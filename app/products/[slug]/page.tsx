@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
+import LunchLearn from "@/components/sections/LunchLearn";
 import DocumentDownloads from "@/components/sections/DocumentDownloads";
 import GalleryGrid, { type GalleryImage } from "@/components/ui/GalleryGrid";
 import JsonLd from "@/components/ui/JsonLd";
@@ -226,6 +227,7 @@ export default async function ProductPage({ params }: Props) {
           </div>
         )}
       </div>
+      <LunchLearn />
       <Footer />
     </main>
   );

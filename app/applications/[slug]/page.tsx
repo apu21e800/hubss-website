@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
+import LunchLearn from "@/components/sections/LunchLearn";
 import GalleryGrid, { type GalleryImage } from "@/components/ui/GalleryGrid";
 import { applications } from "@/lib/applications";
 import { products } from "@/lib/products";
@@ -405,6 +406,7 @@ export default async function ApplicationPage({ params }: Props) {
         </div>
       </section>
 
+      <LunchLearn />
       <Footer />
     </main>
   );

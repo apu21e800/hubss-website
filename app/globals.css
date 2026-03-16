@@ -117,6 +117,11 @@ p {
   line-height: 1.85;
 }
 
+/* Hide the first h1 in MDX body — title already shown in hero */
+.blog-prose > h1:first-child {
+  display: none;
+}
+
 .blog-prose h2 {
   color: #f5f0eb;
   font-size: 1.5rem;

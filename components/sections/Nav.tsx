@@ -50,9 +50,8 @@ const APP_ICONS: Record<string, LucideIcon> = {
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const PLAIN_LINKS = [
-  { label: "Projects",  href: "/projects" },
+  { label: "Projects",  href: "/blog" },
   { label: "About",     href: "/about" },
-  { label: "Blog",      href: "/blog" },
   { label: "Resources", href: "/resources" },
   { label: "Contact",   href: "/contact" },
 ];
@@ -168,6 +167,37 @@ function ProjectCard() {
   );
 }
 
+// ─── Lunch & Learn card (mega menu) ──────────────────────────────────────────
+
+function LunchLearnCard() {
+  return (
+    <Link
+      href="/#lunch-learn"
+      className="block rounded-[8px] p-4 transition-all duration-150 hover:brightness-110"
+      style={{
+        background: "linear-gradient(135deg, #1C2333 0%, #0f172a 100%)",
+        border: "1px solid rgba(249,115,22,0.18)",
+      }}
+    >
+      <p className="text-[0.55rem] font-bold tracking-[0.18em] uppercase mb-1.5" style={{ color: "#f97316" }}>
+        Free for your team
+      </p>
+      <p className="text-[0.88rem] font-bold leading-snug mb-1.5" style={{ ...GEIST, color: "#f5f0eb" }}>
+        Book a Lunch &amp; Learn
+      </p>
+      <p className="text-[0.62rem] leading-relaxed mb-3" style={{ color: "#64748b" }}>
+        We bring lunch. You get a full product briefing + real Canadian case studies.
+      </p>
+      <span
+        className="inline-block text-[0.62rem] font-bold px-3 py-1.5 rounded-[5px]"
+        style={{ background: "linear-gradient(90deg,#f97316,#f59e0b)", color: "#fff" }}
+      >
+        Schedule free session →
+      </span>
+    </Link>
+  );
+}
+
 // ─── Right column (shared layout) ─────────────────────────────────────────────
 
 function RightCol({ showProject }: { showProject: boolean }) {
@@ -185,6 +215,7 @@ function RightCol({ showProject }: { showProject: boolean }) {
         </>
       )}
       {!showProject && <div className="flex-1" />}
+      <LunchLearnCard />
       <StatsStrip />
       <ContactStrip />
     </div>

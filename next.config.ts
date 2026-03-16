@@ -124,7 +124,8 @@ const nextConfig: NextConfig = {
       { source: "/traffic-patterns", destination: "/products/traffic-patterns", permanent: true },
       // Other pages
       { source: "/case-studies", destination: "/blog", permanent: true },
-      { source: "/featured-projects", destination: "/projects", permanent: true },
+      { source: "/projects", destination: "/blog", permanent: true },
+      { source: "/featured-projects", destination: "/blog", permanent: true },
       { source: "/documentation", destination: "/resources", permanent: true },
       { source: "/about-us", destination: "/about", permanent: true },
       { source: "/contact-us", destination: "/contact", permanent: true },

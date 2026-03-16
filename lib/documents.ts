@@ -70,6 +70,12 @@ export const productDocuments: ProductDocs[] = [
       { label: 'Pro 250 MMA Installation Guide',type: 'installation-guide', href: '/docs/streetbond/streetbond-pro250-install-guide.pdf' },
       { label: 'Pro 250 MMA Brochure',          type: 'brochure',           href: '/docs/streetbond/streetbond-pro250-brochure.pdf' },
       { label: 'Pro 250 MMA Data Sheet',        type: 'data-sheet',         href: '/docs/streetbond/streetbond-pro250-tds.pdf' },
+      { label: 'Colorant Data Sheet',           type: 'data-sheet',         href: '/docs/streetbond/streetbond-colorant.pdf' },
+      { label: 'SB120 Over Concrete Spec',      type: 'spec-sheet',         href: '/docs/streetbond/streetbond-sb120-concrete-spec.pdf' },
+      { label: 'StreetBondSR Brochure',         type: 'brochure',           href: '/docs/streetbond/streetbondsr-brochure.pdf' },
+      { label: 'StreetBondSR Flat Surface Spec', type: 'spec-sheet',        href: '/docs/streetbond/streetbondsr-flat-surface-spec.pdf' },
+      { label: 'StreetBondSR Friction Certificate', type: 'certificate',    href: '/docs/streetbond/streetbondsr-certificate-friction.pdf' },
+      { label: 'StreetBondSR Colour Guide',     type: 'colour-guide',       href: '/docs/streetbond/streetbondsr-colour-guide.pdf' },
     ],
   },
   {

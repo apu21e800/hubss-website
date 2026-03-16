@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
+import LunchLearn from "@/components/sections/LunchLearn";
 import Image from "next/image";
 import Link from "next/link";
 import { applications } from "@/lib/applications";
@@ -57,6 +58,7 @@ export default function ApplicationsPage() {
           ))}
         </div>
       </div>
+      <LunchLearn />
       <Footer />
     </main>
   );

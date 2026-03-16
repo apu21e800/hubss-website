@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
+import LunchLearn from "@/components/sections/LunchLearn";
 import JsonLd from "@/components/ui/JsonLd";
 import { getAllPosts, getPost } from "@/lib/mdx";
 import { MDXRemote } from "next-mdx-remote/rsc";
@@ -178,6 +179,7 @@ export default async function BlogPostPage({ params }: Props) {
         <RelatedPosts posts={allPosts} currentSlug={slug} />
       </div>
 
+      <LunchLearn />
       <Footer />
     </main>
   );

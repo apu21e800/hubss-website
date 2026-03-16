@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
+import LunchLearn from "@/components/sections/LunchLearn";
 import BlogFilter from "@/components/blog/BlogFilter";
 import { getAllPosts } from "@/lib/mdx";
 
@@ -31,16 +32,13 @@ export default function BlogPage() {
 
       <div className="max-w-7xl mx-auto px-6 pt-32 pb-24">
         {/* Header */}
-        <div className="mb-12">
-          <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-3 text-orange-500">
-            Insights
+        <div className="mb-14">
+          <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-3" style={{ color: "#f97316" }}>
+            Portfolio
           </p>
-          <h1 className="text-5xl md:text-6xl font-bold text-[#f5f0eb]">
-            Blog
-          </h1>
-          <p className="text-gray-400 mt-3 max-w-xl">
-            Industry perspectives on decorative pavement, pedestrian safety, and
-            municipal infrastructure across Canada.
+          <h1 className="text-6xl font-bold mb-4" style={{ color: "#f5f0eb" }}>Projects</h1>
+          <p className="text-lg" style={{ color: "#9ca3af" }}>
+            Surface solutions transforming Canadian streets and communities.
           </p>
         </div>
 
@@ -50,6 +48,7 @@ export default function BlogPage() {
         </Suspense>
       </div>
 
+      <LunchLearn />
       <Footer />
     </main>
   );

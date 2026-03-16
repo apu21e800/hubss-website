@@ -6,9 +6,8 @@ import Image from "next/image";
 import { products } from "@/lib/products";
 
 export default function ProductsGrid() {
-  const cols = 4;
-  const remainder = products.length % cols;
-  const orphanStart = remainder > 0 ? products.length - remainder : products.length;
+  // First 2 products are featured — each spans 2 cols to fill the opening row
+  const FEATURED = 2;
 
   return (
     <section className="py-24" style={{ background: "#1a1a1a" }}>
@@ -39,7 +38,7 @@ export default function ProductsGrid() {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.04 }}
-              className={remainder === 2 && i >= orphanStart ? "lg:col-span-2" : ""}
+              className={i < FEATURED ? "lg:col-span-2" : ""}
             >
               <Link
                 href={`/products/${product.slug}`}

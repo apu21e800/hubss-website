@@ -1,19 +1,33 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import DocumentDownloads from "@/components/sections/DocumentDownloads";
 import GalleryGrid, { type GalleryImage } from "@/components/ui/GalleryGrid";
+import JsonLd from "@/components/ui/JsonLd";
 import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
 import { placeholderImages } from "@/lib/placeholder-images";
+import { buildMetadata } from "@/lib/seo";
 
 export async function generateStaticParams() {
   return products.map((p) => ({ slug: p.slug }));
 }
 
 type Props = { params: Promise<{ slug: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const product = products.find((p) => p.slug === slug);
+  if (!product) return {};
+  return buildMetadata({
+    title: product.name,
+    description: product.shortDesc + " — " + product.description.slice(0, 120) + "…",
+    slug: `products/${product.slug}`,
+  });
+}
 
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
@@ -34,8 +48,19 @@ export default async function ProductPage({ params }: Props) {
     .map((s) => applications.find((a) => a.slug === s))
     .filter(Boolean) as typeof applications;
 
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: product.description,
+    brand: { "@type": "Brand", name: "HUB Surface Systems" },
+    url: `https://hubss.com/products/${product.slug}`,
+    image: product.imageUrl,
+  };
+
   return (
     <main style={{ background: "#1a1a1a", minHeight: "100vh" }}>
+      <JsonLd data={productSchema} />
       <Nav />
 
       {/* Hero banner */}

@@ -1,15 +1,31 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
+import JsonLd from "@/components/ui/JsonLd";
 import { getAllPosts, getPost } from "@/lib/mdx";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import Link from "next/link";
+import { buildMetadata } from "@/lib/seo";
 
 export async function generateStaticParams() {
   return getAllPosts().map((p) => ({ slug: p.slug }));
 }
 
 type Props = { params: Promise<{ slug: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  let post;
+  try { post = getPost(slug); } catch { return {}; }
+  return buildMetadata({
+    title: post.title,
+    description: post.excerpt,
+    slug: `blog/${slug}`,
+    type: "article",
+    publishedTime: post.date,
+  });
+}
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
@@ -21,8 +37,25 @@ export default async function BlogPostPage({ params }: Props) {
     notFound();
   }
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: post.date,
+    author: { "@type": "Organization", name: "HUB Surface Systems" },
+    publisher: {
+      "@type": "Organization",
+      name: "HUB Surface Systems",
+      logo: { "@type": "ImageObject", url: "https://hubss.com/images/logo.svg" },
+    },
+    url: `https://hubss.com/blog/${post.slug}`,
+    image: "https://hubss.com/images/og-default.jpg",
+  };
+
   return (
     <main style={{ background: "#1a1a1a", minHeight: "100vh" }}>
+      <JsonLd data={articleSchema} />
       <Nav />
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24">
         <div className="mb-10">

@@ -8,6 +8,7 @@ import GalleryGrid, { type GalleryImage } from "@/components/ui/GalleryGrid";
 import { applications } from "@/lib/applications";
 import { products } from "@/lib/products";
 import { placeholderImages } from "@/lib/placeholder-images";
+import { buildMetadata } from "@/lib/seo";
 
 export async function generateStaticParams() {
   return applications.map((a) => ({ slug: a.slug }));
@@ -19,10 +20,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const app = applications.find((a) => a.slug === slug);
   if (!app) return {};
-  return {
-    title: `${app.name} | HUB Surface Systems`,
+  return buildMetadata({
+    title: app.name,
     description: app.desc,
-  };
+    slug: `applications/${app.slug}`,
+  });
 }
 
 // ─── Inline SVG icons ─────────────────────────────────────────────────────────

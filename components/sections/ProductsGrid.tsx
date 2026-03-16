@@ -6,9 +6,6 @@ import Image from "next/image";
 import { products } from "@/lib/products";
 
 export default function ProductsGrid() {
-  // First 2 products are featured — each spans 2 cols to fill the opening row
-  const FEATURED = 2;
-
   return (
     <section className="py-24" style={{ background: "#1a1a1a" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -30,7 +27,7 @@ export default function ProductsGrid() {
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {products.map((product, i) => (
             <motion.div
               key={product.slug}
@@ -38,7 +35,6 @@ export default function ProductsGrid() {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.04 }}
-              className={i < FEATURED ? "lg:col-span-2" : ""}
             >
               <Link
                 href={`/products/${product.slug}`}

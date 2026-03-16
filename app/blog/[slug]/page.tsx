@@ -5,6 +5,7 @@ import Footer from "@/components/sections/Footer";
 import JsonLd from "@/components/ui/JsonLd";
 import { getAllPosts, getPost } from "@/lib/mdx";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import Image from "next/image";
 import Link from "next/link";
 import { buildMetadata } from "@/lib/seo";
 
@@ -50,7 +51,9 @@ export default async function BlogPostPage({ params }: Props) {
       logo: { "@type": "ImageObject", url: "https://hubss.com/images/logo.svg" },
     },
     url: `https://hubss.com/blog/${post.slug}`,
-    image: "https://hubss.com/images/og-default.jpg",
+    image: post.featuredImage
+      ? `https://hubss.com${post.featuredImage}`
+      : "https://hubss.com/images/og-default.jpg",
   };
 
   return (
@@ -70,6 +73,19 @@ export default async function BlogPostPage({ params }: Props) {
             {post.title}
           </h1>
         </div>
+
+        {post.featuredImage && (
+          <div className="mb-10 rounded-lg overflow-hidden">
+            <Image
+              src={post.featuredImage}
+              alt={post.title}
+              width={1200}
+              height={630}
+              className="w-full h-auto object-cover"
+              priority
+            />
+          </div>
+        )}
 
         <div
           className="prose prose-invert max-w-none"

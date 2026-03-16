@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
+import Image from "next/image";
 import Link from "next/link";
 import { getAllPosts } from "@/lib/mdx";
 
@@ -25,9 +26,21 @@ export default function BlogPage() {
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
-              className="group block p-8 rounded-xl transition-colors"
+              className="group block rounded-xl overflow-hidden transition-colors"
               style={{ background: "#2d2d2d", border: "1px solid #333" }}
             >
+              {post.featuredImage && (
+                <div className="aspect-[16/9] overflow-hidden">
+                  <Image
+                    src={post.featuredImage}
+                    alt={post.title}
+                    width={600}
+                    height={338}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+              )}
+              <div className="p-8">
               <p className="text-xs mb-4" style={{ color: "#9ca3af" }}>
                 {new Date(post.date).toLocaleDateString("en-CA", { year: "numeric", month: "long", day: "numeric" })}
                 {" \u00b7 "}{post.readTime}
@@ -39,6 +52,7 @@ export default function BlogPage() {
                 {post.excerpt}
               </p>
               <p className="text-xs font-semibold mt-5" style={{ color: "#f97316" }}>Read more &rarr;</p>
+              </div>
             </Link>
           ))}
         </div>

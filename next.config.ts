@@ -32,6 +32,14 @@ const nextConfig: NextConfig = {
       { source: "/townhomes", destination: "/applications/driveways", permanent: true },
       { source: "/leed-urban-heat-island", destination: "/applications/community-branding", permanent: true },
       { source: "/decorative-streetscape-solutions", destination: "/applications/crosswalks", permanent: true },
+      // Blog post redirects
+      { source: "/keeping-pedestrians-safe-and-operation-budgets-low", destination: "/blog/keeping-pedestrians-safe", permanent: true },
+      { source: "/pedestrian-safety-solutions", destination: "/blog/pedestrian-safety-solutions", permanent: true },
+      { source: "/vancouver-decorative-crosswalk-design", destination: "/blog/vancouver-decorative-crosswalk-design", permanent: true },
+      { source: "/enhancing-multimodal-connectivity-in-york-region-toronto", destination: "/blog/multimodal-connectivity-york-region", permanent: true },
+      { source: "/case-study-branded-crosswalks-and-pedestrian-safety-in-vancouver-richmond", destination: "/blog/branded-crosswalks-vancouver-richmond", permanent: true },
+      { source: "/decorative-asphalt-for-high-traffic-areas", destination: "/blog/decorative-asphalt-high-traffic", permanent: true },
+      { source: "/veterans-crosswalk-kitchener-trafficpatterns", destination: "/blog/veterans-crosswalk-kitchener", permanent: true },
       // Other pages
       { source: "/case-studies", destination: "/blog", permanent: true },
       { source: "/featured-projects", destination: "/projects", permanent: true },

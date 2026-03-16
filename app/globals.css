@@ -1,0 +1,111 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+:root {
+  --font-geist: '';
+  --font-inter: '';
+  /* ─── Brand gradient system ─────────────────────────── */
+  --gradient-brand:          linear-gradient(90deg, #F97316 0%, #EAB308 100%);
+  --gradient-brand-vertical: linear-gradient(180deg, #F97316 0%, #EAB308 100%);
+  --gradient-brand-subtle:   linear-gradient(90deg, rgba(249,115,22,0.15) 0%, rgba(234,179,8,0.15) 100%);
+  --gradient-glow:           0 0 20px rgba(249,115,22,0.25);
+}
+
+@theme inline {
+  --font-sans:    var(--font-inter);   /* body → Inter */
+  --font-display: var(--font-geist);   /* headings → Geist */
+}
+
+body {
+  background: #1a1a1a;
+  color: #e5e7eb;
+  font-size: 16px;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-geist), system-ui, sans-serif;
+}
+
+p {
+  line-height: 1.7;
+}
+
+/* ─── Grain texture animation ─────────────────────────── */
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  10%       { transform: translate(-2%, -3%); }
+  20%       { transform: translate(3%, 1%); }
+  30%       { transform: translate(-1%, 4%); }
+  40%       { transform: translate(2%, -2%); }
+  50%       { transform: translate(-3%, 2%); }
+  60%       { transform: translate(1%, -4%); }
+  70%       { transform: translate(-2%, 3%); }
+  80%       { transform: translate(3%, -1%); }
+  90%       { transform: translate(-1%, 2%); }
+}
+
+.grain-overlay {
+  animation: grain 8s steps(1) infinite;
+}
+
+/* ─── Client ticker ───────────────────────────────────── */
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.ticker-track {
+  animation: ticker 40s linear infinite;
+  display: flex;
+  width: max-content;
+}
+
+/* ─── Generic fade up ─────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Gradient text utilities ─────────────────────────── */
+.grad-text,
+.gradient-text {
+  background:              var(--gradient-brand);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip:         text;
+}
+
+/* ─── Gradient bottom border ──────────────────────────── */
+.gradient-border-bottom {
+  border-bottom: 2px solid transparent;
+  border-image: var(--gradient-brand) 1;
+}
+
+
+/* ─── CTA button gradient ─────────────────────────────── */
+.btn-primary,
+.cta-btn {
+  background: linear-gradient(90deg, #F97316 0%, #D97706 100%);
+  color: #fff;
+  transition: all 0.2s ease;
+}
+.btn-primary:hover,
+.cta-btn:hover {
+  background: linear-gradient(90deg, #FB923C 0%, #F59E0B 100%);
+  box-shadow: var(--gradient-glow);
+}
+
+
+/* ─── yet-another-react-lightbox theming ─────────────── */
+.yarl__root {
+  --yarl__color_backdrop:              rgba(8, 8, 8, 0.97);
+  --yarl__color_button:                #f97316;
+  --yarl__color_button_active:         #fb923c;
+  --yarl__color_button_disabled:       rgba(249, 115, 22, 0.25);
+  --yarl__slide_title_color:           #f5f0eb;
+  --yarl__slide_description_color:     #9ca3af;
+  --yarl__slide_captions_container_background: linear-gradient(to top, rgba(0,0,0,0.82), transparent);
+}

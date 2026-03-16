@@ -13,7 +13,7 @@ export const products: Product[] = [
     name: "TrafficPatterns",
     slug: "traffic-patterns",
     shortDesc: "Intersection-grade preformed thermoplastic markings",
-    imageUrl: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&q=80",
     description: "TrafficPatterns is HUB Surface Systems' flagship preformed thermoplastic marking solution, engineered for high-traffic municipal intersections. Manufactured to exacting specifications, these durable markings offer superior visibility, fast installation, and long-term performance. Ideal for crosswalks, stop bars, and directional arrows across Canadian municipalities.",
     specs: [
       { label: "Material", value: "Preformed thermoplastic" },
@@ -29,7 +29,7 @@ export const products: Product[] = [
     name: "TrafficPatternsXD",
     slug: "traffic-patterns-xd",
     shortDesc: "150mil aggregate-reinforced for extreme durability",
-    imageUrl: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=1200&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80",
     description: "TrafficPatternsXD raises the bar with 150mil aggregate-reinforced thermoplastic construction, engineered for the most demanding intersections and high-speed corridors. Where standard markings wear prematurely, XD delivers consistent retroreflectivity and skid resistance season after season.",
     specs: [
       { label: "Material", value: "Aggregate-reinforced thermoplastic" },
@@ -45,7 +45,7 @@ export const products: Product[] = [
     name: "StreetPrint",
     slug: "streetprint",
     shortDesc: "Decorative stamped asphalt for civic identity",
-    imageUrl: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1200&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800&q=80",
     description: "StreetPrint transforms ordinary asphalt into stunning civic art. Using a proprietary in-place stamping system, StreetPrint creates decorative patterns — brick, stone, slate — that define intersections, plazas, and pedestrian zones. Used by municipalities across Canada to create sense of place without the cost of traditional pavers.",
     specs: [
       { label: "System", value: "In-place asphalt stamping" },
@@ -61,7 +61,7 @@ export const products: Product[] = [
     name: "StreetBond",
     slug: "streetbond",
     shortDesc: "UV-stable color coating with 20-year performance",
-    imageUrl: "https://images.unsplash.com/photo-1573348722427-f1d6819fdf98?w=1200&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?w=800&q=80",
     description: "StreetBond is a high-performance coloured pavement coating that delivers vibrant, durable colour to roads, bike lanes, and pedestrian areas. Its UV-stable formulation resists fading, cracking, and peeling — maintaining vivid colour for 20 years. Used extensively for bike lane delineation and Complete Streets applications.",
     specs: [
       { label: "Type", value: "Acrylic pavement coating" },
@@ -77,7 +77,7 @@ export const products: Product[] = [
     name: "MMAX",
     slug: "mmax",
     shortDesc: "Fast-cure MMA resin for bus and bike lanes",
-    imageUrl: "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?w=1200&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=800&q=80",
     description: "MMAX is HUB's methyl methacrylate (MMA) resin system — the gold standard for high-durability, fast-cure coloured pavement markings. Specifically engineered for bus lanes, bike lanes, and high-stress urban corridors, MMAX delivers unmatched bonding strength and can be opened to traffic within 60 minutes of application.",
     specs: [
       { label: "Material", value: "Methyl Methacrylate (MMA) resin" },
@@ -93,7 +93,7 @@ export const products: Product[] = [
     name: "DecoMark",
     slug: "decomark",
     shortDesc: "Custom decorative pavement marking systems",
-    imageUrl: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=1200&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1486325212980-2af6a2b98b1f?w=800&q=80",
     description: "DecoMark is HUB's custom decorative marking system, enabling municipalities and artists to bring complex designs, murals, and community identifiers to the street. From Indigenous art installations to Pride crosswalks to neighbourhood branding, DecoMark delivers precision colour and lasting vibrancy.",
     specs: [
       { label: "System", value: "Preformed + hand-applied thermoplastic" },
@@ -109,7 +109,7 @@ export const products: Product[] = [
     name: "DuraShield",
     slug: "durashield",
     shortDesc: "Protective asphalt coating and restoration",
-    imageUrl: "https://images.unsplash.com/photo-1486325212980-2af6a2b98b1f?w=1200&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1590674899484-d5640e854abe?w=800&q=80",
     description: "DuraShield is HUB's protective asphalt coating designed to extend pavement life, restore faded surfaces, and reduce lifecycle costs. Applied as a rejuvenating seal coat, DuraShield penetrates the asphalt matrix to restore flexibility, reduce oxidation, and deliver a uniform, professional finish.",
     specs: [
       { label: "Type", value: "Asphalt rejuvenating seal coat" },
@@ -125,7 +125,7 @@ export const products: Product[] = [
     name: "PreMark",
     slug: "premark",
     shortDesc: "Preformed symbols and legends for road markings",
-    imageUrl: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=1200&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&q=80",
     description: "PreMark delivers precision-manufactured preformed thermoplastic symbols, legends, and arrows for road marking applications. From standard MUTCD symbols to custom legends, PreMark ensures consistent, professional results with minimal installation time and maximum durability.",
     specs: [
       { label: "Material", value: "Preformed thermoplastic" },
@@ -141,7 +141,7 @@ export const products: Product[] = [
     name: "DuraTherm",
     slug: "duratherm",
     shortDesc: "Inlaid preformed thermoplastic — snowplow-safe",
-    imageUrl: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1573348722427-f1d6819fdf98?w=800&q=80",
     description: "DuraTherm is inlaid directly into the asphalt surface using specialized reheating and printing technology. It sits flush with the road surface — no high points to wear down, no edges for snowplow blades to catch. The only decorative pavement system engineered specifically to eliminate snowplow shear, making it ideal for Canadian municipalities where winter maintenance is non-negotiable.",
     specs: [
       { label: "Installation", value: "Inlaid flush-mount" },
@@ -157,7 +157,7 @@ export const products: Product[] = [
     name: "AirMark",
     slug: "airmark",
     shortDesc: "FAA and TC Canada compliant airfield marking system",
-    imageUrl: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1200&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800&q=80",
     description: "AirMark is HUB's precision thermoplastic marking system engineered to FAA and Transport Canada airfield standards. Bonds permanently to asphalt and concrete surfaces with exceptional retroreflectivity for low-visibility conditions. Trusted for commercial airports, regional facilities, and private airstrips across Canada where precision and durability are non-negotiable.",
     specs: [
       { label: "Compliance", value: "FAA AC 150/5370-10, TC Canada" },

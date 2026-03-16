@@ -4,9 +4,12 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { products } from "@/lib/products";
-import { placeholderImages } from "@/lib/placeholder-images";
 
 export default function ProductsGrid() {
+  const cols = 4;
+  const remainder = products.length % cols;
+  const orphanStart = remainder > 0 ? products.length - remainder : products.length;
+
   return (
     <section className="py-24" style={{ background: "#1a1a1a" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -28,10 +31,7 @@ export default function ProductsGrid() {
         </div>
 
         {/* Grid */}
-        <div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px"
-          style={{ background: "#27272a" }}
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {products.map((product, i) => (
             <motion.div
               key={product.slug}
@@ -39,6 +39,7 @@ export default function ProductsGrid() {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.04 }}
+              className={remainder === 2 && i >= orphanStart ? "lg:col-span-2" : ""}
             >
               <Link
                 href={`/products/${product.slug}`}
@@ -53,10 +54,7 @@ export default function ProductsGrid() {
                 {/* Card image */}
                 <div className="relative w-full overflow-hidden flex-shrink-0" style={{ height: 160 }}>
                   <Image
-                    src={
-                      placeholderImages.products[product.slug as keyof typeof placeholderImages.products]?.hero
-                      ?? product.imageUrl
-                    }
+                    src={product.imageUrl}
                     alt={product.name}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"

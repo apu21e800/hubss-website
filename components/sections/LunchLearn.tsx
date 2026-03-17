@@ -63,9 +63,6 @@ export default function LunchLearn() {
 
   return (
     <section id="lunch-learn" className="relative overflow-hidden" style={{ background: "var(--bg-slate)" }}>
-      {/* Top divider */}
-      <div className="h-[3px] w-full" style={{ background: "linear-gradient(90deg, #f97316, #f59e0b)" }} />
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
 

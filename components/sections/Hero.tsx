@@ -136,15 +136,6 @@ export default function Hero() {
               </Link>
             </div>
 
-            {/* 1px gradient separator above stats */}
-            <div
-              className="mb-6"
-              style={{
-                height: "1px",
-                background: "linear-gradient(90deg, rgba(249,115,22,0.5) 0%, rgba(234,179,8,0.15) 55%, transparent 100%)",
-              }}
-            />
-
             {/* Credential stats bar */}
             <div className="flex flex-wrap gap-x-8 gap-y-3">
               {credentialStats.map((stat, i) => (

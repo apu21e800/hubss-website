@@ -149,12 +149,6 @@ function ProductsPanel({
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
       >
-        {/* Gradient bottom border */}
-        <div
-          className="absolute bottom-0 left-0 right-0 h-[2px]"
-          style={{ background: "linear-gradient(90deg,#F97316,#EAB308)" }}
-        />
-
         {/* Inner content — max-width constrained */}
         <div style={{ maxWidth: 1400, margin: "0 auto", padding: "2rem 3rem" }}>
           <div
@@ -336,12 +330,6 @@ function ApplicationsPanel({
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
       >
-        {/* Gradient bottom border */}
-        <div
-          className="absolute bottom-0 left-0 right-0 h-[2px]"
-          style={{ background: "linear-gradient(90deg,#F97316,#EAB308)" }}
-        />
-
         {/* Inner content — max-width constrained */}
         <div style={{ maxWidth: 1400, margin: "0 auto", padding: "2rem 3rem" }}>
           <div

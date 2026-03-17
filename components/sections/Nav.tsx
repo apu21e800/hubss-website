@@ -513,7 +513,7 @@ export default function Nav() {
         className="fixed top-0 left-0 right-0 transition-all duration-300"
         style={{
           zIndex: 10000,
-          background:           scrolled || activePanel ? "rgba(0,0,0,0.92)" : "rgba(26,26,26,0.95)",
+          background:           "rgba(26,26,26,0.97)",
           backdropFilter:       scrolled || activePanel ? "blur(12px)" : "blur(8px)",
           WebkitBackdropFilter: scrolled || activePanel ? "blur(12px)" : "blur(8px)",
         }}

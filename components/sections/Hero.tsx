@@ -47,8 +47,8 @@ export default function Hero() {
         priority
         sizes="100vw"
       />
-      {/* Dark overlay — keeps text fully readable */}
-      <div className="absolute inset-0 bg-black/62" />
+      {/* Dark overlay — keeps text fully readable regardless of theme */}
+      <div className="absolute inset-0 bg-black/70" />
 
       {/* Animated grain overlay */}
       <div
@@ -84,7 +84,7 @@ export default function Hero() {
             <h1
               className="font-black leading-none mb-5"
               style={{
-                color: "var(--text-primary)",
+                color: "#F5F0EB",
                 fontSize: "clamp(3rem, 9vw, 7rem)",
                 letterSpacing: "-0.03em",
               }}
@@ -110,7 +110,7 @@ export default function Hero() {
 
             <p
               className="text-lg md:text-xl max-w-xl mb-10 font-light leading-relaxed"
-              style={{ color: "var(--text-body)" }}
+              style={{ color: "#E5E7EB" }}
             >
               The infrastructure beneath great cities.
             </p>
@@ -128,8 +128,8 @@ export default function Hero() {
                 className="font-semibold px-8 py-4 rounded-full text-center transition-all text-sm hover:border-gray-500"
                 style={{
                   background: "transparent",
-                  color: "var(--text-primary)",
-                  border: "1px solid #3a3a3a",
+                  color: "#F5F0EB",
+                  border: "1px solid rgba(255,255,255,0.2)",
                 }}
               >
                 View Projects

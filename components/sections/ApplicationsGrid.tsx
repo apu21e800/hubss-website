@@ -30,7 +30,7 @@ export default function ApplicationsGrid() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.06 }}
               className={`relative overflow-hidden group ${app.col ?? ""}`}
-              style={{ borderRadius: "4px" }}
+              style={{ borderRadius: "12px" }}
             >
               <Link href={`/applications/${app.slug}`} className="block w-full h-full">
                 <Image

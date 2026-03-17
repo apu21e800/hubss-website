@@ -37,7 +37,7 @@ const socials = [
 
 export default function Footer() {
   return (
-    <footer style={{ background: "var(--bg-dark)" }}>
+    <footer className="asphalt-noise" style={{ background: "var(--bg-dark)" }}>
 
       {/* Full-width gradient divider */}
       <div

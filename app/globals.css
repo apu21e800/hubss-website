@@ -318,6 +318,25 @@ p {
   color: #d1d5db;
 }
 
+/* ─── Asphalt noise texture ──────────────────────────── */
+/* Apply to full-black sections (Hero, Footer).            */
+/* SWAP ::before background-image with real asphalt photo  */
+/* once available at /images/textures/asphalt.jpg          */
+.asphalt-noise {
+  position: relative;
+  isolation: isolate;
+}
+.asphalt-noise::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  opacity: 0.035;
+  pointer-events: none;
+  z-index: 0;
+}
+
 /* ─── Section grid texture — kills the floating feeling ─ */
 /* 4% opacity lines at 80px grid — texture, not graph paper */
 .section-grid-bg {
@@ -334,9 +353,8 @@ p {
 }
 
 /* ─── Hero always-dark override (theme-agnostic) ─────── */
-/* Hero has a full-bleed image + black overlay — keep it dark in light mode */
+/* Hero has a full-bleed image + black overlay — text stays white in all themes */
 .hero-section {
-  --bg-primary: #0a0a0a;
   --text-primary: #F5F0EB;
   --text-body:    #E5E7EB;
   --border-subtle: #1f1f1f;

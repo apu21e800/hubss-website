@@ -10,7 +10,7 @@ export default function RecentProjects() {
   const secondary = projects.slice(1, 3);
 
   return (
-    <section className="py-24" style={{ background: "var(--bg-primary)" }}>
+    <section className="py-24" style={{ background: "var(--bg-dark)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-end justify-between mb-14">
           <div>
@@ -35,8 +35,8 @@ export default function RecentProjects() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="group grid grid-cols-1 md:grid-cols-5 gap-0 mb-3 overflow-hidden rounded"
-          style={{ background: "var(--bg-card)", border: "1px solid var(--border-subtle)" }}
+          className="group grid grid-cols-1 md:grid-cols-5 gap-0 mb-3 overflow-hidden rounded-xl"
+          style={{ background: "#111111", border: "1px solid rgba(255,255,255,0.06)" }}
         >
           <div className="relative md:col-span-3 h-64 md:h-auto min-h-[320px] overflow-hidden">
             <Image
@@ -93,8 +93,10 @@ export default function RecentProjects() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="group overflow-hidden rounded"
-              style={{ background: "var(--bg-card)", border: "1px solid var(--border-subtle)" }}
+              className="group overflow-hidden rounded-xl transition-all duration-200 hover:shadow-[0_4px_20px_rgba(249,115,22,0.08)]"
+              style={{ background: "#111111", border: "1px solid rgba(255,255,255,0.06)" }}
+              onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(249,115,22,0.3)")}
+              onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)")}
             >
               <div className="relative h-52 overflow-hidden">
                 <Image

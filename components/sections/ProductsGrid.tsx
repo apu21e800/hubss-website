@@ -7,21 +7,21 @@ import { products } from "@/lib/products";
 
 export default function ProductsGrid() {
   return (
-    <section className="py-24" style={{ background: "var(--bg-primary)" }}>
+    <section className="py-24" style={{ background: "var(--bg-dark)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Section header */}
         <div className="mb-14">
-          <p className="gradient-text text-xs tracking-[0.2em] font-semibold uppercase mb-2">
+          <p className="gradient-text text-xs tracking-[0.15em] font-semibold uppercase mb-2">
             Surface Solutions
           </p>
           <h2
             className="font-bold tracking-tight mb-3"
-            style={{ color: "#fff", fontSize: "clamp(1.875rem, 4vw, 3rem)" }}
+            style={{ color: "#F5F0EB", fontSize: "clamp(1.875rem, 4vw, 3rem)" }}
           >
             Our Systems
           </h2>
-          <p className="text-lg font-light max-w-xl" style={{ color: "var(--text-secondary)" }}>
+          <p className="text-lg font-light max-w-xl" style={{ color: "#d1d5db" }}>
             Engineered for Canadian infrastructure. Built to outlast.
           </p>
         </div>
@@ -38,27 +38,26 @@ export default function ProductsGrid() {
             >
               <Link
                 href={`/products/${product.slug}`}
-                className="group flex flex-col h-full relative overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(249,115,22,0.12)]"
+                className="group flex flex-col h-full relative overflow-hidden rounded-xl transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(249,115,22,0.12)]"
                 style={{
-                  background: "#18181b",
-                  border: "1px solid var(--border-color)",
+                  background: "#111111",
+                  border: "1px solid rgba(255,255,255,0.06)",
                 }}
-                onMouseEnter={e => (e.currentTarget.style.borderColor = "#52525b")}
-                onMouseLeave={e => (e.currentTarget.style.borderColor = "var(--border-color)")}
+                onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(249,115,22,0.3)")}
+                onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)")}
               >
                 {/* Card image */}
-                <div className="relative w-full overflow-hidden flex-shrink-0" style={{ height: 160 }}>
+                <div className="relative w-full overflow-hidden flex-shrink-0 rounded-t-xl" style={{ height: 160 }}>
                   <Image
                     src={product.imageUrl}
                     alt={product.name}
                     fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                    className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                   />
-                  {/* Bottom gradient so card content reads cleanly */}
                   <div
                     className="absolute inset-0"
-                    style={{ background: "linear-gradient(to top, rgba(24,24,27,0.7) 0%, transparent 60%)" }}
+                    style={{ background: "linear-gradient(to top, rgba(17,17,17,0.7) 0%, transparent 60%)" }}
                   />
                 </div>
 
@@ -69,20 +68,19 @@ export default function ProductsGrid() {
                 />
 
                 <div className="flex flex-col flex-1 p-6">
-                  {/* Product name */}
                   <h3
                     className="text-lg font-semibold mb-1 transition-colors duration-200 group-hover:text-orange-400"
-                    style={{ color: "#fff" }}
+                    style={{ color: "#F5F0EB" }}
                   >
                     {product.name}
                   </h3>
 
-                  {/* Short desc — orange hook */}
+                  {/* Short desc — product tagline */}
                   <p className="text-sm font-medium mb-3" style={{ color: "#fb923c" }}>
                     {product.shortDesc}
                   </p>
 
-                  {/* Body copy — 2-line clamp */}
+                  {/* Body copy */}
                   <p
                     className="text-sm leading-relaxed mb-auto"
                     style={{
@@ -96,11 +94,10 @@ export default function ProductsGrid() {
                     {product.description}
                   </p>
 
-                  {/* CTA */}
                   <div className="pt-5 mt-auto">
                     <span
                       className="flex items-center gap-1.5 text-xs tracking-widest font-semibold uppercase"
-                      style={{ color: "#fb923c" }}
+                      style={{ color: "#f97316" }}
                     >
                       Explore System
                       <span className="transition-transform duration-200 group-hover:translate-x-1 inline-block">

@@ -318,6 +318,16 @@ p {
   color: #d1d5db;
 }
 
+/* ─── Section grid texture — kills the floating feeling ─ */
+/* Use on light-bg sections. Lines are 1px at 40px grid.   */
+/* Dark mode: near-invisible on off-white. Light: warm grey. */
+.section-grid-bg {
+  background-image:
+    linear-gradient(var(--border-subtle) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
 /* ─── Hero always-dark override (theme-agnostic) ─────── */
 /* Hero has a full-bleed image + black overlay — keep it dark in light mode */
 .hero-section {

@@ -10,21 +10,21 @@ export default function RecentProjects() {
   const secondary = projects.slice(1, 3);
 
   return (
-    <section className="py-24" style={{ background: "var(--color-off-white)" }}>
+    <section className="py-24" style={{ background: "var(--bg-primary)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-end justify-between mb-14">
           <div>
             <p className="gradient-text text-xs font-semibold tracking-[0.2em] uppercase mb-3">
               Portfolio
             </p>
-            <h2 className="text-5xl font-bold" style={{ color: "#111827" }}>
+            <h2 className="text-5xl font-bold" style={{ color: "var(--text-primary)" }}>
               Recent Work
             </h2>
           </div>
           <Link
             href="/projects"
-            className="hidden md:block text-sm font-semibold px-6 py-3 rounded transition-colors"
-            style={{ border: "1px solid #d1d5db", color: "#374151" }}
+            className="hidden md:block text-sm font-semibold px-6 py-3 rounded transition-colors hover:border-gray-500"
+            style={{ border: "1px solid var(--border-color)", color: "var(--text-secondary)" }}
           >
             Browse All Projects
           </Link>
@@ -35,8 +35,8 @@ export default function RecentProjects() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="group grid grid-cols-1 md:grid-cols-5 gap-0 mb-3 overflow-hidden rounded shadow-sm"
-          style={{ background: "#fff" }}
+          className="group grid grid-cols-1 md:grid-cols-5 gap-0 mb-3 overflow-hidden rounded"
+          style={{ background: "var(--bg-card)", border: "1px solid var(--border-subtle)" }}
         >
           <div className="relative md:col-span-3 h-64 md:h-auto min-h-[320px] overflow-hidden">
             <Image
@@ -51,30 +51,30 @@ export default function RecentProjects() {
             <div className="flex gap-2 mb-5">
               <span
                 className="text-xs font-semibold px-3 py-1 rounded-full"
-                style={{ background: "rgba(249,115,22,0.1)", color: "#ea580c" }}
+                style={{ background: "rgba(249,115,22,0.12)", color: "#f97316" }}
               >
                 {featured.product}
               </span>
               <span
                 className="text-xs font-semibold px-3 py-1 rounded-full"
-                style={{ background: "#f3f4f6", color: "#6b7280" }}
+                style={{ background: "var(--bg-card-surface)", color: "var(--text-muted)" }}
               >
                 {featured.application}
               </span>
             </div>
-            <h3 className="text-2xl font-bold mb-3 leading-tight" style={{ color: "#111827" }}>
+            <h3 className="text-2xl font-bold mb-3 leading-tight" style={{ color: "var(--text-primary)" }}>
               {featured.title}
             </h3>
-            <p className="text-[15px] leading-relaxed mb-6" style={{ color: "#4b5563" }}>
+            <p className="text-[15px] leading-relaxed mb-6" style={{ color: "var(--text-secondary)" }}>
               {featured.excerpt}
             </p>
-            <p className="text-xs mb-6" style={{ color: "#6b7280" }}>
+            <p className="text-xs mb-6" style={{ color: "var(--text-muted)" }}>
               {featured.city}, {featured.province}
             </p>
             <Link
               href={`/projects/${featured.slug}`}
-              className="text-sm font-semibold flex items-center gap-2 self-start"
-              style={{ color: "#ea580c" }}
+              className="text-sm font-semibold flex items-center gap-2 self-start hover:text-orange-300 transition-colors"
+              style={{ color: "#f97316" }}
             >
               View Project
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -93,8 +93,8 @@ export default function RecentProjects() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="group overflow-hidden rounded shadow-sm"
-              style={{ background: "#fff" }}
+              className="group overflow-hidden rounded"
+              style={{ background: "var(--bg-card)", border: "1px solid var(--border-subtle)" }}
             >
               <div className="relative h-52 overflow-hidden">
                 <Image
@@ -109,21 +109,21 @@ export default function RecentProjects() {
                 <div className="flex gap-2 mb-4">
                   <span
                     className="text-xs font-semibold px-3 py-1 rounded-full"
-                    style={{ background: "rgba(249,115,22,0.1)", color: "#ea580c" }}
+                    style={{ background: "rgba(249,115,22,0.12)", color: "#f97316" }}
                   >
                     {project.product}
                   </span>
                 </div>
-                <h3 className="text-lg font-bold mb-2 leading-tight" style={{ color: "#111827" }}>
+                <h3 className="text-lg font-bold mb-2 leading-tight" style={{ color: "var(--text-primary)" }}>
                   {project.title}
                 </h3>
-                <p className="text-xs mb-4" style={{ color: "#6b7280" }}>
+                <p className="text-xs mb-4" style={{ color: "var(--text-muted)" }}>
                   {project.city}, {project.province}
                 </p>
                 <Link
                   href={`/projects/${project.slug}`}
-                  className="text-sm font-semibold flex items-center gap-2"
-                  style={{ color: "#ea580c" }}
+                  className="text-sm font-semibold flex items-center gap-2 hover:text-orange-300 transition-colors"
+                  style={{ color: "#f97316" }}
                 >
                   View Project
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -139,7 +139,7 @@ export default function RecentProjects() {
           <Link
             href="/projects"
             className="text-sm font-semibold px-6 py-3 rounded"
-            style={{ border: "1px solid #d1d5db", color: "#374151" }}
+            style={{ border: "1px solid var(--border-color)", color: "var(--text-secondary)" }}
           >
             Browse All Projects
           </Link>

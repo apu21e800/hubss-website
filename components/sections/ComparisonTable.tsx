@@ -14,6 +14,7 @@ const rows = [
 export default function ComparisonTable() {
   return (
     <section
+      data-theme="light"
       className="section-grid-bg py-24 border-t border-[var(--border-subtle)]"
       style={{ backgroundColor: "var(--color-off-white)" }}
     >

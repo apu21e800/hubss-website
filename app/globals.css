@@ -16,8 +16,8 @@
   /* ─── Backgrounds ───────────────────────────────── */
   --bg-primary:     #1a1a1a;
   --bg-dark:        #0a0a0a;
-  --bg-slate:       #1C2333;
-  --bg-slate-light: #252D3D;
+  --bg-slate:       #111C2D;
+  --bg-slate-light: #182436;
   --bg-card:        #111111;
   --bg-card-surface:#2d2d2d;
   --bg-card-hover:  #27272a;
@@ -36,8 +36,8 @@
   --border-faint:   rgba(255,255,255,0.05);
 
   /* ─── Deep blue — engineering / credential tone ─────── */
-  --color-blue-deep:  #1E3A5F;
-  --color-blue-mid:   #162D4A;   /* cards on blue sections */
+  --color-blue-deep:  #111C2D;   /* same as --bg-slate — one uniform value */
+  --color-blue-mid:   #0C1520;   /* darker: cards sitting on blue sections */
   --color-blue-text:  #93C5FD;   /* body text on blue bg   */
 
   /* ─── Legacy aliases (kept for ComparisonTable / RecentProjects light sections) */

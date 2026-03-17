@@ -18,7 +18,7 @@ const GRAD: React.CSSProperties = {
 
 export default function StatsBar() {
   return (
-    <section className="py-16" style={{ background: "#1E3A5F" }}>
+    <section className="py-16" style={{ background: "var(--bg-slate)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 md:grid-cols-4">
           {stats.map((stat, i) => (

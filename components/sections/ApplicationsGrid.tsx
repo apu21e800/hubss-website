@@ -7,13 +7,13 @@ import { applications } from "@/lib/applications";
 
 export default function ApplicationsGrid() {
   return (
-    <section className="py-24" style={{ background: "var(--color-slate)" }}>
+    <section className="py-24" style={{ background: "var(--bg-slate)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-14">
           <p className="grad-text text-xs font-semibold tracking-[0.2em] uppercase mb-3">
             Applications
           </p>
-          <h2 className="text-5xl font-bold" style={{ color: "#f5f0eb" }}>
+          <h2 className="text-5xl font-bold" style={{ color: "var(--text-primary)" }}>
             Where We Work
           </h2>
         </div>
@@ -64,7 +64,7 @@ export default function ApplicationsGrid() {
                 />
 
                 <div className="absolute bottom-0 left-0 right-0 p-5 transition-transform duration-300 group-hover:-translate-y-1">
-                  <h3 className="font-bold text-base" style={{ color: "#f5f0eb" }}>
+                  <h3 className="font-bold text-base" style={{ color: "var(--text-primary)" }}>
                     {app.name}
                   </h3>
                 </div>

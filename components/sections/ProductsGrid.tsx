@@ -7,7 +7,7 @@ import { products } from "@/lib/products";
 
 export default function ProductsGrid() {
   return (
-    <section className="py-24" style={{ background: "#1a1a1a" }}>
+    <section className="py-24" style={{ background: "var(--bg-primary)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Section header */}
@@ -21,7 +21,7 @@ export default function ProductsGrid() {
           >
             Our Systems
           </h2>
-          <p className="text-lg font-light max-w-xl" style={{ color: "#9ca3af" }}>
+          <p className="text-lg font-light max-w-xl" style={{ color: "var(--text-secondary)" }}>
             Engineered for Canadian infrastructure. Built to outlast.
           </p>
         </div>
@@ -41,10 +41,10 @@ export default function ProductsGrid() {
                 className="group flex flex-col h-full relative overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(249,115,22,0.12)]"
                 style={{
                   background: "#18181b",
-                  border: "1px solid #27272a",
+                  border: "1px solid var(--border-color)",
                 }}
                 onMouseEnter={e => (e.currentTarget.style.borderColor = "#52525b")}
-                onMouseLeave={e => (e.currentTarget.style.borderColor = "#27272a")}
+                onMouseLeave={e => (e.currentTarget.style.borderColor = "var(--border-color)")}
               >
                 {/* Card image */}
                 <div className="relative w-full overflow-hidden flex-shrink-0" style={{ height: 160 }}>

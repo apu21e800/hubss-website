@@ -11,7 +11,7 @@ export const metadata = buildMetadata({
 
 export default function LunchLearnPage() {
   return (
-    <main style={{ background: "#1a1a1a", minHeight: "100vh" }}>
+    <main style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
       <Nav />
 
       {/* Hero */}
@@ -24,7 +24,7 @@ export default function LunchLearnPage() {
         </p>
         <h1
           className="text-5xl md:text-6xl font-bold mb-5 leading-tight max-w-3xl"
-          style={{ color: "#f5f0eb" }}
+          style={{ color: "var(--text-primary)" }}
         >
           Lunch Is On Us.
           <br />
@@ -41,7 +41,7 @@ export default function LunchLearnPage() {
         </h1>
         <p
           className="text-lg leading-relaxed max-w-2xl"
-          style={{ color: "#9ca3af" }}
+          style={{ color: "var(--text-secondary)" }}
         >
           We bring lunch to your office and walk your team through everything
           you need to know about modern pavement marking systems — real Canadian

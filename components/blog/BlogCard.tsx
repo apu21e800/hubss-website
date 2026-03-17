@@ -21,7 +21,7 @@ export default function BlogCard({ post }: { post: PostMeta }) {
   const isExternal = imgSrc.startsWith("http");
 
   return (
-    <div className="group overflow-hidden rounded" style={{ background: "#2d2d2d" }}>
+    <div className="group overflow-hidden rounded" style={{ background: "var(--bg-card-surface)" }}>
       <div className="relative h-52 overflow-hidden">
         <Image
           src={imgSrc}
@@ -46,16 +46,16 @@ export default function BlogCard({ post }: { post: PostMeta }) {
           {post.category && (
             <span
               className="text-xs font-semibold px-2 py-1 rounded"
-              style={{ background: "rgba(255,255,255,0.06)", color: "#9ca3af" }}
+              style={{ background: "rgba(255,255,255,0.06)", color: "var(--text-secondary)" }}
             >
               {post.category}
             </span>
           )}
         </div>
-        <h3 className="font-bold text-base leading-snug mb-2" style={{ color: "#f5f0eb" }}>
+        <h3 className="font-bold text-base leading-snug mb-2" style={{ color: "var(--text-primary)" }}>
           {post.title}
         </h3>
-        <p className="text-xs mb-1" style={{ color: "#9ca3af" }}>
+        <p className="text-xs mb-1" style={{ color: "var(--text-secondary)" }}>
           {new Date(post.date).toLocaleDateString("en-CA", {
             year: "numeric",
             month: "long",
@@ -64,7 +64,7 @@ export default function BlogCard({ post }: { post: PostMeta }) {
           {" · "}
           {post.readTime}
         </p>
-        <p className="text-xs leading-relaxed mb-4" style={{ color: "#9ca3af" }}>
+        <p className="text-xs leading-relaxed mb-4" style={{ color: "var(--text-secondary)" }}>
           {post.excerpt.length > 120
             ? post.excerpt.slice(0, post.excerpt.lastIndexOf(" ", 120)) + "..."
             : post.excerpt}

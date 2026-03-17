@@ -10,7 +10,7 @@ function DocRow({ doc, isLast }: { doc: ProductDocument; isLast: boolean }) {
       target="_blank"
       rel="noopener noreferrer"
       className="flex items-center justify-between gap-4 py-3 group"
-      style={{ borderBottom: isLast ? "none" : "1px solid #333" }}
+      style={{ borderBottom: isLast ? "none" : "1px solid var(--border-subtle)" }}
     >
       <div className="flex items-center gap-3 min-w-0">
         <span
@@ -19,13 +19,13 @@ function DocRow({ doc, isLast }: { doc: ProductDocument; isLast: boolean }) {
         >
           {docTypeLabel[doc.type]}
         </span>
-        <span className="text-sm truncate" style={{ color: "#f5f0eb" }}>
+        <span className="text-sm truncate" style={{ color: "var(--text-primary)" }}>
           {label}
         </span>
       </div>
       <svg
         className="w-4 h-4 shrink-0 transition-transform group-hover:translate-y-0.5"
-        style={{ color: "#9ca3af" }}
+        style={{ color: "var(--text-secondary)" }}
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -47,12 +47,12 @@ export default function DocumentDownloads({ slug }: { slug: string }) {
 
   return (
     <div className="mt-12">
-      <h2 className="text-2xl font-bold mb-6" style={{ color: "#f5f0eb" }}>
+      <h2 className="text-2xl font-bold mb-6" style={{ color: "var(--text-primary)" }}>
         Downloads
       </h2>
       <div
         className="rounded-xl p-6"
-        style={{ background: "#2d2d2d", border: "1px solid #333" }}
+        style={{ background: "var(--bg-card-surface)", border: "1px solid var(--border-subtle)" }}
       >
         {docs.map((doc, idx) => (
           <DocRow key={`${doc.type}-${doc.href}`} doc={doc} isLast={idx === docs.length - 1} />

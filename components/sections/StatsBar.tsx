@@ -18,7 +18,7 @@ const GRAD: React.CSSProperties = {
 
 export default function StatsBar() {
   return (
-    <section className="py-16" style={{ background: "var(--color-slate)" }}>
+    <section className="py-16" style={{ background: "var(--bg-slate)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 md:grid-cols-4">
           {stats.map((stat, i) => (
@@ -41,7 +41,7 @@ export default function StatsBar() {
               </p>
               <p
                 className="text-xs font-medium uppercase tracking-[0.1em]"
-                style={{ color: "#4b5563" }}
+                style={{ color: "var(--text-faint)" }}
               >
                 {stat.label}
               </p>

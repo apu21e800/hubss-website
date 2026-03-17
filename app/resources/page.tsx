@@ -44,7 +44,7 @@ const quickLinks = [
 
 export default function ResourcesPage() {
   return (
-    <main className="min-h-screen bg-[#0a0a0a]">
+    <main className="min-h-screen bg-[var(--bg-dark)]">
       <Nav />
 
       {/* ── Hero ──────────────────────────────────────────── */}
@@ -91,7 +91,7 @@ export default function ResourcesPage() {
             <Link
               key={link.title}
               href={link.href}
-              className="group block rounded-xl overflow-hidden bg-zinc-900 border border-zinc-800 transition-all duration-300 hover:border-orange-500/20 hover:shadow-[0_0_30px_rgba(249,115,22,0.06)]"
+              className="group block rounded-xl overflow-hidden bg-[var(--bg-card)] border border-[var(--bg-card-hover)] transition-all duration-300 hover:border-orange-500/20 hover:shadow-[0_0_30px_rgba(249,115,22,0.06)]"
             >
               <div className="aspect-[16/9] overflow-hidden relative">
                 <Image
@@ -104,7 +104,7 @@ export default function ResourcesPage() {
                 />
               </div>
               <div className="p-5">
-                <h3 className="font-semibold text-[#f5f0eb] mb-2 group-hover:text-orange-400 transition-colors">
+                <h3 className="font-semibold text-[var(--text-primary)] mb-2 group-hover:text-orange-400 transition-colors">
                   {link.title}
                 </h3>
                 <p className="text-sm text-gray-400 leading-relaxed mb-3">
@@ -123,7 +123,7 @@ export default function ResourcesPage() {
       {/* ── Document Library ──────────────────────────────── */}
       <section className="max-w-7xl mx-auto px-6 pb-24">
         <div className="mb-10">
-          <h2 className="text-3xl font-bold text-[#f5f0eb] mb-2">
+          <h2 className="text-3xl font-bold text-[var(--text-primary)] mb-2">
             All Documents
           </h2>
           <p className="text-gray-400">

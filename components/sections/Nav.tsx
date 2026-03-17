@@ -93,9 +93,9 @@ const GEIST: React.CSSProperties = {
 
 function PanelFooter() {
   return (
-    <div style={{ background: "#0a0a0a", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+    <div style={{ background: "var(--bg-dark)", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
       <div style={{ maxWidth: 1400, margin: "0 auto", padding: "12px 3rem" }}>
-        <p className="text-xs text-center" style={{ color: "#374151" }}>
+        <p className="text-xs text-center" style={{ color: "var(--text-hint)" }}>
           Engineered for Canadian infrastructure · TAC + FAA Compliant · Proud to work coast to coast 🍁
         </p>
       </div>
@@ -138,8 +138,8 @@ function ProductsPanel({
         className="absolute top-0 left-0 overflow-hidden"
         style={{
           width: "100vw",
-          background: "#111111",
-          borderTop: "1px solid #1f1f1f",
+          background: "var(--bg-card)",
+          borderTop: "1px solid var(--border-subtle)",
           boxShadow: "0 20px 60px rgba(0,0,0,0.6)",
           pointerEvents: "auto",
         }}
@@ -165,7 +165,7 @@ function ProductsPanel({
             }}
           >
             {/* ── LEFT: Featured product spotlight ──────────────────── */}
-            <div style={{ borderRight: "1px solid rgba(255,255,255,0.05)", paddingRight: "2.5rem" }}>
+            <div style={{ borderRight: "1px solid var(--border-faint)", paddingRight: "2.5rem" }}>
               <p className="text-xs font-bold tracking-[0.2em] uppercase mb-4" style={GRAD}>
                 Featured System
               </p>
@@ -173,13 +173,13 @@ function ProductsPanel({
               <div className="flex gap-4 items-start">
                 {/* Text */}
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-2xl font-bold mb-1.5" style={{ ...GEIST, color: "#f5f0eb" }}>
+                  <h3 className="text-2xl font-bold mb-1.5" style={{ ...GEIST, color: "var(--text-primary)" }}>
                     {featured.name}
                   </h3>
                   <p className="text-sm font-medium mb-3" style={{ color: "#f97316" }}>
                     {featured.shortDesc}
                   </p>
-                  <p className="text-sm leading-relaxed mb-5" style={{ color: "#6b7280" }}>
+                  <p className="text-sm leading-relaxed mb-5" style={{ color: "var(--text-muted)" }}>
                     {featured.description.slice(0, 130)}…
                   </p>
                   <Link
@@ -208,7 +208,7 @@ function ProductsPanel({
             </div>
 
             {/* ── MIDDLE: All systems list ───────────────────────────── */}
-            <div style={{ borderRight: "1px solid rgba(255,255,255,0.05)", paddingRight: "2.5rem" }}>
+            <div style={{ borderRight: "1px solid var(--border-faint)", paddingRight: "2.5rem" }}>
               <p className="text-xs font-bold tracking-[0.2em] uppercase mb-4" style={GRAD}>
                 All Systems
               </p>
@@ -218,7 +218,7 @@ function ProductsPanel({
                   <Link
                     key={p.slug}
                     href={`/products/${p.slug}`}
-                    className="group flex items-center gap-3 py-2 px-2 -mx-2 rounded-md transition-all duration-150 hover:bg-zinc-900"
+                    className="group flex items-center gap-3 py-2 px-2 -mx-2 rounded-md transition-all duration-150 hover:bg-[var(--bg-card-hover)]"
                     style={{ borderBottom: "0.5px solid rgba(255,255,255,0.04)" }}
                   >
                     <span
@@ -228,11 +228,11 @@ function ProductsPanel({
                     <div className="flex-1 min-w-0">
                       <span
                         className="block text-sm font-medium transition-colors duration-150 group-hover:text-orange-400"
-                        style={{ color: "#d1d5db" }}
+                        style={{ color: "#d1d5db" /* mid-gray, keep as-is */ }}
                       >
                         {p.name}
                       </span>
-                      <span className="block text-[0.68rem] truncate" style={{ color: "#4b5563" }}>
+                      <span className="block text-[0.68rem] truncate" style={{ color: "var(--text-faint)" }}>
                         {p.shortDesc}
                       </span>
                     </div>
@@ -260,8 +260,8 @@ function ProductsPanel({
                   <Link
                     key={href}
                     href={href}
-                    className="flex items-start gap-3 p-3 rounded-lg transition-colors duration-150 hover:bg-zinc-800"
-                    style={{ background: "#1a1a1a" }}
+                    className="flex items-start gap-3 p-3 rounded-lg transition-colors duration-150 hover:bg-[var(--bg-card-hover)]"
+                    style={{ background: "var(--bg-primary)" }}
                   >
                     <div
                       className="w-8 h-8 rounded-md flex items-center justify-center flex-shrink-0 mt-0.5"
@@ -270,14 +270,14 @@ function ProductsPanel({
                       <Icon size={14} stroke="#f97316" strokeWidth={2} />
                     </div>
                     <div>
-                      <p className="text-sm font-medium" style={{ color: "#e5e7eb" }}>{label}</p>
-                      <p className="text-[0.68rem]" style={{ color: "#4b5563" }}>{sub}</p>
+                      <p className="text-sm font-medium" style={{ color: "var(--text-body)" }}>{label}</p>
+                      <p className="text-[0.68rem]" style={{ color: "var(--text-faint)" }}>{sub}</p>
                     </div>
                   </Link>
                 ))}
               </div>
 
-              <p className="mt-6 text-xs text-center leading-relaxed" style={{ color: "#374151" }}>
+              <p className="mt-6 text-xs text-center leading-relaxed" style={{ color: "var(--text-hint)" }}>
                 500+ Projects · 10 Provinces · Since 1994
               </p>
             </div>
@@ -325,8 +325,8 @@ function ApplicationsPanel({
         className="absolute top-0 left-0 overflow-hidden"
         style={{
           width: "100vw",
-          background: "#111111",
-          borderTop: "1px solid #1f1f1f",
+          background: "var(--bg-card)",
+          borderTop: "1px solid var(--border-subtle)",
           boxShadow: "0 20px 60px rgba(0,0,0,0.6)",
           pointerEvents: "auto",
         }}
@@ -352,7 +352,7 @@ function ApplicationsPanel({
             }}
           >
             {/* ── LEFT: Application tiles grid ──────────────────────── */}
-            <div style={{ borderRight: "1px solid rgba(255,255,255,0.05)", paddingRight: "3rem" }}>
+            <div style={{ borderRight: "1px solid var(--border-faint)", paddingRight: "3rem" }}>
               <p className="text-xs font-bold tracking-[0.2em] uppercase mb-5" style={GRAD}>
                 Applications
               </p>
@@ -364,7 +364,7 @@ function ApplicationsPanel({
                     <Link
                       key={app.slug}
                       href={`/applications/${app.slug}`}
-                      className="group relative flex flex-col items-start gap-1.5 p-3 rounded-lg transition-all duration-150 hover:bg-zinc-900"
+                      className="group relative flex flex-col items-start gap-1.5 p-3 rounded-lg transition-all duration-150 hover:bg-[var(--bg-card-hover)]"
                     >
                       {/* Gradient top border on hover */}
                       <div
@@ -382,7 +382,7 @@ function ApplicationsPanel({
                       </div>
                       <span
                         className="text-xs font-medium leading-tight transition-colors duration-150 group-hover:text-white"
-                        style={{ color: "#9ca3af" }}
+                        style={{ color: "var(--text-secondary)" }}
                       >
                         {app.name}
                       </span>
@@ -422,13 +422,13 @@ function ApplicationsPanel({
                     }}
                   />
                   <div className="absolute bottom-0 left-0 right-0 p-4">
-                    <h3 className="text-xl font-bold" style={{ ...GEIST, color: "#f5f0eb" }}>
+                    <h3 className="text-xl font-bold" style={{ ...GEIST, color: "var(--text-primary)" }}>
                       {featuredApp.name}
                     </h3>
                   </div>
                 </div>
 
-                <p className="text-sm leading-relaxed mb-4" style={{ color: "#6b7280" }}>
+                <p className="text-sm leading-relaxed mb-4" style={{ color: "var(--text-muted)" }}>
                   {featuredApp.desc.slice(0, 100)}…
                 </p>
 
@@ -541,7 +541,7 @@ export default function Nav() {
 
             {/* Wordmark */}
             <Link href="/" className="flex items-center" onClick={() => setActivePanel(null)}>
-              <span style={{ color: "#f5f0eb", fontWeight: 800, fontSize: "1.15rem", letterSpacing: "-0.02em", ...GEIST }}>
+              <span style={{ color: "var(--text-primary)", fontWeight: 800, fontSize: "1.15rem", letterSpacing: "-0.02em", ...GEIST }}>
                 HUB
               </span>
               <span style={{ ...GRAD, ...GEIST, fontWeight: 800, fontSize: "1.15rem", letterSpacing: "-0.02em" }}>
@@ -556,7 +556,7 @@ export default function Nav() {
               <Link
                 href="/products"
                 className="flex items-center gap-1 text-[0.78rem] font-medium px-3 py-2 relative transition-colors duration-150"
-                style={{ color: activePanel === "products" || pathname.startsWith("/products") ? "#f5f0eb" : "#6b7280" }}
+                style={{ color: activePanel === "products" || pathname.startsWith("/products") ? "var(--text-primary)" : "var(--text-muted)" }}
                 onMouseEnter={(e) => openPanel("products", e.currentTarget)}
                 onMouseLeave={startCloseTimer}
                 aria-expanded={activePanel === "products"}
@@ -581,7 +581,7 @@ export default function Nav() {
               <Link
                 href="/applications"
                 className="flex items-center gap-1 text-[0.78rem] font-medium px-3 py-2 relative transition-colors duration-150"
-                style={{ color: activePanel === "applications" || pathname.startsWith("/applications") ? "#f5f0eb" : "#6b7280" }}
+                style={{ color: activePanel === "applications" || pathname.startsWith("/applications") ? "var(--text-primary)" : "var(--text-muted)" }}
                 onMouseEnter={(e) => openPanel("applications", e.currentTarget)}
                 onMouseLeave={startCloseTimer}
                 aria-expanded={activePanel === "applications"}
@@ -610,7 +610,7 @@ export default function Nav() {
                     key={link.href}
                     href={link.href}
                     className="text-[0.78rem] font-medium px-3 py-2 relative group transition-colors duration-150"
-                    style={{ color: active ? "#f5f0eb" : "#6b7280" }}
+                    style={{ color: active ? "var(--text-primary)" : "var(--text-muted)" }}
                   >
                     {link.label}
                     <span
@@ -634,7 +634,7 @@ export default function Nav() {
             {/* Mobile hamburger */}
             <button
               className="md:hidden p-2"
-              style={{ color: "#f5f0eb" }}
+              style={{ color: "var(--text-primary)" }}
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
               aria-expanded={mobileOpen}
@@ -652,13 +652,13 @@ export default function Nav() {
               animate={{ opacity: 1, y: 0, transition: { duration: 0.15 } }}
               exit={{ opacity: 0, y: -4, transition: { duration: 0.1 } }}
               className="md:hidden px-4 pb-5 flex flex-col"
-              style={{ borderTop: "1px solid #1e1e1e", paddingTop: 12 }}
+              style={{ borderTop: "1px solid var(--border-subtle)", paddingTop: 12 }}
             >
               {/* Products accordion */}
               <div>
                 <button
                   className="flex items-center justify-between w-full px-2 py-2.5 text-sm font-medium"
-                  style={{ color: pathname.startsWith("/products") ? "#f97316" : "#9ca3af" }}
+                  style={{ color: pathname.startsWith("/products") ? "#f97316" : "var(--text-secondary)" }}
                   onClick={() => setMobileExpanded(mobileExpanded === "products" ? null : "products")}
                   aria-expanded={mobileExpanded === "products"}
                 >
@@ -679,7 +679,7 @@ export default function Nav() {
                     >
                       {products.map((p) => (
                         <Link key={p.slug} href={`/products/${p.slug}`}
-                          className="block px-2 py-2 text-sm" style={{ color: "#6b7280" }}>
+                          className="block px-2 py-2 text-sm" style={{ color: "var(--text-muted)" }}>
                           {p.name}
                         </Link>
                       ))}
@@ -695,7 +695,7 @@ export default function Nav() {
               <div>
                 <button
                   className="flex items-center justify-between w-full px-2 py-2.5 text-sm font-medium"
-                  style={{ color: pathname.startsWith("/applications") ? "#f97316" : "#9ca3af" }}
+                  style={{ color: pathname.startsWith("/applications") ? "#f97316" : "var(--text-secondary)" }}
                   onClick={() => setMobileExpanded(mobileExpanded === "applications" ? null : "applications")}
                   aria-expanded={mobileExpanded === "applications"}
                 >
@@ -716,7 +716,7 @@ export default function Nav() {
                     >
                       {applications.map((app) => (
                         <Link key={app.slug} href={`/applications/${app.slug}`}
-                          className="block px-2 py-2 text-sm" style={{ color: "#6b7280" }}>
+                          className="block px-2 py-2 text-sm" style={{ color: "var(--text-muted)" }}>
                           {app.name}
                         </Link>
                       ))}
@@ -734,7 +734,7 @@ export default function Nav() {
                 return (
                   <Link key={link.href} href={link.href}
                     className="block px-2 py-2.5 text-sm font-medium"
-                    style={{ color: active ? "#f97316" : "#9ca3af" }}>
+                    style={{ color: active ? "#f97316" : "var(--text-secondary)" }}>
                     {link.label}
                   </Link>
                 );

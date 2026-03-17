@@ -141,7 +141,7 @@ export default function ResourcesClient({
             className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 border ${
               applicationFilter === filter.value
                 ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white border-transparent shadow-[0_0_16px_rgba(249,115,22,0.25)]"
-                : "border-zinc-700 text-gray-400 hover:border-orange-400/50 hover:text-gray-200"
+                : "border-[var(--border-color)] text-gray-400 hover:border-orange-400/50 hover:text-gray-200"
             }`}
           >
             {filter.label}
@@ -162,7 +162,7 @@ export default function ResourcesClient({
               setSearch(e.target.value);
               setVisibleCount(PAGE_SIZE);
             }}
-            className="w-full pl-10 pr-4 py-3 rounded-lg bg-zinc-900 border border-zinc-800 text-[#f5f0eb] placeholder-gray-500 focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/25 transition-colors text-sm"
+            className="w-full pl-10 pr-4 py-3 rounded-lg bg-[var(--bg-card)] border border-[var(--bg-card-hover)] text-[var(--text-primary)] placeholder-gray-500 focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/25 transition-colors text-sm"
           />
           {search && (
             <button
@@ -182,7 +182,7 @@ export default function ResourcesClient({
               setProductFilter(e.target.value);
               setVisibleCount(PAGE_SIZE);
             }}
-            className="appearance-none w-full sm:w-48 px-4 py-3 pr-10 rounded-lg bg-zinc-900 border border-zinc-800 text-[#f5f0eb] text-sm focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/25 transition-colors cursor-pointer"
+            className="appearance-none w-full sm:w-48 px-4 py-3 pr-10 rounded-lg bg-[var(--bg-card)] border border-[var(--bg-card-hover)] text-[var(--text-primary)] text-sm focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/25 transition-colors cursor-pointer"
           >
             {PRODUCTS.map((p) => (
               <option key={p.value} value={p.value}>
@@ -201,7 +201,7 @@ export default function ResourcesClient({
               setTypeFilter(e.target.value);
               setVisibleCount(PAGE_SIZE);
             }}
-            className="appearance-none w-full sm:w-48 px-4 py-3 pr-10 rounded-lg bg-zinc-900 border border-zinc-800 text-[#f5f0eb] text-sm focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/25 transition-colors cursor-pointer"
+            className="appearance-none w-full sm:w-48 px-4 py-3 pr-10 rounded-lg bg-[var(--bg-card)] border border-[var(--bg-card-hover)] text-[var(--text-primary)] text-sm focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/25 transition-colors cursor-pointer"
           >
             {DOCUMENT_TYPES.map((t) => (
               <option key={t} value={t}>
@@ -235,7 +235,7 @@ export default function ResourcesClient({
             {visible.map((doc) => (
               <div
                 key={doc.id}
-                className="group rounded-xl bg-zinc-900 border border-zinc-800 p-5 flex flex-col justify-between transition-all duration-300 hover:border-orange-500/20 hover:shadow-[0_0_30px_rgba(249,115,22,0.06)] hover:-translate-y-0.5"
+                className="group rounded-xl bg-[var(--bg-card)] border border-[var(--bg-card-hover)] p-5 flex flex-col justify-between transition-all duration-300 hover:border-orange-500/20 hover:shadow-[0_0_30px_rgba(249,115,22,0.06)] hover:-translate-y-0.5"
               >
                 <div>
                   {/* Type badge */}
@@ -246,7 +246,7 @@ export default function ResourcesClient({
                   </span>
 
                   {/* Title */}
-                  <h3 className="font-medium text-[#f5f0eb] leading-snug mb-2">
+                  <h3 className="font-medium text-[var(--text-primary)] leading-snug mb-2">
                     {doc.title}
                   </h3>
 
@@ -257,7 +257,7 @@ export default function ResourcesClient({
                 </div>
 
                 {/* Bottom row */}
-                <div className="flex items-center justify-between mt-5 pt-4 border-t border-zinc-800">
+                <div className="flex items-center justify-between mt-5 pt-4 border-t border-[var(--bg-card-hover)]">
                   <div className="flex items-center gap-3 text-xs text-gray-500">
                     <span>{doc.fileSize}</span>
                     <span className="w-1 h-1 rounded-full bg-zinc-700" />
@@ -282,7 +282,7 @@ export default function ResourcesClient({
             <div className="text-center mt-10">
               <button
                 onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
-                className="px-8 py-3 rounded-lg text-sm font-medium border border-zinc-700 text-gray-300 hover:border-orange-400/50 hover:text-orange-400 transition-all duration-200"
+                className="px-8 py-3 rounded-lg text-sm font-medium border border-[var(--border-color)] text-gray-300 hover:border-orange-400/50 hover:text-orange-400 transition-all duration-200"
               >
                 Load more ({filtered.length - visibleCount} remaining)
               </button>
@@ -293,7 +293,7 @@ export default function ResourcesClient({
         /* ── Empty State ──────────────────────────────────── */
         <div className="text-center py-20">
           <FileText className="w-12 h-12 text-zinc-700 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-[#f5f0eb] mb-2">
+          <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-2">
             No documents found
           </h3>
           <p className="text-gray-500 mb-6">
@@ -308,7 +308,7 @@ export default function ResourcesClient({
             </button>
             <Link
               href="/contact"
-              className="px-6 py-2.5 rounded-lg text-sm font-medium border border-zinc-700 text-gray-300 hover:border-orange-400/50 hover:text-orange-400 transition-all"
+              className="px-6 py-2.5 rounded-lg text-sm font-medium border border-[var(--border-color)] text-gray-300 hover:border-orange-400/50 hover:text-orange-400 transition-all"
             >
               Can&apos;t find what you need? Contact us &rarr;
             </Link>

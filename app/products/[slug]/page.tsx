@@ -60,7 +60,7 @@ export default async function ProductPage({ params }: Props) {
   };
 
   return (
-    <main style={{ background: "#1a1a1a", minHeight: "100vh" }}>
+    <main style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
       <JsonLd data={productSchema} />
       <Nav />
 
@@ -74,34 +74,34 @@ export default async function ProductPage({ params }: Props) {
           priority
           sizes="100vw"
         />
-        <div className="absolute inset-0" style={{ background: "rgba(26,26,26,0.7)" }} />
+        <div className="absolute inset-0" style={{ background: "rgba(26,26,26,0.7)" }} />{/* overlay — keep hardcoded */}
         <div className="absolute inset-0 flex items-end max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
           <div>
             <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-3" style={{ color: "#f97316" }}>
               HUB Product System
             </p>
-            <h1 className="text-6xl font-bold" style={{ color: "#f5f0eb" }}>
+            <h1 className="text-6xl font-bold" style={{ color: "var(--text-primary)" }}>
               {product.name}
             </h1>
-            <p className="text-lg mt-2" style={{ color: "#e5e7eb" }}>
+            <p className="text-lg mt-2" style={{ color: "var(--text-body)" }}>
               {product.shortDesc}
             </p>
           </div>
         </div>
       </div>
 
-      <div style={{ background: "var(--color-slate)" }}>
+      <div style={{ background: "var(--bg-slate)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
           {/* Left: description + gallery */}
           <div className="lg:col-span-2">
-            <h2 className="text-2xl font-bold mb-5" style={{ color: "#f5f0eb" }}>About {product.name}</h2>
-            <p className="text-[16px] leading-relaxed mb-12" style={{ color: "#e5e7eb" }}>
+            <h2 className="text-2xl font-bold mb-5" style={{ color: "var(--text-primary)" }}>About {product.name}</h2>
+            <p className="text-[16px] leading-relaxed mb-12" style={{ color: "var(--text-body)" }}>
               {product.description}
             </p>
 
             {/* Gallery */}
-            <h2 className="text-2xl font-bold mb-6" style={{ color: "#f5f0eb" }}>Gallery</h2>
+            <h2 className="text-2xl font-bold mb-6" style={{ color: "var(--text-primary)" }}>Gallery</h2>
             <GalleryGrid images={gallery} />
 
             <DocumentDownloads slug={product.slug} />
@@ -109,13 +109,13 @@ export default async function ProductPage({ params }: Props) {
 
           {/* Right: specs + CTA */}
           <div>
-            <div className="rounded-xl p-8 mb-8 sticky top-24" style={{ background: "#2d2d2d", border: "1px solid #333" }}>
-              <h3 className="font-bold text-lg mb-6" style={{ color: "#f5f0eb" }}>Specifications</h3>
+            <div className="rounded-xl p-8 mb-8 sticky top-24" style={{ background: "var(--bg-card-surface)", border: "1px solid var(--border-subtle)" }}>
+              <h3 className="font-bold text-lg mb-6" style={{ color: "var(--text-primary)" }}>Specifications</h3>
               <div className="space-y-4">
                 {product.specs.map((spec) => (
-                  <div key={spec.label} className="flex justify-between text-sm" style={{ borderBottom: "1px solid #333", paddingBottom: "12px" }}>
+                  <div key={spec.label} className="flex justify-between text-sm" style={{ borderBottom: "1px solid var(--border-subtle)", paddingBottom: "12px" }}>
                     <span style={{ color: "#d1d5db" }}>{spec.label}</span>
-                    <span className="font-semibold text-right max-w-[60%]" style={{ color: "#f5f0eb" }}>
+                    <span className="font-semibold text-right max-w-[60%]" style={{ color: "var(--text-primary)" }}>
                       {spec.value}
                     </span>
                   </div>
@@ -132,7 +132,7 @@ export default async function ProductPage({ params }: Props) {
               <Link
                 href="/lunch-learn"
                 className="block w-full text-center font-semibold py-4 rounded-lg mt-3 transition-colors text-sm"
-                style={{ background: "transparent", color: "#f5f0eb", border: "1px solid #333" }}
+                style={{ background: "transparent", color: "var(--text-primary)", border: "1px solid var(--border-subtle)" }}
               >
                 Book Lunch &amp; Learn
               </Link>
@@ -142,7 +142,7 @@ export default async function ProductPage({ params }: Props) {
 
         {/* Applications this product is used for */}
         {relatedAppData.length > 0 && (
-          <div className="mt-16 pt-16" style={{ borderTop: "1px solid #2a2a2a" }}>
+          <div className="mt-16 pt-16" style={{ borderTop: "1px solid var(--border-subtle)" }}>
             <div className="flex items-end justify-between mb-8">
               <div>
                 <p
@@ -151,14 +151,14 @@ export default async function ProductPage({ params }: Props) {
                 >
                   Where It&apos;s Used
                 </p>
-                <h2 className="text-2xl font-bold" style={{ color: "#f5f0eb" }}>
+                <h2 className="text-2xl font-bold" style={{ color: "var(--text-primary)" }}>
                   Applications
                 </h2>
               </div>
               <Link
                 href="/applications"
                 className="hidden sm:flex items-center gap-1.5 text-xs font-semibold transition-colors duration-150 hover:text-white"
-                style={{ color: "#6b7280" }}
+                style={{ color: "var(--text-muted)" }}
               >
                 All applications
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round">
@@ -173,7 +173,7 @@ export default async function ProductPage({ params }: Props) {
                   key={app.slug}
                   href={`/applications/${app.slug}`}
                   className="group relative overflow-hidden rounded-lg flex flex-col"
-                  style={{ background: "#1e1e1e", border: "1px solid rgba(255,255,255,0.05)" }}
+                  style={{ background: "var(--bg-card)", border: "1px solid var(--border-faint)" }}
                 >
                   {/* Thumbnail */}
                   <div className="relative overflow-hidden" style={{ height: 130 }}>
@@ -197,7 +197,7 @@ export default async function ProductPage({ params }: Props) {
                         />
                         <p
                           className="font-bold text-sm leading-tight"
-                          style={{ color: "#f5f0eb" }}
+                          style={{ color: "var(--text-primary)" }}
                         >
                           {app.name}
                         </p>
@@ -208,7 +208,7 @@ export default async function ProductPage({ params }: Props) {
                   <div className="px-4 py-3 flex-1 flex flex-col">
                     <p
                       className="text-[0.72rem] leading-relaxed flex-1"
-                      style={{ color: "#6b7280" }}
+                      style={{ color: "var(--text-muted)" }}
                     >
                       {app.desc.slice(0, 80)}{app.desc.length > 80 ? "…" : ""}
                     </p>

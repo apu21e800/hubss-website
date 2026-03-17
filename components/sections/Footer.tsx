@@ -37,7 +37,7 @@ const socials = [
 
 export default function Footer() {
   return (
-    <footer style={{ background: "#0f0f0f" }}>
+    <footer style={{ background: "var(--bg-dark)" }}>
 
       {/* Full-width gradient divider */}
       <div
@@ -53,7 +53,7 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-0.5 mb-5">
-              <span className="font-bold text-2xl" style={{ color: "#f5f0eb" }}>HUB</span>
+              <span className="font-bold text-2xl" style={{ color: "var(--text-primary)" }}>HUB</span>
               <span
                 className="font-bold text-2xl grad-text"
               >SS</span>
@@ -62,12 +62,12 @@ export default function Footer() {
             {/* Monument tagline */}
             <p
               className="font-light tracking-wide leading-snug mb-2"
-              style={{ color: "#f5f0eb", fontSize: "1.15rem" }}
+              style={{ color: "var(--text-primary)", fontSize: "1.15rem" }}
             >
               Redefining Canadian<br />Hardscapes Since 1994
             </p>
 
-            <p className="text-xs mb-6" style={{ color: "#6b7280" }}>
+            <p className="text-xs mb-6" style={{ color: "var(--text-muted)" }}>
               Proud to work coast to coast — all 10 provinces
             </p>
 
@@ -79,9 +79,9 @@ export default function Footer() {
                   aria-label={s.label}
                   className="w-9 h-9 rounded flex items-center justify-center transition-colors hover:text-white"
                   style={{
-                    background: "#1a1a1a",
-                    border: "1px solid #2a2a2a",
-                    color: "#6b7280",
+                    background: "var(--bg-primary)",
+                    border: "1px solid var(--border-subtle)",
+                    color: "var(--text-muted)",
                   }}
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -94,14 +94,14 @@ export default function Footer() {
 
           {/* Products */}
           <div>
-            <h4 className="font-semibold text-sm mb-5" style={{ color: "#f5f0eb" }}>Products</h4>
+            <h4 className="font-semibold text-sm mb-5" style={{ color: "var(--text-primary)" }}>Products</h4>
             <ul className="space-y-2.5">
               {products.map((p) => (
                 <li key={p.slug}>
                   <Link
                     href={`/products/${p.slug}`}
                     className="text-sm transition-colors hover:text-[#f97316] underline-offset-4 hover:underline"
-                    style={{ color: "#9ca3af" }}
+                    style={{ color: "var(--text-secondary)" }}
                   >
                     {p.name}
                   </Link>
@@ -112,14 +112,14 @@ export default function Footer() {
 
           {/* Applications */}
           <div>
-            <h4 className="font-semibold text-sm mb-5" style={{ color: "#f5f0eb" }}>Applications</h4>
+            <h4 className="font-semibold text-sm mb-5" style={{ color: "var(--text-primary)" }}>Applications</h4>
             <ul className="space-y-2.5">
               {applications.map((a) => (
                 <li key={a.slug}>
                   <Link
                     href={`/applications/${a.slug}`}
                     className="text-sm transition-colors hover:text-[#f97316] underline-offset-4 hover:underline"
-                    style={{ color: "#9ca3af" }}
+                    style={{ color: "var(--text-secondary)" }}
                   >
                     {a.label}
                   </Link>
@@ -130,7 +130,7 @@ export default function Footer() {
 
           {/* Offices */}
           <div>
-            <h4 className="font-semibold text-sm mb-5" style={{ color: "#f5f0eb" }}>Offices</h4>
+            <h4 className="font-semibold text-sm mb-5" style={{ color: "var(--text-primary)" }}>Offices</h4>
             <div className="space-y-6">
 
               {/* East */}
@@ -142,11 +142,11 @@ export default function Footer() {
                 <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "#f97316" }}>
                   East Office
                 </p>
-                <p className="text-sm mb-1" style={{ color: "#f5f0eb" }}>Milton, Ontario</p>
-                <a href="mailto:doug.bain@hubss.com" className="text-xs block transition-colors hover:text-white underline-offset-4 hover:underline" style={{ color: "#9ca3af" }}>
+                <p className="text-sm mb-1" style={{ color: "var(--text-primary)" }}>Milton, Ontario</p>
+                <a href="mailto:doug.bain@hubss.com" className="text-xs block transition-colors hover:text-white underline-offset-4 hover:underline" style={{ color: "var(--text-secondary)" }}>
                   doug.bain@hubss.com
                 </a>
-                <a href="tel:4165409287" className="text-xs block transition-colors hover:text-white" style={{ color: "#9ca3af" }}>
+                <a href="tel:4165409287" className="text-xs block transition-colors hover:text-white" style={{ color: "var(--text-secondary)" }}>
                   416-540-9287
                 </a>
               </div>
@@ -160,11 +160,11 @@ export default function Footer() {
                 <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "#f97316" }}>
                   West Office
                 </p>
-                <p className="text-sm mb-1" style={{ color: "#f5f0eb" }}>Ladysmith, BC</p>
-                <a href="mailto:cleve.stordy@hubss.com" className="text-xs block transition-colors hover:text-white underline-offset-4 hover:underline" style={{ color: "#9ca3af" }}>
+                <p className="text-sm mb-1" style={{ color: "var(--text-primary)" }}>Ladysmith, BC</p>
+                <a href="mailto:cleve.stordy@hubss.com" className="text-xs block transition-colors hover:text-white underline-offset-4 hover:underline" style={{ color: "var(--text-secondary)" }}>
                   cleve.stordy@hubss.com
                 </a>
-                <a href="tel:6043098212" className="text-xs block transition-colors hover:text-white" style={{ color: "#9ca3af" }}>
+                <a href="tel:6043098212" className="text-xs block transition-colors hover:text-white" style={{ color: "var(--text-secondary)" }}>
                   604-309-8212
                 </a>
               </div>
@@ -175,16 +175,16 @@ export default function Footer() {
 
         <div
           className="mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4"
-          style={{ borderTop: "1px solid #1e1e1e" }}
+          style={{ borderTop: "1px solid var(--border-subtle)" }}
         >
-          <p className="text-xs" style={{ color: "#6b7280" }}>
+          <p className="text-xs" style={{ color: "var(--text-muted)" }}>
             &copy; {new Date().getFullYear()} HUB Surface Systems. All rights reserved.
           </p>
           <div className="flex gap-6">
-            <Link href="/privacy" className="text-xs transition-colors hover:text-white underline-offset-4 hover:underline" style={{ color: "#6b7280" }}>
+            <Link href="/privacy" className="text-xs transition-colors hover:text-white underline-offset-4 hover:underline" style={{ color: "var(--text-muted)" }}>
               Privacy Policy
             </Link>
-            <Link href="/terms" className="text-xs transition-colors hover:text-white underline-offset-4 hover:underline" style={{ color: "#6b7280" }}>
+            <Link href="/terms" className="text-xs transition-colors hover:text-white underline-offset-4 hover:underline" style={{ color: "var(--text-muted)" }}>
               Terms of Use
             </Link>
           </div>

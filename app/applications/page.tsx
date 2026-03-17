@@ -13,19 +13,19 @@ export const metadata: Metadata = {
 
 export default function ApplicationsPage() {
   return (
-    <main style={{ background: "#1a1a1a", minHeight: "100vh" }}>
+    <main style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
       <Nav />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24">
         <div className="mb-16 max-w-2xl">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-3" style={{ color: "#f97316" }}>
             Applications
           </p>
-          <h1 className="text-6xl font-bold mb-5 leading-tight" style={{ color: "#f5f0eb" }}>
+          <h1 className="text-6xl font-bold mb-5 leading-tight" style={{ color: "var(--text-primary)" }}>
             Every Surface.
             <br />
             Every City.
           </h1>
-          <p className="text-lg" style={{ color: "#9ca3af" }}>
+          <p className="text-lg" style={{ color: "var(--text-secondary)" }}>
             From provincial highways to neighbourhood laneways — HUB Surface Systems
             delivers the right solution for every surface application.
           </p>
@@ -49,8 +49,8 @@ export default function ApplicationsPage() {
               <div className="absolute inset-0 transition-all" style={{ background: "rgba(26,26,26,0.6)" }} />
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: "rgba(249,115,22,0.2)" }} />
               <div className="absolute bottom-0 left-0 right-0 p-5">
-                <h2 className="font-bold text-lg mb-1" style={{ color: "#f5f0eb" }}>{app.name}</h2>
-                <p className="text-xs leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: "#f5f0eb" }}>
+                <h2 className="font-bold text-lg mb-1" style={{ color: "var(--text-primary)" }}>{app.name}</h2>
+                <p className="text-xs leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: "var(--text-primary)" }}>
                   {app.desc.slice(0, 80)}...
                 </p>
               </div>

@@ -72,10 +72,10 @@ export default function BlogFilter({ posts, allProducts }: Props) {
       onClick={onClick}
       className="text-xs font-semibold px-4 py-2 rounded transition-all"
       style={{
-        background:   active ? "#f97316" : "#2d2d2d",
-        color:        active ? "#fff"    : "#9ca3af",
+        background:   active ? "#f97316" : "var(--bg-card-surface)",
+        color:        active ? "#fff"    : "var(--text-secondary)",
         border:       "1px solid",
-        borderColor:  active ? "#f97316" : "#333",
+        borderColor:  active ? "#f97316" : "var(--border-subtle)",
       }}
     >
       {label}
@@ -111,7 +111,7 @@ export default function BlogFilter({ posts, allProducts }: Props) {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full pl-8 pr-7 py-2 rounded text-xs"
-              style={{ background: "#2d2d2d", border: "1px solid #333", color: "#f5f0eb" }}
+              style={{ background: "var(--bg-card-surface)", border: "1px solid var(--border-subtle)", color: "var(--text-primary)" }}
             />
             {search && (
               <button onClick={() => { setSearch(""); pushParams({ search: "" }); }} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-400">
@@ -125,7 +125,7 @@ export default function BlogFilter({ posts, allProducts }: Props) {
               value={sort}
               onChange={(e) => setAndSync(setSort, "sort", e.target.value as typeof sort)}
               className="appearance-none pl-3 pr-7 py-2 rounded text-xs cursor-pointer"
-              style={{ background: "#2d2d2d", border: "1px solid #333", color: "#9ca3af" }}
+              style={{ background: "var(--bg-card-surface)", border: "1px solid var(--border-subtle)", color: "var(--text-secondary)" }}
             >
               <option value="newest">Newest</option>
               <option value="oldest">Oldest</option>
@@ -157,8 +157,8 @@ export default function BlogFilter({ posts, allProducts }: Props) {
         </div>
       ) : (
         <div className="text-center py-20">
-          <p className="text-base font-semibold mb-2" style={{ color: "#f5f0eb" }}>No posts match your filters</p>
-          <p className="text-sm mb-6" style={{ color: "#9ca3af" }}>Try adjusting your search or filters.</p>
+          <p className="text-base font-semibold mb-2" style={{ color: "var(--text-primary)" }}>No posts match your filters</p>
+          <p className="text-sm mb-6" style={{ color: "var(--text-secondary)" }}>Try adjusting your search or filters.</p>
           <button
             onClick={clearFilters}
             className="text-xs font-semibold px-5 py-2.5 rounded"

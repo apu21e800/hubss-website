@@ -72,7 +72,7 @@ export default async function BlogPostPage({ params }: Props) {
   };
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a]">
+    <main className="min-h-screen bg-[var(--bg-dark)]">
       <JsonLd data={articleSchema} />
       <Nav />
 
@@ -88,10 +88,10 @@ export default async function BlogPostPage({ params }: Props) {
             sizes="100vw"
           />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a]" />
+          <div className="absolute inset-0 bg-gradient-to-br from-[var(--bg-primary)] to-[var(--bg-dark)]" />
         )}
         {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-dark)] via-[var(--bg-dark)]/60 to-transparent" />
 
         {/* Hero content */}
         <div className="absolute inset-0 flex items-end">
@@ -136,7 +136,7 @@ export default async function BlogPostPage({ params }: Props) {
       <div className="max-w-3xl mx-auto px-6 pb-16">
         <div className="border-t border-white/10 pt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
           <div>
-            <p className="text-sm font-semibold text-[#f5f0eb]">
+            <p className="text-sm font-semibold text-[var(--text-primary)]">
               HUB Surface Systems
             </p>
             <p className="text-xs text-gray-500 mt-1">
@@ -148,9 +148,9 @@ export default async function BlogPostPage({ params }: Props) {
       </div>
 
       {/* ── CTA band ────────────────────────────────────── */}
-      <section className="border-t border-white/5 bg-[#111]">
+      <section className="border-t border-white/5 bg-[var(--bg-card)]">
         <div className="max-w-4xl mx-auto px-6 py-16 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-[#f5f0eb] mb-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-[var(--text-primary)] mb-4">
             Ready to transform your streetscape?
           </h2>
           <p className="text-gray-400 mb-8 max-w-xl mx-auto">
@@ -166,7 +166,7 @@ export default async function BlogPostPage({ params }: Props) {
             </Link>
             <Link
               href="/lunch-learn"
-              className="px-8 py-4 rounded-lg font-semibold text-sm border border-white/20 text-[#f5f0eb] hover:border-orange-400/40 hover:text-orange-400 transition-all duration-200"
+              className="px-8 py-4 rounded-lg font-semibold text-sm border border-white/20 text-[var(--text-primary)] hover:border-orange-400/40 hover:text-orange-400 transition-all duration-200"
             >
               Book Lunch &amp; Learn
             </Link>

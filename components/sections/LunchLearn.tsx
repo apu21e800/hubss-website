@@ -26,7 +26,7 @@ const inputStyle = {
   color: "#111827",
 };
 
-const labelStyle = { color: "#374151", fontSize: "0.8125rem", fontWeight: 600 };
+const labelStyle = { color: "var(--text-hint)" as string, fontSize: "0.8125rem", fontWeight: 600 };
 
 export default function LunchLearn() {
   const [form, setForm] = useState({
@@ -62,7 +62,7 @@ export default function LunchLearn() {
   }
 
   return (
-    <section id="lunch-learn" className="relative overflow-hidden" style={{ background: "#1C2333" }}>
+    <section id="lunch-learn" className="relative overflow-hidden" style={{ background: "var(--bg-slate)" }}>
       {/* Top divider */}
       <div className="h-[3px] w-full" style={{ background: "linear-gradient(90deg, #f97316, #f59e0b)" }} />
 
@@ -81,7 +81,7 @@ export default function LunchLearn() {
             </p>
 
             {/* Headline */}
-            <h2 className="text-5xl font-bold mb-4 leading-tight" style={{ color: "#f5f0eb" }}>
+            <h2 className="text-5xl font-bold mb-4 leading-tight" style={{ color: "var(--text-primary)" }}>
               Let&apos;s{" "}
               <em style={{ color: "#f97316", fontStyle: "italic" }}>Lunch</em>
               {" & Learn"}
@@ -90,7 +90,7 @@ export default function LunchLearn() {
             {/* Subhead */}
             <p className="text-lg mb-10 leading-relaxed" style={{ color: "#94a3b8" }}>
               Tough solutions. Real Canadian examples.{" "}
-              <span style={{ color: "#f5f0eb" }}>Real free lunch.</span>
+              <span style={{ color: "var(--text-primary)" }}>Real free lunch.</span>
             </p>
 
             {/* What we'll cover */}
@@ -131,14 +131,14 @@ export default function LunchLearn() {
               <div className="flex items-start gap-3">
                 <span className="text-base mt-0.5">🏢</span>
                 <div>
-                  <p className="text-sm font-semibold" style={{ color: "#f5f0eb" }}>In-Person</p>
+                  <p className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>In-Person</p>
                   <p className="text-xs" style={{ color: "#94a3b8" }}>We bring lunch to your office.</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <span className="text-base mt-0.5">💻</span>
                 <div>
-                  <p className="text-sm font-semibold" style={{ color: "#f5f0eb" }}>Virtual</p>
+                  <p className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>Virtual</p>
                   <p className="text-xs" style={{ color: "#94a3b8" }}>$25 SkipTheDishes voucher on us.</p>
                 </div>
               </div>
@@ -156,7 +156,7 @@ export default function LunchLearn() {
                 SD
               </div>
               <div>
-                <p className="text-xs font-semibold" style={{ color: "#f5f0eb" }}>SkipTheDishes</p>
+                <p className="text-xs font-semibold" style={{ color: "var(--text-primary)" }}>SkipTheDishes</p>
                 <p className="text-[11px]" style={{ color: "#94a3b8" }}>Voucher delivered on booking</p>
               </div>
             </div>
@@ -181,7 +181,7 @@ export default function LunchLearn() {
                   </svg>
                 </div>
                 <h3 className="text-xl font-bold mb-2" style={{ color: "#111827" }}>You&apos;re on the list!</h3>
-                <p className="text-sm" style={{ color: "#6b7280" }}>
+                <p className="text-sm" style={{ color: "var(--text-muted)" }}>
                   We&apos;ll be in touch within one business day to confirm your session.
                 </p>
               </div>
@@ -192,7 +192,7 @@ export default function LunchLearn() {
                   <h3 className="text-xl font-bold" style={{ color: "#111827" }}>
                     Schedule Your Free Lunch &amp; Learn
                   </h3>
-                  <p className="text-sm mt-1" style={{ color: "#6b7280" }}>
+                  <p className="text-sm mt-1" style={{ color: "var(--text-muted)" }}>
                     We&apos;ll confirm within one business day.
                   </p>
                 </div>

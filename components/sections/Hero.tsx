@@ -36,7 +36,7 @@ export default function Hero() {
   return (
     <section
       className="relative min-h-screen flex flex-col overflow-hidden"
-      style={{ background: "#1a1a1a" }}
+      style={{ background: "var(--bg-primary)" }}
     >
       {/* Full-bleed hero image */}
       <Image
@@ -84,7 +84,7 @@ export default function Hero() {
             <h1
               className="font-black leading-none mb-5"
               style={{
-                color: "#f5f0eb",
+                color: "var(--text-primary)",
                 fontSize: "clamp(3rem, 9vw, 7rem)",
                 letterSpacing: "-0.03em",
               }}
@@ -110,7 +110,7 @@ export default function Hero() {
 
             <p
               className="text-lg md:text-xl max-w-xl mb-10 font-light leading-relaxed"
-              style={{ color: "#e5e7eb" }}
+              style={{ color: "var(--text-body)" }}
             >
               The infrastructure beneath great cities.
             </p>
@@ -128,7 +128,7 @@ export default function Hero() {
                 className="font-semibold px-8 py-4 rounded-full text-center transition-all text-sm hover:border-gray-500"
                 style={{
                   background: "transparent",
-                  color: "#f5f0eb",
+                  color: "var(--text-primary)",
                   border: "1px solid #3a3a3a",
                 }}
               >
@@ -179,7 +179,7 @@ export default function Hero() {
       {/* Client ticker */}
       <div
         className="overflow-hidden py-4"
-        style={{ borderTop: "1px solid #252525", borderBottom: "1px solid #252525" }}
+        style={{ borderTop: "1px solid var(--border-subtle)", borderBottom: "1px solid var(--border-subtle)" }}
       >
         <div className="ticker-track">
           {[...clients, ...clients].map((client, i) => (

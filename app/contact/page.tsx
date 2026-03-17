@@ -27,17 +27,17 @@ export default function ContactPage() {
   });
 
   return (
-    <main style={{ background: "#1a1a1a", minHeight: "100vh" }}>
+    <main style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
       <Nav />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
           {/* Left */}
           <div className="pt-4">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "#f97316" }}>Get In Touch</p>
-            <h1 className="text-5xl font-bold mb-8 leading-tight" style={{ color: "#f5f0eb" }}>
+            <h1 className="text-5xl font-bold mb-8 leading-tight" style={{ color: "var(--text-primary)" }}>
               Let&apos;s Build<br />Something.
             </h1>
-            <p className="text-[16px] leading-relaxed mb-12" style={{ color: "#e5e7eb" }}>
+            <p className="text-[16px] leading-relaxed mb-12" style={{ color: "var(--text-body)" }}>
               Whether you&apos;re a municipality planning a crosswalk program, a developer
               looking to enhance a property entrance, or a contractor seeking a product
               partner — we&apos;re here to help.
@@ -49,7 +49,7 @@ export default function ContactPage() {
               ].map((office) => (
                 <div key={office.region}>
                   <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "#f97316" }}>{office.region}</p>
-                  <p className="text-sm font-medium mb-2" style={{ color: "#f5f0eb" }}>{office.city}</p>
+                  <p className="text-sm font-medium mb-2" style={{ color: "var(--text-primary)" }}>{office.city}</p>
                   <a href={`mailto:${office.email}`} className="text-sm block mb-1 transition-colors hover:text-[#f97316]" style={{ color: "#d1d5db" }}>{office.email}</a>
                   <a href={`tel:${office.phone.replace(/-/g, "")}`} className="text-sm transition-colors hover:text-[#f97316]" style={{ color: "#d1d5db" }}>{office.phone}</a>
                 </div>
@@ -58,7 +58,7 @@ export default function ContactPage() {
           </div>
 
           {/* Right: form */}
-          <div className="rounded-xl p-10" style={{ background: "#2d2d2d", border: "1px solid #333" }}>
+          <div className="rounded-xl p-10" style={{ background: "var(--bg-card-surface)", border: "1px solid var(--border-subtle)" }}>
             {submitted ? (
               <div className="flex flex-col items-center justify-center h-full py-16 text-center">
                 <div className="w-16 h-16 rounded-full flex items-center justify-center mb-5" style={{ background: "rgba(249,115,22,0.15)" }}>
@@ -66,7 +66,7 @@ export default function ContactPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold mb-2" style={{ color: "#f5f0eb" }}>Message Sent!</h3>
+                <h3 className="text-xl font-bold mb-2" style={{ color: "var(--text-primary)" }}>Message Sent!</h3>
                 <p className="text-sm" style={{ color: "#d1d5db" }}>We&apos;ll be in touch within one business day.</p>
               </div>
             ) : (
@@ -109,7 +109,7 @@ export default function ContactPage() {
                         onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}
                         placeholder={f.placeholder}
                         className="w-full px-4 py-3 rounded-lg text-sm outline-none focus:ring-1 focus:ring-orange-500"
-                        style={{ background: "#1a1a1a", border: "1px solid #333", color: "#f5f0eb" }}
+                        style={{ background: "var(--bg-primary)", border: "1px solid var(--border-subtle)", color: "var(--text-primary)" }}
                       />
                     </div>
                   ))}
@@ -127,7 +127,7 @@ export default function ContactPage() {
                       onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}
                       placeholder={f.placeholder}
                       className="w-full px-4 py-3 rounded-lg text-sm outline-none focus:ring-1 focus:ring-orange-500"
-                      style={{ background: "#1a1a1a", border: "1px solid #333", color: "#f5f0eb" }}
+                      style={{ background: "var(--bg-primary)", border: "1px solid var(--border-subtle)", color: "var(--text-primary)" }}
                     />
                   </div>
                 ))}
@@ -137,7 +137,7 @@ export default function ContactPage() {
                     value={form.projectType}
                     onChange={(e) => setForm({ ...form, projectType: e.target.value })}
                     className="w-full px-4 py-3 rounded-lg text-sm outline-none focus:ring-1 focus:ring-orange-500"
-                    style={{ background: "#1a1a1a", border: "1px solid #333", color: "#f5f0eb" }}
+                    style={{ background: "var(--bg-primary)", border: "1px solid var(--border-subtle)", color: "var(--text-primary)" }}
                   >
                     <option value="">Select project type...</option>
                     {projectTypes.map((t) => <option key={t} value={t}>{t}</option>)}
@@ -151,7 +151,7 @@ export default function ContactPage() {
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
                     placeholder="Tell us about your project..."
                     className="w-full px-4 py-3 rounded-lg text-sm outline-none resize-none focus:ring-1 focus:ring-orange-500"
-                    style={{ background: "#1a1a1a", border: "1px solid #333", color: "#f5f0eb" }}
+                    style={{ background: "var(--bg-primary)", border: "1px solid var(--border-subtle)", color: "var(--text-primary)" }}
                   />
                 </div>
                 {/* Honeypot — hidden from real users */}

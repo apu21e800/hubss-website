@@ -70,7 +70,7 @@ export default async function ApplicationPage({ params }: Props) {
   }));
 
   return (
-    <main style={{ background: "#1a1a1a", minHeight: "100vh" }}>
+    <main style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
       <Nav />
 
       {/* ── 1. Hero ────────────────────────────────────────────────────────── */}
@@ -103,7 +103,7 @@ export default async function ApplicationPage({ params }: Props) {
             </p>
             <h1
               className="text-5xl sm:text-6xl font-black leading-none mb-4"
-              style={{ color: "#f5f0eb", letterSpacing: "-0.02em" }}
+              style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}
             >
               {app.name}
             </h1>
@@ -118,7 +118,7 @@ export default async function ApplicationPage({ params }: Props) {
       </div>
 
       {/* ── 2. Overview ───────────────────────────────────────────────────── */}
-      <section className="py-20" style={{ background: "#1a1a1a" }}>
+      <section className="py-20" style={{ background: "var(--bg-primary)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <p
@@ -129,7 +129,7 @@ export default async function ApplicationPage({ params }: Props) {
             </p>
             <h2
               className="text-3xl font-bold mb-8"
-              style={{ color: "#f5f0eb", letterSpacing: "-0.01em" }}
+              style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}
             >
               About {app.name}
             </h2>
@@ -150,7 +150,7 @@ export default async function ApplicationPage({ params }: Props) {
 
       {/* ── 3. Recommended Products ──────────────────────────────────────── */}
       {relatedProductData.length > 0 && (
-        <section className="py-16" style={{ background: "var(--color-slate)" }}>
+        <section className="py-16" style={{ background: "var(--bg-slate)" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-end justify-between mb-10">
               <div>
@@ -162,7 +162,7 @@ export default async function ApplicationPage({ params }: Props) {
                 </p>
                 <h2
                   className="text-3xl font-bold"
-                  style={{ color: "#f5f0eb", letterSpacing: "-0.01em" }}
+                  style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}
                 >
                   Products for {app.name}
                 </h2>
@@ -170,7 +170,7 @@ export default async function ApplicationPage({ params }: Props) {
               <Link
                 href="/products"
                 className="hidden sm:flex items-center gap-1.5 text-xs font-semibold transition-colors duration-150 hover:text-white"
-                style={{ color: "#6b7280" }}
+                style={{ color: "var(--text-muted)" }}
               >
                 All products
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round">
@@ -190,7 +190,7 @@ export default async function ApplicationPage({ params }: Props) {
                   key={product.slug}
                   href={`/products/${product.slug}`}
                   className="group relative overflow-hidden rounded-lg flex flex-col"
-                  style={{ background: "#1e1e1e", border: "1px solid rgba(255,255,255,0.05)" }}
+                  style={{ background: "var(--bg-card)", border: "1px solid var(--border-faint)" }}
                 >
                   {/* Product image */}
                   <div className="relative overflow-hidden" style={{ height: 160 }}>
@@ -215,13 +215,13 @@ export default async function ApplicationPage({ params }: Props) {
                     />
                     <h3
                       className="font-bold text-[0.95rem] mb-1.5 transition-colors duration-150 group-hover:text-[#f97316]"
-                      style={{ color: "#f5f0eb" }}
+                      style={{ color: "var(--text-primary)" }}
                     >
                       {product.name}
                     </h3>
                     <p
                       className="text-[0.75rem] leading-relaxed mb-4 flex-1"
-                      style={{ color: "#6b7280" }}
+                      style={{ color: "var(--text-muted)" }}
                     >
                       {product.shortDesc}
                     </p>
@@ -248,7 +248,7 @@ export default async function ApplicationPage({ params }: Props) {
       )}
 
       {/* ── 4. Gallery ────────────────────────────────────────────────────── */}
-      <section className="py-16" style={{ background: "#1a1a1a" }}>
+      <section className="py-16" style={{ background: "var(--bg-primary)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <p
             className="text-xs font-bold tracking-[0.2em] uppercase mb-3"
@@ -258,7 +258,7 @@ export default async function ApplicationPage({ params }: Props) {
           </p>
           <h2
             className="text-3xl font-bold mb-8"
-            style={{ color: "#f5f0eb", letterSpacing: "-0.01em" }}
+            style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}
           >
             Gallery
           </h2>
@@ -267,7 +267,7 @@ export default async function ApplicationPage({ params }: Props) {
       </section>
 
       {/* ── 5. Benefits ───────────────────────────────────────────────────── */}
-      <section className="py-16" style={{ background: "var(--color-slate)" }}>
+      <section className="py-16" style={{ background: "var(--bg-slate)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             {/* Left: heading */}
@@ -280,11 +280,11 @@ export default async function ApplicationPage({ params }: Props) {
               </p>
               <h2
                 className="text-3xl font-bold mb-4"
-                style={{ color: "#f5f0eb", letterSpacing: "-0.01em" }}
+                style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}
               >
                 Key Benefits
               </h2>
-              <p className="text-[15px] leading-relaxed" style={{ color: "#6b7280" }}>
+              <p className="text-[15px] leading-relaxed" style={{ color: "var(--text-muted)" }}>
                 Every HUB application is engineered for Canadian conditions — freeze-thaw
                 cycles, snowplow loads, and the performance expectations of municipal
                 infrastructure managers.
@@ -297,8 +297,8 @@ export default async function ApplicationPage({ params }: Props) {
                   key={i}
                   className="flex items-start gap-3 p-4 rounded-lg"
                   style={{
-                    background: "#1a1a1a",
-                    border: "1px solid rgba(255,255,255,0.05)",
+                    background: "var(--bg-primary)",
+                    border: "1px solid var(--border-faint)",
                   }}
                 >
                   <span
@@ -338,7 +338,7 @@ export default async function ApplicationPage({ params }: Props) {
             </p>
             <h2
               className="text-4xl font-black mb-4"
-              style={{ color: "#f5f0eb", letterSpacing: "-0.02em", lineHeight: 1.1 }}
+              style={{ color: "var(--text-primary)", letterSpacing: "-0.02em", lineHeight: 1.1 }}
             >
               See {app.name} in action.
               <br />
@@ -355,7 +355,7 @@ export default async function ApplicationPage({ params }: Props) {
             </h2>
             <p
               className="text-[16px] leading-relaxed mb-8"
-              style={{ color: "#6b7280" }}
+              style={{ color: "var(--text-muted)" }}
             >
               Complimentary sessions for municipalities, engineering firms, and contractors.
               Live product demonstrations, case studies from Canadian projects, and
@@ -380,7 +380,7 @@ export default async function ApplicationPage({ params }: Props) {
                 className="inline-flex items-center gap-2 font-semibold px-7 py-3.5 rounded-full text-sm transition-all duration-150 hover:border-gray-500"
                 style={{
                   border: "1px solid rgba(255,255,255,0.12)",
-                  color: "#d1d5db",
+                  color: "#d1d5db", /* keep as-is */
                 }}
               >
                 Request Consultation
@@ -395,7 +395,7 @@ export default async function ApplicationPage({ params }: Props) {
                 <span
                   key={item}
                   className="flex items-center gap-2 text-xs"
-                  style={{ color: "#4b5563" }}
+                  style={{ color: "var(--text-faint)" }}
                 >
                   <span style={{ color: "#f97316" }}>✓</span>
                   {item}

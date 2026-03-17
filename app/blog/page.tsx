@@ -27,7 +27,7 @@ export default function BlogPage() {
     .map(([name]) => name);
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a]">
+    <main className="min-h-screen bg-[var(--bg-dark)]">
       <Nav />
 
       <div className="max-w-7xl mx-auto px-6 pt-32 pb-24">
@@ -36,8 +36,8 @@ export default function BlogPage() {
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-3" style={{ color: "#f97316" }}>
             Portfolio
           </p>
-          <h1 className="text-6xl font-bold mb-4" style={{ color: "#f5f0eb" }}>Projects</h1>
-          <p className="text-lg" style={{ color: "#9ca3af" }}>
+          <h1 className="text-6xl font-bold mb-4" style={{ color: "var(--text-primary)" }}>Projects</h1>
+          <p className="text-lg" style={{ color: "var(--text-secondary)" }}>
             Surface solutions transforming Canadian streets and communities.
           </p>
         </div>

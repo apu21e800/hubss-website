@@ -89,17 +89,16 @@ const GEIST: React.CSSProperties = {
   fontFamily: "var(--font-geist), system-ui, sans-serif",
 };
 
-// ─── Panel footer bar (shared) ─────────────────────────────────────────────────
+// ─── Panel footer bar ─────────────────────────────────────────────────────────
 
 function PanelFooter() {
   return (
-    <div
-      className="px-12 py-3 text-center"
-      style={{ background: "#0a0a0a", borderTop: "1px solid rgba(255,255,255,0.04)" }}
-    >
-      <p className="text-xs" style={{ color: "#374151" }}>
-        Engineered for Canadian infrastructure · TAC + FAA Compliant · Proud to work coast to coast 🍁
-      </p>
+    <div style={{ background: "#0a0a0a", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+      <div style={{ maxWidth: 1400, margin: "0 auto", padding: "12px 3rem" }}>
+        <p className="text-xs text-center" style={{ color: "#374151" }}>
+          Engineered for Canadian infrastructure · TAC + FAA Compliant · Proud to work coast to coast 🍁
+        </p>
+      </div>
     </div>
   );
 }
@@ -107,10 +106,12 @@ function PanelFooter() {
 // ─── Products mega menu panel ──────────────────────────────────────────────────
 
 function ProductsPanel({
+  navHeight,
   onClose,
   onMouseEnter,
   onMouseLeave,
 }: {
+  navHeight: number;
   onClose: () => void;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
@@ -119,120 +120,107 @@ function ProductsPanel({
 
   return (
     <motion.div
-      className="fixed left-0 right-0 bottom-0 z-40"
-      style={{ top: 64 }}
+      className="fixed left-0 right-0 bottom-0"
+      style={{ top: navHeight, zIndex: 9999, pointerEvents: "none" }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1, transition: { duration: 0.18, ease: "easeOut" } }}
       exit={{ opacity: 0, transition: { duration: 0.12, ease: "easeIn" } }}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
     >
       {/* Backdrop */}
       <div
         className="absolute inset-0"
-        style={{ background: "rgba(0,0,0,0.55)" }}
+        style={{ background: "rgba(0,0,0,0.55)", pointerEvents: "auto" }}
         onClick={onClose}
       />
 
-      {/* Panel */}
+      {/* Full-bleed panel */}
       <motion.div
-        className="relative z-10 max-w-[1100px] mx-auto overflow-hidden"
-        initial={{ opacity: 0, y: -8 }}
-        animate={{ opacity: 1, y: 0, transition: { duration: 0.2, ease: "easeOut", delay: 0.04 } }}
-        exit={{ opacity: 0, y: -6, transition: { duration: 0.12 } }}
-        style={{ background: "#111111", boxShadow: "0 20px 60px rgba(0,0,0,0.5)" }}
+        className="absolute top-0 left-0 overflow-hidden"
+        style={{
+          width: "100vw",
+          background: "#111111",
+          borderTop: "1px solid #1f1f1f",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.6)",
+          pointerEvents: "auto",
+        }}
+        initial={{ y: -10 }}
+        animate={{ y: 0, transition: { duration: 0.22, ease: [0.22, 1, 0.36, 1], delay: 0.04 } }}
+        exit={{ y: -8, transition: { duration: 0.14 } }}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
       >
         {/* Gradient bottom border */}
         <div
-          className="absolute bottom-0 left-0 right-0 h-px"
+          className="absolute bottom-0 left-0 right-0 h-[2px]"
           style={{ background: "linear-gradient(90deg,#F97316,#EAB308)" }}
         />
 
-        {/* 3-column grid */}
-        <div style={{ display: "grid", gridTemplateColumns: "40% 35% 25%" }}>
-
-          {/* ── LEFT: Featured product spotlight ─────────────────────── */}
+        {/* Inner content — max-width constrained */}
+        <div style={{ maxWidth: 1400, margin: "0 auto", padding: "2rem 3rem" }}>
           <div
             style={{
-              padding: "2rem 2.5rem",
-              borderRight: "1px solid rgba(255,255,255,0.05)",
+              display: "grid",
+              gridTemplateColumns: "380px 1fr 280px",
+              gap: "2.5rem",
             }}
           >
-            <p
-              className="text-xs font-bold tracking-[0.2em] uppercase mb-4"
-              style={GRAD}
-            >
-              Featured System
-            </p>
+            {/* ── LEFT: Featured product spotlight ──────────────────── */}
+            <div style={{ borderRight: "1px solid rgba(255,255,255,0.05)", paddingRight: "2.5rem" }}>
+              <p className="text-xs font-bold tracking-[0.2em] uppercase mb-4" style={GRAD}>
+                Featured System
+              </p>
 
-            <div className="flex gap-4 items-start">
-              {/* Text */}
-              <div className="flex-1 min-w-0">
-                <h3
-                  className="text-2xl font-bold mb-1.5"
-                  style={{ ...GEIST, color: "#f5f0eb" }}
-                >
-                  {featured.name}
-                </h3>
-                <p className="text-sm font-medium mb-3" style={{ color: "#f97316" }}>
-                  {featured.shortDesc}
-                </p>
-                <p
-                  className="text-sm leading-relaxed mb-5"
-                  style={{ color: "#6b7280" }}
-                >
-                  {featured.description.slice(0, 130)}…
-                </p>
-                <Link
-                  href={`/products/${featured.slug}`}
-                  className="inline-flex items-center gap-1.5 text-sm font-semibold transition-colors duration-150 hover:text-orange-300"
-                  style={{ color: "#f97316" }}
-                >
-                  Explore
-                  <span className="text-base leading-none">→</span>
-                </Link>
-              </div>
+              <div className="flex gap-4 items-start">
+                {/* Text */}
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-2xl font-bold mb-1.5" style={{ ...GEIST, color: "#f5f0eb" }}>
+                    {featured.name}
+                  </h3>
+                  <p className="text-sm font-medium mb-3" style={{ color: "#f97316" }}>
+                    {featured.shortDesc}
+                  </p>
+                  <p className="text-sm leading-relaxed mb-5" style={{ color: "#6b7280" }}>
+                    {featured.description.slice(0, 130)}…
+                  </p>
+                  <Link
+                    href={`/products/${featured.slug}`}
+                    className="inline-flex items-center gap-1.5 text-sm font-semibold transition-colors duration-150 hover:text-orange-300"
+                    style={{ color: "#f97316" }}
+                  >
+                    Explore <span className="text-base leading-none">→</span>
+                  </Link>
+                </div>
 
-              {/* Product image */}
-              <div
-                className="flex-shrink-0 rounded-lg overflow-hidden"
-                style={{ width: 140, height: 110 }}
-              >
-                <Image
-                  src={featured.imageUrl}
-                  alt={featured.name}
-                  width={140}
-                  height={110}
-                  className="w-full h-full object-cover"
-                />
+                {/* Product image */}
+                <div
+                  className="flex-shrink-0 rounded-lg overflow-hidden"
+                  style={{ width: 130, height: 100 }}
+                >
+                  <Image
+                    src={featured.imageUrl}
+                    alt={featured.name}
+                    width={130}
+                    height={100}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* ── MIDDLE: All systems list ──────────────────────────────── */}
-          <div
-            style={{
-              padding: "2rem 1.75rem",
-              borderRight: "1px solid rgba(255,255,255,0.05)",
-            }}
-          >
-            <p
-              className="text-xs font-bold tracking-[0.2em] uppercase mb-4"
-              style={GRAD}
-            >
-              All Systems
-            </p>
+            {/* ── MIDDLE: All systems list ───────────────────────────── */}
+            <div style={{ borderRight: "1px solid rgba(255,255,255,0.05)", paddingRight: "2.5rem" }}>
+              <p className="text-xs font-bold tracking-[0.2em] uppercase mb-4" style={GRAD}>
+                All Systems
+              </p>
 
-            <div>
-              {products.map((p) => {
-                return (
+              <div>
+                {products.map((p) => (
                   <Link
                     key={p.slug}
                     href={`/products/${p.slug}`}
                     className="group flex items-center gap-3 py-2 px-2 -mx-2 rounded-md transition-all duration-150 hover:bg-zinc-900"
                     style={{ borderBottom: "0.5px solid rgba(255,255,255,0.04)" }}
                   >
-                    {/* Orange dot */}
                     <span
                       className="flex-shrink-0 rounded-full"
                       style={{ width: 6, height: 6, background: "#f97316", opacity: 0.7 }}
@@ -244,68 +232,55 @@ function ProductsPanel({
                       >
                         {p.name}
                       </span>
-                      <span
-                        className="block text-[0.68rem] truncate"
-                        style={{ color: "#4b5563" }}
-                      >
+                      <span className="block text-[0.68rem] truncate" style={{ color: "#4b5563" }}>
                         {p.shortDesc}
                       </span>
                     </div>
                   </Link>
-                );
-              })}
+                ))}
+              </div>
+
+              <Link
+                href="/products"
+                className="mt-4 inline-flex items-center gap-1 text-xs font-semibold transition-colors duration-150 hover:text-orange-300"
+                style={{ color: "#f97316" }}
+              >
+                View all products →
+              </Link>
             </div>
 
-            <Link
-              href="/products"
-              className="mt-4 inline-flex items-center gap-1 text-xs font-semibold transition-colors duration-150 hover:text-orange-300"
-              style={{ color: "#f97316" }}
-            >
-              View all products →
-            </Link>
-          </div>
+            {/* ── RIGHT: Quick links ─────────────────────────────────── */}
+            <div>
+              <p className="text-xs font-bold tracking-[0.2em] uppercase mb-4" style={GRAD}>
+                Quick Links
+              </p>
 
-          {/* ── RIGHT: Quick links ────────────────────────────────────── */}
-          <div style={{ padding: "2rem 1.5rem" }}>
-            <p
-              className="text-xs font-bold tracking-[0.2em] uppercase mb-4"
-              style={GRAD}
-            >
-              Quick Links
-            </p>
-
-            <div className="space-y-2">
-              {QUICK_ACTIONS.map(({ icon: Icon, label, sub, href }) => (
-                <Link
-                  key={href}
-                  href={href}
-                  className="flex items-start gap-3 p-3 rounded-lg transition-colors duration-150 hover:bg-zinc-800"
-                  style={{ background: "#1a1a1a" }}
-                >
-                  <div
-                    className="w-8 h-8 rounded-md flex items-center justify-center flex-shrink-0 mt-0.5"
-                    style={{ background: "rgba(249,115,22,0.1)" }}
+              <div className="space-y-2">
+                {QUICK_ACTIONS.map(({ icon: Icon, label, sub, href }) => (
+                  <Link
+                    key={href}
+                    href={href}
+                    className="flex items-start gap-3 p-3 rounded-lg transition-colors duration-150 hover:bg-zinc-800"
+                    style={{ background: "#1a1a1a" }}
                   >
-                    <Icon size={14} stroke="#f97316" strokeWidth={2} />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium" style={{ color: "#e5e7eb" }}>
-                      {label}
-                    </p>
-                    <p className="text-[0.68rem]" style={{ color: "#4b5563" }}>
-                      {sub}
-                    </p>
-                  </div>
-                </Link>
-              ))}
-            </div>
+                    <div
+                      className="w-8 h-8 rounded-md flex items-center justify-center flex-shrink-0 mt-0.5"
+                      style={{ background: "rgba(249,115,22,0.1)" }}
+                    >
+                      <Icon size={14} stroke="#f97316" strokeWidth={2} />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium" style={{ color: "#e5e7eb" }}>{label}</p>
+                      <p className="text-[0.68rem]" style={{ color: "#4b5563" }}>{sub}</p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
 
-            <p
-              className="mt-6 text-xs text-center leading-relaxed"
-              style={{ color: "#374151" }}
-            >
-              500+ Projects · 10 Provinces · Since 1994
-            </p>
+              <p className="mt-6 text-xs text-center leading-relaxed" style={{ color: "#374151" }}>
+                500+ Projects · 10 Provinces · Since 1994
+              </p>
+            </div>
           </div>
         </div>
 
@@ -318,10 +293,12 @@ function ProductsPanel({
 // ─── Applications mega menu panel ─────────────────────────────────────────────
 
 function ApplicationsPanel({
+  navHeight,
   onClose,
   onMouseEnter,
   onMouseLeave,
 }: {
+  navHeight: number;
   onClose: () => void;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
@@ -330,145 +307,139 @@ function ApplicationsPanel({
 
   return (
     <motion.div
-      className="fixed left-0 right-0 bottom-0 z-40"
-      style={{ top: 64 }}
+      className="fixed left-0 right-0 bottom-0"
+      style={{ top: navHeight, zIndex: 9999, pointerEvents: "none" }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1, transition: { duration: 0.18, ease: "easeOut" } }}
       exit={{ opacity: 0, transition: { duration: 0.12, ease: "easeIn" } }}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
     >
       {/* Backdrop */}
       <div
         className="absolute inset-0"
-        style={{ background: "rgba(0,0,0,0.55)" }}
+        style={{ background: "rgba(0,0,0,0.55)", pointerEvents: "auto" }}
         onClick={onClose}
       />
 
-      {/* Panel */}
+      {/* Full-bleed panel */}
       <motion.div
-        className="relative z-10 max-w-[1100px] mx-auto overflow-hidden"
-        initial={{ opacity: 0, y: -8 }}
-        animate={{ opacity: 1, y: 0, transition: { duration: 0.2, ease: "easeOut", delay: 0.04 } }}
-        exit={{ opacity: 0, y: -6, transition: { duration: 0.12 } }}
-        style={{ background: "#111111", boxShadow: "0 20px 60px rgba(0,0,0,0.5)" }}
+        className="absolute top-0 left-0 overflow-hidden"
+        style={{
+          width: "100vw",
+          background: "#111111",
+          borderTop: "1px solid #1f1f1f",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.6)",
+          pointerEvents: "auto",
+        }}
+        initial={{ y: -10 }}
+        animate={{ y: 0, transition: { duration: 0.22, ease: [0.22, 1, 0.36, 1], delay: 0.04 } }}
+        exit={{ y: -8, transition: { duration: 0.14 } }}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
       >
         {/* Gradient bottom border */}
         <div
-          className="absolute bottom-0 left-0 right-0 h-px"
+          className="absolute bottom-0 left-0 right-0 h-[2px]"
           style={{ background: "linear-gradient(90deg,#F97316,#EAB308)" }}
         />
 
-        {/* 2-column grid */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
-
-          {/* ── LEFT: Application tiles grid ─────────────────────────── */}
+        {/* Inner content — max-width constrained */}
+        <div style={{ maxWidth: 1400, margin: "0 auto", padding: "2rem 3rem" }}>
           <div
             style={{
-              padding: "2rem 2.5rem",
-              borderRight: "1px solid rgba(255,255,255,0.05)",
+              display: "grid",
+              gridTemplateColumns: "1fr 400px",
+              gap: "3rem",
             }}
           >
-            <p
-              className="text-xs font-bold tracking-[0.2em] uppercase mb-5"
-              style={GRAD}
-            >
-              Applications
-            </p>
-
-            <div className="grid grid-cols-3 gap-1.5">
-              {applications.map((app) => {
-                const Icon = APP_ICONS[app.slug];
-                return (
-                  <Link
-                    key={app.slug}
-                    href={`/applications/${app.slug}`}
-                    className="group relative flex flex-col items-start gap-1.5 p-3 rounded-lg transition-all duration-150 hover:bg-zinc-900"
-                  >
-                    {/* Gradient top border on hover */}
-                    <div
-                      className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-150"
-                      style={{ background: "linear-gradient(90deg,#F97316,#EAB308)" }}
-                    />
-                    <div
-                      className="flex items-center justify-center w-7 h-7 rounded-md flex-shrink-0"
-                      style={{
-                        background: "rgba(249,115,22,0.08)",
-                        border: "1px solid rgba(249,115,22,0.1)",
-                      }}
-                    >
-                      {Icon && <Icon size={13} stroke="#f97316" strokeWidth={2} />}
-                    </div>
-                    <span
-                      className="text-xs font-medium leading-tight transition-colors duration-150 group-hover:text-white"
-                      style={{ color: "#9ca3af" }}
-                    >
-                      {app.name}
-                    </span>
-                  </Link>
-                );
-              })}
-            </div>
-
-            <Link
-              href="/applications"
-              className="mt-5 inline-flex items-center gap-1 text-xs font-semibold transition-colors duration-150 hover:text-orange-300"
-              style={{ color: "#f97316" }}
-            >
-              View all applications →
-            </Link>
-          </div>
-
-          {/* ── RIGHT: Featured application ───────────────────────────── */}
-          <div style={{ padding: "2rem 2.5rem" }}>
-            <p
-              className="text-xs font-bold tracking-[0.2em] uppercase mb-4"
-              style={GRAD}
-            >
-              Featured Application
-            </p>
-
-            <Link
-              href={`/applications/${featuredApp.slug}`}
-              className="block group"
-            >
-              {/* Image */}
-              <div
-                className="relative rounded-lg overflow-hidden mb-3"
-                style={{ height: 190 }}
-              >
-                <Image
-                  src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80"
-                  alt="Crosswalks"
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                  sizes="400px"
-                />
-                <div
-                  className="absolute inset-0"
-                  style={{ background: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 60%)" }}
-                />
-                <div className="absolute bottom-0 left-0 right-0 p-4">
-                  <h3
-                    className="text-xl font-bold"
-                    style={{ ...GEIST, color: "#f5f0eb" }}
-                  >
-                    {featuredApp.name}
-                  </h3>
-                </div>
-              </div>
-
-              <p className="text-sm leading-relaxed mb-4" style={{ color: "#6b7280" }}>
-                {featuredApp.desc.slice(0, 100)}…
+            {/* ── LEFT: Application tiles grid ──────────────────────── */}
+            <div style={{ borderRight: "1px solid rgba(255,255,255,0.05)", paddingRight: "3rem" }}>
+              <p className="text-xs font-bold tracking-[0.2em] uppercase mb-5" style={GRAD}>
+                Applications
               </p>
 
-              <span
-                className="text-xs font-semibold inline-flex items-center gap-1.5 transition-colors duration-150 group-hover:text-orange-300"
+              <div className="grid grid-cols-3 gap-1.5">
+                {applications.map((app) => {
+                  const Icon = APP_ICONS[app.slug];
+                  return (
+                    <Link
+                      key={app.slug}
+                      href={`/applications/${app.slug}`}
+                      className="group relative flex flex-col items-start gap-1.5 p-3 rounded-lg transition-all duration-150 hover:bg-zinc-900"
+                    >
+                      {/* Gradient top border on hover */}
+                      <div
+                        className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-150"
+                        style={{ background: "linear-gradient(90deg,#F97316,#EAB308)" }}
+                      />
+                      <div
+                        className="flex items-center justify-center w-7 h-7 rounded-md flex-shrink-0"
+                        style={{
+                          background: "rgba(249,115,22,0.08)",
+                          border: "1px solid rgba(249,115,22,0.1)",
+                        }}
+                      >
+                        {Icon && <Icon size={13} stroke="#f97316" strokeWidth={2} />}
+                      </div>
+                      <span
+                        className="text-xs font-medium leading-tight transition-colors duration-150 group-hover:text-white"
+                        style={{ color: "#9ca3af" }}
+                      >
+                        {app.name}
+                      </span>
+                    </Link>
+                  );
+                })}
+              </div>
+
+              <Link
+                href="/applications"
+                className="mt-5 inline-flex items-center gap-1 text-xs font-semibold transition-colors duration-150 hover:text-orange-300"
                 style={{ color: "#f97316" }}
               >
                 View all applications →
-              </span>
-            </Link>
+              </Link>
+            </div>
+
+            {/* ── RIGHT: Featured application ────────────────────────── */}
+            <div>
+              <p className="text-xs font-bold tracking-[0.2em] uppercase mb-4" style={GRAD}>
+                Featured Application
+              </p>
+
+              <Link href={`/applications/${featuredApp.slug}`} className="block group">
+                <div className="relative rounded-lg overflow-hidden mb-3" style={{ height: 200 }}>
+                  <Image
+                    src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80"
+                    alt="Crosswalks"
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    sizes="400px"
+                  />
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      background: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.15) 60%)",
+                    }}
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 p-4">
+                    <h3 className="text-xl font-bold" style={{ ...GEIST, color: "#f5f0eb" }}>
+                      {featuredApp.name}
+                    </h3>
+                  </div>
+                </div>
+
+                <p className="text-sm leading-relaxed mb-4" style={{ color: "#6b7280" }}>
+                  {featuredApp.desc.slice(0, 100)}…
+                </p>
+
+                <span
+                  className="text-xs font-semibold inline-flex items-center gap-1.5 transition-colors duration-150 group-hover:text-orange-300"
+                  style={{ color: "#f97316" }}
+                >
+                  View all applications →
+                </span>
+              </Link>
+            </div>
           </div>
         </div>
 
@@ -486,10 +457,23 @@ export default function Nav() {
   const [activePanel, setActivePanel]       = useState<Panel>(null);
   const [mobileOpen, setMobileOpen]         = useState(false);
   const [mobileExpanded, setMobileExpanded] = useState<MobileExpanded>(null);
+  const [navHeight, setNavHeight]           = useState(64);
 
   const navRef         = useRef<HTMLElement>(null);
   const closeTimerRef  = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastTriggerRef = useRef<HTMLElement | null>(null);
+
+  // Measure actual nav height (handles any padding/border changes)
+  useEffect(() => {
+    if (!navRef.current) return;
+    const measure = () => {
+      if (navRef.current) setNavHeight(navRef.current.clientHeight);
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(navRef.current);
+    return () => ro.disconnect();
+  }, []);
 
   // Scroll
   useEffect(() => {
@@ -538,9 +522,10 @@ export default function Nav() {
       <nav
         ref={navRef}
         aria-label="Main navigation"
-        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+        className="fixed top-0 left-0 right-0 transition-all duration-300"
         style={{
-          background:           scrolled || activePanel ? "rgba(0,0,0,0.90)" : "rgba(26,26,26,0.95)",
+          zIndex: 10000,
+          background:           scrolled || activePanel ? "rgba(0,0,0,0.92)" : "rgba(26,26,26,0.95)",
           backdropFilter:       scrolled || activePanel ? "blur(12px)" : "blur(8px)",
           WebkitBackdropFilter: scrolled || activePanel ? "blur(12px)" : "blur(8px)",
         }}
@@ -767,11 +752,12 @@ export default function Nav() {
         </AnimatePresence>
       </nav>
 
-      {/* Mega menu panels */}
+      {/* Mega menu panels — rendered outside nav to avoid stacking context issues */}
       <AnimatePresence mode="wait">
         {activePanel === "products" && (
           <ProductsPanel
             key="products"
+            navHeight={navHeight}
             onClose={() => setActivePanel(null)}
             onMouseEnter={cancelCloseTimer}
             onMouseLeave={startCloseTimer}
@@ -780,6 +766,7 @@ export default function Nav() {
         {activePanel === "applications" && (
           <ApplicationsPanel
             key="applications"
+            navHeight={navHeight}
             onClose={() => setActivePanel(null)}
             onMouseEnter={cancelCloseTimer}
             onMouseLeave={startCloseTimer}

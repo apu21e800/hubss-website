@@ -35,7 +35,7 @@ export default function Hero() {
 
   return (
     <section
-      className="relative min-h-screen flex flex-col overflow-hidden"
+      className="hero-section relative min-h-screen flex flex-col overflow-hidden"
       style={{ background: "var(--bg-primary)" }}
     >
       {/* Full-bleed hero image */}

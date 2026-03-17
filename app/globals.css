@@ -318,6 +318,15 @@ p {
   color: #d1d5db;
 }
 
+/* ─── Hero always-dark override (theme-agnostic) ─────── */
+/* Hero has a full-bleed image + black overlay — keep it dark in light mode */
+.hero-section {
+  --bg-primary: #0a0a0a;
+  --text-primary: #F5F0EB;
+  --text-body:    #E5E7EB;
+  --border-subtle: #1f1f1f;
+}
+
 /* ─── Page-load gradient sweep ───────────────────────── */
 @keyframes page-sweep {
   from { transform: translateX(-100%); }

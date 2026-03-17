@@ -319,13 +319,18 @@ p {
 }
 
 /* ─── Section grid texture — kills the floating feeling ─ */
-/* Use on light-bg sections. Lines are 1px at 40px grid.   */
-/* Dark mode: near-invisible on off-white. Light: warm grey. */
+/* 4% opacity lines at 80px grid — texture, not graph paper */
 .section-grid-bg {
   background-image:
-    linear-gradient(var(--border-subtle) 1px, transparent 1px),
-    linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
-  background-size: 40px 40px;
+    linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+
+[data-theme="dark"] .section-grid-bg {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
 }
 
 /* ─── Hero always-dark override (theme-agnostic) ─────── */

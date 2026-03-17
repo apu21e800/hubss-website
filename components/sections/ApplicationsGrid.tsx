@@ -7,7 +7,7 @@ import { applications } from "@/lib/applications";
 
 export default function ApplicationsGrid() {
   return (
-    <section className="py-24" style={{ background: "#111111" }}>
+    <section className="py-24" style={{ background: "var(--color-slate)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-14">
           <p className="grad-text text-xs font-semibold tracking-[0.2em] uppercase mb-3">

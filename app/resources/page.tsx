@@ -22,7 +22,7 @@ const quickLinks = [
       "Free professional development sessions with CPD/PDH credits for engineers and contractors.",
     image:
       "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=600&q=80",
-    href: "/contact",
+    href: "/lunch-learn",
   },
   {
     title: "Installation & Training",

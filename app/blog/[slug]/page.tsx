@@ -165,7 +165,7 @@ export default async function BlogPostPage({ params }: Props) {
               Request Spec Sheet
             </Link>
             <Link
-              href="/contact"
+              href="/lunch-learn"
               className="px-8 py-4 rounded-lg font-semibold text-sm border border-white/20 text-[#f5f0eb] hover:border-orange-400/40 hover:text-orange-400 transition-all duration-200"
             >
               Book Lunch &amp; Learn

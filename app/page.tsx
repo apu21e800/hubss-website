@@ -4,6 +4,7 @@ import Hero from "@/components/sections/Hero";
 import StatsBar from "@/components/sections/StatsBar";
 import ProductsGrid from "@/components/sections/ProductsGrid";
 import ApplicationsGrid from "@/components/sections/ApplicationsGrid";
+import ComparisonTable from "@/components/sections/ComparisonTable";
 import RecentProjects from "@/components/sections/RecentProjects";
 import LunchLearn from "@/components/sections/LunchLearn";
 import Footer from "@/components/sections/Footer";
@@ -48,17 +49,25 @@ const organizationSchema = {
 export default function Home() {
   return (
     <main>
+      {/* Page-load sweep */}
+      <div className="page-sweep" />
+
       <JsonLd data={organizationSchema} />
       <Nav />
       <Hero />
+      {/* dark → slate */}
       <StatsBar />
+      {/* slate → dark */}
       <ProductsGrid />
-      <div style={{ height: "1px", background: "linear-gradient(90deg, transparent 0%, rgba(249,115,22,0.35) 25%, rgba(234,179,8,0.35) 75%, transparent 100%)" }} />
+      {/* dark → slate */}
       <ApplicationsGrid />
-      <div style={{ height: "1px", background: "linear-gradient(90deg, transparent 0%, rgba(249,115,22,0.35) 25%, rgba(234,179,8,0.35) 75%, transparent 100%)" }} />
+      {/* slate → off-white */}
+      <ComparisonTable />
+      {/* off-white → off-white */}
       <RecentProjects />
-      <div style={{ height: "1px", background: "linear-gradient(90deg, transparent 0%, rgba(249,115,22,0.35) 25%, rgba(234,179,8,0.35) 75%, transparent 100%)" }} />
+      {/* off-white → slate (lunch learn) */}
       <LunchLearn />
+      {/* slate → dark footer */}
       <Footer />
     </main>
   );

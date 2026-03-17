@@ -4,10 +4,20 @@
 :root {
   --font-geist: '';
   --font-inter: '';
+
+  /* ─── Design system colors ─────────────────────────── */
+  --color-dark:        #0A0A0A;
+  --color-slate:       #1C2333;
+  --color-slate-light: #252D3D;
+  --color-white:       #FFFFFF;
+  --color-off-white:   #F5F4F0;
+  --color-orange:      #F97316;
+  --color-amber:       #D97706;
+
   /* ─── Brand gradient system ─────────────────────────── */
   --gradient-brand:          linear-gradient(90deg, #F97316 0%, #EAB308 100%);
   --gradient-brand-vertical: linear-gradient(180deg, #F97316 0%, #EAB308 100%);
-  --gradient-brand-subtle:   linear-gradient(90deg, rgba(249,115,22,0.15) 0%, rgba(234,179,8,0.15) 100%);
+  --gradient-brand-subtle:   linear-gradient(90deg, rgba(249,115,22,0.12) 0%, rgba(234,179,8,0.12) 100%);
   --gradient-glow:           0 0 20px rgba(249,115,22,0.25);
 }
 
@@ -269,4 +279,70 @@ p {
   border: none;
   padding: 0;
   color: #d1d5db;
+}
+
+/* ─── Page-load gradient sweep ───────────────────────── */
+@keyframes page-sweep {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(100%); }
+}
+
+.page-sweep {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 9999;
+  overflow: hidden;
+  pointer-events: none;
+  animation: page-sweep-fade 0.6s ease-out forwards;
+}
+
+.page-sweep::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--gradient-brand);
+  animation: page-sweep 0.4s ease-out forwards;
+}
+
+@keyframes page-sweep-fade {
+  0%   { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ─── CTA button pulse (single, on appear) ───────────── */
+@keyframes cta-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(249,115,22,0.4); }
+  70%  { box-shadow: 0 0 0 10px rgba(249,115,22,0); }
+  100% { box-shadow: 0 0 0 0 rgba(249,115,22,0); }
+}
+
+.cta-pulse {
+  animation: cta-pulse 0.8s ease-out 0.5s 1;
+}
+
+/* ─── Gradient underline hover (scaleX 0→1) ──────────── */
+.hover-underline-gradient {
+  position: relative;
+}
+
+.hover-underline-gradient::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--gradient-brand);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease-out;
+}
+
+.hover-underline-gradient:hover::after {
+  transform: scaleX(1);
 }

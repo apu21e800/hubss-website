@@ -118,13 +118,13 @@ export default function Hero() {
             {/* CTAs */}
             <div className="flex flex-row gap-4 mb-12">
               <Link
-                href="/contact"
-                className="cta-btn font-semibold px-8 py-4 rounded-full text-center text-sm"
+                href="/lunch-learn"
+                className="cta-btn cta-pulse font-semibold px-8 py-4 rounded-full text-center text-sm"
               >
                 Book a Lunch &amp; Learn
               </Link>
               <Link
-                href="/projects"
+                href="/blog"
                 className="font-semibold px-8 py-4 rounded-full text-center transition-all text-sm hover:border-gray-500"
                 style={{
                   background: "transparent",

@@ -90,6 +90,7 @@ export default async function ProductPage({ params }: Props) {
         </div>
       </div>
 
+      <div style={{ background: "var(--color-slate)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
           {/* Left: description + gallery */}
@@ -129,7 +130,7 @@ export default async function ProductPage({ params }: Props) {
                 Request Spec Sheet
               </Link>
               <Link
-                href="/#lunch-learn"
+                href="/lunch-learn"
                 className="block w-full text-center font-semibold py-4 rounded-lg mt-3 transition-colors text-sm"
                 style={{ background: "transparent", color: "#f5f0eb", border: "1px solid #333" }}
               >
@@ -226,6 +227,7 @@ export default async function ProductPage({ params }: Props) {
             </div>
           </div>
         )}
+      </div>
       </div>
       <LunchLearn />
       <Footer />

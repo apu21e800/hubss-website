@@ -30,31 +30,36 @@ export default function ProductsPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px" style={{ background: "#333" }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {products.map((product) => (
             <Link
               key={product.slug}
               href={`/products/${product.slug}`}
-              className="group block p-8 relative overflow-hidden transition-all"
-              style={{ background: "#2d2d2d" }}
+              className="group flex flex-col relative overflow-hidden rounded-lg transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(249,115,22,0.12)]"
+              style={{ background: "#2d2d2d", border: "1px solid #333" }}
             >
-              <span
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                style={{ background: "rgba(249,115,22,0.06)" }}
+              {/* Orange top accent */}
+              <div
+                className="absolute top-0 left-0 right-0 h-[2px] z-10"
+                style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }}
               />
-              <div className="w-8 h-0.5 mb-6 transition-all group-hover:w-16" style={{ background: "#f97316" }} />
-              <h2 className="font-bold text-xl mb-3 transition-colors group-hover:text-[#f97316]" style={{ color: "#f5f0eb" }}>
-                {product.name}
-              </h2>
-              <p className="text-sm leading-relaxed mb-6" style={{ color: "#9ca3af" }}>
-                {product.shortDesc}
-              </p>
-              <span className="text-sm font-semibold flex items-center gap-2" style={{ color: "#f97316" }}>
-                Explore
-                <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </span>
+              <div className="p-7">
+                <h2 className="font-bold text-xl mb-2 transition-colors group-hover:text-[#f97316]" style={{ color: "#f5f0eb" }}>
+                  {product.name}
+                </h2>
+                <p className="text-sm font-medium mb-3" style={{ color: "#fb923c" }}>
+                  {product.shortDesc}
+                </p>
+                <p className="text-sm leading-relaxed mb-6" style={{ color: "#9ca3af" }}>
+                  {typeof product.description === "string"
+                    ? product.description.slice(0, 120) + (product.description.length > 120 ? "…" : "")
+                    : ""}
+                </p>
+                <span className="text-xs font-semibold tracking-widest uppercase flex items-center gap-1.5" style={{ color: "#f97316" }}>
+                  Explore System
+                  <span className="transition-transform duration-200 group-hover:translate-x-1 inline-block">→</span>
+                </span>
+              </div>
             </Link>
           ))}
         </div>

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
+import LunchLearn from "@/components/sections/LunchLearn";
 
 // Note: metadata must be in a server component — defined in layout or a parallel route.
 // Page-level metadata for client components requires moving meta to a parent layout.
@@ -180,6 +181,7 @@ export default function ContactPage() {
           </div>
         </div>
       </div>
+      <LunchLearn />
       <Footer />
     </main>
   );

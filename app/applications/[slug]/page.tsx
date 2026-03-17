@@ -150,7 +150,7 @@ export default async function ApplicationPage({ params }: Props) {
 
       {/* ── 3. Recommended Products ──────────────────────────────────────── */}
       {relatedProductData.length > 0 && (
-        <section className="py-16" style={{ background: "#141414" }}>
+        <section className="py-16" style={{ background: "var(--color-slate)" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-end justify-between mb-10">
               <div>
@@ -267,7 +267,7 @@ export default async function ApplicationPage({ params }: Props) {
       </section>
 
       {/* ── 5. Benefits ───────────────────────────────────────────────────── */}
-      <section className="py-16" style={{ background: "#111" }}>
+      <section className="py-16" style={{ background: "var(--color-slate)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             {/* Left: heading */}
@@ -363,7 +363,7 @@ export default async function ApplicationPage({ params }: Props) {
             </p>
             <div className="flex flex-wrap gap-3">
               <Link
-                href="/contact"
+                href="/lunch-learn"
                 className="inline-flex items-center gap-2 font-bold px-7 py-3.5 rounded-full text-sm transition-all duration-150 hover:brightness-110"
                 style={{
                   background: "linear-gradient(90deg, #F97316, #d97706)",

@@ -302,7 +302,7 @@ export default function LunchLearn() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 text-center">
           <p className="text-sm" style={{ color: "#94a3b8" }}>
             Book your session at{" "}
-            <span className="font-semibold" style={{ color: "#f97316" }}>hubss.com/lunch-learn</span>
+            <a href="/lunch-learn" className="font-semibold transition-colors hover:text-white" style={{ color: "#f97316" }}>hubss.com/lunch-learn</a>
             {" "}— or fill out the form above.
           </p>
         </div>

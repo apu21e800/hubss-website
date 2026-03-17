@@ -109,13 +109,13 @@ export default async function ProductPage({ params }: Props) {
 
           {/* Right: specs + CTA */}
           <div>
-            <div className="rounded-xl p-8 mb-8 sticky top-24" style={{ background: "var(--bg-card-surface)", border: "1px solid var(--border-subtle)" }}>
-              <h3 className="font-bold text-lg mb-6" style={{ color: "var(--text-primary)" }}>Specifications</h3>
+            <div className="rounded-xl p-8 mb-8 sticky top-24" style={{ background: "var(--color-blue-mid)", border: "1px solid rgba(147,197,253,0.1)" }}>
+              <h3 className="font-bold text-lg mb-6" style={{ color: "#fff" }}>Specifications</h3>
               <div className="space-y-4">
                 {product.specs.map((spec) => (
-                  <div key={spec.label} className="flex justify-between text-sm" style={{ borderBottom: "1px solid var(--border-subtle)", paddingBottom: "12px" }}>
-                    <span style={{ color: "#d1d5db" }}>{spec.label}</span>
-                    <span className="font-semibold text-right max-w-[60%]" style={{ color: "var(--text-primary)" }}>
+                  <div key={spec.label} className="flex justify-between text-sm" style={{ borderBottom: "1px solid rgba(147,197,253,0.08)", paddingBottom: "12px" }}>
+                    <span style={{ color: "var(--color-blue-text)" }}>{spec.label}</span>
+                    <span className="font-semibold text-right max-w-[60%]" style={{ color: "#fff" }}>
                       {spec.value}
                     </span>
                   </div>
@@ -132,7 +132,7 @@ export default async function ProductPage({ params }: Props) {
               <Link
                 href="/lunch-learn"
                 className="block w-full text-center font-semibold py-4 rounded-lg mt-3 transition-colors text-sm"
-                style={{ background: "transparent", color: "var(--text-primary)", border: "1px solid var(--border-subtle)" }}
+                style={{ background: "transparent", color: "var(--color-blue-text)", border: "1px solid rgba(147,197,253,0.2)" }}
               >
                 Book Lunch &amp; Learn
               </Link>

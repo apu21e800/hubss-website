@@ -35,6 +35,11 @@
   --border-subtle:  #1f1f1f;
   --border-faint:   rgba(255,255,255,0.05);
 
+  /* ─── Deep blue — engineering / credential tone ─────── */
+  --color-blue-deep:  #1E3A5F;
+  --color-blue-mid:   #162D4A;   /* cards on blue sections */
+  --color-blue-text:  #93C5FD;   /* body text on blue bg   */
+
   /* ─── Legacy aliases (kept for ComparisonTable / RecentProjects light sections) */
   --color-off-white:   #F5F4F0;
 }

@@ -18,7 +18,7 @@ const quickLinks = [
   {
     title: "Book a Lunch & Learn",
     description:
-      "Free professional development sessions with CPD/PDH credits for engineers and contractors.",
+      "Free professional development sessions with continuing education credits for engineers and contractors.",
     image: "/images/applications/commercial-spaces/little-italy-aerial-colourful-intersection-01.jpg",
     href: "/lunch-learn",
   },
@@ -78,8 +78,25 @@ export default function ResourcesPage() {
         </div>
       </header>
 
+      {/* ── Document Library ──────────────────────────────── */}
+      <section className="max-w-7xl mx-auto px-6 pt-16 pb-24">
+        <div className="mb-10">
+          <h2 className="text-3xl font-extrabold text-[var(--text-primary)] mb-2">
+            Browse Documents
+          </h2>
+          <p className="text-gray-300">
+            Filter by product or document type to find what you need.
+          </p>
+        </div>
+
+        <ResourcesClient documents={resourceDocuments} />
+      </section>
+
       {/* ── Quick Links Strip ─────────────────────────────── */}
-      <section className="max-w-7xl mx-auto px-6 -mt-12 relative z-10 pb-16">
+      <section className="max-w-7xl mx-auto px-6 pb-20">
+        <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-6 gradient-text">
+          Quick Links
+        </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {quickLinks.map((link) => (
             <Link
@@ -112,20 +129,6 @@ export default function ResourcesPage() {
             </Link>
           ))}
         </div>
-      </section>
-
-      {/* ── Document Library ──────────────────────────────── */}
-      <section className="max-w-7xl mx-auto px-6 pb-24">
-        <div className="mb-10">
-          <h2 className="text-3xl font-extrabold text-[var(--text-primary)] mb-2">
-            Browse Documents
-          </h2>
-          <p className="text-gray-300">
-            Filter by product, application, or document type to find what you need.
-          </p>
-        </div>
-
-        <ResourcesClient documents={resourceDocuments} />
       </section>
 
       <LunchLearn />

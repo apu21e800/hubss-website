@@ -8,7 +8,7 @@ import { productImages, resolveImage } from "@/lib/featured-images";
 
 export default function ProductsGrid() {
   return (
-    <section className="py-28 bg-asphalt-subtle" style={{ background: "var(--bg-dark)" }}>
+    <section className="py-28 bg-zinc-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Section header */}
@@ -17,12 +17,11 @@ export default function ProductsGrid() {
             Our Systems
           </p>
           <h2
-            className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3"
-            style={{ color: "#F5F0EB" }}
+            className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3 text-zinc-900"
           >
             The Systems Behind Canada&apos;s Most Recognised Surfaces
           </h2>
-          <p className="text-lg font-light max-w-xl" style={{ color: "#d1d5db" }}>
+          <p className="text-lg font-light max-w-xl text-zinc-600">
             Engineered for Canadian infrastructure. Built to outlast.
           </p>
         </div>
@@ -39,13 +38,13 @@ export default function ProductsGrid() {
             >
               <Link
                 href={`/products/${product.slug}`}
-                className="group flex flex-col h-full relative overflow-hidden rounded-xl transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(249,115,22,0.12)]"
+                className="group flex flex-col h-full relative overflow-hidden rounded-xl transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(249,115,22,0.15)]"
                 style={{
-                  background: "#111111",
-                  border: "1px solid rgba(255,255,255,0.06)",
+                  background: "#ffffff",
+                  border: "1px solid #e5e7eb",
                 }}
-                onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(249,115,22,0.3)")}
-                onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)")}
+                onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(249,115,22,0.5)")}
+                onMouseLeave={e => (e.currentTarget.style.borderColor = "#e5e7eb")}
               >
                 {/* Card image */}
                 <div className="relative w-full overflow-hidden flex-shrink-0 rounded-t-xl" style={{ height: 160 }}>
@@ -70,22 +69,20 @@ export default function ProductsGrid() {
 
                 <div className="flex flex-col flex-1 p-6">
                   <h3
-                    className="text-lg font-semibold mb-1 transition-colors duration-200 group-hover:text-orange-400"
-                    style={{ color: "#F5F0EB" }}
+                    className="text-lg font-semibold mb-1 transition-colors duration-200 group-hover:text-orange-500 text-zinc-900"
                   >
                     {product.name}
                   </h3>
 
                   {/* Short desc — product tagline */}
-                  <p className="text-sm font-medium mb-3" style={{ color: "#fb923c" }}>
+                  <p className="text-sm font-medium mb-3" style={{ color: "#f97316" }}>
                     {product.shortDesc}
                   </p>
 
                   {/* Body copy */}
                   <p
-                    className="text-sm leading-relaxed mb-auto"
+                    className="text-sm leading-relaxed mb-auto text-zinc-600"
                     style={{
-                      color: "#d1d5db",
                       display: "-webkit-box",
                       WebkitLineClamp: 3,
                       WebkitBoxOrient: "vertical",

@@ -8,7 +8,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import {
   // Nav chrome
   FileText, CalendarCheck, Phone,
-  ChevronDown, Menu, X,
+  ChevronDown, X,
 } from "lucide-react";
 import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
@@ -66,7 +66,7 @@ function PanelFooter() {
     <div style={{ background: "var(--bg-dark)", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
       <div style={{ maxWidth: 1400, margin: "0 auto", padding: "12px 3rem" }}>
         <p className="text-xs text-center" style={{ color: "var(--text-hint)" }}>
-          Engineered for Canadian infrastructure · TAC + FAA Compliant · Proud to work coast to coast 🍁
+          Engineered for Canadian infrastructure · TAC + FAA Compliant · Proud to work coast to coast
         </p>
       </div>
     </div>
@@ -161,7 +161,7 @@ function ProductsPanel({
                 <Link href="/products/traffic-patterns-xd" className="group flex gap-2 p-2 rounded-lg border-l-2 border-orange-500 bg-white/[0.04] hover:bg-orange-500/10 transition-colors">
                   <div className="flex-shrink-0 w-[48px] h-[48px] rounded overflow-hidden bg-black/20">
                     <Image
-                      src="/images/products/mmax/mmax-red-black-crosswalk-pattern-01.jpg"
+                      src="/images/products/trafficpatterns-xd/trafficpatterns-xd-1.jpg"
                       alt="TrafficPatternsXD"
                       width={48}
                       height={48}
@@ -483,7 +483,7 @@ export default function Nav() {
               }}>
                 HUB <span style={{ color: "#f97316" }}>Surface Systems</span>
               </span>
-              <span className="hidden md:inline ml-2" aria-label="Canadian company">🇨🇦</span>
+              <Image src="/images/flags/canada-flag.svg" width={22} height={13} alt="Canada" unoptimized className="hidden md:inline-block ml-2 align-middle" />
             </Link>
 
             {/* Desktop links */}
@@ -578,15 +578,16 @@ export default function Nav() {
               </Link>
             </div>
 
-            {/* Mobile hamburger */}
+            {/* Mobile hamburger — animated lines */}
             <button
-              className="md:hidden p-2"
-              style={{ color: "var(--text-primary)" }}
+              className="md:hidden p-2 flex flex-col justify-center items-center gap-[5px] w-10 h-10"
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
               aria-expanded={mobileOpen}
             >
-              {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+              <span className={`block w-6 h-0.5 bg-white transition-all duration-300 ${mobileOpen ? "rotate-45 translate-y-[7px]" : ""}`} />
+              <span className={`block w-6 h-0.5 bg-white transition-all duration-300 ${mobileOpen ? "opacity-0" : ""}`} />
+              <span className={`block w-6 h-0.5 bg-white transition-all duration-300 ${mobileOpen ? "-rotate-45 -translate-y-[7px]" : ""}`} />
             </button>
           </div>
         </div>
@@ -595,26 +596,32 @@ export default function Nav() {
         <AnimatePresence>
           {mobileOpen && (
             <motion.div
-              initial={{ opacity: 0, x: "100%" }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: "100%" }}
-              transition={{ type: "tween", duration: 0.25 }}
-              className="fixed inset-0 bg-zinc-950 z-50 flex flex-col p-6 md:hidden"
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "tween", duration: 0.3 }}
+              className="fixed inset-0 bg-zinc-950/95 backdrop-blur-sm z-50 flex flex-col p-6 md:hidden overflow-y-auto"
             >
               <div className="flex justify-between items-center mb-8">
                 <span className="text-white font-bold text-lg">HUB Surface Systems</span>
-                <button onClick={() => setMobileOpen(false)} className="text-white text-2xl p-2">×</button>
+                <button
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center justify-center w-11 h-11 rounded-full text-white hover:bg-white/10 transition-colors"
+                  aria-label="Close menu"
+                >
+                  <X size={22} />
+                </button>
               </div>
-              <nav className="flex flex-col flex-1 overflow-y-auto">
+              <nav className="flex flex-col flex-1">
               {/* Products accordion */}
               <div className="border-b border-zinc-800">
                 <button
-                  className="flex items-center justify-between w-full py-4 text-lg font-semibold text-white"
+                  className="flex items-center justify-between w-full py-4 min-h-[56px] text-xl font-semibold text-white"
                   onClick={() => setMobileExpanded(mobileExpanded === "products" ? null : "products")}
                   aria-expanded={mobileExpanded === "products"}
                 >
                   Products
-                  <span className="text-xl">{mobileExpanded === "products" ? "−" : "+"}</span>
+                  <ChevronDown size={18} className={`transition-transform duration-200 ${mobileExpanded === "products" ? "rotate-180" : ""}`} />
                 </button>
                 <AnimatePresence>
                   {mobileExpanded === "products" && (
@@ -644,12 +651,12 @@ export default function Nav() {
               {/* Applications accordion */}
               <div className="border-b border-zinc-800">
                 <button
-                  className="flex items-center justify-between w-full py-4 text-lg font-semibold text-white"
+                  className="flex items-center justify-between w-full py-4 min-h-[56px] text-xl font-semibold text-white"
                   onClick={() => setMobileExpanded(mobileExpanded === "applications" ? null : "applications")}
                   aria-expanded={mobileExpanded === "applications"}
                 >
                   Applications
-                  <span className="text-xl">{mobileExpanded === "applications" ? "−" : "+"}</span>
+                  <ChevronDown size={18} className={`transition-transform duration-200 ${mobileExpanded === "applications" ? "rotate-180" : ""}`} />
                 </button>
                 <AnimatePresence>
                   {mobileExpanded === "applications" && (
@@ -682,7 +689,7 @@ export default function Nav() {
                 return (
                   <Link key={link.href} href={link.href}
                     onClick={() => setMobileOpen(false)}
-                    className="block py-3 text-lg font-semibold"
+                    className="block py-4 min-h-[56px] text-xl font-semibold border-b border-zinc-800 flex items-center"
                     style={{ color: active ? "#f97316" : "white" }}>
                     {link.label}
                   </Link>

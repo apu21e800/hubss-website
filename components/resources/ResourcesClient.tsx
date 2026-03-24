@@ -5,19 +5,15 @@ import { FileText, Download, Search, X, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import type { ResourceDocument } from "@/lib/resource-documents";
 
-const TABS = ["All", "By Product", "By Application"] as const;
+const TABS = ["All", "By Product", "By Document Type"] as const;
 type TabType = (typeof TABS)[number];
 
-const APPLICATION_FILTERS = [
-  { label: "All Applications", value: "all" },
-  { label: "Crosswalks", value: "crosswalks" },
-  { label: "Bike Lanes", value: "bike-lanes" },
-  { label: "Bus Lanes", value: "bus-lanes" },
-  { label: "Parking Lots", value: "parking-lots" },
-  { label: "Parks & Paths", value: "parks-paths" },
-  { label: "Community Branding", value: "community-branding" },
-  { label: "Airports", value: "airports" },
-  { label: "Private Driveways", value: "private-driveways" },
+const DOCUMENT_TYPE_FILTERS = [
+  { label: "All", value: "All" },
+  { label: "Case Study", value: "Case Study" },
+  { label: "White Paper", value: "White Paper" },
+  { label: "Technical Data Sheet", value: "Data Sheet" },
+  { label: "Installation Guide", value: "Installation Guide" },
 ];
 
 const DOCUMENT_TYPES = [
@@ -94,10 +90,10 @@ export default function ResourcesClient({
 }) {
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState<TabType>("All");
-  const [applicationFilter, setApplicationFilter] = useState("all");
   const [productFilter, setProductFilter] = useState("all");
   const [subcategoryFilter, setSubcategoryFilter] = useState("all");
   const [typeFilter, setTypeFilter] = useState("All");
+  const [docTypeFilter, setDocTypeFilter] = useState("All");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   const filtered = useMemo(() => {
@@ -111,11 +107,7 @@ export default function ResourcesClient({
           doc.type.toLowerCase().includes(q);
         if (!matchesSearch) return false;
       }
-      // Application filter (only when "By Application" tab is active)
-      if (activeTab === "By Application" && applicationFilter !== "all") {
-        if (!doc.applications.includes(applicationFilter)) return false;
-      }
-      // Product dropdown (only when "By Product" tab is active)
+      // Product filter (only when "By Product" tab is active)
       if (activeTab === "By Product" && productFilter !== "all") {
         if (doc.product !== productFilter) return false;
       }
@@ -123,38 +115,43 @@ export default function ResourcesClient({
       if (activeTab === "By Product" && productFilter === "streetbond" && subcategoryFilter !== "all") {
         if (doc.subcategory !== subcategoryFilter) return false;
       }
-      // Type dropdown
-      if (typeFilter !== "All") {
+      // Document type tab filter
+      if (activeTab === "By Document Type" && docTypeFilter !== "All") {
+        if (doc.type !== docTypeFilter) return false;
+      }
+      // Type dropdown (always active)
+      if (activeTab !== "By Document Type" && typeFilter !== "All") {
         if (doc.type !== typeFilter) return false;
       }
       return true;
     });
-  }, [documents, search, activeTab, applicationFilter, productFilter, subcategoryFilter, typeFilter]);
+  }, [documents, search, activeTab, productFilter, subcategoryFilter, typeFilter, docTypeFilter]);
 
   const visible = filtered.slice(0, visibleCount);
   const hasMore = visibleCount < filtered.length;
 
   const hasActiveFilters =
     search !== "" ||
-    (activeTab === "By Application" && applicationFilter !== "all") ||
     (activeTab === "By Product" && productFilter !== "all") ||
     (activeTab === "By Product" && subcategoryFilter !== "all") ||
-    typeFilter !== "All";
+    (activeTab === "By Document Type" && docTypeFilter !== "All") ||
+    (activeTab !== "By Document Type" && typeFilter !== "All");
 
   function clearAllFilters() {
     setSearch("");
-    setApplicationFilter("all");
     setProductFilter("all");
     setSubcategoryFilter("all");
     setTypeFilter("All");
+    setDocTypeFilter("All");
     setVisibleCount(PAGE_SIZE);
   }
 
   function handleTabChange(tab: TabType) {
     setActiveTab(tab);
-    setApplicationFilter("all");
     setProductFilter("all");
     setSubcategoryFilter("all");
+    setTypeFilter("All");
+    setDocTypeFilter("All");
     setVisibleCount(PAGE_SIZE);
   }
 
@@ -162,15 +159,15 @@ export default function ResourcesClient({
     <>
       {/* ── Tab Navigation ─────────────────────────────────── */}
       <div id="documents" className="scroll-mt-24 mb-8">
-        <div className="flex gap-8 border-b border-zinc-800">
+        <div className="flex gap-8 border-b border-zinc-300">
           {TABS.map((tab) => (
             <button
               key={tab}
               onClick={() => handleTabChange(tab)}
               className={`pb-3 text-sm font-medium transition-colors ${
                 activeTab === tab
-                  ? "text-white border-b-2 border-orange-500 -mb-px"
-                  : "text-gray-500 hover:text-gray-300"
+                  ? "text-zinc-900 border-b-2 border-orange-500 -mb-px"
+                  : "text-zinc-500 hover:text-zinc-700"
               }`}
             >
               {tab}
@@ -183,7 +180,7 @@ export default function ResourcesClient({
       <div className="flex flex-col sm:flex-row gap-3 mb-8">
         {/* Search */}
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
           <input
             type="text"
             placeholder="Search documents..."
@@ -192,12 +189,12 @@ export default function ResourcesClient({
               setSearch(e.target.value);
               setVisibleCount(PAGE_SIZE);
             }}
-            className="w-full pl-10 pr-4 py-3 rounded-lg bg-[var(--bg-card)] border border-[var(--bg-card-hover)] text-[var(--text-primary)] placeholder-gray-500 focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/25 transition-colors text-sm"
+            className="w-full pl-10 pr-4 py-3 rounded-lg bg-white border border-zinc-300 text-zinc-800 placeholder-zinc-400 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/25 transition-colors text-sm"
           />
           {search && (
             <button
               onClick={() => setSearch("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600"
             >
               <X className="w-4 h-4" />
             </button>
@@ -214,7 +211,7 @@ export default function ResourcesClient({
                 setSubcategoryFilter("all");
                 setVisibleCount(PAGE_SIZE);
               }}
-              className="appearance-none w-full sm:w-48 px-4 py-3 pr-10 rounded-lg bg-[var(--bg-card)] border border-[var(--bg-card-hover)] text-[var(--text-primary)] text-sm focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/25 transition-colors cursor-pointer"
+              className="appearance-none w-full sm:w-48 px-4 py-3 pr-10 rounded-lg bg-white border border-zinc-300 text-zinc-700 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/25 transition-colors cursor-pointer"
             >
               {PRODUCTS.map((p) => (
                 <option key={p.value} value={p.value}>
@@ -222,60 +219,63 @@ export default function ResourcesClient({
                 </option>
               ))}
             </select>
-            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none" />
           </div>
         )}
 
-        {/* Application dropdown — show when "By Application" tab is active */}
-        {activeTab === "By Application" && (
+        {/* Type dropdown — show when NOT on "By Document Type" tab */}
+        {activeTab !== "By Document Type" && (
           <div className="relative">
             <select
-              value={applicationFilter}
+              value={typeFilter}
               onChange={(e) => {
-                setApplicationFilter(e.target.value);
+                setTypeFilter(e.target.value);
                 setVisibleCount(PAGE_SIZE);
               }}
-              className="appearance-none w-full sm:w-48 px-4 py-3 pr-10 rounded-lg bg-[var(--bg-card)] border border-[var(--bg-card-hover)] text-[var(--text-primary)] text-sm focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/25 transition-colors cursor-pointer"
+              className="appearance-none w-full sm:w-48 px-4 py-3 pr-10 rounded-lg bg-white border border-zinc-300 text-zinc-700 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/25 transition-colors cursor-pointer"
             >
-              {APPLICATION_FILTERS.map((a) => (
-                <option key={a.value} value={a.value}>
-                  {a.label}
+              {DOCUMENT_TYPES.map((t) => (
+                <option key={t} value={t}>
+                  {t === "All" ? "All Types" : t}
                 </option>
               ))}
             </select>
-            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none" />
           </div>
         )}
-
-        {/* Type dropdown */}
-        <div className="relative">
-          <select
-            value={typeFilter}
-            onChange={(e) => {
-              setTypeFilter(e.target.value);
-              setVisibleCount(PAGE_SIZE);
-            }}
-            className="appearance-none w-full sm:w-48 px-4 py-3 pr-10 rounded-lg bg-[var(--bg-card)] border border-[var(--bg-card-hover)] text-[var(--text-primary)] text-sm focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/25 transition-colors cursor-pointer"
-          >
-            {DOCUMENT_TYPES.map((t) => (
-              <option key={t} value={t}>
-                {t === "All" ? "All Types" : t}
-              </option>
-            ))}
-          </select>
-          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
-        </div>
 
         {/* Clear all */}
         {hasActiveFilters && (
           <button
             onClick={clearAllFilters}
-            className="text-sm text-orange-400 hover:text-orange-300 transition-colors whitespace-nowrap py-3 px-2"
+            className="text-sm text-orange-500 hover:text-orange-600 transition-colors whitespace-nowrap py-3 px-2"
           >
             Clear all filters
           </button>
         )}
       </div>
+
+      {/* ── Document Type Pills — show when "By Document Type" tab is active ── */}
+      {activeTab === "By Document Type" && (
+        <div className="flex flex-wrap gap-2 mb-6">
+          {DOCUMENT_TYPE_FILTERS.map((dt) => (
+            <button
+              key={dt.value}
+              onClick={() => {
+                setDocTypeFilter(dt.value);
+                setVisibleCount(PAGE_SIZE);
+              }}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 border ${
+                docTypeFilter === dt.value
+                  ? "bg-orange-500 text-white border-transparent"
+                  : "bg-white border-zinc-300 text-zinc-600 hover:border-orange-400 hover:text-orange-500"
+              }`}
+            >
+              {dt.label}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* ── StreetBond Subcategory Pills ─────────────────── */}
       {activeTab === "By Product" && productFilter === "streetbond" && (
@@ -289,8 +289,8 @@ export default function ResourcesClient({
               }}
               className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 border ${
                 subcategoryFilter === sc.value
-                  ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white border-transparent"
-                  : "border-[var(--border-color)] text-gray-300 hover:border-orange-400/50 hover:text-gray-100"
+                  ? "bg-orange-500 text-white border-transparent"
+                  : "bg-white border-zinc-300 text-zinc-600 hover:border-orange-400 hover:text-orange-500"
               }`}
             >
               {sc.label}
@@ -300,7 +300,7 @@ export default function ResourcesClient({
       )}
 
       {/* ── Results count ────────────────────────────────── */}
-      <p className="text-sm text-gray-300 mb-6">
+      <p className="text-sm text-zinc-500 mb-6">
         {filtered.length} document{filtered.length !== 1 ? "s" : ""} found
       </p>
 

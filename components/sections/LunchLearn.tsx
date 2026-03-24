@@ -31,7 +31,7 @@ const labelStyle = { color: "var(--text-hint)" as string, fontSize: "0.8125rem",
 
 export default function LunchLearn() {
   const [form, setForm] = useState({
-    name: "", org: "", email: "", phone: "", format: "In-Person", province: "",
+    name: "", org: "", email: "", phone: "", province: "",
   });
   const [submitted, setSubmitted] = useState(false);
   const [error, setError]     = useState("");
@@ -86,7 +86,7 @@ export default function LunchLearn() {
                   border: "1px solid rgba(249,115,22,0.3)",
                 }}
               >
-                CPD-Accredited
+                Continuing Education
               </span>
             </div>
 
@@ -133,7 +133,7 @@ export default function LunchLearn() {
               </ul>
             </div>
 
-            {/* Pug peeker — paws sit flush against the orange fold line below */}
+            {/* Moose peeker — overlaps the orange fold line below */}
             <div style={{ position: "relative", height: "120px", marginBottom: "-32px", zIndex: 10, pointerEvents: "none" }}>
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
@@ -148,10 +148,10 @@ export default function LunchLearn() {
                 }}
               >
                 <Image
-                  src="/images/lunch-learn/pug-peeker.png"
-                  alt="Pug mascot peeking over the edge"
-                  width={190}
-                  height={148}
+                  src="/images/lunch-learn/moose.png"
+                  alt="Moose mascot peeking over the edge"
+                  width={220}
+                  height={220}
                   style={{ objectFit: "contain", objectPosition: "bottom", display: "block" }}
                   unoptimized
                 />
@@ -281,27 +281,6 @@ export default function LunchLearn() {
                         className="w-full px-3 py-2.5 rounded-lg text-sm outline-none focus:ring-2 focus:ring-orange-400 transition-all min-h-[44px]"
                         style={inputStyle}
                       />
-                    </div>
-                  </div>
-
-                  {/* Preferred Format */}
-                  <div>
-                    <label className="block mb-2" style={labelStyle}>Preferred Format</label>
-                    <div className="grid grid-cols-2 gap-3">
-                      {(["In-Person", "Virtual"] as const).map((opt) => (
-                        <button
-                          key={opt} type="button"
-                          onClick={() => set("format", opt)}
-                          className="py-2.5 rounded-lg text-sm font-semibold border-2 transition-all min-h-[44px]"
-                          style={{
-                            background:     form.format === opt ? "#fff7ed" : "#f9fafb",
-                            borderColor:    form.format === opt ? "#f97316" : "#e5e7eb",
-                            color:          form.format === opt ? "#ea580c" : "#6b7280",
-                          }}
-                        >
-                          {opt === "In-Person" ? "🏢 In-Person" : "💻 Virtual"}
-                        </button>
-                      ))}
                     </div>
                   </div>
 

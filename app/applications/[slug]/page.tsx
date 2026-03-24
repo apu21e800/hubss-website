@@ -359,7 +359,7 @@ export default async function ApplicationPage({ params }: Props) {
             >
               Complimentary sessions for municipalities, engineering firms, and contractors.
               Live product demonstrations, case studies from Canadian projects, and
-              free CPD/PDH credits for engineers.
+              free continuing education credits for engineers.
             </p>
             <div className="flex flex-wrap gap-3">
               <Link
@@ -391,7 +391,7 @@ export default async function ApplicationPage({ params }: Props) {
               className="flex flex-wrap gap-x-6 gap-y-2 mt-8 pt-8"
               style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
             >
-              {["Free CPD/PDH credits", "Lunch provided", "East: Milton · West: Ladysmith"].map((item) => (
+              {["Free continuing education credits", "Lunch provided", "East: Milton · West: Ladysmith"].map((item) => (
                 <span
                   key={item}
                   className="flex items-center gap-2 text-xs"

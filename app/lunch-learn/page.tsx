@@ -6,7 +6,7 @@ import Image from "next/image";
 
 export const metadata = buildMetadata({
   title: "Book a Free Lunch & Learn",
-  description: "Complimentary lunch and product briefing for municipalities, engineering firms, and contractors. Live demonstrations, Canadian case studies, and free CPD/PDH credits.",
+  description: "Complimentary lunch and product briefing for municipalities, engineering firms, and contractors. Live demonstrations, Canadian case studies, and free continuing education credits.",
   slug: "lunch-learn",
 });
 
@@ -58,7 +58,7 @@ export default function LunchLearnPage() {
                 We bring lunch to your office and walk your team through everything
                 you need to know about modern pavement marking systems — real Canadian
                 case studies, lifecycle cost analysis, and practical specs you can drop
-                straight into your next RFP. Free CPD/PDH credits for engineers.
+                straight into your next RFP. Free continuing education credits for engineers.
               </p>
             </div>
 
@@ -67,21 +67,20 @@ export default function LunchLearnPage() {
               className="hidden md:block"
               style={{
                 flexShrink: 0,
-                marginBottom: "-100px",
+                marginBottom: "-110px",
                 zIndex: 20,
                 position: "relative",
                 pointerEvents: "none"
               }}
             >
-              {/* TODO: Replace emoji with <Image src="/images/mascots/moose.png" /> once real PNG is added */}
-              <div
-                className="text-[140px] select-none leading-none"
-                style={{
-                  filter: "drop-shadow(0 8px 24px rgba(0,0,0,0.4))",
-                }}
-              >
-                🦌
-              </div>
+              <Image
+                src="/images/lunch-learn/moose.png"
+                alt="Moose mascot"
+                width={220}
+                height={220}
+                style={{ objectFit: "contain", filter: "drop-shadow(0 8px 24px rgba(0,0,0,0.4))" }}
+                unoptimized
+              />
             </div>
           </div>
         </div>

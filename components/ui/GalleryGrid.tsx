@@ -13,8 +13,14 @@ export interface GalleryImage {
   caption?: string;
 }
 
+const INITIAL_COUNT = 6;
+
 export default function GalleryGrid({ images }: { images: GalleryImage[] }) {
   const [index, setIndex] = useState(-1);
+  const [showAll, setShowAll] = useState(false);
+
+  const displayed = showAll ? images : images.slice(0, INITIAL_COUNT);
+  const hasMore = images.length > INITIAL_COUNT;
 
   return (
     <>
@@ -26,7 +32,7 @@ export default function GalleryGrid({ images }: { images: GalleryImage[] }) {
           columnGap: "10px",
         }}
       >
-        {images.map((img, i) => (
+        {displayed.map((img, i) => (
           <div
             key={i}
             role="button"
@@ -95,6 +101,17 @@ export default function GalleryGrid({ images }: { images: GalleryImage[] }) {
           </div>
         ))}
       </div>
+
+      {hasMore && (
+        <div className="text-center mt-6">
+          <button
+            onClick={() => setShowAll((s) => !s)}
+            className="border border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white px-6 py-3 rounded-lg transition-all text-sm font-semibold"
+          >
+            {showAll ? "Show Less" : `View More Photos (${images.length - INITIAL_COUNT} more)`}
+          </button>
+        </div>
+      )}
 
       <Lightbox
         slides={images.map((img) => ({

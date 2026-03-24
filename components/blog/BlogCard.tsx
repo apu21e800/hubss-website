@@ -21,7 +21,11 @@ export default function BlogCard({ post }: { post: PostMeta }) {
   const isExternal = imgSrc.startsWith("http");
 
   return (
-    <div className="group overflow-hidden rounded" style={{ background: "var(--bg-card-surface)" }}>
+    <Link
+      href={`/blog/${post.slug}`}
+      className="group overflow-hidden rounded cursor-pointer hover:shadow-lg transition-shadow duration-300 block"
+      style={{ background: "var(--bg-card-surface)" }}
+    >
       <div className="relative h-52 overflow-hidden">
         <Image
           src={imgSrc}
@@ -52,7 +56,7 @@ export default function BlogCard({ post }: { post: PostMeta }) {
             </span>
           )}
         </div>
-        <h3 className="font-bold text-base leading-snug mb-2" style={{ color: "var(--text-primary)" }}>
+        <h3 className="font-bold text-base leading-snug mb-2 group-hover:text-orange-400 transition-colors" style={{ color: "var(--text-primary)" }}>
           {post.title}
         </h3>
         <p className="text-xs mb-1" style={{ color: "var(--text-secondary)" }}>
@@ -69,14 +73,13 @@ export default function BlogCard({ post }: { post: PostMeta }) {
             ? post.excerpt.slice(0, post.excerpt.lastIndexOf(" ", 120)) + "..."
             : post.excerpt}
         </p>
-        <Link
-          href={`/blog/${post.slug}`}
+        <span
           className="text-xs font-semibold flex items-center gap-1"
           style={{ color: "#f97316" }}
         >
           Read Post &rarr;
-        </Link>
+        </span>
       </div>
-    </div>
+    </Link>
   );
 }

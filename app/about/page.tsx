@@ -173,7 +173,7 @@ export default function AboutPage() {
             ))}
           </div>
           <p className="text-center text-sm mt-8" style={{ color: "#d1d5db" /* keep as-is */ }}>
-            🇨🇦 Serving all 10 provinces and 3 territories
+            Serving all 10 provinces and 3 territories
           </p>
         </div>
       </div>
@@ -203,12 +203,37 @@ export default function AboutPage() {
           <h2 className="text-3xl font-bold mb-6" style={{ color: "var(--text-primary)" }}>
             Backed by Industry Leaders
           </h2>
-          <p className="text-base leading-relaxed max-w-2xl mb-12" style={{ color: "var(--text-body)" }}>
+          <p className="text-base leading-relaxed max-w-2xl mb-8" style={{ color: "var(--text-body)" }}>
             HUB Surface Systems is an authorized distributor and applicator partner for the manufacturers
             behind our core product systems. These partnerships give our clients access to the broadest
             product portfolio in the Canadian decorative pavement market — with direct manufacturer
             technical support and warranty backing.
           </p>
+
+          {/* Trusted Partners logo strip */}
+          <div className="py-8 mb-8 border-t border-b" style={{ borderColor: "var(--border-subtle)" }}>
+            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-center mb-6" style={{ color: "var(--text-faint)" }}>
+              Trusted Partners
+            </p>
+            <div className="flex items-center justify-center gap-12 flex-wrap">
+              <Image
+                src="/images/partners/ppg-logo.svg"
+                alt="PPG Pavement Technologies"
+                width={120}
+                height={48}
+                className="opacity-50 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300 object-contain"
+                unoptimized
+              />
+              <Image
+                src="/images/partners/gaf-logo.png"
+                alt="GAF Ennis-Flint"
+                width={120}
+                height={48}
+                className="opacity-50 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300 object-contain"
+                unoptimized
+              />
+            </div>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
               {

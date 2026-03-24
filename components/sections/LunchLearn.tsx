@@ -15,11 +15,6 @@ const TAKEAWAYS = [
   "Direct answers to your toughest pavement marking questions",
 ];
 
-const PROVINCES = [
-  "Alberta", "British Columbia", "Manitoba", "New Brunswick",
-  "Newfoundland & Labrador", "Nova Scotia", "Ontario",
-  "Prince Edward Island", "Quebec", "Saskatchewan",
-];
 
 const inputStyle = {
   background: "#f9fafb",
@@ -31,7 +26,7 @@ const labelStyle = { color: "var(--text-hint)" as string, fontSize: "0.8125rem",
 
 export default function LunchLearn() {
   const [form, setForm] = useState({
-    name: "", org: "", email: "", phone: "", province: "",
+    name: "", org: "", email: "", phone: "",
   });
   const [submitted, setSubmitted] = useState(false);
   const [error, setError]     = useState("");
@@ -63,8 +58,8 @@ export default function LunchLearn() {
   }
 
   return (
-    <section id="lunch-learn" className="relative overflow-hidden" style={{ background: "var(--bg-slate)", zIndex: 0, position: "relative" }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28 pt-36">
+    <section id="lunch-learn" className="relative overflow-hidden" style={{ background: "var(--bg-slate)", zIndex: 0, position: "relative", paddingTop: "100px" }}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28 pt-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
 
           {/* ── LEFT — content ─────────────────────────────── */}
@@ -158,50 +153,6 @@ export default function LunchLearn() {
               </motion.div>
             </div>
 
-            {/* Format options — orange top border IS the fold line the pug peers over */}
-            <div
-              className="p-5 mb-8 space-y-3"
-              style={{ position: "relative", zIndex: 0, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderTop: "2px solid #F97316", borderRadius: "0.5rem" }}
-            >
-              <div className="flex items-start gap-3">
-                <span className="text-base mt-0.5">🏢</span>
-                <div>
-                  <p className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>In-Person</p>
-                  <p className="text-xs" style={{ color: "#94a3b8" }}>We bring lunch to your office.</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <span className="text-base mt-0.5">💻</span>
-                <div>
-                  <p className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>Virtual</p>
-                  <p className="text-xs" style={{ color: "#94a3b8" }}>$25 SkipTheDishes voucher on us.</p>
-                </div>
-              </div>
-            </div>
-
-            {/* SkipTheDishes badge */}
-            <div
-              className="inline-flex items-center gap-3 px-4 py-3 rounded-xl"
-              style={{
-                background: "linear-gradient(135deg, rgba(249,115,22,0.12) 0%, rgba(234,179,8,0.08) 100%)",
-                border: "1px solid rgba(249,115,22,0.25)",
-              }}
-            >
-              <div
-                className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 font-black text-sm tracking-tight shadow-sm"
-                style={{
-                  background: "linear-gradient(135deg, #f97316, #f59e0b)",
-                  color: "#fff",
-                  boxShadow: "0 2px 8px rgba(249,115,22,0.4)",
-                }}
-              >
-                Skip
-              </div>
-              <div>
-                <p className="text-xs font-bold" style={{ color: "var(--text-primary)" }}>$25 SkipTheDishes Voucher</p>
-                <p className="text-[11px]" style={{ color: "#94a3b8" }}>Delivered to virtual attendees on booking</p>
-              </div>
-            </div>
           </motion.div>
 
           {/* ── RIGHT — form card ───────────────────────────── */}
@@ -282,20 +233,6 @@ export default function LunchLearn() {
                         style={inputStyle}
                       />
                     </div>
-                  </div>
-
-                  {/* Province */}
-                  <div>
-                    <label className="block mb-1.5" style={labelStyle}>Province</label>
-                    <select
-                      required
-                      value={form.province} onChange={(e) => set("province", e.target.value)}
-                      className="w-full px-3 py-2.5 rounded-lg text-sm outline-none focus:ring-2 focus:ring-orange-400 transition-all appearance-none cursor-pointer min-h-[44px]"
-                      style={inputStyle}
-                    >
-                      <option value="">Select province…</option>
-                      {PROVINCES.map((p) => <option key={p} value={p}>{p}</option>)}
-                    </select>
                   </div>
 
                   {/* Honeypot */}

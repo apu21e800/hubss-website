@@ -483,11 +483,11 @@ export default function Nav() {
               }}>
                 HUB <span style={{ color: "#f97316" }}>Surface Systems</span>
               </span>
-              <Image src="/images/flags/canada-flag.svg" width={22} height={13} alt="Canada" unoptimized className="hidden md:inline-block ml-2 align-middle" />
+              <Image src="/images/flags/canada-flag.svg" width={22} height={13} alt="Canada" unoptimized className="hidden lg:inline-block ml-2 align-middle" />
             </Link>
 
             {/* Desktop links */}
-            <div className="hidden md:flex items-center gap-0.5">
+            <div className="hidden lg:flex items-center gap-0.5">
 
               {/* Products trigger */}
               <Link
@@ -580,7 +580,7 @@ export default function Nav() {
 
             {/* Mobile hamburger — animated lines */}
             <button
-              className="md:hidden p-2 flex flex-col justify-center items-center gap-[5px] w-10 h-10"
+              className="lg:hidden p-2 flex flex-col justify-center items-center gap-[5px] w-10 h-10"
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
               aria-expanded={mobileOpen}
@@ -600,7 +600,7 @@ export default function Nav() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "tween", duration: 0.3 }}
-              className="fixed inset-0 bg-zinc-950/95 backdrop-blur-sm z-50 flex flex-col p-6 md:hidden overflow-y-auto"
+              className="fixed inset-0 bg-zinc-950/98 backdrop-blur-sm z-50 flex flex-col p-6 lg:hidden overflow-y-auto"
             >
               <div className="flex justify-between items-center mb-8">
                 <span className="text-white font-bold text-lg">HUB Surface Systems</span>
@@ -701,7 +701,7 @@ export default function Nav() {
                 <Link
                   href="/lunch-learn"
                   onClick={() => setMobileOpen(false)}
-                  className="block w-full bg-orange-500 text-black font-bold py-4 text-center rounded-lg"
+                  className="block w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 text-center rounded-lg transition-colors"
                 >
                   Book Lunch &amp; Learn
                 </Link>

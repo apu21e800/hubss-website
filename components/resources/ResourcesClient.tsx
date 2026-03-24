@@ -311,7 +311,7 @@ export default function ResourcesClient({
             {visible.map((doc) => (
               <div
                 key={doc.id}
-                className="group rounded-xl bg-[var(--bg-card)] border border-[var(--bg-card-hover)] p-5 flex flex-col justify-between transition-all duration-300 hover:border-orange-500/20 hover:shadow-[0_0_30px_rgba(249,115,22,0.06)] hover:-translate-y-0.5"
+                className="group rounded-xl bg-white border border-zinc-200 p-5 flex flex-col justify-between transition-all duration-300 hover:border-orange-400 hover:shadow-md hover:-translate-y-0.5"
               >
                 <div>
                   {/* Type badge */}
@@ -322,7 +322,7 @@ export default function ResourcesClient({
                   </span>
 
                   {/* Title */}
-                  <h3 className="font-medium text-[var(--text-primary)] leading-snug mb-2">
+                  <h3 className="font-medium text-zinc-900 leading-snug mb-2">
                     {doc.title}
                   </h3>
 
@@ -333,17 +333,17 @@ export default function ResourcesClient({
                 </div>
 
                 {/* Bottom row */}
-                <div className="flex items-center justify-between mt-5 pt-4 border-t border-[var(--bg-card-hover)]">
-                  <div className="flex items-center gap-3 text-xs text-gray-300">
+                <div className="flex items-center justify-between mt-5 pt-4 border-t border-zinc-200">
+                  <div className="flex items-center gap-3 text-xs text-zinc-500">
                     <span>{doc.fileSize}</span>
-                    <span className="w-1 h-1 rounded-full bg-zinc-700" />
+                    <span className="w-1 h-1 rounded-full bg-zinc-300" />
                     <span>{doc.updatedDate}</span>
                   </div>
                   <a
                     href={doc.fileUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 text-sm font-medium text-gray-300 hover:text-orange-400 transition-colors group/btn"
+                    className="flex items-center gap-1.5 text-sm font-medium text-zinc-500 hover:text-orange-500 transition-colors group/btn"
                   >
                     <Download className="w-4 h-4" />
                     <span className="hidden sm:inline">Download</span>
@@ -358,7 +358,7 @@ export default function ResourcesClient({
             <div className="text-center mt-10">
               <button
                 onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
-                className="px-8 py-3 rounded-lg text-sm font-medium border border-[var(--border-color)] text-gray-300 hover:border-orange-400/50 hover:text-orange-400 transition-all duration-200"
+                className="px-8 py-3 rounded-lg text-sm font-medium border border-zinc-300 text-zinc-600 hover:border-orange-500 hover:text-orange-500 transition-all duration-200"
               >
                 Load more ({filtered.length - visibleCount} remaining)
               </button>

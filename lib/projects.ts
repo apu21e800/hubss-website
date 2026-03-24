@@ -18,7 +18,7 @@ export const projects: Project[] = [
     province: "Ontario",
     city: "York Region",
     excerpt: "How TrafficPatternsXD delivered 150mil aggregate-reinforced crosswalk markings that outlasted paint by 8x while reducing annual maintenance costs by 60%.",
-    imageUrl: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80",
+    imageUrl: "/images/applications/traffic-calming/speed-table-red-brick-crosswalk-01.jpg",
   },
   {
     title: "Pedestrian Safety Solutions: How High-Visibility Crosswalks Save Lives",
@@ -28,7 +28,7 @@ export const projects: Project[] = [
     province: "Multiple",
     city: "Canada-Wide",
     excerpt: "A national case study on the measurable impact of high-visibility thermoplastic crosswalk markings on pedestrian fatality rates across Canadian municipalities.",
-    imageUrl: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&q=80",
+    imageUrl: "/images/applications/public-spaces/concordia-multicolour-crosswalk-01.jpg",
   },
   {
     title: "Vancouver Crosswalk Design & District Identity 2025",
@@ -38,7 +38,7 @@ export const projects: Project[] = [
     province: "British Columbia",
     city: "Vancouver",
     excerpt: "Custom StreetPrint stamped asphalt crosswalks celebrating neighbourhood identity across five Vancouver Business Improvement Districts.",
-    imageUrl: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800&q=80",
+    imageUrl: "/images/applications/commercial-spaces/little-italy-aerial-colourful-intersection-01.jpg",
   },
   {
     title: "York Region Hwy 7 VIVA Rapid Transit Corridor",
@@ -48,7 +48,7 @@ export const projects: Project[] = [
     province: "Ontario",
     city: "York Region",
     excerpt: "MMAX red MMA resin bus lane markings for the VIVA BRT corridor — high-durability, fast-cure application that opened to traffic within 90 minutes.",
-    imageUrl: "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?w=800&q=80",
+    imageUrl: "/images/applications/bus-bike-lanes/red-bus-lane-brt-transit-station-01.jpg",
   },
   {
     title: "City of Toronto Priority Bus Lanes — MMAX Red Resin",
@@ -58,7 +58,7 @@ export const projects: Project[] = [
     province: "Ontario",
     city: "Toronto",
     excerpt: "Toronto's transit priority network received MMAX red resin bus lane treatments on 12 major arterials, improving transit reliability and visual clarity.",
-    imageUrl: "https://images.unsplash.com/photo-1486325212980-2af6a2b98b1f?w=800&q=80",
+    imageUrl: "/images/products/mmax/mmax-red-bus-lane-ottawa-flags-01.jpg",
   },
   {
     title: "London ON East London Link BRT",
@@ -68,7 +68,7 @@ export const projects: Project[] = [
     province: "Ontario",
     city: "London",
     excerpt: "StreetBond coloured pavement markings define the East London Link BRT corridor, creating a cohesive branded transit experience through the city's east end.",
-    imageUrl: "https://images.unsplash.com/photo-1573348722427-f1d6819fdf98?w=800&q=80",
+    imageUrl: "/images/applications/bus-bike-lanes/london-transit-bus-on-red-lane-01.jpg",
   },
   {
     title: "Kitchener Veterans Memorial Crosswalk",
@@ -78,7 +78,7 @@ export const projects: Project[] = [
     province: "Ontario",
     city: "Kitchener",
     excerpt: "A custom DecoMark installation honouring Kitchener's veterans — a decorative crosswalk featuring poppy motifs and regimental colours at the city's cenotaph.",
-    imageUrl: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=800&q=80",
+    imageUrl: "/images/applications/community-branding/tennis-club-logo-pavement-mural-01.jpg",
   },
   {
     title: "UBC Musqueam Decorative Campus Crosswalk",
@@ -88,7 +88,7 @@ export const projects: Project[] = [
     province: "British Columbia",
     city: "Vancouver",
     excerpt: "A collaboration with UBC and the Musqueam Nation to create a ceremonial crosswalk featuring traditional Coast Salish art patterns in stamped asphalt.",
-    imageUrl: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80",
+    imageUrl: "/images/applications/parks-paths/eagle-mural-courtyard-aerial-01.jpg",
   },
   {
     title: "Vancouver More Awesome Now Laneway Revitalization",
@@ -98,6 +98,6 @@ export const projects: Project[] = [
     province: "British Columbia",
     city: "Vancouver",
     excerpt: "The More Awesome Now program transformed 6 Vancouver laneways into vibrant public art installations using custom StreetBond colour treatments and mural overlays.",
-    imageUrl: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80",
+    imageUrl: "/images/products/streetbond/streetbond-coloured-plaza-art-mural-01.jpg",
   },
 ];

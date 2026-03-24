@@ -1,15 +1,16 @@
 import Link from "next/link";
+import Image from "next/image";
 import { products } from "@/lib/products";
 
-const applications = [
+const footerApplications = [
   { label: "Crosswalks",          slug: "crosswalks" },
-  { label: "Bus & Bike Lanes",    slug: "bus-bike-lanes" },
-  { label: "Driveways",           slug: "driveways" },
-  { label: "Public Art",          slug: "public-art" },
+  { label: "Bike Lanes",          slug: "bike-lanes" },
+  { label: "Bus Lanes",           slug: "bus-lanes" },
   { label: "Regulatory Markings", slug: "regulatory-markings" },
   { label: "Parks & Paths",       slug: "parks-paths" },
   { label: "Community Branding",  slug: "community-branding" },
   { label: "Parking Lots",        slug: "parking-lots" },
+  { label: "Private Driveways",   slug: "private-driveways" },
 ];
 
 const socials = [
@@ -37,7 +38,12 @@ const socials = [
 
 export default function Footer() {
   return (
-    <footer className="asphalt-noise" style={{ background: "var(--bg-dark)" }}>
+    <footer className="asphalt-noise" style={{ background: "var(--bg-dark)", position: "relative" }}>
+
+      {/* Wheel watermark — subtle background accent */}
+      <div style={{ position: "absolute", bottom: "24px", right: "32px", opacity: 0.04, pointerEvents: "none", zIndex: 0 }}>
+        <Image src="/images/hub-wheel-orange.png" alt="" width={180} height={180} unoptimized aria-hidden="true" />
+      </div>
 
       {/* Full-width gradient divider */}
       <div
@@ -52,23 +58,26 @@ export default function Footer() {
 
           {/* Brand */}
           <div>
-            <div className="flex items-center gap-0.5 mb-5">
-              <span className="font-bold text-2xl" style={{ color: "var(--text-primary)" }}>HUB</span>
-              <span
-                className="font-bold text-2xl grad-text"
-              >SS</span>
+            <div className="mb-5">
+              <Image
+                src="/images/hub-logo-white.png"
+                alt="HUB Surface Systems"
+                width={130}
+                height={40}
+                unoptimized
+              />
             </div>
 
             {/* Monument tagline */}
             <p
               className="font-light tracking-wide leading-snug mb-2"
-              style={{ color: "var(--text-primary)", fontSize: "1.15rem" }}
+              style={{ color: "var(--text-primary)", fontSize: "1.05rem" }}
             >
-              Redefining Canadian<br />Hardscapes Since 1994
+              Pedestrian safety. Traffic calming.<br />Civic identity. Coast to coast since 1994.
             </p>
 
             <p className="text-xs mb-6" style={{ color: "var(--text-muted)" }}>
-              Proud to work coast to coast — all 10 provinces
+              Proud to work coast to coast — all 10 provinces 🇨🇦
             </p>
 
             <div className="flex gap-2">
@@ -90,6 +99,10 @@ export default function Footer() {
                 </a>
               ))}
             </div>
+
+            <p className="text-xs mt-4 font-medium" style={{ color: "var(--text-muted)" }}>
+              🍁 A Canadian Company — Established 1994
+            </p>
           </div>
 
           {/* Products */}
@@ -114,7 +127,7 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold text-sm mb-5" style={{ color: "var(--text-primary)" }}>Applications</h4>
             <ul className="space-y-2.5">
-              {applications.map((a) => (
+              {footerApplications.map((a) => (
                 <li key={a.slug}>
                   <Link
                     href={`/applications/${a.slug}`}

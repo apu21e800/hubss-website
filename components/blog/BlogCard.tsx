@@ -2,13 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import type { PostMeta } from "@/lib/mdx";
 
-// Unsplash fallback images cycled by slug hash
+// Local fallback images cycled by slug hash
 const FALLBACKS = [
-  "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=70",
-  "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=600&q=70",
-  "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?w=600&q=70",
-  "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=70",
-  "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&q=70",
+  "/images/applications/public-spaces/concordia-multicolour-crosswalk-01.jpg",
+  "/images/applications/traffic-calming/roundabout-red-brick-planted-centre-01.jpg",
+  "/images/applications/bus-bike-lanes/red-bus-lane-brt-transit-station-01.jpg",
+  "/images/products/streetbond/streetbond-multicolour-plaza-green-circles-01.jpg",
+  "/images/applications/commercial-spaces/tim-hortons-red-brick-crosswalk-01.jpg",
 ];
 
 function getFallback(slug: string) {

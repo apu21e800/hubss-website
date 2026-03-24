@@ -5,15 +5,19 @@ import { FileText, Download, Search, X, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import type { ResourceDocument } from "@/lib/resource-documents";
 
+const TABS = ["All", "By Product", "By Application"] as const;
+type TabType = (typeof TABS)[number];
+
 const APPLICATION_FILTERS = [
-  { label: "All", value: "all" },
+  { label: "All Applications", value: "all" },
   { label: "Crosswalks", value: "crosswalks" },
-  { label: "Bike & Bus Lanes", value: "bike-bus-lanes" },
+  { label: "Bike Lanes", value: "bike-lanes" },
+  { label: "Bus Lanes", value: "bus-lanes" },
   { label: "Parking Lots", value: "parking-lots" },
   { label: "Parks & Paths", value: "parks-paths" },
   { label: "Community Branding", value: "community-branding" },
   { label: "Airports", value: "airports" },
-  { label: "Driveways", value: "driveways" },
+  { label: "Private Driveways", value: "private-driveways" },
 ];
 
 const DOCUMENT_TYPES = [
@@ -36,12 +40,23 @@ const PRODUCTS = [
   { label: "TrafficPatternsXD", value: "traffic-patterns-xd" },
   { label: "StreetPrint", value: "streetprint" },
   { label: "StreetBond", value: "streetbond" },
+  { label: "StreetBondSR", value: "streetbond-sr" },
   { label: "MMAX", value: "mmax" },
   { label: "DecoMark", value: "decomark" },
   { label: "DuraShield", value: "durashield" },
   { label: "PreMark", value: "premark" },
   { label: "DuraTherm", value: "duratherm" },
   { label: "AirMark", value: "airmark" },
+];
+
+const STREETBOND_SUBCATEGORIES = [
+  { label: "All StreetBond", value: "all" },
+  { label: "StreetBond", value: "StreetBond" },
+  { label: "SB120", value: "SB120" },
+  { label: "SB150", value: "SB150" },
+  { label: "Concrete Primer", value: "Concrete Primer" },
+  { label: "Pro 220", value: "Pro 220" },
+  { label: "Pro 250", value: "Pro 250" },
 ];
 
 // Badge colors by document type
@@ -78,8 +93,10 @@ export default function ResourcesClient({
   documents: ResourceDocument[];
 }) {
   const [search, setSearch] = useState("");
+  const [activeTab, setActiveTab] = useState<TabType>("All");
   const [applicationFilter, setApplicationFilter] = useState("all");
   const [productFilter, setProductFilter] = useState("all");
+  const [subcategoryFilter, setSubcategoryFilter] = useState("all");
   const [typeFilter, setTypeFilter] = useState("All");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
@@ -94,13 +111,17 @@ export default function ResourcesClient({
           doc.type.toLowerCase().includes(q);
         if (!matchesSearch) return false;
       }
-      // Application pill
-      if (applicationFilter !== "all") {
+      // Application filter (only when "By Application" tab is active)
+      if (activeTab === "By Application" && applicationFilter !== "all") {
         if (!doc.applications.includes(applicationFilter)) return false;
       }
-      // Product dropdown
-      if (productFilter !== "all") {
+      // Product dropdown (only when "By Product" tab is active)
+      if (activeTab === "By Product" && productFilter !== "all") {
         if (doc.product !== productFilter) return false;
+      }
+      // StreetBond subcategory filter
+      if (activeTab === "By Product" && productFilter === "streetbond" && subcategoryFilter !== "all") {
+        if (doc.subcategory !== subcategoryFilter) return false;
       }
       // Type dropdown
       if (typeFilter !== "All") {
@@ -108,52 +129,61 @@ export default function ResourcesClient({
       }
       return true;
     });
-  }, [documents, search, applicationFilter, productFilter, typeFilter]);
+  }, [documents, search, activeTab, applicationFilter, productFilter, subcategoryFilter, typeFilter]);
 
   const visible = filtered.slice(0, visibleCount);
   const hasMore = visibleCount < filtered.length;
 
   const hasActiveFilters =
     search !== "" ||
-    applicationFilter !== "all" ||
-    productFilter !== "all" ||
+    (activeTab === "By Application" && applicationFilter !== "all") ||
+    (activeTab === "By Product" && productFilter !== "all") ||
+    (activeTab === "By Product" && subcategoryFilter !== "all") ||
     typeFilter !== "All";
 
   function clearAllFilters() {
     setSearch("");
     setApplicationFilter("all");
     setProductFilter("all");
+    setSubcategoryFilter("all");
     setTypeFilter("All");
+    setVisibleCount(PAGE_SIZE);
+  }
+
+  function handleTabChange(tab: TabType) {
+    setActiveTab(tab);
+    setApplicationFilter("all");
+    setProductFilter("all");
+    setSubcategoryFilter("all");
     setVisibleCount(PAGE_SIZE);
   }
 
   return (
     <>
-      {/* ── Application Filter Pills ─────────────────────── */}
-      <div id="documents" className="flex flex-wrap gap-2 mb-8 scroll-mt-24">
-        {APPLICATION_FILTERS.map((filter) => (
-          <button
-            key={filter.value}
-            onClick={() => {
-              setApplicationFilter(filter.value);
-              setVisibleCount(PAGE_SIZE);
-            }}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 border ${
-              applicationFilter === filter.value
-                ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white border-transparent shadow-[0_0_16px_rgba(249,115,22,0.25)]"
-                : "border-[var(--border-color)] text-gray-400 hover:border-orange-400/50 hover:text-gray-200"
-            }`}
-          >
-            {filter.label}
-          </button>
-        ))}
+      {/* ── Tab Navigation ─────────────────────────────────── */}
+      <div id="documents" className="scroll-mt-24 mb-8">
+        <div className="flex gap-8 border-b border-zinc-800">
+          {TABS.map((tab) => (
+            <button
+              key={tab}
+              onClick={() => handleTabChange(tab)}
+              className={`pb-3 text-sm font-medium transition-colors ${
+                activeTab === tab
+                  ? "text-white border-b-2 border-orange-500 -mb-px"
+                  : "text-gray-500 hover:text-gray-300"
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* ── Search + Filter Bar ──────────────────────────── */}
       <div className="flex flex-col sm:flex-row gap-3 mb-8">
         {/* Search */}
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
             type="text"
             placeholder="Search documents..."
@@ -167,31 +197,55 @@ export default function ResourcesClient({
           {search && (
             <button
               onClick={() => setSearch("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200"
             >
               <X className="w-4 h-4" />
             </button>
           )}
         </div>
 
-        {/* Product dropdown */}
-        <div className="relative">
-          <select
-            value={productFilter}
-            onChange={(e) => {
-              setProductFilter(e.target.value);
-              setVisibleCount(PAGE_SIZE);
-            }}
-            className="appearance-none w-full sm:w-48 px-4 py-3 pr-10 rounded-lg bg-[var(--bg-card)] border border-[var(--bg-card-hover)] text-[var(--text-primary)] text-sm focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/25 transition-colors cursor-pointer"
-          >
-            {PRODUCTS.map((p) => (
-              <option key={p.value} value={p.value}>
-                {p.label}
-              </option>
-            ))}
-          </select>
-          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
-        </div>
+        {/* Product dropdown — show when "By Product" tab is active */}
+        {activeTab === "By Product" && (
+          <div className="relative">
+            <select
+              value={productFilter}
+              onChange={(e) => {
+                setProductFilter(e.target.value);
+                setSubcategoryFilter("all");
+                setVisibleCount(PAGE_SIZE);
+              }}
+              className="appearance-none w-full sm:w-48 px-4 py-3 pr-10 rounded-lg bg-[var(--bg-card)] border border-[var(--bg-card-hover)] text-[var(--text-primary)] text-sm focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/25 transition-colors cursor-pointer"
+            >
+              {PRODUCTS.map((p) => (
+                <option key={p.value} value={p.value}>
+                  {p.label}
+                </option>
+              ))}
+            </select>
+            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+          </div>
+        )}
+
+        {/* Application dropdown — show when "By Application" tab is active */}
+        {activeTab === "By Application" && (
+          <div className="relative">
+            <select
+              value={applicationFilter}
+              onChange={(e) => {
+                setApplicationFilter(e.target.value);
+                setVisibleCount(PAGE_SIZE);
+              }}
+              className="appearance-none w-full sm:w-48 px-4 py-3 pr-10 rounded-lg bg-[var(--bg-card)] border border-[var(--bg-card-hover)] text-[var(--text-primary)] text-sm focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/25 transition-colors cursor-pointer"
+            >
+              {APPLICATION_FILTERS.map((a) => (
+                <option key={a.value} value={a.value}>
+                  {a.label}
+                </option>
+              ))}
+            </select>
+            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+          </div>
+        )}
 
         {/* Type dropdown */}
         <div className="relative">
@@ -209,7 +263,7 @@ export default function ResourcesClient({
               </option>
             ))}
           </select>
-          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
+          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
         </div>
 
         {/* Clear all */}
@@ -223,8 +277,30 @@ export default function ResourcesClient({
         )}
       </div>
 
+      {/* ── StreetBond Subcategory Pills ─────────────────── */}
+      {activeTab === "By Product" && productFilter === "streetbond" && (
+        <div className="flex flex-wrap gap-2 mb-6">
+          {STREETBOND_SUBCATEGORIES.map((sc) => (
+            <button
+              key={sc.value}
+              onClick={() => {
+                setSubcategoryFilter(sc.value);
+                setVisibleCount(PAGE_SIZE);
+              }}
+              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 border ${
+                subcategoryFilter === sc.value
+                  ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white border-transparent"
+                  : "border-[var(--border-color)] text-gray-300 hover:border-orange-400/50 hover:text-gray-100"
+              }`}
+            >
+              {sc.label}
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* ── Results count ────────────────────────────────── */}
-      <p className="text-sm text-gray-500 mb-6">
+      <p className="text-sm text-gray-300 mb-6">
         {filtered.length} document{filtered.length !== 1 ? "s" : ""} found
       </p>
 
@@ -258,7 +334,7 @@ export default function ResourcesClient({
 
                 {/* Bottom row */}
                 <div className="flex items-center justify-between mt-5 pt-4 border-t border-[var(--bg-card-hover)]">
-                  <div className="flex items-center gap-3 text-xs text-gray-500">
+                  <div className="flex items-center gap-3 text-xs text-gray-300">
                     <span>{doc.fileSize}</span>
                     <span className="w-1 h-1 rounded-full bg-zinc-700" />
                     <span>{doc.updatedDate}</span>
@@ -267,7 +343,7 @@ export default function ResourcesClient({
                     href={doc.fileUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 text-sm font-medium text-gray-400 hover:text-orange-400 transition-colors group/btn"
+                    className="flex items-center gap-1.5 text-sm font-medium text-gray-300 hover:text-orange-400 transition-colors group/btn"
                   >
                     <Download className="w-4 h-4" />
                     <span className="hidden sm:inline">Download</span>
@@ -296,7 +372,7 @@ export default function ResourcesClient({
           <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-2">
             No documents found
           </h3>
-          <p className="text-gray-500 mb-6">
+          <p className="text-gray-300 mb-6">
             Try adjusting your filters or search terms
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">

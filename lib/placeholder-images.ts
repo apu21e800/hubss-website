@@ -41,13 +41,16 @@ export const placeholderImages = {
 
   // ── Homepage hero ──────────────────────────────────────────────────────────
   hero: {
-    main: U("1558618666-fcd25c85cd64", 1920),   // aerial coloured crosswalk
+    main: "/images/hero/hero-bg.jpg",
   },
 
   // ── Products ───────────────────────────────────────────────────────────────
+  // TODO: per-product, replace hero with /images/products/<slug>/<slug>-hero.jpg
+  //       and gallery[0] with <slug>-detail-01.jpg, gallery[1] with <slug>-detail-02.jpg, etc.
+  //       See public/images/products/README.md for full naming spec.
   products: {
     "traffic-patterns": {
-      hero: CROSS,
+      hero: CROSS, // TODO: /images/products/traffic-patterns/traffic-patterns-hero.jpg
       gallery: [CROSS_G, CITY_G, ROAD_G, URBAN_G, STREET_G, TRANSIT_G],
     },
     "traffic-patterns-xd": {
@@ -98,11 +101,11 @@ export const placeholderImages = {
       hero: TRANSIT,
       gallery: [TRANSIT_G, CITY_G, STREET_G, ROAD_G],
     },
-    "driveways": {
+    "private-driveways": {
       hero: URBAN,
       gallery: [URBAN_G, STREET_G, ART_G, ROAD_G],
     },
-    "public-art": {
+    "public-spaces": {
       hero: ART,
       gallery: [ART_G, STREET_G, URBAN_G, CROSS_G],
     },
@@ -125,6 +128,22 @@ export const placeholderImages = {
     "airports": {
       hero: RUNWAY,
       gallery: [RUNWAY_G, ROAD_G, CITY_G, URBAN_G],
+    },
+    "traffic-calming": {
+      hero: ROAD,
+      gallery: [ROAD_G, CROSS_G, CITY_G, STREET_G],
+    },
+    "commercial-spaces": {
+      hero: STREET,
+      gallery: [STREET_G, URBAN_G, PARK_G, CITY_G],
+    },
+    "splash-pads": {
+      hero: PATH,
+      gallery: [PATH_G, ART_G, URBAN_G, STREET_G],
+    },
+    "leed-urban-heat-island": {
+      hero: PATH,
+      gallery: [PATH_G, STREET_G, URBAN_G, ROAD_G],
     },
   },
 

@@ -8,7 +8,7 @@ import LunchLearn from "@/components/sections/LunchLearn";
 import GalleryGrid, { type GalleryImage } from "@/components/ui/GalleryGrid";
 import { applications } from "@/lib/applications";
 import { products } from "@/lib/products";
-import { placeholderImages } from "@/lib/placeholder-images";
+// Gallery images now come from app.gallery in lib/applications.ts
 import { buildMetadata } from "@/lib/seo";
 
 export async function generateStaticParams() {
@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!app) return {};
   return buildMetadata({
     title: app.name,
-    description: app.desc,
+    description: app.shortDesc,
     slug: `applications/${app.slug}`,
   });
 }
@@ -55,18 +55,18 @@ export default async function ApplicationPage({ params }: Props) {
   const app = applications.find((a) => a.slug === slug);
   if (!app) notFound();
 
-  const relatedProductData = app.relatedProducts
+  const relatedProductData = (app.relatedProducts ?? [])
     .map((s) => products.find((p) => p.slug === s))
     .filter(Boolean) as typeof products;
 
-  // Gallery — use per-slug placeholder images; fall back to app hero
-  const placeholderGallery =
-    placeholderImages.applications[app.slug as keyof typeof placeholderImages.applications]?.gallery ?? [];
-  const galleryLabels = ["Overview", "Installation", "Detail", "Completed"];
-  const gallery: GalleryImage[] = galleryLabels.map((label, idx) => ({
-    src: placeholderGallery[idx] ?? app.imageUrl,
-    alt: `${app.name} — ${label}`,
-    caption: `${app.name} — ${label}`,
+  // Gallery — use app.gallery if available, fall back to imageUrl
+  const appGallery = app.gallery ?? [];
+  const galleryLabels = ["Overview", "Installation", "Detail", "Completed", "In Service", "Close-up"];
+  const gallerySources = appGallery.length > 0 ? appGallery : [app.imageUrl];
+  const gallery: GalleryImage[] = gallerySources.slice(0, 12).map((src, idx) => ({
+    src,
+    alt: `${app.name} — ${galleryLabels[idx % galleryLabels.length]}`,
+    caption: `${app.name} · ${galleryLabels[idx % galleryLabels.length]}`,
   }));
 
   return (
@@ -111,7 +111,7 @@ export default async function ApplicationPage({ params }: Props) {
               className="text-base max-w-xl leading-relaxed"
               style={{ color: "rgba(229,231,235,0.8)" }}
             >
-              {app.desc}
+              {app.shortDesc}
             </p>
           </div>
         </div>
@@ -134,7 +134,7 @@ export default async function ApplicationPage({ params }: Props) {
               About {app.name}
             </h2>
             <div className="space-y-5">
-              {app.description.map((para, i) => (
+              {(app.description ?? [app.shortDesc]).map((para, i) => (
                 <p
                   key={i}
                   className="text-[16px] leading-[1.8]"
@@ -291,11 +291,11 @@ export default async function ApplicationPage({ params }: Props) {
               </p>
             </div>
             {/* Right: benefits grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {app.benefits.map((benefit, i) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {(app.benefits ?? []).map((benefit, i) => (
                 <div
                   key={i}
-                  className="flex items-start gap-3 p-4 rounded-lg"
+                  className="flex items-start gap-3 p-5 rounded-lg"
                   style={{
                     background: "var(--bg-primary)",
                     border: "1px solid var(--border-faint)",

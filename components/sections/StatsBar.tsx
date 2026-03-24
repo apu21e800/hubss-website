@@ -3,10 +3,10 @@
 import { motion } from "framer-motion";
 
 const stats = [
-  { value: "30+",     label: "Years Experience" },
-  { value: "500+",    label: "Projects Delivered" },
-  { value: "10",      label: "Provinces Served" },
-  { value: "20 Year", label: "Durability Guarantee" },
+  { value: "500+",      label: "Surfaces Installed" },
+  { value: "10",        label: "Provinces" },
+  { value: "Since 1994", label: "" },
+  { value: "Vision Zero", label: "Ready" },
 ];
 
 const GRAD: React.CSSProperties = {
@@ -41,7 +41,7 @@ export default function StatsBar() {
               </p>
               <p
                 className="text-xs font-medium uppercase tracking-[0.1em]"
-                style={{ color: "var(--color-blue-text)" }}
+                style={{ color: "#d1d5db" }}
               >
                 {stat.label}
               </p>

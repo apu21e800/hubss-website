@@ -10,7 +10,7 @@ import GalleryGrid, { type GalleryImage } from "@/components/ui/GalleryGrid";
 import JsonLd from "@/components/ui/JsonLd";
 import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
-import { placeholderImages } from "@/lib/placeholder-images";
+import { productImages, resolveImage } from "@/lib/featured-images";
 import { buildMetadata } from "@/lib/seo";
 
 export async function generateStaticParams() {
@@ -35,14 +35,17 @@ export default async function ProductPage({ params }: Props) {
   const product = products.find((p) => p.slug === slug);
   if (!product) notFound();
 
-  // Gallery — use per-slug placeholder images; fall back to product hero
-  const placeholderGallery =
-    placeholderImages.products[product.slug as keyof typeof placeholderImages.products]?.gallery ?? [];
+  // Gallery — use product.gallery if available, otherwise fall back to featured image
+  const productGallery = product.gallery ?? [];
+  const featuredImg = productImages[product.slug] ? resolveImage(productImages[product.slug]) : null;
   const galleryLabels = ["Overview", "Installation", "Detail", "Completed", "In Service", "Close-up"];
-  const gallery: GalleryImage[] = galleryLabels.map((label, idx) => ({
-    src: placeholderGallery[idx] ?? product.imageUrl,
-    alt: `${product.name} — ${label}`,
-    caption: `${product.name} · ${label}`,
+
+  // Prefer product.gallery, fall back to featured image or product imageUrl
+  const gallerySources = productGallery.length > 0 ? productGallery : (featuredImg ? [featuredImg.src] : [product.imageUrl]);
+  const gallery: GalleryImage[] = gallerySources.slice(0, 12).map((src, idx) => ({
+    src,
+    alt: `${product.name} — ${galleryLabels[idx % galleryLabels.length]}`,
+    caption: `${product.name} · ${galleryLabels[idx % galleryLabels.length]}`,
   }));
 
   const relatedAppData = product.relatedApplications
@@ -90,8 +93,8 @@ export default async function ProductPage({ params }: Props) {
         </div>
       </div>
 
-      <div style={{ background: "var(--bg-slate)" }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <div className="bg-asphalt-subtle" style={{ background: "var(--bg-dark)" }}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
           {/* Left: description + gallery */}
           <div className="lg:col-span-2">
@@ -142,7 +145,7 @@ export default async function ProductPage({ params }: Props) {
 
         {/* Applications this product is used for */}
         {relatedAppData.length > 0 && (
-          <div className="mt-16 pt-16" style={{ borderTop: "1px solid var(--border-subtle)" }}>
+          <div className="mt-16 pt-16" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
             <div className="flex items-end justify-between mb-8">
               <div>
                 <p
@@ -210,7 +213,7 @@ export default async function ProductPage({ params }: Props) {
                       className="text-[0.72rem] leading-relaxed flex-1"
                       style={{ color: "var(--text-muted)" }}
                     >
-                      {app.desc.slice(0, 80)}{app.desc.length > 80 ? "…" : ""}
+                      {app.shortDesc.slice(0, 80)}{app.shortDesc.length > 80 ? "…" : ""}
                     </p>
                     <span
                       className="mt-2 text-[0.68rem] font-semibold flex items-center gap-1 uppercase tracking-wider transition-colors duration-150 group-hover:text-[#fb923c]"

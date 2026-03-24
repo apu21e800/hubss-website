@@ -1,8 +1,8 @@
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
-  title: "Contact Us",
-  description: "Reach HUB Surface Systems for project inquiries, spec sheets, and Lunch & Learn bookings. Two regional offices serving all of Canada — East: Milton, ON · West: Ladysmith, BC.",
+  title: "Start a Project",
+  description: "Tell us about your community, timeline, and vision. Two regional offices serving all 10 Canadian provinces — Milton ON and Ladysmith BC. Response within one business day.",
   slug: "contact",
 });
 

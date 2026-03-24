@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { projects } from "@/lib/projects";
+import { projectImages, resolveImage } from "@/lib/featured-images";
 
 export default function RecentProjects() {
   const featured = projects[0];
@@ -17,8 +18,8 @@ export default function RecentProjects() {
             <p className="gradient-text text-xs font-semibold tracking-[0.2em] uppercase mb-3">
               Portfolio
             </p>
-            <h2 className="text-5xl font-bold" style={{ color: "var(--text-primary)" }}>
-              Recent Work
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold" style={{ color: "var(--text-primary)" }}>
+              Projects That Changed How Cities Look
             </h2>
           </div>
           <Link

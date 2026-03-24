@@ -2,10 +2,11 @@ import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
 import { buildMetadata } from "@/lib/seo";
+import Image from "next/image";
 
 export const metadata = buildMetadata({
   title: "About HUB Surface Systems",
-  description: "30 years transforming Canadian streets, crosswalks, and public spaces. Two regional offices — Milton, Ontario and Ladysmith, BC — serving all 10 provinces.",
+  description: "30 years enabling Canadian streets, crosswalks, and public spaces. Two regional offices — Milton, Ontario and Ladysmith, BC — serving all 10 provinces.",
   slug: "about",
 });
 
@@ -24,24 +25,37 @@ export default function AboutPage() {
       <Nav />
 
       {/* Hero */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-20">
-        <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "#f97316" }}>
-          About HUB Surface Systems
-        </p>
-        <h1 className="text-6xl md:text-7xl font-bold mb-8 leading-tight max-w-3xl" style={{ color: "var(--text-primary)" }}>
-          30 Years of
-          <br />
-          Surface Excellence
-        </h1>
-        <p className="text-xl leading-relaxed max-w-2xl" style={{ color: "var(--text-body)" }}>
-          HUB Surface Systems has been transforming Canadian streets, crosswalks, and public spaces
-          since 1994. What started as a single-product distributor has grown into Canada&apos;s most
-          comprehensive decorative pavement solutions provider.
-        </p>
+      <div className="relative overflow-hidden">
+        {/* HUB Wheel watermark — bottom-right of hero, very subtle */}
+        <div
+          className="absolute bottom-0 right-0 pointer-events-none"
+          style={{ width: 460, height: 460, opacity: 0.07 }}
+          aria-hidden="true"
+        >
+          <Image
+            src="/images/hub-wheel-orange.png"
+            alt=""
+            width={460}
+            height={460}
+            unoptimized
+          />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-20 relative">
+          <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "#f97316" }}>
+            About HUB Surface Systems
+          </p>
+          <h1 className="text-6xl md:text-7xl font-bold mb-8 leading-tight max-w-3xl" style={{ color: "var(--text-primary)" }}>
+            30 Years of Civic Surface Design
+          </h1>
+          <p className="text-xl leading-relaxed max-w-2xl" style={{ color: "var(--text-body)" }}>
+            For three decades, HUBSS has been the partner Canadian cities call when a surface needs to do more than function — when it needs to communicate, protect, and define a place. From Vision Zero crosswalks in Vancouver to stamped roundabouts in Toronto, our systems are specified by engineers, planners, and architects who understand that the ground people walk on is civic infrastructure.
+          </p>
+        </div>
       </div>
 
       {/* Story */}
-      <div className="py-20" style={{ background: "var(--bg-slate)" }}>
+      <div className="py-28 bg-asphalt-subtle" style={{ background: "var(--bg-slate)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             <div>
@@ -61,16 +75,21 @@ export default function AboutPage() {
                 <p>
                   Today, HUB operates from two regional offices — East in Milton, Ontario, and West
                   in Ladysmith, British Columbia — serving municipalities, developers, and contractors
-                  in every province. Our products have transformed thousands of intersections, plazas,
+                  in every province. Our products have enabled thousands of intersections, plazas,
                   driveways, and public spaces across the country.
+                </p>
+                <p>
+                  Behind every HUB installation is a network of certified applicators — trained, assessed,
+                  and authorized by HUB to install each product system to spec. This credentialed installer
+                  program is what turns a quality product into a quality outcome, and what backs every
+                  warranty we issue.
                 </p>
               </div>
             </div>
             <div>
               <h2 className="text-3xl font-bold mb-6" style={{ color: "var(--text-primary)" }}>Our Mission</h2>
               <p className="text-xl leading-relaxed mb-8" style={{ color: "var(--text-primary)", borderLeft: "3px solid #f97316", paddingLeft: "24px" }}>
-                &ldquo;To transform Canadian infrastructure into vibrant, durable civic identity —
-                one surface at a time.&rdquo;
+                &ldquo;Every surface tells a story. We give communities the language to write it.&rdquo;
               </p>
               <p className="text-base leading-relaxed" style={{ color: "var(--text-body)" }}>
                 We believe that the quality of a community&apos;s public spaces reflects its values.
@@ -154,21 +173,75 @@ export default function AboutPage() {
             ))}
           </div>
           <p className="text-center text-sm mt-8" style={{ color: "#d1d5db" /* keep as-is */ }}>
-            Serving all 10 provinces and 3 territories
+            🇨🇦 Serving all 10 provinces and 3 territories
           </p>
         </div>
       </div>
 
       {/* Why HUB */}
-      <div className="py-20" style={{ background: "var(--bg-slate)" }}>
+      <div className="py-28" style={{ background: "var(--bg-slate)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold mb-12" style={{ color: "var(--text-primary)" }}>Why HUB</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {differentiators.map((d) => (
-              <div key={d.title} className="p-7 rounded-xl" style={{ background: "var(--bg-card-surface)", border: "1px solid var(--border-subtle)" }}>
+              <div key={d.title} className="p-8 rounded-xl" style={{ background: "var(--bg-card-surface)", border: "1px solid var(--border-subtle)" }}>
                 <div className="w-8 h-0.5 mb-5" style={{ background: "#f97316" }} />
                 <h3 className="font-bold text-lg mb-3" style={{ color: "var(--text-primary)" }}>{d.title}</h3>
                 <p className="text-[15px] leading-relaxed" style={{ color: "var(--text-body)" }}>{d.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Manufacturer Partners */}
+      <div className="py-20" style={{ background: "var(--bg-primary)" }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "#f97316" }}>
+            Manufacturer Partners
+          </p>
+          <h2 className="text-3xl font-bold mb-6" style={{ color: "var(--text-primary)" }}>
+            Backed by Industry Leaders
+          </h2>
+          <p className="text-base leading-relaxed max-w-2xl mb-12" style={{ color: "var(--text-body)" }}>
+            HUB Surface Systems is an authorized distributor and applicator partner for the manufacturers
+            behind our core product systems. These partnerships give our clients access to the broadest
+            product portfolio in the Canadian decorative pavement market — with direct manufacturer
+            technical support and warranty backing.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {[
+              {
+                name: "PPG Pavement Technologies",
+                role: "StreetBond · StreetPrint · DuraTherm",
+                desc: "PPG is the world's largest coatings manufacturer. Their Pavement Technologies division developed StreetBond coloured pavement coatings and the StreetPrint decorative stamped asphalt system — the products behind thousands of HUB installations across Canada.",
+                accent: "#0057A8",
+              },
+              {
+                name: "GAF Ennis-Flint",
+                role: "TrafficPatterns · TrafficPatternsXD · PreMark · AirMark",
+                desc: "Ennis-Flint is North America's largest supplier of roadway markings and traffic safety products. Their preformed thermoplastic systems — including TrafficPatterns, TrafficPatternsXD, and AirMark — are the gold standard for high-durability pavement markings across Canada.",
+                accent: "#E05C1A",
+              },
+            ].map((partner) => (
+              <div
+                key={partner.name}
+                className="p-8 rounded-xl relative overflow-hidden"
+                style={{ background: "var(--bg-card-surface)", border: "1px solid var(--border-subtle)" }}
+              >
+                <div
+                  className="absolute top-0 left-0 right-0 h-0.5"
+                  style={{ background: partner.accent }}
+                />
+                <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: partner.accent }}>
+                  {partner.role}
+                </p>
+                <h3 className="text-xl font-bold mb-4" style={{ color: "var(--text-primary)" }}>
+                  {partner.name}
+                </h3>
+                <p className="text-sm leading-relaxed" style={{ color: "var(--text-body)" }}>
+                  {partner.desc}
+                </p>
               </div>
             ))}
           </div>

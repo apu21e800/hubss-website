@@ -1,15 +1,16 @@
-import type { Metadata } from "next";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
 import Image from "next/image";
 import Link from "next/link";
 import { applications } from "@/lib/applications";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Applications | HUB Surface Systems",
-  description: "From crosswalks and bus lanes to airports and community branding — HUB Surface Systems delivers the right pavement solution for every application.",
-};
+export const metadata = buildMetadata({
+  title: "Pavement Marking Applications",
+  description: "Crosswalks, bus lanes, bike infrastructure, airports, community branding, and more — purpose-matched surface systems for every municipal and commercial application.",
+  slug: "applications",
+});
 
 export default function ApplicationsPage() {
   return (
@@ -21,17 +22,14 @@ export default function ApplicationsPage() {
             Applications
           </p>
           <h1 className="text-6xl font-bold mb-5 leading-tight" style={{ color: "var(--text-primary)" }}>
-            Every Surface.
-            <br />
-            Every City.
+            Where Our Systems Live
           </h1>
           <p className="text-lg" style={{ color: "var(--text-secondary)" }}>
-            From provincial highways to neighbourhood laneways — HUB Surface Systems
-            delivers the right solution for every surface application.
+            Each application carries its own demands — visibility, durability, tactile guidance, speed reduction, civic branding. We match the right system to the right context, then back it with certified installation and real warranties.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {applications.map((app) => (
             <Link
               key={app.slug}
@@ -43,15 +41,15 @@ export default function ApplicationsPage() {
                 src={app.imageUrl}
                 alt={app.name}
                 fill
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
-                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
               />
               <div className="absolute inset-0 transition-all" style={{ background: "rgba(26,26,26,0.6)" }} />
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: "rgba(249,115,22,0.2)" }} />
               <div className="absolute bottom-0 left-0 right-0 p-5">
                 <h2 className="font-bold text-lg mb-1" style={{ color: "var(--text-primary)" }}>{app.name}</h2>
                 <p className="text-xs leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: "var(--text-primary)" }}>
-                  {app.desc.slice(0, 80)}...
+                  {app.shortDesc.slice(0, 80)}...
                 </p>
               </div>
             </Link>

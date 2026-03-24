@@ -38,7 +38,7 @@ export default function ProjectsPage() {
   const FilterBtn = ({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) => (
     <button
       onClick={onClick}
-      className="text-xs font-semibold px-4 py-2 rounded transition-all"
+      className="text-xs font-semibold px-4 py-2 rounded transition-all whitespace-nowrap min-h-[36px]"
       style={{
         background: active ? "#f97316" : "#2d2d2d",
         color: active ? "#fff" : "#9ca3af",
@@ -60,12 +60,12 @@ export default function ProjectsPage() {
           </p>
           <h1 className="text-6xl font-bold mb-4" style={{ color: "#f5f0eb" }}>Projects</h1>
           <p className="text-lg" style={{ color: "#9ca3af" }}>
-            Surface solutions transforming Canadian streets and communities.
+            Surface solutions protecting Canadian streets and communities.
           </p>
         </div>
 
         {/* Filter bar */}
-        <div className="flex flex-wrap gap-2 mb-12">
+        <div className="flex flex-wrap gap-2 mb-12 overflow-x-auto scrollbar-hide pb-2">
           <FilterBtn label="All" active={filter.type === "all"} onClick={() => setFilter({ type: "all", value: "" })} />
           <span className="text-xs self-center px-2" style={{ color: "#333" }}>Product:</span>
           {productList.map((p) => (
@@ -82,17 +82,23 @@ export default function ProjectsPage() {
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {filtered.map((project, i) => (
             <motion.div
               key={project.slug}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05 }}
-              className="group overflow-hidden rounded"
+              className="group overflow-hidden rounded relative"
               style={{ background: "#2d2d2d" }}
             >
-              <div className="relative h-52 overflow-hidden">
+              {/* Featured badge for first 2 */}
+              {i < 2 && (
+                <span className="absolute top-3 left-3 bg-orange-500 text-black text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-sm z-10">
+                  Featured
+                </span>
+              )}
+              <div className="relative h-56 overflow-hidden">
                 <Image
                   src={project.imageUrl}
                   alt={project.title}

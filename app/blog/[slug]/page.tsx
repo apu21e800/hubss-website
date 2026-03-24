@@ -12,6 +12,7 @@ import { buildMetadata } from "@/lib/seo";
 import TableOfContents from "@/components/blog/TableOfContents";
 import ShareButtons from "@/components/blog/ShareButtons";
 import RelatedPosts from "@/components/blog/RelatedPosts";
+import BlogImage from "@/components/blog/BlogImage";
 
 export async function generateStaticParams() {
   return getAllPosts().map((p) => ({ slug: p.slug }));
@@ -97,7 +98,7 @@ export default async function BlogPostPage({ params }: Props) {
         <div className="absolute inset-0 flex items-end">
           <div className="w-full max-w-7xl mx-auto px-6 pb-12">
             <div className="max-w-3xl">
-              <p className="text-sm text-gray-400 mb-4">
+              <p className="text-sm text-gray-300 mb-4">
                 {new Date(post.date).toLocaleDateString("en-CA", {
                   year: "numeric",
                   month: "long",
@@ -121,7 +122,7 @@ export default async function BlogPostPage({ params }: Props) {
           data-blog-content
           className="blog-prose prose prose-invert max-w-3xl"
         >
-          <MDXRemote source={post.content} />
+          <MDXRemote source={post.content} components={{ BlogImage }} />
         </article>
 
         {/* Sidebar — desktop only */}
@@ -139,7 +140,7 @@ export default async function BlogPostPage({ params }: Props) {
             <p className="text-sm font-semibold text-[var(--text-primary)]">
               HUB Surface Systems
             </p>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-gray-300 mt-1">
               Canadian leader in decorative and functional pavement solutions
             </p>
           </div>
@@ -150,10 +151,10 @@ export default async function BlogPostPage({ params }: Props) {
       {/* ── CTA band ────────────────────────────────────── */}
       <section className="border-t border-white/5 bg-[var(--bg-card)]">
         <div className="max-w-4xl mx-auto px-6 py-16 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-[var(--text-primary)] mb-4">
+          <h2 className="text-2xl md:text-3xl font-extrabold text-[var(--text-primary)] mb-4">
             Ready to transform your streetscape?
           </h2>
-          <p className="text-gray-400 mb-8 max-w-xl mx-auto">
+          <p className="text-gray-300 mb-8 max-w-xl mx-auto">
             From decorative crosswalks to durable transit lanes — get a custom
             spec sheet for your project or book a complimentary Lunch &amp; Learn.
           </p>

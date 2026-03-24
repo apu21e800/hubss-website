@@ -15,8 +15,8 @@ export default function ComparisonTable() {
   return (
     <section
       data-theme="light"
-      className="section-grid-bg py-24 border-t border-[var(--border-subtle)]"
-      style={{ backgroundColor: "var(--color-off-white)" }}
+      className="section-grid-bg py-24"
+      style={{ backgroundColor: "var(--color-off-white)", borderTop: "4px solid #f97316" }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
@@ -32,7 +32,7 @@ export default function ComparisonTable() {
               Why HUBSS
             </p>
             <h2
-              className="text-4xl md:text-5xl font-bold mb-5 leading-[1.1]"
+              className="text-2xl sm:text-3xl md:text-4xl font-bold mb-5 leading-[1.1]"
               style={{ color: "#111827" }}
             >
               The Smarter<br />Specification
@@ -52,8 +52,8 @@ export default function ComparisonTable() {
               }}
             >
               <p
-                className="font-black leading-none mb-2"
-                style={{ fontSize: "3.5rem", color: "#f97316" }}
+                className="text-6xl font-black leading-none mb-2"
+                style={{ color: "#f97316" }}
               >
                 8x
               </p>
@@ -87,7 +87,7 @@ export default function ComparisonTable() {
               scroll &rarr;
             </p>
 
-            <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
+            <div className="overflow-x-auto scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
               <table
                 className="w-full min-w-[520px] rounded-lg overflow-hidden shadow-sm"
                 style={{ borderCollapse: "separate", borderSpacing: 0 }}
@@ -123,13 +123,13 @@ export default function ComparisonTable() {
                         borderBottom: "1px solid #e5e7eb",
                       }}
                     >
-                      <td className="px-6 py-4 text-sm font-medium" style={{ color: "#111827" }}>
+                      <td className="px-3 py-2 text-sm font-medium" style={{ color: "#111827" }}>
                         {row.metric}
                       </td>
-                      <td className="px-6 py-4 text-sm font-medium" style={{ color: "#ef4444" }}>
+                      <td className="px-3 py-2 text-sm font-medium" style={{ color: "#ef4444" }}>
                         {row.trad}
                       </td>
-                      <td className="px-6 py-4 text-sm font-bold" style={{ color: "#111827" }}>
+                      <td className="px-3 py-2 text-sm font-bold" style={{ color: "#111827" }}>
                         {row.hub}
                       </td>
                     </tr>

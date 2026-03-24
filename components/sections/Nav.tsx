@@ -6,12 +6,9 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  Layers, Shield, PenTool, Paintbrush, Zap, Palette,
-  ShieldCheck, Flame, Milestone, PlaneLanding,
-  ArrowLeftRight, Bus, Home, Sparkles, TriangleAlert,
-  TreePine, Building2, SquareParking, Plane,
+  // Nav chrome
   FileText, CalendarCheck, Phone,
-  ChevronDown, Menu, X, type LucideIcon,
+  ChevronDown, Menu, X,
 } from "lucide-react";
 import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
@@ -20,33 +17,6 @@ import { applications } from "@/lib/applications";
 
 type Panel = "products" | "applications" | null;
 type MobileExpanded = "products" | "applications" | null;
-
-// ─── Icon maps ────────────────────────────────────────────────────────────────
-
-const PRODUCT_ICONS: Record<string, LucideIcon> = {
-  "traffic-patterns":    Layers,
-  "traffic-patterns-xd": Shield,
-  "streetprint":         PenTool,
-  "streetbond":          Paintbrush,
-  "mmax":                Zap,
-  "decomark":            Palette,
-  "durashield":          ShieldCheck,
-  "duratherm":           Flame,
-  "premark":             Milestone,
-  "airmark":             PlaneLanding,
-};
-
-const APP_ICONS: Record<string, LucideIcon> = {
-  "crosswalks":          ArrowLeftRight,
-  "bus-bike-lanes":      Bus,
-  "driveways":           Home,
-  "public-art":          Sparkles,
-  "regulatory-markings": TriangleAlert,
-  "parks-paths":         TreePine,
-  "community-branding":  Building2,
-  "parking-lots":        SquareParking,
-  "airports":            Plane,
-};
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -116,8 +86,6 @@ function ProductsPanel({
   onMouseEnter: () => void;
   onMouseLeave: () => void;
 }) {
-  const featured = products.find((p) => p.slug === "traffic-patterns-xd") ?? products[0];
-
   return (
     <motion.div
       className="fixed left-0 right-0 bottom-0"
@@ -139,7 +107,8 @@ function ProductsPanel({
         style={{
           width: "100vw",
           background: "var(--bg-card)",
-          borderTop: "1px solid var(--border-subtle)",
+          borderTop: "2px solid transparent",
+          borderImage: "linear-gradient(90deg,#F97316,#EAB308) 1",
           boxShadow: "0 20px 60px rgba(0,0,0,0.6)",
           pointerEvents: "auto",
         }}
@@ -149,131 +118,120 @@ function ProductsPanel({
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
       >
-        {/* Inner content — max-width constrained */}
+        {/* Inner content — max-width constrained, matching Applications panel */}
         <div style={{ maxWidth: 1400, margin: "0 auto", padding: "2rem 3rem" }}>
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "380px 1fr 280px",
-              gap: "2.5rem",
+              gridTemplateColumns: "1fr 400px",
+              gap: "3rem",
             }}
           >
-            {/* ── LEFT: Featured product spotlight ──────────────────── */}
-            <div style={{ borderRight: "1px solid var(--border-faint)", paddingRight: "2.5rem" }}>
-              <p className="text-xs font-bold tracking-[0.2em] uppercase mb-4" style={GRAD}>
-                Featured System
+            {/* ── LEFT: All systems list (2-column like Applications) ───── */}
+            <div style={{ borderRight: "1px solid var(--border-faint)", paddingRight: "3rem" }}>
+              <p className="text-xs font-bold tracking-[0.2em] uppercase mb-5" style={GRAD}>
+                Products
               </p>
 
-              <div className="flex gap-4 items-start">
-                {/* Text */}
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-2xl font-bold mb-1.5" style={{ ...GEIST, color: "var(--text-primary)" }}>
-                    {featured.name}
-                  </h3>
-                  <p className="text-sm font-medium mb-3" style={{ color: "#f97316" }}>
-                    {featured.shortDesc}
-                  </p>
-                  <p className="text-sm leading-relaxed mb-5" style={{ color: "var(--text-muted)" }}>
-                    {featured.description.slice(0, 130)}…
-                  </p>
-                  <Link
-                    href={`/products/${featured.slug}`}
-                    className="inline-flex items-center gap-1.5 text-sm font-semibold transition-colors duration-150 hover:text-orange-300"
-                    style={{ color: "#f97316" }}
-                  >
-                    Explore <span className="text-base leading-none">→</span>
-                  </Link>
-                </div>
-
-                {/* Product image */}
-                <div
-                  className="flex-shrink-0 rounded-lg overflow-hidden"
-                  style={{ width: 130, height: 100 }}
-                >
-                  <Image
-                    src={featured.imageUrl}
-                    alt={featured.name}
-                    width={130}
-                    height={100}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* ── MIDDLE: All systems list ───────────────────────────── */}
-            <div style={{ borderRight: "1px solid var(--border-faint)", paddingRight: "2.5rem" }}>
-              <p className="text-xs font-bold tracking-[0.2em] uppercase mb-4" style={GRAD}>
-                All Systems
-              </p>
-
-              <div>
+              <div className="grid grid-cols-2 gap-x-8 gap-y-1">
                 {products.map((p) => (
-                  <Link
-                    key={p.slug}
-                    href={`/products/${p.slug}`}
-                    className="group flex items-center gap-3 py-2 px-2 -mx-2 rounded-md transition-all duration-150 hover:bg-[var(--bg-card-hover)]"
-                    style={{ borderBottom: "0.5px solid rgba(255,255,255,0.04)" }}
-                  >
-                    <span
-                      className="flex-shrink-0 rounded-full"
-                      style={{ width: 6, height: 6, background: "#f97316", opacity: 0.7 }}
-                    />
-                    <div className="flex-1 min-w-0">
-                      <span
-                        className="block text-sm font-medium transition-colors duration-150 group-hover:text-orange-400"
-                        style={{ color: "#d1d5db" /* mid-gray, keep as-is */ }}
-                      >
-                        {p.name}
-                      </span>
-                      <span className="block text-[0.68rem] truncate" style={{ color: "var(--text-faint)" }}>
-                        {p.shortDesc}
-                      </span>
-                    </div>
+                  <Link key={p.slug} href={`/products/${p.slug}`} className="group py-2 block">
+                    <div className="text-sm font-medium text-gray-200 group-hover:text-orange-400 transition-colors">{p.name}</div>
+                    <div className="text-xs text-gray-500 group-hover:text-gray-400 transition-colors">{p.shortDesc}</div>
                   </Link>
                 ))}
               </div>
 
               <Link
                 href="/products"
-                className="mt-4 inline-flex items-center gap-1 text-xs font-semibold transition-colors duration-150 hover:text-orange-300"
-                style={{ color: "#f97316" }}
+                className="inline-flex items-center gap-1.5 text-xs text-orange-400 hover:text-orange-300 mt-4 font-medium"
               >
                 View all products →
               </Link>
             </div>
 
-            {/* ── RIGHT: Quick links ─────────────────────────────────── */}
-            <div>
+            {/* ── RIGHT: Featured products + Quick Links ────────────────── */}
+            <div style={{ borderTop: "2px solid #F97316", paddingTop: "1.25rem" }}>
               <p className="text-xs font-bold tracking-[0.2em] uppercase mb-4" style={GRAD}>
-                Quick Links
+                Featured Systems
               </p>
 
-              <div className="space-y-2">
+              {/* Compact featured cards */}
+              <div className="space-y-2 mb-6">
+                <Link href="/products/traffic-patterns-xd" className="group flex gap-2 p-2 rounded-lg border-l-2 border-orange-500 bg-white/[0.04] hover:bg-orange-500/10 transition-colors">
+                  <div className="flex-shrink-0 w-[48px] h-[48px] rounded overflow-hidden bg-black/20">
+                    <Image
+                      src="/images/products/mmax/mmax-red-black-crosswalk-pattern-01.jpg"
+                      alt="TrafficPatternsXD"
+                      width={48}
+                      height={48}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-semibold text-white">TrafficPatternsXD™</div>
+                    <div className="text-xs text-gray-400">150 mil · Canadian winters</div>
+                  </div>
+                </Link>
+
+                <Link href="/products/streetbond" className="group flex gap-2 p-2 rounded-lg border-l-2 border-orange-500 bg-white/[0.04] hover:bg-orange-500/10 transition-colors">
+                  <div className="flex-shrink-0 w-[48px] h-[48px] rounded overflow-hidden bg-black/20">
+                    <Image
+                      src="/images/products/streetbond/streetbond-multicolour-plaza-green-circles-01.jpg"
+                      alt="StreetBond"
+                      width={48}
+                      height={48}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-semibold text-white">StreetBond®</div>
+                    <div className="text-xs text-gray-400">Permanent coating · LEED® compliant</div>
+                  </div>
+                </Link>
+
+                <Link href="/products/streetprint" className="group flex gap-2 p-2 rounded-lg border-l-2 border-orange-500 bg-white/[0.04] hover:bg-orange-500/10 transition-colors">
+                  <div className="flex-shrink-0 w-[48px] h-[48px] rounded overflow-hidden bg-black/20">
+                    <Image
+                      src="/images/applications/traffic-calming/roundabout-red-brick-planted-centre-01.jpg"
+                      alt="StreetPrint"
+                      width={48}
+                      height={48}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-semibold text-white">StreetPrint®</div>
+                    <div className="text-xs text-gray-400">Stamped asphalt · Since 1993</div>
+                  </div>
+                </Link>
+              </div>
+
+              {/* Quick Links — matching Applications spacing */}
+              <p className="text-xs font-bold tracking-[0.2em] uppercase mb-3" style={GRAD}>
+                Quick Links
+              </p>
+              <div className="space-y-1.5">
                 {QUICK_ACTIONS.map(({ icon: Icon, label, sub, href }) => (
                   <Link
                     key={href}
                     href={href}
-                    className="flex items-start gap-3 p-3 rounded-lg transition-colors duration-150 hover:bg-[var(--bg-card-hover)]"
+                    className="flex items-start gap-2 p-2 rounded-lg transition-colors duration-150 hover:bg-[var(--bg-card-hover)]"
                     style={{ background: "var(--bg-primary)" }}
                   >
                     <div
-                      className="w-8 h-8 rounded-md flex items-center justify-center flex-shrink-0 mt-0.5"
+                      className="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0"
                       style={{ background: "rgba(249,115,22,0.1)" }}
                     >
-                      <Icon size={14} stroke="#f97316" strokeWidth={2} />
+                      <Icon size={12} stroke="#f97316" strokeWidth={2} />
                     </div>
                     <div>
                       <p className="text-sm font-medium" style={{ color: "var(--text-body)" }}>{label}</p>
-                      <p className="text-[0.68rem]" style={{ color: "var(--text-faint)" }}>{sub}</p>
+                      <p className="text-[0.65rem]" style={{ color: "var(--text-faint)" }}>{sub}</p>
                     </div>
                   </Link>
                 ))}
               </div>
-
-              <p className="mt-6 text-xs text-center leading-relaxed" style={{ color: "var(--text-hint)" }}>
-                500+ Projects · 10 Provinces · Since 1994
-              </p>
             </div>
           </div>
         </div>
@@ -320,7 +278,8 @@ function ApplicationsPanel({
         style={{
           width: "100vw",
           background: "var(--bg-card)",
-          borderTop: "1px solid var(--border-subtle)",
+          borderTop: "2px solid transparent",
+          borderImage: "linear-gradient(90deg,#F97316,#EAB308) 1",
           boxShadow: "0 20px 60px rgba(0,0,0,0.6)",
           pointerEvents: "auto",
         }}
@@ -339,57 +298,30 @@ function ApplicationsPanel({
               gap: "3rem",
             }}
           >
-            {/* ── LEFT: Application tiles grid ──────────────────────── */}
+            {/* ── LEFT: Application text list ────────────────────────── */}
             <div style={{ borderRight: "1px solid var(--border-faint)", paddingRight: "3rem" }}>
               <p className="text-xs font-bold tracking-[0.2em] uppercase mb-5" style={GRAD}>
                 Applications
               </p>
 
-              <div className="grid grid-cols-3 gap-1.5">
-                {applications.map((app) => {
-                  const Icon = APP_ICONS[app.slug];
-                  return (
-                    <Link
-                      key={app.slug}
-                      href={`/applications/${app.slug}`}
-                      className="group relative flex flex-col items-start gap-1.5 p-3 rounded-lg transition-all duration-150 hover:bg-[var(--bg-card-hover)]"
-                    >
-                      {/* Gradient top border on hover */}
-                      <div
-                        className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-150"
-                        style={{ background: "linear-gradient(90deg,#F97316,#EAB308)" }}
-                      />
-                      <div
-                        className="flex items-center justify-center w-7 h-7 rounded-md flex-shrink-0"
-                        style={{
-                          background: "rgba(249,115,22,0.08)",
-                          border: "1px solid rgba(249,115,22,0.1)",
-                        }}
-                      >
-                        {Icon && <Icon size={13} stroke="#f97316" strokeWidth={2} />}
-                      </div>
-                      <span
-                        className="text-xs font-medium leading-tight transition-colors duration-150 group-hover:text-white"
-                        style={{ color: "var(--text-secondary)" }}
-                      >
-                        {app.name}
-                      </span>
-                    </Link>
-                  );
-                })}
+              <div className="grid grid-cols-2 gap-x-8 gap-y-0.5">
+                {applications.map((app) => (
+                  <Link key={app.slug} href={`/applications/${app.slug}`} className="group py-2 block">
+                    <div className="text-sm font-medium text-gray-200 group-hover:text-orange-400 transition-colors">{app.name}</div>
+                  </Link>
+                ))}
               </div>
 
               <Link
                 href="/applications"
-                className="mt-5 inline-flex items-center gap-1 text-xs font-semibold transition-colors duration-150 hover:text-orange-300"
-                style={{ color: "#f97316" }}
+                className="inline-flex items-center gap-1.5 text-xs text-orange-400 hover:text-orange-300 mt-4 font-medium"
               >
                 View all applications →
               </Link>
             </div>
 
             {/* ── RIGHT: Featured application ────────────────────────── */}
-            <div>
+            <div style={{ borderTop: "2px solid #F97316", paddingTop: "1.25rem" }}>
               <p className="text-xs font-bold tracking-[0.2em] uppercase mb-4" style={GRAD}>
                 Featured Application
               </p>
@@ -397,8 +329,8 @@ function ApplicationsPanel({
               <Link href={`/applications/${featuredApp.slug}`} className="block group">
                 <div className="relative rounded-lg overflow-hidden mb-3" style={{ height: 200 }}>
                   <Image
-                    src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80"
-                    alt="Crosswalks"
+                    src={featuredApp.imageUrl}
+                    alt={featuredApp.name}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                     sizes="400px"
@@ -410,15 +342,26 @@ function ApplicationsPanel({
                     }}
                   />
                   <div className="absolute bottom-0 left-0 right-0 p-4">
-                    <h3 className="text-xl font-bold" style={{ ...GEIST, color: "var(--text-primary)" }}>
+                    <h3 className="text-lg font-bold text-white" style={GEIST}>
                       {featuredApp.name}
                     </h3>
                   </div>
                 </div>
 
-                <p className="text-sm leading-relaxed mb-4" style={{ color: "var(--text-muted)" }}>
-                  {featuredApp.desc.slice(0, 100)}…
+                <p className="text-sm leading-relaxed mb-4" style={{ color: "var(--text-secondary)" }}>
+                  {featuredApp.shortDesc.slice(0, 100)}…
                 </p>
+
+                {/* Why it matters stat */}
+                <div
+                  className="flex items-center gap-3 mb-4 px-3 py-2.5 rounded-lg"
+                  style={{ background: "rgba(249,115,22,0.06)", border: "1px solid rgba(249,115,22,0.12)" }}
+                >
+                  <span className="text-xl font-black leading-none" style={{ color: "#f97316", fontFamily: "var(--font-geist), system-ui, sans-serif" }}>30–50%</span>
+                  <span className="text-[0.7rem] leading-tight" style={{ color: "var(--text-secondary)" }}>
+                    reduction in pedestrian collisions at marked crossings
+                  </span>
+                </div>
 
                 <span
                   className="text-xs font-semibold inline-flex items-center gap-1.5 transition-colors duration-150 group-hover:text-orange-300"
@@ -492,9 +435,9 @@ export default function Nav() {
     };
   }, []);
 
-  // Timer helpers
+  // Timer helpers — 300ms delay for cross-link mouse path tolerance
   const startCloseTimer = () => {
-    closeTimerRef.current = setTimeout(() => setActivePanel(null), 200);
+    closeTimerRef.current = setTimeout(() => setActivePanel(null), 300);
   };
   const cancelCloseTimer = () => {
     if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
@@ -518,23 +461,29 @@ export default function Nav() {
           WebkitBackdropFilter: scrolled || activePanel ? "blur(12px)" : "blur(8px)",
         }}
       >
-        {/* Gradient bottom rule */}
-        <div
-          className="absolute bottom-0 left-0 right-0 h-[2px]"
-          style={{ background: "linear-gradient(90deg, #F97316 0%, #EAB308 100%)" }}
-        />
-
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
 
             {/* Wordmark */}
-            <Link href="/" className="flex items-center" onClick={() => setActivePanel(null)}>
-              <span style={{ color: "var(--text-primary)", fontWeight: 800, fontSize: "1.15rem", letterSpacing: "-0.02em", ...GEIST }}>
-                HUB
+            <Link href="/" className="flex items-center gap-2.5" onClick={() => setActivePanel(null)}>
+              <Image
+                src="/images/hub-wheel-orange.png"
+                alt=""
+                width={28}
+                height={28}
+                unoptimized
+                aria-hidden="true"
+              />
+              <span style={{
+                color: "#ffffff",
+                fontWeight: 700,
+                fontSize: "0.95rem",
+                letterSpacing: "0.01em",
+                lineHeight: 1,
+              }}>
+                HUB <span style={{ color: "#f97316" }}>Surface Systems</span>
               </span>
-              <span style={{ ...GRAD, ...GEIST, fontWeight: 800, fontSize: "1.15rem", letterSpacing: "-0.02em" }}>
-                SS
-              </span>
+              <span className="hidden md:inline ml-2" aria-label="Canadian company">🇨🇦</span>
             </Link>
 
             {/* Desktop links */}
@@ -590,6 +539,16 @@ export default function Nav() {
                 />
               </Link>
 
+              {/* Bridge zone — invisible 20px hitbox keeps panel open during diagonal mouse path */}
+              {activePanel && (
+                <div
+                  className="absolute left-0 right-0 h-5"
+                  style={{ top: "100%", zIndex: 9998 }}
+                  onMouseEnter={cancelCloseTimer}
+                  onMouseLeave={startCloseTimer}
+                />
+              )}
+
               {/* Plain links */}
               {PLAIN_LINKS.map((link) => {
                 const active = pathname === link.href || pathname.startsWith(link.href + "/");
@@ -632,30 +591,30 @@ export default function Nav() {
           </div>
         </div>
 
-        {/* Mobile menu */}
+        {/* Mobile menu — full-screen drawer */}
         <AnimatePresence>
           {mobileOpen && (
             <motion.div
-              initial={{ opacity: 0, y: -6 }}
-              animate={{ opacity: 1, y: 0, transition: { duration: 0.15 } }}
-              exit={{ opacity: 0, y: -4, transition: { duration: 0.1 } }}
-              className="md:hidden px-4 pb-5 flex flex-col"
-              style={{ borderTop: "1px solid var(--border-subtle)", paddingTop: 12 }}
+              initial={{ opacity: 0, x: "100%" }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: "100%" }}
+              transition={{ type: "tween", duration: 0.25 }}
+              className="fixed inset-0 bg-zinc-950 z-50 flex flex-col p-6 md:hidden"
             >
+              <div className="flex justify-between items-center mb-8">
+                <span className="text-white font-bold text-lg">HUB Surface Systems</span>
+                <button onClick={() => setMobileOpen(false)} className="text-white text-2xl p-2">×</button>
+              </div>
+              <nav className="flex flex-col flex-1 overflow-y-auto">
               {/* Products accordion */}
-              <div>
+              <div className="border-b border-zinc-800">
                 <button
-                  className="flex items-center justify-between w-full px-2 py-2.5 text-sm font-medium"
-                  style={{ color: pathname.startsWith("/products") ? "#f97316" : "var(--text-secondary)" }}
+                  className="flex items-center justify-between w-full py-4 text-lg font-semibold text-white"
                   onClick={() => setMobileExpanded(mobileExpanded === "products" ? null : "products")}
                   aria-expanded={mobileExpanded === "products"}
                 >
                   Products
-                  <ChevronDown
-                    size={15}
-                    className="transition-transform duration-200"
-                    style={{ transform: mobileExpanded === "products" ? "rotate(180deg)" : "rotate(0deg)" }}
-                  />
+                  <span className="text-xl">{mobileExpanded === "products" ? "−" : "+"}</span>
                 </button>
                 <AnimatePresence>
                   {mobileExpanded === "products" && (
@@ -663,15 +622,18 @@ export default function Nav() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1, transition: { duration: 0.18 } }}
                       exit={{ height: 0, opacity: 0, transition: { duration: 0.13 } }}
-                      className="overflow-hidden pl-3"
+                      className="overflow-hidden pl-4 pb-4"
                     >
                       {products.map((p) => (
                         <Link key={p.slug} href={`/products/${p.slug}`}
-                          className="block px-2 py-2 text-sm" style={{ color: "var(--text-muted)" }}>
+                          onClick={() => setMobileOpen(false)}
+                          className="block py-2 text-base text-zinc-400 hover:text-white">
                           {p.name}
                         </Link>
                       ))}
-                      <Link href="/products" className="block px-2 py-2 text-xs font-semibold" style={{ color: "#f97316" }}>
+                      <Link href="/products"
+                        onClick={() => setMobileOpen(false)}
+                        className="block py-2 text-sm font-semibold text-orange-500">
                         View all products →
                       </Link>
                     </motion.div>
@@ -680,19 +642,14 @@ export default function Nav() {
               </div>
 
               {/* Applications accordion */}
-              <div>
+              <div className="border-b border-zinc-800">
                 <button
-                  className="flex items-center justify-between w-full px-2 py-2.5 text-sm font-medium"
-                  style={{ color: pathname.startsWith("/applications") ? "#f97316" : "var(--text-secondary)" }}
+                  className="flex items-center justify-between w-full py-4 text-lg font-semibold text-white"
                   onClick={() => setMobileExpanded(mobileExpanded === "applications" ? null : "applications")}
                   aria-expanded={mobileExpanded === "applications"}
                 >
                   Applications
-                  <ChevronDown
-                    size={15}
-                    className="transition-transform duration-200"
-                    style={{ transform: mobileExpanded === "applications" ? "rotate(180deg)" : "rotate(0deg)" }}
-                  />
+                  <span className="text-xl">{mobileExpanded === "applications" ? "−" : "+"}</span>
                 </button>
                 <AnimatePresence>
                   {mobileExpanded === "applications" && (
@@ -700,15 +657,18 @@ export default function Nav() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1, transition: { duration: 0.18 } }}
                       exit={{ height: 0, opacity: 0, transition: { duration: 0.13 } }}
-                      className="overflow-hidden pl-3"
+                      className="overflow-hidden pl-4 pb-4"
                     >
                       {applications.map((app) => (
                         <Link key={app.slug} href={`/applications/${app.slug}`}
-                          className="block px-2 py-2 text-sm" style={{ color: "var(--text-muted)" }}>
+                          onClick={() => setMobileOpen(false)}
+                          className="block py-2 text-base text-zinc-400 hover:text-white">
                           {app.name}
                         </Link>
                       ))}
-                      <Link href="/applications" className="block px-2 py-2 text-xs font-semibold" style={{ color: "#f97316" }}>
+                      <Link href="/applications"
+                        onClick={() => setMobileOpen(false)}
+                        className="block py-2 text-sm font-semibold text-orange-500">
                         View all applications →
                       </Link>
                     </motion.div>
@@ -721,20 +681,24 @@ export default function Nav() {
                 const active = pathname === link.href || pathname.startsWith(link.href + "/");
                 return (
                   <Link key={link.href} href={link.href}
-                    className="block px-2 py-2.5 text-sm font-medium"
-                    style={{ color: active ? "#f97316" : "var(--text-secondary)" }}>
+                    onClick={() => setMobileOpen(false)}
+                    className="block py-3 text-lg font-semibold"
+                    style={{ color: active ? "#f97316" : "white" }}>
                     {link.label}
                   </Link>
                 );
               })}
+              </nav>
 
-              <Link
-                href="/lunch-learn"
-                className="mt-3 block text-sm font-bold px-5 py-3 rounded-full text-center"
-                style={{ background: "linear-gradient(90deg,#F97316,#d97706)", color: "#fff" }}
-              >
-                Book Lunch &amp; Learn
-              </Link>
+              <div className="mt-auto pt-6">
+                <Link
+                  href="/lunch-learn"
+                  onClick={() => setMobileOpen(false)}
+                  className="block w-full bg-orange-500 text-black font-bold py-4 text-center rounded-lg"
+                >
+                  Book Lunch &amp; Learn
+                </Link>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

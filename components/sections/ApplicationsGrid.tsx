@@ -4,22 +4,23 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { applications } from "@/lib/applications";
+import { applicationImages, resolveImage } from "@/lib/featured-images";
 
 export default function ApplicationsGrid() {
   return (
-    <section className="py-24" style={{ background: "var(--bg-slate)" }}>
+    <section className="py-28 bg-asphalt-subtle" style={{ background: "var(--bg-slate)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-14">
+        <div className="mb-16">
           <p className="grad-text text-xs font-semibold tracking-[0.2em] uppercase mb-3">
             Applications
           </p>
-          <h2 className="text-5xl font-bold" style={{ color: "var(--text-primary)" }}>
-            Where We Work
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold" style={{ color: "var(--text-primary)" }}>
+            Every Surface, A Statement
           </h2>
         </div>
 
         <div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"
           style={{ gridAutoRows: "200px" }}
         >
           {applications.map((app, i) => (
@@ -34,8 +35,8 @@ export default function ApplicationsGrid() {
             >
               <Link href={`/applications/${app.slug}`} className="block w-full h-full">
                 <Image
-                  src={app.imageUrl}
-                  alt={app.name}
+                  src={applicationImages[app.slug] ? resolveImage(applicationImages[app.slug]).src : app.imageUrl}
+                  alt={applicationImages[app.slug] ? resolveImage(applicationImages[app.slug]).alt : app.name}
                   fill
                   className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"

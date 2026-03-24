@@ -1,32 +1,61 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
 import { products } from "@/lib/products";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Products | HUB Surface Systems",
-  description: "Ten purpose-built surface treatment systems — thermoplastics, MMA resins, stamped asphalt, and protective coatings for Canadian municipalities and contractors.",
-};
+export const metadata = buildMetadata({
+  title: "Decorative Pavement & Marking Systems",
+  description: "Ten purpose-built surface systems — thermoplastics, MMA resins, stamped asphalt, and protective coatings engineered for Canadian climate. Spec sheets, technical data, and installation support.",
+  slug: "products",
+});
 
 export default function ProductsPage() {
   return (
     <main style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
       <Nav />
+
+      {/*
+       * ASPHALT TEXTURE SECTION BACKGROUND
+       * TODO: drop public/images/asphalt-texture.jpg (dark asphalt closeup, 1200×800+)
+       *       then uncomment the backgroundImage line below and remove the TODO comment.
+       *
+       * When the file is present the section gets a subtle atmospheric dark asphalt
+       * background at 8% opacity with a full dark overlay on top — purely decorative,
+       * text remains fully readable. The grain SVG below is an inline fallback until then.
+       */}
+      <div
+        className="relative"
+        style={
+          {
+            /* backgroundImage: "url('/images/asphalt-texture.jpg')", */
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }
+        }
+      >
+        {/* Subtle SVG grain overlay — atmospheric fallback until asphalt-texture.jpg is added */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E")`,
+            opacity: 0.03,
+            mixBlendMode: "overlay",
+          }}
+        />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24">
         <div className="mb-16 max-w-2xl">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-3" style={{ color: "#f97316" }}>
             Our Systems
           </p>
           <h1 className="text-6xl font-bold mb-5 leading-tight" style={{ color: "var(--text-primary)" }}>
-            Built to Perform.
-            <br />
-            Designed to Last.
+            Surface Systems for the Built Environment
           </h1>
           <p className="text-lg" style={{ color: "var(--text-secondary)" }}>
-            Eight purpose-built surface treatment systems — each engineered for a specific
-            performance requirement, climate condition, and application context.
+            Ten product systems, one mission: give every Canadian surface the capacity to carry meaning.
           </p>
         </div>
 
@@ -64,6 +93,7 @@ export default function ProductsPage() {
           ))}
         </div>
       </div>
+      </div>{/* end asphalt texture wrapper */}
       <LunchLearn />
       <Footer />
     </main>

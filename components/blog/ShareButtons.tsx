@@ -17,7 +17,7 @@ interface ShareButtonsProps {
 }
 
 const btnClass =
-  "flex items-center justify-center w-10 h-10 rounded-full border border-white/10 text-gray-400 hover:text-orange-400 hover:border-orange-400/30 transition-all duration-200";
+  "flex items-center justify-center w-10 h-10 rounded-full border border-white/10 text-gray-300 hover:text-orange-400 hover:border-orange-400/30 transition-all duration-200";
 
 export default function ShareButtons({ url, title }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false);

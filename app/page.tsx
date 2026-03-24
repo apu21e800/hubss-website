@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Nav from "@/components/sections/Nav";
 import Hero from "@/components/sections/Hero";
+import HeroCityTicker from "@/components/sections/HeroCityTicker";
 import StatsBar from "@/components/sections/StatsBar";
 import ProductsGrid from "@/components/sections/ProductsGrid";
 import ApplicationsGrid from "@/components/sections/ApplicationsGrid";
@@ -55,6 +56,7 @@ export default function Home() {
       <JsonLd data={organizationSchema} />
       <Nav />
       <Hero />
+      <HeroCityTicker />
       {/* dark → slate */}
       <StatsBar />
       {/* slate → dark */}

@@ -14,28 +14,17 @@
  */
 export const SITE_IMAGES = {
   // ── Hero ──────────────────────────────────────────────────────────────
-  // Recommended: aerial shot of colourful Canadian crosswalk or streetscape
-  // Dimensions: 1600×900px minimum
-  hero_bg: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1600&q=80",
+  hero_bg: "/images/hero/hero-bg.jpg",
 
   // ── About Page ────────────────────────────────────────────────────────
-  // Recommended: team photo or office exterior
-  // Dimensions: 1200×800px
-  about_team: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1200&q=80",
-
-  // Recommended: Canadian city or infrastructure aerial
-  // Dimensions: 1200×800px
-  about_story: "https://images.unsplash.com/photo-1486325212980-2af6a2b98b1f?w=1200&q=80",
+  about_team: "/images/applications/commercial-spaces/granville-island-installation-crew-01.jpg",
+  about_story: "/images/applications/traffic-calming/roundabout-aerial-red-white-checkerboard-01.jpg",
 
   // ── Blog ──────────────────────────────────────────────────────────────
-  // Default cover when a post has no specific image
-  // Dimensions: 800×500px
-  blog_default: "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?w=800&q=80",
+  blog_default: "/images/applications/bus-bike-lanes/red-bus-lane-brt-transit-station-01.jpg",
 
   // ── Lunch & Learn ─────────────────────────────────────────────────────
-  // Recommended: boardroom, lunch meeting, or professional presentation
-  // Dimensions: 800×600px
-  lunch_learn: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=800&q=80",
+  lunch_learn: "/images/applications/commercial-spaces/little-italy-aerial-colourful-intersection-01.jpg",
 } as const;
 
 export type ImageKey = keyof typeof SITE_IMAGES;

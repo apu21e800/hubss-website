@@ -38,7 +38,7 @@ export default function BlogPage() {
           </p>
           <h1 className="text-6xl font-bold mb-4" style={{ color: "var(--text-primary)" }}>Projects</h1>
           <p className="text-lg" style={{ color: "var(--text-secondary)" }}>
-            Surface solutions transforming Canadian streets and communities.
+            Surface solutions protecting Canadian streets and communities.
           </p>
         </div>
 
@@ -68,7 +68,7 @@ function BlogSkeleton() {
         <div className="h-10 w-44 rounded-lg bg-zinc-800" />
       </div>
       <div className="h-72 rounded-2xl bg-zinc-800 mt-8" />
-      <div className="grid grid-cols-3 gap-6 mt-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
         {Array.from({ length: 6 }).map((_, i) => (
           <div key={i} className="h-64 rounded-xl bg-zinc-800" />
         ))}

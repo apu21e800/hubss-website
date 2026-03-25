@@ -15,7 +15,10 @@
       "Bash(powershell -Command \"Remove-Item -Path ''C:/Users/cleve/Based_Agency/based-agncy_os/Web_Projects/hubss-website/.claude/worktrees/thirsty-williams/node_modules'' -Recurse -Force\")",
       "Bash(echo \"exit: $?\")",
       "Bash(NODE_PATH=\"C:/Users/cleve/Based_Agency/based-agncy_os/Web_Projects/hubss-website/node_modules\" TURBOPACK=0 \"C:/Users/cleve/Based_Agency/based-agncy_os/Web_Projects/hubss-website/node_modules/.bin/next\" build)",
-      "Bash(\"C:/Users/cleve/Based_Agency/based-agncy_os/Web_Projects/hubss-website/node_modules/.bin/tsc\" --noEmit --skipLibCheck)"
+      "Bash(\"C:/Users/cleve/Based_Agency/based-agncy_os/Web_Projects/hubss-website/node_modules/.bin/tsc\" --noEmit --skipLibCheck)",
+      "Bash(rm -f .git/index.lock)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ]
   }
 }

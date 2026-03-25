@@ -16,13 +16,7 @@ export default function LunchLearnPage() {
       <Nav />
 
       {/* Hero — moose sits at the very bottom, paws overlapping the LunchLearn section below */}
-      <div className="relative overflow-visible pb-24" style={{ zIndex: 2 }}>
-        {/* Subtle orange tint */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ background: "linear-gradient(135deg, rgba(249,115,22,0.07) 0%, transparent 55%)" }}
-          aria-hidden="true"
-        />
+      <div className="relative overflow-visible pb-16" style={{ zIndex: 2 }}>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-0 relative">
           <div className="flex flex-col gap-8">
@@ -77,7 +71,7 @@ export default function LunchLearnPage() {
         </div>
       </div>
 
-      <div className="pt-24">
+      <div className="pt-16">
         <LunchLearn />
       </div>
       <Footer />

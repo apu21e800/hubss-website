@@ -11,7 +11,7 @@ const stats = [
 
 export default function StatsBar() {
   return (
-    <section className="bg-zinc-900 py-12">
+    <section className="py-12" style={{ background: "var(--bg-dark)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 md:grid-cols-4">
           {stats.map((stat, i) => (
@@ -28,7 +28,9 @@ export default function StatsBar() {
                 <span className="hidden md:block absolute right-0 top-1/4 bottom-1/4 w-px bg-zinc-700" />
               )}
 
-              <p className="text-3xl font-black text-orange-500 leading-none mb-1">
+              <p
+                className="text-3xl font-black leading-none mb-1 grad-text"
+              >
                 {stat.value}
               </p>
               <p className="text-sm text-zinc-400">

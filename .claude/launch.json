@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "HUBSS Dev Server",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeExecutable": "/usr/bin/bash",
+      "runtimeArgs": ["-c", "cd '/c/Users/cleve/Based_Agency/based-agncy_os/Web_Projects/hubss-website' && npm run dev"],
       "port": 3000,
       "autoPort": true
     },

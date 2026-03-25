@@ -83,6 +83,38 @@ function typeBadgeClasses(type: string): string {
 
 const PAGE_SIZE = 12;
 
+function DocCard({ doc }: { doc: ResourceDocument }) {
+  return (
+    <div className="group rounded-xl bg-zinc-900 border border-zinc-800 p-5 flex flex-col justify-between transition-all duration-200 hover:border-zinc-600 hover:bg-zinc-800">
+      <div>
+        <span className={`inline-block text-xs font-semibold px-2.5 py-1 rounded-md border mb-4 ${typeBadgeClasses(doc.type)}`}>
+          {doc.type}
+        </span>
+        <h3 className="font-semibold text-white leading-snug mb-2">{doc.title}</h3>
+        <span className="inline-block text-xs text-orange-400 bg-orange-500/10 px-2 py-0.5 rounded-full">
+          {doc.productName}
+        </span>
+      </div>
+      <div className="flex items-center justify-between mt-5 pt-4 border-t border-zinc-700">
+        <div className="flex items-center gap-3 text-xs text-zinc-400">
+          <span>{doc.fileSize}</span>
+          <span className="w-1 h-1 rounded-full bg-zinc-600" />
+          <span>{doc.updatedDate}</span>
+        </div>
+        <a
+          href={doc.fileUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-1.5 text-sm font-medium text-zinc-400 hover:text-orange-400 transition-colors"
+        >
+          <Download className="w-4 h-4" />
+          <span className="hidden sm:inline">Download</span>
+        </a>
+      </div>
+    </div>
+  );
+}
+
 export default function ResourcesClient({
   documents,
 }: {
@@ -307,51 +339,44 @@ export default function ResourcesClient({
       {/* ── Document Grid ────────────────────────────────── */}
       {visible.length > 0 ? (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {visible.map((doc) => (
-              <div
-                key={doc.id}
-                className="group rounded-xl bg-zinc-900 border border-zinc-800 p-5 flex flex-col justify-between transition-all duration-200 hover:border-zinc-600 hover:bg-zinc-800"
-              >
-                <div>
-                  {/* Type badge */}
-                  <span
-                    className={`inline-block text-xs font-semibold px-2.5 py-1 rounded-md border mb-4 ${typeBadgeClasses(doc.type)}`}
-                  >
-                    {doc.type}
-                  </span>
-
-                  {/* Title */}
-                  <h3 className="font-semibold text-white leading-snug mb-2">
-                    {doc.title}
-                  </h3>
-
-                  {/* Product pill */}
-                  <span className="inline-block text-xs text-orange-400 bg-orange-500/10 px-2 py-0.5 rounded-full">
-                    {doc.productName}
-                  </span>
+          {/* Group by product when All tab + no type filter */}
+          {activeTab === "All" && typeFilter === "All" && !search ? (
+            (() => {
+              const grouped: Record<string, ResourceDocument[]> = {};
+              for (const doc of visible) {
+                if (!grouped[doc.productName]) grouped[doc.productName] = [];
+                grouped[doc.productName].push(doc);
+              }
+              return (
+                <div className="space-y-12">
+                  {Object.entries(grouped).map(([productName, docs]) => (
+                    <div key={productName}>
+                      <div className="flex items-center gap-4 mb-6">
+                        <h3
+                          className="text-sm font-bold tracking-widest uppercase grad-text"
+                        >
+                          {productName}
+                        </h3>
+                        <div className="flex-1 h-px bg-zinc-800" />
+                        <span className="text-xs text-zinc-500">{docs.length} doc{docs.length !== 1 ? "s" : ""}</span>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                        {docs.map((doc) => (
+                          <DocCard key={doc.id} doc={doc} />
+                        ))}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-
-                {/* Bottom row */}
-                <div className="flex items-center justify-between mt-5 pt-4 border-t border-zinc-700">
-                  <div className="flex items-center gap-3 text-xs text-zinc-400">
-                    <span>{doc.fileSize}</span>
-                    <span className="w-1 h-1 rounded-full bg-zinc-600" />
-                    <span>{doc.updatedDate}</span>
-                  </div>
-                  <a
-                    href={doc.fileUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 text-sm font-medium text-zinc-400 hover:text-orange-400 transition-colors group/btn"
-                  >
-                    <Download className="w-4 h-4" />
-                    <span className="hidden sm:inline">Download</span>
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
+              );
+            })()
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {visible.map((doc) => (
+                <DocCard key={doc.id} doc={doc} />
+              ))}
+            </div>
+          )}
 
           {/* Load more */}
           {hasMore && (

@@ -11,7 +11,7 @@ export default function RecentProjects() {
   const secondary = projects.slice(1, 3);
 
   return (
-    <section className="py-24" style={{ background: "var(--bg-dark)" }}>
+    <section className="py-24 bg-zinc-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-end justify-between mb-14">
           <div>
@@ -40,8 +40,7 @@ export default function RecentProjects() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="group grid grid-cols-1 md:grid-cols-5 gap-0 overflow-hidden rounded-xl cursor-pointer hover:shadow-[0_4px_24px_rgba(249,115,22,0.1)] transition-shadow duration-300"
-            style={{ background: "#111111", border: "1px solid rgba(255,255,255,0.06)" }}
+            className="group grid grid-cols-1 md:grid-cols-5 gap-0 overflow-hidden rounded-xl cursor-pointer hover:shadow-[0_4px_24px_rgba(249,115,22,0.1)] transition-shadow duration-300 bg-zinc-800/50 border border-zinc-700"
           >
             <div className="relative md:col-span-3 h-64 md:h-auto min-h-[320px] overflow-hidden">
               <Image
@@ -98,10 +97,9 @@ export default function RecentProjects() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="group overflow-hidden rounded-xl transition-all duration-200 cursor-pointer hover:shadow-[0_4px_20px_rgba(249,115,22,0.08)]"
-                style={{ background: "#111111", border: "1px solid rgba(255,255,255,0.06)" }}
+                className="group overflow-hidden rounded-xl transition-all duration-200 cursor-pointer hover:shadow-[0_4px_20px_rgba(249,115,22,0.08)] bg-zinc-800/50 border border-zinc-700"
                 onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(249,115,22,0.3)")}
-                onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)")}
+                onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(249,115,22,0)")}
               >
                 <div className="relative h-52 overflow-hidden">
                   <Image

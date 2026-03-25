@@ -483,7 +483,7 @@ export default function Nav() {
               }}>
                 HUB <span style={{ color: "#f97316" }}>Surface Systems</span>
               </span>
-              <Image src="/images/flags/canada-flag.svg" width={22} height={13} alt="Canada" unoptimized className="hidden lg:inline-block ml-2 align-middle" />
+              <Image src="/images/flags/canada-flag.svg" width={18} height={12} alt="Canada" unoptimized className="hidden lg:inline-block ml-1 align-middle" style={{ aspectRatio: '3/2', objectFit: 'cover', borderRadius: '1px' }} />
             </Link>
 
             {/* Desktop links */}

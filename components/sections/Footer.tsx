@@ -100,8 +100,9 @@ export default function Footer() {
               ))}
             </div>
 
-            <p className="text-xs mt-4 font-medium" style={{ color: "var(--text-muted)" }}>
-              🍁 A Canadian Company — Established 1994
+            <p className="text-xs mt-4 font-medium flex items-center gap-1.5" style={{ color: "var(--text-muted)" }}>
+              <Image src="/images/flags/canada-flag.svg" width={18} height={12} alt="Canada" unoptimized className="inline-block align-middle" style={{ aspectRatio: '3/2', objectFit: 'cover', borderRadius: '1px' }} />
+              A Canadian Company — Established 1994
             </p>
           </div>
 

@@ -215,26 +215,32 @@ export default function AboutPage() {
 
           {/* Trusted Partners logo strip */}
           <div className="py-8 mb-8 border-t border-b" style={{ borderColor: "var(--border-subtle)" }}>
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-center mb-6" style={{ color: "var(--text-faint)" }}>
-              Trusted Partners
+            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-center mb-8" style={{ color: "var(--text-faint)" }}>
+              Manufacturer Partners
             </p>
-            <div className="flex items-center justify-center gap-12 flex-wrap">
-              <Image
-                src="/images/partners/ppg-logo.svg"
-                alt="PPG Pavement Technologies"
-                width={120}
-                height={48}
-                className="opacity-50 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300 object-contain"
-                unoptimized
-              />
-              <Image
-                src="/images/partners/gaf-logo.png"
-                alt="GAF Ennis-Flint"
-                width={120}
-                height={48}
-                className="opacity-50 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300 object-contain"
-                unoptimized
-              />
+            <div className="flex items-center justify-center gap-20 flex-wrap">
+              <div className="flex items-center justify-center w-32 h-16">
+                <Image
+                  src="/images/partners/ppg-logo.svg"
+                  width={100}
+                  height={40}
+                  alt="PPG"
+                  className="opacity-50 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300 object-contain"
+                  style={{ maxHeight: '40px', width: 'auto' }}
+                  unoptimized
+                />
+              </div>
+              <div className="flex items-center justify-center w-32 h-16">
+                <Image
+                  src="/images/partners/gaf-logo.png"
+                  width={100}
+                  height={40}
+                  alt="GAF"
+                  className="opacity-50 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300 object-contain"
+                  style={{ maxHeight: '40px', width: 'auto' }}
+                  unoptimized
+                />
+              </div>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

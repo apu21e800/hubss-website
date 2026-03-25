@@ -25,9 +25,9 @@ export default function LunchLearnPage() {
         />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-0 relative">
-          <div className="flex flex-col md:flex-row gap-12 items-end">
+          <div className="flex flex-col gap-8">
             {/* Text */}
-            <div className="flex-1 pb-10">
+            <div className="pb-4">
               <p
                 className="text-xs font-semibold tracking-[0.2em] uppercase mb-4"
                 style={{ color: "#f97316" }}
@@ -61,28 +61,21 @@ export default function LunchLearnPage() {
                 straight into your next RFP. Free continuing education credits for engineers.
               </p>
             </div>
-
-            {/* Moose mascot — overlaps into LunchLearn section below */}
-            <div
-              className="hidden md:block"
-              style={{
-                flexShrink: 0,
-                marginBottom: "-110px",
-                zIndex: 20,
-                position: "relative",
-                pointerEvents: "none"
-              }}
-            >
-              <Image
-                src="/images/lunch-learn/moose.png"
-                alt="Moose mascot"
-                width={220}
-                height={220}
-                style={{ objectFit: "contain", filter: "drop-shadow(0 8px 24px rgba(0,0,0,0.4))" }}
-                unoptimized
-              />
-            </div>
           </div>
+        </div>
+      </div>
+
+      {/* Moose divider — paws on the section fold, head in the air */}
+      <div className="relative w-full flex justify-center" style={{ height: '120px', zIndex: 20 }}>
+        <div className="absolute bottom-0" style={{ transform: 'translateY(50%)' }}>
+          <Image
+            src="/images/lunch-learn/moose.png"
+            alt="HUBSS Moose"
+            width={180}
+            height={180}
+            style={{ filter: 'drop-shadow(0 8px 24px rgba(0,0,0,0.4))', display: 'block' }}
+            unoptimized
+          />
         </div>
       </div>
 

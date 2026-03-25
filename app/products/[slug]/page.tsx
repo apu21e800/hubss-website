@@ -95,6 +95,23 @@ export default async function ProductPage({ params }: Props) {
 
       <div className="bg-asphalt-subtle" style={{ background: "var(--bg-dark)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
+
+        {/* Specify CTA bar */}
+        <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-10">
+          <div>
+            <p className="text-white font-semibold text-base">Ready to specify {product.name}?</p>
+            <p className="text-zinc-400 text-sm mt-0.5">Get technical documentation, pricing, and installation support.</p>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <Link href="/resources" className="border border-zinc-600 hover:border-zinc-400 text-zinc-300 hover:text-white px-4 py-2 rounded-lg text-sm transition-all">
+              Technical Specs
+            </Link>
+            <Link href="/lunch-learn" className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all">
+              Book Lunch &amp; Learn
+            </Link>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
           {/* Left: description + gallery */}
           <div className="lg:col-span-2">

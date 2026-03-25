@@ -3,10 +3,13 @@ import Nav from "@/components/sections/Nav";
 import Hero from "@/components/sections/Hero";
 import HeroCityTicker from "@/components/sections/HeroCityTicker";
 import StatsBar from "@/components/sections/StatsBar";
+import WhyHubss from "@/components/sections/WhyHubss";
+import PersonaEntryPoints from "@/components/sections/PersonaEntryPoints";
 import ProductsGrid from "@/components/sections/ProductsGrid";
 import ApplicationsGrid from "@/components/sections/ApplicationsGrid";
 import ComparisonTable from "@/components/sections/ComparisonTable";
 import RecentProjects from "@/components/sections/RecentProjects";
+import InstagramStrip from "@/components/sections/InstagramStrip";
 import LunchLearn from "@/components/sections/LunchLearn";
 import Footer from "@/components/sections/Footer";
 import JsonLd from "@/components/ui/JsonLd";
@@ -59,6 +62,8 @@ export default function Home() {
       <HeroCityTicker />
       {/* dark → slate */}
       <StatsBar />
+      <WhyHubss />
+      <PersonaEntryPoints />
       {/* slate → dark */}
       <ProductsGrid />
       {/* dark → slate */}
@@ -68,6 +73,7 @@ export default function Home() {
       {/* off-white → off-white */}
       <RecentProjects />
       {/* off-white → slate (lunch learn) */}
+      <InstagramStrip />
       <LunchLearn />
       {/* slate → dark footer */}
       <Footer />

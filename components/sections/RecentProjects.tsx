@@ -21,6 +21,9 @@ export default function RecentProjects() {
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold" style={{ color: "var(--text-primary)" }}>
               Projects That Changed How Cities Look
             </h2>
+            <p className="text-base mt-2 max-w-xl" style={{ color: "var(--text-secondary)" }}>
+              Real installations. Real municipalities. Real performance data.
+            </p>
           </div>
           <Link
             href="/projects"

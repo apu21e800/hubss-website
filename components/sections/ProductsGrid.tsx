@@ -22,7 +22,7 @@ export default function ProductsGrid() {
             The Systems Behind Canada&apos;s Most Recognised Surfaces
           </h2>
           <p className="text-lg font-light max-w-xl text-zinc-600">
-            Engineered for Canadian infrastructure. Built to outlast.
+            From thermoplastic crosswalks to stamped asphalt roundabouts — every product engineered for Canadian conditions.
           </p>
         </div>
 

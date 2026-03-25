@@ -46,10 +46,10 @@ export default function AboutPage() {
             About HUB Surface Systems
           </p>
           <h1 className="text-6xl md:text-7xl font-bold mb-8 leading-tight max-w-3xl" style={{ color: "var(--text-primary)" }}>
-            30 Years of Civic Surface Design
+            Thirty Years of Making Canadian Streets Better
           </h1>
           <p className="text-xl leading-relaxed max-w-2xl" style={{ color: "var(--text-body)" }}>
-            For three decades, HUBSS has been the partner Canadian cities call when a surface needs to do more than function — when it needs to communicate, protect, and define a place. From Vision Zero crosswalks in Vancouver to stamped roundabouts in Toronto, our systems are specified by engineers, planners, and architects who understand that the ground people walk on is civic infrastructure.
+            HUB Surface Systems connects Canadian design professionals with the world&apos;s leading pavement technologies — and provides the local expertise to specify and install them right.
           </p>
         </div>
       </div>
@@ -88,8 +88,11 @@ export default function AboutPage() {
             </div>
             <div>
               <h2 className="text-3xl font-bold mb-6" style={{ color: "var(--text-primary)" }}>Our Mission</h2>
-              <p className="text-xl leading-relaxed mb-8" style={{ color: "var(--text-primary)", borderLeft: "3px solid #f97316", paddingLeft: "24px" }}>
+              <p className="text-xl leading-relaxed mb-4" style={{ color: "var(--text-primary)", borderLeft: "3px solid #f97316", paddingLeft: "24px" }}>
                 &ldquo;Every surface tells a story. We give communities the language to write it.&rdquo;
+              </p>
+              <p className="text-sm mb-8" style={{ color: "var(--text-muted)", paddingLeft: "24px" }}>
+                — HUB Surface Systems
               </p>
               <p className="text-base leading-relaxed" style={{ color: "var(--text-body)" }}>
                 We believe that the quality of a community&apos;s public spaces reflects its values.
@@ -110,7 +113,7 @@ export default function AboutPage() {
             {[
               {
                 region: "East Office",
-                territory: "Western Canada",
+                territory: "Eastern Canada",
                 city: "Milton, Ontario",
                 contact: "Doug Bain",
                 email: "doug.bain@hubss.com",
@@ -119,7 +122,7 @@ export default function AboutPage() {
               },
               {
                 region: "West Office",
-                territory: "Eastern Canada",
+                territory: "Western Canada",
                 city: "Ladysmith, British Columbia",
                 contact: "Cleve Stordy",
                 email: "cleve.stordy@hubss.com",

@@ -74,11 +74,11 @@ export default function Hero({ variant = "default" }: HeroProps) {
             </p>
 
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-tight tracking-tight mb-6">
-              The Street Is Your Canvas.
+              Canada&apos;s Standard for High-Performance Pavement Coatings
             </h1>
 
             <p className="text-lg md:text-xl text-gray-300 max-w-2xl mb-8 leading-relaxed">
-              From crosswalks that carry cultural meaning to transit corridors built for safety — HUB Surface Systems partners with Canadian communities to design surfaces that protect people, express identity, and last a generation.
+              Trusted by municipalities, landscape architects, and engineers from coast to coast. Surface systems that protect, define, and endure.
             </p>
 
             {/* CTAs */}
@@ -87,13 +87,13 @@ export default function Hero({ variant = "default" }: HeroProps) {
                 href="/products"
                 className="bg-orange-500 hover:bg-orange-400 text-white font-bold px-8 py-4 rounded-lg transition-colors text-center sm:text-left w-full sm:w-auto min-h-[44px]"
               >
-                Explore Our Systems
+                Explore Systems
               </Link>
               <Link
-                href="/projects"
+                href="/lunch-learn"
                 className="border border-white/30 hover:border-white text-white font-semibold px-8 py-4 rounded-lg transition-colors text-center sm:text-left w-full sm:w-auto min-h-[44px]"
               >
-                See Our Work
+                Book a Lunch &amp; Learn
               </Link>
             </div>
 

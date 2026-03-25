@@ -87,15 +87,12 @@ export default function LunchLearn() {
 
             {/* Headline */}
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 leading-tight" style={{ color: "var(--text-primary)" }}>
-              Let&apos;s{" "}
-              <em style={{ color: "#f97316", fontStyle: "italic" }}>Lunch</em>
-              {" & Learn"}
+              Earn Continuing Education Credits Over Lunch
             </h2>
 
             {/* Subhead */}
             <p className="text-lg mb-10 leading-relaxed" style={{ color: "#cbd5e1" }}>
-              Tough solutions. Real Canadian examples.{" "}
-              <span style={{ color: "var(--text-primary)" }}>Real free lunch.</span>
+              We bring the presentation — and the food. HUB Lunch &amp; Learn sessions are accredited continuing education sessions for landscape architects, traffic engineers, and public works professionals. Virtual or in-person, coast to coast.
             </p>
 
             {/* What we'll cover */}
@@ -245,7 +242,7 @@ export default function LunchLearn() {
                     className="w-full font-bold py-4 rounded-xl text-sm mt-2 transition-all disabled:opacity-60 hover:brightness-110"
                     style={{ background: "linear-gradient(90deg, #f97316, #f59e0b)", color: "#fff" }}
                   >
-                    {loading ? "Sending…" : "Schedule Your Free Lunch & Learn →"}
+                    {loading ? "Sending…" : "Reserve Your Session →"}
                   </button>
                 </form>
               </>

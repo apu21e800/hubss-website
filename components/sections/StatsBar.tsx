@@ -3,10 +3,9 @@
 import { motion } from "framer-motion";
 
 const stats = [
-  { value: "500+",      label: "Surfaces Installed" },
-  { value: "10",        label: "Provinces" },
-  { value: "Since 1994", label: "" },
-  { value: "Vision Zero", label: "Ready" },
+  { value: "30+ Years",     label: "Serving Canadian municipalities since 1994" },
+  { value: "500+ Projects", label: "From Vision Zero crosswalks to BRT corridors" },
+  { value: "Coast to Coast", label: "Two regional offices serving all 10 provinces" },
 ];
 
 const GRAD: React.CSSProperties = {
@@ -20,7 +19,7 @@ export default function StatsBar() {
   return (
     <section className="py-16" style={{ background: "var(--bg-slate)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 md:grid-cols-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3">
           {stats.map((stat, i) => (
             <motion.div
               key={stat.label}

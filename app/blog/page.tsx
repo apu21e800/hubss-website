@@ -34,11 +34,13 @@ export default function BlogPage() {
         {/* Header */}
         <div className="mb-14">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-3" style={{ color: "#f97316" }}>
-            Portfolio
+            Field Notes
           </p>
-          <h1 className="text-6xl font-bold mb-4" style={{ color: "var(--text-primary)" }}>Projects</h1>
+          <h1 className="text-6xl font-bold mb-4" style={{ color: "var(--text-primary)" }}>
+            Field Notes from the Front Lines of Canadian Pavement
+          </h1>
           <p className="text-lg" style={{ color: "var(--text-secondary)" }}>
-            Surface solutions protecting Canadian streets and communities.
+            Case studies, technical insights, and project stories from HUB Surface Systems installations across Canada.
           </p>
         </div>
 

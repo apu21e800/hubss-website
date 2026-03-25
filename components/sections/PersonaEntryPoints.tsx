@@ -18,9 +18,9 @@ const personas = [
   {
     role: "Public Works Directors",
     icon: "🏙",
-    desc: "Vision Zero solutions, snowplow-proof systems, rapid installation, and warranty documentation.",
-    cta: "Municipal Solutions",
-    href: "/applications/crosswalks",
+    desc: "Vision Zero crosswalks, traffic calming systems, snowplow-proof thermoplastic, and AODA-compliant pedestrian surfaces.",
+    cta: "Safety Solutions",
+    href: "/applications/pedestrian-safety",
   },
   {
     role: "Commercial Developers",

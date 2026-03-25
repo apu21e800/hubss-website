@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Claude_Preview__preview_start",
+      "Bash(where npm:*)",
+      "Bash(where node:*)",
+      "Bash(mkdir -p public/images/applications/pedestrian-safety)",
+      "Bash(cp public/images/applications/crosswalks/crosswalk-1.jpg public/images/applications/pedestrian-safety/pedestrian-safety-1.jpg)",
+      "Bash(npm run:*)",
+      "Bash(WORKTREE=\"C:/Users/cleve/Based_Agency/based-agncy_os/Web_Projects/hubss-website/.claude/worktrees/thirsty-williams\")",
+      "Bash(MAIN=\"C:/Users/cleve/Based_Agency/based-agncy_os/Web_Projects/hubss-website\")",
+      "Bash(cmd /c \"mklink /J \"\"$WORKTREE/node_modules\"\" \"\"$MAIN/node_modules\"\"\")",
+      "Bash(junction \"$WORKTREE/node_modules\" \"$MAIN/node_modules\")",
+      "Bash(powershell -Command \"Remove-Item -Path ''C:/Users/cleve/Based_Agency/based-agncy_os/Web_Projects/hubss-website/.claude/worktrees/thirsty-williams/node_modules'' -Force\")",
+      "Bash(powershell -Command \"Remove-Item -Path ''C:/Users/cleve/Based_Agency/based-agncy_os/Web_Projects/hubss-website/.claude/worktrees/thirsty-williams/node_modules'' -Recurse -Force\")",
+      "Bash(echo \"exit: $?\")",
+      "Bash(NODE_PATH=\"C:/Users/cleve/Based_Agency/based-agncy_os/Web_Projects/hubss-website/node_modules\" TURBOPACK=0 \"C:/Users/cleve/Based_Agency/based-agncy_os/Web_Projects/hubss-website/node_modules/.bin/next\" build)",
+      "Bash(\"C:/Users/cleve/Based_Agency/based-agncy_os/Web_Projects/hubss-website/node_modules/.bin/tsc\" --noEmit --skipLibCheck)"
+    ]
+  }
+}

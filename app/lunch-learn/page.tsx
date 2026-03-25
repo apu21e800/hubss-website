@@ -15,8 +15,8 @@ export default function LunchLearnPage() {
     <main style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
       <Nav />
 
-      {/* Hero — moose sits at the very bottom, paws overlapping the section below */}
-      <div className="relative overflow-hidden" style={{ paddingBottom: 0, zIndex: 2 }}>
+      {/* Hero — moose sits at the very bottom, paws overlapping the LunchLearn section below */}
+      <div className="relative overflow-visible pb-24" style={{ zIndex: 2 }}>
         {/* Subtle orange tint */}
         <div
           className="absolute inset-0 pointer-events-none"
@@ -35,7 +35,7 @@ export default function LunchLearnPage() {
                 Free Professional Development
               </p>
               <h1
-                className="text-5xl md:text-6xl font-bold mb-5 leading-tight"
+                className="text-4xl sm:text-5xl md:text-6xl font-bold mb-5 leading-tight"
                 style={{ color: "var(--text-primary)" }}
               >
                 Lunch Is On Us.
@@ -52,7 +52,7 @@ export default function LunchLearnPage() {
                 </span>
               </h1>
               <p
-                className="text-lg leading-relaxed max-w-2xl"
+                className="text-base sm:text-lg leading-relaxed max-w-2xl"
                 style={{ color: "var(--text-secondary)" }}
               >
                 We bring lunch to your office and walk your team through everything
@@ -63,23 +63,23 @@ export default function LunchLearnPage() {
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Moose divider — paws on the section fold, head in the air */}
-      <div className="relative w-full flex justify-center" style={{ height: '120px', zIndex: 20 }}>
-        <div className="absolute bottom-0" style={{ transform: 'translateY(50%)' }}>
+        {/* Moose — absolute bottom, overlapping the section below */}
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-40 h-40 z-20">
           <Image
             src="/images/lunch-learn/moose.png"
             alt="HUBSS Moose"
-            width={180}
-            height={180}
+            width={160}
+            height={160}
             style={{ filter: 'drop-shadow(0 8px 24px rgba(0,0,0,0.4))', display: 'block' }}
             unoptimized
           />
         </div>
       </div>
 
-      <LunchLearn />
+      <div className="pt-24">
+        <LunchLearn />
+      </div>
       <Footer />
     </main>
   );

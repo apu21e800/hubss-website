@@ -578,9 +578,9 @@ export default function Nav() {
               </Link>
             </div>
 
-            {/* Mobile hamburger — animated lines */}
+            {/* Mobile hamburger — animated lines, 48×48 touch target */}
             <button
-              className="lg:hidden p-2 flex flex-col justify-center items-center gap-[5px] w-10 h-10"
+              className="lg:hidden flex flex-col justify-center items-center gap-[5px] w-12 h-12 rounded-lg"
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
               aria-expanded={mobileOpen}

@@ -3,34 +3,17 @@
 import { motion } from "framer-motion";
 
 const stats = [
-  { value: "30+ Years",     label: "Serving Canadian municipalities since 1994" },
-  { value: "500+ Projects", label: "From Vision Zero crosswalks to BRT corridors" },
-  { value: "Coast to Coast", label: "Two regional offices serving all 10 provinces" },
+  { value: "1,000+", label: "Projects Completed" },
+  { value: "10",     label: "Provinces Served" },
+  { value: "30+",    label: "Years Experience" },
+  { value: "20 Year", label: "Warranty" },
 ];
-
-const GRAD: React.CSSProperties = {
-  background:           "linear-gradient(90deg, #F97316, #EAB308)",
-  WebkitBackgroundClip: "text",
-  WebkitTextFillColor:  "transparent",
-  backgroundClip:       "text",
-};
 
 export default function StatsBar() {
   return (
-    <section
-      className="py-16 relative overflow-hidden"
-      style={{
-        backgroundImage: 'url(/images/textures/stamped-asphalt-texture.webp)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}
-    >
-      {/* Dark overlay — subtle texture visible, text fully readable */}
-      <div className="absolute inset-0 bg-zinc-950/85" />
-
-      <div className="relative z-10">
+    <section className="bg-zinc-900 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-3">
+        <div className="grid grid-cols-2 md:grid-cols-4">
           {stats.map((stat, i) => (
             <motion.div
               key={stat.label}
@@ -38,27 +21,22 @@ export default function StatsBar() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.08, duration: 0.4, ease: "easeOut" }}
-              className="text-center py-6 px-4"
-              style={{
-                borderRight: i < stats.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none",
-              }}
+              className="flex flex-col items-center text-center py-6 px-4 relative"
             >
-              <p
-                className="text-4xl font-black mb-1.5 leading-none"
-                style={{ ...GRAD, fontFamily: "var(--font-geist), system-ui, sans-serif" }}
-              >
+              {/* Vertical divider — desktop only */}
+              {i < stats.length - 1 && (
+                <span className="hidden md:block absolute right-0 top-1/4 bottom-1/4 w-px bg-zinc-700" />
+              )}
+
+              <p className="text-3xl font-black text-orange-500 leading-none mb-1">
                 {stat.value}
               </p>
-              <p
-                className="text-xs font-medium uppercase tracking-[0.1em]"
-                style={{ color: "#d1d5db" }}
-              >
+              <p className="text-sm text-zinc-400">
                 {stat.label}
               </p>
             </motion.div>
           ))}
         </div>
-      </div>
       </div>
     </section>
   );

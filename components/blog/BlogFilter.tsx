@@ -86,8 +86,10 @@ export default function BlogFilter({ posts, allProducts }: Props) {
     <>
       {/* ── Filter row ──────────────────────────────────── */}
       <div className="space-y-3 mb-10">
-        {/* Category + product pills */}
-        <div className="flex flex-wrap items-center gap-2">
+        {/* Category + product pills — horizontal scroll on mobile, wraps on larger screens */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:flex-wrap sm:overflow-visible scrollbar-none"
+          style={{ WebkitOverflowScrolling: "touch" }}
+        >
           <Btn label="All" active={category === "all" && product === "all"} onClick={() => { setAndSync(setCategory, "category", "all"); setAndSync(setProduct, "product", "all"); }} />
 
           <span className="text-xs px-2" style={{ color: "#444" }}>Type:</span>

@@ -47,7 +47,7 @@ export default function ProductsGrid() {
                 onMouseLeave={e => (e.currentTarget.style.borderColor = "#e5e7eb")}
               >
                 {/* Card image */}
-                <div className="relative w-full overflow-hidden flex-shrink-0 rounded-t-xl" style={{ height: 160 }}>
+                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-t-lg">
                   <Image
                     src={productImages[product.slug] ? resolveImage(productImages[product.slug]).src : product.imageUrl}
                     alt={productImages[product.slug] ? resolveImage(productImages[product.slug]).alt : product.name}
@@ -67,7 +67,7 @@ export default function ProductsGrid() {
                   style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }}
                 />
 
-                <div className="flex flex-col flex-1 p-6">
+                <div className="flex flex-col flex-1 p-4 sm:p-6">
                   <h3
                     className="text-lg font-semibold mb-1 transition-colors duration-200 group-hover:text-orange-500 text-zinc-900"
                   >

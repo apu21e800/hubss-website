@@ -112,7 +112,7 @@ export default function ContactPage() {
                 }}
                 className="space-y-5"
               >
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {[
                     { label: "Full Name", key: "name", type: "text", placeholder: "Jane Smith" },
                     { label: "Company", key: "company", type: "text", placeholder: "City of Toronto" },
@@ -125,7 +125,7 @@ export default function ContactPage() {
                         value={form[f.key as keyof typeof form]}
                         onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}
                         placeholder={f.placeholder}
-                        className="w-full px-4 py-3 rounded-lg text-sm outline-none focus:ring-1 focus:ring-orange-500 min-h-[44px]"
+                        className="w-full px-4 py-3 rounded-lg text-base outline-none focus:ring-1 focus:ring-orange-500 min-h-[48px]"
                         style={{ background: "var(--bg-primary)", border: "1px solid var(--border-subtle)", color: "var(--text-primary)" }}
                       />
                     </div>
@@ -143,7 +143,7 @@ export default function ContactPage() {
                       value={form[f.key as keyof typeof form]}
                       onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}
                       placeholder={f.placeholder}
-                      className="w-full px-4 py-3 rounded-lg text-sm outline-none focus:ring-1 focus:ring-orange-500 min-h-[44px]"
+                      className="w-full px-4 py-3 rounded-lg text-base outline-none focus:ring-1 focus:ring-orange-500 min-h-[48px]"
                       style={{ background: "var(--bg-primary)", border: "1px solid var(--border-subtle)", color: "var(--text-primary)" }}
                     />
                   </div>
@@ -153,7 +153,7 @@ export default function ContactPage() {
                   <select
                     value={form.projectType}
                     onChange={(e) => setForm({ ...form, projectType: e.target.value })}
-                    className="w-full px-4 py-3 rounded-lg text-sm outline-none focus:ring-1 focus:ring-orange-500 min-h-[44px]"
+                    className="w-full px-4 py-3 rounded-lg text-base outline-none focus:ring-1 focus:ring-orange-500 min-h-[48px]"
                     style={{ background: "var(--bg-primary)", border: "1px solid var(--border-subtle)", color: "var(--text-primary)" }}
                   >
                     <option value="">Select project type...</option>
@@ -167,7 +167,7 @@ export default function ContactPage() {
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
                     placeholder="Tell us about your project..."
-                    className="w-full px-4 py-3 rounded-lg text-sm outline-none resize-none focus:ring-1 focus:ring-orange-500"
+                    className="w-full px-4 py-3 rounded-lg text-base outline-none resize-none focus:ring-1 focus:ring-orange-500"
                     style={{ background: "var(--bg-primary)", border: "1px solid var(--border-subtle)", color: "var(--text-primary)" }}
                   />
                 </div>
@@ -188,7 +188,7 @@ export default function ContactPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full font-semibold py-4 rounded-lg text-sm transition-all disabled:opacity-60"
+                  className="w-full font-semibold py-4 rounded-lg text-base transition-all disabled:opacity-60 min-h-[48px]"
                   style={{ background: "#f97316", color: "#fff" }}
                 >
                   {loading ? "Sending..." : "Send Us Your Project"}

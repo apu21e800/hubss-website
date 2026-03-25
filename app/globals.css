@@ -71,6 +71,10 @@
   --font-display: var(--font-geist);   /* headings → Geist */
 }
 
+html {
+  overflow-x: hidden;
+}
+
 body {
   background: var(--bg-primary);
   color: var(--text-body);

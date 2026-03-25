@@ -61,19 +61,10 @@ export default function LunchLearn() {
   return (
     <section
       id="lunch-learn"
-      className="relative overflow-hidden"
-      style={{
-        backgroundImage: 'url(/images/textures/stamped-asphalt-texture.webp)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        zIndex: 0,
-        paddingTop: "100px",
-      }}
+      className="relative bg-zinc-950"
+      style={{ zIndex: 0 }}
     >
-      {/* Dark overlay — slightly more visible, adds warmth to CTA section */}
-      <div className="absolute inset-0 bg-zinc-950/80" />
 
-      <div className="relative z-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28 pt-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
 
@@ -197,7 +188,7 @@ export default function LunchLearn() {
                       <input
                         type="text" required placeholder="Jane Smith"
                         value={form.name} onChange={(e) => set("name", e.target.value)}
-                        className="w-full px-3 py-2.5 rounded-lg text-sm outline-none focus:ring-2 focus:ring-orange-400 transition-all min-h-[44px]"
+                        className="w-full px-3 py-2.5 rounded-lg outline-none focus:ring-2 focus:ring-orange-400 transition-all min-h-[48px] text-base"
                         style={inputStyle}
                       />
                     </div>
@@ -206,7 +197,7 @@ export default function LunchLearn() {
                       <input
                         type="text" required placeholder="City of Vancouver"
                         value={form.org} onChange={(e) => set("org", e.target.value)}
-                        className="w-full px-3 py-2.5 rounded-lg text-sm outline-none focus:ring-2 focus:ring-orange-400 transition-all min-h-[44px]"
+                        className="w-full px-3 py-2.5 rounded-lg outline-none focus:ring-2 focus:ring-orange-400 transition-all min-h-[48px] text-base"
                         style={inputStyle}
                       />
                     </div>
@@ -219,7 +210,7 @@ export default function LunchLearn() {
                       <input
                         type="email" required placeholder="jane@city.ca"
                         value={form.email} onChange={(e) => set("email", e.target.value)}
-                        className="w-full px-3 py-2.5 rounded-lg text-sm outline-none focus:ring-2 focus:ring-orange-400 transition-all min-h-[44px]"
+                        className="w-full px-3 py-2.5 rounded-lg outline-none focus:ring-2 focus:ring-orange-400 transition-all min-h-[48px] text-base"
                         style={inputStyle}
                       />
                     </div>
@@ -228,7 +219,7 @@ export default function LunchLearn() {
                       <input
                         type="tel" placeholder="604-555-0100"
                         value={form.phone} onChange={(e) => set("phone", e.target.value)}
-                        className="w-full px-3 py-2.5 rounded-lg text-sm outline-none focus:ring-2 focus:ring-orange-400 transition-all min-h-[44px]"
+                        className="w-full px-3 py-2.5 rounded-lg outline-none focus:ring-2 focus:ring-orange-400 transition-all min-h-[48px] text-base"
                         style={inputStyle}
                       />
                     </div>
@@ -266,7 +257,7 @@ export default function LunchLearn() {
 
                   <button
                     type="submit" disabled={loading}
-                    className="w-full font-bold py-4 rounded-xl text-sm mt-2 transition-all disabled:opacity-60 hover:brightness-110"
+                    className="w-full font-bold py-4 rounded-xl text-base mt-2 transition-all disabled:opacity-60 hover:brightness-110 min-h-[48px]"
                     style={{ background: "linear-gradient(90deg, #f97316, #f59e0b)", color: "#fff" }}
                   >
                     {loading ? "Sending…" : "Reserve Your Session →"}
@@ -286,7 +277,6 @@ export default function LunchLearn() {
         </div>
       </div>
 
-      </div>{/* end relative z-10 */}
 
       {/* ── Bottom CTA bar ──────────────────────────────────── */}
       <div style={{ background: "#0f1420", borderTop: "1px solid rgba(255,255,255,0.06)" }}>

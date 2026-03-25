@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { heroImages, resolveImage } from "@/lib/featured-images";
-import { TypewriterHeading } from "@/components/ui/TypewriterHeading";
 
 export type HeroVariant = 'default' | 'split' | 'cinematic';
 
@@ -74,11 +73,11 @@ export default function Hero({ variant = "default" }: HeroProps) {
               30 Years · 500+ Projects · Coast to Coast
             </p>
 
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-tight tracking-tight mb-6 min-h-[2.5em] md:min-h-[2em]">
-              <TypewriterHeading />
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tight text-white leading-none mb-6">
+              The Street Is Your Canvas.
             </h1>
 
-            <p className="text-lg md:text-xl text-gray-300 max-w-2xl mb-8 leading-relaxed">
+            <p className="text-base md:text-xl text-gray-300 max-w-2xl mb-8 leading-relaxed">
               Trusted by municipalities, landscape architects, and engineers from coast to coast. Surface systems that protect, define, and endure.
             </p>
 
@@ -86,13 +85,13 @@ export default function Hero({ variant = "default" }: HeroProps) {
             <div className="flex flex-col sm:flex-row gap-4 mb-12">
               <Link
                 href="/products"
-                className="bg-orange-500 hover:bg-orange-400 text-white font-bold px-8 py-4 rounded-lg transition-colors text-center sm:text-left w-full sm:w-auto min-h-[44px]"
+                className="bg-orange-500 hover:bg-orange-400 text-white font-bold px-8 py-4 rounded-lg transition-colors text-center w-full sm:w-auto min-h-[48px] flex items-center justify-center"
               >
                 Explore Systems
               </Link>
               <Link
                 href="/lunch-learn"
-                className="border border-white/30 hover:border-white text-white font-semibold px-8 py-4 rounded-lg transition-colors text-center sm:text-left w-full sm:w-auto min-h-[44px]"
+                className="border border-white/30 hover:border-white text-white font-semibold px-8 py-4 rounded-lg transition-colors text-center w-full sm:w-auto min-h-[48px] flex items-center justify-center"
               >
                 Book a Lunch &amp; Learn
               </Link>

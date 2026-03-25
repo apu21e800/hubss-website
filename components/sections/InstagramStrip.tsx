@@ -1,4 +1,4 @@
-import { SOCIAL_LINKS } from '@/lib/social';
+import { SOCIAL_LINKS } from '@/lib/social-links';
 import { SocialLinks } from '@/components/ui/SocialLinks';
 
 export default function InstagramStrip() {

@@ -17,7 +17,18 @@ const GRAD: React.CSSProperties = {
 
 export default function StatsBar() {
   return (
-    <section className="py-16" style={{ background: "var(--bg-slate)" }}>
+    <section
+      className="py-16 relative overflow-hidden"
+      style={{
+        backgroundImage: 'url(/images/textures/stamped-asphalt-texture.webp)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
+      {/* Dark overlay — subtle texture visible, text fully readable */}
+      <div className="absolute inset-0 bg-zinc-950/85" />
+
+      <div className="relative z-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-3">
           {stats.map((stat, i) => (
@@ -47,6 +58,7 @@ export default function StatsBar() {
             </motion.div>
           ))}
         </div>
+      </div>
       </div>
     </section>
   );

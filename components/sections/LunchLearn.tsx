@@ -59,7 +59,21 @@ export default function LunchLearn() {
   }
 
   return (
-    <section id="lunch-learn" className="relative overflow-hidden" style={{ background: "var(--bg-slate)", zIndex: 0, position: "relative", paddingTop: "100px" }}>
+    <section
+      id="lunch-learn"
+      className="relative overflow-hidden"
+      style={{
+        backgroundImage: 'url(/images/textures/stamped-asphalt-texture.webp)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        zIndex: 0,
+        paddingTop: "100px",
+      }}
+    >
+      {/* Dark overlay — slightly more visible, adds warmth to CTA section */}
+      <div className="absolute inset-0 bg-zinc-950/80" />
+
+      <div className="relative z-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28 pt-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
 
@@ -271,6 +285,8 @@ export default function LunchLearn() {
 
         </div>
       </div>
+
+      </div>{/* end relative z-10 */}
 
       {/* ── Bottom CTA bar ──────────────────────────────────── */}
       <div style={{ background: "#0f1420", borderTop: "1px solid rgba(255,255,255,0.06)" }}>

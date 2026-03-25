@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 const COVERS = [
   "Why preformed thermoplastic markings last 10x longer than paint",
@@ -107,7 +108,7 @@ export default function LunchLearn() {
                 {COVERS.map((item) => (
                   <li key={item} className="flex items-start gap-3">
                     <span className="mt-0.5 text-sm font-bold flex-shrink-0" style={{ color: "#f97316" }}>✓</span>
-                    <span className="text-sm leading-relaxed" style={{ color: "#cbd5e1" }}>{item}</span>
+                    <span className="text-base leading-relaxed" style={{ color: "#cbd5e1" }}>{item}</span>
                   </li>
                 ))}
               </ul>
@@ -122,35 +123,22 @@ export default function LunchLearn() {
                 {TAKEAWAYS.map((item) => (
                   <li key={item} className="flex items-start gap-3">
                     <span className="mt-0.5 text-sm font-bold flex-shrink-0" style={{ color: "#f97316" }}>✓</span>
-                    <span className="text-sm leading-relaxed" style={{ color: "#cbd5e1" }}>{item}</span>
+                    <span className="text-base leading-relaxed" style={{ color: "#cbd5e1" }}>{item}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            {/* Moose peeker — overlaps the orange fold line below */}
-            <div style={{ position: "relative", height: "120px", marginBottom: "-32px", zIndex: 10, pointerEvents: "none" }}>
-              <motion.div
-                initial={{ opacity: 0, y: 12 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                style={{
-                  position: "absolute",
-                  bottom: 0,
-                  left: 0,
-                  zIndex: 10,
-                }}
-              >
-                <Image
-                  src="/images/lunch-learn/moose.png"
-                  alt="Moose mascot peeking over the edge"
-                  width={220}
-                  height={220}
-                  style={{ objectFit: "contain", objectPosition: "bottom", display: "block" }}
-                  unoptimized
-                />
-              </motion.div>
+            {/* Format options — In Person vs Virtual */}
+            <div className="flex flex-col sm:flex-row gap-4 mt-4">
+              <div className="flex-1 border border-zinc-700 rounded-xl p-5 bg-zinc-900/60">
+                <div className="text-sm font-semibold text-orange-500 uppercase tracking-wider mb-2">In Person</div>
+                <p className="text-base text-zinc-400 leading-relaxed">We bring lunch and present at your office. Perfect for municipalities, engineering firms, and landscape architects.</p>
+              </div>
+              <div className="flex-1 border border-zinc-700 rounded-xl p-5 bg-zinc-900/60">
+                <div className="text-sm font-semibold text-orange-500 uppercase tracking-wider mb-2">Virtual</div>
+                <p className="text-base text-zinc-400 leading-relaxed">Join online from anywhere. We&apos;ll send a SkipTheDishes gift card so you can eat along with us.</p>
+              </div>
             </div>
 
           </motion.div>
@@ -235,6 +223,31 @@ export default function LunchLearn() {
                     </div>
                   </div>
 
+                  {/* Topics of interest */}
+                  <div>
+                    <label className="block text-sm font-medium mb-3" style={{ color: "var(--text-hint)" }}>Topics of Interest</label>
+                    <div className="grid grid-cols-2 gap-2">
+                      {[
+                        'StreetPrint Patterns',
+                        'Colour Systems',
+                        'Installation & Application',
+                        'Maintenance & Longevity',
+                        'Specification & Budgeting',
+                        'Municipal Case Studies',
+                      ].map((topic) => (
+                        <label key={topic} className="flex items-center gap-2 cursor-pointer group">
+                          <input
+                            type="checkbox"
+                            name="topics"
+                            value={topic}
+                            className="w-4 h-4 accent-orange-500 rounded"
+                          />
+                          <span className="text-sm text-zinc-500 group-hover:text-zinc-700 transition-colors">{topic}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
                   {/* Honeypot */}
                   <input type="text" name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
 
@@ -247,6 +260,13 @@ export default function LunchLearn() {
                   >
                     {loading ? "Sending…" : "Schedule Your Free Lunch & Learn →"}
                   </button>
+
+                  <p className="text-center text-zinc-500 text-sm mt-2">
+                    Have a different question?{' '}
+                    <Link href="/contact" className="text-orange-500 hover:text-orange-400 underline underline-offset-4 transition-colors">
+                      Send us a message
+                    </Link>
+                  </p>
                 </form>
               </>
             )}

@@ -1,3 +1,6 @@
+import { SOCIAL_LINKS } from '@/lib/social';
+import { SocialLinks } from '@/components/ui/SocialLinks';
+
 export default function InstagramStrip() {
   return (
     <section className="py-20 bg-black border-t border-zinc-800">
@@ -8,7 +11,7 @@ export default function InstagramStrip() {
             <h2 className="text-3xl font-bold text-white">Follow the Work</h2>
           </div>
           <a
-            href="https://www.instagram.com/hubsurfacesystems"
+            href={SOCIAL_LINKS.instagram}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 border border-zinc-700 hover:border-orange-500 text-zinc-300 hover:text-orange-500 px-5 py-2.5 rounded-lg transition-all duration-200 text-sm font-medium"
@@ -25,7 +28,7 @@ export default function InstagramStrip() {
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <a
               key={i}
-              href="https://www.instagram.com/hubsurfacesystems"
+              href={SOCIAL_LINKS.instagram}
               target="_blank"
               rel="noopener noreferrer"
               className="aspect-square bg-zinc-900 border border-zinc-800 rounded-lg overflow-hidden hover:border-orange-500/40 transition-all duration-200 group relative"
@@ -38,6 +41,7 @@ export default function InstagramStrip() {
             </a>
           ))}
         </div>
+        <SocialLinks className="justify-center gap-6 mt-8" iconClassName="w-6 h-6" />
       </div>
     </section>
   );

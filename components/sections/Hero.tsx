@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { heroImages, resolveImage } from "@/lib/featured-images";
+import { TypewriterHeading } from "@/components/ui/TypewriterHeading";
 
 export type HeroVariant = 'default' | 'split' | 'cinematic';
 
@@ -73,8 +74,8 @@ export default function Hero({ variant = "default" }: HeroProps) {
               30 Years · 500+ Projects · Coast to Coast
             </p>
 
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-tight tracking-tight mb-6">
-              Canada&apos;s Standard for High-Performance Pavement Coatings
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-tight tracking-tight mb-6 min-h-[2.5em] md:min-h-[2em]">
+              <TypewriterHeading />
             </h1>
 
             <p className="text-lg md:text-xl text-gray-300 max-w-2xl mb-8 leading-relaxed">

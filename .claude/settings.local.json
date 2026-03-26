@@ -18,7 +18,8 @@
       "Bash(\"C:/Users/cleve/Based_Agency/based-agncy_os/Web_Projects/hubss-website/node_modules/.bin/tsc\" --noEmit --skipLibCheck)",
       "Bash(rm -f .git/index.lock)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(cmd /c \"taskkill /PID 39040 /F\")"
     ]
   }
 }

@@ -97,16 +97,21 @@ export default async function ProductPage({ params }: Props) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
 
         {/* Specify CTA bar */}
-        <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-10">
+        <div className="rounded-xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-10"
+          style={{ background: "#111111", border: "1px solid rgba(249,115,22,0.2)" }}>
           <div>
-            <p className="text-white font-semibold text-base">Ready to specify {product.name}?</p>
-            <p className="text-zinc-400 text-sm mt-0.5">Get technical documentation, pricing, and installation support.</p>
+            <p className="font-semibold text-base" style={{ color: "#F5F0EB" }}>Ready to specify {product.name}?</p>
+            <p className="text-sm mt-0.5" style={{ color: "#9CA3AF" }}>Get technical documentation, pricing, and installation support.</p>
           </div>
           <div className="flex flex-wrap gap-3">
-            <Link href="/resources" className="border border-zinc-600 hover:border-zinc-400 text-zinc-300 hover:text-white px-4 py-2 rounded-lg text-sm transition-all">
+            <Link href="/resources" className="px-4 py-2 rounded-lg text-sm transition-all"
+              style={{ border: "1px solid rgba(255,255,255,0.15)", color: "#D1D5DB" }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(249,115,22,0.5)"; (e.currentTarget as HTMLElement).style.color = "#F5F0EB"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.15)"; (e.currentTarget as HTMLElement).style.color = "#D1D5DB"; }}>
               Technical Specs
             </Link>
-            <Link href="/lunch-learn" className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all">
+            <Link href="/lunch-learn" className="px-4 py-2 rounded-lg text-sm font-medium transition-all"
+              style={{ background: "#F97316", color: "#fff" }}>
               Book Lunch &amp; Learn
             </Link>
           </div>
@@ -129,13 +134,15 @@ export default async function ProductPage({ params }: Props) {
 
           {/* Right: specs + CTA */}
           <div>
-            <div className="rounded-xl p-8 mb-8 sticky top-24" style={{ background: "var(--color-blue-mid)", border: "1px solid rgba(147,197,253,0.1)" }}>
-              <h3 className="font-bold text-lg mb-6" style={{ color: "#fff" }}>Specifications</h3>
+            <div className="rounded-xl p-8 mb-8 sticky top-24 relative overflow-hidden" style={{ background: "#111111", border: "1px solid rgba(255,255,255,0.08)" }}>
+              {/* Orange top accent */}
+              <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
+              <h3 className="font-bold text-lg mb-6" style={{ color: "#F5F0EB" }}>Specifications</h3>
               <div className="space-y-4">
                 {product.specs.map((spec) => (
-                  <div key={spec.label} className="flex justify-between text-sm" style={{ borderBottom: "1px solid rgba(147,197,253,0.08)", paddingBottom: "12px" }}>
-                    <span style={{ color: "var(--color-blue-text)" }}>{spec.label}</span>
-                    <span className="font-semibold text-right max-w-[60%]" style={{ color: "#fff" }}>
+                  <div key={spec.label} className="flex justify-between text-sm" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", paddingBottom: "12px" }}>
+                    <span style={{ color: "#9CA3AF" }}>{spec.label}</span>
+                    <span className="font-semibold text-right max-w-[60%]" style={{ color: "#F5F0EB" }}>
                       {spec.value}
                     </span>
                   </div>
@@ -144,15 +151,15 @@ export default async function ProductPage({ params }: Props) {
 
               <Link
                 href="/contact"
-                className="block w-full text-center font-semibold py-4 rounded-lg mt-8 transition-colors text-sm"
+                className="block w-full text-center font-semibold py-4 rounded-lg mt-8 transition-all text-sm hover:brightness-110"
                 style={{ background: "#f97316", color: "#fff" }}
               >
                 Request Spec Sheet
               </Link>
               <Link
                 href="/lunch-learn"
-                className="block w-full text-center font-semibold py-4 rounded-lg mt-3 transition-colors text-sm"
-                style={{ background: "transparent", color: "var(--color-blue-text)", border: "1px solid rgba(147,197,253,0.2)" }}
+                className="block w-full text-center font-semibold py-4 rounded-lg mt-3 transition-all text-sm hover:border-[#F97316]/50 hover:text-white"
+                style={{ background: "transparent", color: "#9CA3AF", border: "1px solid rgba(255,255,255,0.12)" }}
               >
                 Book Lunch &amp; Learn
               </Link>

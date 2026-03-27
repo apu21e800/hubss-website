@@ -21,7 +21,7 @@ const differentiators = [
 
 export default function AboutPage() {
   return (
-    <main style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
+    <main style={{ background: "#0A0A0A", minHeight: "100vh" }}>
       <Nav />
 
       {/* Hero */}
@@ -55,7 +55,7 @@ export default function AboutPage() {
       </div>
 
       {/* Story */}
-      <div className="py-28 bg-asphalt-subtle" style={{ background: "var(--bg-slate)" }}>
+      <div className="py-28" style={{ background: "#111111" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             <div>
@@ -106,7 +106,7 @@ export default function AboutPage() {
       </div>
 
       {/* Offices */}
-      <div className="py-20" style={{ background: "var(--bg-primary)" }}>
+      <div className="py-20" style={{ background: "#0A0A0A" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold mb-10" style={{ color: "var(--text-primary)" }}>Regional Offices</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -133,7 +133,7 @@ export default function AboutPage() {
               <div
                 key={office.region}
                 className="p-8 rounded-xl relative overflow-hidden"
-                style={{ background: "var(--bg-card-surface)", border: "1px solid var(--border-subtle)" }}
+                style={{ background: "#161616", border: "1px solid rgba(255,255,255,0.08)" }}
               >
                 <div
                   className="absolute top-0 left-0 right-0 h-0.5"
@@ -182,12 +182,12 @@ export default function AboutPage() {
       </div>
 
       {/* Why HUB */}
-      <div className="py-28" style={{ background: "var(--bg-slate)" }}>
+      <div className="py-28" style={{ background: "#111111" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold mb-12" style={{ color: "var(--text-primary)" }}>Why HUB</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {differentiators.map((d) => (
-              <div key={d.title} className="p-8 rounded-xl" style={{ background: "var(--bg-card-surface)", border: "1px solid var(--border-subtle)" }}>
+              <div key={d.title} className="p-8 rounded-xl" style={{ background: "#161616", border: "1px solid rgba(255,255,255,0.08)" }}>
                 <div className="w-8 h-0.5 mb-5" style={{ background: "#f97316" }} />
                 <h3 className="font-bold text-lg mb-3" style={{ color: "var(--text-primary)" }}>{d.title}</h3>
                 <p className="text-[15px] leading-relaxed" style={{ color: "var(--text-body)" }}>{d.desc}</p>
@@ -198,7 +198,7 @@ export default function AboutPage() {
       </div>
 
       {/* Manufacturer Partners */}
-      <div className="py-20" style={{ background: "var(--bg-primary)" }}>
+      <div className="py-20" style={{ background: "#0A0A0A" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "#f97316" }}>
             Manufacturer Partners
@@ -261,7 +261,7 @@ export default function AboutPage() {
               <div
                 key={partner.name}
                 className="p-8 rounded-xl relative overflow-hidden"
-                style={{ background: "var(--bg-card-surface)", border: "1px solid var(--border-subtle)" }}
+                style={{ background: "#161616", border: "1px solid rgba(255,255,255,0.08)" }}
               >
                 <div
                   className="absolute top-0 left-0 right-0 h-0.5"

@@ -409,6 +409,16 @@ p {
     linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
 }
 
+/* ─── White section with grid texture ────────────────── */
+/* Used for document/spec-sheet sections — clean pro-max feel */
+.bg-grid {
+  background-color: #ffffff;
+  background-image:
+    linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
 /* ─── Hero always-dark override (theme-agnostic) ─────── */
 /* Hero has a full-bleed image + black overlay — text stays white in all themes */
 .hero-section {

@@ -24,7 +24,7 @@ export default async function ProjectPage({ params }: Props) {
     .slice(0, 3);
 
   return (
-    <main style={{ background: "#1a1a1a", minHeight: "100vh" }}>
+    <main style={{ background: "#0A0A0A", minHeight: "100vh" }}>
       <Nav />
 
       {/* Hero */}
@@ -64,7 +64,7 @@ export default async function ProjectPage({ params }: Props) {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20" style={{ background: "#0A0A0A" }}>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
           <div className="lg:col-span-2">
             <h2 className="text-2xl font-bold mb-5" style={{ color: "#f5f0eb" }}>Project Overview</h2>
@@ -90,7 +90,9 @@ export default async function ProjectPage({ params }: Props) {
           </div>
 
           <div>
-            <div className="rounded-xl p-8 sticky top-24" style={{ background: "#2d2d2d", border: "1px solid #333" }}>
+            <div className="rounded-xl p-8 sticky top-24 relative overflow-hidden" style={{ background: "#111111", border: "1px solid rgba(255,255,255,0.08)" }}>
+              {/* Orange top accent */}
+              <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
               <h3 className="font-bold text-lg mb-6" style={{ color: "#f5f0eb" }}>Project Details</h3>
               <div className="space-y-4">
                 {[
@@ -98,8 +100,8 @@ export default async function ProjectPage({ params }: Props) {
                   { label: "Application", value: project.application },
                   { label: "Location", value: `${project.city}, ${project.province}` },
                 ].map((detail) => (
-                  <div key={detail.label} className="flex justify-between text-sm" style={{ borderBottom: "1px solid #333", paddingBottom: "12px" }}>
-                    <span style={{ color: "#d1d5db" }}>{detail.label}</span>
+                  <div key={detail.label} className="flex justify-between text-sm" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", paddingBottom: "12px" }}>
+                    <span style={{ color: "#9CA3AF" }}>{detail.label}</span>
                     <span className="font-semibold text-right" style={{ color: "#f5f0eb" }}>{detail.value}</span>
                   </div>
                 ))}
@@ -107,15 +109,15 @@ export default async function ProjectPage({ params }: Props) {
 
               <Link
                 href={productEntry ? `/products/${productEntry.slug}` : "/products"}
-                className="block w-full text-center font-semibold py-4 rounded-lg mt-8 text-sm"
+                className="block w-full text-center font-semibold py-4 rounded-lg mt-8 text-sm transition-all hover:brightness-110"
                 style={{ background: "#f97316", color: "#fff" }}
               >
                 View {project.product} Product
               </Link>
               <Link
                 href="/contact"
-                className="block w-full text-center font-semibold py-4 rounded-lg mt-3 text-sm"
-                style={{ border: "1px solid #333", color: "#f5f0eb" }}
+                className="block w-full text-center font-semibold py-4 rounded-lg mt-3 text-sm transition-all hover:border-[#F97316]/50 hover:text-white"
+                style={{ border: "1px solid rgba(255,255,255,0.12)", color: "#9CA3AF" }}
               >
                 Request a Consultation
               </Link>
@@ -124,15 +126,15 @@ export default async function ProjectPage({ params }: Props) {
         </div>
 
         {relatedProjects.length > 0 && (
-          <div className="mt-20 pt-16" style={{ borderTop: "1px solid #333" }}>
+          <div className="mt-20 pt-16" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
             <h2 className="text-2xl font-bold mb-8" style={{ color: "#f5f0eb" }}>Related Projects</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {relatedProjects.map((p) => (
                 <Link
                   key={p.slug}
                   href={`/projects/${p.slug}`}
-                  className="group overflow-hidden rounded"
-                  style={{ background: "#2d2d2d" }}
+                  className="group overflow-hidden rounded-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(249,115,22,0.1)]"
+                  style={{ background: "#111111", border: "1px solid rgba(255,255,255,0.08)" }}
                 >
                   <div className="relative h-40 overflow-hidden">
                     <Image

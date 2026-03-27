@@ -70,7 +70,7 @@ export default async function ApplicationPage({ params }: Props) {
   }));
 
   return (
-    <main style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
+    <main style={{ background: "#0A0A0A", minHeight: "100vh" }}>
       <Nav />
 
       {/* ── 1. Hero ────────────────────────────────────────────────────────── */}
@@ -118,7 +118,7 @@ export default async function ApplicationPage({ params }: Props) {
       </div>
 
       {/* ── 2. Overview ───────────────────────────────────────────────────── */}
-      <section className="py-20" style={{ background: "var(--bg-primary)" }}>
+      <section className="py-20" style={{ background: "#0A0A0A" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <p
@@ -150,7 +150,7 @@ export default async function ApplicationPage({ params }: Props) {
 
       {/* ── 3. Recommended Products ──────────────────────────────────────── */}
       {relatedProductData.length > 0 && (
-        <section className="py-16" style={{ background: "var(--bg-slate)" }}>
+        <section className="py-16" style={{ background: "#111111" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-end justify-between mb-10">
               <div>
@@ -248,7 +248,7 @@ export default async function ApplicationPage({ params }: Props) {
       )}
 
       {/* ── 4. Gallery ────────────────────────────────────────────────────── */}
-      <section className="py-16" style={{ background: "var(--bg-primary)" }}>
+      <section className="py-16" style={{ background: "#0A0A0A" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <p
             className="text-xs font-bold tracking-[0.2em] uppercase mb-3"
@@ -267,7 +267,7 @@ export default async function ApplicationPage({ params }: Props) {
       </section>
 
       {/* ── 5. Benefits ───────────────────────────────────────────────────── */}
-      <section className="py-16" style={{ background: "var(--bg-slate)" }}>
+      <section className="py-16" style={{ background: "#111111" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             {/* Left: heading */}

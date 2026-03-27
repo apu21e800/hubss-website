@@ -35,12 +35,12 @@ export default function ProjectsPage() {
   const FilterBtn = ({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) => (
     <button
       onClick={onClick}
-      className="text-xs font-semibold px-4 py-2 rounded transition-all whitespace-nowrap min-h-[36px]"
+      className="text-xs font-semibold px-4 py-2 rounded-full transition-all whitespace-nowrap min-h-[36px]"
       style={{
-        background: active ? "#f97316" : "#2d2d2d",
+        background: active ? "#F97316" : "rgba(255,255,255,0.05)",
         color: active ? "#fff" : "#9ca3af",
         border: "1px solid",
-        borderColor: active ? "#f97316" : "#333",
+        borderColor: active ? "#F97316" : "rgba(255,255,255,0.1)",
       }}
     >
       {label}
@@ -48,7 +48,7 @@ export default function ProjectsPage() {
   );
 
   return (
-    <main style={{ background: "#1a1a1a", minHeight: "100vh" }}>
+    <main style={{ background: "#0A0A0A", minHeight: "100vh" }}>
       <Nav />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24">
         <div className="mb-14">
@@ -64,11 +64,11 @@ export default function ProjectsPage() {
         {/* Filter bar */}
         <div className="flex flex-wrap gap-2 mb-12 overflow-x-auto scrollbar-hide pb-2">
           <FilterBtn label="All" active={filter.type === "all"} onClick={() => setFilter({ type: "all", value: "" })} />
-          <span className="text-xs self-center px-2" style={{ color: "#333" }}>Product:</span>
+          <span className="text-xs self-center px-2" style={{ color: "rgba(255,255,255,0.25)" }}>Product:</span>
           {productList.map((p) => (
             <FilterBtn key={p} label={p} active={filter.type === "product" && filter.value === p} onClick={() => setFilter({ type: "product", value: p })} />
           ))}
-          <span className="text-xs self-center px-2" style={{ color: "#333" }}>Application:</span>
+          <span className="text-xs self-center px-2" style={{ color: "rgba(255,255,255,0.25)" }}>Application:</span>
           {appTypes.map((a) => (
             <FilterBtn key={a} label={a} active={filter.type === "application" && filter.value === a} onClick={() => setFilter({ type: "application", value: a })} />
           ))}
@@ -82,8 +82,8 @@ export default function ProjectsPage() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05 }}
-              className="group overflow-hidden rounded relative"
-              style={{ background: "#2d2d2d" }}
+              className="group overflow-hidden rounded-lg relative transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(249,115,22,0.1)]"
+              style={{ background: "#111111", border: "1px solid rgba(255,255,255,0.08)" }}
             >
               {/* Featured badge for first 2 */}
               {i < 2 && (
@@ -137,7 +137,7 @@ export default function ProjectsPage() {
         </div>
 
         {/* Photo gallery */}
-        <div className="mt-20 pt-16" style={{ borderTop: "1px solid #2a2a2a" }}>
+        <div className="mt-20 pt-16" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
           <div className="mb-8">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-2" style={{ color: "#f97316" }}>
               Photo Archive

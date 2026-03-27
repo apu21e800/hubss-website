@@ -61,11 +61,34 @@ export default function LunchLearn() {
   return (
     <section
       id="lunch-learn"
-      className="relative bg-zinc-950"
-      style={{ zIndex: 0 }}
+      className="relative overflow-hidden"
+      style={{ background: "#0f1420", zIndex: 0 }}
     >
+      {/* Orange/amber warm glow — emanates from bottom-right */}
+      <div
+        className="absolute bottom-0 right-0 w-[500px] h-[500px] pointer-events-none"
+        style={{
+          background: "radial-gradient(ellipse at bottom right, rgba(249,115,22,0.12) 0%, rgba(234,179,8,0.06) 30%, transparent 70%)",
+          zIndex: 0,
+        }}
+      />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28 pt-16">
+      {/* Moose mascot — large, bottom-right, peeking up */}
+      <div
+        className="absolute bottom-0 right-6 xl:right-16 hidden lg:block"
+        style={{ zIndex: 1, width: 220, height: 220 }}
+      >
+        <Image
+          src="/images/lunch-learn/moose.png"
+          alt="HUB Surface Systems Moose"
+          width={220}
+          height={220}
+          style={{ filter: "drop-shadow(0 0 32px rgba(249,115,22,0.25))", display: "block" }}
+          unoptimized
+        />
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28 pt-16" style={{ zIndex: 2 }}>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
 
           {/* ── LEFT — content ─────────────────────────────── */}

@@ -16,7 +16,7 @@ export default function LunchLearnPage() {
       <Nav />
 
       {/* Hero — moose sits at the very bottom, paws overlapping the LunchLearn section below */}
-      <div className="relative overflow-visible pb-16" style={{ zIndex: 2 }}>
+      <div className="relative overflow-visible pb-28 sm:pb-36" style={{ zIndex: 2 }}>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-0 relative">
           <div className="flex flex-col gap-8">
@@ -58,14 +58,20 @@ export default function LunchLearnPage() {
           </div>
         </div>
 
-        {/* Moose — absolute bottom, overlapping the section below */}
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-40 h-40 z-20">
+        {/* Moose — large, bottom-right of hero, peeking into L&L section */}
+        <div
+          className="absolute bottom-0 right-0 md:right-16 lg:right-24 z-20 hidden sm:block"
+          style={{ width: 288, height: 288 }}
+        >
           <Image
             src="/images/lunch-learn/moose.png"
-            alt="HUBSS Moose"
-            width={160}
-            height={160}
-            style={{ filter: 'drop-shadow(0 8px 24px rgba(0,0,0,0.4))', display: 'block' }}
+            alt="HUB Surface Systems Moose Mascot"
+            width={288}
+            height={288}
+            style={{
+              filter: "drop-shadow(0 0 40px rgba(249,115,22,0.3)) drop-shadow(0 16px 32px rgba(0,0,0,0.5))",
+              display: "block",
+            }}
             unoptimized
           />
         </div>

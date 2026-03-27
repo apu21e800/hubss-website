@@ -9,9 +9,12 @@ import {
   // Nav chrome
   FileText, CalendarCheck, Phone,
   ChevronDown, X,
+  // Social
+  Linkedin, Instagram, Youtube, Facebook,
 } from "lucide-react";
 import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
+import { SOCIAL_LINKS } from "@/lib/social-links";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -58,6 +61,36 @@ const GRAD: React.CSSProperties = {
 const GEIST: React.CSSProperties = {
   fontFamily: "var(--font-geist), system-ui, sans-serif",
 };
+
+// ─── Mobile stagger variants ───────────────────────────────────────────────────
+
+const mobileContainerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.05,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const mobileItemVariants = {
+  hidden:   { opacity: 0, y: 20 },
+  visible:  {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.35, ease: [0.22, 1, 0.36, 1] as const },
+  },
+};
+
+// ─── Social icons row ──────────────────────────────────────────────────────────
+
+const MOBILE_SOCIALS = [
+  { Icon: Linkedin,  href: SOCIAL_LINKS.linkedin,  label: "LinkedIn"  },
+  { Icon: Instagram, href: SOCIAL_LINKS.instagram, label: "Instagram" },
+  { Icon: Youtube,   href: SOCIAL_LINKS.youtube,   label: "YouTube"   },
+  { Icon: Facebook,  href: SOCIAL_LINKS.facebook,  label: "Facebook"  },
+];
 
 // ─── Panel footer bar ─────────────────────────────────────────────────────────
 
@@ -111,6 +144,8 @@ function ProductsPanel({
           borderImage: "linear-gradient(90deg,#F97316,#EAB308) 1",
           boxShadow: "0 20px 60px rgba(0,0,0,0.6)",
           pointerEvents: "auto",
+          maxHeight: "80vh",
+          overflowY: "auto",
         }}
         initial={{ y: -10 }}
         animate={{ y: 0, transition: { duration: 0.22, ease: [0.22, 1, 0.36, 1], delay: 0.04 } }}
@@ -282,6 +317,8 @@ function ApplicationsPanel({
           borderImage: "linear-gradient(90deg,#F97316,#EAB308) 1",
           boxShadow: "0 20px 60px rgba(0,0,0,0.6)",
           pointerEvents: "auto",
+          maxHeight: "80vh",
+          overflowY: "auto",
         }}
         initial={{ y: -10 }}
         animate={{ y: 0, transition: { duration: 0.22, ease: [0.22, 1, 0.36, 1], delay: 0.04 } }}
@@ -380,6 +417,408 @@ function ApplicationsPanel({
   );
 }
 
+// ─── Mobile full-screen overlay ────────────────────────────────────────────────
+
+function MobileOverlay({
+  onClose,
+  mobileExpanded,
+  setMobileExpanded,
+  pathname,
+}: {
+  onClose: () => void;
+  mobileExpanded: MobileExpanded;
+  setMobileExpanded: (v: MobileExpanded) => void;
+  pathname: string;
+}) {
+  return (
+    <motion.div
+      className="fixed inset-0 flex flex-col lg:hidden"
+      style={{
+        zIndex: 10001,
+        background: "#0A0A0A",
+        WebkitOverflowScrolling: "touch" as React.CSSProperties["WebkitOverflowScrolling"],
+      }}
+      initial={{ opacity: 0, scale: 0.97 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.97 }}
+      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+    >
+      {/* ── Zone 1: Top bar ─────────────────────────────────────────── */}
+      <div
+        className="flex items-center justify-between px-4 flex-shrink-0"
+        style={{
+          height: 64,
+          borderBottom: "1px solid rgba(255,255,255,0.06)",
+        }}
+      >
+        {/* Logo — same as main nav */}
+        <Link href="/" onClick={onClose} className="flex items-center gap-2.5">
+          <Image
+            src="/images/hub-wheel-orange.png"
+            alt=""
+            width={26}
+            height={26}
+            unoptimized
+            aria-hidden="true"
+          />
+          <span style={{
+            color: "#ffffff",
+            fontWeight: 700,
+            fontSize: "0.9rem",
+            letterSpacing: "0.01em",
+            lineHeight: 1,
+          }}>
+            HUB <span style={{ color: "#f97316" }}>Surface Systems</span>
+          </span>
+        </Link>
+
+        {/* Close button — pill */}
+        <button
+          onClick={onClose}
+          aria-label="Close menu"
+          className="flex items-center justify-center"
+          style={{
+            width: 44,
+            height: 44,
+            background: "rgba(255,255,255,0.05)",
+            border: "1px solid rgba(255,255,255,0.10)",
+            borderRadius: 8,
+          }}
+        >
+          <X size={18} color="#ffffff" strokeWidth={2} />
+        </button>
+      </div>
+
+      {/* ── Zone 2: Scrollable nav content ──────────────────────────── */}
+      <div
+        className="flex-1 overflow-y-auto"
+        style={{ WebkitOverflowScrolling: "touch" as React.CSSProperties["WebkitOverflowScrolling"] }}
+      >
+        <motion.div
+          variants={mobileContainerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+
+          {/* Products accordion ─────────────────────────────────────── */}
+          <motion.div variants={mobileItemVariants}>
+            <button
+              className="flex items-center justify-between w-full px-6 active:bg-white/[0.04] transition-colors"
+              style={{
+                minHeight: 64,
+                borderBottom: "1px solid rgba(255,255,255,0.05)",
+                borderLeft: `3px solid ${mobileExpanded === "products" ? "#F97316" : "transparent"}`,
+              }}
+              onClick={() => setMobileExpanded(mobileExpanded === "products" ? null : "products")}
+              aria-expanded={mobileExpanded === "products"}
+            >
+              <span
+                style={{
+                  fontSize: "1.5rem",
+                  fontWeight: 700,
+                  color: mobileExpanded === "products" ? "#F97316" : "#ffffff",
+                  fontFamily: "var(--font-geist), system-ui, sans-serif",
+                  transition: "color 0.2s",
+                }}
+              >
+                Products
+              </span>
+              <ChevronDown
+                size={20}
+                color={mobileExpanded === "products" ? "#F97316" : "rgba(255,255,255,0.4)"}
+                style={{
+                  transform: mobileExpanded === "products" ? "rotate(180deg)" : "rotate(0deg)",
+                  transition: "transform 0.25s ease, color 0.2s",
+                }}
+              />
+            </button>
+
+            <AnimatePresence>
+              {mobileExpanded === "products" && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1, transition: { duration: 0.22, ease: [0.22, 1, 0.36, 1] } }}
+                  exit={{ height: 0, opacity: 0, transition: { duration: 0.16 } }}
+                  style={{ overflow: "hidden", background: "rgba(249,115,22,0.02)" }}
+                >
+                  {products.map((p) => (
+                    <Link
+                      key={p.slug}
+                      href={`/products/${p.slug}`}
+                      onClick={onClose}
+                      className="flex items-center active:bg-white/[0.05] transition-colors"
+                      style={{
+                        minHeight: 48,
+                        paddingLeft: "2rem",
+                        paddingRight: "1.5rem",
+                        borderBottom: "1px solid rgba(255,255,255,0.03)",
+                      }}
+                    >
+                      <span style={{ fontSize: "0.9375rem", color: "rgba(255,255,255,0.65)", fontWeight: 500 }}>
+                        {p.name}
+                      </span>
+                    </Link>
+                  ))}
+                  <Link
+                    href="/products"
+                    onClick={onClose}
+                    className="flex items-center"
+                    style={{
+                      minHeight: 48,
+                      paddingLeft: "2rem",
+                      paddingRight: "1.5rem",
+                      color: "#F97316",
+                      fontSize: "0.875rem",
+                      fontWeight: 600,
+                      borderBottom: "1px solid rgba(255,255,255,0.05)",
+                    }}
+                  >
+                    View all products →
+                  </Link>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+
+          {/* Applications accordion ─────────────────────────────────── */}
+          <motion.div variants={mobileItemVariants}>
+            <button
+              className="flex items-center justify-between w-full px-6 active:bg-white/[0.04] transition-colors"
+              style={{
+                minHeight: 64,
+                borderBottom: "1px solid rgba(255,255,255,0.05)",
+                borderLeft: `3px solid ${mobileExpanded === "applications" ? "#F97316" : "transparent"}`,
+              }}
+              onClick={() => setMobileExpanded(mobileExpanded === "applications" ? null : "applications")}
+              aria-expanded={mobileExpanded === "applications"}
+            >
+              <span
+                style={{
+                  fontSize: "1.5rem",
+                  fontWeight: 700,
+                  color: mobileExpanded === "applications" ? "#F97316" : "#ffffff",
+                  fontFamily: "var(--font-geist), system-ui, sans-serif",
+                  transition: "color 0.2s",
+                }}
+              >
+                Applications
+              </span>
+              <ChevronDown
+                size={20}
+                color={mobileExpanded === "applications" ? "#F97316" : "rgba(255,255,255,0.4)"}
+                style={{
+                  transform: mobileExpanded === "applications" ? "rotate(180deg)" : "rotate(0deg)",
+                  transition: "transform 0.25s ease, color 0.2s",
+                }}
+              />
+            </button>
+
+            <AnimatePresence>
+              {mobileExpanded === "applications" && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1, transition: { duration: 0.22, ease: [0.22, 1, 0.36, 1] } }}
+                  exit={{ height: 0, opacity: 0, transition: { duration: 0.16 } }}
+                  style={{ overflow: "hidden", background: "rgba(249,115,22,0.02)" }}
+                >
+                  {applications.map((app) => (
+                    <Link
+                      key={app.slug}
+                      href={`/applications/${app.slug}`}
+                      onClick={onClose}
+                      className="flex items-center active:bg-white/[0.05] transition-colors"
+                      style={{
+                        minHeight: 48,
+                        paddingLeft: "2rem",
+                        paddingRight: "1.5rem",
+                        borderBottom: "1px solid rgba(255,255,255,0.03)",
+                      }}
+                    >
+                      <span style={{ fontSize: "0.9375rem", color: "rgba(255,255,255,0.65)", fontWeight: 500 }}>
+                        {app.name}
+                      </span>
+                    </Link>
+                  ))}
+                  <Link
+                    href="/applications"
+                    onClick={onClose}
+                    className="flex items-center"
+                    style={{
+                      minHeight: 48,
+                      paddingLeft: "2rem",
+                      paddingRight: "1.5rem",
+                      color: "#F97316",
+                      fontSize: "0.875rem",
+                      fontWeight: 600,
+                      borderBottom: "1px solid rgba(255,255,255,0.05)",
+                    }}
+                  >
+                    View all applications →
+                  </Link>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+
+          {/* Plain nav links ─────────────────────────────────────────── */}
+          {PLAIN_LINKS.map((link) => {
+            const isActive = pathname === link.href || pathname.startsWith(link.href + "/");
+            return (
+              <motion.div key={link.href} variants={mobileItemVariants}>
+                <Link
+                  href={link.href}
+                  onClick={onClose}
+                  className="flex items-center w-full active:bg-white/[0.04] transition-colors"
+                  style={{
+                    minHeight: 64,
+                    paddingLeft: "1.5rem",
+                    paddingRight: "1.5rem",
+                    borderBottom: "1px solid rgba(255,255,255,0.05)",
+                    borderLeft: `3px solid ${isActive ? "#F97316" : "transparent"}`,
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: "1.5rem",
+                      fontWeight: 700,
+                      color: isActive ? "#F97316" : "#ffffff",
+                      fontFamily: "var(--font-geist), system-ui, sans-serif",
+                    }}
+                  >
+                    {link.label}
+                  </span>
+                </Link>
+              </motion.div>
+            );
+          })}
+
+          {/* Lunch & Learn — orange CTA link ─────────────────────────── */}
+          <motion.div variants={mobileItemVariants}>
+            <Link
+              href="/lunch-learn"
+              onClick={onClose}
+              className="flex items-center justify-between w-full active:bg-orange-500/10 transition-colors"
+              style={{
+                minHeight: 64,
+                paddingLeft: "1.5rem",
+                paddingRight: "1.5rem",
+                borderBottom: "1px solid rgba(249,115,22,0.12)",
+                borderLeft: "3px solid #F97316",
+                background: "rgba(249,115,22,0.04)",
+              }}
+            >
+              <span
+                style={{
+                  fontSize: "1.5rem",
+                  fontWeight: 700,
+                  color: "#F97316",
+                  fontFamily: "var(--font-geist), system-ui, sans-serif",
+                }}
+              >
+                Lunch &amp; Learn
+              </span>
+              <span
+                style={{
+                  fontSize: "0.6875rem",
+                  color: "rgba(249,115,22,0.6)",
+                  fontWeight: 600,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                }}
+              >
+                Free · Book now
+              </span>
+            </Link>
+          </motion.div>
+
+          {/* ── Zone 4: Social links ──────────────────────────────────── */}
+          <motion.div variants={mobileItemVariants}>
+            <div
+              className="flex items-center justify-center gap-7"
+              style={{ paddingTop: "2rem", paddingBottom: "2rem" }}
+            >
+              {MOBILE_SOCIALS.map(({ Icon, href, label }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="transition-colors duration-200"
+                  style={{ color: "rgba(255,255,255,0.28)" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.65)")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.28)")}
+                >
+                  <Icon size={22} strokeWidth={1.5} />
+                </a>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Spacer so content clears the bottom CTA */}
+          <div style={{ height: 140 }} />
+
+        </motion.div>
+      </div>
+
+      {/* ── Zone 3: Bottom CTA strip — always visible ────────────────── */}
+      <div
+        className="flex-shrink-0 absolute bottom-0 left-0 right-0"
+        style={{ pointerEvents: "none" }}
+      >
+        {/* Gradient fade */}
+        <div
+          style={{
+            height: 120,
+            background: "linear-gradient(to top, #0A0A0A 60%, transparent 100%)",
+            pointerEvents: "none",
+          }}
+        />
+        {/* Content */}
+        <div
+          style={{
+            background: "#0A0A0A",
+            paddingLeft: "1.5rem",
+            paddingRight: "1.5rem",
+            paddingBottom: "env(safe-area-inset-bottom, 2rem)",
+            marginBottom: "0.5rem",
+            pointerEvents: "auto",
+          }}
+        >
+          <Link
+            href="/lunch-learn"
+            onClick={onClose}
+            className="block w-full text-center font-bold transition-all active:scale-[0.98]"
+            style={{
+              background: "linear-gradient(90deg, #F97316 0%, #D97706 100%)",
+              color: "#ffffff",
+              borderRadius: 14,
+              paddingTop: "1rem",
+              paddingBottom: "1rem",
+              fontSize: "1rem",
+              letterSpacing: "0.01em",
+              boxShadow: "0 4px 24px rgba(249,115,22,0.3)",
+            }}
+          >
+            Book Lunch &amp; Learn
+          </Link>
+          <p
+            className="text-center"
+            style={{
+              color: "rgba(255,255,255,0.38)",
+              fontSize: "0.8125rem",
+              marginTop: "0.75rem",
+              paddingBottom: "0.5rem",
+            }}
+          >
+            or call <span style={{ color: "rgba(255,255,255,0.55)" }}>1-877-391-0270</span>
+          </p>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
 // ─── Main Nav ─────────────────────────────────────────────────────────────────
 
 export default function Nav() {
@@ -394,7 +833,7 @@ export default function Nav() {
   const closeTimerRef  = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastTriggerRef = useRef<HTMLElement | null>(null);
 
-  // Measure actual nav height (handles any padding/border changes)
+  // Measure actual nav height
   useEffect(() => {
     if (!navRef.current) return;
     const measure = () => {
@@ -413,6 +852,18 @@ export default function Nav() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Body scroll lock when mobile menu open
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileOpen]);
+
   // Close on route change
   useEffect(() => {
     setActivePanel(null);
@@ -425,6 +876,7 @@ export default function Nav() {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setActivePanel(null);
+        setMobileOpen(false);
         lastTriggerRef.current?.focus();
       }
     };
@@ -435,7 +887,7 @@ export default function Nav() {
     };
   }, []);
 
-  // Timer helpers — 300ms delay for cross-link mouse path tolerance
+  // Timer helpers — 300ms grace period for diagonal mouse paths
   const startCloseTimer = () => {
     closeTimerRef.current = setTimeout(() => setActivePanel(null), 300);
   };
@@ -485,7 +937,7 @@ export default function Nav() {
               </span>
             </Link>
 
-            {/* Desktop links */}
+            {/* Desktop links — hidden on mobile */}
             <div className="hidden lg:flex items-center gap-0.5">
 
               {/* Products trigger */}
@@ -538,7 +990,7 @@ export default function Nav() {
                 />
               </Link>
 
-              {/* Bridge zone — invisible 20px hitbox keeps panel open during diagonal mouse path */}
+              {/* Bridge zone — invisible hitbox keeps panel open on diagonal mouse path */}
               {activePanel && (
                 <div
                   className="absolute left-0 right-0 h-5"
@@ -567,7 +1019,7 @@ export default function Nav() {
                 );
               })}
 
-              {/* CTA */}
+              {/* Desktop CTA */}
               <Link
                 href="/lunch-learn"
                 className="ml-3 text-[0.72rem] font-bold px-5 py-2 rounded-full transition-all duration-150 hover:brightness-110 whitespace-nowrap"
@@ -577,140 +1029,74 @@ export default function Nav() {
               </Link>
             </div>
 
-            {/* Mobile hamburger — animated lines, 48×48 touch target */}
+            {/* Mobile hamburger — pill button, three-line → X morphs via CSS */}
             <button
-              className="lg:hidden flex flex-col justify-center items-center gap-[5px] w-12 h-12 rounded-lg"
+              className="lg:hidden flex flex-col justify-center items-center gap-[5px]"
+              style={{
+                width: 44,
+                height: 44,
+                background: "rgba(255,255,255,0.05)",
+                border: "1px solid rgba(255,255,255,0.10)",
+                borderRadius: 8,
+                padding: "10px",
+                flexShrink: 0,
+              }}
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
               aria-expanded={mobileOpen}
             >
-              <span className={`block w-6 h-0.5 bg-white transition-all duration-300 ${mobileOpen ? "rotate-45 translate-y-[7px]" : ""}`} />
-              <span className={`block w-6 h-0.5 bg-white transition-all duration-300 ${mobileOpen ? "opacity-0" : ""}`} />
-              <span className={`block w-6 h-0.5 bg-white transition-all duration-300 ${mobileOpen ? "-rotate-45 -translate-y-[7px]" : ""}`} />
+              <span
+                style={{
+                  display: "block",
+                  width: 20,
+                  height: 1.5,
+                  background: "#ffffff",
+                  borderRadius: 2,
+                  transition: "transform 0.3s cubic-bezier(0.22,1,0.36,1), opacity 0.2s",
+                  transform: mobileOpen ? "rotate(45deg) translate(4.5px, 4.5px)" : "none",
+                }}
+              />
+              <span
+                style={{
+                  display: "block",
+                  width: 20,
+                  height: 1.5,
+                  background: "#ffffff",
+                  borderRadius: 2,
+                  transition: "opacity 0.2s",
+                  opacity: mobileOpen ? 0 : 1,
+                }}
+              />
+              <span
+                style={{
+                  display: "block",
+                  width: 20,
+                  height: 1.5,
+                  background: "#ffffff",
+                  borderRadius: 2,
+                  transition: "transform 0.3s cubic-bezier(0.22,1,0.36,1), opacity 0.2s",
+                  transform: mobileOpen ? "rotate(-45deg) translate(4.5px, -4.5px)" : "none",
+                }}
+              />
             </button>
+
           </div>
         </div>
-
-        {/* Mobile menu — full-screen drawer */}
-        <AnimatePresence>
-          {mobileOpen && (
-            <motion.div
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "tween", duration: 0.3 }}
-              className="fixed inset-0 bg-zinc-950/98 backdrop-blur-sm z-50 flex flex-col p-6 lg:hidden overflow-y-auto"
-            >
-              <div className="flex justify-between items-center mb-8">
-                <span className="text-white font-bold text-lg">HUB Surface Systems</span>
-                <button
-                  onClick={() => setMobileOpen(false)}
-                  className="flex items-center justify-center w-11 h-11 rounded-full text-white hover:bg-white/10 transition-colors"
-                  aria-label="Close menu"
-                >
-                  <X size={22} />
-                </button>
-              </div>
-              <nav className="flex flex-col flex-1">
-              {/* Products accordion */}
-              <div className="border-b border-zinc-800">
-                <button
-                  className="flex items-center justify-between w-full py-4 min-h-[56px] text-xl font-semibold text-white"
-                  onClick={() => setMobileExpanded(mobileExpanded === "products" ? null : "products")}
-                  aria-expanded={mobileExpanded === "products"}
-                >
-                  Products
-                  <ChevronDown size={18} className={`transition-transform duration-200 ${mobileExpanded === "products" ? "rotate-180" : ""}`} />
-                </button>
-                <AnimatePresence>
-                  {mobileExpanded === "products" && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1, transition: { duration: 0.18 } }}
-                      exit={{ height: 0, opacity: 0, transition: { duration: 0.13 } }}
-                      className="overflow-hidden pl-4 pb-4"
-                    >
-                      {products.map((p) => (
-                        <Link key={p.slug} href={`/products/${p.slug}`}
-                          onClick={() => setMobileOpen(false)}
-                          className="block py-2 text-base text-zinc-400 hover:text-white">
-                          {p.name}
-                        </Link>
-                      ))}
-                      <Link href="/products"
-                        onClick={() => setMobileOpen(false)}
-                        className="block py-2 text-sm font-semibold text-orange-500">
-                        View all products →
-                      </Link>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* Applications accordion */}
-              <div className="border-b border-zinc-800">
-                <button
-                  className="flex items-center justify-between w-full py-4 min-h-[56px] text-xl font-semibold text-white"
-                  onClick={() => setMobileExpanded(mobileExpanded === "applications" ? null : "applications")}
-                  aria-expanded={mobileExpanded === "applications"}
-                >
-                  Applications
-                  <ChevronDown size={18} className={`transition-transform duration-200 ${mobileExpanded === "applications" ? "rotate-180" : ""}`} />
-                </button>
-                <AnimatePresence>
-                  {mobileExpanded === "applications" && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1, transition: { duration: 0.18 } }}
-                      exit={{ height: 0, opacity: 0, transition: { duration: 0.13 } }}
-                      className="overflow-hidden pl-4 pb-4"
-                    >
-                      {applications.map((app) => (
-                        <Link key={app.slug} href={`/applications/${app.slug}`}
-                          onClick={() => setMobileOpen(false)}
-                          className="block py-2 text-base text-zinc-400 hover:text-white">
-                          {app.name}
-                        </Link>
-                      ))}
-                      <Link href="/applications"
-                        onClick={() => setMobileOpen(false)}
-                        className="block py-2 text-sm font-semibold text-orange-500">
-                        View all applications →
-                      </Link>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* Plain links */}
-              {PLAIN_LINKS.map((link) => {
-                const active = pathname === link.href || pathname.startsWith(link.href + "/");
-                return (
-                  <Link key={link.href} href={link.href}
-                    onClick={() => setMobileOpen(false)}
-                    className="block py-4 min-h-[56px] text-xl font-semibold border-b border-zinc-800 flex items-center"
-                    style={{ color: active ? "#f97316" : "white" }}>
-                    {link.label}
-                  </Link>
-                );
-              })}
-              </nav>
-
-              <div className="mt-auto pt-6">
-                <Link
-                  href="/lunch-learn"
-                  onClick={() => setMobileOpen(false)}
-                  className="block w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 text-center rounded-lg transition-colors"
-                >
-                  Book Lunch &amp; Learn
-                </Link>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </nav>
 
-      {/* Mega menu panels — rendered outside nav to avoid stacking context issues */}
+      {/* Mobile full-screen overlay — outside nav to avoid stacking context issues */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <MobileOverlay
+            onClose={() => setMobileOpen(false)}
+            mobileExpanded={mobileExpanded}
+            setMobileExpanded={setMobileExpanded}
+            pathname={pathname}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Desktop mega menu panels — rendered outside nav */}
       <AnimatePresence mode="wait">
         {activePanel === "products" && (
           <ProductsPanel

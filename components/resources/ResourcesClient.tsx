@@ -5,7 +5,7 @@ import { FileText, Download, Search, X, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import type { ResourceDocument } from "@/lib/resource-documents";
 
-const TABS = ["All", "By Product", "By Document Type"] as const;
+const TABS = ["By Product", "By Document Type"] as const;
 type TabType = (typeof TABS)[number];
 
 const DOCUMENT_TYPE_FILTERS = [
@@ -121,7 +121,7 @@ export default function ResourcesClient({
   documents: ResourceDocument[];
 }) {
   const [search, setSearch] = useState("");
-  const [activeTab, setActiveTab] = useState<TabType>("All");
+  const [activeTab, setActiveTab] = useState<TabType>("By Product");
   const [productFilter, setProductFilter] = useState("all");
   const [subcategoryFilter, setSubcategoryFilter] = useState("all");
   const [typeFilter, setTypeFilter] = useState("All");
@@ -339,8 +339,8 @@ export default function ResourcesClient({
       {/* ── Document Grid ────────────────────────────────── */}
       {visible.length > 0 ? (
         <>
-          {/* Group by product when All tab + no type filter */}
-          {activeTab === "All" && typeFilter === "All" && !search ? (
+          {/* Group by product when By Product tab + no product selected + no type filter */}
+          {activeTab === "By Product" && productFilter === "all" && typeFilter === "All" && !search ? (
             (() => {
               const grouped: Record<string, ResourceDocument[]> = {};
               for (const doc of visible) {

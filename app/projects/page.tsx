@@ -9,7 +9,7 @@ import Footer from "@/components/sections/Footer";
 import GalleryGrid, { type GalleryImage } from "@/components/ui/GalleryGrid";
 import { projects } from "@/lib/projects";
 
-type FilterType = "all" | "product" | "application" | "province";
+type FilterType = "all" | "product" | "application";
 
 const truncate = (str: string, n: number) =>
   str.length > n ? str.slice(0, str.lastIndexOf(" ", n)) + "..." : str;
@@ -19,8 +19,6 @@ export default function ProjectsPage() {
 
   const productList = [...new Set(projects.map((p) => p.product))];
   const appTypes = [...new Set(projects.map((p) => p.application))];
-  const provinces = [...new Set(projects.map((p) => p.province))];
-
   const allGalleryImages: GalleryImage[] = projects.map((p) => ({
     src: p.imageUrl,
     alt: p.title,
@@ -31,7 +29,6 @@ export default function ProjectsPage() {
     if (filter.type === "all") return projects;
     if (filter.type === "product") return projects.filter((p) => p.product === filter.value);
     if (filter.type === "application") return projects.filter((p) => p.application === filter.value);
-    if (filter.type === "province") return projects.filter((p) => p.province === filter.value);
     return projects;
   }, [filter]);
 
@@ -74,10 +71,6 @@ export default function ProjectsPage() {
           <span className="text-xs self-center px-2" style={{ color: "#333" }}>Application:</span>
           {appTypes.map((a) => (
             <FilterBtn key={a} label={a} active={filter.type === "application" && filter.value === a} onClick={() => setFilter({ type: "application", value: a })} />
-          ))}
-          <span className="text-xs self-center px-2" style={{ color: "#333" }}>Province:</span>
-          {provinces.map((prov) => (
-            <FilterBtn key={prov} label={prov} active={filter.type === "province" && filter.value === prov} onClick={() => setFilter({ type: "province", value: prov })} />
           ))}
         </div>
 

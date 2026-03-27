@@ -8,7 +8,7 @@ import { productImages, resolveImage } from "@/lib/featured-images";
 
 export default function ProductsGrid() {
   return (
-    <section className="py-24" style={{ background: "var(--bg-slate)" }}>
+    <section className="py-24" style={{ background: "#1C1F23" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Section header */}

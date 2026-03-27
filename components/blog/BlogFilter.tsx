@@ -4,9 +4,7 @@ import { useState, useMemo, useCallback, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Search, X, ChevronDown } from "lucide-react";
 import BlogCard from "./BlogCard";
-import type { PostMeta, PostCategory } from "@/lib/mdx";
-
-const CATEGORIES: PostCategory[] = ["Blog", "Case Study", "Project Profile", "White Paper"];
+import type { PostMeta } from "@/lib/mdx";
 
 interface Props {
   posts: PostMeta[];
@@ -18,22 +16,20 @@ export default function BlogFilter({ posts, allProducts }: Props) {
   const searchParams = useSearchParams();
 
   const [search, setSearch]     = useState(() => searchParams.get("search") ?? "");
-  const [category, setCategory] = useState<PostCategory | "all">(() => (searchParams.get("category") as PostCategory) ?? "all");
   const [product, setProduct]   = useState(() => searchParams.get("product") ?? "all");
   const [sort, setSort]         = useState<"newest" | "oldest" | "az">(() => (searchParams.get("sort") as "newest" | "oldest" | "az") ?? "newest");
 
   const pushParams = useCallback(
     (overrides: Record<string, string>) => {
       const params = new URLSearchParams();
-      const state = { search, category, product, sort, ...overrides };
-      if (state.search)           params.set("search",   state.search);
-      if (state.category !== "all") params.set("category", state.category);
-      if (state.product !== "all")  params.set("product",  state.product);
-      if (state.sort !== "newest")  params.set("sort",     state.sort);
+      const state = { search, product, sort, ...overrides };
+      if (state.search)            params.set("search",   state.search);
+      if (state.product !== "all") params.set("product",  state.product);
+      if (state.sort !== "newest") params.set("sort",     state.sort);
       const qs = params.toString();
       router.replace(qs ? `/blog?${qs}` : "/blog", { scroll: false });
     },
-    [search, category, product, sort, router]
+    [search, product, sort, router]
   );
 
   useEffect(() => {
@@ -46,10 +42,10 @@ export default function BlogFilter({ posts, allProducts }: Props) {
     pushParams({ [key]: value });
   }
 
-  const hasFilters = search !== "" || category !== "all" || product !== "all" || sort !== "newest";
+  const hasFilters = search !== "" || product !== "all" || sort !== "newest";
 
   function clearFilters() {
-    setSearch(""); setCategory("all"); setProduct("all"); setSort("newest");
+    setSearch(""); setProduct("all"); setSort("newest");
     router.replace("/blog", { scroll: false });
   }
 
@@ -59,12 +55,11 @@ export default function BlogFilter({ posts, allProducts }: Props) {
       const q = search.toLowerCase();
       result = result.filter((p) => p.title.toLowerCase().includes(q) || p.excerpt.toLowerCase().includes(q));
     }
-    if (category !== "all") result = result.filter((p) => p.category === category);
     if (product !== "all")  result = result.filter((p) => p.products.includes(product));
     if (sort === "oldest") result.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
     else if (sort === "az") result.sort((a, b) => a.title.localeCompare(b.title));
     return result;
-  }, [posts, search, category, product, sort]);
+  }, [posts, search, product, sort]);
 
   // Filter button — matches projects page style exactly
   const Btn = ({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) => (
@@ -90,12 +85,7 @@ export default function BlogFilter({ posts, allProducts }: Props) {
         <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:flex-wrap sm:overflow-visible scrollbar-none"
           style={{ WebkitOverflowScrolling: "touch" }}
         >
-          <Btn label="All" active={category === "all" && product === "all"} onClick={() => { setAndSync(setCategory, "category", "all"); setAndSync(setProduct, "product", "all"); }} />
-
-          <span className="text-xs px-2" style={{ color: "#444" }}>Type:</span>
-          {CATEGORIES.map((cat) => (
-            <Btn key={cat} label={cat} active={category === cat} onClick={() => setAndSync(setCategory, "category", cat)} />
-          ))}
+          <Btn label="All" active={product === "all"} onClick={() => setAndSync(setProduct, "product", "all")} />
 
           <span className="text-xs px-2" style={{ color: "#444" }}>Product:</span>
           {allProducts.map((p) => (

@@ -34,6 +34,7 @@ export interface Application {
   description?: string[];
   relatedProducts?: string[];
   benefits?: string[];
+  relatedPost?: { slug: string; title: string; excerpt: string };
   col?: string;
 }
 
@@ -709,6 +710,11 @@ export const applications: Application[] = [
       "No joint maintenance — zero weeds, no sand topping, no shifting",
       "AODA-compliant slip resistance on all finished surfaces",
     ],
+    relatedPost: {
+      slug: "residential-driveways-stamped-asphalt",
+      title: "Why Stamped Asphalt Driveways Outperform Interlocking Stone",
+      excerpt: "Interlocking stone looks great on day one. Five years in, the weeds are growing through the joints. Here's the honest comparison.",
+    },
     col: "",
   },
   {

@@ -8,6 +8,7 @@ import WhyHubss from "@/components/sections/WhyHubss";
 import PersonaEntryPoints from "@/components/sections/PersonaEntryPoints";
 import ProductsGrid from "@/components/sections/ProductsGrid";
 import ApplicationsGrid from "@/components/sections/ApplicationsGrid";
+import ResidentialDriveways from "@/components/sections/ResidentialDriveways";
 import ComparisonTable from "@/components/sections/ComparisonTable";
 import RecentProjects from "@/components/sections/RecentProjects";
 import InstagramStrip from "@/components/sections/InstagramStrip";
@@ -69,6 +70,8 @@ export default function Home() {
       <ProductsGrid />
       {/* dark → slate */}
       <ApplicationsGrid />
+      {/* Residential Driveways feature — grid bg */}
+      <ResidentialDriveways />
       {/* slate → off-white */}
       <ComparisonTable />
       {/* off-white → off-white */}

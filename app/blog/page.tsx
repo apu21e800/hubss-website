@@ -27,7 +27,7 @@ export default function BlogPage() {
     .map(([name]) => name);
 
   return (
-    <main className="min-h-screen bg-[var(--bg-dark)]">
+    <main className="min-h-screen" style={{ background: "#0f1620" }}>
       <Nav />
 
       <div className="max-w-7xl mx-auto px-6 pt-32 pb-24">

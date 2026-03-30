@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function ResourcesPage() {
   return (
-    <main className="min-h-screen" style={{ background: "#0A0A0A" }}>
+    <main className="min-h-screen" style={{ background: "#0f1620" }}>
       <Nav />
 
       {/* ── Dark Page Header ──────────────────────────────── */}
@@ -29,8 +29,8 @@ export default function ResourcesPage() {
         </p>
       </div>
 
-      {/* ── Document Library — dark grid background ──────── */}
-      <section className="bg-grid-dark relative overflow-hidden">
+      {/* ── Document Library — dot-grid background ───────── */}
+      <section className="bg-dot-grid-dark relative overflow-hidden">
         {/* Orange radial glow — soft, offset to bottom-left */}
         <div
           className="absolute pointer-events-none"

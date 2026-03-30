@@ -67,10 +67,10 @@ export default function BlogFilter({ posts, allProducts }: Props) {
       onClick={onClick}
       className="text-xs font-semibold px-4 py-2 rounded transition-all"
       style={{
-        background:   active ? "#f97316" : "var(--bg-card-surface)",
-        color:        active ? "#fff"    : "var(--text-secondary)",
+        background:   active ? "#f97316" : "#1a1e28",
+        color:        active ? "#fff"    : "#8b8b8b",
         border:       "1px solid",
-        borderColor:  active ? "#f97316" : "var(--border-subtle)",
+        borderColor:  active ? "#f97316" : "rgba(255,255,255,0.07)",
       }}
     >
       {label}
@@ -96,14 +96,14 @@ export default function BlogFilter({ posts, allProducts }: Props) {
         {/* Search + sort */}
         <div className="flex gap-3">
           <div className="relative flex-1 max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-600 pointer-events-none" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none" style={{ color: "#5a5a5a" }} />
             <input
               type="text"
               placeholder="Search..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full pl-8 pr-7 py-2 rounded text-xs"
-              style={{ background: "var(--bg-card-surface)", border: "1px solid var(--border-subtle)", color: "var(--text-primary)" }}
+              style={{ background: "#1a1e28", border: "1px solid rgba(255,255,255,0.07)", color: "#ffffff" }}
             />
             {search && (
               <button onClick={() => { setSearch(""); pushParams({ search: "" }); }} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-400">
@@ -117,13 +117,13 @@ export default function BlogFilter({ posts, allProducts }: Props) {
               value={sort}
               onChange={(e) => setAndSync(setSort, "sort", e.target.value as typeof sort)}
               className="appearance-none pl-3 pr-7 py-2 rounded text-xs cursor-pointer"
-              style={{ background: "var(--bg-card-surface)", border: "1px solid var(--border-subtle)", color: "var(--text-secondary)" }}
+              style={{ background: "#1a1e28", border: "1px solid rgba(255,255,255,0.07)", color: "#8b8b8b" }}
             >
               <option value="newest">Newest</option>
               <option value="oldest">Oldest</option>
               <option value="az">A – Z</option>
             </select>
-            <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3 text-gray-600 pointer-events-none" />
+            <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3 pointer-events-none" style={{ color: "#5a5a5a" }} />
           </div>
 
           {hasFilters && (

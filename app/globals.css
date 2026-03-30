@@ -5,8 +5,8 @@
   --font-geist: '';
   --font-inter: '';
 
-  /* ─── Primary background (softened black) ────────── */
-  --color-bg-primary: #1A1A1A;
+  /* ─── Primary background (HUBSS deep navy + blue-charcoal) ── */
+  --color-bg-primary: #0f1620;
 
   /* ─── Brand — never change between themes ───────── */
   --color-orange:   #F97316;
@@ -16,27 +16,32 @@
   --gradient-brand-subtle: linear-gradient(90deg, rgba(249,115,22,0.12) 0%, rgba(234,179,8,0.12) 100%);
   --gradient-glow:  0 0 20px rgba(249,115,22,0.25);
 
-  /* ─── Backgrounds ───────────────────────────────── */
-  --bg-primary:     #1a1a1a;
-  --bg-dark:        #0a0a0a;
-  --bg-slate:       #111C2D;
+  /* ─── Section backgrounds ────────────────────────────────── */
+  /* Blue territory — HUBSS brand identity */
+  --bg-primary:     #0f1620;   /* main page bg — blue-charcoal */
+  --bg-dark:        #0d1117;   /* deep navy — hero / footer / feature sections */
+  --bg-slate:       #111C2D;   /* blue accent sections */
   --bg-slate-light: #182436;
-  --bg-card:        #111111;
-  --bg-card-surface:#2d2d2d;
-  --bg-card-hover:  #27272a;
+
+  /* UI surfaces — Claude grey system, sitting ON the blue world */
+  --bg-neutral:        #141414;  /* warm neutral anchor — stats/utility sections */
+  --bg-card:           #1a1e28;  /* card on dark-blue bg — bridges both worlds */
+  --bg-card-surface:   #222838;  /* card hover on dark-blue bg */
+  --bg-card-hover:     #222838;
+  --bg-card-neutral:   #1e1e1e;  /* card on neutral/grey bg — resources, docs */
 
   /* ─── Text ──────────────────────────────────────── */
-  --text-primary:   #F5F0EB;
-  --text-body:      #E5E7EB;
-  --text-secondary: #9CA3AF;
-  --text-muted:     #6B7280;
-  --text-faint:     #4B5563;
-  --text-hint:      #374151;
+  --text-primary:   #ffffff;
+  --text-body:      #e0e0e0;
+  --text-secondary: #8b8b8b;
+  --text-muted:     #5a5a5a;
+  --text-faint:     #3a3a3a;
+  --text-hint:      #2a2a2a;
 
   /* ─── Borders ───────────────────────────────────── */
-  --border-color:   #27272a;
-  --border-subtle:  #1f1f1f;
-  --border-faint:   rgba(255,255,255,0.05);
+  --border-color:   rgba(255,255,255,0.07);  /* on dark-blue bg */
+  --border-subtle:  rgba(255,255,255,0.05);
+  --border-faint:   rgba(255,255,255,0.03);
 
   /* ─── Deep blue — engineering / credential tone ─────── */
   --color-blue-deep:  #111C2D;   /* same as --bg-slate — one uniform value */
@@ -160,7 +165,7 @@ p {
 /* ─── Asphalt texture background ─────────────────────── */
 /* Fallback: pure CSS noise pattern if asphalt-texture.jpg is missing */
 .bg-asphalt-subtle {
-  background-color: #1c1c1c;
+  background-color: #0f1620;
   background-image:
     url('/images/textures/asphalt-texture.jpg'),
     radial-gradient(circle at 20% 30%, rgba(255,255,255,0.02) 0%, transparent 50%),
@@ -419,13 +424,27 @@ p {
   background-size: 32px 32px;
 }
 
-/* ─── Dark grid section — documents library ──────────── */
+/* ─── Dark grid section — line grid (legacy) ─────────── */
 .bg-grid-dark {
-  background-color: #0A0A0A;
+  background-color: #0d1117;
   background-image:
-    linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+    linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
   background-size: 32px 32px;
+}
+
+/* ─── Dot-grid — documents library / resources ────────── */
+/* Refined dot pattern: 20px spacing, 1px dots, 4% opacity */
+.bg-dot-grid-dark {
+  background-color: #141414;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.bg-dot-grid-blue {
+  background-color: #0f1620;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 20px 20px;
 }
 
 /* ─── Hero always-dark override (theme-agnostic) ─────── */

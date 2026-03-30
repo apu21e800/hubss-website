@@ -84,9 +84,9 @@ const PAGE_SIZE = 12;
 function DocCard({ doc }: { doc: ResourceDocument }) {
   return (
     <div
-      className="group rounded-xl p-5 flex flex-col justify-between transition-all duration-200 hover:shadow-[0_4px_24px_rgba(249,115,22,0.1)] hover:-translate-y-0.5"
+      className="group rounded-xl p-5 flex flex-col justify-between transition-all duration-200 hover:shadow-[0_4px_24px_rgba(249,115,22,0.08)] hover:-translate-y-0.5"
       style={{
-        background: "#111111",
+        background: "#1e1e1e",
         border: "1px solid rgba(255,255,255,0.08)",
       }}
     >
@@ -94,7 +94,7 @@ function DocCard({ doc }: { doc: ResourceDocument }) {
         <span className={`inline-block text-xs font-semibold px-2.5 py-1 rounded-md border mb-4 ${typeBadgeClasses(doc.type)}`}>
           {doc.type}
         </span>
-        <h3 className="font-semibold leading-snug mb-2" style={{ color: "#F5F0EB" }}>{doc.title}</h3>
+        <h3 className="font-semibold leading-snug mb-2" style={{ color: "#ffffff" }}>{doc.title}</h3>
         <span
           className="inline-block text-xs px-2 py-0.5 rounded-full border"
           style={{ color: "#f97316", background: "rgba(249,115,22,0.12)", borderColor: "rgba(249,115,22,0.2)" }}
@@ -104,21 +104,25 @@ function DocCard({ doc }: { doc: ResourceDocument }) {
       </div>
       <div
         className="flex items-center justify-between mt-5 pt-4"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}
+        style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
       >
-        <div className="flex items-center gap-3 text-xs" style={{ color: "#6B7280" }}>
+        <div className="flex items-center gap-3 text-xs" style={{ color: "#5a5a5a" }}>
           <span>{doc.fileSize}</span>
-          <span className="w-1 h-1 rounded-full bg-zinc-600" />
+          <span className="w-1 h-1 rounded-full" style={{ background: "#3a3a3a" }} />
           <span>{doc.updatedDate}</span>
         </div>
         <a
           href={doc.fileUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-1.5 text-sm font-medium transition-colors hover:text-[#F97316]"
-          style={{ color: "#6B7280" }}
+          className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-all duration-200 hover:text-[#F97316] hover:border-orange-500/30"
+          style={{
+            color: "#8b8b8b",
+            border: "1px solid rgba(255,255,255,0.10)",
+            background: "transparent",
+          }}
         >
-          <Download className="w-4 h-4" />
+          <Download className="w-3.5 h-3.5" />
           <span className="hidden sm:inline">Download</span>
         </a>
       </div>
@@ -194,9 +198,9 @@ export default function ResourcesClient({
   }
 
   const selectStyle = {
-    background: "#111111",
-    border: "1px solid rgba(255,255,255,0.12)",
-    color: "#D1D5DB",
+    background: "#1e1e1e",
+    border: "1px solid rgba(255,255,255,0.10)",
+    color: "#e0e0e0",
   };
 
   return (

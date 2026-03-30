@@ -436,11 +436,11 @@ p {
 /* ─── Dot-grid — documents library / resources ────────── */
 /* Refined dot pattern: 20px spacing, 1px dots, 4% opacity */
 .bg-dot-grid-dark {
-  background-color: #191919;
+  background-color: #1a1a1a;
   background-image:
-    linear-gradient(rgba(255,255,255,0.055) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.055) 1px, transparent 1px);
-  background-size: 36px 36px;
+    linear-gradient(rgba(255,255,255,0.048) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.048) 1px, transparent 1px);
+  background-size: 28px 28px;
 }
 
 .bg-dot-grid-blue {

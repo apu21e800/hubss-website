@@ -6,9 +6,34 @@ import Image from "next/image";
 
 export const metadata = buildMetadata({
   title: "About HUB Surface Systems",
-  description: "30 years enabling Canadian streets, crosswalks, and public spaces. Two regional offices — Milton, Ontario and Ladysmith, BC — serving all 10 provinces.",
+  description: "30+ years making Canadian streets better. Two regional offices serving every province — we're the people who made your city look like your city.",
   slug: "about",
 });
+
+const stats = [
+  { value: "30+", label: "Years in Business" },
+  { value: "500+", label: "Projects Completed" },
+  { value: "10", label: "Provinces Served" },
+  { value: "2", label: "Regional Offices" },
+];
+
+const values = [
+  {
+    heading: "What We Build",
+    body:
+      "Decorative crosswalks, civic plazas, community murals, transit lanes, private driveways, and parks. Surface solutions that carry meaning — from high-visibility school zones in Milton to Indigenous art installations in Sechelt.",
+  },
+  {
+    heading: "Who We Build For",
+    body:
+      "Municipalities, landscape architects, urban planners, developers, and certified contractors across every Canadian province. If it&apos;s a surface that people walk, drive, or gather on — we have a system for it.",
+  },
+  {
+    heading: "Why It Matters",
+    body:
+      "Beautiful streets make walkable cities. Legible surfaces slow cars. Identity-rich public spaces build community. This isn&apos;t just infrastructure — it&apos;s the civic layer that tells a city it&apos;s worth caring about.",
+  },
+];
 
 const differentiators = [
   { title: "Flexibility vs Concrete", desc: "Asphalt-based systems flex with Canada's freeze-thaw cycles, outlasting concrete alternatives by 2–3x in northern climates." },
@@ -21,99 +46,148 @@ const differentiators = [
 
 export default function AboutPage() {
   return (
-    <main style={{ background: "#0A0A0A", minHeight: "100vh" }}>
+    <main style={{ background: "#0f1620", minHeight: "100vh" }}>
       <Nav />
 
-      {/* Hero */}
-      <div className="relative overflow-hidden">
-        {/* HUB Wheel watermark — bottom-right of hero, very subtle */}
+      {/* ── Hero ───────────────────────────────────────────── */}
+      <div className="relative overflow-hidden" style={{ background: "#0d1117" }}>
+        {/* Orange accent underline */}
+        <div
+          className="absolute bottom-0 left-0 right-0 h-[2px] pointer-events-none"
+          style={{ background: "linear-gradient(90deg, #F97316 0%, transparent 60%)" }}
+          aria-hidden="true"
+        />
+        {/* HUB Wheel watermark */}
         <div
           className="absolute bottom-0 right-0 pointer-events-none"
-          style={{ width: 460, height: 460, opacity: 0.07 }}
+          style={{ width: 520, height: 520, opacity: 0.05 }}
           aria-hidden="true"
         >
-          <Image
-            src="/images/hub-wheel-orange.png"
-            alt=""
-            width={460}
-            height={460}
-            unoptimized
-          />
+          <Image src="/images/hub-wheel-orange.png" alt="" width={520} height={520} unoptimized />
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-20 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-24 relative">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "#f97316" }}>
             About HUB Surface Systems
           </p>
-          <h1 className="text-6xl md:text-7xl font-bold mb-8 leading-tight max-w-3xl" style={{ color: "var(--text-primary)" }}>
-            Thirty Years of Making Canadian Streets Better
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight max-w-4xl" style={{ color: "#ffffff" }}>
+            The people who made your city look like your city.
           </h1>
-          <p className="text-xl leading-relaxed max-w-2xl" style={{ color: "var(--text-body)" }}>
-            HUB Surface Systems connects Canadian design professionals with the world&apos;s leading pavement technologies — and provides the local expertise to specify and install them right.
+          <p className="text-xl leading-relaxed max-w-2xl" style={{ color: "#8b8b8b" }}>
+            For over thirty years, HUB Surface Systems has been connecting Canadian communities
+            with pavement technologies that do more than carry traffic — they carry identity.
           </p>
         </div>
       </div>
 
-      {/* Story */}
-      <div className="py-28" style={{ background: "#111111" }}>
+      {/* ── Stats Bar ───────────────────────────────────────── */}
+      <div style={{ background: "#141414", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4">
+            {stats.map((s, i) => (
+              <div
+                key={s.label}
+                className="py-10 px-6 flex flex-col items-center text-center"
+                style={i < stats.length - 1 ? { borderRight: "1px solid rgba(255,255,255,0.06)" } : {}}
+              >
+                <span className="text-4xl md:text-5xl font-bold mb-2" style={{ color: "#f97316" }}>
+                  {s.value}
+                </span>
+                <span className="text-xs font-semibold tracking-widest uppercase" style={{ color: "#5a5a5a" }}>
+                  {s.label}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Story ───────────────────────────────────────────── */}
+      <div className="py-28" style={{ background: "#0f1620" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             <div>
-              <h2 className="text-3xl font-bold mb-6" style={{ color: "var(--text-primary)" }}>Our Story</h2>
-              <div className="space-y-4 text-base leading-relaxed" style={{ color: "var(--text-body)" }}>
+              <h2 className="text-3xl font-bold mb-6" style={{ color: "#ffffff" }}>Our Story</h2>
+              <div className="space-y-4 text-base leading-relaxed" style={{ color: "#e0e0e0" }}>
                 <p>
-                  HUB Surface Systems was founded with a simple belief: streets don&apos;t have to be grey.
-                  Canadian cities had spent decades treating pavement as pure utility — functional,
-                  forgettable, interchangeable. We saw an opportunity to change that.
+                  HUB Surface Systems was founded on a simple belief: streets don&apos;t have to be grey.
+                  For decades, Canadian cities treated pavement as pure utility — functional, forgettable,
+                  interchangeable. We saw an opportunity to change that, starting with StreetPrint
+                  decorative stamped asphalt in the mid-1990s.
                 </p>
                 <p>
-                  Starting with StreetPrint decorative stamped asphalt in the mid-1990s, we grew
-                  our product portfolio to address every surface application challenge a Canadian
-                  municipality might face — from high-traffic arterial markings to decorative
-                  community crosswalks to Indigenous art installations.
+                  Over thirty years, we grew our portfolio to address every surface challenge a Canadian
+                  municipality might face — from high-traffic arterial markings in York Region to
+                  decorative community crosswalks at UBC to Indigenous art installations on BC ferries.
+                  Every city, every application, every climate.
                 </p>
                 <p>
-                  Today, HUB operates from two regional offices — East in Milton, Ontario, and West
-                  in Ladysmith, British Columbia — serving municipalities, developers, and contractors
-                  in every province. Our products have enabled thousands of intersections, plazas,
-                  driveways, and public spaces across the country.
-                </p>
-                <p>
-                  Behind every HUB installation is a network of certified applicators — trained, assessed,
-                  and authorized by HUB to install each product system to spec. This credentialed installer
-                  program is what turns a quality product into a quality outcome, and what backs every
-                  warranty we issue.
+                  Today, HUB operates from two regional offices — East in Milton, Ontario, and West in
+                  Ladysmith, British Columbia — backed by a network of certified applicators trained and
+                  authorized by HUB to install each system to spec. That credentialed installer program
+                  is what turns a quality product into a quality outcome.
                 </p>
               </div>
             </div>
             <div>
-              <h2 className="text-3xl font-bold mb-6" style={{ color: "var(--text-primary)" }}>Our Mission</h2>
-              <p className="text-xl leading-relaxed mb-4" style={{ color: "var(--text-primary)", borderLeft: "3px solid #f97316", paddingLeft: "24px" }}>
+              <h2 className="text-3xl font-bold mb-6" style={{ color: "#ffffff" }}>Our Mission</h2>
+              <p
+                className="text-xl leading-relaxed mb-4"
+                style={{ color: "#ffffff", borderLeft: "3px solid #f97316", paddingLeft: "24px" }}
+              >
                 &ldquo;Every surface tells a story. We give communities the language to write it.&rdquo;
               </p>
-              <p className="text-sm mb-8" style={{ color: "var(--text-muted)", paddingLeft: "24px" }}>
+              <p className="text-sm mb-8" style={{ color: "#5a5a5a", paddingLeft: "24px" }}>
                 — HUB Surface Systems
               </p>
-              <p className="text-base leading-relaxed" style={{ color: "var(--text-body)" }}>
-                We believe that the quality of a community&apos;s public spaces reflects its values.
-                When streets are beautiful, accessible, and legible, people use them differently —
-                they walk more, drive slower, and feel more connected to where they live.
-                Every HUB installation is a contribution to a more livable Canada.
+              <p className="text-base leading-relaxed" style={{ color: "#e0e0e0" }}>
+                York Region. City of Toronto. City of Vancouver. UBC. The City of Sechelt.
+                When you walk through a Canadian city and feel something — when a crosswalk
+                catches your eye, when a plaza feels like it belongs — there&apos;s a chance we were
+                there. That&apos;s what thirty years looks like on the ground.
               </p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Offices */}
-      <div className="py-20" style={{ background: "#0A0A0A" }}>
+      {/* ── Values — 3 columns ─────────────────────────────── */}
+      <div style={{ background: "#141414", borderTop: "1px solid rgba(255,255,255,0.05)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+          <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-12" style={{ color: "#f97316" }}>
+            What We Stand For
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-0" style={{ border: "1px solid rgba(255,255,255,0.06)", borderRadius: "16px", overflow: "hidden" }}>
+            {values.map((v, i) => (
+              <div
+                key={v.heading}
+                className="p-8 md:p-10"
+                style={{
+                  background: "#1a1e28",
+                  borderRight: i < values.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none",
+                }}
+              >
+                <div className="w-8 h-[2px] mb-6" style={{ background: "#f97316" }} />
+                <h3 className="text-lg font-bold mb-4" style={{ color: "#ffffff" }}>{v.heading}</h3>
+                <p
+                  className="text-sm leading-relaxed"
+                  style={{ color: "#8b8b8b" }}
+                  dangerouslySetInnerHTML={{ __html: v.body }}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Offices ─────────────────────────────────────────── */}
+      <div className="py-20" style={{ background: "#0f1620" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold mb-10" style={{ color: "var(--text-primary)" }}>Regional Offices</h2>
+          <h2 className="text-3xl font-bold mb-10" style={{ color: "#ffffff" }}>Regional Offices</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
               {
                 region: "East Office",
-                territory: "Eastern Canada",
                 city: "Milton, Ontario",
                 contact: "Doug Bain",
                 email: "doug.bain@hubss.com",
@@ -122,7 +196,6 @@ export default function AboutPage() {
               },
               {
                 region: "West Office",
-                territory: "Western Canada",
                 city: "Ladysmith, British Columbia",
                 contact: "Cleve Stordy",
                 email: "cleve.stordy@hubss.com",
@@ -133,89 +206,85 @@ export default function AboutPage() {
               <div
                 key={office.region}
                 className="p-8 rounded-xl relative overflow-hidden"
-                style={{ background: "#161616", border: "1px solid rgba(255,255,255,0.08)" }}
+                style={{ background: "#1a1e28", border: "1px solid rgba(255,255,255,0.07)" }}
               >
-                <div
-                  className="absolute top-0 left-0 right-0 h-0.5"
-                  style={{ background: "#f97316" }}
-                />
+                <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "#f97316" }} />
                 <p className="text-xs font-semibold tracking-widest uppercase mb-3" style={{ color: "#f97316" }}>
                   {office.region}
                 </p>
-                <h3 className="text-xl font-bold mb-1" style={{ color: "var(--text-primary)" }}>{office.city}</h3>
-                <p className="text-sm mb-5" style={{ color: "#d1d5db" /* keep as-is */ }}>{office.contact}</p>
-
-                {/* Province tags */}
+                <h3 className="text-xl font-bold mb-1" style={{ color: "#ffffff" }}>{office.city}</h3>
+                <p className="text-sm mb-5" style={{ color: "#8b8b8b" }}>{office.contact}</p>
                 <div className="flex flex-wrap gap-1.5 mb-6">
                   {office.provinces.map((prov) => (
                     <span
                       key={prov}
                       className="text-xs font-bold px-2 py-0.5 rounded"
-                      style={{ background: "rgba(249,115,22,0.1)", color: "#f97316", border: "1px solid rgba(249,115,22,0.2)" }}
+                      style={{ background: "rgba(249,115,22,0.10)", color: "#f97316", border: "1px solid rgba(249,115,22,0.20)" }}
                     >
                       {prov}
                     </span>
                   ))}
                 </div>
-
                 <a
                   href={`mailto:${office.email}`}
                   className="text-sm block mb-1.5 transition-colors hover:text-[#f97316]"
-                  style={{ color: "#d1d5db" /* keep as-is */ }}
+                  style={{ color: "#e0e0e0" }}
                 >
                   {office.email}
                 </a>
                 <a
                   href={`tel:${office.phone.replace(/-/g, "")}`}
                   className="text-sm transition-colors hover:text-[#f97316]"
-                  style={{ color: "#d1d5db" /* keep as-is */ }}
+                  style={{ color: "#e0e0e0" }}
                 >
                   {office.phone}
                 </a>
               </div>
             ))}
           </div>
-          <p className="text-center text-sm mt-8" style={{ color: "#d1d5db" /* keep as-is */ }}>
+          <p className="text-center text-sm mt-8" style={{ color: "#5a5a5a" }}>
             Serving all 10 provinces and 3 territories
           </p>
         </div>
       </div>
 
-      {/* Why HUB */}
-      <div className="py-28" style={{ background: "#111111" }}>
+      {/* ── Why HUB ─────────────────────────────────────────── */}
+      <div className="py-28" style={{ background: "#0d1117" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold mb-12" style={{ color: "var(--text-primary)" }}>Why HUB</h2>
+          <h2 className="text-3xl font-bold mb-12" style={{ color: "#ffffff" }}>Why HUB</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {differentiators.map((d) => (
-              <div key={d.title} className="p-8 rounded-xl" style={{ background: "#161616", border: "1px solid rgba(255,255,255,0.08)" }}>
+              <div
+                key={d.title}
+                className="p-8 rounded-xl"
+                style={{ background: "#1a1e28", border: "1px solid rgba(255,255,255,0.07)" }}
+              >
                 <div className="w-8 h-0.5 mb-5" style={{ background: "#f97316" }} />
-                <h3 className="font-bold text-lg mb-3" style={{ color: "var(--text-primary)" }}>{d.title}</h3>
-                <p className="text-[15px] leading-relaxed" style={{ color: "var(--text-body)" }}>{d.desc}</p>
+                <h3 className="font-bold text-lg mb-3" style={{ color: "#ffffff" }}>{d.title}</h3>
+                <p className="text-[15px] leading-relaxed" style={{ color: "#8b8b8b" }}>{d.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Manufacturer Partners */}
-      <div className="py-20" style={{ background: "#0A0A0A" }}>
+      {/* ── Manufacturer Partners ────────────────────────────── */}
+      <div className="py-20" style={{ background: "#0f1620" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "#f97316" }}>
             Manufacturer Partners
           </p>
-          <h2 className="text-3xl font-bold mb-6" style={{ color: "var(--text-primary)" }}>
+          <h2 className="text-3xl font-bold mb-6" style={{ color: "#ffffff" }}>
             Backed by Industry Leaders
           </h2>
-          <p className="text-base leading-relaxed max-w-2xl mb-8" style={{ color: "var(--text-body)" }}>
-            HUB Surface Systems is an authorized distributor and applicator partner for the manufacturers
-            behind our core product systems. These partnerships give our clients access to the broadest
-            product portfolio in the Canadian decorative pavement market — with direct manufacturer
-            technical support and warranty backing.
+          <p className="text-base leading-relaxed max-w-2xl mb-8" style={{ color: "#8b8b8b" }}>
+            HUB is an authorized distributor and applicator partner for the manufacturers behind
+            our core product systems — giving clients access to the broadest decorative pavement
+            portfolio in Canada, with direct manufacturer technical support and warranty backing.
           </p>
 
-          {/* Trusted Partners logo strip */}
-          <div className="py-8 mb-8 border-t border-b" style={{ borderColor: "var(--border-subtle)" }}>
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-center mb-8" style={{ color: "var(--text-faint)" }}>
+          <div className="py-8 mb-8 border-t border-b" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
+            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-center mb-8" style={{ color: "#3a3a3a" }}>
               Manufacturer Partners
             </p>
             <div className="flex items-center justify-center gap-20 flex-wrap">
@@ -225,8 +294,8 @@ export default function AboutPage() {
                   width={100}
                   height={40}
                   alt="PPG"
-                  className="opacity-50 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300 object-contain"
-                  style={{ maxHeight: '40px', width: 'auto' }}
+                  className="opacity-40 grayscale hover:opacity-80 hover:grayscale-0 transition-all duration-300 object-contain"
+                  style={{ maxHeight: "40px", width: "auto" }}
                   unoptimized
                 />
               </div>
@@ -236,13 +305,14 @@ export default function AboutPage() {
                   width={100}
                   height={40}
                   alt="GAF"
-                  className="opacity-50 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300 object-contain"
-                  style={{ maxHeight: '40px', width: 'auto' }}
+                  className="opacity-40 grayscale hover:opacity-80 hover:grayscale-0 transition-all duration-300 object-contain"
+                  style={{ maxHeight: "40px", width: "auto" }}
                   unoptimized
                 />
               </div>
             </div>
           </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
               {
@@ -261,19 +331,16 @@ export default function AboutPage() {
               <div
                 key={partner.name}
                 className="p-8 rounded-xl relative overflow-hidden"
-                style={{ background: "#161616", border: "1px solid rgba(255,255,255,0.08)" }}
+                style={{ background: "#1a1e28", border: "1px solid rgba(255,255,255,0.07)" }}
               >
-                <div
-                  className="absolute top-0 left-0 right-0 h-0.5"
-                  style={{ background: partner.accent }}
-                />
+                <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: partner.accent }} />
                 <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: partner.accent }}>
                   {partner.role}
                 </p>
-                <h3 className="text-xl font-bold mb-4" style={{ color: "var(--text-primary)" }}>
+                <h3 className="text-xl font-bold mb-4" style={{ color: "#ffffff" }}>
                   {partner.name}
                 </h3>
-                <p className="text-sm leading-relaxed" style={{ color: "var(--text-body)" }}>
+                <p className="text-sm leading-relaxed" style={{ color: "#8b8b8b" }}>
                   {partner.desc}
                 </p>
               </div>

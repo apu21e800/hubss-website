@@ -14,7 +14,7 @@ export const metadata = buildMetadata({
 
 export default function ApplicationsPage() {
   return (
-    <main style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
+    <main style={{ background: "#0f1620", minHeight: "100vh" }}>
       <Nav />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24">
         <div className="mb-16 max-w-2xl">
@@ -34,7 +34,7 @@ export default function ApplicationsPage() {
             <Link
               key={app.slug}
               href={`/applications/${app.slug}`}
-              className="group relative overflow-hidden rounded block"
+              className="group relative overflow-hidden rounded-xl block"
               style={{ aspectRatio: "4/3" }}
             >
               <Image

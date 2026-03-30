@@ -48,7 +48,7 @@ export default function ProjectsPage() {
   );
 
   return (
-    <main style={{ background: "#0A0A0A", minHeight: "100vh" }}>
+    <main style={{ background: "#0f1620", minHeight: "100vh" }}>
       <Nav />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24">
         <div className="mb-14">
@@ -82,8 +82,8 @@ export default function ProjectsPage() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05 }}
-              className="group overflow-hidden rounded-lg relative transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(249,115,22,0.1)]"
-              style={{ background: "#111111", border: "1px solid rgba(255,255,255,0.08)" }}
+              className="group overflow-hidden rounded-xl relative transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(249,115,22,0.1)]"
+              style={{ background: "#1a1e28", border: "1px solid rgba(255,255,255,0.07)" }}
             >
               {/* Featured badge for first 2 */}
               {i < 2 && (

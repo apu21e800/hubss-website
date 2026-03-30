@@ -13,7 +13,7 @@ export const metadata = buildMetadata({
 
 export default function ProductsPage() {
   return (
-    <main style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
+    <main style={{ background: "#0f1620", minHeight: "100vh" }}>
       <Nav />
 
       {/*
@@ -103,8 +103,8 @@ export default function ProductsPage() {
                         <Link
                           key={product.slug}
                           href={`/products/${product.slug}`}
-                          className="group flex flex-col relative overflow-hidden rounded-lg transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(249,115,22,0.12)]"
-                          style={{ background: "var(--bg-card-surface)", border: "1px solid var(--border-subtle)" }}
+                          className="group flex flex-col relative overflow-hidden rounded-xl transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(249,115,22,0.12)]"
+                          style={{ background: "#1a1e28", border: "1px solid rgba(255,255,255,0.07)" }}
                         >
                           <div
                             className="absolute top-0 left-0 right-0 h-[2px] z-10"

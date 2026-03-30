@@ -419,6 +419,15 @@ p {
   background-size: 32px 32px;
 }
 
+/* ─── Dark grid section — documents library ──────────── */
+.bg-grid-dark {
+  background-color: #0A0A0A;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
 /* ─── Hero always-dark override (theme-agnostic) ─────── */
 /* Hero has a full-bleed image + black overlay — text stays white in all themes */
 .hero-section {

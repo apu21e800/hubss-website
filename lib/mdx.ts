@@ -16,6 +16,7 @@ export interface PostMeta {
   category: PostCategory;
   products: string[];
   applications: string[];
+  draft?: boolean;
 }
 
 export interface Post extends PostMeta {
@@ -103,8 +104,10 @@ export function getAllPosts(): PostMeta[] {
         category: (data.category as PostCategory) || inferCategory(slug, title, excerpt),
         products: (data.products as string[]) || inferProducts(title, excerpt),
         applications: (data.applications as string[]) || [],
+        draft: (data.draft as boolean) || false,
       };
     })
+    .filter((post) => !post.draft)
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 

@@ -29,16 +29,28 @@ export default function ResourcesPage() {
         </p>
       </div>
 
-      {/* ── Document Library — white grid background ──────── */}
-      <section className="bg-grid">
-        <div className="max-w-7xl mx-auto px-6 py-16 pb-28">
-          {/* Section label within the white area */}
+      {/* ── Document Library — dark grid background ──────── */}
+      <section className="bg-grid-dark relative overflow-hidden">
+        {/* Orange radial glow — soft, offset to bottom-left */}
+        <div
+          className="absolute pointer-events-none"
+          style={{
+            bottom: "-100px",
+            left: "-80px",
+            width: "600px",
+            height: "600px",
+            background: "radial-gradient(ellipse at center, rgba(249,115,22,0.12) 0%, rgba(249,115,22,0.04) 40%, transparent 70%)",
+          }}
+          aria-hidden="true"
+        />
+        <div className="max-w-7xl mx-auto px-6 py-16 pb-28 relative">
+          {/* Section label */}
           <div className="flex items-center gap-4 mb-10">
             <h2 className="text-sm font-bold tracking-widest uppercase" style={{ color: "#F97316" }}>
               All Documents
             </h2>
-            <div className="flex-1 h-px bg-gray-200" />
-            <span className="text-xs text-gray-400">{resourceDocuments.length} total</span>
+            <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.1)" }} />
+            <span className="text-xs" style={{ color: "#9CA3AF" }}>{resourceDocuments.length} total</span>
           </div>
           <ResourcesClient documents={resourceDocuments} />
         </div>

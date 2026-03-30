@@ -72,21 +72,6 @@ export default async function ProjectPage({ params }: Props) {
               {project.excerpt}
             </p>
 
-            {/* Gallery — swap /public/images/projects/[slug]/ photos in when available */}
-            <h2 className="text-2xl font-bold mb-6" style={{ color: "#f5f0eb" }}>Gallery</h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-              {[1, 2, 3, 4, 5, 6].map((n) => (
-                <div key={n} className="relative aspect-square overflow-hidden rounded">
-                  <Image
-                    src={project.imageUrl}
-                    alt={`${project.title} - Photo ${n}`}
-                    fill
-                    className="object-cover hover:scale-105 transition-transform duration-300"
-                    sizes="(max-width: 768px) 50vw, 33vw"
-                  />
-                </div>
-              ))}
-            </div>
           </div>
 
           <div>

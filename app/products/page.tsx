@@ -59,39 +59,83 @@ export default function ProductsPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {products.map((product) => (
-            <Link
-              key={product.slug}
-              href={`/products/${product.slug}`}
-              className="group flex flex-col relative overflow-hidden rounded-lg transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(249,115,22,0.12)]"
-              style={{ background: "var(--bg-card-surface)", border: "1px solid var(--border-subtle)" }}
-            >
-              {/* Orange top accent */}
-              <div
-                className="absolute top-0 left-0 right-0 h-[2px] z-10"
-                style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }}
-              />
-              <div className="p-7">
-                <h2 className="font-bold text-xl mb-2 transition-colors group-hover:text-[#f97316]" style={{ color: "var(--text-primary)" }}>
-                  {product.name}
-                </h2>
-                <p className="text-sm font-medium mb-3" style={{ color: "#fb923c" }}>
-                  {product.shortDesc}
-                </p>
-                <p className="text-sm leading-relaxed mb-6" style={{ color: "var(--text-secondary)" }}>
-                  {typeof product.description === "string"
-                    ? product.description.slice(0, 120) + (product.description.length > 120 ? "…" : "")
-                    : ""}
-                </p>
-                <span className="text-xs font-semibold tracking-widest uppercase flex items-center gap-1.5" style={{ color: "#f97316" }}>
-                  Explore System
-                  <span className="transition-transform duration-200 group-hover:translate-x-1 inline-block">→</span>
-                </span>
-              </div>
-            </Link>
-          ))}
-        </div>
+        {/* ── Product groups ──────────────────────────────── */}
+        {(() => {
+          const groups: { label: string; desc: string; slugs: string[] }[] = [
+            {
+              label: "Traffic & Safety Markings",
+              desc: "Preformed thermoplastics engineered for Canadian winters — snowplow-safe, retroreflective, TAC/MUTCD compliant.",
+              slugs: ["traffic-patterns", "traffic-patterns-xd", "premark", "airmark"],
+            },
+            {
+              label: "Decorative Surface Systems",
+              desc: "Turn pavement into civic identity — stamped asphalt, coloured coatings, and custom graphic installations.",
+              slugs: ["streetprint", "streetbond", "decomark", "duratherm"],
+            },
+            {
+              label: "Performance Coatings & Protection",
+              desc: "High-durability MMA resins and penetrating rejuvenators that extend pavement life and slash maintenance costs.",
+              slugs: ["mmax", "durashield"],
+            },
+          ];
+
+          return (
+            <div className="space-y-16">
+              {groups.map((group) => {
+                const groupProducts = group.slugs
+                  .map((slug) => products.find((p) => p.slug === slug))
+                  .filter(Boolean) as typeof products;
+                return (
+                  <div key={group.label}>
+                    {/* Group header */}
+                    <div className="mb-8">
+                      <div className="flex items-center gap-4 mb-2">
+                        <h2 className="text-xs font-bold tracking-[0.2em] uppercase whitespace-nowrap" style={{ color: "#F97316" }}>
+                          {group.label}
+                        </h2>
+                        <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.08)" }} />
+                      </div>
+                      <p className="text-sm max-w-2xl" style={{ color: "#9CA3AF" }}>{group.desc}</p>
+                    </div>
+                    {/* Product cards */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {groupProducts.map((product) => (
+                        <Link
+                          key={product.slug}
+                          href={`/products/${product.slug}`}
+                          className="group flex flex-col relative overflow-hidden rounded-lg transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(249,115,22,0.12)]"
+                          style={{ background: "var(--bg-card-surface)", border: "1px solid var(--border-subtle)" }}
+                        >
+                          <div
+                            className="absolute top-0 left-0 right-0 h-[2px] z-10"
+                            style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }}
+                          />
+                          <div className="p-7">
+                            <h3 className="font-bold text-xl mb-2 transition-colors group-hover:text-[#f97316]" style={{ color: "var(--text-primary)" }}>
+                              {product.name}
+                            </h3>
+                            <p className="text-sm font-medium mb-3" style={{ color: "#fb923c" }}>
+                              {product.shortDesc}
+                            </p>
+                            <p className="text-sm leading-relaxed mb-6" style={{ color: "var(--text-secondary)" }}>
+                              {typeof product.description === "string"
+                                ? product.description.slice(0, 120) + (product.description.length > 120 ? "…" : "")
+                                : ""}
+                            </p>
+                            <span className="text-xs font-semibold tracking-widest uppercase flex items-center gap-1.5" style={{ color: "#f97316" }}>
+                              Explore System
+                              <span className="transition-transform duration-200 group-hover:translate-x-1 inline-block">→</span>
+                            </span>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })()}
       </div>
       </div>{/* end asphalt texture wrapper */}
       <LunchLearn />

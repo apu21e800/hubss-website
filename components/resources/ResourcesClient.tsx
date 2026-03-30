@@ -55,29 +55,27 @@ const STREETBOND_SUBCATEGORIES = [
   { label: "Pro 250", value: "Pro 250" },
 ];
 
-// Badge colors by document type — light versions for white background
+// Badge colors — dark-theme versions
 function typeBadgeClasses(type: string): string {
   switch (type) {
     case "Spec Sheet":
-      return "bg-blue-50 text-blue-700 border-blue-200";
     case "Data Sheet":
-      return "bg-blue-50 text-blue-700 border-blue-200";
+      return "bg-blue-900/40 text-blue-300 border-blue-700/50";
     case "Safety Data Sheet":
-      return "bg-red-50 text-red-700 border-red-200";
+      return "bg-red-900/40 text-red-300 border-red-700/50";
     case "Brochure":
-      return "bg-orange-50 text-orange-700 border-orange-200";
+      return "bg-orange-900/40 text-orange-300 border-orange-700/50";
     case "Installation Guide":
-      return "bg-teal-50 text-teal-700 border-teal-200";
-    case "Design Manual":
-      return "bg-purple-50 text-purple-700 border-purple-200";
-    case "Colour Guide":
-      return "bg-pink-50 text-pink-700 border-pink-200";
-    case "Certificate":
-      return "bg-green-50 text-green-700 border-green-200";
     case "Guide":
-      return "bg-teal-50 text-teal-700 border-teal-200";
+      return "bg-teal-900/40 text-teal-300 border-teal-700/50";
+    case "Design Manual":
+      return "bg-purple-900/40 text-purple-300 border-purple-700/50";
+    case "Colour Guide":
+      return "bg-pink-900/40 text-pink-300 border-pink-700/50";
+    case "Certificate":
+      return "bg-green-900/40 text-green-300 border-green-700/50";
     default:
-      return "bg-gray-100 text-gray-600 border-gray-200";
+      return "bg-white/5 text-zinc-400 border-white/10";
   }
 }
 
@@ -85,27 +83,40 @@ const PAGE_SIZE = 12;
 
 function DocCard({ doc }: { doc: ResourceDocument }) {
   return (
-    <div className="group rounded-xl bg-white border border-gray-100 shadow-sm p-5 flex flex-col justify-between transition-all duration-200 hover:shadow-md hover:border-[#F97316]/30">
+    <div
+      className="group rounded-xl p-5 flex flex-col justify-between transition-all duration-200 hover:shadow-[0_4px_24px_rgba(249,115,22,0.1)] hover:-translate-y-0.5"
+      style={{
+        background: "#111111",
+        border: "1px solid rgba(255,255,255,0.08)",
+      }}
+    >
       <div>
         <span className={`inline-block text-xs font-semibold px-2.5 py-1 rounded-md border mb-4 ${typeBadgeClasses(doc.type)}`}>
           {doc.type}
         </span>
-        <h3 className="font-semibold text-gray-900 leading-snug mb-2">{doc.title}</h3>
-        <span className="inline-block text-xs text-[#F97316] bg-orange-50 px-2 py-0.5 rounded-full border border-orange-100">
+        <h3 className="font-semibold leading-snug mb-2" style={{ color: "#F5F0EB" }}>{doc.title}</h3>
+        <span
+          className="inline-block text-xs px-2 py-0.5 rounded-full border"
+          style={{ color: "#f97316", background: "rgba(249,115,22,0.12)", borderColor: "rgba(249,115,22,0.2)" }}
+        >
           {doc.productName}
         </span>
       </div>
-      <div className="flex items-center justify-between mt-5 pt-4 border-t border-gray-100">
-        <div className="flex items-center gap-3 text-xs text-gray-400">
+      <div
+        className="flex items-center justify-between mt-5 pt-4"
+        style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}
+      >
+        <div className="flex items-center gap-3 text-xs" style={{ color: "#6B7280" }}>
           <span>{doc.fileSize}</span>
-          <span className="w-1 h-1 rounded-full bg-gray-300" />
+          <span className="w-1 h-1 rounded-full bg-zinc-600" />
           <span>{doc.updatedDate}</span>
         </div>
         <a
           href={doc.fileUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-1.5 text-sm font-medium text-gray-400 hover:text-[#F97316] transition-colors"
+          className="flex items-center gap-1.5 text-sm font-medium transition-colors hover:text-[#F97316]"
+          style={{ color: "#6B7280" }}
         >
           <Download className="w-4 h-4" />
           <span className="hidden sm:inline">Download</span>
@@ -130,7 +141,6 @@ export default function ResourcesClient({
 
   const filtered = useMemo(() => {
     return documents.filter((doc) => {
-      // Search
       if (search) {
         const q = search.toLowerCase();
         const matchesSearch =
@@ -139,19 +149,15 @@ export default function ResourcesClient({
           doc.type.toLowerCase().includes(q);
         if (!matchesSearch) return false;
       }
-      // Product filter (only when "By Product" tab is active)
       if (activeTab === "By Product" && productFilter !== "all") {
         if (doc.product !== productFilter) return false;
       }
-      // StreetBond subcategory filter
       if (activeTab === "By Product" && productFilter === "streetbond" && subcategoryFilter !== "all") {
         if (doc.subcategory !== subcategoryFilter) return false;
       }
-      // Document type tab filter
       if (activeTab === "By Document Type" && docTypeFilter !== "All") {
         if (doc.type !== docTypeFilter) return false;
       }
-      // Type dropdown (always active)
       if (activeTab !== "By Document Type" && typeFilter !== "All") {
         if (doc.type !== typeFilter) return false;
       }
@@ -187,20 +193,27 @@ export default function ResourcesClient({
     setVisibleCount(PAGE_SIZE);
   }
 
+  const selectStyle = {
+    background: "#111111",
+    border: "1px solid rgba(255,255,255,0.12)",
+    color: "#D1D5DB",
+  };
+
   return (
     <>
       {/* ── Tab Navigation ─────────────────────────────────── */}
       <div id="documents" className="scroll-mt-24 mb-8">
-        <div className="flex gap-8 border-b border-gray-200">
+        <div className="flex gap-8" style={{ borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
           {TABS.map((tab) => (
             <button
               key={tab}
               onClick={() => handleTabChange(tab)}
-              className={`pb-3 text-sm font-medium transition-colors ${
-                activeTab === tab
-                  ? "text-gray-900 border-b-2 border-[#F97316] -mb-px"
-                  : "text-gray-400 hover:text-gray-600"
-              }`}
+              className="pb-3 text-sm font-medium transition-colors"
+              style={{
+                color: activeTab === tab ? "#F5F0EB" : "#6B7280",
+                borderBottom: activeTab === tab ? "2px solid #F97316" : "2px solid transparent",
+                marginBottom: "-1px",
+              }}
             >
               {tab}
             </button>
@@ -210,9 +223,8 @@ export default function ResourcesClient({
 
       {/* ── Search + Filter Bar ──────────────────────────── */}
       <div className="flex flex-col sm:flex-row gap-3 mb-8">
-        {/* Search */}
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "#6B7280" }} />
           <input
             type="text"
             placeholder="Search documents..."
@@ -221,19 +233,20 @@ export default function ResourcesClient({
               setSearch(e.target.value);
               setVisibleCount(PAGE_SIZE);
             }}
-            className="w-full pl-10 pr-4 py-3 rounded-lg bg-white border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#F97316] focus:ring-1 focus:ring-[#F97316]/30 transition-colors text-sm shadow-sm"
+            className="w-full pl-10 pr-4 py-3 rounded-lg text-sm transition-colors outline-none focus:ring-1 focus:ring-[#F97316]/40"
+            style={{ ...selectStyle, color: "#F5F0EB" }}
           />
           {search && (
             <button
               onClick={() => setSearch("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              className="absolute right-3 top-1/2 -translate-y-1/2 hover:text-zinc-300 transition-colors"
+              style={{ color: "#6B7280" }}
             >
               <X className="w-4 h-4" />
             </button>
           )}
         </div>
 
-        {/* Product dropdown — show when "By Product" tab is active */}
         {activeTab === "By Product" && (
           <div className="relative">
             <select
@@ -243,19 +256,17 @@ export default function ResourcesClient({
                 setSubcategoryFilter("all");
                 setVisibleCount(PAGE_SIZE);
               }}
-              className="appearance-none w-full sm:w-48 px-4 py-3 pr-10 rounded-lg bg-white border border-gray-200 text-gray-700 text-sm focus:outline-none focus:border-[#F97316] focus:ring-1 focus:ring-[#F97316]/30 transition-colors cursor-pointer shadow-sm"
+              className="appearance-none w-full sm:w-48 px-4 py-3 pr-10 rounded-lg text-sm cursor-pointer outline-none focus:ring-1 focus:ring-[#F97316]/40"
+              style={selectStyle}
             >
               {PRODUCTS.map((p) => (
-                <option key={p.value} value={p.value}>
-                  {p.label}
-                </option>
+                <option key={p.value} value={p.value}>{p.label}</option>
               ))}
             </select>
-            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: "#6B7280" }} />
           </div>
         )}
 
-        {/* Type dropdown — show when NOT on "By Document Type" tab */}
         {activeTab !== "By Document Type" && (
           <div className="relative">
             <select
@@ -264,30 +275,29 @@ export default function ResourcesClient({
                 setTypeFilter(e.target.value);
                 setVisibleCount(PAGE_SIZE);
               }}
-              className="appearance-none w-full sm:w-48 px-4 py-3 pr-10 rounded-lg bg-white border border-gray-200 text-gray-700 text-sm focus:outline-none focus:border-[#F97316] focus:ring-1 focus:ring-[#F97316]/30 transition-colors cursor-pointer shadow-sm"
+              className="appearance-none w-full sm:w-48 px-4 py-3 pr-10 rounded-lg text-sm cursor-pointer outline-none focus:ring-1 focus:ring-[#F97316]/40"
+              style={selectStyle}
             >
               {DOCUMENT_TYPES.map((t) => (
-                <option key={t} value={t}>
-                  {t === "All" ? "All Types" : t}
-                </option>
+                <option key={t} value={t}>{t === "All" ? "All Types" : t}</option>
               ))}
             </select>
-            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: "#6B7280" }} />
           </div>
         )}
 
-        {/* Clear all */}
         {hasActiveFilters && (
           <button
             onClick={clearAllFilters}
-            className="text-sm text-[#F97316] hover:text-orange-600 transition-colors whitespace-nowrap py-3 px-2"
+            className="text-sm transition-colors whitespace-nowrap py-3 px-2 hover:text-orange-400"
+            style={{ color: "#F97316" }}
           >
             Clear all filters
           </button>
         )}
       </div>
 
-      {/* ── Document Type Pills — show when "By Document Type" tab is active ── */}
+      {/* ── Document Type Pills ──────────────────────────── */}
       {activeTab === "By Document Type" && (
         <div className="flex flex-wrap gap-2 mb-6">
           {DOCUMENT_TYPE_FILTERS.map((dt) => (
@@ -297,11 +307,12 @@ export default function ResourcesClient({
                 setDocTypeFilter(dt.value);
                 setVisibleCount(PAGE_SIZE);
               }}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 border ${
+              className="px-4 py-2 rounded-full text-sm font-medium transition-all duration-200"
+              style={
                 docTypeFilter === dt.value
-                  ? "bg-[#F97316] text-white border-transparent"
-                  : "bg-white border-gray-200 text-gray-500 hover:border-[#F97316]/50 hover:text-[#F97316]"
-              }`}
+                  ? { background: "#F97316", color: "#fff", border: "1px solid transparent" }
+                  : { background: "transparent", color: "#9CA3AF", border: "1px solid rgba(255,255,255,0.12)" }
+              }
             >
               {dt.label}
             </button>
@@ -319,11 +330,12 @@ export default function ResourcesClient({
                 setSubcategoryFilter(sc.value);
                 setVisibleCount(PAGE_SIZE);
               }}
-              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 border ${
+              className="px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200"
+              style={
                 subcategoryFilter === sc.value
-                  ? "bg-[#F97316] text-white border-transparent"
-                  : "bg-white border-gray-200 text-gray-500 hover:border-[#F97316]/50 hover:text-[#F97316]"
-              }`}
+                  ? { background: "#F97316", color: "#fff", border: "1px solid transparent" }
+                  : { background: "transparent", color: "#9CA3AF", border: "1px solid rgba(255,255,255,0.12)" }
+              }
             >
               {sc.label}
             </button>
@@ -332,14 +344,13 @@ export default function ResourcesClient({
       )}
 
       {/* ── Results count ────────────────────────────────── */}
-      <p className="text-sm text-gray-400 mb-6">
+      <p className="text-sm mb-6" style={{ color: "#6B7280" }}>
         {filtered.length} document{filtered.length !== 1 ? "s" : ""} found
       </p>
 
       {/* ── Document Grid ────────────────────────────────── */}
       {visible.length > 0 ? (
         <>
-          {/* Group by product when By Product tab + no product selected + no type filter */}
           {activeTab === "By Product" && productFilter === "all" && typeFilter === "All" && !search ? (
             (() => {
               const grouped: Record<string, ResourceDocument[]> = {};
@@ -355,8 +366,8 @@ export default function ResourcesClient({
                         <h3 className="text-sm font-bold tracking-widest uppercase" style={{ color: "#F97316" }}>
                           {productName}
                         </h3>
-                        <div className="flex-1 h-px bg-gray-200" />
-                        <span className="text-xs text-gray-400">{docs.length} doc{docs.length !== 1 ? "s" : ""}</span>
+                        <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.08)" }} />
+                        <span className="text-xs" style={{ color: "#6B7280" }}>{docs.length} doc{docs.length !== 1 ? "s" : ""}</span>
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                         {docs.map((doc) => (
@@ -376,12 +387,16 @@ export default function ResourcesClient({
             </div>
           )}
 
-          {/* Load more */}
           {hasMore && (
             <div className="text-center mt-10">
               <button
                 onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
-                className="px-8 py-3 rounded-lg text-sm font-medium border border-gray-200 text-gray-500 hover:border-[#F97316] hover:text-[#F97316] transition-all duration-200 bg-white shadow-sm"
+                className="px-8 py-3 rounded-lg text-sm font-medium transition-all duration-200 hover:text-[#F97316]"
+                style={{
+                  background: "transparent",
+                  border: "1px solid rgba(255,255,255,0.12)",
+                  color: "#9CA3AF",
+                }}
               >
                 Load more ({filtered.length - visibleCount} remaining)
               </button>
@@ -389,25 +404,26 @@ export default function ResourcesClient({
           )}
         </>
       ) : (
-        /* ── Empty State ──────────────────────────────────── */
         <div className="text-center py-20">
-          <FileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">
+          <FileText className="w-12 h-12 mx-auto mb-4" style={{ color: "#374151" }} />
+          <h3 className="text-xl font-semibold mb-2" style={{ color: "#F5F0EB" }}>
             No documents found
           </h3>
-          <p className="text-gray-500 mb-6">
+          <p className="mb-6" style={{ color: "#9CA3AF" }}>
             Try adjusting your filters or search terms
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <button
               onClick={clearAllFilters}
-              className="px-6 py-2.5 rounded-lg text-sm font-medium bg-[#F97316] text-white hover:bg-[#EA6D10] transition-all"
+              className="px-6 py-2.5 rounded-lg text-sm font-medium transition-all hover:brightness-110"
+              style={{ background: "#F97316", color: "#fff" }}
             >
               Clear all filters
             </button>
             <Link
               href="/contact"
-              className="px-6 py-2.5 rounded-lg text-sm font-medium border border-gray-200 text-gray-600 hover:border-[#F97316]/50 hover:text-[#F97316] transition-all"
+              className="px-6 py-2.5 rounded-lg text-sm font-medium transition-all hover:text-white"
+              style={{ border: "1px solid rgba(255,255,255,0.12)", color: "#9CA3AF" }}
             >
               Can&apos;t find what you need? Contact us &rarr;
             </Link>

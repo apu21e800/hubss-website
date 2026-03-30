@@ -67,7 +67,7 @@ export default function BlogFilter({ posts, allProducts }: Props) {
       onClick={onClick}
       className="text-xs font-semibold px-4 py-2 rounded transition-all"
       style={{
-        background:   active ? "#f97316" : "#1a1e28",
+        background:   active ? "#f97316" : "#2a2a2a",
         color:        active ? "#fff"    : "#8b8b8b",
         border:       "1px solid",
         borderColor:  active ? "#f97316" : "rgba(255,255,255,0.07)",
@@ -103,7 +103,7 @@ export default function BlogFilter({ posts, allProducts }: Props) {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full pl-8 pr-7 py-2 rounded text-xs"
-              style={{ background: "#1a1e28", border: "1px solid rgba(255,255,255,0.07)", color: "#ffffff" }}
+              style={{ background: "#2a2a2a", border: "1px solid rgba(255,255,255,0.07)", color: "#ffffff" }}
             />
             {search && (
               <button onClick={() => { setSearch(""); pushParams({ search: "" }); }} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-400">
@@ -117,7 +117,7 @@ export default function BlogFilter({ posts, allProducts }: Props) {
               value={sort}
               onChange={(e) => setAndSync(setSort, "sort", e.target.value as typeof sort)}
               className="appearance-none pl-3 pr-7 py-2 rounded text-xs cursor-pointer"
-              style={{ background: "#1a1e28", border: "1px solid rgba(255,255,255,0.07)", color: "#8b8b8b" }}
+              style={{ background: "#2a2a2a", border: "1px solid rgba(255,255,255,0.07)", color: "#8b8b8b" }}
             >
               <option value="newest">Newest</option>
               <option value="oldest">Oldest</option>

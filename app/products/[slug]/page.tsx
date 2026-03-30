@@ -104,10 +104,8 @@ export default async function ProductPage({ params }: Props) {
             <p className="text-sm mt-0.5" style={{ color: "#9CA3AF" }}>Get technical documentation, pricing, and installation support.</p>
           </div>
           <div className="flex flex-wrap gap-3">
-            <Link href="/resources" className="px-4 py-2 rounded-lg text-sm transition-all"
-              style={{ border: "1px solid rgba(255,255,255,0.15)", color: "#D1D5DB" }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(249,115,22,0.5)"; (e.currentTarget as HTMLElement).style.color = "#F5F0EB"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.15)"; (e.currentTarget as HTMLElement).style.color = "#D1D5DB"; }}>
+            <Link href="/resources" className="px-4 py-2 rounded-lg text-sm transition-all hover:text-white border border-white/15 hover:border-orange-500/50"
+              style={{ color: "#D1D5DB" }}>
               Technical Specs
             </Link>
             <Link href="/lunch-learn" className="px-4 py-2 rounded-lg text-sm font-medium transition-all"

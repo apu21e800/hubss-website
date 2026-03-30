@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 
 const COVERS = [
@@ -72,21 +71,6 @@ export default function LunchLearn() {
           zIndex: 0,
         }}
       />
-
-      {/* Moose mascot — large, bottom-right, peeking up */}
-      <div
-        className="absolute bottom-0 right-6 xl:right-16 hidden lg:block"
-        style={{ zIndex: 1, width: 220, height: 220 }}
-      >
-        <Image
-          src="/images/lunch-learn/moose.png"
-          alt="HUB Surface Systems Moose"
-          width={220}
-          height={220}
-          style={{ filter: "drop-shadow(0 0 32px rgba(249,115,22,0.25))", display: "block" }}
-          unoptimized
-        />
-      </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28 pt-16" style={{ zIndex: 2 }}>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">

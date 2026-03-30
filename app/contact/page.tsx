@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
@@ -71,6 +72,18 @@ export default function ContactPage() {
                 <p className="text-zinc-500 text-xs uppercase tracking-widest mb-4">Follow Our Work</p>
                 <SocialLinks className="justify-center gap-6" iconClassName="w-6 h-6" />
               </div>
+            </div>
+
+            {/* Moose — peeking at the bottom of the contact info column */}
+            <div className="hidden lg:block mt-10">
+              <Image
+                src="/images/lunch-learn/pug-peeker.png"
+                alt="Moose — HUB Surface Systems mascot"
+                width={180}
+                height={180}
+                style={{ filter: "drop-shadow(0 4px 24px rgba(249,115,22,0.18))" }}
+                unoptimized
+              />
             </div>
           </div>
 

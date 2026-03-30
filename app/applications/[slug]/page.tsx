@@ -320,7 +320,52 @@ export default async function ApplicationPage({ params }: Props) {
         </div>
       </section>
 
-      {/* ── 6. CTA — Book a Lunch & Learn ───────────────────────────────── */}
+      {/* ── 6. Related Blog Post ─────────────────────────────────────────── */}
+      {app.relatedPost && (
+        <section className="py-12" style={{ background: "#111111", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p className="text-xs font-bold tracking-[0.2em] uppercase mb-6" style={{ color: "#f97316" }}>
+              Go Deeper
+            </p>
+            <Link
+              href={`/blog/${app.relatedPost.slug}`}
+              className="group flex flex-col sm:flex-row items-start sm:items-center gap-5 p-6 rounded-xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(249,115,22,0.10)]"
+              style={{ background: "var(--bg-card)", border: "1px solid var(--border-faint)" }}
+            >
+              <div
+                className="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center"
+                style={{ background: "rgba(249,115,22,0.12)" }}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f97316" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
+                </svg>
+              </div>
+              <div className="flex-1 min-w-0">
+                <h3
+                  className="text-base font-bold mb-1 transition-colors duration-150 group-hover:text-orange-400"
+                  style={{ color: "var(--text-primary)" }}
+                >
+                  {app.relatedPost.title}
+                </h3>
+                <p className="text-sm leading-relaxed" style={{ color: "var(--text-muted)" }}>
+                  {app.relatedPost.excerpt}
+                </p>
+              </div>
+              <span
+                className="flex-shrink-0 text-xs font-semibold flex items-center gap-1.5 uppercase tracking-wider transition-transform duration-150 group-hover:translate-x-0.5"
+                style={{ color: "#f97316" }}
+              >
+                Read
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" aria-hidden>
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </span>
+            </Link>
+          </div>
+        </section>
+      )}
+
+      {/* ── 7. CTA — Book a Lunch & Learn ───────────────────────────────── */}
       <section
         className="py-20"
         style={{

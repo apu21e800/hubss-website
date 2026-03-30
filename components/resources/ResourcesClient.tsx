@@ -84,11 +84,7 @@ const PAGE_SIZE = 12;
 function DocCard({ doc }: { doc: ResourceDocument }) {
   return (
     <div
-      className="group rounded-xl p-5 flex flex-col justify-between transition-all duration-200 hover:shadow-[0_4px_24px_rgba(249,115,22,0.08)] hover:-translate-y-0.5"
-      style={{
-        background: "#1e1e1e",
-        border: "1px solid rgba(255,255,255,0.08)",
-      }}
+      className="group rounded-xl p-5 flex flex-col justify-between transition-colors duration-200 bg-[#2a2a2a] hover:bg-[#313131]"
     >
       <div>
         <span className={`inline-block text-xs font-semibold px-2.5 py-1 rounded-md border mb-4 ${typeBadgeClasses(doc.type)}`}>
@@ -106,7 +102,7 @@ function DocCard({ doc }: { doc: ResourceDocument }) {
         className="flex items-center justify-between mt-5 pt-4"
         style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
       >
-        <div className="flex items-center gap-3 text-xs" style={{ color: "#5a5a5a" }}>
+        <div className="flex items-center gap-3 text-xs" style={{ color: "#6b6b6b" }}>
           <span>{doc.fileSize}</span>
           <span className="w-1 h-1 rounded-full" style={{ background: "#3a3a3a" }} />
           <span>{doc.updatedDate}</span>
@@ -115,12 +111,7 @@ function DocCard({ doc }: { doc: ResourceDocument }) {
           href={doc.fileUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-all duration-200 hover:text-[#F97316] hover:border-orange-500/30"
-          style={{
-            color: "#8b8b8b",
-            border: "1px solid rgba(255,255,255,0.10)",
-            background: "transparent",
-          }}
+          className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors duration-200 bg-[#383838] hover:bg-[#444444] text-white"
         >
           <Download className="w-3.5 h-3.5" />
           <span className="hidden sm:inline">Download</span>
@@ -198,7 +189,7 @@ export default function ResourcesClient({
   }
 
   const selectStyle = {
-    background: "#1e1e1e",
+    background: "#2a2a2a",
     border: "1px solid rgba(255,255,255,0.10)",
     color: "#e0e0e0",
   };
@@ -207,16 +198,15 @@ export default function ResourcesClient({
     <>
       {/* ── Tab Navigation ─────────────────────────────────── */}
       <div id="documents" className="scroll-mt-24 mb-8">
-        <div className="flex gap-8" style={{ borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
+        <div className="flex gap-2">
           {TABS.map((tab) => (
             <button
               key={tab}
               onClick={() => handleTabChange(tab)}
-              className="pb-3 text-sm font-medium transition-colors"
+              className="px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
               style={{
-                color: activeTab === tab ? "#F5F0EB" : "#6B7280",
-                borderBottom: activeTab === tab ? "2px solid #F97316" : "2px solid transparent",
-                marginBottom: "-1px",
+                background: activeTab === tab ? "#2a2a2a" : "transparent",
+                color: activeTab === tab ? "#ffffff" : "#6b6b6b",
               }}
             >
               {tab}

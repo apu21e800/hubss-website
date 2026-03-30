@@ -24,7 +24,7 @@ export default function ResourcesPage() {
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 leading-tight" style={{ color: "#F5F0EB" }}>
           Specification Library
         </h1>
-        <p className="text-base max-w-2xl" style={{ color: "#9CA3AF" }}>
+        <p className="text-base max-w-2xl" style={{ color: "#8b8b8b" }}>
           Technical data sheets, brochures, safety guides, and installation resources for every HUBSS product.
         </p>
       </div>
@@ -39,7 +39,7 @@ export default function ResourcesPage() {
             left: "-80px",
             width: "600px",
             height: "600px",
-            background: "radial-gradient(ellipse at center, rgba(249,115,22,0.12) 0%, rgba(249,115,22,0.04) 40%, transparent 70%)",
+            background: "radial-gradient(ellipse at center, rgba(249,115,22,0.04) 0%, rgba(249,115,22,0.01) 40%, transparent 70%)",
           }}
           aria-hidden="true"
         />

@@ -28,10 +28,10 @@ export default function ProductsGrid() {
       style={{
         backgroundColor: "#1a1a1a",
         backgroundImage: `
-          linear-gradient(rgba(255,255,255,0.048) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(255,255,255,0.048) 1px, transparent 1px)
+          linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px)
         `,
-        backgroundSize: "28px 28px",
+        backgroundSize: "44px 44px",
       }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -74,7 +74,7 @@ export default function ProductsGrid() {
                 </div>
 
                 {/* Cards */}
-                <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
                   {groupProducts.map((product, i) => (
                     <motion.div
                       key={product.slug}

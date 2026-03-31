@@ -6,14 +6,7 @@ import Link from "next/link";
 export default function ResidentialDriveways() {
   return (
     <section
-      style={{
-        backgroundColor: "#1a1a1a",
-        backgroundImage: `
-          linear-gradient(rgba(255,255,255,0.048) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(255,255,255,0.048) 1px, transparent 1px)
-        `,
-        backgroundSize: "28px 28px",
-      }}
+      style={{ backgroundColor: "#0f1420" }}
     >
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[520px]">
@@ -134,7 +127,7 @@ export default function ResidentialDriveways() {
               className="absolute inset-0 lg:hidden pointer-events-none"
               style={{
                 background:
-                  "linear-gradient(to top, rgba(26,26,26,0.65) 0%, transparent 50%)",
+                  "linear-gradient(to top, rgba(15,20,32,0.65) 0%, transparent 50%)",
               }}
             />
           </div>

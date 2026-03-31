@@ -438,9 +438,9 @@ p {
 .bg-dot-grid-dark {
   background-color: #1a1a1a;
   background-image:
-    linear-gradient(rgba(255,255,255,0.048) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.048) 1px, transparent 1px);
-  background-size: 28px 28px;
+    linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px);
+  background-size: 44px 44px;
 }
 
 .bg-dot-grid-blue {

@@ -58,7 +58,7 @@ export default function LunchLearnPage() {
           </div>
         </div>
 
-        {/* Moose — large, bottom-right of hero, peeking into L&L section */}
+        {/* Moose — large, bottom-right of hero, standing on the floor line */}
         <div
           className="absolute bottom-0 right-0 md:right-16 lg:right-24 z-20 hidden sm:block"
           style={{ width: 288, height: 288 }}
@@ -75,6 +75,15 @@ export default function LunchLearnPage() {
             unoptimized
           />
         </div>
+
+        {/* Floor line — visual ground the moose stands on */}
+        <div
+          className="absolute bottom-0 left-0 right-0 hidden sm:block"
+          style={{
+            height: 2,
+            background: "linear-gradient(90deg, transparent 0%, rgba(249,115,22,0.18) 35%, rgba(249,115,22,0.1) 65%, transparent 100%)",
+          }}
+        />
       </div>
 
       <div className="pt-16">

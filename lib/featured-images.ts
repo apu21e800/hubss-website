@@ -27,25 +27,20 @@ export const productImages: Record<string, ImageConfig> = {
 };
 
 export const applicationImages: Record<string, ImageConfig> = {
-  crosswalks: { featured: '/images/applications/crosswalks/hero.jpg', fallback: '/images/applications/crosswalks/crosswalk-1.jpg', alt: 'High-visibility decorative crosswalk — HUBSS TrafficPatternsXD pedestrian safety installation' },
-  'bike-lanes': { featured: '/images/applications/bike-lanes/hero.jpg', fallback: '/images/applications/bike-lanes/bike-lanes-1.jpg', alt: 'Protected green bike lane surface — Complete Streets coloured pavement system' },
-  'bus-lanes': { featured: '/images/applications/bus-lanes/hero.jpg', fallback: '/images/applications/bus-lanes/bus-lanes-1.jpg', alt: 'Red bus rapid transit lane surface — MMAX MMA coloured pavement, Canadian municipality' },
-  'commercial-spaces': { featured: '/images/applications/commercial-spaces/hero.jpg', fallback: '/images/applications/commercial-spaces/commercial-spaces-1.jpg', alt: 'Commercial space decorative pavement — stamped asphalt retail entry and plaza' },
-  'community-branding': { featured: '/images/applications/community-branding/hero.jpg', fallback: '/images/applications/community-branding/community-branding-1.jpg', alt: 'Community identity surface branding — custom civic graphics and placemaking pavement art' },
-  'parking-lots': { featured: '/images/applications/parking-lots/hero.jpg', fallback: '/images/applications/parking-lots/parking-lots-1.jpg', alt: 'Parking lot decorative surface system — PreMark stall markings and DuraShield coating' },
-  'parks-paths': { featured: '/images/applications/parks-paths/hero.jpg', fallback: '/images/applications/parks-paths/parks-paths-1.jpg', alt: 'Park pathway StreetBond coloured surface treatment — recreational trail marking' },
+  crosswalks: { featured: null, fallback: '/images/applications/crosswalks/crosswalk-1.jpg', alt: 'High-visibility decorative crosswalk — HUBSS TrafficPatternsXD pedestrian safety installation' },
+  'bike-lanes': { featured: null, fallback: '/images/applications/bike-lanes/bike-lanes-1.jpg', alt: 'Protected green bike lane surface — Complete Streets coloured pavement system' },
+  'bus-lanes': { featured: null, fallback: '/images/applications/bus-lanes/bus-lanes-1.jpg', alt: 'Red bus rapid transit lane surface — MMAX MMA coloured pavement, Canadian municipality' },
+  'commercial-spaces': { featured: null, fallback: '/images/applications/commercial-spaces/commercial-spaces-1.jpg', alt: 'Commercial space decorative pavement — stamped asphalt retail entry and plaza' },
+  'community-branding': { featured: null, fallback: '/images/applications/community-branding/community-branding-1.jpg', alt: 'Community identity surface branding — custom civic graphics and placemaking pavement art' },
+  'parking-lots': { featured: null, fallback: '/images/applications/parking-lots/apartment-complex-yellow-streetprint-aerial-01.jpg', alt: 'Parking lot decorative surface system — PreMark stall markings and DuraShield coating' },
+  'parks-paths': { featured: '/images/applications/parks-paths/hero.jpg', fallback: '/images/applications/parks-paths/eagle-mural-courtyard-aerial-01.jpg', alt: 'Park pathway StreetBond coloured surface treatment — recreational trail marking' },
   'playgrounds': { featured: '/images/applications/playgrounds/hero.jpg', fallback: '/images/applications/playgrounds/playgrounds-1.jpg', alt: 'Playground surface markings — DecoMark custom thermoplastic graphics for school play area' },
-  'private-driveways': { featured: '/images/applications/private-driveways/hero.jpg', fallback: '/images/applications/private-driveways/private-driveways-1.png', alt: 'Private driveway stamped asphalt — StreetPrint decorative brick pattern residential installation' },
-  'residential-driveways': { featured: '/images/applications/private-driveways/hero.jpg', fallback: '/images/applications/private-driveways/private-driveways-1.png', alt: 'Residential driveway stamped asphalt — StreetPrint decorative brick pattern installation' },
-  'regulatory-markings': { featured: '/images/applications/regulatory-markings/hero.jpg', fallback: '/images/applications/regulatory-markings/regulatory-markings-1.jpg', alt: 'Regulatory road markings — PreMark TAC-compliant thermoplastic arrows and stop bars' },
+  'private-driveways': { featured: null, fallback: '/images/applications/private-driveways/chilliwack-townhomes-brick-driveway-01.jpg', alt: 'Private driveway stamped asphalt — StreetPrint decorative brick pattern residential installation' },
+  'residential-driveways': { featured: null, fallback: '/images/applications/private-driveways/estate-herringbone-gated-driveway-01.jpg', alt: 'Residential driveway stamped asphalt — StreetPrint decorative brick pattern installation' },
+  'regulatory-markings': { featured: '/images/applications/regulatory-markings/hero.jpg', fallback: '/images/applications/regulatory-markings/premark-arrows-intersection-01.jpg', alt: 'Regulatory road markings — PreMark TAC-compliant thermoplastic arrows and stop bars' },
   'splash-pads': { featured: '/images/applications/splash-pads/hero.jpg', fallback: '/images/applications/splash-pads/splash-pads-1.jpg', alt: 'Splash pad coloured surface system — StreetBond slip-resistant water play area coating' },
   'townhomes': { featured: '/images/applications/townhomes/hero.jpg', fallback: '/images/applications/townhomes/townhomes-1.jpg', alt: 'Townhome shared driveway — StreetPrint decorative stamped asphalt common area surface' },
-  'traffic-calming': { featured: '/images/applications/traffic-calming/hero.jpg', fallback: '/images/applications/traffic-calming/traffic-calming-1.jpg', alt: 'Traffic calming surface treatment — decorative asphalt shared street and roundabout' },
-  airports: { featured: '/images/applications/airports/hero.jpg', fallback: '/images/applications/airports/airports-1.jpg', alt: 'Airport airfield surface marking — AirMark FAA-compliant runway and taxiway thermoplastic' },
+  'traffic-calming': { featured: '/images/applications/traffic-calming/hero.jpg', fallback: '/images/applications/traffic-calming/curved-red-brick-shared-path-01.jpg', alt: 'Traffic calming surface treatment — decorative asphalt shared street and roundabout' },
+  airports: { featured: null, fallback: '/images/applications/airports/aircraft-stop-symbol-apron-01.jpg', alt: 'Airport airfield surface marking — AirMark FAA-compliant runway and taxiway thermoplastic' },
   'leed-urban-heat-island': { featured: '/images/applications/leed-urban-heat-island/hero.jpg', fallback: '/images/applications/leed-urban-heat-island/leed-1.jpg', alt: 'LEED solar reflective surface coating — StreetBond SR urban heat island reduction' },
-  'pedestrian-safety': { featured: '/images/applications/pedestrian-safety/hero.jpg', fallback: '/images/applications/crosswalks/crosswalk-1.jpg', alt: 'Pedestrian safety surface marking — high-visibility crosswalk for Vision Zero compliance' },
-};
-
-export const projectImages: Record<string, ImageConfig> = {
-  default: { featured: null, fallback: '/images/hero/hero-3.jpg', alt: 'HUBSS project installation' },
-};
+  'pedestrian-safety': { featured: '/images/applications/pedestrian-safety/hero.jpg', fallback: '/images/applications/crosswalks/crosswalk-1.jpg', alt: 'Ped

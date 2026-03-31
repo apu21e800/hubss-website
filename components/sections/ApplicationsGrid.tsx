@@ -6,7 +6,23 @@ import Image from "next/image";
 import { applications } from "@/lib/applications";
 import { applicationImages, resolveImage } from "@/lib/featured-images";
 
+const FEATURED_SLUGS = [
+  "crosswalks",
+  "commercial-spaces",
+  "parks-paths",
+  "bike-lanes",
+  "bus-lanes",
+  "community-branding",
+  "traffic-calming",
+  "townhomes",
+  "residential-driveways",
+];
+
 export default function ApplicationsGrid() {
+  const featured = FEATURED_SLUGS.map(
+    (slug) => applications.find((a) => a.slug === slug)
+  ).filter(Boolean) as typeof applications;
+
   return (
     <section className="py-28" style={{ background: "#1C1F23" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -19,19 +35,16 @@ export default function ApplicationsGrid() {
           </h2>
         </div>
 
-        <div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"
-          style={{ gridAutoRows: "200px" }}
-        >
-          {applications.map((app, i) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {featured.map((app, i) => (
             <motion.div
               key={app.slug}
               initial={{ opacity: 0, scale: 0.97 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.06 }}
-              className={`relative overflow-hidden group ${app.col ?? ""}`}
-              style={{ borderRadius: "12px" }}
+              className="relative overflow-hidden group"
+              style={{ borderRadius: "12px", aspectRatio: "4/3" }}
             >
               <Link href={`/applications/${app.slug}`} className="block w-full h-full">
                 <Image
@@ -39,7 +52,7 @@ export default function ApplicationsGrid() {
                   alt={applicationImages[app.slug] ? resolveImage(applicationImages[app.slug]).alt : app.name}
                   fill
                   className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
 
                 {/* Permanent dark gradient — bottom 60% */}

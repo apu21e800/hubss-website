@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 const COVERS = [
   "Why preformed thermoplastic markings last 10x longer than paint",
@@ -284,6 +285,24 @@ export default function LunchLearn() {
         </div>
       </div>
 
+
+      {/* Moose — standing on the CTA bar's top border */}
+      <div
+        className="absolute z-10 hidden sm:block pointer-events-none"
+        style={{ bottom: 64, right: 40, width: 216, height: 216 }}
+      >
+        <Image
+          src="/images/lunch-learn/moose.png"
+          alt="HUB Surface Systems Moose mascot"
+          width={216}
+          height={216}
+          style={{
+            filter: "drop-shadow(0 0 32px rgba(249,115,22,0.25)) drop-shadow(0 8px 24px rgba(0,0,0,0.45))",
+            display: "block",
+          }}
+          unoptimized
+        />
+      </div>
 
       {/* ── Bottom CTA bar ──────────────────────────────────── */}
       <div style={{ background: "#0f1420", borderTop: "1px solid rgba(255,255,255,0.06)" }}>

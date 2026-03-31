@@ -77,7 +77,7 @@ export default function ContactPage() {
             {/* Moose — peeking at the bottom of the contact info column */}
             <div className="hidden lg:block mt-10">
               <Image
-                src="/images/lunch-learn/pug-peeker.png"
+                src="/images/lunch-learn/moose.png"
                 alt="Moose — HUB Surface Systems mascot"
                 width={180}
                 height={180}

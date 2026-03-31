@@ -11,6 +11,7 @@ import ApplicationsGrid from "@/components/sections/ApplicationsGrid";
 import ResidentialDriveways from "@/components/sections/ResidentialDriveways";
 import ComparisonTable from "@/components/sections/ComparisonTable";
 import RecentProjects from "@/components/sections/RecentProjects";
+import FeaturedBlogPost from "@/components/sections/FeaturedBlogPost";
 import InstagramStrip from "@/components/sections/InstagramStrip";
 import LunchLearn from "@/components/sections/LunchLearn";
 import Footer from "@/components/sections/Footer";
@@ -76,6 +77,8 @@ export default function Home() {
       <ComparisonTable />
       {/* off-white → off-white */}
       <RecentProjects />
+      {/* Featured blog post */}
+      <FeaturedBlogPost />
       {/* off-white → slate (lunch learn) */}
       <InstagramStrip />
       {/* Moose — anchored to the L&L section on homepage, bottom-left */}

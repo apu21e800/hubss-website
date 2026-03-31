@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { projects } from "@/lib/projects";
-import { projectImages, resolveImage } from "@/lib/featured-images";
+import { resolveImage } from "@/lib/featured-images";
 
 export default function RecentProjects() {
   const featured = projects[0];

@@ -43,4 +43,7 @@ export const applicationImages: Record<string, ImageConfig> = {
   'traffic-calming': { featured: '/images/applications/traffic-calming/hero.jpg', fallback: '/images/applications/traffic-calming/curved-red-brick-shared-path-01.jpg', alt: 'Traffic calming surface treatment — decorative asphalt shared street and roundabout' },
   airports: { featured: null, fallback: '/images/applications/airports/aircraft-stop-symbol-apron-01.jpg', alt: 'Airport airfield surface marking — AirMark FAA-compliant runway and taxiway thermoplastic' },
   'leed-urban-heat-island': { featured: '/images/applications/leed-urban-heat-island/hero.jpg', fallback: '/images/applications/leed-urban-heat-island/leed-1.jpg', alt: 'LEED solar reflective surface coating — StreetBond SR urban heat island reduction' },
-  'pedestrian-safety': { featured: '/images/applications/pedestrian-safety/hero.jpg', fallback: '/images/applications/crosswalks/crosswalk-1.jpg', alt: 'Ped
+  'pedestrian-safety': { featured: '/images/applications/pedestrian-safety/hero.jpg', fallback: '/images/applications/crosswalks/crosswalk-1.jpg', alt: 'Pedestrian safety surface markings — decorative crosswalk and high-visibility pavement treatments' },
+  'public-art': { featured: null, fallback: '/images/applications/public-art/public-art-1.jpg', alt: 'Public art pavement installation — DecoMark custom thermoplastic civic mural' },
+  'public-spaces': { featured: null, fallback: '/images/applications/public-spaces/red-brick-waterfront-promenade-01.jpg', alt: 'Public plaza decorative surface — StreetPrint stamped asphalt waterfront promenade' },
+};

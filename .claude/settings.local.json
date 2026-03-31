@@ -20,7 +20,16 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(cmd /c \"taskkill /PID 39040 /F\")",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(powershell -Command \"Get-Process | Where-Object {$_Path -like ''*hubss*'' -or $_MainWindowTitle -like ''*hubss*''} | Select-Object Id, Name, Path | Format-Table\")",
+      "Bash(cmd /c \"rmdir /s /q \"\"C:\\\\Users\\\\cleve\\\\Based_Agency\\\\based-agncy_os\\\\Web_Projects\\\\hubss-website\\\\.claude\\\\worktrees\\\\cool-lumiere\"\"\")",
+      "Bash(cmd /c \"rmdir /s /q \"\"C:\\\\Users\\\\cleve\\\\Based_Agency\\\\based-agncy_os\\\\Web_Projects\\\\hubss-website\\\\.claude\\\\worktrees\\\\eloquent-cray\"\"\")",
+      "Bash(cmd /c \"rmdir /s /q \"\"C:\\\\Users\\\\cleve\\\\Based_Agency\\\\based-agncy_os\\\\Web_Projects\\\\hubss-website\\\\.claude\\\\worktrees\\\\fervent-villani\"\"\")",
+      "Bash(cmd /c \"rmdir /s /q \"\"C:\\\\Users\\\\cleve\\\\Based_Agency\\\\based-agncy_os\\\\Web_Projects\\\\hubss-website\\\\.claude\\\\worktrees\\\\romantic-wing\"\"\")",
+      "Bash(cmd /c \"rmdir /s /q \"\"C:\\\\Users\\\\cleve\\\\Based_Agency\\\\Web_Projects\\\\based-agency-site\\\\.claude\\\\worktrees\\\\amazing-kirch\"\"\")",
+      "Bash(cmd /c \"rmdir /s /q \"\"C:\\\\Users\\\\cleve\\\\Based_Agency\\\\Web_Projects\\\\based-agency-site\\\\.claude\\\\worktrees\\\\hardcore-blackwell\"\"\")",
+      "Bash(powershell -Command \"Remove-Item -Recurse -Force ''C:\\\\Users\\\\cleve\\\\Based_Agency\\\\based-agncy_os\\\\Web_Projects\\\\squareone-website\\\\.claude\\\\worktrees\\\\'' -ErrorAction SilentlyContinue; Write-Host ''Done''\")",
+      "Bash(powershell -Command \"Remove-Item -Recurse -Force ''C:\\\\Users\\\\cleve\\\\Based_Agency\\\\Web_Projects\\\\based-agency-site\\\\.claude\\\\worktrees\\\\'' -ErrorAction SilentlyContinue; Write-Host ''Done''\")"
     ]
   }
 }

@@ -24,7 +24,7 @@ export default function ApplicationsGrid() {
   ).filter(Boolean) as typeof applications;
 
   return (
-    <section className="py-28" style={{ background: "#1C1F23" }}>
+    <section className="py-28" style={{ background: "#080d16" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-16">
           <p className="grad-text text-xs font-semibold tracking-[0.2em] uppercase mb-3">

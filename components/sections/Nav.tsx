@@ -26,8 +26,9 @@ type MobileExpanded = "products" | "applications" | null;
 const PLAIN_LINKS = [
   { label: "Projects",  href: "/projects" },
   { label: "About",     href: "/about" },
-  { label: "Resources", href: "/resources" },
+  { label: "Blog",      href: "/blog" },
   { label: "Contact",   href: "/contact" },
+  { label: "Resources", href: "/resources" },
 ];
 
 const QUICK_ACTIONS = [
@@ -139,10 +140,11 @@ function ProductsPanel({
         className="absolute top-0 left-0 overflow-hidden"
         style={{
           width: "100vw",
-          background: "var(--bg-card)",
+          background: "#0d1117",
+          border: "1px solid rgba(255,255,255,0.08)",
           borderTop: "2px solid transparent",
           borderImage: "linear-gradient(90deg,#F97316,#EAB308) 1",
-          boxShadow: "0 20px 60px rgba(0,0,0,0.6)",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.7)",
           pointerEvents: "auto",
           maxHeight: "80vh",
           overflowY: "auto",
@@ -171,8 +173,8 @@ function ProductsPanel({
               <div className="grid grid-cols-2 gap-x-8 gap-y-1">
                 {products.map((p) => (
                   <Link key={p.slug} href={`/products/${p.slug}`} className="group py-2 block">
-                    <div className="text-sm font-medium text-gray-200 group-hover:text-orange-400 transition-colors">{p.name}</div>
-                    <div className="text-xs text-gray-500 group-hover:text-gray-400 transition-colors">{p.shortDesc}</div>
+                    <div className="text-sm font-medium group-hover:text-orange-400 transition-colors" style={{ color: "rgba(255,255,255,0.85)" }}>{p.name}</div>
+                    <div className="text-xs group-hover:text-gray-300 transition-colors" style={{ color: "rgba(255,255,255,0.4)" }}>{p.shortDesc}</div>
                   </Link>
                 ))}
               </div>
@@ -251,8 +253,10 @@ function ProductsPanel({
                   <Link
                     key={href}
                     href={href}
-                    className="flex items-start gap-2 p-2 rounded-lg transition-colors duration-150 hover:bg-[var(--bg-card-hover)]"
-                    style={{ background: "var(--bg-primary)" }}
+                    className="flex items-start gap-2 p-2 rounded-lg transition-colors duration-150"
+                    style={{ background: "rgba(255,255,255,0.03)" }}
+                    onMouseEnter={e => (e.currentTarget.style.background = "rgba(249,115,22,0.10)")}
+                    onMouseLeave={e => (e.currentTarget.style.background = "rgba(255,255,255,0.03)")}
                   >
                     <div
                       className="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0"
@@ -261,8 +265,8 @@ function ProductsPanel({
                       <Icon size={12} stroke="#f97316" strokeWidth={2} />
                     </div>
                     <div>
-                      <p className="text-sm font-medium" style={{ color: "var(--text-body)" }}>{label}</p>
-                      <p className="text-[0.65rem]" style={{ color: "var(--text-faint)" }}>{sub}</p>
+                      <p className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.85)" }}>{label}</p>
+                      <p className="text-[0.65rem]" style={{ color: "rgba(255,255,255,0.4)" }}>{sub}</p>
                     </div>
                   </Link>
                 ))}
@@ -312,10 +316,11 @@ function ApplicationsPanel({
         className="absolute top-0 left-0 overflow-hidden"
         style={{
           width: "100vw",
-          background: "var(--bg-card)",
+          background: "#0d1117",
+          border: "1px solid rgba(255,255,255,0.08)",
           borderTop: "2px solid transparent",
           borderImage: "linear-gradient(90deg,#F97316,#EAB308) 1",
-          boxShadow: "0 20px 60px rgba(0,0,0,0.6)",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.7)",
           pointerEvents: "auto",
           maxHeight: "80vh",
           overflowY: "auto",
@@ -344,7 +349,7 @@ function ApplicationsPanel({
               <div className="grid grid-cols-2 gap-x-8 gap-y-0.5">
                 {applications.map((app) => (
                   <Link key={app.slug} href={`/applications/${app.slug}`} className="group py-2 block">
-                    <div className="text-sm font-medium text-gray-200 group-hover:text-orange-400 transition-colors">{app.name}</div>
+                    <div className="text-sm font-medium group-hover:text-orange-400 transition-colors" style={{ color: "rgba(255,255,255,0.85)" }}>{app.name}</div>
                   </Link>
                 ))}
               </div>
@@ -385,7 +390,7 @@ function ApplicationsPanel({
                   </div>
                 </div>
 
-                <p className="text-sm leading-relaxed mb-4" style={{ color: "var(--text-secondary)" }}>
+                <p className="text-sm leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.55)" }}>
                   {featuredApp.shortDesc.slice(0, 100)}…
                 </p>
 
@@ -435,7 +440,7 @@ function MobileOverlay({
       className="fixed inset-0 flex flex-col lg:hidden"
       style={{
         zIndex: 10001,
-        background: "#0A0A0A",
+        background: "#080d16",
         WebkitOverflowScrolling: "touch" as React.CSSProperties["WebkitOverflowScrolling"],
       }}
       initial={{ opacity: 0, scale: 0.97 }}
@@ -692,45 +697,6 @@ function MobileOverlay({
             );
           })}
 
-          {/* Lunch & Learn — orange CTA link ─────────────────────────── */}
-          <motion.div variants={mobileItemVariants}>
-            <Link
-              href="/lunch-learn"
-              onClick={onClose}
-              className="flex items-center justify-between w-full active:bg-orange-500/10 transition-colors"
-              style={{
-                minHeight: 64,
-                paddingLeft: "1.5rem",
-                paddingRight: "1.5rem",
-                borderBottom: "1px solid rgba(249,115,22,0.12)",
-                borderLeft: "3px solid #F97316",
-                background: "rgba(249,115,22,0.04)",
-              }}
-            >
-              <span
-                style={{
-                  fontSize: "1.5rem",
-                  fontWeight: 700,
-                  color: "#F97316",
-                  fontFamily: "var(--font-geist), system-ui, sans-serif",
-                }}
-              >
-                Lunch &amp; Learn
-              </span>
-              <span
-                style={{
-                  fontSize: "0.6875rem",
-                  color: "rgba(249,115,22,0.6)",
-                  fontWeight: 600,
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                }}
-              >
-                Free · Book now
-              </span>
-            </Link>
-          </motion.div>
-
           {/* ── Zone 4: Social links ──────────────────────────────────── */}
           <motion.div variants={mobileItemVariants}>
             <div
@@ -770,14 +736,14 @@ function MobileOverlay({
         <div
           style={{
             height: 120,
-            background: "linear-gradient(to top, #0A0A0A 60%, transparent 100%)",
+            background: "linear-gradient(to top, #080d16 60%, transparent 100%)",
             pointerEvents: "none",
           }}
         />
         {/* Content */}
         <div
           style={{
-            background: "#0A0A0A",
+            background: "#080d16",
             paddingLeft: "1.5rem",
             paddingRight: "1.5rem",
             paddingBottom: "env(safe-area-inset-bottom, 2rem)",
@@ -802,16 +768,33 @@ function MobileOverlay({
           >
             Book Lunch &amp; Learn
           </Link>
+          <Link
+            href="/resources"
+            onClick={onClose}
+            className="block w-full text-center font-semibold transition-all active:scale-[0.98] mt-3"
+            style={{
+              background: "transparent",
+              color: "rgba(255,255,255,0.75)",
+              border: "1px solid rgba(255,255,255,0.15)",
+              borderRadius: 14,
+              paddingTop: "0.875rem",
+              paddingBottom: "0.875rem",
+              fontSize: "1rem",
+              letterSpacing: "0.01em",
+            }}
+          >
+            Download Spec Sheet
+          </Link>
           <p
             className="text-center"
             style={{
-              color: "rgba(255,255,255,0.38)",
+              color: "rgba(255,255,255,0.32)",
               fontSize: "0.8125rem",
               marginTop: "0.75rem",
               paddingBottom: "0.5rem",
             }}
           >
-            or call <span style={{ color: "rgba(255,255,255,0.55)" }}>1-877-391-0270</span>
+            or call <span style={{ color: "rgba(255,255,255,0.5)" }}>1-877-391-0270</span>
           </p>
         </div>
       </div>
@@ -908,7 +891,7 @@ export default function Nav() {
         className="fixed top-0 left-0 right-0 transition-all duration-300"
         style={{
           zIndex: 10000,
-          background:           "rgba(26,26,26,0.97)",
+          background:           "rgba(8,13,22,0.97)",
           backdropFilter:       scrolled || activePanel ? "blur(12px)" : "blur(8px)",
           WebkitBackdropFilter: scrolled || activePanel ? "blur(12px)" : "blur(8px)",
         }}

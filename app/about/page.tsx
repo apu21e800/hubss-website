@@ -81,7 +81,7 @@ export default function AboutPage() {
       </div>
 
       {/* ── Stats Bar ───────────────────────────────────────── */}
-      <div style={{ background: "#141414", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+      <div style={{ background: "#141b2d", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4">
             {stats.map((s, i) => (
@@ -152,7 +152,7 @@ export default function AboutPage() {
       </div>
 
       {/* ── Values — 3 columns ─────────────────────────────── */}
-      <div style={{ background: "#141414", borderTop: "1px solid rgba(255,255,255,0.05)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+      <div style={{ background: "#141b2d", borderTop: "1px solid rgba(255,255,255,0.05)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-12" style={{ color: "#f97316" }}>
             What We Stand For

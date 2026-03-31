@@ -24,9 +24,9 @@ const PRODUCT_GROUPS: { label: string; slugs: string[] }[] = [
 export default function ProductsGrid() {
   return (
     <section
-      className="py-24"
+      className="py-28 lg:py-32"
       style={{
-        backgroundColor: "#1a1a1a",
+        backgroundColor: "#0f1420",
         backgroundImage: `
           linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
           linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px)
@@ -37,7 +37,7 @@ export default function ProductsGrid() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Section header */}
-        <div className="mb-14">
+        <div className="mb-16 md:mb-20">
           <p className="gradient-text text-xs tracking-[0.15em] font-semibold uppercase mb-2">
             Our Systems
           </p>

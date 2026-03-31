@@ -37,7 +37,7 @@ export default function Hero({ variant = "default" }: HeroProps) {
   return (
     <section
       className="hero-section relative z-10 min-h-screen flex flex-col pb-20"
-      style={{ background: "#1A1A1A" }}
+      style={{ background: "#080d16" }}
     >
       {/* Full-bleed hero image */}
       <Image

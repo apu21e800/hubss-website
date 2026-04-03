@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Nav from "@/components/sections/Nav";
 import Hero from "@/components/sections/Hero";
 import HeroCityTicker from "@/components/sections/HeroCityTicker";
@@ -81,23 +80,8 @@ export default function Home() {
       <FeaturedBlogPost />
       {/* off-white → slate (lunch learn) */}
       <InstagramStrip />
-      {/* Moose — anchored to the L&L section on homepage, bottom-left */}
-      <div className="relative">
-        <LunchLearn />
-        <div
-          className="absolute bottom-0 left-8 lg:left-16 hidden lg:block pointer-events-none"
-          style={{ zIndex: 10, width: 200, height: 200 }}
-        >
-          <Image
-            src="/images/lunch-learn/moose.png"
-            alt="HUB Surface Systems Moose"
-            width={200}
-            height={200}
-            style={{ filter: "drop-shadow(0 0 28px rgba(249,115,22,0.22))", display: "block" }}
-            unoptimized
-          />
-        </div>
-      </div>
+      {/* LunchLearn — Moose mascot rendered internally by the component */}
+      <LunchLearn />
       {/* slate → dark footer */}
       <Footer />
     </main>

@@ -130,42 +130,6 @@ export default async function ProductPage({ params }: Props) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
           {/* Left: description + gallery */}
           <div className="lg:col-span-2">
-            {/* Brand logo lockup */}
-            {product.brandLogo && (
-              <div
-                data-brand-lockup
-                className="rounded-xl p-6 mb-10 flex flex-col sm:flex-row items-center gap-6"
-                style={{
-                  background: "linear-gradient(135deg, #1a1e28 0%, #111827 100%)",
-                  border: "1px solid rgba(255,255,255,0.08)",
-                }}
-              >
-                <Image
-                  src={product.brandLogo.src}
-                  alt={product.brandLogo.alt}
-                  width={product.brandLogo.width}
-                  height={product.brandLogo.height}
-                  style={{ maxWidth: product.brandLogo.width, height: "auto", flexShrink: 0 }}
-                  unoptimized
-                />
-                <div
-                  className="hidden sm:block self-stretch w-px"
-                  style={{ background: "rgba(255,255,255,0.08)" }}
-                />
-                <div className="flex-1 text-center sm:text-left">
-                  <p
-                    className="text-xs font-bold tracking-[0.18em] uppercase mb-1"
-                    style={{ color: "#f97316" }}
-                  >
-                    Industry-Leading Product
-                  </p>
-                  <p className="text-sm leading-relaxed" style={{ color: "#9CA3AF" }}>
-                    StreetBond is the most widely specified coloured pavement coating in Canada — trusted
-                    by municipalities, landscape architects, and contractors from coast to coast.
-                  </p>
-                </div>
-              </div>
-            )}
 
             <h2 className="text-2xl font-bold mb-5" style={{ color: "var(--text-primary)" }}>About {product.name}</h2>
             <p className="text-[16px] leading-relaxed mb-12" style={{ color: "var(--text-body)" }}>

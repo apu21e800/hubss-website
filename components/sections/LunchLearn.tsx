@@ -286,18 +286,18 @@ export default function LunchLearn() {
       </div>
 
 
-      {/* Moose — standing on the CTA bar's top border */}
+      {/* Moose — grounded bottom-right, visible on large screens */}
       <div
-        className="absolute z-10 hidden sm:block pointer-events-none"
-        style={{ bottom: 64, right: 40, width: 216, height: 216 }}
+        className="absolute z-10 hidden xl:block pointer-events-none"
+        style={{ bottom: 72, right: 24, width: 240, height: 240 }}
       >
         <Image
           src="/images/lunch-learn/moose.png"
           alt="HUB Surface Systems Moose mascot"
-          width={216}
-          height={216}
+          width={240}
+          height={240}
           style={{
-            filter: "drop-shadow(0 0 32px rgba(249,115,22,0.25)) drop-shadow(0 8px 24px rgba(0,0,0,0.45))",
+            filter: "drop-shadow(0 0 16px rgba(249,115,22,0.08)) drop-shadow(0 6px 16px rgba(0,0,0,0.5))",
             display: "block",
           }}
           unoptimized

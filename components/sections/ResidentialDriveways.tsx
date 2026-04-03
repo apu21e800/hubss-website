@@ -3,13 +3,14 @@
 import Image from "next/image";
 import Link from "next/link";
 
+// Featured images from the residential-driveways gallery (confirmed in lib/applications.ts)
+const HERO_IMAGE = "/images/applications/residential-driveways/residential-driveways-01.jpg";
+
 export default function ResidentialDriveways() {
   return (
-    <section
-      style={{ backgroundColor: "#0f1420" }}
-    >
+    <section style={{ backgroundColor: "#0f1420" }}>
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[520px]">
+        <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[540px]">
 
           {/* ── Left — content ─────────────────────────────────────────── */}
           <div className="flex flex-col justify-center px-8 sm:px-12 lg:px-16 py-16 lg:py-24">
@@ -41,16 +42,16 @@ export default function ResidentialDriveways() {
               className="text-base leading-relaxed mb-8 max-w-md"
               style={{ color: "var(--text-secondary)" }}
             >
-              The same StreetPrint patterns used on Toronto&apos;s streetscapes, now available
-              for residential driveways. 20&#8209;year durability. 1&#8209;2 day installation.
+              The same StreetPrint patterns used on Toronto&apos;s streetscapes, now available for
+              residential driveways. 20&#8209;year durability. 1&#8209;2 day installation.
             </p>
 
             {/* Benefit bullets */}
             <ul className="space-y-3.5 mb-10">
               {[
                 "Custom patterns — cobblestone, brick, herringbone, and more",
-                "Engineered for Canadian freeze\u2011thaw cycles",
-                "Same materials used on public streets — residential quality isn\u2019t a downgrade",
+                "Engineered for Canadian freeze‑thaw cycles",
+                "Same materials used on public streets — residential quality isn’t a downgrade",
               ].map((item) => (
                 <li key={item} className="flex items-start gap-3">
                   <span
@@ -108,8 +109,8 @@ export default function ResidentialDriveways() {
           {/* ── Right — hero image ──────────────────────────────────────── */}
           <div className="relative min-h-[360px] lg:min-h-0 overflow-hidden">
             <Image
-              src="/images/applications/private-driveways/estate-herringbone-gated-driveway-01.jpg"
-              alt="Estate herringbone stamped asphalt driveway — StreetPrint"
+              src={HERO_IMAGE}
+              alt="Residential stamped asphalt driveway — StreetPrint herringbone pattern"
               fill
               className="object-cover"
               sizes="(max-width: 1024px) 100vw, 50vw"
@@ -118,16 +119,14 @@ export default function ResidentialDriveways() {
             <div
               className="absolute inset-0 pointer-events-none"
               style={{
-                background:
-                  "linear-gradient(to right, rgba(249,115,22,0.13) 0%, transparent 35%)",
+                background: "linear-gradient(to right, rgba(249,115,22,0.13) 0%, transparent 35%)",
               }}
             />
-            {/* Bottom fade on mobile so text above reads clearly */}
+            {/* Bottom fade on mobile */}
             <div
               className="absolute inset-0 lg:hidden pointer-events-none"
               style={{
-                background:
-                  "linear-gradient(to top, rgba(15,20,32,0.65) 0%, transparent 50%)",
+                background: "linear-gradient(to top, rgba(15,20,32,0.65) 0%, transparent 50%)",
               }}
             />
           </div>

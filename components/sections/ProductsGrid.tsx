@@ -35,7 +35,6 @@ export default function ProductsGrid() {
       }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
         {/* Section header */}
         <div className="mb-16 md:mb-20">
           <p className="gradient-text text-xs tracking-[0.15em] font-semibold uppercase mb-2">
@@ -47,13 +46,16 @@ export default function ProductsGrid() {
           >
             The Systems Behind Canada&apos;s Most Recognised Surfaces
           </h2>
-          <p className="text-base font-light max-w-xl" style={{ color: "var(--text-secondary)" }}>
+          <p
+            className="text-base font-light max-w-xl"
+            style={{ color: "var(--text-secondary)" }}
+          >
             From thermoplastic crosswalks to stamped asphalt roundabouts — every product engineered for Canadian conditions.
           </p>
         </div>
 
         {/* Grouped product categories */}
-        <div className="space-y-12">
+        <div className="space-y-16">
           {PRODUCT_GROUPS.map((group) => {
             const groupProducts = group.slugs
               .map((slug) => products.find((p) => p.slug === slug))
@@ -62,7 +64,7 @@ export default function ProductsGrid() {
             return (
               <div key={group.label}>
                 {/* Group label row */}
-                <div className="flex items-center gap-4 mb-6">
+                <div className="flex items-center gap-4 mb-8">
                   <div className="h-px flex-shrink-0 w-8" style={{ background: "#f97316" }} />
                   <span
                     className="text-xs font-bold tracking-[0.18em] uppercase whitespace-nowrap"
@@ -73,25 +75,25 @@ export default function ProductsGrid() {
                   <div className="h-px flex-1" style={{ background: "rgba(255,255,255,0.06)" }} />
                 </div>
 
-                {/* Cards */}
-                <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                {/* Cards — 1 col mobile, 2 col sm, 4 col lg */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                   {groupProducts.map((product, i) => (
                     <motion.div
                       key={product.slug}
-                      initial={{ opacity: 0 }}
-                      whileInView={{ opacity: 1 }}
+                      initial={{ opacity: 0, y: 12 }}
+                      whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
-                      transition={{ delay: i * 0.04 }}
+                      transition={{ delay: i * 0.06 }}
                     >
                       <Link
                         href={`/products/${product.slug}`}
-                        className="group flex flex-col h-full relative overflow-hidden rounded-xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(249,115,22,0.12)]"
+                        className="group flex flex-col h-full relative overflow-hidden rounded-xl transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(249,115,22,0.14)]"
                         style={{
                           background: "var(--color-blue-mid)",
                           border: "1px solid var(--border-color)",
                         }}
-                        onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(249,115,22,0.4)")}
-                        onMouseLeave={e => (e.currentTarget.style.borderColor = "var(--border-color)")}
+                        onMouseEnter={(e) => (e.currentTarget.style.borderColor = "rgba(249,115,22,0.4)")}
+                        onMouseLeave={(e) => (e.currentTarget.style.borderColor = "var(--border-color)")}
                       >
                         {/* Gradient top accent */}
                         <div
@@ -99,38 +101,63 @@ export default function ProductsGrid() {
                           style={{ background: "var(--gradient-brand)" }}
                         />
 
-                        {/* Card image */}
-                        <div className="relative aspect-video w-full overflow-hidden">
+                        {/* Card image — taller, more impactful */}
+                        <div className="relative w-full overflow-hidden" style={{ aspectRatio: "4/3" }}>
                           <Image
-                            src={productImages[product.slug] ? resolveImage(productImages[product.slug]).src : product.imageUrl}
-                            alt={productImages[product.slug] ? resolveImage(productImages[product.slug]).alt : product.name}
+                            src={
+                              productImages[product.slug]
+                                ? resolveImage(productImages[product.slug]).src
+                                : product.imageUrl
+                            }
+                            alt={
+                              productImages[product.slug]
+                                ? resolveImage(productImages[product.slug]).alt
+                                : product.name
+                            }
                             fill
-                            className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-                            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                            className="object-cover transition-transform duration-500 group-hover:scale-[1.06]"
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                           />
                           <div
                             className="absolute inset-0"
-                            style={{ background: "linear-gradient(to top, rgba(12,21,32,0.75) 0%, transparent 60%)" }}
+                            style={{
+                              background:
+                                "linear-gradient(to top, rgba(12,21,32,0.82) 0%, rgba(12,21,32,0.2) 50%, transparent 100%)",
+                            }}
                           />
+                          {/* Product name overlaid on image */}
+                          <div className="absolute bottom-0 inset-x-0 p-4 z-10">
+                            <h3
+                              className="text-base font-bold leading-tight transition-colors duration-200 group-hover:text-orange-400"
+                              style={{ color: "#F5F0EB" }}
+                            >
+                              {product.name}
+                            </h3>
+                          </div>
                         </div>
 
-                        <div className="flex flex-col flex-1 p-4">
-                          <h3
-                            className="text-sm font-bold mb-1 transition-colors duration-200 group-hover:text-orange-400 leading-tight"
-                            style={{ color: "var(--text-primary)" }}
+                        {/* Card body */}
+                        <div className="flex flex-col flex-1 p-5">
+                          <p
+                            className="text-sm leading-relaxed flex-1"
+                            style={{ color: "var(--text-secondary)" }}
                           >
-                            {product.name}
-                          </h3>
-                          <p className="text-xs leading-relaxed" style={{ color: "var(--text-secondary)" }}>
                             {product.shortDesc}
                           </p>
-                          <div className="mt-3">
+                          <div className="mt-4 flex items-center justify-between">
                             <span
-                              className="text-[10px] tracking-widest font-semibold uppercase flex items-center gap-1"
+                              className="text-xs tracking-widest font-bold uppercase flex items-center gap-1.5 transition-colors duration-200 group-hover:text-orange-300"
                               style={{ color: "#f97316" }}
                             >
                               Explore
-                              <span className="transition-transform duration-200 group-hover:translate-x-0.5 inline-block">→</span>
+                              <svg
+                                className="w-3 h-3 transition-transform duration-200 group-hover:translate-x-1"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                              </svg>
                             </span>
                           </div>
                         </div>
@@ -141,6 +168,20 @@ export default function ProductsGrid() {
               </div>
             );
           })}
+        </div>
+
+        {/* Bottom CTA */}
+        <div className="mt-16 flex justify-center">
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold transition-all duration-150 border hover:border-orange-500/50 hover:text-white"
+            style={{ color: "var(--text-secondary)", borderColor: "rgba(255,255,255,0.12)" }}
+          >
+            View all products
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </Link>
         </div>
       </div>
     </section>

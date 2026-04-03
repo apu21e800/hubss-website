@@ -42,7 +42,7 @@ export default async function ProductPage({ params }: Props) {
 
   // Prefer product.gallery, fall back to featured image or product imageUrl
   const gallerySources = productGallery.length > 0 ? productGallery : (featuredImg ? [featuredImg.src] : [product.imageUrl]);
-  const gallery: GalleryImage[] = gallerySources.slice(0, 12).map((src, idx) => ({
+  const gallery: GalleryImage[] = gallerySources.map((src, idx) => ({
     src,
     alt: `${product.name} — ${galleryLabels[idx % galleryLabels.length]}`,
     caption: `${product.name} · ${galleryLabels[idx % galleryLabels.length]}`,
@@ -93,8 +93,20 @@ export default async function ProductPage({ params }: Props) {
         </div>
       </div>
 
-      <div className="bg-asphalt-subtle" style={{ background: "var(--bg-dark)" }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
+      {/* Main content — dark section with subtle asphalt texture overlay */}
+      <div className="relative" style={{ background: "var(--bg-dark)" }}>
+        {/* Texture overlay */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage: "url('/images/assets/details/asphalt-closeup-01.jpg')",
+            backgroundSize: "480px auto",
+            backgroundRepeat: "repeat",
+            opacity: 0.04,
+            mixBlendMode: "luminosity",
+          }}
+        />
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
 
         {/* Specify CTA bar */}
         <div className="rounded-xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-10"
@@ -118,6 +130,43 @@ export default async function ProductPage({ params }: Props) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
           {/* Left: description + gallery */}
           <div className="lg:col-span-2">
+            {/* Brand logo lockup */}
+            {product.brandLogo && (
+              <div
+                data-brand-lockup
+                className="rounded-xl p-6 mb-10 flex flex-col sm:flex-row items-center gap-6"
+                style={{
+                  background: "linear-gradient(135deg, #1a1e28 0%, #111827 100%)",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                }}
+              >
+                <Image
+                  src={product.brandLogo.src}
+                  alt={product.brandLogo.alt}
+                  width={product.brandLogo.width}
+                  height={product.brandLogo.height}
+                  style={{ maxWidth: product.brandLogo.width, height: "auto", flexShrink: 0 }}
+                  unoptimized
+                />
+                <div
+                  className="hidden sm:block self-stretch w-px"
+                  style={{ background: "rgba(255,255,255,0.08)" }}
+                />
+                <div className="flex-1 text-center sm:text-left">
+                  <p
+                    className="text-xs font-bold tracking-[0.18em] uppercase mb-1"
+                    style={{ color: "#f97316" }}
+                  >
+                    Industry-Leading Product
+                  </p>
+                  <p className="text-sm leading-relaxed" style={{ color: "#9CA3AF" }}>
+                    StreetBond is the most widely specified coloured pavement coating in Canada — trusted
+                    by municipalities, landscape architects, and contractors from coast to coast.
+                  </p>
+                </div>
+              </div>
+            )}
+
             <h2 className="text-2xl font-bold mb-5" style={{ color: "var(--text-primary)" }}>About {product.name}</h2>
             <p className="text-[16px] leading-relaxed mb-12" style={{ color: "var(--text-body)" }}>
               {product.description}
@@ -132,6 +181,26 @@ export default async function ProductPage({ params }: Props) {
 
           {/* Right: specs + CTA */}
           <div>
+            {/* Brand logo badge in sidebar */}
+            {product.brandLogo && (
+              <div
+                className="rounded-xl p-5 mb-6 flex items-center justify-center"
+                style={{
+                  background: "#ffffff",
+                  border: "1px solid rgba(255,255,255,0.06)",
+                  minHeight: 88,
+                }}
+              >
+                <Image
+                  src={product.brandLogo.src}
+                  alt={product.brandLogo.alt}
+                  width={product.brandLogo.width}
+                  height={product.brandLogo.height}
+                  style={{ maxWidth: "100%", height: "auto", maxHeight: 64 }}
+                  unoptimized
+                />
+              </div>
+            )}
             <div className="rounded-xl p-8 mb-8 sticky top-24 relative overflow-hidden" style={{ background: "#111111", border: "1px solid rgba(255,255,255,0.08)" }}>
               {/* Orange top accent */}
               <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
@@ -252,8 +321,8 @@ export default async function ProductPage({ params }: Props) {
             </div>
           </div>
         )}
-      </div>
-      </div>
+      </div>{/* /max-w-7xl content */}
+      </div>{/* /texture outer wrapper */}
       <LunchLearn />
       <Footer />
     </main>

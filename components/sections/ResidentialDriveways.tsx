@@ -3,8 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
-// Aerial shot — circular stamp pattern, home with garage. Clearly a driveway, not a path.
-const HERO_IMAGE = "/images/applications/residential-driveways/residential-driveways-03.jpg";
+// Featured images from the residential-driveways gallery (confirmed in lib/applications.ts)
+const HERO_IMAGE = "/images/applications/residential-driveways/residential-driveways-01.jpg";
 
 export default function ResidentialDriveways() {
   return (
@@ -110,7 +110,7 @@ export default function ResidentialDriveways() {
           <div className="relative min-h-[360px] lg:min-h-0 overflow-hidden">
             <Image
               src={HERO_IMAGE}
-              alt="Residential StreetPrint driveway — aerial view, circular stamp pattern, home with double garage"
+              alt="Residential stamped asphalt driveway — StreetPrint herringbone pattern"
               fill
               className="object-cover"
               sizes="(max-width: 1024px) 100vw, 50vw"

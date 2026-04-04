@@ -8,12 +8,16 @@ import { productImages, resolveImage } from "@/lib/featured-images";
 
 const PRODUCT_GROUPS: { label: string; slugs: string[] }[] = [
   {
-    label: "Flagship Systems",
-    slugs: ["traffic-patterns-xd", "traffic-patterns", "streetbond", "streetprint"],
+    label: "Traffic & Safety Markings",
+    slugs: ["traffic-patterns", "traffic-patterns-xd", "premark", "airmark"],
   },
   {
-    label: "Specialty & Regulatory",
-    slugs: ["decomark", "mmax", "duratherm", "durashield", "airmark"],
+    label: "Decorative Surface Systems",
+    slugs: ["streetprint", "streetbond", "decomark", "duratherm"],
+  },
+  {
+    label: "Performance Coatings & Protection",
+    slugs: ["mmax", "durashield"],
   },
 ];
 
@@ -71,18 +75,8 @@ export default function ProductsGrid() {
                   <div className="h-px flex-1" style={{ background: "rgba(255,255,255,0.06)" }} />
                 </div>
 
-                {/* Cards — 1 col mobile, 2 col sm, up to 5 col lg for large groups */}
-                <div
-                  className={`grid grid-cols-1 sm:grid-cols-2 gap-5 ${
-                    groupProducts.length >= 5
-                      ? "lg:grid-cols-5"
-                      : groupProducts.length === 4
-                      ? "lg:grid-cols-4"
-                      : groupProducts.length === 3
-                      ? "lg:grid-cols-3"
-                      : "lg:grid-cols-2"
-                  }`}
-                >
+                {/* Cards — 1 col mobile, 2 col sm, 4 col lg */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                   {groupProducts.map((product, i) => (
                     <motion.div
                       key={product.slug}
@@ -95,8 +89,8 @@ export default function ProductsGrid() {
                         href={`/products/${product.slug}`}
                         className="group flex flex-col h-full relative overflow-hidden rounded-xl transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(249,115,22,0.14)]"
                         style={{
-                          background: "rgba(255,255,255,0.04)",
-                          border: "1px solid rgba(255,255,255,0.09)",
+                          background: "var(--color-blue-mid)",
+                          border: "1px solid var(--border-color)",
                         }}
                         onMouseEnter={(e) => (e.currentTarget.style.borderColor = "rgba(249,115,22,0.4)")}
                         onMouseLeave={(e) => (e.currentTarget.style.borderColor = "var(--border-color)")}
@@ -107,7 +101,7 @@ export default function ProductsGrid() {
                           style={{ background: "var(--gradient-brand)" }}
                         />
 
-                        {/* Card image — 4:3 aspect, impactful */}
+                        {/* Card image — taller, more impactful */}
                         <div className="relative w-full overflow-hidden" style={{ aspectRatio: "4/3" }}>
                           <Image
                             src={

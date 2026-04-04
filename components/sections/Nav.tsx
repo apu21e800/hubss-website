@@ -142,7 +142,8 @@ function ProductsPanel({
           width: "100vw",
           background: "#0d1117",
           border: "1px solid rgba(255,255,255,0.08)",
-          borderTop: "none",
+          borderTop: "2px solid transparent",
+          borderImage: "linear-gradient(90deg,#F97316,#EAB308) 1",
           boxShadow: "0 20px 60px rgba(0,0,0,0.7)",
           pointerEvents: "auto",
           maxHeight: "80vh",
@@ -154,20 +155,6 @@ function ProductsPanel({
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
       >
-        {/* Top accent line — full-width orange gradient */}
-        <div
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            height: 2,
-            background: "linear-gradient(90deg,#F97316,#EAB308)",
-            zIndex: 10,
-            pointerEvents: "none",
-          }}
-        />
         {/* Inner content — max-width constrained, matching Applications panel */}
         <div style={{ maxWidth: 1400, margin: "0 auto", padding: "2rem 3rem" }}>
           <div
@@ -179,7 +166,7 @@ function ProductsPanel({
           >
             {/* ── LEFT: All systems list (2-column like Applications) ───── */}
             <div style={{ borderRight: "1px solid var(--border-faint)", paddingRight: "3rem" }}>
-              <p className="text-[0.65rem] font-bold tracking-[0.2em] uppercase mb-5" style={{ color: "rgba(255,255,255,0.35)" }}>
+              <p className="text-xs font-bold tracking-[0.2em] uppercase mb-5" style={GRAD}>
                 Products
               </p>
 
@@ -201,17 +188,17 @@ function ProductsPanel({
             </div>
 
             {/* ── RIGHT: Featured products + Quick Links ────────────────── */}
-            <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: "1.25rem" }}>
-              <p className="text-[0.65rem] font-bold tracking-[0.2em] uppercase mb-4" style={{ color: "rgba(255,255,255,0.35)" }}>
+            <div style={{ borderTop: "2px solid #F97316", paddingTop: "1.25rem" }}>
+              <p className="text-xs font-bold tracking-[0.2em] uppercase mb-4" style={GRAD}>
                 Featured Systems
               </p>
 
               {/* Compact featured cards */}
               <div className="space-y-2 mb-6">
-                <Link href="/products/traffic-patterns-xd" className="group flex gap-2 p-2 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] transition-colors">
+                <Link href="/products/traffic-patterns-xd" className="group flex gap-2 p-2 rounded-lg border-l-2 border-orange-500 bg-white/[0.04] hover:bg-orange-500/10 transition-colors">
                   <div className="flex-shrink-0 w-[48px] h-[48px] rounded overflow-hidden bg-black/20">
                     <Image
-                      src="/images/products/traffic-patterns-xd/traffic-patterns-xd-01.jpg"
+                      src="/images/products/trafficpatterns-xd/trafficpatterns-xd-1.jpg"
                       alt="TrafficPatternsXD"
                       width={48}
                       height={48}
@@ -224,10 +211,10 @@ function ProductsPanel({
                   </div>
                 </Link>
 
-                <Link href="/products/streetbond" className="group flex gap-2 p-2 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] transition-colors">
+                <Link href="/products/streetbond" className="group flex gap-2 p-2 rounded-lg border-l-2 border-orange-500 bg-white/[0.04] hover:bg-orange-500/10 transition-colors">
                   <div className="flex-shrink-0 w-[48px] h-[48px] rounded overflow-hidden bg-black/20">
                     <Image
-                      src="/images/products/streetbond/streetbond-01.png"
+                      src="/images/products/streetbond/streetbond-multicolour-plaza-green-circles-01.jpg"
                       alt="StreetBond"
                       width={48}
                       height={48}
@@ -240,10 +227,10 @@ function ProductsPanel({
                   </div>
                 </Link>
 
-                <Link href="/products/streetprint" className="group flex gap-2 p-2 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] transition-colors">
+                <Link href="/products/streetprint" className="group flex gap-2 p-2 rounded-lg border-l-2 border-orange-500 bg-white/[0.04] hover:bg-orange-500/10 transition-colors">
                   <div className="flex-shrink-0 w-[48px] h-[48px] rounded overflow-hidden bg-black/20">
                     <Image
-                      src="/images/applications/traffic-calming/traffic-calming-01.jpg"
+                      src="/images/applications/traffic-calming/roundabout-red-brick-planted-centre-01.jpg"
                       alt="StreetPrint"
                       width={48}
                       height={48}
@@ -258,7 +245,7 @@ function ProductsPanel({
               </div>
 
               {/* Quick Links — matching Applications spacing */}
-              <p className="text-[0.65rem] font-bold tracking-[0.2em] uppercase mb-3" style={{ color: "rgba(255,255,255,0.35)" }}>
+              <p className="text-xs font-bold tracking-[0.2em] uppercase mb-3" style={GRAD}>
                 Quick Links
               </p>
               <div className="space-y-1.5">
@@ -268,14 +255,14 @@ function ProductsPanel({
                     href={href}
                     className="flex items-start gap-2 p-2 rounded-lg transition-colors duration-150"
                     style={{ background: "rgba(255,255,255,0.03)" }}
-                    onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
+                    onMouseEnter={e => (e.currentTarget.style.background = "rgba(249,115,22,0.10)")}
                     onMouseLeave={e => (e.currentTarget.style.background = "rgba(255,255,255,0.03)")}
                   >
                     <div
                       className="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0"
-                      style={{ background: "rgba(255,255,255,0.06)" }}
+                      style={{ background: "rgba(249,115,22,0.1)" }}
                     >
-                      <Icon size={12} stroke="rgba(255,255,255,0.5)" strokeWidth={2} />
+                      <Icon size={12} stroke="#f97316" strokeWidth={2} />
                     </div>
                     <div>
                       <p className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.85)" }}>{label}</p>
@@ -331,7 +318,8 @@ function ApplicationsPanel({
           width: "100vw",
           background: "#0d1117",
           border: "1px solid rgba(255,255,255,0.08)",
-          borderTop: "none",
+          borderTop: "2px solid transparent",
+          borderImage: "linear-gradient(90deg,#F97316,#EAB308) 1",
           boxShadow: "0 20px 60px rgba(0,0,0,0.7)",
           pointerEvents: "auto",
           maxHeight: "80vh",
@@ -343,20 +331,6 @@ function ApplicationsPanel({
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
       >
-        {/* Top accent line — full-width orange gradient */}
-        <div
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            height: 2,
-            background: "linear-gradient(90deg,#F97316,#EAB308)",
-            zIndex: 10,
-            pointerEvents: "none",
-          }}
-        />
         {/* Inner content — max-width constrained */}
         <div style={{ maxWidth: 1400, margin: "0 auto", padding: "2rem 3rem" }}>
           <div
@@ -368,7 +342,7 @@ function ApplicationsPanel({
           >
             {/* ── LEFT: Application text list ────────────────────────── */}
             <div style={{ borderRight: "1px solid var(--border-faint)", paddingRight: "3rem" }}>
-              <p className="text-[0.65rem] font-bold tracking-[0.2em] uppercase mb-5" style={{ color: "rgba(255,255,255,0.35)" }}>
+              <p className="text-xs font-bold tracking-[0.2em] uppercase mb-5" style={GRAD}>
                 Applications
               </p>
 
@@ -389,8 +363,8 @@ function ApplicationsPanel({
             </div>
 
             {/* ── RIGHT: Featured application ────────────────────────── */}
-            <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: "1.25rem" }}>
-              <p className="text-[0.65rem] font-bold tracking-[0.2em] uppercase mb-4" style={{ color: "rgba(255,255,255,0.35)" }}>
+            <div style={{ borderTop: "2px solid #F97316", paddingTop: "1.25rem" }}>
+              <p className="text-xs font-bold tracking-[0.2em] uppercase mb-4" style={GRAD}>
                 Featured Application
               </p>
 
@@ -423,10 +397,10 @@ function ApplicationsPanel({
                 {/* Why it matters stat */}
                 <div
                   className="flex items-center gap-3 mb-4 px-3 py-2.5 rounded-lg"
-                  style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}
+                  style={{ background: "rgba(249,115,22,0.06)", border: "1px solid rgba(249,115,22,0.12)" }}
                 >
-                  <span className="text-xl font-black leading-none" style={{ color: "rgba(255,255,255,0.85)", fontFamily: "var(--font-geist), system-ui, sans-serif" }}>30–50%</span>
-                  <span className="text-[0.7rem] leading-tight" style={{ color: "rgba(255,255,255,0.4)" }}>
+                  <span className="text-xl font-black leading-none" style={{ color: "#f97316", fontFamily: "var(--font-geist), system-ui, sans-serif" }}>30–50%</span>
+                  <span className="text-[0.7rem] leading-tight" style={{ color: "var(--text-secondary)" }}>
                     reduction in pedestrian collisions at marked crossings
                   </span>
                 </div>
@@ -930,15 +904,15 @@ export default function Nav() {
               <Image
                 src="/images/hub-wheel-orange.png"
                 alt=""
-                width={40}
-                height={40}
+                width={28}
+                height={28}
                 unoptimized
                 aria-hidden="true"
               />
               <span style={{
                 color: "#ffffff",
                 fontWeight: 700,
-                fontSize: "1.05rem",
+                fontSize: "0.95rem",
                 letterSpacing: "0.01em",
                 lineHeight: 1,
               }}>
@@ -952,8 +926,8 @@ export default function Nav() {
               {/* Products trigger */}
               <Link
                 href="/products"
-                className="flex items-center gap-1 text-[0.875rem] font-medium px-3 py-2 relative transition-colors duration-150"
-                style={{ color: activePanel === "products" || pathname.startsWith("/products") ? "var(--text-primary)" : "rgba(255,255,255,0.88)" }}
+                className="flex items-center gap-1 text-[0.78rem] font-medium px-3 py-2 relative transition-colors duration-150"
+                style={{ color: activePanel === "products" || pathname.startsWith("/products") ? "var(--text-primary)" : "var(--text-muted)" }}
                 onMouseEnter={(e) => openPanel("products", e.currentTarget)}
                 onMouseLeave={startCloseTimer}
                 aria-expanded={activePanel === "products"}
@@ -977,8 +951,8 @@ export default function Nav() {
               {/* Applications trigger */}
               <Link
                 href="/applications"
-                className="flex items-center gap-1 text-[0.875rem] font-medium px-3 py-2 relative transition-colors duration-150"
-                style={{ color: activePanel === "applications" || pathname.startsWith("/applications") ? "var(--text-primary)" : "rgba(255,255,255,0.88)" }}
+                className="flex items-center gap-1 text-[0.78rem] font-medium px-3 py-2 relative transition-colors duration-150"
+                style={{ color: activePanel === "applications" || pathname.startsWith("/applications") ? "var(--text-primary)" : "var(--text-muted)" }}
                 onMouseEnter={(e) => openPanel("applications", e.currentTarget)}
                 onMouseLeave={startCloseTimer}
                 aria-expanded={activePanel === "applications"}
@@ -1016,8 +990,8 @@ export default function Nav() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="text-[0.875rem] font-medium px-3 py-2 relative group transition-colors duration-150"
-                    style={{ color: active ? "var(--text-primary)" : "rgba(255,255,255,0.88)" }}
+                    className="text-[0.78rem] font-medium px-3 py-2 relative group transition-colors duration-150"
+                    style={{ color: active ? "var(--text-primary)" : "var(--text-muted)" }}
                   >
                     {link.label}
                     <span

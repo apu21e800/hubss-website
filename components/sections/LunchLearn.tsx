@@ -25,7 +25,7 @@ const inputStyle = {
 
 const labelStyle = { color: "var(--text-hint)" as string, fontSize: "0.8125rem", fontWeight: 600 };
 
-export default function LunchLearn() {
+export default function LunchLearn({ hideMoose = false }: { hideMoose?: boolean }) {
   const [form, setForm] = useState({
     name: "", org: "", email: "", phone: "",
   });
@@ -286,23 +286,25 @@ export default function LunchLearn() {
       </div>
 
 
-      {/* Moose — grounded bottom-right, visible on large screens */}
-      <div
-        className="absolute z-10 hidden xl:block pointer-events-none"
-        style={{ bottom: 72, right: 24, width: 240, height: 240 }}
-      >
-        <Image
-          src="/images/lunch-learn/moose.png"
-          alt="HUB Surface Systems Moose mascot"
-          width={240}
-          height={240}
-          style={{
-            filter: "drop-shadow(0 0 16px rgba(249,115,22,0.08)) drop-shadow(0 6px 16px rgba(0,0,0,0.5))",
-            display: "block",
-          }}
-          unoptimized
-        />
-      </div>
+      {/* Moose mascot — grounded bottom-right, xl screens only. Hidden when page already has its own hero mascot */}
+      {!hideMoose && (
+        <div
+          className="absolute z-10 hidden xl:block pointer-events-none"
+          style={{ bottom: 72, right: 24, width: 240, height: 240 }}
+        >
+          <Image
+            src="/images/lunch-learn/moose.png"
+            alt="HUB Surface Systems Moose mascot"
+            width={240}
+            height={240}
+            style={{
+              filter: "drop-shadow(0 0 16px rgba(249,115,22,0.08)) drop-shadow(0 6px 16px rgba(0,0,0,0.5))",
+              display: "block",
+            }}
+            unoptimized
+          />
+        </div>
+      )}
 
       {/* ── Bottom CTA bar ──────────────────────────────────── */}
       <div style={{ background: "#0f1420", borderTop: "1px solid rgba(255,255,255,0.06)" }}>

@@ -29,8 +29,15 @@ export default function ResourcesPage() {
         </p>
       </div>
 
-      {/* ── Document Library — dot-grid background ───────── */}
-      <section className="bg-dot-grid-dark relative overflow-hidden">
+      {/* ── Document Library — white grid background ─────── */}
+      <section
+        className="relative overflow-hidden"
+        style={{
+          backgroundColor: "#f7f6f3",
+          backgroundImage: "linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px)",
+          backgroundSize: "44px 44px",
+        }}
+      >
         {/* Orange radial glow — soft, offset to bottom-left */}
         <div
           className="absolute pointer-events-none"
@@ -39,7 +46,7 @@ export default function ResourcesPage() {
             left: "-80px",
             width: "600px",
             height: "600px",
-            background: "radial-gradient(ellipse at center, rgba(249,115,22,0.04) 0%, rgba(249,115,22,0.01) 40%, transparent 70%)",
+            background: "radial-gradient(ellipse at center, rgba(249,115,22,0.06) 0%, rgba(249,115,22,0.02) 40%, transparent 70%)",
           }}
           aria-hidden="true"
         />
@@ -49,7 +56,7 @@ export default function ResourcesPage() {
             <h2 className="text-sm font-bold tracking-widest uppercase" style={{ color: "#F97316" }}>
               All Documents
             </h2>
-            <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.1)" }} />
+            <div className="flex-1 h-px" style={{ background: "rgba(0,0,0,0.1)" }} />
             <span className="text-xs" style={{ color: "#9CA3AF" }}>{resourceDocuments.length} total</span>
           </div>
           <ResourcesClient documents={resourceDocuments} />

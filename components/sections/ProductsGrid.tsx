@@ -13,7 +13,7 @@ const PRODUCT_GROUPS: { label: string; slugs: string[] }[] = [
   },
   {
     label: "Specialty & Regulatory",
-    slugs: ["decomark", "mmax", "duratherm", "durashield", "airmark"],
+    slugs: ["decomark", "mmax", "premark", "durashield", "duratherm"],
   },
 ];
 
@@ -64,7 +64,7 @@ export default function ProductsGrid() {
                   <div className="h-px flex-shrink-0 w-8" style={{ background: "#f97316" }} />
                   <span
                     className="text-xs font-bold tracking-[0.18em] uppercase whitespace-nowrap"
-                    style={{ color: "rgba(209,213,219,0.5)" }}
+                    style={{ color: "rgba(249,115,22,0.7)" }}
                   >
                     {group.label}
                   </span>

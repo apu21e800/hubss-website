@@ -87,7 +87,7 @@ export default function LunchLearnPage() {
       </div>
 
       <div className="pt-16">
-        <LunchLearn />
+        <LunchLearn hideMoose />
       </div>
       <Footer />
     </main>

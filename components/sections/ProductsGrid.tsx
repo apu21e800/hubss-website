@@ -6,30 +6,54 @@ import Image from "next/image";
 import { products } from "@/lib/products";
 import { productImages, resolveImage } from "@/lib/featured-images";
 
-const PRODUCT_GROUPS: { label: string; slugs: string[]; sectionImage: string; sectionImageAlt: string }[] = [
+// Plain-English description of what each product actually does
+const PRODUCT_WHAT: Record<string, string> = {
+  "streetprint":          "Stamps existing asphalt into decorative patterns — cobblestone, brick, herringbone, and more. Used on 500+ Canadian streets.",
+  "streetbond":           "Bonds vivid colour directly to asphalt or concrete. 20-year colour retention warranty. Full Pantone custom matching.",
+  "traffic-patterns-xd":  "Aggregate-reinforced thermoplastic built for high-volume intersections and BRT corridors. BPN 65+ skid resistance.",
+  "traffic-patterns":     "Crisp preformed thermoplastic markings trusted by York Region, City of Toronto, Vancouver, and UBC.",
+  "mmax":                 "MMA resin for coloured bus and bike lanes. Cures in under 60 minutes — applied down to −10°C.",
+  "decomark":             "Custom civic murals, Pride crosswalks, and Indigenous art rendered in durable preformed thermoplastic.",
+};
+
+const PRODUCT_TYPE: Record<string, string> = {
+  "streetprint":          "Stamped Asphalt",
+  "streetbond":           "Colour Coating",
+  "traffic-patterns-xd":  "Thermoplastic XD",
+  "traffic-patterns":     "Thermoplastic",
+  "mmax":                 "MMA Resin",
+  "decomark":             "Custom Graphics",
+};
+
+const PRODUCT_STAT: Record<string, string> = {
+  "streetprint":          "20-yr warranty",
+  "streetbond":           "20-yr warranty",
+  "traffic-patterns-xd":  "7+ yr service life",
+  "traffic-patterns":     "5–7 yr service life",
+  "mmax":                 "Cures in 60 min",
+  "decomark":             "Full Pantone match",
+};
+
+// Where each product is typically installed
+const PRODUCT_APPS: Record<string, string[]> = {
+  "streetprint":          ["Crosswalks", "Driveways", "Plazas", "Intersections"],
+  "streetbond":           ["Bike Lanes", "Bus Lanes", "Driveways", "Paths"],
+  "traffic-patterns-xd":  ["Crosswalks", "BRT Corridors", "Bike Lanes"],
+  "traffic-patterns":     ["Crosswalks", "Bike Lanes", "Parking Lots"],
+  "mmax":                 ["Bus Lanes", "Bike Lanes", "Crosswalks"],
+  "decomark":             ["Public Art", "Crosswalks", "Community Branding"],
+};
+
+const PRODUCT_GROUPS: { label: string; slugs: string[] }[] = [
   {
-    label: "Decorative & Surface Systems",
+    label: "Decorative Asphalt Systems",
     slugs: ["streetprint", "streetbond", "traffic-patterns-xd", "traffic-patterns"],
-    sectionImage: "/images/applications/crosswalks/crosswalks-01.jpg",
-    sectionImageAlt: "StreetPrint stamped asphalt decorative crosswalk — Canadian municipality installation",
   },
   {
-    label: "Mobility & Community Identity",
+    label: "Transit Safety & Community Graphics",
     slugs: ["mmax", "decomark"],
-    sectionImage: "/images/applications/bus-lanes/bus-lanes-01.jpg",
-    sectionImageAlt: "MMAX red bus rapid transit lane surface — Canadian municipality",
   },
 ];
-
-// One-word product type tags for quick scanning
-const PRODUCT_TYPE: Record<string, string> = {
-  "streetprint":         "Stamped Asphalt",
-  "streetbond":          "Colour Coating",
-  "traffic-patterns-xd": "Thermoplastic XD",
-  "traffic-patterns":    "Thermoplastic",
-  "mmax":                "MMA Resin",
-  "decomark":            "Custom Graphics",
-};
 
 export default function ProductsGrid() {
   return (
@@ -51,22 +75,34 @@ export default function ProductsGrid() {
           <p className="gradient-text text-xs tracking-[0.15em] font-semibold uppercase mb-2">
             Surface Systems
           </p>
-          <h2
-            className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3"
-            style={{ color: "var(--text-primary)" }}
-          >
-            Purpose-Built. Canadian-Proven.
-          </h2>
-          <p
-            className="text-base font-light max-w-xl"
-            style={{ color: "var(--text-secondary)" }}
-          >
-            Stamped asphalt, thermoplastic markings, and coloured pavement coatings — engineered to survive snowplows, de-icing chemicals, and thirty years of freeze-thaw.
-          </p>
+          <div className="flex items-end justify-between gap-6 flex-wrap">
+            <div>
+              <h2
+                className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3"
+                style={{ color: "var(--text-primary)" }}
+              >
+                Purpose-Built. Canadian-Proven.
+              </h2>
+              <p className="text-base font-light max-w-xl" style={{ color: "var(--text-secondary)" }}>
+                Six surface systems engineered for Canadian infrastructure — decorative crosswalks,
+                bus rapid transit corridors, and everything in between.
+              </p>
+            </div>
+            <Link
+              href="/products"
+              className="flex-shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold border transition-all duration-150 hover:border-orange-500/50 hover:text-white"
+              style={{ color: "var(--text-secondary)", borderColor: "rgba(255,255,255,0.12)" }}
+            >
+              All systems
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
+          </div>
         </div>
 
-        {/* Grouped product categories */}
-        <div className="space-y-20">
+        {/* Product groups */}
+        <div className="space-y-16">
           {PRODUCT_GROUPS.map((group) => {
             const groupProducts = group.slugs
               .map((slug) => products.find((p) => p.slug === slug))
@@ -75,25 +111,20 @@ export default function ProductsGrid() {
             return (
               <div key={group.label}>
 
-                {/* Group header: label + section photo side by side */}
-                <div className="flex items-center gap-4 mb-10">
-                  <div className="h-px flex-shrink-0 w-8" style={{ background: "#f97316" }} />
+                {/* Group label */}
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="h-px w-6 flex-shrink-0" style={{ background: "#f97316" }} />
                   <span
-                    className="text-xs font-bold tracking-[0.18em] uppercase whitespace-nowrap"
-                    style={{ color: "rgba(249,115,22,0.7)" }}
+                    className="text-[11px] font-bold tracking-[0.18em] uppercase whitespace-nowrap"
+                    style={{ color: "rgba(249,115,22,0.65)" }}
                   >
                     {group.label}
                   </span>
                   <div className="h-px flex-1" style={{ background: "rgba(255,255,255,0.06)" }} />
                 </div>
 
-                {/* Product cards — compact, text-primary */}
-                <div
-                  className={`grid grid-cols-1 sm:grid-cols-2 gap-3 ${
-                    groupProducts.length === 4 ? "lg:grid-cols-4" :
-                    groupProducts.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"
-                  }`}
-                >
+                {/* Cards — 2-col on desktop */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {groupProducts.map((product, i) => {
                     const imgSrc = productImages[product.slug]
                       ? resolveImage(productImages[product.slug]).src
@@ -101,97 +132,115 @@ export default function ProductsGrid() {
                     const imgAlt = productImages[product.slug]
                       ? resolveImage(productImages[product.slug]).alt
                       : product.name;
+                    const apps = PRODUCT_APPS[product.slug] ?? [];
+                    const stat = PRODUCT_STAT[product.slug];
+                    const what = PRODUCT_WHAT[product.slug];
+                    const type = PRODUCT_TYPE[product.slug];
 
                     return (
                       <motion.div
                         key={product.slug}
-                        initial={{ opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
+                        initial={{ y: 12 }}
+                        whileInView={{ y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: i * 0.05 }}
                       >
                         <Link
                           href={`/products/${product.slug}`}
-                          className="group flex flex-col h-full relative overflow-hidden rounded-xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(249,115,22,0.12)]"
+                          className="group flex h-full overflow-hidden rounded-xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(249,115,22,0.12)]"
                           style={{
                             background: "rgba(255,255,255,0.035)",
                             border: "1px solid rgba(255,255,255,0.07)",
+                            minHeight: "130px",
                           }}
                           onMouseEnter={(e) => {
-                            e.currentTarget.style.borderColor = "rgba(249,115,22,0.35)";
-                            e.currentTarget.style.background = "rgba(255,255,255,0.055)";
+                            e.currentTarget.style.borderColor = "rgba(249,115,22,0.3)";
+                            e.currentTarget.style.background = "rgba(255,255,255,0.05)";
                           }}
                           onMouseLeave={(e) => {
                             e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)";
                             e.currentTarget.style.background = "rgba(255,255,255,0.035)";
                           }}
                         >
-                          {/* Thin orange top bar — always visible */}
+                          {/* Thin orange top bar */}
                           <div
-                            className="absolute top-0 left-0 right-0 h-[2px]"
-                            style={{ background: "linear-gradient(90deg, #f97316 0%, rgba(249,115,22,0.3) 100%)" }}
+                            className="absolute top-0 left-0 right-0 h-[2px] pointer-events-none"
+                            style={{ background: "linear-gradient(90deg, #f97316 0%, rgba(249,115,22,0.2) 100%)" }}
                           />
 
-                          {/* Narrow landscape image — 3:1 ratio, stays small */}
-                          <div className="relative w-full overflow-hidden" style={{ aspectRatio: "3/1" }}>
+                          {/* Image column — fixed width, full card height */}
+                          <div className="relative flex-shrink-0 self-stretch overflow-hidden" style={{ width: "160px" }}>
                             <Image
                               src={imgSrc}
                               alt={imgAlt}
                               fill
                               loading="eager"
-                              className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-                              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                              className="object-cover transition-transform duration-500 group-hover:scale-[1.06]"
+                              sizes="160px"
                             />
+                            {/* Right-edge fade into card */}
                             <div
-                              className="absolute inset-0"
+                              className="absolute inset-0 pointer-events-none"
                               style={{
-                                background: "linear-gradient(to top, rgba(15,20,32,0.7) 0%, rgba(15,20,32,0.1) 60%, transparent 100%)",
+                                background: "linear-gradient(to right, transparent 50%, rgba(15,20,32,0.5) 100%)",
                               }}
                             />
                           </div>
 
-                          {/* Card body — text is the hero */}
-                          <div className="flex flex-col flex-1 p-5 pt-4">
-                            {/* Type badge */}
-                            <span
-                              className="inline-block self-start text-[10px] font-bold tracking-[0.12em] uppercase mb-2 px-2 py-0.5 rounded"
-                              style={{ background: "rgba(249,115,22,0.1)", color: "rgba(249,115,22,0.8)" }}
-                            >
-                              {PRODUCT_TYPE[product.slug] ?? "System"}
-                            </span>
+                          {/* Content column */}
+                          <div className="flex flex-col flex-1 p-5 min-w-0">
+
+                            {/* Type badge + stat */}
+                            <div className="flex items-center gap-2 mb-3 flex-wrap">
+                              <span
+                                className="text-[10px] font-bold tracking-[0.12em] uppercase px-2 py-0.5 rounded"
+                                style={{ background: "rgba(249,115,22,0.1)", color: "rgba(249,115,22,0.85)" }}
+                              >
+                                {type}
+                              </span>
+                              {stat && (
+                                <span
+                                  className="text-[10px] font-semibold px-2 py-0.5 rounded"
+                                  style={{
+                                    background: "rgba(255,255,255,0.05)",
+                                    color: "rgba(255,255,255,0.38)",
+                                  }}
+                                >
+                                  {stat}
+                                </span>
+                              )}
+                            </div>
 
                             {/* Product name */}
                             <h3
-                              className="font-bold text-base leading-tight mb-2 transition-colors duration-200 group-hover:text-orange-400"
+                              className="font-bold text-[15px] leading-tight mb-2 transition-colors duration-200 group-hover:text-orange-400"
                               style={{ color: "#F5F0EB" }}
                             >
                               {product.name}
                             </h3>
 
-                            {/* Short description */}
+                            {/* Plain-English what */}
                             <p
-                              className="text-[13px] leading-relaxed flex-1"
+                              className="text-[12px] leading-relaxed flex-1 mb-3"
                               style={{ color: "var(--text-secondary)" }}
                             >
-                              {product.shortDesc}
+                              {what ?? product.shortDesc}
                             </p>
 
-                            {/* CTA row */}
-                            <div className="mt-4 flex items-center gap-1.5">
-                              <span
-                                className="text-xs font-semibold tracking-wide flex items-center gap-1 transition-colors duration-200 group-hover:text-orange-300"
-                                style={{ color: "#f97316" }}
-                              >
-                                View specs
-                                <svg
-                                  className="w-3 h-3 transition-transform duration-200 group-hover:translate-x-0.5"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  viewBox="0 0 24 24"
+                            {/* Application chips */}
+                            <div className="flex flex-wrap gap-1.5">
+                              {apps.map((app) => (
+                                <span
+                                  key={app}
+                                  className="text-[9px] font-semibold px-2 py-0.5 rounded-full tracking-wide"
+                                  style={{
+                                    background: "rgba(255,255,255,0.06)",
+                                    color: "rgba(255,255,255,0.32)",
+                                  }}
                                 >
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                </svg>
-                              </span>
+                                  {app}
+                                </span>
+                              ))}
                             </div>
                           </div>
                         </Link>
@@ -199,29 +248,26 @@ export default function ProductsGrid() {
                     );
                   })}
                 </div>
-
               </div>
             );
           })}
         </div>
 
-        {/* Bottom CTA */}
-        <div className="mt-16 flex justify-center">
-          <div className="flex flex-col items-center gap-3">
-            <Link
-              href="/products"
-              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold transition-all duration-150 border hover:border-orange-500/50 hover:text-white"
-              style={{ color: "var(--text-secondary)", borderColor: "rgba(255,255,255,0.12)" }}
-            >
-              View all systems
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </Link>
-            <p className="text-xs" style={{ color: "rgba(255,255,255,0.22)" }}>
-              Including PreMark, DuraShield, DuraTherm, and AirMark
-            </p>
-          </div>
+        {/* Bottom note + CTA */}
+        <div className="mt-12 flex flex-col items-center gap-3">
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold transition-all duration-150 border hover:border-orange-500/50 hover:text-white"
+            style={{ color: "var(--text-secondary)", borderColor: "rgba(255,255,255,0.12)" }}
+          >
+            View all systems
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </Link>
+          <p className="text-xs" style={{ color: "rgba(255,255,255,0.2)" }}>
+            Including PreMark, DuraShield, DuraTherm, and AirMark
+          </p>
         </div>
 
       </div>

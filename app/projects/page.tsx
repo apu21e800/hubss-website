@@ -79,8 +79,8 @@ export default function ProjectsPage() {
           {filtered.map((project, i) => (
             <motion.div
               key={project.slug}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ y: 16 }}
+              animate={{ y: 0 }}
               transition={{ delay: i * 0.05 }}
               className="group overflow-hidden rounded-xl relative transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(249,115,22,0.1)]"
               style={{ background: "#1a1e28", border: "1px solid rgba(255,255,255,0.07)" }}

@@ -3,11 +3,11 @@ import Link from "next/link";
 import type { PostMeta } from "@/lib/mdx";
 
 const FALLBACKS = [
-  "/images/applications/public-spaces/concordia-multicolour-crosswalk-01.jpg",
-  "/images/applications/traffic-calming/roundabout-red-brick-planted-centre-01.jpg",
-  "/images/applications/bus-bike-lanes/red-bus-lane-brt-transit-station-01.jpg",
-  "/images/products/streetbond/streetbond-multicolour-plaza-green-circles-01.jpg",
-  "/images/applications/commercial-spaces/tim-hortons-red-brick-crosswalk-01.jpg",
+  "/images/applications/crosswalks/crosswalks-01.jpg",
+  "/images/applications/traffic-calming/traffic-calming-01.jpg",
+  "/images/applications/bus-lanes/bus-lanes-01.jpg",
+  "/images/products/streetbond/streetbond-01.png",
+  "/images/applications/commercial-spaces/commercial-spaces-01.jpg",
 ];
 
 function getFallback(slug: string) {

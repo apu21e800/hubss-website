@@ -17,14 +17,14 @@ export const SITE_IMAGES = {
   hero_bg: "/images/hero/hero-bg.jpg",
 
   // ── About Page ────────────────────────────────────────────────────────
-  about_team: "/images/applications/commercial-spaces/granville-island-installation-crew-01.jpg",
-  about_story: "/images/applications/traffic-calming/roundabout-aerial-red-white-checkerboard-01.jpg",
+  about_team: "/images/applications/commercial-spaces/commercial-spaces-01.jpg",
+  about_story: "/images/applications/traffic-calming/traffic-calming-01.jpg",
 
   // ── Blog ──────────────────────────────────────────────────────────────
-  blog_default: "/images/applications/bus-bike-lanes/red-bus-lane-brt-transit-station-01.jpg",
+  blog_default: "/images/applications/bus-lanes/bus-lanes-01.jpg",
 
   // ── Lunch & Learn ─────────────────────────────────────────────────────
-  lunch_learn: "/images/applications/commercial-spaces/little-italy-aerial-colourful-intersection-01.jpg",
+  lunch_learn: "/images/applications/community-branding/community-branding-01.jpg",
 } as const;
 
 export type ImageKey = keyof typeof SITE_IMAGES;

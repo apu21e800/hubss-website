@@ -96,6 +96,7 @@ export default function ProjectsPage() {
                   src={project.imageUrl}
                   alt={project.title}
                   fill
+                  loading="eager"
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                   sizes="(max-width: 768px) 100vw, 33vw"
                 />

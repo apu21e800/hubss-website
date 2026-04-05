@@ -6,14 +6,15 @@ import Image from "next/image";
 import { products } from "@/lib/products";
 import { productImages, resolveImage } from "@/lib/featured-images";
 
-// Plain-English description of what each product actually does
+// Plain-English: what does this product actually do?
 const PRODUCT_WHAT: Record<string, string> = {
-  "streetprint":          "Stamps existing asphalt into decorative patterns — cobblestone, brick, herringbone, and more. Used on 500+ Canadian streets.",
+  "streetprint":          "Stamps existing asphalt into decorative patterns — cobblestone, brick, herringbone. Used on 500+ Canadian streets.",
   "streetbond":           "Bonds vivid colour directly to asphalt or concrete. 20-year colour retention warranty. Full Pantone custom matching.",
-  "traffic-patterns-xd":  "Aggregate-reinforced thermoplastic built for high-volume intersections and BRT corridors. BPN 65+ skid resistance.",
-  "traffic-patterns":     "Crisp preformed thermoplastic markings trusted by York Region, City of Toronto, Vancouver, and UBC.",
-  "mmax":                 "MMA resin for coloured bus and bike lanes. Cures in under 60 minutes — applied down to −10°C.",
+  "traffic-patterns-xd":  "Aggregate-reinforced thermoplastic for high-volume intersections and BRT corridors. BPN 65+ skid resistance.",
+  "traffic-patterns":     "Preformed thermoplastic markings trusted by York Region, City of Toronto, Vancouver, and UBC.",
+  "mmax":                 "MMA resin for coloured bus and bike lanes. Cures in under 60 minutes. Applied down to −10°C.",
   "decomark":             "Custom civic murals, Pride crosswalks, and Indigenous art rendered in durable preformed thermoplastic.",
+  "airmark":              "FAA-compliant preformed thermoplastic for runway thresholds, taxiways, and airfield markings. Outlasts paint 4:1.",
 };
 
 const PRODUCT_TYPE: Record<string, string> = {
@@ -23,6 +24,7 @@ const PRODUCT_TYPE: Record<string, string> = {
   "traffic-patterns":     "Thermoplastic",
   "mmax":                 "MMA Resin",
   "decomark":             "Custom Graphics",
+  "airmark":              "Airfield Markings",
 };
 
 const PRODUCT_STAT: Record<string, string> = {
@@ -30,28 +32,31 @@ const PRODUCT_STAT: Record<string, string> = {
   "streetbond":           "20-yr warranty",
   "traffic-patterns-xd":  "7+ yr service life",
   "traffic-patterns":     "5–7 yr service life",
-  "mmax":                 "Cures in 60 min",
-  "decomark":             "Full Pantone match",
+  "mmax":                 "60-min cure",
+  "decomark":             "Pantone-matched",
+  "airmark":              "FAA AC150/5370-10",
 };
 
-// Where each product is typically installed
 const PRODUCT_APPS: Record<string, string[]> = {
-  "streetprint":          ["Crosswalks", "Driveways", "Plazas", "Intersections"],
-  "streetbond":           ["Bike Lanes", "Bus Lanes", "Driveways", "Paths"],
+  "streetprint":          ["Crosswalks", "Driveways", "Plazas"],
+  "streetbond":           ["Bike Lanes", "Bus Lanes", "Driveways"],
   "traffic-patterns-xd":  ["Crosswalks", "BRT Corridors", "Bike Lanes"],
-  "traffic-patterns":     ["Crosswalks", "Bike Lanes", "Parking Lots"],
+  "traffic-patterns":     ["Crosswalks", "Bike Lanes", "Parking"],
   "mmax":                 ["Bus Lanes", "Bike Lanes", "Crosswalks"],
   "decomark":             ["Public Art", "Crosswalks", "Community Branding"],
+  "airmark":              ["Runways", "Taxiways", "Airfields"],
 };
 
-const PRODUCT_GROUPS: { label: string; slugs: string[] }[] = [
+const PRODUCT_GROUPS: { label: string; slugs: string[]; cols: number }[] = [
   {
     label: "Decorative Asphalt Systems",
     slugs: ["streetprint", "streetbond", "traffic-patterns-xd", "traffic-patterns"],
+    cols: 2,
   },
   {
-    label: "Transit Safety & Community Graphics",
-    slugs: ["mmax", "decomark"],
+    label: "Transit Safety & Specialty Systems",
+    slugs: ["mmax", "decomark", "airmark"],
+    cols: 3,
   },
 ];
 
@@ -84,8 +89,8 @@ export default function ProductsGrid() {
                 Purpose-Built. Canadian-Proven.
               </h2>
               <p className="text-base font-light max-w-xl" style={{ color: "var(--text-secondary)" }}>
-                Six surface systems engineered for Canadian infrastructure — decorative crosswalks,
-                bus rapid transit corridors, and everything in between.
+                Seven surface systems engineered for Canadian infrastructure — from decorative civic
+                crosswalks to bus rapid transit corridors to FAA-grade airfield markings.
               </p>
             </div>
             <Link
@@ -102,11 +107,16 @@ export default function ProductsGrid() {
         </div>
 
         {/* Product groups */}
-        <div className="space-y-16">
+        <div className="space-y-14">
           {PRODUCT_GROUPS.map((group) => {
             const groupProducts = group.slugs
               .map((slug) => products.find((p) => p.slug === slug))
               .filter(Boolean) as typeof products;
+
+            const gridClass =
+              group.cols === 3
+                ? "grid grid-cols-1 sm:grid-cols-3 gap-3"
+                : "grid grid-cols-1 sm:grid-cols-2 gap-3";
 
             return (
               <div key={group.label}>
@@ -123,8 +133,8 @@ export default function ProductsGrid() {
                   <div className="h-px flex-1" style={{ background: "rgba(255,255,255,0.06)" }} />
                 </div>
 
-                {/* Cards — 2-col on desktop */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {/* Cards */}
+                <div className={gridClass}>
                   {groupProducts.map((product, i) => {
                     const imgSrc = productImages[product.slug]
                       ? resolveImage(productImages[product.slug]).src
@@ -144,66 +154,76 @@ export default function ProductsGrid() {
                         whileInView={{ y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: i * 0.05 }}
+                        className="h-full"
                       >
                         <Link
                           href={`/products/${product.slug}`}
-                          className="group flex h-full overflow-hidden rounded-xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(249,115,22,0.12)]"
+                          className="group relative flex h-full overflow-hidden rounded-xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(0,0,0,0.4)]"
                           style={{
-                            background: "rgba(255,255,255,0.035)",
-                            border: "1px solid rgba(255,255,255,0.07)",
+                            background: "rgba(255,255,255,0.055)",
+                            border: "1px solid rgba(255,255,255,0.1)",
                             minHeight: "130px",
                           }}
                           onMouseEnter={(e) => {
-                            e.currentTarget.style.borderColor = "rgba(249,115,22,0.3)";
-                            e.currentTarget.style.background = "rgba(255,255,255,0.05)";
+                            e.currentTarget.style.borderColor = "rgba(249,115,22,0.4)";
+                            e.currentTarget.style.background = "rgba(255,255,255,0.08)";
                           }}
                           onMouseLeave={(e) => {
-                            e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)";
-                            e.currentTarget.style.background = "rgba(255,255,255,0.035)";
+                            e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)";
+                            e.currentTarget.style.background = "rgba(255,255,255,0.055)";
                           }}
                         >
-                          {/* Thin orange top bar */}
+                          {/* Left orange accent bar */}
                           <div
-                            className="absolute top-0 left-0 right-0 h-[2px] pointer-events-none"
-                            style={{ background: "linear-gradient(90deg, #f97316 0%, rgba(249,115,22,0.2) 100%)" }}
+                            className="absolute left-0 top-0 bottom-0 w-[3px] z-10"
+                            style={{
+                              background: "linear-gradient(180deg, #f97316 0%, rgba(249,115,22,0.3) 100%)",
+                            }}
                           />
 
-                          {/* Image column — fixed width, full card height */}
-                          <div className="relative flex-shrink-0 self-stretch overflow-hidden" style={{ width: "160px" }}>
+                          {/* Image column — fixed width */}
+                          <div
+                            className="relative flex-shrink-0 self-stretch overflow-hidden"
+                            style={{ width: group.cols === 3 ? "110px" : "160px" }}
+                          >
                             <Image
                               src={imgSrc}
                               alt={imgAlt}
                               fill
                               loading="eager"
                               className="object-cover transition-transform duration-500 group-hover:scale-[1.06]"
-                              sizes="160px"
+                              sizes={group.cols === 3 ? "110px" : "160px"}
                             />
-                            {/* Right-edge fade into card */}
+                            {/* Right-edge fade */}
                             <div
                               className="absolute inset-0 pointer-events-none"
                               style={{
-                                background: "linear-gradient(to right, transparent 50%, rgba(15,20,32,0.5) 100%)",
+                                background:
+                                  "linear-gradient(to right, transparent 40%, rgba(15,20,32,0.55) 100%)",
                               }}
                             />
                           </div>
 
-                          {/* Content column */}
-                          <div className="flex flex-col flex-1 p-5 min-w-0">
+                          {/* Content */}
+                          <div className="flex flex-col flex-1 px-4 py-4 min-w-0">
 
                             {/* Type badge + stat */}
-                            <div className="flex items-center gap-2 mb-3 flex-wrap">
+                            <div className="flex items-center gap-2 mb-2.5 flex-wrap">
                               <span
-                                className="text-[10px] font-bold tracking-[0.12em] uppercase px-2 py-0.5 rounded"
-                                style={{ background: "rgba(249,115,22,0.1)", color: "rgba(249,115,22,0.85)" }}
+                                className="text-[9.5px] font-bold tracking-[0.12em] uppercase px-2 py-0.5 rounded"
+                                style={{
+                                  background: "rgba(249,115,22,0.12)",
+                                  color: "rgba(249,115,22,0.9)",
+                                }}
                               >
                                 {type}
                               </span>
                               {stat && (
                                 <span
-                                  className="text-[10px] font-semibold px-2 py-0.5 rounded"
+                                  className="text-[9.5px] font-semibold px-2 py-0.5 rounded"
                                   style={{
-                                    background: "rgba(255,255,255,0.05)",
-                                    color: "rgba(255,255,255,0.38)",
+                                    background: "rgba(255,255,255,0.07)",
+                                    color: "rgba(255,255,255,0.45)",
                                   }}
                                 >
                                   {stat}
@@ -213,7 +233,7 @@ export default function ProductsGrid() {
 
                             {/* Product name */}
                             <h3
-                              className="font-bold text-[15px] leading-tight mb-2 transition-colors duration-200 group-hover:text-orange-400"
+                              className="font-bold text-[14px] leading-tight mb-2 transition-colors duration-200 group-hover:text-orange-400"
                               style={{ color: "#F5F0EB" }}
                             >
                               {product.name}
@@ -221,7 +241,7 @@ export default function ProductsGrid() {
 
                             {/* Plain-English what */}
                             <p
-                              className="text-[12px] leading-relaxed flex-1 mb-3"
+                              className="text-[11.5px] leading-relaxed flex-1 mb-3"
                               style={{ color: "var(--text-secondary)" }}
                             >
                               {what ?? product.shortDesc}
@@ -234,8 +254,8 @@ export default function ProductsGrid() {
                                   key={app}
                                   className="text-[9px] font-semibold px-2 py-0.5 rounded-full tracking-wide"
                                   style={{
-                                    background: "rgba(255,255,255,0.06)",
-                                    color: "rgba(255,255,255,0.32)",
+                                    background: "rgba(255,255,255,0.07)",
+                                    color: "rgba(255,255,255,0.35)",
                                   }}
                                 >
                                   {app}
@@ -253,7 +273,7 @@ export default function ProductsGrid() {
           })}
         </div>
 
-        {/* Bottom note + CTA */}
+        {/* Bottom CTA */}
         <div className="mt-12 flex flex-col items-center gap-3">
           <Link
             href="/products"
@@ -265,8 +285,8 @@ export default function ProductsGrid() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </Link>
-          <p className="text-xs" style={{ color: "rgba(255,255,255,0.2)" }}>
-            Including PreMark, DuraShield, DuraTherm, and AirMark
+          <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.2)" }}>
+            Including PreMark, DuraShield, and DuraTherm
           </p>
         </div>
 

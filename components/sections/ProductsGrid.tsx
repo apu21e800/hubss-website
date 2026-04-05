@@ -8,12 +8,12 @@ import { productImages, resolveImage } from "@/lib/featured-images";
 
 const PRODUCT_GROUPS: { label: string; slugs: string[] }[] = [
   {
-    label: "Flagship Systems",
-    slugs: ["traffic-patterns-xd", "traffic-patterns", "streetbond", "streetprint"],
+    label: "Decorative & Surface Systems",
+    slugs: ["streetprint", "streetbond", "traffic-patterns-xd", "traffic-patterns"],
   },
   {
-    label: "Specialty & Regulatory",
-    slugs: ["decomark", "mmax", "premark", "durashield", "duratherm"],
+    label: "Mobility & Community Identity",
+    slugs: ["mmax", "decomark"],
   },
 ];
 
@@ -34,19 +34,19 @@ export default function ProductsGrid() {
         {/* Section header */}
         <div className="mb-16 md:mb-20">
           <p className="gradient-text text-xs tracking-[0.15em] font-semibold uppercase mb-2">
-            Our Systems
+            Surface Systems
           </p>
           <h2
             className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3"
             style={{ color: "var(--text-primary)" }}
           >
-            The Systems Behind Canada&apos;s Most Recognised Surfaces
+            Purpose-Built. Canadian-Proven.
           </h2>
           <p
             className="text-base font-light max-w-xl"
             style={{ color: "var(--text-secondary)" }}
           >
-            From thermoplastic crosswalks to stamped asphalt roundabouts — every product engineered for Canadian conditions.
+            Stamped asphalt, thermoplastic markings, and coloured pavement coatings — engineered to survive snowplows, de-icing chemicals, and thirty years of freeze-thaw.
           </p>
         </div>
 
@@ -179,16 +179,21 @@ export default function ProductsGrid() {
 
         {/* Bottom CTA */}
         <div className="mt-16 flex justify-center">
-          <Link
-            href="/products"
-            className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold transition-all duration-150 border hover:border-orange-500/50 hover:text-white"
-            style={{ color: "var(--text-secondary)", borderColor: "rgba(255,255,255,0.12)" }}
-          >
-            View all products
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </Link>
+          <div className="flex flex-col items-center gap-3">
+            <Link
+              href="/products"
+              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold transition-all duration-150 border hover:border-orange-500/50 hover:text-white"
+              style={{ color: "var(--text-secondary)", borderColor: "rgba(255,255,255,0.12)" }}
+            >
+              View all systems
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
+            <p className="text-xs" style={{ color: "rgba(255,255,255,0.22)" }}>
+              Including PreMark, DuraShield, DuraTherm, and AirMark
+            </p>
+          </div>
         </div>
       </div>
     </section>

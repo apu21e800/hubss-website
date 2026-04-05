@@ -13,10 +13,10 @@ interface HeroProps {
 }
 
 const credentialStats = [
-  { value: "1,000+", label: "Projects Completed" },
-  { value: "10", label: "Provinces Served" },
-  { value: "30+ Years", label: "Canadian-Founded" },
-  { value: "20 Year", label: "Durability" },
+  { value: "1,000+", label: "Streets transformed" },
+  { value: "10", label: "Provinces active" },
+  { value: "Since 1994", label: "Canadian-built" },
+  { value: "20yr", label: "Colour warranty" },
 ];
 
 export default function Hero({ variant = "default" }: HeroProps) {
@@ -78,7 +78,7 @@ export default function Hero({ variant = "default" }: HeroProps) {
             </h1>
 
             <p className="text-base md:text-xl text-gray-300 max-w-2xl mb-8 leading-relaxed">
-              Trusted by municipalities, landscape architects, and engineers from coast to coast. Surface systems that protect, define, and endure.
+              We make streets that feel like they belong there. Municipalities from York Region to Vancouver have trusted us since 1994 to build surfaces that endure.
             </p>
 
             {/* CTAs */}

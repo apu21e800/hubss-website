@@ -30,9 +30,12 @@ export default function ApplicationsGrid() {
           <p className="grad-text text-xs font-semibold tracking-[0.2em] uppercase mb-3">
             Applications
           </p>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold" style={{ color: "var(--text-primary)" }}>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3" style={{ color: "var(--text-primary)" }}>
             Every Surface, A Statement
           </h2>
+          <p className="text-base max-w-xl" style={{ color: "var(--text-secondary)" }}>
+            Crosswalks, bike lanes, civic art, driveways — wherever people move, gather, or stop, the surface underneath is doing work.
+          </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">

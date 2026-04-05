@@ -3,10 +3,10 @@
 import { motion } from "framer-motion";
 
 const stats = [
-  { value: "1,000+", label: "Projects Completed" },
-  { value: "10",     label: "Provinces Served" },
-  { value: "30+",    label: "Years Experience" },
-  { value: "20 Year", label: "Warranty" },
+  { value: "1,000+", label: "Streets transformed" },
+  { value: "10",     label: "Provinces, coast to coast" },
+  { value: "1994",   label: "Year we started" },
+  { value: "20yr",   label: "Colour retention guarantee" },
 ];
 
 export default function StatsBar() {

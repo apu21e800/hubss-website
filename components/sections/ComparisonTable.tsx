@@ -40,12 +40,12 @@ export default function ComparisonTable() {
               className="text-2xl sm:text-3xl md:text-4xl font-bold mb-5 leading-[1.1]"
               style={{ color: "#111827" }}
             >
-              The Smarter<br />Specification
+              Paint Fades.<br />We Don&apos;t.
             </h2>
             <p className="text-[15px] leading-relaxed mb-8" style={{ color: "#4b5563" }}>
               Traditional paint markings cost municipalities more every year through
-              repeated reapplication, faded visibility, and plow damage. HUBSS products
-              are installed once and built to last.
+              repeated reapplication, faded visibility, and plow damage. HUB surface
+              systems are installed once and built to outlast the budget cycle.
             </p>
 
             {/* Metric callout card */}

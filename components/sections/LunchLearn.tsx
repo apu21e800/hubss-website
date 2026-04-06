@@ -285,12 +285,12 @@ export default function LunchLearn({ hideMoose = false }: { hideMoose?: boolean 
 
           {/* Moose — in flow, below card, centered in right column */}
           {!hideMoose && (
-            <div className="hidden lg:flex justify-center items-end pt-2 pointer-events-none">
+            <div className="hidden lg:flex justify-end items-end pt-2 pointer-events-none">
               <Image
                 src="/images/lunch-learn/moose.png"
                 alt="HUB Surface Systems Moose mascot"
-                width={300}
-                height={300}
+                width={220}
+                height={220}
                 style={{
                   display: "block",
                   filter: "drop-shadow(0 0 36px rgba(249,115,22,0.22)) drop-shadow(0 8px 24px rgba(0,0,0,0.55))",

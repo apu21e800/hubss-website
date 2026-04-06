@@ -73,7 +73,7 @@ export default function LunchLearn({ hideMoose = false }: { hideMoose?: boolean 
         }}
       />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28 pt-16" style={{ zIndex: 2 }}>
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 pb-0" style={{ zIndex: 2 }}>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
 
           {/* ── LEFT — content ─────────────────────────────── */}
@@ -153,7 +153,8 @@ export default function LunchLearn({ hideMoose = false }: { hideMoose?: boolean 
 
           </motion.div>
 
-          {/* ── RIGHT — form card ───────────────────────────── */}
+          {/* ── RIGHT — form card + moose below ────────────── */}
+          <div className="flex flex-col">
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -282,29 +283,26 @@ export default function LunchLearn({ hideMoose = false }: { hideMoose?: boolean 
             )}
           </motion.div>
 
+          {/* Moose — in flow, below card, centered in right column */}
+          {!hideMoose && (
+            <div className="hidden lg:flex justify-center items-end pt-2 pointer-events-none">
+              <Image
+                src="/images/lunch-learn/moose.png"
+                alt="HUB Surface Systems Moose mascot"
+                width={300}
+                height={300}
+                style={{
+                  display: "block",
+                  filter: "drop-shadow(0 0 36px rgba(249,115,22,0.22)) drop-shadow(0 8px 24px rgba(0,0,0,0.55))",
+                }}
+                unoptimized
+              />
+            </div>
+          )}
+          </div>
+
         </div>
       </div>
-
-
-      {/* Moose mascot — bottom-right, flanking the form card, in the orange glow */}
-      {!hideMoose && (
-        <div
-          className="absolute z-10 hidden lg:block pointer-events-none"
-          style={{ bottom: 44, right: 0, width: 260, height: 260 }}
-        >
-          <Image
-            src="/images/lunch-learn/moose.png"
-            alt="HUB Surface Systems Moose mascot"
-            width={260}
-            height={260}
-            style={{
-              filter: "drop-shadow(0 0 28px rgba(249,115,22,0.18)) drop-shadow(0 8px 20px rgba(0,0,0,0.5))",
-              display: "block",
-            }}
-            unoptimized
-          />
-        </div>
-      )}
 
       {/* ── Bottom CTA bar ──────────────────────────────────── */}
       <div style={{ background: "#0f1420", borderTop: "1px solid rgba(255,255,255,0.06)" }}>

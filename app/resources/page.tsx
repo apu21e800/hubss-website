@@ -36,17 +36,32 @@ export default function ResourcesPage() {
         </p>
       </div>
 
-      {/* ── Document Library — neutral dark, Claude-style ─── */}
+      {/* ── Document Library — grey grid + orange glow ────── */}
       <section
+        className="relative overflow-hidden"
         style={{
-          background: "#111111",
+          background: "#1c1c1e",
           backgroundImage:
-            "radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px)",
-          backgroundSize: "52px 52px",
+            "linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px)",
+          backgroundSize: "44px 44px",
           borderTop: "1px solid rgba(255,255,255,0.07)",
         }}
       >
-        <div className="max-w-7xl mx-auto px-6 py-16 pb-28">
+        {/* Orange radial glow — bottom right */}
+        <div
+          className="absolute pointer-events-none"
+          style={{
+            bottom: "-80px",
+            right: "-80px",
+            width: "700px",
+            height: "700px",
+            background:
+              "radial-gradient(ellipse at center, rgba(249,115,22,0.09) 0%, rgba(249,115,22,0.03) 45%, transparent 70%)",
+          }}
+          aria-hidden="true"
+        />
+
+        <div className="max-w-7xl mx-auto px-6 py-16 pb-28 relative">
           {/* Section label */}
           <div className="flex items-center gap-4 mb-10">
             <h2

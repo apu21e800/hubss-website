@@ -587,24 +587,59 @@ function MobileOverlay({
                   exit={{ height: 0, opacity: 0, transition: { duration: 0.16 } }}
                   style={{ overflow: "hidden", background: "rgba(249,115,22,0.02)" }}
                 >
-                  {products.map((p) => (
-                    <Link
-                      key={p.slug}
-                      href={`/products/${p.slug}`}
-                      onClick={onClose}
-                      className="flex items-center active:bg-white/[0.05] transition-colors"
-                      style={{
-                        minHeight: 48,
-                        paddingLeft: "2rem",
-                        paddingRight: "1.5rem",
-                        borderBottom: "1px solid rgba(255,255,255,0.03)",
-                      }}
-                    >
-                      <span style={{ fontSize: "0.9375rem", color: "rgba(255,255,255,0.65)", fontWeight: 500 }}>
-                        {p.name}
-                      </span>
-                    </Link>
-                  ))}
+                  {PRODUCT_TAXONOMY.map((group, gi) => {
+                    const groupProducts = group.slugs
+                      .map((slug) => products.find((p) => p.slug === slug))
+                      .filter(Boolean) as typeof products;
+                    return (
+                      <div key={group.label}>
+                        {/* Group label */}
+                        <div
+                          style={{
+                            paddingLeft: "2rem",
+                            paddingTop: gi === 0 ? "0.75rem" : "1rem",
+                            paddingBottom: "0.4rem",
+                          }}
+                        >
+                          <span
+                            style={{
+                              fontSize: "0.6rem",
+                              fontWeight: 700,
+                              letterSpacing: "0.2em",
+                              textTransform: "uppercase",
+                              color: "rgba(249,115,22,0.65)",
+                            }}
+                          >
+                            {group.label}
+                          </span>
+                        </div>
+                        {/* Products in group */}
+                        {groupProducts.map((p) => (
+                          <Link
+                            key={p.slug}
+                            href={`/products/${p.slug}`}
+                            onClick={onClose}
+                            className="flex flex-col justify-center active:bg-white/[0.05] transition-colors"
+                            style={{
+                              minHeight: 48,
+                              paddingLeft: "2rem",
+                              paddingRight: "1.5rem",
+                              paddingTop: "0.5rem",
+                              paddingBottom: "0.5rem",
+                              borderBottom: "1px solid rgba(255,255,255,0.03)",
+                            }}
+                          >
+                            <span style={{ fontSize: "0.9375rem", color: "rgba(255,255,255,0.75)", fontWeight: 500, lineHeight: 1.2 }}>
+                              {p.name}
+                            </span>
+                            <span style={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.3)", marginTop: 2 }}>
+                              {p.shortDesc}
+                            </span>
+                          </Link>
+                        ))}
+                      </div>
+                    );
+                  })}
                   <Link
                     href="/products"
                     onClick={onClose}
@@ -617,9 +652,10 @@ function MobileOverlay({
                       fontSize: "0.875rem",
                       fontWeight: 600,
                       borderBottom: "1px solid rgba(255,255,255,0.05)",
+                      marginTop: "0.5rem",
                     }}
                   >
-                    View all products →
+                    View all surface systems →
                   </Link>
                 </motion.div>
               )}

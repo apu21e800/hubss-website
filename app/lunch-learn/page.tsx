@@ -58,10 +58,10 @@ export default function LunchLearnPage() {
           </div>
         </div>
 
-        {/* Moose — large, bottom-right of hero, standing on the floor line */}
+        {/* Moose — bottom-right of hero, standing on the floor line */}
         <div
-          className="absolute bottom-0 right-0 md:right-16 lg:right-24 z-20 hidden sm:block"
-          style={{ width: 288, height: 288 }}
+          className="absolute bottom-0 right-0 sm:right-8 md:right-16 lg:right-24 z-20 pointer-events-none"
+          style={{ width: "clamp(120px, 22vw, 288px)", height: "clamp(120px, 22vw, 288px)" }}
         >
           <Image
             src="/images/lunch-learn/moose.png"
@@ -69,7 +69,10 @@ export default function LunchLearnPage() {
             width={288}
             height={288}
             style={{
-              filter: "drop-shadow(0 0 40px rgba(249,115,22,0.3)) drop-shadow(0 16px 32px rgba(0,0,0,0.5))",
+              width: "100%",
+              height: "100%",
+              objectFit: "contain",
+              filter: "drop-shadow(0 0 32px rgba(249,115,22,0.28)) drop-shadow(0 12px 24px rgba(0,0,0,0.5))",
               display: "block",
             }}
             unoptimized

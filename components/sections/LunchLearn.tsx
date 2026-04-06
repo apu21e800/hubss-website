@@ -289,7 +289,7 @@ export default function LunchLearn({ hideMoose = false }: { hideMoose?: boolean 
       {/* Moose mascot — grounded bottom-right, xl screens only. Hidden when page already has its own hero mascot */}
       {!hideMoose && (
         <div
-          className="absolute z-10 hidden xl:block pointer-events-none"
+          className="absolute z-10 hidden lg:block pointer-events-none"
           style={{ bottom: 72, left: "calc(50% + 80px)", width: 220, height: 220 }}
         >
           <Image

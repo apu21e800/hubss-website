@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Nav from "@/components/sections/Nav";
 import Hero from "@/components/sections/Hero";
 import HeroCityTicker from "@/components/sections/HeroCityTicker";
-import StatsBar from "@/components/sections/StatsBar";
 import WhyHubss from "@/components/sections/WhyHubss";
 import PersonaEntryPoints from "@/components/sections/PersonaEntryPoints";
 import ProductsGrid from "@/components/sections/ProductsGrid";
@@ -61,8 +60,6 @@ export default function Home() {
       <Nav />
       <Hero />
       <HeroCityTicker />
-      {/* dark → slate */}
-      <StatsBar />
       <WhyHubss />
       <PersonaEntryPoints />
       {/* slate → dark */}

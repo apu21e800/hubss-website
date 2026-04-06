@@ -13,7 +13,7 @@ export interface GalleryImage {
   caption?: string;
 }
 
-const PAGE_SIZE = 24;
+const PAGE_SIZE = 7;
 
 export default function GalleryGrid({ images }: { images: GalleryImage[] }) {
   const [lightboxIndex, setLightboxIndex] = useState(-1);

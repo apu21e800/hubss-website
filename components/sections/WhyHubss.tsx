@@ -78,7 +78,7 @@ export default function WhyHubss() {
         style={{ background: "linear-gradient(180deg, rgba(249,115,22,0.04) 0%, transparent 100%)" }}
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 lg:pt-28 pb-6">
 
         {/* ── Header ─────────────────────────────────────────────────── */}
         <motion.div
@@ -175,14 +175,14 @@ export default function WhyHubss() {
         </div>
 
         {/* ── Trusted-by label ───────────────────────────────────────── */}
-        <p className="text-[10px] font-bold tracking-[0.2em] uppercase mb-4" style={{ color: "rgba(255,255,255,0.2)" }}>
+        <p className="text-[10px] font-bold tracking-[0.2em] uppercase mb-6" style={{ color: "rgba(255,255,255,0.2)" }}>
           Trusted by
         </p>
       </div>
 
       {/* ── Full-bleed scrolling marquee ───────────────────────────── */}
       <div
-        className="overflow-hidden pb-16"
+        className="overflow-hidden pb-14"
         style={{ maskImage: "linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%)" }}
       >
         <div

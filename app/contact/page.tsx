@@ -74,17 +74,6 @@ export default function ContactPage() {
               </div>
             </div>
 
-            {/* Moose — peeking at the bottom of the contact info column */}
-            <div className="hidden lg:block mt-10">
-              <Image
-                src="/images/lunch-learn/moose.png"
-                alt="Moose — HUB Surface Systems mascot"
-                width={180}
-                height={180}
-                style={{ filter: "drop-shadow(0 4px 24px rgba(249,115,22,0.18))" }}
-                unoptimized
-              />
-            </div>
           </div>
 
           {/* Right: form */}

@@ -3,8 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
-// Aerial shot — circular stamp pattern, home with garage. Clearly a driveway, not a path.
-const HERO_IMAGE = "/images/applications/residential-driveways/residential-driveways-03.jpg";
+// Residential driveway — stamped asphalt with visible home/garage context
+const HERO_IMAGE = "/images/applications/residential-driveways/residential-driveways-08.jpg";
 
 export default function ResidentialDriveways() {
   return (

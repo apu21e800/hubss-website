@@ -98,8 +98,8 @@ function PanelFooter() {
   return (
     <div style={{ background: "var(--bg-dark)", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
       <div style={{ maxWidth: 1400, margin: "0 auto", padding: "12px 3rem" }}>
-        <p className="text-xs text-center" style={{ color: "var(--text-hint)" }}>
-          Engineered for Canadian infrastructure · TAC + FAA Compliant · Proud to work coast to coast
+        <p className="text-xs text-center tracking-wide" style={{ color: "rgba(255,255,255,0.55)" }}>
+          Engineered for Canadian infrastructure &nbsp;·&nbsp; Canadian-operated since 1994 &nbsp;·&nbsp; Coast to coast
         </p>
       </div>
     </div>
@@ -1037,9 +1037,9 @@ export default function Nav() {
               </Link>
             </div>
 
-            {/* Mobile hamburger — pill button, three-line → X morphs via CSS */}
+            {/* Mobile hamburger — 2-line editorial style → X morphs via CSS */}
             <button
-              className="lg:hidden flex flex-col justify-center items-center gap-[5px] transition-all duration-200"
+              className="lg:hidden flex flex-col justify-center items-center gap-[7px] transition-all duration-200"
               style={{
                 width: 44,
                 height: 44,
@@ -1056,34 +1056,26 @@ export default function Nav() {
               <span
                 style={{
                   display: "block",
-                  width: 20,
+                  width: mobileOpen ? 20 : 20,
                   height: 1.5,
                   background: mobileOpen ? "#f97316" : "#ffffff",
                   borderRadius: 2,
-                  transition: "transform 0.3s cubic-bezier(0.22,1,0.36,1), opacity 0.2s, background 0.2s",
-                  transform: mobileOpen ? "rotate(45deg) translate(4.5px, 4.5px)" : "none",
+                  transition: "transform 0.3s cubic-bezier(0.22,1,0.36,1), background 0.2s",
+                  transform: mobileOpen ? "rotate(45deg) translate(0px, 4.25px)" : "none",
                 }}
               />
               <span
                 style={{
                   display: "block",
-                  width: 20,
+                  width: 14,
                   height: 1.5,
-                  background: "#f97316",
+                  background: mobileOpen ? "#f97316" : "#f97316",
                   borderRadius: 2,
-                  transition: "opacity 0.2s",
-                  opacity: mobileOpen ? 0 : 1,
-                }}
-              />
-              <span
-                style={{
-                  display: "block",
-                  width: 20,
-                  height: 1.5,
-                  background: mobileOpen ? "#f97316" : "#ffffff",
-                  borderRadius: 2,
-                  transition: "transform 0.3s cubic-bezier(0.22,1,0.36,1), opacity 0.2s, background 0.2s",
-                  transform: mobileOpen ? "rotate(-45deg) translate(4.5px, -4.5px)" : "none",
+                  alignSelf: "flex-start",
+                  marginLeft: 3,
+                  transition: "transform 0.3s cubic-bezier(0.22,1,0.36,1), width 0.2s, background 0.2s",
+                  transform: mobileOpen ? "rotate(-45deg) translate(0px, -4.25px) scaleX(1.43)" : "none",
+                  transformOrigin: "left center",
                 }}
               />
             </button>

@@ -290,7 +290,7 @@ export default function LunchLearn({ hideMoose = false }: { hideMoose?: boolean 
       {!hideMoose && (
         <div
           className="absolute z-10 hidden xl:block pointer-events-none"
-          style={{ bottom: 72, right: 24, width: 240, height: 240 }}
+          style={{ bottom: 72, left: "calc(50% + 80px)", width: 220, height: 220 }}
         >
           <Image
             src="/images/lunch-learn/moose.png"

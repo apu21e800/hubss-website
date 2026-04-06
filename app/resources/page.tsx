@@ -40,10 +40,10 @@ export default function ResourcesPage() {
       <section
         className="relative overflow-hidden"
         style={{
-          background: "#1c1c1e",
+          background: "#141414",
           backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px)",
-          backgroundSize: "44px 44px",
+            "radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px)",
+          backgroundSize: "52px 52px",
           borderTop: "1px solid rgba(255,255,255,0.07)",
         }}
       >

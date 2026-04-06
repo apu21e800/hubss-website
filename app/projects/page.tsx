@@ -55,7 +55,7 @@ export default function ProjectsPage() {
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-3" style={{ color: "#f97316" }}>
             Portfolio
           </p>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4" style={{ color: "#f5f0eb" }}>Projects</h1>
+          <h1 className="text-6xl font-bold mb-4" style={{ color: "#f5f0eb" }}>Projects</h1>
           <p className="text-lg" style={{ color: "#9ca3af" }}>
             Surface solutions protecting Canadian streets and communities.
           </p>
@@ -79,8 +79,8 @@ export default function ProjectsPage() {
           {filtered.map((project, i) => (
             <motion.div
               key={project.slug}
-              initial={{ y: 16 }}
-              animate={{ y: 0 }}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05 }}
               className="group overflow-hidden rounded-xl relative transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(249,115,22,0.1)]"
               style={{ background: "#1a1e28", border: "1px solid rgba(255,255,255,0.07)" }}
@@ -96,7 +96,6 @@ export default function ProjectsPage() {
                   src={project.imageUrl}
                   alt={project.title}
                   fill
-                  loading="eager"
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                   sizes="(max-width: 768px) 100vw, 33vw"
                 />

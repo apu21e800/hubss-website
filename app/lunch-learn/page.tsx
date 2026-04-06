@@ -69,11 +69,12 @@ export default function LunchLearnPage() {
 
         {/* Moose — paws resting on the fold line, positioned centre-right */}
         <div
-          className="absolute bottom-0 z-20 pointer-events-none"
+          className="absolute z-20 pointer-events-none"
           style={{
-            right: "clamp(80px, 28vw, 380px)",
-            width: "clamp(110px, 20vw, 260px)",
-            height: "clamp(110px, 20vw, 260px)",
+            bottom: "-8px",
+            right: "clamp(32px, 18vw, 280px)",
+            width: "clamp(120px, 22vw, 280px)",
+            height: "clamp(120px, 22vw, 280px)",
           }}
         >
           <Image

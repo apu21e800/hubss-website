@@ -55,66 +55,45 @@ const STREETBOND_SUBCATEGORIES = [
   { label: "Pro 250", value: "Pro 250" },
 ];
 
-// Badge colors — muted dark-theme variants
-function typeBadgeStyle(type: string): React.CSSProperties {
+// Badge colors — dark-theme versions
+function typeBadgeClasses(type: string): string {
   switch (type) {
     case "Spec Sheet":
     case "Data Sheet":
-      return { background: "rgba(59,130,246,0.08)", color: "#7db3f0", border: "1px solid rgba(59,130,246,0.14)" };
+      return "bg-blue-900/40 text-blue-300 border-blue-700/50";
     case "Safety Data Sheet":
-      return { background: "rgba(239,68,68,0.08)", color: "#e89090", border: "1px solid rgba(239,68,68,0.14)" };
+      return "bg-red-900/40 text-red-300 border-red-700/50";
     case "Brochure":
-      return { background: "rgba(249,115,22,0.08)", color: "#d4924a", border: "1px solid rgba(249,115,22,0.14)" };
+      return "bg-orange-900/40 text-orange-300 border-orange-700/50";
     case "Installation Guide":
     case "Guide":
-      return { background: "rgba(20,184,166,0.08)", color: "#4dbfb0", border: "1px solid rgba(20,184,166,0.14)" };
+      return "bg-teal-900/40 text-teal-300 border-teal-700/50";
     case "Design Manual":
-      return { background: "rgba(168,85,247,0.08)", color: "#b88ee8", border: "1px solid rgba(168,85,247,0.14)" };
+      return "bg-purple-900/40 text-purple-300 border-purple-700/50";
     case "Colour Guide":
-      return { background: "rgba(236,72,153,0.08)", color: "#d078a8", border: "1px solid rgba(236,72,153,0.14)" };
+      return "bg-pink-900/40 text-pink-300 border-pink-700/50";
     case "Certificate":
-      return { background: "rgba(34,197,94,0.08)", color: "#5ebd82", border: "1px solid rgba(34,197,94,0.14)" };
+      return "bg-green-900/40 text-green-300 border-green-700/50";
     default:
-      return { background: "rgba(255,255,255,0.05)", color: "#6B7280", border: "1px solid rgba(255,255,255,0.08)" };
+      return "bg-white/5 text-zinc-400 border-white/10";
   }
 }
 
 const PAGE_SIZE = 12;
 
-const selectStyle: React.CSSProperties = {
-  background: "#242424",
-  border: "1px solid rgba(255,255,255,0.1)",
-  color: "#e5e7eb",
-};
-
 function DocCard({ doc }: { doc: ResourceDocument }) {
   return (
     <div
-      className="group rounded-xl p-5 flex flex-col justify-between transition-all duration-200"
-      style={{
-        background: "#1e1e1e",
-        border: "1px solid rgba(255,255,255,0.08)",
-      }}
-      onMouseEnter={e => {
-        (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(249,115,22,0.22)";
-        (e.currentTarget as HTMLDivElement).style.background = "#272727";
-      }}
-      onMouseLeave={e => {
-        (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(255,255,255,0.08)";
-        (e.currentTarget as HTMLDivElement).style.background = "#1e1e1e";
-      }}
+      className="group rounded-xl p-5 flex flex-col justify-between transition-colors duration-200 bg-[#2a2a2a] hover:bg-[#313131]"
     >
       <div>
-        <span
-          className="inline-block text-xs font-semibold px-2.5 py-1 rounded-md mb-4"
-          style={typeBadgeStyle(doc.type)}
-        >
+        <span className={`inline-block text-xs font-semibold px-2.5 py-1 rounded-md border mb-4 ${typeBadgeClasses(doc.type)}`}>
           {doc.type}
         </span>
-        <h3 className="font-semibold leading-snug mb-2" style={{ color: "#F5F0EB" }}>{doc.title}</h3>
+        <h3 className="font-semibold leading-snug mb-2" style={{ color: "#ffffff" }}>{doc.title}</h3>
         <span
-          className="inline-block text-xs px-2 py-0.5 rounded-full"
-          style={{ color: "#c96a18", background: "rgba(249,115,22,0.07)", border: "1px solid rgba(249,115,22,0.12)" }}
+          className="inline-block text-xs px-2 py-0.5 rounded-full border"
+          style={{ color: "#f97316", background: "rgba(249,115,22,0.12)", borderColor: "rgba(249,115,22,0.2)" }}
         >
           {doc.productName}
         </span>
@@ -123,25 +102,16 @@ function DocCard({ doc }: { doc: ResourceDocument }) {
         className="flex items-center justify-between mt-5 pt-4"
         style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
       >
-        <div className="flex items-center gap-3 text-xs" style={{ color: "#6B7280" }}>
+        <div className="flex items-center gap-3 text-xs" style={{ color: "#6b6b6b" }}>
           <span>{doc.fileSize}</span>
-          <span className="w-1 h-1 rounded-full" style={{ background: "rgba(255,255,255,0.15)" }} />
+          <span className="w-1 h-1 rounded-full" style={{ background: "#3a3a3a" }} />
           <span>{doc.updatedDate}</span>
         </div>
         <a
           href={doc.fileUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors duration-200"
-          style={{ background: "rgba(255,255,255,0.08)", color: "#9CA3AF" }}
-          onMouseEnter={e => {
-            (e.currentTarget as HTMLAnchorElement).style.background = "#f97316";
-            (e.currentTarget as HTMLAnchorElement).style.color = "#ffffff";
-          }}
-          onMouseLeave={e => {
-            (e.currentTarget as HTMLAnchorElement).style.background = "rgba(255,255,255,0.08)";
-            (e.currentTarget as HTMLAnchorElement).style.color = "#9CA3AF";
-          }}
+          className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors duration-200 bg-[#383838] hover:bg-[#444444] text-white"
         >
           <Download className="w-3.5 h-3.5" />
           <span className="hidden sm:inline">Download</span>
@@ -218,6 +188,12 @@ export default function ResourcesClient({
     setVisibleCount(PAGE_SIZE);
   }
 
+  const selectStyle = {
+    background: "#2a2a2a",
+    border: "1px solid rgba(255,255,255,0.10)",
+    color: "#e0e0e0",
+  };
+
   return (
     <>
       {/* ── Tab Navigation ─────────────────────────────────── */}
@@ -229,9 +205,8 @@ export default function ResourcesClient({
               onClick={() => handleTabChange(tab)}
               className="px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
               style={{
-                background: activeTab === tab ? "#F97316" : "rgba(255,255,255,0.05)",
-                color: activeTab === tab ? "#ffffff" : "#9CA3AF",
-                border: activeTab === tab ? "1px solid transparent" : "1px solid rgba(255,255,255,0.08)",
+                background: activeTab === tab ? "#2a2a2a" : "transparent",
+                color: activeTab === tab ? "#ffffff" : "#6b6b6b",
               }}
             >
               {tab}
@@ -253,7 +228,7 @@ export default function ResourcesClient({
               setVisibleCount(PAGE_SIZE);
             }}
             className="w-full pl-10 pr-4 py-3 rounded-lg text-sm transition-colors outline-none focus:ring-1 focus:ring-[#F97316]/40"
-            style={selectStyle}
+            style={{ ...selectStyle, color: "#F5F0EB" }}
           />
           {search && (
             <button
@@ -330,7 +305,7 @@ export default function ResourcesClient({
               style={
                 docTypeFilter === dt.value
                   ? { background: "#F97316", color: "#fff", border: "1px solid transparent" }
-                  : { background: "rgba(255,255,255,0.04)", color: "#6B7280", border: "1px solid rgba(255,255,255,0.08)" }
+                  : { background: "transparent", color: "#9CA3AF", border: "1px solid rgba(255,255,255,0.12)" }
               }
             >
               {dt.label}
@@ -353,7 +328,7 @@ export default function ResourcesClient({
               style={
                 subcategoryFilter === sc.value
                   ? { background: "#F97316", color: "#fff", border: "1px solid transparent" }
-                  : { background: "rgba(255,255,255,0.04)", color: "#6B7280", border: "1px solid rgba(255,255,255,0.08)" }
+                  : { background: "transparent", color: "#9CA3AF", border: "1px solid rgba(255,255,255,0.12)" }
               }
             >
               {sc.label}
@@ -410,7 +385,7 @@ export default function ResourcesClient({
             <div className="text-center mt-10">
               <button
                 onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
-                className="px-8 py-3 rounded-lg text-sm font-medium transition-all duration-200 hover:text-[#F97316] hover:border-[#F97316]/30"
+                className="px-8 py-3 rounded-lg text-sm font-medium transition-all duration-200 hover:text-[#F97316]"
                 style={{
                   background: "transparent",
                   border: "1px solid rgba(255,255,255,0.12)",
@@ -424,11 +399,11 @@ export default function ResourcesClient({
         </>
       ) : (
         <div className="text-center py-20">
-          <FileText className="w-12 h-12 mx-auto mb-4" style={{ color: "rgba(255,255,255,0.15)" }} />
+          <FileText className="w-12 h-12 mx-auto mb-4" style={{ color: "#374151" }} />
           <h3 className="text-xl font-semibold mb-2" style={{ color: "#F5F0EB" }}>
             No documents found
           </h3>
-          <p className="mb-6" style={{ color: "#6B7280" }}>
+          <p className="mb-6" style={{ color: "#9CA3AF" }}>
             Try adjusting your filters or search terms
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -441,7 +416,7 @@ export default function ResourcesClient({
             </button>
             <Link
               href="/contact"
-              className="px-6 py-2.5 rounded-lg text-sm font-medium transition-all hover:text-white hover:border-white/20"
+              className="px-6 py-2.5 rounded-lg text-sm font-medium transition-all hover:text-white"
               style={{ border: "1px solid rgba(255,255,255,0.12)", color: "#9CA3AF" }}
             >
               Can&apos;t find what you need? Contact us &rarr;

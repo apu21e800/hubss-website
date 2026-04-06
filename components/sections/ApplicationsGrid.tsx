@@ -30,15 +30,12 @@ export default function ApplicationsGrid() {
           <p className="grad-text text-xs font-semibold tracking-[0.2em] uppercase mb-3">
             Applications
           </p>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3" style={{ color: "var(--text-primary)" }}>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold" style={{ color: "var(--text-primary)" }}>
             Every Surface, A Statement
           </h2>
-          <p className="text-base max-w-xl" style={{ color: "var(--text-secondary)" }}>
-            Crosswalks, bike lanes, civic art, driveways — wherever people move, gather, or stop, the surface underneath is doing work.
-          </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {featured.map((app, i) => (
             <motion.div
               key={app.slug}
@@ -54,7 +51,6 @@ export default function ApplicationsGrid() {
                   src={applicationImages[app.slug] ? resolveImage(applicationImages[app.slug]).src : app.imageUrl}
                   alt={applicationImages[app.slug] ? resolveImage(applicationImages[app.slug]).alt : app.name}
                   fill
-                  loading="lazy"
                   className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
@@ -89,19 +85,6 @@ export default function ApplicationsGrid() {
               </Link>
             </motion.div>
           ))}
-        </div>
-
-        {/* View All CTA */}
-        <div className="flex justify-center mt-4">
-          <Link
-            href="/applications"
-            className="inline-flex items-center gap-2 border border-white/20 hover:border-orange-500/60 text-white font-semibold px-7 py-3.5 rounded-lg transition-all duration-200 hover:bg-white/[0.04] text-sm"
-          >
-            View All Applications
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </Link>
         </div>
       </div>
     </section>

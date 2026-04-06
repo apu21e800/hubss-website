@@ -49,7 +49,7 @@ export const applications: Application[] = [
     imageUrl: "/images/applications/parking-lots/parking-lots-01.jpg",
     gallery: gallery("parking-lots", "parking-lots", 59),
     description: "Parking lot markings degrade faster than almost any other paved surface. DuraShield rejuvenates and seals oxidized asphalt, extending pavement life 3-5 years. TrafficPatterns and PreMark deliver crisp stall markings and accessible parking symbols that hold retroreflectivity for 5-7 years. StreetBond and DuraTherm unlock wayfinding colour zones and decorative treatments.",
-    relatedProducts: ["durashield", "traffic-patterns", "premark", "streetbond", "duratherm"],
+    relatedProducts: ["durashield", "traffic-patterns", "traffic-patterns-xd", "premark", "streetbond", "streetprint", "duratherm"],
   },
   {
     name: "Parks & Paths",
@@ -67,7 +67,7 @@ export const applications: Application[] = [
     imageUrl: "/images/applications/playgrounds/playgrounds-01.jpg",
     gallery: gallery("playgrounds", "playgrounds", 53),
     description: "Playground surfaces demand safety, durability, and delight. DecoMark custom thermoplastic graphics bring hopscotch courts, number grids, and mural-scale artwork to paved play surfaces with Pantone-accurate colour. StreetBond adds vivid colour to existing asphalt play courts without raised edges that create trip hazards.",
-    relatedProducts: ["decomark", "streetbond"],
+    relatedProducts: ["decomark", "streetbond", "streetprint", "traffic-patterns"],
   },
   {
     name: "Community Branding",
@@ -94,7 +94,7 @@ export const applications: Application[] = [
     imageUrl: "/images/applications/sport-courts/sport-courts-01.jpg",
     gallery: gallery("sport-courts", "sport-courts", 21),
     description: "Tennis, basketball, pickleball, and multi-sport courts require surface colour systems that perform under repeated lateral movement and outdoor exposure. StreetBond bonds permanently to asphalt and acid-etched concrete, delivering vivid UV-stable court colours that meet tournament line-marking standards with a 20-year colour retention warranty.",
-    relatedProducts: ["streetbond", "decomark"],
+    relatedProducts: ["streetbond", "decomark", "streetprint", "premark"],
   },
   {
     name: "Splash Pads",
@@ -103,7 +103,7 @@ export const applications: Application[] = [
     imageUrl: "/images/applications/splash-pads/splash-pads-01.jpg",
     gallery: gallery("splash-pads", "splash-pads", 19),
     description: "Splash pad surfaces face constant water exposure, chemical treatments, and the highest safety standards for slip resistance. StreetBond's advanced acrylic formulation is applied to acid-etched concrete splash pad surfaces, delivering vivid colour with slip-resistant texture required for wet play areas.",
-    relatedProducts: ["streetbond", "decomark"],
+    relatedProducts: ["streetbond", "decomark", "durashield"],
   },
   {
     name: "Public Spaces",
@@ -166,7 +166,7 @@ export const applications: Application[] = [
     imageUrl: "/images/applications/leed-urban-heat-island/leed-urban-heat-island-01.jpg",
     gallery: gallery("leed-urban-heat-island", "leed-urban-heat-island", 2),
     description: "Dark asphalt surfaces absorb solar heat, raising urban ambient temperatures and contributing to the urban heat island effect. StreetBond light-coloured pavement coatings reflect solar radiation, reducing surface temperatures and contributing to LEED site credit compliance for heat island reduction. Available in high-SRI formulations.",
-    relatedProducts: ["streetbond"],
+    relatedProducts: ["streetbond", "mmax", "durashield"],
   },
   {
     name: "Regulatory Markings",
@@ -175,6 +175,6 @@ export const applications: Application[] = [
     imageUrl: "/images/applications/airports/airports-01.jpg",
     gallery: gallery("airports", "airports", 28),
     description: "Stop bars, yield lines, turn arrows, speed legends, accessible parking symbols, and the full library of TAC and MUTCD-compliant regulatory pavement markings are available through HUB's PreMark and AirMark systems. Pre-cut thermoplastic components eliminate stencil setup and deliver consistent markings that outlast painted equivalents 5:1.",
-    relatedProducts: ["premark", "airmark", "traffic-patterns"],
+    relatedProducts: ["premark", "airmark", "traffic-patterns", "traffic-patterns-xd", "duratherm"],
   },
 ];

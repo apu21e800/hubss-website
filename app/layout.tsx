@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Inter } from "next/font/google";
 import "./globals.css";
-// ThemeToggle deferred — light mode requires full CSS var migration of hardcoded hex sections
-// import ThemeToggle from "@/components/ui/ThemeToggle";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 // Crisp Chat — sign up at crisp.chat (free), grab Website ID from Settings → Setup
 import CrispChat from "@/components/CrispChat";
 
@@ -53,8 +52,17 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
+      <head>
+        {/* Apply saved theme before first paint — prevents flash of wrong theme */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var t=localStorage.getItem('hubss-theme');if(t==='light')document.documentElement.setAttribute('data-theme','light');})();`,
+          }}
+        />
+      </head>
       <body className={`${geist.variable} ${inter.variable} antialiased`}>
         {children}
+        <ThemeToggle />
         <CrispChat />
       </body>
     </html>

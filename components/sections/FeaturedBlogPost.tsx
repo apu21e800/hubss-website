@@ -17,10 +17,10 @@ export default function FeaturedBlogPost() {
     posts.find((p) => p.slug === "residential-driveways-stamped-asphalt-upgrade") ??
     posts[0];
 
-  // Next three posts for the secondary row
+  // Next two posts for the secondary row
   const secondary = posts
     .filter((p) => p.slug !== hero?.slug)
-    .slice(0, 3);
+    .slice(0, 2);
 
   if (!hero) return null;
 
@@ -45,13 +45,13 @@ export default function FeaturedBlogPost() {
               className="text-2xl sm:text-3xl md:text-4xl font-bold"
               style={{ color: "var(--text-primary)" }}
             >
-              Built in Canada. Proven in the Field.
+              Specs, Case Studies &amp; Real Project Data
             </h2>
             <p
               className="text-base mt-2 max-w-xl"
               style={{ color: "var(--text-secondary)" }}
             >
-              Real project data, case studies, and spec-ready content for engineers and project managers.
+              Decision-ready content for landscape architects, engineers, and project managers.
             </p>
           </div>
           <Link
@@ -74,8 +74,8 @@ export default function FeaturedBlogPost() {
           <div
             className="grid grid-cols-1 md:grid-cols-5 gap-0 overflow-hidden rounded-2xl border transition-all duration-300 group-hover:shadow-[0_8px_32px_rgba(249,115,22,0.12)] group-hover:border-orange-500/25"
             style={{
-              background: "#1e1e1e",
-              borderColor: "rgba(255,255,255,0.07)",
+              background: "var(--bg-card-surface)",
+              borderColor: "var(--border-color)",
             }}
           >
             {/* Image — 3/5 on desktop */}
@@ -181,7 +181,7 @@ export default function FeaturedBlogPost() {
 
         {/* ── Secondary articles row ──────────────────────────────── */}
         {secondary.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             {secondary.map((post, i) => {
               const img = post.featuredImage ?? FALLBACK_IMAGES[(i + 1) % FALLBACK_IMAGES.length];
               const date = new Date(post.date).toLocaleDateString("en-CA", {
@@ -192,37 +192,37 @@ export default function FeaturedBlogPost() {
                 <Link
                   key={post.slug}
                   href={`/blog/${post.slug}`}
-                  className="group flex flex-col overflow-hidden rounded-xl border transition-all duration-200 hover:shadow-[0_4px_20px_rgba(249,115,22,0.1)] hover:border-orange-500/25"
+                  className="group flex overflow-hidden rounded-xl border transition-all duration-200 hover:shadow-[0_4px_20px_rgba(249,115,22,0.08)] hover:border-orange-500/20"
                   style={{
-                    background: "#1e1e1e",
-                    borderColor: "rgba(255,255,255,0.07)",
+                    background: "var(--bg-card-surface)",
+                    borderColor: "var(--border-color)",
                   }}
                 >
-                  {/* Thumbnail — full width, 16:9 */}
-                  <div className="relative w-full overflow-hidden" style={{ aspectRatio: "16/9" }}>
+                  {/* Thumbnail */}
+                  <div className="relative flex-shrink-0 overflow-hidden" style={{ width: 130, minHeight: 130 }}>
                     <Image
                       src={img}
                       alt={post.title}
                       fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-                      sizes="(max-width: 768px) 100vw, 50vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+                      sizes="130px"
                     />
                   </div>
                   {/* Content */}
-                  <div className="flex flex-col p-6 flex-1">
+                  <div className="flex flex-col justify-center p-6 flex-1 min-w-0">
                     <span
-                      className="text-[10px] font-bold tracking-widest uppercase mb-3"
+                      className="text-[10px] font-bold tracking-widest uppercase mb-2"
                       style={{ color: "#f97316" }}
                     >
                       {post.category}
                     </span>
                     <h4
-                      className="text-base font-bold leading-snug mb-3 group-hover:text-orange-100 transition-colors line-clamp-2"
+                      className="text-base font-bold leading-snug mb-2 group-hover:text-orange-100 transition-colors line-clamp-2"
                       style={{ color: "var(--text-primary)" }}
                     >
                       {post.title}
                     </h4>
-                    <p className="text-xs mt-auto" style={{ color: "var(--text-muted)" }}>
+                    <p className="text-xs" style={{ color: "var(--text-muted)" }}>
                       {date}
                       {post.readTime ? ` · ${post.readTime}` : ""}
                     </p>

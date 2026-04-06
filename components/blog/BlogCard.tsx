@@ -3,11 +3,11 @@ import Link from "next/link";
 import type { PostMeta } from "@/lib/mdx";
 
 const FALLBACKS = [
-  "/images/applications/crosswalks/crosswalks-01.jpg",
-  "/images/applications/traffic-calming/traffic-calming-01.jpg",
-  "/images/applications/bus-lanes/bus-lanes-01.jpg",
-  "/images/products/streetbond/streetbond-01.png",
-  "/images/applications/commercial-spaces/commercial-spaces-01.jpg",
+  "/images/applications/public-spaces/concordia-multicolour-crosswalk-01.jpg",
+  "/images/applications/traffic-calming/roundabout-red-brick-planted-centre-01.jpg",
+  "/images/applications/bus-bike-lanes/red-bus-lane-brt-transit-station-01.jpg",
+  "/images/products/streetbond/streetbond-multicolour-plaza-green-circles-01.jpg",
+  "/images/applications/commercial-spaces/tim-hortons-red-brick-crosswalk-01.jpg",
 ];
 
 function getFallback(slug: string) {
@@ -22,7 +22,7 @@ export default function BlogCard({ post }: { post: PostMeta }) {
   return (
     <Link
       href={`/blog/${post.slug}`}
-      className="group flex flex-col overflow-hidden rounded-xl transition-all duration-300 hover:-translate-y-1 bg-[#1e1e1e] hover:bg-[#252525]"
+      className="group flex flex-col overflow-hidden rounded-xl transition-all duration-300 hover:-translate-y-1 bg-[#2a2a2a] hover:bg-[#313131]"
     >
       {/* Image with gradient overlay */}
       <div className="relative h-52 overflow-hidden flex-shrink-0">
@@ -37,7 +37,7 @@ export default function BlogCard({ post }: { post: PostMeta }) {
         {/* Dark gradient at bottom of image */}
         <div
           className="absolute inset-x-0 bottom-0 h-20 pointer-events-none"
-          style={{ background: "linear-gradient(to top, rgba(30,30,30,0.9), transparent)" }}
+          style={{ background: "linear-gradient(to top, rgba(42,42,42,0.9), transparent)" }}
         />
         {/* Orange accent border on hover */}
         <div
@@ -61,7 +61,7 @@ export default function BlogCard({ post }: { post: PostMeta }) {
               </span>
             ))}
           </div>
-          <span className="text-[10px] flex-shrink-0" style={{ color: "#9CA3AF" }}>
+          <span className="text-[10px] flex-shrink-0" style={{ color: "#6B7280" }}>
             {new Date(post.date).toLocaleDateString("en-CA", { year: "numeric", month: "short", day: "numeric" })}
           </span>
         </div>

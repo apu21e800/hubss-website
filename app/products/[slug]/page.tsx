@@ -12,7 +12,6 @@ import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
 import { productImages, resolveImage } from "@/lib/featured-images";
 import { buildMetadata } from "@/lib/seo";
-import { getProductFamily } from "@/lib/product-taxonomy";
 
 export async function generateStaticParams() {
   return products.map((p) => ({ slug: p.slug }));
@@ -82,9 +81,9 @@ export default async function ProductPage({ params }: Props) {
         <div className="absolute inset-0 flex items-end max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
           <div>
             <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-3" style={{ color: "#f97316" }}>
-              {getProductFamily(product.slug)}
+              HUB Product System
             </p>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold" style={{ color: "var(--text-primary)" }}>
+            <h1 className="text-6xl font-bold" style={{ color: "var(--text-primary)" }}>
               {product.name}
             </h1>
             <p className="text-lg mt-2" style={{ color: "var(--text-body)" }}>

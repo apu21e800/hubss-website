@@ -79,7 +79,7 @@ export default async function ApplicationPage({ params }: Props) {
             <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-3" style={{ color: "#f97316" }}>
               HUB Application
             </p>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold" style={{ color: "var(--text-primary)" }}>
+            <h1 className="text-6xl font-bold" style={{ color: "var(--text-primary)" }}>
               {application.name}
             </h1>
             <p className="text-lg mt-2" style={{ color: "var(--text-body)" }}>

@@ -810,17 +810,28 @@ function MobileOverlay({
           >
             Download Spec Sheet
           </Link>
-          <p
-            className="text-center"
-            style={{
-              color: "rgba(255,255,255,0.32)",
-              fontSize: "0.8125rem",
-              marginTop: "0.75rem",
-              paddingBottom: "0.5rem",
-            }}
+          <div
+            className="flex items-center justify-center gap-4"
+            style={{ marginTop: "0.875rem", paddingBottom: "0.5rem" }}
           >
-            or call <span style={{ color: "rgba(255,255,255,0.5)" }}>1-877-391-0270</span>
-          </p>
+            <a
+              href="tel:4165409287"
+              className="flex flex-col items-center transition-opacity active:opacity-60"
+              style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.75rem", lineHeight: 1.3 }}
+            >
+              <span style={{ color: "rgba(255,255,255,0.28)", fontSize: "0.625rem", letterSpacing: "0.1em", textTransform: "uppercase" }}>East — ON</span>
+              <span>416-540-9287</span>
+            </a>
+            <span style={{ width: 1, height: 28, background: "rgba(255,255,255,0.1)", flexShrink: 0 }} />
+            <a
+              href="tel:6043098212"
+              className="flex flex-col items-center transition-opacity active:opacity-60"
+              style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.75rem", lineHeight: 1.3 }}
+            >
+              <span style={{ color: "rgba(255,255,255,0.28)", fontSize: "0.625rem", letterSpacing: "0.1em", textTransform: "uppercase" }}>West — BC</span>
+              <span>604-309-8212</span>
+            </a>
+          </div>
         </div>
       </div>
     </motion.div>
@@ -937,7 +948,7 @@ export default function Nav() {
               <span style={{
                 color: "#ffffff",
                 fontWeight: 700,
-                fontSize: "1.05rem",
+                fontSize: "1rem",
                 letterSpacing: "0.01em",
                 lineHeight: 1,
               }}>

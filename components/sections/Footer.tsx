@@ -50,7 +50,7 @@ export default function Footer() {
             {/* Monument tagline */}
             <p
               className="font-light tracking-wide leading-snug mb-2"
-              style={{ color: "var(--text-primary)", fontSize: "1.05rem" }}
+              style={{ color: "var(--text-primary)", fontSize: "1rem" }}
             >
               Pedestrian safety. Traffic calming.<br />Civic identity. Coast to coast since 1994.
             </p>

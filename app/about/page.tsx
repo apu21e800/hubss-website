@@ -68,14 +68,15 @@ export default function AboutPage() {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-24 relative">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "#f97316" }}>
-            About HUB Surface Systems
+            Canadian-Operated Since 1994 · All 10 Provinces
           </p>
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight max-w-4xl" style={{ color: "#ffffff" }}>
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 leading-tight max-w-4xl" style={{ color: "#ffffff" }}>
             The people who made your city look like your city.
           </h1>
           <p className="text-xl leading-relaxed max-w-2xl" style={{ color: "#8b8b8b" }}>
-            For over thirty years, HUB Surface Systems has been connecting Canadian communities
-            with pavement technologies that do more than carry traffic — they carry identity.
+            For over thirty years, HUB Surface Systems — a proudly Canadian company, coast to coast
+            — has been connecting communities with pavement technologies that do more than carry
+            traffic. They carry identity.
           </p>
         </div>
       </div>
@@ -83,12 +84,11 @@ export default function AboutPage() {
       {/* ── Stats Bar ───────────────────────────────────────── */}
       <div style={{ background: "#141b2d", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4">
-            {stats.map((s, i) => (
+          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/[0.06]">
+            {stats.map((s) => (
               <div
                 key={s.label}
-                className="py-10 px-6 flex flex-col items-center text-center"
-                style={i < stats.length - 1 ? { borderRight: "1px solid rgba(255,255,255,0.06)" } : {}}
+                className="py-8 md:py-10 px-4 sm:px-6 flex flex-col items-center text-center"
               >
                 <span className="text-4xl md:text-5xl font-bold mb-2" style={{ color: "#f97316" }}>
                   {s.value}

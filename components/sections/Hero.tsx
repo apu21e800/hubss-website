@@ -70,7 +70,7 @@ export default function Hero({ variant = "default" }: HeroProps) {
               className="text-xs font-semibold tracking-[0.2em] uppercase mb-6"
               style={{ color: "#f97316" }}
             >
-              30+ Years · 1,000+ Projects · Coast to Coast
+              Canadian-Operated · 30+ Years · 1,000+ Projects · Coast to Coast
             </p>
 
             <h1 className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tight text-white leading-none mb-6">

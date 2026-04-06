@@ -49,7 +49,7 @@ export default function ContactPage() {
           {/* Left */}
           <div className="pt-4">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "#f97316" }}>Get In Touch</p>
-            <h1 className="text-5xl font-bold mb-8 leading-tight" style={{ color: "var(--text-primary)" }}>
+            <h1 className="text-4xl sm:text-5xl font-bold mb-8 leading-tight" style={{ color: "var(--text-primary)" }}>
               Start a Project
             </h1>
             <p className="text-[16px] leading-relaxed mb-12" style={{ color: "var(--text-body)" }}>

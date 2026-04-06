@@ -55,69 +55,77 @@ const STREETBOND_SUBCATEGORIES = [
   { label: "Pro 250", value: "Pro 250" },
 ];
 
-// Badge colors — light-theme versions
-function typeBadgeClasses(type: string): string {
+// Badge colors — dark-theme alpha variants
+function typeBadgeStyle(type: string): React.CSSProperties {
   switch (type) {
     case "Spec Sheet":
     case "Data Sheet":
-      return "bg-blue-50 text-blue-700 border-blue-200";
+      return { background: "rgba(59,130,246,0.12)", color: "#93c5fd", border: "1px solid rgba(59,130,246,0.2)" };
     case "Safety Data Sheet":
-      return "bg-red-50 text-red-700 border-red-200";
+      return { background: "rgba(239,68,68,0.12)", color: "#fca5a5", border: "1px solid rgba(239,68,68,0.2)" };
     case "Brochure":
-      return "bg-orange-50 text-orange-700 border-orange-200";
+      return { background: "rgba(249,115,22,0.12)", color: "#fdba74", border: "1px solid rgba(249,115,22,0.2)" };
     case "Installation Guide":
     case "Guide":
-      return "bg-teal-50 text-teal-700 border-teal-200";
+      return { background: "rgba(20,184,166,0.12)", color: "#5eead4", border: "1px solid rgba(20,184,166,0.2)" };
     case "Design Manual":
-      return "bg-purple-50 text-purple-700 border-purple-200";
+      return { background: "rgba(168,85,247,0.12)", color: "#d8b4fe", border: "1px solid rgba(168,85,247,0.2)" };
     case "Colour Guide":
-      return "bg-pink-50 text-pink-700 border-pink-200";
+      return { background: "rgba(236,72,153,0.12)", color: "#f9a8d4", border: "1px solid rgba(236,72,153,0.2)" };
     case "Certificate":
-      return "bg-green-50 text-green-700 border-green-200";
+      return { background: "rgba(34,197,94,0.12)", color: "#86efac", border: "1px solid rgba(34,197,94,0.2)" };
     default:
-      return "bg-gray-100 text-gray-600 border-gray-200";
+      return { background: "rgba(255,255,255,0.06)", color: "#9CA3AF", border: "1px solid rgba(255,255,255,0.1)" };
   }
 }
 
 const PAGE_SIZE = 12;
+
+const selectStyle: React.CSSProperties = {
+  background: "#242424",
+  border: "1px solid rgba(255,255,255,0.1)",
+  color: "#e5e7eb",
+};
 
 function DocCard({ doc }: { doc: ResourceDocument }) {
   return (
     <div
       className="group rounded-xl p-5 flex flex-col justify-between transition-all duration-200"
       style={{
-        background: "#ffffff",
-        border: "1px solid #e5e7eb",
-        boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
+        background: "#242424",
+        border: "1px solid rgba(255,255,255,0.08)",
       }}
       onMouseEnter={e => {
-        (e.currentTarget as HTMLDivElement).style.boxShadow = "0 4px 16px rgba(0,0,0,0.08)";
-        (e.currentTarget as HTMLDivElement).style.borderColor = "#d1d5db";
+        (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(249,115,22,0.3)";
+        (e.currentTarget as HTMLDivElement).style.background = "#2a2a2a";
       }}
       onMouseLeave={e => {
-        (e.currentTarget as HTMLDivElement).style.boxShadow = "0 1px 3px rgba(0,0,0,0.04)";
-        (e.currentTarget as HTMLDivElement).style.borderColor = "#e5e7eb";
+        (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(255,255,255,0.08)";
+        (e.currentTarget as HTMLDivElement).style.background = "#242424";
       }}
     >
       <div>
-        <span className={`inline-block text-xs font-semibold px-2.5 py-1 rounded-md border mb-4 ${typeBadgeClasses(doc.type)}`}>
+        <span
+          className="inline-block text-xs font-semibold px-2.5 py-1 rounded-md mb-4"
+          style={typeBadgeStyle(doc.type)}
+        >
           {doc.type}
         </span>
-        <h3 className="font-semibold leading-snug mb-2" style={{ color: "#111827" }}>{doc.title}</h3>
+        <h3 className="font-semibold leading-snug mb-2" style={{ color: "#F5F0EB" }}>{doc.title}</h3>
         <span
-          className="inline-block text-xs px-2 py-0.5 rounded-full border"
-          style={{ color: "#f97316", background: "rgba(249,115,22,0.08)", borderColor: "rgba(249,115,22,0.25)" }}
+          className="inline-block text-xs px-2 py-0.5 rounded-full"
+          style={{ color: "#f97316", background: "rgba(249,115,22,0.1)", border: "1px solid rgba(249,115,22,0.2)" }}
         >
           {doc.productName}
         </span>
       </div>
       <div
         className="flex items-center justify-between mt-5 pt-4"
-        style={{ borderTop: "1px solid #f3f4f6" }}
+        style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
       >
-        <div className="flex items-center gap-3 text-xs" style={{ color: "#9ca3af" }}>
+        <div className="flex items-center gap-3 text-xs" style={{ color: "#6B7280" }}>
           <span>{doc.fileSize}</span>
-          <span className="w-1 h-1 rounded-full" style={{ background: "#d1d5db" }} />
+          <span className="w-1 h-1 rounded-full" style={{ background: "rgba(255,255,255,0.15)" }} />
           <span>{doc.updatedDate}</span>
         </div>
         <a
@@ -125,14 +133,14 @@ function DocCard({ doc }: { doc: ResourceDocument }) {
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors duration-200"
-          style={{ background: "#f3f4f6", color: "#374151" }}
+          style={{ background: "rgba(255,255,255,0.06)", color: "#9CA3AF" }}
           onMouseEnter={e => {
             (e.currentTarget as HTMLAnchorElement).style.background = "#f97316";
             (e.currentTarget as HTMLAnchorElement).style.color = "#ffffff";
           }}
           onMouseLeave={e => {
-            (e.currentTarget as HTMLAnchorElement).style.background = "#f3f4f6";
-            (e.currentTarget as HTMLAnchorElement).style.color = "#374151";
+            (e.currentTarget as HTMLAnchorElement).style.background = "rgba(255,255,255,0.06)";
+            (e.currentTarget as HTMLAnchorElement).style.color = "#9CA3AF";
           }}
         >
           <Download className="w-3.5 h-3.5" />
@@ -210,12 +218,6 @@ export default function ResourcesClient({
     setVisibleCount(PAGE_SIZE);
   }
 
-  const selectStyle = {
-    background: "#ffffff",
-    border: "1px solid #e5e7eb",
-    color: "#374151",
-  };
-
   return (
     <>
       {/* ── Tab Navigation ─────────────────────────────────── */}
@@ -227,8 +229,9 @@ export default function ResourcesClient({
               onClick={() => handleTabChange(tab)}
               className="px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
               style={{
-                background: activeTab === tab ? "#111827" : "transparent",
-                color: activeTab === tab ? "#ffffff" : "#6b7280",
+                background: activeTab === tab ? "#F97316" : "rgba(255,255,255,0.05)",
+                color: activeTab === tab ? "#ffffff" : "#9CA3AF",
+                border: activeTab === tab ? "1px solid transparent" : "1px solid rgba(255,255,255,0.08)",
               }}
             >
               {tab}
@@ -250,7 +253,7 @@ export default function ResourcesClient({
               setVisibleCount(PAGE_SIZE);
             }}
             className="w-full pl-10 pr-4 py-3 rounded-lg text-sm transition-colors outline-none focus:ring-1 focus:ring-[#F97316]/40"
-            style={{ ...selectStyle, color: "#374151" }}
+            style={selectStyle}
           />
           {search && (
             <button
@@ -327,7 +330,7 @@ export default function ResourcesClient({
               style={
                 docTypeFilter === dt.value
                   ? { background: "#F97316", color: "#fff", border: "1px solid transparent" }
-                  : { background: "transparent", color: "#6b7280", border: "1px solid #d1d5db" }
+                  : { background: "rgba(255,255,255,0.04)", color: "#9CA3AF", border: "1px solid rgba(255,255,255,0.12)" }
               }
             >
               {dt.label}
@@ -350,7 +353,7 @@ export default function ResourcesClient({
               style={
                 subcategoryFilter === sc.value
                   ? { background: "#F97316", color: "#fff", border: "1px solid transparent" }
-                  : { background: "transparent", color: "#6b7280", border: "1px solid #d1d5db" }
+                  : { background: "rgba(255,255,255,0.04)", color: "#9CA3AF", border: "1px solid rgba(255,255,255,0.12)" }
               }
             >
               {sc.label}
@@ -360,7 +363,7 @@ export default function ResourcesClient({
       )}
 
       {/* ── Results count ────────────────────────────────── */}
-      <p className="text-sm mb-6" style={{ color: "#9ca3af" }}>
+      <p className="text-sm mb-6" style={{ color: "#6B7280" }}>
         {filtered.length} document{filtered.length !== 1 ? "s" : ""} found
       </p>
 
@@ -382,8 +385,8 @@ export default function ResourcesClient({
                         <h3 className="text-sm font-bold tracking-widest uppercase" style={{ color: "#F97316" }}>
                           {productName}
                         </h3>
-                        <div className="flex-1 h-px" style={{ background: "rgba(0,0,0,0.08)" }} />
-                        <span className="text-xs" style={{ color: "#9ca3af" }}>{docs.length} doc{docs.length !== 1 ? "s" : ""}</span>
+                        <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.08)" }} />
+                        <span className="text-xs" style={{ color: "#6B7280" }}>{docs.length} doc{docs.length !== 1 ? "s" : ""}</span>
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                         {docs.map((doc) => (
@@ -407,11 +410,11 @@ export default function ResourcesClient({
             <div className="text-center mt-10">
               <button
                 onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
-                className="px-8 py-3 rounded-lg text-sm font-medium transition-all duration-200 hover:text-[#F97316]"
+                className="px-8 py-3 rounded-lg text-sm font-medium transition-all duration-200 hover:text-[#F97316] hover:border-[#F97316]/30"
                 style={{
                   background: "transparent",
-                  border: "1px solid #d1d5db",
-                  color: "#6b7280",
+                  border: "1px solid rgba(255,255,255,0.12)",
+                  color: "#9CA3AF",
                 }}
               >
                 Load more ({filtered.length - visibleCount} remaining)
@@ -421,11 +424,11 @@ export default function ResourcesClient({
         </>
       ) : (
         <div className="text-center py-20">
-          <FileText className="w-12 h-12 mx-auto mb-4" style={{ color: "#d1d5db" }} />
-          <h3 className="text-xl font-semibold mb-2" style={{ color: "#111827" }}>
+          <FileText className="w-12 h-12 mx-auto mb-4" style={{ color: "rgba(255,255,255,0.15)" }} />
+          <h3 className="text-xl font-semibold mb-2" style={{ color: "#F5F0EB" }}>
             No documents found
           </h3>
-          <p className="mb-6" style={{ color: "#6b7280" }}>
+          <p className="mb-6" style={{ color: "#6B7280" }}>
             Try adjusting your filters or search terms
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -438,8 +441,8 @@ export default function ResourcesClient({
             </button>
             <Link
               href="/contact"
-              className="px-6 py-2.5 rounded-lg text-sm font-medium transition-all hover:text-gray-900"
-              style={{ border: "1px solid #d1d5db", color: "#6b7280" }}
+              className="px-6 py-2.5 rounded-lg text-sm font-medium transition-all hover:text-white hover:border-white/20"
+              style={{ border: "1px solid rgba(255,255,255,0.12)", color: "#9CA3AF" }}
             >
               Can&apos;t find what you need? Contact us &rarr;
             </Link>

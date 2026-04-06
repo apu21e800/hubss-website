@@ -102,7 +102,7 @@ export default function WhyHubss() {
             <br />Approved by Cities.
             <br />Loved by Communities.
           </h2>
-          <p className="text-base leading-relaxed max-w-xl" style={{ color: "#6B7280" }}>
+          <p className="text-base leading-relaxed max-w-xl" style={{ color: "#9CA3AF" }}>
             Thirty years. Five hundred municipalities. One standard — if it goes on the street, it stays on the street.
           </p>
         </motion.div>
@@ -130,7 +130,7 @@ export default function WhyHubss() {
               <span className="text-[11px] font-bold tracking-wider uppercase mt-1" style={{ color: "#F5F0EB" }}>
                 {s.label}
               </span>
-              <span className="text-[10px] leading-snug" style={{ color: "#6B7280" }}>
+              <span className="text-[10px] leading-snug" style={{ color: "#9CA3AF" }}>
                 {s.sub}
               </span>
             </motion.div>
@@ -156,7 +156,7 @@ export default function WhyHubss() {
                   {p.claim}
                 </h3>
               </div>
-              <p className="text-sm leading-relaxed" style={{ color: "#6B7280" }}>
+              <p className="text-sm leading-relaxed" style={{ color: "#9CA3AF" }}>
                 {p.detail}
               </p>
             </motion.div>
@@ -171,7 +171,7 @@ export default function WhyHubss() {
 
       {/* ── Full-bleed scrolling marquee ── */}
       <div
-        className="overflow-hidden pb-14"
+        className="overflow-hidden pt-2 pb-10"
         style={{ maskImage: "linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%)" }}
       >
         <div
@@ -180,14 +180,24 @@ export default function WhyHubss() {
         >
           {TICKER.map((name, i) => (
             <span key={i} className="inline-flex items-center gap-6 px-6 flex-shrink-0">
-              <span className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.3)" }}>
+              <span className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.35)" }}>
                 {name}
               </span>
-              <span className="inline-block w-1 h-1 rounded-full flex-shrink-0" style={{ background: "rgba(249,115,22,0.35)" }} />
+              <span className="inline-block w-1 h-1 rounded-full flex-shrink-0" style={{ background: "rgba(249,115,22,0.4)" }} />
             </span>
           ))}
         </div>
       </div>
+
+      {/* ── Gradient frame line — grounds the marquee, bridges into persona strip ── */}
+      <div
+        className="w-full"
+        style={{
+          height: "1.5px",
+          background: "linear-gradient(90deg, transparent 0%, #F97316 30%, #EAB308 70%, transparent 100%)",
+          opacity: 0.6,
+        }}
+      />
 
       <style>{`
         @keyframes hubss-marquee {

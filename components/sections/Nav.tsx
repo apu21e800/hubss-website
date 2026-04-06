@@ -13,6 +13,7 @@ import {
   Linkedin, Instagram, Youtube, Facebook,
 } from "lucide-react";
 import { products } from "@/lib/products";
+import { PRODUCT_TAXONOMY } from "@/lib/product-taxonomy";
 import { applications } from "@/lib/applications";
 import { SOCIAL_LINKS } from "@/lib/social-links";
 
@@ -176,26 +177,41 @@ function ProductsPanel({
               gap: "3rem",
             }}
           >
-            {/* ── LEFT: All systems list (2-column like Applications) ───── */}
+            {/* ── LEFT: Products grouped by taxonomy ─────────────────────── */}
             <div style={{ borderRight: "1px solid var(--border-faint)", paddingRight: "3rem" }}>
-              <p className="text-[0.65rem] font-bold tracking-[0.2em] uppercase mb-5" style={{ color: "rgba(255,255,255,0.35)" }}>
-                Products
-              </p>
-
-              <div className="grid grid-cols-2 gap-x-8 gap-y-1">
-                {products.map((p) => (
-                  <Link key={p.slug} href={`/products/${p.slug}`} className="group py-2 block">
-                    <div className="text-sm font-medium group-hover:text-orange-400 transition-colors" style={{ color: "rgba(255,255,255,0.85)" }}>{p.name}</div>
-                    <div className="text-xs group-hover:text-gray-300 transition-colors" style={{ color: "rgba(255,255,255,0.4)" }}>{p.shortDesc}</div>
-                  </Link>
-                ))}
+              <div className="space-y-6">
+                {PRODUCT_TAXONOMY.map((group) => {
+                  const groupProducts = group.slugs
+                    .map((slug) => products.find((p) => p.slug === slug))
+                    .filter(Boolean) as typeof products;
+                  return (
+                    <div key={group.label}>
+                      {/* Group label */}
+                      <p
+                        className="text-[0.6rem] font-bold tracking-[0.2em] uppercase mb-2"
+                        style={{ color: "rgba(249,115,22,0.65)" }}
+                      >
+                        {group.label}
+                      </p>
+                      {/* Product links — 2-col within each group */}
+                      <div className="grid grid-cols-2 gap-x-8 gap-y-0.5">
+                        {groupProducts.map((p) => (
+                          <Link key={p.slug} href={`/products/${p.slug}`} className="group py-1.5 block">
+                            <div className="text-sm font-medium group-hover:text-orange-400 transition-colors" style={{ color: "rgba(255,255,255,0.85)" }}>{p.name}</div>
+                            <div className="text-xs group-hover:text-gray-300 transition-colors leading-snug" style={{ color: "rgba(255,255,255,0.35)" }}>{p.shortDesc}</div>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
 
               <Link
                 href="/products"
-                className="inline-flex items-center gap-1.5 text-xs text-orange-400 hover:text-orange-300 mt-4 font-medium"
+                className="inline-flex items-center gap-1.5 text-xs text-orange-400 hover:text-orange-300 mt-5 font-medium"
               >
-                View all products →
+                View all surface systems →
               </Link>
             </div>
 
@@ -1078,15 +1094,12 @@ export default function Nav() {
               <span
                 style={{
                   display: "block",
-                  width: 14,
+                  width: 20,
                   height: 1.5,
                   background: "#ffffff",
                   borderRadius: 2,
-                  alignSelf: "flex-start",
-                  marginLeft: 3,
-                  transition: "transform 0.3s cubic-bezier(0.22,1,0.36,1), width 0.2s",
-                  transform: mobileOpen ? "rotate(-45deg) translate(0px, -4.25px) scaleX(1.43)" : "none",
-                  transformOrigin: "left center",
+                  transition: "transform 0.3s cubic-bezier(0.22,1,0.36,1)",
+                  transform: mobileOpen ? "rotate(-45deg) translate(0px, -4.25px)" : "none",
                 }}
               />
             </button>

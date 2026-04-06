@@ -55,7 +55,7 @@ export default function ProjectsPage() {
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-3" style={{ color: "#f97316" }}>
             Portfolio
           </p>
-          <h1 className="text-6xl font-bold mb-4" style={{ color: "#f5f0eb" }}>Projects</h1>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4" style={{ color: "#f5f0eb" }}>Projects</h1>
           <p className="text-lg" style={{ color: "#9ca3af" }}>
             Surface solutions protecting Canadian streets and communities.
           </p>

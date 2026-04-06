@@ -64,11 +64,15 @@ export default function LunchLearn({ hideMoose = false }: { hideMoose?: boolean 
       className="relative overflow-hidden"
       style={{ background: "#0f1420", zIndex: 0 }}
     >
-      {/* Orange/amber warm glow — emanates from bottom-right */}
+      {/* Orange/amber radial glow — bottom-right */}
       <div
-        className="absolute bottom-0 right-0 w-[500px] h-[500px] pointer-events-none"
+        className="absolute pointer-events-none"
         style={{
-          background: "radial-gradient(ellipse at bottom right, rgba(249,115,22,0.12) 0%, rgba(234,179,8,0.06) 30%, transparent 70%)",
+          bottom: "-120px",
+          right: "-120px",
+          width: "800px",
+          height: "800px",
+          background: "radial-gradient(ellipse at center, rgba(249,115,22,0.11) 0%, rgba(234,179,8,0.05) 35%, transparent 65%)",
           zIndex: 0,
         }}
       />
@@ -283,17 +287,17 @@ export default function LunchLearn({ hideMoose = false }: { hideMoose?: boolean 
             )}
           </motion.div>
 
-          {/* Moose — in flow, below card, centered in right column */}
+          {/* Moose — in flow, below card, paws on fold line */}
           {!hideMoose && (
-            <div className="hidden lg:flex justify-end items-end pt-2 pointer-events-none">
+            <div className="hidden lg:flex justify-center items-end pt-2 pointer-events-none">
               <Image
                 src="/images/lunch-learn/moose.png"
                 alt="HUB Surface Systems Moose mascot"
-                width={220}
-                height={220}
+                width={210}
+                height={210}
                 style={{
                   display: "block",
-                  filter: "drop-shadow(0 0 36px rgba(249,115,22,0.22)) drop-shadow(0 8px 24px rgba(0,0,0,0.55))",
+                  filter: "drop-shadow(0 0 40px rgba(249,115,22,0.2)) drop-shadow(0 8px 24px rgba(0,0,0,0.55))",
                 }}
                 unoptimized
               />
@@ -306,7 +310,7 @@ export default function LunchLearn({ hideMoose = false }: { hideMoose?: boolean 
 
       {/* ── Bottom CTA bar ──────────────────────────────────── */}
       <div style={{ background: "#0f1420", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 text-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center">
           <p className="text-sm" style={{ color: "#94a3b8" }}>
             Book your session at{" "}
             <a href="/lunch-learn" className="font-semibold transition-colors hover:text-white" style={{ color: "#f97316" }}>hubss.com/lunch-learn</a>

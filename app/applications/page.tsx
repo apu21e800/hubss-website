@@ -21,7 +21,7 @@ export default function ApplicationsPage() {
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-3" style={{ color: "#f97316" }}>
             Applications
           </p>
-          <h1 className="text-6xl font-bold mb-5 leading-tight" style={{ color: "var(--text-primary)" }}>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-5 leading-tight" style={{ color: "var(--text-primary)" }}>
             Where Our Systems Live
           </h1>
           <p className="text-lg" style={{ color: "var(--text-secondary)" }}>

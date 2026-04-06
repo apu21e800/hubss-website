@@ -58,36 +58,39 @@ export default function LunchLearnPage() {
           </div>
         </div>
 
-        {/* Moose — bottom-right of hero, standing on the floor line */}
+        {/* Floor line — sits exactly at the section fold */}
         <div
-          className="absolute bottom-0 right-0 sm:right-4 md:right-8 lg:right-12 z-20 pointer-events-none"
-          style={{ width: "clamp(120px, 22vw, 288px)", height: "clamp(120px, 22vw, 288px)" }}
+          className="absolute left-0 right-0 bottom-0"
+          style={{
+            height: 2,
+            background: "linear-gradient(90deg, transparent 0%, rgba(249,115,22,0.2) 30%, rgba(249,115,22,0.12) 70%, transparent 100%)",
+          }}
+        />
+
+        {/* Moose — paws resting on the fold line, positioned centre-right */}
+        <div
+          className="absolute bottom-0 z-20 pointer-events-none"
+          style={{
+            right: "clamp(80px, 28vw, 380px)",
+            width: "clamp(110px, 20vw, 260px)",
+            height: "clamp(110px, 20vw, 260px)",
+          }}
         >
           <Image
             src="/images/lunch-learn/moose.png"
             alt="HUB Surface Systems Moose Mascot"
-            width={288}
-            height={288}
+            width={260}
+            height={260}
             style={{
               width: "100%",
               height: "100%",
               objectFit: "contain",
-              filter: "drop-shadow(0 0 32px rgba(249,115,22,0.28)) drop-shadow(0 12px 24px rgba(0,0,0,0.5))",
+              filter: "drop-shadow(0 0 36px rgba(249,115,22,0.25)) drop-shadow(0 12px 24px rgba(0,0,0,0.5))",
               display: "block",
             }}
             unoptimized
           />
         </div>
-
-        {/* Floor line — visual ground the moose stands on, visible at all breakpoints */}
-        <div
-          className="absolute left-0 right-0"
-          style={{
-            bottom: "clamp(0px, 4vw, 28px)",
-            height: 2,
-            background: "linear-gradient(90deg, transparent 0%, rgba(249,115,22,0.18) 35%, rgba(249,115,22,0.1) 65%, transparent 100%)",
-          }}
-        />
       </div>
 
       <div className="pt-16">

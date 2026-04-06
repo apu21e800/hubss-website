@@ -286,19 +286,19 @@ export default function LunchLearn({ hideMoose = false }: { hideMoose?: boolean 
       </div>
 
 
-      {/* Moose mascot — grounded bottom-right, xl screens only. Hidden when page already has its own hero mascot */}
+      {/* Moose mascot — bottom-right, flanking the form card, in the orange glow */}
       {!hideMoose && (
         <div
           className="absolute z-10 hidden lg:block pointer-events-none"
-          style={{ bottom: 72, left: "calc(50% + 80px)", width: 220, height: 220 }}
+          style={{ bottom: 44, right: 0, width: 260, height: 260 }}
         >
           <Image
             src="/images/lunch-learn/moose.png"
             alt="HUB Surface Systems Moose mascot"
-            width={240}
-            height={240}
+            width={260}
+            height={260}
             style={{
-              filter: "drop-shadow(0 0 16px rgba(249,115,22,0.08)) drop-shadow(0 6px 16px rgba(0,0,0,0.5))",
+              filter: "drop-shadow(0 0 28px rgba(249,115,22,0.18)) drop-shadow(0 8px 20px rgba(0,0,0,0.5))",
               display: "block",
             }}
             unoptimized

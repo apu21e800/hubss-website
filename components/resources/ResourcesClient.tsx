@@ -55,27 +55,27 @@ const STREETBOND_SUBCATEGORIES = [
   { label: "Pro 250", value: "Pro 250" },
 ];
 
-// Badge colors — dark-theme alpha variants
+// Badge colors — muted dark-theme variants
 function typeBadgeStyle(type: string): React.CSSProperties {
   switch (type) {
     case "Spec Sheet":
     case "Data Sheet":
-      return { background: "rgba(59,130,246,0.12)", color: "#93c5fd", border: "1px solid rgba(59,130,246,0.2)" };
+      return { background: "rgba(59,130,246,0.08)", color: "#7db3f0", border: "1px solid rgba(59,130,246,0.14)" };
     case "Safety Data Sheet":
-      return { background: "rgba(239,68,68,0.12)", color: "#fca5a5", border: "1px solid rgba(239,68,68,0.2)" };
+      return { background: "rgba(239,68,68,0.08)", color: "#e89090", border: "1px solid rgba(239,68,68,0.14)" };
     case "Brochure":
-      return { background: "rgba(249,115,22,0.12)", color: "#fdba74", border: "1px solid rgba(249,115,22,0.2)" };
+      return { background: "rgba(249,115,22,0.08)", color: "#d4924a", border: "1px solid rgba(249,115,22,0.14)" };
     case "Installation Guide":
     case "Guide":
-      return { background: "rgba(20,184,166,0.12)", color: "#5eead4", border: "1px solid rgba(20,184,166,0.2)" };
+      return { background: "rgba(20,184,166,0.08)", color: "#4dbfb0", border: "1px solid rgba(20,184,166,0.14)" };
     case "Design Manual":
-      return { background: "rgba(168,85,247,0.12)", color: "#d8b4fe", border: "1px solid rgba(168,85,247,0.2)" };
+      return { background: "rgba(168,85,247,0.08)", color: "#b88ee8", border: "1px solid rgba(168,85,247,0.14)" };
     case "Colour Guide":
-      return { background: "rgba(236,72,153,0.12)", color: "#f9a8d4", border: "1px solid rgba(236,72,153,0.2)" };
+      return { background: "rgba(236,72,153,0.08)", color: "#d078a8", border: "1px solid rgba(236,72,153,0.14)" };
     case "Certificate":
-      return { background: "rgba(34,197,94,0.12)", color: "#86efac", border: "1px solid rgba(34,197,94,0.2)" };
+      return { background: "rgba(34,197,94,0.08)", color: "#5ebd82", border: "1px solid rgba(34,197,94,0.14)" };
     default:
-      return { background: "rgba(255,255,255,0.06)", color: "#9CA3AF", border: "1px solid rgba(255,255,255,0.1)" };
+      return { background: "rgba(255,255,255,0.05)", color: "#6B7280", border: "1px solid rgba(255,255,255,0.08)" };
   }
 }
 
@@ -92,16 +92,16 @@ function DocCard({ doc }: { doc: ResourceDocument }) {
     <div
       className="group rounded-xl p-5 flex flex-col justify-between transition-all duration-200"
       style={{
-        background: "#262626",
+        background: "#1e1e1e",
         border: "1px solid rgba(255,255,255,0.07)",
       }}
       onMouseEnter={e => {
-        (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(249,115,22,0.25)";
-        (e.currentTarget as HTMLDivElement).style.background = "#2e2e2e";
+        (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(249,115,22,0.2)";
+        (e.currentTarget as HTMLDivElement).style.background = "#252525";
       }}
       onMouseLeave={e => {
         (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(255,255,255,0.07)";
-        (e.currentTarget as HTMLDivElement).style.background = "#262626";
+        (e.currentTarget as HTMLDivElement).style.background = "#1e1e1e";
       }}
     >
       <div>
@@ -114,7 +114,7 @@ function DocCard({ doc }: { doc: ResourceDocument }) {
         <h3 className="font-semibold leading-snug mb-2" style={{ color: "#F5F0EB" }}>{doc.title}</h3>
         <span
           className="inline-block text-xs px-2 py-0.5 rounded-full"
-          style={{ color: "#f97316", background: "rgba(249,115,22,0.1)", border: "1px solid rgba(249,115,22,0.2)" }}
+          style={{ color: "#c96a18", background: "rgba(249,115,22,0.07)", border: "1px solid rgba(249,115,22,0.12)" }}
         >
           {doc.productName}
         </span>
@@ -330,7 +330,7 @@ export default function ResourcesClient({
               style={
                 docTypeFilter === dt.value
                   ? { background: "#F97316", color: "#fff", border: "1px solid transparent" }
-                  : { background: "rgba(255,255,255,0.04)", color: "#9CA3AF", border: "1px solid rgba(255,255,255,0.12)" }
+                  : { background: "rgba(255,255,255,0.04)", color: "#6B7280", border: "1px solid rgba(255,255,255,0.08)" }
               }
             >
               {dt.label}
@@ -353,7 +353,7 @@ export default function ResourcesClient({
               style={
                 subcategoryFilter === sc.value
                   ? { background: "#F97316", color: "#fff", border: "1px solid transparent" }
-                  : { background: "rgba(255,255,255,0.04)", color: "#9CA3AF", border: "1px solid rgba(255,255,255,0.12)" }
+                  : { background: "rgba(255,255,255,0.04)", color: "#6B7280", border: "1px solid rgba(255,255,255,0.08)" }
               }
             >
               {sc.label}

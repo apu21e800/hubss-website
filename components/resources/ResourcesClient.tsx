@@ -92,16 +92,16 @@ function DocCard({ doc }: { doc: ResourceDocument }) {
     <div
       className="group rounded-xl p-5 flex flex-col justify-between transition-all duration-200"
       style={{
-        background: "#1e1e1e",
-        border: "1px solid rgba(255,255,255,0.07)",
+        background: "#1c1c1c",
+        border: "1px solid rgba(255,255,255,0.08)",
       }}
       onMouseEnter={e => {
-        (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(249,115,22,0.2)";
-        (e.currentTarget as HTMLDivElement).style.background = "#252525";
+        (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(249,115,22,0.22)";
+        (e.currentTarget as HTMLDivElement).style.background = "#242424";
       }}
       onMouseLeave={e => {
-        (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(255,255,255,0.07)";
-        (e.currentTarget as HTMLDivElement).style.background = "#1e1e1e";
+        (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(255,255,255,0.08)";
+        (e.currentTarget as HTMLDivElement).style.background = "#1c1c1c";
       }}
     >
       <div>

@@ -39,10 +39,10 @@ export default function ResourcesPage() {
       {/* ── Document Library — neutral dark, Claude-style ─── */}
       <section
         style={{
-          background: "#1a1a1a",
+          background: "#111111",
           backgroundImage:
-            "radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px)",
-          backgroundSize: "24px 24px",
+            "radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px)",
+          backgroundSize: "36px 36px",
           borderTop: "1px solid rgba(255,255,255,0.07)",
         }}
       >

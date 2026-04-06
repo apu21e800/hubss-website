@@ -30,7 +30,7 @@ export default function BlogPage() {
     <main className="min-h-screen" style={{ background: "#0f1620" }}>
       <Nav />
 
-      <div className="max-w-7xl mx-auto px-6 pt-32 pb-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-32 pb-24">
         {/* Header */}
         <div className="mb-14">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-3" style={{ color: "#f97316" }}>

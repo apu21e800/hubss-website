@@ -136,7 +136,7 @@ export default function WhyHubss() {
               <span className="text-[11px] font-bold tracking-wider uppercase" style={{ color: "#F5F0EB" }}>
                 {s.label}
               </span>
-              <span className="text-[10px] leading-snug" style={{ color: "#6B7280" }}>
+              <span className="text-[10px] leading-snug" style={{ color: "#9CA3AF" }}>
                 {s.sub}
               </span>
             </motion.div>
@@ -167,7 +167,7 @@ export default function WhyHubss() {
                 </h3>
               </div>
               {/* Detail */}
-              <p className="text-sm leading-relaxed" style={{ color: "#6B7280" }}>
+              <p className="text-sm leading-relaxed" style={{ color: "#9CA3AF" }}>
                 {p.detail}
               </p>
             </motion.div>

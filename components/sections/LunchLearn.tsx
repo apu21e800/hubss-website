@@ -83,12 +83,12 @@ export default function LunchLearn({ hideMoose = false }: { hideMoose?: boolean 
             viewport={{ once: true }}
           >
             {/* Eyebrow + CPD Badge */}
-            <div className="flex items-center gap-3 mb-4">
+            <div className="flex items-center flex-wrap gap-2 mb-4">
               <p className="gradient-text text-xs font-semibold tracking-[0.2em] uppercase">
                 Free Professional Development
               </p>
               <span
-                className="text-[10px] font-bold tracking-wide px-2 py-0.5 rounded-full"
+                className="text-[10px] font-bold tracking-wide px-2 py-0.5 rounded-full whitespace-nowrap flex-shrink-0"
                 style={{
                   background: "linear-gradient(90deg, rgba(249,115,22,0.15), rgba(234,179,8,0.15))",
                   color: "#f97316",

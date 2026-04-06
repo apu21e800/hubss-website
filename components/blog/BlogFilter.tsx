@@ -68,12 +68,14 @@ export default function BlogFilter({ posts, allProducts }: Props) {
   const Btn = ({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) => (
     <button
       onClick={onClick}
-      className="text-xs font-semibold px-4 py-2 rounded transition-all"
+      className="text-xs font-semibold px-3 py-1.5 rounded transition-all whitespace-nowrap flex-shrink-0"
       style={{
         background:   active ? "#f97316" : "#2a2a2a",
         color:        active ? "#fff"    : "#8b8b8b",
         border:       "1px solid",
         borderColor:  active ? "#f97316" : "rgba(255,255,255,0.07)",
+        lineHeight:   "1.25rem",
+        height:       "2rem",
       }}
     >
       {label}
@@ -85,8 +87,8 @@ export default function BlogFilter({ posts, allProducts }: Props) {
       {/* ── Filter row ──────────────────────────────────── */}
       <div className="space-y-3 mb-10">
         {/* Category + product pills — horizontal scroll on mobile, wraps on larger screens */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:flex-wrap sm:overflow-visible scrollbar-none"
-          style={{ WebkitOverflowScrolling: "touch" }}
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-1 sm:flex-wrap sm:overflow-visible scrollbar-none"
+          style={{ WebkitOverflowScrolling: "touch", msOverflowStyle: "none", scrollbarWidth: "none" }}
         >
           <Btn label="All" active={category === "all" && product === "all"} onClick={() => { setAndSync(setCategory, "category", "all"); setProduct("all"); }} />
 

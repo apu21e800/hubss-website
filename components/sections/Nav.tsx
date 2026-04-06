@@ -1054,8 +1054,8 @@ export default function Nav() {
               style={{
                 width: 44,
                 height: 44,
-                background: mobileOpen ? "rgba(249,115,22,0.12)" : "rgba(255,255,255,0.05)",
-                border: mobileOpen ? "1px solid rgba(249,115,22,0.45)" : "1px solid rgba(255,255,255,0.10)",
+                background: "rgba(255,255,255,0.05)",
+                border: "1px solid rgba(255,255,255,0.10)",
                 borderRadius: 8,
                 padding: "10px",
                 flexShrink: 0,
@@ -1067,11 +1067,11 @@ export default function Nav() {
               <span
                 style={{
                   display: "block",
-                  width: mobileOpen ? 20 : 20,
+                  width: 20,
                   height: 1.5,
-                  background: mobileOpen ? "#f97316" : "#ffffff",
+                  background: "#ffffff",
                   borderRadius: 2,
-                  transition: "transform 0.3s cubic-bezier(0.22,1,0.36,1), background 0.2s",
+                  transition: "transform 0.3s cubic-bezier(0.22,1,0.36,1)",
                   transform: mobileOpen ? "rotate(45deg) translate(0px, 4.25px)" : "none",
                 }}
               />
@@ -1080,11 +1080,11 @@ export default function Nav() {
                   display: "block",
                   width: 14,
                   height: 1.5,
-                  background: mobileOpen ? "#f97316" : "#f97316",
+                  background: "#ffffff",
                   borderRadius: 2,
                   alignSelf: "flex-start",
                   marginLeft: 3,
-                  transition: "transform 0.3s cubic-bezier(0.22,1,0.36,1), width 0.2s, background 0.2s",
+                  transition: "transform 0.3s cubic-bezier(0.22,1,0.36,1), width 0.2s",
                   transform: mobileOpen ? "rotate(-45deg) translate(0px, -4.25px) scaleX(1.43)" : "none",
                   transformOrigin: "left center",
                 }}

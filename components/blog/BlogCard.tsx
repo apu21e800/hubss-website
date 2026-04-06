@@ -22,7 +22,7 @@ export default function BlogCard({ post }: { post: PostMeta }) {
   return (
     <Link
       href={`/blog/${post.slug}`}
-      className="group flex flex-col overflow-hidden rounded-xl transition-all duration-300 hover:-translate-y-1 bg-[#2a2a2a] hover:bg-[#313131]"
+      className="group flex flex-col overflow-hidden rounded-xl transition-all duration-300 hover:-translate-y-1 bg-[#1c1c1c] hover:bg-[#242424]"
     >
       {/* Image with gradient overlay */}
       <div className="relative h-52 overflow-hidden flex-shrink-0">
@@ -37,7 +37,7 @@ export default function BlogCard({ post }: { post: PostMeta }) {
         {/* Dark gradient at bottom of image */}
         <div
           className="absolute inset-x-0 bottom-0 h-20 pointer-events-none"
-          style={{ background: "linear-gradient(to top, rgba(42,42,42,0.9), transparent)" }}
+          style={{ background: "linear-gradient(to top, rgba(28,28,28,0.9), transparent)" }}
         />
         {/* Orange accent border on hover */}
         <div
@@ -61,7 +61,7 @@ export default function BlogCard({ post }: { post: PostMeta }) {
               </span>
             ))}
           </div>
-          <span className="text-[10px] flex-shrink-0" style={{ color: "#6B7280" }}>
+          <span className="text-[10px] flex-shrink-0" style={{ color: "#9CA3AF" }}>
             {new Date(post.date).toLocaleDateString("en-CA", { year: "numeric", month: "short", day: "numeric" })}
           </span>
         </div>

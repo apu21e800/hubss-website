@@ -37,12 +37,12 @@ export default function ComparisonTable() {
               Why HUBSS
             </p>
             <h2
-              className="text-2xl sm:text-3xl md:text-4xl font-bold mb-5 leading-[1.1]"
+              className="text-3xl sm:text-4xl md:text-5xl font-bold mb-5 leading-[1.1]"
               style={{ color: "#111827" }}
             >
               Paint Fades.<br />We Don&apos;t.
             </h2>
-            <p className="text-[15px] leading-relaxed mb-8" style={{ color: "#4b5563" }}>
+            <p className="text-[15px] leading-relaxed mb-8" style={{ color: "#374151" }}>
               Traditional paint markings cost municipalities more every year through
               repeated reapplication, faded visibility, and plow damage. HUB surface
               systems are installed once and built to outlast the budget cycle.
@@ -59,7 +59,7 @@ export default function ComparisonTable() {
               {/* Stat */}
               <div className="flex-shrink-0">
                 <p
-                  className="text-5xl font-black leading-none"
+                  className="text-4xl sm:text-5xl font-black leading-none"
                   style={{ color: "#f97316" }}
                 >
                   8x

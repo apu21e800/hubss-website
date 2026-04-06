@@ -51,12 +51,6 @@ export default function Hero({ variant = "default" }: HeroProps) {
       {/* Dark overlay — keeps text fully readable */}
       <div className="absolute inset-0 bg-black/70 pointer-events-none" />
 
-      {/* Gradient left-edge accent */}
-      <div
-        className="absolute left-0 top-1/4 w-1 h-48 z-10"
-        style={{ background: "linear-gradient(180deg, #F97316 0%, #EAB308 100%)" }}
-      />
-
       {/* Main content — mobile: column with top text + bottom CTAs | desktop: centered */}
       <div
         ref={textRef}
@@ -67,8 +61,13 @@ export default function Hero({ variant = "default" }: HeroProps) {
           initial={{ opacity: 0, y: 32 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          className="max-w-4xl w-full text-left"
+          className="max-w-4xl w-full text-left relative"
         >
+          {/* Gradient left-edge accent — tracks the headline block */}
+          <div
+            className="absolute -left-4 sm:-left-6 lg:-left-8 top-6 w-[3px] h-16 sm:h-24"
+            style={{ background: "linear-gradient(180deg, #F97316 0%, #EAB308 100%)" }}
+          />
           {/* Eyebrow */}
           <p
             className="text-xs font-semibold tracking-[0.2em] uppercase mb-5 sm:mb-6"

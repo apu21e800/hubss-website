@@ -24,7 +24,6 @@ type MobileExpanded = "products" | "applications" | null;
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const PLAIN_LINKS = [
-  { label: "Projects",  href: "/projects" },
   { label: "About",     href: "/about" },
   { label: "Blog",      href: "/blog" },
   { label: "Contact",   href: "/contact" },

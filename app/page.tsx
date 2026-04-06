@@ -9,7 +9,6 @@ import ProductsGrid from "@/components/sections/ProductsGrid";
 import ApplicationsGrid from "@/components/sections/ApplicationsGrid";
 import ResidentialDriveways from "@/components/sections/ResidentialDriveways";
 import ComparisonTable from "@/components/sections/ComparisonTable";
-import RecentProjects from "@/components/sections/RecentProjects";
 import FeaturedBlogPost from "@/components/sections/FeaturedBlogPost";
 import InstagramStrip from "@/components/sections/InstagramStrip";
 import LunchLearn from "@/components/sections/LunchLearn";
@@ -74,9 +73,7 @@ export default function Home() {
       <ResidentialDriveways />
       {/* slate → off-white */}
       <ComparisonTable />
-      {/* off-white → off-white */}
-      <RecentProjects />
-      {/* Featured blog post */}
+      {/* Featured blog post — Field Notes */}
       <FeaturedBlogPost />
       {/* off-white → slate (lunch learn) */}
       <InstagramStrip />

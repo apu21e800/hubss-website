@@ -65,7 +65,7 @@ export default function Hero({ variant = "default" }: HeroProps) {
         >
           {/* Gradient left-edge accent — tracks the headline block */}
           <div
-            className="absolute -left-4 sm:-left-6 lg:-left-8 top-6 w-[3px] h-16 sm:h-24"
+            className="absolute -left-4 sm:-left-6 lg:-left-8 top-2 w-[3px] h-36 sm:h-48"
             style={{ background: "linear-gradient(180deg, #F97316 0%, #EAB308 100%)" }}
           />
           {/* Eyebrow */}

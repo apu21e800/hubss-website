@@ -38,7 +38,7 @@ export default function ApplicationsGrid() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-10">
           {featured.map((app, i) => (
             <motion.div
               key={app.slug}
@@ -89,6 +89,19 @@ export default function ApplicationsGrid() {
               </Link>
             </motion.div>
           ))}
+        </div>
+
+        {/* View All CTA */}
+        <div className="flex justify-center mt-4">
+          <Link
+            href="/applications"
+            className="inline-flex items-center gap-2 border border-white/20 hover:border-orange-500/60 text-white font-semibold px-7 py-3.5 rounded-lg transition-all duration-200 hover:bg-white/[0.04] text-sm"
+          >
+            View All Applications
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </Link>
         </div>
       </div>
     </section>

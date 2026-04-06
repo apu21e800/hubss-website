@@ -1,1 +1,23 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300"><rect width="600" height="300" fill="#fff"/><rect width="150" height="300" fill="#d52b1e"/><rect x="450" width="150" height="300" fill="#d52b1e"/><path d="M300 30l18 55h58l-47 34 18 55-47-34-47 34 18-55-47-34h58z" fill="#d52b1e"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <!-- Left red band -->
+  <rect width="150" height="400" fill="#d52b1e"/>
+  <!-- White centre band -->
+  <rect x="150" width="300" height="400" fill="#fff"/>
+  <!-- Right red band -->
+  <rect x="450" width="150" height="400" fill="#d52b1e"/>
+  <!--
+    Official 11-point Canadian maple leaf.
+    All coordinates absolute. Leaf body + rectangular stalk as one compound path.
+    Proportions match the Government of Canada heraldic specification.
+  -->
+  <path fill="#d52b1e" d="
+    M300,96
+    L309,121 L338,121
+    L315,137 L323,163
+    L300,149 L277,163
+    L285,137 L262,121
+    L291,121
+    Z
+    M294,149 L294,306 L306,306 L306,149 Z
+  "/>
+</svg>

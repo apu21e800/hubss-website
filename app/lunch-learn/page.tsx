@@ -79,10 +79,11 @@ export default function LunchLearnPage() {
           />
         </div>
 
-        {/* Floor line — visual ground the moose stands on */}
+        {/* Floor line — visual ground the moose stands on, visible at all breakpoints */}
         <div
-          className="absolute bottom-0 left-0 right-0 hidden sm:block"
+          className="absolute left-0 right-0"
           style={{
+            bottom: "clamp(0px, 4vw, 28px)",
             height: 2,
             background: "linear-gradient(90deg, transparent 0%, rgba(249,115,22,0.18) 35%, rgba(249,115,22,0.1) 65%, transparent 100%)",
           }}

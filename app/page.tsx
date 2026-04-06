@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Nav from "@/components/sections/Nav";
 import Hero from "@/components/sections/Hero";
-import HeroCityTicker from "@/components/sections/HeroCityTicker";
 import WhyHubss from "@/components/sections/WhyHubss";
 import PersonaEntryPoints from "@/components/sections/PersonaEntryPoints";
 import ProductsGrid from "@/components/sections/ProductsGrid";
@@ -59,7 +58,6 @@ export default function Home() {
       <JsonLd data={organizationSchema} />
       <Nav />
       <Hero />
-      <HeroCityTicker />
       <WhyHubss />
       <PersonaEntryPoints />
       {/* slate → dark */}

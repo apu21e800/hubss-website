@@ -13,60 +13,36 @@ export const metadata: Metadata = {
 
 export default function ResourcesPage() {
   return (
-    <main
-      className="min-h-screen relative"
-      style={{
-        background: "#1a1a1a",
-        backgroundImage:
-          "radial-gradient(circle, rgba(255,255,255,0.12) 1px, transparent 1px)",
-        backgroundSize: "32px 32px",
-      }}
-    >
-      {/* Subtle orange radial — top-right, very soft */}
-      <div
-        className="absolute pointer-events-none"
+    <main className="min-h-screen" style={{ background: "#0a0f1a" }}>
+      <Nav />
+
+      {/* ── Page Header — HUBSS dark blue ─────────────────── */}
+      <div className="max-w-7xl mx-auto px-6 pt-32 pb-16">
+        <p
+          className="text-xs font-semibold tracking-[0.2em] uppercase mb-3"
+          style={{ color: "#F97316" }}
+        >
+          Resources
+        </p>
+        <h1
+          className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 leading-tight"
+          style={{ color: "#F5F0EB" }}
+        >
+          Specification Library
+        </h1>
+        <p className="text-base max-w-2xl" style={{ color: "#6B7280" }}>
+          Technical data sheets, brochures, safety guides, and installation
+          resources for every HUBSS product.
+        </p>
+      </div>
+
+      {/* ── Document Library — neutral dark, Claude-style ─── */}
+      <section
         style={{
-          top: "-60px",
-          right: "-80px",
-          width: "700px",
-          height: "700px",
-          background:
-            "radial-gradient(ellipse at center, rgba(249,115,22,0.06) 0%, rgba(249,115,22,0.02) 40%, transparent 68%)",
-          zIndex: 0,
+          background: "#1a1a1a",
+          borderTop: "1px solid rgba(255,255,255,0.07)",
         }}
-        aria-hidden="true"
-      />
-
-      <div className="relative" style={{ zIndex: 1 }}>
-        <Nav />
-
-        {/* ── Page Header ──────────────────────────────────── */}
-        <div className="max-w-7xl mx-auto px-6 pt-32 pb-14">
-          <p
-            className="text-xs font-semibold tracking-[0.2em] uppercase mb-3"
-            style={{ color: "#F97316" }}
-          >
-            Resources
-          </p>
-          <h1
-            className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 leading-tight"
-            style={{ color: "#F5F0EB" }}
-          >
-            Specification Library
-          </h1>
-          <p className="text-base max-w-2xl" style={{ color: "#6B7280" }}>
-            Technical data sheets, brochures, safety guides, and installation
-            resources for every HUBSS product.
-          </p>
-        </div>
-
-        {/* ── Divider ──────────────────────────────────────── */}
-        <div
-          className="max-w-7xl mx-auto px-6"
-          style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
-        />
-
-        {/* ── Document Library ─────────────────────────────── */}
+      >
         <div className="max-w-7xl mx-auto px-6 py-16 pb-28">
           {/* Section label */}
           <div className="flex items-center gap-4 mb-10">
@@ -78,7 +54,7 @@ export default function ResourcesPage() {
             </h2>
             <div
               className="flex-1 h-px"
-              style={{ background: "rgba(255,255,255,0.08)" }}
+              style={{ background: "rgba(255,255,255,0.07)" }}
             />
             <span className="text-xs" style={{ color: "#6B7280" }}>
               {resourceDocuments.length} total
@@ -86,7 +62,7 @@ export default function ResourcesPage() {
           </div>
           <ResourcesClient documents={resourceDocuments} />
         </div>
-      </div>
+      </section>
 
       <LunchLearn />
       <Footer />

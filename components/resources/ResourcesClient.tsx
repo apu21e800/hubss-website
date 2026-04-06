@@ -92,16 +92,16 @@ function DocCard({ doc }: { doc: ResourceDocument }) {
     <div
       className="group rounded-xl p-5 flex flex-col justify-between transition-all duration-200"
       style={{
-        background: "#242424",
-        border: "1px solid rgba(255,255,255,0.08)",
+        background: "#262626",
+        border: "1px solid rgba(255,255,255,0.07)",
       }}
       onMouseEnter={e => {
-        (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(249,115,22,0.3)";
-        (e.currentTarget as HTMLDivElement).style.background = "#2a2a2a";
+        (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(249,115,22,0.25)";
+        (e.currentTarget as HTMLDivElement).style.background = "#2e2e2e";
       }}
       onMouseLeave={e => {
-        (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(255,255,255,0.08)";
-        (e.currentTarget as HTMLDivElement).style.background = "#242424";
+        (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(255,255,255,0.07)";
+        (e.currentTarget as HTMLDivElement).style.background = "#262626";
       }}
     >
       <div>
@@ -121,7 +121,7 @@ function DocCard({ doc }: { doc: ResourceDocument }) {
       </div>
       <div
         className="flex items-center justify-between mt-5 pt-4"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
+        style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
       >
         <div className="flex items-center gap-3 text-xs" style={{ color: "#6B7280" }}>
           <span>{doc.fileSize}</span>
@@ -133,13 +133,13 @@ function DocCard({ doc }: { doc: ResourceDocument }) {
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors duration-200"
-          style={{ background: "rgba(255,255,255,0.06)", color: "#9CA3AF" }}
+          style={{ background: "rgba(255,255,255,0.08)", color: "#9CA3AF" }}
           onMouseEnter={e => {
             (e.currentTarget as HTMLAnchorElement).style.background = "#f97316";
             (e.currentTarget as HTMLAnchorElement).style.color = "#ffffff";
           }}
           onMouseLeave={e => {
-            (e.currentTarget as HTMLAnchorElement).style.background = "rgba(255,255,255,0.06)";
+            (e.currentTarget as HTMLAnchorElement).style.background = "rgba(255,255,255,0.08)";
             (e.currentTarget as HTMLAnchorElement).style.color = "#9CA3AF";
           }}
         >

@@ -22,7 +22,7 @@ export default function BlogCard({ post }: { post: PostMeta }) {
   return (
     <Link
       href={`/blog/${post.slug}`}
-      className="group flex flex-col overflow-hidden rounded-xl transition-all duration-300 hover:-translate-y-1 bg-[#1c1c1c] hover:bg-[#242424]"
+      className="group flex flex-col overflow-hidden rounded-xl transition-all duration-300 hover:-translate-y-1 bg-[#1e1e1e] hover:bg-[#252525]"
     >
       {/* Image with gradient overlay */}
       <div className="relative h-52 overflow-hidden flex-shrink-0">
@@ -37,7 +37,7 @@ export default function BlogCard({ post }: { post: PostMeta }) {
         {/* Dark gradient at bottom of image */}
         <div
           className="absolute inset-x-0 bottom-0 h-20 pointer-events-none"
-          style={{ background: "linear-gradient(to top, rgba(28,28,28,0.9), transparent)" }}
+          style={{ background: "linear-gradient(to top, rgba(30,30,30,0.9), transparent)" }}
         />
         {/* Orange accent border on hover */}
         <div

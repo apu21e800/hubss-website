@@ -13,55 +13,80 @@ export const metadata: Metadata = {
 
 export default function ResourcesPage() {
   return (
-    <main className="min-h-screen" style={{ background: "#0f1620" }}>
-      <Nav />
-
-      {/* ── Dark Page Header ──────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-6 pt-32 pb-14">
-        <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-3" style={{ color: "#F97316" }}>
-          Resources
-        </p>
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 leading-tight" style={{ color: "#F5F0EB" }}>
-          Specification Library
-        </h1>
-        <p className="text-base max-w-2xl" style={{ color: "#8b8b8b" }}>
-          Technical data sheets, brochures, safety guides, and installation resources for every HUBSS product.
-        </p>
-      </div>
-
-      {/* ── Document Library — white grid background ─────── */}
-      <section
-        className="relative overflow-hidden"
+    <main
+      className="min-h-screen relative"
+      style={{
+        background: "#141414",
+        backgroundImage:
+          "linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)",
+        backgroundSize: "48px 48px",
+      }}
+    >
+      {/* Subtle orange radial — top-right, very soft */}
+      <div
+        className="absolute pointer-events-none"
         style={{
-          backgroundColor: "#f7f6f3",
-          backgroundImage: "linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px)",
-          backgroundSize: "44px 44px",
+          top: "-60px",
+          right: "-80px",
+          width: "700px",
+          height: "700px",
+          background:
+            "radial-gradient(ellipse at center, rgba(249,115,22,0.06) 0%, rgba(249,115,22,0.02) 40%, transparent 68%)",
+          zIndex: 0,
         }}
-      >
-        {/* Orange radial glow — soft, offset to bottom-left */}
+        aria-hidden="true"
+      />
+
+      <div className="relative" style={{ zIndex: 1 }}>
+        <Nav />
+
+        {/* ── Page Header ──────────────────────────────────── */}
+        <div className="max-w-7xl mx-auto px-6 pt-32 pb-14">
+          <p
+            className="text-xs font-semibold tracking-[0.2em] uppercase mb-3"
+            style={{ color: "#F97316" }}
+          >
+            Resources
+          </p>
+          <h1
+            className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 leading-tight"
+            style={{ color: "#F5F0EB" }}
+          >
+            Specification Library
+          </h1>
+          <p className="text-base max-w-2xl" style={{ color: "#6B7280" }}>
+            Technical data sheets, brochures, safety guides, and installation
+            resources for every HUBSS product.
+          </p>
+        </div>
+
+        {/* ── Divider ──────────────────────────────────────── */}
         <div
-          className="absolute pointer-events-none"
-          style={{
-            bottom: "-100px",
-            left: "-80px",
-            width: "600px",
-            height: "600px",
-            background: "radial-gradient(ellipse at center, rgba(249,115,22,0.06) 0%, rgba(249,115,22,0.02) 40%, transparent 70%)",
-          }}
-          aria-hidden="true"
+          className="max-w-7xl mx-auto px-6"
+          style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
         />
-        <div className="max-w-7xl mx-auto px-6 py-16 pb-28 relative">
+
+        {/* ── Document Library ─────────────────────────────── */}
+        <div className="max-w-7xl mx-auto px-6 py-16 pb-28">
           {/* Section label */}
           <div className="flex items-center gap-4 mb-10">
-            <h2 className="text-sm font-bold tracking-widest uppercase" style={{ color: "#F97316" }}>
+            <h2
+              className="text-sm font-bold tracking-widest uppercase"
+              style={{ color: "#F97316" }}
+            >
               All Documents
             </h2>
-            <div className="flex-1 h-px" style={{ background: "rgba(0,0,0,0.1)" }} />
-            <span className="text-xs" style={{ color: "#9CA3AF" }}>{resourceDocuments.length} total</span>
+            <div
+              className="flex-1 h-px"
+              style={{ background: "rgba(255,255,255,0.08)" }}
+            />
+            <span className="text-xs" style={{ color: "#6B7280" }}>
+              {resourceDocuments.length} total
+            </span>
           </div>
           <ResourcesClient documents={resourceDocuments} />
         </div>
-      </section>
+      </div>
 
       <LunchLearn />
       <Footer />

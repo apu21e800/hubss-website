@@ -16,9 +16,9 @@ export default function LunchLearnPage() {
       <Nav />
 
       {/* Hero — moose sits at the very bottom, paws overlapping the LunchLearn section below */}
-      <div className="relative overflow-visible pb-28 sm:pb-36" style={{ zIndex: 2 }}>
+      <div className="relative overflow-visible pb-24 sm:pb-32" style={{ zIndex: 2 }}>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-0 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-0 relative">
           <div className="flex flex-col gap-8">
             {/* Text */}
             <div className="pb-4">
@@ -60,7 +60,7 @@ export default function LunchLearnPage() {
 
         {/* Moose — bottom-right of hero, standing on the floor line */}
         <div
-          className="absolute bottom-0 right-0 sm:right-8 md:right-16 lg:right-24 z-20 pointer-events-none"
+          className="absolute bottom-0 right-0 sm:right-4 md:right-8 lg:right-12 z-20 pointer-events-none"
           style={{ width: "clamp(120px, 22vw, 288px)", height: "clamp(120px, 22vw, 288px)" }}
         >
           <Image

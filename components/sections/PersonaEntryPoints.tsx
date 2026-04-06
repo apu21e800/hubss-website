@@ -22,7 +22,7 @@ export default function PersonaEntryPoints() {
   return (
     <section
       style={{
-        background: "#0a0f1a",
+        background: "#080d16",
         borderTop: "1px solid rgba(255,255,255,0.06)",
         borderBottom: "1px solid rgba(255,255,255,0.06)",
       }}

@@ -54,7 +54,7 @@ export default function ApplicationsGrid() {
                   src={applicationImages[app.slug] ? resolveImage(applicationImages[app.slug]).src : app.imageUrl}
                   alt={applicationImages[app.slug] ? resolveImage(applicationImages[app.slug]).alt : app.name}
                   fill
-                  loading="eager"
+                  loading="lazy"
                   className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />

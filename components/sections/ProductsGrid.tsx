@@ -161,7 +161,7 @@ export default function ProductsGrid() {
                       src={imgSrc}
                       alt={imgAlt}
                       fill
-                      loading="eager"
+                      loading="lazy"
                       className="object-cover transition-transform duration-700 group-hover:scale-[1.05]"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     />

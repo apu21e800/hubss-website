@@ -42,7 +42,7 @@ export default function ResourcesPage() {
           background: "#111111",
           backgroundImage:
             "radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px)",
-          backgroundSize: "36px 36px",
+          backgroundSize: "52px 52px",
           borderTop: "1px solid rgba(255,255,255,0.07)",
         }}
       >

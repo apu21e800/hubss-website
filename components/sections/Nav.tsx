@@ -389,15 +389,16 @@ function ApplicationsPanel({
 
               <div className="grid grid-cols-2 gap-x-8 gap-y-0.5">
                 {applications.map((app) => (
-                  <Link key={app.slug} href={`/applications/${app.slug}`} className="group py-2 block">
+                  <Link key={app.slug} href={`/applications/${app.slug}`} className="group py-1.5 block">
                     <div className="text-sm font-medium group-hover:text-orange-400 transition-colors" style={{ color: "rgba(255,255,255,0.85)" }}>{app.name}</div>
+                    <div className="text-xs group-hover:text-gray-300 transition-colors leading-snug" style={{ color: "rgba(255,255,255,0.35)" }}>{app.shortDesc}</div>
                   </Link>
                 ))}
               </div>
 
               <Link
                 href="/applications"
-                className="inline-flex items-center gap-1.5 text-xs text-orange-400 hover:text-orange-300 mt-4 font-medium"
+                className="inline-flex items-center gap-1.5 text-xs text-orange-400 hover:text-orange-300 mt-5 font-medium"
               >
                 View all applications →
               </Link>
@@ -708,16 +709,21 @@ function MobileOverlay({
                       key={app.slug}
                       href={`/applications/${app.slug}`}
                       onClick={onClose}
-                      className="flex items-center active:bg-white/[0.05] transition-colors"
+                      className="flex flex-col justify-center active:bg-white/[0.05] transition-colors"
                       style={{
                         minHeight: 48,
                         paddingLeft: "2rem",
                         paddingRight: "1.5rem",
+                        paddingTop: "0.5rem",
+                        paddingBottom: "0.5rem",
                         borderBottom: "1px solid rgba(255,255,255,0.03)",
                       }}
                     >
-                      <span style={{ fontSize: "0.9375rem", color: "rgba(255,255,255,0.65)", fontWeight: 500 }}>
+                      <span style={{ fontSize: "0.9375rem", color: "rgba(255,255,255,0.75)", fontWeight: 500, lineHeight: 1.2 }}>
                         {app.name}
+                      </span>
+                      <span style={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.3)", marginTop: 2 }}>
+                        {app.shortDesc}
                       </span>
                     </Link>
                   ))}

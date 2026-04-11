@@ -25,7 +25,7 @@ const inputStyle = {
 
 const labelStyle = { color: "var(--text-hint)" as string, fontSize: "0.8125rem", fontWeight: 600 };
 
-export default function LunchLearn() {
+export default function LunchLearn({ hideMoose: _hideMoose }: { hideMoose?: boolean } = {}) {
   const [form, setForm] = useState({
     name: "", org: "", email: "", phone: "",
   });

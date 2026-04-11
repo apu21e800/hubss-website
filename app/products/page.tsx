@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
@@ -35,15 +36,15 @@ export default function ProductsPage() {
           }
         }
       >
-        {/* Subtle SVG grain overlay — atmospheric fallback until asphalt-texture.jpg is added */}
-        <div
+        {/* Stamped asphalt texture — atmospheric depth */}
+        <Image
+          src="/images/textures/stamped-asphalt-texture.webp"
+          alt=""
+          fill
+          className="object-cover pointer-events-none"
+          style={{ opacity: 0.05, mixBlendMode: "overlay" }}
           aria-hidden="true"
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E")`,
-            opacity: 0.03,
-            mixBlendMode: "overlay",
-          }}
+          sizes="100vw"
         />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24">

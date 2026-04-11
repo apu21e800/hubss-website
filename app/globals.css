@@ -148,7 +148,7 @@ p {
 }
 
 .ticker-track {
-  animation: ticker 50s linear infinite;
+  animation: ticker 55s linear infinite;
   display: flex;
   width: max-content;
   align-items: center;

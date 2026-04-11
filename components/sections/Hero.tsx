@@ -48,6 +48,16 @@ export default function Hero({ variant = "default" }: HeroProps) {
         priority
         sizes="100vw"
       />
+      {/* Stamped asphalt texture — material depth, barely visible */}
+      <Image
+        src="/images/textures/stamped-asphalt-texture.webp"
+        alt=""
+        fill
+        className="object-cover pointer-events-none"
+        style={{ opacity: 0.06, mixBlendMode: "overlay" }}
+        aria-hidden="true"
+        sizes="100vw"
+      />
       {/* Dark overlay — keeps text fully readable */}
       <div className="absolute inset-0 bg-black/70 pointer-events-none" />
 

@@ -9,16 +9,21 @@ const cities = [
 ];
 
 export default function HeroCityTicker() {
+  const doubled = [...cities, ...cities];
+
   return (
     <div className="w-full overflow-hidden bg-zinc-900 border-t border-zinc-800 py-3">
       <motion.div
-        className="flex gap-8 whitespace-nowrap"
+        className="flex items-center whitespace-nowrap"
         animate={{ x: ['0%', '-50%'] }}
         transition={{ duration: 28, repeat: Infinity, ease: 'linear' }}
       >
-        {[...cities, ...cities].map((city, i) => (
-          <span key={i} className="text-sm text-zinc-500 font-medium tracking-wider uppercase">
-            {city}
+        {doubled.map((city, i) => (
+          <span key={i} className="flex items-center">
+            <span className="text-sm text-zinc-500 font-medium tracking-wider uppercase px-4">
+              {city}
+            </span>
+            <span aria-hidden="true" style={{ color: '#f97316', fontSize: '0.5rem', lineHeight: 1 }}>·</span>
           </span>
         ))}
       </motion.div>

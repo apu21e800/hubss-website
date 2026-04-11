@@ -1,15 +1,12 @@
 import type { Metadata } from "next";
 import Nav from "@/components/sections/Nav";
 import Hero from "@/components/sections/Hero";
-import HeroCityTicker from "@/components/sections/HeroCityTicker";
-import StatsBar from "@/components/sections/StatsBar";
 import WhyHubss from "@/components/sections/WhyHubss";
 import PersonaEntryPoints from "@/components/sections/PersonaEntryPoints";
 import ProductsGrid from "@/components/sections/ProductsGrid";
 import ApplicationsGrid from "@/components/sections/ApplicationsGrid";
 import ResidentialDriveways from "@/components/sections/ResidentialDriveways";
 import ComparisonTable from "@/components/sections/ComparisonTable";
-import RecentProjects from "@/components/sections/RecentProjects";
 import FeaturedBlogPost from "@/components/sections/FeaturedBlogPost";
 import InstagramStrip from "@/components/sections/InstagramStrip";
 import LunchLearn from "@/components/sections/LunchLearn";
@@ -61,9 +58,6 @@ export default function Home() {
       <JsonLd data={organizationSchema} />
       <Nav />
       <Hero />
-      <HeroCityTicker />
-      {/* dark → slate */}
-      <StatsBar />
       <WhyHubss />
       <PersonaEntryPoints />
       {/* slate → dark */}
@@ -74,9 +68,7 @@ export default function Home() {
       <ResidentialDriveways />
       {/* slate → off-white */}
       <ComparisonTable />
-      {/* off-white → off-white */}
-      <RecentProjects />
-      {/* Featured blog post */}
+      {/* Featured blog post — Field Notes */}
       <FeaturedBlogPost />
       {/* off-white → slate (lunch learn) */}
       <InstagramStrip />

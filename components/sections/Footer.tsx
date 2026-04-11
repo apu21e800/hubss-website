@@ -50,20 +50,20 @@ export default function Footer() {
             {/* Monument tagline */}
             <p
               className="font-light tracking-wide leading-snug mb-2"
-              style={{ color: "var(--text-primary)", fontSize: "1.05rem" }}
+              style={{ color: "var(--text-primary)", fontSize: "1rem" }}
             >
               Pedestrian safety. Traffic calming.<br />Civic identity. Coast to coast since 1994.
             </p>
 
             <p className="text-xs mb-6" style={{ color: "var(--text-muted)" }}>
-              Proud to work coast to coast — all 10 provinces 🇨🇦
+              Canadian-operated · All 10 provinces · Since 1994
             </p>
 
             <SocialLinks className="mt-3" />
 
             <p className="text-xs mt-4 font-medium flex items-center gap-1.5" style={{ color: "var(--text-muted)" }}>
               <Image src="/images/flags/canada-flag.svg" width={18} height={12} alt="Canada" unoptimized className="inline-block align-middle" style={{ aspectRatio: '3/2', objectFit: 'cover', borderRadius: '1px' }} />
-              A Canadian Company — Established 1994
+              Canadian-operated · Established 1994
             </p>
           </div>
 

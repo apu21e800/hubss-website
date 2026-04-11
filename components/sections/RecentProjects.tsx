@@ -37,8 +37,8 @@ export default function RecentProjects() {
         {/* Featured project */}
         <Link href={`/projects/${featured.slug}`} className="block mb-3">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ y: 20 }}
+            whileInView={{ y: 0 }}
             viewport={{ once: true }}
             className="group grid grid-cols-1 md:grid-cols-5 gap-0 overflow-hidden rounded-xl cursor-pointer hover:shadow-[0_4px_24px_rgba(249,115,22,0.1)] transition-shadow duration-300"
             style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}
@@ -48,6 +48,7 @@ export default function RecentProjects() {
                 src={featured.imageUrl}
                 alt={featured.title}
                 fill
+                priority
                 className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                 sizes="(max-width: 768px) 100vw, 60vw"
               />
@@ -94,8 +95,8 @@ export default function RecentProjects() {
           {secondary.map((project, i) => (
             <Link key={project.slug} href={`/projects/${project.slug}`} className="block">
               <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ y: 16 }}
+                whileInView={{ y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
                 className="group overflow-hidden rounded-xl transition-all duration-200 cursor-pointer hover:shadow-[0_4px_20px_rgba(249,115,22,0.08)]"
@@ -108,6 +109,7 @@ export default function RecentProjects() {
                     src={project.imageUrl}
                     alt={project.title}
                     fill
+                    priority
                     className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                     sizes="(max-width: 768px) 100vw, 50vw"
                   />

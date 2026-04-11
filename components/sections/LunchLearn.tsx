@@ -25,7 +25,7 @@ const inputStyle = {
 
 const labelStyle = { color: "var(--text-hint)" as string, fontSize: "0.8125rem", fontWeight: 600 };
 
-export default function LunchLearn({ hideMoose: _hideMoose }: { hideMoose?: boolean } = {}) {
+export default function LunchLearn({ hideMoose = false }: { hideMoose?: boolean }) {
   const [form, setForm] = useState({
     name: "", org: "", email: "", phone: "",
   });
@@ -64,16 +64,20 @@ export default function LunchLearn({ hideMoose: _hideMoose }: { hideMoose?: bool
       className="relative overflow-hidden"
       style={{ background: "#0f1420", zIndex: 0 }}
     >
-      {/* Orange/amber warm glow — emanates from bottom-right */}
+      {/* Orange/amber radial glow — bottom-right */}
       <div
-        className="absolute bottom-0 right-0 w-[500px] h-[500px] pointer-events-none"
+        className="absolute pointer-events-none"
         style={{
-          background: "radial-gradient(ellipse at bottom right, rgba(249,115,22,0.12) 0%, rgba(234,179,8,0.06) 30%, transparent 70%)",
+          bottom: "-120px",
+          right: "-120px",
+          width: "800px",
+          height: "800px",
+          background: "radial-gradient(ellipse at center, rgba(249,115,22,0.11) 0%, rgba(234,179,8,0.05) 35%, transparent 65%)",
           zIndex: 0,
         }}
       />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28 pt-16" style={{ zIndex: 2 }}>
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 pb-0" style={{ zIndex: 2 }}>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
 
           {/* ── LEFT — content ─────────────────────────────── */}
@@ -83,12 +87,12 @@ export default function LunchLearn({ hideMoose: _hideMoose }: { hideMoose?: bool
             viewport={{ once: true }}
           >
             {/* Eyebrow + CPD Badge */}
-            <div className="flex items-center gap-3 mb-4">
+            <div className="flex items-center flex-wrap gap-2 mb-4">
               <p className="gradient-text text-xs font-semibold tracking-[0.2em] uppercase">
                 Free Professional Development
               </p>
               <span
-                className="text-[10px] font-bold tracking-wide px-2 py-0.5 rounded-full"
+                className="text-[10px] font-bold tracking-wide px-2 py-0.5 rounded-full whitespace-nowrap flex-shrink-0"
                 style={{
                   background: "linear-gradient(90deg, rgba(249,115,22,0.15), rgba(234,179,8,0.15))",
                   color: "#f97316",
@@ -153,7 +157,8 @@ export default function LunchLearn({ hideMoose: _hideMoose }: { hideMoose?: bool
 
           </motion.div>
 
-          {/* ── RIGHT — form card ───────────────────────────── */}
+          {/* ── RIGHT — form card + moose below ────────────── */}
+          <div className="flex flex-col">
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -282,31 +287,30 @@ export default function LunchLearn({ hideMoose: _hideMoose }: { hideMoose?: bool
             )}
           </motion.div>
 
+          {/* Moose — in flow, below card, paws on fold line */}
+          {!hideMoose && (
+            <div className="hidden lg:flex justify-center items-end pt-2 pointer-events-none">
+              <Image
+                src="/images/lunch-learn/moose.png"
+                alt="HUB Surface Systems Moose mascot"
+                width={210}
+                height={210}
+                style={{
+                  display: "block",
+                  filter: "drop-shadow(0 0 40px rgba(249,115,22,0.2)) drop-shadow(0 8px 24px rgba(0,0,0,0.55))",
+                }}
+                unoptimized
+              />
+            </div>
+          )}
+          </div>
+
         </div>
-      </div>
-
-
-      {/* Moose — grounded bottom-right, visible on large screens */}
-      <div
-        className="absolute z-10 hidden xl:block pointer-events-none"
-        style={{ bottom: 72, right: 24, width: 240, height: 240 }}
-      >
-        <Image
-          src="/images/lunch-learn/moose.png"
-          alt="HUB Surface Systems Moose mascot"
-          width={240}
-          height={240}
-          style={{
-            filter: "drop-shadow(0 0 16px rgba(249,115,22,0.08)) drop-shadow(0 6px 16px rgba(0,0,0,0.5))",
-            display: "block",
-          }}
-          unoptimized
-        />
       </div>
 
       {/* ── Bottom CTA bar ──────────────────────────────────── */}
       <div style={{ background: "#0f1420", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 text-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center">
           <p className="text-sm" style={{ color: "#94a3b8" }}>
             Book your session at{" "}
             <a href="/lunch-learn" className="font-semibold transition-colors hover:text-white" style={{ color: "#f97316" }}>hubss.com/lunch-learn</a>

@@ -3,8 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
-// Featured images from the residential-driveways gallery (confirmed in lib/applications.ts)
-const HERO_IMAGE = "/images/applications/residential-driveways/residential-driveways-01.jpg";
+// Residential driveway — stamped asphalt with visible home/garage context
+const HERO_IMAGE = "/images/applications/residential-driveways/residential-driveways-08.jpg";
 
 export default function ResidentialDriveways() {
   return (
@@ -110,9 +110,10 @@ export default function ResidentialDriveways() {
           <div className="relative min-h-[360px] lg:min-h-0 overflow-hidden">
             <Image
               src={HERO_IMAGE}
-              alt="Residential stamped asphalt driveway — StreetPrint herringbone pattern"
+              alt="Residential StreetPrint driveway — aerial view, circular stamp pattern, home with double garage"
               fill
-              className="object-cover"
+              priority
+              className="object-cover object-top"
               sizes="(max-width: 1024px) 100vw, 50vw"
             />
             {/* Subtle orange left-edge glow where image meets content panel */}

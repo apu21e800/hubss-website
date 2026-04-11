@@ -5,6 +5,7 @@
       "name": "HUBSS Dev Server",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
+      "cwd": "../../../",
       "port": 3000,
       "autoPort": true
     },
@@ -12,6 +13,7 @@
       "name": "HUBSS Production Server",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "start"],
+      "cwd": "../../../",
       "port": 3000
     }
   ]

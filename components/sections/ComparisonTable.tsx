@@ -15,8 +15,13 @@ export default function ComparisonTable() {
   return (
     <section
       data-theme="light"
-      className="section-grid-bg py-24"
-      style={{ backgroundColor: "var(--color-off-white)", borderTop: "4px solid #f97316" }}
+      className="py-24"
+      style={{
+        backgroundColor: "var(--color-off-white)",
+        borderTop: "4px solid #f97316",
+        backgroundImage: "linear-gradient(rgba(0,0,0,0.028) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.028) 1px, transparent 1px)",
+        backgroundSize: "44px 44px",
+      }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
@@ -32,34 +37,45 @@ export default function ComparisonTable() {
               Why HUBSS
             </p>
             <h2
-              className="text-2xl sm:text-3xl md:text-4xl font-bold mb-5 leading-[1.1]"
+              className="text-3xl sm:text-4xl md:text-5xl font-bold mb-5 leading-[1.1]"
               style={{ color: "#111827" }}
             >
-              The Smarter<br />Specification
+              Paint Fades.<br />We Don&apos;t.
             </h2>
-            <p className="text-[15px] leading-relaxed mb-8" style={{ color: "#4b5563" }}>
+            <p className="text-[15px] leading-relaxed mb-8" style={{ color: "#374151" }}>
               Traditional paint markings cost municipalities more every year through
-              repeated reapplication, faded visibility, and plow damage. HUBSS products
-              are installed once and built to last.
+              repeated reapplication, faded visibility, and plow damage. HUB surface
+              systems are installed once and built to outlast the budget cycle.
             </p>
 
             {/* Metric callout card */}
             <div
-              className="rounded-lg p-6 mb-8"
+              className="rounded-xl p-6 mb-8 flex items-center gap-5"
               style={{
                 background: "#111827",
                 borderLeft: "3px solid #f97316",
               }}
             >
-              <p
-                className="text-6xl font-black leading-none mb-2"
-                style={{ color: "#f97316" }}
-              >
-                8x
-              </p>
-              <p className="text-sm font-medium" style={{ color: "#9ca3af" }}>
-                longer service life than painted markings
-              </p>
+              {/* Stat */}
+              <div className="flex-shrink-0">
+                <p
+                  className="text-4xl sm:text-5xl font-black leading-none"
+                  style={{ color: "#f97316" }}
+                >
+                  8x
+                </p>
+              </div>
+              {/* Divider */}
+              <div className="w-px self-stretch" style={{ background: "rgba(249,115,22,0.2)" }} />
+              {/* Label */}
+              <div>
+                <p className="text-sm font-semibold leading-snug" style={{ color: "#ffffff" }}>
+                  Longer service life
+                </p>
+                <p className="text-xs mt-0.5" style={{ color: "#6b7280" }}>
+                  vs. painted markings — proven across Canada since 1994
+                </p>
+              </div>
             </div>
 
             <Link

@@ -11,20 +11,20 @@ const PRODUCT_WHAT: Record<string, string> = {
   "streetprint":
     "Transforms existing asphalt into decorative patterns — cobblestone, brick, herringbone. Trusted by 500+ Canadian municipalities.",
   "streetbond":
-    "Bonds vivid colour to asphalt or concrete with a 20-year warranty. Full Pantone matching, used on bike lanes, bus corridors, and driveways across Canada.",
+    "Transforms existing asphalt into decorative patterns — cobblestone, brick, herringbone. The coating system trusted by 500+ Canadian municipalities.",
   "traffic-patterns-xd":
     "Aggregate-reinforced thermoplastic engineered for BRT corridors and high-volume intersections. BPN 65+ skid resistance.",
   "traffic-patterns":
     "Crisp preformed thermoplastic markings that outlast paint 5:1. Trusted by York Region, City of Toronto, Vancouver, and UBC.",
   "mmax":
-    "MMA resin for coloured bus and bike lanes. Traffic-ready in 60 minutes. Bonds at −10°C — no waiting for spring.",
+    "MMA resin for red bus lanes and bike lanes. Traffic-ready in 60 minutes. Bonds at −10°C — no waiting for spring.",
   "decomark":
     "Custom murals, Pride crosswalks, and Indigenous street art, precision-formed in durable thermoplastic. From vector file to civic landmark.",
 };
 
 const PRODUCT_TYPE: Record<string, string> = {
   "streetprint":         "Stamped Asphalt",
-  "streetbond":          "Colour Coating",
+  "streetbond":          "StreetPrint · 20-yr durability",
   "traffic-patterns-xd": "Thermoplastic XD",
   "traffic-patterns":    "Thermoplastic",
   "mmax":                "MMA Resin",

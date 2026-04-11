@@ -13,9 +13,9 @@ const FEATURED_SLUGS = [
   "bike-lanes",
   "bus-lanes",
   "community-branding",
+  "public-art",
   "traffic-calming",
   "townhomes",
-  "residential-driveways",
 ];
 
 export default function ApplicationsGrid() {

@@ -14,8 +14,8 @@ interface HeroProps {
 
 const credentialStats = [
   { value: "1,000+", label: "Streets transformed" },
-  { value: "10", label: "Provinces active" },
-  { value: "Since 1994", label: "Canadian-built" },
+  { value: "10", label: "Provinces, coast to coast" },
+  { value: "Since 1994", label: "Trusted across Canada" },
   { value: "20yr", label: "Colour warranty" },
 ];
 

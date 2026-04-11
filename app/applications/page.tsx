@@ -8,7 +8,7 @@ import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
   title: "Pavement Marking Applications",
-  description: "Crosswalks, bus lanes, bike infrastructure, airports, community branding, and more — purpose-matched surface systems for every municipal and commercial application.",
+  description: "Crosswalks, bus lanes, bike infrastructure, airports, public art, and community branding — purpose-matched surface systems for Canadian municipal and commercial applications.",
   slug: "applications",
 });
 

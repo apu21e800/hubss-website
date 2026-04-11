@@ -12,6 +12,7 @@ const footerApplications = [
   { label: "Community Branding",  slug: "community-branding" },
   { label: "Parking Lots",        slug: "parking-lots" },
   { label: "Private Driveways",   slug: "private-driveways" },
+  { label: "Public Art",          slug: "public-art" },
 ];
 
 
@@ -62,8 +63,13 @@ export default function Footer() {
             <SocialLinks className="mt-3" />
 
             <p className="text-xs mt-4 font-medium flex items-center gap-1.5" style={{ color: "var(--text-muted)" }}>
-              <Image src="/images/flags/canada-flag.svg" width={18} height={12} alt="Canada" unoptimized className="inline-block align-middle" style={{ aspectRatio: '3/2', objectFit: 'cover', borderRadius: '1px' }} />
-              Canadian-operated · Established 1994
+              <svg width="24" height="16" viewBox="0 0 24 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="inline-block align-middle flex-shrink-0">
+                <rect width="6" height="16" fill="#FF0000"/>
+                <rect x="6" width="12" height="16" fill="white"/>
+                <rect x="18" width="6" height="16" fill="#FF0000"/>
+                <path d="M12 3L13.2 6.8H11L12.5 8L11.8 10L12 9.5L12.2 10L11.5 8L13 6.8H10.8L12 3Z" fill="#FF0000"/>
+              </svg>
+              Proudly Canadian · Serving all 10 provinces since 1994
             </p>
           </div>
 

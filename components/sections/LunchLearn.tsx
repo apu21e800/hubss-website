@@ -287,17 +287,19 @@ export default function LunchLearn({ hideMoose = false }: { hideMoose?: boolean 
             )}
           </motion.div>
 
-          {/* Moose — in flow, below card, paws on fold line */}
+          {/* Moose — paws sit on the fold line between sections */}
           {!hideMoose && (
-            <div className="hidden lg:flex justify-center items-end pt-2 pointer-events-none">
+            <div className="hidden lg:flex justify-center pointer-events-none" style={{ position: "relative", height: "200px" }}>
               <Image
-                src="/images/lunch-learn/moose.png"
-                alt="HUB Surface Systems Moose mascot"
+                src="/images/lunch-learn/moose-updated.png"
+                alt="HUB Surface Systems Moose mascot — book a free Lunch and Learn session"
                 width={210}
                 height={210}
                 style={{
                   display: "block",
-                  filter: "drop-shadow(0 0 40px rgba(249,115,22,0.2)) drop-shadow(0 8px 24px rgba(0,0,0,0.55))",
+                  position: "absolute",
+                  bottom: 0,
+                  filter: "drop-shadow(0 0 20px rgba(249,115,22,0.4)) drop-shadow(0 8px 24px rgba(0,0,0,0.55))",
                 }}
                 unoptimized
               />

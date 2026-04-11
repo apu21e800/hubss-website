@@ -40,7 +40,7 @@ const differentiators = [
   { title: "6–8x Longer Than Paint", desc: "Thermoplastic and MMA markings deliver 6–8 years of service life versus 12–18 months for standard traffic paint." },
   { title: "Vision Zero Aligned", desc: "Every HUB product is designed to support Vision Zero frameworks — from retroreflective crosswalk markings to high-contrast bike lane systems." },
   { title: "AODA Compliant", desc: "Our tactile and high-contrast marking solutions meet or exceed AODA accessibility requirements across all provinces." },
-  { title: "20-Year Durability", desc: "StreetPrint and StreetBond installations carry a 20-year colour retention warranty — the best in the industry." },
+  { title: "20-Year Durability", desc: "StreetPrint and StreetBond installations carry a 20-year colour retention warranty — documented performance across hundreds of Canadian municipalities." },
   { title: "Canadian-Specific", desc: "Every system is engineered and tested for Canadian climate extremes, from Ladysmith BC to York Region ON." },
 ];
 

@@ -78,15 +78,15 @@ export default function LunchLearnPage() {
           }}
         >
           <Image
-            src="/images/lunch-learn/moose.png"
-            alt="HUB Surface Systems Moose Mascot"
+            src="/images/lunch-learn/moose-updated.png"
+            alt="HUB Surface Systems Moose mascot — book a free Lunch and Learn session"
             width={300}
             height={300}
             style={{
               width: "100%",
               height: "100%",
               objectFit: "contain",
-              filter: "drop-shadow(0 12px 28px rgba(0,0,0,0.6)) drop-shadow(0 4px 8px rgba(0,0,0,0.4))",
+              filter: "drop-shadow(0 0 20px rgba(249,115,22,0.4)) drop-shadow(0 12px 28px rgba(0,0,0,0.6))",
               display: "block",
             }}
             unoptimized

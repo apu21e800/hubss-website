@@ -58,10 +58,10 @@ export const products: Product[] = [
   {
     name: "StreetBond",
     slug: "streetbond",
-    shortDesc: "Colour that bonds. Beauty that endures.",
+    shortDesc: "StreetPrint · 20-yr durability",
     imageUrl: "/images/products/streetbond/streetbond-01.png",
     gallery: gallery("streetbond", "streetbond", 112, "png"),
-    description: "StreetBond is the industry-leading coloured pavement coating for asphalt and concrete. 20-year colour retention warranty. Available in extensive standard palette and fully custom Pantone-matched. BC Ministry of Transportation recognized product.",
+    description: "Transforms existing asphalt into decorative patterns — cobblestone, brick, herringbone. The coating system trusted by 500+ Canadian municipalities. 20-year colour retention warranty. Available in extensive standard palette and fully custom Pantone-matched. BC Ministry of Transportation recognized product.",
     specs: [
       { label: "Type", value: "Acrylic coloured pavement coating" },
       { label: "Surfaces", value: "Asphalt and concrete (acid-etched)" },
@@ -82,7 +82,7 @@ export const products: Product[] = [
     ],
     brandLogo: {
       src: "/images/products/streetbond/streetbond-logo.png",
-      alt: "StreetBond - industry-leading coloured pavement coating",
+      alt: "StreetBond coloured pavement coating system by HUB Surface Systems",
       width: 280,
       height: 80,
     },
@@ -132,7 +132,7 @@ export const products: Product[] = [
     shortDesc: "Lanes that lead. Colour that commands.",
     imageUrl: "/images/products/mmax/mmax-01.jpg",
     gallery: gallery("mmax", "mmax", 33),
-    description: "MMAX methyl methacrylate cures in 30-60 minutes. Bond strength exceeding 3 MPa. Can be applied at temperatures as low as -10C. The specified solution for transit corridors where painted lanes are not an option.",
+    description: "MMAX methyl methacrylate cures in 30-60 minutes. Bond strength exceeding 3 MPa. Can be applied at temperatures as low as -10C. The specified solution for red bus lanes, bike lanes, and transit corridors where painted lanes are not an option.",
     specs: [
       { label: "Material", value: "Methyl Methacrylate (MMA) resin" },
       { label: "Cure Time", value: "30-60 minutes (traffic-ready)" },
@@ -184,12 +184,12 @@ export const products: Product[] = [
     shortDesc: "FAA-grade clarity. Field-proven performance.",
     imageUrl: "/images/products/airmark/airmark-01.jpg",
     gallery: gallery("airmark", "airmark", 22),
-    description: "AirMark: FAA Advisory Circular 150/5370-10 compliant preformed thermoplastic airfield markings. ASTM D4956 Type IV premium retroreflectivity. Outlast painted alternatives by 4:1.",
+    description: "AirMark: preformed thermoplastic airfield markings meeting aviation marking standards. Premium retroreflectivity. Outlast painted alternatives by 4:1.", // AUDIT: removed specific FAA AC number — verify exact compliance citation with manufacturer
     specs: [
-      { label: "Standard", value: "FAA Advisory Circular 150/5370-10" },
+      { label: "Standard", value: "Meets aviation airfield marking standards" }, // AUDIT: verify specific FAA AC compliance
       { label: "Material", value: "Preformed thermoplastic" },
-      { label: "Retroreflectivity", value: "ASTM D4956 Type IV premium" },
-      { label: "Colour", value: "FAA white and yellow" },
+      { label: "Retroreflectivity", value: "Premium glass bead surface" }, // AUDIT: verify ASTM D4956 Type IV claim
+      { label: "Colour", value: "White and yellow" },
       { label: "Service Life", value: "4x painted alternatives" },
       { label: "Installation", value: "Heat application - certified crews" },
     ],

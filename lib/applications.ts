@@ -169,6 +169,15 @@ export const applications: Application[] = [
     relatedProducts: ["streetbond", "mmax", "durashield"],
   },
   {
+    name: "Public Art",
+    slug: "public-art",
+    shortDesc: "The street as canvas.",
+    imageUrl: "/images/applications/community-branding/community-branding-01.jpg",
+    gallery: gallery("community-branding", "community-branding", 14),
+    description: "From Indigenous art installations and labyrinth designs to pride crosswalks and transit station murals, HUBSS transforms pavement into community expression. Permanent, weather-resistant, and designed to last the full life of the asphalt surface.",
+    relatedProducts: ["decomark", "streetbond", "streetprint"],
+  },
+  {
     name: "Regulatory Markings",
     slug: "regulatory-markings",
     shortDesc: "Compliant symbols. Consistent performance.",

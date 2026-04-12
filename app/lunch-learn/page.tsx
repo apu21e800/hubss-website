@@ -77,20 +77,32 @@ export default function LunchLearnPage() {
             height: "clamp(140px, 26vw, 300px)",
           }}
         >
-          <Image
-            src="/images/lunch-learn/moose-updated.png"
-            alt="HUB Surface Systems Moose mascot — book a free Lunch and Learn session"
-            width={300}
-            height={300}
+          <div
+            className="rounded-2xl overflow-hidden"
             style={{
+              background: "#1E3A5F",
               width: "100%",
               height: "100%",
-              objectFit: "contain",
-              filter: "drop-shadow(0 0 20px rgba(249,115,22,0.4)) drop-shadow(0 12px 28px rgba(0,0,0,0.6))",
-              display: "block",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
-            unoptimized
-          />
+          >
+            <Image
+              src="/images/lunch-learn/moose-updated.png"
+              alt="HUB Surface Systems Moose mascot — book a free Lunch and Learn session"
+              width={300}
+              height={300}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+                filter: "drop-shadow(0 0 20px rgba(249,115,22,0.4)) drop-shadow(0 12px 28px rgba(0,0,0,0.6))",
+                display: "block",
+              }}
+              unoptimized
+            />
+          </div>
         </div>
       </div>
 

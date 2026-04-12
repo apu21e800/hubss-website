@@ -13,10 +13,17 @@ interface HeroProps {
 }
 
 const credentialStats = [
-  { value: "1,000+", label: "Streets transformed" },
+  { value: "500+", label: "Projects completed" },
   { value: "10", label: "Provinces, coast to coast" },
   { value: "Since 1994", label: "Trusted across Canada" },
-  { value: "20yr", label: "Colour warranty" },
+  { value: "20yr", label: "Durability" },
+];
+
+const tickerItems = [
+  "TrafficPatterns", "TrafficPatternsXD", "StreetPrint", "StreetBond", "MMAX",
+  "DecoMark", "DuraShield", "DuraTherm", "PreMark", "AirMark",
+  "Crosswalks", "Bike Lanes", "Bus Lanes", "Pedestrian Safety",
+  "Traffic Calming", "Community Branding", "Parks & Paths", "Airports",
 ];
 
 export default function Hero({ variant = "default" }: HeroProps) {
@@ -61,6 +68,15 @@ export default function Hero({ variant = "default" }: HeroProps) {
       {/* Dark overlay — keeps text fully readable */}
       <div className="absolute inset-0 bg-black/70 pointer-events-none" />
 
+      {/* HUB Wheel watermark — right side */}
+      <div
+        className="absolute pointer-events-none hidden md:block"
+        style={{ top: "50%", right: "5%", transform: "translateY(-50%)", opacity: 0.06 }}
+        aria-hidden="true"
+      >
+        <Image src="/images/hub-wheel-orange.png" alt="" width={500} height={500} unoptimized />
+      </div>
+
       {/* Main content — mobile: column with top text + bottom CTAs | desktop: centered */}
       <div
         ref={textRef}
@@ -93,11 +109,11 @@ export default function Hero({ variant = "default" }: HeroProps) {
 
           {/* Body — hidden on smallest screens to give headline room, shows sm+ */}
           <p className="hidden sm:block text-base md:text-xl text-gray-300 max-w-2xl mb-8 leading-relaxed">
-            Trusted by municipalities in all 10 provinces since 1994. We make streets that feel like they belong there — surfaces that endure Canadian winters and define communities.
+            Decorative hardscape and traffic safety solutions, installed by certified professionals across all 10 provinces.
           </p>
           {/* Mobile-only shortened body */}
           <p className="sm:hidden text-sm text-gray-300 mb-8 leading-relaxed">
-            Trusted in all 10 provinces since 1994.
+            Decorative hardscape and traffic safety solutions across all 10 provinces.
           </p>
         </motion.div>
 
@@ -134,6 +150,17 @@ export default function Hero({ variant = "default" }: HeroProps) {
             ))}
           </div>
         </motion.div>
+      </div>
+
+      {/* Ticker — infinite scroll of products and applications */}
+      <div className="absolute bottom-0 left-0 right-0 overflow-hidden z-10" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+        <div className="py-3 whitespace-nowrap ticker-track">
+          {[...tickerItems, ...tickerItems].map((item, i) => (
+            <span key={i} className="text-xs font-medium tracking-wide mx-4" style={{ color: "rgba(255,255,255,0.3)" }}>
+              {item} <span style={{ color: "rgba(249,115,22,0.4)" }}>·</span>
+            </span>
+          ))}
+        </div>
       </div>
     </section>
   );

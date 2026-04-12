@@ -290,19 +290,31 @@ export default function LunchLearn({ hideMoose = false }: { hideMoose?: boolean 
           {/* Moose — paws sit on the fold line between sections */}
           {!hideMoose && (
             <div className="hidden lg:flex justify-center pointer-events-none" style={{ position: "relative", height: "200px" }}>
-              <Image
-                src="/images/lunch-learn/moose-transparent.png"
-                alt="HUB Surface Systems Moose mascot — book a free Lunch and Learn session"
-                width={210}
-                height={210}
+              <div
+                className="rounded-2xl overflow-hidden"
                 style={{
-                  display: "block",
                   position: "absolute",
                   bottom: 0,
-                  filter: "drop-shadow(0 0 20px rgba(249,115,22,0.4)) drop-shadow(0 8px 24px rgba(0,0,0,0.55))",
+                  width: 210,
+                  height: 210,
+                  background: "#1E3A5F",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
-                unoptimized
-              />
+              >
+                <Image
+                  src="/images/lunch-learn/moose-transparent.png"
+                  alt="HUB Surface Systems Moose mascot — book a free Lunch and Learn session"
+                  width={210}
+                  height={210}
+                  style={{
+                    display: "block",
+                    filter: "drop-shadow(0 0 20px rgba(249,115,22,0.4)) drop-shadow(0 8px 24px rgba(0,0,0,0.55))",
+                  }}
+                  unoptimized
+                />
+              </div>
             </div>
           )}
           </div>

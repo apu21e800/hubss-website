@@ -1,8 +1,8 @@
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
-  title: "Start a Project",
-  description: "Tell us about your community, timeline, and vision. Two regional offices serving all 10 Canadian provinces — Milton ON and Ladysmith BC. Response within one business day.",
+  title: "Contact HUB Surface Systems",
+  description: "Request a quote for decorative pavement, thermoplastic crosswalks, or traffic safety markings. Two offices — Milton ON and Ladysmith BC — serving municipalities and contractors across all 10 provinces.",
   slug: "contact",
 });
 

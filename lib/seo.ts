@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 const BASE_URL = "https://hubss.com";
 const SITE_NAME = "HUB Surface Systems";
-const DEFAULT_OG_IMAGE = "/images/og-default.jpg";
+const DEFAULT_OG_IMAGE = "/images/hero/hero-1.jpg";
 
 // Keyword-rich title suffix for better SERP context
 const TITLE_SUFFIX = "HUBSS";

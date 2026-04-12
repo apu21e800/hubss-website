@@ -97,7 +97,7 @@ export const projects: Project[] = [
     application: "Public Art",
     province: "British Columbia",
     city: "Vancouver",
-    excerpt: "The More Awesome Now program transformed six Vancouver laneways into vibrant public art installations using StreetBond coloured pavement coatings.",
-    imageUrl: "/images/applications/public-spaces/public-spaces-01.jpg",
+    excerpt: "The More Awesome Now program transformed six Vancouver laneways into vibrant public art installations using StreetBond coloured pavement systems.",
+    imageUrl: "/images/applications/community-branding/community-branding-01.jpg",
   },
 ];

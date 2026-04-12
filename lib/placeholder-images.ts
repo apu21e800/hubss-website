@@ -9,7 +9,7 @@
 // ─── Shared thematic aliases ─────────────────────────────────────────────────
 
 const CROSS   = "/images/applications/crosswalks/crosswalks-01.jpg";
-const CITY    = "/images/products/streetbond/streetbond-01.jpg";
+const CITY    = "/images/products/streetbond/streetbond-01.png";
 const URBAN   = "/images/products/streetprint/streetprint-01.jpg";
 const STREET  = "/images/applications/community-branding/community-branding-01.jpg";
 const TRANSIT = "/images/applications/bus-lanes/bus-lanes-01.jpg";
@@ -55,7 +55,7 @@ export const placeholderImages = {
       gallery: [URBAN_G, ART_G, STREET_G, CROSS_G, CITY_G, ROAD_G],
     },
     "streetbond": {
-      hero: "/images/products/streetbond/streetbond-01.jpg",
+      hero: "/images/products/streetbond/streetbond-01.png",
       gallery: [STREET_G, ART_G, TRANSIT_G, URBAN_G, CROSS_G, ROAD_G],
     },
     "mmax": {
@@ -164,35 +164,6 @@ export const placeholderImages = {
   projects: {
     "keeping-pedestrians-safe":          "/images/applications/traffic-calming/speed-table-red-brick-crosswalk-01.jpg",
     "pedestrian-safety-high-visibility": "/images/applications/public-spaces/concordia-multicolour-crosswalk-01.jpg",
-    "vancouver-crosswalk-design-2025":   "/images/applications/commercial-spaces/little-italy-aerial-colourful-intersection-01.jpg",
-    "york-region-hwy7-viva":             "/images/applications/bus-lanes/red-bus-lane-brt-transit-station-01.jpg",
-    "toronto-priority-bus-lanes":        "/images/products/mmax/mmax-red-bus-lane-ottawa-flags-01.jpg",
-    "london-east-link-brt":              "/images/applications/bus-lanes/london-transit-bus-on-red-lane-01.jpg",
-    "kitchener-veterans-memorial":       "/images/applications/community-branding/tennis-club-logo-pavement-mural-01.jpg",
-    "ubc-musqueam-crosswalk":            "/images/applications/parks-paths/eagle-mural-courtyard-aerial-01.jpg",
-    "vancouver-more-awesome-laneway":    "/images/products/streetbond/streetbond-coloured-plaza-art-mural-01.jpg",
+    "vancouver-crosswalk-design-2025":   "/images/applications/commercial-spaces/commercial-spaces-01.jpg",
   },
-
-  // ── About page ─────────────────────────────────────────────────────────────
-  about: {
-    hero:   "/images/hero/hero-3.jpg",
-    team:   STREET,
-    office: CITY,
-  },
-
-  // ── Blog ───────────────────────────────────────────────────────────────────
-  blog: {
-    default:                                      CROSS,
-    "stamped-asphalt-vs-concrete":                URBAN,
-    "vision-zero-surface-markings":               CITY,
-    "decorative-crosswalks-community-identity":   ART,
-  },
-
-  // ── Lunch & Learn ──────────────────────────────────────────────────────────
-  lunchLearn: {
-    hero:    "/images/hero/hero-2.jpg",
-    session: URBAN,
-  },
-} as const;
-
-export type PlaceholderImages = typeof placeholderImages;
+};

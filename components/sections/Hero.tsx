@@ -128,12 +128,8 @@ export default function Hero({ variant = "default" }: HeroProps) {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
             {credentialStats.map((stat) => (
               <div key={stat.label} className="flex items-baseline gap-1.5">
-                <span className="text-sm font-bold" style={{ color: "#f97316" }}>
-                  {stat.value}
-                </span>
-                <span className="text-xs sm:text-sm" style={{ color: "#d1d5db" }}>
-                  {stat.label}
-                </span>
+                <span className="text-2xl sm:text-3xl font-black text-white tabular-nums">{stat.value}</span>
+                <span className="text-xs font-medium" style={{ color: "rgba(255,255,255,0.5)" }}>{stat.label}</span>
               </div>
             ))}
           </div>

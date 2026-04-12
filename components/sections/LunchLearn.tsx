@@ -291,7 +291,7 @@ export default function LunchLearn({ hideMoose = false }: { hideMoose?: boolean 
           {!hideMoose && (
             <div className="hidden lg:flex justify-center pointer-events-none" style={{ position: "relative", height: "200px" }}>
               <Image
-                src="/images/lunch-learn/moose-updated.png"
+                src="/images/lunch-learn/moose-transparent.png"
                 alt="HUB Surface Systems Moose mascot — book a free Lunch and Learn session"
                 width={210}
                 height={210}
@@ -315,8 +315,9 @@ export default function LunchLearn({ hideMoose = false }: { hideMoose?: boolean 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center">
           <p className="text-sm" style={{ color: "#94a3b8" }}>
             Book your session at{" "}
-            <a href="/lunch-learn" className="font-semibold transition-colors hover:text-white" style={{ color: "#f97316" }}>hubss.com/lunch-learn</a>
-            {" "}— or fill out the form above.
+            <a href="/lunch-learn" className="font-semibold transition-colors hover:text-white" style={{ color: "#f97316" }}>
+              hubss.com/lunch-learn
+            </a>
           </p>
         </div>
       </div>

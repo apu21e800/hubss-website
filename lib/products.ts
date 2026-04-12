@@ -205,12 +205,10 @@ export const products: Product[] = [
     specs: [
       { label: "Material", value: "Preformed thermoplastic" },
       { label: "Thickness", value: "90mil standard / 125mil heavy-use" },
-      { label: "Retroreflectivity", value: "ASTM D4956 Type III glass beads" },
-      { label: "Standards", value: "TAC + MUTCD compliant" },
-      { label: "Library", value: "200+ standard symbols + custom" },
-      { label: "Installation", value: "Heat application - no stencil required" },
-      { label: "Service Life", value: "5-year warranty" },
+      { label: "Service Life", value: "5-7 years in heavy municipal use" },
+      { label: "Curing", value: "No cure time — heat-applied, drive-on immediately" },
+      { label: "Retroreflectivity", value: "Premium glass bead surface" },
     ],
-    relatedApplications: ["crosswalks", "bike-lanes", "bus-lanes", "regulatory-markings"],
+    relatedApplications: ["crosswalks", "regulatory-markings", "parking-lots", "bike-lanes", "bus-lanes"],
   },
 ];

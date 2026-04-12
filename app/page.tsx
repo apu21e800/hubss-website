@@ -74,7 +74,6 @@ export default function Home() {
       <InstagramStrip />
       {/* LunchLearn — Moose mascot rendered internally by the component */}
       <LunchLearn />
-      {/* slate → dark footer */}
       <Footer />
     </main>
   );

@@ -181,9 +181,9 @@ export const applications: Application[] = [
     name: "Regulatory Markings",
     slug: "regulatory-markings",
     shortDesc: "Compliant symbols. Consistent performance.",
-    imageUrl: "/images/applications/airports/airports-01.jpg",
-    gallery: gallery("airports", "airports", 28),
-    description: "Stop bars, yield lines, turn arrows, speed legends, accessible parking symbols, and the full library of TAC and MUTCD-compliant regulatory pavement markings are available through HUB's PreMark and AirMark systems. Pre-cut thermoplastic components eliminate stencil setup and deliver consistent markings that outlast painted equivalents 5:1.",
-    relatedProducts: ["premark", "airmark", "traffic-patterns", "traffic-patterns-xd", "duratherm"],
+    imageUrl: "/images/applications/traffic-calming/traffic-calming-01.jpg",
+    gallery: gallery("traffic-calming", "traffic-calming", 56),
+    description: "Stop bars, turn arrows, yield symbols, school zone markings, and MUTCD-compliant pavement legends demand precision and longevity. TrafficPatterns and TrafficPatternsXD thermoplastic deliver retroreflective symbols and lines that outlast paint 5:1. PreMark preformed thermoplastic provides fast installation for school zones, accessible parking, and crosswalk ladder lines with no curing downtime.",
+    relatedProducts: ["traffic-patterns", "traffic-patterns-xd", "premark", "duratherm", "airmark"],
   },
 ];

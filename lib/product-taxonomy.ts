@@ -29,5 +29,5 @@ export function getProductFamily(slug: string): string {
       return group.label;
     }
   }
-  return "Surface System";
+  return "Other";
 }

@@ -11,8 +11,13 @@ import { applications } from "@/lib/applications";
 import { products } from "@/lib/products";
 import { buildMetadata } from "@/lib/seo";
 
+// Exclude slugs that have their own dedicated page (e.g. /applications/public-art/page.tsx)
+const DEDICATED_PAGES = new Set(["public-art"]);
+
 export async function generateStaticParams() {
-  return applications.map((a) => ({ slug: a.slug }));
+  return applications
+    .filter((a) => !DEDICATED_PAGES.has(a.slug))
+    .map((a) => ({ slug: a.slug }));
 }
 
 type Props = { params: Promise<{ slug: string }> };

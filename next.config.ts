@@ -24,7 +24,7 @@ const nextConfig: NextConfig = {
       { source: "/commercial-parking-lot-solutions", destination: "/applications/parking-lots", permanent: true },
       { source: "/commercial-parking-lot-surfaces", destination: "/applications/parking-lots", permanent: true },
       { source: "/parks-paths", destination: "/applications/parks-paths", permanent: true },
-      { source: "/public-art", destination: "/applications/community-branding", permanent: true },
+      { source: "/public-art", destination: "/applications/public-art", permanent: true },
       { source: "/community-branding", destination: "/applications/community-branding", permanent: true },
       { source: "/regulatory-markings", destination: "/applications/regulatory-markings", permanent: true },
       { source: "/air-ports", destination: "/applications/airports", permanent: true },
@@ -34,7 +34,8 @@ const nextConfig: NextConfig = {
       { source: "/leed-urban-heat-island", destination: "/applications/leed-urban-heat-island", permanent: true },
       { source: "/splash-pads", destination: "/applications/splash-pads", permanent: true },
       { source: "/applications/driveways", destination: "/applications/private-driveways", permanent: true },
-      { source: "/applications/public-art", destination: "/applications/community-branding", permanent: true },
+      // Public Art now has its own dedicated page — no redirect needed
+      // { source: "/applications/public-art", destination: "/applications/community-branding", permanent: true },
       { source: "/applications/public-spaces", destination: "/applications/community-branding", permanent: true },
       { source: "/decorative-streetscape-solutions", destination: "/applications/crosswalks", permanent: true },
       // Blog post redirects

@@ -16,7 +16,7 @@ export default function HeroCityTicker() {
       <motion.div
         className="flex items-center whitespace-nowrap"
         animate={{ x: ['0%', '-50%'] }}
-        transition={{ duration: 28, repeat: Infinity, ease: 'linear' }}
+        transition={{ duration: 55, repeat: Infinity, ease: 'linear' }}
       >
         {doubled.map((city, i) => (
           <span key={i} className="flex items-center">

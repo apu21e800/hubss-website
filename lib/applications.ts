@@ -142,6 +142,15 @@ export const applications: Application[] = [
     relatedProducts: ["streetprint", "streetbond", "durashield"],
   },
   {
+    name: "Pedestrian Safety",
+    slug: "pedestrian-safety",
+    shortDesc: "Protecting people where they walk.",
+    imageUrl: "/images/applications/crosswalks/crosswalks-03.jpg",
+    gallery: gallery("crosswalks", "crosswalks", 122),
+    description: "Pedestrian safety is the single most important function of urban pavement marking. High-visibility crosswalks, raised intersection treatments, school zone markings, and tactile guidance surfaces all rely on durable, retroreflective pavement systems. TrafficPatterns and TrafficPatternsXD thermoplastic deliver Vision Zero–compliant crosswalks that outlast paint 5:1. StreetBond and MMAX colour coatings mark pedestrian priority zones with high-contrast colour that persists through Canadian winters.",
+    relatedProducts: ["traffic-patterns", "traffic-patterns-xd", "streetbond", "mmax", "decomark", "premark"],
+  },
+  {
     name: "Traffic Calming",
     slug: "traffic-calming",
     shortDesc: "Infrastructure that slows, guides, and signals.",

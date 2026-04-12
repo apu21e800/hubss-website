@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Nav from "@/components/sections/Nav";
 import Hero from "@/components/sections/Hero";
+import HeroCityTicker from "@/components/sections/HeroCityTicker";
 import WhyHubss from "@/components/sections/WhyHubss";
 import PersonaEntryPoints from "@/components/sections/PersonaEntryPoints";
 import ProductsGrid from "@/components/sections/ProductsGrid";
@@ -46,7 +47,12 @@ const organizationSchema = {
     { "@type": "PostalAddress", addressLocality: "Milton", addressRegion: "ON", addressCountry: "CA" },
     { "@type": "PostalAddress", addressLocality: "Ladysmith", addressRegion: "BC", addressCountry: "CA" },
   ],
-  sameAs: [],
+  sameAs: [
+    "https://www.linkedin.com/company/hub-surface-systems",
+    "https://www.instagram.com/hubsurfacesystems",
+    "https://www.facebook.com/hubsurfacesystems",
+    "https://www.youtube.com/@hubsurfacesystems",
+  ],
 };
 
 export default function Home() {
@@ -58,6 +64,7 @@ export default function Home() {
       <JsonLd data={organizationSchema} />
       <Nav />
       <Hero />
+      <HeroCityTicker />
       <WhyHubss />
       <PersonaEntryPoints />
       {/* slate → dark */}

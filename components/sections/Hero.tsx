@@ -83,7 +83,7 @@ export default function Hero({ variant = "default" }: HeroProps) {
             className="text-xs font-semibold tracking-[0.2em] uppercase mb-5 sm:mb-6"
             style={{ color: "#f97316" }}
           >
-            Canadian-Operated · 30+ Years · 1,000+ Projects · Coast to Coast
+            30+ Years · 500+ Projects · York Region, Vancouver &amp; UBC
           </p>
 
           {/* Headline */}
@@ -93,11 +93,11 @@ export default function Hero({ variant = "default" }: HeroProps) {
 
           {/* Body — hidden on smallest screens to give headline room, shows sm+ */}
           <p className="hidden sm:block text-base md:text-xl text-gray-300 max-w-2xl mb-8 leading-relaxed">
-            We make streets that feel like they belong there. Municipalities from York Region to Vancouver have trusted us since 1994 to build surfaces that endure.
+            Trusted by municipalities in all 10 provinces since 1994. We make streets that feel like they belong there — surfaces that endure Canadian winters and define communities.
           </p>
           {/* Mobile-only shortened body */}
           <p className="sm:hidden text-sm text-gray-300 mb-8 leading-relaxed">
-            Trusted by municipalities coast to coast since 1994.
+            Trusted in all 10 provinces since 1994.
           </p>
         </motion.div>
 

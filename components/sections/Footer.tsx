@@ -12,7 +12,9 @@ const footerApplications = [
   { label: "Community Branding",  slug: "community-branding" },
   { label: "Parking Lots",        slug: "parking-lots" },
   { label: "Private Driveways",   slug: "private-driveways" },
-  { label: "Public Art",          slug: "public-art" },
+  { label: "Public Art",            slug: "public-art" },
+  { label: "Pedestrian Safety",    slug: "pedestrian-safety" },
+  { label: "Traffic Calming",      slug: "traffic-calming" },
 ];
 
 

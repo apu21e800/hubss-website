@@ -3,6 +3,7 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Search, X, ChevronDown } from "lucide-react";
+import { motion } from "framer-motion";
 import BlogCard from "./BlogCard";
 import type { PostMeta } from "@/lib/mdx";
 
@@ -156,8 +157,16 @@ export default function BlogFilter({ posts, allProducts }: Props) {
       {/* ── Grid ──────────────────────────────────────────── */}
       {filtered.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filtered.map((post) => (
-            <BlogCard key={post.slug} post={post} />
+          {filtered.map((post, index) => (
+            <motion.div
+              key={post.slug}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ duration: 0.4, delay: index * 0.05 }}
+            >
+              <BlogCard post={post} />
+            </motion.div>
           ))}
         </div>
       ) : (

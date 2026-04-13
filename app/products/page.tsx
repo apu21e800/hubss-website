@@ -126,21 +126,21 @@ export default function ProductsPage() {
                           <Link
                             key={product.slug}
                             href={`/products/${product.slug}`}
-                            className="group flex flex-col relative overflow-hidden rounded-xl transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(249,115,22,0.12)]"
+                            className="group h-full flex flex-col relative overflow-hidden rounded-xl transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(249,115,22,0.12)]"
                             style={{ background: "#1a1e28", border: "1px solid rgba(255,255,255,0.07)" }}
                           >
                             <div
                               className="absolute top-0 left-0 right-0 h-[2px] z-10"
                               style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }}
                             />
-                            <div className="p-7">
+                            <div className="p-7 flex flex-col flex-grow">
                               <h3 className="font-bold text-xl mb-1.5 transition-colors group-hover:text-[#f97316]" style={{ color: "var(--text-primary)" }}>
                                 {product.name}
                               </h3>
                               <p className="text-sm font-medium mb-3" style={{ color: "#fb923c" }}>
                                 {product.shortDesc}
                               </p>
-                              <p className="text-sm leading-relaxed mb-5" style={{ color: "var(--text-secondary)" }}>
+                              <p className="text-sm leading-relaxed mb-5 flex-grow" style={{ color: "var(--text-secondary)" }}>
                                 {typeof product.description === "string"
                                   ? product.description.slice(0, 120) + (product.description.length > 120 ? "…" : "")
                                   : ""}

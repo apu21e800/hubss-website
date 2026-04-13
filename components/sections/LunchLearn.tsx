@@ -160,8 +160,8 @@ export default function LunchLearn({ hideMoose = false }: { hideMoose?: boolean 
           {/* ── RIGHT — form card + moose below ────────────── */}
           <div className="flex flex-col">
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 1, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="rounded-2xl overflow-hidden shadow-2xl"
             style={{ background: "#ffffff" }}

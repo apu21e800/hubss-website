@@ -42,10 +42,10 @@ export default function ApplicationsGrid() {
           {featured.map((app, i) => (
             <motion.div
               key={app.slug}
-              initial={{ opacity: 0, scale: 0.97 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.06 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ duration: 0.4, delay: i * 0.05 }}
               className="relative overflow-hidden group"
               style={{ borderRadius: "12px", aspectRatio: "4/3" }}
             >
@@ -85,6 +85,9 @@ export default function ApplicationsGrid() {
                   <h3 className="font-bold text-base" style={{ color: "var(--text-primary)" }}>
                     {app.name}
                   </h3>
+                  <p className="text-sm text-white/60 mt-0.5 line-clamp-2">
+                    {app.shortDesc}
+                  </p>
                 </div>
               </Link>
             </motion.div>

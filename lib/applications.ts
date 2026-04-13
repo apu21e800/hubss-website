@@ -18,7 +18,7 @@ export const applications: Application[] = [
   {
     name: "Crosswalks",
     slug: "crosswalks",
-    shortDesc: "Bold markings. Lasting safety.",
+    shortDesc: "High-visibility decorative crosswalks that define intersections and calm traffic",
     imageUrl: "/images/applications/crosswalks/crosswalks-01.jpg",
     gallery: gallery("crosswalks", "crosswalks", 122),
     description: "Crosswalks are the most visible safety infrastructure in any municipality. HUB systems deliver durability, retroreflectivity, and design flexibility that paint cannot match. TrafficPatterns and TrafficPatternsXD survive snowplow cycles and de-icing chemicals. DecoMark and StreetBond unlock full artistic expression for Pride crosswalks, Indigenous art, and neighbourhood identity. Specified by York Region, City of Toronto, Vancouver, and over 500 municipalities coast to coast.",
@@ -27,7 +27,7 @@ export const applications: Application[] = [
   {
     name: "Bike Lanes",
     slug: "bike-lanes",
-    shortDesc: "Lanes that protect. Colours that last.",
+    shortDesc: "Durable coloured lane treatments for safe multimodal corridors",
     imageUrl: "/images/applications/bike-lanes/bike-lanes-01.jpg",
     gallery: gallery("bike-lanes", "bike-lanes", 38),
     description: "Bike lanes demand pavement systems that hold colour season after season. StreetBond delivers 20-year colour retention on asphalt and concrete with full Pantone custom matching. MMAX MMA is specified for high-volume transit-adjacent corridors requiring overnight curing and bond strength above 3 MPa. PreMark and TrafficPatterns deliver retroreflective symbols and edge lines that outlast paint 5:1.",
@@ -36,7 +36,7 @@ export const applications: Application[] = [
   {
     name: "Bus Lanes",
     slug: "bus-lanes",
-    shortDesc: "Transit-grade durability. Zero downtime.",
+    shortDesc: "Durable coloured lane treatments for safe multimodal corridors",
     imageUrl: "/images/applications/bus-lanes/bus-lanes-01.jpg",
     gallery: gallery("bus-lanes", "bus-lanes", 40),
     description: "BRT corridors and bus priority lanes face the harshest combination of loads in urban infrastructure. MMAX MMA cures in 30-60 minutes for single overnight shift installation. TrafficPatternsXD 150mil aggregate-reinforced thermoplastic delivers BPN 65+ skid resistance and 7+ years of service in high-volume turn movements.",
@@ -45,7 +45,7 @@ export const applications: Application[] = [
   {
     name: "Parking Lots",
     slug: "parking-lots",
-    shortDesc: "Stalls that stay sharp. Surfaces that last.",
+    shortDesc: "Branded, durable coatings for commercial and institutional parking",
     imageUrl: "/images/applications/parking-lots/parking-lots-01.jpg",
     gallery: gallery("parking-lots", "parking-lots", 59),
     description: "Parking lot markings degrade faster than almost any other paved surface. DuraShield rejuvenates and seals oxidized asphalt, extending pavement life 3-5 years. TrafficPatterns and PreMark deliver crisp stall markings and accessible parking symbols that hold retroreflectivity for 5-7 years. StreetBond and DuraTherm unlock wayfinding colour zones and decorative treatments.",
@@ -54,7 +54,7 @@ export const applications: Application[] = [
   {
     name: "Parks & Paths",
     slug: "parks-paths",
-    shortDesc: "Colour and character for every pathway.",
+    shortDesc: "Decorative coatings for pathways, plazas, and recreational surfaces",
     imageUrl: "/images/applications/parks-paths/parks-paths-01.jpg",
     gallery: gallery("parks-paths", "parks-paths", 144),
     description: "Urban parks and multi-use paths are where communities live. StreetBond 20-year colour retention transforms utilitarian asphalt paths into vibrant spaces. DecoMark brings mural-quality artwork to the ground plane for wayfinding art and cultural expression. StreetPrint gives park plazas a traditional stone aesthetic at a fraction of real paver cost.",
@@ -72,7 +72,7 @@ export const applications: Application[] = [
   {
     name: "Community Branding",
     slug: "community-branding",
-    shortDesc: "Neighbourhoods with identity underfoot.",
+    shortDesc: "Custom logos, crests, and wayfinding embedded in pavement",
     imageUrl: "/images/applications/community-branding/community-branding-01.jpg",
     gallery: gallery("community-branding", "community-branding", 14),
     description: "From Bowen Island's community art path to Vancouver's Little Italy installation to the UBC Musqueam cultural crosswalk — pavement is an underutilized canvas for community identity. HUB's DecoMark and StreetBond systems embed neighbourhood names, cultural motifs, First Nations artwork, BIA wayfinding, and Pride declarations directly into the street surface.",
@@ -81,7 +81,7 @@ export const applications: Application[] = [
   {
     name: "Private Driveways",
     slug: "private-driveways",
-    shortDesc: "Curb appeal that compounds.",
+    shortDesc: "Premium stamped asphalt for residential and multi-family properties",
     imageUrl: "/images/applications/residential-driveways/residential-driveways-01.jpg",
     gallery: gallery("residential-driveways", "residential-driveways", 44),
     description: "A decorative driveway is one of the highest-return investments a homeowner can make. StreetPrint delivers the look of brick, cobblestone, or slate on existing asphalt without demolition. StreetBond colour coating adds vivid, long-lasting colour. DuraShield rejuvenates and extends the life of oxidized driveways.",
@@ -126,7 +126,7 @@ export const applications: Application[] = [
   {
     name: "Townhomes",
     slug: "townhomes",
-    shortDesc: "Strata surfaces that set the standard.",
+    shortDesc: "Cohesive hardscape systems for strata and residential developments",
     imageUrl: "/images/applications/townhomes/townhomes-01.jpg",
     gallery: gallery("townhomes", "townhomes", 18),
     description: "Townhome and strata developments have one chance to make a lasting impression. StreetPrint stamped asphalt driveways and entry courts deliver the look of traditional pavers at half the installation cost. StreetBond elevates guest parking areas and amenity court surfaces. DuraShield rejuvenates aging strata asphalt, extending pavement life 3-5 years.",
@@ -135,7 +135,7 @@ export const applications: Application[] = [
   {
     name: "Residential Driveways",
     slug: "residential-driveways",
-    shortDesc: "Driveways worth coming home to.",
+    shortDesc: "Premium stamped asphalt for residential and multi-family properties",
     imageUrl: "/images/applications/residential-driveways/residential-driveways-01.jpg",
     gallery: gallery("residential-driveways", "residential-driveways", 44),
     description: "A beautifully finished residential driveway adds immediate curb appeal and lasting value. StreetPrint's in-place stamped asphalt process transforms an existing driveway into a rich decorative surface without tearing out and replacing the base. StreetBond UV-stable colour coating gives driveways a fresh, professional finish in any colour.",
@@ -162,7 +162,7 @@ export const applications: Application[] = [
   {
     name: "Airports",
     slug: "airports",
-    shortDesc: "Precision markings. Aviation-grade performance.",
+    shortDesc: "FAA-compliant airfield markings for runways, taxiways, and aprons",
     imageUrl: "/images/applications/airports/airports-01.jpg",
     gallery: gallery("airports", "airports", 28),
     description: "Airfield surface marking is one of the most regulated and technically demanding applications in the road marking industry. AirMark preformed thermoplastic delivers FAA Advisory Circular 150/5370-10 compliant threshold markings, runway designation numbers, taxiway edge lines, and holding position signs with ASTM D4956 Type IV premium retroreflectivity. Outlast paint 4:1.",
@@ -180,7 +180,7 @@ export const applications: Application[] = [
   {
     name: "Public Art",
     slug: "public-art",
-    shortDesc: "The street as canvas.",
+    shortDesc: "Custom pavement murals and Indigenous art installations at civic scale",
     imageUrl: "/images/applications/community-branding/community-branding-01.jpg",
     gallery: gallery("community-branding", "community-branding", 14),
     description: "From Indigenous art installations and labyrinth designs to pride crosswalks and transit station murals, HUBSS transforms pavement into community expression. Permanent, weather-resistant, and designed to last the full life of the asphalt surface.",
@@ -189,7 +189,7 @@ export const applications: Application[] = [
   {
     name: "Regulatory Markings",
     slug: "regulatory-markings",
-    shortDesc: "Compliant symbols. Consistent performance.",
+    shortDesc: "TAC-compliant stop bars, arrows, legends, and lane markings",
     imageUrl: "/images/applications/traffic-calming/traffic-calming-01.jpg",
     gallery: gallery("traffic-calming", "traffic-calming", 56),
     description: "Stop bars, turn arrows, yield symbols, school zone markings, and MUTCD-compliant pavement legends demand precision and longevity. TrafficPatterns and TrafficPatternsXD thermoplastic deliver retroreflective symbols and lines that outlast paint 5:1. PreMark preformed thermoplastic provides fast installation for school zones, accessible parking, and crosswalk ladder lines with no curing downtime.",

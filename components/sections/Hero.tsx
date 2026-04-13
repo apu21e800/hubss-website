@@ -87,14 +87,14 @@ export default function Hero({ variant = "default" }: HeroProps) {
           />
           {/* Eyebrow */}
           <p
-            className="text-xs font-semibold tracking-[0.2em] uppercase mb-5 sm:mb-6"
+            className="text-xs font-semibold tracking-[0.2em] uppercase mb-3"
             style={{ color: "#f97316" }}
           >
             30+ Years · 500+ Projects · York Region, Vancouver &amp; UBC
           </p>
 
           {/* Headline */}
-          <h1 className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tight text-white leading-none mb-5 sm:mb-6">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tight text-white leading-none mb-4 sm:mb-6">
             The Street Is Your Canvas.
           </h1>
 
@@ -113,7 +113,7 @@ export default function Hero({ variant = "default" }: HeroProps) {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="max-w-4xl w-full"
+          className="max-w-4xl w-full mt-6 sm:mt-8"
         >
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8 sm:mb-12">

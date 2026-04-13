@@ -61,21 +61,12 @@ export default function Hero({ variant = "default" }: HeroProps) {
         alt=""
         fill
         className="object-cover pointer-events-none"
-        style={{ opacity: 0.06, mixBlendMode: "overlay" }}
+        style={{ opacity: 0.10, mixBlendMode: "overlay" }}
         aria-hidden="true"
         sizes="100vw"
       />
       {/* Dark overlay — keeps text fully readable */}
       <div className="absolute inset-0 bg-black/70 pointer-events-none" />
-
-      {/* HUB Wheel watermark — right side */}
-      <div
-        className="absolute pointer-events-none hidden md:block"
-        style={{ top: "50%", right: "5%", transform: "translateY(-50%)", opacity: 0.06 }}
-        aria-hidden="true"
-      >
-        <Image src="/images/hub-wheel-orange.png" alt="" width={500} height={500} unoptimized />
-      </div>
 
       {/* Main content — mobile: column with top text + bottom CTAs | desktop: centered */}
       <div
@@ -145,7 +136,7 @@ export default function Hero({ variant = "default" }: HeroProps) {
             {credentialStats.map((stat) => (
               <div key={stat.label} className="flex items-baseline gap-1.5">
                 <span className="text-2xl sm:text-3xl font-black text-white tabular-nums">{stat.value}</span>
-                <span className="text-xs font-medium" style={{ color: "rgba(255,255,255,0.5)" }}>{stat.label}</span>
+                <span className="text-xs font-medium whitespace-nowrap" style={{ color: "rgba(255,255,255,0.5)" }}>{stat.label}</span>
               </div>
             ))}
           </div>

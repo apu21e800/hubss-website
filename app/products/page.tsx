@@ -42,7 +42,7 @@ export default function ProductsPage() {
           alt=""
           fill
           className="object-cover pointer-events-none"
-          style={{ opacity: 0.05, mixBlendMode: "overlay" }}
+          style={{ opacity: 0.10, mixBlendMode: "overlay" }}
           aria-hidden="true"
           sizes="100vw"
         />

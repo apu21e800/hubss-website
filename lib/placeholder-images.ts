@@ -162,8 +162,8 @@ export const placeholderImages = {
 
   // ── Projects ───────────────────────────────────────────────────────────────
   projects: {
-    "keeping-pedestrians-safe":          "/images/applications/traffic-calming/speed-table-red-brick-crosswalk-01.jpg",
-    "pedestrian-safety-high-visibility": "/images/applications/public-spaces/concordia-multicolour-crosswalk-01.jpg",
+    "keeping-pedestrians-safe":          "/images/applications/traffic-calming/traffic-calming-01.jpg",
+    "pedestrian-safety-high-visibility": "/images/applications/public-spaces/public-spaces-01.jpg",
     "vancouver-crosswalk-design-2025":   "/images/applications/commercial-spaces/commercial-spaces-01.jpg",
   },
 };

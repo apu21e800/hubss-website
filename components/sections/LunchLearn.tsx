@@ -1,336 +1,333 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
 
-const COVERS = [
-  "Why preformed thermoplastic markings last 10x longer than paint",
-  "Real Canadian case studies: before/after durability comparisons",
-  "Budget planning: upfront costs vs lifecycle savings",
-];
+interface LunchLearnProps {
+  /** Pass true on the dedicated /lunch-learn page — moose is rendered in the hero there */
+  hideMoose?: boolean;
+}
 
-const TAKEAWAYS = [
-  "Practical specs you can use in your next RFP",
-  "Direct answers to your toughest pavement marking questions",
-];
-
-
-const inputStyle = {
-  background: "#f9fafb",
-  border: "1px solid #e5e7eb",
-  color: "#111827",
-};
-
-const labelStyle = { color: "var(--text-hint)" as string, fontSize: "0.8125rem", fontWeight: 600 };
-
-export default function LunchLearn({ hideMoose = false }: { hideMoose?: boolean }) {
+export default function LunchLearn({ hideMoose = false }: LunchLearnProps) {
   const [form, setForm] = useState({
-    name: "", org: "", email: "", phone: "",
+    name: "",
+    email: "",
+    company: "",
+    city: "",
+    phone: "",
   });
-  const [submitted, setSubmitted] = useState(false);
-  const [error, setError]     = useState("");
-  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
-  const set = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true);
-    setError("");
+    setStatus("sending");
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, formType: "lunch-learn", website: "" }),
+        body: JSON.stringify({ formType: "lunch-learn", ...form }),
       });
-      const data = await res.json();
-      if (!res.ok || data.error) {
-        setError(data.error ?? "Something went wrong. Please try again.");
-      } else {
-        setSubmitted(true);
-      }
+      if (!res.ok) throw new Error("Send failed");
+      setStatus("sent");
+      setForm({ name: "", email: "", company: "", city: "", phone: "" });
     } catch {
-      setError("Network error. Please try again.");
-    } finally {
-      setLoading(false);
+      setStatus("error");
     }
   }
 
   return (
     <section
-      id="lunch-learn"
       className="relative overflow-hidden"
-      style={{ background: "#0f1420", zIndex: 0 }}
+      style={{
+        background: "linear-gradient(160deg, #0d1117 0%, #141b2d 60%, #0d1117 100%)",
+        borderTop: "1px solid rgba(255,255,255,0.05)",
+        borderBottom: "1px solid rgba(255,255,255,0.05)",
+      }}
     >
-      {/* Orange/amber radial glow — bottom-right */}
+      {/* Subtle grid pattern */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(249,115,22,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(249,115,22,0.03) 1px, transparent 1px)",
+          backgroundSize: "60px 60px",
+        }}
+        aria-hidden="true"
+      />
+
+      {/* Orange glow — top left */}
       <div
         className="absolute pointer-events-none"
         style={{
-          bottom: "-120px",
-          right: "-120px",
-          width: "800px",
-          height: "800px",
-          background: "radial-gradient(ellipse at center, rgba(249,115,22,0.11) 0%, rgba(234,179,8,0.05) 35%, transparent 65%)",
-          zIndex: 0,
+          top: -120,
+          left: -80,
+          width: 400,
+          height: 400,
+          borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(249,115,22,0.08) 0%, transparent 70%)",
         }}
+        aria-hidden="true"
       />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 pb-0" style={{ zIndex: 2 }}>
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
 
-          {/* ── LEFT — content ─────────────────────────────── */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-          >
-            {/* Eyebrow + CPD Badge */}
-            <div className="flex items-center flex-wrap gap-2 mb-4">
-              <p className="gradient-text text-xs font-semibold tracking-[0.2em] uppercase">
-                Free Professional Development
-              </p>
+          {/* ── Left — content panel ──────────────────────────── */}
+          <div className="relative">
+            <p
+              className="text-xs font-semibold tracking-[0.2em] uppercase mb-4"
+              style={{ color: "#f97316" }}
+            >
+              Free Professional Development
+            </p>
+            <h2
+              className="text-4xl sm:text-5xl font-bold mb-6 leading-tight"
+              style={{ color: "#ffffff" }}
+            >
+              Lunch Is On Us.
+              <br />
               <span
-                className="text-[10px] font-bold tracking-wide px-2 py-0.5 rounded-full whitespace-nowrap flex-shrink-0"
                 style={{
-                  background: "linear-gradient(90deg, rgba(249,115,22,0.15), rgba(234,179,8,0.15))",
-                  color: "#f97316",
-                  border: "1px solid rgba(249,115,22,0.3)",
+                  background: "linear-gradient(90deg, #F97316, #EAB308)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
                 }}
               >
-                Continuing Education
+                Knowledge Is Free.
               </span>
-            </div>
-
-            {/* Headline */}
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 leading-tight" style={{ color: "var(--text-primary)" }}>
-              Earn Continuing Education Credits Over Lunch
             </h2>
-
-            {/* Subhead */}
-            <p className="text-lg mb-10 leading-relaxed" style={{ color: "#cbd5e1" }}>
-              We bring the presentation — and the food. HUB Lunch &amp; Learn sessions are accredited continuing education sessions for landscape architects, traffic engineers, and public works professionals. Virtual or in-person, coast to coast.
+            <p
+              className="text-base sm:text-lg leading-relaxed mb-8 max-w-lg"
+              style={{ color: "#8b8b8b" }}
+            >
+              We bring lunch to your office and walk your team through everything
+              you need to know about modern pavement marking systems — real Canadian
+              case studies, lifecycle cost analysis, and practical specs you can drop
+              straight into your next RFP.
             </p>
 
-            {/* What we'll cover */}
-            <div className="mb-8">
-              <p className="text-xs font-semibold tracking-[0.15em] uppercase mb-4" style={{ color: "#f97316" }}>
-                What we&apos;ll cover
-              </p>
-              <ul className="space-y-3">
-                {COVERS.map((item) => (
-                  <li key={item} className="flex items-start gap-3">
-                    <span className="mt-0.5 text-sm font-bold flex-shrink-0" style={{ color: "#f97316" }}>✓</span>
-                    <span className="text-base leading-relaxed" style={{ color: "#cbd5e1" }}>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            {/* What you get */}
+            <ul className="space-y-3 mb-10">
+              {[
+                "Live product demonstrations + take-home samples",
+                "Canadian case studies — York Region, Vancouver, UBC",
+                "Free continuing education credits for engineers",
+                "Lifecycle cost comparison vs paint and concrete",
+                "Tailored to your municipality's active projects",
+              ].map((item) => (
+                <li key={item} className="flex items-start gap-3">
+                  <span
+                    className="mt-1 flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold"
+                    style={{ background: "rgba(249,115,22,0.15)", color: "#f97316" }}
+                  >
+                    ✓
+                  </span>
+                  <span className="text-sm leading-snug" style={{ color: "#c0c0c0" }}>
+                    {item}
+                  </span>
+                </li>
+              ))}
+            </ul>
 
-            {/* You'll leave with */}
-            <div className="mb-8 pb-8">
-              <p className="text-xs font-semibold tracking-[0.15em] uppercase mb-4" style={{ color: "#f97316" }}>
-                You&apos;ll leave with
-              </p>
-              <ul className="space-y-3">
-                {TAKEAWAYS.map((item) => (
-                  <li key={item} className="flex items-start gap-3">
-                    <span className="mt-0.5 text-sm font-bold flex-shrink-0" style={{ color: "#f97316" }}>✓</span>
-                    <span className="text-base leading-relaxed" style={{ color: "#cbd5e1" }}>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Format options — In Person vs Virtual */}
-            <div className="flex flex-col sm:flex-row gap-4 mt-4">
-              <div className="flex-1 border border-zinc-700 rounded-xl p-5 bg-zinc-900/60">
-                <div className="text-sm font-semibold text-orange-500 uppercase tracking-wider mb-2">In Person</div>
-                <p className="text-base text-zinc-400 leading-relaxed">We bring lunch and present at your office. Perfect for municipalities, engineering firms, and landscape architects.</p>
-              </div>
-              <div className="flex-1 border border-zinc-700 rounded-xl p-5 bg-zinc-900/60">
-                <div className="text-sm font-semibold text-orange-500 uppercase tracking-wider mb-2">Virtual</div>
-                <p className="text-base text-zinc-400 leading-relaxed">Join online from anywhere. We&apos;ll send a SkipTheDishes gift card so you can eat along with us.</p>
-              </div>
-            </div>
-
-          </motion.div>
-
-          {/* ── RIGHT — form card + moose below ────────────── */}
-          <div className="flex flex-col">
-          <motion.div
-            initial={{ opacity: 1, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="rounded-2xl overflow-hidden shadow-2xl"
-            style={{ background: "#ffffff" }}
-          >
-            {submitted ? (
-              <div className="text-center py-16 px-10">
+            {/* Pug peeker — only on non-dedicated page */}
+            {!hideMoose && (
+              <div
+                className="relative"
+                style={{ height: 120, marginBottom: "-24px", isolation: "isolate" }}
+              >
+                {/* Fold line */}
                 <div
-                  className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-5"
-                  style={{ background: "rgba(249,115,22,0.12)" }}
+                  className="absolute left-0 right-0 bottom-0"
+                  style={{ height: 2, background: "linear-gradient(90deg, rgba(249,115,22,0.35) 0%, rgba(249,115,22,0.08) 60%, transparent 100%)" }}
+                />
+                {/* Mascot */}
+                <div
+                  className="absolute bottom-0"
+                  style={{ left: 0, width: 140, height: 120 }}
                 >
-                  <svg className="w-7 h-7" style={{ color: "#f97316" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
+                  <Image
+                    src="/images/lunch-learn/moose-transparent.png"
+                    alt="HUB mascot peeking over the fold"
+                    width={140}
+                    height={120}
+                    style={{ width: "100%", height: "100%", objectFit: "contain", objectPosition: "bottom" }}
+                    unoptimized
+                  />
                 </div>
-                <h3 className="text-xl font-bold mb-2" style={{ color: "#111827" }}>You&apos;re on the list!</h3>
-                <p className="text-sm" style={{ color: "var(--text-muted)" }}>
-                  We&apos;ll be in touch within one business day to confirm your session.
+              </div>
+            )}
+          </div>
+
+          {/* ── Right — form ──────────────────────────────────── */}
+          <div
+            className="rounded-2xl p-8 sm:p-10 relative overflow-hidden"
+            style={{
+              background: "#1a1e28",
+              border: "1px solid rgba(255,255,255,0.08)",
+            }}
+          >
+            {/* Orange top accent */}
+            <div
+              className="absolute top-0 left-0 right-0 h-[2px]"
+              style={{ background: "linear-gradient(90deg, #f97316 0%, rgba(249,115,22,0.3) 60%, transparent 100%)" }}
+            />
+
+            {status === "sent" ? (
+              <div className="py-10 text-center">
+                <div
+                  className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-6"
+                  style={{ background: "rgba(249,115,22,0.12)", border: "1px solid rgba(249,115,22,0.25)" }}
+                >
+                  <span style={{ color: "#f97316", fontSize: 22 }}>✓</span>
+                </div>
+                <h3 className="text-xl font-bold mb-3" style={{ color: "#ffffff" }}>
+                  You&apos;re on the list.
+                </h3>
+                <p className="text-sm" style={{ color: "#8b8b8b" }}>
+                  We&apos;ll reach out within one business day to coordinate a date that works for your team.
                 </p>
               </div>
             ) : (
               <>
-                {/* Card header */}
-                <div className="px-8 pt-8 pb-6" style={{ borderBottom: "1px solid #f3f4f6" }}>
-                  <h3 className="text-xl font-bold" style={{ color: "#111827" }}>
-                    Schedule Your Free Lunch &amp; Learn
-                  </h3>
-                  <p className="text-sm mt-1" style={{ color: "var(--text-muted)" }}>
-                    We&apos;ll confirm within one business day.
-                  </p>
-                </div>
+                <h3 className="text-xl font-bold mb-2" style={{ color: "#ffffff" }}>
+                  Book Your Session
+                </h3>
+                <p className="text-sm mb-8" style={{ color: "#5a5a5a" }}>
+                  Available anywhere in Canada — East or West office will coordinate.
+                </p>
 
-                <form onSubmit={handleSubmit} className="px-8 py-6 space-y-4">
-                  {/* Full Name + Organization */}
+                <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block mb-1.5" style={labelStyle}>Full Name</label>
+                      <label className="block text-xs font-semibold tracking-wide uppercase mb-1.5" style={{ color: "#5a5a5a" }}>
+                        Name *
+                      </label>
                       <input
-                        type="text" required placeholder="Jane Smith"
-                        value={form.name} onChange={(e) => set("name", e.target.value)}
-                        className="w-full px-3 py-2.5 rounded-lg outline-none focus:ring-2 focus:ring-orange-400 transition-all min-h-[48px] text-base"
-                        style={inputStyle}
+                        type="text"
+                        name="name"
+                        required
+                        value={form.name}
+                        onChange={handleChange}
+                        placeholder="Jane Smith"
+                        className="w-full rounded-lg px-4 py-3 text-sm outline-none transition-colors focus:border-[#f97316]"
+                        style={{
+                          background: "#0f1620",
+                          border: "1px solid rgba(255,255,255,0.08)",
+                          color: "#ffffff",
+                        }}
                       />
                     </div>
                     <div>
-                      <label className="block mb-1.5" style={labelStyle}>Organization</label>
+                      <label className="block text-xs font-semibold tracking-wide uppercase mb-1.5" style={{ color: "#5a5a5a" }}>
+                        Email *
+                      </label>
                       <input
-                        type="text" required placeholder="City of Vancouver"
-                        value={form.org} onChange={(e) => set("org", e.target.value)}
-                        className="w-full px-3 py-2.5 rounded-lg outline-none focus:ring-2 focus:ring-orange-400 transition-all min-h-[48px] text-base"
-                        style={inputStyle}
+                        type="email"
+                        name="email"
+                        required
+                        value={form.email}
+                        onChange={handleChange}
+                        placeholder="jane@municipality.ca"
+                        className="w-full rounded-lg px-4 py-3 text-sm outline-none transition-colors focus:border-[#f97316]"
+                        style={{
+                          background: "#0f1620",
+                          border: "1px solid rgba(255,255,255,0.08)",
+                          color: "#ffffff",
+                        }}
                       />
                     </div>
                   </div>
 
-                  {/* Email + Phone */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block mb-1.5" style={labelStyle}>Email</label>
-                      <input
-                        type="email" required placeholder="jane@city.ca"
-                        value={form.email} onChange={(e) => set("email", e.target.value)}
-                        className="w-full px-3 py-2.5 rounded-lg outline-none focus:ring-2 focus:ring-orange-400 transition-all min-h-[48px] text-base"
-                        style={inputStyle}
-                      />
-                    </div>
-                    <div>
-                      <label className="block mb-1.5" style={labelStyle}>Phone</label>
-                      <input
-                        type="tel" placeholder="604-555-0100"
-                        value={form.phone} onChange={(e) => set("phone", e.target.value)}
-                        className="w-full px-3 py-2.5 rounded-lg outline-none focus:ring-2 focus:ring-orange-400 transition-all min-h-[48px] text-base"
-                        style={inputStyle}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Topics of interest */}
                   <div>
-                    <label className="block text-sm font-medium mb-3" style={{ color: "var(--text-hint)" }}>Topics of Interest</label>
-                    <div className="grid grid-cols-2 gap-2">
-                      {[
-                        'StreetPrint Patterns',
-                        'Colour Systems',
-                        'Installation & Application',
-                        'Maintenance & Longevity',
-                        'Specification & Budgeting',
-                        'Municipal Case Studies',
-                      ].map((topic) => (
-                        <label key={topic} className="flex items-center gap-2 cursor-pointer group">
-                          <input
-                            type="checkbox"
-                            name="topics"
-                            value={topic}
-                            className="w-4 h-4 accent-orange-500 rounded"
-                          />
-                          <span className="text-sm text-zinc-500 group-hover:text-zinc-700 transition-colors">{topic}</span>
-                        </label>
-                      ))}
+                    <label className="block text-xs font-semibold tracking-wide uppercase mb-1.5" style={{ color: "#5a5a5a" }}>
+                      Organization
+                    </label>
+                    <input
+                      type="text"
+                      name="company"
+                      value={form.company}
+                      onChange={handleChange}
+                      placeholder="City of Vancouver / Stantec / etc."
+                      className="w-full rounded-lg px-4 py-3 text-sm outline-none transition-colors focus:border-[#f97316]"
+                      style={{
+                        background: "#0f1620",
+                        border: "1px solid rgba(255,255,255,0.08)",
+                        color: "#ffffff",
+                      }}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold tracking-wide uppercase mb-1.5" style={{ color: "#5a5a5a" }}>
+                        City / Region
+                      </label>
+                      <input
+                        type="text"
+                        name="city"
+                        value={form.city}
+                        onChange={handleChange}
+                        placeholder="Milton, ON"
+                        className="w-full rounded-lg px-4 py-3 text-sm outline-none transition-colors focus:border-[#f97316]"
+                        style={{
+                          background: "#0f1620",
+                          border: "1px solid rgba(255,255,255,0.08)",
+                          color: "#ffffff",
+                        }}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold tracking-wide uppercase mb-1.5" style={{ color: "#5a5a5a" }}>
+                        Phone
+                      </label>
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={form.phone}
+                        onChange={handleChange}
+                        placeholder="416-555-0100"
+                        className="w-full rounded-lg px-4 py-3 text-sm outline-none transition-colors focus:border-[#f97316]"
+                        style={{
+                          background: "#0f1620",
+                          border: "1px solid rgba(255,255,255,0.08)",
+                          color: "#ffffff",
+                        }}
+                      />
                     </div>
                   </div>
 
-                  {/* Honeypot */}
-                  <input type="text" name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
-
-                  {error && <p className="text-sm text-red-500">{error}</p>}
+                  {status === "error" && (
+                    <p className="text-xs text-red-400">
+                      Something went wrong. Email us directly at info@hubss.com
+                    </p>
+                  )}
 
                   <button
-                    type="submit" disabled={loading}
-                    className="w-full font-bold py-4 rounded-xl text-base mt-2 transition-all disabled:opacity-60 hover:brightness-110 min-h-[48px]"
-                    style={{ background: "linear-gradient(90deg, #f97316, #f59e0b)", color: "#fff" }}
+                    type="submit"
+                    disabled={status === "sending"}
+                    className="w-full rounded-lg py-4 text-sm font-bold tracking-wide uppercase transition-all duration-200 hover:brightness-110 disabled:opacity-60"
+                    style={{
+                      background: "linear-gradient(135deg, #f97316 0%, #ea6c10 100%)",
+                      color: "#ffffff",
+                      letterSpacing: "0.1em",
+                    }}
                   >
-                    {loading ? "Sending…" : "Reserve Your Session →"}
+                    {status === "sending" ? "Sending…" : "Book a Free Lunch & Learn →"}
                   </button>
 
-                  <p className="text-center text-zinc-500 text-sm mt-2">
-                    Have a different question?{' '}
-                    <Link href="/contact" className="text-orange-500 hover:text-orange-400 underline underline-offset-4 transition-colors">
-                      Send us a message
-                    </Link>
+                  <p className="text-xs text-center" style={{ color: "#3a3a3a" }}>
+                    We respond within 1 business day. No spam, ever.
                   </p>
                 </form>
               </>
             )}
-          </motion.div>
-
-          {/* Moose — paws sit on the fold line between sections */}
-          {!hideMoose && (
-            <div className="hidden lg:flex justify-center pointer-events-none" style={{ position: "relative", height: "200px" }}>
-              <div
-                className="rounded-2xl overflow-hidden"
-                style={{
-                  position: "absolute",
-                  bottom: 0,
-                  width: 210,
-                  height: 210,
-                  background: "#1E3A5F",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Image
-                  src="/images/lunch-learn/moose-transparent.png"
-                  alt="HUB Surface Systems Moose mascot — book a free Lunch and Learn session"
-                  width={210}
-                  height={210}
-                  style={{
-                    display: "block",
-                    filter: "drop-shadow(0 0 20px rgba(249,115,22,0.4)) drop-shadow(0 8px 24px rgba(0,0,0,0.55))",
-                  }}
-                  unoptimized
-                />
-              </div>
-            </div>
-          )}
           </div>
 
-        </div>
-      </div>
-
-      {/* ── Bottom CTA bar ──────────────────────────────────── */}
-      <div style={{ background: "#0f1420", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center">
-          <p className="text-sm" style={{ color: "#94a3b8" }}>
-            Book your session at{" "}
-            <a href="/lunch-learn" className="font-semibold transition-colors hover:text-white" style={{ color: "#f97316" }}>
-              hubss.com/lunch-learn
-            </a>
-          </p>
         </div>
       </div>
     </section>

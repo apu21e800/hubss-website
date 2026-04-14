@@ -11,7 +11,12 @@ import {
   ChevronDown, X,
   // Social
   Linkedin, Instagram, Youtube, Facebook,
+  // Application icons
+  Footprints, Bike, Fence, Landmark, AlertOctagon, Trees, Flag,
+  ParkingSquare, PlaneTakeoff, Octagon, ShoppingBag, Waves, Sun,
+  MapPin,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { products } from "@/lib/products";
 import { PRODUCT_TAXONOMY } from "@/lib/product-taxonomy";
 import { applications } from "@/lib/applications";
@@ -61,6 +66,59 @@ const GRAD: React.CSSProperties = {
 
 const GEIST: React.CSSProperties = {
   fontFamily: "var(--font-geist), system-ui, sans-serif",
+};
+
+// ─── Product category badges ─────────────────────────────────────────────────
+
+const PRODUCT_BADGE: Record<string, string> = {
+  "traffic-patterns": "Thermoplastic",
+  "traffic-patterns-xd": "Thermoplastic",
+  "premark": "Thermoplastic",
+  "decomark": "Thermoplastic",
+  "duratherm": "Thermoplastic",
+  "streetbond": "Coating",
+  "durashield": "Coating",
+  "streetprint": "Stamped Asphalt",
+  "mmax": "MMA Resin",
+  "airmark": "Aviation",
+};
+
+const BADGE_STYLE: React.CSSProperties = {
+  fontSize: "0.6rem",
+  padding: "1px 5px",
+  borderRadius: "3px",
+  background: "rgba(249,115,22,0.1)",
+  color: "#f97316",
+  fontWeight: 600,
+  letterSpacing: "0.05em",
+  textTransform: "uppercase",
+  marginLeft: "auto",
+  flexShrink: 0,
+};
+
+// ─── Application icon mapping ────────────────────────────────────────────────
+
+const APP_ICON: Record<string, LucideIcon> = {
+  "crosswalks": Footprints,
+  "bike-lanes": Bike,
+  "bus-lanes": Bike,
+  "private-driveways": Fence,
+  "public-spaces": Landmark,
+  "regulatory-markings": AlertOctagon,
+  "parks-paths": Trees,
+  "community-branding": Flag,
+  "parking-lots": ParkingSquare,
+  "airports": PlaneTakeoff,
+  "traffic-calming": Octagon,
+  "commercial-spaces": ShoppingBag,
+  "splash-pads": Waves,
+  "leed-urban-heat-island": Sun,
+  "pedestrian-safety": Footprints,
+  "playgrounds": Waves,
+  "sport-courts": Landmark,
+  "townhomes": Fence,
+  "residential-driveways": Fence,
+  "public-art": Flag,
 };
 
 // ─── Mobile stagger variants ───────────────────────────────────────────────────
@@ -197,7 +255,12 @@ function ProductsPanel({
                       <div className="grid grid-cols-2 gap-x-8 gap-y-0.5">
                         {groupProducts.map((p) => (
                           <Link key={p.slug} href={`/products/${p.slug}`} className="group py-1.5 block">
-                            <div className="text-sm font-medium group-hover:text-orange-400 transition-colors" style={{ color: "rgba(255,255,255,0.85)" }}>{p.name}</div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm font-medium group-hover:text-orange-400 transition-colors" style={{ color: "rgba(255,255,255,0.85)" }}>{p.name}</span>
+                              {PRODUCT_BADGE[p.slug] && (
+                                <span style={BADGE_STYLE}>{PRODUCT_BADGE[p.slug]}</span>
+                              )}
+                            </div>
                             <div className="text-xs group-hover:text-gray-300 transition-colors leading-snug" style={{ color: "rgba(255,255,255,0.35)" }}>{p.shortDesc}</div>
                           </Link>
                         ))}
@@ -211,7 +274,7 @@ function ProductsPanel({
                 href="/products"
                 className="inline-flex items-center gap-1.5 text-xs text-orange-400 hover:text-orange-300 mt-5 font-medium"
               >
-                View all surface systems →
+                Browse all products →
               </Link>
             </div>
 
@@ -388,19 +451,34 @@ function ApplicationsPanel({
               </p>
 
               <div className="grid grid-cols-2 gap-x-8 gap-y-0.5">
-                {applications.map((app) => (
-                  <Link key={app.slug} href={`/applications/${app.slug}`} className="group py-1.5 block">
-                    <div className="text-sm font-medium group-hover:text-orange-400 transition-colors" style={{ color: "rgba(255,255,255,0.85)" }}>{app.name}</div>
-                    <div className="text-xs group-hover:text-gray-300 transition-colors leading-snug" style={{ color: "rgba(255,255,255,0.35)" }}>{app.shortDesc}</div>
-                  </Link>
-                ))}
+                {applications.map((app) => {
+                  const Icon = APP_ICON[app.slug] ?? MapPin;
+                  const relatedNames = app.relatedProducts
+                    .map((slug) => products.find((p) => p.slug === slug)?.name)
+                    .filter(Boolean)
+                    .join(", ");
+                  return (
+                    <Link
+                      key={app.slug}
+                      href={`/applications/${app.slug}`}
+                      className="group py-1.5 block"
+                      title={relatedNames ? `Products: ${relatedNames}` : undefined}
+                    >
+                      <div className="flex items-center gap-2">
+                        <Icon className="w-5 h-5 flex-shrink-0 text-orange-500/40 group-hover:text-orange-400 transition-colors" strokeWidth={1.5} />
+                        <span className="text-sm font-medium group-hover:text-orange-400 transition-colors" style={{ color: "rgba(255,255,255,0.85)" }}>{app.name}</span>
+                      </div>
+                      <div className="text-xs group-hover:text-gray-300 transition-colors leading-snug ml-7" style={{ color: "rgba(255,255,255,0.35)" }}>{app.shortDesc}</div>
+                    </Link>
+                  );
+                })}
               </div>
 
               <Link
                 href="/applications"
                 className="inline-flex items-center gap-1.5 text-xs text-orange-400 hover:text-orange-300 mt-5 font-medium"
               >
-                View all applications →
+                Browse all applications →
               </Link>
             </div>
 
@@ -446,6 +524,10 @@ function ApplicationsPanel({
                     reduction in pedestrian collisions at marked crossings
                   </span>
                 </div>
+
+                <p style={{ fontSize: "0.7rem", color: "#f97316", fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase" }}>
+                  20+ Canadian municipalities
+                </p>
 
                 <span
                   className="text-xs font-semibold inline-flex items-center gap-1.5 transition-colors duration-150 group-hover:text-orange-300"

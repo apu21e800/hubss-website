@@ -127,6 +127,12 @@ export default function AboutPage() {
                   authorized by HUB to install each system to spec. That credentialed installer program
                   is what turns a quality product into a quality outcome.
                 </p>
+                <p>
+                  HUB supports a network of Manufacturer Certified Installers — experienced, quality contractors
+                  across all 10 provinces who assure that every project is installed to the highest standards.
+                  When you specify HUB products, you&apos;re not just getting materials — you&apos;re getting the full
+                  installation assurance of Canada&apos;s most comprehensive decorative hardscape network.
+                </p>
               </div>
             </div>
             <div>

@@ -8,7 +8,7 @@ import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
   title: "Decorative Pavement & Marking Systems",
-  description: "Ten purpose-built surface systems — thermoplastics, MMA resins, stamped asphalt, and protective coatings engineered for Canadian climate. Spec sheets, technical data, and installation support.",
+  description: "Preformed thermoplastic, MMA resin bike lane coatings, stamped asphalt, and protective pavement coatings engineered for Canadian freeze-thaw conditions. Spec sheets and installation support for municipalities and contractors.",
   slug: "products",
 });
 

@@ -13,10 +13,10 @@ interface HeroProps {
 }
 
 const credentialStats = [
-  { value: "500+", label: "Projects completed" },
-  { value: "10", label: "Provinces, coast to coast" },
-  { value: "Since 1994", label: "Trusted across Canada" },
-  { value: "20yr", label: "Durability" },
+  { value: "500+", label: "Projects Completed" },
+  { value: "10", label: "Provinces Served" },
+  { value: "Since 1994", label: "Canadian-Founded" },
+  { value: "20 Year", label: "Durability" },
 ];
 
 const tickerItems = [
@@ -90,7 +90,7 @@ export default function Hero({ variant = "default" }: HeroProps) {
             className="text-xs font-semibold tracking-[0.2em] uppercase mb-3"
             style={{ color: "#f97316" }}
           >
-            30+ Years · 500+ Projects · York Region, Vancouver &amp; UBC
+            30+ Years &middot; 500+ Projects &middot; York Region, Vancouver &amp; UBC
           </p>
 
           {/* Headline */}
@@ -102,9 +102,8 @@ export default function Hero({ variant = "default" }: HeroProps) {
           <p className="hidden sm:block text-base md:text-xl text-gray-300 max-w-2xl mb-8 leading-relaxed">
             Decorative hardscape and traffic safety solutions, installed by certified professionals across all 10 provinces.
           </p>
-          {/* Mobile-only shortened body */}
           <p className="sm:hidden text-sm text-gray-300 mb-8 leading-relaxed">
-            Decorative hardscape and traffic safety solutions across all 10 provinces.
+            Decorative hardscape and traffic safety solutions, installed by certified professionals across all 10 provinces.
           </p>
         </motion.div>
 
@@ -147,8 +146,8 @@ export default function Hero({ variant = "default" }: HeroProps) {
       <div className="absolute bottom-0 left-0 right-0 overflow-hidden z-10" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
         <div className="py-3 whitespace-nowrap ticker-track">
           {[...tickerItems, ...tickerItems].map((item, i) => (
-            <span key={i} className="text-xs font-medium tracking-wide mx-4" style={{ color: "rgba(255,255,255,0.3)" }}>
-              {item} <span style={{ color: "rgba(249,115,22,0.4)" }}>·</span>
+            <span key={i} className="text-xs font-medium tracking-wide" style={{ color: "rgba(255,255,255,0.3)" }}>
+              {item}<span style={{ color: "#f97316", margin: "0 1.5rem", fontSize: "0.35rem", lineHeight: 1, display: "inline-block", verticalAlign: "middle" }}>●</span>
             </span>
           ))}
         </div>

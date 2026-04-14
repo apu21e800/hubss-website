@@ -16,8 +16,8 @@ import JsonLd from "@/components/ui/JsonLd";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Decorative Pavement & Road Marking Solutions",
-  description: "Canada's leader in decorative stamped asphalt, thermoplastic road markings, and coloured pavement systems. Serving municipalities, developers, and contractors coast to coast since 1994.",
+  title: "Decorative Hardscape & Traffic Safety Solutions",
+  description: "Canada's leader in preformed thermoplastic crosswalk markings, stamped asphalt, and pavement coatings. Municipal pavement solutions for traffic safety, bike lanes, and community branding across all 10 provinces.",
   slug: "",
 });
 

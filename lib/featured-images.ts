@@ -14,7 +14,7 @@ export const heroImages = {
 };
 
 export const productImages: Record<string, ImageConfig> = {
-  'traffic-patterns':    { featured: '/images/products/traffic-patterns/traffic-patterns-18.jpg',       fallback: '/images/products/traffic-patterns/traffic-patterns-01.jpg',       alt: 'TrafficPatterns preformed thermoplastic crosswalk marking installed at a Canadian urban intersection — high-visibility pedestrian safety surface' },
+  'traffic-patterns':    { featured: '/images/products/traffic-patterns/traffic-patterns-08.jpg',       fallback: '/images/products/traffic-patterns/traffic-patterns-01.jpg',       alt: 'TrafficPatterns preformed thermoplastic crosswalk at UBC — Musqueam Nation Indigenous art installation on University of British Columbia campus' },
   'traffic-patterns-xd': { featured: '/images/products/traffic-patterns-xd/traffic-patterns-xd-03.jpg', fallback: '/images/products/traffic-patterns-xd/traffic-patterns-xd-01.jpg', alt: 'TrafficPatternsXD aggregate-reinforced preformed thermoplastic crosswalk — premium durability decorative pavement marking for high-traffic Canadian intersections' },
   'streetprint':         { featured: '/images/products/streetprint/streetprint-01.jpg',                 fallback: '/images/products/streetprint/streetprint-01.jpg',                 alt: 'StreetPrint stamped asphalt decorative pavement — brick cobblestone pattern crosswalk installed for a Canadian municipality streetscape' },
   'streetbond':          { featured: '/images/products/streetbond/streetbond-112.jpg',                  fallback: '/images/products/streetbond/streetbond-20.jpg',                   alt: 'StreetBond coloured acrylic pavement coating — vibrant bike lane and pedestrian crossing surface treatment on Canadian urban road' },

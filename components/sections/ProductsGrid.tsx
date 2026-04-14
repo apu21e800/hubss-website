@@ -9,9 +9,9 @@ import { productImages, resolveImage } from "@/lib/featured-images";
 // Plain-English: what it does and who uses it
 const PRODUCT_WHAT: Record<string, string> = {
   "streetprint":
-    "Transforms existing asphalt into decorative patterns — cobblestone, brick, herringbone. Available in 12+ standard patterns, coast to coast.",
+    "In-place stamped asphalt — cobblestone, brick, herringbone and 12+ more patterns. No demolition, no raised edges, snowplow-safe. Looks like stone, performs like asphalt.",
   "streetbond":
-    "Transforms existing asphalt into vibrant, durable colour. Available in extensive standard palette and fully custom Pantone-matched.",
+    "Permanently bonded acrylic colour for asphalt and concrete. Standard palette plus full Pantone custom matching. 20-year colour retention — bike lanes, crosswalks, driveways.",
   "traffic-patterns-xd":
     "Aggregate-reinforced thermoplastic engineered for BRT corridors and high-volume intersections. BPN 65+ skid resistance.",
   "traffic-patterns":

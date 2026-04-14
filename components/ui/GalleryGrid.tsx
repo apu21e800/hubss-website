@@ -87,6 +87,7 @@ export default function GalleryGrid({ images }: { images: GalleryImage[] }) {
         index={lightboxIndex}
         close={() => setLightboxIndex(-1)}
         plugins={[Captions]}
+        controller={{ closeOnBackdropClick: true }}
       />
     </>
   );

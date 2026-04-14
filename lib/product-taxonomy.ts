@@ -16,7 +16,7 @@ export const PRODUCT_TAXONOMY = [
     slugs: ["streetbond", "mmax", "durashield"],
   },
   {
-    label: "Stamped Asphalt Street",
+    label: "Stamped Asphalt",
     desc: "Process-based systems that change the surface itself.",
     slugs: ["streetprint"],
   },

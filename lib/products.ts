@@ -61,7 +61,16 @@ export const products: Product[] = [
     slug: "streetbond",
     shortDesc: "Colour that holds. Asphalt transformed.",
     imageUrl: "/images/products/streetbond/streetbond-01.png",
-    gallery: gallery("streetbond", "streetbond", 112, "png"),
+    gallery: [
+      // Colorful installation shots first (high-numbered JPGs — most recent uploads)
+      ...Array.from({ length: 13 }, (_, i) => `/images/products/streetbond/streetbond-${100 + i}.jpg`),
+      // Core installation range
+      ...Array.from({ length: 20 }, (_, i) => `/images/products/streetbond/streetbond-${80 + i}.jpg`),
+      // Mid-range installation shots
+      ...Array.from({ length: 30 }, (_, i) => `/images/products/streetbond/streetbond-${String(9 + i).padStart(2, "0")}.jpg`),
+      // Original branding / product PNGs
+      ...gallery("streetbond", "streetbond", 8, "png"),
+    ],
     description: "Transforms existing asphalt into decorative colour and patterns — cobblestone, brick, herringbone. Available in an extensive standard palette and fully custom Pantone-matched. BC Ministry of Transportation recognized product.",
     specs: [
       { label: "Type", value: "Acrylic coloured pavement coating" },

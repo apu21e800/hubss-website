@@ -7,6 +7,7 @@ import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
 import DocumentDownloads from "@/components/sections/DocumentDownloads";
 import GalleryGrid, { type GalleryImage } from "@/components/ui/GalleryGrid";
+import ComparisonTable from "@/components/sections/ComparisonTable";
 import JsonLd from "@/components/ui/JsonLd";
 import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
@@ -161,7 +162,7 @@ export default async function ProductPage({ params }: Props) {
                   alt={product.brandLogo.alt}
                   width={product.brandLogo.width}
                   height={product.brandLogo.height}
-                  style={{ maxWidth: "100%", height: "auto", maxHeight: 64 }}
+                  style={{ width: "auto", height: "auto", maxWidth: "100%", maxHeight: 56, objectFit: "contain" }}
                   unoptimized
                 />
               </div>
@@ -198,6 +199,13 @@ export default async function ProductPage({ params }: Props) {
             </div>
           </div>
         </div>
+
+        {/* Paint Fades comparison — StreetBond + TrafficPatterns only */}
+        {(slug === "streetbond" || slug === "traffic-patterns") && (
+          <div className="mt-16">
+            <ComparisonTable />
+          </div>
+        )}
 
         {/* Applications this product is used for */}
         {relatedAppData.length > 0 && (

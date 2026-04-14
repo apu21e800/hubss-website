@@ -73,7 +73,7 @@ export default function LunchLearn({ hideMoose = false }: LunchLearnProps) {
         aria-hidden="true"
       />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-48 sm:pb-52">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
 
           {/* ── Left — content panel ──────────────────────────── */}
@@ -136,8 +136,7 @@ export default function LunchLearn({ hideMoose = false }: LunchLearnProps) {
 
           </div>
 
-          {/* ── Right — form + moose ──────────────────────────── */}
-          <div className="flex flex-col">
+          {/* ── Right — form card ────────────────────────────── */}
           <div
             className="rounded-2xl p-8 sm:p-10 relative overflow-hidden"
             style={{
@@ -302,23 +301,37 @@ export default function LunchLearn({ hideMoose = false }: LunchLearnProps) {
             )}
           </div>
 
-          {/* Moose — below booking card, only on non-dedicated page */}
-          {!hideMoose && (
-            <div className="flex justify-center mt-6">
-              <Image
-                src="/images/assets/mascot/moose-1.png"
-                alt="HUB Surface Systems Moose mascot"
-                width={260}
-                height={260}
-                style={{ width: 260, height: "auto", objectFit: "contain", filter: "drop-shadow(0 8px 24px rgba(0,0,0,0.5))" }}
-                unoptimized
-              />
-            </div>
-          )}
-          </div>{/* /right flex col */}
 
         </div>
       </div>
+
+      {/* Moose — paws on section fold line, right side under form card */}
+      {!hideMoose && (
+        <div
+          className="absolute z-10 pointer-events-none"
+          style={{
+            bottom: 0,
+            right: "clamp(16px, 5vw, 100px)",
+            width: "clamp(220px, 22vw, 290px)",
+          }}
+        >
+          <Image
+            src="/images/assets/mascot/moose-1.png"
+            alt="HUB Surface Systems Moose mascot"
+            width={290}
+            height={290}
+            style={{
+              width: "100%",
+              height: "auto",
+              objectFit: "contain",
+              objectPosition: "bottom",
+              filter: "drop-shadow(0 8px 24px rgba(0,0,0,0.5))",
+              display: "block",
+            }}
+            unoptimized
+          />
+        </div>
+      )}
     </section>
   );
 }

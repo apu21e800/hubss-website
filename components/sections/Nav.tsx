@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   // Nav chrome
   FileText, CalendarCheck, Phone,
-  ChevronDown, X,
+  ChevronDown, X, Search,
   // Social
   Linkedin, Instagram, Youtube, Facebook,
 } from "lucide-react";
@@ -92,6 +92,133 @@ const MOBILE_SOCIALS = [
   { Icon: Youtube,   href: SOCIAL_LINKS.youtube,   label: "YouTube"   },
   { Icon: Facebook,  href: SOCIAL_LINKS.facebook,  label: "Facebook"  },
 ];
+
+// ─── Nav search ───────────────────────────────────────────────────────────────
+
+const allNavItems = [
+  ...products
+    .filter((p) => !p.comingSoon)
+    .map((p) => ({ label: p.name, slug: p.slug, type: "product" as const })),
+  ...applications.map((a) => ({
+    label: a.name, slug: a.slug, type: "application" as const,
+  })),
+];
+
+function NavSearch() {
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const ref = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
+
+  const results = query.length > 1
+    ? allNavItems.filter((i) => i.label.toLowerCase().includes(query.toLowerCase()))
+    : [];
+
+  function go(item: typeof allNavItems[0]) {
+    setQuery(""); setOpen(false);
+    router.push(item.type === "product" ? `/products/${item.slug}` : `/applications/${item.slug}`);
+  }
+
+  useEffect(() => { if (open) inputRef.current?.focus(); }, [open]);
+
+  useEffect(() => {
+    function onMouse(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    }
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") { setOpen(false); setQuery(""); }
+    }
+    document.addEventListener("mousedown", onMouse);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onMouse);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, []);
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        aria-label="Search products and applications"
+        className="flex items-center justify-center w-8 h-8 rounded-lg transition-colors hover:bg-white/[0.06]"
+        style={{ color: open ? "#f97316" : "rgba(255,255,255,0.5)" }}
+      >
+        <Search size={16} />
+      </button>
+
+      {open && (
+        <div
+          className="absolute right-0 top-full mt-2 w-72 rounded-xl shadow-2xl overflow-hidden z-[9999]"
+          style={{ background: "#0d1117", border: "1px solid rgba(255,255,255,0.1)" }}
+        >
+          <div
+            className="flex items-center gap-2 px-3 py-2.5"
+            style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}
+          >
+            <Search size={13} style={{ color: "rgba(255,255,255,0.25)", flexShrink: 0 }} />
+            <input
+              ref={inputRef}
+              type="text"
+              placeholder="Products & applications…"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="flex-1 bg-transparent text-sm outline-none min-w-0 placeholder-zinc-600"
+              style={{ color: "#fff" }}
+            />
+            {query && (
+              <button
+                onClick={() => setQuery("")}
+                className="flex-shrink-0 transition-colors hover:text-white"
+                style={{ color: "rgba(255,255,255,0.3)" }}
+              >
+                <X size={13} />
+              </button>
+            )}
+          </div>
+
+          {results.length > 0 && (
+            <div className="max-h-64 overflow-y-auto py-1">
+              {results.map((item) => (
+                <button
+                  key={`${item.type}-${item.slug}`}
+                  onClick={() => go(item)}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 text-left transition-colors hover:bg-white/[0.04]"
+                >
+                  <span
+                    className="text-[9px] font-bold tracking-widest uppercase px-1.5 py-0.5 rounded flex-shrink-0"
+                    style={{
+                      background: item.type === "product" ? "rgba(249,115,22,0.15)" : "rgba(59,130,246,0.15)",
+                      color: item.type === "product" ? "#f97316" : "#60a5fa",
+                    }}
+                  >
+                    {item.type}
+                  </span>
+                  <span className="text-sm" style={{ color: "rgba(255,255,255,0.85)" }}>
+                    {item.label}
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
+
+          {query.length > 1 && results.length === 0 && (
+            <div className="px-3 py-4 text-sm" style={{ color: "rgba(255,255,255,0.3)" }}>
+              No results for &ldquo;{query}&rdquo;
+            </div>
+          )}
+
+          {query.length === 0 && (
+            <div className="px-3 py-3 text-xs" style={{ color: "rgba(255,255,255,0.2)" }}>
+              Search products &amp; applications
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
 
 // ─── Panel footer bar ─────────────────────────────────────────────────────────
 
@@ -1078,10 +1205,15 @@ export default function Nav() {
                 );
               })}
 
+              {/* Search */}
+              <div className="ml-1">
+                <NavSearch />
+              </div>
+
               {/* Desktop CTA */}
               <Link
                 href="/lunch-learn"
-                className="ml-3 text-[0.72rem] font-bold px-5 py-2 rounded-full transition-all duration-150 hover:brightness-110 whitespace-nowrap"
+                className="ml-2 text-[0.72rem] font-bold px-5 py-2 rounded-full transition-all duration-150 hover:brightness-110 whitespace-nowrap"
                 style={{ background: "linear-gradient(90deg,#F97316,#d97706)", color: "#fff" }}
               >
                 Book Lunch &amp; Learn

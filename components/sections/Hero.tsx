@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { heroImages, resolveImage } from "@/lib/featured-images";
-import HeroSearch from "@/components/ui/HeroSearch";
 
 export type HeroVariant = 'default' | 'split' | 'cinematic';
 
@@ -117,7 +116,7 @@ export default function Hero({ variant = "default" }: HeroProps) {
           className="max-w-4xl w-full mt-6 sm:mt-8"
         >
           {/* CTAs */}
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-6 sm:mb-8">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8 sm:mb-10">
             <Link
               href="/products"
               className="bg-orange-500 hover:bg-orange-400 text-white font-bold px-8 py-4 rounded-lg transition-colors text-center w-full sm:w-auto min-h-[52px] flex items-center justify-center text-base"
@@ -131,9 +130,6 @@ export default function Hero({ variant = "default" }: HeroProps) {
               Book a Lunch &amp; Learn
             </Link>
           </div>
-
-          {/* Search */}
-          <HeroSearch />
 
           {/* Stats bar */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">

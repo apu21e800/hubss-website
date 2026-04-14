@@ -9,6 +9,7 @@ export interface Product {
   relatedApplications: string[];
   colourCollections?: { name: string; hex: string }[];
   brandLogo?: { src: string; alt: string; width: number; height: number; };
+  comingSoon?: boolean;
 }
 
 function gallery(slug: string, dir: string, count: number, ext: string = "jpg"): string[] {
@@ -29,7 +30,7 @@ export const products: Product[] = [
     specs: [
       { label: "Material", value: "Aggregate-reinforced preformed thermoplastic" },
       { label: "Thickness", value: "150mil" },
-      { label: "Aggregate", value: "Crushed aggregate + glass bead surface" },
+      { label: "Aggregate", value: "Crushed aggregate reinforced" },
       { label: "Skid Resistance", value: "BPN 65+" },
       { label: "Retroreflectivity", value: "ASTM D4956 Type III" },
       { label: "Service Life", value: "7+ years in high-volume use" },
@@ -43,7 +44,7 @@ export const products: Product[] = [
     shortDesc: "Permanent pattern. Permanent impression.",
     imageUrl: "/images/products/traffic-patterns/traffic-patterns-01.jpg",
     gallery: gallery("traffic-patterns", "traffic-patterns", 86),
-    description: "Crisp, permanently fused markings that survive snowplows, de-icing chemicals, and decades of freeze-thaw cycles — that's what TrafficPatterns delivers. Factory-manufactured to 90mil thickness, trusted by York Region, the City of Toronto, Vancouver, and UBC. Delivers 5-7 years of consistent retroreflectivity where traffic paint lasts just 12-18 months.",
+    description: "Crisp, permanently fused markings that survive snowplows, de-icing chemicals, and decades of freeze-thaw cycles — that's what TrafficPatterns delivers. Factory-manufactured to 90mil thickness. Delivers 5-7 years of consistent retroreflectivity where traffic paint lasts just 12-18 months.",
     specs: [
       { label: "Material", value: "Preformed thermoplastic" },
       { label: "Thickness", value: "90mil standard" },
@@ -58,15 +59,15 @@ export const products: Product[] = [
   {
     name: "StreetBond",
     slug: "streetbond",
-    shortDesc: "StreetPrint · 20-yr durability",
+    shortDesc: "Colour that holds. Asphalt transformed.",
     imageUrl: "/images/products/streetbond/streetbond-01.png",
     gallery: gallery("streetbond", "streetbond", 112, "png"),
-    description: "Transforms existing asphalt into decorative patterns — cobblestone, brick, herringbone. The coating system trusted by 500+ Canadian municipalities. 20-year colour retention warranty. Available in extensive standard palette and fully custom Pantone-matched. BC Ministry of Transportation recognized product.",
+    description: "Transforms existing asphalt into decorative colour and patterns — cobblestone, brick, herringbone. Available in an extensive standard palette and fully custom Pantone-matched. BC Ministry of Transportation recognized product.",
     specs: [
       { label: "Type", value: "Acrylic coloured pavement coating" },
       { label: "Surfaces", value: "Asphalt and concrete (acid-etched)" },
       { label: "Flexibility", value: "Moves with pavement - will not peel or crack" },
-      { label: "Durability", value: "20-year colour retention warranty" },
+      { label: "UV Stability", value: "Colour-fast acrylic formula" },
       { label: "Coverage", value: "30-50 sq ft per gallon" },
       { label: "Dry Time", value: "2-4 hours" },
       { label: "Colour Matching", value: "Full Pantone custom matching available" },
@@ -94,12 +95,11 @@ export const products: Product[] = [
     shortDesc: "Where asphalt becomes architecture.",
     imageUrl: "/images/products/streetprint/streetprint-01.jpg",
     gallery: gallery("streetprint", "streetprint", 91),
-    description: "StreetPrint transforms existing asphalt into rich decorative hardscape. A proprietary in-place stamping process backed by a 20-year colour retention warranty. Used by more than 500 Canadian municipalities.",
+    description: "StreetPrint transforms existing asphalt into rich decorative hardscape. A proprietary in-place stamping process available in 12+ standard patterns and fully custom designs. Installed coast to coast by certified HUB applicators.",
     specs: [
       { label: "System", value: "In-place asphalt stamping + StreetBond coating" },
       { label: "Patterns", value: "12+ standard patterns, custom available" },
       { label: "Colour Coat", value: "StreetBond UV-stable acrylic" },
-      { label: "Durability", value: "20-year colour retention warranty" },
       { label: "Base", value: "New lay or existing asphalt" },
       { label: "Snowplow Safe", value: "Yes - flush surface, no raised edges" },
       { label: "Applications", value: "Intersections, plazas, driveways, crosswalks" },
@@ -121,7 +121,7 @@ export const products: Product[] = [
       { label: "Surfaces", value: "Asphalt and concrete" },
       { label: "Design", value: "Custom artwork - vector files accepted" },
       { label: "Installation", value: "Certified HUB applicators" },
-      { label: "Service Life", value: "5-year colour warranty" },
+      { label: "Service Life", value: "5+ year service life" },
       { label: "Min. Order", value: "Project-based" },
     ],
     relatedApplications: ["community-branding", "crosswalks", "playgrounds"],
@@ -150,14 +150,14 @@ export const products: Product[] = [
     shortDesc: "Set into the road. There for life.",
     imageUrl: "/images/products/duratherm/duratherm-01.jpg",
     gallery: gallery("duratherm", "duratherm", 36),
-    description: "DuraTherm: inlaid flush-mount thermoplastic. Zero raised edges, zero profile for plow blades. Survives winter maintenance season after season. 7-year performance warranty.",
+    description: "DuraTherm: inlaid flush-mount thermoplastic. Zero raised edges, zero profile for plow blades. Survives winter maintenance season after season. 7+ year service life.",
     specs: [
       { label: "Installation", value: "Inlaid flush-mount - embedded in asphalt" },
       { label: "Profile", value: "Zero edge - road surface level" },
       { label: "Snowplow Safe", value: "Yes - no shear risk" },
       { label: "Bond", value: "Full-depth asphalt integration" },
       { label: "Designs", value: "Custom artwork accepted" },
-      { label: "Service Life", value: "7-year performance warranty" },
+      { label: "Service Life", value: "7+ year service life" },
     ],
     relatedApplications: ["crosswalks", "parking-lots", "community-branding"],
   },
@@ -210,5 +210,27 @@ export const products: Product[] = [
       { label: "Retroreflectivity", value: "Premium glass bead surface" },
     ],
     relatedApplications: ["crosswalks", "regulatory-markings", "parking-lots", "bike-lanes", "bus-lanes"],
+  },
+
+  // ── Coming Soon ──────────────────────────────────────────────────────────────
+  {
+    name: "Chip Fill",
+    slug: "chip-fill",
+    shortDesc: "Coming soon.",
+    imageUrl: "/images/products/traffic-patterns/traffic-patterns-01.jpg",
+    description: "Coming soon.",
+    specs: [],
+    relatedApplications: [],
+    comingSoon: true,
+  },
+  {
+    name: "Fast Patch",
+    slug: "fast-patch",
+    shortDesc: "Coming soon.",
+    imageUrl: "/images/products/traffic-patterns/traffic-patterns-01.jpg",
+    description: "Coming soon.",
+    specs: [],
+    relatedApplications: [],
+    comingSoon: true,
   },
 ];

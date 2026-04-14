@@ -13,12 +13,12 @@ export const PRODUCT_TAXONOMY = [
   {
     label: "Coloured Pavement Coating",
     desc: "Liquid-applied colour bonded chemically to asphalt and concrete.",
-    slugs: ["streetbond", "mmax"],
+    slugs: ["streetbond", "mmax", "durashield"],
   },
   {
-    label: "Surface Transformation",
+    label: "Stamped Asphalt Street",
     desc: "Process-based systems that change the surface itself.",
-    slugs: ["streetprint", "durashield"],
+    slugs: ["streetprint"],
   },
 ] as const;
 

@@ -59,14 +59,19 @@ export default function Footer() {
             </p>
 
             <p className="text-xs mb-6" style={{ color: "var(--text-muted)" }}>
-              Canadian-operated · All 10 provinces · Since 1994
+              Canadian-operated · Coast to coast · Since 1994
             </p>
 
             <SocialLinks className="mt-3" />
 
             <p className="text-xs mt-4 font-medium flex items-center gap-1.5" style={{ color: "var(--text-muted)" }}>
-              <Image src="/images/flags/canada-flag.svg" alt="Canadian flag" width={24} height={16} unoptimized className="inline-block align-middle flex-shrink-0 rounded-sm" />
-              Proudly Canadian · Serving all 10 provinces since 1994
+              <svg viewBox="0 0 20 10" width={28} height={14} xmlns="http://www.w3.org/2000/svg" aria-label="Canada" style={{ display: "inline-block", flexShrink: 0 }}>
+                <rect x="0" y="0" width="5" height="10" fill="#D80621"/>
+                <rect x="5" y="0" width="10" height="10" fill="#FFFFFF"/>
+                <rect x="15" y="0" width="5" height="10" fill="#D80621"/>
+                <path d="M10 1.5 L10.6 3.5 L12.5 3.5 L11.1 4.6 L11.6 6.5 L10 5.4 L8.4 6.5 L8.9 4.6 L7.5 3.5 L9.4 3.5 Z" fill="#D80621"/>
+              </svg>
+              Proudly Canadian · Serving Canada since 1994
             </p>
           </div>
 

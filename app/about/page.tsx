@@ -316,16 +316,16 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
               {
-                name: "PPG Pavement Technologies",
-                role: "StreetBond · StreetPrint · DuraTherm",
-                desc: "PPG is the world's largest coatings manufacturer. Their Pavement Technologies division developed StreetBond coloured pavement coatings and the StreetPrint decorative stamped asphalt system — the products behind thousands of HUB installations across Canada.",
-                accent: "#0057A8",
+                name: "GAF",
+                role: "StreetBond · StreetBond Pro",
+                desc: "GAF supplies StreetBond and StreetBond Pro — the coloured pavement coatings behind thousands of HUB decorative surface installations across Canada. Their coatings technology delivers the 20-year colour retention warranty that sets HUB apart.",
+                accent: "#E05C1A",
               },
               {
-                name: "GAF Ennis-Flint",
-                role: "TrafficPatterns · TrafficPatternsXD · PreMark · AirMark",
-                desc: "Ennis-Flint is North America's largest supplier of roadway markings and traffic safety products. Their preformed thermoplastic systems — including TrafficPatterns, TrafficPatternsXD, and AirMark — are the gold standard for high-durability pavement markings across Canada.",
-                accent: "#E05C1A",
+                name: "NNS Flint",
+                role: "TrafficPatterns · TrafficPatternsXD · PreMark · AirMark · DuraTherm",
+                desc: "NNS Flint is the supplier behind HUB's full thermoplastics range — including TrafficPatterns, TrafficPatternsXD, PreMark, AirMark, and DuraTherm. Their preformed thermoplastic systems are the gold standard for high-durability pavement markings across Canada.",
+                accent: "#0057A8",
               },
             ].map((partner) => (
               <div

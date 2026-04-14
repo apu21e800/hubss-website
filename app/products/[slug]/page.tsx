@@ -15,7 +15,7 @@ import { buildMetadata } from "@/lib/seo";
 import { getProductFamily } from "@/lib/product-taxonomy";
 
 export async function generateStaticParams() {
-  return products.map((p) => ({ slug: p.slug }));
+  return products.filter((p) => !p.comingSoon).map((p) => ({ slug: p.slug }));
 }
 
 type Props = { params: Promise<{ slug: string }> };
@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
   const product = products.find((p) => p.slug === slug);
-  if (!product) notFound();
+  if (!product || product.comingSoon) notFound();
 
   // Gallery — use product.gallery if available, otherwise fall back to featured image
   const productGallery = product.gallery ?? [];

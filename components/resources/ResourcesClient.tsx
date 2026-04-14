@@ -55,28 +55,17 @@ const STREETBOND_SUBCATEGORIES = [
   { label: "Pro 250", value: "Pro 250" },
 ];
 
-// Badge colors — muted dark-theme variants
+// Badge styles — monochrome, typography-differentiated
 function typeBadgeStyle(type: string): React.CSSProperties {
-  switch (type) {
-    case "Spec Sheet":
-    case "Data Sheet":
-      return { background: "rgba(59,130,246,0.08)", color: "#7db3f0", border: "1px solid rgba(59,130,246,0.14)" };
-    case "Safety Data Sheet":
-      return { background: "rgba(239,68,68,0.08)", color: "#e89090", border: "1px solid rgba(239,68,68,0.14)" };
-    case "Brochure":
-      return { background: "rgba(249,115,22,0.08)", color: "#d4924a", border: "1px solid rgba(249,115,22,0.14)" };
-    case "Installation Guide":
-    case "Guide":
-      return { background: "rgba(20,184,166,0.08)", color: "#4dbfb0", border: "1px solid rgba(20,184,166,0.14)" };
-    case "Design Manual":
-      return { background: "rgba(168,85,247,0.08)", color: "#b88ee8", border: "1px solid rgba(168,85,247,0.14)" };
-    case "Colour Guide":
-      return { background: "rgba(236,72,153,0.08)", color: "#d078a8", border: "1px solid rgba(236,72,153,0.14)" };
-    case "Certificate":
-      return { background: "rgba(34,197,94,0.08)", color: "#5ebd82", border: "1px solid rgba(34,197,94,0.14)" };
-    default:
-      return { background: "rgba(255,255,255,0.05)", color: "#6B7280", border: "1px solid rgba(255,255,255,0.08)" };
-  }
+  const isHighlighted = ["Spec Sheet", "Data Sheet", "Brochure", "Safety Data Sheet"].includes(type);
+  return {
+    color: isHighlighted ? "#f97316" : "rgba(255,255,255,0.4)",
+    background: "transparent",
+    border: "none",
+    padding: 0,
+    fontWeight: 700,
+    letterSpacing: "0.15em",
+  };
 }
 
 const PAGE_SIZE = 12;

@@ -5,7 +5,7 @@ import { useRef } from "react";
 
 const STATS = [
   { num: "30+", label: "Years", sub: "Engineering Canadian surfaces" },
-  { num: "500+", label: "Municipalities", sub: "Specified coast to coast" },
+  { num: "Hundreds", label: "Municipalities", sub: "Specified coast to coast" },
   { num: "20yr", label: "Warranty", sub: "Colour retention, in writing" },
   { num: "AODA", label: "Compliant", sub: "Every system, every install" },
 ];
@@ -15,7 +15,7 @@ const PROOF = [
   {
     num: "01",
     claim: "Built for Canadian winters",
-    detail: "Freeze-thaw, de-icing salts, snowplow blades. Stress-tested for every climate from Ladysmith to York Region.",
+    detail: "Freeze-thaw, de-icing salts, snowplow blades. Stress-tested for every climate Coast to Coast.",
   },
   {
     num: "02",
@@ -24,8 +24,13 @@ const PROOF = [
   },
   {
     num: "03",
-    claim: "The standard cities rely on",
-    detail: "York Region, City of Toronto, Vancouver, UBC — 500+ municipalities have specified our systems.",
+    claim: "Safe",
+    detail: "Products designed for pedestrian safety and traffic-compliant installations.",
+  },
+  {
+    num: "04",
+    claim: "Regulatory Compliance",
+    detail: "TAC, MUTCD, BCMOT, and FAA-compliant across the full product range.",
   },
 ];
 
@@ -98,12 +103,12 @@ export default function WhyHubss() {
               backgroundClip: "text",
             }}
           >
-            Specified by Engineers.
-            <br />Approved by Cities.
+            Canada's durable decorative hardscape.
+            <br />Specified by Engineers.
             <br />Loved by Communities.
           </h2>
           <p className="text-base leading-relaxed max-w-xl" style={{ color: "#9CA3AF" }}>
-            Thirty years. Five hundred municipalities. One standard — if it goes on the street, it stays on the street.
+            Thirty years. Hundreds of municipalities. One standard — if it goes on the street, it stays on the street.
           </p>
         </motion.div>
 

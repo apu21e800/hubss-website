@@ -9,13 +9,13 @@ import { productImages, resolveImage } from "@/lib/featured-images";
 // Plain-English: what it does and who uses it
 const PRODUCT_WHAT: Record<string, string> = {
   "streetprint":
-    "Transforms existing asphalt into decorative patterns — cobblestone, brick, herringbone. Trusted by 500+ Canadian municipalities.",
+    "Transforms existing asphalt into decorative patterns — cobblestone, brick, herringbone. Available in 12+ standard patterns, coast to coast.",
   "streetbond":
-    "Transforms existing asphalt into decorative patterns — cobblestone, brick, herringbone. The coating system trusted by 500+ Canadian municipalities.",
+    "Transforms existing asphalt into vibrant, durable colour. Available in extensive standard palette and fully custom Pantone-matched.",
   "traffic-patterns-xd":
     "Aggregate-reinforced thermoplastic engineered for BRT corridors and high-volume intersections. BPN 65+ skid resistance.",
   "traffic-patterns":
-    "Crisp preformed thermoplastic markings that outlast paint 5:1. Trusted by York Region, City of Toronto, Vancouver, and UBC.",
+    "Crisp preformed thermoplastic markings that outlast paint 5:1. Factory-manufactured to 90mil and specified by municipalities coast to coast.",
   "mmax":
     "MMA resin for red bus lanes and bike lanes. Traffic-ready in 60 minutes. Bonds at −10°C — no waiting for spring.",
   "decomark":
@@ -24,7 +24,7 @@ const PRODUCT_WHAT: Record<string, string> = {
 
 const PRODUCT_TYPE: Record<string, string> = {
   "streetprint":         "Stamped Asphalt",
-  "streetbond":          "StreetPrint · 20-yr durability",
+  "streetbond":          "Coloured Coating",
   "traffic-patterns-xd": "Thermoplastic XD",
   "traffic-patterns":    "Thermoplastic",
   "mmax":                "MMA Resin",
@@ -32,8 +32,8 @@ const PRODUCT_TYPE: Record<string, string> = {
 };
 
 const PRODUCT_STAT: Record<string, string> = {
-  "streetprint":         "20-yr warranty",
-  "streetbond":          "20-yr warranty",
+  "streetprint":         "20+ yr service life",
+  "streetbond":          "20+ yr service life",
   "traffic-patterns-xd": "7+ yr service life",
   "traffic-patterns":    "5–7 yr service life",
   "mmax":                "60-min cure",

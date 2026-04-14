@@ -45,7 +45,7 @@ export default function FeaturedBlogPost() {
               className="text-2xl sm:text-3xl md:text-4xl font-bold"
               style={{ color: "var(--text-primary)" }}
             >
-              Built in Canada. Proven in the Field.
+              Proven in Canada and Built in Canada
             </h2>
             <p
               className="text-base mt-2 max-w-xl"

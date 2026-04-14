@@ -21,7 +21,7 @@ export const applications: Application[] = [
     shortDesc: "High-visibility decorative crosswalks that define intersections and calm traffic",
     imageUrl: "/images/applications/crosswalks/crosswalks-01.jpg",
     gallery: gallery("crosswalks", "crosswalks", 122),
-    description: "Crosswalks are the most visible safety infrastructure in any municipality. HUB systems deliver durability, retroreflectivity, and design flexibility that paint cannot match. TrafficPatterns and TrafficPatternsXD survive snowplow cycles and de-icing chemicals. DecoMark and StreetBond unlock full artistic expression for Pride crosswalks, Indigenous art, and neighbourhood identity. Specified by York Region, City of Toronto, Vancouver, and over 500 municipalities coast to coast.",
+    description: "Crosswalks are the most visible safety infrastructure in any municipality. HUB systems deliver durability, retroreflectivity, and design flexibility that paint cannot match. TrafficPatterns and TrafficPatternsXD survive snowplow cycles and de-icing chemicals. DecoMark and StreetBond unlock full artistic expression for Pride crosswalks, Indigenous art, and neighbourhood identity. Specified by municipalities coast to coast.",
     relatedProducts: ["traffic-patterns", "traffic-patterns-xd", "streetbond", "decomark", "duratherm", "premark"],
   },
   {
@@ -30,8 +30,8 @@ export const applications: Application[] = [
     shortDesc: "Durable coloured lane treatments for safe multimodal corridors",
     imageUrl: "/images/applications/bike-lanes/bike-lanes-01.jpg",
     gallery: gallery("bike-lanes", "bike-lanes", 38),
-    description: "Bike lanes demand pavement systems that hold colour season after season. StreetBond delivers 20-year colour retention on asphalt and concrete with full Pantone custom matching. MMAX MMA is specified for high-volume transit-adjacent corridors requiring overnight curing and bond strength above 3 MPa. PreMark and TrafficPatterns deliver retroreflective symbols and edge lines that outlast paint 5:1.",
-    relatedProducts: ["streetbond", "mmax", "premark", "traffic-patterns"],
+    description: "Bike lanes demand pavement systems that hold colour season after season. StreetBond delivers vivid, UV-stable colour on asphalt and concrete with full Pantone custom matching. MMAX MMA is specified for high-volume transit-adjacent corridors requiring overnight curing and bond strength above 3 MPa. PreMark delivers retroreflective symbols and edge lines that outlast paint 5:1.",
+    relatedProducts: ["premark", "mmax"],
   },
   {
     name: "Bus Lanes",
@@ -57,7 +57,7 @@ export const applications: Application[] = [
     shortDesc: "Decorative coatings for pathways, plazas, and recreational surfaces",
     imageUrl: "/images/applications/parks-paths/parks-paths-01.jpg",
     gallery: gallery("parks-paths", "parks-paths", 144),
-    description: "Urban parks and multi-use paths are where communities live. StreetBond 20-year colour retention transforms utilitarian asphalt paths into vibrant spaces. DecoMark brings mural-quality artwork to the ground plane for wayfinding art and cultural expression. StreetPrint gives park plazas a traditional stone aesthetic at a fraction of real paver cost.",
+    description: "Urban parks and multi-use paths are where communities live. StreetBond transforms utilitarian asphalt paths into vibrant, long-lasting surfaces. DecoMark brings mural-quality artwork to the ground plane for wayfinding art and cultural expression. StreetPrint gives park plazas a traditional stone aesthetic at a fraction of real paver cost.",
     relatedProducts: ["streetbond", "decomark", "durashield", "streetprint"],
   },
   {
@@ -93,7 +93,7 @@ export const applications: Application[] = [
     shortDesc: "Court-ready surfaces. Competition-grade colour.",
     imageUrl: "/images/applications/sport-courts/sport-courts-01.jpg",
     gallery: gallery("sport-courts", "sport-courts", 21),
-    description: "Tennis, basketball, pickleball, and multi-sport courts require surface colour systems that perform under repeated lateral movement and outdoor exposure. StreetBond bonds permanently to asphalt and acid-etched concrete, delivering vivid UV-stable court colours that meet tournament line-marking standards with a 20-year colour retention warranty.",
+    description: "Tennis, basketball, pickleball, and multi-sport courts require surface colour systems that perform under repeated lateral movement and outdoor exposure. StreetBond bonds permanently to asphalt and acid-etched concrete, delivering vivid UV-stable court colours that meet tournament line-marking standards.",
     relatedProducts: ["streetbond", "decomark", "streetprint", "premark"],
   },
   {

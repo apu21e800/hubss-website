@@ -72,7 +72,7 @@ export default function LunchLearnPage() {
           className="absolute z-20 pointer-events-none"
           style={{
             bottom: 0,
-            right: "clamp(100px, 28vw, 410px)",
+            right: "clamp(60px, 20vw, 320px)",
             width: "clamp(150px, 22.5vw, 285px)",
           }}
         >

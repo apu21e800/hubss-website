@@ -283,66 +283,79 @@ export default function AboutPage() {
             portfolio in Canada, with direct manufacturer technical support and warranty backing.
           </p>
 
-          <div className="py-8 mb-8 border-t border-b" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-center mb-8" style={{ color: "#3a3a3a" }}>
-              Manufacturer Partners
-            </p>
-            <div className="flex items-center justify-center gap-20 flex-wrap">
-              <div className="flex items-center justify-center w-32 h-16">
-                <Image
-                  src="/images/partners/ppg-logo.svg"
-                  width={100}
-                  height={40}
-                  alt="PPG"
-                  className="opacity-40 grayscale hover:opacity-80 hover:grayscale-0 transition-all duration-300 object-contain"
-                  style={{ maxHeight: "40px", width: "auto" }}
-                  unoptimized
-                />
-              </div>
-              <div className="flex items-center justify-center w-32 h-16">
-                <Image
-                  src="/images/partners/gaf-logo.png"
-                  width={100}
-                  height={40}
-                  alt="GAF"
-                  className="opacity-40 grayscale hover:opacity-80 hover:grayscale-0 transition-all duration-300 object-contain"
-                  style={{ maxHeight: "40px", width: "auto" }}
-                  unoptimized
-                />
-              </div>
-            </div>
-          </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
               {
                 name: "GAF",
-                role: "StreetBond · StreetBond Pro",
+                logo: "/images/partners/gaf-logo.png",
+                logoW: 80,
+                logoH: 40,
+                products: ["StreetBond", "StreetBond Pro"],
                 desc: "GAF supplies StreetBond and StreetBond Pro — the coloured pavement coatings behind thousands of HUB decorative surface installations across Canada. Their coatings technology delivers the 20-year colour retention warranty that sets HUB apart.",
                 accent: "#E05C1A",
               },
               {
-                name: "NNS Flint",
-                role: "TrafficPatterns · TrafficPatternsXD · PreMark · AirMark · DuraTherm",
-                desc: "NNS Flint is the supplier behind HUB's full thermoplastics range — including TrafficPatterns, TrafficPatternsXD, PreMark, AirMark, and DuraTherm. Their preformed thermoplastic systems are the gold standard for high-durability pavement markings across Canada.",
+                name: "PPG",
+                logo: "/images/partners/ppg-logo.svg",
+                logoW: 80,
+                logoH: 40,
+                products: ["TrafficPatterns", "TrafficPatternsXD", "PreMark", "AirMark", "DuraTherm"],
+                desc: "PPG is the manufacturer behind HUB's full thermoplastics range — including TrafficPatterns, TrafficPatternsXD, PreMark, AirMark, and DuraTherm. Their preformed thermoplastic systems are the gold standard for high-durability pavement markings across Canada.",
                 accent: "#0057A8",
               },
             ].map((partner) => (
               <div
                 key={partner.name}
-                className="p-8 rounded-xl relative overflow-hidden"
+                className="rounded-xl relative overflow-hidden"
                 style={{ background: "#1a1e28", border: "1px solid rgba(255,255,255,0.07)" }}
               >
+                {/* Accent top line */}
                 <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: partner.accent }} />
-                <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: partner.accent }}>
-                  {partner.role}
-                </p>
-                <h3 className="text-xl font-bold mb-4" style={{ color: "#ffffff" }}>
-                  {partner.name}
-                </h3>
-                <p className="text-sm leading-relaxed" style={{ color: "#8b8b8b" }}>
-                  {partner.desc}
-                </p>
+
+                {/* Logo header */}
+                <div
+                  className="flex items-center justify-between gap-6 px-8 py-6"
+                  style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
+                >
+                  <div
+                    className="flex items-center justify-center rounded-lg flex-shrink-0"
+                    style={{ background: "#ffffff", width: 120, height: 60, padding: "10px 16px" }}
+                  >
+                    <Image
+                      src={partner.logo}
+                      width={partner.logoW}
+                      height={partner.logoH}
+                      alt={partner.name}
+                      style={{ maxHeight: 36, width: "auto", objectFit: "contain" }}
+                      unoptimized
+                    />
+                  </div>
+                  <div className="flex flex-wrap gap-1.5 justify-end">
+                    {partner.products.map((p) => (
+                      <span
+                        key={p}
+                        className="text-[10px] font-semibold px-2 py-0.5 rounded-full"
+                        style={{
+                          background: `${partner.accent}18`,
+                          color: partner.accent,
+                          border: `1px solid ${partner.accent}30`,
+                        }}
+                      >
+                        {p}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="px-8 py-6">
+                  <h3 className="text-2xl font-bold mb-3" style={{ color: "#ffffff" }}>
+                    {partner.name}
+                  </h3>
+                  <p className="text-sm leading-relaxed" style={{ color: "#8b8b8b" }}>
+                    {partner.desc}
+                  </p>
+                </div>
               </div>
             ))}
           </div>

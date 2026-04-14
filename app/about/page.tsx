@@ -287,6 +287,7 @@ export default function AboutPage() {
             {[
               {
                 name: "GAF",
+                sub: "",
                 logo: "/images/partners/gaf-logo.png",
                 logoW: 80,
                 logoH: 40,
@@ -295,12 +296,13 @@ export default function AboutPage() {
                 accent: "#E05C1A",
               },
               {
-                name: "PPG",
+                name: "Ennis-Flint",
+                sub: "A PPG Company",
                 logo: "/images/partners/ppg-logo.svg",
                 logoW: 80,
                 logoH: 40,
                 products: ["TrafficPatterns", "TrafficPatternsXD", "PreMark", "AirMark", "DuraTherm"],
-                desc: "PPG is the manufacturer behind HUB's full thermoplastics range — including TrafficPatterns, TrafficPatternsXD, PreMark, AirMark, and DuraTherm. Their preformed thermoplastic systems are the gold standard for high-durability pavement markings across Canada.",
+                desc: "Ennis-Flint (a PPG company) is the manufacturer behind HUB's full thermoplastics range — including TrafficPatterns, TrafficPatternsXD, PreMark, AirMark, and DuraTherm. Their preformed thermoplastic systems are the gold standard for high-durability pavement markings across Canada.",
                 accent: "#0057A8",
               },
             ].map((partner) => (
@@ -349,9 +351,15 @@ export default function AboutPage() {
 
                 {/* Content */}
                 <div className="px-8 py-6">
-                  <h3 className="text-2xl font-bold mb-3" style={{ color: "#ffffff" }}>
+                  <h3 className="text-2xl font-bold mb-1" style={{ color: "#ffffff" }}>
                     {partner.name}
                   </h3>
+                  {partner.sub && (
+                    <p className="text-xs font-semibold tracking-wide uppercase mb-3" style={{ color: "rgba(255,255,255,0.3)" }}>
+                      {partner.sub}
+                    </p>
+                  )}
+                  {!partner.sub && <div className="mb-3" />}
                   <p className="text-sm leading-relaxed" style={{ color: "#8b8b8b" }}>
                     {partner.desc}
                   </p>

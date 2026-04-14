@@ -1262,6 +1262,19 @@ export default function Nav() {
 
           </div>
         </div>
+
+        {/* Orange fold line — rendered at nav level so it's visible above the mega panel */}
+        {activePanel && (
+          <div
+            aria-hidden="true"
+            className="absolute bottom-0 left-0 right-0 pointer-events-none"
+            style={{
+              height: 2,
+              background: "linear-gradient(90deg, transparent 5%, #f97316 30%, #eab308 70%, transparent 95%)",
+              zIndex: 1,
+            }}
+          />
+        )}
       </nav>
 
       {/* Mobile full-screen overlay — outside nav to avoid stacking context issues */}

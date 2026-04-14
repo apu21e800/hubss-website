@@ -13,11 +13,38 @@ export const metadata: Metadata = {
 
 export default function ResourcesPage() {
   return (
-    <main className="min-h-screen" style={{ background: "#0a0f1a" }}>
+    <main
+      className="min-h-screen relative overflow-hidden"
+      style={{ background: "linear-gradient(160deg, #0d1117 0%, #141b2d 60%, #0d1117 100%)" }}
+    >
+      {/* Subtle orange grid — matches L&L */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(249,115,22,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(249,115,22,0.03) 1px, transparent 1px)",
+          backgroundSize: "60px 60px",
+        }}
+        aria-hidden="true"
+      />
+      {/* Orange glow — top left */}
+      <div
+        className="absolute pointer-events-none"
+        style={{
+          top: -120,
+          left: -80,
+          width: 500,
+          height: 500,
+          borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(249,115,22,0.08) 0%, transparent 70%)",
+        }}
+        aria-hidden="true"
+      />
+
       <Nav />
 
-      {/* ── Page Header — HUBSS dark blue ─────────────────── */}
-      <div className="max-w-7xl mx-auto px-6 pt-32 pb-16">
+      {/* ── Page Header ─────────────────────────────────────── */}
+      <div className="relative max-w-7xl mx-auto px-6 pt-32 pb-16">
         <p
           className="text-xs font-semibold tracking-[0.2em] uppercase mb-3"
           style={{ color: "#F97316" }}
@@ -36,27 +63,32 @@ export default function ResourcesPage() {
         </p>
       </div>
 
-      {/* ── Document Library — grey grid + orange glow ────── */}
+      {/* ── Document Library — L&L card style ──────────────── */}
       <section
         className="relative overflow-hidden"
         style={{
-          background: "#141414",
-          backgroundImage:
-            "radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px)",
-          backgroundSize: "52px 52px",
-          borderTop: "1px solid rgba(255,255,255,0.07)",
+          background: "#1a1e28",
+          borderTop: "1px solid rgba(255,255,255,0.08)",
+          borderBottom: "1px solid rgba(255,255,255,0.08)",
         }}
       >
+        {/* Orange top accent */}
+        <div
+          className="absolute top-0 left-0 right-0 h-[2px]"
+          style={{ background: "linear-gradient(90deg, #f97316 0%, rgba(249,115,22,0.3) 60%, transparent 100%)" }}
+          aria-hidden="true"
+        />
+
         {/* Orange radial glow — bottom right */}
         <div
           className="absolute pointer-events-none"
           style={{
             bottom: "-80px",
             right: "-80px",
-            width: "700px",
-            height: "700px",
+            width: "600px",
+            height: "600px",
             background:
-              "radial-gradient(ellipse at center, rgba(249,115,22,0.09) 0%, rgba(249,115,22,0.03) 45%, transparent 70%)",
+              "radial-gradient(ellipse at center, rgba(249,115,22,0.07) 0%, rgba(249,115,22,0.02) 45%, transparent 70%)",
           }}
           aria-hidden="true"
         />

@@ -67,13 +67,13 @@ export default function LunchLearnPage() {
           }}
         />
 
-        {/* Moose — paws ON the fold line, left-of-center */}
+        {/* Moose — paws ON the fold line, left paw aligns with form card below */}
         <div
           className="absolute z-20 pointer-events-none"
           style={{
             bottom: 0,
-            right: "clamp(100px, 28vw, 480px)",
-            width: "clamp(200px, 30vw, 380px)",
+            right: "clamp(100px, 28vw, 410px)",
+            width: "clamp(150px, 22.5vw, 285px)",
           }}
         >
           <Image

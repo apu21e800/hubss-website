@@ -127,6 +127,7 @@ export default function WhyHubss() {
               style={{
                 background: "rgba(255,255,255,0.02)",
                 borderRight: i < 3 ? "1px solid rgba(255,255,255,0.07)" : "none",
+                borderBottom: i < 2 ? "1px solid rgba(255,255,255,0.07)" : "none",
               }}
             >
               <span className="text-3xl sm:text-4xl font-black tracking-tight leading-none" style={{ color: "#f97316" }}>

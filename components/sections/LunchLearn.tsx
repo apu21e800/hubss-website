@@ -305,13 +305,13 @@ export default function LunchLearn({ hideMoose = false }: LunchLearnProps) {
         </div>
       </div>
 
-      {/* Moose — paws on section fold line, right side under form card */}
+      {/* Moose — paws on section fold line, tracks form card right edge at all widths */}
       {!hideMoose && (
         <div
           className="absolute z-10 pointer-events-none"
           style={{
             bottom: 0,
-            right: "clamp(16px, 5vw, 100px)",
+            right: "clamp(16px, calc((100vw - 1280px) / 2 + 16px), 400px)",
             width: "clamp(220px, 22vw, 290px)",
           }}
         >

@@ -6,8 +6,7 @@ import { useRef } from "react";
 const STATS = [
   { num: "30+", label: "Years", sub: "Engineering Canadian surfaces" },
   { num: "Hundreds", label: "Municipalities", sub: "Specified coast to coast" },
-  { num: "20yr", label: "Warranty", sub: "Colour retention, in writing" },
-  { num: "AODA", label: "Compliant", sub: "Every system, every install" },
+  { num: "Safe", label: "by Design", sub: "Pedestrian & AODA compliant" },
 ];
 
 // Condensed to scannable one-liners — no paragraphs
@@ -114,7 +113,7 @@ export default function WhyHubss() {
 
         {/* ── Stats ── */}
         <div
-          className="grid grid-cols-2 lg:grid-cols-4 mb-12 rounded-xl overflow-hidden"
+          className="grid grid-cols-1 sm:grid-cols-3 mb-12 rounded-xl overflow-hidden"
           style={{ border: "1px solid rgba(255,255,255,0.07)" }}
         >
           {STATS.map((s, i) => (
@@ -126,7 +125,7 @@ export default function WhyHubss() {
               className="flex flex-col items-center justify-center gap-1 py-7 px-4 text-center"
               style={{
                 background: "rgba(255,255,255,0.02)",
-                borderRight: i < 3 ? "1px solid rgba(255,255,255,0.07)" : "none",
+                borderRight: i < 2 ? "1px solid rgba(255,255,255,0.07)" : "none",
               }}
             >
               <span className="text-3xl sm:text-4xl font-black tracking-tight leading-none" style={{ color: "#f97316" }}>

@@ -134,36 +134,10 @@ export default function LunchLearn({ hideMoose = false }: LunchLearnProps) {
               ))}
             </ul>
 
-            {/* Pug peeker — only on non-dedicated page */}
-            {!hideMoose && (
-              <div
-                className="relative"
-                style={{ height: 120, marginBottom: "-24px", isolation: "isolate" }}
-              >
-                {/* Fold line */}
-                <div
-                  className="absolute left-0 right-0 bottom-0"
-                  style={{ height: 2, background: "linear-gradient(90deg, rgba(249,115,22,0.35) 0%, rgba(249,115,22,0.08) 60%, transparent 100%)" }}
-                />
-                {/* Mascot */}
-                <div
-                  className="absolute bottom-0"
-                  style={{ left: 0, width: 140, height: 120 }}
-                >
-                  <Image
-                    src="/images/lunch-learn/moose-transparent.png"
-                    alt="HUB mascot peeking over the fold"
-                    width={140}
-                    height={120}
-                    style={{ width: "100%", height: "100%", objectFit: "contain", objectPosition: "bottom" }}
-                    unoptimized
-                  />
-                </div>
-              </div>
-            )}
           </div>
 
-          {/* ── Right — form ──────────────────────────────────── */}
+          {/* ── Right — form + moose ──────────────────────────── */}
+          <div className="flex flex-col">
           <div
             className="rounded-2xl p-8 sm:p-10 relative overflow-hidden"
             style={{
@@ -327,6 +301,21 @@ export default function LunchLearn({ hideMoose = false }: LunchLearnProps) {
               </>
             )}
           </div>
+
+          {/* Moose — below booking card, only on non-dedicated page */}
+          {!hideMoose && (
+            <div className="flex justify-center mt-6">
+              <Image
+                src="/images/assets/mascot/moose-1.png"
+                alt="HUB Surface Systems Moose mascot"
+                width={260}
+                height={260}
+                style={{ width: 260, height: "auto", objectFit: "contain", filter: "drop-shadow(0 8px 24px rgba(0,0,0,0.5))" }}
+                unoptimized
+              />
+            </div>
+          )}
+          </div>{/* /right flex col */}
 
         </div>
       </div>

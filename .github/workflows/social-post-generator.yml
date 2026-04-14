@@ -1,11 +1,7 @@
 name: Generate Social Media Drafts
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - "content/blog/**.mdx"
+  workflow_dispatch:  # disabled until site is live — re-enable by adding push trigger
 
 jobs:
   generate-social-posts:

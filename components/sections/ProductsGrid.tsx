@@ -6,25 +6,9 @@ import Image from "next/image";
 import { products } from "@/lib/products";
 import { productImages, resolveImage } from "@/lib/featured-images";
 
-// Plain-English: what it does and who uses it
-const PRODUCT_WHAT: Record<string, string> = {
-  "streetprint":
-    "Transforms existing asphalt into decorative patterns — cobblestone, brick, herringbone. Trusted by 500+ Canadian municipalities.",
-  "streetbond":
-    "Transforms existing asphalt into decorative patterns — cobblestone, brick, herringbone. The coating system trusted by 500+ Canadian municipalities.",
-  "traffic-patterns-xd":
-    "Aggregate-reinforced thermoplastic engineered for BRT corridors and high-volume intersections. BPN 65+ skid resistance.",
-  "traffic-patterns":
-    "Crisp preformed thermoplastic markings that outlast paint 5:1. Trusted by York Region, City of Toronto, Vancouver, and UBC.",
-  "mmax":
-    "MMA resin for red bus lanes and bike lanes. Traffic-ready in 60 minutes. Bonds at −10°C — no waiting for spring.",
-  "decomark":
-    "Custom murals, Pride crosswalks, and Indigenous street art, precision-formed in durable thermoplastic. From vector file to civic landmark.",
-};
-
 const PRODUCT_TYPE: Record<string, string> = {
   "streetprint":         "Stamped Asphalt",
-  "streetbond":          "StreetPrint · 20-yr durability",
+  "streetbond":          "Acrylic Colour Coat",
   "traffic-patterns-xd": "Thermoplastic XD",
   "traffic-patterns":    "Thermoplastic",
   "mmax":                "MMA Resin",
@@ -124,7 +108,6 @@ export default function ProductsGrid() {
             const apps = PRODUCT_APPS[product.slug] ?? [];
             const type = PRODUCT_TYPE[product.slug];
             const stat = PRODUCT_STAT[product.slug];
-            const what = PRODUCT_WHAT[product.slug];
 
             return (
               <motion.div
@@ -219,7 +202,7 @@ export default function ProductsGrid() {
                       className="text-[12.5px] leading-relaxed flex-1 mb-4"
                       style={{ color: "var(--text-secondary)" }}
                     >
-                      {what}
+                      {product.shortDesc}
                     </p>
 
                     {/* Application chips + arrow */}

@@ -499,24 +499,15 @@ function MobileOverlay({
         }}
       >
         {/* Logo — same as main nav */}
-        <Link href="/" onClick={onClose} className="flex items-center gap-2.5">
+        <Link href="/" onClick={onClose} className="flex items-center">
           <Image
-            src="/images/hub-wheel-orange.png"
-            alt=""
-            width={26}
-            height={26}
+            src="/images/hub-official-logo.svg"
+            alt="HUB Surface Systems"
+            width={140}
+            height={35}
             unoptimized
-            aria-hidden="true"
+            className="h-7 w-auto"
           />
-          <span style={{
-            color: "#ffffff",
-            fontWeight: 700,
-            fontSize: "0.9rem",
-            letterSpacing: "0.01em",
-            lineHeight: 1,
-          }}>
-            HUB <span style={{ color: "#f97316" }}>Surface Systems</span>
-          </span>
         </Link>
 
         {/* Close button — pill */}
@@ -994,24 +985,16 @@ export default function Nav() {
           <div className="flex items-center justify-between h-16">
 
             {/* Wordmark */}
-            <Link href="/" className="flex items-center gap-2.5" onClick={() => setActivePanel(null)}>
+            <Link href="/" className="flex items-center" onClick={() => setActivePanel(null)}>
               <Image
-                src="/images/hub-wheel-orange.png"
-                alt=""
-                width={40}
+                src="/images/hub-official-logo.svg"
+                alt="HUB Surface Systems"
+                width={160}
                 height={40}
+                priority
                 unoptimized
-                aria-hidden="true"
+                className="h-8 w-auto"
               />
-              <span style={{
-                color: "#ffffff",
-                fontWeight: 700,
-                fontSize: "1rem",
-                letterSpacing: "0.01em",
-                lineHeight: 1,
-              }}>
-                HUB <span style={{ color: "#f97316" }}>Surface Systems</span>
-              </span>
             </Link>
 
             {/* Desktop links — hidden on mobile */}

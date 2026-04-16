@@ -134,31 +134,17 @@ export default function LunchLearn({ hideMoose = false }: LunchLearnProps) {
               ))}
             </ul>
 
-            {/* Pug peeker — only on non-dedicated page */}
+            {/* Moose mascot — content area, only on non-dedicated page */}
             {!hideMoose && (
-              <div
-                className="relative"
-                style={{ height: 120, marginBottom: "-24px", isolation: "isolate" }}
-              >
-                {/* Fold line */}
-                <div
-                  className="absolute left-0 right-0 bottom-0"
-                  style={{ height: 2, background: "linear-gradient(90deg, rgba(249,115,22,0.35) 0%, rgba(249,115,22,0.08) 60%, transparent 100%)" }}
+              <div style={{ width: 310, height: 310, marginTop: 8 }}>
+                <Image
+                  src="/images/lunch-learn/moose-transparent.png"
+                  alt="HUB Surface Systems moose mascot"
+                  width={310}
+                  height={310}
+                  style={{ width: 310, height: 310, objectFit: "contain", display: "block" }}
+                  unoptimized
                 />
-                {/* Mascot */}
-                <div
-                  className="absolute bottom-0"
-                  style={{ left: 0, width: 140, height: 120 }}
-                >
-                  <Image
-                    src="/images/lunch-learn/moose-transparent.png"
-                    alt="HUB mascot peeking over the fold"
-                    width={140}
-                    height={120}
-                    style={{ width: "100%", height: "100%", objectFit: "contain", objectPosition: "bottom" }}
-                    unoptimized
-                  />
-                </div>
               </div>
             )}
           </div>
@@ -333,3 +319,4 @@ export default function LunchLearn({ hideMoose = false }: LunchLearnProps) {
     </section>
   );
 }
+         

@@ -12,10 +12,10 @@ export async function POST(request: NextRequest) {
   const stream = new ReadableStream({
     async start(controller) {
       try {
-        const aiStream = await client.messages.stream({
+        const aiStream = client.messages.stream({
           model: 'claude-opus-4-6',
           max_tokens: 1024,
-          system: `You are a helpful assistant for HUBSS, a pavement marking company. 
+          system: `You are a helpful assistant for HUBSS, a pavement marking company.
 Help customers with questions about:
 - Pavement marking services
 - StreetPrint decorative surfaces
@@ -25,9 +25,11 @@ Be professional, friendly, and knowledgeable about pavement marking.`,
           messages: [{ role: 'user', content: message }],
         });
 
-        for await (const text of aiStream.textStream) {
-          const data = JSON.stringify({ type: 'text', content: text });
-          controller.enqueue(encoder.encode(`data: ${data}\n\n`));
+        for await (const chunk of aiStream) {
+          if (chunk.type === 'content_block_delta' && chunk.delta.type === 'text_delta') {
+            const data = JSON.stringify({ type: 'text', content: chunk.delta.text });
+            controller.enqueue(encoder.encode(`data: ${data}\n\n`));
+          }
         }
 
         controller.close();

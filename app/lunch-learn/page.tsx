@@ -67,26 +67,26 @@ export default function LunchLearnPage() {
           }}
         />
 
-        {/* Moose — paws resting on the fold line, positioned right */}
+        {/* Moose — paws ON the fold line, left paw aligns with form card below */}
         <div
           className="absolute z-20 pointer-events-none"
           style={{
-            bottom: "-8px",
-            right: "clamp(16px, 10vw, 180px)",
-            width: "clamp(200px, 28vw, 320px)",
-            height: "clamp(200px, 28vw, 320px)",
+            bottom: 0,
+            right: "clamp(60px, 20vw, 320px)",
+            width: "clamp(150px, 22.5vw, 285px)",
           }}
         >
           <Image
-            src="/images/lunch-learn/moose-transparent.png"
+            src="/images/assets/mascot/moose-1.png"
             alt="HUB Surface Systems Moose mascot — book a free Lunch and Learn session"
-            width={320}
-            height={320}
+            width={380}
+            height={380}
             style={{
               width: "100%",
-              height: "100%",
+              height: "auto",
               objectFit: "contain",
-              filter: "drop-shadow(0 0 20px rgba(249,115,22,0.4)) drop-shadow(0 12px 28px rgba(0,0,0,0.6))",
+              objectPosition: "bottom",
+              filter: "drop-shadow(0 0 20px rgba(249,115,22,0.3)) drop-shadow(0 8px 24px rgba(0,0,0,0.5))",
               display: "block",
             }}
             unoptimized

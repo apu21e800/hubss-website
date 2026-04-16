@@ -24,7 +24,6 @@ export function SocialLinks({ size = 'md', className = '', iconClassName = '' }:
   const platforms = [
     { key: 'linkedin', label: 'LinkedIn' },
     { key: 'instagram', label: 'Instagram' },
-    { key: 'youtube', label: 'YouTube' },
     { key: 'facebook', label: 'Facebook' },
     { key: 'x', label: 'X' },
   ] as const;

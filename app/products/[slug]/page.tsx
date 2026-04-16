@@ -7,6 +7,7 @@ import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
 import DocumentDownloads from "@/components/sections/DocumentDownloads";
 import GalleryGrid, { type GalleryImage } from "@/components/ui/GalleryGrid";
+import ComparisonTable from "@/components/sections/ComparisonTable";
 import JsonLd from "@/components/ui/JsonLd";
 import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
@@ -15,7 +16,7 @@ import { buildMetadata } from "@/lib/seo";
 import { getProductFamily } from "@/lib/product-taxonomy";
 
 export async function generateStaticParams() {
-  return products.map((p) => ({ slug: p.slug }));
+  return products.filter((p) => !p.comingSoon).map((p) => ({ slug: p.slug }));
 }
 
 type Props = { params: Promise<{ slug: string }> };
@@ -34,7 +35,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
   const product = products.find((p) => p.slug === slug);
-  if (!product) notFound();
+  if (!product || product.comingSoon) notFound();
 
   // Gallery — use product.gallery if available, otherwise fall back to featured image
   const productGallery = product.gallery ?? [];
@@ -161,7 +162,7 @@ export default async function ProductPage({ params }: Props) {
                   alt={product.brandLogo.alt}
                   width={product.brandLogo.width}
                   height={product.brandLogo.height}
-                  style={{ maxWidth: "100%", height: "auto", maxHeight: 64 }}
+                  style={{ width: "auto", height: "auto", maxWidth: "100%", maxHeight: 56, objectFit: "contain" }}
                   unoptimized
                 />
               </div>
@@ -198,6 +199,13 @@ export default async function ProductPage({ params }: Props) {
             </div>
           </div>
         </div>
+
+        {/* Paint Fades comparison — StreetBond + TrafficPatterns only */}
+        {(slug === "streetbond" || slug === "traffic-patterns") && (
+          <div className="mt-16">
+            <ComparisonTable />
+          </div>
+        )}
 
         {/* Applications this product is used for */}
         {relatedAppData.length > 0 && (

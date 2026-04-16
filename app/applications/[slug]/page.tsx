@@ -6,6 +6,7 @@ import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
 import GalleryGrid, { type GalleryImage } from "@/components/ui/GalleryGrid";
+import ResidentialDriveways from "@/components/sections/ResidentialDriveways";
 import JsonLd from "@/components/ui/JsonLd";
 import { applications } from "@/lib/applications";
 import { products } from "@/lib/products";
@@ -282,6 +283,8 @@ export default async function ApplicationPage({ params }: Props) {
 
         </div>
       </div>
+      {/* Feature callout — residential driveways page only */}
+      {slug === "residential-driveways" && <ResidentialDriveways />}
       <LunchLearn />
       <Footer />
     </main>

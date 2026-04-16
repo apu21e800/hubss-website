@@ -13,7 +13,7 @@ interface HeroProps {
 }
 
 const credentialStats = [
-  { value: "500+", label: "Projects completed" },
+  { value: "1,000+", label: "Projects completed" },
   { value: "10", label: "Provinces, coast to coast" },
   { value: "Since 1994", label: "Trusted across Canada" },
   { value: "20yr", label: "Durability" },
@@ -90,21 +90,21 @@ export default function Hero({ variant = "default" }: HeroProps) {
             className="text-xs font-semibold tracking-[0.2em] uppercase mb-3"
             style={{ color: "#f97316" }}
           >
-            30+ Years · 500+ Projects · York Region, Vancouver &amp; UBC
+            30+ Years · 1,000+ Projects · York Region, Vancouver &amp; UBC
           </p>
 
           {/* Headline */}
           <h1 className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tight text-white leading-none mb-4 sm:mb-6">
-            The Street Is Your Canvas.
+            The World Is Your Canvas.
           </h1>
 
           {/* Body — hidden on smallest screens to give headline room, shows sm+ */}
           <p className="hidden sm:block text-base md:text-xl text-gray-300 max-w-2xl mb-8 leading-relaxed">
-            Decorative hardscape and traffic safety solutions, installed by certified professionals across all 10 provinces.
+            Decorative hardscape and traffic safety solutions, installed by certified professionals across Canada.
           </p>
           {/* Mobile-only shortened body */}
           <p className="sm:hidden text-sm text-gray-300 mb-8 leading-relaxed">
-            Decorative hardscape and traffic safety solutions across all 10 provinces.
+            Decorative hardscape and traffic safety solutions across Canada.
           </p>
         </motion.div>
 
@@ -116,7 +116,7 @@ export default function Hero({ variant = "default" }: HeroProps) {
           className="max-w-4xl w-full mt-6 sm:mt-8"
         >
           {/* CTAs */}
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8 sm:mb-12">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8 sm:mb-10">
             <Link
               href="/products"
               className="bg-orange-500 hover:bg-orange-400 text-white font-bold px-8 py-4 rounded-lg transition-colors text-center w-full sm:w-auto min-h-[52px] flex items-center justify-center text-base"
@@ -132,11 +132,11 @@ export default function Hero({ variant = "default" }: HeroProps) {
           </div>
 
           {/* Stats bar */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-4">
             {credentialStats.map((stat) => (
-              <div key={stat.label} className="flex items-baseline gap-1.5">
-                <span className="text-2xl sm:text-3xl font-black text-white tabular-nums">{stat.value}</span>
-                <span className="text-xs font-medium whitespace-nowrap" style={{ color: "rgba(255,255,255,0.5)" }}>{stat.label}</span>
+              <div key={stat.label} className="flex flex-col gap-0.5">
+                <span className="text-2xl sm:text-3xl font-black text-white tabular-nums leading-none">{stat.value}</span>
+                <span className="text-[11px] font-medium leading-tight" style={{ color: "rgba(255,255,255,0.45)" }}>{stat.label}</span>
               </div>
             ))}
           </div>

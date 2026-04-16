@@ -6,9 +6,25 @@ import Image from "next/image";
 import { products } from "@/lib/products";
 import { productImages, resolveImage } from "@/lib/featured-images";
 
+// Plain-English: what it does and who uses it
+const PRODUCT_WHAT: Record<string, string> = {
+  "streetprint":
+    "In-place stamped asphalt — cobblestone, brick, herringbone and 12+ more patterns. No demolition, no raised edges, snowplow-safe. Looks like stone, performs like asphalt.",
+  "streetbond":
+    "Permanently bonded acrylic colour for asphalt and concrete. Standard palette plus full Pantone custom matching. 20-year colour retention — bike lanes, crosswalks, driveways.",
+  "traffic-patterns-xd":
+    "Aggregate-reinforced thermoplastic engineered for BRT corridors and high-volume intersections. BPN 65+ skid resistance.",
+  "traffic-patterns":
+    "Crisp preformed thermoplastic markings that outlast paint 5:1. Factory-manufactured to 90mil and specified by municipalities coast to coast.",
+  "mmax":
+    "MMA resin for red bus lanes and bike lanes. Traffic-ready in 60 minutes. Bonds at −10°C — no waiting for spring.",
+  "decomark":
+    "Custom murals, Pride crosswalks, and Indigenous street art, precision-formed in durable thermoplastic. From vector file to civic landmark.",
+};
+
 const PRODUCT_TYPE: Record<string, string> = {
   "streetprint":         "Stamped Asphalt",
-  "streetbond":          "Acrylic Colour Coat",
+  "streetbond":          "Coloured Coating",
   "traffic-patterns-xd": "Thermoplastic XD",
   "traffic-patterns":    "Thermoplastic",
   "mmax":                "MMA Resin",
@@ -16,8 +32,8 @@ const PRODUCT_TYPE: Record<string, string> = {
 };
 
 const PRODUCT_STAT: Record<string, string> = {
-  "streetprint":         "20-yr warranty",
-  "streetbond":          "20-yr warranty",
+  "streetprint":         "20+ yr service life",
+  "streetbond":          "20+ yr service life",
   "traffic-patterns-xd": "7+ yr service life",
   "traffic-patterns":    "5–7 yr service life",
   "mmax":                "60-min cure",
@@ -108,6 +124,7 @@ export default function ProductsGrid() {
             const apps = PRODUCT_APPS[product.slug] ?? [];
             const type = PRODUCT_TYPE[product.slug];
             const stat = PRODUCT_STAT[product.slug];
+            const what = PRODUCT_WHAT[product.slug];
 
             return (
               <motion.div
@@ -202,7 +219,7 @@ export default function ProductsGrid() {
                       className="text-[12.5px] leading-relaxed flex-1 mb-4"
                       style={{ color: "var(--text-secondary)" }}
                     >
-                      {product.shortDesc}
+                      {what}
                     </p>
 
                     {/* Application chips + arrow */}

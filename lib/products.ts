@@ -97,8 +97,8 @@ export const products: Product[] = [
     brandLogo: {
       src: "/images/products/streetbond/streetbond-logo-color.svg",
       alt: "StreetBond coloured pavement coating system by HUB Surface Systems",
-      width: 280,
-      height: 80,
+      width: 663,
+      height: 435,
     },
     relatedApplications: ["bike-lanes", "bus-lanes", "private-driveways", "parks-paths", "parking-lots"],
   },
@@ -121,8 +121,8 @@ export const products: Product[] = [
     brandLogo: {
       src: "/images/assets/logos/product-logos/StreetPrint/large_StreetPrint_Logo.png",
       alt: "StreetPrint decorative asphalt stamping system by HUB Surface Systems",
-      width: 300,
-      height: 80,
+      width: 800,
+      height: 367,
     },
     relatedApplications: ["crosswalks", "private-driveways", "community-branding", "parking-lots"],
   },
@@ -196,8 +196,8 @@ export const products: Product[] = [
     brandLogo: {
       src: "/images/products/streetbondsr/streetbondsr-logo-white.png",
       alt: "StreetBondSR solar reflective coating system by HUB Surface Systems",
-      width: 280,
-      height: 80,
+      width: 900,
+      height: 325,
     },
     relatedApplications: ["parking-lots", "private-driveways", "parks-paths", "community-branding"],
   },

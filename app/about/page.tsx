@@ -12,7 +12,7 @@ export const metadata = buildMetadata({
 
 const stats = [
   { value: "30+", label: "Years in Business" },
-  { value: "500+", label: "Projects Completed" },
+  { value: "1,000+", label: "Projects Completed" },
   { value: "10", label: "Provinces Served" },
   { value: "2", label: "Regional Offices" },
 ];
@@ -63,7 +63,7 @@ export default function AboutPage() {
           style={{ width: 520, height: 520, opacity: 0.05 }}
           aria-hidden="true"
         >
-          <Image src="/images/hub-wheel-orange.png" alt="" width={520} height={520} unoptimized />
+          <Image src="/images/assets/logos/hubss-logos/HUB-wheel_official-orange-transparent.svg" alt="" width={520} height={520} unoptimized />
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-24 relative">
@@ -93,7 +93,7 @@ export default function AboutPage() {
                 <span className="text-4xl md:text-5xl font-bold mb-2" style={{ color: "#f97316" }}>
                   {s.value}
                 </span>
-                <span className="text-xs font-semibold tracking-widest uppercase" style={{ color: "#5a5a5a" }}>
+                <span className="text-xs font-semibold tracking-widest uppercase" style={{ color: "#9CA3AF" }}>
                   {s.label}
                 </span>
               </div>
@@ -242,7 +242,7 @@ export default function AboutPage() {
               </div>
             ))}
           </div>
-          <p className="text-center text-sm mt-8" style={{ color: "#5a5a5a" }}>
+          <p className="text-center text-sm mt-8" style={{ color: "#9CA3AF" }}>
             Serving all 10 provinces and 3 territories
           </p>
         </div>

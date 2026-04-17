@@ -6,8 +6,8 @@ import { useRef } from "react";
 const STATS = [
   { num: "30+", label: "Years", sub: "Engineering Canadian surfaces" },
   { num: "1,000+", label: "Projects", sub: "Completed coast to coast" },
-  { num: "Hundreds", label: "Municipalities", sub: "Specified coast to coast" },
-  { num: "Safe", label: "by Design", sub: "Pedestrian & AODA compliant" },
+  { num: "500+", label: "Municipalities", sub: "Specified coast to coast" },
+  { num: "AODA", label: "Compliant", sub: "Accessible & pedestrian-safe by design" },
 ];
 
 // Condensed to scannable one-liners — no paragraphs
@@ -24,8 +24,8 @@ const PROOF = [
   },
   {
     num: "03",
-    claim: "Safe",
-    detail: "Products designed for pedestrian safety and traffic-compliant installations.",
+    claim: "Pedestrian safety built in",
+    detail: "AODA-compliant, Vision Zero-aligned, and designed for high-visibility performance in every Canadian climate.",
   },
   {
     num: "04",
@@ -108,7 +108,7 @@ export default function WhyHubss() {
             <br />Loved by Communities.
           </h2>
           <p className="text-base leading-relaxed max-w-xl" style={{ color: "#9CA3AF" }}>
-            Thirty years. Hundreds of municipalities. One standard — if it goes on the street, it stays on the street.
+            Thirty years. 500+ municipalities. One standard — if it goes on the street, it stays on the street.
           </p>
         </motion.div>
 

@@ -24,6 +24,7 @@ export const productImages: Record<string, ImageConfig> = {
   'premark':             { featured: '/images/products/premark/premark-01.jpg',                         fallback: '/images/products/premark/premark-01.jpg',                         alt: 'PreMark preformed thermoplastic road marking symbols — TAC-compliant turn arrows, stop bars, and regulatory pavement markings' },
   'airmark':             { featured: '/images/products/airmark/airmark-01.jpg',                         fallback: '/images/products/airmark/airmark-01.jpg',                         alt: 'AirMark FAA-compliant preformed thermoplastic airfield markings — runway threshold, taxiway guidance, and apron surface markings' },
   'durashield':          { featured: '/images/products/durashield/durashield-01.jpg',                   fallback: '/images/products/durashield/durashield-01.jpg',                   alt: 'DuraShield penetrating asphalt rejuvenator and protective seal coat — pavement life extension treatment for Canadian municipal road surfaces' },
+  'streetbondsr':        { featured: '/images/products/streetbondsr/streetbondsr-02.jpg',               fallback: '/images/products/streetbondsr/streetbondsr-01.png',               alt: 'StreetBondSR solar reflective acrylic pavement coating — parking area installation showing cool surface treatment for urban heat island mitigation' },
 };
 
 export const applicationImages: Record<string, ImageConfig> = {

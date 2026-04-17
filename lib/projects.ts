@@ -18,7 +18,7 @@ export const projects: Project[] = [
     province: "Ontario",
     city: "York Region",
     excerpt: "How TrafficPatternsXD delivered 150mil aggregate-reinforced crosswalk markings that outlasted paint by 8x while reducing annual maintenance costs by 60%.",
-    imageUrl: "/images/applications/traffic-calming/traffic-calming-01.jpg",
+    imageUrl: "/images/products/traffic-patterns-xd/traffic-patterns-xd-03.jpg",
   },
   {
     title: "Pedestrian Safety Solutions: How High-Visibility Crosswalks Save Lives",
@@ -38,7 +38,7 @@ export const projects: Project[] = [
     province: "British Columbia",
     city: "Vancouver",
     excerpt: "Custom StreetPrint stamped asphalt crosswalks celebrating neighbourhood identity across five Vancouver Business Improvement Districts.",
-    imageUrl: "/images/applications/commercial-spaces/commercial-spaces-01.jpg",
+    imageUrl: "/images/products/streetprint/streetprint-40.jpg",
   },
   {
     title: "York Region Hwy 7 VIVA Rapid Transit Corridor",

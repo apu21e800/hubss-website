@@ -101,7 +101,7 @@ export default async function ProductPage({ params }: Props) {
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            backgroundImage: "url('/images/assets/details/asphalt-closeup-01.jpg')",
+            backgroundImage: "url('/images/textures/stamped-asphalt-texture.webp')",
             backgroundSize: "480px auto",
             backgroundRepeat: "repeat",
             opacity: 0.04,
@@ -154,7 +154,8 @@ export default async function ProductPage({ params }: Props) {
                 style={{
                   background: "#ffffff",
                   border: "1px solid rgba(255,255,255,0.06)",
-                  minHeight: 88,
+                  minHeight: 120,
+                  padding: "1.5rem 2rem",
                 }}
               >
                 <Image
@@ -162,7 +163,7 @@ export default async function ProductPage({ params }: Props) {
                   alt={product.brandLogo.alt}
                   width={product.brandLogo.width}
                   height={product.brandLogo.height}
-                  style={{ width: "auto", height: "auto", maxWidth: "100%", maxHeight: 56, objectFit: "contain" }}
+                  style={{ width: "auto", height: "auto", maxWidth: "100%", maxHeight: 80, objectFit: "contain" }}
                   unoptimized
                 />
               </div>

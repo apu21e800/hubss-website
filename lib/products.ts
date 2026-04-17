@@ -25,7 +25,7 @@ export const products: Product[] = [
     slug: "traffic-patterns-xd",
     shortDesc: "Built for the roads that never rest.",
     imageUrl: "/images/products/traffic-patterns-xd/traffic-patterns-xd-03.jpg",
-    gallery: gallery("traffic-patterns-xd", "traffic-patterns-xd", 99),
+    gallery: gallery("traffic-patterns-xd", "traffic-patterns-xd", 143),
     description: "TrafficPatternsXD: 150mil aggregate-reinforced thermoplastic for BRT corridors and high-volume intersections. BPN 65+ skid resistance and 7+ year service life.",
     specs: [
       { label: "Material", value: "Aggregate-reinforced preformed thermoplastic" },
@@ -157,8 +157,11 @@ export const products: Product[] = [
     name: "StreetBondSR",
     slug: "streetbondsr",
     shortDesc: "Solar reflective. LEED-compliant. Urban heat island mitigation.",
-    imageUrl: "/images/products/streetbond/streetbond-01.png",
-    gallery: gallery("streetbondsr", "streetbondsr", 1, "png"),
+    imageUrl: "/images/products/streetbondsr/streetbondsr-02.jpg",
+    gallery: [
+      "/images/products/streetbondsr/streetbondsr-01.png",
+      ...Array.from({ length: 7 }, (_, i) => `/images/products/streetbondsr/streetbondsr-${String(i + 2).padStart(2, "0")}.jpg`),
+    ],
     description: "StreetBondSR combines superior colour retention with solar reflective technology. LEED-compliant coating system that reduces pavement surface temperatures, mitigating urban heat island effects while delivering lasting color and protection. Trusted by 500+ Canadian municipalities.",
     specs: [
       { label: "Type", value: "Solar reflective acrylic pavement coating" },

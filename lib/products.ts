@@ -97,8 +97,8 @@ export const products: Product[] = [
     brandLogo: {
       src: "/images/products/streetbond/streetbond-logo-color.svg",
       alt: "StreetBond coloured pavement coating system by HUB Surface Systems",
-      width: 280,
-      height: 80,
+      width: 1130,
+      height: 140,
     },
     relatedApplications: ["bike-lanes", "bus-lanes", "private-driveways", "parks-paths", "parking-lots"],
   },

@@ -170,14 +170,14 @@ export default function LunchLearn({ hideMoose = false }: LunchLearnProps) {
                 <h3 className="text-xl font-bold mb-2" style={{ color: "#ffffff" }}>
                   Book Your Session
                 </h3>
-                <p className="text-sm mb-8" style={{ color: "#5a5a5a" }}>
+                <p className="text-sm mb-8" style={{ color: "#9CA3AF" }}>
                   Available anywhere in Canada — East or West office will coordinate.
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-semibold tracking-wide uppercase mb-1.5" style={{ color: "#5a5a5a" }}>
+                      <label className="block text-xs font-semibold tracking-wide uppercase mb-1.5" style={{ color: "#9CA3AF" }}>
                         Name *
                       </label>
                       <input
@@ -196,7 +196,7 @@ export default function LunchLearn({ hideMoose = false }: LunchLearnProps) {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold tracking-wide uppercase mb-1.5" style={{ color: "#5a5a5a" }}>
+                      <label className="block text-xs font-semibold tracking-wide uppercase mb-1.5" style={{ color: "#9CA3AF" }}>
                         Email *
                       </label>
                       <input
@@ -217,7 +217,7 @@ export default function LunchLearn({ hideMoose = false }: LunchLearnProps) {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold tracking-wide uppercase mb-1.5" style={{ color: "#5a5a5a" }}>
+                    <label className="block text-xs font-semibold tracking-wide uppercase mb-1.5" style={{ color: "#9CA3AF" }}>
                       Organization
                     </label>
                     <input
@@ -237,7 +237,7 @@ export default function LunchLearn({ hideMoose = false }: LunchLearnProps) {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-semibold tracking-wide uppercase mb-1.5" style={{ color: "#5a5a5a" }}>
+                      <label className="block text-xs font-semibold tracking-wide uppercase mb-1.5" style={{ color: "#9CA3AF" }}>
                         City / Region
                       </label>
                       <input
@@ -255,7 +255,7 @@ export default function LunchLearn({ hideMoose = false }: LunchLearnProps) {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold tracking-wide uppercase mb-1.5" style={{ color: "#5a5a5a" }}>
+                      <label className="block text-xs font-semibold tracking-wide uppercase mb-1.5" style={{ color: "#9CA3AF" }}>
                         Phone
                       </label>
                       <input

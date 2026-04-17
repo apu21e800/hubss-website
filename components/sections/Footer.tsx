@@ -24,7 +24,7 @@ export default function Footer() {
 
       {/* Wheel watermark — subtle background accent */}
       <div style={{ position: "absolute", bottom: "24px", right: "32px", opacity: 0.04, pointerEvents: "none", zIndex: 0 }}>
-        <Image src="/images/hub-wheel-orange.png" alt="" width={180} height={180} unoptimized aria-hidden="true" />
+        <Image src="/images/assets/logos/hubss-logos/HUB-wheel_official-orange-transparent.svg" alt="" width={180} height={180} unoptimized aria-hidden="true" />
       </div>
 
       {/* Full-width gradient divider */}
@@ -42,7 +42,7 @@ export default function Footer() {
           <div>
             <div className="mb-5">
               <Image
-                src="/images/hub-logo-white.png"
+                src="/images/assets/logos/hubss-logos/hubss-logo_white.svg"
                 alt="HUB Surface Systems"
                 width={130}
                 height={40}
@@ -79,7 +79,7 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold text-sm mb-5" style={{ color: "var(--text-primary)" }}>Products</h4>
             <ul className="space-y-2.5">
-              {products.map((p) => (
+              {products.filter((p) => !p.comingSoon).map((p) => (
                 <li key={p.slug}>
                   <Link
                     href={`/products/${p.slug}`}

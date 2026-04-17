@@ -353,7 +353,7 @@ function ProductsPanel({
                 <Link href="/products/traffic-patterns-xd" className="group flex gap-2 p-2 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] transition-colors">
                   <div className="flex-shrink-0 w-[48px] h-[48px] rounded overflow-hidden bg-black/20">
                     <Image
-                      src="/images/products/traffic-patterns-xd/traffic-patterns-xd-01.jpg"
+                      src="/images/products/traffic-patterns-xd/traffic-patterns-xd-03.jpg"
                       alt="TrafficPatternsXD"
                       width={48}
                       height={48}
@@ -369,7 +369,7 @@ function ProductsPanel({
                 <Link href="/products/streetbond" className="group flex gap-2 p-2 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] transition-colors">
                   <div className="flex-shrink-0 w-[48px] h-[48px] rounded overflow-hidden bg-black/20">
                     <Image
-                      src="/images/products/streetbond/streetbond-01.png"
+                      src="/images/products/streetbond/streetbond-112.jpg"
                       alt="StreetBond"
                       width={48}
                       height={48}
@@ -385,7 +385,7 @@ function ProductsPanel({
                 <Link href="/products/streetprint" className="group flex gap-2 p-2 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] transition-colors">
                   <div className="flex-shrink-0 w-[48px] h-[48px] rounded overflow-hidden bg-black/20">
                     <Image
-                      src="/images/applications/traffic-calming/traffic-calming-01.jpg"
+                      src="/images/products/streetprint/streetprint-40.jpg"
                       alt="StreetPrint"
                       width={48}
                       height={48}

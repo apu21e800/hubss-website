@@ -25,7 +25,8 @@ export const products: Product[] = [
     slug: "traffic-patterns-xd",
     shortDesc: "Built for the roads that never rest.",
     imageUrl: "/images/products/traffic-patterns-xd/traffic-patterns-xd-03.jpg",
-    gallery: gallery("traffic-patterns-xd", "traffic-patterns-xd", 143),
+    gallery: [1,2,4,7,10,13,16,19,22,25,28,31,34,37,40,43,46,49,52,55,58,61,64,67,70,73,76,79,82,85,88,91,94,97,100,103,106,109,112,115,118,121,124,127,129,130,133,136,139,143].map(n =>
+      `/images/products/traffic-patterns-xd/traffic-patterns-xd-${String(n).padStart(2, "0")}.jpg`),
     description: "TrafficPatternsXD: 150mil aggregate-reinforced thermoplastic for BRT corridors and high-volume intersections. BPN 65+ skid resistance and 7+ year service life.",
     specs: [
       { label: "Material", value: "Aggregate-reinforced preformed thermoplastic" },
@@ -62,14 +63,17 @@ export const products: Product[] = [
     shortDesc: "Colour that holds. Asphalt transformed.",
     imageUrl: "/images/products/streetbond/streetbond-01.png",
     gallery: [
-      // Colorful installation shots first (high-numbered JPGs — most recent uploads)
-      ...Array.from({ length: 13 }, (_, i) => `/images/products/streetbond/streetbond-${100 + i}.jpg`),
-      // Core installation range
-      ...Array.from({ length: 20 }, (_, i) => `/images/products/streetbond/streetbond-${80 + i}.jpg`),
-      // Mid-range installation shots
-      ...Array.from({ length: 30 }, (_, i) => `/images/products/streetbond/streetbond-${String(9 + i).padStart(2, "0")}.jpg`),
-      // Original branding / product PNGs
-      ...gallery("streetbond", "streetbond", 8, "png"),
+      // Product renders
+      "/images/products/streetbond/streetbond-01.png",
+      "/images/products/streetbond/streetbond-02.png",
+      "/images/products/streetbond/streetbond-04.png",
+      "/images/products/streetbond/streetbond-06.png",
+      // Installation photos — early range (every 3rd)
+      ...[9,12,15,18,21,24,27,30,33,36,40,45,50,55].map(n =>
+        `/images/products/streetbond/streetbond-${String(n).padStart(2, "0")}.jpg`),
+      // Installation photos — latest batch
+      ...[80,81,82,83,84,85,86,87,88,89,90,91,92,93,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112].map(n =>
+        `/images/products/streetbond/streetbond-${n}.jpg`),
     ],
     description: "Transforms existing asphalt into decorative colour and patterns — cobblestone, brick, herringbone. Available in an extensive standard palette and fully custom Pantone-matched. BC Ministry of Transportation recognized product.",
     specs: [
@@ -103,7 +107,8 @@ export const products: Product[] = [
     slug: "streetprint",
     shortDesc: "Where asphalt becomes architecture.",
     imageUrl: "/images/products/streetprint/streetprint-01.jpg",
-    gallery: gallery("streetprint", "streetprint", 91),
+    gallery: [1,3,5,7,9,10,11,13,15,17,19,21,23,25,27,29,31,32,33,35,37,39,41,43,45,47,49,51,53,55,56,57,59,61,63,65,67,69,71,73,75,77,79,80,81,83,85,87,89,91].map(n =>
+      `/images/products/streetprint/streetprint-${String(n).padStart(2, "0")}.jpg`),
     description: "StreetPrint transforms existing asphalt into rich decorative hardscape. A proprietary in-place stamping process available in 12+ standard patterns and fully custom designs. Installed coast to coast by certified HUB applicators.",
     specs: [
       { label: "System", value: "In-place asphalt stamping + StreetBond coating" },
@@ -180,7 +185,7 @@ export const products: Product[] = [
       { name: "Sage", hex: "#9CAF88" },
     ],
     brandLogo: {
-      src: "/images/products/streetbond/streetbond-logo.png",
+      src: "/images/products/streetbondsr/streetbondsr-logo-white.png",
       alt: "StreetBondSR solar reflective coating system by HUB Surface Systems",
       width: 280,
       height: 80,

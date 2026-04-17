@@ -138,20 +138,13 @@ export default async function ProductPage({ params }: Props) {
           <div>
             {/* Brand logo badge in sidebar */}
             {product.brandLogo && (
-              <div
-                className="rounded-xl mb-6"
-                style={{
-                  background: "#111111",
-                  border: "1px solid rgba(255,255,255,0.08)",
-                  padding: "1.25rem 1.5rem",
-                }}
-              >
+              <div className="mb-6" style={{ padding: "0.5rem 0" }}>
                 <div style={{ position: "relative", height: 80 }}>
                   <Image
                     src={product.brandLogo.src}
                     alt={product.brandLogo.alt}
                     fill
-                    style={{ objectFit: "contain" }}
+                    style={{ objectFit: "contain", objectPosition: "left center" }}
                     unoptimized
                   />
                 </div>

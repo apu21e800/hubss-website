@@ -95,7 +95,7 @@ export const products: Product[] = [
       { name: "Night White", hex: "#F2F2F2" },
     ],
     brandLogo: {
-      src: "/images/assets/logos/product-logos/StreetBond/streetbond-reversed/streetbond-reversed.png",
+      src: "/images/products/streetbond/streetbond-logo-color.svg",
       alt: "StreetBond coloured pavement coating system by HUB Surface Systems",
       width: 280,
       height: 80,

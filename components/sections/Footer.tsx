@@ -65,7 +65,7 @@ export default function Footer() {
             <SocialLinks className="mt-3" />
 
             <p className="text-xs mt-4 font-medium flex items-center gap-1.5" style={{ color: "var(--text-muted)" }}>
-              <svg viewBox="0 0 20 10" width={28} height={14} xmlns="http://www.w3.org/2000/svg" aria-label="Canada" style={{ display: "inline-block", flexShrink: 0 }}>
+              <svg viewBox="0 0 20 10" xmlns="http://www.w3.org/2000/svg" aria-label="Canada" style={{ display: "inline-block", flexShrink: 0, width: 28, height: 14, minWidth: 28 }}>
                 <rect x="0" y="0" width="5" height="10" fill="#D80621"/>
                 <rect x="5" y="0" width="10" height="10" fill="#FFFFFF"/>
                 <rect x="15" y="0" width="5" height="10" fill="#D80621"/>

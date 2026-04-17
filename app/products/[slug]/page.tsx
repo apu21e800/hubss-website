@@ -95,8 +95,19 @@ export default async function ProductPage({ params }: Props) {
         </div>
       </div>
 
-      {/* Main content */}
-      <div style={{ background: "var(--bg-dark)" }}>
+      {/* Main content — dark section with subtle asphalt texture overlay */}
+      <div className="relative" style={{ background: "var(--bg-dark)" }}>
+        {/* Texture overlay */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage: "url('/images/textures/stamped-asphalt-texture.webp')",
+            backgroundSize: "480px auto",
+            backgroundRepeat: "repeat",
+            opacity: 0.04,
+            mixBlendMode: "luminosity",
+          }}
+        />
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
 
         {/* Specify CTA bar */}
@@ -136,18 +147,17 @@ export default async function ProductPage({ params }: Props) {
 
           {/* Right: specs + CTA */}
           <div>
-            {/* Brand logo badge in sidebar */}
+            {/* Brand logo */}
             {product.brandLogo && (
-              <div className="mb-6" style={{ padding: "0.5rem 0" }}>
-                <div style={{ position: "relative", height: 80 }}>
-                  <Image
-                    src={product.brandLogo.src}
-                    alt={product.brandLogo.alt}
-                    fill
-                    style={{ objectFit: "contain", objectPosition: "left center" }}
-                    unoptimized
-                  />
-                </div>
+              <div className="mb-6">
+                <Image
+                  src={product.brandLogo.src}
+                  alt={product.brandLogo.alt}
+                  width={240}
+                  height={96}
+                  style={{ objectFit: "contain", objectPosition: "left center" }}
+                  unoptimized
+                />
               </div>
             )}
             <div className="rounded-xl p-8 mb-8 sticky top-24 relative overflow-hidden" style={{ background: "#111111", border: "1px solid rgba(255,255,255,0.08)" }}>
@@ -278,7 +288,7 @@ export default async function ProductPage({ params }: Props) {
           </div>
         )}
       </div>{/* /max-w-7xl content */}
-      </div>{/* /main content */}
+      </div>{/* /texture outer wrapper */}
       <LunchLearn />
       <Footer />
     </main>

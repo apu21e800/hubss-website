@@ -144,17 +144,17 @@ export default async function ProductPage({ params }: Props) {
                   background: "#111111",
                   border: "1px solid rgba(255,255,255,0.08)",
                   padding: "1.25rem 1.5rem",
-                  position: "relative",
-                  height: 100,
                 }}
               >
-                <Image
-                  src={product.brandLogo.src}
-                  alt={product.brandLogo.alt}
-                  fill
-                  style={{ objectFit: "contain", padding: "0.75rem 1rem" }}
-                  unoptimized
-                />
+                <div style={{ position: "relative", height: 80 }}>
+                  <Image
+                    src={product.brandLogo.src}
+                    alt={product.brandLogo.alt}
+                    fill
+                    style={{ objectFit: "contain" }}
+                    unoptimized
+                  />
+                </div>
               </div>
             )}
             <div className="rounded-xl p-8 mb-8 sticky top-24 relative overflow-hidden" style={{ background: "#111111", border: "1px solid rgba(255,255,255,0.08)" }}>

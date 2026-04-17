@@ -95,19 +95,8 @@ export default async function ProductPage({ params }: Props) {
         </div>
       </div>
 
-      {/* Main content — dark section with subtle asphalt texture overlay */}
-      <div className="relative" style={{ background: "var(--bg-dark)" }}>
-        {/* Texture overlay */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            backgroundImage: "url('/images/textures/stamped-asphalt-texture.webp')",
-            backgroundSize: "480px auto",
-            backgroundRepeat: "repeat",
-            opacity: 0.04,
-            mixBlendMode: "luminosity",
-          }}
-        />
+      {/* Main content */}
+      <div style={{ background: "var(--bg-dark)" }}>
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
 
         {/* Specify CTA bar */}
@@ -296,7 +285,7 @@ export default async function ProductPage({ params }: Props) {
           </div>
         )}
       </div>{/* /max-w-7xl content */}
-      </div>{/* /texture outer wrapper */}
+      </div>{/* /main content */}
       <LunchLearn />
       <Footer />
     </main>

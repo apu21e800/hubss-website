@@ -65,11 +65,11 @@ export default function Footer() {
             <SocialLinks className="mt-3" />
 
             <p className="text-xs mt-4 font-medium flex items-center gap-1.5" style={{ color: "var(--text-muted)" }}>
-              <svg viewBox="0 0 20 10" xmlns="http://www.w3.org/2000/svg" aria-label="Canada" style={{ display: "inline-block", flexShrink: 0, width: 28, height: 14, minWidth: 28 }}>
-                <rect x="0" y="0" width="5" height="10" fill="#D80621"/>
-                <rect x="5" y="0" width="10" height="10" fill="#FFFFFF"/>
-                <rect x="15" y="0" width="5" height="10" fill="#D80621"/>
-                <path d="M10 1.5 L10.6 3.5 L12.5 3.5 L11.1 4.6 L11.6 6.5 L10 5.4 L8.4 6.5 L8.9 4.6 L7.5 3.5 L9.4 3.5 Z" fill="#D80621"/>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 450" width={28} height={14} aria-label="Canada" style={{ display: "inline-block", flexShrink: 0, minWidth: 28 }}>
+                <rect width="225" height="450" fill="#D52B1E"/>
+                <rect x="225" width="450" height="450" fill="#FFFFFF"/>
+                <rect x="675" width="225" height="450" fill="#D52B1E"/>
+                <path fill="#D52B1E" d="M450 45l-15 90-85-35 55 75-85 20 75 45-10 80 65-40 65 40-10-80 75-45-85-20 55-75-85 35z"/>
               </svg>
               Proudly Canadian · Serving Canada since 1994
             </p>

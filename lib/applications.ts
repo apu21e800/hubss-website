@@ -20,7 +20,8 @@ export const applications: Application[] = [
     slug: "crosswalks",
     shortDesc: "High-visibility decorative crosswalks that define intersections and calm traffic",
     imageUrl: "/images/applications/crosswalks/crosswalks-01.jpg",
-    gallery: gallery("crosswalks", "crosswalks", 122),
+    gallery: [1,3,6,8,11,13,16,18,21,23,26,28,31,33,36,38,41,43,45,48,50,53,55,58,60,63,65,68,70,73,75,78,80,83,85,87,90,92,95,97,100,102,105,107,110,112,115,117,120,122].map(n =>
+      `/images/applications/crosswalks/crosswalks-${String(n).padStart(2,"0")}.jpg`),
     description: "Crosswalks are the most visible safety infrastructure in any municipality. HUB systems deliver durability, retroreflectivity, and design flexibility that paint cannot match. TrafficPatterns and TrafficPatternsXD survive snowplow cycles and de-icing chemicals. DecoMark and StreetBond unlock full artistic expression for Pride crosswalks, Indigenous art, and neighbourhood identity. Specified by municipalities coast to coast.",
     relatedProducts: ["traffic-patterns", "traffic-patterns-xd", "streetbond", "decomark", "duratherm", "premark"],
   },
@@ -47,7 +48,8 @@ export const applications: Application[] = [
     slug: "parking-lots",
     shortDesc: "Branded, durable coatings for commercial and institutional parking",
     imageUrl: "/images/applications/parking-lots/parking-lots-01.jpg",
-    gallery: gallery("parking-lots", "parking-lots", 59),
+    gallery: [1,2,3,4,5,7,8,9,10,11,13,14,15,16,17,19,20,21,22,23,25,26,27,28,29,31,32,33,34,35,37,38,39,40,41,43,44,45,46,47,49,50,51,52,53,55,56,57,58,59].map(n =>
+      `/images/applications/parking-lots/parking-lots-${String(n).padStart(2,"0")}.jpg`),
     description: "Parking lot markings degrade faster than almost any other paved surface. DuraShield rejuvenates and seals oxidized asphalt, extending pavement life 3-5 years. TrafficPatterns and PreMark deliver crisp stall markings and accessible parking symbols that hold retroreflectivity for 5-7 years. StreetBond and DuraTherm unlock wayfinding colour zones and decorative treatments.",
     relatedProducts: ["durashield", "traffic-patterns", "traffic-patterns-xd", "premark", "streetbond", "streetprint", "duratherm"],
   },
@@ -56,7 +58,8 @@ export const applications: Application[] = [
     slug: "parks-paths",
     shortDesc: "Decorative coatings for pathways, plazas, and recreational surfaces",
     imageUrl: "/images/applications/parks-paths/parks-paths-01.jpg",
-    gallery: gallery("parks-paths", "parks-paths", 144),
+    gallery: [1,4,7,10,13,16,19,22,25,28,31,34,37,40,43,46,49,52,55,58,61,64,67,70,73,76,79,82,85,88,91,94,97,100,103,106,109,112,115,118,121,124,127,130,133,136,139,142,143,144].map(n =>
+      `/images/applications/parks-paths/parks-paths-${String(n).padStart(2,"0")}.jpg`),
     description: "Urban parks and multi-use paths are where communities live. StreetBond transforms utilitarian asphalt paths into vibrant, long-lasting surfaces. DecoMark brings mural-quality artwork to the ground plane for wayfinding art and cultural expression. StreetPrint gives park plazas a traditional stone aesthetic at a fraction of real paver cost.",
     relatedProducts: ["streetbond", "decomark", "durashield", "streetprint"],
   },
@@ -65,7 +68,8 @@ export const applications: Application[] = [
     slug: "playgrounds",
     shortDesc: "Safe surfaces. Bold expression.",
     imageUrl: "/images/applications/playgrounds/playgrounds-01.jpg",
-    gallery: gallery("playgrounds", "playgrounds", 53),
+    gallery: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52].map(n =>
+      `/images/applications/playgrounds/playgrounds-${String(n).padStart(2,"0")}.jpg`),
     description: "Playground surfaces demand safety, durability, and delight. DecoMark custom thermoplastic graphics bring hopscotch courts, number grids, and mural-scale artwork to paved play surfaces with Pantone-accurate colour. StreetBond adds vivid colour to existing asphalt play courts without raised edges that create trip hazards.",
     relatedProducts: ["decomark", "streetbond", "streetprint", "traffic-patterns"],
   },
@@ -110,7 +114,8 @@ export const applications: Application[] = [
     slug: "public-spaces",
     shortDesc: "Plazas, squares, and civic surfaces worth noticing.",
     imageUrl: "/images/applications/public-spaces/public-spaces-01.jpg",
-    gallery: gallery("public-spaces", "public-spaces", 67),
+    gallery: [1,2,3,5,6,7,9,10,11,13,14,15,17,18,19,21,22,23,25,26,27,29,30,31,33,34,35,37,38,39,41,42,43,45,46,47,49,50,51,53,54,55,57,58,59,61,62,63,65,66].map(n =>
+      `/images/applications/public-spaces/public-spaces-${String(n).padStart(2,"0")}.jpg`),
     description: "Town squares, transit plazas, university campuses, and civic forecourts are the most visible public surfaces in any community. StreetPrint transforms utilitarian paved plazas into rich hardscape environments. StreetBond colour systems define zones and reinforce campus or municipal identity. Used at UBC, BC Children's Hospital, and civic plazas across Canada.",
     relatedProducts: ["streetprint", "streetbond", "decomark", "duratherm"],
   },
@@ -119,7 +124,8 @@ export const applications: Application[] = [
     slug: "commercial-spaces",
     shortDesc: "First impressions start at the pavement.",
     imageUrl: "/images/applications/commercial-spaces/commercial-spaces-01.jpg",
-    gallery: gallery("commercial-spaces", "commercial-spaces", 115),
+    gallery: [1,3,5,8,10,12,15,17,19,22,24,26,29,31,33,36,38,40,43,45,47,50,52,54,57,59,61,64,66,68,71,73,75,78,80,82,85,87,89,92,94,96,99,101,103,106,108,110,113,115].map(n =>
+      `/images/applications/commercial-spaces/commercial-spaces-${String(n).padStart(2,"0")}.jpg`),
     description: "Retail centres, mixed-use developments, hotel entries, and commercial campuses compete on every surface detail. StreetPrint creates the aesthetic of premium hardscape at a fraction of full stone installation cost. StreetBond colour treatments define tenant zones and wayfinding paths. DuraShield extends the life of existing commercial lot surfaces.",
     relatedProducts: ["streetprint", "streetbond", "durashield", "traffic-patterns"],
   },
@@ -146,7 +152,8 @@ export const applications: Application[] = [
     slug: "pedestrian-safety",
     shortDesc: "Protecting people where they walk.",
     imageUrl: "/images/applications/crosswalks/crosswalks-03.jpg",
-    gallery: gallery("crosswalks", "crosswalks", 122),
+    gallery: [1,3,6,8,11,13,16,18,21,23,26,28,31,33,36,38,41,43,45,48,50,53,55,58,60,63,65,68,70,73,75,78,80,83,85,87,90,92,95,97,100,102,105,107,110,112,115,117,120,122].map(n =>
+      `/images/applications/crosswalks/crosswalks-${String(n).padStart(2,"0")}.jpg`),
     description: "Pedestrian safety is the single most important function of urban pavement marking. High-visibility crosswalks, raised intersection treatments, school zone markings, and tactile guidance surfaces all rely on durable, retroreflective pavement systems. TrafficPatterns and TrafficPatternsXD thermoplastic deliver Vision Zero–compliant crosswalks that outlast paint 5:1. StreetBond and MMAX colour coatings mark pedestrian priority zones with high-contrast colour that persists through Canadian winters.",
     relatedProducts: ["traffic-patterns", "traffic-patterns-xd", "streetbond", "mmax", "decomark", "premark"],
   },
@@ -155,7 +162,8 @@ export const applications: Application[] = [
     slug: "traffic-calming",
     shortDesc: "Infrastructure that slows, guides, and signals.",
     imageUrl: "/images/applications/traffic-calming/traffic-calming-01.jpg",
-    gallery: gallery("traffic-calming", "traffic-calming", 56),
+    gallery: [1,2,3,4,5,6,7,8,9,11,12,13,14,15,16,17,18,19,21,22,23,24,25,26,27,28,29,31,32,33,34,35,36,37,38,39,41,42,43,44,45,46,47,48,49,51,52,53,54,55].map(n =>
+      `/images/applications/traffic-calming/traffic-calming-${String(n).padStart(2,"0")}.jpg`),
     description: "Speed tables, raised intersections, curb extensions, and gateway treatments use pavement colour and texture to reduce vehicle speeds. StreetBond and MMAX coloured coatings give traffic calming installations high-visibility colour that persists through winter maintenance cycles. TrafficPatterns and TrafficPatternsXD deliver durable markings at raised crosswalks and school zones.",
     relatedProducts: ["streetbond", "mmax", "traffic-patterns", "traffic-patterns-xd", "streetprint"],
   },
@@ -191,7 +199,8 @@ export const applications: Application[] = [
     slug: "regulatory-markings",
     shortDesc: "TAC-compliant stop bars, arrows, legends, and lane markings",
     imageUrl: "/images/applications/traffic-calming/traffic-calming-01.jpg",
-    gallery: gallery("traffic-calming", "traffic-calming", 56),
+    gallery: [1,2,3,4,5,6,7,8,9,11,12,13,14,15,16,17,18,19,21,22,23,24,25,26,27,28,29,31,32,33,34,35,36,37,38,39,41,42,43,44,45,46,47,48,49,51,52,53,54,55].map(n =>
+      `/images/applications/traffic-calming/traffic-calming-${String(n).padStart(2,"0")}.jpg`),
     description: "Stop bars, turn arrows, yield symbols, school zone markings, and MUTCD-compliant pavement legends demand precision and longevity. TrafficPatterns and TrafficPatternsXD thermoplastic deliver retroreflective symbols and lines that outlast paint 5:1. PreMark preformed thermoplastic provides fast installation for school zones, accessible parking, and crosswalk ladder lines with no curing downtime.",
     relatedProducts: ["traffic-patterns", "traffic-patterns-xd", "premark", "duratherm", "airmark"],
   },

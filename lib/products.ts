@@ -165,7 +165,10 @@ export const products: Product[] = [
     imageUrl: "/images/products/streetbondsr/streetbondsr-02.jpg",
     gallery: [
       "/images/products/streetbondsr/streetbondsr-01.png",
-      ...Array.from({ length: 7 }, (_, i) => `/images/products/streetbondsr/streetbondsr-${String(i + 2).padStart(2, "0")}.jpg`),
+      "/images/products/streetbondsr/streetbondsr-02.jpg",
+      "/images/products/streetbondsr/streetbondsr-05.jpg",
+      "/images/products/streetbondsr/streetbondsr-07.jpg",
+      "/images/products/streetbondsr/streetbondsr-08.jpg",
     ],
     description: "StreetBondSR combines superior colour retention with solar reflective technology. LEED-compliant coating system that reduces pavement surface temperatures, mitigating urban heat island effects while delivering lasting color and protection. Trusted by 500+ Canadian municipalities.",
     specs: [

@@ -209,120 +209,76 @@ function ProjectModal({ project, onClose }: { project: MapProject; onClose: () =
   );
 }
 
-// ── Animated accordion project grid ────────────────────────────────────────
-const INITIAL_VISIBLE = 6;
-
-function ProjectGrid({ onSelectProject }: { onSelectProject: (p: MapProject) => void }) {
-  const [expanded, setExpanded] = useState(false);
-  const visibleProjects = expanded ? mapProjects : mapProjects.slice(0, INITIAL_VISIBLE);
-
+// ── Horizontal filmstrip below map ──────────────────────────────────────────
+function ProjectFilmstrip({ onSelectProject }: { onSelectProject: (p: MapProject) => void }) {
   return (
-    <div style={{ marginTop: "2.5rem" }}>
-      {/* Accordion trigger header */}
-      <button
-        onClick={() => setExpanded(!expanded)}
-        style={{
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          background: "rgba(249,115,22,0.04)",
-          border: "1px solid rgba(249,115,22,0.18)",
-          borderRadius: expanded ? "12px 12px 0 0" : 12,
-          padding: "14px 20px",
-          cursor: "pointer",
-          transition: "background 0.2s, border-color 0.2s",
-        }}
-        onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(249,115,22,0.08)"; }}
-        onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(249,115,22,0.04)"; }}
-        aria-expanded={expanded}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#F97316", boxShadow: "0 0 6px rgba(249,115,22,0.7)", flexShrink: 0 }} />
-          <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", color: "#F97316" }}>
-            Browse All Projects
-          </span>
-          <span style={{ fontSize: 12, color: "#6B7280" }}>
-            — {mapProjects.length} installations
-          </span>
-        </div>
-        <svg
-          width="16" height="16" viewBox="0 0 16 16" fill="none"
-          style={{
-            color: "#F97316",
-            transform: expanded ? "rotate(180deg)" : "rotate(0deg)",
-            transition: "transform 0.35s cubic-bezier(0.4,0,0.2,1)",
-            flexShrink: 0,
-          }}
-        >
-          <path d="M3 6l5 5 5-5" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </button>
+    <div style={{ marginTop: "1.5rem" }}>
+      {/* Label row */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.75rem", paddingLeft: 2 }}>
+        <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "#4B5563", margin: 0 }}>
+          {mapProjects.length} installations — click to explore
+        </p>
+        <span style={{ fontSize: 11, color: "#374151" }}>scroll →</span>
+      </div>
 
-      {/* Animated accordion body — grid-template-rows trick for smooth height animation */}
+      {/* Scrollable strip */}
       <div
         style={{
-          display: "grid",
-          gridTemplateRows: expanded ? "1fr" : "0fr",
-          transition: "grid-template-rows 0.42s cubic-bezier(0.4,0,0.2,1)",
-          background: "rgba(255,255,255,0.015)",
-          border: expanded ? "1px solid rgba(249,115,22,0.12)" : "1px solid transparent",
-          borderTop: "none",
-          borderRadius: "0 0 12px 12px",
+          display: "flex",
+          gap: 10,
+          overflowX: "auto",
+          paddingBottom: 8,
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
+          WebkitOverflowScrolling: "touch",
         }}
+        className="filmstrip-hide-scrollbar"
       >
-        <div style={{ overflow: "hidden" }}>
-          <div style={{ padding: "16px 16px 20px" }}>
-            <div className="canada-map-grid">
-              {visibleProjects.map((project) => (
-                <button
-                  key={project.id}
-                  onClick={() => onSelectProject(project)}
-                  style={{ background: "#1a1e28", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 10, padding: 0, cursor: "pointer", overflow: "hidden", textAlign: "left", transition: "border-color 0.2s, transform 0.18s, box-shadow 0.2s" }}
-                  onMouseEnter={(e) => {
-                    const el = e.currentTarget as HTMLButtonElement;
-                    el.style.borderColor = "rgba(249,115,22,0.4)";
-                    el.style.transform = "translateY(-2px)";
-                    el.style.boxShadow = "0 8px 24px rgba(0,0,0,0.4)";
-                  }}
-                  onMouseLeave={(e) => {
-                    const el = e.currentTarget as HTMLButtonElement;
-                    el.style.borderColor = "rgba(255,255,255,0.07)";
-                    el.style.transform = "translateY(0)";
-                    el.style.boxShadow = "none";
-                  }}
-                >
-                  <div style={{ position: "relative", aspectRatio: "16/9", overflow: "hidden" }}>
-                    <Image src={project.images[0]} alt={project.title} fill className="object-cover" sizes="220px" unoptimized />
-                    <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, transparent 40%, rgba(26,30,40,0.95) 100%)" }} />
-                  </div>
-                  <div style={{ padding: "10px 12px 12px" }}>
-                    <p style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#F97316", margin: "0 0 4px", lineHeight: 1 }}>
-                      {project.city}, {project.province}
-                    </p>
-                    <p style={{ fontSize: 12, fontWeight: 600, color: "#F5F0EB", margin: "0 0 4px", lineHeight: 1.35 }}>
-                      {project.title}
-                    </p>
-                    <p style={{ fontSize: 10, color: "#6B7280", margin: 0 }}>{project.product}</p>
-                  </div>
-                </button>
-              ))}
+        {mapProjects.map((project) => (
+          <button
+            key={project.id}
+            onClick={() => onSelectProject(project)}
+            style={{
+              flexShrink: 0,
+              width: 160,
+              background: "#111827",
+              border: "1px solid rgba(255,255,255,0.06)",
+              borderRadius: 10,
+              padding: 0,
+              cursor: "pointer",
+              overflow: "hidden",
+              textAlign: "left",
+              transition: "border-color 0.18s, transform 0.18s",
+            }}
+            onMouseEnter={(e) => {
+              const el = e.currentTarget as HTMLButtonElement;
+              el.style.borderColor = "rgba(249,115,22,0.45)";
+              el.style.transform = "translateY(-2px)";
+            }}
+            onMouseLeave={(e) => {
+              const el = e.currentTarget as HTMLButtonElement;
+              el.style.borderColor = "rgba(255,255,255,0.06)";
+              el.style.transform = "translateY(0)";
+            }}
+          >
+            {/* Thumbnail */}
+            <div style={{ position: "relative", width: "100%", aspectRatio: "16/9", overflow: "hidden" }}>
+              <Image src={project.images[0]} alt={project.title} fill className="object-cover" sizes="160px" unoptimized />
+              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, transparent 30%, rgba(17,24,39,0.85) 100%)" }} />
+              {/* Province badge */}
+              <span style={{ position: "absolute", top: 7, right: 7, fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", background: "rgba(0,0,0,0.55)", color: "#F97316", padding: "2px 6px", borderRadius: 4, backdropFilter: "blur(4px)" }}>
+                {project.province}
+              </span>
             </div>
-
-            {/* Show more / show less within the open accordion */}
-            {mapProjects.length > INITIAL_VISIBLE && (
-              <button
-                onClick={(e) => { e.stopPropagation(); setExpanded(false); }}
-                style={{ display: "flex", alignItems: "center", gap: 6, background: "transparent", border: "none", cursor: "pointer", color: "#6B7280", fontSize: 12, fontWeight: 600, marginTop: 16, padding: 0 }}
-              >
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ transform: "rotate(180deg)" }}>
-                  <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-                Collapse
-              </button>
-            )}
-          </div>
-        </div>
+            {/* Label */}
+            <div style={{ padding: "8px 10px 10px" }}>
+              <p style={{ fontSize: 10, fontWeight: 600, color: "#F5F0EB", margin: "0 0 3px", lineHeight: 1.3 }}>
+                {project.title.length > 32 ? project.title.slice(0, 32) + "…" : project.title}
+              </p>
+              <p style={{ fontSize: 9, color: "#6B7280", margin: 0, fontWeight: 500 }}>{project.product}</p>
+            </div>
+          </button>
+        ))}
       </div>
     </div>
   );
@@ -360,15 +316,10 @@ export default function CanadaMap() {
           grid-template-columns: 1fr 1fr;
           gap: 14px;
         }
-        .canada-map-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
-          gap: 10px;
-        }
+        .filmstrip-hide-scrollbar::-webkit-scrollbar { display: none; }
         @media (max-width: 640px) {
           .canada-map-modal { border-radius: 14px !important; }
           .canada-map-modal-grid { grid-template-columns: 1fr !important; }
-          .canada-map-grid { grid-template-columns: repeat(2, 1fr) !important; }
           .canada-map-header { flex-direction: column !important; align-items: flex-start !important; }
         }
       `}</style>
@@ -413,4 +364,52 @@ export default function CanadaMap() {
               attributionControl={false}
             >
               <NavigationControl position="bottom-right" style={{ marginBottom: 16, marginRight: 16 }} />
-              <ScaleControl position="bottom-left" style={{ mar
+              <ScaleControl position="bottom-left" style={{ marginBottom: 16, marginLeft: 16 }} />
+
+              {mapProjects.map((project) => (
+                <Marker
+                  key={project.id}
+                  longitude={project.lng}
+                  latitude={project.lat}
+                  anchor="bottom"
+                  onClick={(e) => {
+                    e.originalEvent.stopPropagation();
+                    handleMarkerClick(project);
+                  }}
+                >
+                  <div
+                    style={{ position: "relative" }}
+                    onMouseEnter={() => setHoveredId(project.id)}
+                    onMouseLeave={() => setHoveredId(null)}
+                  >
+                    <PinMarker
+                      active={selectedProject?.id === project.id}
+                      hovered={hoveredId === project.id}
+                    />
+                    {hoveredId === project.id && selectedProject?.id !== project.id && (
+                      <HoverPopup project={project} />
+                    )}
+                  </div>
+                </Marker>
+              ))}
+            </Map>
+
+            {/* Hint pill */}
+            <div style={{ position: "absolute", bottom: 16, left: "50%", transform: "translateX(-50%)", background: "rgba(8,13,22,0.85)", backdropFilter: "blur(10px)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 24, padding: "6px 16px", pointerEvents: "none", whiteSpace: "nowrap" }}>
+              <span style={{ fontSize: 11, color: "#6B7280", fontWeight: 500 }}>Hover to preview · Click to explore</span>
+            </div>
+          </div>
+
+          {/* Filmstrip */}
+          <ProjectFilmstrip onSelectProject={handleMarkerClick} />
+
+        </div>
+      </section>
+
+      {selectedProject && (
+        <ProjectModal project={selectedProject} onClose={handleCloseModal} />
+      )}
+    </>
+  );
+}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         

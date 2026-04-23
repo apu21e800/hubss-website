@@ -167,7 +167,7 @@ export const products: Product[] = [
   {
     name: "StreetBondSR",
     slug: "streetbondsr",
-    shortDesc: "Solar reflective. LEED-compliant. Urban heat island mitigation.",
+    shortDesc: "Solar reflective. High-SRI rated. Urban heat island mitigation.",
     imageUrl: "/images/products/streetbondsr/streetbondsr-02.jpg",
     gallery: [
       "/images/products/streetbondsr/streetbondsr-01.png",
@@ -176,10 +176,10 @@ export const products: Product[] = [
       "/images/products/streetbondsr/streetbondsr-07.jpg",
       "/images/products/streetbondsr/streetbondsr-08.jpg",
     ],
-    description: "StreetBondSR combines superior colour retention with solar reflective technology. LEED-compliant coating system that reduces pavement surface temperatures, mitigating urban heat island effects while delivering lasting color and protection. Trusted by 500+ Canadian municipalities.",
+    description: "StreetBondSR combines superior colour retention with solar reflective technology. A high-SRI coating system that reduces pavement surface temperatures, mitigating urban heat island effects while delivering lasting colour and protection. Trusted by 500+ Canadian municipalities.",
     specs: [
       { label: "Type", value: "Solar reflective acrylic pavement coating" },
-      { label: "LEED Compliance", value: "Yes - contributes to sustainable site credits" },
+      { label: "LEED Credits", value: "Contributes to sustainable site credits" },
       { label: "Solar Reflectance", value: "High SRI (Solar Reflectance Index)" },
       { label: "Heat Mitigation", value: "Reduces surface temperature vs. standard coatings" },
       { label: "Surfaces", value: "Asphalt and concrete" },
@@ -238,14 +238,14 @@ export const products: Product[] = [
   {
     name: "AirMark",
     slug: "airmark",
-    shortDesc: "FAA-grade clarity. Field-proven performance.",
+    shortDesc: "Aviation-grade clarity. Field-proven performance.",
     imageUrl: "/images/products/airmark/airmark-01.jpg",
     gallery: gallery("airmark", "airmark", 22),
-    description: "AirMark: preformed thermoplastic airfield markings meeting aviation marking standards. Premium retroreflectivity. Outlast painted alternatives by 4:1.", // AUDIT: removed specific FAA AC number — verify exact compliance citation with manufacturer
+    description: "AirMark: preformed thermoplastic airfield markings engineered for precision and performance. Premium retroreflectivity. Outlast painted alternatives by 4:1.",
     specs: [
-      { label: "Standard", value: "Meets aviation airfield marking standards" }, // AUDIT: verify specific FAA AC compliance
+      { label: "Standard", value: "Aviation airfield marking standards" },
       { label: "Material", value: "Preformed thermoplastic" },
-      { label: "Retroreflectivity", value: "Premium glass bead surface" }, // AUDIT: verify ASTM D4956 Type IV claim
+      { label: "Retroreflectivity", value: "Premium glass bead surface" },
       { label: "Colour", value: "White and yellow" },
       { label: "Service Life", value: "4x painted alternatives" },
       { label: "Installation", value: "Heat application - certified crews" },
@@ -307,4 +307,4 @@ export const products: Product[] = [
     ],
     relatedApplications: ["private-driveways", "parking-lots", "parks-paths", "commercial-spaces"],
   },
-];
+];                                                                                                                                                                                             

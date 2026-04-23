@@ -154,7 +154,7 @@ export const applications: Application[] = [
     imageUrl: "/images/applications/crosswalks/crosswalks-03.jpg",
     gallery: [1,3,6,8,11,13,16,18,21,23,26,28,31,33,36,38,41,43,45,48,50,53,55,58,60,63,65,68,70,73,75,78,80,83,85,87,90,92,95,97,100,102,105,107,110,112,115,117,120,122].map(n =>
       `/images/applications/crosswalks/crosswalks-${String(n).padStart(2,"0")}.jpg`),
-    description: "Pedestrian safety is the single most important function of urban pavement marking. High-visibility crosswalks, raised intersection treatments, school zone markings, and tactile guidance surfaces all rely on durable, retroreflective pavement systems. TrafficPatterns and TrafficPatternsXD thermoplastic deliver Vision Zero–compliant crosswalks that outlast paint 5:1. StreetBond and MMAX colour coatings mark pedestrian priority zones with high-contrast colour that persists through Canadian winters.",
+    description: "Pedestrian safety is the single most important function of urban pavement marking. High-visibility crosswalks, raised intersection treatments, school zone markings, and tactile guidance surfaces all rely on durable, retroreflective pavement systems. TrafficPatterns and TrafficPatternsXD thermoplastic deliver Vision Zero crosswalks that outlast paint 5:1. StreetBond and MMAX colour coatings mark pedestrian priority zones with high-contrast colour that persists through Canadian winters.",
     relatedProducts: ["traffic-patterns", "traffic-patterns-xd", "streetbond", "mmax", "decomark", "premark"],
   },
   {
@@ -182,7 +182,7 @@ export const applications: Application[] = [
     shortDesc: "Cool surfaces. Green credentials.",
     imageUrl: "/images/applications/leed-urban-heat-island/leed-urban-heat-island-01.jpg",
     gallery: gallery("leed-urban-heat-island", "leed-urban-heat-island", 2),
-    description: "Dark asphalt surfaces absorb solar heat, raising urban ambient temperatures and contributing to the urban heat island effect. StreetBond light-coloured pavement coatings reflect solar radiation, reducing surface temperatures and contributing to LEED site credit compliance for heat island reduction. Available in high-SRI formulations.",
+    description: "Dark asphalt surfaces absorb solar heat, raising urban ambient temperatures and contributing to the urban heat island effect. StreetBond light-coloured pavement coatings reflect solar radiation, reducing surface temperatures and contributing to LEED site credits for heat island reduction. Available in high-SRI formulations.",
     relatedProducts: ["streetbond", "mmax", "durashield"],
   },
   {
@@ -205,3 +205,4 @@ export const applications: Application[] = [
     relatedProducts: ["traffic-patterns", "traffic-patterns-xd", "premark", "duratherm", "airmark"],
   },
 ];
+                      

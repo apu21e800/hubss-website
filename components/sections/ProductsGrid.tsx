@@ -86,23 +86,17 @@ export default function ProductsGrid() {
           <div className="flex items-end justify-between gap-6 flex-wrap">
             <div>
               <h2
-                className="font-black mb-3"
-                style={{
-                  color: "var(--text-primary)",
-                  fontSize: "clamp(1.8rem, 3.5vw, 3rem)",
-                  lineHeight: 1.08,
-                  letterSpacing: "-0.03em",
-                  textWrap: "balance",
-                }}
+                className="text-3xl sm:text-4xl font-bold tracking-tight mb-3"
+                style={{ color: "var(--text-primary)" }}
               >
-                Purpose-Built.<br className="hidden sm:block" /> Performance-Proven.
+                Purpose-Built. Canadian-Proven.
               </h2>
               <p
                 className="text-base font-light max-w-lg leading-relaxed"
                 style={{ color: "var(--text-secondary)" }}
               >
-                Six systems engineered for freeze-thaw climates, municipalities,
-                and the projects that define a city.
+                Six systems engineered for Canadian winters, municipalities, and
+                the projects that define a city.
               </p>
             </div>
             <Link
@@ -275,4 +269,13 @@ export default function ProductsGrid() {
           </p>
           <Link
             href="/products"
-            className="order-1 sm:order-2 inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold border transition-all duration-200 hover:text-white hover:border-oran
+            className="order-1 sm:order-2 inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold border transition-all duration-200 hover:text-white hover:border-orange-500/50"
+            style={{ color: "var(--text-secondary)", borderColor: "rgba(255,255,255,0.12)" }}
+          >
+            View all systems
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}

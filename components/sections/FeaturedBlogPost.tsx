@@ -42,16 +42,10 @@ export default function FeaturedBlogPost() {
               Field Notes
             </p>
             <h2
-              className="font-black"
-              style={{
-                color: "var(--text-primary)",
-                fontSize: "clamp(1.8rem, 3.5vw, 3rem)",
-                lineHeight: 1.08,
-                letterSpacing: "-0.03em",
-                textWrap: "balance",
-              }}
+              className="text-2xl sm:text-3xl md:text-4xl font-bold"
+              style={{ color: "var(--text-primary)" }}
             >
-              Proven in the Field.<br className="hidden sm:block" /> Built to Last.
+              Proven in Canada and Built in Canada
             </h2>
             <p
               className="text-base mt-2 max-w-xl"
@@ -244,4 +238,12 @@ export default function FeaturedBlogPost() {
           <Link
             href="/blog"
             className="text-sm font-semibold px-6 py-3 rounded-lg inline-block border transition-all hover:border-orange-500/40 hover:text-white"
-  
+            style={{ borderColor: "var(--border-color)", color: "var(--text-secondary)" }}
+          >
+            All Field Notes
+          </Link>
+        </div>
+
+      </div>
+    </section>
+  );

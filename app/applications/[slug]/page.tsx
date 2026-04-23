@@ -10,6 +10,7 @@ import ResidentialDriveways from "@/components/sections/ResidentialDriveways";
 import JsonLd from "@/components/ui/JsonLd";
 import { applications } from "@/lib/applications";
 import { products } from "@/lib/products";
+import { applicationImages, resolveImage } from "@/lib/featured-images";
 import { buildMetadata } from "@/lib/seo";
 
 // Exclude slugs that have their own dedicated page (e.g. /applications/public-art/page.tsx)
@@ -38,6 +39,11 @@ export default async function ApplicationPage({ params }: Props) {
   const { slug } = await params;
   const application = applications.find((a) => a.slug === slug);
   if (!application) notFound();
+
+  // Curated featured image for hero — better shot than the default -01 imageUrl
+  const featuredImg = applicationImages[application.slug]
+    ? resolveImage(applicationImages[application.slug])
+    : null;
 
   // Gallery — use application.gallery if available, otherwise fall back to featured image
   const appGallery = application.gallery ?? [];
@@ -69,17 +75,17 @@ export default async function ApplicationPage({ params }: Props) {
       <JsonLd data={applicationSchema} />
       <Nav />
 
-      {/* Hero banner */}
+      {/* Hero banner — prefer curated featured image, fall back to application.imageUrl */}
       <div className="relative h-[50vh] min-h-[400px] overflow-hidden">
         <Image
-          src={application.imageUrl}
-          alt={application.name}
+          src={featuredImg?.src ?? application.imageUrl}
+          alt={featuredImg?.alt ?? application.name}
           fill
           className="object-cover"
           priority
           sizes="100vw"
         />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(10,10,10,0.42) 0%, rgba(10,10,10,0.62) 55%, rgba(0,0,0,0.85) 100%)" }} />
+        <div className="absolute inset-0" style={{ background: "rgba(26,26,26,0.7)" }} />
         <div className="absolute inset-0 flex items-end max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
           <div>
             <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-3" style={{ color: "#f97316" }}>
@@ -101,7 +107,7 @@ export default async function ApplicationPage({ params }: Props) {
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            backgroundImage: "url('/images/assets/details/asphalt-closeup-01.jpg')",
+            backgroundImage: "url('/images/textures/stamped-asphalt-texture.webp')",
             backgroundSize: "480px auto",
             backgroundRepeat: "repeat",
             opacity: 0.04,
@@ -111,29 +117,21 @@ export default async function ApplicationPage({ params }: Props) {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
 
           {/* Specify CTA bar */}
-          <div
-            className="rounded-xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 mb-10 relative overflow-hidden"
-            style={{
-              background: "linear-gradient(135deg, #ea6c10 0%, #f97316 50%, #d97706 100%)",
-              boxShadow: "0 4px 28px rgba(249,115,22,0.3)",
-            }}
-          >
-            <div className="absolute inset-0 pointer-events-none opacity-10"
-              style={{ backgroundImage: "url('/images/textures/stamped-asphalt-texture.webp')", backgroundSize: "300px auto" }} />
+          <div className="rounded-xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-10 relative overflow-hidden"
+            style={{ background: "linear-gradient(135deg, #1c1100 0%, #111111 60%)", border: "1px solid rgba(249,115,22,0.35)", borderLeft: "3px solid #f97316" }}>
+            <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 0% 50%, rgba(249,115,22,0.07) 0%, transparent 60%)" }} />
             <div className="relative">
-              <p className="font-bold text-lg leading-snug" style={{ color: "#ffffff" }}>Ready to specify {application.name}?</p>
-              <p className="text-sm mt-1" style={{ color: "rgba(255,255,255,0.82)" }}>Product recommendations, documentation, and certified installer support.</p>
+              <p className="font-bold text-base" style={{ color: "#F5F0EB" }}>Interested in {application.name}?</p>
+              <p className="text-sm mt-0.5" style={{ color: "#9CA3AF" }}>Get product recommendations, technical documentation, and installation support.</p>
             </div>
-            <div className="flex flex-wrap gap-3 relative flex-shrink-0">
-              <Link href="/lunch-learn"
-                className="px-5 py-2.5 rounded-lg text-sm font-semibold transition-all hover:bg-white/20"
-                style={{ background: "rgba(0,0,0,0.2)", color: "#ffffff", border: "1px solid rgba(255,255,255,0.25)" }}>
-                Book a Lunch &amp; Learn
+            <div className="flex flex-wrap gap-3 relative">
+              <Link href="/resources" className="px-4 py-2.5 rounded-lg text-sm font-medium transition-all hover:text-white border border-white/20 hover:border-orange-500/50"
+                style={{ color: "#D1D5DB" }}>
+                Technical Specs
               </Link>
-              <Link href="/contact"
-                className="px-5 py-2.5 rounded-lg text-sm font-bold transition-all hover:brightness-95"
-                style={{ background: "#ffffff", color: "#ea6c10" }}>
-                Get a Quote →
+              <Link href="/lunch-learn" className="px-4 py-2.5 rounded-lg text-sm font-bold transition-all hover:brightness-110"
+                style={{ background: "#F97316", color: "#fff" }}>
+                Book Lunch &amp; Learn →
               </Link>
             </div>
           </div>
@@ -187,24 +185,17 @@ export default async function ApplicationPage({ params }: Props) {
 
                 <Link
                   href="/contact"
-                  className="flex items-center justify-center gap-2 w-full text-center font-bold py-4 rounded-lg mt-8 transition-all text-sm"
-                  style={{
-                    background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
-                    color: "#fff",
-                    boxShadow: "0 4px 16px rgba(249,115,22,0.35)",
-                  }}
+                  className="block w-full text-center font-semibold py-4 rounded-lg mt-8 transition-all text-sm hover:brightness-110"
+                  style={{ background: "#f97316", color: "#fff" }}
                 >
                   Request a Quote
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
                 </Link>
                 <Link
                   href="/lunch-learn"
-                  className="flex items-center justify-center gap-2 w-full text-center font-semibold py-3.5 rounded-lg mt-3 transition-all text-sm hover:border-orange-500/40 hover:text-white"
+                  className="block w-full text-center font-semibold py-4 rounded-lg mt-3 transition-all text-sm hover:border-[#F97316]/50 hover:text-white"
                   style={{ background: "transparent", color: "#9CA3AF", border: "1px solid rgba(255,255,255,0.12)" }}
                 >
-                  Book a Lunch &amp; Learn
+                  Book Lunch &amp; Learn
                 </Link>
               </div>
             </div>
@@ -282,4 +273,10 @@ export default async function ApplicationPage({ params }: Props) {
                         {product.shortDesc.slice(0, 80)}{product.shortDesc.length > 80 ? "…" : ""}
                       </p>
                       <span
-                       
+                        className="mt-2 text-[0.68rem] font-semibold flex items-center gap-1 uppercase tracking-wider transition-colors duration-150 group-hover:text-[#fb923c]"
+                        style={{ color: "#f97316" }}
+                      >
+                        View Product
+                        <svg className="w-2.5 h-2.5 transition-transform duration-150 group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </sv

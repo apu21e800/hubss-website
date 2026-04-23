@@ -4,32 +4,33 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
 const STATS = [
-  { num: "30+",    label: "Years",          sub: "Installations across North America" },
-  { num: "1,000+", label: "Projects",       sub: "Completed coast to coast" },
-  { num: "500+",   label: "Municipalities", sub: "Specified coast to coast" },
-  { num: "20yr",   label: "Performance",    sub: "Colour retention on stamped asphalt and coatings" },
+  { num: "30+", label: "Years", sub: "Engineering Canadian surfaces" },
+  { num: "1,000+", label: "Projects", sub: "Completed coast to coast" },
+  { num: "500+", label: "Municipalities", sub: "Specified coast to coast" },
+  { num: "5–7yr", label: "Service Life", sub: "Where traffic paint lasts 12–18 months" },
 ];
 
+// Condensed to scannable one-liners — no paragraphs
 const PROOF = [
   {
     num: "01",
-    claim: "Built for freeze-thaw climates",
-    detail: "Freeze-thaw cycles, de-icing salts, snowplow blades. Stress-tested for every climate coast to coast.",
+    claim: "Built for Canadian winters",
+    detail: "Freeze-thaw, de-icing salts, snowplow blades — stress-tested for every climate from BC coastal rain to Ontario freeze-thaw.",
   },
   {
     num: "02",
-    claim: "Lower lifecycle cost than paint",
-    detail: "Thermoplastic and MMA systems last 6–8× longer than paint — with no lane closures for reapplication.",
+    claim: "Snowplow-proof by design",
+    detail: "Preformed thermoplastics and stamped asphalt profiles are engineered to survive blade contact. No peeling, no delamination — season after season.",
   },
   {
     num: "03",
-    claim: "Visible in every condition",
-    detail: "Retroreflective crosswalk systems, high-contrast colour combinations, and slip-resistant surfaces engineered for rain, snow, and low-light performance.",
+    claim: "Pedestrian safety built in",
+    detail: "High-contrast retroreflectivity, BPN 65+ skid resistance, and Vision Zero-aligned geometry — proven across hundreds of Canadian crosswalk programs.",
   },
   {
     num: "04",
-    claim: "Specified by engineers coast to coast",
-    detail: "Trusted by transportation engineers, urban designers, and municipal procurement teams from Vancouver to Halifax.",
+    claim: "Regulatory compliance",
+    detail: "TAC, MUTCD, BCMOT, and aviation marking standards compliant across the full product range.",
   },
 ];
 
@@ -49,28 +50,41 @@ export default function WhyHubss() {
     <section
       ref={sectionRef}
       className="relative overflow-hidden"
-      style={{ background: "#070b12" }}
+      style={{
+        background: "#070b12",
+      }}
     >
+      {/* Strong orange bloom from top-left — gives the section energy */}
       <div
         className="absolute pointer-events-none"
         style={{
-          top: "-120px", left: "-80px", width: "600px", height: "500px",
+          top: "-120px",
+          left: "-80px",
+          width: "600px",
+          height: "500px",
           background: "radial-gradient(ellipse at 30% 20%, rgba(249,115,22,0.13) 0%, transparent 65%)",
         }}
       />
+      {/* Subtle secondary bloom top-right */}
       <div
         className="absolute pointer-events-none"
         style={{
-          top: "-60px", right: "0", width: "400px", height: "300px",
+          top: "-60px",
+          right: "0",
+          width: "400px",
+          height: "300px",
           background: "radial-gradient(ellipse at 70% 0%, rgba(234,179,8,0.06) 0%, transparent 70%)",
         }}
       />
+      {/* Top edge line */}
       <div
         className="absolute top-0 inset-x-0 h-px pointer-events-none"
         style={{ background: "linear-gradient(90deg, transparent 0%, rgba(249,115,22,0.5) 50%, transparent 100%)" }}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 lg:pt-28 pb-6">
+
+        {/* ── Header ── */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -89,7 +103,7 @@ export default function WhyHubss() {
               backgroundClip: "text",
             }}
           >
-            The durable decorative hardscape.
+            Canada's durable decorative hardscape.
             <br />Specified by Engineers.
             <br />Loved by Communities.
           </h2>
@@ -98,6 +112,7 @@ export default function WhyHubss() {
           </p>
         </motion.div>
 
+        {/* ── Stats ── */}
         <div
           className="grid grid-cols-2 sm:grid-cols-4 mb-12 rounded-xl overflow-hidden"
           style={{ border: "1px solid rgba(255,255,255,0.07)" }}
@@ -111,7 +126,7 @@ export default function WhyHubss() {
               className="flex flex-col items-center justify-center gap-1 py-7 px-4 text-center"
               style={{
                 background: "rgba(255,255,255,0.02)",
-                borderRight:  i < 3 ? "1px solid rgba(255,255,255,0.07)" : "none",
+                borderRight: i < 3 ? "1px solid rgba(255,255,255,0.07)" : "none",
                 borderBottom: i < 2 ? "1px solid rgba(255,255,255,0.07)" : "none",
               }}
             >
@@ -128,6 +143,7 @@ export default function WhyHubss() {
           ))}
         </div>
 
+        {/* ── Proof points — tight rows, no paragraph walls ── */}
         <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
           {PROOF.map((p, i) => (
             <motion.div
@@ -153,37 +169,40 @@ export default function WhyHubss() {
           ))}
         </div>
 
-        {/* Bottom CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.5, duration: 0.4 }}
-          className="mt-12 mb-2 flex flex-col sm:flex-row items-start sm:items-center gap-4"
-        >
-          <a
-            href="/contact"
-            className="inline-flex items-center gap-2 font-bold px-7 py-3.5 rounded-lg transition-all text-sm"
-            style={{
-              background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
-              color: "#fff",
-              boxShadow: "0 4px 20px rgba(249,115,22,0.3)",
-            }}
-          >
-            Request a Quote
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </a>
-          <a
-            href="/lunch-learn"
-            className="inline-flex items-center gap-2 text-sm font-semibold transition-colors group"
-            style={{ color: "rgba(255,255,255,0.5)" }}
-          >
-            <span className="group-hover:text-orange-400 transition-colors">Book a Lunch &amp; Learn</span>
-            <svg className="w-3.5 h-3.5 group-hover:text-orange-400 group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </a>
-        </motion.div>
+        {/* ── Trusted-by label ── */}
+        <p className="text-[10px] font-bold tracking-[0.2em] uppercase mt-10 mb-5" style={{ color: "rgba(255,255,255,0.18)" }}>
+          Trusted by
+        </p>
+      </div>
 
-        <p className="text-[10px] font
+      {/* ── Full-bleed scrolling marquee ── */}
+      <div
+        className="overflow-hidden pt-2 pb-10"
+        style={{ maskImage: "linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%)" }}
+      >
+        <div
+          className="flex gap-0 whitespace-nowrap"
+          style={{ animation: "hubss-marquee 36s linear infinite" }}
+        >
+          {TICKER.map((name, i) => (
+            <span key={i} className="inline-flex items-center flex-shrink-0">
+              <span className="text-sm font-medium pl-6 pr-4" style={{ color: "rgba(255,255,255,0.35)" }}>{name}</span>
+              <span className="inline-block w-1 h-1 rounded-full flex-shrink-0 mr-2" style={{ background: "rgba(249,115,22,0.4)" }} />
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Gradient frame line — grounds the marquee, bridges into persona strip ── */}
+      <div
+        className="w-full"
+        style={{
+          height: "1.5px",
+          background: "linear-gradient(90deg, transparent 0%, #F97316 30%, #EAB308 70%, transparent 100%)",
+          opacity: 0.6,
+        }}
+      />
+
+      <style>{`
+        @keyframes hubss-marquee {
+          0%   { transform: 

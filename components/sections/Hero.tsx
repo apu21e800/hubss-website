@@ -14,9 +14,9 @@ interface HeroProps {
 
 const credentialStats = [
   { value: "1,000+", label: "Projects completed" },
-  { value: "10",     label: "Provinces, coast to coast" },
+  { value: "10", label: "Provinces, coast to coast" },
   { value: "Since 1994", label: "Trusted across Canada" },
-  { value: "20yr",   label: "Durability" },
+  { value: "20yr", label: "Durability" },
 ];
 
 const tickerItems = [
@@ -29,6 +29,7 @@ const tickerItems = [
 export default function Hero({ variant = "default" }: HeroProps) {
   const textRef = useRef<HTMLDivElement>(null);
 
+  // Subtle parallax — text block floats slightly upward on scroll
   useEffect(() => {
     const onScroll = () => {
       if (textRef.current) {
@@ -39,11 +40,13 @@ export default function Hero({ variant = "default" }: HeroProps) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // All variants use the same left-aligned layout for consistency
   return (
     <section
       className="hero-section relative z-10 min-h-screen flex flex-col pb-20"
       style={{ background: "#080d16" }}
     >
+      {/* Full-bleed hero image */}
       <Image
         src={resolveImage(heroImages.homepage).src}
         alt={resolveImage(heroImages.homepage).alt}
@@ -52,6 +55,7 @@ export default function Hero({ variant = "default" }: HeroProps) {
         priority
         sizes="100vw"
       />
+      {/* Stamped asphalt texture — material depth, barely visible */}
       <Image
         src="/images/textures/stamped-asphalt-texture.webp"
         alt=""
@@ -61,8 +65,10 @@ export default function Hero({ variant = "default" }: HeroProps) {
         aria-hidden="true"
         sizes="100vw"
       />
+      {/* Dark overlay — keeps text fully readable */}
       <div className="absolute inset-0 bg-black/70 pointer-events-none" />
 
+      {/* Main content — mobile: column with top text + bottom CTAs | desktop: centered */}
       <div
         ref={textRef}
         className="flex-1 flex flex-col justify-between sm:justify-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-28 sm:pt-32 pb-10 relative z-10"
@@ -74,42 +80,43 @@ export default function Hero({ variant = "default" }: HeroProps) {
           transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-4xl w-full text-left relative"
         >
+          {/* Gradient left-edge accent — tracks the headline block */}
           <div
             className="absolute -left-4 sm:-left-6 lg:-left-8 top-2 w-[3px] h-36 sm:h-48"
             style={{ background: "linear-gradient(180deg, #F97316 0%, #EAB308 100%)" }}
           />
+          {/* Eyebrow */}
           <p
             className="text-xs font-semibold tracking-[0.2em] uppercase mb-3"
             style={{ color: "#f97316" }}
           >
-            30+ Years &middot; 1,000+ Projects &middot; York Region, Vancouver &amp; UBC
+            30+ Years · 1,000+ Projects · York Region, Vancouver &amp; UBC
           </p>
-          <h1
-            className="font-black text-white mb-4 sm:mb-6"
-            style={{
-              fontSize: "clamp(2.8rem, 6.5vw, 6.5rem)",
-              lineHeight: 0.97,
-              letterSpacing: "-0.035em",
-              textWrap: "balance",
-            }}
-          >
+
+          {/* Headline */}
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tight text-white leading-none mb-4 sm:mb-6">
             The World Is Your Canvas.
           </h1>
+
+          {/* Body — hidden on smallest screens to give headline room, shows sm+ */}
           <p className="hidden sm:block text-base md:text-xl text-gray-300 max-w-2xl mb-8 leading-relaxed">
             Decorative hardscape and traffic safety solutions, installed by certified professionals across Canada.
           </p>
+          {/* Mobile-only shortened body */}
           <p className="sm:hidden text-sm text-gray-300 mb-8 leading-relaxed">
             Decorative hardscape and traffic safety solutions across Canada.
           </p>
         </motion.div>
 
+        {/* CTAs + Stats — bottom of flex on mobile for thumb reach, inline on desktop */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-4xl w-full mt-6 sm:mt-8"
         >
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-5 sm:mb-6">
+          {/* CTAs */}
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8 sm:mb-10">
             <Link
               href="/products"
               className="bg-orange-500 hover:bg-orange-400 text-white font-bold px-8 py-4 rounded-lg transition-colors text-center w-full sm:w-auto min-h-[52px] flex items-center justify-center text-base"
@@ -123,40 +130,28 @@ export default function Hero({ variant = "default" }: HeroProps) {
               Book a Lunch &amp; Learn
             </Link>
           </div>
-          <Link
-            href="/contact"
-            className="inline-flex items-center gap-2 text-sm font-semibold mb-8 sm:mb-10 transition-colors group"
-            style={{ color: "rgba(255,255,255,0.55)" }}
-          >
-            <span className="group-hover:text-orange-400 transition-colors">Start a project</span>
-            <svg className="w-3.5 h-3.5 group-hover:text-orange-400 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </Link>
+
+          {/* Stats bar */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-4">
             {credentialStats.map((stat) => (
               <div key={stat.label} className="flex flex-col gap-0.5">
-                <span className="text-2xl sm:text-3xl font-black text-white tabular-nums leading-none">
-                  {stat.value}
-                </span>
-                <span
-                  className="text-[11px] font-medium leading-tight"
-                  style={{ color: "rgba(255,255,255,0.45)" }}
-                >
-                  {stat.label}
-                </span>
+                <span className="text-2xl sm:text-3xl font-black text-white tabular-nums leading-none">{stat.value}</span>
+                <span className="text-[11px] font-medium leading-tight" style={{ color: "rgba(255,255,255,0.45)" }}>{stat.label}</span>
               </div>
             ))}
           </div>
         </motion.div>
       </div>
 
-      {/* Ticker strip */}
-      <div
-        className="absolute bottom-0 left-0 right-0 overflow-hidden z-10"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
-      >
+      {/* Ticker — infinite scroll of products and applications */}
+      <div className="absolute bottom-0 left-0 right-0 overflow-hidden z-10" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
         <div className="py-3 whitespace-nowrap ticker-track">
           {[...tickerItems, ...tickerItems].map((item, i) => (
-            <span key={i} style={{ display: "inline-flex", alignItems: "center", flexShrink: 0 }}>
-              <s
+            <span key={i} className="inline-flex items-center flex-shrink-0">
+              <span className="text-xs font-medium tracking-wide pl-5 pr-3" style={{ color: "rgba(255,255,255,0.3)" }}>{item}</span>
+              <span className="inline-block w-1 h-1 rounded-full flex-shrink-0 mr-2" style={{ background: "rgba(249,115,22,0.4)" }} />
+            </span>
+          ))}
+        </div>
+      </div>
+    </section

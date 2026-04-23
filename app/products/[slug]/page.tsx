@@ -16,7 +16,8 @@ import { buildMetadata } from "@/lib/seo";
 import { getProductFamily } from "@/lib/product-taxonomy";
 
 export async function generateStaticParams() {
-  return products.filter((p) => !p.comingSoon).map((p) => ({ slug: p.slug }));
+  // Include comingSoon products so they get a proper page instead of a 404
+  return products.map((p) => ({ slug: p.slug }));
 }
 
 type Props = { params: Promise<{ slug: string }> };
@@ -35,7 +36,44 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
   const product = products.find((p) => p.slug === slug);
-  if (!product || product.comingSoon) notFound();
+  if (!product) notFound();
+
+  // Coming-soon products get a placeholder page
+  if (product.comingSoon) {
+    return (
+      <main style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
+        <Nav />
+        <div className="flex flex-col items-center justify-center min-h-[70vh] px-4 text-center">
+          <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "#f97316" }}>
+            Coming Soon
+          </p>
+          <h1 className="text-4xl sm:text-5xl font-bold mb-4" style={{ color: "var(--text-primary)" }}>
+            {product.name}
+          </h1>
+          <p className="text-lg max-w-xl mb-4" style={{ color: "var(--text-secondary)" }}>
+            {product.shortDesc}
+          </p>
+          <p className="text-base max-w-2xl mb-10" style={{ color: "var(--text-secondary)" }}>
+            {product.description}
+          </p>
+          <p className="text-sm mb-8" style={{ color: "var(--text-muted)" }}>
+            Full product details and specifications are coming soon. Contact us for availability.
+          </p>
+          <div className="flex gap-4 flex-wrap justify-center">
+            <Link href="/contact" className="px-6 py-3 rounded-lg font-bold text-white transition-all hover:brightness-110"
+              style={{ background: "linear-gradient(90deg, #F97316, #ea8c00)" }}>
+              Contact Us
+            </Link>
+            <Link href="/products" className="px-6 py-3 rounded-lg font-medium transition-colors"
+              style={{ color: "var(--text-secondary)", border: "1px solid var(--border-color)" }}>
+              ← All Products
+            </Link>
+          </div>
+        </div>
+        <Footer />
+      </main>
+    );
+  }
 
   // Gallery — use product.gallery if available, otherwise fall back to featured image
   const productGallery = product.gallery ?? [];
@@ -69,17 +107,17 @@ export default async function ProductPage({ params }: Props) {
       <JsonLd data={productSchema} />
       <Nav />
 
-      {/* Hero banner */}
+      {/* Hero banner — prefer curated featured image, fall back to product.imageUrl */}
       <div className="relative h-[50vh] min-h-[400px] overflow-hidden">
         <Image
-          src={product.imageUrl}
-          alt={product.name}
+          src={featuredImg?.src ?? product.imageUrl}
+          alt={featuredImg?.alt ?? product.name}
           fill
           className="object-cover"
           priority
           sizes="100vw"
         />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(10,10,10,0.45) 0%, rgba(10,10,10,0.65) 60%, rgba(0,0,0,0.82) 100%)" }} />
+        <div className="absolute inset-0" style={{ background: "rgba(26,26,26,0.7)" }} />{/* overlay — keep hardcoded */}
         <div className="absolute inset-0 flex items-end max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
           <div>
             <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-3" style={{ color: "#f97316" }}>
@@ -111,34 +149,23 @@ export default async function ProductPage({ params }: Props) {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
 
         {/* Specify CTA bar */}
-        <div
-          className="rounded-xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 mb-10 relative overflow-hidden"
-          style={{
-            background: "linear-gradient(135deg, #ea6c10 0%, #f97316 50%, #d97706 100%)",
-            boxShadow: "0 4px 28px rgba(249,115,22,0.35)",
-          }}
-        >
-          {/* Subtle texture overlay */}
-          <div className="absolute inset-0 pointer-events-none opacity-10"
-            style={{ backgroundImage: "url('/images/textures/stamped-asphalt-texture.webp')", backgroundSize: "300px auto" }} />
-          <div className="relative">
-            <p className="font-bold text-lg leading-snug" style={{ color: "#ffffff" }}>
-              Ready to specify {product.name}?
-            </p>
-            <p className="text-sm mt-1" style={{ color: "rgba(255,255,255,0.82)" }}>
-              Technical documentation, pricing, and certified installer support — coast to coast.
-            </p>
+        <div className="rounded-xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-10 relative overflow-hidden"
+          style={{ background: "linear-gradient(135deg, #2a1500 0%, #1a1000 60%)", border: "1px solid rgba(249,115,22,0.5)", boxShadow: "0 0 0 1px rgba(249,115,22,0.1), 0 4px 24px rgba(249,115,22,0.12)" }}>
+          {/* Left orange accent bar */}
+          <div className="absolute left-0 top-0 bottom-0 w-1 rounded-l-xl" style={{ background: "linear-gradient(180deg, #F97316 0%, #EAB308 100%)" }} />
+          <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 0% 50%, rgba(249,115,22,0.12) 0%, transparent 55%)" }} />
+          <div className="relative pl-2">
+            <p className="font-bold text-base" style={{ color: "#F5F0EB" }}>Ready to specify {product.name}?</p>
+            <p className="text-sm mt-0.5" style={{ color: "#D1D5DB" }}>Get technical documentation, pricing, and installation support from our team.</p>
           </div>
-          <div className="flex flex-wrap gap-3 relative flex-shrink-0">
-            <Link href="/lunch-learn"
-              className="px-5 py-2.5 rounded-lg text-sm font-semibold transition-all hover:bg-white/20"
-              style={{ background: "rgba(0,0,0,0.2)", color: "#ffffff", border: "1px solid rgba(255,255,255,0.25)" }}>
-              Book a Lunch &amp; Learn
+          <div className="flex flex-wrap gap-3 relative">
+            <Link href="/resources" className="px-4 py-2.5 rounded-lg text-sm font-medium transition-all hover:text-white"
+              style={{ color: "#D1D5DB", border: "1px solid rgba(255,255,255,0.18)" }}>
+              Spec Sheets
             </Link>
-            <Link href="/contact"
-              className="px-5 py-2.5 rounded-lg text-sm font-bold transition-all hover:brightness-95"
-              style={{ background: "#ffffff", color: "#ea6c10" }}>
-              Get a Quote →
+            <Link href="/lunch-learn" className="px-5 py-2.5 rounded-lg text-sm font-bold transition-all hover:brightness-110"
+              style={{ background: "linear-gradient(90deg, #F97316, #ea8c00)", color: "#fff", boxShadow: "0 2px 12px rgba(249,115,22,0.35)" }}>
+              Book Lunch &amp; Learn →
             </Link>
           </div>
         </div>
@@ -196,24 +223,17 @@ export default async function ProductPage({ params }: Props) {
 
               <Link
                 href="/contact"
-                className="flex items-center justify-center gap-2 w-full text-center font-bold py-4 rounded-lg mt-8 transition-all text-sm"
-                style={{
-                  background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
-                  color: "#fff",
-                  boxShadow: "0 4px 16px rgba(249,115,22,0.35)",
-                }}
+                className="block w-full text-center font-semibold py-4 rounded-lg mt-8 transition-all text-sm hover:brightness-110"
+                style={{ background: "#f97316", color: "#fff" }}
               >
                 Request Spec Sheet
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
               </Link>
               <Link
                 href="/lunch-learn"
-                className="flex items-center justify-center gap-2 w-full text-center font-semibold py-3.5 rounded-lg mt-3 transition-all text-sm hover:border-orange-500/40 hover:text-white"
+                className="block w-full text-center font-semibold py-4 rounded-lg mt-3 transition-all text-sm hover:border-[#F97316]/50 hover:text-white"
                 style={{ background: "transparent", color: "#9CA3AF", border: "1px solid rgba(255,255,255,0.12)" }}
               >
-                Book a Lunch &amp; Learn
+                Book Lunch &amp; Learn
               </Link>
             </div>
           </div>
@@ -271,36 +291,4 @@ export default async function ProductPage({ params }: Props) {
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     />
                     <div
-                      className="absolute inset-0 transition-opacity duration-300 opacity-50 group-hover:opacity-70"
-                      style={{ background: "rgba(0,0,0,0.4)" }}
-                    />
-                    {/* Name badge overlaid */}
-                    <div className="absolute inset-0 flex items-end p-3">
-                      <div>
-                        <div
-                          className="w-5 h-px mb-2 transition-all duration-200 group-hover:w-8"
-                          style={{ background: "#f97316" }}
-                        />
-                        <p
-                          className="font-bold text-sm leading-tight"
-                          style={{ color: "var(--text-primary)" }}
-                        >
-                          {app.name}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  {/* Desc */}
-                  <div className="px-4 py-3 flex-1 flex flex-col">
-                    <p
-                      className="text-[0.72rem] leading-relaxed flex-1"
-                      style={{ color: "var(--text-muted)" }}
-                    >
-                      {app.shortDesc.slice(0, 80)}{app.shortDesc.length > 80 ? "…" : ""}
-                    </p>
-                    <span
-                      className="mt-2 text-[0.68rem] font-semibold flex items-center gap-1 uppercase tracking-wider transition-colors duration-150 group-hover:text-[#fb923c]"
-                      style={{ color: "#f97316" }}
-                    >
-                      Explore
-                      <svg className="w-2.5 h-2.5 transition-transform duration-150 group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0
+                      className="absolute inset-0 transition-

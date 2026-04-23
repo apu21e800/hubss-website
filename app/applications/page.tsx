@@ -25,7 +25,7 @@ export default function ApplicationsPage() {
             Where Our Systems Live
           </h1>
           <p className="text-lg" style={{ color: "var(--text-secondary)" }}>
-            Each application carries its own demands — visibility, durability, tactile guidance, speed reduction, civic branding. We match the right system to the right context, then back it with certified installation and real warranties.
+            Each application carries its own demands — visibility, durability, tactile guidance, speed reduction, civic branding. We match the right system to the right context, then back it with certified installation and proven performance.
           </p>
         </div>
 
@@ -60,4 +60,3 @@ export default function ApplicationsPage() {
       <Footer />
     </main>
   );
-}

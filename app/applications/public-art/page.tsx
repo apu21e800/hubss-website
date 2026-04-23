@@ -106,7 +106,7 @@ export default function PublicArtPage() {
           className="absolute inset-0 pointer-events-none"
           style={{
             backgroundImage:
-              "url('/images/assets/details/asphalt-closeup-01.jpg')",
+              "url('/images/textures/stamped-asphalt-texture.webp')",
             backgroundSize: "480px auto",
             backgroundRepeat: "repeat",
             opacity: 0.04,

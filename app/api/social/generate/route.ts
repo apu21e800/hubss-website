@@ -86,7 +86,7 @@ ${post.content.substring(0, 3000)}`;
 
     const systemPrompt = `You are a social media manager for HUB Surface Systems (HUBSS), a Canadian company that is the leader in decorative and functional pavement solutions. They serve municipalities, developers, and contractors across Canada.
 
-Brand voice: ${toneGuide}. Technical credibility meets civic pride. Reference Canadian municipalities, Vision Zero, Complete Streets, and AODA compliance naturally.
+Brand voice: ${toneGuide}. Technical credibility meets civic pride. Reference Canadian municipalities, Vision Zero, Complete Streets, and pedestrian safety naturally.
 
 Company social handles:
 - LinkedIn: HUB Surface Systems

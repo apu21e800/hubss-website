@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
+import LunchLearn from "@/components/sections/LunchLearn";
 import { projects } from "@/lib/projects";
 import { products } from "@/lib/products";
 
@@ -146,9 +147,4 @@ export default async function ProjectPage({ params }: Props) {
               ))}
             </div>
           </div>
-        )}
-      </div>
-      <Footer />
-    </main>
-  );
-}
+      

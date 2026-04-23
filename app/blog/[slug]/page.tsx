@@ -8,6 +8,7 @@ import LunchLearn from "@/components/sections/LunchLearn";
 import JsonLd from "@/components/ui/JsonLd";
 import { getAllPosts, getPost } from "@/lib/mdx";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import remarkGfm from "remark-gfm";
 import { buildMetadata } from "@/lib/seo";
 import TableOfContents from "@/components/blog/TableOfContents";
 import ShareButtons from "@/components/blog/ShareButtons";
@@ -123,7 +124,11 @@ export default async function BlogPostPage({ params }: Props) {
           data-blog-content
           className="blog-prose prose prose-invert max-w-3xl"
         >
-          <MDXRemote source={post.content} components={{ BlogImage }} />
+          <MDXRemote
+            source={post.content}
+            options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
+            components={{ BlogImage }}
+          />
         </article>
 
         {/* Sidebar — desktop only */}
@@ -220,12 +225,4 @@ export default async function BlogPostPage({ params }: Props) {
       </div>
 
       {/* ── Related Posts ───────────────────────────────── */}
-      <div className="pt-16 border-t border-white/5">
-        <RelatedPosts posts={allPosts} currentSlug={slug} />
-      </div>
-
-      <LunchLearn />
-      <Footer />
-    </main>
-  );
-}
+      <div className="pt-16 border-t border-white/5

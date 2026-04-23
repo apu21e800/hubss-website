@@ -147,12 +147,11 @@ export default function Hero({ variant = "default" }: HeroProps) {
       <div className="absolute bottom-0 left-0 right-0 overflow-hidden z-10" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
         <div className="py-3 whitespace-nowrap ticker-track">
           {[...tickerItems, ...tickerItems].map((item, i) => (
-            <span key={i} className="text-xs font-medium tracking-wide mx-4" style={{ color: "rgba(255,255,255,0.3)" }}>
-              {item} <span style={{ color: "rgba(249,115,22,0.4)" }}>·</span>
+            <span key={i} className="inline-flex items-center flex-shrink-0">
+              <span className="text-xs font-medium tracking-wide pl-5 pr-3" style={{ color: "rgba(255,255,255,0.3)" }}>{item}</span>
+              <span className="inline-block w-1 h-1 rounded-full flex-shrink-0 mr-2" style={{ background: "rgba(249,115,22,0.4)" }} />
             </span>
           ))}
         </div>
       </div>
-    </section>
-  );
-}
+    </section

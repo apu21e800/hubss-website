@@ -7,7 +7,7 @@ const STATS = [
   { num: "30+", label: "Years", sub: "Engineering Canadian surfaces" },
   { num: "1,000+", label: "Projects", sub: "Completed coast to coast" },
   { num: "500+", label: "Municipalities", sub: "Specified coast to coast" },
-  { num: "AODA", label: "Compliant", sub: "Accessible & pedestrian-safe by design" },
+  { num: "5–7yr", label: "Service Life", sub: "Where traffic paint lasts 12–18 months" },
 ];
 
 // Condensed to scannable one-liners — no paragraphs
@@ -15,22 +15,22 @@ const PROOF = [
   {
     num: "01",
     claim: "Built for Canadian winters",
-    detail: "Freeze-thaw, de-icing salts, snowplow blades. Stress-tested for every climate Coast to Coast.",
+    detail: "Freeze-thaw, de-icing salts, snowplow blades — stress-tested for every climate from BC coastal rain to Ontario freeze-thaw.",
   },
   {
     num: "02",
-    claim: "Strongest warranty in Canadian pavement",
-    detail: "20-year colour retention on StreetPrint and StreetBond. Backed in writing. No one else offers it.",
+    claim: "Snowplow-proof by design",
+    detail: "Preformed thermoplastics and stamped asphalt profiles are engineered to survive blade contact. No peeling, no delamination — season after season.",
   },
   {
     num: "03",
     claim: "Pedestrian safety built in",
-    detail: "AODA-compliant, Vision Zero-aligned, and designed for high-visibility performance in every Canadian climate.",
+    detail: "High-contrast retroreflectivity, BPN 65+ skid resistance, and Vision Zero-aligned geometry — proven across hundreds of Canadian crosswalk programs.",
   },
   {
     num: "04",
-    claim: "Regulatory Compliance",
-    detail: "TAC, MUTCD, BCMOT, and FAA-compliant across the full product range.",
+    claim: "Regulatory compliance",
+    detail: "TAC, MUTCD, BCMOT, and aviation marking standards compliant across the full product range.",
   },
 ];
 
@@ -185,11 +185,9 @@ export default function WhyHubss() {
           style={{ animation: "hubss-marquee 36s linear infinite" }}
         >
           {TICKER.map((name, i) => (
-            <span key={i} className="inline-flex items-center gap-6 px-6 flex-shrink-0">
-              <span className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.35)" }}>
-                {name}
-              </span>
-              <span className="inline-block w-1 h-1 rounded-full flex-shrink-0" style={{ background: "rgba(249,115,22,0.4)" }} />
+            <span key={i} className="inline-flex items-center flex-shrink-0">
+              <span className="text-sm font-medium pl-6 pr-4" style={{ color: "rgba(255,255,255,0.35)" }}>{name}</span>
+              <span className="inline-block w-1 h-1 rounded-full flex-shrink-0 mr-2" style={{ background: "rgba(249,115,22,0.4)" }} />
             </span>
           ))}
         </div>
@@ -207,10 +205,4 @@ export default function WhyHubss() {
 
       <style>{`
         @keyframes hubss-marquee {
-          0%   { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-      `}</style>
-    </section>
-  );
-}
+          0%   { transform: 

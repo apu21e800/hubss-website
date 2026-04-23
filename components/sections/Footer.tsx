@@ -114,24 +114,6 @@ export default function Footer() {
             <h4 className="font-semibold text-sm mb-5" style={{ color: "var(--text-primary)" }}>Offices</h4>
             <div className="space-y-6">
 
-              {/* East */}
-              <div className="relative pl-4">
-                <span
-                  className="absolute left-0 top-0 bottom-0 w-0.5"
-                  style={{ background: "linear-gradient(180deg, #F97316 0%, #EAB308 100%)" }}
-                />
-                <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "#f97316" }}>
-                  East Office
-                </p>
-                <p className="text-sm mb-1" style={{ color: "var(--text-primary)" }}>Milton, Ontario</p>
-                <a href="mailto:doug.bain@hubss.com" className="text-xs block transition-colors hover:text-white underline-offset-4 hover:underline" style={{ color: "var(--text-secondary)" }}>
-                  doug.bain@hubss.com
-                </a>
-                <a href="tel:4165409287" className="text-xs block transition-colors hover:text-white" style={{ color: "var(--text-secondary)" }}>
-                  416-540-9287
-                </a>
-              </div>
-
               {/* West */}
               <div className="relative pl-4">
                 <span
@@ -147,6 +129,24 @@ export default function Footer() {
                 </a>
                 <a href="tel:6043098212" className="text-xs block transition-colors hover:text-white" style={{ color: "var(--text-secondary)" }}>
                   604-309-8212
+                </a>
+              </div>
+
+              {/* East */}
+              <div className="relative pl-4">
+                <span
+                  className="absolute left-0 top-0 bottom-0 w-0.5"
+                  style={{ background: "linear-gradient(180deg, #F97316 0%, #EAB308 100%)" }}
+                />
+                <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "#f97316" }}>
+                  East Office
+                </p>
+                <p className="text-sm mb-1" style={{ color: "var(--text-primary)" }}>Milton, Ontario</p>
+                <a href="mailto:doug.bain@hubss.com" className="text-xs block transition-colors hover:text-white underline-offset-4 hover:underline" style={{ color: "var(--text-secondary)" }}>
+                  doug.bain@hubss.com
+                </a>
+                <a href="tel:4165409287" className="text-xs block transition-colors hover:text-white" style={{ color: "var(--text-secondary)" }}>
+                  416-540-9287
                 </a>
               </div>
 

@@ -156,7 +156,7 @@ export default function FeaturedBlogPost() {
                       key={p}
                       className="text-xs px-2.5 py-1 rounded-md font-medium"
                       style={{
-                        background: "var(--bg-secondary)",
+                        background: "rgba(255,255,255,0.06)",
                         color: "var(--text-muted)",
                       }}
                     >
@@ -247,4 +247,3 @@ export default function FeaturedBlogPost() {
       </div>
     </section>
   );
-}

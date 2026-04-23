@@ -23,6 +23,7 @@ interface SocialLinksProps {
 export function SocialLinks({ size = 'md', className = '', iconClassName = '' }: SocialLinksProps) {
   const platforms = [
     { key: 'linkedin', label: 'LinkedIn' },
+    { key: 'youtube', label: 'YouTube' },
     { key: 'instagram', label: 'Instagram' },
     { key: 'facebook', label: 'Facebook' },
     { key: 'x', label: 'X' },

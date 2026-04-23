@@ -73,7 +73,7 @@ export default function LunchLearn({ hideMoose = false }: LunchLearnProps) {
         aria-hidden="true"
       />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-48 sm:pb-52">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-72 sm:pb-80">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
 
           {/* ── Left — content panel ──────────────────────────── */}
@@ -293,8 +293,8 @@ export default function LunchLearn({ hideMoose = false }: LunchLearnProps) {
                     {status === "sending" ? "Sending…" : "Book a Free Lunch & Learn →"}
                   </button>
 
-                  <p className="text-xs text-center" style={{ color: "#3a3a3a" }}>
-                    We respond within 1 business day. No spam, ever.
+                  <p className="text-xs text-center" style={{ color: "#9CA3AF" }}>
+                    We respond within 1 business day — no spam, ever.
                   </p>
                 </form>
               </>
@@ -334,4 +334,3 @@ export default function LunchLearn({ hideMoose = false }: LunchLearnProps) {
       )}
     </section>
   );
-}

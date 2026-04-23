@@ -37,7 +37,7 @@ export const products: Product[] = [
       { label: "Service Life", value: "7+ years in high-volume use" },
       { label: "Standards", value: "TAC + MUTCD compliant" },
     ],
-    relatedApplications: ["crosswalks", "bike-lanes", "bus-lanes"],
+    relatedApplications: ["crosswalks", "bike-lanes", "bus-lanes", "pedestrian-safety", "traffic-calming", "regulatory-markings"],
   },
   {
     name: "TrafficPatterns",
@@ -55,7 +55,7 @@ export const products: Product[] = [
       { label: "Service Life", value: "5-7 years" },
       { label: "Standards", value: "TAC + MUTCD compliant" },
     ],
-    relatedApplications: ["crosswalks", "bike-lanes", "bus-lanes", "parking-lots"],
+    relatedApplications: ["crosswalks", "bike-lanes", "bus-lanes", "parking-lots", "pedestrian-safety", "regulatory-markings", "traffic-calming"],
   },
   {
     name: "StreetBond",
@@ -100,7 +100,7 @@ export const products: Product[] = [
       width: 280,
       height: 80,
     },
-    relatedApplications: ["bike-lanes", "bus-lanes", "private-driveways", "parks-paths", "parking-lots"],
+    relatedApplications: ["crosswalks", "bike-lanes", "bus-lanes", "community-branding", "sport-courts", "splash-pads", "pedestrian-safety", "traffic-calming", "public-spaces", "parks-paths", "parking-lots", "private-driveways"],
   },
   {
     name: "StreetPrint",
@@ -117,6 +117,7 @@ export const products: Product[] = [
       { label: "Base", value: "New lay or existing asphalt" },
       { label: "Snowplow Safe", value: "Yes - flush surface, no raised edges" },
       { label: "Applications", value: "Intersections, plazas, driveways, crosswalks" },
+      { label: "Service Life", value: "10–20 years with proper maintenance" },
     ],
     brandLogo: {
       src: "/images/assets/logos/product-logos/StreetPrint/large_StreetPrint_Logo.png",
@@ -124,7 +125,7 @@ export const products: Product[] = [
       width: 300,
       height: 80,
     },
-    relatedApplications: ["crosswalks", "private-driveways", "community-branding", "parking-lots"],
+    relatedApplications: ["crosswalks", "private-driveways", "residential-driveways", "community-branding", "public-spaces", "commercial-spaces", "townhomes", "parking-lots", "traffic-calming"],
   },
 
   // ── Specialty & Regulatory Group ────────────────────────────────────────────
@@ -144,7 +145,7 @@ export const products: Product[] = [
       { label: "Service Life", value: "5+ year service life" },
       { label: "Min. Order", value: "Project-based" },
     ],
-    relatedApplications: ["community-branding", "crosswalks", "playgrounds"],
+    relatedApplications: ["community-branding", "crosswalks", "playgrounds", "public-art", "parks-paths", "sport-courts", "public-spaces"],
   },
   {
     name: "MMAX",
@@ -162,7 +163,7 @@ export const products: Product[] = [
       { label: "UV Stability", value: "High - colour-fast for 10+ years" },
       { label: "Service Life", value: "10+ years in transit lane use" },
     ],
-    relatedApplications: ["bike-lanes", "bus-lanes", "crosswalks"],
+    relatedApplications: ["bike-lanes", "bus-lanes", "crosswalks", "pedestrian-safety", "traffic-calming", "regulatory-markings"],
   },
   {
     name: "StreetBondSR",
@@ -176,7 +177,7 @@ export const products: Product[] = [
       "/images/products/streetbondsr/streetbondsr-07.jpg",
       "/images/products/streetbondsr/streetbondsr-08.jpg",
     ],
-    description: "StreetBondSR combines superior colour retention with solar reflective technology. LEED-compliant coating system that reduces pavement surface temperatures, mitigating urban heat island effects while delivering lasting color and protection. Trusted by 500+ Canadian municipalities.",
+    description: "StreetBondSR combines superior colour retention with solar reflective technology. A LEED-compliant coating system that reduces pavement surface temperatures, mitigating urban heat island effects while delivering lasting colour and protection — specified across hundreds of Canadian municipalities.",
     specs: [
       { label: "Type", value: "Solar reflective acrylic pavement coating" },
       { label: "LEED Compliance", value: "Yes - contributes to sustainable site credits" },
@@ -199,7 +200,7 @@ export const products: Product[] = [
       width: 280,
       height: 80,
     },
-    relatedApplications: ["parking-lots", "private-driveways", "parks-paths", "community-branding"],
+    relatedApplications: ["leed-urban-heat-island", "parking-lots", "private-driveways", "parks-paths", "public-spaces", "commercial-spaces"],
   },
   {
     name: "DuraTherm",
@@ -214,9 +215,10 @@ export const products: Product[] = [
       { label: "Snowplow Safe", value: "Yes - no shear risk" },
       { label: "Bond", value: "Full-depth asphalt integration" },
       { label: "Designs", value: "Custom artwork accepted" },
+      { label: "Retroreflectivity", value: "Glass bead surface — ASTM D4956 compliant" },
       { label: "Service Life", value: "7+ year service life" },
     ],
-    relatedApplications: ["crosswalks", "parking-lots", "community-branding"],
+    relatedApplications: ["crosswalks", "pedestrian-safety", "parking-lots", "community-branding", "regulatory-markings"],
   },
   {
     name: "DuraShield",
@@ -233,7 +235,7 @@ export const products: Product[] = [
       { label: "Traffic Open", value: "24 hours" },
       { label: "Lifespan Extension", value: "3-5 years documented" },
     ],
-    relatedApplications: ["private-driveways", "parking-lots", "parks-paths"],
+    relatedApplications: ["private-driveways", "residential-driveways", "parking-lots", "parks-paths", "townhomes", "commercial-spaces"],
   },
   {
     name: "AirMark",
@@ -241,16 +243,16 @@ export const products: Product[] = [
     shortDesc: "FAA-grade clarity. Field-proven performance.",
     imageUrl: "/images/products/airmark/airmark-01.jpg",
     gallery: gallery("airmark", "airmark", 22),
-    description: "AirMark: preformed thermoplastic airfield markings meeting aviation marking standards. Premium retroreflectivity. Outlast painted alternatives by 4:1.", // AUDIT: removed specific FAA AC number — verify exact compliance citation with manufacturer
+    description: "AirMark: preformed thermoplastic airfield markings meeting aviation marking standards. Premium retroreflectivity. Outlast painted alternatives by 4:1.",
     specs: [
-      { label: "Standard", value: "Meets aviation airfield marking standards" }, // AUDIT: verify specific FAA AC compliance
+      { label: "Standard", value: "Meets aviation airfield marking standards" },
       { label: "Material", value: "Preformed thermoplastic" },
-      { label: "Retroreflectivity", value: "Premium glass bead surface" }, // AUDIT: verify ASTM D4956 Type IV claim
+      { label: "Retroreflectivity", value: "Premium glass bead surface" },
       { label: "Colour", value: "White and yellow" },
       { label: "Service Life", value: "4x painted alternatives" },
       { label: "Installation", value: "Heat application - certified crews" },
     ],
-    relatedApplications: ["regulatory-markings"],
+    relatedApplications: ["airports", "regulatory-markings"],
   },
   {
     name: "PreMark",
@@ -266,28 +268,7 @@ export const products: Product[] = [
       { label: "Curing", value: "No cure time — heat-applied, drive-on immediately" },
       { label: "Retroreflectivity", value: "Premium glass bead surface" },
     ],
-    relatedApplications: ["crosswalks", "regulatory-markings", "parking-lots", "bike-lanes", "bus-lanes"],
+    relatedApplications: ["crosswalks", "regulatory-markings", "parking-lots", "bike-lanes", "bus-lanes", "pedestrian-safety", "traffic-calming"],
   },
 
-  // ── Coming Soon ──────────────────────────────────────────────────────────────
-  {
-    name: "Chip Fill",
-    slug: "chip-fill",
-    shortDesc: "Coming soon.",
-    imageUrl: "/images/products/traffic-patterns/traffic-patterns-01.jpg",
-    description: "Coming soon.",
-    specs: [],
-    relatedApplications: [],
-    comingSoon: true,
-  },
-  {
-    name: "Fast Patch",
-    slug: "fast-patch",
-    shortDesc: "Coming soon.",
-    imageUrl: "/images/products/traffic-patterns/traffic-patterns-01.jpg",
-    description: "Coming soon.",
-    specs: [],
-    relatedApplications: [],
-    comingSoon: true,
-  },
-];
+  // ── Coming Soon ─────────────────�

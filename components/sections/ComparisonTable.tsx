@@ -4,11 +4,12 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 
 const rows = [
-  { metric: "Snow plow resistance", trad: "Poor",                hub: "Excellent" },
-  { metric: "Service life",         trad: "1–2 Years",           hub: "8+ Years" },
-  { metric: "Installation",         trad: "Yearly maintenance",  hub: "One-time application" },
-  { metric: "Skid resistance",      trad: "Low",                 hub: "High" },
-  { metric: "Visibility",           trad: "Fades quickly",       hub: "Colour stable" },
+  { metric: "Snowplow resistance",  trad: "Poor",               hub: "Excellent — zero shear risk" },
+  { metric: "Service life",         trad: "1–2 years",          hub: "7–8+ years" },
+  { metric: "Reapplication",        trad: "Every 1–2 seasons",  hub: "Not required" },
+  { metric: "Skid resistance",      trad: "Degrades rapidly",   hub: "BPN 65+ maintained" },
+  { metric: "Night visibility",     trad: "Fades within months", hub: "Retroreflective, colour stable" },
+  { metric: "Total lifecycle cost", trad: "High — recurring",   hub: "Lower — one installation" },
 ];
 
 export default function ComparisonTable() {
@@ -139,28 +140,13 @@ export default function ComparisonTable() {
                         borderBottom: "1px solid #e5e7eb",
                       }}
                     >
-                      <td className="px-3 py-2 text-sm font-medium" style={{ color: "#111827" }}>
+                      <td className="px-5 py-3.5 text-sm font-semibold" style={{ color: "#111827" }}>
                         {row.metric}
                       </td>
-                      <td className="px-3 py-2 text-sm font-medium" style={{ color: "#ef4444" }}>
-                        {row.trad}
+                      <td className="px-5 py-3.5 text-sm" style={{ color: "#6b7280" }}>
+                        <span className="flex items-center gap-1.5">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                          {row.trad}
+                        </span>
                       </td>
-                      <td className="px-3 py-2 text-sm font-bold" style={{ color: "#111827" }}>
-                        {row.hub}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            <p className="text-sm mt-6" style={{ color: "#6b7280" }}>
-              Proven across 10 Canadian provinces since 1994
-            </p>
-          </motion.div>
-
-        </div>
-      </div>
-    </section>
-  );
-}
+                      <td className="px-5 py-3.5 text-sm font-semibold" style={{ colo

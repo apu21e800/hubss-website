@@ -57,8 +57,8 @@ export default function ContactPage() {
             </p>
             <div className="space-y-8">
               {[
-                { region: "East Office", city: "Milton, Ontario", email: "doug.bain@hubss.com", phone: "416-540-9287" },
                 { region: "West Office", city: "Ladysmith, BC", email: "cleve.stordy@hubss.com", phone: "604-309-8212" },
+                { region: "East Office", city: "Milton, Ontario", email: "doug.bain@hubss.com", phone: "416-540-9287" },
               ].map((office) => (
                 <div key={office.region}>
                   <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "#f97316" }}>{office.region}</p>
@@ -68,9 +68,9 @@ export default function ContactPage() {
                 </div>
               ))}
 
-              <div className="mt-6 pt-6" style={{ borderTop: "1px solid var(--border-subtle)" }}>
-                <p className="text-zinc-500 text-xs uppercase tracking-widest mb-4">Follow Our Work</p>
-                <SocialLinks className="justify-center gap-6" iconClassName="w-6 h-6" />
+              <div className="mt-6 pt-6 flex items-center gap-4 flex-wrap" style={{ borderTop: "1px solid var(--border-subtle)" }}>
+                <p className="text-zinc-500 text-xs uppercase tracking-widest flex-shrink-0">Follow our work</p>
+                <SocialLinks className="gap-4" iconClassName="w-5 h-5" />
               </div>
             </div>
 
@@ -200,8 +200,4 @@ export default function ContactPage() {
           </div>
         </div>
       </div>
-      <LunchLearn />
-      <Footer />
-    </main>
-  );
-}
+      <LunchLearn /

@@ -5,14 +5,12 @@ import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
 import BlogFilter from "@/components/blog/BlogFilter";
 import { getAllPosts } from "@/lib/mdx";
-import { buildMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Field Notes — Pavement Engineering & Case Studies",
+export const metadata: Metadata = {
+  title: "Blog | HUB Surface Systems",
   description:
-    "Real project data, case studies, and technical insights on decorative pavement, Vision Zero, Complete Streets, and Canadian municipal infrastructure.",
-  slug: "blog",
-});
+    "Insights on decorative pavement, Vision Zero, Complete Streets, and Canadian municipal infrastructure from the HUB Surface Systems team.",
+};
 
 export default function BlogPage() {
   const posts = getAllPosts();

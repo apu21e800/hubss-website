@@ -130,15 +130,15 @@ export default async function ProductPage({ params }: Props) {
             </p>
           </div>
           <div className="flex flex-wrap gap-3 relative flex-shrink-0">
-            <Link href="/resources"
+            <Link href="/lunch-learn"
               className="px-5 py-2.5 rounded-lg text-sm font-semibold transition-all hover:bg-white/20"
               style={{ background: "rgba(0,0,0,0.2)", color: "#ffffff", border: "1px solid rgba(255,255,255,0.25)" }}>
-              Spec Sheets
+              Book a Lunch &amp; Learn
             </Link>
-            <Link href="/lunch-learn"
+            <Link href="/contact"
               className="px-5 py-2.5 rounded-lg text-sm font-bold transition-all hover:brightness-95"
               style={{ background: "#ffffff", color: "#ea6c10" }}>
-              Book Lunch &amp; Learn →
+              Get a Quote →
             </Link>
           </div>
         </div>
@@ -196,17 +196,24 @@ export default async function ProductPage({ params }: Props) {
 
               <Link
                 href="/contact"
-                className="block w-full text-center font-semibold py-4 rounded-lg mt-8 transition-all text-sm hover:brightness-110"
-                style={{ background: "#f97316", color: "#fff" }}
+                className="flex items-center justify-center gap-2 w-full text-center font-bold py-4 rounded-lg mt-8 transition-all text-sm"
+                style={{
+                  background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
+                  color: "#fff",
+                  boxShadow: "0 4px 16px rgba(249,115,22,0.35)",
+                }}
               >
                 Request Spec Sheet
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
               </Link>
               <Link
                 href="/lunch-learn"
-                className="block w-full text-center font-semibold py-4 rounded-lg mt-3 transition-all text-sm hover:border-[#F97316]/50 hover:text-white"
+                className="flex items-center justify-center gap-2 w-full text-center font-semibold py-3.5 rounded-lg mt-3 transition-all text-sm hover:border-orange-500/40 hover:text-white"
                 style={{ background: "transparent", color: "#9CA3AF", border: "1px solid rgba(255,255,255,0.12)" }}
               >
-                Book Lunch &amp; Learn
+                Book a Lunch &amp; Learn
               </Link>
             </div>
           </div>
@@ -296,20 +303,4 @@ export default async function ProductPage({ params }: Props) {
                       style={{ color: "#f97316" }}
                     >
                       Explore
-                      <svg className="w-2.5 h-2.5 transition-transform duration-150 group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                      </svg>
-                    </span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>{/* /max-w-7xl content */}
-      </div>{/* /texture outer wrapper */}
-      <LunchLearn />
-      <Footer />
-    </main>
-  );
-}
+                      <svg className="w-2.5 h-2.5 transition-transform duration-150 group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0

@@ -11,7 +11,6 @@ import LunchLearn from "@/components/sections/LunchLearn";
 import Footer from "@/components/sections/Footer";
 import JsonLd from "@/components/ui/JsonLd";
 import { buildMetadata } from "@/lib/seo";
-import CanadaMapWrapper from "@/components/sections/CanadaMapWrapper";
 
 export const metadata: Metadata = buildMetadata({
   title: "Decorative Pavement & Road Marking Solutions",
@@ -72,8 +71,6 @@ export default function Home() {
       <FeaturedBlogPost />
       {/* off-white → slate (lunch learn) */}
       <InstagramStrip />
-      {/* Canada map — flagship projects across Canada */}
-      <CanadaMapWrapper />
       {/* LunchLearn — Moose mascot rendered internally by the component */}
       <LunchLearn />
       <Footer />

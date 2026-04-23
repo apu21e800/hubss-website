@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import Nav from "@/components/sections/Nav";
@@ -7,25 +6,12 @@ import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
 import { projects } from "@/lib/projects";
 import { products } from "@/lib/products";
-import { buildMetadata } from "@/lib/seo";
 
 export async function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
 }
 
 type Props = { params: Promise<{ slug: string }> };
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
-  const project = projects.find((p) => p.slug === slug);
-  if (!project) return {};
-  return buildMetadata({
-    title: project.title,
-    description: `${project.product} installation in ${project.city}, ${project.province}. ${project.excerpt}`,
-    slug: `projects/${project.slug}`,
-    image: project.imageUrl,
-  });
-}
 
 export default async function ProjectPage({ params }: Props) {
   const { slug } = await params;
@@ -161,9 +147,4 @@ export default async function ProjectPage({ params }: Props) {
               ))}
             </div>
           </div>
-        )}
-      </div>
-      <Footer />
-    </main>
-  );
-}
+      

@@ -6,7 +6,7 @@ const stats = [
   { value: "1,000+", label: "Streets transformed" },
   { value: "10",     label: "Provinces, coast to coast" },
   { value: "1994",   label: "Year we started" },
-  { value: "20yr",   label: "Performance documented" },
+  { value: "20yr",   label: "Colour retention guarantee" },
 ];
 
 export default function StatsBar() {

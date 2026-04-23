@@ -73,7 +73,7 @@ export default function LunchLearn({ hideMoose = false }: LunchLearnProps) {
         aria-hidden="true"
       />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-60 sm:pb-64">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-72 sm:pb-80">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
 
           {/* ── Left — content panel ──────────────────────────── */}
@@ -293,7 +293,7 @@ export default function LunchLearn({ hideMoose = false }: LunchLearnProps) {
                     {status === "sending" ? "Sending…" : "Book a Free Lunch & Learn →"}
                   </button>
 
-                  <p className="text-xs text-center font-medium" style={{ color: "#e2e8f0" }}>
+                  <p className="text-xs text-center" style={{ color: "#9CA3AF" }}>
                     We respond within 1 business day — no spam, ever.
                   </p>
                 </form>
@@ -310,24 +310,23 @@ export default function LunchLearn({ hideMoose = false }: LunchLearnProps) {
         <div
           className="absolute z-10 pointer-events-none"
           style={{
-            bottom: -2,
-            right: "clamp(24px, calc((100vw - 1280px) / 2 + 24px), 380px)",
-            width: "clamp(200px, 20vw, 272px)",
+            bottom: 0,
+            right: "clamp(16px, calc((100vw - 1280px) / 2 + 16px), 400px)",
+            width: "clamp(220px, 22vw, 290px)",
           }}
         >
           <Image
             src="/images/assets/mascot/moose-1.png"
             alt="HUB Surface Systems Moose mascot"
-            width={272}
-            height={272}
+            width={290}
+            height={290}
             style={{
               width: "100%",
               height: "auto",
               objectFit: "contain",
               objectPosition: "bottom",
-              filter: "drop-shadow(0 -2px 0px rgba(249,115,22,0.0)) drop-shadow(0 10px 28px rgba(0,0,0,0.55))",
+              filter: "drop-shadow(0 8px 24px rgba(0,0,0,0.5))",
               display: "block",
-              marginBottom: -1,
             }}
             unoptimized
           />
@@ -335,4 +334,3 @@ export default function LunchLearn({ hideMoose = false }: LunchLearnProps) {
       )}
     </section>
   );
-}

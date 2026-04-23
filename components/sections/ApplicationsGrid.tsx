@@ -30,25 +30,10 @@ export default function ApplicationsGrid() {
           <p className="grad-text text-xs font-semibold tracking-[0.2em] uppercase mb-3">
             Applications
           </p>
-          <h2
-            className="font-black mb-4"
-            style={{
-              color: "var(--text-primary)",
-              fontSize: "clamp(2rem, 4vw, 3.5rem)",
-              lineHeight: 1.05,
-              letterSpacing: "-0.03em",
-              textWrap: "balance",
-            }}
-          >
-            Every Surface,{" "}
-            <span style={{
-              background: "linear-gradient(90deg, #F97316 0%, #EAB308 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}>A Statement.</span>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3" style={{ color: "var(--text-primary)" }}>
+            Every Surface, A Statement
           </h2>
-          <p className="text-base sm:text-lg max-w-2xl leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+          <p className="text-base max-w-xl" style={{ color: "var(--text-secondary)" }}>
             Crosswalks, bike lanes, civic art, driveways — wherever people move, gather, or stop, the surface underneath is doing work.
           </p>
         </div>
@@ -113,4 +98,15 @@ export default function ApplicationsGrid() {
         <div className="flex justify-center mt-4">
           <Link
             href="/applications"
-            className="inline-flex items-center gap-2 border bor
+            className="inline-flex items-center gap-2 border border-white/20 hover:border-orange-500/60 text-white font-semibold px-7 py-3.5 rounded-lg transition-all duration-200 hover:bg-white/[0.04] text-sm"
+          >
+            View All Applications
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}

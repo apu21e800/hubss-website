@@ -41,7 +41,7 @@ const differentiators = [
   { title: "Vision Zero Aligned", desc: "Every HUB product is designed to support Vision Zero frameworks — from retroreflective crosswalk markings to high-contrast bike lane systems." },
   { title: "High-Visibility by Design", desc: "Tactile and high-contrast marking solutions engineered for pedestrian safety and legibility in every lighting condition and season." },
   { title: "20-Year Performance", desc: "StreetPrint and StreetBond installations are engineered for 20-year colour retention — documented across hundreds of Canadian municipalities." },
-  { title: "Canadian-Specific", desc: "Every system is engineered and tested for Canadian climate extremes, from Ladysmith BC to York Region ON." },
+  { title: "Climate-Tested", desc: "Every system is stress-tested for freeze-thaw extremes, de-icing salts, and snowplow blades — from coastal BC to the Great Lakes." },
 ];
 
 export default function AboutPage() {
@@ -385,7 +385,4 @@ export default function AboutPage() {
       </div>
 
       <LunchLearn />
-      <Footer />
-    </main>
-  );
-}
+      <Footer

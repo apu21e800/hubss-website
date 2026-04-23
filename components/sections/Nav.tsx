@@ -227,7 +227,7 @@ function PanelFooter() {
     <div style={{ background: "var(--bg-dark)", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
       <div style={{ maxWidth: 1400, margin: "0 auto", padding: "12px 3rem" }}>
         <p className="text-xs text-center tracking-wide" style={{ color: "rgba(255,255,255,0.55)" }}>
-          Engineered for Canadian infrastructure &nbsp;·&nbsp; Canadian-operated since 1994 &nbsp;·&nbsp; Coast to coast
+          Engineered for municipal infrastructure &nbsp;·&nbsp; Operated since 1994 &nbsp;·&nbsp; Coast to coast
         </p>
       </div>
     </div>
@@ -362,7 +362,7 @@ function ProductsPanel({
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-semibold text-white">TrafficPatternsXD™</div>
-                    <div className="text-xs text-gray-400">150 mil · Canadian winters</div>
+                    <div className="text-xs text-gray-400">150 mil · freeze-thaw rated</div>
                   </div>
                 </Link>
 
@@ -1313,3 +1313,4 @@ export default function Nav() {
     </>
   );
 }
+       

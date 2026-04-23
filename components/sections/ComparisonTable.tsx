@@ -73,7 +73,7 @@ export default function ComparisonTable() {
                   Longer service life
                 </p>
                 <p className="text-xs mt-0.5" style={{ color: "#6b7280" }}>
-                  vs. painted markings — proven across Canada since 1994
+                  vs. painted markings — proven in the field since 1994
                 </p>
               </div>
             </div>
@@ -155,7 +155,7 @@ export default function ComparisonTable() {
             </div>
 
             <p className="text-sm mt-6" style={{ color: "#6b7280" }}>
-              Proven across 10 Canadian provinces since 1994
+              Proven in 10 provinces, coast to coast, since 1994
             </p>
           </motion.div>
 
@@ -163,4 +163,3 @@ export default function ComparisonTable() {
       </div>
     </section>
   );
-}

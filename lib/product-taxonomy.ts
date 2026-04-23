@@ -21,18 +21,11 @@ export const PRODUCT_TAXONOMY = [
     slugs: ["streetprint"],
   },
   {
-    label: "Asphalt Repair",
-    desc: "Cold-mix and permanent repair compounds for potholes, utility cuts, and surface defects.",
+    label: "Pavement Repair",
+    desc: "Cold-patch and repair compounds for permanent pothole and surface repair.",
     slugs: ["fast-patch", "aquaphalt"],
   },
 ] as const;
 
 /** Returns the taxonomy family label for a given product slug. */
-export function getProductFamily(slug: string): string {
-  for (const group of PRODUCT_TAXONOMY) {
-    if ((group.slugs as readonly string[]).includes(slug)) {
-      return group.label;
-    }
-  }
-  return "Other";
-}
+export function getProductFamily(slug: string): str

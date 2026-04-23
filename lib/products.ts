@@ -35,9 +35,9 @@ export const products: Product[] = [
       { label: "Skid Resistance", value: "BPN 65+" },
       { label: "Retroreflectivity", value: "ASTM D4956 Type III" },
       { label: "Service Life", value: "7+ years in high-volume use" },
-      { label: "Specification", value: "Specified by Canadian municipalities coast to coast" },
+      { label: "Standards", value: "TAC + MUTCD compliant" },
     ],
-    relatedApplications: ["crosswalks", "bike-lanes", "bus-lanes"],
+    relatedApplications: ["crosswalks", "bike-lanes", "bus-lanes", "pedestrian-safety", "traffic-calming", "regulatory-markings"],
   },
   {
     name: "TrafficPatterns",
@@ -53,9 +53,9 @@ export const products: Product[] = [
       { label: "Temperature Range", value: "-40C to +60C in service" },
       { label: "Installation", value: "Heat application - open to traffic in hours" },
       { label: "Service Life", value: "5-7 years" },
-      { label: "Specification", value: "Specified by Canadian municipalities coast to coast" },
+      { label: "Standards", value: "TAC + MUTCD compliant" },
     ],
-    relatedApplications: ["crosswalks", "bike-lanes", "bus-lanes", "parking-lots"],
+    relatedApplications: ["crosswalks", "bike-lanes", "bus-lanes", "parking-lots", "pedestrian-safety", "regulatory-markings", "traffic-calming"],
   },
   {
     name: "StreetBond",
@@ -84,7 +84,7 @@ export const products: Product[] = [
       { label: "Coverage", value: "30-50 sq ft per gallon" },
       { label: "Dry Time", value: "2-4 hours" },
       { label: "Colour Matching", value: "Full Pantone custom matching available" },
-      { label: "Specification", value: "BC Ministry of Transportation recognized product" },
+      { label: "Standards", value: "MUTCD compliant, BCMOT recognized" },
     ],
     colourCollections: [
       { name: "Traffic Red", hex: "#C0392B" },
@@ -100,7 +100,7 @@ export const products: Product[] = [
       width: 280,
       height: 80,
     },
-    relatedApplications: ["bike-lanes", "bus-lanes", "private-driveways", "parks-paths", "parking-lots"],
+    relatedApplications: ["crosswalks", "bike-lanes", "bus-lanes", "community-branding", "sport-courts", "splash-pads", "pedestrian-safety", "traffic-calming", "public-spaces", "parks-paths", "parking-lots", "private-driveways"],
   },
   {
     name: "StreetPrint",
@@ -117,6 +117,7 @@ export const products: Product[] = [
       { label: "Base", value: "New lay or existing asphalt" },
       { label: "Snowplow Safe", value: "Yes - flush surface, no raised edges" },
       { label: "Applications", value: "Intersections, plazas, driveways, crosswalks" },
+      { label: "Service Life", value: "10–20 years with proper maintenance" },
     ],
     brandLogo: {
       src: "/images/assets/logos/product-logos/StreetPrint/large_StreetPrint_Logo.png",
@@ -124,7 +125,7 @@ export const products: Product[] = [
       width: 300,
       height: 80,
     },
-    relatedApplications: ["crosswalks", "private-driveways", "community-branding", "parking-lots"],
+    relatedApplications: ["crosswalks", "private-driveways", "residential-driveways", "community-branding", "public-spaces", "commercial-spaces", "townhomes", "parking-lots", "traffic-calming"],
   },
 
   // ── Specialty & Regulatory Group ────────────────────────────────────────────
@@ -144,7 +145,7 @@ export const products: Product[] = [
       { label: "Service Life", value: "5+ year service life" },
       { label: "Min. Order", value: "Project-based" },
     ],
-    relatedApplications: ["community-branding", "crosswalks", "playgrounds"],
+    relatedApplications: ["community-branding", "crosswalks", "playgrounds", "public-art", "parks-paths", "sport-courts", "public-spaces"],
   },
   {
     name: "MMAX",
@@ -162,12 +163,12 @@ export const products: Product[] = [
       { label: "UV Stability", value: "High - colour-fast for 10+ years" },
       { label: "Service Life", value: "10+ years in transit lane use" },
     ],
-    relatedApplications: ["bike-lanes", "bus-lanes", "crosswalks"],
+    relatedApplications: ["bike-lanes", "bus-lanes", "crosswalks", "pedestrian-safety", "traffic-calming", "regulatory-markings"],
   },
   {
     name: "StreetBondSR",
     slug: "streetbondsr",
-    shortDesc: "Solar reflective. High-SRI rated. Urban heat island mitigation.",
+    shortDesc: "Solar reflective. LEED-compliant. Urban heat island mitigation.",
     imageUrl: "/images/products/streetbondsr/streetbondsr-02.jpg",
     gallery: [
       "/images/products/streetbondsr/streetbondsr-01.png",
@@ -176,10 +177,10 @@ export const products: Product[] = [
       "/images/products/streetbondsr/streetbondsr-07.jpg",
       "/images/products/streetbondsr/streetbondsr-08.jpg",
     ],
-    description: "StreetBondSR combines superior colour retention with solar reflective technology. A high-SRI coating system that reduces pavement surface temperatures, mitigating urban heat island effects while delivering lasting colour and protection. Trusted by 500+ Canadian municipalities.",
+    description: "StreetBondSR combines superior colour retention with solar reflective technology. A LEED-compliant coating system that reduces pavement surface temperatures, mitigating urban heat island effects while delivering lasting colour and protection — specified across hundreds of Canadian municipalities.",
     specs: [
       { label: "Type", value: "Solar reflective acrylic pavement coating" },
-      { label: "LEED Credits", value: "Contributes to sustainable site credits" },
+      { label: "LEED Compliance", value: "Yes - contributes to sustainable site credits" },
       { label: "Solar Reflectance", value: "High SRI (Solar Reflectance Index)" },
       { label: "Heat Mitigation", value: "Reduces surface temperature vs. standard coatings" },
       { label: "Surfaces", value: "Asphalt and concrete" },
@@ -199,7 +200,7 @@ export const products: Product[] = [
       width: 280,
       height: 80,
     },
-    relatedApplications: ["parking-lots", "private-driveways", "parks-paths", "community-branding"],
+    relatedApplications: ["leed-urban-heat-island", "parking-lots", "private-driveways", "parks-paths", "public-spaces", "commercial-spaces"],
   },
   {
     name: "DuraTherm",
@@ -214,9 +215,10 @@ export const products: Product[] = [
       { label: "Snowplow Safe", value: "Yes - no shear risk" },
       { label: "Bond", value: "Full-depth asphalt integration" },
       { label: "Designs", value: "Custom artwork accepted" },
+      { label: "Retroreflectivity", value: "Glass bead surface — ASTM D4956 compliant" },
       { label: "Service Life", value: "7+ year service life" },
     ],
-    relatedApplications: ["crosswalks", "parking-lots", "community-branding"],
+    relatedApplications: ["crosswalks", "pedestrian-safety", "parking-lots", "community-branding", "regulatory-markings"],
   },
   {
     name: "DuraShield",
@@ -233,24 +235,24 @@ export const products: Product[] = [
       { label: "Traffic Open", value: "24 hours" },
       { label: "Lifespan Extension", value: "3-5 years documented" },
     ],
-    relatedApplications: ["private-driveways", "parking-lots", "parks-paths"],
+    relatedApplications: ["private-driveways", "residential-driveways", "parking-lots", "parks-paths", "townhomes", "commercial-spaces"],
   },
   {
     name: "AirMark",
     slug: "airmark",
-    shortDesc: "Aviation-grade clarity. Field-proven performance.",
+    shortDesc: "FAA-grade clarity. Field-proven performance.",
     imageUrl: "/images/products/airmark/airmark-01.jpg",
     gallery: gallery("airmark", "airmark", 22),
-    description: "AirMark: preformed thermoplastic airfield markings engineered for precision and performance. Premium retroreflectivity. Outlast painted alternatives by 4:1.",
+    description: "AirMark: preformed thermoplastic airfield markings meeting aviation marking standards. Premium retroreflectivity. Outlast painted alternatives by 4:1.",
     specs: [
-      { label: "Standard", value: "Aviation airfield marking standards" },
+      { label: "Standard", value: "Meets aviation airfield marking standards" },
       { label: "Material", value: "Preformed thermoplastic" },
       { label: "Retroreflectivity", value: "Premium glass bead surface" },
       { label: "Colour", value: "White and yellow" },
       { label: "Service Life", value: "4x painted alternatives" },
       { label: "Installation", value: "Heat application - certified crews" },
     ],
-    relatedApplications: ["regulatory-markings"],
+    relatedApplications: ["airports", "regulatory-markings"],
   },
   {
     name: "PreMark",
@@ -258,7 +260,7 @@ export const products: Product[] = [
     shortDesc: "Precision-formed. Snowplow-proof.",
     imageUrl: "/images/products/premark/premark-01.jpg",
     gallery: gallery("premark", "premark", 11),
-    description: "PreMark: complete library of preformed thermoplastic road marking symbols — turn arrows, stop bars, yield lines, and school zone legends. Pre-cut and ready to apply. Outlasts painted symbols 5:1.",
+    description: "PreMark: complete library of TAC and MUTCD-compliant preformed thermoplastic road marking symbols. Pre-cut and ready to apply. Outlasts painted symbols by 5:1.",
     specs: [
       { label: "Material", value: "Preformed thermoplastic" },
       { label: "Thickness", value: "90mil standard / 125mil heavy-use" },
@@ -266,45 +268,7 @@ export const products: Product[] = [
       { label: "Curing", value: "No cure time — heat-applied, drive-on immediately" },
       { label: "Retroreflectivity", value: "Premium glass bead surface" },
     ],
-    relatedApplications: ["crosswalks", "regulatory-markings", "parking-lots", "bike-lanes", "bus-lanes"],
+    relatedApplications: ["crosswalks", "regulatory-markings", "parking-lots", "bike-lanes", "bus-lanes", "pedestrian-safety", "traffic-calming"],
   },
 
-
-  // ── Asphalt Repair ───────────────────────────────────────────────────────────
-  {
-    name: "Fast Patch",
-    slug: "fast-patch",
-    shortDesc: "Permanent pothole repair. Open to traffic in minutes.",
-    imageUrl: "/images/products/streetprint/streetprint-01.jpg",
-    gallery: [],
-    description: "FastPatch is a two-component polyurethane hybrid repair system engineered for permanent pothole and utility cut repair. Mixed on-site and applied cold, it bonds directly to the existing asphalt substrate — no heating, no compaction equipment, no lane closures for longer than 30 minutes. Unlike cold-mix or hot-mix temporary patches, FastPatch cures to a rigid, traffic-ready surface that outlasts conventional repair methods by 5:1. Trusted by municipalities, contractors, and maintenance crews across Canada.",
-    specs: [
-      { label: "Type", value: "Two-component polyurethane hybrid" },
-      { label: "Application", value: "Cold mix — no heating required" },
-      { label: "Cure Time", value: "Open to traffic in 30 minutes" },
-      { label: "Bond", value: "Direct chemical bond to existing asphalt and concrete" },
-      { label: "Service Life", value: "5x conventional cold-mix repair" },
-      { label: "Temperature Range", value: "Applies from -10°C to +40°C" },
-      { label: "Coverage", value: "1 unit covers approx. 0.1 m³ of repair volume" },
-    ],
-    relatedApplications: ["private-driveways", "parking-lots", "parks-paths", "commercial-spaces"],
-  },
-  {
-    name: "Aquaphalt",
-    slug: "aquaphalt",
-    shortDesc: "Water-activated repair. No fumes. No heat. No mess.",
-    imageUrl: "/images/products/streetprint/streetprint-40.jpg",
-    gallery: [],
-    description: "Aquaphalt is a water-activated, permanent asphalt repair product engineered for potholes, utility cuts, utility valve adjustments, and edge joints. Applied cold and activated with water, Aquaphalt requires no mixing, no heating, and no special equipment — just fill, compact, and drive. Its environmentally responsible formula contains no solvents, no VOCs, and no hazardous fumes, making it suitable for use in occupied spaces, underground parkades, and school zones. Aquaphalt bonds permanently to asphalt and concrete and has been installed in over 30 countries.",
-    specs: [
-      { label: "Type", value: "Water-activated permanent cold-mix" },
-      { label: "Application", value: "No heat, no mixing, no special equipment" },
-      { label: "Activation", value: "Water — potable or grey water" },
-      { label: "VOCs", value: "Zero — no solvents, no fumes" },
-      { label: "Open to Traffic", value: "Immediately after compaction" },
-      { label: "Shelf Life", value: "3 years in sealed packaging" },
-      { label: "Bond", value: "Permanent adhesion to asphalt and concrete" },
-    ],
-    relatedApplications: ["private-driveways", "parking-lots", "parks-paths", "commercial-spaces"],
-  },
-];                                                                                                                                                                                             
+  // ── Coming Soon ─────────────────�

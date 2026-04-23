@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
+import LunchLearn from "@/components/sections/LunchLearn";
 import GalleryGrid, { type GalleryImage } from "@/components/ui/GalleryGrid";
 import { projects } from "@/lib/projects";
 
@@ -146,9 +147,4 @@ export default function ProjectsPage() {
             <h2 className="text-3xl font-bold" style={{ color: "#f5f0eb" }}>Gallery</h2>
           </div>
           <GalleryGrid images={allGalleryImages} />
-        </div>
-      </div>
-      <Footer />
-    </main>
-  );
-}
+        </

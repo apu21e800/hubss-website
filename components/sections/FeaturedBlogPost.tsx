@@ -51,7 +51,7 @@ export default function FeaturedBlogPost() {
                 textWrap: "balance",
               }}
             >
-              Proven in Canada.<br className="hidden sm:block" /> Built in Canada.
+              Proven in the Field.<br className="hidden sm:block" /> Built to Last.
             </h2>
             <p
               className="text-base mt-2 max-w-xl"
@@ -244,4 +244,4 @@ export default function FeaturedBlogPost() {
           <Link
             href="/blog"
             className="text-sm font-semibold px-6 py-3 rounded-lg inline-block border transition-all hover:border-orange-500/40 hover:text-white"
-   
+  

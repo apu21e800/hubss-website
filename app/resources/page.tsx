@@ -5,14 +5,11 @@ import LunchLearn from "@/components/sections/LunchLearn";
 import { resourceDocuments } from "@/lib/resource-documents";
 import ResourcesClient from "@/components/resources/ResourcesClient";
 
-import { buildMetadata } from "@/lib/seo";
-
-export const metadata: Metadata = buildMetadata({
-  title: "Specification Library & Technical Resources",
+export const metadata: Metadata = {
+  title: "Specification Library | HUB Surface Systems",
   description:
-    "Technical data sheets, spec sheets, brochures, safety guides, and installation resources for every HUB Surface Systems decorative pavement product. Download free for any project.",
-  slug: "resources",
-});
+    "Technical data sheets, spec sheets, brochures, safety guides, and installation resources for every HUBSS decorative pavement product.",
+};
 
 export default function ResourcesPage() {
   return (

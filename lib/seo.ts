@@ -5,10 +5,10 @@ const SITE_NAME = "HUB Surface Systems";
 const DEFAULT_OG_IMAGE = "/images/hero/hero-1.jpg";
 
 // Keyword-rich title suffix for better SERP context
-const TITLE_SUFFIX = "HUB Surface Systems";
+const TITLE_SUFFIX = "HUBSS";
 
 // Clamp helpers — avoid truncation in SERPs
-const clampTitle = (str: string, max = 65) =>
+const clampTitle = (str: string, max = 60) =>
   str.length > max ? str.slice(0, str.lastIndexOf(" ", max - 3)) + "…" : str;
 const clampDesc = (str: string, max = 155) =>
   str.length > max ? str.slice(0, str.lastIndexOf(" ", max - 3)) + "…" : str;
@@ -37,7 +37,7 @@ export function buildMetadata({
   const clampedDesc = clampDesc(description);
 
   return {
-    title: { absolute: clampedTitle },
+    title: clampedTitle,
     description: clampedDesc,
     openGraph: {
       title: clampedTitle,

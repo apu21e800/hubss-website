@@ -68,11 +68,9 @@ export default function ContactPage() {
                 </div>
               ))}
 
-              <div className="mt-6 pt-6" style={{ borderTop: "1px solid var(--border-subtle)" }}>
-                <div className="flex items-center gap-4 flex-wrap">
-                  <p className="text-xs font-semibold uppercase tracking-widest flex-shrink-0" style={{ color: "rgba(255,255,255,0.3)" }}>Follow Our Work</p>
-                  <SocialLinks size="sm" className="gap-4" />
-                </div>
+              <div className="mt-6 pt-6 flex items-center gap-4 flex-wrap" style={{ borderTop: "1px solid var(--border-subtle)" }}>
+                <p className="text-zinc-500 text-xs uppercase tracking-widest flex-shrink-0">Follow our work</p>
+                <SocialLinks className="gap-4" iconClassName="w-5 h-5" />
               </div>
             </div>
 
@@ -202,8 +200,4 @@ export default function ContactPage() {
           </div>
         </div>
       </div>
-      <LunchLearn />
-      <Footer />
-    </main>
-  );
-}
+      <LunchLearn /

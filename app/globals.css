@@ -91,16 +91,37 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-geist), system-ui, sans-serif;
-  text-wrap: balance; /* prevents lone words on last line of headings */
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: clamp(2.4rem, 5vw, 5.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  font-weight: 900;
+}
+
+h2 {
+  font-size: clamp(1.75rem, 3.5vw, 3.25rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+}
+
+h3 {
+  font-size: clamp(1.25rem, 2vw, 1.875rem);
+  line-height: 1.18;
+  letter-spacing: -0.02em;
 }
 
 p {
-  line-height: 1.75;
+  line-height: 1.7;
   text-wrap: pretty; /* prevents orphaned words on last line of paragraphs */
 }
 
 .prose p {
-  line-height: 1.8;
+  line-height: 1.75;
 }
 
 /* ─── Section padding utility ─────────────────────────── */
@@ -531,4 +552,12 @@ p {
   left: 0;
   right: 0;
   height: 2px;
-  backg
+  background: linear-gradient(90deg, #F97316, #EAB308);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.hover-underline-gradient:hover::after {
+  transform: scaleX(1);
+}

@@ -247,3 +247,4 @@ export default function FeaturedBlogPost() {
       </div>
     </section>
   );
+}

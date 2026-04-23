@@ -126,8 +126,8 @@ export default async function BlogPostPage({ params }: Props) {
         >
           <MDXRemote
             source={post.content}
-            options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
             components={{ BlogImage }}
+            options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
           />
         </article>
 
@@ -225,4 +225,12 @@ export default async function BlogPostPage({ params }: Props) {
       </div>
 
       {/* ── Related Posts ───────────────────────────────── */}
-      <div className="pt-16 border-t border-white/5
+      <div className="pt-16 border-t border-white/5 bg-[#0c0c0c]">
+        <RelatedPosts posts={getAllPosts()} currentSlug={post.slug} />
+      </div>
+
+      <LunchLearn />
+      <Footer />
+    </main>
+  );
+}

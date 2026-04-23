@@ -17,7 +17,25 @@ export default function ProductsPage() {
     <main style={{ background: "#0f1620", minHeight: "100vh" }}>
       <Nav />
 
-      <div className="relative">
+      {/*
+       * ASPHALT TEXTURE SECTION BACKGROUND
+       * TODO: drop public/images/asphalt-texture.jpg (dark asphalt closeup, 1200×800+)
+       *       then uncomment the backgroundImage line below and remove the TODO comment.
+       *
+       * When the file is present the section gets a subtle atmospheric dark asphalt
+       * background at 8% opacity with a full dark overlay on top — purely decorative,
+       * text remains fully readable. The grain SVG below is an inline fallback until then.
+       */}
+      <div
+        className="relative"
+        style={
+          {
+            /* backgroundImage: "url('/images/asphalt-texture.jpg')", */
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }
+        }
+      >
         {/* Stamped asphalt texture — atmospheric depth */}
         <Image
           src="/images/textures/stamped-asphalt-texture.webp"
@@ -70,18 +88,13 @@ export default function ProductsPage() {
             },
             {
               label: "Coloured Pavement Coatings",
-              desc: "Liquid-applied colour systems that bond chemically to asphalt and concrete. Safety lane demarcation, civic plazas, stamped driveways, and LEED-compliant solar-reflective surfaces — wherever colour is doing structural work.",
-              slugs: ["streetbond", "streetbondsr", "mmax"],
+              desc: "Liquid-applied colour systems that bond chemically to asphalt and concrete. Safety lane demarcation, civic plazas, stamped driveways — wherever colour is doing structural work.",
+              slugs: ["streetbond", "mmax"],
             },
             {
               label: "Surface Transformation Systems",
               desc: "Process-based systems that change the surface itself — stamped pattern and texture into existing asphalt, or penetrating treatments that extend pavement life by years.",
               slugs: ["streetprint", "durashield"],
-            },
-            {
-              label: "Pavement Repair",
-              desc: "Cold-patch and repair compounds for fast, permanent pothole and surface repair. No special equipment, no minimum temperature — ready to carry traffic immediately.",
-              slugs: ["fast-patch", "aquaphalt"],
             },
           ];
 
@@ -114,24 +127,17 @@ export default function ProductsPage() {
                             key={product.slug}
                             href={`/products/${product.slug}`}
                             className="group h-full flex flex-col relative overflow-hidden rounded-xl transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(249,115,22,0.12)]"
-                            style={{ background: "#1a1e28", border: "1px solid rgba(255,255,255,0.07)", opacity: product.comingSoon ? 0.75 : 1 }}
+                            style={{ background: "#1a1e28", border: "1px solid rgba(255,255,255,0.07)" }}
                           >
                             <div
                               className="absolute top-0 left-0 right-0 h-[2px] z-10"
-                              style={{ background: product.comingSoon ? "rgba(255,255,255,0.15)" : "linear-gradient(90deg, #F97316, #EAB308)" }}
+                              style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }}
                             />
-                            {product.comingSoon && (
-                              <div className="absolute top-4 right-4 z-10">
-                                <span className="text-[10px] font-bold tracking-widest uppercase px-2 py-1 rounded" style={{ background: "rgba(249,115,22,0.15)", color: "#f97316", border: "1px solid rgba(249,115,22,0.3)" }}>
-                                  Coming Soon
-                                </span>
-                              </div>
-                            )}
                             <div className="p-7 flex flex-col flex-grow">
-                              <h3 className="font-bold text-xl mb-1.5 transition-colors group-hover:text-[#f97316]" style={{ color: product.comingSoon ? "var(--text-secondary)" : "var(--text-primary)" }}>
+                              <h3 className="font-bold text-xl mb-1.5 transition-colors group-hover:text-[#f97316]" style={{ color: "var(--text-primary)" }}>
                                 {product.name}
                               </h3>
-                              <p className="text-sm font-medium mb-3" style={{ color: product.comingSoon ? "var(--text-muted)" : "#fb923c" }}>
+                              <p className="text-sm font-medium mb-3" style={{ color: "#fb923c" }}>
                                 {product.shortDesc}
                               </p>
                               <p className="text-sm leading-relaxed mb-5 flex-grow" style={{ color: "var(--text-secondary)" }}>
@@ -171,7 +177,25 @@ export default function ProductsPage() {
                                 </div>
                               )}
 
-                              <span className="text-xs font-semibold tracking-widest uppercase flex items-center gap-1.5" style={{ color: product.comingSoon ? "var(--text-muted)" : "#f97316" }}>
-                                {product.comingSoon ? "Learn More" : "Explore System"}
+                              <span className="text-xs font-semibold tracking-widest uppercase flex items-center gap-1.5" style={{ color: "#f97316" }}>
+                                Explore System
                                 <span className="transition-transform duration-200 group-hover:translate-x-1 inline-block">→</span>
-                              </span
+                              </span>
+                            </div>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })()}
+      </div>
+      </div>{/* end asphalt texture wrapper */}
+      <LunchLearn />
+      <Footer />
+    </main>
+  );
+}

@@ -4,33 +4,32 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
 const STATS = [
-  { num: "30+", label: "Years", sub: "Engineering Canadian surfaces" },
-  { num: "1,000+", label: "Projects", sub: "Completed coast to coast" },
-  { num: "500+", label: "Municipalities", sub: "Specified coast to coast" },
-  { num: "5–7yr", label: "Service Life", sub: "Where traffic paint lasts 12–18 months" },
+  { num: "30+",    label: "Years",          sub: "Engineering Canadian surfaces" },
+  { num: "1,000+", label: "Projects",       sub: "Completed coast to coast" },
+  { num: "500+",   label: "Municipalities", sub: "Specified coast to coast" },
+  { num: "20yr",   label: "Performance",    sub: "Colour retention on stamped asphalt and coatings" },
 ];
 
-// Condensed to scannable one-liners — no paragraphs
 const PROOF = [
   {
     num: "01",
     claim: "Built for Canadian winters",
-    detail: "Freeze-thaw, de-icing salts, snowplow blades — stress-tested for every climate from BC coastal rain to Ontario freeze-thaw.",
+    detail: "Freeze-thaw, de-icing salts, snowplow blades. Stress-tested for every climate coast to coast.",
   },
   {
     num: "02",
-    claim: "Snowplow-proof by design",
-    detail: "Preformed thermoplastics and stamped asphalt profiles are engineered to survive blade contact. No peeling, no delamination — season after season.",
+    claim: "Lower lifecycle cost than paint",
+    detail: "Thermoplastic and MMA systems last 6–8× longer than paint — with no lane closures for reapplication.",
   },
   {
     num: "03",
-    claim: "Pedestrian safety built in",
-    detail: "High-contrast retroreflectivity, BPN 65+ skid resistance, and Vision Zero-aligned geometry — proven across hundreds of Canadian crosswalk programs.",
+    claim: "Visible in every condition",
+    detail: "Retroreflective crosswalk systems, high-contrast colour combinations, and slip-resistant surfaces engineered for rain, snow, and low-light performance.",
   },
   {
     num: "04",
-    claim: "Regulatory compliance",
-    detail: "TAC, MUTCD, BCMOT, and aviation marking standards compliant across the full product range.",
+    claim: "Specified by engineers coast to coast",
+    detail: "Trusted by transportation engineers, urban designers, and municipal procurement teams across all 10 Canadian provinces.",
   },
 ];
 
@@ -50,41 +49,28 @@ export default function WhyHubss() {
     <section
       ref={sectionRef}
       className="relative overflow-hidden"
-      style={{
-        background: "#070b12",
-      }}
+      style={{ background: "#070b12" }}
     >
-      {/* Strong orange bloom from top-left — gives the section energy */}
       <div
         className="absolute pointer-events-none"
         style={{
-          top: "-120px",
-          left: "-80px",
-          width: "600px",
-          height: "500px",
+          top: "-120px", left: "-80px", width: "600px", height: "500px",
           background: "radial-gradient(ellipse at 30% 20%, rgba(249,115,22,0.13) 0%, transparent 65%)",
         }}
       />
-      {/* Subtle secondary bloom top-right */}
       <div
         className="absolute pointer-events-none"
         style={{
-          top: "-60px",
-          right: "0",
-          width: "400px",
-          height: "300px",
+          top: "-60px", right: "0", width: "400px", height: "300px",
           background: "radial-gradient(ellipse at 70% 0%, rgba(234,179,8,0.06) 0%, transparent 70%)",
         }}
       />
-      {/* Top edge line */}
       <div
         className="absolute top-0 inset-x-0 h-px pointer-events-none"
         style={{ background: "linear-gradient(90deg, transparent 0%, rgba(249,115,22,0.5) 50%, transparent 100%)" }}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 lg:pt-28 pb-6">
-
-        {/* ── Header ── */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -103,7 +89,7 @@ export default function WhyHubss() {
               backgroundClip: "text",
             }}
           >
-            Canada's durable decorative hardscape.
+            Canada&apos;s durable decorative hardscape.
             <br />Specified by Engineers.
             <br />Loved by Communities.
           </h2>
@@ -112,7 +98,6 @@ export default function WhyHubss() {
           </p>
         </motion.div>
 
-        {/* ── Stats ── */}
         <div
           className="grid grid-cols-2 sm:grid-cols-4 mb-12 rounded-xl overflow-hidden"
           style={{ border: "1px solid rgba(255,255,255,0.07)" }}
@@ -126,7 +111,7 @@ export default function WhyHubss() {
               className="flex flex-col items-center justify-center gap-1 py-7 px-4 text-center"
               style={{
                 background: "rgba(255,255,255,0.02)",
-                borderRight: i < 3 ? "1px solid rgba(255,255,255,0.07)" : "none",
+                borderRight:  i < 3 ? "1px solid rgba(255,255,255,0.07)" : "none",
                 borderBottom: i < 2 ? "1px solid rgba(255,255,255,0.07)" : "none",
               }}
             >
@@ -143,7 +128,6 @@ export default function WhyHubss() {
           ))}
         </div>
 
-        {/* ── Proof points — tight rows, no paragraph walls ── */}
         <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
           {PROOF.map((p, i) => (
             <motion.div
@@ -169,13 +153,11 @@ export default function WhyHubss() {
           ))}
         </div>
 
-        {/* ── Trusted-by label ── */}
         <p className="text-[10px] font-bold tracking-[0.2em] uppercase mt-10 mb-5" style={{ color: "rgba(255,255,255,0.18)" }}>
           Trusted by
         </p>
       </div>
 
-      {/* ── Full-bleed scrolling marquee ── */}
       <div
         className="overflow-hidden pt-2 pb-10"
         style={{ maskImage: "linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%)" }}
@@ -186,14 +168,26 @@ export default function WhyHubss() {
         >
           {TICKER.map((name, i) => (
             <span key={i} className="inline-flex items-center flex-shrink-0">
-              <span className="text-sm font-medium pl-6 pr-4" style={{ color: "rgba(255,255,255,0.35)" }}>{name}</span>
-              <span className="inline-block w-1 h-1 rounded-full flex-shrink-0 mr-2" style={{ background: "rgba(249,115,22,0.4)" }} />
+              <span className="text-sm font-medium px-5" style={{ color: "rgba(255,255,255,0.35)" }}>
+                {name}
+              </span>
+              <span
+                aria-hidden="true"
+                style={{
+                  display: "inline-block",
+                  width: 4,
+                  height: 4,
+                  borderRadius: "50%",
+                  background: "rgba(249,115,22,0.5)",
+                  flexShrink: 0,
+                  verticalAlign: "middle",
+                }}
+              />
             </span>
           ))}
         </div>
       </div>
 
-      {/* ── Gradient frame line — grounds the marquee, bridges into persona strip ── */}
       <div
         className="w-full"
         style={{
@@ -205,4 +199,10 @@ export default function WhyHubss() {
 
       <style>{`
         @keyframes hubss-marquee {
-          0%   { transform: 
+          0%   { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+      `}</style>
+    </section>
+  );
+}

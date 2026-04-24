@@ -63,7 +63,7 @@ export default function LunchLearn({ hideMoose: _hideMoose }: { hideMoose?: bool
   };
 
   const contactImg = { src: "/images/products/streetbond/streetbond-112.jpg", alt: "HUB Surface Systems Lunch and Learn — decorative pavement products presentation" };
-  const mooseImg = { src: "/images/lunch-learn/moose-final.png", alt: "HUB Surface Systems mascot moose" };
+  const mooseImg = { src: "/images/lunch-learn/moose.png", alt: "HUB Surface Systems mascot moose" };
 
   return (
     <section className="bg-dot-grid-blue relative overflow-hidden py-20 lg:py-28">

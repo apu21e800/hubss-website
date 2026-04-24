@@ -43,7 +43,7 @@ export default function Footer() {
             <div className="mb-5">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/images/assets/logos/hubss-logos/hubss-logo-white.png"
+                src="/images/hub-logo-white.png"
                 alt="HUB Surface Systems"
                 width={140}
                 height={44}

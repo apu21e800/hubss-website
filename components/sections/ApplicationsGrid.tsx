@@ -30,10 +30,25 @@ export default function ApplicationsGrid() {
           <p className="grad-text text-xs font-semibold tracking-[0.2em] uppercase mb-3">
             Applications
           </p>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3" style={{ color: "var(--text-primary)" }}>
-            Every Surface, A Statement
+          <h2
+            className="font-black mb-4"
+            style={{
+              color: "var(--text-primary)",
+              fontSize: "clamp(2rem, 4vw, 3.5rem)",
+              lineHeight: 1.05,
+              letterSpacing: "-0.03em",
+              textWrap: "balance",
+            }}
+          >
+            Every Surface,{" "}
+            <span style={{
+              background: "linear-gradient(90deg, #F97316 0%, #EAB308 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+            }}>A Statement.</span>
           </h2>
-          <p className="text-base max-w-xl" style={{ color: "var(--text-secondary)" }}>
+          <p className="text-base sm:text-lg max-w-2xl leading-relaxed" style={{ color: "var(--text-secondary)" }}>
             Crosswalks, bike lanes, civic art, driveways — wherever people move, gather, or stop, the surface underneath is doing work.
           </p>
         </div>

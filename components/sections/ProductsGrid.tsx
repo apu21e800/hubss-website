@@ -86,17 +86,23 @@ export default function ProductsGrid() {
           <div className="flex items-end justify-between gap-6 flex-wrap">
             <div>
               <h2
-                className="text-3xl sm:text-4xl font-bold tracking-tight mb-3"
-                style={{ color: "var(--text-primary)" }}
+                className="font-black mb-3"
+                style={{
+                  color: "var(--text-primary)",
+                  fontSize: "clamp(1.8rem, 3.5vw, 3rem)",
+                  lineHeight: 1.08,
+                  letterSpacing: "-0.03em",
+                  textWrap: "balance",
+                }}
               >
-                Purpose-Built. Canadian-Proven.
+                Purpose-Built.<br className="hidden sm:block" /> Performance-Proven.
               </h2>
               <p
                 className="text-base font-light max-w-lg leading-relaxed"
                 style={{ color: "var(--text-secondary)" }}
               >
-                Six systems engineered for Canadian winters, municipalities, and
-                the projects that define a city.
+                Six systems engineered for freeze-thaw climates, municipalities,
+                and the projects that define a city.
               </p>
             </div>
             <Link

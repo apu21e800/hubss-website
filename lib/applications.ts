@@ -32,7 +32,7 @@ export const applications: Application[] = [
     imageUrl: "/images/applications/bike-lanes/bike-lanes-01.jpg",
     gallery: gallery("bike-lanes", "bike-lanes", 38),
     description: "Bike lanes demand pavement systems that hold colour season after season. StreetBond delivers vivid, UV-stable colour on asphalt and concrete with full Pantone custom matching. MMAX MMA is specified for high-volume transit-adjacent corridors requiring overnight curing and bond strength above 3 MPa. PreMark delivers retroreflective symbols and edge lines that outlast paint 5:1.",
-    relatedProducts: ["streetbond", "mmax", "traffic-patterns-xd", "premark"],
+    relatedProducts: ["premark", "mmax"],
   },
   {
     name: "Bus Lanes",
@@ -71,7 +71,7 @@ export const applications: Application[] = [
     gallery: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52].map(n =>
       `/images/applications/playgrounds/playgrounds-${String(n).padStart(2,"0")}.jpg`),
     description: "Playground surfaces demand safety, durability, and delight. DecoMark custom thermoplastic graphics bring hopscotch courts, number grids, and mural-scale artwork to paved play surfaces with Pantone-accurate colour. StreetBond adds vivid colour to existing asphalt play courts without raised edges that create trip hazards.",
-    relatedProducts: ["decomark", "streetbond", "streetprint"],
+    relatedProducts: ["decomark", "streetbond", "streetprint", "traffic-patterns"],
   },
   {
     name: "Community Branding",
@@ -154,7 +154,7 @@ export const applications: Application[] = [
     imageUrl: "/images/applications/crosswalks/crosswalks-03.jpg",
     gallery: [1,3,6,8,11,13,16,18,21,23,26,28,31,33,36,38,41,43,45,48,50,53,55,58,60,63,65,68,70,73,75,78,80,83,85,87,90,92,95,97,100,102,105,107,110,112,115,117,120,122].map(n =>
       `/images/applications/crosswalks/crosswalks-${String(n).padStart(2,"0")}.jpg`),
-    description: "Pedestrian safety is the single most important function of urban pavement marking. High-visibility crosswalks, raised intersection treatments, school zone markings, and tactile guidance surfaces all rely on durable, retroreflective pavement systems. TrafficPatterns and TrafficPatternsXD thermoplastic deliver Vision Zero–compliant crosswalks that outlast paint 5:1. StreetBond and MMAX colour coatings mark pedestrian priority zones with high-contrast colour that persists through Canadian winters.",
+    description: "Pedestrian safety is the single most important function of urban pavement marking. High-visibility crosswalks, raised intersection treatments, school zone markings, and tactile guidance surfaces all rely on durable, retroreflective pavement systems. TrafficPatterns and TrafficPatternsXD thermoplastic deliver Vision Zero crosswalks that outlast paint 5:1. StreetBond and MMAX colour coatings mark pedestrian priority zones with high-contrast colour that persists through Canadian winters.",
     relatedProducts: ["traffic-patterns", "traffic-patterns-xd", "streetbond", "mmax", "decomark", "premark"],
   },
   {
@@ -170,10 +170,10 @@ export const applications: Application[] = [
   {
     name: "Airports",
     slug: "airports",
-    shortDesc: "FAA-compliant airfield markings for runways, taxiways, and aprons",
+    shortDesc: "Precision airfield markings for runways, taxiways, and aprons",
     imageUrl: "/images/applications/airports/airports-01.jpg",
     gallery: gallery("airports", "airports", 28),
-    description: "Airfield surface marking is one of the most regulated and technically demanding applications in the road marking industry. AirMark preformed thermoplastic delivers FAA Advisory Circular 150/5370-10 compliant threshold markings, runway designation numbers, taxiway edge lines, and holding position signs with ASTM D4956 Type IV premium retroreflectivity. Outlast paint 4:1.",
+    description: "Airfield surface marking is one of the most technically demanding applications in the pavement marking industry. AirMark preformed thermoplastic delivers precision threshold markings, runway designation numbers, taxiway edge lines, and holding position signs with ASTM D4956 Type IV premium retroreflectivity. Outlasts paint 4:1 with no lane-closure downtime.",
     relatedProducts: ["airmark"],
   },
   {
@@ -182,8 +182,8 @@ export const applications: Application[] = [
     shortDesc: "Cool surfaces. Green credentials.",
     imageUrl: "/images/applications/leed-urban-heat-island/leed-urban-heat-island-01.jpg",
     gallery: gallery("leed-urban-heat-island", "leed-urban-heat-island", 2),
-    description: "Dark asphalt surfaces absorb solar heat, raising urban ambient temperatures and contributing to the urban heat island effect. StreetBondSR solar-reflective coatings reduce pavement surface temperatures and contribute to LEED site credit compliance for heat island reduction. Available in high-SRI formulations across hundreds of Canadian municipalities.",
-    relatedProducts: ["streetbondsr", "streetbond", "durashield"],
+    description: "Dark asphalt surfaces absorb solar heat, raising urban ambient temperatures and contributing to the urban heat island effect. StreetBond light-coloured pavement coatings reflect solar radiation, reducing surface temperatures and contributing to LEED site credits for heat island reduction. Available in high-SRI formulations.",
+    relatedProducts: ["streetbond", "mmax", "durashield"],
   },
   {
     name: "Public Art",
@@ -197,9 +197,11 @@ export const applications: Application[] = [
   {
     name: "Regulatory Markings",
     slug: "regulatory-markings",
-    shortDesc: "TAC-compliant stop bars, arrows, legends, and lane markings",
-    imageUrl: "/images/applications/crosswalks/crosswalks-01.jpg",
-    gallery: [1,3,6,8,11,13,16,18,21,23,26,28,31,33,36,38,41,43,45,48,50,53,55,58,60,63,65,68,70,73,75,78,80,83,85,87,90,92,95,97,100,102,105,107,110,112,115,117,120,122].map(n =>
-      `/images/applications/crosswalks/crosswalks-${String(n).padStart(2,"0")}.jpg`),
-    description: "Stop bars, turn arrows, yield symbols, school zone markings, and MUTCD-compliant pavement legends demand precision and longevity. TrafficPatterns and TrafficPatternsXD thermoplastic deliver retroreflective symbols and lines that outlast paint 5:1. PreMark preformed thermoplastic provides fast installation for school zones, accessible parking, and crosswalk ladder lines with no curing downtime.",
-    relatedProducts: ["traffic-patterns", "traffic-patterns-xd", "premark"
+    shortDesc: "Precision stop bars, arrows, legends, and lane markings",
+    imageUrl: "/images/applications/traffic-calming/traffic-calming-01.jpg",
+    gallery: [1,2,3,4,5,6,7,8,9,11,12,13,14,15,16,17,18,19,21,22,23,24,25,26,27,28,29,31,32,33,34,35,36,37,38,39,41,42,43,44,45,46,47,48,49,51,52,53,54,55].map(n =>
+      `/images/applications/traffic-calming/traffic-calming-${String(n).padStart(2,"0")}.jpg`),
+    description: "Stop bars, turn arrows, yield symbols, school zone markings, and pavement legends demand precision and longevity. TrafficPatterns and TrafficPatternsXD thermoplastic deliver retroreflective symbols and lines that outlast paint 5:1. PreMark preformed thermoplastic provides fast installation for school zones, accessible parking, and crosswalk ladder lines with no curing downtime.",
+    relatedProducts: ["traffic-patterns", "traffic-patterns-xd", "premark", "duratherm", "airmark"],
+  },
+];

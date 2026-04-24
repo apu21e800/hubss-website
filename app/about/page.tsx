@@ -36,36 +36,12 @@ const values = [
 ];
 
 const differentiators = [
-  {
-    title: "Flexibility vs Concrete",
-    desc: "Asphalt-based systems flex with Canada's freeze-thaw cycles, outlasting concrete alternatives by 2–3x in northern climates.",
-    icon: "M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15",
-  },
-  {
-    title: "6–8x Longer Than Paint",
-    desc: "Thermoplastic and MMA markings deliver 6–8 years of service life versus 12–18 months for standard traffic paint.",
-    icon: "M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z",
-  },
-  {
-    title: "Vision Zero Aligned",
-    desc: "Every HUB product is designed to support Vision Zero frameworks — from retroreflective crosswalk markings to high-contrast bike lane systems.",
-    icon: "M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.955 11.955 0 003 10c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.623 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.249-8.25-3.286z",
-  },
-  {
-    title: "Pedestrian-First Design",
-    desc: "High-contrast, retroreflective, and textured surface systems engineered for maximum pedestrian visibility and safety in every Canadian climate condition.",
-    icon: "M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z",
-  },
-  {
-    title: "Documented Longevity",
-    desc: "StreetPrint and StreetBond installations deliver proven 20-year colour retention across hundreds of Canadian municipalities — from BC coastal rain to Ontario freeze-thaw cycles.",
-    icon: "M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z",
-  },
-  {
-    title: "Canadian-Specific",
-    desc: "Every system is engineered and tested for Canadian climate extremes, from Ladysmith BC to York Region ON.",
-    icon: "M15 10.5a3 3 0 11-6 0 3 3 0 016 0zM19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z",
-  },
+  { title: "Flexibility vs Concrete", desc: "Asphalt-based systems flex with Canada's freeze-thaw cycles, outlasting concrete alternatives by 2–3x in northern climates." },
+  { title: "6–8x Longer Than Paint", desc: "Thermoplastic and MMA markings deliver 6–8 years of service life versus 12–18 months for standard traffic paint." },
+  { title: "Vision Zero Aligned", desc: "Every HUB product is designed to support Vision Zero frameworks — from retroreflective crosswalk markings to high-contrast bike lane systems." },
+  { title: "High-Visibility by Design", desc: "Tactile and high-contrast marking solutions engineered for pedestrian safety and legibility in every lighting condition and season." },
+  { title: "20-Year Performance", desc: "StreetPrint and StreetBond installations are engineered for 20-year colour retention — documented across hundreds of Canadian municipalities." },
+  { title: "Climate-Tested", desc: "Every system is stress-tested for freeze-thaw extremes, de-icing salts, and snowplow blades — from coastal BC to the Great Lakes." },
 ];
 
 export default function AboutPage() {
@@ -74,23 +50,26 @@ export default function AboutPage() {
       <Nav />
 
       {/* ── Hero ───────────────────────────────────────────── */}
-      <div className="relative overflow-hidden" style={{ background: "#0d1117" }}>
+      <div className="relative overflow-hidden min-h-[500px]" style={{ background: "#0d1117" }}>
+        {/* Hero image */}
+        <Image
+          src="/images/hero/hero-3.jpg"
+          alt="HUB Surface Systems — Canadian decorative pavement specialists"
+          fill
+          className="object-cover object-center"
+          priority
+          sizes="100vw"
+        />
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/72 pointer-events-none" />
         {/* Orange accent underline */}
         <div
-          className="absolute bottom-0 left-0 right-0 h-[2px] pointer-events-none"
+          className="absolute bottom-0 left-0 right-0 h-[2px] pointer-events-none z-10"
           style={{ background: "linear-gradient(90deg, #F97316 0%, transparent 60%)" }}
           aria-hidden="true"
         />
-        {/* HUB Wheel watermark */}
-        <div
-          className="absolute bottom-0 right-0 pointer-events-none"
-          style={{ width: 520, height: 520, opacity: 0.05 }}
-          aria-hidden="true"
-        >
-          <Image src="/images/assets/logos/hubss-logos/HUB-wheel_official-orange-transparent.svg" alt="" width={520} height={520} unoptimized />
-        </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-24 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-24 relative z-10">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "#f97316" }}>
             Canadian-Operated Since 1994 · All 10 Provinces
           </p>
@@ -154,6 +133,17 @@ export default function AboutPage() {
               </div>
             </div>
             <div>
+              {/* Story image */}
+              <div className="rounded-xl overflow-hidden mb-8 relative" style={{ height: 260 }}>
+                <Image
+                  src="/images/applications/community-branding/community-branding-08.jpg"
+                  alt="HUB Surface Systems — UBC community identity crosswalk installation"
+                  fill
+                  className="object-cover object-center"
+                  sizes="(max-width:1024px) 100vw, 50vw"
+                />
+                <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, transparent 50%, rgba(13,17,23,0.7) 100%)" }} />
+              </div>
               <h2 className="text-3xl font-bold mb-6" style={{ color: "#ffffff" }}>Our Mission</h2>
               <p
                 className="text-xl leading-relaxed mb-4"
@@ -283,14 +273,7 @@ export default function AboutPage() {
                 className="p-8 rounded-xl"
                 style={{ background: "#1a1e28", border: "1px solid rgba(255,255,255,0.07)" }}
               >
-                <div
-                  className="flex items-center justify-center rounded-lg mb-5 flex-shrink-0"
-                  style={{ width: 44, height: 44, background: "rgba(249,115,22,0.12)", border: "1px solid rgba(249,115,22,0.2)" }}
-                >
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f97316" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d={d.icon} />
-                  </svg>
-                </div>
+                <div className="w-8 h-0.5 mb-5" style={{ background: "#f97316" }} />
                 <h3 className="font-bold text-lg mb-3" style={{ color: "#ffffff" }}>{d.title}</h3>
                 <p className="text-[15px] leading-relaxed" style={{ color: "#8b8b8b" }}>{d.desc}</p>
               </div>
@@ -311,7 +294,7 @@ export default function AboutPage() {
           <p className="text-base leading-relaxed max-w-2xl mb-8" style={{ color: "#8b8b8b" }}>
             HUB is an authorized distributor and applicator partner for the manufacturers behind
             our core product systems — giving clients access to the broadest decorative pavement
-            portfolio in Canada, with direct manufacturer technical support.
+            portfolio in Canada, with direct manufacturer technical support and specification backup.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -322,8 +305,8 @@ export default function AboutPage() {
                 logo: "/images/partners/gaf-logo.png",
                 logoW: 80,
                 logoH: 40,
-                products: ["StreetBond", "StreetBond Pro", "StreetBondSR", "DuraShield", "MMAX"],
-                desc: "GAF supplies the coloured pavement coating systems behind thousands of HUB decorative surface installations across Canada — including StreetBond, StreetBondSR solar-reflective coatings, DuraShield protective sealers, and MMAX MMA rapid-cure systems. Documented colour retention across hundreds of Canadian municipalities.",
+                products: ["StreetBond", "StreetBondSR", "DuraShield", "MMAX"],
+                desc: "GAF is the manufacturer behind HUB's coloured pavement coating systems — StreetBond, StreetBondSR (solar reflective), DuraShield, and MMAX. Their coatings technology has been the foundation of thousands of decorative surface installations across Canada.",
                 accent: "#E05C1A",
               },
               {
@@ -332,8 +315,8 @@ export default function AboutPage() {
                 logo: "/images/partners/ppg-logo.svg",
                 logoW: 80,
                 logoH: 40,
-                products: ["TrafficPatterns", "TrafficPatternsXD", "PreMark", "AirMark", "DuraTherm"],
-                desc: "Ennis-Flint (a PPG company) is the manufacturer behind HUB's full thermoplastics range — including TrafficPatterns, TrafficPatternsXD, PreMark, AirMark, and DuraTherm. Their preformed thermoplastic systems are the gold standard for high-durability pavement markings across Canada.",
+                products: ["TrafficPatterns", "TrafficPatternsXD", "PreMark", "AirMark", "DuraTherm", "DecoMark"],
+                desc: "Ennis-Flint (a PPG company) is the manufacturer behind HUB's full thermoplastics range — including TrafficPatterns, TrafficPatternsXD, PreMark, AirMark, DuraTherm, and DecoMark. Their preformed thermoplastic systems are the gold standard for high-durability pavement markings across Canada.",
                 accent: "#0057A8",
               },
             ].map((partner) => (
@@ -359,4 +342,50 @@ export default function AboutPage() {
                       width={partner.logoW}
                       height={partner.logoH}
                       alt={partner.name}
-                      style={{ maxHeight: 36, width: "auto", objectFit: "co
+                      style={{ maxHeight: 36, width: "auto", objectFit: "contain" }}
+                      unoptimized
+                    />
+                  </div>
+                  <div className="flex flex-wrap gap-1.5 justify-end">
+                    {partner.products.map((p) => (
+                      <span
+                        key={p}
+                        className="text-[10px] font-semibold px-2 py-0.5 rounded-full"
+                        style={{
+                          background: `${partner.accent}18`,
+                          color: partner.accent,
+                          border: `1px solid ${partner.accent}30`,
+                        }}
+                      >
+                        {p}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="px-8 py-6">
+                  <h3 className="text-2xl font-bold mb-1" style={{ color: "#ffffff" }}>
+                    {partner.name}
+                  </h3>
+                  {partner.sub && (
+                    <p className="text-xs font-semibold tracking-wide uppercase mb-3" style={{ color: "rgba(255,255,255,0.3)" }}>
+                      {partner.sub}
+                    </p>
+                  )}
+                  {!partner.sub && <div className="mb-3" />}
+                  <p className="text-sm leading-relaxed" style={{ color: "#8b8b8b" }}>
+                    {partner.desc}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <LunchLearn />
+      <Footer />
+    </main>
+  );
+}

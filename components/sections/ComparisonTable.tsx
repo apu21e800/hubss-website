@@ -4,26 +4,25 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 
 const rows = [
-  { metric: "Snowplow resistance",  trad: "Poor",               hub: "Excellent — zero shear risk" },
-  { metric: "Service life",         trad: "1–2 years",          hub: "7–8+ years" },
-  { metric: "Reapplication",        trad: "Every 1–2 seasons",  hub: "Not required" },
-  { metric: "Skid resistance",      trad: "Degrades rapidly",   hub: "BPN 65+ maintained" },
-  { metric: "Night visibility",     trad: "Fades within months", hub: "Retroreflective, colour stable" },
-  { metric: "Total lifecycle cost", trad: "High — recurring",   hub: "Lower — one installation" },
+  { metric: "Snow plow resistance", trad: "Poor",                hub: "Excellent" },
+  { metric: "Service life",         trad: "1–2 Years",           hub: "8+ Years" },
+  { metric: "Installation",         trad: "Yearly maintenance",  hub: "One-time application" },
+  { metric: "Skid resistance",      trad: "Low",                 hub: "High" },
+  { metric: "Visibility",           trad: "Fades quickly",       hub: "Colour stable" },
 ];
 
 export default function ComparisonTable() {
   return (
     <section
-      data-theme="light"
-      className="py-24"
+      className="py-24 relative overflow-hidden"
       style={{
-        backgroundColor: "var(--color-off-white)",
-        borderTop: "4px solid #f97316",
-        backgroundImage: "linear-gradient(rgba(0,0,0,0.028) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.028) 1px, transparent 1px)",
-        backgroundSize: "44px 44px",
+        background: "#0d1117",
+        borderTop: "1px solid rgba(255,255,255,0.06)",
+        borderBottom: "1px solid rgba(255,255,255,0.06)",
       }}
     >
+      {/* Subtle orange glow top-left */}
+      <div className="absolute pointer-events-none" style={{ top: -100, left: -80, width: 480, height: 400, background: "radial-gradient(ellipse at 30% 20%, rgba(249,115,22,0.10) 0%, transparent 65%)" }} />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
 
@@ -34,16 +33,16 @@ export default function ComparisonTable() {
             viewport={{ once: true }}
             className="lg:sticky lg:top-32"
           >
-            <p className="gradient-text text-xs font-semibold tracking-[0.2em] uppercase mb-4">
+            <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "#f97316" }}>
               Why HUBSS
             </p>
             <h2
               className="text-3xl sm:text-4xl md:text-5xl font-bold mb-5 leading-[1.1]"
-              style={{ color: "#111827" }}
+              style={{ color: "#ffffff" }}
             >
               Paint Fades.<br />We Don&apos;t.
             </h2>
-            <p className="text-[15px] leading-relaxed mb-8" style={{ color: "#374151" }}>
+            <p className="text-[15px] leading-relaxed mb-8" style={{ color: "#9ca3af" }}>
               Traditional paint markings cost municipalities more every year through
               repeated reapplication, faded visibility, and plow damage. HUB surface
               systems are installed once and built to outlast the budget cycle.
@@ -74,7 +73,7 @@ export default function ComparisonTable() {
                   Longer service life
                 </p>
                 <p className="text-xs mt-0.5" style={{ color: "#6b7280" }}>
-                  vs. painted markings — proven across Canada since 1994
+                  vs. painted markings — proven in the field since 1994
                 </p>
               </div>
             </div>
@@ -136,17 +135,32 @@ export default function ComparisonTable() {
                     <tr
                       key={row.metric}
                       style={{
-                        background: i % 2 === 0 ? "#fff" : "#fafaf9",
-                        borderBottom: "1px solid #e5e7eb",
+                        background: i % 2 === 0 ? "rgba(255,255,255,0.03)" : "rgba(255,255,255,0.01)",
+                        borderBottom: "1px solid rgba(255,255,255,0.06)",
                       }}
                     >
-                      <td className="px-5 py-3.5 text-sm font-semibold" style={{ color: "#111827" }}>
+                      <td className="px-3 py-2 text-sm font-medium" style={{ color: "#e5e7eb" }}>
                         {row.metric}
                       </td>
-                      <td className="px-5 py-3.5 text-sm" style={{ color: "#6b7280" }}>
-                        <span className="flex items-center gap-1.5">
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
-                          {row.trad}
-                        </span>
+                      <td className="px-3 py-2 text-sm font-medium" style={{ color: "#ef4444" }}>
+                        {row.trad}
                       </td>
-                      <td className="px-5 py-3.5 text-sm font-semibold" style={{ colo
+                      <td className="px-3 py-2 text-sm font-bold" style={{ color: "#f97316" }}>
+                        {row.hub}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <p className="text-sm mt-6" style={{ color: "#6b7280" }}>
+              Proven in 10 provinces, coast to coast, since 1994
+            </p>
+          </motion.div>
+
+        </div>
+      </div>
+    </section>
+  );
+}

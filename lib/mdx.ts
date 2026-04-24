@@ -16,6 +16,7 @@ export interface PostMeta {
   category: PostCategory;
   products: string[];
   applications: string[];
+  tags?: string[];
   draft?: boolean;
 }
 
@@ -104,6 +105,7 @@ export function getAllPosts(): PostMeta[] {
         category: (data.category as PostCategory) || inferCategory(slug, title, excerpt),
         products: (data.products as string[]) || inferProducts(title, excerpt),
         applications: (data.applications as string[]) || [],
+        tags: (data.tags as string[]) || undefined,
         draft: (data.draft as boolean) || false,
       };
     })
@@ -127,6 +129,8 @@ export function getPost(slug: string): Post {
     category: (data.category as PostCategory) || inferCategory(slug, title, excerpt),
     products: (data.products as string[]) || inferProducts(title, excerpt),
     applications: (data.applications as string[]) || [],
+    tags: (data.tags as string[]) || undefined,
+    draft: (data.draft as boolean) || false,
     content,
   };
 }

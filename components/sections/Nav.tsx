@@ -227,7 +227,7 @@ function PanelFooter() {
     <div style={{ background: "var(--bg-dark)", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
       <div style={{ maxWidth: 1400, margin: "0 auto", padding: "12px 3rem" }}>
         <p className="text-xs text-center tracking-wide" style={{ color: "rgba(255,255,255,0.55)" }}>
-          Engineered for Canadian infrastructure &nbsp;·&nbsp; Canadian-operated since 1994 &nbsp;·&nbsp; Coast to coast
+          Engineered for municipal infrastructure &nbsp;·&nbsp; Operated since 1994 &nbsp;·&nbsp; Coast to coast
         </p>
       </div>
     </div>
@@ -324,14 +324,7 @@ function ProductsPanel({
                       <div className="grid grid-cols-2 gap-x-8 gap-y-0.5">
                         {groupProducts.map((p) => (
                           <Link key={p.slug} href={`/products/${p.slug}`} className="group py-1.5 block">
-                            <div className="flex items-center gap-1.5">
-                              <div className="text-sm font-medium group-hover:text-orange-400 transition-colors" style={{ color: p.comingSoon ? "rgba(255,255,255,0.4)" : "rgba(255,255,255,0.85)" }}>{p.name}</div>
-                              {p.comingSoon && (
-                                <span className="text-[9px] font-bold tracking-wide px-1 py-0.5 rounded" style={{ background: "rgba(249,115,22,0.15)", color: "rgba(249,115,22,0.7)", border: "1px solid rgba(249,115,22,0.2)" }}>
-                                  SOON
-                                </span>
-                              )}
-                            </div>
+                            <div className="text-sm font-medium group-hover:text-orange-400 transition-colors" style={{ color: "rgba(255,255,255,0.85)" }}>{p.name}</div>
                             <div className="text-xs group-hover:text-gray-300 transition-colors leading-snug" style={{ color: "rgba(255,255,255,0.35)" }}>{p.shortDesc}</div>
                           </Link>
                         ))}
@@ -369,7 +362,7 @@ function ProductsPanel({
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-semibold text-white">TrafficPatternsXD™</div>
-                    <div className="text-xs text-gray-400">150 mil · Canadian winters</div>
+                    <div className="text-xs text-gray-400">150 mil · freeze-thaw rated</div>
                   </div>
                 </Link>
 
@@ -755,16 +748,9 @@ function MobileOverlay({
                               borderBottom: "1px solid rgba(255,255,255,0.03)",
                             }}
                           >
-                            <div className="flex items-center gap-1.5">
-                              <span style={{ fontSize: "0.9375rem", color: p.comingSoon ? "rgba(255,255,255,0.4)" : "rgba(255,255,255,0.75)", fontWeight: 500, lineHeight: 1.2 }}>
-                                {p.name}
-                              </span>
-                              {p.comingSoon && (
-                                <span style={{ fontSize: "0.55rem", fontWeight: 700, letterSpacing: "0.1em", padding: "1px 4px", borderRadius: 3, background: "rgba(249,115,22,0.15)", color: "rgba(249,115,22,0.7)", border: "1px solid rgba(249,115,22,0.2)" }}>
-                                  SOON
-                                </span>
-                              )}
-                            </div>
+                            <span style={{ fontSize: "0.9375rem", color: "rgba(255,255,255,0.75)", fontWeight: 500, lineHeight: 1.2 }}>
+                              {p.name}
+                            </span>
                             <span style={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.3)", marginTop: 2 }}>
                               {p.shortDesc}
                             </span>
@@ -1291,4 +1277,39 @@ export default function Nav() {
         )}
       </nav>
 
-      {/* Mobile full-scr
+      {/* Mobile full-screen overlay — outside nav to avoid stacking context issues */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <MobileOverlay
+            onClose={() => setMobileOpen(false)}
+            mobileExpanded={mobileExpanded}
+            setMobileExpanded={setMobileExpanded}
+            pathname={pathname}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Desktop mega menu panels — rendered outside nav */}
+      <AnimatePresence mode="wait">
+        {activePanel === "products" && (
+          <ProductsPanel
+            key="products"
+            navHeight={navHeight}
+            onClose={() => setActivePanel(null)}
+            onMouseEnter={cancelCloseTimer}
+            onMouseLeave={startCloseTimer}
+          />
+        )}
+        {activePanel === "applications" && (
+          <ApplicationsPanel
+            key="applications"
+            navHeight={navHeight}
+            onClose={() => setActivePanel(null)}
+            onMouseEnter={cancelCloseTimer}
+            onMouseLeave={startCloseTimer}
+          />
+        )}
+      </AnimatePresence>
+    </>
+  );
+}

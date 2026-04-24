@@ -1,338 +1,291 @@
 "use client";
 
-import { useState } from "react";
+import { useState, FormEvent } from "react";
+import { motion } from "framer-motion";
 import Image from "next/image";
 
-interface LunchLearnProps {
-  /** Pass true on the dedicated /lunch-learn page — moose is rendered in the hero there */
-  hideMoose?: boolean;
+
+interface FormState {
+  name: string;
+  email: string;
+  company: string;
+  city: string;
+  phone: string;
 }
 
-export default function LunchLearn({ hideMoose = false }: LunchLearnProps) {
-  const [form, setForm] = useState({
+interface SubmitState {
+  status: "idle" | "loading" | "success" | "error";
+  message?: string;
+}
+
+export default function LunchLearn({ hideMoose: _hideMoose }: { hideMoose?: boolean } = {}) {
+  const [formData, setFormData] = useState<FormState>({
     name: "",
     email: "",
     company: "",
     city: "",
     phone: "",
   });
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  }
+  const [submitState, setSubmitState] = useState<SubmitState>({ status: "idle" });
 
-  async function handleSubmit(e: React.FormEvent) {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.currentTarget;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setStatus("sending");
+    setSubmitState({ status: "loading" });
+
     try {
-      const res = await fetch("/api/contact", {
+      const response = await fetch("/api/lunch-learn", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ formType: "lunch-learn", ...form }),
+        body: JSON.stringify(formData),
       });
-      if (!res.ok) throw new Error("Send failed");
-      setStatus("sent");
-      setForm({ name: "", email: "", company: "", city: "", phone: "" });
-    } catch {
-      setStatus("error");
+
+      if (!response.ok) {
+        throw new Error(`API error: ${response.statusText}`);
+      }
+
+      setSubmitState({
+        status: "success",
+        message: "Thank you! We'll be in touch soon to schedule your Lunch & Learn session.",
+      });
+      setFormData({ name: "", email: "", company: "", city: "", phone: "" });
+    } catch (error) {
+      setSubmitState({
+        status: "error",
+        message: "Something went wrong. Please try again or contact us directly.",
+      });
     }
-  }
+  };
+
+  const contactImg = { src: "/images/products/streetbond/streetbond-112.jpg", alt: "HUB Surface Systems Lunch and Learn — decorative pavement products presentation" };
 
   return (
-    <section
-      className="relative overflow-hidden"
-      style={{
-        background: "linear-gradient(160deg, #0d1117 0%, #141b2d 60%, #0d1117 100%)",
-        borderTop: "1px solid rgba(255,255,255,0.05)",
-        borderBottom: "1px solid rgba(255,255,255,0.05)",
-      }}
-    >
-      {/* Subtle grid pattern */}
+    <section className="relative overflow-hidden py-20 lg:py-28">
+      {/* Background gradient */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          backgroundImage:
-            "linear-gradient(rgba(249,115,22,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(249,115,22,0.03) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
+          background: "radial-gradient(ellipse at 50% 50%, rgba(249,115,22,0.08) 0%, transparent 70%)",
         }}
-        aria-hidden="true"
       />
 
-      {/* Orange glow — top left */}
-      <div
-        className="absolute pointer-events-none"
-        style={{
-          top: -120,
-          left: -80,
-          width: 400,
-          height: 400,
-          borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(249,115,22,0.08) 0%, transparent 70%)",
-        }}
-        aria-hidden="true"
-      />
-
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-60 sm:pb-64">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-
-          {/* ── Left — content panel ──────────────────────────── */}
-          <div className="relative">
-            <p
-              className="text-xs font-semibold tracking-[0.2em] uppercase mb-4"
-              style={{ color: "#f97316" }}
-            >
-              Free Professional Development
-            </p>
-            <h2
-              className="text-4xl sm:text-5xl font-bold mb-6 leading-tight"
-              style={{ color: "#ffffff" }}
-            >
-              Lunch Is On Us.
-              <br />
-              <span
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          {/* Left: Content + Form */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="mb-8">
+              <p className="text-xs font-bold tracking-[0.2em] uppercase mb-3" style={{ color: "#f97316" }}>
+                Education &amp; Engagement
+              </p>
+              <h2
+                className="text-3xl sm:text-4xl lg:text-[2.75rem] font-bold leading-tight mb-5"
                 style={{
-                  background: "linear-gradient(90deg, #F97316, #EAB308)",
+                  background: "linear-gradient(92deg, #F97316 0%, #EAB308 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
                 }}
               >
-                Knowledge Is Free.
-              </span>
-            </h2>
-            <p
-              className="text-base sm:text-lg leading-relaxed mb-8 max-w-lg"
-              style={{ color: "#8b8b8b" }}
-            >
-              We bring lunch to your office and walk your team through everything
-              you need to know about modern pavement marking systems — real Canadian
-              case studies, lifecycle cost analysis, and practical specs you can drop
-              straight into your next RFP.
-            </p>
+                Lunch &amp; Learn at Your Location
+              </h2>
+              <p className="text-base leading-relaxed" style={{ color: "#9CA3AF" }}>
+                Bring the team together. We'll deliver a personalized session covering product selection, installation best practices, and ROI — with lunch included.
+              </p>
+            </div>
 
-            {/* What you get */}
-            <ul className="space-y-3 mb-10">
+            {/* Benefits list */}
+            <div className="space-y-4 mb-10">
               {[
-                "Live product demonstrations + take-home samples",
-                "Canadian case studies — York Region, Vancouver, UBC",
-                "Free continuing education credits for engineers",
-                "Lifecycle cost comparison vs paint and concrete",
-                "Tailored to your municipality's active projects",
-              ].map((item) => (
-                <li key={item} className="flex items-start gap-3">
-                  <span
-                    className="mt-1 flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold"
-                    style={{ background: "rgba(249,115,22,0.15)", color: "#f97316" }}
-                  >
-                    ✓
-                  </span>
-                  <span className="text-sm leading-snug" style={{ color: "#c0c0c0" }}>
-                    {item}
-                  </span>
-                </li>
-              ))}
-            </ul>
-
-          </div>
-
-          {/* ── Right — form card ────────────────────────────── */}
-          <div
-            className="rounded-2xl p-8 sm:p-10 relative overflow-hidden"
-            style={{
-              background: "#1a1e28",
-              border: "1px solid rgba(255,255,255,0.08)",
-            }}
-          >
-            {/* Orange top accent */}
-            <div
-              className="absolute top-0 left-0 right-0 h-[2px]"
-              style={{ background: "linear-gradient(90deg, #f97316 0%, rgba(249,115,22,0.3) 60%, transparent 100%)" }}
-            />
-
-            {status === "sent" ? (
-              <div className="py-10 text-center">
-                <div
-                  className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-6"
-                  style={{ background: "rgba(249,115,22,0.12)", border: "1px solid rgba(249,115,22,0.25)" }}
+                "30–45 minute presentation tailored to your projects",
+                "Live Q&A with HUB technical team",
+                "Sample materials and specification sheets",
+                "Lunch &amp; refreshments included",
+              ].map((benefit, i) => (
+                <motion.div
+                  key={benefit}
+                  initial={{ opacity: 0, x: -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.08, duration: 0.4 }}
+                  className="flex items-start gap-3"
                 >
-                  <span style={{ color: "#f97316", fontSize: 22 }}>✓</span>
-                </div>
-                <h3 className="text-xl font-bold mb-3" style={{ color: "#ffffff" }}>
-                  You&apos;re on the list.
-                </h3>
-                <p className="text-sm" style={{ color: "#8b8b8b" }}>
-                  We&apos;ll reach out within one business day to coordinate a date that works for your team.
-                </p>
-              </div>
-            ) : (
-              <>
-                <h3 className="text-xl font-bold mb-2" style={{ color: "#ffffff" }}>
-                  Book Your Session
-                </h3>
-                <p className="text-sm mb-8" style={{ color: "#9CA3AF" }}>
-                  Available anywhere in Canada — East or West office will coordinate.
-                </p>
-
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-semibold tracking-wide uppercase mb-1.5" style={{ color: "#9CA3AF" }}>
-                        Name *
-                      </label>
-                      <input
-                        type="text"
-                        name="name"
-                        required
-                        value={form.name}
-                        onChange={handleChange}
-                        placeholder="Jane Smith"
-                        className="w-full rounded-lg px-4 py-3 text-sm outline-none transition-colors focus:border-[#f97316]"
-                        style={{
-                          background: "#0f1620",
-                          border: "1px solid rgba(255,255,255,0.08)",
-                          color: "#ffffff",
-                        }}
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold tracking-wide uppercase mb-1.5" style={{ color: "#9CA3AF" }}>
-                        Email *
-                      </label>
-                      <input
-                        type="email"
-                        name="email"
-                        required
-                        value={form.email}
-                        onChange={handleChange}
-                        placeholder="jane@municipality.ca"
-                        className="w-full rounded-lg px-4 py-3 text-sm outline-none transition-colors focus:border-[#f97316]"
-                        style={{
-                          background: "#0f1620",
-                          border: "1px solid rgba(255,255,255,0.08)",
-                          color: "#ffffff",
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold tracking-wide uppercase mb-1.5" style={{ color: "#9CA3AF" }}>
-                      Organization
-                    </label>
-                    <input
-                      type="text"
-                      name="company"
-                      value={form.company}
-                      onChange={handleChange}
-                      placeholder="City of Vancouver / Stantec / etc."
-                      className="w-full rounded-lg px-4 py-3 text-sm outline-none transition-colors focus:border-[#f97316]"
-                      style={{
-                        background: "#0f1620",
-                        border: "1px solid rgba(255,255,255,0.08)",
-                        color: "#ffffff",
-                      }}
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-semibold tracking-wide uppercase mb-1.5" style={{ color: "#9CA3AF" }}>
-                        City / Region
-                      </label>
-                      <input
-                        type="text"
-                        name="city"
-                        value={form.city}
-                        onChange={handleChange}
-                        placeholder="Milton, ON"
-                        className="w-full rounded-lg px-4 py-3 text-sm outline-none transition-colors focus:border-[#f97316]"
-                        style={{
-                          background: "#0f1620",
-                          border: "1px solid rgba(255,255,255,0.08)",
-                          color: "#ffffff",
-                        }}
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold tracking-wide uppercase mb-1.5" style={{ color: "#9CA3AF" }}>
-                        Phone
-                      </label>
-                      <input
-                        type="tel"
-                        name="phone"
-                        value={form.phone}
-                        onChange={handleChange}
-                        placeholder="416-555-0100"
-                        className="w-full rounded-lg px-4 py-3 text-sm outline-none transition-colors focus:border-[#f97316]"
-                        style={{
-                          background: "#0f1620",
-                          border: "1px solid rgba(255,255,255,0.08)",
-                          color: "#ffffff",
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  {status === "error" && (
-                    <p className="text-xs text-red-400">
-                      Something went wrong. Email us directly at info@hubss.com
-                    </p>
-                  )}
-
-                  <button
-                    type="submit"
-                    disabled={status === "sending"}
-                    className="w-full rounded-lg py-4 text-sm font-bold tracking-wide uppercase transition-all duration-200 hover:brightness-110 disabled:opacity-60"
-                    style={{
-                      background: "linear-gradient(135deg, #f97316 0%, #ea6c10 100%)",
-                      color: "#ffffff",
-                      letterSpacing: "0.1em",
-                    }}
+                  <svg
+                    className="w-5 h-5 flex-shrink-0 mt-0.5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    style={{ color: "#f97316" }}
                   >
-                    {status === "sending" ? "Sending…" : "Book a Free Lunch & Learn →"}
-                  </button>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span style={{ color: "#F5F0EB" }}>{benefit}</span>
+                </motion.div>
+              ))}
+            </div>
 
-                  <p className="text-xs text-center font-medium" style={{ color: "#e2e8f0" }}>
-                    We respond within 1 business day — no spam, ever.
-                  </p>
-                </form>
-              </>
-            )}
-          </div>
+            {/* Form */}
+            <motion.form
+              onSubmit={handleSubmit}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="space-y-4"
+            >
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Your name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                  className="px-4 py-3 rounded-lg text-sm"
+                  style={{
+                    background: "rgba(255,255,255,0.07)",
+                    border: "1px solid rgba(255,255,255,0.12)",
+                    color: "#F5F0EB",
+                  }}
+                />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email address"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  className="px-4 py-3 rounded-lg text-sm"
+                  style={{
+                    background: "rgba(255,255,255,0.07)",
+                    border: "1px solid rgba(255,255,255,0.12)",
+                    color: "#F5F0EB",
+                  }}
+                />
+              </div>
 
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <input
+                  type="text"
+                  name="company"
+                  placeholder="Company or organization"
+                  value={formData.company}
+                  onChange={handleChange}
+                  className="px-4 py-3 rounded-lg text-sm"
+                  style={{
+                    background: "rgba(255,255,255,0.07)",
+                    border: "1px solid rgba(255,255,255,0.12)",
+                    color: "#F5F0EB",
+                  }}
+                />
+                <input
+                  type="text"
+                  name="city"
+                  placeholder="City"
+                  value={formData.city}
+                  onChange={handleChange}
+                  className="px-4 py-3 rounded-lg text-sm"
+                  style={{
+                    background: "rgba(255,255,255,0.07)",
+                    border: "1px solid rgba(255,255,255,0.12)",
+                    color: "#F5F0EB",
+                  }}
+                />
+              </div>
 
+              <input
+                type="tel"
+                name="phone"
+                placeholder="Phone number"
+                value={formData.phone}
+                onChange={handleChange}
+                className="w-full px-4 py-3 rounded-lg text-sm"
+                style={{
+                  background: "rgba(255,255,255,0.07)",
+                  border: "1px solid rgba(255,255,255,0.12)",
+                  color: "#F5F0EB",
+                }}
+              />
+
+              <button
+                type="submit"
+                disabled={submitState.status === "loading"}
+                className="w-full px-6 py-3.5 rounded-lg font-semibold text-sm transition-all disabled:opacity-50"
+                style={{
+                  background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
+                  color: "#fff",
+                  boxShadow: "0 4px 20px rgba(249,115,22,0.3)",
+                }}
+              >
+                {submitState.status === "loading" ? "Sending..." : "Request Lunch & Learn"}
+              </button>
+
+              {submitState.status === "success" && (
+                <motion.div
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="p-4 rounded-lg"
+                  style={{ background: "rgba(34,197,94,0.1)", border: "1px solid rgba(34,197,94,0.3)" }}
+                >
+                  <p style={{ color: "#86efac" }}>{submitState.message}</p>
+                </motion.div>
+              )}
+
+              {submitState.status === "error" && (
+                <motion.div
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="p-4 rounded-lg"
+                  style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.3)" }}
+                >
+                  <p style={{ color: "#fca5a5" }}>{submitState.message}</p>
+                </motion.div>
+              )}
+            </motion.form>
+          </motion.div>
+
+          {/* Right: Image */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="relative"
+          >
+            <div
+              className="relative rounded-2xl overflow-hidden"
+              style={{
+                aspectRatio: "4/5",
+                boxShadow: "0 20px 60px rgba(0,0,0,0.4)",
+                border: "1px solid rgba(255,255,255,0.09)",
+              }}
+            >
+              <Image
+                src={contactImg.src}
+                alt={contactImg.alt}
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
+            </div>
+
+            {/* Decorative elements */}
+            <div
+              className="absolute -bottom-8 -right-8 w-32 h-32 rounded-full opacity-20 pointer-events-none"
+              style={{ background: "radial-gradient(circle, #F97316 0%, transparent 70%)" }}
+            />
+          </motion.div>
         </div>
       </div>
-
-      {/* Moose — paws on section fold line, tracks form card right edge at all widths */}
-      {!hideMoose && (
-        <div
-          className="absolute z-10 pointer-events-none"
-          style={{
-            bottom: -2,
-            right: "clamp(24px, calc((100vw - 1280px) / 2 + 24px), 380px)",
-            width: "clamp(200px, 20vw, 272px)",
-          }}
-        >
-          <Image
-            src="/images/assets/mascot/moose-1.png"
-            alt="HUB Surface Systems Moose mascot"
-            width={272}
-            height={272}
-            style={{
-              width: "100%",
-              height: "auto",
-              objectFit: "contain",
-              objectPosition: "bottom",
-              filter: "drop-shadow(0 -2px 0px rgba(249,115,22,0.0)) drop-shadow(0 10px 28px rgba(0,0,0,0.55))",
-              display: "block",
-              marginBottom: -1,
-            }}
-            unoptimized
-          />
-        </div>
-      )}
     </section>
   );
 }

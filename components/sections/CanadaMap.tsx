@@ -209,81 +209,6 @@ function ProjectModal({ project, onClose }: { project: MapProject; onClose: () =
   );
 }
 
-// ── Horizontal filmstrip below map ──────────────────────────────────────────
-function ProjectFilmstrip({ onSelectProject }: { onSelectProject: (p: MapProject) => void }) {
-  return (
-    <div style={{ marginTop: "1.5rem" }}>
-      {/* Label row */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.75rem", paddingLeft: 2 }}>
-        <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "#4B5563", margin: 0 }}>
-          {mapProjects.length} installations — click to explore
-        </p>
-        <span style={{ fontSize: 11, color: "#374151" }}>scroll →</span>
-      </div>
-
-      {/* Scrollable strip */}
-      <div
-        style={{
-          display: "flex",
-          gap: 10,
-          overflowX: "auto",
-          paddingBottom: 8,
-          scrollbarWidth: "none",
-          msOverflowStyle: "none",
-          WebkitOverflowScrolling: "touch",
-        }}
-        className="filmstrip-hide-scrollbar"
-      >
-        {mapProjects.map((project) => (
-          <button
-            key={project.id}
-            onClick={() => onSelectProject(project)}
-            style={{
-              flexShrink: 0,
-              width: 160,
-              background: "#111827",
-              border: "1px solid rgba(255,255,255,0.06)",
-              borderRadius: 10,
-              padding: 0,
-              cursor: "pointer",
-              overflow: "hidden",
-              textAlign: "left",
-              transition: "border-color 0.18s, transform 0.18s",
-            }}
-            onMouseEnter={(e) => {
-              const el = e.currentTarget as HTMLButtonElement;
-              el.style.borderColor = "rgba(249,115,22,0.45)";
-              el.style.transform = "translateY(-2px)";
-            }}
-            onMouseLeave={(e) => {
-              const el = e.currentTarget as HTMLButtonElement;
-              el.style.borderColor = "rgba(255,255,255,0.06)";
-              el.style.transform = "translateY(0)";
-            }}
-          >
-            {/* Thumbnail */}
-            <div style={{ position: "relative", width: "100%", aspectRatio: "16/9", overflow: "hidden" }}>
-              <Image src={project.images[0]} alt={project.title} fill className="object-cover" sizes="160px" unoptimized />
-              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, transparent 30%, rgba(17,24,39,0.85) 100%)" }} />
-              {/* Province badge */}
-              <span style={{ position: "absolute", top: 7, right: 7, fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", background: "rgba(0,0,0,0.55)", color: "#F97316", padding: "2px 6px", borderRadius: 4, backdropFilter: "blur(4px)" }}>
-                {project.province}
-              </span>
-            </div>
-            {/* Label */}
-            <div style={{ padding: "8px 10px 10px" }}>
-              <p style={{ fontSize: 10, fontWeight: 600, color: "#F5F0EB", margin: "0 0 3px", lineHeight: 1.3 }}>
-                {project.title.length > 32 ? project.title.slice(0, 32) + "…" : project.title}
-              </p>
-              <p style={{ fontSize: 9, color: "#6B7280", margin: 0, fontWeight: 500 }}>{project.product}</p>
-            </div>
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 // ── Main component ──────────────────────────────────────────────────────────
 export default function CanadaMap() {
   const mapRef = useRef<MapRef>(null);
@@ -400,9 +325,6 @@ export default function CanadaMap() {
             </div>
           </div>
 
-          {/* Filmstrip */}
-          <ProjectFilmstrip onSelectProject={handleMarkerClick} />
-
         </div>
       </section>
 
@@ -412,4 +334,3 @@ export default function CanadaMap() {
     </>
   );
 }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         

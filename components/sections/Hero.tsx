@@ -1,183 +1,188 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
-import Link from "next/link";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 import Image from "next/image";
 import { heroImages, resolveImage } from "@/lib/featured-images";
 
-export type HeroVariant = 'default' | 'split' | 'cinematic';
-
-interface HeroProps {
-  variant?: HeroVariant;
-}
-
 const credentialStats = [
-  { value: "1,000+", label: "Projects completed" },
-  { value: "10",     label: "Provinces, coast to coast" },
-  { value: "Since 1994", label: "Trusted across Canada" },
-  { value: "20yr",   label: "Durability" },
+  { value: "30+", label: "Years", sub: "of proven performance" },
+  { value: "500+", label: "Municipalities", sub: "coast to coast" },
+  { value: "1,000+", label: "Projects", sub: "transformed" },
+  { value: "20yr", label: "Durability", sub: "colour retention documented" },
 ];
 
 const tickerItems = [
-  "TrafficPatterns", "TrafficPatternsXD", "StreetPrint", "StreetBond", "MMAX",
-  "DecoMark", "DuraShield", "DuraTherm", "PreMark", "AirMark",
-  "Crosswalks", "Bike Lanes", "Bus Lanes", "Pedestrian Safety",
-  "Traffic Calming", "Community Branding", "Parks & Paths", "Airports",
+  "City of Toronto", "York Region", "Vancouver", "UBC",
+  "City of Ottawa", "City of Calgary", "Brampton", "Mississauga",
+  "TransLink", "City of Surrey", "City of Edmonton", "Winnipeg",
+  "City of Burnaby", "Richmond Hill", "Vision Zero", "Complete Streets",
 ];
 
-export default function Hero({ variant = "default" }: HeroProps) {
-  const textRef = useRef<HTMLDivElement>(null);
+export default function Hero() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollY } = useScroll();
+  const yTransform = useTransform(scrollY, [0, 300], [0, 100]);
 
-  useEffect(() => {
-    const onScroll = () => {
-      if (textRef.current) {
-        textRef.current.style.transform = `translateY(${window.scrollY * 0.1}px)`;
-      }
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  const heroImg = resolveImage(heroImages.homepage);
 
   return (
-    <section
-      className="hero-section relative z-10 min-h-screen flex flex-col pb-20"
-      style={{ background: "#080d16" }}
-    >
-      <Image
-        src={resolveImage(heroImages.homepage).src}
-        alt={resolveImage(heroImages.homepage).alt}
-        fill
-        className="object-cover"
-        priority
-        sizes="100vw"
-      />
-      <Image
-        src="/images/textures/stamped-asphalt-texture.webp"
-        alt=""
-        fill
-        className="object-cover pointer-events-none"
-        style={{ opacity: 0.10, mixBlendMode: "overlay" }}
-        aria-hidden="true"
-        sizes="100vw"
-      />
-      <div className="absolute inset-0 bg-black/70 pointer-events-none" />
-
+    <section ref={containerRef} className="relative overflow-hidden">
+      {/* Background gradient decorations */}
       <div
-        ref={textRef}
-        className="flex-1 flex flex-col justify-between sm:justify-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-28 sm:pt-32 pb-10 relative z-10"
-        style={{ willChange: "transform" }}
-      >
+        className="absolute top-0 left-0 w-full h-full pointer-events-none"
+        style={{
+          background: "linear-gradient(135deg, rgba(249,115,22,0.08) 0%, transparent 50%)",
+        }}
+      />
+
+      {/* Hero content container */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 lg:pt-28">
+        {/* Main heading section */}
         <motion.div
-          initial={{ opacity: 0, y: 32 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          className="max-w-4xl w-full text-left relative"
+          transition={{ duration: 0.6 }}
+          className="max-w-3xl mb-8 sm:mb-12"
         >
-          <div
-            className="absolute -left-4 sm:-left-6 lg:-left-8 top-2 w-[3px] h-36 sm:h-48"
-            style={{ background: "linear-gradient(180deg, #F97316 0%, #EAB308 100%)" }}
-          />
-          <p
-            className="text-xs font-semibold tracking-[0.2em] uppercase mb-3"
-            style={{ color: "#f97316" }}
-          >
-            30+ Years &middot; 1,000+ Projects &middot; York Region, Vancouver &amp; UBC
+          <p className="text-xs font-bold tracking-[0.2em] uppercase mb-4" style={{ color: "#f97316" }}>
+            Decorative Hardscapes
           </p>
           <h1
-            className="font-black text-white mb-4 sm:mb-6"
+            className="font-black leading-tight mb-6"
             style={{
-              fontSize: "clamp(2.8rem, 6.5vw, 6.5rem)",
-              lineHeight: 0.97,
-              letterSpacing: "-0.035em",
+              fontSize: "clamp(2rem, 5.5vw, 3.75rem)",
+              background: "linear-gradient(92deg, #F97316 0%, #EAB308 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
               textWrap: "balance",
             }}
           >
-            The World Is Your Canvas.
+            Colour that lasts. Streets that stand out.
           </h1>
-          <p className="hidden sm:block text-base md:text-xl text-gray-300 max-w-2xl mb-8 leading-relaxed">
-            Decorative hardscape and traffic safety solutions, installed by certified professionals across Canada.
-          </p>
-          <p className="sm:hidden text-sm text-gray-300 mb-8 leading-relaxed">
-            Decorative hardscape and traffic safety solutions across Canada.
+          <p className="text-base sm:text-lg leading-relaxed max-w-2xl" style={{ color: "#9CA3AF" }}>
+            HUB Surface Systems redefines hardscapes for freeze-thaw climates. Stamped asphalt, thermoplastics, and specialty coatings built to outlast paint and outperform expectations.
           </p>
         </motion.div>
 
+        {/* CTA buttons */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="max-w-4xl w-full mt-6 sm:mt-8"
+          transition={{ delay: 0.2, duration: 0.6 }}
+          className="flex flex-col sm:flex-row gap-4 mb-16 sm:mb-20"
         >
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-5 sm:mb-6">
-            <Link
-              href="/products"
-              className="bg-orange-500 hover:bg-orange-400 text-white font-bold px-8 py-4 rounded-lg transition-colors text-center w-full sm:w-auto min-h-[52px] flex items-center justify-center text-base"
-            >
-              Explore Systems
-            </Link>
-            <Link
-              href="/lunch-learn"
-              className="border border-white/30 hover:border-white text-white font-semibold px-8 py-4 rounded-lg transition-colors text-center w-full sm:w-auto min-h-[52px] flex items-center justify-center text-base"
-            >
-              Book a Lunch &amp; Learn
-            </Link>
-          </div>
-          <Link
+          <a
             href="/contact"
-            className="inline-flex items-center gap-2 text-sm font-semibold mb-8 sm:mb-10 transition-colors group"
-            style={{ color: "rgba(255,255,255,0.55)" }}
+            className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-lg font-semibold text-sm transition-all"
+            style={{
+              background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
+              color: "#fff",
+              boxShadow: "0 8px 24px rgba(249,115,22,0.35)",
+            }}
           >
-            <span className="group-hover:text-orange-400 transition-colors">Start a project</span>
-            <svg className="w-3.5 h-3.5 group-hover:text-orange-400 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            Request Spec Sheet
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
-          </Link>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-4">
-            {credentialStats.map((stat) => (
-              <div key={stat.label} className="flex flex-col gap-0.5">
-                <span className="text-2xl sm:text-3xl font-black text-white tabular-nums leading-none">
-                  {stat.value}
-                </span>
-                <span
-                  className="text-[11px] font-medium leading-tight"
-                  style={{ color: "rgba(255,255,255,0.45)" }}
-                >
-                  {stat.label}
-                </span>
-              </div>
-            ))}
-          </div>
+          </a>
+          <a
+            href="/lunch-learn"
+            className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-lg font-semibold text-sm border transition-all hover:border-orange-500/50 hover:text-orange-400"
+            style={{ borderColor: "rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.7)" }}
+          >
+            Book Lunch &amp; Learn
+          </a>
         </motion.div>
       </div>
 
-      {/* Ticker strip */}
-      <div
-        className="absolute bottom-0 left-0 right-0 overflow-hidden z-10"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
+      {/* Hero image section */}
+      <motion.div
+        style={{ y: yTransform }}
+        className="relative z-5 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12"
       >
-        <div className="py-3 whitespace-nowrap ticker-track">
-          {[...tickerItems, ...tickerItems].map((item, i) => (
-            <span key={i} style={{ display: "inline-flex", alignItems: "center", flexShrink: 0 }}>
+        <div
+          className="relative overflow-hidden rounded-2xl"
+          style={{
+            aspectRatio: "16/9",
+            boxShadow: "0 20px 60px rgba(0,0,0,0.4)",
+            border: "1px solid rgba(255,255,255,0.09)",
+          }}
+        >
+          <Image
+            src={heroImg.src}
+            alt={heroImg.alt}
+            fill
+            priority
+            className="object-cover"
+            sizes="100vw"
+          />
+        </div>
+      </motion.div>
+
+      {/* Credential stats grid */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          {credentialStats.map((stat, i) => (
+            <motion.div
+              key={stat.value}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.08, duration: 0.4 }}
+              className="rounded-xl p-5"
+              style={{
+                background: "rgba(255,255,255,0.03)",
+                border: "1px solid rgba(255,255,255,0.07)",
+              }}
+            >
+              <p className="text-2xl sm:text-3xl font-black mb-1" style={{ color: "#f97316" }}>
+                {stat.value}
+              </p>
+              <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: "#F5F0EB" }}>
+                {stat.label}
+              </p>
+              <p className="text-[11px]" style={{ color: "#9CA3AF" }}>
+                {stat.sub}
+              </p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      {/* Ticker section */}
+      <div className="relative z-0 border-y" style={{ borderColor: "rgba(255,255,255,0.07)" }}>
+        <div
+          className="overflow-hidden py-4"
+          style={{
+            maskImage: "linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%)",
+          }}
+        >
+          <motion.div
+            className="flex gap-8 whitespace-nowrap"
+            animate={{ x: [0, -2000] }}
+            transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+          >
+            {[...tickerItems, ...tickerItems].map((item, i) => (
               <span
-                className="text-xs font-medium tracking-wide px-4"
-                style={{ color: "rgba(255,255,255,0.32)", lineHeight: 1 }}
+                key={i}
+                className="text-sm font-medium flex items-center gap-3"
+                style={{ color: "rgba(255,255,255,0.35)" }}
               >
                 {item}
+                <span
+                  style={{
+                    width: "4px",
+                    height: "4px",
+                    borderRadius: "50%",
+                    background: "rgba(249,115,22,0.5)",
+                    flexShrink: 0,
+                  }}
+                />
               </span>
-              <span
-                aria-hidden="true"
-                style={{
-                  display: "block",
-                  width: 4,
-                  height: 4,
-                  borderRadius: "50%",
-                  background: "rgba(249,115,22,0.55)",
-                  flexShrink: 0,
-                }}
-              />
-            </span>
-          ))}
+            ))}
+          </motion.div>
         </div>
       </div>
     </section>

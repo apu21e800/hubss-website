@@ -157,8 +157,8 @@ export default function AboutPage() {
               <p className="text-base leading-relaxed" style={{ color: "#e0e0e0" }}>
                 York Region. City of Toronto. City of Vancouver. UBC. The City of Sechelt.
                 When you walk through a Canadian city and feel something — when a crosswalk
-                catches your eye, when a plaza feels like it belongs — there&apos;s a chance we were
-                there. That&apos;s what thirty years looks like on the ground.
+                catches your eye, when a plaza feels like it belongs — there's a chance we were
+                there. That's what thirty years looks like on the ground.
               </p>
             </div>
           </div>

@@ -2,14 +2,13 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
 
 const PLAIN_LINKS = [
   { label: "Projects", href: "/projects" },
-  { label: "Products", href: "/products" },
-  { label: "Applications", href: "/applications" },
   { label: "About", href: "/about" },
   { label: "Blog", href: "/blog" },
 ];
@@ -176,8 +175,15 @@ export default function Nav() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="font-black text-xl flex-shrink-0" style={{ color: "#f97316" }}>
-          HUB
+        <Link href="/" className="flex-shrink-0">
+          <Image
+            src="/images/assets/logos/hubss-logos/hubss-logo_white.svg"
+            alt="HUB Surface Systems"
+            width={140}
+            height={44}
+            style={{ height: 36, width: "auto" }}
+            priority
+          />
         </Link>
 
         {/* Desktop nav */}

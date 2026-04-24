@@ -63,6 +63,7 @@ export default function LunchLearn({ hideMoose: _hideMoose }: { hideMoose?: bool
   };
 
   const contactImg = { src: "/images/products/streetbond/streetbond-112.jpg", alt: "HUB Surface Systems Lunch and Learn — decorative pavement products presentation" };
+  const mooseImg = { src: "/images/lunch-learn/moose-final.png", alt: "HUB Surface Systems mascot moose" };
 
   return (
     <section className="relative overflow-hidden py-20 lg:py-28">
@@ -253,16 +254,17 @@ export default function LunchLearn({ hideMoose: _hideMoose }: { hideMoose?: bool
             </motion.form>
           </motion.div>
 
-          {/* Right: Image */}
+          {/* Right: Moose mascot + product image */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="relative"
+            className="relative flex items-end justify-center"
           >
+            {/* Product image background card */}
             <div
-              className="relative rounded-2xl overflow-hidden"
+              className="relative rounded-2xl overflow-hidden w-full"
               style={{
                 aspectRatio: "4/5",
                 boxShadow: "0 20px 60px rgba(0,0,0,0.4)",
@@ -276,9 +278,29 @@ export default function LunchLearn({ hideMoose: _hideMoose }: { hideMoose?: bool
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />
+              {/* Orange overlay at bottom */}
+              <div
+                className="absolute bottom-0 left-0 right-0 h-1/3"
+                style={{ background: "linear-gradient(to top, rgba(249,115,22,0.4), transparent)" }}
+              />
             </div>
 
-            {/* Decorative elements */}
+            {/* Moose mascot — bottom right, peeking up */}
+            <div
+              className="absolute bottom-0 right-0 pointer-events-none"
+              style={{ width: "55%", transform: "translateX(8%) translateY(4%)" }}
+            >
+              <Image
+                src={mooseImg.src}
+                alt={mooseImg.alt}
+                width={320}
+                height={400}
+                className="w-full h-auto drop-shadow-2xl"
+                style={{ objectFit: "contain" }}
+              />
+            </div>
+
+            {/* Decorative glow */}
             <div
               className="absolute -bottom-8 -right-8 w-32 h-32 rounded-full opacity-20 pointer-events-none"
               style={{ background: "radial-gradient(circle, #F97316 0%, transparent 70%)" }}

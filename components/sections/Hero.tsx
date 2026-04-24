@@ -59,7 +59,7 @@ export default function Hero() {
               textWrap: "balance",
             }}
           >
-            Colour that lasts. Streets that stand out.
+            The World Is Your Canvas.
           </h1>
           <p className="text-base sm:text-lg leading-relaxed max-w-2xl" style={{ color: "#9CA3AF" }}>
             HUB Surface Systems redefines hardscapes for freeze-thaw climates. Stamped asphalt, thermoplastics, and specialty coatings built to outlast paint and outperform expectations.

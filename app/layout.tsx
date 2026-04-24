@@ -5,6 +5,7 @@ import "./globals.css";
 // import ThemeToggle from "@/components/ui/ThemeToggle";
 // Crisp Chat — sign up at crisp.chat (free), grab Website ID from Settings → Setup
 import CrispChat from "@/components/CrispChat";
+import { VercelToolbar } from "@vercel/toolbar/next";
 
 const geist = Geist({ variable: "--font-geist", subsets: ["latin"] });
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"], weight: ["300","400","500","600","700"] });
@@ -59,6 +60,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className={`${geist.variable} ${inter.variable} antialiased`}>
         {children}
         <CrispChat />
+        <VercelToolbar />
       </body>
     </html>
   );

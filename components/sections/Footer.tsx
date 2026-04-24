@@ -24,7 +24,7 @@ export default function Footer() {
 
       {/* Wheel watermark — subtle background accent */}
       <div style={{ position: "absolute", bottom: "24px", right: "32px", opacity: 0.04, pointerEvents: "none", zIndex: 0 }}>
-        <Image src="/images/assets/logos/hubss-logos/HUB-wheel_official-orange-transparent.svg" alt="" width={180} height={180} unoptimized aria-hidden="true" />
+        <Image src="/images/assets/logos/hubss-logos/HUB-wheel_official-orange-transparent.svg" alt="" width={180} height={180} unoptimized aria-hidden="true" style={{ display: "none" }} />
       </div>
 
       {/* Full-width gradient divider */}
@@ -43,7 +43,7 @@ export default function Footer() {
             <div className="mb-5">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/images/assets/logos/hubss-logos/hubss-logo_white.svg"
+                src="/images/assets/logos/hubss-logos/hubss-logo-white.png"
                 alt="HUB Surface Systems"
                 width={140}
                 height={44}

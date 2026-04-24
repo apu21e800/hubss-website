@@ -493,7 +493,7 @@ export default function Nav() {
           {/* Logo */}
           <Link href="/" className="flex-shrink-0">
             <Image
-              src="/images/assets/logos/hubss-logos/hubss-logo_white.svg"
+              src="/images/assets/logos/hubss-logos/hubss-logo-white.png"
               alt="HUB Surface Systems"
               width={140}
               height={44}

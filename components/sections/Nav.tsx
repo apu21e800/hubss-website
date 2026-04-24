@@ -266,11 +266,11 @@ export default function Nav() {
         {/* Desktop CTA buttons */}
         <div className="hidden md:flex items-center gap-3">
           <a
-            href="/contact"
+            href="/resources"
             className="px-4 py-2 rounded-lg text-sm font-semibold transition-all border hover:border-orange-500/50 hover:text-orange-400"
             style={{ borderColor: "rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.6)" }}
           >
-            Specs
+            Resources
           </a>
           <a
             href="/lunch-learn"

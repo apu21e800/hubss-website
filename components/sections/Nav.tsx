@@ -151,26 +151,96 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
   );
 }
 
+// ── Product category data ────────────────────────────────────────────────────
+const PRODUCT_CATEGORIES = [
+  {
+    label: "Preformed Thermoplastics",
+    slugs: ["traffic-patterns-xd", "traffic-patterns", "decomark", "duratherm", "premark", "airmark"],
+  },
+  {
+    label: "Coatings",
+    slugs: ["streetbond", "streetbondsr", "mmax", "durashield"],
+  },
+  {
+    label: "Stamped Asphalt & Concrete",
+    slugs: ["streetprint"],
+  },
+  {
+    label: "Asphalt Repair",
+    slugs: ["fast-patch", "aquaphalt"],
+  },
+];
+
 // ── Full-width Products mega menu ────────────────────────────────────────────
 function ProductsMegaMenu() {
+  const bySlug = (slugs: string[]) =>
+    slugs.flatMap((s) => { const p = products.find((x) => x.slug === s); return p ? [p] : []; });
+
+  const thermoplastics = bySlug(PRODUCT_CATEGORIES[0].slugs);
+  const coatings       = bySlug(PRODUCT_CATEGORIES[1].slugs);
+  const stamped        = bySlug(PRODUCT_CATEGORIES[2].slugs);
+  const repair         = bySlug(PRODUCT_CATEGORIES[3].slugs);
+
+  const ProductLink = ({ p }: { p: (typeof products)[0] }) => (
+    <Link
+      href={`/products/${p.slug}`}
+      className="group block p-3 rounded-xl transition-colors hover:bg-white/5"
+      style={{ color: "rgba(255,255,255,0.75)" }}
+    >
+      <p className="font-semibold text-sm group-hover:text-orange-400 transition-colors">{p.name}</p>
+      {p.shortDesc && (
+        <p className="text-xs mt-0.5 leading-snug" style={{ color: "rgba(255,255,255,0.38)" }}>{p.shortDesc}</p>
+      )}
+    </Link>
+  );
+
+  const CatLabel = ({ label }: { label: string }) => (
+    <p className="text-[10px] font-bold tracking-[0.18em] uppercase mb-3" style={{ color: "rgba(249,115,22,0.6)" }}>
+      {label}
+    </p>
+  );
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="grid grid-cols-5 gap-8">
-        {/* All products — 4 cols */}
-        <div className="col-span-4">
-          <p className="text-xs font-bold tracking-[0.18em] uppercase mb-4" style={{ color: "rgba(249,115,22,0.7)" }}>All Products</p>
-          <div className="grid grid-cols-4 gap-1">
-            {products.map((product) => (
-              <Link key={product.slug} href={`/products/${product.slug}`}
-                className="group p-3 rounded-xl transition-colors hover:bg-white/5"
-                style={{ color: "rgba(255,255,255,0.75)" }}
-              >
-                <p className="font-semibold text-sm group-hover:text-orange-400 transition-colors">{product.name}</p>
-                {product.shortDesc && (
-                  <p className="text-xs mt-0.5 leading-snug" style={{ color: "rgba(255,255,255,0.38)" }}>{product.shortDesc}</p>
-                )}
-              </Link>
-            ))}
+
+        {/* Products area — 4 cols */}
+        <div className="col-span-4 space-y-5">
+
+          {/* Row 1: Preformed Thermoplastics */}
+          <div>
+            <CatLabel label="Preformed Thermoplastics" />
+            <div className="grid grid-cols-3 gap-1">
+              {thermoplastics.map((p) => <ProductLink key={p.slug} p={p} />)}
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
+
+          {/* Row 2: Coatings (left 2/3) + Stamped & Repair stacked (right 1/3) */}
+          <div className="grid grid-cols-3 gap-6">
+
+            {/* Coatings */}
+            <div className="col-span-2">
+              <CatLabel label="Coatings" />
+              <div className="grid grid-cols-2 gap-1">
+                {coatings.map((p) => <ProductLink key={p.slug} p={p} />)}
+              </div>
+            </div>
+
+            {/* Stamped Asphalt + Asphalt Repair — stacked */}
+            <div className="col-span-1 border-l pl-5 space-y-4" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
+              <div>
+                <CatLabel label="Stamped Asphalt & Concrete" />
+                {stamped.map((p) => <ProductLink key={p.slug} p={p} />)}
+              </div>
+              <div>
+                <CatLabel label="Asphalt Repair" />
+                {repair.map((p) => <ProductLink key={p.slug} p={p} />)}
+              </div>
+            </div>
+
           </div>
         </div>
 
@@ -378,7 +448,7 @@ export default function Nav() {
           {/* Logo */}
           <Link href="/" className="flex-shrink-0">
             <Image
-              src="/images/hub-logo-white.png"
+              src="/images/hub-logo-orange-grey.png"
               alt="HUB Surface Systems"
               width={140}
               height={44}

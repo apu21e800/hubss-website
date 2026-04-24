@@ -91,54 +91,15 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Heading base — font family, weight, tracking only.
+   DO NOT set font-size here: it overrides Tailwind utility classes
+   (unlayered CSS beats @layer utilities). Each component controls its own size. */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-geist), "Inter", system-ui, sans-serif;
   font-weight: 800;
   letter-spacing: -0.025em;
   text-wrap: balance;
-  line-height: 1.1;
-}
-
-h1 {
-  font-size: clamp(2.8rem, 6vw, 6.5rem);
-  line-height: 1.0;
-  letter-spacing: -0.04em;
-  font-weight: 900;
-}
-
-h2 {
-  font-size: clamp(2rem, 4vw, 3.75rem);
-  line-height: 1.06;
-  letter-spacing: -0.032em;
-  font-weight: 900;
-}
-
-h3 {
-  font-size: clamp(1.35rem, 2.2vw, 2.25rem);
-  line-height: 1.18;
-  letter-spacing: -0.022em;
-  font-weight: 800;
-}
-
-h4 {
-  font-size: clamp(1.1rem, 1.6vw, 1.5rem);
-  line-height: 1.25;
-  letter-spacing: -0.018em;
-  font-weight: 700;
-}
-
-h5 {
-  font-size: clamp(0.95rem, 1.2vw, 1.2rem);
-  line-height: 1.35;
-  letter-spacing: -0.01em;
-  font-weight: 700;
-}
-
-h6 {
-  font-size: clamp(0.85rem, 1vw, 1rem);
-  line-height: 1.4;
-  letter-spacing: 0;
-  font-weight: 600;
+  line-height: 1.15;
 }
 
 /* Caption / label utility */

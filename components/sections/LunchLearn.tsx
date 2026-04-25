@@ -110,7 +110,7 @@ export default function LunchLearn({ hideMoose: _hideMoose }: { hideMoose?: bool
                 "30–45 minute presentation tailored to your projects",
                 "Live Q&A with HUB technical team",
                 "Sample materials and specification sheets",
-                "Lunch &amp; refreshments included",
+                "Lunch & refreshments included",
               ].map((benefit, i) => (
                 <motion.div
                   key={benefit}

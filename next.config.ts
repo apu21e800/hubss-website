@@ -10,7 +10,7 @@ const nextConfig: NextConfig = {
       { source: "/trafficpatterns", destination: "/products/traffic-patterns", permanent: true },
       { source: "/streetprint", destination: "/products/streetprint", permanent: true },
       { source: "/streetbond", destination: "/products/streetbond", permanent: true },
-      { source: "/streetbondsr", destination: "/products/streetbond-sr", permanent: true },
+      { source: "/streetbondsr", destination: "/products/streetbondsr", permanent: true },
       { source: "/mmax-2", destination: "/products/mmax", permanent: true },
       { source: "/decomark", destination: "/products/decomark", permanent: true },
       { source: "/duratherm-2", destination: "/products/duratherm", permanent: true },

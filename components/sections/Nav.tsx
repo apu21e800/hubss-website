@@ -30,6 +30,13 @@ const PAGES = [
   { label: "Projects", href: "/projects", desc: "Browse our project portfolio" },
 ];
 
+const CATEGORIES = [
+  { label: "Preformed Thermoplastics", href: "/products", desc: "TrafficPatternsXD, TrafficPatterns, PreMark, DuraTherm, DecoMark, AirMark" },
+  { label: "Coatings", href: "/products", desc: "StreetBond, StreetBondSR, MMAX, DuraShield — coloured pavement coatings" },
+  { label: "Stamped Asphalt & Concrete", href: "/products", desc: "StreetPrint — in-place decorative stamped asphalt" },
+  { label: "Asphalt Repair", href: "/products", desc: "Fast Patch, Aquaphalt — permanent cold-mix pothole repair" },
+];
+
 // ── Search overlay ───────────────────────────────────────────────────────────
 function SearchOverlay({ onClose }: { onClose: () => void }) {
   const [query, setQuery] = useState("");
@@ -48,7 +55,8 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
   const matchedProducts = q.length < 2 ? [] : products.filter(p => p.name.toLowerCase().includes(q) || p.shortDesc?.toLowerCase().includes(q));
   const matchedApps = q.length < 2 ? [] : applications.filter(a => a.name.toLowerCase().includes(q) || a.shortDesc?.toLowerCase().includes(q));
   const matchedPages = q.length < 2 ? [] : PAGES.filter(p => p.label.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q));
-  const hasResults = matchedProducts.length > 0 || matchedApps.length > 0 || matchedPages.length > 0;
+  const matchedCategories = q.length < 2 ? [] : CATEGORIES.filter(c => c.label.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q));
+  const hasResults = matchedProducts.length > 0 || matchedApps.length > 0 || matchedPages.length > 0 || matchedCategories.length > 0;
   const showEmpty = q.length >= 2 && !hasResults;
 
   const handleResultClick = (href: string) => { onClose(); router.push(href); };
@@ -121,6 +129,16 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
                   ))}
                 </div>
               )}
+              {matchedCategories.length > 0 && (
+                <div className="p-4 border-b" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
+                  <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "rgba(249,115,22,0.7)" }}>Product Categories</p>
+                  {matchedCategories.map((c) => (
+                    <button key={c.label} onClick={() => handleResultClick(c.href)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left hover:bg-white/5">
+                      <div><p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>{c.label}</p><p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>{c.desc}</p></div>
+                    </button>
+                  ))}
+                </div>
+              )}
               {matchedPages.length > 0 && (
                 <div className="p-4">
                   <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "rgba(249,115,22,0.7)" }}>Pages</p>
@@ -137,7 +155,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
           {/* No results */}
           {showEmpty && (
             <div className="px-4 py-10 text-center">
-              <p className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>No results for <span style={{ color: "#F5F0EB" }}>"{query}"</span></p>
+              <p className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>No results for <span style={{ color: "#F5F0EB" }}>&#34;{query}&#34;</span></p>
               <p className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.25)" }}>Try a product name, application type, or page</p>
             </div>
           )}
@@ -411,15 +429,6 @@ export default function Nav() {
   const [searchOpen, setSearchOpen] = useState(false);
   const navRef = useRef<HTMLElement>(null);
 
-  // Cmd/Ctrl+K
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") { e.preventDefault(); setSearchOpen(true); }
-    };
-    document.addEventListener("keydown", handler);
-    return () => document.removeEventListener("keydown", handler);
-  }, []);
-
   // Close mega menu on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -446,16 +455,20 @@ export default function Nav() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between gap-4">
 
           {/* Logo */}
-          <Link href="/" className="flex-shrink-0">
+          <Link href="/" className="flex-shrink-0 flex items-center gap-2.5">
             <Image
-              src="/images/hub-logo-orange-grey.png"
+              src="/images/hub-wheel-orange.png"
               alt="HUB Surface Systems"
-              width={140}
-              height={44}
-              style={{ height: 34, width: "auto" }}
+              width={40}
+              height={40}
+              style={{ height: 36, width: "auto" }}
               priority
               unoptimized
             />
+            <span className="hidden sm:flex flex-col leading-none gap-0.5">
+              <span className="text-[15px] font-black tracking-tight" style={{ color: "#ffffff" }}>HUB</span>
+              <span className="text-[9px] font-bold tracking-[0.18em] uppercase" style={{ color: "rgba(255,255,255,0.55)" }}>Surface Systems</span>
+            </span>
           </Link>
 
           {/* Desktop links */}
@@ -508,14 +521,11 @@ export default function Nav() {
               onClick={openSearch}
               className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all hover:bg-white/5"
               style={{ color: "rgba(255,255,255,0.45)", border: "1px solid rgba(255,255,255,0.1)" }}
-              title="Search (⌘K)"
             >
               <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <circle cx="11" cy="11" r="8" strokeWidth={2} /><path d="M21 21l-4.35-4.35" strokeWidth={2} strokeLinecap="round" />
               </svg>
               <span className="text-xs hidden lg:block">Search</span>
-              <kbd className="hidden lg:block text-xs font-mono px-1.5 py-0.5 rounded"
-                style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", fontSize: 10 }}>⌘K</kbd>
             </button>
 
             {/* Resources — ghost */}

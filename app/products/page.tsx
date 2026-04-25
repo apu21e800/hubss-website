@@ -60,7 +60,7 @@ export default function ProductsPage() {
           </p>
         </div>
 
-        {/* ── Product groups ──────────────────────────────────────────── */}
+        {/* ── Product groups ──────────────────────────────── */}
         {(() => {
           // Application slug → readable label
           const APP_LABELS: Record<string, string> = {
@@ -76,25 +76,21 @@ export default function ProductsPage() {
             "traffic-calming":     "Traffic Calming",
           };
 
-          // Groups organised by TECHNOLOGY — not use-case.
-          // This prevents false pigeonholing (TP/TPXD aren't "only functional",
-          // StreetBond isn't "only decorative"). Application tags on each card
-          // communicate the full range per product.
           const groups: { label: string; desc: string; slugs: string[] }[] = [
             {
-              label: "Preformed Thermoplastic Systems",
-              desc: "Factory-manufactured and heat-fused directly to the surface. One technology — regulatory symbols, patterned crosswalks, custom civic art, airfield markings, and everything in between.",
+              label: "Preformed Thermoplastics",
+              desc: "Factory-manufactured and heat-fused directly to the surface. Regulatory symbols, patterned crosswalks, custom civic art, airfield markings — one technology, unlimited expression.",
               slugs: ["traffic-patterns-xd", "traffic-patterns", "premark", "duratherm", "decomark", "airmark"],
             },
             {
-              label: "Coloured Pavement Coatings",
-              desc: "Liquid-applied colour systems that bond chemically to asphalt and concrete. Safety lane demarcation, civic plazas, stamped driveways, and solar-reflective urban heat island mitigation.",
-              slugs: ["streetbond", "streetbondsr", "mmax"],
+              label: "Coatings",
+              desc: "Liquid-applied colour systems that bond chemically to asphalt and concrete. Safety lane demarcation, civic plazas, solar-reflective urban heat island mitigation, and surface protection.",
+              slugs: ["streetbond", "streetbondsr", "mmax", "durashield"],
             },
             {
-              label: "Surface Transformation Systems",
-              desc: "Process-based systems that change the surface itself — stamped pattern and texture into existing asphalt, or penetrating treatments that extend pavement life by years.",
-              slugs: ["streetprint", "durashield"],
+              label: "Stamped Asphalt & Concrete",
+              desc: "In-place stamping process that transforms existing asphalt into rich decorative hardscape — available in 12+ standard patterns and fully custom designs.",
+              slugs: ["streetprint"],
             },
             {
               label: "Asphalt Repair",
@@ -151,7 +147,7 @@ export default function ProductsPage() {
                                   : ""}
                               </p>
 
-                              {/* Application tags — shows where this product actually goes */}
+                              {/* Application tags */}
                               {appTags.length > 0 && (
                                 <div className="flex flex-wrap gap-1.5 mb-5">
                                   {appTags.map((slug) => (
@@ -184,7 +180,7 @@ export default function ProductsPage() {
 
                               <span className="text-xs font-semibold tracking-widest uppercase flex items-center gap-1.5" style={{ color: "#f97316" }}>
                                 Explore System
-                                <span className="transition-transform duration-200 group-hover:translate-x-1 inline-block">→</span>
+                                <span className="transition-transform duration-200 group-hover:translate-x-1 inline-block">&rarr;</span>
                               </span>
                             </div>
                           </Link>

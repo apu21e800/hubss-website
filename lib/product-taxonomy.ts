@@ -6,18 +6,18 @@
 
 export const PRODUCT_TAXONOMY = [
   {
-    label: "Preformed Thermoplastic",
+    label: "Preformed Thermoplastics",
     desc: "Factory-manufactured, heat-fused. Regulatory, decorative, and custom-graphic.",
     slugs: ["traffic-patterns-xd", "traffic-patterns", "premark", "duratherm", "decomark", "airmark"],
   },
   {
-    label: "Coloured Pavement Coating",
+    label: "Coatings",
     desc: "Liquid-applied colour bonded chemically to asphalt and concrete.",
     slugs: ["streetbond", "streetbondsr", "mmax", "durashield"],
   },
   {
-    label: "Stamped Asphalt",
-    desc: "Process-based systems that change the surface itself.",
+    label: "Stamped Asphalt & Concrete",
+    desc: "In-place stamping process that transforms existing asphalt into decorative hardscape.",
     slugs: ["streetprint"],
   },
   {

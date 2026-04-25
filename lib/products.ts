@@ -19,7 +19,7 @@ function gallery(slug: string, dir: string, count: number, ext: string = "jpg"):
 }
 
 export const products: Product[] = [
-  // ── Flagship Group ──────────────────────────────────────────────────────────
+  // ── Flagship Group ────────────────────────────────────────────────────────────────────────
   {
     name: "TrafficPatternsXD",
     slug: "traffic-patterns-xd",
@@ -117,7 +117,7 @@ export const products: Product[] = [
     relatedApplications: ["crosswalks", "private-driveways", "community-branding", "parking-lots"],
   },
 
-  // ── Specialty & Regulatory Group ────────────────────────────────────────────
+  // ── Specialty & Regulatory Group ───────────────────────────────────────────────────────────────────────────
   {
     name: "DecoMark",
     slug: "decomark",
@@ -260,7 +260,7 @@ export const products: Product[] = [
   },
 
 
-  // ── Asphalt Repair ───────────────────────────────────────────────────────────
+  // ── Asphalt Repair ────────────────────────────────────────────────────────────────────────────
   {
     name: "Fast Patch",
     slug: "fast-patch",

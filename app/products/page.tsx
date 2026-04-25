@@ -60,7 +60,7 @@ export default function ProductsPage() {
           </p>
         </div>
 
-        {/* ── Product groups ──────────────────────────────── */}
+        {/* ── Product groups ──────────────────────────────────────────── */}
         {(() => {
           // Application slug → readable label
           const APP_LABELS: Record<string, string> = {

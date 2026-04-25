@@ -10,7 +10,7 @@ import { applications } from "@/lib/applications";
 
 // ── Nav link config ──────────────────────────────────────────────────────────
 const PLAIN_LINKS = [
-  { label: "Blog", href: "/blog" },
+  { label: "Field Notes", href: "/blog" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
@@ -22,7 +22,7 @@ const MOBILE_QUICK_ACTIONS = [
 
 // ── Search data ──────────────────────────────────────────────────────────────
 const PAGES = [
-  { label: "Blog", href: "/blog", desc: "Field notes and industry insights" },
+  { label: "Field Notes", href: "/blog", desc: "Field notes and industry insights" },
   { label: "About", href: "/about", desc: "Our story and team" },
   { label: "Contact", href: "/contact", desc: "Get in touch with our team" },
   { label: "Resources", href: "/resources", desc: "Spec sheets, SDS, install guides" },
@@ -155,7 +155,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
           {/* No results */}
           {showEmpty && (
             <div className="px-4 py-10 text-center">
-              <p className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>No results for <span style={{ color: "#F5F0EB" }}>"{query}"</span></p>
+              <p className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>No results for <span style={{ color: "#F5F0EB" }}>"{ query}"</span></p>
               <p className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.25)" }}>Try a product name, application type, or page</p>
             </div>
           )}

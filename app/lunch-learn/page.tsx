@@ -77,7 +77,7 @@ export default function LunchLearnPage() {
           }}
         >
           <Image
-            src="/images/lunch-learn/mascot-1.png"
+            src="/images/lunch-learn/moose-final.png"
             alt="HUB Surface Systems Moose mascot — book a free Lunch and Learn session"
             width={380}
             height={380}

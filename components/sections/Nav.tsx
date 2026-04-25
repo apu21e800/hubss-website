@@ -410,12 +410,8 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
           >
             {/* Top bar */}
             <div className="flex items-center justify-between px-5 py-4 border-b" style={{ borderColor: "rgba(255,255,255,0.07)" }}>
-              <Link href="/" onClick={onClose} className="flex items-center gap-2.5">
-                <Image src="/images/hub-wheel-orange.png" alt="HUB Surface Systems" width={36} height={36} style={{ height: 30, width: "auto" }} unoptimized />
-                <span className="flex flex-col leading-none gap-0.5">
-                  <span className="text-[15px] font-black tracking-tight" style={{ color: "#ffffff" }}>HUB</span>
-                  <span className="text-[9px] font-bold tracking-[0.18em] uppercase" style={{ color: "rgba(255,255,255,0.55)" }}>Surface Systems</span>
-                </span>
+              <Link href="/" onClick={onClose}>
+                <Image src="/images/hub-official-logo.svg" alt="HUB Surface Systems" width={140} height={33} style={{ height: 30, width: "auto" }} unoptimized />
               </Link>
               <button onClick={onClose} className="p-2 rounded-lg" style={{ color: "rgba(255,255,255,0.5)", background: "rgba(255,255,255,0.05)" }}>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -597,20 +593,16 @@ export default function Nav() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between gap-4">
 
           {/* Logo */}
-          <Link href="/" className="flex-shrink-0 flex items-center gap-2.5">
+          <Link href="/" className="flex-shrink-0">
             <Image
-              src="/images/hub-wheel-orange.png"
+              src="/images/hub-official-logo.svg"
               alt="HUB Surface Systems"
-              width={40}
-              height={40}
-              style={{ height: 36, width: "auto" }}
+              width={160}
+              height={38}
+              style={{ height: 34, width: "auto" }}
               priority
               unoptimized
             />
-            <span className="hidden sm:flex flex-col leading-none gap-0.5">
-              <span className="text-[15px] font-black tracking-tight" style={{ color: "#ffffff" }}>HUB</span>
-              <span className="text-[9px] font-bold tracking-[0.18em] uppercase" style={{ color: "rgba(255,255,255,0.55)" }}>Surface Systems</span>
-            </span>
           </Link>
 
           {/* Desktop links */}

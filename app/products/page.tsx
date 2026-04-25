@@ -56,7 +56,7 @@ export default function ProductsPage() {
             Surface Systems for the Built Environment
           </h1>
           <p className="text-lg" style={{ color: "var(--text-secondary)" }}>
-            Ten product systems, one mission: give every Canadian surface the capacity to carry meaning.
+            Thirteen purpose-built systems, one mission: give every Canadian surface the capacity to carry meaning.
           </p>
         </div>
 
@@ -88,13 +88,18 @@ export default function ProductsPage() {
             },
             {
               label: "Coloured Pavement Coatings",
-              desc: "Liquid-applied colour systems that bond chemically to asphalt and concrete. Safety lane demarcation, civic plazas, stamped driveways — wherever colour is doing structural work.",
-              slugs: ["streetbond", "mmax"],
+              desc: "Liquid-applied colour systems that bond chemically to asphalt and concrete. Safety lane demarcation, civic plazas, stamped driveways, and solar-reflective urban heat island mitigation.",
+              slugs: ["streetbond", "streetbondsr", "mmax"],
             },
             {
               label: "Surface Transformation Systems",
               desc: "Process-based systems that change the surface itself — stamped pattern and texture into existing asphalt, or penetrating treatments that extend pavement life by years.",
               slugs: ["streetprint", "durashield"],
+            },
+            {
+              label: "Asphalt Repair",
+              desc: "Permanent, traffic-ready repair products for potholes, utility cuts, and edge joints. No heating, no compaction equipment — open to traffic in minutes.",
+              slugs: ["fast-patch", "aquaphalt"],
             },
           ];
 

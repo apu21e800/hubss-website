@@ -94,12 +94,7 @@ export const products: Product[] = [
       { name: "Civic Orange", hex: "#E67E22" },
       { name: "Night White", hex: "#F2F2F2" },
     ],
-    brandLogo: {
-      src: "/images/products/streetbond/streetbond-logo-color.svg",
-      alt: "StreetBond coloured pavement coating system by HUB Surface Systems",
-      width: 280,
-      height: 80,
-    },
+    // brandLogo: logo file not yet uploaded — omit to avoid broken image
     relatedApplications: ["bike-lanes", "bus-lanes", "private-driveways", "parks-paths", "parking-lots"],
   },
   {
@@ -118,12 +113,7 @@ export const products: Product[] = [
       { label: "Snowplow Safe", value: "Yes - flush surface, no raised edges" },
       { label: "Applications", value: "Intersections, plazas, driveways, crosswalks" },
     ],
-    brandLogo: {
-      src: "/images/assets/logos/product-logos/StreetPrint/large_StreetPrint_Logo.png",
-      alt: "StreetPrint decorative asphalt stamping system by HUB Surface Systems",
-      width: 300,
-      height: 80,
-    },
+    // brandLogo: logo file not yet uploaded — omit to avoid broken image
     relatedApplications: ["crosswalks", "private-driveways", "community-branding", "parking-lots"],
   },
 

@@ -46,7 +46,7 @@ const projectsGeoJSON: FeatureCollection<Point> = {
   })),
 };
 
-// ── Layer specs ──────────────────────────────────────────────────────
+// ── Layer specs ────────────────────────────────────────────────────────────
 const CLUSTER_LAYER = {
   id: "clusters",
   type: "circle" as const,
@@ -237,7 +237,7 @@ function PanelCard({
   );
 }
 
-// ── Project detail modal ──────────────────────────────────────────────────
+// ── Project detail modal ────────────────────────────────────────────────────
 function ProjectModal({
   project,
   onClose,
@@ -522,7 +522,7 @@ function ProjectModal({
   );
 }
 
-// ── Main component ────────────────────────────────────────────────────────
+// ── Main component ──────────────────────────────────────────────────────────
 export default function CanadaMap() {
   const mapRef = useRef<MapRef>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -535,8 +535,11 @@ export default function CanadaMap() {
   const scrollEnabledRef = useRef(false);
   const [popupProject, setPopupProject] = useState<MapProject | null>(null);
   const [visibleProjects, setVisibleProjects] = useState<MapProject[]>(mapProjects);
+  const [showScrollHint, setShowScrollHint] = useState(false);
+  const scrollHintTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const autoReleaseTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // ── GeoJSON for hover ring ───────────────────────────────────────────────────
+  // ── GeoJSON for hover ring ─────────────────────────────────────────────
   const hoveredProject = useMemo(
     () => (hoveredId ? mapProjects.find((p) => p.id === hoveredId) ?? null : null),
     [hoveredId]
@@ -561,7 +564,7 @@ export default function CanadaMap() {
     [hoveredProject]
   );
 
-  // ── Update panel list based on map bounds ──────────────────────────────────
+  // ── Update panel list based on map bounds ──────────────────────────────
   const updateVisibleProjects = useCallback(() => {
     const map = mapRef.current?.getMap();
     if (!map) return;
@@ -579,7 +582,7 @@ export default function CanadaMap() {
     );
   }, []);
 
-  // ── Scroll zoom management ────────────────────────────────────────────────────
+  // ── Scroll zoom management ─────────────────────────────────────────────
   // Keep ref in sync so event listeners never close over stale state
   useEffect(() => {
     scrollEnabledRef.current = scrollEnabled;
@@ -591,23 +594,48 @@ export default function CanadaMap() {
       scrollEnabledRef.current = true;
       setScrollEnabled(true);
     }
+    // Reset the auto-release timer on every scroll activation
+    if (autoReleaseTimeoutRef.current) clearTimeout(autoReleaseTimeoutRef.current);
+    autoReleaseTimeoutRef.current = setTimeout(() => {
+      mapRef.current?.getMap().scrollZoom.disable();
+      scrollEnabledRef.current = false;
+      setScrollEnabled(false);
+    }, 3000);
   }, []);
 
-  // Ctrl+scroll to zoom — no click required
+  // Ctrl+scroll — zoom immediately AND enable further scroll zoom
   useEffect(() => {
     const container = mapContainerRef.current;
     if (!container) return;
     function handleCtrlWheel(e: WheelEvent) {
       if (e.ctrlKey || e.metaKey) {
         e.preventDefault();
+        e.stopPropagation();
+        const map = mapRef.current?.getMap();
+        if (!map) return;
+        // Apply the zoom from this event directly (first ctrl+scroll must actually zoom)
+        const zoomDelta = e.deltaY < 0 ? 0.5 : -0.5;
+        map.zoomTo(map.getZoom() + zoomDelta, { duration: 180 });
         enableScrollZoom();
       }
     }
+    // Plain scroll over the map (no Ctrl) → show hint overlay briefly
+    function handlePlainWheel(e: WheelEvent) {
+      if (!e.ctrlKey && !e.metaKey && !scrollEnabledRef.current) {
+        setShowScrollHint(true);
+        if (scrollHintTimeoutRef.current) clearTimeout(scrollHintTimeoutRef.current);
+        scrollHintTimeoutRef.current = setTimeout(() => setShowScrollHint(false), 1800);
+      }
+    }
     container.addEventListener("wheel", handleCtrlWheel, { passive: false });
-    return () => container.removeEventListener("wheel", handleCtrlWheel);
+    container.addEventListener("wheel", handlePlainWheel, { passive: true });
+    return () => {
+      container.removeEventListener("wheel", handleCtrlWheel);
+      container.removeEventListener("wheel", handlePlainWheel);
+    };
   }, [enableScrollZoom]);
 
-  // Click outside → release scroll zoom
+  // Click outside → release scroll zoom immediately (no waiting for timer)
   useEffect(() => {
     function handleOutsideClick(e: MouseEvent) {
       if (
@@ -615,6 +643,7 @@ export default function CanadaMap() {
         mapContainerRef.current &&
         !mapContainerRef.current.contains(e.target as Node)
       ) {
+        if (autoReleaseTimeoutRef.current) clearTimeout(autoReleaseTimeoutRef.current);
         mapRef.current?.getMap().scrollZoom.disable();
         scrollEnabledRef.current = false;
         setScrollEnabled(false);
@@ -624,7 +653,7 @@ export default function CanadaMap() {
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, []);
 
-  // ── Map layer click handler ──────────────────────────────────────────────────
+  // ── Map layer click handler ────────────────────────────────────────────
   // maplibre-gl v3+ uses Promise (not callback) for getClusterExpansionZoom
   const handleMapLayerClick = useCallback(
     async (event: MapLayerMouseEvent) => {
@@ -661,7 +690,7 @@ export default function CanadaMap() {
     []
   );
 
-  // ── Mouse move — hover on layers ──────────────────────────────────────────
+  // ── Mouse move — hover on layers ──────────────────────────────────────
   const handleMouseMove = useCallback(
     (event: MapLayerMouseEvent) => {
       const feature = event.features?.[0];
@@ -690,7 +719,7 @@ export default function CanadaMap() {
     setCursor(scrollEnabled ? "grab" : "default");
   }, [scrollEnabled]);
 
-  // ── Panel card interaction ───────────────────────────────────────────────────
+  // ── Panel card interaction ─────────────────────────────────────────────
   const handlePanelHover = useCallback((id: string | null) => {
     setHoveredId(id);
     // Don't show popup when hovering from panel
@@ -755,7 +784,7 @@ export default function CanadaMap() {
       <section style={{ background: "#080d16", paddingTop: "5rem", paddingBottom: "5rem" }}>
         <div style={{ maxWidth: 1340, margin: "0 auto", padding: "0 1.25rem" }}>
 
-          {/* ── Header ──────────────────────────────────────────────────────────── */}
+          {/* ── Header ─────────────────────────────────────────────────── */}
           <div
             style={{
               display: "flex",
@@ -841,7 +870,7 @@ export default function CanadaMap() {
             </div>
           </div>
 
-          {/* ── Map + Panel ───────────────────────────────────────────────────────────── */}
+          {/* ── Map + Panel ─────────────────────────────────────────────── */}
           <div
             style={{
               display: "flex",
@@ -1024,7 +1053,43 @@ export default function CanadaMap() {
                 )}
               </Map>
 
-              {/* Scroll hint pill */}
+              {/* Ctrl+scroll hint overlay — shown when user scrolls without Ctrl */}
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  pointerEvents: "none",
+                  zIndex: 20,
+                  opacity: showScrollHint ? 1 : 0,
+                  transition: "opacity 0.25s ease",
+                }}
+              >
+                <div
+                  style={{
+                    background: "rgba(8,13,22,0.82)",
+                    backdropFilter: "blur(14px)",
+                    border: "1px solid rgba(255,255,255,0.12)",
+                    borderRadius: 14,
+                    padding: "14px 24px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 10,
+                  }}
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(249,115,22,0.9)" strokeWidth={2} strokeLinecap="round">
+                    <path d="M12 2a7 7 0 0 0-7 7v8a7 7 0 0 0 14 0V9a7 7 0 0 0-7-7z" />
+                    <line x1="12" y1="2" x2="12" y2="10" />
+                  </svg>
+                  <span style={{ fontSize: 13, fontWeight: 600, color: "#F5F0EB" }}>
+                    Use <kbd style={{ background: "rgba(255,255,255,0.12)", borderRadius: 5, padding: "1px 7px", fontSize: 12, fontFamily: "monospace", color: "#F97316" }}>Ctrl</kbd> + scroll to zoom
+                  </span>
+                </div>
+              </div>
+
+              {/* Status pill — bottom center */}
               <div
                 style={{
                   position: "absolute",
@@ -1034,7 +1099,7 @@ export default function CanadaMap() {
                   background: "rgba(8,13,22,0.88)",
                   backdropFilter: "blur(10px)",
                   border: `1px solid ${
-                    scrollEnabled ? "rgba(249,115,22,0.25)" : "rgba(255,255,255,0.08)"
+                    scrollEnabled ? "rgba(249,115,22,0.35)" : "rgba(255,255,255,0.08)"
                   }`,
                   borderRadius: 24,
                   padding: "6px 16px",
@@ -1052,15 +1117,15 @@ export default function CanadaMap() {
                   }}
                 >
                   {scrollEnabled
-                    ? "Scroll zoom active · Click outside to release"
+                    ? "Scroll zoom active — auto-releases after 3 s of inactivity"
                     : hoveredId
-                    ? "Pin highlighted — click it to open project details"
-                    : "Click map to enable scroll zoom · Hold Ctrl + scroll · Click pins for details"}
+                    ? "Click to open project details"
+                    : "Ctrl + scroll to zoom · Click pins for details"}
                 </span>
               </div>
             </div>
 
-            {/* ── Right panel ───────────────────────────────────────────────────────────── */}
+            {/* ── Right panel ──────────────────────────────────────────── */}
             <div
               className="canada-map-panel"
               ref={panelRef}
@@ -1119,12 +1184,12 @@ export default function CanadaMap() {
                 <p
                   style={{
                     fontSize: 10.5,
-                    color: "#374151",
+                    color: "#6B7280",
                     margin: 0,
                     lineHeight: 1.4,
                   }}
                 >
-                  Pan or zoom the map to filter
+                  Pan or zoom to filter
                 </p>
               </div>
 

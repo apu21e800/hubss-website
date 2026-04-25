@@ -40,7 +40,7 @@ export const applications: Application[] = [
     shortDesc: "Durable coloured lane treatments for safe multimodal corridors",
     imageUrl: "/images/applications/bus-lanes/bus-lanes-01.jpg",
     gallery: gallery("bus-lanes", "bus-lanes", 40),
-    description: "BRT corridors and bus priority lanes face the harshest combination of loads in urban infrastructure. MMAX MMA cures in 30-60 minutes for single overnight shift installation. TrafficPatternsXD 150mil aggregate-reinforced thermoplastic delivers BPN 65+ skid resistance and 7+ years of service in high-volume turn movements.",
+    description: "BRT corridors and bus priority lanes face the harshest combination of loads in urban infrastructure. MMAX MMA cures in 30-60 minutes for single overnight shift installation. TrafficPatternsXD 150mil aggregate-reinforced thermoplastic delivers BPN 65+ skid resistance — built to outlast paint season after season in the most demanding turn movements.",
     relatedProducts: ["mmax", "traffic-patterns-xd", "streetbond", "premark"],
   },
   {
@@ -50,7 +50,7 @@ export const applications: Application[] = [
     imageUrl: "/images/applications/parking-lots/parking-lots-01.jpg",
     gallery: [1,2,3,4,5,7,8,9,10,11,13,14,15,16,17,19,20,21,22,23,25,26,27,28,29,31,32,33,34,35,37,38,39,40,41,43,44,45,46,47,49,50,51,52,53,55,56,57,58,59].map(n =>
       `/images/applications/parking-lots/parking-lots-${String(n).padStart(2,"0")}.jpg`),
-    description: "Parking lot markings degrade faster than almost any other paved surface. DuraShield rejuvenates and seals oxidized asphalt, extending pavement life 3-5 years. TrafficPatterns and PreMark deliver crisp stall markings and accessible parking symbols that hold retroreflectivity for 5-7 years. StreetBond and DuraTherm unlock wayfinding colour zones and decorative treatments.",
+    description: "Parking lot markings degrade faster than almost any other paved surface. DuraShield rejuvenates and seals oxidized asphalt, meaningfully extending pavement life. TrafficPatterns and PreMark deliver crisp stall markings and accessible parking symbols that hold retroreflectivity season after season without annual repainting. StreetBond and DuraTherm unlock wayfinding colour zones and decorative treatments.",
     relatedProducts: ["durashield", "traffic-patterns", "traffic-patterns-xd", "premark", "streetbond", "streetprint", "duratherm"],
   },
   {
@@ -115,7 +115,7 @@ export const applications: Application[] = [
     shortDesc: "Plazas, squares, and civic surfaces worth noticing.",
     imageUrl: "/images/applications/public-spaces/public-spaces-01.jpg",
     gallery: [1,2,3,5,6,7,9,10,11,13,14,15,17,18,19,21,22,23,25,26,27,29,30,31,33,34,35,37,38,39,41,42,43,45,46,47,49,50,51,53,54,55,57,58,59,61,62,63,65,66].map(n =>
-      `/images/applications/public-spaces/public-spaces-${String(n).padStart(2,"0")}.jpg`),
+      `/images/applications/public-spaces/public-spaces-${String(n).padStart(2,"00")}.jpg`),
     description: "Town squares, transit plazas, university campuses, and civic forecourts are the most visible public surfaces in any community. StreetPrint transforms utilitarian paved plazas into rich hardscape environments. StreetBond colour systems define zones and reinforce campus or municipal identity. Used at UBC, BC Children's Hospital, and civic plazas across Canada.",
     relatedProducts: ["streetprint", "streetbond", "decomark", "duratherm"],
   },
@@ -135,7 +135,7 @@ export const applications: Application[] = [
     shortDesc: "Cohesive hardscape systems for strata and residential developments",
     imageUrl: "/images/applications/townhomes/townhomes-01.jpg",
     gallery: gallery("townhomes", "townhomes", 18),
-    description: "Townhome and strata developments have one chance to make a lasting impression. StreetPrint stamped asphalt driveways and entry courts deliver the look of traditional pavers at half the installation cost. StreetBond elevates guest parking areas and amenity court surfaces. DuraShield rejuvenates aging strata asphalt, extending pavement life 3-5 years.",
+    description: "Townhome and strata developments have one chance to make a lasting impression. StreetPrint stamped asphalt driveways and entry courts deliver the look of traditional pavers at half the installation cost. StreetBond elevates guest parking areas and amenity court surfaces. DuraShield rejuvenates aging strata asphalt, adding meaningful life back to the surface.",
     relatedProducts: ["streetprint", "streetbond", "durashield"],
   },
   {

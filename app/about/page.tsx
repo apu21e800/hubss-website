@@ -73,7 +73,15 @@ export default function AboutPage() {
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "#f97316" }}>
             Canadian-Operated Since 1994 · All 10 Provinces
           </p>
-          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 leading-tight max-w-4xl" style={{ color: "#ffffff" }}>
+          <h1
+            className="font-black mb-6 max-w-4xl"
+            style={{
+              color: "#ffffff",
+              fontSize: "clamp(2.8rem, 7vw, 6rem)",
+              lineHeight: 0.95,
+              letterSpacing: "-0.035em",
+            }}
+          >
             The people who made your city look like your city.
           </h1>
           <p className="text-xl leading-relaxed max-w-2xl" style={{ color: "#8b8b8b" }}>

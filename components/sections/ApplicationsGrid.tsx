@@ -34,7 +34,7 @@ export default function ApplicationsGrid() {
             className="font-black mb-4"
             style={{
               color: "var(--text-primary)",
-              fontSize: "clamp(2rem, 4vw, 3.5rem)",
+              fontSize: "clamp(2.2rem, 4vw, 3.5rem)",
               lineHeight: 1.05,
               letterSpacing: "-0.03em",
               textWrap: "balance",

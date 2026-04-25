@@ -52,7 +52,15 @@ export default function ProductsPage() {
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-3" style={{ color: "#f97316" }}>
             Our Systems
           </p>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-5 leading-tight" style={{ color: "var(--text-primary)" }}>
+          <h1
+            className="font-black mb-5"
+            style={{
+              color: "var(--text-primary)",
+              fontSize: "clamp(2.8rem, 7vw, 5.5rem)",
+              lineHeight: 0.95,
+              letterSpacing: "-0.035em",
+            }}
+          >
             Surface Systems for the Built Environment
           </h1>
           <p className="text-lg" style={{ color: "var(--text-secondary)" }}>

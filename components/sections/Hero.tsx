@@ -74,7 +74,7 @@ export default function Hero() {
           <h1
             className="font-black leading-[1.02] mb-6"
             style={{
-              fontSize: "clamp(3rem, 8.5vw, 6.5rem)",
+              fontSize: "clamp(3.2rem, 9vw, 7rem)",
               textWrap: "balance",
               letterSpacing: "-0.035em",
             }}
@@ -138,37 +138,49 @@ export default function Hero() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.42, duration: 0.55 }}
-            className="flex flex-wrap gap-x-8 gap-y-3 pt-2"
+            style={{ marginTop: "2.75rem" }}
           >
-            {[
-              { stat: "30+", label: "Years in Canada" },
-              { stat: "200+", label: "Installations coast to coast" },
-              { stat: "No", label: "Annual repainting required" },
-            ].map(({ stat, label }) => (
-              <div key={stat} className="flex items-center gap-2.5">
-                <span
-                  style={{
-                    fontSize: "1.05rem",
-                    fontWeight: 800,
-                    color: "#F97316",
-                    lineHeight: 1,
-                    letterSpacing: "-0.02em",
-                  }}
-                >
-                  {stat}
-                </span>
-                <span
-                  style={{
-                    fontSize: "0.78rem",
-                    color: "rgba(255,255,255,0.52)",
-                    fontWeight: 500,
-                    lineHeight: 1.2,
-                  }}
-                >
-                  {label}
-                </span>
-              </div>
-            ))}
+            {/* Thin divider */}
+            <div
+              style={{
+                height: 1,
+                background: "linear-gradient(90deg, rgba(249,115,22,0.35) 0%, rgba(255,255,255,0.08) 60%, transparent 100%)",
+                marginBottom: "1.25rem",
+                maxWidth: "28rem",
+              }}
+            />
+            <div className="flex flex-wrap gap-x-10 gap-y-4">
+              {[
+                { stat: "30+", label: "Years in Canada" },
+                { stat: "200+", label: "Installations coast to coast" },
+                { stat: "Zero", label: "Annual repainting required" },
+              ].map(({ stat, label }) => (
+                <div key={stat} className="flex items-center gap-3">
+                  <span
+                    style={{
+                      fontSize: "1.35rem",
+                      fontWeight: 800,
+                      color: "#F97316",
+                      lineHeight: 1,
+                      letterSpacing: "-0.03em",
+                    }}
+                  >
+                    {stat}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: "0.88rem",
+                      color: "rgba(255,255,255,0.58)",
+                      fontWeight: 500,
+                      lineHeight: 1.25,
+                      maxWidth: "7rem",
+                    }}
+                  >
+                    {label}
+                  </span>
+                </div>
+              ))}
+            </div>
           </motion.div>
         </motion.div>
         </div>

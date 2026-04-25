@@ -11,7 +11,7 @@ const PRODUCT_WHAT: Record<string, string> = {
   "streetprint":
     "In-place stamped asphalt — cobblestone, brick, herringbone and 12+ more patterns. No demolition, no raised edges, snowplow-safe. Looks like stone, performs like asphalt.",
   "streetbond":
-    "Permanently bonded acrylic colour for asphalt and concrete. Standard palette plus full Pantone custom matching. 20-year colour retention — bike lanes, crosswalks, driveways.",
+    "Permanently bonded acrylic colour for asphalt and concrete. Standard palette plus full Pantone custom matching. Long-lasting colour retention — bike lanes, crosswalks, driveways.",
   "traffic-patterns-xd":
     "Aggregate-reinforced thermoplastic engineered for BRT corridors and high-volume intersections. BPN 65+ skid resistance.",
   "traffic-patterns":
@@ -32,10 +32,10 @@ const PRODUCT_TYPE: Record<string, string> = {
 };
 
 const PRODUCT_STAT: Record<string, string> = {
-  "streetprint":         "20+ yr service life",
-  "streetbond":          "20+ yr service life",
-  "traffic-patterns-xd": "7+ yr service life",
-  "traffic-patterns":    "5–7 yr service life",
+  "streetprint":         "No raised edges",
+  "streetbond":          "Colour-fast formula",
+  "traffic-patterns-xd": "BPN 65+ rated",
+  "traffic-patterns":    "Outlasts paint",
   "mmax":                "60-min cure",
   "decomark":            "Full Pantone match",
 };
@@ -89,7 +89,7 @@ export default function ProductsGrid() {
                 className="font-black mb-3"
                 style={{
                   color: "var(--text-primary)",
-                  fontSize: "clamp(1.8rem, 3.5vw, 3rem)",
+                  fontSize: "clamp(2rem, 4vw, 3.5rem)",
                   lineHeight: 1.08,
                   letterSpacing: "-0.03em",
                   textWrap: "balance",
@@ -145,7 +145,7 @@ export default function ProductsGrid() {
                   href={`/products/${product.slug}`}
                   className="group relative flex flex-col h-full rounded-2xl overflow-hidden transition-all duration-250"
                   style={{
-                    background: "rgba(255,255,255,0.04)",
+                    background: "#111827",
                     border: "1px solid rgba(255,255,255,0.09)",
                     boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
                   }}

@@ -89,8 +89,11 @@ export default function LunchLearn({ hideMoose: _hideMoose }: { hideMoose?: bool
                 Education &amp; Engagement
               </p>
               <h2
-                className="text-3xl sm:text-4xl lg:text-[2.75rem] font-bold leading-tight mb-5"
+                className="font-bold leading-tight mb-5"
                 style={{
+                  fontSize: "clamp(2rem, 4vw, 3.25rem)",
+                  lineHeight: 1.06,
+                  letterSpacing: "-0.025em",
                   background: "linear-gradient(92deg, #F97316 0%, #EAB308 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
@@ -110,7 +113,7 @@ export default function LunchLearn({ hideMoose: _hideMoose }: { hideMoose?: bool
                 "30–45 minute presentation tailored to your projects",
                 "Live Q&A with HUB technical team",
                 "Sample materials and specification sheets",
-                "Lunch & refreshments included",
+                "Lunch included — virtual sessions come with a gift card",
               ].map((benefit, i) => (
                 <motion.div
                   key={benefit}

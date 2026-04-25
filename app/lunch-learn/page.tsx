@@ -15,40 +15,17 @@ export default function LunchLearnPage() {
     <main style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
       <Nav />
 
-      {/* Hero — moose sits at the very bottom, paws overlapping the LunchLearn section below */}
       <div className="relative overflow-visible pb-36 sm:pb-40" style={{ zIndex: 2 }}>
-
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-0 relative">
           <div className="flex flex-col gap-8">
-            {/* Text */}
             <div className="pb-4">
-              <p
-                className="text-xs font-semibold tracking-[0.2em] uppercase mb-4"
-                style={{ color: "#f97316" }}
-              >
-                Free Professional Development
-              </p>
-              <h1
-                className="text-4xl sm:text-5xl md:text-6xl font-bold mb-5 leading-tight"
-                style={{ color: "var(--text-primary)" }}
-              >
+              <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "#f97316" }}>Free Professional Development</p>
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-5 leading-tight" style={{ color: "var(--text-primary)" }}>
                 Lunch Is On Us.
                 <br />
-                <span
-                  style={{
-                    background: "linear-gradient(90deg, #F97316, #EAB308)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  }}
-                >
-                  Knowledge Is Free.
-                </span>
+                <span style={{ background: "linear-gradient(90deg, #F97316, #EAB308)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Knowledge Is Free.</span>
               </h1>
-              <p
-                className="text-base sm:text-lg leading-relaxed max-w-2xl"
-                style={{ color: "var(--text-secondary)" }}
-              >
+              <p className="text-base sm:text-lg leading-relaxed max-w-2xl" style={{ color: "var(--text-secondary)" }}>
                 We bring lunch to your office and walk your team through everything
                 you need to know about modern pavement marking systems — real Canadian
                 case studies, lifecycle cost analysis, and practical specs you can drop
@@ -58,37 +35,15 @@ export default function LunchLearnPage() {
           </div>
         </div>
 
-        {/* Floor line — sits exactly at the section fold */}
-        <div
-          className="absolute left-0 right-0 bottom-0"
-          style={{
-            height: 2,
-            background: "linear-gradient(90deg, transparent 0%, rgba(249,115,22,0.2) 30%, rgba(249,115,22,0.12) 70%, transparent 100%)",
-          }}
-        />
+        <div className="absolute left-0 right-0 bottom-0" style={{ height: 2, background: "linear-gradient(90deg, transparent 0%, rgba(249,115,22,0.2) 30%, rgba(249,115,22,0.12) 70%, transparent 100%)" }} />
 
-        {/* Moose — paws ON the fold line, left paw aligns with form card below */}
-        <div
-          className="absolute z-20 pointer-events-none"
-          style={{
-            bottom: 0,
-            right: "clamp(60px, 20vw, 320px)",
-            width: "clamp(150px, 22.5vw, 285px)",
-          }}
-        >
+        <div className="absolute z-20 pointer-events-none" style={{ bottom: 0, right: "clamp(60px, 20vw, 320px)", width: "clamp(150px, 22.5vw, 285px)" }}>
           <Image
             src="/images/lunch-learn/moose-final.png"
             alt="HUB Surface Systems Moose mascot — book a free Lunch and Learn session"
             width={380}
             height={380}
-            style={{
-              width: "100%",
-              height: "auto",
-              objectFit: "contain",
-              objectPosition: "bottom",
-              filter: "drop-shadow(0 0 20px rgba(249,115,22,0.3)) drop-shadow(0 8px 24px rgba(0,0,0,0.5))",
-              display: "block",
-            }}
+            style={{ width: "100%", height: "auto", objectFit: "contain", objectPosition: "bottom", filter: "drop-shadow(0 0 20px rgba(249,115,22,0.3)) drop-shadow(0 8px 24px rgba(0,0,0,0.5))", display: "block" }}
             unoptimized
           />
         </div>

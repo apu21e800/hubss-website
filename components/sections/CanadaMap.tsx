@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import Map, {
   Marker,
   NavigationControl,
@@ -14,11 +14,9 @@ import { mapProjects, type MapProject } from "@/lib/map-projects";
 const MAP_STYLE =
   "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json";
 
-// Tight bounds derived from actual project coordinates
-// W: Sechelt BC  E: Ottawa  S: Ontario  N: BC coast
 const PROJECT_BOUNDS: [[number, number], [number, number]] = [
-  [-126.0, 42.5],  // SW
-  [-74.0, 50.8],   // NE
+  [-126.0, 42.5],
+  [-74.0, 50.8],
 ];
 
 const FIT_OPTIONS = {
@@ -26,7 +24,6 @@ const FIT_OPTIONS = {
   maxZoom: 10,
 } as const;
 
-// ── Clean teardrop pin — no ring, just a small dot ─────────────────────────
 function PinMarker({ active, hovered }: { active: boolean; hovered: boolean }) {
   const scale = active ? 1.35 : hovered ? 1.15 : 1;
   return (
@@ -49,20 +46,23 @@ function PinMarker({ active, hovered }: { active: boolean; hovered: boolean }) {
             : "drop-shadow(0 2px 5px rgba(0,0,0,0.65))",
         }}
       >
-        {/* Teardrop body */}
         <path
           d="M12 0C5.373 0 0 5.373 0 12c0 4.65 2.52 8.72 6.27 10.91L12 32l5.73-9.09C21.48 20.72 24 16.65 24 12 24 5.373 18.627 0 12 0z"
           fill={active ? "#ff8c3a" : "#F97316"}
         />
-        {/* Small inner dot only */}
         <circle cx="12" cy="12" r="3" fill="white" fillOpacity={0.92} />
       </svg>
     </div>
   );
 }
 
-// ── Hover mini-card ─────────────────────────────────────────────────────────
-function HoverPopup({ project }: { project: MapProject }) {
+function HoverPopup({
+  project,
+  onOpen,
+}: {
+  project: MapProject;
+  onOpen: () => void;
+}) {
   return (
     <div
       style={{
@@ -75,9 +75,23 @@ function HoverPopup({ project }: { project: MapProject }) {
         border: "1px solid rgba(249,115,22,0.35)",
         borderRadius: 12,
         overflow: "hidden",
-        pointerEvents: "none",
-        zIndex: 10,
+        pointerEvents: "auto",
+        cursor: "pointer",
+        zIndex: 9999,
         boxShadow: "0 8px 32px rgba(0,0,0,0.75)",
+        transition: "box-shadow 0.15s ease",
+      }}
+      onClick={(e) => {
+        e.stopPropagation();
+        onOpen();
+      }}
+      onMouseEnter={(e) => {
+        (e.currentTarget as HTMLDivElement).style.boxShadow =
+          "0 12px 40px rgba(0,0,0,0.85), 0 0 0 1px rgba(249,115,22,0.5)";
+      }}
+      onMouseLeave={(e) => {
+        (e.currentTarget as HTMLDivElement).style.boxShadow =
+          "0 8px 32px rgba(0,0,0,0.75)";
       }}
     >
       <div style={{ position: "relative", width: "100%", aspectRatio: "16/9", overflow: "hidden" }}>
@@ -90,6 +104,22 @@ function HoverPopup({ project }: { project: MapProject }) {
           unoptimized
         />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, transparent 45%, rgba(17,24,39,0.9) 100%)" }} />
+        <div style={{
+          position: "absolute",
+          top: 8,
+          right: 8,
+          background: "rgba(0,0,0,0.55)",
+          backdropFilter: "blur(4px)",
+          borderRadius: 6,
+          padding: "3px 7px",
+          fontSize: 9,
+          fontWeight: 600,
+          color: "rgba(255,255,255,0.7)",
+          letterSpacing: "0.08em",
+          textTransform: "uppercase",
+        }}>
+          Click to explore
+        </div>
       </div>
       <div style={{ padding: "10px 12px 12px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 5 }}>
@@ -108,7 +138,6 @@ function HoverPopup({ project }: { project: MapProject }) {
   );
 }
 
-// ── Project detail modal ────────────────────────────────────────────────────
 function ProjectModal({ project, onClose }: { project: MapProject; onClose: () => void }) {
   const [imgIndex, setImgIndex] = useState(0);
 
@@ -123,7 +152,6 @@ function ProjectModal({ project, onClose }: { project: MapProject; onClose: () =
         onClick={(e) => e.stopPropagation()}
       >
         <div style={{ height: 3, background: "linear-gradient(90deg, #F97316, #EAB308)", borderRadius: "20px 20px 0 0" }} />
-
         <button
           onClick={onClose}
           style={{ position: "absolute", top: 16, right: 16, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: "50%", width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#9CA3AF", zIndex: 10 }}
@@ -133,7 +161,6 @@ function ProjectModal({ project, onClose }: { project: MapProject; onClose: () =
             <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" strokeWidth={2} strokeLinecap="round" />
           </svg>
         </button>
-
         <div style={{ padding: "24px 24px 28px" }}>
           <div style={{ marginBottom: 18 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8, flexWrap: "wrap" }}>
@@ -145,15 +172,13 @@ function ProjectModal({ project, onClose }: { project: MapProject; onClose: () =
               </span>
             </div>
             <h2 style={{ fontSize: "clamp(1.1rem, 3vw, 1.4rem)", fontWeight: 800, color: "#F5F0EB", margin: "0 0 4px", letterSpacing: "-0.02em", lineHeight: 1.2 }}>{project.title}</h2>
-            <p style={{ fontSize: 13, color: "#9CA3AF", margin: 0 }}>📍 {project.city}, {project.province}</p>
+            <p style={{ fontSize: 13, color: "#9CA3AF", margin: 0 }}>&#128205; {project.city}, {project.province}</p>
           </div>
-
-          {/* Main image */}
           <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 20 }}>
             <div style={{ position: "relative", width: "100%", borderRadius: 12, overflow: "hidden", aspectRatio: "16/9", background: "#0d1117" }}>
               <Image
                 src={project.images[imgIndex]}
-                alt={`${project.title} — photo ${imgIndex + 1}`}
+                alt={`${project.title} photo ${imgIndex + 1}`}
                 fill
                 className="object-contain"
                 sizes="(max-width: 880px) 100vw, 880px"
@@ -175,8 +200,6 @@ function ProjectModal({ project, onClose }: { project: MapProject; onClose: () =
               </div>
             )}
           </div>
-
-          {/* Problem / Solution */}
           <div className="canada-map-modal-grid">
             <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12, padding: "16px 18px" }}>
               <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", color: "#F97316", margin: "0 0 8px" }}>The Challenge</p>
@@ -187,20 +210,12 @@ function ProjectModal({ project, onClose }: { project: MapProject; onClose: () =
               <p style={{ fontSize: 13, color: "#D1D5DB", lineHeight: 1.65, margin: 0 }}>{project.solution}</p>
             </div>
           </div>
-
-          {/* CTAs */}
           <div style={{ marginTop: 22, display: "flex", gap: 12, flexWrap: "wrap" }}>
-            <a
-              href="/contact"
-              style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff", fontWeight: 700, fontSize: 13, padding: "11px 24px", borderRadius: 8, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 6, boxShadow: "0 4px 16px rgba(249,115,22,0.35)" }}
-            >
-              Request Similar Project →
+            <a href="/contact" style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff", fontWeight: 700, fontSize: 13, padding: "11px 24px", borderRadius: 8, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 6, boxShadow: "0 4px 16px rgba(249,115,22,0.35)" }}>
+              Request Similar Project &rarr;
             </a>
-            <a
-              href="/contact"
-              style={{ background: "transparent", color: "#9CA3AF", fontWeight: 600, fontSize: 13, padding: "11px 24px", borderRadius: 8, textDecoration: "none", border: "1px solid rgba(255,255,255,0.12)", display: "inline-flex", alignItems: "center" }}
-            >
-              Get a Quote →
+            <a href="/contact" style={{ background: "transparent", color: "#9CA3AF", fontWeight: 600, fontSize: 13, padding: "11px 24px", borderRadius: 8, textDecoration: "none", border: "1px solid rgba(255,255,255,0.12)", display: "inline-flex", alignItems: "center" }}>
+              Get a Quote &rarr;
             </a>
           </div>
         </div>
@@ -209,11 +224,34 @@ function ProjectModal({ project, onClose }: { project: MapProject; onClose: () =
   );
 }
 
-// ── Main component ──────────────────────────────────────────────────────────
 export default function CanadaMap() {
   const mapRef = useRef<MapRef>(null);
+  const mapContainerRef = useRef<HTMLDivElement>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [selectedProject, setSelectedProject] = useState<MapProject | null>(null);
+  const [scrollEnabled, setScrollEnabled] = useState(false);
+
+  const handleMapClick = useCallback(() => {
+    if (!scrollEnabled) {
+      mapRef.current?.getMap().scrollZoom.enable();
+      setScrollEnabled(true);
+    }
+  }, [scrollEnabled]);
+
+  useEffect(() => {
+    function handleOutsideClick(e: MouseEvent) {
+      if (
+        scrollEnabled &&
+        mapContainerRef.current &&
+        !mapContainerRef.current.contains(e.target as Node)
+      ) {
+        mapRef.current?.getMap().scrollZoom.disable();
+        setScrollEnabled(false);
+      }
+    }
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+  }, [scrollEnabled]);
 
   const handleMarkerClick = useCallback((project: MapProject) => {
     setSelectedProject(project);
@@ -227,20 +265,13 @@ export default function CanadaMap() {
 
   const handleCloseModal = useCallback(() => {
     setSelectedProject(null);
-    mapRef.current?.fitBounds(PROJECT_BOUNDS, {
-      ...FIT_OPTIONS,
-      duration: 1400,
-    });
+    mapRef.current?.fitBounds(PROJECT_BOUNDS, { ...FIT_OPTIONS, duration: 1400 });
   }, []);
 
   return (
     <>
       <style>{`
-        .canada-map-modal-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 14px;
-        }
+        .canada-map-modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
         .filmstrip-hide-scrollbar::-webkit-scrollbar { display: none; }
         @media (max-width: 640px) {
           .canada-map-modal { border-radius: 14px !important; }
@@ -251,22 +282,14 @@ export default function CanadaMap() {
 
       <section style={{ background: "#080d16", paddingTop: "5rem", paddingBottom: "5rem" }}>
         <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 1.25rem" }}>
-
-          {/* Header */}
           <div className="canada-map-header" style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: 16, marginBottom: "2.5rem" }}>
             <div>
-              <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "#F97316", marginBottom: 10 }}>
-                Installations Across Canada
-              </p>
+              <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "#F97316", marginBottom: 10 }}>Installations Across Canada</p>
               <h2 style={{ fontSize: "clamp(1.75rem, 3.5vw, 2.75rem)", fontWeight: 900, color: "#F5F0EB", margin: "0 0 10px", lineHeight: 1.1, letterSpacing: "-0.03em" }}>
                 Coast to Coast.{" "}
-                <span style={{ background: "linear-gradient(90deg, #F97316, #EAB308)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
-                  Every Surface.
-                </span>
+                <span style={{ background: "linear-gradient(90deg, #F97316, #EAB308)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Every Surface.</span>
               </h2>
-              <p style={{ fontSize: 15, color: "#9CA3AF", maxWidth: 460, margin: 0, lineHeight: 1.6 }}>
-                Hover any marker to preview. Click to open the full case study.
-              </p>
+              <p style={{ fontSize: 15, color: "#9CA3AF", maxWidth: 460, margin: 0, lineHeight: 1.6 }}>Hover any marker to preview. Click to open the full case study.</p>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 10, background: "rgba(249,115,22,0.08)", border: "1px solid rgba(249,115,22,0.2)", borderRadius: 12, padding: "12px 20px", flexShrink: 0 }}>
               <div style={{ width: 9, height: 9, borderRadius: "50%", background: "#F97316", boxShadow: "0 0 8px rgba(249,115,22,0.85)" }} />
@@ -274,19 +297,20 @@ export default function CanadaMap() {
             </div>
           </div>
 
-          {/* Map */}
-          <div style={{ borderRadius: 20, overflow: "hidden", border: "1px solid rgba(249,115,22,0.15)", boxShadow: "0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04)", height: "clamp(360px, 56vh, 660px)", position: "relative" }}>
+          <div
+            ref={mapContainerRef}
+            style={{ borderRadius: 20, overflow: "hidden", border: "1px solid rgba(249,115,22,0.15)", boxShadow: "0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04)", height: "clamp(360px, 56vh, 660px)", position: "relative" }}
+            onClick={handleMapClick}
+          >
             <Map
               ref={mapRef}
               mapStyle={MAP_STYLE}
-              initialViewState={{
-                bounds: PROJECT_BOUNDS,
-                fitBoundsOptions: FIT_OPTIONS,
-              }}
+              initialViewState={{ bounds: PROJECT_BOUNDS, fitBoundsOptions: FIT_OPTIONS }}
               style={{ width: "100%", height: "100%" }}
               minZoom={2.5}
               maxZoom={18}
               attributionControl={false}
+              scrollZoom={false}
             >
               <NavigationControl position="bottom-right" style={{ marginBottom: 16, marginRight: 16 }} />
               <ScaleControl position="bottom-left" style={{ marginBottom: 16, marginLeft: 16 }} />
@@ -297,40 +321,33 @@ export default function CanadaMap() {
                   longitude={project.lng}
                   latitude={project.lat}
                   anchor="bottom"
-                  onClick={(e) => {
-                    e.originalEvent.stopPropagation();
-                    handleMarkerClick(project);
-                  }}
+                  onClick={(e) => { e.originalEvent.stopPropagation(); handleMarkerClick(project); }}
+                  style={{ zIndex: hoveredId === project.id ? 1000 : 1 }}
                 >
                   <div
                     style={{ position: "relative" }}
                     onMouseEnter={() => setHoveredId(project.id)}
                     onMouseLeave={() => setHoveredId(null)}
                   >
-                    <PinMarker
-                      active={selectedProject?.id === project.id}
-                      hovered={hoveredId === project.id}
-                    />
+                    <PinMarker active={selectedProject?.id === project.id} hovered={hoveredId === project.id} />
                     {hoveredId === project.id && selectedProject?.id !== project.id && (
-                      <HoverPopup project={project} />
+                      <HoverPopup project={project} onOpen={() => handleMarkerClick(project)} />
                     )}
                   </div>
                 </Marker>
               ))}
             </Map>
 
-            {/* Hint pill */}
-            <div style={{ position: "absolute", bottom: 16, left: "50%", transform: "translateX(-50%)", background: "rgba(8,13,22,0.85)", backdropFilter: "blur(10px)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 24, padding: "6px 16px", pointerEvents: "none", whiteSpace: "nowrap" }}>
-              <span style={{ fontSize: 11, color: "#6B7280", fontWeight: 500 }}>Hover to preview · Click to explore</span>
+            <div style={{ position: "absolute", bottom: 16, left: "50%", transform: "translateX(-50%)", background: "rgba(8,13,22,0.85)", backdropFilter: "blur(10px)", border: scrollEnabled ? "1px solid rgba(249,115,22,0.2)" : "1px solid rgba(255,255,255,0.08)", borderRadius: 24, padding: "6px 16px", pointerEvents: "none", whiteSpace: "nowrap" }}>
+              <span style={{ fontSize: 11, color: scrollEnabled ? "#F97316" : "#6B7280", fontWeight: 500 }}>
+                {scrollEnabled ? "Scroll zoom active · Click outside map to release" : "Click map to enable scroll zoom · Hover pins to preview"}
+              </span>
             </div>
           </div>
-
         </div>
       </section>
 
-      {selectedProject && (
-        <ProjectModal project={selectedProject} onClose={handleCloseModal} />
-      )}
+      {selectedProject && <ProjectModal project={selectedProject} onClose={handleCloseModal} />}
     </>
   );
 }

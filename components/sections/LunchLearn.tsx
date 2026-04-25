@@ -89,18 +89,18 @@ export default function LunchLearn({ hideMoose: _hideMoose }: { hideMoose?: bool
                 Education &amp; Engagement
               </p>
               <h2
-                className="font-bold leading-tight mb-5"
+                className="font-black mb-5"
                 style={{
-                  fontSize: "clamp(2rem, 4vw, 3.25rem)",
-                  lineHeight: 1.06,
-                  letterSpacing: "-0.025em",
+                  fontSize: "clamp(2.4rem, 5vw, 3.75rem)",
+                  lineHeight: 0.97,
+                  letterSpacing: "-0.03em",
                   background: "linear-gradient(92deg, #F97316 0%, #EAB308 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
                 }}
               >
-                Lunch &amp; Learn at Your Location
+                Lunch &amp; Learn<br />at Your Location
               </h2>
               <p className="text-base leading-relaxed" style={{ color: "#9CA3AF" }}>
                 Bring the team together. We'll deliver a personalized session covering product selection, installation best practices, and ROI — with lunch included.
@@ -113,7 +113,7 @@ export default function LunchLearn({ hideMoose: _hideMoose }: { hideMoose?: bool
                 "30–45 minute presentation tailored to your projects",
                 "Live Q&A with HUB technical team",
                 "Sample materials and specification sheets",
-                "Lunch included — virtual sessions come with a gift card",
+                "Lunch included — virtual sessions come with a $50 gift card",
               ].map((benefit, i) => (
                 <motion.div
                   key={benefit}

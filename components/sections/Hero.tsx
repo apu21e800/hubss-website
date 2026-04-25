@@ -18,7 +18,7 @@ export default function Hero() {
   return (
     <section className="relative flex flex-col overflow-hidden min-h-screen">
 
-      {/* ── Full-bleed background image ──────────────────────────── */}
+      {/* ── Full-bleed background image ──────────────────────── */}
       <div className="absolute inset-0">
         <Image
           src={heroImg.src}
@@ -55,7 +55,7 @@ export default function Hero() {
         />
       </div>
 
-      {/* ── Main content ────────────────────────────────────────────── */}
+      {/* ── Main content ────────────────────────────────────────────────── */}
       <div className="relative z-10 flex-1 w-full pt-20 sm:pt-24 lg:pt-28 pb-16 sm:pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
@@ -72,11 +72,12 @@ export default function Hero() {
           </p>
 
           <h1
-            className="font-black leading-[1.02] mb-6"
+            className="font-black mb-6"
             style={{
-              fontSize: "clamp(3.2rem, 9vw, 7rem)",
+              fontSize: "clamp(3.4rem, 9.5vw, 7.5rem)",
+              lineHeight: 0.93,
               textWrap: "balance",
-              letterSpacing: "-0.035em",
+              letterSpacing: "-0.04em",
             }}
           >
             <span style={{ color: "#fff", textShadow: "0 2px 28px rgba(0,0,0,0.45)" }}>
@@ -95,15 +96,15 @@ export default function Hero() {
           </h1>
 
           <p
-            className="text-base sm:text-lg leading-relaxed max-w-2xl mb-10 sm:mb-12"
-            style={{ color: "rgba(255,255,255,0.82)", textShadow: "0 1px 16px rgba(0,0,0,0.55)" }}
+            className="text-lg sm:text-xl leading-relaxed max-w-2xl mb-10 sm:mb-12"
+            style={{ color: "rgba(255,255,255,0.78)", textShadow: "0 1px 16px rgba(0,0,0,0.55)", fontWeight: 400 }}
           >
             HUB Surface Systems redefines hardscapes for freeze-thaw climates.
             Stamped asphalt, thermoplastics, and specialty coatings built to
-            outlast paint and outperform expectations.
+            outlast paint and outperform expectations — for 30+ years.
           </p>
 
-          {/* ── CTAs ───────────────────────────────────────────────── */}
+          {/* ── CTAs ─────────────────────────────────────────────────── */}
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -133,7 +134,7 @@ export default function Hero() {
             </a>
           </motion.div>
 
-          {/* ── Trust signals ──────────────────────────────────────── */}
+          {/* ── Trust signals ────────────────────────────────────────────────── */}
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -152,28 +153,28 @@ export default function Hero() {
             <div className="flex flex-wrap gap-x-10 gap-y-4">
               {[
                 { stat: "30+", label: "Years in Canada" },
-                { stat: "200+", label: "Installations coast to coast" },
-                { stat: "Zero", label: "Annual repainting required" },
+                { stat: "1,000+", label: "Projects coast to coast" },
+                { stat: "20yr", label: "Proven service life" },
               ].map(({ stat, label }) => (
                 <div key={stat} className="flex items-center gap-3">
                   <span
                     style={{
-                      fontSize: "1.35rem",
+                      fontSize: "1.55rem",
                       fontWeight: 800,
                       color: "#F97316",
                       lineHeight: 1,
-                      letterSpacing: "-0.03em",
+                      letterSpacing: "-0.04em",
                     }}
                   >
                     {stat}
                   </span>
                   <span
                     style={{
-                      fontSize: "0.88rem",
-                      color: "rgba(255,255,255,0.58)",
+                      fontSize: "0.8rem",
+                      color: "rgba(255,255,255,0.52)",
                       fontWeight: 500,
                       lineHeight: 1.25,
-                      maxWidth: "7rem",
+                      maxWidth: "6.5rem",
                     }}
                   >
                     {label}
@@ -186,7 +187,7 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* ── Client ticker ────────────────────────────────────────────── */}
+      {/* ── Client ticker ──────────────────────────────────────────────────────── */}
       <div
         className="relative z-10 border-t"
         style={{ borderColor: "rgba(255,255,255,0.10)" }}

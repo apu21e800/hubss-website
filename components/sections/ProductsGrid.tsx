@@ -32,11 +32,11 @@ const PRODUCT_TYPE: Record<string, string> = {
 };
 
 const PRODUCT_STAT: Record<string, string> = {
-  "streetprint":         "No raised edges",
-  "streetbond":          "Colour-fast formula",
-  "traffic-patterns-xd": "BPN 65+ rated",
-  "traffic-patterns":    "Outlasts paint",
-  "mmax":                "60-min cure",
+  "streetprint":         "20+ yr proven life",
+  "streetbond":          "UV-stable · won't peel",
+  "traffic-patterns-xd": "BPN 65+ certified",
+  "traffic-patterns":    "Outlasts paint 5–8×",
+  "mmax":                "Traffic-ready in 60 min",
   "decomark":            "Full Pantone match",
 };
 
@@ -145,9 +145,9 @@ export default function ProductsGrid() {
                   href={`/products/${product.slug}`}
                   className="group relative flex flex-col h-full rounded-2xl overflow-hidden transition-all duration-250"
                   style={{
-                    background: "#111827",
-                    border: "1px solid rgba(255,255,255,0.09)",
-                    boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+                    background: "#1a2235",
+                    border: "1px solid rgba(255,255,255,0.11)",
+                    boxShadow: "0 2px 12px rgba(0,0,0,0.3)",
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.borderColor = "rgba(249,115,22,0.45)";
@@ -208,10 +208,11 @@ export default function ProductsGrid() {
                       </h3>
                       {stat && (
                         <span
-                          className="flex-shrink-0 text-[10px] font-semibold px-2 py-1 rounded-lg mt-0.5"
+                          className="flex-shrink-0 text-[10px] font-semibold px-2 py-1 rounded-md mt-0.5"
                           style={{
-                            background: "rgba(255,255,255,0.06)",
-                            color: "rgba(255,255,255,0.4)",
+                            background: "rgba(249,115,22,0.12)",
+                            color: "rgba(249,115,22,0.9)",
+                            border: "1px solid rgba(249,115,22,0.18)",
                             whiteSpace: "nowrap",
                           }}
                         >

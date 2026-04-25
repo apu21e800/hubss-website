@@ -602,8 +602,9 @@ export default function CanadaMap() {
   }, [scrollEnabled]);
 
   // ── Map layer click handler ────────────────────────────────────────────
+  // maplibre-gl v3+ uses Promise (not callback) for getClusterExpansionZoom
   const handleMapLayerClick = useCallback(
-    (event: MapLayerMouseEvent) => {
+    async (event: MapLayerMouseEvent) => {
       const feature = event.features?.[0];
       if (!feature) return;
 
@@ -612,8 +613,8 @@ export default function CanadaMap() {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const source = mapRef.current?.getSource("projects") as any;
         if (!source?.getClusterExpansionZoom) return;
-        source.getClusterExpansionZoom(clusterId, (err: Error | null, zoom: number) => {
-          if (err || zoom == null) return;
+        try {
+          const zoom: number = await source.getClusterExpansionZoom(clusterId);
           const coords = (feature.geometry as { coordinates: [number, number] }).coordinates;
           mapRef.current?.flyTo({
             center: coords,
@@ -621,7 +622,9 @@ export default function CanadaMap() {
             duration: 900,
             essential: true,
           });
-        });
+        } catch {
+          // ignore
+        }
       } else if (feature.layer.id === "unclustered-point") {
         const id = feature.properties?.id as string;
         const project = mapProjects.find((p) => p.id === id);
@@ -782,7 +785,7 @@ export default function CanadaMap() {
                   lineHeight: 1.6,
                 }}
               >
-                {mapProjects.length} projects from Victoria to St. John&apos;s. Zoom into any
+                {mapProjects.length} projects from Victoria to St. John's. Zoom into any
                 province to explore.
               </p>
             </div>

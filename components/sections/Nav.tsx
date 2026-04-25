@@ -155,7 +155,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
           {/* No results */}
           {showEmpty && (
             <div className="px-4 py-10 text-center">
-              <p className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>No results for <span style={{ color: "#F5F0EB" }}>&#34;{query}&#34;</span></p>
+              <p className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>No results for <span style={{ color: "#F5F0EB" }}>"{query}"</span></p>
               <p className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.25)" }}>Try a product name, application type, or page</p>
             </div>
           )}
@@ -202,87 +202,94 @@ function ProductsMegaMenu() {
   const ProductLink = ({ p }: { p: (typeof products)[0] }) => (
     <Link
       href={`/products/${p.slug}`}
-      className="group block p-3 rounded-xl transition-colors hover:bg-white/5"
-      style={{ color: "rgba(255,255,255,0.75)" }}
+      className="group flex items-start gap-2 px-2.5 py-2 rounded-lg transition-colors hover:bg-white/5"
     >
-      <p className="font-semibold text-sm group-hover:text-orange-400 transition-colors">{p.name}</p>
-      {p.shortDesc && (
-        <p className="text-xs mt-0.5 leading-snug" style={{ color: "rgba(255,255,255,0.38)" }}>{p.shortDesc}</p>
-      )}
+      <div className="mt-0.5 w-1 h-1 rounded-full flex-shrink-0" style={{ background: "rgba(249,115,22,0.4)", marginTop: 7 }} />
+      <div>
+        <p className="text-sm font-semibold leading-tight group-hover:text-orange-400 transition-colors" style={{ color: "rgba(255,255,255,0.82)" }}>{p.name}</p>
+        {p.shortDesc && (
+          <p className="text-[11px] mt-0.5 leading-snug" style={{ color: "rgba(255,255,255,0.35)" }}>{p.shortDesc}</p>
+        )}
+      </div>
     </Link>
   );
 
   const CatLabel = ({ label }: { label: string }) => (
-    <p className="text-[10px] font-bold tracking-[0.18em] uppercase mb-3" style={{ color: "rgba(249,115,22,0.6)" }}>
+    <p className="text-[9px] font-bold tracking-[0.22em] uppercase mb-2 px-2.5" style={{ color: "rgba(249,115,22,0.55)" }}>
       {label}
     </p>
   );
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="grid grid-cols-5 gap-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="flex gap-0">
 
-        {/* Products area — 4 cols */}
-        <div className="col-span-4 space-y-5">
-
-          {/* Row 1: Preformed Thermoplastics */}
-          <div>
-            <CatLabel label="Preformed Thermoplastics" />
-            <div className="grid grid-cols-3 gap-1">
-              {thermoplastics.map((p) => <ProductLink key={p.slug} p={p} />)}
-            </div>
-          </div>
-
-          {/* Divider */}
-          <div style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
-
-          {/* Row 2: Coatings (left 2/3) + Stamped & Repair stacked (right 1/3) */}
-          <div className="grid grid-cols-3 gap-6">
-
-            {/* Coatings */}
-            <div className="col-span-2">
-              <CatLabel label="Coatings" />
-              <div className="grid grid-cols-2 gap-1">
-                {coatings.map((p) => <ProductLink key={p.slug} p={p} />)}
-              </div>
-            </div>
-
-            {/* Stamped Asphalt + Asphalt Repair — stacked */}
-            <div className="col-span-1 border-l pl-5 space-y-4" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
-              <div>
-                <CatLabel label="Stamped Asphalt & Concrete" />
-                {stamped.map((p) => <ProductLink key={p.slug} p={p} />)}
-              </div>
-              <div>
-                <CatLabel label="Asphalt Repair" />
-                {repair.map((p) => <ProductLink key={p.slug} p={p} />)}
-              </div>
-            </div>
-
+        {/* Col 1 — Preformed Thermoplastics (widest, 2 cols of products) */}
+        <div className="flex-[2] pr-6 border-r" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
+          <CatLabel label="Preformed Thermoplastics" />
+          <div className="grid grid-cols-2 gap-x-1 gap-y-0">
+            {thermoplastics.map((p) => <ProductLink key={p.slug} p={p} />)}
           </div>
         </div>
 
-        {/* Right sidebar — CTA */}
-        <div className="col-span-1 border-l pl-8 flex flex-col justify-between" style={{ borderColor: "rgba(255,255,255,0.07)" }}>
+        {/* Col 2 — Coatings */}
+        <div className="flex-[1.2] px-6 border-r" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
+          <CatLabel label="Coatings" />
+          <div className="space-y-0">
+            {coatings.map((p) => <ProductLink key={p.slug} p={p} />)}
+          </div>
+        </div>
+
+        {/* Col 3 — Stamped + Repair stacked */}
+        <div className="flex-[1] px-6 border-r space-y-5" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
           <div>
-            <p className="text-xs font-bold tracking-[0.18em] uppercase mb-3" style={{ color: "rgba(249,115,22,0.7)" }}>Get Started</p>
+            <CatLabel label="Stamped Asphalt & Concrete" />
+            {stamped.map((p) => <ProductLink key={p.slug} p={p} />)}
+          </div>
+          <div>
+            <CatLabel label="Asphalt Repair" />
+            {repair.map((p) => <ProductLink key={p.slug} p={p} />)}
+          </div>
+        </div>
+
+        {/* Right sidebar */}
+        <div className="w-56 pl-6 flex flex-col gap-3 flex-shrink-0">
+          {/* Featured image */}
+          <Link href="/projects" className="group relative rounded-xl overflow-hidden block" style={{ height: 130 }}>
+            <Image
+              src="/images/blog/best-crosswalks-canada/featured.jpg"
+              alt="HUB Surface Systems projects"
+              fill
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              sizes="224px"
+            />
+            <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(7,11,18,0.92) 0%, rgba(7,11,18,0.2) 100%)" }} />
+            <div className="absolute bottom-0 left-0 right-0 p-3">
+              <p className="text-[9px] font-bold tracking-[0.18em] uppercase mb-0.5" style={{ color: "#F97316" }}>Featured</p>
+              <p className="text-xs font-semibold leading-snug text-white">Award-winning crosswalks across Canada</p>
+            </div>
+          </Link>
+
+          {/* Quick links */}
+          <div className="space-y-1.5">
             <Link href="/products"
-              className="flex items-center justify-between w-full p-3 rounded-xl mb-2 transition-colors hover:bg-white/5"
-              style={{ color: "rgba(255,255,255,0.7)", border: "1px solid rgba(255,255,255,0.08)" }}
+              className="flex items-center justify-between w-full px-3 py-2 rounded-lg transition-colors hover:bg-white/5"
+              style={{ color: "rgba(255,255,255,0.65)", border: "1px solid rgba(255,255,255,0.08)" }}
             >
-              <span className="text-sm font-semibold">All Products</span>
-              <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
+              <span className="text-xs font-semibold">All Products</span>
+              <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
             </Link>
             <Link href="/resources"
-              className="flex items-center justify-between w-full p-3 rounded-xl mb-2 transition-colors hover:bg-white/5"
-              style={{ color: "rgba(255,255,255,0.7)", border: "1px solid rgba(255,255,255,0.08)" }}
+              className="flex items-center justify-between w-full px-3 py-2 rounded-lg transition-colors hover:bg-white/5"
+              style={{ color: "rgba(255,255,255,0.65)", border: "1px solid rgba(255,255,255,0.08)" }}
             >
-              <span className="text-sm font-semibold">Spec Sheets</span>
-              <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
+              <span className="text-xs font-semibold">Spec Sheets</span>
+              <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
             </Link>
           </div>
+
           <Link href="/lunch-learn"
-            className="block w-full text-center px-4 py-2.5 rounded-xl text-sm font-bold mt-4"
+            className="block w-full text-center px-4 py-2.5 rounded-xl text-xs font-bold mt-auto"
             style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff" }}
           >
             Book Lunch &amp; Learn
@@ -296,47 +303,65 @@ function ProductsMegaMenu() {
 // ── Full-width Applications mega menu ────────────────────────────────────────
 function ApplicationsMegaMenu() {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="grid grid-cols-5 gap-8">
-        {/* All applications — 4 cols */}
-        <div className="col-span-4">
-          <p className="text-xs font-bold tracking-[0.18em] uppercase mb-4" style={{ color: "rgba(249,115,22,0.7)" }}>All Applications</p>
-          <div className="grid grid-cols-4 gap-1">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="flex gap-6">
+        {/* All applications */}
+        <div className="flex-1 min-w-0">
+          <p className="text-[9px] font-bold tracking-[0.22em] uppercase mb-3 px-2.5" style={{ color: "rgba(249,115,22,0.55)" }}>All Applications</p>
+          <div className="grid grid-cols-4 gap-x-1 gap-y-0">
             {applications.map((app) => (
               <Link key={app.slug} href={`/applications/${app.slug}`}
-                className="group p-3 rounded-xl transition-colors hover:bg-white/5"
-                style={{ color: "rgba(255,255,255,0.75)" }}
+                className="group flex items-start gap-2 px-2.5 py-2 rounded-lg transition-colors hover:bg-white/5"
               >
-                <p className="font-semibold text-sm group-hover:text-orange-400 transition-colors">{app.name}</p>
-                {app.shortDesc && (
-                  <p className="text-xs mt-0.5 leading-snug" style={{ color: "rgba(255,255,255,0.38)" }}>{app.shortDesc}</p>
-                )}
+                <div className="w-1 h-1 rounded-full flex-shrink-0" style={{ background: "rgba(249,115,22,0.4)", marginTop: 7 }} />
+                <div>
+                  <p className="text-sm font-semibold leading-tight group-hover:text-orange-400 transition-colors" style={{ color: "rgba(255,255,255,0.82)" }}>{app.name}</p>
+                  {app.shortDesc && (
+                    <p className="text-[11px] mt-0.5 leading-snug" style={{ color: "rgba(255,255,255,0.35)" }}>{app.shortDesc}</p>
+                  )}
+                </div>
               </Link>
             ))}
           </div>
         </div>
 
         {/* Right sidebar */}
-        <div className="col-span-1 border-l pl-8 flex flex-col justify-between" style={{ borderColor: "rgba(255,255,255,0.07)" }}>
-          <div>
-            <p className="text-xs font-bold tracking-[0.18em] uppercase mb-3" style={{ color: "rgba(249,115,22,0.7)" }}>Explore</p>
+        <div className="w-56 pl-6 flex-shrink-0 flex flex-col gap-3">
+          {/* Featured image */}
+          <Link href="/projects" className="group relative rounded-xl overflow-hidden block" style={{ height: 130 }}>
+            <Image
+              src="/images/blog/decorative-crosswalk-meridian/featured.jpg"
+              alt="HUB application projects"
+              fill
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              sizes="224px"
+            />
+            <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(7,11,18,0.92) 0%, rgba(7,11,18,0.2) 100%)" }} />
+            <div className="absolute bottom-0 left-0 right-0 p-3">
+              <p className="text-[9px] font-bold tracking-[0.18em] uppercase mb-0.5" style={{ color: "#F97316" }}>Projects</p>
+              <p className="text-xs font-semibold leading-snug text-white">See our work across Canada</p>
+            </div>
+          </Link>
+
+          <div className="space-y-1.5">
             <Link href="/applications"
-              className="flex items-center justify-between w-full p-3 rounded-xl mb-2 transition-colors hover:bg-white/5"
-              style={{ color: "rgba(255,255,255,0.7)", border: "1px solid rgba(255,255,255,0.08)" }}
+              className="flex items-center justify-between w-full px-3 py-2 rounded-lg transition-colors hover:bg-white/5"
+              style={{ color: "rgba(255,255,255,0.65)", border: "1px solid rgba(255,255,255,0.08)" }}
             >
-              <span className="text-sm font-semibold">All Applications</span>
-              <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
+              <span className="text-xs font-semibold">All Applications</span>
+              <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
             </Link>
             <Link href="/projects"
-              className="flex items-center justify-between w-full p-3 rounded-xl mb-2 transition-colors hover:bg-white/5"
-              style={{ color: "rgba(255,255,255,0.7)", border: "1px solid rgba(255,255,255,0.08)" }}
+              className="flex items-center justify-between w-full px-3 py-2 rounded-lg transition-colors hover:bg-white/5"
+              style={{ color: "rgba(255,255,255,0.65)", border: "1px solid rgba(255,255,255,0.08)" }}
             >
-              <span className="text-sm font-semibold">Project Gallery</span>
-              <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
+              <span className="text-xs font-semibold">Project Gallery</span>
+              <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
             </Link>
           </div>
+
           <Link href="/contact"
-            className="block w-full text-center px-4 py-2.5 rounded-xl text-sm font-bold mt-4"
+            className="block w-full text-center px-4 py-2.5 rounded-xl text-xs font-bold mt-auto"
             style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff" }}
           >
             Request a Quote
@@ -348,48 +373,164 @@ function ApplicationsMegaMenu() {
 }
 
 // ── Mobile overlay ───────────────────────────────────────────────────────────
+const MOBILE_PRODUCT_CATEGORIES = [
+  { label: "Preformed Thermoplastics", slugs: ["traffic-patterns-xd", "traffic-patterns", "premark", "duratherm", "decomark", "airmark"] },
+  { label: "Coatings", slugs: ["streetbond", "streetbondsr", "mmax", "durashield"] },
+  { label: "Stamped Asphalt & Concrete", slugs: ["streetprint"] },
+  { label: "Asphalt Repair", slugs: ["fast-patch", "aquaphalt"] },
+];
+
+const MOBILE_APP_LINKS = [
+  { label: "Crosswalks", href: "/applications/crosswalks" },
+  { label: "Bike Lanes", href: "/applications/bike-lanes" },
+  { label: "Bus Lanes", href: "/applications/bus-lanes" },
+  { label: "Parking Lots", href: "/applications/parking-lots" },
+  { label: "Parks & Paths", href: "/applications/parks-paths" },
+  { label: "Community Branding", href: "/applications/community-branding" },
+];
+
 function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onClose: () => void; onSearchOpen: () => void }) {
+  const [expandedSection, setExpandedSection] = useState<"products" | "applications" | null>(null);
+
   return (
     <AnimatePresence>
       {isOpen && (
         <motion.div
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
           className="fixed inset-0 z-40 md:hidden"
-          style={{ background: "rgba(0,0,0,0.8)" }}
+          style={{ background: "rgba(0,0,0,0.75)", backdropFilter: "blur(4px)" }}
           onClick={onClose}
         >
           <motion.div
             initial={{ y: "-100%" }} animate={{ y: 0 }} exit={{ y: "-100%" }}
-            transition={{ type: "spring", damping: 25 }}
-            className="absolute top-0 left-0 right-0 p-6"
-            style={{ background: "#070b12", borderBottom: "1px solid rgba(255,255,255,0.07)" }}
+            transition={{ type: "spring", damping: 28, stiffness: 300 }}
+            className="absolute top-0 left-0 right-0 overflow-y-auto"
+            style={{ background: "#070b12", borderBottom: "1px solid rgba(255,255,255,0.08)", maxHeight: "90vh" }}
             onClick={(e) => e.stopPropagation()}
           >
-            <button onClick={onClose} className="absolute top-4 right-4 p-2" style={{ color: "rgba(255,255,255,0.5)" }}>
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
+            {/* Top bar */}
+            <div className="flex items-center justify-between px-5 py-4 border-b" style={{ borderColor: "rgba(255,255,255,0.07)" }}>
+              <Link href="/" onClick={onClose} className="flex items-center gap-2.5">
+                <Image src="/images/hub-wheel-orange.png" alt="HUB Surface Systems" width={36} height={36} style={{ height: 30, width: "auto" }} unoptimized />
+                <span className="flex flex-col leading-none gap-0.5">
+                  <span className="text-[15px] font-black tracking-tight" style={{ color: "#ffffff" }}>HUB</span>
+                  <span className="text-[9px] font-bold tracking-[0.18em] uppercase" style={{ color: "rgba(255,255,255,0.55)" }}>Surface Systems</span>
+                </span>
+              </Link>
+              <button onClick={onClose} className="p-2 rounded-lg" style={{ color: "rgba(255,255,255,0.5)", background: "rgba(255,255,255,0.05)" }}>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
 
-            {/* Mobile search */}
-            <button onClick={() => { onClose(); onSearchOpen(); }}
-              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl mb-6 mt-2 text-left"
-              style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.4)" }}
-            >
-              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <circle cx="11" cy="11" r="8" strokeWidth={2} /><path d="M21 21l-4.35-4.35" strokeWidth={2} strokeLinecap="round" />
-              </svg>
-              <span className="text-sm">Search products, applications…</span>
-            </button>
+            <div className="px-4 py-4 space-y-1">
+              {/* Mobile search */}
+              <button onClick={() => { onClose(); onSearchOpen(); }}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl mb-2 text-left"
+                style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.09)", color: "rgba(255,255,255,0.4)" }}
+              >
+                <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <circle cx="11" cy="11" r="8" strokeWidth={2} /><path d="M21 21l-4.35-4.35" strokeWidth={2} strokeLinecap="round" />
+                </svg>
+                <span className="text-sm">Search products, applications…</span>
+              </button>
 
-            <nav className="space-y-1">
-              {[
-                { label: "Products", href: "/products" },
-                { label: "Applications", href: "/applications" },
-                ...PLAIN_LINKS,
-              ].map((link) => (
+              {/* Products expandable */}
+              <div>
+                <button
+                  className="w-full flex items-center justify-between py-3 px-3 rounded-xl text-base font-semibold transition-colors hover:bg-white/5"
+                  style={{ color: expandedSection === "products" ? "#F97316" : "#F5F0EB" }}
+                  onClick={() => setExpandedSection(expandedSection === "products" ? null : "products")}
+                >
+                  Products
+                  <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    style={{ opacity: 0.4, transform: expandedSection === "products" ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                <AnimatePresence>
+                  {expandedSection === "products" && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="pl-3 pb-2 pt-1 space-y-3">
+                        {MOBILE_PRODUCT_CATEGORIES.map((cat) => (
+                          <div key={cat.label}>
+                            <p className="text-[9px] font-bold tracking-[0.2em] uppercase px-2 mb-1" style={{ color: "rgba(249,115,22,0.6)" }}>{cat.label}</p>
+                            <div className="grid grid-cols-2 gap-x-1">
+                              {cat.slugs.map((slug) => {
+                                const p = products.find((x) => x.slug === slug);
+                                if (!p) return null;
+                                return (
+                                  <Link key={slug} href={`/products/${slug}`}
+                                    className="px-2 py-1.5 text-sm rounded-lg hover:bg-white/5 transition-colors"
+                                    style={{ color: "rgba(255,255,255,0.72)" }}
+                                    onClick={onClose}
+                                  >{p.name}</Link>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        ))}
+                        <Link href="/products"
+                          className="flex items-center gap-1.5 px-2 py-1.5 text-xs font-semibold"
+                          style={{ color: "#F97316" }}
+                          onClick={onClose}
+                        >View all products →</Link>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Applications expandable */}
+              <div>
+                <button
+                  className="w-full flex items-center justify-between py-3 px-3 rounded-xl text-base font-semibold transition-colors hover:bg-white/5"
+                  style={{ color: expandedSection === "applications" ? "#F97316" : "#F5F0EB" }}
+                  onClick={() => setExpandedSection(expandedSection === "applications" ? null : "applications")}
+                >
+                  Applications
+                  <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    style={{ opacity: 0.4, transform: expandedSection === "applications" ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                <AnimatePresence>
+                  {expandedSection === "applications" && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="pl-3 pb-2 pt-1">
+                        <div className="grid grid-cols-2 gap-x-1">
+                          {MOBILE_APP_LINKS.map((app) => (
+                            <Link key={app.href} href={app.href}
+                              className="px-2 py-1.5 text-sm rounded-lg hover:bg-white/5 transition-colors"
+                              style={{ color: "rgba(255,255,255,0.72)" }}
+                              onClick={onClose}
+                            >{app.label}</Link>
+                          ))}
+                        </div>
+                        <Link href="/applications"
+                          className="flex items-center gap-1.5 px-2 py-1.5 text-xs font-semibold mt-1"
+                          style={{ color: "#F97316" }}
+                          onClick={onClose}
+                        >View all applications →</Link>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Plain links */}
+              {PLAIN_LINKS.map((link) => (
                 <Link key={link.href} href={link.href}
-                  className="flex items-center justify-between py-3 px-2 text-base font-semibold rounded-lg hover:bg-white/5 transition-colors"
+                  className="flex items-center justify-between py-3 px-3 text-base font-semibold rounded-xl hover:bg-white/5 transition-colors"
                   style={{ color: "#F5F0EB" }}
                   onClick={onClose}
                 >
@@ -397,18 +538,19 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                   <svg width="14" height="14" fill="none" stroke="rgba(255,255,255,0.3)" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
                 </Link>
               ))}
-            </nav>
+            </div>
 
-            <div className="border-t mt-6 pt-6 space-y-3" style={{ borderColor: "rgba(255,255,255,0.1)" }}>
+            {/* Bottom CTAs */}
+            <div className="px-4 pb-6 pt-2 border-t space-y-2.5" style={{ borderColor: "rgba(255,255,255,0.07)" }}>
               <Link href="/resources"
                 className="block px-4 py-3 rounded-xl text-sm font-semibold text-center transition-all"
-                style={{ border: "1px solid rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.8)" }}
+                style={{ border: "1px solid rgba(255,255,255,0.18)", color: "rgba(255,255,255,0.8)" }}
                 onClick={onClose}
               >
                 Resources
               </Link>
               <Link href="/lunch-learn"
-                className="block px-4 py-3 rounded-xl text-sm font-semibold text-center"
+                className="block px-4 py-3 rounded-xl text-sm font-bold text-center"
                 style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff" }}
                 onClick={onClose}
               >

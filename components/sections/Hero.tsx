@@ -47,7 +47,8 @@ export default function Hero() {
       </div>
 
       {/* ── Main content ────────────────────────────────────────────── */}
-      <div className="relative z-10 flex-1 w-full px-6 sm:px-10 lg:px-16 xl:px-24 pt-28 sm:pt-36 lg:pt-48 pb-20 sm:pb-28">
+      <div className="relative z-10 flex-1 w-full pt-28 sm:pt-36 lg:pt-48 pb-20 sm:pb-28">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
@@ -122,6 +123,7 @@ export default function Hero() {
             </a>
           </motion.div>
         </motion.div>
+        </div>
       </div>
 
       {/* ── Client ticker ────────────────────────────────────────────── */}

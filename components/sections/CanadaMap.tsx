@@ -602,7 +602,6 @@ export default function CanadaMap() {
   }, [scrollEnabled]);
 
   // ── Map layer click handler ────────────────────────────────────────────
-  // maplibre-gl v3+ uses Promise (not callback) for getClusterExpansionZoom
   const handleMapLayerClick = useCallback(
     async (event: MapLayerMouseEvent) => {
       const feature = event.features?.[0];
@@ -670,18 +669,19 @@ export default function CanadaMap() {
   // ── Panel card interaction ─────────────────────────────────────────────
   const handlePanelHover = useCallback((id: string | null) => {
     setHoveredId(id);
-    // Don't show popup when hovering from panel
     setPopupProject(null);
   }, []);
 
   const handlePanelClick = useCallback((project: MapProject) => {
-    setSelectedProject(project);
+    // Zoom the map to the project location — do NOT open the modal here.
+    // The modal opens when the user clicks the highlighted pin on the map.
     setPopupProject(null);
-    setHoveredId(null);
+    setSelectedProject(null);
+    setHoveredId(project.id);
     mapRef.current?.flyTo({
       center: [project.lng, project.lat],
-      zoom: 12,
-      duration: 1200,
+      zoom: 13,
+      duration: 1100,
       essential: true,
     });
   }, []);
@@ -785,7 +785,7 @@ export default function CanadaMap() {
                   lineHeight: 1.6,
                 }}
               >
-                {mapProjects.length} projects from Victoria to St. John's. Zoom into any
+                {mapProjects.length} projects from Victoria to St. John&apos;s. Zoom into any
                 province to explore.
               </p>
             </div>
@@ -1028,7 +1028,9 @@ export default function CanadaMap() {
                 >
                   {scrollEnabled
                     ? "Scroll zoom active · Click outside to release"
-                    : "Click clusters to zoom in · Click pins for project details"}
+                    : hoveredId
+                    ? "Pin highlighted — click it to open project details"
+                    : "Click clusters to zoom · Click list to navigate · Click pins for details"}
                 </span>
               </div>
             </div>

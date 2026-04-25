@@ -155,7 +155,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
           {/* No results */}
           {showEmpty && (
             <div className="px-4 py-10 text-center">
-              <p className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>No results for <span style={{ color: "#F5F0EB" }}>"{ query}"</span></p>
+              <p className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>No results for <span style={{ color: "#F5F0EB" }}>"{query}"</span></p>
               <p className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.25)" }}>Try a product name, application type, or page</p>
             </div>
           )}
@@ -565,6 +565,7 @@ export default function Nav() {
   const [openPanel, setOpenPanel] = useState<"products" | "applications" | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const navRef = useRef<HTMLElement>(null);
 
   // Close mega menu on outside click
@@ -578,6 +579,13 @@ export default function Nav() {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
+  // Scroll state — adds shadow + accent border on scroll
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 16);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const openSearch = useCallback(() => setSearchOpen(true), []);
   const closeSearch = useCallback(() => setSearchOpen(false), []);
 
@@ -586,7 +594,17 @@ export default function Nav() {
       <nav
         ref={navRef}
         className="sticky top-0 z-50"
-        style={{ background: "rgba(7,11,18,0.96)", backdropFilter: "blur(12px)", borderBottom: "1px solid rgba(255,255,255,0.07)" }}
+        style={{
+          background: "rgba(7,11,18,0.96)",
+          backdropFilter: "blur(12px)",
+          borderBottom: scrolled
+            ? "1px solid rgba(249,115,22,0.18)"
+            : "1px solid rgba(255,255,255,0.07)",
+          boxShadow: scrolled
+            ? "0 4px 32px rgba(0,0,0,0.55), 0 1px 0 rgba(249,115,22,0.08)"
+            : "none",
+          transition: "border-color 0.3s ease, box-shadow 0.3s ease",
+        }}
         onMouseLeave={() => setOpenPanel(null)}
       >
         {/* Main bar */}

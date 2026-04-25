@@ -5,10 +5,11 @@ import Image from "next/image";
 import { heroImages, resolveImage } from "@/lib/featured-images";
 
 const tickerItems = [
-  "Vision Zero", "City of Toronto", "York Region", "Vancouver", "UBC",
-  "City of Ottawa", "City of Calgary", "Brampton", "Mississauga",
-  "TransLink", "City of Surrey", "City of Edmonton", "Winnipeg",
-  "City of Burnaby", "Richmond Hill", "Complete Streets",
+  "City of Toronto", "York Region", "City of Vancouver", "UBC",
+  "City of Ottawa", "City of Calgary", "City of Brampton", "City of Mississauga",
+  "TransLink", "City of Surrey", "City of Edmonton", "City of Winnipeg",
+  "City of Burnaby", "Richmond Hill", "Halifax Regional Municipality",
+  "City of Kelowna", "Region of Peel", "City of Saskatoon",
 ];
 
 export default function Hero() {

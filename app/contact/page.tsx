@@ -45,7 +45,7 @@ export default function ContactPage() {
       />
       <Nav />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
           {/* Left */}
           <div className="pt-4">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "#f97316" }}>Get In Touch</p>
@@ -79,7 +79,7 @@ export default function ContactPage() {
           </div>
 
           {/* Right: form */}
-          <div className="rounded-xl p-10" style={{ background: "var(--bg-card-surface)", border: "1px solid var(--border-subtle)" }}>
+          <div className="rounded-xl p-6 sm:p-10" style={{ background: "var(--bg-card-surface)", border: "1px solid var(--border-subtle)" }}>
             {submitted ? (
               <div className="flex flex-col items-center justify-center h-full py-16 text-center">
                 <div className="w-16 h-16 rounded-full flex items-center justify-center mb-5" style={{ background: "rgba(249,115,22,0.15)" }}>

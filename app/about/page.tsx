@@ -108,7 +108,7 @@ export default function AboutPage() {
       {/* ── Story ───────────────────────────────────────────── */}
       <div className="py-28" style={{ background: "#0f1620" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
             <div>
               <h2 className="text-3xl font-bold mb-6" style={{ color: "#ffffff" }}>Our Story</h2>
               <div className="space-y-4 text-base leading-relaxed" style={{ color: "#e0e0e0" }}>

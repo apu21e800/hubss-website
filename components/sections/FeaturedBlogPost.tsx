@@ -117,7 +117,7 @@ export default function FeaturedBlogPost() {
             </div>
 
             {/* Content — 2/5 on desktop */}
-            <div className="md:col-span-2 p-10 flex flex-col justify-center">
+            <div className="md:col-span-2 p-6 md:p-10 flex flex-col justify-center">
               {/* Category + read time */}
               <div className="flex items-center gap-3 mb-5">
                 <span

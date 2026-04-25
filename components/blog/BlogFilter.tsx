@@ -63,7 +63,7 @@ export default function BlogFilter({ posts, allProducts }: Props) {
     if (sort === "oldest") result.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
     else if (sort === "az") result.sort((a, b) => a.title.localeCompare(b.title));
     return result;
-  }, [posts, search, product, sort]);
+  }, [posts, search, product, category, sort]);
 
   // Filter button — matches projects page style exactly
   const Btn = ({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) => (
@@ -91,19 +91,23 @@ export default function BlogFilter({ posts, allProducts }: Props) {
         <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-1 sm:flex-wrap sm:overflow-visible scrollbar-none"
           style={{ WebkitOverflowScrolling: "touch", msOverflowStyle: "none", scrollbarWidth: "none" }}
         >
-          <Btn label="All" active={category === "all" && product === "all"} onClick={() => { setAndSync(setCategory, "category", "all"); setProduct("all"); }} />
+          <Btn label="All" active={category === "all" && product === "all"} onClick={() => { setCategory("all"); setProduct("all"); pushParams({ category: "all", product: "all" }); }} />
 
           <span className="w-px h-4 self-center flex-shrink-0" style={{ background: "rgba(255,255,255,0.1)" }} />
 
-          <Btn label="Case Studies" active={category === "Case Study"} onClick={() => { setAndSync(setCategory, "category", "Case Study"); setProduct("all"); }} />
-          <Btn label="Project Profiles" active={category === "Project Profile"} onClick={() => { setAndSync(setCategory, "category", "Project Profile"); setProduct("all"); }} />
-          <Btn label="Guides" active={category === "Blog"} onClick={() => { setAndSync(setCategory, "category", "Blog"); setProduct("all"); }} />
-          <Btn label="White Papers" active={category === "White Paper"} onClick={() => { setAndSync(setCategory, "category", "White Paper"); setProduct("all"); }} />
+          {(["Case Study", "Project Profile", "Blog", "White Paper"] as const).map((cat) => (
+            <Btn
+              key={cat}
+              label={cat === "Case Study" ? "Case Studies" : cat === "Project Profile" ? "Project Profiles" : cat === "Blog" ? "Guides" : "White Papers"}
+              active={category === cat}
+              onClick={() => { setCategory(cat); setProduct("all"); pushParams({ category: cat, product: "all" }); }}
+            />
+          ))}
 
           <span className="w-px h-4 self-center flex-shrink-0" style={{ background: "rgba(255,255,255,0.1)" }} />
 
           {allProducts.slice(0, 4).map((p) => (
-            <Btn key={p} label={p} active={product === p} onClick={() => { setAndSync(setProduct, "product", p); setCategory("all"); }} />
+            <Btn key={p} label={p} active={product === p} onClick={() => { setProduct(p); setCategory("all"); pushParams({ product: p, category: "all" }); }} />
           ))}
         </div>
 

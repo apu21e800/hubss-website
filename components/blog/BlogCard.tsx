@@ -48,23 +48,41 @@ export default function BlogCard({ post }: { post: PostMeta }) {
 
       {/* Content */}
       <div className="p-5 flex flex-col flex-1">
-        {/* Product badges + date */}
-        <div className="flex items-center justify-between mb-3 gap-2 flex-wrap">
-          <div className="flex gap-1.5 flex-wrap">
+        {/* Category badge + date */}
+        <div className="flex items-center justify-between mb-2 gap-2">
+          <span
+            className="text-[9px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wider flex-shrink-0"
+            style={
+              post.category === "Case Study"
+                ? { background: "rgba(249,115,22,0.18)", color: "#f97316" }
+                : post.category === "White Paper"
+                ? { background: "rgba(99,102,241,0.15)", color: "#818cf8" }
+                : post.category === "Project Profile"
+                ? { background: "rgba(16,185,129,0.15)", color: "#34d399" }
+                : { background: "rgba(255,255,255,0.07)", color: "#9CA3AF" }
+            }
+          >
+            {post.category}
+          </span>
+          <span className="text-[10px] flex-shrink-0" style={{ color: "#9CA3AF" }}>
+            {new Date(post.date).toLocaleDateString("en-CA", { year: "numeric", month: "short", day: "numeric" })}
+          </span>
+        </div>
+
+        {/* Product badges */}
+        {post.products.length > 0 && (
+          <div className="flex gap-1.5 flex-wrap mb-3">
             {post.products.slice(0, 2).map((p) => (
               <span
                 key={p}
-                className="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide"
-                style={{ background: "rgba(249,115,22,0.15)", color: "#f97316" }}
+                className="text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide"
+                style={{ background: "rgba(249,115,22,0.10)", color: "#f97316", border: "1px solid rgba(249,115,22,0.2)" }}
               >
                 {p}
               </span>
             ))}
           </div>
-          <span className="text-[10px] flex-shrink-0" style={{ color: "#9CA3AF" }}>
-            {new Date(post.date).toLocaleDateString("en-CA", { year: "numeric", month: "short", day: "numeric" })}
-          </span>
-        </div>
+        )}
 
         {/* Title */}
         <h3
@@ -81,10 +99,15 @@ export default function BlogCard({ post }: { post: PostMeta }) {
             : post.excerpt}
         </p>
 
-        {/* CTA */}
-        <span className="text-xs font-semibold flex items-center gap-1 mt-auto" style={{ color: "#f97316" }}>
-          Read Post &rarr;
-        </span>
+        {/* CTA + read time */}
+        <div className="flex items-center justify-between mt-auto">
+          <span className="text-xs font-semibold flex items-center gap-1" style={{ color: "#f97316" }}>
+            Read Post &rarr;
+          </span>
+          {post.readTime && (
+            <span className="text-[10px]" style={{ color: "#6B7280" }}>{post.readTime}</span>
+          )}
+        </div>
       </div>
     </Link>
   );

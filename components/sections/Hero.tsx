@@ -72,10 +72,11 @@ export default function Hero() {
           </p>
 
           <h1
-            className="font-black leading-[1.04] mb-6"
+            className="font-black leading-[1.02] mb-6"
             style={{
-              fontSize: "clamp(2.4rem, 6vw, 4.5rem)",
+              fontSize: "clamp(3rem, 8.5vw, 6.5rem)",
               textWrap: "balance",
+              letterSpacing: "-0.035em",
             }}
           >
             <span style={{ color: "#fff", textShadow: "0 2px 28px rgba(0,0,0,0.45)" }}>

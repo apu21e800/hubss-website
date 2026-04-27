@@ -1,6 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 
+const stats = [
+  { stat: "30+",    label: "Years in Canada" },
+  { stat: "1,000+", label: "Projects coast to coast" },
+  { stat: "20yr",   label: "Proven service life" },
+];
+
 export default function HeroSlideshow() {
   return (
     <section
@@ -38,7 +44,6 @@ export default function HeroSlideshow() {
           zIndex: 2,
         }}
       />
-      {/* Orange atmospheric bloom */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -48,12 +53,12 @@ export default function HeroSlideshow() {
         }}
       />
 
-      {/* ── Bottom content zone ───────────────────────────────────── */}
+      {/* ── Content zone ───────────────────────────────────────────── */}
       <div
         className="absolute inset-x-0 bottom-0"
         style={{ zIndex: 10 }}
       >
-        <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pb-14 lg:pb-20">
+        <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pb-10 lg:pb-14">
           <div className="max-w-2xl">
 
             {/* Eyebrow */}
@@ -90,7 +95,7 @@ export default function HeroSlideshow() {
 
             {/* Body */}
             <p
-              className="text-base sm:text-lg leading-relaxed mb-8 max-w-xl"
+              className="text-base sm:text-lg leading-relaxed mb-7 max-w-xl"
               style={{ color: "rgba(255,255,255,0.75)", fontWeight: 400 }}
             >
               Decorative crosswalks, roundabouts, and plazas that define community
@@ -98,7 +103,7 @@ export default function HeroSlideshow() {
             </p>
 
             {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex flex-col sm:flex-row gap-3 mb-9">
               <Link
                 href="/projects"
                 className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-lg font-semibold text-sm transition-all"
@@ -123,6 +128,45 @@ export default function HeroSlideshow() {
               >
                 Request Spec Sheet
               </Link>
+            </div>
+
+            {/* ── Trust signals ─────────────────────────────────── */}
+            <div
+              style={{
+                height: 1,
+                background:
+                  "linear-gradient(90deg, rgba(249,115,22,0.45) 0%, rgba(255,255,255,0.08) 55%, transparent 100%)",
+                marginBottom: "1.35rem",
+                maxWidth: "32rem",
+              }}
+            />
+            <div className="flex flex-wrap gap-x-9 gap-y-4">
+              {stats.map(({ stat, label }) => (
+                <div key={stat} className="flex items-center gap-3">
+                  <span
+                    style={{
+                      fontSize: "1.55rem",
+                      fontWeight: 800,
+                      color: "#F97316",
+                      lineHeight: 1,
+                      letterSpacing: "-0.04em",
+                    }}
+                  >
+                    {stat}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: "0.78rem",
+                      color: "rgba(255,255,255,0.50)",
+                      fontWeight: 500,
+                      lineHeight: 1.3,
+                      maxWidth: "7rem",
+                    }}
+                  >
+                    {label}
+                  </span>
+                </div>
+              ))}
             </div>
 
           </div>

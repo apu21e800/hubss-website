@@ -11,6 +11,7 @@ import { applications } from "@/lib/applications";
 // ── Nav link config ──────────────────────────────────────────────────────────
 const PLAIN_LINKS = [
   { label: "Field Notes", href: "/blog" },
+  { label: "Gallery", href: "/gallery" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
@@ -23,11 +24,11 @@ const MOBILE_QUICK_ACTIONS = [
 // ── Search data ──────────────────────────────────────────────────────────────
 const PAGES = [
   { label: "Field Notes", href: "/blog", desc: "Field notes and industry insights" },
+  { label: "Gallery", href: "/gallery", desc: "Photo archive — 500+ installations across Canada" },
   { label: "About", href: "/about", desc: "Our story and team" },
   { label: "Contact", href: "/contact", desc: "Get in touch with our team" },
   { label: "Resources", href: "/resources", desc: "Spec sheets, SDS, install guides" },
   { label: "Lunch & Learn", href: "/lunch-learn", desc: "Book a free product presentation" },
-  { label: "Projects", href: "/projects", desc: "Browse our project portfolio" },
 ];
 
 const CATEGORIES = [
@@ -96,7 +97,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
             <div className="p-4">
               <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "rgba(255,255,255,0.3)" }}>Quick links</p>
               <div className="grid grid-cols-2 gap-1">
-                {[{ label: "All Products", href: "/products" }, { label: "All Applications", href: "/applications" }, { label: "Project Gallery", href: "/projects" }, { label: "Spec Sheets", href: "/resources" }, { label: "Lunch & Learn", href: "/lunch-learn" }, { label: "Contact Us", href: "/contact" }].map((item) => (
+                {[{ label: "All Products", href: "/products" }, { label: "All Applications", href: "/applications" }, { label: "Photo Gallery", href: "/gallery" }, { label: "Spec Sheets", href: "/resources" }, { label: "Lunch & Learn", href: "/lunch-learn" }, { label: "Contact Us", href: "/contact" }].map((item) => (
                   <button key={item.href} onClick={() => handleResultClick(item.href)} className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-left hover:bg-white/5" style={{ color: "rgba(255,255,255,0.6)" }}>
                     <svg width="13" height="13" fill="none" stroke="rgba(249,115,22,0.6)" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
                     <span className="text-sm font-medium">{item.label}</span>
@@ -255,18 +256,18 @@ function ProductsMegaMenu() {
         {/* Right sidebar */}
         <div className="w-56 pl-6 flex flex-col gap-3 flex-shrink-0">
           {/* Featured image */}
-          <Link href="/projects" className="group relative rounded-xl overflow-hidden block" style={{ height: 130 }}>
+          <Link href="/gallery" className="group relative rounded-xl overflow-hidden block" style={{ height: 130 }}>
             <Image
               src="/images/blog/best-crosswalks-canada/featured.jpg"
-              alt="HUB Surface Systems projects"
+              alt="HUB Surface Systems gallery"
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-105"
               sizes="224px"
             />
             <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(7,11,18,0.92) 0%, rgba(7,11,18,0.2) 100%)" }} />
             <div className="absolute bottom-0 left-0 right-0 p-3">
-              <p className="text-[9px] font-bold tracking-[0.18em] uppercase mb-0.5" style={{ color: "#F97316" }}>Featured</p>
-              <p className="text-xs font-semibold leading-snug text-white">Award-winning crosswalks across Canada</p>
+              <p className="text-[9px] font-bold tracking-[0.18em] uppercase mb-0.5" style={{ color: "#F97316" }}>Photo Archive</p>
+              <p className="text-xs font-semibold leading-snug text-white">500+ installations across Canada</p>
             </div>
           </Link>
 
@@ -328,18 +329,18 @@ function ApplicationsMegaMenu() {
         {/* Right sidebar */}
         <div className="w-56 pl-6 flex-shrink-0 flex flex-col gap-3">
           {/* Featured image */}
-          <Link href="/projects" className="group relative rounded-xl overflow-hidden block" style={{ height: 130 }}>
+          <Link href="/gallery" className="group relative rounded-xl overflow-hidden block" style={{ height: 130 }}>
             <Image
               src="/images/blog/decorative-crosswalk-meridian/featured.jpg"
-              alt="HUB application projects"
+              alt="HUB application gallery"
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-105"
               sizes="224px"
             />
             <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(7,11,18,0.92) 0%, rgba(7,11,18,0.2) 100%)" }} />
             <div className="absolute bottom-0 left-0 right-0 p-3">
-              <p className="text-[9px] font-bold tracking-[0.18em] uppercase mb-0.5" style={{ color: "#F97316" }}>Projects</p>
-              <p className="text-xs font-semibold leading-snug text-white">See our work across Canada</p>
+              <p className="text-[9px] font-bold tracking-[0.18em] uppercase mb-0.5" style={{ color: "#F97316" }}>Photo Archive</p>
+              <p className="text-xs font-semibold leading-snug text-white">See every application type</p>
             </div>
           </Link>
 
@@ -351,11 +352,11 @@ function ApplicationsMegaMenu() {
               <span className="text-xs font-semibold">All Applications</span>
               <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
             </Link>
-            <Link href="/projects"
+            <Link href="/gallery"
               className="flex items-center justify-between w-full px-3 py-2 rounded-lg transition-colors hover:bg-white/5"
               style={{ color: "rgba(255,255,255,0.65)", border: "1px solid rgba(255,255,255,0.08)" }}
             >
-              <span className="text-xs font-semibold">Project Gallery</span>
+              <span className="text-xs font-semibold">Photo Gallery</span>
               <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
             </Link>
           </div>

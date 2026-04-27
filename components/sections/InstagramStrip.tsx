@@ -148,7 +148,7 @@ export default function InstagramStrip() {
                 <p className="text-sm font-semibold group-hover:text-orange-400 transition-colors" style={{ color: "rgba(255,255,255,0.8)" }}>
                   {channel.name}
                 </p>
-                <p className="text-xs truncate" style={{ color: "rgba(255,255,255,0.35)" }}>
+                <p className="text-xs truncate" style={{ color: "rgba(255,255,255,0.50)" }}>
                   {channel.description}
                 </p>
               </div>

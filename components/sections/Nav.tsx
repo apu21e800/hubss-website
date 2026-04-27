@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
 
-// ── Nav link config ────────────────────────────────────────────────────────────
+// ── Nav link config ──────────────────────────────────────────────────────────
 const PLAIN_LINKS = [
   { label: "Field Notes", href: "/blog" },
   { label: "About", href: "/about" },
@@ -20,14 +20,14 @@ const MOBILE_QUICK_ACTIONS = [
   { label: "Book Lunch & Learn", href: "/lunch-learn" },
 ];
 
-// ── Search data ────────────────────────────────────────────────────────────────
+// ── Search data ──────────────────────────────────────────────────────────────
 const PAGES = [
   { label: "Field Notes", href: "/blog", desc: "Field notes and industry insights" },
   { label: "About", href: "/about", desc: "Our story and team" },
   { label: "Contact", href: "/contact", desc: "Get in touch with our team" },
   { label: "Resources", href: "/resources", desc: "Spec sheets, SDS, install guides" },
   { label: "Lunch & Learn", href: "/lunch-learn", desc: "Book a free product presentation" },
-  { label: "Projects", href: "/projects", desc: "Browse our project portfolio" },
+  { label: "Gallery", href: "/gallery", desc: "Photo archive of our installations" },
 ];
 
 const CATEGORIES = [
@@ -37,7 +37,7 @@ const CATEGORIES = [
   { label: "Asphalt Repair", href: "/products", desc: "Fast Patch, Aquaphalt — permanent cold-mix pothole repair" },
 ];
 
-// ── Search overlay ────────────────────────────────────────────────────────────────
+// ── Search overlay ───────────────────────────────────────────────────────────
 function SearchOverlay({ onClose }: { onClose: () => void }) {
   const [query, setQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -96,7 +96,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
             <div className="p-4">
               <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "rgba(255,255,255,0.3)" }}>Quick links</p>
               <div className="grid grid-cols-2 gap-1">
-                {[{ label: "All Products", href: "/products" }, { label: "All Applications", href: "/applications" }, { label: "Project Gallery", href: "/projects" }, { label: "Spec Sheets", href: "/resources" }, { label: "Lunch & Learn", href: "/lunch-learn" }, { label: "Contact Us", href: "/contact" }].map((item) => (
+                {[{ label: "All Products", href: "/products" }, { label: "All Applications", href: "/applications" }, { label: "Project Gallery", href: "/gallery" }, { label: "Spec Sheets", href: "/resources" }, { label: "Lunch & Learn", href: "/lunch-learn" }, { label: "Contact Us", href: "/contact" }].map((item) => (
                   <button key={item.href} onClick={() => handleResultClick(item.href)} className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-left hover:bg-white/5" style={{ color: "rgba(255,255,255,0.6)" }}>
                     <svg width="13" height="13" fill="none" stroke="rgba(249,115,22,0.6)" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
                     <span className="text-sm font-medium">{item.label}</span>
@@ -155,7 +155,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
           {/* No results */}
           {showEmpty && (
             <div className="px-4 py-10 text-center">
-              <p className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>No results for <span style={{ color: "#F5F0EB" }}>"{query}"</span></p>
+              <p className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>No results for <span style={{ color: "#F5F0EB" }}>"{ query}"</span></p>
               <p className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.25)" }}>Try a product name, application type, or page</p>
             </div>
           )}
@@ -169,7 +169,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
   );
 }
 
-// ── Product category data ──────────────────────────────────────────────────────────
+// ── Product category data ────────────────────────────────────────────────────
 const PRODUCT_CATEGORIES = [
   {
     label: "Preformed Thermoplastics",
@@ -189,7 +189,7 @@ const PRODUCT_CATEGORIES = [
   },
 ];
 
-// ── Full-width Products mega menu ──────────────────────────────────────────────────────────
+// ── Full-width Products mega menu ────────────────────────────────────────────
 function ProductsMegaMenu() {
   const bySlug = (slugs: string[]) =>
     slugs.flatMap((s) => { const p = products.find((x) => x.slug === s); return p ? [p] : []; });
@@ -255,7 +255,7 @@ function ProductsMegaMenu() {
         {/* Right sidebar */}
         <div className="w-56 pl-6 flex flex-col gap-3 flex-shrink-0">
           {/* Featured image */}
-          <Link href="/projects" className="group relative rounded-xl overflow-hidden block" style={{ height: 130 }}>
+          <Link href="/gallery" className="group relative rounded-xl overflow-hidden block" style={{ height: 130 }}>
             <Image
               src="/images/blog/best-crosswalks-canada/featured.jpg"
               alt="HUB Surface Systems projects"
@@ -300,7 +300,7 @@ function ProductsMegaMenu() {
   );
 }
 
-// ── Full-width Applications mega menu ──────────────────────────────────────────────────
+// ── Full-width Applications mega menu ────────────────────────────────────────
 function ApplicationsMegaMenu() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -328,7 +328,7 @@ function ApplicationsMegaMenu() {
         {/* Right sidebar */}
         <div className="w-56 pl-6 flex-shrink-0 flex flex-col gap-3">
           {/* Featured image */}
-          <Link href="/projects" className="group relative rounded-xl overflow-hidden block" style={{ height: 130 }}>
+          <Link href="/gallery" className="group relative rounded-xl overflow-hidden block" style={{ height: 130 }}>
             <Image
               src="/images/blog/decorative-crosswalk-meridian/featured.jpg"
               alt="HUB application projects"
@@ -351,7 +351,7 @@ function ApplicationsMegaMenu() {
               <span className="text-xs font-semibold">All Applications</span>
               <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
             </Link>
-            <Link href="/projects"
+            <Link href="/gallery"
               className="flex items-center justify-between w-full px-3 py-2 rounded-lg transition-colors hover:bg-white/5"
               style={{ color: "rgba(255,255,255,0.65)", border: "1px solid rgba(255,255,255,0.08)" }}
             >
@@ -372,7 +372,7 @@ function ApplicationsMegaMenu() {
   );
 }
 
-// ── Mobile overlay ──────────────────────────────────────────────────────────────────
+// ── Mobile overlay ───────────────────────────────────────────────────────────
 const MOBILE_PRODUCT_CATEGORIES = [
   { label: "Preformed Thermoplastics", slugs: ["traffic-patterns-xd", "traffic-patterns", "premark", "duratherm", "decomark", "airmark"] },
   { label: "Coatings", slugs: ["streetbond", "streetbondsr", "mmax", "durashield"] },
@@ -560,7 +560,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
   );
 }
 
-// ── Main Nav ───────────────────────────────────────────────────────────────────────────
+// ── Main Nav ─────────────────────────────────────────────────────────────────
 export default function Nav() {
   const [openPanel, setOpenPanel] = useState<"products" | "applications" | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -668,7 +668,7 @@ export default function Nav() {
 
           {/* Desktop right — search + CTAs */}
           <div className="hidden md:flex items-center gap-2">
-            {/* Search — no border, just icon + label */}
+            {/* Search */}
             <button
               onClick={openSearch}
               className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all hover:bg-white/5"

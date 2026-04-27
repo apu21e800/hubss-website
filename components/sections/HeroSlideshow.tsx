@@ -73,7 +73,7 @@ export default function HeroSlideshow() {
             <h1
               className="font-black mb-5"
               style={{
-                fontSize: "clamp(3rem, 8.5vw, 7rem)",
+                fontSize: "clamp(2.6rem, 6.5vw, 5.5rem)",
                 lineHeight: 0.92,
                 letterSpacing: "-0.04em",
                 color: "white",

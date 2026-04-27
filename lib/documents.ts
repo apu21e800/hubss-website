@@ -67,19 +67,19 @@ const ALL_DOCS: Record<string, ProductDocument[]> = {
   ],
 
   "duratherm": [
-    { label: "Specification",                        type: "spec",         href: "/docs/DuraTherm/DuraTherm-Specification-Branded.pdf" },
-    { label: "Colour Guide",                         type: "colour",       href: "/docs/DuraTherm/Duratherm-Colour-Guide.pdf" },
-    { label: "Technical Data Sheet",                 type: "tds",          href: "/docs/DuraTherm/TS003_DuraTherm_220204.pdf" },
-    { label: "Custom Design Guidelines",              type: "design",       href: "/docs/DuraTherm/Duratherm-Custom-Design-Guidelines.pdf" },
-    { label: "Design Manual",                        type: "design",       href: "/docs/DuraTherm/DuraTherm-Design-Manual.pdf" },
+    { label: "Specification",                        type: "spec",         href: "/docs/duratherm/DuraTherm-Specification-Branded.pdf" },
+    { label: "Colour Guide",                         type: "colour",       href: "/docs/duratherm/duratherm-colour-guide.pdf" },
+    { label: "Technical Data Sheet",                 type: "tds",          href: "/docs/duratherm/TS003_DuraTherm_220204.pdf" },
+    { label: "Custom Design Guidelines",              type: "design",       href: "/docs/duratherm/duratherm-custom-design-guidelines.pdf" },
+    { label: "Design Manual",                        type: "design",       href: "/docs/duratherm/duratherm-design-manual.pdf" },
   ],
 
   "decomark": [
-    { label: "Application Instructions",             type: "installation", href: "/docs/DecoMark/DecoMark-Application-Instructions.pdf" },
-    { label: "Custom Design Guidelines",              type: "design",       href: "/docs/DecoMark/DecoMark-Custom-Design-Guidelines.pdf" },
-    { label: "Colour Guide",                         type: "colour",       href: "/docs/DecoMark/DecoMark-Colour-Guide.pdf" },
-    { label: "Technical Data Sheet",                 type: "tds",          href: "/docs/DecoMark/TS004_DecoMark_220204.pdf" },
-    { label: "Specification",                        type: "spec",         href: "/docs/DecoMark/DecoMark-Specification.pdf" },
+    { label: "Application Instructions",             type: "installation", href: "/docs/decomark/decomark-application-instructions.pdf" },
+    { label: "Custom Design Guidelines",              type: "design",       href: "/docs/decomark/decomark-custom-design-guidelines.pdf" },
+    { label: "Colour Guide",                         type: "colour",       href: "/docs/decomark/decomark-colour-guide.pdf" },
+    { label: "Technical Data Sheet",                 type: "tds",          href: "/docs/decomark/TS004_DecoMark_220204.pdf" },
+    { label: "Specification",                        type: "spec",         href: "/docs/decomark/DecoMark-Specification.pdf" },
   ],
 
   "airmark": [
@@ -132,10 +132,10 @@ const ALL_DOCS: Record<string, ProductDocument[]> = {
   ],
 
   "streetprint": [
-    { label: "FAQ",                                  type: "faq",          href: "/docs/StreetPrint/StreetPrint-FAQ.pdf" },
-    { label: "Colour Guide",                         type: "colour",       href: "/docs/StreetPrint/StreetPrint-Colour-Guide.pdf" },
-    { label: "Asphalt Texturing Specification",      type: "spec",         href: "/docs/StreetPrint/StreetPrint-Asphalt-Texturing-Specification.pdf" },
-    { label: "Template Catalog",                     type: "other",        href: "/docs/StreetPrint/StreetPrint-Template-Catalog.pdf" },
+    { label: "FAQ",                                  type: "faq",          href: "/docs/streetprint/streetprint-faq.pdf" },
+    { label: "Colour Guide",                         type: "colour",       href: "/docs/streetprint/streetprint-colour-guide.pdf" },
+    { label: "Asphalt Texturing Specification",      type: "spec",         href: "/docs/streetprint/StreetPrint-Asphalt-Texturing-Specification.pdf" },
+    { label: "Template Catalog",                     type: "other",        href: "/docs/streetprint/streetprint-template-catalog.pdf" },
   ],
 };
 

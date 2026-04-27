@@ -18,7 +18,7 @@ interface SubmitState {
   message?: string;
 }
 
-export default function LunchLearn({ hideMoose: _hideMoose }: { hideMoose?: boolean } = {}) {
+export default function LunchLearn({ hideMoose }: { hideMoose?: boolean } = {}) {
   const [formData, setFormData] = useState<FormState>({
     name: "",
     email: "",
@@ -55,6 +55,7 @@ export default function LunchLearn({ hideMoose: _hideMoose }: { hideMoose?: bool
       });
       setFormData({ name: "", email: "", company: "", city: "", phone: "" });
     } catch (error) {
+      console.error(error);
       setSubmitState({
         status: "error",
         message: "Something went wrong. Please try again or contact us directly.",
@@ -289,19 +290,21 @@ export default function LunchLearn({ hideMoose: _hideMoose }: { hideMoose?: bool
             </div>
 
             {/* Moose mascot — bottom right, peeking up */}
-            <div
-              className="absolute bottom-0 right-0 pointer-events-none"
-              style={{ width: "55%", transform: "translateX(8%) translateY(4%)" }}
-            >
-              <Image
-                src={mooseImg.src}
-                alt={mooseImg.alt}
-                width={320}
-                height={400}
-                className="w-full h-auto drop-shadow-2xl"
-                style={{ objectFit: "contain" }}
-              />
-            </div>
+            {!hideMoose && (
+              <div
+                className="absolute bottom-0 right-0 pointer-events-none"
+                style={{ width: "55%", transform: "translateX(8%) translateY(4%)" }}
+              >
+                <Image
+                  src={mooseImg.src}
+                  alt={mooseImg.alt}
+                  width={320}
+                  height={400}
+                  className="w-full h-auto drop-shadow-2xl"
+                  style={{ objectFit: "contain" }}
+                />
+              </div>
+            )}
 
             {/* Decorative glow */}
             <div

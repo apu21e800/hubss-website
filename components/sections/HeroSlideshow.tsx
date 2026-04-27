@@ -10,8 +10,8 @@ const stats = [
 export default function HeroSlideshow() {
   return (
     <section
-      className="relative w-full overflow-hidden"
-      style={{ minHeight: "90vh", maxHeight: "1000px", background: "#0d1117" }}
+      className="relative w-full overflow-hidden flex flex-col"
+      style={{ minHeight: "60vh", maxHeight: "800px", background: "#0d1117" }}
       aria-label="Hero"
     >
       {/* ── Background image ──────────────────────────────────────── */}
@@ -23,7 +23,7 @@ export default function HeroSlideshow() {
           priority
           sizes="100vw"
           className="object-cover"
-          style={{ objectPosition: "50% 55%" }}
+          style={{ objectPosition: "50% 42%" }}
         />
       </div>
 
@@ -32,7 +32,7 @@ export default function HeroSlideshow() {
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(180deg, rgba(13,17,23,0.65) 0%, rgba(13,17,23,0.58) 30%, rgba(13,17,23,0.78) 65%, rgba(13,17,23,0.97) 100%)",
+            "linear-gradient(180deg, rgba(13,17,23,0.50) 0%, rgba(13,17,23,0.40) 25%, rgba(13,17,23,0.68) 60%, rgba(13,17,23,0.96) 100%)",
           zIndex: 2,
         }}
       />
@@ -40,24 +40,25 @@ export default function HeroSlideshow() {
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            "linear-gradient(95deg, rgba(13,17,23,0.55) 0%, rgba(13,17,23,0.22) 44%, transparent 64%)",
+            "linear-gradient(95deg, rgba(13,17,23,0.52) 0%, rgba(13,17,23,0.20) 44%, transparent 64%)",
           zIndex: 2,
         }}
       />
+      {/* Orange atmospheric bloom */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse at 0% 0%, rgba(249,115,22,0.14) 0%, transparent 55%)",
+            "radial-gradient(ellipse at 0% 0%, rgba(249,115,22,0.13) 0%, transparent 55%)",
           zIndex: 2,
         }}
       />
 
-      {/* ── Content zone ───────────────────────────────────────────── */}
-      <div
-        className="absolute inset-x-0 bottom-0"
-        style={{ zIndex: 10 }}
-      >
+      {/* ── Flex spacer — image visible above content ─────────────── */}
+      <div className="flex-1" style={{ minHeight: "80px" }} />
+
+      {/* ── Content zone ──────────────────────────────────────────── */}
+      <div className="relative w-full" style={{ zIndex: 10 }}>
         <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pb-10 lg:pb-14">
           <div className="max-w-2xl">
 
@@ -80,7 +81,7 @@ export default function HeroSlideshow() {
                 textShadow: "0 2px 28px rgba(0,0,0,0.45)",
               }}
             >
-              The World Is{" "}
+              The World Is{"\ "}
               <span
                 style={{
                   background: "linear-gradient(92deg, #F97316 0%, #EAB308 100%)",
@@ -95,7 +96,7 @@ export default function HeroSlideshow() {
 
             {/* Body */}
             <p
-              className="text-base sm:text-lg leading-relaxed mb-7 max-w-xl"
+              className="text-base sm:text-lg leading-relaxed mb-8 max-w-xl"
               style={{ color: "rgba(255,255,255,0.75)", fontWeight: 400 }}
             >
               Decorative crosswalks, roundabouts, and plazas that define community
@@ -130,43 +131,44 @@ export default function HeroSlideshow() {
               </Link>
             </div>
 
-            {/* ── Trust signals ─────────────────────────────────── */}
-            <div
-              style={{
-                height: 1,
-                background:
-                  "linear-gradient(90deg, rgba(249,115,22,0.45) 0%, rgba(255,255,255,0.08) 55%, transparent 100%)",
-                marginBottom: "1.35rem",
-                maxWidth: "32rem",
-              }}
-            />
-            <div className="flex flex-wrap gap-x-9 gap-y-4">
-              {stats.map(({ stat, label }) => (
-                <div key={stat} className="flex items-center gap-3">
-                  <span
-                    style={{
-                      fontSize: "1.55rem",
-                      fontWeight: 800,
-                      color: "#F97316",
-                      lineHeight: 1,
-                      letterSpacing: "-0.04em",
-                    }}
-                  >
-                    {stat}
-                  </span>
-                  <span
-                    style={{
-                      fontSize: "0.78rem",
-                      color: "rgba(255,255,255,0.50)",
-                      fontWeight: 500,
-                      lineHeight: 1.3,
-                      maxWidth: "7rem",
-                    }}
-                  >
-                    {label}
-                  </span>
-                </div>
-              ))}
+            {/* Trust signals */}
+            <div>
+              <div
+                style={{
+                  height: 1,
+                  background: "linear-gradient(90deg, rgba(249,115,22,0.45) 0%, rgba(255,255,255,0.08) 55%, transparent 100%)",
+                  marginBottom: "1.35rem",
+                  maxWidth: "32rem",
+                }}
+              />
+              <div className="flex flex-wrap gap-x-10 gap-y-3">
+                {stats.map(({ stat, label }) => (
+                  <div key={stat} className="flex items-center gap-3">
+                    <span
+                      style={{
+                        fontSize: "1.55rem",
+                        fontWeight: 800,
+                        color: "#F97316",
+                        lineHeight: 1,
+                        letterSpacing: "-0.04em",
+                      }}
+                    >
+                      {stat}
+                    </span>
+                    <span
+                      style={{
+                        fontSize: "0.78rem",
+                        color: "rgba(255,255,255,0.50)",
+                        fontWeight: 500,
+                        lineHeight: 1.3,
+                        maxWidth: "7rem",
+                      }}
+                    >
+                      {label}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
 
           </div>

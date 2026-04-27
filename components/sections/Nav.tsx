@@ -155,7 +155,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
           {/* No results */}
           {showEmpty && (
             <div className="px-4 py-10 text-center">
-              <p className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>No results for <span style={{ color: "#F5F0EB" }}>"{query}"</span></p>
+              <p className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>No results for <span style={{ color: "#F5F0EB" }}>"{ query}"</span></p>
               <p className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.25)" }}>Try a product name, application type, or page</p>
             </div>
           )}
@@ -204,18 +204,18 @@ function ProductsMegaMenu() {
       href={`/products/${p.slug}`}
       className="group flex items-start gap-2 px-2.5 py-2 rounded-lg transition-colors hover:bg-white/5"
     >
-      <div className="mt-0.5 w-1 h-1 rounded-full flex-shrink-0" style={{ background: "rgba(249,115,22,0.4)", marginTop: 7 }} />
+      <div className="mt-0.5 w-1 h-1 rounded-full flex-shrink-0" style={{ background: "rgba(249,115,22,0.5)", marginTop: 7 }} />
       <div>
-        <p className="text-sm font-semibold leading-tight group-hover:text-orange-400 transition-colors" style={{ color: "rgba(255,255,255,0.82)" }}>{p.name}</p>
+        <p className="text-sm font-semibold leading-tight group-hover:text-orange-400 transition-colors" style={{ color: "#F5F0EB" }}>{p.name}</p>
         {p.shortDesc && (
-          <p className="text-[11px] mt-0.5 leading-snug" style={{ color: "rgba(255,255,255,0.35)" }}>{p.shortDesc}</p>
+          <p className="text-[11px] mt-0.5 leading-snug" style={{ color: "rgba(255,255,255,0.55)" }}>{p.shortDesc}</p>
         )}
       </div>
     </Link>
   );
 
   const CatLabel = ({ label }: { label: string }) => (
-    <p className="text-[9px] font-bold tracking-[0.22em] uppercase mb-2 px-2.5" style={{ color: "rgba(249,115,22,0.55)" }}>
+    <p className="text-[10px] font-bold tracking-[0.2em] uppercase mb-2.5 px-2.5" style={{ color: "rgba(249,115,22,0.9)" }}>
       {label}
     </p>
   );
@@ -307,17 +307,17 @@ function ApplicationsMegaMenu() {
       <div className="flex gap-6">
         {/* All applications */}
         <div className="flex-1 min-w-0">
-          <p className="text-[9px] font-bold tracking-[0.22em] uppercase mb-3 px-2.5" style={{ color: "rgba(249,115,22,0.55)" }}>All Applications</p>
+          <p className="text-[10px] font-bold tracking-[0.2em] uppercase mb-2.5 px-2.5" style={{ color: "rgba(249,115,22,0.9)" }}>All Applications</p>
           <div className="grid grid-cols-4 gap-x-1 gap-y-0">
             {applications.map((app) => (
               <Link key={app.slug} href={`/applications/${app.slug}`}
                 className="group flex items-start gap-2 px-2.5 py-2 rounded-lg transition-colors hover:bg-white/5"
               >
-                <div className="w-1 h-1 rounded-full flex-shrink-0" style={{ background: "rgba(249,115,22,0.4)", marginTop: 7 }} />
+                <div className="w-1 h-1 rounded-full flex-shrink-0" style={{ background: "rgba(249,115,22,0.5)", marginTop: 7 }} />
                 <div>
-                  <p className="text-sm font-semibold leading-tight group-hover:text-orange-400 transition-colors" style={{ color: "rgba(255,255,255,0.82)" }}>{app.name}</p>
+                  <p className="text-sm font-semibold leading-tight group-hover:text-orange-400 transition-colors" style={{ color: "#F5F0EB" }}>{app.name}</p>
                   {app.shortDesc && (
-                    <p className="text-[11px] mt-0.5 leading-snug" style={{ color: "rgba(255,255,255,0.35)" }}>{app.shortDesc}</p>
+                    <p className="text-[11px] mt-0.5 leading-snug" style={{ color: "rgba(255,255,255,0.55)" }}>{app.shortDesc}</p>
                   )}
                 </div>
               </Link>

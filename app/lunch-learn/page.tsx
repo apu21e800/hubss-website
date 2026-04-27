@@ -32,9 +32,9 @@ export default function LunchLearnPage() {
                 className="font-black mb-5"
                 style={{
                   color: "var(--text-primary)",
-                  fontSize: "clamp(3rem, 7vw, 5.5rem)",
+                  fontSize: "clamp(2rem, 4vw, 3.5rem)",
                   lineHeight: 1.04,
-                  letterSpacing: "-0.035em",
+                  letterSpacing: "-0.03em",
                 }}
               >
                 Lunch Is On Us.

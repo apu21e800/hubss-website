@@ -72,7 +72,7 @@ export default async function BlogPostPage({ params }: Props) {
       <Nav />
 
       {/* ── Cinematic hero ─────────────────────────────── */}
-      <header className="relative w-full overflow-hidden" style={{ height: "80vh", minHeight: 520 }}>
+      <header className="relative w-full overflow-hidden" style={{ height: "68vh", minHeight: 460 }}>
         {post.featuredImage ? (
           <Image
             src={post.featuredImage}
@@ -96,7 +96,7 @@ export default async function BlogPostPage({ params }: Props) {
 
         {/* Category + meta bar */}
         <div className="absolute top-0 inset-x-0" style={{ paddingTop: "6rem" }}>
-          <div className="max-w-5xl mx-auto px-6">
+          <div className="max-w-7xl mx-auto px-6">
             <div className="flex items-center gap-3 flex-wrap">
               {post.tags?.slice(0, 2).map((tag: string) => (
                 <span key={tag} style={{
@@ -115,18 +115,18 @@ export default async function BlogPostPage({ params }: Props) {
 
         {/* Title block — anchored to bottom */}
         <div className="absolute inset-x-0 bottom-0">
-          <div className="max-w-5xl mx-auto px-6 pb-14">
+          <div className="max-w-7xl mx-auto px-6 pb-14">
             {/* Orange rule */}
             <div style={{ width: 48, height: 3, background: "linear-gradient(90deg, #F97316, #EAB308)", borderRadius: 2, marginBottom: "1.25rem" }} />
 
             <h1 style={{
-              fontSize: "clamp(2rem, 4.5vw, 4rem)",
+              fontSize: "clamp(1.75rem, 3.2vw, 2.75rem)",
               fontWeight: 900,
-              lineHeight: 1.05,
-              letterSpacing: "-0.03em",
+              lineHeight: 1.08,
+              letterSpacing: "-0.025em",
               color: "#ffffff",
               marginBottom: "1.25rem",
-              maxWidth: "16em",
+              maxWidth: "22em",
               textShadow: "0 2px 20px rgba(0,0,0,0.4)",
             }}>
               {post.title}
@@ -157,8 +157,8 @@ export default async function BlogPostPage({ params }: Props) {
           {/* Excerpt / lede */}
           {post.excerpt && (
             <p style={{
-              fontSize: "clamp(1.1rem, 1.8vw, 1.3rem)",
-              lineHeight: 1.65,
+              fontSize: "1.05rem",
+              lineHeight: 1.7,
               color: "rgba(255,255,255,0.7)",
               borderLeft: "3px solid #F97316",
               paddingLeft: "1.25rem",
@@ -273,7 +273,7 @@ export default async function BlogPostPage({ params }: Props) {
               padding: "12px 28px", borderRadius: 8, textDecoration: "none",
               boxShadow: "0 4px 20px rgba(249,115,22,0.3)",
             }}>
-              Request Spec Sheet →
+              Request Spec Sheet &rarr;
             </Link>
             <Link href="/lunch-learn" style={{
               background: "transparent",

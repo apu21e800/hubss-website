@@ -56,9 +56,9 @@ export default function ProductsPage() {
             className="font-black mb-5"
             style={{
               color: "var(--text-primary)",
-              fontSize: "clamp(2.8rem, 7vw, 5.5rem)",
-              lineHeight: 0.95,
-              letterSpacing: "-0.035em",
+              fontSize: "clamp(2rem, 4vw, 3.5rem)",
+              lineHeight: 1.0,
+              letterSpacing: "-0.03em",
             }}
           >
             Surface Systems for the Built Environment

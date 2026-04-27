@@ -247,14 +247,14 @@ p {
 /* ─── Blog article prose overrides ───────────────────── */
 .blog-prose {
   color: #c9d1db;
-  font-size: 1.125rem;
-  line-height: 1.9;
+  font-size: 1rem;
+  line-height: 1.85;
   font-variant-ligatures: common-ligatures;
 }
 
 /* Opening paragraph — slightly elevated */
 .blog-prose > p:first-of-type {
-  font-size: 1.2rem;
+  font-size: 1.075rem;
   color: #d9e0eb;
   line-height: 1.8;
 }

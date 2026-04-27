@@ -1,443 +1,293 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { FileText, Download, Search, X, ChevronDown } from "lucide-react";
-import Link from "next/link";
 import type { ResourceDocument } from "@/lib/resource-documents";
+import { docTypeLabel } from "@/lib/documents";
 
-const TABS = ["By Product", "By Document Type"] as const;
-type TabType = (typeof TABS)[number];
-
-const DOCUMENT_TYPE_FILTERS = [
-  { label: "All", value: "All" },
-  { label: "Case Study", value: "Case Study" },
-  { label: "White Paper", value: "White Paper" },
-  { label: "Technical Data Sheet", value: "Data Sheet" },
-  { label: "Installation Guide", value: "Installation Guide" },
-];
-
-const DOCUMENT_TYPES = [
-  "All",
-  "Spec Sheet",
-  "Data Sheet",
-  "Brochure",
-  "Installation Guide",
-  "Design Manual",
-  "Colour Guide",
-  "Safety Data Sheet",
-  "Guide",
-  "Certificate",
-  "Other",
-];
-
-const PRODUCTS = [
-  { label: "All Products", value: "all" },
-  { label: "TrafficPatterns", value: "traffic-patterns" },
-  { label: "TrafficPatternsXD", value: "traffic-patterns-xd" },
-  { label: "StreetPrint", value: "streetprint" },
-  { label: "StreetBond", value: "streetbond" },
-  { label: "StreetBondSR", value: "streetbond-sr" },
-  { label: "MMAX", value: "mmax" },
-  { label: "DecoMark", value: "decomark" },
-  { label: "DuraShield", value: "durashield" },
-  { label: "PreMark", value: "premark" },
-  { label: "DuraTherm", value: "duratherm" },
-  { label: "AirMark", value: "airmark" },
-];
-
-const STREETBOND_SUBCATEGORIES = [
-  { label: "All StreetBond", value: "all" },
-  { label: "StreetBond", value: "StreetBond" },
-  { label: "SB120", value: "SB120" },
-  { label: "SB150", value: "SB150" },
-  { label: "Concrete Primer", value: "Concrete Primer" },
-  { label: "Pro 220", value: "Pro 220" },
-  { label: "Pro 250", value: "Pro 250" },
-];
-
-// Badge styles — monochrome, typography-differentiated
-function typeBadgeStyle(type: string): React.CSSProperties {
-  const isHighlighted = ["Spec Sheet", "Data Sheet", "Brochure", "Safety Data Sheet"].includes(type);
-  return {
-    color: isHighlighted ? "#f97316" : "rgba(255,255,255,0.4)",
-    background: "transparent",
-    border: "none",
-    padding: 0,
-    fontWeight: 700,
-    letterSpacing: "0.15em",
-  };
-}
-
-const PAGE_SIZE = 12;
-
-const selectStyle: React.CSSProperties = {
-  background: "#242424",
-  border: "1px solid rgba(255,255,255,0.1)",
-  color: "#e5e7eb",
-};
-
-function DocCard({ doc }: { doc: ResourceDocument }) {
+// ─── Icon ────────────────────────────────────────────────────────────────────
+function PdfIcon() {
   return (
-    <div
-      className="group rounded-xl p-5 flex flex-col justify-between transition-all duration-200"
-      style={{
-        background: "#1e1e1e",
-        border: "1px solid rgba(255,255,255,0.08)",
-      }}
-      onMouseEnter={e => {
-        (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(249,115,22,0.22)";
-        (e.currentTarget as HTMLDivElement).style.background = "#272727";
-      }}
-      onMouseLeave={e => {
-        (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(255,255,255,0.08)";
-        (e.currentTarget as HTMLDivElement).style.background = "#1e1e1e";
-      }}
-    >
-      <div>
-        <span
-          className="inline-block text-xs font-semibold px-2.5 py-1 rounded-md mb-4"
-          style={typeBadgeStyle(doc.type)}
-        >
-          {doc.type}
-        </span>
-        <h3 className="font-semibold leading-snug mb-2" style={{ color: "#F5F0EB" }}>{doc.title}</h3>
-        <span
-          className="inline-block text-xs px-2 py-0.5 rounded-full"
-          style={{ color: "#c96a18", background: "rgba(249,115,22,0.07)", border: "1px solid rgba(249,115,22,0.12)" }}
-        >
-          {doc.productName}
-        </span>
-      </div>
-      <div
-        className="flex items-center justify-between mt-5 pt-4"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
-      >
-        <div className="flex items-center gap-3 text-xs" style={{ color: "#6B7280" }}>
-          <span>{doc.fileSize}</span>
-          <span className="w-1 h-1 rounded-full" style={{ background: "rgba(255,255,255,0.15)" }} />
-          <span>{doc.updatedDate}</span>
-        </div>
-        <a
-          href={doc.fileUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors duration-200"
-          style={{ background: "rgba(255,255,255,0.08)", color: "#9CA3AF" }}
-          onMouseEnter={e => {
-            (e.currentTarget as HTMLAnchorElement).style.background = "#f97316";
-            (e.currentTarget as HTMLAnchorElement).style.color = "#ffffff";
-          }}
-          onMouseLeave={e => {
-            (e.currentTarget as HTMLAnchorElement).style.background = "rgba(255,255,255,0.08)";
-            (e.currentTarget as HTMLAnchorElement).style.color = "#9CA3AF";
-          }}
-        >
-          <Download className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">Download</span>
-        </a>
-      </div>
-    </div>
+    <svg className="w-4 h-4" style={{ color: "#F97316" }} fill="currentColor" viewBox="0 0 20 20">
+      <path
+        fillRule="evenodd"
+        d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
+        clipRule="evenodd"
+      />
+    </svg>
   );
 }
 
-export default function ResourcesClient({
-  documents,
-}: {
+// ─── Types ───────────────────────────────────────────────────────────────────
+type SortKey = "product" | "type" | "label";
+
+interface Props {
   documents: ResourceDocument[];
-}) {
-  const [search, setSearch] = useState("");
-  const [activeTab, setActiveTab] = useState<TabType>("By Product");
-  const [productFilter, setProductFilter] = useState("all");
-  const [subcategoryFilter, setSubcategoryFilter] = useState("all");
-  const [typeFilter, setTypeFilter] = useState("All");
-  const [docTypeFilter, setDocTypeFilter] = useState("All");
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+}
 
-  const filtered = useMemo(() => {
-    return documents.filter((doc) => {
-      if (search) {
-        const q = search.toLowerCase();
-        const matchesSearch =
-          doc.title.toLowerCase().includes(q) ||
-          doc.productName.toLowerCase().includes(q) ||
-          doc.type.toLowerCase().includes(q);
-        if (!matchesSearch) return false;
-      }
-      if (activeTab === "By Product" && productFilter !== "all") {
-        if (doc.product !== productFilter) return false;
-      }
-      if (activeTab === "By Product" && productFilter === "streetbond" && subcategoryFilter !== "all") {
-        if (doc.subcategory !== subcategoryFilter) return false;
-      }
-      if (activeTab === "By Document Type" && docTypeFilter !== "All") {
-        if (doc.type !== docTypeFilter) return false;
-      }
-      if (activeTab !== "By Document Type" && typeFilter !== "All") {
-        if (doc.type !== typeFilter) return false;
-      }
-      return true;
-    });
-  }, [documents, search, activeTab, productFilter, subcategoryFilter, typeFilter, docTypeFilter]);
-
-  const visible = filtered.slice(0, visibleCount);
-  const hasMore = visibleCount < filtered.length;
-
-  const hasActiveFilters =
-    search !== "" ||
-    (activeTab === "By Product" && productFilter !== "all") ||
-    (activeTab === "By Product" && subcategoryFilter !== "all") ||
-    (activeTab === "By Document Type" && docTypeFilter !== "All") ||
-    (activeTab !== "By Document Type" && typeFilter !== "All");
-
-  function clearAllFilters() {
-    setSearch("");
-    setProductFilter("all");
-    setSubcategoryFilter("all");
-    setTypeFilter("All");
-    setDocTypeFilter("All");
-    setVisibleCount(PAGE_SIZE);
-  }
-
-  function handleTabChange(tab: TabType) {
-    setActiveTab(tab);
-    setProductFilter("all");
-    setSubcategoryFilter("all");
-    setTypeFilter("All");
-    setDocTypeFilter("All");
-    setVisibleCount(PAGE_SIZE);
-  }
+// ─── Single doc row ───────────────────────────────────────────────────────────
+function DocRow({ doc }: { doc: ResourceDocument }) {
+  const displayLabel = doc.lang
+    ? `${doc.label} (${doc.lang.toUpperCase()})`
+    : doc.label;
 
   return (
-    <>
-      {/* ── Tab Navigation ─────────────────────────────────── */}
-      <div id="documents" className="scroll-mt-24 mb-8">
-        <div className="flex gap-2">
-          {TABS.map((tab) => (
-            <button
-              key={tab}
-              onClick={() => handleTabChange(tab)}
-              className="px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
-              style={{
-                background: activeTab === tab ? "#F97316" : "rgba(255,255,255,0.05)",
-                color: activeTab === tab ? "#ffffff" : "#9CA3AF",
-                border: activeTab === tab ? "1px solid transparent" : "1px solid rgba(255,255,255,0.08)",
-              }}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
-      </div>
+    <a
+      href={doc.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group flex items-center gap-3 rounded-lg px-4 py-3 transition-all"
+      style={{
+        background: "rgba(255,255,255,0.03)",
+        border: "1px solid rgba(255,255,255,0.07)",
+      }}
+      onMouseEnter={(e) => {
+        (e.currentTarget as HTMLAnchorElement).style.background = "rgba(249,115,22,0.07)";
+        (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(249,115,22,0.25)";
+      }}
+      onMouseLeave={(e) => {
+        (e.currentTarget as HTMLAnchorElement).style.background = "rgba(255,255,255,0.03)";
+        (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(255,255,255,0.07)";
+      }}
+    >
+      {/* PDF icon */}
+      <span
+        className="flex-shrink-0 w-8 h-8 rounded-md flex items-center justify-center"
+        style={{ background: "rgba(249,115,22,0.1)" }}
+      >
+        <PdfIcon />
+      </span>
 
-      {/* ── Search + Filter Bar ──────────────────────────── */}
-      <div className="flex flex-col sm:flex-row gap-3 mb-8">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "#6B7280" }} />
+      {/* Label */}
+      <span
+        className="flex-1 text-sm font-medium truncate min-w-0"
+        style={{ color: "#e5e7eb" }}
+      >
+        {displayLabel}
+      </span>
+
+      {/* Type badge */}
+      <span
+        className="flex-shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded hidden sm:inline"
+        style={{
+          background: "rgba(249,115,22,0.08)",
+          color: "#F97316",
+          border: "1px solid rgba(249,115,22,0.18)",
+        }}
+      >
+        {doc.typeLabel}
+      </span>
+
+      {/* Download arrow */}
+      <svg
+        className="w-4 h-4 flex-shrink-0 transition-transform group-hover:translate-y-0.5"
+        style={{ color: "rgba(255,255,255,0.25)" }}
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+        />
+      </svg>
+    </a>
+  );
+}
+
+// ─── Main component ───────────────────────────────────────────────────────────
+export default function ResourcesClient({ documents }: Props) {
+  const [search, setSearch] = useState("");
+  const [productFilter, setProductFilter] = useState("all");
+  const [typeFilter, setTypeFilter] = useState("all");
+  const [sort, setSort] = useState<SortKey>("product");
+
+  // Unique product labels
+  const products = useMemo(() => {
+    const seen = new Map<string, string>();
+    for (const d of documents) seen.set(d.productSlug, d.productLabel);
+    return Array.from(seen.entries()).map(([slug, label]) => ({ slug, label }));
+  }, [documents]);
+
+  // Unique doc types present
+  const types = useMemo(() => {
+    const seen = new Set<string>();
+    for (const d of documents) seen.add(d.type);
+    return Array.from(seen).map((t) => ({
+      value: t,
+      label: docTypeLabel[t as keyof typeof docTypeLabel] ?? t,
+    }));
+  }, [documents]);
+
+  // Filter + search + sort
+  const filtered = useMemo(() => {
+    let result = documents;
+    if (productFilter !== "all")
+      result = result.filter((d) => d.productSlug === productFilter);
+    if (typeFilter !== "all")
+      result = result.filter((d) => d.type === typeFilter);
+    if (search.trim()) {
+      const q = search.toLowerCase();
+      result = result.filter(
+        (d) =>
+          d.label.toLowerCase().includes(q) ||
+          d.productLabel.toLowerCase().includes(q) ||
+          d.typeLabel.toLowerCase().includes(q)
+      );
+    }
+    if (sort === "product")
+      result = [...result].sort((a, b) =>
+        a.productLabel.localeCompare(b.productLabel) ||
+        a.label.localeCompare(b.label)
+      );
+    else if (sort === "type")
+      result = [...result].sort((a, b) =>
+        a.typeLabel.localeCompare(b.typeLabel) ||
+        a.label.localeCompare(b.label)
+      );
+    else
+      result = [...result].sort((a, b) => a.label.localeCompare(b.label));
+    return result;
+  }, [documents, productFilter, typeFilter, search, sort]);
+
+  // Group by product when sorted by product
+  const grouped = useMemo(() => {
+    if (sort !== "product") return null;
+    const map = new Map<string, { label: string; docs: ResourceDocument[] }>();
+    for (const doc of filtered) {
+      if (!map.has(doc.productSlug))
+        map.set(doc.productSlug, { label: doc.productLabel, docs: [] });
+      map.get(doc.productSlug)!.docs.push(doc);
+    }
+    return Array.from(map.values());
+  }, [filtered, sort]);
+
+  const chipStyle = (active: boolean): React.CSSProperties => ({
+    background: active ? "#F97316" : "rgba(255,255,255,0.05)",
+    color: active ? "#fff" : "#9ca3af",
+    border: `1px solid ${active ? "#F97316" : "rgba(255,255,255,0.1)"}`,
+    borderRadius: 20,
+    padding: "5px 14px",
+    fontSize: 12,
+    fontWeight: 600,
+    cursor: "pointer",
+    whiteSpace: "nowrap" as const,
+    transition: "all 0.15s",
+  });
+
+  return (
+    <div>
+      {/* ── Controls ─────────────────────────────────────── */}
+      <div className="flex flex-col gap-4 mb-8">
+        {/* Search + Sort row */}
+        <div className="flex flex-col sm:flex-row gap-3">
           <input
-            type="text"
-            placeholder="Search documents..."
+            type="search"
+            placeholder="Search documents…"
             value={search}
-            onChange={(e) => {
-              setSearch(e.target.value);
-              setVisibleCount(PAGE_SIZE);
+            onChange={(e) => setSearch(e.target.value)}
+            className="flex-1 rounded-lg px-4 py-2.5 text-sm outline-none"
+            style={{
+              background: "rgba(255,255,255,0.05)",
+              border: "1px solid rgba(255,255,255,0.1)",
+              color: "#F5F0EB",
             }}
-            className="w-full pl-10 pr-4 py-3 rounded-lg text-sm transition-colors outline-none focus:ring-1 focus:ring-[#F97316]/40"
-            style={selectStyle}
           />
-          {search && (
-            <button
-              onClick={() => setSearch("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 hover:text-zinc-300 transition-colors"
-              style={{ color: "#6B7280" }}
-            >
-              <X className="w-4 h-4" />
-            </button>
-          )}
+          <select
+            value={sort}
+            onChange={(e) => setSort(e.target.value as SortKey)}
+            className="rounded-lg px-4 py-2.5 text-sm outline-none"
+            style={{
+              background: "rgba(255,255,255,0.05)",
+              border: "1px solid rgba(255,255,255,0.1)",
+              color: "#9ca3af",
+              minWidth: 160,
+            }}
+          >
+            <option value="product">Sort by Product</option>
+            <option value="type">Sort by Type</option>
+            <option value="label">Sort by Name</option>
+          </select>
         </div>
 
-        {activeTab === "By Product" && (
-          <div className="relative">
-            <select
-              value={productFilter}
-              onChange={(e) => {
-                setProductFilter(e.target.value);
-                setSubcategoryFilter("all");
-                setVisibleCount(PAGE_SIZE);
-              }}
-              className="appearance-none w-full sm:w-48 px-4 py-3 pr-10 rounded-lg text-sm cursor-pointer outline-none focus:ring-1 focus:ring-[#F97316]/40"
-              style={selectStyle}
-            >
-              {PRODUCTS.map((p) => (
-                <option key={p.value} value={p.value}>{p.label}</option>
-              ))}
-            </select>
-            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: "#6B7280" }} />
-          </div>
-        )}
-
-        {activeTab !== "By Document Type" && (
-          <div className="relative">
-            <select
-              value={typeFilter}
-              onChange={(e) => {
-                setTypeFilter(e.target.value);
-                setVisibleCount(PAGE_SIZE);
-              }}
-              className="appearance-none w-full sm:w-48 px-4 py-3 pr-10 rounded-lg text-sm cursor-pointer outline-none focus:ring-1 focus:ring-[#F97316]/40"
-              style={selectStyle}
-            >
-              {DOCUMENT_TYPES.map((t) => (
-                <option key={t} value={t}>{t === "All" ? "All Types" : t}</option>
-              ))}
-            </select>
-            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: "#6B7280" }} />
-          </div>
-        )}
-
-        {hasActiveFilters && (
+        {/* Product filter chips */}
+        <div className="flex flex-wrap gap-2">
           <button
-            onClick={clearAllFilters}
-            className="text-sm transition-colors whitespace-nowrap py-3 px-2 hover:text-orange-400"
-            style={{ color: "#F97316" }}
+            style={chipStyle(productFilter === "all")}
+            onClick={() => setProductFilter("all")}
           >
-            Clear all filters
+            All Products
           </button>
-        )}
+          {products.map((p) => (
+            <button
+              key={p.slug}
+              style={chipStyle(productFilter === p.slug)}
+              onClick={() => setProductFilter(p.slug)}
+            >
+              {p.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Type filter chips */}
+        <div className="flex flex-wrap gap-2">
+          <button
+            style={chipStyle(typeFilter === "all")}
+            onClick={() => setTypeFilter("all")}
+          >
+            All Types
+          </button>
+          {types.map((t) => (
+            <button
+              key={t.value}
+              style={chipStyle(typeFilter === t.value)}
+              onClick={() => setTypeFilter(t.value)}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* ── Document Type Pills ──────────────────────────── */}
-      {activeTab === "By Document Type" && (
-        <div className="flex flex-wrap gap-2 mb-6">
-          {DOCUMENT_TYPE_FILTERS.map((dt) => (
-            <button
-              key={dt.value}
-              onClick={() => {
-                setDocTypeFilter(dt.value);
-                setVisibleCount(PAGE_SIZE);
-              }}
-              className="px-4 py-2 rounded-full text-sm font-medium transition-all duration-200"
-              style={
-                docTypeFilter === dt.value
-                  ? { background: "#F97316", color: "#fff", border: "1px solid transparent" }
-                  : { background: "rgba(255,255,255,0.04)", color: "#6B7280", border: "1px solid rgba(255,255,255,0.08)" }
-              }
-            >
-              {dt.label}
-            </button>
-          ))}
-        </div>
-      )}
-
-      {/* ── StreetBond Subcategory Pills ─────────────────── */}
-      {activeTab === "By Product" && productFilter === "streetbond" && (
-        <div className="flex flex-wrap gap-2 mb-6">
-          {STREETBOND_SUBCATEGORIES.map((sc) => (
-            <button
-              key={sc.value}
-              onClick={() => {
-                setSubcategoryFilter(sc.value);
-                setVisibleCount(PAGE_SIZE);
-              }}
-              className="px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200"
-              style={
-                subcategoryFilter === sc.value
-                  ? { background: "#F97316", color: "#fff", border: "1px solid transparent" }
-                  : { background: "rgba(255,255,255,0.04)", color: "#6B7280", border: "1px solid rgba(255,255,255,0.08)" }
-              }
-            >
-              {sc.label}
-            </button>
-          ))}
-        </div>
-      )}
-
-      {/* ── Results count ────────────────────────────────── */}
-      <p className="text-sm mb-6" style={{ color: "#6B7280" }}>
-        {filtered.length} document{filtered.length !== 1 ? "s" : ""} found
+      {/* ── Results count ─────────────────────────────────── */}
+      <p className="text-xs mb-6" style={{ color: "#6B7280" }}>
+        {filtered.length} document{filtered.length !== 1 ? "s" : ""}
+        {search || productFilter !== "all" || typeFilter !== "all" ? " matching filters" : " total"}
       </p>
 
-      {/* ── Document Grid ────────────────────────────────── */}
-      {visible.length > 0 ? (
-        <>
-          {activeTab === "By Product" && productFilter === "all" && typeFilter === "All" && !search ? (
-            (() => {
-              const grouped: Record<string, ResourceDocument[]> = {};
-              for (const doc of visible) {
-                if (!grouped[doc.productName]) grouped[doc.productName] = [];
-                grouped[doc.productName].push(doc);
-              }
-              return (
-                <div className="space-y-12">
-                  {Object.entries(grouped).map(([productName, docs]) => (
-                    <div key={productName}>
-                      <div className="flex items-center gap-4 mb-6">
-                        <h3 className="text-sm font-bold tracking-widest uppercase" style={{ color: "#F97316" }}>
-                          {productName}
-                        </h3>
-                        <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.08)" }} />
-                        <span className="text-xs" style={{ color: "#6B7280" }}>{docs.length} doc{docs.length !== 1 ? "s" : ""}</span>
-                      </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                        {docs.map((doc) => (
-                          <DocCard key={doc.id} doc={doc} />
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              );
-            })()
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {visible.map((doc) => (
-                <DocCard key={doc.id} doc={doc} />
-              ))}
+      {/* ── Document list ─────────────────────────────────── */}
+      {filtered.length === 0 ? (
+        <p className="text-sm" style={{ color: "#6B7280" }}>No documents match your search.</p>
+      ) : grouped ? (
+        <div className="space-y-10">
+          {grouped.map((group) => (
+            <div key={group.label}>
+              {/* Product heading */}
+              <div className="flex items-center gap-4 mb-4">
+                <h3 className="text-sm font-bold tracking-widest uppercase" style={{ color: "#F97316" }}>
+                  {group.label}
+                </h3>
+                <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.07)" }} />
+                <span className="text-xs" style={{ color: "#6B7280" }}>
+                  {group.docs.length} file{group.docs.length !== 1 ? "s" : ""}
+                </span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {group.docs.map((doc) => (
+                  <DocRow key={`${doc.productSlug}-${doc.href}`} doc={doc} />
+                ))}
+              </div>
             </div>
-          )}
-
-          {hasMore && (
-            <div className="text-center mt-10">
-              <button
-                onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
-                className="px-8 py-3 rounded-lg text-sm font-medium transition-all duration-200 hover:text-[#F97316] hover:border-[#F97316]/30"
-                style={{
-                  background: "transparent",
-                  border: "1px solid rgba(255,255,255,0.12)",
-                  color: "#9CA3AF",
-                }}
-              >
-                Load more ({filtered.length - visibleCount} remaining)
-              </button>
-            </div>
-          )}
-        </>
+          ))}
+        </div>
       ) : (
-        <div className="text-center py-20">
-          <FileText className="w-12 h-12 mx-auto mb-4" style={{ color: "rgba(255,255,255,0.15)" }} />
-          <h3 className="text-xl font-semibold mb-2" style={{ color: "#F5F0EB" }}>
-            No documents found
-          </h3>
-          <p className="mb-6" style={{ color: "#6B7280" }}>
-            Try adjusting your filters or search terms
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <button
-              onClick={clearAllFilters}
-              className="px-6 py-2.5 rounded-lg text-sm font-medium transition-all hover:brightness-110"
-              style={{ background: "#F97316", color: "#fff" }}
-            >
-              Clear all filters
-            </button>
-            <Link
-              href="/contact"
-              className="px-6 py-2.5 rounded-lg text-sm font-medium transition-all hover:text-white hover:border-white/20"
-              style={{ border: "1px solid rgba(255,255,255,0.12)", color: "#9CA3AF" }}
-            >
-              Can&apos;t find what you need? Contact us &rarr;
-            </Link>
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          {filtered.map((doc) => (
+            <DocRow key={`${doc.productSlug}-${doc.href}`} doc={doc} />
+          ))}
         </div>
       )}
-    </>
+    </div>
   );
 }

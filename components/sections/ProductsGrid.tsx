@@ -31,15 +31,6 @@ const PRODUCT_TYPE: Record<string, string> = {
   "decomark":            "Custom Graphics",
 };
 
-const PRODUCT_STAT: Record<string, string> = {
-  "streetprint":         "20+ yr proven life",
-  "streetbond":          "UV-stable · won't peel",
-  "traffic-patterns-xd": "BPN 65+ certified",
-  "traffic-patterns":    "Outlasts paint 5–8×",
-  "mmax":                "Traffic-ready in 60 min",
-  "decomark":            "Full Pantone match",
-};
-
 const PRODUCT_APPS: Record<string, string[]> = {
   "streetprint":         ["Crosswalks", "Driveways", "Plazas", "Intersections"],
   "streetbond":          ["Bike Lanes", "Bus Lanes", "Driveways", "Paths"],
@@ -129,7 +120,6 @@ export default function ProductsGrid() {
               : product.name;
             const apps = PRODUCT_APPS[product.slug] ?? [];
             const type = PRODUCT_TYPE[product.slug];
-            const stat = PRODUCT_STAT[product.slug];
             const what = PRODUCT_WHAT[product.slug];
 
             return (
@@ -179,26 +169,12 @@ export default function ProductsGrid() {
                           "linear-gradient(to bottom, transparent 40%, rgba(15,20,32,0.75) 100%)",
                       }}
                     />
-                    {/* Type badge — floats over image bottom-left */}
-                    <div className="absolute bottom-3 left-3">
-                      <span
-                        className="inline-block text-[10px] font-bold tracking-[0.1em] uppercase px-2.5 py-1 rounded-md"
-                        style={{
-                          background: "rgba(249,115,22,0.18)",
-                          color: "rgba(249,115,22,0.95)",
-                          backdropFilter: "blur(8px)",
-                          border: "1px solid rgba(249,115,22,0.25)",
-                        }}
-                      >
-                        {type}
-                      </span>
-                    </div>
                   </div>
 
                   {/* Card body */}
                   <div className="flex flex-col flex-1 p-5">
 
-                    {/* Product name + stat */}
+                    {/* Product name + type pill */}
                     <div className="flex items-start justify-between gap-3 mb-3">
                       <h3
                         className="font-bold text-[16px] leading-snug transition-colors duration-200 group-hover:text-orange-400"
@@ -206,9 +182,9 @@ export default function ProductsGrid() {
                       >
                         {product.name}
                       </h3>
-                      {stat && (
+                      {type && (
                         <span
-                          className="flex-shrink-0 text-[10px] font-semibold px-2 py-1 rounded-md mt-0.5"
+                          className="flex-shrink-0 text-[10px] font-bold tracking-[0.08em] uppercase px-2.5 py-1 rounded-md mt-0.5"
                           style={{
                             background: "rgba(249,115,22,0.12)",
                             color: "rgba(249,115,22,0.9)",
@@ -216,7 +192,7 @@ export default function ProductsGrid() {
                             whiteSpace: "nowrap",
                           }}
                         >
-                          {stat}
+                          {type}
                         </span>
                       )}
                     </div>

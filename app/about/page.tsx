@@ -49,7 +49,7 @@ export default function AboutPage() {
     <main style={{ background: "#0f1620", minHeight: "100vh" }}>
       <Nav />
 
-      {/* ── Hero ───────────────────────────────────────────── */}
+      {/* ── Hero ──────────────────────────────── */}
       <div className="relative overflow-hidden min-h-[500px]" style={{ background: "#0d1117" }}>
         {/* Hero image */}
         <Image
@@ -69,7 +69,7 @@ export default function AboutPage() {
           aria-hidden="true"
         />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-24 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-36 pb-16 sm:pb-24 relative z-10">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "#f97316" }}>
             Canadian-Operated Since 1994 · All 10 Provinces
           </p>
@@ -92,7 +92,7 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* ── Stats Bar ───────────────────────────────────────── */}
+      {/* ── Stats Bar ───────────────────────── */}
       <div style={{ background: "#141b2d", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/[0.06]">
@@ -113,7 +113,7 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* ── Story ───────────────────────────────────────────── */}
+      {/* ── Story ──────────────────────────────── */}
       <div className="py-28" style={{ background: "#0f1620" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
@@ -173,21 +173,18 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* ── Values — 3 columns ─────────────────────────────── */}
+      {/* ── Values — 3 columns ────────────────────── */}
       <div style={{ background: "#141b2d", borderTop: "1px solid rgba(255,255,255,0.05)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-12" style={{ color: "#f97316" }}>
             What We Stand For
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-0" style={{ border: "1px solid rgba(255,255,255,0.06)", borderRadius: "16px", overflow: "hidden" }}>
-            {values.map((v, i) => (
+          <div className="grid grid-cols-1 md:grid-cols-3 divide-y divide-white/[0.06] md:divide-y-0 md:divide-x md:divide-white/[0.06]" style={{ border: "1px solid rgba(255,255,255,0.06)", borderRadius: "16px", overflow: "hidden" }}>
+            {values.map((v) => (
               <div
                 key={v.heading}
                 className="p-8 md:p-10"
-                style={{
-                  background: "#1a1e28",
-                  borderRight: i < values.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none",
-                }}
+                style={{ background: "#1a1e28" }}
               >
                 <div className="w-8 h-[2px] mb-6" style={{ background: "#f97316" }} />
                 <h3 className="text-lg font-bold mb-4" style={{ color: "#ffffff" }}>{v.heading}</h3>
@@ -202,7 +199,7 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* ── Offices ─────────────────────────────────────────── */}
+      {/* ── Offices ───────────────────────────── */}
       <div className="py-20" style={{ background: "#0f1620" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold mb-10" style={{ color: "#ffffff" }}>Regional Offices</h2>
@@ -270,7 +267,7 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* ── Why HUB ─────────────────────────────────────────── */}
+      {/* ── Why HUB ───────────────────────────── */}
       <div className="py-28" style={{ background: "#0d1117" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold mb-12" style={{ color: "#ffffff" }}>Why HUB</h2>
@@ -290,7 +287,7 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* ── Manufacturer Partners ────────────────────────────── */}
+      {/* ── Manufacturer Partners ────────────────────── */}
       <div className="py-20" style={{ background: "#0f1620" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "#f97316" }}>
@@ -338,23 +335,23 @@ export default function AboutPage() {
 
                 {/* Logo header */}
                 <div
-                  className="flex items-center justify-between gap-6 px-8 py-6"
+                  className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-5 sm:px-8 py-5 sm:py-6"
                   style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
                 >
                   <div
                     className="flex items-center justify-center rounded-lg flex-shrink-0"
-                    style={{ background: "#ffffff", width: 120, height: 60, padding: "10px 16px" }}
+                    style={{ background: "#ffffff", width: 100, height: 52, padding: "8px 14px" }}
                   >
                     <Image
                       src={partner.logo}
                       width={partner.logoW}
                       height={partner.logoH}
                       alt={partner.name}
-                      style={{ maxHeight: 36, width: "auto", objectFit: "contain" }}
+                      style={{ maxHeight: 32, width: "auto", objectFit: "contain" }}
                       unoptimized
                     />
                   </div>
-                  <div className="flex flex-wrap gap-1.5 justify-end">
+                  <div className="flex flex-wrap gap-1.5">
                     {partner.products.map((p) => (
                       <span
                         key={p}
@@ -372,7 +369,7 @@ export default function AboutPage() {
                 </div>
 
                 {/* Content */}
-                <div className="px-8 py-6">
+                <div className="px-5 sm:px-8 py-5 sm:py-6">
                   <h3 className="text-2xl font-bold mb-1" style={{ color: "#ffffff" }}>
                     {partner.name}
                   </h3>

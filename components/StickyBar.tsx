@@ -29,6 +29,7 @@ export default function StickyBar() {
           background: "#0d1117",
           borderTop: "1px solid rgba(255,255,255,0.08)",
           boxShadow: "0 -4px 24px rgba(0,0,0,0.35)",
+          paddingBottom: "max(12px, env(safe-area-inset-bottom))",
         }}
       >
         {/* Brand caption — desktop only */}
@@ -40,10 +41,11 @@ export default function StickyBar() {
         <div className="flex items-center gap-2.5 w-full lg:w-auto">
           <Link
             href="/contact"
-            className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 border text-white px-5 py-2.5 text-[12px] font-bold tracking-[0.04em] transition-all whitespace-nowrap"
+            className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 border text-white px-5 text-[12px] font-bold tracking-[0.04em] transition-all whitespace-nowrap"
             style={{
               borderColor: "rgba(255,255,255,0.2)",
               borderRadius: "6px",
+              minHeight: "44px",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.borderColor = "rgba(255,255,255,0.45)";
@@ -58,11 +60,12 @@ export default function StickyBar() {
           </Link>
           <Link
             href="/lunch-learn"
-            className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 text-white px-5 py-2.5 text-[12px] font-bold tracking-[0.04em] transition-colors whitespace-nowrap"
+            className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 text-white px-5 text-[12px] font-bold tracking-[0.04em] transition-colors whitespace-nowrap"
             style={{
               background: "#F97316",
               borderRadius: "6px",
               boxShadow: "0 2px 14px rgba(249,115,22,0.35)",
+              minHeight: "44px",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = "#EA6C05";

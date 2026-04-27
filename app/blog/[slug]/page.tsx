@@ -71,7 +71,7 @@ export default async function BlogPostPage({ params }: Props) {
       <JsonLd data={articleSchema} />
       <Nav />
 
-      {/* ── Cinematic hero ─────────────────────────────── */}
+      {/* ── Cinematic hero ────────────────────── */}
       <header className="relative w-full overflow-hidden" style={{ height: "68vh", minHeight: 460 }}>
         {post.featuredImage ? (
           <Image
@@ -146,11 +146,11 @@ export default async function BlogPostPage({ params }: Props) {
         </div>
       </header>
 
-      {/* ── Orange accent divider ───────────────────────── */}
+      {/* ── Orange accent divider ─────────────────── */}
       <div style={{ height: 2, background: "linear-gradient(90deg, #F97316 0%, #EAB308 50%, transparent 100%)" }} />
 
-      {/* ── Article layout ─────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-6 pt-14 pb-8 lg:grid lg:gap-16" style={{ gridTemplateColumns: "1fr 220px" }}>
+      {/* ── Article layout ────────────────────── */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-8 lg:grid lg:gap-16" style={{ gridTemplateColumns: "1fr 220px" }}>
 
         {/* Article body */}
         <article className="blog-prose prose prose-invert" style={{ maxWidth: "72ch" }}>
@@ -246,8 +246,8 @@ export default async function BlogPostPage({ params }: Props) {
         </aside>
       </div>
 
-      {/* ── Editorial CTA ───────────────────────────────── */}
-      <div className="max-w-5xl mx-auto px-6 py-12">
+      {/* ── Editorial CTA ─────────────────────── */}
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
         <div style={{
           background: "linear-gradient(135deg, rgba(249,115,22,0.08) 0%, rgba(249,115,22,0.03) 100%)",
           border: "1px solid rgba(249,115,22,0.2)",
@@ -273,7 +273,7 @@ export default async function BlogPostPage({ params }: Props) {
               padding: "12px 28px", borderRadius: 8, textDecoration: "none",
               boxShadow: "0 4px 20px rgba(249,115,22,0.3)",
             }}>
-              Request Spec Sheet &rarr;
+              Request Spec Sheet →
             </Link>
             <Link href="/lunch-learn" style={{
               background: "transparent",
@@ -287,9 +287,9 @@ export default async function BlogPostPage({ params }: Props) {
         </div>
       </div>
 
-      {/* ── Related posts ───────────────────────────────── */}
+      {/* ── Related posts ─────────────────────── */}
       <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", background: "#0c0c0c" }}>
-        <div className="max-w-7xl mx-auto px-6 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
           <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#F97316", marginBottom: 20 }}>
             Continue Reading
           </p>

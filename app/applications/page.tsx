@@ -16,7 +16,7 @@ export default function ApplicationsPage() {
   return (
     <main style={{ background: "#0f1620", minHeight: "100vh" }}>
       <Nav />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-16 sm:pb-24">
         <div className="mb-16 max-w-2xl">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-3" style={{ color: "#f97316" }}>
             Applications

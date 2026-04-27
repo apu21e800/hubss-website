@@ -19,11 +19,11 @@ function gallery(slug: string, dir: string, count: number, ext: string = "jpg"):
 }
 
 export const products: Product[] = [
-  // ── Flagship Group ────────────────────────────────────────────────────────────────────────
+  // ── Flagship Group ─────────────────────────────────────────────────────────────────────────────────────
   {
     name: "TrafficPatternsXD",
     slug: "traffic-patterns-xd",
-    shortDesc: "Heavy-duty thermoplastic for BRT corridors and high-volume intersections.",
+    shortDesc: "BRT-grade thermoplastic for the highest-volume intersections.",
     imageUrl: "/images/products/traffic-patterns-xd/traffic-patterns-xd-03.jpg",
     gallery: [1,2,4,7,10,13,16,19,22,25,28,31,34,37,40,43,46,49,52,55,58,61,64,67,70,73,76,79,82,85,88,91,94,97,100,103,106,109,112,115,118,121,124,127,129,130,133,136,139,143].map(n =>
       `/images/products/traffic-patterns-xd/traffic-patterns-xd-${String(n).padStart(2, "0")}.jpg`),
@@ -42,7 +42,7 @@ export const products: Product[] = [
   {
     name: "TrafficPatterns",
     slug: "traffic-patterns",
-    shortDesc: "Preformed thermoplastic road markings that outlast paint by seasons, not months.",
+    shortDesc: "Preformed thermoplastic markings that outlast paint for seasons.",
     imageUrl: "/images/products/traffic-patterns/traffic-patterns-01.jpg",
     gallery: gallery("traffic-patterns", "traffic-patterns", 86),
     description: "Paint crews come back every spring. TrafficPatterns doesn't ask them to. Factory-manufactured preformed thermoplastic road markings — crosswalk bars, stop lines, bicycle symbols, stencils — that heat-fuse permanently to asphalt and concrete, eliminating the repainting cycle that drains municipal maintenance budgets year after year. Manufactured to 90mil thickness with ASTM D4956 Type III retroreflective glass beads embedded through the full cross-section, not just the surface, TrafficPatterns stays visible after the top layer wears. It opens to traffic within hours of installation, survives snowplow blades, de-icing salts, and Canadian freeze-thaw cycles that fracture surface paint. Specified by municipalities from Halifax to Vancouver for crosswalks, bike lanes, and regulatory markings where long-term performance matters more than lowest initial bid.",
@@ -60,7 +60,7 @@ export const products: Product[] = [
   {
     name: "StreetBond",
     slug: "streetbond",
-    shortDesc: "Coloured pavement coating that moves with asphalt and never peels.",
+    shortDesc: "Flexible colour coat — bonds permanently, never peels.",
     imageUrl: "/images/products/streetbond/streetbond-01.png",
     gallery: [
       // Product renders
@@ -100,7 +100,7 @@ export const products: Product[] = [
   {
     name: "StreetPrint",
     slug: "streetprint",
-    shortDesc: "Stamped asphalt that looks like stone — at a fraction of the cost and maintenance.",
+    shortDesc: "In-place stamped asphalt. Stone look, no demolition.",
     imageUrl: "/images/products/streetprint/streetprint-01.jpg",
     gallery: [1,3,5,7,9,10,11,13,15,17,19,21,23,25,27,29,31,32,33,35,37,39,41,43,45,47,49,51,53,55,56,57,59,61,63,65,67,69,71,73,75,77,79,80,81,83,85,87,89,91].map(n =>
       `/images/products/streetprint/streetprint-${String(n).padStart(2, "0")}.jpg`),
@@ -117,11 +117,11 @@ export const products: Product[] = [
     relatedApplications: ["crosswalks", "private-driveways", "community-branding", "parking-lots"],
   },
 
-  // ── Specialty & Regulatory Group ───────────────────────────────────────────────────────────────────────────
+  // ── Specialty & Regulatory Group ───────────────────────────────────────────────────────────────────────────────────────────────────────────
   {
     name: "DecoMark",
     slug: "decomark",
-    shortDesc: "Custom thermoplastic graphics — murals, cultural art, and civic landmarks at street scale.",
+    shortDesc: "Custom art and murals, permanently in the pavement.",
     imageUrl: "/images/products/decomark/decomark-01.jpg",
     gallery: gallery("decomark", "decomark", 78),
     description: "A crosswalk is a canvas. DecoMark is how you paint it permanently. Precision preformed thermoplastic components, fabricated to vector artwork and Pantone colour specifications, heat-fused to the road surface to create graphics that survive snowplow cycles, winter salt, and years of traffic without fading or peeling. Used for Pride crosswalks in downtown corridors, Indigenous cultural recognition art in partnership with First Nations, neighbourhood identity installations, school zone graphics, and mural-scale public art that asks the street itself to tell a community's story. If you can design it in a vector file, DecoMark can put it on the road — accurately, durably, and at the scale a city deserves.",
@@ -139,7 +139,7 @@ export const products: Product[] = [
   {
     name: "MMAX",
     slug: "mmax",
-    shortDesc: "MMA resin lane coating — traffic-ready in under an hour, even in cold weather.",
+    shortDesc: "MMA resin lane coating — traffic-ready in 60 minutes.",
     imageUrl: "/images/products/mmax/mmax-01.jpg",
     gallery: gallery("mmax", "mmax", 33),
     description: "Transit agencies can't shut down a bus lane for a full day while a coating cures. MMAX is built around that reality. A methyl methacrylate (MMA) resin system that achieves full cure in 30-60 minutes and reaches traffic-ready hardness before the overnight window closes. Bond strength exceeds 3 MPa — outlasting epoxy and acrylic alternatives in high-shear zones at bus stops and turning radii. Application temperature down to -10°C means installation crews aren't waiting for a weather window that never comes. The go-to specification for coloured bus lanes, protected bike lanes, and transit priority zones where a painted alternative has already failed and the operations team won't accept another temporary fix.",
@@ -157,7 +157,7 @@ export const products: Product[] = [
   {
     name: "StreetBondSR",
     slug: "streetbondsr",
-    shortDesc: "High-SRI solar reflective coating — urban heat island mitigation that earns LEED credits.",
+    shortDesc: "Solar reflective coating — heat island mitigation, LEED-eligible.",
     imageUrl: "/images/products/streetbondsr/streetbondsr-02.jpg",
     gallery: [
       "/images/products/streetbondsr/streetbondsr-01.png",
@@ -194,7 +194,7 @@ export const products: Product[] = [
   {
     name: "DuraTherm",
     slug: "duratherm",
-    shortDesc: "Inlaid thermoplastic — flush to the road surface, invisible to snowplows.",
+    shortDesc: "Flush-inlaid thermoplastic. Zero profile. Snowplow-safe.",
     imageUrl: "/images/products/duratherm/duratherm-01.jpg",
     gallery: gallery("duratherm", "duratherm", 36),
     description: "Every raised pavement marking is a liability when the snowplow comes through. DuraTherm eliminates the problem entirely — an inlaid flush-mount thermoplastic system embedded into the asphalt surface at road level, with zero profile above grade. No shear edge. No trip hazard. No seasonal damage from winter maintenance equipment. Custom artwork, logos, and wayfinding graphics are precision-fabricated and set directly into the asphalt matrix, fusing below the road surface plane rather than sitting on top of it. The result is permanent graphic inlay that survives plowing, sanding, and de-icing indefinitely. The preferred specification wherever surface graphics must coexist with heavy winter maintenance or high pedestrian traffic.",
@@ -211,7 +211,7 @@ export const products: Product[] = [
   {
     name: "DuraShield",
     slug: "durashield",
-    shortDesc: "Penetrating asphalt rejuvenator — extend pavement life for a fraction of replacement cost.",
+    shortDesc: "Penetrating rejuvenator — extends pavement life, not replacement cost.",
     imageUrl: "/images/products/durashield/durashield-01.jpg",
     gallery: gallery("durashield", "durashield", 10),
     description: "Asphalt oxidizes. The oils that give it flexibility migrate over time, leaving a brittle, grey surface that cracks under load and lets water in. Once water gets in, freeze-thaw takes over — and what was a maintenance problem becomes a replacement project. DuraShield is a penetrating asphalt rejuvenator that reverses this process: penetrating 6-12mm into the surface, replenishing the maltene fraction, restoring flexibility, and sealing the top against water infiltration. Applied as part of a proactive maintenance program, DuraShield meaningfully extends pavement service life at a fraction of the cost of mill-and-overlay. The rational choice for municipalities, property managers, and facility teams that would rather maintain a surface than replace it.",
@@ -228,7 +228,7 @@ export const products: Product[] = [
   {
     name: "AirMark",
     slug: "airmark",
-    shortDesc: "Preformed thermoplastic airfield markings — precision-formed, certified, and built to outlast paint.",
+    shortDesc: "Certified airfield markings — precision-formed, outlasts paint.",
     imageUrl: "/images/products/airmark/airmark-01.jpg",
     gallery: gallery("airmark", "airmark", 22),
     description: "Airfield markings are safety-critical — precision, visibility, and permanence are not negotiable. AirMark preformed thermoplastic airfield markings are engineered to airfield marking standards, delivering consistent dimensional accuracy, premium retroreflectivity through full-depth glass bead construction, and a service life that significantly outlasts painted alternatives. Heat-applied by certified crews, AirMark fuses directly to asphalt and concrete airfield surfaces without curing delay. The choice for airports and aerodrome operators who need markings that hold their specification year-round, not just in the season they were installed.",
@@ -245,7 +245,7 @@ export const products: Product[] = [
   {
     name: "PreMark",
     slug: "premark",
-    shortDesc: "Preformed thermoplastic road marking symbols — pre-cut, ready to apply, no stencils required.",
+    shortDesc: "Pre-cut symbols, no stencils — drive on immediately.",
     imageUrl: "/images/products/premark/premark-01.jpg",
     gallery: gallery("premark", "premark", 11),
     description: "Painted road symbols need stencils, dry time, and a crew back on site every season. PreMark needs none of that. A complete library of preformed thermoplastic road marking symbols — turn arrows, stop bars, yield lines, school zone legends, bike pictographs, accessible parking symbols, and more — pre-cut to specification and ready to apply with heat. Open to traffic immediately after application. No stencil prep, no overnight curing window, no messy overspray. Standard 90mil thickness for typical applications; 125mil heavy-use variant for high-traffic intersections and commercial zones. Premium glass bead retroreflectivity built into the surface holds nighttime visibility season after season without the fade that makes painted symbols invisible in rain.",
@@ -260,11 +260,11 @@ export const products: Product[] = [
   },
 
 
-  // ── Asphalt Repair ────────────────────────────────────────────────────────────────────────────
+  // ── Asphalt Repair ────────────────────────────────────────────────────────────────────────────────────
   {
     name: "Fast Patch",
     slug: "fast-patch",
-    shortDesc: "Two-component polyurethane pothole repair — permanent bond, open to traffic in 30 minutes.",
+    shortDesc: "Permanent polyurethane repair — open to traffic in 30 min.",
     imageUrl: "/images/products/streetprint/streetprint-01.jpg",
     gallery: [],
     description: "Temporary cold-patch is a placeholder, not a repair — you're back filling the same pothole next season. FastPatch is different: a two-component polyurethane hybrid that chemically bonds to the existing asphalt substrate, curing to a rigid, traffic-bearing surface in 30 minutes without heat, compaction equipment, or specialty crew. Applied cold and mixed on-site, it works at temperatures from -10°C to +40°C, fits into a single-lane closure window, and outlasts conventional patching methods by a measurable margin. For municipalities and contractors who are done treating the same failures repeatedly, FastPatch closes the pothole — and keeps it closed.",
@@ -282,7 +282,7 @@ export const products: Product[] = [
   {
     name: "Aquaphalt",
     slug: "aquaphalt",
-    shortDesc: "Water-activated permanent patch — zero VOCs, no equipment, open to traffic immediately.",
+    shortDesc: "Water-activated patch — zero VOCs, open to traffic immediately.",
     imageUrl: "/images/products/streetprint/streetprint-40.jpg",
     gallery: [],
     description: "Some repair sites don't allow hot work. Underground parkades, occupied school zones, and hospital campuses can't manage solvent fumes or propane equipment. Aquaphalt was engineered for exactly these environments. A water-activated permanent patching material — zero solvents, zero VOCs, zero hazardous fumes — that fills potholes, utility cuts, and edge joints with a single step: pour, compact, drive. No mixing. No heating. No special equipment beyond what's already on the truck. Bonds permanently to asphalt and concrete on contact and opens to traffic immediately after compaction. Deployed in over 30 countries by maintenance teams who need a repair that works in the conditions they actually work in.",

@@ -50,7 +50,7 @@ export default function ProductsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-16 sm:pb-24">
         <div className="mb-16 max-w-2xl">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-3" style={{ color: "#f97316" }}>
-            Our Systems
+            The Full Lineup
           </p>
           <h1
             className="font-black mb-5"
@@ -61,10 +61,10 @@ export default function ProductsPage() {
               letterSpacing: "-0.03em",
             }}
           >
-            Surface Systems for the Built Environment
+            Every Surface Has a Best Version.
           </h1>
           <p className="text-lg" style={{ color: "var(--text-secondary)" }}>
-            Thirteen purpose-built systems, one mission: give every Canadian surface the capacity to carry meaning.
+            Thirteen purpose-built systems. One mission: stop repainting and start performing.
           </p>
         </div>
 
@@ -87,22 +87,22 @@ export default function ProductsPage() {
           const groups: { label: string; desc: string; slugs: string[] }[] = [
             {
               label: "Preformed Thermoplastics",
-              desc: "Factory-manufactured and heat-fused directly to the surface. Regulatory symbols, patterned crosswalks, custom civic art, airfield markings — one technology, unlimited expression.",
+              desc: "Factory-formed, heat-fused, and built to outlast. Crisp regulatory symbols, patterned crosswalks, custom street art, and airfield markings — one technology, endless expression. No stencils, no dry time, no repainting.",
               slugs: ["traffic-patterns-xd", "traffic-patterns", "premark", "duratherm", "decomark", "airmark"],
             },
             {
               label: "Coatings",
-              desc: "Liquid-applied colour systems that bond chemically to asphalt and concrete. Safety lane demarcation, civic plazas, solar-reflective urban heat island mitigation, and surface protection.",
+              desc: "Liquid-applied colour that bonds chemically — not just sits on top. Bus lanes done in 60 minutes. Bike lanes that hold their green for years. Heat island mitigation that earns LEED credits. The whole spectrum of permanent colour.",
               slugs: ["streetbond", "streetbondsr", "mmax", "durashield"],
             },
             {
               label: "Stamped Asphalt & Concrete",
-              desc: "In-place stamping process that transforms existing asphalt into rich decorative hardscape — available in 12+ standard patterns and fully custom designs.",
+              desc: "Cobblestone richness, brick warmth, herringbone elegance — stamped directly into the asphalt that's already there. No demolition. No raised edges. Snowplow-safe and maintenance-free for 20+ years.",
               slugs: ["streetprint"],
             },
             {
               label: "Asphalt Repair",
-              desc: "Permanent, traffic-ready repair products for potholes, utility cuts, and edge joints. No heating, no compaction equipment — open to traffic in minutes.",
+              desc: "Stop patching the same potholes every spring. These are permanent repairs — chemical bonds, no heat required, traffic-ready in 30 minutes. The last time you touch that spot.",
               slugs: ["fast-patch", "aquaphalt"],
             },
           ];

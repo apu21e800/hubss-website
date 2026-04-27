@@ -31,6 +31,15 @@ const PRODUCT_TYPE: Record<string, string> = {
   "decomark":            "Custom Graphics",
 };
 
+const PRODUCT_STAT: Record<string, string> = {
+  "streetprint":         "20+ yr proven life",
+  "streetbond":          "UV-stable · won't peel",
+  "traffic-patterns-xd": "BPN 65+ certified",
+  "traffic-patterns":    "Outlasts paint 5–8×",
+  "mmax":                "Traffic-ready in 60 min",
+  "decomark":            "Full Pantone match",
+};
+
 const PRODUCT_APPS: Record<string, string[]> = {
   "streetprint":         ["Crosswalks", "Driveways", "Plazas", "Intersections"],
   "streetbond":          ["Bike Lanes", "Bus Lanes", "Driveways", "Paths"],
@@ -72,7 +81,7 @@ export default function ProductsGrid() {
         {/* Section header */}
         <div className="mb-14 md:mb-16">
           <p className="gradient-text text-xs tracking-[0.15em] font-semibold uppercase mb-3">
-            Surface Systems
+            The Systems
           </p>
           <div className="flex items-end justify-between gap-6 flex-wrap">
             <div>
@@ -92,8 +101,8 @@ export default function ProductsGrid() {
                 className="text-base font-light max-w-lg leading-relaxed"
                 style={{ color: "var(--text-secondary)" }}
               >
-                Six systems engineered for freeze-thaw climates, municipalities,
-                and the projects that define a city.
+                Six systems that outlast paint 6:1, survive everything Canada throws at them,
+                and turn any surface into a signature.
               </p>
             </div>
             <Link
@@ -120,6 +129,7 @@ export default function ProductsGrid() {
               : product.name;
             const apps = PRODUCT_APPS[product.slug] ?? [];
             const type = PRODUCT_TYPE[product.slug];
+            const stat = PRODUCT_STAT[product.slug];
             const what = PRODUCT_WHAT[product.slug];
 
             return (
@@ -174,7 +184,7 @@ export default function ProductsGrid() {
                   {/* Card body */}
                   <div className="flex flex-col flex-1 p-5">
 
-                    {/* Product name + type pill */}
+                    {/* Product name + stat */}
                     <div className="flex items-start justify-between gap-3 mb-3">
                       <h3
                         className="font-bold text-[16px] leading-snug transition-colors duration-200 group-hover:text-orange-400"

@@ -19,7 +19,7 @@ export default function ApplicationsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-16 sm:pb-24">
         <div className="mb-16 max-w-2xl">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-3" style={{ color: "#f97316" }}>
-            Applications
+            In the Field
           </p>
           <h1
             className="font-black mb-5"
@@ -30,10 +30,10 @@ export default function ApplicationsPage() {
               letterSpacing: "-0.03em",
             }}
           >
-            Where Our Systems Live
+            Every Surface We Transform.
           </h1>
           <p className="text-lg" style={{ color: "var(--text-secondary)" }}>
-            Each application carries its own demands — visibility, durability, tactile guidance, speed reduction, civic branding. We match the right system to the right context, then back it with certified installation and proven performance.
+            Crosswalks that stop traffic. Bike lanes that hold colour. Plazas that become landmarks. Each application demands something different — we built a system for all of them.
           </p>
         </div>
 

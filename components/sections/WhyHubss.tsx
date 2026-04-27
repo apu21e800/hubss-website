@@ -78,7 +78,7 @@ export default function WhyHubss() {
           className="max-w-2xl mb-14"
         >
           <p className="text-xs font-bold tracking-[0.2em] uppercase mb-4" style={{ color: "#f97316" }}>
-            Why HUB Surface Systems
+            Why HUB
           </p>
           <h2
             className="font-black mb-5"

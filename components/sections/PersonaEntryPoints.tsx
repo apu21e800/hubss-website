@@ -3,17 +3,17 @@ import Link from "next/link";
 const PERSONAS = [
   {
     label: "Municipalities",
-    desc: "Crosswalks, transit corridors, civic plazas — Vision Zero and Complete Streets ready.",
+    desc: "Every crosswalk, transit corridor, and plaza that defines your city — Vision Zero and AODA ready, installed by certified crews from Halifax to Victoria.",
     href: "/applications",
   },
   {
-    label: "Landscape Architects",
-    desc: "Decorative stamped asphalt and coloured coatings for parks, plazas, and Complete Streets.",
+    label: "Designers & Specifiers",
+    desc: "12+ StreetPrint patterns, full Pantone matching, snowplow-safe, and engineering-approved. Beautiful that actually survives the job site.",
     href: "/products",
   },
   {
     label: "Contractors",
-    desc: "Certified applicator program, full technical support, and coast-to-coast installation network.",
+    desc: "Get HUB-certified, unlock territory rights, and bid on jobs your competitors can't touch — backed by real technical support on every project.",
     href: "/contact",
   },
 ];

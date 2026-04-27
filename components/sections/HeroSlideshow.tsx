@@ -61,7 +61,7 @@ export default function HeroSlideshow() {
               className="text-xs font-bold tracking-[0.22em] uppercase mb-4"
               style={{ color: "#F97316" }}
             >
-              Municipal &amp; Civic
+              Redefining Hardscapes
             </p>
 
             {/* H1 */}
@@ -94,14 +94,14 @@ export default function HeroSlideshow() {
               className="text-lg sm:text-xl leading-relaxed mb-10 max-w-2xl"
               style={{ color: "rgba(255,255,255,0.78)", fontWeight: 400 }}
             >
-              Decorative crosswalks, roundabouts, and plazas that define community
-              identity — and outlast paint by 20 years in Canada&apos;s harshest climates.
+              Most surfaces just exist. Ours make a statement — and keep making it
+              through snowplows, de-icing salt, and 20 Canadian winters without a single repaint.
             </p>
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
-                href="/projects"
+                href="/gallery"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-lg font-semibold text-sm transition-all"
                 style={{
                   background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
@@ -109,7 +109,7 @@ export default function HeroSlideshow() {
                   boxShadow: "0 6px 28px rgba(249,115,22,0.42)",
                 }}
               >
-                See Projects
+                See the Work
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>

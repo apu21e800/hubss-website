@@ -496,7 +496,7 @@ function ProjectModal({
                 boxShadow: "0 4px 16px rgba(249,115,22,0.35)",
               }}
             >
-              Request Similar Project →
+              Request Similar Project &rarr;
             </a>
             <a
               href="/contact"
@@ -513,7 +513,7 @@ function ProjectModal({
                 alignItems: "center",
               }}
             >
-              Get a Quote →
+              Get a Quote &rarr;
             </a>
           </div>
         </div>
@@ -536,6 +536,7 @@ export default function CanadaMap() {
   const [popupProject, setPopupProject] = useState<MapProject | null>(null);
   const [visibleProjects, setVisibleProjects] = useState<MapProject[]>(mapProjects);
   const [showScrollHint, setShowScrollHint] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const scrollHintTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const autoReleaseTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -563,6 +564,20 @@ export default function CanadaMap() {
     }),
     [hoveredProject]
   );
+
+  // ── Search: filter all projects when query active, else use viewport ──
+  const displayedProjects = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return visibleProjects;
+    return mapProjects.filter(
+      (p) =>
+        p.title.toLowerCase().includes(q) ||
+        p.city.toLowerCase().includes(q) ||
+        p.province.toLowerCase().includes(q) ||
+        p.product.toLowerCase().includes(q) ||
+        p.application.toLowerCase().includes(q)
+    );
+  }, [searchQuery, visibleProjects]);
 
   // ── Update panel list based on map bounds ──────────────────────────────
   const updateVisibleProjects = useCallback(() => {
@@ -726,12 +741,14 @@ export default function CanadaMap() {
     setPopupProject(null);
   }, []);
 
-  const handlePanelClick = useCallback((project: MapProject) => {
-    // Zoom the map to the project location — do NOT open the modal here.
-    // The modal opens when the user clicks the highlighted pin on the map.
+  const handlePanelClick = useCallback((project: MapProject, openModal = false) => {
     setPopupProject(null);
-    setSelectedProject(null);
     setHoveredId(project.id);
+    if (openModal) {
+      setSelectedProject(project);
+    } else {
+      setSelectedProject(null);
+    }
     mapRef.current?.flyTo({
       center: [project.lng, project.lat],
       zoom: 13,
@@ -772,6 +789,8 @@ export default function CanadaMap() {
           background: rgba(249,115,22,0.25);
           border-radius: 4px;
         }
+        /* Search input placeholder */
+        .canada-map-search::placeholder { color: #4B5563; }
         @media (max-width: 900px) {
           .canada-map-panel { display: none !important; }
         }
@@ -1166,7 +1185,7 @@ export default function CanadaMap() {
                       margin: 0,
                     }}
                   >
-                    Projects in view
+                    {searchQuery.trim() ? "Search results" : "Projects in view"}
                   </p>
                   <span
                     style={{
@@ -1178,19 +1197,105 @@ export default function CanadaMap() {
                       borderRadius: 20,
                     }}
                   >
-                    {visibleProjects.length}
+                    {displayedProjects.length}
                   </span>
                 </div>
                 <p
                   style={{
                     fontSize: 10.5,
                     color: "#6B7280",
-                    margin: 0,
+                    margin: "0 0 10px",
                     lineHeight: 1.4,
                   }}
                 >
-                  Pan or zoom to filter
+                  {searchQuery.trim()
+                    ? `Searching all ${mapProjects.length} projects`
+                    : "Pan or zoom to filter"}
                 </p>
+
+                {/* Search input */}
+                <div
+                  style={{
+                    position: "relative",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  {/* Search icon */}
+                  <svg
+                    width="13"
+                    height="13"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#6B7280"
+                    strokeWidth={2.5}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    style={{
+                      position: "absolute",
+                      left: 10,
+                      flexShrink: 0,
+                      pointerEvents: "none",
+                    }}
+                  >
+                    <circle cx="11" cy="11" r="8" />
+                    <path d="m21 21-4.35-4.35" />
+                  </svg>
+                  <input
+                    type="text"
+                    className="canada-map-search"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="City, product, application…"
+                    style={{
+                      width: "100%",
+                      padding: "7px 30px 7px 30px",
+                      background: "rgba(255,255,255,0.05)",
+                      border: searchQuery.trim()
+                        ? "1px solid rgba(249,115,22,0.4)"
+                        : "1px solid rgba(255,255,255,0.1)",
+                      borderRadius: 9,
+                      color: "#F5F0EB",
+                      fontSize: 12,
+                      outline: "none",
+                      transition: "border-color 0.15s ease",
+                    }}
+                    onFocus={(e) => {
+                      e.currentTarget.style.borderColor = "rgba(249,115,22,0.5)";
+                    }}
+                    onBlur={(e) => {
+                      if (!searchQuery.trim())
+                        e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)";
+                    }}
+                  />
+                  {/* Clear button */}
+                  {searchQuery && (
+                    <button
+                      onClick={() => setSearchQuery("")}
+                      style={{
+                        position: "absolute",
+                        right: 8,
+                        background: "rgba(255,255,255,0.1)",
+                        border: "none",
+                        borderRadius: "50%",
+                        width: 16,
+                        height: 16,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        cursor: "pointer",
+                        padding: 0,
+                        color: "#9CA3AF",
+                        flexShrink: 0,
+                      }}
+                      aria-label="Clear search"
+                    >
+                      <svg width="8" height="8" viewBox="0 0 12 12" fill="none">
+                        <path d="M1 1l10 10M11 1L1 11" stroke="currentColor" strokeWidth={2} strokeLinecap="round" />
+                      </svg>
+                    </button>
+                  )}
+                </div>
               </div>
 
               {/* Scrollable project list */}
@@ -1198,7 +1303,7 @@ export default function CanadaMap() {
                 className="canada-map-panel-scroll"
                 style={{ flex: 1, overflowY: "auto", overflowX: "hidden" }}
               >
-                {visibleProjects.length === 0 ? (
+                {displayedProjects.length === 0 ? (
                   <div
                     style={{
                       display: "flex",
@@ -1210,38 +1315,62 @@ export default function CanadaMap() {
                       textAlign: "center",
                     }}
                   >
-                    <p style={{ color: "#4B5563", fontSize: 13, margin: "0 0 12px" }}>
-                      No projects in this area
-                    </p>
-                    <button
-                      onClick={() =>
-                        mapRef.current?.fitBounds(CANADA_BOUNDS, {
-                          ...FIT_OPTIONS,
-                          duration: 900,
-                        })
-                      }
-                      style={{
-                        fontSize: 12,
-                        color: "#F97316",
-                        background: "transparent",
-                        border: "1px solid rgba(249,115,22,0.3)",
-                        borderRadius: 8,
-                        padding: "6px 14px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      Reset to Canada view
-                    </button>
+                    {searchQuery.trim() ? (
+                      <>
+                        <p style={{ color: "#4B5563", fontSize: 13, margin: "0 0 12px" }}>
+                          No projects match &ldquo;{searchQuery}&rdquo;
+                        </p>
+                        <button
+                          onClick={() => setSearchQuery("")}
+                          style={{
+                            fontSize: 12,
+                            color: "#F97316",
+                            background: "transparent",
+                            border: "1px solid rgba(249,115,22,0.3)",
+                            borderRadius: 8,
+                            padding: "6px 14px",
+                            cursor: "pointer",
+                          }}
+                        >
+                          Clear search
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <p style={{ color: "#4B5563", fontSize: 13, margin: "0 0 12px" }}>
+                          No projects in this area
+                        </p>
+                        <button
+                          onClick={() =>
+                            mapRef.current?.fitBounds(CANADA_BOUNDS, {
+                              ...FIT_OPTIONS,
+                              duration: 900,
+                            })
+                          }
+                          style={{
+                            fontSize: 12,
+                            color: "#F97316",
+                            background: "transparent",
+                            border: "1px solid rgba(249,115,22,0.3)",
+                            borderRadius: 8,
+                            padding: "6px 14px",
+                            cursor: "pointer",
+                          }}
+                        >
+                          Reset to Canada view
+                        </button>
+                      </>
+                    )}
                   </div>
                 ) : (
-                  visibleProjects.map((project) => (
+                  displayedProjects.map((project) => (
                     <PanelCard
                       key={project.id}
                       project={project}
                       hovered={hoveredId === project.id}
                       selected={selectedProject?.id === project.id}
                       onHover={handlePanelHover}
-                      onClick={handlePanelClick}
+                      onClick={(p) => handlePanelClick(p, !!searchQuery.trim())}
                     />
                   ))
                 )}

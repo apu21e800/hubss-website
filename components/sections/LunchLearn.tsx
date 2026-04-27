@@ -39,10 +39,10 @@ export default function LunchLearn({ hideMoose }: { hideMoose?: boolean } = {}) 
     setSubmitState({ status: "loading" });
 
     try {
-      const response = await fetch("/api/lunch-learn", {
+      const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, formType: "lunch-learn" }),
       });
 
       if (!response.ok) {
@@ -55,7 +55,6 @@ export default function LunchLearn({ hideMoose }: { hideMoose?: boolean } = {}) 
       });
       setFormData({ name: "", email: "", company: "", city: "", phone: "" });
     } catch (error) {
-      console.error(error);
       setSubmitState({
         status: "error",
         message: "Something went wrong. Please try again or contact us directly.",

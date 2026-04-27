@@ -24,7 +24,7 @@ export default function Footer() {
 
       {/* Wheel watermark — subtle background accent */}
       <div style={{ position: "absolute", bottom: "24px", right: "32px", opacity: 0.04, pointerEvents: "none", zIndex: 0 }}>
-        <Image src="/images/assets/logos/hubss-logos/HUB-wheel_official-orange-transparent.svg" alt="" width={180} height={180} unoptimized aria-hidden="true" style={{ display: "none" }} />
+        <Image src="/images/assets/logos/hubss-logos/HUB-wheel_official-orange-transparent.svg" alt="" width={180} height={180} unoptimized aria-hidden="true" />
       </div>
 
       {/* Full-width gradient divider */}

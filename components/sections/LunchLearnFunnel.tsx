@@ -3,6 +3,7 @@
 import { useState, FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 
 interface FormState {
   name: string;
@@ -113,10 +114,10 @@ export default function LunchLearnFunnel() {
     e.preventDefault();
     setSubmitState({ status: "loading" });
     try {
-      const response = await fetch("/api/lunch-learn", {
+      const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, formType: "lunch-learn" }),
       });
       if (!response.ok) throw new Error(`API error: ${response.statusText}`);
       setSubmitState({ status: "success", message: "You're on the list. We'll be in touch within 24 hours to confirm your date and details." });
@@ -129,7 +130,7 @@ export default function LunchLearnFunnel() {
   return (
     <div style={{ background: "var(--bg-primary)" }}>
 
-      {/* ── HERO ──────────────────────────────────────────────────────── */}
+      {/* ── HERO ────────────────────────────────────────────────── */}
       <section
         className="relative overflow-hidden"
         style={{ background: "#070b12", minHeight: "72vh" }}
@@ -261,11 +262,11 @@ export default function LunchLearnFunnel() {
 
         {/* Bottom fade */}
         <div className="absolute bottom-0 inset-x-0 h-16 pointer-events-none" style={{
-          background: "linear-gradient(to bottom, transparent, #0f1620)",
+          background: "linear-gradient(to bottom, transparent, var(--bg-primary))",
         }} />
       </section>
 
-      {/* ── WHAT YOU WALK AWAY WITH ──────────────────────────────────── */}
+      {/* ── WHAT YOU WALK AWAY WITH ──────────────────────────────── */}
       <section className="py-20 lg:py-24" style={{ background: "#0a0f1a" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-12 text-center">
@@ -324,7 +325,7 @@ export default function LunchLearnFunnel() {
         </div>
       </section>
 
-      {/* ── PERFECT FOR ──────────────────────────────────────────────── */}
+      {/* ── PERFECT FOR ──────────────────────────────────────────── */}
       <section className="py-20" style={{ background: "#070b12" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-12">
@@ -451,7 +452,7 @@ export default function LunchLearnFunnel() {
         </div>
       </section>
 
-      {/* ── FORM ─────────────────────────────────────────────────────── */}
+      {/* ── FORM ──────────────────────────────────────────────────────────── */}
       <section
         id="book"
         className="py-20 lg:py-28 relative overflow-hidden"

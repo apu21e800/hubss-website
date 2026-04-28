@@ -10,7 +10,6 @@ import { applications } from "@/lib/applications";
 
 // ── Nav link config ──────────────────────────────────────────────────────────
 const PLAIN_LINKS = [
-  { label: "Field Notes", href: "/blog" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
@@ -300,6 +299,46 @@ function ProductsMegaMenu() {
   );
 }
 
+// ── Field Notes mini dropdown ────────────────────────────────────────────────
+function FieldNotesMiniMenu() {
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+      <div className="flex gap-2">
+        <Link
+          href="/blog"
+          className="group flex items-start gap-3 px-4 py-3 rounded-xl transition-colors hover:bg-white/5 flex-1"
+          style={{ border: "1px solid rgba(255,255,255,0.07)" }}
+        >
+          <div className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "rgba(249,115,22,0.12)" }}>
+            <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+          </div>
+          <div>
+            <p className="text-sm font-semibold group-hover:text-orange-400 transition-colors" style={{ color: "#F5F0EB" }}>Field Notes</p>
+            <p className="text-xs mt-0.5" style={{ color: "rgba(255,255,255,0.45)" }}>Industry insights &amp; project stories</p>
+          </div>
+        </Link>
+        <Link
+          href="/gallery"
+          className="group flex items-start gap-3 px-4 py-3 rounded-xl transition-colors hover:bg-white/5 flex-1"
+          style={{ border: "1px solid rgba(255,255,255,0.07)" }}
+        >
+          <div className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "rgba(249,115,22,0.12)" }}>
+            <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <div>
+            <p className="text-sm font-semibold group-hover:text-orange-400 transition-colors" style={{ color: "#F5F0EB" }}>Project Gallery</p>
+            <p className="text-xs mt-0.5" style={{ color: "rgba(255,255,255,0.45)" }}>Photo archive of our installations</p>
+          </div>
+        </Link>
+      </div>
+    </div>
+  );
+}
+
 // ── Full-width Applications mega menu ────────────────────────────────────────
 function ApplicationsMegaMenu() {
   return (
@@ -523,6 +562,24 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                 </AnimatePresence>
               </div>
 
+              {/* Field Notes + Gallery */}
+              <Link href="/blog"
+                className="flex items-center justify-between py-3 px-3 text-base font-semibold rounded-xl hover:bg-white/5 transition-colors"
+                style={{ color: "#F5F0EB" }}
+                onClick={onClose}
+              >
+                Field Notes
+                <svg width="14" height="14" fill="none" stroke="rgba(255,255,255,0.3)" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
+              </Link>
+              <Link href="/gallery"
+                className="flex items-center justify-between py-3 px-3 text-base font-semibold rounded-xl hover:bg-white/5 transition-colors"
+                style={{ color: "#F5F0EB" }}
+                onClick={onClose}
+              >
+                Project Gallery
+                <svg width="14" height="14" fill="none" stroke="rgba(255,255,255,0.3)" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
+              </Link>
+
               {/* Plain links */}
               {PLAIN_LINKS.map((link) => (
                 <Link key={link.href} href={link.href}
@@ -562,7 +619,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
 
 // ── Main Nav ─────────────────────────────────────────────────────────────────
 export default function Nav() {
-  const [openPanel, setOpenPanel] = useState<"products" | "applications" | null>(null);
+  const [openPanel, setOpenPanel] = useState<"products" | "applications" | "fieldnotes" | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -654,6 +711,20 @@ export default function Nav() {
               </svg>
             </button>
 
+            {/* Field Notes dropdown trigger */}
+            <button
+              onMouseEnter={() => setOpenPanel("fieldnotes")}
+              onClick={() => setOpenPanel(openPanel === "fieldnotes" ? null : "fieldnotes")}
+              className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:text-orange-400 hover:bg-white/5"
+              style={{ color: openPanel === "fieldnotes" ? "#F97316" : "rgba(255,255,255,0.65)" }}
+            >
+              Field Notes
+              <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                style={{ opacity: 0.5, transform: openPanel === "fieldnotes" ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+
             {/* Plain links */}
             {PLAIN_LINKS.map((link) => (
               <Link key={link.href} href={link.href}
@@ -730,6 +801,7 @@ export default function Nav() {
             >
               {openPanel === "products" && <ProductsMegaMenu />}
               {openPanel === "applications" && <ApplicationsMegaMenu />}
+              {openPanel === "fieldnotes" && <FieldNotesMiniMenu />}
             </motion.div>
           )}
         </AnimatePresence>

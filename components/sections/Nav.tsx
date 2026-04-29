@@ -443,8 +443,8 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
           <motion.div
             initial={{ y: "-100%" }} animate={{ y: 0 }} exit={{ y: "-100%" }}
             transition={{ type: "spring", damping: 28, stiffness: 300 }}
-            className="absolute top-0 left-0 right-0 overflow-y-auto"
-            style={{ background: "#070b12", borderBottom: "1px solid rgba(255,255,255,0.08)", maxHeight: "90vh" }}
+            className="absolute inset-0 overflow-y-auto"
+            style={{ background: "#070b12" }}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Top bar */}

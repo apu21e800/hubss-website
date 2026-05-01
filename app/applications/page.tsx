@@ -30,10 +30,10 @@ export default function ApplicationsPage() {
               letterSpacing: "-0.03em",
             }}
           >
-            Every Surface We Transform.
+            Where Our Systems Live.
           </h1>
           <p className="text-lg" style={{ color: "var(--text-secondary)" }}>
-            Crosswalks that stop traffic. Bike lanes that hold colour. Plazas that become landmarks. Each application demands something different — we built a system for all of them.
+            Each application has its own performance demands — retroreflectivity, snowplow tolerance, slip resistance, urban heat reduction, decorative finish. Product specs are matched to the demand. Installation is by certified HUB applicators.
           </p>
         </div>
 

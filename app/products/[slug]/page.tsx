@@ -125,10 +125,10 @@ export default async function ProductPage({ params }: Props) {
           <div className="absolute left-0 top-0 bottom-0 w-1 rounded-l-xl" style={{ background: "linear-gradient(180deg, #F97316, #EAB308)" }} />
           <div className="relative pl-3">
             <p className="font-bold text-lg leading-snug" style={{ color: "var(--text-primary)" }}>
-              Ready to specify {product.name}?
+              Specify {product.name}.
             </p>
             <p className="text-sm mt-1" style={{ color: "var(--text-secondary)" }}>
-              Technical documentation, pricing, and certified installer support — coast to coast.
+              Technical data sheets, pricing, and certified installer support across Canada.
             </p>
           </div>
           <div className="flex flex-wrap gap-3 relative flex-shrink-0">
@@ -252,11 +252,10 @@ export default async function ProductPage({ params }: Props) {
                   </div>
                 </div>
                 <p className="leading-[1.8] mb-6" style={{ color: "rgba(255,255,255,0.72)", fontSize: "clamp(0.95rem, 1.6vw, 1.05rem)", maxWidth: "52ch" }}>
-                  StreetBondSR&apos;s high Solar Reflectance Index (SRI) rating qualifies for{" "}
+                  StreetBondSR&apos;s high Solar Reflectance Index (SRI) qualifies for{" "}
                   <strong style={{ color: "#F5F0EB" }}>LEED v4 SS Credit: Heat Island Reduction</strong> under the
-                  U.S. Green Building Council framework. By reflecting solar radiation rather than absorbing it,
-                  treated surfaces run significantly cooler than standard dark asphalt — lowering ambient temperatures
-                  and reducing cooling energy loads in surrounding buildings.
+                  U.S. Green Building Council framework. The coating reflects solar radiation rather than absorbing it,
+                  reducing surface temperature relative to standard dark asphalt and lowering radiant heat loads on adjacent buildings.
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
                   {[
@@ -300,17 +299,17 @@ export default async function ProductPage({ params }: Props) {
                   {
                     icon: "🌡️",
                     heading: "Cooler Surfaces",
-                    body: "Dark asphalt can reach 60–70°C on a hot day. High-SRI coatings reflect solar energy, keeping paved surfaces dramatically cooler and reducing heat stress on pedestrians and cyclists.",
+                    body: "Dark asphalt can reach 60–70°C in direct sun. High-SRI coatings reflect solar energy off the surface, reducing pavement temperature and the heat radiated back to pedestrians and cyclists.",
                   },
                   {
                     icon: "🏙️",
                     heading: "Urban Heat Island Mitigation",
-                    body: "Cities experience ambient temperatures 2–4°C higher than surrounding areas due to heat-absorbing surfaces. StreetBondSR is part of the toolkit municipalities use to address this effect.",
+                    body: "Cities run 2–4°C warmer than surrounding rural areas due to heat-absorbing surfaces. High-SRI pavement coatings are one of the established mitigation strategies in municipal climate action plans.",
                   },
                   {
                     icon: "⚡",
                     heading: "Building Energy Performance",
-                    body: "Cooler surrounding pavements reduce radiant heat loads on adjacent buildings, contributing to lower cooling energy consumption — a co-benefit recognized in LEED whole-building assessments.",
+                    body: "Cooler adjacent pavement reduces radiant heat loads on nearby buildings, contributing to lower cooling energy consumption — recognized as a co-benefit in LEED whole-building assessments.",
                   },
                 ].map(({ icon, heading, body }) => (
                   <div key={heading} className="flex gap-4">

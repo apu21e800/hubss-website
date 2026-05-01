@@ -11,30 +11,30 @@ import { buildMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "Public Art — Pavement as Community Expression",
   description:
-    "From Indigenous art installations and pride crosswalks to transit station murals and labyrinth designs, HUBSS transforms Canadian pavement into permanent civic expression with DecoMark and StreetBond.",
+    "Indigenous art installations, Pride crosswalks, transit station murals, and labyrinth designs — permanent civic art at full street scale, executed in DecoMark preformed thermoplastic and StreetBond coloured coatings.",
   slug: "applications/public-art",
 });
 
 const FEATURED_PROJECTS = [
   {
     name: "Joyce-Collingwood SkyTrain Station",
-    desc: "Large-scale DecoMark thermoplastic art installation reflecting the cultural diversity of East Vancouver — permanent, full-colour, and integrated into the transit plaza surface.",
+    desc: "Large-scale DecoMark thermoplastic installation at the transit plaza surface, reflecting the cultural composition of East Vancouver. Permanent, full-colour, integrated flush with the pavement.",
   },
   {
     name: "UBC Campus Pathways",
-    desc: "Musqueam-inspired cultural wayfinding graphics embedded into campus pedestrian routes using DecoMark custom thermoplastic, honouring the traditional territory on which UBC stands.",
+    desc: "Musqueam-designed cultural wayfinding graphics embedded into campus pedestrian routes using DecoMark custom thermoplastic, on the traditional territory of the Musqueam people.",
   },
   {
     name: "Indigenous Art Crosswalks",
-    desc: "Custom crosswalk installations featuring Indigenous artwork and cultural motifs. Precision-formed DecoMark thermoplastic delivers Pantone-accurate colour and multi-year durability.",
+    desc: "Custom crosswalk installations featuring Indigenous artwork and cultural motifs. DecoMark preformed thermoplastic provides Pantone-accurate colour and multi-year service life.",
   },
   {
     name: "Pride Crosswalks",
-    desc: "Vibrant rainbow and progressive pride crosswalks installed in municipalities across Canada. StreetBond and DecoMark systems deliver permanent colour that survives snowplows and de-icing chemicals.",
+    desc: "Rainbow and progressive Pride crosswalks installed at intersections across Canada. StreetBond and DecoMark hold colour through snowplow cycles and de-icing chemicals.",
   },
   {
     name: "Community Labyrinth Designs",
-    desc: "Meditative labyrinth patterns created in public parks and community spaces using StreetBond coloured coatings on asphalt — permanent, zero-maintenance installations.",
+    desc: "Labyrinth patterns installed in public parks and community spaces using StreetBond coloured coatings on asphalt. Permanent, zero-maintenance, full life of the pavement substrate.",
   },
 ];
 
@@ -92,9 +92,7 @@ export default function PublicArtPage() {
               className="text-lg mt-2 max-w-2xl"
               style={{ color: "var(--text-body)" }}
             >
-              Community identity and civic art, embedded in the surface
-              itself. Permanent, weather-resistant, and designed to last the
-              full life of the asphalt.
+              Civic art and community identity embedded directly into the pavement surface. Permanent, weather-resistant, and serviceable for the full life of the asphalt substrate.
             </p>
           </div>
         </div>
@@ -133,8 +131,7 @@ export default function PublicArtPage() {
                 className="text-sm mt-0.5"
                 style={{ color: "#9CA3AF" }}
               >
-                From concept to installed street art — our team handles
-                design, production, and certified installation.
+                End-to-end project management — design files, fabrication, and certified installation.
               </p>
             </div>
             <div className="flex flex-wrap gap-3">
@@ -168,14 +165,7 @@ export default function PublicArtPage() {
                 className="text-[16px] leading-relaxed mb-12"
                 style={{ color: "var(--text-body)" }}
               >
-                From Indigenous art installations and labyrinth designs to
-                pride crosswalks and transit station murals, HUB transforms
-                pavement into community expression. Permanent,
-                weather-resistant, and designed to last the full life of the
-                asphalt surface. DecoMark custom thermoplastic delivers
-                print-quality graphics with full Pantone matching, while
-                StreetBond coloured coatings turn plain asphalt into vibrant
-                civic canvases.
+                Indigenous art installations, labyrinth designs, Pride crosswalks, and transit station murals — pavement carries civic art at full street scale. DecoMark custom-graphic preformed thermoplastic provides print-quality images with full Pantone matching. StreetBond covers large-format colour fields and mural backgrounds. Both systems are designed to remain in service for the full life of the asphalt substrate.
               </p>
 
               {/* Gallery grid */}

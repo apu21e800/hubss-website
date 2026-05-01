@@ -134,8 +134,8 @@ export default async function ApplicationPage({ params }: Props) {
             {/* Left accent bar */}
             <div className="absolute left-0 top-0 bottom-0 w-1 rounded-l-xl" style={{ background: "linear-gradient(180deg, #F97316, #EAB308)" }} />
             <div className="relative pl-3">
-              <p className="font-bold text-lg leading-snug" style={{ color: "var(--text-primary)" }}>Ready to specify {application.name}?</p>
-              <p className="text-sm mt-1" style={{ color: "var(--text-secondary)" }}>Product recommendations, documentation, and certified installer support coast to coast.</p>
+              <p className="font-bold text-lg leading-snug" style={{ color: "var(--text-primary)" }}>Designing for {application.name}?</p>
+              <p className="text-sm mt-1" style={{ color: "var(--text-secondary)" }}>Product matching, technical data, and certified installer support across Canada.</p>
             </div>
             <div className="flex flex-wrap gap-3 relative flex-shrink-0">
               <Link href="/lunch-learn"

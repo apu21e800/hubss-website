@@ -8,7 +8,7 @@ import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
   title: "Decorative Pavement & Marking Systems",
-  description: "Ten purpose-built surface systems — thermoplastics, MMA resins, stamped asphalt, and protective coatings engineered for Canadian climate. Spec sheets, technical data, and installation support.",
+  description: "Thirteen purpose-built surface systems — thermoplastics, MMA resins, stamped asphalt, and protective coatings engineered for Canadian climate. Spec sheets, technical data, and installation support.",
   slug: "products",
 });
 
@@ -17,24 +17,9 @@ export default function ProductsPage() {
     <main style={{ background: "#0f1620", minHeight: "100vh" }}>
       <Nav />
 
-      {/*
-       * ASPHALT TEXTURE SECTION BACKGROUND
-       * TODO: drop public/images/asphalt-texture.jpg (dark asphalt closeup, 1200×800+)
-       *       then uncomment the backgroundImage line below and remove the TODO comment.
-       *
-       * When the file is present the section gets a subtle atmospheric dark asphalt
-       * background at 8% opacity with a full dark overlay on top — purely decorative,
-       * text remains fully readable. The grain SVG below is an inline fallback until then.
-       */}
       <div
         className="relative"
-        style={
-          {
-            /* backgroundImage: "url('/images/asphalt-texture.jpg')", */
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }
-        }
+        style={{ backgroundSize: "cover", backgroundPosition: "center" }}
       >
         {/* Stamped asphalt texture — atmospheric depth */}
         <Image

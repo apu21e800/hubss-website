@@ -54,7 +54,7 @@ export default function LunchLearn({ hideMoose }: { hideMoose?: boolean } = {}) 
         message: "Thank you! We'll be in touch soon to schedule your Lunch & Learn session.",
       });
       setFormData({ name: "", email: "", company: "", city: "", phone: "" });
-    } catch (error) {
+    } catch {
       setSubmitState({
         status: "error",
         message: "Something went wrong. Please try again or contact us directly.",
@@ -151,6 +151,7 @@ export default function LunchLearn({ hideMoose }: { hideMoose?: boolean } = {}) 
                   type="text"
                   name="name"
                   placeholder="Your name"
+                  aria-label="Your name"
                   value={formData.name}
                   onChange={handleChange}
                   required
@@ -165,6 +166,7 @@ export default function LunchLearn({ hideMoose }: { hideMoose?: boolean } = {}) 
                   type="email"
                   name="email"
                   placeholder="Email address"
+                  aria-label="Email address"
                   value={formData.email}
                   onChange={handleChange}
                   required
@@ -182,6 +184,7 @@ export default function LunchLearn({ hideMoose }: { hideMoose?: boolean } = {}) 
                   type="text"
                   name="company"
                   placeholder="Company or organization"
+                  aria-label="Company or organization"
                   value={formData.company}
                   onChange={handleChange}
                   className="px-4 py-3 rounded-lg text-sm"
@@ -195,6 +198,7 @@ export default function LunchLearn({ hideMoose }: { hideMoose?: boolean } = {}) 
                   type="text"
                   name="city"
                   placeholder="City"
+                  aria-label="City"
                   value={formData.city}
                   onChange={handleChange}
                   className="px-4 py-3 rounded-lg text-sm"
@@ -210,6 +214,7 @@ export default function LunchLearn({ hideMoose }: { hideMoose?: boolean } = {}) 
                 type="tel"
                 name="phone"
                 placeholder="Phone number"
+                aria-label="Phone number"
                 value={formData.phone}
                 onChange={handleChange}
                 className="w-full px-4 py-3 rounded-lg text-sm"

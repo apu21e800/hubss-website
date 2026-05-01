@@ -81,7 +81,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
             placeholder="Search products, applications, pages…" className="flex-1 bg-transparent outline-none text-base"
             style={{ color: "#F5F0EB", caretColor: "#F97316" }} />
           {query && (
-            <button onClick={() => setQuery("")} className="flex-shrink-0 p-1 rounded-md hover:bg-white/10" style={{ color: "rgba(255,255,255,0.4)" }}>
+            <button onClick={() => setQuery("")} aria-label="Clear search" className="flex-shrink-0 p-1 rounded-md hover:bg-white/10" style={{ color: "rgba(255,255,255,0.4)" }}>
               <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" strokeWidth={2} strokeLinecap="round" /></svg>
             </button>
           )}
@@ -452,7 +452,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
               <Link href="/" onClick={onClose}>
                 <Image src="/images/hub-official-logo.svg" alt="HUB Surface Systems" width={140} height={33} style={{ height: 30, width: "auto" }} unoptimized />
               </Link>
-              <button onClick={onClose} className="p-2 rounded-lg" style={{ color: "rgba(255,255,255,0.5)", background: "rgba(255,255,255,0.05)" }}>
+              <button onClick={onClose} aria-label="Close menu" className="p-2 rounded-lg" style={{ color: "rgba(255,255,255,0.5)", background: "rgba(255,255,255,0.05)" }}>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -770,12 +770,12 @@ export default function Nav() {
 
           {/* Mobile — search + hamburger */}
           <div className="md:hidden flex items-center gap-2">
-            <button onClick={openSearch} className="p-2" style={{ color: "rgba(255,255,255,0.6)" }}>
+            <button onClick={openSearch} aria-label="Open search" className="p-2" style={{ color: "rgba(255,255,255,0.6)" }}>
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <circle cx="11" cy="11" r="8" strokeWidth={2} /><path d="M21 21l-4.35-4.35" strokeWidth={2} strokeLinecap="round" />
               </svg>
             </button>
-            <button onClick={() => setMobileOpen(!mobileOpen)} className="p-2" style={{ color: "rgba(255,255,255,0.6)" }}>
+            <button onClick={() => setMobileOpen(!mobileOpen)} aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"} aria-expanded={mobileOpen} className="p-2" style={{ color: "rgba(255,255,255,0.6)" }}>
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>

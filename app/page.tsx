@@ -24,7 +24,7 @@ const organizationSchema = {
   "@type": "Organization",
   name: "HUB Surface Systems",
   url: "https://hubss.com",
-  logo: "https://hubss.com/images/logo.svg",
+  logo: "https://hubss.com/images/hub-official-logo.svg",
   contactPoint: [
     {
       "@type": "ContactPoint",

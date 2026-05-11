@@ -12,6 +12,8 @@
     "@hookform/resolvers": "^5.2.2",
     "@next/mdx": "^16.1.6",
     "@tailwindcss/typography": "^0.5.19",
+    "@vercel/analytics": "^1.5.0",
+    "@vercel/speed-insights": "^1.2.0",
     "@vercel/toolbar": "^0.1.41",
     "framer-motion": "^12.34.5",
     "gray-matter": "^4.0.3",

@@ -7,6 +7,8 @@ import "./globals.css";
 import CrispChat from "@/components/CrispChat";
 import StickyBar from "@/components/StickyBar";
 import { VercelToolbar } from "@vercel/toolbar/next";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const geist = Geist({ variable: "--font-geist", subsets: ["latin"] });
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"], weight: ["300","400","500","600","700"] });
@@ -63,6 +65,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <StickyBar />
         <CrispChat />
         <VercelToolbar />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

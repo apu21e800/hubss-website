@@ -1,8 +1,44 @@
 import type { NextConfig } from "next";
 import path from "path";
 
+// ── Security headers ────────────────────────────────────────────────────────
+// Conservative, production-safe set. CSP is intentionally permissive for v1
+// (Crisp chat, MapLibre tiles, Google Fonts, inline framer-motion styles) —
+// can be tightened post-launch with a CSP report-only run first.
+const SECURITY_HEADERS = [
+  { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
+  { key: "X-Frame-Options", value: "SAMEORIGIN" },
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  { key: "X-DNS-Prefetch-Control", value: "on" },
+  {
+    key: "Permissions-Policy",
+    value: [
+      "accelerometer=()",
+      "autoplay=()",
+      "camera=()",
+      "geolocation=()",
+      "gyroscope=()",
+      "magnetometer=()",
+      "microphone=()",
+      "payment=()",
+      "usb=()",
+      "interest-cohort=()",
+    ].join(", "),
+  },
+];
+
 const nextConfig: NextConfig = {
   typescript: { ignoreBuildErrors: true },
+  poweredByHeader: false,
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: SECURITY_HEADERS,
+      },
+    ];
+  },
   async redirects() {
     return [
       // Products
@@ -137,6 +173,70 @@ const nextConfig: NextConfig = {
       { source: "/documentation", destination: "/resources", permanent: true },
       { source: "/about-us", destination: "/about", permanent: true },
       { source: "/contact-us", destination: "/contact", permanent: true },
+
+      // ── WordPress → Next.js migration redirects (added 2026-05-10) ────────
+      // Legacy .php product pages
+      { source: "/trafficpatterns.php", destination: "/products/traffic-patterns", permanent: true },
+      { source: "/trafficpatterns-xd.php", destination: "/products/traffic-patterns-xd", permanent: true },
+      { source: "/trafficpatterns-xd.php/:path*", destination: "/products/traffic-patterns-xd", permanent: true },
+
+      // Legal pages
+      { source: "/terms-conditions", destination: "/terms", permanent: true },
+      { source: "/privacy-policy", destination: "/privacy", permanent: true },
+
+      // Old WP gallery pages — fold into matching product/application pages
+      { source: "/trafficpatterns-gallery", destination: "/products/traffic-patterns", permanent: true },
+      { source: "/trafficpatternsxd-gallery", destination: "/products/traffic-patterns-xd", permanent: true },
+      { source: "/streetprint-gallery", destination: "/products/streetprint", permanent: true },
+      { source: "/streetbond-gallery", destination: "/products/streetbond", permanent: true },
+      { source: "/streetbond-sr-gallery", destination: "/products/streetbondsr", permanent: true },
+      { source: "/decomark-gallery", destination: "/products/decomark", permanent: true },
+      { source: "/mma-gallery", destination: "/products/mmax", permanent: true },
+      { source: "/duratherm-gallery", destination: "/products/duratherm", permanent: true },
+      { source: "/durashield-gallery", destination: "/products/durashield", permanent: true },
+      { source: "/airmark-gallery", destination: "/products/airmark", permanent: true },
+      { source: "/premark-gallery", destination: "/products/premark", permanent: true },
+      { source: "/crosswalks-gallery", destination: "/applications/crosswalks", permanent: true },
+      { source: "/parking-lots-gallery", destination: "/applications/parking-lots", permanent: true },
+      { source: "/parks-paths-gallery", destination: "/applications/parks-paths", permanent: true },
+      { source: "/community-branding-gallery", destination: "/applications/community-branding", permanent: true },
+      { source: "/townhomes-gallery", destination: "/applications/townhomes", permanent: true },
+      { source: "/driveways-gallery", destination: "/applications/private-driveways", permanent: true },
+      { source: "/public-art-gallery", destination: "/applications/public-art", permanent: true },
+      { source: "/regulatory-safety-markings-gallery", destination: "/applications/regulatory-markings", permanent: true },
+      { source: "/streetscapes-gallery", destination: "/projects", permanent: true },
+
+      // WordPress projects sub-tree — bulk taxonomy/pagination URLs
+      { source: "/projects/category/:cat*", destination: "/projects", permanent: true },
+      { source: "/projects/page/:n", destination: "/projects", permanent: true },
+      { source: "/projects/featured-projects/:n", destination: "/projects", permanent: true },
+
+      // /projects/[slug] — route to matching blog post on new site
+      { source: "/projects/best-crosswalks-canada", destination: "/blog/best-crosswalks-canada", permanent: true },
+      { source: "/projects/stamped-asphalt-vs-stamped-concrete", destination: "/blog/stamped-asphalt-vs-concrete", permanent: true },
+      { source: "/projects/decorative-stamped-asphalt-crosswalks", destination: "/blog/decorative-asphalt-crosswalks", permanent: true },
+      { source: "/projects/airfield-markings", destination: "/applications/airports", permanent: true },
+      { source: "/projects/community-branding", destination: "/applications/community-branding", permanent: true },
+      { source: "/projects/decorative-crosswalk_richmond-brighouse", destination: "/blog/richmond-brighouse-crosswalk", permanent: true },
+      { source: "/projects/decorative-paving-public-art", destination: "/blog/decorative-paving-public-art-joyce", permanent: true },
+      { source: "/projects/decorative-paving-for-townhomes-canada", destination: "/blog/decorative-paving-townhomes", permanent: true },
+      { source: "/projects/solar-reflective-asphalt-surfaces", destination: "/blog/streetbondsr-solar-reflective-coatings", permanent: true },
+      { source: "/projects/solar-reflective-coatings-for-asphalt-and-concrete", destination: "/blog/streetbondsr-solar-reflective-coatings", permanent: true },
+      { source: "/projects/solar-reflective-hardscapes", destination: "/blog/streetbondsr-solar-reflective-coatings", permanent: true },
+      { source: "/projects/decorative-greenway-for-spirit-trail", destination: "/blog/spirit-trail-wayfinding-vancouver", permanent: true },
+      { source: "/projects/complete-streets-richmond", destination: "/blog/complete-streets-new-westminster", permanent: true },
+      { source: "/projects/community-branding-for-asphalt-and-concrete", destination: "/applications/community-branding", permanent: true },
+      { source: "/projects/attractive-waterpark-pavement-surfaces", destination: "/blog/durable-coatings-waterparks", permanent: true },
+      { source: "/projects/decorative-asphalt-pedestrian-plaza", destination: "/blog/terry-fox-plaza-coquitlam", permanent: true },
+      { source: "/projects/avenue-of-the-arts-crosswalks", destination: "/applications/public-art", permanent: true },
+      { source: "/projects/complete-streets-intersections", destination: "/blog/complete-streets-new-westminster", permanent: true },
+      { source: "/projects/extreme-pavement-surfacing-with-trafficpatternsxd", destination: "/blog/trafficpatternsxd-urban-design", permanent: true },
+      { source: "/projects/decorative-paving-for-parks-and-paths", destination: "/applications/parks-paths", permanent: true },
+      { source: "/projects/high-visibility-decorative-crosswalks", destination: "/blog/pedestrian-safety-solutions", permanent: true },
+      { source: "/projects/community-branding-and-crosswalks-in-canada", destination: "/blog/community-branding-case-study", permanent: true },
+
+      // Legacy spec-sheet PDFs — safety-net redirect to resources hub
+      { source: "/assets/specification-documents/:path*", destination: "/resources", permanent: true },
     ];
   },
   turbopack: {

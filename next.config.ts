@@ -2,15 +2,43 @@ import type { NextConfig } from "next";
 import path from "path";
 
 // ── Security headers ────────────────────────────────────────────────────────
-// Conservative, production-safe set. CSP is intentionally permissive for v1
-// (Crisp chat, MapLibre tiles, Google Fonts, inline framer-motion styles) —
-// can be tightened post-launch with a CSP report-only run first.
+// Production-safe set. CSP is shipped in REPORT-ONLY mode for launch — it
+// surfaces violations to the browser console + Vercel logs without blocking
+// anything. After a week of monitoring, flip to enforced mode by changing the
+// header key to "Content-Security-Policy".
+const CSP_REPORT_ONLY = [
+  "default-src 'self'",
+  // Inline + eval needed for Next.js + framer-motion runtime
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://client.crisp.chat https://*.vercel-scripts.com https://*.vercel-insights.com https://va.vercel-scripts.com",
+  // Inline styles from framer-motion + Tailwind v4 + Crisp
+  "style-src 'self' 'unsafe-inline' https://client.crisp.chat https://fonts.googleapis.com",
+  // Images from Unsplash, Vercel optimization, data URIs, blob (for clipboard), Crisp avatars
+  "img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com https://*.crisp.chat https://image.crisp.chat https://basemaps.cartocdn.com https://*.basemaps.cartocdn.com",
+  // Google Fonts files
+  "font-src 'self' data: https://fonts.gstatic.com https://client.crisp.chat",
+  // Resend API, Crisp WS, Vercel telemetry, MapLibre tiles
+  "connect-src 'self' https://api.resend.com https://*.crisp.chat wss://*.crisp.chat https://*.vercel-insights.com https://va.vercel-scripts.com https://*.cartocdn.com https://basemaps.cartocdn.com",
+  // Frame sources — Crisp chat iframe + YouTube embeds (just in case)
+  "frame-src 'self' https://client.crisp.chat https://www.youtube.com https://www.youtube-nocookie.com",
+  // Disallow plugins
+  "object-src 'none'",
+  // Block forms from being submitted to off-domain endpoints
+  "form-action 'self'",
+  // Don't allow this site to be embedded anywhere
+  "frame-ancestors 'self'",
+  // Force https for all sub-resources
+  "upgrade-insecure-requests",
+].join("; ");
+
 const SECURITY_HEADERS = [
   { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
   { key: "X-Frame-Options", value: "SAMEORIGIN" },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "X-DNS-Prefetch-Control", value: "on" },
+  // Report-Only — does NOT block. Switch the key to "Content-Security-Policy"
+  // after monitoring browser-console / Vercel-logs reports for ~7 days.
+  { key: "Content-Security-Policy-Report-Only", value: CSP_REPORT_ONLY },
   {
     key: "Permissions-Policy",
     value: [

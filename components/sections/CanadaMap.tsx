@@ -496,7 +496,7 @@ function ProjectModal({
                 boxShadow: "0 4px 16px rgba(249,115,22,0.35)",
               }}
             >
-              Request Similar Project &rarr;
+              Request Similar Project →
             </a>
             <a
               href="/contact"
@@ -513,7 +513,7 @@ function ProjectModal({
                 alignItems: "center",
               }}
             >
-              Get a Quote &rarr;
+              Get a Quote →
             </a>
           </div>
         </div>
@@ -539,6 +539,9 @@ export default function CanadaMap() {
   const [searchQuery, setSearchQuery] = useState("");
   const scrollHintTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const autoReleaseTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Popup hover bridge — prevents popup from dismissing as cursor travels from marker to card
+  const popupHoveredRef = useRef(false);
+  const popupClearTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // ── GeoJSON for hover ring ─────────────────────────────────────────────
   const hoveredProject = useMemo(
@@ -721,8 +724,12 @@ export default function CanadaMap() {
         setCursor("pointer");
       } else {
         setHoveredId(null);
-        setPopupProject(null);
         setCursor(scrollEnabled ? "grab" : "default");
+        // Delay clearing the popup so the cursor has time to travel from marker onto the card
+        if (popupClearTimeoutRef.current) clearTimeout(popupClearTimeoutRef.current);
+        popupClearTimeoutRef.current = setTimeout(() => {
+          if (!popupHoveredRef.current) setPopupProject(null);
+        }, 80);
       }
     },
     [scrollEnabled]
@@ -730,7 +737,7 @@ export default function CanadaMap() {
 
   const handleMouseLeave = useCallback(() => {
     setHoveredId(null);
-    setPopupProject(null);
+    if (!popupHoveredRef.current) setPopupProject(null);
     setCursor(scrollEnabled ? "grab" : "default");
   }, [scrollEnabled]);
 
@@ -789,8 +796,6 @@ export default function CanadaMap() {
           background: rgba(249,115,22,0.25);
           border-radius: 4px;
         }
-        /* Search input placeholder */
-        .canada-map-search::placeholder { color: #4B5563; }
         @media (max-width: 900px) {
           .canada-map-panel { display: none !important; }
         }
@@ -976,6 +981,15 @@ export default function CanadaMap() {
                         width: 215,
                         cursor: "pointer",
                         boxShadow: "0 8px 28px rgba(0,0,0,0.75)",
+                      }}
+                      onMouseEnter={() => {
+                        popupHoveredRef.current = true;
+                        if (popupClearTimeoutRef.current) clearTimeout(popupClearTimeoutRef.current);
+                      }}
+                      onMouseLeave={() => {
+                        popupHoveredRef.current = false;
+                        setPopupProject(null);
+                        setHoveredId(null);
                       }}
                       onClick={(e) => {
                         e.stopPropagation();
@@ -1243,7 +1257,6 @@ export default function CanadaMap() {
                   </svg>
                   <input
                     type="text"
-                    className="canada-map-search"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="City, product, application…"

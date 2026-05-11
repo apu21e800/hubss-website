@@ -261,7 +261,7 @@ export default async function ProductPage({ params }: Props) {
                   {[
                     { label: "Credit Category", value: "Sustainable Sites" },
                     { label: "Applicable Rating", value: "LEED BD+C, ID+C, O+M" },
-                    { label: "Compliance Path", value: "High-SRI paving materials" },
+                    { label: "Credit Pathway", value: "High-SRI paving materials" },
                   ].map(({ label, value }) => (
                     <div key={label} className="rounded-xl p-4" style={{ background: "rgba(134,197,82,0.08)", border: "1px solid rgba(134,197,82,0.15)" }}>
                       <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: "rgba(134,197,82,0.7)" }}>{label}</p>

@@ -3,25 +3,40 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
+// Smart scroll-direction hide:
+//   • Always visible near top of page (≤ ALWAYS_SHOW_PX)
+//   • Past that: HIDE on scroll-down (reader committed to content),
+//     SHOW on scroll-up (reader looking for action)
+//   • MIN_DELTA filters iOS rubber-band / trackpad jitter
+//   • rAF-throttled to avoid layout thrash
+const ALWAYS_SHOW_PX = 220;
+const MIN_DELTA = 6;
+
 export default function StickyBar() {
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(true);
   const lastScrollY = useRef(0);
+  const ticking = useRef(false);
 
   useEffect(() => {
+    lastScrollY.current = window.scrollY;
     const onScroll = () => {
-      const currentY = window.scrollY;
-      const scrollingDown = currentY > lastScrollY.current;
-      if (currentY <= 420) {
-        setVisible(false);
-      } else if (scrollingDown) {
-        setVisible(true);
-      } else {
-        setVisible(false);
-      }
-      lastScrollY.current = currentY;
+      if (ticking.current) return;
+      ticking.current = true;
+      requestAnimationFrame(() => {
+        const y = window.scrollY;
+        const dy = y - lastScrollY.current;
+        if (y <= ALWAYS_SHOW_PX) {
+          setVisible(true);
+        } else if (Math.abs(dy) >= MIN_DELTA) {
+          // dy > 0 → scrolling down → hide
+          // dy < 0 → scrolling up → show
+          setVisible(dy < 0);
+        }
+        lastScrollY.current = y;
+        ticking.current = false;
+      });
     };
     window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 

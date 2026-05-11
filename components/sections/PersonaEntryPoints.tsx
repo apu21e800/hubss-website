@@ -3,7 +3,7 @@ import Link from "next/link";
 const PERSONAS = [
   {
     label: "Municipalities",
-    desc: "Every crosswalk, transit corridor, and plaza that defines your city — Vision Zero and AODA ready, installed by certified crews from Halifax to Victoria.",
+    desc: "Every crosswalk, transit corridor, and plaza that defines your city — Vision Zero aligned, accessibility-aware, installed by certified crews from Halifax to Victoria.",
     href: "/applications",
   },
   {

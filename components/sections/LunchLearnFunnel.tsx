@@ -54,11 +54,11 @@ const WHAT_YOU_GET = [
 const PERSONAS = [
   {
     title: "Municipal Engineers & Planners",
-    desc: "Crosswalks, transit corridors, and complete streets that meet Vision Zero, AODA, and Complete Streets specifications. Real installation data from 500+ Canadian municipalities.",
+    desc: "Crosswalks, transit corridors, and complete streets that meet Vision Zero and Complete Streets specifications, with accessibility-aware design. Real installation data from Canadian municipalities coast to coast.",
   },
   {
     title: "Landscape Architects & Designers",
-    desc: "12+ StreetPrint patterns, full StreetBond Pantone palette, and decorative surfaces that outlast the project warranty. Snowplow-safe. Engineering-approved.",
+    desc: "12+ StreetPrint patterns, full StreetBond Pantone palette, and decorative surfaces engineered to outlast the design life of the asphalt beneath them. Snowplow-safe. Engineering-approved.",
   },
   {
     title: "Engineering & Consulting Firms",

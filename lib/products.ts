@@ -10,6 +10,10 @@ export interface Product {
   colourCollections?: { name: string; hex: string }[];
   brandLogo?: { src: string; alt: string; width: number; height: number; };
   comingSoon?: boolean;
+  // SEO overrides ported from old hubss.com — preserves keyword targeting + rankings on launch.
+  // When present, these win over auto-generated title/description in buildMetadata.
+  seoTitle?: string;
+  seoDescription?: string;
 }
 
 function gallery(slug: string, dir: string, count: number, ext: string = "jpg"): string[] {
@@ -23,6 +27,8 @@ export const products: Product[] = [
   {
     name: "TrafficPatternsXD",
     slug: "traffic-patterns-xd",
+    seoTitle: "TrafficPatternsXD — Heavy-Duty Decorative Pavement Markings",
+    seoDescription: "Get extra durability and a bold look with TrafficPatternsXD — a heavy-duty, decorative pavement marking system for high-traffic areas, BRT corridors, and intersections.",
     shortDesc: "150mil aggregate-reinforced thermoplastic. BPN 65+ skid resistance.",
     imageUrl: "/images/products/traffic-patterns-xd/traffic-patterns-xd-03.jpg",
     gallery: [1,2,4,7,10,13,16,19,22,25,28,31,34,37,40,43,46,49,52,55,58,61,64,67,70,73,76,79,82,85,88,91,94,97,100,103,106,109,112,115,118,121,124,127,129,130,133,136,139,143].map(n =>
@@ -60,6 +66,8 @@ export const products: Product[] = [
   {
     name: "StreetBond",
     slug: "streetbond",
+    seoTitle: "StreetBond® — Durable Asphalt Coatings for Safer Streets",
+    seoDescription: "StreetBond is a high-quality pavement coating system that transforms ordinary asphalt and concrete surfaces into vibrant, durable, and functional surfaces for streets, commercial spaces, and public facilities.",
     shortDesc: "Acrylic pavement coating. Bonds chemically. Full Pantone matching.",
     imageUrl: "/images/products/streetbond/streetbond-01.png",
     gallery: [
@@ -100,6 +108,8 @@ export const products: Product[] = [
   {
     name: "StreetPrint",
     slug: "streetprint",
+    seoTitle: "StreetPrint® — Stamped Asphalt Solutions for Urban Design",
+    seoDescription: "StreetPrint is a state-of-the-art decorative pavement solution that combines the durability of asphalt with the aesthetics of brick, stone, or custom designs.",
     shortDesc: "In-place stamped asphalt. 12+ standard patterns plus custom.",
     imageUrl: "/images/products/streetprint/streetprint-01.jpg",
     gallery: [1,3,5,7,9,10,11,13,15,17,19,21,23,25,27,29,31,32,33,35,37,39,41,43,45,47,49,51,53,55,56,57,59,61,63,65,67,69,71,73,75,77,79,80,81,83,85,87,89,91].map(n =>
@@ -121,6 +131,8 @@ export const products: Product[] = [
   {
     name: "DecoMark",
     slug: "decomark",
+    seoTitle: "DecoMark — Custom Horizontal Graphics and Wayfinding",
+    seoDescription: "Elevate your brand with durable custom horizontal graphics, civic art, and pavement wayfinding solutions — full Pantone matching, print-quality accuracy.",
     shortDesc: "Custom-graphic preformed thermoplastic. Pantone-matched.",
     imageUrl: "/images/products/decomark/decomark-01.jpg",
     gallery: gallery("decomark", "decomark", 78),
@@ -157,6 +169,8 @@ export const products: Product[] = [
   {
     name: "StreetBondSR",
     slug: "streetbondsr",
+    seoTitle: "StreetBondSR™ — Solar Reflective Asphalt Coatings",
+    seoDescription: "Solar reflective, LEED-aligned coatings for asphalt and concrete that reduce urban heat island effect and support sustainable hardscape design across Canada.",
     shortDesc: "Solar reflective acrylic coating. High SRI. LEED-eligible.",
     imageUrl: "/images/products/streetbondsr/streetbondsr-02.jpg",
     gallery: [
@@ -194,6 +208,8 @@ export const products: Product[] = [
   {
     name: "DuraTherm",
     slug: "duratherm",
+    seoTitle: "DuraTherm — Inlaid Pavement Markings for Snowplow-Safe Crosswalks",
+    seoDescription: "Maximize safety and visibility with DuraTherm — inlaid, preformed thermoplastic markings that survive winter maintenance and deliver 7+ years of service.",
     shortDesc: "Inlaid flush-mount thermoplastic. Zero plow profile.",
     imageUrl: "/images/products/duratherm/duratherm-01.jpg",
     gallery: gallery("duratherm", "duratherm", 36),
@@ -228,6 +244,8 @@ export const products: Product[] = [
   {
     name: "AirMark",
     slug: "airmark",
+    seoTitle: "AirMark — Advanced Airport Pavement Markings",
+    seoDescription: "AirMark is an advanced, high-quality airport pavement markings system specifically designed for taxiways, aprons, and other non-runway aviation applications.",
     shortDesc: "Preformed thermoplastic for airfield markings. Outlasts paint 4:1.",
     imageUrl: "/images/products/airmark/airmark-01.jpg",
     gallery: gallery("airmark", "airmark", 22),
@@ -245,6 +263,8 @@ export const products: Product[] = [
   {
     name: "PreMark",
     slug: "premark",
+    seoTitle: "PreMark — Long-Lasting, High-Visibility Pavement Markings",
+    seoDescription: "Long-lasting, high-visibility preformed thermoplastic pavement markings for enhanced safety — arrows, stop bars, school zones, and regulatory symbols.",
     shortDesc: "Preformed thermoplastic symbols and legends. Drive-on installation.",
     imageUrl: "/images/products/premark/premark-01.jpg",
     gallery: gallery("premark", "premark", 11),

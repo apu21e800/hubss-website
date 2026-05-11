@@ -62,6 +62,16 @@ export default async function BlogPostPage({ params }: Props) {
       : "https://hubss.com/images/og-default.jpg",
   };
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://hubss.com" },
+      { "@type": "ListItem", position: 2, name: "Field Notes", item: "https://hubss.com/blog" },
+      { "@type": "ListItem", position: 3, name: post.title, item: postUrl },
+    ],
+  };
+
   const formattedDate = new Date(post.date).toLocaleDateString("en-CA", {
     year: "numeric", month: "long", day: "numeric",
   });
@@ -69,6 +79,7 @@ export default async function BlogPostPage({ params }: Props) {
   return (
     <main className="min-h-screen" style={{ background: "#080d16" }}>
       <JsonLd data={articleSchema} />
+      <JsonLd data={breadcrumbSchema} />
       <Nav />
 
       {/* ── Cinematic hero ────────────────────── */}

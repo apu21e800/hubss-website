@@ -26,8 +26,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = products.find((p) => p.slug === slug);
   if (!product) return {};
   return buildMetadata({
-    title: product.name,
-    description: product.shortDesc + " — " + product.description.slice(0, 120) + "…",
+    title: product.seoTitle ?? product.name,
+    description: product.seoDescription ?? (product.shortDesc + " — " + product.description.slice(0, 120) + "…"),
     slug: `products/${product.slug}`,
   });
 }
@@ -64,9 +64,20 @@ export default async function ProductPage({ params }: Props) {
     image: product.imageUrl,
   };
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://hubss.com" },
+      { "@type": "ListItem", position: 2, name: "Products", item: "https://hubss.com/products" },
+      { "@type": "ListItem", position: 3, name: product.name, item: `https://hubss.com/products/${product.slug}` },
+    ],
+  };
+
   return (
     <main style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
       <JsonLd data={productSchema} />
+      <JsonLd data={breadcrumbSchema} />
       <Nav />
 
       {/* Hero banner */}

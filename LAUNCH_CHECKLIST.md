@@ -86,6 +86,18 @@ Follow `DNS_MIGRATION.md` Steps M-1 through M-6.
 
 ## 🛡️ Post-launch (within first 2 hours)
 
+### Search Console — submit + request indexing
+
+- [ ] **Google Search Console:** verify `hubss.com` ownership (DNS TXT record is cleanest). Submit `https://hubss.com/sitemap.xml` under **Sitemaps**. Use URL Inspection to request indexing of:
+  - [ ] Homepage
+  - [ ] `/products/streetbond`, `/products/streetprint`, `/products/traffic-patterns-xd`
+  - [ ] `/applications/crosswalks`, `/applications/parks-paths`
+  - [ ] 2–3 top-traffic blog posts (cross-ref with old GSC Performance report)
+- [ ] **Bing Webmaster Tools:** verify ownership; import settings from Google Search Console.
+- [ ] No **Change of Address** filing needed (same domain, only host changed).
+
+### Live-URL spot check
+
 - [ ] Browse 10 random URLs from the old hubss.com sitemap — confirm each either renders or 301s to the right new URL.
 - [ ] Open Crisp Chat dashboard — confirm widget is loading on production.
 - [ ] Check Vercel Analytics dashboard — pageviews are flowing.
@@ -105,7 +117,11 @@ Follow `DNS_MIGRATION.md` Steps M-1 through M-6.
 
 ## 📅 Post-launch (within 1 week)
 
-See `SECURITY.md` § "Open items / post-launch hardening" and `DNS_MIGRATION.md` § "Post-launch".
+- [ ] Review GSC **Coverage** report daily — add redirects for any old URL that is 404'ing.
+- [ ] Review GSC **Performance** report — flag any page that lost > 30% impressions vs. pre-launch baseline.
+- [ ] If a flagged closest-match redirect (`/projects/complete-streets-richmond`, `/projects/decorative-asphalt-pedestrian-plaza`, etc. — see SEO_MIGRATION.md §1) is showing measurable traffic, create dedicated MDX content for it.
+
+See `SECURITY.md` § "Open items / post-launch hardening" and `DNS_MIGRATION.md` § "Post-launch" and `SEO_MIGRATION.md` § 7 for the full Search Console runbook.
 
 ---
 

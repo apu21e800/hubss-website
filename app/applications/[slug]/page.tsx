@@ -28,8 +28,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const application = applications.find((a) => a.slug === slug);
   if (!application) return {};
   return buildMetadata({
-    title: application.name,
-    description: application.shortDesc + " — " + application.description.slice(0, 120) + "…",
+    title: application.seoTitle ?? application.name,
+    description: application.seoDescription ?? (application.shortDesc + " — " + application.description.slice(0, 120) + "…"),
     slug: `applications/${application.slug}`,
   });
 }
@@ -64,9 +64,20 @@ export default async function ApplicationPage({ params }: Props) {
     image: application.imageUrl,
   };
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://hubss.com" },
+      { "@type": "ListItem", position: 2, name: "Applications", item: "https://hubss.com/applications" },
+      { "@type": "ListItem", position: 3, name: application.name, item: `https://hubss.com/applications/${application.slug}` },
+    ],
+  };
+
   return (
     <main style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
       <JsonLd data={applicationSchema} />
+      <JsonLd data={breadcrumbSchema} />
       <Nav />
 
       {/* Hero banner */}

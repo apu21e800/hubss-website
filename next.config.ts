@@ -37,7 +37,7 @@ const nextConfig: NextConfig = {
       { source: "/applications/driveways", destination: "/applications/private-driveways", permanent: true },
       // Public Art now has its own dedicated page — no redirect needed
       // { source: "/applications/public-art", destination: "/applications/community-branding", permanent: true },
-      { source: "/applications/public-spaces", destination: "/applications/community-branding", permanent: true },
+      // Public Spaces now has its own page in applications.ts — redirect removed
       { source: "/decorative-streetscape-solutions", destination: "/applications/crosswalks", permanent: true },
       // Blog post redirects
       { source: "/keeping-pedestrians-safe-and-operation-budgets-low", destination: "/blog/keeping-pedestrians-safe", permanent: true },
@@ -129,6 +129,8 @@ const nextConfig: NextConfig = {
       { source: "/enhanced-parking-lot-surfaces", destination: "/blog/enhanced-parking-lot-surfaces", permanent: true },
       // Footer/nav link variants
       { source: "/traffic-patterns", destination: "/products/traffic-patterns", permanent: true },
+      // Nav \"Project Gallery\" links point to /gallery — serve the projects page
+      { source: "/gallery", destination: "/projects", permanent: false },
       // Other pages
       { source: "/case-studies", destination: "/blog", permanent: true },
       { source: "/featured-projects", destination: "/blog", permanent: true },

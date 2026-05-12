@@ -78,7 +78,7 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold text-sm mb-5" style={{ color: "var(--text-primary)" }}>Products</h4>
             <ul className="space-y-1">
-              {products.filter((p) => !p.comingSoon).map((p) => (
+              {products.filter((p) => !p.comingSoon && !p.hideFromFooter).map((p) => (
                 <li key={p.slug}>
                   <Link
                     href={`/products/${p.slug}`}

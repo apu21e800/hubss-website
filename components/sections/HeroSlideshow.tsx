@@ -56,12 +56,12 @@ export default function HeroSlideshow() {
         <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
 
-            {/* Eyebrow */}
+            {/* Eyebrow — Doug's review: ".... since 1999" — overrides 1994 elsewhere on site */}
             <p
               className="text-xs font-bold tracking-[0.22em] uppercase mb-4"
               style={{ color: "#F97316" }}
             >
-              Redefining Hardscapes
+              Redefining Hardscapes · Since 1999
             </p>
 
             {/* H1 */}

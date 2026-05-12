@@ -82,6 +82,7 @@ export default async function ProductPage({ params }: Props) {
 
       {/* Hero banner */}
       <div className="relative overflow-hidden" style={{ height: "clamp(360px, 52vh, 560px)" }}>
+        {/* TODO: doug-review-image — Doug flagged the TPXD hero/overview ("This is TrafficPatterns, not TPXD — no stamping"). Confirm correct TPXD image and replace product.imageUrl for traffic-patterns-xd in lib/products.ts. */}
         <Image
           src={product.imageUrl}
           alt={product.name}
@@ -168,6 +169,7 @@ export default async function ProductPage({ params }: Props) {
 
             {/* Gallery */}
             <h2 className="text-2xl font-bold mb-6" style={{ color: "var(--text-primary)" }}>Gallery</h2>
+            {/* TODO: doug-review-image — Doug flagged /products/premark detail image #2 (premark-03.jpg) as "Not PreMark". Audit each product's gallery[] in lib/products.ts and remove or replace incorrect images. */}
             <GalleryGrid images={gallery} />
 
             <DocumentDownloads slug={product.slug} />
@@ -353,6 +355,11 @@ export default async function ProductPage({ params }: Props) {
                 >
                   {/* Thumbnail */}
                   <div className="relative overflow-hidden" style={{ height: 130 }}>
+                    {/* TODO: doug-review-image — Doug noted certain related-app card images don't match the parent product:
+                          • /products/traffic-patterns + "crosswalks" card → shown image is TPXD work, swap to a TP install
+                          • /products/traffic-patterns-xd + "bike-lanes" card → swap to a non-bike-lane install (Doug suggested Winners entrance)
+                          • /products/decomark + "crosswalks" card → was TPXD work; crosswalks dropped from DM relatedApplications, but verify image source
+                        Image source is application.imageUrl shared site-wide; a per-product override would require a schema change. */}
                     <Image
                       src={app.imageUrl}
                       alt={app.name}

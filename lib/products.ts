@@ -12,6 +12,8 @@ export interface Product {
   comingSoon?: boolean;
   // Overrides the hero eyebrow on /products/[slug] (which otherwise falls back to taxonomy).
   eyebrow?: string;
+  // Hide a product from footer nav while keeping the /products/[slug] page reachable directly.
+  hideFromFooter?: boolean;
   // SEO overrides ported from old hubss.com — preserves keyword targeting + rankings on launch.
   // When present, these win over auto-generated title/description in buildMetadata.
   seoTitle?: string;
@@ -117,9 +119,7 @@ export const products: Product[] = [
     imageUrl: "/images/products/streetprint/streetprint-01.jpg",
     gallery: [1,3,5,7,9,10,11,13,15,17,19,21,23,25,27,29,31,32,33,35,37,39,41,43,45,47,49,51,53,55,56,57,59,61,63,65,67,69,71,73,75,77,79,80,81,83,85,87,89,91].map(n =>
       `/images/products/streetprint/streetprint-${String(n).padStart(2, "0")}.jpg`),
-    // TODO: doug-review — Doug's reviewer note ended mid-sentence ("after final....").
-    // Leaving current description in place until Vernon completes Doug's thought.
-    description: "In-place asphalt stamping system, sealed with StreetBond UV-stable acrylic colour. Stamps brick, cobblestone, slate, herringbone, fan, and custom patterns directly into new or existing asphalt before final compaction. Flush surface with no raised edges, no shear risk under plows, and no joints to weed. 12+ standard patterns plus fully custom designs. Installed by certified HUB applicators across Canada for crosswalks, plazas, intersections, and driveways.",
+    description: "An in-place asphalt stamping system sealed with StreetBond UV-stable acrylic colour. Patterns — brick, cobblestone, slate, herringbone, fan, and full custom — are imprinted directly into new or existing asphalt after final compaction, then locked in with a colour coat. The finished surface is flush with the surrounding road, with no raised edges, no shear risk under plows, and no joints to weed. Available in 12+ standard patterns plus fully custom designs, installed by certified HUB applicators across Canada for crosswalks, plazas, intersections, and driveways.",
     specs: [
       { label: "System", value: "In-place asphalt stamping + StreetBond coating" },
       { label: "Patterns", value: "12+ standard patterns, custom available" },
@@ -156,19 +156,16 @@ export const products: Product[] = [
   {
     name: "MMAX",
     slug: "mmax",
-    shortDesc: "MMA resin coating. 30–60 min cure. Engineered for transit lanes and bike priority corridors.",
+    shortDesc: "MMA resin coating. 45–60 min cure. Engineered for transit lanes and bike priority corridors.",
     imageUrl: "/images/products/mmax/mmax-01.jpg",
     gallery: gallery("mmax", "mmax", 33),
-    // TODO: doug-review — Doug noted "+3°C at best. need to check spec's" on temperature.
-    // Current copy says "2°C and rising" which is the conservative industry-typical MMA min.
-    // Vernon to confirm the specific MMAX TDS value (likely +3°C, +5°C, or similar).
-    description: "Methyl methacrylate (MMA) resin coating that cures to traffic-ready in 30–60 minutes, enabling overnight installation in active transit corridors. High bond strength under shear loading at bus stops and turning radii. Applies in cool conditions per manufacturer TDS. Specified for red bus lanes, green bike lanes, and transit-priority corridors where short cure windows and bond strength above acrylic and epoxy alternatives are required.",
+    description: "Methyl methacrylate (MMA) resin coating that cures to traffic-ready in 45–60 minutes, enabling overnight installation in active transit corridors. High bond strength under shear loading at bus stops and turning radii. Minimum application temperature is +3°C and rising. Specified for red bus lanes, green bike lanes, and transit-priority corridors where short cure windows and bond strength above acrylic and epoxy alternatives are required.",
     specs: [
       { label: "Material", value: "Methyl Methacrylate (MMA) resin" },
-      { label: "Cure Time", value: "30–60 minutes (traffic-ready)" },
+      { label: "Cure Time", value: "45–60 minutes (traffic-ready)" },
       { label: "Bond Strength", value: "High — exceeds typical acrylic/epoxy systems" },
       { label: "Thickness", value: "1.5–3mm applied for coloured lane treatment" },
-      { label: "Min. Temp", value: "Cool-weather application — per manufacturer TDS" },
+      { label: "Min. Temp", value: "+3°C and rising" },
       { label: "UV Stability", value: "Colour-fast acrylic-MMA chemistry" },
       { label: "Service Life", value: "Multi-year service in transit lane use" },
     ],
@@ -290,6 +287,40 @@ export const products: Product[] = [
 
   // ── Asphalt Repair ────────────────────────────────────────────────────────────────────────────────────
   {
+    name: "Chipfill",
+    slug: "chipfill",
+    eyebrow: "Concrete and Asphalt Repair",
+    shortDesc: "Permanent cold-pour repair for cracks, joints, and surface defects in asphalt and concrete.",
+    imageUrl: "/images/products/streetprint/streetprint-01.jpg",
+    gallery: [],
+    description: "Chipfill is a permanent, cold-pour repair compound for cracks, joints, spalls, and surface defects in asphalt and concrete. Applies directly from the container — no heating, no mixing, no specialty equipment. Bonds chemically to the substrate and cures to a traffic-ready surface that flexes with seasonal pavement movement. Specified by Canadian municipalities and maintenance crews for routine and emergency repair programs across roads, parking lots, and pedestrian surfaces.",
+    specs: [
+      { label: "Type", value: "Permanent cold-pour repair compound" },
+      { label: "Application", value: "Direct pour — no heating or mixing" },
+      { label: "Substrate", value: "Asphalt and concrete" },
+      { label: "Use Case", value: "Cracks, joints, spalls, surface defects" },
+      { label: "Service Life", value: "Multi-year flexible repair" },
+    ],
+    relatedApplications: ["parking-lots", "private-driveways", "parks-paths", "commercial-spaces"],
+  },
+  {
+    name: "Aggrefill",
+    slug: "aggrefill",
+    eyebrow: "Concrete and Asphalt Repair",
+    shortDesc: "Aggregate-filled permanent repair for deeper potholes and high-load surface failures.",
+    imageUrl: "/images/products/streetprint/streetprint-01.jpg",
+    gallery: [],
+    description: "Aggrefill is an aggregate-filled permanent repair system engineered for deeper potholes, edge failures, and high-load surface defects. The aggregate-reinforced matrix delivers structural durability under repeated wheel loading where standard repair compounds compress or migrate. Applied cold, bonds chemically to the surrounding asphalt or concrete, and is traffic-ready in under an hour. Designed for Canadian municipal maintenance programs, parking facility operators, and industrial site managers.",
+    specs: [
+      { label: "Type", value: "Aggregate-filled permanent repair" },
+      { label: "Application", value: "Cold mix — direct fill, no heating" },
+      { label: "Substrate", value: "Asphalt and concrete" },
+      { label: "Use Case", value: "Deeper potholes, edge failures, high-load defects" },
+      { label: "Service Life", value: "Engineered for repeated wheel loading" },
+    ],
+    relatedApplications: ["parking-lots", "private-driveways", "parks-paths", "commercial-spaces"],
+  },
+  {
     name: "Fast Patch",
     slug: "fast-patch",
     eyebrow: "Concrete and Asphalt Repair",
@@ -311,6 +342,8 @@ export const products: Product[] = [
   {
     name: "Aquaphalt",
     slug: "aquaphalt",
+    // Per Doug review — keep the page reachable, omit from footer nav.
+    hideFromFooter: true,
     shortDesc: "Water-activated cold-mix repair. Solvent-free, no heat required.",
     imageUrl: "/images/products/streetprint/streetprint-40.jpg",
     gallery: [],

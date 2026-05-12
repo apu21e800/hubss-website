@@ -53,8 +53,8 @@ export const products: Product[] = [
       { label: "Service Life", value: "Engineered for high-volume traffic — multi-year service" },
       { label: "Specification", value: "Specified by Canadian municipalities coast to coast" },
     ],
-    // Audited per Vernon: TPXD is used for crosswalks and high-volume bus / BRT routes. Not used in bike lanes.
-    relatedApplications: ["crosswalks", "bus-lanes"],
+    // Expanded per Vernon's final audit: BRT corridors, high-volume crosswalks, bus priority, intersections, civic plazas.
+    relatedApplications: ["crosswalks", "bus-lanes", "pedestrian-safety", "public-spaces", "traffic-calming"],
   },
   {
     name: "TrafficPatterns",
@@ -73,8 +73,8 @@ export const products: Product[] = [
       { label: "Service Life", value: "Multi-year — outlasts traffic paint by orders of magnitude" },
       { label: "Specification", value: "Specified by Canadian municipalities coast to coast" },
     ],
-    // Audited per Vernon: TrafficPatterns is the crosswalks workhorse. Old site also uses for parking lots / streetscapes.
-    relatedApplications: ["crosswalks", "parking-lots", "community-branding"],
+    // Expanded per Vernon: crosswalks, parks, schools (→playgrounds), public spaces, parking lots.
+    relatedApplications: ["crosswalks", "parks-paths", "playgrounds", "public-spaces", "parking-lots", "pedestrian-safety"],
   },
   {
     name: "StreetBond",
@@ -115,9 +115,9 @@ export const products: Product[] = [
       { name: "Civic Orange", hex: "#E67E22" },
       { name: "Night White", hex: "#F2F2F2" },
     ],
-    // Audited per Vernon: StreetBond is the colour-coating workhorse across bike lanes, bus lanes,
-    // crosswalks, driveways, and parks/paths.
-    relatedApplications: ["bike-lanes", "bus-lanes", "crosswalks", "private-driveways", "parks-paths"],
+    // Expanded per Vernon: bike lanes, bus lanes, crosswalks, parking lots, pedestrian plazas (public-spaces),
+    // driveways, sports surfaces, playgrounds.
+    relatedApplications: ["bike-lanes", "bus-lanes", "crosswalks", "parking-lots", "public-spaces", "private-driveways", "sport-courts", "playgrounds", "parks-paths"],
   },
   {
     name: "StreetPrint",
@@ -137,9 +137,9 @@ export const products: Product[] = [
       { label: "Snowplow Safe", value: "Yes — flush surface, no raised edges" },
       { label: "Applications", value: "Driveways, parks/paths, plazas, intersections" },
     ],
-    // Audited per Vernon: StreetPrint is primarily decorative — parks/paths, driveways, plazas.
-    // Removed crosswalks per Vernon (TrafficPatterns/TPxD own that application).
-    relatedApplications: ["private-driveways", "parks-paths", "community-branding", "townhomes"],
+    // Expanded per Vernon: crosswalks, driveways, plazas (public-spaces), parks/paths, townhomes,
+    // heritage districts (community-branding), public art settings.
+    relatedApplications: ["crosswalks", "private-driveways", "residential-driveways", "public-spaces", "parks-paths", "townhomes", "community-branding", "public-art", "commercial-spaces"],
   },
 
   // ── Specialty & Regulatory Group ───────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -160,9 +160,9 @@ export const products: Product[] = [
       { label: "Service Life", value: "Multi-year service in municipal use" },
       { label: "Min. Order", value: "Project-based" },
     ],
-    // Audited per Vernon: DecoMark for crosswalks (Pride / cultural / community), public art, playgrounds,
-    // parks/paths wayfinding, community branding.
-    relatedApplications: ["crosswalks", "public-art", "community-branding", "playgrounds", "parks-paths"],
+    // Expanded per Vernon: public art, community branding, wayfinding (public-spaces),
+    // schools (playgrounds), parks/paths, crosswalks.
+    relatedApplications: ["public-art", "community-branding", "public-spaces", "playgrounds", "parks-paths", "crosswalks"],
   },
   {
     name: "MMAX",
@@ -180,8 +180,8 @@ export const products: Product[] = [
       { label: "UV Stability", value: "Colour-fast acrylic-MMA chemistry" },
       { label: "Service Life", value: "Multi-year service in transit lane use" },
     ],
-    // Audited per Vernon: MMAX is the core bike-lane / bus-lane / BRT / crosswalks-colour product.
-    relatedApplications: ["bike-lanes", "bus-lanes", "crosswalks"],
+    // Expanded per Vernon: bike lanes, bus lanes, BRT corridors (→bus-lanes also), crosswalks, traffic-calming.
+    relatedApplications: ["bike-lanes", "bus-lanes", "crosswalks", "traffic-calming", "pedestrian-safety"],
   },
   {
     name: "StreetBondSR",
@@ -220,8 +220,8 @@ export const products: Product[] = [
       width: 280,
       height: 80,
     },
-    // Focused on heat-island + parking-lot heat mitigation. Removed driveways/community-branding (StreetBond covers those).
-    relatedApplications: ["leed-urban-heat-island", "parking-lots", "parks-paths"],
+    // Expanded per Vernon: parking lots, schools (playgrounds), urban heat-island reduction, parks/paths.
+    relatedApplications: ["leed-urban-heat-island", "parking-lots", "playgrounds", "parks-paths", "commercial-spaces"],
   },
   {
     name: "DuraTherm",
@@ -240,7 +240,8 @@ export const products: Product[] = [
       { label: "Designs", value: "Custom artwork accepted" },
       { label: "Service Life", value: "Multi-year — outlasts painted markings" },
     ],
-    relatedApplications: ["crosswalks", "parking-lots", "community-branding"],
+    // Expanded per Vernon: streetscape inlays (community-branding), heritage districts, pedestrian plazas (public-spaces).
+    relatedApplications: ["crosswalks", "community-branding", "public-spaces", "parking-lots", "pedestrian-safety"],
   },
   {
     name: "DuraShield",
@@ -258,7 +259,8 @@ export const products: Product[] = [
       { label: "Anti-Slip", value: "Available with aggregate texture" },
       { label: "Use Case", value: "Parking lots, residential driveways, pedestrian areas" },
     ],
-    relatedApplications: ["parking-lots", "private-driveways", "parks-paths"],
+    // Expanded per Vernon: pedestrian areas, residential roadways, heat-island mitigation surfaces.
+    relatedApplications: ["parking-lots", "private-driveways", "residential-driveways", "parks-paths", "leed-urban-heat-island", "pedestrian-safety"],
   },
   {
     name: "AirMark",
@@ -277,8 +279,8 @@ export const products: Product[] = [
       { label: "Service Life", value: "Multi-year — significantly outlasts paint" },
       { label: "Installation", value: "Heat application — certified crews" },
     ],
-    // Audited per Vernon: AirMark belongs to airports — not generic regulatory markings.
-    relatedApplications: ["airports"],
+    // Vernon: taxiways, aprons, helipads, holding-position signs — airfield surfaces.
+    relatedApplications: ["airports", "regulatory-markings"],
   },
   {
     name: "PreMark",
@@ -297,9 +299,8 @@ export const products: Product[] = [
       { label: "Retroreflectivity", value: "Intersection-grade glass bead surface" },
       { label: "Symbols", value: "Arrows, stop bars, legends, bike lane markings, accessible parking" },
     ],
-    // Audited per Vernon: PreMark is the bike-lane symbol + regulatory markings workhorse.
-    // Keeps crosswalks (ladder lines) and parking-lots (stall symbols + accessibility).
-    relatedApplications: ["bike-lanes", "regulatory-markings", "crosswalks", "parking-lots"],
+    // Expanded per Vernon: bike lanes, regulatory markings, symbols/arrows, school zones (playgrounds), crosswalks.
+    relatedApplications: ["bike-lanes", "regulatory-markings", "crosswalks", "parking-lots", "playgrounds", "pedestrian-safety", "traffic-calming"],
   },
 
 
@@ -320,7 +321,8 @@ export const products: Product[] = [
       { label: "Cure", value: "Rapid set — minutes to reopen to traffic" },
       { label: "Use Case", value: "Smaller potholes, cracks, joints, surface defects" },
     ],
-    relatedApplications: ["parking-lots", "private-driveways", "parks-paths", "commercial-spaces"],
+    // ChipFill/AggreFill/Fast Patch DPR — pothole + crack repair across all paved surfaces.
+    relatedApplications: ["parking-lots", "private-driveways", "residential-driveways", "parks-paths", "commercial-spaces", "townhomes"],
   },
   {
     name: "AggreFill",
@@ -338,7 +340,7 @@ export const products: Product[] = [
       { label: "Cure", value: "Rapid set — minutes to reopen to traffic" },
       { label: "Weather", value: "Year-round, all-conditions deployment" },
     ],
-    relatedApplications: ["parking-lots", "private-driveways", "parks-paths", "commercial-spaces"],
+    relatedApplications: ["parking-lots", "private-driveways", "residential-driveways", "parks-paths", "commercial-spaces", "townhomes"],
   },
   {
     name: "Fast Patch DPR",
@@ -357,7 +359,7 @@ export const products: Product[] = [
       { label: "Odour", value: "Odourless — suitable for indoor applications" },
       { label: "Resilience", value: "Excellent freeze-thaw resistance + impact absorption" },
     ],
-    relatedApplications: ["parking-lots", "private-driveways", "parks-paths", "commercial-spaces"],
+    relatedApplications: ["parking-lots", "private-driveways", "residential-driveways", "parks-paths", "commercial-spaces", "townhomes"],
   },
   {
     name: "Aquaphalt",

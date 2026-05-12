@@ -64,9 +64,9 @@ export default function HeroSlideshow() {
               Redefining Hardscapes · Since 1999
             </p>
 
-            {/* H1 */}
+            {/* H1 — restored per Vernon ("Let's build your signature space" was a typo on his part, that's the H2) */}
             <h1
-              className="font-black mb-6"
+              className="font-black mb-4"
               style={{
                 fontSize: "clamp(3rem, 7.5vw, 6.5rem)",
                 lineHeight: 0.9,
@@ -75,18 +75,36 @@ export default function HeroSlideshow() {
                 textShadow: "0 2px 32px rgba(0,0,0,0.5)",
               }}
             >
-              Let&rsquo;s build your{" "}
+              The World Is
+              <br />
               <span
                 style={{
-                  background: "linear-gradient(92deg, #F97316 0%, #EAB308 100%)",
+                  // More dramatic gradient per Vernon — pure orange → bright yellow, pop the anchor word.
+                  background: "linear-gradient(92deg, #F97316 0%, #FACC15 55%, #FDE047 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
+                  // Subtle glow so the gradient reads on the dark hero.
+                  filter: "drop-shadow(0 0 24px rgba(249,115,22,0.18))",
                 }}
               >
-                signature space.
+                Your Canvas.
               </span>
             </h1>
+
+            {/* H2 — Vernon's intended placement: directly below the H1 anchor */}
+            <h2
+              className="font-semibold mb-8"
+              style={{
+                fontSize: "clamp(1.5rem, 3vw, 2.25rem)",
+                lineHeight: 1.15,
+                letterSpacing: "-0.02em",
+                color: "rgba(255,255,255,0.86)",
+                textShadow: "0 1px 12px rgba(0,0,0,0.5)",
+              }}
+            >
+              Let&rsquo;s build your signature space.
+            </h2>
 
             {/* Body */}
             <p

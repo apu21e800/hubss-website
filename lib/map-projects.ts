@@ -7,6 +7,9 @@ export interface MapProject {
   lng: number;
   product: string;
   application: string;
+  /** Install year as a 4-digit string. Optional — when omitted, the popup
+   *  card hides the year line gracefully. Vernon to populate when available. */
+  year?: string;
   images: string[];
   excerpt: string;
   problem: string;
@@ -122,7 +125,7 @@ export const mapProjects: MapProject[] = [
   },
   {
     id: "simcoe-rainbow",
-    title: "Simcoe Rainbow Crosswalk",
+    title: "Collingwood Rainbow Crosswalk",
     city: "Collingwood",
     province: "ON",
     lat: 44.5001,
@@ -970,7 +973,7 @@ export const mapProjects: MapProject[] = [
     id: "charlottetown-crosswalk",
     title: "Charlottetown Confederation Landing Crosswalks",
     city: "Charlottetown",
-    province: "PEI",
+    province: "PE",
     lat: 46.2382,
     lng: -63.1311,
     product: "StreetPrint",

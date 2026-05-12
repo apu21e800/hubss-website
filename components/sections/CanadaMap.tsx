@@ -962,7 +962,10 @@ export default function CanadaMap() {
                   <Layer {...HOVERED_RING_LAYER} />
                 </Source>
 
-                {/* Hover popup (map hover only, not panel hover) */}
+                {/* Hover popup — agency-grade card, 4 meta lines tight */}
+                {/* Hover-bridge preserved: onMouseEnter cancels the clear-timeout from handleMouseMove;
+                    onMouseLeave clears immediately. Keeps the popup pinned while the cursor
+                    transits from marker into the card. */}
                 {popupProject && !selectedProject && (
                   <Popup
                     longitude={popupProject.lng}
@@ -972,24 +975,37 @@ export default function CanadaMap() {
                     closeButton={false}
                     closeOnClick={false}
                   >
-                    <div
+                    <button
+                      type="button"
+                      aria-label={`Open case study: ${popupProject.title}`}
                       style={{
-                        background: "#111827",
-                        border: "1px solid rgba(249,115,22,0.4)",
-                        borderRadius: 10,
-                        overflow: "hidden",
-                        width: 215,
+                        all: "unset",
+                        display: "block",
+                        width: 240,
                         cursor: "pointer",
-                        boxShadow: "0 8px 28px rgba(0,0,0,0.75)",
+                        background: "#0f1620",
+                        border: "1px solid rgba(249,115,22,0.32)",
+                        borderRadius: 12,
+                        overflow: "hidden",
+                        boxShadow: "0 10px 32px rgba(0,0,0,0.78), 0 0 0 1px rgba(255,255,255,0.03)",
+                        transition: "transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease",
                       }}
-                      onMouseEnter={() => {
+                      onMouseEnter={(e) => {
                         popupHoveredRef.current = true;
                         if (popupClearTimeoutRef.current) clearTimeout(popupClearTimeoutRef.current);
+                        const el = e.currentTarget;
+                        el.style.transform = "translateY(-2px)";
+                        el.style.borderColor = "rgba(249,115,22,0.55)";
+                        el.style.boxShadow = "0 14px 40px rgba(0,0,0,0.85), 0 0 0 1px rgba(249,115,22,0.2)";
                       }}
-                      onMouseLeave={() => {
+                      onMouseLeave={(e) => {
                         popupHoveredRef.current = false;
                         setPopupProject(null);
                         setHoveredId(null);
+                        const el = e.currentTarget;
+                        el.style.transform = "translateY(0)";
+                        el.style.borderColor = "rgba(249,115,22,0.32)";
+                        el.style.boxShadow = "0 10px 32px rgba(0,0,0,0.78), 0 0 0 1px rgba(255,255,255,0.03)";
                       }}
                       onClick={(e) => {
                         e.stopPropagation();
@@ -999,20 +1015,14 @@ export default function CanadaMap() {
                         setHoveredId(null);
                       }}
                     >
-                      <div
-                        style={{
-                          position: "relative",
-                          width: "100%",
-                          height: 105,
-                          overflow: "hidden",
-                        }}
-                      >
+                      {/* Image with gradient bottom for legibility */}
+                      <div style={{ position: "relative", width: "100%", height: 110, overflow: "hidden" }}>
                         <Image
                           src={popupProject.images[0]}
                           alt={popupProject.title}
                           fill
                           className="object-cover"
-                          sizes="215px"
+                          sizes="240px"
                           unoptimized
                         />
                         <div
@@ -1020,68 +1030,101 @@ export default function CanadaMap() {
                             position: "absolute",
                             inset: 0,
                             background:
-                              "linear-gradient(to bottom, transparent 40%, rgba(17,24,39,0.9) 100%)",
+                              "linear-gradient(to bottom, transparent 35%, rgba(15,22,32,0.55) 78%, rgba(15,22,32,0.95) 100%)",
                           }}
                         />
-                        <div
-                          style={{
-                            position: "absolute",
-                            top: 7,
-                            right: 7,
-                            background: "rgba(0,0,0,0.55)",
-                            backdropFilter: "blur(4px)",
-                            borderRadius: 5,
-                            padding: "2px 6px",
-                            fontSize: 9,
-                            fontWeight: 600,
-                            color: "rgba(255,255,255,0.7)",
-                            letterSpacing: "0.06em",
-                            textTransform: "uppercase",
-                          }}
-                        >
-                          Click to open
-                        </div>
                       </div>
-                      <div style={{ padding: "9px 11px 11px" }}>
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 5,
-                            marginBottom: 4,
-                          }}
-                        >
+
+                      {/* Meta — agency-grade 4 lines */}
+                      <div style={{ padding: "11px 13px 13px" }}>
+                        {/* Line 1: product · application pills */}
+                        <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8, flexWrap: "wrap" }}>
                           <span
                             style={{
                               fontSize: 9,
                               fontWeight: 700,
-                              letterSpacing: "0.1em",
+                              letterSpacing: "0.13em",
                               textTransform: "uppercase",
                               color: "#F97316",
-                              background: "rgba(249,115,22,0.12)",
-                              padding: "1.5px 6px",
+                              background: "rgba(249,115,22,0.13)",
+                              padding: "2px 7px",
                               borderRadius: 4,
+                              border: "1px solid rgba(249,115,22,0.22)",
                             }}
                           >
                             {popupProject.product}
                           </span>
-                          <span style={{ fontSize: 9.5, color: "#6B7280" }}>
-                            {popupProject.city}, {popupProject.province}
+                          <span
+                            style={{
+                              fontSize: 9,
+                              fontWeight: 600,
+                              letterSpacing: "0.1em",
+                              textTransform: "uppercase",
+                              color: "rgba(255,255,255,0.45)",
+                            }}
+                          >
+                            {popupProject.application}
                           </span>
                         </div>
+
+                        {/* Line 2: project title */}
                         <p
                           style={{
-                            fontSize: 11.5,
-                            fontWeight: 600,
+                            fontSize: 13,
+                            fontWeight: 700,
                             color: "#F5F0EB",
-                            lineHeight: 1.35,
-                            margin: 0,
+                            lineHeight: 1.3,
+                            margin: "0 0 6px",
+                            letterSpacing: "-0.01em",
                           }}
                         >
                           {popupProject.title}
                         </p>
+
+                        {/* Line 3: location · year (year line hidden if undefined) */}
+                        <p
+                          style={{
+                            fontSize: 11,
+                            fontWeight: 500,
+                            color: "rgba(255,255,255,0.5)",
+                            margin: 0,
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 6,
+                          }}
+                        >
+                          <span>
+                            {popupProject.city}, {popupProject.province}
+                          </span>
+                          {popupProject.year && (
+                            <>
+                              <span style={{ color: "rgba(255,255,255,0.2)" }}>·</span>
+                              <span>{popupProject.year}</span>
+                            </>
+                          )}
+                        </p>
+
+                        {/* Line 4: CTA */}
+                        <p
+                          style={{
+                            fontSize: 10,
+                            fontWeight: 700,
+                            color: "#F97316",
+                            margin: "9px 0 0",
+                            letterSpacing: "0.08em",
+                            textTransform: "uppercase",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 4,
+                          }}
+                        >
+                          View case study
+                          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        </p>
                       </div>
-                    </div>
+                    </button>
                   </Popup>
                 )}
               </Map>

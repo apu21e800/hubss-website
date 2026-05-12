@@ -8,7 +8,11 @@ Run top-to-bottom on launch morning. Each item is independently verifiable.
 
 - [ ] Lower TTL on `hubss.com` A/CNAME records in GoDaddy to **600s** (see `DNS_MIGRATION.md` P-2).
 - [ ] Confirm MX records do **NOT** point to GoDaddy hosting (email survives the cutover).
-- [ ] Confirm Vercel project env vars are set: `RESEND_API_KEY`, `CONTACT_EMAIL`, plus any AI/social keys.
+- [ ] Confirm Vercel project env vars are set on **Production** scope:
+  - [ ] `RESEND_API_KEY` — without this the contact + Lunch & Learn forms silently succeed but no email is sent (dev fallback)
+  - [ ] `CONTACT_EMAIL` (optional; defaults to `info@hubss.com`)
+  - [ ] `ADMIN_USER` and `ADMIN_PASSWORD` — gate the `/admin/*` tooling (Basic Auth via middleware). Without these the admin routes fail-closed with 503, which is the correct fallback for public production
+  - [ ] Any AI / social-poster keys the admin tooling needs (`ANTHROPIC_API_KEY`, etc.)
 - [ ] In Vercel → Project → Domains → add `hubss.com` and `www.hubss.com` (status will be "Pending" until DNS cuts over).
 - [ ] Sleep.
 
@@ -21,16 +25,20 @@ Run top-to-bottom on launch morning. Each item is independently verifiable.
 - [ ] Latest commit on `main` is the launch-ready commit. Vercel "Production" deployment is **green** (not building, not errored).
 - [ ] Visit the production Vercel URL (`https://hubss-website.vercel.app`). Walk:
   - [ ] Homepage renders, hero loads, map loads, no console errors.
+  - [ ] **Mega menus** — hover Products, Applications, Field Notes. Each opens to a wide multi-column panel (not a narrow dropdown). Field Notes shows featured post cards.
+  - [ ] **Map popup card** — hover any pin, confirm the popup appears with image + 4-line meta (product/application · title · location · "View case study"). Move cursor from pin → card without dismissal. Click → opens full case study modal.
+  - [ ] **Sticky bottom CTA bar** — scroll down past 220px, bar hides. Scroll back up, bar reappears. At top of page bar is always visible.
   - [ ] `/products` grid shows all 13 products with images.
-  - [ ] `/products/streetbond` → loads, sticky bottom CTA works (hide on scroll-down, show on scroll-up).
+  - [ ] `/products/streetbond` → loads, AirMark says "non-runway", PreMark thickness reads "125mil standard / 90mil ViziGrip option", Aquaphalt shelf life reads "1 year".
   - [ ] `/applications` → grid loads, all 21 application tiles.
   - [ ] `/applications/crosswalks` → loads, related products on right rail.
   - [ ] `/blog` → list of posts.
-  - [ ] One blog post → renders MDX.
+  - [ ] One blog post → renders MDX with BreadcrumbList JSON-LD.
   - [ ] `/contact` → form renders.
-  - [ ] `/lunch-learn` → funnel renders.
-  - [ ] `/about` → offices block, JSON-LD includes two LocalBusiness entries.
+  - [ ] `/lunch-learn` → funnel renders, **moose mascot at ~20% smaller than initial design** (clamp(224, 34vw, 416)).
+  - [ ] `/about` → offices block, JSON-LD includes Organization + two LocalBusiness sub-entries.
   - [ ] `/resources` → PDF library loads.
+  - [ ] `/admin` → returns **401 / Basic Auth prompt** (or 503 if env vars not set). Should NOT be publicly reachable.
 - [ ] Submit the **contact form** with a real email. Verify it lands at `info@hubss.com` within 30 seconds.
 - [ ] Submit the **Lunch & Learn form**. Verify same.
 - [ ] Verify `https://hubss-website.vercel.app/sitemap.xml` renders an XML sitemap.
@@ -63,11 +71,12 @@ If anything is < target, screenshot it, decide go/no-go with Vernon.
 Run from a terminal once the Vercel deploy is live:
 
 ```bash
-curl -sI https://hubss-website.vercel.app/ | grep -iE "strict-transport|x-frame|x-content-type|referrer-policy|permissions-policy"
+curl -sI https://hubss-website.vercel.app/ | grep -iE "strict-transport|x-frame|x-content-type|referrer-policy|permissions-policy|content-security-policy"
 ```
 
-- [ ] All 5 security headers present.
+- [ ] All 6 security headers present: HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, **Content-Security-Policy-Report-Only**.
 - [ ] `Strict-Transport-Security` max-age is 63072000 (2 years) with `preload`.
+- [ ] `Content-Security-Policy-Report-Only` is in **Report-Only** mode at launch (won't block anything). After 7 days of clean violation reports in Vercel logs, flip the header key from `Content-Security-Policy-Report-Only` to `Content-Security-Policy` in `next.config.ts` to enforce.
 
 ---
 

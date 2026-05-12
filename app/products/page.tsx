@@ -8,7 +8,7 @@ import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
   title: "Decorative Pavement & Marking Systems",
-  description: "Thirteen surface systems for Canadian municipal, commercial, and private use — preformed thermoplastics, MMA resins, stamped asphalt, decorative coatings, and asphalt repair. Technical data, spec sheets, and certified installation.",
+  description: "Fourteen surface systems for Canadian municipal, commercial, and private use — preformed thermoplastics, MMA resins, stamped asphalt, decorative coatings, and asphalt repair. Technical data, spec sheets, and certified installation.",
   slug: "products",
 });
 
@@ -49,7 +49,7 @@ export default function ProductsPage() {
             Surface Systems for the Built Environment.
           </h1>
           <p className="text-lg" style={{ color: "var(--text-secondary)" }}>
-            Thirteen systems for municipal, commercial, and private use — preformed thermoplastics, MMA resins, stamped asphalt, decorative coatings, and asphalt repair.
+            Fourteen systems for municipal, commercial, and private use — preformed thermoplastics, MMA resins, stamped asphalt, decorative coatings, and asphalt repair.
           </p>
         </div>
 
@@ -88,7 +88,7 @@ export default function ProductsPage() {
             {
               label: "Asphalt Repair",
               desc: "Permanent, traffic-ready repair systems for potholes, utility cuts, and edge joints. No heating, no compaction equipment, open to traffic in 30 minutes.",
-              slugs: ["fast-patch", "aquaphalt"],
+              slugs: ["chipfill", "aggrefill", "fast-patch"],
             },
           ];
 

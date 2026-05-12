@@ -28,8 +28,8 @@ Run top-to-bottom on launch morning. Each item is independently verifiable.
   - [ ] **Mega menus** — hover Products, Applications, Field Notes. Each opens to a wide multi-column panel (not a narrow dropdown). Field Notes shows featured post cards.
   - [ ] **Map popup card** — hover any pin, confirm the popup appears with image + 4-line meta (product/application · title · location · "View case study"). Move cursor from pin → card without dismissal. Click → opens full case study modal.
   - [ ] **Sticky bottom CTA bar** — scroll down past 220px, bar hides. Scroll back up, bar reappears. At top of page bar is always visible.
-  - [ ] `/products` grid shows all 13 products with images.
-  - [ ] `/products/streetbond` → loads, AirMark says "non-runway", PreMark thickness reads "125mil standard / 90mil ViziGrip option", Aquaphalt shelf life reads "1 year".
+  - [ ] `/products` grid shows all 14 products with images.
+  - [ ] `/products/streetbond` → loads, AirMark says "non-runway", PreMark thickness reads "125mil standard / 90mil ViziGrip option".
   - [ ] `/applications` → grid loads, all 21 application tiles.
   - [ ] `/applications/crosswalks` → loads, related products on right rail.
   - [ ] `/blog` → list of posts.

@@ -23,7 +23,7 @@ export const PRODUCT_TAXONOMY = [
   {
     label: "Asphalt Repair",
     desc: "Cold-mix and permanent repair compounds for potholes, utility cuts, and surface defects.",
-    slugs: ["fast-patch", "aquaphalt"],
+    slugs: ["chipfill", "aggrefill", "fast-patch"],
   },
 ] as const;
 

@@ -372,24 +372,6 @@ export const products: Product[] = [
     ],
     relatedApplications: ["parking-lots", "private-driveways", "residential-driveways", "parks-paths", "commercial-spaces", "townhomes"],
   },
-  {
-    name: "Aquaphalt",
-    slug: "aquaphalt",
-    // Per Doug review — keep the page reachable, omit from footer nav.
-    hideFromFooter: true,
-    shortDesc: "Water-activated cold-mix repair. Solvent-free, no heat required.",
-    imageUrl: "/images/products/streetprint/streetprint-40.jpg",
-    gallery: [],
-    description: "Water-activated permanent cold-mix asphalt repair for potholes, utility cuts, valve adjustments, and edge joints. Applied cold and activated with water — no mixing, no heating, no specialty equipment. Solvent-free formulation with low odour profile, making it suitable for underground parkades, occupied spaces, hospital campuses, and school zones. Bonds permanently to asphalt and concrete on contact. Open to traffic immediately after compaction. In service in municipalities and facility programs around the world.",
-    specs: [
-      { label: "Type", value: "Water-activated permanent cold-mix" },
-      { label: "Application", value: "No heat, no mixing, no special equipment" },
-      { label: "Activation", value: "Water — potable or grey water" },
-      { label: "VOC Profile", value: "Solvent-free formulation, low odour" },
-      { label: "Open to Traffic", value: "Immediately after compaction" },
-      { label: "Shelf Life", value: "1 year in sealed packaging" },
-      { label: "Bond", value: "Permanent adhesion to asphalt and concrete" },
-    ],
-    relatedApplications: ["private-driveways", "parking-lots", "parks-paths", "commercial-spaces"],
-  },
 ];
+
+// Aquaphalt removed as a product line (2026-05-12, Vernon). Page and all references dropped.

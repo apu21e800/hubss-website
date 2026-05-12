@@ -28,7 +28,7 @@ const CATEGORIES = [
   { label: "Preformed Thermoplastics", href: "/products", desc: "TrafficPatternsXD, TrafficPatterns, PreMark, DuraTherm, DecoMark, AirMark" },
   { label: "Coatings", href: "/products", desc: "StreetBond, StreetBondSR, MMAX, DuraShield — coloured pavement coatings" },
   { label: "Stamped Asphalt & Concrete", href: "/products", desc: "StreetPrint — in-place decorative stamped asphalt" },
-  { label: "Asphalt Repair", href: "/products", desc: "Fast Patch, Aquaphalt — permanent cold-mix pothole repair" },
+  { label: "Asphalt Repair", href: "/products", desc: "ChipFill, AggreFill, Fast Patch — permanent cold-mix pothole repair" },
 ];
 
 // ── Search overlay ───────────────────────────────────────────────────────────
@@ -187,7 +187,7 @@ const PRODUCT_CATEGORIES = [
     label: "Asphalt Repair",
     tag: "Permanent pothole + crack repair",
     image: "/images/products/streetprint/streetprint-40.jpg",
-    slugs: ["chipfill", "aggrefill", "fast-patch", "aquaphalt"],
+    slugs: ["chipfill", "aggrefill", "fast-patch"],
   },
 ];
 
@@ -207,7 +207,6 @@ const PRODUCT_TAGLINE: Record<string, string> = {
   "chipfill":            "Cold-pour crack and joint repair",
   "aggrefill":           "Aggregate-filled pothole repair",
   "fast-patch":          "Water-activated cold-mix repair",
-  "aquaphalt":           "Water-activated cold-mix repair",
 };
 
 // ── Application category groupings for mega menu ─────────────────────────────

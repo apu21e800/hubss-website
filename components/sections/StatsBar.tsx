@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 const stats = [
   { value: "1,000+", label: "Streets transformed" },
   { value: "10",     label: "Provinces, coast to coast" },
-  { value: "1994",   label: "Year we started" },
+  { value: "1999",   label: "Year we started" },
   // Softened from "20yr" — Doug-style discipline on bold numbers.
   { value: "DECADES", label: "Performance documented" },
 ];

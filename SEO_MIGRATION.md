@@ -126,7 +126,7 @@ About 14 pages on the old site lacked a meta description entirely (`/about-us`, 
 Old homepage had a duplicated title/meta. New site sets it explicitly:
 
 - **Title:** `Decorative Pavement & Road Marking Solutions | HUB Surface Systems`
-- **Meta:** `Canada's leader in decorative stamped asphalt, thermoplastic road markings, and coloured pavement systems. Serving municipalities, developers, and contractors coast to coast since 1994.`
+- **Meta:** `Canada's leader in decorative stamped asphalt, thermoplastic road markings, and coloured pavement systems. Serving municipalities, developers, and contractors coast to coast since 1999.`
 
 Stronger keyword targeting than the old version.
 

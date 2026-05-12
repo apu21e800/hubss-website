@@ -213,7 +213,7 @@ export default async function BlogPostPage({ params }: Props) {
                 </div>
               </div>
               <p style={{ fontSize: 12, color: "#9CA3AF", lineHeight: 1.6, margin: 0 }}>
-                Canada&apos;s leader in decorative and functional pavement solutions since 1994.
+                Canada&apos;s leader in decorative and functional pavement solutions since 1999.
               </p>
             </div>
 

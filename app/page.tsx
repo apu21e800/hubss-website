@@ -15,7 +15,7 @@ import CanadaMapWrapper from "@/components/sections/CanadaMapWrapper";
 
 export const metadata: Metadata = buildMetadata({
   title: "Decorative Pavement & Road Marking Solutions",
-  description: "Canada's leader in decorative stamped asphalt, thermoplastic road markings, and coloured pavement systems. Serving municipalities, developers, and contractors coast to coast since 1994.",
+  description: "Canada's leader in decorative stamped asphalt, thermoplastic road markings, and coloured pavement systems. Serving municipalities, developers, and contractors coast to coast since 1999.",
   slug: "",
 });
 
@@ -26,7 +26,7 @@ const organizationSchema = {
   name: "HUB Surface Systems",
   url: "https://hubss.com",
   logo: "https://hubss.com/images/hub-official-logo.svg",
-  foundingDate: "1994",
+  foundingDate: "1999",
   description:
     "Canadian leader in decorative pavement and traffic safety solutions. Stamped asphalt, thermoplastic markings, and specialty coatings for municipalities and developers across Canada.",
   sameAs: [

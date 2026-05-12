@@ -71,7 +71,7 @@ export default function AboutPage() {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-36 pb-16 sm:pb-24 relative z-10">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "#f97316" }}>
-            Canadian-Operated Since 1994 · All 10 Provinces
+            Canadian-Operated Since 1999 · All 10 Provinces
           </p>
           <h1
             className="font-black mb-6 max-w-4xl"

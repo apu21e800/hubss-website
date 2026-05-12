@@ -56,7 +56,7 @@ export default function HeroSlideshow() {
         <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
 
-            {/* Eyebrow — Doug's review: ".... since 1999" — overrides 1994 elsewhere on site */}
+            {/* Eyebrow — Vernon-confirmed: 1999 is the authoritative founding year site-wide */}
             <p
               className="text-xs font-bold tracking-[0.22em] uppercase mb-4"
               style={{ color: "#F97316" }}

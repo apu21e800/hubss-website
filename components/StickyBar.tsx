@@ -3,17 +3,16 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
-// Smart scroll-direction hide:
-//   • Always visible near top of page (≤ ALWAYS_SHOW_PX)
-//   • Past that: HIDE on scroll-down (reader committed to content),
-//     SHOW on scroll-up (reader looking for action)
+// Scroll-up-only reveal:
+//   • Hidden on page load — gives the hero full visual breathing room
+//   • SHOW on scroll-up (reader looking for action)
+//   • HIDE on scroll-down (reader moving into content)
 //   • MIN_DELTA filters iOS rubber-band / trackpad jitter
 //   • rAF-throttled to avoid layout thrash
-const ALWAYS_SHOW_PX = 220;
 const MIN_DELTA = 6;
 
 export default function StickyBar() {
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
   const lastScrollY = useRef(0);
   const ticking = useRef(false);
 
@@ -25,9 +24,7 @@ export default function StickyBar() {
       requestAnimationFrame(() => {
         const y = window.scrollY;
         const dy = y - lastScrollY.current;
-        if (y <= ALWAYS_SHOW_PX) {
-          setVisible(true);
-        } else if (Math.abs(dy) >= MIN_DELTA) {
+        if (Math.abs(dy) >= MIN_DELTA) {
           // dy > 0 → scrolling down → hide
           // dy < 0 → scrolling up → show
           setVisible(dy < 0);

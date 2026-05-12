@@ -21,12 +21,12 @@ export default function HeroSlideshow() {
         />
       </div>
 
-      {/* ── Gradients ─────────────────────────────────────────────── */}
+      {/* ── Gradients — lightened per Doug review for brighter hero ───── */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(180deg, rgba(13,17,23,0.55) 0%, rgba(13,17,23,0.45) 40%, rgba(13,17,23,0.62) 70%, rgba(13,17,23,0.92) 100%)",
+            "linear-gradient(180deg, rgba(13,17,23,0.38) 0%, rgba(13,17,23,0.28) 40%, rgba(13,17,23,0.5) 70%, rgba(13,17,23,0.86) 100%)",
           zIndex: 2,
         }}
       />
@@ -34,7 +34,7 @@ export default function HeroSlideshow() {
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            "linear-gradient(95deg, rgba(13,17,23,0.62) 0%, rgba(13,17,23,0.28) 42%, transparent 62%)",
+            "linear-gradient(95deg, rgba(13,17,23,0.48) 0%, rgba(13,17,23,0.18) 42%, transparent 62%)",
           zIndex: 2,
         }}
       />
@@ -92,10 +92,9 @@ export default function HeroSlideshow() {
             {/* Body */}
             <p
               className="text-lg sm:text-xl leading-relaxed mb-10 max-w-2xl"
-              style={{ color: "rgba(255,255,255,0.78)", fontWeight: 400 }}
+              style={{ color: "rgba(255,255,255,0.82)", fontWeight: 400 }}
             >
-              Most surfaces just exist. Ours make a statement — and keep making it
-              through snowplows, de-icing salt, and 20 Canadian winters without a single repaint.
+              Ours make a statement... Yours!
             </p>
 
             {/* CTAs */}

@@ -10,6 +10,8 @@ export interface Product {
   colourCollections?: { name: string; hex: string }[];
   brandLogo?: { src: string; alt: string; width: number; height: number; };
   comingSoon?: boolean;
+  // Overrides the hero eyebrow on /products/[slug] (which otherwise falls back to taxonomy).
+  eyebrow?: string;
   // SEO overrides ported from old hubss.com — preserves keyword targeting + rankings on launch.
   // When present, these win over auto-generated title/description in buildMetadata.
   seoTitle?: string;
@@ -29,11 +31,11 @@ export const products: Product[] = [
     slug: "traffic-patterns-xd",
     seoTitle: "TrafficPatternsXD — Heavy-Duty Decorative Pavement Markings",
     seoDescription: "Get extra durability and a bold look with TrafficPatternsXD — a heavy-duty, decorative pavement marking system for high-traffic areas, BRT corridors, and intersections.",
-    shortDesc: "150mil aggregate-reinforced thermoplastic for BRT corridors and high-traffic intersections.",
+    shortDesc: "Stamped asphalt with aggregate-reinforced preformed thermoplastic.",
     imageUrl: "/images/products/traffic-patterns-xd/traffic-patterns-xd-03.jpg",
     gallery: [1,2,4,7,10,13,16,19,22,25,28,31,34,37,40,43,46,49,52,55,58,61,64,67,70,73,76,79,82,85,88,91,94,97,100,103,106,109,112,115,118,121,124,127,129,130,133,136,139,143].map(n =>
       `/images/products/traffic-patterns-xd/traffic-patterns-xd-${String(n).padStart(2, "0")}.jpg`),
-    description: "150mil aggregate-reinforced preformed thermoplastic for BRT corridors, high-volume intersections, and concentrated turning movements. Crushed aggregate fused through the thermoplastic matrix delivers high skid resistance under wet-surface bus and transit loading. Heat-fused permanently to the pavement surface. Specified by Canadian transit authorities and municipalities where painted lane markings will not survive a single season of bus turning movements.",
+    description: "TrafficPatternsXD is a thermoplastic surface system designed for high-traffic decorative pavement applications. Aggregate is integrally bound within the thermoplastic, delivering enhanced skid resistance and surface durability under the heaviest pedestrian and vehicular use. Heat-fused permanently to asphalt or concrete, the system pairs the aesthetic of stamped patterns with the longevity expected of preformed thermoplastic — specified by Canadian municipalities and transit authorities coast to coast for crosswalks, BRT corridors, plazas, and high-volume intersections.",
     specs: [
       { label: "Material", value: "Aggregate-reinforced preformed thermoplastic" },
       { label: "Thickness", value: "150mil" },
@@ -48,27 +50,28 @@ export const products: Product[] = [
   {
     name: "TrafficPatterns",
     slug: "traffic-patterns",
-    shortDesc: "90mil preformed thermoplastic. Years of retroreflectivity vs months for paint.",
+    shortDesc: "Specified for crosswalks, parks, schools, public spaces and multiple other applications used across Canadian municipalities coast to coast.",
     imageUrl: "/images/products/traffic-patterns/traffic-patterns-01.jpg",
     gallery: gallery("traffic-patterns", "traffic-patterns", 86),
-    description: "Factory-manufactured 90mil preformed thermoplastic, heat-fused to asphalt or concrete. Retroreflective glass beads embedded through the full cross-section, holding nighttime visibility as the surface wears. Open to traffic within hours of installation. Withstands snowplow blades, de-icing chemicals, and Canadian freeze-thaw cycling. Holds retroreflectivity for years where conventional traffic paint typically requires repainting in a year or less. Specified for crosswalks, bike lanes, and regulatory markings by Canadian municipalities coast to coast.",
+    description: "Factory-manufactured 125mil preformed thermoplastic, heat-fused to asphalt or concrete. Retroreflective glass beads embedded through the full cross-section, holding nighttime visibility as the surface wears. Open to traffic within hours of installation. Withstands snowplow blades, de-icing chemicals, and Canadian freeze-thaw cycling. Holds retroreflectivity for years where conventional traffic paint typically requires repainting in a year or less. Specified for crosswalks, parks, schools, public spaces, and regulatory markings by Canadian municipalities coast to coast.",
     specs: [
       { label: "Material", value: "Preformed thermoplastic" },
-      { label: "Thickness", value: "90mil standard" },
+      { label: "Thickness", value: "125mil standard" },
       { label: "Retroreflectivity", value: "Glass beads embedded through full cross-section" },
       { label: "Temperature Range", value: "Performs in Canadian climate extremes" },
       { label: "Installation", value: "Heat application — open to traffic in hours" },
       { label: "Service Life", value: "Multi-year — outlasts traffic paint by orders of magnitude" },
       { label: "Specification", value: "Specified by Canadian municipalities coast to coast" },
     ],
-    relatedApplications: ["crosswalks", "bike-lanes", "bus-lanes", "parking-lots"],
+    // bike-lanes removed per Doug's review — TrafficPatterns is not used in bike-lane installations.
+    relatedApplications: ["crosswalks", "bus-lanes", "parking-lots"],
   },
   {
     name: "StreetBond",
     slug: "streetbond",
     seoTitle: "StreetBond® — Durable Asphalt Coatings for Safer Streets",
     seoDescription: "StreetBond is a high-quality pavement coating system that transforms ordinary asphalt and concrete surfaces into vibrant, durable, and functional surfaces for streets, commercial spaces, and public facilities.",
-    shortDesc: "Acrylic pavement coating. Bonds chemically. Full Pantone matching.",
+    shortDesc: "Coloured coatings for Canadian applications. Bold. Tough. Engineered for Canada.",
     imageUrl: "/images/products/streetbond/streetbond-01.png",
     gallery: [
       // Product renders
@@ -83,7 +86,7 @@ export const products: Product[] = [
       ...[80,81,82,83,84,85,86,87,88,89,90,91,92,93,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112].map(n =>
         `/images/products/streetbond/streetbond-${n}.jpg`),
     ],
-    description: "Flexible acrylic coloured pavement coating for asphalt and acid-etched concrete. Bonds to the substrate and flexes with pavement movement, resisting peeling, chipping, and delamination through freeze-thaw cycling. Used for bike lanes, bus priority zones, decorative crosswalks, civic plazas, and branded driveways. Available in a standard palette or full custom Pantone matching. Specified by Canadian municipalities and transportation authorities coast to coast.",
+    description: "StreetBond is a high-quality, innovative pavement coating system designed to transform ordinary asphalt and concrete surfaces into vibrant, visually stunning, and functional surfaces in commercial spaces, public facilities, residential neighbourhoods, and urban streetscapes. With StreetBond, you can unleash your creativity to design truly unique and captivating surfaces that leave a lasting impression on both asphalt and concrete. Specified by Canadian municipalities and transportation authorities coast to coast.",
     specs: [
       { label: "Type", value: "Acrylic coloured pavement coating" },
       { label: "Surfaces", value: "Asphalt and concrete (acid-etched)" },
@@ -110,10 +113,12 @@ export const products: Product[] = [
     slug: "streetprint",
     seoTitle: "StreetPrint® — Stamped Asphalt Solutions for Urban Design",
     seoDescription: "StreetPrint is a state-of-the-art decorative pavement solution that combines the durability of asphalt with the aesthetics of brick, stone, or custom designs.",
-    shortDesc: "In-place stamped asphalt. 12+ standard patterns plus custom.",
+    shortDesc: "Genuine Stamped Asphalt.",
     imageUrl: "/images/products/streetprint/streetprint-01.jpg",
     gallery: [1,3,5,7,9,10,11,13,15,17,19,21,23,25,27,29,31,32,33,35,37,39,41,43,45,47,49,51,53,55,56,57,59,61,63,65,67,69,71,73,75,77,79,80,81,83,85,87,89,91].map(n =>
       `/images/products/streetprint/streetprint-${String(n).padStart(2, "0")}.jpg`),
+    // TODO: doug-review — Doug's reviewer note ended mid-sentence ("after final....").
+    // Leaving current description in place until Vernon completes Doug's thought.
     description: "In-place asphalt stamping system, sealed with StreetBond UV-stable acrylic colour. Stamps brick, cobblestone, slate, herringbone, fan, and custom patterns directly into new or existing asphalt before final compaction. Flush surface with no raised edges, no shear risk under plows, and no joints to weed. 12+ standard patterns plus fully custom designs. Installed by certified HUB applicators across Canada for crosswalks, plazas, intersections, and driveways.",
     specs: [
       { label: "System", value: "In-place asphalt stamping + StreetBond coating" },
@@ -132,35 +137,38 @@ export const products: Product[] = [
     name: "DecoMark",
     slug: "decomark",
     seoTitle: "DecoMark — Custom Horizontal Graphics and Wayfinding",
-    seoDescription: "Elevate your brand with durable custom horizontal graphics, civic art, and pavement wayfinding solutions — full Pantone matching, print-quality accuracy.",
-    shortDesc: "Custom-graphic preformed thermoplastic. Pantone-matched.",
+    seoDescription: "Elevate your brand with durable custom horizontal graphics, civic art, and pavement wayfinding solutions.",
+    shortDesc: "Custom-graphic preformed thermoplastic for wayfinding, public art, schools, and parks.",
     imageUrl: "/images/products/decomark/decomark-01.jpg",
     gallery: gallery("decomark", "decomark", 78),
-    description: "Custom-graphic preformed thermoplastic for civic murals, Indigenous art, Pride crosswalks, neighbourhood identity, school zone graphics, and large-format public art. Components are fabricated to vector artwork and Pantone colour specifications, then heat-fused to asphalt or concrete. Print-quality colour accuracy and dimensional precision. Withstands snowplow cycles, de-icing chemicals, and multi-year traffic loads.",
+    description: "Custom-graphic preformed thermoplastic for civic murals, Indigenous art, neighbourhood identity, school zone graphics, and large-format public art. Components are fabricated in our state-of-the-art production facility to your design, then heat-fused to asphalt or concrete. Dimensional precision and print-grade colour accuracy. Withstands snowplow cycles, de-icing chemicals, and multi-year traffic loads.",
     specs: [
       { label: "System", value: "Precision preformed thermoplastic components" },
-      { label: "Colour Range", value: "Full custom Pantone matching" },
       { label: "Surfaces", value: "Asphalt and concrete" },
       { label: "Design", value: "Custom artwork — vector files accepted" },
       { label: "Installation", value: "Certified HUB applicators" },
       { label: "Service Life", value: "Multi-year service in municipal use" },
       { label: "Min. Order", value: "Project-based" },
     ],
-    relatedApplications: ["community-branding", "crosswalks", "playgrounds"],
+    // Updated per Doug: DecoMark used for wayfinding/public art/schools/parks, not crosswalks.
+    relatedApplications: ["community-branding", "public-art", "playgrounds", "parks-paths"],
   },
   {
     name: "MMAX",
     slug: "mmax",
-    shortDesc: "MMA resin coating. 30–60 min cure. Bond strength >3 MPa.",
+    shortDesc: "MMA resin coating. 30–60 min cure. Engineered for transit lanes and bike priority corridors.",
     imageUrl: "/images/products/mmax/mmax-01.jpg",
     gallery: gallery("mmax", "mmax", 33),
-    description: "Methyl methacrylate (MMA) resin coating that cures to traffic-ready in 30–60 minutes, enabling overnight installation in active transit corridors. High bond strength under shear loading at bus stops and turning radii. Applies in cool conditions when ambient is 2°C and rising. Specified for red bus lanes, green bike lanes, and transit-priority corridors where short cure windows and bond strength above acrylic and epoxy alternatives are required.",
+    // TODO: doug-review — Doug noted "+3°C at best. need to check spec's" on temperature.
+    // Current copy says "2°C and rising" which is the conservative industry-typical MMA min.
+    // Vernon to confirm the specific MMAX TDS value (likely +3°C, +5°C, or similar).
+    description: "Methyl methacrylate (MMA) resin coating that cures to traffic-ready in 30–60 minutes, enabling overnight installation in active transit corridors. High bond strength under shear loading at bus stops and turning radii. Applies in cool conditions per manufacturer TDS. Specified for red bus lanes, green bike lanes, and transit-priority corridors where short cure windows and bond strength above acrylic and epoxy alternatives are required.",
     specs: [
       { label: "Material", value: "Methyl Methacrylate (MMA) resin" },
       { label: "Cure Time", value: "30–60 minutes (traffic-ready)" },
       { label: "Bond Strength", value: "High — exceeds typical acrylic/epoxy systems" },
       { label: "Thickness", value: "1.5–3mm applied for coloured lane treatment" },
-      { label: "Min. Temp", value: "2°C and rising" },
+      { label: "Min. Temp", value: "Cool-weather application — per manufacturer TDS" },
       { label: "UV Stability", value: "Colour-fast acrylic-MMA chemistry" },
       { label: "Service Life", value: "Multi-year service in transit lane use" },
     ],
@@ -227,17 +235,17 @@ export const products: Product[] = [
   {
     name: "DuraShield",
     slug: "durashield",
-    shortDesc: "Two-component epoxy-modified acrylic coating for asphalt and concrete surface protection.",
+    shortDesc: "Two-component asphalt pavement maintenance coating. Solar-reflective grey for pedestrian areas and local residential roadways.",
     imageUrl: "/images/products/durashield/durashield-01.jpg",
     gallery: gallery("durashield", "durashield", 10),
-    description: "Two-component, water-based, epoxy-modified acrylic protective coating that extends the service life of asphalt and concrete pavement surfaces. Resists hot tire pickup, oil contamination, and UV degradation. Available with optional anti-slip aggregate for enhanced traction in pedestrian areas. Standard offerings include Color Asphalt and Solar Gray. Applied as part of a proactive maintenance program for parking lots, driveways, and asphalt path systems before resurfacing is required.",
+    description: "Formulated for use as an asphalt pavement maintenance coating, DuraShield is a two-component waterborne epoxy-modified acrylic grey color that provides durable aesthetics in pedestrian areas and local residential roadways. DuraShield SR Grey provides a solar reflectance of 0.34, which helps cool pavement surfaces and protect the substrate by reducing the damaging effects of heat and UV exposure. Cooler pavement surface temperatures can also help mitigate urban heat island effects. With low volatile organic content (VOC), DuraShield meets Southern California Air Quality Management District (SCAQMD) regulations. DuraShield also helps protect the substrate from the damaging effects of exposure to chemicals like fuel, oil and deicing agents.",
     specs: [
-      { label: "Type", value: "Two-component, water-based, epoxy-modified acrylic coating" },
-      { label: "Surface", value: "Asphalt and concrete" },
-      { label: "Standard Colours", value: "Color Asphalt, Solar Gray" },
-      { label: "Anti-Slip", value: "Available with aggregate texture" },
-      { label: "Drying", value: "Recoat and traffic-open per manufacturer TDS" },
-      { label: "Use Case", value: "Proactive pavement maintenance, surface protection" },
+      { label: "Type", value: "Two-component waterborne epoxy-modified acrylic coating" },
+      { label: "Surface", value: "Asphalt pavement maintenance coating" },
+      { label: "Colour", value: "Grey (SR 0.34 solar reflectance)" },
+      { label: "VOC", value: "Low — meets SCAQMD regulations" },
+      { label: "Chemical Resistance", value: "Fuel, oil, deicing agents" },
+      { label: "Use Case", value: "Pedestrian areas, local residential roadways, urban heat island mitigation" },
     ],
     relatedApplications: ["private-driveways", "parking-lots", "parks-paths"],
   },
@@ -246,10 +254,10 @@ export const products: Product[] = [
     slug: "airmark",
     seoTitle: "AirMark — Advanced Airport Pavement Markings",
     seoDescription: "AirMark is an advanced, high-quality airport pavement markings system specifically designed for taxiways, aprons, and other non-runway aviation applications.",
-    shortDesc: "Preformed thermoplastic for non-runway airfield markings. Multi-year service life.",
+    shortDesc: "Preformed thermoplastic for non-runway airfield markings. Used in Canada's busiest airports.",
     imageUrl: "/images/products/airmark/airmark-01.jpg",
     gallery: gallery("airmark", "airmark", 22),
-    description: "Preformed thermoplastic airfield marking system for taxiways, aprons, holding position signs, and other non-runway aviation surfaces. Glass beads embedded through the full material cross-section, not just the surface, holding retroreflectivity as the surface wears. Heat-applied by certified crews. Withstands deicing fluid application and rubber contamination from landing gear. Multi-year service life with no annual repainting cycle.",
+    description: "Withstands jet blast, snow clearing operations, rubber removal treatments, and maintains visibility year after year.",
     specs: [
       { label: "Application", value: "Taxiways, aprons, helipads, non-runway airfield surfaces" },
       { label: "Material", value: "Preformed thermoplastic" },
@@ -268,7 +276,7 @@ export const products: Product[] = [
     shortDesc: "Preformed thermoplastic symbols and legends. Drive-on installation.",
     imageUrl: "/images/products/premark/premark-01.jpg",
     gallery: gallery("premark", "premark", 11),
-    description: "Library of preformed thermoplastic road marking symbols — turn arrows, stop bars, yield triangles, school zone legends, bike pictograms, accessible parking symbols, and crosswalk ladder lines. Pre-cut to specification, heat-applied, and drive-on immediately. No stencil prep, no curing window. 125mil standard thickness, with a 90mil ViziGrip option for lighter-duty applications. Holds retroreflectivity for years where painted symbols typically require annual repainting.",
+    description: "Library of preformed thermoplastic road marking symbols — turn arrows, stop bars, yield triangles, school zone legends, bike pictograms and bike lane markings, accessible parking symbols, and crosswalk ladder lines. Pre-cut to specification, heat-applied, and drive-on immediately. No stencil prep, no curing window. 125mil standard thickness, with a 90mil ViziGrip option for lighter-duty applications. Holds retroreflectivity for years where painted symbols typically require annual repainting.",
     specs: [
       { label: "Material", value: "Preformed thermoplastic" },
       { label: "Thickness", value: "125mil standard / 90mil ViziGrip option" },
@@ -284,17 +292,18 @@ export const products: Product[] = [
   {
     name: "Fast Patch",
     slug: "fast-patch",
-    shortDesc: "Permanent polyurethane repair. Open to traffic in 30 minutes.",
+    eyebrow: "Concrete and Asphalt Repair",
+    shortDesc: "Permanent concrete and asphalt repair. Traffic-ready in less than an hour.",
     imageUrl: "/images/products/streetprint/streetprint-01.jpg",
     gallery: [],
-    description: "Two-component polyurethane hybrid for permanent pothole and utility cut repair. Mixed on-site and applied cold — no heating, no compaction equipment, no extended lane closures. Bonds chemically to the surrounding asphalt or concrete substrate and cures to a rigid, traffic-ready surface in 30 minutes. Applies from –10°C to +40°C. Significantly outlasts conventional cold-mix repair. Specified by Canadian municipalities and maintenance contractors.",
+    description: "FastPatch DPR is a permanent concrete and asphalt repair system engineered for high-strength, fast-return-to-service repair of potholes, spalls, joints, and utility cuts. Two-component polyurethane chemistry mixes on-site and applies cold — no heating, no compaction equipment, no extended lane closures. Bonds chemically to the surrounding asphalt or concrete substrate and is traffic-ready in less than an hour. Used by Canadian municipalities, maintenance contractors, and industrial facilities where downtime is not an option. Manufacturer source: fastpatchsystems.com/fastpatch-dpr/",
     specs: [
       { label: "Type", value: "Two-component polyurethane hybrid" },
       { label: "Application", value: "Cold mix — no heating required" },
-      { label: "Cure Time", value: "Open to traffic in 30 minutes" },
+      { label: "Cure Time", value: "Traffic-ready in less than an hour" },
       { label: "Bond", value: "Direct chemical bond to existing asphalt and concrete" },
+      { label: "Substrate", value: "Concrete and asphalt — potholes, spalls, joints, utility cuts" },
       { label: "Service Life", value: "Significantly outlasts conventional cold-mix repair" },
-      { label: "Temperature Range", value: "Applies from -10°C to +40°C" },
       { label: "Coverage", value: "1 unit covers approximately 0.1 m³ of repair volume" },
     ],
     relatedApplications: ["private-driveways", "parking-lots", "parks-paths", "commercial-spaces"],

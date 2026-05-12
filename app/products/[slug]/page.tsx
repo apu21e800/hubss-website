@@ -90,13 +90,14 @@ export default async function ProductPage({ params }: Props) {
           priority
           sizes="100vw"
         />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(8,13,22,0.55) 0%, rgba(8,13,22,0.62) 55%, rgba(8,13,22,0.88) 100%)" }} />
+        {/* Hero overlays lightened per Doug review (TPXD specifically — applied product-wide for consistency) */}
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(8,13,22,0.4) 0%, rgba(8,13,22,0.5) 55%, rgba(8,13,22,0.82) 100%)" }} />
         {/* Left text scrim for legibility */}
-        <div className="absolute inset-0" style={{ background: "linear-gradient(92deg, rgba(8,13,22,0.48) 0%, rgba(8,13,22,0.18) 45%, transparent 65%)" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(92deg, rgba(8,13,22,0.38) 0%, rgba(8,13,22,0.14) 45%, transparent 65%)" }} />
         <div className="absolute inset-0 flex items-end">
           <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-14">
             <p className="text-xs font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#f97316" }}>
-              {getProductFamily(product.slug)}
+              {product.eyebrow ?? getProductFamily(product.slug)}
             </p>
             <h1
               className="font-black leading-[1.05] mb-3"
@@ -195,7 +196,7 @@ export default async function ProductPage({ params }: Props) {
             <div className="rounded-xl p-8 mb-8 sticky top-24 relative overflow-hidden" style={{ background: "#111111", border: "1px solid rgba(255,255,255,0.08)" }}>
               {/* Orange top accent */}
               <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
-              <h3 className="font-bold text-lg mb-6" style={{ color: "#F5F0EB" }}>Specifications</h3>
+              <h3 className="font-bold text-lg mb-6" style={{ color: "#F5F0EB" }}>Spec Library</h3>
               <div className="space-y-4">
                 {product.specs.map((spec) => (
                   <div key={spec.label} className="flex justify-between text-sm" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", paddingBottom: "12px" }}>
@@ -206,28 +207,7 @@ export default async function ProductPage({ params }: Props) {
                   </div>
                 ))}
               </div>
-
-              <Link
-                href="/contact"
-                className="flex items-center justify-center gap-2 w-full text-center font-bold py-4 rounded-lg mt-8 transition-all text-sm"
-                style={{
-                  background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
-                  color: "#fff",
-                  boxShadow: "0 4px 16px rgba(249,115,22,0.35)",
-                }}
-              >
-                Request Spec Sheet
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </Link>
-              <Link
-                href="/lunch-learn"
-                className="flex items-center justify-center gap-2 w-full text-center font-semibold py-3.5 rounded-lg mt-3 transition-all text-sm hover:border-orange-500/40 hover:text-white"
-                style={{ background: "transparent", color: "#9CA3AF", border: "1px solid rgba(255,255,255,0.12)" }}
-              >
-                Book a Lunch &amp; Learn
-              </Link>
+              {/* CTAs removed per Doug review — quote and L&L now live in the sticky bottom bar. */}
             </div>
           </div>
         </div>

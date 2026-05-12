@@ -60,7 +60,7 @@ export default function Footer() {
             </p>
 
             <p className="text-xs mb-6" style={{ color: "var(--text-muted)" }}>
-              Canadian-operated · Coast to coast · Since 1994
+              Canadian owned and operated · Coast to coast · Since 1994
             </p>
 
             <SocialLinks className="mt-3" />

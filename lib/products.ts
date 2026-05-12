@@ -14,6 +14,8 @@ export interface Product {
   eyebrow?: string;
   // Hide a product from footer nav while keeping the /products/[slug] page reachable directly.
   hideFromFooter?: boolean;
+  // Per-product hero crop override (CSS object-position). Defaults to "center 62%" in the product page.
+  heroPosition?: string;
   // SEO overrides ported from old hubss.com — preserves keyword targeting + rankings on launch.
   // When present, these win over auto-generated title/description in buildMetadata.
   seoTitle?: string;
@@ -310,11 +312,12 @@ export const products: Product[] = [
     slug: "chipfill",
     eyebrow: "Concrete and Asphalt Repair",
     shortDesc: "Heat-activated preformed material for permanent pothole repair. Year-round, all-weather.",
-    imageUrl: "/images/products/chipfill/chipfill-04.jpg",
+    imageUrl: "/images/products/chipfill/chipfill-01.jpg",
+    heroPosition: "center 38%",
     gallery: [
-      "/images/products/chipfill/chipfill-04.jpg",
       "/images/products/chipfill/chipfill-01.jpg",
       "/images/products/chipfill/chipfill-02.jpg",
+      "/images/products/chipfill/chipfill-04.jpg",
       "/images/products/chipfill/chipfill-03.jpg",
     ],
     description: "ChipFill is a heat-activated preformed pothole repair material engineered for permanent restoration of road surface damage. The material is laid into the prepared pothole and activated with a heat torch — no specialized equipment, no mixing, no aggregate prep. Once heated, ChipFill conforms to the contours of the damage and bonds chemically to the surrounding asphalt or concrete, preventing the water intrusion that turns minor damage into deeper structural failure. Deployable year-round regardless of weather. Sets rapidly so traffic can reopen within minutes of installation. Used by Canadian municipalities and maintenance crews for routine and emergency repair programs across roads, parking lots, sidewalks, and pedestrian surfaces.",
@@ -335,6 +338,7 @@ export const products: Product[] = [
     eyebrow: "Concrete and Asphalt Repair",
     shortDesc: "Pre-coated aggregate filler for larger potholes up to 1 m². Combined with ChipFill for permanent repair.",
     imageUrl: "/images/products/aggrefill/aggrefill-01.jpg",
+    heroPosition: "center 28%",
     gallery: [
       "/images/products/aggrefill/aggrefill-01.jpg",
       "/images/products/aggrefill/aggrefill-02.jpg",
@@ -356,7 +360,10 @@ export const products: Product[] = [
     slug: "fast-patch",
     eyebrow: "Concrete and Asphalt Repair",
     shortDesc: "Distressed pavement repair. Return to service in under 45 minutes. Polymer blend with recycled content.",
-    imageUrl: "/images/products/fast-patch/fast-patch-01.png",
+    // TODO: Vernon to supply in-use Fast Patch photo (product-in-pothole / crew applying). Using aggrefill-02 as atmospheric
+    // repair hero until then — close-up of heat-activated repair material reads well on dark overlay.
+    imageUrl: "/images/products/aggrefill/aggrefill-02.jpg",
+    heroPosition: "center 50%",
     gallery: [
       "/images/products/fast-patch/fast-patch-01.png",
     ],

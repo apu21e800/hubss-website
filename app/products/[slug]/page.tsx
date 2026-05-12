@@ -89,7 +89,7 @@ export default async function ProductPage({ params }: Props) {
           fill
           // Subject-bias crop — pavement surface is the subject, sky/context is background.
           className="object-cover"
-          style={{ objectPosition: "center 62%" }}
+          style={{ objectPosition: product.heroPosition ?? "center 62%" }}
           priority
           sizes="100vw"
         />

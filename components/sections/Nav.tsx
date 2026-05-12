@@ -191,6 +191,25 @@ const PRODUCT_CATEGORIES = [
   },
 ];
 
+// ── Mega-menu micro-taglines per product (5–7 word noun phrases per Vernon) ──
+const PRODUCT_TAGLINE: Record<string, string> = {
+  "traffic-patterns-xd": "Aggregate-reinforced thermoplastic",
+  "traffic-patterns":    "Preformed thermoplastic markings",
+  "premark":             "Symbols, arrows, regulatory markings",
+  "duratherm":           "Inlaid flush-mount thermoplastic",
+  "decomark":            "Custom graphic thermoplastic",
+  "airmark":             "Airfield thermoplastic markings",
+  "streetbond":          "Coloured pavement coating",
+  "streetbondsr":        "Solar-reflective coating",
+  "mmax":                "MMA resin lane coating",
+  "durashield":          "Pavement maintenance coating",
+  "streetprint":         "Stamped asphalt patterns",
+  "fast-patch":          "Permanent pothole repair",
+  "chipfill":            "Cold-pour crack and joint repair",
+  "aggrefill":           "Aggregate-filled pothole repair",
+  "aquaphalt":           "Water-activated cold-mix repair",
+};
+
 // ── Application category groupings for mega menu ─────────────────────────────
 const APPLICATION_GROUPS = [
   {
@@ -308,19 +327,26 @@ function ProductsMegaMenu() {
                   </div>
                 </Link>
 
-                {/* Product list */}
+                {/* Product list — name + 5-7 word tagline per Vernon */}
                 <div className="flex-1 px-3 py-3 space-y-0.5">
                   {items.map((p) => (
                     <Link
                       key={p.slug}
                       href={`/products/${p.slug}`}
-                      className="group flex items-center justify-between gap-2 px-2 py-1.5 rounded-md transition-colors hover:bg-white/5"
+                      className="group flex items-start justify-between gap-2 px-2 py-2 rounded-md transition-colors hover:bg-white/5"
                     >
-                      <span className="text-sm font-semibold group-hover:text-orange-400 transition-colors" style={{ color: "#F5F0EB" }}>
-                        {p.name}
-                      </span>
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold leading-tight group-hover:text-orange-400 transition-colors" style={{ color: "#F5F0EB" }}>
+                          {p.name}
+                        </p>
+                        {PRODUCT_TAGLINE[p.slug] && (
+                          <p className="text-[11px] leading-snug mt-0.5" style={{ color: "rgba(255,255,255,0.45)" }}>
+                            {PRODUCT_TAGLINE[p.slug]}
+                          </p>
+                        )}
+                      </div>
                       <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        className="opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: "#F97316" }}>
+                        className="opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1.5" style={{ color: "#F97316" }}>
                         <path d="M9 18l6-6-6-6" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </Link>
@@ -412,11 +438,11 @@ function FieldNotesMegaMenu() {
           </div>
         </div>
 
-        {/* Featured large card */}
+        {/* Featured large card — taller for parity with Products/Applications mega heights */}
         <Link
           href={`/blog/${featured.slug}`}
           className="col-span-12 lg:col-span-5 group relative rounded-xl overflow-hidden block"
-          style={{ minHeight: 280 }}
+          style={{ minHeight: 360 }}
         >
           <Image
             src={featured.image}
@@ -445,7 +471,7 @@ function FieldNotesMegaMenu() {
           </div>
         </Link>
 
-        {/* Recent posts grid */}
+        {/* Recent posts grid — slightly larger thumbnails for parity */}
         <div className="col-span-12 lg:col-span-4 grid grid-cols-1 gap-3">
           {rest.map((post) => (
             <Link
@@ -454,13 +480,13 @@ function FieldNotesMegaMenu() {
               className="group flex gap-3 p-3 rounded-xl transition-colors hover:bg-white/5"
               style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.06)" }}
             >
-              <div className="relative flex-shrink-0 rounded-lg overflow-hidden" style={{ width: 80, height: 80 }}>
+              <div className="relative flex-shrink-0 rounded-lg overflow-hidden" style={{ width: 96, height: 96 }}>
                 <Image
                   src={post.image}
                   alt={post.title}
                   fill
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  sizes="80px"
+                  sizes="96px"
                 />
               </div>
               <div className="flex-1 min-w-0 flex flex-col justify-center">
@@ -474,6 +500,40 @@ function FieldNotesMegaMenu() {
             </Link>
           ))}
         </div>
+      </div>
+
+      {/* Bottom strip — secondary entry points (matches Products + Applications mega for peer-parity visual weight) */}
+      <div className="mt-8 pt-6 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+        <Link href="/blog"
+          className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
+          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
+        >
+          <div>
+            <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>All field notes</p>
+            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>Project profiles, case studies, guides</p>
+          </div>
+          <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
+        </Link>
+        <Link href="/projects"
+          className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
+          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
+        >
+          <div>
+            <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>Project gallery</p>
+            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>Installations across Canada</p>
+          </div>
+          <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
+        </Link>
+        <Link href="/resources"
+          className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
+          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
+        >
+          <div>
+            <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>Resources</p>
+            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>Spec sheets, install guides, SDS</p>
+          </div>
+          <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
+        </Link>
       </div>
     </MegaShell>
   );

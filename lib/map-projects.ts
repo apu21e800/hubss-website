@@ -78,6 +78,85 @@ export const mapProjects: MapProject[] = [
     solution:
       "StreetBond multi-colour installation with each stripe applied as a separate coloured coating pass. The system bonds to asphalt and is engineered to withstand plow blades and calcium chloride.",
   },
+  {
+    id: "georgina-every-child-matters",
+    title: "Every Child Matters Crosswalk",
+    city: "Georgina",
+    province: "ON",
+    lat: 44.2928,
+    lng: -79.4547,
+    product: "TrafficPatterns",
+    application: "Community Branding",
+    year: "2021",
+    images: [
+      "/images/blog/every-child-matters-crosswalk/featured.png",
+    ],
+    excerpt:
+      "A TrafficPatterns thermoplastic crosswalk in York Region's Town of Georgina honouring the Every Child Matters movement — permanent colour that survives Ontario winters.",
+    problem:
+      "The Town of Georgina sought a durable way to honour the Every Child Matters movement in a public space that would be visible year-round without requiring annual maintenance.",
+    solution:
+      "TrafficPatterns preformed thermoplastic in orange and white, heat-fused to the asphalt crosswalk surface. The installation maintains sharp colour and edge definition through freeze-thaw cycles and snowplow contact.",
+  },
+  {
+    id: "toronto-humberwest-crosswalk",
+    title: "Humberwest Parkway Decorative Crosswalk & Median",
+    city: "Toronto",
+    province: "ON",
+    lat: 43.7350,
+    lng: -79.5784,
+    product: "TrafficPatternsXD",
+    application: "Crosswalks",
+    images: [
+      "/images/blog/decorative-crosswalk-meridian/featured.jpg",
+    ],
+    excerpt:
+      "StreetBond 150 and TrafficPatternsXD combine to create a decorative crosswalk and median treatment on Humberwest Parkway in Toronto's west end.",
+    problem:
+      "The Humberwest Parkway corridor needed a decorative crosswalk and median treatment that could withstand heavy vehicle turning movements and aggressive winter maintenance without the maintenance overhead of concrete pavers.",
+    solution:
+      "TrafficPatternsXD for the crosswalk field — aggregate-reinforced and virtually flush with the asphalt — paired with StreetBond 150 coloured coating on the median. Both systems are snowplow-safe and require no repainting.",
+  },
+  {
+    // TODO: Vernon to confirm exact corridor location + locate image for East London Link BRT
+    id: "london-east-brt",
+    title: "East London Link — Bus Rapid Transit",
+    city: "London",
+    province: "ON",
+    lat: 42.9836,
+    lng: -81.2200,
+    product: "MMAX",
+    application: "Bus & Bike Lanes",
+    images: [
+      "/images/projects/_placeholder.svg",
+    ],
+    excerpt:
+      "MMAX MMA resin bicycle lanes and TrafficPatternsXD crosswalks on London's East London Link BRT corridor — fast-cure installation with minimal transit disruption.",
+    problem:
+      "London's East London Link required surface solutions capable of withstanding heavy transit wear while supporting safe cycling integration on a busy BRT corridor.",
+    solution:
+      "MMAX MMA resin applied to define bicycle lanes — fast cure, slip-resistant, and vibrant. TrafficPatternsXD installed at pedestrian conflict zones for high-traction, long-life crosswalk markings through Ontario freeze-thaw cycles.",
+  },
+  {
+    // TODO: Vernon to locate project image for City of Vaughan TrafficPatternsXD crosswalks
+    id: "vaughan-complete-streets",
+    title: "City of Vaughan Complete Streets Crosswalks",
+    city: "Vaughan",
+    province: "ON",
+    lat: 43.8361,
+    lng: -79.4987,
+    product: "TrafficPatternsXD",
+    application: "Crosswalks",
+    images: [
+      "/images/projects/_placeholder.svg",
+    ],
+    excerpt:
+      "TrafficPatternsXD crosswalks across Vaughan's high-volume arterials — aggregate-reinforced thermoplastic engineered to withstand heavy traffic and aggressive winter clearing.",
+    problem:
+      "Vaughan's arterial crosswalks see some of York Region's heaviest vehicle counts. Standard paint and thermoplastic markings were failing within one to two seasons under snowplow contact.",
+    solution:
+      "TrafficPatternsXD's virtually-flush, aggregate-reinforced structure installs as an 8+ year solution. The material resists snowplow blades, retains retroreflectivity, and requires no annual maintenance cycle.",
+  },
 
   // ── British Columbia ───────────────────────────────────────────────────────
   {
@@ -288,5 +367,105 @@ export const mapProjects: MapProject[] = [
       "BC Children's Hospital wanted a therapeutic labyrinth in their outdoor healing garden. The design needed to be durable enough for daily use, visually distinct, and zero-maintenance given hospital grounds staffing constraints.",
     solution:
       "StreetBond in two complementary colours defines the labyrinth path and surround on the existing asphalt. The application required precise template masking to achieve the geometric design.",
+  },
+  {
+    id: "sechelt-pictograph-crosswalk",
+    title: "Pictograph Crosswalk — Cowrie St & Trail Ave",
+    city: "Sechelt",
+    province: "BC",
+    lat: 49.4745,
+    lng: -123.7572,
+    product: "TrafficPatterns",
+    application: "Community Branding",
+    year: "2022",
+    images: [
+      "/images/blog/pictograph-crosswalk-sechelt/featured.jpg",
+    ],
+    excerpt:
+      "Indigenous artists Dionne Paul and Lindsey Kyoko Adams created a pictograph-themed crosswalk at Cowrie St & Trail Ave in Sechelt, telling the origin story of the shíshálh Nation.",
+    problem:
+      "The District of Sechelt commissioned two artists — one with Indigenous pictograph motifs, one with a bee and dogwood pollinator theme — to create crosswalks that would celebrate community identity without the maintenance burden of paint.",
+    solution:
+      "TrafficPatterns preformed thermoplastic capturing fine artistic detail. The panels are heat-fused to the asphalt, maintaining crisp colour and edge definition through the Sunshine Coast's wet coastal seasons.",
+  },
+  {
+    id: "pitt-meadows-natures-walk",
+    title: "Nature's Walk Roadway Accents",
+    city: "Pitt Meadows",
+    province: "BC",
+    lat: 49.2318,
+    lng: -122.6897,
+    product: "StreetPrint",
+    application: "Community Branding",
+    year: "2021",
+    images: [
+      "/images/blog/roadway-accents-natures-walk/featured.jpg",
+    ],
+    excerpt:
+      "StreetPrint stamped asphalt and StreetBond pavement coating create decorative roadway accents throughout the Nature's Walk development in Pitt Meadows, BC.",
+    problem:
+      "The Nature's Walk residential development in Pitt Meadows needed decorative roadway treatments that would distinguish the community from standard subdivision streetscapes without the long-term maintenance of brick or concrete pavers.",
+    solution:
+      "StreetPrint in-place stamped asphalt for decorative crossings and entry points, combined with StreetBond coloured coating for pedestrian zones. The flush surface is snowplow-safe and requires no annual maintenance.",
+  },
+  {
+    id: "white-rock-seaside-stroll",
+    title: "White Rock Seaside Stroll — Johnston Rd",
+    city: "White Rock",
+    province: "BC",
+    lat: 49.0284,
+    lng: -122.8040,
+    product: "TrafficPatterns",
+    application: "Community Branding",
+    images: [
+      "/images/blog/white-rock-langley-trafficpatterns/featured.jpg",
+    ],
+    excerpt:
+      "Artist Amy Bao's wave-inspired crosswalk mural on Johnston Road — TrafficPatterns thermoplastic that brought the White Rock waterfront identity into the Uptown district.",
+    problem:
+      "White Rock's Uptown district lacked the visual character of the iconic waterfront. The city commissioned artist Amy Bao to design a crosswalk connecting Uptown to the coast's identity. Painted murals had previously faded within months.",
+    solution:
+      "TrafficPatterns preformed thermoplastic panels capturing Bao's flowing wave motifs in permanent, UV-stable colour. The installation drove a reported 40% increase in Uptown foot traffic in its first season.",
+  },
+  {
+    // TODO: Vernon to locate project image for Langley Railroad Heritage Crosswalk at Linwood Park
+    id: "langley-railroad-heritage",
+    title: "Langley Railroad Heritage Crosswalk",
+    city: "Langley City",
+    province: "BC",
+    lat: 49.1027,
+    lng: -122.6600,
+    product: "TrafficPatterns",
+    application: "Community Branding",
+    year: "2025",
+    images: [
+      "/images/projects/_placeholder.svg",
+    ],
+    excerpt:
+      "Railroad tie-and-rail pattern crosswalk at the entrance to Linwood Park, Langley City — connecting modern pedestrian infrastructure to the Fraser Valley's railway heritage.",
+    problem:
+      "Langley City wanted to mark the gateway to Linwood Park with a design that honoured the city's railway roots. Painted surfaces would fail quickly under the foot traffic of an active park entrance.",
+    solution:
+      "TrafficPatterns preformed thermoplastic in a railroad tie-and-rail pattern — tan rectangular panels and white lines fused permanently to the asphalt. Installed by Square One Paving in March 2025.",
+  },
+  {
+    id: "langley-murrayville-reunion",
+    title: "Reunion Housing Complex Sidewalks",
+    city: "Langley",
+    province: "BC",
+    lat: 49.0944,
+    lng: -122.5846,
+    product: "DecoMark",
+    application: "Community Branding",
+    year: "2020",
+    images: [
+      "/images/blog/murrayville-schoolhouse-sidewalk/featured.jpg",
+    ],
+    excerpt:
+      "Decorative asphalt sidewalks at the Reunion Housing Complex in Murrayville, Langley — DecoMark thermoplastic decals adding classic design character to a new residential community.",
+    problem:
+      "The Reunion Housing Complex in Murrayville needed decorative sidewalk treatments that would differentiate the development from standard residential streetscapes and hold up to year-round pedestrian use.",
+    solution:
+      "DecoMark custom thermoplastic decals surface-applied to the existing asphalt sidewalks. The UV-stable graphics are designed to last 6–8 times longer than paint and require no special maintenance.",
   },
 ];

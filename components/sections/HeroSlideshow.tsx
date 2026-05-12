@@ -106,14 +106,6 @@ export default function HeroSlideshow() {
               Let&rsquo;s build your signature space.
             </h2>
 
-            {/* Body */}
-            <p
-              className="text-lg sm:text-xl leading-relaxed mb-10 max-w-2xl"
-              style={{ color: "rgba(255,255,255,0.82)", fontWeight: 400 }}
-            >
-              Ours make a statement... Yours!
-            </p>
-
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-3">
               <Link

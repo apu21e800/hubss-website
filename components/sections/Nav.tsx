@@ -185,9 +185,9 @@ const PRODUCT_CATEGORIES = [
   },
   {
     label: "Asphalt Repair",
-    tag: "Permanent pothole repair",
+    tag: "Permanent pothole + crack repair",
     image: "/images/products/streetprint/streetprint-40.jpg",
-    slugs: ["fast-patch", "aquaphalt"],
+    slugs: ["chipfill", "aggrefill", "fast-patch", "aquaphalt"],
   },
 ];
 
@@ -204,9 +204,9 @@ const PRODUCT_TAGLINE: Record<string, string> = {
   "mmax":                "MMA resin lane coating",
   "durashield":          "Pavement maintenance coating",
   "streetprint":         "Stamped asphalt patterns",
-  "fast-patch":          "Permanent pothole repair",
   "chipfill":            "Cold-pour crack and joint repair",
   "aggrefill":           "Aggregate-filled pothole repair",
+  "fast-patch":          "Water-activated cold-mix repair",
   "aquaphalt":           "Water-activated cold-mix repair",
 };
 

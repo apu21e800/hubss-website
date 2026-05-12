@@ -310,8 +310,13 @@ export const products: Product[] = [
     slug: "chipfill",
     eyebrow: "Concrete and Asphalt Repair",
     shortDesc: "Heat-activated preformed material for permanent pothole repair. Year-round, all-weather.",
-    imageUrl: "/images/products/streetprint/streetprint-01.jpg",
-    gallery: [],
+    imageUrl: "/images/products/chipfill/chipfill-04.jpg",
+    gallery: [
+      "/images/products/chipfill/chipfill-04.jpg",
+      "/images/products/chipfill/chipfill-01.jpg",
+      "/images/products/chipfill/chipfill-02.jpg",
+      "/images/products/chipfill/chipfill-03.jpg",
+    ],
     description: "ChipFill is a heat-activated preformed pothole repair material engineered for permanent restoration of road surface damage. The material is laid into the prepared pothole and activated with a heat torch — no specialized equipment, no mixing, no aggregate prep. Once heated, ChipFill conforms to the contours of the damage and bonds chemically to the surrounding asphalt or concrete, preventing the water intrusion that turns minor damage into deeper structural failure. Deployable year-round regardless of weather. Sets rapidly so traffic can reopen within minutes of installation. Used by Canadian municipalities and maintenance crews for routine and emergency repair programs across roads, parking lots, sidewalks, and pedestrian surfaces.",
     specs: [
       { label: "Type", value: "Heat-activated preformed pothole repair material" },
@@ -329,8 +334,12 @@ export const products: Product[] = [
     slug: "aggrefill",
     eyebrow: "Concrete and Asphalt Repair",
     shortDesc: "Pre-coated aggregate filler for larger potholes up to 1 m². Combined with ChipFill for permanent repair.",
-    imageUrl: "/images/products/streetprint/streetprint-01.jpg",
-    gallery: [],
+    imageUrl: "/images/products/aggrefill/aggrefill-01.jpg",
+    gallery: [
+      "/images/products/aggrefill/aggrefill-01.jpg",
+      "/images/products/aggrefill/aggrefill-02.jpg",
+      "/images/products/aggrefill/aggrefill-03.jpg",
+    ],
     description: "AggreFill is a pre-coated aggregate filler used in combination with ChipFill to permanently repair larger potholes — up to approximately 1 m² in diameter. Where the damage is too deep or too wide for a stand-alone material, AggreFill provides the structural mass; ChipFill bonds the matrix and seals the surface. The combined system applies cold with a heat torch finish, bonds chemically to the surrounding asphalt or concrete substrate, and is traffic-ready within minutes. Year-round deployment regardless of weather. Specified for the deeper road, parking lot, and industrial-site damages where conventional cold mix migrates under wheel loading or fails to bond at the substrate edges.",
     specs: [
       { label: "Type", value: "Pre-coated aggregate filler — paired with ChipFill" },
@@ -347,8 +356,10 @@ export const products: Product[] = [
     slug: "fast-patch",
     eyebrow: "Concrete and Asphalt Repair",
     shortDesc: "Distressed pavement repair. Return to service in under 45 minutes. Polymer blend with recycled content.",
-    imageUrl: "/images/products/streetprint/streetprint-01.jpg",
-    gallery: [],
+    imageUrl: "/images/products/fast-patch/fast-patch-01.png",
+    gallery: [
+      "/images/products/fast-patch/fast-patch-01.png",
+    ],
     description: "Fast Patch DPR is an easy-to-apply distressed pavement repair material for asphalt and concrete — a unique polymer blend of recycled and renewable materials engineered for high-strength, fast-return-to-service repair of potholes, spalls, joints, wheel paths, and utility cuts. Minimal site preparation. Return to service in less than 45 minutes; optional Fast Patch Kicker accelerator delivers faster cure in cooler conditions. Bonds chemically to the surrounding substrate with excellent freeze-thaw resistance and impact absorption. Completely odourless, making it suitable for indoor warehouse floors, loading docks, and underground parkades. Used on roadways and bridges, parking lots, sidewalks and curbs (trip hazards), and any environment where extended downtime is not an option.",
     specs: [
       { label: "Type", value: "Polymer-blend distressed pavement repair" },

@@ -47,7 +47,7 @@ const WHAT_YOU_GET = [
       </svg>
     ),
     title: "Lunch Included. No Catch.",
-    desc: "In-person sessions include catered lunch for your team. Virtual sessions come with a $50 gift card delivered before we connect.",
+    desc: "In-person sessions include catered lunch for your team. Virtual sessions come with a $25 lunch voucher delivered before we connect.",
   },
 ];
 
@@ -234,13 +234,13 @@ export default function LunchLearnFunnel() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              style={{ height: "clamp(224px, 34vw, 416px)" }}
+              style={{ height: "clamp(160px, 24vw, 290px)" }}
             >
               <Image
                 src="/images/lunch-learn/moose-final.png"
                 alt="HUB Surface Systems moose mascot — book a free Lunch & Learn"
-                width={368}
-                height={416}
+                width={256}
+                height={290}
                 style={{
                   width: "auto",
                   height: "100%",

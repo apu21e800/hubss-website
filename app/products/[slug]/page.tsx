@@ -87,7 +87,9 @@ export default async function ProductPage({ params }: Props) {
           src={product.imageUrl}
           alt={product.name}
           fill
+          // Subject-bias crop — pavement surface is the subject, sky/context is background.
           className="object-cover"
+          style={{ objectPosition: "center 62%" }}
           priority
           sizes="100vw"
         />
@@ -150,10 +152,11 @@ export default async function ProductPage({ params }: Props) {
               style={{ background: "transparent", color: "var(--text-secondary)", border: "1px solid rgba(255,255,255,0.14)" }}>
               Book a Lunch &amp; Learn
             </Link>
-            <Link href="/contact"
+            {/* Product page secondary CTA: "See the Systems" is wrong here (already on one) — link to gallery instead. */}
+            <Link href="/gallery"
               className="px-5 py-2.5 rounded-lg text-sm font-bold transition-all"
               style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff", boxShadow: "0 4px 16px rgba(249,115,22,0.32)" }}>
-              Speak with a specifier →
+              See Project Gallery →
             </Link>
           </div>
         </div>
@@ -198,7 +201,7 @@ export default async function ProductPage({ params }: Props) {
             <div className="rounded-xl p-8 mb-8 sticky top-24 relative overflow-hidden" style={{ background: "#111111", border: "1px solid rgba(255,255,255,0.08)" }}>
               {/* Orange top accent */}
               <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
-              <h3 className="font-bold text-lg mb-6" style={{ color: "#F5F0EB" }}>Spec Library</h3>
+              <h3 className="font-bold text-lg mb-6" style={{ color: "#F5F0EB" }}>Product Features</h3>
               <div className="space-y-4">
                 {product.specs.map((spec) => (
                   <div key={spec.label} className="flex justify-between text-sm" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", paddingBottom: "12px" }}>
@@ -364,6 +367,7 @@ export default async function ProductPage({ params }: Props) {
                       src={app.imageUrl}
                       alt={app.name}
                       fill
+                      style={{ objectPosition: "center 60%" }}
                       className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     />

@@ -307,13 +307,14 @@ function ProductsMegaMenu() {
                 className="rounded-xl overflow-hidden flex flex-col"
                 style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.06)" }}
               >
-                {/* Image header */}
-                <Link href="/products" className="relative block group" style={{ height: 92 }}>
+                {/* Image header — bumped from 92 to 124px + subject-bias crop (pavement in lower 2/3 of source) */}
+                <Link href="/products" className="relative block group" style={{ height: 124 }}>
                   <Image
                     src={cat.image}
                     alt={cat.label}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    style={{ objectPosition: "center 65%" }}
                     sizes="(max-width:1024px) 50vw, 25vw"
                   />
                   <div className="absolute inset-0" style={{

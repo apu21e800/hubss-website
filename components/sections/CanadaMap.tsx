@@ -513,7 +513,7 @@ function ProjectModal({
                 alignItems: "center",
               }}
             >
-              Speak with a specifier →
+              See the Systems →
             </a>
           </div>
         </div>

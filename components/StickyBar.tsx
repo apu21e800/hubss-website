@@ -83,7 +83,7 @@ export default function StickyBar() {
               e.currentTarget.style.background = "transparent";
             }}
           >
-            Speak with a specifier
+            See the Systems
           </Link>
           <Link
             href="/lunch-learn"

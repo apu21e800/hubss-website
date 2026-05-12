@@ -148,7 +148,7 @@ export default function DocumentDownloads({ slug }: { slug: string }) {
                   className="text-xs font-bold tracking-[0.2em] uppercase mb-1"
                   style={{ color: "#F97316" }}
                 >
-                  Specification Library
+                  Specification Documents
                 </p>
                 <h2 className="text-xl font-bold text-gray-900">Downloads</h2>
               </div>

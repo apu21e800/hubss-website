@@ -75,8 +75,7 @@ export default function HeroSlideshow() {
                 textShadow: "0 2px 32px rgba(0,0,0,0.5)",
               }}
             >
-              The World Is
-              <br />
+              Let&rsquo;s build your{" "}
               <span
                 style={{
                   background: "linear-gradient(92deg, #F97316 0%, #EAB308 100%)",
@@ -85,7 +84,7 @@ export default function HeroSlideshow() {
                   backgroundClip: "text",
                 }}
               >
-                Your Canvas.
+                signature space.
               </span>
             </h1>
 
@@ -121,7 +120,7 @@ export default function HeroSlideshow() {
                   color: "rgba(255,255,255,0.82)",
                 }}
               >
-                Speak with a specifier
+                See the Systems
               </Link>
             </div>
 

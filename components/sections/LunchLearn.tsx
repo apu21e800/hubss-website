@@ -113,7 +113,7 @@ export default function LunchLearn({ hideMoose }: { hideMoose?: boolean } = {}) 
                 "45–60 minute presentation tailored to your projects",
                 "Live Q&A with HUB technical team",
                 "Sample materials and specification sheets",
-                "Lunch included — virtual sessions come with a $20 lunch voucher",
+                "Lunch included — virtual sessions come with a $25 lunch voucher",
               ].map((benefit, i) => (
                 <motion.div
                   key={benefit}

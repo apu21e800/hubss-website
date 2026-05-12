@@ -284,7 +284,7 @@ export default async function BlogPostPage({ params }: Props) {
               padding: "12px 28px", borderRadius: 8, textDecoration: "none",
               boxShadow: "0 4px 20px rgba(249,115,22,0.3)",
             }}>
-              Speak with a specifier →
+              See the Systems →
             </Link>
             <Link href="/lunch-learn" style={{
               background: "transparent",

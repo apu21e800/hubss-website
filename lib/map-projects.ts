@@ -468,4 +468,265 @@ export const mapProjects: MapProject[] = [
     solution:
       "DecoMark custom thermoplastic decals surface-applied to the existing asphalt sidewalks. The UV-stable graphics are designed to last 6–8 times longer than paint and require no special maintenance.",
   },
+
+  // ── More Ontario ───────────────────────────────────────────────────────────
+  {
+    id: "toronto-leslieville-laneway",
+    title: "Leslieville Laneway Revitalization",
+    city: "Toronto",
+    province: "ON",
+    lat: 43.6590,
+    lng: -79.3342,
+    product: "StreetBond",
+    application: "Public Art",
+    year: "2023",
+    images: [
+      "/images/blog/municipalities-case-study/featured.jpg",
+    ],
+    excerpt:
+      "City of Toronto and the Laneway Project non-profit used StreetBond150 to transform a Leslieville back lane into a vibrant, welcoming public space — bold colour patterns that survive foot traffic and weather.",
+    problem:
+      "Toronto's Leslieville laneway was an underused service corridor. The Laneway Project needed a durable surface treatment that could withstand daily foot traffic while delivering bold, welcoming aesthetics.",
+    solution:
+      "StreetBond150 applied in bold geometric patterns directly to the asphalt lane surface. The MMA-grade bonding survives heavy foot traffic and Toronto winters without repainting.",
+  },
+  {
+    id: "toronto-emery-village",
+    title: "Emery Village BIA Crosswalk Restoration",
+    city: "Toronto",
+    province: "ON",
+    lat: 43.7556,
+    lng: -79.5662,
+    product: "TrafficPatternsXD",
+    application: "Crosswalks",
+    year: "2020",
+    images: [
+      "/images/blog/decorative-asphalt-high-traffic/featured.jpg",
+    ],
+    excerpt:
+      "Emery Village BIA replaced failing unit pavers with TrafficPatternsXD — matching the original 'Emery Blue' design in aggregate-reinforced thermoplastic that handles heavy commercial truck loads.",
+    problem:
+      "Twelve-year-old coloured unit pavers at the Emery Village BIA gateway were failing under heavy truck traffic, requiring constant patching. The BIA needed a permanent solution that preserved the community's 'Emery Blue' design identity.",
+    solution:
+      "TrafficPatternsXD across 440 m² of crossings, Pantone-matched to Emery Blue. The monolithic thermoplastic bond to asphalt eliminated joint failure and edge displacement — the mechanisms that had destroyed the pavers.",
+  },
+  {
+    id: "toronto-ttc-bus-corridors",
+    title: "TTC Bus Priority Corridors",
+    city: "Toronto",
+    province: "ON",
+    lat: 43.6532,
+    lng: -79.3832,
+    product: "MMAX",
+    application: "Bus & Bike Lanes",
+    images: [
+      "/images/blog/extending-transit-lane-lifespan/featured.jpg",
+    ],
+    excerpt:
+      "MMAX MMA red bus lane coatings across TTC's busiest priority corridors — overnight installs that cure before morning service, eliminating the repainting cycle.",
+    problem:
+      "Toronto's TTC bus priority corridors required constant repainting under high axle loads and aggressive snowplow operations. Each repainting cycle caused service disruptions and lane closures.",
+    solution:
+      "MMAX MMA coatings applied during overnight windows, traffic-ready before morning rush. The MMA chemistry bonds to asphalt and resists the lateral shear forces from bus turning movements that defeat standard acrylic coatings.",
+  },
+  {
+    id: "burlington-spencer-smith",
+    title: "Spencer Smith Park Lakeshore Promenade",
+    city: "Burlington",
+    province: "ON",
+    lat: 43.3261,
+    lng: -79.7984,
+    product: "StreetBond",
+    application: "Parks & Paths",
+    year: "2017",
+    images: [
+      "/images/blog/pedestrian-channelization-public-spaces/featured.jpg",
+    ],
+    excerpt:
+      "5,600 m² of StreetBond150 Cobalt Blue on Burlington's Spencer Smith Park lakeshore promenade — durable, skid-resistant surface coating replacing the original StreetPrint installation after 20 years.",
+    problem:
+      "Spencer Smith Park's StreetPrint lakeshore promenade had reached the end of its 20-year lifecycle under Lake Ontario's harsh winters. The city needed a replacement surface that could handle the Canada Rib Fest crowds and year-round lakefront conditions.",
+    solution:
+      "New asphalt base topped with 5,600 m² of StreetBond150 in Cobalt Blue — fast-install, skid-free, and accessible. No stamping this time; the colour coating alone delivers the visual identity the park requires.",
+  },
+  {
+    id: "waterloo-grandlinq-lrt",
+    title: "GrandLinq ION LRT Platform Crossings",
+    city: "Waterloo",
+    province: "ON",
+    lat: 43.4668,
+    lng: -80.5164,
+    product: "TrafficPatternsXD",
+    application: "Crosswalks",
+    images: [
+      "/images/blog/safety-durability-transit-stations/featured.jpg",
+    ],
+    excerpt:
+      "TrafficPatternsXD at LRT platform edges, pedestrian crossings, and modal transition points across the ION corridor — high-traction, fade-resistant surfacing through Waterloo Region winters.",
+    problem:
+      "GrandLinq's ION LRT corridor needed platform-edge and crossing treatments that could withstand year-round freeze-thaw cycling, de-icing salts, and the lateral forces from LRT and bus movements without service disruption.",
+    solution:
+      "TrafficPatternsXD installed phased overnight applications across the ION corridor. Aggregate-reinforced thermoplastic maintained high-contrast visibility and BPN 65+ traction through multiple consecutive winters.",
+  },
+  {
+    id: "kitchener-cadillac-fairview",
+    title: "Cadillac Fairview Parking Lot — Kitchener",
+    city: "Kitchener",
+    province: "ON",
+    lat: 43.4337,
+    lng: -80.4797,
+    product: "TrafficPatternsXD",
+    application: "Parking Lots",
+    year: "2021",
+    images: [
+      "/images/blog/stamped-asphalt-parking-lot/featured.jpg",
+    ],
+    excerpt:
+      "TrafficPatternsXD crosswalks and traffic calming devices at Cadillac Fairview Kitchener — aggregate-reinforced thermoplastic delivering brick-like aesthetics and lasting safety markings across a high-volume retail parking lot.",
+    problem:
+      "Cadillac Fairview's Kitchener shopping centre needed pedestrian crosswalk treatments that could withstand year-round vehicle traffic and snowplow operations without the maintenance liability of traditional paint or unit pavers.",
+    solution:
+      "TrafficPatternsXD brick-pattern crosswalks heat-fused to the asphalt surface — no raised edges, no repainting, and a visual quality consistent with a premium retail environment.",
+  },
+  {
+    id: "vaughan-woodbridge-heritage",
+    title: "Woodbridge Avenue Heritage Crosswalks",
+    city: "Vaughan",
+    province: "ON",
+    lat: 43.7935,
+    lng: -79.5701,
+    product: "TrafficPatternsXD",
+    application: "Crosswalks",
+    images: [
+      "/images/blog/trafficpatternsxd-urban-design/featured.jpg",
+    ],
+    excerpt:
+      "Heritage Conservation District crosswalks on Woodbridge Avenue — TrafficPatternsXD brick-pattern thermoplastic that satisfies the character requirements of a designated heritage streetscape while surviving Canadian winters.",
+    problem:
+      "The City of Vaughan's Woodbridge Avenue streetscape improvement required crosswalks matching the Heritage Conservation District character. Real brick pavers were ruled out — snowplow blades displace them, making them an ongoing maintenance liability.",
+    solution:
+      "TrafficPatternsXD in a brick-pattern flush-to-surface profile: visually indistinguishable from masonry at street level, snowplow-safe, and specified by the City's Urban Design team for all pedestrian crosswalks on the project.",
+  },
+
+  // ── More British Columbia ──────────────────────────────────────────────────
+  {
+    id: "coquitlam-windsor-gate",
+    title: "Windsor Gate Masterplanned Community",
+    city: "Coquitlam",
+    province: "BC",
+    lat: 49.2660,
+    lng: -122.7575,
+    product: "StreetPrint",
+    application: "Community Branding",
+    images: [
+      "/images/blog/community-branding-case-study/featured.jpg",
+    ],
+    excerpt:
+      "Polygon Realty's Windsor Gate community in Coquitlam — StreetPrint stamped asphalt roadways and driveways creating brick-street aesthetics that reinforce the community's identity throughout.",
+    problem:
+      "Polygon Realty needed roadways and driveways at Windsor Gate that would communicate premium residential quality and a cohesive community identity — without the long-term maintenance liability of real brick or stone.",
+    solution:
+      "StreetPrint genuine stamped asphalt with the community's logo mark integrated into key surfaces. The tricolour design and brick-pattern stamping create an immediate sense of entry and place throughout the development.",
+  },
+  {
+    id: "kelowna-crosswalk-network",
+    title: "City of Kelowna Crosswalk Network",
+    city: "Kelowna",
+    province: "BC",
+    lat: 49.8880,
+    lng: -119.4958,
+    product: "TrafficPatternsXD",
+    application: "Crosswalks",
+    images: [
+      "/images/blog/performance-crosswalks-asphalt-concrete/featured.jpg",
+    ],
+    excerpt:
+      "80+ TrafficPatternsXD crosswalks installed across Kelowna's city core over 13 years — one of Canada's largest single-city thermoplastic crosswalk programs.",
+    problem:
+      "Kelowna began investing in active transportation infrastructure and needed crosswalk treatments that could handle Okanagan summers and winters while supporting the city's aesthetic and safety goals across dozens of locations.",
+    solution:
+      "TrafficPatternsXD became Kelowna's standard crosswalk specification. Over 13 years, 80+ crosswalks were installed city-wide with documented performance superior to painted alternatives and zero edge-damage from snowplow operations.",
+  },
+  {
+    id: "victoria-david-foster-pathway",
+    title: "David Foster Harbour Pathway",
+    city: "Victoria",
+    province: "BC",
+    lat: 48.4201,
+    lng: -123.3656,
+    product: "StreetBond",
+    application: "Parks & Paths",
+    images: [
+      "/images/blog/pedestrian-channelization-public-spaces/featured.jpg",
+    ],
+    excerpt:
+      "StreetBond Safety Blue along Victoria's David Foster Harbour Pathway — five kilometres connecting Rock Bay to Ogden Point, celebrating Lekwungen First Nations history and the working harbour.",
+    problem:
+      "Victoria's Inner Harbour pathway renovation needed a surface treatment that would hold vibrant colour in a high-humidity marine environment while remaining slip-resistant for cyclists and pedestrians year-round.",
+    solution:
+      "StreetBond in high-visibility Safety Blue — water-based, slip-resistant coating applied along the full 5 km+ pathway. The coastal environment has not degraded the surface colour or friction performance since installation.",
+  },
+
+  // ── Québec ─────────────────────────────────────────────────────────────────
+  {
+    id: "montreal-guido-nincheri",
+    title: "Parc Guido-Nincheri Promenade",
+    city: "Montréal",
+    province: "QC",
+    lat: 45.5600,
+    lng: -73.5490,
+    product: "StreetBond",
+    application: "Parks & Paths",
+    images: [
+      "/images/blog/pedestrian-channelization-public-spaces/featured.jpg",
+    ],
+    excerpt:
+      "StreetBond150 over concrete at Parc Guido-Nincheri's promenade Ville-de-Québec — bold flowing lines designed by Civiliti as a gateway to Space for Life and the Olympic Park.",
+    problem:
+      "Civiliti's landscape design for the promenade required a surface coating that could reproduce flowing organic line-work in vivid colour on concrete, adjacent to major institutional landmarks, and survive Montréal winters.",
+    solution:
+      "StreetBond150 applied over concrete substrate in the promenade's architectural colour palette. The coating bonds permanently to the concrete and has maintained its flow-line design through multiple freeze-thaw seasons.",
+  },
+
+  // ── Alberta ────────────────────────────────────────────────────────────────
+  {
+    // TODO: Vernon to locate project image for Calgary MAX BRT corridor
+    id: "calgary-max-brt",
+    title: "Calgary MAX BRT Corridor",
+    city: "Calgary",
+    province: "AB",
+    lat: 51.0447,
+    lng: -114.0719,
+    product: "MMAX",
+    application: "Bus & Bike Lanes",
+    images: [
+      "/images/projects/_placeholder.svg",
+    ],
+    excerpt:
+      "MMAX MMA bus lane surfacing on Calgary Transit's MAX BRT network — fast-cure MMA coatings in red and green applied overnight to keep Calgary's rapid transit corridors visually legible through prairie winters.",
+    problem:
+      "Calgary Transit's MAX BRT corridors needed bus lane coatings that could withstand Alberta's temperature extremes — from -40°C winters to +35°C summers — without the adhesion failures that defeat standard acrylic coatings.",
+    solution:
+      "MMAX MMA two-component coating system applied during overnight closures. MMA chemistry cures in 30–60 minutes regardless of ambient temperature, making it uniquely suited to Alberta's unpredictable installation conditions.",
+  },
+  {
+    // TODO: Vernon to locate project image for Edmonton Valley Line LRT
+    id: "edmonton-valley-line-lrt",
+    title: "Edmonton Valley Line LRT Crossings",
+    city: "Edmonton",
+    province: "AB",
+    lat: 53.5355,
+    lng: -113.4907,
+    product: "TrafficPatternsXD",
+    application: "Crosswalks",
+    images: [
+      "/images/projects/_placeholder.svg",
+    ],
+    excerpt:
+      "TrafficPatternsXD pedestrian crossings and platform markings along Edmonton's Valley Line LRT — high-traction thermoplastic engineered for Edmonton's severe freeze-thaw cycles.",
+    problem:
+      "Edmonton's Valley Line LRT at-grade crossings required high-traction, long-life surface markings at pedestrian conflict zones. The city's severe winter conditions — more than 60 freeze-thaw cycles per year — eliminate standard paint within a season.",
+    solution:
+      "TrafficPatternsXD heat-fused thermoplastic at key crossings and platform zones along the Valley Line. The aggregate-reinforced system maintains BPN 65+ traction and full retroreflectivity through Edmonton's winter cycle without repainting.",
+  },
 ];

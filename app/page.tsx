@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Nav from "@/components/sections/Nav";
 import HeroSlideshow from "@/components/sections/HeroSlideshow";
-// WhyHubss removed from homepage per Doug review.
+// WhyHubss stats/claims block removed per Doug; TrustedByMarquee restored as standalone social proof.
+import TrustedByMarquee from "@/components/sections/TrustedByMarquee";
 import PersonaEntryPoints from "@/components/sections/PersonaEntryPoints";
 import ProductsGrid from "@/components/sections/ProductsGrid";
 import ApplicationsGrid from "@/components/sections/ApplicationsGrid";
@@ -82,6 +83,7 @@ export default function Home() {
       <JsonLd data={organizationSchema} />
       <Nav />
       <HeroSlideshow />
+      <TrustedByMarquee />
       <PersonaEntryPoints />
       {/* slate → dark */}
       <ProductsGrid />

@@ -153,7 +153,7 @@ export default async function ProductPage({ params }: Props) {
             <Link href="/contact"
               className="px-5 py-2.5 rounded-lg text-sm font-bold transition-all"
               style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff", boxShadow: "0 4px 16px rgba(249,115,22,0.32)" }}>
-              Get a Quote →
+              Speak with a specifier →
             </Link>
           </div>
         </div>

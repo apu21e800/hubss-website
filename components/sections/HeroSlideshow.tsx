@@ -121,7 +121,7 @@ export default function HeroSlideshow() {
                   color: "rgba(255,255,255,0.82)",
                 }}
               >
-                Request Spec Sheet
+                Speak with a specifier
               </Link>
             </div>
 

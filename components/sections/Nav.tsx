@@ -959,8 +959,8 @@ export default function Nav() {
         {/* Main bar */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between gap-4">
 
-          {/* Logo + Canadian flag accent */}
-          <Link href="/" className="flex-shrink-0 flex items-center gap-2.5">
+          {/* Logo + integrated "Canadian" accent — small flag glyph + label, vertically centered with the logo wordmark */}
+          <Link href="/" className="flex-shrink-0 flex items-center gap-3 group">
             <Image
               src="/images/hub-official-logo.svg"
               alt="HUB Surface Systems"
@@ -970,17 +970,32 @@ export default function Nav() {
               priority
               unoptimized
             />
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 9600 4800"
-              width={22}
-              height={11}
-              aria-label="Canadian — flag of Canada"
-              style={{ display: "block", flexShrink: 0, borderRadius: 2, boxShadow: "0 1px 2px rgba(0,0,0,0.3)" }}
+            <span
+              className="hidden sm:inline-flex items-center gap-1.5 pl-3"
+              style={{
+                borderLeft: "1px solid rgba(255,255,255,0.12)",
+                height: 22,
+              }}
+              aria-label="Canadian"
             >
-              <path fill="#f00" d="m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z" />
-              <path fill="#fff" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z" />
-            </svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 9600 4800"
+                width={16}
+                height={8}
+                aria-hidden="true"
+                style={{ display: "block", flexShrink: 0, borderRadius: 1 }}
+              >
+                <path fill="#f00" d="m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z" />
+                <path fill="#fff" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z" />
+              </svg>
+              <span
+                className="text-[10px] font-bold tracking-[0.18em] uppercase"
+                style={{ color: "rgba(255,255,255,0.42)", lineHeight: 1 }}
+              >
+                Canadian
+              </span>
+            </span>
           </Link>
 
           {/* Desktop links */}

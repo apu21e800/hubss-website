@@ -513,7 +513,7 @@ function ProjectModal({
                 alignItems: "center",
               }}
             >
-              Get a Quote →
+              Speak with a specifier →
             </a>
           </div>
         </div>
@@ -534,12 +534,17 @@ export default function CanadaMap() {
   const [scrollEnabled, setScrollEnabled] = useState(false);
   const scrollEnabledRef = useRef(false);
   const [popupProject, setPopupProject] = useState<MapProject | null>(null);
+  // Click-to-pin: when true, popup persists regardless of cursor location. Cleared by the
+  // close button on the card, by clicking outside the map, or by clicking another marker.
+  // Hover-driven popup behavior is fragile in MapLibre (cursor crosses a dead zone between
+  // marker and Popup DOM during transit). Click-to-pin makes the preview bulletproof.
+  const [popupPinned, setPopupPinned] = useState(false);
   const [visibleProjects, setVisibleProjects] = useState<MapProject[]>(mapProjects);
   const [showScrollHint, setShowScrollHint] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const scrollHintTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const autoReleaseTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  // Popup hover bridge — prevents popup from dismissing as cursor travels from marker to card
+  // Popup hover bridge — bumped to 250ms grace + popup-card hover keeps it alive.
   const popupHoveredRef = useRef(false);
   const popupClearTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -699,9 +704,12 @@ export default function CanadaMap() {
         const id = feature.properties?.id as string;
         const project = mapProjects.find((p) => p.id === id);
         if (project) {
-          setSelectedProject(project);
-          setPopupProject(null);
-          setHoveredId(null);
+          // Click-to-pin: marker click PINS the popup (does not open the modal directly).
+          // Clicking the popup body opens the full case study modal. This makes hover
+          // dismissal a non-issue — once pinned, the popup persists until closed explicitly.
+          setPopupProject(project);
+          setPopupPinned(true);
+          setHoveredId(id);
         }
       }
     },
@@ -709,6 +717,8 @@ export default function CanadaMap() {
   );
 
   // ── Mouse move — hover on layers ──────────────────────────────────────
+  // When a popup is PINNED, hover never replaces or clears it. Only marker-click
+  // and the close button toggle the pinned popup.
   const handleMouseMove = useCallback(
     (event: MapLayerMouseEvent) => {
       const feature = event.features?.[0];
@@ -716,30 +726,47 @@ export default function CanadaMap() {
         const id = feature.properties?.id as string;
         setHoveredId(id);
         setCursor("pointer");
-        const project = mapProjects.find((p) => p.id === id) ?? null;
-        setPopupProject(project);
+        if (!popupPinned) {
+          const project = mapProjects.find((p) => p.id === id) ?? null;
+          setPopupProject(project);
+        }
       } else if (feature?.layer?.id === "clusters") {
         setHoveredId(null);
-        setPopupProject(null);
         setCursor("pointer");
+        if (!popupPinned) setPopupProject(null);
       } else {
         setHoveredId(null);
         setCursor(scrollEnabled ? "grab" : "default");
-        // Delay clearing the popup so the cursor has time to travel from marker onto the card
+        // 250ms grace (bumped from 80ms) — gives the cursor more time to transit
+        // marker → popup card. Popup-card hover sets popupHoveredRef true to cancel.
         if (popupClearTimeoutRef.current) clearTimeout(popupClearTimeoutRef.current);
         popupClearTimeoutRef.current = setTimeout(() => {
-          if (!popupHoveredRef.current) setPopupProject(null);
-        }, 80);
+          if (!popupHoveredRef.current && !popupPinned) setPopupProject(null);
+        }, 250);
       }
     },
-    [scrollEnabled]
+    [scrollEnabled, popupPinned]
   );
 
   const handleMouseLeave = useCallback(() => {
     setHoveredId(null);
-    if (!popupHoveredRef.current) setPopupProject(null);
+    if (!popupHoveredRef.current && !popupPinned) setPopupProject(null);
     setCursor(scrollEnabled ? "grab" : "default");
-  }, [scrollEnabled]);
+  }, [scrollEnabled, popupPinned]);
+
+  // Close pinned popup on click outside the map container.
+  useEffect(() => {
+    if (!popupPinned) return;
+    function handleOutsideClick(e: MouseEvent) {
+      if (mapContainerRef.current && !mapContainerRef.current.contains(e.target as Node)) {
+        setPopupPinned(false);
+        setPopupProject(null);
+        setHoveredId(null);
+      }
+    }
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+  }, [popupPinned]);
 
   // ── Panel card interaction ─────────────────────────────────────────────
   const handlePanelHover = useCallback((id: string | null) => {
@@ -750,6 +777,7 @@ export default function CanadaMap() {
 
   const handlePanelClick = useCallback((project: MapProject, openModal = false) => {
     setPopupProject(null);
+    setPopupPinned(false);
     setHoveredId(project.id);
     if (openModal) {
       setSelectedProject(project);
@@ -766,6 +794,7 @@ export default function CanadaMap() {
 
   const handleCloseModal = useCallback(() => {
     setSelectedProject(null);
+    setPopupPinned(false);
     mapRef.current?.fitBounds(CANADA_BOUNDS, { ...FIT_OPTIONS, duration: 1400 });
   }, []);
 
@@ -962,10 +991,10 @@ export default function CanadaMap() {
                   <Layer {...HOVERED_RING_LAYER} />
                 </Source>
 
-                {/* Hover popup — agency-grade card, 4 meta lines tight */}
-                {/* Hover-bridge preserved: onMouseEnter cancels the clear-timeout from handleMouseMove;
-                    onMouseLeave clears immediately. Keeps the popup pinned while the cursor
-                    transits from marker into the card. */}
+                {/* Project popup — agency-grade card with click-to-pin behavior.
+                    Marker click PINS the popup (popupPinned=true). Hover dismissal is
+                    disabled while pinned. Close button on the card or click-outside the
+                    map dismisses it. Card body click opens the full case-study modal. */}
                 {popupProject && !selectedProject && (
                   <Popup
                     longitude={popupProject.lng}
@@ -975,46 +1004,86 @@ export default function CanadaMap() {
                     closeButton={false}
                     closeOnClick={false}
                   >
-                    <button
-                      type="button"
-                      aria-label={`Open case study: ${popupProject.title}`}
+                    <div
+                      role="dialog"
+                      aria-label={`Project preview: ${popupProject.title}`}
                       style={{
-                        all: "unset",
-                        display: "block",
+                        position: "relative",
                         width: 240,
-                        cursor: "pointer",
                         background: "#0f1620",
-                        border: "1px solid rgba(249,115,22,0.32)",
+                        border: `1px solid ${popupPinned ? "rgba(249,115,22,0.6)" : "rgba(249,115,22,0.32)"}`,
                         borderRadius: 12,
                         overflow: "hidden",
-                        boxShadow: "0 10px 32px rgba(0,0,0,0.78), 0 0 0 1px rgba(255,255,255,0.03)",
-                        transition: "transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease",
+                        boxShadow: popupPinned
+                          ? "0 14px 40px rgba(0,0,0,0.85), 0 0 0 1px rgba(249,115,22,0.2)"
+                          : "0 10px 32px rgba(0,0,0,0.78), 0 0 0 1px rgba(255,255,255,0.03)",
                       }}
-                      onMouseEnter={(e) => {
+                      onMouseEnter={() => {
                         popupHoveredRef.current = true;
                         if (popupClearTimeoutRef.current) clearTimeout(popupClearTimeoutRef.current);
-                        const el = e.currentTarget;
-                        el.style.transform = "translateY(-2px)";
-                        el.style.borderColor = "rgba(249,115,22,0.55)";
-                        el.style.boxShadow = "0 14px 40px rgba(0,0,0,0.85), 0 0 0 1px rgba(249,115,22,0.2)";
                       }}
-                      onMouseLeave={(e) => {
+                      onMouseLeave={() => {
                         popupHoveredRef.current = false;
-                        setPopupProject(null);
-                        setHoveredId(null);
-                        const el = e.currentTarget;
-                        el.style.transform = "translateY(0)";
-                        el.style.borderColor = "rgba(249,115,22,0.32)";
-                        el.style.boxShadow = "0 10px 32px rgba(0,0,0,0.78), 0 0 0 1px rgba(255,255,255,0.03)";
-                      }}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        const p = popupProject;
-                        setSelectedProject(p);
-                        setPopupProject(null);
-                        setHoveredId(null);
+                        if (!popupPinned) {
+                          setPopupProject(null);
+                          setHoveredId(null);
+                        }
                       }}
                     >
+                      {/* Close button — visible whenever popup is pinned */}
+                      {popupPinned && (
+                        <button
+                          type="button"
+                          aria-label="Close project preview"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setPopupPinned(false);
+                            setPopupProject(null);
+                            setHoveredId(null);
+                          }}
+                          style={{
+                            position: "absolute",
+                            top: 7,
+                            right: 7,
+                            zIndex: 5,
+                            width: 24,
+                            height: 24,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            border: "1px solid rgba(255,255,255,0.18)",
+                            borderRadius: "50%",
+                            background: "rgba(15,22,32,0.85)",
+                            backdropFilter: "blur(4px)",
+                            cursor: "pointer",
+                            color: "#F5F0EB",
+                            padding: 0,
+                          }}
+                        >
+                          <svg width="10" height="10" viewBox="0 0 14 14" fill="none">
+                            <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" />
+                          </svg>
+                        </button>
+                      )}
+
+                      <button
+                        type="button"
+                        aria-label={`Open case study: ${popupProject.title}`}
+                        style={{
+                          all: "unset",
+                          display: "block",
+                          width: "100%",
+                          cursor: "pointer",
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const p = popupProject;
+                          setSelectedProject(p);
+                          setPopupPinned(false);
+                          setPopupProject(null);
+                          setHoveredId(null);
+                        }}
+                      >
                       {/* Image with gradient bottom for legibility */}
                       <div style={{ position: "relative", width: "100%", height: 110, overflow: "hidden" }}>
                         <Image
@@ -1118,13 +1187,14 @@ export default function CanadaMap() {
                             gap: 4,
                           }}
                         >
-                          View case study
+                          {popupPinned ? "Open case study" : "Click to open"}
                           <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                             <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
                           </svg>
                         </p>
                       </div>
-                    </button>
+                      </button>
+                    </div>
                   </Popup>
                 )}
               </Map>

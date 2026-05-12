@@ -83,7 +83,7 @@ export default function StickyBar() {
               e.currentTarget.style.background = "transparent";
             }}
           >
-            Request Spec Sheet
+            Speak with a specifier
           </Link>
           <Link
             href="/lunch-learn"

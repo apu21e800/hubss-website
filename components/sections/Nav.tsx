@@ -14,11 +14,6 @@ const PLAIN_LINKS = [
   { label: "Contact", href: "/contact" },
 ];
 
-const MOBILE_QUICK_ACTIONS = [
-  { label: "Resources", href: "/resources" },
-  { label: "Book Lunch & Learn", href: "/lunch-learn" },
-];
-
 // ── Search data ──────────────────────────────────────────────────────────────
 const PAGES = [
   { label: "Field Notes", href: "/blog", desc: "Field notes and industry insights" },
@@ -172,443 +167,740 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
 const PRODUCT_CATEGORIES = [
   {
     label: "Preformed Thermoplastics",
-    slugs: ["traffic-patterns-xd", "traffic-patterns", "decomark", "duratherm", "premark", "airmark"],
+    tag: "Heat-fused permanent markings",
+    image: "/images/products/traffic-patterns/traffic-patterns-01.jpg",
+    slugs: ["traffic-patterns-xd", "traffic-patterns", "premark", "duratherm", "decomark", "airmark"],
   },
   {
     label: "Coatings",
+    tag: "Coloured pavement systems",
+    image: "/images/products/streetbond/streetbond-01.png",
     slugs: ["streetbond", "streetbondsr", "mmax", "durashield"],
   },
   {
-    label: "Stamped Asphalt & Concrete",
+    label: "Stamped Asphalt",
+    tag: "In-place decorative hardscape",
+    image: "/images/products/streetprint/streetprint-01.jpg",
     slugs: ["streetprint"],
   },
   {
     label: "Asphalt Repair",
+    tag: "Permanent pothole repair",
+    image: "/images/products/streetprint/streetprint-40.jpg",
     slugs: ["fast-patch", "aquaphalt"],
   },
 ];
 
-// ── Full-width Products mega menu ────────────────────────────────────────────
-function ProductsMegaMenu() {
-  const bySlug = (slugs: string[]) =>
-    slugs.flatMap((s) => { const p = products.find((x) => x.slug === s); return p ? [p] : []; });
+// ── Mega-menu micro-taglines per product (5–7 word noun phrases per Vernon) ──
+const PRODUCT_TAGLINE: Record<string, string> = {
+  "traffic-patterns-xd": "Aggregate-reinforced thermoplastic",
+  "traffic-patterns":    "Preformed thermoplastic markings",
+  "premark":             "Symbols, arrows, regulatory markings",
+  "duratherm":           "Inlaid flush-mount thermoplastic",
+  "decomark":            "Custom graphic thermoplastic",
+  "airmark":             "Airfield thermoplastic markings",
+  "streetbond":          "Coloured pavement coating",
+  "streetbondsr":        "Solar-reflective coating",
+  "mmax":                "MMA resin lane coating",
+  "durashield":          "Pavement maintenance coating",
+  "streetprint":         "Stamped asphalt patterns",
+  "fast-patch":          "Permanent pothole repair",
+  "chipfill":            "Cold-pour crack and joint repair",
+  "aggrefill":           "Aggregate-filled pothole repair",
+  "aquaphalt":           "Water-activated cold-mix repair",
+};
 
-  const thermoplastics = bySlug(PRODUCT_CATEGORIES[0].slugs);
-  const coatings       = bySlug(PRODUCT_CATEGORIES[1].slugs);
-  const stamped        = bySlug(PRODUCT_CATEGORIES[2].slugs);
-  const repair         = bySlug(PRODUCT_CATEGORIES[3].slugs);
+// ── Application category groupings for mega menu ─────────────────────────────
+const APPLICATION_GROUPS = [
+  {
+    label: "Traffic & Safety",
+    slugs: ["crosswalks", "bike-lanes", "bus-lanes", "pedestrian-safety", "traffic-calming", "regulatory-markings"],
+  },
+  {
+    label: "Public & Civic",
+    slugs: ["parks-paths", "public-spaces", "community-branding", "public-art", "playgrounds"],
+  },
+  {
+    label: "Commercial",
+    slugs: ["parking-lots", "commercial-spaces", "sport-courts", "splash-pads", "airports"],
+  },
+  {
+    label: "Residential & Sustainability",
+    slugs: ["private-driveways", "residential-driveways", "townhomes", "leed-urban-heat-island"],
+  },
+];
 
-  const ProductLink = ({ p }: { p: (typeof products)[0] }) => (
-    <Link
-      href={`/products/${p.slug}`}
-      className="group flex items-start gap-2 px-2.5 py-2 rounded-lg transition-colors hover:bg-white/5"
-    >
-      <div className="mt-0.5 w-1 h-1 rounded-full flex-shrink-0" style={{ background: "rgba(249,115,22,0.5)", marginTop: 7 }} />
-      <div>
-        <p className="text-sm font-semibold leading-tight group-hover:text-orange-400 transition-colors" style={{ color: "#F5F0EB" }}>{p.name}</p>
-        {p.shortDesc && (
-          <p className="text-[11px] mt-0.5 leading-snug" style={{ color: "rgba(255,255,255,0.55)" }}>{p.shortDesc}</p>
-        )}
-      </div>
-    </Link>
-  );
+// ── Curated Field Notes for mega menu ────────────────────────────────────────
+// Hardcoded for client-component context; swap manually when featuring different posts.
+const FEATURED_POSTS = [
+  {
+    slug: "best-crosswalks-canada",
+    title: "Best crosswalks in Canada",
+    category: "Field Notes",
+    image: "/images/blog/best-crosswalks-canada/featured.jpg",
+  },
+  {
+    slug: "ubc-musqueam-crosswalk",
+    title: "UBC × Musqueam — cultural identity in the street surface",
+    category: "Project Profile",
+    image: "/images/blog/ubc-musqueam-crosswalk/featured.jpg",
+  },
+  {
+    slug: "streetbondsr-solar-reflective-coatings",
+    title: "StreetBondSR — cooler asphalt for hot cities",
+    category: "Field Notes",
+    image: "/images/blog/streetbondsr-solar-reflective-coatings/featured.jpg",
+  },
+  {
+    slug: "transportation-infrastructure-guide",
+    title: "Transportation infrastructure — the surface specifier's guide",
+    category: "White Paper",
+    image: "/images/blog/transportation-infrastructure-guide/featured.jpg",
+  },
+];
 
-  const CatLabel = ({ label }: { label: string }) => (
-    <p className="text-[10px] font-bold tracking-[0.2em] uppercase mb-2.5 px-2.5" style={{ color: "rgba(249,115,22,0.9)" }}>
-      {label}
-    </p>
-  );
-
+// ── Mega menu — shared shell ─────────────────────────────────────────────────
+// Wide container, generous padding, dark surface, accent top line.
+function MegaShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      <div className="flex gap-0">
-
-        {/* Col 1 — Preformed Thermoplastics (widest, 2 cols of products) */}
-        <div className="flex-[2] pr-6 border-r" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
-          <CatLabel label="Preformed Thermoplastics" />
-          <div className="grid grid-cols-2 gap-x-1 gap-y-0">
-            {thermoplastics.map((p) => <ProductLink key={p.slug} p={p} />)}
-          </div>
-        </div>
-
-        {/* Col 2 — Coatings */}
-        <div className="flex-[1.2] px-6 border-r" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
-          <CatLabel label="Coatings" />
-          <div className="space-y-0">
-            {coatings.map((p) => <ProductLink key={p.slug} p={p} />)}
-          </div>
-        </div>
-
-        {/* Col 3 — Stamped + Repair stacked */}
-        <div className="flex-[1] px-6 border-r space-y-5" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
-          <div>
-            <CatLabel label="Stamped Asphalt & Concrete" />
-            {stamped.map((p) => <ProductLink key={p.slug} p={p} />)}
-          </div>
-          <div>
-            <CatLabel label="Asphalt Repair" />
-            {repair.map((p) => <ProductLink key={p.slug} p={p} />)}
-          </div>
-        </div>
-
-        {/* Right sidebar */}
-        <div className="w-56 pl-6 flex flex-col gap-3 flex-shrink-0">
-          {/* Featured image */}
-          <Link href="/gallery" className="group relative rounded-xl overflow-hidden block" style={{ height: 130 }}>
-            <Image
-              src="/images/blog/best-crosswalks-canada/featured.jpg"
-              alt="HUB Surface Systems projects"
-              fill
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
-              sizes="224px"
-            />
-            <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(7,11,18,0.92) 0%, rgba(7,11,18,0.2) 100%)" }} />
-            <div className="absolute bottom-0 left-0 right-0 p-3">
-              <p className="text-[9px] font-bold tracking-[0.18em] uppercase mb-0.5" style={{ color: "#F97316" }}>Featured</p>
-              <p className="text-xs font-semibold leading-snug text-white">Award-winning crosswalks across Canada</p>
-            </div>
-          </Link>
-
-          {/* Quick links */}
-          <div className="space-y-1.5">
-            <Link href="/products"
-              className="flex items-center justify-between w-full px-3 py-2 rounded-lg transition-colors hover:bg-white/5"
-              style={{ color: "rgba(255,255,255,0.65)", border: "1px solid rgba(255,255,255,0.08)" }}
-            >
-              <span className="text-xs font-semibold">All Products</span>
-              <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
-            </Link>
-            <Link href="/resources"
-              className="flex items-center justify-between w-full px-3 py-2 rounded-lg transition-colors hover:bg-white/5"
-              style={{ color: "rgba(255,255,255,0.65)", border: "1px solid rgba(255,255,255,0.08)" }}
-            >
-              <span className="text-xs font-semibold">Spec Sheets</span>
-              <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
-            </Link>
-          </div>
-
-          <Link href="/lunch-learn"
-            className="block w-full text-center px-4 py-2.5 rounded-xl text-xs font-bold mt-auto"
-            style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff" }}
-          >
-            Book Lunch &amp; Learn
-          </Link>
-        </div>
-      </div>
+    <div className="max-w-[1480px] mx-auto px-6 lg:px-10 py-10">
+      {children}
     </div>
   );
 }
 
-// ── Field Notes mini dropdown ────────────────────────────────────────────────
-function FieldNotesMiniMenu() {
+// ── Full-width Products mega menu ────────────────────────────────────────────
+function ProductsMegaMenu() {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
-      <div className="flex gap-2">
-        <Link
-          href="/blog"
-          className="group flex items-start gap-3 px-4 py-3 rounded-xl transition-colors hover:bg-white/5 flex-1"
-          style={{ border: "1px solid rgba(255,255,255,0.07)" }}
+    <MegaShell>
+      <div className="grid grid-cols-12 gap-8">
+        {/* Lead column */}
+        <div className="col-span-12 lg:col-span-3">
+          <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#F97316" }}>
+            Products
+          </p>
+          <h3 className="text-2xl font-bold leading-tight mb-3" style={{ color: "#F5F0EB" }}>
+            Decorative pavement, engineered for Canadian streets.
+          </h3>
+          <p className="text-sm leading-relaxed mb-6" style={{ color: "rgba(255,255,255,0.55)" }}>
+            13 specified systems for crosswalks, transit lanes, plazas, and decorative hardscape — installed coast to coast.
+          </p>
+          <Link href="/products"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold transition-all"
+            style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff", boxShadow: "0 4px 16px rgba(249,115,22,0.3)" }}
+          >
+            Browse all products
+            <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
+          </Link>
+        </div>
+
+        {/* Category tiles — 4 cards with image headers */}
+        <div className="col-span-12 lg:col-span-9 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {PRODUCT_CATEGORIES.map((cat) => {
+            const items = cat.slugs.flatMap((s) => {
+              const p = products.find((x) => x.slug === s);
+              return p ? [p] : [];
+            });
+            return (
+              <div
+                key={cat.label}
+                className="rounded-xl overflow-hidden flex flex-col"
+                style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.06)" }}
+              >
+                {/* Image header */}
+                <Link href="/products" className="relative block group" style={{ height: 92 }}>
+                  <Image
+                    src={cat.image}
+                    alt={cat.label}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    sizes="(max-width:1024px) 50vw, 25vw"
+                  />
+                  <div className="absolute inset-0" style={{
+                    background: "linear-gradient(to top, rgba(7,11,18,0.96) 0%, rgba(7,11,18,0.55) 55%, rgba(7,11,18,0.1) 100%)"
+                  }} />
+                  <div className="absolute bottom-0 left-0 right-0 px-4 pb-3">
+                    <p className="text-[9px] font-bold tracking-[0.2em] uppercase mb-0.5" style={{ color: "#F97316" }}>
+                      {cat.tag}
+                    </p>
+                    <p className="text-sm font-bold leading-tight" style={{ color: "#F5F0EB" }}>{cat.label}</p>
+                  </div>
+                </Link>
+
+                {/* Product list — name + 5-7 word tagline per Vernon */}
+                <div className="flex-1 px-3 py-3 space-y-0.5">
+                  {items.map((p) => (
+                    <Link
+                      key={p.slug}
+                      href={`/products/${p.slug}`}
+                      className="group flex items-start justify-between gap-2 px-2 py-2 rounded-md transition-colors hover:bg-white/5"
+                    >
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold leading-tight group-hover:text-orange-400 transition-colors" style={{ color: "#F5F0EB" }}>
+                          {p.name}
+                        </p>
+                        {PRODUCT_TAGLINE[p.slug] && (
+                          <p className="text-[11px] leading-snug mt-0.5" style={{ color: "rgba(255,255,255,0.45)" }}>
+                            {PRODUCT_TAGLINE[p.slug]}
+                          </p>
+                        )}
+                      </div>
+                      <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        className="opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1.5" style={{ color: "#F97316" }}>
+                        <path d="M9 18l6-6-6-6" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Bottom strip — secondary entry points */}
+      <div className="mt-8 pt-6 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+        <Link href="/resources"
+          className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
+          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
-          <div className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "rgba(249,115,22,0.12)" }}>
-            <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-            </svg>
-          </div>
           <div>
-            <p className="text-sm font-semibold group-hover:text-orange-400 transition-colors" style={{ color: "#F5F0EB" }}>Field Notes</p>
-            <p className="text-xs mt-0.5" style={{ color: "rgba(255,255,255,0.45)" }}>Industry insights &amp; project stories</p>
+            <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>Spec sheets</p>
+            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>TDS, install guides, SDS</p>
           </div>
+          <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
         </Link>
-        <Link
-          href="/gallery"
-          className="group flex items-start gap-3 px-4 py-3 rounded-xl transition-colors hover:bg-white/5 flex-1"
-          style={{ border: "1px solid rgba(255,255,255,0.07)" }}
+        <Link href="/projects"
+          className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
+          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
-          <div className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "rgba(249,115,22,0.12)" }}>
-            <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-          </div>
           <div>
-            <p className="text-sm font-semibold group-hover:text-orange-400 transition-colors" style={{ color: "#F5F0EB" }}>Project Gallery</p>
-            <p className="text-xs mt-0.5" style={{ color: "rgba(255,255,255,0.45)" }}>Photo archive of our installations</p>
+            <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>Project gallery</p>
+            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>See products in the field</p>
           </div>
+          <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
+        </Link>
+        <Link href="/lunch-learn"
+          className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
+          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
+        >
+          <div>
+            <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>Lunch &amp; Learn</p>
+            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>Free CPD session for your team</p>
+          </div>
+          <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
         </Link>
       </div>
-    </div>
+    </MegaShell>
+  );
+}
+
+// ── Field Notes mega menu ────────────────────────────────────────────────────
+function FieldNotesMegaMenu() {
+  const [featured, ...rest] = FEATURED_POSTS;
+
+  return (
+    <MegaShell>
+      <div className="grid grid-cols-12 gap-8">
+        {/* Lead column */}
+        <div className="col-span-12 lg:col-span-3">
+          <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#F97316" }}>
+            Field Notes
+          </p>
+          <h3 className="text-2xl font-bold leading-tight mb-3" style={{ color: "#F5F0EB" }}>
+            What we learn from the road.
+          </h3>
+          <p className="text-sm leading-relaxed mb-6" style={{ color: "rgba(255,255,255,0.55)" }}>
+            Project profiles, case studies, technical guides, and white papers from 30+ years of decorative pavement work across Canada.
+          </p>
+          <div className="space-y-2.5">
+            <Link href="/blog"
+              className="flex items-center justify-between w-full px-4 py-2.5 rounded-lg transition-all"
+              style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff", boxShadow: "0 4px 16px rgba(249,115,22,0.3)" }}
+            >
+              <span className="text-xs font-bold">All field notes</span>
+              <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
+            </Link>
+            <Link href="/projects"
+              className="flex items-center justify-between w-full px-4 py-2.5 rounded-lg transition-colors hover:bg-white/5"
+              style={{ color: "rgba(255,255,255,0.65)", border: "1px solid rgba(255,255,255,0.12)" }}
+            >
+              <span className="text-xs font-semibold">Project gallery</span>
+              <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
+            </Link>
+            <Link href="/resources"
+              className="flex items-center justify-between w-full px-4 py-2.5 rounded-lg transition-colors hover:bg-white/5"
+              style={{ color: "rgba(255,255,255,0.65)", border: "1px solid rgba(255,255,255,0.12)" }}
+            >
+              <span className="text-xs font-semibold">Resources &amp; spec sheets</span>
+              <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
+            </Link>
+          </div>
+        </div>
+
+        {/* Featured large card — taller for parity with Products/Applications mega heights */}
+        <Link
+          href={`/blog/${featured.slug}`}
+          className="col-span-12 lg:col-span-5 group relative rounded-xl overflow-hidden block"
+          style={{ minHeight: 360 }}
+        >
+          <Image
+            src={featured.image}
+            alt={featured.title}
+            fill
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+            sizes="(max-width:1024px) 100vw, 620px"
+          />
+          <div className="absolute inset-0" style={{
+            background: "linear-gradient(to top, rgba(7,11,18,0.96) 0%, rgba(7,11,18,0.55) 50%, rgba(7,11,18,0.1) 100%)"
+          }} />
+          <div className="absolute bottom-0 left-0 right-0 p-6">
+            <span
+              className="inline-block text-[10px] font-bold tracking-[0.18em] uppercase mb-3 px-2.5 py-1 rounded"
+              style={{ color: "#F97316", background: "rgba(249,115,22,0.15)", border: "1px solid rgba(249,115,22,0.3)" }}
+            >
+              {featured.category}
+            </span>
+            <p className="text-lg lg:text-xl font-bold leading-tight" style={{ color: "#F5F0EB" }}>
+              {featured.title}
+            </p>
+            <p className="text-sm mt-2 flex items-center gap-2 font-semibold" style={{ color: "#F97316" }}>
+              Read field note
+              <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" /></svg>
+            </p>
+          </div>
+        </Link>
+
+        {/* Recent posts grid — slightly larger thumbnails for parity */}
+        <div className="col-span-12 lg:col-span-4 grid grid-cols-1 gap-3">
+          {rest.map((post) => (
+            <Link
+              key={post.slug}
+              href={`/blog/${post.slug}`}
+              className="group flex gap-3 p-3 rounded-xl transition-colors hover:bg-white/5"
+              style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.06)" }}
+            >
+              <div className="relative flex-shrink-0 rounded-lg overflow-hidden" style={{ width: 96, height: 96 }}>
+                <Image
+                  src={post.image}
+                  alt={post.title}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  sizes="96px"
+                />
+              </div>
+              <div className="flex-1 min-w-0 flex flex-col justify-center">
+                <p className="text-[9px] font-bold tracking-[0.18em] uppercase mb-1" style={{ color: "#F97316" }}>
+                  {post.category}
+                </p>
+                <p className="text-sm font-semibold leading-snug group-hover:text-orange-400 transition-colors line-clamp-2" style={{ color: "#F5F0EB" }}>
+                  {post.title}
+                </p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* Bottom strip — secondary entry points (matches Products + Applications mega for peer-parity visual weight) */}
+      <div className="mt-8 pt-6 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+        <Link href="/blog"
+          className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
+          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
+        >
+          <div>
+            <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>All field notes</p>
+            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>Project profiles, case studies, guides</p>
+          </div>
+          <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
+        </Link>
+        <Link href="/projects"
+          className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
+          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
+        >
+          <div>
+            <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>Project gallery</p>
+            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>Installations across Canada</p>
+          </div>
+          <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
+        </Link>
+        <Link href="/resources"
+          className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
+          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
+        >
+          <div>
+            <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>Resources</p>
+            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>Spec sheets, install guides, SDS</p>
+          </div>
+          <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
+        </Link>
+      </div>
+    </MegaShell>
   );
 }
 
 // ── Full-width Applications mega menu ────────────────────────────────────────
 function ApplicationsMegaMenu() {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      <div className="flex gap-6">
-        {/* All applications */}
-        <div className="flex-1 min-w-0">
-          <p className="text-[10px] font-bold tracking-[0.2em] uppercase mb-2.5 px-2.5" style={{ color: "rgba(249,115,22,0.9)" }}>All Applications</p>
-          <div className="grid grid-cols-4 gap-x-1 gap-y-0">
-            {applications.map((app) => (
-              <Link key={app.slug} href={`/applications/${app.slug}`}
-                className="group flex items-start gap-2 px-2.5 py-2 rounded-lg transition-colors hover:bg-white/5"
-              >
-                <div className="w-1 h-1 rounded-full flex-shrink-0" style={{ background: "rgba(249,115,22,0.5)", marginTop: 7 }} />
-                <div>
-                  <p className="text-sm font-semibold leading-tight group-hover:text-orange-400 transition-colors" style={{ color: "#F5F0EB" }}>{app.name}</p>
-                  {app.shortDesc && (
-                    <p className="text-[11px] mt-0.5 leading-snug" style={{ color: "rgba(255,255,255,0.55)" }}>{app.shortDesc}</p>
-                  )}
-                </div>
-              </Link>
-            ))}
-          </div>
+    <MegaShell>
+      <div className="grid grid-cols-12 gap-8">
+        {/* Lead column */}
+        <div className="col-span-12 lg:col-span-3">
+          <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#F97316" }}>
+            Applications
+          </p>
+          <h3 className="text-2xl font-bold leading-tight mb-3" style={{ color: "#F5F0EB" }}>
+            Surfaces that do real work.
+          </h3>
+          <p className="text-sm leading-relaxed mb-6" style={{ color: "rgba(255,255,255,0.55)" }}>
+            Crosswalks, transit lanes, parks, plazas, parking lots, airfields — every surface where decorative pavement and durable markings meet the brief.
+          </p>
+          <Link href="/applications"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold transition-all"
+            style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff", boxShadow: "0 4px 16px rgba(249,115,22,0.3)" }}
+          >
+            Browse all applications
+            <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
+          </Link>
         </div>
 
-        {/* Right sidebar */}
-        <div className="w-56 pl-6 flex-shrink-0 flex flex-col gap-3">
-          {/* Featured image */}
-          <Link href="/gallery" className="group relative rounded-xl overflow-hidden block" style={{ height: 130 }}>
-            <Image
-              src="/images/blog/decorative-crosswalk-meridian/featured.jpg"
-              alt="HUB application projects"
-              fill
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
-              sizes="224px"
-            />
-            <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(7,11,18,0.92) 0%, rgba(7,11,18,0.2) 100%)" }} />
-            <div className="absolute bottom-0 left-0 right-0 p-3">
-              <p className="text-[9px] font-bold tracking-[0.18em] uppercase mb-0.5" style={{ color: "#F97316" }}>Projects</p>
-              <p className="text-xs font-semibold leading-snug text-white">See our work across Canada</p>
-            </div>
-          </Link>
-
-          <div className="space-y-1.5">
-            <Link href="/applications"
-              className="flex items-center justify-between w-full px-3 py-2 rounded-lg transition-colors hover:bg-white/5"
-              style={{ color: "rgba(255,255,255,0.65)", border: "1px solid rgba(255,255,255,0.08)" }}
-            >
-              <span className="text-xs font-semibold">All Applications</span>
-              <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
-            </Link>
-            <Link href="/gallery"
-              className="flex items-center justify-between w-full px-3 py-2 rounded-lg transition-colors hover:bg-white/5"
-              style={{ color: "rgba(255,255,255,0.65)", border: "1px solid rgba(255,255,255,0.08)" }}
-            >
-              <span className="text-xs font-semibold">Project Gallery</span>
-              <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
-            </Link>
-          </div>
-
-          <Link href="/contact"
-            className="block w-full text-center px-4 py-2.5 rounded-xl text-xs font-bold mt-auto"
-            style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff" }}
-          >
-            Request a Quote
-          </Link>
+        {/* Category groupings — 4 columns, no subtext */}
+        <div className="col-span-12 lg:col-span-9 grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-7">
+          {APPLICATION_GROUPS.map((group) => {
+            const items = group.slugs.flatMap((s) => {
+              const a = applications.find((x) => x.slug === s);
+              return a ? [a] : [];
+            });
+            return (
+              <div key={group.label}>
+                <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3 pb-2.5" style={{
+                  color: "rgba(249,115,22,0.95)",
+                  borderBottom: "1px solid rgba(249,115,22,0.18)"
+                }}>
+                  {group.label}
+                </p>
+                <div className="space-y-0.5">
+                  {items.map((a) => (
+                    <Link
+                      key={a.slug}
+                      href={`/applications/${a.slug}`}
+                      className="group flex items-center justify-between gap-2 px-2 py-2 rounded-md transition-colors hover:bg-white/5"
+                    >
+                      <span className="text-sm font-semibold group-hover:text-orange-400 transition-colors" style={{ color: "#F5F0EB" }}>
+                        {a.name}
+                      </span>
+                      <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        className="opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: "#F97316" }}>
+                        <path d="M9 18l6-6-6-6" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
-    </div>
+
+      {/* Bottom strip — secondary entry points */}
+      <div className="mt-8 pt-6 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+        <Link href="/projects"
+          className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
+          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
+        >
+          <div>
+            <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>Project gallery</p>
+            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>Real installations, real outcomes</p>
+          </div>
+          <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
+        </Link>
+        <Link href="/blog"
+          className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
+          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
+        >
+          <div>
+            <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>Field notes</p>
+            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>Project profiles &amp; case studies</p>
+          </div>
+          <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
+        </Link>
+        <Link href="/contact"
+          className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
+          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
+        >
+          <div>
+            <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>Request a quote</p>
+            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>Talk to your regional rep</p>
+          </div>
+          <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
+        </Link>
+      </div>
+    </MegaShell>
   );
 }
 
 // ── Mobile overlay ───────────────────────────────────────────────────────────
-const MOBILE_PRODUCT_CATEGORIES = [
-  { label: "Preformed Thermoplastics", slugs: ["traffic-patterns-xd", "traffic-patterns", "premark", "duratherm", "decomark", "airmark"] },
-  { label: "Coatings", slugs: ["streetbond", "streetbondsr", "mmax", "durashield"] },
-  { label: "Stamped Asphalt & Concrete", slugs: ["streetprint"] },
-  { label: "Asphalt Repair", slugs: ["fast-patch", "aquaphalt"] },
-];
+// Mobile reuses the desktop PRODUCT_CATEGORIES + APPLICATION_GROUPS for consistency.
+const MOBILE_PRODUCT_CATEGORIES = PRODUCT_CATEGORIES.map(({ label, slugs }) => ({ label, slugs }));
 
-const MOBILE_APP_LINKS = [
-  { label: "Crosswalks", href: "/applications/crosswalks" },
-  { label: "Bike Lanes", href: "/applications/bike-lanes" },
-  { label: "Bus Lanes", href: "/applications/bus-lanes" },
-  { label: "Parking Lots", href: "/applications/parking-lots" },
-  { label: "Parks & Paths", href: "/applications/parks-paths" },
-  { label: "Community Branding", href: "/applications/community-branding" },
-];
+// Mobile expandable section — single source for Products/Apps/Field Notes
+function MobileSection({
+  label,
+  expanded,
+  onToggle,
+  children,
+}: {
+  label: string;
+  expanded: boolean;
+  onToggle: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="border-b" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
+      <button
+        onClick={onToggle}
+        className="w-full flex items-center justify-between py-4 px-3 text-[17px] font-semibold transition-colors"
+        style={{ color: expanded ? "#F97316" : "#F5F0EB" }}
+      >
+        {label}
+        <svg
+          width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+          style={{ opacity: 0.5, transform: expanded ? "rotate(180deg)" : "none", transition: "transform 0.2s ease" }}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      <AnimatePresence initial={false}>
+        {expanded && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+            className="overflow-hidden"
+          >
+            <div className="pb-5 pt-1">{children}</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
 
 function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onClose: () => void; onSearchOpen: () => void }) {
-  const [expandedSection, setExpandedSection] = useState<"products" | "applications" | null>(null);
+  const [expandedSection, setExpandedSection] = useState<"products" | "applications" | "fieldnotes" | null>(null);
+
+  // Lock body scroll while the full-screen menu is open
+  useEffect(() => {
+    if (!isOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
+  }, [isOpen]);
 
   return (
     <AnimatePresence>
       {isOpen && (
         <motion.div
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-          className="fixed inset-0 z-40 md:hidden"
-          style={{ background: "rgba(0,0,0,0.75)", backdropFilter: "blur(4px)" }}
-          onClick={onClose}
+          transition={{ duration: 0.18 }}
+          className="fixed inset-0 z-[60] md:hidden"
+          style={{ background: "#070b12" }}
+          onClick={(e) => e.stopPropagation()}
         >
           <motion.div
-            initial={{ y: "-100%" }} animate={{ y: 0 }} exit={{ y: "-100%" }}
-            transition={{ type: "spring", damping: 28, stiffness: 300 }}
+            initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 12 }}
+            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
             className="absolute inset-0 overflow-y-auto"
             style={{ background: "#070b12" }}
-            onClick={(e) => e.stopPropagation()}
           >
-            {/* Top bar */}
-            <div className="flex items-center justify-between px-5 py-4 border-b" style={{ borderColor: "rgba(255,255,255,0.07)" }}>
+            {/* Top bar — sticky for long menus */}
+            <div
+              className="sticky top-0 z-10 flex items-center justify-between px-5 py-4 border-b"
+              style={{ borderColor: "rgba(255,255,255,0.08)", background: "rgba(7,11,18,0.96)", backdropFilter: "blur(12px)" }}
+            >
               <Link href="/" onClick={onClose}>
-                <Image src="/images/hub-official-logo.svg" alt="HUB Surface Systems" width={140} height={33} style={{ height: 30, width: "auto" }} unoptimized />
+                <Image src="/images/hub-official-logo.svg" alt="HUB Surface Systems" width={150} height={36} style={{ height: 32, width: "auto" }} unoptimized />
               </Link>
-              <button onClick={onClose} aria-label="Close menu" className="p-2 rounded-lg" style={{ color: "rgba(255,255,255,0.5)", background: "rgba(255,255,255,0.05)" }}>
+              <button
+                onClick={onClose}
+                aria-label="Close menu"
+                className="flex items-center justify-center rounded-full transition-colors"
+                style={{
+                  width: 40, height: 40,
+                  color: "#F5F0EB",
+                  background: "rgba(255,255,255,0.06)",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                }}
+              >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
 
-            <div className="px-4 py-4 space-y-1">
+            <div className="px-5 py-6">
               {/* Mobile search */}
               <button onClick={() => { onClose(); onSearchOpen(); }}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl mb-2 text-left"
-                style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.09)", color: "rgba(255,255,255,0.4)" }}
+                className="w-full flex items-center gap-3 px-4 mb-6 text-left"
+                style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.09)", color: "rgba(255,255,255,0.4)", borderRadius: 12, height: 48 }}
               >
-                <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <circle cx="11" cy="11" r="8" strokeWidth={2} /><path d="M21 21l-4.35-4.35" strokeWidth={2} strokeLinecap="round" />
                 </svg>
-                <span className="text-sm">Search products, applications…</span>
+                <span className="text-[15px]">Search products, applications…</span>
               </button>
 
               {/* Products expandable */}
-              <div>
-                <button
-                  className="w-full flex items-center justify-between py-3 px-3 rounded-xl text-base font-semibold transition-colors hover:bg-white/5"
-                  style={{ color: expandedSection === "products" ? "#F97316" : "#F5F0EB" }}
-                  onClick={() => setExpandedSection(expandedSection === "products" ? null : "products")}
-                >
-                  Products
-                  <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                    style={{ opacity: 0.4, transform: expandedSection === "products" ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                <AnimatePresence>
-                  {expandedSection === "products" && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                      className="overflow-hidden"
-                    >
-                      <div className="pl-3 pb-2 pt-1 space-y-3">
-                        {MOBILE_PRODUCT_CATEGORIES.map((cat) => (
-                          <div key={cat.label}>
-                            <p className="text-[9px] font-bold tracking-[0.2em] uppercase px-2 mb-1" style={{ color: "rgba(249,115,22,0.6)" }}>{cat.label}</p>
-                            <div className="grid grid-cols-2 gap-x-1">
-                              {cat.slugs.map((slug) => {
-                                const p = products.find((x) => x.slug === slug);
-                                if (!p) return null;
-                                return (
-                                  <Link key={slug} href={`/products/${slug}`}
-                                    className="px-2 py-1.5 text-sm rounded-lg hover:bg-white/5 transition-colors"
-                                    style={{ color: "rgba(255,255,255,0.72)" }}
-                                    onClick={onClose}
-                                  >{p.name}</Link>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        ))}
-                        <Link href="/products"
-                          className="flex items-center gap-1.5 px-2 py-1.5 text-xs font-semibold"
-                          style={{ color: "#F97316" }}
-                          onClick={onClose}
-                        >View all products →</Link>
+              <MobileSection
+                label="Products"
+                expanded={expandedSection === "products"}
+                onToggle={() => setExpandedSection(expandedSection === "products" ? null : "products")}
+              >
+                <div className="space-y-5">
+                  {MOBILE_PRODUCT_CATEGORIES.map((cat) => (
+                    <div key={cat.label}>
+                      <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-2.5 px-1" style={{ color: "rgba(249,115,22,0.95)" }}>{cat.label}</p>
+                      <div className="grid grid-cols-2 gap-1">
+                        {cat.slugs.map((slug) => {
+                          const p = products.find((x) => x.slug === slug);
+                          if (!p) return null;
+                          return (
+                            <Link key={slug} href={`/products/${slug}`}
+                              className="px-3 py-2.5 text-[15px] rounded-lg hover:bg-white/5 transition-colors font-medium"
+                              style={{ color: "#F5F0EB" }}
+                              onClick={onClose}
+                            >{p.name}</Link>
+                          );
+                        })}
                       </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+                    </div>
+                  ))}
+                  <Link href="/products"
+                    className="inline-flex items-center gap-2 px-3 py-2 text-sm font-bold"
+                    style={{ color: "#F97316" }}
+                    onClick={onClose}
+                  >View all products
+                    <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" /></svg>
+                  </Link>
+                </div>
+              </MobileSection>
 
               {/* Applications expandable */}
-              <div>
-                <button
-                  className="w-full flex items-center justify-between py-3 px-3 rounded-xl text-base font-semibold transition-colors hover:bg-white/5"
-                  style={{ color: expandedSection === "applications" ? "#F97316" : "#F5F0EB" }}
-                  onClick={() => setExpandedSection(expandedSection === "applications" ? null : "applications")}
-                >
-                  Applications
-                  <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                    style={{ opacity: 0.4, transform: expandedSection === "applications" ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                <AnimatePresence>
-                  {expandedSection === "applications" && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                      className="overflow-hidden"
-                    >
-                      <div className="pl-3 pb-2 pt-1">
-                        <div className="grid grid-cols-2 gap-x-1">
-                          {MOBILE_APP_LINKS.map((app) => (
-                            <Link key={app.href} href={app.href}
-                              className="px-2 py-1.5 text-sm rounded-lg hover:bg-white/5 transition-colors"
-                              style={{ color: "rgba(255,255,255,0.72)" }}
+              <MobileSection
+                label="Applications"
+                expanded={expandedSection === "applications"}
+                onToggle={() => setExpandedSection(expandedSection === "applications" ? null : "applications")}
+              >
+                <div className="space-y-5">
+                  {APPLICATION_GROUPS.map((group) => (
+                    <div key={group.label}>
+                      <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-2.5 px-1" style={{ color: "rgba(249,115,22,0.95)" }}>{group.label}</p>
+                      <div className="grid grid-cols-2 gap-1">
+                        {group.slugs.map((slug) => {
+                          const a = applications.find((x) => x.slug === slug);
+                          if (!a) return null;
+                          return (
+                            <Link key={slug} href={`/applications/${slug}`}
+                              className="px-3 py-2.5 text-[15px] rounded-lg hover:bg-white/5 transition-colors font-medium"
+                              style={{ color: "#F5F0EB" }}
                               onClick={onClose}
-                            >{app.label}</Link>
-                          ))}
-                        </div>
-                        <Link href="/applications"
-                          className="flex items-center gap-1.5 px-2 py-1.5 text-xs font-semibold mt-1"
-                          style={{ color: "#F97316" }}
-                          onClick={onClose}
-                        >View all applications →</Link>
+                            >{a.name}</Link>
+                          );
+                        })}
                       </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+                    </div>
+                  ))}
+                  <Link href="/applications"
+                    className="inline-flex items-center gap-2 px-3 py-2 text-sm font-bold"
+                    style={{ color: "#F97316" }}
+                    onClick={onClose}
+                  >View all applications
+                    <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" /></svg>
+                  </Link>
+                </div>
+              </MobileSection>
 
-              {/* Field Notes + Gallery */}
-              <Link href="/blog"
-                className="flex items-center justify-between py-3 px-3 text-base font-semibold rounded-xl hover:bg-white/5 transition-colors"
-                style={{ color: "#F5F0EB" }}
-                onClick={onClose}
+              {/* Field Notes expandable */}
+              <MobileSection
+                label="Field Notes"
+                expanded={expandedSection === "fieldnotes"}
+                onToggle={() => setExpandedSection(expandedSection === "fieldnotes" ? null : "fieldnotes")}
               >
-                Field Notes
-                <svg width="14" height="14" fill="none" stroke="rgba(255,255,255,0.3)" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
-              </Link>
-              <Link href="/gallery"
-                className="flex items-center justify-between py-3 px-3 text-base font-semibold rounded-xl hover:bg-white/5 transition-colors"
-                style={{ color: "#F5F0EB" }}
-                onClick={onClose}
-              >
-                Project Gallery
-                <svg width="14" height="14" fill="none" stroke="rgba(255,255,255,0.3)" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
-              </Link>
+                <div className="space-y-3">
+                  {FEATURED_POSTS.slice(0, 3).map((post) => (
+                    <Link
+                      key={post.slug}
+                      href={`/blog/${post.slug}`}
+                      className="group flex gap-3 p-3 rounded-xl transition-colors hover:bg-white/5"
+                      style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}
+                      onClick={onClose}
+                    >
+                      <div className="relative flex-shrink-0 rounded-lg overflow-hidden" style={{ width: 64, height: 64 }}>
+                        <Image src={post.image} alt={post.title} fill className="object-cover" sizes="64px" />
+                      </div>
+                      <div className="flex-1 min-w-0 flex flex-col justify-center">
+                        <p className="text-[9px] font-bold tracking-[0.18em] uppercase mb-0.5" style={{ color: "#F97316" }}>{post.category}</p>
+                        <p className="text-sm font-semibold leading-snug line-clamp-2" style={{ color: "#F5F0EB" }}>{post.title}</p>
+                      </div>
+                    </Link>
+                  ))}
+                  <div className="grid grid-cols-2 gap-2">
+                    <Link href="/blog"
+                      className="flex items-center justify-center gap-1.5 px-3 py-2.5 text-xs font-bold rounded-lg"
+                      style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff" }}
+                      onClick={onClose}
+                    >All field notes →</Link>
+                    <Link href="/projects"
+                      className="flex items-center justify-center gap-1.5 px-3 py-2.5 text-xs font-bold rounded-lg"
+                      style={{ color: "rgba(255,255,255,0.7)", border: "1px solid rgba(255,255,255,0.15)" }}
+                      onClick={onClose}
+                    >Project gallery →</Link>
+                  </div>
+                </div>
+              </MobileSection>
 
               {/* Plain links */}
-              {PLAIN_LINKS.map((link) => (
-                <Link key={link.href} href={link.href}
-                  className="flex items-center justify-between py-3 px-3 text-base font-semibold rounded-xl hover:bg-white/5 transition-colors"
+              <div className="mt-2 border-t pt-4 space-y-0.5" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
+                {PLAIN_LINKS.map((link) => (
+                  <Link key={link.href} href={link.href}
+                    className="flex items-center justify-between py-3.5 px-3 text-[17px] font-semibold rounded-lg hover:bg-white/5 transition-colors"
+                    style={{ color: "#F5F0EB" }}
+                    onClick={onClose}
+                  >
+                    {link.label}
+                    <svg width="14" height="14" fill="none" stroke="rgba(255,255,255,0.3)" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
+                  </Link>
+                ))}
+                <Link href="/resources"
+                  className="flex items-center justify-between py-3.5 px-3 text-[17px] font-semibold rounded-lg hover:bg-white/5 transition-colors"
                   style={{ color: "#F5F0EB" }}
                   onClick={onClose}
                 >
-                  {link.label}
+                  Resources
                   <svg width="14" height="14" fill="none" stroke="rgba(255,255,255,0.3)" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
                 </Link>
-              ))}
+              </div>
             </div>
 
-            {/* Bottom CTAs */}
-            <div className="px-4 pb-6 pt-2 border-t space-y-2.5" style={{ borderColor: "rgba(255,255,255,0.07)" }}>
-              <Link href="/resources"
-                className="block px-4 py-3 rounded-xl text-sm font-semibold text-center transition-all"
-                style={{ border: "1px solid rgba(255,255,255,0.18)", color: "rgba(255,255,255,0.8)" }}
-                onClick={onClose}
-              >
-                Resources
-              </Link>
+            {/* Sticky bottom CTA */}
+            <div
+              className="sticky bottom-0 px-5 pt-4 pb-5 border-t"
+              style={{ borderColor: "rgba(255,255,255,0.08)", background: "rgba(7,11,18,0.96)", backdropFilter: "blur(12px)" }}
+            >
               <Link href="/lunch-learn"
-                className="block px-4 py-3 rounded-xl text-sm font-bold text-center"
-                style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff" }}
+                className="flex items-center justify-center gap-2 w-full px-4 rounded-xl text-sm font-bold"
+                style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff", height: 52, boxShadow: "0 4px 20px rgba(249,115,22,0.35)" }}
                 onClick={onClose}
               >
-                Book Lunch &amp; Learn
+                Book a Lunch &amp; Learn
+                <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" /></svg>
               </Link>
+              <div className="mt-3 flex items-center justify-center gap-4 text-[11px]" style={{ color: "rgba(255,255,255,0.4)" }}>
+                <a href="tel:+14165409287" className="font-semibold hover:text-orange-400 transition-colors">East · 416-540-9287</a>
+                <span style={{ color: "rgba(255,255,255,0.15)" }}>·</span>
+                <a href="tel:+16043098212" className="font-semibold hover:text-orange-400 transition-colors">West · 604-309-8212</a>
+              </div>
             </div>
           </motion.div>
         </motion.div>
@@ -667,8 +959,8 @@ export default function Nav() {
         {/* Main bar */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between gap-4">
 
-          {/* Logo */}
-          <Link href="/" className="flex-shrink-0">
+          {/* Logo + integrated "Canadian" accent — small flag glyph + label, vertically centered with the logo wordmark */}
+          <Link href="/" className="flex-shrink-0 flex items-center gap-3 group">
             <Image
               src="/images/hub-official-logo.svg"
               alt="HUB Surface Systems"
@@ -678,6 +970,32 @@ export default function Nav() {
               priority
               unoptimized
             />
+            <span
+              className="hidden sm:inline-flex items-center gap-1.5 pl-3"
+              style={{
+                borderLeft: "1px solid rgba(255,255,255,0.12)",
+                height: 22,
+              }}
+              aria-label="Canadian"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 9600 4800"
+                width={16}
+                height={8}
+                aria-hidden="true"
+                style={{ display: "block", flexShrink: 0, borderRadius: 1 }}
+              >
+                <path fill="#f00" d="m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z" />
+                <path fill="#fff" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z" />
+              </svg>
+              <span
+                className="text-[10px] font-bold tracking-[0.18em] uppercase"
+                style={{ color: "rgba(255,255,255,0.42)", lineHeight: 1 }}
+              >
+                Canadian
+              </span>
+            </span>
           </Link>
 
           {/* Desktop links */}
@@ -801,7 +1119,7 @@ export default function Nav() {
             >
               {openPanel === "products" && <ProductsMegaMenu />}
               {openPanel === "applications" && <ApplicationsMegaMenu />}
-              {openPanel === "fieldnotes" && <FieldNotesMiniMenu />}
+              {openPanel === "fieldnotes" && <FieldNotesMegaMenu />}
             </motion.div>
           )}
         </AnimatePresence>

@@ -513,7 +513,7 @@ function ProjectModal({
                 alignItems: "center",
               }}
             >
-              Get a Quote →
+              Speak with a specifier →
             </a>
           </div>
         </div>
@@ -534,12 +534,17 @@ export default function CanadaMap() {
   const [scrollEnabled, setScrollEnabled] = useState(false);
   const scrollEnabledRef = useRef(false);
   const [popupProject, setPopupProject] = useState<MapProject | null>(null);
+  // Click-to-pin: when true, popup persists regardless of cursor location. Cleared by the
+  // close button on the card, by clicking outside the map, or by clicking another marker.
+  // Hover-driven popup behavior is fragile in MapLibre (cursor crosses a dead zone between
+  // marker and Popup DOM during transit). Click-to-pin makes the preview bulletproof.
+  const [popupPinned, setPopupPinned] = useState(false);
   const [visibleProjects, setVisibleProjects] = useState<MapProject[]>(mapProjects);
   const [showScrollHint, setShowScrollHint] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const scrollHintTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const autoReleaseTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  // Popup hover bridge — prevents popup from dismissing as cursor travels from marker to card
+  // Popup hover bridge — bumped to 250ms grace + popup-card hover keeps it alive.
   const popupHoveredRef = useRef(false);
   const popupClearTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -699,9 +704,12 @@ export default function CanadaMap() {
         const id = feature.properties?.id as string;
         const project = mapProjects.find((p) => p.id === id);
         if (project) {
-          setSelectedProject(project);
-          setPopupProject(null);
-          setHoveredId(null);
+          // Click-to-pin: marker click PINS the popup (does not open the modal directly).
+          // Clicking the popup body opens the full case study modal. This makes hover
+          // dismissal a non-issue — once pinned, the popup persists until closed explicitly.
+          setPopupProject(project);
+          setPopupPinned(true);
+          setHoveredId(id);
         }
       }
     },
@@ -709,6 +717,8 @@ export default function CanadaMap() {
   );
 
   // ── Mouse move — hover on layers ──────────────────────────────────────
+  // When a popup is PINNED, hover never replaces or clears it. Only marker-click
+  // and the close button toggle the pinned popup.
   const handleMouseMove = useCallback(
     (event: MapLayerMouseEvent) => {
       const feature = event.features?.[0];
@@ -716,30 +726,47 @@ export default function CanadaMap() {
         const id = feature.properties?.id as string;
         setHoveredId(id);
         setCursor("pointer");
-        const project = mapProjects.find((p) => p.id === id) ?? null;
-        setPopupProject(project);
+        if (!popupPinned) {
+          const project = mapProjects.find((p) => p.id === id) ?? null;
+          setPopupProject(project);
+        }
       } else if (feature?.layer?.id === "clusters") {
         setHoveredId(null);
-        setPopupProject(null);
         setCursor("pointer");
+        if (!popupPinned) setPopupProject(null);
       } else {
         setHoveredId(null);
         setCursor(scrollEnabled ? "grab" : "default");
-        // Delay clearing the popup so the cursor has time to travel from marker onto the card
+        // 250ms grace (bumped from 80ms) — gives the cursor more time to transit
+        // marker → popup card. Popup-card hover sets popupHoveredRef true to cancel.
         if (popupClearTimeoutRef.current) clearTimeout(popupClearTimeoutRef.current);
         popupClearTimeoutRef.current = setTimeout(() => {
-          if (!popupHoveredRef.current) setPopupProject(null);
-        }, 80);
+          if (!popupHoveredRef.current && !popupPinned) setPopupProject(null);
+        }, 250);
       }
     },
-    [scrollEnabled]
+    [scrollEnabled, popupPinned]
   );
 
   const handleMouseLeave = useCallback(() => {
     setHoveredId(null);
-    if (!popupHoveredRef.current) setPopupProject(null);
+    if (!popupHoveredRef.current && !popupPinned) setPopupProject(null);
     setCursor(scrollEnabled ? "grab" : "default");
-  }, [scrollEnabled]);
+  }, [scrollEnabled, popupPinned]);
+
+  // Close pinned popup on click outside the map container.
+  useEffect(() => {
+    if (!popupPinned) return;
+    function handleOutsideClick(e: MouseEvent) {
+      if (mapContainerRef.current && !mapContainerRef.current.contains(e.target as Node)) {
+        setPopupPinned(false);
+        setPopupProject(null);
+        setHoveredId(null);
+      }
+    }
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+  }, [popupPinned]);
 
   // ── Panel card interaction ─────────────────────────────────────────────
   const handlePanelHover = useCallback((id: string | null) => {
@@ -750,6 +777,7 @@ export default function CanadaMap() {
 
   const handlePanelClick = useCallback((project: MapProject, openModal = false) => {
     setPopupProject(null);
+    setPopupPinned(false);
     setHoveredId(project.id);
     if (openModal) {
       setSelectedProject(project);
@@ -766,6 +794,7 @@ export default function CanadaMap() {
 
   const handleCloseModal = useCallback(() => {
     setSelectedProject(null);
+    setPopupPinned(false);
     mapRef.current?.fitBounds(CANADA_BOUNDS, { ...FIT_OPTIONS, duration: 1400 });
   }, []);
 
@@ -962,7 +991,10 @@ export default function CanadaMap() {
                   <Layer {...HOVERED_RING_LAYER} />
                 </Source>
 
-                {/* Hover popup (map hover only, not panel hover) */}
+                {/* Project popup — agency-grade card with click-to-pin behavior.
+                    Marker click PINS the popup (popupPinned=true). Hover dismissal is
+                    disabled while pinned. Close button on the card or click-outside the
+                    map dismisses it. Card body click opens the full case-study modal. */}
                 {popupProject && !selectedProject && (
                   <Popup
                     longitude={popupProject.lng}
@@ -973,14 +1005,18 @@ export default function CanadaMap() {
                     closeOnClick={false}
                   >
                     <div
+                      role="dialog"
+                      aria-label={`Project preview: ${popupProject.title}`}
                       style={{
-                        background: "#111827",
-                        border: "1px solid rgba(249,115,22,0.4)",
-                        borderRadius: 10,
+                        position: "relative",
+                        width: 240,
+                        background: "#0f1620",
+                        border: `1px solid ${popupPinned ? "rgba(249,115,22,0.6)" : "rgba(249,115,22,0.32)"}`,
+                        borderRadius: 12,
                         overflow: "hidden",
-                        width: 215,
-                        cursor: "pointer",
-                        boxShadow: "0 8px 28px rgba(0,0,0,0.75)",
+                        boxShadow: popupPinned
+                          ? "0 14px 40px rgba(0,0,0,0.85), 0 0 0 1px rgba(249,115,22,0.2)"
+                          : "0 10px 32px rgba(0,0,0,0.78), 0 0 0 1px rgba(255,255,255,0.03)",
                       }}
                       onMouseEnter={() => {
                         popupHoveredRef.current = true;
@@ -988,31 +1024,74 @@ export default function CanadaMap() {
                       }}
                       onMouseLeave={() => {
                         popupHoveredRef.current = false;
-                        setPopupProject(null);
-                        setHoveredId(null);
-                      }}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        const p = popupProject;
-                        setSelectedProject(p);
-                        setPopupProject(null);
-                        setHoveredId(null);
+                        if (!popupPinned) {
+                          setPopupProject(null);
+                          setHoveredId(null);
+                        }
                       }}
                     >
-                      <div
+                      {/* Close button — visible whenever popup is pinned */}
+                      {popupPinned && (
+                        <button
+                          type="button"
+                          aria-label="Close project preview"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setPopupPinned(false);
+                            setPopupProject(null);
+                            setHoveredId(null);
+                          }}
+                          style={{
+                            position: "absolute",
+                            top: 7,
+                            right: 7,
+                            zIndex: 5,
+                            width: 24,
+                            height: 24,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            border: "1px solid rgba(255,255,255,0.18)",
+                            borderRadius: "50%",
+                            background: "rgba(15,22,32,0.85)",
+                            backdropFilter: "blur(4px)",
+                            cursor: "pointer",
+                            color: "#F5F0EB",
+                            padding: 0,
+                          }}
+                        >
+                          <svg width="10" height="10" viewBox="0 0 14 14" fill="none">
+                            <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" />
+                          </svg>
+                        </button>
+                      )}
+
+                      <button
+                        type="button"
+                        aria-label={`Open case study: ${popupProject.title}`}
                         style={{
-                          position: "relative",
+                          all: "unset",
+                          display: "block",
                           width: "100%",
-                          height: 105,
-                          overflow: "hidden",
+                          cursor: "pointer",
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const p = popupProject;
+                          setSelectedProject(p);
+                          setPopupPinned(false);
+                          setPopupProject(null);
+                          setHoveredId(null);
                         }}
                       >
+                      {/* Image with gradient bottom for legibility */}
+                      <div style={{ position: "relative", width: "100%", height: 110, overflow: "hidden" }}>
                         <Image
                           src={popupProject.images[0]}
                           alt={popupProject.title}
                           fill
                           className="object-cover"
-                          sizes="215px"
+                          sizes="240px"
                           unoptimized
                         />
                         <div
@@ -1020,67 +1099,101 @@ export default function CanadaMap() {
                             position: "absolute",
                             inset: 0,
                             background:
-                              "linear-gradient(to bottom, transparent 40%, rgba(17,24,39,0.9) 100%)",
+                              "linear-gradient(to bottom, transparent 35%, rgba(15,22,32,0.55) 78%, rgba(15,22,32,0.95) 100%)",
                           }}
                         />
-                        <div
-                          style={{
-                            position: "absolute",
-                            top: 7,
-                            right: 7,
-                            background: "rgba(0,0,0,0.55)",
-                            backdropFilter: "blur(4px)",
-                            borderRadius: 5,
-                            padding: "2px 6px",
-                            fontSize: 9,
-                            fontWeight: 600,
-                            color: "rgba(255,255,255,0.7)",
-                            letterSpacing: "0.06em",
-                            textTransform: "uppercase",
-                          }}
-                        >
-                          Click to open
-                        </div>
                       </div>
-                      <div style={{ padding: "9px 11px 11px" }}>
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 5,
-                            marginBottom: 4,
-                          }}
-                        >
+
+                      {/* Meta — agency-grade 4 lines */}
+                      <div style={{ padding: "11px 13px 13px" }}>
+                        {/* Line 1: product · application pills */}
+                        <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8, flexWrap: "wrap" }}>
                           <span
                             style={{
                               fontSize: 9,
                               fontWeight: 700,
-                              letterSpacing: "0.1em",
+                              letterSpacing: "0.13em",
                               textTransform: "uppercase",
                               color: "#F97316",
-                              background: "rgba(249,115,22,0.12)",
-                              padding: "1.5px 6px",
+                              background: "rgba(249,115,22,0.13)",
+                              padding: "2px 7px",
                               borderRadius: 4,
+                              border: "1px solid rgba(249,115,22,0.22)",
                             }}
                           >
                             {popupProject.product}
                           </span>
-                          <span style={{ fontSize: 9.5, color: "#6B7280" }}>
-                            {popupProject.city}, {popupProject.province}
+                          <span
+                            style={{
+                              fontSize: 9,
+                              fontWeight: 600,
+                              letterSpacing: "0.1em",
+                              textTransform: "uppercase",
+                              color: "rgba(255,255,255,0.45)",
+                            }}
+                          >
+                            {popupProject.application}
                           </span>
                         </div>
+
+                        {/* Line 2: project title */}
                         <p
                           style={{
-                            fontSize: 11.5,
-                            fontWeight: 600,
+                            fontSize: 13,
+                            fontWeight: 700,
                             color: "#F5F0EB",
-                            lineHeight: 1.35,
-                            margin: 0,
+                            lineHeight: 1.3,
+                            margin: "0 0 6px",
+                            letterSpacing: "-0.01em",
                           }}
                         >
                           {popupProject.title}
                         </p>
+
+                        {/* Line 3: location · year (year line hidden if undefined) */}
+                        <p
+                          style={{
+                            fontSize: 11,
+                            fontWeight: 500,
+                            color: "rgba(255,255,255,0.5)",
+                            margin: 0,
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 6,
+                          }}
+                        >
+                          <span>
+                            {popupProject.city}, {popupProject.province}
+                          </span>
+                          {popupProject.year && (
+                            <>
+                              <span style={{ color: "rgba(255,255,255,0.2)" }}>·</span>
+                              <span>{popupProject.year}</span>
+                            </>
+                          )}
+                        </p>
+
+                        {/* Line 4: CTA */}
+                        <p
+                          style={{
+                            fontSize: 10,
+                            fontWeight: 700,
+                            color: "#F97316",
+                            margin: "9px 0 0",
+                            letterSpacing: "0.08em",
+                            textTransform: "uppercase",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 4,
+                          }}
+                        >
+                          {popupPinned ? "Open case study" : "Click to open"}
+                          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        </p>
                       </div>
+                      </button>
                     </div>
                   </Popup>
                 )}

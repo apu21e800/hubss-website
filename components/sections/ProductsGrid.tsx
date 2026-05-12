@@ -13,11 +13,11 @@ const PRODUCT_WHAT: Record<string, string> = {
   "streetbond":
     "Permanently bonded acrylic colour for asphalt and concrete. Standard palette plus full Pantone custom matching. Long-lasting colour retention — bike lanes, crosswalks, driveways.",
   "traffic-patterns-xd":
-    "Aggregate-reinforced thermoplastic engineered for BRT corridors and high-volume intersections. BPN 65+ skid resistance.",
+    "Aggregate-reinforced thermoplastic engineered for BRT corridors and high-volume intersections. High skid resistance from the integral aggregate matrix.",
   "traffic-patterns":
-    "Crisp preformed thermoplastic markings that outlast paint 5:1. Factory-manufactured to 90mil and specified by municipalities coast to coast.",
+    "Crisp preformed thermoplastic markings that outlast paint by years. Factory-manufactured to 125mil and specified by municipalities coast to coast.",
   "mmax":
-    "MMA resin for red bus lanes and bike lanes. Traffic-ready in 60 minutes. Bonds at −10°C — no waiting for spring.",
+    "MMA resin for red bus lanes and bike lanes. Traffic-ready in under an hour. Applies down to +3°C and rising — no waiting for high summer.",
   "decomark":
     "Custom murals, Pride crosswalks, and Indigenous street art, precision-formed in durable thermoplastic. From vector file to civic landmark.",
 };
@@ -32,12 +32,13 @@ const PRODUCT_TYPE: Record<string, string> = {
 };
 
 const PRODUCT_STAT: Record<string, string> = {
-  "streetprint":         "20+ yr proven life",
+  // Softened per Doug-style claims discipline (no unsourced numbers).
+  "streetprint":         "Decades of proven service",
   "streetbond":          "UV-stable · won't peel",
-  "traffic-patterns-xd": "BPN 65+ certified",
-  "traffic-patterns":    "Outlasts paint 5–8×",
-  "mmax":                "Traffic-ready in 60 min",
-  "decomark":            "Full Pantone match",
+  "traffic-patterns-xd": "Aggregate-reinforced surface",
+  "traffic-patterns":    "Outlasts paint by years",
+  "mmax":                "Traffic-ready in under an hour",
+  "decomark":            "Custom Pantone graphics",
 };
 
 const PRODUCT_APPS: Record<string, string[]> = {

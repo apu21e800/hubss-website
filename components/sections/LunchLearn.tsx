@@ -103,17 +103,17 @@ export default function LunchLearn({ hideMoose }: { hideMoose?: boolean } = {}) 
                 Lunch &amp; Learn<br />at Your Location
               </h2>
               <p className="text-base leading-relaxed" style={{ color: "#9CA3AF" }}>
-                Bring the team together. We'll deliver a personalized session covering product selection, installation best practices, and ROI — with lunch included.
+                Lunch included, in your office or virtual.
               </p>
             </div>
 
             {/* Benefits list */}
             <div className="space-y-4 mb-10">
               {[
-                "30–45 minute presentation tailored to your projects",
+                "45–60 minute presentation tailored to your projects",
                 "Live Q&A with HUB technical team",
                 "Sample materials and specification sheets",
-                "Lunch included — virtual sessions come with a $50 gift card",
+                "Lunch included — virtual sessions come with a $20 lunch voucher",
               ].map((benefit, i) => (
                 <motion.div
                   key={benefit}

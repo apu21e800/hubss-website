@@ -8,6 +8,7 @@ import LunchLearn from "@/components/sections/LunchLearn";
 import { projects } from "@/lib/projects";
 import { products } from "@/lib/products";
 import { buildMetadata } from "@/lib/seo";
+import JsonLd from "@/components/ui/JsonLd";
 
 export async function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -38,8 +39,19 @@ export default async function ProjectPage({ params }: Props) {
     .filter((p) => p.slug !== slug && (p.product === project.product || p.application === project.application))
     .slice(0, 3);
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://hubss.com" },
+      { "@type": "ListItem", position: 2, name: "Projects", item: "https://hubss.com/projects" },
+      { "@type": "ListItem", position: 3, name: project.title, item: `https://hubss.com/projects/${project.slug}` },
+    ],
+  };
+
   return (
     <main style={{ background: "#0A0A0A", minHeight: "100vh" }}>
+      <JsonLd data={breadcrumbSchema} />
       <Nav />
 
       {/* Hero */}

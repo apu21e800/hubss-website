@@ -7,7 +7,8 @@ const STATS = [
   { num: "30+",    label: "Years",          sub: "Installations across North America" },
   { num: "1,000+", label: "Projects",       sub: "Completed coast to coast" },
   { num: "500+",   label: "Municipalities", sub: "Specified coast to coast" },
-  { num: "20yr",   label: "Performance",    sub: "Colour retention on stamped asphalt and coatings" },
+  // Softened from "20yr" — Doug-style proactive QA on bold quantitative claims (Vernon's call).
+  { num: "DECADES", label: "Performance",   sub: "Colour retention on stamped asphalt and coatings" },
 ];
 
 const PROOF = [

@@ -6,6 +6,9 @@ export interface Application {
   imageUrl: string;
   gallery?: string[];
   relatedProducts: string[];
+  // SEO overrides ported from old hubss.com.
+  seoTitle?: string;
+  seoDescription?: string;
 }
 
 function gallery(slug: string, dir: string, count: number, ext: string = "jpg"): string[] {
@@ -18,6 +21,8 @@ export const applications: Application[] = [
   {
     name: "Crosswalks",
     slug: "crosswalks",
+    seoTitle: "Decorative Crosswalks — Thermoplastic Pedestrian Markings",
+    seoDescription: "Aggregate-reinforced preformed thermoplastic crosswalk markings for high-visibility pedestrian safety, traffic calming, and community identity — specified across Canada.",
     shortDesc: "Durable, high-visibility crosswalk systems that outlast paint and elevate the intersection.",
     imageUrl: "/images/applications/crosswalks/crosswalks-01.jpg",
     gallery: [1,3,6,8,11,13,16,18,21,23,26,28,31,33,36,38,41,43,45,48,50,53,55,58,60,63,65,68,70,73,75,78,80,83,85,87,90,92,95,97,100,102,105,107,110,112,115,117,120,122].map(n =>
@@ -40,7 +45,8 @@ export const applications: Application[] = [
     shortDesc: "BRT corridor and bus priority lane treatments engineered for the harshest urban loads.",
     imageUrl: "/images/applications/bus-lanes/bus-lanes-01.jpg",
     gallery: gallery("bus-lanes", "bus-lanes", 40),
-    description: "Bus priority lanes and BRT corridors are among the most demanding surfaces in any city's network — concentrated axle loads, tight turning radii, and the expectation that markings stay legible through thousands of bus movements a day. Paint doesn't survive this. HUB does. MMAX MMA resin cures in 30-60 minutes, enabling complete overnight installation in a single maintenance window without disrupting weekday transit operations. TrafficPatternsXD 150mil aggregate-reinforced thermoplastic delivers BPN 65+ certified skid resistance at bus stops and turning movements where wet-surface traction directly affects passenger safety. Both systems outlast painted lane markings season after season, eliminating the cycle of annual repainting that costs transit agencies time, budget, and lane availability. The specified solution for red bus lanes, transit signal priority corridors, and BRT station zones across Canada.",
+    // TODO: doug-review — Doug's note ended mid-sentence ("...survive this. Our MMAX line of MMA resin cures in...."). Polished here per Vernon; revisit when Doug clarifies the intended completion.
+    description: "Bus priority lanes and BRT corridors are among the most demanding surfaces in any city's network — concentrated axle loads, tight turning radii, and the expectation that markings stay legible through thousands of bus movements a day. Paint doesn't survive this. Our MMAX line of MMA resin cures in 45–60 minutes, traffic-ready in under an hour, enabling complete overnight installation in a single maintenance window without disrupting weekday transit operations. TrafficPatternsXD 150mil aggregate-reinforced thermoplastic delivers high skid resistance at bus stops and turning movements where wet-surface traction directly affects passenger safety. Both systems outlast painted lane markings season after season, eliminating the cycle of annual repainting that costs transit agencies time, budget, and lane availability. The specified solution for red bus lanes, transit signal priority corridors, and BRT station zones across Canada.",
     relatedProducts: ["mmax", "traffic-patterns-xd", "streetbond", "premark"],
   },
   {
@@ -56,6 +62,8 @@ export const applications: Application[] = [
   {
     name: "Parks & Paths",
     slug: "parks-paths",
+    seoTitle: "Decorative Paving for Parks and Paths",
+    seoDescription: "Discover decorative paving products that redefine outdoor spaces. Engineered for durability and designed for beauty — surfaces that transform parks and paths into inviting, accessible spaces.",
     shortDesc: "Decorative surface systems for urban paths, park plazas, and multi-use trails.",
     imageUrl: "/images/applications/parks-paths/parks-paths-01.jpg",
     gallery: [1,4,7,10,13,16,19,22,25,28,31,34,37,40,43,46,49,52,55,58,61,64,67,70,73,76,79,82,85,88,91,94,97,100,103,106,109,112,115,118,121,124,127,130,133,136,139,142,143,144].map(n =>
@@ -66,6 +74,8 @@ export const applications: Application[] = [
   {
     name: "Playgrounds",
     slug: "playgrounds",
+    seoTitle: "Playgrounds & Recreation — Schoolyard Paving",
+    seoDescription: "Transform schoolyards with StreetBond — cost-effective, vibrant playground surfacing that increases physical activity and student engagement.",
     shortDesc: "Vibrant, slip-resistant playground surface graphics that stand up to hard use.",
     imageUrl: "/images/applications/playgrounds/playgrounds-01.jpg",
     gallery: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52].map(n =>
@@ -154,7 +164,7 @@ export const applications: Application[] = [
     imageUrl: "/images/applications/crosswalks/crosswalks-03.jpg",
     gallery: [1,3,6,8,11,13,16,18,21,23,26,28,31,33,36,38,41,43,45,48,50,53,55,58,60,63,65,68,70,73,75,78,80,83,85,87,90,92,95,97,100,102,105,107,110,112,115,117,120,122].map(n =>
       `/images/applications/crosswalks/crosswalks-${String(n).padStart(2,"0")}.jpg`),
-    description: "Pedestrian safety isn't an aesthetic aspiration — it's a measurable outcome. Crosswalk markings that are visible at night in the rain, school zone treatments that read at speed, and pedestrian priority zones that communicate unambiguously to a driver are all functions of durable, retroreflective pavement systems that hold their performance specification through Canadian winters, not just in the season they were installed. TrafficPatterns and TrafficPatternsXD thermoplastic deliver ASTM D4956-rated retroreflectivity at crosswalks and school zones season after season without repainting. StreetBond and MMAX high-contrast colour coatings mark pedestrian priority zones, raised intersection treatments, and school zone warning areas with colours that persist through de-icing salt cycles and freeze-thaw conditions. The complete specification for municipalities and engineers taking Vision Zero and Complete Streets commitments seriously.",
+    description: "Pedestrian safety isn't an aesthetic aspiration — it's a measurable outcome. Crosswalk markings that are visible at night in the rain, school zone treatments that read at speed, and pedestrian priority zones that communicate unambiguously to a driver are all functions of durable, retroreflective pavement systems that hold their performance specification through Canadian winters, not just in the season they were installed. TrafficPatterns and TrafficPatternsXD thermoplastic deliver retroreflective performance at crosswalks and school zones season after season without repainting. StreetBond and MMAX high-contrast colour coatings mark pedestrian priority zones, raised intersection treatments, and school zone warning areas with colours that persist through de-icing salt cycles and freeze-thaw conditions. The complete specification for municipalities and engineers taking Vision Zero and Complete Streets commitments seriously.",
     relatedProducts: ["traffic-patterns", "traffic-patterns-xd", "streetbond", "mmax", "decomark", "premark"],
   },
   {
@@ -173,12 +183,14 @@ export const applications: Application[] = [
     shortDesc: "Precision preformed thermoplastic airfield markings — certified performance, outlasts paint.",
     imageUrl: "/images/applications/airports/airports-01.jpg",
     gallery: gallery("airports", "airports", 28),
-    description: "Airfield surface markings exist at the intersection of safety-critical precision and extreme operational demand. Threshold markings, runway designation numbers, taxiway centrelines, holding position signs, and apron surface designations must maintain dimensional accuracy and premium retroreflectivity through seasons of jet blast, deicing fluid application, and rubber contamination from landing gear. AirMark preformed thermoplastic airfield markings are engineered to this standard — ASTM D4956 Type IV retroreflectivity built through the full material cross-section rather than a surface bead application that wears away. Installed by certified crews with heat application equipment, AirMark fuses to the airfield surface permanently and significantly outlasts painted airfield markings with no lane-closure downtime beyond the initial application window.",
+    description: "Airfield surface markings exist at the intersection of safety-critical precision and extreme operational demand. Taxiway centrelines, apron designations, holding position signs, helipad markings, and other non-runway airside surfaces must maintain dimensional accuracy and high retroreflectivity through seasons of deicing fluid application, rubber contamination, and ground-handling traffic. AirMark preformed thermoplastic airfield markings are engineered to this standard — glass-bead retroreflectivity built through the full material cross-section rather than a surface bead application that wears away. Installed by certified crews with heat application equipment, AirMark fuses to the airfield surface permanently and significantly outlasts painted airfield markings with no extended closure window required.",
     relatedProducts: ["airmark"],
   },
   {
     name: "LEED & Urban Heat Island",
     slug: "leed-urban-heat-island",
+    seoTitle: "LEED & Urban Heat Island — Cool Pavement Coatings",
+    seoDescription: "Creating cooler, more sustainable urban spaces — high-SRI StreetBond coatings reduce pavement surface temperature and support LEED Heat Island Reduction credits.",
     shortDesc: "Solar reflective paving solutions that reduce urban heat island effect and earn LEED credits.",
     imageUrl: "/images/applications/leed-urban-heat-island/leed-urban-heat-island-01.jpg",
     gallery: gallery("leed-urban-heat-island", "leed-urban-heat-island", 2),

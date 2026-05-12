@@ -61,7 +61,7 @@ export default function StickyBar() {
       >
         {/* Brand caption — desktop only */}
         <p className="hidden lg:block flex-1 text-[10px] uppercase tracking-[0.22em] font-semibold" style={{ color: "rgba(255,255,255,0.25)" }}>
-          Canada&#39;s Decorative Pavement Specialists · Since 1994
+          Canada&#39;s Decorative Pavement Specialists · Since 1999
         </p>
 
         {/* CTAs */}
@@ -83,7 +83,7 @@ export default function StickyBar() {
               e.currentTarget.style.background = "transparent";
             }}
           >
-            Request Spec Sheet
+            Speak with a specifier
           </Link>
           <Link
             href="/lunch-learn"

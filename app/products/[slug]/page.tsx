@@ -26,8 +26,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = products.find((p) => p.slug === slug);
   if (!product) return {};
   return buildMetadata({
-    title: product.name,
-    description: product.shortDesc + " — " + product.description.slice(0, 120) + "…",
+    title: product.seoTitle ?? product.name,
+    description: product.seoDescription ?? (product.shortDesc + " — " + product.description.slice(0, 120) + "…"),
     slug: `products/${product.slug}`,
   });
 }
@@ -64,13 +64,25 @@ export default async function ProductPage({ params }: Props) {
     image: product.imageUrl,
   };
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://hubss.com" },
+      { "@type": "ListItem", position: 2, name: "Products", item: "https://hubss.com/products" },
+      { "@type": "ListItem", position: 3, name: product.name, item: `https://hubss.com/products/${product.slug}` },
+    ],
+  };
+
   return (
     <main style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
       <JsonLd data={productSchema} />
+      <JsonLd data={breadcrumbSchema} />
       <Nav />
 
       {/* Hero banner */}
       <div className="relative overflow-hidden" style={{ height: "clamp(360px, 52vh, 560px)" }}>
+        {/* TODO: doug-review-image — Doug flagged the TPXD hero/overview ("This is TrafficPatterns, not TPXD — no stamping"). Confirm correct TPXD image and replace product.imageUrl for traffic-patterns-xd in lib/products.ts. */}
         <Image
           src={product.imageUrl}
           alt={product.name}
@@ -79,13 +91,14 @@ export default async function ProductPage({ params }: Props) {
           priority
           sizes="100vw"
         />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(8,13,22,0.55) 0%, rgba(8,13,22,0.62) 55%, rgba(8,13,22,0.88) 100%)" }} />
+        {/* Hero overlays lightened per Doug review (TPXD specifically — applied product-wide for consistency) */}
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(8,13,22,0.4) 0%, rgba(8,13,22,0.5) 55%, rgba(8,13,22,0.82) 100%)" }} />
         {/* Left text scrim for legibility */}
-        <div className="absolute inset-0" style={{ background: "linear-gradient(92deg, rgba(8,13,22,0.48) 0%, rgba(8,13,22,0.18) 45%, transparent 65%)" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(92deg, rgba(8,13,22,0.38) 0%, rgba(8,13,22,0.14) 45%, transparent 65%)" }} />
         <div className="absolute inset-0 flex items-end">
           <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-14">
             <p className="text-xs font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#f97316" }}>
-              {getProductFamily(product.slug)}
+              {product.eyebrow ?? getProductFamily(product.slug)}
             </p>
             <h1
               className="font-black leading-[1.05] mb-3"
@@ -140,7 +153,7 @@ export default async function ProductPage({ params }: Props) {
             <Link href="/contact"
               className="px-5 py-2.5 rounded-lg text-sm font-bold transition-all"
               style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff", boxShadow: "0 4px 16px rgba(249,115,22,0.32)" }}>
-              Get a Quote →
+              Speak with a specifier →
             </Link>
           </div>
         </div>
@@ -156,6 +169,7 @@ export default async function ProductPage({ params }: Props) {
 
             {/* Gallery */}
             <h2 className="text-2xl font-bold mb-6" style={{ color: "var(--text-primary)" }}>Gallery</h2>
+            {/* TODO: doug-review-image — Doug flagged /products/premark detail image #2 (premark-03.jpg) as "Not PreMark". Audit each product's gallery[] in lib/products.ts and remove or replace incorrect images. */}
             <GalleryGrid images={gallery} />
 
             <DocumentDownloads slug={product.slug} />
@@ -184,7 +198,7 @@ export default async function ProductPage({ params }: Props) {
             <div className="rounded-xl p-8 mb-8 sticky top-24 relative overflow-hidden" style={{ background: "#111111", border: "1px solid rgba(255,255,255,0.08)" }}>
               {/* Orange top accent */}
               <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
-              <h3 className="font-bold text-lg mb-6" style={{ color: "#F5F0EB" }}>Specifications</h3>
+              <h3 className="font-bold text-lg mb-6" style={{ color: "#F5F0EB" }}>Spec Library</h3>
               <div className="space-y-4">
                 {product.specs.map((spec) => (
                   <div key={spec.label} className="flex justify-between text-sm" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", paddingBottom: "12px" }}>
@@ -195,28 +209,7 @@ export default async function ProductPage({ params }: Props) {
                   </div>
                 ))}
               </div>
-
-              <Link
-                href="/contact"
-                className="flex items-center justify-center gap-2 w-full text-center font-bold py-4 rounded-lg mt-8 transition-all text-sm"
-                style={{
-                  background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
-                  color: "#fff",
-                  boxShadow: "0 4px 16px rgba(249,115,22,0.35)",
-                }}
-              >
-                Request Spec Sheet
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </Link>
-              <Link
-                href="/lunch-learn"
-                className="flex items-center justify-center gap-2 w-full text-center font-semibold py-3.5 rounded-lg mt-3 transition-all text-sm hover:border-orange-500/40 hover:text-white"
-                style={{ background: "transparent", color: "#9CA3AF", border: "1px solid rgba(255,255,255,0.12)" }}
-              >
-                Book a Lunch &amp; Learn
-              </Link>
+              {/* CTAs removed per Doug review — quote and L&L now live in the sticky bottom bar. */}
             </div>
           </div>
         </div>
@@ -362,6 +355,11 @@ export default async function ProductPage({ params }: Props) {
                 >
                   {/* Thumbnail */}
                   <div className="relative overflow-hidden" style={{ height: 130 }}>
+                    {/* TODO: doug-review-image — Doug noted certain related-app card images don't match the parent product:
+                          • /products/traffic-patterns + "crosswalks" card → shown image is TPXD work, swap to a TP install
+                          • /products/traffic-patterns-xd + "bike-lanes" card → swap to a non-bike-lane install (Doug suggested Winners entrance)
+                          • /products/decomark + "crosswalks" card → was TPXD work; crosswalks dropped from DM relatedApplications, but verify image source
+                        Image source is application.imageUrl shared site-wide; a per-product override would require a schema change. */}
                     <Image
                       src={app.imageUrl}
                       alt={app.name}

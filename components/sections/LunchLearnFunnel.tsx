@@ -234,13 +234,13 @@ export default function LunchLearnFunnel() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              style={{ height: "clamp(280px, 42vw, 520px)" }}
+              style={{ height: "clamp(224px, 34vw, 416px)" }}
             >
               <Image
                 src="/images/lunch-learn/moose-final.png"
                 alt="HUB Surface Systems moose mascot — book a free Lunch & Learn"
-                width={460}
-                height={520}
+                width={368}
+                height={416}
                 style={{
                   width: "auto",
                   height: "100%",

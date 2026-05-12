@@ -28,8 +28,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const application = applications.find((a) => a.slug === slug);
   if (!application) return {};
   return buildMetadata({
-    title: application.name,
-    description: application.shortDesc + " — " + application.description.slice(0, 120) + "…",
+    title: application.seoTitle ?? application.name,
+    description: application.seoDescription ?? (application.shortDesc + " — " + application.description.slice(0, 120) + "…"),
     slug: `applications/${application.slug}`,
   });
 }
@@ -64,9 +64,20 @@ export default async function ApplicationPage({ params }: Props) {
     image: application.imageUrl,
   };
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://hubss.com" },
+      { "@type": "ListItem", position: 2, name: "Applications", item: "https://hubss.com/applications" },
+      { "@type": "ListItem", position: 3, name: application.name, item: `https://hubss.com/applications/${application.slug}` },
+    ],
+  };
+
   return (
     <main style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
       <JsonLd data={applicationSchema} />
+      <JsonLd data={breadcrumbSchema} />
       <Nav />
 
       {/* Hero banner */}
@@ -146,7 +157,7 @@ export default async function ApplicationPage({ params }: Props) {
               <Link href="/contact"
                 className="px-5 py-2.5 rounded-lg text-sm font-bold transition-all"
                 style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff", boxShadow: "0 4px 16px rgba(249,115,22,0.32)" }}>
-                Get a Quote →
+                Speak with a specifier →
               </Link>
             </div>
           </div>
@@ -207,7 +218,7 @@ export default async function ApplicationPage({ params }: Props) {
                     boxShadow: "0 4px 16px rgba(249,115,22,0.35)",
                   }}
                 >
-                  Request a Quote
+                  Speak with a specifier
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>

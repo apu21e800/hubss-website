@@ -5,7 +5,7 @@ export default function HeroSlideshow() {
   return (
     <section
       className="relative w-full overflow-hidden"
-      style={{ minHeight: "90vh", maxHeight: "1000px", background: "#0d1117" }}
+      style={{ minHeight: "min(82vh, 780px)", background: "#0d1117" }}
       aria-label="Hero"
     >
       {/* ── Background image ──────────────────────────────────────── */}
@@ -58,18 +58,17 @@ export default function HeroSlideshow() {
 
             {/* Eyebrow — Vernon-confirmed: 1999 is the authoritative founding year site-wide */}
             <p
-              className="text-xs font-bold tracking-[0.22em] uppercase mb-4"
+              className="text-xs font-bold tracking-[0.22em] uppercase mb-3"
               style={{ color: "#F97316" }}
             >
               Redefining Hardscapes · Since 1999
             </p>
 
-            {/* H1 — floor 2.25rem (mobile), 5vw slope, hard cap 4rem (64px) at 1280px+.
-                7.5vw/6.5rem was blowing out at ultrawide (104px on every desktop). */}
+            {/* H1 — cap tightened to 3.5rem (56px) per Vernon: 64px still read dominant */}
             <h1
-              className="font-black mb-4"
+              className="font-black mb-3"
               style={{
-                fontSize: "clamp(2.25rem, 5vw, 4rem)",
+                fontSize: "clamp(2.25rem, 4vw, 3.5rem)",
                 lineHeight: 0.95,
                 letterSpacing: "-0.04em",
                 color: "white",
@@ -95,7 +94,7 @@ export default function HeroSlideshow() {
 
             {/* H2 — tagline subhead. Cap at 1.5rem (24px) so it doesn't compete with H1. */}
             <h2
-              className="font-semibold mb-8"
+              className="font-semibold mb-6"
               style={{
                 fontSize: "clamp(1.125rem, 2vw, 1.5rem)",
                 lineHeight: 1.25,

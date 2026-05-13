@@ -125,8 +125,9 @@ export default async function ApplicationPage({ params }: Props) {
           className="absolute inset-0 pointer-events-none"
           style={{
             backgroundImage: "url('/images/textures/stamped-asphalt-texture.webp')",
-            backgroundSize: "480px auto",
-            backgroundRepeat: "repeat",
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center top",
             opacity: 0.04,
             mixBlendMode: "luminosity",
           }}

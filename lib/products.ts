@@ -61,7 +61,7 @@ export const products: Product[] = [
   {
     name: "TrafficPatterns",
     slug: "traffic-patterns",
-    shortDesc: "Specified for crosswalks, parks, schools, public spaces and multiple other applications used across Canadian municipalities coast to coast.",
+    shortDesc: "Custom preformed thermoplastic crosswalk and surface marking. Factory-manufactured at 125mil, heat-fused permanently to asphalt or concrete.",
     imageUrl: "/images/products/traffic-patterns/traffic-patterns-01.jpg",
     gallery: gallery("traffic-patterns", "traffic-patterns", 86),
     description: "TrafficPatterns is a fully customizable preformed thermoplastic pavement marking system — a fusion of performance, aesthetics, and functionality. Factory-manufactured to 125mil and heat-fused to asphalt or concrete, the material is engineered to withstand vehicular and pedestrian traffic, harsh weather, and daily wear with a skid- and slip-resistant surface treatment. Retroreflective glass beads are embedded through the full cross-section, holding nighttime visibility as the surface wears. Open to traffic within hours of installation. Withstands snowplow blades, de-icing chemicals, and Canadian freeze-thaw cycling. Holds retroreflectivity for years where conventional traffic paint typically requires repainting in a year or less. A vast array of customizable designs and colours allows planners, architects, and designers to reflect community character and identity. Specified by Canadian municipalities coast to coast for crosswalks, parks, schools, public spaces, and regulatory markings.",
@@ -126,7 +126,7 @@ export const products: Product[] = [
     slug: "streetprint",
     seoTitle: "StreetPrint® — Stamped Asphalt Solutions for Urban Design",
     seoDescription: "StreetPrint is a state-of-the-art decorative pavement solution that combines the durability of asphalt with the aesthetics of brick, stone, or custom designs.",
-    shortDesc: "Genuine Stamped Asphalt.",
+    shortDesc: "In-place decorative asphalt stamping. Brick, cobblestone, slate, and custom patterns — flush surface, snowplow-safe.",
     imageUrl: "/images/products/streetprint/streetprint-01.jpg",
     gallery: [1,3,5,7,9,10,11,13,15,17,19,21,23,25,27,29,31,32,33,35,37,39,41,43,45,47,49,51,53,55,56,57,59,61,63,65,67,69,71,73,75,77,79,80,81,83,85,87,89,91].map(n =>
       `/images/products/streetprint/streetprint-${String(n).padStart(2, "0")}.jpg`),
@@ -292,14 +292,14 @@ export const products: Product[] = [
     shortDesc: "Preformed thermoplastic symbols and legends. Drive-on installation.",
     imageUrl: "/images/products/premark/premark-01.jpg",
     gallery: gallery("premark", "premark", 11),
-    description: "PreMark is a highly durable preformed thermoplastic pavement marking material, specifically engineered for high-traffic regulatory applications. Heat-applied with a propane torch, the system delivers crisp, vibrant lines and symbols — turn arrows, stop bars, yield triangles, school zone legends, bike pictograms and bike lane markings, accessible parking symbols, crosswalk ladder lines, and rumble strips — with permanent adhesion to asphalt and concrete. 125mil standard thickness, with a 90mil ViziGrip option for lighter-duty applications. The retroreflective, intersection-grade material is built to withstand heavy traffic and harsh weather, retaining vibrant colour and reflective performance day and night where painted alternatives require annual repainting. Lower total cost of ownership than traditional marking methods; quick installation without lane closures.",
+    description: "PreMark is a highly durable preformed thermoplastic pavement marking material, specifically engineered for high-traffic regulatory applications. Heat-applied with a propane torch, the system delivers crisp, vibrant lines and symbols — turn arrows, stop bars, yield triangles, school zone legends, bike pictograms, accessible parking symbols, crosswalk ladder lines, and rumble strips — with permanent adhesion to asphalt and concrete. 125mil standard thickness, with a 90mil ViziGrip option for lighter-duty applications. The retroreflective, intersection-grade material is built to withstand heavy traffic and harsh weather, retaining vibrant colour and reflective performance day and night where painted alternatives require annual repainting. Lower total cost of ownership than traditional marking methods; quick installation without lane closures.",
     specs: [
       { label: "Material", value: "Preformed thermoplastic" },
       { label: "Thickness", value: "125mil standard / 90mil ViziGrip option" },
       { label: "Service Life", value: "Multi-year service in heavy municipal use" },
       { label: "Installation", value: "Heat-applied via propane torch — drive-on immediately" },
       { label: "Retroreflectivity", value: "Intersection-grade glass bead surface" },
-      { label: "Symbols", value: "Arrows, stop bars, legends, bike lane markings, accessible parking" },
+      { label: "Symbols", value: "Arrows, stop bars, legends, accessible parking symbols, crosswalk lines" },
     ],
     // Expanded per Vernon: bike lanes, regulatory markings, symbols/arrows, school zones (playgrounds), crosswalks.
     relatedApplications: ["bike-lanes", "regulatory-markings", "crosswalks", "parking-lots", "playgrounds", "pedestrian-safety", "traffic-calming"],
@@ -359,11 +359,10 @@ export const products: Product[] = [
     name: "Fast Patch DPR",
     slug: "fast-patch",
     eyebrow: "Concrete and Asphalt Repair",
-    shortDesc: "Distressed pavement repair. Return to service in under 45 minutes. Polymer blend with recycled content.",
-    // TODO: Vernon to supply in-use Fast Patch photo (product-in-pothole / crew applying). Using aggrefill-02 as atmospheric
-    // repair hero until then — close-up of heat-activated repair material reads well on dark overlay.
-    imageUrl: "/images/products/aggrefill/aggrefill-02.jpg",
-    heroPosition: "center 50%",
+    shortDesc: "Cold-mix polymer repair for potholes, spalls, and utility cuts. Back in service in under an hour.",
+    // TODO: Vernon to supply in-use Fast Patch photo. chipfill-02 shows generic repair crew applying material.
+    imageUrl: "/images/products/chipfill/chipfill-02.jpg",
+    heroPosition: "center 35%",
     gallery: [
       "/images/products/fast-patch/fast-patch-01.png",
     ],

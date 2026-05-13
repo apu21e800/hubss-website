@@ -750,8 +750,13 @@ export default function CanadaMap() {
 
   const handleMouseLeave = useCallback(() => {
     setHoveredId(null);
-    if (!popupHoveredRef.current && !popupPinned) setPopupProject(null);
     setCursor(scrollEnabled ? "grab" : "default");
+    // Use the same grace-period pattern as handleMouseMove so the cursor can
+    // transit from the map canvas edge into the popup card without it vanishing.
+    if (popupClearTimeoutRef.current) clearTimeout(popupClearTimeoutRef.current);
+    popupClearTimeoutRef.current = setTimeout(() => {
+      if (!popupHoveredRef.current && !popupPinned) setPopupProject(null);
+    }, 300);
   }, [scrollEnabled, popupPinned]);
 
   // Close pinned popup on click outside the map container.
@@ -798,7 +803,7 @@ export default function CanadaMap() {
     mapRef.current?.fitBounds(CANADA_BOUNDS, { ...FIT_OPTIONS, duration: 1400 });
   }, []);
 
-  const LAYOUT_HEIGHT = "clamp(400px, 60vh, 680px)";
+  const LAYOUT_HEIGHT = "clamp(520px, 72vh, 840px)";
 
   return (
     <>

@@ -40,14 +40,39 @@ const SOCIAL_CHANNELS = [
   },
 ];
 
-// Six real project photos — diverse, iconic, coast to coast
+// Six real project photos — newest first.
+// instagramUrl: link to the specific IG post, falls back to profile if not set.
 const GRID_PHOTOS = [
-  { src: "/images/blog/decorative-crosswalk-commercial-drive/featured.jpg", alt: "Commercial Drive Crosswalk — Vancouver, BC" },
-  { src: "/images/blog/simcoe-rainbow-crosswalk/featured.jpg", alt: "Rainbow Crosswalk — Simcoe, ON" },
-  { src: "/images/blog/ubc-musqueam-crosswalk/featured.jpg", alt: "UBC Musqueam Crosswalk — Vancouver, BC" },
-  { src: "/images/blog/bc-childrens-hospital-labyrinth/featured.jpg", alt: "BC Children's Hospital Labyrinth — Vancouver, BC" },
-  { src: "/images/blog/complete-streets-new-westminster/featured.jpg", alt: "Complete Streets — New Westminster, BC" },
-  { src: "/images/blog/branded-crosswalks-vancouver-richmond/featured.jpg", alt: "Branded Crosswalks — Vancouver & Richmond, BC" },
+  {
+    src: "/images/blog/decorative-crosswalk-commercial-drive/featured.jpg",
+    alt: "Commercial Drive Crosswalk — Vancouver, BC",
+    instagramUrl: "", // TODO: Vernon to add post URL
+  },
+  {
+    src: "/images/blog/simcoe-rainbow-crosswalk/featured.jpg",
+    alt: "Rainbow Crosswalk — Simcoe, ON",
+    instagramUrl: "", // TODO: Vernon to add post URL
+  },
+  {
+    src: "/images/blog/ubc-musqueam-crosswalk/featured.jpg",
+    alt: "UBC Musqueam Crosswalk — Vancouver, BC",
+    instagramUrl: "", // TODO: Vernon to add post URL
+  },
+  {
+    src: "/images/blog/bc-childrens-hospital-labyrinth/featured.jpg",
+    alt: "BC Children's Hospital Labyrinth — Vancouver, BC",
+    instagramUrl: "", // TODO: Vernon to add post URL
+  },
+  {
+    src: "/images/blog/complete-streets-new-westminster/featured.jpg",
+    alt: "Complete Streets — New Westminster, BC",
+    instagramUrl: "", // TODO: Vernon to add post URL
+  },
+  {
+    src: "/images/blog/branded-crosswalks-vancouver-richmond/featured.jpg",
+    alt: "Branded Crosswalks — Vancouver & Richmond, BC",
+    instagramUrl: "", // TODO: Vernon to add post URL
+  },
 ];
 
 export default function InstagramStrip() {
@@ -94,7 +119,7 @@ export default function InstagramStrip() {
           {GRID_PHOTOS.map((photo) => (
             <a
               key={photo.src}
-              href={SOCIAL_LINKS.instagram}
+              href={photo.instagramUrl || SOCIAL_LINKS.instagram}
               target="_blank"
               rel="noopener noreferrer"
               className="group relative overflow-hidden rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_8px_32px_rgba(249,115,22,0.2)]"

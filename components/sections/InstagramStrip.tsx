@@ -40,38 +40,38 @@ const SOCIAL_CHANNELS = [
   },
 ];
 
-// Six real project photos — newest first.
-// instagramUrl: link to the specific IG post, falls back to profile if not set.
+// Six most recent @hub_surface_systems Instagram posts — fetched 2026-05-13.
+// To update: replace instagramUrl values with newer post links.
 const GRID_PHOTOS = [
   {
     src: "/images/blog/decorative-crosswalk-commercial-drive/featured.jpg",
     alt: "Commercial Drive Crosswalk — Vancouver, BC",
-    instagramUrl: "", // TODO: Vernon to add post URL
+    instagramUrl: "https://www.instagram.com/hub_surface_systems/p/DYCPYXcDtB7/",
   },
   {
     src: "/images/blog/simcoe-rainbow-crosswalk/featured.jpg",
     alt: "Rainbow Crosswalk — Simcoe, ON",
-    instagramUrl: "", // TODO: Vernon to add post URL
+    instagramUrl: "https://www.instagram.com/hub_surface_systems/p/DXwNzFIDg69/",
   },
   {
     src: "/images/blog/ubc-musqueam-crosswalk/featured.jpg",
     alt: "UBC Musqueam Crosswalk — Vancouver, BC",
-    instagramUrl: "", // TODO: Vernon to add post URL
+    instagramUrl: "https://www.instagram.com/hub_surface_systems/p/DXeMNLvjubp/",
   },
   {
     src: "/images/blog/bc-childrens-hospital-labyrinth/featured.jpg",
     alt: "BC Children's Hospital Labyrinth — Vancouver, BC",
-    instagramUrl: "", // TODO: Vernon to add post URL
+    instagramUrl: "https://www.instagram.com/hub_surface_systems/p/DXceVE4iQ5C/",
   },
   {
     src: "/images/blog/complete-streets-new-westminster/featured.jpg",
     alt: "Complete Streets — New Westminster, BC",
-    instagramUrl: "", // TODO: Vernon to add post URL
+    instagramUrl: "https://www.instagram.com/hub_surface_systems/p/DXW5RQ3jr6n/",
   },
   {
     src: "/images/blog/branded-crosswalks-vancouver-richmond/featured.jpg",
     alt: "Branded Crosswalks — Vancouver & Richmond, BC",
-    instagramUrl: "", // TODO: Vernon to add post URL
+    instagramUrl: "https://www.instagram.com/hub_surface_systems/p/DXRUNlFDjjG/",
   },
 ];
 

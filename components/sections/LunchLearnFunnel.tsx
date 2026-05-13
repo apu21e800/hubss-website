@@ -447,8 +447,10 @@ export default function LunchLearnFunnel() {
         </div>
       </div>
 
-      {/* ── PULL QUOTE ───────────────────────────────────────────────── */}
-      <section
+      {/* ── PULL QUOTE — PENDING APPROVAL (SITE_FLAGS.showLeoQuote) ─────
+          Vernon needs to OK this before it goes live. Toggle on via
+          lib/site-flags.ts → showLeoQuote: true once approved. */}
+      {false && <section
         className="py-20 lg:py-28 relative overflow-hidden"
         style={{ background: "#070b12" }}
       >
@@ -498,7 +500,8 @@ export default function LunchLearnFunnel() {
             </span>
           </motion.div>
         </div>
-      </section>
+      </section>}
+      {/* END PULL QUOTE (pending approval) */}
 
       {/* ── FAQ ──────────────────────────────────────────────────────── */}
       <section className="py-20 lg:py-24" style={{ background: "#0a0f1a" }}>

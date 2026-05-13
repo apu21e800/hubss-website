@@ -13,6 +13,7 @@ import Footer from "@/components/sections/Footer";
 import JsonLd from "@/components/ui/JsonLd";
 import { buildMetadata } from "@/lib/seo";
 import CanadaMapWrapper from "@/components/sections/CanadaMapWrapper";
+import { SITE_FLAGS } from "@/lib/site-flags";
 
 export const metadata: Metadata = buildMetadata({
   title: "Decorative Pavement & Road Marking Solutions",
@@ -93,8 +94,8 @@ export default function Home() {
       <FeaturedBlogPost />
       {/* off-white → slate (lunch learn) */}
       <InstagramStrip />
-      {/* Canada map — flagship projects across Canada */}
-      <CanadaMapWrapper />
+      {/* Canada map — controlled by SITE_FLAGS.showMap in lib/site-flags.ts */}
+      {SITE_FLAGS.showMap && <CanadaMapWrapper />}
       {/* LunchLearn — Moose mascot rendered internally by the component */}
       <LunchLearn />
       <Footer />

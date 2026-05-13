@@ -54,7 +54,7 @@ export default async function BlogPostPage({ params }: Props) {
     publisher: {
       "@type": "Organization",
       name: "HUB Surface Systems",
-      logo: { "@type": "ImageObject", url: "https://hubss.com/images/logo.svg" },
+      logo: { "@type": "ImageObject", url: "https://hubss.com/images/hub-official-logo.svg" },
     },
     url: postUrl,
     image: post.featuredImage

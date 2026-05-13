@@ -308,7 +308,7 @@ function ProductsMegaMenu() {
             Decorative pavement, engineered for Canadian streets.
           </h3>
           <p className="text-sm leading-relaxed mb-6" style={{ color: "rgba(255,255,255,0.55)" }}>
-            13 specified systems for crosswalks, transit lanes, plazas, and decorative hardscape — installed coast to coast.
+            14 specified systems for crosswalks, transit lanes, plazas, and decorative hardscape — installed coast to coast.
           </p>
           <Link href="/products"
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold transition-all"

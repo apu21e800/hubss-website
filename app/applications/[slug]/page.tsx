@@ -150,13 +150,13 @@ export default async function ApplicationPage({ params }: Props) {
             </div>
             <div className="flex flex-wrap gap-3 relative flex-shrink-0">
               <Link href="/lunch-learn"
-                className="px-5 py-2.5 rounded-lg text-sm font-semibold transition-all"
-                style={{ background: "transparent", color: "var(--text-secondary)", border: "1px solid rgba(255,255,255,0.14)" }}>
+                className="px-5 rounded-lg text-sm font-semibold transition-all inline-flex items-center"
+                style={{ background: "transparent", color: "var(--text-secondary)", border: "1px solid rgba(255,255,255,0.14)", minHeight: "44px" }}>
                 Book a Lunch &amp; Learn
               </Link>
               <Link href="/contact"
-                className="px-5 py-2.5 rounded-lg text-sm font-bold transition-all"
-                style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff", boxShadow: "0 4px 16px rgba(249,115,22,0.32)" }}>
+                className="px-5 rounded-lg text-sm font-bold transition-all inline-flex items-center"
+                style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff", boxShadow: "0 4px 16px rgba(249,115,22,0.32)", minHeight: "44px" }}>
                 See the Systems →
               </Link>
             </div>
@@ -186,8 +186,8 @@ export default async function ApplicationPage({ params }: Props) {
                     <Link
                       key={product.slug}
                       href={`/products/${product.slug}`}
-                      className="flex items-center gap-3 p-3 rounded-lg transition-all group hover:bg-white/5"
-                      style={{ border: "1px solid rgba(255,255,255,0.06)" }}
+                      className="flex items-center gap-3 px-3 rounded-lg transition-all group hover:bg-white/5"
+                      style={{ border: "1px solid rgba(255,255,255,0.06)", minHeight: "52px" }}
                     >
                       <div className="relative overflow-hidden rounded-md flex-shrink-0" style={{ width: 48, height: 48 }}>
                         <Image

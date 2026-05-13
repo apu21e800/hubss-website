@@ -37,7 +37,7 @@ export default function ApplicationsPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {applications.map((app) => (
             <Link
               key={app.slug}
@@ -50,13 +50,14 @@ export default function ApplicationsPage() {
                 alt={app.name}
                 fill
                 className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               />
               <div className="absolute inset-0 transition-all" style={{ background: "rgba(26,26,26,0.6)" }} />
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: "rgba(249,115,22,0.2)" }} />
               <div className="absolute bottom-0 left-0 right-0 p-5">
                 <h2 className="font-bold text-lg mb-1" style={{ color: "var(--text-primary)" }}>{app.name}</h2>
-                <p className="text-xs leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: "var(--text-primary)" }}>
+                {/* Description always visible on mobile (no hover), fades in on desktop */}
+                <p className="text-xs leading-relaxed opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity" style={{ color: "var(--text-primary)" }}>
                   {app.shortDesc.slice(0, 80)}...
                 </p>
               </div>

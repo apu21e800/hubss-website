@@ -288,13 +288,13 @@ function ProjectModal({
           onClick={onClose}
           style={{
             position: "absolute",
-            top: 16,
-            right: 16,
+            top: 12,
+            right: 12,
             background: "rgba(255,255,255,0.08)",
             border: "1px solid rgba(255,255,255,0.12)",
             borderRadius: "50%",
-            width: 36,
-            height: 36,
+            width: 44,
+            height: 44,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -401,7 +401,7 @@ function ProjectModal({
                     style={{
                       position: "relative",
                       width: 68,
-                      height: 46,
+                      height: 52,
                       borderRadius: 8,
                       overflow: "hidden",
                       border:
@@ -487,7 +487,8 @@ function ProjectModal({
                 color: "#fff",
                 fontWeight: 700,
                 fontSize: 13,
-                padding: "11px 24px",
+                padding: "13px 24px",
+                minHeight: 44,
                 borderRadius: 8,
                 textDecoration: "none",
                 display: "inline-flex",
@@ -505,7 +506,8 @@ function ProjectModal({
                 color: "#9CA3AF",
                 fontWeight: 600,
                 fontSize: 13,
-                padding: "11px 24px",
+                padding: "13px 24px",
+                minHeight: 44,
                 borderRadius: 8,
                 textDecoration: "none",
                 border: "1px solid rgba(255,255,255,0.12)",
@@ -803,7 +805,9 @@ export default function CanadaMap() {
     mapRef.current?.fitBounds(CANADA_BOUNDS, { ...FIT_OPTIONS, duration: 1400 });
   }, []);
 
-  const LAYOUT_HEIGHT = "clamp(520px, 72vh, 840px)";
+  // On mobile the panel is hidden so the map takes full width; allow it to be
+  // shorter so it doesn't eat the whole viewport on a 375px screen.
+  const LAYOUT_HEIGHT = "clamp(360px, 72vh, 840px)";
 
   return (
     <>
@@ -1235,7 +1239,7 @@ export default function CanadaMap() {
                     <line x1="12" y1="2" x2="12" y2="10" />
                   </svg>
                   <span style={{ fontSize: 13, fontWeight: 600, color: "#F5F0EB" }}>
-                    Use <kbd style={{ background: "rgba(255,255,255,0.12)", borderRadius: 5, padding: "1px 7px", fontSize: 12, fontFamily: "monospace", color: "#F97316" }}>Ctrl</kbd> + scroll to zoom
+                    Pinch to zoom · <kbd style={{ background: "rgba(255,255,255,0.12)", borderRadius: 5, padding: "1px 7px", fontSize: 12, fontFamily: "monospace", color: "#F97316" }}>Ctrl</kbd> + scroll on desktop
                   </span>
                 </div>
               </div>
@@ -1271,7 +1275,7 @@ export default function CanadaMap() {
                     ? "Scroll zoom active — auto-releases after 3 s of inactivity"
                     : hoveredId
                     ? "Click to open project details"
-                    : "Ctrl + scroll to zoom · Click pins for details"}
+                    : "Pinch or Ctrl + scroll to zoom · Tap pins for details"}
                 </span>
               </div>
             </div>

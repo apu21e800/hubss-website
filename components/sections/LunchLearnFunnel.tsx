@@ -163,8 +163,8 @@ export default function LunchLearnFunnel() {
               <h1
                 className="font-black mb-6"
                 style={{
-                  fontSize: "clamp(2.6rem, 5.5vw, 4.5rem)",
-                  lineHeight: 0.95,
+                  fontSize: "clamp(2rem, 5.5vw, 4.5rem)",
+                  lineHeight: 1.0,
                   letterSpacing: "-0.04em",
                   color: "#F5F0EB",
                 }}
@@ -201,14 +201,15 @@ export default function LunchLearnFunnel() {
               </div>
 
               {/* CTAs */}
-              <div className="flex flex-col sm:flex-row gap-3">
+              <div className="flex flex-col gap-3">
                 <a
                   href="#book"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-lg font-bold text-sm transition-all"
+                  className="inline-flex items-center justify-center gap-2 px-8 rounded-lg font-bold text-sm transition-all self-start"
                   style={{
                     background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
                     color: "#fff",
                     boxShadow: "0 6px 28px rgba(249,115,22,0.42)",
+                    minHeight: "44px",
                   }}
                 >
                   Book Your Free Session
@@ -216,7 +217,8 @@ export default function LunchLearnFunnel() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </a>
-                <div className="flex items-center gap-4">
+                {/* Phone numbers — flex-wrap so they don't overflow 375px */}
+                <div className="flex items-center gap-4 flex-wrap">
                   <a href="tel:+14165409287" className="text-sm font-semibold transition-colors hover:text-orange-400" style={{ color: "rgba(255,255,255,0.45)" }}>
                     East: 416-540-9287
                   </a>
@@ -592,8 +594,8 @@ export default function LunchLearnFunnel() {
             )}
           </motion.div>
 
-          {/* Bottom office info */}
-          <div className="mt-8 grid grid-cols-2 gap-4">
+          {/* Bottom office info — stack on mobile to prevent email overflow */}
+          <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
             {[
               { region: "Eastern Canada", name: "Doug Bain", phone: "416-540-9287", email: "doug.bain@hubss.com" },
               { region: "Western Canada", name: "Cleve Stordy", phone: "604-309-8212", email: "cleve.stordy@hubss.com" },

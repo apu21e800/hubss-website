@@ -146,7 +146,7 @@ export default function ProductsPage() {
                                   {appTags.map((slug) => (
                                     <span
                                       key={slug}
-                                      className="text-[10px] font-semibold px-2 py-0.5 rounded-md"
+                                      className="text-[11px] font-semibold px-2 py-0.5 rounded-md"
                                       style={{
                                         background: "rgba(255,255,255,0.06)",
                                         color: "#9CA3AF",
@@ -158,7 +158,7 @@ export default function ProductsPage() {
                                   ))}
                                   {overflow > 0 && (
                                     <span
-                                      className="text-[10px] font-semibold px-2 py-0.5 rounded-md"
+                                      className="text-[11px] font-semibold px-2 py-0.5 rounded-md"
                                       style={{
                                         background: "rgba(249,115,22,0.08)",
                                         color: "rgba(249,115,22,0.7)",

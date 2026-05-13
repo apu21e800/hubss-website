@@ -64,12 +64,12 @@ export default function HeroSlideshow() {
               Redefining Hardscapes · Since 1999
             </p>
 
-            {/* H1 — restored per Vernon ("Let's build your signature space" was a typo on his part, that's the H2) */}
+            {/* H1 — clamp floor raised from 3rem→2.25rem so it doesn't overflow on 375px */}
             <h1
               className="font-black mb-4"
               style={{
-                fontSize: "clamp(3rem, 7.5vw, 6.5rem)",
-                lineHeight: 0.9,
+                fontSize: "clamp(2.25rem, 7.5vw, 6.5rem)",
+                lineHeight: 0.95,
                 letterSpacing: "-0.04em",
                 color: "white",
                 textShadow: "0 2px 32px rgba(0,0,0,0.5)",
@@ -92,12 +92,12 @@ export default function HeroSlideshow() {
               </span>
             </h1>
 
-            {/* H2 — Vernon's intended placement: directly below the H1 anchor */}
+            {/* H2 — clamp floor raised from 1.5rem→1.125rem to prevent overflow on mobile */}
             <h2
               className="font-semibold mb-8"
               style={{
-                fontSize: "clamp(1.5rem, 3vw, 2.25rem)",
-                lineHeight: 1.15,
+                fontSize: "clamp(1.125rem, 3vw, 2.25rem)",
+                lineHeight: 1.25,
                 letterSpacing: "-0.02em",
                 color: "rgba(255,255,255,0.86)",
                 textShadow: "0 1px 12px rgba(0,0,0,0.5)",
@@ -106,15 +106,16 @@ export default function HeroSlideshow() {
               Let&rsquo;s build your signature space.
             </h2>
 
-            {/* CTAs */}
+            {/* CTAs — min-h 44px ensures tap targets meet iOS guidelines */}
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
                 href="/gallery"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-lg font-semibold text-sm transition-all"
+                className="inline-flex items-center justify-center gap-2 px-8 rounded-lg font-semibold text-sm transition-all"
                 style={{
                   background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
                   color: "#fff",
                   boxShadow: "0 6px 28px rgba(249,115,22,0.42)",
+                  minHeight: "44px",
                 }}
               >
                 See the Work
@@ -124,10 +125,11 @@ export default function HeroSlideshow() {
               </Link>
               <Link
                 href="/contact"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-lg font-semibold text-sm border transition-all hover:bg-white/[0.06]"
+                className="inline-flex items-center justify-center gap-2 px-8 rounded-lg font-semibold text-sm border transition-all hover:bg-white/[0.06]"
                 style={{
                   borderColor: "rgba(255,255,255,0.28)",
                   color: "rgba(255,255,255,0.82)",
+                  minHeight: "44px",
                 }}
               >
                 See the Systems

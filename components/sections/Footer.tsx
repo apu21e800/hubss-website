@@ -142,10 +142,10 @@ export default function Footer() {
                   West Office
                 </p>
                 <p className="text-sm mb-1" style={{ color: "var(--text-primary)" }}>Ladysmith, BC</p>
-                <a href="mailto:cleve.stordy@hubss.com" className="text-xs block transition-colors hover:text-white underline-offset-4 hover:underline" style={{ color: "var(--text-secondary)" }}>
+                <a href="mailto:cleve.stordy@hubss.com" className="text-xs block transition-colors hover:text-white underline-offset-4 hover:underline py-1.5" style={{ color: "var(--text-secondary)" }}>
                   cleve.stordy@hubss.com
                 </a>
-                <a href="tel:6043098212" className="text-xs block transition-colors hover:text-white" style={{ color: "var(--text-secondary)" }}>
+                <a href="tel:6043098212" className="text-xs block transition-colors hover:text-white py-1.5" style={{ color: "var(--text-secondary)" }}>
                   604-309-8212
                 </a>
               </div>
@@ -160,10 +160,10 @@ export default function Footer() {
                   East Office
                 </p>
                 <p className="text-sm mb-1" style={{ color: "var(--text-primary)" }}>Milton, Ontario</p>
-                <a href="mailto:doug.bain@hubss.com" className="text-xs block transition-colors hover:text-white underline-offset-4 hover:underline" style={{ color: "var(--text-secondary)" }}>
+                <a href="mailto:doug.bain@hubss.com" className="text-xs block transition-colors hover:text-white underline-offset-4 hover:underline py-1.5" style={{ color: "var(--text-secondary)" }}>
                   doug.bain@hubss.com
                 </a>
-                <a href="tel:4165409287" className="text-xs block transition-colors hover:text-white" style={{ color: "var(--text-secondary)" }}>
+                <a href="tel:4165409287" className="text-xs block transition-colors hover:text-white py-1.5" style={{ color: "var(--text-secondary)" }}>
                   416-540-9287
                 </a>
               </div>

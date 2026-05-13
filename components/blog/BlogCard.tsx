@@ -51,7 +51,7 @@ export default function BlogCard({ post }: { post: PostMeta }) {
         {/* Category badge + date */}
         <div className="flex items-center justify-between mb-2 gap-2">
           <span
-            className="text-[9px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wider flex-shrink-0"
+            className="text-[11px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wider flex-shrink-0"
             style={
               post.category === "Case Study"
                 ? { background: "rgba(249,115,22,0.18)", color: "#f97316" }
@@ -75,7 +75,7 @@ export default function BlogCard({ post }: { post: PostMeta }) {
             {post.products.slice(0, 2).map((p) => (
               <span
                 key={p}
-                className="text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide"
+                className="text-[11px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide"
                 style={{ background: "rgba(249,115,22,0.10)", color: "#f97316", border: "1px solid rgba(249,115,22,0.2)" }}
               >
                 {p}

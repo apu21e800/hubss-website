@@ -148,14 +148,14 @@ export default async function ProductPage({ params }: Props) {
           </div>
           <div className="flex flex-wrap gap-3 relative flex-shrink-0">
             <Link href="/lunch-learn"
-              className="px-5 py-2.5 rounded-lg text-sm font-semibold transition-all"
-              style={{ background: "transparent", color: "var(--text-secondary)", border: "1px solid rgba(255,255,255,0.14)" }}>
+              className="px-5 rounded-lg text-sm font-semibold transition-all inline-flex items-center"
+              style={{ background: "transparent", color: "var(--text-secondary)", border: "1px solid rgba(255,255,255,0.14)", minHeight: "44px" }}>
               Book a Lunch &amp; Learn
             </Link>
             {/* Product page secondary CTA: "See the Systems" is wrong here (already on one) — link to gallery instead. */}
             <Link href="/gallery"
-              className="px-5 py-2.5 rounded-lg text-sm font-bold transition-all"
-              style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff", boxShadow: "0 4px 16px rgba(249,115,22,0.32)" }}>
+              className="px-5 rounded-lg text-sm font-bold transition-all inline-flex items-center"
+              style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff", boxShadow: "0 4px 16px rgba(249,115,22,0.32)", minHeight: "44px" }}>
               See Project Gallery →
             </Link>
           </div>
@@ -394,13 +394,13 @@ export default async function ProductPage({ params }: Props) {
                   {/* Desc */}
                   <div className="px-4 py-3 flex-1 flex flex-col">
                     <p
-                      className="text-[0.72rem] leading-relaxed flex-1"
+                      className="text-xs leading-relaxed flex-1"
                       style={{ color: "var(--text-muted)" }}
                     >
                       {app.shortDesc.slice(0, 80)}{app.shortDesc.length > 80 ? "…" : ""}
                     </p>
                     <span
-                      className="mt-2 text-[0.68rem] font-semibold flex items-center gap-1 uppercase tracking-wider transition-colors duration-150 group-hover:text-[#fb923c]"
+                      className="mt-2 text-[11px] font-semibold flex items-center gap-1 uppercase tracking-wider transition-colors duration-150 group-hover:text-[#fb923c]"
                       style={{ color: "#f97316" }}
                     >
                       Explore

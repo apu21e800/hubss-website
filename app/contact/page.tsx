@@ -71,8 +71,8 @@ export default function ContactPage() {
                 <div key={office.region}>
                   <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "#f97316" }}>{office.region}</p>
                   <p className="text-sm font-medium mb-2" style={{ color: "var(--text-primary)" }}>{office.city}</p>
-                  <a href={`mailto:${office.email}`} className="text-sm block mb-1 transition-colors hover:text-[#f97316]" style={{ color: "#d1d5db" }}>{office.email}</a>
-                  <a href={`tel:${office.phone.replace(/-/g, "")}`} className="text-sm transition-colors hover:text-[#f97316]" style={{ color: "#d1d5db" }}>{office.phone}</a>
+                  <a href={`mailto:${office.email}`} className="text-sm block mb-1 transition-colors hover:text-[#f97316] py-1" style={{ color: "#d1d5db" }}>{office.email}</a>
+                  <a href={`tel:${office.phone.replace(/-/g, "")}`} className="text-sm block transition-colors hover:text-[#f97316] py-1" style={{ color: "#d1d5db" }}>{office.phone}</a>
                 </div>
               ))}
 

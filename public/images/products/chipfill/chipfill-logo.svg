@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 44" width="180" height="44" role="img" aria-label="ChipFill">
+  <defs>
+    <linearGradient id="chipfill-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#F97316"/>
+      <stop offset="100%" stop-color="#EAB308"/>
+    </linearGradient>
+  </defs>
+  <text
+    x="0"
+    y="33"
+    font-family="'Arial Black', 'Helvetica Neue', Arial, sans-serif"
+    font-weight="900"
+    font-size="30"
+    letter-spacing="2.5"
+    text-transform="uppercase"
+    fill="url(#chipfill-grad)"
+    style="text-transform:uppercase"
+  >CHIPFILL</text>
+</svg>

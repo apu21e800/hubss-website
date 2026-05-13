@@ -165,6 +165,20 @@ export default async function ProductPage({ params }: Props) {
           {/* Left: description + gallery */}
           <div className="lg:col-span-2">
 
+            {/* Brand mark — shown above the description when a brandLogo is defined */}
+            {product.brandLogo && (
+              <div className="mb-6">
+                <Image
+                  src={product.brandLogo.src}
+                  alt={product.brandLogo.alt}
+                  width={product.brandLogo.width}
+                  height={product.brandLogo.height}
+                  style={{ width: product.brandLogo.width, height: "auto", objectFit: "contain", objectPosition: "left center" }}
+                  unoptimized
+                />
+              </div>
+            )}
+
             <h2 className="text-2xl sm:text-3xl font-bold mb-5" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>About {product.name}</h2>
             <p className="mb-12 leading-[1.85]" style={{ color: "var(--text-body)", fontSize: "clamp(1rem, 1.8vw, 1.075rem)", maxWidth: "65ch" }}>
               {product.description}

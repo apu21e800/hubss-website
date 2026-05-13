@@ -375,9 +375,9 @@ export const products: Product[] = [
     imageUrl: "https://images.unsplash.com/photo-WppH6SVwkdg?auto=format&fit=crop&w=2400&q=85",
     heroPosition: "center 55%",
     brandLogo: {
-      src: "/images/products/fast-patch/fast-patch-logo.png",
+      src: "/images/products/fast-patch/fast-patch-logo.webp",
       alt: "Fast Patch DPR",
-      width: 160,
+      width: 200,
       height: 44,
     },
     gallery: [

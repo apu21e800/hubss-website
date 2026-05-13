@@ -283,10 +283,9 @@ export default async function ProductPage({ params }: Props) {
                 </div>
               </div>
 
-              {/* Right — stat pillars */}
+              {/* Right — stat pillars. borderTop on mobile (stacked), borderLeft on lg+ (side-by-side). */}
               <div
-                className="p-10 lg:p-12 flex flex-col justify-center gap-5"
-                style={{ borderLeft: "1px solid rgba(134,197,82,0.15)" }}
+                className="p-10 lg:p-12 flex flex-col justify-center gap-5 border-t border-t-[rgba(134,197,82,0.15)] lg:border-t-0 lg:border-l lg:border-l-[rgba(134,197,82,0.15)]"
               >
                 <p className="text-xs font-bold tracking-[0.2em] uppercase mb-2" style={{ color: "rgba(134,197,82,0.6)" }}>
                   Why It Matters

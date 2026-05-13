@@ -288,7 +288,7 @@ const FEATURED_POSTS = [
 // Wide container, generous padding, dark surface, accent top line.
 function MegaShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="max-w-[1480px] mx-auto px-6 lg:px-10 py-10">
+    <div className="max-w-[1480px] mx-auto px-6 lg:px-10 py-6">
       {children}
     </div>
   );
@@ -298,16 +298,16 @@ function MegaShell({ children }: { children: React.ReactNode }) {
 function ProductsMegaMenu() {
   return (
     <MegaShell>
-      <div className="grid grid-cols-12 gap-8">
+      <div className="grid grid-cols-12 gap-6">
         {/* Lead column */}
         <div className="col-span-12 lg:col-span-3">
           <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#F97316" }}>
             Products
           </p>
-          <h3 className="text-2xl font-bold leading-tight mb-3" style={{ color: "#F5F0EB" }}>
+          <h3 className="text-xl font-bold leading-tight mb-2" style={{ color: "#F5F0EB" }}>
             Decorative pavement, engineered for Canadian streets.
           </h3>
-          <p className="text-sm leading-relaxed mb-6" style={{ color: "rgba(255,255,255,0.55)" }}>
+          <p className="text-sm leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.55)" }}>
             14 specified systems for crosswalks, transit lanes, plazas, and decorative hardscape — installed coast to coast.
           </p>
           <Link href="/products"
@@ -320,7 +320,7 @@ function ProductsMegaMenu() {
         </div>
 
         {/* Category tiles — 4 cards with image headers */}
-        <div className="col-span-12 lg:col-span-9 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="col-span-12 lg:col-span-9 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {PRODUCT_CATEGORIES.map((cat) => {
             const items = cat.slugs.flatMap((s) => {
               const p = products.find((x) => x.slug === s);
@@ -332,8 +332,7 @@ function ProductsMegaMenu() {
                 className="rounded-xl overflow-hidden flex flex-col"
                 style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.06)" }}
               >
-                {/* Image header — bumped from 92 to 124px + subject-bias crop (pavement in lower 2/3 of source) */}
-                <Link href="/products" className="relative block group" style={{ height: 124 }}>
+                <Link href="/products" className="relative block group" style={{ height: 96 }}>
                   <Image
                     src={cat.image}
                     alt={cat.label}
@@ -385,9 +384,9 @@ function ProductsMegaMenu() {
       </div>
 
       {/* Bottom strip — secondary entry points */}
-      <div className="mt-8 pt-6 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+      <div className="mt-5 pt-4 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
         <Link href="/resources"
-          className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
+          className="flex items-center justify-between px-4 py-2.5 rounded-lg transition-colors hover:bg-white/5"
           style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
@@ -427,16 +426,16 @@ function FieldNotesMegaMenu() {
 
   return (
     <MegaShell>
-      <div className="grid grid-cols-12 gap-8">
+      <div className="grid grid-cols-12 gap-6">
         {/* Lead column */}
         <div className="col-span-12 lg:col-span-3">
           <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#F97316" }}>
             Field Notes
           </p>
-          <h3 className="text-2xl font-bold leading-tight mb-3" style={{ color: "#F5F0EB" }}>
+          <h3 className="text-xl font-bold leading-tight mb-2" style={{ color: "#F5F0EB" }}>
             What we learn from the road.
           </h3>
-          <p className="text-sm leading-relaxed mb-6" style={{ color: "rgba(255,255,255,0.55)" }}>
+          <p className="text-sm leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.55)" }}>
             Project profiles, case studies, technical guides, and white papers from 30+ years of decorative pavement work across Canada.
           </p>
           <div className="space-y-2.5">
@@ -468,7 +467,7 @@ function FieldNotesMegaMenu() {
         <Link
           href={`/blog/${featured.slug}`}
           className="col-span-12 lg:col-span-5 group relative rounded-xl overflow-hidden block"
-          style={{ minHeight: 360 }}
+          style={{ minHeight: 240 }}
         >
           <Image
             src={featured.image}
@@ -506,7 +505,7 @@ function FieldNotesMegaMenu() {
               className="group flex gap-3 p-3 rounded-xl transition-colors hover:bg-white/5"
               style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.06)" }}
             >
-              <div className="relative flex-shrink-0 rounded-lg overflow-hidden" style={{ width: 96, height: 96 }}>
+              <div className="relative flex-shrink-0 rounded-lg overflow-hidden" style={{ width: 72, height: 72 }}>
                 <Image
                   src={post.image}
                   alt={post.title}
@@ -528,10 +527,10 @@ function FieldNotesMegaMenu() {
         </div>
       </div>
 
-      {/* Bottom strip — secondary entry points (matches Products + Applications mega for peer-parity visual weight) */}
-      <div className="mt-8 pt-6 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+      {/* Bottom strip — secondary entry points */}
+      <div className="mt-5 pt-4 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
         <Link href="/blog"
-          className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
+          className="flex items-center justify-between px-4 py-2.5 rounded-lg transition-colors hover:bg-white/5"
           style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
@@ -569,16 +568,16 @@ function FieldNotesMegaMenu() {
 function ApplicationsMegaMenu() {
   return (
     <MegaShell>
-      <div className="grid grid-cols-12 gap-8">
+      <div className="grid grid-cols-12 gap-6">
         {/* Lead column */}
         <div className="col-span-12 lg:col-span-3">
           <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#F97316" }}>
             Applications
           </p>
-          <h3 className="text-2xl font-bold leading-tight mb-3" style={{ color: "#F5F0EB" }}>
+          <h3 className="text-xl font-bold leading-tight mb-2" style={{ color: "#F5F0EB" }}>
             Surfaces that do real work.
           </h3>
-          <p className="text-sm leading-relaxed mb-6" style={{ color: "rgba(255,255,255,0.55)" }}>
+          <p className="text-sm leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.55)" }}>
             Crosswalks, transit lanes, parks, plazas, parking lots, airfields — every surface where decorative pavement and durable markings meet the brief.
           </p>
           <Link href="/applications"
@@ -629,9 +628,9 @@ function ApplicationsMegaMenu() {
       </div>
 
       {/* Bottom strip — secondary entry points */}
-      <div className="mt-8 pt-6 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+      <div className="mt-5 pt-4 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
         <Link href="/projects"
-          className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
+          className="flex items-center justify-between px-4 py-2.5 rounded-lg transition-colors hover:bg-white/5"
           style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>

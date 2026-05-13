@@ -1,12 +1,17 @@
 import Anthropic from '@anthropic-ai/sdk';
-import { NextRequest } from 'next/server';
-
-const client = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
+  if (!process.env.ANTHROPIC_API_KEY) {
+    return NextResponse.json(
+      { error: 'AI chat is not configured.' },
+      { status: 503 }
+    );
+  }
+
   const { message } = await request.json();
+
+  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
   const encoder = new TextEncoder();
   const stream = new ReadableStream({

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
-import { writeFile } from "fs/promises";
+import { writeFile, mkdir } from "fs/promises";
 import path from "path";
 
 function checkAuth(req: NextRequest): boolean {
@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
   const client = new Anthropic();
 
   const stream = client.messages.stream({
-    model: "claude-opus-4-6",
+    model: "claude-opus-4-5",
     max_tokens: 4096,
     thinking: { type: "adaptive" },
     system: `You are an expert content writer for HUB Surface Systems, a Canadian company specialising in decorative and functional pavement coatings for municipalities, developers, and contractors.
@@ -93,6 +93,7 @@ After the frontmatter, write the full post body in Markdown. Target 600–900 wo
 
   const filename = `${slug}.mdx`;
   const draftsDir = path.join(process.cwd(), "content", "blog", "drafts");
+  await mkdir(draftsDir, { recursive: true });
   await writeFile(path.join(draftsDir, filename), mdx, "utf8");
 
   return NextResponse.json({ slug, filename, topic, preview: mdx.slice(0, 300) });

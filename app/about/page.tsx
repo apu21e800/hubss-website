@@ -26,12 +26,12 @@ const values = [
   {
     heading: "Who We Build For",
     body:
-      "Municipalities, landscape architects, urban planners, developers, and certified contractors across every Canadian province. If it&apos;s a surface that people walk, drive, or gather on — we have a system for it.",
+      "Municipalities, landscape architects, urban planners, developers, and certified contractors across every Canadian province. If it's a surface that people walk, drive, or gather on — we have a system for it.",
   },
   {
     heading: "Why It Matters",
     body:
-      "Beautiful streets make walkable cities. Legible surfaces slow cars. Identity-rich public spaces build community. This isn&apos;t just infrastructure — it&apos;s the civic layer that tells a city it&apos;s worth caring about.",
+      "Beautiful streets make walkable cities. Legible surfaces slow cars. Identity-rich public spaces build community. This isn't just infrastructure — it's the civic layer that tells a city it's worth caring about.",
   },
 ];
 

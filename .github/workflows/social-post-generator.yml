@@ -5,6 +5,7 @@ on:
 
 jobs:
   generate-social-posts:
+    if: false  # Block D — disabled until social automation is built out
     runs-on: ubuntu-latest
     permissions:
       contents: write

@@ -4,8 +4,9 @@ import Link from "next/link";
 export default function HeroSlideshow() {
   return (
     <section
+      data-hero
       className="relative w-full overflow-hidden"
-      style={{ minHeight: "90vh", maxHeight: "1000px", background: "#0d1117" }}
+      style={{ minHeight: "min(75vh, 720px)", background: "#0d1117" }}
       aria-label="Hero"
     >
       {/* ── Background image ──────────────────────────────────────── */}
@@ -58,18 +59,17 @@ export default function HeroSlideshow() {
 
             {/* Eyebrow — Vernon-confirmed: 1999 is the authoritative founding year site-wide */}
             <p
-              className="text-xs font-bold tracking-[0.22em] uppercase mb-4"
+              className="text-xs font-bold tracking-[0.22em] uppercase mb-3"
               style={{ color: "#F97316" }}
             >
               Redefining Hardscapes · Since 1999
             </p>
 
-            {/* H1 — floor 2.25rem (mobile), 5vw slope, hard cap 4rem (64px) at 1280px+.
-                7.5vw/6.5rem was blowing out at ultrawide (104px on every desktop). */}
+            {/* H1 — cinematic 76px cap: fills the hero frame, bold and commanding */}
             <h1
               className="font-black mb-4"
               style={{
-                fontSize: "clamp(2.25rem, 5vw, 4rem)",
+                fontSize: "clamp(2.75rem, 5.5vw, 4.75rem)",
                 lineHeight: 0.95,
                 letterSpacing: "-0.04em",
                 color: "white",
@@ -93,11 +93,11 @@ export default function HeroSlideshow() {
               </span>
             </h1>
 
-            {/* H2 — tagline subhead. Cap at 1.5rem (24px) so it doesn't compete with H1. */}
+            {/* H2 — supporting tagline, 26px — readable subhead under bold H1 */}
             <h2
               className="font-semibold mb-8"
               style={{
-                fontSize: "clamp(1.125rem, 2vw, 1.5rem)",
+                fontSize: "clamp(1.25rem, 2vw, 1.625rem)",
                 lineHeight: 1.25,
                 letterSpacing: "-0.02em",
                 color: "rgba(255,255,255,0.86)",
@@ -111,7 +111,7 @@ export default function HeroSlideshow() {
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
                 href="/gallery"
-                className="inline-flex items-center justify-center gap-2 px-8 rounded-lg font-semibold text-sm transition-all"
+                className="inline-flex items-center justify-center gap-2 px-7 rounded-lg font-semibold text-sm transition-all"
                 style={{
                   background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
                   color: "#fff",
@@ -126,7 +126,7 @@ export default function HeroSlideshow() {
               </Link>
               <Link
                 href="/contact"
-                className="inline-flex items-center justify-center gap-2 px-8 rounded-lg font-semibold text-sm border transition-all hover:bg-white/[0.06]"
+                className="inline-flex items-center justify-center gap-2 px-7 rounded-lg font-semibold text-sm border transition-all hover:bg-white/[0.06]"
                 style={{
                   borderColor: "rgba(255,255,255,0.28)",
                   color: "rgba(255,255,255,0.82)",

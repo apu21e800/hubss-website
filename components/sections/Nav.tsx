@@ -114,7 +114,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
                   <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "rgba(249,115,22,0.7)" }}>Products</p>
                   {matchedProducts.slice(0, 4).map((p) => (
                     <button key={p.slug} onClick={() => handleResultClick(`/products/${p.slug}`)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left hover:bg-white/5">
-                      <div><p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>{p.name}</p>{p.shortDesc && <p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>{p.shortDesc}</p>}</div>
+                      <div><p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>{p.name}</p>{p.shortDesc && <p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>{p.shortDesc}</p>}</div>
                     </button>
                   ))}
                 </div>
@@ -124,7 +124,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
                   <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "rgba(249,115,22,0.7)" }}>Applications</p>
                   {matchedApps.slice(0, 4).map((a) => (
                     <button key={a.slug} onClick={() => handleResultClick(`/applications/${a.slug}`)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left hover:bg-white/5">
-                      <div><p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>{a.name}</p>{a.shortDesc && <p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>{a.shortDesc}</p>}</div>
+                      <div><p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>{a.name}</p>{a.shortDesc && <p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>{a.shortDesc}</p>}</div>
                     </button>
                   ))}
                 </div>
@@ -134,7 +134,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
                   <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "rgba(249,115,22,0.7)" }}>Product Categories</p>
                   {matchedCategories.map((c) => (
                     <button key={c.label} onClick={() => handleResultClick(c.href)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left hover:bg-white/5">
-                      <div><p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>{c.label}</p><p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>{c.desc}</p></div>
+                      <div><p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>{c.label}</p><p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>{c.desc}</p></div>
                     </button>
                   ))}
                 </div>
@@ -144,7 +144,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
                   <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "rgba(249,115,22,0.7)" }}>Pages</p>
                   {matchedPages.map((p) => (
                     <button key={p.href} onClick={() => handleResultClick(p.href)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left hover:bg-white/5">
-                      <div><p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>{p.label}</p><p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>{p.desc}</p></div>
+                      <div><p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>{p.label}</p><p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>{p.desc}</p></div>
                     </button>
                   ))}
                 </div>
@@ -162,7 +162,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
                         <polyline points="10 9 9 9 8 9" strokeWidth={1.75} strokeLinecap="round" />
                       </svg>
                       <div>
-                        <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>{doc.title}</p>
+                        <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>{doc.title}</p>
                         <p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>{doc.productName} · {doc.type}</p>
                       </div>
                     </a>
@@ -288,7 +288,7 @@ const FEATURED_POSTS = [
 // Wide container, generous padding, dark surface, accent top line.
 function MegaShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="max-w-[1480px] mx-auto px-6 lg:px-10 py-10">
+    <div className="max-w-[1480px] mx-auto px-6 lg:px-10 py-6">
       {children}
     </div>
   );
@@ -298,16 +298,16 @@ function MegaShell({ children }: { children: React.ReactNode }) {
 function ProductsMegaMenu() {
   return (
     <MegaShell>
-      <div className="grid grid-cols-12 gap-8">
+      <div className="grid grid-cols-12 gap-6">
         {/* Lead column */}
         <div className="col-span-12 lg:col-span-3">
           <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#F97316" }}>
             Products
           </p>
-          <h3 className="text-2xl font-bold leading-tight mb-3" style={{ color: "#F5F0EB" }}>
+          <h3 className="text-xl font-bold leading-tight mb-2" style={{ color: "#F5F0EB" }}>
             Decorative pavement, engineered for Canadian streets.
           </h3>
-          <p className="text-sm leading-relaxed mb-6" style={{ color: "rgba(255,255,255,0.55)" }}>
+          <p className="text-[13px] leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.55)" }}>
             14 specified systems for crosswalks, transit lanes, plazas, and decorative hardscape — installed coast to coast.
           </p>
           <Link href="/products"
@@ -320,7 +320,7 @@ function ProductsMegaMenu() {
         </div>
 
         {/* Category tiles — 4 cards with image headers */}
-        <div className="col-span-12 lg:col-span-9 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="col-span-12 lg:col-span-9 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {PRODUCT_CATEGORIES.map((cat) => {
             const items = cat.slugs.flatMap((s) => {
               const p = products.find((x) => x.slug === s);
@@ -332,8 +332,7 @@ function ProductsMegaMenu() {
                 className="rounded-xl overflow-hidden flex flex-col"
                 style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.06)" }}
               >
-                {/* Image header — bumped from 92 to 124px + subject-bias crop (pavement in lower 2/3 of source) */}
-                <Link href="/products" className="relative block group" style={{ height: 124 }}>
+                <Link href="/products" className="relative block group" style={{ height: 96 }}>
                   <Image
                     src={cat.image}
                     alt={cat.label}
@@ -349,7 +348,7 @@ function ProductsMegaMenu() {
                     <p className="text-[9px] font-bold tracking-[0.2em] uppercase mb-0.5" style={{ color: "#F97316" }}>
                       {cat.tag}
                     </p>
-                    <p className="text-sm font-bold leading-tight" style={{ color: "#F5F0EB" }}>{cat.label}</p>
+                    <p className="text-[13px] font-bold leading-tight" style={{ color: "#F5F0EB" }}>{cat.label}</p>
                   </div>
                 </Link>
 
@@ -362,7 +361,7 @@ function ProductsMegaMenu() {
                       className="group flex items-start justify-between gap-2 px-2 py-2 rounded-md transition-colors hover:bg-white/5"
                     >
                       <div className="min-w-0">
-                        <p className="text-sm font-semibold leading-tight group-hover:text-orange-400 transition-colors" style={{ color: "#F5F0EB" }}>
+                        <p className="text-[13px] font-semibold leading-tight group-hover:text-orange-400 transition-colors" style={{ color: "#F5F0EB" }}>
                           {p.name}
                         </p>
                         {PRODUCT_TAGLINE[p.slug] && (
@@ -385,13 +384,13 @@ function ProductsMegaMenu() {
       </div>
 
       {/* Bottom strip — secondary entry points */}
-      <div className="mt-8 pt-6 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+      <div className="mt-5 pt-4 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
         <Link href="/resources"
-          className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
+          className="flex items-center justify-between px-4 py-2.5 rounded-lg transition-colors hover:bg-white/5"
           style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
-            <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>Spec sheets</p>
+            <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Spec sheets</p>
             <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>TDS, install guides, SDS</p>
           </div>
           <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -401,7 +400,7 @@ function ProductsMegaMenu() {
           style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
-            <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>Project gallery</p>
+            <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Project gallery</p>
             <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>See products in the field</p>
           </div>
           <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -411,7 +410,7 @@ function ProductsMegaMenu() {
           style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
-            <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>Lunch &amp; Learn</p>
+            <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Lunch &amp; Learn</p>
             <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>Free CPD session for your team</p>
           </div>
           <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -427,16 +426,16 @@ function FieldNotesMegaMenu() {
 
   return (
     <MegaShell>
-      <div className="grid grid-cols-12 gap-8">
+      <div className="grid grid-cols-12 gap-6">
         {/* Lead column */}
         <div className="col-span-12 lg:col-span-3">
           <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#F97316" }}>
             Field Notes
           </p>
-          <h3 className="text-2xl font-bold leading-tight mb-3" style={{ color: "#F5F0EB" }}>
+          <h3 className="text-xl font-bold leading-tight mb-2" style={{ color: "#F5F0EB" }}>
             What we learn from the road.
           </h3>
-          <p className="text-sm leading-relaxed mb-6" style={{ color: "rgba(255,255,255,0.55)" }}>
+          <p className="text-[13px] leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.55)" }}>
             Project profiles, case studies, technical guides, and white papers from 30+ years of decorative pavement work across Canada.
           </p>
           <div className="space-y-2.5">
@@ -468,7 +467,7 @@ function FieldNotesMegaMenu() {
         <Link
           href={`/blog/${featured.slug}`}
           className="col-span-12 lg:col-span-5 group relative rounded-xl overflow-hidden block"
-          style={{ minHeight: 360 }}
+          style={{ minHeight: 240 }}
         >
           <Image
             src={featured.image}
@@ -506,7 +505,7 @@ function FieldNotesMegaMenu() {
               className="group flex gap-3 p-3 rounded-xl transition-colors hover:bg-white/5"
               style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.06)" }}
             >
-              <div className="relative flex-shrink-0 rounded-lg overflow-hidden" style={{ width: 96, height: 96 }}>
+              <div className="relative flex-shrink-0 rounded-lg overflow-hidden" style={{ width: 72, height: 72 }}>
                 <Image
                   src={post.image}
                   alt={post.title}
@@ -519,7 +518,7 @@ function FieldNotesMegaMenu() {
                 <p className="text-[9px] font-bold tracking-[0.18em] uppercase mb-1" style={{ color: "#F97316" }}>
                   {post.category}
                 </p>
-                <p className="text-sm font-semibold leading-snug group-hover:text-orange-400 transition-colors line-clamp-2" style={{ color: "#F5F0EB" }}>
+                <p className="text-[13px] font-semibold leading-snug group-hover:text-orange-400 transition-colors line-clamp-2" style={{ color: "#F5F0EB" }}>
                   {post.title}
                 </p>
               </div>
@@ -528,14 +527,14 @@ function FieldNotesMegaMenu() {
         </div>
       </div>
 
-      {/* Bottom strip — secondary entry points (matches Products + Applications mega for peer-parity visual weight) */}
-      <div className="mt-8 pt-6 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+      {/* Bottom strip — secondary entry points */}
+      <div className="mt-5 pt-4 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
         <Link href="/blog"
-          className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
+          className="flex items-center justify-between px-4 py-2.5 rounded-lg transition-colors hover:bg-white/5"
           style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
-            <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>All field notes</p>
+            <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>All field notes</p>
             <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>Project profiles, case studies, guides</p>
           </div>
           <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -545,7 +544,7 @@ function FieldNotesMegaMenu() {
           style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
-            <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>Project gallery</p>
+            <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Project gallery</p>
             <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>Installations across Canada</p>
           </div>
           <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -555,7 +554,7 @@ function FieldNotesMegaMenu() {
           style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
-            <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>Resources</p>
+            <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Resources</p>
             <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>Spec sheets, install guides, SDS</p>
           </div>
           <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -569,16 +568,16 @@ function FieldNotesMegaMenu() {
 function ApplicationsMegaMenu() {
   return (
     <MegaShell>
-      <div className="grid grid-cols-12 gap-8">
+      <div className="grid grid-cols-12 gap-6">
         {/* Lead column */}
         <div className="col-span-12 lg:col-span-3">
           <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#F97316" }}>
             Applications
           </p>
-          <h3 className="text-2xl font-bold leading-tight mb-3" style={{ color: "#F5F0EB" }}>
+          <h3 className="text-xl font-bold leading-tight mb-2" style={{ color: "#F5F0EB" }}>
             Surfaces that do real work.
           </h3>
-          <p className="text-sm leading-relaxed mb-6" style={{ color: "rgba(255,255,255,0.55)" }}>
+          <p className="text-[13px] leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.55)" }}>
             Crosswalks, transit lanes, parks, plazas, parking lots, airfields — every surface where decorative pavement and durable markings meet the brief.
           </p>
           <Link href="/applications"
@@ -612,7 +611,7 @@ function ApplicationsMegaMenu() {
                       href={`/applications/${a.slug}`}
                       className="group flex items-center justify-between gap-2 px-2 py-2 rounded-md transition-colors hover:bg-white/5"
                     >
-                      <span className="text-sm font-semibold group-hover:text-orange-400 transition-colors" style={{ color: "#F5F0EB" }}>
+                      <span className="text-[13px] font-semibold group-hover:text-orange-400 transition-colors" style={{ color: "#F5F0EB" }}>
                         {a.name}
                       </span>
                       <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -629,13 +628,13 @@ function ApplicationsMegaMenu() {
       </div>
 
       {/* Bottom strip — secondary entry points */}
-      <div className="mt-8 pt-6 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+      <div className="mt-5 pt-4 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
         <Link href="/projects"
-          className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
+          className="flex items-center justify-between px-4 py-2.5 rounded-lg transition-colors hover:bg-white/5"
           style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
-            <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>Project gallery</p>
+            <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Project gallery</p>
             <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>Real installations, real outcomes</p>
           </div>
           <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -645,7 +644,7 @@ function ApplicationsMegaMenu() {
           style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
-            <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>Field notes</p>
+            <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Field notes</p>
             <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>Project profiles &amp; case studies</p>
           </div>
           <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -655,7 +654,7 @@ function ApplicationsMegaMenu() {
           style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
-            <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>Request a quote</p>
+            <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Request a quote</p>
             <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>Talk to your regional rep</p>
           </div>
           <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -1180,13 +1179,13 @@ export default function Nav() {
           </Link>
 
           {/* Desktop links */}
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden md:flex items-center gap-0.5">
 
             {/* Products mega menu trigger */}
             <button
               onMouseEnter={() => setOpenPanel("products")}
               onClick={() => setOpenPanel(openPanel === "products" ? null : "products")}
-              className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:text-orange-400 hover:bg-white/5"
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[13px] font-medium transition-colors hover:text-orange-400 hover:bg-white/5"
               style={{ color: openPanel === "products" ? "#F97316" : "rgba(255,255,255,0.65)" }}
             >
               Products
@@ -1200,7 +1199,7 @@ export default function Nav() {
             <button
               onMouseEnter={() => setOpenPanel("applications")}
               onClick={() => setOpenPanel(openPanel === "applications" ? null : "applications")}
-              className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:text-orange-400 hover:bg-white/5"
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[13px] font-medium transition-colors hover:text-orange-400 hover:bg-white/5"
               style={{ color: openPanel === "applications" ? "#F97316" : "rgba(255,255,255,0.65)" }}
             >
               Applications
@@ -1214,7 +1213,7 @@ export default function Nav() {
             <button
               onMouseEnter={() => setOpenPanel("fieldnotes")}
               onClick={() => setOpenPanel(openPanel === "fieldnotes" ? null : "fieldnotes")}
-              className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:text-orange-400 hover:bg-white/5"
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[13px] font-medium transition-colors hover:text-orange-400 hover:bg-white/5"
               style={{ color: openPanel === "fieldnotes" ? "#F97316" : "rgba(255,255,255,0.65)" }}
             >
               Field Notes
@@ -1228,7 +1227,7 @@ export default function Nav() {
             {PLAIN_LINKS.map((link) => (
               <Link key={link.href} href={link.href}
                 onMouseEnter={() => setOpenPanel(null)}
-                className="px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:text-orange-400 hover:bg-white/5"
+                className="px-2.5 py-1.5 rounded-lg text-[13px] font-medium transition-colors hover:text-orange-400 hover:bg-white/5"
                 style={{ color: "rgba(255,255,255,0.65)" }}
               >
                 {link.label}
@@ -1241,7 +1240,7 @@ export default function Nav() {
             {/* Search */}
             <button
               onClick={openSearch}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all hover:bg-white/5"
+              className="flex items-center gap-2 px-2 py-1.5 rounded-lg text-[13px] transition-all hover:bg-white/5"
               style={{ color: "rgba(255,255,255,0.45)" }}
             >
               <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1252,7 +1251,7 @@ export default function Nav() {
 
             {/* Resources — ghost */}
             <a href="/resources"
-              className="px-4 py-2 rounded-lg text-sm font-semibold transition-all hover:border-orange-500/50 hover:text-orange-400"
+              className="px-3 py-1.5 rounded-lg text-[13px] font-semibold transition-all hover:border-orange-500/50 hover:text-orange-400"
               style={{ border: "1px solid rgba(255,255,255,0.22)", color: "rgba(255,255,255,0.75)" }}
             >
               Resources
@@ -1260,7 +1259,7 @@ export default function Nav() {
 
             {/* Lunch & Learn — gradient */}
             <a href="/lunch-learn"
-              className="px-4 py-2 rounded-lg text-sm font-bold whitespace-nowrap"
+              className="px-3 py-1.5 rounded-lg text-[13px] font-bold whitespace-nowrap"
               style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff" }}
             >
               Lunch &amp; Learn

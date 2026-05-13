@@ -193,8 +193,6 @@ const nextConfig: NextConfig = {
       { source: "/enhanced-parking-lot-surfaces", destination: "/blog/enhanced-parking-lot-surfaces", permanent: true },
       // Footer/nav link variants
       { source: "/traffic-patterns", destination: "/products/traffic-patterns", permanent: true },
-      // Nav \"Project Gallery\" links point to /gallery — serve the projects page
-      { source: "/gallery", destination: "/projects", permanent: false },
       // Other pages
       { source: "/case-studies", destination: "/blog", permanent: true },
       { source: "/featured-projects", destination: "/blog", permanent: true },

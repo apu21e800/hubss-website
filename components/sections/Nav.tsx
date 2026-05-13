@@ -114,7 +114,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
                   <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "rgba(249,115,22,0.7)" }}>Products</p>
                   {matchedProducts.slice(0, 4).map((p) => (
                     <button key={p.slug} onClick={() => handleResultClick(`/products/${p.slug}`)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left hover:bg-white/5">
-                      <div><p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>{p.name}</p>{p.shortDesc && <p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>{p.shortDesc}</p>}</div>
+                      <div><p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>{p.name}</p>{p.shortDesc && <p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>{p.shortDesc}</p>}</div>
                     </button>
                   ))}
                 </div>
@@ -124,7 +124,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
                   <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "rgba(249,115,22,0.7)" }}>Applications</p>
                   {matchedApps.slice(0, 4).map((a) => (
                     <button key={a.slug} onClick={() => handleResultClick(`/applications/${a.slug}`)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left hover:bg-white/5">
-                      <div><p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>{a.name}</p>{a.shortDesc && <p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>{a.shortDesc}</p>}</div>
+                      <div><p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>{a.name}</p>{a.shortDesc && <p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>{a.shortDesc}</p>}</div>
                     </button>
                   ))}
                 </div>
@@ -134,7 +134,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
                   <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "rgba(249,115,22,0.7)" }}>Product Categories</p>
                   {matchedCategories.map((c) => (
                     <button key={c.label} onClick={() => handleResultClick(c.href)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left hover:bg-white/5">
-                      <div><p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>{c.label}</p><p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>{c.desc}</p></div>
+                      <div><p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>{c.label}</p><p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>{c.desc}</p></div>
                     </button>
                   ))}
                 </div>
@@ -144,7 +144,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
                   <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "rgba(249,115,22,0.7)" }}>Pages</p>
                   {matchedPages.map((p) => (
                     <button key={p.href} onClick={() => handleResultClick(p.href)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left hover:bg-white/5">
-                      <div><p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>{p.label}</p><p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>{p.desc}</p></div>
+                      <div><p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>{p.label}</p><p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>{p.desc}</p></div>
                     </button>
                   ))}
                 </div>
@@ -162,7 +162,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
                         <polyline points="10 9 9 9 8 9" strokeWidth={1.75} strokeLinecap="round" />
                       </svg>
                       <div>
-                        <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>{doc.title}</p>
+                        <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>{doc.title}</p>
                         <p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>{doc.productName} · {doc.type}</p>
                       </div>
                     </a>
@@ -390,7 +390,7 @@ function ProductsMegaMenu() {
           style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
-            <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>Spec sheets</p>
+            <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Spec sheets</p>
             <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>TDS, install guides, SDS</p>
           </div>
           <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -400,7 +400,7 @@ function ProductsMegaMenu() {
           style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
-            <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>Project gallery</p>
+            <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Project gallery</p>
             <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>See products in the field</p>
           </div>
           <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -410,7 +410,7 @@ function ProductsMegaMenu() {
           style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
-            <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>Lunch &amp; Learn</p>
+            <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Lunch &amp; Learn</p>
             <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>Free CPD session for your team</p>
           </div>
           <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -534,7 +534,7 @@ function FieldNotesMegaMenu() {
           style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
-            <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>All field notes</p>
+            <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>All field notes</p>
             <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>Project profiles, case studies, guides</p>
           </div>
           <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -544,7 +544,7 @@ function FieldNotesMegaMenu() {
           style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
-            <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>Project gallery</p>
+            <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Project gallery</p>
             <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>Installations across Canada</p>
           </div>
           <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -554,7 +554,7 @@ function FieldNotesMegaMenu() {
           style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
-            <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>Resources</p>
+            <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Resources</p>
             <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>Spec sheets, install guides, SDS</p>
           </div>
           <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -611,7 +611,7 @@ function ApplicationsMegaMenu() {
                       href={`/applications/${a.slug}`}
                       className="group flex items-center justify-between gap-2 px-2 py-2 rounded-md transition-colors hover:bg-white/5"
                     >
-                      <span className="text-sm font-semibold group-hover:text-orange-400 transition-colors" style={{ color: "#F5F0EB" }}>
+                      <span className="text-[13px] font-semibold group-hover:text-orange-400 transition-colors" style={{ color: "#F5F0EB" }}>
                         {a.name}
                       </span>
                       <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -634,7 +634,7 @@ function ApplicationsMegaMenu() {
           style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
-            <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>Project gallery</p>
+            <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Project gallery</p>
             <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>Real installations, real outcomes</p>
           </div>
           <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -644,7 +644,7 @@ function ApplicationsMegaMenu() {
           style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
-            <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>Field notes</p>
+            <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Field notes</p>
             <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>Project profiles &amp; case studies</p>
           </div>
           <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -654,7 +654,7 @@ function ApplicationsMegaMenu() {
           style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
-            <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>Request a quote</p>
+            <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Request a quote</p>
             <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>Talk to your regional rep</p>
           </div>
           <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -1179,13 +1179,13 @@ export default function Nav() {
           </Link>
 
           {/* Desktop links */}
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden md:flex items-center gap-0.5">
 
             {/* Products mega menu trigger */}
             <button
               onMouseEnter={() => setOpenPanel("products")}
               onClick={() => setOpenPanel(openPanel === "products" ? null : "products")}
-              className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:text-orange-400 hover:bg-white/5"
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[13px] font-medium transition-colors hover:text-orange-400 hover:bg-white/5"
               style={{ color: openPanel === "products" ? "#F97316" : "rgba(255,255,255,0.65)" }}
             >
               Products
@@ -1199,7 +1199,7 @@ export default function Nav() {
             <button
               onMouseEnter={() => setOpenPanel("applications")}
               onClick={() => setOpenPanel(openPanel === "applications" ? null : "applications")}
-              className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:text-orange-400 hover:bg-white/5"
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[13px] font-medium transition-colors hover:text-orange-400 hover:bg-white/5"
               style={{ color: openPanel === "applications" ? "#F97316" : "rgba(255,255,255,0.65)" }}
             >
               Applications
@@ -1213,7 +1213,7 @@ export default function Nav() {
             <button
               onMouseEnter={() => setOpenPanel("fieldnotes")}
               onClick={() => setOpenPanel(openPanel === "fieldnotes" ? null : "fieldnotes")}
-              className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:text-orange-400 hover:bg-white/5"
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[13px] font-medium transition-colors hover:text-orange-400 hover:bg-white/5"
               style={{ color: openPanel === "fieldnotes" ? "#F97316" : "rgba(255,255,255,0.65)" }}
             >
               Field Notes
@@ -1227,7 +1227,7 @@ export default function Nav() {
             {PLAIN_LINKS.map((link) => (
               <Link key={link.href} href={link.href}
                 onMouseEnter={() => setOpenPanel(null)}
-                className="px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:text-orange-400 hover:bg-white/5"
+                className="px-2.5 py-1.5 rounded-lg text-[13px] font-medium transition-colors hover:text-orange-400 hover:bg-white/5"
                 style={{ color: "rgba(255,255,255,0.65)" }}
               >
                 {link.label}
@@ -1240,7 +1240,7 @@ export default function Nav() {
             {/* Search */}
             <button
               onClick={openSearch}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all hover:bg-white/5"
+              className="flex items-center gap-2 px-2 py-1.5 rounded-lg text-[13px] transition-all hover:bg-white/5"
               style={{ color: "rgba(255,255,255,0.45)" }}
             >
               <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1251,7 +1251,7 @@ export default function Nav() {
 
             {/* Resources — ghost */}
             <a href="/resources"
-              className="px-4 py-2 rounded-lg text-sm font-semibold transition-all hover:border-orange-500/50 hover:text-orange-400"
+              className="px-3 py-1.5 rounded-lg text-[13px] font-semibold transition-all hover:border-orange-500/50 hover:text-orange-400"
               style={{ border: "1px solid rgba(255,255,255,0.22)", color: "rgba(255,255,255,0.75)" }}
             >
               Resources
@@ -1259,7 +1259,7 @@ export default function Nav() {
 
             {/* Lunch & Learn — gradient */}
             <a href="/lunch-learn"
-              className="px-4 py-2 rounded-lg text-sm font-bold whitespace-nowrap"
+              className="px-3 py-1.5 rounded-lg text-[13px] font-bold whitespace-nowrap"
               style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff" }}
             >
               Lunch &amp; Learn

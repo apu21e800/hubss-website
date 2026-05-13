@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
+import { resourceDocuments } from "@/lib/resource-documents";
 
 // ── Nav link config ──────────────────────────────────────────────────────────
 const PLAIN_LINKS = [
@@ -50,7 +51,12 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
   const matchedApps = q.length < 2 ? [] : applications.filter(a => a.name.toLowerCase().includes(q) || a.shortDesc?.toLowerCase().includes(q));
   const matchedPages = q.length < 2 ? [] : PAGES.filter(p => p.label.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q));
   const matchedCategories = q.length < 2 ? [] : CATEGORIES.filter(c => c.label.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q));
-  const hasResults = matchedProducts.length > 0 || matchedApps.length > 0 || matchedPages.length > 0 || matchedCategories.length > 0;
+  const matchedDocs = q.length < 2 ? [] : resourceDocuments.filter(doc =>
+    doc.title.toLowerCase().includes(q) ||
+    doc.productName.toLowerCase().includes(q) ||
+    doc.type.toLowerCase().includes(q)
+  );
+  const hasResults = matchedProducts.length > 0 || matchedApps.length > 0 || matchedPages.length > 0 || matchedCategories.length > 0 || matchedDocs.length > 0;
   const showEmpty = q.length >= 2 && !hasResults;
 
   const handleResultClick = (href: string) => { onClose(); router.push(href); };
@@ -134,12 +140,32 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
                 </div>
               )}
               {matchedPages.length > 0 && (
-                <div className="p-4">
+                <div className={`p-4${matchedDocs.length > 0 ? " border-b" : ""}`} style={matchedDocs.length > 0 ? { borderColor: "rgba(255,255,255,0.05)" } : undefined}>
                   <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "rgba(249,115,22,0.7)" }}>Pages</p>
                   {matchedPages.map((p) => (
                     <button key={p.href} onClick={() => handleResultClick(p.href)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left hover:bg-white/5">
                       <div><p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>{p.label}</p><p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>{p.desc}</p></div>
                     </button>
+                  ))}
+                </div>
+              )}
+              {matchedDocs.length > 0 && (
+                <div className="p-4">
+                  <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "rgba(249,115,22,0.7)" }}>Documents</p>
+                  {matchedDocs.slice(0, 5).map((doc) => (
+                    <a key={doc.id} href={doc.fileUrl} target="_blank" rel="noopener noreferrer" className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left hover:bg-white/5">
+                      <svg className="flex-shrink-0" width="16" height="16" fill="none" stroke="rgba(249,115,22,0.7)" viewBox="0 0 24 24">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" />
+                        <polyline points="14 2 14 8 20 8" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" />
+                        <line x1="16" y1="13" x2="8" y2="13" strokeWidth={1.75} strokeLinecap="round" />
+                        <line x1="16" y1="17" x2="8" y2="17" strokeWidth={1.75} strokeLinecap="round" />
+                        <polyline points="10 9 9 9 8 9" strokeWidth={1.75} strokeLinecap="round" />
+                      </svg>
+                      <div>
+                        <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>{doc.title}</p>
+                        <p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>{doc.productName} · {doc.type}</p>
+                      </div>
+                    </a>
                   ))}
                 </div>
               )}

@@ -64,11 +64,12 @@ export default function HeroSlideshow() {
               Redefining Hardscapes · Since 1999
             </p>
 
-            {/* H1 — clamp floor raised from 3rem→2.25rem so it doesn't overflow on 375px */}
+            {/* H1 — floor 2.25rem (mobile), 5vw slope, hard cap 4rem (64px) at 1280px+.
+                7.5vw/6.5rem was blowing out at ultrawide (104px on every desktop). */}
             <h1
               className="font-black mb-4"
               style={{
-                fontSize: "clamp(2.25rem, 7.5vw, 6.5rem)",
+                fontSize: "clamp(2.25rem, 5vw, 4rem)",
                 lineHeight: 0.95,
                 letterSpacing: "-0.04em",
                 color: "white",
@@ -92,11 +93,11 @@ export default function HeroSlideshow() {
               </span>
             </h1>
 
-            {/* H2 — clamp floor raised from 1.5rem→1.125rem to prevent overflow on mobile */}
+            {/* H2 — tagline subhead. Cap at 1.5rem (24px) so it doesn't compete with H1. */}
             <h2
               className="font-semibold mb-8"
               style={{
-                fontSize: "clamp(1.125rem, 3vw, 2.25rem)",
+                fontSize: "clamp(1.125rem, 2vw, 1.5rem)",
                 lineHeight: 1.25,
                 letterSpacing: "-0.02em",
                 color: "rgba(255,255,255,0.86)",

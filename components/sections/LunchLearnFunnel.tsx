@@ -163,7 +163,7 @@ export default function LunchLearnFunnel() {
               <h1
                 className="font-black mb-6"
                 style={{
-                  fontSize: "clamp(2rem, 5.5vw, 4.5rem)",
+                  fontSize: "clamp(2rem, 4.5vw, 3.75rem)",
                   lineHeight: 1.0,
                   letterSpacing: "-0.04em",
                   color: "#F5F0EB",

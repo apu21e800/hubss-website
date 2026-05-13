@@ -3,7 +3,6 @@
 import { useState, FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
 
 interface FormState {
   name: string;
@@ -20,32 +19,17 @@ interface SubmitState {
 
 const WHAT_YOU_GET = [
   {
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8}
-          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-      </svg>
-    ),
+    num: "01",
     title: "Spec Language Ready for Your RFP",
     desc: "Pre-written specification language for thermoplastic crosswalks, MMA bus lanes, coloured bike lanes, and more. Copy it straight into your next tender document.",
   },
   {
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8}
-          d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-      </svg>
-    ),
+    num: "02",
     title: "The Lifecycle Cost Math",
     desc: "Paint every 18 months vs. thermoplastic that outlasts it 6:1. We show you the numbers side by side. The math usually surprises people.",
   },
   {
-    icon: (
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8}
-          d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
-      </svg>
-    ),
+    num: "03",
     title: "Lunch Included. No Catch.",
     desc: "In-person sessions include catered lunch for your team. Virtual sessions come with a $25 lunch voucher delivered before we connect.",
   },
@@ -55,18 +39,22 @@ const PERSONAS = [
   {
     title: "Municipal Engineers & Planners",
     desc: "Crosswalks, transit corridors, and complete streets that meet Vision Zero and Complete Streets specifications, with accessibility-aware design. Real installation data from Canadian municipalities coast to coast.",
+    badge: "Vision Zero · Complete Streets",
   },
   {
     title: "Landscape Architects & Designers",
     desc: "12+ StreetPrint patterns, full StreetBond Pantone palette, and decorative surfaces engineered to outlast the design life of the asphalt beneath them. Snowplow-safe. Engineering-approved.",
+    badge: "Public Art · Driveways",
   },
   {
     title: "Engineering & Consulting Firms",
     desc: "CE credits available. Walk away with real spec sheets, sample materials, and a list of certified HUB installers in your region.",
+    badge: "CE Credits",
   },
   {
     title: "Contractors & Applicators",
     desc: "Learn about the HUB certified applicator program — unlock territory rights and bid on jobs your competitors can't touch.",
+    badge: "Certified Applicator Program",
   },
 ];
 
@@ -97,6 +85,13 @@ const CITIES = [
   "City of Victoria", "District of Saanich", "Strathcona County",
 ];
 const TICKER = [...CITIES, ...CITIES];
+
+const STATS = [
+  { value: "45 min", label: "Focused Session" },
+  { value: "100% Free", label: "No Invoice Ever" },
+  { value: "Lunch Included", label: "Every In-Person" },
+  { value: "CE Credits", label: "AIBC · RAIC · PEO" },
+];
 
 export default function LunchLearnFunnel() {
   const [formData, setFormData] = useState<FormState>({
@@ -133,14 +128,18 @@ export default function LunchLearnFunnel() {
       {/* ── HERO ────────────────────────────────────────────────── */}
       <section
         className="relative overflow-hidden"
-        style={{ background: "#070b12", minHeight: "72vh" }}
+        style={{ background: "#070b12", minHeight: "80vh" }}
       >
-        {/* Atmospheric glows */}
+        {/* Atmospheric glows — more dramatic */}
         <div className="absolute inset-0 pointer-events-none" style={{
-          background: "radial-gradient(ellipse at 15% 60%, rgba(249,115,22,0.13) 0%, transparent 55%)",
+          background: "radial-gradient(ellipse at 12% 65%, rgba(249,115,22,0.18) 0%, transparent 55%)",
         }} />
         <div className="absolute inset-0 pointer-events-none" style={{
-          background: "radial-gradient(ellipse at 80% 20%, rgba(234,179,8,0.06) 0%, transparent 60%)",
+          background: "radial-gradient(ellipse at 80% 20%, rgba(234,179,8,0.09) 0%, transparent 60%)",
+        }} />
+        {/* Right-side texture accent */}
+        <div className="absolute inset-0 pointer-events-none hidden lg:block" style={{
+          background: "radial-gradient(ellipse at 90% 70%, rgba(249,115,22,0.08) 0%, transparent 50%)",
         }} />
         {/* Top accent line */}
         <div className="absolute top-0 inset-x-0 h-px" style={{
@@ -148,7 +147,7 @@ export default function LunchLearnFunnel() {
         }} />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-0">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-end">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:items-center" style={{ minHeight: "calc(80vh - 7rem)" }}>
 
             {/* Left: Text + trust + CTAs */}
             <motion.div
@@ -217,7 +216,7 @@ export default function LunchLearnFunnel() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </a>
-                {/* Phone numbers — flex-wrap so they don't overflow 375px */}
+                {/* Phone numbers */}
                 <div className="flex items-center gap-4 flex-wrap">
                   <a href="tel:+14165409287" className="text-sm font-semibold transition-colors hover:text-orange-400" style={{ color: "rgba(255,255,255,0.45)" }}>
                     East: 416-540-9287
@@ -230,13 +229,13 @@ export default function LunchLearnFunnel() {
               </div>
             </motion.div>
 
-            {/* Right: Moose mascot — one and only */}
+            {/* Right: Moose mascot — centered vertically, larger */}
             <motion.div
-              className="relative flex items-end justify-center lg:justify-end"
+              className="relative flex items-center justify-center lg:justify-end"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              style={{ height: "clamp(160px, 24vw, 290px)" }}
+              style={{ height: "clamp(200px, 30vw, 360px)" }}
             >
               <Image
                 src="/images/lunch-learn/moose-final.png"
@@ -248,16 +247,12 @@ export default function LunchLearnFunnel() {
                   height: "100%",
                   objectFit: "contain",
                   objectPosition: "bottom",
-                  filter: "drop-shadow(0 0 30px rgba(249,115,22,0.25)) drop-shadow(0 12px 32px rgba(0,0,0,0.5))",
+                  filter: "drop-shadow(0 0 20px rgba(249,115,22,0.2))",
+                  mixBlendMode: "screen",
                 }}
                 priority
                 unoptimized
               />
-              {/* Glow pool under moose */}
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-64 h-16 pointer-events-none" style={{
-                background: "radial-gradient(ellipse, rgba(249,115,22,0.22) 0%, transparent 70%)",
-                filter: "blur(12px)",
-              }} />
             </motion.div>
           </div>
         </div>
@@ -268,10 +263,53 @@ export default function LunchLearnFunnel() {
         }} />
       </section>
 
+      {/* ── STATS STRIP ──────────────────────────────────────────── */}
+      <section
+        className="py-10"
+        style={{
+          background: "#0a0f1a",
+          borderTop: "1px solid rgba(255,255,255,0.06)",
+          borderBottom: "1px solid rgba(255,255,255,0.06)",
+        }}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-0">
+            {STATS.map((stat, i) => (
+              <motion.div
+                key={stat.value}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.07, duration: 0.35 }}
+                className="flex flex-col items-center text-center lg:border-r last:border-r-0"
+                style={{ borderColor: "rgba(255,255,255,0.06)" }}
+              >
+                <span
+                  className="font-black mb-1"
+                  style={{
+                    fontSize: "clamp(1.5rem, 2.5vw, 2.25rem)",
+                    letterSpacing: "-0.03em",
+                    background: "linear-gradient(92deg, #F97316 0%, #EAB308 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}
+                >
+                  {stat.value}
+                </span>
+                <span className="text-xs font-semibold tracking-[0.12em] uppercase" style={{ color: "rgba(255,255,255,0.4)" }}>
+                  {stat.label}
+                </span>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── WHAT YOU WALK AWAY WITH ──────────────────────────────── */}
       <section className="py-20 lg:py-24" style={{ background: "#0a0f1a" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-12 text-center">
+          <div className="mb-14 text-center">
             <p className="text-xs font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#f97316" }}>
               What You Walk Away With
             </p>
@@ -296,7 +334,7 @@ export default function LunchLearnFunnel() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.08, duration: 0.4 }}
-                className="relative rounded-2xl p-8 flex flex-col gap-4"
+                className="relative rounded-2xl p-8 flex flex-col gap-5"
                 style={{
                   background: "#111827",
                   border: "1px solid rgba(255,255,255,0.08)",
@@ -307,12 +345,20 @@ export default function LunchLearnFunnel() {
                   className="absolute top-0 left-0 right-0 h-0.5 rounded-t-2xl"
                   style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }}
                 />
-                <div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
-                  style={{ background: "rgba(249,115,22,0.12)", color: "#f97316" }}
+                {/* Large number as visual anchor */}
+                <span
+                  className="font-black leading-none select-none"
+                  style={{
+                    fontSize: "5rem",
+                    background: "linear-gradient(135deg, #F97316 0%, #EAB308 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                    opacity: 0.85,
+                  }}
                 >
-                  {item.icon}
-                </div>
+                  {item.num}
+                </span>
                 <div>
                   <h3 className="font-bold text-lg mb-2 leading-snug" style={{ color: "#F5F0EB" }}>
                     {item.title}
@@ -355,17 +401,26 @@ export default function LunchLearnFunnel() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.06, duration: 0.35 }}
-                className="flex gap-5 p-6 rounded-xl"
-                style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}
+                className="flex flex-col p-8 rounded-xl"
+                style={{
+                  background: "rgba(255,255,255,0.04)",
+                  border: "1px solid rgba(255,255,255,0.09)",
+                }}
               >
-                <span
-                  className="mt-1 w-2 h-2 rounded-full flex-shrink-0"
-                  style={{ background: "#f97316" }}
-                />
-                <div>
-                  <p className="font-bold text-base mb-1.5" style={{ color: "#F5F0EB" }}>{p.title}</p>
-                  <p className="text-sm leading-relaxed" style={{ color: "#6B7280" }}>{p.desc}</p>
+                <div className="flex items-start justify-between gap-3 mb-3">
+                  <p className="font-semibold text-base leading-snug" style={{ color: "#F5F0EB", fontWeight: 500 }}>{p.title}</p>
+                  <span
+                    className="flex-shrink-0 rounded-full px-2.5 py-0.5 text-[10px] font-bold tracking-wide whitespace-nowrap"
+                    style={{
+                      background: "rgba(249,115,22,0.12)",
+                      color: "#f97316",
+                      border: "1px solid rgba(249,115,22,0.22)",
+                    }}
+                  >
+                    {p.badge}
+                  </span>
                 </div>
+                <p className="text-sm leading-relaxed" style={{ color: "#6B7280" }}>{p.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -391,6 +446,59 @@ export default function LunchLearnFunnel() {
           </div>
         </div>
       </div>
+
+      {/* ── PULL QUOTE ───────────────────────────────────────────────── */}
+      <section
+        className="py-20 lg:py-28 relative overflow-hidden"
+        style={{ background: "#070b12" }}
+      >
+        <div className="absolute inset-0 pointer-events-none" style={{
+          background: "radial-gradient(ellipse at 50% 50%, rgba(249,115,22,0.06) 0%, transparent 65%)",
+        }} />
+        <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          {/* Opening quote mark */}
+          <span
+            className="block leading-none select-none mb-2"
+            style={{
+              fontSize: "6rem",
+              lineHeight: 0.8,
+              color: "#F97316",
+              fontFamily: "Georgia, serif",
+              opacity: 0.7,
+            }}
+          >
+            &ldquo;
+          </span>
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="font-semibold leading-relaxed mb-8"
+            style={{
+              fontSize: "clamp(1.1rem, 2vw, 1.4rem)",
+              color: "rgba(255,255,255,0.88)",
+              letterSpacing: "-0.01em",
+            }}
+          >
+            TrafficPatternsXD has proven to be very stable in our environment
+            and has a multitude of applications across various sectors such as
+            landscape, transportation, trails, and parks.
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.15 }}
+            className="flex flex-col items-center gap-1"
+          >
+            <span className="font-bold text-sm" style={{ color: "#F5F0EB" }}>Leo Guddemi</span>
+            <span className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>
+              Senior Associate, Landscape Architecture Team Lead &mdash; Stantec
+            </span>
+          </motion.div>
+        </div>
+      </section>
 
       {/* ── FAQ ──────────────────────────────────────────────────────── */}
       <section className="py-20 lg:py-24" style={{ background: "#0a0f1a" }}>
@@ -492,6 +600,22 @@ export default function LunchLearnFunnel() {
             </p>
           </div>
 
+          {/* Trust strip */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-8">
+            {[
+              "HUB responds within 24 hours",
+              "No commitment required",
+              "In-person, virtual, or hybrid",
+            ].map((item) => (
+              <div key={item} className="flex items-center gap-2">
+                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: "#f97316" }}>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                </svg>
+                <span className="text-sm" style={{ color: "rgba(255,255,255,0.55)" }}>{item}</span>
+              </div>
+            ))}
+          </div>
+
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -504,7 +628,7 @@ export default function LunchLearnFunnel() {
               boxShadow: "0 0 0 1px rgba(249,115,22,0.06) inset, 0 20px 60px rgba(0,0,0,0.3)",
             }}
           >
-            <div className="absolute top-0 left-0 right-0 h-0.5 rounded-t-2xl" style={{
+            <div className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl" style={{
               background: "linear-gradient(90deg, #F97316, #EAB308)",
             }} />
 
@@ -566,7 +690,7 @@ export default function LunchLearnFunnel() {
                 <button
                   type="submit"
                   disabled={submitState.status === "loading"}
-                  className="w-full py-4 rounded-xl font-bold text-sm transition-all disabled:opacity-50"
+                  className="w-full py-5 rounded-xl font-bold text-base transition-all disabled:opacity-50"
                   style={{
                     background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
                     color: "#fff",
@@ -594,7 +718,7 @@ export default function LunchLearnFunnel() {
             )}
           </motion.div>
 
-          {/* Bottom office info — stack on mobile to prevent email overflow */}
+          {/* Bottom office info */}
           <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
             {[
               { region: "Eastern Canada", name: "Doug Bain", phone: "416-540-9287", email: "doug.bain@hubss.com" },

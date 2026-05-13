@@ -265,6 +265,8 @@ const nextConfig: NextConfig = {
       { source: "/assets/specification-documents/:path*", destination: "/resources", permanent: true },
     ];
   },
+  // Disable the Vercel floating toolbar on production and preview deployments
+  devIndicators: false,
   turbopack: {
     root: path.resolve(__dirname),
     resolveAlias: {

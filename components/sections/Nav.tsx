@@ -690,12 +690,26 @@ function MobileSection({
 function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onClose: () => void; onSearchOpen: () => void }) {
   const [expandedSection, setExpandedSection] = useState<"products" | "applications" | "fieldnotes" | null>(null);
 
-  // Lock body scroll while the full-screen menu is open
+  // Lock body scroll while the full-screen menu is open.
+  // Uses the iOS-safe fixed-position trick so Safari doesn't scroll under the overlay.
   useEffect(() => {
     if (!isOpen) return;
-    const prev = document.body.style.overflow;
+    const scrollY = window.scrollY;
+    const prevOverflow = document.body.style.overflow;
+    const prevPosition = document.body.style.position;
+    const prevTop = document.body.style.top;
+    const prevWidth = document.body.style.width;
     document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = prev; };
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = "100%";
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      document.body.style.position = prevPosition;
+      document.body.style.top = prevTop;
+      document.body.style.width = prevWidth;
+      window.scrollTo(0, scrollY);
+    };
   }, [isOpen]);
 
   return (
@@ -1095,7 +1109,11 @@ export default function Nav() {
             </button>
             <button onClick={() => setMobileOpen(!mobileOpen)} aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"} aria-expanded={mobileOpen} className="p-2" style={{ color: "rgba(255,255,255,0.6)" }}>
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                {mobileOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                )}
               </svg>
             </button>
           </div>
@@ -1124,8 +1142,10 @@ export default function Nav() {
           )}
         </AnimatePresence>
 
-        <MobileOverlay isOpen={mobileOpen} onClose={() => setMobileOpen(false)} onSearchOpen={openSearch} />
       </nav>
+
+      {/* Mobile overlay — rendered outside <nav> so its z-index is not capped by the nav stacking context */}
+      <MobileOverlay isOpen={mobileOpen} onClose={() => setMobileOpen(false)} onSearchOpen={openSearch} />
 
       {/* Search overlay */}
       <AnimatePresence>

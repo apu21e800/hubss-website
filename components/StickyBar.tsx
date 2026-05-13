@@ -69,7 +69,7 @@ export default function StickyBar() {
         {/* CTAs */}
         <div className="flex items-center gap-2.5 w-full lg:w-auto">
           <Link
-            href="/contact"
+            href="/products"
             className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 border text-white px-5 text-[12px] font-bold tracking-[0.04em] transition-all whitespace-nowrap"
             style={{
               borderColor: "rgba(255,255,255,0.2)",

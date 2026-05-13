@@ -110,7 +110,7 @@ export default function HeroSlideshow() {
             {/* CTAs — min-h 44px ensures tap targets meet iOS guidelines */}
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
-                href="/gallery"
+                href="#field-notes"
                 className="inline-flex items-center justify-center gap-2 px-7 rounded-lg font-semibold text-sm transition-all"
                 style={{
                   background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
@@ -125,7 +125,7 @@ export default function HeroSlideshow() {
                 </svg>
               </Link>
               <Link
-                href="/contact"
+                href="#systems"
                 className="inline-flex items-center justify-center gap-2 px-7 rounded-lg font-semibold text-sm border transition-all hover:bg-white/[0.06]"
                 style={{
                   borderColor: "rgba(255,255,255,0.28)",

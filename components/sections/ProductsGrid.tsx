@@ -67,6 +67,7 @@ export default function ProductsGrid() {
 
   return (
     <section
+      id="systems"
       className="py-28 lg:py-32"
       style={{
         backgroundColor: "#0f1420",
@@ -193,19 +194,7 @@ export default function ProductsGrid() {
                       >
                         {product.name}
                       </h3>
-                      {type && (
-                        <span
-                          className="flex-shrink-0 text-[10px] font-bold tracking-[0.08em] uppercase px-2.5 py-1 rounded-md mt-0.5"
-                          style={{
-                            background: "rgba(249,115,22,0.12)",
-                            color: "rgba(249,115,22,0.9)",
-                            border: "1px solid rgba(249,115,22,0.18)",
-                            whiteSpace: "nowrap",
-                          }}
-                        >
-                          {type}
-                        </span>
-                      )}
+                      {/* orange type chip removed per Vernon */}
                     </div>
 
                     {/* Description */}

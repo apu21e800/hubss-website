@@ -92,7 +92,7 @@ export default async function ProjectPage({ params }: Props) {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20" style={{ background: "#0A0A0A" }}>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
           <div className="lg:col-span-2">
             <h2 className="text-2xl font-bold mb-5" style={{ color: "#f5f0eb" }}>Project Overview</h2>
             <p className="text-[16px] leading-relaxed mb-10" style={{ color: "#e5e7eb" }}>

@@ -53,13 +53,13 @@ const GRID_PHOTOS = [
 export default function InstagramStrip() {
   return (
     <section
-      className="py-16 lg:py-20"
+      className="py-24"
       style={{ background: "#080d16", borderTop: "1px solid rgba(255,255,255,0.05)" }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}
-        <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-10 gap-6">
+        <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-14 gap-6">
           <div>
             <p className="text-xs font-bold tracking-[0.2em] uppercase mb-3" style={{ color: "rgba(249,115,22,0.8)" }}>
               On The Ground
@@ -90,7 +90,7 @@ export default function InstagramStrip() {
         </div>
 
         {/* Photo grid — 6 real project images */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 mb-10">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 mb-14">
           {GRID_PHOTOS.map((photo) => (
             <a
               key={photo.src}

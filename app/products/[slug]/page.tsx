@@ -250,7 +250,7 @@ export default async function ProductPage({ params }: Props) {
                 <div className="flex items-center gap-4 mb-6">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src="/images/products/streetbondsr/leed-logo.png"
+                    src="/images/products/streetbondsr/leed-logo.svg"
                     alt="LEED — U.S. Green Building Council"
                     style={{ width: 72, height: 72, objectFit: "contain", filter: "invert(1) brightness(0.75) sepia(1) hue-rotate(60deg) saturate(2)" }}
                   />

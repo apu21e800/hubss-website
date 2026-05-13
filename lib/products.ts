@@ -22,10 +22,13 @@ export interface Product {
   seoDescription?: string;
 }
 
-function gallery(slug: string, dir: string, count: number, ext: string = "jpg"): string[] {
-  return Array.from({ length: count }, (_, i) =>
-    `/images/products/${dir}/${slug}-${String(i + 1).padStart(2, "0")}.${ext}`
-  );
+function gallery(slug: string, dir: string, count: number, ext: string = "jpg", pngOverrides: number[] = []): string[] {
+  const pngSet = new Set(pngOverrides);
+  return Array.from({ length: count }, (_, i) => {
+    const n = i + 1;
+    const resolvedExt = pngSet.has(n) ? "png" : ext;
+    return `/images/products/${dir}/${slug}-${String(n).padStart(2, "0")}.${resolvedExt}`;
+  });
 }
 
 // Product descriptions rewritten from the authoritative old hubss.com product pages and the StreetBond
@@ -63,7 +66,7 @@ export const products: Product[] = [
     slug: "traffic-patterns",
     shortDesc: "Custom preformed thermoplastic crosswalk and surface marking. Factory-manufactured at 125mil, heat-fused permanently to asphalt or concrete.",
     imageUrl: "/images/products/traffic-patterns/traffic-patterns-01.jpg",
-    gallery: gallery("traffic-patterns", "traffic-patterns", 86),
+    gallery: gallery("traffic-patterns", "traffic-patterns", 86, "jpg", [65, 69]),
     description: "TrafficPatterns is a fully customizable preformed thermoplastic pavement marking system — a fusion of performance, aesthetics, and functionality. Factory-manufactured to 125mil and heat-fused to asphalt or concrete, the material is engineered to withstand vehicular and pedestrian traffic, harsh weather, and daily wear with a skid- and slip-resistant surface treatment. Retroreflective glass beads are embedded through the full cross-section, holding nighttime visibility as the surface wears. Open to traffic within hours of installation. Withstands snowplow blades, de-icing chemicals, and Canadian freeze-thaw cycling. Holds retroreflectivity for years where conventional traffic paint typically requires repainting in a year or less. A vast array of customizable designs and colours allows planners, architects, and designers to reflect community character and identity. Specified by Canadian municipalities coast to coast for crosswalks, parks, schools, public spaces, and regulatory markings.",
     specs: [
       { label: "Material", value: "Preformed thermoplastic" },
@@ -128,8 +131,10 @@ export const products: Product[] = [
     seoDescription: "StreetPrint is a state-of-the-art decorative pavement solution that combines the durability of asphalt with the aesthetics of brick, stone, or custom designs.",
     shortDesc: "In-place decorative asphalt stamping. Brick, cobblestone, slate, and custom patterns — flush surface, snowplow-safe.",
     imageUrl: "/images/products/streetprint/streetprint-01.jpg",
-    gallery: [1,3,5,7,9,10,11,13,15,17,19,21,23,25,27,29,31,32,33,35,37,39,41,43,45,47,49,51,53,55,56,57,59,61,63,65,67,69,71,73,75,77,79,80,81,83,85,87,89,91].map(n =>
-      `/images/products/streetprint/streetprint-${String(n).padStart(2, "0")}.jpg`),
+    gallery: [1,3,5,7,9,10,11,13,15,17,19,21,23,25,27,29,31,32,33,35,37,39,41,43,45,47,49,51,53,55,56,57,59,61,63,65,67,69,71,73,75,77,79,80,81,83,85,87,89,91].map(n => {
+      const ext = [57, 63].includes(n) ? "png" : "jpg";
+      return `/images/products/streetprint/streetprint-${String(n).padStart(2, "0")}.${ext}`;
+    }),
     description: "StreetPrint is a state-of-the-art decorative pavement solution combining the durability of asphalt with the aesthetic of brick, stone, slate, herringbone, fan, and fully custom designs. Using a genuine stamped-asphalt technology, patterns are imprinted directly into new or existing asphalt after final compaction, then sealed with StreetBond UV-stable acrylic colour. The finished surface is flush with the surrounding road — no raised edges, no shear risk under plows, no joints to weed — making it structurally compatible with municipal winter maintenance where traditional pavers fail. Available in 12+ standard patterns plus fully custom designs, installed by certified HUB applicators across Canada for driveways, parks and pathways, town home developments, and community-branding streetscapes.",
     specs: [
       { label: "System", value: "In-place asphalt stamping + StreetBond coating" },

@@ -14,7 +14,7 @@ const rows = [
 export default function ComparisonTable() {
   return (
     <section
-      className="py-24 relative overflow-hidden"
+      className="py-16 lg:py-20 relative overflow-hidden"
       style={{
         background: "#0d1117",
         borderTop: "1px solid rgba(255,255,255,0.06)",

@@ -457,7 +457,7 @@ export default function LunchLearnFunnel() {
       {/* ── FORM ──────────────────────────────────────────────────────────── */}
       <section
         id="book"
-        className="py-20 lg:py-28 relative overflow-hidden"
+        className="py-16 lg:py-20 relative overflow-hidden"
         style={{ background: "#070b12" }}
       >
         {/* Background glow */}

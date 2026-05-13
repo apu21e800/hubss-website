@@ -66,7 +66,7 @@ export default function LunchLearn({ hideMoose }: { hideMoose?: boolean } = {}) 
   const mooseImg = { src: "/images/lunch-learn/moose.png", alt: "HUB Surface Systems mascot moose" };
 
   return (
-    <section className="bg-dot-grid-blue relative overflow-hidden py-20 lg:py-28">
+    <section className="bg-dot-grid-blue relative overflow-hidden py-16 lg:py-20">
       {/* Background gradient */}
       <div
         className="absolute inset-0 pointer-events-none"

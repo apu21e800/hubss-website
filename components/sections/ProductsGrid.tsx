@@ -67,7 +67,7 @@ export default function ProductsGrid() {
 
   return (
     <section
-      className="py-28 lg:py-32"
+      className="py-20 lg:py-24"
       style={{
         backgroundColor: "#0f1420",
         backgroundImage: `

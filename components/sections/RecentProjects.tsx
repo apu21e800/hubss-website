@@ -11,9 +11,9 @@ export default function RecentProjects() {
   const secondary = projects.slice(1, 3);
 
   return (
-    <section className="py-28 lg:py-32" style={{ background: "#0f1420" }}>
+    <section className="py-20 lg:py-24" style={{ background: "#0f1420" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-end justify-between mb-16">
+        <div className="flex items-end justify-between mb-10">
           <div>
             <p className="gradient-text text-xs font-semibold tracking-[0.2em] uppercase mb-3">
               Portfolio

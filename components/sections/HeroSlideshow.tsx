@@ -65,11 +65,11 @@ export default function HeroSlideshow() {
               Redefining Hardscapes · Since 1999
             </p>
 
-            {/* H1 — 60px cap: proportionate in a 720px hero, strong without blowing out */}
+            {/* H1 — cinematic 76px cap: fills the hero frame, bold and commanding */}
             <h1
-              className="font-black mb-3"
+              className="font-black mb-4"
               style={{
-                fontSize: "clamp(2.5rem, 4.5vw, 3.75rem)",
+                fontSize: "clamp(2.75rem, 5.5vw, 4.75rem)",
                 lineHeight: 0.95,
                 letterSpacing: "-0.04em",
                 color: "white",
@@ -93,11 +93,11 @@ export default function HeroSlideshow() {
               </span>
             </h1>
 
-            {/* H2 — supporting tagline, 24px cap */}
+            {/* H2 — supporting tagline, 26px — readable subhead under bold H1 */}
             <h2
-              className="font-semibold mb-6"
+              className="font-semibold mb-8"
               style={{
-                fontSize: "clamp(1.125rem, 1.8vw, 1.5rem)",
+                fontSize: "clamp(1.25rem, 2vw, 1.625rem)",
                 lineHeight: 1.25,
                 letterSpacing: "-0.02em",
                 color: "rgba(255,255,255,0.86)",

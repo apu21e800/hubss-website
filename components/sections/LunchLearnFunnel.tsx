@@ -147,7 +147,7 @@ export default function LunchLearnFunnel() {
         }} />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-0">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:items-center" style={{ minHeight: "calc(80vh - 7rem)" }}>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:items-end" style={{ minHeight: "calc(80vh - 7rem)" }}>
 
             {/* Left: Text + trust + CTAs */}
             <motion.div
@@ -229,13 +229,13 @@ export default function LunchLearnFunnel() {
               </div>
             </motion.div>
 
-            {/* Right: Moose mascot — centered vertically, larger */}
+            {/* Right: Moose — paws bottom-aligned with phone numbers via pb-12 lg:pb-20 */}
             <motion.div
-              className="relative flex items-center justify-center lg:justify-end"
+              className="relative flex items-end justify-center lg:justify-end pb-12 lg:pb-20"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              style={{ height: "clamp(200px, 30vw, 360px)" }}
+              style={{ height: "clamp(280px, 38vw, 480px)" }}
             >
               <Image
                 src="/images/lunch-learn/moose-final.png"

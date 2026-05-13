@@ -307,7 +307,7 @@ function ProductsMegaMenu() {
           <h3 className="text-xl font-bold leading-tight mb-2" style={{ color: "#F5F0EB" }}>
             Decorative pavement, engineered for Canadian streets.
           </h3>
-          <p className="text-sm leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.55)" }}>
+          <p className="text-[13px] leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.55)" }}>
             14 specified systems for crosswalks, transit lanes, plazas, and decorative hardscape — installed coast to coast.
           </p>
           <Link href="/products"
@@ -348,7 +348,7 @@ function ProductsMegaMenu() {
                     <p className="text-[9px] font-bold tracking-[0.2em] uppercase mb-0.5" style={{ color: "#F97316" }}>
                       {cat.tag}
                     </p>
-                    <p className="text-sm font-bold leading-tight" style={{ color: "#F5F0EB" }}>{cat.label}</p>
+                    <p className="text-[13px] font-bold leading-tight" style={{ color: "#F5F0EB" }}>{cat.label}</p>
                   </div>
                 </Link>
 
@@ -361,7 +361,7 @@ function ProductsMegaMenu() {
                       className="group flex items-start justify-between gap-2 px-2 py-2 rounded-md transition-colors hover:bg-white/5"
                     >
                       <div className="min-w-0">
-                        <p className="text-sm font-semibold leading-tight group-hover:text-orange-400 transition-colors" style={{ color: "#F5F0EB" }}>
+                        <p className="text-[13px] font-semibold leading-tight group-hover:text-orange-400 transition-colors" style={{ color: "#F5F0EB" }}>
                           {p.name}
                         </p>
                         {PRODUCT_TAGLINE[p.slug] && (
@@ -435,7 +435,7 @@ function FieldNotesMegaMenu() {
           <h3 className="text-xl font-bold leading-tight mb-2" style={{ color: "#F5F0EB" }}>
             What we learn from the road.
           </h3>
-          <p className="text-sm leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.55)" }}>
+          <p className="text-[13px] leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.55)" }}>
             Project profiles, case studies, technical guides, and white papers from 30+ years of decorative pavement work across Canada.
           </p>
           <div className="space-y-2.5">
@@ -518,7 +518,7 @@ function FieldNotesMegaMenu() {
                 <p className="text-[9px] font-bold tracking-[0.18em] uppercase mb-1" style={{ color: "#F97316" }}>
                   {post.category}
                 </p>
-                <p className="text-sm font-semibold leading-snug group-hover:text-orange-400 transition-colors line-clamp-2" style={{ color: "#F5F0EB" }}>
+                <p className="text-[13px] font-semibold leading-snug group-hover:text-orange-400 transition-colors line-clamp-2" style={{ color: "#F5F0EB" }}>
                   {post.title}
                 </p>
               </div>
@@ -577,7 +577,7 @@ function ApplicationsMegaMenu() {
           <h3 className="text-xl font-bold leading-tight mb-2" style={{ color: "#F5F0EB" }}>
             Surfaces that do real work.
           </h3>
-          <p className="text-sm leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.55)" }}>
+          <p className="text-[13px] leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.55)" }}>
             Crosswalks, transit lanes, parks, plazas, parking lots, airfields — every surface where decorative pavement and durable markings meet the brief.
           </p>
           <Link href="/applications"

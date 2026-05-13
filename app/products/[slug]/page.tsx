@@ -81,7 +81,7 @@ export default async function ProductPage({ params }: Props) {
       <Nav />
 
       {/* Hero banner */}
-      <div className="relative overflow-hidden" style={{ height: "clamp(360px, 52vh, 560px)" }}>
+      <div data-hero className="relative overflow-hidden" style={{ height: "clamp(360px, 52vh, 560px)" }}>
         {/* TODO: doug-review-image — Doug flagged the TPXD hero/overview ("This is TrafficPatterns, not TPXD — no stamping"). Confirm correct TPXD image and replace product.imageUrl for traffic-patterns-xd in lib/products.ts. */}
         <Image
           src={product.imageUrl}

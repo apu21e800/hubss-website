@@ -4,6 +4,7 @@ import Link from "next/link";
 export default function HeroSlideshow() {
   return (
     <section
+      data-hero
       className="relative w-full overflow-hidden"
       style={{ minHeight: "min(82vh, 780px)", background: "#0d1117" }}
       aria-label="Hero"
@@ -64,11 +65,11 @@ export default function HeroSlideshow() {
               Redefining Hardscapes · Since 1999
             </p>
 
-            {/* H1 — cap tightened to 3.5rem (56px) per Vernon: 64px still read dominant */}
+            {/* H1 — 48px cap (Vernon: 56px still too big) */}
             <h1
               className="font-black mb-3"
               style={{
-                fontSize: "clamp(2.25rem, 4vw, 3.5rem)",
+                fontSize: "clamp(2rem, 3.5vw, 3rem)",
                 lineHeight: 0.95,
                 letterSpacing: "-0.04em",
                 color: "white",
@@ -92,11 +93,11 @@ export default function HeroSlideshow() {
               </span>
             </h1>
 
-            {/* H2 — tagline subhead. Cap at 1.5rem (24px) so it doesn't compete with H1. */}
+            {/* H2 — tagline. 20px cap (Vernon: restrained, supporting) */}
             <h2
               className="font-semibold mb-6"
               style={{
-                fontSize: "clamp(1.125rem, 2vw, 1.5rem)",
+                fontSize: "clamp(1rem, 1.5vw, 1.25rem)",
                 lineHeight: 1.25,
                 letterSpacing: "-0.02em",
                 color: "rgba(255,255,255,0.86)",
@@ -110,26 +111,28 @@ export default function HeroSlideshow() {
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
                 href="/gallery"
-                className="inline-flex items-center justify-center gap-2 px-8 rounded-lg font-semibold text-sm transition-all"
+                className="inline-flex items-center justify-center gap-2 px-5 rounded-lg font-semibold transition-all"
                 style={{
+                  fontSize: "13px",
                   background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
                   color: "#fff",
-                  boxShadow: "0 6px 28px rgba(249,115,22,0.42)",
-                  minHeight: "44px",
+                  boxShadow: "0 4px 20px rgba(249,115,22,0.38)",
+                  minHeight: "40px",
                 }}
               >
                 See the Work
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </Link>
               <Link
                 href="/contact"
-                className="inline-flex items-center justify-center gap-2 px-8 rounded-lg font-semibold text-sm border transition-all hover:bg-white/[0.06]"
+                className="inline-flex items-center justify-center gap-2 px-5 rounded-lg font-semibold border transition-all hover:bg-white/[0.06]"
                 style={{
+                  fontSize: "13px",
                   borderColor: "rgba(255,255,255,0.28)",
                   color: "rgba(255,255,255,0.82)",
-                  minHeight: "44px",
+                  minHeight: "40px",
                 }}
               >
                 See the Systems

@@ -81,7 +81,7 @@ export default async function ApplicationPage({ params }: Props) {
       <Nav />
 
       {/* Hero banner */}
-      <div className="relative overflow-hidden" style={{ height: "clamp(360px, 52vh, 560px)" }}>
+      <div data-hero className="relative overflow-hidden" style={{ height: "clamp(360px, 52vh, 560px)" }}>
         <Image
           src={application.imageUrl}
           alt={application.name}

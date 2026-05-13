@@ -317,8 +317,9 @@ export const products: Product[] = [
     slug: "chipfill",
     eyebrow: "Concrete and Asphalt Repair",
     shortDesc: "Heat-activated preformed material for permanent pothole repair. Year-round, all-weather.",
-    imageUrl: "https://images.unsplash.com/photo-DubvqlTGyXE?auto=format&fit=crop&w=2400&q=85",
-    heroPosition: "center 60%",
+    // Both bags side-by-side hero — ChipFill & AggreFill are always specified together
+    imageUrl: "/images/products/chipfill/chipfill-aggrefill-bags.jpg",
+    heroPosition: "center 55%",
     brandLogo: {
       src: "/images/products/chipfill/chipfill-logo.svg",
       alt: "ChipFill by HUB Surface Systems",
@@ -326,10 +327,12 @@ export const products: Product[] = [
       height: 44,
     },
     gallery: [
+      "/images/products/chipfill/chipfill-aggrefill-bags.jpg",
+      "/images/products/chipfill/chipfill-application.jpg",
+      "/images/products/chipfill/chipfill-road-repair.webp",
+      "/images/products/aggrefill/aggrefill-application.webp",
       "/images/products/chipfill/chipfill-01.jpg",
       "/images/products/chipfill/chipfill-02.jpg",
-      "/images/products/chipfill/chipfill-04.jpg",
-      "/images/products/chipfill/chipfill-03.jpg",
     ],
     description: "ChipFill is a heat-activated preformed pothole repair material engineered for permanent restoration of road surface damage. The material is laid into the prepared excavation and activated with a propane heat torch — no specialized equipment, no hot-mix plant, no aggregate batching. Once heated, ChipFill conforms to the contours of the damage and bonds chemically to the surrounding asphalt or concrete, sealing the substrate from the water intrusion that accelerates freeze-thaw damage and turns minor surface defects into deep structural failures. Deployable year-round regardless of temperature or weather conditions — a critical advantage in Canadian climates where hot-mix asphalt plants close seasonally and potholes peak in early spring. Sets rapidly so the lane can reopen to traffic within minutes of application. Specified by Canadian municipalities and road maintenance contractors for routine patrol patching, emergency response programs, utility cut restoration, edge joint repair, and pedestrian infrastructure maintenance across roads, parking lots, sidewalks, and pathways.",
     specs: [
@@ -348,8 +351,9 @@ export const products: Product[] = [
     slug: "aggrefill",
     eyebrow: "Concrete and Asphalt Repair",
     shortDesc: "Pre-coated aggregate filler for larger potholes up to 1 m². Combined with ChipFill for permanent repair.",
-    imageUrl: "https://images.unsplash.com/photo-ZpzOBTvKv5w?auto=format&fit=crop&w=2400&q=85",
-    heroPosition: "center 65%",
+    // AggreFill-first hero — application shot leads; combined bags as context
+    imageUrl: "/images/products/aggrefill/aggrefill-application.webp",
+    heroPosition: "center 40%",
     brandLogo: {
       src: "/images/products/aggrefill/aggrefill-logo.svg",
       alt: "AggreFill by HUB Surface Systems",
@@ -357,9 +361,12 @@ export const products: Product[] = [
       height: 44,
     },
     gallery: [
+      "/images/products/aggrefill/aggrefill-application.webp",
+      "/images/products/aggrefill/aggrefill-chipfill-bags.jpg",
+      "/images/products/chipfill/chipfill-application.jpg",
+      "/images/products/chipfill/chipfill-road-repair.webp",
       "/images/products/aggrefill/aggrefill-01.jpg",
       "/images/products/aggrefill/aggrefill-02.jpg",
-      "/images/products/aggrefill/aggrefill-03.jpg",
     ],
     description: "AggreFill is a pre-coated aggregate filler used in combination with ChipFill to permanently repair larger potholes — up to approximately 1 m² in diameter. Where the damage is too deep or wide for a stand-alone material, AggreFill provides the structural mass to fill the void; ChipFill bonds the aggregate matrix and seals the repaired surface flush. The combined system applies cold then receives a heat torch finish, bonding chemically to the surrounding asphalt or concrete substrate and returning the lane to traffic within minutes. Year-round deployment regardless of weather or season — eliminating the dependency on hot-mix plant availability that leaves deep damage unrepaired through Canadian winters. Specified for the deeper road surface failures, parking lot craters, industrial-site damage, and utility cut restoration where conventional cold-mix patching migrates under heavy wheel loading or fails to achieve durable bond at substrate edges. The AggreFill + ChipFill system is a permanent repair solution, not a seasonal temporary patch.",
     specs: [
@@ -377,8 +384,8 @@ export const products: Product[] = [
     slug: "fast-patch",
     eyebrow: "Concrete and Asphalt Repair",
     shortDesc: "Cold-mix polymer repair for potholes, spalls, and utility cuts. Back in service in under an hour.",
-    imageUrl: "https://images.unsplash.com/photo-WppH6SVwkdg?auto=format&fit=crop&w=2400&q=85",
-    heroPosition: "center 55%",
+    imageUrl: "/images/products/fast-patch/fastpatch-repaired.jpg",
+    heroPosition: "center 50%",
     brandLogo: {
       src: "/images/products/fast-patch/fast-patch-logo.webp",
       alt: "Fast Patch DPR",
@@ -386,6 +393,8 @@ export const products: Product[] = [
       height: 44,
     },
     gallery: [
+      "/images/products/fast-patch/fastpatch-repaired.jpg",
+      "/images/products/fast-patch/fastpatch-bucket.jpg",
       "/images/products/fast-patch/fast-patch-01.png",
     ],
     description: "Fast Patch DPR is an easy-to-apply distressed pavement repair material for asphalt and concrete — a unique polymer blend of recycled and renewable materials engineered for high-strength, fast-return-to-service repair of potholes, spalls, joints, wheel paths, and utility cuts. Minimal site preparation required: clean the area, apply the material, compact, and the repaired surface is back in service in less than 45 minutes. The optional Fast Patch Kicker accelerator shortens cure time further in cooler conditions, making Fast Patch DPR deployable year-round across Canadian temperature ranges where traditional cold-mix products lose performance. Bonds chemically to the surrounding asphalt or concrete substrate with excellent freeze-thaw resistance and impact absorption — this is a permanent repair, not a seasonal patch. Completely odourless, making it suitable for indoor environments including warehouse floors, loading docks, and underground parkades where ventilation constraints rule out petroleum-based materials. Used by Canadian municipalities, property managers, and contractors on roadways and bridges, parking lots, sidewalks and curbs (trip-hazard remediation), and any public or commercial environment where extended downtime is not an option.",

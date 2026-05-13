@@ -229,13 +229,13 @@ export default function LunchLearnFunnel() {
               </div>
             </motion.div>
 
-            {/* Right: Moose — paws bottom-aligned with phone numbers via pb-12 lg:pb-20 */}
+            {/* Right: Moose — paws bottom-aligned with phone numbers, 10% bigger */}
             <motion.div
               className="relative flex items-end justify-center lg:justify-end pb-12 lg:pb-20"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              style={{ height: "clamp(280px, 38vw, 480px)" }}
+              style={{ height: "clamp(310px, 42vw, 530px)" }}
             >
               <Image
                 src="/images/lunch-learn/moose-final.png"

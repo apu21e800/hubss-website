@@ -739,12 +739,11 @@ export default function CanadaMap() {
       } else {
         setHoveredId(null);
         setCursor(scrollEnabled ? "grab" : "default");
-        // 250ms grace (bumped from 80ms) — gives the cursor more time to transit
-        // marker → popup card. Popup-card hover sets popupHoveredRef true to cancel.
+        // 450ms grace — generous window for cursor to transit marker → popup card.
         if (popupClearTimeoutRef.current) clearTimeout(popupClearTimeoutRef.current);
         popupClearTimeoutRef.current = setTimeout(() => {
           if (!popupHoveredRef.current && !popupPinned) setPopupProject(null);
-        }, 250);
+        }, 450);
       }
     },
     [scrollEnabled, popupPinned]
@@ -758,7 +757,7 @@ export default function CanadaMap() {
     if (popupClearTimeoutRef.current) clearTimeout(popupClearTimeoutRef.current);
     popupClearTimeoutRef.current = setTimeout(() => {
       if (!popupHoveredRef.current && !popupPinned) setPopupProject(null);
-    }, 300);
+    }, 450);
   }, [scrollEnabled, popupPinned]);
 
   // Close pinned popup on click outside the map container.

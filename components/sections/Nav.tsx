@@ -212,7 +212,7 @@ const PRODUCT_CATEGORIES = [
   {
     label: "Asphalt Repair",
     tag: "Permanent pothole + crack repair",
-    image: "/images/products/streetprint/streetprint-40.jpg",
+    image: "/images/products/chipfill/chipfill-aggrefill-bags.jpg",
     slugs: ["chipfill", "aggrefill", "fast-patch"],
   },
 ];

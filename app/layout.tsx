@@ -6,7 +6,7 @@ import "./globals.css";
 // Crisp Chat — sign up at crisp.chat (free), grab Website ID from Settings → Setup
 import CrispChat from "@/components/CrispChat";
 import StickyBar from "@/components/StickyBar";
-import { VercelToolbar } from "@vercel/toolbar/next";
+// VercelToolbar removed — was hardcoded here, overriding dashboard + vercel.json settings
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
@@ -64,7 +64,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         {children}
         <StickyBar />
         <CrispChat />
-        <VercelToolbar />
         <Analytics />
         <SpeedInsights />
       </body>

@@ -173,7 +173,7 @@ export default async function ProductPage({ params }: Props) {
                   alt={product.brandLogo.alt}
                   width={product.brandLogo.width}
                   height={product.brandLogo.height}
-                  style={{ width: product.brandLogo.width, height: "auto", objectFit: "contain", objectPosition: "left center" }}
+                  style={{ width: product.brandLogo.width, height: "auto", objectFit: "contain", objectPosition: "left center", mixBlendMode: (product.brandLogo.blendMode as React.CSSProperties["mixBlendMode"]) ?? "normal" }}
                   unoptimized
                 />
               </div>

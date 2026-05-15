@@ -165,19 +165,8 @@ export default async function ProductPage({ params }: Props) {
           {/* Left: description + gallery */}
           <div className="lg:col-span-2">
 
-            {/* Brand mark — shown above the description when a brandLogo is defined */}
-            {product.brandLogo && (
-              <div className="mb-6">
-                <Image
-                  src={product.brandLogo.src}
-                  alt={product.brandLogo.alt}
-                  width={product.brandLogo.width}
-                  height={product.brandLogo.height}
-                  style={{ width: product.brandLogo.width, height: "auto", objectFit: "contain", objectPosition: "left center" }}
-                  unoptimized
-                />
-              </div>
-            )}
+            {/* brandLogo rendering removed — logos held in products.ts data for future use
+                but not displayed. Product name in hero H1 + photography tells the story. */}
 
             <h2 className="text-2xl sm:text-3xl font-bold mb-5" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>About {product.name}</h2>
             <p className="mb-12 leading-[1.85]" style={{ color: "var(--text-body)", fontSize: "clamp(1rem, 1.8vw, 1.075rem)", maxWidth: "65ch" }}>
@@ -194,23 +183,9 @@ export default async function ProductPage({ params }: Props) {
 
           {/* Right: specs + CTA */}
           <div>
-            {/* Brand logo badge in sidebar */}
-            {product.brandLogo && (
-              <div
-                className="rounded-xl mb-6 flex items-center justify-start"
-                style={{
-                  padding: "0.5rem 0",
-                }}
-              >
-                <Image
-                  src={product.brandLogo.src}
-                  alt={product.brandLogo.alt}
-                  width={320}
-                  height={120}
-                  style={{ width: "100%", height: "auto", maxWidth: 320, objectFit: "contain", objectPosition: "left center" }}
-                  unoptimized
-                />
-              </div>
+            {/* brandLogo sidebar render removed */}
+            {false && product.brandLogo && (
+              <div className="hidden" />
             )}
             <div className="rounded-xl p-8 mb-8 sticky top-24 relative overflow-hidden" style={{ background: "#111111", border: "1px solid rgba(255,255,255,0.08)" }}>
               {/* Orange top accent */}

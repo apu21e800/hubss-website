@@ -119,19 +119,7 @@ export default async function ApplicationPage({ params }: Props) {
       </div>
 
       {/* Main content */}
-      <div className="relative" style={{ background: "var(--bg-dark)" }}>
-        {/* Texture overlay */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            backgroundImage: "url('/images/textures/stamped-asphalt-texture.webp')",
-            backgroundSize: "cover",
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center top",
-            opacity: 0.04,
-            mixBlendMode: "luminosity",
-          }}
-        />
+      <div className="relative" style={{ background: "#0f1620" }}>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
 
           {/* Specify CTA bar */}

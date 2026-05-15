@@ -8,7 +8,7 @@ export interface Product {
   specs: { label: string; value: string }[];
   relatedApplications: string[];
   colourCollections?: { name: string; hex: string }[];
-  brandLogo?: { src: string; alt: string; width: number; height: number; };
+  brandLogo?: { src: string; alt: string; width: number; height: number; blendMode?: string; };
   comingSoon?: boolean;
   // Overrides the hero eyebrow on /products/[slug] (which otherwise falls back to taxonomy).
   eyebrow?: string;
@@ -88,6 +88,13 @@ export const products: Product[] = [
     seoDescription: "StreetBond is a high-quality pavement coating system that transforms ordinary asphalt and concrete surfaces into vibrant, durable, and functional surfaces for streets, commercial spaces, and public facilities.",
     shortDesc: "Coloured coatings for Canadian applications. Bold. Tough. Engineered for Canada.",
     imageUrl: "/images/products/streetbond/streetbond-01.png",
+    brandLogo: {
+      src: "/images/products/streetbond/streetbond-logo-color.svg",
+      alt: "StreetBond® by PPG",
+      width: 220,
+      height: 60,
+      blendMode: "multiply", // SVG has white bg — multiply makes it transparent on dark
+    },
     gallery: [
       // Product renders
       "/images/products/streetbond/streetbond-01.png",

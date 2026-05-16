@@ -8,6 +8,7 @@ import CrispChat from "@/components/CrispChat";
 import StickyBar from "@/components/StickyBar";
 // VercelToolbar — only on staging/preview, never on production
 import { VercelToolbar } from "@vercel/toolbar/next";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
@@ -68,6 +69,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         {process.env.VERCEL_ENV !== "production" && <VercelToolbar />}
         <Analytics />
         <SpeedInsights />
+        <GoogleAnalytics gaId="G-7YSFCGRL5E" />
       </body>
     </html>
   );

@@ -59,8 +59,8 @@ export default function HeroSlideshow() {
 
             {/* Eyebrow — Vernon-confirmed: 1999 is the authoritative founding year site-wide */}
             <p
-              className="text-xs font-bold tracking-[0.22em] uppercase mb-3"
-              style={{ color: "#F97316" }}
+              className="text-sm font-bold tracking-[0.18em] uppercase mb-3"
+              style={{ color: "#FB923C" }}
             >
               Redefining Hardscapes · Since 1999
             </p>

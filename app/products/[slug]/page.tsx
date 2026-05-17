@@ -14,6 +14,9 @@ import { applications } from "@/lib/applications";
 import { productImages, resolveImage } from "@/lib/featured-images";
 import { buildMetadata } from "@/lib/seo";
 import { getProductFamily } from "@/lib/product-taxonomy";
+import { getProductBySlug } from "@/lib/sanity.queries";
+
+export const revalidate = 3600;
 
 export async function generateStaticParams() {
   return products.filter((p) => !p.comingSoon).map((p) => ({ slug: p.slug }));
@@ -34,7 +37,32 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
-  const product = products.find((p) => p.slug === slug);
+
+  // Try Sanity first; fall back to static data if not populated yet.
+  // This ensures the site works immediately after deploy, before migration is run.
+  const sanityProduct = await getProductBySlug(slug);
+
+  const product = (() => {
+    const staticProduct = products.find((p) => p.slug === slug);
+    if (!staticProduct) return null;
+
+    // If Sanity has this product, merge in any Sanity-managed overrides.
+    // Currently we only use Sanity data when it has a name (i.e. it was migrated).
+    if (sanityProduct?.name) {
+      return {
+        ...staticProduct,
+        // Allow Sanity to override shortDesc and description when present
+        shortDesc: sanityProduct.shortDesc ?? staticProduct.shortDesc,
+        description:
+          sanityProduct.heroImageUrl
+            ? staticProduct.description // keep static description for now — rich text migration is follow-up
+            : staticProduct.description,
+      };
+    }
+
+    return staticProduct;
+  })();
+
   if (!product || product.comingSoon) notFound();
 
   // Gallery — use product.gallery if available, otherwise fall back to featured image

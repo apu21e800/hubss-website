@@ -5,7 +5,10 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "migrate:sanity": "tsx scripts/migrate-to-sanity.ts",
+    "migrate:sanity:dry": "tsx scripts/migrate-to-sanity.ts --dry-run",
+    "migrate:sanity:purge": "tsx scripts/migrate-to-sanity.ts --purge"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",
@@ -40,6 +43,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.5",
+    "tsx": "^4.22.0",
     "@sanity/types": "^5.25.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",

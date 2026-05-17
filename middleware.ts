@@ -56,10 +56,11 @@ function requireAdminAuth(req: NextRequest): NextResponse | null {
 }
 
 export function middleware(req: NextRequest) {
-  // Gate /admin/* — and the underlying APIs the admin tools call.
+  // Gate /admin/* and /studio/* behind Basic Auth.
   const path = req.nextUrl.pathname;
   if (
     path.startsWith("/admin") ||
+    path.startsWith("/studio") ||
     path.startsWith("/api/blog/approve") ||
     path.startsWith("/api/blog/drafts") ||
     path.startsWith("/api/blog/generate") ||
@@ -75,6 +76,7 @@ export function middleware(req: NextRequest) {
 export const config = {
   matcher: [
     "/admin/:path*",
+    "/studio/:path*",
     "/api/blog/approve/:path*",
     "/api/blog/drafts/:path*",
     "/api/blog/generate/:path*",

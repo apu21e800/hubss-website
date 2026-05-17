@@ -263,6 +263,38 @@ const nextConfig: NextConfig = {
 
       // Legacy spec-sheet PDFs — safety-net redirect to resources hub
       { source: "/assets/specification-documents/:path*", destination: "/resources", permanent: true },
+
+      // ── Old WordPress URL patterns → catch remaining 404s ────────────────
+      // WordPress project category archives → relevant destination
+      { source: "/projects/category/streetprint/:path*", destination: "/products/streetprint", permanent: true },
+      { source: "/projects/category/stamped-asphalt/:path*", destination: "/products/streetprint", permanent: true },
+      { source: "/projects/category/streetbond/:path*", destination: "/products/streetbond", permanent: true },
+      { source: "/projects/category/trafficpatterns/:path*", destination: "/products/traffic-patterns", permanent: true },
+      { source: "/projects/category/mmax/:path*", destination: "/products/mmax", permanent: true },
+      { source: "/projects/category/public-art/:path*", destination: "/applications/public-art", permanent: true },
+      { source: "/projects/category/community-branding/:path*", destination: "/applications/community-branding", permanent: true },
+      { source: "/projects/category/crosswalks/:path*", destination: "/applications/crosswalks", permanent: true },
+      { source: "/projects/category/parking-lots/:path*", destination: "/applications/parking-lots", permanent: true },
+      { source: "/projects/category/bike-lanes/:path*", destination: "/applications/bike-lanes", permanent: true },
+      { source: "/projects/category/bus-lanes/:path*", destination: "/applications/bus-lanes", permanent: true },
+      { source: "/projects/category/driveways/:path*", destination: "/applications/private-driveways", permanent: true },
+      // WordPress date archives → gallery
+      { source: "/projects/:year(\\d{4})/:path*", destination: "/gallery", permanent: true },
+      // Any remaining /projects/category/... → gallery
+      { source: "/projects/category/:path*", destination: "/gallery", permanent: true },
+      // Old commercial parking lots section
+      { source: "/commercial-parking-lots/:path*", destination: "/applications/parking-lots", permanent: true },
+      // WordPress blog old slugs (blog-slug format)
+      { source: "/blog-:slug", destination: "/blog", permanent: true },
+      // WordPress wp-content → 410 is ideal but redirect to home is fine
+      { source: "/wp-content/:path*", destination: "/", permanent: true },
+      { source: "/wp-admin/:path*", destination: "/", permanent: true },
+      { source: "/wp-json/:path*", destination: "/", permanent: true },
+      // Old feed URLs
+      { source: "/feed", destination: "/blog", permanent: true },
+      { source: "/feed/:path*", destination: "/blog", permanent: true },
+      // Catch-all for any remaining /projects/ URLs → gallery
+      { source: "/projects/:path*", destination: "/gallery", permanent: true },
     ];
   },
   turbopack: {

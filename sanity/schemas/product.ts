@@ -39,6 +39,22 @@ export default defineType({
       of: [{ type: "reference", to: [{ type: "application" }] }],
     }),
     defineField({
+      name: "documents",
+      title: "Product documents",
+      type: "array",
+      description: "Spec sheets, TDS, guides — stored as URL paths served from /public/docs/",
+      of: [{
+        type: "object",
+        fields: [
+          defineField({ name: "label", type: "string", title: "Document label" }),
+          defineField({ name: "docType", type: "string", title: "Type", options: { list: ["spec","tds","colour","installation","brochure","faq","design","application","certificate","other"] } }),
+          defineField({ name: "filePath", type: "string", title: "File path", description: 'e.g. /docs/StreetBond/StreetBond/StreetBond-Brochure.pdf' }),
+          defineField({ name: "lang", type: "string", title: "Language (optional)", description: 'e.g. FR for French versions' }),
+        ],
+        preview: { select: { title: "label", subtitle: "docType" } },
+      }],
+    }),
+    defineField({
       name: "seo",
       title: "SEO overrides",
       type: "object",

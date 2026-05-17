@@ -3,8 +3,11 @@ import Image from "next/image";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
-import { products } from "@/lib/products";
+import { products as staticProducts } from "@/lib/products";
 import { buildMetadata } from "@/lib/seo";
+import { getAllSanityProducts } from "@/lib/sanity.queries";
+
+export const revalidate = 3600;
 
 export const metadata = buildMetadata({
   title: "Decorative Pavement & Marking Systems",
@@ -12,7 +15,24 @@ export const metadata = buildMetadata({
   slug: "products",
 });
 
-export default function ProductsPage() {
+export default async function ProductsPage() {
+  // Try Sanity first; fall back to static data when Sanity isn't populated.
+  // Sanity products are keyed by slug — merge with static list to preserve
+  // product ordering and groups defined here in code.
+  const sanityProducts = await getAllSanityProducts();
+  const sanityBySlug = new Map(sanityProducts.map((p) => [p.slug as unknown as string, p]));
+
+  // Use static products as the source of truth for ordering/grouping.
+  // Apply Sanity overrides only when the doc exists and has been migrated.
+  const products = staticProducts.map((sp) => {
+    const sDoc = sanityBySlug.get(sp.slug);
+    if (!sDoc) return sp;
+    return {
+      ...sp,
+      shortDesc: sDoc.shortDesc ?? sp.shortDesc,
+    };
+  });
+
   return (
     <main style={{ background: "#0f1620", minHeight: "100vh" }}>
       <Nav />

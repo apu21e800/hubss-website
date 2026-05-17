@@ -59,6 +59,9 @@ const SECURITY_HEADERS = [
 const nextConfig: NextConfig = {
   typescript: { ignoreBuildErrors: true },
   poweredByHeader: false,
+  // Sanity Studio uses rxjs + CommonJS internals that Turbopack can't bundle.
+  // Marking them external lets Node handle them at runtime instead.
+  serverExternalPackages: ["sanity", "@sanity/client", "next-sanity", "@sanity/vision"],
   async headers() {
     return [
       {
@@ -297,12 +300,9 @@ const nextConfig: NextConfig = {
       { source: "/projects/:path*", destination: "/gallery", permanent: true },
     ];
   },
-  turbopack: {
-    root: path.resolve(__dirname),
-    resolveAlias: {
-      tailwindcss: path.resolve(__dirname, "node_modules/tailwindcss"),
-    },
-  },
+  // turbopack config removed — Sanity Studio is incompatible with Turbopack
+  // production builds. Webpack handles both correctly. Dev server can still
+  // use `next dev --turbopack` manually if needed.
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },

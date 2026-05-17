@@ -14,6 +14,7 @@ import JsonLd from "@/components/ui/JsonLd";
 import { buildMetadata } from "@/lib/seo";
 import CanadaMapWrapper from "@/components/sections/CanadaMapWrapper";
 import { SITE_FLAGS } from "@/lib/site-flags";
+import { getSanityPageContent } from "@/lib/sanity.queries";
 
 export const metadata: Metadata = buildMetadata({
   title: "Decorative Pavement & Road Marking Solutions",
@@ -75,7 +76,19 @@ const organizationSchema = {
   ],
 };
 
-export default function Home() {
+export default async function Home() {
+  const sanityPage = await getSanityPageContent("homepage").catch(() => null);
+  const hero = {
+    eyebrow:    sanityPage?.homepageHero?.eyebrow    ?? "Redefining Hardscapes · Since 1999",
+    heading:    sanityPage?.homepageHero?.heading    ?? "The World Is",
+    subheading: sanityPage?.homepageHero?.subheading ?? "Your Canvas.",
+    tagline:    sanityPage?.homepageHero?.tagline    ?? "Let’s build your signature space.",
+    cta1Label:  sanityPage?.homepageHero?.cta1Label  ?? "See the Work",
+    cta1Href:   sanityPage?.homepageHero?.cta1Href   ?? "#field-notes",
+    cta2Label:  sanityPage?.homepageHero?.cta2Label  ?? "See the Systems",
+    cta2Href:   sanityPage?.homepageHero?.cta2Href   ?? "#systems",
+  };
+
   return (
     <main>
       {/* Page-load sweep */}
@@ -83,7 +96,7 @@ export default function Home() {
 
       <JsonLd data={organizationSchema} />
       <Nav />
-      <HeroSlideshow />
+      <HeroSlideshow {...hero} />
       <TrustedByMarquee />
       <PersonaEntryPoints />
       {/* slate → dark */}

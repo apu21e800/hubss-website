@@ -4,6 +4,17 @@ import { useState, FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 
+export interface LunchLearnFunnelProps {
+  eyebrow?: string;
+  headingLine1?: string;
+  headingLine2?: string;
+  subheading?: string;
+  ctaLabel?: string;
+  formHeading?: string;
+  formSubheading?: string;
+  submitLabel?: string;
+}
+
 interface FormState {
   name: string;
   email: string;
@@ -93,7 +104,16 @@ const STATS = [
   { value: "CE Credits", label: "AIBC · RAIC · PEO" },
 ];
 
-export default function LunchLearnFunnel() {
+export default function LunchLearnFunnel({
+  eyebrow      = "Free · No Obligation · Coast to Coast",
+  headingLine1 = "Lunch Is On Us.",
+  headingLine2 = "Your Next Spec Is Free.",
+  subheading   = "A 45-minute HUB Lunch & Learn delivers everything your team needs to confidently specify decorative pavement, thermoplastic crosswalks, and coloured coatings — real Canadian case studies and spec language you can drop straight into your next RFP.",
+  ctaLabel     = "Book Your Free Session",
+  formHeading  = "Claim Your Free Lunch & Learn",
+  formSubheading = "Tell us who you are and where you are — we handle the rest. Usually within 24 hours.",
+  submitLabel  = "Claim Your Free Lunch & Learn →",
+}: LunchLearnFunnelProps = {}) {
   const [formData, setFormData] = useState<FormState>({
     name: "", email: "", company: "", city: "", phone: "",
   });
@@ -157,7 +177,7 @@ export default function LunchLearnFunnel() {
               transition={{ duration: 0.5 }}
             >
               <p className="text-xs font-bold tracking-[0.22em] uppercase mb-5" style={{ color: "#f97316" }}>
-                Free &middot; No Obligation &middot; Coast to Coast
+                {eyebrow}
               </p>
               <h1
                 className="font-black mb-6"
@@ -168,7 +188,7 @@ export default function LunchLearnFunnel() {
                   color: "#F5F0EB",
                 }}
               >
-                Lunch Is On Us.
+                {headingLine1}
                 <br />
                 <span style={{
                   background: "linear-gradient(92deg, #F97316 0%, #EAB308 100%)",
@@ -176,17 +196,14 @@ export default function LunchLearnFunnel() {
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
                 }}>
-                  Your Next Spec Is Free.
+                  {headingLine2}
                 </span>
               </h1>
               <p
                 className="text-base sm:text-lg leading-relaxed mb-8 max-w-xl"
                 style={{ color: "rgba(255,255,255,0.7)" }}
               >
-                A 45-minute HUB Lunch &amp; Learn delivers everything your team needs
-                to confidently specify decorative pavement, thermoplastic crosswalks,
-                and coloured coatings — real Canadian case studies and spec language
-                you can drop straight into your next RFP.
+                {subheading}
               </p>
 
               {/* Trust trio */}
@@ -211,7 +228,7 @@ export default function LunchLearnFunnel() {
                     minHeight: "44px",
                   }}
                 >
-                  Book Your Free Session
+                  {ctaLabel}
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
@@ -596,10 +613,10 @@ export default function LunchLearnFunnel() {
                 backgroundClip: "text",
               }}
             >
-              Claim Your Free Lunch &amp; Learn
+              {formHeading}
             </h2>
             <p className="text-base" style={{ color: "#9CA3AF" }}>
-              Tell us who you are and where you are — we handle the rest. Usually within 24 hours.
+              {formSubheading}
             </p>
           </div>
 
@@ -700,7 +717,7 @@ export default function LunchLearnFunnel() {
                     boxShadow: "0 6px 24px rgba(249,115,22,0.38)",
                   }}
                 >
-                  {submitState.status === "loading" ? "Sending your request…" : "Claim Your Free Lunch & Learn →"}
+                  {submitState.status === "loading" ? "Sending your request…" : submitLabel}
                 </button>
 
                 <p className="text-center text-xs" style={{ color: "rgba(255,255,255,0.28)" }}>

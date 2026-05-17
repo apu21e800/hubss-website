@@ -108,6 +108,75 @@ export const getAllSanityApplications = unstable_cache(
   { tags: ["applications"], revalidate: 3600 }
 );
 
+// ── Pages ────────────────────────────────────────────────────────────────────
+
+export interface SanityPageContent {
+  _id: string;
+  _type: "page";
+  title: string;
+  slug: { current: string };
+  // Homepage
+  homepageHero?: {
+    eyebrow?: string;
+    heading?: string;
+    subheading?: string;
+    tagline?: string;
+    cta1Label?: string;
+    cta1Href?: string;
+    cta2Label?: string;
+    cta2Href?: string;
+  };
+  // About
+  aboutHero?: {
+    eyebrow?: string;
+    heading?: string;
+    subheading?: string;
+  };
+  aboutMission?: string;
+  // Contact
+  contactHero?: {
+    eyebrow?: string;
+    heading?: string;
+    subheading?: string;
+  };
+  // Lunch & Learn
+  lunchLearnHero?: {
+    eyebrow?: string;
+    headingLine1?: string;
+    headingLine2?: string;
+    subheading?: string;
+    ctaLabel?: string;
+    formHeading?: string;
+    formSubheading?: string;
+    submitLabel?: string;
+  };
+  seo?: {
+    metaTitle?: string;
+    metaDescription?: string;
+  };
+}
+
+/**
+ * Fetch a single page document by slug from Sanity.
+ * Returns null if not found or on error.
+ *
+ * Slugs in use: "homepage" | "about" | "contact" | "lunch-learn"
+ */
+export const getSanityPageContent = unstable_cache(
+  async (slug: string): Promise<SanityPageContent | null> => {
+    try {
+      return await client.fetch<SanityPageContent | null>(
+        `*[_type == "page" && slug.current == $slug][0]`,
+        { slug }
+      );
+    } catch {
+      return null;
+    }
+  },
+  ["page-by-slug"],
+  { tags: ["pages"], revalidate: 3600 }
+);
+
 // ── Sanity availability check ────────────────────────────────────────────────
 
 /**

@@ -1,7 +1,27 @@
 import Image from "next/image";
 import Link from "next/link";
 
-export default function HeroSlideshow() {
+interface HeroSlideshowProps {
+  eyebrow?: string;
+  heading?: string;
+  subheading?: string;
+  tagline?: string;
+  cta1Label?: string;
+  cta1Href?: string;
+  cta2Label?: string;
+  cta2Href?: string;
+}
+
+export default function HeroSlideshow({
+  eyebrow    = "Redefining Hardscapes · Since 1999",
+  heading    = "The World Is",
+  subheading = "Your Canvas.",
+  tagline    = "Let’s build your signature space.",
+  cta1Label  = "See the Work",
+  cta1Href   = "#field-notes",
+  cta2Label  = "See the Systems",
+  cta2Href   = "#systems",
+}: HeroSlideshowProps = {}) {
   return (
     <section
       data-hero
@@ -62,7 +82,7 @@ export default function HeroSlideshow() {
               className="text-sm font-bold tracking-[0.18em] uppercase mb-3"
               style={{ color: "#FB923C" }}
             >
-              Redefining Hardscapes · Since 1999
+              {eyebrow}
             </p>
 
             {/* H1 — cinematic 76px cap: fills the hero frame, bold and commanding */}
@@ -76,7 +96,7 @@ export default function HeroSlideshow() {
                 textShadow: "0 2px 32px rgba(0,0,0,0.5)",
               }}
             >
-              The World Is
+              {heading}
               <br />
               <span
                 style={{
@@ -89,7 +109,7 @@ export default function HeroSlideshow() {
                   filter: "drop-shadow(0 0 24px rgba(249,115,22,0.18))",
                 }}
               >
-                Your Canvas.
+                {subheading}
               </span>
             </h1>
 
@@ -104,13 +124,13 @@ export default function HeroSlideshow() {
                 textShadow: "0 1px 12px rgba(0,0,0,0.5)",
               }}
             >
-              Let&rsquo;s build your signature space.
+              {tagline}
             </h2>
 
             {/* CTAs — min-h 44px ensures tap targets meet iOS guidelines */}
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
-                href="#field-notes"
+                href={cta1Href}
                 className="inline-flex items-center justify-center gap-2 px-7 rounded-lg font-semibold text-sm transition-all"
                 style={{
                   background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
@@ -119,13 +139,13 @@ export default function HeroSlideshow() {
                   minHeight: "44px",
                 }}
               >
-                See the Work
+                {cta1Label}
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </Link>
               <Link
-                href="#systems"
+                href={cta2Href}
                 className="inline-flex items-center justify-center gap-2 px-7 rounded-lg font-semibold text-sm border transition-all hover:bg-white/[0.06]"
                 style={{
                   borderColor: "rgba(255,255,255,0.28)",
@@ -133,7 +153,7 @@ export default function HeroSlideshow() {
                   minHeight: "44px",
                 }}
               >
-                See the Systems
+                {cta2Label}
               </Link>
             </div>
 

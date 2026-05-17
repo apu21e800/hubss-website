@@ -25,6 +25,7 @@ const ROOT = path.resolve(__dirname, "..");
 // ── Args ────────────────────────────────────────────────────────────────────
 const DRY_RUN = process.argv.includes("--dry-run");
 const PURGE = process.argv.includes("--purge");
+const PAGES_ONLY = process.argv.includes("--pages-only");
 
 // ── Sanity client ────────────────────────────────────────────────────────────
 const token = process.env.SANITY_API_WRITE_TOKEN;
@@ -398,6 +399,79 @@ async function migrateProjects() {
   console.log(`  ✓ Migrated ${count} projects`);
 }
 
+// ── 6. Pages ─────────────────────────────────────────────────────────────────
+
+async function migratePages() {
+  console.log("\n→ pages (homepage, about, contact, lunch-learn)");
+
+  if (PURGE) await purgeType("page");
+
+  const pages = [
+    {
+      _id: "page-homepage",
+      _type: "page",
+      title: "Homepage",
+      slug: { _type: "slug", current: "homepage" },
+      homepageHero: {
+        eyebrow:    "Redefining Hardscapes · Since 1999",
+        heading:    "The World Is",
+        subheading: "Your Canvas.",
+        tagline:    "Let's build your signature space.",
+        cta1Label:  "See the Work",
+        cta1Href:   "#field-notes",
+        cta2Label:  "See the Systems",
+        cta2Href:   "#systems",
+      },
+    },
+    {
+      _id: "page-about",
+      _type: "page",
+      title: "About",
+      slug: { _type: "slug", current: "about" },
+      aboutHero: {
+        eyebrow:    "Canadian-Operated Since 1999 · All 10 Provinces",
+        heading:    "The people who made your city look like your city.",
+        subheading: "For over thirty years, HUB Surface Systems — a proudly Canadian company, coast to coast — has been connecting communities with pavement technologies that do more than carry traffic. They carry identity.",
+      },
+      aboutMission: "Every surface tells a story. We give communities the language to write it.",
+    },
+    {
+      _id: "page-contact",
+      _type: "page",
+      title: "Contact",
+      slug: { _type: "slug", current: "contact" },
+      contactHero: {
+        eyebrow:    "Get In Touch",
+        heading:    "Start a Project",
+        subheading: "Tell us about your community, your timeline, and your vision. We'll tell you which surface system brings it to life.",
+      },
+    },
+    {
+      _id: "page-lunch-learn",
+      _type: "page",
+      title: "Lunch & Learn",
+      slug: { _type: "slug", current: "lunch-learn" },
+      lunchLearnHero: {
+        eyebrow:        "Free · No Obligation · Coast to Coast",
+        headingLine1:   "Lunch Is On Us.",
+        headingLine2:   "Your Next Spec Is Free.",
+        subheading:     "A 45-minute HUB Lunch & Learn delivers everything your team needs to confidently specify decorative pavement, thermoplastic crosswalks, and coloured coatings — real Canadian case studies and spec language you can drop straight into your next RFP.",
+        ctaLabel:       "Book Your Free Session",
+        formHeading:    "Claim Your Free Lunch & Learn",
+        formSubheading: "Tell us who you are and where you are — we handle the rest. Usually within 24 hours.",
+        submitLabel:    "Claim Your Free Lunch & Learn →",
+      },
+    },
+  ];
+
+  for (const doc of pages) {
+    await upsert(doc);
+    console.log(`  ✓ ${doc.title} (slug: ${(doc.slug as { current: string }).current})`);
+  }
+
+  console.log(`  ✓ Migrated ${pages.length} page documents`);
+}
+
 // ── Main ─────────────────────────────────────────────────────────────────────
 
 async function main() {
@@ -406,14 +480,20 @@ async function main() {
   console.log(`  Project: ${client.config().projectId} / ${client.config().dataset}`);
   if (DRY_RUN) console.log("  MODE: DRY RUN — no writes will happen");
   if (PURGE) console.log("  MODE: PURGE — existing documents will be deleted first");
+  if (PAGES_ONLY) console.log("  MODE: PAGES ONLY — skipping products/apps/blogs/projects");
   console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
   try {
-    await migrateSiteSettings();
-    await migrateProducts();
-    await migrateApplications();
-    await migrateBlogPosts();
-    await migrateProjects();
+    if (PAGES_ONLY) {
+      await migratePages();
+    } else {
+      await migrateSiteSettings();
+      await migrateProducts();
+      await migrateApplications();
+      await migrateBlogPosts();
+      await migrateProjects();
+      await migratePages();
+    }
 
     console.log("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
     if (DRY_RUN) {

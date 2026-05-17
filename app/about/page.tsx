@@ -3,6 +3,7 @@ import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
 import { buildMetadata } from "@/lib/seo";
 import Image from "next/image";
+import { getSanityPageContent } from "@/lib/sanity.queries";
 
 export const metadata = buildMetadata({
   title: "About HUB Surface Systems",
@@ -44,7 +45,15 @@ const differentiators = [
   { title: "Climate-Tested", desc: "Every system is stress-tested for freeze-thaw extremes, de-icing salts, and snowplow blades — from coastal BC to the Great Lakes." },
 ];
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const sanityPage = await getSanityPageContent("about").catch(() => null);
+  const hero = {
+    eyebrow:    sanityPage?.aboutHero?.eyebrow    ?? "Canadian-Operated Since 1999 · All 10 Provinces",
+    heading:    sanityPage?.aboutHero?.heading    ?? "The people who made your city look like your city.",
+    subheading: sanityPage?.aboutHero?.subheading ?? "For over thirty years, HUB Surface Systems — a proudly Canadian company, coast to coast — has been connecting communities with pavement technologies that do more than carry traffic. They carry identity.",
+  };
+  const missionQuote = sanityPage?.aboutMission ?? "Every surface tells a story. We give communities the language to write it.";
+
   return (
     <main style={{ background: "#0f1620", minHeight: "100vh" }}>
       <Nav />
@@ -84,7 +93,7 @@ export default function AboutPage() {
               <path fill="#fff" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z" />
             </svg>
             <p className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "#f97316" }}>
-              Canadian-Operated Since 1999 · All 10 Provinces
+              {hero.eyebrow}
             </p>
           </div>
           <h1
@@ -96,12 +105,10 @@ export default function AboutPage() {
               letterSpacing: "-0.03em",
             }}
           >
-            The people who made your city look like your city.
+            {hero.heading}
           </h1>
           <p className="text-xl leading-relaxed max-w-2xl" style={{ color: "#8b8b8b" }}>
-            For over thirty years, HUB Surface Systems — a proudly Canadian company, coast to coast
-            — has been connecting communities with pavement technologies that do more than carry
-            traffic. They carry identity.
+            {hero.subheading}
           </p>
         </div>
       </div>
@@ -171,7 +178,7 @@ export default function AboutPage() {
                 className="text-xl leading-relaxed mb-4"
                 style={{ color: "#ffffff", borderLeft: "3px solid #f97316", paddingLeft: "24px" }}
               >
-                &ldquo;Every surface tells a story. We give communities the language to write it.&rdquo;
+                &ldquo;{missionQuote}&rdquo;
               </p>
               <p className="text-sm mb-8" style={{ color: "#5a5a5a", paddingLeft: "24px" }}>
                 — HUB Surface Systems

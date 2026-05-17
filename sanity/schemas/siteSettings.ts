@@ -49,6 +49,26 @@ export default defineType({
     }),
     defineField({ name: "footerTagline", title: "Footer tagline", type: "text", rows: 2 }),
     defineField({ name: "foundedYear",   title: "Founded year",   type: "number", description: "Currently: 1999" }),
+    defineField({
+      name: "resourceDocuments",
+      title: "Resource library documents",
+      type: "array",
+      description: "All downloadable documents shown on the Resources page",
+      of: [{
+        type: "object",
+        fields: [
+          defineField({ name: "id",          type: "string", title: "ID" }),
+          defineField({ name: "title",       type: "string", title: "Title" }),
+          defineField({ name: "docType",     type: "string", title: "Type" }),
+          defineField({ name: "product",     type: "string", title: "Product slug" }),
+          defineField({ name: "productName", type: "string", title: "Product name" }),
+          defineField({ name: "fileUrl",     type: "string", title: "File path (relative to /public)" }),
+          defineField({ name: "fileSize",    type: "string", title: "File size label" }),
+          defineField({ name: "updatedDate", type: "string", title: "Updated date" }),
+        ],
+        preview: { select: { title: "title", subtitle: "productName" } },
+      }],
+    }),
   ],
   preview: { prepare: () => ({ title: "Site Settings" }) },
 });

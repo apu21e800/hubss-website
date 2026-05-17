@@ -26,6 +26,7 @@ const ROOT = path.resolve(__dirname, "..");
 const DRY_RUN = process.argv.includes("--dry-run");
 const PURGE = process.argv.includes("--purge");
 const PAGES_ONLY = process.argv.includes("--pages-only");
+const DOCS_ONLY = process.argv.includes("--docs-only");
 
 // ── Sanity client ────────────────────────────────────────────────────────────
 const token = process.env.SANITY_API_WRITE_TOKEN;
@@ -399,7 +400,97 @@ async function migrateProjects() {
   console.log(`  ✓ Migrated ${count} projects`);
 }
 
-// ── 6. Pages ─────────────────────────────────────────────────────────────────
+// ── 6. Document library ──────────────────────────────────────────────────────
+
+interface ProductDoc {
+  label: string;
+  href: string;
+  type: string;
+  lang?: string;
+}
+
+async function migrateDocs() {
+  console.log("\n→ document library (per-product + resource list)");
+
+  // 6a. Per-product docs → patch each product document in Sanity
+  const docsMod = await import(pathToFileURL(path.join(ROOT, "lib", "documents.ts")).href).catch(() =>
+    import(pathToFileURL(path.join(ROOT, "lib", "documents.js")).href)
+  );
+  // The module exports a const ALL_DOCS but it's not exported — access via named export instead
+  // lib/documents.ts exports: DocType, ProductDocument, docTypeLabel
+  // ALL_DOCS is a private const — we need to re-read it via getProductDocs() if exported,
+  // otherwise import the whole module and look for the map.
+  // Fallback: iterate the module keys to find the Record.
+  const docsExports = docsMod as Record<string, unknown>;
+
+  // lib/documents.ts exports getDocsForProduct(slug)
+  const getDocsForProduct = docsExports["getDocsForProduct"] as ((slug: string) => ProductDoc[]) | undefined;
+
+  if (!getDocsForProduct) {
+    console.log("  ⚠ getDocsForProduct not found in lib/documents.ts — skipping per-product doc patch");
+  } else {
+    // Fetch all product slugs from Sanity
+    const productIds: Array<{ _id: string; slug: string }> = DRY_RUN
+      ? []
+      : await client.fetch(`*[_type == "product"]{ _id, "slug": slug.current }`);
+
+    let count = 0;
+    for (const { _id, slug } of productIds) {
+      const rawDocs = getDocsForProduct(slug);
+      if (!rawDocs?.length) continue;
+
+      const documents = rawDocs.map((d, i) => ({
+        _key: key(`doc_${i}_${d.label}`),
+        label: d.label,
+        docType: d.type,
+        filePath: d.href,
+        ...(d.lang ? { lang: d.lang } : {}),
+      }));
+
+      if (DRY_RUN) {
+        console.log(`  [dry-run] patch product ${_id} (${slug}) with ${documents.length} docs`);
+        count++;
+        continue;
+      }
+
+      await client.patch(_id).set({ documents }).commit();
+      count++;
+    }
+    console.log(`  ✓ Patched ${count} products with document arrays`);
+  }
+
+  // 6b. Resource documents → patch siteSettings singleton
+  const resMod = await import(pathToFileURL(path.join(ROOT, "lib", "resource-documents.ts")).href).catch(() =>
+    import(pathToFileURL(path.join(ROOT, "lib", "resource-documents.js")).href)
+  );
+  const resourceDocuments = (resMod as Record<string, unknown>)["resourceDocuments"] as Array<Record<string, unknown>>;
+
+  if (!resourceDocuments?.length) {
+    console.log("  ⚠ resourceDocuments not found in lib/resource-documents.ts — skipping");
+    return;
+  }
+
+  const resourceDocsForSanity = resourceDocuments.map((d, i) => ({
+    _key: key(`rdoc_${i}_${String(d["id"] ?? i)}`),
+    id: d["id"],
+    title: d["title"],
+    docType: d["type"],
+    product: d["product"],
+    productName: d["productName"],
+    fileUrl: d["fileUrl"],
+    fileSize: d["fileSize"],
+    updatedDate: d["updatedDate"],
+  }));
+
+  if (DRY_RUN) {
+    console.log(`  [dry-run] patch siteSettings with ${resourceDocsForSanity.length} resource documents`);
+  } else {
+    await client.patch("siteSettings").set({ resourceDocuments: resourceDocsForSanity }).commit();
+    console.log(`  ✓ Patched siteSettings with ${resourceDocsForSanity.length} resource documents`);
+  }
+}
+
+// ── 7. Pages ─────────────────────────────────────────────────────────────────
 
 async function migratePages() {
   console.log("\n→ pages (homepage, about, contact, lunch-learn)");
@@ -481,10 +572,13 @@ async function main() {
   if (DRY_RUN) console.log("  MODE: DRY RUN — no writes will happen");
   if (PURGE) console.log("  MODE: PURGE — existing documents will be deleted first");
   if (PAGES_ONLY) console.log("  MODE: PAGES ONLY — skipping products/apps/blogs/projects");
+  if (DOCS_ONLY) console.log("  MODE: DOCS ONLY — patching product docs + siteSettings resourceDocuments");
   console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
 
   try {
-    if (PAGES_ONLY) {
+    if (DOCS_ONLY) {
+      await migrateDocs();
+    } else if (PAGES_ONLY) {
       await migratePages();
     } else {
       await migrateSiteSettings();
@@ -492,6 +586,7 @@ async function main() {
       await migrateApplications();
       await migrateBlogPosts();
       await migrateProjects();
+      await migrateDocs();
       await migratePages();
     }
 

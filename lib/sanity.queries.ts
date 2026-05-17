@@ -12,6 +12,7 @@
 import { unstable_cache } from "next/cache";
 import { client } from "@/lib/sanity.client";
 import type { SanityProduct, SanityApplication } from "@/types/sanity";
+import type { ResourceDocument } from "@/lib/resource-documents";
 
 // ── Products ─────────────────────────────────────────────────────────────────
 
@@ -175,6 +176,29 @@ export const getSanityPageContent = unstable_cache(
   },
   ["page-by-slug"],
   { tags: ["pages"], revalidate: 3600 }
+);
+
+// ── Resource Documents (siteSettings) ────────────────────────────────────────
+
+/**
+ * Fetch the resource documents array from the siteSettings singleton.
+ * Returns null if not found or on error — callers must fall back to
+ * the static lib/resource-documents.ts array.
+ */
+export const getResourceDocuments = unstable_cache(
+  async (): Promise<ResourceDocument[] | null> => {
+    try {
+      const result = await client.fetch<{ resourceDocuments: ResourceDocument[] } | null>(
+        `*[_type == "siteSettings"][0]{ resourceDocuments }`
+      );
+      if (!result?.resourceDocuments?.length) return null;
+      return result.resourceDocuments;
+    } catch {
+      return null;
+    }
+  },
+  ["resource-documents"],
+  { tags: ["siteSettings"], revalidate: 3600 }
 );
 
 // ── Sanity availability check ────────────────────────────────────────────────

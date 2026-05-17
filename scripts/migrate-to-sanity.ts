@@ -56,6 +56,23 @@ function toPortableText(text: string) {
   }));
 }
 
+/**
+ * Validate an image path against the local /public/ directory.
+ * Returns the path if valid, undefined if the file is missing.
+ * Images stored as URL strings — no Sanity CDN upload per Vernon's direction.
+ */
+function validateImagePath(imgPath: string | undefined | null): string | undefined {
+  if (!imgPath) return undefined;
+  // Skip Unsplash or external URLs — pass through as-is
+  if (imgPath.startsWith("http")) return imgPath;
+  // Skip template literals that weren't resolved (false positives from gallery() helper)
+  if (imgPath.includes("${")) return undefined;
+  const fullPath = path.join(ROOT, "public", imgPath);
+  if (fs.existsSync(fullPath)) return imgPath;
+  console.warn(`  ⚠️  Missing image (skipped): ${imgPath}`);
+  return undefined;
+}
+
 /** Create a deterministic _key for array items */
 function key(s: string) {
   return s.replace(/[^a-z0-9]/gi, "_").slice(0, 40);
@@ -168,10 +185,11 @@ async function migrateProducts() {
       ...(product.eyebrow && { eyebrow: product.eyebrow }),
       shortDesc: product.shortDesc,
       description: toPortableText(product.description),
-      // Store image URL as a custom field — not uploading binaries yet
-      heroImageUrl: product.imageUrl,
+      // Images stored as URL strings — no Sanity CDN upload per Vernon's direction.
+      // validateImagePath skips missing files and logs a warning.
+      heroImageUrl: validateImagePath(product.imageUrl),
       ...(product.heroPosition && { heroPosition: product.heroPosition }),
-      galleryUrls: product.gallery ?? [],
+      galleryUrls: (product.gallery ?? []).map(validateImagePath).filter(Boolean),
       specs: (product.specs ?? []).map((s, i) => ({ ...s, _key: key(`spec_${i}_${s.label}`) })),
       // Store related application slugs as strings — references wired in follow-up PR
       relatedApplicationSlugs: product.relatedApplications,
@@ -221,8 +239,8 @@ async function migrateApplications() {
       slug: { _type: "slug", current: app.slug },
       shortDesc: app.shortDesc,
       description: toPortableText(app.description),
-      heroImageUrl: app.imageUrl,
-      galleryUrls: app.gallery ?? [],
+      heroImageUrl: validateImagePath(app.imageUrl),
+      galleryUrls: (app.gallery ?? []).map(validateImagePath).filter(Boolean),
       // Store related product slugs as strings — references wired in follow-up PR
       relatedProductSlugs: app.relatedProducts,
       seo: {
@@ -311,8 +329,8 @@ async function migrateBlogPosts() {
       publishedAt,
       ...(data.excerpt && { excerpt: data.excerpt }),
       ...(data.readTime && { readTime: data.readTime }),
-      // Store featured image URL as string — CDN upload is follow-up PR
-      ...(data.featuredImage && { featuredImageUrl: data.featuredImage }),
+      // Validate image path exists before migrating
+      ...(validateImagePath(data.featuredImage) && { featuredImageUrl: validateImagePath(data.featuredImage) }),
       // Store body as a single plain-text block — rich text migration is follow-up
       body: toPortableText(plainBody.slice(0, 8000)), // cap at 8k chars for now
     };
@@ -367,7 +385,7 @@ async function migrateProjects() {
       productSlug: project.product,
       application: project.application,
       // Store first image URL as string — CDN upload is follow-up PR
-      imageUrl: project.images[0] ?? null,
+      imageUrl: validateImagePath(project.images[0]) ?? null,
       excerpt: project.excerpt,
       problem: project.problem,
       solution: project.solution,

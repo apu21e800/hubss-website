@@ -193,24 +193,28 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
 const PRODUCT_CATEGORIES = [
   {
     label: "Preformed Thermoplastics",
+    icon: "◈",
     tag: "Heat-fused permanent markings",
     image: "/images/products/traffic-patterns/traffic-patterns-01.jpg",
     slugs: ["traffic-patterns-xd", "traffic-patterns", "premark", "duratherm", "decomark", "airmark"],
   },
   {
     label: "Coatings",
+    icon: "◉",
     tag: "Coloured pavement systems",
     image: "/images/products/streetbond/streetbond-01.png",
     slugs: ["streetbond", "streetbondsr", "mmax", "durashield"],
   },
   {
     label: "Stamped Asphalt",
+    icon: "◧",
     tag: "In-place decorative hardscape",
     image: "/images/products/streetprint/streetprint-01.jpg",
     slugs: ["streetprint"],
   },
   {
     label: "Asphalt Repair",
+    icon: "◌",
     tag: "Permanent pothole + crack repair",
     image: "/images/products/chipfill/chipfill-aggrefill-bags.jpg",
     slugs: ["chipfill", "aggrefill", "fast-patch"],
@@ -332,7 +336,7 @@ function ProductsMegaMenu() {
                 className="rounded-xl overflow-hidden flex flex-col"
                 style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.06)" }}
               >
-                <Link href="/products" className="relative block group" style={{ height: 96 }}>
+                <Link href="/products" className="relative block group" style={{ height: 120 }}>
                   <Image
                     src={cat.image}
                     alt={cat.label}
@@ -346,7 +350,7 @@ function ProductsMegaMenu() {
                   }} />
                   <div className="absolute bottom-0 left-0 right-0 px-4 pb-3">
                     <p className="text-[9px] font-bold tracking-[0.2em] uppercase mb-0.5" style={{ color: "#F97316" }}>
-                      {cat.tag}
+                      {cat.icon} {cat.tag}
                     </p>
                     <p className="text-[13px] font-bold leading-tight" style={{ color: "#F5F0EB" }}>{cat.label}</p>
                   </div>
@@ -358,7 +362,7 @@ function ProductsMegaMenu() {
                     <Link
                       key={p.slug}
                       href={`/products/${p.slug}`}
-                      className="group flex items-start justify-between gap-2 px-2 py-2 rounded-md transition-colors hover:bg-white/5"
+                      className="group flex items-start justify-between gap-2 px-2 py-2.5 rounded-md transition-colors hover:bg-white/5"
                     >
                       <div className="min-w-0">
                         <p className="text-[13px] font-semibold leading-tight group-hover:text-orange-400 transition-colors" style={{ color: "#F5F0EB" }}>
@@ -380,6 +384,21 @@ function ProductsMegaMenu() {
               </div>
             );
           })}
+        </div>
+      </div>
+
+      {/* Featured project strip */}
+      <div className="mt-5 pt-4 rounded-xl overflow-hidden relative" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
+        <div className="flex items-center gap-4 p-4">
+          <div className="flex-shrink-0 rounded-lg overflow-hidden" style={{ width: 72, height: 72 }}>
+            <img src="/images/blog/ubc-musqueam-crosswalk/featured.jpg" alt="Featured project" className="w-full h-full object-cover" style={{ objectPosition: "center 65%" }} />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-[9px] font-bold tracking-[0.2em] uppercase mb-1" style={{ color: "#F97316" }}>Featured Project</p>
+            <p className="text-[13px] font-semibold leading-snug" style={{ color: "#F5F0EB" }}>UBC Musqueam Cultural Crosswalk</p>
+            <p className="text-[11px] mt-0.5" style={{ color: "rgba(255,255,255,0.45)" }}>TrafficPatterns · Vancouver, BC</p>
+          </div>
+          <a href="/projects" className="flex-shrink-0 text-[11px] font-bold" style={{ color: "#F97316" }}>See all →</a>
         </div>
       </div>
 
@@ -624,6 +643,21 @@ function ApplicationsMegaMenu() {
               </div>
             );
           })}
+        </div>
+      </div>
+
+      {/* Featured field note strip */}
+      <div className="mt-5 pt-4 rounded-xl overflow-hidden relative" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
+        <div className="flex items-center gap-4 p-4">
+          <div className="flex-shrink-0 rounded-lg overflow-hidden" style={{ width: 72, height: 72 }}>
+            <img src="/images/blog/keeping-pedestrians-safe/featured.png" alt="Featured field note" className="w-full h-full object-cover" style={{ objectPosition: "center 65%" }} />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-[9px] font-bold tracking-[0.2em] uppercase mb-1" style={{ color: "#F97316" }}>Featured Field Note</p>
+            <p className="text-[13px] font-semibold leading-snug" style={{ color: "#F5F0EB" }}>Keeping Pedestrians Safe — TrafficPatternsXD</p>
+            <p className="text-[11px] mt-0.5" style={{ color: "rgba(255,255,255,0.45)" }}>Technical · Municipalities</p>
+          </div>
+          <a href="/blog" className="flex-shrink-0 text-[11px] font-bold" style={{ color: "#F97316" }}>See all →</a>
         </div>
       </div>
 

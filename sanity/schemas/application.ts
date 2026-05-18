@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { richImageField } from "./_shared";
 
 /** Matches lib/applications.ts shape — 20+ application types */
 export default defineType({
@@ -10,7 +11,9 @@ export default defineType({
     defineField({ name: "slug",      title: "Slug",             type: "slug", options: { source: "name" }, validation: r => r.required() }),
     defineField({ name: "shortDesc", title: "Short description", type: "text", rows: 2 }),
     defineField({ name: "description", title: "Full description", type: "array", of: [{ type: "block" }] }),
-    defineField({ name: "heroImage", title: "Hero image", type: "image", options: { hotspot: true } }),
+    richImageField("heroImage", "Hero Image"),
+    // Legacy string URL — kept for backward compat until all images are in Sanity CDN
+    defineField({ name: "heroImageUrl", title: "Hero image URL (legacy)", type: "string", description: "Fallback path — leave blank once heroImage asset is set" }),
     defineField({ name: "gallery",   title: "Gallery images", type: "array", of: [{ type: "image", options: { hotspot: true } }] }),
     defineField({
       name: "relatedProducts",

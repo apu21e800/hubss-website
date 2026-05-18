@@ -26,7 +26,7 @@ export default function HeroSlideshow({
     <section
       data-hero
       className="relative w-full overflow-hidden"
-      style={{ minHeight: "min(88vh, 860px)", background: "#0d1117" }}
+      style={{ minHeight: "88vh", background: "#0d1117" }}
       aria-label="Hero"
     >
       {/* ── Background image ──────────────────────────────────────── */}
@@ -89,7 +89,7 @@ export default function HeroSlideshow({
             <h1
               className="font-black mb-4"
               style={{
-                fontSize: "clamp(2.75rem, 5.5vw, 4.75rem)",
+                fontSize: "clamp(2.5rem, 5vw, 4.5rem)",
                 lineHeight: 0.95,
                 letterSpacing: "-0.04em",
                 color: "white",

@@ -300,4 +300,103 @@ Sanity doesn't have schema migrations — just add new fields. Old documents wit
 
 ---
 
+---
+
+## 10. Studio UX Patterns
+
+### Field groups (tabs)
+
+Complex schemas use field groups to show organised tabs instead of one long scroll. In Studio you'll see tabs like **Content**, **Media**, **SEO** at the top of each document form.
+
+To add a new tab to an existing schema:
+
+```ts
+// 1. Add the group to the `groups` array on the schema
+groups: [
+  { name: "content", title: "Content", default: true },
+  { name: "media",   title: "Media" },
+  { name: "newTab",  title: "My New Tab" },  // ← add here
+],
+
+// 2. Add `group: "newTab"` to each field that should appear in it
+defineField({
+  name: "myField",
+  title: "My Field",
+  type: "string",
+  group: "newTab",   // ← assign here
+}),
+```
+
+Fields without a `group` assignment appear at the top of the form regardless of which tab is active.
+
+### Gallery images (galleryImageItem)
+
+Gallery arrays use the `galleryImageItem` helper from `sanity/schemas/_shared.ts`. This gives every gallery image its own alt text and caption sub-fields, and enforces hotspot support.
+
+```ts
+import { galleryImageItem } from "./_shared";
+
+defineField({
+  name: "gallery",
+  title: "Gallery images",
+  type: "array",
+  of: [galleryImageItem],  // ← use this instead of { type: "image" }
+}),
+```
+
+The `galleryImageItem` object includes `hotspot: true`, a required `alt` text field, and an optional `caption` field.
+
+### Image optimisation presets
+
+Use `imagePresets` from `lib/sanity-image.ts` for common rendering contexts — they handle width, quality, format, and crop automatically:
+
+```ts
+import { imagePresets } from "@/lib/sanity-image";
+
+// Hero — 1920px wide, q85, crop
+<img src={imagePresets.hero(doc.heroImage) ?? "/images/placeholder.jpg"} />
+
+// Card — 800px wide, q85, crop
+<img src={imagePresets.card(doc.image) ?? fallback} />
+
+// Thumbnail — 240px wide, q80, crop
+<img src={imagePresets.thumb(doc.image) ?? fallback} />
+
+// Open Graph / social sharing — 1200×630, q90
+<meta property="og:image" content={imagePresets.og(doc.featuredImage) ?? ogDefault} />
+```
+
+All presets fall back gracefully to `null` for Sanity refs that fail, or pass-through for legacy string paths.
+
+For custom sizes, use `resolveImageUrl()` directly — it now defaults to `auto("format")` + `quality(85)`:
+
+```ts
+import { resolveImageUrl } from "@/lib/sanity-image";
+
+const src = resolveImageUrl(doc.heroImage, { width: 1200, height: 800 });
+```
+
+### Custom document previews
+
+Each schema has a `preview` config that controls what's shown in the Studio document list. The pattern is:
+
+```ts
+preview: {
+  select: {
+    title: "fieldName",        // maps to preview.title
+    subtitle: "anotherField",  // maps to preview.subtitle
+    media: "imageField",       // maps to preview.media (thumbnail)
+  },
+  prepare: ({ title, subtitle, media }) => ({
+    title,
+    subtitle: subtitle?.slice(0, 60) ?? "No description",
+    media,
+  }),
+},
+```
+
+The `prepare` function lets you format dates, truncate long strings, or compose multiple fields into a subtitle. For dates use `new Date(publishedAt).toLocaleDateString("en-CA")`.
+
+---
+
 *Last updated: 2026-05-17 — Vernon Stordy / Based Agency*

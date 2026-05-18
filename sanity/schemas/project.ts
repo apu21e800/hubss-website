@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { richImageField } from "./_shared";
 
 /** Matches lib/map-projects.ts shape — 59 map pins */
 export default defineType({
@@ -19,7 +20,9 @@ export default defineType({
       to: [{ type: "product" }],
     }),
     defineField({ name: "application", title: "Application type", type: "string", description: "e.g. Crosswalks, Bus & Bike Lanes" }),
-    defineField({ name: "image",       title: "Project image",   type: "image", options: { hotspot: true } }),
+    richImageField("image", "Project Image"),
+    // Legacy string URL — kept for backward compat
+    defineField({ name: "imageUrl", title: "Image URL (legacy)", type: "string", description: "Fallback path — leave blank once image asset is set" }),
     defineField({ name: "excerpt",     title: "Excerpt (one line)", type: "text", rows: 2 }),
     defineField({ name: "problem",     title: "Problem",    type: "text", rows: 3 }),
     defineField({ name: "solution",    title: "Solution",   type: "text", rows: 3 }),

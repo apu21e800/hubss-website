@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { richImageField } from "./_shared";
 
 /**
  * Page schema — structured fields per page type.
@@ -43,6 +44,9 @@ export default defineType({
         defineField({ name: "cta1Href",   type: "string", title: "Primary CTA link",   description: 'e.g. "#field-notes"' }),
         defineField({ name: "cta2Label",  type: "string", title: "Secondary CTA label", description: 'e.g. "See the Systems"' }),
         defineField({ name: "cta2Href",   type: "string", title: "Secondary CTA link",  description: 'e.g. "#systems"' }),
+        richImageField("heroImage1", "Hero slide 1 (primary)"),
+        richImageField("heroImage2", "Hero slide 2"),
+        richImageField("heroImage3", "Hero slide 3"),
       ],
     }),
 
@@ -57,6 +61,7 @@ export default defineType({
         defineField({ name: "eyebrow",    type: "string", title: "Eyebrow text",    description: 'e.g. "Canadian-Operated Since 1999 · All 10 Provinces"' }),
         defineField({ name: "heading",    type: "string", title: "Hero heading",    description: 'e.g. "The people who made your city look like your city."' }),
         defineField({ name: "subheading", type: "text",   title: "Hero subheading", description: "Paragraph below the heading.", rows: 3 }),
+        richImageField("heroImage", "Hero background image"),
       ],
     }),
 
@@ -97,6 +102,7 @@ export default defineType({
         defineField({ name: "formHeading",     type: "string", title: "Form section heading", description: 'e.g. "Claim Your Free Lunch & Learn"' }),
         defineField({ name: "formSubheading",  type: "string", title: "Form section subheading", description: 'e.g. "Tell us who you are and where you are — we handle the rest."' }),
         defineField({ name: "submitLabel",     type: "string", title: "Submit button label",  description: 'e.g. "Claim Your Free Lunch & Learn →"' }),
+        richImageField("mascotImage", "Mascot / hero image (optional)"),
       ],
     }),
 

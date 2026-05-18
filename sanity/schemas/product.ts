@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { richImageField } from "./_shared";
 
 /** Matches lib/products.ts shape — 14 surface systems */
 export default defineType({
@@ -16,8 +17,10 @@ export default defineType({
       type: "array",
       of: [{ type: "block" }],
     }),
-    defineField({ name: "heroImage",    title: "Hero image",    type: "image", options: { hotspot: true } }),
+    richImageField("heroImage", "Hero Image"),
     defineField({ name: "heroPosition", title: "Hero crop position (CSS object-position)", type: "string", description: "e.g. center 62%" }),
+    // Legacy string URL — kept for backward compat until all images are in Sanity CDN
+    defineField({ name: "heroImageUrl", title: "Hero image URL (legacy)", type: "string", description: "Fallback path, e.g. /images/products/StreetBond/hero.jpg — leave blank once heroImage is set" }),
     defineField({ name: "gallery", title: "Gallery images", type: "array", of: [{ type: "image", options: { hotspot: true } }] }),
     defineField({
       name: "specs",
@@ -48,7 +51,8 @@ export default defineType({
         fields: [
           defineField({ name: "label", type: "string", title: "Document label" }),
           defineField({ name: "docType", type: "string", title: "Type", options: { list: ["spec","tds","colour","installation","brochure","faq","design","application","certificate","other"] } }),
-          defineField({ name: "filePath", type: "string", title: "File path", description: 'e.g. /docs/StreetBond/StreetBond/StreetBond-Brochure.pdf' }),
+          defineField({ name: "fileAsset", type: "file", title: "PDF file (Sanity CDN)", description: "Upload the PDF here — preferred over filePath once migrated" }),
+          defineField({ name: "filePath", type: "string", title: "File path (legacy)", description: 'Fallback path, e.g. /docs/StreetBond/StreetBond-Brochure.pdf — keep until fileAsset is set' }),
           defineField({ name: "lang", type: "string", title: "Language (optional)", description: 'e.g. FR for French versions' }),
         ],
         preview: { select: { title: "label", subtitle: "docType" } },

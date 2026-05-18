@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { richImageField } from "./_shared";
 
 /** Matches content/blog/*.mdx frontmatter shape */
 export default defineType({
@@ -11,7 +12,9 @@ export default defineType({
     defineField({ name: "publishedAt", title: "Published", type: "datetime", validation: r => r.required() }),
     defineField({ name: "excerpt",     title: "Excerpt",   type: "text", rows: 3 }),
     defineField({ name: "readTime",    title: "Read time", type: "string", description: "e.g. 4 min read" }),
-    defineField({ name: "featuredImage", title: "Featured image", type: "image", options: { hotspot: true } }),
+    richImageField("featuredImage", "Featured Image"),
+    // Legacy string URL — kept for backward compat
+    defineField({ name: "featuredImageUrl", title: "Featured image URL (legacy)", type: "string", description: "Fallback path from MDX frontmatter — leave blank once featuredImage asset is set" }),
     defineField({ name: "body", title: "Body", type: "array", of: [{ type: "block" }, { type: "image", options: { hotspot: true } }] }),
     defineField({
       name: "tags",

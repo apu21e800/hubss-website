@@ -56,7 +56,7 @@ When you write a blog post, output it in MDX format with the following frontmatt
 - date (today's date: ${new Date().toISOString().slice(0, 10)})
 - author (use "HUB Surface Systems Editorial Team")
 - tags (array of 3–5 relevant tags)
-- coverImage (leave as "/images/blog/default.jpg")
+- coverImage (leave as "/images/blog/decorative-crosswalks-community-identity/featured.jpg")
 
 After the frontmatter, write the full post body in Markdown. Target 600–900 words. Use ## and ### headings, bullet lists where appropriate, and reference relevant HUB products naturally. End with a CTA paragraph linking to /contact.`,
     messages: [

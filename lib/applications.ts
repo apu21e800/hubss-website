@@ -28,7 +28,7 @@ export const applications: Application[] = [
     seoDescription: "Aggregate-reinforced preformed thermoplastic crosswalk markings for high-visibility pedestrian safety, traffic calming, and community identity — specified across Canada.",
     shortDesc: "Durable, high-visibility crosswalk systems that outlast paint and elevate the intersection.",
     imageUrl: "/images/applications/crosswalks/crosswalks-01.jpg",
-    gallery: [1,3,6,8,11,13,16,18,21,23,26,28,31,33,36,38,41,43,45,48,50,53,55,58,60,63,65,68,70,73,75,78,80,83,85,87,90,92,95,97,100,102,105,107,110,112,115,117,120,122].map(n => {
+    gallery: [1,3,6,8,11,13,16,18,21,23,26,28,31,33,36,38,42,43,45,48,50,53,55,58,60,63,65,68,70,73,75,78,80,83,85,87,90,92,95,97,100,102,105,107,110,116,115,117,120,122].map(n => {
       const ext = [115].includes(n) ? "png" : "jpg";
       return `/images/applications/crosswalks/crosswalks-${String(n).padStart(2,"0")}.${ext}`;
     }),
@@ -71,7 +71,7 @@ export const applications: Application[] = [
     seoDescription: "Discover decorative paving products that redefine outdoor spaces. Engineered for durability and designed for beauty — surfaces that transform parks and paths into inviting, accessible spaces.",
     shortDesc: "Decorative surface systems for urban paths, park plazas, and multi-use trails.",
     imageUrl: "/images/applications/parks-paths/parks-paths-01.jpg",
-    gallery: [1,4,7,10,13,16,19,22,25,28,31,34,37,40,43,46,49,52,55,58,61,64,67,70,73,76,79,82,85,88,91,94,97,100,103,106,109,112,115,118,121,124,127,130,133,136,139,142,143,144].map(n => {
+    gallery: [1,4,7,10,13,16,19,22,25,28,31,34,37,40,43,46,49,52,55,58,61,64,67,70,73,76,79,82,85,88,91,94,95,100,103,106,109,112,115,118,121,124,127,130,133,136,139,142,143,144].map(n => {
       const ext = [100, 103].includes(n) ? "png" : "jpg";
       return `/images/applications/parks-paths/parks-paths-${String(n).padStart(2,"0")}.${ext}`;
     }),
@@ -173,7 +173,7 @@ export const applications: Application[] = [
     slug: "pedestrian-safety",
     shortDesc: "Retroreflective thermoplastic markings that support Vision Zero crosswalk standards.",
     imageUrl: "/images/applications/crosswalks/crosswalks-03.jpg",
-    gallery: [1,3,6,8,11,13,16,18,21,23,26,28,31,33,36,38,41,43,45,48,50,53,55,58,60,63,65,68,70,73,75,78,80,83,85,87,90,92,95,97,100,102,105,107,110,112,115,117,120,122].map(n => {
+    gallery: [1,3,6,8,11,13,16,18,21,23,26,28,31,33,36,38,42,43,45,48,50,53,55,58,60,63,65,68,70,73,75,78,80,83,85,87,90,92,95,97,100,102,105,107,110,116,115,117,120,122].map(n => {
       const ext = [115].includes(n) ? "png" : "jpg";
       return `/images/applications/crosswalks/crosswalks-${String(n).padStart(2,"0")}.${ext}`;
     }),

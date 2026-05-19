@@ -1,0 +1,420 @@
+"""Catalog content — pulled from live HUBSS website data."""
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+ASSETS = ROOT / "assets" / "booklet"
+PUBLIC_IMG = ROOT.parent / "public" / "images"
+PRODUCTS_DIR = PUBLIC_IMG / "products"
+APPS_DIR = PUBLIC_IMG / "applications"
+BLOG_DIR = PUBLIC_IMG / "blog"
+
+
+def _pick(*paths):
+    for p in paths:
+        if p and Path(p).exists():
+            return Path(p)
+    return Path(paths[0])
+
+
+def _app_img(slug, n):
+    """Resolve image regardless of extension (jpg, png, jpeg)."""
+    base = APPS_DIR / slug
+    for ext in ("jpg", "jpeg", "png"):
+        p = base / f"{slug}-{n:02d}.{ext}"
+        if p.exists():
+            return p
+    return base / f"{slug}-{n:02d}.jpg"
+
+
+def _prod_img(slug, n):
+    """Resolve product image regardless of extension."""
+    base = PRODUCTS_DIR / slug
+    for ext in ("jpg", "jpeg", "png"):
+        p = base / f"{slug}-{n:02d}.{ext}"
+        if p.exists():
+            return p
+    return base / f"{slug}-{n:02d}.jpg"
+
+
+COVER_PHOTO = _pick(ASSETS / "UBC Crosswalk 1.png")
+
+SECTION_OPENERS = {
+    "products":     _pick(ASSETS / "DuraTherm stecils on asphalt 1.png"),
+    "applications": _pick(ASSETS / "Splash Pad 1.png"),
+    "projects":     _pick(ASSETS / "HUB Catalogue 2024 (walking) 1.png"),
+    "network":      _pick(ASSETS / "duratherm1 1.png"),
+    "reference":    _pick(ASSETS / "StreetPrint - bikes 1.png"),
+}
+
+MANIFESTO = {
+    "eyebrow": "Established 1994   ·   Coast to Coast",
+    "h1_lines": ["The people who made", "your city look", "like your city."],
+    "h1_orange_line": 2,
+    "body": "For thirty years, HUB Surface Systems has connected Canadian communities with pavement technologies that do more than carry traffic. Decorative crosswalks. Civic plazas. Indigenous recognition art. Transit lanes. Parks. Driveways. Surfaces that carry meaning.",
+    "signature": "HUB Surface Systems   /   Established 1994",
+}
+
+WHY_HUB = {
+    "eyebrow": "Why HUB",
+    "title_lines": ["The durable", "decorative hardscape."],
+    "subtitle": "Specified by engineers. Loved by communities.",
+    "stats": [
+        ("30+",     "Years",          "Installations across North America"),
+        ("1,000+",  "Projects",       "Completed coast to coast"),
+        ("500+",    "Municipalities", "Specified by name"),
+        ("20yr",    "Performance",    "Colour retention on stamped asphalt"),
+    ],
+    "proof": [
+        ("01", "Built for freeze-thaw climates",
+               "Stress-tested for de-icing salts, snowplow blades, and the cycles that destroy paint."),
+        ("02", "Lower lifecycle cost than paint",
+               "Thermoplastic and MMA last 6 to 8 times longer than paint — with no annual repaint window."),
+        ("03", "Visible in every condition",
+               "Retroreflective crosswalks. High-contrast colour. Slip-resistant by design."),
+        ("04", "Specified coast to coast",
+               "Trusted by transportation engineers, urban designers, and municipal procurement from Vancouver to Halifax."),
+    ],
+}
+
+
+# ===== PRODUCTS (12 — AirMark removed per Doug) =====
+PRODUCTS = [
+    {"name": "TrafficPatternsXD",
+     "tagline": "When the surface has to hold.",
+     "hero": _pick(PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-03.jpg",
+                   PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-03.jpg"),
+     "title": "Heavy-duty thermoplastic.",
+     "italic": "150-mil aggregate-reinforced. Built for BRT corridors and high-volume intersections.",
+     "callout": "150 mil",
+     "callout_unit": "Aggregate-reinforced preformed thermoplastic   ·   BPN 65+",
+     "body": "When bus wheels turn 30,000 times a day through the same intersection, the pavement marking has one job: hold. TrafficPatternsXD is HUB's most durable thermoplastic — 150 mil of aggregate-reinforced material with BPN 65+ certified skid resistance. Specified by Canadian transit authorities and municipalities who need infrastructure that performs as hard as the routes it serves.",
+     "uses": ["Crosswalks", "Bike Lanes", "Bus Lanes", "BRT Corridors"],
+     "spec_pairs": [("Thickness", "150 mil"), ("Skid Resistance", "BPN 65+"),
+                    ("Retroreflectivity", "Type III glass beads"), ("Service Life", "Outlasts paint")]},
+    {"name": "TrafficPatterns",
+     "tagline": "Outlasts paint by seasons, not months.",
+     "hero": _pick(PRODUCTS_DIR / "traffic-patterns" / "traffic-patterns-08.jpg",
+                   PRODUCTS_DIR / "traffic-patterns" / "traffic-patterns-08.jpg"),
+     "title": "Standard thermoplastic.",
+     "italic": "90-mil preformed. Heat-fused. No repaint cycle.",
+     "callout": "90 mil",
+     "callout_unit": "Preformed thermoplastic with Type III glass beads",
+     "body": "Paint crews come back every spring. TrafficPatterns doesn't ask them to. Factory-manufactured preformed thermoplastic that heat-fuses permanently to asphalt and concrete, eliminating the repainting cycle that drains municipal maintenance budgets year after year. Open to traffic in hours. Specified by municipalities from Halifax to Vancouver.",
+     "uses": ["Crosswalks", "Bike Lanes", "Bus Lanes", "Parking"],
+     "spec_pairs": [("Thickness", "90 mil"), ("Retroreflectivity", "Type III"),
+                    ("Temperature", "-40 to +60 C"), ("Open to Traffic", "Hours")]},
+    {"name": "StreetBond",
+     "tagline": "Coloured pavement that moves with asphalt.",
+     "hero": _pick(PRODUCTS_DIR / "streetbond" / "streetbond-112.jpg",
+                   PRODUCTS_DIR / "streetbond" / "streetbond-112.jpg"),
+     "title": "The colour system.",
+     "italic": "Flexible acrylic. Bonds at the molecular level. Will not peel.",
+     "callout": "Pantone",
+     "callout_unit": "Full custom matching, plus extensive standard palette",
+     "body": "Most coloured pavement coatings look vivid in the brochure and embarrassing by the third winter. StreetBond is different — flexible acrylic engineered to move with the asphalt beneath it. Bike lanes, bus priority zones, decorative plazas, and branded driveways. BC Ministry of Transportation recognized.",
+     "uses": ["Bike Lanes", "Plazas", "Courts", "Parking"],
+     "spec_pairs": [("Type", "Flexible acrylic"), ("Surfaces", "Asphalt and concrete"),
+                    ("Colour", "Full Pantone matching"), ("Spec", "BC MoT recognized")]},
+    {"name": "StreetPrint",
+     "tagline": "Stamped asphalt at a fraction of stone's lifecycle cost.",
+     "hero": _pick(PRODUCTS_DIR / "streetprint" / "streetprint-40.jpg",
+                   PRODUCTS_DIR / "streetprint" / "streetprint-40.jpg"),
+     "title": "Stamped asphalt.",
+     "italic": "12+ patterns. Flush surface. Snowplow safe.",
+     "callout": "12+",
+     "callout_unit": "Standard patterns; custom available for landmark projects",
+     "body": "Cobblestone entry courts. Brick-pattern pedestrian plazas. Heritage-look intersections that make drivers slow down without a speed bump in sight. HUB's proprietary in-place asphalt stamping system works with the surface already there. No demolition. No raised edges. The civic richness of natural stone without the lifecycle cost.",
+     "uses": ["Crosswalks", "Driveways", "Plazas", "Heritage"],
+     "spec_pairs": [("System", "In-place stamping"), ("Patterns", "12+ standard"),
+                    ("Colour Coat", "StreetBond"), ("Snowplow Safe", "Flush surface")]},
+    {"name": "DecoMark",
+     "tagline": "A crosswalk is a canvas.",
+     "hero": _pick(PRODUCTS_DIR / "decomark" / "decomark-01.jpg",
+                   PRODUCTS_DIR / "decomark" / "decomark-01.jpg"),
+     "title": "Custom graphics.",
+     "italic": "Pride crosswalks. Indigenous art. Civic landmarks at street scale.",
+     "callout": "Custom",
+     "callout_unit": "Vector artwork to Pantone-accurate pavement graphics",
+     "body": "A crosswalk is a canvas. DecoMark is how you paint it permanently. Precision preformed thermoplastic, fabricated to your vector artwork and Pantone colour, heat-fused to the road. Pride crosswalks. Indigenous cultural recognition art. Neighbourhood identity installations. Mural-scale public art that lets the street tell a community's story.",
+     "uses": ["Identity", "Wayfinding", "Public Art", "Memorial"],
+     "spec_pairs": [("System", "Preformed components"), ("Colour", "Custom Pantone"),
+                    ("Design", "Vector artwork"), ("Install", "Certified crews")]},
+    {"name": "MMAX",
+     "tagline": "Traffic-ready in 30 minutes. Even at -10 C.",
+     "hero": _pick(PRODUCTS_DIR / "mmax" / "mmax-05.jpg",
+                   PRODUCTS_DIR / "mmax" / "mmax-05.jpg"),
+     "title": "MMA resin lane coating.",
+     "italic": "Methyl methacrylate. Bond strength above 3 MPa. Cures cold.",
+     "callout": "30 min",
+     "callout_unit": "Cure time — traffic-ready before the overnight window closes",
+     "body": "Transit agencies can't shut down a bus lane for a full day while a coating cures. MMAX is built around that reality. Bond strength exceeds 3 MPa, application down to -10 C. The go-to specification for coloured bus lanes, protected bike lanes, and transit priority zones where painted alternatives have already failed.",
+     "uses": ["Bus Lanes", "Bike Lanes", "Calming", "Transit"],
+     "spec_pairs": [("Material", "MMA resin"), ("Cure", "30 to 60 min"),
+                    ("Bond Strength", "Above 3 MPa"), ("Min Temp", "-10 C")]},
+    {"name": "StreetBondSR",
+     "tagline": "Solar reflective. LEED contributing.",
+     "hero": _pick(PRODUCTS_DIR / "streetbondsr" / "streetbondsr-02.jpg",
+                   PRODUCTS_DIR / "streetbondsr" / "streetbondsr-02.jpg"),
+     "title": "Cool surface coating.",
+     "italic": "High SRI. Reduces urban heat island. LEED v4 sustainable sites.",
+     "callout": "LEED",
+     "callout_unit": "Contributes to v4 Sustainable Sites credit for heat island reduction",
+     "body": "Dark pavement absorbs up to 95 percent of solar radiation, contributing measurably to urban heat island. StreetBondSR reflects significantly more solar energy, reducing surface temperatures and contributing to LEED v4 credits. The specification for sustainability-conscious developers and municipalities pursuing climate action plans.",
+     "uses": ["Parking", "Plazas", "LEED Sites", "Schools"],
+     "spec_pairs": [("Type", "Solar reflective"), ("LEED", "v4 Sustainable Sites"),
+                    ("SRI", "High reflectance"), ("Effect", "Cooler surface")]},
+    {"name": "DuraTherm",
+     "tagline": "Inlaid. Flush. Invisible to snowplows.",
+     "hero": _pick(PRODUCTS_DIR / "duratherm" / "duratherm-01.jpg",
+                   PRODUCTS_DIR / "duratherm" / "duratherm-01.jpg"),
+     "title": "Inlaid thermoplastic.",
+     "italic": "Set into the pavement, not on top of it. Zero profile above grade.",
+     "callout": "Flush",
+     "callout_unit": "Full-depth integration with the asphalt matrix",
+     "body": "Every raised pavement marking is a liability when the snowplow comes through. DuraTherm eliminates the problem entirely — embedded into the asphalt at road level, with zero profile above grade. No shear edge. No trip hazard. No seasonal damage from winter maintenance equipment.",
+     "uses": ["Crosswalks", "Streetscape", "Calming", "Identity"],
+     "spec_pairs": [("Install", "Inlaid flush-mount"), ("Profile", "Zero edge"),
+                    ("Snowplow", "Safe"), ("Bond", "Full-depth")]},
+    {"name": "DuraShield",
+     "tagline": "Maintain a surface, do not replace it.",
+     "hero": _pick(PRODUCTS_DIR / "durashield" / "durashield-04.jpg"),
+     "title": "Pavement rejuvenator.",
+     "italic": "Penetrating asphalt life-extension treatment.",
+     "callout": "6-12 mm",
+     "callout_unit": "Penetration depth, replenishing the maltene fraction",
+     "body": "Asphalt oxidizes. The oils that give it flexibility migrate, leaving a brittle surface. DuraShield reverses this — penetrating 6 to 12 mm into the surface, replenishing the maltene fraction, and sealing against water infiltration. The rational choice for teams that would rather maintain than replace.",
+     "uses": ["Roads", "Parking", "Driveways", "Pathways"],
+     "spec_pairs": [("Type", "Penetrating rejuvenator"), ("Depth", "6 to 12 mm"),
+                    ("Coverage", "100-150 sq ft / gal"), ("Open", "24 hours")]},
+    {"name": "PreMark",
+     "tagline": "Pre-cut. Heat-applied. Open immediately.",
+     "hero": _pick(PRODUCTS_DIR / "premark" / "premark-01.jpg"),
+     "title": "Road marking symbols.",
+     "italic": "Turn arrows. Stop bars. Bike pictographs. No stencils required.",
+     "callout": "90 / 125 mil",
+     "callout_unit": "Standard / heavy-use thicknesses with premium glass bead",
+     "body": "Painted road symbols need stencils, dry time, and a crew back on site every season. PreMark needs none of that. A complete library of preformed thermoplastic symbols — pre-cut to specification and ready to apply with heat. Open to traffic immediately. Premium glass bead retroreflectivity holds nighttime visibility season after season.",
+     "uses": ["Bike Lanes", "Crosswalks", "Regulatory", "Parking"],
+     "spec_pairs": [("Thickness", "90 / 125 mil"), ("Curing", "None"),
+                    ("Retroreflectivity", "Glass bead"), ("Service Life", "Multi-season")]},
+    {"name": "AirMark",
+     "tagline": "Airfield markings, certified to last.",
+     "hero": _pick(PRODUCTS_DIR / "airmark" / "airmark-04.jpg",
+                   PRODUCTS_DIR / "airmark" / "airmark-01.jpg"),
+     "title": "Airfield thermoplastic.",
+     "italic": "Preformed. Heat-applied. Engineered to airfield marking standards.",
+     "callout": "4x",
+     "callout_unit": "Service life vs. painted alternatives — full-depth glass bead",
+     "body": "Airfield markings are safety-critical. Precision, visibility, and permanence are not negotiable. AirMark preformed thermoplastic is engineered to airfield marking standards, delivering consistent dimensional accuracy, premium retroreflectivity through full-depth glass bead construction, and a service life that outlasts paint by four to one. Heat-applied by certified crews to asphalt and concrete airfield surfaces. The choice for airports and aerodrome operators who need markings that hold their specification year-round.",
+     "uses": ["Runways", "Taxiways", "Aprons", "Helipads"],
+     "spec_pairs": [("Standard", "Airfield marking"), ("Material", "Preformed thermoplastic"),
+                    ("Retroreflectivity", "Full-depth glass bead"), ("Service Life", "4x paint")]},
+]
+
+
+# ===== APPLICATIONS (17 — Airports removed) =====
+APPLICATIONS = [
+    {"name": "Crosswalks", "tagline": "Pedestrian safety, designed in.",
+     "image": _pick(_app_img("crosswalks", 3)),
+     "body": "A crosswalk does two jobs: protect pedestrians, and tell a driver someone is about to cross. Paint does both poorly. HUB thermoplastic systems hold ASTM-rated retroreflectivity through snowplow cycles, de-icing seasons, and freeze-thaw."},
+    {"name": "Bike Lanes", "tagline": "Visibility that holds, season after season.",
+     "image": _pick(_app_img("bike-lanes", 14)),
+     "body": "A faded bike lane is a dangerous bike lane. StreetBond UV-stable acrylic and MMAX MMA resin maintain vivid colour through years of traffic and weather without chalking or fading. Bond strength above 3 MPa for cured MMAX zones."},
+    {"name": "Bus Lanes", "tagline": "Engineered for the harshest urban loads.",
+     "image": _pick(_app_img("bus-lanes", 20)),
+     "body": "BRT corridors are among the most demanding surfaces in any city's network. MMAX cures in 30 to 60 minutes, enabling overnight installation. TrafficPatternsXD delivers BPN 65+ skid resistance at bus stops."},
+    {"name": "Parking Lots", "tagline": "Looks maintained, performs safely, costs less.",
+     "image": _pick(_app_img("parking-lots", 1)),
+     "body": "Parking lots take a disproportionate beating. DuraShield restores oxidized asphalt and seals against deterioration. TrafficPatterns and PreMark thermoplastic stall markings hold retroreflectivity. StreetBond colour treatments create branded wayfinding zones."},
+    {"name": "Parks & Paths", "tagline": "Surfaces worth spending time on.",
+     "image": _pick(_app_img("parks-paths", 1)),
+     "body": "The path through a park sets the tone for the whole space. StreetBond applies vivid UV-stable colour to existing surfaces. DecoMark brings mural-quality custom graphics. StreetPrint gives plazas the visual richness of stone."},
+    {"name": "Playgrounds", "tagline": "Vibrant, slip-resistant, built for hard use.",
+     "image": _pick(_app_img("playgrounds", 1)),
+     "body": "Children are hard on surfaces. DecoMark thermoplastic brings hopscotch courts, number grids, compass roses, and mural-scale artwork to play surfaces with Pantone-accurate colour and flush-surface edges that eliminate trip hazards."},
+    {"name": "Community Branding", "tagline": "Neighbourhood identity, embedded in the street.",
+     "image": _pick(_app_img("community-branding", 8)),
+     "body": "Every neighbourhood has a story. Most go untold on the street. DecoMark embeds Pantone-accurate custom graphics directly into asphalt: First Nations cultural artwork, BIA wayfinding, neighbourhood crests, Pride declarations, heritage commemorations."},
+    {"name": "Private Driveways", "tagline": "Stone-paver looks. No demolition required.",
+     "image": _pick(_app_img("residential-driveways", 1)),
+     "body": "StreetPrint offers in-place stamped asphalt that works with the driveway already there, impressing cobblestone, brick, herringbone, or slate patterns directly into the surface, then sealing it with StreetBond colour."},
+    {"name": "Sport Courts", "tagline": "Court colour and lines that hold their geometry.",
+     "image": _pick(_app_img("sport-courts", 1)),
+     "body": "Sport courts are one of the most demanding colour environments in outdoor pavement. StreetBond bonds permanently to asphalt and acid-etched concrete, delivering vivid colours and crisp line markings that hold through hard play."},
+    {"name": "Splash Pads", "tagline": "Slip-resistant. Cool to touch. Vivid colour.",
+     "image": _pick(_app_img("splash-pads", 1)),
+     "body": "Splash pad surfaces are uniquely demanding: constant water exposure, chemical treatments, bare feet. StreetBond builds a slip-resistant texture meeting wet-surface safety standards while delivering vivid, engaging colour."},
+    {"name": "Public Spaces", "tagline": "Civic plazas, transit forecourts, university campuses.",
+     "image": _pick(_app_img("public-spaces", 8), _app_img("public-spaces", 1)),
+     "body": "Public plazas and civic squares are the most visible surfaces in any community. StreetPrint stamped asphalt transforms grey paved plazas into rich hardscape environments. StreetBond defines civic zones. Installed at UBC, BC Children's Hospital, and civic plazas coast to coast."},
+    {"name": "Commercial Spaces", "tagline": "Premium hardscape. Mixed-use developments and hospitality.",
+     "image": _pick(_app_img("commercial-spaces", 1)),
+     "body": "Retail centres, mixed-use developments, hotel porte-cocheres. The surface underfoot signals the quality of everything inside. StreetPrint delivers the visual weight of premium stone paving at a fraction of full installation cost."},
+    {"name": "Townhomes", "tagline": "Cohesive hardscape for strata developments.",
+     "image": _pick(_app_img("townhomes", 1)),
+     "body": "Townhome and strata developments live and die by their first impression. StreetPrint stamped asphalt driveways and entry courts deliver the look of clay pavers or stone cobble at a fraction of the cost — no settling, no weeding."},
+    {"name": "Pedestrian Safety", "tagline": "Vision Zero, on the surface.",
+     "image": _pick(_app_img("crosswalks", 18)),
+     "body": "Pedestrian safety isn't aesthetic aspiration — it's a measurable outcome. Retroreflective thermoplastic. High-contrast colour that persists through de-icing salt cycles. The complete specification for engineers taking Vision Zero seriously."},
+    {"name": "Traffic Calming", "tagline": "Drivers slow without barriers.",
+     "image": _pick(_app_img("traffic-calming", 1)),
+     "body": "Colour changes driver behaviour. Gateway treatments, speed table surface markings, and intersection colour reduce vehicle entry speeds without requiring physical barriers that impede emergency response."},
+    {"name": "LEED & Heat Island", "tagline": "Solar reflective. Climate-aligned.",
+     "image": _pick(_app_img("leed-urban-heat-island", 1)),
+     "body": "Standard dark asphalt absorbs the vast majority of solar radiation. StreetBondSR reduces surface temperatures and contributes to LEED v4 Sustainable Sites credit. The specification for sustainable development and climate action plans."},
+    {"name": "Public Art", "tagline": "The street as canvas.",
+     "image": _pick(_app_img("community-branding", 11), _app_img("community-branding", 4)),
+     "body": "The street is one of the largest untapped canvases in any city. HUB public art installations turn that canvas into permanent, weather-resistant community expression. From BC Children's Hospital labyrinth to UBC Indigenous cultural crosswalks."},
+]
+
+
+# ===== PROJECTS (18 — capital/transit projects first, community art second) =====
+# Order: major infrastructure + institutional → municipal safety → cultural/community
+PROJECTS = [
+    {"name": "York Region VIVA BRT", "location": "York Region, Ontario", "product": "MMAX",
+     "hero": _pick(_app_img("bus-lanes", 1)),
+     "detail": _pick(PRODUCTS_DIR / "mmax" / "mmax-15.jpg"),
+     "title": "BRT corridor, open in 90 minutes.",
+     "story": "MMAX red MMA resin bus lane markings for York Region's VIVA Rapid Transit corridor — one of Canada's highest-ridership BRT networks. Bond strength above 3 MPa. Applied overnight. Open to full bus traffic in 90 minutes. No daytime closure. No paint cycle."},
+    {"name": "Toronto Priority Bus Lanes", "location": "Toronto, Ontario", "product": "MMAX",
+     "hero": _pick(PRODUCTS_DIR / "mmax" / "mmax-01.jpg", _app_img("bus-lanes", 20)),
+     "detail": _pick(PRODUCTS_DIR / "mmax" / "mmax-07.jpg",
+                     PRODUCTS_DIR / "mmax" / "mmax-08.jpg"),
+     "title": "Twelve corridors. One transit network.",
+     "story": "MMAX red resin treatments across 12 priority bus corridors in Toronto — one of the largest single-contract MMA deployments in Canada. One overnight cure window per corridor. No daytime closures. No repaint cycle. The specification TTC engineers reach for when painted alternatives have already failed."},
+    {"name": "London East Link BRT", "location": "London, Ontario", "product": "StreetBond",
+     "hero": _pick(_app_img("bus-lanes", 3)),
+     "detail": _pick(_app_img("bus-lanes", 38)),
+     "title": "A transit corridor with a clear identity.",
+     "story": "StreetBond coloured pavement across London Transit's East Link BRT priority corridor — vivid red lanes that communicate bus priority immediately to every driver on the road. Colour-stable through Ontario freeze-thaw cycles. No annual repaint window. A branded transit corridor built for the long term."},
+    {"name": "BC Children's Hospital", "location": "Vancouver, British Columbia", "product": "StreetBond + DecoMark",
+     "hero": _pick(BLOG_DIR / "bc-childrens-hospital-labyrinth" / "featured.jpg",
+                   PRODUCTS_DIR / "streetbond" / "streetbond-95.jpg"),
+     "detail": _pick(PRODUCTS_DIR / "decomark" / "decomark-43.jpg"),
+     "title": "Playful surfaces. Healing spaces.",
+     "story": "StreetBond coatings and DecoMark surface graphics — including a meditation labyrinth — installed across active wards and ground-level plazas at BC Children's Hospital. Designed with Connect Landscape Architecture. The surfaces are slip-resistant, chemical-resistant, and built to perform in a healthcare environment."},
+    {"name": "New Westminster Complete Streets", "location": "New Westminster, British Columbia", "product": "StreetBond + TrafficPatterns",
+     "hero": _pick(BLOG_DIR / "complete-streets-new-westminster" / "featured.jpg",
+                   _app_img("bike-lanes", 22)),
+     "detail": _pick(_app_img("bike-lanes", 32)),
+     "title": "Modal clarity, written in colour.",
+     "story": "Complete Streets across New Westminster: StreetBond green for protected bike lanes, TrafficPatterns retroreflective crosswalks, high-contrast colour at every conflict point. Modal priority made legible. Cyclists protected. Pedestrians seen. The Complete Streets specification that transportation engineers and urban planners return to."},
+    {"name": "York Region Pedestrian Safety", "location": "York Region, Ontario", "product": "TrafficPatternsXD",
+     # Use TrafficPatternsXD product imagery (actual crosswalk installations)
+     # rather than the Whiterock Pier shot which depicts a different project.
+     "hero": _pick(PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-82.jpg",
+                   _app_img("crosswalks", 3)),
+     "detail": _pick(_app_img("crosswalks", 26),
+                     PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-94.jpg"),
+     "title": "Outlasts paint by eight times.",
+     "story": "TrafficPatternsXD 150-mil aggregate-reinforced crosswalk markings specified across York Region intersections. Eight times the service life of paint. A measurable reduction in annual maintenance spend. The kind of lifecycle arithmetic that procurement teams and transportation engineers notice — and specify again."},
+    {"name": "Vision Zero Crosswalks", "location": "Canada-Wide", "product": "TrafficPatterns",
+     "hero": _pick(_app_img("crosswalks", 11)),
+     "detail": _pick(_app_img("crosswalks", 31)),
+     "title": "High-visibility holds lives.",
+     "story": "Where painted crosswalks fade by spring, retroreflective thermoplastic holds visibility through every season. Specified by municipalities from Halifax to Victoria pursuing Vision Zero — the standard for engineers who need pedestrian safety outcomes, not just pedestrian safety intentions."},
+    {"name": "Vancouver BIA Crosswalks", "location": "Vancouver, British Columbia", "product": "StreetPrint",
+     "hero": _pick(PRODUCTS_DIR / "streetprint" / "streetprint-23.jpg"),
+     "detail": _pick(PRODUCTS_DIR / "streetprint" / "streetprint-69.jpg"),
+     "title": "District identity, cast in pavement.",
+     "story": "StreetPrint stamped-asphalt crosswalks across five Vancouver Business Improvement Districts. District identity embedded permanently in the street — walked over every day, maintaining visual coherence through snowplow seasons and years of traffic load."},
+    {"name": "UBC Musqueam Crosswalk", "location": "Vancouver, British Columbia", "product": "StreetPrint and DecoMark",
+     "hero": _pick(ASSETS / "aboriginal crosswalk 1.png"),
+     "detail": _pick(PRODUCTS_DIR / "streetprint" / "streetprint-77.jpg"),
+     "title": "A surface is also a statement.",
+     "story": "A collaboration with UBC and the Musqueam Nation. Coast Salish art patterns stamped into asphalt at the centre of campus — an institutional acknowledgement made permanent, at street scale, in a material that will outlast the generation that commissioned it."},
+    {"name": "More Awesome Now", "location": "Vancouver, British Columbia", "product": "StreetBond",
+     "hero": _pick(ASSETS / "StreetBond Circle Design 1.png"),
+     "detail": _pick(_app_img("community-branding", 4)),
+     "title": "Six laneways. Six artists.",
+     "story": "Six Vancouver laneways. Six artists. StreetBond coloured pavement turned utility corridors into civic gallery space — public art at street scale, permanent and weather-resistant."},
+    {"name": "White Rock Pier", "location": "White Rock, British Columbia", "product": "TrafficPatternsXD",
+     # Authentic blog-frontmatter photo for White Rock Pier
+     "hero": _pick(BLOG_DIR / "white-rock-pier-crosswalk" / "featured.png",
+                   PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-95.jpg"),
+     "detail": _pick(PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-140.jpg"),
+     "title": "Salt air. Holiday traffic. Held.",
+     "story": "Salt spray. Summer surge. Winter rain. The pier crosswalk at White Rock faces the full force of the BC coast — and holds season after season. TrafficPatternsXD installed where paint would be gone by July."},
+    {"name": "Indigenous Recognition", "location": "Multiple municipalities, Canada", "product": "DecoMark",
+     "hero": _pick(ASSETS / "native crosswalk 1.png"),
+     "detail": _pick(PRODUCTS_DIR / "decomark" / "decomark-77.jpg"),
+     "title": "Recognition, cast in pavement.",
+     "story": "Indigenous Recognition crosswalks honouring First Nations communities across Canada. Every design co-developed with community elders and knowledge keepers. Permanent. Visible at every crossing. Walked by the whole city."},
+    {"name": "Kitchener Veterans Memorial", "location": "Kitchener, Ontario", "product": "DecoMark",
+     # Use website-canonical community-branding image — the blog featured.jpeg
+     # appears to be the same photo that was leaking into Sechelt earlier.
+     "hero": _pick(_app_img("community-branding", 1),
+                   PRODUCTS_DIR / "decomark" / "decomark-62.jpg"),
+     "detail": _pick(PRODUCTS_DIR / "decomark" / "decomark-74.jpg"),
+     "title": "Paint fades. Memory shouldn't.",
+     "story": "Kitchener's Veterans Crosswalk: a permanent civic tribute walked over every day. DecoMark thermoplastic graphic embedded into the street — durable enough to outlast the paint that failed before it, respectful enough to honour what it commemorates."},
+    {"name": "Every Child Matters", "location": "Town of Georgina, Ontario", "product": "TrafficPatterns",
+     "hero": _pick(BLOG_DIR / "every-child-matters-crosswalk" / "featured.png",
+                   PRODUCTS_DIR / "traffic-patterns" / "traffic-patterns-37.jpg"),
+     "detail": _pick(PRODUCTS_DIR / "traffic-patterns" / "traffic-patterns-36.jpg"),
+     "title": "Honouring residential schools survivors.",
+     "story": "Town of Georgina honours the Every Child Matters movement with a permanent TrafficPatterns thermoplastic crosswalk. A civic acknowledgement cast in durable material — walked over every day, visible every season."},
+    {"name": "Sechelt Pictograph Crosswalk", "location": "Sunshine Coast, British Columbia", "product": "TrafficPatterns",
+     # NOTE: blog/pictograph-crosswalk-sechelt/featured.jpg is mislabeled in
+     # the website asset folder (depicts Kitchener Veterans). Skip it.
+     "hero": _pick(PRODUCTS_DIR / "traffic-patterns" / "traffic-patterns-35.jpg",
+                   PRODUCTS_DIR / "traffic-patterns" / "traffic-patterns-65.jpg"),
+     "detail": _pick(PRODUCTS_DIR / "decomark" / "decomark-69.jpg"),
+     "title": "The origin story of the shishalh Nation.",
+     "story": "Indigenous artists Dionne Paul and Lindsey Kyoko Adams told the origin story of the shishalh Nation in TrafficPatterns thermoplastic at Cowrie and Trail in Sechelt. Unveiled during National Aboriginal History Month — cultural memory made permanent at street level."},
+    {"name": "Simcoe Rainbow Crosswalk", "location": "Simcoe, Ontario", "product": "TrafficPatternsXD",
+     "hero": _pick(BLOG_DIR / "simcoe-rainbow-crosswalk" / "featured.jpg",
+                   PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-127.jpg"),
+     "detail": _pick(PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-129.jpg"),
+     "title": "Two years of fundraising. One street.",
+     "story": "A young Simcoe resident's two-year fundraising campaign, realized in TrafficPatternsXD by Multiseal. A rainbow crosswalk that holds colour and retroreflectivity season after season — long after painted alternatives would have faded from memory."},
+    {"name": "Bowen Island Path", "location": "Snug Cove, British Columbia", "product": "StreetBond",
+     # Authentic Bowen Island shot from the blog post — actual project >
+     # higher-res generic StreetBond stock.
+     "hero": _pick(BLOG_DIR / "bowen-island-asphalt-path" / "featured.jpg",
+                   PRODUCTS_DIR / "streetbond" / "streetbond-88.jpg"),
+     "detail": _pick(PRODUCTS_DIR / "streetbond" / "streetbond-92.jpg",
+                     PRODUCTS_DIR / "streetbond" / "streetbond-86.jpg"),
+     "title": "Forest. Sunset. Water. Earth.",
+     "story": "A community art path at Snug Cove, Bowen Island. Custom StreetBond in four colours — forest, sunset, water, and earth — community identity built permanently into the surface of the path that connects the village to the waterfront."},
+    {"name": "Murrayville Schoolhouse", "location": "Langley, British Columbia", "product": "StreetPrint",
+     "hero": _pick(BLOG_DIR / "murrayville-schoolhouse-sidewalk" / "featured.jpg",
+                   PRODUCTS_DIR / "streetprint" / "streetprint-77.jpg"),
+     "detail": _pick(PRODUCTS_DIR / "streetprint" / "streetprint-83.jpg"),
+     "title": "A schoolhouse, a sidewalk, a memory.",
+     "story": "StreetPrint stamped-asphalt sidewalk linking the historic Murrayville Schoolhouse to the community around it. Heritage-look surface for a heritage building — brick-pattern asphalt that reads as stone and performs as pavement."},
+]
+
+
+INSTALLERS = [
+    {"name": "Square One Paving", "region": "British Columbia",
+     "image": _pick(ASSETS / "DecoMark community park 1.png"),
+     "body": "Experts in asphalt imprinting across British Columbia. Outstanding products, best-in-class installation for municipalities, developers, and contractors.",
+     "url": "squareonepaving.com", "phone": "604-446-9902"},
+    {"name": "Thermo Design", "region": "Quebec",
+     "image": _pick(ASSETS / "Intergrated Rumble Bars (TrafficPatterns) 1.png"),
+     "body": "Specialiste en marquage de longue duree. Long-life decorative pavement markings for Quebec municipalities and commercial sites.",
+     "url": "thermo-design.ca", "phone": "450.698.0000"},
+    {"name": "Virtue Construction", "region": "Saskatchewan",
+     "image": _pick(ASSETS / "compactor on streetprint 1.png"),
+     "body": "Quality project outcomes since 2009. Decorative paving services for Saskatchewan communities, certified to install the full HUB Surface Systems portfolio.",
+     "url": "virtueconstruction.ca", "phone": "306-251-0177"},
+    {"name": "ULS Landscaping", "region": "Alberta and Saskatchewan",
+     "image": _pick(ASSETS / "StreetPrint walkway 1.png"),
+     "body": "10+ years of trusted experience. Professional landscape management with certified decorative paving installation across Alberta and Saskatchewan.",
+     "url": "ulslandscaping.com", "phone": "403-235-5353"},
+]
+
+
+CITIES = [
+    "City of Toronto",         "City of Vancouver",
+    "York Region",             "TransLink",
+    "City of Ottawa",          "UBC",
+    "City of Calgary",         "City of Surrey",
+    "City of Brampton",        "City of Edmonton",
+    "City of Mississauga",     "City of Winnipeg",
+    "Region of Peel",          "City of Burnaby",
+    "Halifax Regional",        "City of Kelowna",
+    "Richmond Hill",           "City of Saskatoon",
+    "BC Ministry of Transport","BC Children's Hospital",
+]

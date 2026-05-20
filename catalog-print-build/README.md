@@ -1,6 +1,7 @@
 # HUB Surface Systems — 2026 Catalog Build
 
-Programmatic print catalog. One Python build produces a press-ready PDF.
+Programmatic print catalog. The Python pipeline generates a Figma plugin that builds
+all 100 frames with live text and embedded photos. Final export goes from Figma to PDF.
 
 ## Print specs
 
@@ -63,9 +64,58 @@ python -m src.build --out custom.pdf     # custom output path
 
 The press-ready file lands at `output/HUBSS_Catalog_2026.pdf`.
 
+## Figma plugin workflow (current build method)
+
+### Build the plugin
+
+```bash
+# Rebuild after any copy or data changes:
+python -B -m src.generate_plugin   # writes figma-plugin/code.js (~78 KB, no images)
+python -B -m src.embed_images      # injects base64 IMAGE_BANK — keep under 74 MB total
+
+# Or regenerate catalog_data.json first (if catalog_content.py was edited):
+python -B -m src.export_json && python -B -m src.generate_plugin && python -B -m src.embed_images
+```
+
+### Install and run in Figma
+
+1. Open **Figma desktop** (browser Figma cannot install development plugins)
+2. **Plugins → Development → Import plugin from manifest…** → select `figma-plugin/manifest.json`
+3. Open a blank Figma file
+4. **Plugins → Development → HUBSS Catalogue Builder → Build catalogue (100 frames)**
+5. ~10–20 seconds — 100 frames appear in a 10-column grid
+
+### Exporting to PDF for print
+
+**Critical: Figma frames are 450 × 450 px. To hit 300 DPI at 5" × 5" trim, you MUST export at 3.33× scale.**
+
+```
+450 px × 3.33 = 1498.5 px ≈ 1500 px
+1500 px ÷ 300 DPI = 5 inches ✓
+```
+
+**Export steps:**
+1. Select all 100 frames (Cmd/Ctrl-A inside the catalog Figma page)
+2. **File → Export…** (or right-click → Export)
+3. Set format: **PDF**
+4. Set scale: **3.33×** ← this is the critical setting
+5. Confirm the frame order is left-to-right, top-to-bottom (p01 → p100)
+6. Export → send `HUBSS_Catalogue_2026.pdf` to printer
+
+> If your printer requires PDF/X-1a, run the exported PDF through Adobe Acrobat's
+> PDF/X export or ask the printer for their preflight requirements.
+
+### Bleed note
+
+The current Figma frames are trim-size only (450 × 450 px = 5" × 5"). The printer
+will need either: (a) 0.125" bleed added per side (5.25" × 5.25" document), or
+(b) the printer handles bleed setup. Confirm with your print house before final export.
+
+---
+
 ## What to send the printer
 
-Send `HUBSS_Catalog_2026.pdf` (the non-proof version). The printer should:
+Send the PDF exported from Figma at 3.33× scale. The printer should:
 - See a 5.25 × 5.25 in MediaBox
 - Cut on the crop marks → 5 × 5 in finished piece
 - Find CMYK color throughout

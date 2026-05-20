@@ -36,17 +36,26 @@ def _prod_img(slug, n):
     return base / f"{slug}-{n:02d}.jpg"
 
 
-COVER_PHOTO = _pick(ASSETS / "UBC Crosswalk 1.png")
+# White Rock Pier crosswalk — strong aerial, coastal, unmistakably HUB. High-res PNG
+# suitable for cover at 300 DPI. Falls back to UBC Crosswalk booklet PNG if missing.
+COVER_PHOTO = _pick(BLOG_DIR / "white-rock-pier-crosswalk" / "featured.png",
+                    ASSETS / "UBC Crosswalk 1.png")
 
 SECTION_OPENERS = {
-    # Section divider backgrounds — use website images (small JPEGs) not raw booklet PNGs
-    # to keep code.js under Figma's ~74 MB plugin sandbox limit
+    # Section divider backgrounds — use website JPEGs (not raw booklet PNGs) to keep
+    # code.js under Figma's ~74 MB plugin sandbox limit.
+    # products: York Transit stamped asphalt installation — strong infrastructure shot
     "products":            _pick(BLOG_DIR / "imprinted-asphalt-york-transit" / "featured.jpg",
                                  APPS_DIR / "bus-lanes" / "bus-lanes-01.jpg"),
+    # applications: Simcoe rainbow — vivid, celebratory, sets up the range of what's possible
     "applications":        _pick(BLOG_DIR / "simcoe-rainbow-crosswalk" / "featured.jpg",
                                  APPS_DIR / "crosswalks" / "crosswalks-06.jpg"),
-    "projects":            _pick(APPS_DIR / "community-branding" / "community-branding-03.jpg"),
-    "network":             _pick(APPS_DIR / "community-branding" / "community-branding-09.jpg"),
+    # projects: York Region TrafficPatternsXD crosswalk — aerial, impactful, infrastructure at scale
+    "projects":            _pick(PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-82.jpg",
+                                 APPS_DIR / "crosswalks" / "crosswalks-03.jpg"),
+    # network: VIVA BRT bus lane installation — crew in action, sets up the installer section
+    "network":             _pick(APPS_DIR / "bus-lanes" / "bus-lanes-01.jpg",
+                                 APPS_DIR / "bus-lanes" / "bus-lanes-20.jpg"),
     "reference":           _pick(APPS_DIR / "bike-lanes" / "bike-lanes-09.jpg"),
     # DPS right-side images — distinct pool from left, ensures no mirrored spreads
     "editorial_products":  _pick(BLOG_DIR / "decorative-crosswalk-commercial-drive" / "featured.jpg",
@@ -136,7 +145,7 @@ PRODUCTS = [
                     ("Snowplow Safe", "Yes — flush surface"), ("Base", "New lay or existing asphalt")]},
     {"name": "DecoMark",
      "tagline": "A crosswalk is a canvas.",
-     "hero": _pick(PRODUCTS_DIR / "decomark" / "decomark-01.jpg",
+     "hero": _pick(PRODUCTS_DIR / "decomark" / "decomark-43.jpg",
                    PRODUCTS_DIR / "decomark" / "decomark-01.jpg"),
      "title": "Custom graphics.",
      "italic": "Pride crosswalks. Indigenous art. Civic landmarks at street scale.",
@@ -186,7 +195,7 @@ PRODUCTS = [
      "italic": "Two-component epoxy-modified acrylic. Solar Reflectance 0.34.",
      "callout": "SR 0.34",
      "callout_unit": "Solar Reflectance — cools the surface and protects asphalt from UV and heat degradation",
-     "body": "Two-component waterborne epoxy-modified acrylic coating formulated for asphalt maintenance in pedestrian areas and residential roadways. Solar Reflectance 0.34 — cools the pavement surface and protects the substrate from UV, chemical, and heat degradation. Chemical-resistant: fuel, oil, and deicing agents. Available with anti-slip aggregate texture for pedestrian areas. Low VOC. The rational maintenance choice before full resurfacing is considered.",
+     "body": "Two-component waterborne epoxy-modified acrylic coating for asphalt maintenance in pedestrian areas and residential roadways. Solar Reflectance 0.34 — cools the pavement surface and protects the substrate from UV, chemical, and heat degradation. Chemical-resistant: fuel, oil, and deicing agents. Available with anti-slip aggregate. Low VOC.",
      "uses": ["Parking", "Driveways", "Pathways", "LEED Sites"],
      "spec_pairs": [("Type", "Epoxy-modified acrylic coating"), ("Solar Reflectance", "0.34"),
                     ("Chemical Resistance", "Fuel, oil, deicing agents"), ("Anti-Slip", "Available")]},
@@ -210,9 +219,9 @@ PRODUCTS = [
      "callout": "4x",
      "callout_unit": "Service life vs. painted alternatives — full-depth glass bead",
      "body": "Airfield markings are safety-critical. Precision, visibility, and permanence are not negotiable. AirMark preformed thermoplastic is engineered to airfield marking standards, delivering consistent dimensional accuracy, premium retroreflectivity through full-depth glass bead construction, and a service life that outlasts paint by four to one. Heat-applied by certified crews to asphalt and concrete airfield surfaces. The choice for airports and aerodrome operators who need markings that hold their specification year-round.",
-     "uses": ["Runways", "Taxiways", "Aprons", "Helipads"],
-     "spec_pairs": [("Standard", "Airfield marking"), ("Material", "Preformed thermoplastic"),
-                    ("Retroreflectivity", "Full-depth glass bead"), ("Service Life", "4x paint")]},
+     "uses": ["Taxiways", "Aprons", "Helipads", "Ground Vehicles"],
+     "spec_pairs": [("Application", "Non-runway airfield surfaces"), ("Material", "Preformed thermoplastic"),
+                    ("Retroreflectivity", "Full-depth glass bead"), ("Service Life", "4× painted alternatives")]},
 ]
 
 
@@ -393,19 +402,23 @@ PROJECTS = [
 INSTALLERS = [
     {"name": "Square One Paving", "region": "British Columbia",
      "image": _pick(ASSETS / "DecoMark community park 1.png"),
-     "body": "Experts in asphalt imprinting across British Columbia. Outstanding products, best-in-class installation for municipalities, developers, and contractors.",
+     # Signature project: StreetPrint stamped-asphalt work across BC municipalities and strata
+     "body": "BC's certified StreetPrint and decorative thermoplastic installer. From stamped-asphalt driveways in Langley strata developments to municipal streetscapes — outstanding outcomes for municipalities, developers, and contractors across British Columbia.",
      "url": "squareonepaving.com", "phone": "604-446-9902"},
     {"name": "Thermo Design", "region": "Quebec",
      "image": _pick(ASSETS / "Intergrated Rumble Bars (TrafficPatterns) 1.png"),
-     "body": "Specialiste en marquage de longue duree. Long-life decorative pavement markings for Quebec municipalities and commercial sites.",
+     # Quebec specialist — marquage de longue durée for municipalities
+     "body": "Spécialiste québécois en marquage de longue durée. Crosswalk programs, bus lane markings, and decorative surface systems for Quebec municipalities and commercial sites — built to survive Quebec winters.",
      "url": "thermo-design.ca", "phone": "450.698.0000"},
     {"name": "Virtue Construction", "region": "Saskatchewan",
      "image": _pick(ASSETS / "Intersection installation TPXD 1.png"),
-     "body": "Quality project outcomes since 2009. Decorative paving services for Saskatchewan communities, certified to install the full HUB Surface Systems portfolio.",
+     # Delivering TrafficPatterns, StreetBond, and full HUB portfolio across SK communities
+     "body": "Quality Saskatchewan outcomes since 2009. TrafficPatterns crosswalks, StreetBond colour systems, and full HUB portfolio installation for Saskatchewan municipalities and communities — from Saskatoon to rural intersections that specify by name.",
      "url": "virtueconstruction.ca", "phone": "306-251-0177"},
     {"name": "ULS Landscaping", "region": "Alberta and Saskatchewan",
      "image": _pick(ASSETS / "StreetPrint walkway 1.png"),
-     "body": "10+ years of trusted experience. Professional landscape management with certified decorative paving installation across Alberta and Saskatchewan.",
+     # 10+ years certified HUB installation paired with professional landscape management
+     "body": "10+ years of professional landscape management with certified HUB decorative paving installation across Alberta and Saskatchewan. Parks, pathways, residential driveways, and commercial sites — precision installation, backed by experience.",
      "url": "ulslandscaping.com", "phone": "403-235-5353"},
 ]
 

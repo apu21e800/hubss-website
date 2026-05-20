@@ -62,12 +62,12 @@
       ]
     ]
   },
-  "cover_photo": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\catalog-print-build\\assets\\booklet\\UBC Crosswalk 1.png",
+  "cover_photo": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\white-rock-pier-crosswalk\\featured.png",
   "section_openers": {
     "products": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\imprinted-asphalt-york-transit\\featured.jpg",
     "applications": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\simcoe-rainbow-crosswalk\\featured.jpg",
-    "projects": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\community-branding\\community-branding-03.jpg",
-    "network": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\community-branding\\community-branding-09.jpg",
+    "projects": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\traffic-patterns-xd\\traffic-patterns-xd-82.jpg",
+    "network": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\bus-lanes\\bus-lanes-01.jpg",
     "reference": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\bike-lanes\\bike-lanes-09.jpg",
     "editorial_products": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\decorative-crosswalk-commercial-drive\\featured.jpg",
     "editorial_projects": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\community-branding\\community-branding-10.jpg",
@@ -247,7 +247,7 @@
           "Certified crews"
         ]
       ],
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\decomark\\decomark-01.jpg"
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\decomark\\decomark-43.jpg"
     },
     {
       "name": "MMAX",
@@ -358,7 +358,7 @@
       "italic": "Two-component epoxy-modified acrylic. Solar Reflectance 0.34.",
       "callout": "SR 0.34",
       "callout_unit": "Solar Reflectance \u2014 cools the surface and protects asphalt from UV and heat degradation",
-      "body": "Two-component waterborne epoxy-modified acrylic coating formulated for asphalt maintenance in pedestrian areas and residential roadways. Solar Reflectance 0.34 \u2014 cools the pavement surface and protects the substrate from UV, chemical, and heat degradation. Chemical-resistant: fuel, oil, and deicing agents. Available with anti-slip aggregate texture for pedestrian areas. Low VOC. The rational maintenance choice before full resurfacing is considered.",
+      "body": "Two-component waterborne epoxy-modified acrylic coating for asphalt maintenance in pedestrian areas and residential roadways. Solar Reflectance 0.34 \u2014 cools the pavement surface and protects the substrate from UV, chemical, and heat degradation. Chemical-resistant: fuel, oil, and deicing agents. Available with anti-slip aggregate. Low VOC.",
       "uses": [
         "Parking",
         "Driveways",
@@ -428,15 +428,15 @@
       "callout_unit": "Service life vs. painted alternatives \u2014 full-depth glass bead",
       "body": "Airfield markings are safety-critical. Precision, visibility, and permanence are not negotiable. AirMark preformed thermoplastic is engineered to airfield marking standards, delivering consistent dimensional accuracy, premium retroreflectivity through full-depth glass bead construction, and a service life that outlasts paint by four to one. Heat-applied by certified crews to asphalt and concrete airfield surfaces. The choice for airports and aerodrome operators who need markings that hold their specification year-round.",
       "uses": [
-        "Runways",
         "Taxiways",
         "Aprons",
-        "Helipads"
+        "Helipads",
+        "Ground Vehicles"
       ],
       "spec_pairs": [
         [
-          "Standard",
-          "Airfield marking"
+          "Application",
+          "Non-runway airfield surfaces"
         ],
         [
           "Material",
@@ -448,7 +448,7 @@
         ],
         [
           "Service Life",
-          "4x paint"
+          "4\u00d7 painted alternatives"
         ]
       ],
       "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\airmark\\airmark-04.jpg"
@@ -726,7 +726,7 @@
     {
       "name": "Square One Paving",
       "region": "British Columbia",
-      "body": "Experts in asphalt imprinting across British Columbia. Outstanding products, best-in-class installation for municipalities, developers, and contractors.",
+      "body": "BC's certified StreetPrint and decorative thermoplastic installer. From stamped-asphalt driveways in Langley strata developments to municipal streetscapes \u2014 outstanding outcomes for municipalities, developers, and contractors across British Columbia.",
       "url": "squareonepaving.com",
       "phone": "604-446-9902",
       "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\catalog-print-build\\assets\\booklet\\DecoMark community park 1.png"
@@ -734,7 +734,7 @@
     {
       "name": "Thermo Design",
       "region": "Quebec",
-      "body": "Specialiste en marquage de longue duree. Long-life decorative pavement markings for Quebec municipalities and commercial sites.",
+      "body": "Sp\u00e9cialiste qu\u00e9b\u00e9cois en marquage de longue dur\u00e9e. Crosswalk programs, bus lane markings, and decorative surface systems for Quebec municipalities and commercial sites \u2014 built to survive Quebec winters.",
       "url": "thermo-design.ca",
       "phone": "450.698.0000",
       "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\catalog-print-build\\assets\\booklet\\Intergrated Rumble Bars (TrafficPatterns) 1.png"
@@ -742,7 +742,7 @@
     {
       "name": "Virtue Construction",
       "region": "Saskatchewan",
-      "body": "Quality project outcomes since 2009. Decorative paving services for Saskatchewan communities, certified to install the full HUB Surface Systems portfolio.",
+      "body": "Quality Saskatchewan outcomes since 2009. TrafficPatterns crosswalks, StreetBond colour systems, and full HUB portfolio installation for Saskatchewan municipalities and communities \u2014 from Saskatoon to rural intersections that specify by name.",
       "url": "virtueconstruction.ca",
       "phone": "306-251-0177",
       "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\catalog-print-build\\assets\\booklet\\Intersection installation TPXD 1.png"
@@ -750,7 +750,7 @@
     {
       "name": "ULS Landscaping",
       "region": "Alberta and Saskatchewan",
-      "body": "10+ years of trusted experience. Professional landscape management with certified decorative paving installation across Alberta and Saskatchewan.",
+      "body": "10+ years of professional landscape management with certified HUB decorative paving installation across Alberta and Saskatchewan. Parks, pathways, residential driveways, and commercial sites \u2014 precision installation, backed by experience.",
       "url": "ulslandscaping.com",
       "phone": "403-235-5353",
       "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\catalog-print-build\\assets\\booklet\\StreetPrint walkway 1.png"

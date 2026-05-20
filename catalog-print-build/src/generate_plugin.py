@@ -675,6 +675,13 @@ async function pageBlank(idx) {
 // pageFieldNotes — a ruled notepad page for specifiers.
 // Simple, intentional — the specifier gets a physical place to record their project details.
 // Sits after the Contact page so it directly faces the contact information.
+// addFolio — prints a small page number at the bottom of content pages.
+// Skipped on: Cover, Back Cover, Half Title, blank/Rest pages, section openers, DPS spreads, QuarterAd.
+// On dark-background pages the grey is barely visible — Vernon can style in Figma if needed.
+async function addFolio(frame, num) {
+  await tx(frame, String(num), 28, 437, 5.5, M, false, 394, "center", 8);
+}
+
 async function pageFieldNotes() {
   const f = fr("Field Notes");
   // Header: small-caps label + orange rule — same visual grammar as the rest of the catalogue
@@ -870,6 +877,22 @@ async function buildCatalogue(d) {
   for (let i = 0; i < frames.length; i++) {
     const f = frames[i];
     if (f) f.name = "p" + String(i + 1).padStart(2, "0") + " — " + f.name;
+  }
+
+  // TOC note: productsPage, appsPage, etc. are computed dynamically at the moment
+  // each section is pushed into frames[], so TOC page numbers are always correct
+  // regardless of front-matter changes. No hardcoded numbers anywhere.
+
+  // Add folios to content pages (skip cover, section openers, DPS, blanks, quarter-ads).
+  const _noFolioNames = new Set(["Cover", "Back Cover", "Half Title"]);
+  const _noFolioPrefix = ["Rest ", "Section ", "Spread ", "QuarterAd", "By the Numbers"];
+  for (let i = 0; i < frames.length; i++) {
+    const f = frames[i];
+    if (!f) continue;
+    const raw = f.name.replace(/^p\d+ — /, "");
+    if (_noFolioNames.has(raw)) continue;
+    if (_noFolioPrefix.some(p => raw.startsWith(p))) continue;
+    await addFolio(f, i + 1);
   }
 
   // Layout all frames in a grid and append to current page

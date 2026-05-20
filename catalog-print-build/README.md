@@ -85,52 +85,47 @@ python -B -m src.export_json && python -B -m src.generate_plugin && python -B -m
 4. **Plugins → Development → HUBSS Catalogue Builder → Build catalogue (100 frames)**
 5. ~10–20 seconds — 100 frames appear in a 10-column grid
 
-### Exporting to PDF for print
+## Print Export (for the printer)
 
-**Critical: Figma frames are 450 × 450 px. To hit 300 DPI at 5" × 5" trim, you MUST export at 3.33× scale.**
+Use the **Print for Figma** plugin (printability.app) — it handles CMYK conversion,
+bleed, crop marks, and 300 DPI in one step. Do NOT use Figma's built-in File → Export.
 
-```
-450 px × 3.33 = 1498.5 px ≈ 1500 px
-1500 px ÷ 300 DPI = 5 inches ✓
-```
+**Why not File → Export?** Figma is RGB-only. A manual PDF export will send RGB to the
+printer — brand orange `#F97316` will print dull/shifted on press. Print for Figma
+converts to CMYK so colours match what you see on screen.
 
-**Export steps:**
-1. Select all 100 frames (Cmd/Ctrl-A inside the catalog Figma page)
-2. **File → Export…** (or right-click → Export)
-3. Set format: **PDF**
-4. Set scale: **3.33×** ← this is the critical setting
-5. Confirm the frame order is left-to-right, top-to-bottom (p01 → p100)
-6. Export → send `HUBSS_Catalogue_2026.pdf` to printer
+### Steps
 
-> If your printer requires PDF/X-1a, run the exported PDF through Adobe Acrobat's
-> PDF/X export or ask the printer for their preflight requirements.
+1. Build the catalogue via the HUBSS Catalogue Builder plugin → all 100 frames appear
+2. Install **Print for Figma** from Figma Community → search "Print for Figma" or go to
+   [printability.app](https://printability.app)
+3. Select all 100 catalogue frames (Cmd/Ctrl-A inside the catalog page)
+4. Open the Print for Figma plugin
+5. Set **Color mode: CMYK** ← critical — converts brand orange and all colours for press
+6. Set **Bleed: 0.125"** (confirm exact amount with your print house before exporting)
+7. Enable **Crop marks**
+8. Export → multi-page PDF
+9. Confirm frame order is p01 → p100 (left-to-right, top-to-bottom in the Figma canvas)
+10. Send the PDF to your printer — they handle saddle-stitch imposition (confirm with printer)
 
-### Bleed note
+> **PDF/X-1a**: if your printer requires PDF/X-1a specifically, run the exported PDF
+> through Adobe Acrobat's PDF/X export after Print for Figma outputs it.
 
-The current Figma frames are trim-size only (450 × 450 px = 5" × 5"). The printer
-will need either: (a) 0.125" bleed added per side (5.25" × 5.25" document), or
-(b) the printer handles bleed setup. Confirm with your print house before final export.
+### What the printer receives
+
+- CMYK colour throughout — no RGB surprises on press
+- Bleed on every side — trim-safe
+- Crop marks — standard for commercial print
+- Reading-order pages — printer imposes for saddle-stitch
 
 ---
 
-## What to send the printer
-
-Send the PDF exported from Figma at 3.33× scale. The printer should:
-- See a 5.25 × 5.25 in MediaBox
-- Cut on the crop marks → 5 × 5 in finished piece
-- Find CMYK color throughout
-
-If the printer asks for PDF/X-1a specifically, run the output through
-Acrobat's PDF/X export, or ask them what their preflight requires — ReportLab
-doesn't natively certify PDF/X.
-
 ## Color management note
 
-Image CMYK conversion uses Pillow's naive RGB→CMYK transform. For accurate
-brand-orange reproduction, run brand-critical images through Photoshop with
-your printer's ICC profile and replace the files in `assets/`. Drop the
-already-CMYK image into the same path; the build skips conversion when the
-image is already CMYK.
+The Figma frames are built in RGB (Figma's native colour space). The Python pipeline
+uses HUBSS Orange `{r:0.976, g:0.451, b:0.086}` which maps to `#F97316` in RGB.
+Print for Figma converts this to CMYK on export. For maximum brand-orange fidelity,
+confirm the CMYK output value matches your printer's profile (target: `0 / 65 / 100 / 0`).
 
 ## Adjusting the look
 

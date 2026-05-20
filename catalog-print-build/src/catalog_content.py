@@ -36,10 +36,10 @@ def _prod_img(slug, n):
     return base / f"{slug}-{n:02d}.jpg"
 
 
-# White Rock Pier crosswalk — strong aerial, coastal, unmistakably HUB. High-res PNG
-# suitable for cover at 300 DPI. Falls back to UBC Crosswalk booklet PNG if missing.
-COVER_PHOTO = _pick(BLOG_DIR / "white-rock-pier-crosswalk" / "featured.png",
-                    ASSETS / "UBC Crosswalk 1.png")
+# UBC Crosswalk 1.png = 7.4 MB booklet scan — the highest-res UBC image available.
+# Blog featured.jpg (~182 KB) is too low-res for a 300 DPI cover; booklet PNG is correct.
+# White Rock pier blog PNG was only 63 KB — blurry at print size.
+COVER_PHOTO = _pick(ASSETS / "UBC Crosswalk 1.png")
 
 SECTION_OPENERS = {
     # Section divider backgrounds — use website JPEGs (not raw booklet PNGs) to keep
@@ -60,8 +60,8 @@ SECTION_OPENERS = {
     # DPS right-side images — distinct from left, avoids mirrored spreads
     "editorial_products":  _pick(BLOG_DIR / "decorative-crosswalk-commercial-drive" / "featured.jpg",
                                  APPS_DIR / "community-branding" / "community-branding-02.jpg"),
-    # editorial_products_r: explicit right-side for DPS1 — crosswalk wide shot, not used elsewhere
-    "editorial_products_r": _pick(APPS_DIR / "crosswalks" / "crosswalks-06.jpg",
+    # editorial_products_r: DPS1 right-side — community branding (distinct from crosswalks-06 apps opener)
+    "editorial_products_r": _pick(APPS_DIR / "community-branding" / "community-branding-03.jpg",
                                   APPS_DIR / "crosswalks" / "crosswalks-03.jpg"),
     "editorial_projects":  _pick(APPS_DIR / "community-branding" / "community-branding-10.jpg",
                                  APPS_DIR / "community-branding" / "community-branding-04.jpg"),
@@ -75,6 +75,10 @@ SECTION_OPENERS = {
     "dps_b_right":  _pick(APPS_DIR / "community-branding" / "community-branding-12.jpg"),
     "dps_c_left":   _pick(BLOG_DIR / "parc-riviera-streetbond-walkway" / "featured.jpg"),
     "dps_c_right":  _pick(APPS_DIR / "community-branding" / "community-branding-13.jpg"),
+    # DPS-D: between Projects and Network — most recent blog project (2025-09-14)
+    # White Rock Seaside Stroll + Langley Railroad Heritage crosswalks
+    "dps_d_left":   _pick(BLOG_DIR / "white-rock-langley-trafficpatterns" / "featured.jpg"),
+    "dps_d_right":  _pick(APPS_DIR / "community-branding" / "community-branding-09.jpg"),
 }
 
 MANIFESTO = {
@@ -378,11 +382,11 @@ PROJECTS = [
      "title": "Honouring residential schools survivors.",
      "story": "Town of Georgina honours the Every Child Matters movement with a permanent TrafficPatterns thermoplastic crosswalk. A civic acknowledgement cast in durable material — walked over every day, visible every season."},
     {"name": "Sechelt Pictograph Crosswalk", "location": "Sunshine Coast, British Columbia", "product": "TrafficPatterns",
-     # blog/pictograph-crosswalk-sechelt/featured.jpg is mislabeled (depicts Kitchener Veterans) — skip.
-     # traffic-patterns-35.jpg shows train tracks / wrong content — rotated 90° in Figma. Use
-     # community-branding-07 (Indigenous community art crosswalk, correct cultural context).
-     "hero": _pick(APPS_DIR / "community-branding" / "community-branding-07.jpg",
-                   APPS_DIR / "community-branding" / "community-branding-06.jpg"),
+     # tsain-ko-crosswalk-sechelt/featured.jpg = ACTUAL aboriginal motif crosswalk at 5500 Sunshine
+     # Coast Hwy, Tsain-Ko Centre — the correct image for this story (confirmed via blog post).
+     # pictograph-crosswalk-sechelt/featured.jpg is mislabeled (depicts Kitchener) — still skip.
+     "hero": _pick(BLOG_DIR / "tsain-ko-crosswalk-sechelt" / "featured.jpg",
+                   APPS_DIR / "community-branding" / "community-branding-07.jpg"),
      "detail": _pick(PRODUCTS_DIR / "decomark" / "decomark-69.jpg"),
      "title": "The origin story of the shishalh Nation.",
      "story": "Indigenous artists Dionne Paul and Lindsey Kyoko Adams told the origin story of the shishalh Nation in TrafficPatterns thermoplastic at Cowrie and Trail in Sechelt. Unveiled during National Aboriginal History Month — cultural memory made permanent at street level."},

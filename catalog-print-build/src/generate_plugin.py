@@ -92,6 +92,26 @@ function ph(p, x, y, w, h, label, imagePath) {
   return r;
 }
 
+// phFit() — like ph() but FIT mode: shows entire image, may letterbox.
+// Use when the subject (crosswalk decal, marking) must not be cropped at any edge.
+function phFit(p, x, y, w, h, label, imagePath) {
+  const r = rct(p, x, y, w, h, PH, "[PHOTO] " + (label || ""));
+  if (imagePath) {
+    const parts = imagePath.split(/[\\/]/);
+    const key2 = parts.slice(-2).join("/");
+    const fname = parts[parts.length - 1];
+    const b64 = IMAGE_BANK[key2] || IMAGE_BANK[fname] || IMAGE_BANK[imagePath];
+    if (b64) {
+      try {
+        const img = figma.createImage(base64ToBytes(b64));
+        r.fills = [{type:"IMAGE", scaleMode:"FIT", imageHash: img.hash}];
+        r.name = label || "Photo";
+      } catch(e) {}
+    }
+  }
+  return r;
+}
+
 // logo() — like ph() but uses FIT mode so the full wordmark is never cropped.
 // Transparent fill when no image is present (looks clean over any background).
 function logo(p, x, y, w, h, label, imagePath) {
@@ -344,8 +364,8 @@ async function pageProductSpec(prod) {
     rct(f, 28, 392, 394, 1, F, "rule");
     await tx(f, prod.uses.join("   ·   ").toUpperCase(), 28, 402, 6, M, false, 394, "center", 9);
   }
-  // CTA: spec sheet URL anchored bottom-right — clear next step for the specifier
-  await tx(f, "hubss.com/products", 28, 426, 6.5, O, false, 394, "right", 10);
+  // CTA: spec sheet URL — moved to y=414 (bottom=424, gap=26px ≥ 0.25" safe margin)
+  await tx(f, "hubss.com/products", 28, 414, 6.5, O, false, 394, "right", 10);
   return f;
 }
 
@@ -380,9 +400,11 @@ async function pageProjectHero(proj) {
 
 async function pageProjectStory(proj, idx) {
   const f = fr(`Story ${String(idx).padStart(2,"0")} — ${proj.name}`);
-  ph(f, 0, 0, 450, 248, proj.name + " — detail photo", proj.detail || proj.hero);
+  // FIT mode: preserves full product markings/decals — prevents subject cutoff on story photos
+  phFit(f, 0, 0, 450, 248, proj.name + " — detail photo", proj.detail || proj.hero);
   await tx(f, "PROJECT " + String(idx).padStart(2,"0"), 30, 266, 6.5, O, false, 370);
-  await tx(f, proj.title || "", 30, 283, 17, D, true, 370);
+  // Show proj.name (project identifier), not proj.title — title is already H1 on hero page
+  await tx(f, proj.name || "", 30, 283, 17, D, true, 370);
   await tx(f, ((proj.location||"") + "    " + (proj.product||"")), 30, 315, 6.5, M, false, 370);
   await tx(f, proj.story || "", 30, 334, 7.5, D, false, 370);
   return f;
@@ -404,9 +426,10 @@ async function pageInstaller(inst, idx, total) {
   ph(f, 0, 152, 450, 192, inst.name + " — photo", inst.image);
   // White content zone below photo
   await tx(f, inst.body || "", 28, 360, 8, D, false, 394);
-  rct(f, 28, 412, 394, 1, F, "rule");
-  await tx(f, inst.phone || "", 28, 422, 10, D, true, 190);
-  await tx(f, inst.url || "", 238, 423, 9, O, false, 182);
+  // Footer: moved up to y=400/410 — bottom=420, gap=30px (≥0.25" safe margin)
+  rct(f, 28, 400, 394, 1, F, "rule");
+  await tx(f, inst.phone || "", 28, 410, 10, D, true, 190);
+  await tx(f, inst.url || "", 238, 411, 9, O, false, 182);
   return f;
 }
 
@@ -550,9 +573,10 @@ async function pageLunchLearn() {
   // CTA — large URL type, no box. Print lets the URL carry the weight.
   await tx(f, "hubss.com/lunch-learn", 30, 350, 13, O, true, 390);
   await tx(f, "Book directly or contact either office below to arrange a session for your team.", 30, 376, 7.5, M, false, 390, null, 11);
-  rct(f, 30, 410, 390, 1, F, "rule");
-  await tx(f, "Cleve Stordy   604.309.8212", 30, 422, 7, D, false, 188, null, 11);
-  await tx(f, "Doug Bain   416.540.9287", 242, 422, 7, D, false, 178, null, 11);
+  // Footer: moved up — bottom=~409, gap=41px (well within 0.25" safe margin)
+  rct(f, 30, 394, 390, 1, F, "rule");
+  await tx(f, "Cleve Stordy   604.309.8212", 30, 404, 7, D, false, 188, null, 11);
+  await tx(f, "Doug Bain   416.540.9287", 242, 404, 7, D, false, 178, null, 11);
   return f;
 }
 
@@ -654,11 +678,11 @@ async function pageBlank(idx) {
 // pageFieldNotes — a ruled notepad page for specifiers.
 // Simple, intentional — the specifier gets a physical place to record their project details.
 // Sits after the Contact page so it directly faces the contact information.
-// addFolio — prints a small page number at the bottom of content pages.
-// Skipped on: Cover, Back Cover, Half Title, blank/Rest pages, section openers, DPS spreads, QuarterAd.
-// On dark-background pages the grey is barely visible — Vernon can style in Figma if needed.
+// addFolio — page number at bottom of content pages.
+// y=415: bottom=423, gap=27px (0.3" from trim edge — within 0.25" safe margin).
+// Skipped on: Cover, Back Cover, Half Title, Rest/blank, Section openers, Spread/DPS.
 async function addFolio(frame, num) {
-  await tx(frame, String(num), 28, 437, 5.5, M, false, 394, "center", 8);
+  await tx(frame, String(num), 28, 415, 5.5, M, false, 394, "center", 8);
 }
 
 async function pageFieldNotes() {
@@ -673,9 +697,9 @@ async function pageFieldNotes() {
   for (let i = 0; i < lineCount; i++) {
     rct(f, 28, lineY0 + i * lineGap, 394, 1, F, "NoteLine");
   }
-  // Footer: very faint attribution — catalogue stays in the room as a brand object
-  rct(f, 28, 420, 394, 1, F, "rule");
-  await tx(f, "HUB SURFACE SYSTEMS   ·   hubss.com   ·   604.309.8212   ·   416.540.9287", 28, 430, 5.5, F, false, 394, "center", 8);
+  // Footer: moved up — bottom=~414, gap=36px (≥0.25" safe margin)
+  rct(f, 28, 402, 394, 1, F, "rule");
+  await tx(f, "HUB SURFACE SYSTEMS   ·   hubss.com   ·   604.309.8212   ·   416.540.9287", 28, 410, 5.5, F, false, 394, "center", 8);
   return f;
 }
 
@@ -810,6 +834,17 @@ async function buildCatalogue(d) {
         const [sL2, sR2] = await pageDoublespread("Every Mark", dpsImg2, "Every mark tells a story.", undefined, dpsImg2R);
         frames.push(sL2, sR2);
       }
+    }
+  }
+
+  // DPS-D — between Projects and Network. Newest project work (White Rock & Langley, 2025).
+  // Keys: dps_d_left / dps_d_right.
+  {
+    const dpsDL = d.section_openers && d.section_openers.dps_d_left;
+    const dpsDR = d.section_openers && d.section_openers.dps_d_right;
+    if (dpsDL) {
+      const [dL, dR] = await pageDoublespread("New Work", dpsDL, "The mark on the street. The most recent chapter.", undefined, dpsDR || dpsDL);
+      frames.push(dL, dR);
     }
   }
 

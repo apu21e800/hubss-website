@@ -411,6 +411,17 @@ PROJECTS = [
      "detail": _pick(PRODUCTS_DIR / "streetprint" / "streetprint-83.jpg"),
      "title": "A schoolhouse, a sidewalk, a memory.",
      "story": "StreetPrint stamped-asphalt sidewalk linking the historic Murrayville Schoolhouse to the community around it. Heritage-look surface for a heritage building — brick-pattern asphalt that reads as stone and performs as pavement."},
+    # ── Newest project (2025) ────────────────────────────────────────────────────────────
+    {"name": "Langley Railroad Heritage", "location": "Langley City, British Columbia",
+     "product": "TrafficPatterns",
+     # Blog image shared with White Rock Seaside Stroll post (2025-09-14).
+     # No dedicated Langley-only photo exists yet — Vernon to swap in Figma once sourced.
+     # Installed by Square One Paving, March 2025, at the entrance to Linwood Park.
+     "hero": _pick(BLOG_DIR / "white-rock-langley-trafficpatterns" / "featured.jpg"),
+     # Detail: same blog image with phFit (FIT mode) to show full railroad tie pattern
+     "detail": _pick(BLOG_DIR / "white-rock-langley-trafficpatterns" / "featured.jpg"),
+     "title": "Heritage cast in thermoplastic.",
+     "story": "Langley City's crosswalk at the entrance to Linwood Park connects modern pedestrian infrastructure to the city's railway history. Railroad tie-and-rail pattern in preformed TrafficPatterns thermoplastic — tan panels mimicking wooden rail ties, white lines suggesting steel rails, fused permanently to the asphalt. Installed by Square One Paving, March 2025. It became a social media landmark before the crew had packed up."},
 ]
 
 

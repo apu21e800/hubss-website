@@ -410,27 +410,6 @@ async function pageInstaller(inst, idx, total) {
   return f;
 }
 
-// pageQuarterAd — compact installer ad inserted early in the book.
-// Feels like a bound-in quarter-page card: intimate, punchy, no wasted space.
-// Gives a key certified installer early-book visibility before the Network section.
-async function pageQuarterAd(inst) {
-  const f = fr("QuarterAd — " + inst.name);
-  // Slim navy header — installer identity zone
-  rct(f, 0, 0, 450, 80, N, "NavyHeader");
-  await tx(f, "HUB CERTIFIED INSTALLER", 28, 14, 5, O, false, 260, null, 8);
-  await tx(f, inst.name, 28, 30, 22, W, true, 260);
-  await tx(f, (inst.region || "").toUpperCase(), 28, 62, 5.5, {r:0.55,g:0.55,b:0.55}, false, 260, null, 8);
-  // Photo strip — full width, contained below header
-  ph(f, 0, 80, 450, 200, inst.name + " — photo", inst.image);
-  // White content zone
-  rul(f, 28, 294, 32);
-  await tx(f, inst.body || "", 28, 306, 8.5, D, false, 394);
-  rct(f, 28, 380, 394, 1, F, "rule");
-  await tx(f, inst.phone || "", 28, 392, 10, D, true, 190);
-  await tx(f, inst.url || "", 242, 393, 9, O, false, 178);
-  return f;
-}
-
 // pageNetworkOpen — Network section opener. Clean split: photo top / solid navy bottom.
 // No stacked transparencies — photo breathes above, type reads crisply below.
 async function pageNetworkOpen(d) {
@@ -754,13 +733,20 @@ async function buildCatalogue(d) {
   frames.push(await pageWhyProof(d));     // 5 = p6  Why HUB proof
   frames.push(await pageHubNumbers());    // 6 = p7  Bold stats moment — navy
   frames.push(await pageStatement());     // 7 = p8  Editorial statement — white
-  // Early installer quarter-ad — certified installer early-book visibility (p9)
-  if (d.installers && d.installers[0]) {
-    frames.push(await pageQuarterAd(d.installers[0]));
+
+  // DPS-A — opening editorial. Full-bleed before Products section.
+  // Vernon swaps images in Figma for final. Keys: dps_a_left / dps_a_right.
+  {
+    const dpsAL = d.section_openers && d.section_openers.dps_a_left;
+    const dpsAR = d.section_openers && d.section_openers.dps_a_right;
+    if (dpsAL) {
+      const [aL, aR] = await pageDoublespread("The Work", dpsAL, "From every intersection, a statement.", undefined, dpsAR || dpsAL);
+      frames.push(aL, aR);
+    }
   }
 
   // Section 1 — Products
-  const productsPage = frames.length + 1;  // p9 (after 8 front-matter pages)
+  const productsPage = frames.length + 1;
   frames.push(await pageSectionOpen("One", "Products.", d.section_openers && d.section_openers.products));
   for (const prod of (d.products || [])) {
     frames.push(await pageProductHero(prod));
@@ -789,6 +775,17 @@ async function buildCatalogue(d) {
   for (const app of (d.applications || [])) {
     appIdx++;
     frames.push(await pageApplication(app, appIdx, nApps));
+  }
+
+  // DPS-B — transition between Applications and Projects. Full-bleed visual breather.
+  // Keys: dps_b_left / dps_b_right.
+  {
+    const dpsBL = d.section_openers && d.section_openers.dps_b_left;
+    const dpsBR = d.section_openers && d.section_openers.dps_b_right;
+    if (dpsBL) {
+      const [bL, bR] = await pageDoublespread("Across Canada", dpsBL, "Five hundred municipalities. One standard.", undefined, dpsBR || dpsBL);
+      frames.push(bL, bR);
+    }
   }
 
   // Section 3 — Projects
@@ -824,6 +821,17 @@ async function buildCatalogue(d) {
     frames.push(await pageInstaller(installs[ii], ii + 1, installs.length));
   }
 
+  // DPS-C — between Network and Reference. Visual breathing room before back matter.
+  // Keys: dps_c_left / dps_c_right.
+  {
+    const dpsCL = d.section_openers && d.section_openers.dps_c_left;
+    const dpsCR = d.section_openers && d.section_openers.dps_c_right;
+    if (dpsCL) {
+      const [cL, cR] = await pageDoublespread("Built to Last", dpsCL, "The surface underfoot. The city above.", undefined, dpsCR || dpsCL);
+      frames.push(cL, cR);
+    }
+  }
+
   // Section 5 — Reference
   const referencePage = frames.length + 1;
   frames.push(await pageSectionOpen("Five", "Reference.", d.section_openers && d.section_openers.reference));
@@ -849,8 +857,9 @@ async function buildCatalogue(d) {
     }
   }
 
-  // Pad to exactly 100 pages: cap at 97 frames + 3 closing = 100 (multiple of 4)
-  while ((frames.length + 3) % 4 !== 0 && frames.length < 97) {
+  // Pad to next multiple of 4 — saddle-stitch / perfect-bind requirement.
+  // No upper-bound cap. Content count + 3 closing must be divisible by 4.
+  while ((frames.length + 3) % 4 !== 0) {
     frames.push(await pageBlank(frames.length + 1));
   }
 

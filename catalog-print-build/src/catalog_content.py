@@ -47,23 +47,34 @@ SECTION_OPENERS = {
     # products: York Transit stamped asphalt installation — strong infrastructure shot
     "products":            _pick(BLOG_DIR / "imprinted-asphalt-york-transit" / "featured.jpg",
                                  APPS_DIR / "bus-lanes" / "bus-lanes-01.jpg"),
-    # applications: Simcoe rainbow — vivid, celebratory, sets up the range of what's possible
-    "applications":        _pick(BLOG_DIR / "simcoe-rainbow-crosswalk" / "featured.jpg",
-                                 APPS_DIR / "crosswalks" / "crosswalks-06.jpg"),
-    # projects: York Region TrafficPatternsXD crosswalk — aerial, impactful, infrastructure at scale
-    "projects":            _pick(PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-82.jpg",
+    # applications: wide crosswalk shot — vivid, distinct from Simcoe Rainbow project hero
+    "applications":        _pick(APPS_DIR / "crosswalks" / "crosswalks-06.jpg",
                                  APPS_DIR / "crosswalks" / "crosswalks-03.jpg"),
-    # network: VIVA BRT bus lane installation — crew in action, sets up the installer section
+    # projects: VIVA BRT aerial corridor — strong infrastructure shot, distinct from TPXD product imagery
+    "projects":            _pick(BLOG_DIR / "multimodal-connectivity-york-region" / "featured.jpg",
+                                 APPS_DIR / "bus-lanes" / "bus-lanes-20.jpg"),
+    # network: bus lane installation crew in action — sets up the certified-installer section
     "network":             _pick(APPS_DIR / "bus-lanes" / "bus-lanes-01.jpg",
                                  APPS_DIR / "bus-lanes" / "bus-lanes-20.jpg"),
     "reference":           _pick(APPS_DIR / "bike-lanes" / "bike-lanes-09.jpg"),
-    # DPS right-side images — distinct pool from left, ensures no mirrored spreads
+    # DPS right-side images — distinct from left, avoids mirrored spreads
     "editorial_products":  _pick(BLOG_DIR / "decorative-crosswalk-commercial-drive" / "featured.jpg",
                                  APPS_DIR / "community-branding" / "community-branding-02.jpg"),
+    # editorial_products_r: explicit right-side for DPS1 — crosswalk wide shot, not used elsewhere
+    "editorial_products_r": _pick(APPS_DIR / "crosswalks" / "crosswalks-06.jpg",
+                                  APPS_DIR / "crosswalks" / "crosswalks-03.jpg"),
     "editorial_projects":  _pick(APPS_DIR / "community-branding" / "community-branding-10.jpg",
                                  APPS_DIR / "community-branding" / "community-branding-04.jpg"),
     "editorial_closing":   _pick(BLOG_DIR / "spirit-trail-wayfinding-vancouver" / "featured.jpg",
                                  APPS_DIR / "bike-lanes" / "bike-lanes-09.jpg"),
+    # Three new full-bleed DPS — Vernon swaps images manually in Figma for final
+    "dps_a_left":   _pick(BLOG_DIR / "richmond-brighouse-crosswalk" / "featured.jpeg"),
+    "dps_a_right":  _pick(BLOG_DIR / "branded-crosswalks-vancouver-richmond" / "featured.jpg",
+                          APPS_DIR / "crosswalks" / "crosswalks-06.jpg"),
+    "dps_b_left":   _pick(APPS_DIR / "community-branding" / "community-branding-05.jpg"),
+    "dps_b_right":  _pick(APPS_DIR / "community-branding" / "community-branding-12.jpg"),
+    "dps_c_left":   _pick(BLOG_DIR / "parc-riviera-streetbond-walkway" / "featured.jpg"),
+    "dps_c_right":  _pick(APPS_DIR / "community-branding" / "community-branding-13.jpg"),
 }
 
 MANIFESTO = {
@@ -313,9 +324,8 @@ PROJECTS = [
      "title": "Modal clarity, written in colour.",
      "story": "Complete Streets across New Westminster: StreetBond green for protected bike lanes, TrafficPatterns retroreflective crosswalks, high-contrast colour at every conflict point. Modal priority made legible. Cyclists protected. Pedestrians seen. The Complete Streets specification that transportation engineers and urban planners return to."},
     {"name": "York Region Pedestrian Safety", "location": "York Region, Ontario", "product": "TrafficPatternsXD",
-     # Use TrafficPatternsXD product imagery (actual crosswalk installations)
-     # rather than the Whiterock Pier shot which depicts a different project.
-     "hero": _pick(PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-82.jpg",
+     # tpxd-82 was also the projects section opener — use tpxd-94 to avoid same image appearing twice
+     "hero": _pick(PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-94.jpg",
                    _app_img("crosswalks", 3)),
      "detail": _pick(_app_img("crosswalks", 26),
                      PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-94.jpg"),
@@ -342,9 +352,9 @@ PROJECTS = [
      "title": "Six laneways. Six artists.",
      "story": "Six Vancouver laneways. Six artists. StreetBond coloured pavement turned utility corridors into civic gallery space — public art at street scale, permanent and weather-resistant."},
     {"name": "White Rock Pier", "location": "White Rock, British Columbia", "product": "TrafficPatternsXD",
-     # Authentic blog-frontmatter photo for White Rock Pier
-     "hero": _pick(BLOG_DIR / "white-rock-pier-crosswalk" / "featured.png",
-                   PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-95.jpg"),
+     # Cover uses white-rock-pier/featured.png — use a different TPXD shot here to avoid duplicate
+     "hero": _pick(PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-95.jpg",
+                   PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-94.jpg"),
      "detail": _pick(PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-140.jpg"),
      "title": "Salt air. Holiday traffic. Held.",
      "story": "Salt spray. Summer surge. Winter rain. The pier crosswalk at White Rock faces the full force of the BC coast — and holds season after season. TrafficPatternsXD installed where paint would be gone by July."},
@@ -368,10 +378,11 @@ PROJECTS = [
      "title": "Honouring residential schools survivors.",
      "story": "Town of Georgina honours the Every Child Matters movement with a permanent TrafficPatterns thermoplastic crosswalk. A civic acknowledgement cast in durable material — walked over every day, visible every season."},
     {"name": "Sechelt Pictograph Crosswalk", "location": "Sunshine Coast, British Columbia", "product": "TrafficPatterns",
-     # NOTE: blog/pictograph-crosswalk-sechelt/featured.jpg is mislabeled in
-     # the website asset folder (depicts Kitchener Veterans). Skip it.
-     "hero": _pick(PRODUCTS_DIR / "traffic-patterns" / "traffic-patterns-35.jpg",
-                   PRODUCTS_DIR / "traffic-patterns" / "traffic-patterns-65.jpg"),
+     # blog/pictograph-crosswalk-sechelt/featured.jpg is mislabeled (depicts Kitchener Veterans) — skip.
+     # traffic-patterns-35.jpg shows train tracks / wrong content — rotated 90° in Figma. Use
+     # community-branding-07 (Indigenous community art crosswalk, correct cultural context).
+     "hero": _pick(APPS_DIR / "community-branding" / "community-branding-07.jpg",
+                   APPS_DIR / "community-branding" / "community-branding-06.jpg"),
      "detail": _pick(PRODUCTS_DIR / "decomark" / "decomark-69.jpg"),
      "title": "The origin story of the shishalh Nation.",
      "story": "Indigenous artists Dionne Paul and Lindsey Kyoko Adams told the origin story of the shishalh Nation in TrafficPatterns thermoplastic at Cowrie and Trail in Sechelt. Unveiled during National Aboriginal History Month — cultural memory made permanent at street level."},

@@ -65,13 +65,20 @@
   "cover_photo": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\white-rock-pier-crosswalk\\featured.png",
   "section_openers": {
     "products": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\imprinted-asphalt-york-transit\\featured.jpg",
-    "applications": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\simcoe-rainbow-crosswalk\\featured.jpg",
-    "projects": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\traffic-patterns-xd\\traffic-patterns-xd-82.jpg",
+    "applications": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\crosswalks\\crosswalks-06.jpg",
+    "projects": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\multimodal-connectivity-york-region\\featured.jpg",
     "network": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\bus-lanes\\bus-lanes-01.jpg",
     "reference": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\bike-lanes\\bike-lanes-09.jpg",
     "editorial_products": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\decorative-crosswalk-commercial-drive\\featured.jpg",
+    "editorial_products_r": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\crosswalks\\crosswalks-06.jpg",
     "editorial_projects": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\community-branding\\community-branding-10.jpg",
-    "editorial_closing": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\spirit-trail-wayfinding-vancouver\\featured.jpg"
+    "editorial_closing": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\spirit-trail-wayfinding-vancouver\\featured.jpg",
+    "dps_a_left": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\richmond-brighouse-crosswalk\\featured.jpeg",
+    "dps_a_right": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\branded-crosswalks-vancouver-richmond\\featured.jpg",
+    "dps_b_left": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\community-branding\\community-branding-05.jpg",
+    "dps_b_right": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\community-branding\\community-branding-12.jpg",
+    "dps_c_left": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\parc-riviera-streetbond-walkway\\featured.jpg",
+    "dps_c_right": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\community-branding\\community-branding-13.jpg"
   },
   "brand": {
     "logo_white": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\assets\\logos\\hubss-logos\\hubss-logo-white-large.png",
@@ -610,7 +617,7 @@
       "product": "TrafficPatternsXD",
       "title": "Outlasts paint by eight times.",
       "story": "TrafficPatternsXD 150-mil aggregate-reinforced crosswalk markings specified across York Region intersections. Eight times the service life of paint. A measurable reduction in annual maintenance spend. The kind of lifecycle arithmetic that procurement teams and transportation engineers notice \u2014 and specify again.",
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\traffic-patterns-xd\\traffic-patterns-xd-82.jpg",
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\traffic-patterns-xd\\traffic-patterns-xd-94.jpg",
       "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\crosswalks\\crosswalks-26.jpg"
     },
     {
@@ -655,7 +662,7 @@
       "product": "TrafficPatternsXD",
       "title": "Salt air. Holiday traffic. Held.",
       "story": "Salt spray. Summer surge. Winter rain. The pier crosswalk at White Rock faces the full force of the BC coast \u2014 and holds season after season. TrafficPatternsXD installed where paint would be gone by July.",
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\white-rock-pier-crosswalk\\featured.png",
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\traffic-patterns-xd\\traffic-patterns-xd-95.jpg",
       "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\traffic-patterns-xd\\traffic-patterns-xd-140.jpg"
     },
     {
@@ -691,7 +698,7 @@
       "product": "TrafficPatterns",
       "title": "The origin story of the shishalh Nation.",
       "story": "Indigenous artists Dionne Paul and Lindsey Kyoko Adams told the origin story of the shishalh Nation in TrafficPatterns thermoplastic at Cowrie and Trail in Sechelt. Unveiled during National Aboriginal History Month \u2014 cultural memory made permanent at street level.",
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\traffic-patterns\\traffic-patterns-35.jpg",
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\community-branding\\community-branding-07.jpg",
       "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\decomark\\decomark-69.jpg"
     },
     {

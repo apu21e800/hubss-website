@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Raw asset images (large PNGs/JPGs — keep locally, too big for git without LFS)
+assets/booklet/
+assets/cover/
+assets/fonts/
+assets/images/
+assets/products/
+assets/projects/
+assets/applications/
+
+# Figma reference screenshots (layout refs — keep locally)
+figma_refs/
+
+# Build artifacts
+output/_*
+output/DEBUG*
+output/FRESH*
+output/_cmyk_cache/
+output/previews/
+
+# Generated plugin (embed_images bloats to 40MB — regenerate locally)
+figma-plugin/code.js
+
+# Large binary output PDFs (version-controlled via Figma, not git)
+output/*.pdf
+output/previews_*/
+output/v*/
+output/bleed/
+output/fc/
+output/final/
+output/final2/
+output/fix/
+output/v_final/
+output/v100/
+output/v2*/
+output/v3*/
+output/v4*/
+output/v5*/
+output/verify/
+output/svg/
+output/*.png

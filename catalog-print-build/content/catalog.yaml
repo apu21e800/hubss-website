@@ -1,0 +1,271 @@
+meta:
+  title: HUB Surface Systems. 2026
+  subtitle: A Catalogue of Surfaces. A Record of Communities.
+  edition: Catalogue 2026
+cover:
+  hero_image: assets/booklet/Whiterock-Pier-Crosswalk-TrafficPatternsXD-1 1.png
+  eyebrow: Catalogue 2026
+  headline: REDEFINING HARDSCAPES.
+  subhead: ''
+inside_front:
+  hero_image: assets/booklet/HUB Catalogue 2024 (walking) 1.png
+  quote: Pavement is not a small thing. It is the surface a city walks on.
+manifesto:
+  eyebrow: A Word From HUB
+  headline: Surfaces, in service of the public.
+  body: For thirty years we have built the ground beneath Canada's most lived-on streets. Crosswalks. Plazas. Bus lanes. Runways. We do not make pavement. We make the public realm.
+  signature: HUB Surface Systems / Established 1994
+projects_divider:
+  eyebrow: Section One
+  title: Projects.
+  subtitle: What we have built, in partnership with Canadian cities.
+projects:
+- title: White Rock Pier.
+  location: White Rock, British Columbia
+  product: TrafficPatternsXD
+  image: assets/booklet/Whiterock-Pier-Crosswalk-TrafficPatternsXD-1 1.png
+  summary: Salt air. Holiday traffic. Held.
+- title: UBC Musqueam.
+  location: Vancouver, British Columbia
+  product: StreetPrint
+  image: assets/booklet/UBC Crosswalk 1.png
+  summary: A surface is also a statement.
+- title: Meridian, Surrey.
+  location: Surrey, British Columbia
+  product: StreetPrint
+  image: assets/booklet/StreetPrint - Maridian Surrey 1.png
+  summary: Specified by the city. Walked by everyone.
+- title: An Indigenous Recognition Crosswalk.
+  location: Multiple municipalities, Canada
+  product: DecoMark
+  image: assets/booklet/aboriginal crosswalk 1.png
+  summary: Recognition. Cast in pavement.
+- title: Splash Pad Surfaces.
+  location: Multiple municipalities, Canada
+  product: StreetBond
+  image: assets/booklet/Splash Pad 2.png
+  summary: Slip-resistant. Cool to touch. Vivid.
+- title: Costco Site.
+  location: Commercial retail, Canada
+  product: StreetBond
+  image: assets/booklet/StreetBonf - Costco 1.png
+  summary: Branded. Holds the parking lot.
+- title: Town Home Driveway.
+  location: British Columbia
+  product: StreetPrint
+  image: assets/booklet/StreetPrint - town home 1.png
+  summary: Asphalt that earns the stone comparison.
+- title: Look Listen Live.
+  location: School zone safety program
+  product: DecoMark
+  image: assets/booklet/Look listen live 1.png
+  summary: Bold enough to slow a driver.
+- title: Traffic Calming, Street Skirt.
+  location: Residential calming, Canada
+  product: StreetPrint
+  image: assets/booklet/StreetPrint - TrafficCalming, street skirt 1.png
+  summary: Drivers slow. Without thinking about it.
+products_divider:
+  eyebrow: Section Two
+  title: Products.
+  subtitle: The systems we use to do the work.
+products:
+- name: TrafficPatternsXD.
+  tagline: When the surface has to hold.
+  hero_image: assets/booklet/Intersection installation TPXD 1.png
+  detail_image: assets/booklet/IMG_1347 1.png
+  description: ''
+  spec_line: 150mil. BPN 65+. Type III glass beads.
+  project_examples:
+  - ../public/images/products/traffic-patterns-xd/traffic-patterns-xd-140.jpg
+  - ../public/images/products/traffic-patterns-xd/traffic-patterns-xd-95.jpg
+  - ../public/images/products/traffic-patterns-xd/traffic-patterns-xd-94.jpg
+  logo: assets/booklet/logos/TPXD_white.png
+- name: TrafficPatterns.
+  tagline: Outlasts paint by seasons, not months.
+  hero_image: assets/booklet/Intergrated Rumble Bars (TrafficPatterns) 1.png
+  detail_image: assets/booklet/Intergrated Rumble Bars 2 (TrafficPatterns) 1.png
+  description: ''
+  spec_line: 90mil. Open in hours. No repaint cycle.
+  project_examples:
+  - ../public/images/products/traffic-patterns/traffic-patterns-37.jpg
+  - ../public/images/products/traffic-patterns/traffic-patterns-36.jpg
+  - ../public/images/products/traffic-patterns/traffic-patterns-35.jpg
+  logo: assets/booklet/logos/TP_white.png
+- name: StreetBond.
+  tagline: Coloured pavement that moves with asphalt and never peels.
+  hero_image: assets/booklet/StreetBond - Vancouver sidewalk 1.png
+  detail_image: assets/booklet/StreetBond Circle Design 1.png
+  description: ''
+  spec_line: Flexible acrylic. Pantone matched.
+  project_examples:
+  - ../public/images/products/streetbond/streetbond-92.jpg
+  - ../public/images/products/streetbond/streetbond-81.jpg
+  - ../public/images/products/streetbond/streetbond-79.png
+  logo: assets/booklet/logos/StreetBond.png
+  logo_special: rainbow
+- name: StreetPrint.
+  tagline: Asphalt that looks like stone.
+  hero_image: assets/booklet/StreetPrint - Maridian Surrey 1.png
+  detail_image: assets/booklet/StreetPrint walkway 1.png
+  description: ''
+  spec_line: 12+ patterns. Flush surface. Plow safe.
+  project_examples:
+  - ../public/images/products/streetprint/streetprint-69.jpg
+  - ../public/images/products/streetprint/streetprint-68.jpg
+  - ../public/images/products/streetprint/streetprint-89.jpg
+  logo: assets/booklet/logos/StreetPrint.png
+- name: DecoMark.
+  tagline: Where a crosswalk becomes a canvas.
+  hero_image: assets/booklet/DecoMark community park 1.png
+  detail_image: assets/booklet/DecoMark community park 2 1.png
+  description: ''
+  spec_line: Vector artwork. Pantone. Permanent.
+  project_examples:
+  - ../public/images/products/decomark/decomark-77.jpg
+  - ../public/images/products/decomark/decomark-74.jpg
+  - ../public/images/products/decomark/decomark-69.jpg
+  logo: assets/booklet/logos/DecoMark_white.png
+- name: MMAX.
+  tagline: Traffic-ready in under an hour.
+  hero_image: assets/booklet/Look listen live 1.png
+  detail_image: ../public/images/products/mmax/mmax-04.jpg
+  description: ''
+  spec_line: 30 minute cure. Holds at -10°C.
+  project_examples:
+  - ../public/images/products/mmax/mmax-16.jpg
+  - ../public/images/products/mmax/mmax-15.jpg
+  - ../public/images/products/mmax/mmax-14.jpg
+- name: StreetBondSR.
+  tagline: Solar reflective. LEED-certified.
+  hero_image: assets/booklet/StreetBond on concrets and vertical surfaces 1.png
+  detail_image: assets/booklet/StreetBond Moxing 1.png
+  description: ''
+  spec_line: High SRI. LEED v4.
+  project_examples:
+  - ../public/images/products/streetbondsr/streetbondsr-04.jpg
+  - ../public/images/products/streetbondsr/streetbondsr-03.jpg
+  - ../public/images/products/streetbondsr/streetbondsr-02.jpg
+  logo: assets/booklet/logos/StreetBondSR.png
+- name: DuraTherm.
+  tagline: Inlaid. Flush. Invisible to snowplows.
+  hero_image: assets/booklet/DuraTherm stecils on asphalt 1.png
+  detail_image: assets/booklet/duratherm1 1.png
+  description: ''
+  spec_line: Inlaid. Flush. Zero profile.
+  project_examples:
+  - ../public/images/products/duratherm/duratherm-01.jpg
+  - ../public/images/products/duratherm/duratherm-29.jpg
+  - ../public/images/products/duratherm/duratherm-03.jpg
+  logo: assets/booklet/logos/DuraTherm_white.png
+- name: DuraShield.
+  tagline: Maintain a surface, do not replace it.
+  hero_image: ../public/images/products/durashield/durashield-04.jpg
+  detail_image: ../public/images/products/durashield/durashield-07.jpg
+  description: ''
+  spec_line: Penetrating rejuvenator. 6 to 12 mm.
+  project_examples:
+  - ../public/images/products/durashield/durashield-05.jpg
+  - ../public/images/products/durashield/durashield-03.jpg
+  - ../public/images/products/durashield/durashield-08.jpg
+- name: AirMark.
+  tagline: Aviation-grade, certified, permanent.
+  hero_image: assets/booklet/Airport Sports Court 1.png
+  detail_image: ../public/images/products/airmark/airmark-04.jpg
+  description: ''
+  spec_line: Aviation grade. 4× the life of paint.
+  project_examples:
+  - ../public/images/products/airmark/airmark-10.jpg
+  - ../public/images/products/airmark/airmark-08.jpg
+  - ../public/images/products/airmark/airmark-21.jpg
+- name: PreMark.
+  tagline: Ready to apply. No stencils. No cure time.
+  hero_image: assets/booklet/StreetPrint - bikes 1.png
+  detail_image: ../public/images/products/premark/premark-09.jpg
+  description: ''
+  spec_line: Pre cut. Heat applied. Open immediately.
+  project_examples:
+  - ../public/images/products/premark/premark-03.jpg
+  - ../public/images/products/premark/premark-01.jpg
+  - ../public/images/products/premark/premark-11.jpg
+- name: Fast Patch.
+  tagline: A pothole, gone in thirty minutes.
+  hero_image: assets/booklet/compactor on streetprint 1.png
+  detail_image: ../public/images/products/streetprint/streetprint-67.jpg
+  description: ''
+  spec_line: 30 minute cure. -10°C to +40°C.
+  project_examples:
+  - ../public/images/products/streetprint/streetprint-69.jpg
+  - ../public/images/products/streetprint/streetprint-68.jpg
+  - ../public/images/products/streetprint/streetprint-89.jpg
+applications_divider:
+  eyebrow: Section Three
+  title: Applications.
+  subtitle: Where a HUB surface earns its place.
+applications:
+- name: Crosswalks.
+  image: assets/booklet/native crosswalk 1.png
+  blurb: AODA-compliant pedestrian crossings, engineered for Vision Zero outcomes and built to last.
+- name: Splash Pads.
+  image: assets/booklet/Splash Pad 1.png
+  blurb: Slip-resistant, cool-touch coloured surfaces for the places where children spend the most concentrated hours of their year.
+- name: Sport Courts.
+  image: assets/booklet/school sport court 1.png
+  blurb: Custom-coloured, line-marked, durable sport surfaces for schools, parks, and community centres.
+- name: Driveways.
+  image: assets/booklet/StreetPrin Driveway 1.png
+  blurb: Decorative finishes that turn private driveways into curbside design statements.
+- name: Bike Routes.
+  image: ../public/images/applications/bike-lanes/bike-lanes-12.jpg
+  blurb: High-contrast coloured surfaces that improve modal clarity and reinforce Complete Streets principles.
+- name: Parks & Paths.
+  image: ../public/images/applications/parks-paths/parks-paths-132.jpg
+  blurb: Pathway and plaza surfaces that hold up to year-round civic use.
+- name: Community Branding.
+  image: ../public/images/applications/community-branding/community-branding-08.jpg
+  blurb: Custom-coloured pavement that reinforces neighbourhood identity at the street level.
+- name: Airports.
+  image: ../public/images/applications/airports/airports-20.png
+  blurb: Aviation-grade systems for runways, taxiways, aprons, and terminal forecourts.
+cities_served:
+  eyebrow: Specified Coast to Coast
+  title: Trusted, by name.
+  list:
+  - City of Toronto
+  - York Region
+  - City of Vancouver
+  - UBC
+  - City of Ottawa
+  - City of Calgary
+  - City of Brampton
+  - City of Mississauga
+  - TransLink
+  - City of Surrey
+  - City of Edmonton
+  - City of Winnipeg
+  - City of Burnaby
+  - Richmond Hill
+  - Halifax Regional Municipality
+  - City of Kelowna
+  - Region of Peel
+  - City of Saskatoon
+contact:
+  east:
+    region: Eastern Canada
+    contact: Doug Bain
+    email: doug.bain@hubss.com
+    phone: 416-540-9287
+    city: Milton, Ontario
+  west:
+    region: Western Canada
+    contact: Cleve Stordy
+    email: cleve.stordy@hubss.com
+    phone: 604-309-8212
+    city: Ladysmith, British Columbia
+  cta_image: assets/booklet/StreetBond Splash Pad 1.png
+  cta: Request a spec sheet, or book a Lunch & Learn.
+  url: hubss.com
+back_cover:
+  hero_image: assets/booklet/StreetBond. path 1.png
+  tagline: Surfaces that work as hard as the communities they serve.
+  url: hubss.com

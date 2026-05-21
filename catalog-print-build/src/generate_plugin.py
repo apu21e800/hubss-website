@@ -321,40 +321,41 @@ async function pageProductHero(prod) {
 }
 
 async function pageProductSpec(prod) {
-  // 2-layer hierarchy: name (H1 in navy) → title (H2) → body → spec grid.
-  // Removed: "BY HUB SURFACE SYSTEMS" (redundant in own catalogue),
-  //          "DECORATIVE PAVEMENT" category label (visual noise),
-  //          orange callout heading (specs belong in the grid, not as a heading).
+  // REBALANCE: product image band fills the dead white gap.
+  // Three clear zones: navy name (70px) → product image (148px) → content (232px).
+  // This solves the hollow mid-page gap without re-adding text clutter.
   const f = fr("Spec — " + prod.name);
 
-  // Compact navy band — product name only. Nothing else needed.
-  navyBand(f, 82);
-  await tx(f, prod.name || "", 28, 22, 24, W, true, 394);
-  rul(f, 28, 56, 20);
+  // Compact navy — name + rule only
+  navyBand(f, 70);
+  await tx(f, prod.name || "", 28, 18, 22, W, true, 394);
+  rul(f, 28, 50, 18);
 
-  // Body zone — generous white space below band. Clean 2-layer hierarchy.
+  // Product image band — full-width, editorial crop. Connects hero-page feel to spec content.
+  ph(f, 0, 70, 450, 148, prod.name + " — spec image", prod.hero);
+
+  // Content zone — compact block below image
   const title = prod.title || prod.name;
-  await tx(f, title, 28, 98, 20, D, true, 394);
-  await tx(f, prod.italic || "", 28, 126, 7.5, M, false, 394);
-  // Body: 2-3 tight sentences only. White space below is intentional.
-  await tx(f, prod.body || "", 28, 150, 8, D, false, 394);
+  await tx(f, title, 28, 232, 17, D, true, 394);
+  await tx(f, prod.italic || "", 28, 256, 7, M, false, 394);
+  await tx(f, prod.body || "", 28, 272, 8, D, false, 394);
 
-  // Spec grid — 2 rows of up to 3 pairs each
+  // Spec grid — 2 rows of 3 pairs
   if (prod.spec_pairs && prod.spec_pairs.length) {
-    rct(f, 28, 298, 394, 1, F, "rule");
+    rct(f, 28, 322, 394, 1, F, "rule");
     const colX = [28, 162, 296];
     for (let i = 0; i < Math.min(prod.spec_pairs.length, 6); i++) {
       const [lbl, val] = prod.spec_pairs[i];
       const col = i % 3, row = Math.floor(i / 3);
-      const xx = colX[col], yy = 310 + row * 30;
+      const xx = colX[col], yy = 332 + row * 28;
       await tx(f, (lbl||"").toUpperCase(), xx, yy, 5, F, false, 124, null, 8);
-      await tx(f, val||"", xx, yy+10, 8, D, true, 124, null, 12);
+      await tx(f, val||"", xx, yy+9, 8, D, true, 124, null, 12);
     }
   }
-  // Uses — single restrained footer line. No competing URL.
+  // Uses footer — single restrained line
   if (prod.uses && prod.uses.length) {
-    rct(f, 28, 378, 394, 1, F, "rule");
-    await tx(f, prod.uses.join("   ·   ").toUpperCase(), 28, 387, 5.5, M, false, 394, "center", 8);
+    rct(f, 28, 398, 394, 1, F, "rule");
+    await tx(f, prod.uses.join("   ·   ").toUpperCase(), 28, 406, 5.5, M, false, 394, "center", 8);
   }
   return f;
 }
@@ -407,25 +408,24 @@ async function pageProjectStory(proj, idx) {
 }
 
 async function pageInstaller(inst, idx, total) {
+  // REBALANCE: tighter navy band (120px), taller photo (200px), more breathing room
+  // for body and footer. Proportions: 120px navy + 200px photo + 130px content.
   const f = fr("Installer — " + inst.name);
-  // Navy header band — credential zone. Keeps photo uncluttered.
-  navyBand(f, 152);
-  // Credential badge top-left, counter top-right — both sit in the navy zone
-  await tx(f, "HUB CERTIFIED INSTALLER", 28, 28, 5.5, O, false, 260, null, 8);
-  await tx(f, String(idx).padStart(2,"0") + " / " + String(total).padStart(2,"0"), 28, 28, 5.5, {r:0.38,g:0.38,b:0.38}, false, 394, "right", 8);
-  // Name: 30px — large, white, in the navy zone
-  await tx(f, inst.name, 28, 52, 30, W, true, 394);
-  // Region: small caps, muted charcoal on navy
-  await tx(f, (inst.region || "").toUpperCase(), 28, 102, 5.5, {r:0.45,g:0.45,b:0.45}, false, 394, null, 8);
-  rul(f, 28, 128, 32);
-  // Contained editorial photo — full width, runs from bottom of header to content zone
-  ph(f, 0, 152, 450, 192, inst.name + " — photo", inst.image);
-  // White content zone below photo
-  await tx(f, inst.body || "", 28, 360, 8, D, false, 394);
-  // Footer: moved up to y=400/410 — bottom=420, gap=30px (≥0.25" safe margin)
-  rct(f, 28, 400, 394, 1, F, "rule");
-  await tx(f, inst.phone || "", 28, 410, 10, D, true, 190);
-  await tx(f, inst.url || "", 238, 411, 9, O, false, 182);
+  navyBand(f, 120);
+  await tx(f, "HUB CERTIFIED INSTALLER", 28, 18, 5, O, false, 260, null, 8);
+  await tx(f, String(idx).padStart(2,"0") + " / " + String(total).padStart(2,"0"), 28, 18, 5, {r:0.38,g:0.38,b:0.38}, false, 394, "right", 8);
+  // Name: 28px — strong but not oversized. Province below with more air.
+  await tx(f, inst.name, 28, 40, 26, W, true, 394);
+  await tx(f, (inst.region || "").toUpperCase(), 28, 82, 5.5, {r:0.45,g:0.45,b:0.45}, false, 394, null, 8);
+  rul(f, 28, 100, 28);
+  // Photo — 200px, slightly taller for visual weight
+  ph(f, 0, 120, 450, 200, inst.name + " — photo", inst.image);
+  // Body — 16px gap from photo
+  await tx(f, inst.body || "", 28, 336, 8, D, false, 394);
+  // Footer — anchored with space (body ~3 lines → bottom ~372, 22px gap to rule)
+  rct(f, 28, 390, 394, 1, F, "rule");
+  await tx(f, inst.phone || "", 28, 400, 10, D, true, 190);
+  await tx(f, inst.url || "", 238, 401, 9, O, false, 182);
   return f;
 }
 
@@ -555,39 +555,40 @@ async function pageCities(d) {
 }
 
 async function pageLunchLearn(mascotPath) {
-  // REDUCTION PASS: Moose + tight headline + 4 benefits + one booking line. That's it.
-  // City list, "not a sales pitch", redundant headers — all cut.
+  // REBALANCE: Moose fills more height, headline fits single line, composition fills space.
+  // BUG FIX: "Lunch Is On Us." at sz=28 in 202px wraps to 2 lines, colliding with next line.
+  //          Fix: sz=22 (confirmed single line), explicit lh=30, proper y-gap.
   const f = fr("CTA — Lunch and Learn");
 
-  // Moose — right half. Generous and prominent.
-  logo(f, 238, 20, 192, 262, "Moose — HUB mascot", mascotPath);
+  // Moose — right half, tall (fills most of page height for visual balance)
+  logo(f, 236, 14, 196, 306, "Moose — HUB mascot", mascotPath);
 
-  // Left column — breathe
-  rul(f, 28, 28, 20);
-  await tx(f, "Lunch Is On Us.", 28, 44, 28, D, true, 202);
-  await tx(f, "Your Next Spec Is Free.", 28, 80, 15, O, true, 202);
+  // Left column — correct single-line headline at sz=22 (fits 202px column)
+  rul(f, 28, 22, 20);
+  await tx(f, "Lunch Is On Us.", 28, 38, 22, D, true, 200, null, 28);
+  // explicit lh=28 ensures single-line bottom = 38+28 = 66. Gap to y=80 = 14px. No collision.
+  await tx(f, "Your Next Spec Is Free.", 28, 80, 13, O, true, 200, null, 18);
 
-  // 4 benefits only — the essentials
+  // 4 clean benefits
   const items = [
     "45 min — tailored to your project",
     "Spec sheets, samples + CE credits",
     "Lunch included — $25 virtual voucher",
     "Zero cost · Zero obligation",
   ];
-  let dy = 120;
+  let dy = 116;
   for (const item of items) {
-    await tx(f, "— " + item, 28, dy, 7.5, D, false, 202);
-    dy += 17;
+    await tx(f, "— " + item, 28, dy, 7, D, false, 200);
+    dy += 15;
   }
 
-  // Full-width URL — the one clear action
-  rct(f, 28, 300, 394, 1, F, "rule");
-  await tx(f, "hubss.com/lunch-learn", 28, 312, 15, O, true, 394);
+  // Full-width zone below — URL is the one clear action
+  rct(f, 28, 256, 394, 1, F, "rule");
+  await tx(f, "hubss.com/lunch-learn", 28, 266, 14, O, true, 394);
 
-  // Single contact line — they know where to find the Contact page for details
-  rct(f, 28, 348, 394, 1, F, "rule");
-  await tx(f, "Cleve Stordy   604.309.8212", 28, 358, 8.5, D, false, 188, null, 12);
-  await tx(f, "Doug Bain   416.540.9287", 238, 358, 8.5, D, false, 178, null, 12);
+  rct(f, 28, 298, 394, 1, F, "rule");
+  await tx(f, "Cleve Stordy   604.309.8212", 28, 308, 8, D, false, 188, null, 12);
+  await tx(f, "Doug Bain   416.540.9287", 238, 308, 8, D, false, 178, null, 12);
   return f;
 }
 

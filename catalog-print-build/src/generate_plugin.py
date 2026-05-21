@@ -154,8 +154,10 @@ async function tx(p, text, x, y, sz, col, bold, maxW, align, lh) {
   t.fontSize = Math.round(sz);
   t.fills = [{type:"SOLID", color: col}];
   // Always set explicit line height — eliminates Figma's auto-leading inconsistencies
-  // Display sizes (sz >= 11): tight 1.08× for print-quality heading rhythm
-  const lineH = lh || (sz < 11 ? Math.round(sz * 1.55) : Math.round(sz * 1.08));
+  // Body (sz < 11): 1.55× for open readable leading
+  // Display (sz >= 11): 1.15× — industry standard for tight display leading, clears Inter Bold ascenders
+  // 1.08× was too tight: 40pt × 1.08 = 43px, visually clips ascenders when text wraps → collision
+  const lineH = lh || (sz < 11 ? Math.round(sz * 1.55) : Math.round(sz * 1.15));
   t.lineHeight = {value: lineH, unit: "PIXELS"};
   if (maxW) {
     t.textAutoResize = "HEIGHT";
@@ -425,7 +427,8 @@ async function pageInstaller(inst, idx, total) {
   // Footer — anchored with space (body ~3 lines → bottom ~372, 22px gap to rule)
   rct(f, 28, 390, 394, 1, F, "rule");
   await tx(f, inst.phone || "", 28, 400, 10, D, true, 190);
-  await tx(f, inst.url || "", 238, 401, 9, O, false, 182);
+  // URL right-aligned — consistent footer URL treatment sitewide
+  await tx(f, inst.url || "", 28, 401, 9, O, false, 394, "right", 13);
   return f;
 }
 
@@ -467,20 +470,23 @@ async function pageDoublespread(label, imagePath, caption, rightStyle, rightImag
   // Right page — photo CTA by default; navy brand statement when rightStyle === "navy"
   const fR = fr("Spread R — " + (label||""), N);
   if (rightStyle === "navy") {
-    // Closing editorial — navy, giant type, lands as a final statement.
-    rul(fR, 28, 80, 32);
-    await tx(fR, "THIRTY YEARS IN THE MAKING.", 28, 96, 6, O, false, 394, null, 9);
-    await tx(fR, "Built to", 28, 116, 52, W, true, 394);
-    await tx(fR, "outlast.", 28, 180, 52, O, true, 394);
-    rct(fR, 28, 248, 394, 1, {r:1,g:1,b:1}, "Divider");
+    // Closing editorial — navy, giant type. Spacing system: rule→eyebrow 16px,
+    // eyebrow→H1 16px, H1→H2 8px, H2→divider 16px, stats→editorial 24px.
+    rul(fR, 28, 76, 28);
+    await tx(fR, "THIRTY YEARS IN THE MAKING.", 28, 92, 5.5, O, false, 394, null, 8);
+    // "Built to" ≈ 8 chars × ~31px at sz=52 ≈ 248px ✓  "outlast." similar ✓ — both single-line
+    await tx(fR, "Built to", 28, 110, 50, W, true, 394);
+    await tx(fR, "outlast.", 28, 170, 50, O, true, 394);
+    rct(fR, 28, 234, 394, 1, {r:1,g:1,b:1}, "Divider");
     fR.children[fR.children.length-1].opacity = 0.15;
-    await tx(fR, "30+ years   ·   1,000+ projects   ·   500+ municipalities", 28, 262, 7.5, M, false, 394, "center", 11);
-    rct(fR, 28, 288, 394, 1, {r:1,g:1,b:1}, "Divider");
+    await tx(fR, "30+ years   ·   1,000+ projects   ·   500+ municipalities", 28, 248, 7.5, M, false, 394, "center", 11);
+    rct(fR, 28, 272, 394, 1, {r:1,g:1,b:1}, "Divider");
     fR.children[fR.children.length-1].opacity = 0.08;
-    await tx(fR, "The surface beneath every city we've built.", 28, 308, 12, W, false, 360);
-    await tx(fR, "Spec the surface. Watch it work. Walk over it for twenty years.", 28, 332, 8, M, false, 360);
+    // Closing editorial — moved down to fill the bottom zone intentionally
+    await tx(fR, "The surface beneath every city we've built.", 28, 292, 12, W, false, 360);
+    // URL right-aligned, anchored at bottom (fixed y, not floating)
     rct(fR, 28, 404, 394, 1, O, "OrangeRule");
-    await tx(fR, "hubss.com", 28, 414, 7.5, O, true, 394, "right", 11);
+    await tx(fR, "hubss.com", 28, 412, 7.5, O, true, 394, "right", 11);
   } else {
     // Photo right — use rightImagePath if supplied, else mirror left
     ph(fR, 0, 0, 450, 450, label + " — right", rightImagePath || imagePath);
@@ -555,40 +561,51 @@ async function pageCities(d) {
 }
 
 async function pageLunchLearn(mascotPath) {
-  // REBALANCE: Moose fills more height, headline fits single line, composition fills space.
-  // BUG FIX: "Lunch Is On Us." at sz=28 in 202px wraps to 2 lines, colliding with next line.
-  //          Fix: sz=22 (confirmed single line), explicit lh=30, proper y-gap.
+  // NAVY LEFT SPLIT: navy left column for brand energy, Moose on white right.
+  // The warm/human page earns bold color treatment — Moose lives in brightness,
+  // headline punches out of navy. Warm and confident.
   const f = fr("CTA — Lunch and Learn");
 
-  // Moose — right half, tall (fills most of page height for visual balance)
-  logo(f, 236, 14, 196, 306, "Moose — HUB mascot", mascotPath);
+  // Navy left panel — energy block
+  rct(f, 0, 0, 234, 450, N, "NavyLeft");
 
-  // Left column — correct single-line headline at sz=22 (fits 202px column)
-  rul(f, 28, 22, 20);
-  await tx(f, "Lunch Is On Us.", 28, 38, 22, D, true, 200, null, 28);
-  // explicit lh=28 ensures single-line bottom = 38+28 = 66. Gap to y=80 = 14px. No collision.
-  await tx(f, "Your Next Spec Is Free.", 28, 80, 13, O, true, 200, null, 18);
+  // Moose — right half, white background, full height. He's bright and welcoming.
+  logo(f, 242, 10, 194, 310, "Moose — HUB mascot", mascotPath);
 
-  // 4 clean benefits
+  // Left column — white/orange text on navy
+  rul(f, 20, 24, 20);
+  // sz=22 confirmed single-line in 206px at Inter Bold; explicit lh=28
+  await tx(f, "Lunch Is On Us.", 20, 40, 22, W, true, 206, null, 28);
+  // Gap: 40+28=68, next at y=80 → 12px clear gap
+  await tx(f, "Your Next Spec Is Free.", 20, 80, 12, O, true, 206, null, 16);
+
+  // Benefits — muted white on navy
+  const LW = {r:0.70, g:0.70, b:0.70};  // light white for nav background
   const items = [
     "45 min — tailored to your project",
     "Spec sheets, samples + CE credits",
     "Lunch included — $25 virtual voucher",
     "Zero cost · Zero obligation",
   ];
-  let dy = 116;
+  let dy = 114;
   for (const item of items) {
-    await tx(f, "— " + item, 28, dy, 7, D, false, 200);
+    await tx(f, "— " + item, 20, dy, 7, LW, false, 206);
     dy += 15;
   }
 
-  // Full-width zone below — URL is the one clear action
-  rct(f, 28, 256, 394, 1, F, "rule");
-  await tx(f, "hubss.com/lunch-learn", 28, 266, 14, O, true, 394);
+  // Separator in navy zone
+  rct(f, 20, 180, 206, 1, {r:1,g:1,b:1}, "NavySep");
+  f.children[f.children.length-1].opacity = 0.18;
 
-  rct(f, 28, 298, 394, 1, F, "rule");
-  await tx(f, "Cleve Stordy   604.309.8212", 28, 308, 8, D, false, 188, null, 12);
-  await tx(f, "Doug Bain   416.540.9287", 238, 308, 8, D, false, 178, null, 12);
+  // URL — orange, full-width across both panels (spans the split)
+  rct(f, 20, 260, 410, 1, {r:0.3,g:0.3,b:0.3}, "BottomSep");
+  await tx(f, "hubss.com/lunch-learn", 20, 270, 13, O, true, 410);
+
+  // Contact line — white text (still in the left navy zone)
+  rct(f, 20, 302, 206, 1, {r:1,g:1,b:1}, "NavySep2");
+  f.children[f.children.length-1].opacity = 0.12;
+  await tx(f, "Cleve Stordy   604.309.8212", 20, 312, 8, W, false, 206, null, 12);
+  await tx(f, "Doug Bain   416.540.9287", 20, 328, 8, W, false, 206, null, 12);
   return f;
 }
 
@@ -628,31 +645,32 @@ async function pageContact(d) {
 }
 
 async function pageClosing() {
-  // Final word. Generous white space — the page earns the silence.
-  // Upper half breathes. Lower half anchors. Statement in between.
+  // REDESIGN: sz=30 headings (confirmed single-line at 394px), tighter element grouping.
+  // Spacing system: eyebrow→rule: 14px. rule→H1: 14px. H1→H2: 8px gap. H2→accent: 14px.
+  // accent→body: 16px. body→sign-off rule: 24px. Consistent rhythm throughout.
   const f = fr("Closing — The Street");
 
-  // Eyebrow — small, precisely tracked, not competing with headline
-  await tx(f, "THE STREET IS", 28, 60, 5.5, O, false, 394, null, 8);
-  rul(f, 28, 76, 20);
+  await tx(f, "A FINAL WORD", 28, 58, 5.5, O, false, 394, null, 8);
+  rul(f, 28, 74, 20);
 
-  // Display headline — maximum negative space above it
-  await tx(f, "The public realm.", 28, 94, 40, D, true, 360);
-  await tx(f, "Ours to build right.", 28, 150, 40, O, true, 360);
+  // sz=30 — "The street is" = ~240px ✓  "the public realm." = ~300px ✓ both single-line
+  await tx(f, "The street is", 28, 90, 30, D, true, 394);
+  await tx(f, "the public realm.", 28, 128, 30, O, true, 394);
 
-  // 48px orange rule accent — editorial not decorative
-  rct(f, 28, 210, 48, 2, O, "Accent");
+  // Accent rule: 14px below headline block bottom (128 + lh≈35 = 163 + 14 = 177)
+  rct(f, 28, 178, 48, 2, O, "Accent");
 
-  // Statement — relaxed leading, breathing room on all sides
-  await tx(f, "Every surface we build is walked over, driven on, played at, and lived around. That is the standard we hold ourselves to. Specify it right. Watch it work. Walk over it for twenty years.", 28, 228, 9.5, D, false, 330, null, 15);
+  // Body: 16px below accent (178+2+16=196)
+  await tx(f, "Every surface we build is walked over, driven on, played at, and lived around. That is the standard we hold ourselves to. Specify it right. Watch it work. Walk over it for twenty years.", 28, 196, 9.5, D, false, 330, null, 15);
 
-  // Sign-off — three words as a trio, slightly more spacing between them
-  rct(f, 28, 360, 394, 1, F, "rule");
-  await tx(f, "SPECIFIED.", 28, 374, 8.5, D, true, 118);
-  await tx(f, "INSTALLED.", 166, 374, 8.5, D, true, 118);
-  await tx(f, "BACKED.", 304, 374, 8.5, D, true, 100);
-  rul(f, 28, 396, 28);
-  await tx(f, "HUB SURFACE SYSTEMS", 28, 404, 5, F, false, 394, "center", 8);
+  // Sign-off: 24px below body (body 3 lines × 15lh = 45px → ends y=241 + 24 = 265)
+  rct(f, 28, 266, 394, 1, F, "rule");
+  await tx(f, "SPECIFIED.", 28, 278, 8.5, D, true, 118);
+  await tx(f, "INSTALLED.", 166, 278, 8.5, D, true, 118);
+  await tx(f, "BACKED.", 304, 278, 8.5, D, true, 100);
+  rul(f, 28, 300, 28);
+  await tx(f, "HUB SURFACE SYSTEMS", 28, 308, 5, F, false, 394, "center", 8);
+  // Intentional white space from y=320 to bottom — earned breathing room
   return f;
 }
 
@@ -667,16 +685,23 @@ async function pageService() {
 }
 
 async function pageQuietMark(d) {
-  const f = fr("Closing — HUB Mark");
-  // Optical centre — logo sits in the upper third, generous air around it
-  // 148×32px frame: same proportions as cover/back-cover for visual system cohesion
-  logo(f, 151, 162, 148, 32, "HUBSS logo colour", d.brand && d.brand.logo_color);
-  // Rule then type — spaced on a 16px baseline grid from logo bottom (y=194)
-  rct(f, 213, 208, 24, 1, O, "OrangeRule");
-  await tx(f, "HUB SURFACE SYSTEMS", 28, 220, 7, D, true, 394, "center", 11);
-  await tx(f, "ESTABLISHED 1994   ·   COAST TO COAST", 28, 235, 5.5, F, false, 394, "center", 8);
-  rct(f, 98, 260, 254, 1, F, "Divider");
-  await tx(f, "Thank you.", 28, 280, 13, M, false, 394, "center", 18);
+  // REDESIGN: navy background — confident bookend to the navy cover.
+  // "Thank you." at 20px white bold — not mumbled grey 13px. On-brand, designed.
+  const f = fr("Closing — HUB Mark", N);
+
+  // White HUBSS wordmark — centred, in the optical upper third
+  logo(f, 151, 152, 148, 32, "HUBSS logo white", d.brand && d.brand.logo_white);
+  rct(f, 213, 196, 24, 1, O, "OrangeRule");
+  await tx(f, "HUB SURFACE SYSTEMS", 28, 208, 6.5, W, true, 394, "center", 10);
+  await tx(f, "ESTABLISHED 1994   ·   COAST TO COAST", 28, 224, 5, M, false, 394, "center", 8);
+
+  // Subtle divider
+  rct(f, 98, 248, 254, 1, {r:1,g:1,b:1}, "Divider");
+  f.children[f.children.length-1].opacity = 0.15;
+
+  // Closing statement — confident scale, on-brand palette
+  await tx(f, "Thank you.", 28, 266, 20, W, true, 394, "center", 26);
+  await tx(f, "For every street. For every community.", 28, 298, 7, M, false, 394, "center", 11);
   return f;
 }
 

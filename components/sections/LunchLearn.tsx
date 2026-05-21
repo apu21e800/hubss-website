@@ -18,7 +18,7 @@ interface SubmitState {
   message?: string;
 }
 
-export default function LunchLearn({ hideMoose: _hideMoose }: { hideMoose?: boolean } = {}) {
+export default function LunchLearn({ hideMoose }: { hideMoose?: boolean } = {}) {
   const [formData, setFormData] = useState<FormState>({
     name: "",
     email: "",
@@ -39,10 +39,10 @@ export default function LunchLearn({ hideMoose: _hideMoose }: { hideMoose?: bool
     setSubmitState({ status: "loading" });
 
     try {
-      const response = await fetch("/api/lunch-learn", {
+      const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, formType: "lunch-learn" }),
       });
 
       if (!response.ok) {
@@ -54,7 +54,7 @@ export default function LunchLearn({ hideMoose: _hideMoose }: { hideMoose?: bool
         message: "Thank you! We'll be in touch soon to schedule your Lunch & Learn session.",
       });
       setFormData({ name: "", email: "", company: "", city: "", phone: "" });
-    } catch (error) {
+    } catch {
       setSubmitState({
         status: "error",
         message: "Something went wrong. Please try again or contact us directly.",
@@ -89,28 +89,31 @@ export default function LunchLearn({ hideMoose: _hideMoose }: { hideMoose?: bool
                 Education &amp; Engagement
               </p>
               <h2
-                className="text-3xl sm:text-4xl lg:text-[2.75rem] font-bold leading-tight mb-5"
+                className="font-black mb-5"
                 style={{
+                  fontSize: "clamp(2.4rem, 5vw, 3.75rem)",
+                  lineHeight: 0.97,
+                  letterSpacing: "-0.03em",
                   background: "linear-gradient(92deg, #F97316 0%, #EAB308 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
                 }}
               >
-                Lunch &amp; Learn at Your Location
+                Lunch &amp; Learn<br />at Your Location
               </h2>
               <p className="text-base leading-relaxed" style={{ color: "#9CA3AF" }}>
-                Bring the team together. We'll deliver a personalized session covering product selection, installation best practices, and ROI — with lunch included.
+                Lunch included, in your office or virtual.
               </p>
             </div>
 
             {/* Benefits list */}
             <div className="space-y-4 mb-10">
               {[
-                "30–45 minute presentation tailored to your projects",
+                "45–60 minute presentation tailored to your projects",
                 "Live Q&A with HUB technical team",
                 "Sample materials and specification sheets",
-                "Lunch & refreshments included",
+                "Lunch included — virtual sessions come with a $25 lunch voucher",
               ].map((benefit, i) => (
                 <motion.div
                   key={benefit}
@@ -148,6 +151,7 @@ export default function LunchLearn({ hideMoose: _hideMoose }: { hideMoose?: bool
                   type="text"
                   name="name"
                   placeholder="Your name"
+                  aria-label="Your name"
                   value={formData.name}
                   onChange={handleChange}
                   required
@@ -162,6 +166,7 @@ export default function LunchLearn({ hideMoose: _hideMoose }: { hideMoose?: bool
                   type="email"
                   name="email"
                   placeholder="Email address"
+                  aria-label="Email address"
                   value={formData.email}
                   onChange={handleChange}
                   required
@@ -179,6 +184,7 @@ export default function LunchLearn({ hideMoose: _hideMoose }: { hideMoose?: bool
                   type="text"
                   name="company"
                   placeholder="Company or organization"
+                  aria-label="Company or organization"
                   value={formData.company}
                   onChange={handleChange}
                   className="px-4 py-3 rounded-lg text-sm"
@@ -192,6 +198,7 @@ export default function LunchLearn({ hideMoose: _hideMoose }: { hideMoose?: bool
                   type="text"
                   name="city"
                   placeholder="City"
+                  aria-label="City"
                   value={formData.city}
                   onChange={handleChange}
                   className="px-4 py-3 rounded-lg text-sm"
@@ -207,6 +214,7 @@ export default function LunchLearn({ hideMoose: _hideMoose }: { hideMoose?: bool
                 type="tel"
                 name="phone"
                 placeholder="Phone number"
+                aria-label="Phone number"
                 value={formData.phone}
                 onChange={handleChange}
                 className="w-full px-4 py-3 rounded-lg text-sm"
@@ -286,19 +294,21 @@ export default function LunchLearn({ hideMoose: _hideMoose }: { hideMoose?: bool
             </div>
 
             {/* Moose mascot — bottom right, peeking up */}
-            <div
-              className="absolute bottom-0 right-0 pointer-events-none"
-              style={{ width: "55%", transform: "translateX(8%) translateY(4%)" }}
-            >
-              <Image
-                src={mooseImg.src}
-                alt={mooseImg.alt}
-                width={320}
-                height={400}
-                className="w-full h-auto drop-shadow-2xl"
-                style={{ objectFit: "contain" }}
-              />
-            </div>
+            {!hideMoose && (
+              <div
+                className="absolute bottom-0 right-0 pointer-events-none"
+                style={{ width: "55%", transform: "translateX(8%) translateY(4%)" }}
+              >
+                <Image
+                  src={mooseImg.src}
+                  alt={mooseImg.alt}
+                  width={320}
+                  height={400}
+                  className="w-full h-auto drop-shadow-2xl"
+                  style={{ objectFit: "contain" }}
+                />
+              </div>
+            )}
 
             {/* Decorative glow */}
             <div

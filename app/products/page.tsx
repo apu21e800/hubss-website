@@ -3,38 +3,43 @@ import Image from "next/image";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
-import { products } from "@/lib/products";
+import { products as staticProducts } from "@/lib/products";
 import { buildMetadata } from "@/lib/seo";
+import { getAllSanityProducts } from "@/lib/sanity.queries";
+
+export const revalidate = 3600;
 
 export const metadata = buildMetadata({
   title: "Decorative Pavement & Marking Systems",
-  description: "Ten purpose-built surface systems — thermoplastics, MMA resins, stamped asphalt, and protective coatings engineered for Canadian climate. Spec sheets, technical data, and installation support.",
+  description: "Fourteen surface systems for Canadian municipal, commercial, and private use — preformed thermoplastics, MMA resins, stamped asphalt, decorative coatings, and asphalt repair. Technical data, spec sheets, and certified installation.",
   slug: "products",
 });
 
-export default function ProductsPage() {
+export default async function ProductsPage() {
+  // Try Sanity first; fall back to static data when Sanity isn't populated.
+  // Sanity products are keyed by slug — merge with static list to preserve
+  // product ordering and groups defined here in code.
+  const sanityProducts = await getAllSanityProducts();
+  const sanityBySlug = new Map(sanityProducts.map((p) => [p.slug as unknown as string, p]));
+
+  // Use static products as the source of truth for ordering/grouping.
+  // Apply Sanity overrides only when the doc exists and has been migrated.
+  const products = staticProducts.map((sp) => {
+    const sDoc = sanityBySlug.get(sp.slug);
+    if (!sDoc) return sp;
+    return {
+      ...sp,
+      shortDesc: sDoc.shortDesc ?? sp.shortDesc,
+    };
+  });
+
   return (
     <main style={{ background: "#0f1620", minHeight: "100vh" }}>
       <Nav />
 
-      {/*
-       * ASPHALT TEXTURE SECTION BACKGROUND
-       * TODO: drop public/images/asphalt-texture.jpg (dark asphalt closeup, 1200×800+)
-       *       then uncomment the backgroundImage line below and remove the TODO comment.
-       *
-       * When the file is present the section gets a subtle atmospheric dark asphalt
-       * background at 8% opacity with a full dark overlay on top — purely decorative,
-       * text remains fully readable. The grain SVG below is an inline fallback until then.
-       */}
       <div
         className="relative"
-        style={
-          {
-            /* backgroundImage: "url('/images/asphalt-texture.jpg')", */
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }
-        }
+        style={{ backgroundSize: "cover", backgroundPosition: "center" }}
       >
         {/* Stamped asphalt texture — atmospheric depth */}
         <Image
@@ -47,16 +52,24 @@ export default function ProductsPage() {
           sizes="100vw"
         />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-16 sm:pb-24">
         <div className="mb-16 max-w-2xl">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-3" style={{ color: "#f97316" }}>
-            Our Systems
+            The Full Lineup
           </p>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-5 leading-tight" style={{ color: "var(--text-primary)" }}>
-            Surface Systems for the Built Environment
+          <h1
+            className="font-black mb-5"
+            style={{
+              color: "var(--text-primary)",
+              fontSize: "clamp(2rem, 4vw, 3.5rem)",
+              lineHeight: 1.0,
+              letterSpacing: "-0.03em",
+            }}
+          >
+            Surface Systems for the Built Environment.
           </h1>
           <p className="text-lg" style={{ color: "var(--text-secondary)" }}>
-            Thirteen purpose-built systems, one mission: give every Canadian surface the capacity to carry meaning.
+            Fourteen systems for municipal, commercial, and private use — preformed thermoplastics, MMA resins, stamped asphalt, decorative coatings, and asphalt repair.
           </p>
         </div>
 
@@ -79,23 +92,23 @@ export default function ProductsPage() {
           const groups: { label: string; desc: string; slugs: string[] }[] = [
             {
               label: "Preformed Thermoplastics",
-              desc: "Factory-manufactured and heat-fused directly to the surface. Regulatory symbols, patterned crosswalks, custom civic art, airfield markings — one technology, unlimited expression.",
+              desc: "Factory-manufactured and heat-fused directly to asphalt or concrete. Used for regulatory symbols, patterned crosswalks, custom civic graphics, and airfield markings. No stencil prep, no curing window, no annual repainting.",
               slugs: ["traffic-patterns-xd", "traffic-patterns", "premark", "duratherm", "decomark", "airmark"],
             },
             {
               label: "Coatings",
-              desc: "Liquid-applied colour systems that bond chemically to asphalt and concrete. Safety lane demarcation, civic plazas, solar-reflective urban heat island mitigation, and surface protection.",
+              desc: "Liquid-applied colour systems that bond chemically to asphalt and concrete. Used for lane demarcation, decorative plazas, solar-reflective heat island mitigation, and pavement protection.",
               slugs: ["streetbond", "streetbondsr", "mmax", "durashield"],
             },
             {
               label: "Stamped Asphalt & Concrete",
-              desc: "In-place stamping process that transforms existing asphalt into rich decorative hardscape — available in 12+ standard patterns and fully custom designs.",
+              desc: "In-place asphalt stamping. Stamps brick, cobblestone, slate, herringbone, fan, or fully custom patterns directly into new or existing asphalt. Flush surface, no raised edges, snowplow-safe.",
               slugs: ["streetprint"],
             },
             {
               label: "Asphalt Repair",
-              desc: "Permanent, traffic-ready repair products for potholes, utility cuts, and edge joints. No heating, no compaction equipment — open to traffic in minutes.",
-              slugs: ["fast-patch", "aquaphalt"],
+              desc: "Permanent, traffic-ready repair systems for potholes, utility cuts, and edge joints. No heating, no compaction equipment, open to traffic in 30 minutes.",
+              slugs: ["chipfill", "aggrefill", "fast-patch"],
             },
           ];
 
@@ -153,7 +166,7 @@ export default function ProductsPage() {
                                   {appTags.map((slug) => (
                                     <span
                                       key={slug}
-                                      className="text-[10px] font-semibold px-2 py-0.5 rounded-md"
+                                      className="text-[11px] font-semibold px-2 py-0.5 rounded-md"
                                       style={{
                                         background: "rgba(255,255,255,0.06)",
                                         color: "#9CA3AF",
@@ -165,7 +178,7 @@ export default function ProductsPage() {
                                   ))}
                                   {overflow > 0 && (
                                     <span
-                                      className="text-[10px] font-semibold px-2 py-0.5 rounded-md"
+                                      className="text-[11px] font-semibold px-2 py-0.5 rounded-md"
                                       style={{
                                         background: "rgba(249,115,22,0.08)",
                                         color: "rgba(249,115,22,0.7)",

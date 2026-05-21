@@ -3,6 +3,7 @@ import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
 import { buildMetadata } from "@/lib/seo";
 import Image from "next/image";
+import { getSanityPageContent } from "@/lib/sanity.queries";
 
 export const metadata = buildMetadata({
   title: "About HUB Surface Systems",
@@ -26,12 +27,12 @@ const values = [
   {
     heading: "Who We Build For",
     body:
-      "Municipalities, landscape architects, urban planners, developers, and certified contractors across every Canadian province. If it&apos;s a surface that people walk, drive, or gather on — we have a system for it.",
+      "Municipalities, landscape architects, urban planners, developers, and certified contractors across every Canadian province. If it's a surface that people walk, drive, or gather on — we have a system for it.",
   },
   {
     heading: "Why It Matters",
     body:
-      "Beautiful streets make walkable cities. Legible surfaces slow cars. Identity-rich public spaces build community. This isn&apos;t just infrastructure — it&apos;s the civic layer that tells a city it&apos;s worth caring about.",
+      "Beautiful streets make walkable cities. Legible surfaces slow cars. Identity-rich public spaces build community. This isn't just infrastructure — it's the civic layer that tells a city it's worth caring about.",
   },
 ];
 
@@ -44,12 +45,20 @@ const differentiators = [
   { title: "Climate-Tested", desc: "Every system is stress-tested for freeze-thaw extremes, de-icing salts, and snowplow blades — from coastal BC to the Great Lakes." },
 ];
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const sanityPage = await getSanityPageContent("about").catch(() => null);
+  const hero = {
+    eyebrow:    sanityPage?.aboutHero?.eyebrow    ?? "Canadian-Operated Since 1999 · All 10 Provinces",
+    heading:    sanityPage?.aboutHero?.heading    ?? "The people who made your city look like your city.",
+    subheading: sanityPage?.aboutHero?.subheading ?? "For over thirty years, HUB Surface Systems — a proudly Canadian company, coast to coast — has been connecting communities with pavement technologies that do more than carry traffic. They carry identity.",
+  };
+  const missionQuote = sanityPage?.aboutMission ?? "Every surface tells a story. We give communities the language to write it.";
+
   return (
     <main style={{ background: "#0f1620", minHeight: "100vh" }}>
       <Nav />
 
-      {/* ── Hero ───────────────────────────────────────────── */}
+      {/* ── Hero ──────────────────────────────── */}
       <div className="relative overflow-hidden min-h-[500px]" style={{ background: "#0d1117" }}>
         {/* Hero image */}
         <Image
@@ -69,22 +78,42 @@ export default function AboutPage() {
           aria-hidden="true"
         />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-24 relative z-10">
-          <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "#f97316" }}>
-            Canadian-Operated Since 1994 · All 10 Provinces
-          </p>
-          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 leading-tight max-w-4xl" style={{ color: "#ffffff" }}>
-            The people who made your city look like your city.
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-36 pb-16 sm:pb-24 relative z-10">
+          {/* Canadian flag + eyebrow — featured placement (matches nav + footer treatment) */}
+          <div className="flex items-center gap-3 mb-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 9600 4800"
+              width={28}
+              height={14}
+              aria-label="Flag of Canada"
+              style={{ display: "block", flexShrink: 0, borderRadius: 2, boxShadow: "0 1px 4px rgba(0,0,0,0.45)" }}
+            >
+              <path fill="#f00" d="m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z" />
+              <path fill="#fff" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z" />
+            </svg>
+            <p className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "#f97316" }}>
+              {hero.eyebrow}
+            </p>
+          </div>
+          <h1
+            className="font-black mb-6 max-w-4xl"
+            style={{
+              color: "#ffffff",
+              fontSize: "clamp(2rem, 4vw, 3.5rem)",
+              lineHeight: 1.0,
+              letterSpacing: "-0.03em",
+            }}
+          >
+            {hero.heading}
           </h1>
           <p className="text-xl leading-relaxed max-w-2xl" style={{ color: "#8b8b8b" }}>
-            For over thirty years, HUB Surface Systems — a proudly Canadian company, coast to coast
-            — has been connecting communities with pavement technologies that do more than carry
-            traffic. They carry identity.
+            {hero.subheading}
           </p>
         </div>
       </div>
 
-      {/* ── Stats Bar ───────────────────────────────────────── */}
+      {/* ── Stats Bar ───────────────────────── */}
       <div style={{ background: "#141b2d", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/[0.06]">
@@ -105,7 +134,7 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* ── Story ───────────────────────────────────────────── */}
+      {/* ── Story ──────────────────────────────── */}
       <div className="py-28" style={{ background: "#0f1620" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
@@ -149,7 +178,7 @@ export default function AboutPage() {
                 className="text-xl leading-relaxed mb-4"
                 style={{ color: "#ffffff", borderLeft: "3px solid #f97316", paddingLeft: "24px" }}
               >
-                &ldquo;Every surface tells a story. We give communities the language to write it.&rdquo;
+                &ldquo;{missionQuote}&rdquo;
               </p>
               <p className="text-sm mb-8" style={{ color: "#5a5a5a", paddingLeft: "24px" }}>
                 — HUB Surface Systems
@@ -165,21 +194,18 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* ── Values — 3 columns ─────────────────────────────── */}
+      {/* ── Values — 3 columns ────────────────────── */}
       <div style={{ background: "#141b2d", borderTop: "1px solid rgba(255,255,255,0.05)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-12" style={{ color: "#f97316" }}>
             What We Stand For
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-0" style={{ border: "1px solid rgba(255,255,255,0.06)", borderRadius: "16px", overflow: "hidden" }}>
-            {values.map((v, i) => (
+          <div className="grid grid-cols-1 md:grid-cols-3 divide-y divide-white/[0.06] md:divide-y-0 md:divide-x md:divide-white/[0.06]" style={{ border: "1px solid rgba(255,255,255,0.06)", borderRadius: "16px", overflow: "hidden" }}>
+            {values.map((v) => (
               <div
                 key={v.heading}
                 className="p-8 md:p-10"
-                style={{
-                  background: "#1a1e28",
-                  borderRight: i < values.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none",
-                }}
+                style={{ background: "#1a1e28" }}
               >
                 <div className="w-8 h-[2px] mb-6" style={{ background: "#f97316" }} />
                 <h3 className="text-lg font-bold mb-4" style={{ color: "#ffffff" }}>{v.heading}</h3>
@@ -194,7 +220,7 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* ── Offices ─────────────────────────────────────────── */}
+      {/* ── Offices ───────────────────────────── */}
       <div className="py-20" style={{ background: "#0f1620" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold mb-10" style={{ color: "#ffffff" }}>Regional Offices</h2>
@@ -262,7 +288,7 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* ── Why HUB ─────────────────────────────────────────── */}
+      {/* ── Why HUB ───────────────────────────── */}
       <div className="py-28" style={{ background: "#0d1117" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold mb-12" style={{ color: "#ffffff" }}>Why HUB</h2>
@@ -282,7 +308,7 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* ── Manufacturer Partners ────────────────────────────── */}
+      {/* ── Manufacturer Partners ────────────────────── */}
       <div className="py-20" style={{ background: "#0f1620" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "#f97316" }}>
@@ -330,23 +356,23 @@ export default function AboutPage() {
 
                 {/* Logo header */}
                 <div
-                  className="flex items-center justify-between gap-6 px-8 py-6"
+                  className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-5 sm:px-8 py-5 sm:py-6"
                   style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
                 >
                   <div
                     className="flex items-center justify-center rounded-lg flex-shrink-0"
-                    style={{ background: "#ffffff", width: 120, height: 60, padding: "10px 16px" }}
+                    style={{ background: "#ffffff", width: 100, height: 52, padding: "8px 14px" }}
                   >
                     <Image
                       src={partner.logo}
                       width={partner.logoW}
                       height={partner.logoH}
                       alt={partner.name}
-                      style={{ maxHeight: 36, width: "auto", objectFit: "contain" }}
+                      style={{ maxHeight: 32, width: "auto", objectFit: "contain" }}
                       unoptimized
                     />
                   </div>
-                  <div className="flex flex-wrap gap-1.5 justify-end">
+                  <div className="flex flex-wrap gap-1.5">
                     {partner.products.map((p) => (
                       <span
                         key={p}
@@ -364,7 +390,7 @@ export default function AboutPage() {
                 </div>
 
                 {/* Content */}
-                <div className="px-8 py-6">
+                <div className="px-5 sm:px-8 py-5 sm:py-6">
                   <h3 className="text-2xl font-bold mb-1" style={{ color: "#ffffff" }}>
                     {partner.name}
                   </h3>

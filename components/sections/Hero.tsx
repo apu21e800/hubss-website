@@ -5,10 +5,11 @@ import Image from "next/image";
 import { heroImages, resolveImage } from "@/lib/featured-images";
 
 const tickerItems = [
-  "Vision Zero", "City of Toronto", "York Region", "Vancouver", "UBC",
-  "City of Ottawa", "City of Calgary", "Brampton", "Mississauga",
-  "TransLink", "City of Surrey", "City of Edmonton", "Winnipeg",
-  "City of Burnaby", "Richmond Hill", "Complete Streets",
+  "City of Toronto", "York Region", "City of Vancouver", "UBC",
+  "City of Ottawa", "City of Calgary", "City of Brampton", "City of Mississauga",
+  "TransLink", "City of Surrey", "City of Edmonton", "City of Winnipeg",
+  "City of Burnaby", "Richmond Hill", "Halifax Regional Municipality",
+  "City of Kelowna", "Region of Peel", "City of Saskatoon",
 ];
 
 export default function Hero() {
@@ -17,7 +18,7 @@ export default function Hero() {
   return (
     <section className="relative flex flex-col overflow-hidden min-h-screen">
 
-      {/* ── Full-bleed background image ──────────────────────────── */}
+      {/* ── Full-bleed background image ──────────────────────── */}
       <div className="absolute inset-0">
         <Image
           src={heroImg.src}
@@ -33,7 +34,15 @@ export default function Hero() {
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(180deg, rgba(8,13,22,0.58) 0%, rgba(8,13,22,0.38) 35%, rgba(8,13,22,0.65) 70%, rgba(8,13,22,0.97) 100%)",
+              "linear-gradient(180deg, rgba(8,13,22,0.72) 0%, rgba(8,13,22,0.68) 30%, rgba(8,13,22,0.82) 65%, rgba(8,13,22,0.97) 100%)",
+          }}
+        />
+        {/* Left-side text scrim — pulls legibility without killing the full image */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(95deg, rgba(8,13,22,0.55) 0%, rgba(8,13,22,0.22) 44%, transparent 64%)",
           }}
         />
         {/* Orange atmospheric bloom — top-left corner */}
@@ -46,8 +55,8 @@ export default function Hero() {
         />
       </div>
 
-      {/* ── Main content ────────────────────────────────────────────── */}
-      <div className="relative z-10 flex-1 w-full pt-28 sm:pt-36 lg:pt-48 pb-20 sm:pb-28">
+      {/* ── Main content ────────────────────────────────────────────────── */}
+      <div className="relative z-10 flex-1 w-full pt-20 sm:pt-24 lg:pt-28 pb-16 sm:pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
@@ -63,10 +72,12 @@ export default function Hero() {
           </p>
 
           <h1
-            className="font-black leading-[1.04] mb-6"
+            className="font-black mb-6"
             style={{
-              fontSize: "clamp(2.4rem, 6vw, 4.5rem)",
+              fontSize: "clamp(3.4rem, 9.5vw, 7.5rem)",
+              lineHeight: 0.93,
               textWrap: "balance",
+              letterSpacing: "-0.04em",
             }}
           >
             <span style={{ color: "#fff", textShadow: "0 2px 28px rgba(0,0,0,0.45)" }}>
@@ -85,15 +96,15 @@ export default function Hero() {
           </h1>
 
           <p
-            className="text-base sm:text-lg leading-relaxed max-w-2xl mb-10 sm:mb-12"
-            style={{ color: "rgba(255,255,255,0.70)" }}
+            className="text-lg sm:text-xl leading-relaxed max-w-2xl mb-10 sm:mb-12"
+            style={{ color: "rgba(255,255,255,0.78)", textShadow: "0 1px 16px rgba(0,0,0,0.55)", fontWeight: 400 }}
           >
             HUB Surface Systems redefines hardscapes for freeze-thaw climates.
             Stamped asphalt, thermoplastics, and specialty coatings built to
-            outlast paint and outperform expectations.
+            outlast paint and outperform expectations — for 30+ years.
           </p>
 
-          {/* ── CTAs ───────────────────────────────────────────────── */}
+          {/* ── CTAs ─────────────────────────────────────────────────── */}
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -122,11 +133,61 @@ export default function Hero() {
               Book Lunch &amp; Learn
             </a>
           </motion.div>
+
+          {/* ── Trust signals ────────────────────────────────────────────────── */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.42, duration: 0.55 }}
+            style={{ marginTop: "2.75rem" }}
+          >
+            {/* Thin divider */}
+            <div
+              style={{
+                height: 1,
+                background: "linear-gradient(90deg, rgba(249,115,22,0.35) 0%, rgba(255,255,255,0.08) 60%, transparent 100%)",
+                marginBottom: "1.25rem",
+                maxWidth: "28rem",
+              }}
+            />
+            <div className="flex flex-wrap gap-x-10 gap-y-4">
+              {[
+                { stat: "30+", label: "Years in Canada" },
+                { stat: "1,000+", label: "Projects coast to coast" },
+                { stat: "20yr", label: "Proven service life" },
+              ].map(({ stat, label }) => (
+                <div key={stat} className="flex items-center gap-3">
+                  <span
+                    style={{
+                      fontSize: "1.55rem",
+                      fontWeight: 800,
+                      color: "#F97316",
+                      lineHeight: 1,
+                      letterSpacing: "-0.04em",
+                    }}
+                  >
+                    {stat}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: "0.8rem",
+                      color: "rgba(255,255,255,0.52)",
+                      fontWeight: 500,
+                      lineHeight: 1.25,
+                      maxWidth: "6.5rem",
+                    }}
+                  >
+                    {label}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </motion.div>
         </motion.div>
         </div>
       </div>
 
-      {/* ── Client ticker ────────────────────────────────────────────── */}
+      {/* ── Client ticker ──────────────────────────────────────────────────────── */}
       <div
         className="relative z-10 border-t"
         style={{ borderColor: "rgba(255,255,255,0.10)" }}

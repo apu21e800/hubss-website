@@ -63,20 +63,19 @@ export default function BlogFilter({ posts, allProducts }: Props) {
     if (sort === "oldest") result.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
     else if (sort === "az") result.sort((a, b) => a.title.localeCompare(b.title));
     return result;
-  }, [posts, search, product, sort]);
+  }, [posts, search, product, category, sort]);
 
-  // Filter button — matches projects page style exactly
+  // Filter button — min-height 44px for iOS tap target compliance
   const Btn = ({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) => (
     <button
       onClick={onClick}
-      className="text-xs font-semibold px-3 py-1.5 rounded transition-all whitespace-nowrap flex-shrink-0"
+      className="text-xs font-semibold px-3 rounded transition-all whitespace-nowrap flex-shrink-0 inline-flex items-center"
       style={{
         background:   active ? "#f97316" : "#2a2a2a",
         color:        active ? "#fff"    : "#8b8b8b",
         border:       "1px solid",
         borderColor:  active ? "#f97316" : "rgba(255,255,255,0.07)",
-        lineHeight:   "1.25rem",
-        height:       "2rem",
+        minHeight:    "44px",
       }}
     >
       {label}
@@ -91,23 +90,27 @@ export default function BlogFilter({ posts, allProducts }: Props) {
         <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-1 sm:flex-wrap sm:overflow-visible scrollbar-none"
           style={{ WebkitOverflowScrolling: "touch", msOverflowStyle: "none", scrollbarWidth: "none" }}
         >
-          <Btn label="All" active={category === "all" && product === "all"} onClick={() => { setAndSync(setCategory, "category", "all"); setProduct("all"); }} />
+          <Btn label="All" active={category === "all" && product === "all"} onClick={() => { setCategory("all"); setProduct("all"); pushParams({ category: "all", product: "all" }); }} />
 
           <span className="w-px h-4 self-center flex-shrink-0" style={{ background: "rgba(255,255,255,0.1)" }} />
 
-          <Btn label="Case Studies" active={category === "Case Study"} onClick={() => { setAndSync(setCategory, "category", "Case Study"); setProduct("all"); }} />
-          <Btn label="Project Profiles" active={category === "Project Profile"} onClick={() => { setAndSync(setCategory, "category", "Project Profile"); setProduct("all"); }} />
-          <Btn label="Guides" active={category === "Blog"} onClick={() => { setAndSync(setCategory, "category", "Blog"); setProduct("all"); }} />
-          <Btn label="White Papers" active={category === "White Paper"} onClick={() => { setAndSync(setCategory, "category", "White Paper"); setProduct("all"); }} />
+          {(["Case Study", "Project Profile", "Blog", "White Paper"] as const).map((cat) => (
+            <Btn
+              key={cat}
+              label={cat === "Case Study" ? "Case Studies" : cat === "Project Profile" ? "Project Profiles" : cat === "Blog" ? "Guides" : "White Papers"}
+              active={category === cat}
+              onClick={() => { setCategory(cat); setProduct("all"); pushParams({ category: cat, product: "all" }); }}
+            />
+          ))}
 
           <span className="w-px h-4 self-center flex-shrink-0" style={{ background: "rgba(255,255,255,0.1)" }} />
 
           {allProducts.slice(0, 4).map((p) => (
-            <Btn key={p} label={p} active={product === p} onClick={() => { setAndSync(setProduct, "product", p); setCategory("all"); }} />
+            <Btn key={p} label={p} active={product === p} onClick={() => { setProduct(p); setCategory("all"); pushParams({ product: p, category: "all" }); }} />
           ))}
         </div>
 
-        {/* Search + sort */}
+        {/* Search + sort — min-height 44px on all interactive elements */}
         <div className="flex gap-3">
           <div className="relative flex-1 max-w-sm">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none" style={{ color: "#5a5a5a" }} />
@@ -116,11 +119,11 @@ export default function BlogFilter({ posts, allProducts }: Props) {
               placeholder="Search..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-8 pr-7 py-2 rounded text-xs"
-              style={{ background: "#2a2a2a", border: "1px solid rgba(255,255,255,0.07)", color: "#ffffff" }}
+              className="w-full pl-8 pr-7 rounded text-sm"
+              style={{ background: "#2a2a2a", border: "1px solid rgba(255,255,255,0.07)", color: "#ffffff", minHeight: "44px" }}
             />
             {search && (
-              <button onClick={() => { setSearch(""); pushParams({ search: "" }); }} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-400">
+              <button onClick={() => { setSearch(""); pushParams({ search: "" }); }} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-400 w-6 h-6 flex items-center justify-center">
                 <X className="w-3 h-3" />
               </button>
             )}
@@ -130,8 +133,8 @@ export default function BlogFilter({ posts, allProducts }: Props) {
             <select
               value={sort}
               onChange={(e) => setAndSync(setSort, "sort", e.target.value as typeof sort)}
-              className="appearance-none pl-3 pr-7 py-2 rounded text-xs cursor-pointer"
-              style={{ background: "#2a2a2a", border: "1px solid rgba(255,255,255,0.07)", color: "#8b8b8b" }}
+              className="appearance-none pl-3 pr-7 rounded text-sm cursor-pointer"
+              style={{ background: "#2a2a2a", border: "1px solid rgba(255,255,255,0.07)", color: "#8b8b8b", minHeight: "44px" }}
             >
               <option value="newest">Newest</option>
               <option value="oldest">Oldest</option>
@@ -141,7 +144,7 @@ export default function BlogFilter({ posts, allProducts }: Props) {
           </div>
 
           {hasFilters && (
-            <button onClick={clearFilters} className="text-xs px-3 py-2 rounded" style={{ color: "#f97316" }}>
+            <button onClick={clearFilters} className="text-sm px-3 rounded inline-flex items-center" style={{ color: "#f97316", minHeight: "44px" }}>
               Clear
             </button>
           )}

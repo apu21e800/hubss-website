@@ -32,13 +32,21 @@ export default function BlogPage() {
     <main className="min-h-screen" style={{ background: "#0f1620" }}>
       <Nav />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-32 pb-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-24 sm:pt-32 pb-16 sm:pb-24">
         {/* Header */}
         <div className="mb-14">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-3" style={{ color: "#f97316" }}>
             Field Notes
           </p>
-          <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold mb-4" style={{ color: "var(--text-primary)" }}>
+          <h1
+            className="font-black mb-4"
+            style={{
+              color: "var(--text-primary)",
+              fontSize: "clamp(2rem, 4vw, 3.5rem)",
+              lineHeight: 1.0,
+              letterSpacing: "-0.03em",
+            }}
+          >
             Field Notes from the Front Lines of Canadian Pavement
           </h1>
           <p className="text-lg" style={{ color: "var(--text-secondary)" }}>

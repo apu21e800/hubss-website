@@ -4,8 +4,11 @@ import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
 import { resourceDocuments } from "@/lib/resource-documents";
 import ResourcesClient from "@/components/resources/ResourcesClient";
+import { getResourceDocuments } from "@/lib/sanity.queries";
 
 import { buildMetadata } from "@/lib/seo";
+
+export const revalidate = 3600;
 
 export const metadata: Metadata = buildMetadata({
   title: "Specification Library & Technical Resources",
@@ -14,7 +17,10 @@ export const metadata: Metadata = buildMetadata({
   slug: "resources",
 });
 
-export default function ResourcesPage() {
+export default async function ResourcesPage() {
+  const sanityDocs = await getResourceDocuments().catch(() => null);
+  const docs = sanityDocs ?? resourceDocuments;
+
   return (
     <main
       className="min-h-screen relative overflow-hidden"
@@ -110,10 +116,10 @@ export default function ResourcesPage() {
               style={{ background: "rgba(255,255,255,0.07)" }}
             />
             <span className="text-xs" style={{ color: "#6B7280" }}>
-              {resourceDocuments.length} total
+              {docs.length} total
             </span>
           </div>
-          <ResourcesClient documents={resourceDocuments} />
+          <ResourcesClient documents={docs} />
         </div>
       </section>
 

@@ -7,7 +7,8 @@ const STATS = [
   { num: "30+",    label: "Years",          sub: "Installations across North America" },
   { num: "1,000+", label: "Projects",       sub: "Completed coast to coast" },
   { num: "500+",   label: "Municipalities", sub: "Specified coast to coast" },
-  { num: "20yr",   label: "Performance",    sub: "Colour retention on stamped asphalt and coatings" },
+  // Softened from "20yr" — Doug-style proactive QA on bold quantitative claims (Vernon's call).
+  { num: "DECADES", label: "Performance",   sub: "Colour retention on stamped asphalt and coatings" },
 ];
 
 const PROOF = [
@@ -78,11 +79,14 @@ export default function WhyHubss() {
           className="max-w-2xl mb-14"
         >
           <p className="text-xs font-bold tracking-[0.2em] uppercase mb-4" style={{ color: "#f97316" }}>
-            Why HUB Surface Systems
+            Why HUB
           </p>
           <h2
-            className="text-3xl sm:text-4xl lg:text-[2.75rem] font-bold leading-tight mb-5"
+            className="font-black mb-5"
             style={{
+              fontSize: "clamp(2.2rem, 5vw, 3.5rem)",
+              lineHeight: 0.97,
+              letterSpacing: "-0.035em",
               background: "linear-gradient(92deg, #F97316 0%, #EAB308 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
@@ -100,7 +104,7 @@ export default function WhyHubss() {
 
         <div
           className="grid grid-cols-2 sm:grid-cols-4 mb-12 rounded-xl overflow-hidden"
-          style={{ border: "1px solid rgba(255,255,255,0.07)" }}
+          style={{ border: "1px solid rgba(255,255,255,0.10)", background: "rgba(255,255,255,0.025)" }}
         >
           {STATS.map((s, i) => (
             <motion.div
@@ -110,9 +114,8 @@ export default function WhyHubss() {
               transition={{ delay: i * 0.07, duration: 0.35 }}
               className="flex flex-col items-center justify-center gap-1 py-7 px-4 text-center"
               style={{
-                background: "rgba(255,255,255,0.02)",
-                borderRight:  i < 3 ? "1px solid rgba(255,255,255,0.07)" : "none",
-                borderBottom: i < 2 ? "1px solid rgba(255,255,255,0.07)" : "none",
+                borderRight:  i < 3 ? "1px solid rgba(255,255,255,0.08)" : "none",
+                borderBottom: i < 2 ? "1px solid rgba(255,255,255,0.08)" : "none",
               }}
             >
               <span className="text-3xl sm:text-4xl font-black tracking-tight leading-none" style={{ color: "#f97316" }}>

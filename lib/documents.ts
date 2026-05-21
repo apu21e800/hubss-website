@@ -1,165 +1,146 @@
 // lib/documents.ts
-// Central document registry — mirrors lib/products.ts pattern.
-// To add a document: add an entry here and drop the PDF in public/docs/[slug]/filename.pdf
+// Canonical document registry for all HUB Surface Systems PDF resources.
+// Used by:
+//   - DocumentDownloads component (per-product sidebar on individual product pages)
+//   - lib/resource-documents.ts  (flat list for the /resources page)
 
 export type DocType =
-  | 'brochure'
-  | 'spec-sheet'
-  | 'colour-guide'
-  | 'installation-guide'
-  | 'data-sheet'      // TDS, PDS, Product Data Sheet
-  | 'design-manual'
-  | 'sds'
-  | 'certificate'
-  | 'guide'           // Substrate Guide, Corundum Guide, Custom Design Guidelines
-  | 'other'           // FAQ, Template Catalog, Cross Section Detail, etc.
-
-/** Human-readable badge labels for each DocType */
-export const docTypeLabel: Record<DocType, string> = {
-  'brochure':           'Brochure',
-  'spec-sheet':         'Spec Sheet',
-  'colour-guide':       'Colour Guide',
-  'installation-guide': 'Install Guide',
-  'data-sheet':         'Data Sheet',
-  'design-manual':      'Design Manual',
-  'sds':                'SDS',
-  'certificate':        'Certificate',
-  'guide':              'Guide',
-  'other':              'Document',
-}
+  | "spec"
+  | "tds"
+  | "colour"
+  | "installation"
+  | "brochure"
+  | "faq"
+  | "design"
+  | "application"
+  | "certificate"
+  | "other";
 
 export interface ProductDocument {
-  label: string        // display name, e.g. "SB120 Specification Sheet"
-  type: DocType
-  href: string         // e.g. "/docs/streetprint/streetprint-spec.pdf"
-  lang?: 'en' | 'fr'  // only set for bilingual docs
+  label: string;
+  href: string;
+  type: DocType;
+  lang?: string;
 }
 
-export interface ProductDocs {
-  slug: string         // matches lib/products.ts slug exactly
-  docs: ProductDocument[]
-}
+export const docTypeLabel: Record<DocType, string> = {
+  spec:         "Specification",
+  tds:          "Technical Data Sheet",
+  colour:       "Colour Guide",
+  installation: "Installation Guide",
+  brochure:     "Brochure",
+  faq:          "FAQ",
+  design:       "Design Manual",
+  application:  "Application Guide",
+  certificate:  "Certificate",
+  other:        "Document",
+};
 
-export const productDocuments: ProductDocs[] = [
-  {
-    slug: 'streetprint',
-    docs: [
-      { label: 'Specification Sheet',  type: 'spec-sheet',    href: '/docs/streetprint/streetprint-spec.pdf' },
-      { label: 'Colour Guide',         type: 'colour-guide',  href: '/docs/streetprint/streetprint-colour-guide.pdf' },
-      { label: 'Template Catalog',     type: 'other',         href: '/docs/streetprint/streetprint-template-catalog.pdf' },
-      { label: 'FAQ',                  type: 'other',         href: '/docs/streetprint/streetprint-faq.pdf' },
-    ],
-  },
-  {
-    slug: 'streetbond',
-    docs: [
-      { label: 'Brochure',                      type: 'brochure',           href: '/docs/streetbond/streetbond-brochure.pdf' },
-      { label: 'Colour Guide',                  type: 'colour-guide',       href: '/docs/streetbond/streetbond-colour-guide.pdf' },
-      { label: 'Substrate Guide',               type: 'guide',              href: '/docs/streetbond/streetbond-substrate-guide.pdf' },
-      { label: 'SB120 Specification',           type: 'spec-sheet',         href: '/docs/streetbond/streetbond-sb120-spec.pdf' },
-      { label: 'SB150 Specification',           type: 'spec-sheet',         href: '/docs/streetbond/streetbond-sb150-spec.pdf' },
-      { label: 'SB120 Technical Data Sheet',    type: 'data-sheet',         href: '/docs/streetbond/streetbond-sb120-tds.pdf' },
-      { label: 'SB150 Technical Data Sheet',    type: 'data-sheet',         href: '/docs/streetbond/streetbond-sb150-tds.pdf' },
-      { label: 'SB150 AL Technical Data Sheet', type: 'data-sheet',         href: '/docs/streetbond/streetbond-sb150-al-tds.pdf' },
-      { label: 'Concrete Specification',        type: 'spec-sheet',         href: '/docs/streetbond/streetbond-concrete-spec.pdf' },
-      { label: 'Concrete Primer WB Data Sheet', type: 'data-sheet',         href: '/docs/streetbond/streetbond-concrete-primer-wb-tds.pdf' },
-      { label: 'Concrete Primer QS Data Sheet', type: 'data-sheet',         href: '/docs/streetbond/streetbond-concrete-primer-qs-tds.pdf' },
-      { label: 'Pro 220 MMA Installation Guide',type: 'installation-guide', href: '/docs/streetbond/streetbond-pro220-install-guide.pdf' },
-      { label: 'Pro 220 MMA Brochure',          type: 'brochure',           href: '/docs/streetbond/streetbond-pro220-brochure.pdf' },
-      { label: 'Pro 220 MMA Data Sheet',        type: 'data-sheet',         href: '/docs/streetbond/streetbond-pro220-tds.pdf' },
-      { label: 'Pro 250 MMA Installation Guide',type: 'installation-guide', href: '/docs/streetbond/streetbond-pro250-install-guide.pdf' },
-      { label: 'Pro 250 MMA Brochure',          type: 'brochure',           href: '/docs/streetbond/streetbond-pro250-brochure.pdf' },
-      { label: 'Pro 250 MMA Data Sheet',        type: 'data-sheet',         href: '/docs/streetbond/streetbond-pro250-tds.pdf' },
-      { label: 'Colorant Data Sheet',           type: 'data-sheet',         href: '/docs/streetbond/streetbond-colorant.pdf' },
-      { label: 'SB120 Over Concrete Spec',      type: 'spec-sheet',         href: '/docs/streetbond/streetbond-sb120-concrete-spec.pdf' },
-      { label: 'StreetBondSR Brochure',         type: 'brochure',           href: '/docs/streetbond/streetbondsr-brochure.pdf' },
-      { label: 'StreetBondSR Flat Surface Spec', type: 'spec-sheet',        href: '/docs/streetbond/streetbondsr-flat-surface-spec.pdf' },
-      { label: 'StreetBondSR Friction Certificate', type: 'certificate',    href: '/docs/streetbond/streetbondsr-certificate-friction.pdf' },
-      { label: 'StreetBondSR Colour Guide',     type: 'colour-guide',       href: '/docs/streetbond/streetbondsr-colour-guide.pdf' },
-    ],
-  },
-  {
-    slug: 'traffic-patterns',
-    docs: [
-      { label: 'Brochure',                          type: 'brochure',      href: '/docs/traffic-patterns/traffic-patterns-brochure.pdf' },
-      { label: 'Design Manual',                     type: 'design-manual', href: '/docs/traffic-patterns/traffic-patterns-design-manual.pdf' },
-      { label: 'Custom Design Guidelines',          type: 'guide',         href: '/docs/traffic-patterns/traffic-patterns-custom-design-guidelines.pdf' },
-      { label: '125 with SA Specification',         type: 'spec-sheet',    href: '/docs/traffic-patterns/traffic-patterns-125-sa-spec.pdf' },
-      { label: 'Solid Sheets 125 Specification',    type: 'spec-sheet',    href: '/docs/traffic-patterns/traffic-patterns-solid-sheets-125-spec.pdf' },
-      { label: 'Two Component Sealer Specification',type: 'spec-sheet',    href: '/docs/traffic-patterns/traffic-patterns-two-component-sealer-spec.pdf' },
-      { label: 'Colour Guide',                      type: 'colour-guide',  href: '/docs/traffic-patterns/traffic-patterns-colour-guide.pdf' },
-    ],
-  },
-  {
-    slug: 'traffic-patterns-xd',
-    docs: [
-      { label: 'Brochure',                          type: 'brochure',      href: '/docs/traffic-patterns-xd/traffic-patterns-xd-brochure.pdf' },
-      { label: 'Design Manual',                     type: 'design-manual', href: '/docs/traffic-patterns-xd/traffic-patterns-xd-design-manual.pdf' },
-      { label: 'Specification',                     type: 'spec-sheet',    href: '/docs/traffic-patterns-xd/traffic-patterns-xd-spec-en.pdf', lang: 'en' },
-      { label: 'Specification',                     type: 'spec-sheet',    href: '/docs/traffic-patterns-xd/traffic-patterns-xd-spec-fr.pdf', lang: 'fr' },
-      { label: 'Two Component Sealer Specification',type: 'spec-sheet',    href: '/docs/traffic-patterns-xd/traffic-patterns-xd-two-component-sealer-spec.pdf' },
-      { label: 'Colour Guide',                      type: 'colour-guide',  href: '/docs/traffic-patterns-xd/traffic-patterns-xd-colour-guide.pdf' },
-      { label: 'Cross Section Detail',              type: 'other',         href: '/docs/traffic-patterns-xd/traffic-patterns-xd-cross-section-detail.pdf' },
-    ],
-  },
-  {
-    slug: 'mmax',
-    docs: [
-      { label: 'Brochure',                           type: 'brochure',           href: '/docs/mmax/mmax-brochure.pdf' },
-      { label: 'Application Instructions',           type: 'installation-guide', href: '/docs/mmax/mmax-application-instructions.pdf' },
-      { label: 'Product Data Sheet',                 type: 'data-sheet',         href: '/docs/mmax/mmax-product-data-sheet.pdf' },
-      { label: 'Extended Season Corundum Guide',     type: 'guide',              href: '/docs/mmax/mmax-extended-season-corundum-guide.pdf' },
-      { label: 'Extended Season Product Data Sheet', type: 'data-sheet',         href: '/docs/mmax/mmax-extended-season-pds.pdf' },
-    ],
-  },
-  {
-    slug: 'decomark',
-    docs: [
-      { label: 'Brochure',                 type: 'brochure',           href: '/docs/decomark/decomark-brochure.pdf' },
-      { label: 'Application Instructions', type: 'installation-guide', href: '/docs/decomark/decomark-application-instructions.pdf' },
-      { label: 'Custom Design Guidelines', type: 'guide',              href: '/docs/decomark/decomark-custom-design-guidelines.pdf' },
-      { label: 'Specification',            type: 'spec-sheet',         href: '/docs/decomark/decomark-spec.pdf' },
-      { label: 'Colour Guide',             type: 'colour-guide',       href: '/docs/decomark/decomark-colour-guide.pdf' },
-    ],
-  },
-  {
-    slug: 'durashield',
-    docs: [
-      { label: 'Color Asphalt Technical Data Sheet',    type: 'data-sheet', href: '/docs/durashield/durashield-color-asphalt-tds.pdf' },
-      { label: 'Color Solar Gray Technical Data Sheet', type: 'data-sheet', href: '/docs/durashield/durashield-color-solar-gray-tds.pdf' },
-    ],
-  },
-  {
-    slug: 'premark',
-    docs: [
-      { label: 'Brochure',          type: 'brochure', href: '/docs/premark/premark-brochure.pdf' },
-      { label: 'PreMarkXF Brochure',type: 'brochure', href: '/docs/premark/premark-xf-brochure.pdf' },
-    ],
-  },
-  {
-    slug: 'duratherm',
-    docs: [
-      { label: 'Brochure',                 type: 'brochure',      href: '/docs/duratherm/duratherm-brochure.pdf' },
-      { label: 'Design Manual',            type: 'design-manual', href: '/docs/duratherm/duratherm-design-manual.pdf' },
-      { label: 'Custom Design Guidelines', type: 'guide',         href: '/docs/duratherm/duratherm-custom-design-guidelines.pdf' },
-      { label: 'Specification',            type: 'spec-sheet',    href: '/docs/duratherm/duratherm-spec.pdf' },
-      { label: 'Colour Guide',             type: 'colour-guide',  href: '/docs/duratherm/duratherm-colour-guide.pdf' },
-    ],
-  },
-  {
-    slug: 'airmark',
-    docs: [
-      { label: 'Brochure',                           type: 'brochure',   href: '/docs/airmark/airmark-brochure-en.pdf',              lang: 'en' },
-      { label: 'Brochure',                           type: 'brochure',   href: '/docs/airmark/airmark-brochure-fr.pdf',              lang: 'fr' },
-      { label: 'TrafficPaint Brochure',              type: 'brochure',   href: '/docs/airmark/airmark-trafficpaint-brochure-en.pdf', lang: 'en' },
-      { label: 'TrafficPaint Brochure',              type: 'brochure',   href: '/docs/airmark/airmark-trafficpaint-brochure-fr.pdf', lang: 'fr' },
-      { label: 'WB Airfield Product Data Sheet',     type: 'data-sheet', href: '/docs/airmark/airmark-wb-airfield-pds.pdf' },
-      { label: 'PreMark Groundside Airports Brochure',type: 'brochure',  href: '/docs/airmark/airmark-premark-groundside-brochure.pdf' },
-    ],
-  },
-]
+// All product docs keyed by product slug.
+// Paths relative to /public — spaces encoded as %20, brackets as %5B/%5D.
+const ALL_DOCS: Record<string, ProductDocument[]> = {
 
-/** Returns docs for a given product slug, or empty array if none registered */
+  "traffic-patterns-xd": [
+    { label: "Specification",                        type: "spec",         href: "/docs/TrafficPatternsXD/TrafficPatternsXD-Specification-Branded.pdf" },
+    { label: "Specification",                        type: "spec",         href: "/docs/TrafficPatternsXD/TrafficPatternsXD-Specification.pdf" },
+    { label: "Specification",                        type: "spec",  lang: "FR", href: "/docs/TrafficPatternsXD/TrafficPatternsXD-Specification-FR.pdf" },
+    { label: "Two-Component Sealer Spec",             type: "spec",         href: "/docs/TrafficPatternsXD/TrafficPatternsXD-Two-Component-Sealer.pdf" },
+    { label: "Cross-Section Detail",                 type: "other",        href: "/docs/TrafficPatternsXD/TrafficPatternsXD-CrossSection-Detail.pdf" },
+    { label: "Colour Guide",                         type: "colour",       href: "/docs/TrafficPatternsXD/TrafficPatternsXD-Colour-Guide.pdf" },
+    { label: "Technical Data Sheet",                 type: "tds",          href: "/docs/TrafficPatternsXD/TS002_TrafficPatternsXD_220204.pdf" },
+    { label: "Design Manual",                        type: "design",       href: "/docs/TrafficPatternsXD/TrafficPatternsXD-Design-Manual.pdf" },
+  ],
+
+  "traffic-patterns": [
+    { label: "Two-Component Sealer Specification",    type: "spec",         href: "/docs/TrafficPatterns/TrafficPatterns-Specification-Two-Component-Sealer.pdf" },
+    { label: "Custom Design Guidelines",              type: "design",       href: "/docs/TrafficPatterns/TrafficPatterns-Custom-Design-Guidelines.pdf" },
+    { label: "Technical Data Sheet",                 type: "tds",          href: "/docs/TrafficPatterns/TS001_TrafficPatterns_220204.pdf" },
+    { label: "Colour Guidelines",                    type: "colour",       href: "/docs/TrafficPatterns/TrafficPatterns-Colour-Guidelines.pdf" },
+    { label: "Solid Sheets 125 Specification",        type: "spec",         href: "/docs/TrafficPatterns/TrafficPatterns-Solid-Sheets-125-Specification.pdf" },
+    { label: "125 with Self-Adhesive Specification",  type: "spec",         href: "/docs/TrafficPatterns/TrafficPatterns-125-with-SA-Specification.pdf" },
+    { label: "Design Manual",                        type: "design",       href: "/docs/TrafficPatterns/TrafficPatterns-Design-Manual.pdf" },
+  ],
+
+  "premark": [
+    { label: "PreMark XF Brochure",                  type: "brochure",     href: "/docs/PreMark/PreMarkXF-Brochure.pdf" },
+    { label: "Technical Data Sheet",                 type: "tds",          href: "/docs/PreMark/TS005_PreMark_220204.pdf" },
+  ],
+
+  "duratherm": [
+    { label: "Specification",                        type: "spec",         href: "/docs/duratherm/DuraTherm-Specification-Branded.pdf" },
+    { label: "Colour Guide",                         type: "colour",       href: "/docs/duratherm/duratherm-colour-guide.pdf" },
+    { label: "Technical Data Sheet",                 type: "tds",          href: "/docs/duratherm/TS003_DuraTherm_220204.pdf" },
+    { label: "Custom Design Guidelines",              type: "design",       href: "/docs/duratherm/duratherm-custom-design-guidelines.pdf" },
+    { label: "Design Manual",                        type: "design",       href: "/docs/duratherm/duratherm-design-manual.pdf" },
+  ],
+
+  "decomark": [
+    { label: "Application Instructions",             type: "installation", href: "/docs/decomark/decomark-application-instructions.pdf" },
+    { label: "Custom Design Guidelines",              type: "design",       href: "/docs/decomark/decomark-custom-design-guidelines.pdf" },
+    { label: "Colour Guide",                         type: "colour",       href: "/docs/decomark/decomark-colour-guide.pdf" },
+    { label: "Technical Data Sheet",                 type: "tds",          href: "/docs/decomark/TS004_DecoMark_220204.pdf" },
+    { label: "Specification",                        type: "spec",         href: "/docs/decomark/DecoMark-Specification.pdf" },
+  ],
+
+  "airmark": [
+    { label: "AirMark Brochure",                     type: "brochure",     href: "/docs/AirMark/AirMark/AirMark_Brocure.pdf" },
+    { label: "AirMark Brochure",                     type: "brochure", lang: "FR", href: "/docs/AirMark/AirMark/AirMark-Brocure-FR.pdf" },
+    { label: "PreMark for Airports",                 type: "application",  href: "/docs/AirMark/PreMark%20-%20Groundside/PreMark-for-Airports.pdf" },
+    { label: "Airfield Paint Product Data",           type: "tds",          href: "/docs/AirMark/Airfield%20Paint/WB-Airfield-Product-Data.pdf" },
+    { label: "Traffic Paint for Airfields",           type: "application",  href: "/docs/AirMark/Airfield%20Paint/TrafficPaint-for-Airfields.pdf" },
+    { label: "Traffic Paint for Airfields",           type: "application", lang: "FR", href: "/docs/AirMark/Airfield%20Paint/TrafficPaint-for-Airfields-FR.pdf" },
+  ],
+
+  "streetbond": [
+    { label: "Brochure",                             type: "brochure",     href: "/docs/StreetBond/StreetBond/StreetBond-Brochure.pdf" },
+    { label: "Colour Guide",                         type: "colour",       href: "/docs/StreetBond/StreetBond/StreetBond-Colour-Guide.pdf" },
+    { label: "Substrate Guide",                      type: "other",        href: "/docs/StreetBond/StreetBond/StreetBond_Substrate_Guide.pdf" },
+    { label: "Colorant Technical Data Sheet",        type: "tds",          href: "/docs/StreetBond/StreetBond/StreetBond-Colorant.pdf" },
+    { label: "SB120 Technical Data Sheet",           type: "tds",          href: "/docs/StreetBond/StreetBond%20120/StreetBond-SB120-Data-Sheet-12.22-Rev.pdf" },
+    { label: "SB120 Specification",                  type: "spec",         href: "/docs/StreetBond/StreetBond%20120/StreetBond_SB120_Specifications.pdf" },
+    { label: "SB120 Over Concrete Specification",    type: "spec",         href: "/docs/StreetBond/StreetBond%20120/StreetBond-SB120-Over-Concrete-Specification.pdf" },
+    { label: "SB150 Technical Data Sheet",           type: "tds",          href: "/docs/StreetBond/StreetBond%20150/StreetBond-SB150-Data-Sheet-12.22-Rev.pdf" },
+    { label: "SB150AL Technical Data Sheet",         type: "tds",          href: "/docs/StreetBond/StreetBond%20150/StreetBond-SB150AL-Data-Sheet-12.22-Rev.pdf" },
+    { label: "SB150 Specification",                  type: "spec",         href: "/docs/StreetBond/StreetBond%20150/StreetBond_SB150_Specifications.pdf" },
+    { label: "SB150 Over Concrete Specification",    type: "spec",         href: "/docs/StreetBond/StreetBond%20150/StreetBond-SB150-Over-Concrete-Specification.pdf" },
+    { label: "Pro 220 Technical Data Sheet",         type: "tds",          href: "/docs/StreetBond/StreetBond%20Pro%20220%20%5BMMA%5D/StreetBond-Pro-220-TDS.pdf" },
+    { label: "Pro 220 & 250 Installation Guide",     type: "installation", href: "/docs/StreetBond/StreetBond%20Pro%20220%20%5BMMA%5D/StreetBond-Pro-220-and-250-Intallation.pdf" },
+    { label: "Pro 220 & 250 Brochure",               type: "brochure",     href: "/docs/StreetBond/StreetBond%20Pro%20220%20%5BMMA%5D/StreetBond-Pro-220-Pro-250-Brochure-1.pdf" },
+    { label: "Pro 250 Technical Data Sheet",         type: "tds",          href: "/docs/StreetBond/StreetBond%20Pro%20250%20%5BMMA%5D/Data-Sheet-StreetBond-Pro-250.pdf" },
+    { label: "Concrete Primer QS — Technical Data Sheet", type: "tds",    href: "/docs/StreetBond/StreetBond%20Concrete%20Primer/StreetBond-QS-Concrete-TDS.pdf" },
+    { label: "Concrete Primer WB — Technical Data Sheet", type: "tds",    href: "/docs/StreetBond/StreetBond%20Concrete%20Primer/StreetBond-Concrete-Primer-WB-TDS.pdf" },
+  ],
+
+  "streetbondsr": [
+    { label: "Brochure",                             type: "brochure",     href: "/docs/StreetBondSR/StreetBondSR-Brochure.pdf" },
+    { label: "Colour Guide",                         type: "colour",       href: "/docs/StreetBondSR/Colour-Guide-1.pdf" },
+    { label: "Friction Certificate of Analysis",     type: "certificate",  href: "/docs/StreetBondSR/StreetBond-SR-Certificate-of-Analysis-Friction.pdf" },
+    { label: "Flat Surface Specification",           type: "spec",         href: "/docs/StreetBondSR/StreetBond-SR-Flat-Surface-Specification.pdf" },
+  ],
+
+  "mmax": [
+    { label: "Product Data Sheet",                   type: "tds",          href: "/docs/MMAX/MMAX-Product-Data.pdf" },
+    { label: "Next Gen Brochure",                    type: "brochure",     href: "/docs/MMAX/MMAX-Next-Gen-Brochure_06_09_23-1.pdf" },
+    { label: "Extended Season Corundum PDS",         type: "tds",          href: "/docs/MMAX/Extended-Season-MMAX-Corundum-PDS-070723.pdf" },
+    { label: "Extended Season Product Data Sheet",   type: "tds",          href: "/docs/MMAX/Extended-Season-MMAX-product-data-sheet.pdf" },
+    { label: "Corundum Area Markings — Application Instructions", type: "installation", href: "/docs/MMAX/Application_Instructions_MMAX_Corundum_Area_Markings.pdf" },
+  ],
+
+  "durashield": [
+    { label: "Part A+B Asphalt — Technical Data Sheet",     type: "tds", href: "/docs/DuraShield/DuraShield-Pavement-Coating-Part-A-B-Color-Asphalt-TDS.pdf" },
+    { label: "Part A+B Solar Gray — Technical Data Sheet",  type: "tds", href: "/docs/DuraShield/DuraShield-Pavement-Coating-Part-A-B-Color-Solar-Gray-TDS.pdf" },
+  ],
+
+  "streetprint": [
+    { label: "FAQ",                                  type: "faq",          href: "/docs/streetprint/streetprint-faq.pdf" },
+    { label: "Colour Guide",                         type: "colour",       href: "/docs/streetprint/streetprint-colour-guide.pdf" },
+    { label: "Asphalt Texturing Specification",      type: "spec",         href: "/docs/streetprint/StreetPrint-Asphalt-Texturing-Specification.pdf" },
+    { label: "Template Catalog",                     type: "other",        href: "/docs/streetprint/streetprint-template-catalog.pdf" },
+  ],
+};
+
 export function getDocsForProduct(slug: string): ProductDocument[] {
-  return productDocuments.find((p) => p.slug === slug)?.docs ?? []
+  return ALL_DOCS[slug] ?? [];
 }
+
+export { ALL_DOCS };

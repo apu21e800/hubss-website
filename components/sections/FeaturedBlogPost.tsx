@@ -32,10 +32,10 @@ export default function FeaturedBlogPost() {
   });
 
   return (
-    <section className="py-28 lg:py-32" style={{ background: "#080d16" }}>
+    <section id="field-notes" className="py-28 lg:py-32" style={{ background: "#080d16" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        {/* ── Section header ─────────────────────────────────────── */}
+        {/* ── Section header ────────────────────────────────────────────────── */}
         <div className="flex items-end justify-between mb-14">
           <div>
             <p className="gradient-text text-xs font-semibold tracking-[0.2em] uppercase mb-3">
@@ -45,7 +45,7 @@ export default function FeaturedBlogPost() {
               className="font-black"
               style={{
                 color: "var(--text-primary)",
-                fontSize: "clamp(1.8rem, 3.5vw, 3rem)",
+                fontSize: "clamp(2rem, 3.5vw, 3.2rem)",
                 lineHeight: 1.08,
                 letterSpacing: "-0.03em",
                 textWrap: "balance",
@@ -75,7 +75,7 @@ export default function FeaturedBlogPost() {
           </Link>
         </div>
 
-        {/* ── Hero featured article ───────────────────────────────── */}
+        {/* ── Hero featured article ──────────────────────────────────────────────────── */}
         <Link href={`/blog/${hero.slug}`} className="block group mb-4">
           <div
             className="grid grid-cols-1 md:grid-cols-5 gap-0 overflow-hidden rounded-2xl border transition-all duration-300 group-hover:shadow-[0_8px_32px_rgba(249,115,22,0.12)] group-hover:border-orange-500/25"
@@ -185,7 +185,7 @@ export default function FeaturedBlogPost() {
           </div>
         </Link>
 
-        {/* ── Secondary articles row ──────────────────────────────── */}
+        {/* ── Secondary articles row ───────────────────────────────────────────────────────── */}
         {secondary.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
             {secondary.map((post, i) => {

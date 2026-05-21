@@ -11,13 +11,13 @@ const PRODUCT_WHAT: Record<string, string> = {
   "streetprint":
     "In-place stamped asphalt — cobblestone, brick, herringbone and 12+ more patterns. No demolition, no raised edges, snowplow-safe. Looks like stone, performs like asphalt.",
   "streetbond":
-    "Permanently bonded acrylic colour for asphalt and concrete. Standard palette plus full Pantone custom matching. 20-year colour retention — bike lanes, crosswalks, driveways.",
+    "Permanently bonded acrylic colour for asphalt and concrete. Standard palette plus full Pantone custom matching. Long-lasting colour retention — bike lanes, crosswalks, driveways.",
   "traffic-patterns-xd":
-    "Aggregate-reinforced thermoplastic engineered for BRT corridors and high-volume intersections. BPN 65+ skid resistance.",
+    "Aggregate-reinforced thermoplastic engineered for BRT corridors and high-volume intersections. High skid resistance from the integral aggregate matrix.",
   "traffic-patterns":
-    "Crisp preformed thermoplastic markings that outlast paint 5:1. Factory-manufactured to 90mil and specified by municipalities coast to coast.",
+    "Crisp preformed thermoplastic markings that outlast paint by years. Factory-manufactured to 125mil and specified by municipalities coast to coast.",
   "mmax":
-    "MMA resin for red bus lanes and bike lanes. Traffic-ready in 60 minutes. Bonds at −10°C — no waiting for spring.",
+    "MMA resin for red bus lanes and bike lanes. Traffic-ready in under an hour. Applies down to +3°C and rising — no waiting for high summer.",
   "decomark":
     "Custom murals, Pride crosswalks, and Indigenous street art, precision-formed in durable thermoplastic. From vector file to civic landmark.",
 };
@@ -32,12 +32,13 @@ const PRODUCT_TYPE: Record<string, string> = {
 };
 
 const PRODUCT_STAT: Record<string, string> = {
-  "streetprint":         "20+ yr service life",
-  "streetbond":          "20+ yr service life",
-  "traffic-patterns-xd": "7+ yr service life",
-  "traffic-patterns":    "5–7 yr service life",
-  "mmax":                "60-min cure",
-  "decomark":            "Full Pantone match",
+  // Softened per Doug-style claims discipline (no unsourced numbers).
+  "streetprint":         "Decades of proven service",
+  "streetbond":          "UV-stable · won't peel",
+  "traffic-patterns-xd": "Aggregate-reinforced surface",
+  "traffic-patterns":    "Outlasts paint by years",
+  "mmax":                "Traffic-ready in under an hour",
+  "decomark":            "Custom Pantone graphics",
 };
 
 const PRODUCT_APPS: Record<string, string[]> = {
@@ -66,6 +67,7 @@ export default function ProductsGrid() {
 
   return (
     <section
+      id="systems"
       className="py-28 lg:py-32"
       style={{
         backgroundColor: "#0f1420",
@@ -81,7 +83,7 @@ export default function ProductsGrid() {
         {/* Section header */}
         <div className="mb-14 md:mb-16">
           <p className="gradient-text text-xs tracking-[0.15em] font-semibold uppercase mb-3">
-            Surface Systems
+            The Systems
           </p>
           <div className="flex items-end justify-between gap-6 flex-wrap">
             <div>
@@ -89,7 +91,7 @@ export default function ProductsGrid() {
                 className="font-black mb-3"
                 style={{
                   color: "var(--text-primary)",
-                  fontSize: "clamp(1.8rem, 3.5vw, 3rem)",
+                  fontSize: "clamp(2.2rem, 4vw, 3.5rem)",
                   lineHeight: 1.08,
                   letterSpacing: "-0.03em",
                   textWrap: "balance",
@@ -101,8 +103,8 @@ export default function ProductsGrid() {
                 className="text-base font-light max-w-lg leading-relaxed"
                 style={{ color: "var(--text-secondary)" }}
               >
-                Six systems engineered for freeze-thaw climates, municipalities,
-                and the projects that define a city.
+                Six systems that outlast paint 6:1, survive everything Canada throws at them,
+                and turn any surface into a signature.
               </p>
             </div>
             <Link
@@ -145,9 +147,9 @@ export default function ProductsGrid() {
                   href={`/products/${product.slug}`}
                   className="group relative flex flex-col h-full rounded-2xl overflow-hidden transition-all duration-250"
                   style={{
-                    background: "rgba(255,255,255,0.04)",
-                    border: "1px solid rgba(255,255,255,0.09)",
-                    boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+                    background: "#1a2235",
+                    border: "1px solid rgba(255,255,255,0.11)",
+                    boxShadow: "0 2px 12px rgba(0,0,0,0.3)",
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.borderColor = "rgba(249,115,22,0.45)";
@@ -179,20 +181,6 @@ export default function ProductsGrid() {
                           "linear-gradient(to bottom, transparent 40%, rgba(15,20,32,0.75) 100%)",
                       }}
                     />
-                    {/* Type badge — floats over image bottom-left */}
-                    <div className="absolute bottom-3 left-3">
-                      <span
-                        className="inline-block text-[10px] font-bold tracking-[0.1em] uppercase px-2.5 py-1 rounded-md"
-                        style={{
-                          background: "rgba(249,115,22,0.18)",
-                          color: "rgba(249,115,22,0.95)",
-                          backdropFilter: "blur(8px)",
-                          border: "1px solid rgba(249,115,22,0.25)",
-                        }}
-                      >
-                        {type}
-                      </span>
-                    </div>
                   </div>
 
                   {/* Card body */}
@@ -206,18 +194,7 @@ export default function ProductsGrid() {
                       >
                         {product.name}
                       </h3>
-                      {stat && (
-                        <span
-                          className="flex-shrink-0 text-[10px] font-semibold px-2 py-1 rounded-lg mt-0.5"
-                          style={{
-                            background: "rgba(255,255,255,0.06)",
-                            color: "rgba(255,255,255,0.4)",
-                            whiteSpace: "nowrap",
-                          }}
-                        >
-                          {stat}
-                        </span>
-                      )}
+                      {/* orange type chip removed per Vernon */}
                     </div>
 
                     {/* Description */}

@@ -43,9 +43,9 @@ export default function ComparisonTable() {
               Paint Fades.<br />We Don&apos;t.
             </h2>
             <p className="text-[15px] leading-relaxed mb-8" style={{ color: "#9ca3af" }}>
-              Traditional paint markings cost municipalities more every year through
-              repeated reapplication, faded visibility, and plow damage. HUB surface
-              systems are installed once and built to outlast the budget cycle.
+              Conventional paint markings recur as a yearly municipal expense — reapplication,
+              faded retroreflectivity, and plow shear. HUB surface systems are installed once
+              and remain in service through multiple budget cycles.
             </p>
 
             {/* Metric callout card */}
@@ -73,7 +73,7 @@ export default function ComparisonTable() {
                   Longer service life
                 </p>
                 <p className="text-xs mt-0.5" style={{ color: "#6b7280" }}>
-                  vs. painted markings — proven in the field since 1994
+                  vs. painted markings — proven in the field since 1999
                 </p>
               </div>
             </div>
@@ -155,7 +155,7 @@ export default function ComparisonTable() {
             </div>
 
             <p className="text-sm mt-6" style={{ color: "#6b7280" }}>
-              Proven in 10 provinces, coast to coast, since 1994
+              Proven in 10 provinces, coast to coast, since 1999
             </p>
           </motion.div>
 

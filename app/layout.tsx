@@ -5,7 +5,12 @@ import "./globals.css";
 // import ThemeToggle from "@/components/ui/ThemeToggle";
 // Crisp Chat — sign up at crisp.chat (free), grab Website ID from Settings → Setup
 import CrispChat from "@/components/CrispChat";
+import StickyBar from "@/components/StickyBar";
+// VercelToolbar — only on staging/preview, never on production
 import { VercelToolbar } from "@vercel/toolbar/next";
+import { GoogleAnalytics } from "@next/third-parties/google";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const geist = Geist({ variable: "--font-geist", subsets: ["latin"] });
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"], weight: ["300","400","500","600","700"] });
@@ -59,8 +64,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en">
       <body className={`${geist.variable} ${inter.variable} antialiased`}>
         {children}
+        <StickyBar />
         <CrispChat />
-        <VercelToolbar />
+        {process.env.VERCEL_ENV !== "production" && <VercelToolbar />}
+        <Analytics />
+        <SpeedInsights />
+        <GoogleAnalytics gaId="G-7YSFCGRL5E" />
       </body>
     </html>
   );

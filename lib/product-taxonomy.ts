@@ -16,14 +16,14 @@ export const PRODUCT_TAXONOMY = [
     slugs: ["streetbond", "streetbondsr", "mmax", "durashield"],
   },
   {
-    label: "Stamped Asphalt & Concrete",
+    label: "Stamped Asphalt",
     desc: "In-place stamping process that transforms existing asphalt into decorative hardscape.",
     slugs: ["streetprint"],
   },
   {
     label: "Asphalt Repair",
     desc: "Cold-mix and permanent repair compounds for potholes, utility cuts, and surface defects.",
-    slugs: ["fast-patch", "aquaphalt"],
+    slugs: ["chipfill", "aggrefill", "fast-patch"],
   },
 ] as const;
 

@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { FileText, Download, Search, X, ChevronDown } from "lucide-react";
+import { FileText, Download, Eye, Search, X, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import type { ResourceDocument } from "@/lib/resource-documents";
+import PdfPreviewModal from "@/components/ui/PdfPreviewModal";
 
 const TABS = ["By Product", "By Document Type"] as const;
 type TabType = (typeof TABS)[number];
@@ -76,7 +77,20 @@ const selectStyle: React.CSSProperties = {
   color: "#e5e7eb",
 };
 
-function DocCard({ doc }: { doc: ResourceDocument }) {
+interface PreviewState {
+  href: string;
+  label: string;
+  typeLabel: string;
+  productLabel: string;
+}
+
+function DocCard({
+  doc,
+  onPreview,
+}: {
+  doc: ResourceDocument;
+  onPreview: (state: PreviewState) => void;
+}) {
   return (
     <div
       className="group rounded-xl p-5 flex flex-col justify-between transition-all duration-200"
@@ -84,11 +98,11 @@ function DocCard({ doc }: { doc: ResourceDocument }) {
         background: "#1e1e1e",
         border: "1px solid rgba(255,255,255,0.08)",
       }}
-      onMouseEnter={e => {
+      onMouseEnter={(e) => {
         (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(249,115,22,0.22)";
         (e.currentTarget as HTMLDivElement).style.background = "#272727";
       }}
-      onMouseLeave={e => {
+      onMouseLeave={(e) => {
         (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(255,255,255,0.08)";
         (e.currentTarget as HTMLDivElement).style.background = "#1e1e1e";
       }}
@@ -100,40 +114,80 @@ function DocCard({ doc }: { doc: ResourceDocument }) {
         >
           {doc.type}
         </span>
-        <h3 className="font-semibold leading-snug mb-2" style={{ color: "#F5F0EB" }}>{doc.title}</h3>
+        <h3 className="font-semibold leading-snug mb-2" style={{ color: "#F5F0EB" }}>
+          {doc.title}
+        </h3>
         <span
           className="inline-block text-xs px-2 py-0.5 rounded-full"
-          style={{ color: "#c96a18", background: "rgba(249,115,22,0.07)", border: "1px solid rgba(249,115,22,0.12)" }}
+          style={{
+            color: "#c96a18",
+            background: "rgba(249,115,22,0.07)",
+            border: "1px solid rgba(249,115,22,0.12)",
+          }}
         >
           {doc.productName}
         </span>
       </div>
       <div
-        className="flex items-center justify-between mt-5 pt-4"
+        className="flex items-center gap-2 mt-5 pt-4"
         style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
       >
-        <div className="flex items-center gap-3 text-xs" style={{ color: "#6B7280" }}>
+        {/* File meta */}
+        <div className="flex items-center gap-1.5 text-xs flex-1 min-w-0" style={{ color: "#6B7280" }}>
           <span>{doc.fileSize}</span>
-          <span className="w-1 h-1 rounded-full" style={{ background: "rgba(255,255,255,0.15)" }} />
-          <span>{doc.updatedDate}</span>
+          <span
+            className="w-1 h-1 rounded-full flex-shrink-0"
+            style={{ background: "rgba(255,255,255,0.15)" }}
+          />
+          <span className="truncate">{doc.updatedDate}</span>
         </div>
+
+        {/* Preview button */}
+        <button
+          onClick={() =>
+            onPreview({
+              href: doc.fileUrl,
+              label: doc.title,
+              typeLabel: doc.type,
+              productLabel: doc.productName,
+            })
+          }
+          className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors duration-200 flex-shrink-0"
+          style={{ background: "rgba(255,255,255,0.08)", color: "#9CA3AF" }}
+          onMouseEnter={(e) => {
+            (e.currentTarget as HTMLButtonElement).style.background = "rgba(249,115,22,0.12)";
+            (e.currentTarget as HTMLButtonElement).style.color = "#f97316";
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.08)";
+            (e.currentTarget as HTMLButtonElement).style.color = "#9CA3AF";
+          }}
+        >
+          <Eye className="w-3.5 h-3.5" />
+          <span className="hidden sm:inline">Preview</span>
+        </button>
+
+        {/* Download button */}
         <a
           href={doc.fileUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors duration-200"
-          style={{ background: "rgba(255,255,255,0.08)", color: "#9CA3AF" }}
-          onMouseEnter={e => {
+          download
+          className="flex items-center justify-center w-8 h-8 rounded-lg transition-colors duration-200 flex-shrink-0"
+          style={{
+            background: "rgba(249,115,22,0.10)",
+            color: "#f97316",
+            border: "1px solid rgba(249,115,22,0.2)",
+          }}
+          onMouseEnter={(e) => {
             (e.currentTarget as HTMLAnchorElement).style.background = "#f97316";
             (e.currentTarget as HTMLAnchorElement).style.color = "#ffffff";
           }}
-          onMouseLeave={e => {
-            (e.currentTarget as HTMLAnchorElement).style.background = "rgba(255,255,255,0.08)";
-            (e.currentTarget as HTMLAnchorElement).style.color = "#9CA3AF";
+          onMouseLeave={(e) => {
+            (e.currentTarget as HTMLAnchorElement).style.background = "rgba(249,115,22,0.10)";
+            (e.currentTarget as HTMLAnchorElement).style.color = "#f97316";
           }}
+          title="Download PDF"
         >
           <Download className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">Download</span>
         </a>
       </div>
     </div>
@@ -152,6 +206,7 @@ export default function ResourcesClient({
   const [typeFilter, setTypeFilter] = useState("All");
   const [docTypeFilter, setDocTypeFilter] = useState("All");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [preview, setPreview] = useState<PreviewState | null>(null);
 
   const filtered = useMemo(() => {
     return documents.filter((doc) => {
@@ -166,7 +221,11 @@ export default function ResourcesClient({
       if (activeTab === "By Product" && productFilter !== "all") {
         if (doc.product !== productFilter) return false;
       }
-      if (activeTab === "By Product" && productFilter === "streetbond" && subcategoryFilter !== "all") {
+      if (
+        activeTab === "By Product" &&
+        productFilter === "streetbond" &&
+        subcategoryFilter !== "all"
+      ) {
         if (doc.subcategory !== subcategoryFilter) return false;
       }
       if (activeTab === "By Document Type" && docTypeFilter !== "All") {
@@ -209,6 +268,17 @@ export default function ResourcesClient({
 
   return (
     <>
+      {/* PDF Preview Modal */}
+      {preview && (
+        <PdfPreviewModal
+          href={preview.href}
+          label={preview.label}
+          typeLabel={preview.typeLabel}
+          productLabel={preview.productLabel}
+          onClose={() => setPreview(null)}
+        />
+      )}
+
       {/* ── Tab Navigation ─────────────────────────────────── */}
       <div id="documents" className="scroll-mt-24 mb-8">
         <div className="flex gap-2">
@@ -220,7 +290,10 @@ export default function ResourcesClient({
               style={{
                 background: activeTab === tab ? "#F97316" : "rgba(255,255,255,0.05)",
                 color: activeTab === tab ? "#ffffff" : "#9CA3AF",
-                border: activeTab === tab ? "1px solid transparent" : "1px solid rgba(255,255,255,0.08)",
+                border:
+                  activeTab === tab
+                    ? "1px solid transparent"
+                    : "1px solid rgba(255,255,255,0.08)",
               }}
             >
               {tab}
@@ -232,7 +305,10 @@ export default function ResourcesClient({
       {/* ── Search + Filter Bar ──────────────────────────── */}
       <div className="flex flex-col sm:flex-row gap-3 mb-8">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "#6B7280" }} />
+          <Search
+            className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4"
+            style={{ color: "#6B7280" }}
+          />
           <input
             type="text"
             placeholder="Search documents..."
@@ -268,10 +344,15 @@ export default function ResourcesClient({
               style={selectStyle}
             >
               {PRODUCTS.map((p) => (
-                <option key={p.value} value={p.value}>{p.label}</option>
+                <option key={p.value} value={p.value}>
+                  {p.label}
+                </option>
               ))}
             </select>
-            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: "#6B7280" }} />
+            <ChevronDown
+              className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
+              style={{ color: "#6B7280" }}
+            />
           </div>
         )}
 
@@ -287,10 +368,15 @@ export default function ResourcesClient({
               style={selectStyle}
             >
               {DOCUMENT_TYPES.map((t) => (
-                <option key={t} value={t}>{t === "All" ? "All Types" : t}</option>
+                <option key={t} value={t}>
+                  {t === "All" ? "All Types" : t}
+                </option>
               ))}
             </select>
-            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: "#6B7280" }} />
+            <ChevronDown
+              className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
+              style={{ color: "#6B7280" }}
+            />
           </div>
         )}
 
@@ -319,7 +405,11 @@ export default function ResourcesClient({
               style={
                 docTypeFilter === dt.value
                   ? { background: "#F97316", color: "#fff", border: "1px solid transparent" }
-                  : { background: "rgba(255,255,255,0.04)", color: "#6B7280", border: "1px solid rgba(255,255,255,0.08)" }
+                  : {
+                      background: "rgba(255,255,255,0.04)",
+                      color: "#6B7280",
+                      border: "1px solid rgba(255,255,255,0.08)",
+                    }
               }
             >
               {dt.label}
@@ -342,7 +432,11 @@ export default function ResourcesClient({
               style={
                 subcategoryFilter === sc.value
                   ? { background: "#F97316", color: "#fff", border: "1px solid transparent" }
-                  : { background: "rgba(255,255,255,0.04)", color: "#6B7280", border: "1px solid rgba(255,255,255,0.08)" }
+                  : {
+                      background: "rgba(255,255,255,0.04)",
+                      color: "#6B7280",
+                      border: "1px solid rgba(255,255,255,0.08)",
+                    }
               }
             >
               {sc.label}
@@ -359,7 +453,10 @@ export default function ResourcesClient({
       {/* ── Document Grid ────────────────────────────────── */}
       {visible.length > 0 ? (
         <>
-          {activeTab === "By Product" && productFilter === "all" && typeFilter === "All" && !search ? (
+          {activeTab === "By Product" &&
+          productFilter === "all" &&
+          typeFilter === "All" &&
+          !search ? (
             (() => {
               const grouped: Record<string, ResourceDocument[]> = {};
               for (const doc of visible) {
@@ -371,15 +468,27 @@ export default function ResourcesClient({
                   {Object.entries(grouped).map(([productName, docs]) => (
                     <div key={productName}>
                       <div className="flex items-center gap-4 mb-6">
-                        <h3 className="text-sm font-bold tracking-widest uppercase" style={{ color: "#F97316" }}>
+                        <h3
+                          className="text-sm font-bold tracking-widest uppercase"
+                          style={{ color: "#F97316" }}
+                        >
                           {productName}
                         </h3>
-                        <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.08)" }} />
-                        <span className="text-xs" style={{ color: "#6B7280" }}>{docs.length} doc{docs.length !== 1 ? "s" : ""}</span>
+                        <div
+                          className="flex-1 h-px"
+                          style={{ background: "rgba(255,255,255,0.08)" }}
+                        />
+                        <span className="text-xs" style={{ color: "#6B7280" }}>
+                          {docs.length} doc{docs.length !== 1 ? "s" : ""}
+                        </span>
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                         {docs.map((doc) => (
-                          <DocCard key={doc.id} doc={doc} />
+                          <DocCard
+                            key={doc.id}
+                            doc={doc}
+                            onPreview={setPreview}
+                          />
                         ))}
                       </div>
                     </div>
@@ -390,7 +499,7 @@ export default function ResourcesClient({
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {visible.map((doc) => (
-                <DocCard key={doc.id} doc={doc} />
+                <DocCard key={doc.id} doc={doc} onPreview={setPreview} />
               ))}
             </div>
           )}
@@ -413,8 +522,14 @@ export default function ResourcesClient({
         </>
       ) : (
         <div className="text-center py-20">
-          <FileText className="w-12 h-12 mx-auto mb-4" style={{ color: "rgba(255,255,255,0.15)" }} />
-          <h3 className="text-xl font-semibold mb-2" style={{ color: "#F5F0EB" }}>
+          <FileText
+            className="w-12 h-12 mx-auto mb-4"
+            style={{ color: "rgba(255,255,255,0.15)" }}
+          />
+          <h3
+            className="text-xl font-semibold mb-2"
+            style={{ color: "#F5F0EB" }}
+          >
             No documents found
           </h3>
           <p className="mb-6" style={{ color: "#6B7280" }}>

@@ -24,7 +24,7 @@ export default function Footer() {
 
       {/* Wheel watermark — subtle background accent */}
       <div style={{ position: "absolute", bottom: "24px", right: "32px", opacity: 0.04, pointerEvents: "none", zIndex: 0 }}>
-        <Image src="/images/assets/logos/hubss-logos/HUB-wheel_official-orange-transparent.svg" alt="" width={180} height={180} unoptimized aria-hidden="true" style={{ display: "none" }} />
+        <Image src="/images/hub-wheel-orange.png" alt="" width={180} height={180} aria-hidden="true" />
       </div>
 
       {/* Full-width gradient divider */}
@@ -56,29 +56,46 @@ export default function Footer() {
               className="font-light tracking-wide leading-snug mb-2"
               style={{ color: "var(--text-primary)", fontSize: "1rem" }}
             >
-              Pedestrian safety. Traffic calming.<br />Civic identity. Coast to coast since 1994.
+              Pedestrian safety. Traffic calming.<br />Civic identity. Coast to coast since 1999.
             </p>
 
-            <p className="text-xs mb-6" style={{ color: "var(--text-muted)" }}>
-              Canadian-operated · Coast to coast · Since 1994
+            <p className="text-xs mb-6 flex items-center gap-2 flex-wrap" style={{ color: "var(--text-muted)" }}>
+              <span
+                className="inline-flex items-center gap-1.5"
+                aria-label="Canadian"
+                style={{
+                  paddingRight: 10,
+                  borderRight: "1px solid rgba(255,255,255,0.1)",
+                }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 9600 4800"
+                  width={16}
+                  height={8}
+                  aria-hidden="true"
+                  style={{ display: "block", flexShrink: 0, borderRadius: 1 }}
+                >
+                  <path fill="#f00" d="m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z" />
+                  <path fill="#fff" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z" />
+                </svg>
+                <span className="text-[10px] font-bold tracking-[0.18em] uppercase" style={{ color: "rgba(255,255,255,0.55)", lineHeight: 1 }}>
+                  Canadian
+                </span>
+              </span>
+              <span>Owned and operated · Coast to coast · Since 1999</span>
             </p>
 
             <SocialLinks className="mt-3" />
 
-            <p className="text-xs mt-4 font-medium flex items-center gap-1.5" style={{ color: "var(--text-muted)" }}>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9600 4800" width={20} height={10} aria-label="Flag of Canada" style={{ display: "inline-block", flexShrink: 0, minWidth: 20 }}>
-                <path fill="#f00" d="m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z"/>
-                <path fill="#fff" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z"/>
-              </svg>
-              Proudly Canadian · Serving Canada since 1994
-            </p>
+            {/* Earlier per-line flag removed — consolidated into the "Canadian | Owned and operated" treatment above for visual consistency with the nav + about page. */}
           </div>
 
           {/* Products */}
           <div>
             <h4 className="font-semibold text-sm mb-5" style={{ color: "var(--text-primary)" }}>Products</h4>
             <ul className="space-y-1">
-              {products.filter((p) => !p.comingSoon).map((p) => (
+              {products.filter((p) => !p.comingSoon && !p.hideFromFooter).map((p) => (
                 <li key={p.slug}>
                   <Link
                     href={`/products/${p.slug}`}
@@ -125,10 +142,10 @@ export default function Footer() {
                   West Office
                 </p>
                 <p className="text-sm mb-1" style={{ color: "var(--text-primary)" }}>Ladysmith, BC</p>
-                <a href="mailto:cleve.stordy@hubss.com" className="text-xs block transition-colors hover:text-white underline-offset-4 hover:underline" style={{ color: "var(--text-secondary)" }}>
+                <a href="mailto:cleve.stordy@hubss.com" className="text-xs block transition-colors hover:text-white underline-offset-4 hover:underline py-1.5" style={{ color: "var(--text-secondary)" }}>
                   cleve.stordy@hubss.com
                 </a>
-                <a href="tel:6043098212" className="text-xs block transition-colors hover:text-white" style={{ color: "var(--text-secondary)" }}>
+                <a href="tel:6043098212" className="text-xs block transition-colors hover:text-white py-1.5" style={{ color: "var(--text-secondary)" }}>
                   604-309-8212
                 </a>
               </div>
@@ -143,10 +160,10 @@ export default function Footer() {
                   East Office
                 </p>
                 <p className="text-sm mb-1" style={{ color: "var(--text-primary)" }}>Milton, Ontario</p>
-                <a href="mailto:doug.bain@hubss.com" className="text-xs block transition-colors hover:text-white underline-offset-4 hover:underline" style={{ color: "var(--text-secondary)" }}>
+                <a href="mailto:doug.bain@hubss.com" className="text-xs block transition-colors hover:text-white underline-offset-4 hover:underline py-1.5" style={{ color: "var(--text-secondary)" }}>
                   doug.bain@hubss.com
                 </a>
-                <a href="tel:4165409287" className="text-xs block transition-colors hover:text-white" style={{ color: "var(--text-secondary)" }}>
+                <a href="tel:4165409287" className="text-xs block transition-colors hover:text-white py-1.5" style={{ color: "var(--text-secondary)" }}>
                   416-540-9287
                 </a>
               </div>

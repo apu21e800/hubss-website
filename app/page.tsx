@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Nav from "@/components/sections/Nav";
-import Hero from "@/components/sections/Hero";
-import WhyHubss from "@/components/sections/WhyHubss";
+import HeroSlideshow from "@/components/sections/HeroSlideshow";
+// WhyHubss stats/claims block removed per Doug; TrustedByMarquee restored as standalone social proof.
+import TrustedByMarquee from "@/components/sections/TrustedByMarquee";
 import PersonaEntryPoints from "@/components/sections/PersonaEntryPoints";
 import ProductsGrid from "@/components/sections/ProductsGrid";
 import ApplicationsGrid from "@/components/sections/ApplicationsGrid";
@@ -12,48 +13,82 @@ import Footer from "@/components/sections/Footer";
 import JsonLd from "@/components/ui/JsonLd";
 import { buildMetadata } from "@/lib/seo";
 import CanadaMapWrapper from "@/components/sections/CanadaMapWrapper";
+import { SITE_FLAGS } from "@/lib/site-flags";
+import { getSanityPageContent } from "@/lib/sanity.queries";
 
 export const metadata: Metadata = buildMetadata({
   title: "Decorative Pavement & Road Marking Solutions",
-  description: "Canada's leader in decorative stamped asphalt, thermoplastic road markings, and coloured pavement systems. Serving municipalities, developers, and contractors coast to coast since 1994.",
+  description: "Canada's leader in decorative stamped asphalt, thermoplastic road markings, and coloured pavement systems. Serving municipalities, developers, and contractors coast to coast since 1999.",
   slug: "",
 });
 
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
+  "@id": "https://hubss.com/#organization",
   name: "HUB Surface Systems",
   url: "https://hubss.com",
-  logo: "https://hubss.com/images/logo.svg",
-  contactPoint: [
-    {
-      "@type": "ContactPoint",
-      telephone: "+1-416-540-9287",
-      contactType: "sales",
-      areaServed: "CA",
-      availableLanguage: "English",
-    },
-    {
-      "@type": "ContactPoint",
-      telephone: "+1-604-309-8212",
-      contactType: "sales",
-      areaServed: "CA",
-      availableLanguage: "English",
-    },
-  ],
-  address: [
-    { "@type": "PostalAddress", addressLocality: "Milton", addressRegion: "ON", addressCountry: "CA" },
-    { "@type": "PostalAddress", addressLocality: "Ladysmith", addressRegion: "BC", addressCountry: "CA" },
-  ],
+  logo: "https://hubss.com/images/hub-official-logo.svg",
+  foundingDate: "1999",
+  description:
+    "Canadian leader in decorative pavement and traffic safety solutions. Stamped asphalt, thermoplastic markings, and specialty coatings for municipalities and developers across Canada.",
   sameAs: [
     "https://www.linkedin.com/company/hub-surface-systems",
     "https://www.instagram.com/hubsurfacesystems",
     "https://www.facebook.com/hubsurfacesystems",
     "https://www.youtube.com/@hubsurfacesystems",
   ],
+  subOrganization: [
+    {
+      "@type": "LocalBusiness",
+      "@id": "https://hubss.com/#west-office",
+      name: "HUB Surface Systems — West Office",
+      image: "https://hubss.com/images/hero/hero-1.jpg",
+      url: "https://hubss.com/contact",
+      telephone: "+1-604-309-8212",
+      email: "cleve.stordy@hubss.com",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Ladysmith",
+        addressRegion: "BC",
+        addressCountry: "CA",
+      },
+      areaServed: ["BC", "AB", "SK", "NT", "YT", "NU"],
+      priceRange: "$$",
+    },
+    {
+      "@type": "LocalBusiness",
+      "@id": "https://hubss.com/#east-office",
+      name: "HUB Surface Systems — East Office",
+      image: "https://hubss.com/images/hero/hero-1.jpg",
+      url: "https://hubss.com/contact",
+      telephone: "+1-416-540-9287",
+      email: "doug.bain@hubss.com",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Milton",
+        addressRegion: "ON",
+        addressCountry: "CA",
+      },
+      areaServed: ["ON", "QC", "NS", "NB", "PE", "NL", "MB"],
+      priceRange: "$$",
+    },
+  ],
 };
 
-export default function Home() {
+export default async function Home() {
+  const sanityPage = await getSanityPageContent("homepage").catch(() => null);
+  const hero = {
+    eyebrow:    sanityPage?.homepageHero?.eyebrow    ?? "Redefining Hardscapes · Since 1999",
+    heading:    sanityPage?.homepageHero?.heading    ?? "The World Is",
+    subheading: sanityPage?.homepageHero?.subheading ?? "Your Canvas.",
+    tagline:    sanityPage?.homepageHero?.tagline    ?? "Let’s build your signature space.",
+    cta1Label:  sanityPage?.homepageHero?.cta1Label  ?? "See the Work",
+    cta1Href:   sanityPage?.homepageHero?.cta1Href   ?? "#field-notes",
+    cta2Label:  sanityPage?.homepageHero?.cta2Label  ?? "See the Systems",
+    cta2Href:   sanityPage?.homepageHero?.cta2Href   ?? "#systems",
+  };
+
   return (
     <main>
       {/* Page-load sweep */}
@@ -61,8 +96,8 @@ export default function Home() {
 
       <JsonLd data={organizationSchema} />
       <Nav />
-      <Hero />
-      <WhyHubss />
+      <HeroSlideshow {...hero} />
+      <TrustedByMarquee />
       <PersonaEntryPoints />
       {/* slate → dark */}
       <ProductsGrid />
@@ -72,8 +107,8 @@ export default function Home() {
       <FeaturedBlogPost />
       {/* off-white → slate (lunch learn) */}
       <InstagramStrip />
-      {/* Canada map — flagship projects across Canada */}
-      <CanadaMapWrapper />
+      {/* Canada map — controlled by SITE_FLAGS.showMap in lib/site-flags.ts */}
+      {SITE_FLAGS.showMap && <CanadaMapWrapper />}
       {/* LunchLearn — Moose mascot rendered internally by the component */}
       <LunchLearn />
       <Footer />

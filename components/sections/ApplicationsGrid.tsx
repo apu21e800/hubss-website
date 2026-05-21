@@ -34,7 +34,7 @@ export default function ApplicationsGrid() {
             className="font-black mb-4"
             style={{
               color: "var(--text-primary)",
-              fontSize: "clamp(2rem, 4vw, 3.5rem)",
+              fontSize: "clamp(2.2rem, 4vw, 3.5rem)",
               lineHeight: 1.05,
               letterSpacing: "-0.03em",
               textWrap: "balance",
@@ -70,34 +70,29 @@ export default function ApplicationsGrid() {
                   alt={applicationImages[app.slug] ? resolveImage(applicationImages[app.slug]).alt : app.name}
                   fill
                   loading="lazy"
+                  // Subject-foreground bias: pavement surface usually sits in the lower 2/3 of source frames.
                   className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+                  style={{ objectPosition: "center 60%" }}
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
 
-                {/* Permanent dark gradient — bottom 60% */}
+                {/* Bottom 40% scrim for text legibility — image stays visible above */}
                 <div
-                  className="absolute inset-0"
+                  className="absolute inset-x-0 bottom-0"
                   style={{
-                    background: "linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.35) 40%, transparent 70%)",
+                    height: "44%",
+                    background: "linear-gradient(to top, rgba(7,11,18,0.92) 0%, rgba(7,11,18,0.65) 55%, rgba(7,11,18,0) 100%)",
                   }}
                 />
 
-                {/* Hover: overlay lightens (reduces darkness) */}
-                <div
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  style={{
-                    background: "linear-gradient(to top, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.15) 40%, transparent 70%)",
-                  }}
-                />
-
-                {/* 2px gradient bottom border on hover */}
+                {/* Hover: 2px gradient bottom border only — image foregrounded, no full overlay */}
                 <span
-                  className="absolute inset-x-0 bottom-0 h-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  className="absolute inset-x-0 bottom-0 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-200"
                   style={{ background: "linear-gradient(90deg, #F97316 0%, #EAB308 100%)" }}
                 />
 
-                <div className="absolute bottom-0 left-0 right-0 p-5 transition-transform duration-300 group-hover:-translate-y-1">
-                  <h3 className="font-bold text-base" style={{ color: "var(--text-primary)" }}>
+                <div className="absolute bottom-0 left-0 right-0 p-5 transition-transform duration-300 group-hover:-translate-y-0.5">
+                  <h3 className="font-bold text-base group-hover:text-orange-400 transition-colors" style={{ color: "var(--text-primary)" }}>
                     {app.name}
                   </h3>
                   <p className="text-sm text-white/60 mt-0.5 line-clamp-2">

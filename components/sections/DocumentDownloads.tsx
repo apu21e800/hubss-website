@@ -1,18 +1,33 @@
-// components/sections/DocumentDownloads.tsx
-import { getDocsForProduct, docTypeLabel, type ProductDocument } from "@/lib/documents";
+"use client";
 
-function DocRow({ doc, isLast }: { doc: ProductDocument; isLast: boolean }) {
+import { useState } from "react";
+import { getDocsForProduct, docTypeLabel, type ProductDocument } from "@/lib/documents";
+import PdfPreviewModal from "@/components/ui/PdfPreviewModal";
+
+interface PreviewState {
+  href: string;
+  label: string;
+  typeLabel: string;
+}
+
+function DocRow({
+  doc,
+  isLast,
+  onPreview,
+}: {
+  doc: ProductDocument;
+  isLast: boolean;
+  onPreview: (state: PreviewState) => void;
+}) {
   const typeLabel = docTypeLabel[doc.type];
-  const labelText = doc.lang ? `${doc.label} (${doc.lang.toUpperCase()})` : doc.label;
-  // Only show the type badge when it adds information the label doesn't already convey
+  const labelText = doc.lang
+    ? `${doc.label} (${doc.lang.toUpperCase()})`
+    : doc.label;
   const showBadge = labelText.toLowerCase() !== typeLabel.toLowerCase();
 
   return (
-    <a
-      href={doc.href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="flex items-center gap-3 py-3 group transition-colors hover:bg-orange-50/50 rounded-lg px-3 -mx-3"
+    <div
+      className="flex items-center gap-3 py-2"
       style={{ borderBottom: isLast ? "none" : "1px solid #f3f4f6" }}
     >
       {/* PDF icon */}
@@ -26,11 +41,11 @@ function DocRow({ doc, isLast }: { doc: ProductDocument; isLast: boolean }) {
       </span>
 
       {/* Document name */}
-      <span className="flex-1 text-sm font-medium text-gray-800 group-hover:text-gray-900 transition-colors min-w-0 truncate">
+      <span className="flex-1 text-sm font-medium text-gray-800 min-w-0 truncate">
         {labelText}
       </span>
 
-      {/* Type badge — only when it adds info beyond the label */}
+      {/* Type badge — desktop only */}
       {showBadge && (
         <span
           className="flex-shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded border hidden sm:inline"
@@ -40,47 +55,106 @@ function DocRow({ doc, isLast }: { doc: ProductDocument; isLast: boolean }) {
         </span>
       )}
 
-      {/* Download icon */}
-      <svg
-        className="w-4 h-4 flex-shrink-0 transition-transform group-hover:translate-y-0.5 text-gray-300 group-hover:text-[#F97316]"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
+      {/* Preview button — CSS hover only (no mouse event handlers that stick on touch) */}
+      <button
+        onClick={() => onPreview({ href: doc.href, label: labelText, typeLabel })}
+        className="flex-shrink-0 hidden sm:flex items-center gap-1.5 text-xs font-semibold px-3 rounded-lg transition-colors"
+        style={{
+          minHeight: "44px",
+          background: "rgba(249,115,22,0.06)",
+          color: "#F97316",
+          border: "1px solid rgba(249,115,22,0.15)",
+        }}
+        aria-label={`Preview ${labelText}`}
       >
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-      </svg>
-    </a>
+        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+        </svg>
+        Preview
+      </button>
+
+      {/* Download / Open button.
+          - `download` attr works on desktop Chrome/Firefox.
+          - iOS Safari ignores `download` and opens the PDF in its viewer — correct behavior.
+          - `target="_blank"` ensures it at least opens in a new tab on iOS rather than navigating away.
+          - No onMouseEnter/Leave: touch browsers fire mouseenter on tap but never mouseleave,
+            leaving the button visually stuck. Use CSS :active via Tailwind active: instead. */}
+      <a
+        href={doc.href}
+        download
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex-shrink-0 flex items-center justify-center rounded-lg transition-colors active:bg-orange-50 hover:text-orange-500 hover:border-orange-200 hover:bg-orange-50/50"
+        style={{
+          minWidth: "44px",
+          minHeight: "44px",
+          color: "#9ca3af",
+          background: "rgba(0,0,0,0.03)",
+          border: "1px solid #f3f4f6",
+        }}
+        title={`Download ${labelText}`}
+        aria-label={`Download ${labelText}`}
+      >
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>
+      </a>
+    </div>
   );
 }
 
 export default function DocumentDownloads({ slug }: { slug: string }) {
   const docs = getDocsForProduct(slug);
+  const [preview, setPreview] = useState<PreviewState | null>(null);
+
   if (docs.length === 0) return null;
 
   return (
-    <div className="mt-14 -mx-4 sm:mx-0">
-      <div className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
-        <div className="px-8 py-8">
-          {/* Header */}
-          <div className="flex items-center gap-4 mb-6">
-            <div>
-              <p className="text-xs font-bold tracking-[0.2em] uppercase mb-1" style={{ color: "#F97316" }}>
-                Specification Library
-              </p>
-              <h2 className="text-xl font-bold text-gray-900">Downloads</h2>
-            </div>
-            <div className="flex-1 h-px bg-gray-100 ml-4" />
-            <span className="text-xs text-gray-400 shrink-0">{docs.length} file{docs.length !== 1 ? "s" : ""}</span>
-          </div>
+    <>
+      {preview && (
+        <PdfPreviewModal
+          href={preview.href}
+          label={preview.label}
+          typeLabel={preview.typeLabel}
+          onClose={() => setPreview(null)}
+        />
+      )}
 
-          {/* Doc rows */}
-          <div>
-            {docs.map((doc, idx) => (
-              <DocRow key={`${doc.type}-${doc.href}`} doc={doc} isLast={idx === docs.length - 1} />
-            ))}
+      <div className="mt-14 -mx-4 sm:mx-0">
+        <div className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+          <div className="px-8 py-8">
+            {/* Header */}
+            <div className="flex items-center gap-4 mb-6">
+              <div>
+                <p
+                  className="text-xs font-bold tracking-[0.2em] uppercase mb-1"
+                  style={{ color: "#F97316" }}
+                >
+                  Documents
+                </p>
+                <h2 className="text-xl font-bold text-gray-900">Downloads</h2>
+              </div>
+              <div className="flex-1 h-px bg-gray-100 ml-4" />
+              <span className="text-xs text-gray-400 shrink-0">
+                {docs.length} file{docs.length !== 1 ? "s" : ""}
+              </span>
+            </div>
+
+            {/* Doc rows */}
+            <div>
+              {docs.map((doc, idx) => (
+                <DocRow
+                  key={`${doc.type}-${doc.href}`}
+                  doc={doc}
+                  isLast={idx === docs.length - 1}
+                  onPreview={setPreview}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

@@ -78,8 +78,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (!process.env.RESEND_API_KEY) {
-      // Dev fallback: log to console when no key is configured
-      console.log("[contact API] No RESEND_API_KEY — would send:", body);
+      // Dev fallback: silently succeed when no key is configured
       return NextResponse.json({ success: true });
     }
 

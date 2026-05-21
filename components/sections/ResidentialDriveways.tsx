@@ -42,16 +42,16 @@ export default function ResidentialDriveways() {
               className="text-base leading-relaxed mb-8 max-w-md"
               style={{ color: "var(--text-secondary)" }}
             >
-              The same StreetPrint patterns used on Toronto&apos;s streetscapes, now available for
-              residential driveways. 20&#8209;year durability. 1&#8209;2 day installation.
+              The same StreetPrint patterns specified for Toronto&apos;s streetscapes, applied to
+              residential driveways. 20&#8209;year service life. 1&#8209;2 day installation.
             </p>
 
             {/* Benefit bullets */}
             <ul className="space-y-3.5 mb-10">
               {[
-                "Custom patterns — cobblestone, brick, herringbone, and more",
-                "Engineered for Canadian freeze‑thaw cycles",
-                "Same materials used on public streets — residential quality isn’t a downgrade",
+                "Brick, cobblestone, slate, herringbone, and custom pattern options",
+                "Specified for Canadian freeze‑thaw cycles and winter maintenance",
+                "Same material specification used on public streets — no downgrade for residential applications",
               ].map((item) => (
                 <li key={item} className="flex items-start gap-3">
                   <span

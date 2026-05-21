@@ -291,21 +291,18 @@ async function pageTOC(sections, totalPages) {
 }
 
 async function pageSectionOpen(num, title, imagePath) {
+  // Cinematic section opener — photo breathes at top, type anchors at bottom.
+  // Scrim builds from invisible to dense only in the text zone. Clean and confident.
   const f = fr(`Section ${num} — ${title}`, N);
   ph(f, 0, 0, 450, 450, "Section opener: " + title, imagePath);
-  // 3-step graduated scrim — no hard lines. Photo breathes at the top,
-  // density builds only where text needs legibility at the bottom.
-  rct(f, 0, 0, 450, 450, N, "ScrimGlobal");    // very subtle full-frame tone
-  f.children[f.children.length-1].opacity = 0.12;
-  rct(f, 0, 210, 450, 240, N, "ScrimMid");      // lower half, building
-  f.children[f.children.length-1].opacity = 0.40;
-  rct(f, 0, 310, 450, 140, N, "ScrimBase");     // text zone, dense
-  f.children[f.children.length-1].opacity = 0.60;
-  // Rule directly above section label (tight, intentional)
-  await tx(f, ("SECTION " + num).toUpperCase(), 28, 330, 6, W, false, 394, null, 9);
-  rul(f, 28, 324, 24);
-  // Title: bold, 14px below label
-  await tx(f, title, 28, 353, 34, W, true, 394);
+  // Single smooth scrim — avoids banding. Photo is the hero.
+  rct(f, 0, 260, 450, 190, N, "Scrim");
+  f.children[f.children.length-1].opacity = 0.75;
+  // Eyebrow + rule — precise alignment. 24px tick rule reads as a confident mark.
+  await tx(f, ("SECTION " + num).toUpperCase(), 28, 324, 5.5, W, false, 394, null, 8);
+  rul(f, 28, 318, 24);
+  // Title — 40px for real cinematic presence. More drama than before.
+  await tx(f, title, 28, 346, 40, W, true, 394);
   return f;
 }
 
@@ -364,8 +361,8 @@ async function pageProductSpec(prod) {
     rct(f, 28, 392, 394, 1, F, "rule");
     await tx(f, prod.uses.join("   ·   ").toUpperCase(), 28, 402, 6, M, false, 394, "center", 9);
   }
-  // CTA: spec sheet URL — moved to y=414 (bottom=424, gap=26px ≥ 0.25" safe margin)
-  await tx(f, "hubss.com/products", 28, 414, 6.5, O, false, 394, "right", 10);
+  // CTA: spec sheet URL — y=402 keeps bottom=412, well clear of folio at y=415
+  await tx(f, "hubss.com/products", 28, 402, 6.5, O, false, 394, "right", 10);
   return f;
 }
 
@@ -376,9 +373,9 @@ async function pageApplication(app, idx, total) {
   await tx(f, app.name, 30, 321, 19, D, true, 390);
   await tx(f, app.tagline || "", 30, 354, 8.5, M, false, 370);
   await tx(f, app.body || "", 30, 376, 7.5, D, false, 370);
-  // Footer rule + CTA URL
-  rct(f, 30, 418, 390, 1, F, "rule");
-  await tx(f, "hubss.com", 30, 428, 6.5, O, false, 390, "right", 10);
+  // Footer: moved up from y=418 — clear of safe margin, no folio collision (App pages skip folios)
+  rct(f, 30, 406, 390, 1, F, "rule");
+  await tx(f, "hubss.com", 30, 414, 6.5, O, false, 390, "right", 10);
   return f;
 }
 
@@ -400,15 +397,19 @@ async function pageProjectHero(proj) {
 
 async function pageProjectStory(proj, idx) {
   const f = fr(`Story ${String(idx).padStart(2,"0")} — ${proj.name}`);
-  // FILL mode: full-bleed, edge-to-edge — no letterbox. Subject centered by default.
+  // FILL mode: full-bleed, edge-to-edge. Subject centered by default.
   ph(f, 0, 0, 450, 248, proj.name + " — detail photo", proj.detail || proj.hero);
-  // Eyebrow = product name (e.g. "TRAFFICPATTERNS XD"), not a sequential project number
-  const eyebrowLabel = proj.product ? proj.product.toUpperCase() : ("PROJECT " + String(idx).padStart(2,"0"));
-  await tx(f, eyebrowLabel, 30, 266, 6.5, O, false, 370);
-  // proj.name as H2 (identifier), proj.title stays on the hero page as the dramatic tagline
-  await tx(f, proj.name || "", 30, 283, 17, D, true, 370);
-  await tx(f, ((proj.location||"") + "    " + (proj.product||"")), 30, 315, 6.5, M, false, 370);
-  await tx(f, proj.story || "", 30, 334, 7.5, D, false, 370);
+  // Eyebrow = product (e.g. "MMAX", "TRAFFICPATTERNS XD") — tells reader WHAT product achieved this
+  const eyebrowLabel = proj.product ? proj.product.toUpperCase() : "";
+  if (eyebrowLabel) {
+    await tx(f, eyebrowLabel, 30, 262, 5.5, O, false, 370, null, 8);
+  }
+  // H2: project name. Tagline stays on the hero page — no repetition.
+  await tx(f, proj.name || "", 30, 276, 16, D, true, 370);
+  // Location only — product is already the eyebrow, don't duplicate it here
+  await tx(f, (proj.location||"").toUpperCase(), 30, 306, 5.5, M, false, 370, null, 8);
+  rct(f, 30, 318, 390, 1, {r:0.88,g:0.88,b:0.88}, "StoryRule");
+  await tx(f, proj.story || "", 30, 328, 7.5, D, false, 390);
   return f;
 }
 
@@ -435,20 +436,18 @@ async function pageInstaller(inst, idx, total) {
   return f;
 }
 
-// pageNetworkOpen — Network section opener. Clean split: photo top / solid navy bottom.
-// No stacked transparencies — photo breathes above, type reads crisply below.
+// pageNetworkOpen — Network section opener. Photo top, solid navy bottom.
+// The title is pushed lower for more drama — photo breathes, type anchors.
 async function pageNetworkOpen(d) {
   const f = fr("Section Four — Network", N);
-  // Photo: upper 250px — clean, unencumbered, no overlay
-  ph(f, 0, 0, 450, 250, "Network section opener", d.section_openers && d.section_openers.network);
-  // Solid navy band — hard edge, no transparency stacking
-  rct(f, 0, 250, 450, 200, N, "NavyBand");
-  // Section label + rule in the clean navy zone
-  await tx(f, "SECTION FOUR", 28, 270, 6, O, false, 394, null, 9);
-  rul(f, 28, 287, 24);
-  // Two-line title: white + orange — maximum contrast on solid navy
-  await tx(f, "Certified", 28, 303, 34, W, true, 394);
-  await tx(f, "Installers.", 28, 345, 34, O, true, 394);
+  ph(f, 0, 0, 450, 244, "Network section opener", d.section_openers && d.section_openers.network);
+  rct(f, 0, 244, 450, 206, N, "NavyBand");
+  // Section label — restrained, 6px
+  await tx(f, "SECTION FOUR", 28, 264, 5.5, O, false, 394, null, 8);
+  rul(f, 28, 280, 24);
+  // Title — 40px for real presence. More air between lines.
+  await tx(f, "Certified", 28, 296, 40, W, true, 394);
+  await tx(f, "Installers.", 28, 348, 40, O, true, 394);
   return f;
 }
 
@@ -563,107 +562,116 @@ async function pageCities(d) {
 }
 
 async function pageLunchLearn(mascotPath) {
-  // Moose-anchored Lunch & Learn page. Warm + editorial, not corporate.
-  // Left column: headline + detail list. Right column: Moose mascot, large + clean.
+  // PREMIUM L&L — editorial split: left type / right Moose. Warm and confident.
+  // Moose fills the full right half — he's the visual hook, not a corner decoration.
   const f = fr("CTA — Lunch and Learn");
 
-  // Moose — right column, FIT mode (transparent bg — no box, no crop)
-  // Prominent, friendly, anchors the visual. Vernon can reposition in Figma.
-  logo(f, 248, 10, 180, 260, "Moose — HUB mascot", mascotPath);
+  // Moose — right half, generous and prominent. FIT/logo mode: transparent, never cropped.
+  logo(f, 238, 12, 198, 270, "Moose — HUB mascot", mascotPath);
 
-  // Left column — headline and what's included
-  rul(f, 28, 16, 24);
-  await tx(f, "ENGINEERS, PLANNERS + SPECIFIERS", 28, 26, 5, O, false, 210, null, 8);
-  await tx(f, "Lunch Is On Us.", 28, 44, 24, D, true, 210);
-  await tx(f, "Your Next Spec Is Free.", 28, 74, 15, O, true, 210);
+  // Left column — generous leading, breathing room between each element
+  await tx(f, "FOR ENGINEERS", 28, 24, 5, O, false, 200, null, 8);
+  await tx(f, "PLANNERS + SPECIFIERS", 28, 33, 5, O, false, 200, null, 8);
+  rul(f, 28, 48, 20);
+  await tx(f, "Lunch", 28, 60, 30, D, true, 200);
+  await tx(f, "Is On Us.", 28, 96, 30, O, true, 200);
 
-  rct(f, 28, 104, 210, 1, F, "rule");
-
+  // Benefit list — restrained, generous spacing
   const items = [
-    "45 min · Tailored to your project",
-    "Live Q&A with HUB technical team",
+    "45 min, tailored to your project",
+    "Live Q&A with technical team",
     "Spec sheets + sample materials",
-    "CE credits: AIBC, RAIC, PEO",
-    "Lunch included",
-    "$25 voucher for virtual sessions",
-    "Zero cost · No obligation",
+    "AIBC / RAIC / PEO CE credits",
+    "Lunch included — $25 virtual voucher",
+    "No cost · No obligation",
   ];
-  let dy = 114;
+  let dy = 146;
   for (const item of items) {
-    await tx(f, "·  " + item, 28, dy, 7, D, false, 210);
-    dy += 13;
+    await tx(f, "— " + item, 28, dy, 7, D, false, 200);
+    dy += 14;
   }
+  rct(f, 28, dy + 8, 200, 1, F, "Separator");
+  await tx(f, "Not a sales pitch. An education.", 28, dy + 18, 7.5, M, false, 200, null, 11);
 
-  rct(f, 28, dy + 4, 210, 1, F, "rule");
-  await tx(f, "Not a sales pitch. An education.", 28, dy + 13, 7.5, M, false, 210);
-  await tx(f, "Real case studies from 500+ Canadian municipalities.", 28, dy + 27, 7, M, false, 210);
+  // Full-width bottom zone: generous gap between Moose zone and URL block
+  rct(f, 28, 296, 394, 1, F, "rule");
+  await tx(f, "hubss.com/lunch-learn", 28, 306, 14, O, true, 394);
+  await tx(f, "Toronto · York Region · Vancouver · UBC · TransLink · 500+ municipalities", 28, 330, 6.5, M, false, 394, "center", 10);
 
-  // Full-width URL zone below both columns
-  rct(f, 28, 280, 394, 1, F, "rule");
-  await tx(f, "hubss.com/lunch-learn", 28, 292, 13, O, true, 394);
-  await tx(f, "City of Toronto  ·  York Region  ·  City of Vancouver  ·  UBC  ·  TransLink  ·  500+ municipalities", 28, 318, 6.5, M, false, 394, "center", 9);
-
-  // Contacts
-  rct(f, 28, 340, 394, 1, F, "rule");
-  await tx(f, "BOOK DIRECTLY", 28, 350, 5, F, false, 394, null, 8);
-  await tx(f, "Cleve Stordy   604.309.8212", 28, 362, 8, D, false, 188, null, 12);
-  await tx(f, "Doug Bain   416.540.9287", 242, 362, 8, D, false, 178, null, 12);
-  rct(f, 28, 390, 394, 1, F, "rule");
-  await tx(f, "HUB SURFACE SYSTEMS   ·   hubss.com   ·   604.309.8212   ·   416.540.9287", 28, 400, 5.5, F, false, 394, "center", 8);
+  rct(f, 28, 350, 394, 1, F, "rule");
+  await tx(f, "BOOK DIRECTLY WITH YOUR REGIONAL CONTACT", 28, 358, 5, F, false, 394, null, 8);
+  await tx(f, "Cleve Stordy   604.309.8212", 28, 370, 9, D, false, 188, null, 13);
+  await tx(f, "Doug Bain   416.540.9287", 238, 370, 9, D, false, 178, null, 13);
+  rct(f, 28, 396, 394, 1, F, "rule");
+  await tx(f, "HUB SURFACE SYSTEMS   ·   hubss.com", 28, 404, 5.5, F, false, 394, "center", 8);
   return f;
 }
 
 async function pageContact(d) {
-  // Contact page with navy header band for visual weight.
+  // Contact page — editorial premium. Navy band anchors, generous whitespace below.
+  // Names scaled DOWN to 14px — they are contacts, not headlines. White space does the work.
   const f = fr("Contact");
-  // Navy header — gives visual interest without breaking the clean layout
-  rct(f, 0, 0, 450, 82, N, "NavyBand");
-  await tx(f, "TWO OFFICES. ONE NETWORK.", 30, 14, 5.5, O, false, 390, null, 8);
-  rul(f, 30, 30, 24);
-  await tx(f, "Speak with HUB.", 30, 44, 22, W, true, 390);
-  // Content zone
-  await tx(f, "Every project starts with a conversation.", 30, 96, 10, M, false, 390, null, 15);
-  rct(f, 30, 128, 390, 1, F, "rule");
-  // West
-  await tx(f, "WESTERN CANADA", 30, 144, 5.5, O, false, 188, null, 8);
-  await tx(f, "Cleve Stordy", 30, 158, 20, D, true, 188);
-  await tx(f, "cleve.stordy@hubss.com", 30, 194, 8.5, D, false, 188);
-  await tx(f, "604.309.8212", 30, 212, 8.5, M, false, 188);
-  await tx(f, "Ladysmith, British Columbia", 30, 230, 7, M, false, 188);
+  // Navy band — identity zone
+  rct(f, 0, 0, 450, 88, N, "NavyBand");
+  await tx(f, "TWO OFFICES. ONE NETWORK.", 30, 16, 5, O, false, 390, null, 8);
+  rul(f, 30, 32, 20);
+  await tx(f, "Speak with HUB.", 30, 46, 20, W, true, 390);
+
+  // Tagline — generous air above
+  await tx(f, "Every project starts with a conversation.", 30, 106, 9, M, false, 390, null, 14);
+  rct(f, 30, 130, 390, 1, F, "rule");
+
+  // West — names at 14px, contacts refined not oversized
+  await tx(f, "WESTERN CANADA", 30, 146, 5, O, false, 188, null, 8);
+  await tx(f, "Cleve Stordy", 30, 160, 14, D, true, 188);
+  await tx(f, "cleve.stordy@hubss.com", 30, 184, 8, D, false, 188);
+  await tx(f, "604.309.8212", 30, 200, 8, M, false, 188);
+  await tx(f, "Ladysmith, British Columbia", 30, 216, 7, M, false, 188);
+
   // East
-  await tx(f, "EASTERN CANADA", 242, 144, 5.5, O, false, 178, null, 8);
-  await tx(f, "Doug Bain", 242, 158, 20, D, true, 178);
-  await tx(f, "doug.bain@hubss.com", 242, 194, 8.5, D, false, 178);
-  await tx(f, "416.540.9287", 242, 212, 8.5, M, false, 178);
-  await tx(f, "Milton, Ontario", 242, 230, 7, M, false, 178);
-  rct(f, 30, 258, 390, 1, F, "rule");
-  // URL — single bold destination
-  await tx(f, "hubss.com", 30, 272, 16, O, true, 390);
-  await tx(f, "Spec sheets · project gallery · installer network · lunch + learn booking", 30, 304, 8, M, false, 390, null, 12);
-  rct(f, 30, 338, 390, 1, F, "rule");
-  await tx(f, "© 2026 HUB Surface Systems   ·   Established 1994   ·   Coast to Coast", 30, 350, 5.5, F, false, 390, "center", 8);
+  await tx(f, "EASTERN CANADA", 242, 146, 5, O, false, 178, null, 8);
+  await tx(f, "Doug Bain", 242, 160, 14, D, true, 178);
+  await tx(f, "doug.bain@hubss.com", 242, 184, 8, D, false, 178);
+  await tx(f, "416.540.9287", 242, 200, 8, M, false, 178);
+  await tx(f, "Milton, Ontario", 242, 216, 7, M, false, 178);
+
+  rct(f, 30, 244, 390, 1, F, "rule");
+
+  // URL — one bold destination, generous space
+  await tx(f, "hubss.com", 30, 258, 20, O, true, 390);
+  await tx(f, "Spec sheets · Project gallery · Installer network · Lunch + Learn", 30, 294, 7.5, M, false, 390, null, 11);
+
+  rct(f, 30, 322, 390, 1, F, "rule");
+  await tx(f, "© 2026 HUB Surface Systems   ·   Established 1994   ·   Coast to Coast", 30, 332, 5, F, false, 390, "center", 8);
   return f;
 }
 
 async function pageClosing() {
-  // Confident sign-off. More breathing room, stronger hierarchy.
+  // Final word. Generous white space — the page earns the silence.
+  // Upper half breathes. Lower half anchors. Statement in between.
   const f = fr("Closing — The Street");
-  // Eyebrow
-  await tx(f, "THE STREET IS", 28, 52, 6.5, O, false, 394, null, 9);
-  // Two-line display headline with more white space
-  await tx(f, "The public realm.", 28, 76, 38, D, true, 394);
-  await tx(f, "Ours to build right.", 28, 128, 38, O, true, 394);
-  // Orange accent rule — visual pause before the statement
-  rct(f, 28, 185, 48, 2, O, "OrangeRule");
-  // Statement — tighter body copy with more breathing room above
-  await tx(f, "Every surface we build is walked over, driven on, played at, and lived around. That is the standard we hold ourselves to. Specify it right. Watch it work. Walk over it for twenty years.", 28, 208, 9.5, D, false, 340);
-  // Three-word sign-off as horizontal trio
-  rct(f, 28, 356, 394, 1, F, "rule");
-  await tx(f, "SPECIFIED.", 28, 370, 9, D, true, 120);
-  await tx(f, "INSTALLED.", 162, 370, 9, D, true, 120);
-  await tx(f, "BACKED.", 296, 370, 9, D, true, 100);
-  rul(f, 28, 393, 32);
-  await tx(f, "HUB SURFACE SYSTEMS", 28, 404, 5.5, F, false, 394, "center", 8);
+
+  // Eyebrow — small, precisely tracked, not competing with headline
+  await tx(f, "THE STREET IS", 28, 60, 5.5, O, false, 394, null, 8);
+  rul(f, 28, 76, 20);
+
+  // Display headline — maximum negative space above it
+  await tx(f, "The public realm.", 28, 94, 40, D, true, 360);
+  await tx(f, "Ours to build right.", 28, 150, 40, O, true, 360);
+
+  // 48px orange rule accent — editorial not decorative
+  rct(f, 28, 210, 48, 2, O, "Accent");
+
+  // Statement — relaxed leading, breathing room on all sides
+  await tx(f, "Every surface we build is walked over, driven on, played at, and lived around. That is the standard we hold ourselves to. Specify it right. Watch it work. Walk over it for twenty years.", 28, 228, 9.5, D, false, 330, null, 15);
+
+  // Sign-off — three words as a trio, slightly more spacing between them
+  rct(f, 28, 360, 394, 1, F, "rule");
+  await tx(f, "SPECIFIED.", 28, 374, 8.5, D, true, 118);
+  await tx(f, "INSTALLED.", 166, 374, 8.5, D, true, 118);
+  await tx(f, "BACKED.", 304, 374, 8.5, D, true, 100);
+  rul(f, 28, 396, 28);
+  await tx(f, "HUB SURFACE SYSTEMS", 28, 404, 5, F, false, 394, "center", 8);
   return f;
 }
 
@@ -962,9 +970,12 @@ async function buildCatalogue(d) {
   // each section is pushed into frames[], so TOC page numbers are always correct
   // regardless of front-matter changes. No hardcoded numbers anywhere.
 
-  // Add folios to content pages (skip cover, section openers, DPS, blanks, quarter-ads).
-  const _noFolioNames = new Set(["Cover", "Back Cover", "Half Title"]);
-  const _noFolioPrefix = ["Rest ", "Section ", "Spread ", "QuarterAd", "By the Numbers"];
+  // Add folios to content pages. Skip pages with their own footer treatment to avoid collisions.
+  // App pages: have footer URL rule at y=406 — folio would clash.
+  // Story pages: always adjacent to numbered hero pages; folio redundant + story body can overflow to folio zone.
+  // Field Notes: has explicit footer attribution line at y=410.
+  const _noFolioNames = new Set(["Cover", "Back Cover", "Half Title", "Field Notes"]);
+  const _noFolioPrefix = ["Rest ", "Section ", "Spread ", "QuarterAd", "By the Numbers", "App ", "Story "];
   for (let i = 0; i < frames.length; i++) {
     const f = frames[i];
     if (!f) continue;

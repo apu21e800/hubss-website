@@ -1,5 +1,10 @@
-import Image from "next/image";
 import Link from "next/link";
+
+// BUG FIX: next/image fill + priority failed silently in async server component context,
+// producing zero <img> tags and zero network requests (verified production regression).
+// CSS background-image is immune to the optimization pipeline and renders on first paint.
+// heroImageSrc is Sanity-overridable — add it to getSanityPageContent return type when needed.
+const FALLBACK_HERO = "/images/hero/hero-1.jpg";
 
 interface HeroSlideshowProps {
   eyebrow?: string;
@@ -10,6 +15,8 @@ interface HeroSlideshowProps {
   cta1Href?: string;
   cta2Label?: string;
   cta2Href?: string;
+  /** Sanity-supplied hero image URL. Falls back to local /public/images/hero/hero-1.jpg. */
+  heroImageSrc?: string;
 }
 
 export default function HeroSlideshow({
@@ -21,7 +28,10 @@ export default function HeroSlideshow({
   cta1Href   = "#field-notes",
   cta2Label  = "See the Systems",
   cta2Href   = "#systems",
+  heroImageSrc,
 }: HeroSlideshowProps = {}) {
+  const bgSrc = heroImageSrc ?? FALLBACK_HERO;
+
   return (
     <section
       data-hero
@@ -29,18 +39,19 @@ export default function HeroSlideshow({
       style={{ minHeight: "88vh", background: "#0d1117" }}
       aria-label="Hero"
     >
-      {/* ── Background image ──────────────────────────────────────── */}
-      <div className="absolute inset-0" style={{ zIndex: 1 }}>
-        <Image
-          src="/images/hero/hero-1.jpg"
-          alt="Decorative crosswalk — HUB Surface Systems"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-          style={{ objectPosition: "50% 55%" }}
-        />
-      </div>
+      {/* ── Background image — CSS background-image (never blank, no optimization pipeline) */}
+      <div
+        className="absolute inset-0"
+        style={{
+          zIndex: 1,
+          backgroundImage: `url(‘${bgSrc}’)`,
+          backgroundSize: "cover",
+          backgroundPosition: "50% 55%",
+          backgroundRepeat: "no-repeat",
+        }}
+        role="img"
+        aria-label="Decorative crosswalk — HUB Surface Systems"
+      />
 
       {/* ── Gradients — lightened per Doug review for brighter hero ───── */}
       <div

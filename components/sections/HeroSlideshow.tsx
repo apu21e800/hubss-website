@@ -77,19 +77,22 @@ export default function HeroSlideshow({
         <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
 
-            {/* Eyebrow — Vernon-confirmed: 1999 is the authoritative founding year site-wide */}
+            {/* Eyebrow — #FDBA74 (orange-300) reads clearly over the hero photo; shadow adds contrast */}
             <p
-              className="text-sm font-bold tracking-[0.18em] uppercase mb-3"
-              style={{ color: "#FB923C" }}
+              className="text-sm font-bold tracking-[0.22em] uppercase mb-3"
+              style={{
+                color: "#FDBA74",
+                textShadow: "0 1px 12px rgba(0,0,0,0.75)",
+              }}
             >
               {eyebrow}
             </p>
 
-            {/* H1 — cinematic 76px cap: fills the hero frame, bold and commanding */}
+            {/* H1 — clamp raised: 5vw→7vw, 4.5rem→5.75rem cap for more presence on desktop */}
             <h1
               className="font-black mb-4"
               style={{
-                fontSize: "clamp(2.5rem, 5vw, 4.5rem)",
+                fontSize: "clamp(2.5rem, 7vw, 5.75rem)",
                 lineHeight: 0.95,
                 letterSpacing: "-0.04em",
                 color: "white",

@@ -1,9 +1,9 @@
 import Link from "next/link";
 
-// BUG FIX: next/image fill + priority failed silently in async server component context,
-// producing zero <img> tags and zero network requests (verified production regression).
-// CSS background-image is immune to the optimization pipeline and renders on first paint.
-// heroImageSrc is Sanity-overridable — add it to getSanityPageContent return type when needed.
+// THIRD FIX: plain <img> avoids both the next/image fill+priority silent failure
+// (async server component context) AND CSS background-image rendering failures on Vercel.
+// fetchPriority="high" ensures the browser's HTML preload scanner picks this up first.
+// || instead of ?? guards against empty-string heroImageSrc from Sanity.
 const FALLBACK_HERO = "/images/hero/hero-1.jpg";
 
 interface HeroSlideshowProps {
@@ -23,14 +23,14 @@ export default function HeroSlideshow({
   eyebrow    = "Redefining Hardscapes · Since 1999",
   heading    = "The World Is",
   subheading = "Your Canvas.",
-  tagline    = "Let’s build your signature space.",
+  tagline    = "Let's build your signature space.",
   cta1Label  = "See the Work",
   cta1Href   = "#field-notes",
   cta2Label  = "See the Systems",
   cta2Href   = "#systems",
   heroImageSrc,
 }: HeroSlideshowProps = {}) {
-  const bgSrc = heroImageSrc ?? FALLBACK_HERO;
+  const src = heroImageSrc || FALLBACK_HERO;
 
   return (
     <section
@@ -39,18 +39,25 @@ export default function HeroSlideshow({
       style={{ minHeight: "88vh", background: "#0d1117" }}
       aria-label="Hero"
     >
-      {/* ── Background image — CSS background-image (never blank, no optimization pipeline) */}
-      <div
-        className="absolute inset-0"
+      {/* ── Background image — plain <img>, not next/image and not CSS background-image.
+           Both prior approaches failed on Vercel. Plain img src is picked up by
+           the browser HTML preload scanner immediately, before CSS/JS parsing. */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={src}
+        alt=""
+        aria-hidden="true"
+        // @ts-ignore fetchPriority is valid HTML but TS types lag
+        fetchPriority="high"
         style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          objectPosition: "50% 55%",
           zIndex: 1,
-          backgroundImage: `url(‘${bgSrc}’)`,
-          backgroundSize: "cover",
-          backgroundPosition: "50% 55%",
-          backgroundRepeat: "no-repeat",
         }}
-        role="img"
-        aria-label="Decorative crosswalk — HUB Surface Systems"
       />
 
       {/* ── Gradients — lightened per Doug review for brighter hero ───── */}
@@ -80,7 +87,7 @@ export default function HeroSlideshow({
         }}
       />
 
-      {/* ── Centered content zone ────────────────────────────────── */}
+      {/* ── Centered content zone ────────────────────── */}
       <div
         className="absolute inset-0 flex items-center"
         style={{ zIndex: 10, paddingTop: "4rem" }}
@@ -114,12 +121,10 @@ export default function HeroSlideshow({
               <br />
               <span
                 style={{
-                  // More dramatic gradient per Vernon — pure orange → bright yellow, pop the anchor word.
                   background: "linear-gradient(92deg, #F97316 0%, #FACC15 55%, #FDE047 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
-                  // Subtle glow so the gradient reads on the dark hero.
                   filter: "drop-shadow(0 0 24px rgba(249,115,22,0.18))",
                 }}
               >
@@ -127,7 +132,7 @@ export default function HeroSlideshow({
               </span>
             </h1>
 
-            {/* H2 — supporting tagline, 26px — readable subhead under bold H1 */}
+            {/* H2 — supporting tagline — readable subhead under bold H1 */}
             <h2
               className="font-semibold mb-8"
               style={{

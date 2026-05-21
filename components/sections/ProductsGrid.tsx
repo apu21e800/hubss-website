@@ -69,14 +69,7 @@ export default function ProductsGrid() {
     <section
       id="systems"
       className="py-28 lg:py-32"
-      style={{
-        backgroundColor: "#0f1420",
-        backgroundImage: `
-          linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)
-        `,
-        backgroundSize: "44px 44px",
-      }}
+      style={{ backgroundColor: "#0f1420" }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 

@@ -53,8 +53,9 @@ SECTION_OPENERS = {
     # projects: VIVA BRT aerial corridor — strong infrastructure shot, distinct from TPXD product imagery
     "projects":            _pick(BLOG_DIR / "multimodal-connectivity-york-region" / "featured.jpg",
                                  APPS_DIR / "bus-lanes" / "bus-lanes-20.jpg"),
-    # network: bus lane installation crew in action — sets up the certified-installer section
-    "network":             _pick(APPS_DIR / "bus-lanes" / "bus-lanes-01.jpg",
+    # network: London East Link red BRT lane at Ontario city intersection — correct bus lane imagery
+    # (bus-lanes-01.jpg was WRONG: StreetPrint commercial entrance, not a bus corridor)
+    "network":             _pick(APPS_DIR / "bus-lanes" / "bus-lanes-03.jpg",
                                  APPS_DIR / "bus-lanes" / "bus-lanes-20.jpg"),
     "reference":           _pick(APPS_DIR / "bike-lanes" / "bike-lanes-09.jpg"),
     # DPS right-side images — distinct from left, avoids mirrored spreads
@@ -112,7 +113,10 @@ WHY_HUB = {
 PRODUCTS = [
     {"name": "TrafficPatternsXD",
      "tagline": "When the surface has to hold.",
-     "hero": _pick(PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-03.jpg"),
+     # tpxd-03.jpg WRONG: showed StreetPrint herringbone brick pattern, not TPXD thermoplastic markings
+     # tpxd-05.jpg: green/white decorative TPXD crosswalk — shows actual preformed thermoplastic panels ✓
+     "hero": _pick(PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-05.jpg",
+                   PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-03.jpg"),
      "title": "Heavy-duty thermoplastic.",
      "italic": "150-mil aggregate-reinforced. Built for BRT corridors and high-volume intersections.",
      "callout": "150 mil",
@@ -123,7 +127,10 @@ PRODUCTS = [
                     ("Retroreflectivity", "Glass beads — full depth"), ("Service Life", "Multi-year — outlasts paint")]},
     {"name": "TrafficPatterns",
      "tagline": "Outlasts paint by seasons, not months.",
-     "hero": _pick(PRODUCTS_DIR / "traffic-patterns" / "traffic-patterns-08.jpg"),
+     # tp-08.jpg WRONG: showed UBC Musqueam DecoMark cultural crosswalk, not standard TP markings
+     # tp-05.jpg: Indigenous recognition crosswalk — at least shows flat thermoplastic (not stamped asphalt)
+     "hero": _pick(PRODUCTS_DIR / "traffic-patterns" / "traffic-patterns-05.jpg",
+                   PRODUCTS_DIR / "traffic-patterns" / "traffic-patterns-08.jpg"),
      "title": "Standard thermoplastic.",
      "italic": "125-mil preformed. Heat-fused. No repaint cycle.",
      "callout": "125 mil",
@@ -251,13 +258,19 @@ APPLICATIONS = [
      "image": _pick(_app_img("parking-lots", 1)),
      "body": "Parking lots take a disproportionate beating. DuraShield asphalt maintenance coating (SR 0.34) protects oxidized surfaces from UV, heat, and chemical degradation. TrafficPatterns and PreMark thermoplastic stall markings hold retroreflectivity without annual repainting. StreetBond creates branded wayfinding zones and fire lane designations."},
     {"name": "Parks & Paths", "tagline": "Surfaces worth spending time on.",
-     "image": _pick(_app_img("parks-paths", 1)),
+     # parks-paths-01.jpg WRONG: showed playground/daycare with play equipment, not a path
+     # parks-paths-04.jpg: StreetPrint crosswalk in pedestrian park area (heritage building, pedestrian bollard) ✓
+     "image": _pick(_app_img("parks-paths", 4),
+                    _app_img("parks-paths", 1)),
      "body": "The path through a park sets the tone for the whole space. StreetBond applies vivid UV-stable colour to existing surfaces. DecoMark brings mural-quality custom graphics. StreetPrint gives plazas the visual richness of stone."},
     {"name": "Playgrounds", "tagline": "Vibrant, slip-resistant, built for hard use.",
      "image": _pick(_app_img("playgrounds", 1)),
      "body": "Children are hard on surfaces. DecoMark thermoplastic brings hopscotch courts, number grids, compass roses, and mural-scale artwork to play surfaces with Pantone-accurate colour and flush-surface edges that eliminate trip hazards."},
     {"name": "Community Branding", "tagline": "Neighbourhood identity, embedded in the street.",
-     "image": _pick(_app_img("community-branding", 8)),
+     # community-branding-08.jpg WRONG: tiny dim "4 Yates St." marker, not representative of community branding
+     # community-branding-03.jpg: strong community branding crosswalk installation ✓
+     "image": _pick(_app_img("community-branding", 3),
+                    _app_img("community-branding", 8)),
      "body": "Every neighbourhood has a story. Most go untold on the street. DecoMark embeds Pantone-accurate custom graphics directly into asphalt: First Nations cultural artwork, BIA wayfinding, neighbourhood crests, Pride declarations, heritage commemorations."},
     {"name": "Private Driveways", "tagline": "Stone-paver looks. No demolition required.",
      "image": _pick(_app_img("residential-driveways", 1)),
@@ -296,12 +309,18 @@ APPLICATIONS = [
 # Order: major infrastructure + institutional → municipal safety → cultural/community
 PROJECTS = [
     {"name": "York Region VIVA BRT", "location": "York Region, Ontario", "product": "MMAX",
-     "hero": _pick(_app_img("bus-lanes", 1)),
+     # bus-lanes-01.jpg WRONG: showed StreetPrint brick commercial entrance, no red MMAX bus lane
+     # mmax-16.jpg: vivid WET red MMAX bus lane on Ontario highway — correct product + context
+     "hero": _pick(PRODUCTS_DIR / "mmax" / "mmax-16.jpg",
+                   _app_img("bus-lanes", 1)),
      "detail": _pick(PRODUCTS_DIR / "mmax" / "mmax-15.jpg"),
      "title": "BRT corridor, open in 90 minutes.",
      "story": "MMAX red MMA resin bus lane markings for York Region's VIVA Rapid Transit corridor — one of Canada's highest-ridership BRT networks. Bond strength above 3 MPa. Applied overnight. Open to full bus traffic in 90 minutes. No daytime closure. No paint cycle."},
     {"name": "Toronto Priority Bus Lanes", "location": "Toronto, Ontario", "product": "MMAX",
-     "hero": _pick(PRODUCTS_DIR / "mmax" / "mmax-01.jpg", _app_img("bus-lanes", 20)),
+     # mmax-01.jpg WRONG: showed decorative floral art crosswalk + green bike lane (BC art, not Toronto red bus lanes)
+     # mmax-04.jpg: "BUS ONLY" red MMAX lane, wide urban boulevard — correct product + context ✓
+     "hero": _pick(PRODUCTS_DIR / "mmax" / "mmax-04.jpg",
+                   _app_img("bus-lanes", 20)),
      "detail": _pick(PRODUCTS_DIR / "mmax" / "mmax-07.jpg",
                      PRODUCTS_DIR / "mmax" / "mmax-08.jpg"),
      "title": "Twelve corridors. One transit network.",
@@ -352,9 +371,10 @@ PROJECTS = [
      "title": "Six laneways. Six artists.",
      "story": "Six Vancouver laneways. Six artists. StreetBond coloured pavement turned utility corridors into civic gallery space — public art at street scale, permanent and weather-resistant."},
     {"name": "White Rock Pier", "location": "White Rock, British Columbia", "product": "TrafficPatternsXD",
-     # Cover uses white-rock-pier/featured.png — use a different TPXD shot here to avoid duplicate
-     "hero": _pick(PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-95.jpg",
-                   PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-94.jpg"),
+     # tpxd-95.jpg WRONG: showed Toronto high-rise intersection, not White Rock pier or coastal setting
+     # Using actual White Rock pier blog photo — coastal bollards + thermoplastic crosswalk, correct location ✓
+     "hero": _pick(BLOG_DIR / "white-rock-pier-crosswalk" / "featured.png",
+                   PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-95.jpg"),
      "detail": _pick(PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-140.jpg"),
      "title": "Salt air. Holiday traffic. Held.",
      "story": "Salt spray. Summer surge. Winter rain. The pier crosswalk at White Rock faces the full force of the BC coast — and holds season after season. TrafficPatternsXD installed where paint would be gone by July."},
@@ -402,8 +422,10 @@ PROJECTS = [
      "title": "Forest. Sunset. Water. Earth.",
      "story": "A community art path at Snug Cove, Bowen Island. Custom StreetBond in four colours — forest, sunset, water, and earth — community identity built permanently into the surface of the path that connects the village to the waterfront."},
     {"name": "Murrayville Schoolhouse", "location": "Langley, British Columbia", "product": "StreetPrint",
-     "hero": _pick(BLOG_DIR / "murrayville-schoolhouse-sidewalk" / "featured.jpg",
-                   PRODUCTS_DIR / "streetprint" / "streetprint-77.jpg"),
+     # murrayville/featured.jpg WRONG: showed green oak-leaf DecoMark design, not StreetPrint stamped sidewalk
+     # streetprint-04.jpg: dark charcoal herringbone StreetPrint plaza with heritage brick buildings — right product ✓
+     "hero": _pick(PRODUCTS_DIR / "streetprint" / "streetprint-04.jpg",
+                   BLOG_DIR / "murrayville-schoolhouse-sidewalk" / "featured.jpg"),
      "detail": _pick(PRODUCTS_DIR / "streetprint" / "streetprint-83.jpg"),
      "title": "A schoolhouse, a sidewalk, a memory.",
      "story": "StreetPrint stamped-asphalt sidewalk linking the historic Murrayville Schoolhouse to the community around it. Heritage-look surface for a heritage building — brick-pattern asphalt that reads as stone and performs as pavement."},

@@ -44,3 +44,4 @@ next-env.d.ts
 .env*.local
 .superpowers/
 .claude/worktrees/
+scripts/relink-report.json

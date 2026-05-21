@@ -52,6 +52,10 @@ def collect_image_paths(data: dict) -> list[str]:
     asphalt = ROOT.parent / "public" / "images" / "applications" / "parking-lots" / "parking-lots-01.jpg"
     add(str(asphalt))
 
+    # Moose mascot — Lunch & Learn page
+    mascot = ROOT / "assets" / "moose-mascot.png"
+    add(str(mascot))
+
     # de-dup, keep order
     seen = set()
     out = []

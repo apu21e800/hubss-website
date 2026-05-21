@@ -474,15 +474,20 @@ async function pageDoublespread(label, imagePath, caption, rightStyle, rightImag
   // Right page — photo CTA by default; navy brand statement when rightStyle === "navy"
   const fR = fr("Spread R — " + (label||""), N);
   if (rightStyle === "navy") {
-    // Closing editorial — navy, giant type, zero clutter
-    rul(fR, 28, 96, 32);
-    await tx(fR, "Built to", 28, 118, 48, W, true, 394);
-    await tx(fR, "outlast.", 28, 178, 48, O, true, 394);
-    rct(fR, 28, 256, 394, 1, W, "Divider");
+    // Closing editorial — navy, giant type, lands as a final statement.
+    rul(fR, 28, 80, 32);
+    await tx(fR, "THIRTY YEARS IN THE MAKING.", 28, 96, 6, O, false, 394, null, 9);
+    await tx(fR, "Built to", 28, 116, 52, W, true, 394);
+    await tx(fR, "outlast.", 28, 180, 52, O, true, 394);
+    rct(fR, 28, 248, 394, 1, {r:1,g:1,b:1}, "Divider");
     fR.children[fR.children.length-1].opacity = 0.15;
-    await tx(fR, "30+ years   ·   1,000+ projects   ·   500+ municipalities", 28, 270, 7, M, false, 394, "center", 11);
-    rct(fR, 28, 412, 394, 1, O, "OrangeRule");
-    await tx(fR, "hubss.com", 28, 422, 7.5, O, true, 394, "right", 11);
+    await tx(fR, "30+ years   ·   1,000+ projects   ·   500+ municipalities", 28, 262, 7.5, M, false, 394, "center", 11);
+    rct(fR, 28, 288, 394, 1, {r:1,g:1,b:1}, "Divider");
+    fR.children[fR.children.length-1].opacity = 0.08;
+    await tx(fR, "The surface beneath every city we've built.", 28, 308, 12, W, false, 360);
+    await tx(fR, "Spec the surface. Watch it work. Walk over it for twenty years.", 28, 332, 8, M, false, 360);
+    rct(fR, 28, 404, 394, 1, O, "OrangeRule");
+    await tx(fR, "hubss.com", 28, 414, 7.5, O, true, 394, "right", 11);
   } else {
     // Photo right — use rightImagePath if supplied, else mirror left
     ph(fR, 0, 0, 450, 450, label + " — right", rightImagePath || imagePath);
@@ -537,88 +542,127 @@ async function pageTechnical() {
 
 async function pageCities(d) {
   const f = fr("Reference — Cities");
-  await tx(f, "SPECIFIED COAST TO COAST", 30, 40, 7, O, false, 370);
-  await tx(f, "Trusted, by name.", 30, 68, 24, D, true, 370);
-  await tx(f, "500+ Canadian municipalities have specified HUB systems by name — from Halifax to Vancouver.", 30, 108, 9, M, false, 370);
+  // "500+" as hero stat — visual anchor, gives the city list credibility and scale
+  await tx(f, "500+", 30, 28, 60, O, true, 390);
+  await tx(f, "Canadian municipalities", 30, 98, 9, D, false, 280, null, 13);
+  await tx(f, "that specify HUB systems by name.", 30, 113, 9, M, false, 280, null, 13);
+  await tx(f, "FROM HALIFAX TO VANCOUVER", 30, 133, 5.5, F, false, 390, null, 8);
+  rct(f, 30, 150, 390, 1, F, "rule");
+  await tx(f, "A partial list", 30, 158, 7, M, false, 390, "right", 10);
+  // City list — 2 columns, 8px type, generous spacing
   const cities = d.cities || [];
-  let y = 178;
+  let y = 172;
   for (let i = 0; i < cities.length; i += 2) {
-    if (y > 430) break;
-    await tx(f, cities[i]||"", 30, y, 9, D, false, 180);
-    if (cities[i+1]) await tx(f, cities[i+1], 235, y, 9, D, false, 180);
-    y += 14;
+    if (y > 418) break;
+    await tx(f, cities[i]||"", 30, y, 8, D, false, 185);
+    if (cities[i+1]) await tx(f, cities[i+1], 235, y, 8, D, false, 175);
+    y += 13;
   }
   return f;
 }
 
-async function pageLunchLearn() {
-  // White page — print editorial, type-driven. No buttons, no UI containers.
+async function pageLunchLearn(mascotPath) {
+  // Moose-anchored Lunch & Learn page. Warm + editorial, not corporate.
+  // Left column: headline + detail list. Right column: Moose mascot, large + clean.
   const f = fr("CTA — Lunch and Learn");
-  // Eyebrow + orange rule — same grammar as the rest of the catalogue
-  await tx(f, "FOR ENGINEERS, PLANNERS + SPECIFIERS", 30, 36, 5.5, O, false, 390, null, 8);
-  rul(f, 30, 52, 32);
-  // Headline: large, bold, two lines — the invite is the message
-  await tx(f, "Lunch Is On Us.", 30, 66, 30, D, true, 390);
-  await tx(f, "Your Next Spec Is Free.", 30, 106, 30, O, true, 390);
-  // Stats as a single typeset line — not a web grid
-  rct(f, 30, 152, 390, 1, F, "rule");
-  await tx(f, "45 minutes   ·   No cost   ·   CE credits: AIBC, RAIC, PEO", 30, 164, 7.5, M, false, 390, null, 11);
-  rct(f, 30, 182, 390, 1, F, "rule");
-  // Body — one paragraph, not a checklist
-  await tx(f, "One focused session built around your team's upcoming work. We walk through spec language, material selection, and lifecycle cost math — and we handle the food. In person across Canada, or virtual.", 30, 196, 9, D, false, 390);
-  rct(f, 30, 272, 390, 1, F, "rule");
-  // Previously presented to — editorial pull-quote style
-  await tx(f, "PREVIOUSLY PRESENTED TO", 30, 284, 5.5, F, false, 390, null, 8);
-  await tx(f, "City of Toronto   ·   York Region   ·   City of Vancouver   ·   UBC   ·   TransLink   ·   500+ municipalities coast to coast", 30, 298, 8, D, false, 390, null, 12);
-  rct(f, 30, 336, 390, 1, F, "rule");
-  // CTA — large URL type, no box. Print lets the URL carry the weight.
-  await tx(f, "hubss.com/lunch-learn", 30, 350, 13, O, true, 390);
-  await tx(f, "Book directly or contact either office below to arrange a session for your team.", 30, 376, 7.5, M, false, 390, null, 11);
-  // Footer: moved up — bottom=~409, gap=41px (well within 0.25" safe margin)
-  rct(f, 30, 394, 390, 1, F, "rule");
-  await tx(f, "Cleve Stordy   604.309.8212", 30, 404, 7, D, false, 188, null, 11);
-  await tx(f, "Doug Bain   416.540.9287", 242, 404, 7, D, false, 178, null, 11);
+
+  // Moose — right column, FIT mode (transparent bg — no box, no crop)
+  // Prominent, friendly, anchors the visual. Vernon can reposition in Figma.
+  logo(f, 248, 10, 180, 260, "Moose — HUB mascot", mascotPath);
+
+  // Left column — headline and what's included
+  rul(f, 28, 16, 24);
+  await tx(f, "ENGINEERS, PLANNERS + SPECIFIERS", 28, 26, 5, O, false, 210, null, 8);
+  await tx(f, "Lunch Is On Us.", 28, 44, 24, D, true, 210);
+  await tx(f, "Your Next Spec Is Free.", 28, 74, 15, O, true, 210);
+
+  rct(f, 28, 104, 210, 1, F, "rule");
+
+  const items = [
+    "45 min · Tailored to your project",
+    "Live Q&A with HUB technical team",
+    "Spec sheets + sample materials",
+    "CE credits: AIBC, RAIC, PEO",
+    "Lunch included",
+    "$25 voucher for virtual sessions",
+    "Zero cost · No obligation",
+  ];
+  let dy = 114;
+  for (const item of items) {
+    await tx(f, "·  " + item, 28, dy, 7, D, false, 210);
+    dy += 13;
+  }
+
+  rct(f, 28, dy + 4, 210, 1, F, "rule");
+  await tx(f, "Not a sales pitch. An education.", 28, dy + 13, 7.5, M, false, 210);
+  await tx(f, "Real case studies from 500+ Canadian municipalities.", 28, dy + 27, 7, M, false, 210);
+
+  // Full-width URL zone below both columns
+  rct(f, 28, 280, 394, 1, F, "rule");
+  await tx(f, "hubss.com/lunch-learn", 28, 292, 13, O, true, 394);
+  await tx(f, "City of Toronto  ·  York Region  ·  City of Vancouver  ·  UBC  ·  TransLink  ·  500+ municipalities", 28, 318, 6.5, M, false, 394, "center", 9);
+
+  // Contacts
+  rct(f, 28, 340, 394, 1, F, "rule");
+  await tx(f, "BOOK DIRECTLY", 28, 350, 5, F, false, 394, null, 8);
+  await tx(f, "Cleve Stordy   604.309.8212", 28, 362, 8, D, false, 188, null, 12);
+  await tx(f, "Doug Bain   416.540.9287", 242, 362, 8, D, false, 178, null, 12);
+  rct(f, 28, 390, 394, 1, F, "rule");
+  await tx(f, "HUB SURFACE SYSTEMS   ·   hubss.com   ·   604.309.8212   ·   416.540.9287", 28, 400, 5.5, F, false, 394, "center", 8);
   return f;
 }
 
 async function pageContact(d) {
-  // Print contact card — generous white space, type hierarchy does the work.
-  // No web-style link grids or button containers.
+  // Contact page with navy header band for visual weight.
   const f = fr("Contact");
-  await tx(f, "TWO OFFICES. ONE NETWORK.", 30, 36, 5.5, O, false, 390, null, 8);
-  rul(f, 30, 52, 32);
-  await tx(f, "Speak with HUB.", 30, 66, 30, D, true, 390);
-  await tx(f, "Every project starts with a conversation.", 30, 112, 10, M, false, 390, null, 15);
-  rct(f, 30, 148, 390, 1, F, "rule");
-  // West — large name, then contact details on a loose baseline
-  await tx(f, "WESTERN CANADA", 30, 164, 5.5, O, false, 188, null, 8);
-  await tx(f, "Cleve Stordy", 30, 180, 20, D, true, 188);
-  await tx(f, "cleve.stordy@hubss.com", 30, 216, 8.5, D, false, 188);
-  await tx(f, "604.309.8212", 30, 234, 8.5, M, false, 188);
-  await tx(f, "Ladysmith, British Columbia", 30, 252, 7, M, false, 188);
+  // Navy header — gives visual interest without breaking the clean layout
+  rct(f, 0, 0, 450, 82, N, "NavyBand");
+  await tx(f, "TWO OFFICES. ONE NETWORK.", 30, 14, 5.5, O, false, 390, null, 8);
+  rul(f, 30, 30, 24);
+  await tx(f, "Speak with HUB.", 30, 44, 22, W, true, 390);
+  // Content zone
+  await tx(f, "Every project starts with a conversation.", 30, 96, 10, M, false, 390, null, 15);
+  rct(f, 30, 128, 390, 1, F, "rule");
+  // West
+  await tx(f, "WESTERN CANADA", 30, 144, 5.5, O, false, 188, null, 8);
+  await tx(f, "Cleve Stordy", 30, 158, 20, D, true, 188);
+  await tx(f, "cleve.stordy@hubss.com", 30, 194, 8.5, D, false, 188);
+  await tx(f, "604.309.8212", 30, 212, 8.5, M, false, 188);
+  await tx(f, "Ladysmith, British Columbia", 30, 230, 7, M, false, 188);
   // East
-  await tx(f, "EASTERN CANADA", 242, 164, 5.5, O, false, 178, null, 8);
-  await tx(f, "Doug Bain", 242, 180, 20, D, true, 178);
-  await tx(f, "doug.bain@hubss.com", 242, 216, 8.5, D, false, 178);
-  await tx(f, "416.540.9287", 242, 234, 8.5, M, false, 178);
-  await tx(f, "Milton, Ontario", 242, 252, 7, M, false, 178);
-  rct(f, 30, 282, 390, 1, F, "rule");
-  // Single bold URL — one destination, not a nav grid
-  await tx(f, "hubss.com", 30, 298, 16, O, true, 390);
-  await tx(f, "Spec sheets · project gallery · installer network · lunch + learn booking", 30, 330, 8, M, false, 390, null, 12);
-  rct(f, 30, 364, 390, 1, F, "rule");
-  await tx(f, "© 2026 HUB Surface Systems   ·   Established 1994   ·   Coast to Coast", 30, 376, 5.5, F, false, 390, "center", 8);
+  await tx(f, "EASTERN CANADA", 242, 144, 5.5, O, false, 178, null, 8);
+  await tx(f, "Doug Bain", 242, 158, 20, D, true, 178);
+  await tx(f, "doug.bain@hubss.com", 242, 194, 8.5, D, false, 178);
+  await tx(f, "416.540.9287", 242, 212, 8.5, M, false, 178);
+  await tx(f, "Milton, Ontario", 242, 230, 7, M, false, 178);
+  rct(f, 30, 258, 390, 1, F, "rule");
+  // URL — single bold destination
+  await tx(f, "hubss.com", 30, 272, 16, O, true, 390);
+  await tx(f, "Spec sheets · project gallery · installer network · lunch + learn booking", 30, 304, 8, M, false, 390, null, 12);
+  rct(f, 30, 338, 390, 1, F, "rule");
+  await tx(f, "© 2026 HUB Surface Systems   ·   Established 1994   ·   Coast to Coast", 30, 350, 5.5, F, false, 390, "center", 8);
   return f;
 }
 
 async function pageClosing() {
+  // Confident sign-off. More breathing room, stronger hierarchy.
   const f = fr("Closing — The Street");
-  await tx(f, "A FINAL WORD", 28, 68, 6.5, O, false, 394);
-  await tx(f, "The street is", 28, 122, 34, D, true, 394);
-  await tx(f, "the public realm.", 28, 170, 34, O, true, 394);
-  await tx(f, "Every surface we build is walked over, driven on, played at, and lived around. That is the standard we hold ourselves to. Spec the surface. Watch it work. Walk over it for twenty years.", 28, 252, 9, D, false, 366);
-  rul(f, 28, 390, 32);
-  await tx(f, "SPECIFIED. INSTALLED. BACKED.", 28, 406, 5.5, F, false, 394);
+  // Eyebrow
+  await tx(f, "THE STREET IS", 28, 52, 6.5, O, false, 394, null, 9);
+  // Two-line display headline with more white space
+  await tx(f, "The public realm.", 28, 76, 38, D, true, 394);
+  await tx(f, "Ours to build right.", 28, 128, 38, O, true, 394);
+  // Orange accent rule — visual pause before the statement
+  rct(f, 28, 185, 48, 2, O, "OrangeRule");
+  // Statement — tighter body copy with more breathing room above
+  await tx(f, "Every surface we build is walked over, driven on, played at, and lived around. That is the standard we hold ourselves to. Specify it right. Watch it work. Walk over it for twenty years.", 28, 208, 9.5, D, false, 340);
+  // Three-word sign-off as horizontal trio
+  rct(f, 28, 356, 394, 1, F, "rule");
+  await tx(f, "SPECIFIED.", 28, 370, 9, D, true, 120);
+  await tx(f, "INSTALLED.", 162, 370, 9, D, true, 120);
+  await tx(f, "BACKED.", 296, 370, 9, D, true, 100);
+  rul(f, 28, 393, 32);
+  await tx(f, "HUB SURFACE SYSTEMS", 28, 404, 5.5, F, false, 394, "center", 8);
   return f;
 }
 
@@ -863,7 +907,7 @@ async function buildCatalogue(d) {
   frames.push(await pageTechnical());
   frames.push(await pageCities(d));
   const lunchPage = frames.length + 1;
-  frames.push(await pageLunchLearn());
+  frames.push(await pageLunchLearn(d.brand && d.brand.mascot));
   const contactPage = frames.length + 1;
   frames.push(await pageContact(d));
   // Field Notes: a ruled notepad page — faces the Contact page in the open spread.

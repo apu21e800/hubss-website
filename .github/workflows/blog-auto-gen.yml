@@ -1,0 +1,110 @@
+name: Auto-generate Blog Post
+
+on:
+  schedule:
+    # 1st and 15th of each month at 9:00am Pacific (17:00 UTC)
+    - cron: '0 17 1,15 * *'
+  workflow_dispatch:
+    inputs:
+      topic:
+        description: 'Override topic (leave blank to auto-select)'
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  generate-blog-post:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Generate blog post with Claude
+        uses: anthropics/claude-code-action@beta
+        with:
+          allowed_tools: "Bash,Read,Write,Edit,Glob,Grep"
+          timeout_minutes: "25"
+          prompt: |
+            You are writing a blog post for HUB Surface Systems (hubss.com), a Canadian leader in decorative pavement coatings and surface systems. Your job is to:
+
+            1. UNDERSTAND WHAT'S ALREADY BEEN COVERED
+               - Use Glob to find all .mdx files in content/blog/ (exclude content/blog/drafts/)
+               - Read the most recent 8-10 posts (by filename date or frontmatter date)
+               - Note which topics and products have been covered recently
+
+            2. PICK A TOPIC
+               Rotate through these types — pick whichever hasn't appeared in recent posts:
+               A) Project case study: spotlight a real Canadian municipality crosswalk/surface project
+               B) Specifier how-to: technical guide for engineers/planners/contractors
+               C) Seasonal focus: timely content (spring inspection, winter prep, freeze-thaw planning)
+               D) Product spotlight: deep-dive on one HUB product (MMAX, StreetPrint, DecoMark, etc.)
+               E) Cross-product comparison: when to specify one product vs another
+
+               Topic override from workflow input: "${{ github.event.inputs.topic }}"
+               If a topic override was provided, use that instead.
+
+            3. READ BRAND CONTEXT
+               - Read lib/products.ts for the full product list and descriptions
+               - Read lib/applications.ts for application types
+               - Read 2-3 recent blog posts for voice and style reference
+
+            4. GENERATE THE BLOG POST
+               Write 600-900 words following these rules:
+               - Brand voice: municipal authority meets civic pride — technical credibility, not preachy
+               - Canadian English: colour, centre, fibre, programme (not color, center, fiber, program)
+               - Target audience: municipal engineers, urban planners, project managers, contractors
+               - DO NOT use: "AODA", "warranty", "compliance", "guaranteed" — HUB does not make these claims
+               - DO NOT use: filler phrases like "In conclusion", "In today's world", "game-changer"
+               - Reference HUB products naturally — specific product names where relevant
+               - End with a brief CTA pointing readers to /contact or /lunch-learn
+               - Use ## and ### headings, bullet lists where appropriate
+               - All claims must be defensible — if uncertain, write around it
+
+            5. CREATE THE MDX FILE
+               Generate a slug from the title: lowercase, hyphens only, max 60 chars.
+               Today's date: $(date -u +%Y-%m-%d)
+
+               Create the file at: content/blog/[slug].mdx
+
+               Frontmatter format:
+               ```
+               ---
+               title: "[Post title]"
+               date: "[YYYY-MM-DD]"
+               excerpt: "[One sentence, max 160 chars, for blog listing cards]"
+               readTime: "[X] min read"
+               featuredImage: "/images/blog/[slug]/featured.jpg"
+               tags: ["[tag1]", "[tag2]", "[tag3]"]
+               ---
+               ```
+
+               Note: the featuredImage path follows the convention /images/blog/[slug]/featured.jpg
+               Vernon will add the actual image before publishing.
+
+            6. CREATE A PR FOR REVIEW
+               - Create a new branch: blog/auto-$(date -u +%Y-%m-%d)-[short-slug]
+               - Commit the new file with message: "feat(blog): auto-generated post — [title]"
+               - Push the branch
+               - Open a PR using gh pr create with:
+                 Title: "📝 Draft blog post: [title]"
+                 Body should include:
+                 - The topic type chosen (A/B/C/D/E above)
+                 - Why this topic was chosen (what gap it fills)
+                 - The post excerpt
+                 - Checklist for Vernon:
+                   - [ ] Review and edit the content
+                   - [ ] Add featured image at [path]
+                   - [ ] Adjust tags if needed
+                   - [ ] Merge when ready to publish (triggers social cross-post)
+
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

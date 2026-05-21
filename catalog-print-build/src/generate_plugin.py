@@ -401,10 +401,11 @@ async function pageProjectHero(proj) {
 async function pageProjectStory(proj, idx) {
   const f = fr(`Story ${String(idx).padStart(2,"0")} — ${proj.name}`);
   // FILL mode: full-bleed, edge-to-edge — no letterbox. Subject centered by default.
-  // If a specific photo crops the subject, Vernon adjusts the crop in Figma.
   ph(f, 0, 0, 450, 248, proj.name + " — detail photo", proj.detail || proj.hero);
-  await tx(f, "PROJECT " + String(idx).padStart(2,"0"), 30, 266, 6.5, O, false, 370);
-  // Show proj.name (project identifier), not proj.title — title is already H1 on hero page
+  // Eyebrow = product name (e.g. "TRAFFICPATTERNS XD"), not a sequential project number
+  const eyebrowLabel = proj.product ? proj.product.toUpperCase() : ("PROJECT " + String(idx).padStart(2,"0"));
+  await tx(f, eyebrowLabel, 30, 266, 6.5, O, false, 370);
+  // proj.name as H2 (identifier), proj.title stays on the hero page as the dramatic tagline
   await tx(f, proj.name || "", 30, 283, 17, D, true, 370);
   await tx(f, ((proj.location||"") + "    " + (proj.product||"")), 30, 315, 6.5, M, false, 370);
   await tx(f, proj.story || "", 30, 334, 7.5, D, false, 370);

@@ -343,30 +343,44 @@ PROJECTS = [
      "title": "Modal clarity, written in colour.",
      "story": "Complete Streets across New Westminster: StreetBond green for protected bike lanes, TrafficPatterns retroreflective crosswalks, high-contrast colour at every conflict point. Modal priority made legible. Cyclists protected. Pedestrians seen. The Complete Streets specification that transportation engineers and urban planners return to."},
     {"name": "York Region Pedestrian Safety", "location": "York Region, Ontario", "product": "TrafficPatternsXD",
-     # tpxd-82 was also the projects section opener — use tpxd-94 to avoid same image appearing twice
-     "hero": _pick(PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-94.jpg",
+     # Blog: trafficpatternsxd-urban-design — "Heritage Crosswalks in Woodbridge: How TPXD Delivered the Look"
+     # Shows dark charcoal TPXD crosswalk in a York Region (Woodbridge/Vaughan) suburb — winter, GTA homes ✓
+     "hero": _pick(BLOG_DIR / "trafficpatternsxd-urban-design" / "featured.jpg",
                    _app_img("crosswalks", 3)),
      "detail": _pick(_app_img("crosswalks", 26),
                      PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-94.jpg"),
      "title": "Outlasts paint by eight times.",
      "story": "TrafficPatternsXD 150-mil aggregate-reinforced crosswalk markings specified across York Region intersections. Eight times the service life of paint. A measurable reduction in annual maintenance spend. The kind of lifecycle arithmetic that procurement teams and transportation engineers notice — and specify again."},
     {"name": "Vision Zero Crosswalks", "location": "Canada-Wide", "product": "TrafficPatterns",
-     "hero": _pick(_app_img("crosswalks", 11)),
+     # Blog: pedestrian-safety-solutions — "Keeping Pedestrians Safe and Operation Budgets Low"
+     # Shows "W 1ST STREET" high-visibility branded crosswalk — bold blue, high contrast, perfect for Vision Zero ✓
+     # (crosswalks-11 was WRONG: suburban StreetPrint stamped intersection, not thermoplastic)
+     "hero": _pick(BLOG_DIR / "pedestrian-safety-solutions" / "featured.jpeg",
+                   _app_img("crosswalks", 11)),
      "detail": _pick(_app_img("crosswalks", 31)),
      "title": "High-visibility holds lives.",
      "story": "Where painted crosswalks fade by spring, retroreflective thermoplastic holds visibility through every season. Specified by municipalities from Halifax to Victoria pursuing Vision Zero — the standard for engineers who need pedestrian safety outcomes, not just pedestrian safety intentions."},
     {"name": "Vancouver BIA Crosswalks", "location": "Vancouver, British Columbia", "product": "StreetPrint",
-     "hero": _pick(PRODUCTS_DIR / "streetprint" / "streetprint-23.jpg"),
+     # Blog: vancouver-decorative-crosswalk-design — BC TransLink bus + colourful leaf/wave crosswalk design ✓
+     # (streetprint-23.jpg was WRONG: showed indoor covered commercial walkway, not an outdoor BIA street)
+     "hero": _pick(BLOG_DIR / "vancouver-decorative-crosswalk-design" / "featured.jpeg",
+                   PRODUCTS_DIR / "streetprint" / "streetprint-23.jpg"),
      "detail": _pick(PRODUCTS_DIR / "streetprint" / "streetprint-69.jpg"),
      "title": "District identity, cast in pavement.",
      "story": "StreetPrint stamped-asphalt crosswalks across five Vancouver Business Improvement Districts. District identity embedded permanently in the street — walked over every day, maintaining visual coherence through snowplow seasons and years of traffic load."},
     {"name": "UBC Musqueam Crosswalk", "location": "Vancouver, British Columbia", "product": "StreetPrint and DecoMark",
-     "hero": _pick(ASSETS / "aboriginal crosswalk 1.png"),
+     # Blog: ubc-musqueam-crosswalk — actual UBC campus + Coast Salish salmon design, UBC letters in background ✓
+     # (aboriginal crosswalk 1.png was WRONG: showed an aerial B&W/blue eagle design, different project)
+     "hero": _pick(BLOG_DIR / "ubc-musqueam-crosswalk" / "featured.jpg",
+                   ASSETS / "aboriginal crosswalk 1.png"),
      "detail": _pick(PRODUCTS_DIR / "streetprint" / "streetprint-77.jpg"),
      "title": "A surface is also a statement.",
      "story": "A collaboration with UBC and the Musqueam Nation. Coast Salish art patterns stamped into asphalt at the centre of campus — an institutional acknowledgement made permanent, at street scale, in a material that will outlast the generation that commissioned it."},
     {"name": "More Awesome Now", "location": "Vancouver, British Columbia", "product": "StreetBond",
-     "hero": _pick(ASSETS / "StreetBond Circle Design 1.png"),
+     # Blog: laneway-project — "The Laneway Project" — shows a Toronto laneway with colourful StreetBond ✓
+     # (StreetBond Circle Design 1.png was WRONG: showed a large stadium/arena circular plaza, not Vancouver laneways)
+     "hero": _pick(BLOG_DIR / "laneway-project" / "featured.png",
+                   ASSETS / "StreetBond Circle Design 1.png"),
      "detail": _pick(_app_img("community-branding", 4)),
      "title": "Six laneways. Six artists.",
      "story": "Six Vancouver laneways. Six artists. StreetBond coloured pavement turned utility corridors into civic gallery space — public art at street scale, permanent and weather-resistant."},
@@ -384,11 +398,14 @@ PROJECTS = [
      "title": "Recognition, cast in pavement.",
      "story": "Indigenous Recognition crosswalks honouring First Nations communities across Canada. Every design co-developed with community elders and knowledge keepers. Permanent. Visible at every crossing. Walked by the whole city."},
     {"name": "Kitchener Veterans Memorial", "location": "Kitchener, Ontario", "product": "DecoMark",
-     # Use website-canonical community-branding image — the blog featured.jpeg
-     # appears to be the same photo that was leaking into Sechelt earlier.
-     "hero": _pick(_app_img("community-branding", 1),
-                   PRODUCTS_DIR / "decomark" / "decomark-62.jpg"),
-     "detail": _pick(PRODUCTS_DIR / "decomark" / "decomark-74.jpg"),
+     # Blog: veterans-crosswalk-kitchener — actual "Lest We Forget" ceremony with Canadian flag,
+     # soldier silhouette on crosswalk, Kitchener cenotaph, veterans in uniform. Stunning. ✓
+     # (community-branding-01.jpg was WRONG: showed StreetPrint brick road, wrong product + wrong project)
+     # (decomark-74.jpg detail was WRONG: showed "Little Italy - The Drive" Vancouver, wrong project)
+     "hero": _pick(BLOG_DIR / "veterans-crosswalk-kitchener" / "featured.jpeg",
+                   _app_img("community-branding", 1)),
+     "detail": _pick(BLOG_DIR / "veterans-crosswalk-kitchener" / "featured.jpeg",
+                     PRODUCTS_DIR / "decomark" / "decomark-74.jpg"),
      "title": "Paint fades. Memory shouldn't.",
      "story": "Kitchener's Veterans Crosswalk: a permanent civic tribute walked over every day. DecoMark thermoplastic graphic embedded into the street — durable enough to outlast the paint that failed before it, respectful enough to honour what it commemorates."},
     {"name": "Every Child Matters", "location": "Town of Georgina, Ontario", "product": "TrafficPatterns",

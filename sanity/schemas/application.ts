@@ -66,10 +66,12 @@ export default defineType({
     richImageField("heroImage", "Hero image", false, "media"),
     defineField({
       name: "heroImageUrl",
-      title: "Hero image URL (legacy)",
+      title: "Hero image URL (legacy — read only)",
       type: "string",
       group: "media",
-      description: "Legacy fallback path served from /public/images/ (e.g. /images/applications/crosswalks/hero.jpg). Leave blank once heroImage is set in Sanity.",
+      readOnly: true,
+      hidden: ({ document }) => !!document?.heroImage,
+      description: "Replaced by the Hero Image above. Disappears automatically once a hero image is uploaded.",
     }),
     defineField({
       name: "gallery",
@@ -117,11 +119,15 @@ export default defineType({
     }),
   ],
 
+  orderings: [
+    { title: "Name (A–Z)", name: "nameAsc", by: [{ field: "name", direction: "asc" }] },
+  ],
+
   preview: {
     select: { title: "name", subtitle: "shortDesc", media: "heroImage" },
     prepare: ({ title, subtitle, media }) => ({
       title,
-      subtitle: subtitle?.slice(0, 60) ?? "No description",
+      subtitle: subtitle?.slice(0, 70) ?? "No short description set",
       media,
     }),
   },

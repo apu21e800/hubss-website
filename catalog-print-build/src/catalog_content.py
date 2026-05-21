@@ -75,10 +75,6 @@ SECTION_OPENERS = {
     "dps_b_right":  _pick(APPS_DIR / "community-branding" / "community-branding-12.jpg"),
     "dps_c_left":   _pick(BLOG_DIR / "parc-riviera-streetbond-walkway" / "featured.jpg"),
     "dps_c_right":  _pick(APPS_DIR / "community-branding" / "community-branding-13.jpg"),
-    # DPS-D: between Projects and Network — most recent blog project (2025-09-14)
-    # White Rock Seaside Stroll + Langley Railroad Heritage crosswalks
-    "dps_d_left":   _pick(BLOG_DIR / "white-rock-langley-trafficpatterns" / "featured.jpg"),
-    "dps_d_right":  _pick(APPS_DIR / "community-branding" / "community-branding-09.jpg"),
 }
 
 MANIFESTO = {
@@ -411,17 +407,23 @@ PROJECTS = [
      "detail": _pick(PRODUCTS_DIR / "streetprint" / "streetprint-83.jpg"),
      "title": "A schoolhouse, a sidewalk, a memory.",
      "story": "StreetPrint stamped-asphalt sidewalk linking the historic Murrayville Schoolhouse to the community around it. Heritage-look surface for a heritage building — brick-pattern asphalt that reads as stone and performs as pavement."},
-    # ── Newest project (2025) ────────────────────────────────────────────────────────────
+    # ── Two newest projects (2025) — White Rock Seaside Stroll + Langley Railroad Heritage ──
+    {"name": "White Rock Seaside Stroll", "location": "White Rock, British Columbia",
+     "product": "TrafficPatterns",
+     # Coastal wave-inspired mural by artist Amy (Yun Ru) Bao on Johnston Road, Uptown.
+     "hero": _pick(BLOG_DIR / "white-rock-langley-trafficpatterns" / "featured.jpg"),
+     "detail": _pick(BLOG_DIR / "white-rock-langley-trafficpatterns" / "featured.jpg"),
+     "title": "The waterfront, brought inland.",
+     "story": "White Rock commissioned Vancouver artist Amy Bao to carry the coastal identity of the waterfront into the Uptown district on Johnston Road. Her 'Seaside Stroll' — flowing wave lines in the tones of White Rock's sandy beaches — was realized in TrafficPatterns preformed thermoplastic. Permanent. UV-stable. Slip-resistant. In its first season, Uptown reported 40% more foot traffic to the district."},
     {"name": "Langley Railroad Heritage", "location": "Langley City, British Columbia",
      "product": "TrafficPatterns",
-     # Blog image shared with White Rock Seaside Stroll post (2025-09-14).
-     # No dedicated Langley-only photo exists yet — Vernon to swap in Figma once sourced.
-     # Installed by Square One Paving, March 2025, at the entrance to Linwood Park.
-     "hero": _pick(BLOG_DIR / "white-rock-langley-trafficpatterns" / "featured.jpg"),
-     # Detail: same blog image with phFit (FIT mode) to show full railroad tie pattern
-     "detail": _pick(BLOG_DIR / "white-rock-langley-trafficpatterns" / "featured.jpg"),
+     # Actual railroad crosswalk photos sourced from squareonepaving.com (March 2025 install).
+     # featured.jpg: overhead shot showing tie-and-rail pattern.
+     # detail.jpg: close-up of the installation showing thermoplastic tile geometry.
+     "hero": _pick(BLOG_DIR / "langley-railroad-heritage" / "featured.jpg"),
+     "detail": _pick(BLOG_DIR / "langley-railroad-heritage" / "detail.jpg"),
      "title": "Heritage cast in thermoplastic.",
-     "story": "Langley City's crosswalk at the entrance to Linwood Park connects modern pedestrian infrastructure to the city's railway history. Railroad tie-and-rail pattern in preformed TrafficPatterns thermoplastic — tan panels mimicking wooden rail ties, white lines suggesting steel rails, fused permanently to the asphalt. Installed by Square One Paving, March 2025. It became a social media landmark before the crew had packed up."},
+     "story": "Langley City's crosswalk at the entrance to Linwood Park connects modern pedestrian infrastructure to the city's railway history. Railroad tie-and-rail pattern in preformed TrafficPatterns thermoplastic — tan panels mimicking wooden rail ties, white lines suggesting steel rails, fused permanently to the asphalt. Installed by Square One Paving, March 2025. A social media landmark before the crew had packed up."},
 ]
 
 

@@ -400,8 +400,9 @@ async function pageProjectHero(proj) {
 
 async function pageProjectStory(proj, idx) {
   const f = fr(`Story ${String(idx).padStart(2,"0")} — ${proj.name}`);
-  // FIT mode: preserves full product markings/decals — prevents subject cutoff on story photos
-  phFit(f, 0, 0, 450, 248, proj.name + " — detail photo", proj.detail || proj.hero);
+  // FILL mode: full-bleed, edge-to-edge — no letterbox. Subject centered by default.
+  // If a specific photo crops the subject, Vernon adjusts the crop in Figma.
+  ph(f, 0, 0, 450, 248, proj.name + " — detail photo", proj.detail || proj.hero);
   await tx(f, "PROJECT " + String(idx).padStart(2,"0"), 30, 266, 6.5, O, false, 370);
   // Show proj.name (project identifier), not proj.title — title is already H1 on hero page
   await tx(f, proj.name || "", 30, 283, 17, D, true, 370);
@@ -834,17 +835,6 @@ async function buildCatalogue(d) {
         const [sL2, sR2] = await pageDoublespread("Every Mark", dpsImg2, "Every mark tells a story.", undefined, dpsImg2R);
         frames.push(sL2, sR2);
       }
-    }
-  }
-
-  // DPS-D — between Projects and Network. Newest project work (White Rock & Langley, 2025).
-  // Keys: dps_d_left / dps_d_right.
-  {
-    const dpsDL = d.section_openers && d.section_openers.dps_d_left;
-    const dpsDR = d.section_openers && d.section_openers.dps_d_right;
-    if (dpsDL) {
-      const [dL, dR] = await pageDoublespread("New Work", dpsDL, "The mark on the street. The most recent chapter.", undefined, dpsDR || dpsDL);
-      frames.push(dL, dR);
     }
   }
 

@@ -29,7 +29,6 @@ export default function Hero() {
           style={{ objectPosition: "50% 60%" }}
           sizes="100vw"
         />
-        {/* Multi-stop overlay: dark vignette that's strongest at bottom so hero bleeds into next section */}
         <div
           className="absolute inset-0"
           style={{
@@ -37,7 +36,6 @@ export default function Hero() {
               "linear-gradient(180deg, rgba(8,13,22,0.72) 0%, rgba(8,13,22,0.68) 30%, rgba(8,13,22,0.82) 65%, rgba(8,13,22,0.97) 100%)",
           }}
         />
-        {/* Left-side text scrim — pulls legibility without killing the full image */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -45,7 +43,6 @@ export default function Hero() {
               "linear-gradient(95deg, rgba(8,13,22,0.55) 0%, rgba(8,13,22,0.22) 44%, transparent 64%)",
           }}
         />
-        {/* Orange atmospheric bloom — top-left corner */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -100,8 +97,8 @@ export default function Hero() {
             style={{ color: "rgba(255,255,255,0.78)", textShadow: "0 1px 16px rgba(0,0,0,0.55)", fontWeight: 400 }}
           >
             HUB Surface Systems redefines hardscapes for freeze-thaw climates.
-            Stamped asphalt, thermoplastics, and specialty coatings built to
-            outlast paint and outperform expectations — for 30+ years.
+            Stamped asphalt, thermoplastics, and specialty coatings built for
+            performance and lasting visual impact — for 30+ years.
           </p>
 
           {/* ── CTAs ─────────────────────────────────────────────────── */}
@@ -141,7 +138,6 @@ export default function Hero() {
             transition={{ delay: 0.42, duration: 0.55 }}
             style={{ marginTop: "2.75rem" }}
           >
-            {/* Thin divider */}
             <div
               style={{
                 height: 1,

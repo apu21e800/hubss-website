@@ -19,8 +19,8 @@ const PROOF = [
   },
   {
     num: "02",
-    claim: "Lower lifecycle cost than paint",
-    detail: "Thermoplastic and MMA systems last 6–8× longer than paint — with no lane closures for reapplication.",
+    claim: "Outstanding lifecycle value",
+    detail: "Thermoplastic and MMA systems deliver 6–8 years of high-visibility performance — with no seasonal reapplication or lane closures.",
   },
   {
     num: "03",

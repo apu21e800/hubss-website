@@ -13,7 +13,7 @@ const PERSONAS = [
   },
   {
     label: "Contractors",
-    desc: "Get HUB-certified, unlock territory rights, and bid on jobs your competitors can't touch — backed by real technical support on every project.",
+    desc: "Hub Surface Systems certifies, trains and supports a network of contractors across Canada",
     href: "/contact",
   },
 ];

@@ -9,17 +9,17 @@ import { productImages, resolveImage } from "@/lib/featured-images";
 // Plain-English: what it does and who uses it
 const PRODUCT_WHAT: Record<string, string> = {
   "streetprint":
-    "In-place stamped asphalt — cobblestone, brick, herringbone and 12+ more patterns. No demolition, no raised edges, snowplow-safe. Looks like stone, performs like asphalt.",
+    "In-place stamped asphalt — cobblestone, brick, herringbone and a wide variety of other patterns. No demolition, no raised edges, snowplow-safe. Looks like stone, performs like asphalt.",
   "streetbond":
-    "Permanently bonded acrylic colour for asphalt and concrete. Standard palette plus full Pantone custom matching. Long-lasting colour retention — bike lanes, crosswalks, driveways.",
+    "Water based, epoxy modified acrylic coatings that transform asphalt and concrete.",
   "traffic-patterns-xd":
-    "Aggregate-reinforced thermoplastic engineered for BRT corridors and high-volume intersections. High skid resistance from the integral aggregate matrix.",
+    "Aggregate-reinforced, preformed thermoplastic that is purpose engineered for the toughest environments. High performance crosswalks, entrance features and endless other applications.",
   "traffic-patterns":
-    "Crisp preformed thermoplastic markings that outlast paint by years. Factory-manufactured to 125mil and specified by municipalities coast to coast.",
+    "Crisp preformed thermoplastic markings, factory-manufactured to 125mil and specified by municipalities coast to coast.",
   "mmax":
-    "MMA resin for red bus lanes and bike lanes. Traffic-ready in under an hour. Applies down to +3°C and rising — no waiting for high summer.",
+    "MMA resin with performance aggregates for use in area markings like bus lanes, bike lanes, and other visual needs in high traffic environments. Fast installation. Full range of colours. Extended season formula for shoulder season applications.",
   "decomark":
-    "Custom murals, Pride crosswalks, and Indigenous street art, precision-formed in durable thermoplastic. From vector file to civic landmark.",
+    "Preformed thermoplastic that is custom fabricated to put your design into a functional surface for use in endless environments. Used all across North America for unique messaging, branding, community expression, schools, etc.",
 };
 
 const PRODUCT_TYPE: Record<string, string> = {
@@ -32,11 +32,11 @@ const PRODUCT_TYPE: Record<string, string> = {
 };
 
 const PRODUCT_STAT: Record<string, string> = {
-  // Softened per Doug-style claims discipline (no unsourced numbers).
+  // Doug: focus on positives, no paint comparisons.
   "streetprint":         "Decades of proven service",
   "streetbond":          "UV-stable · won't peel",
   "traffic-patterns-xd": "Aggregate-reinforced surface",
-  "traffic-patterns":    "Outlasts paint by years",
+  "traffic-patterns":    "Durable, retroreflective markings",
   "mmax":                "Traffic-ready in under an hour",
   "decomark":            "Custom Pantone graphics",
 };
@@ -103,8 +103,8 @@ export default function ProductsGrid() {
                 className="text-base font-light max-w-lg leading-relaxed"
                 style={{ color: "var(--text-secondary)" }}
               >
-                Six systems that outlast paint 6:1, survive everything Canada throws at them,
-                and turn any surface into a signature.
+                Six systems that are purpose built for life in Canada. Turning asphalt and
+                concrete into your signature surface.
               </p>
             </div>
             <Link

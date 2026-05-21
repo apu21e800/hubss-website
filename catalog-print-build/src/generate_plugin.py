@@ -321,48 +321,41 @@ async function pageProductHero(prod) {
 }
 
 async function pageProductSpec(prod) {
+  // 2-layer hierarchy: name (H1 in navy) → title (H2) → body → spec grid.
+  // Removed: "BY HUB SURFACE SYSTEMS" (redundant in own catalogue),
+  //          "DECORATIVE PAVEMENT" category label (visual noise),
+  //          orange callout heading (specs belong in the grid, not as a heading).
   const f = fr("Spec — " + prod.name);
-  // Band height 116px — enough room to push all header text into the 28px safe zone
-  navyBand(f, 116);
-  // Header text starts at y=28: the same safe-zone margin used everywhere else.
-  // At 450px = 5", y=16 puts live text ~1mm from the trim edge — not print-safe.
-  // y=28 = ~3mm from edge, safely inside the live area on any print spec.
-  await tx(f, "BY HUB SURFACE SYSTEMS", 28, 28, 5.5, O, false, 394, null, 8);
-  // Product name: 8px below eyebrow bottom (eyebrow bottom = 28+8 = 36, name at 44)
-  await tx(f, prod.name || "", 28, 44, 24, W, true, 394);
-  // Rule: 6px below name bottom (name bottom ≈ 44+28 = 72, rule at 78)
-  rul(f, 28, 78, 24);
-  // Category: 4px below rule
-  await tx(f, (prod.category || "Decorative Pavement").toUpperCase(), 28, 84, 5.5, W, false, 394, null, 8);
 
-  // Body zone — 28px breathing room below band (band ends at 116, content at 144)
+  // Compact navy band — product name only. Nothing else needed.
+  navyBand(f, 82);
+  await tx(f, prod.name || "", 28, 22, 24, W, true, 394);
+  rul(f, 28, 56, 20);
+
+  // Body zone — generous white space below band. Clean 2-layer hierarchy.
   const title = prod.title || prod.name;
-  await tx(f, title, 28, 144, 21, D, true, 394);
-  await tx(f, prod.italic || "", 28, 184, 8.5, M, false, 394);
-  const callout = ((prod.callout||"") + "  ·  " + (prod.callout_unit||"")).toUpperCase();
-  rul(f, 28, 210, 24);
-  await tx(f, callout, 28, 216, 6, O, false, 394, null, 9);
-  await tx(f, prod.body || "", 28, 230, 8, D, false, 394);
+  await tx(f, title, 28, 98, 20, D, true, 394);
+  await tx(f, prod.italic || "", 28, 126, 7.5, M, false, 394);
+  // Body: 2-3 tight sentences only. White space below is intentional.
+  await tx(f, prod.body || "", 28, 150, 8, D, false, 394);
 
-  // Spec grid — anchored from bottom, leaving intentional white space above
+  // Spec grid — 2 rows of up to 3 pairs each
   if (prod.spec_pairs && prod.spec_pairs.length) {
-    rct(f, 28, 308, 394, 1, F, "rule");
+    rct(f, 28, 298, 394, 1, F, "rule");
     const colX = [28, 162, 296];
     for (let i = 0; i < Math.min(prod.spec_pairs.length, 6); i++) {
       const [lbl, val] = prod.spec_pairs[i];
       const col = i % 3, row = Math.floor(i / 3);
-      const xx = colX[col], yy = 320 + row * 30;
-      await tx(f, (lbl||"").toUpperCase(), xx, yy, 5.5, F, false, 124, null, 8);
+      const xx = colX[col], yy = 310 + row * 30;
+      await tx(f, (lbl||"").toUpperCase(), xx, yy, 5, F, false, 124, null, 8);
       await tx(f, val||"", xx, yy+10, 8, D, true, 124, null, 12);
     }
   }
-  // Uses — footer: rule then centred uses line, pinned near page bottom
+  // Uses — single restrained footer line. No competing URL.
   if (prod.uses && prod.uses.length) {
-    rct(f, 28, 392, 394, 1, F, "rule");
-    await tx(f, prod.uses.join("   ·   ").toUpperCase(), 28, 402, 6, M, false, 394, "center", 9);
+    rct(f, 28, 378, 394, 1, F, "rule");
+    await tx(f, prod.uses.join("   ·   ").toUpperCase(), 28, 387, 5.5, M, false, 394, "center", 8);
   }
-  // CTA: spec sheet URL — y=402 keeps bottom=412, well clear of folio at y=415
-  await tx(f, "hubss.com/products", 28, 402, 6.5, O, false, 394, "right", 10);
   return f;
 }
 
@@ -562,87 +555,74 @@ async function pageCities(d) {
 }
 
 async function pageLunchLearn(mascotPath) {
-  // PREMIUM L&L — editorial split: left type / right Moose. Warm and confident.
-  // Moose fills the full right half — he's the visual hook, not a corner decoration.
+  // REDUCTION PASS: Moose + tight headline + 4 benefits + one booking line. That's it.
+  // City list, "not a sales pitch", redundant headers — all cut.
   const f = fr("CTA — Lunch and Learn");
 
-  // Moose — right half, generous and prominent. FIT/logo mode: transparent, never cropped.
-  logo(f, 238, 12, 198, 270, "Moose — HUB mascot", mascotPath);
+  // Moose — right half. Generous and prominent.
+  logo(f, 238, 20, 192, 262, "Moose — HUB mascot", mascotPath);
 
-  // Left column — generous leading, breathing room between each element
-  await tx(f, "FOR ENGINEERS", 28, 24, 5, O, false, 200, null, 8);
-  await tx(f, "PLANNERS + SPECIFIERS", 28, 33, 5, O, false, 200, null, 8);
-  rul(f, 28, 48, 20);
-  await tx(f, "Lunch", 28, 60, 30, D, true, 200);
-  await tx(f, "Is On Us.", 28, 96, 30, O, true, 200);
+  // Left column — breathe
+  rul(f, 28, 28, 20);
+  await tx(f, "Lunch Is On Us.", 28, 44, 28, D, true, 202);
+  await tx(f, "Your Next Spec Is Free.", 28, 80, 15, O, true, 202);
 
-  // Benefit list — restrained, generous spacing
+  // 4 benefits only — the essentials
   const items = [
-    "45 min, tailored to your project",
-    "Live Q&A with technical team",
-    "Spec sheets + sample materials",
-    "AIBC / RAIC / PEO CE credits",
+    "45 min — tailored to your project",
+    "Spec sheets, samples + CE credits",
     "Lunch included — $25 virtual voucher",
-    "No cost · No obligation",
+    "Zero cost · Zero obligation",
   ];
-  let dy = 146;
+  let dy = 120;
   for (const item of items) {
-    await tx(f, "— " + item, 28, dy, 7, D, false, 200);
-    dy += 14;
+    await tx(f, "— " + item, 28, dy, 7.5, D, false, 202);
+    dy += 17;
   }
-  rct(f, 28, dy + 8, 200, 1, F, "Separator");
-  await tx(f, "Not a sales pitch. An education.", 28, dy + 18, 7.5, M, false, 200, null, 11);
 
-  // Full-width bottom zone: generous gap between Moose zone and URL block
-  rct(f, 28, 296, 394, 1, F, "rule");
-  await tx(f, "hubss.com/lunch-learn", 28, 306, 14, O, true, 394);
-  await tx(f, "Toronto · York Region · Vancouver · UBC · TransLink · 500+ municipalities", 28, 330, 6.5, M, false, 394, "center", 10);
+  // Full-width URL — the one clear action
+  rct(f, 28, 300, 394, 1, F, "rule");
+  await tx(f, "hubss.com/lunch-learn", 28, 312, 15, O, true, 394);
 
-  rct(f, 28, 350, 394, 1, F, "rule");
-  await tx(f, "BOOK DIRECTLY WITH YOUR REGIONAL CONTACT", 28, 358, 5, F, false, 394, null, 8);
-  await tx(f, "Cleve Stordy   604.309.8212", 28, 370, 9, D, false, 188, null, 13);
-  await tx(f, "Doug Bain   416.540.9287", 238, 370, 9, D, false, 178, null, 13);
-  rct(f, 28, 396, 394, 1, F, "rule");
-  await tx(f, "HUB SURFACE SYSTEMS   ·   hubss.com", 28, 404, 5.5, F, false, 394, "center", 8);
+  // Single contact line — they know where to find the Contact page for details
+  rct(f, 28, 348, 394, 1, F, "rule");
+  await tx(f, "Cleve Stordy   604.309.8212", 28, 358, 8.5, D, false, 188, null, 12);
+  await tx(f, "Doug Bain   416.540.9287", 238, 358, 8.5, D, false, 178, null, 12);
   return f;
 }
 
 async function pageContact(d) {
-  // Contact page — editorial premium. Navy band anchors, generous whitespace below.
-  // Names scaled DOWN to 14px — they are contacts, not headlines. White space does the work.
+  // REDUCTION PASS: emails 7px (secondary detail), footer anchored at page bottom.
   const f = fr("Contact");
-  // Navy band — identity zone
-  rct(f, 0, 0, 450, 88, N, "NavyBand");
-  await tx(f, "TWO OFFICES. ONE NETWORK.", 30, 16, 5, O, false, 390, null, 8);
-  rul(f, 30, 32, 20);
-  await tx(f, "Speak with HUB.", 30, 46, 20, W, true, 390);
+  rct(f, 0, 0, 450, 80, N, "NavyBand");
+  await tx(f, "TWO OFFICES. ONE NETWORK.", 30, 14, 5, O, false, 390, null, 8);
+  rul(f, 30, 30, 20);
+  await tx(f, "Speak with HUB.", 30, 44, 20, W, true, 390);
 
-  // Tagline — generous air above
-  await tx(f, "Every project starts with a conversation.", 30, 106, 9, M, false, 390, null, 14);
-  rct(f, 30, 130, 390, 1, F, "rule");
+  await tx(f, "Every project starts with a conversation.", 30, 100, 9, M, false, 390, null, 14);
+  rct(f, 30, 124, 390, 1, F, "rule");
 
-  // West — names at 14px, contacts refined not oversized
-  await tx(f, "WESTERN CANADA", 30, 146, 5, O, false, 188, null, 8);
-  await tx(f, "Cleve Stordy", 30, 160, 14, D, true, 188);
-  await tx(f, "cleve.stordy@hubss.com", 30, 184, 8, D, false, 188);
-  await tx(f, "604.309.8212", 30, 200, 8, M, false, 188);
-  await tx(f, "Ladysmith, British Columbia", 30, 216, 7, M, false, 188);
+  // West — names 14px, emails 7px (secondary, not headlines)
+  await tx(f, "WESTERN CANADA", 30, 140, 5, O, false, 188, null, 8);
+  await tx(f, "Cleve Stordy", 30, 154, 14, D, true, 188);
+  await tx(f, "cleve.stordy@hubss.com", 30, 175, 7, M, false, 188);
+  await tx(f, "604.309.8212", 30, 188, 8.5, D, false, 188);
+  await tx(f, "Ladysmith, BC", 30, 203, 7, M, false, 188);
 
   // East
-  await tx(f, "EASTERN CANADA", 242, 146, 5, O, false, 178, null, 8);
-  await tx(f, "Doug Bain", 242, 160, 14, D, true, 178);
-  await tx(f, "doug.bain@hubss.com", 242, 184, 8, D, false, 178);
-  await tx(f, "416.540.9287", 242, 200, 8, M, false, 178);
-  await tx(f, "Milton, Ontario", 242, 216, 7, M, false, 178);
+  await tx(f, "EASTERN CANADA", 238, 140, 5, O, false, 178, null, 8);
+  await tx(f, "Doug Bain", 238, 154, 14, D, true, 178);
+  await tx(f, "doug.bain@hubss.com", 238, 175, 7, M, false, 178);
+  await tx(f, "416.540.9287", 238, 188, 8.5, D, false, 178);
+  await tx(f, "Milton, ON", 238, 203, 7, M, false, 178);
 
-  rct(f, 30, 244, 390, 1, F, "rule");
+  rct(f, 30, 228, 390, 1, F, "rule");
+  await tx(f, "hubss.com", 30, 242, 20, O, true, 390);
+  await tx(f, "Spec sheets · Gallery · Installer network · Lunch + Learn", 30, 276, 7.5, M, false, 390, null, 11);
 
-  // URL — one bold destination, generous space
-  await tx(f, "hubss.com", 30, 258, 20, O, true, 390);
-  await tx(f, "Spec sheets · Project gallery · Installer network · Lunch + Learn", 30, 294, 7.5, M, false, 390, null, 11);
-
-  rct(f, 30, 322, 390, 1, F, "rule");
-  await tx(f, "© 2026 HUB Surface Systems   ·   Established 1994   ·   Coast to Coast", 30, 332, 5, F, false, 390, "center", 8);
+  // Footer anchored at PAGE BOTTOM — not floating mid-page
+  rct(f, 30, 404, 390, 1, F, "rule");
+  await tx(f, "© 2026 HUB Surface Systems   ·   Established 1994   ·   Coast to Coast", 30, 412, 5, F, false, 390, "center", 8);
   return f;
 }
 

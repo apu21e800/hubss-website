@@ -50,6 +50,11 @@ const PRODUCT_APPS: Record<string, string[]> = {
   "decomark":            ["Public Art", "Crosswalks", "Community Branding"],
 };
 
+// Per-card object-position overrides for images that need non-center focal points
+const PRODUCT_POSITION: Record<string, string> = {
+  "decomark": "center bottom",
+};
+
 // Core products shown on homepage — one unified showcase
 const FEATURED_SLUGS = [
   "streetprint",
@@ -165,6 +170,7 @@ export default function ProductsGrid() {
                       loading="lazy"
                       className="object-cover transition-transform duration-700 group-hover:scale-[1.05]"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      style={{ objectPosition: PRODUCT_POSITION[product.slug] ?? "center" }}
                     />
                     {/* Bottom gradient — merges image into card body */}
                     <div

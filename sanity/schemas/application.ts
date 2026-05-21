@@ -78,7 +78,7 @@ export default defineType({
       title: "Gallery images",
       type: "array",
       group: "media",
-      description: "Project photos showcasing this application type. Add alt text to every image for accessibility (AODA).",
+      description: "Photos showcasing real installations of this application type — shown in the gallery on the application page. Add alt text to every image describing what's in the photo (required for accessibility). Drag and drop to reorder.",
       of: [galleryImageItem],
     }),
 

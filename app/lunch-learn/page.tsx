@@ -26,7 +26,13 @@ export default async function LunchLearnPage() {
   return (
     <main style={{ background: "#0f1620", minHeight: "100vh" }}>
       <Nav />
-      <LunchLearnFunnel {...hero} />
+      <LunchLearnFunnel
+        {...hero}
+        whatYouGet={sanityPage?.lunchLearnWhatYouGet}
+        personas={sanityPage?.lunchLearnPersonas}
+        faqs={sanityPage?.lunchLearnFaqs}
+        sectionHeadings={sanityPage?.lunchLearnSectionHeadings}
+      />
       <Footer />
     </main>
   );

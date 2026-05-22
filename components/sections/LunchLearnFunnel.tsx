@@ -13,6 +13,19 @@ export interface LunchLearnFunnelProps {
   formHeading?: string;
   formSubheading?: string;
   submitLabel?: string;
+  // Optional Sanity-sourced overrides for the mid-page sections. When unset,
+  // the component falls back to the const arrays defined just below.
+  whatYouGet?: { num: string; title: string; desc: string }[];
+  personas?: { title: string; desc: string; badge: string }[];
+  faqs?: { q: string; a: string }[];
+  sectionHeadings?: {
+    whatYouGetEyebrow?: string;
+    whatYouGetHeading?: string;
+    personasEyebrow?: string;
+    personasHeading?: string;
+    faqEyebrow?: string;
+    faqHeading?: string;
+  };
 }
 
 interface FormState {
@@ -113,7 +126,20 @@ export default function LunchLearnFunnel({
   formHeading  = "Claim Your Free Lunch & Learn",
   formSubheading = "Tell us who you are and where you are — we handle the rest. Usually within 24 hours.",
   submitLabel  = "Claim Your Free Lunch & Learn →",
+  whatYouGet,
+  personas,
+  faqs,
+  sectionHeadings,
 }: LunchLearnFunnelProps = {}) {
+  const whatYouGetItems    = whatYouGet?.length ? whatYouGet : WHAT_YOU_GET;
+  const personaItems       = personas?.length   ? personas   : PERSONAS;
+  const faqItems           = faqs?.length       ? faqs       : FAQS;
+  const whatYouGetEyebrow  = sectionHeadings?.whatYouGetEyebrow ?? "What You Walk Away With";
+  const whatYouGetHeading  = sectionHeadings?.whatYouGetHeading ?? "Not a Sales Pitch. An Education.";
+  const personasEyebrow    = sectionHeadings?.personasEyebrow   ?? "Who It's Built For";
+  const personasHeading    = sectionHeadings?.personasHeading   ?? "Your Whole Team. One Session.";
+  const faqEyebrow         = sectionHeadings?.faqEyebrow        ?? "Common Questions";
+  const faqHeading         = sectionHeadings?.faqHeading        ?? "Everything You Need to Know";
   const [formData, setFormData] = useState<FormState>({
     name: "", email: "", company: "", city: "", phone: "",
   });
@@ -319,7 +345,7 @@ export default function LunchLearnFunnel({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-14 text-center">
             <p className="text-xs font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#f97316" }}>
-              What You Walk Away With
+              {whatYouGetEyebrow}
             </p>
             <h2
               className="font-black"
@@ -330,12 +356,12 @@ export default function LunchLearnFunnel({
                 color: "#F5F0EB",
               }}
             >
-              Not a Sales Pitch. An Education.
+              {whatYouGetHeading}
             </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {WHAT_YOU_GET.map((item, i) => (
+            {whatYouGetItems.map((item, i) => (
               <motion.div
                 key={item.title}
                 initial={{ opacity: 0, y: 16 }}
@@ -385,7 +411,7 @@ export default function LunchLearnFunnel({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-12">
             <p className="text-xs font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#f97316" }}>
-              Who It&apos;s Built For
+              {personasEyebrow}
             </p>
             <h2
               className="font-black"
@@ -396,12 +422,12 @@ export default function LunchLearnFunnel({
                 color: "#F5F0EB",
               }}
             >
-              Your Whole Team. One Session.
+              {personasHeading}
             </h2>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {PERSONAS.map((p, i) => (
+            {personaItems.map((p, i) => (
               <motion.div
                 key={p.title}
                 initial={{ opacity: 0, y: 12 }}
@@ -472,13 +498,13 @@ export default function LunchLearnFunnel({
       <section className="py-20 lg:py-24" style={{ background: "#0a0f1a" }}>
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-12 text-center">
-            <p className="text-xs font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#f97316" }}>Common Questions</p>
+            <p className="text-xs font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#f97316" }}>{faqEyebrow}</p>
             <h2 className="font-black" style={{ fontSize: "clamp(1.9rem, 3.5vw, 2.9rem)", lineHeight: 1.05, letterSpacing: "-0.03em", color: "#F5F0EB" }}>
-              Everything You Need to Know
+              {faqHeading}
             </h2>
           </div>
           <div className="space-y-3">
-            {FAQS.map((faq, i) => (
+            {faqItems.map((faq, i) => (
               <div key={faq.q} className="rounded-xl overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.08)", background: openFaq === i ? "#111827" : "rgba(255,255,255,0.02)" }}>
                 <button className="w-full text-left flex items-center justify-between gap-4 px-6 py-5" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
                   <span className="font-semibold text-base" style={{ color: "#F5F0EB" }}>{faq.q}</span>

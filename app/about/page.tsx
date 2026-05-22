@@ -18,32 +18,39 @@ const stats = [
   { value: "2", label: "Regional Offices" },
 ];
 
-const values = [
-  {
-    heading: "What We Build",
-    body:
-      "Decorative crosswalks, civic plazas, community murals, transit lanes, private driveways, and parks. Surface solutions that carry meaning — from high-visibility school zones in Milton to Indigenous art installations in Sechelt.",
-  },
-  {
-    heading: "Who We Build For",
-    body:
-      "Municipalities, landscape architects, urban planners, developers, and certified contractors across every Canadian province. If it's a surface that people walk, drive, or gather on — we have a system for it.",
-  },
-  {
-    heading: "Why It Matters",
-    body:
-      "Beautiful streets make walkable cities. Legible surfaces slow cars. Identity-rich public spaces build community. This isn't just infrastructure — it's the civic layer that tells a city it's worth caring about.",
-  },
+// Fallbacks used if the Sanity page doc has no matching field. These are also
+// the canonical copies for the sync script (scripts/sync-pages-to-sanity.ts).
+const STORY_FALLBACK: string[] = [
+  "HUB Surface Systems was founded on a simple belief: streets don't have to be grey. For decades, Canadian cities treated pavement as pure utility — functional, forgettable, interchangeable. We saw an opportunity to change that, starting with StreetPrint decorative stamped asphalt in the mid-1990s.",
+  "Over thirty years, we grew our portfolio to address every surface challenge a Canadian municipality might face — from high-traffic arterial markings in York Region to decorative community crosswalks at UBC to Indigenous art installations on BC ferries. Every city, every application, every climate.",
+  "Today, HUB operates from two regional offices — East in Milton, Ontario, and West in Ladysmith, British Columbia — backed by a network of certified applicators trained and authorized by HUB to install each system to spec. That credentialed installer program is what turns a quality product into a quality outcome.",
 ];
 
-const differentiators = [
-  { title: "Flexibility vs Concrete", desc: "Asphalt-based systems flex with Canada's freeze-thaw cycles, outlasting concrete alternatives by 2–3x in northern climates." },
-  { title: "6–8 Years of Proven Performance", desc: "Thermoplastic and MMA markings deliver 6–8 years of high-visibility service life — documented across hundreds of Canadian municipalities in every climate." },
-  { title: "Vision Zero Aligned", desc: "Every HUB product is designed to support Vision Zero frameworks — from retroreflective crosswalk markings to high-contrast bike lane systems." },
-  { title: "High-Visibility by Design", desc: "Tactile and high-contrast marking solutions engineered for pedestrian safety and legibility in every lighting condition and season." },
-  { title: "20-Year Performance", desc: "StreetPrint and StreetBond installations are engineered for 20-year colour retention — documented across hundreds of Canadian municipalities." },
-  { title: "Climate-Tested", desc: "Every system is stress-tested for freeze-thaw extremes, de-icing salts, and snowplow blades — from coastal BC to the Great Lakes." },
+const STORY_ASIDE_FALLBACK =
+  "York Region. City of Toronto. City of Vancouver. UBC. The City of Sechelt. When you walk through a Canadian city and feel something — when a crosswalk catches your eye, when a plaza feels like it belongs — there's a chance we were there. That's what thirty years looks like on the ground.";
+
+const VALUES_FALLBACK = [
+  { heading: "What We Build",     body: "Decorative crosswalks, civic plazas, community murals, transit lanes, private driveways, and parks. Surface solutions that carry meaning — from high-visibility school zones in Milton to Indigenous art installations in Sechelt." },
+  { heading: "Who We Build For",  body: "Municipalities, landscape architects, urban planners, developers, and certified contractors across every Canadian province. If it's a surface that people walk, drive, or gather on — we have a system for it." },
+  { heading: "Why It Matters",    body: "Beautiful streets make walkable cities. Legible surfaces slow cars. Identity-rich public spaces build community. This isn't just infrastructure — it's the civic layer that tells a city it's worth caring about." },
 ];
+
+const DIFFERENTIATORS_FALLBACK = [
+  { title: "Flexibility vs Concrete",          desc: "Asphalt-based systems flex with Canada's freeze-thaw cycles, outlasting concrete alternatives by 2–3x in northern climates." },
+  { title: "6–8 Years of Proven Performance",  desc: "Thermoplastic and MMA markings deliver 6–8 years of high-visibility service life — documented across hundreds of Canadian municipalities in every climate." },
+  { title: "Vision Zero Aligned",              desc: "Every HUB product is designed to support Vision Zero frameworks — from retroreflective crosswalk markings to high-contrast bike lane systems." },
+  { title: "High-Visibility by Design",        desc: "Tactile and high-contrast marking solutions engineered for pedestrian safety and legibility in every lighting condition and season." },
+  { title: "20-Year Performance",              desc: "StreetPrint and StreetBond installations are engineered for 20-year colour retention — documented across hundreds of Canadian municipalities." },
+  { title: "Climate-Tested",                   desc: "Every system is stress-tested for freeze-thaw extremes, de-icing salts, and snowplow blades — from coastal BC to the Great Lakes." },
+];
+
+const PARTNERS_INTRO_FALLBACK =
+  "HUB is an authorized distributor and applicator partner for the manufacturers behind our core product systems — giving clients access to the broadest decorative pavement portfolio in Canada, with direct manufacturer technical support and specification backup.";
+
+const PARTNER_DESC_FALLBACK: Record<string, string> = {
+  "gaf":          "GAF is the manufacturer behind HUB's coloured pavement coating systems — StreetBond, StreetBondSR (solar reflective), DuraShield, and MMAX. Their coatings technology has been the foundation of thousands of decorative surface installations across Canada.",
+  "ennis-flint":  "Ennis-Flint (a PPG company) is the manufacturer behind HUB's full thermoplastics range — including TrafficPatterns, TrafficPatternsXD, PreMark, AirMark, DuraTherm, and DecoMark. Their preformed thermoplastic systems are the gold standard for high-durability pavement markings across Canada.",
+};
 
 export default async function AboutPage() {
   const sanityPage = await getSanityPageContent("about").catch(() => null);
@@ -53,6 +60,17 @@ export default async function AboutPage() {
     subheading: sanityPage?.aboutHero?.subheading ?? "For over thirty years, HUB Surface Systems — a proudly Canadian company, coast to coast — has been connecting communities with pavement technologies that do more than carry traffic. They carry identity.",
   };
   const missionQuote = sanityPage?.aboutMission ?? "Every surface tells a story. We give communities the language to write it.";
+
+  const storyParagraphs = sanityPage?.aboutStory?.length ? sanityPage.aboutStory : STORY_FALLBACK;
+  const storyAside      = sanityPage?.aboutStoryAside ?? STORY_ASIDE_FALLBACK;
+  const values          = sanityPage?.aboutValues?.length ? sanityPage.aboutValues : VALUES_FALLBACK;
+  const differentiators = sanityPage?.aboutWhyHub?.length ? sanityPage.aboutWhyHub : DIFFERENTIATORS_FALLBACK;
+  const partnersIntro   = sanityPage?.aboutPartnersIntro ?? PARTNERS_INTRO_FALLBACK;
+  const sanityPartnerDescs = new Map<string, string>(
+    (sanityPage?.aboutPartners ?? []).map((p) => [p.key, p.desc])
+  );
+  const partnerDesc = (key: string): string =>
+    sanityPartnerDescs.get(key) ?? PARTNER_DESC_FALLBACK[key] ?? "";
 
   return (
     <main style={{ background: "#0f1620", minHeight: "100vh" }}>
@@ -137,24 +155,9 @@ export default async function AboutPage() {
             <div>
               <h2 className="text-3xl font-bold mb-6" style={{ color: "#ffffff" }}>Our Story</h2>
               <div className="space-y-4 text-base leading-relaxed" style={{ color: "#e0e0e0" }}>
-                <p>
-                  HUB Surface Systems was founded on a simple belief: streets don&apos;t have to be grey.
-                  For decades, Canadian cities treated pavement as pure utility — functional, forgettable,
-                  interchangeable. We saw an opportunity to change that, starting with StreetPrint
-                  decorative stamped asphalt in the mid-1990s.
-                </p>
-                <p>
-                  Over thirty years, we grew our portfolio to address every surface challenge a Canadian
-                  municipality might face — from high-traffic arterial markings in York Region to
-                  decorative community crosswalks at UBC to Indigenous art installations on BC ferries.
-                  Every city, every application, every climate.
-                </p>
-                <p>
-                  Today, HUB operates from two regional offices — East in Milton, Ontario, and West in
-                  Ladysmith, British Columbia — backed by a network of certified applicators trained and
-                  authorized by HUB to install each system to spec. That credentialed installer program
-                  is what turns a quality product into a quality outcome.
-                </p>
+                {storyParagraphs.map((para, i) => (
+                  <p key={i}>{para}</p>
+                ))}
               </div>
             </div>
             <div>
@@ -179,10 +182,7 @@ export default async function AboutPage() {
                 — HUB Surface Systems
               </p>
               <p className="text-base leading-relaxed" style={{ color: "#e0e0e0" }}>
-                York Region. City of Toronto. City of Vancouver. UBC. The City of Sechelt.
-                When you walk through a Canadian city and feel something — when a crosswalk
-                catches your eye, when a plaza feels like it belongs — there's a chance we were
-                there. That's what thirty years looks like on the ground.
+                {storyAside}
               </p>
             </div>
           </div>
@@ -257,14 +257,12 @@ export default async function AboutPage() {
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "#f97316" }}>Manufacturer Partners</p>
           <h2 className="text-3xl font-bold mb-6" style={{ color: "#ffffff" }}>Backed by Industry Leaders</h2>
           <p className="text-base leading-relaxed max-w-2xl mb-8" style={{ color: "#8b8b8b" }}>
-            HUB is an authorized distributor and applicator partner for the manufacturers behind
-            our core product systems — giving clients access to the broadest decorative pavement
-            portfolio in Canada, with direct manufacturer technical support and specification backup.
+            {partnersIntro}
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
-              { name: "GAF", sub: "", logo: "/images/partners/gaf-logo.png", logoW: 80, logoH: 40, products: ["StreetBond", "StreetBondSR", "DuraShield", "MMAX"], desc: "GAF is the manufacturer behind HUB's coloured pavement coating systems — StreetBond, StreetBondSR (solar reflective), DuraShield, and MMAX. Their coatings technology has been the foundation of thousands of decorative surface installations across Canada.", accent: "#E05C1A" },
-              { name: "Ennis-Flint", sub: "A PPG Company", logo: "/images/partners/ppg-logo.svg", logoW: 80, logoH: 40, products: ["TrafficPatterns", "TrafficPatternsXD", "PreMark", "AirMark", "DuraTherm", "DecoMark"], desc: "Ennis-Flint (a PPG company) is the manufacturer behind HUB's full thermoplastics range — including TrafficPatterns, TrafficPatternsXD, PreMark, AirMark, DuraTherm, and DecoMark. Their preformed thermoplastic systems are the gold standard for high-durability pavement markings across Canada.", accent: "#0057A8" },
+              { name: "GAF",         key: "gaf",         sub: "",                logo: "/images/partners/gaf-logo.png", logoW: 80, logoH: 40, products: ["StreetBond", "StreetBondSR", "DuraShield", "MMAX"],                                                  desc: partnerDesc("gaf"),         accent: "#E05C1A" },
+              { name: "Ennis-Flint", key: "ennis-flint", sub: "A PPG Company",   logo: "/images/partners/ppg-logo.svg", logoW: 80, logoH: 40, products: ["TrafficPatterns", "TrafficPatternsXD", "PreMark", "AirMark", "DuraTherm", "DecoMark"],          desc: partnerDesc("ennis-flint"), accent: "#0057A8" },
             ].map((partner) => (
               <div key={partner.name} className="rounded-xl relative overflow-hidden" style={{ background: "#1a1e28", border: "1px solid rgba(255,255,255,0.07)" }}>
                 <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: partner.accent }} />

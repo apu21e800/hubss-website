@@ -157,6 +157,75 @@ export default defineType({
       description: 'The pull-quote displayed in the Our Story section — make it memorable (e.g. "Every surface tells a story. We give communities the language to write it.").',
       validation: (r) => r.max(200).warning("Mission quote should be under 200 characters"),
     }),
+    defineField({
+      name: "aboutStory",
+      title: "About — Our Story paragraphs",
+      type: "array",
+      group: "about",
+      description: "The 3-paragraph 'Our Story' body in the left column of the Story section.",
+      of: [{ type: "text", rows: 4 }],
+    }),
+    defineField({
+      name: "aboutStoryAside",
+      title: "About — Story aside paragraph",
+      type: "text",
+      rows: 3,
+      group: "about",
+      description: "The short paragraph below the mission quote (e.g. 'York Region. City of Toronto. City of Vancouver. UBC. ...').",
+    }),
+    defineField({
+      name: "aboutValues",
+      title: "About — Values cards",
+      type: "array",
+      group: "about",
+      description: "The three 'What We Stand For' cards (heading + body).",
+      of: [{
+        type: "object",
+        fields: [
+          defineField({ name: "heading", type: "string", title: "Heading", validation: (r) => r.required() }),
+          defineField({ name: "body", type: "text", title: "Body", rows: 4, validation: (r) => r.required() }),
+        ],
+        preview: { select: { title: "heading", subtitle: "body" } },
+      }],
+    }),
+    defineField({
+      name: "aboutWhyHub",
+      title: "About — Why HUB differentiators",
+      type: "array",
+      group: "about",
+      description: "The 'Why HUB' grid cards (title + description). Six entries by default.",
+      of: [{
+        type: "object",
+        fields: [
+          defineField({ name: "title", type: "string", title: "Title", validation: (r) => r.required() }),
+          defineField({ name: "desc", type: "text", title: "Description", rows: 3, validation: (r) => r.required() }),
+        ],
+        preview: { select: { title: "title", subtitle: "desc" } },
+      }],
+    }),
+    defineField({
+      name: "aboutPartnersIntro",
+      title: "About — Manufacturer Partners intro",
+      type: "text",
+      rows: 4,
+      group: "about",
+      description: "The intro paragraph below the 'Backed by Industry Leaders' heading.",
+    }),
+    defineField({
+      name: "aboutPartners",
+      title: "About — Manufacturer Partner descriptions",
+      type: "array",
+      group: "about",
+      description: "Per-partner description text. Keep partner keys ('gaf', 'ennis-flint') stable — the matching logo/products array stays in code.",
+      of: [{
+        type: "object",
+        fields: [
+          defineField({ name: "key", type: "string", title: "Partner key (e.g. gaf, ennis-flint)", validation: (r) => r.required() }),
+          defineField({ name: "desc", type: "text", title: "Description", rows: 4, validation: (r) => r.required() }),
+        ],
+        preview: { select: { title: "key", subtitle: "desc" } },
+      }],
+    }),
 
     // ── Contact page fields ─────────────────────────────────────────────────
 
@@ -250,6 +319,68 @@ export default defineType({
           description: 'Text on the form submit button (e.g. "Claim Your Free Lunch & Learn →").',
         }),
         richImageField("mascotImage", "Mascot / hero image (optional)"),
+      ],
+    }),
+    defineField({
+      name: "lunchLearnWhatYouGet",
+      title: "Lunch & Learn — 'What You Walk Away With' cards",
+      type: "array",
+      group: "lunchLearn",
+      description: "Three numbered cards in the 'What You Walk Away With' section.",
+      of: [{
+        type: "object",
+        fields: [
+          defineField({ name: "num", type: "string", title: "Number (e.g. 01)", validation: (r) => r.required() }),
+          defineField({ name: "title", type: "string", title: "Card title", validation: (r) => r.required() }),
+          defineField({ name: "desc", type: "text", title: "Description", rows: 3, validation: (r) => r.required() }),
+        ],
+        preview: { select: { title: "title", subtitle: "desc" } },
+      }],
+    }),
+    defineField({
+      name: "lunchLearnPersonas",
+      title: "Lunch & Learn — Persona cards",
+      type: "array",
+      group: "lunchLearn",
+      description: "The 'Perfect For' / 'Who It's Built For' audience cards (title + desc + badge).",
+      of: [{
+        type: "object",
+        fields: [
+          defineField({ name: "title", type: "string", title: "Audience title", validation: (r) => r.required() }),
+          defineField({ name: "desc", type: "text", title: "Description", rows: 3, validation: (r) => r.required() }),
+          defineField({ name: "badge", type: "string", title: "Badge text", validation: (r) => r.required() }),
+        ],
+        preview: { select: { title: "title", subtitle: "badge" } },
+      }],
+    }),
+    defineField({
+      name: "lunchLearnFaqs",
+      title: "Lunch & Learn — FAQ accordion items",
+      type: "array",
+      group: "lunchLearn",
+      description: "Frequently-asked questions shown in the FAQ accordion.",
+      of: [{
+        type: "object",
+        fields: [
+          defineField({ name: "q", type: "string", title: "Question", validation: (r) => r.required() }),
+          defineField({ name: "a", type: "text", title: "Answer", rows: 4, validation: (r) => r.required() }),
+        ],
+        preview: { select: { title: "q", subtitle: "a" } },
+      }],
+    }),
+    defineField({
+      name: "lunchLearnSectionHeadings",
+      title: "Lunch & Learn — Section eyebrows & headings",
+      type: "object",
+      group: "lunchLearn",
+      description: "Short marketing eyebrows + headings for the three mid-page sections.",
+      fields: [
+        defineField({ name: "whatYouGetEyebrow", type: "string", title: "What You Get — eyebrow" }),
+        defineField({ name: "whatYouGetHeading", type: "string", title: "What You Get — heading" }),
+        defineField({ name: "personasEyebrow",   type: "string", title: "Personas — eyebrow" }),
+        defineField({ name: "personasHeading",   type: "string", title: "Personas — heading" }),
+        defineField({ name: "faqEyebrow",        type: "string", title: "FAQ — eyebrow" }),
+        defineField({ name: "faqHeading",        type: "string", title: "FAQ — heading" }),
       ],
     }),
 

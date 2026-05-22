@@ -7,7 +7,6 @@ import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
 import DocumentDownloads from "@/components/sections/DocumentDownloads";
 import GalleryGrid, { type GalleryImage } from "@/components/ui/GalleryGrid";
-import ComparisonTable from "@/components/sections/ComparisonTable";
 import JsonLd from "@/components/ui/JsonLd";
 import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
@@ -39,23 +38,19 @@ export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
 
   // Try Sanity first; fall back to static data if not populated yet.
-  // This ensures the site works immediately after deploy, before migration is run.
   const sanityProduct = await getProductBySlug(slug);
 
   const product = (() => {
     const staticProduct = products.find((p) => p.slug === slug);
     if (!staticProduct) return null;
 
-    // If Sanity has this product, merge in any Sanity-managed overrides.
-    // Currently we only use Sanity data when it has a name (i.e. it was migrated).
     if (sanityProduct?.name) {
       return {
         ...staticProduct,
-        // Allow Sanity to override shortDesc and description when present
         shortDesc: sanityProduct.shortDesc ?? staticProduct.shortDesc,
         description:
           sanityProduct.heroImageUrl
-            ? staticProduct.description // keep static description for now — rich text migration is follow-up
+            ? staticProduct.description
             : staticProduct.description,
       };
     }
@@ -65,12 +60,10 @@ export default async function ProductPage({ params }: Props) {
 
   if (!product || product.comingSoon) notFound();
 
-  // Gallery — use product.gallery if available, otherwise fall back to featured image
   const productGallery = product.gallery ?? [];
   const featuredImg = productImages[product.slug] ? resolveImage(productImages[product.slug]) : null;
   const galleryLabels = ["Overview", "Installation", "Detail", "Completed", "In Service", "Close-up"];
 
-  // Prefer product.gallery, fall back to featured image or product imageUrl
   const gallerySources = productGallery.length > 0 ? productGallery : (featuredImg ? [featuredImg.src] : [product.imageUrl]);
   const gallery: GalleryImage[] = gallerySources.map((src, idx) => ({
     src,
@@ -110,20 +103,16 @@ export default async function ProductPage({ params }: Props) {
 
       {/* Hero banner */}
       <div data-hero className="relative overflow-hidden" style={{ height: "clamp(360px, 52vh, 560px)" }}>
-        {/* TODO: doug-review-image — Doug flagged the TPXD hero/overview ("This is TrafficPatterns, not TPXD — no stamping"). Confirm correct TPXD image and replace product.imageUrl for traffic-patterns-xd in lib/products.ts. */}
         <Image
           src={product.imageUrl}
           alt={product.name}
           fill
-          // Subject-bias crop — pavement surface is the subject, sky/context is background.
           className="object-cover"
           style={{ objectPosition: product.heroPosition ?? "center 62%" }}
           priority
           sizes="100vw"
         />
-        {/* Hero overlays lightened per Doug review (TPXD specifically — applied product-wide for consistency) */}
         <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(8,13,22,0.4) 0%, rgba(8,13,22,0.5) 55%, rgba(8,13,22,0.82) 100%)" }} />
-        {/* Left text scrim for legibility */}
         <div className="absolute inset-0" style={{ background: "linear-gradient(92deg, rgba(8,13,22,0.38) 0%, rgba(8,13,22,0.14) 45%, transparent 65%)" }} />
         <div className="absolute inset-0 flex items-end">
           <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-14">
@@ -164,7 +153,6 @@ export default async function ProductPage({ params }: Props) {
             boxShadow: "0 1px 24px rgba(249,115,22,0.08)",
           }}
         >
-          {/* Left accent bar */}
           <div className="absolute left-0 top-0 bottom-0 w-1 rounded-l-xl" style={{ background: "linear-gradient(180deg, #F97316, #EAB308)" }} />
           <div className="relative pl-3">
             <p className="font-bold text-lg leading-snug" style={{ color: "var(--text-primary)" }}>
@@ -180,7 +168,6 @@ export default async function ProductPage({ params }: Props) {
               style={{ background: "transparent", color: "var(--text-secondary)", border: "1px solid rgba(255,255,255,0.14)", minHeight: "44px" }}>
               Book a Lunch &amp; Learn
             </Link>
-            {/* Product page secondary CTA: "See the Systems" is wrong here (already on one) — link to gallery instead. */}
             <Link href="/gallery"
               className="px-5 rounded-lg text-sm font-bold transition-all inline-flex items-center"
               style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff", boxShadow: "0 4px 16px rgba(249,115,22,0.32)", minHeight: "44px" }}>
@@ -192,31 +179,23 @@ export default async function ProductPage({ params }: Props) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
           {/* Left: description + gallery */}
           <div className="lg:col-span-2">
-
-            {/* brandLogo rendering removed — logos held in products.ts data for future use
-                but not displayed. Product name in hero H1 + photography tells the story. */}
-
             <h2 className="text-2xl sm:text-3xl font-bold mb-5" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>About {product.name}</h2>
             <p className="mb-12 leading-[1.85]" style={{ color: "var(--text-body)", fontSize: "clamp(1rem, 1.8vw, 1.075rem)", maxWidth: "65ch" }}>
               {product.description}
             </p>
 
-            {/* Gallery */}
             <h2 className="text-2xl font-bold mb-6" style={{ color: "var(--text-primary)" }}>Gallery</h2>
-            {/* TODO: doug-review-image — Doug flagged /products/premark detail image #2 (premark-03.jpg) as "Not PreMark". Audit each product's gallery[] in lib/products.ts and remove or replace incorrect images. */}
             <GalleryGrid images={gallery} />
 
             <DocumentDownloads slug={product.slug} />
           </div>
 
-          {/* Right: specs + CTA */}
+          {/* Right: specs */}
           <div>
-            {/* brandLogo sidebar render removed */}
             {false && product.brandLogo && (
               <div className="hidden" />
             )}
             <div className="rounded-xl p-8 mb-8 sticky top-24 relative overflow-hidden" style={{ background: "#111111", border: "1px solid rgba(255,255,255,0.08)" }}>
-              {/* Orange top accent */}
               <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
               <h3 className="font-bold text-lg mb-6" style={{ color: "#F5F0EB" }}>Product Features</h3>
               <div className="space-y-4">
@@ -229,17 +208,9 @@ export default async function ProductPage({ params }: Props) {
                   </div>
                 ))}
               </div>
-              {/* CTAs removed per Doug review — quote and L&L now live in the sticky bottom bar. */}
             </div>
           </div>
         </div>
-
-        {/* Paint Fades comparison — StreetBond + TrafficPatterns only */}
-        {(slug === "streetbond" || slug === "traffic-patterns") && (
-          <div className="mt-16">
-            <ComparisonTable />
-          </div>
-        )}
 
         {/* StreetBondSR LEED callout */}
         {slug === "streetbondsr" && (
@@ -248,7 +219,6 @@ export default async function ProductPage({ params }: Props) {
             style={{ border: "1px solid rgba(134,197,82,0.25)", background: "rgba(134,197,82,0.04)" }}
           >
             <div className="grid grid-cols-1 lg:grid-cols-2">
-              {/* Left — copy */}
               <div className="p-10 lg:p-12 flex flex-col justify-center">
                 <div className="flex items-center gap-4 mb-6">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -300,29 +270,14 @@ export default async function ProductPage({ params }: Props) {
                 </div>
               </div>
 
-              {/* Right — stat pillars. borderTop on mobile (stacked), borderLeft on lg+ (side-by-side). */}
-              <div
-                className="p-10 lg:p-12 flex flex-col justify-center gap-5 border-t border-t-[rgba(134,197,82,0.15)] lg:border-t-0 lg:border-l lg:border-l-[rgba(134,197,82,0.15)]"
-              >
+              <div className="p-10 lg:p-12 flex flex-col justify-center gap-5 border-t border-t-[rgba(134,197,82,0.15)] lg:border-t-0 lg:border-l lg:border-l-[rgba(134,197,82,0.15)]">
                 <p className="text-xs font-bold tracking-[0.2em] uppercase mb-2" style={{ color: "rgba(134,197,82,0.6)" }}>
                   Why It Matters
                 </p>
                 {[
-                  {
-                    icon: "🌡️",
-                    heading: "Cooler Surfaces",
-                    body: "Dark asphalt can reach 60–70°C in direct sun. High-SRI coatings reflect solar energy off the surface, reducing pavement temperature and the heat radiated back to pedestrians and cyclists.",
-                  },
-                  {
-                    icon: "🏙️",
-                    heading: "Urban Heat Island Mitigation",
-                    body: "Cities run 2–4°C warmer than surrounding rural areas due to heat-absorbing surfaces. High-SRI pavement coatings are one of the established mitigation strategies in municipal climate action plans.",
-                  },
-                  {
-                    icon: "⚡",
-                    heading: "Building Energy Performance",
-                    body: "Cooler adjacent pavement reduces radiant heat loads on nearby buildings, contributing to lower cooling energy consumption — recognized as a co-benefit in LEED whole-building assessments.",
-                  },
+                  { icon: "🌡️", heading: "Cooler Surfaces", body: "Dark asphalt can reach 60–70°C in direct sun. High-SRI coatings reflect solar energy off the surface, reducing pavement temperature and the heat radiated back to pedestrians and cyclists." },
+                  { icon: "🏙️", heading: "Urban Heat Island Mitigation", body: "Cities run 2–4°C warmer than surrounding rural areas due to heat-absorbing surfaces. High-SRI pavement coatings are one of the established mitigation strategies in municipal climate action plans." },
+                  { icon: "⚡", heading: "Building Energy Performance", body: "Cooler adjacent pavement reduces radiant heat loads on nearby buildings, contributing to lower cooling energy consumption — recognized as a co-benefit in LEED whole-building assessments." },
                 ].map(({ icon, heading, body }) => (
                   <div key={heading} className="flex gap-4">
                     <span style={{ fontSize: 22, lineHeight: 1, flexShrink: 0, marginTop: 2 }}>{icon}</span>
@@ -342,10 +297,7 @@ export default async function ProductPage({ params }: Props) {
           <div className="mt-16 pt-16" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
             <div className="flex items-end justify-between mb-8">
               <div>
-                <p
-                  className="text-xs font-bold tracking-[0.2em] uppercase mb-3"
-                  style={{ color: "#f97316" }}
-                >
+                <p className="text-xs font-bold tracking-[0.2em] uppercase mb-3" style={{ color: "#f97316" }}>
                   Where It&apos;s Used
                 </p>
                 <h2 className="text-2xl font-bold" style={{ color: "var(--text-primary)" }}>
@@ -372,13 +324,7 @@ export default async function ProductPage({ params }: Props) {
                   className="group relative overflow-hidden rounded-lg flex flex-col"
                   style={{ background: "var(--bg-card)", border: "1px solid var(--border-faint)" }}
                 >
-                  {/* Thumbnail */}
                   <div className="relative overflow-hidden" style={{ height: 130 }}>
-                    {/* TODO: doug-review-image — Doug noted certain related-app card images don't match the parent product:
-                          • /products/traffic-patterns + "crosswalks" card → shown image is TPXD work, swap to a TP install
-                          • /products/traffic-patterns-xd + "bike-lanes" card → swap to a non-bike-lane install (Doug suggested Winners entrance)
-                          • /products/decomark + "crosswalks" card → was TPXD work; crosswalks dropped from DM relatedApplications, but verify image source
-                        Image source is application.imageUrl shared site-wide; a per-product override would require a schema change. */}
                     <Image
                       src={app.imageUrl}
                       alt={app.name}
@@ -391,28 +337,17 @@ export default async function ProductPage({ params }: Props) {
                       className="absolute inset-0 transition-opacity duration-300 opacity-50 group-hover:opacity-70"
                       style={{ background: "rgba(0,0,0,0.4)" }}
                     />
-                    {/* Name badge overlaid */}
                     <div className="absolute inset-0 flex items-end p-3">
                       <div>
-                        <div
-                          className="w-5 h-px mb-2 transition-all duration-200 group-hover:w-8"
-                          style={{ background: "#f97316" }}
-                        />
-                        <p
-                          className="font-bold text-sm leading-tight"
-                          style={{ color: "var(--text-primary)" }}
-                        >
+                        <div className="w-5 h-px mb-2 transition-all duration-200 group-hover:w-8" style={{ background: "#f97316" }} />
+                        <p className="font-bold text-sm leading-tight" style={{ color: "var(--text-primary)" }}>
                           {app.name}
                         </p>
                       </div>
                     </div>
                   </div>
-                  {/* Desc */}
                   <div className="px-4 py-3 flex-1 flex flex-col">
-                    <p
-                      className="text-xs leading-relaxed flex-1"
-                      style={{ color: "var(--text-muted)" }}
-                    >
+                    <p className="text-xs leading-relaxed flex-1" style={{ color: "var(--text-muted)" }}>
                       {app.shortDesc.slice(0, 80)}{app.shortDesc.length > 80 ? "…" : ""}
                     </p>
                     <span
@@ -430,8 +365,8 @@ export default async function ProductPage({ params }: Props) {
             </div>
           </div>
         )}
-      </div>{/* /max-w-7xl content */}
-      </div>{/* /texture outer wrapper */}
+      </div>
+      </div>
       <LunchLearn />
       <Footer />
     </main>

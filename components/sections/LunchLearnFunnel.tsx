@@ -37,7 +37,7 @@ const WHAT_YOU_GET = [
   {
     num: "02",
     title: "The Lifecycle Cost Math",
-    desc: "Paint every 18 months vs. thermoplastic that outlasts it 6:1. We show you the numbers side by side. The math usually surprises people.",
+    desc: "Lifecycle cost math, side by side. How HUB systems deliver years of high-performance service versus repeated seasonal interventions — the numbers usually surprise people.",
   },
   {
     num: "03",
@@ -150,18 +150,15 @@ export default function LunchLearnFunnel({
         className="relative overflow-hidden"
         style={{ background: "#070b12", minHeight: "80vh" }}
       >
-        {/* Atmospheric glows — more dramatic */}
         <div className="absolute inset-0 pointer-events-none" style={{
           background: "radial-gradient(ellipse at 12% 65%, rgba(249,115,22,0.18) 0%, transparent 55%)",
         }} />
         <div className="absolute inset-0 pointer-events-none" style={{
           background: "radial-gradient(ellipse at 80% 20%, rgba(234,179,8,0.09) 0%, transparent 60%)",
         }} />
-        {/* Right-side texture accent */}
         <div className="absolute inset-0 pointer-events-none hidden lg:block" style={{
           background: "radial-gradient(ellipse at 90% 70%, rgba(249,115,22,0.08) 0%, transparent 50%)",
         }} />
-        {/* Top accent line */}
         <div className="absolute top-0 inset-x-0 h-px" style={{
           background: "linear-gradient(90deg, transparent 0%, rgba(249,115,22,0.5) 50%, transparent 100%)",
         }} />
@@ -169,7 +166,6 @@ export default function LunchLearnFunnel({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-0">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:items-end" style={{ minHeight: "calc(80vh - 7rem)" }}>
 
-            {/* Left: Text + trust + CTAs */}
             <motion.div
               className="pb-12 lg:pb-20"
               initial={{ opacity: 0, y: 20 }}
@@ -206,7 +202,6 @@ export default function LunchLearnFunnel({
                 {subheading}
               </p>
 
-              {/* Trust trio */}
               <div className="flex flex-wrap gap-5 mb-10">
                 {["30+ Years in Canada", "500+ Municipalities", "Free CE Credits"].map((t) => (
                   <div key={t} className="flex items-center gap-2">
@@ -216,7 +211,6 @@ export default function LunchLearnFunnel({
                 ))}
               </div>
 
-              {/* CTAs */}
               <div className="flex flex-col gap-3">
                 <a
                   href="#book"
@@ -233,7 +227,6 @@ export default function LunchLearnFunnel({
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </a>
-                {/* Phone numbers */}
                 <div className="flex items-center gap-4 flex-wrap">
                   <a href="tel:+14165409287" className="text-sm font-semibold transition-colors hover:text-orange-400" style={{ color: "rgba(255,255,255,0.45)" }}>
                     East: 416-540-9287
@@ -246,7 +239,6 @@ export default function LunchLearnFunnel({
               </div>
             </motion.div>
 
-            {/* Right: Moose — paws bottom-aligned with phone numbers, 10% bigger */}
             <motion.div
               className="relative flex items-end justify-center lg:justify-end pb-12 lg:pb-20"
               initial={{ opacity: 0, y: 30 }}
@@ -274,7 +266,6 @@ export default function LunchLearnFunnel({
           </div>
         </div>
 
-        {/* Bottom fade */}
         <div className="absolute bottom-0 inset-x-0 h-16 pointer-events-none" style={{
           background: "linear-gradient(to bottom, transparent, var(--bg-primary))",
         }} />
@@ -362,7 +353,6 @@ export default function LunchLearnFunnel({
                   className="absolute top-0 left-0 right-0 h-0.5 rounded-t-2xl"
                   style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }}
                 />
-                {/* Large number as visual anchor */}
                 <span
                   className="font-black leading-none select-none"
                   style={{
@@ -464,115 +454,42 @@ export default function LunchLearnFunnel({
         </div>
       </div>
 
-      {/* ── PULL QUOTE — PENDING APPROVAL (SITE_FLAGS.showLeoQuote) ─────
-          Vernon needs to OK this before it goes live. Toggle on via
-          lib/site-flags.ts → showLeoQuote: true once approved. */}
-      {false && <section
-        className="py-20 lg:py-28 relative overflow-hidden"
-        style={{ background: "#070b12" }}
-      >
-        <div className="absolute inset-0 pointer-events-none" style={{
-          background: "radial-gradient(ellipse at 50% 50%, rgba(249,115,22,0.06) 0%, transparent 65%)",
-        }} />
+      {false && <section className="py-20 lg:py-28 relative overflow-hidden" style={{ background: "#070b12" }}>
+        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 50% 50%, rgba(249,115,22,0.06) 0%, transparent 65%)" }} />
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          {/* Opening quote mark */}
-          <span
-            className="block leading-none select-none mb-2"
-            style={{
-              fontSize: "6rem",
-              lineHeight: 0.8,
-              color: "#F97316",
-              fontFamily: "Georgia, serif",
-              opacity: 0.7,
-            }}
-          >
-            &ldquo;
-          </span>
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="font-semibold leading-relaxed mb-8"
-            style={{
-              fontSize: "clamp(1.1rem, 2vw, 1.4rem)",
-              color: "rgba(255,255,255,0.88)",
-              letterSpacing: "-0.01em",
-            }}
-          >
-            TrafficPatternsXD has proven to be very stable in our environment
-            and has a multitude of applications across various sectors such as
-            landscape, transportation, trails, and parks.
+          <span className="block leading-none select-none mb-2" style={{ fontSize: "6rem", lineHeight: 0.8, color: "#F97316", fontFamily: "Georgia, serif", opacity: 0.7 }}>&ldquo;</span>
+          <motion.p initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="font-semibold leading-relaxed mb-8" style={{ fontSize: "clamp(1.1rem, 2vw, 1.4rem)", color: "rgba(255,255,255,0.88)", letterSpacing: "-0.01em" }}>
+            TrafficPatternsXD has proven to be very stable in our environment and has a multitude of applications across various sectors such as landscape, transportation, trails, and parks.
           </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: 0.15 }}
-            className="flex flex-col items-center gap-1"
-          >
+          <motion.div initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: 0.15 }} className="flex flex-col items-center gap-1">
             <span className="font-bold text-sm" style={{ color: "#F5F0EB" }}>Leo Guddemi</span>
-            <span className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>
-              Senior Associate, Landscape Architecture Team Lead &mdash; Stantec
-            </span>
+            <span className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>Senior Associate, Landscape Architecture Team Lead &mdash; Stantec</span>
           </motion.div>
         </div>
       </section>}
-      {/* END PULL QUOTE (pending approval) */}
 
       {/* ── FAQ ──────────────────────────────────────────────────────── */}
       <section className="py-20 lg:py-24" style={{ background: "#0a0f1a" }}>
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-12 text-center">
-            <p className="text-xs font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#f97316" }}>
-              Common Questions
-            </p>
-            <h2
-              className="font-black"
-              style={{ fontSize: "clamp(1.9rem, 3.5vw, 2.9rem)", lineHeight: 1.05, letterSpacing: "-0.03em", color: "#F5F0EB" }}
-            >
+            <p className="text-xs font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#f97316" }}>Common Questions</p>
+            <h2 className="font-black" style={{ fontSize: "clamp(1.9rem, 3.5vw, 2.9rem)", lineHeight: 1.05, letterSpacing: "-0.03em", color: "#F5F0EB" }}>
               Everything You Need to Know
             </h2>
           </div>
-
           <div className="space-y-3">
             {FAQS.map((faq, i) => (
-              <div
-                key={faq.q}
-                className="rounded-xl overflow-hidden"
-                style={{ border: "1px solid rgba(255,255,255,0.08)", background: openFaq === i ? "#111827" : "rgba(255,255,255,0.02)" }}
-              >
-                <button
-                  className="w-full text-left flex items-center justify-between gap-4 px-6 py-5"
-                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                >
+              <div key={faq.q} className="rounded-xl overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.08)", background: openFaq === i ? "#111827" : "rgba(255,255,255,0.02)" }}>
+                <button className="w-full text-left flex items-center justify-between gap-4 px-6 py-5" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
                   <span className="font-semibold text-base" style={{ color: "#F5F0EB" }}>{faq.q}</span>
-                  <span
-                    className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-transform duration-200"
-                    style={{
-                      background: openFaq === i ? "rgba(249,115,22,0.2)" : "rgba(255,255,255,0.06)",
-                      color: openFaq === i ? "#f97316" : "#9CA3AF",
-                      transform: openFaq === i ? "rotate(45deg)" : "rotate(0deg)",
-                    }}
-                  >
-                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 5v14M5 12h14" />
-                    </svg>
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-transform duration-200" style={{ background: openFaq === i ? "rgba(249,115,22,0.2)" : "rgba(255,255,255,0.06)", color: openFaq === i ? "#f97316" : "#9CA3AF", transform: openFaq === i ? "rotate(45deg)" : "rotate(0deg)" }}>
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 5v14M5 12h14" /></svg>
                   </span>
                 </button>
                 <AnimatePresence initial={false}>
                   {openFaq === i && (
-                    <motion.div
-                      key="answer"
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.22 }}
-                      style={{ overflow: "hidden" }}
-                    >
-                      <p className="px-6 pb-6 text-sm leading-relaxed" style={{ color: "#9CA3AF" }}>
-                        {faq.a}
-                      </p>
+                    <motion.div key="answer" initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.22 }} style={{ overflow: "hidden" }}>
+                      <p className="px-6 pb-6 text-sm leading-relaxed" style={{ color: "#9CA3AF" }}>{faq.a}</p>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -583,86 +500,35 @@ export default function LunchLearnFunnel({
       </section>
 
       {/* ── FORM ──────────────────────────────────────────────────────────── */}
-      <section
-        id="book"
-        className="py-20 lg:py-28 relative overflow-hidden"
-        style={{ background: "#070b12" }}
-      >
-        {/* Background glow */}
-        <div className="absolute inset-0 pointer-events-none" style={{
-          background: "radial-gradient(ellipse at 50% 50%, rgba(249,115,22,0.09) 0%, transparent 65%)",
-        }} />
-        <div className="absolute top-0 inset-x-0 h-px" style={{
-          background: "linear-gradient(90deg, transparent 0%, rgba(249,115,22,0.4) 50%, transparent 100%)",
-        }} />
+      <section id="book" className="py-20 lg:py-28 relative overflow-hidden" style={{ background: "#070b12" }}>
+        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 50% 50%, rgba(249,115,22,0.09) 0%, transparent 65%)" }} />
+        <div className="absolute top-0 inset-x-0 h-px" style={{ background: "linear-gradient(90deg, transparent 0%, rgba(249,115,22,0.4) 50%, transparent 100%)" }} />
 
         <div className="relative z-10 max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
-            <p className="text-xs font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#f97316" }}>
-              Book Your Session
-            </p>
-            <h2
-              className="font-black mb-4"
-              style={{
-                fontSize: "clamp(2rem, 4vw, 3.25rem)",
-                lineHeight: 1.0,
-                letterSpacing: "-0.035em",
-                background: "linear-gradient(92deg, #F97316 0%, #EAB308 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
-            >
+            <p className="text-xs font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#f97316" }}>Book Your Session</p>
+            <h2 className="font-black mb-4" style={{ fontSize: "clamp(2rem, 4vw, 3.25rem)", lineHeight: 1.0, letterSpacing: "-0.035em", background: "linear-gradient(92deg, #F97316 0%, #EAB308 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
               {formHeading}
             </h2>
-            <p className="text-base" style={{ color: "#9CA3AF" }}>
-              {formSubheading}
-            </p>
+            <p className="text-base" style={{ color: "#9CA3AF" }}>{formSubheading}</p>
           </div>
 
-          {/* Trust strip */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-8">
-            {[
-              "HUB responds within 24 hours",
-              "No commitment required",
-              "In-person, virtual, or hybrid",
-            ].map((item) => (
+            {["HUB responds within 24 hours", "No commitment required", "In-person, virtual, or hybrid"].map((item) => (
               <div key={item} className="flex items-center gap-2">
-                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: "#f97316" }}>
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                </svg>
+                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: "#f97316" }}><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
                 <span className="text-sm" style={{ color: "rgba(255,255,255,0.55)" }}>{item}</span>
               </div>
             ))}
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.45 }}
-            className="relative rounded-2xl p-8 sm:p-10"
-            style={{
-              background: "#0f1520",
-              border: "1px solid rgba(249,115,22,0.2)",
-              boxShadow: "0 0 0 1px rgba(249,115,22,0.06) inset, 0 20px 60px rgba(0,0,0,0.3)",
-            }}
-          >
-            <div className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl" style={{
-              background: "linear-gradient(90deg, #F97316, #EAB308)",
-            }} />
+          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.45 }} className="relative rounded-2xl p-8 sm:p-10" style={{ background: "#0f1520", border: "1px solid rgba(249,115,22,0.2)", boxShadow: "0 0 0 1px rgba(249,115,22,0.06) inset, 0 20px 60px rgba(0,0,0,0.3)" }}>
+            <div className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
 
             {submitState.status === "success" ? (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.96 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="text-center py-8"
-              >
-                <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-5"
-                  style={{ background: "rgba(34,197,94,0.12)", border: "1px solid rgba(34,197,94,0.3)" }}>
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: "#86efac" }}>
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                  </svg>
+              <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-8">
+                <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-5" style={{ background: "rgba(34,197,94,0.12)", border: "1px solid rgba(34,197,94,0.3)" }}>
+                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: "#86efac" }}><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
                 </div>
                 <h3 className="font-bold text-xl mb-3" style={{ color: "#F5F0EB" }}>You&apos;re on the list.</h3>
                 <p className="text-sm leading-relaxed" style={{ color: "#86efac" }}>{submitState.message}</p>
@@ -676,61 +542,16 @@ export default function LunchLearnFunnel({
                     { name: "company", placeholder: "Company or organization", type: "text", required: false },
                     { name: "city", placeholder: "City", type: "text", required: false },
                   ].map((field) => (
-                    <input
-                      key={field.name}
-                      type={field.type}
-                      name={field.name}
-                      placeholder={field.placeholder}
-                      value={formData[field.name as keyof FormState]}
-                      onChange={handleChange}
-                      required={field.required}
-                      className="px-4 py-3.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-orange-500/50 transition-all"
-                      style={{
-                        background: "rgba(255,255,255,0.06)",
-                        border: "1px solid rgba(255,255,255,0.1)",
-                        color: "#F5F0EB",
-                      }}
-                    />
+                    <input key={field.name} type={field.type} name={field.name} placeholder={field.placeholder} value={formData[field.name as keyof FormState]} onChange={handleChange} required={field.required} className="px-4 py-3.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-orange-500/50 transition-all" style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: "#F5F0EB" }} />
                   ))}
                 </div>
-                <input
-                  type="tel"
-                  name="phone"
-                  placeholder="Phone number"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-orange-500/50 transition-all"
-                  style={{
-                    background: "rgba(255,255,255,0.06)",
-                    border: "1px solid rgba(255,255,255,0.1)",
-                    color: "#F5F0EB",
-                  }}
-                />
-
-                <button
-                  type="submit"
-                  disabled={submitState.status === "loading"}
-                  className="w-full py-5 rounded-xl font-bold text-base transition-all disabled:opacity-50"
-                  style={{
-                    background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
-                    color: "#fff",
-                    boxShadow: "0 6px 24px rgba(249,115,22,0.38)",
-                  }}
-                >
+                <input type="tel" name="phone" placeholder="Phone number" value={formData.phone} onChange={handleChange} className="w-full px-4 py-3.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-orange-500/50 transition-all" style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: "#F5F0EB" }} />
+                <button type="submit" disabled={submitState.status === "loading"} className="w-full py-5 rounded-xl font-bold text-base transition-all disabled:opacity-50" style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff", boxShadow: "0 6px 24px rgba(249,115,22,0.38)" }}>
                   {submitState.status === "loading" ? "Sending your request…" : submitLabel}
                 </button>
-
-                <p className="text-center text-xs" style={{ color: "rgba(255,255,255,0.28)" }}>
-                  No obligation. No invoice. Lunch included. We&apos;ll reach out within 24 hours.
-                </p>
-
+                <p className="text-center text-xs" style={{ color: "rgba(255,255,255,0.28)" }}>No obligation. No invoice. Lunch included. We&apos;ll reach out within 24 hours.</p>
                 {submitState.status === "error" && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="p-4 rounded-xl text-sm"
-                    style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.25)", color: "#fca5a5" }}
-                  >
+                  <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="p-4 rounded-xl text-sm" style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.25)", color: "#fca5a5" }}>
                     {submitState.message}
                   </motion.div>
                 )}
@@ -738,27 +559,16 @@ export default function LunchLearnFunnel({
             )}
           </motion.div>
 
-          {/* Bottom office info */}
           <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
             {[
               { region: "Eastern Canada", name: "Doug Bain", phone: "416-540-9287", email: "doug.bain@hubss.com" },
               { region: "Western Canada", name: "Cleve Stordy", phone: "604-309-8212", email: "cleve.stordy@hubss.com" },
             ].map((office) => (
-              <div
-                key={office.region}
-                className="rounded-xl p-5 text-center"
-                style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.06)" }}
-              >
-                <p className="text-[10px] font-bold tracking-[0.15em] uppercase mb-2" style={{ color: "#f97316" }}>
-                  {office.region}
-                </p>
+              <div key={office.region} className="rounded-xl p-5 text-center" style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.06)" }}>
+                <p className="text-[10px] font-bold tracking-[0.15em] uppercase mb-2" style={{ color: "#f97316" }}>{office.region}</p>
                 <p className="text-sm font-semibold mb-1" style={{ color: "#F5F0EB" }}>{office.name}</p>
-                <a href={`tel:+1${office.phone.replace(/-/g, "")}`} className="text-xs block mb-0.5 hover:text-orange-400 transition-colors" style={{ color: "#9CA3AF" }}>
-                  {office.phone}
-                </a>
-                <a href={`mailto:${office.email}`} className="text-xs hover:text-orange-400 transition-colors" style={{ color: "#9CA3AF" }}>
-                  {office.email}
-                </a>
+                <a href={`tel:+1${office.phone.replace(/-/g, "")}`} className="text-xs block mb-0.5 hover:text-orange-400 transition-colors" style={{ color: "#9CA3AF" }}>{office.phone}</a>
+                <a href={`mailto:${office.email}`} className="text-xs hover:text-orange-400 transition-colors" style={{ color: "#9CA3AF" }}>{office.email}</a>
               </div>
             ))}
           </div>

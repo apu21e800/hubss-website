@@ -1243,10 +1243,11 @@ export default function Nav() {
               </svg>
             </button>
 
-            {/* Field Notes dropdown trigger */}
-            <button
+            {/* Field Notes — navigates to /blog on click, shows dropdown on hover */}
+            <Link
+              href="/blog"
               onMouseEnter={() => setOpenPanel("fieldnotes")}
-              onClick={() => setOpenPanel(openPanel === "fieldnotes" ? null : "fieldnotes")}
+              onClick={() => setOpenPanel(null)}
               className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[13px] font-medium transition-colors hover:text-orange-400 hover:bg-white/5"
               style={{ color: openPanel === "fieldnotes" ? "#F97316" : "rgba(255,255,255,0.65)" }}
             >
@@ -1255,7 +1256,7 @@ export default function Nav() {
                 style={{ opacity: 0.5, transform: openPanel === "fieldnotes" ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
-            </button>
+            </Link>
 
             {/* Plain links */}
             {PLAIN_LINKS.map((link) => (

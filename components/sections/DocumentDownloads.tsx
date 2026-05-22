@@ -27,13 +27,13 @@ function DocRow({
 
   return (
     <div
-      className="flex items-center gap-3 py-2"
-      style={{ borderBottom: isLast ? "none" : "1px solid #f3f4f6" }}
+      className="flex items-center gap-3 py-2.5"
+      style={{ borderBottom: isLast ? "none" : "1px solid rgba(255,255,255,0.07)" }}
     >
       {/* PDF icon */}
       <span
         className="flex-shrink-0 w-8 h-8 rounded-md flex items-center justify-center"
-        style={{ background: "rgba(249,115,22,0.08)" }}
+        style={{ background: "rgba(249,115,22,0.10)" }}
       >
         <svg className="w-4 h-4" style={{ color: "#F97316" }} fill="currentColor" viewBox="0 0 20 20">
           <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
@@ -41,7 +41,7 @@ function DocRow({
       </span>
 
       {/* Document name */}
-      <span className="flex-1 text-sm font-medium text-gray-800 min-w-0 truncate">
+      <span className="flex-1 text-sm font-medium min-w-0 truncate" style={{ color: "#E5E7EB" }}>
         {labelText}
       </span>
 
@@ -49,21 +49,21 @@ function DocRow({
       {showBadge && (
         <span
           className="flex-shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded border hidden sm:inline"
-          style={{ background: "rgba(249,115,22,0.06)", color: "#F97316", borderColor: "rgba(249,115,22,0.15)" }}
+          style={{ background: "rgba(249,115,22,0.08)", color: "#F97316", borderColor: "rgba(249,115,22,0.18)" }}
         >
           {typeLabel}
         </span>
       )}
 
-      {/* Preview button — CSS hover only (no mouse event handlers that stick on touch) */}
+      {/* Preview button */}
       <button
         onClick={() => onPreview({ href: doc.href, label: labelText, typeLabel })}
         className="flex-shrink-0 hidden sm:flex items-center gap-1.5 text-xs font-semibold px-3 rounded-lg transition-colors"
         style={{
           minHeight: "44px",
-          background: "rgba(249,115,22,0.06)",
+          background: "rgba(249,115,22,0.08)",
           color: "#F97316",
-          border: "1px solid rgba(249,115,22,0.15)",
+          border: "1px solid rgba(249,115,22,0.18)",
         }}
         aria-label={`Preview ${labelText}`}
       >
@@ -74,24 +74,19 @@ function DocRow({
         Preview
       </button>
 
-      {/* Download / Open button.
-          - `download` attr works on desktop Chrome/Firefox.
-          - iOS Safari ignores `download` and opens the PDF in its viewer — correct behavior.
-          - `target="_blank"` ensures it at least opens in a new tab on iOS rather than navigating away.
-          - No onMouseEnter/Leave: touch browsers fire mouseenter on tap but never mouseleave,
-            leaving the button visually stuck. Use CSS :active via Tailwind active: instead. */}
+      {/* Download button */}
       <a
         href={doc.href}
         download
         target="_blank"
         rel="noopener noreferrer"
-        className="flex-shrink-0 flex items-center justify-center rounded-lg transition-colors active:bg-orange-50 hover:text-orange-500 hover:border-orange-200 hover:bg-orange-50/50"
+        className="flex-shrink-0 flex items-center justify-center rounded-lg transition-colors"
         style={{
           minWidth: "44px",
           minHeight: "44px",
-          color: "#9ca3af",
-          background: "rgba(0,0,0,0.03)",
-          border: "1px solid #f3f4f6",
+          color: "rgba(255,255,255,0.4)",
+          background: "rgba(255,255,255,0.05)",
+          border: "1px solid rgba(255,255,255,0.10)",
         }}
         title={`Download ${labelText}`}
         aria-label={`Download ${labelText}`}
@@ -122,7 +117,13 @@ export default function DocumentDownloads({ slug }: { slug: string }) {
       )}
 
       <div className="mt-14 -mx-4 sm:mx-0">
-        <div className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+        <div
+          className="rounded-2xl overflow-hidden"
+          style={{
+            background: "#0f1420",
+            border: "1px solid rgba(255,255,255,0.10)",
+          }}
+        >
           <div className="px-8 py-8">
             {/* Header */}
             <div className="flex items-center gap-4 mb-6">
@@ -133,10 +134,10 @@ export default function DocumentDownloads({ slug }: { slug: string }) {
                 >
                   Documents
                 </p>
-                <h2 className="text-xl font-bold text-gray-900">Downloads</h2>
+                <h2 className="text-xl font-bold" style={{ color: "#F5F0EB" }}>Downloads</h2>
               </div>
-              <div className="flex-1 h-px bg-gray-100 ml-4" />
-              <span className="text-xs text-gray-400 shrink-0">
+              <div className="flex-1 h-px ml-4" style={{ background: "rgba(255,255,255,0.08)" }} />
+              <span className="text-xs shrink-0" style={{ color: "rgba(255,255,255,0.35)" }}>
                 {docs.length} file{docs.length !== 1 ? "s" : ""}
               </span>
             </div>

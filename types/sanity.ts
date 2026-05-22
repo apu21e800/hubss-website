@@ -66,6 +66,7 @@ export interface SanityProduct {
   eyebrow?: string;
   shortDesc?: string;
   description?: SanityBlock[];
+  homepageBlurb?: string;
   heroImage?: SanityImageRef;
   heroPosition?: string;
   gallery?: SanityImageRef[];

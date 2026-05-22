@@ -13,7 +13,7 @@ import { applications } from "@/lib/applications";
 import { productImages, resolveImage } from "@/lib/featured-images";
 import { buildMetadata } from "@/lib/seo";
 import { getProductFamily } from "@/lib/product-taxonomy";
-import { getProductBySlug } from "@/lib/sanity.queries";
+import { getMergedProduct } from "@/lib/products.server";
 
 export const revalidate = 3600;
 
@@ -25,7 +25,7 @@ type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const product = products.find((p) => p.slug === slug);
+  const product = await getMergedProduct(slug);
   if (!product) return {};
   return buildMetadata({
     title: product.seoTitle ?? product.name,
@@ -36,28 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
-
-  // Try Sanity first; fall back to static data if not populated yet.
-  const sanityProduct = await getProductBySlug(slug);
-
-  const product = (() => {
-    const staticProduct = products.find((p) => p.slug === slug);
-    if (!staticProduct) return null;
-
-    if (sanityProduct?.name) {
-      return {
-        ...staticProduct,
-        shortDesc: sanityProduct.shortDesc ?? staticProduct.shortDesc,
-        description:
-          sanityProduct.heroImageUrl
-            ? staticProduct.description
-            : staticProduct.description,
-      };
-    }
-
-    return staticProduct;
-  })();
-
+  const product = await getMergedProduct(slug);
   if (!product || product.comingSoon) notFound();
 
   const productGallery = product.gallery ?? [];

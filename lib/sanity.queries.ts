@@ -24,6 +24,7 @@ const PRODUCT_FIELDS = `
   eyebrow,
   shortDesc,
   description,
+  homepageBlurb,
   heroImageUrl,
   heroPosition,
   galleryUrls,

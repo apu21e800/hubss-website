@@ -16,6 +16,7 @@ import CanadaMapWrapper from "@/components/sections/CanadaMapWrapper";
 import { SITE_FLAGS } from "@/lib/site-flags";
 import { getSanityPageContent } from "@/lib/sanity.queries";
 import { getMergedApplications } from "@/lib/applications.server";
+import { getMergedProducts } from "@/lib/products.server";
 
 export const metadata: Metadata = buildMetadata({
   title: "Decorative Pavement & Road Marking Solutions",
@@ -79,7 +80,10 @@ const organizationSchema = {
 
 export default async function Home() {
   const sanityPage = await getSanityPageContent("homepage").catch(() => null);
-  const mergedApplications = await getMergedApplications();
+  const [mergedApplications, mergedProducts] = await Promise.all([
+    getMergedApplications(),
+    getMergedProducts(),
+  ]);
   const hero = {
     eyebrow:    sanityPage?.homepageHero?.eyebrow    ?? "Redefining Hardscapes · Since 1999",
     heading:    sanityPage?.homepageHero?.heading    ?? "The World Is",
@@ -102,7 +106,7 @@ export default async function Home() {
       <TrustedByMarquee />
       <PersonaEntryPoints />
       {/* slate → dark */}
-      <ProductsGrid />
+      <ProductsGrid products={mergedProducts} />
       {/* dark → slate */}
       <ApplicationsGrid applications={mergedApplications} />
       {/* Featured blog post — Field Notes */}

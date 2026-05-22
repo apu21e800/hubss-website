@@ -6,6 +6,11 @@ import Image from "next/image";
 import { applications } from "@/lib/applications";
 import { applicationImages, resolveImage } from "@/lib/featured-images";
 
+// Per-card object-position overrides for portrait images where the subject isn't centered
+const APP_POSITION: Record<string, string> = {
+  "public-art": "center 70%",
+};
+
 const FEATURED_SLUGS = [
   "crosswalks",
   "commercial-spaces",
@@ -72,7 +77,7 @@ export default function ApplicationsGrid() {
                   loading="lazy"
                   // Subject-foreground bias: pavement surface usually sits in the lower 2/3 of source frames.
                   className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
-                  style={{ objectPosition: "center 60%" }}
+                  style={{ objectPosition: APP_POSITION[app.slug] ?? "center 60%" }}
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
 

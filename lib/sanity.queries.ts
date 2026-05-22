@@ -24,6 +24,7 @@ const PRODUCT_FIELDS = `
   eyebrow,
   shortDesc,
   description,
+  homepageBlurb,
   heroImageUrl,
   heroPosition,
   galleryUrls,
@@ -134,6 +135,12 @@ export interface SanityPageContent {
     subheading?: string;
   };
   aboutMission?: string;
+  aboutStory?: string[];
+  aboutStoryAside?: string;
+  aboutValues?: Array<{ heading: string; body: string }>;
+  aboutWhyHub?: Array<{ title: string; desc: string }>;
+  aboutPartnersIntro?: string;
+  aboutPartners?: Array<{ key: string; desc: string }>;
   // Contact
   contactHero?: {
     eyebrow?: string;
@@ -150,6 +157,17 @@ export interface SanityPageContent {
     formHeading?: string;
     formSubheading?: string;
     submitLabel?: string;
+  };
+  lunchLearnWhatYouGet?: Array<{ num: string; title: string; desc: string }>;
+  lunchLearnPersonas?: Array<{ title: string; desc: string; badge: string }>;
+  lunchLearnFaqs?: Array<{ q: string; a: string }>;
+  lunchLearnSectionHeadings?: {
+    whatYouGetEyebrow?: string;
+    whatYouGetHeading?: string;
+    personasEyebrow?: string;
+    personasHeading?: string;
+    faqEyebrow?: string;
+    faqHeading?: string;
   };
   seo?: {
     metaTitle?: string;

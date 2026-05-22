@@ -3,10 +3,11 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { products } from "@/lib/products";
+import { products as libProducts, type Product } from "@/lib/products";
 import { productImages, resolveImage } from "@/lib/featured-images";
 
 // Plain-English: what it does and who uses it
+// Used as the fallback when Sanity has not set `homepageBlurb` on a product.
 const PRODUCT_WHAT: Record<string, string> = {
   "streetprint":
     "In-place stamped asphalt — cobblestone, brick, herringbone and a wide variety of other patterns. No demolition, no raised edges, snowplow-safe. Looks like stone, performs like asphalt.",
@@ -65,10 +66,15 @@ const FEATURED_SLUGS = [
   "decomark",
 ];
 
-export default function ProductsGrid() {
+type Props = {
+  products?: (Product & { homepageBlurb?: string })[];
+};
+
+export default function ProductsGrid({ products: productsProp }: Props = {}) {
+  const source = productsProp ?? libProducts;
   const featured = FEATURED_SLUGS.map((slug) =>
-    products.find((p) => p.slug === slug)
-  ).filter(Boolean) as typeof products;
+    source.find((p) => p.slug === slug)
+  ).filter(Boolean) as (Product & { homepageBlurb?: string })[];
 
   return (
     <section
@@ -130,7 +136,7 @@ export default function ProductsGrid() {
             const apps = PRODUCT_APPS[product.slug] ?? [];
             const type = PRODUCT_TYPE[product.slug];
             const stat = PRODUCT_STAT[product.slug];
-            const what = PRODUCT_WHAT[product.slug];
+            const what = product.homepageBlurb ?? PRODUCT_WHAT[product.slug];
 
             return (
               <motion.div

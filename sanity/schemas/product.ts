@@ -69,6 +69,15 @@ export default defineType({
       description: "Rich text body shown on the product detail page. Use headings, bullet points, and bold for scannable copy.",
       of: [{ type: "block" }],
     }),
+    defineField({
+      name: "homepageBlurb",
+      title: "Homepage card description",
+      type: "text",
+      rows: 3,
+      group: "content",
+      description: "2–3 sentence description used ONLY on the homepage 'Systems' grid card. Distinct from the short description above — keep it plain-spoken: what it does and who uses it.",
+      validation: (r) => r.max(400).warning("Homepage blurb should be under 400 characters"),
+    }),
 
     // ── Media ────────────────────────────────────────────────────────────────
     richImageField("heroImage", "Hero image", false, "media"),

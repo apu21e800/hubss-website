@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { applications } from "@/lib/applications";
+import { applications as libApplications, type Application } from "@/lib/applications";
 import { applicationImages, resolveImage } from "@/lib/featured-images";
 
 // Per-card object-position overrides for portrait images where the subject isn't centered
@@ -23,10 +23,13 @@ const FEATURED_SLUGS = [
   "townhomes",
 ];
 
-export default function ApplicationsGrid() {
+type Props = { applications?: Application[] };
+
+export default function ApplicationsGrid({ applications: appsProp }: Props = {}) {
+  const source = appsProp ?? libApplications;
   const featured = FEATURED_SLUGS.map(
-    (slug) => applications.find((a) => a.slug === slug)
-  ).filter(Boolean) as typeof applications;
+    (slug) => source.find((a) => a.slug === slug)
+  ).filter(Boolean) as Application[];
 
   return (
     <section className="py-28" style={{ background: "#080d16" }}>

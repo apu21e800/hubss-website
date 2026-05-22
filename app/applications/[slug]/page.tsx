@@ -9,6 +9,7 @@ import GalleryGrid, { type GalleryImage } from "@/components/ui/GalleryGrid";
 import ResidentialDriveways from "@/components/sections/ResidentialDriveways";
 import JsonLd from "@/components/ui/JsonLd";
 import { applications } from "@/lib/applications";
+import { getMergedApplication } from "@/lib/applications.server";
 import { products } from "@/lib/products";
 import { buildMetadata } from "@/lib/seo";
 
@@ -25,7 +26,7 @@ type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const application = applications.find((a) => a.slug === slug);
+  const application = await getMergedApplication(slug);
   if (!application) return {};
   return buildMetadata({
     title: application.seoTitle ?? application.name,
@@ -36,7 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ApplicationPage({ params }: Props) {
   const { slug } = await params;
-  const application = applications.find((a) => a.slug === slug);
+  const application = await getMergedApplication(slug);
   if (!application) notFound();
 
   // Gallery — use application.gallery if available, otherwise fall back to featured image

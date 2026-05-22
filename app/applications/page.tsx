@@ -3,7 +3,7 @@ import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
 import Image from "next/image";
 import Link from "next/link";
-import { applications } from "@/lib/applications";
+import { getMergedApplications } from "@/lib/applications.server";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
@@ -12,7 +12,8 @@ export const metadata = buildMetadata({
   slug: "applications",
 });
 
-export default function ApplicationsPage() {
+export default async function ApplicationsPage() {
+  const applications = await getMergedApplications();
   return (
     <main style={{ background: "#0f1620", minHeight: "100vh" }}>
       <Nav />

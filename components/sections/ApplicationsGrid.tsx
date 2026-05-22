@@ -8,7 +8,7 @@ import { applicationImages, resolveImage } from "@/lib/featured-images";
 
 // Per-card object-position overrides for portrait images where the subject isn't centered
 const APP_POSITION: Record<string, string> = {
-  "public-art": "center 70%",
+  "public-art": "center 80%",
 };
 
 const FEATURED_SLUGS = [

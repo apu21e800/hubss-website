@@ -5,6 +5,7 @@ import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
 import { SocialLinks } from "@/components/ui/SocialLinks";
+import { track } from "@vercel/analytics";
 
 // Note: metadata must be in a server component — defined in layout or a parallel route.
 // Page-level metadata for client components requires moving meta to a parent layout.
@@ -120,6 +121,8 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
                       setError(data.error ?? "Something went wrong. Please try again.");
                     } else {
                       setSubmitted(true);
+                      window.gtag?.("event", "generate_lead", { event_category: "conversion", form_type: "contact" });
+                      track("contact_submit", { form_type: "contact" });
                     }
                   } catch {
                     setError("Network error. Please check your connection and try again.");

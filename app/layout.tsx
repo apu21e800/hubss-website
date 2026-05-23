@@ -6,6 +6,7 @@ import "./globals.css";
 // Crisp Chat — sign up at crisp.chat (free), grab Website ID from Settings → Setup
 import CrispChat from "@/components/CrispChat";
 import StickyBar from "@/components/StickyBar";
+import AnalyticsEvents from "@/components/AnalyticsEvents";
 // VercelToolbar — only on staging/preview, never on production
 import { VercelToolbar } from "@vercel/toolbar/next";
 import { GoogleAnalytics } from "@next/third-parties/google";
@@ -70,6 +71,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <Analytics />
         <SpeedInsights />
         <GoogleAnalytics gaId="G-7YSFCGRL5E" />
+        <AnalyticsEvents />
       </body>
     </html>
   );

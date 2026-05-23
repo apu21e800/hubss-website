@@ -13,7 +13,7 @@ import { applications } from "@/lib/applications";
 import { productImages, resolveImage } from "@/lib/featured-images";
 import { buildMetadata } from "@/lib/seo";
 import { getProductFamily } from "@/lib/product-taxonomy";
-import { getMergedProduct } from "@/lib/products.server";
+import { getProductBySlug } from "@/lib/sanity.queries";
 
 export const revalidate = 3600;
 
@@ -25,22 +25,48 @@ type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const product = await getMergedProduct(slug);
+  const product = products.find((p) => p.slug === slug);
   if (!product) return {};
+  const featuredImg = productImages[slug] ? resolveImage(productImages[slug]) : null;
   return buildMetadata({
     title: product.seoTitle ?? product.name,
     description: product.seoDescription ?? (product.shortDesc + " — " + product.description.slice(0, 120) + "…"),
     slug: `products/${product.slug}`,
+    image: featuredImg?.src ?? product.imageUrl,
   });
 }
 
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
-  const product = await getMergedProduct(slug);
+
+  // Try Sanity first; fall back to static data if not populated yet.
+  const sanityProduct = await getProductBySlug(slug);
+
+  const product = (() => {
+    const staticProduct = products.find((p) => p.slug === slug);
+    if (!staticProduct) return null;
+
+    if (sanityProduct?.name) {
+      return {
+        ...staticProduct,
+        shortDesc: sanityProduct.shortDesc ?? staticProduct.shortDesc,
+        description:
+          sanityProduct.heroImageUrl
+            ? staticProduct.description
+            : staticProduct.description,
+      };
+    }
+
+    return staticProduct;
+  })();
+
   if (!product || product.comingSoon) notFound();
 
+  // Featured image from lib/featured-images.ts (audited, correct per product)
+  const featuredImg = productImages[slug] ? resolveImage(productImages[slug]) : null;
+
+  // Gallery — use product.gallery if available, otherwise fall back to featured image
   const productGallery = product.gallery ?? [];
-  const featuredImg = productImages[product.slug] ? resolveImage(productImages[product.slug]) : null;
   const galleryLabels = ["Overview", "Installation", "Detail", "Completed", "In Service", "Close-up"];
 
   const gallerySources = productGallery.length > 0 ? productGallery : (featuredImg ? [featuredImg.src] : [product.imageUrl]);
@@ -54,6 +80,11 @@ export default async function ProductPage({ params }: Props) {
     .map((s) => applications.find((a) => a.slug === s))
     .filter(Boolean) as typeof applications;
 
+  // Use the audited featured image for JSON-LD so Google Image associates the right photo
+  const heroImageUrl = featuredImg
+    ? `https://hubss.com${featuredImg.src}`
+    : `https://hubss.com${product.imageUrl}`;
+
   const productSchema = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -61,7 +92,12 @@ export default async function ProductPage({ params }: Props) {
     description: product.description,
     brand: { "@type": "Brand", name: "HUB Surface Systems" },
     url: `https://hubss.com/products/${product.slug}`,
-    image: product.imageUrl,
+    image: heroImageUrl,
+    manufacturer: {
+      "@type": "Organization",
+      "@id": "https://hubss.com/#organization",
+      name: "HUB Surface Systems",
+    },
   };
 
   const breadcrumbSchema = {
@@ -83,8 +119,8 @@ export default async function ProductPage({ params }: Props) {
       {/* Hero banner */}
       <div data-hero className="relative overflow-hidden" style={{ height: "clamp(360px, 52vh, 560px)" }}>
         <Image
-          src={product.imageUrl}
-          alt={product.name}
+          src={featuredImg?.src ?? product.imageUrl}
+          alt={featuredImg?.alt ?? `${product.name} — ${product.shortDesc}`}
           fill
           className="object-cover"
           style={{ objectPosition: product.heroPosition ?? "center 62%" }}
@@ -306,7 +342,7 @@ export default async function ProductPage({ params }: Props) {
                   <div className="relative overflow-hidden" style={{ height: 130 }}>
                     <Image
                       src={app.imageUrl}
-                      alt={app.name}
+                      alt={`${app.name} — ${app.shortDesc.slice(0, 60)}`}
                       fill
                       style={{ objectPosition: "center 60%" }}
                       className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"

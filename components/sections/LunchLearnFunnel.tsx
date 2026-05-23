@@ -3,6 +3,7 @@
 import { useState, FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { track } from "@vercel/analytics";
 
 export interface LunchLearnFunnelProps {
   eyebrow?: string;
@@ -163,6 +164,8 @@ export default function LunchLearnFunnel({
       if (!response.ok) throw new Error(`API error: ${response.statusText}`);
       setSubmitState({ status: "success", message: "You're on the list. We'll be in touch within 24 hours to confirm your date and details." });
       setFormData({ name: "", email: "", company: "", city: "", phone: "" });
+      window.gtag?.("event", "generate_lead", { event_category: "conversion", form_type: "lunch-learn" });
+      track("lunch_learn_submit", { form_type: "lunch-learn" });
     } catch {
       setSubmitState({ status: "error", message: "Something went wrong. Call us directly: 416-540-9287 (East) or 604-309-8212 (West)." });
     }
@@ -479,20 +482,6 @@ export default function LunchLearnFunnel({
           </div>
         </div>
       </div>
-
-      {false && <section className="py-20 lg:py-28 relative overflow-hidden" style={{ background: "#070b12" }}>
-        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 50% 50%, rgba(249,115,22,0.06) 0%, transparent 65%)" }} />
-        <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <span className="block leading-none select-none mb-2" style={{ fontSize: "6rem", lineHeight: 0.8, color: "#F97316", fontFamily: "Georgia, serif", opacity: 0.7 }}>&ldquo;</span>
-          <motion.p initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="font-semibold leading-relaxed mb-8" style={{ fontSize: "clamp(1.1rem, 2vw, 1.4rem)", color: "rgba(255,255,255,0.88)", letterSpacing: "-0.01em" }}>
-            TrafficPatternsXD has proven to be very stable in our environment and has a multitude of applications across various sectors such as landscape, transportation, trails, and parks.
-          </motion.p>
-          <motion.div initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: 0.15 }} className="flex flex-col items-center gap-1">
-            <span className="font-bold text-sm" style={{ color: "#F5F0EB" }}>Leo Guddemi</span>
-            <span className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>Senior Associate, Landscape Architecture Team Lead &mdash; Stantec</span>
-          </motion.div>
-        </div>
-      </section>}
 
       {/* ── FAQ ──────────────────────────────────────────────────────── */}
       <section className="py-20 lg:py-24" style={{ background: "#0a0f1a" }}>

@@ -6,9 +6,17 @@ import { getAllPosts } from "@/lib/mdx";
 
 const BASE_URL = "https://hubss.com";
 
+const abs = (p: string) => (p.startsWith("http") ? p : `${BASE_URL}${p.startsWith("/") ? "" : "/"}${p}`);
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes: MetadataRoute.Sitemap = [
-    { url: BASE_URL, lastModified: new Date(), changeFrequency: "daily", priority: 1.0 },
+    {
+      url: BASE_URL,
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 1.0,
+      images: [abs("/images/hero/hero-bg.jpg"), abs("/images/hero/hero-2.jpg"), abs("/images/hero/hero-3.jpg")],
+    },
     { url: `${BASE_URL}/products`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE_URL}/applications`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE_URL}/gallery`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
@@ -26,6 +34,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: new Date(),
     changeFrequency: "weekly",
     priority: 0.9,
+    images: p.imageUrl ? [abs(p.imageUrl)] : undefined,
   }));
 
   const applicationRoutes: MetadataRoute.Sitemap = applications.map((a) => ({
@@ -33,6 +42,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: new Date(),
     changeFrequency: "weekly",
     priority: 0.9,
+    images: a.imageUrl ? [abs(a.imageUrl)] : undefined,
   }));
 
   const projectRoutes: MetadataRoute.Sitemap = projects.map((p) => ({
@@ -40,6 +50,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: new Date(),
     changeFrequency: "monthly",
     priority: 0.7,
+    images: p.imageUrl ? [abs(p.imageUrl)] : undefined,
   }));
 
   const blogRoutes: MetadataRoute.Sitemap = getAllPosts().map((p) => ({
@@ -47,6 +58,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: new Date(p.date),
     changeFrequency: "monthly",
     priority: 0.7,
+    images: p.featuredImage ? [abs(p.featuredImage)] : undefined,
   }));
 
   return [

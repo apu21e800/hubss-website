@@ -289,6 +289,15 @@ const nextConfig: NextConfig = {
       { source: "/commercial-parking-lots/:path*", destination: "/applications/parking-lots", permanent: true },
       // WordPress blog old slugs (blog-slug format)
       { source: "/blog-:slug", destination: "/blog", permanent: true },
+      // ── Legacy WordPress image URLs (Google Image search) ───────────────
+      // WordPress stored media under /wp-content/uploads/YYYY/MM/<file>.
+      // The /wp-content/:path* catch-all below would 301 those to the
+      // homepage HTML, which Google Images treats as a broken image
+      // (image-typed URL → text/html response → thumbnail dropped).
+      // Routing /uploads/ specifically to a real image gives the bot a
+      // valid 200 image response so indexed thumbnails stop showing as
+      // broken. MUST appear before the /wp-content/:path* catch-all.
+      { source: "/wp-content/uploads/:path*", destination: "/images/hero/hero-bg.jpg", permanent: true },
       // WordPress wp-content → 410 is ideal but redirect to home is fine
       { source: "/wp-content/:path*", destination: "/", permanent: true },
       { source: "/wp-admin/:path*", destination: "/", permanent: true },

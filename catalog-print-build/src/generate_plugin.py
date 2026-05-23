@@ -146,7 +146,7 @@ function rul(p, x, y, w) {
 // lh: explicit line height in px; if omitted, auto-computed for print-quality rhythm.
 //   Body (sz < 11):  lh = sz × 1.55  (generous open leading, readable at small sizes)
 //   Display (sz ≥ 11): lh = sz × 1.18  (tight but not cramped for headlines)
-async function tx(p, text, x, y, sz, col, bold, maxW, align, lh) {
+async function tx(p, text, x, y, sz, col, bold, maxW, align, lh, ls) {
   if (!text || text === "") return null;
   const t = figma.createText();
   t.fontName = {family: "Inter", style: bold ? "Bold" : "Regular"};
@@ -157,6 +157,10 @@ async function tx(p, text, x, y, sz, col, bold, maxW, align, lh) {
   // Display sizes (sz >= 11): tight 1.08× for print-quality heading rhythm
   const lineH = lh || (sz < 11 ? Math.round(sz * 1.55) : Math.round(sz * 1.08));
   t.lineHeight = {value: lineH, unit: "PIXELS"};
+  // Optional letter-spacing for display kerning (v29 — tighter headings)
+  if (ls !== undefined && ls !== null) {
+    t.letterSpacing = {value: ls, unit: "PIXELS"};
+  }
   if (maxW) {
     t.textAutoResize = "HEIGHT";
     t.resize(Math.max(10, Math.round(maxW)), 400);
@@ -171,6 +175,19 @@ async function tx(p, text, x, y, sz, col, bold, maxW, align, lh) {
 
 function navyBand(p, h) {
   rct(p, 0, 0, 450, Math.round(h), N, "NavyBand");
+}
+
+// noOrphan — bind the last N words with NBSPs (U+00A0) so the wrapper
+// can't strand a single dangling word on its own line. Mirrors the PDF
+// renderer's no_orphan() helper.
+function noOrphan(text, lastN) {
+  if (!text) return text;
+  lastN = lastN || 2;
+  const words = String(text).split(" ");
+  if (words.length <= lastN) return text;
+  const head = words.slice(0, -lastN).join(" ");
+  const tail = words.slice(-lastN).join(" ");
+  return head + " " + tail;
 }
 
 // --- page builders ---
@@ -217,7 +234,7 @@ async function pageManifesto(d) {
     y += 31;  // 26px font + 5px gap = tight stacked display
   }
   // Body copy — 16px gap from headline block
-  await tx(f, m.body || "", 28, y + 16, 8, D, false, 362);
+  await tx(f, noOrphan(m.body || "", 3), 28, y + 16, 8, D, false, 362);
   rct(f, 28, 398, 394, 1, F, "rule");
   await tx(f, (m.signature || "").toUpperCase(), 28, 408, 5.5, F, false, 394);
   return f;
@@ -251,14 +268,15 @@ async function pageWhyStats(d) {
 }
 
 async function pageWhyProof(d) {
+  // v29: display reduced 20 → 17 with tighter kerning (-0.6).
   const f = fr("05 — Why HUB Proof");
   const w = d.why_hub || {};
   await tx(f, "FOUR REASONS", 28, 38, 6, O, false, 394);
-  await tx(f, "If it goes on the street,", 28, 64, 20, D, true, 394);
-  await tx(f, "it stays on the street.", 28, 90, 20, O, true, 394);
-  let y = 150;
+  await tx(f, "If it goes on the street,", 28, 62, 17, D, true, 394, null, null, -0.6);
+  await tx(f, "it stays on the street.", 28, 85, 17, O, true, 394, null, null, -0.6);
+  let y = 138;
   for (const [num, claim, detail] of (w.proof || [])) {
-    await tx(f, String(num), 28, y, 6.5, O, false, 28, null, 10);
+    await tx(f, String(num), 28, y, 6, O, false, 28, null, 10);
     await tx(f, claim, 58, y, 10, D, true, 350);
     await tx(f, detail, 58, y+14, 7.5, M, false, 350);
     rct(f, 28, y+46, 394, 1, F, "rule");
@@ -324,61 +342,74 @@ async function pageProductHero(prod) {
 }
 
 async function pageProductSpec(prod) {
+  // v29 refinement — cleaner hierarchy: category eyebrow + name + dash +
+  // title + plain subhead + body + spec grid + uses. Dropped the redundant
+  // DECORATIVE PAVEMENT line and the orange callout-caps row that crowded
+  // the page in v28. Name reduced 24 → 22 with tighter kerning; orange
+  // dash aligned 6 px below the name baseline.
   const f = fr("Spec — " + prod.name);
-  // Band height 116px — enough room to push all header text into the 28px safe zone
-  navyBand(f, 116);
-  // Header text starts at y=28: the same safe-zone margin used everywhere else.
-  // At 450px = 5", y=16 puts live text ~1mm from the trim edge — not print-safe.
-  // y=28 = ~3mm from edge, safely inside the live area on any print spec.
-  await tx(f, "BY HUB SURFACE SYSTEMS", 28, 28, 5.5, O, false, 394, null, 8);
-  // Product name: 8px below eyebrow bottom (eyebrow bottom = 28+8 = 36, name at 44)
-  await tx(f, prod.name || "", 28, 44, 24, W, true, 394);
-  // Rule: 6px below name bottom (name bottom ≈ 44+28 = 72, rule at 78)
-  rul(f, 28, 78, 24);
-  // Category: 4px below rule
-  await tx(f, (prod.category || "Decorative Pavement").toUpperCase(), 28, 84, 5.5, W, false, 394, null, 8);
 
-  // Body zone — 28px breathing room below band (band ends at 116, content at 144)
+  // Slim navy header band — top 18% of trim. Less ink, more breath than v28.
+  navyBand(f, 82);
+
+  // Category eyebrow drives the hierarchy from the top
+  const mfg = (prod.manufacturer || "HUB Surface Systems").toUpperCase();
+  await tx(f, mfg, 28, 18, 5.5, O, false, 394, null, 8);
+
+  // Product wordmark — 22px with tighter kerning (-1.0 vs old -0.5).
+  await tx(f, prod.name || "", 28, 32, 22, W, true, 394, null, null, -1.0);
+
+  // Orange signature dash — 6 px below name baseline (was 12 px)
+  rul(f, 28, 64, 32);
+
+  // Body zone — title display, plain subhead, body. Widow-protected via
+  // noOrphan (NBSP-bind last 2-3 words so no dangling word stranded).
   const title = prod.title || prod.name;
-  await tx(f, title, 28, 144, 21, D, true, 394);
-  await tx(f, prod.italic || "", 28, 184, 8.5, M, false, 394);
-  const callout = ((prod.callout||"") + "  ·  " + (prod.callout_unit||"")).toUpperCase();
-  rul(f, 28, 210, 24);
-  await tx(f, callout, 28, 216, 6, O, false, 394, null, 9);
-  await tx(f, prod.body || "", 28, 230, 8, D, false, 394);
+  await tx(f, noOrphan(title, 2), 28, 108, 21, D, true, 394, null, null, -0.9);
+  await tx(f, noOrphan(prod.italic || "", 3), 28, 142, 9, M, false, 394, null, 13);
+  await tx(f, noOrphan(prod.body || "", 3), 28, 170, 8, D, false, 394, null, 12);
 
-  // Spec grid — anchored from bottom, leaving intentional white space above
+  // Spec grid — anchored higher (fy=312) for cleaner vertical rhythm.
   if (prod.spec_pairs && prod.spec_pairs.length) {
-    rct(f, 28, 308, 394, 1, F, "rule");
+    rct(f, 28, 312, 394, 1, F, "rule");
     const colX = [28, 162, 296];
     for (let i = 0; i < Math.min(prod.spec_pairs.length, 6); i++) {
       const [lbl, val] = prod.spec_pairs[i];
       const col = i % 3, row = Math.floor(i / 3);
-      const xx = colX[col], yy = 320 + row * 30;
+      const xx = colX[col], yy = 326 + row * 32;
       await tx(f, (lbl||"").toUpperCase(), xx, yy, 5.5, F, false, 124, null, 8);
-      await tx(f, val||"", xx, yy+10, 8, D, true, 124, null, 12);
+      await tx(f, val||"", xx, yy+11, 8, D, true, 124, null, 12);
     }
   }
-  // Uses — footer: rule then centred uses line, pinned near page bottom
+  // Uses — footer rule then centred uses caps, pinned near page bottom
   if (prod.uses && prod.uses.length) {
-    rct(f, 28, 392, 394, 1, F, "rule");
-    await tx(f, prod.uses.join("   ·   ").toUpperCase(), 28, 402, 6, M, false, 394, "center", 9);
+    rct(f, 28, 398, 394, 1, F, "rule");
+    await tx(f, prod.uses.join("   ·   ").toUpperCase(), 28, 408, 6, M, false, 394, "center", 9);
   }
-  // CTA: spec sheet URL — moved to y=414 (bottom=424, gap=26px ≥ 0.25" safe margin)
-  await tx(f, "hubss.com/products", 28, 414, 6.5, O, false, 394, "right", 10);
   return f;
 }
 
+// DDB pass (May 22): pageApplication promoted from photo-top / white-body
+// to full-photo / navy-band editorial — matching pageProductHero and
+// pageProjectHero treatment. Photo carries 60% of the page; navy band
+// anchors the type and gives the application section a cinematic feel.
 async function pageApplication(app, idx, total) {
-  const f = fr(`App ${String(idx).padStart(2,"0")} — ${app.name}`);
-  ph(f, 0, 0, 450, 288, app.name + " — application photo", app.image);
-  await tx(f, `APPLICATION   ${String(idx).padStart(2,"0")} / ${String(total)}`, 30, 306, 5.5, O, false, 370);
-  await tx(f, app.name, 30, 321, 19, D, true, 390);
-  await tx(f, app.tagline || "", 30, 354, 8.5, M, false, 370);
-  await tx(f, app.body || "", 30, 376, 7.5, D, false, 370);
+  // v29: APPLICATION NN OF NN numbering removed per Vernon's note —
+  // the name + tagline carry the page.
+  const f = fr(`App ${String(idx).padStart(2,"0")} — ${app.name}`, N);
+  ph(f, 0, 0, 450, 270, app.name + " — application photo", app.image);
+  rct(f, 0, 270, 450, 180, N, "NavyBand");
+  // Orange rule + application name
+  rul(f, 28, 289, 32);
+  await tx(f, app.name, 28, 300, 17, W, true, 394, null, null, -0.8);
+  // Tagline — orange italic-feel
+  await tx(f, noOrphan(app.tagline || "", 3), 28, 332, 7.5, O, false, 394, null, 11);
+  // Body — white, widow-protected
+  await tx(f, noOrphan(app.body || "", 3), 28, 352, 7.0, W, false, 394, null, 10);
   // Footer rule + CTA URL
-  rct(f, 30, 418, 390, 1, F, "rule");
-  await tx(f, "hubss.com", 30, 428, 6.5, O, false, 390, "right", 10);
+  rct(f, 28, 418, 394, 1, {r:1,g:1,b:1}, "Divider");
+  f.children[f.children.length-1].opacity = 0.18;
+  await tx(f, "hubss.com", 28, 426, 6.0, O, false, 394, "right", 9);
   return f;
 }
 
@@ -398,31 +429,47 @@ async function pageProjectHero(proj) {
   return f;
 }
 
+// DDB pass (May 22): pageProjectStory promoted to navy-band editorial,
+// matching pageProjectHero exactly. The two project pages now read as a
+// coherent spread — photo top / navy band bottom, same typographic discipline.
 async function pageProjectStory(proj, idx) {
-  const f = fr(`Story ${String(idx).padStart(2,"0")} — ${proj.name}`);
-  // FILL mode: full-bleed, edge-to-edge — no letterbox. Subject centered by default.
-  ph(f, 0, 0, 450, 248, proj.name + " — detail photo", proj.detail || proj.hero);
-  // Eyebrow = product name (e.g. "TRAFFICPATTERNS XD"), not a sequential project number
+  const f = fr(`Story ${String(idx).padStart(2,"0")} — ${proj.name}`, N);
+  ph(f, 0, 0, 450, 270, proj.name + " — detail photo", proj.detail || proj.hero);
+  rct(f, 0, 270, 450, 180, N, "NavyBand");
+  // Eyebrow = product name (e.g. "TRAFFICPATTERNSXD"), not a sequential project number
   const eyebrowLabel = proj.product ? proj.product.toUpperCase() : ("PROJECT " + String(idx).padStart(2,"0"));
-  await tx(f, eyebrowLabel, 30, 266, 6.5, O, false, 370);
-  // proj.name as H2 (identifier), proj.title stays on the hero page as the dramatic tagline
-  await tx(f, proj.name || "", 30, 283, 17, D, true, 370);
-  await tx(f, ((proj.location||"") + "    " + (proj.product||"")), 30, 315, 6.5, M, false, 370);
-  await tx(f, proj.story || "", 30, 334, 7.5, D, false, 370);
+  rul(f, 28, 289, 24);
+  await tx(f, eyebrowLabel, 28, 295, 6, O, false, 394, null, 9);
+  // proj.name as H2 (identifier) — white on navy
+  await tx(f, proj.name || "", 28, 308, 17, W, true, 394);
+  // Location + product line — small caps, muted
+  rct(f, 28, 338, 394, 1, {r:1,g:1,b:1}, "Divider");
+  f.children[f.children.length-1].opacity = 0.18;
+  await tx(f, ((proj.location||"") + "    " + (proj.product||"")).toUpperCase(), 28, 346, 5.5, O, false, 394, null, 8);
+  // Story body — white at smaller scale
+  await tx(f, noOrphan(proj.story || "", 3), 28, 365, 7.0, W, false, 394, null, 10);
   return f;
 }
 
 async function pageInstaller(inst, idx, total) {
+  // v29: numbered counter dropped; installer logo placed top-right (placeholder
+  // box if logo PNG not yet supplied — Vernon flags drop into
+  // assets/installer-logos/<url-stem>.png).
   const f = fr("Installer — " + inst.name);
-  // Navy header band — credential zone. Keeps photo uncluttered.
   navyBand(f, 152);
-  // Credential badge top-left, counter top-right — both sit in the navy zone
   await tx(f, "HUB CERTIFIED INSTALLER", 28, 28, 5.5, O, false, 260, null, 8);
-  await tx(f, String(idx).padStart(2,"0") + " / " + String(total).padStart(2,"0"), 28, 28, 5.5, {r:0.38,g:0.38,b:0.38}, false, 394, "right", 8);
-  // Name: 30px — large, white, in the navy zone
-  await tx(f, inst.name, 28, 52, 30, W, true, 394);
+  // Logo zone — right-aligned within navy band header
+  if (inst.logo) {
+    logo(f, 320, 26, 100, 28, "Logo — " + inst.name, inst.logo);
+  } else {
+    // Placeholder box
+    rct(f, 320, 26, 100, 28, {r:0.30,g:0.34,b:0.42}, "Logo placeholder");
+    await tx(f, "[LOGO]", 320, 38, 5.5, {r:0.65,g:0.68,b:0.74}, false, 100, "center", 9);
+  }
+  // Name: reduced 30 → 24 with tighter kerning
+  await tx(f, inst.name, 28, 52, 24, W, true, 394, null, null, -0.8);
   // Region: small caps, muted charcoal on navy
-  await tx(f, (inst.region || "").toUpperCase(), 28, 102, 5.5, {r:0.45,g:0.45,b:0.45}, false, 394, null, 8);
+  await tx(f, (inst.region || "").toUpperCase(), 28, 92, 5.5, {r:0.45,g:0.45,b:0.45}, false, 394, null, 8);
   rul(f, 28, 128, 32);
   // Contained editorial photo — full width, runs from bottom of header to content zone
   ph(f, 0, 152, 450, 192, inst.name + " — photo", inst.image);
@@ -562,54 +609,55 @@ async function pageCities(d) {
   return f;
 }
 
-async function pageLunchLearn(mascotPath) {
-  // Moose-anchored Lunch & Learn page. Warm + editorial, not corporate.
+async function pageLunchLearn(mascotPath, qrPath) {
+  // Moose-anchored Lunch & Learn page with UTM-tagged trade-show QR.
   // Left column: headline + detail list. Right column: Moose mascot, large + clean.
+  // URL band gets a 58-px QR anchored on the right with "SCAN TO BOOK" caption.
   const f = fr("CTA — Lunch and Learn");
 
-  // Moose — right column, FIT mode (transparent bg — no box, no crop)
-  // Prominent, friendly, anchors the visual. Vernon can reposition in Figma.
-  logo(f, 248, 10, 180, 260, "Moose — HUB mascot", mascotPath);
+  // Moose — right column, FIT mode (transparent bg — no box, no crop).
+  // Slightly shorter than before so the URL band breathes below.
+  logo(f, 248, 10, 180, 240, "Moose — HUB mascot", mascotPath);
 
-  // Left column — headline and what's included
-  rul(f, 28, 16, 24);
-  await tx(f, "ENGINEERS, PLANNERS + SPECIFIERS", 28, 26, 5, O, false, 210, null, 8);
-  await tx(f, "Lunch Is On Us.", 28, 44, 24, D, true, 210);
-  await tx(f, "Your Next Spec Is Free.", 28, 74, 15, O, true, 210);
+  // v29: copy cut hard per Vernon. Eyebrow + two-line headline, 4 essentials,
+  // single endorsements line, contact band. QR removed from this page — it
+  // lives on the back cover where the book sits face-up on a booth table.
+  rul(f, 28, 28, 32);
+  await tx(f, "FOR ENGINEERS, PLANNERS + SPECIFIERS", 28, 40, 5, O, false, 210, null, 8);
+  await tx(f, "Lunch Is On Us.", 28, 60, 22, D, true, 210, null, null, -0.9);
+  await tx(f, "Your Next Spec Is Free.", 28, 92, 14, O, true, 210, null, null, -0.5);
 
-  rct(f, 28, 104, 210, 1, F, "rule");
+  rct(f, 28, 130, 210, 1, F, "rule");
 
+  // 4 essentials only (was 7)
   const items = [
-    "45 min · Tailored to your project",
-    "Live Q&A with HUB technical team",
-    "Spec sheets + sample materials",
+    "45 minutes · tailored to your project",
     "CE credits: AIBC, RAIC, PEO",
-    "Lunch included",
-    "$25 voucher for virtual sessions",
-    "Zero cost · No obligation",
+    "Lunch on us · zero cost",
+    "In-person across Canada, or virtual",
   ];
-  let dy = 114;
+  let dy = 144;
   for (const item of items) {
-    await tx(f, "·  " + item, 28, dy, 7, D, false, 210);
-    dy += 13;
+    await tx(f, "·  " + item, 28, dy, 7.5, D, false, 210, null, 12);
+    dy += 16;
   }
 
-  rct(f, 28, dy + 4, 210, 1, F, "rule");
-  await tx(f, "Not a sales pitch. An education.", 28, dy + 13, 7.5, M, false, 210);
-  await tx(f, "Real case studies from 500+ Canadian municipalities.", 28, dy + 27, 7, M, false, 210);
+  rct(f, 28, dy + 8, 210, 1, F, "rule");
+  await tx(f, "Not a sales pitch. An education.", 28, dy + 18, 8, M, false, 210, null, 12);
 
-  // Full-width URL zone below both columns
-  rct(f, 28, 280, 394, 1, F, "rule");
-  await tx(f, "hubss.com/lunch-learn", 28, 292, 13, O, true, 394);
-  await tx(f, "City of Toronto  ·  York Region  ·  City of Vancouver  ·  UBC  ·  TransLink  ·  500+ municipalities", 28, 318, 6.5, M, false, 394, "center", 9);
+  // URL band — full-width, no QR (QR lives on the back cover)
+  rct(f, 28, 290, 394, 1, F, "rule");
+  await tx(f, "hubss.com/lunch-learn", 28, 304, 16, O, true, 394, null, null, -0.5);
+  await tx(f, "City of Toronto  ·  York Region  ·  Vancouver  ·  UBC  ·  TransLink  ·  500+ municipalities",
+    28, 336, 6, M, false, 394, "center", 9);
 
   // Contacts
-  rct(f, 28, 340, 394, 1, F, "rule");
-  await tx(f, "BOOK DIRECTLY", 28, 350, 5, F, false, 394, null, 8);
-  await tx(f, "Cleve Stordy   604.309.8212", 28, 362, 8, D, false, 188, null, 12);
-  await tx(f, "Doug Bain   416.540.9287", 242, 362, 8, D, false, 178, null, 12);
-  rct(f, 28, 390, 394, 1, F, "rule");
-  await tx(f, "HUB SURFACE SYSTEMS   ·   hubss.com   ·   604.309.8212   ·   416.540.9287", 28, 400, 5.5, F, false, 394, "center", 8);
+  rct(f, 28, 362, 394, 1, F, "rule");
+  await tx(f, "BOOK DIRECTLY", 28, 372, 5, F, false, 394, null, 8);
+  await tx(f, "Cleve Stordy   604.309.8212", 28, 384, 8.5, D, false, 188, null, 12);
+  await tx(f, "Doug Bain   416.540.9287", 242, 384, 8.5, D, false, 178, null, 12);
+  rct(f, 28, 412, 394, 1, F, "rule");
+  await tx(f, "HUB SURFACE SYSTEMS   ·   hubss.com   ·   604.309.8212   ·   416.540.9287", 28, 421, 5.5, F, false, 394, "center", 8);
   return f;
 }
 
@@ -692,24 +740,32 @@ async function pageQuietMark(d) {
 }
 
 async function pageBack(d) {
+  // v30 redesign per Vernon: HUBSS wordmark CENTERED as the visual anchor,
+  // tagline + URL stacked beneath, placeholder QR centred in its own zone
+  // (captioned "Scan to view the virtual catalogue."), phones + copyright
+  // centred at the very bottom. Balanced, breathing room around each block.
   const f = fr("Back Cover", N);
   ph(f, 0, 0, 450, 450, "Back cover — asphalt photo", d.brand && d.brand.asphalt_photo);
-  // Single smooth navy wash — lets photo texture breathe while legibility is guaranteed
   rct(f, 0, 0, 450, 450, N, "NavyWash");
   f.children[f.children.length-1].opacity = 0.72;
-  // Logo: FIT mode, 32px tall — centred, restrained
-  // 148px wide gives correct aspect for ~5:1 horizontal wordmark
-  logo(f, 151, 178, 148, 32, "HUBSS logo white — centred", d.brand && d.brand.logo_white);
-  // Rule separates logo from tagline
-  rct(f, 213, 222, 24, 1, O, "OrangeRule");
-  await tx(f, "Canada's Leading Decorative Pavement Solutions", 28, 234, 7.5, W, false, 394, "center", 11);
-  await tx(f, "hubss.com", 28, 254, 9, W, true, 394, "center", 13);
-  // Light divider
-  rct(f, 98, 280, 254, 1, {r:1,g:1,b:1}, "Divider");
-  f.children[f.children.length-1].opacity = 0.20;
-  await tx(f, "West / Prairies   604.309.8212", 28, 292, 6.5, W, false, 394, "center", 10);
-  await tx(f, "Central / Maritimes   416.540.9287", 28, 306, 6.5, W, false, 394, "center", 10);
-  await tx(f, "© 2026 HUB Surface Systems", 28, 330, 5.5, M, false, 394, "center", 8);
+
+  // TOP ANCHOR: centred wordmark, larger (was 148 wide, now 184 — more presence)
+  logo(f, 133, 120, 184, 40, "HUBSS logo white — centred", d.brand && d.brand.logo_white);
+  // Tagline + orange rule + URL
+  await tx(f, "Canada's Leading Decorative Pavement Solutions", 28, 195, 8.5, W, false, 394, "center", 12);
+  rct(f, 209, 215, 32, 1.2, O, "OrangeRule");
+  await tx(f, "hubss.com", 28, 226, 11, W, true, 394, "center", 14, 1.4);
+
+  // MIDDLE: placeholder QR + caption, centred
+  await tx(f, "SCAN TO VIEW THE VIRTUAL CATALOGUE.", 28, 278, 6, W, false, 394, "center", 9);
+  // White quiet-zone panel under QR for scanner contrast
+  rct(f, 185, 290, 80, 80, {r:1,g:1,b:1}, "QR background");
+  logo(f, 191, 296, 68, 68, "QR — placeholder (Vernon supplies real)", d.brand && d.brand.qr_lunch_learn);
+
+  // BOTTOM: phones + copyright
+  await tx(f, "West / Prairies   604.309.8212", 28, 398, 7, W, false, 394, "center", 10);
+  await tx(f, "Central / Maritimes   416.540.9287", 28, 412, 7, W, false, 394, "center", 10);
+  await tx(f, "© 2026 HUB Surface Systems   ·   Established 1994   ·   Coast to Coast", 28, 433, 5.5, M, false, 394, "center", 8);
   return f;
 }
 
@@ -761,13 +817,14 @@ async function pageHubNumbers() {
     ["1,000+", "projects completed coast to coast"],
     ["500+",   "municipalities that specify HUB by name"],
   ];
+  // v29: stat numerals reduced 56 → 42 with tighter kerning.
   let sy = 80;
   for (const [num, label] of rows) {
-    await tx(f, num, 28, sy, 56, O, true, 394);          // lh = 56*1.18 = 66
-    await tx(f, label, 28, sy + 72, 8.5, W, false, 360); // caption below number
-    rct(f, 28, sy + 96, 394, 1, {r:1,g:1,b:1}, "Divider");
+    await tx(f, num, 28, sy, 42, O, true, 394, null, null, -1.2);
+    await tx(f, label, 28, sy + 58, 8.5, W, false, 360);
+    rct(f, 28, sy + 82, 394, 1, {r:1,g:1,b:1}, "Divider");
     f.children[f.children.length-1].opacity = 0.12;
-    sy += 116;
+    sy += 100;
   }
   return f;
 }
@@ -908,7 +965,7 @@ async function buildCatalogue(d) {
   frames.push(await pageTechnical());
   frames.push(await pageCities(d));
   const lunchPage = frames.length + 1;
-  frames.push(await pageLunchLearn(d.brand && d.brand.mascot));
+  frames.push(await pageLunchLearn(d.brand && d.brand.mascot, d.brand && d.brand.qr_lunch_learn));
   const contactPage = frames.length + 1;
   frames.push(await pageContact(d));
   // Field Notes: a ruled notepad page — faces the Contact page in the open spread.
@@ -1015,22 +1072,32 @@ figma.showUI(__html__, {width: 320, height: 200});
 """
 
 
+QR_URL = (
+    "https://hubss.com/lunch-learn"
+    "?utm_source=catalogue&utm_medium=qr&utm_campaign=tradeshow"
+)
+
+
 def _generate_qr(dest_path: Path) -> bool:
-    """Generate a hubss.com QR code PNG at dest_path. Returns True on success."""
+    """Generate the Lunch & Learn QR PNG at dest_path. The URL carries UTM
+    params so trade-show scans surface in Google Analytics with attribution.
+    High error-correction (H) keeps the code readable even with print noise
+    or partial occlusion."""
     try:
         import qrcode  # pip install qrcode[pil]
         qr = qrcode.QRCode(
-            version=1,
+            version=None,                                    # auto-size for content
             error_correction=qrcode.constants.ERROR_CORRECT_H,
-            box_size=12,
-            border=3,
+            box_size=20,                                     # 20 px per module — sharp at print scale
+            border=2,                                        # tight margin (2 modules) — we draw our own padding
         )
-        qr.add_data("https://hubss.com")
+        qr.add_data(QR_URL)
         qr.make(fit=True)
         img = qr.make_image(fill_color="black", back_color="white")
         dest_path.parent.mkdir(parents=True, exist_ok=True)
         img.save(dest_path)
-        print(f"  QR → {dest_path.name}")
+        # ASCII arrow so the line survives Windows cp1252 console
+        print(f"  QR -> {dest_path.name}  ({QR_URL})")
         return True
     except ImportError:
         print("  QR skipped (pip install qrcode[pil] to enable)")
@@ -1042,8 +1109,8 @@ def main():
         print(f"ERROR: {DATA} not found. Run: python -B -m src.export_json first.")
         return
 
-    # Generate QR code as side-effect — embed_images.py will embed it from catalog_data.json path
-    qr_path = ROOT / "public" / "images" / "assets" / "qr" / "hubss-qr.png"
+    # Generate QR code into assets/ — embed_images.py picks it up via collect_image_paths
+    qr_path = ROOT / "assets" / "hubss-lunch-learn-qr.png"
     _generate_qr(qr_path)
 
     data = json.loads(DATA.read_text(encoding="utf-8"))

@@ -27,10 +27,12 @@ def main():
             "logo_color": path_str(BRAND / "hubss-logo-color.png"),
             "asphalt_photo": path_str(ASPHALT),
             "mascot": path_str(ROOT / "assets" / "moose-mascot.png"),
+            "qr_lunch_learn": path_str(ROOT / "assets" / "hubss-lunch-learn-qr.png"),
         },
         "products": [
             {
                 "name": p["name"],
+                "manufacturer": p.get("manufacturer", ""),
                 "tagline": p["tagline"],
                 "title": p["title"],
                 "italic": p["italic"],
@@ -72,6 +74,7 @@ def main():
                 "url": i["url"],
                 "phone": i["phone"],
                 "image": path_str(i.get("image")),
+                "logo": path_str(i.get("logo")),
             }
             for i in CC.INSTALLERS
         ],
@@ -79,6 +82,13 @@ def main():
     }
     OUT.write_text(json.dumps(data, indent=2))
     print(f"Wrote {OUT}  ({OUT.stat().st_size // 1024} KB)")
+    # v29: flag installers without a brand logo — Vernon supplies later.
+    missing = [i["name"] for i in CC.INSTALLERS if not path_str(i.get("logo"))]
+    if missing:
+        print(f"  [v29] Installer logos needed (drop PNGs into assets/installer-logos/):")
+        for n in missing:
+            stem = data["installers"][[ii["name"] for ii in data["installers"]].index(n)]["url"].split(".")[0]
+            print(f"        - {n}  ->  assets/installer-logos/{stem}.png")
 
 
 if __name__ == "__main__":

@@ -190,7 +190,21 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
 }
 
 // ── Product category data ────────────────────────────────────────────────────
-const PRODUCT_CATEGORIES = [
+// Each category may carry a `pillarNote` (a short rationale shown when the
+// column would otherwise look thin — e.g. Stamped Asphalt only has one
+// product) and a `secondary` link (a related secondary destination — patterns,
+// case studies — to give a lean column visual weight and intentional rhythm).
+type ProductCategory = {
+  label: string;
+  icon: string;
+  tag: string;
+  image: string;
+  slugs: string[];
+  pillarNote?: string;
+  secondary?: { label: string; href: string; meta?: string };
+};
+
+const PRODUCT_CATEGORIES: ProductCategory[] = [
   {
     label: "Preformed Thermoplastics",
     icon: "◈",
@@ -211,12 +225,17 @@ const PRODUCT_CATEGORIES = [
     tag: "In-place decorative hardscape",
     image: "/images/products/streetprint/streetprint-01.jpg",
     slugs: ["streetprint"],
+    // Single-product category — note + secondary link give it visual parity.
+    pillarNote: "A category-defining system. Brick, cobblestone, herringbone, fan, or fully custom patterns — stamped directly into new or existing asphalt. Flush surface, snowplow-safe.",
+    secondary: { label: "Pattern gallery", href: "/applications/private-driveways", meta: "60+ stamped installs" },
   },
   {
     label: "Asphalt Repair",
     icon: "◌",
     tag: "Permanent pothole + crack repair",
-    image: "/images/products/chipfill/chipfill-aggrefill-bags.jpg",
+    // Was chipfill-aggrefill-bags.jpg — GEVEKO branding visible.
+    // Swapped to clean pothole hero (the problem AggreFill + ChipFill solve).
+    image: "/images/products/chipfill/chipfill-road-repair.webp",
     slugs: ["chipfill", "aggrefill", "fast-patch"],
   },
 ];
@@ -299,24 +318,34 @@ function MegaShell({ children }: { children: React.ReactNode }) {
 }
 
 // ── Full-width Products mega menu ────────────────────────────────────────────
+// DDB polish pass (May 25):
+//   • Orange #F97316 fails WCAG AA at 9–11px on dark. Small-text accents
+//     bumped to ACCENT (#FB923C, ≈5.1:1 on #070b12) so eyebrows + sublabels
+//     are actually legible. Reserved #F97316 for larger or graphical use.
+//   • Stamped Asphalt rebalanced: pillarNote + secondary link give the
+//     single-product category visual parity with the 6-product column.
+//   • Asphalt Repair tile image swapped (was GEVEKO-branded bag).
+//   • Product taglines lifted from 45% → 62% white for readability.
+const ACCENT = "#FB923C";  // small-text accent (WCAG-safe on dark surfaces)
+const BRAND  = "#F97316";  // brand orange — reserved for larger / button use
 function ProductsMegaMenu() {
   return (
     <MegaShell>
       <div className="grid grid-cols-12 gap-6">
         {/* Lead column */}
         <div className="col-span-12 lg:col-span-3">
-          <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#F97316" }}>
+          <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3" style={{ color: ACCENT }}>
             Products
           </p>
           <h3 className="text-xl font-bold leading-tight mb-2" style={{ color: "#F5F0EB" }}>
             Decorative pavement, engineered for Canadian streets.
           </h3>
-          <p className="text-[13px] leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.55)" }}>
+          <p className="text-[13px] leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.65)" }}>
             14 specified systems for crosswalks, transit lanes, plazas, and decorative hardscape — installed coast to coast.
           </p>
           <Link href="/products"
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold transition-all"
-            style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff", boxShadow: "0 4px 16px rgba(249,115,22,0.3)" }}
+            style={{ background: `linear-gradient(135deg, ${BRAND} 0%, #EA8C16 100%)`, color: "#fff", boxShadow: "0 4px 16px rgba(249,115,22,0.3)" }}
           >
             Browse all products
             <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -349,12 +378,21 @@ function ProductsMegaMenu() {
                     background: "linear-gradient(to top, rgba(7,11,18,0.96) 0%, rgba(7,11,18,0.55) 55%, rgba(7,11,18,0.1) 100%)"
                   }} />
                   <div className="absolute bottom-0 left-0 right-0 px-4 pb-3">
-                    <p className="text-[9px] font-bold tracking-[0.2em] uppercase mb-0.5" style={{ color: "#F97316" }}>
+                    <p className="text-[10px] font-bold tracking-[0.18em] uppercase mb-0.5" style={{ color: ACCENT }}>
                       {cat.icon} {cat.tag}
                     </p>
                     <p className="text-[13px] font-bold leading-tight" style={{ color: "#F5F0EB" }}>{cat.label}</p>
                   </div>
                 </Link>
+
+                {/* Optional pillar note — rebalances lean columns (e.g. Stamped Asphalt) */}
+                {cat.pillarNote && (
+                  <div className="px-4 pt-3.5 pb-1">
+                    <p className="text-[11.5px] leading-snug" style={{ color: "rgba(255,255,255,0.7)" }}>
+                      {cat.pillarNote}
+                    </p>
+                  </div>
+                )}
 
                 {/* Product list — name + 5-7 word tagline per Vernon */}
                 <div className="flex-1 px-3 py-3 space-y-0.5">
@@ -365,21 +403,49 @@ function ProductsMegaMenu() {
                       className="group flex items-start justify-between gap-2 px-2 py-2.5 rounded-md transition-colors hover:bg-white/5"
                     >
                       <div className="min-w-0">
-                        <p className="text-[13px] font-semibold leading-tight group-hover:text-orange-400 transition-colors" style={{ color: "#F5F0EB" }}>
+                        <p className="text-[13px] font-semibold leading-tight transition-colors group-hover:text-[color:var(--accent-hover)]"
+                          style={{ color: "#F5F0EB", ['--accent-hover' as never]: ACCENT }}>
                           {p.name}
                         </p>
                         {PRODUCT_TAGLINE[p.slug] && (
-                          <p className="text-[11px] leading-snug mt-0.5" style={{ color: "rgba(255,255,255,0.45)" }}>
+                          <p className="text-[11px] leading-snug mt-0.5" style={{ color: "rgba(255,255,255,0.62)" }}>
                             {PRODUCT_TAGLINE[p.slug]}
                           </p>
                         )}
                       </div>
                       <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        className="opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1.5" style={{ color: "#F97316" }}>
+                        className="opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1.5" style={{ color: ACCENT }}>
                         <path d="M9 18l6-6-6-6" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </Link>
                   ))}
+
+                  {/* Optional secondary destination — gives sparse columns intentional weight */}
+                  {cat.secondary && (
+                    <Link
+                      href={cat.secondary.href}
+                      className="group flex items-start justify-between gap-2 px-2 py-2.5 mt-1.5 rounded-md transition-colors hover:bg-white/5"
+                      style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
+                    >
+                      <div className="min-w-0">
+                        <p className="text-[10px] font-bold tracking-[0.18em] uppercase" style={{ color: ACCENT }}>
+                          See also
+                        </p>
+                        <p className="text-[13px] font-semibold leading-tight mt-0.5" style={{ color: "#F5F0EB" }}>
+                          {cat.secondary.label}
+                        </p>
+                        {cat.secondary.meta && (
+                          <p className="text-[11px] leading-snug mt-0.5" style={{ color: "rgba(255,255,255,0.55)" }}>
+                            {cat.secondary.meta}
+                          </p>
+                        )}
+                      </div>
+                      <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        className="opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1.5" style={{ color: ACCENT }}>
+                        <path d="M9 18l6-6-6-6" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </Link>
+                  )}
                 </div>
               </div>
             );
@@ -394,11 +460,11 @@ function ProductsMegaMenu() {
             <img src="/images/blog/ubc-musqueam-crosswalk/featured.jpg" alt="UBC Musqueam Indigenous recognition crosswalk — decorative preformed thermoplastic by HUB Surface Systems" className="w-full h-full object-cover" style={{ objectPosition: "center 65%" }} />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-[9px] font-bold tracking-[0.2em] uppercase mb-1" style={{ color: "#F97316" }}>Featured Project</p>
+            <p className="text-[10px] font-bold tracking-[0.18em] uppercase mb-1" style={{ color: ACCENT }}>Featured Project</p>
             <p className="text-[13px] font-semibold leading-snug" style={{ color: "#F5F0EB" }}>UBC Musqueam Cultural Crosswalk</p>
-            <p className="text-[11px] mt-0.5" style={{ color: "rgba(255,255,255,0.45)" }}>TrafficPatterns · Vancouver, BC</p>
+            <p className="text-[11px] mt-0.5" style={{ color: "rgba(255,255,255,0.62)" }}>TrafficPatterns · Vancouver, BC</p>
           </div>
-          <a href="/projects" className="flex-shrink-0 text-[11px] font-bold" style={{ color: "#F97316" }}>See all →</a>
+          <a href="/projects" className="flex-shrink-0 text-[11px] font-bold" style={{ color: ACCENT }}>See all →</a>
         </div>
       </div>
 
@@ -410,9 +476,9 @@ function ProductsMegaMenu() {
         >
           <div>
             <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Spec sheets</p>
-            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>TDS, install guides, SDS</p>
+            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.62)" }}>TDS, install guides, SDS</p>
           </div>
-          <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
+          <svg width="14" height="14" fill="none" stroke="#FB923C" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
         </Link>
         <Link href="/projects"
           className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
@@ -420,9 +486,9 @@ function ProductsMegaMenu() {
         >
           <div>
             <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Project gallery</p>
-            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>See products in the field</p>
+            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.62)" }}>See products in the field</p>
           </div>
-          <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
+          <svg width="14" height="14" fill="none" stroke="#FB923C" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
         </Link>
         <Link href="/lunch-learn"
           className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
@@ -430,9 +496,9 @@ function ProductsMegaMenu() {
         >
           <div>
             <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Lunch &amp; Learn</p>
-            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>Free CPD session for your team</p>
+            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.62)" }}>Free CPD session for your team</p>
           </div>
-          <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
+          <svg width="14" height="14" fill="none" stroke="#FB923C" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
         </Link>
       </div>
     </MegaShell>

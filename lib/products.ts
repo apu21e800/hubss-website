@@ -358,9 +358,17 @@ export const products: Product[] = [
     slug: "aggrefill",
     eyebrow: "Concrete and Asphalt Repair",
     shortDesc: "Pre-coated aggregate filler for larger potholes up to 1 m². Combined with ChipFill for permanent repair.",
-    // AggreFill-first hero — application shot leads; combined bags as context
-    imageUrl: "/images/products/aggrefill/aggrefill-application.webp",
-    heroPosition: "center 40%",
+    // De-brand swap: the prior hero (`aggrefill-application.webp` /
+    // `aggrefill-01.jpg`) showed a GEVEKO-branded supplier bag, violating
+    // the no-supplier-names standing rule. Switched to `aggrefill-02.jpg`
+    // — the only AggreFill-specific shot in the bank with zero visible
+    // branding (asphalt patch being smoothed, in-progress, no bags).
+    // Gallery rebuilt from the same bank, supplier-branded shots removed.
+    // NOTE for Vernon: the AggreFill image bank is thin — a proper
+    // finished-pothole-repair hero (clean cured patch, no supplier
+    // packaging in frame) is the right long-term fix.
+    imageUrl: "/images/products/aggrefill/aggrefill-02.jpg",
+    heroPosition: "center center",
     brandLogo: {
       src: "/images/products/aggrefill/aggrefill-logo.svg",
       alt: "AggreFill by HUB Surface Systems",
@@ -368,12 +376,9 @@ export const products: Product[] = [
       height: 44,
     },
     gallery: [
-      "/images/products/aggrefill/aggrefill-application.webp",
-      "/images/products/aggrefill/aggrefill-chipfill-bags.jpg",
-      "/images/products/chipfill/chipfill-application.jpg",
-      "/images/products/chipfill/chipfill-road-repair.webp",
-      "/images/products/aggrefill/aggrefill-01.jpg",
       "/images/products/aggrefill/aggrefill-02.jpg",
+      "/images/products/chipfill/chipfill-road-repair.webp",
+      "/images/products/aggrefill/aggrefill-03.jpg",
     ],
     description: "AggreFill is a pre-coated aggregate filler used in combination with ChipFill to permanently repair larger potholes — up to approximately 1 m² in diameter. Where the damage is too deep or wide for a stand-alone material, AggreFill provides the structural mass to fill the void; ChipFill bonds the aggregate matrix and seals the repaired surface flush. The combined system applies cold then receives a heat torch finish, bonding chemically to the surrounding asphalt or concrete substrate and returning the lane to traffic within minutes. Year-round deployment regardless of weather or season — eliminating the dependency on hot-mix plant availability that leaves deep damage unrepaired through Canadian winters. Specified for the deeper road surface failures, parking lot craters, industrial-site damage, and utility cut restoration where conventional cold-mix patching migrates under heavy wheel loading or fails to achieve durable bond at substrate edges. The AggreFill + ChipFill system is a permanent repair solution, not a seasonal temporary patch.",
     specs: [

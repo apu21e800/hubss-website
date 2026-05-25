@@ -1,11 +1,13 @@
-import type { Metadata } from "next";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Terms of Use | HUB Surface Systems",
-  description: "Terms of use for hubss.com — governing law, intellectual property, and disclaimer of warranties.",
-};
+export const metadata = buildMetadata({
+  title: "Terms of Use",
+  description:
+    "Terms governing use of hubss.com — governing law, intellectual property, content licensing, and disclaimer of warranties for HUB Surface Systems' web properties.",
+  slug: "terms",
+});
 
 const sections = [
   {

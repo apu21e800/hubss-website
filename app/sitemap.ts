@@ -20,6 +20,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     { url: `${BASE_URL}/products`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE_URL}/applications`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
+    // /applications/public-art — sub-route not covered by the [slug] map below
+    {
+      url: `${BASE_URL}/applications/public-art`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.8,
+      images: [
+        abs("/images/blog/best-crosswalks-canada/featured.jpg"),
+        abs("/images/blog/ubc-musqueam-crosswalk/featured.jpg"),
+      ],
+    },
     { url: `${BASE_URL}/gallery`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
     { url: `${BASE_URL}/blog`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
     { url: `${BASE_URL}/resources`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
@@ -49,12 +60,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const applicationRoutes: MetadataRoute.Sitemap = applications.map((a) => {
     const featured = applicationImages[a.slug] ? resolveImage(applicationImages[a.slug]).src : a.imageUrl;
+    // Include first 3 gallery images (parity with productRoutes above) so
+    // Google Images indexes real installation photography per application.
+    const galleryImgs = (a.gallery ?? []).slice(0, 3).map(abs);
+    const images = [abs(featured), ...galleryImgs].filter((v, i, arr) => arr.indexOf(v) === i);
     return {
       url: `${BASE_URL}/applications/${a.slug}`,
       lastModified: new Date(),
       changeFrequency: "weekly" as const,
       priority: 0.9,
-      images: [abs(featured)],
+      images,
     };
   });
 

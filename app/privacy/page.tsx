@@ -1,11 +1,13 @@
-import type { Metadata } from "next";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Privacy Policy | HUB Surface Systems",
-  description: "HUB Surface Systems privacy policy — how we collect, use, and protect your personal information under PIPEDA.",
-};
+export const metadata = buildMetadata({
+  title: "Privacy Policy",
+  description:
+    "How HUB Surface Systems collects, uses, and protects your personal information under PIPEDA — Canada's Personal Information Protection and Electronic Documents Act.",
+  slug: "privacy",
+});
 
 const sections = [
   {

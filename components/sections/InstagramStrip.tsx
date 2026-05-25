@@ -99,7 +99,7 @@ export default async function InstagramStrip() {
                 <a key={post.id} href={post.permalink} target="_blank" rel="noopener noreferrer"
                   className="group relative overflow-hidden rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_8px_32px_rgba(249,115,22,0.2)]"
                   style={{ aspectRatio: "1/1", border: "1px solid rgba(255,255,255,0.07)" }}>
-                  <Image src={post.media_url} alt="@hub_surface_systems on Instagram" fill
+                  <Image src={post.media_url} alt="HUB Surface Systems Instagram — recent decorative pavement project from the field" fill
                     className="object-cover transition-transform duration-500 group-hover:scale-110"
                     sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 17vw" unoptimized />
                   <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200"

@@ -391,7 +391,7 @@ function ProductsMegaMenu() {
       <div className="mt-5 pt-4 rounded-xl overflow-hidden relative" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
         <div className="flex items-center gap-4 p-4">
           <div className="flex-shrink-0 rounded-lg overflow-hidden" style={{ width: 72, height: 72 }}>
-            <img src="/images/blog/ubc-musqueam-crosswalk/featured.jpg" alt="Featured project" className="w-full h-full object-cover" style={{ objectPosition: "center 65%" }} />
+            <img src="/images/blog/ubc-musqueam-crosswalk/featured.jpg" alt="UBC Musqueam Indigenous recognition crosswalk — decorative preformed thermoplastic by HUB Surface Systems" className="w-full h-full object-cover" style={{ objectPosition: "center 65%" }} />
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-[9px] font-bold tracking-[0.2em] uppercase mb-1" style={{ color: "#F97316" }}>Featured Project</p>

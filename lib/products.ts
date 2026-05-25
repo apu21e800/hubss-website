@@ -324,9 +324,14 @@ export const products: Product[] = [
     slug: "chipfill",
     eyebrow: "Concrete and Asphalt Repair",
     shortDesc: "Heat-activated preformed material for permanent pothole repair. Year-round, all-weather.",
-    // Both bags side-by-side hero — ChipFill & AggreFill are always specified together
-    imageUrl: "/images/products/chipfill/chipfill-aggrefill-bags.jpg",
-    heroPosition: "center 55%",
+    // De-brand swap (companion to fix/aggrefill-hero): the prior hero
+    // (`chipfill-aggrefill-bags.jpg`) showed two GEVEKO-branded supplier
+    // bags. Swapped to `chipfill-road-repair.webp` — cinematic clean
+    // pothole hero (the problem ChipFill solves), zero branding in frame.
+    // Gallery rebuilt to clean-only shots. Bank still thin — proper
+    // finished-repair photography would be the right long-term fix.
+    imageUrl: "/images/products/chipfill/chipfill-road-repair.webp",
+    heroPosition: "center 60%",
     brandLogo: {
       src: "/images/products/chipfill/chipfill-logo.svg",
       alt: "ChipFill by HUB Surface Systems",
@@ -334,12 +339,9 @@ export const products: Product[] = [
       height: 44,
     },
     gallery: [
-      "/images/products/chipfill/chipfill-aggrefill-bags.jpg",
-      "/images/products/chipfill/chipfill-application.jpg",
       "/images/products/chipfill/chipfill-road-repair.webp",
-      "/images/products/aggrefill/aggrefill-application.webp",
-      "/images/products/chipfill/chipfill-01.jpg",
       "/images/products/chipfill/chipfill-02.jpg",
+      "/images/products/chipfill/chipfill-03.jpg",
     ],
     description: "ChipFill is a heat-activated preformed pothole repair material engineered for permanent restoration of road surface damage. The material is laid into the prepared excavation and activated with a propane heat torch — no specialized equipment, no hot-mix plant, no aggregate batching. Once heated, ChipFill conforms to the contours of the damage and bonds chemically to the surrounding asphalt or concrete, sealing the substrate from the water intrusion that accelerates freeze-thaw damage and turns minor surface defects into deep structural failures. Deployable year-round regardless of temperature or weather conditions — a critical advantage in Canadian climates where hot-mix asphalt plants close seasonally and potholes peak in early spring. Sets rapidly so the lane can reopen to traffic within minutes of application. Specified by Canadian municipalities and road maintenance contractors for routine patrol patching, emergency response programs, utility cut restoration, edge joint repair, and pedestrian infrastructure maintenance across roads, parking lots, sidewalks, and pathways.",
     specs: [

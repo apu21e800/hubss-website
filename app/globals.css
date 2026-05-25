@@ -472,55 +472,17 @@ p {
   z-index: 0;
 }
 
-/* ─── Section grid texture — kills the floating feeling ─ */
-/* 4% opacity lines at 80px grid — texture, not graph paper */
-.section-grid-bg {
-  background-image:
-    linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
-  background-size: 80px 80px;
-}
+/* ─── Section / grid utility classes ─────────────────── */
+/* Vernon: no repeating grid/graph-paper textures anywhere.   */
+/* Classes preserved as solid-colour backgrounds so existing  */
+/* call sites stay valid; the repeating gradient is removed.  */
+.section-grid-bg { /* transparent — section gets its own bg */ }
+[data-theme="dark"] .section-grid-bg { /* same */ }
 
-[data-theme="dark"] .section-grid-bg {
-  background-image:
-    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-}
-
-/* ─── White section with grid texture ────────────────── */
-/* Used for document/spec-sheet sections — clean pro-max feel */
-.bg-grid {
-  background-color: #ffffff;
-  background-image:
-    linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
-  background-size: 32px 32px;
-}
-
-/* ─── Dark grid section — line grid (legacy) ─────────── */
-.bg-grid-dark {
-  background-color: #0d1117;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-  background-size: 32px 32px;
-}
-
-/* ─── Dot-grid — documents library / resources ────────── */
-/* Refined dot pattern: 20px spacing, 1px dots, 4% opacity */
-.bg-dot-grid-dark {
-  background-color: #1a1a1a;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px);
-  background-size: 44px 44px;
-}
-
-.bg-dot-grid-blue {
-  background-color: #0f1620;
-  background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
-  background-size: 20px 20px;
-}
+.bg-grid      { background-color: #ffffff; }
+.bg-grid-dark { background-color: #0d1117; }
+.bg-dot-grid-dark { background-color: #1a1a1a; }
+.bg-dot-grid-blue { background-color: #0f1620; }
 
 /* ─── Hero always-dark override (theme-agnostic) ─────── */
 /* Hero has a full-bleed image + black overlay — text stays white in all themes */

@@ -879,10 +879,6 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
           className="fixed inset-0 z-[60] md:hidden flex flex-col outline-none"
           style={{
             background: "#070b12",
-            // Subtle dot texture — pure CSS, no extra image asset
-            backgroundImage:
-              "radial-gradient(circle, rgba(255,255,255,0.035) 1px, transparent 1px)",
-            backgroundSize: "28px 28px",
             height: "100dvh",
           }}
           onClick={(e) => e.stopPropagation()}

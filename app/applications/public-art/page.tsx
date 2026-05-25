@@ -100,17 +100,6 @@ export default function PublicArtPage() {
 
       {/* Main content */}
       <div className="relative" style={{ background: "var(--bg-dark)" }}>
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            backgroundImage:
-              "url('/images/textures/stamped-asphalt-texture.webp')",
-            backgroundSize: "480px auto",
-            backgroundRepeat: "repeat",
-            opacity: 0.04,
-            mixBlendMode: "luminosity",
-          }}
-        />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
           {/* CTA bar */}
           <div

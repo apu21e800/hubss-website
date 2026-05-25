@@ -26,16 +26,6 @@ export default async function ResourcesPage() {
       className="min-h-screen relative overflow-hidden"
       style={{ background: "linear-gradient(160deg, #0d1117 0%, #141b2d 60%, #0d1117 100%)" }}
     >
-      {/* Subtle orange grid — matches L&L */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(249,115,22,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(249,115,22,0.03) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-        }}
-        aria-hidden="true"
-      />
       {/* Orange glow — top left */}
       <div
         className="absolute pointer-events-none"

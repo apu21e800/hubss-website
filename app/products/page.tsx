@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
@@ -37,21 +36,7 @@ export default async function ProductsPage() {
     <main style={{ background: "#0f1620", minHeight: "100vh" }}>
       <Nav />
 
-      <div
-        className="relative"
-        style={{ backgroundSize: "cover", backgroundPosition: "center" }}
-      >
-        {/* Stamped asphalt texture — atmospheric depth */}
-        <Image
-          src="/images/textures/stamped-asphalt-texture.webp"
-          alt=""
-          fill
-          className="object-cover pointer-events-none"
-          style={{ opacity: 0.10, mixBlendMode: "overlay" }}
-          aria-hidden="true"
-          sizes="100vw"
-        />
-
+      <div className="relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-16 sm:pb-24">
         <div className="mb-16 max-w-2xl">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-3" style={{ color: "#f97316" }}>
@@ -207,7 +192,7 @@ export default async function ProductsPage() {
           );
         })()}
       </div>
-      </div>{/* end asphalt texture wrapper */}
+      </div>{/* end content wrapper */}
       <LunchLearn />
       <Footer />
     </main>

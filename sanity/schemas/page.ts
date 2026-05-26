@@ -35,11 +35,12 @@ export default defineType({
     }),
     defineField({
       name: "slug",
-      title: "Page identifier",
+      title: "Page identifier (read only — do not change)",
       type: "slug",
       group: "identity",
+      readOnly: true,
       options: { source: "title" },
-      description: 'Fixed identifier that determines which page these fields appear on. Use exactly: "homepage", "about", "contact", or "lunch-learn". Do not change after initial setup.',
+      description: 'This is fixed — do not change it. It tells the website which page these settings belong to.',
       validation: (r) =>
         r
           .required()

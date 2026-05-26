@@ -126,10 +126,11 @@ export default defineType({
     richImageField("image", "Project image", false, "media"),
     defineField({
       name: "imageUrl",
-      title: "Image URL (legacy)",
+      title: "Image URL (legacy — read only)",
       type: "string",
       group: "media",
-      description: "Legacy fallback path served from /public/images/. Leave blank once image asset is set in Sanity.",
+      readOnly: true,
+      description: "Auto-populated during migration. If this shows '/images/projects/_placeholder.svg', this map pin still needs a real photo — upload one in the Image field above, then this field will clear automatically.",
     }),
 
     // ── Related ──────────────────────────────────────────────────────────────
@@ -143,12 +144,17 @@ export default defineType({
     }),
   ],
 
+  orderings: [
+    { title: "City (A–Z)", name: "cityAsc", by: [{ field: "city", direction: "asc" }] },
+    { title: "Province", name: "provinceAsc", by: [{ field: "province", direction: "asc" }] },
+  ],
+
   preview: {
-    select: { title: "title", city: "city", province: "province", media: "image" },
-    prepare: ({ title, city, province, media }) => ({
-      title,
-      subtitle: city && province ? `${city}, ${province}` : city ?? province ?? "Location not set",
-      media,
-    }),
+    select: { title: "title", city: "city", province: "province", year: "year", media: "image" },
+    prepare: ({ title, city, province, year, media }) => {
+      const location = city && province ? `${city}, ${province}` : city ?? province ?? "Location not set";
+      const suffix   = year ? ` · ${year}` : "";
+      return { title, subtitle: location + suffix, media };
+    },
   },
 });

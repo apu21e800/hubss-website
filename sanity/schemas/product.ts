@@ -90,17 +90,19 @@ export default defineType({
     }),
     defineField({
       name: "heroImageUrl",
-      title: "Hero image URL (legacy)",
+      title: "Hero image URL (legacy — read only)",
       type: "string",
       group: "media",
-      description: "Legacy fallback path served from /public/images/ (e.g. /images/products/StreetBond/hero.jpg). Leave blank once heroImage is set in Sanity.",
+      readOnly: true,
+      hidden: ({ document }) => !!document?.heroImage,
+      description: "This field has been replaced by the Hero Image above. It disappears automatically once a hero image is uploaded.",
     }),
     defineField({
       name: "gallery",
       title: "Gallery images",
       type: "array",
       group: "media",
-      description: "Additional project photos shown in the product gallery. Add alt text to every image for accessibility.",
+      description: "Product photos shown in the gallery slider on this product's page. Add alt text to every image for screen reader accessibility — describe what's in the photo. You can drag and drop to reorder.",
       of: [galleryImageItem],
     }),
 
@@ -229,11 +231,15 @@ export default defineType({
     }),
   ],
 
+  orderings: [
+    { title: "Name (A–Z)", name: "nameAsc", by: [{ field: "name", direction: "asc" }] },
+  ],
+
   preview: {
     select: { title: "name", subtitle: "shortDesc", media: "heroImage" },
     prepare: ({ title, subtitle, media }) => ({
       title,
-      subtitle: subtitle?.slice(0, 60) ?? "No description",
+      subtitle: subtitle?.slice(0, 70) ?? "No short description set",
       media,
     }),
   },

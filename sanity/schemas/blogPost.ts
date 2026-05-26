@@ -72,18 +72,84 @@ export default defineType({
       title: "Body content",
       type: "array",
       group: "content",
-      description: "The full article body. Use the toolbar to add headings, lists, links, and inline images.",
-      of: [{ type: "block" }, { type: "image", options: { hotspot: true } }],
+      description: "Write the full article here. Use the toolbar to format text, add headings (H2/H3), bullet or numbered lists, bold/italic, hyperlinks, and inline photos.",
+      of: [
+        {
+          type: "block",
+          styles: [
+            { title: "Normal paragraph", value: "normal" },
+            { title: "Heading 2 (section title)", value: "h2" },
+            { title: "Heading 3 (sub-section)", value: "h3" },
+            { title: "Heading 4 (detail)", value: "h4" },
+            { title: "Pull quote / callout", value: "blockquote" },
+          ],
+          lists: [
+            { title: "Bullet list", value: "bullet" },
+            { title: "Numbered list", value: "number" },
+          ],
+          marks: {
+            decorators: [
+              { title: "Bold", value: "strong" },
+              { title: "Italic", value: "em" },
+            ],
+            annotations: [
+              {
+                title: "Hyperlink",
+                name: "link",
+                type: "object",
+                fields: [
+                  defineField({
+                    name: "href",
+                    title: "URL (web address)",
+                    type: "url",
+                    description: "Paste the full web address, e.g. https://hubss.com/products/streetbond",
+                    validation: (r) => r.uri({ scheme: ["http", "https", "mailto"] }),
+                  }),
+                  defineField({
+                    name: "blank",
+                    title: "Open in new tab",
+                    type: "boolean",
+                    description: "Turn on to open this link in a new browser tab (recommended for external links).",
+                    initialValue: false,
+                  }),
+                ],
+              },
+            ],
+          },
+        },
+        {
+          type: "image",
+          title: "Inline photo",
+          options: { hotspot: true },
+          fields: [
+            defineField({
+              name: "alt",
+              title: "Alt text (required for accessibility)",
+              type: "string",
+              description: "Describe what's in the photo — screen readers read this aloud (e.g. 'Stamped asphalt crosswalk in York Region').",
+              validation: (r) => r.required().warning("All inline images need alt text for accessibility"),
+            }),
+            defineField({
+              name: "caption",
+              title: "Caption (optional)",
+              type: "string",
+              description: "Short caption shown below the image.",
+            }),
+          ],
+        },
+      ],
     }),
 
     // ── Media ────────────────────────────────────────────────────────────────
     richImageField("featuredImage", "Featured image", false, "media"),
     defineField({
       name: "featuredImageUrl",
-      title: "Featured image URL (legacy)",
+      title: "Featured image URL (legacy — read only)",
       type: "string",
       group: "media",
-      description: "Legacy fallback path from MDX frontmatter. Leave blank once featuredImage asset is set in Sanity.",
+      readOnly: true,
+      hidden: ({ document }) => !!document?.featuredImage,
+      description: "Replaced by the Featured Image above. Disappears automatically once a featured image is uploaded.",
     }),
 
     // ── Meta & SEO ───────────────────────────────────────────────────────────

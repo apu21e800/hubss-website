@@ -119,14 +119,32 @@ export default async function ResourcesPage() {
         />
 
         <div className="max-w-7xl mx-auto px-6 py-16 pb-28 relative">
-          {/* ── Featured: Virtual Catalogue ────────────────────
-                Banner card sits at the top of the library section so it
-                anchors to a real container (not floating in the hero) and
-                reads as a featured resource rather than a hero CTA. */}
+          {/* Section label */}
+          <div className="flex items-center gap-4 mb-10">
+            <h2
+              className="text-sm font-bold tracking-widest uppercase"
+              style={{ color: "#F97316" }}
+            >
+              All Documents
+            </h2>
+            <div
+              className="flex-1 h-px"
+              style={{ background: "rgba(255,255,255,0.07)" }}
+            />
+            <span className="text-xs" style={{ color: "#6B7280" }}>
+              {docs.length} total
+            </span>
+          </div>
+          <ResourcesClient documents={docs} />
+
+          {/* ── Featured: Virtual Catalogue (post-list) ────────
+                Vernon's instruction: sit AFTER the document list, not
+                above it. Reads as a closing/featured invitation rather
+                than competing for the top of the section. */}
           {catalogue && (
             <Link
               href="/catalogue?utm_source=resources&utm_medium=feature_banner&utm_campaign=catalogue"
-              className="group block overflow-hidden rounded-2xl mb-12 transition-all duration-300 hover:-translate-y-[2px] hover:shadow-[0_14px_44px_rgba(249,115,22,0.20)]"
+              className="group block overflow-hidden rounded-2xl mt-16 transition-all duration-300 hover:-translate-y-[2px] hover:shadow-[0_14px_44px_rgba(249,115,22,0.20)]"
               style={{
                 background: "linear-gradient(135deg, #141b2d 0%, #0d1117 100%)",
                 border: "1px solid rgba(255,255,255,0.08)",
@@ -197,24 +215,6 @@ export default async function ResourcesPage() {
               </div>
             </Link>
           )}
-
-          {/* Section label */}
-          <div className="flex items-center gap-4 mb-10">
-            <h2
-              className="text-sm font-bold tracking-widest uppercase"
-              style={{ color: "#F97316" }}
-            >
-              All Documents
-            </h2>
-            <div
-              className="flex-1 h-px"
-              style={{ background: "rgba(255,255,255,0.07)" }}
-            />
-            <span className="text-xs" style={{ color: "#6B7280" }}>
-              {docs.length} total
-            </span>
-          </div>
-          <ResourcesClient documents={docs} />
         </div>
       </section>
 

@@ -245,10 +245,14 @@ export default function Flipbook({ pages, downloadHref }: Props) {
           background: "linear-gradient(0deg, rgba(0,0,0,0.85) 35%, rgba(0,0,0,0) 100%)",
         }}
       >
-        <div className="mx-auto flex max-w-[640px] items-center gap-2">
+        {/* Left-align (Vernon v39): CTA pill sits at the left edge of the
+            640px column with phone + email icons trailing right. The pill
+            sizes to its content (no flex-1 stretch) so it reads as a
+            considered button anchored to the left, not a centred banner. */}
+        <div className="mx-auto flex max-w-[640px] items-center justify-start gap-2">
           <Link
             href={LUNCH_LEARN_HREF}
-            className="flex-1 rounded-full bg-[#F97316] px-4 py-3 text-center text-[13px] font-semibold
+            className="rounded-full bg-[#F97316] px-5 py-3 text-left text-[13px] font-semibold
                        text-white hover:bg-[#ea6d12] active:translate-y-px"
           >
             Book a Free Lunch &amp; Learn

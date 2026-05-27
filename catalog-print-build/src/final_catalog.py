@@ -26,7 +26,7 @@ LOGO_WHITE = HUBSS_LOGOS / "hubss-logo-white-large.png"
 LOGO_COLOR = HUBSS_LOGOS / "hubss-logo-color.png"
 LOGO_ASPECT = 2432 / 701
 
-OUT = ROOT / "output" / "HUBSS_Catalogue_2026_v38.pdf"
+OUT = ROOT / "output" / "HUBSS_Catalogue_2026_v39.pdf"
 
 
 # ---- accent palette --------------------------------------------------
@@ -199,16 +199,51 @@ def _make_scrim_png(height_px=400, width_px=8, max_alpha=230, ease=2.2):
     return out
 
 
-def hero_scrim(c, height_figma=160):
-    """Real linear-gradient scrim using a PIL-rendered PNG. No banding.
+def hero_scrim(c, height_figma=160, *, text_zone_figma=130):
+    """Bulletproof two-layer scrim (Vernon v39 — third flag on contrast).
 
-    Uses the deeper defaults from _make_scrim_png (max_alpha=230, ease=2.2)
-    — Vernon's v33/v34 calibration so bottom captions hold contrast on the
-    brightest photos (e.g. StreetBond splash pad, DuraTherm gold inlay)."""
-    png = _make_scrim_png(height_px=400)
-    h_pdf = height_figma * SCALE
-    c.drawImage(str(png), 0, 0, width=PAGE_W, height=h_pdf,
-                preserveAspectRatio=False, mask='auto')
+    Single-gradient scrims leave the text zone at only ~25-40% opacity on
+    bright photos, which is why the eyebrow + tagline kept washing out on
+    StreetBond splash pads, StreetBondSR sand courts, AggreFill brown
+    patches, etc.
+
+    The fix: TWO layers stacked from the bottom up:
+      1. A NEAR-SOLID black band covering the bottom `text_zone_figma`
+         units at 88% alpha — text on this zone is guaranteed legible
+         regardless of what's behind it. Premium catalogues sacrifice the
+         sliver of photo bottom for guaranteed readability; that's the
+         right trade.
+      2. A SOFT gradient fade above the solid band (transparent at top,
+         meeting the solid band's alpha at the bottom) so the transition
+         is invisible — the eye doesn't see a hard edge.
+
+    text_zone_figma=130 is sized to cover the full eyebrow + tagline zone
+    (page_product_hero text sits at fy=340-370, so 130 units from the
+    bottom of the 450-unit trim covers fy=320-450 — text zone + a buffer).
+    """
+    # --- Layer 1: near-solid black band where the text lives ----------
+    SOLID_ALPHA_PCT = 0.88   # 88% — text is bulletproof on this
+    solid_h_pdf = text_zone_figma * SCALE
+    c.saveState()
+    c.setFillColorRGB(0, 0, 0)
+    c.setFillAlpha(SOLID_ALPHA_PCT)
+    c.rect(0, 0, PAGE_W, solid_h_pdf, stroke=0, fill=1)
+    c.setFillAlpha(1.0)
+    c.restoreState()
+
+    # --- Layer 2: soft fade above, transparent->solid ------------------
+    # The fade ends where the solid band starts so there's no visible seam.
+    # Height of the fade portion = full scrim height - solid band height.
+    fade_h_figma = max(0, height_figma - text_zone_figma)
+    if fade_h_figma > 0:
+        # max_alpha matched to the solid band so the fade meets it cleanly.
+        fade_png = _make_scrim_png(
+            height_px=400, max_alpha=int(255 * SOLID_ALPHA_PCT), ease=1.5
+        )
+        fade_h_pdf = fade_h_figma * SCALE
+        c.drawImage(str(fade_png), 0, solid_h_pdf,
+                    width=PAGE_W, height=fade_h_pdf,
+                    preserveAspectRatio=False, mask='auto')
 
 
 _GLOW_CACHE = {}

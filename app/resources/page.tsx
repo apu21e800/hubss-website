@@ -204,14 +204,14 @@ export default async function ResourcesPage() {
                     className="text-lg sm:text-xl md:text-2xl font-semibold leading-snug mb-2"
                     style={{ color: "#F5F0EB" }}
                   >
-                    Browse the complete {catalogue.pageCount}-page catalogue in your browser.
+                    Browse the full catalogue in your browser.
                   </p>
                   <p
                     className="text-[13px] sm:text-sm leading-relaxed"
                     style={{ color: "rgba(255,255,255,0.6)" }}
                   >
-                    Every product, application, and recent project — searchable,
-                    shareable, and downloadable as a PDF. No download required to read.
+                    All 14 products, applications, and projects — {catalogue.pageCount} pages.
+                    Read online or download the PDF.
                   </p>
                 </div>
                 {/* Desktop CTA */}

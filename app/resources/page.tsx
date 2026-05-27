@@ -210,7 +210,7 @@ export default async function ResourcesPage() {
                     className="text-[13px] sm:text-sm leading-relaxed"
                     style={{ color: "rgba(255,255,255,0.6)" }}
                   >
-                    All 14 products, applications, and projects — {catalogue.pageCount} pages.
+                    Every product, application, and project — {catalogue.pageCount} pages.
                     Read online or download the PDF.
                   </p>
                 </div>

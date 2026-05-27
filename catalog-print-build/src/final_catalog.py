@@ -26,7 +26,7 @@ LOGO_WHITE = HUBSS_LOGOS / "hubss-logo-white-large.png"
 LOGO_COLOR = HUBSS_LOGOS / "hubss-logo-color.png"
 LOGO_ASPECT = 2432 / 701
 
-OUT = ROOT / "output" / "HUBSS_Catalogue_2026_v40.pdf"
+OUT = ROOT / "output" / "HUBSS_Catalogue_2026_v41.pdf"
 
 
 # ---- accent palette --------------------------------------------------
@@ -464,18 +464,28 @@ def page_toc(c, sections):
 
 
 def page_section_open(c, section_no, title, photo_path):
-    """Section divider — full-bleed photo, dark scrim, corner accent."""
+    """Section divider — full-bleed photo, dark scrim, corner accent.
+
+    v41 fix: bumped scrim solid-band height (text_zone_figma) from 130→170
+    so the solid black zone covers the photo's horizon line. Vernon was
+    seeing "two gradients" on the Applications opener (p42) — actually
+    the photo's natural sky→ground transition was visible just above the
+    scrim's fade, reading as a second dark band stacked above the scrim.
+    Taller solid zone covers the horizon → one clean dark band only."""
     fill_bleed(c, HUBSS_WHITE)
     if photo_path and photo_path.exists():
         draw_full_bleed_image(c, str(photo_path))
-    hero_scrim(c, height_figma=210)
+    hero_scrim(c, height_figma=210, text_zone_figma=170)
     corner_accent(c, max_alpha=50, size_figma=230)
-    tracked_caps(c, "Section " + section_no, fx=30, fy=325, size=7.5,
+    # Text positions pulled up to sit within the taller (170 figma) solid
+    # zone — was fy=325/348/415; now fy=300/325/400 to keep proportional
+    # vertical rhythm against the new band top edge (450-170=280).
+    tracked_caps(c, "Section " + section_no, fx=30, fy=300, size=7.5,
                  color=HUBSS_WHITE, max_w_figma=140)
-    draw_text_block(c, title, fx=30, fy=348, font_size_figma=48, weight=800,
+    draw_text_block(c, title, fx=30, fy=325, font_size_figma=48, weight=800,
                     color=HUBSS_WHITE, tracking=-1.4, leading_figma=50)
-    orange_dot(c, fx=30, fy=415, r_figma=2.2)
-    thin_rule(c, fx=40, fy=414, w_figma=56, color=HUBSS_ORANGE, weight_pt=2.0)
+    orange_dot(c, fx=30, fy=400, r_figma=2.2)
+    thin_rule(c, fx=40, fy=399, w_figma=56, color=HUBSS_ORANGE, weight_pt=2.0)
 
 
 def page_product_hero(c, prod):

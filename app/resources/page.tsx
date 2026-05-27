@@ -9,6 +9,7 @@ import LunchLearn from "@/components/sections/LunchLearn";
 import { resourceDocuments } from "@/lib/resource-documents";
 import ResourcesClient from "@/components/resources/ResourcesClient";
 import { getResourceDocuments } from "@/lib/sanity.queries";
+import { showCatalogue } from "@/lib/feature-flags";
 
 import { buildMetadata } from "@/lib/seo";
 
@@ -45,7 +46,9 @@ export const metadata: Metadata = buildMetadata({
 export default async function ResourcesPage() {
   const sanityDocs = await getResourceDocuments().catch(() => null);
   const docs = sanityDocs ?? resourceDocuments;
-  const catalogue = await getCatalogueCover();
+  // Skip cover lookup entirely when the catalogue is hidden — keeps the
+  // gated section from leaking even an image path.
+  const catalogue = showCatalogue() ? await getCatalogueCover() : null;
 
   return (
     <main

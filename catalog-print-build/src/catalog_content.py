@@ -112,6 +112,7 @@ WHY_HUB = {
 # ===== PRODUCTS (12 — AirMark removed per Doug) =====
 PRODUCTS = [
     {"name": "TrafficPatternsXD",
+     "category": "Heavy-Duty Preformed Thermoplastic",
      "tagline": "When the surface has to hold.",
      # tpxd-03.jpg WRONG: showed StreetPrint herringbone brick pattern, not TPXD thermoplastic markings
      # tpxd-05.jpg: green/white decorative TPXD crosswalk — shows actual preformed thermoplastic panels ✓
@@ -126,6 +127,7 @@ PRODUCTS = [
      "spec_pairs": [("Thickness", "150 mil"), ("Aggregate", "Bound through full cross-section"),
                     ("Retroreflectivity", "Glass beads — full depth"), ("Service Life", "Multi-year — outlasts paint")]},
     {"name": "TrafficPatterns",
+     "category": "Preformed Thermoplastic",
      "tagline": "Outlasts paint by seasons, not months.",
      # tp-08.jpg WRONG: showed UBC Musqueam DecoMark cultural crosswalk, not standard TP markings
      # tp-05.jpg: Indigenous recognition crosswalk — at least shows flat thermoplastic (not stamped asphalt)
@@ -140,6 +142,7 @@ PRODUCTS = [
      "spec_pairs": [("Thickness", "125 mil"), ("Retroreflectivity", "Full-depth glass beads"),
                     ("Open to Traffic", "Hours"), ("Service Life", "Multi-year — outlasts paint")]},
     {"name": "StreetBond",
+     "category": "Coloured Acrylic Coating",
      "tagline": "Coloured pavement that moves with asphalt.",
      "hero": _pick(PRODUCTS_DIR / "streetbond" / "streetbond-112.jpg"),
      "title": "The colour system.",
@@ -151,6 +154,7 @@ PRODUCTS = [
      "spec_pairs": [("Type", "Flexible acrylic"), ("Surfaces", "Asphalt and concrete"),
                     ("Colour", "Full Pantone matching"), ("Coverage", "30–50 sq ft / gallon")]},
     {"name": "StreetPrint",
+     "category": "Stamped Asphalt System",
      "tagline": "Stamped asphalt at a fraction of stone's lifecycle cost.",
      "hero": _pick(PRODUCTS_DIR / "streetprint" / "streetprint-40.jpg"),
      "title": "Stamped asphalt.",
@@ -162,6 +166,7 @@ PRODUCTS = [
      "spec_pairs": [("System", "In-place stamping + StreetBond coating"), ("Patterns", "12+ standard + custom"),
                     ("Snowplow Safe", "Yes — flush surface"), ("Base", "New lay or existing asphalt")]},
     {"name": "DecoMark",
+     "category": "Custom Preformed Thermoplastic",
      "tagline": "A crosswalk is a canvas.",
      "hero": _pick(PRODUCTS_DIR / "decomark" / "decomark-43.jpg",
                    PRODUCTS_DIR / "decomark" / "decomark-01.jpg"),
@@ -174,6 +179,7 @@ PRODUCTS = [
      "spec_pairs": [("System", "Preformed components"), ("Colour", "Custom Pantone"),
                     ("Design", "Vector artwork"), ("Install", "Certified crews")]},
     {"name": "MMAX",
+     "category": "MMA Resin Lane Coating",
      "tagline": "Traffic-ready overnight. Engineered for transit lanes.",
      "hero": _pick(PRODUCTS_DIR / "mmax" / "mmax-05.jpg"),
      "title": "MMA resin lane coating.",
@@ -185,6 +191,7 @@ PRODUCTS = [
      "spec_pairs": [("Material", "Methyl methacrylate (MMA) resin"), ("Cure", "45–60 min — traffic-ready"),
                     ("Traction", "Embedded aggregate"), ("Min Temp", "+3°C and rising")]},
     {"name": "StreetBondSR",
+     "category": "Solar-Reflective Acrylic Coating",
      "tagline": "Solar reflective. LEED-aligned.",
      "hero": _pick(PRODUCTS_DIR / "streetbondsr" / "streetbondsr-02.jpg"),
      "title": "Cool surface coating.",
@@ -196,6 +203,7 @@ PRODUCTS = [
      "spec_pairs": [("Solar Reflectance", "≥ 0.33 initial"), ("LEED", "v4 SS Credit: Heat Island"),
                     ("Surfaces", "Asphalt and concrete"), ("Coverage", "30–50 sq ft / gallon")]},
     {"name": "DuraTherm",
+     "category": "Inlaid Preformed Thermoplastic",
      "tagline": "Inlaid. Flush. Invisible to snowplows.",
      "hero": _pick(PRODUCTS_DIR / "duratherm" / "duratherm-01.jpg"),
      "title": "Inlaid thermoplastic.",
@@ -207,6 +215,7 @@ PRODUCTS = [
      "spec_pairs": [("Install", "Inlaid into milled groove"), ("Profile", "Zero — flush with road"),
                     ("Snowplow Safe", "Yes — no shear risk"), ("Bond", "Heat-fused to asphalt substrate")]},
     {"name": "DuraShield",
+     "category": "Pavement Maintenance Coating",
      "tagline": "Maintain a surface, do not replace it.",
      "hero": _pick(PRODUCTS_DIR / "durashield" / "durashield-04.jpg"),
      "title": "Pavement maintenance coating.",
@@ -218,6 +227,7 @@ PRODUCTS = [
      "spec_pairs": [("Type", "Epoxy-modified acrylic coating"), ("Solar Reflectance", "0.34"),
                     ("Chemical Resistance", "Fuel, oil, deicing agents"), ("Anti-Slip", "Available")]},
     {"name": "PreMark",
+     "category": "Preformed Regulatory Markings",
      "tagline": "Pre-cut. Heat-applied. Open immediately.",
      "hero": _pick(PRODUCTS_DIR / "premark" / "premark-01.jpg"),
      "title": "Road marking symbols.",
@@ -229,6 +239,7 @@ PRODUCTS = [
      "spec_pairs": [("Thickness", "125mil standard / 90mil ViziGrip"), ("Installation", "Heat-applied — drive-on immediately"),
                     ("Retroreflectivity", "Intersection-grade glass bead"), ("Service Life", "Multi-year municipal use")]},
     {"name": "AirMark",
+     "category": "Airfield Preformed Thermoplastic",
      "tagline": "Airfield markings, certified to last.",
      "hero": _pick(PRODUCTS_DIR / "airmark" / "airmark-04.jpg",
                    PRODUCTS_DIR / "airmark" / "airmark-01.jpg"),

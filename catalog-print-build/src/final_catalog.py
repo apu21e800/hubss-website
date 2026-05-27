@@ -172,8 +172,14 @@ def folio(c, page_no, *, on_dark=False):
 _SCRIM_CACHE = {}
 
 
-def _make_scrim_png(height_px=400, width_px=8, max_alpha=180, ease=1.6):
-    """Render a true black-to-transparent gradient PNG (cached)."""
+def _make_scrim_png(height_px=400, width_px=8, max_alpha=230, ease=2.2):
+    """Render a true black-to-transparent gradient PNG (cached).
+
+    Vernon's v33/v34 calibration: max_alpha 180→230 + ease 1.6→2.2.
+    Higher max_alpha makes the bottom truly opaque (so white captions
+    pop on bright photos like StreetBond rainbow / DuraTherm gold).
+    Higher ease pushes opacity toward the bottom, so the upper photo
+    stays readable while the caption zone goes properly dark."""
     from PIL import Image
     key = (height_px, width_px, max_alpha, ease)
     if key in _SCRIM_CACHE:
@@ -194,8 +200,12 @@ def _make_scrim_png(height_px=400, width_px=8, max_alpha=180, ease=1.6):
 
 
 def hero_scrim(c, height_figma=160):
-    """Real linear-gradient scrim using a PIL-rendered PNG. No banding."""
-    png = _make_scrim_png(height_px=400, max_alpha=185)
+    """Real linear-gradient scrim using a PIL-rendered PNG. No banding.
+
+    Uses the deeper defaults from _make_scrim_png (max_alpha=230, ease=2.2)
+    — Vernon's v33/v34 calibration so bottom captions hold contrast on the
+    brightest photos (e.g. StreetBond splash pad, DuraTherm gold inlay)."""
+    png = _make_scrim_png(height_px=400)
     h_pdf = height_figma * SCALE
     c.drawImage(str(png), 0, 0, width=PAGE_W, height=h_pdf,
                 preserveAspectRatio=False, mask='auto')
@@ -452,9 +462,24 @@ def page_product_hero(c, prod):
                  color=HUBSS_WHITE, max_w_figma=400)
 
     tagline = no_orphan(prod["tagline"], last_n=3)
-    draw_text_block(c, tagline, fx=30, fy=388, font_size_figma=24,
+    # Size-to-fit tagline (Vernon v33/v34 polish): start at 24pt, shrink
+    # down to a 14pt floor until the tagline fits on a single line in the
+    # 400-figma-unit max width. Prevents oversized heads on long taglines
+    # like "Coloured pavement that moves with asphalt." (StreetBond) or
+    # "Stamped asphalt at a fraction of stone's lifecycle cost." while
+    # keeping short taglines big ("A crosswalk is a canvas.", DecoMark).
+    # Tracking accounts for ~5% extra width per char (-0.6 ≈ -2.5% per em).
+    safe_w_pt = 400 * SCALE
+    tagline_size = 24
+    while tagline_size > 14 and stringWidth(
+        tagline, FONT_SANS_BOLD, tagline_size * SCALE
+    ) > safe_w_pt:
+        tagline_size -= 1
+    # Leading scales with size so vertical rhythm stays proportional.
+    tagline_leading = tagline_size + 2
+    draw_text_block(c, tagline, fx=30, fy=388, font_size_figma=tagline_size,
                     weight=800, color=HUBSS_WHITE, tracking=-0.6,
-                    max_w_figma=400, leading_figma=26)
+                    max_w_figma=400, leading_figma=tagline_leading)
 
 
 

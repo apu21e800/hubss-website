@@ -5,7 +5,16 @@
 // auto-detects the latest vNN PDF, so the pair stays self-syncing.
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import { notFound } from "next/navigation";
 import Flipbook from "./Flipbook";
+import { showCatalogue } from "@/lib/feature-flags";
+
+// Evaluate the feature flag at request time, not build time, so flipping the
+// flag in Vercel env vars doesn't require a rebuild. The page itself is
+// light (manifest read + Flipbook), so dynamic rendering costs nothing.
+// Note: the primary gate is middleware.ts (returns HTTP 307 → /resources);
+// this page-level notFound() is defense-in-depth in case middleware misses.
+export const dynamic = "force-dynamic";
 
 const VERSION_RE = /^v(\d+)$/;
 const PAGE_RE    = /^page-\d{3}\.webp$/;
@@ -32,6 +41,11 @@ async function getPageManifest(): Promise<{ pages: string[]; version: string | n
 }
 
 export default async function CataloguePage() {
+  // Defense-in-depth: middleware should have already redirected when the
+  // flag is off. If it somehow didn't, render the 404 body so visitors
+  // never see the catalogue.
+  if (!showCatalogue()) notFound();
+
   const { pages } = await getPageManifest();
 
   if (pages.length === 0) {

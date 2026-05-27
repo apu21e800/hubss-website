@@ -1,5 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 
+// ── Catalogue feature gate ───────────────────────────────────────────────────
+// Mirrors lib/feature-flags.ts (kept inline because middleware runs on Edge
+// runtime and we want zero external imports). NEXT_PUBLIC_SHOW_CATALOGUE is
+// the explicit override; absent that, hidden on Vercel production only.
+function isCatalogueVisible(): boolean {
+  const raw = (process.env.NEXT_PUBLIC_SHOW_CATALOGUE ?? "").toLowerCase();
+  if (raw === "1" || raw === "true" || raw === "on" || raw === "yes") return true;
+  if (raw === "0" || raw === "false" || raw === "off" || raw === "no") return false;
+  const vercelEnv = process.env.NEXT_PUBLIC_VERCEL_ENV ?? process.env.VERCEL_ENV;
+  return vercelEnv !== "production";
+}
+
 // ── Admin Basic Auth ─────────────────────────────────────────────────────────
 // Protects /admin/* routes via HTTP Basic Auth.
 // Set ADMIN_USER and ADMIN_PASSWORD in Vercel env vars. If either is missing,
@@ -56,8 +68,20 @@ function requireAdminAuth(req: NextRequest): NextResponse | null {
 }
 
 export function middleware(req: NextRequest) {
-  // Gate /admin/* and /studio/* behind Basic Auth.
   const path = req.nextUrl.pathname;
+
+  // Feature-gated catalogue. Redirects to /resources with HTTP 307 when off
+  // so visitors land somewhere useful. Done in middleware (not the page) so
+  // we get a real HTTP status — Next 16's notFound()/redirect() from a
+  // force-dynamic server component returns 200 with the redirect body, which
+  // is bad for SEO.
+  if (path === "/catalogue" || path.startsWith("/catalogue/")) {
+    if (!isCatalogueVisible()) {
+      return NextResponse.redirect(new URL("/resources", req.url), 307);
+    }
+  }
+
+  // Gate /admin/* and /studio/* behind Basic Auth.
   if (
     path.startsWith("/admin") ||
     path.startsWith("/studio") ||
@@ -75,6 +99,8 @@ export function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
+    "/catalogue",
+    "/catalogue/:path*",
     "/admin/:path*",
     "/studio/:path*",
     "/api/blog/approve/:path*",

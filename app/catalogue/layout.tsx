@@ -25,7 +25,14 @@ async function resolveCoverImage(): Promise<string> {
   return "/catalogue/v31/page-001.webp";
 }
 
+import { showCatalogue } from "@/lib/feature-flags";
+
 export async function generateMetadata(): Promise<Metadata> {
+  // When the flag is off, advertise nothing — the page returns 404
+  // anyway, and a 404 with rich OG metadata is a bad smell.
+  if (!showCatalogue()) {
+    return { robots: { index: false, follow: false } };
+  }
   const cover = await resolveCoverImage();
   return {
     title: "Catalogue 2026 — HUB Surface Systems",

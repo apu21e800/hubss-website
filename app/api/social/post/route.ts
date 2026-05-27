@@ -81,9 +81,18 @@ async function postToFacebook(text: string, _media?: SocialPost["media"]): Promi
   }
 }
 
+// Instagram Content Publishing — "Instagram API with Instagram Login" path.
+// Vernon's token is generated via Meta's newer Instagram-Login OAuth flow,
+// so the host is graph.instagram.com (NOT graph.facebook.com — that's the
+// older Facebook-Login path which his token won't authenticate against).
+// Two-step flow (create container → publish) is unchanged per Meta's
+// current content-publishing docs.
+const IG_GRAPH_VERSION = "v25.0";          // matches Meta's current docs example
+const IG_GRAPH_BASE    = "https://graph.instagram.com";
+
 async function postToInstagram(text: string, media?: SocialPost["media"]): Promise<PostResult> {
   if (!process.env.INSTAGRAM_ACCESS_TOKEN) {
-    return { platform: "instagram", success: false, error: "INSTAGRAM_ACCESS_TOKEN not configured. Add your Instagram Business Account token to .env.local" };
+    return { platform: "instagram", success: false, error: "INSTAGRAM_ACCESS_TOKEN not configured. Add your Instagram-Login token to Vercel env." };
   }
   if (!media?.url) {
     return { platform: "instagram", success: false, error: "Instagram requires an image. Add media to this post." };
@@ -92,7 +101,7 @@ async function postToInstagram(text: string, media?: SocialPost["media"]): Promi
     const igUserId = process.env.INSTAGRAM_USER_ID;
     const imageUrl = media.url.startsWith("http") ? media.url : `https://hubss.com${media.url}`;
     // Step 1: Create media container
-    const containerRes = await fetch(`https://graph.facebook.com/v19.0/${igUserId}/media`, {
+    const containerRes = await fetch(`${IG_GRAPH_BASE}/${IG_GRAPH_VERSION}/${igUserId}/media`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -107,7 +116,7 @@ async function postToInstagram(text: string, media?: SocialPost["media"]): Promi
     }
     const container = await containerRes.json();
     // Step 2: Publish
-    const publishRes = await fetch(`https://graph.facebook.com/v19.0/${igUserId}/media_publish`, {
+    const publishRes = await fetch(`${IG_GRAPH_BASE}/${IG_GRAPH_VERSION}/${igUserId}/media_publish`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

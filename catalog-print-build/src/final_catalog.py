@@ -26,7 +26,7 @@ LOGO_WHITE = HUBSS_LOGOS / "hubss-logo-white-large.png"
 LOGO_COLOR = HUBSS_LOGOS / "hubss-logo-color.png"
 LOGO_ASPECT = 2432 / 701
 
-OUT = ROOT / "output" / "HUBSS_Catalogue_2026_v37.pdf"
+OUT = ROOT / "output" / "HUBSS_Catalogue_2026_v38.pdf"
 
 
 # ---- accent palette --------------------------------------------------

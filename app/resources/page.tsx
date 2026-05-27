@@ -204,7 +204,7 @@ export default async function ResourcesPage() {
                     className="text-lg sm:text-xl md:text-2xl font-semibold leading-snug mb-2"
                     style={{ color: "#F5F0EB" }}
                   >
-                    Browse the complete 116-page catalogue in your browser.
+                    Browse the complete {catalogue.pageCount}-page catalogue in your browser.
                   </p>
                   <p
                     className="text-[13px] sm:text-sm leading-relaxed"

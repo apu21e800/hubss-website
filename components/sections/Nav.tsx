@@ -475,7 +475,7 @@ function ProductsMegaMenu() {
           >
             <Image
               src="/catalogue/v38/page-001.webp"
-              alt="HUB Surface Systems 2026 Catalogue — browse 116 pages online"
+              alt="HUB Surface Systems 2026 Catalogue — browse 124 pages online"
               fill
               sizes="96px"
               className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
@@ -498,7 +498,7 @@ function ProductsMegaMenu() {
               Browse the catalogue in your browser
             </p>
             <p className="text-[11px] mt-0.5" style={{ color: "rgba(255,255,255,0.62)" }}>
-              116 pages · all products · all applications · free to read
+              124 pages · all products · all applications · free to read
             </p>
           </div>
           <div className="flex-shrink-0 self-center pr-5">

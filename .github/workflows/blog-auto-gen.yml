@@ -1,0 +1,187 @@
+name: Auto-generate Blog Post
+
+on:
+  schedule:
+    # 1st and 15th of each month at 9:00am Pacific (17:00 UTC).
+    # GATED: this only runs when AUTOMATION_ENABLED == 'true' AND
+    # CLAUDE_CODE_OAUTH_TOKEN is set — see the first job step.
+    - cron: '0 17 1,15 * *'
+  workflow_dispatch:
+    inputs:
+      topic:
+        description: 'Override topic (leave blank to auto-select)'
+        required: false
+        type: string
+      force:
+        description: 'Run even if AUTOMATION_ENABLED secret is not set (manual test only)'
+        required: false
+        default: 'false'
+        type: choice
+        options: ['false', 'true']
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  generate-blog-post:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      # ── Activation gate ──────────────────────────────────────────────
+      # Cron + dispatch both run this gate first. If AUTOMATION_ENABLED
+      # is not "true" AND no manual force flag is set, exit cleanly so
+      # the workflow shows as success but no API calls are made and no
+      # PR is opened. This means the scaffold can sit on a branch with
+      # the workflow .yml present but doing NOTHING until Vernon flips
+      # the secret to activate.
+      - name: Activation gate
+        id: gate
+        run: |
+          if [ "${{ secrets.AUTOMATION_ENABLED }}" = "true" ]; then
+            echo "enabled=true" >> $GITHUB_OUTPUT
+            echo "Activation gate OPEN: AUTOMATION_ENABLED=true"
+          elif [ "${{ github.event.inputs.force }}" = "true" ]; then
+            echo "enabled=true" >> $GITHUB_OUTPUT
+            echo "Activation gate OPEN: manual force=true (one-shot test)"
+          else
+            echo "enabled=false" >> $GITHUB_OUTPUT
+            echo "Activation gate CLOSED: set AUTOMATION_ENABLED secret to 'true' to enable, or dispatch with force=true for a one-shot test."
+          fi
+
+      - name: Checkout repository
+        if: steps.gate.outputs.enabled == 'true'
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Generate blog post with Claude
+        if: steps.gate.outputs.enabled == 'true'
+        uses: anthropics/claude-code-action@beta
+        with:
+          allowed_tools: "Bash,Read,Write,Edit,Glob,Grep"
+          timeout_minutes: "25"
+          prompt: |
+            You are writing a blog post for HUB Surface Systems (hubss.com), a Canadian leader in decorative pavement coatings and surface systems. Your job is to:
+
+            1. UNDERSTAND WHAT'S ALREADY BEEN COVERED
+               - Use Glob to find all .mdx files in content/blog/ (exclude content/blog/drafts/)
+               - Read the most recent 8-10 posts (by filename date or frontmatter date)
+               - Note which topics and products have been covered recently
+
+            2. PICK A TOPIC
+               Rotate through these types — pick whichever hasn't appeared in recent posts:
+               A) Project case study: spotlight a real Canadian municipality crosswalk/surface project
+               B) Specifier how-to: technical guide for engineers/planners/contractors
+               C) Seasonal focus: timely content (spring inspection, winter prep, freeze-thaw planning)
+               D) Product spotlight: deep-dive on one HUB product (MMAX, StreetPrint, DecoMark, etc.)
+               E) Cross-product comparison: when to specify one product vs another
+
+               Topic override from workflow input: "${{ github.event.inputs.topic }}"
+               If a topic override was provided, use that instead.
+
+            3. READ BRAND CONTEXT
+               - Read lib/products.ts for the full product list and descriptions
+               - Read lib/applications.ts for application types
+               - Read 2-3 recent blog posts for voice and style reference
+
+            4. GENERATE THE BLOG POST
+               Write 600-900 words following these rules:
+               - Brand voice: municipal authority meets civic pride — technical credibility, not preachy
+               - Canadian English: colour, centre, fibre, programme (not color, center, fiber, program)
+               - Target audience: municipal engineers, urban planners, project managers, contractors
+               - DO NOT use: "AODA", "warranty", "compliance", "guaranteed" — HUB does not make these claims
+               - DO NOT use: filler phrases like "In conclusion", "In today's world", "game-changer"
+               - Reference HUB products naturally — specific product names where relevant
+               - End with a brief CTA pointing readers to /contact or /lunch-learn
+               - Use ## and ### headings, bullet lists where appropriate
+               - All claims must be defensible — if uncertain, write around it
+
+            5. CREATE THE MDX FILE
+               Generate a slug from the title: lowercase, hyphens only, max 60 chars.
+               Today's date: $(date -u +%Y-%m-%d)
+
+               Create the file at: content/blog/[slug].mdx
+
+               Frontmatter format:
+               ```
+               ---
+               title: "[Post title]"
+               date: "[YYYY-MM-DD]"
+               excerpt: "[One sentence, max 160 chars, for blog listing cards]"
+               readTime: "[X] min read"
+               featuredImage: "/images/blog/[slug]/featured.jpg"
+               tags: ["[tag1]", "[tag2]", "[tag3]"]
+               ---
+               ```
+
+               Note: the featuredImage path follows the convention /images/blog/[slug]/featured.jpg
+               Vernon will add the actual image before publishing.
+
+            6. CREATE A PR FOR REVIEW
+               - Create a new branch: blog/auto-$(date -u +%Y-%m-%d)-[short-slug]
+               - Commit the new file with message: "feat(blog): auto-generated post — [title]"
+               - Push the branch
+               - Open a PR using gh pr create with:
+                 Title: "📝 Draft blog post: [title]"
+                 Body should include:
+                 - The topic type chosen (A/B/C/D/E above)
+                 - Why this topic was chosen (what gap it fills)
+                 - The post excerpt
+                 - Checklist for Vernon:
+                   - [ ] Review and edit the content
+                   - [ ] Add featured image at [path]
+                   - [ ] Adjust tags if needed
+                   - [ ] Merge when ready to publish (triggers social cross-post)
+
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ── Bridge to social cross-post (no-op when AUTO_PUBLISH_TO_SANITY
+      #    is not 'true'). With it ON: the freshly committed MDX draft
+      #    is also published to Sanity via the live /api/blog/approve
+      #    endpoint, which gives the post a public slug and image URL.
+      #    Then we trigger the social-cross-post workflow with the slug
+      #    so it runs on the published content (not on the raw PR).
+      #
+      #    Default OFF: Vernon's existing flow is human-review-then-merge
+      #    (PR → merge → social-cross-post fires on the push). Set
+      #    AUTO_PUBLISH_TO_SANITY=true once Vernon's comfortable with
+      #    auto-publishing without the human step. ─────────────────────
+      - name: Publish to Sanity + trigger social cross-post
+        if: steps.gate.outputs.enabled == 'true'
+        run: |
+          # Inner gate: AUTO_PUBLISH_TO_SANITY must equal 'true' for this
+          # step to actually publish. Default (unset) = no-op, exits 0.
+          if [ "$AUTO_PUBLISH_TO_SANITY" != "true" ]; then
+            echo "AUTO_PUBLISH_TO_SANITY is not 'true' — skipping Sanity publish + social trigger."
+            echo "Vernon's flow stays: PR → human review → merge → social-cross-post fires on push."
+            exit 0
+          fi
+          # The Claude action committed the new MDX on a feature branch.
+          # Find the file it added and POST it to /api/blog/approve.
+          NEW_MDX=$(git diff --name-only --diff-filter=A HEAD~1 HEAD 2>/dev/null | grep '^content/blog/.*\.mdx$' | grep -v drafts/ | head -1)
+          if [ -z "$NEW_MDX" ]; then
+            echo "No new blog MDX found — skipping Sanity publish."
+            exit 0
+          fi
+          SLUG=$(basename "$NEW_MDX" .mdx)
+          echo "Publishing slug to Sanity: $SLUG"
+          # Call the existing /api/blog/approve endpoint (requires ADMIN_PASSWORD)
+          curl -fsS -X POST "${SITE_URL}/api/blog/approve" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${ADMIN_PASSWORD}" \
+            -d "{\"slug\":\"${SLUG}\"}" || echo "WARN: Sanity publish failed (continuing)"
+          # Ping the social-cross-post workflow via repository_dispatch
+          gh api repos/${{ github.repository }}/dispatches \
+            -X POST \
+            -F event_type=blog-published \
+            -F client_payload[slug]="${SLUG}" || echo "WARN: dispatch failed"
+        env:
+          AUTO_PUBLISH_TO_SANITY: ${{ secrets.AUTO_PUBLISH_TO_SANITY }}
+          SITE_URL: ${{ secrets.SITE_URL }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

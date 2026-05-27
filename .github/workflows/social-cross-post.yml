@@ -1,0 +1,147 @@
+name: Social Cross-Post
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      # Fires when a new blog MDX is merged to main (not drafts).
+      # GATED: see first job step — workflow exits cleanly if
+      # AUTOMATION_ENABLED is not 'true', so this triggers but does
+      # nothing until Vernon flips the secret.
+      - 'content/blog/*.mdx'
+
+  # Also fires when the blog-auto-gen workflow publishes to Sanity
+  # (via repository_dispatch with event_type='blog-published'). The
+  # payload carries the Sanity document slug + featured image URL.
+  repository_dispatch:
+    types: [blog-published]
+
+  workflow_dispatch:
+    inputs:
+      blog_slug:
+        description: 'Blog post slug (filename without .mdx) to generate social copy for'
+        required: true
+        type: string
+      force:
+        description: 'Run even if AUTOMATION_ENABLED secret is not set (manual test only)'
+        required: false
+        default: 'false'
+        type: choice
+        options: ['false', 'true']
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  detect-and-generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      # ── Activation gate (same as blog-auto-gen.yml) ─────────────────
+      - name: Activation gate
+        id: gate
+        run: |
+          if [ "${{ secrets.AUTOMATION_ENABLED }}" = "true" ]; then
+            echo "enabled=true" >> $GITHUB_OUTPUT
+            echo "Activation gate OPEN: AUTOMATION_ENABLED=true"
+          elif [ "${{ github.event.inputs.force }}" = "true" ]; then
+            echo "enabled=true" >> $GITHUB_OUTPUT
+            echo "Activation gate OPEN: manual force=true (one-shot test)"
+          else
+            echo "enabled=false" >> $GITHUB_OUTPUT
+            echo "Activation gate CLOSED: set AUTOMATION_ENABLED secret to 'true' to enable, or dispatch with force=true for a one-shot test."
+          fi
+
+      - name: Checkout repository
+        if: steps.gate.outputs.enabled == 'true'
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 2
+
+      - name: Set up Node.js
+        if: steps.gate.outputs.enabled == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Detect new blog post(s)
+        if: steps.gate.outputs.enabled == 'true'
+        id: detect
+        run: |
+          if [ -n "${{ github.event.inputs.blog_slug }}" ]; then
+            # Manual trigger — use provided slug
+            echo "slugs=${{ github.event.inputs.blog_slug }}" >> $GITHUB_OUTPUT
+            echo "found=true" >> $GITHUB_OUTPUT
+          else
+            # Auto trigger — find MDX files added in this push (not in drafts/)
+            ADDED=$(git diff --name-only --diff-filter=A HEAD~1 HEAD -- 'content/blog/*.mdx' | grep -v 'drafts/' | sed 's|content/blog/||' | sed 's|\.mdx$||' | tr '\n' ',' | sed 's/,$//')
+            echo "slugs=$ADDED" >> $GITHUB_OUTPUT
+            if [ -n "$ADDED" ]; then
+              echo "found=true" >> $GITHUB_OUTPUT
+            else
+              echo "found=false" >> $GITHUB_OUTPUT
+            fi
+          fi
+
+      - name: Skip if no new blog posts
+        if: steps.gate.outputs.enabled == 'true' && steps.detect.outputs.found != 'true'
+        run: |
+          echo "No new blog posts detected in this push. Skipping social generation."
+          exit 0
+
+      - name: Install Anthropic SDK
+        if: steps.gate.outputs.enabled == 'true' && steps.detect.outputs.found == 'true'
+        run: npm install @anthropic-ai/sdk
+
+      - name: Generate social variants and post (or draft)
+        if: steps.gate.outputs.enabled == 'true' && steps.detect.outputs.found == 'true'
+        run: |
+          node .github/scripts/generate-social-post.mjs "${{ steps.detect.outputs.slugs }}"
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+          LINKEDIN_ORG_ID: ${{ secrets.LINKEDIN_ORG_ID }}
+          FACEBOOK_PAGE_TOKEN: ${{ secrets.FACEBOOK_PAGE_TOKEN }}
+          FACEBOOK_PAGE_ID: ${{ secrets.FACEBOOK_PAGE_ID }}
+          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+          INSTAGRAM_USER_ID: ${{ secrets.INSTAGRAM_USER_ID }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Open PR with social drafts (if any platforms missing tokens)
+        if: steps.gate.outputs.enabled == 'true' && steps.detect.outputs.found == 'true'
+        run: |
+          # Check if any draft files were created by the script
+          if ls social-drafts/*.md 2>/dev/null | head -1; then
+            DATE=$(date -u +%Y-%m-%d)
+            BRANCH="social/drafts-${DATE}-${{ github.run_id }}"
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git checkout -b "$BRANCH"
+            git add social-drafts/
+            git commit -m "feat(social): auto-generated social drafts for $(echo ${{ steps.detect.outputs.slugs }} | tr ',' ' ')"
+            git push origin "$BRANCH"
+            gh pr create \
+              --title "📣 Social drafts ready — $(date -u +%b %d, %Y)" \
+              --body "Social copy for: \`${{ steps.detect.outputs.slugs }}\`
+
+          Check \`social-drafts/\` for platform-specific copy.
+
+          **Platforms posted automatically:** See script output above.
+          **Platforms needing manual posting:** Copy from the draft files below.
+
+          **To activate automatic posting**, add the missing tokens to GitHub Secrets:
+          - LinkedIn: \`LINKEDIN_ACCESS_TOKEN\` + \`LINKEDIN_ORG_ID\`
+          - Facebook: \`FACEBOOK_PAGE_TOKEN\` + \`FACEBOOK_PAGE_ID\`
+          - Instagram: \`INSTAGRAM_ACCESS_TOKEN\` + \`INSTAGRAM_USER_ID\`
+
+          See \`.github/AUTOMATIONS.md\` for setup instructions." \
+              --base main
+          else
+            echo "All platforms posted automatically — no draft PR needed."
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

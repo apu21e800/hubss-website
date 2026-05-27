@@ -33,6 +33,14 @@ export const SITE_FLAGS = {
   /** /admin/social post composer. Requires OAuth tokens per platform. */
   showAdminSocial: true,
 
+  // ── AI Chat ───────────────────────────────────────────────────────────────
+  /** AI product assistant chat (app/api/ai-chat/route.ts).
+   *  Requires ANTHROPIC_API_KEY in Vercel env vars.
+   *  Cost: ~$0.001-0.003/conversation (Claude Haiku).
+   *  Set spending limit at console.anthropic.com before enabling.
+   *  See CHATBOT-OPTIONS.md for full options analysis. */
+  showAIChat: false,
+
   // ── Add new flags here ────────────────────────────────────────────────────
   // e.g. showTestimonials: false,
   // e.g. showPricingPage: false,

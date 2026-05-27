@@ -26,7 +26,7 @@ LOGO_WHITE = HUBSS_LOGOS / "hubss-logo-white-large.png"
 LOGO_COLOR = HUBSS_LOGOS / "hubss-logo-color.png"
 LOGO_ASPECT = 2432 / 701
 
-OUT = ROOT / "output" / "HUBSS_Catalogue_2026_v36.pdf"
+OUT = ROOT / "output" / "HUBSS_Catalogue_2026_v37.pdf"
 
 
 # ---- accent palette --------------------------------------------------
@@ -444,40 +444,51 @@ def page_section_open(c, section_no, title, photo_path):
 
 
 def page_product_hero(c, prod):
-    """Product hero — full-bleed photo, dark scrim, diagonal corner accent."""
+    """Product hero — full-bleed photo, dark scrim, diagonal corner accent.
+
+    Text zone (Vernon v37 fix): eyebrow + tagline live in a single block
+    near the bottom with a generous SAFE_BOTTOM margin (~80 figma units,
+    ≈0.9") between the tagline baseline and the trim edge. Prior layout
+    at fy=388 pushed descenders right against the trim, giving zero
+    breathing room — looks cramped, no margin for cut variance on press.
+    """
     fill_bleed(c, HUBSS_WHITE)
     if prod["hero"] and prod["hero"].exists():
         draw_full_bleed_image(c, str(prod["hero"]))
-    hero_scrim(c, height_figma=190)
+    hero_scrim(c, height_figma=210)  # bumped 190→210 so scrim covers the
+                                      # now-higher text zone with darker mass
     corner_accent(c, max_alpha=70, size_figma=260)
 
-    # Eyebrow was 12.5pt — at ~52% of H1 (24pt) it competed for attention
-    # with the tagline. Dropped to 9pt so the cap-height reads ~38% of the
-    # H1 cap-height (clearly subordinate). Dot vertical offset scaled from
-    # the empirical 12.5pt calibration (fy=369, baseline fy=358 → offset 11)
-    # by the 9/12.5 = 0.72 size ratio: new offset 11*0.72 ≈ 8 → fy=366.
-    # Dot radius scaled by the same ratio: 1.8 * 0.72 ≈ 1.3.
-    orange_dot(c, fx=33, fy=366, r_figma=1.3)
-    tracked_caps(c, prod["name"], fx=42, fy=358, size=9.0,
+    # ── Bottom-anchored text zone ─────────────────────────────────────
+    # SAFE_BOTTOM is the distance from the tagline baseline to the trim
+    # bottom (fy=450). 80 figma units = ~0.89" — generous for press cut
+    # variance and visual breathing room. Eyebrow + dot sit above tagline
+    # with consistent spacing regardless of tagline final size.
+    SAFE_BOTTOM    = 80
+    TAGLINE_FY     = 450 - SAFE_BOTTOM   # = 370 (was 388 — moved up 18 units)
+    EYEBROW_FY     = TAGLINE_FY - 30     # = 340 (eyebrow 30 above tagline)
+    DOT_FY         = EYEBROW_FY + 8      # = 348 (dot visually centres on caps)
+
+    # Eyebrow: 9pt tracked caps (Vernon B4 — clearly subordinate to H1).
+    # Dot radius 1.3 = 1.8 * 0.72 (scaled from v34's 12.5pt calibration).
+    orange_dot(c, fx=33, fy=DOT_FY, r_figma=1.3)
+    tracked_caps(c, prod["name"], fx=42, fy=EYEBROW_FY, size=9.0,
                  color=HUBSS_WHITE, max_w_figma=400)
 
+    # Tagline size-to-fit: start at 24pt, shrink to a 13pt floor (lowered
+    # from 14pt for safety on the longest taglines) until it fits on ONE
+    # line in 400 figma units. Prevents 2-line wraps that crowd the layout.
     tagline = no_orphan(prod["tagline"], last_n=3)
-    # Size-to-fit tagline (Vernon v33/v34 polish): start at 24pt, shrink
-    # down to a 14pt floor until the tagline fits on a single line in the
-    # 400-figma-unit max width. Prevents oversized heads on long taglines
-    # like "Coloured pavement that moves with asphalt." (StreetBond) or
-    # "Stamped asphalt at a fraction of stone's lifecycle cost." while
-    # keeping short taglines big ("A crosswalk is a canvas.", DecoMark).
-    # Tracking accounts for ~5% extra width per char (-0.6 ≈ -2.5% per em).
     safe_w_pt = 400 * SCALE
     tagline_size = 24
-    while tagline_size > 14 and stringWidth(
+    while tagline_size > 13 and stringWidth(
         tagline, FONT_SANS_BOLD, tagline_size * SCALE
     ) > safe_w_pt:
         tagline_size -= 1
     # Leading scales with size so vertical rhythm stays proportional.
     tagline_leading = tagline_size + 2
-    draw_text_block(c, tagline, fx=30, fy=388, font_size_figma=tagline_size,
+    draw_text_block(c, tagline, fx=30, fy=TAGLINE_FY,
+                    font_size_figma=tagline_size,
                     weight=800, color=HUBSS_WHITE, tracking=-0.6,
                     max_w_figma=400, leading_figma=tagline_leading)
 

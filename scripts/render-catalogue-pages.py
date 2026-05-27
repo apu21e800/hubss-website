@@ -56,8 +56,8 @@ _match = _VERSION_RE.search(PDF.name)
 _version_tag = f"v{int(_match.group(1))}" if _match else "current"
 OUT = PAGES_DIR / _version_tag
 
-LONG_EDGE_PX  = 1200            # ~1200px long edge per spec
-WEBP_QUALITY  = 78              # q78 — visibly lossless for catalogue art
+LONG_EDGE_PX  = 1800            # v32: bumped 1200 → 1800 — sharper on desktop
+WEBP_QUALITY  = 88              # v32: bumped 78 → 88 — preserves photo detail
 
 # Page geometry (PDF points; 72 pt = 1 in):
 BLEED_PT      = 9.0             # 0.125" * 72

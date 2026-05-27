@@ -88,67 +88,6 @@ export default async function ResourcesPage() {
         </p>
       </div>
 
-      {/* ── Catalogue 2026 feature — compact flipbook CTA ──────
-            Tidy horizontal card: cover thumb + label + arrow. Sits
-            modestly above the document library so it's findable
-            without dominating the hero. */}
-      {catalogue && (
-        <div className="relative max-w-3xl mx-auto px-6 pb-10 sm:pb-12">
-          <Link
-            href="/catalogue?utm_source=resources&utm_medium=feature_card&utm_campaign=catalogue"
-            className="group flex items-stretch gap-4 sm:gap-5 overflow-hidden rounded-xl pr-4 sm:pr-5 transition-all duration-300 hover:-translate-y-[2px] hover:shadow-[0_8px_28px_rgba(249,115,22,0.15)]"
-            style={{
-              background: "rgba(255,255,255,0.025)",
-              border: "1px solid rgba(255,255,255,0.08)",
-            }}
-          >
-            {/* Cover thumb — newest rendered v{NN} page-001 (UBC + Musqueam) */}
-            <div
-              className="relative flex-shrink-0 overflow-hidden bg-black"
-              style={{ width: 88, height: 88 }}
-            >
-              <Image
-                src={catalogue.src}
-                alt="HUB Surface Systems Catalogue 2026 — cover thumbnail"
-                fill
-                sizes="88px"
-                className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-              />
-            </div>
-
-            {/* Label */}
-            <div className="flex-1 min-w-0 py-3">
-              <p
-                className="text-[10px] font-bold tracking-[0.2em] uppercase mb-0.5"
-                style={{ color: "#FB923C" }}
-              >
-                Catalogue 2026
-              </p>
-              <p
-                className="text-sm sm:text-base font-semibold leading-snug"
-                style={{ color: "#F5F0EB" }}
-              >
-                Browse the catalogue in your browser
-              </p>
-              <p
-                className="text-[11px] mt-0.5"
-                style={{ color: "rgba(255,255,255,0.55)" }}
-              >
-                {catalogue.pageCount} pages · free to read
-              </p>
-            </div>
-
-            {/* Arrow */}
-            <span
-              className="flex-shrink-0 self-center inline-flex items-center gap-1.5 text-[11px] font-bold tracking-[0.18em] uppercase transition-transform duration-200 group-hover:translate-x-1"
-              style={{ color: "#FB923C" }}
-            >
-              Open <span aria-hidden="true">→</span>
-            </span>
-          </Link>
-        </div>
-      )}
-
       {/* ── Document Library — L&L card style ──────────────── */}
       <section
         className="relative overflow-hidden"
@@ -180,6 +119,85 @@ export default async function ResourcesPage() {
         />
 
         <div className="max-w-7xl mx-auto px-6 py-16 pb-28 relative">
+          {/* ── Featured: Virtual Catalogue ────────────────────
+                Banner card sits at the top of the library section so it
+                anchors to a real container (not floating in the hero) and
+                reads as a featured resource rather than a hero CTA. */}
+          {catalogue && (
+            <Link
+              href="/catalogue?utm_source=resources&utm_medium=feature_banner&utm_campaign=catalogue"
+              className="group block overflow-hidden rounded-2xl mb-12 transition-all duration-300 hover:-translate-y-[2px] hover:shadow-[0_14px_44px_rgba(249,115,22,0.20)]"
+              style={{
+                background: "linear-gradient(135deg, #141b2d 0%, #0d1117 100%)",
+                border: "1px solid rgba(255,255,255,0.08)",
+              }}
+            >
+              <div
+                className="h-[2px] w-full"
+                style={{ background: "linear-gradient(90deg, #F97316 0%, #EAB308 100%)" }}
+                aria-hidden="true"
+              />
+              <div className="grid grid-cols-1 md:grid-cols-[180px_1fr_auto] items-stretch">
+                {/* Cover thumb (auto-detected from newest v{NN}/page-001) */}
+                <div className="relative overflow-hidden bg-black aspect-square md:aspect-auto md:min-h-[160px]">
+                  <Image
+                    src={catalogue.src}
+                    alt="HUB Surface Systems Catalogue 2026 — cover"
+                    fill
+                    sizes="(min-width: 768px) 180px, 100vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                  />
+                </div>
+                {/* Label block */}
+                <div className="p-6 sm:p-7 md:py-7 flex flex-col justify-center">
+                  <p
+                    className="text-[10px] font-bold tracking-[0.22em] uppercase mb-2"
+                    style={{ color: "#FB923C" }}
+                  >
+                    Featured · Virtual Catalogue 2026
+                  </p>
+                  <p
+                    className="text-lg sm:text-xl font-semibold leading-snug mb-1"
+                    style={{ color: "#F5F0EB" }}
+                  >
+                    Browse the complete 116-page catalogue in your browser.
+                  </p>
+                  <p
+                    className="text-[13px]"
+                    style={{ color: "rgba(255,255,255,0.6)" }}
+                  >
+                    {catalogue.pageCount} pages · free to read · downloadable PDF
+                  </p>
+                </div>
+                {/* CTA chevron */}
+                <div className="hidden md:flex items-center pr-7 pl-2">
+                  <span
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-[12px] font-bold tracking-[0.18em] uppercase transition-transform duration-200 group-hover:translate-x-1"
+                    style={{
+                      background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
+                      color: "#fff",
+                      boxShadow: "0 6px 18px rgba(249,115,22,0.32)",
+                    }}
+                  >
+                    Open <span aria-hidden="true">→</span>
+                  </span>
+                </div>
+                {/* Mobile CTA */}
+                <div className="md:hidden px-6 pb-6">
+                  <span
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-[12px] font-bold tracking-[0.18em] uppercase"
+                    style={{
+                      background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
+                      color: "#fff",
+                    }}
+                  >
+                    Open <span aria-hidden="true">→</span>
+                  </span>
+                </div>
+              </div>
+            </Link>
+          )}
+
           {/* Section label */}
           <div className="flex items-center gap-4 mb-10">
             <h2

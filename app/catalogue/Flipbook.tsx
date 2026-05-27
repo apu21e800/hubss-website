@@ -18,9 +18,13 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 const LUNCH_LEARN_HREF =
   "/lunch-learn?utm_source=catalogue&utm_medium=flipbook&utm_campaign=web";
 
-type Props = { pages: string[] };
+type Props = {
+  pages: string[];
+  /** URL of the downloadable web-sized PDF, e.g. /catalogue/HUBSS-Catalogue-2026.pdf */
+  downloadHref?: string;
+};
 
-export default function Flipbook({ pages }: Props) {
+export default function Flipbook({ pages, downloadHref }: Props) {
   const total = pages.length;
   const [idx, setIdx] = useState(0);                          // current page (0-based)
   const [zoom, setZoom] = useState(false);                    // tap-zoom toggle
@@ -203,20 +207,34 @@ export default function Flipbook({ pages }: Props) {
             {idx + 1} / {total}
           </p>
         </div>
-        {shareSupported ? (
-          <button
-            type="button"
-            onClick={onShare}
-            className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full
-                       border border-white/15 bg-white/10 px-3 py-1.5 text-[11px] uppercase
-                       tracking-[0.18em] text-white hover:bg-white/20"
-            aria-label="Share this catalogue"
-          >
-            <ShareIcon /> Share
-          </button>
-        ) : (
-          <div className="w-[68px]" /> // spacer so counter stays centered
-        )}
+        <div className="pointer-events-auto flex items-center gap-2">
+          {downloadHref && (
+            <a
+              href={downloadHref}
+              download
+              className="inline-flex items-center gap-1.5 rounded-full
+                         border border-white/15 bg-white/10 px-3 py-1.5 text-[11px] uppercase
+                         tracking-[0.18em] text-white hover:bg-white/20"
+              aria-label="Download the catalogue as a PDF"
+            >
+              <DownloadIcon /> PDF
+            </a>
+          )}
+          {shareSupported ? (
+            <button
+              type="button"
+              onClick={onShare}
+              className="inline-flex items-center gap-1.5 rounded-full
+                         border border-white/15 bg-white/10 px-3 py-1.5 text-[11px] uppercase
+                         tracking-[0.18em] text-white hover:bg-white/20"
+              aria-label="Share this catalogue"
+            >
+              <ShareIcon /> Share
+            </button>
+          ) : downloadHref ? null : (
+            <div className="w-[68px]" /> /* spacer so counter stays centered */
+          )}
+        </div>
       </header>
 
       {/* Bottom CTA — sticky, always tappable */}
@@ -305,6 +323,15 @@ function ShareIcon() {
   return (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
       <path d="M12 16V4m0 0-4 4m4-4 4 4M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"
+            stroke="currentColor" strokeWidth="2"
+            strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+function DownloadIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M12 3v12m0 0 4-4m-4 4-4-4M5 17v2a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-2"
             stroke="currentColor" strokeWidth="2"
             strokeLinecap="round" strokeLinejoin="round" />
     </svg>

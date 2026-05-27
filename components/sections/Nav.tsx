@@ -468,8 +468,21 @@ function ProductsMegaMenu() {
         </div>
       </div>
 
-      {/* Bottom strip — secondary entry points */}
-      <div className="mt-5 pt-4 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+      {/* Bottom strip — secondary entry points (now 4 incl. Virtual Catalogue) */}
+      <div className="mt-5 pt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+        <Link href="/catalogue?utm_source=megamenu&utm_medium=products_strip&utm_campaign=catalogue"
+          className="flex items-center justify-between px-4 py-2.5 rounded-lg transition-colors hover:bg-white/5 relative"
+          style={{ background: "rgba(249,115,22,0.06)", border: "1px solid rgba(249,115,22,0.22)" }}
+        >
+          <div>
+            <p className="text-[13px] font-semibold flex items-center gap-2" style={{ color: "#F5F0EB" }}>
+              Virtual Catalogue
+              <span className="text-[9px] font-bold tracking-[0.18em] uppercase px-1.5 py-0.5 rounded" style={{ background: "rgba(249,115,22,0.18)", color: "#FB923C" }}>New</span>
+            </p>
+            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.62)" }}>Browse all 116 pages online</p>
+          </div>
+          <svg width="14" height="14" fill="none" stroke="#FB923C" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
+        </Link>
         <Link href="/resources"
           className="flex items-center justify-between px-4 py-2.5 rounded-lg transition-colors hover:bg-white/5"
           style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}

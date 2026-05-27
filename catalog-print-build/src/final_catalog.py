@@ -26,7 +26,7 @@ LOGO_WHITE = HUBSS_LOGOS / "hubss-logo-white-large.png"
 LOGO_COLOR = HUBSS_LOGOS / "hubss-logo-color.png"
 LOGO_ASPECT = 2432 / 701
 
-OUT = ROOT / "output" / "HUBSS_Catalogue_2026_v27.pdf"
+OUT = ROOT / "output" / "HUBSS_Catalogue_2026_v35.pdf"
 
 
 # ---- accent palette --------------------------------------------------
@@ -438,8 +438,12 @@ def page_product_hero(c, prod):
     hero_scrim(c, height_figma=190)
     corner_accent(c, max_alpha=70, size_figma=260)
 
-    orange_dot(c, fx=33, fy=362, r_figma=1.8)
-    tracked_caps(c, prod["name"], fx=42, fy=358, size=12.5,
+    # Eyebrow was 12.5pt — at ~52% of H1 (24pt) it competed for attention
+    # with the tagline. Dropped to 9pt so the cap-height reads ~38% of the
+    # H1 cap-height (clearly subordinate). Dot radius + vertical offset
+    # scaled by the same ratio so the dot still visually centres on caps.
+    orange_dot(c, fx=33, fy=361, r_figma=1.3)
+    tracked_caps(c, prod["name"], fx=42, fy=358, size=9.0,
                  color=HUBSS_WHITE, max_w_figma=400)
 
     tagline = no_orphan(prod["tagline"], last_n=3)

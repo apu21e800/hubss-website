@@ -139,15 +139,36 @@ export default async function ResourcesPage() {
             </span>
           </div>
           <ResourcesClient documents={docs} />
+        </div>
+      </section>
 
-          {/* ── Featured: Virtual Catalogue (post-list) ────────
-                Vernon's instruction: sit AFTER the document list, not
-                above it. Reads as a closing/featured invitation rather
-                than competing for the top of the section. */}
-          {catalogue && (
+      {/* ── Catalogue 2026 — dedicated section ───────────────────
+            Lives in its own titled section under the document
+            library so the catalogue reads as a first-class
+            resource, not a banner glued to the docs list. */}
+      {catalogue && (
+        <section className="relative">
+          <div className="max-w-7xl mx-auto px-6 pt-20 pb-24">
+            {/* Section label — matches "All Documents" treatment */}
+            <div className="flex items-center gap-4 mb-10">
+              <h2
+                className="text-sm font-bold tracking-widest uppercase"
+                style={{ color: "#F97316" }}
+              >
+                Catalogue 2026
+              </h2>
+              <div
+                className="flex-1 h-px"
+                style={{ background: "rgba(255,255,255,0.07)" }}
+              />
+              <span className="text-xs" style={{ color: "#6B7280" }}>
+                {catalogue.pageCount} pages
+              </span>
+            </div>
+
             <Link
-              href="/catalogue?utm_source=resources&utm_medium=feature_banner&utm_campaign=catalogue"
-              className="group block overflow-hidden rounded-2xl mt-16 transition-all duration-300 hover:-translate-y-[2px] hover:shadow-[0_14px_44px_rgba(249,115,22,0.20)]"
+              href="/catalogue?utm_source=resources&utm_medium=feature_section&utm_campaign=catalogue"
+              className="group block overflow-hidden rounded-2xl transition-all duration-300 hover:-translate-y-[2px] hover:shadow-[0_14px_44px_rgba(249,115,22,0.20)]"
               style={{
                 background: "linear-gradient(135deg, #141b2d 0%, #0d1117 100%)",
                 border: "1px solid rgba(255,255,255,0.08)",
@@ -158,42 +179,45 @@ export default async function ResourcesPage() {
                 style={{ background: "linear-gradient(90deg, #F97316 0%, #EAB308 100%)" }}
                 aria-hidden="true"
               />
-              <div className="grid grid-cols-1 md:grid-cols-[180px_1fr_auto] items-stretch">
-                {/* Cover thumb (auto-detected from newest v{NN}/page-001) */}
-                <div className="relative overflow-hidden bg-black aspect-square md:aspect-auto md:min-h-[160px]">
+              {/* Square cover thumb — the catalogue cover renders at 1:1
+                  (1800×1800 webp), so any non-square crop chops artwork.
+                  aspect-square + object-cover keeps the full cover visible
+                  on both desktop and mobile. */}
+              <div className="grid grid-cols-1 md:grid-cols-[200px_1fr_auto] items-stretch">
+                <div className="relative overflow-hidden bg-black aspect-square md:aspect-square">
                   <Image
                     src={catalogue.src}
                     alt="HUB Surface Systems Catalogue 2026 — cover"
                     fill
-                    sizes="(min-width: 768px) 180px, 100vw"
+                    sizes="(min-width: 768px) 200px, 100vw"
                     className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                   />
                 </div>
-                {/* Label block */}
-                <div className="p-6 sm:p-7 md:py-7 flex flex-col justify-center">
+                <div className="p-6 sm:p-7 md:py-8 md:px-8 flex flex-col justify-center">
                   <p
                     className="text-[10px] font-bold tracking-[0.22em] uppercase mb-2"
                     style={{ color: "#FB923C" }}
                   >
-                    Featured · Virtual Catalogue 2026
+                    Featured · Virtual Catalogue
                   </p>
                   <p
-                    className="text-lg sm:text-xl font-semibold leading-snug mb-1"
+                    className="text-lg sm:text-xl md:text-2xl font-semibold leading-snug mb-2"
                     style={{ color: "#F5F0EB" }}
                   >
                     Browse the complete 116-page catalogue in your browser.
                   </p>
                   <p
-                    className="text-[13px]"
+                    className="text-[13px] sm:text-sm leading-relaxed"
                     style={{ color: "rgba(255,255,255,0.6)" }}
                   >
-                    {catalogue.pageCount} pages · free to read · downloadable PDF
+                    Every product, application, and recent project — searchable,
+                    shareable, and downloadable as a PDF. No download required to read.
                   </p>
                 </div>
-                {/* CTA chevron */}
-                <div className="hidden md:flex items-center pr-7 pl-2">
+                {/* Desktop CTA */}
+                <div className="hidden md:flex items-center pr-8 pl-2">
                   <span
-                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-[12px] font-bold tracking-[0.18em] uppercase transition-transform duration-200 group-hover:translate-x-1"
+                    className="inline-flex items-center gap-2 px-5 py-3 rounded-lg text-[12px] font-bold tracking-[0.18em] uppercase transition-transform duration-200 group-hover:translate-x-1"
                     style={{
                       background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
                       color: "#fff",
@@ -217,9 +241,9 @@ export default async function ResourcesPage() {
                 </div>
               </div>
             </Link>
-          )}
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
 
       <LunchLearn />
       <Footer />

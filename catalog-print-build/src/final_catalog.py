@@ -26,7 +26,7 @@ LOGO_WHITE = HUBSS_LOGOS / "hubss-logo-white-large.png"
 LOGO_COLOR = HUBSS_LOGOS / "hubss-logo-color.png"
 LOGO_ASPECT = 2432 / 701
 
-OUT = ROOT / "output" / "HUBSS_Catalogue_2026_v39.pdf"
+OUT = ROOT / "output" / "HUBSS_Catalogue_2026_v40.pdf"
 
 
 # ---- accent palette --------------------------------------------------
@@ -505,9 +505,13 @@ def page_product_hero(c, prod):
     DOT_FY         = EYEBROW_FY + 8      # = 348 (dot visually centres on caps)
 
     # Eyebrow: 9pt tracked caps (Vernon B4 — clearly subordinate to H1).
-    # Dot radius 1.3 = 1.8 * 0.72 (scaled from v34's 12.5pt calibration).
-    orange_dot(c, fx=33, fy=DOT_FY, r_figma=1.3)
-    tracked_caps(c, prod["name"], fx=42, fy=EYEBROW_FY, size=9.0,
+    # Vernon v40 alignment: eyebrow TEXT must left-align with the H1 below.
+    # Prior layout had the dot at fx=33 and the eyebrow text at fx=42,
+    # while the H1 sat at fx=30 — eyebrow text was 12 units right of H1,
+    # reading as misaligned on every product hero. Now: dot just left of
+    # the eyebrow text, eyebrow text starts at fx=30 (= H1 left edge).
+    orange_dot(c, fx=23, fy=DOT_FY, r_figma=1.3)
+    tracked_caps(c, prod["name"], fx=30, fy=EYEBROW_FY, size=9.0,
                  color=HUBSS_WHITE, max_w_figma=400)
 
     # Tagline size-to-fit: start at 24pt, shrink to a 13pt floor (lowered
@@ -1573,10 +1577,31 @@ def build():
             right_style="navy",
             left_image_path=closing_img))
 
-    # Pad-then-close: blank spacers come BEFORE the closing trio so the
-    # book ends on the meaningful Thank-You quiet mark, not on filler.
+    # Pad-then-close: spacers go BEFORE the closing trio so the book ends
+    # on the meaningful Thank-You quiet mark, not on filler.
+    #
+    # Vernon v40 fix: prior implementation rendered pure-white pages, which
+    # Vernon saw as "broken images" in the flipbook viewer (p120/p121). The
+    # padding pages now read as INTENTIONAL — a designed "Notes" page with
+    # brand mark, eyebrow caption, ruled lines for client notes, and the
+    # HUBSS.COM footer. Engineers/specifiers can actually use these pages.
     def page_blank_spacer(c):
         fill_bleed(c, HUBSS_WHITE)
+        # Tiny orange brand dot + tracked-caps eyebrow at top-left
+        orange_dot(c, fx=23, fy=51, r_figma=1.3)
+        tracked_caps(c, "Notes", fx=30, fy=43, size=9.0,
+                     color=HUBSS_ORANGE, max_w_figma=200)
+        # Quiet ruled lines for handwritten specs / dimensions / questions
+        line_color = CMYK_TEXT_FAINT
+        for i in range(14):
+            y = 90 + i * 24
+            thin_rule(c, fx=30, fy=y, w_figma=390,
+                      color=line_color, weight_pt=0.25)
+        # Bottom footer hairline + URL — matches the application-page footer
+        thin_rule(c, fx=30, fy=425, w_figma=390,
+                  color=CMYK_TEXT_FAINT, weight_pt=0.3)
+        tracked_caps(c, "hubss.com", fx=30, fy=434, size=5.5,
+                     color=HUBSS_ORANGE, align="right", max_w_figma=390)
 
     # Closing trio: closing manifesto + quiet mark + back cover = 3 pages.
     # page_service_promise dropped — plugin no longer renders it (DPS3 right

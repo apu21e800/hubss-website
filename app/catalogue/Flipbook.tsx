@@ -237,23 +237,24 @@ export default function Flipbook({ pages, downloadHref }: Props) {
         </div>
       </header>
 
-      {/* Bottom CTA — sticky, always tappable */}
+      {/* Bottom CTA — sticky, always tappable.
+          Vernon v40: more breathing room — footer top padding ↑ from 3 → 5,
+          bottom padding ↑, horizontal padding ↑ from 3 → 5, CTA pill more
+          generous (px-6 py-3.5), gap between pill + icons ↑ from 2 → 3. The
+          pill still left-anchors (v39) but feels considered, not cramped. */}
       <footer
-        className="absolute inset-x-0 bottom-0 z-20 px-3
-                   pb-[max(env(safe-area-inset-bottom),0.75rem)] pt-3"
+        className="absolute inset-x-0 bottom-0 z-20 px-5
+                   pb-[max(env(safe-area-inset-bottom),1rem)] pt-5"
         style={{
-          background: "linear-gradient(0deg, rgba(0,0,0,0.85) 35%, rgba(0,0,0,0) 100%)",
+          background: "linear-gradient(0deg, rgba(0,0,0,0.88) 40%, rgba(0,0,0,0) 100%)",
         }}
       >
-        {/* Left-align (Vernon v39): CTA pill sits at the left edge of the
-            640px column with phone + email icons trailing right. The pill
-            sizes to its content (no flex-1 stretch) so it reads as a
-            considered button anchored to the left, not a centred banner. */}
-        <div className="mx-auto flex max-w-[640px] items-center justify-start gap-2">
+        <div className="mx-auto flex max-w-[640px] items-center justify-start gap-3">
           <Link
             href={LUNCH_LEARN_HREF}
-            className="rounded-full bg-[#F97316] px-5 py-3 text-left text-[13px] font-semibold
-                       text-white hover:bg-[#ea6d12] active:translate-y-px"
+            className="rounded-full bg-[#F97316] px-6 py-3.5 text-left text-[13px] font-semibold
+                       text-white shadow-[0_4px_16px_rgba(249,115,22,0.32)]
+                       hover:bg-[#ea6d12] active:translate-y-px"
           >
             Book a Free Lunch &amp; Learn
           </Link>
@@ -261,7 +262,7 @@ export default function Flipbook({ pages, downloadHref }: Props) {
             href="tel:+16043098212"
             data-event="phone_click"
             aria-label="Call 604-309-8212"
-            className="inline-grid h-11 w-11 place-items-center rounded-full border border-white/15
+            className="inline-grid h-12 w-12 place-items-center rounded-full border border-white/15
                        bg-white/10 text-white hover:bg-white/20"
           >
             <PhoneIcon />
@@ -270,7 +271,7 @@ export default function Flipbook({ pages, downloadHref }: Props) {
             href="mailto:info@hubss.com"
             data-event="email_click"
             aria-label="Email info@hubss.com"
-            className="inline-grid h-11 w-11 place-items-center rounded-full border border-white/15
+            className="inline-grid h-12 w-12 place-items-center rounded-full border border-white/15
                        bg-white/10 text-white hover:bg-white/20"
           >
             <MailIcon />

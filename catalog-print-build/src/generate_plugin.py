@@ -43,6 +43,9 @@ const D  = {r:0.12,  g:0.12,  b:0.12 };  // near-black body
 const M  = {r:0.45,  g:0.45,  b:0.45 };  // mid grey
 const F  = {r:0.65,  g:0.65,  b:0.65 };  // faint
 const PH = {r:0.85,  g:0.83,  b:0.78 };  // cream photo placeholder
+// v43: cream paper band — matches CMYK_CREAM in final_catalog.py
+// Replaces the v42 navy band on cover + product heros + section openers.
+const C  = {r:0.965, g:0.945, b:0.895}; // cream / warm paper band
 
 // --- low-level helpers ---
 function fr(name, bg) {
@@ -179,15 +182,14 @@ async function pageCover(d) {
   const f = fr("Cover", N);
   // Full-bleed photo — entire canvas
   ph(f, 0, 0, 450, 450, "Cover photo", d.cover_photo);
-  // Navy wash — no hard lines anywhere
-  rct(f, 0, 0, 450, 450, N, "NavyWash");
-  f.children[f.children.length-1].opacity = 0.60;
-  // Bottom masthead: logo left + year right — one unified horizontal element.
-  // Both sit on the same baseline. Logo bottom = 422px → exactly 28px bottom margin.
-  // No rule. No tagline. No floating elements. Just the brand mark and the year.
-  logo(f, 28, 392, 160, 30, "HUBSS logo white", d.brand && d.brand.logo_white);
-  // Align text baseline with logo vertical centre (logo h=30 → centre=392+15=407; text lh=10 → centre=y+5; y=402)
-  await tx(f, "CATALOGUE 2026", 28, 402, 6.5, W, false, 394, "right", 10);
+  // v43: cream footer band replaces the navy wash. Photo above breathes;
+  // wordmark sits on solid paper-stock band with a slim orange rule.
+  rct(f, 0, 320, 450, 130, C, "CreamBand");
+  rul(f, 28, 324, 64);
+  // Colour logo on the cream band (not white). Logo + caps in dark ink.
+  logo(f, 28, 384, 160, 30, "HUBSS logo color", d.brand && d.brand.logo_color);
+  await tx(f, "CATALOGUE 2026", 28, 395, 7, D, false, 394, "right", 10);
+  await tx(f, "DECORATIVE PAVEMENT SOLUTIONS", 28, 413, 6, M, false, 394, "right", 9);
   return f;
 }
 
@@ -293,33 +295,28 @@ async function pageTOC(sections, totalPages) {
 async function pageSectionOpen(num, title, imagePath) {
   const f = fr(`Section ${num} — ${title}`, N);
   ph(f, 0, 0, 450, 450, "Section opener: " + title, imagePath);
-  // 3-step graduated scrim — no hard lines. Photo breathes at the top,
-  // density builds only where text needs legibility at the bottom.
-  rct(f, 0, 0, 450, 450, N, "ScrimGlobal");    // very subtle full-frame tone
-  f.children[f.children.length-1].opacity = 0.12;
-  rct(f, 0, 210, 450, 240, N, "ScrimMid");      // lower half, building
-  f.children[f.children.length-1].opacity = 0.40;
-  rct(f, 0, 310, 450, 140, N, "ScrimBase");     // text zone, dense
-  f.children[f.children.length-1].opacity = 0.60;
-  // Rule directly above section label (tight, intentional)
-  await tx(f, ("SECTION " + num).toUpperCase(), 28, 330, 6, W, false, 394, null, 9);
-  rul(f, 28, 324, 24);
-  // Title: bold, 14px below label
-  await tx(f, title, 28, 353, 34, W, true, 394);
+  // v43: cream footer band — 180px (~40% of trim). Replaces the v42
+  // 3-step navy scrim. Photo above breathes unmolested; section number +
+  // big display title live in dark ink on paper-stock band.
+  rct(f, 0, 270, 450, 180, C, "CreamBand");
+  rul(f, 28, 274, 44);
+  await tx(f, ("SECTION " + num).toUpperCase(), 28, 300, 7.5, M, false, 394, null, 11);
+  await tx(f, title, 28, 325, 48, D, true, 394, null, 52);
   return f;
 }
 
 async function pageProductHero(prod) {
   const f = fr("Hero — " + prod.name, N);
-  // Photo fills top 63% — hard print edge into navy band
-  ph(f, 0, 0, 450, 284, prod.name + " — hero photo", prod.hero);
-  rct(f, 0, 284, 450, 166, N, "NavyBand");
-  // Band internal layout: 24px top breathing room before first text
-  // Rule sits immediately above the eyebrow label — directly adjacent, not floating
-  await tx(f, (prod.name||"").toUpperCase(), 28, 320, 6.5, O, false, 394, null, 9);
-  rul(f, 28, 314, 24);   // rule 6px above the label — clear typographic relationship
-  // Tagline: 14px below label bottom (label 6.5px + lh≈10, bottom≈330; gap to 344)
-  await tx(f, prod.tagline || "", 28, 344, 21, W, true, 394);
+  // v43: photo top ~67%, cream footer band bottom ~33%. Replaces v42 navy
+  // band. Eyebrow + tagline in dark ink on paper-stock.
+  ph(f, 0, 0, 450, 300, prod.name + " — hero photo", prod.hero);
+  rct(f, 0, 300, 450, 150, C, "CreamBand");
+  rul(f, 28, 304, 44);
+  // Eyebrow: small dark-mid-grey caps, slightly bigger than v42 (7.5px vs
+  // 6.5px) so it reads on cream without the navy contrast lift.
+  await tx(f, (prod.name||"").toUpperCase(), 28, 345, 7.5, M, false, 394, null, 10);
+  // Tagline: dark ink, 22px display weight. Sits at fy=380 (was 344).
+  await tx(f, prod.tagline || "", 28, 380, 22, D, true, 394);
   return f;
 }
 

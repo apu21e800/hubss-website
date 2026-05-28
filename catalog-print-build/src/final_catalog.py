@@ -26,7 +26,7 @@ LOGO_WHITE = HUBSS_LOGOS / "hubss-logo-white-large.png"
 LOGO_COLOR = HUBSS_LOGOS / "hubss-logo-color.png"
 LOGO_ASPECT = 2432 / 701
 
-OUT = ROOT / "output" / "HUBSS_Catalogue_2026_v42.pdf"
+OUT = ROOT / "output" / "HUBSS_Catalogue_2026_v43.pdf"
 
 
 # ---- accent palette --------------------------------------------------
@@ -264,16 +264,11 @@ def hero_scrim(c, height_figma=160, *, text_zone_figma=130, tint="navy"):
 
 
 def cover_wash(c, *, height_figma=140, max_alpha_pct=0.62, ease=1.7):
-    """v42 cover treatment — Vernon explicitly dropped the cover scrim.
+    """v42 navy-gradient cover treatment — RETIRED v43.
 
-    Soft navy gradient rising from the very bottom edge of the trim.
-    NO solid band, NO black ink, lower peak opacity than the body scrim.
-    The cover photo gets to breathe; the wordmark sits on just enough
-    navy tint to stay readable against bright concrete or sky.
-
-    Verbatim from Vernon: 'I do not like the dark overlay on the front
-    cover. The navy wash / gradient might be better. Let's give this
-    another design round.'
+    Retained so older callers don't break, but page_cover now uses
+    white_footer_band instead (Vernon: 'the gradients are not working
+    too well, let's go back to a white bottom banner').
     """
     png = _make_scrim_png(
         height_px=400, max_alpha=int(255 * max_alpha_pct), ease=ease,
@@ -282,6 +277,34 @@ def cover_wash(c, *, height_figma=140, max_alpha_pct=0.62, ease=1.7):
     h_pdf = height_figma * SCALE
     c.drawImage(str(png), 0, 0, width=PAGE_W, height=h_pdf,
                 preserveAspectRatio=False, mask='auto')
+
+
+def white_footer_band(c, *, height_figma=150, rule_w_figma=44,
+                      band_color=None):
+    """v43 white footer banner — the new house treatment.
+
+    Vernon: 'go back to a white bottom banner, the gradients are not
+    working.' Solid white (cream) rectangle covering the bottom
+    `height_figma` units of the page + bleed area, with a slim orange
+    accent rule across the top edge for brand pickup.
+
+    Photo lives above the band; band carries product text in dark ink.
+    No overlay on the photo — photo breathes, band anchors.
+
+    Use band_color=CMYK_CREAM for the warm-paper feel that reads
+    premium-magazine; default HUBSS_WHITE for a stark editorial white.
+    """
+    if band_color is None:
+        band_color = CMYK_CREAM
+    band_h_pdf = height_figma * SCALE
+    c.setFillColor(band_color)
+    # +BLEED so the band runs cleanly into the bottom bleed area.
+    c.rect(0, 0, PAGE_W, band_h_pdf + BLEED, stroke=0, fill=1)
+    # Slim orange accent rule at the top edge of the band — one brand
+    # touch that anchors the band to the photo above.
+    rule_fy = 450 - height_figma + 4  # 4 figma units below band top
+    thin_rule(c, fx=28, fy=rule_fy, w_figma=rule_w_figma,
+              color=HUBSS_ORANGE, weight_pt=2.0)
 
 
 _GLOW_CACHE = {}
@@ -358,39 +381,32 @@ def corner_accent(c, max_alpha: int = 80, size_figma: int = 240) -> None:
 
 
 def page_cover(c):
-    """Cover — full-bleed photo, soft navy wash at the bottom edge,
-    LEFT-ALIGNED wordmark at confident scale. Catalogue 2026 sits at the
-    right edge as a quiet counter-balance.
+    """Cover — full-bleed photo, white footer banner carrying the wordmark.
 
-    v42 — Vernon dropped the heavy bottom scrim. The cover photo now
-    breathes; the wordmark sits on a soft navy gradient (no solid band,
-    no black). If a future cover photo is too bright at the bottom to
-    hold white type even with the soft wash, swap the photo rather than
-    reintroducing a harsh scrim.
+    v43 — Vernon: 'the gradients are not working, let's go back to a
+    white bottom banner.' Solid cream band at bottom 130 figma units
+    (~29% of trim). Photo breathes above; wordmark + caps in colour /
+    dark ink anchored cleanly in the band.
 
-    Layout decisions:
-      - Logo at 160 figma wide — bottom-left anchor.
-      - Soft 140-figma navy wash gives the wordmark just enough contrast.
-      - Corner accent carries the website warmth.
+    Layout:
+      - 130-figma white footer band with slim orange accent rule.
+      - COLOR logo (not white) at confident scale, lower-left.
+      - Right-aligned caps in dark ink as a quiet counter-balance.
     """
     fill_bleed(c, HUBSS_WHITE)
     if CC.COVER_PHOTO and CC.COVER_PHOTO.exists():
         draw_full_bleed_image(c, str(CC.COVER_PHOTO))
-    cover_wash(c, height_figma=140, max_alpha_pct=0.62)
-    corner_accent(c, max_alpha=55, size_figma=260)
+    white_footer_band(c, height_figma=130, rule_w_figma=64)
 
-    # Slim orange accent rule — the one brand-colour touch above the wordmark.
-    # Pure solid ink: no transparency, prints reliably on CMYK press.
-    thin_rule(c, fx=28, fy=376, w_figma=64, color=HUBSS_ORANGE, weight_pt=2.0)
+    # Colour logo (cream band = dark/coloured ink). Anchored lower-left.
+    draw_logo_color(c, fx=28, fy=384, fw_figma=160)
 
-    # Left-aligned wordmark — bigger than before, anchored to the lower-left
-    draw_logo_white(c, fx=28, fy=384, fw_figma=160)
-
-    # Catalogue 2026 at the right edge of the lower band — a quiet caption
-    tracked_caps(c, "Catalogue 2026", fx=290, fy=400, size=7.0,
-                 color=HUBSS_WHITE, align="right", max_w_figma=130)
-    tracked_caps(c, "Decorative Pavement Solutions", fx=240, fy=415,
-                 size=6.0, color=HUBSS_WHITE,
+    # Catalogue 2026 + sub-line at the right edge — quiet counter-balance,
+    # in dark ink now that the band is light.
+    tracked_caps(c, "Catalogue 2026", fx=290, fy=395, size=7.0,
+                 color=CMYK_TEXT_DARK, align="right", max_w_figma=130)
+    tracked_caps(c, "Decorative Pavement Solutions", fx=240, fy=413,
+                 size=6.0, color=CMYK_TEXT_MID,
                  align="right", max_w_figma=180)
 
 
@@ -507,69 +523,67 @@ def page_toc(c, sections):
 
 
 def page_section_open(c, section_no, title, photo_path):
-    """Section divider — full-bleed photo, dark scrim, corner accent.
+    """Section divider — full-bleed photo, white footer banner, big title.
 
-    v41 fix: bumped scrim solid-band height (text_zone_figma) from 130→170
-    so the solid black zone covers the photo's horizon line. Vernon was
-    seeing "two gradients" on the Applications opener (p42) — actually
-    the photo's natural sky→ground transition was visible just above the
-    scrim's fade, reading as a second dark band stacked above the scrim.
-    Taller solid zone covers the horizon → one clean dark band only."""
+    v43: dark scrim replaced with a tall white footer band carrying the
+    section number eyebrow + the big display title in dark ink. Same
+    confident editorial weight as v42 (huge title), but on a clean
+    paper-stock band instead of a darkened photo.
+    """
     fill_bleed(c, HUBSS_WHITE)
     if photo_path and photo_path.exists():
         draw_full_bleed_image(c, str(photo_path))
-    hero_scrim(c, height_figma=210, text_zone_figma=170)
-    corner_accent(c, max_alpha=50, size_figma=230)
-    # Text positions pulled up to sit within the taller (170 figma) solid
-    # zone — was fy=325/348/415; now fy=300/325/400 to keep proportional
-    # vertical rhythm against the new band top edge (450-170=280).
+    # Tall white band — accommodates the 48pt section title with breathing
+    # room. 180 figma units = ~40% of trim, anchoring the section number
+    # as a confident editorial moment.
+    white_footer_band(c, height_figma=180, rule_w_figma=44)
+
+    # Eyebrow ("Section One") — dark mid-grey caps near the top of the band
     tracked_caps(c, "Section " + section_no, fx=30, fy=300, size=7.5,
-                 color=HUBSS_WHITE, max_w_figma=140)
+                 color=CMYK_TEXT_MID, max_w_figma=140)
+    # Big display title in dark ink — replaces the v42 white-on-scrim title
     draw_text_block(c, title, fx=30, fy=325, font_size_figma=48, weight=800,
-                    color=HUBSS_WHITE, tracking=-1.4, leading_figma=50)
-    orange_dot(c, fx=30, fy=400, r_figma=2.2)
-    thin_rule(c, fx=40, fy=399, w_figma=56, color=HUBSS_ORANGE, weight_pt=2.0)
+                    color=CMYK_TEXT_DARK, tracking=-1.4, leading_figma=50)
+    # Small orange dot + paired rule near the bottom of the band
+    orange_dot(c, fx=30, fy=403, r_figma=2.2)
+    thin_rule(c, fx=40, fy=402, w_figma=56, color=HUBSS_ORANGE, weight_pt=2.0)
 
 
 def page_product_hero(c, prod):
-    """Product hero — full-bleed photo, dark scrim, diagonal corner accent.
+    """Product hero — full-bleed photo, white footer banner, text in dark ink.
 
-    Text zone (Vernon v37 fix): eyebrow + tagline live in a single block
-    near the bottom with a generous SAFE_BOTTOM margin (~80 figma units,
-    ≈0.9") between the tagline baseline and the trim edge. Prior layout
-    at fy=388 pushed descenders right against the trim, giving zero
-    breathing room — looks cramped, no margin for cut variance on press.
+    v43 — Vernon: 'go back to white bottom banner.' Replaces v42 navy
+    scrim. Photo top ~67%, white (cream) band bottom ~33% carrying
+    eyebrow + tagline in dark ink.
+
+    Dot-text co-alignment (v43): eyebrow text dropped 5 figma units
+    (340→345) so its cap-center hits the orange dot center. Vernon
+    flagged the dot floating above the caps — this is the empirical
+    alignment fix.
     """
     fill_bleed(c, HUBSS_WHITE)
     if prod["hero"] and prod["hero"].exists():
         draw_full_bleed_image(c, str(prod["hero"]))
-    hero_scrim(c, height_figma=210)  # bumped 190→210 so scrim covers the
-                                      # now-higher text zone with darker mass
-    corner_accent(c, max_alpha=70, size_figma=260)
+    # White footer band — bottom 150 figma units (~33% of trim). Photo
+    # ends visually at the band's top edge, accented by a slim orange rule.
+    white_footer_band(c, height_figma=150, rule_w_figma=44)
 
-    # ── Bottom-anchored text zone ─────────────────────────────────────
-    # SAFE_BOTTOM is the distance from the tagline baseline to the trim
-    # bottom (fy=450). 80 figma units = ~0.89" — generous for press cut
-    # variance and visual breathing room. Eyebrow + dot sit above tagline
-    # with consistent spacing regardless of tagline final size.
-    SAFE_BOTTOM    = 80
-    TAGLINE_FY     = 450 - SAFE_BOTTOM   # = 370 (was 388 — moved up 18 units)
-    EYEBROW_FY     = TAGLINE_FY - 30     # = 340 (eyebrow 30 above tagline)
-    DOT_FY         = EYEBROW_FY + 8      # = 348 (dot visually centres on caps)
+    # ── Text zone (now on cream band, dark ink) ──────────────────────
+    # Generous SAFE_BOTTOM keeps the tagline baseline well clear of the
+    # trim edge for press cut variance.
+    SAFE_BOTTOM    = 70
+    TAGLINE_FY     = 450 - SAFE_BOTTOM   # = 380
+    EYEBROW_FY     = TAGLINE_FY - 35     # = 345 (was 340 — text DOWN 5 figma
+                                          # so dot co-aligns with cap-center)
+    DOT_FY         = EYEBROW_FY + 3      # = 348 (cap-center of 9pt eyebrow)
 
-    # Eyebrow: 9pt tracked caps (Vernon B4 — clearly subordinate to H1).
-    # Vernon v40 alignment: eyebrow TEXT must left-align with the H1 below.
-    # Prior layout had the dot at fx=33 and the eyebrow text at fx=42,
-    # while the H1 sat at fx=30 — eyebrow text was 12 units right of H1,
-    # reading as misaligned on every product hero. Now: dot just left of
-    # the eyebrow text, eyebrow text starts at fx=30 (= H1 left edge).
+    # Eyebrow: 9pt tracked caps in dark mid-grey. Dot at cap-center.
     orange_dot(c, fx=23, fy=DOT_FY, r_figma=1.3)
     tracked_caps(c, prod["name"], fx=30, fy=EYEBROW_FY, size=9.0,
-                 color=HUBSS_WHITE, max_w_figma=400)
+                 color=CMYK_TEXT_MID, max_w_figma=400)
 
-    # Tagline size-to-fit: start at 24pt, shrink to a 13pt floor (lowered
-    # from 14pt for safety on the longest taglines) until it fits on ONE
-    # line in 400 figma units. Prevents 2-line wraps that crowd the layout.
+    # Tagline size-to-fit: start at 24pt, shrink to a 13pt floor until it
+    # fits on ONE line in 400 figma units.
     tagline = no_orphan(prod["tagline"], last_n=3)
     safe_w_pt = 400 * SCALE
     tagline_size = 24
@@ -577,11 +591,10 @@ def page_product_hero(c, prod):
         tagline, FONT_SANS_BOLD, tagline_size * SCALE
     ) > safe_w_pt:
         tagline_size -= 1
-    # Leading scales with size so vertical rhythm stays proportional.
     tagline_leading = tagline_size + 2
     draw_text_block(c, tagline, fx=30, fy=TAGLINE_FY,
                     font_size_figma=tagline_size,
-                    weight=800, color=HUBSS_WHITE, tracking=-0.6,
+                    weight=800, color=CMYK_TEXT_DARK, tracking=-0.6,
                     max_w_figma=400, leading_figma=tagline_leading)
 
 

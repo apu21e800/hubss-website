@@ -474,7 +474,7 @@ function ProductsMegaMenu() {
             style={{ width: 96, height: 96 }}
           >
             <Image
-              src="/catalogue/v42/page-001.webp"
+              src="/catalogue/v43/page-001.webp"
               alt="HUB Surface Systems 2026 Catalogue — browse 116 pages online"
               fill
               sizes="96px"

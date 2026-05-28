@@ -238,18 +238,21 @@ export default function Flipbook({ pages, downloadHref }: Props) {
       </header>
 
       {/* Bottom CTA — sticky, always tappable.
-          Vernon v40: more breathing room — footer top padding ↑ from 3 → 5,
-          bottom padding ↑, horizontal padding ↑ from 3 → 5, CTA pill more
-          generous (px-6 py-3.5), gap between pill + icons ↑ from 2 → 3. The
-          pill still left-anchors (v39) but feels considered, not cramped. */}
+          Vernon v43: more breathing room (pt-5 → pt-10) so the pill
+          doesn't butt against the catalogue's bottom edge. Container
+          truly left-aligned now (dropped mx-auto + max-w-[640px]) —
+          Vernon flagged the buttons "floating a bit" because the
+          centered container with justify-start put them in the
+          middle-left of the viewport. Buttons now hug the footer's
+          left padding (px-5). */}
       <footer
         className="absolute inset-x-0 bottom-0 z-20 px-5
-                   pb-[max(env(safe-area-inset-bottom),1rem)] pt-5"
+                   pb-[max(env(safe-area-inset-bottom),1rem)] pt-10"
         style={{
-          background: "linear-gradient(0deg, rgba(0,0,0,0.88) 40%, rgba(0,0,0,0) 100%)",
+          background: "linear-gradient(0deg, rgba(0,0,0,0.92) 50%, rgba(0,0,0,0) 100%)",
         }}
       >
-        <div className="mx-auto flex max-w-[640px] items-center justify-start gap-3">
+        <div className="flex items-center justify-start gap-3">
           <Link
             href={LUNCH_LEARN_HREF}
             className="rounded-full bg-[#F97316] px-6 py-3.5 text-left text-[13px] font-semibold

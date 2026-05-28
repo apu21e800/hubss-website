@@ -45,3 +45,18 @@ next-env.d.ts
 .superpowers/
 .claude/worktrees/
 scripts/.gallery-checkpoint.json
+
+# Ad-hoc working scratch — Playwright/MCP screenshots, dev notes, etc.
+# See HUBSS-WEBSITE-ORGANIZATION-PLAN.md.
+scratch/
+.playwright-mcp/
+*.tsbuildinfo
+
+# Root-level dev screenshots — keep out of the repo root
+/*.jpeg
+/*.jpg
+/*.png
+!apple-icon*.png
+!favicon.png
+!opengraph-image.png
+!twitter-image.png

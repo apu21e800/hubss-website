@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 // Show only when BOTH are true:
@@ -18,11 +19,18 @@ function heroIsActive(): boolean {
 }
 
 export default function StickyBar() {
+  const pathname = usePathname();
   const [visible, setVisible] = useState(false);
   const lastScrollY = useRef(0);
   const ticking = useRef(false);
 
+  // /connect is a Linktree-style booth landing — its own four cards are the
+  // primary CTAs. A sticky "See the Systems / Book a Lunch & Learn" bar would
+  // compete with them and clutter mobile, so we hide it on that route entirely.
+  const suppressed = pathname?.startsWith("/connect") ?? false;
+
   useEffect(() => {
+    if (suppressed) return;
     lastScrollY.current = window.scrollY;
     const onScroll = () => {
       if (ticking.current) return;
@@ -40,7 +48,9 @@ export default function StickyBar() {
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [suppressed]);
+
+  if (suppressed) return null;
 
   return (
     <div

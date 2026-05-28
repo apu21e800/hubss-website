@@ -21,6 +21,7 @@ import {
   PinIcon,
   CogIcon,
   ImagesIcon,
+  StarIcon,
 } from "@sanity/icons";
 
 // Page document IDs — set by migrate-to-sanity.ts
@@ -89,6 +90,18 @@ export const structure: StructureResolver = (S) =>
       S.documentTypeListItem("project")
         .title("Projects (Map Pins)")
         .icon(PinIcon),
+
+      S.divider(),
+
+      // ── Prize Draw (booth/tradeshow entries) ─────────────────────────────────
+      S.listItem()
+        .title("Prize Draw")
+        .icon(StarIcon)
+        .child(
+          S.documentTypeList("prizeDrawEntry")
+            .title("Prize Draw Entries")
+            .defaultOrdering([{ field: "submittedAt", direction: "desc" }])
+        ),
 
       S.divider(),
 

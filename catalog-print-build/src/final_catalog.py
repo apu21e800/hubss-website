@@ -26,7 +26,7 @@ LOGO_WHITE = HUBSS_LOGOS / "hubss-logo-white-large.png"
 LOGO_COLOR = HUBSS_LOGOS / "hubss-logo-color.png"
 LOGO_ASPECT = 2432 / 701
 
-OUT = ROOT / "output" / "HUBSS_Catalogue_2026_v41.pdf"
+OUT = ROOT / "output" / "HUBSS_Catalogue_2026_v42.pdf"
 
 
 # ---- accent palette --------------------------------------------------
@@ -172,78 +172,116 @@ def folio(c, page_no, *, on_dark=False):
 _SCRIM_CACHE = {}
 
 
-def _make_scrim_png(height_px=400, width_px=8, max_alpha=230, ease=2.2):
-    """Render a true black-to-transparent gradient PNG (cached).
+def _make_scrim_png(height_px=400, width_px=8, max_alpha=230, ease=2.2,
+                    rgb=(0, 0, 0)):
+    """Render a colour-to-transparent gradient PNG (cached).
 
-    Vernon's v33/v34 calibration: max_alpha 180→230 + ease 1.6→2.2.
-    Higher max_alpha makes the bottom truly opaque (so white captions
-    pop on bright photos like StreetBond rainbow / DuraTherm gold).
-    Higher ease pushes opacity toward the bottom, so the upper photo
-    stays readable while the caption zone goes properly dark."""
+    v42: parameterised on `rgb` so the same generator produces both the
+    legacy black scrim and the navy-tinted scrim Vernon asked for. Cache
+    key includes rgb to avoid collisions between tints.
+
+    Vernon's v33/v34 calibration (when rgb=(0,0,0)): max_alpha 180→230 +
+    ease 1.6→2.2 keeps the bottom truly opaque and pushes opacity toward
+    the bottom so the upper photo stays readable."""
     from PIL import Image
-    key = (height_px, width_px, max_alpha, ease)
+    key = (height_px, width_px, max_alpha, ease, rgb)
     if key in _SCRIM_CACHE:
         return _SCRIM_CACHE[key]
-    img = Image.new("RGBA", (width_px, height_px), (0, 0, 0, 0))
+    R, G, B = rgb
+    img = Image.new("RGBA", (width_px, height_px), (R, G, B, 0))
     px = img.load()
     for y in range(height_px):
         # y=0 is top of image (transparent), y=height_px-1 is bottom (most opaque)
         progress = y / max(1, (height_px - 1))   # 0..1, 1 at bottom
         a = int(max_alpha * (progress ** ease))
         for x in range(width_px):
-            px[x, y] = (0, 0, 0, a)
-    out = ROOT / "output" / "_cache" / f"scrim_{height_px}_{max_alpha}.png"
+            px[x, y] = (R, G, B, a)
+    out = ROOT / "output" / "_cache" / f"scrim_{R}_{G}_{B}_{height_px}_{max_alpha}.png"
     out.parent.mkdir(parents=True, exist_ok=True)
     img.save(out)
     _SCRIM_CACHE[key] = out
     return out
 
 
-def hero_scrim(c, height_figma=160, *, text_zone_figma=130):
-    """Bulletproof two-layer scrim (Vernon v39 — third flag on contrast).
+# v42 navy-tint constants — matches the website hero (rgba 8,13,22) so the
+# catalogue and the web feel cohesive. Lower SOLID_ALPHA than the legacy
+# black band (0.82 vs 0.88) because navy is intrinsically less harsh —
+# white type still reads bulletproof, but the photo's colour breathes
+# through as TINT rather than a stage-lighting blackout.
+NAVY_SCRIM_RGB = (8, 13, 22)
+NAVY_SCRIM_ALPHA = 0.82
 
-    Single-gradient scrims leave the text zone at only ~25-40% opacity on
-    bright photos, which is why the eyebrow + tagline kept washing out on
-    StreetBond splash pads, StreetBondSR sand courts, AggreFill brown
-    patches, etc.
 
-    The fix: TWO layers stacked from the bottom up:
-      1. A NEAR-SOLID black band covering the bottom `text_zone_figma`
-         units at 88% alpha — text on this zone is guaranteed legible
-         regardless of what's behind it. Premium catalogues sacrifice the
-         sliver of photo bottom for guaranteed readability; that's the
-         right trade.
-      2. A SOFT gradient fade above the solid band (transparent at top,
-         meeting the solid band's alpha at the bottom) so the transition
-         is invisible — the eye doesn't see a hard edge.
+def hero_scrim(c, height_figma=160, *, text_zone_figma=130, tint="navy"):
+    """Bulletproof two-layer scrim — v42 navy default.
 
-    text_zone_figma=130 is sized to cover the full eyebrow + tagline zone
-    (page_product_hero text sits at fy=340-370, so 130 units from the
-    bottom of the 450-unit trim covers fy=320-450 — text zone + a buffer).
+    History:
+      • Vernon v39 (third flag on contrast) introduced the 88%-black
+        solid band so white type stays bulletproof on bright photos
+        (StreetBond rainbow, DuraTherm gold, etc.).
+      • Vernon v42: 'these dark overlays are too harsh, stage-lighting.
+        Use the navy wash instead.' So the band stays — same structure,
+        same readability guarantee — but it's now navy-tinted, not black.
+
+    Structure (unchanged from v39):
+      1. Solid band covering the bottom `text_zone_figma` units. Type on
+         this zone is bulletproof regardless of what's behind it.
+      2. Soft gradient fade above the solid band, meeting its alpha at
+         the bottom so there's no visible seam.
+
+    `tint='navy'` (default) — the new house style. RGB (8,13,22) at 82%.
+    `tint='black'` — kept for backward compatibility / fallback. 88% black.
     """
-    # --- Layer 1: near-solid black band where the text lives ----------
-    SOLID_ALPHA_PCT = 0.88   # 88% — text is bulletproof on this
+    if tint == "navy":
+        rgb = NAVY_SCRIM_RGB
+        solid_alpha = NAVY_SCRIM_ALPHA
+    else:
+        rgb = (0, 0, 0)
+        solid_alpha = 0.88
+
+    # --- Layer 1: solid colour band where the text lives --------------
     solid_h_pdf = text_zone_figma * SCALE
     c.saveState()
-    c.setFillColorRGB(0, 0, 0)
-    c.setFillAlpha(SOLID_ALPHA_PCT)
+    c.setFillColorRGB(rgb[0] / 255, rgb[1] / 255, rgb[2] / 255)
+    c.setFillAlpha(solid_alpha)
     c.rect(0, 0, PAGE_W, solid_h_pdf, stroke=0, fill=1)
     c.setFillAlpha(1.0)
     c.restoreState()
 
     # --- Layer 2: soft fade above, transparent->solid ------------------
     # The fade ends where the solid band starts so there's no visible seam.
-    # Height of the fade portion = full scrim height - solid band height.
     fade_h_figma = max(0, height_figma - text_zone_figma)
     if fade_h_figma > 0:
         # max_alpha matched to the solid band so the fade meets it cleanly.
         fade_png = _make_scrim_png(
-            height_px=400, max_alpha=int(255 * SOLID_ALPHA_PCT), ease=1.5
+            height_px=400, max_alpha=int(255 * solid_alpha), ease=1.5,
+            rgb=rgb,
         )
         fade_h_pdf = fade_h_figma * SCALE
         c.drawImage(str(fade_png), 0, solid_h_pdf,
                     width=PAGE_W, height=fade_h_pdf,
                     preserveAspectRatio=False, mask='auto')
+
+
+def cover_wash(c, *, height_figma=140, max_alpha_pct=0.62, ease=1.7):
+    """v42 cover treatment — Vernon explicitly dropped the cover scrim.
+
+    Soft navy gradient rising from the very bottom edge of the trim.
+    NO solid band, NO black ink, lower peak opacity than the body scrim.
+    The cover photo gets to breathe; the wordmark sits on just enough
+    navy tint to stay readable against bright concrete or sky.
+
+    Verbatim from Vernon: 'I do not like the dark overlay on the front
+    cover. The navy wash / gradient might be better. Let's give this
+    another design round.'
+    """
+    png = _make_scrim_png(
+        height_px=400, max_alpha=int(255 * max_alpha_pct), ease=ease,
+        rgb=NAVY_SCRIM_RGB,
+    )
+    h_pdf = height_figma * SCALE
+    c.drawImage(str(png), 0, 0, width=PAGE_W, height=h_pdf,
+                preserveAspectRatio=False, mask='auto')
 
 
 _GLOW_CACHE = {}
@@ -320,20 +358,25 @@ def corner_accent(c, max_alpha: int = 80, size_figma: int = 240) -> None:
 
 
 def page_cover(c):
-    """Cover — full-bleed photo, heavy bottom scrim, LEFT-ALIGNED wordmark
-    (per Vernon's preference) at confident scale. Catalogue 2026 sits at the
-    right edge of the lower band as a quiet counter-balance.
+    """Cover — full-bleed photo, soft navy wash at the bottom edge,
+    LEFT-ALIGNED wordmark at confident scale. Catalogue 2026 sits at the
+    right edge as a quiet counter-balance.
+
+    v42 — Vernon dropped the heavy bottom scrim. The cover photo now
+    breathes; the wordmark sits on a soft navy gradient (no solid band,
+    no black). If a future cover photo is too bright at the bottom to
+    hold white type even with the soft wash, swap the photo rather than
+    reintroducing a harsh scrim.
 
     Layout decisions:
-      - Logo at 200 figma wide (~44% of page) — bigger than the original 160
-        but still reading as bottom-left "anchor" rather than centered crest.
-      - Heavy 200-figma dark scrim ensures the wordmark sits on real darkness.
-      - Orange glow at the very bottom carries the website warmth.
+      - Logo at 160 figma wide — bottom-left anchor.
+      - Soft 140-figma navy wash gives the wordmark just enough contrast.
+      - Corner accent carries the website warmth.
     """
     fill_bleed(c, HUBSS_WHITE)
     if CC.COVER_PHOTO and CC.COVER_PHOTO.exists():
         draw_full_bleed_image(c, str(CC.COVER_PHOTO))
-    hero_scrim(c, height_figma=210)
+    cover_wash(c, height_figma=140, max_alpha_pct=0.62)
     corner_accent(c, max_alpha=55, size_figma=260)
 
     # Slim orange accent rule — the one brand-colour touch above the wordmark.

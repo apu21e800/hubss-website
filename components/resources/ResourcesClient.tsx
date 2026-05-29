@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { FileText, Download, Eye, Search, X, ChevronDown, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,25 +10,17 @@ import PdfPreviewModal from "@/components/ui/PdfPreviewModal";
 const TABS = ["By Product", "By Document Type"] as const;
 type TabType = (typeof TABS)[number];
 
-const DOCUMENT_TYPE_FILTERS = [
-  { label: "All", value: "All" },
-  { label: "Case Study", value: "Case Study" },
-  { label: "White Paper", value: "White Paper" },
-  { label: "Technical Data Sheet", value: "Data Sheet" },
-  { label: "Installation Guide", value: "Installation Guide" },
-];
-
-const DOCUMENT_TYPES = [
-  "All",
-  "Flyer",
+// Display-order for type chips: most-relevant types first, then alphabetical.
+const TYPE_PRIORITY = [
   "Catalogue",
+  "Flyer",
   "Spec Sheet",
   "Data Sheet",
   "Brochure",
-  "Installation Guide",
-  "Design Manual",
-  "Colour Guide",
   "Safety Data Sheet",
+  "Colour Guide",
+  "Design Manual",
+  "Installation Guide",
   "Guide",
   "Certificate",
   "Other",
@@ -288,19 +280,58 @@ export default function ResourcesClient({
   documents: ResourceDocument[];
 }) {
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [activeTab, setActiveTab] = useState<TabType>("By Product");
   const [productFilter, setProductFilter] = useState("all");
   const [subcategoryFilter, setSubcategoryFilter] = useState("all");
-  const [typeFilter, setTypeFilter] = useState("All");
-  const [docTypeFilter, setDocTypeFilter] = useState("All");
+  // selectedTypes: empty Set = no type filter (shows all). Multi-select on
+  // both tabs — chips on "By Document Type", multi-tag pill row on "By Product".
+  const [selectedTypes, setSelectedTypes] = useState<Set<string>>(new Set());
   const [featuredOnly, setFeaturedOnly] = useState(false);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [preview, setPreview] = useState<PreviewState | null>(null);
 
+  // Debounce search input so heavy filtering doesn't churn on every keystroke.
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedSearch(search), 180);
+    return () => clearTimeout(t);
+  }, [search]);
+
+  // Derive the type-chip list from the actual documents — fixes the bug where
+  // the previous hardcoded list contained "Case Study" / "White Paper" types
+  // that no document has, so tapping those returned zero results. Counts
+  // live next to each chip so users see what's available before tapping.
+  const typeOptions = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const d of documents) {
+      counts.set(d.type, (counts.get(d.type) ?? 0) + 1);
+    }
+    const entries = Array.from(counts.entries());
+    entries.sort(([a], [b]) => {
+      const ai = TYPE_PRIORITY.indexOf(a);
+      const bi = TYPE_PRIORITY.indexOf(b);
+      if (ai !== -1 && bi !== -1) return ai - bi;
+      if (ai !== -1) return -1;
+      if (bi !== -1) return 1;
+      return a.localeCompare(b);
+    });
+    return entries.map(([value, count]) => ({ value, count }));
+  }, [documents]);
+
+  function toggleType(value: string) {
+    setSelectedTypes((prev) => {
+      const next = new Set(prev);
+      if (next.has(value)) next.delete(value);
+      else next.add(value);
+      return next;
+    });
+    setVisibleCount(PAGE_SIZE);
+  }
+
   const filtered = useMemo(() => {
     return documents.filter((doc) => {
-      if (search) {
-        const q = search.toLowerCase();
+      if (debouncedSearch) {
+        const q = debouncedSearch.toLowerCase();
         const matchesSearch =
           doc.title.toLowerCase().includes(q) ||
           doc.productName.toLowerCase().includes(q) ||
@@ -318,15 +349,12 @@ export default function ResourcesClient({
       ) {
         if (doc.subcategory !== subcategoryFilter) return false;
       }
-      if (activeTab === "By Document Type" && docTypeFilter !== "All") {
-        if (doc.type !== docTypeFilter) return false;
-      }
-      if (activeTab !== "By Document Type" && typeFilter !== "All") {
-        if (doc.type !== typeFilter) return false;
-      }
+      // Multi-select type filter (applies on both tabs). Empty selection = no
+      // type constraint.
+      if (selectedTypes.size > 0 && !selectedTypes.has(doc.type)) return false;
       return true;
     });
-  }, [documents, search, activeTab, productFilter, subcategoryFilter, typeFilter, docTypeFilter, featuredOnly]);
+  }, [documents, debouncedSearch, activeTab, productFilter, subcategoryFilter, selectedTypes, featuredOnly]);
 
   const visible = filtered.slice(0, visibleCount);
   const hasMore = visibleCount < filtered.length;
@@ -334,28 +362,25 @@ export default function ResourcesClient({
   const hasActiveFilters =
     search !== "" ||
     featuredOnly ||
+    selectedTypes.size > 0 ||
     (activeTab === "By Product" && productFilter !== "all") ||
-    (activeTab === "By Product" && subcategoryFilter !== "all") ||
-    (activeTab === "By Document Type" && docTypeFilter !== "All") ||
-    (activeTab !== "By Document Type" && typeFilter !== "All");
+    (activeTab === "By Product" && subcategoryFilter !== "all");
 
   function clearAllFilters() {
     setSearch("");
     setProductFilter("all");
     setSubcategoryFilter("all");
-    setTypeFilter("All");
-    setDocTypeFilter("All");
+    setSelectedTypes(new Set());
     setFeaturedOnly(false);
     setVisibleCount(PAGE_SIZE);
   }
 
   function handleTabChange(tab: TabType) {
     setActiveTab(tab);
+    // Keep type + featured selections across tab changes — they're orthogonal
+    // to product grouping and users expect their filters to stick.
     setProductFilter("all");
     setSubcategoryFilter("all");
-    setTypeFilter("All");
-    setDocTypeFilter("All");
-    setFeaturedOnly(false);
     setVisibleCount(PAGE_SIZE);
   }
 
@@ -449,34 +474,10 @@ export default function ResourcesClient({
           </div>
         )}
 
-        {activeTab !== "By Document Type" && (
-          <div className="relative">
-            <select
-              value={typeFilter}
-              onChange={(e) => {
-                setTypeFilter(e.target.value);
-                setVisibleCount(PAGE_SIZE);
-              }}
-              className="appearance-none w-full sm:w-48 px-4 py-3 pr-10 rounded-lg text-sm cursor-pointer outline-none focus:ring-1 focus:ring-[#F97316]/40"
-              style={selectStyle}
-            >
-              {DOCUMENT_TYPES.map((t) => (
-                <option key={t} value={t}>
-                  {t === "All" ? "All Types" : t}
-                </option>
-              ))}
-            </select>
-            <ChevronDown
-              className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
-              style={{ color: "#6B7280" }}
-            />
-          </div>
-        )}
-
         {hasActiveFilters && (
           <button
             onClick={clearAllFilters}
-            className="text-sm transition-colors whitespace-nowrap py-3 px-2 hover:text-orange-400"
+            className="text-sm transition-colors whitespace-nowrap py-3 px-3 min-h-[44px] hover:text-orange-400"
             style={{ color: "#F97316" }}
           >
             Clear all filters
@@ -484,7 +485,9 @@ export default function ResourcesClient({
         )}
       </div>
 
-      {/* ── Featured Documents Pill (always visible) ─────── */}
+      {/* ── Filter Chip Row — Featured + Document-Type (multi-select) ───
+            Always visible on both tabs. Counts come from the live document
+            set so users see what tapping a chip will actually surface. */}
       <div className="flex flex-wrap items-center gap-2 mb-6">
         <button
           onClick={() => {
@@ -492,7 +495,7 @@ export default function ResourcesClient({
             setVisibleCount(PAGE_SIZE);
           }}
           aria-pressed={featuredOnly}
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200"
+          className="inline-flex items-center gap-1.5 px-4 min-h-[44px] rounded-full text-sm font-medium transition-all duration-150 ease-out hover:scale-[1.02] active:scale-[0.98]"
           style={
             featuredOnly
               ? { background: "#F97316", color: "#fff", border: "1px solid transparent" }
@@ -508,36 +511,54 @@ export default function ResourcesClient({
             fill={featuredOnly ? "currentColor" : "none"}
             strokeWidth={2}
           />
-          <span>Featured Documents</span>
+          <span>Featured</span>
         </button>
-      </div>
 
-      {/* ── Document Type Pills ──────────────────────────── */}
-      {activeTab === "By Document Type" && (
-        <div className="flex flex-wrap gap-2 mb-6">
-          {DOCUMENT_TYPE_FILTERS.map((dt) => (
+        {/* Type chips — multi-select. Tap to add, tap again to remove. */}
+        {typeOptions.map((opt) => {
+          const active = selectedTypes.has(opt.value);
+          return (
             <button
-              key={dt.value}
-              onClick={() => {
-                setDocTypeFilter(dt.value);
-                setVisibleCount(PAGE_SIZE);
-              }}
-              className="px-4 py-2 rounded-full text-sm font-medium transition-all duration-200"
+              key={opt.value}
+              onClick={() => toggleType(opt.value)}
+              aria-pressed={active}
+              className="inline-flex items-center gap-1.5 px-4 min-h-[44px] rounded-full text-sm font-medium transition-all duration-150 ease-out hover:scale-[1.02] active:scale-[0.98]"
               style={
-                docTypeFilter === dt.value
+                active
                   ? { background: "#F97316", color: "#fff", border: "1px solid transparent" }
                   : {
                       background: "rgba(255,255,255,0.04)",
-                      color: "#6B7280",
+                      color: "#D1D5DB",
                       border: "1px solid rgba(255,255,255,0.08)",
                     }
               }
             >
-              {dt.label}
+              <span>{opt.value}</span>
+              <span
+                className="inline-flex items-center justify-center text-[10px] font-bold rounded-full min-w-[20px] px-1.5 py-0.5"
+                style={{
+                  background: active ? "rgba(255,255,255,0.22)" : "rgba(255,255,255,0.05)",
+                  color: active ? "#fff" : "#9CA3AF",
+                }}
+              >
+                {opt.count}
+              </span>
             </button>
-          ))}
-        </div>
-      )}
+          );
+        })}
+
+        {selectedTypes.size > 0 && (
+          <button
+            onClick={() => {
+              setSelectedTypes(new Set());
+              setVisibleCount(PAGE_SIZE);
+            }}
+            className="text-xs text-orange-400 hover:text-orange-300 transition-colors px-2 min-h-[44px]"
+          >
+            clear types
+          </button>
+        )}
+      </div>
 
       {/* ── StreetBond Subcategory Pills ─────────────────── */}
       {activeTab === "By Product" && productFilter === "streetbond" && (
@@ -576,7 +597,8 @@ export default function ResourcesClient({
         <>
           {activeTab === "By Product" &&
           productFilter === "all" &&
-          typeFilter === "All" &&
+          selectedTypes.size === 0 &&
+          !featuredOnly &&
           !search ? (
             (() => {
               const grouped: Record<string, ResourceDocument[]> = {};

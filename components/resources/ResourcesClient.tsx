@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { FileText, Download, Eye, Search, X, ChevronDown } from "lucide-react";
+import { FileText, Download, Eye, Search, X, ChevronDown, Star } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import type { ResourceDocument } from "@/lib/resource-documents";
 import PdfPreviewModal from "@/components/ui/PdfPreviewModal";
@@ -19,6 +20,8 @@ const DOCUMENT_TYPE_FILTERS = [
 
 const DOCUMENT_TYPES = [
   "All",
+  "Flyer",
+  "Catalogue",
   "Spec Sheet",
   "Data Sheet",
   "Brochure",
@@ -44,6 +47,9 @@ const PRODUCTS = [
   { label: "PreMark", value: "premark" },
   { label: "DuraTherm", value: "duratherm" },
   { label: "AirMark", value: "airmark" },
+  { label: "ChipFill", value: "chipfill" },
+  { label: "AggreFill", value: "aggrefill" },
+  { label: "Fast Patch DPR", value: "fast-patch" },
 ];
 
 const STREETBOND_SUBCATEGORIES = [
@@ -58,7 +64,7 @@ const STREETBOND_SUBCATEGORIES = [
 
 // Badge styles — monochrome, typography-differentiated
 function typeBadgeStyle(type: string): React.CSSProperties {
-  const isHighlighted = ["Spec Sheet", "Data Sheet", "Brochure", "Safety Data Sheet"].includes(type);
+  const isHighlighted = ["Spec Sheet", "Data Sheet", "Brochure", "Safety Data Sheet", "Flyer", "Catalogue"].includes(type);
   return {
     color: isHighlighted ? "#f97316" : "rgba(255,255,255,0.4)",
     background: "transparent",
@@ -91,9 +97,17 @@ function DocCard({
   doc: ResourceDocument;
   onPreview: (state: PreviewState) => void;
 }) {
+  const isFlyer = doc.documentType === "flyer";
+  const isCatalogue = doc.documentType === "catalogue";
+  const hasThumb = isFlyer && !!doc.previewImageUrl;
+  const productLink =
+    isFlyer && doc.product && doc.product !== "all"
+      ? `/products/${doc.product}`
+      : null;
+
   return (
     <div
-      className="group rounded-xl p-5 flex flex-col justify-between transition-all duration-200"
+      className="group rounded-xl flex flex-col justify-between transition-all duration-200 overflow-hidden"
       style={{
         background: "#1e1e1e",
         border: "1px solid rgba(255,255,255,0.08)",
@@ -107,88 +121,162 @@ function DocCard({
         (e.currentTarget as HTMLDivElement).style.background = "#1e1e1e";
       }}
     >
-      <div>
-        <span
-          className="inline-block text-xs font-semibold px-2.5 py-1 rounded-md mb-4"
-          style={typeBadgeStyle(doc.type)}
+      {/* Flyer thumbnail strip */}
+      {hasThumb && doc.previewImageUrl && (
+        <div
+          className="relative w-full h-32 overflow-hidden"
+          style={{ background: "#0f0f0f", borderBottom: "1px solid rgba(255,255,255,0.06)" }}
         >
-          {doc.type}
-        </span>
-        <h3 className="font-semibold leading-snug mb-2" style={{ color: "#F5F0EB" }}>
-          {doc.title}
-        </h3>
-        <span
-          className="inline-block text-xs px-2 py-0.5 rounded-full"
-          style={{
-            color: "#c96a18",
-            background: "rgba(249,115,22,0.07)",
-            border: "1px solid rgba(249,115,22,0.12)",
-          }}
-        >
-          {doc.productName}
-        </span>
-      </div>
-      <div
-        className="flex items-center gap-2 mt-5 pt-4"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
-      >
-        {/* File meta */}
-        <div className="flex items-center gap-1.5 text-xs flex-1 min-w-0" style={{ color: "#6B7280" }}>
-          <span>{doc.fileSize}</span>
-          <span
-            className="w-1 h-1 rounded-full flex-shrink-0"
-            style={{ background: "rgba(255,255,255,0.15)" }}
+          <Image
+            src={doc.previewImageUrl}
+            alt={`${doc.title} preview`}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            className="object-cover object-top transition-transform duration-300 group-hover:scale-[1.02]"
           />
-          <span className="truncate">{doc.updatedDate}</span>
         </div>
+      )}
 
-        {/* Preview button */}
-        <button
-          onClick={() =>
-            onPreview({
-              href: doc.fileUrl,
-              label: doc.title,
-              typeLabel: doc.type,
-              productLabel: doc.productName,
-            })
-          }
-          className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors duration-200 flex-shrink-0"
-          style={{ background: "rgba(255,255,255,0.08)", color: "#9CA3AF" }}
-          onMouseEnter={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.background = "rgba(249,115,22,0.12)";
-            (e.currentTarget as HTMLButtonElement).style.color = "#f97316";
-          }}
-          onMouseLeave={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.08)";
-            (e.currentTarget as HTMLButtonElement).style.color = "#9CA3AF";
-          }}
+      <div className="p-5 flex flex-col justify-between flex-1">
+        <div>
+          <span
+            className="inline-block text-xs font-semibold px-2.5 py-1 rounded-md mb-4"
+            style={typeBadgeStyle(doc.type)}
+          >
+            {doc.type}
+          </span>
+          <h3 className="font-semibold leading-snug mb-2" style={{ color: "#F5F0EB" }}>
+            {doc.title}
+          </h3>
+          {productLink && (
+            <Link
+              href={productLink}
+              className="inline-block text-xs mb-2 transition-colors hover:text-orange-400"
+              style={{ color: "#9CA3AF" }}
+            >
+              View product page &rarr;
+            </Link>
+          )}
+          <div className="mt-1">
+            <span
+              className="inline-block text-xs px-2 py-0.5 rounded-full"
+              style={{
+                color: "#c96a18",
+                background: "rgba(249,115,22,0.07)",
+                border: "1px solid rgba(249,115,22,0.12)",
+              }}
+            >
+              {doc.productName}
+            </span>
+          </div>
+        </div>
+        <div
+          className="flex items-center gap-2 mt-5 pt-4"
+          style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
         >
-          <Eye className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">Preview</span>
-        </button>
+          {/* File meta */}
+          <div className="flex items-center gap-1.5 text-xs flex-1 min-w-0" style={{ color: "#6B7280" }}>
+            <span>{doc.fileSize}</span>
+            <span
+              className="w-1 h-1 rounded-full flex-shrink-0"
+              style={{ background: "rgba(255,255,255,0.15)" }}
+            />
+            <span className="truncate">{doc.updatedDate}</span>
+          </div>
 
-        {/* Download button */}
-        <a
-          href={doc.fileUrl}
-          download
-          className="flex items-center justify-center w-8 h-8 rounded-lg transition-colors duration-200 flex-shrink-0"
-          style={{
-            background: "rgba(249,115,22,0.10)",
-            color: "#f97316",
-            border: "1px solid rgba(249,115,22,0.2)",
-          }}
-          onMouseEnter={(e) => {
-            (e.currentTarget as HTMLAnchorElement).style.background = "#f97316";
-            (e.currentTarget as HTMLAnchorElement).style.color = "#ffffff";
-          }}
-          onMouseLeave={(e) => {
-            (e.currentTarget as HTMLAnchorElement).style.background = "rgba(249,115,22,0.10)";
-            (e.currentTarget as HTMLAnchorElement).style.color = "#f97316";
-          }}
-          title="Download PDF"
-        >
-          <Download className="w-3.5 h-3.5" />
-        </a>
+          {/* Preview button — catalogue opens flipbook in a new tab; everything else uses the PDF modal */}
+          {isCatalogue ? (
+            <a
+              href={doc.fileUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors duration-200 flex-shrink-0"
+              style={{ background: "rgba(255,255,255,0.08)", color: "#9CA3AF" }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.background = "rgba(249,115,22,0.12)";
+                (e.currentTarget as HTMLAnchorElement).style.color = "#f97316";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.background = "rgba(255,255,255,0.08)";
+                (e.currentTarget as HTMLAnchorElement).style.color = "#9CA3AF";
+              }}
+              title="Open the 2026 catalogue flipbook"
+            >
+              <Eye className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Open Flipbook</span>
+            </a>
+          ) : (
+            <button
+              onClick={() =>
+                onPreview({
+                  href: doc.fileUrl,
+                  label: doc.title,
+                  typeLabel: doc.type,
+                  productLabel: doc.productName,
+                })
+              }
+              className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors duration-200 flex-shrink-0"
+              style={{ background: "rgba(255,255,255,0.08)", color: "#9CA3AF" }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.background = "rgba(249,115,22,0.12)";
+                (e.currentTarget as HTMLButtonElement).style.color = "#f97316";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.08)";
+                (e.currentTarget as HTMLButtonElement).style.color = "#9CA3AF";
+              }}
+            >
+              <Eye className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Preview</span>
+            </button>
+          )}
+
+          {/* Download / open button. Catalogue gets a "View" link (no PDF download); everything else downloads. */}
+          {isCatalogue ? (
+            <Link
+              href={doc.fileUrl}
+              className="flex items-center justify-center w-8 h-8 rounded-lg transition-colors duration-200 flex-shrink-0"
+              style={{
+                background: "rgba(249,115,22,0.10)",
+                color: "#f97316",
+                border: "1px solid rgba(249,115,22,0.2)",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.background = "#f97316";
+                (e.currentTarget as HTMLAnchorElement).style.color = "#ffffff";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.background = "rgba(249,115,22,0.10)";
+                (e.currentTarget as HTMLAnchorElement).style.color = "#f97316";
+              }}
+              title="Open catalogue"
+            >
+              <Eye className="w-3.5 h-3.5" />
+            </Link>
+          ) : (
+            <a
+              href={doc.fileUrl}
+              download
+              className="flex items-center justify-center w-8 h-8 rounded-lg transition-colors duration-200 flex-shrink-0"
+              style={{
+                background: "rgba(249,115,22,0.10)",
+                color: "#f97316",
+                border: "1px solid rgba(249,115,22,0.2)",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.background = "#f97316";
+                (e.currentTarget as HTMLAnchorElement).style.color = "#ffffff";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.background = "rgba(249,115,22,0.10)";
+                (e.currentTarget as HTMLAnchorElement).style.color = "#f97316";
+              }}
+              title="Download PDF"
+            >
+              <Download className="w-3.5 h-3.5" />
+            </a>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -205,6 +293,7 @@ export default function ResourcesClient({
   const [subcategoryFilter, setSubcategoryFilter] = useState("all");
   const [typeFilter, setTypeFilter] = useState("All");
   const [docTypeFilter, setDocTypeFilter] = useState("All");
+  const [featuredOnly, setFeaturedOnly] = useState(false);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [preview, setPreview] = useState<PreviewState | null>(null);
 
@@ -218,6 +307,7 @@ export default function ResourcesClient({
           doc.type.toLowerCase().includes(q);
         if (!matchesSearch) return false;
       }
+      if (featuredOnly && doc.featured !== true) return false;
       if (activeTab === "By Product" && productFilter !== "all") {
         if (doc.product !== productFilter) return false;
       }
@@ -236,13 +326,14 @@ export default function ResourcesClient({
       }
       return true;
     });
-  }, [documents, search, activeTab, productFilter, subcategoryFilter, typeFilter, docTypeFilter]);
+  }, [documents, search, activeTab, productFilter, subcategoryFilter, typeFilter, docTypeFilter, featuredOnly]);
 
   const visible = filtered.slice(0, visibleCount);
   const hasMore = visibleCount < filtered.length;
 
   const hasActiveFilters =
     search !== "" ||
+    featuredOnly ||
     (activeTab === "By Product" && productFilter !== "all") ||
     (activeTab === "By Product" && subcategoryFilter !== "all") ||
     (activeTab === "By Document Type" && docTypeFilter !== "All") ||
@@ -254,6 +345,7 @@ export default function ResourcesClient({
     setSubcategoryFilter("all");
     setTypeFilter("All");
     setDocTypeFilter("All");
+    setFeaturedOnly(false);
     setVisibleCount(PAGE_SIZE);
   }
 
@@ -263,6 +355,7 @@ export default function ResourcesClient({
     setSubcategoryFilter("all");
     setTypeFilter("All");
     setDocTypeFilter("All");
+    setFeaturedOnly(false);
     setVisibleCount(PAGE_SIZE);
   }
 
@@ -389,6 +482,34 @@ export default function ResourcesClient({
             Clear all filters
           </button>
         )}
+      </div>
+
+      {/* ── Featured Documents Pill (always visible) ─────── */}
+      <div className="flex flex-wrap items-center gap-2 mb-6">
+        <button
+          onClick={() => {
+            setFeaturedOnly((v) => !v);
+            setVisibleCount(PAGE_SIZE);
+          }}
+          aria-pressed={featuredOnly}
+          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200"
+          style={
+            featuredOnly
+              ? { background: "#F97316", color: "#fff", border: "1px solid transparent" }
+              : {
+                  background: "rgba(255,255,255,0.04)",
+                  color: "#9CA3AF",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                }
+          }
+        >
+          <Star
+            className="w-3.5 h-3.5"
+            fill={featuredOnly ? "currentColor" : "none"}
+            strokeWidth={2}
+          />
+          <span>Featured Documents</span>
+        </button>
       </div>
 
       {/* ── Document Type Pills ──────────────────────────── */}

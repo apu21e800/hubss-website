@@ -182,8 +182,8 @@ async function pageCover(d) {
   // sitting on a SOFT navy vignette (not a band). Editorial cover.
   ph(f, 0, 0, 450, 450, "Cover photo", d.cover_photo);
   // v45 — no vignette. Type sits directly on the photo.
-  // Color logo top-LEFT, restrained scale.
-  logo(f, 28, 28, 110, 22, "HUBSS logo color", d.brand && d.brand.logo_color);
+  // White-text logo top-LEFT (Vernon: 'previous version was better').
+  logo(f, 28, 28, 110, 22, "HUBSS logo white", d.brand && d.brand.logo_white);
   // Bottom masthead — confident display + small caps.
   await tx(f, "Catalogue 2026.", 28, 370, 30, W, true, 394);
   await tx(f, "DECORATIVE PAVEMENT SOLUTIONS", 28, 410, 8, W, false, 394, null, 11);

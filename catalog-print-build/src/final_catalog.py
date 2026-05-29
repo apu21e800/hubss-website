@@ -396,10 +396,10 @@ def page_cover(c):
     fill_bleed(c, HUBSS_WHITE)
     if CC.COVER_PHOTO and CC.COVER_PHOTO.exists():
         draw_full_bleed_image(c, str(CC.COVER_PHOTO))
-    # v45 — Vernon: drop the bottom-of-page gradient. Type sits directly
-    # on the photo. UBC cover's bottom (Musqueam medallion concrete) is
-    # naturally a darker zone — white type reads cleanly.
-    draw_logo_color(c, fx=28, fy=28, fw_figma=110)
+    # v45 — no gradient. Type sits directly on photo. Vernon: 'hubss logo
+    # should have the white text, the previous version was better.' →
+    # white logo (was color in v44–early-v45).
+    draw_logo_white(c, fx=28, fy=28, fw_figma=110)
     draw_text_block(c, "Catalogue 2026.", fx=28, fy=370,
                     font_size_figma=30, weight=800,
                     color=HUBSS_WHITE, tracking=-1.0, max_w_figma=394)

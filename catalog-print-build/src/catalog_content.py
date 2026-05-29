@@ -402,10 +402,11 @@ PROJECTS = [
      "title": "Six laneways. Six artists.",
      "story": "Six Vancouver laneways. Six artists. StreetBond coloured pavement turned utility corridors into civic gallery space — public art at street scale, permanent and weather-resistant."},
     {"name": "White Rock Pier", "location": "White Rock, British Columbia", "product": "TrafficPatternsXD",
-     # tpxd-95.jpg WRONG: showed Toronto high-rise intersection, not White Rock pier or coastal setting
-     # Using actual White Rock pier blog photo — coastal bollards + thermoplastic crosswalk, correct location ✓
-     "hero": _pick(BLOG_DIR / "white-rock-pier-crosswalk" / "featured.png",
-                   PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-95.jpg"),
+     # v45 FIX: blog featured.png was 206×134 = 62 KB — pixelated when upscaled
+     # to a 5x5" print page. Swapped to the 2480×1860 (7.4 MB) booklet PNG
+     # of the same shot, which is print-grade. Vernon flagged p79 as blurry.
+     "hero": _pick(ASSETS / "Whiterock-Pier-Crosswalk-TrafficPatternsXD-1 1.png",
+                   BLOG_DIR / "white-rock-pier-crosswalk" / "featured.png"),
      "detail": _pick(PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-140.jpg"),
      "title": "Salt air. Holiday traffic. Held.",
      "story": "Salt spray. Summer surge. Winter rain. The pier crosswalk at White Rock faces the full force of the BC coast — and holds season after season. TrafficPatternsXD installed where paint would be gone by July."},

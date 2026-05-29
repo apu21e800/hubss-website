@@ -27,6 +27,7 @@ figma-plugin/code.js
 
 # Large binary output PDFs (version-controlled via Figma, not git)
 output/*.pdf
+output/flyers/
 output/previews_*/
 output/v*/
 output/bleed/

@@ -8,7 +8,7 @@ from reportlab.pdfbase.pdfmetrics import stringWidth
 from .specs import (
     PAGE_SIZE, PAGE_W, PAGE_H, BLEED, TRIM_W, TRIM_H,
     HUBSS_ORANGE, HUBSS_NAVY_RICH, HUBSS_WHITE,
-    FONT_SANS_BOLD,
+    FONT_SANS_BOLD, FONT_SERIF,
 )
 from .figma_render import (
     SCALE, fs, figma_to_pdf, fill_bleed,
@@ -381,31 +381,33 @@ def corner_accent(c, max_alpha: int = 80, size_figma: int = 240) -> None:
 
 
 def page_cover(c):
-    """Cover — full-bleed photo + full-frame NavyWash @60% + white wordmark.
+    """Cover — full-bleed photo + restrained masthead + subtle bottom vignette.
 
-    v44 — Vernon's revert. The Figma plugin reference
-    (kdOAk9GBEvn9BjumW3hE0q frame 1:2) shows a full-frame navy wash at
-    60% opacity over the cover photo, with the wordmark in white at
-    bottom-left. He said 'this was the best — revert back to this'.
-    No cream band. No soft gradient. One quiet navy tint over the whole
-    photo, the brand mark sitting calmly on the lower-left.
+    v44 — pro look. No banner. No full-frame wash. No cream anywhere.
+    Vernon: 'no cream banner, no cream nothing. Let's go for a pro look.'
+
+    Layout (magazine cover discipline):
+      - Color logo top-LEFT at restrained scale (110 figma wide).
+      - Bottom: 'CATALOGUE 2026.' display + 'Decorative Pavement Solutions'
+        small caps. White type sits on a SOFT navy vignette that fades up
+        from the very bottom — never reaches solid coverage. The photo
+        dominates; the type is editorial punctuation.
     """
     fill_bleed(c, HUBSS_WHITE)
     if CC.COVER_PHOTO and CC.COVER_PHOTO.exists():
         draw_full_bleed_image(c, str(CC.COVER_PHOTO))
-    # Full-frame navy wash @60% — matches Figma reference exactly.
-    c.saveState()
-    c.setFillColorRGB(8 / 255, 13 / 255, 22 / 255)  # HUBSS navy
-    c.setFillAlpha(0.60)
-    c.rect(0, 0, PAGE_W, PAGE_H, stroke=0, fill=1)
-    c.setFillAlpha(1.0)
-    c.restoreState()
-    # White logo lower-left at figma (28, 392), width 160, height 30 —
-    # mirrors plugin frame 1:5.
-    draw_logo_white(c, fx=28, fy=392, fw_figma=160)
-    # CATALOGUE 2026 caps, white, right-aligned at fy=402.
-    tracked_caps(c, "Catalogue 2026", fx=28, fy=402, size=6.5,
-                 color=HUBSS_WHITE, align="right", max_w_figma=394)
+    # Soft navy vignette ONLY at the bottom — gentle gradient, max ~52%
+    # alpha. Vignette, not a band. Provides just enough darkness for
+    # white type to read without smothering the photo.
+    cover_wash(c, height_figma=160, max_alpha_pct=0.52, ease=1.9)
+    # Color logo top-LEFT — restrained scale (110 figma units).
+    draw_logo_color(c, fx=28, fy=28, fw_figma=110)
+    # Bottom masthead — confident display + small caps.
+    draw_text_block(c, "Catalogue 2026.", fx=28, fy=370,
+                    font_size_figma=30, weight=800,
+                    color=HUBSS_WHITE, tracking=-1.0, max_w_figma=394)
+    tracked_caps(c, "Decorative Pavement Solutions", fx=28, fy=410,
+                 size=8.0, color=HUBSS_WHITE, max_w_figma=394)
 
 
 def page_half_title(c):
@@ -521,96 +523,72 @@ def page_toc(c, sections):
 
 
 def page_section_open(c, section_no, title, photo_path):
-    """Section divider — v44 revert to plugin reference (3-step graduated scrim).
+    """Section divider — v44 pro: typography-led editorial moment.
 
-    Mirrors Figma plugin frame 1:93 (kdOAk9GBEvn9BjumW3hE0q): ScrimGlobal
-    12% over full frame + ScrimMid 40% on the lower half + ScrimBase 60%
-    on the bottom third. White type sits on the dense base. Vernon: 'this
-    was the best — revert back to this.'
+    Full-bleed photo + soft navy vignette at the bottom (legibility only,
+    never reads as a band) + huge confident display title in white.
+    Lots of whitespace above the type. The photo + the type carry the
+    page — no band, no harsh scrim.
     """
     fill_bleed(c, HUBSS_WHITE)
     if photo_path and photo_path.exists():
         draw_full_bleed_image(c, str(photo_path))
-
-    # 3-step graduated navy scrim — matches the plugin frame's
-    # ScrimGlobal / ScrimMid / ScrimBase exactly.
-    c.saveState()
-    c.setFillColorRGB(8 / 255, 13 / 255, 22 / 255)  # HUBSS navy
-    # ScrimGlobal — full-frame 12%
-    c.setFillAlpha(0.12)
-    c.rect(0, 0, PAGE_W, PAGE_H, stroke=0, fill=1)
-    # ScrimMid — lower 240 figma units (fy=210..450) at 40%
-    mid_top_figma = 210
-    mid_h_figma = 240
-    mid_pdf_y = BLEED + TRIM_H - (mid_top_figma + mid_h_figma) * SCALE
-    c.setFillAlpha(0.40)
-    c.rect(0, mid_pdf_y - BLEED, PAGE_W,
-           mid_h_figma * SCALE + BLEED, stroke=0, fill=1)
-    # ScrimBase — text zone bottom 140 figma units (fy=310..450) at 60%
-    base_top_figma = 310
-    base_h_figma = 140
-    base_pdf_y = BLEED + TRIM_H - (base_top_figma + base_h_figma) * SCALE
-    c.setFillAlpha(0.60)
-    c.rect(0, base_pdf_y - BLEED, PAGE_W,
-           base_h_figma * SCALE + BLEED, stroke=0, fill=1)
-    c.setFillAlpha(1.0)
-    c.restoreState()
-
-    # SECTION X caps + orange rule + big display title — mirrors plugin
-    # text positions fy=330 (eyebrow), fy=324 (rule), fy=353 (title).
-    thin_rule(c, fx=28, fy=324, w_figma=24,
+    # Soft navy vignette — taller than cover (covers section opener's
+    # bigger type), still gentle. Max ~55% alpha.
+    cover_wash(c, height_figma=210, max_alpha_pct=0.55, ease=1.85)
+    # Thin orange rule + small section eyebrow caps + huge display title
+    thin_rule(c, fx=28, fy=313, w_figma=28,
               color=HUBSS_ORANGE, weight_pt=2.0)
-    tracked_caps(c, ("Section " + section_no).upper(), fx=28, fy=330,
-                 size=6.0, color=HUBSS_WHITE, max_w_figma=394)
-    draw_text_block(c, title, fx=28, fy=353, font_size_figma=34,
+    tracked_caps(c, ("Section " + section_no).upper(), fx=28, fy=322,
+                 size=7.5, color=HUBSS_WHITE, max_w_figma=394)
+    draw_text_block(c, title, fx=28, fy=350, font_size_figma=44,
                     weight=800, color=HUBSS_WHITE,
-                    tracking=-1.0, max_w_figma=394, leading_figma=37)
+                    tracking=-1.4, max_w_figma=394, leading_figma=46)
 
 
 def page_product_hero(c, prod):
-    """Product hero — v44 revert to plugin reference (solid NavyBand bottom).
+    """Product hero — v44 pro: editorial flow, NO overlay band.
 
-    Mirrors Figma plugin frames 1:101 (TPXD), 1:159 (StreetBond), 1:899
-    (Sechelt project) from kdOAk9GBEvn9BjumW3hE0q. Vernon: 'this was the
-    best — revert back to this.' Clean photo top 284 figma + solid navy
-    band bottom 166 figma. Orange rule + orange eyebrow caps + white
-    tagline below. No dot — the rule does the brand-pickup work.
+    Vernon: 'no cream, no cream nothing. Go for a pro look.'
+
+    Layout:
+      - Full-bleed photo top ~64% of page (fy=-12..fy=298).
+      - White space below — page background carries it, no band.
+      - Small orange dot + product name caps eyebrow.
+      - Display italic SERIF tagline in dark ink — the editorial moment.
+      - Thin orange brand-pickup rule near bottom.
     """
     fill_bleed(c, HUBSS_WHITE)
     if prod["hero"] and prod["hero"].exists():
-        # Photo fills top 284 figma (~63% of 450) — extend through top/side
-        # bleed for cut variance. fh tuned so photo edge meets band top.
+        # Photo top ~64% — extend top/sides through bleed.
         draw_image_at_figma(c, str(prod["hero"]),
-                            fx=-12, fy=-12, fw=474, fh=296)
+                            fx=-12, fy=-12, fw=474, fh=310)
 
-    # Solid NavyBand bottom 166 figma units — runs through bottom bleed.
-    band_top_figma = 284
-    band_h_figma = 166
-    band_pdf_y = BLEED + TRIM_H - (band_top_figma + band_h_figma) * SCALE
-    c.setFillColor(HUBSS_NAVY_RICH)
-    c.rect(0, band_pdf_y - BLEED, PAGE_W,
-           band_h_figma * SCALE + BLEED, stroke=0, fill=1)
-
-    # Orange rule above eyebrow + orange eyebrow caps + white tagline —
-    # text positions mirror plugin frame 1:103 / 1:104 / 1:106 exactly.
-    thin_rule(c, fx=28, fy=314, w_figma=24,
-              color=HUBSS_ORANGE, weight_pt=2.0)
-    tracked_caps(c, prod["name"], fx=28, fy=320, size=9.0,
+    # Eyebrow zone — small orange dot + product name caps in orange.
+    # Dot at fy=325, eyebrow at fy=322 — dot center co-aligns with cap-center.
+    orange_dot(c, fx=28, fy=325, r_figma=1.3)
+    tracked_caps(c, prod["name"], fx=34, fy=322, size=7.5,
                  color=HUBSS_ORANGE, max_w_figma=394)
 
-    # Tagline size-to-fit: start at 22pt, 13pt floor.
+    # Display italic SERIF tagline in dark ink — the editorial centerpiece.
+    # Size-to-fit so it never wraps: start at 22pt, 14pt floor.
     tagline = no_orphan(prod["tagline"], last_n=3)
     safe_w_pt = 394 * SCALE
     tagline_size = 22
-    while tagline_size > 13 and stringWidth(
-        tagline, FONT_SANS_BOLD, tagline_size * SCALE
+    while tagline_size > 14 and stringWidth(
+        tagline, FONT_SERIF, tagline_size * SCALE
     ) > safe_w_pt:
         tagline_size -= 1
-    tagline_leading = tagline_size + 2
-    draw_text_block(c, tagline, fx=28, fy=344,
+    tagline_leading = tagline_size + 4
+    draw_text_block(c, tagline, fx=28, fy=350,
                     font_size_figma=tagline_size,
-                    weight=800, color=HUBSS_WHITE, tracking=-0.6,
+                    figma_font="serif",
+                    color=CMYK_TEXT_DARK, tracking=-0.3,
                     max_w_figma=394, leading_figma=tagline_leading)
+
+    # Thin orange brand-pickup rule near the bottom — quiet anchor.
+    thin_rule(c, fx=28, fy=420, w_figma=44,
+              color=HUBSS_ORANGE, weight_pt=2.0)
 
 
 
@@ -745,34 +723,26 @@ def page_application(c, app, idx, total):
 
 
 def page_project_hero(c, proj):
-    """Project hero — v44 mirrors plugin frame 1:899 (Sechelt). Same solid
-    NavyBand bottom 166 figma as product hero — one design language
-    across both hero treatments."""
+    """Project hero — v44 pro: editorial flow mirroring product hero."""
     fill_bleed(c, HUBSS_WHITE)
     if proj["hero"] and proj["hero"].exists():
         draw_image_at_figma(c, str(proj["hero"]),
-                            fx=-12, fy=-12, fw=474, fh=296)
-    # Solid NavyBand bottom 166 figma units.
-    band_top_figma = 284
-    band_h_figma = 166
-    band_pdf_y = BLEED + TRIM_H - (band_top_figma + band_h_figma) * SCALE
-    c.setFillColor(HUBSS_NAVY_RICH)
-    c.rect(0, band_pdf_y - BLEED, PAGE_W,
-           band_h_figma * SCALE + BLEED, stroke=0, fill=1)
-    # Orange rule + orange product-name eyebrow.
-    thin_rule(c, fx=28, fy=314, w_figma=24,
-              color=HUBSS_ORANGE, weight_pt=2.0)
-    tracked_caps(c, proj["name"], fx=28, fy=320, size=7.0,
+                            fx=-12, fy=-12, fw=474, fh=310)
+    # Eyebrow: project name in orange caps with small dot.
+    orange_dot(c, fx=28, fy=325, r_figma=1.3)
+    tracked_caps(c, proj["name"], fx=34, fy=322, size=7.5,
                  color=HUBSS_ORANGE, max_w_figma=394)
-    # Title in white — keeps the orphan-prevention from prior versions.
-    draw_text_block(c, no_orphan(proj["title"], 3), fx=28, fy=344,
-                    font_size_figma=22, weight=800, color=HUBSS_WHITE,
-                    tracking=-0.6, max_w_figma=394, leading_figma=25)
-    # Location + product line at bottom of band — preserves the
-    # location-left / product-right footer from v40+.
-    tracked_caps(c, proj["location"], fx=28, fy=415, size=6.0,
-                 color=HUBSS_WHITE, max_w_figma=190)
-    tracked_caps(c, proj["product"], fx=232, fy=415, size=6.0,
+    # Display italic serif title in dark ink — editorial centerpiece.
+    draw_text_block(c, no_orphan(proj["title"], 3), fx=28, fy=350,
+                    font_size_figma=20, figma_font="serif",
+                    color=CMYK_TEXT_DARK, tracking=-0.3,
+                    max_w_figma=394, leading_figma=24)
+    # Footer line: location left, product right — small caps.
+    thin_rule(c, fx=28, fy=405, w_figma=44,
+              color=HUBSS_ORANGE, weight_pt=2.0)
+    tracked_caps(c, proj["location"], fx=28, fy=414, size=6.0,
+                 color=CMYK_TEXT_MID, max_w_figma=190)
+    tracked_caps(c, proj["product"], fx=232, fy=414, size=6.0,
                  color=HUBSS_ORANGE, align="right", max_w_figma=190)
 
 

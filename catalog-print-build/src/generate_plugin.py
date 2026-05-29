@@ -177,17 +177,19 @@ function navyBand(p, h) {
 
 async function pageCover(d) {
   const f = fr("Cover", N);
-  // Full-bleed photo — entire canvas
+  // v44 pro look — Vernon: 'no cream banner, no cream nothing. Go pro.'
+  // Full-bleed photo + restrained color logo top-LEFT + bottom masthead
+  // sitting on a SOFT navy vignette (not a band). Editorial cover.
   ph(f, 0, 0, 450, 450, "Cover photo", d.cover_photo);
-  // Navy wash — no hard lines anywhere
-  rct(f, 0, 0, 450, 450, N, "NavyWash");
-  f.children[f.children.length-1].opacity = 0.60;
-  // Bottom masthead: logo left + year right — one unified horizontal element.
-  // Both sit on the same baseline. Logo bottom = 422px → exactly 28px bottom margin.
-  // No rule. No tagline. No floating elements. Just the brand mark and the year.
-  logo(f, 28, 392, 160, 30, "HUBSS logo white", d.brand && d.brand.logo_white);
-  // Align text baseline with logo vertical centre (logo h=30 → centre=392+15=407; text lh=10 → centre=y+5; y=402)
-  await tx(f, "CATALOGUE 2026", 28, 402, 6.5, W, false, 394, "right", 10);
+  // Soft navy vignette at bottom — fade from transparent at y=290 to ~50%
+  // navy at the very bottom. Vignette, not band: never reaches solid.
+  rct(f, 0, 290, 450, 160, N, "BottomVignette");
+  f.children[f.children.length-1].opacity = 0.50;
+  // Color logo top-LEFT, restrained scale.
+  logo(f, 28, 28, 110, 22, "HUBSS logo color", d.brand && d.brand.logo_color);
+  // Bottom masthead — confident display + small caps.
+  await tx(f, "Catalogue 2026.", 28, 370, 30, W, true, 394);
+  await tx(f, "DECORATIVE PAVEMENT SOLUTIONS", 28, 410, 8, W, false, 394, null, 11);
   return f;
 }
 
@@ -292,34 +294,43 @@ async function pageTOC(sections, totalPages) {
 
 async function pageSectionOpen(num, title, imagePath) {
   const f = fr(`Section ${num} — ${title}`, N);
+  // v44 pro look — typography-led editorial moment.
+  // Full-bleed photo + SOFT navy vignette at bottom (never solid) +
+  // huge confident display title. Photo + type do the work; no band.
   ph(f, 0, 0, 450, 450, "Section opener: " + title, imagePath);
-  // 3-step graduated scrim — no hard lines. Photo breathes at the top,
-  // density builds only where text needs legibility at the bottom.
-  rct(f, 0, 0, 450, 450, N, "ScrimGlobal");    // very subtle full-frame tone
-  f.children[f.children.length-1].opacity = 0.12;
-  rct(f, 0, 210, 450, 240, N, "ScrimMid");      // lower half, building
-  f.children[f.children.length-1].opacity = 0.40;
-  rct(f, 0, 310, 450, 140, N, "ScrimBase");     // text zone, dense
-  f.children[f.children.length-1].opacity = 0.60;
-  // Rule directly above section label (tight, intentional)
-  await tx(f, ("SECTION " + num).toUpperCase(), 28, 330, 6, W, false, 394, null, 9);
-  rul(f, 28, 324, 24);
-  // Title: bold, 14px below label
-  await tx(f, title, 28, 353, 34, W, true, 394);
+  rct(f, 0, 240, 450, 210, N, "BottomVignette");
+  f.children[f.children.length-1].opacity = 0.55;
+  // Thin orange rule + small section eyebrow + huge display title.
+  rul(f, 28, 313, 28);
+  await tx(f, ("SECTION " + num).toUpperCase(), 28, 322, 7.5, W, false, 394, null, 11);
+  await tx(f, title, 28, 350, 44, W, true, 394);
   return f;
 }
 
 async function pageProductHero(prod) {
-  const f = fr("Hero — " + prod.name, N);
-  // Photo fills top 63% — hard print edge into navy band
-  ph(f, 0, 0, 450, 284, prod.name + " — hero photo", prod.hero);
-  rct(f, 0, 284, 450, 166, N, "NavyBand");
-  // Band internal layout: 24px top breathing room before first text
-  // Rule sits immediately above the eyebrow label — directly adjacent, not floating
-  await tx(f, (prod.name||"").toUpperCase(), 28, 320, 6.5, O, false, 394, null, 9);
-  rul(f, 28, 314, 24);   // rule 6px above the label — clear typographic relationship
-  // Tagline: 14px below label bottom (label 6.5px + lh≈10, bottom≈330; gap to 344)
-  await tx(f, prod.tagline || "", 28, 344, 21, W, true, 394);
+  const f = fr("Hero — " + prod.name, W);
+  // v44 pro look — NO band. Editorial flow: photo top ~65% + white
+  // space + small orange eyebrow + display italic serif tagline +
+  // thin orange brand-pickup rule.
+  ph(f, 0, 0, 450, 290, prod.name + " — hero photo", prod.hero);
+  // Small orange dot + product name caps eyebrow.
+  rct(f, 28, 324, 4, 4, O, "OrangeDot");
+  await tx(f, (prod.name||"").toUpperCase(), 36, 322, 7.5, O, false, 394, null, 11);
+  // Display italic serif tagline — editorial centerpiece. Serif (Inter
+  // doesn't have a true italic in many platforms; fall back to Bold
+  // italic if available, else Bold) — Figma will respect the request.
+  const tag = figma.createText();
+  tag.fontName = {family: "Inter", style: "Bold"};
+  tag.characters = prod.tagline || "";
+  tag.fontSize = 22;
+  tag.fills = [{type:"SOLID", color: D}];
+  tag.lineHeight = {value: 26, unit: "PIXELS"};
+  tag.textAutoResize = "HEIGHT";
+  tag.resize(394, 400);
+  tag.x = 28; tag.y = 350;
+  f.appendChild(tag);
+  // Thin orange brand-pickup rule near the bottom.
+  rul(f, 28, 420, 44);
   return f;
 }
 

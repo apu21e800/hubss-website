@@ -378,44 +378,43 @@ async function pageProductSpec(prod) {
 
 async function pageApplication(app, idx, total) {
   const f = fr(`App ${String(idx).padStart(2,"0")} — ${app.name}`);
-  ph(f, 0, 0, 450, 288, app.name + " — application photo", app.image);
-  await tx(f, `APPLICATION   ${String(idx).padStart(2,"0")} / ${String(total)}`, 30, 306, 5.5, O, false, 370);
-  await tx(f, app.name, 30, 321, 19, D, true, 390);
-  await tx(f, app.tagline || "", 30, 354, 8.5, M, false, 370);
-  await tx(f, app.body || "", 30, 376, 7.5, D, false, 370);
-  // Footer rule + CTA URL
-  rct(f, 30, 418, 390, 1, F, "rule");
-  await tx(f, "hubss.com", 30, 428, 6.5, O, false, 390, "right", 10);
+  // v47 — matches v46 print: photo top ~65%, dark editorial type on
+  // white space below. Orange-dot eyebrow + display + body + brand rule.
+  ph(f, 0, 0, 450, 296, app.name + " — application photo", app.image);
+  rct(f, 28, 324, 4, 4, O, "OrangeDot");
+  await tx(f, (app.name||"").toUpperCase(), 36, 322, 7.5, O, false, 394, null, 11);
+  await tx(f, app.tagline || "", 28, 350, 18, D, true, 394);
+  await tx(f, app.body || "", 28, 388, 8.5, M, false, 394, null, 12);
+  rul(f, 28, 425, 44);
+  await tx(f, "hubss.com", 28, 435, 5.5, O, false, 394, "right", 9);
   return f;
 }
 
 async function pageProjectHero(proj) {
-  const f = fr("Hero — " + proj.name, N);
-  ph(f, 0, 0, 450, 284, proj.name + " — hero photo", proj.hero);
-  rct(f, 0, 284, 450, 166, N, "NavyBand");
-  // Same rule-above-label discipline as product hero
-  await tx(f, (proj.name||"").toUpperCase(), 28, 320, 6.5, O, false, 394, null, 9);
-  rul(f, 28, 314, 24);
-  await tx(f, proj.title || "", 28, 344, 20, W, true, 394);
-  // Location/product footer — white rule divider, then two-column detail line
-  rct(f, 28, 406, 394, 1, {r:1,g:1,b:1}, "Divider");
-  f.children[f.children.length-1].opacity = 0.18;
-  await tx(f, (proj.location||"").toUpperCase(), 28, 418, 6, W, false, 190, null, 9);
-  await tx(f, (proj.product||"").toUpperCase(), 232, 418, 6, O, false, 190, null, 9);
+  const f = fr("Hero — " + proj.name, W);
+  // v47 — matches v46 print: photo top + dark editorial type on white
+  // (was: NavyBand bottom + white type). No band.
+  ph(f, 0, 0, 450, 296, proj.name + " — hero photo", proj.hero);
+  rct(f, 28, 324, 4, 4, O, "OrangeDot");
+  await tx(f, (proj.name||"").toUpperCase(), 36, 322, 7.5, O, false, 394, null, 11);
+  await tx(f, proj.title || "", 28, 350, 20, D, true, 394);
+  rul(f, 28, 405, 44);
+  await tx(f, (proj.location||"").toUpperCase(), 28, 414, 6, M, false, 190, null, 9);
+  await tx(f, (proj.product||"").toUpperCase(), 232, 414, 6, O, false, 190, null, 9);
   return f;
 }
 
 async function pageProjectStory(proj, idx) {
   const f = fr(`Story ${String(idx).padStart(2,"0")} — ${proj.name}`);
-  // FILL mode: full-bleed, edge-to-edge — no letterbox. Subject centered by default.
-  ph(f, 0, 0, 450, 248, proj.name + " — detail photo", proj.detail || proj.hero);
-  // Eyebrow = product name (e.g. "TRAFFICPATTERNS XD"), not a sequential project number
+  // v47 — matches v46 print: dot eyebrow + dark display name + faint
+  // location/product caps + mid-grey body.
+  ph(f, 0, 0, 450, 296, proj.name + " — detail photo", proj.detail || proj.hero);
   const eyebrowLabel = proj.product ? proj.product.toUpperCase() : ("PROJECT " + String(idx).padStart(2,"0"));
-  await tx(f, eyebrowLabel, 30, 266, 6.5, O, false, 370);
-  // proj.name as H2 (identifier), proj.title stays on the hero page as the dramatic tagline
-  await tx(f, proj.name || "", 30, 283, 17, D, true, 370);
-  await tx(f, ((proj.location||"") + "    " + (proj.product||"")), 30, 315, 6.5, M, false, 370);
-  await tx(f, proj.story || "", 30, 334, 7.5, D, false, 370);
+  rct(f, 28, 324, 4, 4, O, "OrangeDot");
+  await tx(f, eyebrowLabel, 36, 322, 7.0, O, false, 394, null, 11);
+  await tx(f, proj.name || "", 28, 348, 17, D, true, 394, null, 20);
+  await tx(f, ((proj.location||"") + "    " + (proj.product||"")).toUpperCase(), 28, 376, 5.5, F, false, 394, null, 8);
+  await tx(f, proj.story || "", 28, 394, 8.0, M, false, 394, null, 11);
   return f;
 }
 
@@ -442,20 +441,14 @@ async function pageInstaller(inst, idx, total) {
   return f;
 }
 
-// pageNetworkOpen — Network section opener. Clean split: photo top / solid navy bottom.
-// No stacked transparencies — photo breathes above, type reads crisply below.
+// pageNetworkOpen — v47 — matches v46 print section openers. Full-bleed
+// photo + white display type on photo. No scrim, no navy bottom.
 async function pageNetworkOpen(d) {
   const f = fr("Section Four — Network", N);
-  // Photo: upper 250px — clean, unencumbered, no overlay
-  ph(f, 0, 0, 450, 250, "Network section opener", d.section_openers && d.section_openers.network);
-  // Solid navy band — hard edge, no transparency stacking
-  rct(f, 0, 250, 450, 200, N, "NavyBand");
-  // Section label + rule in the clean navy zone
-  await tx(f, "SECTION FOUR", 28, 270, 6, O, false, 394, null, 9);
-  rul(f, 28, 287, 24);
-  // Two-line title: white + orange — maximum contrast on solid navy
-  await tx(f, "Certified", 28, 303, 34, W, true, 394);
-  await tx(f, "Installers.", 28, 345, 34, O, true, 394);
+  ph(f, 0, 0, 450, 450, "Network section opener", d.section_openers && d.section_openers.network);
+  rul(f, 28, 313, 28);
+  await tx(f, "SECTION FOUR", 28, 322, 7.5, W, false, 394, null, 11);
+  await tx(f, "Network.", 28, 350, 44, W, true, 394);
   return f;
 }
 
@@ -464,17 +457,12 @@ async function pageNetworkOpen(d) {
 // Right page: matching image, CTA URL bottom-right (where to go next).
 // The left→right pairing creates intentional narrative: statement → action.
 async function pageDoublespread(label, imagePath, caption, rightStyle, rightImagePath) {
-  // Left page — headline lives here. Reader's eye enters bottom-left.
+  // v47 — matches v46 print: no scrim on left, no footer band on right.
+  // Type sits directly on the photo (eyebrow + caption white on photo).
   const fL = fr("Spread L — " + (label||""), N);
   ph(fL, 0, 0, 450, 450, label + " — left", imagePath);
-  // Deep scrim across bottom third — legibility without killing the photo
-  rct(fL, 0, 340, 450, 110, N, "ScrimBottom");
-  fL.children[fL.children.length-1].opacity = 0.72;
-  // Orange rule: thin horizontal anchor above text block
   rul(fL, 28, 352, 20);
-  // Eyebrow: small-caps label identifies which spread this is
-  await tx(fL, (label||"").toUpperCase(), 28, 361, 6, O, false, 394, null, 9);
-  // Headline: the bold editorial statement — white, confident, left-aligned
+  await tx(fL, (label||"").toUpperCase(), 28, 361, 6, W, false, 394, null, 9);
   if (caption) {
     await tx(fL, caption, 28, 382, 10.5, W, true, 390, null, 15);
   }
@@ -483,6 +471,8 @@ async function pageDoublespread(label, imagePath, caption, rightStyle, rightImag
   const fR = fr("Spread R — " + (label||""), N);
   if (rightStyle === "navy") {
     // Closing editorial — navy, giant type, lands as a final statement.
+    // INTENTIONAL navy: this is a typographic brand-statement spread,
+    // not a photo overlay. Per Vernon's rule, navy is OK on type-only pages.
     rul(fR, 28, 80, 32);
     await tx(fR, "THIRTY YEARS IN THE MAKING.", 28, 96, 6, O, false, 394, null, 9);
     await tx(fR, "Built to", 28, 116, 52, W, true, 394);
@@ -497,23 +487,17 @@ async function pageDoublespread(label, imagePath, caption, rightStyle, rightImag
     rct(fR, 28, 404, 394, 1, O, "OrangeRule");
     await tx(fR, "hubss.com", 28, 414, 7.5, O, true, 394, "right", 11);
   } else {
-    // Photo right — use rightImagePath if supplied, else mirror left
+    // Photo right — full bleed, no footer band, URL on photo right-aligned
     ph(fR, 0, 0, 450, 450, label + " — right", rightImagePath || imagePath);
-    rct(fR, 0, 418, 450, 32, N, "FooterBand");
-    fR.children[fR.children.length-1].opacity = 0.72;
-    // URL: orange, right-aligned — unmistakable action anchor
     await tx(fR, "hubss.com", 28, 426, 7.5, O, true, 394, "right", 11);
   }
   return [fL, fR];
 }
 
-// pageImageSpread — full-bleed editorial photo page. No product info.
-// Used as visual punctuation between catalogue sections.
+// pageImageSpread — v47 full-bleed photo, no caption band. Type on photo.
 async function pageImageSpread(label, imagePath, headline) {
   const f = fr("Spread — " + (label||""), N);
   ph(f, 0, 0, 450, 450, label, imagePath);
-  // Minimal footer — dark band, orange rule, caption in small caps
-  rct(f, 0, 404, 450, 46, N, "CaptionBand");
   rul(f, 30, 410, 30);
   if (headline) {
     await tx(f, headline.toUpperCase(), 68, 413, 6, W, false, 352);

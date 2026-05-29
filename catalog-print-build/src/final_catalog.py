@@ -26,7 +26,7 @@ LOGO_WHITE = HUBSS_LOGOS / "hubss-logo-white-large.png"
 LOGO_COLOR = HUBSS_LOGOS / "hubss-logo-color.png"
 LOGO_ASPECT = 2432 / 701
 
-OUT = ROOT / "output" / "HUBSS_Catalogue_2026_v45.pdf"
+OUT = ROOT / "output" / "HUBSS_Catalogue_2026_v46.pdf"
 
 
 # ---- accent palette --------------------------------------------------
@@ -396,10 +396,19 @@ def page_cover(c):
     fill_bleed(c, HUBSS_WHITE)
     if CC.COVER_PHOTO and CC.COVER_PHOTO.exists():
         draw_full_bleed_image(c, str(CC.COVER_PHOTO))
-    # v45 — no gradient. Type sits directly on photo. Vernon: 'hubss logo
-    # should have the white text, the previous version was better.' →
-    # white logo (was color in v44–early-v45).
+    # v46 — Vernon's creative-director pass: navy wash KEPT on cover
+    # (debating but keep for now), removed everywhere else. Subtle 50%
+    # full-frame wash — quietens the busy Musqueam medallion behind the
+    # type but lets the UBC sculpture still read clearly.
+    c.saveState()
+    c.setFillColorRGB(8 / 255, 13 / 255, 22 / 255)  # HUBSS navy
+    c.setFillAlpha(0.50)
+    c.rect(0, 0, PAGE_W, PAGE_H, stroke=0, fill=1)
+    c.setFillAlpha(1.0)
+    c.restoreState()
+    # White-text HUBSS logo top-left (Vernon's call).
     draw_logo_white(c, fx=28, fy=28, fw_figma=110)
+    # Masthead bottom-left, confident.
     draw_text_block(c, "Catalogue 2026.", fx=28, fy=370,
                     font_size_figma=30, weight=800,
                     color=HUBSS_WHITE, tracking=-1.0, max_w_figma=394)
@@ -682,41 +691,31 @@ def page_application(c, app, idx, total):
     product-hero / project-hero editorial weight throughout the book.
     """
     fill_bleed(c, HUBSS_WHITE)
-    # v29: photo extended into bleed area (fx/fy=-12, fw=474) so the photo
-    # genuinely runs to the trim edge with no white slivers if the cut shifts.
+    # v46 — Vernon's creative-director pass: NO navy band on body pages.
+    # Natural-color photo top ~63%, then dark editorial type on white
+    # space below. Same DDB-grade flow as product/project heros.
     if app["image"] and app["image"].exists():
-        draw_image_at_figma(c, str(app["image"]), fx=-12, fy=-12, fw=474, fh=282)
-    # Navy band — anchors body copy
-    band_top_figma = 270
-    band_h_figma = 180
-    band_pdf_y = BLEED + TRIM_H - (band_top_figma + band_h_figma) * SCALE
-    c.setFillColor(HUBSS_NAVY_RICH)
-    c.rect(0, band_pdf_y - BLEED, PAGE_W, band_h_figma * SCALE + BLEED, stroke=0, fill=1)
+        draw_image_at_figma(c, str(app["image"]),
+                            fx=-12, fy=-12, fw=474, fh=296)
 
-    # v29: numbering removed per Vernon's note — name + tagline carry the page.
-    # Rule above app name as a brand anchor.
-    thin_rule(c, fx=28, fy=289, w_figma=32, color=HUBSS_ORANGE, weight_pt=2.0)
-    name_size = min(display_size_for(app["name"]), 22)
-    draw_text_block(c, app["name"], fx=28, fy=300,
-                    font_size_figma=name_size, weight=800,
-                    color=HUBSS_WHITE, tracking=-0.8, max_w_figma=394)
-    # Tagline — orange, italic-feeling
-    draw_text_block(c, no_orphan(app["tagline"], 3), fx=28, fy=336,
-                    font_size_figma=8.0, color=HUBSS_ORANGE,
-                    max_w_figma=394, leading_figma=11)
-    # Body — white at smaller scale
-    draw_text_block(c, no_orphan(app["body"], 3), fx=28, fy=356,
-                    font_size_figma=7.0, color=HUBSS_WHITE,
-                    max_w_figma=394, leading_figma=10.5)
-    # Footer hairline + URL (white at low opacity for subtle finish)
-    c.saveState()
-    c.setFillColorRGB(1, 1, 1)
-    c.setFillAlpha(0.18)
-    rx, ry = figma_to_pdf(28, 418)
-    c.rect(rx, ry, 394 * SCALE, 0.6, stroke=0, fill=1)
-    c.setFillAlpha(1.0)
-    c.restoreState()
-    tracked_caps(c, "hubss.com", fx=28, fy=426, size=5.5,
+    # Small orange eyebrow with dot — application name in caps
+    orange_dot(c, fx=28, fy=325, r_figma=1.3)
+    tracked_caps(c, app["name"], fx=34, fy=322, size=7.5,
+                 color=HUBSS_ORANGE, max_w_figma=394)
+    # Display tagline — confident, dark ink
+    name_size = min(display_size_for(app["name"]), 18)
+    draw_text_block(c, no_orphan(app["tagline"], 3),
+                    fx=28, fy=350, font_size_figma=18,
+                    weight=800, color=CMYK_TEXT_DARK, tracking=-0.4,
+                    max_w_figma=394, leading_figma=22)
+    # Body — dark mid-grey, comfortable leading
+    draw_text_block(c, no_orphan(app["body"], 3), fx=28, fy=388,
+                    font_size_figma=8.5, color=CMYK_TEXT_MID,
+                    max_w_figma=394, leading_figma=12)
+    # Thin orange brand-pickup rule + URL near bottom
+    thin_rule(c, fx=28, fy=425, w_figma=44,
+              color=HUBSS_ORANGE, weight_pt=1.5)
+    tracked_caps(c, "hubss.com", fx=28, fy=435, size=5.5,
                  color=HUBSS_ORANGE, align="right", max_w_figma=394)
 
 
@@ -745,57 +744,31 @@ def page_project_hero(c, proj):
 
 
 def page_project_story(c, proj, idx):
-    """DDB pass: full photo (top 60%) + navy band (bottom 40%) — same
-    treatment as page_project_hero, so the project spread reads as a
-    single editorial moment. White-band layout retired May 22.
-    """
+    """v46 — DDB pass: natural-color photo + editorial type below.
+    No navy band, no overlays. Same flow as project hero + application."""
     fill_bleed(c, HUBSS_WHITE)
-    # v29: photo extended into bleed area so the photo runs true to trim edge.
     if proj.get("detail") and proj["detail"].exists():
-        draw_image_at_figma(c, str(proj["detail"]), fx=-12, fy=-12, fw=474, fh=282)
-    # Navy band — 180 figma units tall, extends through bleed at bottom
-    band_top_figma = 270
-    band_h_figma = 180
-    band_pdf_y = BLEED + TRIM_H - (band_top_figma + band_h_figma) * SCALE
-    c.setFillColor(HUBSS_NAVY_RICH)
-    c.rect(0, band_pdf_y - BLEED, PAGE_W, band_h_figma * SCALE + BLEED, stroke=0, fill=1)
+        draw_image_at_figma(c, str(proj["detail"]),
+                            fx=-12, fy=-12, fw=474, fh=296)
 
-    # Eyebrow = product name (uppercase). Falls back to project counter only
-    # if product is missing (data oversight).
+    # Eyebrow = product name (uppercase) — orange caps with dot
     eyebrow_label = (proj.get("product") or "").upper() \
         or ("PROJECT " + str(idx).zfill(2))
-    thin_rule(c, fx=28, fy=289, w_figma=24, color=HUBSS_ORANGE, weight_pt=2.0)
-    tracked_caps(c, eyebrow_label, fx=28, fy=295, size=6.0,
+    orange_dot(c, fx=28, fy=325, r_figma=1.3)
+    tracked_caps(c, eyebrow_label, fx=34, fy=322, size=7.0,
                  color=HUBSS_ORANGE, max_w_figma=394)
-    # H2 = proj.name (not proj.title — that's the H1 on the hero page)
-    draw_text_block(c, no_orphan(proj.get("name") or "", 3), fx=28, fy=308,
-                    font_size_figma=17, weight=800, color=HUBSS_WHITE,
-                    tracking=-0.5, max_w_figma=394)
-    # White divider hairline + location/product line
-    c.setFillColor(HUBSS_WHITE)
-    rule_x, rule_y = figma_to_pdf(28, 338)
-    c.saveState()
-    try:
-        from reportlab.lib.colors import Color  # noqa
-    except Exception:
-        pass
-    c.setFillColor(HUBSS_WHITE)
-    # 0.18 opacity hairline — draw directly with low-alpha CMYK equivalent
-    c.setFillColorRGB(1, 1, 1)
-    c.setStrokeColorRGB(1, 1, 1)
-    c.setStrokeAlpha(0.18)
-    c.setFillAlpha(0.18)
-    c.rect(rule_x, rule_y, 394 * SCALE, 0.6, stroke=0, fill=1)
-    c.setStrokeAlpha(1.0)
-    c.setFillAlpha(1.0)
-    c.restoreState()
+    # H2 = project name — dark display
+    draw_text_block(c, no_orphan(proj.get("name") or "", 3), fx=28, fy=348,
+                    font_size_figma=17, weight=800, color=CMYK_TEXT_DARK,
+                    tracking=-0.5, max_w_figma=394, leading_figma=20)
+    # Location · product line in faint caps
     sub = ((proj.get("location") or "") + "    " + (proj.get("product") or "")).upper()
-    tracked_caps(c, sub, fx=28, fy=346, size=5.5,
-                 color=HUBSS_ORANGE, max_w_figma=394)
-    # Story — white body at small scale, fits in remaining band area
-    draw_text_block(c, no_orphan(proj.get("story") or "", 3), fx=28, fy=365,
-                    font_size_figma=7.0, color=HUBSS_WHITE,
-                    max_w_figma=394, leading_figma=10.5)
+    tracked_caps(c, sub, fx=28, fy=376, size=5.5,
+                 color=CMYK_TEXT_FAINT, max_w_figma=394)
+    # Story body — comfortable mid-grey
+    draw_text_block(c, no_orphan(proj.get("story") or "", 3), fx=28, fy=394,
+                    font_size_figma=8.0, color=CMYK_TEXT_MID,
+                    max_w_figma=394, leading_figma=11)
 
 
 def page_installer(c, inst):
@@ -1447,27 +1420,19 @@ def page_doublespread_right(c, label, caption, *, right_style=None,
 
 
 def page_network_open(c, photo_path):
-    """Network section opener — photo top / solid navy bottom split.
-    Replaces the generic page_section_open call for the installer section.
+    """v46 — Network section opener: matches the other section openers.
+    Full-bleed natural-color photo + type lower-left. No navy split.
     """
-    fill_bleed(c, HUBSS_NAVY_RICH)
-    # Top half: photo
+    fill_bleed(c, HUBSS_WHITE)
     if photo_path and Path(photo_path).exists():
-        draw_image_at_figma(c, str(photo_path), fx=0, fy=0, fw=450, fh=240)
-    # Bottom half is the navy fill (already painted by fill_bleed)
-    corner_accent(c, max_alpha=55, size_figma=200)
-    tracked_caps(c, "Section Four", fx=30, fy=270, size=6.5,
-                 color=HUBSS_ORANGE, max_w_figma=390)
-    draw_text_block(c, "Network.", fx=30, fy=295, font_size_figma=44,
-                    weight=800, color=HUBSS_WHITE, tracking=-1.2,
-                    max_w_figma=390)
-    thin_rule(c, fx=30, fy=348, w_figma=48, color=HUBSS_ORANGE,
-              weight_pt=2.0)
-    draw_text_block(c,
-        "HUB-certified installers across Canada. Trained on every product, "
-        "backed by HUB technical support, project-experienced.",
-        fx=30, fy=360, font_size_figma=10, color=CMYK_ON_DARK_BODY,
-        max_w_figma=390, leading_figma=15)
+        draw_full_bleed_image(c, str(photo_path))
+    thin_rule(c, fx=28, fy=313, w_figma=28,
+              color=HUBSS_ORANGE, weight_pt=2.0)
+    tracked_caps(c, "Section Four", fx=28, fy=322, size=7.5,
+                 color=HUBSS_WHITE, max_w_figma=394)
+    draw_text_block(c, "Network.", fx=28, fy=350, font_size_figma=44,
+                    weight=800, color=HUBSS_WHITE, tracking=-1.4,
+                    max_w_figma=394, leading_figma=46)
 
 
 def page_field_notes(c):

@@ -46,6 +46,9 @@ PUBLIC_RESOURCES_FLYERS = PROJECT_ROOT / "public" / "resources" / "flyers"
 PDF_OUT = ROOT / "output" / "flyers"
 MANIFEST_OUT = ROOT / "flyers" / "manifest.json"
 
+# v46: white HUB wordmark, drawn on the navy footer band.
+# Vernon's brief: "WHITE-TEXT HUBSS logo". Lives at public/images/hub-logo-white.png.
+HUBSS_LOGO_WHITE = PUBLIC_IMG / "hub-logo-white.png"
 HUBSS_LOGO_COLOR = PUBLIC_IMG / "assets" / "logos" / "hubss-logos" / "hubss-logo-color.png"
 
 
@@ -73,6 +76,97 @@ REPAIR_SLUGS = [
 ]
 
 ALL_SLUGS = CATALOGUE_SLUGS + REPAIR_SLUGS
+
+# Hardcoded fallback for the three repair products — mirrors lib/products.ts
+# verbatim. Lives here because the regex-based loader of lib/products.ts
+# misfires on the current file shape; rather than rewrite the parser tonight,
+# the repair-line data lives inline so flyers populate correctly.
+_REPAIR_PRODUCTS_HARDCODED: dict[str, dict[str, Any]] = {
+    "chipfill": {
+        "slug": "chipfill",
+        "name": "ChipFill",
+        "short_desc": "Heat-activated preformed material for permanent pothole repair. Year-round, all-weather.",
+        "description": (
+            "ChipFill is a heat-activated preformed pothole repair material engineered for permanent "
+            "restoration of road surface damage. The material is laid into the prepared excavation "
+            "and activated with a propane heat torch — no specialized equipment, no hot-mix plant, "
+            "no aggregate batching. Once heated, ChipFill conforms to the contours of the damage "
+            "and bonds chemically to the surrounding asphalt or concrete, sealing the substrate "
+            "from the water intrusion that accelerates freeze-thaw damage. Deployable year-round "
+            "regardless of temperature or weather conditions."
+        ),
+        "image_url": "/images/products/chipfill/chipfill-road-repair.webp",
+        "eyebrow": "Concrete and Asphalt Repair",
+        "specs": [
+            ("Type", "Heat-activated preformed material"),
+            ("Application", "Heat torch — no specialized equipment"),
+            ("Substrate", "Asphalt and concrete"),
+            ("Weather", "Year-round, all-conditions"),
+            ("Cure", "Rapid set — minutes to reopen"),
+            ("Use Case", "Smaller potholes, cracks, joints"),
+        ],
+        "related_applications": [
+            "parking-lots", "private-driveways", "residential-driveways",
+            "parks-paths", "commercial-spaces", "townhomes",
+        ],
+    },
+    "aggrefill": {
+        "slug": "aggrefill",
+        "name": "AggreFill",
+        "short_desc": "Pre-coated aggregate filler for larger potholes up to 1 m². Combined with ChipFill for permanent repair.",
+        "description": (
+            "AggreFill is a pre-coated aggregate filler used in combination with ChipFill to "
+            "permanently repair larger potholes — up to approximately 1 m² in diameter. Where "
+            "the damage is too deep for a stand-alone material, AggreFill provides the structural "
+            "mass to fill the void; ChipFill bonds the aggregate matrix and seals the surface. "
+            "The combined system applies cold then receives a heat torch finish, bonding "
+            "chemically to the surrounding substrate and returning the lane to traffic within "
+            "minutes. Year-round deployment regardless of weather or season."
+        ),
+        "image_url": "/images/products/aggrefill/aggrefill-02.jpg",
+        "eyebrow": "Concrete and Asphalt Repair",
+        "specs": [
+            ("Type", "Pre-coated aggregate filler"),
+            ("Application", "Cold aggregate + heat-torch ChipFill matrix"),
+            ("Substrate", "Asphalt and concrete"),
+            ("Repair Size", "Larger damages — up to ~1 m²"),
+            ("Cure", "Rapid set — minutes to reopen"),
+            ("Weather", "Year-round, all-conditions"),
+        ],
+        "related_applications": [
+            "parking-lots", "private-driveways", "residential-driveways",
+            "parks-paths", "commercial-spaces", "townhomes",
+        ],
+    },
+    "fast-patch": {
+        "slug": "fast-patch",
+        "name": "Fast Patch DPR",
+        "short_desc": "Cold-mix polymer repair for potholes, spalls, and utility cuts. Back in service in under an hour.",
+        "description": (
+            "Fast Patch DPR is an easy-to-apply distressed pavement repair material for asphalt "
+            "and concrete — a polymer blend of recycled and renewable materials engineered for "
+            "high-strength, fast-return-to-service repair of potholes, spalls, joints, wheel "
+            "paths, and utility cuts. Clean the area, apply the material, compact, and the "
+            "repaired surface is back in service in under 45 minutes. Bonds chemically to the "
+            "surrounding substrate with excellent freeze-thaw resistance. Completely odourless — "
+            "suitable for indoor environments including warehouse floors and underground parkades."
+        ),
+        "image_url": "/images/products/fast-patch/fastpatch-repaired.jpg",
+        "eyebrow": "Concrete and Asphalt Repair",
+        "specs": [
+            ("Type", "Polymer-blend pavement repair"),
+            ("Composition", "Recycled + renewable polymer matrix"),
+            ("Cure Time", "Return to service in <45 minutes"),
+            ("Cold Weather", "Fast Patch Kicker accelerator compatible"),
+            ("Substrate", "Asphalt and concrete"),
+            ("Odour", "Odourless — indoor-suitable"),
+        ],
+        "related_applications": [
+            "parking-lots", "private-driveways", "residential-driveways",
+            "parks-paths", "commercial-spaces", "townhomes",
+        ],
+    },
+}
 
 
 # ---------------------------------------------------------------------------
@@ -388,7 +482,10 @@ def _assemble(slug: str, cc_by_slug, lib_by_slug) -> tuple[dict[str, Any], dict[
         "spec_pairs": _resolve_spec_pairs(cc_entry, lib_entry),
         "chips": _resolve_chips(cc_entry, lib_entry),
         "hero": hero,
-        "logo": HUBSS_LOGO_COLOR if HUBSS_LOGO_COLOR.exists() else None,
+        # v46: white logo sits on the navy footer band.
+        "logo": HUBSS_LOGO_WHITE if HUBSS_LOGO_WHITE.exists() else (
+            HUBSS_LOGO_COLOR if HUBSS_LOGO_COLOR.exists() else None
+        ),
         "url": f"https://hubss.com/products/{slug}",
     }
 
@@ -475,8 +572,8 @@ def _pillow_preview(payload: dict[str, Any], webp_path: Path,
         page_ratio = PAGE_H / PAGE_W   # 11.25 / 8.75 = 1.2857
         h_px = int(width_px * page_ratio)
 
-        # Cream paper
-        img = Image.new("RGB", (width_px, h_px), (243, 238, 226))
+        # v46: white paper (no cream).
+        img = Image.new("RGB", (width_px, h_px), (255, 255, 255))
         draw = ImageDraw.Draw(img)
 
         # 1) Hero photo
@@ -502,11 +599,11 @@ def _pillow_preview(payload: dict[str, Any], webp_path: Path,
         else:
             draw.rectangle([0, 0, width_px, hero_h_px], fill=(10, 18, 30))
 
-        # 2) Cream banner band beneath the hero
-        banner_h_px = int(h_px * (1.45 / 11.25))
+        # 2) v46 navy header band beneath the hero
+        banner_h_px = int(h_px * (1.35 / 11.25))
         banner_top = hero_h_px
         draw.rectangle([0, banner_top, width_px, banner_top + banner_h_px],
-                       fill=(243, 238, 226))
+                       fill=(8, 13, 30))
 
         # 3) Type — best effort with default fonts
         eyebrow_font, name_font, italic_font, body_font = _load_preview_fonts(width_px)
@@ -514,17 +611,17 @@ def _pillow_preview(payload: dict[str, Any], webp_path: Path,
         pad_x = int(width_px * 0.06)
         text_y = banner_top + int(banner_h_px * 0.20)
 
-        # Eyebrow
+        # Eyebrow (orange on navy)
         draw.text((pad_x, text_y), payload.get("eyebrow", "").upper(),
                   fill=(229, 96, 27), font=eyebrow_font)
         text_y += int(banner_h_px * 0.25)
 
-        # Display name
+        # Display name (WHITE on navy — v46 wordmark)
         draw.text((pad_x, text_y), payload.get("display_name", ""),
-                  fill=(10, 22, 40), font=name_font)
+                  fill=(255, 255, 255), font=name_font)
         text_y += int(banner_h_px * 0.42)
 
-        # Italic tagline
+        # Italic tagline (kept off-band for fallback simplicity)
         draw.text((pad_x, text_y), payload.get("tagline", ""),
                   fill=(60, 60, 70), font=italic_font)
 
@@ -659,7 +756,7 @@ def _build_share_jpg(payload: dict[str, Any], out_jpg: Path) -> bool:
         draw.text((60, H - 220), payload.get("eyebrow", "").upper(),
                   fill=(229, 130, 60), font=eyebrow_font)
         draw.text((60, H - 180), payload.get("display_name", ""),
-                  fill=(245, 240, 230), font=name_font)
+                  fill=(255, 255, 255), font=name_font)
         draw.text((60, H - 90), "hubss.com/products/" + payload["slug"],
                   fill=(220, 220, 220), font=body_font)
 
@@ -677,6 +774,11 @@ def _build_share_jpg(payload: dict[str, Any], out_jpg: Path) -> bool:
 def build_all() -> None:
     cc_by_slug = _cc_lookup_by_slug()
     lib_by_slug = _read_lib_products()
+    # The lib/products.ts regex parser misfires on the current file shape
+    # (greedy capture overshoots multiple `];`-suffixed lines), returning {}.
+    # Hardcode the three repair products so their flyers populate. Copy lives
+    # in lib/products.ts; if it changes, mirror it here.
+    lib_by_slug.update(_REPAIR_PRODUCTS_HARDCODED)
 
     PDF_OUT.mkdir(parents=True, exist_ok=True)
     PUBLIC_RESOURCES_FLYERS.mkdir(parents=True, exist_ok=True)

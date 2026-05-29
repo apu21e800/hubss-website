@@ -99,14 +99,14 @@ function DocCard({
 
   return (
     <div
-      className="group rounded-xl flex flex-col justify-between transition-all duration-200 overflow-hidden"
+      className="group rounded-xl flex flex-col justify-between overflow-hidden transition-all duration-200 ease-out hover:-translate-y-[2px] hover:shadow-[0_8px_24px_-12px_rgba(249,115,22,0.35)]"
       style={{
         background: "#1e1e1e",
         border: "1px solid rgba(255,255,255,0.08)",
       }}
       onMouseEnter={(e) => {
-        (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(249,115,22,0.22)";
-        (e.currentTarget as HTMLDivElement).style.background = "#272727";
+        (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(249,115,22,0.28)";
+        (e.currentTarget as HTMLDivElement).style.background = "#242424";
       }}
       onMouseLeave={(e) => {
         (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(255,255,255,0.08)";
@@ -570,13 +570,14 @@ export default function ResourcesClient({
                 setSubcategoryFilter(sc.value);
                 setVisibleCount(PAGE_SIZE);
               }}
-              className="px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200"
+              aria-pressed={subcategoryFilter === sc.value}
+              className="inline-flex items-center px-3.5 min-h-[36px] rounded-full text-xs font-medium transition-all duration-150 ease-out hover:scale-[1.02] active:scale-[0.98]"
               style={
                 subcategoryFilter === sc.value
                   ? { background: "#F97316", color: "#fff", border: "1px solid transparent" }
                   : {
                       background: "rgba(255,255,255,0.04)",
-                      color: "#6B7280",
+                      color: "#D1D5DB",
                       border: "1px solid rgba(255,255,255,0.08)",
                     }
               }

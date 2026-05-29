@@ -6,7 +6,12 @@ import Link from "next/link";
 import { track } from "@vercel/analytics";
 import PrizeDrawForm from "./PrizeDrawForm";
 
-type View = "cards" | "draw";
+type View = "cards" | "draw" | "already";
+
+interface ConnectClientProps {
+  formToken:        string;
+  hasEnteredBefore: boolean;
+}
 
 // ── Analytics helpers ─────────────────────────────────────────────────────
 // Fire both GA4 (window.gtag) and Vercel Analytics. Skip silently if either
@@ -25,7 +30,7 @@ function fireEvent(name: string, params: Record<string, unknown> = {}) {
   }
 }
 
-export default function ConnectClient() {
+export default function ConnectClient({ formToken, hasEnteredBefore }: ConnectClientProps) {
   const [view, setView] = useState<View>("cards");
 
   // Fire the view event exactly once per session load.
@@ -98,11 +103,19 @@ export default function ConnectClient() {
 
             <ConnectCard
               as="button"
-              eyebrow="Win"
-              title="Enter the Prize Draw"
-              subtitle="One quick form. Winner announced after the show."
+              eyebrow={hasEnteredBefore ? "Entered" : "Win"}
+              title={hasEnteredBefore ? "You're in the Prize Draw" : "Enter the Prize Draw"}
+              subtitle={
+                hasEnteredBefore
+                  ? "Your entry is in. Winners announced after the show."
+                  : "One quick form. Winner announced after the show."
+              }
               icon={<GiftIcon />}
               onClick={() => {
+                if (hasEnteredBefore) {
+                  setView("already");
+                  return;
+                }
                 fireEvent("connect_draw_open");
                 setView("draw");
               }}
@@ -126,11 +139,14 @@ export default function ConnectClient() {
               onClick={() => fireEvent("connect_contact_click")}
             />
           </div>
-        ) : (
+        ) : view === "draw" ? (
           <PrizeDrawForm
+            formToken={formToken}
             onSubmitted={() => fireEvent("connect_draw_submit")}
             onBack={() => setView("cards")}
           />
+        ) : (
+          <AlreadyEnteredCard onBack={() => setView("cards")} />
         )}
 
         {/* ── Footer line ───────────────────────────────────────── */}
@@ -281,5 +297,49 @@ function ArrowIcon() {
       <path d="M5 12h14" />
       <path d="m12 5 7 7-7 7" />
     </svg>
+  );
+}
+
+function AlreadyEnteredCard({ onBack }: { onBack: () => void }) {
+  return (
+    <div
+      className="rounded-2xl p-6 sm:p-10 text-center"
+      style={{
+        background: "var(--bg-card)",
+        border: "1px solid var(--border-color)",
+      }}
+    >
+      <div
+        className="mx-auto mb-5 grid place-items-center rounded-full"
+        style={{
+          width: 64,
+          height: 64,
+          background: "rgba(249,115,22,0.15)",
+          color: "#F97316",
+        }}
+        aria-hidden
+      >
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+      <h2
+        className="text-xl sm:text-2xl font-bold mb-2"
+        style={{ color: "var(--text-primary)" }}
+      >
+        You&apos;re already entered.
+      </h2>
+      <p className="text-[15px]" style={{ color: "var(--text-body)" }}>
+        We have your details — winners announced after the show.
+      </p>
+      <button
+        type="button"
+        onClick={onBack}
+        className="mt-7 rounded-lg px-5 py-3 text-sm font-semibold transition-all"
+        style={{ background: "#F97316", color: "#fff", minHeight: 44 }}
+      >
+        Back to options
+      </button>
+    </div>
   );
 }

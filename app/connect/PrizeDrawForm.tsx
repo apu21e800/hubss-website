@@ -3,13 +3,14 @@
 import { useState } from "react";
 
 interface Props {
+  formToken: string;
   onSubmitted: () => void;
   onBack: () => void;
 }
 
 type Status = "idle" | "submitting" | "done" | "error";
 
-export default function PrizeDrawForm({ onSubmitted, onBack }: Props) {
+export default function PrizeDrawForm({ formToken, onSubmitted, onBack }: Props) {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string>("");
   const [form, setForm] = useState({
@@ -30,7 +31,7 @@ export default function PrizeDrawForm({ onSubmitted, onBack }: Props) {
       const res = await fetch("/api/connect/prize-draw", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, website: "" }),
+        body: JSON.stringify({ ...form, formToken, website: "" }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok || data.error) {

@@ -22,6 +22,7 @@ import {
   CogIcon,
   ImagesIcon,
   StarIcon,
+  ActivityIcon,
 } from "@sanity/icons";
 
 // Page document IDs — set by migrate-to-sanity.ts
@@ -101,6 +102,16 @@ export const structure: StructureResolver = (S) =>
           S.documentTypeList("prizeDrawEntry")
             .title("Prize Draw Entries")
             .defaultOrdering([{ field: "submittedAt", direction: "desc" }])
+        ),
+
+      // ── Prize Draw Audit (admin only — every submission attempt) ───────────
+      S.listItem()
+        .title("Prize Draw Audit (admin)")
+        .icon(ActivityIcon)
+        .child(
+          S.documentTypeList("prizeDrawAudit")
+            .title("Prize Draw Audit Log")
+            .defaultOrdering([{ field: "timestamp", direction: "desc" }])
         ),
 
       S.divider(),

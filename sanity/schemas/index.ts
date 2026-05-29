@@ -5,6 +5,7 @@ import blogPost        from "./blogPost";
 import project         from "./project";
 import siteSettings    from "./siteSettings";
 import prizeDrawEntry  from "./prizeDrawEntry";
+import prizeDrawAudit  from "./prizeDrawAudit";
 
 export const schemaTypes = [
   page,
@@ -14,4 +15,5 @@ export const schemaTypes = [
   project,
   siteSettings,
   prizeDrawEntry,
+  prizeDrawAudit,
 ];

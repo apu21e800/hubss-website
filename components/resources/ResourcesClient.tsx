@@ -99,7 +99,7 @@ function DocCard({
 }) {
   const isFlyer = doc.documentType === "flyer";
   const isCatalogue = doc.documentType === "catalogue";
-  const hasThumb = isFlyer && !!doc.previewImageUrl;
+  const hasThumb = (isFlyer || isCatalogue) && !!doc.previewImageUrl;
   const productLink =
     isFlyer && doc.product && doc.product !== "all"
       ? `/products/${doc.product}`

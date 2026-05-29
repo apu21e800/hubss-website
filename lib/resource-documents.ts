@@ -859,6 +859,7 @@ export const resourceDocuments: ResourceDocument[] = [
     updatedDate: 'May 2026',
     documentType: 'catalogue',
     featured: true,
+    previewImageUrl: '/catalogue/v31/page-001.webp',
   },
 
   // ── 2026 Product Flyers (14, one per product) ─────────────────

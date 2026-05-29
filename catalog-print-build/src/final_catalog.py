@@ -8,7 +8,7 @@ from reportlab.pdfbase.pdfmetrics import stringWidth
 from .specs import (
     PAGE_SIZE, PAGE_W, PAGE_H, BLEED, TRIM_W, TRIM_H,
     HUBSS_ORANGE, HUBSS_NAVY_RICH, HUBSS_WHITE,
-    FONT_SANS_BOLD, FONT_SERIF,
+    FONT_SANS_BOLD, FONT_SANS_OBL,
 )
 from .figma_render import (
     SCALE, fs, figma_to_pdf, fill_bleed,
@@ -26,7 +26,7 @@ LOGO_WHITE = HUBSS_LOGOS / "hubss-logo-white-large.png"
 LOGO_COLOR = HUBSS_LOGOS / "hubss-logo-color.png"
 LOGO_ASPECT = 2432 / 701
 
-OUT = ROOT / "output" / "HUBSS_Catalogue_2026_v44.pdf"
+OUT = ROOT / "output" / "HUBSS_Catalogue_2026_v45.pdf"
 
 
 # ---- accent palette --------------------------------------------------
@@ -396,13 +396,10 @@ def page_cover(c):
     fill_bleed(c, HUBSS_WHITE)
     if CC.COVER_PHOTO and CC.COVER_PHOTO.exists():
         draw_full_bleed_image(c, str(CC.COVER_PHOTO))
-    # Soft navy vignette ONLY at the bottom — gentle gradient, max ~52%
-    # alpha. Vignette, not a band. Provides just enough darkness for
-    # white type to read without smothering the photo.
-    cover_wash(c, height_figma=160, max_alpha_pct=0.52, ease=1.9)
-    # Color logo top-LEFT — restrained scale (110 figma units).
+    # v45 — Vernon: drop the bottom-of-page gradient. Type sits directly
+    # on the photo. UBC cover's bottom (Musqueam medallion concrete) is
+    # naturally a darker zone — white type reads cleanly.
     draw_logo_color(c, fx=28, fy=28, fw_figma=110)
-    # Bottom masthead — confident display + small caps.
     draw_text_block(c, "Catalogue 2026.", fx=28, fy=370,
                     font_size_figma=30, weight=800,
                     color=HUBSS_WHITE, tracking=-1.0, max_w_figma=394)
@@ -449,7 +446,7 @@ def page_why_stats(c):
         y += 38
     draw_text_block(c, no_orphan(w["subtitle"], 3), fx=40, fy=y + 4,
                     font_size_figma=11,
-                    color=CMYK_TEXT_MID, figma_font="serif",
+                    color=CMYK_TEXT_MID,
                     max_w_figma=400, leading_figma=15)
     # Navy stat cells — orange number + white label on navy, matching website card style
     grid_y = 240
@@ -533,10 +530,11 @@ def page_section_open(c, section_no, title, photo_path):
     fill_bleed(c, HUBSS_WHITE)
     if photo_path and photo_path.exists():
         draw_full_bleed_image(c, str(photo_path))
-    # Soft navy vignette — taller than cover (covers section opener's
-    # bigger type), still gentle. Max ~55% alpha.
-    cover_wash(c, height_figma=210, max_alpha_pct=0.55, ease=1.85)
-    # Thin orange rule + small section eyebrow caps + huge display title
+    # v45 — Vernon: 'no scrim, type on the photo.' Restrained editorial
+    # treatment lower-left. White display title + small caps eyebrow
+    # sit directly on the photo. If a future photo has a bright
+    # bottom-left zone that kills contrast, swap the photo rather than
+    # reintroduce a gradient.
     thin_rule(c, fx=28, fy=313, w_figma=28,
               color=HUBSS_ORANGE, weight_pt=2.0)
     tracked_caps(c, ("Section " + section_no).upper(), fx=28, fy=322,
@@ -576,13 +574,13 @@ def page_product_hero(c, prod):
     safe_w_pt = 394 * SCALE
     tagline_size = 22
     while tagline_size > 14 and stringWidth(
-        tagline, FONT_SERIF, tagline_size * SCALE
+        tagline, FONT_SANS_BOLD, tagline_size * SCALE
     ) > safe_w_pt:
         tagline_size -= 1
     tagline_leading = tagline_size + 4
     draw_text_block(c, tagline, fx=28, fy=350,
                     font_size_figma=tagline_size,
-                    figma_font="serif",
+                    
                     color=CMYK_TEXT_DARK, tracking=-0.3,
                     max_w_figma=394, leading_figma=tagline_leading)
 
@@ -643,7 +641,7 @@ def page_product_spec(c, prod):
     # Plain subhead — widow-protected (last 3 words bound)
     draw_text_block(c, no_orphan(prod["italic"], 3), fx=28, fy=y,
                     font_size_figma=10.5,
-                    color=CMYK_TEXT_MID, figma_font="serif",
+                    color=CMYK_TEXT_MID,
                     max_w_figma=394, leading_figma=15)
     y += 32
 
@@ -705,7 +703,7 @@ def page_application(c, app, idx, total):
     # Tagline — orange, italic-feeling
     draw_text_block(c, no_orphan(app["tagline"], 3), fx=28, fy=336,
                     font_size_figma=8.0, color=HUBSS_ORANGE,
-                    max_w_figma=394, leading_figma=11, figma_font="serif")
+                    max_w_figma=394, leading_figma=11)
     # Body — white at smaller scale
     draw_text_block(c, no_orphan(app["body"], 3), fx=28, fy=356,
                     font_size_figma=7.0, color=HUBSS_WHITE,
@@ -734,7 +732,7 @@ def page_project_hero(c, proj):
                  color=HUBSS_ORANGE, max_w_figma=394)
     # Display italic serif title in dark ink — editorial centerpiece.
     draw_text_block(c, no_orphan(proj["title"], 3), fx=28, fy=350,
-                    font_size_figma=20, figma_font="serif",
+                    font_size_figma=20,
                     color=CMYK_TEXT_DARK, tracking=-0.3,
                     max_w_figma=394, leading_figma=24)
     # Footer line: location left, product right — small caps.
@@ -925,7 +923,7 @@ def page_cities(c):
               weight_pt=0.3)
     draw_text_block(c, "A partial list", fx=30, fy=158, font_size_figma=7,
                     color=CMYK_TEXT_MID, align="right", max_w_figma=390,
-                    figma_font="serif")
+                    )
     # City list — 2 columns, 8px type, 13px spacing
     cities = CC.CITIES
     y = 172
@@ -949,27 +947,30 @@ def page_lunch_learn(c):
     """
     fill_bleed(c, HUBSS_WHITE)
 
-    # Moose — right column, FIT (transparent bg preserved). Vernon can
-    # reposition in Figma if needed; here we lock it to the spec coords.
+    # v45 — Vernon: 'messy, too much copy. Keep the dog.' Cut hard. One
+    # left margin. Four type sizes max: eyebrow (6) / display (26) /
+    # body+list (10) / URL display (18). Pro hierarchy.
+
+    # Moose — right column, FIT preserving aspect. Lowered to fy_base=70
+    # so it doesn't fight the new headline block at top.
     mascot = ROOT / "assets" / "moose-mascot.png"
     if mascot.exists():
         from PIL import Image as _PIL
         try:
             with _PIL.open(mascot) as _im:
                 iw, ih = _im.size
-            # Fit into a 180x260 figma box, preserving aspect (no crop)
             box_w, box_h = 180.0, 260.0
             aspect = ih / iw
             if box_w * aspect <= box_h:
                 fw_drawn = box_w
                 fh_drawn = box_w * aspect
-                fx_drawn = 248
-                fy_drawn = 10 + (box_h - fh_drawn) / 2
+                fx_drawn = 252
+                fy_drawn = 70 + (box_h - fh_drawn) / 2
             else:
                 fh_drawn = box_h
                 fw_drawn = box_h / aspect
-                fy_drawn = 10
-                fx_drawn = 248 + (box_w - fw_drawn) / 2
+                fy_drawn = 70
+                fx_drawn = 252 + (box_w - fw_drawn) / 2
             px = BLEED + fx_drawn * SCALE
             py = BLEED + TRIM_H - (fy_drawn + fh_drawn) * SCALE
             draw_image_box(c, str(mascot), px, py,
@@ -978,70 +979,58 @@ def page_lunch_learn(c):
         except Exception:
             pass
 
-    # Left column — headline + what's included
-    thin_rule(c, fx=28, fy=16, w_figma=24, color=HUBSS_ORANGE, weight_pt=2.0)
-    tracked_caps(c, "Engineers, Planners + Specifiers", fx=28, fy=26,
-                 size=5.0, color=HUBSS_ORANGE, max_w_figma=210)
-    draw_text_block(c, "Lunch Is On Us.", fx=28, fy=44, font_size_figma=24,
-                    weight=800, color=CMYK_TEXT_DARK, tracking=-0.8,
-                    max_w_figma=210)
-    draw_text_block(c, "Your Next Spec Is Free.", fx=28, fy=74,
-                    font_size_figma=15, weight=800, color=HUBSS_ORANGE,
-                    tracking=-0.4, max_w_figma=210)
+    LEFT_X = 28
+    LEFT_W = 215
 
-    thin_rule(c, fx=28, fy=104, w_figma=210, color=CMYK_TEXT_FAINT,
-              weight_pt=0.4)
+    # 1) Eyebrow — orange caps with short rule above
+    thin_rule(c, fx=LEFT_X, fy=44, w_figma=24,
+              color=HUBSS_ORANGE, weight_pt=2.0)
+    tracked_caps(c, "Lunch & Learn", fx=LEFT_X, fy=54, size=6.0,
+                 color=HUBSS_ORANGE, max_w_figma=LEFT_W)
 
-    # v29: copy cut hard per Vernon. Eyebrow + headline + 4 essentials only
-    # (was 7). QR removed from this page — it lives on the back cover where
-    # the book sits face-up on a booth table.
+    # 2) Display headline — two lines, second line orange
+    draw_text_block(c, "Lunch is on us.", fx=LEFT_X, fy=78,
+                    font_size_figma=26, weight=800,
+                    color=CMYK_TEXT_DARK, tracking=-0.8,
+                    max_w_figma=LEFT_W, leading_figma=30)
+    draw_text_block(c, "Your spec is free.", fx=LEFT_X, fy=110,
+                    font_size_figma=26, weight=800, color=HUBSS_ORANGE,
+                    tracking=-0.8, max_w_figma=LEFT_W, leading_figma=30)
+
+    # 3) Body — one tight sentence
+    draw_text_block(c,
+        "Forty-five minutes of technical depth, real-world projects, "
+        "and CE-credit education — over lunch in your office.",
+        fx=LEFT_X, fy=170, font_size_figma=10,
+        color=CMYK_TEXT_DARK, max_w_figma=LEFT_W, leading_figma=15)
+
+    # 4) Three dot-led essentials — same size as body for clean rhythm
     items = [
-        "45 minutes · tailored to your project",
-        "CE credits: AIBC, RAIC, PEO",
-        "Lunch on us · zero cost",
-        "In-person across Canada, or virtual",
+        "Tailored to your project",
+        "CE credits — AIBC, RAIC, PEO",
+        "In person across Canada, or virtual",
     ]
-    dy = 130
+    dy = 246
     for item in items:
-        draw_text_block(c, "·  " + item, fx=28, fy=dy, font_size_figma=7.5,
-                        color=CMYK_TEXT_DARK, max_w_figma=210, leading_figma=12)
-        dy += 16
+        orange_dot(c, fx=LEFT_X + 1, fy=dy + 4, r_figma=1.0)
+        draw_text_block(c, item, fx=LEFT_X + 10, fy=dy,
+                        font_size_figma=10, color=CMYK_TEXT_DARK,
+                        max_w_figma=LEFT_W - 10, leading_figma=14)
+        dy += 20
 
-    thin_rule(c, fx=28, fy=dy + 8, w_figma=210, color=CMYK_TEXT_FAINT,
-              weight_pt=0.4)
-    draw_text_block(c, "Not a sales pitch. An education.", fx=28, fy=dy + 18,
-                    font_size_figma=8.0, color=CMYK_TEXT_MID,
-                    max_w_figma=210, figma_font="serif", leading_figma=12)
-
-    # Full-width URL band — no QR on this page
-    thin_rule(c, fx=28, fy=290, w_figma=394, color=CMYK_TEXT_FAINT,
-              weight_pt=0.4)
-    draw_text_block(c, "hubss.com/lunch-learn", fx=28, fy=304,
-                    font_size_figma=16, weight=800, color=HUBSS_ORANGE,
+    # FULL-WIDTH FOOTER — single orange rule + URL + 2 contacts
+    thin_rule(c, fx=LEFT_X, fy=350, w_figma=394,
+              color=HUBSS_ORANGE, weight_pt=1.5)
+    draw_text_block(c, "hubss.com/lunch-learn", fx=LEFT_X, fy=364,
+                    font_size_figma=18, weight=800, color=HUBSS_ORANGE,
                     tracking=-0.5, max_w_figma=394)
-    draw_text_block(c,
-        "City of Toronto  ·  York Region  ·  Vancouver  ·  UBC  ·  "
-        "TransLink  ·  500+ municipalities",
-        fx=28, fy=336, font_size_figma=6, color=CMYK_TEXT_MID,
-        align="center", max_w_figma=394, leading_figma=9)
-
-    # Two-column contact footer
-    thin_rule(c, fx=28, fy=362, w_figma=394, color=CMYK_TEXT_FAINT,
-              weight_pt=0.4)
-    tracked_caps(c, "Book Directly", fx=28, fy=372, size=5.0,
-                 color=CMYK_TEXT_FAINT, max_w_figma=394)
-    draw_text_block(c, "Cleve Stordy   604.309.8212", fx=28, fy=384,
-                    font_size_figma=8.5, color=CMYK_TEXT_DARK,
-                    max_w_figma=188)
-    draw_text_block(c, "Doug Bain   416.540.9287", fx=242, fy=384,
-                    font_size_figma=8.5, color=CMYK_TEXT_DARK,
-                    max_w_figma=178)
-    thin_rule(c, fx=28, fy=412, w_figma=394, color=CMYK_TEXT_FAINT,
-              weight_pt=0.4)
-    draw_text_block(c,
-        "HUB SURFACE SYSTEMS   ·   hubss.com   ·   604.309.8212   ·   416.540.9287",
-        fx=28, fy=421, font_size_figma=5.5, color=CMYK_TEXT_FAINT,
-        align="center", max_w_figma=394, tracking=1.4)
+    # Two contacts inline, single baseline
+    draw_text_block(c, "Cleve Stordy   604.309.8212",
+                    fx=LEFT_X, fy=406, font_size_figma=9,
+                    color=CMYK_TEXT_DARK, max_w_figma=200)
+    draw_text_block(c, "Doug Bain   416.540.9287",
+                    fx=LEFT_X + 200, fy=406, font_size_figma=9,
+                    color=CMYK_TEXT_DARK, max_w_figma=200)
 
 
 def page_contact(c):
@@ -1065,7 +1054,7 @@ def page_contact(c):
     # Content zone below navy band
     draw_text_block(c, "Every project starts with a conversation.",
                     fx=30, fy=96, font_size_figma=10, color=CMYK_TEXT_MID,
-                    max_w_figma=390, leading_figma=15, figma_font="serif")
+                    max_w_figma=390, leading_figma=15)
     thin_rule(c, fx=30, fy=128, w_figma=390, color=CMYK_TEXT_FAINT,
               weight_pt=0.4)
 
@@ -1083,7 +1072,7 @@ def page_contact(c):
                     max_w_figma=188)
     draw_text_block(c, "Ladysmith, British Columbia", fx=30, fy=230,
                     font_size_figma=7, color=CMYK_TEXT_MID,
-                    max_w_figma=188, figma_font="serif")
+                    max_w_figma=188)
 
     # East
     tracked_caps(c, "Eastern Canada", fx=242, fy=144, size=5.5,
@@ -1098,7 +1087,7 @@ def page_contact(c):
                     font_size_figma=8.5, color=CMYK_TEXT_MID,
                     max_w_figma=178)
     draw_text_block(c, "Milton, Ontario", fx=242, fy=230, font_size_figma=7,
-                    color=CMYK_TEXT_MID, max_w_figma=178, figma_font="serif")
+                    color=CMYK_TEXT_MID, max_w_figma=178)
 
     thin_rule(c, fx=30, fy=258, w_figma=390, color=CMYK_TEXT_FAINT,
               weight_pt=0.4)
@@ -1170,7 +1159,7 @@ def page_back(c):
     # Tagline directly below wordmark
     draw_text_block(c, "Canada's Leading Decorative Pavement Solutions",
                     fx=25, fy=195, font_size_figma=8.5, color=HUBSS_WHITE,
-                    align="center", max_w_figma=400, figma_font="serif")
+                    align="center", max_w_figma=400)
     # Slim orange rule
     rule_w = 32
     rx, ry = figma_to_pdf((450 - rule_w) / 2, 215)
@@ -1247,7 +1236,7 @@ def page_closing_manifesto(c):
         "Spec the surface. Watch it work. Walk over it for twenty years.",
         fx=40, fy=252, font_size_figma=11, weight=400,
         color=CMYK_TEXT_DARK, max_w_figma=370, leading_figma=18,
-        figma_font="serif")
+        )
     # SPECIFIED / INSTALLED / BACKED — horizontal trio
     trio_y = 370
     tracked_caps(c, "Specified.", fx=40, fy=trio_y, size=8.0,
@@ -1312,7 +1301,7 @@ def page_quiet_mark(c):
     c.rect(rx, ry, 30 * SCALE, 1.2, stroke=0, fill=1)
     draw_text_block(c, "Thank you.", fx=25, fy=350, font_size_figma=14,
                     color=CMYK_TEXT_MID, align="center", max_w_figma=400,
-                    figma_font="serif")
+                    )
 
 
 # ============================================================
@@ -1380,7 +1369,7 @@ def page_statement(c):
         "Every Indigenous medallion, a recognition that streets carry meaning "
         "long after the paint fades.",
         fx=30, fy=275, font_size_figma=11, color=CMYK_TEXT_MID,
-        figma_font="serif", max_w_figma=350, leading_figma=18)
+         max_w_figma=350, leading_figma=18)
 
     thin_rule(c, fx=30, fy=400, w_figma=48, color=HUBSS_ORANGE, weight_pt=2.0)
     tracked_caps(c, "HUB Surface Systems   ·   Established 1994",
@@ -1428,11 +1417,11 @@ def page_doublespread_right(c, label, caption, *, right_style=None,
         draw_text_block(c, "The surface beneath every city we've built.",
                         fx=28, fy=308, font_size_figma=12,
                         color=HUBSS_WHITE, max_w_figma=360,
-                        figma_font="serif")
+                        )
         draw_text_block(c,
             "Spec the surface. Watch it work. Walk over it for twenty years.",
             fx=28, fy=332, font_size_figma=8.5, color=CMYK_ON_DARK_BODY,
-            max_w_figma=360, figma_font="serif", leading_figma=13)
+            max_w_figma=360, leading_figma=13)
         thin_rule(c, fx=28, fy=404, w_figma=394, color=HUBSS_ORANGE,
                   weight_pt=1.5)
         tracked_caps(c, "hubss.com", fx=28, fy=414, size=7.5,
@@ -1446,8 +1435,10 @@ def page_doublespread_right(c, label, caption, *, right_style=None,
           else left_image_path
     if img and Path(img).exists():
         draw_full_bleed_image(c, str(img))
-    # Overlay scrim at bottom for legibility
-    hero_scrim(c, height_figma=140)
+    # v45 — Vernon's call: 'IN THE FIELD scrim looks like shit.' Drop
+    # the bottom scrim. Type on photo. White label/caption read on the
+    # photo's natural lower-edge tones; if a specific photo can't hold
+    # them, swap the photo rather than reintroducing a gradient.
     tracked_caps(c, label, fx=28, fy=350, size=6.5,
                  color=HUBSS_ORANGE, max_w_figma=394)
     draw_text_block(c, caption, fx=28, fy=370, font_size_figma=14,
@@ -1476,7 +1467,7 @@ def page_network_open(c, photo_path):
         "HUB-certified installers across Canada. Trained on every product, "
         "backed by HUB technical support, project-experienced.",
         fx=30, fy=360, font_size_figma=10, color=CMYK_ON_DARK_BODY,
-        max_w_figma=390, leading_figma=15, figma_font="serif")
+        max_w_figma=390, leading_figma=15)
 
 
 def page_field_notes(c):
@@ -1493,7 +1484,7 @@ def page_field_notes(c):
         "A place to capture surface specifications, project locations, "
         "and follow-up actions while the book is in front of you.",
         fx=30, fy=116, font_size_figma=8.5, color=CMYK_TEXT_MID,
-        max_w_figma=370, leading_figma=13, figma_font="serif")
+        max_w_figma=370, leading_figma=13)
 
     # Ruled lines — 14 rules from y=160 to y=410, 18px spacing
     rule_y = 162

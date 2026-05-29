@@ -181,10 +181,7 @@ async function pageCover(d) {
   // Full-bleed photo + restrained color logo top-LEFT + bottom masthead
   // sitting on a SOFT navy vignette (not a band). Editorial cover.
   ph(f, 0, 0, 450, 450, "Cover photo", d.cover_photo);
-  // Soft navy vignette at bottom — fade from transparent at y=290 to ~50%
-  // navy at the very bottom. Vignette, not band: never reaches solid.
-  rct(f, 0, 290, 450, 160, N, "BottomVignette");
-  f.children[f.children.length-1].opacity = 0.50;
+  // v45 — no vignette. Type sits directly on the photo.
   // Color logo top-LEFT, restrained scale.
   logo(f, 28, 28, 110, 22, "HUBSS logo color", d.brand && d.brand.logo_color);
   // Bottom masthead — confident display + small caps.
@@ -298,8 +295,7 @@ async function pageSectionOpen(num, title, imagePath) {
   // Full-bleed photo + SOFT navy vignette at bottom (never solid) +
   // huge confident display title. Photo + type do the work; no band.
   ph(f, 0, 0, 450, 450, "Section opener: " + title, imagePath);
-  rct(f, 0, 240, 450, 210, N, "BottomVignette");
-  f.children[f.children.length-1].opacity = 0.55;
+  // v45 — no vignette. Type sits directly on the photo.
   // Thin orange rule + small section eyebrow + huge display title.
   rul(f, 28, 313, 28);
   await tx(f, ("SECTION " + num).toUpperCase(), 28, 322, 7.5, W, false, 394, null, 11);

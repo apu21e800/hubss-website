@@ -15,16 +15,18 @@ Units: points (72 / inch). ReportLab origin = bottom-left of the bleed page.
 from reportlab.lib.units import inch
 
 # Re-export the catalogue's brand tokens unchanged — colours and TYPE dict
-# are the brand language and stay shared.
-# NOTE: FONT_SERIF still exists in specs.py for legacy reasons but v46
-# explicitly forbids serif anywhere. Use FONT_SANS_OBL for italic emphasis.
+# are the brand language and stay shared. v50 alignment: Inter throughout
+# (Inter-Regular / Medium / SemiBold / Bold / Italic / BoldItalic). No
+# serif anywhere; FONT_SERIF kept as an alias to Inter-Italic for any
+# stray import. Inter TTFs auto-register on specs.py import.
 from .specs import (  # noqa: F401
     HUBSS_ORANGE, HUBSS_BLACK, HUBSS_RICH_BLACK, HUBSS_WHITE,
     HUBSS_GREY_DARK, HUBSS_GREY_MID, HUBSS_GREY_LIGHT,
     HUBSS_NAVY, HUBSS_NAVY_RICH,
     HUBSS_ORANGE_DEEP, HUBSS_ORANGE_BLOOM, HUBSS_GOLD,
     TYPE, ALLCAPS_TRACKING,
-    FONT_SANS_REG, FONT_SANS_BOLD, FONT_SANS_OBL,
+    FONT_SANS_REG, FONT_SANS_MEDIUM, FONT_SANS_SEMI,
+    FONT_SANS_BOLD, FONT_SANS_OBL, FONT_SANS_BOLD_OBL,
     TARGET_DPI, MIN_DPI_WARN,
 )
 

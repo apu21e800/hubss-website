@@ -45,7 +45,8 @@ from .flyer_specs import (
     HUBSS_ORANGE, HUBSS_NAVY_RICH, HUBSS_WHITE, HUBSS_BLACK,
     CMYK_TEXT_DARK, CMYK_TEXT_MID, CMYK_TEXT_FAINT, CMYK_RULE_FAINT,
     CMYK_ON_DARK_BODY, CMYK_ON_DARK_MID,
-    FONT_SANS_REG, FONT_SANS_BOLD, FONT_SANS_OBL,
+    FONT_SANS_REG, FONT_SANS_MEDIUM, FONT_SANS_SEMI,
+    FONT_SANS_BOLD, FONT_SANS_OBL,
     ALLCAPS_TRACKING,
 )
 from .images import draw_image_box
@@ -219,21 +220,37 @@ def _crop_marks(c: Canvas) -> None:
 # ---------------------------------------------------------------------------
 # Layout sections — top to bottom
 # ---------------------------------------------------------------------------
-def _draw_hero_photo(c: Canvas, hero_path: Path | None) -> float:
-    """Full-bleed natural-color product photograph across the top of the page.
-    Returns the y of the bottom edge of the hero (where the next section starts).
+def _draw_hero_photo(c: Canvas, hero_path: Path | None,
+                     hero2_path: Path | None = None) -> float:
+    """Hero zone across the top. If hero2 is supplied, splits the zone into
+    a 64/36 magazine layout (primary photo left + secondary detail right);
+    otherwise the primary photo fills the full width. Both images full-bleed
+    top + side + bottom for clean trim. Returns the y of the zone bottom.
     """
     hero_bottom = TRIM_TOP - HERO_H
-    if hero_path and Path(hero_path).exists():
-        # Extend top + sides through the bleed so the trim cut is clean.
+    hero_zone_h = HERO_H + BLEED   # extend into top bleed for clean trim
+    have_primary = bool(hero_path and Path(hero_path).exists())
+    have_secondary = bool(hero2_path and Path(hero2_path).exists())
+
+    if have_primary and have_secondary:
+        # Magazine split: primary 64% (left, into left bleed) + 4pt gutter +
+        # secondary 36% (right, into right bleed). Both extend to top bleed.
+        gutter = 4.0   # 4pt = ~0.055" hairline gap on press; reads as one frame
+        primary_w = PAGE_W * 0.64 - gutter / 2.0
+        secondary_w = PAGE_W * 0.36 - gutter / 2.0
         draw_image_box(c, str(hero_path),
-                       0, hero_bottom,
-                       PAGE_W, HERO_H + BLEED,
-                       cover=True)
+                       0, hero_bottom, primary_w, hero_zone_h, cover=True)
+        draw_image_box(c, str(hero2_path),
+                       primary_w + gutter, hero_bottom,
+                       secondary_w, hero_zone_h, cover=True)
+    elif have_primary:
+        # Single primary — full-bleed across.
+        draw_image_box(c, str(hero_path),
+                       0, hero_bottom, PAGE_W, hero_zone_h, cover=True)
     else:
-        # Calm navy placeholder if hero is missing — never cream.
+        # Calm navy placeholder — never cream.
         c.setFillColor(HUBSS_NAVY_RICH)
-        c.rect(0, hero_bottom, PAGE_W, HERO_H + BLEED, stroke=0, fill=1)
+        c.rect(0, hero_bottom, PAGE_W, hero_zone_h, stroke=0, fill=1)
     return hero_bottom
 
 
@@ -352,24 +369,25 @@ def _draw_body_section(c: Canvas, *, display_headline: str, tagline: str,
         max_body_height = body_top - max_body_bottom
         max_lines = max(2, int(max_body_height / body_lead))
 
-        lines = _wrap_lines(body, FONT_SANS_REG, body_size, w,
-                            tracking=0.05)
+        # v50: Inter-Medium (not Regular) for body — heavier on press, more
+        # confident on screen. SemiBold/Bold are reserved for spec values
+        # and the display wordmark.
+        lines = _wrap_lines(body, FONT_SANS_MEDIUM, body_size, w,
+                            tracking=0.02)
         if len(lines) > max_lines:
             lines = lines[:max_lines]
-            # Truncate the last line with an ellipsis if needed
             if lines:
                 last_line = lines[-1].rstrip()
                 while last_line and _string_w(last_line + "...",
-                                              FONT_SANS_REG, body_size,
-                                              tracking=0.05) > w:
+                                              FONT_SANS_MEDIUM, body_size,
+                                              tracking=0.02) > w:
                     last_line = last_line.rsplit(" ", 1)[0]
                 lines[-1] = (last_line + "...") if last_line else "..."
 
-        # Draw lines manually so we honour the truncation
         c.setFillColor(CMYK_TEXT_DARK)
         t = c.beginText()
-        t.setFont(FONT_SANS_REG, body_size)
-        t.setCharSpace(0.05)
+        t.setFont(FONT_SANS_MEDIUM, body_size)
+        t.setCharSpace(0.02)
         baseline = body_top - body_size
         for ln in lines:
             t.setTextOrigin(x, baseline)
@@ -483,10 +501,9 @@ def _draw_navy_footer(c: Canvas, *, logo_white_path: Path | None,
     band_top = band_bottom + NAV_FOOTER_H
     band_mid = (band_top + band_bottom) / 2.0
 
-    # A thin orange rule sits ABOVE the navy band (on the white body) —
-    # the v46 brand-pickup hairline.
-    _hairline(c, CONTENT_LEFT, band_top + 0.06 * 72,
-              CONTENT_W, color=HUBSS_ORANGE, h=0.8)
+    # v50 — Vernon removed the decorative orange rule between the body
+    # and the navy footer band; he flagged it as "getting in the way"
+    # on the catalogue. Keep the band clean (white body → navy footer).
 
     # LEFT: white HUB logo. Logo aspect is 2432:701 (~3.47:1) — at 1.45" wide
     # that gives ~0.42" tall, which sits nicely in the 0.95" band.
@@ -572,8 +589,9 @@ def build_flyer(product: dict, output_pdf_path: Path) -> Path:
     # 0. Paper — pure white behind everything.
     _fill_page(c, HUBSS_WHITE)
 
-    # 1. Hero photo across the top.
-    hero_bottom = _draw_hero_photo(c, product.get("hero"))
+    # 1. Hero photo across the top — splits into primary + secondary
+    # detail shot when product["hero2"] is supplied (v50 magazine layout).
+    hero_bottom = _draw_hero_photo(c, product.get("hero"), product.get("hero2"))
 
     # 2. Slim navy header band — eyebrow + wordmark + orange dash.
     header_bottom = _draw_navy_header(

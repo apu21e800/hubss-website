@@ -7,6 +7,11 @@ __pycache__/
 assets/booklet/
 assets/cover/
 assets/fonts/
+# v50 — assets/fonts/inter/ is tracked via `git add -f` (~2.5 MB
+# Inter family, OFL-licensed). Required for the flyer Python pipeline
+# to render type identical to the v50 catalogue + Figma plugin.
+# (Negation patterns don't work once the parent directory is excluded;
+# the inter/ TTFs are kept in the index by force-add.)
 assets/images/
 assets/products/
 assets/projects/

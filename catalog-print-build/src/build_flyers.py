@@ -379,6 +379,42 @@ def _resolve_hero(slug: str, cc_entry: dict[str, Any] | None,
     return None
 
 
+def _resolve_hero_secondary(slug: str, primary: Path | None) -> Path | None:
+    """v50 — pick a secondary detail shot for the magazine split-hero layout.
+    Walks the product image folder in numeric order (-02, -03, ...) and
+    returns the first image that exists AND isn't the same file as the
+    primary hero. Returns None if no suitable secondary exists, in which
+    case the flyer falls back to a single-image hero.
+    """
+    pdir = PUBLIC_IMG / "products" / slug
+    if not pdir.exists():
+        return None
+    primary_name = primary.name if primary else ""
+
+    # Try the predictable suffix patterns first (-02 / -03 / -04 / -05) in
+    # both jpg/png/webp. These are the gallery-ordered photos most likely
+    # to be the strongest detail shots.
+    for n in ("02", "03", "04", "05", "06", "07", "08", "09", "10"):
+        for ext in ("jpg", "jpeg", "png", "webp"):
+            cand = pdir / f"{slug}-{n}.{ext}"
+            if cand.exists() and cand.name != primary_name:
+                return cand
+
+    # Fallback: walk the directory alphabetically for ANY image that isn't
+    # the primary. Skip logos / icons / non-photo assets.
+    skip_tokens = ("logo", "icon", "favicon", "svg", "bags")
+    for cand in sorted(pdir.iterdir()):
+        if cand.suffix.lower() not in (".jpg", ".jpeg", ".png", ".webp"):
+            continue
+        if cand.name == primary_name:
+            continue
+        low = cand.name.lower()
+        if any(tok in low for tok in skip_tokens):
+            continue
+        return cand
+    return None
+
+
 # ---------------------------------------------------------------------------
 # Display name + body resolution
 # ---------------------------------------------------------------------------
@@ -471,6 +507,7 @@ def _assemble(slug: str, cc_by_slug, lib_by_slug) -> tuple[dict[str, Any], dict[
     lib_entry = lib_by_slug.get(slug)
     display_name = _resolve_display_name(slug, cc_entry, lib_entry)
     hero = _resolve_hero(slug, cc_entry, lib_entry)
+    hero2 = _resolve_hero_secondary(slug, hero)
 
     payload = {
         "slug": slug,
@@ -482,6 +519,7 @@ def _assemble(slug: str, cc_by_slug, lib_by_slug) -> tuple[dict[str, Any], dict[
         "spec_pairs": _resolve_spec_pairs(cc_entry, lib_entry),
         "chips": _resolve_chips(cc_entry, lib_entry),
         "hero": hero,
+        "hero2": hero2,   # v50: secondary detail shot for the magazine split
         # v46: white logo sits on the navy footer band.
         "logo": HUBSS_LOGO_WHITE if HUBSS_LOGO_WHITE.exists() else (
             HUBSS_LOGO_COLOR if HUBSS_LOGO_COLOR.exists() else None
@@ -509,6 +547,9 @@ def _assemble(slug: str, cc_by_slug, lib_by_slug) -> tuple[dict[str, Any], dict[
     if not payload["body"]:
         notes.append("no body paragraph")
 
+    if not hero2:
+        notes.append("no secondary image — single-hero fallback layout")
+
     manifest_row = {
         "slug": slug,
         "display_name": display_name,
@@ -516,6 +557,7 @@ def _assemble(slug: str, cc_by_slug, lib_by_slug) -> tuple[dict[str, Any], dict[
         "source_origin": " + ".join(sources),
         "notes": notes,
         "hero_path": str(hero) if hero else None,
+        "hero2_path": str(hero2) if hero2 else None,
         "spec_pair_count": len(payload["spec_pairs"]),
         "chip_count": len(payload["chips"]),
         "url": payload["url"],
@@ -538,22 +580,39 @@ def _assemble(slug: str, cc_by_slug, lib_by_slug) -> tuple[dict[str, Any], dict[
 # ---------------------------------------------------------------------------
 def _try_pdf_to_webp_with_pymupdf(pdf_path: Path, webp_path: Path,
                                   width_px: int = 1200) -> bool:
+    """Render flyer page-1 to WebP via PyMuPDF, with v49 saturation boost
+    and v50 WebP quality bump applied to match the catalogue's web look.
+
+    v49 — Vernon flagged 'muted colors' as the biggest single complaint on
+    the catalogue web flipbook. Root cause: print PDF is CMYK (required
+    for press); PyMuPDF's CMYK→sRGB conversion clips saturated greens /
+    blues / oranges. The catalogue session compensates by post-processing
+    the WebP with a 1.25× saturation bump in PIL plus bumping WebP
+    quality 82→92. Mirror that here so the flyer cards on /resources pop
+    the same way the catalogue does.
+    """
     try:
         import fitz  # PyMuPDF
+        from PIL import ImageEnhance
     except Exception:
         return False
     try:
         doc = fitz.open(str(pdf_path))
         page = doc.load_page(0)
-        # PDF is 8.75" wide at 72 DPI = 630 pt. width_px/630 = zoom factor.
         zoom = width_px / float(PAGE_W)
         mat = fitz.Matrix(zoom, zoom)
         pix = page.get_pixmap(matrix=mat, alpha=False)
         png_bytes = pix.tobytes("png")
         from io import BytesIO
         img = Image.open(BytesIO(png_bytes)).convert("RGB")
+
+        # v50 — saturation bump to compensate for CMYK→sRGB gamut clip.
+        img = ImageEnhance.Color(img).enhance(1.25)
+
         webp_path.parent.mkdir(parents=True, exist_ok=True)
-        img.save(webp_path, format="WEBP", quality=82, method=6)
+        # v50 — WebP quality 92 (was 82) to preserve the photographic
+        # detail in the hero zone.
+        img.save(webp_path, format="WEBP", quality=92, method=6)
         doc.close()
         return True
     except Exception as e:

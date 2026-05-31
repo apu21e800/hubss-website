@@ -149,7 +149,11 @@ function rul(p, x, y, w) {
 async function tx(p, text, x, y, sz, col, bold, maxW, align, lh) {
   if (!text || text === "") return null;
   const t = figma.createText();
-  t.fontName = {family: "Inter", style: bold ? "Bold" : "Regular"};
+  // v48 — Vernon: 'thin font on web' complaint. Inter Regular reads
+  // visibly lighter than the print PDF's Helvetica Regular. Bumping
+  // the non-bold default to Medium gives the on-screen Figma render
+  // visual weight parity with what Doug sees in the printed catalogue.
+  t.fontName = {family: "Inter", style: bold ? "Bold" : "Medium"};
   t.characters = String(text);
   t.fontSize = Math.round(sz);
   t.fills = [{type:"SOLID", color: col}];
@@ -325,8 +329,7 @@ async function pageProductHero(prod) {
   tag.resize(394, 400);
   tag.x = 28; tag.y = 350;
   f.appendChild(tag);
-  // Thin orange brand-pickup rule near the bottom.
-  rul(f, 28, 420, 44);
+  // v48 — Vernon: drop bottom decorative orange line.
   return f;
 }
 
@@ -385,7 +388,7 @@ async function pageApplication(app, idx, total) {
   await tx(f, (app.name||"").toUpperCase(), 36, 322, 7.5, O, false, 394, null, 11);
   await tx(f, app.tagline || "", 28, 350, 18, D, true, 394);
   await tx(f, app.body || "", 28, 388, 8.5, M, false, 394, null, 12);
-  rul(f, 28, 425, 44);
+  // v48 — Vernon: drop bottom decorative orange line. URL keeps it clean.
   await tx(f, "hubss.com", 28, 435, 5.5, O, false, 394, "right", 9);
   return f;
 }
@@ -398,7 +401,7 @@ async function pageProjectHero(proj) {
   rct(f, 28, 324, 4, 4, O, "OrangeDot");
   await tx(f, (proj.name||"").toUpperCase(), 36, 322, 7.5, O, false, 394, null, 11);
   await tx(f, proj.title || "", 28, 350, 20, D, true, 394);
-  rul(f, 28, 405, 44);
+  // v48 — Vernon: drop bottom decorative orange line.
   await tx(f, (proj.location||"").toUpperCase(), 28, 414, 6, M, false, 190, null, 9);
   await tx(f, (proj.product||"").toUpperCase(), 232, 414, 6, O, false, 190, null, 9);
   return f;
@@ -781,6 +784,7 @@ async function pageStatement() {
 // --- main build ---
 async function buildCatalogue(d) {
   await figma.loadFontAsync({family:"Inter", style:"Regular"});
+  await figma.loadFontAsync({family:"Inter", style:"Medium"});
   await figma.loadFontAsync({family:"Inter", style:"Bold"});
 
   const frames = [];

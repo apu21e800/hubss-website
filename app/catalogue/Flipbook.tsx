@@ -31,7 +31,29 @@ export default function Flipbook({ pages, downloadHref }: Props) {
   const [origin, setOrigin] = useState("50% 50%");             // transform-origin for zoom
   const [chromeVisible, setChromeVisible] = useState(true);
   const [shareSupported, setShareSupported] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);          // ≥1024px → 2-page spread
   const chromeTimer = useRef<number | null>(null);
+
+  // ── Detect desktop viewport for 2-page spread ─────────────────────────
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const update = () => setIsDesktop(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  // ── Spread math (desktop only) ─────────────────────────────────────────
+  // Spread convention: cover (idx 0) sits alone on the RIGHT of spread 0.
+  // Subsequent spreads pair odd-even: spread 1 = [p2, p3], spread 2 = [p4, p5].
+  // Mapping: spread N (N≥1) shows leftIdx = 2N-1, rightIdx = 2N.
+  // Last spread shows the final page alone on the LEFT if it lands odd.
+  const leftPageIdx = isDesktop && idx > 0 ? (idx % 2 === 1 ? idx : idx - 1) : -1;
+  const rightPageIdx = isDesktop
+    ? (idx === 0 ? 0 : leftPageIdx + 1)
+    : idx;
+  const showRightOnly = isDesktop && idx === 0;
+  const showLeftOnly = isDesktop && rightPageIdx >= total;
 
   // ── Navigation helpers ──────────────────────────────────────────────────
   const goTo = useCallback(
@@ -42,8 +64,20 @@ export default function Flipbook({ pages, downloadHref }: Props) {
     },
     [total],
   );
-  const prev = useCallback(() => goTo(idx - 1), [idx, goTo]);
-  const next = useCallback(() => goTo(idx + 1), [idx, goTo]);
+  // Desktop advances by 2 (except from cover, which advances by 1 to land on p2).
+  const prev = useCallback(() => {
+    if (!isDesktop) return goTo(idx - 1);
+    if (idx <= 1) return goTo(0);
+    if (idx === 2) return goTo(0);
+    const newLeft = (idx % 2 === 1 ? idx : idx - 1) - 2;
+    goTo(Math.max(1, newLeft));
+  }, [idx, isDesktop, goTo]);
+  const next = useCallback(() => {
+    if (!isDesktop) return goTo(idx + 1);
+    if (idx === 0) return goTo(1);
+    const newLeft = (idx % 2 === 1 ? idx : idx - 1) + 2;
+    goTo(Math.min(total - 1, newLeft));
+  }, [idx, isDesktop, total, goTo]);
 
   // ── Detect native share once ────────────────────────────────────────────
   useEffect(() => {
@@ -116,14 +150,22 @@ export default function Flipbook({ pages, downloadHref }: Props) {
     }
   };
 
-  // ── Window of pages to actually render in DOM (current ±1) ─────────────
+  // ── Window of pages to actually render in DOM ─────────────────────────
+  // Mobile: current ±1. Desktop: current spread ±1 spread (4 pages).
   const window3 = useMemo(() => {
     const s = new Set<number>();
     s.add(idx);
     if (idx > 0) s.add(idx - 1);
     if (idx < total - 1) s.add(idx + 1);
+    if (isDesktop) {
+      // Also include the paired spread page + the next/prev spread
+      if (leftPageIdx >= 0) s.add(leftPageIdx);
+      if (rightPageIdx < total) s.add(rightPageIdx);
+      if (leftPageIdx - 1 >= 0) s.add(leftPageIdx - 1);
+      if (rightPageIdx + 1 < total) s.add(rightPageIdx + 1);
+    }
     return s;
-  }, [idx, total]);
+  }, [idx, total, isDesktop, leftPageIdx, rightPageIdx]);
 
   return (
     <main
@@ -131,15 +173,16 @@ export default function Flipbook({ pages, downloadHref }: Props) {
       onMouseMove={wakeChrome}
       onTouchStart={wakeChrome}
     >
-      {/* Page stage — letterboxes the 5x5 page on tall screens */}
+      {/* Page stage — single page on mobile, 2-page spread on desktop */}
       <div
         className="absolute inset-0 grid place-items-center"
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >
+        {/* MOBILE: single-page square stage (preserved) */}
         <div
           className="relative aspect-square w-full max-w-[min(100vw,calc(100dvh-128px))]
-                     overflow-hidden cursor-zoom-in"
+                     overflow-hidden cursor-zoom-in lg:hidden"
           onClick={onImageTap}
           style={{
             transform: zoom ? "scale(2)" : "scale(1)",
@@ -154,7 +197,7 @@ export default function Flipbook({ pages, downloadHref }: Props) {
             const isActive = i === idx;
             return (
               <div
-                key={src}
+                key={`m-${src}`}
                 className="absolute inset-0"
                 style={{
                   opacity: isActive ? 1 : 0,
@@ -170,7 +213,7 @@ export default function Flipbook({ pages, downloadHref }: Props) {
                     width={1200}
                     height={1200}
                     priority={i === 0}
-                    sizes="(max-width: 768px) 100vw, 720px"
+                    sizes="100vw"
                     className="h-full w-full object-contain"
                     draggable={false}
                   />
@@ -178,6 +221,49 @@ export default function Flipbook({ pages, downloadHref }: Props) {
               </div>
             );
           })}
+        </div>
+
+        {/* DESKTOP: 2-page spread, letterboxed within viewport */}
+        <div
+          className="hidden lg:flex aspect-[2/1] w-full max-w-[min(calc(100vw-80px),calc((100dvh-128px)*2))]
+                     items-stretch justify-center gap-1 cursor-zoom-in"
+          onClick={onImageTap}
+          style={{
+            transform: zoom ? "scale(1.6)" : "scale(1)",
+            transformOrigin: origin,
+            transition: "transform 0.28s cubic-bezier(0.4, 0, 0.2, 1)",
+            cursor: zoom ? "zoom-out" : "zoom-in",
+          }}
+        >
+          {/* LEFT page slot (empty on cover spread) */}
+          <div className="relative flex-1 aspect-square overflow-hidden bg-black/30">
+            {!showRightOnly && leftPageIdx >= 0 && leftPageIdx < total && (
+              <Image
+                src={pages[leftPageIdx]}
+                alt={`HUBSS Catalogue 2026 — page ${leftPageIdx + 1} of ${total}`}
+                width={1200}
+                height={1200}
+                sizes="50vw"
+                className="h-full w-full object-contain"
+                draggable={false}
+              />
+            )}
+          </div>
+          {/* RIGHT page slot (empty on last-page-alone spread) */}
+          <div className="relative flex-1 aspect-square overflow-hidden bg-black/30">
+            {!showLeftOnly && rightPageIdx >= 0 && rightPageIdx < total && (
+              <Image
+                src={pages[rightPageIdx]}
+                alt={`HUBSS Catalogue 2026 — page ${rightPageIdx + 1} of ${total}`}
+                width={1200}
+                height={1200}
+                priority={rightPageIdx === 0}
+                sizes="50vw"
+                className="h-full w-full object-contain"
+                draggable={false}
+              />
+            )}
+          </div>
         </div>
       </div>
 

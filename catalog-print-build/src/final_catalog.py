@@ -13,8 +13,12 @@ from .specs import (
 from .figma_render import (
     SCALE, fs, figma_to_pdf, fill_bleed,
     draw_image_at_figma, draw_full_bleed_image, draw_text_block,
-    CMYK_CREAM, CMYK_TEXT_DARK, CMYK_TEXT_MID, CMYK_TEXT_FAINT,
+    CMYK_TEXT_DARK, CMYK_TEXT_MID, CMYK_TEXT_FAINT,
 )
+# v51 — CMYK_CREAM intentionally NOT imported. Cream is banned as a
+# background fill per Vernon. The constant still exists in figma_render
+# for any text-tint or small-accent use, but live catalogue pages render
+# on pure HUBSS_WHITE backgrounds only.
 from .images import draw_image_box
 from . import page_marks as PM
 from . import catalog_content as CC
@@ -263,48 +267,11 @@ def hero_scrim(c, height_figma=160, *, text_zone_figma=130, tint="navy"):
                     preserveAspectRatio=False, mask='auto')
 
 
-def cover_wash(c, *, height_figma=140, max_alpha_pct=0.62, ease=1.7):
-    """v42 navy-gradient cover treatment — RETIRED v43.
-
-    Retained so older callers don't break, but page_cover now uses
-    white_footer_band instead (Vernon: 'the gradients are not working
-    too well, let's go back to a white bottom banner').
-    """
-    png = _make_scrim_png(
-        height_px=400, max_alpha=int(255 * max_alpha_pct), ease=ease,
-        rgb=NAVY_SCRIM_RGB,
-    )
-    h_pdf = height_figma * SCALE
-    c.drawImage(str(png), 0, 0, width=PAGE_W, height=h_pdf,
-                preserveAspectRatio=False, mask='auto')
-
-
-def white_footer_band(c, *, height_figma=150, rule_w_figma=44,
-                      band_color=None):
-    """v43 white footer banner — the new house treatment.
-
-    Vernon: 'go back to a white bottom banner, the gradients are not
-    working.' Solid white (cream) rectangle covering the bottom
-    `height_figma` units of the page + bleed area, with a slim orange
-    accent rule across the top edge for brand pickup.
-
-    Photo lives above the band; band carries product text in dark ink.
-    No overlay on the photo — photo breathes, band anchors.
-
-    Use band_color=CMYK_CREAM for the warm-paper feel that reads
-    premium-magazine; default HUBSS_WHITE for a stark editorial white.
-    """
-    if band_color is None:
-        band_color = CMYK_CREAM
-    band_h_pdf = height_figma * SCALE
-    c.setFillColor(band_color)
-    # +BLEED so the band runs cleanly into the bottom bleed area.
-    c.rect(0, 0, PAGE_W, band_h_pdf + BLEED, stroke=0, fill=1)
-    # Slim orange accent rule at the top edge of the band — one brand
-    # touch that anchors the band to the photo above.
-    rule_fy = 450 - height_figma + 4  # 4 figma units below band top
-    thin_rule(c, fx=28, fy=rule_fy, w_figma=rule_w_figma,
-              color=HUBSS_ORANGE, weight_pt=2.0)
+# v51 — cover_wash() + white_footer_band() helpers retired. Both were
+# from the v42 (navy gradient) and v43 (cream banner) eras Vernon
+# rejected. No callers remained. CMYK_CREAM import dropped from
+# specs imports below since nothing references it. Vernon: 'no cream
+# background colors.'
 
 
 _GLOW_CACHE = {}

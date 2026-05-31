@@ -6,7 +6,7 @@ plugin sandbox and prevents loading. This script generates a fresh ~100-200 KB
 plugin that builds all 100 Figma frames with:
   - Correct frame names, background colours, navy bands, orange accents
   - All product/project text (name, tagline, body, callout, uses...)
-  - Cream [PHOTO] placeholder rectangles for every photo slot
+  - Neutral light-grey [PHOTO] placeholder rectangles for every photo slot
   - Correct page order matching the PDF exactly
 
 Usage:
@@ -42,7 +42,7 @@ const W  = {r:1,     g:1,     b:1    };  // white
 const D  = {r:0.12,  g:0.12,  b:0.12 };  // near-black body
 const M  = {r:0.45,  g:0.45,  b:0.45 };  // mid grey
 const F  = {r:0.65,  g:0.65,  b:0.65 };  // faint
-const PH = {r:0.85,  g:0.83,  b:0.78 };  // cream photo placeholder
+const PH = {r:0.93,  g:0.93,  b:0.93 };  // v51: neutral light-grey photo placeholder (cream retired — Vernon: 'no cream background colors')
 
 // --- low-level helpers ---
 function fr(name, bg) {

@@ -26,7 +26,7 @@ LOGO_WHITE = HUBSS_LOGOS / "hubss-logo-white-large.png"
 LOGO_COLOR = HUBSS_LOGOS / "hubss-logo-color.png"
 LOGO_ASPECT = 2432 / 701
 
-OUT = ROOT / "output" / "HUBSS_Catalogue_2026_v49.pdf"
+OUT = ROOT / "output" / "HUBSS_Catalogue_2026_v50.pdf"
 
 
 # ---- accent palette --------------------------------------------------
@@ -1609,6 +1609,7 @@ def build():
     pages.append(lambda: page_section_open(c, "Five", "Reference.", SO.get("reference")))
     pages.append(lambda: page_technical_reference(c))
     pages.append(lambda: page_cities(c))
+    lunch_learn_page = len(pages) + 1
     pages.append(lambda: page_lunch_learn(c))
     contact_page = len(pages) + 1
     pages.append(lambda: page_contact(c))
@@ -1660,17 +1661,20 @@ def build():
     pages.append(lambda: page_quiet_mark(c))
     pages.append(lambda: page_back(c))
 
-    # TOC — six navigable sections, mirrors plugin's tocEntries (Manifesto +
-    # Why HUB are editorial front matter, encountered front-to-back, not
-    # listed). Page numbers are computed at section push time, so they're
-    # always correct.
+    # TOC — Vernon v49.1: labels MUST match the title shown on the
+    # section opener (was 'Certified Installers' but the Section Four
+    # opener now reads 'Network.'; was 'Technical Reference' but the
+    # Section Five opener reads 'Reference.'). Also added Lunch & Learn
+    # since it's a CTA destination (QR-equipped booking page).
+    # Page numbers computed at section push time so they're always correct.
     toc_entries = [
-        ("Products",             products_page),
-        ("Applications",         apps_page),
-        ("Projects",             projects_page),
-        ("Certified Installers", network_page),
-        ("Technical Reference",  reference_page),
-        ("Contact",              contact_page),
+        ("Products",       products_page),
+        ("Applications",   apps_page),
+        ("Projects",       projects_page),
+        ("Network",        network_page),
+        ("Reference",      reference_page),
+        ("Lunch & Learn",  lunch_learn_page),
+        ("Contact",        contact_page),
     ]
     pages[2] = lambda: page_toc(c, toc_entries)
 

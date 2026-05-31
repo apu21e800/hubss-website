@@ -294,16 +294,24 @@ async function pageTOC(sections, totalPages) {
 }
 
 async function pageSectionOpen(num, title, imagePath) {
-  const f = fr(`Section ${num} — ${title}`, N);
-  // v44 pro look — typography-led editorial moment.
-  // Full-bleed photo + SOFT navy vignette at bottom (never solid) +
-  // huge confident display title. Photo + type do the work; no band.
-  ph(f, 0, 0, 450, 450, "Section opener: " + title, imagePath);
-  // v45 — no vignette. Type sits directly on the photo.
-  // Thin orange rule + small section eyebrow + huge display title.
-  rul(f, 28, 313, 28);
-  await tx(f, ("SECTION " + num).toUpperCase(), 28, 322, 7.5, W, false, 394, null, 11);
-  await tx(f, title, 28, 350, 44, W, true, 394);
+  const f = fr(`p__ / Section ${num} — ${title}`, N);
+  // v50 parity (print page_section_open at final_catalog.py:513) —
+  // Vernon: 'Section One could stand out more.' Orange dot pre-element,
+  // rule UNDER the eyebrow, 64pt display, tracking -2.0.
+  ph(f, 0, 0, 450, 450, "Section Opener / Photo / " + title, imagePath);
+  // Orange dot — visual brand anchor
+  const dot = figma.createEllipse();
+  dot.resize(7, 7); dot.x = 22; dot.y = 320;
+  dot.fills = [{type:"SOLID", color: O}];
+  dot.name = "Section Opener / Dot";
+  f.appendChild(dot);
+  await tx(f, ("SECTION " + num).toUpperCase(), 34, 318, 8.5, W, false, 394, null, 13);
+  rul(f, 28, 338, 44);   // rule UNDER eyebrow, not under the entire band
+  f.children[f.children.length-1].name = "Section Opener / Brand Rule";
+  await tx(f, title, 28, 358, 64, W, true, 394);
+  // Name the last text node so layer panel reads cleanly
+  const lastTx = f.children[f.children.length-1];
+  if (lastTx && lastTx.type === "TEXT") lastTx.name = "Section Opener / Display Title";
   return f;
 }
 
@@ -781,11 +789,124 @@ async function pageStatement() {
   return f;
 }
 
+// ---------------------------------------------------------------------
+// v51 — VISUAL DESIGN SYSTEM
+// Idempotent — checks if a style/component already exists by name before
+// creating. Vernon's re-imports won't duplicate. Run once at the top
+// of buildCatalogue so the styles + components exist before frames are
+// built and can be referenced from the layers panel.
+// ---------------------------------------------------------------------
+function _hasPaintStyleByName(name) {
+  const styles = figma.getLocalPaintStyles();
+  for (let i = 0; i < styles.length; i++) if (styles[i].name === name) return styles[i];
+  return null;
+}
+function _hasTextStyleByName(name) {
+  const styles = figma.getLocalTextStyles();
+  for (let i = 0; i < styles.length; i++) if (styles[i].name === name) return styles[i];
+  return null;
+}
+function _hasComponentByName(name) {
+  for (const page of figma.root.children) {
+    for (const node of page.children) {
+      if (node.type === "COMPONENT" && node.name === name) return node;
+    }
+  }
+  return null;
+}
+function _ensurePaintStyle(name, color) {
+  let s = _hasPaintStyleByName(name);
+  if (s) return s;
+  s = figma.createPaintStyle();
+  s.name = name;
+  s.paints = [{type:"SOLID", color: color}];
+  return s;
+}
+function _ensureTextStyle(name, family, style, fontSize, lineHeight, tracking) {
+  let s = _hasTextStyleByName(name);
+  if (s) return s;
+  s = figma.createTextStyle();
+  s.name = name;
+  s.fontName = {family: family, style: style};
+  s.fontSize = fontSize;
+  if (lineHeight) s.lineHeight = {value: lineHeight, unit: "PIXELS"};
+  if (typeof tracking === "number") s.letterSpacing = {value: tracking, unit: "PERCENT"};
+  return s;
+}
+async function createDesignSystem() {
+  // Paint styles — brand palette
+  _ensurePaintStyle("HUBSS / Orange",       O);
+  _ensurePaintStyle("HUBSS / Navy",         N);
+  _ensurePaintStyle("HUBSS / Ink",          D);
+  _ensurePaintStyle("HUBSS / Paper",        W);
+  _ensurePaintStyle("HUBSS / Mid Grey",     M);
+  _ensurePaintStyle("HUBSS / Faint Grey",   F);
+
+  // Text styles — print typography roles (v50)
+  _ensureTextStyle("Display / Section",     "Inter", "Bold",     64, 66, -3.0);
+  _ensureTextStyle("Display / Hero",        "Inter", "Bold",     44, 48, -2.0);
+  _ensureTextStyle("Display / Product",     "Inter", "Bold",     26, 30, -2.0);
+  _ensureTextStyle("Subhead / Tagline",     "Inter", "Medium",   16, 22, -1.0);
+  _ensureTextStyle("Body / Regular",        "Inter", "Medium",   10, 15,  0.0);
+  _ensureTextStyle("Body / Small",          "Inter", "Medium",    8, 12,  0.0);
+  _ensureTextStyle("Eyebrow / Caps",        "Inter", "Bold",      7, 11,  16.0);
+  _ensureTextStyle("TOC / Item",            "Inter", "Bold",     11, 17,  0.0);
+  _ensureTextStyle("Page Number",           "Inter", "Medium",    8, 12,  0.0);
+
+  // Components — reusable design-system elements parked on a hidden page
+  // so they're discoverable in the Assets panel without cluttering canvas.
+  let dsPage = figma.root.children.find(p => p.name === "Design System");
+  if (!dsPage) {
+    dsPage = figma.createPage();
+    dsPage.name = "Design System";
+  }
+  if (!_hasComponentByName("Orange Dot")) {
+    const c = figma.createComponent();
+    c.name = "Orange Dot";
+    c.resize(8, 8);
+    const ell = figma.createEllipse();
+    ell.resize(8, 8);
+    ell.fills = [{type:"SOLID", color: O}];
+    ell.name = "Dot";
+    c.appendChild(ell);
+    dsPage.appendChild(c);
+  }
+  if (!_hasComponentByName("Brand Rule / Orange Thin")) {
+    const c = figma.createComponent();
+    c.name = "Brand Rule / Orange Thin";
+    c.resize(44, 2);
+    const r = figma.createRectangle();
+    r.resize(44, 2);
+    r.fills = [{type:"SOLID", color: O}];
+    r.name = "Rule";
+    c.appendChild(r);
+    dsPage.appendChild(c);
+  }
+  if (!_hasComponentByName("Page Number Footer")) {
+    const c = figma.createComponent();
+    c.name = "Page Number Footer";
+    c.resize(40, 14);
+    const tn = figma.createText();
+    tn.fontName = {family:"Inter", style:"Medium"};
+    tn.characters = "00";
+    tn.fontSize = 8;
+    tn.fills = [{type:"SOLID", color: M}];
+    tn.x = 0; tn.y = 0;
+    tn.name = "Page Number";
+    c.appendChild(tn);
+    dsPage.appendChild(c);
+  }
+}
+
 // --- main build ---
 async function buildCatalogue(d) {
+  // v51 — load all weights used by the design system + frames
   await figma.loadFontAsync({family:"Inter", style:"Regular"});
   await figma.loadFontAsync({family:"Inter", style:"Medium"});
+  await figma.loadFontAsync({family:"Inter", style:"SemiBold"});
   await figma.loadFontAsync({family:"Inter", style:"Bold"});
+  // Bootstrap the design system once per Figma session (idempotent).
+  try { await createDesignSystem(); } catch (e) { console.warn("Design system init failed:", e); }
 
   const frames = [];
 
@@ -934,15 +1055,17 @@ async function buildCatalogue(d) {
   frames.push(await pageQuietMark(d));
   frames.push(await pageBack(d));
 
-  // TOC — six navigable sections only. Editorial front matter (Manifesto, Why HUB)
-  // comes after p3 and is not listed; readers encounter it naturally front-to-back.
+  // TOC — v50 parity. Labels match section opener titles exactly; Lunch
+  // & Learn added (CTA destination with QR). Editorial front matter
+  // (Manifesto, Why HUB) is not listed; readers encounter it naturally.
   const tocEntries = [
-    ["Products",            productsPage],
-    ["Applications",        appsPage],
-    ["Projects",            projectsPage],
-    ["Certified Installers",networkPage],
-    ["Technical Reference", referencePage],
-    ["Contact",             contactPage],
+    ["Products",       productsPage],
+    ["Applications",   appsPage],
+    ["Projects",       projectsPage],
+    ["Network",        networkPage],
+    ["Reference",      referencePage],
+    ["Lunch & Learn",  lunchPage],
+    ["Contact",        contactPage],
   ];
   frames[2] = await pageTOC(tocEntries, frames.length);
 

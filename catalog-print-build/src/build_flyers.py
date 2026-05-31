@@ -29,6 +29,7 @@ from typing import Any
 from PIL import Image, ImageDraw, ImageFont
 
 from . import catalog_content as CC
+from . import original_content as OC
 from .product_flyer import build_flyer
 from .flyer_specs import (
     TRIM_W, TRIM_H, PAGE_W, PAGE_H,
@@ -426,10 +427,12 @@ def _resolve_display_name(slug: str, cc_entry, lib_entry) -> str:
     return slug
 
 
-def _resolve_body(cc_entry, lib_entry) -> str:
-    # The catalogue's "body" is more curated (~80-100 words) than the
-    # full description. Prefer it for the flyer; fall back to description
-    # truncated to a comparable length.
+def _resolve_body(orig_entry, cc_entry, lib_entry) -> str:
+    # Priority: Doug's fact-checked original PDF content → catalogue voice →
+    # lib/products.ts description. Original content is the canonical
+    # source-of-truth for product copy on hubss.com.
+    if orig_entry and orig_entry.get("body"):
+        return orig_entry["body"]
     if cc_entry and cc_entry.get("body"):
         return cc_entry["body"]
     desc = (lib_entry or {}).get("description") or ""
@@ -456,9 +459,11 @@ def _resolve_italic(cc_entry, lib_entry) -> str:
     return (lib_entry or {}).get("short_desc") or ""
 
 
-def _resolve_spec_pairs(cc_entry, lib_entry) -> list[tuple[str, str]]:
-    # Prefer the catalogue's spec_pairs (already tuned for short cells); fall
-    # back to lib specs (label/value pairs). Trim to 6 for layout.
+def _resolve_spec_pairs(orig_entry, cc_entry, lib_entry) -> list[tuple[str, str]]:
+    # Priority: original PDF content (richest specs — ASTM cites, exact mm,
+    # BPN, certs) → catalogue's tuned 4-row → lib specs. Trim to 6 for layout.
+    if orig_entry and orig_entry.get("spec_pairs"):
+        return [(str(l), str(v)) for l, v in orig_entry["spec_pairs"][:6]]
     if cc_entry and cc_entry.get("spec_pairs"):
         return [(str(l), str(v)) for l, v in cc_entry["spec_pairs"][:6]]
     out: list[tuple[str, str]] = []
@@ -467,8 +472,11 @@ def _resolve_spec_pairs(cc_entry, lib_entry) -> list[tuple[str, str]]:
     return out
 
 
-def _resolve_chips(cc_entry, lib_entry) -> list[str]:
-    # Catalog content has 'uses' which is already curated for the spec page.
+def _resolve_chips(orig_entry, cc_entry, lib_entry) -> list[str]:
+    # Priority: hand-curated chips from the original PDF docs → catalog uses
+    # → mapped lib/products applications.
+    if orig_entry and orig_entry.get("chips"):
+        return list(orig_entry["chips"])[:6]
     if cc_entry and cc_entry.get("uses"):
         return list(cc_entry["uses"])[:6]
     related = (lib_entry or {}).get("related_applications", [])
@@ -480,10 +488,10 @@ def _resolve_chips(cc_entry, lib_entry) -> list[str]:
     return chips
 
 
-def _resolve_eyebrow(slug: str, cc_entry, lib_entry) -> str:
-    # Slug override wins (these are the canonical category eyebrows for the
-    # flyer system). lib eyebrow (e.g. "Concrete and Asphalt Repair") is a
-    # cross-check.
+def _resolve_eyebrow(slug: str, orig_entry, cc_entry, lib_entry) -> str:
+    # Priority: original PDF eyebrow → slug override → lib eyebrow.
+    if orig_entry and orig_entry.get("eyebrow"):
+        return orig_entry["eyebrow"]
     override = EYEBROW_OVERRIDES.get(slug)
     if override:
         return override
@@ -492,8 +500,10 @@ def _resolve_eyebrow(slug: str, cc_entry, lib_entry) -> str:
     return "HUB Surface Systems"
 
 
-def _resolve_tagline(cc_entry, lib_entry) -> str:
+def _resolve_tagline(orig_entry, cc_entry, lib_entry) -> str:
     """The italic subhead under the display name."""
+    if orig_entry and orig_entry.get("tagline"):
+        return orig_entry["tagline"]
     if cc_entry and cc_entry.get("tagline"):
         return cc_entry["tagline"]
     return (lib_entry or {}).get("short_desc") or ""
@@ -505,6 +515,7 @@ def _resolve_tagline(cc_entry, lib_entry) -> str:
 def _assemble(slug: str, cc_by_slug, lib_by_slug) -> tuple[dict[str, Any], dict[str, Any]]:
     cc_entry = cc_by_slug.get(slug)
     lib_entry = lib_by_slug.get(slug)
+    orig_entry = OC.ORIGINAL_PRODUCTS.get(slug)
     display_name = _resolve_display_name(slug, cc_entry, lib_entry)
     hero = _resolve_hero(slug, cc_entry, lib_entry)
     hero2 = _resolve_hero_secondary(slug, hero)
@@ -513,11 +524,11 @@ def _assemble(slug: str, cc_by_slug, lib_by_slug) -> tuple[dict[str, Any], dict[
         "slug": slug,
         "name": display_name,
         "display_name": display_name,
-        "eyebrow": _resolve_eyebrow(slug, cc_entry, lib_entry),
-        "tagline": _resolve_tagline(cc_entry, lib_entry),
-        "body": _resolve_body(cc_entry, lib_entry),
-        "spec_pairs": _resolve_spec_pairs(cc_entry, lib_entry),
-        "chips": _resolve_chips(cc_entry, lib_entry),
+        "eyebrow": _resolve_eyebrow(slug, orig_entry, cc_entry, lib_entry),
+        "tagline": _resolve_tagline(orig_entry, cc_entry, lib_entry),
+        "body": _resolve_body(orig_entry, cc_entry, lib_entry),
+        "spec_pairs": _resolve_spec_pairs(orig_entry, cc_entry, lib_entry),
+        "chips": _resolve_chips(orig_entry, cc_entry, lib_entry),
         "hero": hero,
         "hero2": hero2,   # v50: secondary detail shot for the magazine split
         # v46: white logo sits on the navy footer band.
@@ -529,6 +540,8 @@ def _assemble(slug: str, cc_by_slug, lib_by_slug) -> tuple[dict[str, Any], dict[
 
     sources = []
     notes = []
+    if orig_entry:
+        sources.append("original_content.py (Doug's verified PDFs)")
     if cc_entry:
         sources.append("catalog_content.py")
     if lib_entry:

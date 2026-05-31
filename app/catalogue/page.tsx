@@ -40,6 +40,19 @@ async function getPageManifest(): Promise<{ pages: string[]; version: string | n
   return { pages: [], version: null };
 }
 
+// Check that the web-sized download PDF actually exists before exposing the
+// Download button — produced by scripts/build-catalogue-download-pdf.py.
+async function downloadPdfHref(): Promise<string | undefined> {
+  const rel = "/catalogue/HUBSS-Catalogue-2026.pdf";
+  const abs = path.join(process.cwd(), "public", rel);
+  try {
+    await fs.access(abs);
+    return rel;
+  } catch {
+    return undefined;
+  }
+}
+
 export default async function CataloguePage() {
   // Defense-in-depth: middleware should have already redirected when the
   // flag is off. If it somehow didn't, render the 404 body so visitors
@@ -47,6 +60,7 @@ export default async function CataloguePage() {
   if (!showCatalogue()) notFound();
 
   const { pages } = await getPageManifest();
+  const downloadHref = await downloadPdfHref();
 
   if (pages.length === 0) {
     return (
@@ -62,5 +76,5 @@ export default async function CataloguePage() {
     );
   }
 
-  return <Flipbook pages={pages} />;
+  return <Flipbook pages={pages} downloadHref={downloadHref} />;
 }

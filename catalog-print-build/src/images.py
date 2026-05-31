@@ -7,6 +7,7 @@ downsample during the CMYK conversion step (cached on first use).
 """
 
 from __future__ import annotations
+import hashlib
 from pathlib import Path
 from PIL import Image
 from reportlab.pdfgen.canvas import Canvas
@@ -23,8 +24,13 @@ MAX_LONG_EDGE = 2000
 
 
 def _cmyk_cache_path(src):
+    """Cache filename includes a hash of the FULL resolved path so two files
+    with the same basename (e.g. both 'featured.jpg' under different project
+    folders) get separate cache entries. The earlier 'src.stem__cmyk.jpg'
+    naming caused silent collisions and swapped images on rebuild."""
     _CONVERTED_CACHE_DIR.mkdir(parents=True, exist_ok=True)
-    return _CONVERTED_CACHE_DIR / f"{src.stem}__cmyk.jpg"
+    digest = hashlib.md5(str(src.resolve()).encode("utf-8")).hexdigest()[:12]
+    return _CONVERTED_CACHE_DIR / f"{src.stem}__{digest}__cmyk.jpg"
 
 
 def ensure_cmyk(src):

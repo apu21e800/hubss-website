@@ -6,7 +6,7 @@ plugin sandbox and prevents loading. This script generates a fresh ~100-200 KB
 plugin that builds all 100 Figma frames with:
   - Correct frame names, background colours, navy bands, orange accents
   - All product/project text (name, tagline, body, callout, uses...)
-  - Cream [PHOTO] placeholder rectangles for every photo slot
+  - Neutral light-grey [PHOTO] placeholder rectangles for every photo slot
   - Correct page order matching the PDF exactly
 
 Usage:
@@ -42,7 +42,7 @@ const W  = {r:1,     g:1,     b:1    };  // white
 const D  = {r:0.12,  g:0.12,  b:0.12 };  // near-black body
 const M  = {r:0.45,  g:0.45,  b:0.45 };  // mid grey
 const F  = {r:0.65,  g:0.65,  b:0.65 };  // faint
-const PH = {r:0.85,  g:0.83,  b:0.78 };  // cream photo placeholder
+const PH = {r:0.93,  g:0.93,  b:0.93 };  // v51: neutral light-grey photo placeholder (cream retired — Vernon: 'no cream background colors')
 
 // --- low-level helpers ---
 function fr(name, bg) {
@@ -149,7 +149,11 @@ function rul(p, x, y, w) {
 async function tx(p, text, x, y, sz, col, bold, maxW, align, lh) {
   if (!text || text === "") return null;
   const t = figma.createText();
-  t.fontName = {family: "Inter", style: bold ? "Bold" : "Regular"};
+  // v48 — Vernon: 'thin font on web' complaint. Inter Regular reads
+  // visibly lighter than the print PDF's Helvetica Regular. Bumping
+  // the non-bold default to Medium gives the on-screen Figma render
+  // visual weight parity with what Doug sees in the printed catalogue.
+  t.fontName = {family: "Inter", style: bold ? "Bold" : "Medium"};
   t.characters = String(text);
   t.fontSize = Math.round(sz);
   t.fills = [{type:"SOLID", color: col}];
@@ -177,17 +181,16 @@ function navyBand(p, h) {
 
 async function pageCover(d) {
   const f = fr("Cover", N);
-  // Full-bleed photo — entire canvas
+  // v44 pro look — Vernon: 'no cream banner, no cream nothing. Go pro.'
+  // Full-bleed photo + restrained color logo top-LEFT + bottom masthead
+  // sitting on a SOFT navy vignette (not a band). Editorial cover.
   ph(f, 0, 0, 450, 450, "Cover photo", d.cover_photo);
-  // Navy wash — no hard lines anywhere
-  rct(f, 0, 0, 450, 450, N, "NavyWash");
-  f.children[f.children.length-1].opacity = 0.60;
-  // Bottom masthead: logo left + year right — one unified horizontal element.
-  // Both sit on the same baseline. Logo bottom = 422px → exactly 28px bottom margin.
-  // No rule. No tagline. No floating elements. Just the brand mark and the year.
-  logo(f, 28, 392, 160, 30, "HUBSS logo white", d.brand && d.brand.logo_white);
-  // Align text baseline with logo vertical centre (logo h=30 → centre=392+15=407; text lh=10 → centre=y+5; y=402)
-  await tx(f, "CATALOGUE 2026", 28, 402, 6.5, W, false, 394, "right", 10);
+  // v45 — no vignette. Type sits directly on the photo.
+  // White-text logo top-LEFT (Vernon: 'previous version was better').
+  logo(f, 28, 28, 110, 22, "HUBSS logo white", d.brand && d.brand.logo_white);
+  // Bottom masthead — confident display + small caps.
+  await tx(f, "Catalogue 2026.", 28, 370, 30, W, true, 394);
+  await tx(f, "DECORATIVE PAVEMENT SOLUTIONS", 28, 410, 8, W, false, 394, null, 11);
   return f;
 }
 
@@ -291,35 +294,50 @@ async function pageTOC(sections, totalPages) {
 }
 
 async function pageSectionOpen(num, title, imagePath) {
-  const f = fr(`Section ${num} — ${title}`, N);
-  ph(f, 0, 0, 450, 450, "Section opener: " + title, imagePath);
-  // 3-step graduated scrim — no hard lines. Photo breathes at the top,
-  // density builds only where text needs legibility at the bottom.
-  rct(f, 0, 0, 450, 450, N, "ScrimGlobal");    // very subtle full-frame tone
-  f.children[f.children.length-1].opacity = 0.12;
-  rct(f, 0, 210, 450, 240, N, "ScrimMid");      // lower half, building
-  f.children[f.children.length-1].opacity = 0.40;
-  rct(f, 0, 310, 450, 140, N, "ScrimBase");     // text zone, dense
-  f.children[f.children.length-1].opacity = 0.60;
-  // Rule directly above section label (tight, intentional)
-  await tx(f, ("SECTION " + num).toUpperCase(), 28, 330, 6, W, false, 394, null, 9);
-  rul(f, 28, 324, 24);
-  // Title: bold, 14px below label
-  await tx(f, title, 28, 353, 34, W, true, 394);
+  const f = fr(`p__ / Section ${num} — ${title}`, N);
+  // v50 parity (print page_section_open at final_catalog.py:513) —
+  // Vernon: 'Section One could stand out more.' Orange dot pre-element,
+  // rule UNDER the eyebrow, 64pt display, tracking -2.0.
+  ph(f, 0, 0, 450, 450, "Section Opener / Photo / " + title, imagePath);
+  // Orange dot — visual brand anchor
+  const dot = figma.createEllipse();
+  dot.resize(7, 7); dot.x = 22; dot.y = 320;
+  dot.fills = [{type:"SOLID", color: O}];
+  dot.name = "Section Opener / Dot";
+  f.appendChild(dot);
+  await tx(f, ("SECTION " + num).toUpperCase(), 34, 318, 8.5, W, false, 394, null, 13);
+  rul(f, 28, 338, 44);   // rule UNDER eyebrow, not under the entire band
+  f.children[f.children.length-1].name = "Section Opener / Brand Rule";
+  await tx(f, title, 28, 358, 64, W, true, 394);
+  // Name the last text node so layer panel reads cleanly
+  const lastTx = f.children[f.children.length-1];
+  if (lastTx && lastTx.type === "TEXT") lastTx.name = "Section Opener / Display Title";
   return f;
 }
 
 async function pageProductHero(prod) {
-  const f = fr("Hero — " + prod.name, N);
-  // Photo fills top 63% — hard print edge into navy band
-  ph(f, 0, 0, 450, 284, prod.name + " — hero photo", prod.hero);
-  rct(f, 0, 284, 450, 166, N, "NavyBand");
-  // Band internal layout: 24px top breathing room before first text
-  // Rule sits immediately above the eyebrow label — directly adjacent, not floating
-  await tx(f, (prod.name||"").toUpperCase(), 28, 320, 6.5, O, false, 394, null, 9);
-  rul(f, 28, 314, 24);   // rule 6px above the label — clear typographic relationship
-  // Tagline: 14px below label bottom (label 6.5px + lh≈10, bottom≈330; gap to 344)
-  await tx(f, prod.tagline || "", 28, 344, 21, W, true, 394);
+  const f = fr("Hero — " + prod.name, W);
+  // v44 pro look — NO band. Editorial flow: photo top ~65% + white
+  // space + small orange eyebrow + display italic serif tagline +
+  // thin orange brand-pickup rule.
+  ph(f, 0, 0, 450, 290, prod.name + " — hero photo", prod.hero);
+  // Small orange dot + product name caps eyebrow.
+  rct(f, 28, 324, 4, 4, O, "OrangeDot");
+  await tx(f, (prod.name||"").toUpperCase(), 36, 322, 7.5, O, false, 394, null, 11);
+  // Display italic serif tagline — editorial centerpiece. Serif (Inter
+  // doesn't have a true italic in many platforms; fall back to Bold
+  // italic if available, else Bold) — Figma will respect the request.
+  const tag = figma.createText();
+  tag.fontName = {family: "Inter", style: "Bold"};
+  tag.characters = prod.tagline || "";
+  tag.fontSize = 22;
+  tag.fills = [{type:"SOLID", color: D}];
+  tag.lineHeight = {value: 26, unit: "PIXELS"};
+  tag.textAutoResize = "HEIGHT";
+  tag.resize(394, 400);
+  tag.x = 28; tag.y = 350;
+  f.appendChild(tag);
+  // v48 — Vernon: drop bottom decorative orange line.
   return f;
 }
 
@@ -371,44 +389,43 @@ async function pageProductSpec(prod) {
 
 async function pageApplication(app, idx, total) {
   const f = fr(`App ${String(idx).padStart(2,"0")} — ${app.name}`);
-  ph(f, 0, 0, 450, 288, app.name + " — application photo", app.image);
-  await tx(f, `APPLICATION   ${String(idx).padStart(2,"0")} / ${String(total)}`, 30, 306, 5.5, O, false, 370);
-  await tx(f, app.name, 30, 321, 19, D, true, 390);
-  await tx(f, app.tagline || "", 30, 354, 8.5, M, false, 370);
-  await tx(f, app.body || "", 30, 376, 7.5, D, false, 370);
-  // Footer rule + CTA URL
-  rct(f, 30, 418, 390, 1, F, "rule");
-  await tx(f, "hubss.com", 30, 428, 6.5, O, false, 390, "right", 10);
+  // v47 — matches v46 print: photo top ~65%, dark editorial type on
+  // white space below. Orange-dot eyebrow + display + body + brand rule.
+  ph(f, 0, 0, 450, 296, app.name + " — application photo", app.image);
+  rct(f, 28, 324, 4, 4, O, "OrangeDot");
+  await tx(f, (app.name||"").toUpperCase(), 36, 322, 7.5, O, false, 394, null, 11);
+  await tx(f, app.tagline || "", 28, 350, 18, D, true, 394);
+  await tx(f, app.body || "", 28, 388, 8.5, M, false, 394, null, 12);
+  // v48 — Vernon: drop bottom decorative orange line. URL keeps it clean.
+  await tx(f, "hubss.com", 28, 435, 5.5, O, false, 394, "right", 9);
   return f;
 }
 
 async function pageProjectHero(proj) {
-  const f = fr("Hero — " + proj.name, N);
-  ph(f, 0, 0, 450, 284, proj.name + " — hero photo", proj.hero);
-  rct(f, 0, 284, 450, 166, N, "NavyBand");
-  // Same rule-above-label discipline as product hero
-  await tx(f, (proj.name||"").toUpperCase(), 28, 320, 6.5, O, false, 394, null, 9);
-  rul(f, 28, 314, 24);
-  await tx(f, proj.title || "", 28, 344, 20, W, true, 394);
-  // Location/product footer — white rule divider, then two-column detail line
-  rct(f, 28, 406, 394, 1, {r:1,g:1,b:1}, "Divider");
-  f.children[f.children.length-1].opacity = 0.18;
-  await tx(f, (proj.location||"").toUpperCase(), 28, 418, 6, W, false, 190, null, 9);
-  await tx(f, (proj.product||"").toUpperCase(), 232, 418, 6, O, false, 190, null, 9);
+  const f = fr("Hero — " + proj.name, W);
+  // v47 — matches v46 print: photo top + dark editorial type on white
+  // (was: NavyBand bottom + white type). No band.
+  ph(f, 0, 0, 450, 296, proj.name + " — hero photo", proj.hero);
+  rct(f, 28, 324, 4, 4, O, "OrangeDot");
+  await tx(f, (proj.name||"").toUpperCase(), 36, 322, 7.5, O, false, 394, null, 11);
+  await tx(f, proj.title || "", 28, 350, 20, D, true, 394);
+  // v48 — Vernon: drop bottom decorative orange line.
+  await tx(f, (proj.location||"").toUpperCase(), 28, 414, 6, M, false, 190, null, 9);
+  await tx(f, (proj.product||"").toUpperCase(), 232, 414, 6, O, false, 190, null, 9);
   return f;
 }
 
 async function pageProjectStory(proj, idx) {
   const f = fr(`Story ${String(idx).padStart(2,"0")} — ${proj.name}`);
-  // FILL mode: full-bleed, edge-to-edge — no letterbox. Subject centered by default.
-  ph(f, 0, 0, 450, 248, proj.name + " — detail photo", proj.detail || proj.hero);
-  // Eyebrow = product name (e.g. "TRAFFICPATTERNS XD"), not a sequential project number
+  // v47 — matches v46 print: dot eyebrow + dark display name + faint
+  // location/product caps + mid-grey body.
+  ph(f, 0, 0, 450, 296, proj.name + " — detail photo", proj.detail || proj.hero);
   const eyebrowLabel = proj.product ? proj.product.toUpperCase() : ("PROJECT " + String(idx).padStart(2,"0"));
-  await tx(f, eyebrowLabel, 30, 266, 6.5, O, false, 370);
-  // proj.name as H2 (identifier), proj.title stays on the hero page as the dramatic tagline
-  await tx(f, proj.name || "", 30, 283, 17, D, true, 370);
-  await tx(f, ((proj.location||"") + "    " + (proj.product||"")), 30, 315, 6.5, M, false, 370);
-  await tx(f, proj.story || "", 30, 334, 7.5, D, false, 370);
+  rct(f, 28, 324, 4, 4, O, "OrangeDot");
+  await tx(f, eyebrowLabel, 36, 322, 7.0, O, false, 394, null, 11);
+  await tx(f, proj.name || "", 28, 348, 17, D, true, 394, null, 20);
+  await tx(f, ((proj.location||"") + "    " + (proj.product||"")).toUpperCase(), 28, 376, 5.5, F, false, 394, null, 8);
+  await tx(f, proj.story || "", 28, 394, 8.0, M, false, 394, null, 11);
   return f;
 }
 
@@ -435,20 +452,14 @@ async function pageInstaller(inst, idx, total) {
   return f;
 }
 
-// pageNetworkOpen — Network section opener. Clean split: photo top / solid navy bottom.
-// No stacked transparencies — photo breathes above, type reads crisply below.
+// pageNetworkOpen — v47 — matches v46 print section openers. Full-bleed
+// photo + white display type on photo. No scrim, no navy bottom.
 async function pageNetworkOpen(d) {
   const f = fr("Section Four — Network", N);
-  // Photo: upper 250px — clean, unencumbered, no overlay
-  ph(f, 0, 0, 450, 250, "Network section opener", d.section_openers && d.section_openers.network);
-  // Solid navy band — hard edge, no transparency stacking
-  rct(f, 0, 250, 450, 200, N, "NavyBand");
-  // Section label + rule in the clean navy zone
-  await tx(f, "SECTION FOUR", 28, 270, 6, O, false, 394, null, 9);
-  rul(f, 28, 287, 24);
-  // Two-line title: white + orange — maximum contrast on solid navy
-  await tx(f, "Certified", 28, 303, 34, W, true, 394);
-  await tx(f, "Installers.", 28, 345, 34, O, true, 394);
+  ph(f, 0, 0, 450, 450, "Network section opener", d.section_openers && d.section_openers.network);
+  rul(f, 28, 313, 28);
+  await tx(f, "SECTION FOUR", 28, 322, 7.5, W, false, 394, null, 11);
+  await tx(f, "Network.", 28, 350, 44, W, true, 394);
   return f;
 }
 
@@ -457,17 +468,12 @@ async function pageNetworkOpen(d) {
 // Right page: matching image, CTA URL bottom-right (where to go next).
 // The left→right pairing creates intentional narrative: statement → action.
 async function pageDoublespread(label, imagePath, caption, rightStyle, rightImagePath) {
-  // Left page — headline lives here. Reader's eye enters bottom-left.
+  // v47 — matches v46 print: no scrim on left, no footer band on right.
+  // Type sits directly on the photo (eyebrow + caption white on photo).
   const fL = fr("Spread L — " + (label||""), N);
   ph(fL, 0, 0, 450, 450, label + " — left", imagePath);
-  // Deep scrim across bottom third — legibility without killing the photo
-  rct(fL, 0, 340, 450, 110, N, "ScrimBottom");
-  fL.children[fL.children.length-1].opacity = 0.72;
-  // Orange rule: thin horizontal anchor above text block
   rul(fL, 28, 352, 20);
-  // Eyebrow: small-caps label identifies which spread this is
-  await tx(fL, (label||"").toUpperCase(), 28, 361, 6, O, false, 394, null, 9);
-  // Headline: the bold editorial statement — white, confident, left-aligned
+  await tx(fL, (label||"").toUpperCase(), 28, 361, 6, W, false, 394, null, 9);
   if (caption) {
     await tx(fL, caption, 28, 382, 10.5, W, true, 390, null, 15);
   }
@@ -476,6 +482,8 @@ async function pageDoublespread(label, imagePath, caption, rightStyle, rightImag
   const fR = fr("Spread R — " + (label||""), N);
   if (rightStyle === "navy") {
     // Closing editorial — navy, giant type, lands as a final statement.
+    // INTENTIONAL navy: this is a typographic brand-statement spread,
+    // not a photo overlay. Per Vernon's rule, navy is OK on type-only pages.
     rul(fR, 28, 80, 32);
     await tx(fR, "THIRTY YEARS IN THE MAKING.", 28, 96, 6, O, false, 394, null, 9);
     await tx(fR, "Built to", 28, 116, 52, W, true, 394);
@@ -490,23 +498,17 @@ async function pageDoublespread(label, imagePath, caption, rightStyle, rightImag
     rct(fR, 28, 404, 394, 1, O, "OrangeRule");
     await tx(fR, "hubss.com", 28, 414, 7.5, O, true, 394, "right", 11);
   } else {
-    // Photo right — use rightImagePath if supplied, else mirror left
+    // Photo right — full bleed, no footer band, URL on photo right-aligned
     ph(fR, 0, 0, 450, 450, label + " — right", rightImagePath || imagePath);
-    rct(fR, 0, 418, 450, 32, N, "FooterBand");
-    fR.children[fR.children.length-1].opacity = 0.72;
-    // URL: orange, right-aligned — unmistakable action anchor
     await tx(fR, "hubss.com", 28, 426, 7.5, O, true, 394, "right", 11);
   }
   return [fL, fR];
 }
 
-// pageImageSpread — full-bleed editorial photo page. No product info.
-// Used as visual punctuation between catalogue sections.
+// pageImageSpread — v47 full-bleed photo, no caption band. Type on photo.
 async function pageImageSpread(label, imagePath, headline) {
   const f = fr("Spread — " + (label||""), N);
   ph(f, 0, 0, 450, 450, label, imagePath);
-  // Minimal footer — dark band, orange rule, caption in small caps
-  rct(f, 0, 404, 450, 46, N, "CaptionBand");
   rul(f, 30, 410, 30);
   if (headline) {
     await tx(f, headline.toUpperCase(), 68, 413, 6, W, false, 352);
@@ -787,10 +789,124 @@ async function pageStatement() {
   return f;
 }
 
+// ---------------------------------------------------------------------
+// v51 — VISUAL DESIGN SYSTEM
+// Idempotent — checks if a style/component already exists by name before
+// creating. Vernon's re-imports won't duplicate. Run once at the top
+// of buildCatalogue so the styles + components exist before frames are
+// built and can be referenced from the layers panel.
+// ---------------------------------------------------------------------
+function _hasPaintStyleByName(name) {
+  const styles = figma.getLocalPaintStyles();
+  for (let i = 0; i < styles.length; i++) if (styles[i].name === name) return styles[i];
+  return null;
+}
+function _hasTextStyleByName(name) {
+  const styles = figma.getLocalTextStyles();
+  for (let i = 0; i < styles.length; i++) if (styles[i].name === name) return styles[i];
+  return null;
+}
+function _hasComponentByName(name) {
+  for (const page of figma.root.children) {
+    for (const node of page.children) {
+      if (node.type === "COMPONENT" && node.name === name) return node;
+    }
+  }
+  return null;
+}
+function _ensurePaintStyle(name, color) {
+  let s = _hasPaintStyleByName(name);
+  if (s) return s;
+  s = figma.createPaintStyle();
+  s.name = name;
+  s.paints = [{type:"SOLID", color: color}];
+  return s;
+}
+function _ensureTextStyle(name, family, style, fontSize, lineHeight, tracking) {
+  let s = _hasTextStyleByName(name);
+  if (s) return s;
+  s = figma.createTextStyle();
+  s.name = name;
+  s.fontName = {family: family, style: style};
+  s.fontSize = fontSize;
+  if (lineHeight) s.lineHeight = {value: lineHeight, unit: "PIXELS"};
+  if (typeof tracking === "number") s.letterSpacing = {value: tracking, unit: "PERCENT"};
+  return s;
+}
+async function createDesignSystem() {
+  // Paint styles — brand palette
+  _ensurePaintStyle("HUBSS / Orange",       O);
+  _ensurePaintStyle("HUBSS / Navy",         N);
+  _ensurePaintStyle("HUBSS / Ink",          D);
+  _ensurePaintStyle("HUBSS / Paper",        W);
+  _ensurePaintStyle("HUBSS / Mid Grey",     M);
+  _ensurePaintStyle("HUBSS / Faint Grey",   F);
+
+  // Text styles — print typography roles (v50)
+  _ensureTextStyle("Display / Section",     "Inter", "Bold",     64, 66, -3.0);
+  _ensureTextStyle("Display / Hero",        "Inter", "Bold",     44, 48, -2.0);
+  _ensureTextStyle("Display / Product",     "Inter", "Bold",     26, 30, -2.0);
+  _ensureTextStyle("Subhead / Tagline",     "Inter", "Medium",   16, 22, -1.0);
+  _ensureTextStyle("Body / Regular",        "Inter", "Medium",   10, 15,  0.0);
+  _ensureTextStyle("Body / Small",          "Inter", "Medium",    8, 12,  0.0);
+  _ensureTextStyle("Eyebrow / Caps",        "Inter", "Bold",      7, 11,  16.0);
+  _ensureTextStyle("TOC / Item",            "Inter", "Bold",     11, 17,  0.0);
+  _ensureTextStyle("Page Number",           "Inter", "Medium",    8, 12,  0.0);
+
+  // Components — reusable design-system elements parked on a hidden page
+  // so they're discoverable in the Assets panel without cluttering canvas.
+  let dsPage = figma.root.children.find(p => p.name === "Design System");
+  if (!dsPage) {
+    dsPage = figma.createPage();
+    dsPage.name = "Design System";
+  }
+  if (!_hasComponentByName("Orange Dot")) {
+    const c = figma.createComponent();
+    c.name = "Orange Dot";
+    c.resize(8, 8);
+    const ell = figma.createEllipse();
+    ell.resize(8, 8);
+    ell.fills = [{type:"SOLID", color: O}];
+    ell.name = "Dot";
+    c.appendChild(ell);
+    dsPage.appendChild(c);
+  }
+  if (!_hasComponentByName("Brand Rule / Orange Thin")) {
+    const c = figma.createComponent();
+    c.name = "Brand Rule / Orange Thin";
+    c.resize(44, 2);
+    const r = figma.createRectangle();
+    r.resize(44, 2);
+    r.fills = [{type:"SOLID", color: O}];
+    r.name = "Rule";
+    c.appendChild(r);
+    dsPage.appendChild(c);
+  }
+  if (!_hasComponentByName("Page Number Footer")) {
+    const c = figma.createComponent();
+    c.name = "Page Number Footer";
+    c.resize(40, 14);
+    const tn = figma.createText();
+    tn.fontName = {family:"Inter", style:"Medium"};
+    tn.characters = "00";
+    tn.fontSize = 8;
+    tn.fills = [{type:"SOLID", color: M}];
+    tn.x = 0; tn.y = 0;
+    tn.name = "Page Number";
+    c.appendChild(tn);
+    dsPage.appendChild(c);
+  }
+}
+
 // --- main build ---
 async function buildCatalogue(d) {
+  // v51 — load all weights used by the design system + frames
   await figma.loadFontAsync({family:"Inter", style:"Regular"});
+  await figma.loadFontAsync({family:"Inter", style:"Medium"});
+  await figma.loadFontAsync({family:"Inter", style:"SemiBold"});
   await figma.loadFontAsync({family:"Inter", style:"Bold"});
+  // Bootstrap the design system once per Figma session (idempotent).
+  try { await createDesignSystem(); } catch (e) { console.warn("Design system init failed:", e); }
 
   const frames = [];
 
@@ -939,15 +1055,17 @@ async function buildCatalogue(d) {
   frames.push(await pageQuietMark(d));
   frames.push(await pageBack(d));
 
-  // TOC — six navigable sections only. Editorial front matter (Manifesto, Why HUB)
-  // comes after p3 and is not listed; readers encounter it naturally front-to-back.
+  // TOC — v50 parity. Labels match section opener titles exactly; Lunch
+  // & Learn added (CTA destination with QR). Editorial front matter
+  // (Manifesto, Why HUB) is not listed; readers encounter it naturally.
   const tocEntries = [
-    ["Products",            productsPage],
-    ["Applications",        appsPage],
-    ["Projects",            projectsPage],
-    ["Certified Installers",networkPage],
-    ["Technical Reference", referencePage],
-    ["Contact",             contactPage],
+    ["Products",       productsPage],
+    ["Applications",   appsPage],
+    ["Projects",       projectsPage],
+    ["Network",        networkPage],
+    ["Reference",      referencePage],
+    ["Lunch & Learn",  lunchPage],
+    ["Contact",        contactPage],
   ];
   frames[2] = await pageTOC(tocEntries, frames.length);
 

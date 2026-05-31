@@ -12,6 +12,11 @@ plugin that builds all 100 Figma frames with:
 Usage:
     python -B -m src.export_json          # regenerate catalog_data.json
     python -B -m src.generate_plugin      # write fresh code.js
+    python -B -m src.embed_images --lite  # MANDATORY: embed images at
+                                          # review quality (~22 MB).
+                                          # NEVER ship --print (~67 MB)
+                                          # to Vernon — it crashes his
+                                          # 30 GB Figma machine.
     Then in Figma: remove plugin, re-import manifest, click Build.
 """
 from __future__ import annotations

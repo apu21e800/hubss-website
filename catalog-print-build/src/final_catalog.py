@@ -34,15 +34,9 @@ OUT = ROOT / "output" / "HUBSS_Catalogue_2026_v50.pdf"
 
 
 # ---- accent palette --------------------------------------------------
-# Chip background — barely-there cool tint on cream paper.
-# Previous 18C version printed as a strong blue band; this is a whisper.
-# The eye reads "subtly different from paper" without "blue chips."
-CMYK_CHIP_BG = CMYKColor(0.05, 0.02, 0.00, 0.04)
-# Chip text — a soft cool-grey that hints at navy without going saturated.
-CMYK_CHIP_TEXT = CMYKColor(0.50, 0.30, 0.10, 0.65)
-# Aliases retained so any reference outside this file still resolves.
-CMYK_CHIP_BLUE = CMYK_CHIP_BG
-CMYK_CHIP_BLUE_TEXT = CMYK_CHIP_TEXT
+# v52 — CMYK_CHIP_* constants removed. They were defined for a "chip" UI
+# element that no longer ships and referenced a cream-paper aesthetic
+# Vernon retired. Pages now render on pure HUBSS_WHITE.
 
 # On-dark text palette — navy background pages (near-white = less ink, not more)
 CMYK_ON_DARK_BODY = CMYKColor(0.00, 0.00, 0.00, 0.10)  # near-white body text
@@ -173,143 +167,19 @@ def folio(c, page_no, *, on_dark=False):
                  color=color, align="right", max_w_figma=30)
 
 
-_SCRIM_CACHE = {}
+# v52 — DDB polish sweep: removed dead helpers no longer in the live render
+# path. Retired in this pass:
+#   • hero_scrim() + _make_scrim_png() + NAVY_SCRIM_* — superseded by the
+#     navy-wash approach baked directly into page builders.
+#   • orange_glow() + _make_glow_png() — v33 accent wash, no longer used.
+#   • _navy_fill_unused() — was explicitly tagged unused in its name.
+#   • cover_wash() + white_footer_band() — already retired in v51.
+# Git history preserves the design rationale if any need to return.
 
-
-def _make_scrim_png(height_px=400, width_px=8, max_alpha=230, ease=2.2,
-                    rgb=(0, 0, 0)):
-    """Render a colour-to-transparent gradient PNG (cached).
-
-    v42: parameterised on `rgb` so the same generator produces both the
-    legacy black scrim and the navy-tinted scrim Vernon asked for. Cache
-    key includes rgb to avoid collisions between tints.
-
-    Vernon's v33/v34 calibration (when rgb=(0,0,0)): max_alpha 180→230 +
-    ease 1.6→2.2 keeps the bottom truly opaque and pushes opacity toward
-    the bottom so the upper photo stays readable."""
-    from PIL import Image
-    key = (height_px, width_px, max_alpha, ease, rgb)
-    if key in _SCRIM_CACHE:
-        return _SCRIM_CACHE[key]
-    R, G, B = rgb
-    img = Image.new("RGBA", (width_px, height_px), (R, G, B, 0))
-    px = img.load()
-    for y in range(height_px):
-        # y=0 is top of image (transparent), y=height_px-1 is bottom (most opaque)
-        progress = y / max(1, (height_px - 1))   # 0..1, 1 at bottom
-        a = int(max_alpha * (progress ** ease))
-        for x in range(width_px):
-            px[x, y] = (R, G, B, a)
-    out = ROOT / "output" / "_cache" / f"scrim_{R}_{G}_{B}_{height_px}_{max_alpha}.png"
-    out.parent.mkdir(parents=True, exist_ok=True)
-    img.save(out)
-    _SCRIM_CACHE[key] = out
-    return out
-
-
-# v42 navy-tint constants — matches the website hero (rgba 8,13,22) so the
-# catalogue and the web feel cohesive. Lower SOLID_ALPHA than the legacy
-# black band (0.82 vs 0.88) because navy is intrinsically less harsh —
-# white type still reads bulletproof, but the photo's colour breathes
-# through as TINT rather than a stage-lighting blackout.
-NAVY_SCRIM_RGB = (8, 13, 22)
-NAVY_SCRIM_ALPHA = 0.82
-
-
-def hero_scrim(c, height_figma=160, *, text_zone_figma=130, tint="navy"):
-    """Bulletproof two-layer scrim — v42 navy default.
-
-    History:
-      • Vernon v39 (third flag on contrast) introduced the 88%-black
-        solid band so white type stays bulletproof on bright photos
-        (StreetBond rainbow, DuraTherm gold, etc.).
-      • Vernon v42: 'these dark overlays are too harsh, stage-lighting.
-        Use the navy wash instead.' So the band stays — same structure,
-        same readability guarantee — but it's now navy-tinted, not black.
-
-    Structure (unchanged from v39):
-      1. Solid band covering the bottom `text_zone_figma` units. Type on
-         this zone is bulletproof regardless of what's behind it.
-      2. Soft gradient fade above the solid band, meeting its alpha at
-         the bottom so there's no visible seam.
-
-    `tint='navy'` (default) — the new house style. RGB (8,13,22) at 82%.
-    `tint='black'` — kept for backward compatibility / fallback. 88% black.
-    """
-    if tint == "navy":
-        rgb = NAVY_SCRIM_RGB
-        solid_alpha = NAVY_SCRIM_ALPHA
-    else:
-        rgb = (0, 0, 0)
-        solid_alpha = 0.88
-
-    # --- Layer 1: solid colour band where the text lives --------------
-    solid_h_pdf = text_zone_figma * SCALE
-    c.saveState()
-    c.setFillColorRGB(rgb[0] / 255, rgb[1] / 255, rgb[2] / 255)
-    c.setFillAlpha(solid_alpha)
-    c.rect(0, 0, PAGE_W, solid_h_pdf, stroke=0, fill=1)
-    c.setFillAlpha(1.0)
-    c.restoreState()
-
-    # --- Layer 2: soft fade above, transparent->solid ------------------
-    # The fade ends where the solid band starts so there's no visible seam.
-    fade_h_figma = max(0, height_figma - text_zone_figma)
-    if fade_h_figma > 0:
-        # max_alpha matched to the solid band so the fade meets it cleanly.
-        fade_png = _make_scrim_png(
-            height_px=400, max_alpha=int(255 * solid_alpha), ease=1.5,
-            rgb=rgb,
-        )
-        fade_h_pdf = fade_h_figma * SCALE
-        c.drawImage(str(fade_png), 0, solid_h_pdf,
-                    width=PAGE_W, height=fade_h_pdf,
-                    preserveAspectRatio=False, mask='auto')
-
-
-# v51 — cover_wash() + white_footer_band() helpers retired. Both were
-# from the v42 (navy gradient) and v43 (cream banner) eras Vernon
-# rejected. No callers remained. CMYK_CREAM import dropped from
-# specs imports below since nothing references it. Vernon: 'no cream
-# background colors.'
-
-
-_GLOW_CACHE = {}
-
-
-def _make_glow_png(height_px=400, width_px=8, max_alpha=140, ease=2.0,
-                   r=249, g=115, b=22):
-    """Render a transparent-to-orange vertical gradient PNG for accent washes."""
-    from PIL import Image
-    key = (height_px, width_px, max_alpha, ease, r, g, b)
-    if key in _GLOW_CACHE:
-        return _GLOW_CACHE[key]
-    img = Image.new("RGBA", (width_px, height_px), (r, g, b, 0))
-    px = img.load()
-    for y in range(height_px):
-        progress = y / max(1, (height_px - 1))   # 0 top, 1 bottom
-        a = int(max_alpha * (progress ** ease))
-        for x in range(width_px):
-            px[x, y] = (r, g, b, a)
-    out = ROOT / "output" / "_cache" / f"glow_{height_px}_{max_alpha}_{r}_{g}_{b}.png"
-    out.parent.mkdir(parents=True, exist_ok=True)
-    img.save(out)
-    _GLOW_CACHE[key] = out
-    return out
-
-
-def orange_glow(c, height_figma=80, max_alpha=120):
-    """Warm orange-yellow accent wash at the bottom — mirrors the website hero."""
-    png = _make_glow_png(height_px=400, max_alpha=max_alpha,
-                         r=249, g=140, b=40)  # orange→amber blend
-    h_pdf = height_figma * SCALE
-    c.drawImage(str(png), 0, 0, width=PAGE_W, height=h_pdf,
-                preserveAspectRatio=False, mask='auto')
-
-
-def _navy_fill_unused(c):
-    fill_bleed(c, HUBSS_NAVY_RICH)
-
+# Shared PNG cache for the live navy-wash helper on page_back. Was the
+# scrim cache before — name kept generic so any future cache-needing
+# helper can co-tenant without a second dict.
+_SCRIM_CACHE: dict = {}
 
 _CORNER_CACHE: dict = {}
 
@@ -1201,7 +1071,7 @@ def page_closing_manifesto(c):
         "Every surface we build is walked over, driven on, played at, "
         "and lived around. That is the standard we hold ourselves to. "
         "Spec the surface. Watch it work. Walk over it for twenty years.",
-        fx=40, fy=252, font_size_figma=11, weight=400,
+        fx=40, fy=252, font_size_figma=11, weight=500,
         color=CMYK_TEXT_DARK, max_w_figma=370, leading_figma=18,
         )
     # SPECIFIED / INSTALLED / BACKED — horizontal trio

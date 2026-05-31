@@ -26,7 +26,7 @@ LOGO_WHITE = HUBSS_LOGOS / "hubss-logo-white-large.png"
 LOGO_COLOR = HUBSS_LOGOS / "hubss-logo-color.png"
 LOGO_ASPECT = 2432 / 701
 
-OUT = ROOT / "output" / "HUBSS_Catalogue_2026_v48.pdf"
+OUT = ROOT / "output" / "HUBSS_Catalogue_2026_v49.pdf"
 
 
 # ---- accent palette --------------------------------------------------
@@ -539,18 +539,19 @@ def page_section_open(c, section_no, title, photo_path):
     fill_bleed(c, HUBSS_WHITE)
     if photo_path and photo_path.exists():
         draw_full_bleed_image(c, str(photo_path))
-    # v45 — Vernon: 'no scrim, type on the photo.' Restrained editorial
-    # treatment lower-left. White display title + small caps eyebrow
-    # sit directly on the photo. If a future photo has a bright
-    # bottom-left zone that kills contrast, swap the photo rather than
-    # reintroduce a gradient.
-    thin_rule(c, fx=28, fy=313, w_figma=28,
-              color=HUBSS_ORANGE, weight_pt=2.0)
-    tracked_caps(c, ("Section " + section_no).upper(), fx=28, fy=322,
-                 size=7.5, color=HUBSS_WHITE, max_w_figma=394)
-    draw_text_block(c, title, fx=28, fy=350, font_size_figma=44,
+    # v49 — Vernon: 'Section One page 10-11 could stand out more.'
+    # Bigger type, bolder orange accent, wider tracking on the section
+    # number. The photo carries the moment; type punches harder.
+    # Orange dot pre-element + thin orange rule UNDER the section number
+    # eyebrow + much larger display title.
+    orange_dot(c, fx=24, fy=323, r_figma=1.8)
+    tracked_caps(c, ("Section " + section_no).upper(), fx=34, fy=320,
+                 size=8.5, color=HUBSS_WHITE, max_w_figma=394)
+    thin_rule(c, fx=28, fy=338, w_figma=44,
+              color=HUBSS_ORANGE, weight_pt=2.5)
+    draw_text_block(c, title, fx=28, fy=358, font_size_figma=64,
                     weight=800, color=HUBSS_WHITE,
-                    tracking=-1.4, max_w_figma=394, leading_figma=46)
+                    tracking=-2.0, max_w_figma=394, leading_figma=66)
 
 
 def page_product_hero(c, prod):

@@ -335,7 +335,13 @@ export default function Flipbook({ pages, downloadHref }: Props) {
         className="absolute inset-x-0 bottom-0 z-20 px-5
                    pb-[max(env(safe-area-inset-bottom),1rem)] pt-10"
         style={{
-          background: "linear-gradient(0deg, rgba(0,0,0,0.92) 50%, rgba(0,0,0,0) 100%)",
+          // v49 — Vernon flagged 'small dark shadow gradient on the
+          // white pages'. Old gradient went to 92% opaque black which
+          // bled visibly onto the catalogue's white edge. Softened to a
+          // narrow, low-opacity wash that only darkens the very bottom
+          // strip where the CTA pill needs contrast — invisible against
+          // photo pages, no longer dirty-edge against white pages.
+          background: "linear-gradient(0deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.30) 60%, rgba(0,0,0,0) 100%)",
         }}
       >
         <div className="flex items-center justify-start gap-3">

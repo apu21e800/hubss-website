@@ -20,7 +20,7 @@ import sys
 from pathlib import Path
 
 import fitz                           # PyMuPDF
-from PIL import Image
+from PIL import Image, ImageEnhance
 
 # -------------------------------------------------------------------------
 HERE      = Path(__file__).resolve().parent.parent
@@ -57,7 +57,21 @@ _version_tag = f"v{int(_match.group(1))}" if _match else "current"
 OUT = PAGES_DIR / _version_tag
 
 LONG_EDGE_PX  = 1800            # v32: bumped 1200 → 1800 — sharper on desktop
-WEBP_QUALITY  = 88              # v32: bumped 78 → 88 — preserves photo detail
+WEBP_QUALITY  = 92              # v49: bumped 88 → 92 — Vernon's 'muted colors' fix
+# v49 — Vernon's biggest complaint: 'a veneer or overlay on the images
+# is making them look dull in color.' Root cause: the print PDF is CMYK
+# (required for press), and PyMuPDF's CMYK→sRGB conversion clips the
+# saturated greens / blues / oranges. The web flipbook serves webps
+# rendered from the CMYK PDF, so the dullness carries through.
+#
+# Cleanest fix would be a separate sRGB web-only render pipeline; for
+# the tomorrow-morning deadline the most impactful single move is to
+# post-process the rendered webps with a saturation bump in PIL to
+# compensate for the CMYK gamut clip. 1.25 puts vivid colors back into
+# the visible range without going neon. Vision-verified against source
+# (StreetBond rainbow splash pad pops, GO bus livery natural, UBC
+# sculpture concrete unchanged).
+SATURATION_BOOST = 1.25
 
 # Page geometry (PDF points; 72 pt = 1 in):
 BLEED_PT      = 9.0             # 0.125" * 72
@@ -96,6 +110,10 @@ def render() -> None:
         # rounding produced 1199 or 1201 pixels.
         if img.size != (LONG_EDGE_PX, LONG_EDGE_PX):
             img = img.resize((LONG_EDGE_PX, LONG_EDGE_PX), Image.LANCZOS)
+
+        # v49 — saturation bump to compensate for CMYK→sRGB gamut clip.
+        if SATURATION_BOOST != 1.0:
+            img = ImageEnhance.Color(img).enhance(SATURATION_BOOST)
 
         out_path = OUT / f"page-{i + 1:03d}.webp"
         buf = io.BytesIO()

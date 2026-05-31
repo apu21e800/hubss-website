@@ -19,7 +19,21 @@ export const metadata: Metadata = buildMetadata({
 
 export default async function ResourcesPage() {
   const sanityDocs = await getResourceDocuments().catch(() => null);
-  const docs = sanityDocs ?? resourceDocuments;
+  // Sanity-curated entries take precedence (Vernon's siteSettings array
+  // wins when an id exists in both). Then append any hardcoded entries
+  // whose id is NOT present in Sanity — that's how the Catalogue + the
+  // 14 product flyers reach the page even though they haven't been
+  // imported into Sanity yet. Previous logic (`sanityDocs ?? hardcoded`)
+  // replaced wholesale, so any Sanity response — even just the 89 legacy
+  // spec sheets — silently dropped the catalogue and flyers from view.
+  const docs = sanityDocs
+    ? [
+        ...sanityDocs,
+        ...resourceDocuments.filter(
+          (d) => !sanityDocs.some((s) => s.id === d.id),
+        ),
+      ]
+    : resourceDocuments;
 
   return (
     <main

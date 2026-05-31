@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { FileText, Download, Eye, Search, X, ChevronDown, Star } from "lucide-react";
+import { FileText, Download, Eye, Search, X, ChevronDown, Star, Sparkles } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import type { ResourceDocument } from "@/lib/resource-documents";
@@ -288,6 +288,7 @@ export default function ResourcesClient({
   // both tabs — chips on "By Document Type", multi-tag pill row on "By Product".
   const [selectedTypes, setSelectedTypes] = useState<Set<string>>(new Set());
   const [featuredOnly, setFeaturedOnly] = useState(false);
+  const [newOnly, setNewOnly] = useState(false);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [preview, setPreview] = useState<PreviewState | null>(null);
 
@@ -339,6 +340,7 @@ export default function ResourcesClient({
         if (!matchesSearch) return false;
       }
       if (featuredOnly && doc.featured !== true) return false;
+      if (newOnly && doc.isNew !== true) return false;
       if (activeTab === "By Product" && productFilter !== "all") {
         if (doc.product !== productFilter) return false;
       }
@@ -354,7 +356,7 @@ export default function ResourcesClient({
       if (selectedTypes.size > 0 && !selectedTypes.has(doc.type)) return false;
       return true;
     });
-  }, [documents, debouncedSearch, activeTab, productFilter, subcategoryFilter, selectedTypes, featuredOnly]);
+  }, [documents, debouncedSearch, activeTab, productFilter, subcategoryFilter, selectedTypes, featuredOnly, newOnly]);
 
   const visible = filtered.slice(0, visibleCount);
   const hasMore = visibleCount < filtered.length;
@@ -362,6 +364,7 @@ export default function ResourcesClient({
   const hasActiveFilters =
     search !== "" ||
     featuredOnly ||
+    newOnly ||
     selectedTypes.size > 0 ||
     (activeTab === "By Product" && productFilter !== "all") ||
     (activeTab === "By Product" && subcategoryFilter !== "all");
@@ -372,6 +375,7 @@ export default function ResourcesClient({
     setSubcategoryFilter("all");
     setSelectedTypes(new Set());
     setFeaturedOnly(false);
+    setNewOnly(false);
     setVisibleCount(PAGE_SIZE);
   }
 
@@ -485,10 +489,35 @@ export default function ResourcesClient({
         )}
       </div>
 
-      {/* ── Filter Chip Row — Featured + Document-Type (multi-select) ───
+      {/* ── Filter Chip Row — Surfacing chips + Document-Type (multi-select) ───
             Always visible on both tabs. Counts come from the live document
-            set so users see what tapping a chip will actually surface. */}
+            set so users see what tapping a chip will actually surface.
+            "New Documents" surfaces the Catalogue + 2026 Product Flyers. */}
       <div className="flex flex-wrap items-center gap-2 mb-6">
+        <button
+          onClick={() => {
+            setNewOnly((v) => !v);
+            setVisibleCount(PAGE_SIZE);
+          }}
+          aria-pressed={newOnly}
+          className="inline-flex items-center gap-1.5 px-4 min-h-[44px] rounded-full text-sm font-medium transition-all duration-150 ease-out hover:scale-[1.02] active:scale-[0.98]"
+          style={
+            newOnly
+              ? { background: "#F97316", color: "#fff", border: "1px solid transparent" }
+              : {
+                  background: "rgba(249,115,22,0.08)",
+                  color: "#FB923C",
+                  border: "1px solid rgba(249,115,22,0.22)",
+                }
+          }
+        >
+          <Sparkles
+            className="w-3.5 h-3.5"
+            fill={newOnly ? "currentColor" : "none"}
+            strokeWidth={2}
+          />
+          <span>New Documents</span>
+        </button>
         <button
           onClick={() => {
             setFeaturedOnly((v) => !v);

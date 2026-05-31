@@ -12,10 +12,11 @@ Coordinate conversion:
   Document page is 5.25x5.25" = 378 pt (trim + 0.125" bleed each side).
   ReportLab origin is bottom-left; Figma is top-left.
 
-Type fallback:
-  We keep Helvetica family for the proof (no embedded Inter yet).
-  Inter Black/Bold -> Helvetica-Bold. Inter Regular -> Helvetica.
-  Roboto Condensed -> Helvetica (slight visual fudge).
+Type (v48):
+  Inter is the locked typeface across print + website + Figma plugin.
+  TTFs registered by specs.register_inter_fonts() at module import.
+  pick_font() maps Figma weight → Inter-Bold (≥600) / SemiBold (≥500)
+  / Regular (<500). No Helvetica anywhere. No Light/Thin weights.
 
 Color:
   Figma cream paper -> CMYK_CREAM (light tone). Navy -> HUBSS_NAVY.
@@ -64,15 +65,31 @@ CMYK_TEXT_FAINT = CMYKColor(0.0, 0.0, 0.0, 0.35)
 
 
 # --- font mapping -------------------------------------------------------
-def pick_font(figma_font: str | None, weight: int | None) -> str:
-    """Map a Figma font + weight to one of our embedded PDF fonts."""
-    fam = (figma_font or "").lower()
+def pick_font(figma_font: str | None, weight: int | None,
+              italic: bool = False) -> str:
+    """v48 — Map Figma font + weight to embedded Inter TTF.
+
+    Inter family registered in specs.register_inter_fonts(). Vernon's
+    call: 'Inter, not Helvetica. Helvetica is too dated.'
+
+    Weight buckets (preserves v47 semantics — anything ≥600 is Bold so
+    we never regress to a thinner weight than v47 had):
+       w >= 600 -> Bold
+       w >= 500 -> SemiBold (slight bump from Regular for body emphasis)
+       else     -> Regular
+    Italic flag picks Inter-Italic (or BoldItalic at w≥600).
+    """
+    from .specs import (
+        FONT_SANS_REG, FONT_SANS_SEMI, FONT_SANS_BOLD,
+        FONT_SANS_OBL, FONT_SANS_BOLD_OBL,
+    )
     w = weight or 400
-    if "serif" in fam or "times" in fam or "roboto serif" in fam:
-        return FONT_SERIF
-    # Bold/black tier
+    if italic:
+        return FONT_SANS_BOLD_OBL if w >= 600 else FONT_SANS_OBL
     if w >= 600:
         return FONT_SANS_BOLD
+    if w >= 500:
+        return FONT_SANS_SEMI
     return FONT_SANS_REG
 
 

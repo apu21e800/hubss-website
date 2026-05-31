@@ -7,6 +7,9 @@ __pycache__/
 assets/booklet/
 assets/cover/
 assets/fonts/
+# v48 — assets/fonts/inter/ is tracked via `git add -f` (~2.5 MB
+# Inter TTFs needed for ReportLab font registration). The broad
+# ignore above is preserved for any future heavy font dirs.
 assets/images/
 assets/products/
 assets/projects/

@@ -1,38 +1,12 @@
 import type { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
-import { promises as fs } from "node:fs";
-import path from "node:path";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
 import { resourceDocuments } from "@/lib/resource-documents";
 import ResourcesClient from "@/components/resources/ResourcesClient";
 import { getResourceDocuments } from "@/lib/sanity.queries";
-import { showCatalogue } from "@/lib/feature-flags";
 
 import { buildMetadata } from "@/lib/seo";
-
-// Mirror /catalogue's auto-detect so the Resources feature card always
-// shows the cover from the newest rendered catalogue version.
-async function getCatalogueCover(): Promise<{ src: string; pageCount: number } | null> {
-  try {
-    const root = path.join(process.cwd(), "public", "catalogue");
-    const dirs = await fs.readdir(root, { withFileTypes: true });
-    const versions = dirs
-      .filter((d) => d.isDirectory() && /^v\d+$/.test(d.name))
-      .map((d) => ({ name: d.name, n: parseInt(d.name.slice(1), 10) }))
-      .sort((a, b) => b.n - a.n);
-    for (const v of versions) {
-      const versionDir = path.join(root, v.name);
-      const files = (await fs.readdir(versionDir)).filter((f) => /^page-\d{3}\.webp$/.test(f));
-      if (files.length > 0) {
-        return { src: `/catalogue/${v.name}/page-001.webp`, pageCount: files.length };
-      }
-    }
-  } catch { /* fall through */ }
-  return null;
-}
 
 export const revalidate = 3600;
 
@@ -46,9 +20,6 @@ export const metadata: Metadata = buildMetadata({
 export default async function ResourcesPage() {
   const sanityDocs = await getResourceDocuments().catch(() => null);
   const docs = sanityDocs ?? resourceDocuments;
-  // Skip cover lookup entirely when the catalogue is hidden — keeps the
-  // gated section from leaking even an image path.
-  const catalogue = showCatalogue() ? await getCatalogueCover() : null;
 
   return (
     <main

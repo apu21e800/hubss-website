@@ -27,6 +27,7 @@ def main():
             "logo_color": path_str(BRAND / "hubss-logo-color.png"),
             "asphalt_photo": path_str(ASPHALT),
             "mascot": path_str(ROOT / "assets" / "moose-mascot.png"),
+            "lunch_learn_qr": path_str(ROOT / "assets" / "hubss-lunch-learn-qr.png"),
         },
         "products": [
             {

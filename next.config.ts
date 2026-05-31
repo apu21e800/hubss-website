@@ -59,6 +59,12 @@ const SECURITY_HEADERS = [
 const nextConfig: NextConfig = {
   typescript: { ignoreBuildErrors: true },
   poweredByHeader: false,
+  // Mirror Vercel's VERCEL_ENV into a NEXT_PUBLIC_* variable so client
+  // components can read it (Next inlines NEXT_PUBLIC_* at build time).
+  // Used by lib/feature-flags.ts → showCatalogue() in the Nav mega menu.
+  env: {
+    NEXT_PUBLIC_VERCEL_ENV: process.env.VERCEL_ENV ?? "",
+  },
   // Sanity Studio uses rxjs + CommonJS internals that Turbopack can't bundle.
   // Marking them external lets Node handle them at runtime instead.
   serverExternalPackages: ["sanity", "@sanity/client", "next-sanity", "@sanity/vision"],

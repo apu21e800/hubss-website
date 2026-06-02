@@ -18,12 +18,12 @@ interface InstagramPost {
 // Static fallback — shown when token is not set or API is down.
 // Each entry's src and instagramUrl ARE matched (same project, verified manually).
 const FALLBACK_PHOTOS = [
-  { src: "/images/blog/decorative-crosswalk-commercial-drive/featured.jpg", alt: "Commercial Drive Crosswalk — Vancouver, BC",     instagramUrl: "https://www.instagram.com/hub_surface_systems/" },
-  { src: "/images/blog/simcoe-rainbow-crosswalk/featured.jpg",              alt: "Rainbow Crosswalk — Simcoe, ON",                  instagramUrl: "https://www.instagram.com/hub_surface_systems/" },
-  { src: "/images/blog/ubc-musqueam-crosswalk/featured.jpg",                alt: "UBC Musqueam Crosswalk — Vancouver, BC",          instagramUrl: "https://www.instagram.com/hub_surface_systems/" },
-  { src: "/images/blog/bc-childrens-hospital-labyrinth/featured.jpg",       alt: "BC Children's Hospital Labyrinth — Vancouver, BC", instagramUrl: "https://www.instagram.com/hub_surface_systems/" },
-  { src: "/images/blog/complete-streets-new-westminster/featured.jpg",      alt: "Complete Streets — New Westminster, BC",           instagramUrl: "https://www.instagram.com/hub_surface_systems/" },
-  { src: "/images/blog/branded-crosswalks-vancouver-richmond/featured.jpg", alt: "Branded Crosswalks — Vancouver & Richmond, BC",   instagramUrl: "https://www.instagram.com/hub_surface_systems/" },
+  { src: "/images/blog/decorative-crosswalk-commercial-drive/decorative-crosswalk-commercial-drive.jpg", alt: "Commercial Drive Crosswalk — Vancouver, BC",     instagramUrl: "https://www.instagram.com/hub_surface_systems/" },
+  { src: "/images/blog/simcoe-rainbow-crosswalk/simcoe-rainbow-crosswalk.jpg",              alt: "Rainbow Crosswalk — Simcoe, ON",                  instagramUrl: "https://www.instagram.com/hub_surface_systems/" },
+  { src: "/images/blog/ubc-musqueam-crosswalk/ubc-musqueam-crosswalk.jpg",                alt: "UBC Musqueam Crosswalk — Vancouver, BC",          instagramUrl: "https://www.instagram.com/hub_surface_systems/" },
+  { src: "/images/blog/bc-childrens-hospital-labyrinth/bc-childrens-hospital-labyrinth.jpg",       alt: "BC Children's Hospital Labyrinth — Vancouver, BC", instagramUrl: "https://www.instagram.com/hub_surface_systems/" },
+  { src: "/images/blog/complete-streets-new-westminster/complete-streets-new-westminster.jpg",      alt: "Complete Streets — New Westminster, BC",           instagramUrl: "https://www.instagram.com/hub_surface_systems/" },
+  { src: "/images/blog/branded-crosswalks-vancouver-richmond/branded-crosswalks-vancouver-richmond.jpg", alt: "Branded Crosswalks — Vancouver & Richmond, BC",   instagramUrl: "https://www.instagram.com/hub_surface_systems/" },
 ];
 
 async function fetchInstagramPosts(): Promise<InstagramPost[]> {

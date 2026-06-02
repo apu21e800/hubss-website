@@ -27,8 +27,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.8,
       images: [
-        abs("/images/blog/best-crosswalks-canada/featured.jpg"),
-        abs("/images/blog/ubc-musqueam-crosswalk/featured.jpg"),
+        abs("/images/blog/best-crosswalks-canada/best-crosswalks-canada.jpg"),
+        abs("/images/blog/ubc-musqueam-crosswalk/ubc-musqueam-crosswalk.jpg"),
       ],
     },
     { url: `${BASE_URL}/gallery`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },

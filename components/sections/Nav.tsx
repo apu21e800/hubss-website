@@ -285,25 +285,25 @@ const FEATURED_POSTS = [
     slug: "best-crosswalks-canada",
     title: "Best crosswalks in Canada",
     category: "Field Notes",
-    image: "/images/blog/best-crosswalks-canada/featured.jpg",
+    image: "/images/blog/best-crosswalks-canada/best-crosswalks-canada.jpg",
   },
   {
     slug: "ubc-musqueam-crosswalk",
     title: "UBC × Musqueam — cultural identity in the street surface",
     category: "Project Profile",
-    image: "/images/blog/ubc-musqueam-crosswalk/featured.jpg",
+    image: "/images/blog/ubc-musqueam-crosswalk/ubc-musqueam-crosswalk.jpg",
   },
   {
     slug: "streetbondsr-solar-reflective-coatings",
     title: "StreetBondSR — cooler asphalt for hot cities",
     category: "Field Notes",
-    image: "/images/blog/streetbondsr-solar-reflective-coatings/featured.jpg",
+    image: "/images/blog/streetbondsr-solar-reflective-coatings/streetbondsr-solar-reflective-coatings.jpg",
   },
   {
     slug: "transportation-infrastructure-guide",
     title: "Transportation infrastructure — the surface specifier's guide",
     category: "White Paper",
-    image: "/images/blog/transportation-infrastructure-guide/featured.jpg",
+    image: "/images/blog/transportation-infrastructure-guide/transportation-infrastructure-guide.jpg",
   },
 ];
 
@@ -457,7 +457,7 @@ function ProductsMegaMenu() {
       <div className="mt-5 pt-4 rounded-xl overflow-hidden relative" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
         <div className="flex items-center gap-4 p-4">
           <div className="flex-shrink-0 rounded-lg overflow-hidden" style={{ width: 72, height: 72 }}>
-            <img src="/images/blog/ubc-musqueam-crosswalk/featured.jpg" alt="UBC Musqueam Indigenous recognition crosswalk — decorative preformed thermoplastic by HUB Surface Systems" className="w-full h-full object-cover" style={{ objectPosition: "center 65%" }} />
+            <img src="/images/blog/ubc-musqueam-crosswalk/ubc-musqueam-crosswalk.jpg" alt="UBC Musqueam Indigenous recognition crosswalk — decorative preformed thermoplastic by HUB Surface Systems" className="w-full h-full object-cover" style={{ objectPosition: "center 65%" }} />
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-[10px] font-bold tracking-[0.18em] uppercase mb-1" style={{ color: ACCENT }}>Featured Project</p>
@@ -716,7 +716,7 @@ function ApplicationsMegaMenu() {
       <div className="mt-5 pt-4 rounded-xl overflow-hidden relative" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
         <div className="flex items-center gap-4 p-4">
           <div className="flex-shrink-0 rounded-lg overflow-hidden" style={{ width: 72, height: 72 }}>
-            <img src="/images/blog/keeping-pedestrians-safe/featured.png" alt="Featured field note" className="w-full h-full object-cover" style={{ objectPosition: "center 65%" }} />
+            <img src="/images/blog/keeping-pedestrians-safe/keeping-pedestrians-safe.png" alt="Featured field note" className="w-full h-full object-cover" style={{ objectPosition: "center 65%" }} />
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-[9px] font-bold tracking-[0.2em] uppercase mb-1" style={{ color: "#F97316" }}>Featured Field Note</p>

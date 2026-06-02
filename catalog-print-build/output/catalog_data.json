@@ -62,29 +62,30 @@
       ]
     ]
   },
-  "cover_photo": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\catalog-print-build\\assets\\booklet\\UBC Crosswalk 1.png",
+  "cover_photo": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\catalog-print-build\\assets\\booklet\\UBC Crosswalk 1.png",
   "section_openers": {
-    "products": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\imprinted-asphalt-york-transit\\featured.jpg",
-    "applications": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\crosswalks\\crosswalks-06.jpg",
-    "projects": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\multimodal-connectivity-york-region\\featured.jpg",
-    "network": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\bus-lanes\\bus-lanes-03.jpg",
-    "reference": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\bike-lanes\\bike-lanes-09.jpg",
-    "editorial_products": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\decorative-crosswalk-commercial-drive\\featured.jpg",
-    "editorial_products_r": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\community-branding\\community-branding-03.jpg",
-    "editorial_projects": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\community-branding\\community-branding-10.jpg",
-    "editorial_closing": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\spirit-trail-wayfinding-vancouver\\featured.jpg",
-    "dps_a_left": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\richmond-brighouse-crosswalk\\featured.jpeg",
-    "dps_a_right": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\branded-crosswalks-vancouver-richmond\\featured.jpg",
-    "dps_b_left": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\community-branding\\community-branding-05.jpg",
-    "dps_b_right": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\community-branding\\community-branding-12.jpg",
-    "dps_c_left": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\parc-riviera-streetbond-walkway\\featured.jpg",
-    "dps_c_right": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\community-branding\\community-branding-13.jpg"
+    "products": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\blog\\imprinted-asphalt-york-transit\\featured.jpg",
+    "applications": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\applications\\crosswalks\\crosswalks-06.jpg",
+    "projects": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\blog\\multimodal-connectivity-york-region\\featured.jpg",
+    "network": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\applications\\bus-lanes\\bus-lanes-03.jpg",
+    "reference": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\applications\\bike-lanes\\bike-lanes-09.jpg",
+    "editorial_products": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\blog\\decorative-crosswalk-commercial-drive\\featured.jpg",
+    "editorial_products_r": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\applications\\community-branding\\community-branding-03.jpg",
+    "editorial_projects": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\applications\\community-branding\\community-branding-10.jpg",
+    "editorial_closing": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\blog\\spirit-trail-wayfinding-vancouver\\featured.jpg",
+    "dps_a_left": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\blog\\richmond-brighouse-crosswalk\\featured.jpeg",
+    "dps_a_right": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\blog\\branded-crosswalks-vancouver-richmond\\featured.jpg",
+    "dps_b_left": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\applications\\community-branding\\community-branding-05.jpg",
+    "dps_b_right": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\applications\\community-branding\\community-branding-12.jpg",
+    "dps_c_left": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\blog\\parc-riviera-streetbond-walkway\\featured.jpg",
+    "dps_c_right": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\applications\\community-branding\\community-branding-13.jpg"
   },
   "brand": {
-    "logo_white": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\assets\\logos\\hubss-logos\\hubss-logo-white-large.png",
-    "logo_color": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\assets\\logos\\hubss-logos\\hubss-logo-color.png",
-    "asphalt_photo": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\parking-lots\\parking-lots-01.jpg",
-    "mascot": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\catalog-print-build\\assets\\moose-mascot.png"
+    "logo_white": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\assets\\logos\\hubss-logos\\hubss-logo-white-large.png",
+    "logo_color": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\assets\\logos\\hubss-logos\\hubss-logo-color.png",
+    "asphalt_photo": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\applications\\parking-lots\\parking-lots-01.jpg",
+    "mascot": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\catalog-print-build\\assets\\moose-mascot.png",
+    "lunch_learn_qr": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\catalog-print-build\\assets\\hubss-lunch-learn-qr.png"
   },
   "products": [
     {
@@ -119,7 +120,7 @@
           "Multi-year \u2014 outlasts paint"
         ]
       ],
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\traffic-patterns-xd\\traffic-patterns-xd-05.jpg"
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\products\\traffic-patterns-xd\\traffic-patterns-xd-05.jpg"
     },
     {
       "name": "TrafficPatterns",
@@ -153,7 +154,7 @@
           "Multi-year \u2014 outlasts paint"
         ]
       ],
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\traffic-patterns\\traffic-patterns-05.jpg"
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\products\\traffic-patterns\\traffic-patterns-05.jpg"
     },
     {
       "name": "StreetBond",
@@ -187,7 +188,7 @@
           "30\u201350 sq ft / gallon"
         ]
       ],
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\streetbond\\streetbond-112.jpg"
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\products\\streetbond\\streetbond-112.jpg"
     },
     {
       "name": "StreetPrint",
@@ -221,7 +222,7 @@
           "New lay or existing asphalt"
         ]
       ],
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\streetprint\\streetprint-40.jpg"
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\products\\streetprint\\streetprint-40.jpg"
     },
     {
       "name": "DecoMark",
@@ -255,7 +256,7 @@
           "Certified crews"
         ]
       ],
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\decomark\\decomark-43.jpg"
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\products\\decomark\\decomark-43.jpg"
     },
     {
       "name": "MMAX",
@@ -289,7 +290,7 @@
           "+3\u00b0C and rising"
         ]
       ],
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\mmax\\mmax-05.jpg"
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\products\\mmax\\mmax-05.jpg"
     },
     {
       "name": "StreetBondSR",
@@ -323,7 +324,7 @@
           "30\u201350 sq ft / gallon"
         ]
       ],
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\streetbondsr\\streetbondsr-02.jpg"
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\products\\streetbondsr\\streetbondsr-02.jpg"
     },
     {
       "name": "DuraTherm",
@@ -357,7 +358,7 @@
           "Heat-fused to asphalt substrate"
         ]
       ],
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\duratherm\\duratherm-01.jpg"
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\products\\duratherm\\duratherm-01.jpg"
     },
     {
       "name": "DuraShield",
@@ -391,7 +392,7 @@
           "Available"
         ]
       ],
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\durashield\\durashield-04.jpg"
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\products\\durashield\\durashield-04.jpg"
     },
     {
       "name": "PreMark",
@@ -425,7 +426,7 @@
           "Multi-year municipal use"
         ]
       ],
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\premark\\premark-01.jpg"
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\products\\premark\\premark-01.jpg"
     },
     {
       "name": "AirMark",
@@ -459,7 +460,7 @@
           "4\u00d7 painted alternatives"
         ]
       ],
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\airmark\\airmark-04.jpg"
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\products\\airmark\\airmark-04.jpg"
     }
   ],
   "applications": [
@@ -467,103 +468,103 @@
       "name": "Crosswalks",
       "tagline": "Pedestrian safety, designed in.",
       "body": "TrafficPatterns and TrafficPatternsXD thermoplastic hold ASTM-rated retroreflectivity through snowplow cycles and de-icing seasons where paint fails within a year. DecoMark and StreetBond open the intersection as a canvas \u2014 Pride crossings, Indigenous cultural art, neighbourhood identity. Specified by municipalities from Halifax to Vancouver.",
-      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\crosswalks\\crosswalks-03.jpg"
+      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\applications\\crosswalks\\crosswalks-03.jpg"
     },
     {
       "name": "Bike Lanes",
       "tagline": "Visibility that holds, season after season.",
       "body": "A faded bike lane is a dangerous bike lane. StreetBond UV-stable acrylic and MMAX MMA resin maintain vivid colour through years of traffic and weather without chalking or fading. Bond strength above 3 MPa for cured MMAX zones.",
-      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\bike-lanes\\bike-lanes-14.jpg"
+      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\applications\\bike-lanes\\bike-lanes-14.jpg"
     },
     {
       "name": "Bus Lanes",
       "tagline": "Engineered for the harshest urban loads.",
       "body": "BRT corridors are among the most demanding surfaces in any city's network. MMAX MMA resin cures to traffic-ready in 45\u201360 minutes, enabling complete overnight installation without disrupting weekday service. TrafficPatternsXD aggregate-reinforced thermoplastic delivers high skid resistance at bus stops and turning movements. Both outlast painted markings season after season.",
-      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\bus-lanes\\bus-lanes-20.jpg"
+      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\applications\\bus-lanes\\bus-lanes-20.jpg"
     },
     {
       "name": "Parking Lots",
       "tagline": "Looks maintained, performs safely, costs less.",
       "body": "Parking lots take a disproportionate beating. DuraShield asphalt maintenance coating (SR 0.34) protects oxidized surfaces from UV, heat, and chemical degradation. TrafficPatterns and PreMark thermoplastic stall markings hold retroreflectivity without annual repainting. StreetBond creates branded wayfinding zones and fire lane designations.",
-      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\parking-lots\\parking-lots-01.jpg"
+      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\applications\\parking-lots\\parking-lots-01.jpg"
     },
     {
       "name": "Parks & Paths",
       "tagline": "Surfaces worth spending time on.",
       "body": "The path through a park sets the tone for the whole space. StreetBond applies vivid UV-stable colour to existing surfaces. DecoMark brings mural-quality custom graphics. StreetPrint gives plazas the visual richness of stone.",
-      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\parks-paths\\parks-paths-04.jpg"
+      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\applications\\parks-paths\\parks-paths-04.jpg"
     },
     {
       "name": "Playgrounds",
       "tagline": "Vibrant, slip-resistant, built for hard use.",
       "body": "Children are hard on surfaces. DecoMark thermoplastic brings hopscotch courts, number grids, compass roses, and mural-scale artwork to play surfaces with Pantone-accurate colour and flush-surface edges that eliminate trip hazards.",
-      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\playgrounds\\playgrounds-01.jpg"
+      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\applications\\playgrounds\\playgrounds-01.jpg"
     },
     {
       "name": "Community Branding",
       "tagline": "Neighbourhood identity, embedded in the street.",
       "body": "Every neighbourhood has a story. Most go untold on the street. DecoMark embeds Pantone-accurate custom graphics directly into asphalt: First Nations cultural artwork, BIA wayfinding, neighbourhood crests, Pride declarations, heritage commemorations.",
-      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\community-branding\\community-branding-03.jpg"
+      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\applications\\community-branding\\community-branding-03.jpg"
     },
     {
       "name": "Private Driveways",
       "tagline": "Stone-paver looks. No demolition required.",
       "body": "StreetPrint offers in-place stamped asphalt that works with the driveway already there, impressing cobblestone, brick, herringbone, or slate patterns directly into the surface, then sealing it with StreetBond colour.",
-      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\residential-driveways\\residential-driveways-01.jpg"
+      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\applications\\residential-driveways\\residential-driveways-01.jpg"
     },
     {
       "name": "Sport Courts",
       "tagline": "Court colour and lines that hold their geometry.",
       "body": "Sport courts are one of the most demanding colour environments in outdoor pavement. StreetBond bonds permanently to asphalt and acid-etched concrete, delivering vivid colours and crisp line markings that hold through hard play.",
-      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\sport-courts\\sport-courts-01.jpg"
+      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\applications\\sport-courts\\sport-courts-01.jpg"
     },
     {
       "name": "Splash Pads",
       "tagline": "Slip-resistant. Cool to touch. Vivid colour.",
       "body": "Splash pad surfaces are uniquely demanding: constant water exposure, chemical treatments, bare feet. StreetBond builds a slip-resistant texture meeting wet-surface safety standards while delivering vivid, engaging colour.",
-      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\splash-pads\\splash-pads-01.jpg"
+      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\applications\\splash-pads\\splash-pads-01.jpg"
     },
     {
       "name": "Public Spaces",
       "tagline": "Civic plazas, transit forecourts, university campuses.",
       "body": "Public plazas and civic squares are the most visible surfaces in any community. StreetPrint stamped asphalt transforms grey paved plazas into rich hardscape environments. StreetBond defines civic zones. Installed at UBC, BC Children's Hospital, and civic plazas coast to coast.",
-      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\public-spaces\\public-spaces-08.jpg"
+      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\applications\\public-spaces\\public-spaces-08.jpg"
     },
     {
       "name": "Commercial Spaces",
       "tagline": "Premium hardscape. Mixed-use developments and hospitality.",
       "body": "Retail centres, mixed-use developments, hotel porte-cocheres. The surface underfoot signals the quality of everything inside. StreetPrint delivers the visual weight of premium stone paving at a fraction of full installation cost.",
-      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\commercial-spaces\\commercial-spaces-01.jpg"
+      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\applications\\commercial-spaces\\commercial-spaces-01.jpg"
     },
     {
       "name": "Townhomes",
       "tagline": "Cohesive hardscape for strata developments.",
       "body": "Townhome and strata developments live and die by their first impression. StreetPrint stamped asphalt driveways and entry courts deliver the look of clay pavers or stone cobble at a fraction of the cost \u2014 no settling, no weeding.",
-      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\townhomes\\townhomes-01.jpg"
+      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\applications\\townhomes\\townhomes-01.jpg"
     },
     {
       "name": "Pedestrian Safety",
       "tagline": "Vision Zero, on the surface.",
       "body": "Pedestrian safety isn't aesthetic aspiration \u2014 it's a measurable outcome. Retroreflective thermoplastic. High-contrast colour that persists through de-icing salt cycles. The complete specification for engineers taking Vision Zero seriously.",
-      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\crosswalks\\crosswalks-18.jpg"
+      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\applications\\crosswalks\\crosswalks-18.jpg"
     },
     {
       "name": "Traffic Calming",
       "tagline": "Drivers slow without barriers.",
       "body": "Colour changes driver behaviour. Gateway treatments, speed table surface markings, and intersection colour reduce vehicle entry speeds without requiring physical barriers that impede emergency response.",
-      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\traffic-calming\\traffic-calming-01.jpg"
+      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\applications\\traffic-calming\\traffic-calming-01.jpg"
     },
     {
       "name": "LEED & Heat Island",
       "tagline": "Solar reflective. Climate-aligned.",
       "body": "Standard dark asphalt absorbs most solar radiation. StreetBondSR \u2014 Initial Solar Reflectance \u2265 0.33 \u2014 meets the LEED v4 SS Credit: Heat Island Reduction threshold for non-roof hardscape. Reduces surface temperatures and mitigates urban heat island. The specification for LEED-certified developments and climate action plan commitments.",
-      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\leed-urban-heat-island\\leed-urban-heat-island-01.jpg"
+      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\applications\\leed-urban-heat-island\\leed-urban-heat-island-01.jpg"
     },
     {
       "name": "Public Art",
       "tagline": "The street as canvas.",
       "body": "The street is one of the largest untapped canvases in any city. HUB public art installations turn that canvas into permanent, weather-resistant community expression. From BC Children's Hospital labyrinth to UBC Indigenous cultural crosswalks.",
-      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\community-branding\\community-branding-11.jpg"
+      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\applications\\community-branding\\community-branding-11.jpg"
     }
   ],
   "projects": [
@@ -573,8 +574,8 @@
       "product": "MMAX",
       "title": "BRT corridor, open in 90 minutes.",
       "story": "MMAX red MMA resin bus lane markings for York Region's VIVA Rapid Transit corridor \u2014 one of Canada's highest-ridership BRT networks. Bond strength above 3 MPa. Applied overnight. Open to full bus traffic in 90 minutes. No daytime closure. No paint cycle.",
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\mmax\\mmax-16.jpg",
-      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\mmax\\mmax-15.jpg"
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\products\\mmax\\mmax-16.jpg",
+      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\products\\mmax\\mmax-15.jpg"
     },
     {
       "name": "Toronto Priority Bus Lanes",
@@ -582,8 +583,8 @@
       "product": "MMAX",
       "title": "Twelve corridors. One transit network.",
       "story": "MMAX red resin treatments across 12 priority bus corridors in Toronto \u2014 one of the largest single-contract MMA deployments in Canada. One overnight cure window per corridor. No daytime closures. No repaint cycle. The specification TTC engineers reach for when painted alternatives have already failed.",
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\mmax\\mmax-04.jpg",
-      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\mmax\\mmax-07.jpg"
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\products\\mmax\\mmax-04.jpg",
+      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\products\\mmax\\mmax-07.jpg"
     },
     {
       "name": "London East Link BRT",
@@ -591,8 +592,8 @@
       "product": "StreetBond",
       "title": "A transit corridor with a clear identity.",
       "story": "StreetBond coloured pavement across London Transit's East Link BRT priority corridor \u2014 vivid red lanes that communicate bus priority immediately to every driver on the road. Colour-stable through Ontario freeze-thaw cycles. No annual repaint window. A branded transit corridor built for the long term.",
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\bus-lanes\\bus-lanes-03.jpg",
-      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\bus-lanes\\bus-lanes-38.png"
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\applications\\bus-lanes\\bus-lanes-03.jpg",
+      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\applications\\bus-lanes\\bus-lanes-38.png"
     },
     {
       "name": "BC Children's Hospital",
@@ -600,8 +601,8 @@
       "product": "StreetBond + DecoMark",
       "title": "Playful surfaces. Healing spaces.",
       "story": "StreetBond coatings and DecoMark surface graphics \u2014 including a meditation labyrinth \u2014 installed across active wards and ground-level plazas at BC Children's Hospital. Designed with Connect Landscape Architecture. The surfaces are slip-resistant, chemical-resistant, and built to perform in a healthcare environment.",
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\bc-childrens-hospital-labyrinth\\featured.jpg",
-      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\decomark\\decomark-43.jpg"
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\blog\\bc-childrens-hospital-labyrinth\\featured.jpg",
+      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\products\\decomark\\decomark-43.jpg"
     },
     {
       "name": "New Westminster Complete Streets",
@@ -609,8 +610,8 @@
       "product": "StreetBond + TrafficPatterns",
       "title": "Modal clarity, written in colour.",
       "story": "Complete Streets across New Westminster: StreetBond green for protected bike lanes, TrafficPatterns retroreflective crosswalks, high-contrast colour at every conflict point. Modal priority made legible. Cyclists protected. Pedestrians seen. The Complete Streets specification that transportation engineers and urban planners return to.",
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\complete-streets-new-westminster\\featured.jpg",
-      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\bike-lanes\\bike-lanes-32.png"
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\blog\\complete-streets-new-westminster\\featured.jpg",
+      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\applications\\bike-lanes\\bike-lanes-32.png"
     },
     {
       "name": "York Region Pedestrian Safety",
@@ -618,8 +619,8 @@
       "product": "TrafficPatternsXD",
       "title": "Outlasts paint by eight times.",
       "story": "TrafficPatternsXD 150-mil aggregate-reinforced crosswalk markings specified across York Region intersections. Eight times the service life of paint. A measurable reduction in annual maintenance spend. The kind of lifecycle arithmetic that procurement teams and transportation engineers notice \u2014 and specify again.",
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\trafficpatternsxd-urban-design\\featured.jpg",
-      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\crosswalks\\crosswalks-26.jpg"
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\blog\\trafficpatternsxd-urban-design\\featured.jpg",
+      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\applications\\crosswalks\\crosswalks-26.jpg"
     },
     {
       "name": "Vision Zero Crosswalks",
@@ -627,8 +628,8 @@
       "product": "TrafficPatterns",
       "title": "High-visibility holds lives.",
       "story": "Where painted crosswalks fade by spring, retroreflective thermoplastic holds visibility through every season. Specified by municipalities from Halifax to Victoria pursuing Vision Zero \u2014 the standard for engineers who need pedestrian safety outcomes, not just pedestrian safety intentions.",
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\pedestrian-safety-solutions\\featured.jpeg",
-      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\crosswalks\\crosswalks-31.jpg"
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\blog\\pedestrian-safety-solutions\\featured.jpeg",
+      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\applications\\crosswalks\\crosswalks-31.jpg"
     },
     {
       "name": "Vancouver BIA Crosswalks",
@@ -636,8 +637,8 @@
       "product": "StreetPrint",
       "title": "District identity, cast in pavement.",
       "story": "StreetPrint stamped-asphalt crosswalks across five Vancouver Business Improvement Districts. District identity embedded permanently in the street \u2014 walked over every day, maintaining visual coherence through snowplow seasons and years of traffic load.",
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\vancouver-decorative-crosswalk-design\\featured.jpeg",
-      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\streetprint\\streetprint-69.jpg"
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\blog\\vancouver-decorative-crosswalk-design\\featured.jpeg",
+      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\products\\streetprint\\streetprint-69.jpg"
     },
     {
       "name": "UBC Musqueam Crosswalk",
@@ -645,8 +646,8 @@
       "product": "StreetPrint and DecoMark",
       "title": "A surface is also a statement.",
       "story": "A collaboration with UBC and the Musqueam Nation. Coast Salish art patterns stamped into asphalt at the centre of campus \u2014 an institutional acknowledgement made permanent, at street scale, in a material that will outlast the generation that commissioned it.",
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\ubc-musqueam-crosswalk\\featured.jpg",
-      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\streetprint\\streetprint-77.jpg"
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\blog\\ubc-musqueam-crosswalk\\featured.jpg",
+      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\products\\streetprint\\streetprint-77.jpg"
     },
     {
       "name": "More Awesome Now",
@@ -654,8 +655,8 @@
       "product": "StreetBond",
       "title": "Six laneways. Six artists.",
       "story": "Six Vancouver laneways. Six artists. StreetBond coloured pavement turned utility corridors into civic gallery space \u2014 public art at street scale, permanent and weather-resistant.",
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\laneway-project\\featured.png",
-      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\applications\\community-branding\\community-branding-04.jpg"
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\blog\\laneway-project\\featured.png",
+      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\applications\\community-branding\\community-branding-04.jpg"
     },
     {
       "name": "White Rock Pier",
@@ -663,8 +664,8 @@
       "product": "TrafficPatternsXD",
       "title": "Salt air. Holiday traffic. Held.",
       "story": "Salt spray. Summer surge. Winter rain. The pier crosswalk at White Rock faces the full force of the BC coast \u2014 and holds season after season. TrafficPatternsXD installed where paint would be gone by July.",
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\white-rock-pier-crosswalk\\featured.png",
-      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\traffic-patterns-xd\\traffic-patterns-xd-140.jpg"
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\catalog-print-build\\assets\\booklet\\Whiterock-Pier-Crosswalk-TrafficPatternsXD-1 1.png",
+      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\products\\traffic-patterns-xd\\traffic-patterns-xd-140.jpg"
     },
     {
       "name": "Indigenous Recognition",
@@ -672,8 +673,8 @@
       "product": "DecoMark",
       "title": "Recognition, cast in pavement.",
       "story": "Indigenous Recognition crosswalks honouring First Nations communities across Canada. Every design co-developed with community elders and knowledge keepers. Permanent. Visible at every crossing. Walked by the whole city.",
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\catalog-print-build\\assets\\booklet\\native crosswalk 1.png",
-      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\decomark\\decomark-77.jpg"
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\catalog-print-build\\assets\\booklet\\native crosswalk 1.png",
+      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\products\\decomark\\decomark-77.jpg"
     },
     {
       "name": "Kitchener Veterans Memorial",
@@ -681,8 +682,8 @@
       "product": "DecoMark",
       "title": "Paint fades. Memory shouldn't.",
       "story": "Kitchener's Veterans Crosswalk: a permanent civic tribute walked over every day. DecoMark thermoplastic graphic embedded into the street \u2014 durable enough to outlast the paint that failed before it, respectful enough to honour what it commemorates.",
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\veterans-crosswalk-kitchener\\featured.jpeg",
-      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\veterans-crosswalk-kitchener\\featured.jpeg"
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\blog\\veterans-crosswalk-kitchener\\featured.jpeg",
+      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\blog\\veterans-crosswalk-kitchener\\featured.jpeg"
     },
     {
       "name": "Every Child Matters",
@@ -690,8 +691,8 @@
       "product": "TrafficPatterns",
       "title": "Honouring residential schools survivors.",
       "story": "Town of Georgina honours the Every Child Matters movement with a permanent TrafficPatterns thermoplastic crosswalk. A civic acknowledgement cast in durable material \u2014 walked over every day, visible every season.",
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\every-child-matters-crosswalk\\featured.png",
-      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\traffic-patterns\\traffic-patterns-36.jpg"
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\blog\\every-child-matters-crosswalk\\featured.png",
+      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\products\\traffic-patterns\\traffic-patterns-36.jpg"
     },
     {
       "name": "Sechelt Pictograph Crosswalk",
@@ -699,8 +700,8 @@
       "product": "TrafficPatterns",
       "title": "The origin story of the shishalh Nation.",
       "story": "Indigenous artists Dionne Paul and Lindsey Kyoko Adams told the origin story of the shishalh Nation in TrafficPatterns thermoplastic at Cowrie and Trail in Sechelt. Unveiled during National Aboriginal History Month \u2014 cultural memory made permanent at street level.",
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\tsain-ko-crosswalk-sechelt\\featured.jpg",
-      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\decomark\\decomark-69.jpg"
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\blog\\tsain-ko-crosswalk-sechelt\\featured.jpg",
+      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\products\\decomark\\decomark-69.jpg"
     },
     {
       "name": "Simcoe Rainbow Crosswalk",
@@ -708,8 +709,8 @@
       "product": "TrafficPatternsXD",
       "title": "Two years of fundraising. One street.",
       "story": "A young Simcoe resident's two-year fundraising campaign, realized in TrafficPatternsXD by Multiseal. A rainbow crosswalk that holds colour and retroreflectivity season after season \u2014 long after painted alternatives would have faded from memory.",
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\simcoe-rainbow-crosswalk\\featured.jpg",
-      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\traffic-patterns-xd\\traffic-patterns-xd-129.jpg"
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\blog\\simcoe-rainbow-crosswalk\\featured.jpg",
+      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\products\\traffic-patterns-xd\\traffic-patterns-xd-129.jpg"
     },
     {
       "name": "Bowen Island Path",
@@ -717,8 +718,8 @@
       "product": "StreetBond",
       "title": "Forest. Sunset. Water. Earth.",
       "story": "A community art path at Snug Cove, Bowen Island. Custom StreetBond in four colours \u2014 forest, sunset, water, and earth \u2014 community identity built permanently into the surface of the path that connects the village to the waterfront.",
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\bowen-island-asphalt-path\\featured.jpg",
-      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\streetbond\\streetbond-92.jpg"
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\blog\\bowen-island-asphalt-path\\featured.jpg",
+      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\products\\streetbond\\streetbond-92.jpg"
     },
     {
       "name": "Murrayville Schoolhouse",
@@ -726,8 +727,8 @@
       "product": "StreetPrint",
       "title": "A schoolhouse, a sidewalk, a memory.",
       "story": "StreetPrint stamped-asphalt sidewalk linking the historic Murrayville Schoolhouse to the community around it. Heritage-look surface for a heritage building \u2014 brick-pattern asphalt that reads as stone and performs as pavement.",
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\streetprint\\streetprint-04.jpg",
-      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\products\\streetprint\\streetprint-83.jpg"
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\products\\streetprint\\streetprint-04.jpg",
+      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\products\\streetprint\\streetprint-83.jpg"
     },
     {
       "name": "White Rock Seaside Stroll",
@@ -735,8 +736,8 @@
       "product": "TrafficPatterns",
       "title": "The waterfront, brought inland.",
       "story": "White Rock commissioned Vancouver artist Amy Bao to carry the coastal identity of the waterfront into the Uptown district on Johnston Road. Her 'Seaside Stroll' \u2014 flowing wave lines in the tones of White Rock's sandy beaches \u2014 was realized in TrafficPatterns preformed thermoplastic. Permanent. UV-stable. Slip-resistant. In its first season, Uptown reported 40% more foot traffic to the district.",
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\white-rock-langley-trafficpatterns\\featured.jpg",
-      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\white-rock-langley-trafficpatterns\\featured.jpg"
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\blog\\white-rock-langley-trafficpatterns\\featured.jpg",
+      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\blog\\white-rock-langley-trafficpatterns\\featured.jpg"
     },
     {
       "name": "Langley Railroad Heritage",
@@ -744,8 +745,8 @@
       "product": "TrafficPatterns",
       "title": "Heritage cast in thermoplastic.",
       "story": "Langley City's crosswalk at the entrance to Linwood Park connects modern pedestrian infrastructure to the city's railway history. Railroad tie-and-rail pattern in preformed TrafficPatterns thermoplastic \u2014 tan panels mimicking wooden rail ties, white lines suggesting steel rails, fused permanently to the asphalt. Installed by Square One Paving, March 2025. A social media landmark before the crew had packed up.",
-      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\langley-railroad-heritage\\featured.jpg",
-      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\public\\images\\blog\\langley-railroad-heritage\\detail.jpg"
+      "hero": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\blog\\langley-railroad-heritage\\featured.jpg",
+      "detail": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\public\\images\\blog\\langley-railroad-heritage\\detail.jpg"
     }
   ],
   "installers": [
@@ -755,7 +756,7 @@
       "body": "BC's certified StreetPrint and decorative thermoplastic installer. From stamped-asphalt driveways in Langley strata developments to municipal streetscapes \u2014 outstanding outcomes for municipalities, developers, and contractors across British Columbia.",
       "url": "squareonepaving.com",
       "phone": "604-446-9902",
-      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\catalog-print-build\\assets\\booklet\\DecoMark community park 1.png"
+      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\catalog-print-build\\assets\\booklet\\DecoMark community park 1.png"
     },
     {
       "name": "Thermo Design",
@@ -763,7 +764,7 @@
       "body": "Sp\u00e9cialiste qu\u00e9b\u00e9cois en marquage de longue dur\u00e9e. Crosswalk programs, bus lane markings, and decorative surface systems for Quebec municipalities and commercial sites \u2014 built to survive Quebec winters.",
       "url": "thermo-design.ca",
       "phone": "450.698.0000",
-      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\catalog-print-build\\assets\\booklet\\Intergrated Rumble Bars (TrafficPatterns) 1.png"
+      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\catalog-print-build\\assets\\booklet\\Intergrated Rumble Bars (TrafficPatterns) 1.png"
     },
     {
       "name": "Virtue Construction",
@@ -771,7 +772,7 @@
       "body": "Quality Saskatchewan outcomes since 2009. TrafficPatterns crosswalks, StreetBond colour systems, and full HUB portfolio installation for Saskatchewan municipalities and communities \u2014 from Saskatoon to rural intersections that specify by name.",
       "url": "virtueconstruction.ca",
       "phone": "306-251-0177",
-      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\catalog-print-build\\assets\\booklet\\Intersection installation TPXD 1.png"
+      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\catalog-print-build\\assets\\booklet\\Intersection installation TPXD 1.png"
     },
     {
       "name": "ULS Landscaping",
@@ -779,7 +780,7 @@
       "body": "10+ years of professional landscape management with certified HUB decorative paving installation across Alberta and Saskatchewan. Parks, pathways, residential driveways, and commercial sites \u2014 precision installation, backed by experience.",
       "url": "ulslandscaping.com",
       "phone": "403-235-5353",
-      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-website\\catalog-print-build\\assets\\booklet\\StreetPrint walkway 1.png"
+      "image": "C:\\Users\\cleve\\Based_Agency\\based-agncy_os\\Web_Projects\\hubss-catalogue-polish-wt\\catalog-print-build\\assets\\booklet\\StreetPrint walkway 1.png"
     }
   ],
   "cities": [

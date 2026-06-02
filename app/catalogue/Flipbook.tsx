@@ -18,16 +18,42 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 const LUNCH_LEARN_HREF =
   "/lunch-learn?utm_source=catalogue&utm_medium=flipbook&utm_campaign=web";
 
-type Props = { pages: string[] };
+type Props = {
+  pages: string[];
+  /** URL of the downloadable web-sized PDF, e.g. /catalogue/HUBSS-Catalogue-2026.pdf */
+  downloadHref?: string;
+};
 
-export default function Flipbook({ pages }: Props) {
+export default function Flipbook({ pages, downloadHref }: Props) {
   const total = pages.length;
   const [idx, setIdx] = useState(0);                          // current page (0-based)
   const [zoom, setZoom] = useState(false);                    // tap-zoom toggle
   const [origin, setOrigin] = useState("50% 50%");             // transform-origin for zoom
   const [chromeVisible, setChromeVisible] = useState(true);
   const [shareSupported, setShareSupported] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);          // ≥1024px → 2-page spread
   const chromeTimer = useRef<number | null>(null);
+
+  // ── Detect desktop viewport for 2-page spread ─────────────────────────
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const update = () => setIsDesktop(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  // ── Spread math (desktop only) ─────────────────────────────────────────
+  // Spread convention: cover (idx 0) sits alone on the RIGHT of spread 0.
+  // Subsequent spreads pair odd-even: spread 1 = [p2, p3], spread 2 = [p4, p5].
+  // Mapping: spread N (N≥1) shows leftIdx = 2N-1, rightIdx = 2N.
+  // Last spread shows the final page alone on the LEFT if it lands odd.
+  const leftPageIdx = isDesktop && idx > 0 ? (idx % 2 === 1 ? idx : idx - 1) : -1;
+  const rightPageIdx = isDesktop
+    ? (idx === 0 ? 0 : leftPageIdx + 1)
+    : idx;
+  const showRightOnly = isDesktop && idx === 0;
+  const showLeftOnly = isDesktop && rightPageIdx >= total;
 
   // ── Navigation helpers ──────────────────────────────────────────────────
   const goTo = useCallback(
@@ -38,8 +64,20 @@ export default function Flipbook({ pages }: Props) {
     },
     [total],
   );
-  const prev = useCallback(() => goTo(idx - 1), [idx, goTo]);
-  const next = useCallback(() => goTo(idx + 1), [idx, goTo]);
+  // Desktop advances by 2 (except from cover, which advances by 1 to land on p2).
+  const prev = useCallback(() => {
+    if (!isDesktop) return goTo(idx - 1);
+    if (idx <= 1) return goTo(0);
+    if (idx === 2) return goTo(0);
+    const newLeft = (idx % 2 === 1 ? idx : idx - 1) - 2;
+    goTo(Math.max(1, newLeft));
+  }, [idx, isDesktop, goTo]);
+  const next = useCallback(() => {
+    if (!isDesktop) return goTo(idx + 1);
+    if (idx === 0) return goTo(1);
+    const newLeft = (idx % 2 === 1 ? idx : idx - 1) + 2;
+    goTo(Math.min(total - 1, newLeft));
+  }, [idx, isDesktop, total, goTo]);
 
   // ── Detect native share once ────────────────────────────────────────────
   useEffect(() => {
@@ -112,14 +150,22 @@ export default function Flipbook({ pages }: Props) {
     }
   };
 
-  // ── Window of pages to actually render in DOM (current ±1) ─────────────
+  // ── Window of pages to actually render in DOM ─────────────────────────
+  // Mobile: current ±1. Desktop: current spread ±1 spread (4 pages).
   const window3 = useMemo(() => {
     const s = new Set<number>();
     s.add(idx);
     if (idx > 0) s.add(idx - 1);
     if (idx < total - 1) s.add(idx + 1);
+    if (isDesktop) {
+      // Also include the paired spread page + the next/prev spread
+      if (leftPageIdx >= 0) s.add(leftPageIdx);
+      if (rightPageIdx < total) s.add(rightPageIdx);
+      if (leftPageIdx - 1 >= 0) s.add(leftPageIdx - 1);
+      if (rightPageIdx + 1 < total) s.add(rightPageIdx + 1);
+    }
     return s;
-  }, [idx, total]);
+  }, [idx, total, isDesktop, leftPageIdx, rightPageIdx]);
 
   return (
     <main
@@ -127,15 +173,16 @@ export default function Flipbook({ pages }: Props) {
       onMouseMove={wakeChrome}
       onTouchStart={wakeChrome}
     >
-      {/* Page stage — letterboxes the 5x5 page on tall screens */}
+      {/* Page stage — single page on mobile, 2-page spread on desktop */}
       <div
         className="absolute inset-0 grid place-items-center"
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >
+        {/* MOBILE: single-page square stage (preserved) */}
         <div
           className="relative aspect-square w-full max-w-[min(100vw,calc(100dvh-128px))]
-                     overflow-hidden cursor-zoom-in"
+                     overflow-hidden cursor-zoom-in lg:hidden"
           onClick={onImageTap}
           style={{
             transform: zoom ? "scale(2)" : "scale(1)",
@@ -150,7 +197,7 @@ export default function Flipbook({ pages }: Props) {
             const isActive = i === idx;
             return (
               <div
-                key={src}
+                key={`m-${src}`}
                 className="absolute inset-0"
                 style={{
                   opacity: isActive ? 1 : 0,
@@ -166,7 +213,7 @@ export default function Flipbook({ pages }: Props) {
                     width={1200}
                     height={1200}
                     priority={i === 0}
-                    sizes="(max-width: 768px) 100vw, 720px"
+                    sizes="100vw"
                     className="h-full w-full object-contain"
                     draggable={false}
                   />
@@ -174,6 +221,49 @@ export default function Flipbook({ pages }: Props) {
               </div>
             );
           })}
+        </div>
+
+        {/* DESKTOP: 2-page spread, letterboxed within viewport */}
+        <div
+          className="hidden lg:flex aspect-[2/1] w-full max-w-[min(calc(100vw-80px),calc((100dvh-128px)*2))]
+                     items-stretch justify-center gap-1 cursor-zoom-in"
+          onClick={onImageTap}
+          style={{
+            transform: zoom ? "scale(1.6)" : "scale(1)",
+            transformOrigin: origin,
+            transition: "transform 0.28s cubic-bezier(0.4, 0, 0.2, 1)",
+            cursor: zoom ? "zoom-out" : "zoom-in",
+          }}
+        >
+          {/* LEFT page slot (empty on cover spread) */}
+          <div className="relative flex-1 aspect-square overflow-hidden bg-black/30">
+            {!showRightOnly && leftPageIdx >= 0 && leftPageIdx < total && (
+              <Image
+                src={pages[leftPageIdx]}
+                alt={`HUBSS Catalogue 2026 — page ${leftPageIdx + 1} of ${total}`}
+                width={1200}
+                height={1200}
+                sizes="50vw"
+                className="h-full w-full object-contain"
+                draggable={false}
+              />
+            )}
+          </div>
+          {/* RIGHT page slot (empty on last-page-alone spread) */}
+          <div className="relative flex-1 aspect-square overflow-hidden bg-black/30">
+            {!showLeftOnly && rightPageIdx >= 0 && rightPageIdx < total && (
+              <Image
+                src={pages[rightPageIdx]}
+                alt={`HUBSS Catalogue 2026 — page ${rightPageIdx + 1} of ${total}`}
+                width={1200}
+                height={1200}
+                priority={rightPageIdx === 0}
+                sizes="50vw"
+                className="h-full w-full object-contain"
+                draggable={false}
+              />
+            )}
+          </div>
         </div>
       </div>
 
@@ -203,35 +293,63 @@ export default function Flipbook({ pages }: Props) {
             {idx + 1} / {total}
           </p>
         </div>
-        {shareSupported ? (
-          <button
-            type="button"
-            onClick={onShare}
-            className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full
-                       border border-white/15 bg-white/10 px-3 py-1.5 text-[11px] uppercase
-                       tracking-[0.18em] text-white hover:bg-white/20"
-            aria-label="Share this catalogue"
-          >
-            <ShareIcon /> Share
-          </button>
-        ) : (
-          <div className="w-[68px]" /> // spacer so counter stays centered
-        )}
+        <div className="pointer-events-auto flex items-center gap-2">
+          {downloadHref && (
+            <a
+              href={downloadHref}
+              download
+              className="inline-flex items-center gap-1.5 rounded-full
+                         border border-white/15 bg-white/10 px-3 py-1.5 text-[11px] uppercase
+                         tracking-[0.18em] text-white hover:bg-white/20"
+              aria-label="Download the catalogue as a PDF"
+            >
+              <DownloadIcon /> PDF
+            </a>
+          )}
+          {shareSupported ? (
+            <button
+              type="button"
+              onClick={onShare}
+              className="inline-flex items-center gap-1.5 rounded-full
+                         border border-white/15 bg-white/10 px-3 py-1.5 text-[11px] uppercase
+                         tracking-[0.18em] text-white hover:bg-white/20"
+              aria-label="Share this catalogue"
+            >
+              <ShareIcon /> Share
+            </button>
+          ) : downloadHref ? null : (
+            <div className="w-[68px]" /> /* spacer so counter stays centered */
+          )}
+        </div>
       </header>
 
-      {/* Bottom CTA — sticky, always tappable */}
+      {/* Bottom CTA — sticky, always tappable.
+          Vernon v43: more breathing room (pt-5 → pt-10) so the pill
+          doesn't butt against the catalogue's bottom edge. Container
+          truly left-aligned now (dropped mx-auto + max-w-[640px]) —
+          Vernon flagged the buttons "floating a bit" because the
+          centered container with justify-start put them in the
+          middle-left of the viewport. Buttons now hug the footer's
+          left padding (px-5). */}
       <footer
-        className="absolute inset-x-0 bottom-0 z-20 px-3
-                   pb-[max(env(safe-area-inset-bottom),0.75rem)] pt-3"
+        className="absolute inset-x-0 bottom-0 z-20 px-5
+                   pb-[max(env(safe-area-inset-bottom),1rem)] pt-10"
         style={{
-          background: "linear-gradient(0deg, rgba(0,0,0,0.85) 35%, rgba(0,0,0,0) 100%)",
+          // v49 — Vernon flagged 'small dark shadow gradient on the
+          // white pages'. Old gradient went to 92% opaque black which
+          // bled visibly onto the catalogue's white edge. Softened to a
+          // narrow, low-opacity wash that only darkens the very bottom
+          // strip where the CTA pill needs contrast — invisible against
+          // photo pages, no longer dirty-edge against white pages.
+          background: "linear-gradient(0deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.30) 60%, rgba(0,0,0,0) 100%)",
         }}
       >
-        <div className="mx-auto flex max-w-[640px] items-center gap-2">
+        <div className="flex items-center justify-start gap-3">
           <Link
             href={LUNCH_LEARN_HREF}
-            className="flex-1 rounded-full bg-[#F97316] px-4 py-3 text-center text-[13px] font-semibold
-                       text-white hover:bg-[#ea6d12] active:translate-y-px"
+            className="rounded-full bg-[#F97316] px-6 py-3.5 text-left text-[13px] font-semibold
+                       text-white shadow-[0_4px_16px_rgba(249,115,22,0.32)]
+                       hover:bg-[#ea6d12] active:translate-y-px"
           >
             Book a Free Lunch &amp; Learn
           </Link>
@@ -239,7 +357,7 @@ export default function Flipbook({ pages }: Props) {
             href="tel:+16043098212"
             data-event="phone_click"
             aria-label="Call 604-309-8212"
-            className="inline-grid h-11 w-11 place-items-center rounded-full border border-white/15
+            className="inline-grid h-12 w-12 place-items-center rounded-full border border-white/15
                        bg-white/10 text-white hover:bg-white/20"
           >
             <PhoneIcon />
@@ -248,7 +366,7 @@ export default function Flipbook({ pages }: Props) {
             href="mailto:info@hubss.com"
             data-event="email_click"
             aria-label="Email info@hubss.com"
-            className="inline-grid h-11 w-11 place-items-center rounded-full border border-white/15
+            className="inline-grid h-12 w-12 place-items-center rounded-full border border-white/15
                        bg-white/10 text-white hover:bg-white/20"
           >
             <MailIcon />
@@ -305,6 +423,15 @@ function ShareIcon() {
   return (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
       <path d="M12 16V4m0 0-4 4m4-4 4 4M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"
+            stroke="currentColor" strokeWidth="2"
+            strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+function DownloadIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M12 3v12m0 0 4-4m-4 4-4-4M5 17v2a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-2"
             stroke="currentColor" strokeWidth="2"
             strokeLinecap="round" strokeLinejoin="round" />
     </svg>

@@ -112,6 +112,7 @@ WHY_HUB = {
 # ===== PRODUCTS (12 — AirMark removed per Doug) =====
 PRODUCTS = [
     {"name": "TrafficPatternsXD",
+     "category": "Heavy-Duty Preformed Thermoplastic",
      "tagline": "When the surface has to hold.",
      # tpxd-03.jpg WRONG: showed StreetPrint herringbone brick pattern, not TPXD thermoplastic markings
      # tpxd-05.jpg: green/white decorative TPXD crosswalk — shows actual preformed thermoplastic panels ✓
@@ -126,6 +127,7 @@ PRODUCTS = [
      "spec_pairs": [("Thickness", "150 mil"), ("Aggregate", "Bound through full cross-section"),
                     ("Retroreflectivity", "Glass beads — full depth"), ("Service Life", "Multi-year — outlasts paint")]},
     {"name": "TrafficPatterns",
+     "category": "Preformed Thermoplastic",
      "tagline": "Outlasts paint by seasons, not months.",
      # tp-08.jpg WRONG: showed UBC Musqueam DecoMark cultural crosswalk, not standard TP markings
      # tp-05.jpg: Indigenous recognition crosswalk — at least shows flat thermoplastic (not stamped asphalt)
@@ -140,6 +142,7 @@ PRODUCTS = [
      "spec_pairs": [("Thickness", "125 mil"), ("Retroreflectivity", "Full-depth glass beads"),
                     ("Open to Traffic", "Hours"), ("Service Life", "Multi-year — outlasts paint")]},
     {"name": "StreetBond",
+     "category": "Coloured Acrylic Coating",
      "tagline": "Coloured pavement that moves with asphalt.",
      "hero": _pick(PRODUCTS_DIR / "streetbond" / "streetbond-112.jpg"),
      "title": "The colour system.",
@@ -151,6 +154,7 @@ PRODUCTS = [
      "spec_pairs": [("Type", "Flexible acrylic"), ("Surfaces", "Asphalt and concrete"),
                     ("Colour", "Full Pantone matching"), ("Coverage", "30–50 sq ft / gallon")]},
     {"name": "StreetPrint",
+     "category": "Stamped Asphalt System",
      "tagline": "Stamped asphalt at a fraction of stone's lifecycle cost.",
      "hero": _pick(PRODUCTS_DIR / "streetprint" / "streetprint-40.jpg"),
      "title": "Stamped asphalt.",
@@ -162,6 +166,7 @@ PRODUCTS = [
      "spec_pairs": [("System", "In-place stamping + StreetBond coating"), ("Patterns", "12+ standard + custom"),
                     ("Snowplow Safe", "Yes — flush surface"), ("Base", "New lay or existing asphalt")]},
     {"name": "DecoMark",
+     "category": "Custom Preformed Thermoplastic",
      "tagline": "A crosswalk is a canvas.",
      "hero": _pick(PRODUCTS_DIR / "decomark" / "decomark-43.jpg",
                    PRODUCTS_DIR / "decomark" / "decomark-01.jpg"),
@@ -174,6 +179,7 @@ PRODUCTS = [
      "spec_pairs": [("System", "Preformed components"), ("Colour", "Custom Pantone"),
                     ("Design", "Vector artwork"), ("Install", "Certified crews")]},
     {"name": "MMAX",
+     "category": "MMA Resin Lane Coating",
      "tagline": "Traffic-ready overnight. Engineered for transit lanes.",
      "hero": _pick(PRODUCTS_DIR / "mmax" / "mmax-05.jpg"),
      "title": "MMA resin lane coating.",
@@ -185,6 +191,7 @@ PRODUCTS = [
      "spec_pairs": [("Material", "Methyl methacrylate (MMA) resin"), ("Cure", "45–60 min — traffic-ready"),
                     ("Traction", "Embedded aggregate"), ("Min Temp", "+3°C and rising")]},
     {"name": "StreetBondSR",
+     "category": "Solar-Reflective Acrylic Coating",
      "tagline": "Solar reflective. LEED-aligned.",
      "hero": _pick(PRODUCTS_DIR / "streetbondsr" / "streetbondsr-02.jpg"),
      "title": "Cool surface coating.",
@@ -196,6 +203,7 @@ PRODUCTS = [
      "spec_pairs": [("Solar Reflectance", "≥ 0.33 initial"), ("LEED", "v4 SS Credit: Heat Island"),
                     ("Surfaces", "Asphalt and concrete"), ("Coverage", "30–50 sq ft / gallon")]},
     {"name": "DuraTherm",
+     "category": "Inlaid Preformed Thermoplastic",
      "tagline": "Inlaid. Flush. Invisible to snowplows.",
      "hero": _pick(PRODUCTS_DIR / "duratherm" / "duratherm-01.jpg"),
      "title": "Inlaid thermoplastic.",
@@ -207,6 +215,7 @@ PRODUCTS = [
      "spec_pairs": [("Install", "Inlaid into milled groove"), ("Profile", "Zero — flush with road"),
                     ("Snowplow Safe", "Yes — no shear risk"), ("Bond", "Heat-fused to asphalt substrate")]},
     {"name": "DuraShield",
+     "category": "Pavement Maintenance Coating",
      "tagline": "Maintain a surface, do not replace it.",
      "hero": _pick(PRODUCTS_DIR / "durashield" / "durashield-04.jpg"),
      "title": "Pavement maintenance coating.",
@@ -218,6 +227,7 @@ PRODUCTS = [
      "spec_pairs": [("Type", "Epoxy-modified acrylic coating"), ("Solar Reflectance", "0.34"),
                     ("Chemical Resistance", "Fuel, oil, deicing agents"), ("Anti-Slip", "Available")]},
     {"name": "PreMark",
+     "category": "Preformed Regulatory Markings",
      "tagline": "Pre-cut. Heat-applied. Open immediately.",
      "hero": _pick(PRODUCTS_DIR / "premark" / "premark-01.jpg"),
      "title": "Road marking symbols.",
@@ -228,7 +238,14 @@ PRODUCTS = [
      "uses": ["Bike Lanes", "Crosswalks", "Regulatory", "Parking"],
      "spec_pairs": [("Thickness", "125mil standard / 90mil ViziGrip"), ("Installation", "Heat-applied — drive-on immediately"),
                     ("Retroreflectivity", "Intersection-grade glass bead"), ("Service Life", "Multi-year municipal use")]},
+    # v41 — Vernon's call: ChipFill, AggreFill, Fast Patch removed from the
+    # CATALOGUE publication. They remain on the WEBSITE (lib/products.ts
+    # entries + /products/chipfill etc.). The print catalogue holds the
+    # 11 core specified-by-engineers products only. Repair products are a
+    # transactional-buyer story and don't belong in the engineer/planner
+    # spec book.
     {"name": "AirMark",
+     "category": "Airfield Preformed Thermoplastic",
      "tagline": "Airfield markings, certified to last.",
      "hero": _pick(PRODUCTS_DIR / "airmark" / "airmark-04.jpg",
                    PRODUCTS_DIR / "airmark" / "airmark-01.jpg"),
@@ -385,10 +402,11 @@ PROJECTS = [
      "title": "Six laneways. Six artists.",
      "story": "Six Vancouver laneways. Six artists. StreetBond coloured pavement turned utility corridors into civic gallery space — public art at street scale, permanent and weather-resistant."},
     {"name": "White Rock Pier", "location": "White Rock, British Columbia", "product": "TrafficPatternsXD",
-     # tpxd-95.jpg WRONG: showed Toronto high-rise intersection, not White Rock pier or coastal setting
-     # Using actual White Rock pier blog photo — coastal bollards + thermoplastic crosswalk, correct location ✓
-     "hero": _pick(BLOG_DIR / "white-rock-pier-crosswalk" / "featured.png",
-                   PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-95.jpg"),
+     # v45 FIX: blog featured.png was 206×134 = 62 KB — pixelated when upscaled
+     # to a 5x5" print page. Swapped to the 2480×1860 (7.4 MB) booklet PNG
+     # of the same shot, which is print-grade. Vernon flagged p79 as blurry.
+     "hero": _pick(ASSETS / "Whiterock-Pier-Crosswalk-TrafficPatternsXD-1 1.png",
+                   BLOG_DIR / "white-rock-pier-crosswalk" / "featured.png"),
      "detail": _pick(PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-140.jpg"),
      "title": "Salt air. Holiday traffic. Held.",
      "story": "Salt spray. Summer surge. Winter rain. The pier crosswalk at White Rock faces the full force of the BC coast — and holds season after season. TrafficPatternsXD installed where paint would be gone by July."},

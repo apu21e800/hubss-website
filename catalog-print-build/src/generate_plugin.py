@@ -986,7 +986,7 @@ function _ensureTextStyle(name, family, style, fontSize, lineHeight, tracking) {
   return s;
 }
 async function createDesignSystem() {
-  // Paint styles — brand palette
+  // Paint styles — brand palette (6 styles, covers every print color use)
   _ensurePaintStyle("HUBSS / Orange",       O);
   _ensurePaintStyle("HUBSS / Navy",         N);
   _ensurePaintStyle("HUBSS / Ink",          D);
@@ -994,16 +994,43 @@ async function createDesignSystem() {
   _ensurePaintStyle("HUBSS / Mid Grey",     M);
   _ensurePaintStyle("HUBSS / Faint Grey",   F);
 
-  // Text styles — print typography roles (v50)
-  _ensureTextStyle("Display / Section",     "Inter", "Bold",     64, 66, -3.0);
-  _ensureTextStyle("Display / Hero",        "Inter", "Bold",     44, 48, -2.0);
-  _ensureTextStyle("Display / Product",     "Inter", "Bold",     26, 30, -2.0);
-  _ensureTextStyle("Subhead / Tagline",     "Inter", "Medium",   16, 22, -1.0);
-  _ensureTextStyle("Body / Regular",        "Inter", "Medium",   10, 15,  0.0);
-  _ensureTextStyle("Body / Small",          "Inter", "Medium",    8, 12,  0.0);
-  _ensureTextStyle("Eyebrow / Caps",        "Inter", "Bold",      7, 11,  16.0);
-  _ensureTextStyle("TOC / Item",            "Inter", "Bold",     11, 17,  0.0);
-  _ensureTextStyle("Page Number",           "Inter", "Medium",    8, 12,  0.0);
+  // Text styles — v52.1 DDB grade: each style maps 1:1 to a specific
+  // print typography role in final_catalog.py so Vernon can pick a
+  // text style in Figma and get pixel-accurate parity with the printed
+  // catalogue. Sizes/leading/tracking taken verbatim from the print
+  // builder. Inter Medium is the minimum body weight (Vernon's v48 mandate
+  // — Regular reads too thin on press). Inter Bold for display + eyebrow.
+
+  // Display (page-defining typography)
+  _ensureTextStyle("Display / Section Opener",   "Inter", "Bold",   64, 66,  -3.0);  // page_section_open 64pt
+  _ensureTextStyle("Display / Manifesto",        "Inter", "Bold",   36, 42,  -2.5);  // page_manifesto 36pt
+  _ensureTextStyle("Display / Catalogue (TOC)",  "Inter", "Bold",   32, 38,  -2.5);  // page_toc + why_stats 32pt
+  _ensureTextStyle("Display / Stat Number",      "Inter", "Bold",   34, 40,  -2.5);  // page_why_stats 34pt
+  _ensureTextStyle("Display / Cover Masthead",   "Inter", "Bold",   30, 36,  -3.0);  // page_cover 30pt
+
+  // Titles (page-level headings, not full-page display)
+  _ensureTextStyle("Title / Product Name",       "Inter", "Bold",   22, 26,  -2.0);  // page_product_spec name 22pt
+  _ensureTextStyle("Title / Product Tagline",    "Inter", "Medium", 22, 26,  -1.4);  // page_product_hero tagline 22pt
+  _ensureTextStyle("Title / Project Hero",       "Inter", "Bold",   20, 24,  -1.5);  // page_project_hero title 20pt
+  _ensureTextStyle("Title / Application",        "Inter", "Bold",   18, 22,  -1.0);  // page_application tagline 18pt
+  _ensureTextStyle("Title / Why HUB Proof",      "Inter", "Bold",   19, 24,  -1.5);  // page_why_proof headline 19pt
+  _ensureTextStyle("Title / Project Story",      "Inter", "Bold",   17, 20,  -1.2);  // page_project_story title 17pt
+
+  // Body (long-form copy)
+  _ensureTextStyle("Body / Print",               "Inter", "Medium", 9.5, 14,  0.0);  // page_product_spec body 9.5pt
+  _ensureTextStyle("Body / Application",         "Inter", "Medium", 8.5, 12,  0.0);  // page_application body 8.5pt
+  _ensureTextStyle("Body / Manifesto",           "Inter", "Medium",  10, 16,  0.0);  // page_manifesto body 10pt
+  _ensureTextStyle("Subhead / Product Spec",     "Inter", "Medium", 10.5, 15, 0.0);  // page_product_spec italic/subhead
+
+  // Eyebrow + tracking (all caps with 16% letter-spacing)
+  _ensureTextStyle("Eyebrow / Standard",         "Inter", "Bold",  7.5, 11,  16.0);  // typical page eyebrow
+  _ensureTextStyle("Eyebrow / Small",            "Inter", "Bold",  5.5,  9,  16.0);  // footer micro-caps
+  _ensureTextStyle("Eyebrow / Stat Label",       "Inter", "Bold",  7.0, 10,  16.0);  // stat-card label
+
+  // TOC + folio
+  _ensureTextStyle("TOC / Item",                 "Inter", "Bold",   10, 14,   0.0);  // page_toc row label 10pt
+  _ensureTextStyle("TOC / Page Number",          "Inter", "Bold",   10, 14,   0.0);  // page_toc row number 10pt
+  _ensureTextStyle("Folio / Page Number",        "Inter", "Medium", 5.5,  8,   0.0);  // addFolio centre 5.5pt
 
   // Components — reusable design-system elements parked on a hidden page
   // so they're discoverable in the Assets panel without cluttering canvas.

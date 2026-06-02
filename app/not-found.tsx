@@ -3,11 +3,14 @@ import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import { buildMetadata } from "@/lib/seo";
 
-export const metadata = buildMetadata({
-  title: "Page Not Found",
-  description: "The page you're looking for doesn't exist. Browse our products, applications, or get in touch.",
-  slug: "404",
-});
+export const metadata = {
+  ...buildMetadata({
+    title: "Page Not Found",
+    description: "The page you're looking for doesn't exist. Browse our products, applications, or get in touch.",
+    slug: "404",
+  }),
+  robots: { index: false, follow: true },
+};
 
 export default function NotFound() {
   return (

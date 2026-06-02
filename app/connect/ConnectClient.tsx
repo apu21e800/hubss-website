@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { track } from "@vercel/analytics";
@@ -95,10 +95,10 @@ export default function ConnectClient({ formToken, hasEnteredBefore }: ConnectCl
             <ConnectCard
               href="/catalogue"
               eyebrow="Browse"
-              title="Open the Virtual Catalogue"
+              title="Virtual Catalogue"
               subtitle="Our 2026 product book — flip through every system."
               icon={<BookIcon />}
-              onClick={() => fireEvent("connect_catalogue_click")}
+              onClick={() => fireEvent("connect_catalogue_click", { position: 1, destination: "/catalogue" })}
             />
 
             <ConnectCard
@@ -116,7 +116,7 @@ export default function ConnectClient({ formToken, hasEnteredBefore }: ConnectCl
                   setView("already");
                   return;
                 }
-                fireEvent("connect_draw_open");
+                fireEvent("connect_draw_open", { position: 2 });
                 setView("draw");
               }}
             />
@@ -127,7 +127,7 @@ export default function ConnectClient({ formToken, hasEnteredBefore }: ConnectCl
               title="Visit hubss.com"
               subtitle="Products, projects, and how it all comes together."
               icon={<GlobeIcon />}
-              onClick={() => fireEvent("connect_website_click")}
+              onClick={() => fireEvent("connect_website_click", { position: 3, destination: "/" })}
             />
 
             <ConnectCard
@@ -136,7 +136,7 @@ export default function ConnectClient({ formToken, hasEnteredBefore }: ConnectCl
               title="Contact Us"
               subtitle="Spec questions, samples, or a Lunch & Learn."
               icon={<MailIcon />}
-              onClick={() => fireEvent("connect_contact_click")}
+              onClick={() => fireEvent("connect_contact_click", { position: 4, destination: "/contact" })}
             />
           </div>
         ) : view === "draw" ? (
@@ -157,6 +157,23 @@ export default function ConnectClient({ formToken, hasEnteredBefore }: ConnectCl
           hubss.com · Redefining hardscapes
         </footer>
       </div>
+
+      {/* Card hover treatment — subtle orange edge + arrow shift.
+          Lives here (not globals.css) to keep /connect self-contained. */}
+      <style>{`
+        .connect-card:hover {
+          border-color: rgba(249,115,22,0.45) !important;
+          box-shadow: 0 8px 32px -12px rgba(249,115,22,0.18);
+        }
+        .connect-card:hover .connect-card-arrow {
+          transform: translateX(4px);
+          color: #F97316;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .connect-card,
+          .connect-card .connect-card-arrow { transition: none !important; }
+        }
+      `}</style>
     </main>
   );
 }
@@ -220,7 +237,7 @@ function ConnectCard({
         </p>
       </div>
       <div
-        className="shrink-0 self-center transition-transform group-hover:translate-x-0.5"
+        className="connect-card-arrow shrink-0 self-center transition-all duration-200"
         style={{ color: "var(--text-secondary)" }}
         aria-hidden
       >
@@ -230,7 +247,7 @@ function ConnectCard({
   );
 
   const sharedClass =
-    "group block w-full text-left rounded-2xl p-5 sm:p-6 min-h-[112px] transition-all duration-200 hover:translate-y-[-1px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500";
+    "group connect-card block w-full text-left rounded-2xl p-5 sm:p-6 min-h-[112px] transition-all duration-200 hover:translate-y-[-1px] active:translate-y-0 active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500";
   const sharedStyle: React.CSSProperties = {
     background: "var(--bg-card)",
     border: "1px solid var(--border-color)",
@@ -301,8 +318,17 @@ function ArrowIcon() {
 }
 
 function AlreadyEnteredCard({ onBack }: { onBack: () => void }) {
+  const headingRef = useRef<HTMLHeadingElement | null>(null);
+
+  useEffect(() => {
+    const t = window.setTimeout(() => headingRef.current?.focus(), 60);
+    return () => window.clearTimeout(t);
+  }, []);
+
   return (
     <div
+      role="status"
+      aria-live="polite"
       className="rounded-2xl p-6 sm:p-10 text-center"
       style={{
         background: "var(--bg-card)",
@@ -324,7 +350,9 @@ function AlreadyEnteredCard({ onBack }: { onBack: () => void }) {
         </svg>
       </div>
       <h2
-        className="text-xl sm:text-2xl font-bold mb-2"
+        ref={headingRef}
+        tabIndex={-1}
+        className="text-xl sm:text-2xl font-bold mb-2 outline-none"
         style={{ color: "var(--text-primary)" }}
       >
         You&apos;re already entered.

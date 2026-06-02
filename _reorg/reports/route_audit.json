@@ -1,0 +1,49 @@
+{
+  "scanned": 66,
+  "total_findings": 7,
+  "by_type": {
+    "BROKEN_IMAGE": 3,
+    "RAW_IMG_TAG": 2,
+    "MISSING_ALT": 2
+  },
+  "findings": [
+    {
+      "type": "BROKEN_IMAGE",
+      "value": "/catalogue/${v.name}/${f}",
+      "expected_path": "public/catalogue/${v.name}/${f}",
+      "file": "app/catalogue/page.tsx"
+    },
+    {
+      "type": "BROKEN_IMAGE",
+      "value": "/catalogue/${v.name}/page-001.webp",
+      "expected_path": "public/catalogue/${v.name}/page-001.webp",
+      "file": "app/resources/page.tsx"
+    },
+    {
+      "type": "BROKEN_IMAGE",
+      "value": "/catalogue/${v.name}/page-001.webp",
+      "expected_path": "public/catalogue/${v.name}/page-001.webp",
+      "file": "app/catalogue/layout.tsx"
+    },
+    {
+      "type": "RAW_IMG_TAG",
+      "value": "<img>",
+      "file": "components/sections/HeroSlideshow.tsx"
+    },
+    {
+      "type": "MISSING_ALT",
+      "value": "<img>",
+      "file": "components/sections/HeroSlideshow.tsx"
+    },
+    {
+      "type": "RAW_IMG_TAG",
+      "value": "<img>",
+      "file": "components/sections/HeroSlideshow.tsx"
+    },
+    {
+      "type": "MISSING_ALT",
+      "value": "<img>",
+      "file": "components/sections/HeroSlideshow.tsx"
+    }
+  ]
+}

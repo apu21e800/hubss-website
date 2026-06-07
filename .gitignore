@@ -1,5 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# Catalogue print master — 150MB+ CMYK PDF, delivered out-of-band (needs Git LFS)
+/print/*.pdf
+
 # dependencies
 /node_modules
 /.pnp

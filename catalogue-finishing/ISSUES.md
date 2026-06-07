@@ -1,11 +1,35 @@
-# HUBSS Catalogue 2026 — ISSUES (Stage A draft)
+# HUBSS Catalogue 2026 — ISSUES (Stage A draft + finishing-pass status)
 
-Open questions, blockers, and unverifiable claims for **Vernon + Doug** to resolve
-before Stage B production. Generated from the **staging** source of record
-(v50 render / v52.2 source), worktree `chore/catalogue-finishing-pass`.
+Open questions, blockers, and unverifiable claims for **Vernon + Doug** to resolve.
+Generated from the **staging** source of record, worktree `chore/catalogue-finishing-pass`.
 
 > Standing rule honoured: nothing deleted. Where cleanup is implied, exact
 > commands are surfaced for Vernon to run, not executed.
+
+---
+
+## FINISHING-PASS STATUS (Stage B + C complete on this branch)
+
+**Shipped (in git on `chore/catalogue-finishing-pass`):** live-text CMYK print master,
+16 MB RGB web PDF (7 live links), v51 flipbook (116×1800px) + per-page alt text,
+21 claims corrections, 7 image swaps. Full detail: `CHANGELOG.md`, `STAGE-B-DIFF.md`.
+
+**STILL OPEN — needs Vernon / Doug / printer:**
+1. **Printer:** confirm **5×5″ vs 6×6″** trim (build is 5×5; prior intent 6×6). Then FOGRA39
+   output-intent + confirm black handling (build uses navy fills, not C40M25Y0K100 — the
+   design largely avoids solid black, so the brief's K-rich-black spec mostly doesn't apply).
+2. **Doug — claims:** (a) TP/TPXD reworded non-reflective per the TrafficPatterns-125 spec —
+   confirm; (b) "BC MoTI recognized" removed from StreetBond — restore only with the listing;
+   (c) Lunch&Learn CE-credit accreditation (AIBC/RAIC/PEO) — confirm before re-adding.
+3. **p68 York image** 480×640 (web-res) — fine at detail size; verify at print scale.
+4. **p84 Kitchener** — text story page (only one 4:3 low-res photo exists; true 2-page bleed
+   would crop the flag + "Lest We Forget"). Optional upgrade: navy panel or a commissioned 2nd shot.
+5. **Print master** `print/HUBSS-Catalogue-2026-PRINT.pdf` (151 MB) is git-ignored — deliver via
+   LFS or file transfer.
+6. **Project stats** still to source/confirm: York "90 minutes", White Rock "40% more foot
+   traffic", Toronto "12 corridors / largest MMA deployment" (see `CLAIMS-VERIFICATION.csv`).
+7. **Figma** rebuild is optional (ReportLab is now the production master) — spec at
+   `FIGMA-REBUILD-SPEC.md` if a designer-editable version is wanted.
 
 ---
 

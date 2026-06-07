@@ -19,7 +19,7 @@ export const dynamic = "force-dynamic";
 const VERSION_RE = /^v(\d+)$/;
 const PAGE_RE    = /^page-\d{3}\.webp$/;
 
-async function getPageManifest(): Promise<{ pages: string[]; version: string | null }> {
+async function getPageManifest(): Promise<{ pages: string[]; version: string | null; alt: string[] }> {
   const root = path.join(process.cwd(), "public", "catalogue");
   try {
     const dirs = await fs.readdir(root, { withFileTypes: true });
@@ -31,13 +31,24 @@ async function getPageManifest(): Promise<{ pages: string[]; version: string | n
       const versionDir = path.join(root, v.name);
       const files = (await fs.readdir(versionDir)).filter((f) => PAGE_RE.test(f)).sort();
       if (files.length > 0) {
-        return { pages: files.map((f) => `/catalogue/${v.name}/${f}`), version: v.name };
+        // Per-page descriptive alt text (accessibility + SEO). Generated from
+        // the rendered PDF text layer alongside the page images. Optional —
+        // falls back to a generic label per page if alt.json is absent.
+        let alt: string[] = [];
+        try {
+          const raw = await fs.readFile(path.join(versionDir, "alt.json"), "utf8");
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) alt = parsed.map((s) => String(s));
+        } catch {
+          /* no alt.json for this version */
+        }
+        return { pages: files.map((f) => `/catalogue/${v.name}/${f}`), version: v.name, alt };
       }
     }
   } catch {
     /* fall through */
   }
-  return { pages: [], version: null };
+  return { pages: [], version: null, alt: [] };
 }
 
 // Check that the web-sized download PDF actually exists before exposing the
@@ -59,7 +70,7 @@ export default async function CataloguePage() {
   // never see the catalogue.
   if (!showCatalogue()) notFound();
 
-  const { pages } = await getPageManifest();
+  const { pages, alt } = await getPageManifest();
   const downloadHref = await downloadPdfHref();
 
   if (pages.length === 0) {
@@ -76,5 +87,5 @@ export default async function CataloguePage() {
     );
   }
 
-  return <Flipbook pages={pages} downloadHref={downloadHref} />;
+  return <Flipbook pages={pages} alt={alt} downloadHref={downloadHref} />;
 }

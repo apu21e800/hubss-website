@@ -20,11 +20,13 @@ const LUNCH_LEARN_HREF =
 
 type Props = {
   pages: string[];
+  /** Per-page descriptive alt text (accessibility + SEO). Index-aligned with pages. */
+  alt?: string[];
   /** URL of the downloadable web-sized PDF, e.g. /catalogue/HUBSS-Catalogue-2026.pdf */
   downloadHref?: string;
 };
 
-export default function Flipbook({ pages, downloadHref }: Props) {
+export default function Flipbook({ pages, alt: altText = [], downloadHref }: Props) {
   const total = pages.length;
   const [idx, setIdx] = useState(0);                          // current page (0-based)
   const [zoom, setZoom] = useState(false);                    // tap-zoom toggle
@@ -209,7 +211,7 @@ export default function Flipbook({ pages, downloadHref }: Props) {
                 {inWindow ? (
                   <Image
                     src={src}
-                    alt={`HUBSS Catalogue 2026 — page ${i + 1} of ${total}`}
+                    alt={altText[i] ?? `HUBSS Catalogue 2026 — page ${i + 1} of ${total}`}
                     width={1200}
                     height={1200}
                     priority={i === 0}
@@ -240,7 +242,7 @@ export default function Flipbook({ pages, downloadHref }: Props) {
             {!showRightOnly && leftPageIdx >= 0 && leftPageIdx < total && (
               <Image
                 src={pages[leftPageIdx]}
-                alt={`HUBSS Catalogue 2026 — page ${leftPageIdx + 1} of ${total}`}
+                alt={altText[leftPageIdx] ?? `HUBSS Catalogue 2026 — page ${leftPageIdx + 1} of ${total}`}
                 width={1200}
                 height={1200}
                 sizes="50vw"
@@ -254,7 +256,7 @@ export default function Flipbook({ pages, downloadHref }: Props) {
             {!showLeftOnly && rightPageIdx >= 0 && rightPageIdx < total && (
               <Image
                 src={pages[rightPageIdx]}
-                alt={`HUBSS Catalogue 2026 — page ${rightPageIdx + 1} of ${total}`}
+                alt={altText[rightPageIdx] ?? `HUBSS Catalogue 2026 — page ${rightPageIdx + 1} of ${total}`}
                 width={1200}
                 height={1200}
                 priority={rightPageIdx === 0}

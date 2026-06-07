@@ -715,13 +715,13 @@ def page_cities(c):
     list (8px / 13px spacing) below."""
     fill_bleed(c, HUBSS_WHITE)
     # "500+" hero stat
-    draw_text_block(c, "500+", fx=30, fy=28, font_size_figma=60,
+    draw_text_block(c, "10", fx=30, fy=28, font_size_figma=60,
                     weight=800, color=HUBSS_ORANGE, tracking=-1.2,
                     max_w_figma=390)
-    draw_text_block(c, "Canadian municipalities", fx=30, fy=98,
+    draw_text_block(c, "provinces and territories", fx=30, fy=98,
                     font_size_figma=9, color=CMYK_TEXT_DARK,
                     max_w_figma=280, leading_figma=13)
-    draw_text_block(c, "that specify HUB systems by name.", fx=30, fy=113,
+    draw_text_block(c, "specify HUB systems by name, coast to coast.", fx=30, fy=113,
                     font_size_figma=9, color=CMYK_TEXT_MID,
                     max_w_figma=280, leading_figma=13)
     tracked_caps(c, "From Halifax to Vancouver", fx=30, fy=133, size=5.5,
@@ -818,7 +818,7 @@ def page_lunch_learn(c):
     # 4) Three dot-led essentials
     items = [
         "Tailored to your project",
-        "CE credits — AIBC, RAIC, PEO",
+        "Continuing-education content for your team",
         "In person across Canada, or virtual",
     ]
     dy = 232
@@ -1246,7 +1246,7 @@ def page_doublespread_right(c, label, caption, *, right_style=None,
         thin_rule(c, fx=28, fy=248, w_figma=394, color=CMYK_ON_DARK_RULE,
                   weight_pt=0.4)
         draw_text_block(c,
-            "30+ years   ·   1,000+ projects   ·   500+ municipalities",
+            "30+ years   ·   1,000+ projects   ·   10 provinces",
             fx=28, fy=262, font_size_figma=7.5, color=CMYK_ON_DARK_BODY,
             align="center", max_w_figma=394, leading_figma=11)
         thin_rule(c, fx=28, fy=288, w_figma=394, color=CMYK_ON_DARK_RULE,
@@ -1402,7 +1402,7 @@ def build():
         pages.append(lambda: page_doublespread_left(c, dps_b_l))
         pages.append(lambda: page_doublespread_right(
             c, "Across Canada",
-            "Five hundred municipalities. One standard.",
+            "Ten provinces. One standard.",
             right_image_path=dps_b_r, left_image_path=dps_b_l))
 
     projects_page = len(pages) + 1

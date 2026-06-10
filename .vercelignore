@@ -1,0 +1,17 @@
+# The /catalogue route is force-dynamic and fs.readdir()s public/catalogue at
+# runtime, so Next traces the WHOLE directory into that serverless function.
+# With every historical flipbook version present (~318 MB) the function blows
+# past Vercel's 250 MB limit ("Max serverless function size exceeded").
+#
+# Only the NEWEST version is ever served (the route auto-detects the highest vNN),
+# so exclude the superseded versions from the deploy. They remain in git history.
+# When a new version ships, add the previous one here.
+public/catalogue/v30/
+public/catalogue/v34/
+public/catalogue/v41/
+public/catalogue/v42/
+public/catalogue/v43/
+public/catalogue/v44/
+public/catalogue/v50/
+public/catalogue/v51/
+public/catalogue/v52/

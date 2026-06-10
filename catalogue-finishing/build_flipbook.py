@@ -9,7 +9,7 @@ import io
 
 WT = Path(r"C:\Users\cleve\Based_Agency\_wt-catalogue-finishing")
 PDF = WT / "catalog-print-build" / "output" / "HUBSS_Catalogue_2026_v50.pdf"
-OUT = WT / "public" / "catalogue" / "v51"
+OUT = WT / "public" / "catalogue" / "v52"  # v52 = 6x6 trim (v51 was 5x5)
 OUT.mkdir(parents=True, exist_ok=True)
 SIZE = 1800
 

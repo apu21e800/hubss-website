@@ -11,9 +11,9 @@ Everything below mirrors the live design system in `final_catalog.py` so a Figma
 rebuild renders 1:1 with the printed book.
 
 ## Document setup
-- **Page size:** 5.25 × 5.25 in (378 × 378 pt) = 5″ trim + 0.125″ bleed all sides. *(Confirm 5×5 vs 6×6 with printer first — see ISSUES.)*
+- **Page size:** **6.25 × 6.25 in (450 × 450 pt) = 6″ trim + 0.125″ bleed all sides.** *(6×6 confirmed by Vernon, 2026-06.)*
 - **Safe area:** 0.25″ inside trim. **Export:** CMYK (print) + RGB (screen).
-- **Grid:** single-column, 28 fig-unit left margin (design space is 0–450 units → ×0.84 = pt).
+- **Grid:** single-column, 28 fig-unit left margin (design space is 0–450 units → ×0.96 = pt, i.e. 1 design unit = 0.96 pt at 6″ trim).
 
 ## Color tokens (CMYK)
 | Token | C M Y K | Use |

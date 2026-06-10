@@ -7,9 +7,9 @@ the Figma layout 1:1.
 
 Coordinate conversion:
   Figma artboard is 450x450 design units.
-  Print trim is 5x5" = 360 pt.
-  Scale factor SCALE = 360 / 450 = 0.8.
-  Document page is 5.25x5.25" = 378 pt (trim + 0.125" bleed each side).
+  Print trim is 6x6" = 432 pt.
+  Scale factor SCALE = TRIM_W / 450 = 432 / 450 = 0.96 (auto-derived from specs).
+  Document page is 6.25x6.25" = 450 pt (trim + 0.125" bleed each side).
   ReportLab origin is bottom-left; Figma is top-left.
 
 Type (v48):

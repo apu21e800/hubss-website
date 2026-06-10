@@ -1,7 +1,7 @@
 # HUBSS Catalogue 2026 — CHANGELOG (finishing pass)
 
 Branch `chore/catalogue-finishing-pass` (off `staging`). Source of record:
-ReportLab pipeline `catalog-print-build/` (v50 build) → 116 pp, 5×5″ trim + 0.125″ bleed.
+ReportLab pipeline `catalog-print-build/` (v50 build) → 116 pp, **6×6″ trim** + 0.125″ bleed (Vernon-confirmed 2026-06; corrected from an interim 5×5 render).
 Nothing merged to main/staging. Every change below is in git on this branch.
 
 ## Outputs produced
@@ -9,12 +9,12 @@ Nothing merged to main/staging. Every change below is in git on this branch.
 |---|---|---|
 | Print master (CMYK, live text) | `print/HUBSS-Catalogue-2026-PRINT.pdf` | 151 MB; not git-committed (needs LFS/external delivery). Live selectable text, embedded Inter, bleed + crop marks. |
 | Web PDF (RGB, optimized) | `public/catalogue/HUBSS-Catalogue-2026.pdf` | 16 MB (was 25 MB stale); 7 live hyperlinks (L&L CTA, tel:, mailto:, hubss.com). |
-| Flipbook | `public/catalogue/v51/page-001..116.webp` | 1800×1800, trim-cropped; route auto-serves v51 (newest). |
-| Alt text | `public/catalogue/v51/alt.json` | Per-page, generated from the rebuilt PDF text layer; wired into `Flipbook.tsx`. |
+| Flipbook | `public/catalogue/v52/page-001..116.webp` | 1800×1800, trim-cropped; route auto-serves v52 (newest). |
+| Alt text | `public/catalogue/v52/alt.json` | Per-page, generated from the rebuilt PDF text layer; wired into `Flipbook.tsx`. |
 
 ## Structural
 - **Zero live text → full live selectable text** on all 116 pages (was a flattened raster PDF). CMYK vector, embedded fonts, bleed, crop marks via the ReportLab build.
-- **Flipbook bumped v50 → v51**, rasterized from the rebuilt PDF so the three outputs are page-for-page synced (116 pp each).
+- **Flipbook bumped v50 → v52**, rasterized from the rebuilt PDF so the three outputs are page-for-page synced (116 pp each).
 - **Alt text**: generic "page N of 116" → descriptive per-page strings.
 
 ## Claims corrections (21 — `apply_claims_fixes.py`; conservative, flagged for Doug where noted)
@@ -37,7 +37,7 @@ Nothing merged to main/staging. Every change below is in git on this branch.
 | p83/p84 Kitchener Veterans | same photo twice | p83 full-bleed hero; **p84 = clean text story page (no duplicate)** — see ISSUES (only one 4:3 low-res photo exists; true 2-page bleed impossible without cropping the flag + "Lest We Forget"). |
 
 ## Open / flagged (see ISSUES.md)
-- **Printer gate:** trim is **5×5″** in the current build vs **6×6″** prior intent — confirm with printer before print export. FOGRA39 output-intent + black value (build uses navy fills, not C40M25Y0K100 black) to confirm.
+- **Trim: RESOLVED → 6×6″** (Vernon-confirmed 2026-06). `specs.py` corrected; all 3 outputs regenerated. MediaBox 6.25″, TrimBox 6.0″. Remaining print prep: FOGRA39 output-intent embed (black handling N/A — design uses navy fills, no solid black).
 - **Doug claims:** TP/TPXD non-reflective wording, BC MoTI removal, CE-credit accreditation.
 - **p68 York image** is 480×640 (web-res) — adequate at detail size, verify at print.
 - **p84 Kitchener** whitespace — optional upgrade (navy panel / commissioned 2nd photo).

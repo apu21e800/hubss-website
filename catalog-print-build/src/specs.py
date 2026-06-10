@@ -3,8 +3,8 @@ Print specifications for the HUB Surface Systems 2026 Catalog.
 
 All units in points (1 inch = 72 points). ReportLab uses points natively.
 
-Trim size: 5" x 5" (square)
-Bleed:     0.125" on all sides (1/8")  -> document size 5.25" x 5.25"
+Trim size: 6" x 6" (square)   [Vernon-confirmed 2026-06: 6x6, not 5x5]
+Bleed:     0.125" on all sides (1/8")  -> document size 6.25" x 6.25"
 Safe area: 0.25" inside trim (text/logos must not cross this line)
 Output:    CMYK PDF, 300 DPI raster, vector text + shapes
 """
@@ -15,14 +15,14 @@ from reportlab.lib.colors import CMYKColor
 # ---------------------------------------------------------------------------
 # Page geometry
 # ---------------------------------------------------------------------------
-TRIM_W = 5.0 * inch
-TRIM_H = 5.0 * inch
+TRIM_W = 6.0 * inch
+TRIM_H = 6.0 * inch
 
 BLEED = 0.125 * inch     # 1/8" bleed on every side
 SAFE  = 0.25  * inch     # 1/4" safe area inside trim
 
-PAGE_W = TRIM_W + 2 * BLEED      # 5.25" — actual document size
-PAGE_H = TRIM_H + 2 * BLEED      # 5.25"
+PAGE_W = TRIM_W + 2 * BLEED      # 6.25" — actual document size
+PAGE_H = TRIM_H + 2 * BLEED      # 6.25"
 
 # Coordinate helpers (origin is bottom-left of the bleed page).
 # Anything inside the TRIM box is what gets printed and cut.

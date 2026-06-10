@@ -15,9 +15,9 @@ Generated from the **staging** source of record, worktree `chore/catalogue-finis
 21 claims corrections, 7 image swaps. Full detail: `CHANGELOG.md`, `STAGE-B-DIFF.md`.
 
 **STILL OPEN — needs Vernon / Doug / printer:**
-1. **Printer:** confirm **5×5″ vs 6×6″** trim (build is 5×5; prior intent 6×6). Then FOGRA39
-   output-intent + confirm black handling (build uses navy fills, not C40M25Y0K100 — the
-   design largely avoids solid black, so the brief's K-rich-black spec mostly doesn't apply).
+1. **Printer: trim RESOLVED → 6×6″** (Vernon-confirmed 2026-06; `specs.py` + all 3 outputs
+   regenerated; MediaBox 6.25″ / TrimBox 6.0″). Remaining: FOGRA39 output-intent embed (black
+   handling N/A — design uses navy fills, not solid C40M25Y0K100 black).
 2. **Doug — claims:** (a) TP/TPXD reworded non-reflective per the TrafficPatterns-125 spec —
    confirm; (b) "BC MoTI recognized" removed from StreetBond — restore only with the listing;
    (c) Lunch&Learn CE-credit accreditation (AIBC/RAIC/PEO) — confirm before re-adding.

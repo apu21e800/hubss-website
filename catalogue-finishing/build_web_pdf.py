@@ -14,7 +14,7 @@ SRC = WT / "catalog-print-build" / "output" / "HUBSS_Catalogue_2026_v50.pdf"
 OUT = WT / "public" / "catalogue" / "HUBSS-Catalogue-2026.pdf"
 
 PX = 1100          # raster long edge per page
-PT = 360.0         # 5" trim page (web; bleed/marks excluded)
+PT = 432.0         # 6" trim page (web; bleed/marks excluded)
 S = PT / 450.0     # figma(0-450) -> trim points
 
 def R(x0, y0, x1, y1):

@@ -54,3 +54,7 @@ next-env.d.ts
 .superpowers/
 .claude/worktrees/
 scripts/.gallery-checkpoint.json
+
+# Phase-1 transient QA renders
+/catalogue-finishing/compare-wash/
+/catalogue-finishing/live_p46.webp

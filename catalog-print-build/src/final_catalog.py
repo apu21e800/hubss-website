@@ -605,6 +605,63 @@ def page_project_story(c, proj, idx):
                     max_w_figma=394, leading_figma=11)
 
 
+def page_full_image(c, img_path):
+    """Verso (left) of an asymmetric spread — full-bleed photo, no type.
+    The facing white card carries all the words; the photo just speaks."""
+    fill_bleed(c, HUBSS_WHITE)
+    if img_path and Path(str(img_path)).exists():
+        draw_full_bleed_image(c, str(img_path))
+
+
+def page_spacer(c):
+    """A 'breath' verso before a section opener — keeps asymmetric spreads
+    aligned (image on the verso, card on the recto) and reads as an
+    intentional whitespace pause, not a missing page."""
+    fill_bleed(c, HUBSS_WHITE)
+    orange_dot(c, fx=225, fy=225, r_figma=2.0)
+
+
+def _card_shell(c, eyebrow, headline, body, *, head_size=27, meta=None,
+                foot_right=None):
+    """Recto (right) white info card — shared editorial shell for application
+    and project spreads. Top-weighted hierarchy, generous whitespace, single
+    orange accent, footer anchored inside the bottom safe margin."""
+    fill_bleed(c, HUBSS_WHITE)
+    orange_dot(c, fx=30, fy=66, r_figma=1.6)
+    tracked_caps(c, eyebrow, fx=40, fy=62, size=7.5, color=HUBSS_ORANGE,
+                 max_w_figma=380)
+    thin_rule(c, fx=30, fy=86, w_figma=30, color=HUBSS_ORANGE, weight_pt=2.5)
+    draw_text_block(c, no_orphan(headline, 3), fx=30, fy=120,
+                    font_size_figma=head_size, weight=800, color=CMYK_TEXT_DARK,
+                    tracking=-0.8, max_w_figma=384, leading_figma=head_size + 4)
+    body_y = 224
+    if meta:
+        tracked_caps(c, meta.upper(), fx=30, fy=212, size=6.5,
+                     color=CMYK_TEXT_MID, max_w_figma=384)
+        body_y = 236
+    draw_text_block(c, no_orphan(body, 3), fx=30, fy=body_y,
+                    font_size_figma=10.5, color=CMYK_TEXT_MID,
+                    max_w_figma=372, leading_figma=16)
+    # Footer — inside the 0.25" bottom safe margin (fy <= 432)
+    tracked_caps(c, "hubss.com", fx=30, fy=420, size=6.0,
+                 color=HUBSS_ORANGE, max_w_figma=200)
+    if foot_right:
+        tracked_caps(c, foot_right, fx=232, fy=420, size=6.0,
+                     color=CMYK_TEXT_FAINT, align="right", max_w_figma=180)
+
+
+def page_app_card(c, app, idx):
+    _card_shell(c, app["name"], app["tagline"], app["body"],
+                head_size=27, foot_right="Application " + str(idx).zfill(2))
+
+
+def page_project_card(c, proj, idx):
+    _card_shell(c, (proj.get("product") or "Project").upper(), proj["title"],
+                proj.get("story") or "", head_size=29,
+                meta=proj.get("location") or "",
+                foot_right="Project " + str(idx).zfill(2))
+
+
 def page_installer(c, inst):
     fill_bleed(c, HUBSS_WHITE)
     tracked_caps(c, "HUB Certified Installer", fx=30, fy=30, size=6.5,
@@ -1388,12 +1445,18 @@ def build():
             "Designed for the city. Built for the street.",
             right_image_path=dps_field_r, left_image_path=dps_field_l))
 
+    # Parity: put the section opener on a recto (odd) so the first asymmetric
+    # item's photo lands on the next verso (even) → image+card share a spread.
+    if (len(pages) + 1) % 2 == 0:
+        pages.append(lambda: page_spacer(c))
     apps_page = len(pages) + 1
     pages.append(lambda: page_section_open(c, "Two", "Applications.", SO.get("applications")))
     n_apps = len(CC.APPLICATIONS)
     for idx, app in enumerate(CC.APPLICATIONS, 1):
         a = app; i = idx
-        pages.append(lambda a=a, i=i: page_application(c, a, i, n_apps))
+        # Asymmetric spread: full-bleed photo (verso) + white info card (recto)
+        pages.append(lambda a=a: page_full_image(c, a["image"]))
+        pages.append(lambda a=a, i=i: page_app_card(c, a, i))
 
     # DPS "Across Canada" — between Applications and Projects
     dps_b_l = SO.get("dps_b_left")
@@ -1405,14 +1468,19 @@ def build():
             "Ten provinces. One standard.",
             right_image_path=dps_b_r, left_image_path=dps_b_l))
 
+    if (len(pages) + 1) % 2 == 0:
+        pages.append(lambda: page_spacer(c))
     projects_page = len(pages) + 1
     pages.append(lambda: page_section_open(c, "Three", "Projects.", SO.get("projects")))
     n_projs = len(CC.PROJECTS)
     half_idx = n_projs // 2 - 1   # plugin: insert DPS after the (half_idx+1)th project's story
     for idx, proj in enumerate(CC.PROJECTS, 1):
         p = proj; i = idx
-        pages.append(lambda p=p: page_project_hero(c, p))
-        pages.append(lambda p=p, i=i: page_project_story(c, p, i))
+        # Asymmetric spread: full-bleed hero (verso) + white info card (recto).
+        # Drops the per-project 'detail' image — kills near-dup spreads and the
+        # detail-image mismatches; one true hero photo per project.
+        pages.append(lambda p=p: page_full_image(c, p["hero"]))
+        pages.append(lambda p=p, i=i: page_project_card(c, p, i))
         if idx - 1 == half_idx:
             # DPS "Every Mark" — mid-Projects breather
             em_l = SO.get("editorial_projects") or SO.get("reference") \

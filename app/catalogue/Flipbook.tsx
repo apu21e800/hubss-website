@@ -333,18 +333,13 @@ export default function Flipbook({ pages, alt: altText = [], downloadHref }: Pro
           centered container with justify-start put them in the
           middle-left of the viewport. Buttons now hug the footer's
           left padding (px-5). */}
+      {/* v55 Phase 3I — Vernon: dropped the bottom shadow gradient entirely; it
+          read as a dirty smudge along the white page edges. The CTA pill + nav
+          buttons carry their own backgrounds/shadows, so no footer scrim is
+          needed and the bottom edge stays clean on every page. */}
       <footer
         className="absolute inset-x-0 bottom-0 z-20 px-5
                    pb-[max(env(safe-area-inset-bottom),1rem)] pt-10"
-        style={{
-          // v49 — Vernon flagged 'small dark shadow gradient on the
-          // white pages'. Old gradient went to 92% opaque black which
-          // bled visibly onto the catalogue's white edge. Softened to a
-          // narrow, low-opacity wash that only darkens the very bottom
-          // strip where the CTA pill needs contrast — invisible against
-          // photo pages, no longer dirty-edge against white pages.
-          background: "linear-gradient(0deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.30) 60%, rgba(0,0,0,0) 100%)",
-        }}
       >
         <div className="flex items-center justify-start gap-3">
           <Link

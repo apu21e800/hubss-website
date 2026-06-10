@@ -52,8 +52,13 @@ DPS "Across Canada" · **Projects** (20 × hero+story, DPS "Every Mark" mid-sect
 - **Images must read VIBRANT.** Convert sRGB → **Coated FOGRA39** (perceptual intent) for print;
   do **NOT** use a profileless RGB→CMYK (it desaturates ~44% = the "washed" defect we fixed).
   Keep screen/RGB exports vibrant too.
-- **No full-image wash/overlay.** The only intended overlays are the **cover navy wash** (for the
-  wordmark) and the **bottom scrim on hero/section pages** (so white type reads). Never tint a
-  whole photo for legibility — if type won't read, swap the photo or scrim only the type band.
+- **Wash/overlay is CONDITIONAL — cover + back/closing ONLY** (Vernon, 2026-06: *"the two pages
+  that can have a bit of a wash is the cover and back page; all other pages should show full
+  colour image"*):
+  - **Cover (p1):** full-frame navy wash over the photo (atmosphere + lets the wordmark read).
+  - **Back cover + closing spread (p113–116):** navy wash over the photo / solid navy panels.
+  - **Interior (p2–p112): NO full-image wash — full vibrant colour.** The only interior overlay is
+    the **bottom scrim on hero/section pages** (so white type reads) — scrim the type band, never
+    the whole photo. If type won't read, swap the photo.
 - Use `IMAGE-MANIFEST.csv` (per-page → source path) for exact placements, post-swap. Link
   images at full res; keep faces/logos/headlines out of the gutter on spreads.

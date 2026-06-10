@@ -17,6 +17,17 @@ proper CMYK — also satisfies the brief's FOGRA39L coated requirement. JPEG qua
 88→92 (print), flipbook webp →92, web JPEG →86. Cache key `__cmyk`→`__fogra` forces
 re-conversion. RGB fallback if the profile is ever absent. Flipbook bumped **v52→v53**.
 
+**Scope (Vernon, 2026-06):** the colour fix is image-only — it did NOT touch the
+**deliberate cover/back washes** (`page_cover` full-frame navy rect; `page_back` navy
+wash PNG; navy closing panels). So cover (p1) + back/closing (p113–116) keep their
+atmosphere; interior (p2–p112) is now full vibrant colour. No conditional code needed.
+
+**Deploy fix (`.vercelignore`):** the `/catalogue` route is force-dynamic and
+`fs.readdir`s `public/catalogue`, so Next traced all 318 MB of stacked flipbook
+versions into one serverless function → exceeded Vercel's 250 MB limit (build ERROR).
+`.vercelignore` excludes superseded versions (v30–v52) from the deploy; only v53 ships.
+Build now READY.
+
 ## Outputs produced
 | Deliverable | Path | Notes |
 |---|---|---|

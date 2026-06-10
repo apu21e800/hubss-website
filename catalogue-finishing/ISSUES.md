@@ -16,8 +16,12 @@ Generated from the **staging** source of record, worktree `chore/catalogue-finis
 
 **STILL OPEN — needs Vernon / Doug / printer:**
 1. **Printer: trim RESOLVED → 6×6″** (Vernon-confirmed 2026-06; `specs.py` + all 3 outputs
-   regenerated; MediaBox 6.25″ / TrimBox 6.0″). Remaining: FOGRA39 output-intent embed (black
-   handling N/A — design uses navy fills, not solid C40M25Y0K100 black).
+   regenerated; MediaBox 6.25″ / TrimBox 6.0″).
+   - **Image colour RESOLVED → FOGRA39** (2026-06): the washed/gauzy look was profileless PIL
+     CMYK losing ~44% saturation. Now sRGB→Coated FOGRA39 perceptual (`assets/profiles/`).
+     Images are vibrant *and* in the correct print gamut. Flipbook bumped to **v53**.
+   - Remaining (optional print-prep): embed a document-level FOGRA39 **output intent** tag on the
+     print PDF. Black handling N/A — design uses navy fills, not solid C40M25Y0K100 black.
 2. **Doug — claims:** (a) TP/TPXD reworded non-reflective per the TrafficPatterns-125 spec —
    confirm; (b) "BC MoTI recognized" removed from StreetBond — restore only with the listing;
    (c) Lunch&Learn CE-credit accreditation (AIBC/RAIC/PEO) — confirm before re-adding.

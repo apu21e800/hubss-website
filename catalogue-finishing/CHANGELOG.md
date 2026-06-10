@@ -4,6 +4,19 @@ Branch `chore/catalogue-finishing-pass` (off `staging`). Source of record:
 ReportLab pipeline `catalog-print-build/` (v50 build) → 116 pp, **6×6″ trim** + 0.125″ bleed (Vernon-confirmed 2026-06; corrected from an interim 5×5 render).
 Nothing merged to main/staging. Every change below is in git on this branch.
 
+## COLOR FIX (2026-06) — washed/gauzy images resolved
+**Root cause:** `images.py` converted every photo with profileless PIL
+`im.convert("RGB").convert("CMYK")`. When that CMYK JPEG is rendered (PDF viewer
+*and* the fitz rasterization that feeds the web PDF + flipbook), it lost **~44%
+saturation** — the "washed/hazy/transparent-overlay" look. Measured on the Splash
+Pads page: saturation 0.212 (washed) → **0.364 (fixed), +72%**.
+
+**Fix:** profile-aware **sRGB → Coated FOGRA39** perceptual conversion via PIL
+ImageCms (`assets/profiles/CoatedFOGRA39.icc`, vendored in-repo). Vibrant *and*
+proper CMYK — also satisfies the brief's FOGRA39L coated requirement. JPEG quality
+88→92 (print), flipbook webp →92, web JPEG →86. Cache key `__cmyk`→`__fogra` forces
+re-conversion. RGB fallback if the profile is ever absent. Flipbook bumped **v52→v53**.
+
 ## Outputs produced
 | Deliverable | Path | Notes |
 |---|---|---|

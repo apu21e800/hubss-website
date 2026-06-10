@@ -39,7 +39,7 @@ for i in range(src.page_count):
     zoom = PX / tb.width
     pix = pg.get_pixmap(matrix=fitz.Matrix(zoom, zoom), clip=tb, colorspace=fitz.csRGB)
     img = Image.open(io.BytesIO(pix.tobytes("png"))).convert("RGB")
-    buf = io.BytesIO(); img.save(buf, "JPEG", quality=80, optimize=True)
+    buf = io.BytesIO(); img.save(buf, "JPEG", quality=86, optimize=True)
     npg = out.new_page(width=PT, height=PT)
     npg.insert_image(fitz.Rect(0, 0, PT, PT), stream=buf.getvalue())
     for rect, uri in LINKS.get(i, []):

@@ -9,7 +9,7 @@ import io
 
 WT = Path(r"C:\Users\cleve\Based_Agency\_wt-catalogue-finishing")
 PDF = WT / "catalog-print-build" / "output" / "HUBSS_Catalogue_2026_v50.pdf"
-OUT = WT / "public" / "catalogue" / "v52"  # v52 = 6x6 trim (v51 was 5x5)
+OUT = WT / "public" / "catalogue" / "v53"  # v53 = 6x6 + FOGRA39 color fix (v52 was washed)
 OUT.mkdir(parents=True, exist_ok=True)
 SIZE = 1800
 
@@ -25,7 +25,7 @@ for i in range(doc.page_count):
     img = Image.open(io.BytesIO(pix.tobytes("png"))).convert("RGB")
     if img.size != (SIZE, SIZE):
         img = img.resize((SIZE, SIZE), Image.LANCZOS)
-    img.save(OUT / f"page-{i+1:03d}.webp", "WEBP", quality=88, method=6)
+    img.save(OUT / f"page-{i+1:03d}.webp", "WEBP", quality=92, method=6)
     if (i + 1) % 20 == 0:
         print(f"  {i+1}/{doc.page_count}")
 print("done ->", OUT)

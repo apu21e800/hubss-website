@@ -48,6 +48,12 @@ DPS "The Work" · **Products** (11 × hero+spec) · DPS "In the Field" · **Appl
 DPS "Across Canada" · **Projects** (20 × hero+story, DPS "Every Mark" mid-section) ·
 **Network** (4 installers) · DPS "Built to Last" · **Reference** · tech-table · cities · L&L · contact · field-notes · closing DPS · back cover.
 
-## Image manifest
-Use `IMAGE-MANIFEST.csv` (per-page → source path) for exact placements, post-swap. Link
-images at full res; keep faces/logos/headlines out of the gutter on spreads.
+## Image colour & manifest
+- **Images must read VIBRANT.** Convert sRGB → **Coated FOGRA39** (perceptual intent) for print;
+  do **NOT** use a profileless RGB→CMYK (it desaturates ~44% = the "washed" defect we fixed).
+  Keep screen/RGB exports vibrant too.
+- **No full-image wash/overlay.** The only intended overlays are the **cover navy wash** (for the
+  wordmark) and the **bottom scrim on hero/section pages** (so white type reads). Never tint a
+  whole photo for legibility — if type won't read, swap the photo or scrim only the type band.
+- Use `IMAGE-MANIFEST.csv` (per-page → source path) for exact placements, post-swap. Link
+  images at full res; keep faces/logos/headlines out of the gutter on spreads.

@@ -376,19 +376,21 @@ def page_section_open(c, section_no, title, photo_path):
     fill_bleed(c, HUBSS_WHITE)
     if photo_path and photo_path.exists():
         draw_full_bleed_image(c, str(photo_path))
-    # v49 — Vernon: 'Section One page 10-11 could stand out more.'
-    # Bigger type, bolder orange accent, wider tracking on the section
-    # number. The photo carries the moment; type punches harder.
-    # Orange dot pre-element + thin orange rule UNDER the section number
-    # eyebrow + much larger display title.
-    orange_dot(c, fx=24, fy=323, r_figma=1.8)
-    tracked_caps(c, ("Section " + section_no).upper(), fx=34, fy=320,
+    # v55 Phase 3C — soft transparent->navy bottom scrim so the white section
+    # title always clears AA contrast (openers were failing 1.6-2.8:1 on bare
+    # photo). Title dropped 64->50 and raised off the trim; photo stays vibrant
+    # above the scrim (scrim only covers the lower band).
+    scrim = _make_navy_wash_png(height_px=420, top_alpha=0, bottom_alpha=165)
+    c.drawImage(str(scrim), 0, 0, width=PAGE_W, height=BLEED + 230 * SCALE,
+                preserveAspectRatio=False, mask='auto')
+    orange_dot(c, fx=24, fy=305, r_figma=1.8)
+    tracked_caps(c, ("Section " + section_no).upper(), fx=34, fy=302,
                  size=8.5, color=HUBSS_WHITE, max_w_figma=394)
-    thin_rule(c, fx=28, fy=338, w_figma=44,
+    thin_rule(c, fx=28, fy=320, w_figma=44,
               color=HUBSS_ORANGE, weight_pt=2.5)
-    draw_text_block(c, title, fx=28, fy=358, font_size_figma=64,
+    draw_text_block(c, title, fx=28, fy=342, font_size_figma=50,
                     weight=800, color=HUBSS_WHITE,
-                    tracking=-2.0, max_w_figma=394, leading_figma=66)
+                    tracking=-1.6, max_w_figma=394, leading_figma=54)
 
 
 def page_product_hero(c, prod):
@@ -804,127 +806,61 @@ def page_cities(c):
 
 
 def page_lunch_learn(c):
-    """Moose-anchored Lunch & Learn. Warm + editorial, not corporate.
-    Left column: headline + 7-item what's-included list. Right column: Moose
-    mascot at FIT scale (transparent PNG, no crop, no box). Full-width URL
-    band below, then two-column contact footer.
-    """
-    fill_bleed(c, HUBSS_WHITE)
-
-    # v45 — Vernon: 'messy, too much copy. Keep the dog.' Cut hard. One
-    # left margin. Four type sizes max: eyebrow (6) / display (26) /
-    # body+list (10) / URL display (18). Pro hierarchy.
-
-    # v48 — Vernon: 'L&L 109 is lacking, make room for a QR code.'
-    # New 3-zone layout:
-    #   LEFT: eyebrow + display + body + 3 essentials
-    #   RIGHT TOP: moose mascot (raised so QR can fit below it)
-    #   RIGHT BOTTOM: 1" QR code on white plate + 'Scan to book' caption
-    #   FOOTER: full-width URL + two contacts
-
-    LEFT_X = 28
-    LEFT_W = 215
-
-    # Moose — right column upper, raised so it leaves clean room for QR
-    mascot = ROOT / "assets" / "moose-mascot.png"
-    if mascot.exists():
-        from PIL import Image as _PIL
-        try:
-            with _PIL.open(mascot) as _im:
-                iw, ih = _im.size
-            box_w, box_h = 170.0, 220.0  # slightly smaller box, raised
-            aspect = ih / iw
-            if box_w * aspect <= box_h:
-                fw_drawn = box_w
-                fh_drawn = box_w * aspect
-                fx_drawn = 257
-                fy_drawn = 30 + (box_h - fh_drawn) / 2
-            else:
-                fh_drawn = box_h
-                fw_drawn = box_h / aspect
-                fy_drawn = 30
-                fx_drawn = 257 + (box_w - fw_drawn) / 2
-            px = BLEED + fx_drawn * SCALE
-            py = BLEED + TRIM_H - (fy_drawn + fh_drawn) * SCALE
-            draw_image_box(c, str(mascot), px, py,
-                           fw_drawn * SCALE, fh_drawn * SCALE,
-                           cover=False, convert_to_cmyk=False)
-        except Exception:
-            pass
-
-    # 1) Orange eyebrow caps (no decorative rule above per v48 cleanup)
-    tracked_caps(c, "Lunch & Learn", fx=LEFT_X, fy=46, size=6.0,
-                 color=HUBSS_ORANGE, max_w_figma=LEFT_W)
-
-    # 2) Display headline — two lines, second line orange
-    draw_text_block(c, "Lunch is on us.", fx=LEFT_X, fy=68,
-                    font_size_figma=26, weight=800,
-                    color=CMYK_TEXT_DARK, tracking=-0.8,
-                    max_w_figma=LEFT_W, leading_figma=30)
-    draw_text_block(c, "Your spec is free.", fx=LEFT_X, fy=100,
-                    font_size_figma=26, weight=800, color=HUBSS_ORANGE,
-                    tracking=-0.8, max_w_figma=LEFT_W, leading_figma=30)
-
-    # 3) Body — one tight sentence
+    """v55 Phase 3G — 'An Invitation' navy treatment (Vernon: build V3 canonical).
+    Premium/formal, brand-cohesive with the closing navy panels. Drops the mascot;
+    orange CTA + QR on a white plate; bullets use dynamic spacing (no overlap)."""
+    fill_bleed(c, HUBSS_NAVY_RICH)
+    LX = 30
+    thin_rule(c, fx=LX, fy=56, w_figma=32, color=HUBSS_ORANGE, weight_pt=2.5)
+    tracked_caps(c, "An Invitation", fx=LX, fy=66, size=7.0,
+                 color=HUBSS_ORANGE, max_w_figma=300)
+    draw_text_block(c, "Lunch is on us.", fx=LX, fy=92, font_size_figma=42,
+                    weight=800, color=HUBSS_WHITE, tracking=-1.2,
+                    max_w_figma=390, leading_figma=46)
+    draw_text_block(c, "Your spec is free.", fx=LX, fy=142, font_size_figma=42,
+                    weight=800, color=HUBSS_ORANGE, tracking=-1.2,
+                    max_w_figma=390, leading_figma=46)
     draw_text_block(c,
-        "Forty-five minutes of technical depth, real-world projects, "
-        "and CE-credit education — over lunch in your office.",
-        fx=LEFT_X, fy=158, font_size_figma=10,
-        color=CMYK_TEXT_DARK, max_w_figma=LEFT_W, leading_figma=15)
-
-    # 4) Three dot-led essentials
+        "Forty-five minutes of technical depth, real project walkthroughs, "
+        "and CE-credit education — brought to your office over lunch.",
+        fx=LX, fy=214, font_size_figma=11, color=CMYK_ON_DARK_BODY,
+        max_w_figma=300, leading_figma=17)
     items = [
-        "Tailored to your project",
-        "Continuing-education content for your team",
-        "In person across Canada, or virtual",
+        "Tailored to your live and upcoming projects",
+        "CE-credit continuing education for your team",
+        "In person across Canada, or virtual — your call",
     ]
-    dy = 232
-    for item in items:
-        orange_dot(c, fx=LEFT_X + 1, fy=dy + 4, r_figma=1.0)
-        draw_text_block(c, item, fx=LEFT_X + 10, fy=dy,
-                        font_size_figma=10, color=CMYK_TEXT_DARK,
-                        max_w_figma=LEFT_W - 10, leading_figma=14)
-        dy += 20
-
-    # 5) QR code — right column lower. 70 figma square (~1" at 5" trim).
-    #    White plate around it for quiet-zone protection so scanners read.
+    vy = 272
+    for it in items:
+        orange_dot(c, fx=LX + 1, fy=vy + 4, r_figma=1.5)
+        draw_text_block(c, it, fx=LX + 12, fy=vy, font_size_figma=9.5,
+                        weight=600, color=HUBSS_WHITE, max_w_figma=300,
+                        leading_figma=13)
+        vy += 22 + (8 if len(it) > 36 else 0)
     qr_path = ROOT / "assets" / "hubss-lunch-learn-qr.png"
     if qr_path.exists():
-        QR_SIZE = 70
-        QR_PAD = 6
-        QR_FX = 287
-        QR_FY = 252
-        # White plate
-        plate_x, plate_y = figma_to_pdf(QR_FX - QR_PAD, QR_FY - QR_PAD)
+        QS, PAD, QF_X, QF_Y = 92, 8, 318, 262
+        plate_x, plate_y = figma_to_pdf(QF_X - PAD, QF_Y - PAD)
         c.setFillColorRGB(1, 1, 1)
-        c.rect(plate_x, plate_y - (QR_SIZE + 2 * QR_PAD) * SCALE,
-               (QR_SIZE + 2 * QR_PAD) * SCALE,
-               (QR_SIZE + 2 * QR_PAD) * SCALE,
-               stroke=0, fill=1)
-        # QR
-        qr_px = BLEED + QR_FX * SCALE
-        qr_py = BLEED + TRIM_H - (QR_FY + QR_SIZE) * SCALE
-        draw_image_box(c, str(qr_path), qr_px, qr_py,
-                       QR_SIZE * SCALE, QR_SIZE * SCALE,
+        c.rect(plate_x, plate_y - (QS + 2 * PAD) * SCALE,
+               (QS + 2 * PAD) * SCALE, (QS + 2 * PAD) * SCALE, stroke=0, fill=1)
+        qpx = BLEED + QF_X * SCALE
+        qpy = BLEED + TRIM_H - (QF_Y + QS) * SCALE
+        draw_image_box(c, str(qr_path), qpx, qpy, QS * SCALE, QS * SCALE,
                        cover=False, convert_to_cmyk=False)
-        # Caption above QR
-        tracked_caps(c, "Scan to book", fx=QR_FX - QR_PAD,
-                     fy=QR_FY - 12, size=5.5,
-                     color=CMYK_TEXT_MID, max_w_figma=QR_SIZE + 2 * QR_PAD)
-
-    # FOOTER — single orange rule + URL + 2 contacts
-    thin_rule(c, fx=LEFT_X, fy=350, w_figma=215,
-              color=HUBSS_ORANGE, weight_pt=1.5)
-    draw_text_block(c, "hubss.com/lunch-learn", fx=LEFT_X, fy=364,
-                    font_size_figma=18, weight=800, color=HUBSS_ORANGE,
-                    tracking=-0.5, max_w_figma=215)
-    # Two contacts inline, single baseline at bottom
-    draw_text_block(c, "Cleve Stordy   604.309.8212",
-                    fx=LEFT_X, fy=406, font_size_figma=9, weight=600,
-                    color=CMYK_TEXT_DARK, max_w_figma=200)
-    draw_text_block(c, "Doug Bain   416.540.9287",
-                    fx=LEFT_X + 200, fy=406, font_size_figma=9, weight=600,
-                    color=CMYK_TEXT_DARK, max_w_figma=200)
+        tracked_caps(c, "Scan to book", fx=QF_X - PAD, fy=QF_Y + QS + PAD + 5,
+                     size=6.0, color=CMYK_ON_DARK_BODY,
+                     max_w_figma=QS + 2 * PAD, align="center")
+    cta_w, cta_h, cta_x, cta_y = 200, 24, LX, 376
+    cx, cy = figma_to_pdf(cta_x, cta_y + cta_h)
+    c.setFillColor(HUBSS_ORANGE)
+    c.roundRect(cx, cy, cta_w * SCALE, cta_h * SCALE, 4 * SCALE, stroke=0, fill=1)
+    draw_text_block(c, "BOOK NOW   ·   hubss.com/lnl", fx=cta_x,
+                    fy=cta_y + cta_h / 2 - 4.5, font_size_figma=8.5,
+                    weight=800, color=HUBSS_WHITE, tracking=1.2,
+                    max_w_figma=cta_w, align="center")
+    tracked_caps(c, "Cleve Stordy 604.309.8212    ·    Doug Bain 416.540.9287",
+                 fx=LX, fy=418, size=6.0, color=CMYK_ON_DARK_BODY, max_w_figma=390)
 
 
 def page_contact(c):
@@ -1100,7 +1036,7 @@ def page_back(c):
                     fx=25, fy=414, font_size_figma=7.0,
                     color=CMYK_ON_DARK_BODY, align="center", max_w_figma=400)
     draw_text_block(c, "(c) 2026 HUB Surface Systems",
-                    fx=25, fy=445, font_size_figma=6.5,
+                    fx=25, fy=430, font_size_figma=6.5,
                     color=CMYK_ON_DARK_MID, align="center",
                     max_w_figma=400, tracking=1.0)
 

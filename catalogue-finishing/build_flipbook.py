@@ -30,3 +30,22 @@ for i in range(doc.page_count):
         print(f"  {i+1}/{doc.page_count}")
 print("done ->", OUT)
 print("count:", len(list(OUT.glob('page-*.webp'))))
+
+# Alt text (per-page, from the PDF text layer) + route manifest. The /catalogue
+# route reads public/catalogue/manifest.json (one static file) instead of
+# fs.readdir'ing the dir — that kept Next from tracing the whole multi-version
+# webp tree into the serverless function (>250MB limit).
+import json, re
+alt = []
+for i in range(doc.page_count):
+    t = " ".join(re.sub(r"(?<=\b\w) (?=\w\b)", "", doc[i].get_text()).split())
+    s = t[:150].strip() or "Full-bleed photographic spread"
+    alt.append(f"HUBSS Catalogue 2026, page {i+1} of {doc.page_count}: {s}")
+json.dump(alt, open(OUT / "alt.json", "w", encoding="utf-8"), ensure_ascii=False)
+manifest = {
+    "version": OUT.name,
+    "pages": [f"/catalogue/{OUT.name}/page-{i+1:03d}.webp" for i in range(doc.page_count)],
+    "alt": alt,
+}
+json.dump(manifest, open(OUT.parent / "manifest.json", "w", encoding="utf-8"), ensure_ascii=False)
+print("wrote alt.json + manifest.json")

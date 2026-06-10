@@ -9,7 +9,7 @@ import io
 
 WT = Path(r"C:\Users\cleve\Based_Agency\_wt-catalogue-finishing")
 PDF = WT / "catalog-print-build" / "output" / "HUBSS_Catalogue_2026_v50.pdf"
-OUT = WT / "public" / "catalogue" / "v53"  # v53 = 6x6 + FOGRA39 color fix (v52 was washed)
+OUT = WT / "public" / "catalogue" / "v54"  # v54 = Phase-3 DDB pass (asymmetric spreads, L&L V3, scrims)
 OUT.mkdir(parents=True, exist_ok=True)
 SIZE = 1800
 

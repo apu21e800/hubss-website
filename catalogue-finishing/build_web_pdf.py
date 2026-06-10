@@ -20,15 +20,16 @@ S = PT / 450.0     # figma(0-450) -> trim points
 def R(x0, y0, x1, y1):
     return fitz.Rect(x0 * S, y0 * S, x1 * S, y1 * S)
 
-# page_index (0-based) -> list of (rect, uri)
+# page_index (0-based) -> list of (rect, uri).  136pp asymmetric layout:
+# L&L (V3) p128, Contact p129, Back p136.
 LINKS = {
-    108: [(R(20, 360, 246, 388), "https://hubss.com/lunch-learn")],          # p109 L&L CTA
-    109: [(R(30, 188, 150, 206), "mailto:cleve.stordy@hubss.com"),           # p110 contact
+    127: [(R(30, 376, 230, 400), "https://hubss.com/lunch-learn")],          # p128 L&L V3 CTA pill
+    128: [(R(30, 188, 150, 206), "mailto:cleve.stordy@hubss.com"),           # p129 contact
           (R(242, 188, 362, 206), "mailto:doug.bain@hubss.com"),
           (R(30, 206, 140, 222), "tel:+16043098212"),
           (R(242, 206, 352, 222), "tel:+14165409287"),
           (R(30, 268, 140, 290), "https://hubss.com")],
-    115: [(R(0, 0, 450, 450), "https://hubss.com")],                          # p116 back cover
+    135: [(R(0, 0, 450, 450), "https://hubss.com")],                          # p136 back cover
 }
 
 src = fitz.open(SRC)

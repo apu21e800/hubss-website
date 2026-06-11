@@ -41,12 +41,20 @@ Status key: ☐ planned · ◐ in progress · ☑ done · ⏸ blocked (needs dec
 | Web-PDF links | 0-based 127/128/135 (L&L/Contact/Back at 136pp) | 129/130/139 — verified against rebuilt PDF text layer (L&L p130, Contact p131, Back p140) | build_web_pdf.py |
 | Build scripts | hardcoded `_wt-catalogue-finishing` path; v54 output | repo-root-relative (`parents[1]`), v55 output | build_flipbook.py / build_web_pdf.py |
 
-## §5 — Logos  ☐
+## Session 3 (2026-06-10) — Phase 0: deploy fixed (Vercel READY)
+
+| Item | Before | After | Source |
+|---|---|---|---|
+| v54 flipbook | committed alongside v55 | **deleted** (`git rm`) per Vernon's one-rendered-version ruling; `.vercelignore` removed with it | checkpoint ruling |
+| **Vercel build** | **every deploy since early June = ERROR** (three prior fix attempts assumed function-size/repo weight) | **READY** — root cause was Tailwind v4 auto-source-detection scanning tracked binary assets as text (`CoatedFOGRA39.icc`, `.eps`/`.dwg` vector originals, uppercase-`.JPG` photos) → `CssSyntaxError: Invalid code point` at globals.css 1:1. Fix: `source(none)` + explicit `@source` dirs (app/components/lib/content/sanity); 5 PNGs misnamed `.svg` renamed `.png`. Reproduced + verified locally (BUILD_ID), then READY on Vercel | oxide Scanner probe |
+| Preview | — | https://hubss-website-git-chore-catalogue-final-revision-based-agency.vercel.app/catalogue — serves v55, "1 / 140", PDF download present | WebFetch verified |
+
+## §5 — Logos  ☑ EXECUTED (Phase 1)
 
 | Page | Before | After | Source |
 |---|---|---|---|
-| p17 StreetBond | no logo | place `streetbond-Full Color-wh.png` on white body (light-bg) | OneDrive Product logos final/StreetBond |
-| all product pages | (StreetBond only) | OPTIONAL all-logos variant for Doug | ISSUES.md decision #2 |
+| p17 StreetBond | no logo (build's v44 "no product logos" decision) | **streetbond® rainbow placed** — light-bg full-colour version (`streetbond-Full Color-wh.png`, alpha-cropped → `product-logos/streetbond-fullcolor-lightbg.png`), white body, right-aligned, bottom-anchored above the spec grid, aspect-true, ® intact (~1060 effective DPI). Verified: **no Ennis-Flint lockup on the asset.** In-code rationale comment updated to record the single-exception ruling | Vernon checkpoint ruling; OneDrive Product logos final |
+| all product pages | — | **mock only** at `catalogue-finishing/mocks/all-logos-variant/` (3 products with clean marks + 1 control page). Finding: clean marks exist for only **3/11** products — DecoMark/DuraTherm/TrafficPatterns art is TrafficScapes-branded (excluded); TPXD/MMAX/DuraShield/PreMark/AirMark have none. All-or-nothing variant **cannot ship** without Doug supplying 8 marks | mock README |
 
 ## §6 — Claims & copy  ◐ (many already fixed in v54 — see CLAIMS-VERIFICATION.csv)
 

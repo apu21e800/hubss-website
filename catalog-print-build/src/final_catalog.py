@@ -52,12 +52,28 @@ LOGOS_DIR = ROOT / "output" / "_logos"
 # Products without a registered logo fall back to orange tracked-caps text.
 _PRODUCT_LOGO_DIR = ROOT.parent / "public" / "images" / "assets" / "logos" / "product-logos"
 
-# Product logos intentionally cleared — all third-party product logos either
+# Product logos intentionally cleared (v44) — third-party product logos either
 # carry Ennis-Flint manufacturer branding or render invisible (white-on-white).
 # DDB-quality direction: every product page uses a consistent typographic
 # wordmark treatment (see page_product_spec below). This gives HUB full brand
 # ownership of the catalogue without sub-brand clutter.
-PRODUCT_LOGOS: dict = {}
+#
+# §5 SINGLE EXCEPTION (Vernon checkpoint ruling, 2026-06-10): the streetbond®
+# rainbow mark. It's the one product logo the manufacturer invested in, it
+# carries NO Ennis-Flint lockup (verified on the asset), and the light-bg
+# full-colour version on the white spec-page body sidesteps the original
+# white-on-white objection. Never on the dark band, never stretched or
+# recoloured, ® intact. Every other product keeps the typographic wordmark:
+# the only official DecoMark / DuraTherm / TrafficPatterns art in the
+# libraries is TrafficScapes-branded ("TS-*-Preferred_logo ….pdf"), which
+# this book excludes by standing decision (see ISSUES.md, all-logos mock).
+PRODUCT_LOGOS: dict = {
+    "StreetBond": {
+        # alpha-cropped from the official streetbond-Full Color-wh.png
+        # (light-background variant), 1702×254
+        "color": _PRODUCT_LOGO_DIR / "streetbond-fullcolor-lightbg.png",
+    },
+}
 
 
 def get_product_logo(name, variant="white"):
@@ -497,6 +513,25 @@ def page_product_spec(c, prod):
     draw_text_block(c, no_orphan(prod["body"], 3), fx=28, fy=y,
                     font_size_figma=9.5,
                     color=CMYK_TEXT_DARK, max_w_figma=394, leading_figma=14)
+
+    # §5 — official product logo on the white body (single exception:
+    # streetbond® rainbow; see PRODUCT_LOGOS). Right-aligned in the clear
+    # zone above the spec grid, bottom-anchored 6 figma above the grid rule
+    # so any logo aspect clears it; aspect from the file (never stretched),
+    # transparency respected, ® intact at this size (asset is 1702 px wide
+    # drawn at ~1.6" → ~1060 effective DPI).
+    logo_path = get_product_logo(prod["name"], "color")
+    if logo_path:
+        from PIL import Image as _LogoImg
+        with _LogoImg.open(logo_path) as _im:
+            _lw, _lh = _im.size
+        fw = 120.0
+        fh = fw * _lh / _lw
+        if fh > 48:  # squarer marks: cap height, shrink width to match
+            fh = 48.0
+            fw = fh * _lw / _lh
+        draw_product_logo(c, prod["name"], fx=422 - fw, fy=306 - fh,
+                          fw_figma=fw, variant="color")
 
     # Spec pairs grid — anchored at fy=312; uses joined caps at fy=395.
     sp = prod.get("spec_pairs") or []

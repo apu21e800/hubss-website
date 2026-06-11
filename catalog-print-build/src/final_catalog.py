@@ -525,6 +525,199 @@ def page_product_spec(c, prod):
                      color=CMYK_TEXT_MID, align="center", max_w_figma=400)
 
 
+# ---- §4 colour-system spread (carried forward from old-catalogue pp14–15) --
+# Two-page facing spread inserted directly after the StreetBondSR spec page.
+# Flat vector chips (photographed texture prints muddy), exact manifest
+# names, measured SR data printed verbatim. Data: CC.COLOUR_SYSTEM, loaded
+# from COLOUR-MANIFEST.csv at the repo root.
+
+_CHIP_CMYK_CACHE: dict = {}
+
+
+def _chip_cmyk(hex_srgb: str) -> CMYKColor:
+    """Reference-hex → CMYK via the vendored Coated FOGRA39 profile.
+
+    Relative-colorimetric intent (not the photo pipeline's perceptual): chips
+    are spec swatches, so in-gamut colours must match the official chart as
+    closely as CMYK allows rather than shift with gamut compression. The hex
+    values are screen-reference only — supplier CMYK formulas replace these
+    before any press run (ISSUES.md). Falls back to naive conversion if the
+    profile is unavailable (build still completes).
+    """
+    cached = _CHIP_CMYK_CACHE.get(hex_srgb)
+    if cached is not None:
+        return cached
+    rgb = tuple(int(hex_srgb.lstrip("#")[i:i + 2], 16) for i in (0, 2, 4))
+    try:
+        from PIL import Image, ImageCms
+        icc = ROOT / "assets" / "profiles" / "CoatedFOGRA39.icc"
+        srgb = ImageCms.createProfile("sRGB")
+        fogra = ImageCms.getOpenProfile(str(icc))
+        xform = ImageCms.buildTransform(
+            srgb, fogra, "RGB", "CMYK",
+            renderingIntent=ImageCms.Intent.RELATIVE_COLORIMETRIC,
+        )
+        im = Image.new("RGB", (1, 1), rgb)
+        ck = ImageCms.applyTransform(im, xform).getpixel((0, 0))
+        col = CMYKColor(*[v / 255.0 for v in ck])
+    except Exception as e:
+        print(f"chip FOGRA conversion failed for {hex_srgb}: {e}")
+        r, g, b = [v / 255.0 for v in rgb]
+        k = 1.0 - max(r, g, b)
+        d = (1.0 - k) or 1e-6
+        col = CMYKColor((1 - r - k) / d, (1 - g - k) / d, (1 - b - k) / d, k)
+    _CHIP_CMYK_CACHE[hex_srgb] = col
+    return col
+
+
+def _chip(c, fx, fy, fw, fh, color, *, keyline=False, radius=2.0):
+    """Flat rounded colour chip at Figma coords. `keyline` adds a hairline
+    outline for near-white chips (SR White) so they don't vanish on the page."""
+    px, py = figma_to_pdf(fx, fy + fh)  # bottom-left corner in PDF space
+    c.setFillColor(color)
+    c.roundRect(px, py, fw * SCALE, fh * SCALE, radius * SCALE,
+                stroke=0, fill=1)
+    if keyline:
+        c.setStrokeColor(CMYK_TEXT_FAINT)
+        c.setLineWidth(0.5)
+        c.roundRect(px, py, fw * SCALE, fh * SCALE, radius * SCALE,
+                    stroke=1, fill=0)
+
+
+def page_colour_system_a(c):
+    """§4 Page A (verso) — the 37-colour standard palette in two labelled
+    families. Light page: chips need neutral ground. Headline deliberately
+    NOT "The colour system." — the StreetBond spec page (p17) already owns
+    that display line; repeating it three pages later would read as an error.
+    """
+    fill_bleed(c, HUBSS_WHITE)
+    orange_dot(c, fx=28, fy=21, r_figma=1.3)
+    tracked_caps(c, "StreetBond Colour", fx=34, fy=18, size=7.5,
+                 color=HUBSS_ORANGE, max_w_figma=394)
+    draw_text_block(c, "The full palette.", fx=28, fy=34, font_size_figma=26,
+                    weight=800, color=CMYK_TEXT_DARK, tracking=-0.9,
+                    max_w_figma=394)
+    draw_text_block(
+        c, "37 standard colours in two families. Full custom Pantone matching.",
+        fx=28, fy=68, font_size_figma=9.5, color=CMYK_TEXT_MID,
+        max_w_figma=394, leading_figma=14)
+
+    COLS = 6
+    CELL_W = 394 / COLS
+    CHIP_W, CHIP_H = 54, 18
+    ROW_H = 38
+
+    def family_block(label, items, y0):
+        tracked_caps(c, label, fx=28, fy=y0, size=6.5,
+                     color=CMYK_TEXT_FAINT, max_w_figma=394)
+        thin_rule(c, fx=28, fy=y0 + 11, w_figma=394,
+                  color=CMYK_TEXT_FAINT, weight_pt=0.3)
+        gy = y0 + 18
+        for i, col in enumerate(items):
+            r, k = divmod(i, COLS)
+            x = 28 + k * CELL_W
+            y = gy + r * ROW_H
+            _chip(c, x, y, CHIP_W, CHIP_H, _chip_cmyk(col["hex"]))
+            draw_text_block(c, col["name"], fx=x, fy=y + CHIP_H + 3,
+                            font_size_figma=6.2, weight=500,
+                            color=CMYK_TEXT_MID, max_w_figma=CELL_W - 4)
+        rows = -(-len(items) // COLS)
+        return gy + rows * ROW_H + 6
+
+    cs = CC.COLOUR_SYSTEM
+    y_next = family_block(f"Traditional — {len(cs['Traditional'])}",
+                          cs["Traditional"], 96)
+    family_block(f"Signature — {len(cs['Signature'])}",
+                 cs["Signature"], y_next)
+
+    # Mandatory sample-request footer — ties the spec content to the
+    # Lunch & Learn conversion path.
+    thin_rule(c, fx=28, fy=412, w_figma=394, color=CMYK_TEXT_FAINT,
+              weight_pt=0.3)
+    draw_text_block(
+        c, "Printed colours are representative — request physical samples "
+           "at a Lunch & Learn.",
+        fx=28, fy=419, font_size_figma=7.0, weight=500,
+        color=CMYK_TEXT_MID, max_w_figma=394)
+
+
+def page_colour_system_b(c):
+    """§4 Page B (recto) — Solar-Reflective palette with measured SRI /
+    Reflectance / Emittance printed verbatim from the manifest, one
+    plain-language SRI line, one compressed standards line, soft LEED
+    wording (no credit number until v4/v4.1 confirmed — ISSUES.md), and
+    the three Cycle-Lane greens as their own labelled band.
+    """
+    fill_bleed(c, HUBSS_WHITE)
+    orange_dot(c, fx=28, fy=21, r_figma=1.3)
+    tracked_caps(c, "StreetBondSR  ·  Solar Reflective", fx=34, fy=18,
+                 size=7.5, color=HUBSS_ORANGE, max_w_figma=394)
+    draw_text_block(c, "Cooler by design.", fx=28, fy=34, font_size_figma=26,
+                    weight=800, color=CMYK_TEXT_DARK, tracking=-0.9,
+                    max_w_figma=394)
+    draw_text_block(
+        c, "Eleven solar-reflective colours, measured and rated. "
+           "A higher SRI means a cooler surface.",
+        fx=28, fy=68, font_size_figma=9.5, color=CMYK_TEXT_MID,
+        max_w_figma=394, leading_figma=14)
+
+    cs = CC.COLOUR_SYSTEM
+    sr = cs["Solar-Reflective"]
+    COLS = 4
+    CELL_W = 394 / COLS
+    CHIP_W, CHIP_H = 86, 20
+    ROW_H = 50
+    gy = 108  # clears the two-line subhead (ends ~fy 94)
+    for i, col in enumerate(sr):
+        r, k = divmod(i, COLS)
+        x = 28 + k * CELL_W
+        y = gy + r * ROW_H
+        _chip(c, x, y, CHIP_W, CHIP_H, _chip_cmyk(col["hex"]),
+              keyline=(col["name"] == "SR White"))
+        draw_text_block(c, col["name"], fx=x, fy=y + CHIP_H + 3,
+                        font_size_figma=6.8, weight=600,
+                        color=CMYK_TEXT_DARK, max_w_figma=CELL_W - 6)
+        data = f"SRI {col['sri']} · R {col['reflectance']} · E {col['emittance']}"
+        draw_text_block(c, data, fx=x, fy=y + CHIP_H + 13,
+                        font_size_figma=5.8, weight=500,
+                        color=CMYK_TEXT_MID, max_w_figma=CELL_W - 6)
+    rows = -(-len(sr) // COLS)
+    y = gy + rows * ROW_H + 4
+
+    # One compressed standards line — replaces the old edition's footnote wall.
+    draw_text_block(
+        c, "Reflectance ASTM C1549  ·  Emittance ASTM C1371  ·  SRI ASTM E1980.",
+        fx=28, fy=y, font_size_figma=6.5, weight=500,
+        color=CMYK_TEXT_FAINT, max_w_figma=394)
+    y += 14
+    # Soft, accurate LEED wording — no credit number printed until the
+    # current LEED v4/v4.1 credit name is confirmed (ISSUES.md).
+    draw_text_block(
+        c, "SR colourants can contribute to LEED heat-island reduction credits.",
+        fx=28, fy=y, font_size_figma=8.5, color=CMYK_TEXT_MID,
+        max_w_figma=394, leading_figma=12)
+    y += 26
+
+    cl = cs["Cycle-Lane"]
+    tracked_caps(c, f"Cycle Lane — {len(cl)}", fx=28, fy=y, size=6.5,
+                 color=CMYK_TEXT_FAINT, max_w_figma=394)
+    thin_rule(c, fx=28, fy=y + 11, w_figma=394,
+              color=CMYK_TEXT_FAINT, weight_pt=0.3)
+    gy2 = y + 18
+    CELL2 = 394 / 3
+    for i, col in enumerate(cl):
+        x = 28 + i * CELL2
+        _chip(c, x, gy2, CELL2 - 14, 26, _chip_cmyk(col["hex"]))
+        draw_text_block(c, col["name"], fx=x, fy=gy2 + 29,
+                        font_size_figma=6.8, weight=600,
+                        color=CMYK_TEXT_DARK, max_w_figma=CELL2 - 14)
+
+    thin_rule(c, fx=28, fy=412, w_figma=394, color=CMYK_TEXT_FAINT,
+              weight_pt=0.3)
+    tracked_caps(c, "hubss.com", fx=28, fy=420, size=5.5,
+                 color=HUBSS_ORANGE, align="right", max_w_figma=394)
+
+
 def page_application(c, app, idx, total):
     """DDB pass: full photo (top 60%) + navy band (bottom 40%) — matches
     product-hero / project-hero editorial weight throughout the book.
@@ -1370,6 +1563,12 @@ def build():
         p = prod
         pages.append(lambda p=p: page_product_hero(c, p))
         pages.append(lambda p=p: page_product_spec(c, p))
+        if p["name"] == "StreetBondSR":
+            # §4 — colour-system spread directly after the SR spec page.
+            # SR spec lands on a recto, so A=verso + B=recto form a true
+            # facing spread; downstream product parity is preserved (+2).
+            pages.append(lambda: page_colour_system_a(c))
+            pages.append(lambda: page_colour_system_b(c))
 
     # DPS "In the Field" — between Products and Applications
     dps_field_l = SO.get("editorial_products") or SO.get("applications")

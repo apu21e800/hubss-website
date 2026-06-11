@@ -1,4 +1,5 @@
 """Catalog content — pulled from live HUBSS website data."""
+import csv
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -149,10 +150,10 @@ PRODUCTS = [
      "italic": "Flexible acrylic engineered to resist peeling, cracking, and fading.",
      "callout": "Pantone",
      "callout_unit": "Full custom matching plus standard palette — bike lanes, plazas, driveways",
-     "body": "Flexible acrylic engineered to move with the pavement — resisting the cracking from excessive hardness, premature wear from excessive flexibility, and slipperiness from overly smooth surfaces that compromise inferior coatings. Available in a curated standard palette plus full custom Pantone matching. 30–50 sq ft per gallon.",
+     "body": "Flexible acrylic engineered to move with the pavement — resisting the cracking from excessive hardness, premature wear from excessive flexibility, and slipperiness from overly smooth surfaces that compromise inferior coatings. Available in 37 standard colours — 17 Traditional, 20 Signature — plus full custom Pantone matching. 30–50 sq ft per gallon.",
      "uses": ["Bike Lanes", "Plazas", "Courts", "Parking"],
      "spec_pairs": [("Type", "Flexible acrylic"), ("Surfaces", "Asphalt and concrete"),
-                    ("Colour", "Full Pantone matching"), ("Coverage", "30–50 sq ft / gallon")]},
+                    ("Colours", "37 standard + custom Pantone"), ("Coverage", "30–50 sq ft / gallon")]},
     {"name": "StreetPrint",
      "category": "Stamped Asphalt System",
      "tagline": "Stamped asphalt at a fraction of stone's lifecycle cost.",
@@ -195,10 +196,14 @@ PRODUCTS = [
      "tagline": "Solar reflective. LEED-aligned.",
      "hero": _pick(PRODUCTS_DIR / "streetbondsr" / "streetbondsr-02.jpg"),
      "title": "Cool surface coating.",
-     "italic": "Initial SRI ≥ 0.33. LEED v4 SS Credit: Heat Island Reduction.",
-     "callout": "SRI",
-     "callout_unit": "≥ 0.33 initial Solar Reflectance Index — meets LEED v4 Heat Island threshold",
-     "body": "Solar reflective acrylic coating with Initial Solar Reflectance ≥ 0.33 — meeting the LEED v4 SS Credit: Heat Island Reduction threshold for non-roof hardscape. Same flexible chemistry and adhesion characteristics as StreetBond. Reduces pavement surface temperatures, mitigates urban heat island, and supports climate action plan implementation. Available in a curated palette of SRI-optimized tones plus custom Pantone matching.",
+     # SRI→SR terminology fix (final-revision pass): SRI is the 0–100 index
+     # (the SR palette rates SRI 31–73 — see the colour spread); the LEED v4
+     # threshold is Solar Reflectance ≥ 0.33, a 0–1 value. Body + spec grid
+     # already said it correctly; the subhead conflated the two.
+     "italic": "Initial Solar Reflectance ≥ 0.33. LEED v4 SS Credit: Heat Island Reduction.",
+     "callout": "SR",
+     "callout_unit": "≥ 0.33 initial Solar Reflectance — meets LEED v4 Heat Island threshold",
+     "body": "Solar reflective acrylic coating with Initial Solar Reflectance ≥ 0.33 — meeting the LEED v4 SS Credit: Heat Island Reduction threshold for non-roof hardscape. Same flexible chemistry and adhesion characteristics as StreetBond. Reduces pavement surface temperatures, mitigates urban heat island, and supports climate action plan implementation. Available in eleven SRI-rated tones plus custom Pantone matching.",
      "uses": ["Parking", "Plazas", "LEED Sites", "Schools"],
      "spec_pairs": [("Solar Reflectance", "≥ 0.33 initial"), ("LEED", "v4 SS Credit: Heat Island"),
                     ("Surfaces", "Asphalt and concrete"), ("Coverage", "30–50 sq ft / gallon")]},
@@ -523,3 +528,38 @@ CITIES = [
     "Richmond Hill",           "City of Saskatoon",
     "BC Ministry of Transport","BC Children's Hospital",
 ]
+
+
+# ===== COLOUR SYSTEM (§4 colour spread — pp26–27, after StreetBondSR) =====
+# Source of truth: COLOUR-MANIFEST.csv at the repo root — the official
+# StreetBond colour list (17 Traditional + 20 Signature + 11 Solar-Reflective
+# + 3 Cycle-Lane). Hex values are screen-reference sampled from the official
+# chart; the build converts them through the vendored FOGRA39 profile for
+# CMYK output. Supplier CMYK formulas must replace these before any press
+# run (tracked in ISSUES.md) — never treat the hex conversion as press-final.
+_COLOUR_MANIFEST = ROOT.parent / "COLOUR-MANIFEST.csv"
+
+
+def _load_colour_system():
+    fams = {"Traditional": [], "Signature": [],
+            "Solar-Reflective": [], "Cycle-Lane": []}
+    with open(_COLOUR_MANIFEST, newline="", encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            fam = row["family"].strip()
+            if fam not in fams:
+                continue
+            fams[fam].append({
+                "name": row["name"].strip(),
+                "hex": row["hex_srgb_reference"].strip(),
+                "sri": row["sri"].strip(),
+                "reflectance": row["reflectance"].strip(),
+                "emittance": row["emittance"].strip(),
+            })
+    counts = {k: len(v) for k, v in fams.items()}
+    assert counts == {"Traditional": 17, "Signature": 20,
+                      "Solar-Reflective": 11, "Cycle-Lane": 3}, \
+        f"COLOUR-MANIFEST.csv counts changed: {counts}"
+    return fams
+
+
+COLOUR_SYSTEM = _load_colour_system()

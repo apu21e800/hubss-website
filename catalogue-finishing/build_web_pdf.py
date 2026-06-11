@@ -9,7 +9,9 @@ import fitz, io
 from PIL import Image
 from pathlib import Path
 
-WT = Path(r"C:\Users\cleve\Based_Agency\_wt-catalogue-finishing")
+# Resolve the repo root from this script's location so the pipeline runs in
+# any worktree (was hardcoded to _wt-catalogue-finishing for the v54 run).
+WT = Path(__file__).resolve().parents[1]
 SRC = WT / "catalog-print-build" / "output" / "HUBSS_Catalogue_2026_v50.pdf"
 OUT = WT / "public" / "catalogue" / "HUBSS-Catalogue-2026.pdf"
 
@@ -20,16 +22,18 @@ S = PT / 450.0     # figma(0-450) -> trim points
 def R(x0, y0, x1, y1):
     return fitz.Rect(x0 * S, y0 * S, x1 * S, y1 * S)
 
-# page_index (0-based) -> list of (rect, uri).  136pp asymmetric layout:
-# L&L (V3) p128, Contact p129, Back p136.
+# page_index (0-based) -> list of (rect, uri).  140pp layout after the §4
+# colour-spread insertion at pp26-27 (+2 to every page ≥26, +2 more Notes
+# spacers from the mod-4 padding): L&L (V3) p130, Contact p131, Back p140.
+# Indices are verified against the rebuilt PDF text layer before this runs.
 LINKS = {
-    127: [(R(30, 376, 230, 400), "https://hubss.com/lunch-learn")],          # p128 L&L V3 CTA pill
-    128: [(R(30, 188, 150, 206), "mailto:cleve.stordy@hubss.com"),           # p129 contact
+    129: [(R(30, 376, 230, 400), "https://hubss.com/lunch-learn")],          # p130 L&L V3 CTA pill
+    130: [(R(30, 188, 150, 206), "mailto:cleve.stordy@hubss.com"),           # p131 contact
           (R(242, 188, 362, 206), "mailto:doug.bain@hubss.com"),
           (R(30, 206, 140, 222), "tel:+16043098212"),
           (R(242, 206, 352, 222), "tel:+14165409287"),
           (R(30, 268, 140, 290), "https://hubss.com")],
-    135: [(R(0, 0, 450, 450), "https://hubss.com")],                          # p136 back cover
+    139: [(R(0, 0, 450, 450), "https://hubss.com")],                          # p140 back cover
 }
 
 src = fitz.open(SRC)

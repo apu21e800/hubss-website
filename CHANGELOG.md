@@ -115,6 +115,18 @@ Note: `IMAGE-MANIFEST.csv` page keys remain v54-based per the do-not-regenerate 
 |---|---|---|---|
 | p119 (was 117) Langley Railroad | blog `langley-railroad-heritage/featured.jpg` — confirm authentic photo present (audit said placeholder; content model now points at real files) | verify visually | PROJECT-IMAGE-AUDIT.md |
 
+## Session 4 — TYPOGRAPHY POLISH  ☑ (TYPE-AUDIT.md → TYPE-SPEC.md → applied)
+
+**Scope held:** typography only · 140pp · Inter (no Regular) · 5.3pt micro-caps system RATIFIED untouched · DuraTherm benchmark unchanged.
+
+| Phase | Result |
+|---|---|
+| 1 Audit | `catalogue-finishing/TYPE-AUDIT.md` — 38 static sizes + 4 dynamic, 8 caps tiers, body leading drift 1.25–1.64, spec eyebrow at half size, Network divider off-spec, `(c) 2026` literal, straight apostrophes. Dead code paths inventoried |
+| 2 Spec | `TYPE-SPEC.md` — one ramp ≈1.2 anchored to the book: micro 5.5 / label 6.5 / eyebrow 7.5 / caps-display 8.5 / caption 7.8 / spec 8.6 / body 10×1.40 / subhead 12.5×1.25 / 14.5 / 17.5 / 21 / 26 / 31 / 37 / 42 / 52 / 60, display ×1.08, tracking −1…−2% above 24pt |
+| 3 Apply | ~127 assertive substitutions (scripts `_apply_ramp_b/c/d.py` committed as audit trail). Spec pages wrap-safe (body flows from actual subhead bottom + fixed 12 gap). Measures: spec body 86→73 cpl, card 74 cpl. Micro-typography: U+2019 apostrophes render-side, © glyph, interpunct. Re-verify: **overlaps 0** (one reflow collision on p5 stats found & fixed — label row +5), contrast 7→5 distinct (process-recto wash deepened 150→185; rest are the documented borderlines), 7 links intact, **parity 140/140/140**, flipbook **v57** |
+| 4 Figma | plugin's 22 text styles snapped 1:1 to the ramp **+ upsert fix** (`_ensureTextStyle` now updates existing styles — re-running the plugin migrates Vern's file instead of keeping stale values; 5 legacy style names superseded — delete in Figma's style manager). Caps tracking now true per-tier % of the 2.4pt charSpace (was flat 16%). `code.js` regenerated LITE 22.7MB (gitignored — **Vern runs the plugin, not me**) |
+| Contact sheet | `catalogue-finishing/type-pass/contact-sheet.png` — 8 archetypes before/after |
+
 ## §8/§9 — Quality, nav, build  ☐
 
 | Item | Action |

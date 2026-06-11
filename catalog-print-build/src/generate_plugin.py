@@ -990,10 +990,14 @@ function _ensurePaintStyle(name, color) {
   return s;
 }
 function _ensureTextStyle(name, family, style, fontSize, lineHeight, tracking) {
+  // UPSERT (type-pass): existing styles are updated in place so re-running
+  // the plugin migrates Vern's file to the current TYPE-SPEC ramp instead
+  // of silently keeping stale values.
   let s = _hasTextStyleByName(name);
-  if (s) return s;
-  s = figma.createTextStyle();
-  s.name = name;
+  if (!s) {
+    s = figma.createTextStyle();
+    s.name = name;
+  }
   s.fontName = {family: family, style: style};
   s.fontSize = fontSize;
   if (lineHeight) s.lineHeight = {value: lineHeight, unit: "PIXELS"};
@@ -1016,36 +1020,38 @@ async function createDesignSystem() {
   // builder. Inter Medium is the minimum body weight (Vernon's v48 mandate
   // — Regular reads too thin on press). Inter Bold for display + eyebrow.
 
-  // Display (page-defining typography)
-  _ensureTextStyle("Display / Section Opener",   "Inter", "Bold",   64, 66,  -3.0);  // page_section_open 64pt
-  _ensureTextStyle("Display / Manifesto",        "Inter", "Bold",   36, 42,  -2.5);  // page_manifesto 36pt
-  _ensureTextStyle("Display / Catalogue (TOC)",  "Inter", "Bold",   32, 38,  -2.5);  // page_toc + why_stats 32pt
-  _ensureTextStyle("Display / Stat Number",      "Inter", "Bold",   34, 40,  -2.5);  // page_why_stats 34pt
-  _ensureTextStyle("Display / Cover Masthead",   "Inter", "Bold",   30, 36,  -3.0);  // page_cover 30pt
+  // Display — TYPE-SPEC ramp (figma units; ratio ~1.2; leading x1.08)
+  _ensureTextStyle("Display / Section Opener",   "Inter", "Bold",   52, 56,  -2.0);  // section + Network titles
+  _ensureTextStyle("Display / Manifesto",        "Inter", "Bold",   37, 40,  -1.9);  // manifesto h1 + stat numbers
+  _ensureTextStyle("Display / Catalogue (TOC)",  "Inter", "Bold",   31, 33.5, -1.9); // TOC/cover/statement/why heads
+  _ensureTextStyle("Display / Stat Number",      "Inter", "Bold",   37, 40,  -1.9);  // why_stats numbers (= L tier)
+  _ensureTextStyle("Display / Cover Masthead",   "Inter", "Bold",   31, 33.5, -1.9); // cover masthead (= M tier)
 
-  // Titles (page-level headings, not full-page display)
-  _ensureTextStyle("Title / Product Name",       "Inter", "Bold",   22, 26,  -2.0);  // page_product_spec name 22pt
-  _ensureTextStyle("Title / Product Tagline",    "Inter", "Medium", 22, 26,  -1.4);  // page_product_hero tagline 22pt
-  _ensureTextStyle("Title / Project Hero",       "Inter", "Bold",   20, 24,  -1.5);  // page_project_hero title 20pt
-  _ensureTextStyle("Title / Application",        "Inter", "Bold",   18, 22,  -1.0);  // page_application tagline 18pt
-  _ensureTextStyle("Title / Why HUB Proof",      "Inter", "Bold",   19, 24,  -1.5);  // page_why_proof headline 19pt
-  _ensureTextStyle("Title / Project Story",      "Inter", "Bold",   17, 20,  -1.2);  // page_project_story title 17pt
+  // Titles — 26 / 21 / 17.5 / 14.5 (leading x1.08-1.10)
+  _ensureTextStyle("Title / Spread & Card Head", "Inter", "Bold",   26, 28,  -1.9);  // spread heads + app/project cards
+  _ensureTextStyle("Title / Product Name",       "Inter", "Bold",   21, 23,  -1.8);  // spec-page wordmark
+  _ensureTextStyle("Title / Product Tagline",    "Inter", "Medium", 21, 23,  -1.4);  // product-hero tagline (shrinks to fit)
+  _ensureTextStyle("Title / Project Hero",       "Inter", "Bold",   21, 23,  -1.8);  // names / proof headline tier
+  _ensureTextStyle("Title / Application",        "Inter", "Bold",   17.5, 19.3, -2.0); // app tagline / story names
+  _ensureTextStyle("Title / Step & Caption",     "Inter", "Bold",   14.5, 16, -2.0);  // process steps / DPS captions
 
-  // Body (long-form copy)
-  _ensureTextStyle("Body / Print",               "Inter", "Medium", 9.5, 14,  0.0);  // page_product_spec body 9.5pt
-  _ensureTextStyle("Body / Application",         "Inter", "Medium", 8.5, 12,  0.0);  // page_application body 8.5pt
-  _ensureTextStyle("Body / Manifesto",           "Inter", "Medium",  10, 16,  0.0);  // page_manifesto body 10pt
-  _ensureTextStyle("Subhead / Product Spec",     "Inter", "Medium", 10.5, 15, 0.0);  // page_product_spec italic/subhead
+  // Body + subhead + spec + caption (leading x1.40 / 1.25 / 1.30 / 1.30)
+  _ensureTextStyle("Body / Print",               "Inter", "Medium", 10, 14,   0.0);  // ALL running body
+  _ensureTextStyle("Subhead / Standfirst",       "Inter", "Medium", 12.5, 15.6, 0.0); // subhead-over-body
+  _ensureTextStyle("Spec / Values & Compact",    "Inter", "Medium", 8.6, 11.2, 0.0);  // spec values / compact prose
+  _ensureTextStyle("Caption / Names & Fine",     "Inter", "Medium", 7.8, 10.1, 0.0);  // chip names / fine lines (7.5pt floor)
 
-  // Eyebrow + tracking (all caps with 16% letter-spacing)
-  _ensureTextStyle("Eyebrow / Standard",         "Inter", "Bold",  7.5, 11,  16.0);  // typical page eyebrow
-  _ensureTextStyle("Eyebrow / Small",            "Inter", "Bold",  5.5,  9,  16.0);  // footer micro-caps
-  _ensureTextStyle("Eyebrow / Stat Label",       "Inter", "Bold",  7.0, 10,  16.0);  // stat-card label
+  // Caps ladder — tracked caps; % = the print build's 2.4pt charSpace
+  // expressed against each tier's pt size (NOT a flat 16%)
+  _ensureTextStyle("Caps / Display (SECTION)",   "Inter", "Bold",  8.5, 11,  29.0);
+  _ensureTextStyle("Eyebrow / Standard",         "Inter", "Bold",  7.5, 11,  33.0);  // every page eyebrow
+  _ensureTextStyle("Caps / Label",               "Inter", "Bold",  6.5, 9,   38.0);  // spec labels / meta / tags
+  _ensureTextStyle("Eyebrow / Small",            "Inter", "Bold",  5.5,  9,  45.0);  // RATIFIED micro footer caps
 
   // TOC + folio
-  _ensureTextStyle("TOC / Item",                 "Inter", "Bold",   10, 14,   0.0);  // page_toc row label 10pt
-  _ensureTextStyle("TOC / Page Number",          "Inter", "Bold",   10, 14,   0.0);  // page_toc row number 10pt
-  _ensureTextStyle("Folio / Page Number",        "Inter", "Medium", 5.5,  8,   0.0);  // addFolio centre 5.5pt
+  _ensureTextStyle("TOC / Item",                 "Inter", "Bold",   10, 14,   0.0);
+  _ensureTextStyle("TOC / Page Number",          "Inter", "Bold",   10, 14,   0.0);
+  _ensureTextStyle("Folio / Page Number",        "Inter", "Medium", 5.5,  8,   0.0);  // retired in print (no folios)
 
   // Components — reusable design-system elements parked on a hidden page
   // so they're discoverable in the Assets panel without cluttering canvas.

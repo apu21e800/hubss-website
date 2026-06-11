@@ -360,9 +360,9 @@ def page_why_stats(c):
                         font_size_figma=37, weight=800,
                         color=HUBSS_ORANGE, tracking=-0.7)
         # White label + grey sub on navy
-        tracked_caps(c, label, fx=gx + 8, fy=gy + 52, size=6.5,
+        tracked_caps(c, label, fx=gx + 8, fy=gy + 57, size=6.5,
                      color=HUBSS_WHITE, max_w_figma=cell_w - 16)
-        draw_text_block(c, sub, fx=gx + 8, fy=gy + 64,
+        draw_text_block(c, sub, fx=gx + 8, fy=gy + 69,
                         font_size_figma=7.8, color=CMYK_ON_DARK_MID,
                         max_w_figma=cell_w - 16, leading_figma=10.1)
     thin_rule(c, fx=40, fy=430, w_figma=56, color=HUBSS_ORANGE, weight_pt=2.0)
@@ -871,7 +871,7 @@ def page_process_right(c):
         draw_full_bleed_image(c, str(result))
     # Short bottom wash (same family as the section-opener scrim) so the
     # white caption line clears AA contrast on the bright surface.
-    scrim = _make_navy_wash_png(height_px=240, top_alpha=0, bottom_alpha=150)
+    scrim = _make_navy_wash_png(height_px=240, top_alpha=0, bottom_alpha=185)
     c.drawImage(str(scrim), 0, 0, width=PAGE_W, height=BLEED + 110 * SCALE,
                 preserveAspectRatio=False, mask='auto')
     orange_dot(c, fx=24, fy=421, r_figma=1.3)

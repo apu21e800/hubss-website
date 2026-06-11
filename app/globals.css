@@ -1,5 +1,19 @@
-@import "tailwindcss";
+/* Tailwind v4 auto-scans every non-gitignored file for class names and
+   chokes on binary files whose extensions miss its case-sensitive text
+   blocklist (.icc colour profile, .eps/.dwg vector originals, uppercase
+   .JPG photos). That's what killed every Vercel build since early June —
+   "CssSyntaxError: Invalid code point" reported here at 1:1. This repo
+   deliberately carries large binary asset trees (catalog-print-build/,
+   public/images/), so auto-detection is the wrong mode: source(none)
+   turns it off and the explicit @source list below scans only the dirs
+   where class names actually live. */
+@import "tailwindcss" source(none);
 @plugin "@tailwindcss/typography";
+@source "../app";
+@source "../components";
+@source "../lib";
+@source "../content";
+@source "../sanity";
 
 :root {
   --font-geist: '';

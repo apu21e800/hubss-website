@@ -1,0 +1,47 @@
+- generic [active] [ref=e1]:
+  - main [ref=e15]:
+    - generic [ref=e16]:
+      - generic [ref=e17]:
+        - img "HUB Surface Systems" [ref=e19]
+        - heading "Welcome to HUB Surface Systems." [level=1] [ref=e20]
+        - paragraph [ref=e21]: Decorative pavement, road safety markings, and surface solutions — pick where you'd like to go.
+      - navigation "Choose where to go" [ref=e125]:
+        - link "Browse Virtual Catalogue Our 2026 product book — flip through every system." [ref=e126] [cursor=pointer]:
+          - /url: /catalogue
+          - generic [ref=e127]:
+            - img [ref=e129]
+            - generic [ref=e132]:
+              - paragraph [ref=e133]: Browse
+              - paragraph [ref=e134]: Virtual Catalogue
+              - paragraph [ref=e135]: Our 2026 product book — flip through every system.
+            - img [ref=e137]
+        - button "Win Enter the Prize Draw One quick form. Winner announced after the show." [ref=e139]:
+          - generic [ref=e140]:
+            - img [ref=e142]
+            - generic [ref=e146]:
+              - paragraph [ref=e147]: Win
+              - paragraph [ref=e148]: Enter the Prize Draw
+              - paragraph [ref=e149]: One quick form. Winner announced after the show.
+            - img [ref=e151]
+        - link "Explore Visit hubss.com Products, projects, and how it all comes together." [ref=e153] [cursor=pointer]:
+          - /url: /
+          - generic [ref=e154]:
+            - img [ref=e156]
+            - generic [ref=e159]:
+              - paragraph [ref=e160]: Explore
+              - paragraph [ref=e161]: Visit hubss.com
+              - paragraph [ref=e162]: Products, projects, and how it all comes together.
+            - img [ref=e164]
+        - link "Talk Contact Us Spec questions, samples, or a Lunch & Learn." [ref=e166] [cursor=pointer]:
+          - /url: /contact
+          - generic [ref=e167]:
+            - img [ref=e169]
+            - generic [ref=e172]:
+              - paragraph [ref=e173]: Talk
+              - paragraph [ref=e174]: Contact Us
+              - paragraph [ref=e175]: Spec questions, samples, or a Lunch & Learn.
+            - img [ref=e177]
+      - generic [ref=e77]: hubss.com · Redefining hardscapes
+  - button "Open Next.js Dev Tools" [ref=e11] [cursor=pointer]:
+    - img [ref=e12]
+  - alert [ref=e78]

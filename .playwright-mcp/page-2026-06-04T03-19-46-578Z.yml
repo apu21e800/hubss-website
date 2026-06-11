@@ -1,0 +1,276 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - navigation [ref=e3]:
+      - link "Workbench" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img [ref=e5]
+        - text: Workbench
+      - generic [ref=e7]: Teardown 002
+      - link "Get yours" [ref=e8] [cursor=pointer]:
+        - /url: mailto:cleve@21e8.studio?subject=Our%20wholesale%20flow
+  - main [ref=e9]:
+    - generic [ref=e11]:
+      - generic [ref=e12]: Spec teardown
+      - generic [ref=e14]: Lightspeed B2B
+      - generic [ref=e15]: Observed live · June 2026
+    - heading "The Cure Hot Sauce Co." [level=1] [ref=e17]
+    - paragraph [ref=e19]: A Courtenay hot-sauce maker stocked in ~35 shops across the Island and Sunshine Coast — with no wholesale portal at all. Every trade order runs through an orders@ inbox. We built the channel they’re missing.
+    - generic [ref=e20]:
+      - generic [ref=e21]:
+        - paragraph [ref=e22]: Platform
+        - paragraph [ref=e23]: Lightspeed eCom
+      - generic [ref=e24]:
+        - paragraph [ref=e25]: Sells
+        - paragraph [ref=e26]: Hot sauce, rubs, Worcestershire
+      - generic [ref=e27]:
+        - paragraph [ref=e28]: Buys wholesale
+        - paragraph [ref=e29]: Grocers, gift shops, restaurants
+      - generic [ref=e30]:
+        - paragraph [ref=e31]: Today
+        - paragraph [ref=e32]: Retail store + email orders@
+    - generic [ref=e34]:
+      - paragraph [ref=e35]: The tell
+      - paragraph [ref=e36]: ~35 stockists across Vancouver Island — and zero wholesale infrastructure.
+      - paragraph [ref=e37]: "The demand is already proven: three dozen shops, oyster bars, and distilleries carry The Cure. The bottleneck isn’t getting buyers — it’s that every one of them orders by emailing Rob, who re-keys it by hand. (A placeholder “222-333-4444” phone number is still live on the contact page — the DIY tell.)"
+    - generic [ref=e38]:
+      - generic [ref=e40]:
+        - generic [ref=e43]: The problem
+        - heading "How wholesale works today" [level=2] [ref=e44]
+      - generic [ref=e45]:
+        - generic [ref=e47]:
+          - generic [ref=e48]:
+            - generic [ref=e49]: "01"
+            - heading "No wholesale channel exists" [level=3] [ref=e50]
+          - paragraph [ref=e51]: "Nav is only: Products · About · Contact · Cart."
+          - paragraph [ref=e52]: A shop owner sees the same retail-priced store a consumer does. No login, no trade pricing.
+        - generic [ref=e54]:
+          - generic [ref=e55]:
+            - generic [ref=e56]: "02"
+            - heading "“Ask them to stock us”" [level=3] [ref=e57]
+          - paragraph [ref=e58]: “Don’t see where you shop? Ask them to stock us!”
+          - paragraph [ref=e59]: The one wholesale-adjacent line pushes acquisition onto the customer — a buyer reading it has no button to click.
+        - generic [ref=e61]:
+          - generic [ref=e62]:
+            - generic [ref=e63]: "03"
+            - heading "Orders by email & phone" [level=3] [ref=e64]
+          - paragraph [ref=e65]: "“…inquiries: orders@thecurehotsauce.ca” · 604-353-9430"
+          - paragraph [ref=e66]: Rob hand-keys every order from free-text email. (A placeholder “222-333-4444” is still live in the contact block.)
+        - generic [ref=e68]:
+          - generic [ref=e69]:
+            - generic [ref=e70]: "04"
+            - heading "A wide, volatile catalogue" [level=3] [ref=e71]
+          - paragraph [ref=e72]: ~35+ SKUs · 2 sizes each · frequent small-batch drops · many “Sold out.”
+          - paragraph [ref=e73]: All that mix-and-match math runs through an inbox, retyped every reorder.
+    - generic [ref=e74]:
+      - generic [ref=e76]:
+        - generic [ref=e79]: The rebuild
+        - heading "The wholesale channel they’re missing" [level=2] [ref=e80]
+      - paragraph [ref=e82]: "A self-serve B2B portal bolted onto their existing Lightspeed store — same catalogue, same inventory. Built for a multi-flavour maker: buyers mix-and-match a 12-pack across heat levels, and reorder their exact mix in one click."
+      - generic [ref=e85]:
+        - generic [ref=e91]: wholesale.thecurehotsauce.ca
+        - generic [ref=e92]:
+          - generic [ref=e93]:
+            - generic [ref=e94]: C
+            - generic [ref=e95]: The Cure · Wholesale
+          - generic [ref=e96]:
+            - paragraph [ref=e97]: Island Affair Giftware
+            - paragraph [ref=e98]: Silver · gift shop
+        - generic [ref=e99]:
+          - generic [ref=e100]:
+            - generic [ref=e101]:
+              - generic [ref=e102]: Catalog · mix-and-match cases
+              - generic [ref=e103]:
+                - img [ref=e104]
+                - text: "Reorder: last order"
+            - list [ref=e107]:
+              - listitem [ref=e108]:
+                - generic [ref=e110]:
+                  - paragraph [ref=e111]: Black Chili Lime
+                  - paragraph [ref=e112]: 148ml · case / 12
+                - generic [ref=e113]: In stock
+                - generic [ref=e114]: $90.00/cs
+                - generic [ref=e115]:
+                  - generic [ref=e116]: –
+                  - generic [ref=e117]: "1"
+                  - generic [ref=e118]: +
+              - listitem [ref=e119]:
+                - generic [ref=e121]:
+                  - paragraph [ref=e122]: ReapTide (Reaper chipotle)
+                  - paragraph [ref=e123]: 148ml · case / 12
+                - generic [ref=e124]: In stock
+                - generic [ref=e125]: $108.00/cs
+                - generic [ref=e126]:
+                  - generic [ref=e127]: –
+                  - generic [ref=e128]: "1"
+                  - generic [ref=e129]: +
+              - listitem [ref=e130]:
+                - generic [ref=e132]:
+                  - paragraph [ref=e133]: Goblin’ Green
+                  - paragraph [ref=e134]: 148ml · case / 12
+                - generic [ref=e135]: In stock
+                - generic [ref=e136]: $72.00/cs
+                - generic [ref=e137]:
+                  - generic [ref=e138]: –
+                  - generic [ref=e139]: "1"
+                  - generic [ref=e140]: +
+              - listitem [ref=e141]:
+                - generic [ref=e143]:
+                  - paragraph [ref=e144]: SirNacha
+                  - paragraph [ref=e145]: 148ml · case / 12
+                - generic [ref=e146]: Low · ships ~5 days
+                - generic [ref=e147]: $102.00/cs
+                - generic [ref=e148]:
+                  - generic [ref=e149]: –
+                  - generic [ref=e150]: "0"
+                  - generic [ref=e151]: +
+              - listitem [ref=e152]:
+                - generic [ref=e154]:
+                  - paragraph [ref=e155]: Rob’s Rub
+                  - paragraph [ref=e156]: 250g jar · case / 6
+                - generic [ref=e157]: In stock
+                - generic [ref=e158]: $45.00/cs
+                - generic [ref=e159]:
+                  - generic [ref=e160]: –
+                  - generic [ref=e161]: "1"
+                  - generic [ref=e162]: +
+              - listitem [ref=e163]:
+                - generic [ref=e165]:
+                  - paragraph [ref=e166]: Worcesterschreier
+                  - paragraph [ref=e167]: 148ml · case / 12
+                - generic [ref=e168]: Backordered
+                - generic [ref=e169]: $72.00/cs
+                - generic [ref=e170]:
+                  - generic [ref=e171]: –
+                  - generic [ref=e172]: "0"
+                  - generic [ref=e173]: +
+            - paragraph [ref=e174]: "min order: 4 cases / $300 · mix-and-match any 148ml into a 12-pack"
+          - generic [ref=e175]:
+            - text: Order summary
+            - generic [ref=e176]:
+              - generic [ref=e177]:
+                - generic [ref=e178]: 3 cases · sauces (mix)
+                - generic [ref=e179]: $270.00
+              - generic [ref=e180]:
+                - generic [ref=e181]: 1 case · Rob’s Rub (6)
+                - generic [ref=e182]: $45.00
+              - generic [ref=e183]:
+                - generic [ref=e184]: MOQ (4 cases / $300)
+                - generic [ref=e185]: met ✓
+            - generic [ref=e187]:
+              - generic [ref=e188]: Free freight at $400
+              - generic [ref=e189]: $315 → add 1 case
+            - generic [ref=e192]:
+              - generic [ref=e193]: Subtotal
+              - generic [ref=e194]: $315.00
+            - button "Submit order → fulfillment" [ref=e195]
+            - paragraph [ref=e196]: drops straight into fulfillment · 0 emails
+        - paragraph [ref=e197]: Wholesale prices illustrative — The Cure publishes no wholesale pricing; retail prices observed live (June 2026).
+      - generic [ref=e198]:
+        - generic [ref=e200]:
+          - generic [ref=e201]:
+            - img [ref=e202]
+            - text: No wholesale channel — retail prices are the only prices
+          - generic [ref=e205]:
+            - img [ref=e206]
+            - text: Gated trade portal with net wholesale pricing.
+        - generic [ref=e209]:
+          - generic [ref=e210]:
+            - img [ref=e211]
+            - text: “Ask them to stock us” — no buyer-facing funnel
+          - generic [ref=e214]:
+            - img [ref=e215]
+            - text: A “Stock The Cure” login on the existing stockist page.
+        - generic [ref=e218]:
+          - generic [ref=e219]:
+            - img [ref=e220]
+            - text: Email/phone orders, re-keyed by hand
+          - generic [ref=e223]:
+            - img [ref=e224]
+            - text: Self-serve ordering, straight into Lightspeed.
+        - generic [ref=e227]:
+          - generic [ref=e228]:
+            - img [ref=e229]
+            - text: No MOQ or case-pack enforcement
+          - generic [ref=e232]:
+            - img [ref=e233]
+            - text: Min 4 cases / $300, enforced at the cart.
+        - generic [ref=e236]:
+          - generic [ref=e237]:
+            - img [ref=e238]
+            - text: No tiered / customer-specific pricing
+          - generic [ref=e241]:
+            - img [ref=e242]
+            - text: Grocer / multi-location / restaurant tiers, live.
+        - generic [ref=e245]:
+          - generic [ref=e246]:
+            - img [ref=e247]
+            - text: 35+ SKUs run as mixed cases by email
+          - generic [ref=e250]:
+            - img [ref=e251]
+            - text: Mix-and-match 12-pack builder + one-click reorder.
+    - generic [ref=e253]:
+      - generic [ref=e255]:
+        - generic [ref=e258]: The result
+        - heading "One stockist, 30 seconds" [level=2] [ref=e259]
+      - generic [ref=e261]:
+        - paragraph [ref=e262]: "Island Affair Giftware in Comox logs in and clicks Reorder: last order. Their saved mixed case loads — Black Chili Lime, ReapTide, Goblin’ Green in one 12-pack, plus a case of Rob’s Rub. The cart confirms it clears the 4-case minimum, shows ReapTide in stock live, applies their Silver-tier price, and checks out — straight into Lightspeed."
+        - generic [ref=e263]:
+          - generic [ref=e264]:
+            - img [ref=e265]
+            - text: Under 30 seconds
+          - generic [ref=e268]:
+            - img [ref=e269]
+            - text: 0 emails for Rob to re-key
+    - generic [ref=e272]:
+      - generic [ref=e274]:
+        - generic [ref=e277]: What it costs
+        - heading "The numbers, on the table" [level=2] [ref=e278]
+      - generic [ref=e280]:
+        - generic [ref=e281]:
+          - paragraph [ref=e282]: To build
+          - paragraph [ref=e283]: $4,000
+          - paragraph [ref=e284]: Portal on top of your Lightspeed store.
+        - generic [ref=e285]:
+          - paragraph [ref=e286]: To run
+          - paragraph [ref=e287]: $300/mo
+          - paragraph [ref=e288]: Hosting, maintenance, support, ongoing fit.
+        - generic [ref=e289]:
+          - paragraph [ref=e290]: Payback
+          - paragraph [ref=e291]: ~6 of 35
+          - paragraph [ref=e292]: Year one (~$7,600) is covered by moving roughly 6 of your existing 35 stockists to self-serve reordering — before a single new account.
+      - paragraph [ref=e294]: Payback illustrative — modelled on an assumed ~$300 average wholesale order at ~40% product margin; we run it on The Cure’s real numbers on the call.
+    - generic [ref=e296]:
+      - paragraph [ref=e297]: This is a spec teardown
+      - heading "Built from public pages — not The Cure’s real data. Yours would be built from yours." [level=2] [ref=e298]
+      - link "cleve@21e8.studio" [ref=e299] [cursor=pointer]:
+        - /url: mailto:cleve@21e8.studio?subject=Our%20wholesale%20flow
+        - text: cleve@21e8.studio
+        - img [ref=e300]
+  - contentinfo [ref=e302]:
+    - generic [ref=e303]:
+      - generic [ref=e304]:
+        - generic [ref=e305]:
+          - link "Workbench a 21e8 studio" [ref=e306] [cursor=pointer]:
+            - /url: /
+            - img [ref=e308]
+            - generic [ref=e311]:
+              - generic [ref=e312]: Workbench
+              - generic [ref=e313]: a 21e8 studio
+          - paragraph [ref=e314]: A studio rebuilding the wholesale workflows your business outgrew. Wholesale first. Vancouver Island, BC.
+        - generic [ref=e315]:
+          - generic [ref=e316]:
+            - generic [ref=e317]: Studio
+            - link "Work" [ref=e318] [cursor=pointer]:
+              - /url: "#work"
+            - link "About" [ref=e319] [cursor=pointer]:
+              - /url: "#who"
+            - link "Teardown 001" [ref=e320] [cursor=pointer]:
+              - /url: /work/hornby-organic
+          - generic [ref=e321]:
+            - generic [ref=e322]: Contact
+            - link "cleve@21e8.studio" [ref=e323] [cursor=pointer]:
+              - /url: mailto:cleve@21e8.studio
+            - generic [ref=e324]: By referral & teardown
+      - generic [ref=e326]:
+        - paragraph [ref=e327]: © 2026 Workbench — a 21e8 studio
+        - paragraph [ref=e328]: This site is the demo.

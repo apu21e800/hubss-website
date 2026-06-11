@@ -1,0 +1,360 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - navigation [ref=e3]:
+      - generic [ref=e4]:
+        - link "HUB Surface Systems Canadian" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - img "HUB Surface Systems" [ref=e6]
+          - generic "Canadian" [ref=e7]:
+            - img [ref=e8]
+            - generic [ref=e11]: Canadian
+        - generic [ref=e12]:
+          - button "Products" [ref=e13]:
+            - text: Products
+            - img [ref=e14]
+          - button "Applications" [ref=e16]:
+            - text: Applications
+            - img [ref=e17]
+          - link "Field Notes" [ref=e19] [cursor=pointer]:
+            - /url: /blog
+            - text: Field Notes
+            - img [ref=e20]
+          - link "About" [ref=e22] [cursor=pointer]:
+            - /url: /about
+          - link "Contact" [ref=e23] [cursor=pointer]:
+            - /url: /contact
+        - generic [ref=e24]:
+          - button "Search" [ref=e25]:
+            - img [ref=e26]
+            - generic [ref=e29]: Search
+          - link "Resources" [ref=e30] [cursor=pointer]:
+            - /url: /resources
+          - link "Lunch & Learn" [ref=e31] [cursor=pointer]:
+            - /url: /lunch-learn
+    - generic [ref=e32]:
+      - img "AggreFill — Pre-coated aggregate filler for larger potholes up to 1 m². Combined with ChipFill for permanent repair." [ref=e33]
+      - generic [ref=e37]:
+        - paragraph [ref=e38]: Concrete and Asphalt Repair
+        - heading "AggreFill" [level=1] [ref=e39]
+        - paragraph [ref=e40]: Pre-coated aggregate filler for larger potholes up to 1 m². Combined with ChipFill for permanent repair.
+    - generic [ref=e42]:
+      - generic [ref=e43]:
+        - generic [ref=e45]:
+          - paragraph [ref=e46]: Specify AggreFill.
+          - paragraph [ref=e47]: Technical data sheets, pricing, and certified installer support across Canada.
+        - generic [ref=e48]:
+          - link "Book a Lunch & Learn" [ref=e49] [cursor=pointer]:
+            - /url: /lunch-learn
+          - link "See Project Gallery →" [ref=e50] [cursor=pointer]:
+            - /url: /gallery
+      - generic [ref=e51]:
+        - generic [ref=e52]:
+          - heading "About AggreFill" [level=2] [ref=e53]
+          - paragraph [ref=e54]: AggreFill is a pre-coated aggregate filler used in combination with ChipFill to permanently repair larger potholes — up to approximately 1 m² in diameter. Where the damage is too deep or wide for a stand-alone material, AggreFill provides the structural mass to fill the void; ChipFill bonds the aggregate matrix and seals the repaired surface flush. The combined system applies cold then receives a heat torch finish, bonding chemically to the surrounding asphalt or concrete substrate and returning the lane to traffic within minutes. Year-round deployment regardless of weather or season — eliminating the dependency on hot-mix plant availability that leaves deep damage unrepaired through Canadian winters. Specified for the deeper road surface failures, parking lot craters, industrial-site damage, and utility cut restoration where conventional cold-mix patching migrates under heavy wheel loading or fails to achieve durable bond at substrate edges. The AggreFill + ChipFill system is a permanent repair solution, not a seasonal temporary patch.
+          - heading "Gallery" [level=2] [ref=e55]
+          - paragraph [ref=e56]: 6 photos
+          - button "View AggreFill — Overview fullscreen" [ref=e57]:
+            - img "AggreFill — Overview" [ref=e58]
+            - img [ref=e60]
+            - generic:
+              - paragraph: AggreFill · Overview
+          - generic [ref=e64]:
+            - button "View AggreFill — Installation fullscreen" [ref=e65]:
+              - img "AggreFill — Installation" [ref=e66]
+              - img [ref=e68]
+              - generic:
+                - paragraph: AggreFill · Installation
+            - button "View AggreFill — Detail fullscreen" [ref=e72]:
+              - img "AggreFill — Detail" [ref=e73]
+              - img [ref=e75]
+              - generic:
+                - paragraph: AggreFill · Detail
+            - button "View AggreFill — Completed fullscreen" [ref=e79]:
+              - img "AggreFill — Completed" [ref=e80]
+              - img [ref=e82]
+              - generic:
+                - paragraph: AggreFill · Completed
+            - button "View AggreFill — In Service fullscreen" [ref=e86]:
+              - img "AggreFill — In Service" [ref=e87]
+              - img [ref=e89]
+              - generic:
+                - paragraph: AggreFill · In Service
+            - button "View AggreFill — Close-up fullscreen" [ref=e93]:
+              - img "AggreFill — Close-up" [ref=e94]
+              - img [ref=e96]
+              - generic:
+                - paragraph: AggreFill · Close-up
+        - generic [ref=e101]:
+          - heading "Product Features" [level=3] [ref=e103]
+          - generic [ref=e104]:
+            - generic [ref=e105]:
+              - generic [ref=e106]: Type
+              - generic [ref=e107]: Pre-coated aggregate filler — paired with ChipFill
+            - generic [ref=e108]:
+              - generic [ref=e109]: Application
+              - generic [ref=e110]: Cold-applied aggregate + heat-torch ChipFill matrix
+            - generic [ref=e111]:
+              - generic [ref=e112]: Substrate
+              - generic [ref=e113]: Asphalt and concrete
+            - generic [ref=e114]:
+              - generic [ref=e115]: Repair Size
+              - generic [ref=e116]: Larger damages — up to ~1 m² in diameter
+            - generic [ref=e117]:
+              - generic [ref=e118]: Cure
+              - generic [ref=e119]: Rapid set — minutes to reopen to traffic
+            - generic [ref=e120]:
+              - generic [ref=e121]: Weather
+              - generic [ref=e122]: Year-round, all-conditions deployment
+      - generic [ref=e123]:
+        - generic [ref=e124]:
+          - generic [ref=e125]:
+            - paragraph [ref=e126]: Where It's Used
+            - heading "Applications" [level=2] [ref=e127]
+          - link "All applications" [ref=e128] [cursor=pointer]:
+            - /url: /applications
+            - text: All applications
+            - img [ref=e129]
+        - generic [ref=e131]:
+          - link "Parking Lots — Durable stall markings, wayfinding colour, and surface rejuv Parking Lots Durable stall markings, wayfinding colour, and surface rejuvenation for commerci… Explore" [ref=e132] [cursor=pointer]:
+            - /url: /applications/parking-lots
+            - generic [ref=e133]:
+              - img "Parking Lots — Durable stall markings, wayfinding colour, and surface rejuv" [ref=e134]
+              - paragraph [ref=e139]: Parking Lots
+            - generic [ref=e140]:
+              - paragraph [ref=e141]: Durable stall markings, wayfinding colour, and surface rejuvenation for commerci…
+              - generic [ref=e142]:
+                - text: Explore
+                - img [ref=e143]
+          - link "Private Driveways — Stamped asphalt driveways — the look of stone pavers without Private Driveways Stamped asphalt driveways — the look of stone pavers without the demolition or m… Explore" [ref=e145] [cursor=pointer]:
+            - /url: /applications/private-driveways
+            - generic [ref=e146]:
+              - img "Private Driveways — Stamped asphalt driveways — the look of stone pavers without" [ref=e147]
+              - paragraph [ref=e152]: Private Driveways
+            - generic [ref=e153]:
+              - paragraph [ref=e154]: Stamped asphalt driveways — the look of stone pavers without the demolition or m…
+              - generic [ref=e155]:
+                - text: Explore
+                - img [ref=e156]
+          - link "Residential Driveways — Transform an existing driveway into decorative stamped aspha Residential Driveways Transform an existing driveway into decorative stamped asphalt — no demolition r… Explore" [ref=e158] [cursor=pointer]:
+            - /url: /applications/residential-driveways
+            - generic [ref=e159]:
+              - img "Residential Driveways — Transform an existing driveway into decorative stamped aspha" [ref=e160]
+              - paragraph [ref=e165]: Residential Driveways
+            - generic [ref=e166]:
+              - paragraph [ref=e167]: Transform an existing driveway into decorative stamped asphalt — no demolition r…
+              - generic [ref=e168]:
+                - text: Explore
+                - img [ref=e169]
+          - link "Parks & Paths — Decorative surface systems for urban paths, park plazas, and Parks & Paths Decorative surface systems for urban paths, park plazas, and multi-use trails. Explore" [ref=e171] [cursor=pointer]:
+            - /url: /applications/parks-paths
+            - generic [ref=e172]:
+              - img "Parks & Paths — Decorative surface systems for urban paths, park plazas, and" [ref=e173]
+              - paragraph [ref=e178]: Parks & Paths
+            - generic [ref=e179]:
+              - paragraph [ref=e180]: Decorative surface systems for urban paths, park plazas, and multi-use trails.
+              - generic [ref=e181]:
+                - text: Explore
+                - img [ref=e182]
+          - link "Commercial Spaces — Premium hardscape finishes for retail centres, mixed-use dev Commercial Spaces Premium hardscape finishes for retail centres, mixed-use developments, and hospi… Explore" [ref=e184] [cursor=pointer]:
+            - /url: /applications/commercial-spaces
+            - generic [ref=e185]:
+              - img "Commercial Spaces — Premium hardscape finishes for retail centres, mixed-use dev" [ref=e186]
+              - paragraph [ref=e191]: Commercial Spaces
+            - generic [ref=e192]:
+              - paragraph [ref=e193]: Premium hardscape finishes for retail centres, mixed-use developments, and hospi…
+              - generic [ref=e194]:
+                - text: Explore
+                - img [ref=e195]
+          - link "Townhomes — Cohesive stamped asphalt hardscape for townhome and strata d Townhomes Cohesive stamped asphalt hardscape for townhome and strata developments. Explore" [ref=e197] [cursor=pointer]:
+            - /url: /applications/townhomes
+            - generic [ref=e198]:
+              - img "Townhomes — Cohesive stamped asphalt hardscape for townhome and strata d" [ref=e199]
+              - paragraph [ref=e204]: Townhomes
+            - generic [ref=e205]:
+              - paragraph [ref=e206]: Cohesive stamped asphalt hardscape for townhome and strata developments.
+              - generic [ref=e207]:
+                - text: Explore
+                - img [ref=e208]
+    - generic [ref=e212]:
+      - generic [ref=e213]:
+        - generic [ref=e214]:
+          - paragraph [ref=e215]: Education & Engagement
+          - heading "Lunch & Learn at Your Location" [level=2] [ref=e216]:
+            - text: Lunch & Learn
+            - text: at Your Location
+          - paragraph [ref=e217]: Lunch included, in your office or virtual.
+        - generic [ref=e218]:
+          - generic [ref=e219]:
+            - img [ref=e220]
+            - generic [ref=e222]: 45–60 minute presentation tailored to your projects
+          - generic [ref=e223]:
+            - img [ref=e224]
+            - generic [ref=e226]: Live Q&A with HUB technical team
+          - generic [ref=e227]:
+            - img [ref=e228]
+            - generic [ref=e230]: Sample materials and specification sheets
+          - generic [ref=e231]:
+            - img [ref=e232]
+            - generic [ref=e234]: Lunch included — virtual sessions come with a $25 lunch voucher
+        - generic [ref=e235]:
+          - generic [ref=e236]:
+            - textbox "Your name" [ref=e237]
+            - textbox "Email address" [ref=e238]
+          - generic [ref=e239]:
+            - textbox "Company or organization" [ref=e240]
+            - textbox "City" [ref=e241]
+          - textbox "Phone number" [ref=e242]
+          - button "Request Lunch & Learn" [ref=e243]
+      - generic [ref=e244]:
+        - img "HUB Surface Systems Lunch and Learn — decorative pavement products presentation" [ref=e246]
+        - generic:
+          - img "HUB Surface Systems mascot moose"
+    - generic [ref=e248]:
+      - generic:
+        - img
+      - generic [ref=e250]:
+        - generic [ref=e251]:
+          - generic [ref=e252]:
+            - img "HUB Surface Systems" [ref=e254]
+            - paragraph [ref=e255]:
+              - text: Pedestrian safety. Traffic calming.
+              - text: Civic identity. Coast to coast since 1999.
+            - paragraph [ref=e256]:
+              - generic "Canadian" [ref=e257]:
+                - img [ref=e258]
+                - generic [ref=e261]: Canadian
+              - generic [ref=e262]: Owned and operated · Coast to coast · Since 1999
+            - generic [ref=e263]:
+              - link "LinkedIn" [ref=e264] [cursor=pointer]:
+                - /url: https://www.linkedin.com/company/hub-surface-systems
+                - img [ref=e265]
+              - link "YouTube" [ref=e267] [cursor=pointer]:
+                - /url: https://www.youtube.com/@hubsurfacesystems
+                - img [ref=e268]
+              - link "Instagram" [ref=e270] [cursor=pointer]:
+                - /url: https://www.instagram.com/hubsurfacesystems
+                - img [ref=e271]
+              - link "Facebook" [ref=e273] [cursor=pointer]:
+                - /url: https://www.facebook.com/hubsurfacesystems
+                - img [ref=e274]
+              - link "X" [ref=e276] [cursor=pointer]:
+                - /url: https://x.com/HUB_SS
+                - img [ref=e277]
+          - generic [ref=e279]:
+            - heading "Products" [level=4] [ref=e280]
+            - list [ref=e281]:
+              - listitem [ref=e282]:
+                - link "TrafficPatternsXD" [ref=e283] [cursor=pointer]:
+                  - /url: /products/traffic-patterns-xd
+              - listitem [ref=e284]:
+                - link "TrafficPatterns" [ref=e285] [cursor=pointer]:
+                  - /url: /products/traffic-patterns
+              - listitem [ref=e286]:
+                - link "StreetBond" [ref=e287] [cursor=pointer]:
+                  - /url: /products/streetbond
+              - listitem [ref=e288]:
+                - link "StreetPrint" [ref=e289] [cursor=pointer]:
+                  - /url: /products/streetprint
+              - listitem [ref=e290]:
+                - link "DecoMark" [ref=e291] [cursor=pointer]:
+                  - /url: /products/decomark
+              - listitem [ref=e292]:
+                - link "MMAX" [ref=e293] [cursor=pointer]:
+                  - /url: /products/mmax
+              - listitem [ref=e294]:
+                - link "StreetBondSR" [ref=e295] [cursor=pointer]:
+                  - /url: /products/streetbondsr
+              - listitem [ref=e296]:
+                - link "DuraTherm" [ref=e297] [cursor=pointer]:
+                  - /url: /products/duratherm
+              - listitem [ref=e298]:
+                - link "DuraShield" [ref=e299] [cursor=pointer]:
+                  - /url: /products/durashield
+              - listitem [ref=e300]:
+                - link "AirMark" [ref=e301] [cursor=pointer]:
+                  - /url: /products/airmark
+              - listitem [ref=e302]:
+                - link "PreMark" [ref=e303] [cursor=pointer]:
+                  - /url: /products/premark
+              - listitem [ref=e304]:
+                - link "ChipFill" [ref=e305] [cursor=pointer]:
+                  - /url: /products/chipfill
+              - listitem [ref=e306]:
+                - link "AggreFill" [ref=e307] [cursor=pointer]:
+                  - /url: /products/aggrefill
+              - listitem [ref=e308]:
+                - link "Fast Patch DPR" [ref=e309] [cursor=pointer]:
+                  - /url: /products/fast-patch
+          - generic [ref=e310]:
+            - heading "Applications" [level=4] [ref=e311]
+            - list [ref=e312]:
+              - listitem [ref=e313]:
+                - link "Crosswalks" [ref=e314] [cursor=pointer]:
+                  - /url: /applications/crosswalks
+              - listitem [ref=e315]:
+                - link "Bike Lanes" [ref=e316] [cursor=pointer]:
+                  - /url: /applications/bike-lanes
+              - listitem [ref=e317]:
+                - link "Bus Lanes" [ref=e318] [cursor=pointer]:
+                  - /url: /applications/bus-lanes
+              - listitem [ref=e319]:
+                - link "Regulatory Markings" [ref=e320] [cursor=pointer]:
+                  - /url: /applications/regulatory-markings
+              - listitem [ref=e321]:
+                - link "Parks & Paths" [ref=e322] [cursor=pointer]:
+                  - /url: /applications/parks-paths
+              - listitem [ref=e323]:
+                - link "Community Branding" [ref=e324] [cursor=pointer]:
+                  - /url: /applications/community-branding
+              - listitem [ref=e325]:
+                - link "Parking Lots" [ref=e326] [cursor=pointer]:
+                  - /url: /applications/parking-lots
+              - listitem [ref=e327]:
+                - link "Private Driveways" [ref=e328] [cursor=pointer]:
+                  - /url: /applications/private-driveways
+              - listitem [ref=e329]:
+                - link "Public Art" [ref=e330] [cursor=pointer]:
+                  - /url: /applications/public-art
+              - listitem [ref=e331]:
+                - link "Pedestrian Safety" [ref=e332] [cursor=pointer]:
+                  - /url: /applications/pedestrian-safety
+              - listitem [ref=e333]:
+                - link "Traffic Calming" [ref=e334] [cursor=pointer]:
+                  - /url: /applications/traffic-calming
+          - generic [ref=e335]:
+            - heading "Offices" [level=4] [ref=e336]
+            - generic [ref=e337]:
+              - generic [ref=e338]:
+                - paragraph [ref=e340]: West Office
+                - paragraph [ref=e341]: Ladysmith, BC
+                - link "cleve.stordy@hubss.com" [ref=e342] [cursor=pointer]:
+                  - /url: mailto:cleve.stordy@hubss.com
+                - link "604-309-8212" [ref=e343] [cursor=pointer]:
+                  - /url: tel:6043098212
+              - generic [ref=e344]:
+                - paragraph [ref=e346]: East Office
+                - paragraph [ref=e347]: Milton, Ontario
+                - link "doug.bain@hubss.com" [ref=e348] [cursor=pointer]:
+                  - /url: mailto:doug.bain@hubss.com
+                - link "416-540-9287" [ref=e349] [cursor=pointer]:
+                  - /url: tel:4165409287
+        - generic [ref=e350]:
+          - paragraph [ref=e351]: © 2026 HUB Surface Systems. All rights reserved.
+          - generic [ref=e352]:
+            - link "Privacy Policy" [ref=e353] [cursor=pointer]:
+              - /url: /privacy
+            - link "Terms of Use" [ref=e354] [cursor=pointer]:
+              - /url: /terms
+  - generic:
+    - generic:
+      - paragraph: Canada's Decorative Pavement Specialists · Since 1999
+      - generic:
+        - link:
+          - /url: /products
+          - text: See the Systems
+        - link:
+          - /url: /lunch-learn
+          - text: Book a Lunch & Learn
+  - button "Open Next.js Dev Tools" [ref=e360] [cursor=pointer]:
+    - img [ref=e361]
+  - alert [ref=e364]

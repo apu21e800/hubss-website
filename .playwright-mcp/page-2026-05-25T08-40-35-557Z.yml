@@ -1,0 +1,357 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - navigation [ref=e3]:
+      - generic [ref=e4]:
+        - link "HUB Surface Systems Canadian" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - img "HUB Surface Systems" [ref=e6]
+          - generic "Canadian" [ref=e7]:
+            - img [ref=e8]
+            - generic [ref=e11]: Canadian
+        - generic [ref=e12]:
+          - button "Products" [ref=e13]:
+            - text: Products
+            - img [ref=e14]
+          - button "Applications" [ref=e16]:
+            - text: Applications
+            - img [ref=e17]
+          - link "Field Notes" [ref=e19] [cursor=pointer]:
+            - /url: /blog
+            - text: Field Notes
+            - img [ref=e20]
+          - link "About" [ref=e22] [cursor=pointer]:
+            - /url: /about
+          - link "Contact" [ref=e23] [cursor=pointer]:
+            - /url: /contact
+        - generic [ref=e24]:
+          - button "Search" [ref=e25]:
+            - img [ref=e26]
+            - generic [ref=e29]: Search
+          - link "Resources" [ref=e30] [cursor=pointer]:
+            - /url: /resources
+          - link "Lunch & Learn" [ref=e31] [cursor=pointer]:
+            - /url: /lunch-learn
+    - generic [ref=e32]:
+      - generic [ref=e36]:
+        - generic [ref=e37]:
+          - paragraph [ref=e38]: Free · No Obligation · Coast to Coast
+          - heading "Lunch Is On Us. Your Next Spec Is Free." [level=1] [ref=e39]:
+            - text: Lunch Is On Us.
+            - text: Your Next Spec Is Free.
+          - paragraph [ref=e40]: A 45-minute HUB Lunch & Learn delivers everything your team needs to confidently specify decorative pavement, thermoplastic crosswalks, and coloured coatings — real Canadian case studies and spec language you can drop straight into your next RFP.
+          - generic [ref=e41]:
+            - generic [ref=e44]: 30+ Years in Canada
+            - generic [ref=e47]: 500+ Municipalities
+            - generic [ref=e50]: Free CE Credits
+          - generic [ref=e51]:
+            - link "Book Your Free Session" [ref=e52] [cursor=pointer]:
+              - /url: "#book"
+              - text: Book Your Free Session
+              - img [ref=e53]
+            - generic [ref=e55]:
+              - 'link "East: 416-540-9287" [ref=e56] [cursor=pointer]':
+                - /url: tel:+14165409287
+              - generic [ref=e57]: ·
+              - 'link "West: 604-309-8212" [ref=e58] [cursor=pointer]':
+                - /url: tel:+16043098212
+        - img "HUB Surface Systems moose mascot — book a free Lunch & Learn" [ref=e60]
+      - generic [ref=e63]:
+        - generic [ref=e64]:
+          - generic [ref=e65]: 45 min
+          - generic [ref=e66]: Focused Session
+        - generic [ref=e67]:
+          - generic [ref=e68]: 100% Free
+          - generic [ref=e69]: No Invoice Ever
+        - generic [ref=e70]:
+          - generic [ref=e71]: Lunch Included
+          - generic [ref=e72]: Every In-Person
+        - generic [ref=e73]:
+          - generic [ref=e74]: CE Credits
+          - generic [ref=e75]: AIBC · RAIC · PEO
+      - generic [ref=e77]:
+        - generic [ref=e78]:
+          - paragraph [ref=e79]: What You Walk Away With
+          - heading "Not a Sales Pitch. An Education." [level=2] [ref=e80]
+        - generic [ref=e81]:
+          - generic [ref=e82]:
+            - generic [ref=e84]: "01"
+            - generic [ref=e85]:
+              - heading "Spec Language Ready for Your RFP" [level=3] [ref=e86]
+              - paragraph [ref=e87]: Pre-written specification language for thermoplastic crosswalks, MMA bus lanes, coloured bike lanes, and more. Copy it straight into your next tender document.
+          - generic [ref=e88]:
+            - generic [ref=e90]: "02"
+            - generic [ref=e91]:
+              - heading "The Lifecycle Cost Math" [level=3] [ref=e92]
+              - paragraph [ref=e93]: Lifecycle cost math, side by side. How HUB systems deliver years of high-performance service versus repeated seasonal interventions — the numbers usually surprise people.
+          - generic [ref=e94]:
+            - generic [ref=e96]: "03"
+            - generic [ref=e97]:
+              - heading "Lunch Included. No Catch." [level=3] [ref=e98]
+              - paragraph [ref=e99]: In-person sessions include catered lunch for your team. Virtual sessions come with a $25 lunch voucher delivered before we connect.
+      - generic [ref=e101]:
+        - generic [ref=e102]:
+          - paragraph [ref=e103]: Who It's Built For
+          - heading "Your Whole Team. One Session." [level=2] [ref=e104]
+        - generic [ref=e105]:
+          - generic [ref=e106]:
+            - generic [ref=e107]:
+              - paragraph [ref=e108]: Municipal Engineers & Planners
+              - generic [ref=e109]: Vision Zero · Complete Streets
+            - paragraph [ref=e110]: Crosswalks, transit corridors, and complete streets that meet Vision Zero and Complete Streets specifications, with accessibility-aware design. Real installation data from Canadian municipalities coast to coast.
+          - generic [ref=e111]:
+            - generic [ref=e112]:
+              - paragraph [ref=e113]: Landscape Architects & Designers
+              - generic [ref=e114]: Public Art · Driveways
+            - paragraph [ref=e115]: 12+ StreetPrint patterns, full StreetBond Pantone palette, and decorative surfaces engineered to outlast the design life of the asphalt beneath them. Snowplow-safe. Engineering-approved.
+          - generic [ref=e116]:
+            - generic [ref=e117]:
+              - paragraph [ref=e118]: Engineering & Consulting Firms
+              - generic [ref=e119]: CE Credits
+            - paragraph [ref=e120]: CE credits available. Walk away with real spec sheets, sample materials, and a list of certified HUB installers in your region.
+          - generic [ref=e121]:
+            - generic [ref=e122]:
+              - paragraph [ref=e123]: Contractors & Applicators
+              - generic [ref=e124]: Certified Applicator Program
+            - paragraph [ref=e125]: Learn about the HUB certified applicator program — unlock territory rights and bid on jobs your competitors can't touch.
+      - generic [ref=e126]:
+        - paragraph [ref=e127]: Previous Lunch & Learn clients include
+        - generic [ref=e129]:
+          - generic [ref=e131]: City of Toronto
+          - generic [ref=e134]: York Region
+          - generic [ref=e137]: City of Vancouver
+          - generic [ref=e140]: University of British Columbia
+          - generic [ref=e143]: City of Ottawa
+          - generic [ref=e146]: City of Calgary
+          - generic [ref=e149]: City of Brampton
+          - generic [ref=e152]: City of Mississauga
+          - generic [ref=e155]: TransLink
+          - generic [ref=e158]: City of Surrey
+          - generic [ref=e161]: City of Edmonton
+          - generic [ref=e164]: City of Winnipeg
+          - generic [ref=e167]: City of Burnaby
+          - generic [ref=e170]: City of Richmond Hill
+          - generic [ref=e173]: Halifax Regional Municipality
+          - generic [ref=e176]: City of Victoria
+          - generic [ref=e179]: District of Saanich
+          - generic [ref=e182]: Strathcona County
+          - generic [ref=e185]: City of Toronto
+          - generic [ref=e188]: York Region
+          - generic [ref=e191]: City of Vancouver
+          - generic [ref=e194]: University of British Columbia
+          - generic [ref=e197]: City of Ottawa
+          - generic [ref=e200]: City of Calgary
+          - generic [ref=e203]: City of Brampton
+          - generic [ref=e206]: City of Mississauga
+          - generic [ref=e209]: TransLink
+          - generic [ref=e212]: City of Surrey
+          - generic [ref=e215]: City of Edmonton
+          - generic [ref=e218]: City of Winnipeg
+          - generic [ref=e221]: City of Burnaby
+          - generic [ref=e224]: City of Richmond Hill
+          - generic [ref=e227]: Halifax Regional Municipality
+          - generic [ref=e230]: City of Victoria
+          - generic [ref=e233]: District of Saanich
+          - generic [ref=e236]: Strathcona County
+      - generic [ref=e239]:
+        - generic [ref=e240]:
+          - paragraph [ref=e241]: Common Questions
+          - heading "Everything You Need to Know" [level=2] [ref=e242]
+        - generic [ref=e243]:
+          - button "How long is the session?" [ref=e245]:
+            - generic [ref=e246]: How long is the session?
+            - img [ref=e248]
+          - button "Is this actually free?" [ref=e251]:
+            - generic [ref=e252]: Is this actually free?
+            - img [ref=e254]
+          - button "Do we get continuing education credits?" [ref=e257]:
+            - generic [ref=e258]: Do we get continuing education credits?
+            - img [ref=e260]
+          - button "In-person or virtual?" [ref=e263]:
+            - generic [ref=e264]: In-person or virtual?
+            - img [ref=e266]
+      - generic [ref=e270]:
+        - generic [ref=e271]:
+          - paragraph [ref=e272]: Book Your Session
+          - heading "Claim Your Free Lunch & Learn" [level=2] [ref=e273]
+          - paragraph [ref=e274]: Tell us who you are and where you are — we handle the rest. Usually within 24 hours.
+        - generic [ref=e275]:
+          - generic [ref=e276]:
+            - img [ref=e277]
+            - generic [ref=e279]: HUB responds within 24 hours
+          - generic [ref=e280]:
+            - img [ref=e281]
+            - generic [ref=e283]: No commitment required
+          - generic [ref=e284]:
+            - img [ref=e285]
+            - generic [ref=e287]: In-person, virtual, or hybrid
+        - generic [ref=e290]:
+          - generic [ref=e291]:
+            - textbox "Your name" [ref=e292]
+            - textbox "Email address" [ref=e293]
+            - textbox "Company or organization" [ref=e294]
+            - textbox "City" [ref=e295]
+          - textbox "Phone number" [ref=e296]
+          - button "Claim Your Free Lunch & Learn →" [ref=e297]
+          - paragraph [ref=e298]: No obligation. No invoice. Lunch included. We'll reach out within 24 hours.
+        - generic [ref=e299]:
+          - generic [ref=e300]:
+            - paragraph [ref=e301]: Eastern Canada
+            - paragraph [ref=e302]: Doug Bain
+            - link "416-540-9287" [ref=e303] [cursor=pointer]:
+              - /url: tel:+14165409287
+            - link "doug.bain@hubss.com" [ref=e304] [cursor=pointer]:
+              - /url: mailto:doug.bain@hubss.com
+          - generic [ref=e305]:
+            - paragraph [ref=e306]: Western Canada
+            - paragraph [ref=e307]: Cleve Stordy
+            - link "604-309-8212" [ref=e308] [cursor=pointer]:
+              - /url: tel:+16043098212
+            - link "cleve.stordy@hubss.com" [ref=e309] [cursor=pointer]:
+              - /url: mailto:cleve.stordy@hubss.com
+    - generic [ref=e310]:
+      - generic:
+        - img
+      - generic [ref=e312]:
+        - generic [ref=e313]:
+          - generic [ref=e314]:
+            - img "HUB Surface Systems" [ref=e316]
+            - paragraph [ref=e317]:
+              - text: Pedestrian safety. Traffic calming.
+              - text: Civic identity. Coast to coast since 1999.
+            - paragraph [ref=e318]:
+              - generic "Canadian" [ref=e319]:
+                - img [ref=e320]
+                - generic [ref=e323]: Canadian
+              - generic [ref=e324]: Owned and operated · Coast to coast · Since 1999
+            - generic [ref=e325]:
+              - link "LinkedIn" [ref=e326] [cursor=pointer]:
+                - /url: https://www.linkedin.com/company/hub-surface-systems
+                - img [ref=e327]
+              - link "YouTube" [ref=e329] [cursor=pointer]:
+                - /url: https://www.youtube.com/@hubsurfacesystems
+                - img [ref=e330]
+              - link "Instagram" [ref=e332] [cursor=pointer]:
+                - /url: https://www.instagram.com/hubsurfacesystems
+                - img [ref=e333]
+              - link "Facebook" [ref=e335] [cursor=pointer]:
+                - /url: https://www.facebook.com/hubsurfacesystems
+                - img [ref=e336]
+              - link "X" [ref=e338] [cursor=pointer]:
+                - /url: https://x.com/HUB_SS
+                - img [ref=e339]
+          - generic [ref=e341]:
+            - heading "Products" [level=4] [ref=e342]
+            - list [ref=e343]:
+              - listitem [ref=e344]:
+                - link "TrafficPatternsXD" [ref=e345] [cursor=pointer]:
+                  - /url: /products/traffic-patterns-xd
+              - listitem [ref=e346]:
+                - link "TrafficPatterns" [ref=e347] [cursor=pointer]:
+                  - /url: /products/traffic-patterns
+              - listitem [ref=e348]:
+                - link "StreetBond" [ref=e349] [cursor=pointer]:
+                  - /url: /products/streetbond
+              - listitem [ref=e350]:
+                - link "StreetPrint" [ref=e351] [cursor=pointer]:
+                  - /url: /products/streetprint
+              - listitem [ref=e352]:
+                - link "DecoMark" [ref=e353] [cursor=pointer]:
+                  - /url: /products/decomark
+              - listitem [ref=e354]:
+                - link "MMAX" [ref=e355] [cursor=pointer]:
+                  - /url: /products/mmax
+              - listitem [ref=e356]:
+                - link "StreetBondSR" [ref=e357] [cursor=pointer]:
+                  - /url: /products/streetbondsr
+              - listitem [ref=e358]:
+                - link "DuraTherm" [ref=e359] [cursor=pointer]:
+                  - /url: /products/duratherm
+              - listitem [ref=e360]:
+                - link "DuraShield" [ref=e361] [cursor=pointer]:
+                  - /url: /products/durashield
+              - listitem [ref=e362]:
+                - link "AirMark" [ref=e363] [cursor=pointer]:
+                  - /url: /products/airmark
+              - listitem [ref=e364]:
+                - link "PreMark" [ref=e365] [cursor=pointer]:
+                  - /url: /products/premark
+              - listitem [ref=e366]:
+                - link "ChipFill" [ref=e367] [cursor=pointer]:
+                  - /url: /products/chipfill
+              - listitem [ref=e368]:
+                - link "AggreFill" [ref=e369] [cursor=pointer]:
+                  - /url: /products/aggrefill
+              - listitem [ref=e370]:
+                - link "Fast Patch DPR" [ref=e371] [cursor=pointer]:
+                  - /url: /products/fast-patch
+          - generic [ref=e372]:
+            - heading "Applications" [level=4] [ref=e373]
+            - list [ref=e374]:
+              - listitem [ref=e375]:
+                - link "Crosswalks" [ref=e376] [cursor=pointer]:
+                  - /url: /applications/crosswalks
+              - listitem [ref=e377]:
+                - link "Bike Lanes" [ref=e378] [cursor=pointer]:
+                  - /url: /applications/bike-lanes
+              - listitem [ref=e379]:
+                - link "Bus Lanes" [ref=e380] [cursor=pointer]:
+                  - /url: /applications/bus-lanes
+              - listitem [ref=e381]:
+                - link "Regulatory Markings" [ref=e382] [cursor=pointer]:
+                  - /url: /applications/regulatory-markings
+              - listitem [ref=e383]:
+                - link "Parks & Paths" [ref=e384] [cursor=pointer]:
+                  - /url: /applications/parks-paths
+              - listitem [ref=e385]:
+                - link "Community Branding" [ref=e386] [cursor=pointer]:
+                  - /url: /applications/community-branding
+              - listitem [ref=e387]:
+                - link "Parking Lots" [ref=e388] [cursor=pointer]:
+                  - /url: /applications/parking-lots
+              - listitem [ref=e389]:
+                - link "Private Driveways" [ref=e390] [cursor=pointer]:
+                  - /url: /applications/private-driveways
+              - listitem [ref=e391]:
+                - link "Public Art" [ref=e392] [cursor=pointer]:
+                  - /url: /applications/public-art
+              - listitem [ref=e393]:
+                - link "Pedestrian Safety" [ref=e394] [cursor=pointer]:
+                  - /url: /applications/pedestrian-safety
+              - listitem [ref=e395]:
+                - link "Traffic Calming" [ref=e396] [cursor=pointer]:
+                  - /url: /applications/traffic-calming
+          - generic [ref=e397]:
+            - heading "Offices" [level=4] [ref=e398]
+            - generic [ref=e399]:
+              - generic [ref=e400]:
+                - paragraph [ref=e402]: West Office
+                - paragraph [ref=e403]: Ladysmith, BC
+                - link "cleve.stordy@hubss.com" [ref=e404] [cursor=pointer]:
+                  - /url: mailto:cleve.stordy@hubss.com
+                - link "604-309-8212" [ref=e405] [cursor=pointer]:
+                  - /url: tel:6043098212
+              - generic [ref=e406]:
+                - paragraph [ref=e408]: East Office
+                - paragraph [ref=e409]: Milton, Ontario
+                - link "doug.bain@hubss.com" [ref=e410] [cursor=pointer]:
+                  - /url: mailto:doug.bain@hubss.com
+                - link "416-540-9287" [ref=e411] [cursor=pointer]:
+                  - /url: tel:4165409287
+        - generic [ref=e412]:
+          - paragraph [ref=e413]: © 2026 HUB Surface Systems. All rights reserved.
+          - generic [ref=e414]:
+            - link "Privacy Policy" [ref=e415] [cursor=pointer]:
+              - /url: /privacy
+            - link "Terms of Use" [ref=e416] [cursor=pointer]:
+              - /url: /terms
+  - generic:
+    - generic:
+      - paragraph: Canada's Decorative Pavement Specialists · Since 1999
+      - generic:
+        - link:
+          - /url: /products
+          - text: See the Systems
+        - link:
+          - /url: /lunch-learn
+          - text: Book a Lunch & Learn
+  - alert [ref=e417]

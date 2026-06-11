@@ -1,0 +1,44 @@
+- generic [active] [ref=e1]:
+  - main [ref=e7]:
+    - generic [ref=e8]:
+      - generic [ref=e9]:
+        - img "HUB Surface Systems" [ref=e11]
+        - heading "Welcome to HUB Surface Systems." [level=1] [ref=e12]
+        - paragraph [ref=e13]: Decorative pavement, road safety markings, and surface solutions — pick where you'd like to go.
+      - generic [ref=e15]:
+        - generic [ref=e16]:
+          - paragraph [ref=e17]: Prize draw
+          - heading "Enter to win." [level=2] [ref=e18]
+          - paragraph [ref=e19]: One entry per person. Winner announced after the show.
+        - generic [ref=e20]:
+          - generic [ref=e22]: Full name *
+          - textbox "Jane Smith" [ref=e23]: Real Human
+        - generic [ref=e24]:
+          - generic [ref=e26]: Email *
+          - textbox "jane@city.ca" [ref=e27]: browsertest@gmail.com
+        - generic [ref=e28]:
+          - generic [ref=e30]: Company *
+          - textbox "City of Toronto" [ref=e31]: Test Municipality
+        - generic [ref=e32]:
+          - generic [ref=e33]:
+            - generic [ref=e34]: Role / title
+            - generic [ref=e35]: Optional
+          - textbox "Public Realm Designer" [ref=e36]
+        - generic [ref=e37]:
+          - generic [ref=e38]:
+            - generic [ref=e39]: Phone
+            - generic [ref=e40]: Optional
+          - textbox "416-555-0100" [ref=e41]
+        - generic [ref=e42] [cursor=pointer]:
+          - checkbox "I'd like to receive HUBSS updates and product news. You can unsubscribe at any time. We never share your information." [ref=e43]
+          - generic [ref=e44]:
+            - text: I'd like to receive HUBSS updates and product news.
+            - generic [ref=e45]: You can unsubscribe at any time. We never share your information.
+        - alert [ref=e59]: Please try again later.
+        - generic [ref=e46]:
+          - button "Enter the draw" [ref=e47]
+          - button "No thanks" [ref=e48]
+      - generic [ref=e49]: hubss.com · Redefining hardscapes
+  - button "Open Next.js Dev Tools" [ref=e55] [cursor=pointer]:
+    - img [ref=e56]
+  - alert [ref=e6]

@@ -1,0 +1,45 @@
+- generic [ref=e1]:
+  - main [ref=e3]:
+    - generic [ref=e5]:
+      - img "HUBSS Catalogue 2026 — page 2 of 116" [ref=e35]
+      - img "HUBSS Catalogue 2026 — page 3 of 116" [ref=e36]
+    - generic:
+      - link "Hubss.com" [ref=e9] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e10]: ←
+        - text: Hubss.com
+      - generic:
+        - paragraph: Catalogue 2026
+        - paragraph: 2 / 116
+      - generic [ref=e11]:
+        - link "Download the catalogue as a PDF" [ref=e12] [cursor=pointer]:
+          - /url: /catalogue/HUBSS-Catalogue-2026.pdf
+          - img [ref=e13]
+          - text: PDF
+        - button "Share this catalogue" [ref=e15]:
+          - img [ref=e16]
+          - text: Share
+    - generic [ref=e19]:
+      - link "Book a Free Lunch & Learn" [ref=e20] [cursor=pointer]:
+        - /url: /lunch-learn?utm_source=catalogue&utm_medium=flipbook&utm_campaign=web
+      - link "Call 604-309-8212" [ref=e21] [cursor=pointer]:
+        - /url: tel:+16043098212
+        - img [ref=e22]
+      - link "Email info@hubss.com" [ref=e24] [cursor=pointer]:
+        - /url: mailto:info@hubss.com
+        - img [ref=e25]
+    - button "Previous page" [ref=e28]:
+      - img [ref=e29]
+    - button "Next page" [active] [ref=e31]:
+      - img [ref=e32]
+  - generic:
+    - generic:
+      - paragraph: Canada's Decorative Pavement Specialists · Since 1999
+      - generic:
+        - link:
+          - /url: /products
+          - text: See the Systems
+        - link:
+          - /url: /lunch-learn
+          - text: Book a Lunch & Learn
+  - alert [ref=e34]

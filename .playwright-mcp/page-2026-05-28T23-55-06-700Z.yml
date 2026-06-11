@@ -1,0 +1,43 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - img "HUB Surface Systems" [ref=e6]
+        - heading "Welcome to HUB Surface Systems." [level=1] [ref=e7]
+        - paragraph [ref=e8]: Decorative pavement, road safety markings, and surface solutions — pick where you'd like to go.
+      - generic [ref=e75]:
+        - generic [ref=e76]:
+          - paragraph [ref=e77]: Prize draw
+          - heading "Enter to win." [level=2] [ref=e78]
+          - paragraph [ref=e79]: One entry per person. Winner announced after the show.
+        - generic [ref=e80]:
+          - generic [ref=e82]: Full name *
+          - textbox "Jane Smith" [ref=e83]
+        - generic [ref=e84]:
+          - generic [ref=e86]: Email *
+          - textbox "jane@city.ca" [ref=e87]
+        - generic [ref=e88]:
+          - generic [ref=e90]: Company *
+          - textbox "City of Toronto" [ref=e91]
+        - generic [ref=e92]:
+          - generic [ref=e93]:
+            - generic [ref=e94]: Role / title
+            - generic [ref=e95]: Optional
+          - textbox "Public Realm Designer" [ref=e96]
+        - generic [ref=e97]:
+          - generic [ref=e98]:
+            - generic [ref=e99]: Phone
+            - generic [ref=e100]: Optional
+          - textbox "416-555-0100" [ref=e101]
+        - generic [ref=e102] [cursor=pointer]:
+          - checkbox "I'd like to receive HUBSS updates and product news. You can unsubscribe at any time. We never share your information." [ref=e103]
+          - generic [ref=e104]:
+            - text: I'd like to receive HUBSS updates and product news.
+            - generic [ref=e105]: You can unsubscribe at any time. We never share your information.
+        - generic [ref=e106]:
+          - button "Enter the draw" [ref=e107]
+          - button "No thanks" [ref=e108]
+      - generic [ref=e64]: hubss.com · Redefining hardscapes
+  - button "Open Next.js Dev Tools" [ref=e70] [cursor=pointer]:
+    - img [ref=e71]
+  - alert [ref=e74]

@@ -1,0 +1,16 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - img "HUB Surface Systems" [ref=e6]
+        - heading "Welcome to HUB Surface Systems." [level=1] [ref=e7]
+        - paragraph [ref=e8]: Decorative pavement, road safety markings, and surface solutions — pick where you'd like to go.
+      - generic [ref=e109]:
+        - img [ref=e111]
+        - heading "Thanks — you're entered." [level=2] [ref=e113]
+        - paragraph [ref=e114]: Winners announced after the show.
+        - button "Back to options" [ref=e115]
+      - generic [ref=e64]: hubss.com · Redefining hardscapes
+  - button "Open Next.js Dev Tools" [ref=e70] [cursor=pointer]:
+    - img [ref=e71]
+  - alert [ref=e74]

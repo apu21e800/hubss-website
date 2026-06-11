@@ -1,0 +1,2234 @@
+{
+  "timestamp": "2026-05-21T07:07:45.957Z",
+  "assetInventory": {
+    "imageAssets": 87,
+    "fileAssets": 66,
+    "imageFilenames": {
+      "streetbond-01.png": 1,
+      "featured.jpg": 38,
+      "IMG_6297.jpeg": 1,
+      "featured.jpeg": 6,
+      "community-branding-11.jpg": 1,
+      "featured.png": 4,
+      "crosswalks-03.jpg": 1,
+      "leed-urban-heat-island-01.jpg": 1,
+      "parking-lots-01.jpg": 1,
+      "fastpatch-repaired.jpg": 1,
+      "parking-lots-05.jpg": 1,
+      "streetprint-01.jpg": 1,
+      "playgrounds-01.jpg": 1,
+      "sport-courts-01.jpg": 1,
+      "bike-lanes-01.jpg": 1,
+      "traffic-patterns-xd-03.jpg": 1,
+      "parks-paths-01.jpg": 1,
+      "bus-lanes-20.jpg": 1,
+      "aggrefill-application.webp": 1,
+      "airports-01.jpg": 1,
+      "durashield-01.jpg": 1,
+      "hero-1.jpg": 1,
+      "residential-driveways-01.jpg": 1,
+      "decomark-01.jpg": 1,
+      "mmax-01.jpg": 1,
+      "streetbondsr-02.jpg": 1,
+      "chipfill-aggrefill-bags.jpg": 1,
+      "residential-driveways-03.jpg": 1,
+      "traffic-patterns-01.jpg": 1,
+      "bus-lanes-01.jpg": 1,
+      "moose-updated.png": 1,
+      "crosswalks-01.jpg": 1,
+      "public-spaces-01.jpg": 1,
+      "community-branding-08.jpg": 1,
+      "premark-01.jpg": 1,
+      "townhomes-01.jpg": 1,
+      "hero-bg.jpg": 1,
+      "crosswalks-10.jpg": 1,
+      "commercial-spaces-01.jpg": 1,
+      "splash-pads-01.jpg": 1,
+      "duratherm-01.jpg": 1,
+      "crosswalks-05.jpg": 1
+    }
+  },
+  "documentState": {
+    "blogPost": {
+      "total": 67,
+      "linked": 67,
+      "urlOnly": 0,
+      "empty": 0
+    },
+    "product": {
+      "total": 14,
+      "linked": 14,
+      "urlOnly": 0,
+      "empty": 0
+    },
+    "application": {
+      "total": 20,
+      "linked": 20,
+      "urlOnly": 0,
+      "empty": 0
+    },
+    "project": {
+      "total": 59,
+      "linked": 31,
+      "urlOnly": 28,
+      "empty": 0
+    }
+  },
+  "uploadPlan": {
+    "blogPosts": [
+      {
+        "docId": "blogpost-asphalt-concrete-renewal",
+        "slug": "asphalt-concrete-renewal",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/products/durashield/durashield-01.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-bc-childrens-hospital-labyrinth",
+        "slug": "bc-childrens-hospital-labyrinth",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/bc-childrens-hospital-labyrinth/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-best-crosswalks-canada",
+        "slug": "best-crosswalks-canada",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/best-crosswalks-canada/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-bowen-island-asphalt-path",
+        "slug": "bowen-island-asphalt-path",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/bowen-island-asphalt-path/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-branded-crosswalks-vancouver-richmond",
+        "slug": "branded-crosswalks-vancouver-richmond",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/branded-crosswalks-vancouver-richmond/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-commercial-applications",
+        "slug": "commercial-applications",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/commercial-applications/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-commercial-parking-reit-specification",
+        "slug": "commercial-parking-reit-specification",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/applications/parking-lots/parking-lots-05.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-commercial-spaces-decorative-pavement",
+        "slug": "commercial-spaces-decorative-pavement",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/applications/commercial-spaces/commercial-spaces-01.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-community-branding-case-study",
+        "slug": "community-branding-case-study",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/community-branding-case-study/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-community-identity-surface-design",
+        "slug": "community-identity-surface-design",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/applications/bus-lanes/bus-lanes-20.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-community-spaces",
+        "slug": "community-spaces",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/community-spaces/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-complete-streets-new-westminster",
+        "slug": "complete-streets-new-westminster",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/complete-streets-new-westminster/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-corporate-logos-branded-pavement",
+        "slug": "corporate-logos-branded-pavement",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/applications/community-branding/community-branding-11.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-cycling-transit-integration-surface-solutions",
+        "slug": "cycling-transit-integration-surface-solutions",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/cycling-transit-integration-surface-solutions/featured.jpeg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-decorative-asphalt-crosswalks",
+        "slug": "decorative-asphalt-crosswalks",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/decorative-asphalt-crosswalks/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-decorative-asphalt-high-traffic",
+        "slug": "decorative-asphalt-high-traffic",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/decorative-asphalt-high-traffic/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-decorative-crosswalk-commercial-drive",
+        "slug": "decorative-crosswalk-commercial-drive",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/decorative-crosswalk-commercial-drive/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-decorative-crosswalk-meridian",
+        "slug": "decorative-crosswalk-meridian",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/decorative-crosswalk-meridian/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-decorative-crosswalks-community-identity",
+        "slug": "decorative-crosswalks-community-identity",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/decorative-crosswalks-community-identity/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-decorative-hardscape-grey-is-new-black",
+        "slug": "decorative-hardscape-grey-is-new-black",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/decorative-hardscape-grey-is-new-black/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-decorative-paving-solutions",
+        "slug": "decorative-paving-solutions",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/decorative-paving-solutions/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-durable-coatings-waterparks",
+        "slug": "durable-coatings-waterparks",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/durable-coatings-waterparks/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-durable-transit-lanes-crossings",
+        "slug": "durable-transit-lanes-crossings",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/durable-transit-lanes-crossings/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-educational-facilities",
+        "slug": "educational-facilities",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/educational-facilities/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-every-child-matters-crosswalk",
+        "slug": "every-child-matters-crosswalk",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/every-child-matters-crosswalk/featured.png",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-extending-transit-lane-lifespan",
+        "slug": "extending-transit-lane-lifespan",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/extending-transit-lane-lifespan/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-imprinted-asphalt-york-transit",
+        "slug": "imprinted-asphalt-york-transit",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/imprinted-asphalt-york-transit/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-keeping-pedestrians-safe",
+        "slug": "keeping-pedestrians-safe",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/keeping-pedestrians-safe/featured.png",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-laneway-project",
+        "slug": "laneway-project",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/laneway-project/featured.png",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-multimodal-connectivity-york-region",
+        "slug": "multimodal-connectivity-york-region",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/multimodal-connectivity-york-region/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-municipalities-case-study",
+        "slug": "municipalities-case-study",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/municipalities-case-study/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-murrayville-schoolhouse-sidewalk",
+        "slug": "murrayville-schoolhouse-sidewalk",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/murrayville-schoolhouse-sidewalk/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-parc-riviera-streetbond-walkway",
+        "slug": "parc-riviera-streetbond-walkway",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/parc-riviera-streetbond-walkway/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-pedestrian-channelization-public-spaces",
+        "slug": "pedestrian-channelization-public-spaces",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/pedestrian-channelization-public-spaces/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-pedestrian-safety-solutions",
+        "slug": "pedestrian-safety-solutions",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/pedestrian-safety-solutions/featured.jpeg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-pedestrian-walkways-surface-systems",
+        "slug": "pedestrian-walkways-surface-systems",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/applications/parks-paths/parks-paths-01.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-performance-crosswalks-asphalt-concrete",
+        "slug": "performance-crosswalks-asphalt-concrete",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/performance-crosswalks-asphalt-concrete/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-pictograph-crosswalk-sechelt",
+        "slug": "pictograph-crosswalk-sechelt",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/pictograph-crosswalk-sechelt/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-playgrounds-recreation",
+        "slug": "playgrounds-recreation",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/playgrounds-recreation/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-residential-driveways-stamped-asphalt",
+        "slug": "residential-driveways-stamped-asphalt",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/applications/residential-driveways/residential-driveways-01.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-residential-driveways-stamped-asphalt-upgrade",
+        "slug": "residential-driveways-stamped-asphalt-upgrade",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/applications/residential-driveways/residential-driveways-03.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-richmond-brighouse-crosswalk",
+        "slug": "richmond-brighouse-crosswalk",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/richmond-brighouse-crosswalk/featured.jpeg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-roadway-accents-natures-walk",
+        "slug": "roadway-accents-natures-walk",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/roadway-accents-natures-walk/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-safety-durability-transit-stations",
+        "slug": "safety-durability-transit-stations",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/safety-durability-transit-stations/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-simcoe-rainbow-crosswalk",
+        "slug": "simcoe-rainbow-crosswalk",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/simcoe-rainbow-crosswalk/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-spirit-trail-wayfinding-vancouver",
+        "slug": "spirit-trail-wayfinding-vancouver",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/spirit-trail-wayfinding-vancouver/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-stamped-asphalt-parking-lot",
+        "slug": "stamped-asphalt-parking-lot",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/stamped-asphalt-parking-lot/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-stamped-asphalt-vs-concrete",
+        "slug": "stamped-asphalt-vs-concrete",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/stamped-asphalt-vs-concrete/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-streetbond-leed-urban-heat-island",
+        "slug": "streetbond-leed-urban-heat-island",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/products/streetbondsr/streetbondsr-02.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-streetbondsr-solar-reflective-coatings",
+        "slug": "streetbondsr-solar-reflective-coatings",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/streetbondsr-solar-reflective-coatings/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-surface-signage-wayfinding",
+        "slug": "surface-signage-wayfinding",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/applications/community-branding/community-branding-08.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-terry-fox-plaza-coquitlam",
+        "slug": "terry-fox-plaza-coquitlam",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/terry-fox-plaza-coquitlam/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-the-street-is-your-canvas",
+        "slug": "the-street-is-your-canvas",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/applications/public-spaces/public-spaces-01.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-traffic-calming-surface-design",
+        "slug": "traffic-calming-surface-design",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/applications/traffic-calming/traffic-calming-01.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-trafficpatternsxd-urban-design",
+        "slug": "trafficpatternsxd-urban-design",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/trafficpatternsxd-urban-design/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-transportation-infrastructure-guide",
+        "slug": "transportation-infrastructure-guide",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/transportation-infrastructure-guide/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-tsain-ko-crosswalk-sechelt",
+        "slug": "tsain-ko-crosswalk-sechelt",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/tsain-ko-crosswalk-sechelt/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-ubc-musqueam-crosswalk",
+        "slug": "ubc-musqueam-crosswalk",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/ubc-musqueam-crosswalk/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-university-campus-surface-branding",
+        "slug": "university-campus-surface-branding",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/applications/crosswalks/crosswalks-03.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-vancouver-decorative-crosswalk-design",
+        "slug": "vancouver-decorative-crosswalk-design",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/vancouver-decorative-crosswalk-design/featured.jpeg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-veterans-crosswalk-kitchener",
+        "slug": "veterans-crosswalk-kitchener",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/veterans-crosswalk-kitchener/featured.jpeg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-vision-zero-surface-markings",
+        "slug": "vision-zero-surface-markings",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/applications/crosswalks/crosswalks-10.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-vision-zero-thermoplastic-crosswalks",
+        "slug": "vision-zero-thermoplastic-crosswalks",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/applications/crosswalks/crosswalks-05.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-white-paper-resilient-transit-infrastructure",
+        "slug": "white-paper-resilient-transit-infrastructure",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/white-paper-resilient-transit-infrastructure/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-white-paper-transportation-urban-design",
+        "slug": "white-paper-transportation-urban-design",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/white-paper-transportation-urban-design/featured.jpeg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-white-rock-langley-trafficpatterns",
+        "slug": "white-rock-langley-trafficpatterns",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/white-rock-langley-trafficpatterns/featured.jpg",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      },
+      {
+        "docId": "blogpost-white-rock-pier-crosswalk",
+        "slug": "white-rock-pier-crosswalk",
+        "hasFeaturedImageRef": true,
+        "hasFeaturedImageUrl": true,
+        "urlString": "/images/blog/white-rock-pier-crosswalk/featured.png",
+        "localExists": true,
+        "action": "ALREADY_LINKED ✓",
+        "note": null
+      }
+    ],
+    "products": [],
+    "applications": [],
+    "projects": [
+      {
+        "docId": "project-bc-childrens-hospital",
+        "title": "BC Children's Hospital Labyrinth",
+        "city": "Vancouver",
+        "province": "BC",
+        "field": "image",
+        "urlString": "/images/blog/bc-childrens-hospital-labyrinth/featured.jpg",
+        "localExists": true,
+        "size": "235KB",
+        "confidence": "HIGH",
+        "action": "SKIP (already linked)"
+      },
+      {
+        "docId": "project-bowen-island-path",
+        "title": "Bowen Island Foreshore Path",
+        "city": "Bowen Island",
+        "province": "BC",
+        "field": "image",
+        "urlString": "/images/blog/bowen-island-asphalt-path/featured.jpg",
+        "localExists": true,
+        "size": "169KB",
+        "confidence": "HIGH",
+        "action": "SKIP (already linked)"
+      },
+      {
+        "docId": "project-burlington-spencer-smith",
+        "title": "Spencer Smith Park Lakeshore Promenade",
+        "city": "Burlington",
+        "province": "ON",
+        "field": "image",
+        "urlString": "/images/blog/pedestrian-channelization-public-spaces/featured.jpg",
+        "localExists": true,
+        "size": "200KB",
+        "confidence": "HIGH",
+        "action": "SKIP (already linked)"
+      },
+      {
+        "docId": "project-burnaby-active-transport",
+        "title": "Burnaby Active Transportation Corridor",
+        "city": "Burnaby",
+        "province": "BC",
+        "field": "image",
+        "urlString": "/images/projects/_placeholder.svg",
+        "localExists": true,
+        "size": "1KB",
+        "confidence": "HIGH",
+        "action": "NEEDS_UPLOAD_AND_LINK"
+      },
+      {
+        "docId": "project-calgary-max-brt",
+        "title": "Calgary MAX BRT Corridor",
+        "city": "Calgary",
+        "province": "AB",
+        "field": "image",
+        "urlString": "/images/projects/_placeholder.svg",
+        "localExists": true,
+        "size": "1KB",
+        "confidence": "HIGH",
+        "action": "NEEDS_UPLOAD_AND_LINK"
+      },
+      {
+        "docId": "project-calgary-reconciliation",
+        "title": "Calgary Reconciliation Crosswalk",
+        "city": "Calgary",
+        "province": "AB",
+        "field": "image",
+        "urlString": "/images/projects/_placeholder.svg",
+        "localExists": true,
+        "size": "1KB",
+        "confidence": "HIGH",
+        "action": "NEEDS_UPLOAD_AND_LINK"
+      },
+      {
+        "docId": "project-charlottetown-confederation-landing",
+        "title": "Charlottetown Confederation Landing",
+        "city": "Charlottetown",
+        "province": "PE",
+        "field": "image",
+        "urlString": "/images/projects/_placeholder.svg",
+        "localExists": true,
+        "size": "1KB",
+        "confidence": "HIGH",
+        "action": "NEEDS_UPLOAD_AND_LINK"
+      },
+      {
+        "docId": "project-collingwood-rainbow",
+        "title": "Collingwood Rainbow Crosswalk",
+        "city": "Collingwood",
+        "province": "ON",
+        "field": "image",
+        "urlString": "/images/blog/simcoe-rainbow-crosswalk/featured.jpg",
+        "localExists": true,
+        "size": "154KB",
+        "confidence": "HIGH",
+        "action": "SKIP (already linked)"
+      },
+      {
+        "docId": "project-coquitlam-terry-fox",
+        "title": "Terry Fox Plaza, Coquitlam",
+        "city": "Coquitlam",
+        "province": "BC",
+        "field": "image",
+        "urlString": "/images/blog/terry-fox-plaza-coquitlam/featured.jpg",
+        "localExists": true,
+        "size": "119KB",
+        "confidence": "HIGH",
+        "action": "SKIP (already linked)"
+      },
+      {
+        "docId": "project-coquitlam-windsor-gate",
+        "title": "Windsor Gate Masterplanned Community",
+        "city": "Coquitlam",
+        "province": "BC",
+        "field": "image",
+        "urlString": "/images/blog/community-branding-case-study/featured.jpg",
+        "localExists": true,
+        "size": "204KB",
+        "confidence": "HIGH",
+        "action": "SKIP (already linked)"
+      },
+      {
+        "docId": "project-edmonton-valley-line-lrt",
+        "title": "Edmonton Valley Line LRT Crossings",
+        "city": "Edmonton",
+        "province": "AB",
+        "field": "image",
+        "urlString": "/images/projects/_placeholder.svg",
+        "localExists": true,
+        "size": "1KB",
+        "confidence": "HIGH",
+        "action": "NEEDS_UPLOAD_AND_LINK"
+      },
+      {
+        "docId": "project-edmonton-whyte-ave",
+        "title": "Whyte Avenue Streetscape",
+        "city": "Edmonton",
+        "province": "AB",
+        "field": "image",
+        "urlString": "/images/projects/_placeholder.svg",
+        "localExists": true,
+        "size": "1KB",
+        "confidence": "HIGH",
+        "action": "NEEDS_UPLOAD_AND_LINK"
+      },
+      {
+        "docId": "project-georgina-every-child-matters",
+        "title": "Every Child Matters Crosswalk",
+        "city": "Georgina",
+        "province": "ON",
+        "field": "image",
+        "urlString": "/images/blog/every-child-matters-crosswalk/featured.png",
+        "localExists": true,
+        "size": "147KB",
+        "confidence": "HIGH",
+        "action": "SKIP (already linked)"
+      },
+      {
+        "docId": "project-halifax-waterfront",
+        "title": "Halifax Waterfront Boardwalk",
+        "city": "Halifax",
+        "province": "NS",
+        "field": "image",
+        "urlString": "/images/projects/_placeholder.svg",
+        "localExists": true,
+        "size": "1KB",
+        "confidence": "HIGH",
+        "action": "NEEDS_UPLOAD_AND_LINK"
+      },
+      {
+        "docId": "project-hamilton-james-street",
+        "title": "Hamilton James Street North Crosswalk",
+        "city": "Hamilton",
+        "province": "ON",
+        "field": "image",
+        "urlString": "/images/projects/_placeholder.svg",
+        "localExists": true,
+        "size": "1KB",
+        "confidence": "HIGH",
+        "action": "NEEDS_UPLOAD_AND_LINK"
+      },
+      {
+        "docId": "project-kamloops-active-transport",
+        "title": "Kamloops Active Transportation Network",
+        "city": "Kamloops",
+        "province": "BC",
+        "field": "image",
+        "urlString": "/images/projects/_placeholder.svg",
+        "localExists": true,
+        "size": "1KB",
+        "confidence": "HIGH",
+        "action": "NEEDS_UPLOAD_AND_LINK"
+      },
+      {
+        "docId": "project-kelowna-crosswalk-network",
+        "title": "City of Kelowna Crosswalk Network",
+        "city": "Kelowna",
+        "province": "BC",
+        "field": "image",
+        "urlString": "/images/blog/performance-crosswalks-asphalt-concrete/featured.jpg",
+        "localExists": true,
+        "size": "109KB",
+        "confidence": "HIGH",
+        "action": "SKIP (already linked)"
+      },
+      {
+        "docId": "project-kitchener-cadillac-fairview",
+        "title": "Cadillac Fairview Parking Lot — Kitchener",
+        "city": "Kitchener",
+        "province": "ON",
+        "field": "image",
+        "urlString": "/images/blog/stamped-asphalt-parking-lot/featured.jpg",
+        "localExists": true,
+        "size": "164KB",
+        "confidence": "HIGH",
+        "action": "SKIP (already linked)"
+      },
+      {
+        "docId": "project-kitchener-veterans",
+        "title": "Kitchener Veterans Memorial Crosswalk",
+        "city": "Kitchener",
+        "province": "ON",
+        "field": "image",
+        "urlString": "/images/blog/veterans-crosswalk-kitchener/featured.jpeg",
+        "localExists": true,
+        "size": "212KB",
+        "confidence": "HIGH",
+        "action": "SKIP (already linked)"
+      },
+      {
+        "docId": "project-langley-murrayville-reunion",
+        "title": "Reunion Housing Complex Sidewalks",
+        "city": "Langley",
+        "province": "BC",
+        "field": "image",
+        "urlString": "/images/blog/murrayville-schoolhouse-sidewalk/featured.jpg",
+        "localExists": true,
+        "size": "247KB",
+        "confidence": "HIGH",
+        "action": "SKIP (already linked)"
+      },
+      {
+        "docId": "project-langley-railroad-heritage",
+        "title": "Langley Railroad Heritage Crosswalk",
+        "city": "Langley City",
+        "province": "BC",
+        "field": "image",
+        "urlString": "/images/projects/_placeholder.svg",
+        "localExists": true,
+        "size": "1KB",
+        "confidence": "HIGH",
+        "action": "NEEDS_UPLOAD_AND_LINK"
+      },
+      {
+        "docId": "project-laval-carrefour",
+        "title": "Laval Carrefour Transit Crosswalk",
+        "city": "Laval",
+        "province": "QC",
+        "field": "image",
+        "urlString": "/images/projects/_placeholder.svg",
+        "localExists": true,
+        "size": "1KB",
+        "confidence": "HIGH",
+        "action": "NEEDS_UPLOAD_AND_LINK"
+      },
+      {
+        "docId": "project-lethbridge-cultural-district",
+        "title": "Lethbridge Cultural District",
+        "city": "Lethbridge",
+        "province": "AB",
+        "field": "image",
+        "urlString": "/images/projects/_placeholder.svg",
+        "localExists": true,
+        "size": "1KB",
+        "confidence": "HIGH",
+        "action": "NEEDS_UPLOAD_AND_LINK"
+      },
+      {
+        "docId": "project-london-east-brt",
+        "title": "East London Link — Bus Rapid Transit",
+        "city": "London",
+        "province": "ON",
+        "field": "image",
+        "urlString": "/images/projects/_placeholder.svg",
+        "localExists": true,
+        "size": "1KB",
+        "confidence": "HIGH",
+        "action": "NEEDS_UPLOAD_AND_LINK"
+      },
+      {
+        "docId": "project-mississauga-civic-centre",
+        "title": "Mississauga Civic Centre Plaza",
+        "city": "Mississauga",
+        "province": "ON",
+        "field": "image",
+        "urlString": "/images/projects/_placeholder.svg",
+        "localExists": true,
+        "size": "1KB",
+        "confidence": "HIGH",
+        "action": "NEEDS_UPLOAD_AND_LINK"
+      },
+      {
+        "docId": "project-moncton-main-street",
+        "title": "Moncton Main Street Crosswalk",
+        "city": "Moncton",
+        "province": "NB",
+        "field": "image",
+        "urlString": "/images/projects/_placeholder.svg",
+        "localExists": true,
+        "size": "1KB",
+        "confidence": "HIGH",
+        "action": "NEEDS_UPLOAD_AND_LINK"
+      },
+      {
+        "docId": "project-montreal-guido-nincheri",
+        "title": "Parc Guido-Nincheri Promenade",
+        "city": "Montréal",
+        "province": "QC",
+        "field": "image",
+        "urlString": "/images/blog/pedestrian-channelization-public-spaces/featured.jpg",
+        "localExists": true,
+        "size": "200KB",
+        "confidence": "HIGH",
+        "action": "SKIP (already linked)"
+      },
+      {
+        "docId": "project-montreal-plateau-ruelle",
+        "title": "Montréal Plateau Ruelle Verte",
+        "city": "Montréal",
+        "province": "QC",
+        "field": "image",
+        "urlString": "/images/projects/_placeholder.svg",
+        "localExists": true,
+        "size": "1KB",
+        "confidence": "HIGH",
+        "action": "NEEDS_UPLOAD_AND_LINK"
+      },
+      {
+        "docId": "project-montreal-rosemont-vision-zero",
+        "title": "Rosemont Vision Zéro Crosswalks",
+        "city": "Montréal",
+        "province": "QC",
+        "field": "image",
+        "urlString": "/images/projects/_placeholder.svg",
+        "localExists": true,
+        "size": "1KB",
+        "confidence": "HIGH",
+        "action": "NEEDS_UPLOAD_AND_LINK"
+      },
+      {
+        "docId": "project-nanaimo-harbour",
+        "title": "Nanaimo Harbour Pathway",
+        "city": "Nanaimo",
+        "province": "BC",
+        "field": "image",
+        "urlString": "/images/projects/_placeholder.svg",
+        "localExists": true,
+        "size": "1KB",
+        "confidence": "HIGH",
+        "action": "NEEDS_UPLOAD_AND_LINK"
+      },
+      {
+        "docId": "project-new-westminster-complete-streets",
+        "title": "New Westminster Complete Streets",
+        "city": "New Westminster",
+        "province": "BC",
+        "field": "image",
+        "urlString": "/images/blog/complete-streets-new-westminster/featured.jpg",
+        "localExists": true,
+        "size": "235KB",
+        "confidence": "HIGH",
+        "action": "SKIP (already linked)"
+      },
+      {
+        "docId": "project-north-van-spirit-trail",
+        "title": "Spirit Trail Waterfront Wayfinding",
+        "city": "North Vancouver",
+        "province": "BC",
+        "field": "image",
+        "urlString": "/images/blog/spirit-trail-wayfinding-vancouver/featured.jpg",
+        "localExists": true,
+        "size": "236KB",
+        "confidence": "HIGH",
+        "action": "SKIP (already linked)"
+      },
+      {
+        "docId": "project-ottawa-every-child-matters",
+        "title": "Ottawa Every Child Matters Crosswalk",
+        "city": "Ottawa",
+        "province": "ON",
+        "field": "image",
+        "urlString": "/images/projects/_placeholder.svg",
+        "localExists": true,
+        "size": "1KB",
+        "confidence": "HIGH",
+        "action": "NEEDS_UPLOAD_AND_LINK"
+      },
+      {
+        "docId": "project-pitt-meadows-natures-walk",
+        "title": "Nature's Walk Roadway Accents",
+        "city": "Pitt Meadows",
+        "province": "BC",
+        "field": "image",
+        "urlString": "/images/blog/roadway-accents-natures-walk/featured.jpg",
+        "localExists": true,
+        "size": "153KB",
+        "confidence": "HIGH",
+        "action": "SKIP (already linked)"
+      },
+      {
+        "docId": "project-quebec-city-st-roch",
+        "title": "Quartier St-Roch Crosswalk",
+        "city": "Québec City",
+        "province": "QC",
+        "field": "image",
+        "urlString": "/images/projects/_placeholder.svg",
+        "localExists": true,
+        "size": "1KB",
+        "confidence": "HIGH",
+        "action": "NEEDS_UPLOAD_AND_LINK"
+      },
+      {
+        "docId": "project-regina-wascana",
+        "title": "Regina Wascana Park Pathway",
+        "city": "Regina",
+        "province": "SK",
+        "field": "image",
+        "urlString": "/images/projects/_placeholder.svg",
+        "localExists": true,
+        "size": "1KB",
+        "confidence": "HIGH",
+        "action": "NEEDS_UPLOAD_AND_LINK"
+      },
+      {
+        "docId": "project-richmond-brighouse",
+        "title": "Richmond Brighouse Station Crosswalk",
+        "city": "Richmond",
+        "province": "BC",
+        "field": "image",
+        "urlString": "/images/blog/richmond-brighouse-crosswalk/featured.jpeg",
+        "localExists": true,
+        "size": "190KB",
+        "confidence": "HIGH",
+        "action": "SKIP (already linked)"
+      },
+      {
+        "docId": "project-saskatoon-bridge-city",
+        "title": "Saskatoon Bridge City Crosswalk",
+        "city": "Saskatoon",
+        "province": "SK",
+        "field": "image",
+        "urlString": "/images/projects/_placeholder.svg",
+        "localExists": true,
+        "size": "1KB",
+        "confidence": "HIGH",
+        "action": "NEEDS_UPLOAD_AND_LINK"
+      },
+      {
+        "docId": "project-sechelt-pictograph-crosswalk",
+        "title": "Pictograph Crosswalk — Cowrie St & Trail Ave",
+        "city": "Sechelt",
+        "province": "BC",
+        "field": "image",
+        "urlString": "/images/blog/pictograph-crosswalk-sechelt/featured.jpg",
+        "localExists": true,
+        "size": "188KB",
+        "confidence": "HIGH",
+        "action": "SKIP (already linked)"
+      },
+      {
+        "docId": "project-sechelt-tsain-ko",
+        "title": "Tsain-Ko Cultural Crosswalk, Sechelt",
+        "city": "Sechelt",
+        "province": "BC",
+        "field": "image",
+        "urlString": "/images/blog/tsain-ko-crosswalk-sechelt/featured.jpg",
+        "localExists": true,
+        "size": "123KB",
+        "confidence": "HIGH",
+        "action": "SKIP (already linked)"
+      },
+      {
+        "docId": "project-st-johns-jellybean-row",
+        "title": "St. John's Jellybean Row Streetscape",
+        "city": "St. John's",
+        "province": "NL",
+        "field": "image",
+        "urlString": "/images/projects/_placeholder.svg",
+        "localExists": true,
+        "size": "1KB",
+        "confidence": "HIGH",
+        "action": "NEEDS_UPLOAD_AND_LINK"
+      },
+      {
+        "docId": "project-toronto-emery-village",
+        "title": "Emery Village BIA Crosswalk Restoration",
+        "city": "Toronto",
+        "province": "ON",
+        "field": "image",
+        "urlString": "/images/blog/decorative-asphalt-high-traffic/featured.jpg",
+        "localExists": true,
+        "size": "228KB",
+        "confidence": "HIGH",
+        "action": "SKIP (already linked)"
+      },
+      {
+        "docId": "project-toronto-humberwest-crosswalk",
+        "title": "Humberwest Parkway Decorative Crosswalk & Median",
+        "city": "Toronto",
+        "province": "ON",
+        "field": "image",
+        "urlString": "/images/blog/decorative-crosswalk-meridian/featured.jpg",
+        "localExists": true,
+        "size": "73KB",
+        "confidence": "HIGH",
+        "action": "SKIP (already linked)"
+      },
+      {
+        "docId": "project-toronto-leslieville-laneway",
+        "title": "Leslieville Laneway Revitalization",
+        "city": "Toronto",
+        "province": "ON",
+        "field": "image",
+        "urlString": "/images/blog/municipalities-case-study/featured.jpg",
+        "localExists": true,
+        "size": "217KB",
+        "confidence": "HIGH",
+        "action": "SKIP (already linked)"
+      },
+      {
+        "docId": "project-toronto-ttc-bus-corridors",
+        "title": "TTC Bus Priority Corridors",
+        "city": "Toronto",
+        "province": "ON",
+        "field": "image",
+        "urlString": "/images/blog/extending-transit-lane-lifespan/featured.jpg",
+        "localExists": true,
+        "size": "193KB",
+        "confidence": "HIGH",
+        "action": "SKIP (already linked)"
+      },
+      {
+        "docId": "project-ubc-musqueam",
+        "title": "UBC Musqueam Campus Crosswalk",
+        "city": "Vancouver",
+        "province": "BC",
+        "field": "image",
+        "urlString": "/images/blog/ubc-musqueam-crosswalk/featured.jpg",
+        "localExists": true,
+        "size": "178KB",
+        "confidence": "HIGH",
+        "action": "SKIP (already linked)"
+      },
+      {
+        "docId": "project-vancouver-commercial-drive",
+        "title": "Commercial Drive Decorative Crosswalk",
+        "city": "Vancouver",
+        "province": "BC",
+        "field": "image",
+        "urlString": "/images/blog/decorative-crosswalk-commercial-drive/featured.jpg",
+        "localExists": true,
+        "size": "190KB",
+        "confidence": "HIGH",
+        "action": "SKIP (already linked)"
+      },
+      {
+        "docId": "project-vancouver-laneways",
+        "title": "More Awesome Now Laneway Revitalization",
+        "city": "Vancouver",
+        "province": "BC",
+        "field": "image",
+        "urlString": "/images/blog/laneway-project/featured.png",
+        "localExists": true,
+        "size": "516KB",
+        "confidence": "HIGH",
+        "action": "SKIP (already linked)"
+      },
+      {
+        "docId": "project-vaughan-complete-streets",
+        "title": "City of Vaughan Complete Streets Crosswalks",
+        "city": "Vaughan",
+        "province": "ON",
+        "field": "image",
+        "urlString": "/images/projects/_placeholder.svg",
+        "localExists": true,
+        "size": "1KB",
+        "confidence": "HIGH",
+        "action": "NEEDS_UPLOAD_AND_LINK"
+      },
+      {
+        "docId": "project-vaughan-woodbridge-heritage",
+        "title": "Woodbridge Avenue Heritage Crosswalks",
+        "city": "Vaughan",
+        "province": "ON",
+        "field": "image",
+        "urlString": "/images/blog/trafficpatternsxd-urban-design/featured.jpg",
+        "localExists": true,
+        "size": "280KB",
+        "confidence": "HIGH",
+        "action": "SKIP (already linked)"
+      },
+      {
+        "docId": "project-victoria-chinatown",
+        "title": "Victoria Chinatown Cultural Crosswalk",
+        "city": "Victoria",
+        "province": "BC",
+        "field": "image",
+        "urlString": "/images/projects/_placeholder.svg",
+        "localExists": true,
+        "size": "1KB",
+        "confidence": "HIGH",
+        "action": "NEEDS_UPLOAD_AND_LINK"
+      },
+      {
+        "docId": "project-victoria-david-foster-pathway",
+        "title": "David Foster Harbour Pathway",
+        "city": "Victoria",
+        "province": "BC",
+        "field": "image",
+        "urlString": "/images/blog/pedestrian-channelization-public-spaces/featured.jpg",
+        "localExists": true,
+        "size": "200KB",
+        "confidence": "HIGH",
+        "action": "SKIP (already linked)"
+      },
+      {
+        "docId": "project-waterloo-grandlinq-lrt",
+        "title": "GrandLinq ION LRT Platform Crossings",
+        "city": "Waterloo",
+        "province": "ON",
+        "field": "image",
+        "urlString": "/images/blog/safety-durability-transit-stations/featured.jpg",
+        "localExists": true,
+        "size": "135KB",
+        "confidence": "HIGH",
+        "action": "SKIP (already linked)"
+      },
+      {
+        "docId": "project-white-rock-pier",
+        "title": "White Rock Pier Crosswalk",
+        "city": "White Rock",
+        "province": "BC",
+        "field": "image",
+        "urlString": "/images/blog/white-rock-pier-crosswalk/featured.png",
+        "localExists": true,
+        "size": "61KB",
+        "confidence": "HIGH",
+        "action": "SKIP (already linked)"
+      },
+      {
+        "docId": "project-white-rock-seaside-stroll",
+        "title": "White Rock Seaside Stroll — Johnston Rd",
+        "city": "White Rock",
+        "province": "BC",
+        "field": "image",
+        "urlString": "/images/blog/white-rock-langley-trafficpatterns/featured.jpg",
+        "localExists": true,
+        "size": "242KB",
+        "confidence": "HIGH",
+        "action": "SKIP (already linked)"
+      },
+      {
+        "docId": "project-windsor-ambassador-bridge",
+        "title": "Windsor Ambassador Bridge Approach",
+        "city": "Windsor",
+        "province": "ON",
+        "field": "image",
+        "urlString": "/images/projects/_placeholder.svg",
+        "localExists": true,
+        "size": "1KB",
+        "confidence": "HIGH",
+        "action": "NEEDS_UPLOAD_AND_LINK"
+      },
+      {
+        "docId": "project-winnipeg-exchange-district",
+        "title": "Winnipeg Exchange District Streetscape",
+        "city": "Winnipeg",
+        "province": "MB",
+        "field": "image",
+        "urlString": "/images/projects/_placeholder.svg",
+        "localExists": true,
+        "size": "1KB",
+        "confidence": "HIGH",
+        "action": "NEEDS_UPLOAD_AND_LINK"
+      },
+      {
+        "docId": "project-winnipeg-indigenous-garden",
+        "title": "Winnipeg Indigenous Cultural Garden",
+        "city": "Winnipeg",
+        "province": "MB",
+        "field": "image",
+        "urlString": "/images/projects/_placeholder.svg",
+        "localExists": true,
+        "size": "1KB",
+        "confidence": "HIGH",
+        "action": "NEEDS_UPLOAD_AND_LINK"
+      },
+      {
+        "docId": "project-york-region-viva",
+        "title": "York Region Hwy 7 VIVA BRT Corridor",
+        "city": "Markham",
+        "province": "ON",
+        "field": "image",
+        "urlString": "/images/blog/imprinted-asphalt-york-transit/featured.jpg",
+        "localExists": true,
+        "size": "147KB",
+        "confidence": "HIGH",
+        "action": "SKIP (already linked)"
+      }
+    ]
+  },
+  "orphanAssets": {
+    "imageAssets": [
+      {
+        "_id": "image-016dde57e353fcb2218c9150935e1e835b468607-2272x1704-png",
+        "originalFilename": "streetbond-01.png",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/016dde57e353fcb2218c9150935e1e835b468607-2272x1704.png"
+      },
+      {
+        "_id": "image-03c4b02fc2b04b43f1beb3196a8a3b9b942ed409-800x600-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/03c4b02fc2b04b43f1beb3196a8a3b9b942ed409-800x600.jpg"
+      },
+      {
+        "_id": "image-05772edd6c81cf11d854f9d871efdffec48f01e4-1200x866-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/05772edd6c81cf11d854f9d871efdffec48f01e4-1200x866.jpg"
+      },
+      {
+        "_id": "image-061d567ed7c4819e9655923d6db1618b0a029173-623x467-jpg",
+        "originalFilename": "IMG_6297.jpeg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/061d567ed7c4819e9655923d6db1618b0a029173-623x467.jpg"
+      },
+      {
+        "_id": "image-095c28a9d0662c39f2371a52493cbc09a7446b1b-1072x804-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/095c28a9d0662c39f2371a52493cbc09a7446b1b-1072x804.jpg"
+      },
+      {
+        "_id": "image-0eda3cf70760803801fdf7ab84c996ab1ae2a807-1200x900-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/0eda3cf70760803801fdf7ab84c996ab1ae2a807-1200x900.jpg"
+      },
+      {
+        "_id": "image-1536a7936bcecb98358b35cc6b9c9ae1f8e7a786-1200x900-jpg",
+        "originalFilename": "featured.jpeg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/1536a7936bcecb98358b35cc6b9c9ae1f8e7a786-1200x900.jpg"
+      },
+      {
+        "_id": "image-1708601a9c48453af64e6e92f9fb19a6b97d3930-1280x960-jpg",
+        "originalFilename": "community-branding-11.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/1708601a9c48453af64e6e92f9fb19a6b97d3930-1280x960.jpg"
+      },
+      {
+        "_id": "image-1864405354c89c598e1925be303d4b71bbdb655c-1188x1198-png",
+        "originalFilename": "featured.png",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/1864405354c89c598e1925be303d4b71bbdb655c-1188x1198.png"
+      },
+      {
+        "_id": "image-19e589012f2797841a6a250be0a34763e32a27dc-3264x2448-jpg",
+        "originalFilename": "crosswalks-03.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/19e589012f2797841a6a250be0a34763e32a27dc-3264x2448.jpg"
+      },
+      {
+        "_id": "image-1b113b54aea953b35fc285094bc1edfbc0498941-4032x3024-jpg",
+        "originalFilename": "leed-urban-heat-island-01.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/1b113b54aea953b35fc285094bc1edfbc0498941-4032x3024.jpg"
+      },
+      {
+        "_id": "image-1b90896be0258661c53622cbbcba49ea547073cc-5472x3080-jpg",
+        "originalFilename": "parking-lots-01.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/1b90896be0258661c53622cbbcba49ea547073cc-5472x3080.jpg"
+      },
+      {
+        "_id": "image-1c2fd281256b55dfe8e72d3207891b4ceb47c721-1200x900-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/1c2fd281256b55dfe8e72d3207891b4ceb47c721-1200x900.jpg"
+      },
+      {
+        "_id": "image-1da4318ce6eef3208ed3a5279078120bb8427425-1200x529-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/1da4318ce6eef3208ed3a5279078120bb8427425-1200x529.jpg"
+      },
+      {
+        "_id": "image-2153bea324b8547f86a155c3407819f9390b5187-1200x884-jpg",
+        "originalFilename": "featured.jpeg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/2153bea324b8547f86a155c3407819f9390b5187-1200x884.jpg"
+      },
+      {
+        "_id": "image-2241323a0aaa696c15eb2eb1a7234424d0d9c570-1200x795-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/2241323a0aaa696c15eb2eb1a7234424d0d9c570-1200x795.jpg"
+      },
+      {
+        "_id": "image-230baf755f95941bc159ccf0a3624d32d88298bb-1480x912-jpg",
+        "originalFilename": "fastpatch-repaired.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/230baf755f95941bc159ccf0a3624d32d88298bb-1480x912.jpg"
+      },
+      {
+        "_id": "image-251cee2899e2bbd7209fd603efecfde65b398300-4032x2268-jpg",
+        "originalFilename": "parking-lots-05.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/251cee2899e2bbd7209fd603efecfde65b398300-4032x2268.jpg"
+      },
+      {
+        "_id": "image-2d745f59c54e3bc81c5099e7da16972dfb545d44-1200x795-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/2d745f59c54e3bc81c5099e7da16972dfb545d44-1200x795.jpg"
+      },
+      {
+        "_id": "image-2e5730f3ab0d6c1466ccb0e2e311fda66eba28ec-2592x1944-jpg",
+        "originalFilename": "streetprint-01.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/2e5730f3ab0d6c1466ccb0e2e311fda66eba28ec-2592x1944.jpg"
+      },
+      {
+        "_id": "image-3ae6fcd8c66ff7f859c36143cf1148ee6a71b632-1200x751-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/3ae6fcd8c66ff7f859c36143cf1148ee6a71b632-1200x751.jpg"
+      },
+      {
+        "_id": "image-3b494f61a71d8f0400a60172931ecfb61180f6cd-562x315-png",
+        "originalFilename": "featured.png",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/3b494f61a71d8f0400a60172931ecfb61180f6cd-562x315.png"
+      },
+      {
+        "_id": "image-49868d05aac9e6a3d80c6fb4dcafed299143f710-4032x3024-jpg",
+        "originalFilename": "playgrounds-01.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/49868d05aac9e6a3d80c6fb4dcafed299143f710-4032x3024.jpg"
+      },
+      {
+        "_id": "image-499bc1a25da81914e39021f139c6543c24deb77a-934x700-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/499bc1a25da81914e39021f139c6543c24deb77a-934x700.jpg"
+      },
+      {
+        "_id": "image-4a99da38e6eb27ced687ae554854e3e3a27c40f6-1200x848-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/4a99da38e6eb27ced687ae554854e3e3a27c40f6-1200x848.jpg"
+      },
+      {
+        "_id": "image-4aa7206b76d1dc0967b98d72476bf062aa77ae80-1200x900-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/4aa7206b76d1dc0967b98d72476bf062aa77ae80-1200x900.jpg"
+      },
+      {
+        "_id": "image-4aac604e9162a0de727b3a4edb84b6a4e39a9d10-1200x900-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/4aac604e9162a0de727b3a4edb84b6a4e39a9d10-1200x900.jpg"
+      },
+      {
+        "_id": "image-5064fee731786fee315aa6ca673fcd49084a7a24-3264x1836-jpg",
+        "originalFilename": "sport-courts-01.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/5064fee731786fee315aa6ca673fcd49084a7a24-3264x1836.jpg"
+      },
+      {
+        "_id": "image-56d86dcca61cfe46b71c9e8b426808e38c9566c7-640x480-jpg",
+        "originalFilename": "featured.jpeg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/56d86dcca61cfe46b71c9e8b426808e38c9566c7-640x480.jpg"
+      },
+      {
+        "_id": "image-5849805961278f4ed4f846b0dfd60e40d768c407-3264x1836-jpg",
+        "originalFilename": "bike-lanes-01.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/5849805961278f4ed4f846b0dfd60e40d768c407-3264x1836.jpg"
+      },
+      {
+        "_id": "image-5c0a1d6b22a39986b9c40e9585acc78f82f6b822-640x480-jpg",
+        "originalFilename": "traffic-patterns-xd-03.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/5c0a1d6b22a39986b9c40e9585acc78f82f6b822-640x480.jpg"
+      },
+      {
+        "_id": "image-5f35b785f2d08dbf69228c6a8d01d549eca3b79c-1024x686-jpg",
+        "originalFilename": "parks-paths-01.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/5f35b785f2d08dbf69228c6a8d01d549eca3b79c-1024x686.jpg"
+      },
+      {
+        "_id": "image-61add9c49ab708111c5fd17f80f6a5befe587a65-1600x1128-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/61add9c49ab708111c5fd17f80f6a5befe587a65-1600x1128.jpg"
+      },
+      {
+        "_id": "image-63ae4784596613c693eaeed6add9397ba8ac342a-1200x900-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/63ae4784596613c693eaeed6add9397ba8ac342a-1200x900.jpg"
+      },
+      {
+        "_id": "image-63e519310903a489dcafd18e3a24ff8bb8ae85d5-4284x5712-jpg",
+        "originalFilename": "bus-lanes-20.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/63e519310903a489dcafd18e3a24ff8bb8ae85d5-4284x5712.jpg"
+      },
+      {
+        "_id": "image-6457b3c2883dacd4029e56645e749cde7ae38178-1200x900-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/6457b3c2883dacd4029e56645e749cde7ae38178-1200x900.jpg"
+      },
+      {
+        "_id": "image-66293bcb56d66dc1dd8b5d8bfd69fa4259a2d221-1192x708-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/66293bcb56d66dc1dd8b5d8bfd69fa4259a2d221-1192x708.jpg"
+      },
+      {
+        "_id": "image-69d620d263c782662ee1f79a7cb06e2d98e21ba1-1200x901-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/69d620d263c782662ee1f79a7cb06e2d98e21ba1-1200x901.jpg"
+      },
+      {
+        "_id": "image-6a67df440292476cbb571aba486e8fc0d7890182-1600x1200-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/6a67df440292476cbb571aba486e8fc0d7890182-1600x1200.jpg"
+      },
+      {
+        "_id": "image-6aabfd254e595807cd5555b73e11a99af25a208e-206x134-png",
+        "originalFilename": "featured.png",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/6aabfd254e595807cd5555b73e11a99af25a208e-206x134.png"
+      },
+      {
+        "_id": "image-6dec754a852f8cfced3091338160600aed59ec96-476x451-webp",
+        "originalFilename": "aggrefill-application.webp",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/6dec754a852f8cfced3091338160600aed59ec96-476x451.webp"
+      },
+      {
+        "_id": "image-6eef937faad8cf0e967a6d3f1e58793b2c5d296a-1200x900-jpg",
+        "originalFilename": "airports-01.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/6eef937faad8cf0e967a6d3f1e58793b2c5d296a-1200x900.jpg"
+      },
+      {
+        "_id": "image-6fa3aca6fa837fab90fb5413fc41408fa051f47b-1200x900-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/6fa3aca6fa837fab90fb5413fc41408fa051f47b-1200x900.jpg"
+      },
+      {
+        "_id": "image-782a79742bd369f8703a20dcb690e2a4b65526a9-1600x1200-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/782a79742bd369f8703a20dcb690e2a4b65526a9-1600x1200.jpg"
+      },
+      {
+        "_id": "image-8304a2cbf6432d633610716a05dc2516543571f7-1200x900-jpg",
+        "originalFilename": "featured.jpeg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/8304a2cbf6432d633610716a05dc2516543571f7-1200x900.jpg"
+      },
+      {
+        "_id": "image-84668ebeabc2f45e226c1863856a524c64cc0d77-738x553-jpg",
+        "originalFilename": "durashield-01.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/84668ebeabc2f45e226c1863856a524c64cc0d77-738x553.jpg"
+      },
+      {
+        "_id": "image-84775dd86d34794c13731ccf499d74181fe92ed0-2400x1537-jpg",
+        "originalFilename": "hero-1.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/84775dd86d34794c13731ccf499d74181fe92ed0-2400x1537.jpg"
+      },
+      {
+        "_id": "image-848d7b1c6cc1103acfd41c22582fd0ab09a1dec7-1200x900-jpg",
+        "originalFilename": "residential-driveways-01.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/848d7b1c6cc1103acfd41c22582fd0ab09a1dec7-1200x900.jpg"
+      },
+      {
+        "_id": "image-84cef997f898852f71db71cc22a550095c649d86-1200x900-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/84cef997f898852f71db71cc22a550095c649d86-1200x900.jpg"
+      },
+      {
+        "_id": "image-8982b3415948d6209616472ba440a3f7a9942492-1200x900-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/8982b3415948d6209616472ba440a3f7a9942492-1200x900.jpg"
+      },
+      {
+        "_id": "image-8ca20ec75af128414afb0f768b17e42ec03914bb-1080x720-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/8ca20ec75af128414afb0f768b17e42ec03914bb-1080x720.jpg"
+      },
+      {
+        "_id": "image-8e1cc864d2021a27675a6b5933804cffd57cbae7-1200x900-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/8e1cc864d2021a27675a6b5933804cffd57cbae7-1200x900.jpg"
+      },
+      {
+        "_id": "image-8f37be9a1da3eac13b4eb34b1b0f3c09d3c63ed7-686x1024-jpg",
+        "originalFilename": "decomark-01.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/8f37be9a1da3eac13b4eb34b1b0f3c09d3c63ed7-686x1024.jpg"
+      },
+      {
+        "_id": "image-93cbcf8f384a293586311d017bf1a8aafd51d9b4-1200x900-jpg",
+        "originalFilename": "mmax-01.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/93cbcf8f384a293586311d017bf1a8aafd51d9b4-1200x900.jpg"
+      },
+      {
+        "_id": "image-9a4921e3d3a79a438d00e8cd4a57222593ab4fae-2560x1920-jpg",
+        "originalFilename": "streetbondsr-02.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/9a4921e3d3a79a438d00e8cd4a57222593ab4fae-2560x1920.jpg"
+      },
+      {
+        "_id": "image-9ce3545aa8e332752b7e0eaac5c4c0ffd6caabb0-600x399-jpg",
+        "originalFilename": "chipfill-aggrefill-bags.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/9ce3545aa8e332752b7e0eaac5c4c0ffd6caabb0-600x399.jpg"
+      },
+      {
+        "_id": "image-a4d9bf0f020feede4d64db3a5eba3c5e2d249a24-1280x960-jpg",
+        "originalFilename": "residential-driveways-03.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/a4d9bf0f020feede4d64db3a5eba3c5e2d249a24-1280x960.jpg"
+      },
+      {
+        "_id": "image-a9de52601601ac0e4b1a696012ac58bbb4cc05e5-1280x720-jpg",
+        "originalFilename": "traffic-patterns-01.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/a9de52601601ac0e4b1a696012ac58bbb4cc05e5-1280x720.jpg"
+      },
+      {
+        "_id": "image-acfeac6613feae679d7a9f90a4c0e753a5297d65-1200x837-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/acfeac6613feae679d7a9f90a4c0e753a5297d65-1200x837.jpg"
+      },
+      {
+        "_id": "image-b384ab33070f204cf2d3d4d58ac09c9e36fdde9f-1334x804-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/b384ab33070f204cf2d3d4d58ac09c9e36fdde9f-1334x804.jpg"
+      },
+      {
+        "_id": "image-b3f08c5281d74f69a977b5d6aaef9a85a872fb63-1200x900-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/b3f08c5281d74f69a977b5d6aaef9a85a872fb63-1200x900.jpg"
+      },
+      {
+        "_id": "image-bc57e2400ec6b16a1c76b8508a1438b15d03343a-1200x675-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/bc57e2400ec6b16a1c76b8508a1438b15d03343a-1200x675.jpg"
+      },
+      {
+        "_id": "image-be707a267083b0d5104875425915f1c79a417e44-1600x1200-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/be707a267083b0d5104875425915f1c79a417e44-1600x1200.jpg"
+      },
+      {
+        "_id": "image-c6d4b50818ea443ee2a19e95f1c2878f34c09bb5-1200x675-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/c6d4b50818ea443ee2a19e95f1c2878f34c09bb5-1200x675.jpg"
+      },
+      {
+        "_id": "image-c94b3156b5001dcd84303c2af5e04a72342b3dc1-1200x633-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/c94b3156b5001dcd84303c2af5e04a72342b3dc1-1200x633.jpg"
+      },
+      {
+        "_id": "image-cab4038d6a14efe50242d82e2cacc0f45098959e-4032x3024-jpg",
+        "originalFilename": "bus-lanes-01.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/cab4038d6a14efe50242d82e2cacc0f45098959e-4032x3024.jpg"
+      },
+      {
+        "_id": "image-cc6c342839f62e4cfaf514fc89d9a85c5f4b108a-2048x2062-png",
+        "originalFilename": "moose-updated.png",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/cc6c342839f62e4cfaf514fc89d9a85c5f4b108a-2048x2062.png"
+      },
+      {
+        "_id": "image-cd1d88eae2752b01a134af1ccf21cf3779210898-2400x2400-jpg",
+        "originalFilename": "crosswalks-01.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/cd1d88eae2752b01a134af1ccf21cf3779210898-2400x2400.jpg"
+      },
+      {
+        "_id": "image-cdd0bdd451f2df645af227ac3877e023117c64c5-1431x1073-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/cdd0bdd451f2df645af227ac3877e023117c64c5-1431x1073.jpg"
+      },
+      {
+        "_id": "image-cdd32251bd015267521220fe158cfc335fc9c555-1600x1200-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/cdd32251bd015267521220fe158cfc335fc9c555-1600x1200.jpg"
+      },
+      {
+        "_id": "image-d419e4fcded35dc80a4e5795de90adc205f45fcb-1280x853-jpg",
+        "originalFilename": "public-spaces-01.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/d419e4fcded35dc80a4e5795de90adc205f45fcb-1280x853.jpg"
+      },
+      {
+        "_id": "image-d8ad5e69164e5af465bd8d6a10bfef89a91d630b-1248x1280-jpg",
+        "originalFilename": "community-branding-08.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/d8ad5e69164e5af465bd8d6a10bfef89a91d630b-1248x1280.jpg"
+      },
+      {
+        "_id": "image-e1deaee8edac09fae26c89d283dfcf7c90f24cc1-1200x900-jpg",
+        "originalFilename": "premark-01.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/e1deaee8edac09fae26c89d283dfcf7c90f24cc1-1200x900.jpg"
+      },
+      {
+        "_id": "image-e36ade57a5a5e4f9083242665e42457cee2ce7e0-1200x900-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/e36ade57a5a5e4f9083242665e42457cee2ce7e0-1200x900.jpg"
+      },
+      {
+        "_id": "image-e4aa71c8ecaddcc1a89707da3eae8715d182b6fa-960x551-jpg",
+        "originalFilename": "townhomes-01.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/e4aa71c8ecaddcc1a89707da3eae8715d182b6fa-960x551.jpg"
+      },
+      {
+        "_id": "image-e841bbb5693276ae31586bcd4ce91dd7ded25ed7-1280x722-jpg",
+        "originalFilename": "featured.jpeg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/e841bbb5693276ae31586bcd4ce91dd7ded25ed7-1280x722.jpg"
+      },
+      {
+        "_id": "image-ebce87aa327a38fffbf1f4388b28a7b4239201aa-640x480-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/ebce87aa327a38fffbf1f4388b28a7b4239201aa-640x480.jpg"
+      },
+      {
+        "_id": "image-ecb0c5c255e3d13f0898c5b26e325007adc8d9fa-1200x780-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/ecb0c5c255e3d13f0898c5b26e325007adc8d9fa-1200x780.jpg"
+      },
+      {
+        "_id": "image-ed161169281a826cdb13661ba1500a58d2d63680-1200x900-jpg",
+        "originalFilename": "hero-bg.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/ed161169281a826cdb13661ba1500a58d2d63680-1200x900.jpg"
+      },
+      {
+        "_id": "image-f2619e5d213c9d61fa962e6a5ca0282dfce3a121-4000x3000-jpg",
+        "originalFilename": "crosswalks-10.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/f2619e5d213c9d61fa962e6a5ca0282dfce3a121-4000x3000.jpg"
+      },
+      {
+        "_id": "image-f2e7e5b3f12ac2b7d112b630271b39553c9b9899-1024x686-jpg",
+        "originalFilename": "commercial-spaces-01.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/f2e7e5b3f12ac2b7d112b630271b39553c9b9899-1024x686.jpg"
+      },
+      {
+        "_id": "image-f40761cf6ee6a215794096b1c1bf732d491148a7-3264x1836-jpg",
+        "originalFilename": "splash-pads-01.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/f40761cf6ee6a215794096b1c1bf732d491148a7-3264x1836.jpg"
+      },
+      {
+        "_id": "image-f5cdd714b8bf75382c03104442f3790ad8dae433-1280x1053-jpg",
+        "originalFilename": "duratherm-01.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/f5cdd714b8bf75382c03104442f3790ad8dae433-1280x1053.jpg"
+      },
+      {
+        "_id": "image-f9ae2e1b942312dc85a7d7fdde9d14144eb5673c-1200x900-jpg",
+        "originalFilename": "featured.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/f9ae2e1b942312dc85a7d7fdde9d14144eb5673c-1200x900.jpg"
+      },
+      {
+        "_id": "image-fbb8d0fd7020312b80a3d5dc842a662b1b952bf1-800x600-jpg",
+        "originalFilename": "featured.jpeg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/fbb8d0fd7020312b80a3d5dc842a662b1b952bf1-800x600.jpg"
+      },
+      {
+        "_id": "image-fbf040c44ee810b60d24c320b12255597252849c-1200x750-png",
+        "originalFilename": "featured.png",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/fbf040c44ee810b60d24c320b12255597252849c-1200x750.png"
+      },
+      {
+        "_id": "image-fe8fe6e976de8bd4c01ef87d3705b17fde889185-3264x2448-jpg",
+        "originalFilename": "crosswalks-05.jpg",
+        "url": "https://cdn.sanity.io/images/9dbro2m1/production/fe8fe6e976de8bd4c01ef87d3705b17fde889185-3264x2448.jpg"
+      }
+    ],
+    "fileAssets": [
+      {
+        "_id": "file-0527d7c4e3c55faa792176b5374cc7189840b7d8-pdf",
+        "originalFilename": "StreetBond-QS-Concrete-TDS.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/0527d7c4e3c55faa792176b5374cc7189840b7d8.pdf"
+      },
+      {
+        "_id": "file-06383ac925e61674b1c01727c98645e06e6d8322-pdf",
+        "originalFilename": "StreetBond-SB150-Over-Concrete-Specification.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/06383ac925e61674b1c01727c98645e06e6d8322.pdf"
+      },
+      {
+        "_id": "file-084d3cc9619e3582f7b79aeb86afd2e1c498638e-pdf",
+        "originalFilename": "DuraShield-Pavement-Coating-Part-A-B-Color-Solar-Gray-TDS.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/084d3cc9619e3582f7b79aeb86afd2e1c498638e.pdf"
+      },
+      {
+        "_id": "file-08781691d33cafb0e1f709723117102ab8cd2397-pdf",
+        "originalFilename": "duratherm-custom-design-guidelines.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/08781691d33cafb0e1f709723117102ab8cd2397.pdf"
+      },
+      {
+        "_id": "file-08fa27e2c317623ca28a286cceadbaeb49b55492-pdf",
+        "originalFilename": "StreetBond-Pro-220-TDS.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/08fa27e2c317623ca28a286cceadbaeb49b55492.pdf"
+      },
+      {
+        "_id": "file-0a8d1776a176ee3bcac5adc5ef37d92e8643318b-pdf",
+        "originalFilename": "TrafficPaint-for-Airfields-FR.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/0a8d1776a176ee3bcac5adc5ef37d92e8643318b.pdf"
+      },
+      {
+        "_id": "file-0d3290d4f6e78103afb6fddfd6139aaf9b35e3a5-pdf",
+        "originalFilename": "StreetBond-Pro-220-Pro-250-Brochure-1.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/0d3290d4f6e78103afb6fddfd6139aaf9b35e3a5.pdf"
+      },
+      {
+        "_id": "file-198f036c87ff0dfc5ea9c71157ca49501fd47d72-pdf",
+        "originalFilename": "TrafficPatterns-125-with-SA-Specification.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/198f036c87ff0dfc5ea9c71157ca49501fd47d72.pdf"
+      },
+      {
+        "_id": "file-1a29abe39e630c1fa387cee5e398e34a223ee670-pdf",
+        "originalFilename": "TrafficPatternsXD-Specification-FR.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/1a29abe39e630c1fa387cee5e398e34a223ee670.pdf"
+      },
+      {
+        "_id": "file-287883a76cee4db6d776765ea86f7505079407fb-pdf",
+        "originalFilename": "StreetBond-Brochure.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/287883a76cee4db6d776765ea86f7505079407fb.pdf"
+      },
+      {
+        "_id": "file-2a6bfbb234909e4a96f4361cd0df8bc3f1148361-pdf",
+        "originalFilename": "StreetBondSR-Brochure.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/2a6bfbb234909e4a96f4361cd0df8bc3f1148361.pdf"
+      },
+      {
+        "_id": "file-2b589de1607d40ae3f4fb0a3ed310c19d1787f57-pdf",
+        "originalFilename": "streetprint-colour-guide.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/2b589de1607d40ae3f4fb0a3ed310c19d1787f57.pdf"
+      },
+      {
+        "_id": "file-350120eda4fc7a2159e17bc271ca9c1314fb6c2b-pdf",
+        "originalFilename": "TS003_DuraTherm_220204.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/350120eda4fc7a2159e17bc271ca9c1314fb6c2b.pdf"
+      },
+      {
+        "_id": "file-35a50dc1469c506d59e1fc5a9b4a1d1593941dc6-pdf",
+        "originalFilename": "Installation_StreetBond-Pro-220-and-250.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/35a50dc1469c506d59e1fc5a9b4a1d1593941dc6.pdf"
+      },
+      {
+        "_id": "file-368c4b53eae13fd119069a2c81719885294f86b9-pdf",
+        "originalFilename": "streetprint-faq.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/368c4b53eae13fd119069a2c81719885294f86b9.pdf"
+      },
+      {
+        "_id": "file-38d433143376f73e79515ed02f8c1fe87b4777be-pdf",
+        "originalFilename": "PreMarkXF-Brochure.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/38d433143376f73e79515ed02f8c1fe87b4777be.pdf"
+      },
+      {
+        "_id": "file-3ad5f39281d5f6f59a6c6f93623ca7e0f117774c-pdf",
+        "originalFilename": "StreetBond-Colour-Guide.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/3ad5f39281d5f6f59a6c6f93623ca7e0f117774c.pdf"
+      },
+      {
+        "_id": "file-3b49e89627539f118d375ae3d593ef151e7825b7-pdf",
+        "originalFilename": "StreetBond-Pro-220-Pro-250-Brochure.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/3b49e89627539f118d375ae3d593ef151e7825b7.pdf"
+      },
+      {
+        "_id": "file-4337a7e81854661d11ef8f635b59d0013601f408-pdf",
+        "originalFilename": "Colour-Guide-1.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/4337a7e81854661d11ef8f635b59d0013601f408.pdf"
+      },
+      {
+        "_id": "file-4f332879c2f185c44fd7fd3bffbc997673998f8a-pdf",
+        "originalFilename": "StreetBond-SB150AL-Data-Sheet-12.22-Rev.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/4f332879c2f185c44fd7fd3bffbc997673998f8a.pdf"
+      },
+      {
+        "_id": "file-57de415e97f9fbcdde03676d8512f3b63c172f5c-pdf",
+        "originalFilename": "TrafficPatternsXD-Colour-Guide.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/57de415e97f9fbcdde03676d8512f3b63c172f5c.pdf"
+      },
+      {
+        "_id": "file-602dd102c09a2f886ca1a05515a098343b4a8854-pdf",
+        "originalFilename": "StreetBond_Substrate_Guide.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/602dd102c09a2f886ca1a05515a098343b4a8854.pdf"
+      },
+      {
+        "_id": "file-67b5f6469675bb8602174b64754c3d75c628077b-pdf",
+        "originalFilename": "TrafficPatternsXD-Specification-Branded.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/67b5f6469675bb8602174b64754c3d75c628077b.pdf"
+      },
+      {
+        "_id": "file-6940189e01ac0168de8714091dfd6aa91c1a08d0-pdf",
+        "originalFilename": "StreetBond-SR-Flat-Surface-Specification.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/6940189e01ac0168de8714091dfd6aa91c1a08d0.pdf"
+      },
+      {
+        "_id": "file-6e1b313ca3671f0eb9c2692070b0b1b7202f943a-pdf",
+        "originalFilename": "TrafficPaint-for-Airfields.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/6e1b313ca3671f0eb9c2692070b0b1b7202f943a.pdf"
+      },
+      {
+        "_id": "file-6f65c69b9d8bc1380199c7366fe65812df04702b-pdf",
+        "originalFilename": "AirMark_Brocure.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/6f65c69b9d8bc1380199c7366fe65812df04702b.pdf"
+      },
+      {
+        "_id": "file-707213f284491be6636e5963053c1a350ab4ee55-pdf",
+        "originalFilename": "StreetBond_SB120_Specifications.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/707213f284491be6636e5963053c1a350ab4ee55.pdf"
+      },
+      {
+        "_id": "file-74bb73b15cfe1c3a887828bc551e4f4080919281-pdf",
+        "originalFilename": "TS002_TrafficPatternsXD_220204.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/74bb73b15cfe1c3a887828bc551e4f4080919281.pdf"
+      },
+      {
+        "_id": "file-782d328657b1f0c99db80d44e8f3b456c96a4476-pdf",
+        "originalFilename": "TS005_PreMark_220204.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/782d328657b1f0c99db80d44e8f3b456c96a4476.pdf"
+      },
+      {
+        "_id": "file-7c2604ae60b02eae91be897b02ac121d28421ab3-pdf",
+        "originalFilename": "DuraTherm-Specification-Branded.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/7c2604ae60b02eae91be897b02ac121d28421ab3.pdf"
+      },
+      {
+        "_id": "file-7c6fce8cee3e5c45f7c0de0e709444d38a1af269-pdf",
+        "originalFilename": "WB-Airfield-Product-Data.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/7c6fce8cee3e5c45f7c0de0e709444d38a1af269.pdf"
+      },
+      {
+        "_id": "file-7ffec53acaa03bd73e1137ea065b12a61d6b3585-pdf",
+        "originalFilename": "TrafficPatternsXD-CrossSection-Detail.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/7ffec53acaa03bd73e1137ea065b12a61d6b3585.pdf"
+      },
+      {
+        "_id": "file-8c09e0fbab95a39552a87a614b8d8a75cc758182-pdf",
+        "originalFilename": "Application_Instructions_MMAX_Corundum_Area_Markings.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/8c09e0fbab95a39552a87a614b8d8a75cc758182.pdf"
+      },
+      {
+        "_id": "file-90fa027c4695f798a1167a085ce285e8b1386242-pdf",
+        "originalFilename": "TrafficPatternsXD-Two-Component-Sealer.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/90fa027c4695f798a1167a085ce285e8b1386242.pdf"
+      },
+      {
+        "_id": "file-9225e7355a9595c80cd4ac671e12db610264a841-pdf",
+        "originalFilename": "MMAX-Next-Gen-Brochure_06_09_23-1.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/9225e7355a9595c80cd4ac671e12db610264a841.pdf"
+      },
+      {
+        "_id": "file-9412b688668cdfdeca6868fc3e84aca88bdc8729-pdf",
+        "originalFilename": "AirMark-Brocure-FR.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/9412b688668cdfdeca6868fc3e84aca88bdc8729.pdf"
+      },
+      {
+        "_id": "file-9730d22f6e1914ae116cac194a4d777f439214a1-pdf",
+        "originalFilename": "Data-Sheet-StreetBond-Pro-250.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/9730d22f6e1914ae116cac194a4d777f439214a1.pdf"
+      },
+      {
+        "_id": "file-978f347815ba22d4add3ab86d6f6c7afe7173ddc-pdf",
+        "originalFilename": "DuraShield-Pavement-Coating-Part-A-B-Color-Asphalt-TDS.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/978f347815ba22d4add3ab86d6f6c7afe7173ddc.pdf"
+      },
+      {
+        "_id": "file-9dda91a4e3388586cbb0e9ebd2e1c53b20eb8fed-pdf",
+        "originalFilename": "PreMark-for-Airports.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/9dda91a4e3388586cbb0e9ebd2e1c53b20eb8fed.pdf"
+      },
+      {
+        "_id": "file-9ee7829743ddd09521c1a5537f4492accd0e7910-pdf",
+        "originalFilename": "TrafficPatternsXD-Design-Manual.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/9ee7829743ddd09521c1a5537f4492accd0e7910.pdf"
+      },
+      {
+        "_id": "file-a0f18e4fd08e08199637cea6aa703f822d8d4c2c-pdf",
+        "originalFilename": "TrafficPatterns-Colour-Guidelines.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/a0f18e4fd08e08199637cea6aa703f822d8d4c2c.pdf"
+      },
+      {
+        "_id": "file-a30497aa696162fab4cb6d3a575f68b1bf152359-pdf",
+        "originalFilename": "decomark-colour-guide.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/a30497aa696162fab4cb6d3a575f68b1bf152359.pdf"
+      },
+      {
+        "_id": "file-a34716996628d23e53b67f39df39cb9ebc7761d3-pdf",
+        "originalFilename": "StreetBond-Concrete-Primer-WB-TDS.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/a34716996628d23e53b67f39df39cb9ebc7761d3.pdf"
+      },
+      {
+        "_id": "file-a6225994df54557e23d1fbd39a0d6872b946a89f-pdf",
+        "originalFilename": "TrafficPatterns-Solid-Sheets-125-Specification.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/a6225994df54557e23d1fbd39a0d6872b946a89f.pdf"
+      },
+      {
+        "_id": "file-ac8a9194cf986665ae3d802d5507c626822455e2-pdf",
+        "originalFilename": "DecoMark-Specification.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/ac8a9194cf986665ae3d802d5507c626822455e2.pdf"
+      },
+      {
+        "_id": "file-b06eb095828f6c93ac22b08257be44966886b32b-pdf",
+        "originalFilename": "decomark-custom-design-guidelines.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/b06eb095828f6c93ac22b08257be44966886b32b.pdf"
+      },
+      {
+        "_id": "file-b33eb0ad4bd441ddffe4269101208000628a08a5-pdf",
+        "originalFilename": "streetprint-template-catalog.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/b33eb0ad4bd441ddffe4269101208000628a08a5.pdf"
+      },
+      {
+        "_id": "file-b6ca330079890922bc446e8cf8a0478da5811b82-pdf",
+        "originalFilename": "StreetBond-SB120-Over-Concrete-Specification.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/b6ca330079890922bc446e8cf8a0478da5811b82.pdf"
+      },
+      {
+        "_id": "file-bb745847cca4881f7d0210344be903ce956d6e64-pdf",
+        "originalFilename": "TrafficPatterns-Design-Manual.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/bb745847cca4881f7d0210344be903ce956d6e64.pdf"
+      },
+      {
+        "_id": "file-bdb37c528e70997cb77ebf95a9d3752908791048-pdf",
+        "originalFilename": "duratherm-design-manual.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/bdb37c528e70997cb77ebf95a9d3752908791048.pdf"
+      },
+      {
+        "_id": "file-bdd4d490667e0cda40d47cade97b1eb8aac1f157-pdf",
+        "originalFilename": "TrafficPatterns-Custom-Design-Guidelines.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/bdd4d490667e0cda40d47cade97b1eb8aac1f157.pdf"
+      },
+      {
+        "_id": "file-c1273829adf85526a86c538fc7048cb07bb6d60e-pdf",
+        "originalFilename": "StreetBond-Colorant.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/c1273829adf85526a86c538fc7048cb07bb6d60e.pdf"
+      },
+      {
+        "_id": "file-c2c3979c8859691f39c210f7b4fc7ca4fc5deb45-pdf",
+        "originalFilename": "StreetBond-SB150-Data-Sheet-12.22-Rev.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/c2c3979c8859691f39c210f7b4fc7ca4fc5deb45.pdf"
+      },
+      {
+        "_id": "file-c38c51d008dd291d5545f7cc582cb07f8fc2b9e6-pdf",
+        "originalFilename": "StreetBond-Pro-220-and-250-Intallation.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/c38c51d008dd291d5545f7cc582cb07f8fc2b9e6.pdf"
+      },
+      {
+        "_id": "file-c5f9448549923909718578a42a80a0be5dad01fb-pdf",
+        "originalFilename": "StreetBond-SB120-Data-Sheet-12.22-Rev.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/c5f9448549923909718578a42a80a0be5dad01fb.pdf"
+      },
+      {
+        "_id": "file-ce0dd050ce12ee99faf32275d519364001feb1c6-pdf",
+        "originalFilename": "MMAX-Product-Data.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/ce0dd050ce12ee99faf32275d519364001feb1c6.pdf"
+      },
+      {
+        "_id": "file-d1b7886b7441f94fed2203f4ef3d58b35cac1d14-pdf",
+        "originalFilename": "StreetPrint-Asphalt-Texturing-Specification.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/d1b7886b7441f94fed2203f4ef3d58b35cac1d14.pdf"
+      },
+      {
+        "_id": "file-d6553c9151fc743e722312958177b994349f2153-pdf",
+        "originalFilename": "TrafficPatterns-Specification-Two-Component-Sealer.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/d6553c9151fc743e722312958177b994349f2153.pdf"
+      },
+      {
+        "_id": "file-d8fcacc37abf5cc9ec2ea39c63a051fe83bcf7f0-pdf",
+        "originalFilename": "TS004_DecoMark_220204.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/d8fcacc37abf5cc9ec2ea39c63a051fe83bcf7f0.pdf"
+      },
+      {
+        "_id": "file-dcf3cb7374ead89d3c718dd70406089bdafa4087-pdf",
+        "originalFilename": "TS001_TrafficPatterns_220204.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/dcf3cb7374ead89d3c718dd70406089bdafa4087.pdf"
+      },
+      {
+        "_id": "file-e0cd94aea25f79b288e8989442af42de24c032f3-pdf",
+        "originalFilename": "decomark-application-instructions.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/e0cd94aea25f79b288e8989442af42de24c032f3.pdf"
+      },
+      {
+        "_id": "file-e9e3a522eb911f13ab7feb4751ae56dfe130d583-pdf",
+        "originalFilename": "TrafficPatternsXD-Specification.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/e9e3a522eb911f13ab7feb4751ae56dfe130d583.pdf"
+      },
+      {
+        "_id": "file-eac43aebcfcf431eef2abfb139377d25b5bd2932-pdf",
+        "originalFilename": "Extended-Season-MMAX-product-data-sheet.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/eac43aebcfcf431eef2abfb139377d25b5bd2932.pdf"
+      },
+      {
+        "_id": "file-edcaa651f3ec5bae3128f83f1705a48138511066-pdf",
+        "originalFilename": "StreetBond-SR-Certificate-of-Analysis-Friction.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/edcaa651f3ec5bae3128f83f1705a48138511066.pdf"
+      },
+      {
+        "_id": "file-ef8fc5374ce58dc3bbb823eddb7fdb13b97daf5c-pdf",
+        "originalFilename": "StreetBond_SB150_Specifications.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/ef8fc5374ce58dc3bbb823eddb7fdb13b97daf5c.pdf"
+      },
+      {
+        "_id": "file-fda4e54d69edd24ffae1a3bec99620e8b4dd0c7b-pdf",
+        "originalFilename": "duratherm-colour-guide.pdf",
+        "url": "https://cdn.sanity.io/files/9dbro2m1/production/fda4e54d69edd24ffae1a3bec99620e8b4dd0c7b.pdf"
+      }
+    ]
+  }
+}

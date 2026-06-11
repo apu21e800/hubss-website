@@ -1,0 +1,4 @@
+- generic [active] [ref=e1]:
+  - main "Loading" [ref=e2]:
+    - paragraph [ref=e5]: Loading
+  - alert [ref=e6]

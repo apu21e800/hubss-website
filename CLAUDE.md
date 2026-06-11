@@ -1,87 +1,160 @@
 # HUBSS.com — Project Intelligence File
 
 ## Client
-HUB Surface Systems — Canadian leader in decorative and functional pavement
-solutions. 30+ years experience. Two regional offices:
-- East: Milton, Ontario (doug.bain@hubss.com / 416-540-9287)
-- West: Ladysmith, BC (cleve.stordy@hubss.com / 604-309-8212)
+HUB Surface Systems — Canadian leader in decorative and functional pavement solutions. 30+ years experience.
+
+**Offices:**
+- East: Milton, Ontario — doug.bain@hubss.com / 416-540-9287
+- West: Ladysmith, BC — cleve.stordy@hubss.com / 604-309-8212
 
 ## What They Do
-Stamped asphalt, preformed thermoplastics, and specialty coatings for
-municipalities, developers, and contractors across Canada. Products include
-TrafficPatterns, TrafficPatternsXD, StreetPrint, StreetBond, MMAX, DecoMark,
-DuraShield, DuraTherm, PreMark, AirMark.
+Stamped asphalt, preformed thermoplastics, and specialty coatings for municipalities, developers, and contractors across Canada.
 
-Applications: Crosswalks, Bus & Bike Lanes, Driveways, Public Art, Regulatory
-Markings, Parks & Paths, Community Branding, Town Homes, Parking Lots, Airports.
+**Products:** TrafficPatterns, TrafficPatternsXD, StreetPrint, StreetBond, MMAX, DecoMark, DuraShield, DuraTherm, PreMark, AirMark
+
+**Applications:** Crosswalks, Bus & Bike Lanes, Driveways, Public Art, Regulatory Markings, Parks & Paths, Community Branding, Town Homes, Parking Lots, Airports
 
 ## Brand
-- Colors: Black background, orange accent (#F97316 approx), white text
-- Tone: Municipal authority meets civic pride. Technical credibility + visual impact.
-- Positioning: "Redefining hardscapes" — surfaces as community identity, not
-  just infrastructure
-- Key proof points: Vision Zero, Complete Streets, AODA compliance, 20-year
-  durability, used by York Region, City of Toronto, Vancouver, UBC
+- **Colors:** Black background, orange accent (#F97316), white text
+- **Tone:** Municipal authority meets civic pride — technical credibility + visual impact
+- **Positioning:** "Redefining hardscapes" — surfaces as community identity, not just infrastructure
+- **Key proof points:** Vision Zero, Complete Streets, AODA compliance, 20-year durability, York Region, City of Toronto, Vancouver, UBC
 
 ## Tech Stack
-- Next.js 16.1.6 (App Router, Turbopack)
-- Tailwind CSS 4
-- TypeScript (strict)
-- MDX for blog posts (markdown with components)
-- Framer Motion for animations
-- Resend for transactional email (contact + lunch & learn forms)
-- Images: /public/images/ — swap by replacing files, no code change needed
-- Documents: /public/docs/ — PDFs linked by filename
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 16.1.6 (App Router, Turbopack) |
+| Styling | Tailwind CSS 4 |
+| Language | TypeScript (strict) |
+| CMS | Sanity v5 (content stored in Sanity Cloud, edited at /studio) |
+| Blog | MDX (legacy) + Sanity (current) |
+| Animations | Framer Motion |
+| Forms | react-hook-form + zod validation |
+| Email | Resend (contact form + Lunch & Learn) |
+| AI | Anthropic SDK (AI blog generation at /admin/blog) |
+| Maps | MapLibre GL / react-map-gl |
+| Analytics | Vercel Analytics + Speed Insights |
+| Chat | Crisp (optional widget) |
+| Deploy | Vercel — auto-deploys from GitHub main |
 
 ## Environment Variables
-Copy .env.local.example → .env.local and fill in:
-- RESEND_API_KEY — from resend.com (required for forms to send)
-- CONTACT_EMAIL — receiving address (defaults to info@hubss.com)
+Copy `.env.local.example` → `.env.local`. Required variables:
+
+| Variable | Purpose |
+|---|---|
+| `RESEND_API_KEY` | Contact + Lunch & Learn form emails |
+| `ANTHROPIC_API_KEY` | AI blog generation at /admin/blog |
+| `ADMIN_PASSWORD` | Gate for /admin/* routes |
+| `NEXT_PUBLIC_SITE_URL` | Canonical URLs, sitemap, OG tags |
+| `CONTACT_EMAIL` | Where form submissions go (default: info@hubss.com) |
+
+Optional (social publishing): `LINKEDIN_ACCESS_TOKEN`, `LINKEDIN_ORG_ID`, `FACEBOOK_PAGE_TOKEN`, `FACEBOOK_PAGE_ID`, `INSTAGRAM_ACCESS_TOKEN`, `INSTAGRAM_USER_ID`, `X_BEARER_TOKEN`, `NEXT_PUBLIC_CRISP_WEBSITE_ID`
 
 ## Project Structure
+```
 hubss-website/
-├── app/
-│   ├── page.tsx (landing page)
-│   ├── projects/
-│   ├── products/
-│   ├── applications/
+├── app/                         # Next.js App Router pages
+│   ├── page.tsx                 # Homepage (hero, products, applications, projects, CTA)
 │   ├── about/
+│   ├── admin/
+│   │   ├── blog/                # AI blog generation (protected, ADMIN_PASSWORD)
+│   │   └── social/              # Social media post scheduler (protected)
+│   ├── applications/
+│   │   ├── page.tsx
+│   │   ├── [slug]/
+│   │   └── public-art/
 │   ├── blog/
-│   └── contact/
+│   │   ├── page.tsx
+│   │   └── [slug]/
+│   ├── contact/
+│   ├── gallery/
+│   ├── lunch-learn/
+│   ├── privacy/
+│   ├── products/
+│   │   ├── page.tsx
+│   │   └── [slug]/
+│   ├── projects/
+│   │   ├── page.tsx
+│   │   └── [slug]/
+│   ├── resources/
+│   ├── studio/[[...tool]]/      # Sanity Studio embedded in Next.js
+│   └── terms/
 ├── components/
-│   ├── ui/ (buttons, cards, nav)
-│   ├── sections/ (hero, projects, lunch-learn, footer)
-│   └── blog/ (post layout, card)
+│   ├── ai/                      # AI-related UI components
+│   ├── blog/                    # Post layout, card
+│   ├── resources/               # Resource/docs components
+│   ├── sections/                # Hero, projects, lunch-learn, footer
+│   ├── ui/                      # Buttons, cards, nav, shared UI
+│   ├── CrispChat.tsx
+│   └── StickyBar.tsx
 ├── content/
-│   └── blog/ (*.mdx files — add posts here)
+│   ├── blog/                    # Legacy MDX blog posts
+│   ├── social-drafts/
+│   └── social-queue/
+├── lib/                         # Data fetching + utilities
+│   ├── sanity.client.ts         # Sanity client config
+│   ├── sanity.queries.ts        # All GROQ queries
+│   ├── products.ts / products.server.ts
+│   ├── projects.ts
+│   ├── applications.ts / applications.server.ts
+│   ├── seo.ts                   # Metadata helpers
+│   └── site-flags.ts            # Feature flags
+├── sanity/
+│   └── schemas/                 # Content types: blogPost, project, product,
+│                                #   application, page, siteSettings
+├── scripts/
+│   └── migrate-to-sanity.ts    # MDX → Sanity migration tool
+├── types/                       # Shared TypeScript types
 ├── public/
-│   ├── images/
-│   └── docs/
+│   ├── images/                  # Static images (swap files, no code change)
+│   └── docs/                    # PDF spec sheets (drop new PDFs here)
+├── _archive/                    # Non-website files (screenshots, planning docs, assets)
 └── CLAUDE.md
+```
 
-## Pages to Build (in order)
-1. Landing page — hero, products grid, applications, recent projects,
-   lunch & learn CTA, footer
-2. Projects page — filterable grid by product/application
-3. Products page — each product with specs
-4. Blog — MDX-powered, easy to add posts
-5. Contact — form + both office locations
+## Sanity CMS
+Content is managed via Sanity. The Studio is embedded at `/studio` (deployed at hubss.com/studio).
 
-## Adding Content (no developer needed)
-- New blog post: create /content/blog/post-name.mdx
-- Swap hero image: replace /public/images/hero.jpg
-- Add PDF spec sheet: drop in /public/docs/, update link in products page
-- New project: add entry to /content/projects/project-name.mdx
+**Content types:** `blogPost`, `project`, `product`, `application`, `page`, `siteSettings`
+
+**Adding content the easy way (no code):**
+- New blog post → Sanity Studio → Blog Posts → New
+- New project → Sanity Studio → Projects → New
+- New product → Sanity Studio → Products → New
+- New PDF spec sheet → drop in `/public/docs/`, update product in Studio
+
+**Code-only tasks:**
+- New page route → add to `app/`
+- Schema change → edit `sanity/schemas/`, run `npx sanity schema deploy`
+
+## Adding Content Without a Developer
+| Task | How |
+|---|---|
+| New blog post | Sanity Studio at /studio, or create `/content/blog/post-name.mdx` (legacy) |
+| Swap hero image | Replace `/public/images/hero.jpg` |
+| Add spec sheet PDF | Drop file in `/public/docs/`, link it in the relevant product in Studio |
+| New project | Add via Sanity Studio |
 
 ## Conversion Goals
-Primary CTA: "Request Spec Sheet" + "Book Lunch & Learn"
-Secondary: Project gallery browsing → contact form
-Lead capture: Name + Email + Phone (matches current form)
+- **Primary CTA:** "Request Spec Sheet" + "Book Lunch & Learn"
+- **Secondary:** Project gallery → contact form
+- **Lead capture:** Name + Email + Phone
 
 ## Commands
-npm run dev     # local development
-npm run build   # production build
-npm run start   # run production locally
+```bash
+npm run dev              # Local dev (Turbopack)
+npm run build            # Production build
+npm run start            # Run production locally
+npm run migrate:sanity   # Migrate MDX → Sanity
+npm run migrate:sanity:dry  # Dry run (no writes)
+npm run migrate:sanity:purge  # Purge Sanity content
+```
 
-## Deploy
-Vercel — connected to GitHub, auto-deploys on push to main
+## Behaviour Guidelines for Claude
+- **Never break the live site.** hubss.com is live and in production. Verify before suggesting structural changes.
+- **Sanity is the source of truth** for blog, projects, products, and applications — not MDX files (those are legacy).
+- **Tailwind 4 syntax** — utility classes only, no config-based custom classes unless already in the project.
+- **TypeScript strict** — never use `any`. Check `types/` for shared types before defining new ones.
+- **Images go in `/public/images/`** — use Next.js `<Image>` component everywhere, not `<img>`.
+- **GROQ queries live in `lib/sanity.queries.ts`** — add new queries there, not inline in page files.
+- **`_archive/`** is non-website storage — do not import from it or reference it in code.

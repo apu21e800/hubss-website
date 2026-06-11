@@ -13,6 +13,97 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "start"],
       "port": 3000
+    },
+    {
+      "name": "Pattern Samples",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8765", "--directory", "design-samples/asphalt-patterns"],
+      "port": 8765
+    },
+    {
+      "name": "flipbook-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "../hubss-flipbook-wt", "run", "dev", "--", "--port", "3010"],
+      "port": 3010
+    },
+    {
+      "name": "seo-pass-2-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "../hubss-seo-wt", "run", "dev", "--", "--port", "3011"],
+      "port": 3011
+    },
+    {
+      "name": "grid-fix-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "../hubss-grid-fix-wt", "run", "dev", "--", "--port", "3012"],
+      "port": 3012
+    },
+    {
+      "name": "products-redesign-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "../hubss-products-redesign-wt", "run", "dev", "--", "--port", "3013"],
+      "port": 3013
+    },
+    {
+      "name": "products-redesign-prod",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "../hubss-products-redesign-wt", "run", "start", "--", "--port", "3014"],
+      "port": 3014
+    },
+    {
+      "name": "aggrefill-prod",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "../hubss-aggrefill-hero-wt", "run", "start", "--", "--port", "3015"],
+      "port": 3015
+    },
+    {
+      "name": "megamenu-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "../hubss-megamenu-polish-wt", "run", "dev", "--", "--port", "3016"],
+      "port": 3016
+    },
+    {
+      "name": "megamenu-prod",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "../hubss-megamenu-polish-wt", "run", "start", "--", "--port", "3017"],
+      "port": 3017
+    },
+    {
+      "name": "studio-merge-prod",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "../hubss-studio-merge-wt", "run", "start", "--", "--port", "3018"],
+      "port": 3018
+    },
+    {
+      "name": "flipbook-ship-prod",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "../hubss-flipbook-ship-wt", "run", "start", "--", "--port", "3020"],
+      "port": 3020
+    },
+    {
+      "name": "card-shrink-prod",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "../hubss-card-shrink-wt", "run", "start", "--", "--port", "3021"],
+      "port": 3021
+    },
+    {
+      "name": "catalogue-polish-prod",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "../hubss-catalogue-polish-wt", "run", "start", "--", "--port", "3022"],
+      "port": 3022
+    },
+    {
+      "name": "catalogue-flag-prod",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "../hubss-catalogue-flag-wt", "run", "start", "--", "--port", "3023"],
+      "port": 3023,
+      "env": { "VERCEL_ENV": "production" }
+    },
+    {
+      "name": "reorg-prod",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "../hubss-reorg-overnight-wt", "run", "start", "--", "--port", "3024"],
+      "port": 3024
     }
   ]
 }

@@ -1,0 +1,113 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - navigation [ref=e3]:
+      - link "KOBO — home" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img [ref=e6]
+        - generic [ref=e9]: KOBO
+      - list [ref=e10]:
+        - listitem [ref=e11]:
+          - link "Work" [ref=e12] [cursor=pointer]:
+            - /url: "#work"
+        - listitem [ref=e13]:
+          - link "About" [ref=e14] [cursor=pointer]:
+            - /url: "#who"
+        - listitem [ref=e15]:
+          - link "Contact" [ref=e16] [cursor=pointer]:
+            - /url: "#contact"
+      - link "Get a teardown" [ref=e17] [cursor=pointer]:
+        - /url: "#contact"
+  - main [ref=e18]:
+    - generic [ref=e20]:
+      - heading "Your wholesale runs on email. We build the portal that fixes it." [level=1] [ref=e21]:
+        - text: Your wholesale runs on email.
+        - text: We build the portal that fixes it.
+      - paragraph [ref=e22]: We rebuild your wholesale ordering on the store you already have — and show you the rebuild before any pitch.
+      - link "See a teardown" [ref=e24] [cursor=pointer]:
+        - /url: "#work"
+        - text: See a teardown
+        - img [ref=e25]
+    - generic [ref=e28]:
+      - generic [ref=e29]:
+        - generic [ref=e32]: Recent work
+        - heading "We build the proof first. Then we talk." [level=2] [ref=e33]
+      - generic [ref=e34]:
+        - link "Hornby Organic · Shopify Wholesale gated behind a form, prices hidden, inventory you can't trust. “Sold out” and “in stock” — same day, same SKUs." [ref=e36] [cursor=pointer]:
+          - /url: /work/hornby-organic
+          - generic [ref=e37]:
+            - generic [ref=e38]: Hornby Organic · Shopify
+            - img [ref=e39]
+          - paragraph [ref=e42]: Wholesale gated behind a form, prices hidden, inventory you can't trust.
+          - paragraph [ref=e43]: “Sold out” and “in stock” — same day, same SKUs.
+        - link "The Cure Hot Sauce · Lightspeed Stocked in shops across the Island, with no wholesale portal at all. ~35 stockists, 0 self-serve ordering." [ref=e45] [cursor=pointer]:
+          - /url: /work/the-cure-hot-sauce
+          - generic [ref=e46]:
+            - generic [ref=e47]: The Cure Hot Sauce · Lightspeed
+            - img [ref=e48]
+          - paragraph [ref=e51]: Stocked in shops across the Island, with no wholesale portal at all.
+          - paragraph [ref=e52]: ~35 stockists, 0 self-serve ordering.
+    - generic [ref=e54]:
+      - heading "We replace wholesale that runs on emailed PDFs and spreadsheets with a self-serve portal on top of your existing store." [level=2] [ref=e56]
+      - generic [ref=e58]:
+        - generic [ref=e59]: $4,000
+        - generic [ref=e60]: to build
+        - generic [ref=e61]: ·
+        - generic [ref=e62]: $300
+        - generic [ref=e63]: /mo to run
+      - paragraph [ref=e65]: A bespoke tool that does ~90% of what you need — where a $100/mo app does part of it.
+    - generic [ref=e67]:
+      - heading "A small studio. You work with the people who build it." [level=2] [ref=e69]
+      - generic [ref=e70]:
+        - article [ref=e72]:
+          - generic [ref=e73]: VS
+          - generic [ref=e74]:
+            - generic [ref=e75]:
+              - heading "Vernon Stordy" [level=3] [ref=e76]
+              - link "Vernon Stordy on LinkedIn" [ref=e77] [cursor=pointer]:
+                - /url: https://www.linkedin.com/in/clevelandstordy/
+                - img [ref=e78]
+            - paragraph [ref=e80]: Design & the relationship
+            - paragraph [ref=e81]: On the Island, in person — your point of contact, start to finish.
+        - article [ref=e83]:
+          - generic [ref=e84]: D
+          - generic [ref=e85]:
+            - heading "Dan" [level=3] [ref=e87]
+            - paragraph [ref=e88]: Engineering & the build
+            - paragraph [ref=e89]: Ships the software, and joins the call to scope the technical work.
+    - generic [ref=e92]:
+      - heading "Tell us how your wholesale works today." [level=2] [ref=e93]
+      - paragraph [ref=e94]: If we can rebuild it, we’ll send you a teardown — free.
+      - link "cleve@21e8.studio" [ref=e95] [cursor=pointer]:
+        - /url: mailto:cleve@21e8.studio?subject=Our%20wholesale%20flow&body=Hi%20%E2%80%94%20here's%20roughly%20how%20our%20wholesale%20ordering%20works%20today%3A%0A%0A(platform%2C%20how%20buyers%20order%2C%20what's%20painful)%0A%0ALink%20to%20our%20site%3A
+        - text: cleve@21e8.studio
+        - img [ref=e96]
+  - contentinfo [ref=e98]:
+    - generic [ref=e99]:
+      - generic [ref=e100]:
+        - generic [ref=e101]:
+          - link "KOBO a 21e8 studio" [ref=e102] [cursor=pointer]:
+            - /url: /
+            - img [ref=e104]
+            - generic [ref=e107]:
+              - generic [ref=e108]: KOBO
+              - generic [ref=e109]: a 21e8 studio
+          - paragraph [ref=e110]: A studio rebuilding the wholesale workflows your business outgrew. Wholesale first. Vancouver Island, BC.
+        - generic [ref=e111]:
+          - generic [ref=e112]:
+            - generic [ref=e113]: Studio
+            - link "Work" [ref=e114] [cursor=pointer]:
+              - /url: "#work"
+            - link "About" [ref=e115] [cursor=pointer]:
+              - /url: "#who"
+            - link "Teardown 001" [ref=e116] [cursor=pointer]:
+              - /url: /work/hornby-organic
+          - generic [ref=e117]:
+            - generic [ref=e118]: Contact
+            - link "cleve@21e8.studio" [ref=e119] [cursor=pointer]:
+              - /url: mailto:cleve@21e8.studio
+            - generic [ref=e120]: By referral & teardown
+      - generic [ref=e122]:
+        - paragraph [ref=e123]: © 2026 KOBO — a 21e8 studio
+        - paragraph [ref=e124]: This site is the demo.
+  - button "Open Next.js Dev Tools" [ref=e130] [cursor=pointer]:
+    - img [ref=e131]

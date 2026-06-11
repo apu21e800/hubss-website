@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HUBSS — Stamped Asphalt Pattern Samples · v4</title>
+<style>
+  :root {
+    --bg-deep: #070b12;
+    --bg-mid:  #0f1620;
+    --bg-card: #131c2a;
+    --ink:     #e8edf4;
+    --ink-mut: #8a96a8;
+    --orange:  #f97316;
+    --line:    rgba(255,255,255,0.08);
+    --line-strong: rgba(255,255,255,0.14);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg-deep); color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif; line-height: 1.55; }
+  code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 11.5px; }
+
+  .container { max-width: 1440px; margin: 0 auto; padding: 56px 32px; }
+
+  header { padding-bottom: 28px; border-bottom: 1px solid var(--line); margin-bottom: 48px; }
+  header .eyebrow { color: var(--orange); font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 10px; }
+  header h1 { font-size: 30px; margin: 0 0 10px; letter-spacing: -0.015em; font-weight: 600; }
+  header p { margin: 0 0 10px; color: var(--ink-mut); font-size: 15px; max-width: 820px; }
+  header .ref code { background: var(--bg-card); padding: 1px 6px; border-radius: 3px; color: var(--ink); }
+
+  .deliverable { margin-bottom: 96px; }
+  .deliverable-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 24px; padding-bottom: 14px; border-bottom: 1px solid var(--line-strong);
+    gap: 16px; flex-wrap: wrap;
+  }
+  .deliverable-head h2 { font-size: 22px; margin: 0; font-weight: 600; letter-spacing: -0.005em; }
+  .deliverable-head .badge {
+    font-size: 11px; color: var(--ink-mut); padding: 4px 10px;
+    border: 1px solid var(--line); border-radius: 999px; background: var(--bg-card);
+  }
+  .deliverable > p.intro { margin: 0 0 28px; color: var(--ink-mut); font-size: 14.5px; max-width: 820px; }
+  .deliverable > p.intro b { color: var(--ink); font-weight: 600; }
+
+  /* ── Comparison row (5 columns per pattern) ── */
+  .pattern { margin-bottom: 36px; }
+  .pattern-head {
+    display: flex; align-items: baseline; gap: 12px;
+    margin-bottom: 12px;
+  }
+  .pattern-head .num {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 12px; color: var(--ink-mut); letter-spacing: 0.06em;
+  }
+  .pattern-head h3 { font-size: 17px; margin: 0; font-weight: 600; letter-spacing: -0.005em; }
+  .pattern-head .src {
+    font-size: 11.5px; color: var(--ink-mut);
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    margin-left: auto;
+  }
+  .pattern-head .src code { background: var(--bg-card); padding: 1px 6px; border-radius: 3px; }
+
+  .compare-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+  }
+  .col-head {
+    font-size: 11px; color: var(--ink-mut);
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 6px 4px 8px;
+    border-bottom: 1px solid var(--line);
+    text-align: center;
+  }
+  .col-head.fixed   { color: #6da9ff; }   /* highlight the fix */
+  .col-head.old     { color: var(--orange); }
+  .swatch {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    background-color: var(--bg-mid);
+    background-repeat: repeat;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .swatch.cream { background-color: #f5f1e8; }
+  .swatch.navy  { background-color: #0d3163; }
+
+  /* Per-pattern bg-size & SVG URL — set inline for clarity per pattern */
+
+  /* ── Tiled background demo (single-line behind real text) ── */
+  .demo {
+    position: relative;
+    padding: 56px 56px;
+    border-radius: 12px;
+    overflow: hidden;
+    background-repeat: repeat;
+    border: 1px solid var(--line);
+    margin-bottom: 28px;
+  }
+  .demo.dark  { background-color: var(--bg-mid); }
+  .demo.navy  { background-color: #0d3163; }
+  .demo.cream { background-color: #f5f1e8; }
+  .demo .label {
+    position: absolute; top: 12px; right: 14px;
+    font-size: 10.5px; color: var(--ink-mut);
+    background: rgba(7,11,18,0.7); padding: 3px 8px; border-radius: 3px;
+    font-family: ui-monospace, Menlo, monospace; letter-spacing: 0.04em;
+  }
+  .demo.cream .label { color: #5b6478; background: rgba(245,241,232,0.7); }
+  .demo.navy  .label { color: #cfe1ff; background: rgba(13,49,99,0.7); }
+  .demo h4 { font-size: 26px; margin: 0 0 12px; font-weight: 600; letter-spacing: -0.012em; }
+  .demo p  { margin: 0 0 18px; font-size: 14.5px; max-width: 580px; color: rgba(232,237,244,0.78); }
+  .demo .cta {
+    display: inline-block; padding: 10px 20px;
+    background: var(--orange); color: #0a0a0a; border-radius: 999px;
+    font-size: 13.5px; font-weight: 600; text-decoration: none;
+  }
+  .demo.cream h4 { color: #1a2030; }
+  .demo.cream p  { color: rgba(26,32,48,0.72); }
+  .demo.navy  h4 { color: #ffffff; }
+  .demo.navy  p  { color: rgba(207,225,255,0.78); }
+
+  /* Notes panel */
+  .notes {
+    margin: 14px 0 0;
+    padding: 12px 16px;
+    background: var(--bg-card);
+    border-left: 2px solid var(--orange);
+    border-radius: 5px;
+    font-size: 12.5px; color: var(--ink-mut);
+  }
+  .notes strong { color: var(--ink); }
+
+  footer { padding: 32px 0; border-top: 1px solid var(--line); color: var(--ink-mut); font-size: 13px; }
+  footer code { background: var(--bg-card); padding: 1px 6px; border-radius: 3px; color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="eyebrow">v4 · true single-line fix + architectural variants</div>
+    <h1>Stamped-asphalt patterns — single-line corrected</h1>
+    <p>The <code>.line</code> variant in v3 drew each brick as a closed outline, so every joint rendered as two parallel lines (the right edge of brick A + the left edge of brick B). v4 fixes this: each brick body is expanded by half the joint width before edge extraction, so adjacent bricks share their joint-centerline edges. Coincident edges are then deduped and collinear sub-segments merged so every joint is emitted as <b>exactly one continuous line</b>.</p>
+    <p>Two architectural variants added on top of the true single-line: <b>blueprint</b> (light cyan on deep navy) and <b>draft</b> (dark navy on cream paper). Both use the same deduped geometry, different palettes.</p>
+    <p class="ref">Source PDFs in <code>apshalt patterns/</code>. 8 patterns × 7 variants = 56 SVGs. The 3 new variants (<code>.single-line</code>, <code>.blueprint</code>, <code>.draft</code>) are the focus of this round; the 4 from v3 are kept for comparison.</p>
+  </header>
+
+  <!-- ════════════════════════════════════════════════════════════════ -->
+  <!-- DELIVERABLE A · FILLED vs OLD-LINE vs NEW-SINGLE-LINE vs ARCH      -->
+  <!-- ════════════════════════════════════════════════════════════════ -->
+  <div class="deliverable">
+    <div class="deliverable-head">
+      <h2>A · 5-way comparison per pattern</h2>
+      <span class="badge">filled · old-line · NEW single-line · blueprint · draft</span>
+    </div>
+    <p class="intro"><b>Read across:</b> the first two columns show what we had (filled + the broken double-line v3 variant). The middle column is the fix — true single-line geometry. The last two are the architectural variants on the same fixed geometry.</p>
+
+    <!-- 1 -->
+    <div class="pattern">
+      <div class="pattern-head"><span class="num">01</span><h3>Standard Herringbone</h3><div class="src">source <code>Standard Herringbone.pdf</code></div></div>
+      <div class="compare-row">
+        <div><div class="col-head">filled · white</div><div class="swatch" style="background-image:url('standard-herringbone.white.svg');background-size:176px 176px;"></div></div>
+        <div><div class="col-head old">v3 line (broken)</div><div class="swatch" style="background-image:url('standard-herringbone.line.svg');background-size:176px 176px;"></div></div>
+        <div><div class="col-head fixed">single-line ✓</div><div class="swatch" style="background-image:url('standard-herringbone.single-line.svg');background-size:176px 176px;"></div></div>
+        <div><div class="col-head">blueprint</div><div class="swatch navy" style="background-image:url('standard-herringbone.blueprint.svg');background-size:176px 176px;"></div></div>
+        <div><div class="col-head">draft</div><div class="swatch cream" style="background-image:url('standard-herringbone.draft.svg');background-size:176px 176px;"></div></div>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="pattern">
+      <div class="pattern-head"><span class="num">02</span><h3>Diagonal Herringbone</h3><div class="src">source <code>Diagonal Herringbone.pdf</code></div></div>
+      <div class="compare-row">
+        <div><div class="col-head">filled · white</div><div class="swatch" style="background-image:url('diagonal-herringbone.white.svg');background-size:249px 249px;"></div></div>
+        <div><div class="col-head old">v3 line (broken)</div><div class="swatch" style="background-image:url('diagonal-herringbone.line.svg');background-size:249px 249px;"></div></div>
+        <div><div class="col-head fixed">single-line ✓</div><div class="swatch" style="background-image:url('diagonal-herringbone.single-line.svg');background-size:249px 249px;"></div></div>
+        <div><div class="col-head">blueprint</div><div class="swatch navy" style="background-image:url('diagonal-herringbone.blueprint.svg');background-size:249px 249px;"></div></div>
+        <div><div class="col-head">draft</div><div class="swatch cream" style="background-image:url('diagonal-herringbone.draft.svg');background-size:249px 249px;"></div></div>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="pattern">
+      <div class="pattern-head"><span class="num">03</span><h3>British Cobble</h3><div class="src">source <code>British Cobble.pdf</code></div></div>
+      <div class="compare-row">
+        <div><div class="col-head">filled · white</div><div class="swatch" style="background-image:url('british-cobble.white.svg');background-size:176px 176px;"></div></div>
+        <div><div class="col-head old">v3 line (broken)</div><div class="swatch" style="background-image:url('british-cobble.line.svg');background-size:176px 176px;"></div></div>
+        <div><div class="col-head fixed">single-line ✓</div><div class="swatch" style="background-image:url('british-cobble.single-line.svg');background-size:176px 176px;"></div></div>
+        <div><div class="col-head">blueprint</div><div class="swatch navy" style="background-image:url('british-cobble.blueprint.svg');background-size:176px 176px;"></div></div>
+        <div><div class="col-head">draft</div><div class="swatch cream" style="background-image:url('british-cobble.draft.svg');background-size:176px 176px;"></div></div>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="pattern">
+      <div class="pattern-head"><span class="num">04</span><h3>Offset Brick</h3><div class="src">source <code>Offset Brick.pdf</code></div></div>
+      <div class="compare-row">
+        <div><div class="col-head">filled · white</div><div class="swatch" style="background-image:url('offset-brick.white.svg');background-size:48px 136px;"></div></div>
+        <div><div class="col-head old">v3 line (broken)</div><div class="swatch" style="background-image:url('offset-brick.line.svg');background-size:48px 136px;"></div></div>
+        <div><div class="col-head fixed">single-line ✓</div><div class="swatch" style="background-image:url('offset-brick.single-line.svg');background-size:48px 136px;"></div></div>
+        <div><div class="col-head">blueprint</div><div class="swatch navy" style="background-image:url('offset-brick.blueprint.svg');background-size:48px 136px;"></div></div>
+        <div><div class="col-head">draft</div><div class="swatch cream" style="background-image:url('offset-brick.draft.svg');background-size:48px 136px;"></div></div>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="pattern">
+      <div class="pattern-head"><span class="num">05</span><h3>Six-In Tiles</h3><div class="src">source <code>6 In Tiles.pdf</code></div></div>
+      <div class="compare-row">
+        <div><div class="col-head">filled · white</div><div class="swatch" style="background-image:url('six-in-tiles.white.svg');background-size:64px 64px;"></div></div>
+        <div><div class="col-head old">v3 line (broken)</div><div class="swatch" style="background-image:url('six-in-tiles.line.svg');background-size:64px 64px;"></div></div>
+        <div><div class="col-head fixed">single-line ✓</div><div class="swatch" style="background-image:url('six-in-tiles.single-line.svg');background-size:64px 64px;"></div></div>
+        <div><div class="col-head">blueprint</div><div class="swatch navy" style="background-image:url('six-in-tiles.blueprint.svg');background-size:64px 64px;"></div></div>
+        <div><div class="col-head">draft</div><div class="swatch cream" style="background-image:url('six-in-tiles.draft.svg');background-size:64px 64px;"></div></div>
+      </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="pattern">
+      <div class="pattern-head"><span class="num">06</span><h3>Eight-In Offset Tile</h3><div class="src">source <code>8 In Offset Tile.pdf</code></div></div>
+      <div class="compare-row">
+        <div><div class="col-head">filled · white</div><div class="swatch" style="background-image:url('eight-in-offset-tile.white.svg');background-size:84px 168px;"></div></div>
+        <div><div class="col-head old">v3 line (broken)</div><div class="swatch" style="background-image:url('eight-in-offset-tile.line.svg');background-size:84px 168px;"></div></div>
+        <div><div class="col-head fixed">single-line ✓</div><div class="swatch" style="background-image:url('eight-in-offset-tile.single-line.svg');background-size:84px 168px;"></div></div>
+        <div><div class="col-head">blueprint</div><div class="swatch navy" style="background-image:url('eight-in-offset-tile.blueprint.svg');background-size:84px 168px;"></div></div>
+        <div><div class="col-head">draft</div><div class="swatch cream" style="background-image:url('eight-in-offset-tile.draft.svg');background-size:84px 168px;"></div></div>
+      </div>
+    </div>
+
+    <!-- 7 -->
+    <div class="pattern">
+      <div class="pattern-head"><span class="num">07</span><h3>Texas Cobble</h3><div class="src">source <code>18-1-336 Double Texas Cobble.pdf</code></div></div>
+      <div class="compare-row">
+        <div><div class="col-head">filled · white</div><div class="swatch" style="background-image:url('texas-cobble.white.svg');background-size:44px 44px;"></div></div>
+        <div><div class="col-head old">v3 line (broken)</div><div class="swatch" style="background-image:url('texas-cobble.line.svg');background-size:44px 44px;"></div></div>
+        <div><div class="col-head fixed">single-line ✓</div><div class="swatch" style="background-image:url('texas-cobble.single-line.svg');background-size:44px 44px;"></div></div>
+        <div><div class="col-head">blueprint</div><div class="swatch navy" style="background-image:url('texas-cobble.blueprint.svg');background-size:44px 44px;"></div></div>
+        <div><div class="col-head">draft</div><div class="swatch cream" style="background-image:url('texas-cobble.draft.svg');background-size:44px 44px;"></div></div>
+      </div>
+    </div>
+
+    <!-- 8 -->
+    <div class="pattern">
+      <div class="pattern-head"><span class="num">08</span><h3>Ashlar Slate</h3><div class="src">source <code>Asher Slate.pdf</code></div></div>
+      <div class="compare-row">
+        <div><div class="col-head">filled · white</div><div class="swatch" style="background-image:url('ashlar-slate.white.svg');background-size:200px 120px;"></div></div>
+        <div><div class="col-head old">v3 line (broken)</div><div class="swatch" style="background-image:url('ashlar-slate.line.svg');background-size:200px 120px;"></div></div>
+        <div><div class="col-head fixed">single-line ✓</div><div class="swatch" style="background-image:url('ashlar-slate.single-line.svg');background-size:200px 120px;"></div></div>
+        <div><div class="col-head">blueprint</div><div class="swatch navy" style="background-image:url('ashlar-slate.blueprint.svg');background-size:200px 120px;"></div></div>
+        <div><div class="col-head">draft</div><div class="swatch cream" style="background-image:url('ashlar-slate.draft.svg');background-size:200px 120px;"></div></div>
+      </div>
+      <p class="notes"><strong>Note on ashlar:</strong> source PDF already had stones butt-touching, so the v3 <code>.line</code> here was already mostly single — but the new variant still gains the dedupe/merge pass + the architectural palettes.</p>
+    </div>
+
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════ -->
+  <!-- DELIVERABLE B · TILED-AS-BACKGROUND DEMOS                          -->
+  <!-- ════════════════════════════════════════════════════════════════ -->
+  <div class="deliverable">
+    <div class="deliverable-head">
+      <h2>B · How the single-line variants tile behind real copy</h2>
+      <span class="badge">background tile demo · zoom in for joint detail</span>
+    </div>
+    <p class="intro"><b>The key test:</b> these blocks are filled with the SVG tile repeating as a CSS background (no inline copy, no mask) — the way Vernon would actually use it on the live site. Zoom in on any joint and confirm: one line, not two parallel lines. Look at the tile boundaries: no visible seam.</p>
+
+    <div class="demo dark" style="background-image:url('standard-herringbone.single-line.svg');background-size:176px 176px;">
+      <span class="label">standard-herringbone · single-line · dark</span>
+      <h4>Redefining hardscapes <span style="color:var(--orange);">—</span> one stamped surface at a time</h4>
+      <p>The civic layer of the city, made legible. Crosswalks, plazas, and laneways treated as community identity, not infrastructure.</p>
+      <a href="#" class="cta">Request a spec sheet</a>
+    </div>
+
+    <div class="demo navy" style="background-image:url('diagonal-herringbone.blueprint.svg');background-size:249px 249px;">
+      <span class="label">diagonal-herringbone · blueprint</span>
+      <h4>Engineered for Vision Zero</h4>
+      <p>Tactile, retroreflective crosswalks specified by York Region, City of Toronto, and the City of Vancouver. AODA aligned. Six- to eight-year marking life.</p>
+      <a href="#" class="cta">View the spec library</a>
+    </div>
+
+    <div class="demo cream" style="background-image:url('british-cobble.draft.svg');background-size:176px 176px;">
+      <span class="label">british-cobble · draft</span>
+      <h4>Heritage paving systems for streets that mean something</h4>
+      <p>Woven masonry textures translated into long-life decorative pavement. Twenty-year colour retention documented across every Canadian province.</p>
+      <a href="#" class="cta" style="background:#1a2030;color:#f5f1e8;">See the case studies</a>
+    </div>
+
+    <div class="demo dark" style="background-image:url('ashlar-slate.single-line.svg');background-size:200px 120px;">
+      <span class="label">ashlar-slate · single-line · dark</span>
+      <h4>Random ashlar <span style="color:var(--orange);">—</span> stone-wall sketch</h4>
+      <p>Irregular polygons echoing real stone. Reads as a deliberate hardscape detail drawing rather than a uniform tile pattern.</p>
+      <a href="#" class="cta">Talk to us</a>
+    </div>
+
+    <div class="demo navy" style="background-image:url('offset-brick.blueprint.svg');background-size:48px 136px;">
+      <span class="label">offset-brick · blueprint</span>
+      <h4>30 years of decorative pavement, engineered for Canada</h4>
+      <p>Stamped asphalt, preformed thermoplastics, and specialty coatings. Built for freeze-thaw, salt, and snowplows from coastal BC to the Great Lakes.</p>
+      <a href="#" class="cta">Book a lunch &amp; learn</a>
+    </div>
+
+    <div class="demo cream" style="background-image:url('six-in-tiles.draft.svg');background-size:64px 64px;">
+      <span class="label">six-in-tiles · draft</span>
+      <h4>Hardscape detail · 6-inch tile spec</h4>
+      <p>Square-grid tile pattern used for plaza paving and pedestrian zones. Renders as a hardscape detail drawing on cream paper.</p>
+      <a href="#" class="cta" style="background:#1a2030;color:#f5f1e8;">Download CAD blocks</a>
+    </div>
+
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════ -->
+  <!-- DELIVERABLE C · PLACEABLES (unchanged from v2)                     -->
+  <!-- ════════════════════════════════════════════════════════════════ -->
+  <div class="deliverable">
+    <div class="deliverable-head">
+      <h2>C · Placeable graphic elements <span style="font-weight:400;color:var(--ink-mut);font-size:13px;">— unchanged from v2</span></h2>
+      <span class="badge">4 modular SVGs</span>
+    </div>
+    <p class="intro">Carried over unchanged. Once a primary pattern is picked, these can be re-rendered against it (currently herringbone).</p>
+
+    <div class="pattern">
+      <div class="pattern-head"><h3>Section divider</h3><div class="src"><code>placeable-divider.svg</code></div></div>
+      <div style="border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg-mid);">
+        <div style="padding:24px 36px;border-bottom:1px solid var(--line);color:var(--ink-mut);font-size:12px;letter-spacing:0.06em;text-transform:uppercase;">Section 1</div>
+        <img src="placeable-divider.svg" alt="" style="display:block;width:100%;height:96px;">
+        <div style="padding:24px 36px;border-top:1px solid var(--line);color:var(--ink-mut);font-size:12px;letter-spacing:0.06em;text-transform:uppercase;">Section 2</div>
+      </div>
+    </div>
+
+    <div class="pattern">
+      <div class="pattern-head"><h3>Corner motif</h3><div class="src"><code>placeable-corner.svg</code></div></div>
+      <div style="position:relative;padding:48px 48px 56px;background:var(--bg-mid);border:1px solid var(--line);border-radius:10px;overflow:hidden;">
+        <img src="placeable-corner.svg" alt="" style="position:absolute;top:0;left:0;width:360px;height:360px;opacity:0.85;">
+        <div style="position:relative;z-index:1;max-width:560px;">
+          <h4 style="font-size:22px;margin:0 0 10px;font-weight:600;letter-spacing:-0.012em;">Vision Zero, made visible</h4>
+          <p style="margin:0;color:var(--ink-mut);font-size:14px;">High-contrast crosswalks and tactile bike-lane delineation specified by York Region, City of Toronto, and City of Vancouver.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    Files in <code>design-samples/asphalt-patterns/</code>. Patterns: 56 SVGs (8 × 7 variants — orange/white/bronze/line filled + line/single-line/blueprint/draft). Placeables: 4. <code>_generate.py</code> emits the filled set; <code>_generate_line.py</code> emits the single-line/blueprint/draft set with dedupe + collinear-merge.
+  </footer>
+
+</div>
+</body>
+</html>

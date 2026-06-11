@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44" shape-rendering="geometricPrecision">
+<rect width="44" height="44" fill="#0d3163"/>
+<line x1="-46.000" y1="-46.000" x2="-46.000" y2="218.000" stroke="#cfe1ff" stroke-width="0.65" stroke-linecap="square"/>
+<line x1="-46.000" y1="-46.000" x2="218.000" y2="-46.000" stroke="#cfe1ff" stroke-width="0.65" stroke-linecap="square"/>
+<line x1="-46.000" y1="-2.000" x2="218.000" y2="-2.000" stroke="#cfe1ff" stroke-width="0.65" stroke-linecap="square"/>
+<line x1="-46.000" y1="42.000" x2="218.000" y2="42.000" stroke="#cfe1ff" stroke-width="0.65" stroke-linecap="square"/>
+<line x1="-46.000" y1="86.000" x2="218.000" y2="86.000" stroke="#cfe1ff" stroke-width="0.65" stroke-linecap="square"/>
+<line x1="-46.000" y1="130.000" x2="218.000" y2="130.000" stroke="#cfe1ff" stroke-width="0.65" stroke-linecap="square"/>
+<line x1="-46.000" y1="174.000" x2="218.000" y2="174.000" stroke="#cfe1ff" stroke-width="0.65" stroke-linecap="square"/>
+<line x1="-46.000" y1="218.000" x2="218.000" y2="218.000" stroke="#cfe1ff" stroke-width="0.65" stroke-linecap="square"/>
+<line x1="-2.000" y1="-46.000" x2="-2.000" y2="218.000" stroke="#cfe1ff" stroke-width="0.65" stroke-linecap="square"/>
+<line x1="42.000" y1="-46.000" x2="42.000" y2="218.000" stroke="#cfe1ff" stroke-width="0.65" stroke-linecap="square"/>
+<line x1="86.000" y1="-46.000" x2="86.000" y2="218.000" stroke="#cfe1ff" stroke-width="0.65" stroke-linecap="square"/>
+<line x1="130.000" y1="-46.000" x2="130.000" y2="218.000" stroke="#cfe1ff" stroke-width="0.65" stroke-linecap="square"/>
+<line x1="174.000" y1="-46.000" x2="174.000" y2="218.000" stroke="#cfe1ff" stroke-width="0.65" stroke-linecap="square"/>
+<line x1="218.000" y1="-46.000" x2="218.000" y2="218.000" stroke="#cfe1ff" stroke-width="0.65" stroke-linecap="square"/>
+</svg>

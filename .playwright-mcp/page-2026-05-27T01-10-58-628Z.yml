@@ -1,0 +1,450 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - navigation [ref=e3]:
+      - generic [ref=e4]:
+        - link "HUB Surface Systems Canadian" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - img "HUB Surface Systems" [ref=e6]
+          - generic "Canadian" [ref=e7]:
+            - img [ref=e8]
+            - generic [ref=e11]: Canadian
+        - generic [ref=e12]:
+          - button "Products" [ref=e13]:
+            - text: Products
+            - img [ref=e14]
+          - button "Applications" [ref=e16]:
+            - text: Applications
+            - img [ref=e17]
+          - link "Field Notes" [ref=e19] [cursor=pointer]:
+            - /url: /blog
+            - text: Field Notes
+            - img [ref=e20]
+          - link "About" [ref=e22] [cursor=pointer]:
+            - /url: /about
+          - link "Contact" [ref=e23] [cursor=pointer]:
+            - /url: /contact
+        - generic [ref=e24]:
+          - button "Search" [ref=e25]:
+            - img [ref=e26]
+            - generic [ref=e29]: Search
+          - link "Resources" [ref=e30] [cursor=pointer]:
+            - /url: /resources
+          - link "Lunch & Learn" [ref=e31] [cursor=pointer]:
+            - /url: /lunch-learn
+    - generic [ref=e32]:
+      - paragraph [ref=e33]: Resources
+      - heading "Specification Library" [level=1] [ref=e34]
+      - paragraph [ref=e35]: Technical data sheets, brochures, safety guides, and installation resources for every HUBSS product.
+    - generic [ref=e38]:
+      - link "HUB Surface Systems Catalogue 2026 — cover Featured · Virtual Catalogue 2026 Browse the complete 116-page catalogue in your browser. 116 pages · free to read · downloadable PDF Open" [ref=e39] [cursor=pointer]:
+        - /url: /catalogue?utm_source=resources&utm_medium=feature_banner&utm_campaign=catalogue
+        - generic [ref=e41]:
+          - img "HUB Surface Systems Catalogue 2026 — cover" [ref=e43]
+          - generic [ref=e44]:
+            - paragraph [ref=e45]: Featured · Virtual Catalogue 2026
+            - paragraph [ref=e46]: Browse the complete 116-page catalogue in your browser.
+            - paragraph [ref=e47]: 116 pages · free to read · downloadable PDF
+          - generic [ref=e49]:
+            - text: Open
+            - generic [ref=e50]: →
+      - generic [ref=e51]:
+        - heading "All Documents" [level=2] [ref=e52]
+        - generic [ref=e54]: 67 total
+      - generic [ref=e56]:
+        - button "By Product" [ref=e57]
+        - button "By Document Type" [ref=e58]
+      - generic [ref=e59]:
+        - generic [ref=e60]:
+          - img [ref=e61]
+          - textbox "Search documents..." [ref=e64]
+        - generic [ref=e65]:
+          - combobox [ref=e66] [cursor=pointer]:
+            - option "All Products" [selected]
+            - option "TrafficPatterns"
+            - option "TrafficPatternsXD"
+            - option "StreetPrint"
+            - option "StreetBond"
+            - option "StreetBondSR"
+            - option "MMAX"
+            - option "DecoMark"
+            - option "DuraShield"
+            - option "PreMark"
+            - option "DuraTherm"
+            - option "AirMark"
+          - img
+        - generic [ref=e67]:
+          - combobox [ref=e68] [cursor=pointer]:
+            - option "All Types" [selected]
+            - option "Spec Sheet"
+            - option "Data Sheet"
+            - option "Brochure"
+            - option "Installation Guide"
+            - option "Design Manual"
+            - option "Colour Guide"
+            - option "Safety Data Sheet"
+            - option "Guide"
+            - option "Certificate"
+            - option "Other"
+          - img
+      - paragraph [ref=e69]: 67 documents found
+      - generic [ref=e70]:
+        - generic [ref=e71]:
+          - generic [ref=e72]:
+            - heading "StreetPrint" [level=3] [ref=e73]
+            - generic [ref=e75]: 4 docs
+          - generic [ref=e76]:
+            - generic [ref=e77]:
+              - generic [ref=e78]:
+                - heading "StreetPrint Asphalt Texturing Specification" [level=3] [ref=e79]
+                - generic [ref=e80]: StreetPrint
+              - generic [ref=e81]:
+                - generic [ref=e82]:
+                  - generic [ref=e83]: 1.2 MB
+                  - generic [ref=e85]: Jan 2024
+                - button "Preview" [ref=e86]:
+                  - img [ref=e87]
+                  - generic [ref=e90]: Preview
+                - link "Download PDF" [ref=e91] [cursor=pointer]:
+                  - /url: /docs/streetprint/StreetPrint-Asphalt-Texturing-Specification.pdf
+                  - img [ref=e92]
+            - generic [ref=e95]:
+              - generic [ref=e96]:
+                - heading "StreetPrint Colour Guide" [level=3] [ref=e97]
+                - generic [ref=e98]: StreetPrint
+              - generic [ref=e99]:
+                - generic [ref=e100]:
+                  - generic [ref=e101]: 3.6 MB
+                  - generic [ref=e103]: Mar 2024
+                - button "Preview" [ref=e104]:
+                  - img [ref=e105]
+                  - generic [ref=e108]: Preview
+                - link "Download PDF" [ref=e109] [cursor=pointer]:
+                  - /url: /docs/streetprint/streetprint-colour-guide.pdf
+                  - img [ref=e110]
+            - generic [ref=e113]:
+              - generic [ref=e114]:
+                - heading "StreetPrint Template Catalog" [level=3] [ref=e115]
+                - generic [ref=e116]: StreetPrint
+              - generic [ref=e117]:
+                - generic [ref=e118]:
+                  - generic [ref=e119]: 5.1 MB
+                  - generic [ref=e121]: Feb 2024
+                - button "Preview" [ref=e122]:
+                  - img [ref=e123]
+                  - generic [ref=e126]: Preview
+                - link "Download PDF" [ref=e127] [cursor=pointer]:
+                  - /url: /docs/streetprint/streetprint-template-catalog.pdf
+                  - img [ref=e128]
+            - generic [ref=e131]:
+              - generic [ref=e132]:
+                - heading "StreetPrint FAQ" [level=3] [ref=e133]
+                - generic [ref=e134]: StreetPrint
+              - generic [ref=e135]:
+                - generic [ref=e136]:
+                  - generic [ref=e137]: 0.8 MB
+                  - generic [ref=e139]: Jan 2024
+                - button "Preview" [ref=e140]:
+                  - img [ref=e141]
+                  - generic [ref=e144]: Preview
+                - link "Download PDF" [ref=e145] [cursor=pointer]:
+                  - /url: /docs/streetprint/streetprint-faq.pdf
+                  - img [ref=e146]
+        - generic [ref=e149]:
+          - generic [ref=e150]:
+            - heading "StreetBond" [level=3] [ref=e151]
+            - generic [ref=e153]: 8 docs
+          - generic [ref=e154]:
+            - generic [ref=e155]:
+              - generic [ref=e156]:
+                - heading "StreetBond Brochure" [level=3] [ref=e157]
+                - generic [ref=e158]: StreetBond
+              - generic [ref=e159]:
+                - generic [ref=e160]:
+                  - generic [ref=e161]: 4.2 MB
+                  - generic [ref=e163]: Mar 2024
+                - button "Preview" [ref=e164]:
+                  - img [ref=e165]
+                  - generic [ref=e168]: Preview
+                - link "Download PDF" [ref=e169] [cursor=pointer]:
+                  - /url: /docs/StreetBond/StreetBond/StreetBond-Brochure.pdf
+                  - img [ref=e170]
+            - generic [ref=e173]:
+              - generic [ref=e174]:
+                - heading "StreetBond Colour Guide" [level=3] [ref=e175]
+                - generic [ref=e176]: StreetBond
+              - generic [ref=e177]:
+                - generic [ref=e178]:
+                  - generic [ref=e179]: 3.8 MB
+                  - generic [ref=e181]: Feb 2024
+                - button "Preview" [ref=e182]:
+                  - img [ref=e183]
+                  - generic [ref=e186]: Preview
+                - link "Download PDF" [ref=e187] [cursor=pointer]:
+                  - /url: /docs/StreetBond/StreetBond/StreetBond-Colour-Guide.pdf
+                  - img [ref=e188]
+            - generic [ref=e191]:
+              - generic [ref=e192]:
+                - heading "StreetBond Substrate Guide" [level=3] [ref=e193]
+                - generic [ref=e194]: StreetBond
+              - generic [ref=e195]:
+                - generic [ref=e196]:
+                  - generic [ref=e197]: 1.4 MB
+                  - generic [ref=e199]: Jan 2024
+                - button "Preview" [ref=e200]:
+                  - img [ref=e201]
+                  - generic [ref=e204]: Preview
+                - link "Download PDF" [ref=e205] [cursor=pointer]:
+                  - /url: /docs/StreetBond/StreetBond/StreetBond_Substrate_Guide.pdf
+                  - img [ref=e206]
+            - generic [ref=e209]:
+              - generic [ref=e210]:
+                - heading "StreetBond Colorant Data Sheet" [level=3] [ref=e211]
+                - generic [ref=e212]: StreetBond
+              - generic [ref=e213]:
+                - generic [ref=e214]:
+                  - generic [ref=e215]: 0.6 MB
+                  - generic [ref=e217]: Feb 2026
+                - button "Preview" [ref=e218]:
+                  - img [ref=e219]
+                  - generic [ref=e222]: Preview
+                - link "Download PDF" [ref=e223] [cursor=pointer]:
+                  - /url: /docs/StreetBond/StreetBond/StreetBond-Colorant.pdf
+                  - img [ref=e224]
+            - generic [ref=e227]:
+              - generic [ref=e228]:
+                - heading "StreetBond SB120 Specification" [level=3] [ref=e229]
+                - generic [ref=e230]: StreetBond
+              - generic [ref=e231]:
+                - generic [ref=e232]:
+                  - generic [ref=e233]: 1.1 MB
+                  - generic [ref=e235]: Jan 2024
+                - button "Preview" [ref=e236]:
+                  - img [ref=e237]
+                  - generic [ref=e240]: Preview
+                - link "Download PDF" [ref=e241] [cursor=pointer]:
+                  - /url: /docs/StreetBond/StreetBond%20120/StreetBond_SB120_Specifications.pdf
+                  - img [ref=e242]
+            - generic [ref=e245]:
+              - generic [ref=e246]:
+                - heading "StreetBond SB120 Technical Data Sheet" [level=3] [ref=e247]
+                - generic [ref=e248]: StreetBond
+              - generic [ref=e249]:
+                - generic [ref=e250]:
+                  - generic [ref=e251]: 0.9 MB
+                  - generic [ref=e253]: Feb 2024
+                - button "Preview" [ref=e254]:
+                  - img [ref=e255]
+                  - generic [ref=e258]: Preview
+                - link "Download PDF" [ref=e259] [cursor=pointer]:
+                  - /url: /docs/StreetBond/StreetBond%20120/StreetBond-SB120-Data-Sheet-12.22-Rev.pdf
+                  - img [ref=e260]
+            - generic [ref=e263]:
+              - generic [ref=e264]:
+                - heading "StreetBond SB120 Over Concrete Specification" [level=3] [ref=e265]
+                - generic [ref=e266]: StreetBond
+              - generic [ref=e267]:
+                - generic [ref=e268]:
+                  - generic [ref=e269]: 1.0 MB
+                  - generic [ref=e271]: Mar 2023
+                - button "Preview" [ref=e272]:
+                  - img [ref=e273]
+                  - generic [ref=e276]: Preview
+                - link "Download PDF" [ref=e277] [cursor=pointer]:
+                  - /url: /docs/StreetBond/StreetBond%20120/StreetBond-SB120-Over-Concrete-Specification.pdf
+                  - img [ref=e278]
+            - generic [ref=e281]:
+              - generic [ref=e282]:
+                - heading "StreetBond SB150 Specification" [level=3] [ref=e283]
+                - generic [ref=e284]: StreetBond
+              - generic [ref=e285]:
+                - generic [ref=e286]:
+                  - generic [ref=e287]: 1.1 MB
+                  - generic [ref=e289]: Jan 2024
+                - button "Preview" [ref=e290]:
+                  - img [ref=e291]
+                  - generic [ref=e294]: Preview
+                - link "Download PDF" [ref=e295] [cursor=pointer]:
+                  - /url: /docs/StreetBond/StreetBond%20150/StreetBond_SB150_Specifications.pdf
+                  - img [ref=e296]
+      - button "Load more (55 remaining)" [ref=e300]
+    - generic [ref=e303]:
+      - generic [ref=e304]:
+        - generic [ref=e305]:
+          - paragraph [ref=e306]: Education & Engagement
+          - heading "Lunch & Learn at Your Location" [level=2] [ref=e307]:
+            - text: Lunch & Learn
+            - text: at Your Location
+          - paragraph [ref=e308]: Lunch included, in your office or virtual.
+        - generic [ref=e309]:
+          - generic [ref=e310]:
+            - img [ref=e311]
+            - generic [ref=e313]: 45–60 minute presentation tailored to your projects
+          - generic [ref=e314]:
+            - img [ref=e315]
+            - generic [ref=e317]: Live Q&A with HUB technical team
+          - generic [ref=e318]:
+            - img [ref=e319]
+            - generic [ref=e321]: Sample materials and specification sheets
+          - generic [ref=e322]:
+            - img [ref=e323]
+            - generic [ref=e325]: Lunch included — virtual sessions come with a $25 lunch voucher
+        - generic [ref=e326]:
+          - generic [ref=e327]:
+            - textbox "Your name" [ref=e328]
+            - textbox "Email address" [ref=e329]
+          - generic [ref=e330]:
+            - textbox "Company or organization" [ref=e331]
+            - textbox "City" [ref=e332]
+          - textbox "Phone number" [ref=e333]
+          - button "Request Lunch & Learn" [ref=e334]
+      - generic [ref=e335]:
+        - img "HUB Surface Systems Lunch and Learn — decorative pavement products presentation" [ref=e337]
+        - generic:
+          - img "HUB Surface Systems mascot moose"
+    - generic [ref=e339]:
+      - generic:
+        - img
+      - generic [ref=e341]:
+        - generic [ref=e342]:
+          - generic [ref=e343]:
+            - img "HUB Surface Systems" [ref=e345]
+            - paragraph [ref=e346]:
+              - text: Pedestrian safety. Traffic calming.
+              - text: Civic identity. Coast to coast since 1999.
+            - paragraph [ref=e347]:
+              - generic "Canadian" [ref=e348]:
+                - img [ref=e349]
+                - generic [ref=e352]: Canadian
+              - generic [ref=e353]: Owned and operated · Coast to coast · Since 1999
+            - generic [ref=e354]:
+              - link "LinkedIn" [ref=e355] [cursor=pointer]:
+                - /url: https://www.linkedin.com/company/hub-surface-systems
+                - img [ref=e356]
+              - link "YouTube" [ref=e358] [cursor=pointer]:
+                - /url: https://www.youtube.com/@hubsurfacesystems
+                - img [ref=e359]
+              - link "Instagram" [ref=e361] [cursor=pointer]:
+                - /url: https://www.instagram.com/hubsurfacesystems
+                - img [ref=e362]
+              - link "Facebook" [ref=e364] [cursor=pointer]:
+                - /url: https://www.facebook.com/hubsurfacesystems
+                - img [ref=e365]
+              - link "X" [ref=e367] [cursor=pointer]:
+                - /url: https://x.com/HUB_SS
+                - img [ref=e368]
+          - generic [ref=e370]:
+            - heading "Products" [level=4] [ref=e371]
+            - list [ref=e372]:
+              - listitem [ref=e373]:
+                - link "TrafficPatternsXD" [ref=e374] [cursor=pointer]:
+                  - /url: /products/traffic-patterns-xd
+              - listitem [ref=e375]:
+                - link "TrafficPatterns" [ref=e376] [cursor=pointer]:
+                  - /url: /products/traffic-patterns
+              - listitem [ref=e377]:
+                - link "StreetBond" [ref=e378] [cursor=pointer]:
+                  - /url: /products/streetbond
+              - listitem [ref=e379]:
+                - link "StreetPrint" [ref=e380] [cursor=pointer]:
+                  - /url: /products/streetprint
+              - listitem [ref=e381]:
+                - link "DecoMark" [ref=e382] [cursor=pointer]:
+                  - /url: /products/decomark
+              - listitem [ref=e383]:
+                - link "MMAX" [ref=e384] [cursor=pointer]:
+                  - /url: /products/mmax
+              - listitem [ref=e385]:
+                - link "StreetBondSR" [ref=e386] [cursor=pointer]:
+                  - /url: /products/streetbondsr
+              - listitem [ref=e387]:
+                - link "DuraTherm" [ref=e388] [cursor=pointer]:
+                  - /url: /products/duratherm
+              - listitem [ref=e389]:
+                - link "DuraShield" [ref=e390] [cursor=pointer]:
+                  - /url: /products/durashield
+              - listitem [ref=e391]:
+                - link "AirMark" [ref=e392] [cursor=pointer]:
+                  - /url: /products/airmark
+              - listitem [ref=e393]:
+                - link "PreMark" [ref=e394] [cursor=pointer]:
+                  - /url: /products/premark
+              - listitem [ref=e395]:
+                - link "ChipFill" [ref=e396] [cursor=pointer]:
+                  - /url: /products/chipfill
+              - listitem [ref=e397]:
+                - link "AggreFill" [ref=e398] [cursor=pointer]:
+                  - /url: /products/aggrefill
+              - listitem [ref=e399]:
+                - link "Fast Patch DPR" [ref=e400] [cursor=pointer]:
+                  - /url: /products/fast-patch
+          - generic [ref=e401]:
+            - heading "Applications" [level=4] [ref=e402]
+            - list [ref=e403]:
+              - listitem [ref=e404]:
+                - link "Crosswalks" [ref=e405] [cursor=pointer]:
+                  - /url: /applications/crosswalks
+              - listitem [ref=e406]:
+                - link "Bike Lanes" [ref=e407] [cursor=pointer]:
+                  - /url: /applications/bike-lanes
+              - listitem [ref=e408]:
+                - link "Bus Lanes" [ref=e409] [cursor=pointer]:
+                  - /url: /applications/bus-lanes
+              - listitem [ref=e410]:
+                - link "Regulatory Markings" [ref=e411] [cursor=pointer]:
+                  - /url: /applications/regulatory-markings
+              - listitem [ref=e412]:
+                - link "Parks & Paths" [ref=e413] [cursor=pointer]:
+                  - /url: /applications/parks-paths
+              - listitem [ref=e414]:
+                - link "Community Branding" [ref=e415] [cursor=pointer]:
+                  - /url: /applications/community-branding
+              - listitem [ref=e416]:
+                - link "Parking Lots" [ref=e417] [cursor=pointer]:
+                  - /url: /applications/parking-lots
+              - listitem [ref=e418]:
+                - link "Private Driveways" [ref=e419] [cursor=pointer]:
+                  - /url: /applications/private-driveways
+              - listitem [ref=e420]:
+                - link "Public Art" [ref=e421] [cursor=pointer]:
+                  - /url: /applications/public-art
+              - listitem [ref=e422]:
+                - link "Pedestrian Safety" [ref=e423] [cursor=pointer]:
+                  - /url: /applications/pedestrian-safety
+              - listitem [ref=e424]:
+                - link "Traffic Calming" [ref=e425] [cursor=pointer]:
+                  - /url: /applications/traffic-calming
+          - generic [ref=e426]:
+            - heading "Offices" [level=4] [ref=e427]
+            - generic [ref=e428]:
+              - generic [ref=e429]:
+                - paragraph [ref=e431]: West Office
+                - paragraph [ref=e432]: Ladysmith, BC
+                - link "cleve.stordy@hubss.com" [ref=e433] [cursor=pointer]:
+                  - /url: mailto:cleve.stordy@hubss.com
+                - link "604-309-8212" [ref=e434] [cursor=pointer]:
+                  - /url: tel:6043098212
+              - generic [ref=e435]:
+                - paragraph [ref=e437]: East Office
+                - paragraph [ref=e438]: Milton, Ontario
+                - link "doug.bain@hubss.com" [ref=e439] [cursor=pointer]:
+                  - /url: mailto:doug.bain@hubss.com
+                - link "416-540-9287" [ref=e440] [cursor=pointer]:
+                  - /url: tel:4165409287
+        - generic [ref=e441]:
+          - paragraph [ref=e442]: © 2026 HUB Surface Systems. All rights reserved.
+          - generic [ref=e443]:
+            - link "Privacy Policy" [ref=e444] [cursor=pointer]:
+              - /url: /privacy
+            - link "Terms of Use" [ref=e445] [cursor=pointer]:
+              - /url: /terms
+  - generic:
+    - generic:
+      - paragraph: Canada's Decorative Pavement Specialists · Since 1999
+      - generic:
+        - link:
+          - /url: /products
+          - text: See the Systems
+        - link:
+          - /url: /lunch-learn
+          - text: Book a Lunch & Learn
+  - alert [ref=e446]

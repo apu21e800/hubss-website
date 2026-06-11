@@ -1,0 +1,434 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - navigation [ref=e3]:
+      - generic [ref=e4]:
+        - link "HUB Surface Systems Canadian" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - img "HUB Surface Systems" [ref=e6]
+          - generic "Canadian" [ref=e7]:
+            - img [ref=e8]
+            - generic [ref=e11]: Canadian
+        - generic [ref=e12]:
+          - button "Products" [ref=e13]:
+            - text: Products
+            - img [ref=e14]
+          - button "Applications" [ref=e16]:
+            - text: Applications
+            - img [ref=e17]
+          - link "Field Notes" [ref=e19] [cursor=pointer]:
+            - /url: /blog
+            - text: Field Notes
+            - img [ref=e20]
+          - link "About" [ref=e22] [cursor=pointer]:
+            - /url: /about
+          - link "Contact" [ref=e23] [cursor=pointer]:
+            - /url: /contact
+        - generic [ref=e24]:
+          - button "Search" [ref=e25]:
+            - img [ref=e26]
+            - generic [ref=e29]: Search
+          - link "Resources" [ref=e30] [cursor=pointer]:
+            - /url: /resources
+          - link "Lunch & Learn" [ref=e31] [cursor=pointer]:
+            - /url: /lunch-learn
+    - generic [ref=e33]:
+      - generic [ref=e34]:
+        - paragraph [ref=e35]: The Full Lineup
+        - heading "Surface Systems for the Built Environment." [level=1] [ref=e36]
+        - paragraph [ref=e37]: Fourteen systems for municipal, commercial, and private use — preformed thermoplastics, MMA resins, stamped asphalt, decorative coatings, and asphalt repair.
+      - generic [ref=e38]:
+        - generic [ref=e39]:
+          - generic [ref=e40]:
+            - heading "Preformed Thermoplastics" [level=2] [ref=e42]
+            - paragraph [ref=e44]: Factory-manufactured and heat-fused directly to asphalt or concrete. Used for regulatory symbols, patterned crosswalks, custom civic graphics, and airfield markings. No stencil prep, no curing window, no annual repainting.
+          - generic [ref=e45]:
+            - link "TrafficPatternsXD Stamped asphalt with aggregate-reinforced preformed thermoplastic. TrafficPatternsXD — the XD stands for Extremely Durable — is a decorative pavement marking system engineered for the har… Crosswalks Bus Lanes pedestrian-safety +2 more Explore System →" [ref=e46] [cursor=pointer]:
+              - /url: /products/traffic-patterns-xd
+              - generic [ref=e48]:
+                - heading "TrafficPatternsXD" [level=3] [ref=e49]
+                - paragraph [ref=e50]: Stamped asphalt with aggregate-reinforced preformed thermoplastic.
+                - paragraph [ref=e51]: TrafficPatternsXD — the XD stands for Extremely Durable — is a decorative pavement marking system engineered for the har…
+                - generic [ref=e52]:
+                  - generic [ref=e53]: Crosswalks
+                  - generic [ref=e54]: Bus Lanes
+                  - generic [ref=e55]: pedestrian-safety
+                  - generic [ref=e56]: +2 more
+                - generic [ref=e57]:
+                  - text: Explore System
+                  - generic [ref=e58]: →
+            - link "TrafficPatterns Custom preformed thermoplastic crosswalk and surface marking. Factory-manufactured at 125mil, heat-fused permanently to asphalt or concrete. TrafficPatterns is a fully customizable preformed thermoplastic pavement marking system — a fusion of performance, aesth… Crosswalks Parks & Paths Playgrounds +3 more Explore System →" [ref=e59] [cursor=pointer]:
+              - /url: /products/traffic-patterns
+              - generic [ref=e61]:
+                - heading "TrafficPatterns" [level=3] [ref=e62]
+                - paragraph [ref=e63]: Custom preformed thermoplastic crosswalk and surface marking. Factory-manufactured at 125mil, heat-fused permanently to asphalt or concrete.
+                - paragraph [ref=e64]: TrafficPatterns is a fully customizable preformed thermoplastic pavement marking system — a fusion of performance, aesth…
+                - generic [ref=e65]:
+                  - generic [ref=e66]: Crosswalks
+                  - generic [ref=e67]: Parks & Paths
+                  - generic [ref=e68]: Playgrounds
+                  - generic [ref=e69]: +3 more
+                - generic [ref=e70]:
+                  - text: Explore System
+                  - generic [ref=e71]: →
+            - link "PreMark Preformed thermoplastic symbols and legends. Drive-on installation. PreMark is a highly durable preformed thermoplastic pavement marking material, specifically engineered for high-traffic … Bike Lanes Regulatory Crosswalks +4 more Explore System →" [ref=e72] [cursor=pointer]:
+              - /url: /products/premark
+              - generic [ref=e74]:
+                - heading "PreMark" [level=3] [ref=e75]
+                - paragraph [ref=e76]: Preformed thermoplastic symbols and legends. Drive-on installation.
+                - paragraph [ref=e77]: PreMark is a highly durable preformed thermoplastic pavement marking material, specifically engineered for high-traffic …
+                - generic [ref=e78]:
+                  - generic [ref=e79]: Bike Lanes
+                  - generic [ref=e80]: Regulatory
+                  - generic [ref=e81]: Crosswalks
+                  - generic [ref=e82]: +4 more
+                - generic [ref=e83]:
+                  - text: Explore System
+                  - generic [ref=e84]: →
+            - link "DuraTherm Inlaid flush-mount thermoplastic. Zero plow profile. DuraTherm is a premium decorative pavement marking system that seamlessly integrates high-performance preformed thermopl… Crosswalks Community Branding public-spaces +2 more Explore System →" [ref=e85] [cursor=pointer]:
+              - /url: /products/duratherm
+              - generic [ref=e87]:
+                - heading "DuraTherm" [level=3] [ref=e88]
+                - paragraph [ref=e89]: Inlaid flush-mount thermoplastic. Zero plow profile.
+                - paragraph [ref=e90]: DuraTherm is a premium decorative pavement marking system that seamlessly integrates high-performance preformed thermopl…
+                - generic [ref=e91]:
+                  - generic [ref=e92]: Crosswalks
+                  - generic [ref=e93]: Community Branding
+                  - generic [ref=e94]: public-spaces
+                  - generic [ref=e95]: +2 more
+                - generic [ref=e96]:
+                  - text: Explore System
+                  - generic [ref=e97]: →
+            - link "DecoMark Custom-graphic preformed thermoplastic for wayfinding, public art, schools, and parks. DecoMark is a high-performance preformed thermoplastic pavement marking system designed for creating durable and vibrant… public-art Community Branding public-spaces +3 more Explore System →" [ref=e98] [cursor=pointer]:
+              - /url: /products/decomark
+              - generic [ref=e100]:
+                - heading "DecoMark" [level=3] [ref=e101]
+                - paragraph [ref=e102]: Custom-graphic preformed thermoplastic for wayfinding, public art, schools, and parks.
+                - paragraph [ref=e103]: DecoMark is a high-performance preformed thermoplastic pavement marking system designed for creating durable and vibrant…
+                - generic [ref=e104]:
+                  - generic [ref=e105]: public-art
+                  - generic [ref=e106]: Community Branding
+                  - generic [ref=e107]: public-spaces
+                  - generic [ref=e108]: +3 more
+                - generic [ref=e109]:
+                  - text: Explore System
+                  - generic [ref=e110]: →
+            - link "AirMark Preformed thermoplastic for non-runway airfield markings. Used in Canada's busiest airports. AirMark is an advanced pavement markings system designed specifically for airports — engineered for taxiways, aprons, he… airports Regulatory Explore System →" [ref=e111] [cursor=pointer]:
+              - /url: /products/airmark
+              - generic [ref=e113]:
+                - heading "AirMark" [level=3] [ref=e114]
+                - paragraph [ref=e115]: Preformed thermoplastic for non-runway airfield markings. Used in Canada's busiest airports.
+                - paragraph [ref=e116]: AirMark is an advanced pavement markings system designed specifically for airports — engineered for taxiways, aprons, he…
+                - generic [ref=e117]:
+                  - generic [ref=e118]: airports
+                  - generic [ref=e119]: Regulatory
+                - generic [ref=e120]:
+                  - text: Explore System
+                  - generic [ref=e121]: →
+        - generic [ref=e122]:
+          - generic [ref=e123]:
+            - heading "Coatings" [level=2] [ref=e125]
+            - paragraph [ref=e127]: Liquid-applied colour systems that bond chemically to asphalt and concrete. Used for lane demarcation, decorative plazas, solar-reflective heat island mitigation, and pavement protection.
+          - generic [ref=e128]:
+            - link "StreetBond Coloured coatings for Canadian applications. Bold. Tough. Engineered for Canada. StreetBond is a high-quality, innovative pavement coating system designed to transform ordinary asphalt and concrete sur… Bike Lanes Bus Lanes Crosswalks +6 more Explore System →" [ref=e129] [cursor=pointer]:
+              - /url: /products/streetbond
+              - generic [ref=e131]:
+                - heading "StreetBond" [level=3] [ref=e132]
+                - paragraph [ref=e133]: Coloured coatings for Canadian applications. Bold. Tough. Engineered for Canada.
+                - paragraph [ref=e134]: StreetBond is a high-quality, innovative pavement coating system designed to transform ordinary asphalt and concrete sur…
+                - generic [ref=e135]:
+                  - generic [ref=e136]: Bike Lanes
+                  - generic [ref=e137]: Bus Lanes
+                  - generic [ref=e138]: Crosswalks
+                  - generic [ref=e139]: +6 more
+                - generic [ref=e140]:
+                  - text: Explore System
+                  - generic [ref=e141]: →
+            - link "StreetBondSR Solar reflective acrylic coating. High SRI. LEED-eligible. StreetBondSR is a solar reflective acrylic pavement coating engineered for surface temperature reduction. Reflects solar… leed-urban-heat-island Parking Lots Playgrounds +2 more Explore System →" [ref=e142] [cursor=pointer]:
+              - /url: /products/streetbondsr
+              - generic [ref=e144]:
+                - heading "StreetBondSR" [level=3] [ref=e145]
+                - paragraph [ref=e146]: Solar reflective acrylic coating. High SRI. LEED-eligible.
+                - paragraph [ref=e147]: StreetBondSR is a solar reflective acrylic pavement coating engineered for surface temperature reduction. Reflects solar…
+                - generic [ref=e148]:
+                  - generic [ref=e149]: leed-urban-heat-island
+                  - generic [ref=e150]: Parking Lots
+                  - generic [ref=e151]: Playgrounds
+                  - generic [ref=e152]: +2 more
+                - generic [ref=e153]:
+                  - text: Explore System
+                  - generic [ref=e154]: →
+            - link "MMAX MMA resin coating. 45–60 min cure. Engineered for transit lanes and bike priority corridors. MMAX is a Methyl Methacrylate (MMA)-based coloured lane treatment for durable, high-visibility transit and bicycle corri… Bike Lanes Bus Lanes Crosswalks +2 more Explore System →" [ref=e155] [cursor=pointer]:
+              - /url: /products/mmax
+              - generic [ref=e157]:
+                - heading "MMAX" [level=3] [ref=e158]
+                - paragraph [ref=e159]: MMA resin coating. 45–60 min cure. Engineered for transit lanes and bike priority corridors.
+                - paragraph [ref=e160]: MMAX is a Methyl Methacrylate (MMA)-based coloured lane treatment for durable, high-visibility transit and bicycle corri…
+                - generic [ref=e161]:
+                  - generic [ref=e162]: Bike Lanes
+                  - generic [ref=e163]: Bus Lanes
+                  - generic [ref=e164]: Crosswalks
+                  - generic [ref=e165]: +2 more
+                - generic [ref=e166]:
+                  - text: Explore System
+                  - generic [ref=e167]: →
+            - link "DuraShield Two-component asphalt pavement maintenance coating. Solar-reflective grey for pedestrian areas and local residential roadways. Formulated for use as an asphalt pavement maintenance coating, DuraShield is a two-component waterborne epoxy-modified a… Parking Lots Driveways residential-driveways +3 more Explore System →" [ref=e168] [cursor=pointer]:
+              - /url: /products/durashield
+              - generic [ref=e170]:
+                - heading "DuraShield" [level=3] [ref=e171]
+                - paragraph [ref=e172]: Two-component asphalt pavement maintenance coating. Solar-reflective grey for pedestrian areas and local residential roadways.
+                - paragraph [ref=e173]: Formulated for use as an asphalt pavement maintenance coating, DuraShield is a two-component waterborne epoxy-modified a…
+                - generic [ref=e174]:
+                  - generic [ref=e175]: Parking Lots
+                  - generic [ref=e176]: Driveways
+                  - generic [ref=e177]: residential-driveways
+                  - generic [ref=e178]: +3 more
+                - generic [ref=e179]:
+                  - text: Explore System
+                  - generic [ref=e180]: →
+        - generic [ref=e181]:
+          - generic [ref=e182]:
+            - heading "Stamped Asphalt & Concrete" [level=2] [ref=e184]
+            - paragraph [ref=e186]: In-place asphalt stamping. Stamps brick, cobblestone, slate, herringbone, fan, or fully custom patterns directly into new or existing asphalt. Flush surface, no raised edges, snowplow-safe.
+          - link "StreetPrint In-place decorative asphalt stamping. Brick, cobblestone, slate, and custom patterns — flush surface, snowplow-safe. StreetPrint is a state-of-the-art decorative pavement solution combining the durability of asphalt with the aesthetic of… Crosswalks Driveways residential-driveways +6 more Explore System →" [ref=e188] [cursor=pointer]:
+            - /url: /products/streetprint
+            - generic [ref=e190]:
+              - heading "StreetPrint" [level=3] [ref=e191]
+              - paragraph [ref=e192]: In-place decorative asphalt stamping. Brick, cobblestone, slate, and custom patterns — flush surface, snowplow-safe.
+              - paragraph [ref=e193]: StreetPrint is a state-of-the-art decorative pavement solution combining the durability of asphalt with the aesthetic of…
+              - generic [ref=e194]:
+                - generic [ref=e195]: Crosswalks
+                - generic [ref=e196]: Driveways
+                - generic [ref=e197]: residential-driveways
+                - generic [ref=e198]: +6 more
+              - generic [ref=e199]:
+                - text: Explore System
+                - generic [ref=e200]: →
+        - generic [ref=e201]:
+          - generic [ref=e202]:
+            - heading "Asphalt Repair" [level=2] [ref=e204]
+            - paragraph [ref=e206]: Permanent, traffic-ready repair systems for potholes, utility cuts, and edge joints. No heating, no compaction equipment, open to traffic in 30 minutes.
+          - generic [ref=e207]:
+            - link "ChipFill Heat-activated preformed material for permanent pothole repair. Year-round, all-weather. ChipFill is a heat-activated preformed pothole repair material engineered for permanent restoration of road surface dama… Parking Lots Driveways residential-driveways +3 more Explore System →" [ref=e208] [cursor=pointer]:
+              - /url: /products/chipfill
+              - generic [ref=e210]:
+                - heading "ChipFill" [level=3] [ref=e211]
+                - paragraph [ref=e212]: Heat-activated preformed material for permanent pothole repair. Year-round, all-weather.
+                - paragraph [ref=e213]: ChipFill is a heat-activated preformed pothole repair material engineered for permanent restoration of road surface dama…
+                - generic [ref=e214]:
+                  - generic [ref=e215]: Parking Lots
+                  - generic [ref=e216]: Driveways
+                  - generic [ref=e217]: residential-driveways
+                  - generic [ref=e218]: +3 more
+                - generic [ref=e219]:
+                  - text: Explore System
+                  - generic [ref=e220]: →
+            - link "AggreFill Pre-coated aggregate filler for larger potholes up to 1 m². Combined with ChipFill for permanent repair. AggreFill is a pre-coated aggregate filler used in combination with ChipFill to permanently repair larger potholes — up … Parking Lots Driveways residential-driveways +3 more Explore System →" [ref=e221] [cursor=pointer]:
+              - /url: /products/aggrefill
+              - generic [ref=e223]:
+                - heading "AggreFill" [level=3] [ref=e224]
+                - paragraph [ref=e225]: Pre-coated aggregate filler for larger potholes up to 1 m². Combined with ChipFill for permanent repair.
+                - paragraph [ref=e226]: AggreFill is a pre-coated aggregate filler used in combination with ChipFill to permanently repair larger potholes — up …
+                - generic [ref=e227]:
+                  - generic [ref=e228]: Parking Lots
+                  - generic [ref=e229]: Driveways
+                  - generic [ref=e230]: residential-driveways
+                  - generic [ref=e231]: +3 more
+                - generic [ref=e232]:
+                  - text: Explore System
+                  - generic [ref=e233]: →
+            - link "Fast Patch DPR Cold-mix polymer repair for potholes, spalls, and utility cuts. Back in service in under an hour. Fast Patch DPR is an easy-to-apply distressed pavement repair material for asphalt and concrete — a unique polymer blend… Parking Lots Driveways residential-driveways +3 more Explore System →" [ref=e234] [cursor=pointer]:
+              - /url: /products/fast-patch
+              - generic [ref=e236]:
+                - heading "Fast Patch DPR" [level=3] [ref=e237]
+                - paragraph [ref=e238]: Cold-mix polymer repair for potholes, spalls, and utility cuts. Back in service in under an hour.
+                - paragraph [ref=e239]: Fast Patch DPR is an easy-to-apply distressed pavement repair material for asphalt and concrete — a unique polymer blend…
+                - generic [ref=e240]:
+                  - generic [ref=e241]: Parking Lots
+                  - generic [ref=e242]: Driveways
+                  - generic [ref=e243]: residential-driveways
+                  - generic [ref=e244]: +3 more
+                - generic [ref=e245]:
+                  - text: Explore System
+                  - generic [ref=e246]: →
+    - generic [ref=e249]:
+      - generic [ref=e250]:
+        - generic [ref=e251]:
+          - paragraph [ref=e252]: Education & Engagement
+          - heading "Lunch & Learn at Your Location" [level=2] [ref=e253]:
+            - text: Lunch & Learn
+            - text: at Your Location
+          - paragraph [ref=e254]: Lunch included, in your office or virtual.
+        - generic [ref=e255]:
+          - generic [ref=e256]:
+            - img [ref=e257]
+            - generic [ref=e259]: 45–60 minute presentation tailored to your projects
+          - generic [ref=e260]:
+            - img [ref=e261]
+            - generic [ref=e263]: Live Q&A with HUB technical team
+          - generic [ref=e264]:
+            - img [ref=e265]
+            - generic [ref=e267]: Sample materials and specification sheets
+          - generic [ref=e268]:
+            - img [ref=e269]
+            - generic [ref=e271]: Lunch included — virtual sessions come with a $25 lunch voucher
+        - generic [ref=e272]:
+          - generic [ref=e273]:
+            - textbox "Your name" [ref=e274]
+            - textbox "Email address" [ref=e275]
+          - generic [ref=e276]:
+            - textbox "Company or organization" [ref=e277]
+            - textbox "City" [ref=e278]
+          - textbox "Phone number" [ref=e279]
+          - button "Request Lunch & Learn" [ref=e280]
+      - generic [ref=e281]:
+        - img "HUB Surface Systems Lunch and Learn — decorative pavement products presentation" [ref=e283]
+        - generic:
+          - img "HUB Surface Systems mascot moose"
+    - generic [ref=e285]:
+      - generic:
+        - img
+      - generic [ref=e287]:
+        - generic [ref=e288]:
+          - generic [ref=e289]:
+            - img "HUB Surface Systems" [ref=e291]
+            - paragraph [ref=e292]:
+              - text: Pedestrian safety. Traffic calming.
+              - text: Civic identity. Coast to coast since 1999.
+            - paragraph [ref=e293]:
+              - generic "Canadian" [ref=e294]:
+                - img [ref=e295]
+                - generic [ref=e298]: Canadian
+              - generic [ref=e299]: Owned and operated · Coast to coast · Since 1999
+            - generic [ref=e300]:
+              - link "LinkedIn" [ref=e301] [cursor=pointer]:
+                - /url: https://www.linkedin.com/company/hub-surface-systems
+                - img [ref=e302]
+              - link "YouTube" [ref=e304] [cursor=pointer]:
+                - /url: https://www.youtube.com/@hubsurfacesystems
+                - img [ref=e305]
+              - link "Instagram" [ref=e307] [cursor=pointer]:
+                - /url: https://www.instagram.com/hubsurfacesystems
+                - img [ref=e308]
+              - link "Facebook" [ref=e310] [cursor=pointer]:
+                - /url: https://www.facebook.com/hubsurfacesystems
+                - img [ref=e311]
+              - link "X" [ref=e313] [cursor=pointer]:
+                - /url: https://x.com/HUB_SS
+                - img [ref=e314]
+          - generic [ref=e316]:
+            - heading "Products" [level=4] [ref=e317]
+            - list [ref=e318]:
+              - listitem [ref=e319]:
+                - link "TrafficPatternsXD" [ref=e320] [cursor=pointer]:
+                  - /url: /products/traffic-patterns-xd
+              - listitem [ref=e321]:
+                - link "TrafficPatterns" [ref=e322] [cursor=pointer]:
+                  - /url: /products/traffic-patterns
+              - listitem [ref=e323]:
+                - link "StreetBond" [ref=e324] [cursor=pointer]:
+                  - /url: /products/streetbond
+              - listitem [ref=e325]:
+                - link "StreetPrint" [ref=e326] [cursor=pointer]:
+                  - /url: /products/streetprint
+              - listitem [ref=e327]:
+                - link "DecoMark" [ref=e328] [cursor=pointer]:
+                  - /url: /products/decomark
+              - listitem [ref=e329]:
+                - link "MMAX" [ref=e330] [cursor=pointer]:
+                  - /url: /products/mmax
+              - listitem [ref=e331]:
+                - link "StreetBondSR" [ref=e332] [cursor=pointer]:
+                  - /url: /products/streetbondsr
+              - listitem [ref=e333]:
+                - link "DuraTherm" [ref=e334] [cursor=pointer]:
+                  - /url: /products/duratherm
+              - listitem [ref=e335]:
+                - link "DuraShield" [ref=e336] [cursor=pointer]:
+                  - /url: /products/durashield
+              - listitem [ref=e337]:
+                - link "AirMark" [ref=e338] [cursor=pointer]:
+                  - /url: /products/airmark
+              - listitem [ref=e339]:
+                - link "PreMark" [ref=e340] [cursor=pointer]:
+                  - /url: /products/premark
+              - listitem [ref=e341]:
+                - link "ChipFill" [ref=e342] [cursor=pointer]:
+                  - /url: /products/chipfill
+              - listitem [ref=e343]:
+                - link "AggreFill" [ref=e344] [cursor=pointer]:
+                  - /url: /products/aggrefill
+              - listitem [ref=e345]:
+                - link "Fast Patch DPR" [ref=e346] [cursor=pointer]:
+                  - /url: /products/fast-patch
+          - generic [ref=e347]:
+            - heading "Applications" [level=4] [ref=e348]
+            - list [ref=e349]:
+              - listitem [ref=e350]:
+                - link "Crosswalks" [ref=e351] [cursor=pointer]:
+                  - /url: /applications/crosswalks
+              - listitem [ref=e352]:
+                - link "Bike Lanes" [ref=e353] [cursor=pointer]:
+                  - /url: /applications/bike-lanes
+              - listitem [ref=e354]:
+                - link "Bus Lanes" [ref=e355] [cursor=pointer]:
+                  - /url: /applications/bus-lanes
+              - listitem [ref=e356]:
+                - link "Regulatory Markings" [ref=e357] [cursor=pointer]:
+                  - /url: /applications/regulatory-markings
+              - listitem [ref=e358]:
+                - link "Parks & Paths" [ref=e359] [cursor=pointer]:
+                  - /url: /applications/parks-paths
+              - listitem [ref=e360]:
+                - link "Community Branding" [ref=e361] [cursor=pointer]:
+                  - /url: /applications/community-branding
+              - listitem [ref=e362]:
+                - link "Parking Lots" [ref=e363] [cursor=pointer]:
+                  - /url: /applications/parking-lots
+              - listitem [ref=e364]:
+                - link "Private Driveways" [ref=e365] [cursor=pointer]:
+                  - /url: /applications/private-driveways
+              - listitem [ref=e366]:
+                - link "Public Art" [ref=e367] [cursor=pointer]:
+                  - /url: /applications/public-art
+              - listitem [ref=e368]:
+                - link "Pedestrian Safety" [ref=e369] [cursor=pointer]:
+                  - /url: /applications/pedestrian-safety
+              - listitem [ref=e370]:
+                - link "Traffic Calming" [ref=e371] [cursor=pointer]:
+                  - /url: /applications/traffic-calming
+          - generic [ref=e372]:
+            - heading "Offices" [level=4] [ref=e373]
+            - generic [ref=e374]:
+              - generic [ref=e375]:
+                - paragraph [ref=e377]: West Office
+                - paragraph [ref=e378]: Ladysmith, BC
+                - link "cleve.stordy@hubss.com" [ref=e379] [cursor=pointer]:
+                  - /url: mailto:cleve.stordy@hubss.com
+                - link "604-309-8212" [ref=e380] [cursor=pointer]:
+                  - /url: tel:6043098212
+              - generic [ref=e381]:
+                - paragraph [ref=e383]: East Office
+                - paragraph [ref=e384]: Milton, Ontario
+                - link "doug.bain@hubss.com" [ref=e385] [cursor=pointer]:
+                  - /url: mailto:doug.bain@hubss.com
+                - link "416-540-9287" [ref=e386] [cursor=pointer]:
+                  - /url: tel:4165409287
+        - generic [ref=e387]:
+          - paragraph [ref=e388]: © 2026 HUB Surface Systems. All rights reserved.
+          - generic [ref=e389]:
+            - link "Privacy Policy" [ref=e390] [cursor=pointer]:
+              - /url: /privacy
+            - link "Terms of Use" [ref=e391] [cursor=pointer]:
+              - /url: /terms
+  - generic:
+    - generic:
+      - paragraph: Canada's Decorative Pavement Specialists · Since 1999
+      - generic:
+        - link:
+          - /url: /products
+          - text: See the Systems
+        - link:
+          - /url: /lunch-learn
+          - text: Book a Lunch & Learn
+  - button "Open Next.js Dev Tools" [ref=e397] [cursor=pointer]:
+    - img [ref=e398]

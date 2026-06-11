@@ -1,0 +1,289 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - navigation [ref=e3]:
+      - generic [ref=e4]:
+        - link "HUB Surface Systems Canadian" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - img "HUB Surface Systems" [ref=e6]
+          - generic "Canadian" [ref=e7]:
+            - img [ref=e8]
+            - generic [ref=e11]: Canadian
+        - generic [ref=e12]:
+          - button "Products" [ref=e13]:
+            - text: Products
+            - img [ref=e14]
+          - button "Applications" [ref=e16]:
+            - text: Applications
+            - img [ref=e17]
+          - link "Field Notes" [ref=e19] [cursor=pointer]:
+            - /url: /blog
+            - text: Field Notes
+            - img [ref=e20]
+          - link "About" [ref=e22] [cursor=pointer]:
+            - /url: /about
+          - link "Contact" [ref=e23] [cursor=pointer]:
+            - /url: /contact
+        - generic [ref=e24]:
+          - button "Search" [ref=e25]:
+            - img [ref=e26]
+            - generic [ref=e29]: Search
+          - link "Resources" [ref=e30] [cursor=pointer]:
+            - /url: /resources
+          - link "Lunch & Learn" [ref=e31] [cursor=pointer]:
+            - /url: /lunch-learn
+    - generic [ref=e32]:
+      - img "Public art pavement installation — DecoMark custom thermoplastic civic mural by HUB Surface Systems" [ref=e33]
+      - generic [ref=e36]:
+        - paragraph [ref=e37]: HUB Application
+        - heading "The Street as Canvas" [level=1] [ref=e38]
+        - paragraph [ref=e39]: Civic art and community identity embedded directly into the pavement surface. Permanent, weather-resistant, and serviceable for the full life of the asphalt substrate.
+    - generic [ref=e41]:
+      - generic [ref=e42]:
+        - generic [ref=e43]:
+          - paragraph [ref=e44]: Commission a Custom Design
+          - paragraph [ref=e45]: End-to-end project management — design files, fabrication, and certified installation.
+        - generic [ref=e46]:
+          - link "Technical Specs" [ref=e47] [cursor=pointer]:
+            - /url: /resources
+          - link "Start a Project" [ref=e48] [cursor=pointer]:
+            - /url: /contact
+      - generic [ref=e49]:
+        - generic [ref=e50]:
+          - heading "Pavement as Public Art" [level=2] [ref=e51]
+          - paragraph [ref=e52]: Indigenous art installations, labyrinth designs, Pride crosswalks, and transit station murals — pavement carries civic art at full street scale. DecoMark custom-graphic preformed thermoplastic provides print-quality images with full Pantone matching. StreetBond covers large-format colour fields and mural backgrounds. Both systems are designed to remain in service for the full life of the asphalt substrate.
+          - heading "Gallery" [level=2] [ref=e53]
+          - generic [ref=e54]:
+            - img "Public art pavement installation — HUB Surface Systems civic mural project 1" [ref=e56]
+            - img "Public art pavement installation — HUB Surface Systems civic mural project 2" [ref=e58]
+            - img "Public art pavement installation — HUB Surface Systems civic mural project 3" [ref=e60]
+            - img "Public art pavement installation — HUB Surface Systems civic mural project 4" [ref=e62]
+            - img "Public art pavement installation — HUB Surface Systems civic mural project 5" [ref=e64]
+            - img "Public art pavement installation — HUB Surface Systems civic mural project 6" [ref=e66]
+          - heading "Featured Projects" [level=2] [ref=e67]
+          - generic [ref=e68]:
+            - generic [ref=e69]:
+              - heading "Joyce-Collingwood SkyTrain Station" [level=3] [ref=e70]
+              - paragraph [ref=e71]: Large-scale DecoMark thermoplastic installation at the transit plaza surface, reflecting the cultural composition of East Vancouver. Permanent, full-colour, integrated flush with the pavement.
+            - generic [ref=e72]:
+              - heading "UBC Campus Pathways" [level=3] [ref=e73]
+              - paragraph [ref=e74]: Musqueam-designed cultural wayfinding graphics embedded into campus pedestrian routes using DecoMark custom thermoplastic, on the traditional territory of the Musqueam people.
+            - generic [ref=e75]:
+              - heading "Indigenous Art Crosswalks" [level=3] [ref=e76]
+              - paragraph [ref=e77]: Custom crosswalk installations featuring Indigenous artwork and cultural motifs. DecoMark preformed thermoplastic provides Pantone-accurate colour and multi-year service life.
+            - generic [ref=e78]:
+              - heading "Pride Crosswalks" [level=3] [ref=e79]
+              - paragraph [ref=e80]: Rainbow and progressive Pride crosswalks installed at intersections across Canada. StreetBond and DecoMark hold colour through snowplow cycles and de-icing chemicals.
+            - generic [ref=e81]:
+              - heading "Community Labyrinth Designs" [level=3] [ref=e82]
+              - paragraph [ref=e83]: Labyrinth patterns installed in public parks and community spaces using StreetBond coloured coatings on asphalt. Permanent, zero-maintenance, full life of the pavement substrate.
+        - generic [ref=e85]:
+          - heading "Products Used" [level=3] [ref=e87]
+          - generic [ref=e88]:
+            - link "DecoMark DecoMark Custom-graphic preformed thermoplastic for wayfinding, public art, schools, and parks." [ref=e89] [cursor=pointer]:
+              - /url: /products/decomark
+              - img "DecoMark" [ref=e91]
+              - generic [ref=e92]:
+                - paragraph [ref=e93]: DecoMark
+                - paragraph [ref=e94]: Custom-graphic preformed thermoplastic for wayfinding, public art, schools, and parks.
+              - img [ref=e95]
+            - link "StreetBond StreetBond Coloured coatings for Canadian applications. Bold. Tough. Engineered for Canada." [ref=e97] [cursor=pointer]:
+              - /url: /products/streetbond
+              - img "StreetBond" [ref=e99]
+              - generic [ref=e100]:
+                - paragraph [ref=e101]: StreetBond
+                - paragraph [ref=e102]: Coloured coatings for Canadian applications. Bold. Tough. Engineered for Canada.
+              - img [ref=e103]
+            - link "StreetPrint StreetPrint In-place decorative asphalt stamping. Brick, cobblestone, slate, and custom patterns — flush surface, snowplow-safe." [ref=e105] [cursor=pointer]:
+              - /url: /products/streetprint
+              - img "StreetPrint" [ref=e107]
+              - generic [ref=e108]:
+                - paragraph [ref=e109]: StreetPrint
+                - paragraph [ref=e110]: In-place decorative asphalt stamping. Brick, cobblestone, slate, and custom patterns — flush surface, snowplow-safe.
+              - img [ref=e111]
+          - link "Commission a Custom Design" [ref=e113] [cursor=pointer]:
+            - /url: /contact
+          - link "Book Lunch & Learn" [ref=e114] [cursor=pointer]:
+            - /url: /lunch-learn
+    - generic [ref=e117]:
+      - generic [ref=e118]:
+        - generic [ref=e119]:
+          - paragraph [ref=e120]: Education & Engagement
+          - heading "Lunch & Learn at Your Location" [level=2] [ref=e121]:
+            - text: Lunch & Learn
+            - text: at Your Location
+          - paragraph [ref=e122]: Lunch included, in your office or virtual.
+        - generic [ref=e123]:
+          - generic [ref=e124]:
+            - img [ref=e125]
+            - generic [ref=e127]: 45–60 minute presentation tailored to your projects
+          - generic [ref=e128]:
+            - img [ref=e129]
+            - generic [ref=e131]: Live Q&A with HUB technical team
+          - generic [ref=e132]:
+            - img [ref=e133]
+            - generic [ref=e135]: Sample materials and specification sheets
+          - generic [ref=e136]:
+            - img [ref=e137]
+            - generic [ref=e139]: Lunch included — virtual sessions come with a $25 lunch voucher
+        - generic [ref=e140]:
+          - generic [ref=e141]:
+            - textbox "Your name" [ref=e142]
+            - textbox "Email address" [ref=e143]
+          - generic [ref=e144]:
+            - textbox "Company or organization" [ref=e145]
+            - textbox "City" [ref=e146]
+          - textbox "Phone number" [ref=e147]
+          - button "Request Lunch & Learn" [ref=e148]
+      - generic [ref=e149]:
+        - img "HUB Surface Systems Lunch and Learn — decorative pavement products presentation" [ref=e151]
+        - generic:
+          - img "HUB Surface Systems mascot moose"
+    - generic [ref=e153]:
+      - generic:
+        - img
+      - generic [ref=e155]:
+        - generic [ref=e156]:
+          - generic [ref=e157]:
+            - img "HUB Surface Systems" [ref=e159]
+            - paragraph [ref=e160]:
+              - text: Pedestrian safety. Traffic calming.
+              - text: Civic identity. Coast to coast since 1999.
+            - paragraph [ref=e161]:
+              - generic "Canadian" [ref=e162]:
+                - img [ref=e163]
+                - generic [ref=e166]: Canadian
+              - generic [ref=e167]: Owned and operated · Coast to coast · Since 1999
+            - generic [ref=e168]:
+              - link "LinkedIn" [ref=e169] [cursor=pointer]:
+                - /url: https://www.linkedin.com/company/hub-surface-systems
+                - img [ref=e170]
+              - link "YouTube" [ref=e172] [cursor=pointer]:
+                - /url: https://www.youtube.com/@hubsurfacesystems
+                - img [ref=e173]
+              - link "Instagram" [ref=e175] [cursor=pointer]:
+                - /url: https://www.instagram.com/hubsurfacesystems
+                - img [ref=e176]
+              - link "Facebook" [ref=e178] [cursor=pointer]:
+                - /url: https://www.facebook.com/hubsurfacesystems
+                - img [ref=e179]
+              - link "X" [ref=e181] [cursor=pointer]:
+                - /url: https://x.com/HUB_SS
+                - img [ref=e182]
+          - generic [ref=e184]:
+            - heading "Products" [level=4] [ref=e185]
+            - list [ref=e186]:
+              - listitem [ref=e187]:
+                - link "TrafficPatternsXD" [ref=e188] [cursor=pointer]:
+                  - /url: /products/traffic-patterns-xd
+              - listitem [ref=e189]:
+                - link "TrafficPatterns" [ref=e190] [cursor=pointer]:
+                  - /url: /products/traffic-patterns
+              - listitem [ref=e191]:
+                - link "StreetBond" [ref=e192] [cursor=pointer]:
+                  - /url: /products/streetbond
+              - listitem [ref=e193]:
+                - link "StreetPrint" [ref=e194] [cursor=pointer]:
+                  - /url: /products/streetprint
+              - listitem [ref=e195]:
+                - link "DecoMark" [ref=e196] [cursor=pointer]:
+                  - /url: /products/decomark
+              - listitem [ref=e197]:
+                - link "MMAX" [ref=e198] [cursor=pointer]:
+                  - /url: /products/mmax
+              - listitem [ref=e199]:
+                - link "StreetBondSR" [ref=e200] [cursor=pointer]:
+                  - /url: /products/streetbondsr
+              - listitem [ref=e201]:
+                - link "DuraTherm" [ref=e202] [cursor=pointer]:
+                  - /url: /products/duratherm
+              - listitem [ref=e203]:
+                - link "DuraShield" [ref=e204] [cursor=pointer]:
+                  - /url: /products/durashield
+              - listitem [ref=e205]:
+                - link "AirMark" [ref=e206] [cursor=pointer]:
+                  - /url: /products/airmark
+              - listitem [ref=e207]:
+                - link "PreMark" [ref=e208] [cursor=pointer]:
+                  - /url: /products/premark
+              - listitem [ref=e209]:
+                - link "ChipFill" [ref=e210] [cursor=pointer]:
+                  - /url: /products/chipfill
+              - listitem [ref=e211]:
+                - link "AggreFill" [ref=e212] [cursor=pointer]:
+                  - /url: /products/aggrefill
+              - listitem [ref=e213]:
+                - link "Fast Patch DPR" [ref=e214] [cursor=pointer]:
+                  - /url: /products/fast-patch
+          - generic [ref=e215]:
+            - heading "Applications" [level=4] [ref=e216]
+            - list [ref=e217]:
+              - listitem [ref=e218]:
+                - link "Crosswalks" [ref=e219] [cursor=pointer]:
+                  - /url: /applications/crosswalks
+              - listitem [ref=e220]:
+                - link "Bike Lanes" [ref=e221] [cursor=pointer]:
+                  - /url: /applications/bike-lanes
+              - listitem [ref=e222]:
+                - link "Bus Lanes" [ref=e223] [cursor=pointer]:
+                  - /url: /applications/bus-lanes
+              - listitem [ref=e224]:
+                - link "Regulatory Markings" [ref=e225] [cursor=pointer]:
+                  - /url: /applications/regulatory-markings
+              - listitem [ref=e226]:
+                - link "Parks & Paths" [ref=e227] [cursor=pointer]:
+                  - /url: /applications/parks-paths
+              - listitem [ref=e228]:
+                - link "Community Branding" [ref=e229] [cursor=pointer]:
+                  - /url: /applications/community-branding
+              - listitem [ref=e230]:
+                - link "Parking Lots" [ref=e231] [cursor=pointer]:
+                  - /url: /applications/parking-lots
+              - listitem [ref=e232]:
+                - link "Private Driveways" [ref=e233] [cursor=pointer]:
+                  - /url: /applications/private-driveways
+              - listitem [ref=e234]:
+                - link "Public Art" [ref=e235] [cursor=pointer]:
+                  - /url: /applications/public-art
+              - listitem [ref=e236]:
+                - link "Pedestrian Safety" [ref=e237] [cursor=pointer]:
+                  - /url: /applications/pedestrian-safety
+              - listitem [ref=e238]:
+                - link "Traffic Calming" [ref=e239] [cursor=pointer]:
+                  - /url: /applications/traffic-calming
+          - generic [ref=e240]:
+            - heading "Offices" [level=4] [ref=e241]
+            - generic [ref=e242]:
+              - generic [ref=e243]:
+                - paragraph [ref=e245]: West Office
+                - paragraph [ref=e246]: Ladysmith, BC
+                - link "cleve.stordy@hubss.com" [ref=e247] [cursor=pointer]:
+                  - /url: mailto:cleve.stordy@hubss.com
+                - link "604-309-8212" [ref=e248] [cursor=pointer]:
+                  - /url: tel:6043098212
+              - generic [ref=e249]:
+                - paragraph [ref=e251]: East Office
+                - paragraph [ref=e252]: Milton, Ontario
+                - link "doug.bain@hubss.com" [ref=e253] [cursor=pointer]:
+                  - /url: mailto:doug.bain@hubss.com
+                - link "416-540-9287" [ref=e254] [cursor=pointer]:
+                  - /url: tel:4165409287
+        - generic [ref=e255]:
+          - paragraph [ref=e256]: © 2026 HUB Surface Systems. All rights reserved.
+          - generic [ref=e257]:
+            - link "Privacy Policy" [ref=e258] [cursor=pointer]:
+              - /url: /privacy
+            - link "Terms of Use" [ref=e259] [cursor=pointer]:
+              - /url: /terms
+  - generic:
+    - generic:
+      - paragraph: Canada's Decorative Pavement Specialists · Since 1999
+      - generic:
+        - link:
+          - /url: /products
+          - text: See the Systems
+        - link:
+          - /url: /lunch-learn
+          - text: Book a Lunch & Learn
+  - button "Open Next.js Dev Tools" [ref=e265] [cursor=pointer]:
+    - img [ref=e266]
+  - alert [ref=e269]

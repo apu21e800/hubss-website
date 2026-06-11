@@ -1,0 +1,574 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - navigation [ref=e3]:
+      - generic [ref=e4]:
+        - link "HUB Surface Systems Canadian" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - img "HUB Surface Systems" [ref=e6]
+          - generic "Canadian" [ref=e7]:
+            - img [ref=e8]
+            - generic [ref=e11]: Canadian
+        - generic [ref=e12]:
+          - button "Products" [ref=e13]:
+            - text: Products
+            - img [ref=e14]
+          - button "Applications" [ref=e16]:
+            - text: Applications
+            - img [ref=e17]
+          - link "Field Notes" [ref=e19] [cursor=pointer]:
+            - /url: /blog
+            - text: Field Notes
+            - img [ref=e20]
+          - link "About" [ref=e22] [cursor=pointer]:
+            - /url: /about
+          - link "Contact" [ref=e23] [cursor=pointer]:
+            - /url: /contact
+        - generic [ref=e24]:
+          - button "Search" [ref=e25]:
+            - img [ref=e26]
+            - generic [ref=e29]: Search
+          - link "Resources" [ref=e30] [cursor=pointer]:
+            - /url: /resources
+          - link "Lunch & Learn" [ref=e31] [cursor=pointer]:
+            - /url: /lunch-learn
+    - region "Hero" [ref=e32]:
+      - img [ref=e33]
+      - generic [ref=e37]:
+        - paragraph [ref=e38]: Redefining Hardscapes · Since 1999
+        - heading "The World Is Your Canvas." [level=1] [ref=e39]:
+          - text: The World Is
+          - text: Your Canvas.
+        - heading "Let's build your signature space." [level=2] [ref=e40]
+        - generic [ref=e41]:
+          - link "See the Work" [ref=e42] [cursor=pointer]:
+            - /url: "#field-notes"
+            - text: See the Work
+            - img [ref=e43]
+          - link "See the Systems" [ref=e45] [cursor=pointer]:
+            - /url: "#systems"
+    - region "Trusted by Canadian municipalities and institutions" [ref=e46]:
+      - paragraph [ref=e48]: Trusted by
+      - generic [ref=e50]:
+        - generic [ref=e52]: City of Toronto
+        - generic [ref=e55]: York Region
+        - generic [ref=e58]: City of Vancouver
+        - generic [ref=e61]: University of British Columbia
+        - generic [ref=e64]: City of Ottawa
+        - generic [ref=e67]: City of Calgary
+        - generic [ref=e70]: City of Brampton
+        - generic [ref=e73]: City of Mississauga
+        - generic [ref=e76]: TransLink
+        - generic [ref=e79]: City of Surrey
+        - generic [ref=e82]: City of Edmonton
+        - generic [ref=e85]: City of Winnipeg
+        - generic [ref=e88]: City of Burnaby
+        - generic [ref=e91]: City of Richmond Hill
+        - generic [ref=e94]: City of Toronto
+        - generic [ref=e97]: York Region
+        - generic [ref=e100]: City of Vancouver
+        - generic [ref=e103]: University of British Columbia
+        - generic [ref=e106]: City of Ottawa
+        - generic [ref=e109]: City of Calgary
+        - generic [ref=e112]: City of Brampton
+        - generic [ref=e115]: City of Mississauga
+        - generic [ref=e118]: TransLink
+        - generic [ref=e121]: City of Surrey
+        - generic [ref=e124]: City of Edmonton
+        - generic [ref=e127]: City of Winnipeg
+        - generic [ref=e130]: City of Burnaby
+        - generic [ref=e133]: City of Richmond Hill
+    - generic [ref=e137]:
+      - link "Municipalities Every crosswalk, transit corridor, and plaza that defines your city — Vision Zero aligned, accessibility-aware, installed by certified crews from Halifax to Victoria." [ref=e138] [cursor=pointer]:
+        - /url: /applications
+        - generic [ref=e140]:
+          - paragraph [ref=e141]: Municipalities
+          - paragraph [ref=e142]: Every crosswalk, transit corridor, and plaza that defines your city — Vision Zero aligned, accessibility-aware, installed by certified crews from Halifax to Victoria.
+        - img [ref=e143]
+      - link "Designers & Specifiers 12+ StreetPrint patterns, full Pantone matching, snowplow-safe, and engineering-approved. Beautiful that actually survives the job site." [ref=e145] [cursor=pointer]:
+        - /url: /products
+        - generic [ref=e147]:
+          - paragraph [ref=e148]: Designers & Specifiers
+          - paragraph [ref=e149]: 12+ StreetPrint patterns, full Pantone matching, snowplow-safe, and engineering-approved. Beautiful that actually survives the job site.
+        - img [ref=e150]
+      - link "Contractors Hub Surface Systems certifies, trains and supports a network of contractors across Canada" [ref=e152] [cursor=pointer]:
+        - /url: /contact
+        - generic [ref=e154]:
+          - paragraph [ref=e155]: Contractors
+          - paragraph [ref=e156]: Hub Surface Systems certifies, trains and supports a network of contractors across Canada
+        - img [ref=e157]
+    - generic [ref=e160]:
+      - generic [ref=e161]:
+        - paragraph [ref=e162]: The Systems
+        - generic [ref=e163]:
+          - generic [ref=e164]:
+            - heading "Purpose-Built. Performance-Proven." [level=2] [ref=e165]:
+              - text: Purpose-Built.
+              - text: Performance-Proven.
+            - paragraph [ref=e166]: Six systems that are purpose built for life in Canada. Turning asphalt and concrete into your signature surface.
+          - link "All systems" [ref=e167] [cursor=pointer]:
+            - /url: /products
+            - text: All systems
+            - img [ref=e168]
+      - generic [ref=e170]:
+        - link "StreetPrint stamped asphalt decorative driveway — estate herringbone pattern with circular medallion, installed by HUB Surface Systems StreetPrint In-place stamped asphalt — cobblestone, brick, herringbone and a wide variety of other patterns. No demolition, no raised edges, snowplow-safe. Looks like stone, performs like asphalt. Crosswalks Driveways Plazas Specs →" [ref=e172] [cursor=pointer]:
+          - /url: /products/streetprint
+          - img "StreetPrint stamped asphalt decorative driveway — estate herringbone pattern with circular medallion, installed by HUB Surface Systems" [ref=e174]
+          - generic [ref=e175]:
+            - heading "StreetPrint" [level=3] [ref=e177]
+            - paragraph [ref=e178]: In-place stamped asphalt — cobblestone, brick, herringbone and a wide variety of other patterns. No demolition, no raised edges, snowplow-safe. Looks like stone, performs like asphalt.
+            - generic [ref=e179]:
+              - generic [ref=e180]:
+                - generic [ref=e181]: Crosswalks
+                - generic [ref=e182]: Driveways
+                - generic [ref=e183]: Plazas
+              - generic [ref=e184]: Specs →
+        - link "StreetBond coloured acrylic pavement coating — vibrant bike lane and pedestrian crossing surface treatment on Canadian urban road StreetBond Water based, epoxy modified acrylic coatings that transform asphalt and concrete. Bike Lanes Bus Lanes Driveways Specs →" [ref=e187] [cursor=pointer]:
+          - /url: /products/streetbond
+          - img "StreetBond coloured acrylic pavement coating — vibrant bike lane and pedestrian crossing surface treatment on Canadian urban road" [ref=e189]
+          - generic [ref=e190]:
+            - heading "StreetBond" [level=3] [ref=e192]
+            - paragraph [ref=e193]: Water based, epoxy modified acrylic coatings that transform asphalt and concrete.
+            - generic [ref=e194]:
+              - generic [ref=e195]:
+                - generic [ref=e196]: Bike Lanes
+                - generic [ref=e197]: Bus Lanes
+                - generic [ref=e198]: Driveways
+              - generic [ref=e199]: Specs →
+        - link "TrafficPatternsXD aggregate-reinforced preformed thermoplastic — BRT bus-only corridor with high-durability crosswalk, Ontario transit environment TrafficPatternsXD Aggregate-reinforced, preformed thermoplastic that is purpose engineered for the toughest environments. High performance crosswalks, entrance features and endless other applications. Crosswalks BRT Corridors Bike Lanes Specs →" [ref=e202] [cursor=pointer]:
+          - /url: /products/traffic-patterns-xd
+          - img "TrafficPatternsXD aggregate-reinforced preformed thermoplastic — BRT bus-only corridor with high-durability crosswalk, Ontario transit environment" [ref=e204]
+          - generic [ref=e205]:
+            - heading "TrafficPatternsXD" [level=3] [ref=e207]
+            - paragraph [ref=e208]: Aggregate-reinforced, preformed thermoplastic that is purpose engineered for the toughest environments. High performance crosswalks, entrance features and endless other applications.
+            - generic [ref=e209]:
+              - generic [ref=e210]:
+                - generic [ref=e211]: Crosswalks
+                - generic [ref=e212]: BRT Corridors
+                - generic [ref=e213]: Bike Lanes
+              - generic [ref=e214]: Specs →
+        - link "TrafficPatterns preformed thermoplastic crosswalk at UBC — Musqueam Nation Indigenous art installation on University of British Columbia campus TrafficPatterns Crisp preformed thermoplastic markings, factory-manufactured to 125mil and specified by municipalities coast to coast. Crosswalks Bike Lanes Parking Lots Specs →" [ref=e217] [cursor=pointer]:
+          - /url: /products/traffic-patterns
+          - img "TrafficPatterns preformed thermoplastic crosswalk at UBC — Musqueam Nation Indigenous art installation on University of British Columbia campus" [ref=e219]
+          - generic [ref=e220]:
+            - heading "TrafficPatterns" [level=3] [ref=e222]
+            - paragraph [ref=e223]: Crisp preformed thermoplastic markings, factory-manufactured to 125mil and specified by municipalities coast to coast.
+            - generic [ref=e224]:
+              - generic [ref=e225]:
+                - generic [ref=e226]: Crosswalks
+                - generic [ref=e227]: Bike Lanes
+                - generic [ref=e228]: Parking Lots
+              - generic [ref=e229]: Specs →
+        - link "MMAX red bus lane — transit bus on MMA methyl methacrylate rapid-cure coloured bus lane pavement on Canadian transit corridor MMAX MMA resin with performance aggregates for use in area markings like bus lanes, bike lanes, and other visual needs in high traffic environments. Fast installation. Full range of colours. Extended season formula for shoulder season applications. Bus Lanes Bike Lanes Crosswalks Specs →" [ref=e232] [cursor=pointer]:
+          - /url: /products/mmax
+          - img "MMAX red bus lane — transit bus on MMA methyl methacrylate rapid-cure coloured bus lane pavement on Canadian transit corridor" [ref=e234]
+          - generic [ref=e235]:
+            - heading "MMAX" [level=3] [ref=e237]
+            - paragraph [ref=e238]: MMA resin with performance aggregates for use in area markings like bus lanes, bike lanes, and other visual needs in high traffic environments. Fast installation. Full range of colours. Extended season formula for shoulder season applications.
+            - generic [ref=e239]:
+              - generic [ref=e240]:
+                - generic [ref=e241]: Bus Lanes
+                - generic [ref=e242]: Bike Lanes
+                - generic [ref=e243]: Crosswalks
+              - generic [ref=e244]: Specs →
+        - link "DecoMark Little Italy thermoplastic decal — Commercial Drive community identity marking on Vancouver sidewalk pavement, vibrant street scene at dusk DecoMark Preformed thermoplastic that is custom fabricated to put your design into a functional surface for use in endless environments. Used all across North America for unique messaging, branding, community expression, schools, etc. Public Art Crosswalks Community Branding Specs →" [ref=e247] [cursor=pointer]:
+          - /url: /products/decomark
+          - img "DecoMark Little Italy thermoplastic decal — Commercial Drive community identity marking on Vancouver sidewalk pavement, vibrant street scene at dusk" [ref=e249]
+          - generic [ref=e250]:
+            - heading "DecoMark" [level=3] [ref=e252]
+            - paragraph [ref=e253]: Preformed thermoplastic that is custom fabricated to put your design into a functional surface for use in endless environments. Used all across North America for unique messaging, branding, community expression, schools, etc.
+            - generic [ref=e254]:
+              - generic [ref=e255]:
+                - generic [ref=e256]: Public Art
+                - generic [ref=e257]: Crosswalks
+                - generic [ref=e258]: Community Branding
+              - generic [ref=e259]: Specs →
+      - generic [ref=e261]:
+        - paragraph [ref=e262]: "Also available: PreMark · DuraShield · DuraTherm · AirMark"
+        - link "View all systems" [ref=e263] [cursor=pointer]:
+          - /url: /products
+    - generic [ref=e265]:
+      - generic [ref=e266]:
+        - paragraph [ref=e267]: Applications
+        - heading "Every Surface, A Statement." [level=2] [ref=e268]
+        - paragraph [ref=e269]: Crosswalks, bike lanes, civic art, driveways — wherever people move, gather, or stop, the surface underneath is doing work.
+      - generic [ref=e270]:
+        - link "High-visibility decorative crosswalk with TrafficPatternsXD preformed thermoplastic — pedestrian safety surface for Vision Zero Canadian streetscape Crosswalks Durable, high-visibility, high-contrast crosswalk systems that elevate the intersection." [ref=e272] [cursor=pointer]:
+          - /url: /applications/crosswalks
+          - img "High-visibility decorative crosswalk with TrafficPatternsXD preformed thermoplastic — pedestrian safety surface for Vision Zero Canadian streetscape" [ref=e273]
+          - generic [ref=e276]:
+            - heading "Crosswalks" [level=3] [ref=e277]
+            - paragraph [ref=e278]: Durable, high-visibility, high-contrast crosswalk systems that elevate the intersection.
+        - link "Commercial plaza decorative pavement — StreetPrint stamped asphalt retail entry and pedestrian streetscape surface Commercial Spaces Premium hardscape finishes for retail centres, mixed-use developments, and hospitality entries." [ref=e280] [cursor=pointer]:
+          - /url: /applications/commercial-spaces
+          - img "Commercial plaza decorative pavement — StreetPrint stamped asphalt retail entry and pedestrian streetscape surface" [ref=e281]
+          - generic [ref=e284]:
+            - heading "Commercial Spaces" [level=3] [ref=e285]
+            - paragraph [ref=e286]: Premium hardscape finishes for retail centres, mixed-use developments, and hospitality entries.
+        - link "Park pathway coloured surface treatment — StreetBond slip-resistant recreational trail marking for Canadian municipal greenway Parks & Paths Decorative surface systems for urban paths, park plazas, and multi-use trails." [ref=e288] [cursor=pointer]:
+          - /url: /applications/parks-paths
+          - img "Park pathway coloured surface treatment — StreetBond slip-resistant recreational trail marking for Canadian municipal greenway" [ref=e289]
+          - generic [ref=e292]:
+            - heading "Parks & Paths" [level=3] [ref=e293]
+            - paragraph [ref=e294]: Decorative surface systems for urban paths, park plazas, and multi-use trails.
+        - link "Vivid green protected bike lane — StreetBond coloured cycling infrastructure for Complete Streets Canadian municipality Bike Lanes Coloured bike lane systems that hold visibility and protect cyclists season after season." [ref=e296] [cursor=pointer]:
+          - /url: /applications/bike-lanes
+          - img "Vivid green protected bike lane — StreetBond coloured cycling infrastructure for Complete Streets Canadian municipality" [ref=e297]
+          - generic [ref=e300]:
+            - heading "Bike Lanes" [level=3] [ref=e301]
+            - paragraph [ref=e302]: Coloured bike lane systems that hold visibility and protect cyclists season after season.
+        - link "Red MMAX bus rapid transit lane with transit bus — high-durability BRT surface marking for Canadian transit corridor Bus Lanes BRT corridor and bus priority lane treatments engineered for the harshest urban loads." [ref=e304] [cursor=pointer]:
+          - /url: /applications/bus-lanes
+          - img "Red MMAX bus rapid transit lane with transit bus — high-durability BRT surface marking for Canadian transit corridor" [ref=e305]
+          - generic [ref=e308]:
+            - heading "Bus Lanes" [level=3] [ref=e309]
+            - paragraph [ref=e310]: BRT corridor and bus priority lane treatments engineered for the harshest urban loads.
+        - link "UBC community identity crosswalk — custom civic graphics and DecoMark placemaking thermoplastic art on Canadian public street Community Branding Neighbourhood identity, cultural art, and civic pride — embedded permanently in the street." [ref=e312] [cursor=pointer]:
+          - /url: /applications/community-branding
+          - img "UBC community identity crosswalk — custom civic graphics and DecoMark placemaking thermoplastic art on Canadian public street" [ref=e313]
+          - generic [ref=e316]:
+            - heading "Community Branding" [level=3] [ref=e317]
+            - paragraph [ref=e318]: Neighbourhood identity, cultural art, and civic pride — embedded permanently in the street.
+        - link "Public art pavement installation — DecoMark and StreetBond custom civic mural and cultural identity street surface at Joyce-Collingwood Skytrain Station. Public Art Civic-scale pavement murals, Indigenous art installations, and landmark street graphics." [ref=e320] [cursor=pointer]:
+          - /url: /applications/public-art
+          - img "Public art pavement installation — DecoMark and StreetBond custom civic mural and cultural identity street surface at Joyce-Collingwood Skytrain Station." [ref=e321]
+          - generic [ref=e324]:
+            - heading "Public Art" [level=3] [ref=e325]
+            - paragraph [ref=e326]: Civic-scale pavement murals, Indigenous art installations, and landmark street graphics.
+        - link "Traffic calming coloured pavement treatment — StreetBond and MMAX speed table surface markings for pedestrian safety zone Traffic Calming Coloured pavement treatments that reduce vehicle speeds without physical barriers." [ref=e328] [cursor=pointer]:
+          - /url: /applications/traffic-calming
+          - img "Traffic calming coloured pavement treatment — StreetBond and MMAX speed table surface markings for pedestrian safety zone" [ref=e329]
+          - generic [ref=e332]:
+            - heading "Traffic Calming" [level=3] [ref=e333]
+            - paragraph [ref=e334]: Coloured pavement treatments that reduce vehicle speeds without physical barriers.
+        - link "Townhome and strata development decorative driveway — StreetPrint stamped asphalt entry court and StreetBond coloured parking surface Townhomes Cohesive stamped asphalt hardscape for townhome and strata developments." [ref=e336] [cursor=pointer]:
+          - /url: /applications/townhomes
+          - img "Townhome and strata development decorative driveway — StreetPrint stamped asphalt entry court and StreetBond coloured parking surface" [ref=e337]
+          - generic [ref=e340]:
+            - heading "Townhomes" [level=3] [ref=e341]
+            - paragraph [ref=e342]: Cohesive stamped asphalt hardscape for townhome and strata developments.
+      - link "View All Applications" [ref=e344] [cursor=pointer]:
+        - /url: /applications
+        - text: View All Applications
+        - img [ref=e345]
+    - generic [ref=e348]:
+      - generic [ref=e349]:
+        - generic [ref=e350]:
+          - paragraph [ref=e351]: Field Notes
+          - heading "Proven in the Field. Built to Last." [level=2] [ref=e352]:
+            - text: Proven in the Field.
+            - text: Built to Last.
+          - paragraph [ref=e353]: Real project data, case studies, and spec-ready content for engineers and project managers.
+        - link "All Articles" [ref=e354] [cursor=pointer]:
+          - /url: /blog
+          - text: All Articles
+          - img [ref=e355]
+      - link "Why Canadian Homeowners Are Upgrading to Stamped Asphalt Driveways Real Installation · Verified Data Blog 6 min read Why Canadian Homeowners Are Upgrading to Stamped Asphalt Driveways Plain asphalt turns grey and oxidizes within a few years. Interlocking pavers heave and weed over time. There's a third option — one that's been performing on Canadian city streets for 30+ years and costs a fraction of what you'd expect. Mar 29, 2026 StreetPrint StreetBond DuraShield Read Case Study" [ref=e357] [cursor=pointer]:
+        - /url: /blog/residential-driveways-stamped-asphalt-upgrade
+        - generic [ref=e358]:
+          - generic [ref=e359]:
+            - img "Why Canadian Homeowners Are Upgrading to Stamped Asphalt Driveways" [ref=e360]
+            - generic [ref=e361]:
+              - img [ref=e362]
+              - text: Real Installation · Verified Data
+          - generic [ref=e364]:
+            - generic [ref=e365]:
+              - generic [ref=e366]: Blog
+              - generic [ref=e367]: 6 min read
+            - heading "Why Canadian Homeowners Are Upgrading to Stamped Asphalt Driveways" [level=3] [ref=e368]
+            - paragraph [ref=e369]: Plain asphalt turns grey and oxidizes within a few years. Interlocking pavers heave and weed over time. There's a third option — one that's been performing on Canadian city streets for 30+ years and costs a fraction of what you'd expect.
+            - paragraph [ref=e370]: Mar 29, 2026
+            - generic [ref=e371]:
+              - generic [ref=e372]: StreetPrint
+              - generic [ref=e373]: StreetBond
+              - generic [ref=e374]: DuraShield
+            - generic [ref=e375]:
+              - text: Read Case Study
+              - img [ref=e376]
+      - generic [ref=e378]:
+        - link "Why Stamped Asphalt Driveways Outperform Interlocking Stone (And Look Better Too) Blog Why Stamped Asphalt Driveways Outperform Interlocking Stone (And Look Better Too) Mar 2026 · 5 min read" [ref=e379] [cursor=pointer]:
+          - /url: /blog/residential-driveways-stamped-asphalt
+          - img "Why Stamped Asphalt Driveways Outperform Interlocking Stone (And Look Better Too)" [ref=e381]
+          - generic [ref=e382]:
+            - generic [ref=e383]: Blog
+            - heading "Why Stamped Asphalt Driveways Outperform Interlocking Stone (And Look Better Too)" [level=4] [ref=e384]
+            - paragraph [ref=e385]: Mar 2026 · 5 min read
+        - 'link "Your Logo, at Street Scale: Custom Pavement Graphics for Corporate Campuses and Branded Environments Project Profile Your Logo, at Street Scale: Custom Pavement Graphics for Corporate Campuses and Branded Environments Mar 2026 · 5 min read" [ref=e386] [cursor=pointer]':
+          - /url: /blog/corporate-logos-branded-pavement
+          - 'img "Your Logo, at Street Scale: Custom Pavement Graphics for Corporate Campuses and Branded Environments" [ref=e388]'
+          - generic [ref=e389]:
+            - generic [ref=e390]: Project Profile
+            - 'heading "Your Logo, at Street Scale: Custom Pavement Graphics for Corporate Campuses and Branded Environments" [level=4] [ref=e391]'
+            - paragraph [ref=e392]: Mar 2026 · 5 min read
+        - link "The Street Is Your Canvas Project Profile The Street Is Your Canvas Mar 2026 · 4 min read" [ref=e393] [cursor=pointer]:
+          - /url: /blog/the-street-is-your-canvas
+          - img "The Street Is Your Canvas" [ref=e395]
+          - generic [ref=e396]:
+            - generic [ref=e397]: Project Profile
+            - heading "The Street Is Your Canvas" [level=4] [ref=e398]
+            - paragraph [ref=e399]: Mar 2026 · 4 min read
+    - generic [ref=e401]:
+      - generic [ref=e402]:
+        - generic [ref=e403]:
+          - paragraph [ref=e404]: On The Ground
+          - heading "Follow the Work" [level=2] [ref=e405]
+          - paragraph [ref=e406]: Projects across Canada — documented as they happen.
+        - link "@hubsurfacesystems" [ref=e407] [cursor=pointer]:
+          - /url: https://www.instagram.com/hubsurfacesystems
+          - img [ref=e408]
+          - text: "@hubsurfacesystems"
+      - generic [ref=e410]:
+        - link "Commercial Drive Crosswalk — Vancouver, BC View on Instagram" [ref=e411] [cursor=pointer]:
+          - /url: https://www.instagram.com/hub_surface_systems/
+          - img "Commercial Drive Crosswalk — Vancouver, BC" [ref=e412]
+          - generic [ref=e413]:
+            - img [ref=e414]
+            - generic [ref=e416]: View on Instagram
+        - link "Rainbow Crosswalk — Simcoe, ON View on Instagram" [ref=e418] [cursor=pointer]:
+          - /url: https://www.instagram.com/hub_surface_systems/
+          - img "Rainbow Crosswalk — Simcoe, ON" [ref=e419]
+          - generic [ref=e420]:
+            - img [ref=e421]
+            - generic [ref=e423]: View on Instagram
+        - link "UBC Musqueam Crosswalk — Vancouver, BC View on Instagram" [ref=e425] [cursor=pointer]:
+          - /url: https://www.instagram.com/hub_surface_systems/
+          - img "UBC Musqueam Crosswalk — Vancouver, BC" [ref=e426]
+          - generic [ref=e427]:
+            - img [ref=e428]
+            - generic [ref=e430]: View on Instagram
+        - link "BC Children's Hospital Labyrinth — Vancouver, BC View on Instagram" [ref=e432] [cursor=pointer]:
+          - /url: https://www.instagram.com/hub_surface_systems/
+          - img "BC Children's Hospital Labyrinth — Vancouver, BC" [ref=e433]
+          - generic [ref=e434]:
+            - img [ref=e435]
+            - generic [ref=e437]: View on Instagram
+        - link "Complete Streets — New Westminster, BC View on Instagram" [ref=e439] [cursor=pointer]:
+          - /url: https://www.instagram.com/hub_surface_systems/
+          - img "Complete Streets — New Westminster, BC" [ref=e440]
+          - generic [ref=e441]:
+            - img [ref=e442]
+            - generic [ref=e444]: View on Instagram
+        - link "Branded Crosswalks — Vancouver & Richmond, BC View on Instagram" [ref=e446] [cursor=pointer]:
+          - /url: https://www.instagram.com/hub_surface_systems/
+          - img "Branded Crosswalks — Vancouver & Richmond, BC" [ref=e447]
+          - generic [ref=e448]:
+            - img [ref=e449]
+            - generic [ref=e451]: View on Instagram
+      - generic [ref=e453]:
+        - link "Instagram Project installs, before & afters" [ref=e454] [cursor=pointer]:
+          - /url: https://www.instagram.com/hubsurfacesystems
+          - img [ref=e456]
+          - generic [ref=e458]:
+            - paragraph [ref=e459]: Instagram
+            - paragraph [ref=e460]: Project installs, before & afters
+          - img [ref=e461]
+        - link "LinkedIn Industry news & case studies" [ref=e463] [cursor=pointer]:
+          - /url: https://www.linkedin.com/company/hub-surface-systems
+          - img [ref=e465]
+          - generic [ref=e467]:
+            - paragraph [ref=e468]: LinkedIn
+            - paragraph [ref=e469]: Industry news & case studies
+          - img [ref=e470]
+        - link "YouTube Installation videos & demos" [ref=e472] [cursor=pointer]:
+          - /url: https://www.youtube.com/@hubsurfacesystems
+          - img [ref=e474]
+          - generic [ref=e476]:
+            - paragraph [ref=e477]: YouTube
+            - paragraph [ref=e478]: Installation videos & demos
+          - img [ref=e479]
+      - generic [ref=e482]:
+        - link "LinkedIn" [ref=e483] [cursor=pointer]:
+          - /url: https://www.linkedin.com/company/hub-surface-systems
+          - img [ref=e484]
+        - link "YouTube" [ref=e486] [cursor=pointer]:
+          - /url: https://www.youtube.com/@hubsurfacesystems
+          - img [ref=e487]
+        - link "Instagram" [ref=e489] [cursor=pointer]:
+          - /url: https://www.instagram.com/hubsurfacesystems
+          - img [ref=e490]
+        - link "Facebook" [ref=e492] [cursor=pointer]:
+          - /url: https://www.facebook.com/hubsurfacesystems
+          - img [ref=e493]
+        - link "X" [ref=e495] [cursor=pointer]:
+          - /url: https://x.com/HUB_SS
+          - img [ref=e496]
+    - generic [ref=e501]:
+      - generic [ref=e502]:
+        - generic [ref=e503]:
+          - paragraph [ref=e504]: Education & Engagement
+          - heading "Lunch & Learn at Your Location" [level=2] [ref=e505]:
+            - text: Lunch & Learn
+            - text: at Your Location
+          - paragraph [ref=e506]: Lunch included, in your office or virtual.
+        - generic [ref=e507]:
+          - generic [ref=e508]:
+            - img [ref=e509]
+            - generic [ref=e511]: 45–60 minute presentation tailored to your projects
+          - generic [ref=e512]:
+            - img [ref=e513]
+            - generic [ref=e515]: Live Q&A with HUB technical team
+          - generic [ref=e516]:
+            - img [ref=e517]
+            - generic [ref=e519]: Sample materials and specification sheets
+          - generic [ref=e520]:
+            - img [ref=e521]
+            - generic [ref=e523]: Lunch included — virtual sessions come with a $25 lunch voucher
+        - generic [ref=e524]:
+          - generic [ref=e525]:
+            - textbox "Your name" [ref=e526]
+            - textbox "Email address" [ref=e527]
+          - generic [ref=e528]:
+            - textbox "Company or organization" [ref=e529]
+            - textbox "City" [ref=e530]
+          - textbox "Phone number" [ref=e531]
+          - button "Request Lunch & Learn" [ref=e532]
+      - generic [ref=e533]:
+        - img "HUB Surface Systems Lunch and Learn — decorative pavement products presentation" [ref=e535]
+        - generic:
+          - img "HUB Surface Systems mascot moose"
+    - generic [ref=e537]:
+      - generic:
+        - img
+      - generic [ref=e539]:
+        - generic [ref=e540]:
+          - generic [ref=e541]:
+            - img "HUB Surface Systems" [ref=e543]
+            - paragraph [ref=e544]:
+              - text: Pedestrian safety. Traffic calming.
+              - text: Civic identity. Coast to coast since 1999.
+            - paragraph [ref=e545]:
+              - generic "Canadian" [ref=e546]:
+                - img [ref=e547]
+                - generic [ref=e550]: Canadian
+              - generic [ref=e551]: Owned and operated · Coast to coast · Since 1999
+            - generic [ref=e552]:
+              - link "LinkedIn" [ref=e553] [cursor=pointer]:
+                - /url: https://www.linkedin.com/company/hub-surface-systems
+                - img [ref=e554]
+              - link "YouTube" [ref=e556] [cursor=pointer]:
+                - /url: https://www.youtube.com/@hubsurfacesystems
+                - img [ref=e557]
+              - link "Instagram" [ref=e559] [cursor=pointer]:
+                - /url: https://www.instagram.com/hubsurfacesystems
+                - img [ref=e560]
+              - link "Facebook" [ref=e562] [cursor=pointer]:
+                - /url: https://www.facebook.com/hubsurfacesystems
+                - img [ref=e563]
+              - link "X" [ref=e565] [cursor=pointer]:
+                - /url: https://x.com/HUB_SS
+                - img [ref=e566]
+          - generic [ref=e568]:
+            - heading "Products" [level=4] [ref=e569]
+            - list [ref=e570]:
+              - listitem [ref=e571]:
+                - link "TrafficPatternsXD" [ref=e572] [cursor=pointer]:
+                  - /url: /products/traffic-patterns-xd
+              - listitem [ref=e573]:
+                - link "TrafficPatterns" [ref=e574] [cursor=pointer]:
+                  - /url: /products/traffic-patterns
+              - listitem [ref=e575]:
+                - link "StreetBond" [ref=e576] [cursor=pointer]:
+                  - /url: /products/streetbond
+              - listitem [ref=e577]:
+                - link "StreetPrint" [ref=e578] [cursor=pointer]:
+                  - /url: /products/streetprint
+              - listitem [ref=e579]:
+                - link "DecoMark" [ref=e580] [cursor=pointer]:
+                  - /url: /products/decomark
+              - listitem [ref=e581]:
+                - link "MMAX" [ref=e582] [cursor=pointer]:
+                  - /url: /products/mmax
+              - listitem [ref=e583]:
+                - link "StreetBondSR" [ref=e584] [cursor=pointer]:
+                  - /url: /products/streetbondsr
+              - listitem [ref=e585]:
+                - link "DuraTherm" [ref=e586] [cursor=pointer]:
+                  - /url: /products/duratherm
+              - listitem [ref=e587]:
+                - link "DuraShield" [ref=e588] [cursor=pointer]:
+                  - /url: /products/durashield
+              - listitem [ref=e589]:
+                - link "AirMark" [ref=e590] [cursor=pointer]:
+                  - /url: /products/airmark
+              - listitem [ref=e591]:
+                - link "PreMark" [ref=e592] [cursor=pointer]:
+                  - /url: /products/premark
+              - listitem [ref=e593]:
+                - link "ChipFill" [ref=e594] [cursor=pointer]:
+                  - /url: /products/chipfill
+              - listitem [ref=e595]:
+                - link "AggreFill" [ref=e596] [cursor=pointer]:
+                  - /url: /products/aggrefill
+              - listitem [ref=e597]:
+                - link "Fast Patch DPR" [ref=e598] [cursor=pointer]:
+                  - /url: /products/fast-patch
+          - generic [ref=e599]:
+            - heading "Applications" [level=4] [ref=e600]
+            - list [ref=e601]:
+              - listitem [ref=e602]:
+                - link "Crosswalks" [ref=e603] [cursor=pointer]:
+                  - /url: /applications/crosswalks
+              - listitem [ref=e604]:
+                - link "Bike Lanes" [ref=e605] [cursor=pointer]:
+                  - /url: /applications/bike-lanes
+              - listitem [ref=e606]:
+                - link "Bus Lanes" [ref=e607] [cursor=pointer]:
+                  - /url: /applications/bus-lanes
+              - listitem [ref=e608]:
+                - link "Regulatory Markings" [ref=e609] [cursor=pointer]:
+                  - /url: /applications/regulatory-markings
+              - listitem [ref=e610]:
+                - link "Parks & Paths" [ref=e611] [cursor=pointer]:
+                  - /url: /applications/parks-paths
+              - listitem [ref=e612]:
+                - link "Community Branding" [ref=e613] [cursor=pointer]:
+                  - /url: /applications/community-branding
+              - listitem [ref=e614]:
+                - link "Parking Lots" [ref=e615] [cursor=pointer]:
+                  - /url: /applications/parking-lots
+              - listitem [ref=e616]:
+                - link "Private Driveways" [ref=e617] [cursor=pointer]:
+                  - /url: /applications/private-driveways
+              - listitem [ref=e618]:
+                - link "Public Art" [ref=e619] [cursor=pointer]:
+                  - /url: /applications/public-art
+              - listitem [ref=e620]:
+                - link "Pedestrian Safety" [ref=e621] [cursor=pointer]:
+                  - /url: /applications/pedestrian-safety
+              - listitem [ref=e622]:
+                - link "Traffic Calming" [ref=e623] [cursor=pointer]:
+                  - /url: /applications/traffic-calming
+          - generic [ref=e624]:
+            - heading "Offices" [level=4] [ref=e625]
+            - generic [ref=e626]:
+              - generic [ref=e627]:
+                - paragraph [ref=e629]: West Office
+                - paragraph [ref=e630]: Ladysmith, BC
+                - link "cleve.stordy@hubss.com" [ref=e631] [cursor=pointer]:
+                  - /url: mailto:cleve.stordy@hubss.com
+                - link "604-309-8212" [ref=e632] [cursor=pointer]:
+                  - /url: tel:6043098212
+              - generic [ref=e633]:
+                - paragraph [ref=e635]: East Office
+                - paragraph [ref=e636]: Milton, Ontario
+                - link "doug.bain@hubss.com" [ref=e637] [cursor=pointer]:
+                  - /url: mailto:doug.bain@hubss.com
+                - link "416-540-9287" [ref=e638] [cursor=pointer]:
+                  - /url: tel:4165409287
+        - generic [ref=e639]:
+          - paragraph [ref=e640]: © 2026 HUB Surface Systems. All rights reserved.
+          - generic [ref=e641]:
+            - link "Privacy Policy" [ref=e642] [cursor=pointer]:
+              - /url: /privacy
+            - link "Terms of Use" [ref=e643] [cursor=pointer]:
+              - /url: /terms
+  - generic:
+    - generic:
+      - paragraph: Canada's Decorative Pavement Specialists · Since 1999
+      - generic:
+        - link:
+          - /url: /products
+          - text: See the Systems
+        - link:
+          - /url: /lunch-learn
+          - text: Book a Lunch & Learn
+  - alert [ref=e644]

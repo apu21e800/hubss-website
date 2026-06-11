@@ -1,0 +1,43 @@
+- generic [active] [ref=e1]:
+  - main [ref=e16]:
+    - generic [ref=e17]:
+      - generic [ref=e18]:
+        - img "HUB Surface Systems" [ref=e20]
+        - heading "Welcome to HUB Surface Systems." [level=1] [ref=e21]
+        - paragraph [ref=e22]: Decorative pavement, road safety markings, and surface solutions — pick where you'd like to go.
+      - generic [ref=e79]:
+        - generic [ref=e80]:
+          - paragraph [ref=e81]: Prize draw
+          - heading "Enter to win." [level=2] [ref=e82]
+          - paragraph [ref=e83]: One entry per person. Winner announced after the show.
+        - generic [ref=e84]:
+          - generic [ref=e86]: Full name *
+          - textbox "Jane Smith" [ref=e87]
+        - generic [ref=e88]:
+          - generic [ref=e90]: Email *
+          - textbox "jane@city.ca" [ref=e91]
+        - generic [ref=e92]:
+          - generic [ref=e94]: Company *
+          - textbox "City of Toronto" [ref=e95]
+        - generic [ref=e96]:
+          - generic [ref=e97]:
+            - generic [ref=e98]: Role / title
+            - generic [ref=e99]: Optional
+          - textbox "Public Realm Designer" [ref=e100]
+        - generic [ref=e101]:
+          - generic [ref=e102]:
+            - generic [ref=e103]: Phone
+            - generic [ref=e104]: Optional
+          - textbox "416-555-0100" [ref=e105]
+        - generic [ref=e106] [cursor=pointer]:
+          - checkbox "I'd like to receive HUBSS updates and product news. You can unsubscribe at any time. We never share your information." [ref=e107]
+          - generic [ref=e108]:
+            - text: I'd like to receive HUBSS updates and product news.
+            - generic [ref=e109]: You can unsubscribe at any time. We never share your information.
+        - generic [ref=e110]:
+          - button "Enter the draw" [ref=e111]
+          - button "No thanks" [ref=e112]
+      - generic [ref=e78]: hubss.com · Redefining hardscapes
+  - button "Open Next.js Dev Tools" [ref=e11] [cursor=pointer]:
+    - img [ref=e12]
+  - alert [ref=e15]

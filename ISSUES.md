@@ -8,6 +8,24 @@ Legend: 🔴 blocking decision · 🟠 needs Vern/Doug input · 🟡 verify befo
 
 ---
 
+## ✅ CHECKPOINT RULINGS (Vernon, 2026-06-10 — recorded, closed)
+
+1. **"The full palette." headline** — APPROVED (p17 collision logic correct).
+2. **Notes padding** — absorb 2 pages with the §7.3 StreetPrint process strip. (Executed Phase 2.)
+3. **Saddle-stitch mod-4** — see new 🟡 item below: binding method UNCONFIRMED.
+4. **streetbond® logo** — APPROVED per Vern's standing decision. (Executed Phase 1.)
+5. **v54** — DELETE via git rm; supersede = delete, git history is the rollback. `.vercelignore` removed with it. **One-rendered-version rule** now standing: the working tree carries exactly one flipbook version.
+
+## 🟡 §9 PRINT-PREP GATE — binding method, trim, bleed UNCONFIRMED with printer
+
+The build's mod-4 padding loop assumes **saddle-stitch signatures** (pages ≡ 0 mod 4). That constraint is **unconfirmed** — a 140 pp 6×6″ book is likely **perfect-bound** (saddle-stitch is typically ≤ ~64–80 pp before creep becomes a problem), in which case the mod-4 rule is unnecessary and the padding logic could relax to mod-2. Before §9 print prep locks, confirm with the printer:
+- **Binding method** (perfect bind vs saddle stitch vs coil) → determines the page-count rule AND whether gutter-margin compensation is needed on inner edges.
+- **Trim** 6×6″ + **bleed** 0.125″ (the prior "page-coordinate anomaly" makes this a must-confirm, per master prompt §9).
+- **Colour profile** (FOGRA39 coated assumed; printer may specify their own) + output-intent embed.
+- Supplier **CMYK formulas for all 51 StreetBond colourants** (chips currently FOGRA39 ICC conversions of reference hexes — flagged since Phase 1).
+
+---
+
 ## ✅ ISSUE #1 — RESOLVED (Session 2): proceeding on the v54 lineage
 
 **Resolution (2026-06-10, Phase-2 relaunch instruction):** Vernon's resume order

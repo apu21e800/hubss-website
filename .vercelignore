@@ -1,5 +1,0 @@
-# Superseded flipbook versions — kept in git for history/rollback, excluded
-# from the deploy so only the newest version ships as static assets.
-# (The /catalogue route reads public/catalogue/manifest.json, which points
-# at the current version only.) Vernon may drop v54 from git after sign-off.
-public/catalogue/v54

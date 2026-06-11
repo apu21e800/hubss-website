@@ -74,7 +74,15 @@ SECTION_OPENERS = {
                                  APPS_DIR / "bike-lanes" / "bike-lanes-09.jpg"),
     # Three new full-bleed DPS — Vernon swaps images manually in Figma for final
     "dps_a_left":   _pick(BLOG_DIR / "richmond-brighouse-crosswalk" / "featured.jpeg"),
-    "dps_a_right":  _pick(BLOG_DIR / "branded-crosswalks-vancouver-richmond" / "featured.jpg",
+    # dps_a_right: was blog branded-crosswalks-vancouver-richmond/featured.jpg —
+    # that file is BYTE-IDENTICAL (same md5) to decorative-crosswalk-commercial-
+    # drive/featured.jpg, so p10 repeated the Little Italy photo shown on the
+    # In-the-Field DPS (p36). (First fix attempt used crosswalks-03 — caught by
+    # the perceptual-hash sweep duplicating the Crosswalks application page.)
+    # crosswalks-11 (3264×2448): residential intersection with a full compass-
+    # rose medallion in coloured stamped asphalt + red stamped crosswalk —
+    # "from every intersection, a statement," literally. Unused in any slot.
+    "dps_a_right":  _pick(APPS_DIR / "crosswalks" / "crosswalks-11.jpg",
                           APPS_DIR / "crosswalks" / "crosswalks-06.jpg"),
     "dps_b_left":   _pick(APPS_DIR / "community-branding" / "community-branding-05.jpg"),
     "dps_b_right":  _pick(APPS_DIR / "community-branding" / "community-branding-12.jpg"),

@@ -119,6 +119,10 @@ def draw_text_block(
     `font_size_figma` is the size as found in Figma (we scale internally).
     Wraps when max_w_figma is provided. Returns the bottom y in PDF coords.
     """
+    # Type-pass micro-typography: typeset apostrophes (U+2019) everywhere —
+    # render-side so content files stay untouched. Straight double quotes
+    # are NOT touched (inch marks like 6×6" must survive).
+    text = text.replace("'", "’")
     font = pick_font(figma_font, weight)
     size = fs(font_size_figma)
     leading = fs(leading_figma) if leading_figma else size * 1.25

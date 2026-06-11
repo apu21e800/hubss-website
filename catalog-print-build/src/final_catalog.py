@@ -161,11 +161,11 @@ def no_orphan(text, last_n=2):
 
 def display_size_for(text):
     n = len(text)
-    if n < 8:   return 56
-    if n < 14:  return 44
-    if n < 25:  return 34
+    if n < 8:   return 52
+    if n < 14:  return 42
+    if n < 25:  return 37
     if n < 40:  return 26
-    return 22
+    return 21
 
 
 def draw_logo_white(c, fx, fy, fw_figma):
@@ -294,10 +294,10 @@ def page_cover(c):
     draw_logo_white(c, fx=28, fy=28, fw_figma=110)
     # Masthead bottom-left, confident.
     draw_text_block(c, "Catalogue 2026.", fx=28, fy=370,
-                    font_size_figma=30, weight=800,
-                    color=HUBSS_WHITE, tracking=-1.0, max_w_figma=394)
+                    font_size_figma=31, weight=800,
+                    color=HUBSS_WHITE, tracking=-0.6, max_w_figma=394)
     tracked_caps(c, "Decorative Pavement Solutions", fx=28, fy=410,
-                 size=8.0, color=HUBSS_WHITE, max_w_figma=394)
+                 size=8.5, color=HUBSS_WHITE, max_w_figma=394)
 
 
 def page_half_title(c):
@@ -317,12 +317,12 @@ def page_manifesto(c):
     y = 120
     for i, line in enumerate(m["h1_lines"]):
         col = HUBSS_ORANGE if i == m["h1_orange_line"] else CMYK_TEXT_DARK
-        draw_text_block(c, line, fx=40, fy=y, font_size_figma=36, weight=800,
-                        color=col, tracking=-1.0)
+        draw_text_block(c, line, fx=40, fy=y, font_size_figma=37, weight=800,
+                        color=col, tracking=-0.7)
         y += 42
     draw_text_block(c, no_orphan(m["body"], 3), fx=40, fy=y + 20,
                     font_size_figma=10,
-                    color=CMYK_TEXT_DARK, max_w_figma=350, leading_figma=16)
+                    color=CMYK_TEXT_DARK, max_w_figma=350, leading_figma=14)
     thin_rule(c, fx=40, fy=393, w_figma=56, color=HUBSS_ORANGE, weight_pt=2.0)
     tracked_caps(c, m["signature"], fx=40, fy=410, size=6.5,
                  color=CMYK_TEXT_FAINT, max_w_figma=350)
@@ -334,13 +334,13 @@ def page_why_stats(c):
     tracked_caps(c, w["eyebrow"], fx=40, fy=50, size=7.5, color=HUBSS_ORANGE)
     y = 88
     for line in w["title_lines"]:
-        draw_text_block(c, line, fx=40, fy=y, font_size_figma=32,
-                        weight=800, color=CMYK_TEXT_DARK, tracking=-0.9)
+        draw_text_block(c, line, fx=40, fy=y, font_size_figma=31,
+                        weight=800, color=CMYK_TEXT_DARK, tracking=-0.6)
         y += 38
     draw_text_block(c, no_orphan(w["subtitle"], 3), fx=40, fy=y + 4,
-                    font_size_figma=11,
+                    font_size_figma=12.5,
                     color=CMYK_TEXT_MID,
-                    max_w_figma=400, leading_figma=15)
+                    max_w_figma=400, leading_figma=15.6)
     # Navy stat cells — orange number + white label on navy, matching website card style
     grid_y = 240
     cell_w = 195
@@ -357,37 +357,37 @@ def page_why_stats(c):
                     cell_h * SCALE, 3, stroke=0, fill=1)
         # Orange big number
         draw_text_block(c, num, fx=gx + 8, fy=gy + 10,
-                        font_size_figma=34, weight=800,
-                        color=HUBSS_ORANGE, tracking=-0.8)
+                        font_size_figma=37, weight=800,
+                        color=HUBSS_ORANGE, tracking=-0.7)
         # White label + grey sub on navy
-        tracked_caps(c, label, fx=gx + 8, fy=gy + 52, size=7.0,
+        tracked_caps(c, label, fx=gx + 8, fy=gy + 52, size=6.5,
                      color=HUBSS_WHITE, max_w_figma=cell_w - 16)
         draw_text_block(c, sub, fx=gx + 8, fy=gy + 64,
-                        font_size_figma=7.5, color=CMYK_ON_DARK_MID,
-                        max_w_figma=cell_w - 16, leading_figma=10)
+                        font_size_figma=7.8, color=CMYK_ON_DARK_MID,
+                        max_w_figma=cell_w - 16, leading_figma=10.1)
     thin_rule(c, fx=40, fy=430, w_figma=56, color=HUBSS_ORANGE, weight_pt=2.0)
 
 
 def page_why_proof(c):
     fill_bleed(c, HUBSS_WHITE)
     w = CC.WHY_HUB
-    tracked_caps(c, "Four Reasons", fx=40, fy=50, size=6.5, color=HUBSS_ORANGE)
+    tracked_caps(c, "Four Reasons", fx=40, fy=50, size=7.5, color=HUBSS_ORANGE)
     # v29: display reduced 24 → 19 (was oversized on 5x5 trim).
     draw_text_block(c, "If it goes on the street,",
-                    fx=40, fy=74, font_size_figma=19, weight=800,
-                    color=CMYK_TEXT_DARK, tracking=-0.6)
+                    fx=40, fy=74, font_size_figma=21, weight=800,
+                    color=CMYK_TEXT_DARK, tracking=-0.4)
     draw_text_block(c, "it stays on the street.",
-                    fx=40, fy=100, font_size_figma=19, weight=800,
+                    fx=40, fy=100, font_size_figma=21, weight=800,
                     color=HUBSS_ORANGE, tracking=-0.6)
     y = 160
     for num, claim, detail in w["proof"]:
-        tracked_caps(c, num, fx=40, fy=y, size=6.0, color=HUBSS_ORANGE,
+        tracked_caps(c, num, fx=40, fy=y, size=6.5, color=HUBSS_ORANGE,
                      max_w_figma=30)
-        draw_text_block(c, claim, fx=80, fy=y, font_size_figma=11,
+        draw_text_block(c, claim, fx=80, fy=y, font_size_figma=14.5,
                         weight=800, color=CMYK_TEXT_DARK, tracking=-0.3,
                         max_w_figma=340)
-        draw_text_block(c, detail, fx=80, fy=y + 16, font_size_figma=8.0,
-                        color=CMYK_TEXT_MID, max_w_figma=340, leading_figma=11)
+        draw_text_block(c, detail, fx=80, fy=y + 16, font_size_figma=8.6,
+                        color=CMYK_TEXT_MID, max_w_figma=340, leading_figma=11.2)
         thin_rule(c, fx=40, fy=y + 50, w_figma=380, color=CMYK_TEXT_FAINT,
                   weight_pt=0.3)
         y += 60
@@ -397,8 +397,8 @@ def page_why_proof(c):
 def page_toc(c, sections):
     fill_bleed(c, HUBSS_WHITE)
     tracked_caps(c, "What's Inside", fx=40, fy=60, size=7.5, color=HUBSS_ORANGE)
-    draw_text_block(c, "Catalogue 2026.", fx=40, fy=88, font_size_figma=32,
-                    weight=800, color=CMYK_TEXT_DARK, tracking=-1.0)
+    draw_text_block(c, "Catalogue 2026.", fx=40, fy=88, font_size_figma=31,
+                    weight=800, color=CMYK_TEXT_DARK, tracking=-0.6)
     y = 160
     for label, num in sections:
         # §8 — TOC row dot carries the section accent (back-matter rows
@@ -408,7 +408,7 @@ def page_toc(c, sections):
         c.setFillColor(accent)
         c.circle(px, py, 1.6 * SCALE, stroke=0, fill=1)
         draw_text_block(c, label, fx=52, fy=y, font_size_figma=10,
-                        weight=600, color=CMYK_TEXT_DARK, tracking=0.3)
+                        weight=600, color=CMYK_TEXT_DARK, tracking=0)
         draw_text_block(c, str(num), fx=400, fy=y, font_size_figma=10,
                         weight=600, color=CMYK_TEXT_DARK,
                         max_w_figma=15, align="right")
@@ -449,9 +449,9 @@ def page_section_open(c, section_no, title, photo_path):
                  size=8.5, color=HUBSS_WHITE, max_w_figma=394)
     thin_rule(c, fx=28, fy=320, w_figma=44,
               color=accent, weight_pt=2.5)
-    draw_text_block(c, title, fx=28, fy=342, font_size_figma=50,
+    draw_text_block(c, title, fx=28, fy=342, font_size_figma=52,
                     weight=800, color=HUBSS_WHITE,
-                    tracking=-1.6, max_w_figma=394, leading_figma=54)
+                    tracking=-1.0, max_w_figma=394, leading_figma=56)
 
 
 def page_product_hero(c, prod):
@@ -482,12 +482,12 @@ def page_product_hero(c, prod):
     # Size-to-fit so it never wraps: start at 22pt, 14pt floor.
     tagline = no_orphan(prod["tagline"], last_n=3)
     safe_w_pt = 394 * SCALE
-    tagline_size = 22
-    while tagline_size > 14 and stringWidth(
+    tagline_size = 21
+    while tagline_size > 14.5 and stringWidth(
         tagline, FONT_SANS_BOLD, tagline_size * SCALE
     ) > safe_w_pt:
         tagline_size -= 1
-    tagline_leading = tagline_size + 4
+    tagline_leading = round(tagline_size * 1.10, 1)
     draw_text_block(c, tagline, fx=28, fy=350,
                     font_size_figma=tagline_size,
                     
@@ -519,13 +519,13 @@ def page_product_spec(c, prod):
     # eyebrow says what the product IS, not who made it. Falls back to the
     # HUB attribution for any product that hasn't been categorised yet.
     eyebrow = prod.get("category") or prod.get("manufacturer") or "HUB Surface Systems"
-    tracked_caps(c, eyebrow, fx=28, fy=18, size=5.5,
+    tracked_caps(c, eyebrow, fx=28, fy=18, size=7.5,
                  color=HUBSS_ORANGE, max_w_figma=394)
 
     # Product wordmark — reduced from 34 → 22 with tighter kerning. Sits in
     # its own clear zone; the orange dash below acts as the brand signature.
-    draw_text_block(c, prod["name"], fx=28, fy=32, font_size_figma=22,
-                    weight=800, color=HUBSS_WHITE, tracking=-1.0,
+    draw_text_block(c, prod["name"], fx=28, fy=32, font_size_figma=21,
+                    weight=800, color=HUBSS_WHITE, tracking=-0.4,
                     max_w_figma=394)
 
     # Orange signature dash — 6 px below name baseline (was 12 px)
@@ -542,22 +542,27 @@ def page_product_spec(c, prod):
         target_size -= 1
     draw_text_block(c, no_orphan(title, 2), fx=28, fy=title_y,
                     font_size_figma=target_size,
-                    weight=800, color=CMYK_TEXT_DARK, tracking=-0.9,
+                    weight=800, color=CMYK_TEXT_DARK, tracking=-0.6,
                     max_w_figma=394)
 
     y = title_y + int(target_size * 1.1) + 6
 
     # Plain subhead — widow-protected (last 3 words bound)
-    draw_text_block(c, no_orphan(prod["italic"], 3), fx=28, fy=y,
-                    font_size_figma=10.5,
-                    color=CMYK_TEXT_MID,
-                    max_w_figma=394, leading_figma=15)
-    y += 32
+    sub_bottom_pdf = draw_text_block(
+        c, no_orphan(prod["italic"], 3), fx=28, fy=y,
+        font_size_figma=12.5,
+        color=CMYK_TEXT_MID,
+        max_w_figma=394, leading_figma=15.6)
+    # wrap-safe rhythm: body starts a fixed gap below the ACTUAL subhead
+    # bottom (draw_text_block returns bottom y in PDF coords) — the old
+    # fixed +32 collided when a subhead wrapped to two lines
+    GAP_SUBHEAD_BODY = 12  # figma
+    y = (BLEED + TRIM_H - sub_bottom_pdf) / SCALE + GAP_SUBHEAD_BODY
 
     # Body — widow-protected (last 3 words bound)
     draw_text_block(c, no_orphan(prod["body"], 3), fx=28, fy=y,
-                    font_size_figma=9.5,
-                    color=CMYK_TEXT_DARK, max_w_figma=394, leading_figma=14)
+                    font_size_figma=10,
+                    color=CMYK_TEXT_DARK, max_w_figma=360, leading_figma=14)
 
     # §5 — official product logo on the white body (single exception:
     # streetbond® rainbow; see PRODUCT_LOGOS). Right-aligned in the clear
@@ -589,12 +594,12 @@ def page_product_spec(c, prod):
             col = i % 2
             x = cols_x[col]
             yy = 328 + row * 34
-            tracked_caps(c, label, fx=x, fy=yy, size=6.0,
+            tracked_caps(c, label, fx=x, fy=yy, size=6.5,
                          color=CMYK_TEXT_FAINT, max_w_figma=190)
             draw_text_block(c, value, fx=x, fy=yy + 11,
-                            font_size_figma=8.5, weight=600,
+                            font_size_figma=8.6, weight=600,
                             color=CMYK_TEXT_DARK, max_w_figma=185,
-                            leading_figma=11)
+                            leading_figma=11.2)
 
     uses = prod.get("uses") or []
     if uses:
@@ -675,11 +680,11 @@ def page_colour_system_a(c):
     tracked_caps(c, "StreetBond Colour", fx=34, fy=18, size=7.5,
                  color=HUBSS_ORANGE, max_w_figma=394)
     draw_text_block(c, "The full palette.", fx=28, fy=34, font_size_figma=26,
-                    weight=800, color=CMYK_TEXT_DARK, tracking=-0.9,
+                    weight=800, color=CMYK_TEXT_DARK, tracking=-0.5,
                     max_w_figma=394)
     draw_text_block(
         c, "37 standard colours in two families. Full custom Pantone matching.",
-        fx=28, fy=68, font_size_figma=9.5, color=CMYK_TEXT_MID,
+        fx=28, fy=68, font_size_figma=10, color=CMYK_TEXT_MID,
         max_w_figma=394, leading_figma=14)
 
     COLS = 6
@@ -699,7 +704,7 @@ def page_colour_system_a(c):
             y = gy + r * ROW_H
             _chip(c, x, y, CHIP_W, CHIP_H, _chip_cmyk(col["hex"]))
             draw_text_block(c, col["name"], fx=x, fy=y + CHIP_H + 3,
-                            font_size_figma=6.2, weight=500,
+                            font_size_figma=7.8, weight=500,
                             color=CMYK_TEXT_MID, max_w_figma=CELL_W - 4)
         rows = -(-len(items) // COLS)
         return gy + rows * ROW_H + 6
@@ -717,7 +722,7 @@ def page_colour_system_a(c):
     draw_text_block(
         c, "Printed colours are representative — request physical samples "
            "at a Lunch & Learn.",
-        fx=28, fy=419, font_size_figma=7.0, weight=500,
+        fx=28, fy=419, font_size_figma=7.8, weight=400,
         color=CMYK_TEXT_MID, max_w_figma=394)
 
 
@@ -733,12 +738,12 @@ def page_colour_system_b(c):
     tracked_caps(c, "StreetBondSR  ·  Solar Reflective", fx=34, fy=18,
                  size=7.5, color=HUBSS_ORANGE, max_w_figma=394)
     draw_text_block(c, "Cooler by design.", fx=28, fy=34, font_size_figma=26,
-                    weight=800, color=CMYK_TEXT_DARK, tracking=-0.9,
+                    weight=800, color=CMYK_TEXT_DARK, tracking=-0.5,
                     max_w_figma=394)
     draw_text_block(
         c, "Eleven solar-reflective colours, measured and rated. "
            "A higher SRI means a cooler surface.",
-        fx=28, fy=68, font_size_figma=9.5, color=CMYK_TEXT_MID,
+        fx=28, fy=68, font_size_figma=10, color=CMYK_TEXT_MID,
         max_w_figma=394, leading_figma=14)
 
     cs = CC.COLOUR_SYSTEM
@@ -755,11 +760,11 @@ def page_colour_system_b(c):
         _chip(c, x, y, CHIP_W, CHIP_H, _chip_cmyk(col["hex"]),
               keyline=(col["name"] == "SR White"))
         draw_text_block(c, col["name"], fx=x, fy=y + CHIP_H + 3,
-                        font_size_figma=6.8, weight=600,
+                        font_size_figma=7.8, weight=500,
                         color=CMYK_TEXT_DARK, max_w_figma=CELL_W - 6)
         data = f"SRI {col['sri']} · R {col['reflectance']} · E {col['emittance']}"
         draw_text_block(c, data, fx=x, fy=y + CHIP_H + 13,
-                        font_size_figma=5.8, weight=500,
+                        font_size_figma=6.5, weight=400,
                         color=CMYK_TEXT_MID, max_w_figma=CELL_W - 6)
     rows = -(-len(sr) // COLS)
     y = gy + rows * ROW_H + 4
@@ -767,15 +772,15 @@ def page_colour_system_b(c):
     # One compressed standards line — replaces the old edition's footnote wall.
     draw_text_block(
         c, "Reflectance ASTM C1549  ·  Emittance ASTM C1371  ·  SRI ASTM E1980.",
-        fx=28, fy=y, font_size_figma=6.5, weight=500,
+        fx=28, fy=y, font_size_figma=7.8, weight=400,
         color=CMYK_TEXT_FAINT, max_w_figma=394)
     y += 14
     # Soft, accurate LEED wording — no credit number printed until the
     # current LEED v4/v4.1 credit name is confirmed (ISSUES.md).
     draw_text_block(
         c, "SR colourants can contribute to LEED heat-island reduction credits.",
-        fx=28, fy=y, font_size_figma=8.5, color=CMYK_TEXT_MID,
-        max_w_figma=394, leading_figma=12)
+        fx=28, fy=y, font_size_figma=8.6, color=CMYK_TEXT_MID,
+        max_w_figma=394, leading_figma=11.2)
     y += 26
 
     cl = cs["Cycle-Lane"]
@@ -789,7 +794,7 @@ def page_colour_system_b(c):
         x = 28 + i * CELL2
         _chip(c, x, gy2, CELL2 - 14, 26, _chip_cmyk(col["hex"]))
         draw_text_block(c, col["name"], fx=x, fy=gy2 + 29,
-                        font_size_figma=6.8, weight=600,
+                        font_size_figma=7.8, weight=500,
                         color=CMYK_TEXT_DARK, max_w_figma=CELL2 - 14)
 
     thin_rule(c, fx=28, fy=412, w_figma=394, color=CMYK_TEXT_FAINT,
@@ -831,25 +836,25 @@ def page_process_left(c):
                  color=HUBSS_ORANGE, max_w_figma=394)
     draw_text_block(c, "Reheat. Stamp. Coat.", fx=28, fy=34,
                     font_size_figma=26, weight=800, color=CMYK_TEXT_DARK,
-                    tracking=-0.9, max_w_figma=394)
+                    tracking=-0.5, max_w_figma=394)
     draw_text_block(
         c, "How genuine stamped asphalt goes in — working with the "
            "pavement already there.",
-        fx=28, fy=68, font_size_figma=9.5, color=CMYK_TEXT_MID,
+        fx=28, fy=68, font_size_figma=10, color=CMYK_TEXT_MID,
         max_w_figma=394, leading_figma=14)
 
     y = 98
     for num, title, desc, photo in PROCESS_STEPS:
         if photo.exists():
             draw_image_at_figma(c, str(photo), fx=28, fy=y, fw=150, fh=92)
-        tracked_caps(c, num, fx=192, fy=y + 2, size=7.0,
+        tracked_caps(c, num, fx=192, fy=y + 2, size=6.5,
                      color=HUBSS_ORANGE, max_w_figma=40)
-        draw_text_block(c, title, fx=192, fy=y + 14, font_size_figma=13,
+        draw_text_block(c, title, fx=192, fy=y + 14, font_size_figma=14.5,
                         weight=800, color=CMYK_TEXT_DARK, tracking=-0.3,
                         max_w_figma=230)
         draw_text_block(c, no_orphan(desc, 3), fx=192, fy=y + 34,
-                        font_size_figma=8.5, color=CMYK_TEXT_MID,
-                        max_w_figma=230, leading_figma=12.5)
+                        font_size_figma=8.6, color=CMYK_TEXT_MID,
+                        max_w_figma=230, leading_figma=11.2)
         y += 104
 
     thin_rule(c, fx=28, fy=412, w_figma=394, color=CMYK_TEXT_FAINT,
@@ -871,7 +876,7 @@ def page_process_right(c):
                 preserveAspectRatio=False, mask='auto')
     orange_dot(c, fx=24, fy=421, r_figma=1.3)
     tracked_caps(c, "The result — pattern and colour, fused into the surface",
-                 fx=32, fy=418, size=7.0, color=HUBSS_WHITE, max_w_figma=390)
+                 fx=32, fy=418, size=7.5, color=HUBSS_WHITE, max_w_figma=390)
 
 
 def page_application(c, app, idx, total):
@@ -893,13 +898,13 @@ def page_application(c, app, idx, total):
     # Display tagline — confident, dark ink
     name_size = min(display_size_for(app["name"]), 18)
     draw_text_block(c, no_orphan(app["tagline"], 3),
-                    fx=28, fy=350, font_size_figma=18,
-                    weight=800, color=CMYK_TEXT_DARK, tracking=-0.4,
-                    max_w_figma=394, leading_figma=22)
+                    fx=28, fy=350, font_size_figma=17.5,
+                    weight=800, color=CMYK_TEXT_DARK, tracking=-0.35,
+                    max_w_figma=394, leading_figma=19.3)
     # Body — dark mid-grey, comfortable leading
     draw_text_block(c, no_orphan(app["body"], 3), fx=28, fy=388,
-                    font_size_figma=8.5, color=CMYK_TEXT_MID,
-                    max_w_figma=394, leading_figma=12)
+                    font_size_figma=10, color=CMYK_TEXT_MID,
+                    max_w_figma=394, leading_figma=14)
     # v48 — Vernon: drop the decorative orange line; URL keeps it clean.
     tracked_caps(c, "hubss.com", fx=28, fy=435, size=5.5,
                  color=HUBSS_ORANGE, align="right", max_w_figma=394)
@@ -917,14 +922,14 @@ def page_project_hero(c, proj):
                  color=HUBSS_ORANGE, max_w_figma=394)
     # Display italic serif title in dark ink — editorial centerpiece.
     draw_text_block(c, no_orphan(proj["title"], 3), fx=28, fy=350,
-                    font_size_figma=20,
-                    color=CMYK_TEXT_DARK, tracking=-0.3,
-                    max_w_figma=394, leading_figma=24)
+                    font_size_figma=21,
+                    color=CMYK_TEXT_DARK, tracking=-0.4,
+                    max_w_figma=394, leading_figma=23)
     # v48 — Vernon: orange decorative line dropped. Location/product
     # caps anchor the page bottom.
-    tracked_caps(c, proj["location"], fx=28, fy=414, size=6.0,
+    tracked_caps(c, proj["location"], fx=28, fy=414, size=6.5,
                  color=CMYK_TEXT_MID, max_w_figma=190)
-    tracked_caps(c, proj["product"], fx=232, fy=414, size=6.0,
+    tracked_caps(c, proj["product"], fx=232, fy=414, size=6.5,
                  color=HUBSS_ORANGE, align="right", max_w_figma=190)
 
 
@@ -940,11 +945,11 @@ def page_project_story(c, proj, idx):
     eyebrow_label = (proj.get("product") or "").upper() \
         or ("PROJECT " + str(idx).zfill(2))
     orange_dot(c, fx=28, fy=325, r_figma=1.3)
-    tracked_caps(c, eyebrow_label, fx=34, fy=322, size=7.0,
+    tracked_caps(c, eyebrow_label, fx=34, fy=322, size=7.5,
                  color=HUBSS_ORANGE, max_w_figma=394)
     # H2 = project name — dark display
     draw_text_block(c, no_orphan(proj.get("name") or "", 3), fx=28, fy=348,
-                    font_size_figma=17, weight=800, color=CMYK_TEXT_DARK,
+                    font_size_figma=17.5, weight=800, color=CMYK_TEXT_DARK,
                     tracking=-0.5, max_w_figma=394, leading_figma=20)
     # Location · product line in faint caps
     sub = ((proj.get("location") or "") + "    " + (proj.get("product") or "")).upper()
@@ -984,20 +989,20 @@ def _card_shell(c, eyebrow, headline, body, *, head_size=27, meta=None,
     thin_rule(c, fx=30, fy=86, w_figma=30, color=HUBSS_ORANGE, weight_pt=2.5)
     draw_text_block(c, no_orphan(headline, 3), fx=30, fy=120,
                     font_size_figma=head_size, weight=800, color=CMYK_TEXT_DARK,
-                    tracking=-0.8, max_w_figma=384, leading_figma=head_size + 4)
+                    tracking=-0.5, max_w_figma=384, leading_figma=head_size + 2)
     body_y = 224
     if meta:
         tracked_caps(c, meta.upper(), fx=30, fy=212, size=6.5,
                      color=CMYK_TEXT_MID, max_w_figma=384)
         body_y = 236
     draw_text_block(c, no_orphan(body, 3), fx=30, fy=body_y,
-                    font_size_figma=10.5, color=CMYK_TEXT_MID,
-                    max_w_figma=372, leading_figma=16)
+                    font_size_figma=10, color=CMYK_TEXT_MID,
+                    max_w_figma=364, leading_figma=14)
     # Footer — inside the 0.25" bottom safe margin (fy <= 432)
-    tracked_caps(c, "hubss.com", fx=30, fy=420, size=6.0,
+    tracked_caps(c, "hubss.com", fx=30, fy=420, size=6.5,
                  color=HUBSS_ORANGE, max_w_figma=200)
     if foot_right:
-        tracked_caps(c, foot_right, fx=232, fy=420, size=6.0,
+        tracked_caps(c, foot_right, fx=232, fy=420, size=6.5,
                      color=CMYK_TEXT_FAINT, align="right", max_w_figma=180)
 
 
@@ -1007,13 +1012,13 @@ def page_app_card(c, app, idx):
     # is verifiable. Unverified locations stay untagged (never fabricate);
     # open IDs are listed in ISSUES.md for Doug.
     _card_shell(c, app["name"], app["tagline"], app["body"],
-                head_size=27, meta=app.get("location") or None,
+                head_size=26, meta=app.get("location") or None,
                 foot_right="Application " + str(idx).zfill(2))
 
 
 def page_project_card(c, proj, idx):
     _card_shell(c, (proj.get("product") or "Project").upper(), proj["title"],
-                proj.get("story") or "", head_size=29,
+                proj.get("story") or "", head_size=26,
                 meta=proj.get("location") or "",
                 foot_right="Project " + str(idx).zfill(2))
 
@@ -1064,34 +1069,34 @@ def page_installer(c, inst):
     tracked_caps(c, inst["region"], fx=30, fy=258, size=6.5,
                  color=CMYK_TEXT_FAINT, max_w_figma=380)
     draw_text_block(c, inst["name"], fx=30, fy=270,
-                    font_size_figma=28,
+                    font_size_figma=26,
                     weight=800, color=CMYK_TEXT_DARK, tracking=-0.5,
-                    max_w_figma=380, leading_figma=32)
+                    max_w_figma=380, leading_figma=28)
     draw_text_block(c, no_orphan(inst["body"], 3), fx=30, fy=325,
-                    font_size_figma=9.5,
-                    color=CMYK_TEXT_DARK, max_w_figma=380, leading_figma=14.5)
+                    font_size_figma=10,
+                    color=CMYK_TEXT_DARK, max_w_figma=380, leading_figma=14)
 
     thin_rule(c, fx=30, fy=380, w_figma=380, color=HUBSS_ORANGE, weight_pt=0.8)
 
-    tracked_caps(c, "Phone", fx=30, fy=395, size=6.0,
+    tracked_caps(c, "Phone", fx=30, fy=395, size=6.5,
                  color=CMYK_TEXT_FAINT, max_w_figma=180)
     draw_text_block(c, inst["phone"], fx=30, fy=408,
-                    font_size_figma=15, weight=800,
+                    font_size_figma=14.5, weight=800,
                     color=CMYK_TEXT_DARK, max_w_figma=180, tracking=-0.3)
 
-    tracked_caps(c, "Online", fx=220, fy=395, size=6.0,
+    tracked_caps(c, "Online", fx=220, fy=395, size=6.5,
                  color=CMYK_TEXT_FAINT, max_w_figma=200)
     draw_text_block(c, inst["url"], fx=220, fy=408,
-                    font_size_figma=13, weight=800,
-                    color=HUBSS_ORANGE, max_w_figma=200, tracking=-0.2)
+                    font_size_figma=14.5, weight=800,
+                    color=HUBSS_ORANGE, max_w_figma=200, tracking=-0.3)
 
 
 
 def page_technical_reference(c):
     fill_bleed(c, HUBSS_WHITE)
-    tracked_caps(c, "Product Reference", fx=30, fy=40, size=7.0, color=HUBSS_ORANGE)
-    draw_text_block(c, "The systems.", fx=30, fy=68, font_size_figma=28,
-                    weight=800, color=CMYK_TEXT_DARK, tracking=-0.8)
+    tracked_caps(c, "Product Reference", fx=30, fy=40, size=7.5, color=HUBSS_ORANGE)
+    draw_text_block(c, "The systems.", fx=30, fy=68, font_size_figma=26,
+                    weight=800, color=CMYK_TEXT_DARK, tracking=-0.5)
     # Product reference — kept in sync with CC.PRODUCTS (11 products).
     # Aquaphalt removed (per Vernon — product discontinued). FastPatch removed
     # (not in PRODUCTS line). DuraShield re-labelled "Coating" (Doug correction —
@@ -1115,7 +1120,7 @@ def page_technical_reference(c):
                         weight=800, color=CMYK_TEXT_DARK)
         tracked_caps(c, key, fx=180, fy=y, size=6.5,
                      color=HUBSS_ORANGE, max_w_figma=120)
-        draw_text_block(c, desc, fx=270, fy=y, font_size_figma=8.5,
+        draw_text_block(c, desc, fx=270, fy=y, font_size_figma=8.6,
                         color=CMYK_TEXT_MID, max_w_figma=160)
         thin_rule(c, fx=30, fy=y + 14, w_figma=390, color=CMYK_TEXT_FAINT,
                   weight_pt=0.3)
@@ -1132,16 +1137,16 @@ def page_cities(c):
                     weight=800, color=HUBSS_ORANGE, tracking=-1.2,
                     max_w_figma=390)
     draw_text_block(c, "provinces and territories", fx=30, fy=98,
-                    font_size_figma=9, color=CMYK_TEXT_DARK,
-                    max_w_figma=280, leading_figma=13)
+                    font_size_figma=10, color=CMYK_TEXT_DARK,
+                    max_w_figma=280, leading_figma=14)
     draw_text_block(c, "specify HUB systems by name, coast to coast.", fx=30, fy=113,
-                    font_size_figma=9, color=CMYK_TEXT_MID,
-                    max_w_figma=280, leading_figma=13)
+                    font_size_figma=10, color=CMYK_TEXT_MID,
+                    max_w_figma=280, leading_figma=14)
     tracked_caps(c, "From Halifax to Vancouver", fx=30, fy=133, size=5.5,
                  color=CMYK_TEXT_FAINT, max_w_figma=390)
     thin_rule(c, fx=30, fy=150, w_figma=390, color=CMYK_TEXT_FAINT,
               weight_pt=0.3)
-    draw_text_block(c, "A partial list", fx=30, fy=158, font_size_figma=7,
+    draw_text_block(c, "A partial list", fx=30, fy=158, font_size_figma=7.8,
                     color=CMYK_TEXT_MID, align="right", max_w_figma=390,
                     )
     # City list — 2 columns, 8px type, 13px spacing
@@ -1150,11 +1155,11 @@ def page_cities(c):
     for i in range(0, len(cities), 2):
         if y > 418:
             break
-        draw_text_block(c, cities[i], fx=30, fy=y, font_size_figma=8,
+        draw_text_block(c, cities[i], fx=30, fy=y, font_size_figma=8.6,
                         color=CMYK_TEXT_DARK, max_w_figma=185)
         if i + 1 < len(cities):
             draw_text_block(c, cities[i + 1], fx=235, fy=y,
-                            font_size_figma=8, color=CMYK_TEXT_DARK,
+                            font_size_figma=8.6, color=CMYK_TEXT_DARK,
                             max_w_figma=175)
         y += 13
 
@@ -1166,19 +1171,19 @@ def page_lunch_learn(c):
     fill_bleed(c, HUBSS_NAVY_RICH)
     LX = 30
     thin_rule(c, fx=LX, fy=56, w_figma=32, color=HUBSS_ORANGE, weight_pt=2.5)
-    tracked_caps(c, "An Invitation", fx=LX, fy=66, size=7.0,
+    tracked_caps(c, "An Invitation", fx=LX, fy=66, size=7.5,
                  color=HUBSS_ORANGE, max_w_figma=300)
     draw_text_block(c, "Lunch is on us.", fx=LX, fy=92, font_size_figma=42,
-                    weight=800, color=HUBSS_WHITE, tracking=-1.2,
-                    max_w_figma=390, leading_figma=46)
+                    weight=800, color=HUBSS_WHITE, tracking=-0.8,
+                    max_w_figma=390, leading_figma=45)
     draw_text_block(c, "Your spec is free.", fx=LX, fy=142, font_size_figma=42,
-                    weight=800, color=HUBSS_ORANGE, tracking=-1.2,
-                    max_w_figma=390, leading_figma=46)
+                    weight=800, color=HUBSS_ORANGE, tracking=-0.8,
+                    max_w_figma=390, leading_figma=45)
     draw_text_block(c,
         "Forty-five minutes of technical depth, real project walkthroughs, "
         "and CE-credit education — brought to your office over lunch.",
-        fx=LX, fy=214, font_size_figma=11, color=CMYK_ON_DARK_BODY,
-        max_w_figma=300, leading_figma=17)
+        fx=LX, fy=214, font_size_figma=12.5, color=CMYK_ON_DARK_BODY,
+        max_w_figma=300, leading_figma=15.6)
     items = [
         "Tailored to your live and upcoming projects",
         "CE-credit continuing education for your team",
@@ -1187,9 +1192,9 @@ def page_lunch_learn(c):
     vy = 272
     for it in items:
         orange_dot(c, fx=LX + 1, fy=vy + 4, r_figma=1.5)
-        draw_text_block(c, it, fx=LX + 12, fy=vy, font_size_figma=9.5,
+        draw_text_block(c, it, fx=LX + 12, fy=vy, font_size_figma=10,
                         weight=600, color=HUBSS_WHITE, max_w_figma=300,
-                        leading_figma=13)
+                        leading_figma=14)
         vy += 22 + (8 if len(it) > 36 else 0)
     qr_path = ROOT / "assets" / "hubss-lunch-learn-qr.png"
     if qr_path.exists():
@@ -1203,18 +1208,18 @@ def page_lunch_learn(c):
         draw_image_box(c, str(qr_path), qpx, qpy, QS * SCALE, QS * SCALE,
                        cover=False, convert_to_cmyk=False)
         tracked_caps(c, "Scan to book", fx=QF_X - PAD, fy=QF_Y + QS + PAD + 5,
-                     size=6.0, color=CMYK_ON_DARK_BODY,
+                     size=6.5, color=CMYK_ON_DARK_BODY,
                      max_w_figma=QS + 2 * PAD, align="center")
     cta_w, cta_h, cta_x, cta_y = 200, 24, LX, 376
     cx, cy = figma_to_pdf(cta_x, cta_y + cta_h)
     c.setFillColor(HUBSS_ORANGE)
     c.roundRect(cx, cy, cta_w * SCALE, cta_h * SCALE, 4 * SCALE, stroke=0, fill=1)
     draw_text_block(c, "BOOK NOW   ·   hubss.com/lnl", fx=cta_x,
-                    fy=cta_y + cta_h / 2 - 4.5, font_size_figma=8.5,
+                    fy=cta_y + cta_h / 2 - 4.5, font_size_figma=8.6,
                     weight=800, color=HUBSS_WHITE, tracking=1.2,
                     max_w_figma=cta_w, align="center")
     tracked_caps(c, "Cleve Stordy 604.309.8212    ·    Doug Bain 416.540.9287",
-                 fx=LX, fy=418, size=6.0, color=CMYK_ON_DARK_BODY, max_w_figma=390)
+                 fx=LX, fy=418, size=6.5, color=CMYK_ON_DARK_BODY, max_w_figma=390)
 
 
 def page_contact(c):
@@ -1228,62 +1233,62 @@ def page_contact(c):
     c.setFillColor(HUBSS_NAVY_RICH)
     c.rect(0, band_pdf_y, PAGE_W, BAND_H * SCALE + BLEED, stroke=0, fill=1)
 
-    tracked_caps(c, "Two Offices. One Network.", fx=30, fy=14, size=5.5,
+    tracked_caps(c, "Two Offices. One Network.", fx=30, fy=14, size=7.5,
                  color=HUBSS_ORANGE, max_w_figma=390)
     thin_rule(c, fx=30, fy=30, w_figma=24, color=HUBSS_ORANGE, weight_pt=2.0)
-    draw_text_block(c, "Speak with HUB.", fx=30, fy=44, font_size_figma=22,
-                    weight=800, color=HUBSS_WHITE, tracking=-0.6,
+    draw_text_block(c, "Speak with HUB.", fx=30, fy=44, font_size_figma=21,
+                    weight=800, color=HUBSS_WHITE, tracking=-0.4,
                     max_w_figma=390)
 
     # Content zone below navy band
     draw_text_block(c, "Every project starts with a conversation.",
                     fx=30, fy=96, font_size_figma=10, color=CMYK_TEXT_MID,
-                    max_w_figma=390, leading_figma=15)
+                    max_w_figma=390, leading_figma=14)
     thin_rule(c, fx=30, fy=128, w_figma=390, color=CMYK_TEXT_FAINT,
               weight_pt=0.4)
 
     # West
     tracked_caps(c, "Western Canada", fx=30, fy=144, size=5.5,
                  color=HUBSS_ORANGE, max_w_figma=188)
-    draw_text_block(c, "Cleve Stordy", fx=30, fy=158, font_size_figma=20,
+    draw_text_block(c, "Cleve Stordy", fx=30, fy=158, font_size_figma=21,
                     weight=800, color=CMYK_TEXT_DARK, tracking=-0.4,
                     max_w_figma=188)
     draw_text_block(c, "cleve.stordy@hubss.com", fx=30, fy=194,
-                    font_size_figma=8.5, color=CMYK_TEXT_DARK,
+                    font_size_figma=8.6, color=CMYK_TEXT_DARK,
                     max_w_figma=188)
     draw_text_block(c, "604.309.8212", fx=30, fy=212,
-                    font_size_figma=8.5, color=CMYK_TEXT_MID,
+                    font_size_figma=8.6, color=CMYK_TEXT_MID,
                     max_w_figma=188)
     draw_text_block(c, "Ladysmith, British Columbia", fx=30, fy=230,
-                    font_size_figma=7, color=CMYK_TEXT_MID,
+                    font_size_figma=7.8, color=CMYK_TEXT_MID,
                     max_w_figma=188)
 
     # East
     tracked_caps(c, "Eastern Canada", fx=242, fy=144, size=5.5,
                  color=HUBSS_ORANGE, max_w_figma=178)
-    draw_text_block(c, "Doug Bain", fx=242, fy=158, font_size_figma=20,
+    draw_text_block(c, "Doug Bain", fx=242, fy=158, font_size_figma=21,
                     weight=800, color=CMYK_TEXT_DARK, tracking=-0.4,
                     max_w_figma=178)
     draw_text_block(c, "doug.bain@hubss.com", fx=242, fy=194,
-                    font_size_figma=8.5, color=CMYK_TEXT_DARK,
+                    font_size_figma=8.6, color=CMYK_TEXT_DARK,
                     max_w_figma=178)
     draw_text_block(c, "416.540.9287", fx=242, fy=212,
-                    font_size_figma=8.5, color=CMYK_TEXT_MID,
+                    font_size_figma=8.6, color=CMYK_TEXT_MID,
                     max_w_figma=178)
-    draw_text_block(c, "Milton, Ontario", fx=242, fy=230, font_size_figma=7,
+    draw_text_block(c, "Milton, Ontario", fx=242, fy=230, font_size_figma=7.8,
                     color=CMYK_TEXT_MID, max_w_figma=178)
 
     thin_rule(c, fx=30, fy=258, w_figma=390, color=CMYK_TEXT_FAINT,
               weight_pt=0.4)
 
     # URL — single bold destination
-    draw_text_block(c, "hubss.com", fx=30, fy=272, font_size_figma=16,
-                    weight=800, color=HUBSS_ORANGE, tracking=-0.4,
+    draw_text_block(c, "hubss.com", fx=30, fy=272, font_size_figma=17.5,
+                    weight=800, color=HUBSS_ORANGE, tracking=-0.35,
                     max_w_figma=390)
     draw_text_block(c,
         "Spec sheets · project gallery · installer network · lunch + learn booking",
-        fx=30, fy=304, font_size_figma=8, color=CMYK_TEXT_MID,
-        max_w_figma=390, leading_figma=12)
+        fx=30, fy=304, font_size_figma=8.6, color=CMYK_TEXT_MID,
+        max_w_figma=390, leading_figma=11.2)
     thin_rule(c, fx=30, fy=338, w_figma=390, color=CMYK_TEXT_FAINT,
               weight_pt=0.4)
     draw_text_block(c,
@@ -1342,7 +1347,7 @@ def page_back(c):
 
     # Tagline directly below wordmark
     draw_text_block(c, "Canada's Leading Decorative Pavement Solutions",
-                    fx=25, fy=195, font_size_figma=8.5, color=HUBSS_WHITE,
+                    fx=25, fy=195, font_size_figma=10, color=HUBSS_WHITE,
                     align="center", max_w_figma=400)
     # Slim orange rule
     rule_w = 32
@@ -1350,13 +1355,13 @@ def page_back(c):
     c.setFillColor(HUBSS_ORANGE)
     c.rect(rx, ry, rule_w * SCALE, 1.2, stroke=0, fill=1)
     # URL
-    draw_text_block(c, "hubss.com", fx=25, fy=228, font_size_figma=11,
+    draw_text_block(c, "hubss.com", fx=25, fy=228, font_size_figma=10,
                     weight=600, color=HUBSS_WHITE, align="center",
                     max_w_figma=400, tracking=1.4)
 
     # --- MIDDLE ZONE: placeholder QR + caption, centred ---
     tracked_caps(c, "Scan to view the virtual catalogue.",
-                 fx=25, fy=278, size=6.0,
+                 fx=25, fy=278, size=6.5,
                  color=HUBSS_WHITE, align="center", max_w_figma=400)
     qr_path = ROOT / "assets" / "hubss-lunch-learn-qr.png"
     qr_size = 70
@@ -1384,12 +1389,12 @@ def page_back(c):
 
     # --- BOTTOM ZONE: phones + copyright ---
     draw_text_block(c, "West / Prairies   604.309.8212",
-                    fx=25, fy=400, font_size_figma=7.0,
+                    fx=25, fy=400, font_size_figma=7.8,
                     color=CMYK_ON_DARK_BODY, align="center", max_w_figma=400)
     draw_text_block(c, "Central / Maritimes   416.540.9287",
-                    fx=25, fy=414, font_size_figma=7.0,
+                    fx=25, fy=414, font_size_figma=7.8,
                     color=CMYK_ON_DARK_BODY, align="center", max_w_figma=400)
-    draw_text_block(c, "(c) 2026 HUB Surface Systems",
+    draw_text_block(c, "© 2026 HUB Surface Systems",
                     fx=25, fy=430, font_size_figma=6.5,
                     color=CMYK_ON_DARK_MID, align="center",
                     max_w_figma=400, tracking=1.0)
@@ -1407,10 +1412,10 @@ def page_closing_manifesto(c):
                  color=HUBSS_ORANGE, max_w_figma=370)
     draw_text_block(c, "The public realm.", fx=40, fy=130,
                     font_size_figma=42, weight=800, color=CMYK_TEXT_DARK,
-                    tracking=-1.2, max_w_figma=370)
+                    tracking=-0.8, max_w_figma=370)
     draw_text_block(c, "Ours to build right.", fx=40, fy=178,
                     font_size_figma=42, weight=800, color=HUBSS_ORANGE,
-                    tracking=-1.2, max_w_figma=370)
+                    tracking=-0.8, max_w_figma=370)
     # Orange accent rule between headline and body
     thin_rule(c, fx=40, fy=232, w_figma=48, color=HUBSS_ORANGE, weight_pt=2.0)
     draw_text_block(
@@ -1418,16 +1423,16 @@ def page_closing_manifesto(c):
         "Every surface we build is walked over, driven on, played at, "
         "and lived around. That is the standard we hold ourselves to. "
         "Spec the surface. Watch it work. Walk over it for twenty years.",
-        fx=40, fy=252, font_size_figma=11, weight=500,
-        color=CMYK_TEXT_DARK, max_w_figma=370, leading_figma=18,
+        fx=40, fy=252, font_size_figma=12.5,
+        color=CMYK_TEXT_DARK, max_w_figma=370, leading_figma=15.6,
         )
     # SPECIFIED / INSTALLED / BACKED — horizontal trio
     trio_y = 370
-    tracked_caps(c, "Specified.", fx=40, fy=trio_y, size=8.0,
+    tracked_caps(c, "Specified.", fx=40, fy=trio_y, size=8.5,
                  color=CMYK_TEXT_DARK, max_w_figma=130)
-    tracked_caps(c, "Installed.", fx=165, fy=trio_y, size=8.0,
+    tracked_caps(c, "Installed.", fx=165, fy=trio_y, size=8.5,
                  color=CMYK_TEXT_DARK, max_w_figma=130, align="center")
-    tracked_caps(c, "Backed.", fx=295, fy=trio_y, size=8.0,
+    tracked_caps(c, "Backed.", fx=295, fy=trio_y, size=8.5,
                  color=HUBSS_ORANGE, max_w_figma=130, align="right")
     thin_rule(c, fx=40, fy=393, w_figma=370, color=CMYK_TEXT_FAINT,
               weight_pt=0.3)
@@ -1437,13 +1442,13 @@ def page_closing_manifesto(c):
 
 def page_service_promise(c):
     fill_bleed(c, HUBSS_WHITE)
-    tracked_caps(c, "How We Work", fx=30, fy=50, size=7.0, color=HUBSS_ORANGE)
-    draw_text_block(c, "Specified.", fx=30, fy=80, font_size_figma=32,
-                    weight=800, color=CMYK_TEXT_DARK, tracking=-1.0)
-    draw_text_block(c, "Installed.", fx=30, fy=120, font_size_figma=32,
-                    weight=800, color=CMYK_TEXT_DARK, tracking=-1.0)
-    draw_text_block(c, "Backed.", fx=30, fy=160, font_size_figma=32,
-                    weight=800, color=HUBSS_ORANGE, tracking=-1.0)
+    tracked_caps(c, "How We Work", fx=30, fy=50, size=7.5, color=HUBSS_ORANGE)
+    draw_text_block(c, "Specified.", fx=30, fy=80, font_size_figma=31,
+                    weight=800, color=CMYK_TEXT_DARK, tracking=-0.6)
+    draw_text_block(c, "Installed.", fx=30, fy=120, font_size_figma=31,
+                    weight=800, color=CMYK_TEXT_DARK, tracking=-0.6)
+    draw_text_block(c, "Backed.", fx=30, fy=160, font_size_figma=31,
+                    weight=800, color=HUBSS_ORANGE, tracking=-0.6)
     steps = [
         ("01", "Consultation",
          "Lunch & Learn, project walkthrough, or full spec review. We meet at your office or your project site."),
@@ -1457,10 +1462,10 @@ def page_service_promise(c):
     y = 220
     for num, claim, detail in steps:
         tracked_caps(c, num, fx=30, fy=y, size=6.5, color=HUBSS_ORANGE, max_w_figma=30)
-        draw_text_block(c, claim, fx=70, fy=y, font_size_figma=11,
+        draw_text_block(c, claim, fx=70, fy=y, font_size_figma=14.5,
                         weight=800, color=CMYK_TEXT_DARK, tracking=-0.3, max_w_figma=350)
-        draw_text_block(c, detail, fx=70, fy=y + 16, font_size_figma=8.5,
-                        color=CMYK_TEXT_MID, max_w_figma=350, leading_figma=12)
+        draw_text_block(c, detail, fx=70, fy=y + 16, font_size_figma=8.6,
+                        color=CMYK_TEXT_MID, max_w_figma=350, leading_figma=11.2)
         thin_rule(c, fx=30, fy=y + 46, w_figma=390, color=CMYK_TEXT_FAINT, weight_pt=0.3)
         y += 52
 
@@ -1478,12 +1483,12 @@ def page_quiet_mark(c):
                        cover=False, convert_to_cmyk=False)
     tracked_caps(c, "HUB Surface Systems", fx=25, fy=270, size=7.5,
                  color=CMYK_TEXT_DARK, align="center", max_w_figma=400)
-    tracked_caps(c, "Established 1994   .   Coast to Coast", fx=25, fy=290, size=6.0,
+    tracked_caps(c, "Established 1994   ·   Coast to Coast", fx=25, fy=290, size=6.5,
                  color=CMYK_TEXT_FAINT, align="center", max_w_figma=400)
     rx, ry = figma_to_pdf((450 - 30) / 2, 320)
     c.setFillColor(HUBSS_ORANGE)
     c.rect(rx, ry, 30 * SCALE, 1.2, stroke=0, fill=1)
-    draw_text_block(c, "Thank you.", fx=25, fy=350, font_size_figma=14,
+    draw_text_block(c, "Thank you.", fx=25, fy=350, font_size_figma=14.5,
                     color=CMYK_TEXT_MID, align="center", max_w_figma=400,
                     )
 
@@ -1497,7 +1502,7 @@ def page_hub_numbers(c):
     Same data as the Why Stats cells, recomposed at display scale on navy."""
     fill_bleed(c, HUBSS_NAVY_RICH)
     corner_accent(c, max_alpha=70, size_figma=260)
-    tracked_caps(c, "By the Numbers", fx=30, fy=40, size=6.5,
+    tracked_caps(c, "By the Numbers", fx=30, fy=40, size=7.5,
                  color=HUBSS_ORANGE, max_w_figma=390)
     thin_rule(c, fx=30, fy=58, w_figma=32, color=HUBSS_ORANGE, weight_pt=2.0)
 
@@ -1512,16 +1517,16 @@ def page_hub_numbers(c):
         gx = 30 + col * (cell_w + 8)
         gy = start_y + row * (cell_h + 18)
         # Stat numeral — orange display
-        draw_text_block(c, num, fx=gx, fy=gy, font_size_figma=40,
-                        weight=800, color=HUBSS_ORANGE, tracking=-1.4,
+        draw_text_block(c, num, fx=gx, fy=gy, font_size_figma=42,
+                        weight=800, color=HUBSS_ORANGE, tracking=-0.8,
                         max_w_figma=cell_w)
         # Label — white caps
-        tracked_caps(c, label, fx=gx, fy=gy + 64, size=7.0,
+        tracked_caps(c, label, fx=gx, fy=gy + 64, size=6.5,
                      color=HUBSS_WHITE, max_w_figma=cell_w)
         # Sub-detail — softer white
-        draw_text_block(c, sub, fx=gx, fy=gy + 82, font_size_figma=7.5,
+        draw_text_block(c, sub, fx=gx, fy=gy + 82, font_size_figma=7.8,
                         color=CMYK_ON_DARK_BODY, max_w_figma=cell_w - 8,
-                        leading_figma=11)
+                        leading_figma=10.1)
 
     # Footer line
     thin_rule(c, fx=30, fy=394, w_figma=390, color=CMYK_ON_DARK_RULE,
@@ -1536,24 +1541,24 @@ def page_statement(c):
     between the proof-grid and the catalogue proper. White space carries
     the meaning; type is the only element."""
     fill_bleed(c, HUBSS_WHITE)
-    tracked_caps(c, "Position", fx=30, fy=70, size=6.5,
+    tracked_caps(c, "Position", fx=30, fy=70, size=7.5,
                  color=HUBSS_ORANGE, max_w_figma=390)
     thin_rule(c, fx=30, fy=88, w_figma=24, color=HUBSS_ORANGE, weight_pt=2.0)
 
     draw_text_block(c, "Asphalt is the canvas.", fx=30, fy=160,
-                    font_size_figma=28, weight=800, color=CMYK_TEXT_DARK,
-                    tracking=-0.8, max_w_figma=390, leading_figma=34)
+                    font_size_figma=31, weight=800, color=CMYK_TEXT_DARK,
+                    tracking=-0.6, max_w_figma=390, leading_figma=33.5)
     draw_text_block(c, "The city is the gallery.", fx=30, fy=200,
-                    font_size_figma=28, weight=800, color=HUBSS_ORANGE,
-                    tracking=-0.8, max_w_figma=390, leading_figma=34)
+                    font_size_figma=31, weight=800, color=HUBSS_ORANGE,
+                    tracking=-0.6, max_w_figma=390, leading_figma=33.5)
 
     draw_text_block(c,
         "Every crosswalk we install is a small public artwork. "
         "Every BRT lane, a piece of civic identity. "
         "Every Indigenous medallion, a recognition that streets carry meaning "
         "long after the paint fades.",
-        fx=30, fy=275, font_size_figma=11, color=CMYK_TEXT_MID,
-         max_w_figma=350, leading_figma=18)
+        fx=30, fy=275, font_size_figma=10, color=CMYK_TEXT_MID,
+         max_w_figma=350, leading_figma=14)
 
     thin_rule(c, fx=30, fy=400, w_figma=48, color=HUBSS_ORANGE, weight_pt=2.0)
     tracked_caps(c, "HUB Surface Systems   ·   Established 1994",
@@ -1583,29 +1588,29 @@ def page_doublespread_right(c, label, caption, *, right_style=None,
         thin_rule(c, fx=28, fy=80, w_figma=32, color=HUBSS_ORANGE,
                   weight_pt=2.0)
         tracked_caps(c, "Thirty years in the making.", fx=28, fy=96,
-                     size=6.0, color=HUBSS_ORANGE, max_w_figma=394)
+                     size=6.5, color=HUBSS_ORANGE, max_w_figma=394)
         draw_text_block(c, "Built to", fx=28, fy=116, font_size_figma=52,
-                        weight=800, color=HUBSS_WHITE, tracking=-1.4,
+                        weight=800, color=HUBSS_WHITE, tracking=-1.0,
                         max_w_figma=394)
         draw_text_block(c, "outlast.", fx=28, fy=180, font_size_figma=52,
-                        weight=800, color=HUBSS_ORANGE, tracking=-1.4,
+                        weight=800, color=HUBSS_ORANGE, tracking=-1.0,
                         max_w_figma=394)
         thin_rule(c, fx=28, fy=248, w_figma=394, color=CMYK_ON_DARK_RULE,
                   weight_pt=0.4)
         draw_text_block(c,
             "30+ years   ·   1,000+ projects   ·   10 provinces",
-            fx=28, fy=262, font_size_figma=7.5, color=CMYK_ON_DARK_BODY,
-            align="center", max_w_figma=394, leading_figma=11)
+            fx=28, fy=262, font_size_figma=7.8, color=CMYK_ON_DARK_BODY,
+            align="center", max_w_figma=394, leading_figma=10.1)
         thin_rule(c, fx=28, fy=288, w_figma=394, color=CMYK_ON_DARK_RULE,
                   weight_pt=0.3)
         draw_text_block(c, "The surface beneath every city we've built.",
-                        fx=28, fy=308, font_size_figma=12,
+                        fx=28, fy=308, font_size_figma=12.5,
                         color=HUBSS_WHITE, max_w_figma=360,
                         )
         draw_text_block(c,
             "Spec the surface. Watch it work. Walk over it for twenty years.",
-            fx=28, fy=332, font_size_figma=8.5, color=CMYK_ON_DARK_BODY,
-            max_w_figma=360, leading_figma=13)
+            fx=28, fy=332, font_size_figma=8.6, color=CMYK_ON_DARK_BODY,
+            max_w_figma=360, leading_figma=11.2)
         thin_rule(c, fx=28, fy=404, w_figma=394, color=HUBSS_ORANGE,
                   weight_pt=1.5)
         tracked_caps(c, "hubss.com", fx=28, fy=414, size=7.5,
@@ -1625,9 +1630,9 @@ def page_doublespread_right(c, label, caption, *, right_style=None,
     # them, swap the photo rather than reintroducing a gradient.
     tracked_caps(c, label, fx=28, fy=350, size=6.5,
                  color=HUBSS_ORANGE, max_w_figma=394)
-    draw_text_block(c, caption, fx=28, fy=370, font_size_figma=14,
-                    weight=800, color=HUBSS_WHITE, tracking=-0.4,
-                    max_w_figma=394, leading_figma=18)
+    draw_text_block(c, caption, fx=28, fy=370, font_size_figma=14.5,
+                    weight=800, color=HUBSS_WHITE, tracking=-0.3,
+                    max_w_figma=394, leading_figma=16)
 
 
 def page_network_open(c, photo_path):
@@ -1648,26 +1653,26 @@ def page_network_open(c, photo_path):
               color=SECTION_ACCENTS["Network"], weight_pt=2.0)
     tracked_caps(c, "Section Four", fx=28, fy=322, size=7.5,
                  color=HUBSS_WHITE, max_w_figma=394)
-    draw_text_block(c, "Network.", fx=28, fy=350, font_size_figma=44,
-                    weight=800, color=HUBSS_WHITE, tracking=-1.4,
-                    max_w_figma=394, leading_figma=46)
+    draw_text_block(c, "Network.", fx=28, fy=350, font_size_figma=52,
+                    weight=800, color=HUBSS_WHITE, tracking=-1.0,
+                    max_w_figma=394, leading_figma=56)
 
 
 def page_field_notes(c):
     """Ruled notepad page — a physical place for specifiers to record
     project details. Sits after Contact so it directly faces it on a spread."""
     fill_bleed(c, HUBSS_WHITE)
-    tracked_caps(c, "Field Notes", fx=30, fy=40, size=6.5,
+    tracked_caps(c, "Field Notes", fx=30, fy=40, size=7.5,
                  color=HUBSS_ORANGE, max_w_figma=390)
     thin_rule(c, fx=30, fy=58, w_figma=24, color=HUBSS_ORANGE, weight_pt=2.0)
-    draw_text_block(c, "Project notes.", fx=30, fy=78, font_size_figma=24,
-                    weight=800, color=CMYK_TEXT_DARK, tracking=-0.6,
+    draw_text_block(c, "Project notes.", fx=30, fy=78, font_size_figma=26,
+                    weight=800, color=CMYK_TEXT_DARK, tracking=-0.5,
                     max_w_figma=390)
     draw_text_block(c,
         "A place to capture surface specifications, project locations, "
         "and follow-up actions while the book is in front of you.",
-        fx=30, fy=116, font_size_figma=8.5, color=CMYK_TEXT_MID,
-        max_w_figma=370, leading_figma=13)
+        fx=30, fy=116, font_size_figma=8.6, color=CMYK_TEXT_MID,
+        max_w_figma=370, leading_figma=11.2)
 
     # Ruled lines — 14 rules from y=160 to y=410, 18px spacing
     rule_y = 162

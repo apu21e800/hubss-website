@@ -65,13 +65,27 @@ Status key: ☐ planned · ◐ in progress · ☑ done · ⏸ blocked (needs dec
 | p31 PreMark | verify thickness | 125mil standard / 90mil ViziGrip | PPG TDS |
 | p126 ref table | — | match spec grids + claims CSV | data sheets |
 
-## §7 — Old-catalogue reconciliation  ☐
+## §7 — Old-catalogue reconciliation  ☑ EXECUTED (Phase 2)
 
 | Item | Action | Source |
 |---|---|---|
-| StreetPrint process strip | rebuild Reheat→Stamp→Coat on/facing p18 | old p17 + D: install photos |
-| Location tags | audit every photo carries CITY, PROV | IMAGE-MANIFEST.csv |
-| Ennis-Flint co-branding | leave out (flagged) | ISSUES.md #1 (decisions) |
+| StreetPrint process strip | **Built** — "Reheat. Stamp. Coat." true facing spread at pp20–21 directly after the StreetPrint spec page; current typography; the real install series (one strata job start-to-finish: StreetHeat reheater + template lay → compactor stamping → StreetBond coat); recto payoff = gold custom-mandala result (streetprint-77, 257 DPI) with short navy wash + white caption. **+2 pages absorbed by the mod-4 padding (Notes 3 → 1; total stays 140pp)** per checkpoint ruling | old p17; installation-images series |
+| Location tags (§7.4) | **System live** — app cards render `location` in the project-card meta style. Tagged where verifiable only: Crosswalks = Richmond Hill ON (street sign in frame), Community Branding = Port Moody BC (Stage-B documented). 15 remaining app-photo IDs flagged for Doug (ISSUES). Projects already carry locations on cards | catalog_content.py |
+| Ennis-Flint co-branding | leave out (flagged) | ISSUES.md (decisions) |
+| Old-book gap check (72 screenshots) | still pending — "old cat" folder path not provided | ISSUES.md |
+
+## §8 — Quality pass + navigation  ☑ EXECUTED (Phase 3)
+
+| Item | Finding / action | Source |
+|---|---|---|
+| Cross-block text overlap | **ZERO** across all 140 pages | qa_sweep.py |
+| Type minimums | Body class ≥ 9.1pt ✓. The 5.3–7.2pt tracked-caps **micro-type is the established 50-version system** (~4,100 spans: eyebrows, folios, footers, spec labels, chip data) — flagged as a Vernon decision rather than redesigned. Master-prompt floor (7.5pt captions) conflicts with the locked system | qa_sweep.py histogram |
+| Safe area | Only the spec-page eyebrow class sits 0.7pt (0.25mm) into the conservative 0.25″ buffer — present since v29, not a cut risk; printer to confirm | qa_sweep.py |
+| White-on-photo contrast | 1,355 flags triaged → **7 real candidates** → 2 fixed by photo choice (v45 rule), 2 fixed by strengthening the sanctioned opener wash (230→260 band, α165→180), 1 false positive (BOOK NOW on orange pill), 2 borderline left for Vernon (p39/p77 DPS captions, medians 155–163) | qa_sweep.py + v45 ruling |
+| "Every Mark" DPS right | `editorial_projects_r` undefined → fallback silently **duplicated the Reference opener's photo** (bike-lanes-09) + caption on bright green. Now `crosswalks-01` (macro of a stamped mark, dark lower-left) | build() fallback audit |
+| "Built to Last" DPS right | caption on 219/255 (book's worst flag) → `streetprint-69` ("the surface underfoot, the city above," literally; dark lower-left) | qa_sweep.py |
+| Section navigation | **Colour-coded nav live**: SECTION_ACCENTS (Products orange / Applications gold / Projects burnt / Network steel / Reference sand — all legible on white + navy wash); page-edge running tab (outer edge, staggered height, bleeds to cut) on every section page; TOC row dots + divider dot/rule carry the same accent; back-matter unmarked | §8 mandate |
+| Applications order | Reordered to the civic arc: Crosswalks → Ped Safety → Bike → Bus → Calming → Parks → Playgrounds → Splash → Sport → Public Spaces → Public Art → Community Branding → LEED → Commercial → Townhomes → Driveways → Parking | §8 grouping note |
 
 ## §3 — Defects / dedup / mismatches  ◐ (Session 2: source-level verified + 1 fix; visual sweep on final v55 next)
 

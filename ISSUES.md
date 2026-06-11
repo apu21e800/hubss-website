@@ -110,6 +110,53 @@ Confirmed from v54 page alt-text; cross-referenced in `CLAIMS-VERIFICATION.csv`:
 
 ---
 
+## 🟠 §7.4 — application-photo locations still needing IDs (Doug/Vern)
+
+The location-tag system is live (app cards render `location` in the
+project-card meta style). Tagged so far — verifiable only: **Crosswalks =
+Richmond Hill, ON** (West Beaver Creek Rd sign in frame); **Community
+Branding = Port Moody, BC** (Stage-B documented). The other 15 application
+photos need a confirmed install location before tagging (never fabricate):
+Bike Lanes (bike-lanes-14) · Bus Lanes (bus-lanes-20) · Parking Lots
+(parking-lots-01) · Parks & Paths (parks-paths-04) · Playgrounds
+(playgrounds-01) · Private Driveways (residential-driveways-01) · Sport
+Courts (sport-courts-01) · Splash Pads (splash-pads-01) · Public Spaces
+(public-spaces-08) · Commercial Spaces (commercial-spaces-01) · Townhomes
+(townhomes-01) · Pedestrian Safety (crosswalks-18) · Traffic Calming
+(traffic-calming-01) · LEED (leed-urban-heat-island-01) · Public Art
+(community-branding-11). Also: §7.3 result shot (streetprint-77 gold
+mandala) and the process-series strata site — confirm locations if known.
+Project pages already carry locations on their cards (§7.4 satisfied).
+
+## 🟠 §5 all-logos variant — blocked on 8 missing marks (Doug)
+
+Mock at `catalogue-finishing/mocks/all-logos-variant/`. Clean HUB-usable
+marks exist for only **3/11 products** (StreetBond ®, StreetBondSR ™,
+StreetPrint ®). DecoMark/DuraTherm/TrafficPatterns art in the libraries is
+TrafficScapes-branded (`TS-*-Preferred_logo….pdf`) — excluded by the
+standing Ennis-Flint decision. TPXD, MMAX, DuraShield, PreMark, AirMark
+have no product mark at all. All-or-nothing cannot ship unless Doug
+supplies the 8 missing light-background marks (or reverses the EF ruling).
+
+## 🟠 §8 sweep — items for Vernon's eye (not unilaterally changed)
+
+1. **Micro-type vs the master-prompt floor.** The book's locked type system
+   runs ~4,100 tracked-caps spans at 5.3–7.2 pt (eyebrows, folios, footers,
+   spec labels, colour-chip data) — under the prompt's 7.5 pt caption floor
+   but established across 50 versions and highly legible as wide-tracked
+   caps. Recommend: accept the system (it IS the book's voice); revisit only
+   if the printer's proof shows fill-in at 5.3 pt.
+2. **Spec-page eyebrow sits 0.7 pt (0.25 mm) inside the 0.25″ safe buffer**
+   (every product page, since v29). Not a realistic cut risk; confirm
+   against the printer's tolerance with the §9 trim/bleed questions.
+3. **Three borderline white-on-photo spots left for your eye** (post-fix
+   sweep — everything else passed or was fixed): p39 "Designed for the
+   city…" (bg median 163/255) and p77 "Ten provinces. One standard."
+   (155/255) — DPS captions, v45 rule says photo-swap not scrim, both read
+   at bold 14 pt; p79 "SECTION THREE" eyebrow (159/255, improved from 171
+   by the deeper opener wash — the big "Projects." title below is solid).
+   If any bother you on the preview: darker-photo swaps on request.
+
 ## 🟡 Asset / path discrepancies found
 
 1. **StreetBond logo filename.** Prompt references `streetbond-Full_Color-wh.png` (underscores). Actual file is `streetbond-Full Color-wh.png` (spaces) in `…\Product logos final\StreetBond\`. Same asset — note the real name when placing. Reversed variants present: `StreetBondSR_white.png`, `StreetBondSR_black.png`, `streetbond-Full Color-white lettering.png` (candidate for the dark band).

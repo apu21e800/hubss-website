@@ -11,7 +11,7 @@ import io
 # any worktree (was hardcoded to _wt-catalogue-finishing for the v54 run).
 WT = Path(__file__).resolve().parents[1]
 PDF = WT / "catalog-print-build" / "output" / "HUBSS_Catalogue_2026_v50.pdf"
-OUT = WT / "public" / "catalogue" / "v55"  # v55 = final-revision pass (§4 colour spread, 140pp)
+OUT = WT / "public" / "catalogue" / "v56"  # v56 = final-revision pass phase 2-3 (§5 logo, §7 process strip + location tags)
 OUT.mkdir(parents=True, exist_ok=True)
 SIZE = 1800
 

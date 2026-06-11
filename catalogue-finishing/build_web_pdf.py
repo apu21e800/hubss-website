@@ -23,12 +23,13 @@ def R(x0, y0, x1, y1):
     return fitz.Rect(x0 * S, y0 * S, x1 * S, y1 * S)
 
 # page_index (0-based) -> list of (rect, uri).  140pp layout after the §4
-# colour-spread insertion at pp26-27 (+2 to every page ≥26, +2 more Notes
-# spacers from the mod-4 padding): L&L (V3) p130, Contact p131, Back p140.
+# colour spread (pp26-27) AND the §7.3 process strip (pp20-21; its +2 was
+# absorbed by the mod-4 padding, Notes 3→1, total unchanged):
+# L&L (V3) p132, Contact p133, Back p140.
 # Indices are verified against the rebuilt PDF text layer before this runs.
 LINKS = {
-    129: [(R(30, 376, 230, 400), "https://hubss.com/lunch-learn")],          # p130 L&L V3 CTA pill
-    130: [(R(30, 188, 150, 206), "mailto:cleve.stordy@hubss.com"),           # p131 contact
+    131: [(R(30, 376, 230, 400), "https://hubss.com/lunch-learn")],          # p132 L&L V3 CTA pill
+    132: [(R(30, 188, 150, 206), "mailto:cleve.stordy@hubss.com"),           # p133 contact
           (R(242, 188, 362, 206), "mailto:doug.bain@hubss.com"),
           (R(30, 206, 140, 222), "tel:+16043098212"),
           (R(242, 206, 352, 222), "tel:+14165409287"),

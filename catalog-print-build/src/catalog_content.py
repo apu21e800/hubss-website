@@ -278,8 +278,14 @@ PRODUCTS = [
 
 # ===== APPLICATIONS (17 — Airports removed) =====
 APPLICATIONS = [
+    # §7.4 — "location" renders as the card's meta line (same style as
+    # project cards) when the facing photo's install location is verifiable.
+    # Never guess: tags below are photo-evident (street sign in frame) or
+    # documented in the Stage-B swap notes. Open IDs tracked in ISSUES.md.
     {"name": "Crosswalks", "tagline": "Pedestrian safety, designed in.",
      "image": _pick(_app_img("crosswalks", 3)),
+     # West Beaver Creek Rd street sign visible in frame (York Region)
+     "location": "Richmond Hill, Ontario",
      "body": "TrafficPatterns and TrafficPatternsXD thermoplastic hold ASTM-rated skid resistance and high-contrast colour through snowplow cycles and de-icing seasons where paint fails within a year. DecoMark and StreetBond open the intersection as a canvas — Pride crossings, Indigenous cultural art, neighbourhood identity. Specified by municipalities from Halifax to Vancouver."},
     {"name": "Bike Lanes", "tagline": "Visibility that holds, season after season.",
      "image": _pick(_app_img("bike-lanes", 14)),
@@ -304,6 +310,8 @@ APPLICATIONS = [
      # community-branding-03.jpg: strong community branding crosswalk installation ✓
      "image": _pick(_app_img("community-branding", 9),
                     _app_img("community-branding", 13)),
+     # Stage-B swap notes: Coast Salish salmon medallion, Moody Centre Station
+     "location": "Port Moody, British Columbia",
      "body": "Every neighbourhood has a story. Most go untold on the street. DecoMark embeds Pantone-accurate custom graphics directly into asphalt: First Nations cultural artwork, BIA wayfinding, neighbourhood crests, Pride declarations, heritage commemorations."},
     {"name": "Private Driveways", "tagline": "Stone-paver looks. No demolition required.",
      "image": _pick(_app_img("residential-driveways", 1)),

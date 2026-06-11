@@ -753,6 +753,82 @@ def page_colour_system_b(c):
                  color=HUBSS_ORANGE, align="right", max_w_figma=394)
 
 
+# ---- §7.3 StreetPrint process strip (carried forward from old-cat p17) ----
+# "Reheat → Stamp → Coat" — the Educate-stage answer to "how does stamped
+# asphalt actually work?", rebuilt in the current typography with the real
+# installation series (one strata job documented start-to-finish). Inserted
+# as a true facing spread after the StreetPrint spec page; absorbs two of
+# the three Notes padding pages (Vernon checkpoint ruling), total stays 140.
+
+_INSTALL_DIR = ROOT.parent / "public" / "images" / "assets" / "installation-images"
+
+PROCESS_STEPS = [
+    ("01", "Reheat",
+     "Infrared reheaters bring the existing asphalt back to a workable "
+     "temperature — no removal, no repaving, no haul-away.",
+     _INSTALL_DIR / "SP Installation2.jpg"),
+    ("02", "Stamp",
+     "Flexible templates press the pattern — brick, cobble, herringbone, "
+     "or custom — into the warm surface, then compact it flush.",
+     _INSTALL_DIR / "SP Installation.jpg"),
+    ("03", "Coat",
+     "StreetBond colour locks the pattern in: UV-stable, skid-resistant, "
+     "engineered for plows and de-icing seasons.",
+     _INSTALL_DIR / "SP Installation5.jpg"),
+]
+
+
+def page_process_left(c):
+    """§7.3 verso — the three-step strip with real install photography."""
+    fill_bleed(c, HUBSS_WHITE)
+    orange_dot(c, fx=28, fy=21, r_figma=1.3)
+    tracked_caps(c, "StreetPrint  ·  The Process", fx=34, fy=18, size=7.5,
+                 color=HUBSS_ORANGE, max_w_figma=394)
+    draw_text_block(c, "Reheat. Stamp. Coat.", fx=28, fy=34,
+                    font_size_figma=26, weight=800, color=CMYK_TEXT_DARK,
+                    tracking=-0.9, max_w_figma=394)
+    draw_text_block(
+        c, "How genuine stamped asphalt goes in — working with the "
+           "pavement already there.",
+        fx=28, fy=68, font_size_figma=9.5, color=CMYK_TEXT_MID,
+        max_w_figma=394, leading_figma=14)
+
+    y = 98
+    for num, title, desc, photo in PROCESS_STEPS:
+        if photo.exists():
+            draw_image_at_figma(c, str(photo), fx=28, fy=y, fw=150, fh=92)
+        tracked_caps(c, num, fx=192, fy=y + 2, size=7.0,
+                     color=HUBSS_ORANGE, max_w_figma=40)
+        draw_text_block(c, title, fx=192, fy=y + 14, font_size_figma=13,
+                        weight=800, color=CMYK_TEXT_DARK, tracking=-0.3,
+                        max_w_figma=230)
+        draw_text_block(c, no_orphan(desc, 3), fx=192, fy=y + 34,
+                        font_size_figma=8.5, color=CMYK_TEXT_MID,
+                        max_w_figma=230, leading_figma=12.5)
+        y += 104
+
+    thin_rule(c, fx=28, fy=412, w_figma=394, color=CMYK_TEXT_FAINT,
+              weight_pt=0.3)
+    tracked_caps(c, "hubss.com", fx=28, fy=420, size=5.5,
+                 color=HUBSS_ORANGE, align="right", max_w_figma=394)
+
+
+def page_process_right(c):
+    """§7.3 recto — the payoff: pattern and colour fused into one surface."""
+    fill_bleed(c, HUBSS_WHITE)
+    result = ROOT.parent / "public" / "images" / "products" / "streetprint" / "streetprint-77.jpg"
+    if result.exists():
+        draw_full_bleed_image(c, str(result))
+    # Short bottom wash (same family as the section-opener scrim) so the
+    # white caption line clears AA contrast on the bright surface.
+    scrim = _make_navy_wash_png(height_px=240, top_alpha=0, bottom_alpha=150)
+    c.drawImage(str(scrim), 0, 0, width=PAGE_W, height=BLEED + 110 * SCALE,
+                preserveAspectRatio=False, mask='auto')
+    orange_dot(c, fx=24, fy=421, r_figma=1.3)
+    tracked_caps(c, "The result — pattern and colour, fused into the surface",
+                 fx=32, fy=418, size=7.0, color=HUBSS_WHITE, max_w_figma=390)
+
+
 def page_application(c, app, idx, total):
     """DDB pass: full photo (top 60%) + navy band (bottom 40%) — matches
     product-hero / project-hero editorial weight throughout the book.
@@ -881,8 +957,13 @@ def _card_shell(c, eyebrow, headline, body, *, head_size=27, meta=None,
 
 
 def page_app_card(c, app, idx):
+    # §7.4 — location tag in the established caption style (same meta slot
+    # the project cards use) wherever the facing photo's install location
+    # is verifiable. Unverified locations stay untagged (never fabricate);
+    # open IDs are listed in ISSUES.md for Doug.
     _card_shell(c, app["name"], app["tagline"], app["body"],
-                head_size=27, foot_right="Application " + str(idx).zfill(2))
+                head_size=27, meta=app.get("location") or None,
+                foot_right="Application " + str(idx).zfill(2))
 
 
 def page_project_card(c, proj, idx):
@@ -1604,6 +1685,13 @@ def build():
         p = prod
         pages.append(lambda p=p: page_product_hero(c, p))
         pages.append(lambda p=p: page_product_spec(c, p))
+        if p["name"] == "StreetPrint":
+            # §7.3 — process strip directly after the StreetPrint spec page
+            # (spec lands on a recto → strip verso/recto = true facing
+            # spread). +2 pages here is absorbed by the mod-4 padding
+            # (Notes pages 3 → 1), so the total page count is unchanged.
+            pages.append(lambda: page_process_left(c))
+            pages.append(lambda: page_process_right(c))
         if p["name"] == "StreetBondSR":
             # §4 — colour-system spread directly after the SR spec page.
             # SR spec lands on a recto, so A=verso + B=recto form a true

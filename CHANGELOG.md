@@ -65,14 +65,28 @@ Status key: ☐ planned · ◐ in progress · ☑ done · ⏸ blocked (needs dec
 | Location tags | audit every photo carries CITY, PROV | IMAGE-MANIFEST.csv |
 | Ennis-Flint co-branding | leave out (flagged) | ISSUES.md #1 (decisions) |
 
-## §3 — Defects / dedup / mismatches  ☐ (need visual pass; see IMAGE-MANIFEST dedup_notes)
+## §3 — Defects / dedup / mismatches  ◐ (Session 2: source-level verified + 1 fix; visual sweep on final v55 next)
 
-| Page (v54) | Before | After | Source |
+**Source-level verification (catalog_content.py is the image source of truth — all 68 rendered slots audited):**
+
+| §3 item | Status in the 140pp build | Evidence |
+|---|---|---|
+| 3.1 Terry Fox p35/p43 duplicate | ✅ FIXED in prior pass (Stage B swaps) — `community-branding-03.jpg` (the mislabeled Terry Fox file) is referenced **nowhere**; Community Branding app uses `community-branding-09` | catalog_content.py + Stage B diff |
+| 3.2 p64 BC Children's vs Surrey | ✅ FIXED — BCH hero = `blog/bc-childrens-hospital-labyrinth/featured.jpg`; the Surrey-logo file (`decomark-43`) appears only as DecoMark's product hero, where it belongs | catalog_content.py |
+| 3.3 p68 York vs UBC | ✅ FIXED — York Ped Safety hero = Woodbridge TPXD blog shot; UBC photography only on the UBC Musqueam project | catalog_content.py |
+| 3.4 same-photo project spreads | ✅ STRUCTURALLY ELIMINATED — the 140pp asymmetric layout renders **one hero per project** (per-project "detail" image dropped by design); Kitchener `detail: None` | build() comment + content model |
+| 3.5 full-book audit | ◐ source-level done: **exactly 1 duplicate found across 68 slots** (below); perceptual-hash sweep of the final v55 webps next | dup audit script |
+
+| Page (140pp) | Before | After | Source |
 |---|---|---|---|
-| p83 | (verify) | BC Children's copy + bc-childrens-hospital-labyrinth image | blog featured |
-| p93 | (verify) | UBC Musqueam copy + ubc image (UBC reserved here only) | blog featured |
-| p117 | _placeholder.svg | real Langley/Linwood Park photo | NEEDS PHOTO |
-| p78/80/84/86… | (verify) | de-dup facing full-bleeds | visual diff |
+| p120 Network opener | `bus-lanes-03.jpg` — **duplicated the London East Link project hero (p~82)**; photo depicts London's red BRT lane so the project keeps it | crew + application machine laying red/white thermoplastic crosswalk, transit bus behind (`assets/installation-images/page49_img02.png`, 2400×1800 ≈ 288 DPI) — the installer-network story in one frame | source-level dup audit |
+| p120 Network opener | white type, **no scrim** (Phase 3C added the navy wash to the other four openers only) | same soft bottom navy wash as `page_section_open` — AA contrast holds regardless of photo | §8 contrast standard |
+
+Note: `IMAGE-MANIFEST.csv` page keys remain v54-based per the do-not-regenerate instruction (+2 offset for pages ≥26, +2 more in the closing run); a comprehensive refresh with catalog_content-resolved paths belongs to the full-book audit phase.
+
+| Still open (full-book audit phase) | | | |
+|---|---|---|---|
+| p119 (was 117) Langley Railroad | blog `langley-railroad-heritage/featured.jpg` — confirm authentic photo present (audit said placeholder; content model now points at real files) | verify visually | PROJECT-IMAGE-AUDIT.md |
 
 ## §8/§9 — Quality, nav, build  ☐
 

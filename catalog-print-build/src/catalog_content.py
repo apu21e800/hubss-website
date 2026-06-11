@@ -54,9 +54,12 @@ SECTION_OPENERS = {
     # projects: VIVA BRT aerial corridor — strong infrastructure shot, distinct from TPXD product imagery
     "projects":            _pick(BLOG_DIR / "multimodal-connectivity-york-region" / "featured.jpg",
                                  APPS_DIR / "bus-lanes" / "bus-lanes-20.jpg"),
-    # network: London East Link red BRT lane at Ontario city intersection — correct bus lane imagery
-    # (bus-lanes-01.jpg was WRONG: StreetPrint commercial entrance, not a bus corridor)
-    "network":             _pick(APPS_DIR / "bus-lanes" / "bus-lanes-03.jpg",
+    # network: certified crew + application machine laying a red/white
+    # thermoplastic crosswalk, transit bus behind — the installer-network
+    # story in one frame. 2400×1800 (≈288 DPI square-cropped). Replaces
+    # bus-lanes-03.jpg, which duplicated the London East Link project hero
+    # (§3 dedup — the photo IS London's red BRT lane, so the project keeps it).
+    "network":             _pick(PUBLIC_IMG / "assets" / "installation-images" / "page49_img02.png",
                                  APPS_DIR / "bus-lanes" / "bus-lanes-20.jpg"),
     "reference":           _pick(APPS_DIR / "bike-lanes" / "bike-lanes-09.jpg"),
     # DPS right-side images — distinct from left, avoids mirrored spreads

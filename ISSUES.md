@@ -8,9 +8,18 @@ Legend: 🔴 blocking decision · 🟠 needs Vern/Doug input · 🟡 verify befo
 
 ---
 
-## 🔴 ISSUE #1 — VERSION MISMATCH: the prompt targets 116 pages (v50), the branch is at 136 pages (v54)
+## ✅ ISSUE #1 — RESOLVED (Session 2): proceeding on the v54 lineage
 
-**This is the single most important thing to resolve before any layout work.**
+**Resolution (2026-06-10, Phase-2 relaunch instruction):** Vernon's resume order
+("Phase 1 artifacts are committed — treat them as source of truth; execute the
+§4 colour spread insertion") on this branch confirms option (a): the **v54/136pp
+lineage on `chore/catalogue-final-revision` is canonical**. The §4 spread is now
+EXECUTED in the ReportLab pipeline → **140 pp** (see CHANGELOG Session 2; the
+mod-4 saddle-stitch padding makes 138 unreachable — the 2 extra pages render as
+designed "Notes" spec-note pages, the established intentional-filler archetype).
+Original analysis kept below for the record.
+
+**Original (Session 1):**
 
 - The MASTER BUILD PROMPT §2 states the catalogue is **116 pages** and gives a page map (Products 11 · Applications 36 · Projects 56 · Network 99 · Reference 106 · L&L 109 · Contact 110). This matches the **deployed staging flipbook, which is v50 and reports "1 / 116."**
 - The branch I am working on (`chore/catalogue-finishing-pass`) has already advanced to **v54 with 136 pages**. Its TOC (page 3) reads **Products 11 · Applications 37 · Projects 75 · Network 118 · Reference 125 · L&L 128 · Contact 129** — materially different pagination and ~20 more pages.
@@ -27,11 +36,11 @@ Until this is confirmed, I have not committed any layout/pagination changes.
 
 ---
 
-## 🔴 ISSUE #2 — Figma source file is not machine-readable in this environment
+## ✅ ISSUE #2 — RESOLVED (Session 2): Figma readable via MCP, and it isn't the build source anyway
 
-- Prompt §0 Figma URL `figma.com/design/MAm10tWt06oCgw0zLZzWts/Untitled?node-id=0-1` returns only a login/JS shell to automated fetch — I **cannot read layers, text, or placed-image filenames** from it programmatically.
-- The catalogue's 136 pages are **flattened webp exports**; the per-page source-photo filenames for the full-bleed spreads (all `FIGMA-ID-NEEDED` rows in `IMAGE-MANIFEST.csv`) live only in the Figma file.
-- **To proceed on the image audit / rebuild I need one of:** (a) Figma desktop access on this machine with the file open, (b) an exported layer/asset list, or (c) approval to visually ID each page from the v54 webp images (slower, image-by-image). The ReportLab build (`catalog-print-build/`) is a *separate, condensed* artifact and is **not** the 136-page book.
+- **Figma MCP now connected** — the file reads fine (`get_metadata`: one page, 116 frames at 450×450, "p01 — Cover"…). It is the **superseded v50-era source**, not the current book.
+- **The real source of record is the ReportLab pipeline**: `catalog-print-build/src/final_catalog.py` (+ `catalog_content.py` content model) generates the live-text CMYK master; `catalogue-finishing/build_flipbook.py` + `build_web_pdf.py` derive the flipbook + web PDF. Phase-4 commit b1109e8 confirms v54's three outputs were regenerated from it at 136pp.
+- Consequence: Session 1's `IMAGE-MANIFEST.csv` "FIGMA-ID-NEEDED" rows are resolvable from **`catalog_content.py`** (every hero/detail/image path is right there) — no Figma access needed for the image audit. The Figma file remains relevant only for §9's "rebuilt Figma file" deliverable (decision for Vernon: keep maintaining Figma in parallel, or declare the ReportLab build the single source and use Figma for review exports only — see prior `catalogue-finishing/FIGMA-REBUILD-SPEC.md` + `STAGE-A-REPORT.md` §E which already posed this).
 
 ---
 

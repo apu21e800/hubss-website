@@ -1476,6 +1476,12 @@ def page_network_open(c, photo_path):
     fill_bleed(c, HUBSS_WHITE)
     if photo_path and Path(photo_path).exists():
         draw_full_bleed_image(c, str(photo_path))
+    # Scrim parity with page_section_open (Phase 3C added the soft bottom
+    # navy wash to the other four openers only — this one relied on its
+    # photo being dark lower-left, which fails the AA bar on photo swaps).
+    scrim = _make_navy_wash_png(height_px=420, top_alpha=0, bottom_alpha=165)
+    c.drawImage(str(scrim), 0, 0, width=PAGE_W, height=BLEED + 230 * SCALE,
+                preserveAspectRatio=False, mask='auto')
     thin_rule(c, fx=28, fy=313, w_figma=28,
               color=HUBSS_ORANGE, weight_pt=2.0)
     tracked_caps(c, "Section Four", fx=28, fy=322, size=7.5,

@@ -43,6 +43,37 @@ CMYK_ON_DARK_BODY = CMYKColor(0.00, 0.00, 0.00, 0.10)  # near-white body text
 CMYK_ON_DARK_MID  = CMYKColor(0.00, 0.00, 0.00, 0.45)  # mid-grey secondary labels
 CMYK_ON_DARK_RULE = CMYKColor(0.12, 0.08, 0.04, 0.70)  # subtle divider on dark
 
+# ---- §8 colour-coded section navigation -------------------------------
+# One accent per major section, applied identically to the section's
+# divider rule/dot, its TOC row dot, and a small page-edge running tab —
+# thumb-navigable like the old tabbed edition, in the new book's language.
+# Restrained ramp inside the HUB palette (warm family + navy-steel); every
+# accent chosen to read on BOTH white paper (TOC) and the openers' navy
+# wash. Back-matter (L&L / Contact / closing) intentionally unmarked.
+SECTION_ACCENTS = {
+    "Products":     HUBSS_ORANGE,                            # brand primary
+    "Applications": CMYKColor(0.00, 0.30, 1.00, 0.00),       # HUB gold
+    "Projects":     CMYKColor(0.00, 0.78, 1.00, 0.12),       # burnt orange
+    "Network":      CMYKColor(0.50, 0.28, 0.12, 0.20),       # light steel
+    "Reference":    CMYKColor(0.00, 0.08, 0.18, 0.22),       # warm sand-grey
+}
+_SECTION_ORDER = list(SECTION_ACCENTS)
+
+
+def draw_edge_tab(c, section):
+    """Small solid tab bleeding off the OUTER page edge at a per-section
+    height — the running marker of the §8 navigation. Drawn on every page
+    of the section (verso = left edge, recto = right edge)."""
+    color = SECTION_ACCENTS[section]
+    order = _SECTION_ORDER.index(section)
+    h = 26 * SCALE
+    top_pt = (60 + order * 34) * SCALE
+    y = BLEED + TRIM_H - top_pt - h
+    w = BLEED + 3.5 * SCALE
+    x = 0 if not getattr(c, "_recto", True) else PAGE_W - w
+    c.setFillColor(color)
+    c.rect(x, y, w, h, stroke=0, fill=1)
+
 
 # ---- product logos --------------------------------------------------
 LOGOS_DIR = ROOT / "output" / "_logos"
@@ -370,7 +401,12 @@ def page_toc(c, sections):
                     weight=800, color=CMYK_TEXT_DARK, tracking=-1.0)
     y = 160
     for label, num in sections:
-        orange_dot(c, fx=42, fy=y + 4, r_figma=1.6)
+        # §8 — TOC row dot carries the section accent (back-matter rows
+        # keep the standard orange), matching divider rule + edge tab.
+        accent = SECTION_ACCENTS.get(label, HUBSS_ORANGE)
+        px, py = figma_to_pdf(42, y + 4)
+        c.setFillColor(accent)
+        c.circle(px, py, 1.6 * SCALE, stroke=0, fill=1)
         draw_text_block(c, label, fx=52, fy=y, font_size_figma=10,
                         weight=600, color=CMYK_TEXT_DARK, tracking=0.3)
         draw_text_block(c, str(num), fx=400, fy=y, font_size_figma=10,
@@ -396,14 +432,23 @@ def page_section_open(c, section_no, title, photo_path):
     # title always clears AA contrast (openers were failing 1.6-2.8:1 on bare
     # photo). Title dropped 64->50 and raised off the trim; photo stays vibrant
     # above the scrim (scrim only covers the lower band).
-    scrim = _make_navy_wash_png(height_px=420, top_alpha=0, bottom_alpha=165)
-    c.drawImage(str(scrim), 0, 0, width=PAGE_W, height=BLEED + 230 * SCALE,
+    # §8 sweep: the SECTION eyebrow sits near the wash's weak top edge and
+    # flagged marginal on bright photos (median 153-171/255). Strengthened
+    # the SAME wash slightly (drawn band 230->260, floor alpha 165->180) —
+    # no new treatment, per the match-the-current-scrim rule.
+    scrim = _make_navy_wash_png(height_px=420, top_alpha=0, bottom_alpha=180)
+    c.drawImage(str(scrim), 0, 0, width=PAGE_W, height=BLEED + 260 * SCALE,
                 preserveAspectRatio=False, mask='auto')
-    orange_dot(c, fx=24, fy=305, r_figma=1.8)
+    # §8 — the divider's dot + short rule carry the section accent,
+    # matching the TOC row dot and the page-edge running tab.
+    accent = SECTION_ACCENTS.get(title.rstrip("."), HUBSS_ORANGE)
+    px, py = figma_to_pdf(24, 305)
+    c.setFillColor(accent)
+    c.circle(px, py, 1.8 * SCALE, stroke=0, fill=1)
     tracked_caps(c, ("Section " + section_no).upper(), fx=34, fy=302,
                  size=8.5, color=HUBSS_WHITE, max_w_figma=394)
     thin_rule(c, fx=28, fy=320, w_figma=44,
-              color=HUBSS_ORANGE, weight_pt=2.5)
+              color=accent, weight_pt=2.5)
     draw_text_block(c, title, fx=28, fy=342, font_size_figma=50,
                     weight=800, color=HUBSS_WHITE,
                     tracking=-1.6, max_w_figma=394, leading_figma=54)
@@ -1595,11 +1640,12 @@ def page_network_open(c, photo_path):
     # Scrim parity with page_section_open (Phase 3C added the soft bottom
     # navy wash to the other four openers only — this one relied on its
     # photo being dark lower-left, which fails the AA bar on photo swaps).
-    scrim = _make_navy_wash_png(height_px=420, top_alpha=0, bottom_alpha=165)
-    c.drawImage(str(scrim), 0, 0, width=PAGE_W, height=BLEED + 230 * SCALE,
+    # §8: strengthened in lockstep with page_section_open (260 / 180).
+    scrim = _make_navy_wash_png(height_px=420, top_alpha=0, bottom_alpha=180)
+    c.drawImage(str(scrim), 0, 0, width=PAGE_W, height=BLEED + 260 * SCALE,
                 preserveAspectRatio=False, mask='auto')
     thin_rule(c, fx=28, fy=313, w_figma=28,
-              color=HUBSS_ORANGE, weight_pt=2.0)
+              color=SECTION_ACCENTS["Network"], weight_pt=2.0)
     tracked_caps(c, "Section Four", fx=28, fy=322, size=7.5,
                  color=HUBSS_WHITE, max_w_figma=394)
     draw_text_block(c, "Network.", fx=28, fy=350, font_size_figma=44,
@@ -1857,11 +1903,37 @@ def build():
     for i in range(len(CC.PROJECTS)):
         dark_hero_pages.add(projects_page + 1 + 2 * i)
 
+    # §8 — page → section map for the edge-tab running marker. Ranges are
+    # derived from the computed section starts, so they survive insertions.
+    # Back-matter (L&L onward) is intentionally unmarked.
+    section_ranges = [
+        ("Products",     products_page,  apps_page - 1),
+        ("Applications", apps_page,      projects_page - 1),
+        ("Projects",     projects_page,  network_page - 1),
+        ("Network",      network_page,   reference_page - 1),
+        ("Reference",    reference_page, lunch_learn_page - 1),
+    ]
+
+    def _section_for(pno):
+        for name, a, b in section_ranges:
+            if a <= pno <= b:
+                return name
+        return None
+
     for idx, fn in enumerate(pages, 1):
         try:
             fn()
         except Exception as e:
             print("page error:", e)
+        # §8 — colour-coded running tab on the outer edge of every section
+        # page (verso = left, recto = right; bleeds to the cut edge).
+        sec = _section_for(idx)
+        if sec:
+            c._recto = (idx % 2 == 1)
+            try:
+                draw_edge_tab(c, sec)
+            except Exception as e:
+                print("edge tab error:", e)
         # Folios removed per Vernon — no page numbers in this edition.
         try:
             PM.add_page_marks(c, show_guides=False)

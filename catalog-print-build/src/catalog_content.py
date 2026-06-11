@@ -70,6 +70,13 @@ SECTION_OPENERS = {
                                   APPS_DIR / "crosswalks" / "crosswalks-03.jpg"),
     "editorial_projects":  _pick(APPS_DIR / "community-branding" / "community-branding-10.jpg",
                                  APPS_DIR / "community-branding" / "community-branding-04.jpg"),
+    # editorial_projects_r: "Every Mark" DPS right. Was undefined — build()'s
+    # fallback chain landed on SO["reference"] (bike-lanes-09), silently
+    # duplicating the Reference opener AND putting the white caption on the
+    # bright green lane (worst-but-one contrast flag). crosswalks-01: macro
+    # of a yellow/charcoal stamped mark — literally "every mark tells a
+    # story," dark lower-left holds white type (v45: photo choice, no scrim).
+    "editorial_projects_r": _pick(APPS_DIR / "crosswalks" / "crosswalks-01.jpg"),
     "editorial_closing":   _pick(BLOG_DIR / "spirit-trail-wayfinding-vancouver" / "featured.jpg",
                                  APPS_DIR / "bike-lanes" / "bike-lanes-09.jpg"),
     # Three new full-bleed DPS — Vernon swaps images manually in Figma for final
@@ -87,7 +94,13 @@ SECTION_OPENERS = {
     "dps_b_left":   _pick(APPS_DIR / "community-branding" / "community-branding-05.jpg"),
     "dps_b_right":  _pick(APPS_DIR / "community-branding" / "community-branding-12.jpg"),
     "dps_c_left":   _pick(BLOG_DIR / "parc-riviera-streetbond-walkway" / "featured.jpg"),
-    "dps_c_right":  _pick(APPS_DIR / "community-branding" / "community-branding-13.jpg"),
+    # dps_c_right: "Built to Last" caption sat on a bright region of
+    # community-branding-13 (median 219/255 — the book's worst white-on-photo
+    # flag). streetprint-69: grey herringbone stalls beneath a rising
+    # building — "the surface underfoot, the city above," literally — with a
+    # dark lower-left that holds the caption (v45: photo choice, no scrim).
+    "dps_c_right":  _pick(PRODUCTS_DIR / "streetprint" / "streetprint-69.jpg",
+                          APPS_DIR / "community-branding" / "community-branding-13.jpg"),
 }
 
 MANIFESTO = {
@@ -344,6 +357,21 @@ APPLICATIONS = [
      "image": _pick(_app_img("community-branding", 11), _app_img("community-branding", 4)),
      "body": "The street is one of the largest untapped canvases in any city. HUB public art installations turn that canvas into permanent, weather-resistant community expression. From BC Children's Hospital labyrinth to UBC Indigenous cultural crosswalks."},
 ]
+
+# §8 — Applications grouping order (master prompt: crosswalks → bike/bus →
+# traffic calming → public spaces → sport → commercial). Civic safety first,
+# recreation + identity in the middle, commercial/residential cluster last.
+# Sort-by-list keeps each entry's content diff-free above.
+_APP_ORDER = [
+    "Crosswalks", "Pedestrian Safety", "Bike Lanes", "Bus Lanes",
+    "Traffic Calming", "Parks & Paths", "Playgrounds", "Splash Pads",
+    "Sport Courts", "Public Spaces", "Public Art", "Community Branding",
+    "LEED & Heat Island", "Commercial Spaces", "Townhomes",
+    "Private Driveways", "Parking Lots",
+]
+assert sorted(_APP_ORDER) == sorted(a["name"] for a in APPLICATIONS), \
+    "_APP_ORDER out of sync with APPLICATIONS"
+APPLICATIONS.sort(key=lambda a: _APP_ORDER.index(a["name"]))
 
 
 # ===== PROJECTS (18 — capital/transit projects first, community art second) =====

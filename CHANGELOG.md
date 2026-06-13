@@ -168,6 +168,19 @@ Note: `IMAGE-MANIFEST.csv` page keys remain v54-based per the do-not-regenerate 
 | "p99 White Rock = no hero image" | p99 is the **More Awesome Now card** (recto; its hero photo is on the facing **p98**, verified present). White Rock Pier is **p102/103** (hero verified, distinct from cover) |
 No photo swaps applied — altering correct pages on a misread would be wrong; page map handed to Vern to re-confirm. **No v59 rebuild** (v58 stands).
 
+## Session 7 — Figma plugin blank-canvas fix (build-time crash)
+
+**The Session-6 streaming build opened the panel but built nothing — blank canvas (Vern's report).** Root cause found by reproduction, not inspection: the sectioning patch block-scoped `lunchPage`/`contactPage` inside `if (want("reference"))`, but `tocEntries` (built unconditionally, later) reads them → `ReferenceError: lunchPage is not defined` at `code.js:1309` → `buildCatalogue` threw → 0 frames appended → blank page. `node --check` passed it — a runtime *scope* bug, not syntax.
+
+| Item | Before | After |
+|---|---|---|
+| `lunchPage` / `contactPage` | `const` declared inside the Reference `if` block | **hoisted** to `let … = 0` right after `const frames`; assigned (not redeclared) in the Reference block |
+| Headless verification | none (the gap that let this ship) | **`_figma_harness.js`** — node `vm` runs `code.js` against a mocked Figma Plugin API, drives `onmessage({type:'build'})`, counts appended frames, captures throws/notify/postMessage. The regression guard `node --check` can't be |
+| Build result | **0 frames** (threw) | **116 frames** — `✓ Products p11 · Apps p36 · Projects p56 · Network p99 · Ref p106`. All 5 section buttons green (products 27 / apps 22 / projects 47 / network 11 / reference 12) |
+| `code.js` | 111 KB (S6) | **111 KB**, **0 embedded base64 images** (re-verified `grep -c` = 0); regenerated from fixed source |
+
+Committed `0e85a41` → branch + **staging fast-forward** (clean, `origin/staging` was a strict ancestor). `code.js` stays gitignored (Vern re-imports the manifest); `catalogue-layout.json` byte-identical (fix is code.js-only). Also gitignored a stray build-local `public/` — `generate_plugin.py` writes a QR PNG to `ROOT/public/` (= `catalog-print-build/public/`), **not** the served repo-root `public/`; regenerable, was cluttering `git status`.
+
 ## §8/§9 — Quality, nav, build  ☐
 
 | Item | Action |

@@ -2,20 +2,22 @@
 
 **Status: shipped to staging.** Final finishing pass (overlay legibility + four photo calls) complete, regenerated as **v58 / 140 pp**, merged to `staging` (fast-forward, no conflicts), staging deployment **READY**. Nothing touched main/production.
 
-_Built: 2026-06-12. Branch `chore/catalogue-final-revision` @ `3060031` → `staging` @ `3060031`._
+_Built: 2026-06-13. Branch `chore/catalogue-final-revision` @ `0e85a41` → `staging` @ `0e85a41` (clean FF). v58 print/flipbook artifacts unchanged; the latest push is the plugin build-crash fix (code.js-only)._
 
 ---
 
-## 🔴 VERN'S ONE MANUAL STEP — run the Figma plugin (dark screen now FIXED)
+## 🔴 VERN'S ONE MANUAL STEP — run the Figma plugin (both crashes now FIXED)
 
-The dark screen was the 22.7 MB embedded image bank stalling Figma's main thread. Fixed: **code.js is now 111 KB**, renders in batches with a progress bar, and can build the whole book or one section at a time. Full steps in **`catalog-print-build/figma-plugin/RUN-THE-PLUGIN.md`**.
+Two bugs are fixed. **(1) Dark screen** — the 22.7 MB embedded image bank stalled Figma's main thread; code.js is now **111 KB** with zero embedded images. **(2) Blank canvas** (what you hit next) — the build threw a `ReferenceError` (`lunchPage`) before it drew anything; that's hoisted/fixed and it now **builds 116 frames**, verified end-to-end against a mocked Figma API. It renders in batches with a progress bar and can build the whole book or one section at a time. Full steps in **`catalog-print-build/figma-plugin/RUN-THE-PLUGIN.md`**.
 
-1. Figma desktop → Plugins → Development → **remove the old "HUBSS Catalogue Builder"**.
+The fixed `code.js` is already on disk at the path your plugin reads, so the cleanest reset:
+
+1. Figma desktop → Plugins → Development → **remove the old "HUBSS Catalogue Builder"** (clears any cached build).
 2. **Import from manifest…** → `catalog-print-build/figma-plugin/manifest.json` (on your machine, this repo).
-3. Run → panel opens **immediately** → **Build entire book** (progress bar ticks). Or use the **section buttons** if a full pass ever stalls.
+3. Run → panel opens **immediately** → **Build entire book**. "Building… N frames" ticks to **✓ 116 frames**. (If a full pass ever stalls, the **section buttons** each build a slice onto the same page — all 5 verified green.)
 4. Re-running migrates text styles in place (UPSERT — no duplicates). Photos are named `[PHOTO]` placeholders — drop images in.
 
-> I can't run a Figma plugin headless, so **your Build is the live test** — tell me what the panel says if anything's off. Two honest caveats: the plugin currently builds the **~100-page** structure (the §4 colour spread + §7 process strip aren't ported into it yet — next increment), and its typography isn't yet 1:1 with v58. The shipping artifacts (print PDF + flipbook **v58**) are fully built and verified; the plugin is for the editable Figma file. `code.js` is gitignored (regenerable + already on your machine); `catalogue-layout.json` is committed + hosted.
+> This time I reproduced your blank canvas, fixed the actual throw, and verified the build runs end-to-end (**116 frames**, all 5 sections green) against a mocked Figma API — but I still can't run a *real* Figma plugin headless, so **your Build is the final confirmation.** Tell me what the panel says if anything's off. Two honest caveats unchanged: the plugin builds the **~100-page (116-frame)** structure (the §4 colour spread + §7 process strip aren't ported into it yet — next increment), and its typography isn't yet 1:1 with v58. The shipping artifacts (print PDF + flipbook **v58**) are fully built and verified; the plugin is for the editable Figma file. `code.js` is gitignored (regenerable + already on your machine); `catalogue-layout.json` is committed + hosted.
 
 **Photo review:** the p30/p32/p99 items from your v58 review were page-number/spread offsets, not defects — PreMark (p34) and AirMark (p36) are correct; p99 is the More Awesome Now card with its photo on p98; White Rock Pier is p102/103. No swaps; details + page map in CHANGELOG "Session 6". v58 stands (no v59).
 

@@ -127,6 +127,19 @@ Note: `IMAGE-MANIFEST.csv` page keys remain v54-based per the do-not-regenerate 
 | 4 Figma | plugin's 22 text styles snapped 1:1 to the ramp **+ upsert fix** (`_ensureTextStyle` now updates existing styles — re-running the plugin migrates Vern's file instead of keeping stale values; 5 legacy style names superseded — delete in Figma's style manager). Caps tracking now true per-tier % of the 2.4pt charSpace (was flat 16%). `code.js` regenerated LITE 22.7MB (gitignored — **Vern runs the plugin, not me**) |
 | Contact sheet | `catalogue-finishing/type-pass/contact-sheet.png` — 8 archetypes before/after |
 
+## Session 5 — OVERLAY LEGIBILITY + SHIP  ◐
+
+**Directive (Vern): legibility wins — supersedes the v45 no-scrim preference.** Bar: every text-on-photo line ≥4.5:1, sampled worst-case-locally under the text block. Scope: overlays + 4 photo calls only; 140pp + type ramp unchanged (overlay roles may move UP existing tiers).
+
+**Measurement tool** `catalogue-finishing/overlay_contrast.py`: per white-text line, dilated-glyph-mask removes the strokes + their AA halos, then samples the true background (95th-percentile luma), sRGB→linear WCAG ratio. (Naive percentile-of-non-white catches the white→bg antialiasing ramp and misreports even solid-navy-backed text as ~2.5:1 — the mask fixes it.) Baseline v57: **37 pass / 11 fail, all `[photo]`** (5 DPS captions, 4 divider titles/eyebrows, L&L pill); panel-backed product names correctly pass.
+
+| Item | Before | After | Source |
+|---|---|---|---|
+| FP1 overlay role | DPS caption 14.5 | **promoted to 21** (display, arm's-length across a 12″ spread); TYPE-SPEC updated | TYPE-SPEC.md |
+| FP2 wash system | per-archetype ad-hoc scrims (opener mid-ramp wash; cover full-frame 50%; v45 "no scrim" on DPS) | **ONE `overlay_scrim(c, top_fy)`** — navy smoothstep transparent→constant floor (α188) → text sits in the dense zone, photo reads above. Applied to cover masthead, 5 section dividers, network divider, 5 DPS captions, process recto | final_catalog.py |
+| L&L CTA pill | white on orange (2.71:1) | navy ink on orange (**6.8:1**), brand orange unchanged | measured |
+| **Result** | 11 photo overlays under 4.5:1 | **48/48 PASS ≥4.5:1 worst-case-local — zero left for the eye** (p39/p77/p79 resolved in-system) | overlay_contrast.py |
+
 ## §8/§9 — Quality, nav, build  ☐
 
 | Item | Action |

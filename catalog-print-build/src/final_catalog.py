@@ -284,12 +284,16 @@ def page_cover(c):
     # (debating but keep for now), removed everywhere else. Subtle 50%
     # full-frame wash — quietens the busy Musqueam medallion behind the
     # type but lets the UBC sculpture still read clearly.
+    # Light full-frame vignette seats the top-left white logo on the busy
+    # Musqueam medallion; the bottom overlay scrim (below) carries the
+    # masthead to >=4.5:1 as part of the book-wide legibility system.
     c.saveState()
     c.setFillColorRGB(8 / 255, 13 / 255, 22 / 255)  # HUBSS navy
-    c.setFillAlpha(0.50)
+    c.setFillAlpha(0.32)
     c.rect(0, 0, PAGE_W, PAGE_H, stroke=0, fill=1)
     c.setFillAlpha(1.0)
     c.restoreState()
+    overlay_scrim(c, 358)
     # White-text HUBSS logo top-left (Vernon's call).
     draw_logo_white(c, fx=28, fy=28, fw_figma=110)
     # Masthead bottom-left, confident.
@@ -436,9 +440,7 @@ def page_section_open(c, section_no, title, photo_path):
     # flagged marginal on bright photos (median 153-171/255). Strengthened
     # the SAME wash slightly (drawn band 230->260, floor alpha 165->180) —
     # no new treatment, per the match-the-current-scrim rule.
-    scrim = _make_navy_wash_png(height_px=420, top_alpha=0, bottom_alpha=180)
-    c.drawImage(str(scrim), 0, 0, width=PAGE_W, height=BLEED + 260 * SCALE,
-                preserveAspectRatio=False, mask='auto')
+    overlay_scrim(c, 296)   # covers eyebrow (302) + title (342) in the floor zone
     # §8 — the divider's dot + short rule carry the section accent,
     # matching the TOC row dot and the page-edge running tab.
     accent = SECTION_ACCENTS.get(title.rstrip("."), HUBSS_ORANGE)
@@ -869,11 +871,7 @@ def page_process_right(c):
     result = ROOT.parent / "public" / "images" / "products" / "streetprint" / "streetprint-77.jpg"
     if result.exists():
         draw_full_bleed_image(c, str(result))
-    # Short bottom wash (same family as the section-opener scrim) so the
-    # white caption line clears AA contrast on the bright surface.
-    scrim = _make_navy_wash_png(height_px=240, top_alpha=0, bottom_alpha=185)
-    c.drawImage(str(scrim), 0, 0, width=PAGE_W, height=BLEED + 110 * SCALE,
-                preserveAspectRatio=False, mask='auto')
+    overlay_scrim(c, 404)   # book-wide system (was a bespoke short wash)
     orange_dot(c, fx=24, fy=421, r_figma=1.3)
     tracked_caps(c, "The result — pattern and colour, fused into the surface",
                  fx=32, fy=418, size=7.5, color=HUBSS_WHITE, max_w_figma=390)
@@ -1216,7 +1214,7 @@ def page_lunch_learn(c):
     c.roundRect(cx, cy, cta_w * SCALE, cta_h * SCALE, 4 * SCALE, stroke=0, fill=1)
     draw_text_block(c, "BOOK NOW   ·   hubss.com/lnl", fx=cta_x,
                     fy=cta_y + cta_h / 2 - 4.5, font_size_figma=8.6,
-                    weight=800, color=HUBSS_WHITE, tracking=1.2,
+                    weight=800, color=HUBSS_NAVY_RICH, tracking=1.2,
                     max_w_figma=cta_w, align="center")
     tracked_caps(c, "Cleve Stordy 604.309.8212    ·    Doug Bain 416.540.9287",
                  fx=LX, fy=418, size=6.5, color=CMYK_ON_DARK_BODY, max_w_figma=390)
@@ -1318,6 +1316,61 @@ def _make_navy_wash_png(height_px=600, width_px=8, top_alpha=210, bottom_alpha=1
     img.save(out)
     _SCRIM_CACHE[key] = out
     return out
+
+
+# ---- FINAL PASS: one overlay-legibility wash, applied book-wide --------
+# Vernon's call (supersedes the v45 no-scrim preference): text on photos
+# was getting lost. ONE treatment everywhere — never a per-page hack. The
+# wash is a navy gradient that ramps from transparent to a CONSTANT FLOOR
+# over a short transition, then holds the floor down through the trim. All
+# overlay text sits in the constant-floor zone, so contrast is independent
+# of the photo (the old opener wash ramped to the very bottom, leaving text
+# at the weak gradient midpoint — that's why titles still failed). Floor
+# alpha is tuned by catalogue-finishing/overlay_contrast.py to clear the
+# 4.5:1 worst-case-local bar with margin while keeping the photo readable
+# above the transition.
+OVERLAY_FLOOR_ALPHA = 188   # tuned: ~6:1 worst case even over a white photo
+OVERLAY_TRANSITION_FY = 78  # figma units of transparent->floor ramp
+
+
+def _overlay_scrim_png(ramp_frac: float, floor_alpha: int) -> "Path":
+    from PIL import Image
+    H = 800
+    key = ('overlay', round(ramp_frac, 3), floor_alpha)
+    if key in _SCRIM_CACHE:
+        return _SCRIM_CACHE[key]
+    r, g, b = 12, 18, 32
+    img = Image.new("RGBA", (8, H), (0, 0, 0, 0))
+    px = img.load()
+    ramp_rows = max(1, int(round(ramp_frac * H)))
+    for y in range(H):
+        if y < ramp_rows:
+            t = y / ramp_rows           # 0 (top) -> 1 (floor begins)
+            a = int(floor_alpha * (t * t * (3 - 2 * t)))  # smoothstep, no banding
+        else:
+            a = floor_alpha             # constant floor through the bottom
+        for x in range(8):
+            px[x, y] = (r, g, b, a)
+    out = ROOT / "output" / "_cache" / f"overlayscrim_{key[1]}_{floor_alpha}.png"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    img.save(out)
+    _SCRIM_CACHE[key] = out
+    return out
+
+
+def overlay_scrim(c, top_fy, *, floor_alpha=OVERLAY_FLOOR_ALPHA,
+                  transition_fy=OVERLAY_TRANSITION_FY):
+    """Draw the book-wide overlay wash so all text at/below `top_fy` (figma)
+    sits in the constant-floor zone. Covers full width, from the ramp top
+    down through the bottom bleed."""
+    region_top_fy = max(0.0, top_fy - transition_fy)
+    py_top = BLEED + TRIM_H - region_top_fy * SCALE   # PDF y of ramp top
+    if py_top <= 0:
+        return
+    ramp_frac = (transition_fy * SCALE) / py_top
+    png = _overlay_scrim_png(ramp_frac, floor_alpha)
+    c.drawImage(str(png), 0, 0, width=PAGE_W, height=py_top,
+                preserveAspectRatio=False, mask='auto')
 
 
 def page_back(c):
@@ -1624,15 +1677,15 @@ def page_doublespread_right(c, label, caption, *, right_style=None,
           else left_image_path
     if img and Path(img).exists():
         draw_full_bleed_image(c, str(img))
-    # v45 — Vernon's call: 'IN THE FIELD scrim looks like shit.' Drop
-    # the bottom scrim. Type on photo. White label/caption read on the
-    # photo's natural lower-edge tones; if a specific photo can't hold
-    # them, swap the photo rather than reintroducing a gradient.
-    tracked_caps(c, label, fx=28, fy=350, size=6.5,
+    # FINAL PASS (supersedes the v45 no-scrim note): legibility wins.
+    # One book-wide overlay scrim + caption promoted to the 21 display tier
+    # so spread captions read at arm's length.
+    overlay_scrim(c, 320)
+    tracked_caps(c, label, fx=28, fy=326, size=7.5,
                  color=HUBSS_ORANGE, max_w_figma=394)
-    draw_text_block(c, caption, fx=28, fy=370, font_size_figma=14.5,
-                    weight=800, color=HUBSS_WHITE, tracking=-0.3,
-                    max_w_figma=394, leading_figma=16)
+    draw_text_block(c, caption, fx=28, fy=344, font_size_figma=21,
+                    weight=800, color=HUBSS_WHITE, tracking=-0.4,
+                    max_w_figma=394, leading_figma=23)
 
 
 def page_network_open(c, photo_path):
@@ -1646,9 +1699,7 @@ def page_network_open(c, photo_path):
     # navy wash to the other four openers only — this one relied on its
     # photo being dark lower-left, which fails the AA bar on photo swaps).
     # §8: strengthened in lockstep with page_section_open (260 / 180).
-    scrim = _make_navy_wash_png(height_px=420, top_alpha=0, bottom_alpha=180)
-    c.drawImage(str(scrim), 0, 0, width=PAGE_W, height=BLEED + 260 * SCALE,
-                preserveAspectRatio=False, mask='auto')
+    overlay_scrim(c, 305)   # covers rule (313) + eyebrow (322) + title (350)
     thin_rule(c, fx=28, fy=313, w_figma=28,
               color=SECTION_ACCENTS["Network"], weight_pt=2.0)
     tracked_caps(c, "Section Four", fx=28, fy=322, size=7.5,

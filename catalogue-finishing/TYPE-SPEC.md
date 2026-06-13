@@ -20,7 +20,7 @@ never Regular). The 5.5-figma (5.3 pt) wide-tracked caps micro system is
 | `subhead` | 12.5 | 12.0 | Medium grey | ×1.25 (15.6) | 0 | mixed | spec-page subhead, why-stats subtitle, DPS-navy line |
 | `title-s` | 14.5 | 13.9 | Bold | ×1.10 | −0.3 | mixed | process steps, DPS captions, installer phone, Thank-you |
 | `title` | 17.5 | 16.8 | Bold | ×1.10 | −0.35 | mixed | contact hubss.com, story names |
-| `title-l` | 21 | 20.2 | Bold | ×1.10 | −0.4 | mixed | product wordmark, contact names, "Speak with HUB.", why-proof headline, smallest display bucket |
+| `title-l` | 21 | 20.2 | Bold | ×1.10 | −0.4 | mixed | product wordmark, contact names, "Speak with HUB.", why-proof headline, smallest display bucket, **DPS/spread photo captions (final pass — promoted from 14.5 for arm's-length reading across a 12″ open spread; white, on the overlay scrim)** |
 | `display-s` | 26 | 25.0 | Bold | ×1.08 | −0.5 | mixed | spread/process/ref/installer/field-notes heads, **card headlines (was 27/29)** |
 | `display` | 31 | 29.8 | Bold | ×1.08 | −0.6 | mixed | cover, TOC head, why-stats head, statement, service triplet |
 | `display-l` | 37 | 35.5 | Bold | ×1.08 | −0.7 | mixed | manifesto h1, why-stats numbers, display bucket 3 |
@@ -91,6 +91,22 @@ and the grid below. A subhead **over running body** (spec pages) = `subhead`
   true `tnum` is unavailable — numeric columns are right-aligned instead
   (TOC ✓); spec grids are label-over-value, not columnar. Documented
   limitation.
+
+## Overlay legibility (final pass — supersedes the v45 no-scrim preference)
+
+Vernon's call: text on photos was getting lost; legibility wins. ONE
+treatment book-wide — `overlay_scrim(c, top_fy)` in final_catalog.py: a navy
+(12,18,32) gradient that smoothsteps transparent→constant floor over a 78-figma
+transition, then holds the floor through the trim, so every overlay line sits
+in the constant-floor zone (the old opener wash ramped to the very bottom,
+leaving text at the weak midpoint — why titles still failed). Floor alpha **188**
+tuned via `overlay_contrast.py` to clear **4.5:1 worst-case-local with ~6:1
+margin even over a white photo**, while the photo reads brightly above the
+transition. Applied to: cover masthead, all 5 section dividers, network divider,
+all 5 DPS photo captions, process-strip recto. The cover also keeps a light
+(0.32) full-frame vignette to seat the top-left white logo. L&L CTA pill text →
+navy ink on orange (2.7:1 white → 6.8:1 navy). **Bar met at every overlay
+instance — nothing "left for the eye."**
 
 ## Floors (stand)
 

@@ -5,6 +5,7 @@ import LunchLearn from "@/components/sections/LunchLearn";
 import { resourceDocuments } from "@/lib/resource-documents";
 import ResourcesClient from "@/components/resources/ResourcesClient";
 import { getResourceDocuments } from "@/lib/sanity.queries";
+import { showCatalogue } from "@/lib/feature-flags";
 
 import { buildMetadata } from "@/lib/seo";
 
@@ -26,7 +27,7 @@ export default async function ResourcesPage() {
   // imported into Sanity yet. Previous logic (`sanityDocs ?? hardcoded`)
   // replaced wholesale, so any Sanity response — even just the 89 legacy
   // spec sheets — silently dropped the catalogue and flyers from view.
-  const docs = sanityDocs
+  const merged = sanityDocs
     ? [
         ...sanityDocs,
         ...resourceDocuments.filter(
@@ -34,6 +35,13 @@ export default async function ResourcesPage() {
         ),
       ]
     : resourceDocuments;
+
+  // Catalogue card is gated on the same flag as the /catalogue route it
+  // links to: visible on staging/preview for review, hidden on production
+  // until NEXT_PUBLIC_SHOW_CATALOGUE is set — so it never dead-links.
+  const docs = showCatalogue()
+    ? merged
+    : merged.filter((d) => d.id !== "catalogue-2026");
 
   return (
     <main
@@ -75,6 +83,52 @@ export default async function ResourcesPage() {
           resources for every HUBSS product.
         </p>
       </div>
+
+      {/* ── Catalogue 2026 feature card ──────────────────────
+          Prominent, flag-gated entry to the flipbook (mirrors the
+          mega-menu banner). The catalogue also stays in the filterable
+          library below; this card guarantees it's accessible without
+          paging. Hidden on production until NEXT_PUBLIC_SHOW_CATALOGUE. */}
+      {showCatalogue() && (
+        <div className="relative max-w-7xl mx-auto px-6 -mt-6 mb-14">
+          <a
+            href="/catalogue?utm_source=resources&utm_medium=feature_card&utm_campaign=catalogue"
+            className="group flex flex-col sm:flex-row items-stretch overflow-hidden rounded-2xl transition-all hover:-translate-y-[2px]"
+            style={{
+              background:
+                "linear-gradient(90deg, rgba(249,115,22,0.12) 0%, rgba(249,115,22,0.05) 50%, rgba(255,255,255,0.03) 100%)",
+              border: "1px solid rgba(249,115,22,0.30)",
+              boxShadow: "0 8px 30px rgba(0,0,0,0.25)",
+            }}
+          >
+            <div className="relative flex-shrink-0 overflow-hidden bg-black sm:w-[200px] h-[150px] sm:h-auto">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/catalogue/cover.webp"
+                alt="HUB Surface Systems 2026 Catalogue cover"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+              />
+            </div>
+            <div className="flex-1 min-w-0 p-6 sm:p-7 flex flex-col justify-center">
+              <p className="text-[11px] font-bold tracking-[0.22em] uppercase mb-2 flex items-center gap-2" style={{ color: "#FB923C" }}>
+                Catalogue 2026
+                <span className="text-[9px] font-bold tracking-[0.18em] uppercase px-1.5 py-0.5 rounded" style={{ background: "rgba(249,115,22,0.20)" }}>New</span>
+              </p>
+              <h2 className="text-xl sm:text-2xl font-bold leading-snug mb-1.5" style={{ color: "#F5F0EB" }}>
+                Browse the 2026 catalogue in your browser
+              </h2>
+              <p className="text-sm" style={{ color: "rgba(255,255,255,0.65)" }}>
+                140 pages · every product &amp; application · free to read, no download
+              </p>
+            </div>
+            <div className="flex-shrink-0 self-center pr-7 pb-6 sm:pb-0">
+              <span className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.18em] uppercase transition-transform duration-200 group-hover:translate-x-1" style={{ color: "#FB923C" }}>
+                Open <span aria-hidden="true">→</span>
+              </span>
+            </div>
+          </a>
+        </div>
+      )}
 
       {/* ── Document Library — L&L card style ──────────────── */}
       <section

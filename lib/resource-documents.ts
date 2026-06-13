@@ -856,12 +856,14 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'Full Line',
     applications: [],
     fileUrl: '/catalogue',
-    fileSize: '70 pages',
-    updatedDate: 'May 2026',
+    fileSize: '140 pages',
+    updatedDate: 'June 2026',
     documentType: 'catalogue',
     featured: true,
     isNew: true,
-    previewImageUrl: '/catalogue/v31/page-001.webp',
+    // Version-agnostic cover (written by build_flipbook.py) — never goes
+    // stale on a flipbook version bump, unlike the old hardcoded /vNN/ path.
+    previewImageUrl: '/catalogue/cover.webp',
   },
 
   // ── 2026 Product Flyers (14, one per product) ─────────────────

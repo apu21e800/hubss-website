@@ -33,6 +33,15 @@ for i in range(doc.page_count):
 print("done ->", OUT)
 print("count:", len(list(OUT.glob('page-*.webp'))))
 
+# Stable, version-agnostic cover thumbnail for site chrome (mega menu +
+# Resources card). Referencing /catalogue/cover.webp means those links
+# never go stale on a version bump (they previously hardcoded v31/v50 and
+# 404'd after each bump). Lives one level up so it's not inside the vNN dir.
+import shutil
+_cover = OUT.parent / "cover.webp"
+shutil.copyfile(OUT / "page-001.webp", _cover)
+print("cover ->", _cover)
+
 # Alt text (per-page, from the PDF text layer) + route manifest. The /catalogue
 # route reads public/catalogue/manifest.json (one static file) instead of
 # fs.readdir'ing the dir — that kept Next from tracing the whole multi-version

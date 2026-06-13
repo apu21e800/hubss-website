@@ -587,11 +587,17 @@ async function pageDoublespread(label, imagePath, caption, rightStyle, rightImag
   // Type sits directly on the photo (eyebrow + caption white on photo).
   const fL = fr("Spread L — " + (label||""), N);
   ph(fL, 0, 0, 450, 450, "Spread L / Photo / " + label, imagePath);
-  const lRule = rul(fL, 28, 352, 20); if (lRule) lRule.name = "Spread L / Brand Rule";
-  const lEb = await tx(fL, (label||"").toUpperCase(), 28, 361, 6, W, false, 394, null, 9);
+  // FINAL PASS: book-wide overlay scrim (navy bottom band) + caption promoted
+  // to the 21 display tier — mirrors the ReportLab print build (overlay_scrim).
+  // NOTE: unverified in-plugin (Vern's run is the verification); the shipping
+  // artifacts are the ReportLab print PDF + flipbook, which ARE verified.
+  rct(fL, 0, 300, 450, 150, N, "Spread L / Overlay Scrim");
+  fL.children[fL.children.length-1].opacity = 0.62;
+  const lRule = rul(fL, 28, 316, 24); if (lRule) lRule.name = "Spread L / Brand Rule";
+  const lEb = await tx(fL, (label||"").toUpperCase(), 28, 326, 7.5, O, false, 394, null, 11);
   if (lEb) lEb.name = "Spread L / Eyebrow";
   if (caption) {
-    const lCap = await tx(fL, caption, 28, 382, 10.5, W, true, 390, null, 15);
+    const lCap = await tx(fL, caption, 28, 344, 21, W, true, 394, null, 23);
     if (lCap) lCap.name = "Spread L / Caption";
   }
 
@@ -1033,7 +1039,8 @@ async function createDesignSystem() {
   _ensureTextStyle("Title / Product Tagline",    "Inter", "Medium", 21, 23,  -1.4);  // product-hero tagline (shrinks to fit)
   _ensureTextStyle("Title / Project Hero",       "Inter", "Bold",   21, 23,  -1.8);  // names / proof headline tier
   _ensureTextStyle("Title / Application",        "Inter", "Bold",   17.5, 19.3, -2.0); // app tagline / story names
-  _ensureTextStyle("Title / Step & Caption",     "Inter", "Bold",   14.5, 16, -2.0);  // process steps / DPS captions
+  _ensureTextStyle("Title / Process Step",       "Inter", "Bold",   14.5, 16, -2.0);  // process-strip steps
+  _ensureTextStyle("Title / Spread Caption",     "Inter", "Bold",   21,   23, -1.9);  // DPS/spread photo captions (final pass: 14.5->21)
 
   // Body + subhead + spec + caption (leading x1.40 / 1.25 / 1.30 / 1.30)
   _ensureTextStyle("Body / Print",               "Inter", "Medium", 10, 14,   0.0);  // ALL running body

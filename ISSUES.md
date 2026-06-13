@@ -138,6 +138,27 @@ standing Ennis-Flint decision. TPXD, MMAX, DuraShield, PreMark, AirMark
 have no product mark at all. All-or-nothing cannot ship unless Doug
 supplies the 8 missing light-background marks (or reverses the EF ruling).
 
+## ✅ OVERLAY LEGIBILITY (final pass) — RESOLVED, shipped to staging (v58)
+
+Vern's call (legibility wins, supersedes v45 no-scrim) executed: one book-wide
+`overlay_scrim` + DPS caption promoted to 21. **48/48 overlay text lines now
+≥4.5:1 worst-case-local** (`overlay_contrast.py`). The three borderlines
+previously "left for the eye" (p39/p77/p79) are resolved in-system. The four
+photo calls resolved (PreMark swapped; AirMark kept non-runway; UBC cover-twin
+→ salmon-detail crop; White Rock confirmed distinct). Merged to `staging`
+(fast-forward) — staging /catalogue serves v58/140pp, READY.
+
+## 🟠 Figma plugin↔print parity (open architectural item)
+
+The plugin (Vern's editable-file builder) is a SECOND renderer behind the
+ReportLab print build. This pass updated the plugin's caption style + DPS
+frame-builder, but full parity is not closed: cover/divider overlay scrims are
+not yet ported into the plugin, and the navy closing spread still has a stale
+"500+ municipalities" line (print build says "10 provinces"). The ReportLab
+build is the source of truth and the shipping artifact; the plugin is for the
+editable Figma file. Decide: maintain the plugin in parallel, or treat Figma
+as review-export-only.
+
 ## 🟠 §8 sweep — items for Vernon's eye (not unilaterally changed)
 
 1. **Micro-type vs the master-prompt floor.** The book's locked type system

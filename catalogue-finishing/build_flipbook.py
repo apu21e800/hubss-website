@@ -11,7 +11,7 @@ import io
 # any worktree (was hardcoded to _wt-catalogue-finishing for the v54 run).
 WT = Path(__file__).resolve().parents[1]
 PDF = WT / "catalog-print-build" / "output" / "HUBSS_Catalogue_2026_v50.pdf"
-OUT = WT / "public" / "catalogue" / "v57"  # v57 = typography pass (TYPE-SPEC ramp, micro-typography)
+OUT = WT / "public" / "catalogue" / "v58"  # v58 = overlay legibility pass + 4 photo calls
 OUT.mkdir(parents=True, exist_ok=True)
 SIZE = 1800
 

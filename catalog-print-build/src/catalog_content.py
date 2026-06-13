@@ -258,7 +258,12 @@ PRODUCTS = [
     {"name": "PreMark",
      "category": "Preformed Regulatory Markings",
      "tagline": "Pre-cut. Heat-applied. Open immediately.",
-     "hero": _pick(PRODUCTS_DIR / "premark" / "premark-01.jpg"),
+     # FINAL PASS photo call: premark-01 was a plain striped crosswalk at a
+     # casino construction site — no regulatory SYMBOL. premark-11 shows
+     # preformed regulatory legends (30 KM/H) + turn arrows being heat-applied
+     # by the SR-120 machine at Granville Island, Vancouver — true on-product.
+     "hero": _pick(PRODUCTS_DIR / "premark" / "premark-11.jpg",
+                   PRODUCTS_DIR / "premark" / "premark-01.jpg"),
      "title": "Road marking symbols.",
      "italic": "Arrows. Stop bars. Legends. Bike pictographs. No stencils.",
      "callout": "125 mil",
@@ -276,6 +281,11 @@ PRODUCTS = [
     {"name": "AirMark",
      "category": "Airfield Preformed Thermoplastic",
      "tagline": "Airfield markings, certified to last.",
+     # FINAL PASS photo call: airmark-04 is already correct on-product — yellow
+     # TAXIWAY/APRON hold markings + control tower, NON-RUNWAY (4032x3024).
+     # Do NOT "upgrade" to airmark-21 (the red "13R-31L" shot): those are RUNWAY
+     # designation markings, and AirMark is explicitly non-runway per the PPG
+     # exclusion (the critical CLAIMS-VERIFICATION liability fix). Kept as-is.
      "hero": _pick(PRODUCTS_DIR / "airmark" / "airmark-04.jpg",
                    PRODUCTS_DIR / "airmark" / "airmark-01.jpg"),
      "title": "Airfield thermoplastic.",
@@ -438,9 +448,15 @@ PROJECTS = [
      "title": "District identity, cast in pavement.",
      "story": "StreetPrint stamped-asphalt crosswalks across five Vancouver Business Improvement Districts. District identity embedded permanently in the street — walked over every day, maintaining visual coherence through snowplow seasons and years of traffic load."},
     {"name": "UBC Musqueam Crosswalk", "location": "Vancouver, British Columbia", "product": "StreetPrint and DecoMark",
-     # Blog: ubc-musqueam-crosswalk — actual UBC campus + Coast Salish salmon design, UBC letters in background ✓
-     # (aboriginal crosswalk 1.png was WRONG: showed an aerial B&W/blue eagle design, different project)
-     "hero": _pick(BLOG_DIR / "ubc-musqueam-crosswalk" / "featured.jpg",
+     # Blog: ubc-musqueam-crosswalk — actual UBC campus + Coast Salish salmon design.
+     # FINAL PASS cover-reuse fix: featured.jpg is the SAME UBC-letters+salmon
+     # composition as the cover (UBC Crosswalk 1.png) — a cover/project twin, and
+     # the only authentic UBC frame in the libraries. salmon-detail.jpg is a crop
+     # of that authentic photo to the Coast Salish salmon medallion (drops the UBC
+     # sculpture) — distinct from the cover, truthful, and on-message for "a
+     # surface is also a statement." (~263 DPI at hero size; print-acceptable.)
+     "hero": _pick(BLOG_DIR / "ubc-musqueam-crosswalk" / "salmon-detail.jpg",
+                   BLOG_DIR / "ubc-musqueam-crosswalk" / "featured.jpg",
                    ASSETS / "aboriginal crosswalk 1.png"),
      "detail": _pick(PRODUCTS_DIR / "streetprint" / "streetprint-77.jpg"),
      "title": "A surface is also a statement.",

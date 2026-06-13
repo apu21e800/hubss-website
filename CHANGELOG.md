@@ -140,6 +140,15 @@ Note: `IMAGE-MANIFEST.csv` page keys remain v54-based per the do-not-regenerate 
 | L&L CTA pill | white on orange (2.71:1) | navy ink on orange (**6.8:1**), brand orange unchanged | measured |
 | **Result** | 11 photo overlays under 4.5:1 | **48/48 PASS ≥4.5:1 worst-case-local — zero left for the eye** (p39/p77/p79 resolved in-system) | overlay_contrast.py |
 
+**FP3 — the four photo calls** (Doug can veto any on staging):
+
+| Page | Before | After | Source / reason |
+|---|---|---|---|
+| p34 PreMark hero | `premark-01.jpg` — plain striped crosswalk at a casino construction site, no regulatory symbol | **`premark-11.jpg`** — preformed 30 KM/H legends + turn arrows being heat-applied by the SR-120 machine, Granville Island, Vancouver BC (1334×804) | true on-product regulatory markings |
+| p36 AirMark hero | `airmark-04.jpg` | **kept `airmark-04.jpg`** — already correct: yellow taxiway/apron hold markings + control tower, NON-RUNWAY (4032×3024). **Rejected `airmark-21`** (the prettier "13R-31L" shot) — those are RUNWAY designation markings and AirMark is explicitly non-runway (the critical claims liability fix) | already on-product; rationale locked in source |
+| p96 UBC Musqueam hero | `featured.jpg` — **same UBC-letters + salmon composition as the cover** (cover/project twin); the only authentic UBC frame in the libraries (`crosswalks-26` is a byte-dup of it) | **`salmon-detail.jpg`** — a crop of that authentic photo to the Coast Salish salmon medallion (drops the UBC sculpture). Distinct from the cover, truthful, on-message for "a surface is also a statement" (~263 DPI at hero size) | resolves the genuine cover-reuse without a caption-truth violation |
+| p99 White Rock Pier | `Whiterock-Pier-…png` | **kept** — verified **already distinct** from the cover (cover = UBC; p99 = the Memorial/pier crosswalk). The "p1 cover reuse" the directive flagged was the UBC project page above, now fixed | confirmed distinct |
+
 ## §8/§9 — Quality, nav, build  ☐
 
 | Item | Action |

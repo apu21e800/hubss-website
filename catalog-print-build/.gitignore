@@ -28,6 +28,11 @@ output/previews/
 # Generated plugin (embed_images bloats to 40MB — regenerate locally)
 figma-plugin/code.js
 
+# Stray generated artifact: generate_plugin.py writes a QR PNG under a
+# build-local public/ (ROOT/public/), NOT the served repo-root public/.
+# Regenerable each run — keep out of git.
+public/
+
 # Large binary output PDFs (version-controlled via Figma, not git)
 output/*.pdf
 output/previews_*/

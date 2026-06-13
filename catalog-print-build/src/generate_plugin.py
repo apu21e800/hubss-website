@@ -1158,6 +1158,7 @@ async function buildCatalogue(d, section) {
   try { await createDesignSystem(); } catch (e) { console.warn("Design system init failed:", e); }
 
   const frames = [];
+  let lunchPage = 0, contactPage = 0;  // hoisted — tocEntries references these; assigned in the Reference block
 
   // Front matter — full builds only (sectioned imports skip it).
   if (ALL) {
@@ -1296,9 +1297,9 @@ async function buildCatalogue(d, section) {
   frames.push(await pageSectionOpen("Five", "Reference.", d.section_openers && d.section_openers.reference));
   frames.push(await pageTechnical());
   frames.push(await pageCities(d));
-  const lunchPage = frames.length + 1;
+  lunchPage = frames.length + 1;
   frames.push(await pageLunchLearn(d));
-  const contactPage = frames.length + 1;
+  contactPage = frames.length + 1;
   frames.push(await pageContact(d));
   // Field Notes: a ruled notepad page — faces the Contact page in the open spread.
   // Specifier reads your contact info on the left, picks up a pen on the right. Very hot.

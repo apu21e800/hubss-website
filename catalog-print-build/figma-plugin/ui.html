@@ -2,32 +2,61 @@
 <html>
 <head>
   <style>
-    body { font-family: Inter, system-ui, -apple-system, sans-serif; margin: 0; padding: 16px; background: #fff; }
-    h2 { margin: 0 0 6px; font-size: 14px; }
-    p { font-size: 12px; color: #666; line-height: 1.5; margin: 4px 0 14px; }
-    button { background: #18a0fb; color: #fff; border: 0; padding: 12px 16px; border-radius: 6px; font-size: 13px; cursor: pointer; width: 100%; font-weight: 600; }
+    body { font-family: Inter, system-ui, -apple-system, sans-serif; margin: 0; padding: 16px; background: #fff; color: #1a1a1a; }
+    h2 { margin: 0 0 4px; font-size: 14px; }
+    p { font-size: 12px; color: #666; line-height: 1.5; margin: 4px 0 12px; }
+    button { display:block; width:100%; background: #18a0fb; color: #fff; border: 0; padding: 11px 14px; border-radius: 6px; font-size: 13px; cursor: pointer; font-weight: 600; }
     button:hover { background: #0d8ce8; }
-    button.secondary { background: #f5f5f5; color: #333; margin-top: 8px; font-weight: 400; }
-    .meta { font-size: 11px; color: #999; padding: 10px 0; border-top: 1px solid #eee; margin-top: 14px; }
+    button:disabled { opacity: .5; cursor: default; }
+    .sec { margin-top: 7px; background: #f4f5f7; color: #333; font-weight: 500; font-size: 12px; padding: 9px 12px; }
+    .sec:hover { background: #e9eaed; }
+    .label { font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #999; margin: 14px 0 6px; }
+    #status { font-size: 12px; color: #18a0fb; margin-top: 14px; min-height: 16px; font-weight: 600; }
+    .bar { height: 4px; background: #eee; border-radius: 2px; margin-top: 6px; overflow: hidden; }
+    .bar > div { height: 100%; width: 0; background: #18a0fb; transition: width .15s; }
+    .meta { font-size: 11px; color: #999; padding-top: 12px; border-top: 1px solid #eee; margin-top: 14px; line-height:1.5; }
   </style>
 </head>
 <body>
   <h2>HUBSS Catalogue 2026</h2>
-  <p>Generates 100 native Figma frames. Catalogue data is embedded — just click Build.</p>
+  <p>Builds native, fully-editable Figma frames — live text, named layers, components. Photos render as named <code>[PHOTO]</code> placeholders; drop images in after.</p>
 
-  <button id="build">Build catalogue (100 frames)</button>
-  <button class="secondary" id="cancel">Cancel</button>
+  <button id="all">Build entire book</button>
 
-  <div class="meta">
-    Each photo position is a beige <code>[PHOTO]</code> rectangle. Drop your photos into them after the layout finishes.
-  </div>
+  <div class="label">Or import one section</div>
+  <button class="sec" data-s="products">Products</button>
+  <button class="sec" data-s="applications">Applications</button>
+  <button class="sec" data-s="projects">Projects</button>
+  <button class="sec" data-s="network">Network</button>
+  <button class="sec" data-s="reference">Reference</button>
+
+  <div id="status"></div>
+  <div class="bar"><div id="fill"></div></div>
+
+  <div class="meta">Big book? If "entire book" ever stalls, import section by section — each is a separate, safe pass onto the same page.</div>
 
   <script>
-    document.getElementById('build').onclick = () => {
-      parent.postMessage({ pluginMessage: { type: 'build' } }, '*');
-    };
-    document.getElementById('cancel').onclick = () => {
-      parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*');
+    const status = document.getElementById('status');
+    const fill = document.getElementById('fill');
+    const btns = [...document.querySelectorAll('button')];
+    function send(section) {
+      btns.forEach(b => b.disabled = true);
+      status.textContent = 'Building ' + section + '…';
+      parent.postMessage({ pluginMessage: { type: 'build', section } }, '*');
+    }
+    document.getElementById('all').onclick = () => send('all');
+    document.querySelectorAll('.sec').forEach(b => b.onclick = () => send(b.dataset.s));
+
+    onmessage = (e) => {
+      const m = e.data.pluginMessage; if (!m) return;
+      if (m.type === 'progress') {
+        status.textContent = (m.label || 'Building') + '… ' + (m.built || 0) + ' frames';
+        fill.style.width = Math.min(100, (m.built || 0) / 1.4) + '%';
+      } else if (m.type === 'done') {
+        status.textContent = '✓ Done' + (m.count ? ' — ' + m.count + ' frames' : '') + '. You can close the plugin.';
+        fill.style.width = '100%';
+        btns.forEach(b => b.disabled = false);
+      }
     };
   </script>
 </body>

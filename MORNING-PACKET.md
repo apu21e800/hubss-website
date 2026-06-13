@@ -6,16 +6,18 @@ _Built: 2026-06-12. Branch `chore/catalogue-final-revision` @ `3060031` → `sta
 
 ---
 
-## 🔴 VERN'S ONE MANUAL STEP — run the Figma plugin
+## 🔴 VERN'S ONE MANUAL STEP — run the Figma plugin (dark screen now FIXED)
 
-The Figma build is the **only** thing I can't do headless (you run the plugin in Figma desktop). Everything else is done and verified.
+The dark screen was the 22.7 MB embedded image bank stalling Figma's main thread. Fixed: **code.js is now 111 KB**, renders in batches with a progress bar, and can build the whole book or one section at a time. Full steps in **`catalog-print-build/figma-plugin/RUN-THE-PLUGIN.md`**.
 
-1. Figma desktop → open your HUBSS catalogue file → Plugins → Development → **remove the old "HUBSS Catalogue" plugin**.
-2. Re-import the manifest: `catalog-print-build/figma-plugin/manifest.json` (rebuilt LITE; `code.js` is 22.7 MB, regenerated this pass — gitignored, present locally).
-3. Run it → **Build**. The `_ensureTextStyle` **upsert** is intact, so it migrates your existing text styles in place to the final TYPE-SPEC ramp (no stale values) and rebuilds all frames.
-4. Spot-check 5 archetypes against the print render (below): product spec, colour spread, section divider, DPS caption, project card.
+1. Figma desktop → Plugins → Development → **remove the old "HUBSS Catalogue Builder"**.
+2. **Import from manifest…** → `catalog-print-build/figma-plugin/manifest.json` (on your machine, this repo).
+3. Run → panel opens **immediately** → **Build entire book** (progress bar ticks). Or use the **section buttons** if a full pass ever stalls.
+4. Re-running migrates text styles in place (UPSERT — no duplicates). Photos are named `[PHOTO]` placeholders — drop images in.
 
-> The shipping artifacts (print PDF + web flipbook v58) are fully built and verified — the plugin run is for the **editable Figma file** only. In-plugin frame geometry for the new overlay scrims is unverified by me (I can't run the plugin); your Build is the verification. Full plugin↔print parity (cover/divider scrims, one stale "500+ municipalities" line in the navy closing spread) is the remaining **Figma-parity** item — see ISSUES.
+> I can't run a Figma plugin headless, so **your Build is the live test** — tell me what the panel says if anything's off. Two honest caveats: the plugin currently builds the **~100-page** structure (the §4 colour spread + §7 process strip aren't ported into it yet — next increment), and its typography isn't yet 1:1 with v58. The shipping artifacts (print PDF + flipbook **v58**) are fully built and verified; the plugin is for the editable Figma file. `code.js` is gitignored (regenerable + already on your machine); `catalogue-layout.json` is committed + hosted.
+
+**Photo review:** the p30/p32/p99 items from your v58 review were page-number/spread offsets, not defects — PreMark (p34) and AirMark (p36) are correct; p99 is the More Awesome Now card with its photo on p98; White Rock Pier is p102/103. No swaps; details + page map in CHANGELOG "Session 6". v58 stands (no v59).
 
 ---
 

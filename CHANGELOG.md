@@ -149,6 +149,25 @@ Note: `IMAGE-MANIFEST.csv` page keys remain v54-based per the do-not-regenerate 
 | p96 UBC Musqueam hero | `featured.jpg` — **same UBC-letters + salmon composition as the cover** (cover/project twin); the only authentic UBC frame in the libraries (`crosswalks-26` is a byte-dup of it) | **`salmon-detail.jpg`** — a crop of that authentic photo to the Coast Salish salmon medallion (drops the UBC sculpture). Distinct from the cover, truthful, on-message for "a surface is also a statement" (~263 DPI at hero size) | resolves the genuine cover-reuse without a caption-truth violation |
 | p99 White Rock Pier | `Whiterock-Pier-…png` | **kept** — verified **already distinct** from the cover (cover = UBC; p99 = the Memorial/pier crosswalk). The "p1 cover reuse" the directive flagged was the UBC project page above, now fixed | confirmed distinct |
 
+## Session 6 — Figma plugin streaming fix + photo-review triage
+
+**Plugin dark-screen fixed (T1/T2).** Root cause: `code.js` was the 22.7 MB LITE build — Figma's main thread stalled parsing the embedded base64 image bank before the UI could paint. Re-architected:
+- Ship the small **111 KB** code.js (no image bank → named `[PHOTO]` placeholders, the documented workflow). `node --check` clean.
+- Layout split out to **`catalogue-layout.json`** (46 KB) — in the plugin dir + `public/catalogue/figma/` (hosted, version-controlled).
+- **Batched render**: yield to the main thread + `progress` postMessage every ~12 frames and every 10 appends; UI shows "Building… N frames" + bar.
+- **Sectioned import fallback**: `buildCatalogue(d, section)` + UI buttons (Products/Applications/Projects/Network/Reference) — each a safe pass onto the same page if a full build ever stalls.
+- Preserved: `_ensureTextStyle` UPSERT, 22 text styles, `safeBuild` red-FAILED frames, per-node layer naming. Editability verified statically (live `createText`, image-capable fills, components, 126 named layers).
+- `RUN-THE-PLUGIN.md` written for Vern. **code.js stays local (gitignored) for him to import; the plugin RUN is his step (can't run a Figma plugin headless).**
+- **Known gap (documented):** plugin builds the ~100-page structure; §4 colour spread + §7 process strip not yet ported (the 140-page parity port is the next increment — not stacked here untested).
+
+**Photo review triage (T3) — no changes needed.** Vern's v58 flags were page-number/spread-structure offsets, not defects (verified against the actual v58 webps):
+| Flag | Reality on v58 |
+|---|---|
+| "p30 PreMark = DuraTherm crosswalk" | p30 is the **DuraTherm hero** (correct); PreMark is **p34** (verified: Granville Island 30 KM/H regulatory install, correct tag) |
+| "p32 AirMark = driveway / DuraShield" | p32 is the **DuraShield hero** (correct — maintenance coating on a driveway); AirMark is **p36** (verified: airfield apron + tower, non-runway, correct tag) |
+| "p99 White Rock = no hero image" | p99 is the **More Awesome Now card** (recto; its hero photo is on the facing **p98**, verified present). White Rock Pier is **p102/103** (hero verified, distinct from cover) |
+No photo swaps applied — altering correct pages on a misread would be wrong; page map handed to Vern to re-confirm. **No v59 rebuild** (v58 stands).
+
 ## §8/§9 — Quality, nav, build  ☐
 
 | Item | Action |

@@ -2,22 +2,22 @@
 
 **Status: shipped to staging.** Final finishing pass (overlay legibility + four photo calls) complete, regenerated as **v58 / 140 pp**, merged to `staging` (fast-forward, no conflicts), staging deployment **READY**. Nothing touched main/production.
 
-_Built: 2026-06-13. Branch `chore/catalogue-final-revision` @ `0e85a41` → `staging` @ `0e85a41` (clean FF). v58 print/flipbook artifacts unchanged; the latest push is the plugin build-crash fix (code.js-only)._
+_Built: 2026-06-13. Branch `chore/catalogue-final-revision` → `staging` (clean FF). v58 print/flipbook artifacts unchanged; the latest pushes are plugin fixes only (`code.js` is gitignored/local). Plugin font fix: `2887b23`._
 
 ---
 
-## 🔴 VERN'S ONE MANUAL STEP — run the Figma plugin (both crashes now FIXED)
+## 🔴 VERN'S ONE MANUAL STEP — run the Figma plugin (the real-Figma blank canvas is now FIXED)
 
-Two bugs are fixed. **(1) Dark screen** — the 22.7 MB embedded image bank stalled Figma's main thread; code.js is now **111 KB** with zero embedded images. **(2) Blank canvas** (what you hit next) — the build threw a `ReferenceError` (`lunchPage`) before it drew anything; that's hoisted/fixed and it now **builds 116 frames**, verified end-to-end against a mocked Figma API. It renders in batches with a progress bar and can build the whole book or one section at a time. Full steps in **`catalog-print-build/figma-plugin/RUN-THE-PLUGIN.md`**.
+Your last run drew nothing because of a bug only **real Figma** reveals — my headless test was blind to it. Found and fixed. The full history: **(1) Dark screen** — 22.7 MB image bank stalled Figma; code.js is now ~112 KB, no embedded images. **(2)** a `ReferenceError` that aborted the build (fixed last round). **(3) — the one that kept giving you a blank canvas:** the plugin tried to load Inter **"SemiBold"**, but Figma's semibold is **"Semi Bold" with a space**, so the font load **rejected and killed the build before the first frame** — and the old error path *closed the plugin instantly, which cancelled its own error message*, so you saw nothing. Now it loads only the weights it actually uses, and **it can no longer fail silently** (see step 3). Full steps in **`catalog-print-build/figma-plugin/RUN-THE-PLUGIN.md`**.
 
 The fixed `code.js` is already on disk at the path your plugin reads, so the cleanest reset:
 
 1. Figma desktop → Plugins → Development → **remove the old "HUBSS Catalogue Builder"** (clears any cached build).
 2. **Import from manifest…** → `catalog-print-build/figma-plugin/manifest.json` (on your machine, this repo).
-3. Run → panel opens **immediately** → **Build entire book**. "Building… N frames" ticks to **✓ 116 frames**. (If a full pass ever stalls, the **section buttons** each build a slice onto the same page — all 5 verified green.)
+3. Run → panel opens **immediately** → **Build entire book**. You'll first get a **"Build started…" toast** (proof it heard the click), then "Building… N frames" ticking to **✓ 116 frames**. **If it ever fails, a red ✕ now stays in the panel** with the reason — copy that line to me. (If a full pass stalls, the **section buttons** each build a slice onto the same page — all 5 verified green.)
 4. Re-running migrates text styles in place (UPSERT — no duplicates). Photos are named `[PHOTO]` placeholders — drop images in.
 
-> This time I reproduced your blank canvas, fixed the actual throw, and verified the build runs end-to-end (**116 frames**, all 5 sections green) against a mocked Figma API — but I still can't run a *real* Figma plugin headless, so **your Build is the final confirmation.** Tell me what the panel says if anything's off. Two honest caveats unchanged: the plugin builds the **~100-page (116-frame)** structure (the §4 colour spread + §7 process strip aren't ported into it yet — next increment), and its typography isn't yet 1:1 with v58. The shipping artifacts (print PDF + flipbook **v58**) are fully built and verified; the plugin is for the editable Figma file. `code.js` is gitignored (regenerable + already on your machine); `catalogue-layout.json` is committed + hosted.
+> Straight about last time: my headless test said "116 frames" because its fake Figma never actually loaded fonts — so it couldn't see the real `"SemiBold"` rejection. I've since taught the harness to **load fonts the way real Figma does** (it now rejects fake style names — it catches this exact bug), and re-verified green. I still can't run a *real* Figma plugin headless, so **your Build is the final confirmation** — but now if something's wrong the panel shows it instead of going blank. Two caveats unchanged: the plugin builds the **~100-page (116-frame)** structure (the §4 colour spread + §7 process strip aren't ported into it yet — next increment), and its typography isn't yet 1:1 with v58. The shipping artifacts (print PDF + flipbook **v58**) are fully built and verified; the plugin is for the editable Figma file. `code.js` is gitignored (regenerable + already on your machine); `catalogue-layout.json` is committed + hosted.
 
 **Photo review:** the p30/p32/p99 items from your v58 review were page-number/spread offsets, not defects — PreMark (p34) and AirMark (p36) are correct; p99 is the More Awesome Now card with its photo on p98; White Rock Pier is p102/103. No swaps; details + page map in CHANGELOG "Session 6". v58 stands (no v59).
 

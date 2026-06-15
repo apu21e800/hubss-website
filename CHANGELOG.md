@@ -181,6 +181,26 @@ No photo swaps applied — altering correct pages on a misread would be wrong; p
 
 Committed `0e85a41` → branch + **staging fast-forward** (clean, `origin/staging` was a strict ancestor). `code.js` stays gitignored (Vern re-imports the manifest); `catalogue-layout.json` byte-identical (fix is code.js-only). Also gitignored a stray build-local `public/` — `generate_plugin.py` writes a QR PNG to `ROOT/public/` (= `catalog-print-build/public/`), **not** the served repo-root `public/`; regenerable, was cluttering `git status`.
 
+## Session 8 — Figma plugin runs headless but drew NOTHING in real Figma (font reject)
+
+**S7 built 116 frames in the harness, but real Figma still showed a blank canvas — no frames, no error.** The bug was in a path the mock didn't exercise. Root-caused with systematic debugging (reproduce, don't guess), against Vern's 4 prime suspects:
+
+| Suspect | Verdict |
+|---|---|
+| **#1 Font loading** | **THE CAUSE.** Preload asked for `Inter "SemiBold"`; real Figma's semibold style is **`"Semi Bold"` (with a space)**, so `loadFontAsync` **rejected** → `buildCatalogue` aborted **before the first frame**. The weight was never used (every style is Bold/Medium) — pure dead, misnamed preload. Invisible to the harness because its `loadFontAsync` was a no-op. |
+| **#2 UI→code wiring** | Correct. `ui.html` posts `{pluginMessage:{type:'build',…}}`; handler switches on `msg.type`. Now asserted by a static wiring check in the harness. |
+| **#3 Silent abort** | The **amplifier** — why Vern saw *nothing*. The `catch` called `figma.closePlugin()` right after `figma.notify(...)`, tearing down the panel and **cancelling its own error toast**. So even a loud error was wiped instantly. |
+| **#4 Runtime layout fetch** | N/A — layout is embedded in `code.js`, not fetched (harness has no `fetch` yet builds 116). |
+
+| Fix | Detail |
+|---|---|
+| Font load | Load only the weights actually used — **Regular** (createText default-font safety) / **Medium** / **Bold** — each in `try/catch` with a `figma.notify` on failure, so one bad weight can never abort the book. Dropped `"SemiBold"`. |
+| Never silent | Error path **no longer `closePlugin()`s**; it `notify`s (8 s) **+ posts `{type:'error'}` to the UI** (a red ✕ stays in the panel) + `console.error`. Added a **`"Build started…"` heartbeat** the instant a build message arrives — every run now says something. |
+| `ui.html` | Renders the `{type:'error'}` message persistently in the panel (toast alone used to vanish with the plugin). |
+| Harness (the guard that would've caught it) | `loadFontAsync` now **mimics real Figma** — only real Inter styles resolve; unknown styles **reject** — and tracks requested-vs-loaded fonts; `.characters` on an unloaded font **throws**; plus the static wiring check. **Proven red→green:** vs the unfixed `code.js` → `FONT REJECTS: Inter SemiBold, frames appended: 0` (exit 2); vs the fix → `BUILD OK 116 frames` + all 5 sections, fonts all loaded. |
+
+`code.js` regenerated **~112 KB** (gitignored). Kept: streaming, `_ensureTextStyle` upsert, `[PHOTO]` placeholders, named layers, live text, batched yields. Committed `2887b23`. **Real-Figma run is still Vern's confirmation** — but the failure is now loud, so the next run is diagnostic even if something else is wrong.
+
 ## §8/§9 — Quality, nav, build  ☐
 
 | Item | Action |

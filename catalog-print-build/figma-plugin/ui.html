@@ -41,6 +41,7 @@
     const btns = [...document.querySelectorAll('button')];
     function send(section) {
       btns.forEach(b => b.disabled = true);
+      status.style.color = '#18a0fb';
       status.textContent = 'Building ' + section + '…';
       parent.postMessage({ pluginMessage: { type: 'build', section } }, '*');
     }
@@ -50,11 +51,19 @@
     onmessage = (e) => {
       const m = e.data.pluginMessage; if (!m) return;
       if (m.type === 'progress') {
+        status.style.color = '#18a0fb';
         status.textContent = (m.label || 'Building') + '… ' + (m.built || 0) + ' frames';
         fill.style.width = Math.min(100, (m.built || 0) / 1.4) + '%';
       } else if (m.type === 'done') {
+        status.style.color = '#18a0fb';
         status.textContent = '✓ Done' + (m.count ? ' — ' + m.count + ' frames' : '') + '. You can close the plugin.';
         fill.style.width = '100%';
+        btns.forEach(b => b.disabled = false);
+      } else if (m.type === 'error') {
+        // Persistent, in-panel error (the toast alone used to vanish with the plugin).
+        status.style.color = '#e5484d';
+        status.textContent = '✕ ' + (m.message || 'Build failed') + ' — fix and run again.';
+        fill.style.width = '0';
         btns.forEach(b => b.disabled = false);
       }
     };

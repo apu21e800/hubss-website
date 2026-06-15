@@ -1149,11 +1149,19 @@ async function buildCatalogue(d, section) {
     if (_built % 12 === 0) { figma.ui.postMessage({type:"progress", built:_built, label}); await tick(); }
   }
 
-  // v51 — load all weights used by the design system + frames
-  await figma.loadFontAsync({family:"Inter", style:"Regular"});
-  await figma.loadFontAsync({family:"Inter", style:"Medium"});
-  await figma.loadFontAsync({family:"Inter", style:"SemiBold"});
-  await figma.loadFontAsync({family:"Inter", style:"Bold"});
+  // v59 — load ONLY the Inter weights the design system + frames actually use,
+  // resiliently: one missing/misnamed weight must NOT abort the whole book.
+  // (Real Figma's Inter semibold is "Semi Bold" WITH A SPACE; the old
+  //  "SemiBold" REJECTED here and silently killed the build before any frame —
+  //  and no style or node ever used semibold anyway: every style is Bold/Medium.)
+  for (const style of ["Regular", "Medium", "Bold"]) {  // Regular = createText default-font safety
+    try {
+      await figma.loadFontAsync({family:"Inter", style: style});
+    } catch (e) {
+      figma.notify("⚠ Inter " + style + " didn't load — that weight may render blank.", {error:true, timeout:5000});
+      console.error("loadFontAsync failed for Inter", style, e);
+    }
+  }
   // Bootstrap the design system once per Figma session (idempotent).
   try { await createDesignSystem(); } catch (e) { console.warn("Design system init failed:", e); }
 
@@ -1393,20 +1401,22 @@ async function buildCatalogue(d, section) {
 }
 
 figma.ui.onmessage = async (msg) => {
-  if (msg.type === "build") {
-    try {
-      await buildCatalogue(EMBEDDED_DATA, msg.section || "all");
-      // Leave the plugin open so the UI can show the done state; the user
-      // closes it. (Auto-close raced the final progress paint.)
-      figma.ui.postMessage({type:"done"});
-    } catch (e) {
-      const m = (e && e.message) ? e.message : String(e);
-      figma.notify("Build error: " + m, {error: true});
-      console.error(e);
-      figma.closePlugin();
-    }
-  } else {
-    figma.closePlugin();
+  if (msg.type !== "build") return;  // ignore stray messages (never tear down on them)
+  // Heartbeat: announce immediately on click so a run is NEVER a silent no-op.
+  figma.notify("Build started — loading fonts, then placing pages…");
+  try {
+    await buildCatalogue(EMBEDDED_DATA, msg.section || "all");
+    // Leave the plugin open so the UI can show the done state; the user closes it.
+    figma.ui.postMessage({type:"done"});
+  } catch (e) {
+    const m = (e && e.message) ? e.message : String(e);
+    // Surface the failure THREE ways and DO NOT closePlugin(): calling
+    // closePlugin() here (the old behaviour) tore down the panel and cancelled
+    // the toast instantly — that is what made the failure invisible (blank
+    // canvas, no error). Leave it open so the message stays on screen.
+    figma.notify("Build error: " + m, {error: true, timeout: 8000});
+    figma.ui.postMessage({type:"error", message: m});
+    console.error(e);
   }
 };
 

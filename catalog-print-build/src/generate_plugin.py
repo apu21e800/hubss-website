@@ -740,77 +740,67 @@ async function pageCities(d) {
 }
 
 async function pageLunchLearn(d) {
-  // v52 — Parity with v48 print L&L (final_catalog.py page_lunch_learn).
-  // 3-zone layout: LEFT eyebrow/display/body/3-dot list, RIGHT TOP moose
-  // (raised), RIGHT BOTTOM 1" QR on white plate + 'Scan to book' caption,
-  // FOOTER full-width orange rule + URL + 2 contacts.
-  const f = fr("CTA — Lunch and Learn", W);
-  const LEFT_X = 28, LEFT_W = 215;
+  // v58 parity with print page_lunch_learn — "An Invitation" navy treatment:
+  // navy bleed, orange rule + eyebrow, 42pt display (white + orange), body,
+  // 3 dot bullets, white-plate streamed QR + 'Scan to book', orange BOOK NOW
+  // pill, contacts. (Replaces the stale white-bg/moose design.)
+  const f = fr("CTA — Lunch and Learn", N);
+  const LX = 30;
+  const ONDARK = {r:0.90, g:0.91, b:0.94};   // near-white body on navy (print CMYK_ON_DARK_BODY)
 
-  // Moose — right column upper, raised so QR has clean room below it
-  const mascot = d && d.brand && d.brand.mascot;
-  const moose = logo(f, 257, 30, 170, 220, "L&L / Moose / Mascot", mascot);
+  rct(f, LX, 56, 32, 2.5, O, "L&L / Brand Rule");
+  const eb = await tx(f, "AN INVITATION", LX, 66, 7.5, O, true, 300, null, 11);
+  if (eb) { eb.letterSpacing = {value: 14, unit: "PERCENT"}; eb.name = "L&L / Eyebrow"; }
 
-  // Eyebrow caps — orange, left column
-  const eb = await tx(f, "LUNCH & LEARN", LEFT_X, 46, 6, O, true, LEFT_W, null, 10);
-  if (eb) { eb.letterSpacing = {value: 16, unit: "PERCENT"}; eb.name = "L&L / Eyebrow"; }
-
-  // Display — two lines, second orange. Matches print: "Lunch is on us." / "Your spec is free."
-  const d1 = await tx(f, "Lunch is on us.", LEFT_X, 68, 26, D, true, LEFT_W, null, 30);
+  const d1 = await tx(f, "Lunch is on us.", LX, 92, 42, W, true, 390, null, 45);
   if (d1) d1.name = "L&L / Display / Line 1";
-  const d2 = await tx(f, "Your spec is free.", LEFT_X, 100, 26, O, true, LEFT_W, null, 30);
+  const d2 = await tx(f, "Your spec is free.", LX, 142, 42, O, true, 390, null, 45);
   if (d2) d2.name = "L&L / Display / Line 2";
 
-  // Body — single tight sentence
   const body = await tx(f,
-    "Forty-five minutes of technical depth, real-world projects, " +
-    "and CE-credit education — over lunch in your office.",
-    LEFT_X, 158, 10, D, false, LEFT_W, null, 15);
+    "Forty-five minutes of technical depth, real project walkthroughs, " +
+    "and CE-credit education — brought to your office over lunch.",
+    LX, 214, 12.5, ONDARK, false, 300, null, 15.6);
   if (body) body.name = "L&L / Body";
 
-  // 3 dot-led essentials
   const items = [
-    "Tailored to your project",
-    "CE credits — AIBC, RAIC, PEO",
-    "In person across Canada, or virtual",
+    "Tailored to your live and upcoming projects",
+    "CE-credit continuing education for your team",
+    "In person across Canada, or virtual — your call",
   ];
-  let dy = 232;
+  let vy = 272;
   for (let i = 0; i < items.length; i++) {
     const dot = figma.createEllipse();
-    dot.resize(3, 3);
-    dot.x = LEFT_X + 1; dot.y = dy + 6;
+    dot.resize(3, 3); dot.x = LX + 1; dot.y = vy + 5;
     dot.fills = [{type:"SOLID", color: O}];
-    dot.name = "L&L / Essentials / Dot " + (i + 1);
+    dot.name = "L&L / Bullet / Dot " + (i + 1);
     f.appendChild(dot);
-    const t = await tx(f, items[i], LEFT_X + 12, dy, 10, D, false, LEFT_W - 12, null, 14);
-    if (t) t.name = "L&L / Essentials / Item " + (i + 1);
-    dy += 20;
+    const t = await tx(f, items[i], LX + 12, vy, 10, W, true, 300, null, 14);
+    if (t) t.name = "L&L / Bullet / Item " + (i + 1);
+    vy += 22 + (items[i].length > 36 ? 8 : 0);
   }
 
-  // QR zone — right column lower. 70px square (~1" at 5" trim) on white
-  // plate (6px pad each side). Real QR PNG injected via d.brand.lunch_learn_qr
-  // (encoded https://hubss.com/lunch-learn). Falls back to neutral placeholder.
-  const QR_SIZE = 70, QR_PAD = 6, QR_FX = 287, QR_FY = 252;
-  const plate = rct(f, QR_FX - QR_PAD, QR_FY - QR_PAD,
-                       QR_SIZE + 2 * QR_PAD, QR_SIZE + 2 * QR_PAD,
-                       W, "L&L / QR / Plate");
+  // QR — white plate + streamed code + caption (right column)
+  const QS = 92, PAD = 8, QF_X = 318, QF_Y = 262;
+  rct(f, QF_X - PAD, QF_Y - PAD, QS + 2 * PAD, QS + 2 * PAD, W, "L&L / QR / Plate");
   const qrPath = d && d.brand && d.brand.lunch_learn_qr;
   if (qrPath) {
-    const qr = phFit(f, QR_FX, QR_FY, QR_SIZE, QR_SIZE, "L&L / QR / Code (scan to book)", qrPath);
+    phFit(f, QF_X, QF_Y, QS, QS, "L&L / QR / Code (scan to book)", qrPath);
   } else {
-    rct(f, QR_FX, QR_FY, QR_SIZE, QR_SIZE, D, "L&L / QR / Code placeholder (replace in Figma)");
+    rct(f, QF_X, QF_Y, QS, QS, {r:0.85, g:0.85, b:0.85}, "L&L / QR / placeholder");
   }
-  const cap = await tx(f, "SCAN TO BOOK", QR_FX - QR_PAD, QR_FY - 14, 5.5, M, false, QR_SIZE + 2 * QR_PAD, null, 9);
-  if (cap) { cap.letterSpacing = {value: 16, unit: "PERCENT"}; cap.name = "L&L / QR / Caption"; }
+  const cap = await tx(f, "SCAN TO BOOK", QF_X - PAD, QF_Y + QS + PAD + 5, 6.5, ONDARK, false, QS + 2 * PAD, "center", 9);
+  if (cap) { cap.letterSpacing = {value: 14, unit: "PERCENT"}; cap.name = "L&L / QR / Caption"; }
 
-  // Footer — full-width orange rule, URL, 2 contacts
-  const ftrRule = rct(f, LEFT_X, 350, 394, 1.5, O, "L&L / Footer / Brand Rule");
-  const url = await tx(f, "hubss.com/lunch-learn", LEFT_X, 364, 18, O, true, 394, null, 22);
-  if (url) url.name = "L&L / Footer / URL";
-  const west = await tx(f, "Cleve Stordy   604.309.8212", LEFT_X, 406, 9, D, true, 200, null, 13);
-  if (west) west.name = "L&L / Footer / Contact West";
-  const east = await tx(f, "Doug Bain   416.540.9287", LEFT_X + 200, 406, 9, D, true, 194, null, 13);
-  if (east) east.name = "L&L / Footer / Contact East";
+  // Orange BOOK NOW pill
+  const cta = rct(f, LX, 376, 200, 24, O, "L&L / CTA / Button");
+  if (cta) cta.cornerRadius = 4;
+  const ctaT = await tx(f, "BOOK NOW   ·   hubss.com/lnl", LX, 383, 8.6, N, true, 200, "center", 11);
+  if (ctaT) { ctaT.letterSpacing = {value: 4, unit: "PERCENT"}; ctaT.name = "L&L / CTA / Label"; }
+
+  // Contacts
+  const contacts = await tx(f, "Cleve Stordy 604.309.8212    ·    Doug Bain 416.540.9287", LX, 418, 6.5, ONDARK, false, 390, null, 9);
+  if (contacts) contacts.name = "L&L / Contacts";
 
   return f;
 }
@@ -908,24 +898,41 @@ async function pageQuietMark(d) {
 }
 
 async function pageBack(d) {
+  // v58 parity with print page_back: asphalt photo + navy wash, wordmark in the
+  // upper third (kills the void), tagline + orange rule + URL, then the
+  // virtual-catalogue QR on a white plate, phones + copyright at the foot.
   const f = fr("Back Cover", N);
   ph(f, 0, 0, 450, 450, "Back Cover / Photo / Asphalt", d.brand && d.brand.asphalt_photo);
-  // Single smooth navy wash — lets photo texture breathe while legibility is guaranteed
-  rct(f, 0, 0, 450, 450, N, "Back Cover / Navy Wash");
-  f.children[f.children.length-1].opacity = 0.72;
-  logo(f, 151, 178, 148, 32, "Back Cover / Logo / HUBSS White Centred", d.brand && d.brand.logo_white);
-  rct(f, 213, 222, 24, 1, O, "Back Cover / Brand Rule");
-  const tag = await tx(f, "Canada's Leading Decorative Pavement Solutions", 28, 234, 8.5, W, false, 394, "center", 12);
+  const wash = rct(f, 0, 0, 450, 450, N, "Back Cover / Navy Wash");
+  if (wash) wash.opacity = 0.76;   // lets the asphalt texture breathe (was a flat 0.72 void)
+  const ONDARK = {r:0.90, g:0.91, b:0.94};
+
+  // TOP ANCHOR — wordmark centred in the upper third (was y=178 → big void above)
+  logo(f, (450 - 240) / 2, 120, 240, 52, "Back Cover / Logo / HUBSS White", d.brand && d.brand.logo_white);
+  const tag = await tx(f, "Canada's Leading Decorative Pavement Solutions", 25, 195, 10, W, false, 400, "center", 14);
   if (tag) tag.name = "Back Cover / Tagline";
-  const url = await tx(f, "hubss.com", 28, 254, 11, W, true, 394, "center", 14);
-  if (url) url.name = "Back Cover / URL";
-  rct(f, 98, 280, 254, 1, {r:1,g:1,b:1}, "Back Cover / Divider");
-  f.children[f.children.length-1].opacity = 0.20;
-  const ph1 = await tx(f, "West / Prairies   604.309.8212", 28, 292, 6.5, W, false, 394, "center", 10);
+  rct(f, (450 - 32) / 2, 215, 32, 1.5, O, "Back Cover / Brand Rule");
+  const url = await tx(f, "hubss.com", 25, 228, 10, W, true, 400, "center", 14);
+  if (url) { url.letterSpacing = {value: 2, unit: "PERCENT"}; url.name = "Back Cover / URL"; }
+
+  // MIDDLE — QR to the virtual catalogue on a white plate + caption (fills the old void)
+  const cap = await tx(f, "SCAN TO VIEW THE VIRTUAL CATALOGUE.", 25, 278, 6.5, W, false, 400, "center", 10);
+  if (cap) { cap.letterSpacing = {value: 12, unit: "PERCENT"}; cap.name = "Back Cover / QR Caption"; }
+  const QS = 70, PAD = 6, QX = (450 - QS) / 2, QY = 296;
+  rct(f, QX - PAD, QY - PAD, QS + 2 * PAD, QS + 2 * PAD, W, "Back Cover / QR Plate");
+  const qrPath = d && d.brand && d.brand.lunch_learn_qr;
+  if (qrPath) {
+    phFit(f, QX, QY, QS, QS, "Back Cover / QR Code", qrPath);
+  } else {
+    rct(f, QX, QY, QS, QS, {r:0.92, g:0.92, b:0.92}, "Back Cover / QR placeholder");
+  }
+
+  // BOTTOM — phones + copyright
+  const ph1 = await tx(f, "West / Prairies   604.309.8212", 25, 400, 7.8, ONDARK, false, 400, "center", 11);
   if (ph1) ph1.name = "Back Cover / Contact / West";
-  const ph2 = await tx(f, "Central / Maritimes   416.540.9287", 28, 306, 6.5, W, false, 394, "center", 10);
+  const ph2 = await tx(f, "Central / Maritimes   416.540.9287", 25, 414, 7.8, ONDARK, false, 400, "center", 11);
   if (ph2) ph2.name = "Back Cover / Contact / East";
-  const cp = await tx(f, "© 2026 HUB Surface Systems", 28, 330, 5.5, M, false, 394, "center", 8);
+  const cp = await tx(f, "© 2026 HUB Surface Systems", 25, 430, 6.5, M, false, 400, "center", 9);
   if (cp) cp.name = "Back Cover / Copyright";
   return f;
 }
@@ -1524,9 +1531,7 @@ def _to_hosted_url(path_str: str, booklet: dict):
     if "/public/images/" in low:
         rel = "/images/" + s.split("/public/images/", 1)[1]
         return urllib.parse.quote(rel, safe="/")
-    if "booklet" in low:
-        return booklet.get(Path(s).name)  # already a clean /images/catalogue-assets/... url
-    return None
+    return booklet.get(Path(s).name)  # hosted assets (booklet photos + QR), keyed by basename
 
 
 def _rewrite_image_urls(node, booklet: dict) -> int:
@@ -1534,14 +1539,12 @@ def _rewrite_image_urls(node, booklet: dict) -> int:
     n = 0
     if isinstance(node, dict):
         for k, v in node.items():
-            if isinstance(v, str):
-                low = v.replace("\\", "/").lower()
-                if low.endswith(_IMG_EXT) and (("public/images/" in low) or ("booklet" in low)):
-                    u = _to_hosted_url(v, booklet)
-                    if u:
-                        node[k] = u
-                        n += 1
-            else:
+            if isinstance(v, str) and v.lower().endswith(_IMG_EXT):
+                u = _to_hosted_url(v, booklet)
+                if u:
+                    node[k] = u
+                    n += 1
+            elif not isinstance(v, str):
                 n += _rewrite_image_urls(v, booklet)
     elif isinstance(node, list):
         for v in node:

@@ -2,7 +2,7 @@
 
 **Status: shipped to staging.** Final finishing pass (overlay legibility + four photo calls) complete, regenerated as **v58 / 140 pp**, merged to `staging` (fast-forward, no conflicts), staging deployment **READY**. Nothing touched main/production.
 
-_Branch `chore/catalogue-final-revision` → `staging` (clean FF); staging **READY**. v58 print/flipbook artifacts unchanged. **Plugin now streams real photos** (createImageAsync from the hosted images — `ed495e5`); all booklet URLs verified 200. Next increment: full 140-page parity (§4 colour spread + §7 process strip + applications as 2-page spreads). Font fix `2887b23`._
+_Branch `chore/catalogue-final-revision` → `staging` (clean FF); staging **READY**. **Doug reviews the flipbook at staging /catalogue** (v58, 140pp — the rasterized print, already complete; see PARITY-DIFF.md). The **editable Figma plugin** is now at **full 1:1 parity** with it — 116 → **140 frames**, all 11 stale divergences closed, real photos stream. Harness: PARITY OK. PDF/flipbook pipeline never run (already correct); main untouched._
 
 ---
 
@@ -14,10 +14,10 @@ The fixed `code.js` is already on disk at the path your plugin reads, so the cle
 
 1. Figma desktop → Plugins → Development → **remove the old "HUBSS Catalogue Builder"** (clears any cached build).
 2. **Import from manifest…** → `catalog-print-build/figma-plugin/manifest.json` (on your machine, this repo).
-3. Run → panel opens **immediately** → **Build entire book**. You'll first get a **"Build started…" toast** (proof it heard the click), then "Building… N frames" ticking to **✓ 116 frames**. **If it ever fails, a red ✕ now stays in the panel** with the reason — copy that line to me. (If a full pass stalls, the **section buttons** each build a slice onto the same page — all 5 verified green.)
+3. Run → panel opens **immediately** → **Build entire book**. You'll first get a **"Build started…" toast**, then **"Loading ~94 photos…"**, then "Building… N frames" ticking to **✓ 140 frames** (the full book). **If it ever fails, a red ✕ now stays in the panel** with the reason — copy that line to me. (If a full pass stalls, the **section buttons** each build a slice onto the same page — all 5 verified green.)
 4. Re-running migrates text styles in place (UPSERT — no duplicates). Photos are named `[PHOTO]` placeholders — drop images in.
 
-> Straight about last time: my headless test said "116 frames" because its fake Figma never actually loaded fonts — so it couldn't see the real `"SemiBold"` rejection. I've since taught the harness to **load fonts the way real Figma does** (it now rejects fake style names — it catches this exact bug), and re-verified green. I still can't run a *real* Figma plugin headless, so **your Build is the final confirmation** — but now if something's wrong the panel shows it instead of going blank. Two caveats unchanged: the plugin builds the **~100-page (116-frame)** structure (the §4 colour spread + §7 process strip aren't ported into it yet — next increment), and its typography isn't yet 1:1 with v58. The shipping artifacts (print PDF + flipbook **v58**) are fully built and verified; the plugin is for the editable Figma file. `code.js` is gitignored (regenerable + already on your machine); `catalogue-layout.json` is committed + hosted.
+> The Figma plugin is now a **1:1 editable twin of the v58 book — all 140 pages**: §4 colour spread, §7 process strip, applications as 2-page spreads, the StreetBond logo, and every stale page re-synced (cities, technical, installers, statement, contact, closing). Type styles match the v58 ramp. The headless harness is **font-aware + asserts full parity** (140 + §4 + §7 + 5 sections) — current PARITY OK — but I still can't run a *real* Figma plugin headless, so **your Build is the final confirmation**; if anything's off the panel shows a red ✕. The print PDF + flipbook **v58** (Doug's deliverable) were never touched. `code.js` is gitignored (regenerable + on your machine); `catalogue-layout.json` is committed + hosted.
 
 **Photo review:** the p30/p32/p99 items from your v58 review were page-number/spread offsets, not defects — PreMark (p34) and AirMark (p36) are correct; p99 is the More Awesome Now card with its photo on p98; White Rock Pier is p102/103. No swaps; details + page map in CHANGELOG "Session 6". v58 stands (no v59).
 

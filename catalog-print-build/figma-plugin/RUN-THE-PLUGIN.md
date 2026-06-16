@@ -7,7 +7,7 @@
 2. **Import plugin from manifest…** → choose
    `catalog-print-build/figma-plugin/manifest.json` (in this repo, on your machine).
 3. Open a fresh Figma page, run the plugin. A panel opens **immediately** (no dark screen).
-4. Click **Build entire book**. A toast says **"Build started…"**, then **"Loading N photos from staging…"** (the bar ticks through ~89 images — this is the new part, give it a moment), then "Building… N frames", ending on **✓ Done — 116 frames**. Close the plugin.
+4. Click **Build entire book**. A toast says **"Build started…"**, then **"Loading N photos from staging…"** (the bar ticks through ~94 images — give it a moment), then "Building… N frames", ending on **✓ Done — 140 frames**. Close the plugin.
    - **If anything goes wrong it now tells you, loudly:** a red **✕ message stays in the panel** and an error toast appears (8 s). It no longer closes itself on error — so you'll never again get a silent blank canvas. If you see a ✕, copy the message to me.
 5. If "entire book" ever stalls on a given day, use the **section buttons** (Products / Applications / Projects / Network / Reference) — each is a separate safe pass onto the same page. (This is the documented fallback.)
 
@@ -17,7 +17,7 @@
 - **Photos now stream in automatically** — the plugin fetches each one from the hosted images (staging) via `createImageAsync` and applies it as a fill, so the frames come in with real photography. (Streamed, *not* embedded — embedding the image bank is what dark-screened Figma. Anything that can't be fetched falls back to a named `[PHOTO]` placeholder you can drop into.) Needs internet; the manifest allows the staging + hubss.com domains.
 
 ## Two honest caveats
-- **Page coverage (parity work in progress):** the plugin builds **116 frames**; the print/flipbook is **140**. The gap — §4 colour-system spread, §7 StreetPrint process strip, and applications rendered as 2-page spreads — is the increment I'm porting next. So expect 116 for now; it'll grow to 140.
-- **Verification:** beyond syntax-checking, a headless harness (`catalogue-finishing/_figma_harness.js`) now runs code.js against a **font-aware mock of the Figma API** — it rejects fake style names (this is what would have caught the `"SemiBold"` bug) and confirms all 116 frames build. But I still can't run a *real* Figma plugin headless, so **your Build is the final test.** If anything misbehaves, the panel will show a ✕ — send me that line and I'll fix it.
+- **Page coverage:** the plugin now builds the **full 140-page v58 book** — §4 colour-system spread, §7 StreetPrint process strip, and applications as 2-page spreads are all in (the earlier 116-frame gap is closed). Expect **✓ 140 frames**.
+- **Verification:** a headless harness (`catalogue-finishing/_figma_harness.js`) runs code.js against a **font-aware mock of the Figma API** — it rejects fake style names (would have caught the `"SemiBold"` bug), and now **asserts full parity** (140 frames + §4 + §7 + all 5 sections). Current: PARITY OK. But I still can't run a *real* Figma plugin headless, so **your Build is the final test.** If anything misbehaves, the panel will show a ✕ — send me that line and I'll fix it.
 
 _Layout data: `catalogue-layout.json` (here + served at `/catalogue/figma/catalogue-layout.json`). Regenerate after content changes: `python -B -m src.export_json && python -m src.generate_plugin` from `catalog-print-build/` — and do **not** run `embed_images` (that re-creates the 22.7 MB bank)._

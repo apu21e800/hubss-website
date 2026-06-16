@@ -250,6 +250,32 @@ Vern's Figma review: back cover + L&L "still trash." **Verified the print/flipbo
 
 Harness: BUILD OK 116 frames · **90 images streamed** (incl QR) · 96 fills · fonts/wiring OK. Committed `3c8e0cc`. Visual (gradient/photo render, QR scannability) is Vern's re-run check. Increment 2 (140-page parity) still on HOLD.
 
+## Session 12 — FIGMA PARITY TRACK: plugin → 1:1 with the v58 print (116 → 140 frames)
+
+Greenlit after the PARITY-DIFF. Closed all 11 divergences + the 24-page structural gap. **100% cloud-safe** (plugin generation + headless harness + git; the PDF/flipbook pipeline was NOT run — they were already correct). Committed per item:
+
+| # | Item | Was (stale plugin) | Now (v58 print parity) | Commit |
+|---|---|---|---|---|
+| 1 | Statement | "Every surface tells the city's story" | "POSITION / Asphalt is the canvas. / The city is the gallery." | `1db71c3` |
+| 2 | Closing stat | "500+ municipalities" | "10 provinces" | `1db71c3` |
+| 3 | Across Canada caption | "Five hundred municipalities…" | "Ten provinces. One standard." | `1db71c3` |
+| 4 | Contact heading | 22pt | 28pt | `1db71c3` |
+| 5 | Technical | "At a Glance."/10 products | "The systems."/11 products | `52887f7` |
+| 6 | Cities | "500+"/1-col | "10" provinces/2-col + subtitle | `52887f7` |
+| 7 | Installers | navy header band | clean white page (page_installer) | `52887f7` |
+| 8 | §7 process strip | absent | pageProcessLeft/Right at frames 20–21 (+2) | `827ca60` |
+| 9 | §4 colour spread | absent | pageColourSystemA/B at frames 28–29 (37+11+3 chips, +2) | `827ca60` |
+| 10 | Applications | 1 combined frame/app | 2-page spread (photo + card) + location tags + "Application NN" (+17) | `7a2e358` |
+| 11 | StreetBond logo | missing | streetbond® logo on the spec page | `f108f49` |
+
+**Structural gap closed:** 116 → **140 frames** (= the v58 book). §4 colour-system data + app location tags injected from `catalog_content` (light import, no reportlab). §4/§7 install + result photos and the StreetBond logo stream via createImageAsync (now **94 images**). Apps open at frame 41 (print parity); section starts land within 1–2pp of the print (the editorial DPS are 2 frames vs the print's 3-page interleave) and the total nets to exactly 140.
+
+**Type:** the plugin's 22 text styles already match TYPE-SPEC (Session-4 v58 ramp: 5.5/6.5/7.5/8.5/7.8/8.6/10/12.5/14.5/17.5/21/26/31/37/52) — no change; `_ensureTextStyle` UPSERT preserved. Kept: streaming (small code.js + layout JSON), `[PHOTO]`/named layers, batched yields, "Build started…" heartbeat + per-section progress + "Done — N frames".
+
+**Harness upgraded to the gate:** font-aware (rejects unknown Inter styles; throws on unloaded-font `.characters`) **+ full-book parity assertion** — FAILS unless 140 frames + §4 + §7 + all 5 sections. Final run: `PARITY OK — full 140-page v58 book`, fonts all loaded, no rejects. (`7de1fef`)
+
+Branch + staging fast-forwarded each commit. **PDF/flipbook untouched; main untouched.** Real-Figma Build is Vern's confirmation (headless can't run real Figma).
+
 ## §8/§9 — Quality, nav, build  ☐
 
 | Item | Action |

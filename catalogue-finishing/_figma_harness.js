@@ -154,8 +154,30 @@ function wiringCheck() {
   if (fontRejects.length)    console.log("FONT REJECTS (real Figma would FAIL):", [...new Set(fontRejects)].join(", "));
   if (unloadedWrites.length) console.log("UNLOADED-FONT WRITES:", [...new Set(unloadedWrites)].join(", "));
 
+  // Full-book parity gate (meaningful only for the "all" build) — the assertion
+  // that would have caught a missing §4/§7 or a short page count before Doug.
+  let parityFail = false;
+  if (section === "all") {
+    const at = (re) => { const i = frameNames.findIndex((n) => re.test(n)); return i >= 0 ? i + 1 : 0; };
+    const P = {
+      total: frameNames.length,
+      Products: at(/Section One — Products/),
+      Apps: at(/Section Two — Applications/),
+      Projects: at(/Section Three — Projects/),
+      Network: at(/Section Four — Network/),
+      Reference: at(/Section Five — Reference/),
+      s4: frameNames.some((n) => /Colour System/.test(n)),
+      s7: frameNames.some((n) => /Process/.test(n)),
+    };
+    console.log("PARITY: total=" + P.total + "  Products p" + P.Products + "  Apps p" + P.Apps +
+      "  Projects p" + P.Projects + "  Network p" + P.Network + "  Ref p" + P.Reference +
+      "  §4=" + (P.s4 ? "yes" : "NO") + "  §7=" + (P.s7 ? "yes" : "NO"));
+    parityFail = !(P.total === 140 && P.s4 && P.s7 && P.Products && P.Apps && P.Projects && P.Network && P.Reference);
+    console.log("PARITY " + (parityFail ? "INCOMPLETE (want 140 frames + §4 + §7 + all 5 sections)" : "OK — full 140-page v58 book"));
+  }
+
   const fontProblem = fontRejects.length || unloadedWrites.length;
-  if (threw || fontProblem) {
+  if (threw || fontProblem || parityFail) {
     console.log(`BUILD FAILED (section=${section}) — frames appended: ${appended}`);
     if (threw) {
       console.log("threw:", threw.message);

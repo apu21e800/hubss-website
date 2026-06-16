@@ -179,6 +179,43 @@ function rul(p, x, y, w) {
   return rct(p, x, y, w, 2, O, "OrangeRule");
 }
 
+// overlayScrim — book-wide legibility wash: a vertical navy gradient, transparent
+// at (topY - 78) ramping to ~0.74 navy by topY, then constant to the bottom (450).
+// Mirrors the ReportLab overlay_scrim (FLOOR_ALPHA 188/255 ≈ 0.74, TRANSITION 78fy):
+// white type at/below topY clears AA contrast over any photo, even a bright one.
+function overlayScrim(f, topY, label) {
+  const y0 = Math.max(0, topY - 78);
+  const h = 450 - y0;
+  const r = figma.createRectangle();
+  r.x = 0; r.y = Math.round(y0); r.resize(450, Math.round(h));
+  const floor = 0.74;
+  const ramp = h > 0 ? Math.min(1, 78 / h) : 0;   // fraction that is the transparent→floor ramp
+  r.fills = [{
+    type: "GRADIENT_LINEAR",
+    gradientTransform: [[0, 1, 0], [-1, 0, 1]],    // vertical: top = stop0, bottom = stop1
+    gradientStops: [
+      { position: 0.0,  color: { r: N.r, g: N.g, b: N.b, a: 0 } },
+      { position: ramp, color: { r: N.r, g: N.g, b: N.b, a: floor } },
+      { position: 1.0,  color: { r: N.r, g: N.g, b: N.b, a: floor } },
+    ],
+  }];
+  r.name = (label || "Section") + " / Overlay Scrim";
+  f.appendChild(r);
+  return r;
+}
+
+// displaySizeFor — shrink a display title by length so long words never clip
+// (port of the print display_size_for). Section dividers use a flat 52, but
+// this is the shared rule for any heading set on a fixed-width frame.
+function displaySizeFor(text) {
+  const n = (text || "").length;
+  if (n < 8) return 52;
+  if (n < 14) return 42;
+  if (n < 25) return 37;
+  if (n < 40) return 26;
+  return 21;
+}
+
 // tx() — all text creation goes through here.
 // lh: explicit line height in px; if omitted, auto-computed for print-quality rhythm.
 //   Body (sz < 11):  lh = sz × 1.55  (generous open leading, readable at small sizes)
@@ -380,8 +417,9 @@ async function pageSectionOpen(num, title, imagePath) {
   const f = fr(`p__ / Section ${num} — ${title}`, N);
   // v50 parity (print page_section_open at final_catalog.py:513) —
   // Vernon: 'Section One could stand out more.' Orange dot pre-element,
-  // rule UNDER the eyebrow, 64pt display, tracking -2.0.
+  // rule UNDER the eyebrow, 52pt display (was 64 — too big, clipped "Applications."), tracking -2.0.
   ph(f, 0, 0, 450, 450, "Section Opener / Photo / " + title, imagePath);
+  overlayScrim(f, 296, "Section Opener");   // legibility wash — mirrors print overlay_scrim(296)
   // Orange dot — visual brand anchor
   const dot = figma.createEllipse();
   dot.resize(7, 7); dot.x = 22; dot.y = 320;
@@ -391,7 +429,7 @@ async function pageSectionOpen(num, title, imagePath) {
   await tx(f, ("SECTION " + num).toUpperCase(), 34, 318, 8.5, W, false, 394, null, 13);
   rul(f, 28, 338, 44);   // rule UNDER eyebrow, not under the entire band
   f.children[f.children.length-1].name = "Section Opener / Brand Rule";
-  await tx(f, title, 28, 358, 64, W, true, 394);
+  await tx(f, title, 28, 358, 52, W, true, 394);
   // Name the last text node so layer panel reads cleanly
   const lastTx = f.children[f.children.length-1];
   if (lastTx && lastTx.type === "TEXT") lastTx.name = "Section Opener / Display Title";
@@ -581,13 +619,14 @@ async function pageInstaller(inst, idx, total) {
 }
 
 // pageNetworkOpen — v47 — matches v46 print section openers. Full-bleed
-// photo + white display type on photo. No scrim, no navy bottom.
+// photo + legibility scrim + white display type — matches the other section dividers.
 async function pageNetworkOpen(d) {
   const f = fr("Section Four — Network", N);
   ph(f, 0, 0, 450, 450, "Network section opener", d.section_openers && d.section_openers.network);
+  overlayScrim(f, 296, "Network Opener");   // was 'No scrim' — white title needs it over a photo
   rul(f, 28, 313, 28);
   await tx(f, "SECTION FOUR", 28, 322, 7.5, W, false, 394, null, 11);
-  await tx(f, "Network.", 28, 350, 44, W, true, 394);
+  await tx(f, "Network.", 28, 350, 52, W, true, 394);
   return f;
 }
 

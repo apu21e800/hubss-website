@@ -512,6 +512,12 @@ async function pageProductSpec(prod) {
     }
   }
 
+  // Official product logo (StreetBond only) — top-right of the white body zone,
+  // rainbow ® mark on the light body. Streamed via prod.logo (FIT, never cropped).
+  if (prod.logo) {
+    logo(f, 300, 92, 120, 28, "Product Spec / Logo / " + prod.name, prod.logo);
+  }
+
   // Uses footer — joined caps centered
   if (prod.uses && prod.uses.length) {
     rct(f, 28, 405, 394, 1, F, "Product Spec / Footer / Uses Rule");
@@ -1735,6 +1741,10 @@ def main():
         for _app in data.get("applications", []):
             if _app.get("name") in _loc:
                 _app["location"] = _loc[_app["name"]]
+        # StreetBond is the one product with an official manufacturer logo (v44).
+        for _p in data.get("products", []):
+            if _p.get("name") == "StreetBond":
+                _p["logo"] = str(ROOT.parent / "public" / "images" / "products" / "streetbond" / "streetbond-logo.png")
     except Exception as e:  # noqa: BLE001 — §4/locations degrade gracefully, never crash the build
         print(f"  content inject skipped: {e}")
     _inst = ROOT.parent / "public" / "images" / "assets" / "installation-images"

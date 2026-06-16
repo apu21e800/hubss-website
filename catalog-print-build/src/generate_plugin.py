@@ -10,17 +10,18 @@ plugin that builds all 100 Figma frames with:
   - Correct page order matching the PDF exactly
 
 Usage:
-    python -B -m src.export_json          # regenerate catalog_data.json
-    python -B -m src.generate_plugin      # write fresh code.js
-    python -B -m src.embed_images --lite  # MANDATORY: embed images at
-                                          # review quality (~22 MB).
-                                          # NEVER ship --print (~67 MB)
-                                          # to Vernon — it crashes his
-                                          # 30 GB Figma machine.
+    python -B -m src.export_json                       # regenerate catalog_data.json
+    python catalogue-finishing/host_booklet_assets.py  # host booklet photos (once)
+    python -B -m src.generate_plugin                   # write fresh code.js (~110 KB)
     Then in Figma: remove plugin, re-import manifest, click Build.
+
+Photos STREAM at runtime via figma.createImageAsync from the hosted images
+(IMAGE_BASE in the template); image paths are rewritten to hosted URLs below.
+Do NOT run embed_images — that base64 bank (~22-67 MB) is what dark-screened Figma.
 """
 from __future__ import annotations
 import json
+import urllib.parse
 from pathlib import Path
 
 ROOT   = Path(__file__).resolve().parent.parent
@@ -56,7 +57,11 @@ JS = r"""
 //        body 9.5/subhead 10.5, Project Hero/Story/Application photos
 //        bleed-extended, Installer name 28pt body 9.5, Back Cover URL 11pt.
 
-const IMAGE_BANK = {};
+const IMAGE_BANK = {};            // legacy base64 embed (empty in streaming build)
+const IMAGE_HASHES = {};          // url -> Figma imageHash, filled by preloadImages() at runtime
+// Where the streamed photos live (hosted + served). createImageAsync fetches here.
+// Staging by default; swap to https://hubss.com for a production pull.
+const IMAGE_BASE = "https://hubss-website-git-staging-based-agency.vercel.app";
 const EMBEDDED_DATA = CATALOG_DATA_JSON;
 
 // --- colour tokens ---
@@ -96,23 +101,33 @@ function base64ToBytes(b64) {
   return arr;
 }
 
+// _fillImage() — apply a streamed or embedded image to rect r as a fill.
+// Streamed hashes (preloadImages → figma.createImageAsync) are keyed by URL and
+// preferred; the legacy base64 IMAGE_BANK is the fallback (empty in the streaming
+// build — embedding it is what dark-screened Figma). On any miss/error the rect
+// keeps its [PHOTO] placeholder, so the build never breaks on a single bad photo.
+function _fillImage(r, imagePath, scaleMode, label) {
+  if (!imagePath) return false;
+  let hash = IMAGE_HASHES[imagePath];
+  if (!hash && Object.keys(IMAGE_BANK).length) {
+    const parts = imagePath.split(/[\\/]/);
+    const b64 = IMAGE_BANK[parts.slice(-2).join("/")] || IMAGE_BANK[parts[parts.length - 1]] || IMAGE_BANK[imagePath];
+    if (b64) { try { hash = figma.createImage(base64ToBytes(b64)).hash; } catch(e) {} }
+  }
+  if (hash) {
+    try {
+      r.fills = [{type:"IMAGE", scaleMode: scaleMode, imageHash: hash}];
+      r.name = label || (scaleMode === "FIT" ? "Logo" : "Photo");
+      return true;
+    } catch(e) {}
+  }
+  return false;
+}
+
 // ph() — photo rect: FILL mode crops to frame (correct for photos).
-// Tries filename-only key first, full path as fallback.
 function ph(p, x, y, w, h, label, imagePath) {
   const r = rct(p, x, y, w, h, PH, "[PHOTO] " + (label || ""));
-  if (imagePath) {
-    const parts = imagePath.split(/[\\/]/);
-    const key2 = parts.slice(-2).join("/");   // parent/filename — unique key matching embed_images.py
-    const fname = parts[parts.length - 1];    // filename-only fallback
-    const b64 = IMAGE_BANK[key2] || IMAGE_BANK[fname] || IMAGE_BANK[imagePath];
-    if (b64) {
-      try {
-        const img = figma.createImage(base64ToBytes(b64));
-        r.fills = [{type:"IMAGE", scaleMode:"FILL", imageHash: img.hash}];
-        r.name = label || "Photo";
-      } catch(e) { /* keep placeholder */ }
-    }
-  }
+  _fillImage(r, imagePath, "FILL", label);
   return r;
 }
 
@@ -120,19 +135,7 @@ function ph(p, x, y, w, h, label, imagePath) {
 // Use when the subject (crosswalk decal, marking) must not be cropped at any edge.
 function phFit(p, x, y, w, h, label, imagePath) {
   const r = rct(p, x, y, w, h, PH, "[PHOTO] " + (label || ""));
-  if (imagePath) {
-    const parts = imagePath.split(/[\\/]/);
-    const key2 = parts.slice(-2).join("/");
-    const fname = parts[parts.length - 1];
-    const b64 = IMAGE_BANK[key2] || IMAGE_BANK[fname] || IMAGE_BANK[imagePath];
-    if (b64) {
-      try {
-        const img = figma.createImage(base64ToBytes(b64));
-        r.fills = [{type:"IMAGE", scaleMode:"FIT", imageHash: img.hash}];
-        r.name = label || "Photo";
-      } catch(e) {}
-    }
-  }
+  _fillImage(r, imagePath, "FIT", label);
   return r;
 }
 
@@ -145,21 +148,31 @@ function logo(p, x, y, w, h, label, imagePath) {
   r.y = Math.round(y);
   r.fills = [];
   r.name = "[LOGO] " + (label || "");
-  if (imagePath) {
-    const parts = imagePath.split(/[\\/]/);
-    const key2 = parts.slice(-2).join("/");
-    const fname = parts[parts.length - 1];
-    const b64 = IMAGE_BANK[key2] || IMAGE_BANK[fname] || IMAGE_BANK[imagePath];
-    if (b64) {
-      try {
-        const img = figma.createImage(base64ToBytes(b64));
-        r.fills = [{type:"IMAGE", scaleMode:"FIT", imageHash: img.hash}];
-        r.name = label || "Logo";
-      } catch(e) {}
-    }
-  }
+  _fillImage(r, imagePath, "FIT", label);
   p.appendChild(r);
   return r;
+}
+
+// preloadImages() — stream every photo URL in the data via figma.createImageAsync
+// from IMAGE_BASE (hosted, served). Each resolves to an imageHash kept in
+// IMAGE_HASHES and applied later by _fillImage(). This is the "stream, don't
+// embed" image path — code.js stays tiny; the 22.7MB base64 bank is gone.
+async function preloadImages(d) {
+  const yieldNow = () => new Promise((r) => setTimeout(r, 0));
+  const urls = Array.from(new Set((JSON.stringify(d).match(/\/images\/[^"\\]+/g) || [])));
+  let done = 0, ok = 0;
+  figma.notify("Loading " + urls.length + " photos from staging…");
+  for (const u of urls) {
+    try { IMAGE_HASHES[u] = (await figma.createImageAsync(IMAGE_BASE + u)).hash; ok++; }
+    catch (e) { console.warn("image fetch failed:", u, e && e.message); }
+    done++;
+    if (done % 6 === 0) {
+      figma.ui.postMessage({type:"progress", built: done, label:"Loading photos (" + ok + "/" + urls.length + ")"});
+      await yieldNow();
+    }
+  }
+  console.log("preloadImages: " + ok + "/" + urls.length + " image(s) streamed");
+  return ok;
 }
 
 function rul(p, x, y, w) {
@@ -1162,6 +1175,10 @@ async function buildCatalogue(d, section) {
       console.error("loadFontAsync failed for Inter", style, e);
     }
   }
+  // Stream every photo from the hosted images (createImageAsync) so _fillImage
+  // can apply them as fills. NOT embedded — that base64 bank dark-screened Figma.
+  try { await preloadImages(d); } catch (e) { console.warn("preloadImages failed:", e); }
+
   // Bootstrap the design system once per Figma session (idempotent).
   try { await createDesignSystem(); } catch (e) { console.warn("Design system init failed:", e); }
 
@@ -1450,6 +1467,49 @@ def _generate_qr(dest_path: Path) -> bool:
         return False
 
 
+# --- image-URL rewriting: local paths -> hosted (served) URLs the plugin fetches
+BOOKLET_MANIFEST = ROOT.parent / "public" / "images" / "catalogue-assets" / "_manifest.json"
+_IMG_EXT = (".jpg", ".jpeg", ".png", ".webp")
+
+
+def _load_booklet_manifest() -> dict:
+    if BOOKLET_MANIFEST.exists():
+        return json.loads(BOOKLET_MANIFEST.read_text(encoding="utf-8"))
+    return {}
+
+
+def _to_hosted_url(path_str: str, booklet: dict):
+    """Map a local image path to a root-relative hosted URL, or None if unmapped."""
+    s = path_str.replace("\\", "/")
+    low = s.lower()
+    if "/public/images/" in low:
+        rel = "/images/" + s.split("/public/images/", 1)[1]
+        return urllib.parse.quote(rel, safe="/")
+    if "booklet" in low:
+        return booklet.get(Path(s).name)  # already a clean /images/catalogue-assets/... url
+    return None
+
+
+def _rewrite_image_urls(node, booklet: dict) -> int:
+    """In-place: replace image-path string values with hosted URLs. Returns count."""
+    n = 0
+    if isinstance(node, dict):
+        for k, v in node.items():
+            if isinstance(v, str):
+                low = v.replace("\\", "/").lower()
+                if low.endswith(_IMG_EXT) and (("public/images/" in low) or ("booklet" in low)):
+                    u = _to_hosted_url(v, booklet)
+                    if u:
+                        node[k] = u
+                        n += 1
+            else:
+                n += _rewrite_image_urls(v, booklet)
+    elif isinstance(node, list):
+        for v in node:
+            n += _rewrite_image_urls(v, booklet)
+    return n
+
+
 def main():
     if not DATA.exists():
         print(f"ERROR: {DATA} not found. Run: python -B -m src.export_json first.")
@@ -1460,6 +1520,9 @@ def main():
     _generate_qr(qr_path)
 
     data = json.loads(DATA.read_text(encoding="utf-8"))
+    booklet = _load_booklet_manifest()
+    rewritten = _rewrite_image_urls(data, booklet)
+    print(f"Rewrote {rewritten} image path(s) -> hosted URLs ({len(booklet)} booklet asset(s) mapped)")
     data_json = json.dumps(data, ensure_ascii=False, separators=(",", ":"))
 
     # Inject the catalog data into the JS template

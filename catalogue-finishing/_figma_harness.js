@@ -33,6 +33,7 @@ const requestedFonts = new Set();
 const loadedFonts = new Set();
 const fontRejects = [];      // styles real Figma would reject (e.g. "Inter SemiBold")
 const unloadedWrites = [];   // .characters written on a node whose font wasn't loaded
+const imageUrls = [];        // urls passed to figma.createImageAsync (streamed photos)
 
 // permissive node stub: stores set props (so reads like f.name.replace work),
 // returns chainable callables for unknown methods. TEXT nodes additionally
@@ -67,6 +68,7 @@ function node(kind) {
 let appended = 0;
 const notifies = [];
 const posts = [];
+const frameNames = [];
 let onmsg = null;
 
 const figma = {
@@ -87,12 +89,13 @@ const figma = {
   createComponent: () => node("COMPONENT"),
   createPage: () => node("PAGE"),
   createImage: () => ({ hash: "deadbeef" }),
+  createImageAsync: async (url) => { imageUrls.push(String(url)); return { hash: "img" + imageUrls.length }; },
   createPaintStyle: () => node("PAINTSTYLE"),
   createTextStyle: () => node("TEXTSTYLE"),
   getLocalTextStyles: () => [],
   getLocalPaintStyles: () => [],
   getLocalEffectStyles: () => [],
-  currentPage: { appendChild: (f) => { appended++; }, children: [], selection: [] },
+  currentPage: { appendChild: (f) => { appended++; try { frameNames.push(String(f.name)); } catch (e) { frameNames.push("(unnamed)"); } }, children: [], selection: [] },
   root: { children: [] },
   viewport: { scrollAndZoomIntoView: () => {} },
   notify: (m) => { notifies.push(String(m)); },
@@ -140,6 +143,7 @@ function wiringCheck() {
   console.log("wiring:", wiringCheck());
   console.log("fonts requested:", [...requestedFonts].join("  ·  ") || "(none)");
   console.log("fonts loaded:   ", [...loadedFonts].join("  ·  ") || "(none)");
+  console.log("images streamed:", imageUrls.length + " via createImageAsync" + (imageUrls.length ? "  (e.g. " + imageUrls[imageUrls.length - 1] + ")" : ""));
   if (fontRejects.length)    console.log("FONT REJECTS (real Figma would FAIL):", [...new Set(fontRejects)].join(", "));
   if (unloadedWrites.length) console.log("UNLOADED-FONT WRITES:", [...new Set(unloadedWrites)].join(", "));
 
@@ -155,4 +159,8 @@ function wiringCheck() {
   console.log(`BUILD OK (section=${section}) — frames appended: ${appended}`);
   console.log("notify:", notifies.slice(0, 6));
   console.log("posts (last):", JSON.stringify(posts.slice(-2)));
+  if (process.argv.includes("--names")) {
+    console.log("FRAMES (" + frameNames.length + "):");
+    frameNames.forEach((n, i) => console.log((i + 1) + "\t" + n));
+  }
 })();

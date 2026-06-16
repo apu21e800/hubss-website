@@ -6,6 +6,11 @@
   "ui": "ui.html",
   "editorType": ["figma"],
   "networkAccess": {
-    "allowedDomains": ["none"]
+    "allowedDomains": [
+      "https://hubss-website-git-staging-based-agency.vercel.app",
+      "https://hubss.com",
+      "https://www.hubss.com"
+    ],
+    "reasoning": "Streams catalogue photos at build time via figma.createImageAsync from the hosted (served) images, instead of embedding a base64 image bank."
   }
 }

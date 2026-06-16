@@ -484,30 +484,30 @@ async function pageProductSpec(prod) {
   rct(f, 0, 0, 450, BAND_H, N, "Product Spec / Header / Navy Band");
   const tEb = await tx(f, ((prod.category || "HUB Surface Systems")).toUpperCase(), 28, 18, 5.5, O, true, 394, null, 8);
   if (tEb) { tEb.letterSpacing = {value: 16, unit: "PERCENT"}; tEb.name = "Product Spec / Header / Category Eyebrow"; }
-  const tName = await tx(f, prod.name || "", 28, 32, 22, W, true, 394, null, 26);
+  const tName = await tx(f, prod.name || "", 28, 32, 21, W, true, 394, null, 25);
   if (tName) tName.name = "Product Spec / Header / Product Name";
   rct(f, 28, 64, 32, 2, O, "Product Spec / Header / Orange Signature Dash");
 
-  // Body zone
+  // Body zone — TYPE-SPEC ramp: title 21 / subhead 12.5 / body 10, even Δ36 rhythm.
   const title = prod.title || prod.name;
-  const tT = await tx(f, title, 28, 108, 22, D, true, 394, null, 26);
+  const tT = await tx(f, noOrphan(title), 28, 108, 21, D, true, 394, null, 25);
   if (tT) tT.name = "Product Spec / Body / Title";
-  const tI = await tx(f, prod.italic || "", 28, 144, 10.5, M, false, 394, null, 15);
+  const tI = await tx(f, prod.italic || "", 28, 144, 12.5, M, false, 394, null, 16);
   if (tI) tI.name = "Product Spec / Body / Subhead";
-  const tB = await tx(f, prod.body || "", 28, 176, 9.5, D, false, 394, null, 14);
+  const tB = await tx(f, prod.body || "", 28, 180, 10, D, false, 394, null, 14);
   if (tB) tB.name = "Product Spec / Body / Description";
 
-  // Spec grid — 2-col, 4 entries max (matches print)
+  // Spec grid — even 2-col (equal 186px columns + 22px gutter), aligned labels/values.
   if (prod.spec_pairs && prod.spec_pairs.length) {
     rct(f, 28, 312, 394, 1, F, "Product Spec / Spec Grid / Rule");
-    const colX = [28, 230];
+    const COLW = 186, GUT = 22, colX = [28, 28 + COLW + GUT];   // 28 | 236, both 186 wide
     for (let i = 0; i < Math.min(prod.spec_pairs.length, 4); i++) {
       const [lbl, val] = prod.spec_pairs[i];
       const col = i % 2, row = Math.floor(i / 2);
       const xx = colX[col], yy = 328 + row * 34;
-      const tL = await tx(f, (lbl||"").toUpperCase(), xx, yy, 6.0, F, true, 190, null, 9);
+      const tL = await tx(f, (lbl||"").toUpperCase(), xx, yy, 6.5, F, true, COLW, null, 9);
       if (tL) { tL.letterSpacing = {value: 16, unit: "PERCENT"}; tL.name = "Product Spec / Spec Grid / Row " + (i + 1) + " / Label"; }
-      const tV = await tx(f, val||"", xx, yy+11, 8.5, D, true, 185, null, 11);
+      const tV = await tx(f, val||"", xx, yy+11, 8.5, D, true, COLW, null, 11);
       if (tV) tV.name = "Product Spec / Spec Grid / Row " + (i + 1) + " / Value";
     }
   }
@@ -531,6 +531,14 @@ async function pageProductSpec(prod) {
 function hexToRgb(hex) {
   const h = String(hex || "#cccccc").replace("#", "");
   return { r: parseInt(h.slice(0,2),16)/255, g: parseInt(h.slice(2,4),16)/255, b: parseInt(h.slice(4,6),16)/255 };
+}
+
+// noOrphan — bind the last two words with a non-breaking space so a display
+// headline never wraps a single word onto its own line. (Port of print no_orphan.)
+function noOrphan(s) {
+  s = String(s || "").trim();
+  const i = s.lastIndexOf(" ");
+  return (i < 0) ? s : s.slice(0, i) + String.fromCharCode(160) + s.slice(i + 1);
 }
 
 // §7 StreetPrint process strip (verso) — 3-step "Reheat. Stamp. Coat." with

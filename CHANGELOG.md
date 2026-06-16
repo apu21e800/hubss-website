@@ -237,6 +237,19 @@ Vern's visual Figma review (real images now landing — Increment 1 confirmed): 
 
 Print PDF + web flipbook already had this (Session 5) — **no PDF/web change**; this aligns the **Figma file** to them. Harness: BUILD OK 116 frames · 89 images · fonts/wiring OK. Committed `8d27a2e`. **Gradient orientation is the one thing the headless harness can't verify** → Vern's visual run confirms. Increment 2 (140-page parity) still on HOLD.
 
+## Session 11 — DDB pass: L&L + back cover (Figma → print alignment)
+
+Vern's Figma review: back cover + L&L "still trash." **Verified the print/flipbook versions first** (v58 `page-132` L&L, `page-140` back cover webps) — they're correct and polished; the **Figma plugin was running stale designs**. Same pattern as the dividers: print is the good reference, plugin diverged. So this is Figma-only — **PDF + flipbook already carry these designs, no heavy rebuild**.
+
+| Page | Plugin was (stale) | Now (matches print) |
+|---|---|---|
+| **Lunch & Learn** | white bg, missing moose, **empty gray QR box**, awkward 26pt wrap, plain URL | **"An Invitation" navy**: orange rule + eyebrow, 42pt "Lunch is on us." (white) / "Your spec is free." (orange), refreshed body + 3 bullets, white-plate **streamed QR** + SCAN TO BOOK, orange **BOOK NOW · hubss.com/lnl** pill, contacts |
+| **Back cover** | logo at y=178 (**big empty top half**), flat 0.72 wash, **no QR** | wordmark up to the **upper third**, lighter 0.76 wash (asphalt texture breathes), **virtual-catalogue QR** on a white plate + caption, phones + © |
+
+**QR streaming:** both pages stream the hosted `hubss-lunch-learn-qr.png` (a generated QR for `hubss.com/lnl`). Hosted to `public/images/catalogue-assets/` (3 KB PNG, NEAREST-resampled to stay crisp); URL mapper generalized to map any hosted asset by basename. 🚩 Flagged to Vern (non-confidential — a QR of a public booking URL, not a client photo). NB: the back-cover QR currently points at `/lnl` (matching the print) though the caption says "virtual catalogue" — Vern to confirm the target.
+
+Harness: BUILD OK 116 frames · **90 images streamed** (incl QR) · 96 fills · fonts/wiring OK. Committed `3c8e0cc`. Visual (gradient/photo render, QR scannability) is Vern's re-run check. Increment 2 (140-page parity) still on HOLD.
+
 ## §8/§9 — Quality, nav, build  ☐
 
 | Item | Action |

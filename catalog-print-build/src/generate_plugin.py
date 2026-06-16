@@ -521,6 +521,123 @@ async function pageProductSpec(prod) {
   return f;
 }
 
+// hex "#rrggbb" -> Figma {r,g,b} 0..1 (chips are spec swatches; RGB is fine in Figma).
+function hexToRgb(hex) {
+  const h = String(hex || "#cccccc").replace("#", "");
+  return { r: parseInt(h.slice(0,2),16)/255, g: parseInt(h.slice(2,4),16)/255, b: parseInt(h.slice(4,6),16)/255 };
+}
+
+// §7 StreetPrint process strip (verso) — 3-step "Reheat. Stamp. Coat." with
+// real install photos. Mirrors print page_process_left.
+async function pageProcessLeft(d) {
+  const f = fr("§7 — StreetPrint Process");
+  const dot = figma.createEllipse(); dot.resize(3,3); dot.x = 27; dot.y = 20;
+  dot.fills = [{type:"SOLID", color: O}]; dot.name = "Process / Dot"; f.appendChild(dot);
+  const eb = await tx(f, "STREETPRINT  ·  THE PROCESS", 34, 18, 7.5, O, true, 394, null, 11);
+  if (eb) { eb.letterSpacing = {value: 12, unit: "PERCENT"}; eb.name = "Process / Eyebrow"; }
+  await tx(f, "Reheat. Stamp. Coat.", 28, 34, 26, D, true, 394, null, 28);
+  await tx(f, "How genuine stamped asphalt goes in — working with the pavement already there.", 28, 68, 10, M, false, 394, null, 14);
+  const steps = (d.process && d.process.steps) || [];
+  let y = 98;
+  for (const s of steps) {
+    ph(f, 28, y, 150, 92, "Process / Photo / " + s.num, s.image);
+    const num = await tx(f, s.num, 192, y + 2, 6.5, O, true, 40, null, 9);
+    if (num) num.letterSpacing = {value: 8, unit: "PERCENT"};
+    await tx(f, s.title, 192, y + 14, 14.5, D, true, 230, null, 16);
+    await tx(f, s.desc, 192, y + 34, 8.6, M, false, 230, null, 11.2);
+    y += 104;
+  }
+  rct(f, 28, 412, 394, 1, F, "Process / Footer / Rule");
+  const hb = await tx(f, "hubss.com", 28, 420, 5.5, O, true, 394, "right", 8);
+  if (hb) hb.name = "Process / Footer / URL";
+  return f;
+}
+
+// §7 recto — full-bleed result photo + scrim + caption. Mirrors page_process_right.
+async function pageProcessRight(d) {
+  const f = fr("§7 — The Result", N);
+  ph(f, 0, 0, 450, 450, "Process / Result Photo", d.process && d.process.result_image);
+  overlayScrim(f, 404, "Process Result");
+  const dot = figma.createEllipse(); dot.resize(3,3); dot.x = 23; dot.y = 421;
+  dot.fills = [{type:"SOLID", color: O}]; dot.name = "Process / Result / Dot"; f.appendChild(dot);
+  const cap = await tx(f, "THE RESULT — PATTERN AND COLOUR, FUSED INTO THE SURFACE", 32, 418, 7.5, W, true, 390, null, 11);
+  if (cap) { cap.letterSpacing = {value: 8, unit: "PERCENT"}; cap.name = "Process / Result / Caption"; }
+  return f;
+}
+
+// §4 colour-system A (verso) — 37 standard chips in two families. page_colour_system_a.
+async function pageColourSystemA(d) {
+  const f = fr("§4 — Colour System A");
+  const cs = d.colour_system || {};
+  const dot = figma.createEllipse(); dot.resize(3,3); dot.x = 27; dot.y = 20;
+  dot.fills = [{type:"SOLID", color: O}]; dot.name = "Colour A / Dot"; f.appendChild(dot);
+  const eb = await tx(f, "STREETBOND COLOUR", 34, 18, 7.5, O, true, 394, null, 11);
+  if (eb) eb.letterSpacing = {value: 12, unit: "PERCENT"};
+  await tx(f, "The full palette.", 28, 34, 26, D, true, 394, null, 28);
+  await tx(f, "37 standard colours in two families. Full custom Pantone matching.", 28, 68, 10, M, false, 394, null, 14);
+  const COLS = 6, CELL_W = 394 / COLS, CHIP_W = 54, CHIP_H = 18, ROW_H = 38;
+  async function family(label, items, y0) {
+    const lab = await tx(f, label, 28, y0, 6.5, F, false, 394, null, 9);
+    if (lab) lab.letterSpacing = {value: 8, unit: "PERCENT"};
+    rct(f, 28, y0 + 11, 394, 0.6, F, "Colour A / Family Rule");
+    const gy = y0 + 18;
+    for (let i = 0; i < items.length; i++) {
+      const r = Math.floor(i / COLS), k = i % COLS;
+      const x = 28 + k * CELL_W, y = gy + r * ROW_H;
+      rct(f, x, y, CHIP_W, CHIP_H, hexToRgb(items[i].hex), "Chip / " + items[i].name);
+      await tx(f, items[i].name, x, y + CHIP_H + 3, 7.8, M, false, CELL_W - 4, null, 9);
+    }
+    return gy + Math.ceil(items.length / COLS) * ROW_H + 6;
+  }
+  const yNext = await family("TRADITIONAL — " + ((cs.Traditional || []).length), cs.Traditional || [], 96);
+  await family("SIGNATURE — " + ((cs.Signature || []).length), cs.Signature || [], yNext);
+  rct(f, 28, 412, 394, 0.6, F, "Colour A / Footer Rule");
+  await tx(f, "Printed colours are representative — request physical samples at a Lunch & Learn.", 28, 419, 7.8, M, false, 394, null, 10);
+  return f;
+}
+
+// §4 colour-system B (recto) — 11 SR chips with SRI/R/E + standards + 3 cycle-lane. page_colour_system_b.
+async function pageColourSystemB(d) {
+  const f = fr("§4 — Colour System B");
+  const cs = d.colour_system || {};
+  const sr = cs["Solar-Reflective"] || [];
+  const dot = figma.createEllipse(); dot.resize(3,3); dot.x = 27; dot.y = 20;
+  dot.fills = [{type:"SOLID", color: O}]; dot.name = "Colour B / Dot"; f.appendChild(dot);
+  const eb = await tx(f, "STREETBONDSR  ·  SOLAR REFLECTIVE", 34, 18, 7.5, O, true, 394, null, 11);
+  if (eb) eb.letterSpacing = {value: 12, unit: "PERCENT"};
+  await tx(f, "Cooler by design.", 28, 34, 26, D, true, 394, null, 28);
+  await tx(f, "Eleven solar-reflective colours, measured and rated. A higher SRI means a cooler surface.", 28, 68, 10, M, false, 394, null, 14);
+  const COLS = 4, CELL_W = 394 / COLS, CHIP_W = 86, CHIP_H = 20, ROW_H = 50;
+  const gy = 108;
+  for (let i = 0; i < sr.length; i++) {
+    const r = Math.floor(i / COLS), k = i % COLS;
+    const x = 28 + k * CELL_W, y = gy + r * ROW_H;
+    const chip = rct(f, x, y, CHIP_W, CHIP_H, hexToRgb(sr[i].hex), "SR Chip / " + sr[i].name);
+    if (chip && sr[i].name === "SR White") { chip.strokes = [{type:"SOLID", color: F}]; chip.strokeWeight = 0.5; }
+    await tx(f, sr[i].name, x, y + CHIP_H + 3, 7.8, D, false, CELL_W - 6, null, 9);
+    await tx(f, "SRI " + sr[i].sri + " · R " + sr[i].reflectance + " · E " + sr[i].emittance, x, y + CHIP_H + 13, 6.5, M, false, CELL_W - 6, null, 8);
+  }
+  let y = gy + Math.ceil(sr.length / COLS) * ROW_H + 4;
+  await tx(f, "Reflectance ASTM C1549  ·  Emittance ASTM C1371  ·  SRI ASTM E1980.", 28, y, 7.8, F, false, 394, null, 10);
+  y += 14;
+  await tx(f, "SR colourants can contribute to LEED heat-island reduction credits.", 28, y, 8.6, M, false, 394, null, 11.2);
+  y += 26;
+  const cl = cs["Cycle-Lane"] || [];
+  const clLab = await tx(f, "CYCLE LANE — " + cl.length, 28, y, 6.5, F, false, 394, null, 9);
+  if (clLab) clLab.letterSpacing = {value: 8, unit: "PERCENT"};
+  rct(f, 28, y + 11, 394, 0.6, F, "Colour B / CL Rule");
+  const gy2 = y + 18, CELL2 = 394 / 3;
+  for (let i = 0; i < cl.length; i++) {
+    const x = 28 + i * CELL2;
+    rct(f, x, gy2, CELL2 - 14, 26, hexToRgb(cl[i].hex), "CL Chip / " + cl[i].name);
+    await tx(f, cl[i].name, x, gy2 + 29, 7.8, D, false, CELL2 - 14, null, 9);
+  }
+  rct(f, 28, 412, 394, 0.6, F, "Colour B / Footer Rule");
+  const hb = await tx(f, "hubss.com", 28, 420, 5.5, O, true, 394, "right", 8);
+  if (hb) hb.letterSpacing = {value: 8, unit: "PERCENT"};
+  return f;
+}
+
 async function pageApplication(app, idx, total) {
   const f = fr(`App ${String(idx).padStart(2,"0")} — ${app.name}`);
   // v52 parity with print page_application: photo bleed-extended
@@ -1269,6 +1386,16 @@ async function buildCatalogue(d, section) {
   for (const prod of (d.products || [])) {
     frames.push(await safeBuild("Product Hero — " + (prod && prod.name || "?"), () => pageProductHero(prod)));
     frames.push(await safeBuild("Product Spec — " + (prod && prod.name || "?"), () => pageProductSpec(prod)));
+    // §7 StreetPrint process strip follows the StreetPrint spec (print parity).
+    if (prod && prod.name === "StreetPrint") {
+      frames.push(await safeBuild("§7 Process — Left", () => pageProcessLeft(d)));
+      frames.push(await safeBuild("§7 Process — Right", () => pageProcessRight(d)));
+    }
+    // §4 colour-system spread follows the StreetBondSR spec (print parity).
+    if (prod && prod.name === "StreetBondSR") {
+      frames.push(await safeBuild("§4 Colour — A", () => pageColourSystemA(d)));
+      frames.push(await safeBuild("§4 Colour — B", () => pageColourSystemB(d)));
+    }
     await progress("Products");
   }
   } // end products
@@ -1568,6 +1695,28 @@ def main():
     _generate_qr(qr_path)
 
     data = json.loads(DATA.read_text(encoding="utf-8"))
+    # Inject §4 colour-system (lives in catalog_content, not the export) + §7 process
+    # data. Image paths here are rewritten to hosted URLs by _rewrite_image_urls below.
+    try:
+        from .catalog_content import COLOUR_SYSTEM
+        data["colour_system"] = COLOUR_SYSTEM
+    except Exception as e:  # noqa: BLE001 — §4 degrades to empty chips, never crashes the build
+        print(f"  colour_system inject skipped: {e}")
+    _inst = ROOT.parent / "public" / "images" / "assets" / "installation-images"
+    data["process"] = {
+        "steps": [
+            {"num": "01", "title": "Reheat",
+             "desc": "Infrared reheaters bring the existing asphalt back to a workable temperature — no removal, no repaving, no haul-away.",
+             "image": str(_inst / "SP Installation2.jpg")},
+            {"num": "02", "title": "Stamp",
+             "desc": "Flexible templates press the pattern — brick, cobble, herringbone, or custom — into the warm surface, then compact it flush.",
+             "image": str(_inst / "SP Installation.jpg")},
+            {"num": "03", "title": "Coat",
+             "desc": "StreetBond colour locks the pattern in: UV-stable, skid-resistant, engineered for plows and de-icing seasons.",
+             "image": str(_inst / "SP Installation5.jpg")},
+        ],
+        "result_image": str(ROOT.parent / "public" / "images" / "products" / "streetprint" / "streetprint-77.jpg"),
+    }
     booklet = _load_booklet_manifest()
     rewritten = _rewrite_image_urls(data, booklet)
     print(f"Rewrote {rewritten} image path(s) -> hosted URLs ({len(booklet)} booklet asset(s) mapped)")

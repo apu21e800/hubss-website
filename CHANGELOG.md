@@ -212,7 +212,12 @@ Vern ran the fixed plugin: it built, but showed **no images**, and he asked whet
 | URL rewrite | `generate_plugin.py` rewrites all image paths → root-relative hosted URLs (`/public/images/*`→`/images/*`; booklet→`/images/catalogue-assets/*`). 91 rewritten. |
 | Booklet hosting | 7 build-only `booklet/` photos (cover etc., 205 MB full-res) → downscaled web JPEGs (~4.9 MB) at `public/images/catalogue-assets/` via `host_booklet_assets.py` + `_manifest.json`. |
 | manifest | `networkAccess.allowedDomains` = staging + hubss.com (required by createImageAsync). |
-| harness | mocks `createImageAsync`, tracks streamed URLs, dumps frame names (`--names`). **BUILD OK 116 frames · 89 images streamed · fonts loaded · wiring OK.** Served URLs verified 200. |
+| harness | mocks `createImageAsync`, tracks streamed URLs, dumps frame names (`--names`), and counts **applied** IMAGE fills. **BUILD OK 116 frames · 89 images streamed · fonts OK · wiring OK.** |
+
+**Pre-Figma verification (commit `4747113`, before any Increment 2):**
+- **Apply-path proven (harness):** 89 images streamed → **94 rects receive an `IMAGE` fill (89 unique, 5 reused)** — not just `createImageAsync` *called*, but the returned hash actually applied. Graceful fallback confirmed by review (fetch fail → `[PHOTO]` placeholder, never blank/crash).
+- **Every fetch target serves a real image:** all **89/89** image URLs the plugin requests return **`200` + `image/*`** on staging (paced HEAD sweep; an earlier all-`000` run was a `mapfile` carriage-return artifact, not missing files).
+- **Only a real-Figma run can confirm the rest:** that Figma's sandbox performs the `createImageAsync` fetch under `networkAccess`, and that fills render visually correct. That's Vern's visual check.
 
 **Part B — full 140-page parity (PLANNED ☐).** Plugin builds 116 frames; book is 140. Gap, confirmed against print `build()`:
 - **§4 colour spread (+2):** port `page_colour_system_a` (37 chips, Traditional + Signature, 6-col grid) + `page_colour_system_b` (11 SR chips 4-col + SRI/R/E verbatim + standards line + soft-LEED + 3 Cycle-Lane chips). Needs `COLOUR_SYSTEM` injected into plugin data (lives in `catalog_content.py`, not the export). Insert after StreetBondSR spec.

@@ -7,9 +7,10 @@
 2. **Import plugin from manifest…** → choose
    `catalog-print-build/figma-plugin/manifest.json` (in this repo, on your machine).
 3. Open a fresh Figma page, run the plugin. A panel opens **immediately** (no dark screen).
-4. Click **Build entire book**. A toast says **"Build started…"**, then **"Loading N photos from staging…"** (the bar ticks through ~94 images — give it a moment), then "Building… N frames", ending on **✓ Done — 140 frames**. Close the plugin.
-   - **If anything goes wrong it now tells you, loudly:** a red **✕ message stays in the panel** and an error toast appears (8 s). It no longer closes itself on error — so you'll never again get a silent blank canvas. If you see a ✕, copy the message to me.
-5. If "entire book" ever stalls on a given day, use the **section buttons** (Products / Applications / Projects / Network / Reference) — each is a separate safe pass onto the same page. (This is the documented fallback.)
+4. **On an EMPTY Figma page**, click **Build entire book**. A toast says **"Build started…"**, then **"Loading ~94 photos…"**, then "Building… N frames", ending on **✓ Done — 140 frames**. Close the plugin.
+   - **Always build on a fresh page, and delete any previous build before re-running.** Re-running adds a *new* 140-frame set — it doesn't replace the old one. Photos are now downscaled (~1600px) so a single build is light, but **stacking several image-heavy builds is what froze the workstation** — don't stack them.
+   - **If anything goes wrong it tells you, loudly:** a red **✕** stays in the panel + an error toast (8 s); it no longer closes itself on error. Copy the ✕ to me.
+5. **If the machine ever feels heavy, build by section** — the **section buttons** (Products / Applications / Projects / Network / Reference) each load only ~15–20 photos instead of 94, the lightest way to build (also the fallback if "entire book" ever stalls).
 
 ## What you get
 - Native, fully-editable frames: **live text layers** (edit type directly), **named layers** per archetype, the design-system **text styles + components**. Restructure pages freely.

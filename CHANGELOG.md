@@ -276,6 +276,17 @@ Greenlit after the PARITY-DIFF. Closed all 11 divergences + the 24-page structur
 
 Branch + staging fast-forwarded each commit. **PDF/flipbook untouched; main untouched.** Real-Figma Build is Vern's confirmation (headless can't run real Figma).
 
+## Session 13 — workstation freeze: diagnosed (GPU, not thermal) + streamlined
+
+After the parity build, the workstation slowed → mouse lag → froze, twice. Diagnosed from the event log: **Kernel-Power 41 ×2** (freeze → hard reset) with **no WHEA** → **not** a thermal/hardware crash; the signature of **GPU/RAM saturation**. Cause: the image-streaming I added makes the plugin fetch **91 photos at full resolution** (some 5712px) → **~1.3 GB decoded in Figma per build**, and re-running "Build entire book" without clearing **stacked** it to multiple GB → GPU/VRAM hang. (My earlier "the plugin run is light" assumption broke once it streamed full-res images.)
+
+**Fix (cloud-safe):**
+- `downscale_figma_images.py` — ≤1600px copies of the 43 oversized photos → `public/images/catalogue-figma/` (downscaled copies of already-public catalogue images; ~18 MB; light single-shot batch, draft() decode, ~12s). `generate_plugin.py` remaps streamed URLs to them (`_remap_urls`).
+- **Per-build decoded footprint 1.3 GB → 0.47 GB (~2.8×)** — a single Build is now well under the GPU ceiling. Display quality unchanged (a 450px frame never needed 5712px).
+- **RUN-THE-PLUGIN.md** updated: build on an **empty page**, **never stack re-runs**, and use **section buttons** (~15–20 photos each) when the machine feels heavy — the operational guard against re-freezing.
+
+Harness: PARITY OK, 140 frames. Committed `41ee2c7`. No PDF/flipbook rebuild; main untouched. Memory updated with the Figma-image-load caveat.
+
 ## §8/§9 — Quality, nav, build  ☐
 
 | Item | Action |

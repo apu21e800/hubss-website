@@ -881,12 +881,13 @@ async function pageTechnical() {
     ["AirMark",           "Airfield",    "Non-runway preformed thermoplastic"],
   ];
   let y = 130;
+  const COL = [30, 186, 264];   // name | spec | description — even 10px gutters, no overlap (was 180/270, key overran desc)
   for (const [name, key, desc] of prods) {
-    await tx(f, name, 30, y, 10, D, true, 148);
-    const k = await tx(f, key.toUpperCase(), 180, y, 6.5, O, false, 120, null, 9);
-    if (k) k.letterSpacing = {value: 8, unit: "PERCENT"};
-    await tx(f, desc, 270, y, 8.6, M, false, 160);
-    rct(f, 30, y + 14, 390, 1, F, "rule");
+    await tx(f, name, COL[0], y, 10, D, true, 146);
+    const k = await tx(f, key.toUpperCase(), COL[1], y + 3, 6.5, O, false, 68, null, 9);  // +3 baseline-aligns the small caps to the name
+    if (k) { k.letterSpacing = {value: 8, unit: "PERCENT"}; k.name = "Technical / Row Spec"; }
+    await tx(f, desc, COL[2], y + 1, 8.6, M, false, 158, null, 12);
+    rct(f, 30, y + 15, 390, 0.6, F, "Technical / Row Rule");   // hairline rule
     y += 22;
   }
   return f;

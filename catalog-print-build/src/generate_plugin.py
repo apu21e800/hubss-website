@@ -652,23 +652,29 @@ async function pageAppImage(app) {
   return f;
 }
 async function pageAppCard(app, idx) {
+  // Pro pass: balanced outer margins (M all sides) + footer anchored at the
+  // bottom safe margin (kills the dead bottom band); whitespace sits in the
+  // upper-middle as editorial breathing, not a void under the body.
   const f = fr("App " + String(idx).padStart(2, "0") + " — " + (app.name || ""));
-  const dot = figma.createEllipse(); dot.resize(3, 3); dot.x = 28; dot.y = 65;
+  const MG = 34;            // balanced left/right/(top/bottom) safe margin
+  const CW = 450 - 2 * MG;  // 382 content width — left & right borders equal
+  const dot = figma.createEllipse(); dot.resize(3, 3); dot.x = MG - 1; dot.y = 50;
   dot.fills = [{type:"SOLID", color: O}]; dot.name = "App Card / Dot"; f.appendChild(dot);
-  const eb = await tx(f, (app.name || "").toUpperCase(), 40, 61, 7.5, O, true, 380, null, 11);
+  const eb = await tx(f, (app.name || "").toUpperCase(), MG + 11, 46, 7.5, O, true, CW - 11, null, 11);
   if (eb) { eb.letterSpacing = {value: 16, unit: "PERCENT"}; eb.name = "App Card / Eyebrow"; }
-  rct(f, 28, 86, 32, 2.5, O, "App Card / Rule");
-  const head = await tx(f, app.tagline || app.name || "", 28, 126, 26, D, true, 394, null, 28);
+  rct(f, MG, 70, 32, 2.5, O, "App Card / Rule");
+  const head = await tx(f, app.tagline || app.name || "", MG, 100, 26, D, true, CW, null, 29);
   if (head) head.name = "App Card / Headline";
   if (app.location) {
-    const loc = await tx(f, String(app.location).toUpperCase(), 28, 220, 6.5, F, true, 394, null, 9);
+    const loc = await tx(f, String(app.location).toUpperCase(), MG, 244, 6.5, F, true, CW, null, 9);
     if (loc) { loc.letterSpacing = {value: 16, unit: "PERCENT"}; loc.name = "App Card / Location"; }
   }
-  const body = await tx(f, app.body || "", 28, 245, 10, M, false, 394, null, 14.5);
+  const body = await tx(f, app.body || "", MG, 268, 10, M, false, CW - 26, null, 14.5);
   if (body) body.name = "App Card / Body";
-  const url = await tx(f, "HUBSS.COM", 28, 432, 5.5, O, true, 190, null, 9);
+  // Footer anchored inside the bottom safe margin (450 - 38) — balances the top.
+  const url = await tx(f, "HUBSS.COM", MG, 412, 5.5, O, true, 180, null, 9);
   if (url) { url.letterSpacing = {value: 16, unit: "PERCENT"}; url.name = "App Card / Footer / URL"; }
-  const ctr = await tx(f, "APPLICATION " + String(idx).padStart(2, "0"), 232, 432, 5.5, F, true, 190, "right", 9);
+  const ctr = await tx(f, "APPLICATION " + String(idx).padStart(2, "0"), 450 - MG - 180, 412, 5.5, F, true, 180, "right", 9);
   if (ctr) { ctr.letterSpacing = {value: 16, unit: "PERCENT"}; ctr.name = "App Card / Footer / Counter"; }
   return f;
 }

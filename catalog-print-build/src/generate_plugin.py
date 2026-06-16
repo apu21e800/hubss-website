@@ -1727,6 +1727,29 @@ def _rewrite_image_urls(node, booklet: dict) -> int:
     return n
 
 
+def _load_figma_downscale() -> dict:
+    f = ROOT.parent / "public" / "images" / "catalogue-figma" / "_manifest.json"
+    if f.exists():
+        return json.loads(f.read_text(encoding="utf-8"))
+    return {}
+
+
+def _remap_urls(node, mapping: dict) -> int:
+    """In-place: swap any image URL for its downscaled catalogue-figma copy."""
+    n = 0
+    if isinstance(node, dict):
+        for k, v in node.items():
+            if isinstance(v, str) and v in mapping:
+                node[k] = mapping[v]
+                n += 1
+            elif not isinstance(v, str):
+                n += _remap_urls(v, mapping)
+    elif isinstance(node, list):
+        for v in node:
+            n += _remap_urls(v, mapping)
+    return n
+
+
 def main():
     if not DATA.exists():
         print(f"ERROR: {DATA} not found. Run: python -B -m src.export_json first.")
@@ -1771,6 +1794,12 @@ def main():
     booklet = _load_booklet_manifest()
     rewritten = _rewrite_image_urls(data, booklet)
     print(f"Rewrote {rewritten} image path(s) -> hosted URLs ({len(booklet)} booklet asset(s) mapped)")
+    # Point streamed photos at downscaled Figma copies — keeps a full Build well
+    # under Figma's GPU/RAM ceiling (full-res ~1.3GB decoded -> ~0.2GB).
+    figma_ds = _load_figma_downscale()
+    if figma_ds:
+        remapped = _remap_urls(data, figma_ds)
+        print(f"Remapped {remapped} image URL(s) -> downscaled catalogue-figma copies ({len(figma_ds)} available)")
     data_json = json.dumps(data, ensure_ascii=False, separators=(",", ":"))
 
     # Inject the catalog data into the JS template

@@ -624,15 +624,16 @@ async function pageColourSystemB(d) {
   if (eb) eb.letterSpacing = {value: 12, unit: "PERCENT"};
   await tx(f, "Cooler by design.", 28, 34, 26, D, true, 394, null, 28);
   await tx(f, "Eleven solar-reflective colours, measured and rated. A higher SRI means a cooler surface.", 28, 68, 10, M, false, 394, null, 14);
-  const COLS = 4, CELL_W = 394 / COLS, CHIP_W = 86, CHIP_H = 20, ROW_H = 50;
+  const COLS = 4, CHIP_W = 86, CHIP_H = 20, ROW_H = 50;
+  const STRIDE = (394 - CHIP_W) / (COLS - 1);   // even edge-to-edge (no right-short)
   const gy = 108;
   for (let i = 0; i < sr.length; i++) {
     const r = Math.floor(i / COLS), k = i % COLS;
-    const x = 28 + k * CELL_W, y = gy + r * ROW_H;
+    const x = 28 + k * STRIDE, y = gy + r * ROW_H;
     const chip = rct(f, x, y, CHIP_W, CHIP_H, hexToRgb(sr[i].hex), "SR Chip / " + sr[i].name);
     if (chip && sr[i].name === "SR White") { chip.strokes = [{type:"SOLID", color: F}]; chip.strokeWeight = 0.5; }
-    await tx(f, sr[i].name, x, y + CHIP_H + 3, 7.8, D, false, CELL_W - 6, null, 9);
-    await tx(f, "SRI " + sr[i].sri + " · R " + sr[i].reflectance + " · E " + sr[i].emittance, x, y + CHIP_H + 13, 6.5, M, false, CELL_W - 6, null, 8);
+    await tx(f, sr[i].name, x, y + CHIP_H + 3, 7.8, D, false, STRIDE - 6, null, 9);
+    await tx(f, "SRI " + sr[i].sri + " · R " + sr[i].reflectance + " · E " + sr[i].emittance, x, y + CHIP_H + 13, 6.5, M, false, STRIDE - 6, null, 8);
   }
   let y = gy + Math.ceil(sr.length / COLS) * ROW_H + 4;
   await tx(f, "Reflectance ASTM C1549  ·  Emittance ASTM C1371  ·  SRI ASTM E1980.", 28, y, 7.8, F, false, 394, null, 10);
@@ -643,11 +644,11 @@ async function pageColourSystemB(d) {
   const clLab = await tx(f, "CYCLE LANE — " + cl.length, 28, y, 6.5, F, false, 394, null, 9);
   if (clLab) clLab.letterSpacing = {value: 8, unit: "PERCENT"};
   rct(f, 28, y + 11, 394, 0.6, F, "Colour B / CL Rule");
-  const gy2 = y + 18, CELL2 = 394 / 3;
+  const gy2 = y + 18, CLW = 118, CLSTRIDE = (394 - CLW) / 2;   // 3 chips edge-to-edge (stride 138)
   for (let i = 0; i < cl.length; i++) {
-    const x = 28 + i * CELL2;
-    rct(f, x, gy2, CELL2 - 14, 26, hexToRgb(cl[i].hex), "CL Chip / " + cl[i].name);
-    await tx(f, cl[i].name, x, gy2 + 29, 7.8, D, false, CELL2 - 14, null, 9);
+    const x = 28 + i * CLSTRIDE;
+    rct(f, x, gy2, CLW, 26, hexToRgb(cl[i].hex), "CL Chip / " + cl[i].name);
+    await tx(f, cl[i].name, x, gy2 + 29, 7.8, D, false, CLW, null, 9);
   }
   rct(f, 28, 412, 394, 0.6, F, "Colour B / Footer Rule");
   const hb = await tx(f, "hubss.com", 28, 420, 5.5, O, true, 394, "right", 8);

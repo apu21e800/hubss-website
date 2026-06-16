@@ -589,7 +589,10 @@ async function pageColourSystemA(d) {
   if (eb) eb.letterSpacing = {value: 12, unit: "PERCENT"};
   await tx(f, "The full palette.", 28, 34, 26, D, true, 394, null, 28);
   await tx(f, "37 standard colours in two families. Full custom Pantone matching.", 28, 68, 10, M, false, 394, null, 14);
-  const COLS = 6, CELL_W = 394 / COLS, CHIP_W = 54, CHIP_H = 18, ROW_H = 38;
+  // Even edge-to-edge grid: first chip flush left @28, last chip flush right @422
+  // (equal 14px gaps, no right-short). Names baseline-aligned under each chip.
+  const COLS = 6, CHIP_W = 54, CHIP_H = 18, ROW_H = 38;
+  const STRIDE = (394 - CHIP_W) / (COLS - 1);
   async function family(label, items, y0) {
     const lab = await tx(f, label, 28, y0, 6.5, F, false, 394, null, 9);
     if (lab) lab.letterSpacing = {value: 8, unit: "PERCENT"};
@@ -597,9 +600,9 @@ async function pageColourSystemA(d) {
     const gy = y0 + 18;
     for (let i = 0; i < items.length; i++) {
       const r = Math.floor(i / COLS), k = i % COLS;
-      const x = 28 + k * CELL_W, y = gy + r * ROW_H;
+      const x = 28 + k * STRIDE, y = gy + r * ROW_H;
       rct(f, x, y, CHIP_W, CHIP_H, hexToRgb(items[i].hex), "Chip / " + items[i].name);
-      await tx(f, items[i].name, x, y + CHIP_H + 3, 7.8, M, false, CELL_W - 4, null, 9);
+      await tx(f, items[i].name, x, y + CHIP_H + 3, 7.8, M, false, STRIDE - 6, null, 9);
     }
     return gy + Math.ceil(items.length / COLS) * ROW_H + 6;
   }

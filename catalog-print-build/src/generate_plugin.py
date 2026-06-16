@@ -590,31 +590,31 @@ async function pageProjectStory(proj, idx) {
 }
 
 async function pageInstaller(inst, idx, total) {
+  // v58 parity with print page_installer — clean WHITE page (was a stale navy
+  // header band): orange credential label, logo top-right, editorial photo,
+  // region + name + body, orange rule, Phone / Online footer.
   const f = fr("Installer — " + inst.name);
-  // Navy header band — credential zone. Keeps photo uncluttered.
-  navyBand(f, 152);
-  const bandNode = f.children[f.children.length - 1];
-  if (bandNode) bandNode.name = "Installer / Header / Navy Band";
-  const t1 = await tx(f, "HUB CERTIFIED INSTALLER", 28, 28, 5.5, O, false, 260, null, 8);
-  if (t1) t1.name = "Installer / Header / Credential";
-  const t2 = await tx(f, String(idx).padStart(2,"0") + " / " + String(total).padStart(2,"0"), 28, 28, 5.5, {r:0.38,g:0.38,b:0.38}, false, 394, "right", 8);
-  if (t2) t2.name = "Installer / Header / Counter";
-  const tName = await tx(f, inst.name, 28, 52, 28, W, true, 394, null, 32);
-  if (tName) tName.name = "Installer / Header / Name";
-  const tRegion = await tx(f, (inst.region || "").toUpperCase(), 28, 102, 5.5, {r:0.45,g:0.45,b:0.45}, false, 394, null, 8);
-  if (tRegion) tRegion.name = "Installer / Header / Region";
-  const rule = rul(f, 28, 128, 32); if (rule) rule.name = "Installer / Header / Brand Rule";
-  // Contained editorial photo
-  ph(f, 0, 152, 450, 192, "Installer / Photo / " + inst.name, inst.image);
-  // White content zone below photo
-  const body = await tx(f, inst.body || "", 28, 360, 9.5, D, false, 394, null, 14);
+  const t1 = await tx(f, "HUB CERTIFIED INSTALLER", 30, 30, 6.5, O, false, 280, null, 9);
+  if (t1) { t1.letterSpacing = {value: 10, unit: "PERCENT"}; t1.name = "Installer / Credential"; }
+  // Logo zone top-right (installer logo if present, else named placeholder)
+  logo(f, 320, 26, 100, 28, "Installer / Logo / " + inst.name, inst.logo);
+  // Editorial photo
+  ph(f, 30, 72, 390, 170, "Installer / Photo / " + inst.name, inst.image);
+  const tRegion = await tx(f, (inst.region || "").toUpperCase(), 30, 258, 6.5, F, false, 380, null, 9);
+  if (tRegion) { tRegion.letterSpacing = {value: 8, unit: "PERCENT"}; tRegion.name = "Installer / Region"; }
+  const tName = await tx(f, inst.name, 30, 270, 26, D, true, 380, null, 28);
+  if (tName) tName.name = "Installer / Name";
+  const body = await tx(f, inst.body || "", 30, 325, 10, D, false, 380, null, 14);
   if (body) body.name = "Installer / Body";
-  // Footer
-  const ftrRule = rct(f, 28, 400, 394, 1, F, "Installer / Footer / Rule");
-  const phone = await tx(f, inst.phone || "", 28, 410, 10, D, true, 190);
-  if (phone) phone.name = "Installer / Footer / Phone";
-  const url = await tx(f, inst.url || "", 238, 411, 9, O, false, 182);
-  if (url) url.name = "Installer / Footer / URL";
+  rct(f, 30, 380, 380, 1.2, O, "Installer / Rule");
+  const phLbl = await tx(f, "PHONE", 30, 395, 6.5, F, false, 180, null, 9);
+  if (phLbl) { phLbl.letterSpacing = {value: 8, unit: "PERCENT"}; phLbl.name = "Installer / Phone Label"; }
+  const phone = await tx(f, inst.phone || "", 30, 408, 14.5, D, true, 180);
+  if (phone) phone.name = "Installer / Phone";
+  const onLbl = await tx(f, "ONLINE", 220, 395, 6.5, F, false, 200, null, 9);
+  if (onLbl) { onLbl.letterSpacing = {value: 8, unit: "PERCENT"}; onLbl.name = "Installer / Online Label"; }
+  const url = await tx(f, inst.url || "", 220, 408, 14.5, O, true, 200);
+  if (url) url.name = "Installer / URL";
   return f;
 }
 
@@ -693,26 +693,30 @@ async function pageImageSpread(label, imagePath, headline) {
 
 async function pageTechnical() {
   const f = fr("Reference — Technical");
-  await tx(f, "TECHNICAL REFERENCE", 30, 40, 7, O, false, 370);
-  await tx(f, "At a Glance.", 30, 68, 24, D, true, 370);
+  // v58 parity with print page_technical_reference — "The systems." + 11 products.
+  const eb = await tx(f, "PRODUCT REFERENCE", 30, 40, 7.5, O, true, 370, null, 11);
+  if (eb) { eb.letterSpacing = {value: 14, unit: "PERCENT"}; eb.name = "Technical / Eyebrow"; }
+  await tx(f, "The systems.", 30, 68, 26, D, true, 370);
   const prods = [
-    ["TrafficPatternsXD", "Thermoplastic", "High-durability preformed marking"],
-    ["TrafficPatterns",   "Thermoplastic", "Standard preformed marking"],
-    ["StreetBond",        "MMA Coating",   "Decorative coloured pavement"],
-    ["StreetPrint",       "Stamped Asphalt","Brick and stone patterns"],
-    ["DecoMark",          "Epoxy",         "Coloured crosswalk systems"],
-    ["MMAX",              "MMA Resin",     "Coloured lane treatment"],
-    ["DuraTherm",         "Inlaid",        "Snowplow-safe flush inlay"],
-    ["DuraShield",        "Penetrating",   "Asphalt rejuvenator"],
-    ["PreMark",           "Pre-cut",       "Bike infrastructure markings"],
-    ["AirMark",           "Airfield",      "FAA-compliant markings"],
+    ["TrafficPatternsXD", "150 mil",     "Heavy-duty thermoplastic"],
+    ["TrafficPatterns",   "125 mil",     "Standard thermoplastic"],
+    ["StreetBond",        "Acrylic",     "Coloured pavement coating"],
+    ["StreetBondSR",      "Solar Refl.", "LEED contributing surface"],
+    ["StreetPrint",       "Stamped",     "Genuine stamped asphalt"],
+    ["DecoMark",          "Custom",      "Graphic thermoplastic"],
+    ["DuraTherm",         "Inlaid",      "Snowplow-safe flush"],
+    ["DuraShield",        "Coating",     "Two-component asphalt maintenance"],
+    ["PreMark",           "Pre-cut",     "Regulatory pavement markings"],
+    ["MMAX",              "MMA Resin",   "Coloured lane treatment"],
+    ["AirMark",           "Airfield",    "Non-runway preformed thermoplastic"],
   ];
-  let y = 128;
+  let y = 130;
   for (const [name, key, desc] of prods) {
-    await tx(f, name, 30, y, 9, D, true, 148);
-    await tx(f, key.toUpperCase(), 185, y, 6, O, false, 110);
-    await tx(f, desc, 272, y, 8, M, false, 158);
-    rct(f, 30, y+15, 390, 1, F, "rule");
+    await tx(f, name, 30, y, 10, D, true, 148);
+    const k = await tx(f, key.toUpperCase(), 180, y, 6.5, O, false, 120, null, 9);
+    if (k) k.letterSpacing = {value: 8, unit: "PERCENT"};
+    await tx(f, desc, 270, y, 8.6, M, false, 160);
+    rct(f, 30, y + 14, 390, 1, F, "rule");
     y += 22;
   }
   return f;
@@ -720,20 +724,23 @@ async function pageTechnical() {
 
 async function pageCities(d) {
   const f = fr("Reference — Cities");
-  // "500+" as hero stat — visual anchor, gives the city list credibility and scale
-  await tx(f, "500+", 30, 28, 60, O, true, 390);
-  await tx(f, "Canadian municipalities", 30, 98, 9, D, false, 280, null, 13);
-  await tx(f, "that specify HUB systems by name.", 30, 113, 9, M, false, 280, null, 13);
-  await tx(f, "FROM HALIFAX TO VANCOUVER", 30, 133, 5.5, F, false, 390, null, 8);
-  rct(f, 30, 150, 390, 1, F, "rule");
-  await tx(f, "A partial list", 30, 158, 7, M, false, 390, "right", 10);
-  // City list — 2 columns, 8px type, generous spacing
+  // v58 parity with print page_cities — "10" provinces hero + 2-column city list.
+  await tx(f, "10", 30, 28, 60, O, true, 390, null, 64);
+  const s1 = await tx(f, "provinces and territories", 30, 98, 10, D, false, 280, null, 14);
+  if (s1) s1.name = "Cities / Subtitle 1";
+  const s2 = await tx(f, "specify HUB systems by name, coast to coast.", 30, 113, 10, M, false, 280, null, 14);
+  if (s2) s2.name = "Cities / Subtitle 2";
+  const eb = await tx(f, "FROM HALIFAX TO VANCOUVER", 30, 133, 5.5, F, false, 390, null, 8);
+  if (eb) { eb.letterSpacing = {value: 12, unit: "PERCENT"}; eb.name = "Cities / Eyebrow"; }
+  rct(f, 30, 150, 390, 1, F, "Cities / Rule");
+  await tx(f, "A partial list", 30, 158, 7.8, M, false, 390, "right", 11);
+  // City list — 2 columns, 8.6pt, 13px spacing (print page_cities)
   const cities = d.cities || [];
   let y = 172;
   for (let i = 0; i < cities.length; i += 2) {
     if (y > 418) break;
-    await tx(f, cities[i]||"", 30, y, 8, D, false, 185);
-    if (cities[i+1]) await tx(f, cities[i+1], 235, y, 8, D, false, 175);
+    await tx(f, cities[i] || "", 30, y, 8.6, D, false, 185, null, 12);
+    if (cities[i + 1]) await tx(f, cities[i + 1], 235, y, 8.6, D, false, 175, null, 12);
     y += 13;
   }
   return f;

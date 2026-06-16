@@ -665,7 +665,7 @@ async function pageDoublespread(label, imagePath, caption, rightStyle, rightImag
     await tx(fR, "outlast.", 28, 180, 52, O, true, 394);
     rct(fR, 28, 248, 394, 1, {r:1,g:1,b:1}, "Divider");
     fR.children[fR.children.length-1].opacity = 0.15;
-    await tx(fR, "30+ years   ·   1,000+ projects   ·   500+ municipalities", 28, 262, 7.5, M, false, 394, "center", 11);
+    await tx(fR, "30+ years   ·   1,000+ projects   ·   10 provinces", 28, 262, 7.5, M, false, 394, "center", 11);
     rct(fR, 28, 288, 394, 1, {r:1,g:1,b:1}, "Divider");
     fR.children[fR.children.length-1].opacity = 0.08;
     await tx(fR, "The surface beneath every city we've built.", 28, 308, 12, W, false, 360);
@@ -812,7 +812,7 @@ async function pageContact(d) {
   const t1 = await tx(f, "TWO OFFICES. ONE NETWORK.", 30, 14, 5.5, O, false, 390, null, 8);
   if (t1) t1.name = "Contact / Header / Eyebrow";
   const r1 = rul(f, 30, 30, 24); if (r1) r1.name = "Contact / Header / Brand Rule";
-  const t2 = await tx(f, "Speak with HUB.", 30, 44, 22, W, true, 390);
+  const t2 = await tx(f, "Speak with HUB.", 30, 44, 28, W, true, 390);
   if (t2) t2.name = "Contact / Header / Display";
   // Content zone
   const intro = await tx(f, "Every project starts with a conversation.", 30, 96, 10, M, false, 390, null, 15);
@@ -1004,20 +1004,19 @@ async function pageHubNumbers() {
 // A breath before the product sections begin. Clean typographic confidence.
 async function pageStatement() {
   const f = fr("Editorial — Statement");
-  const eb = await tx(f, "THE SURFACE UNDERFOOT", 28, 60, 6, O, true, 394, null, 9);
+  // v58 parity with print page_statement — "Position" pull-quote on white.
+  const eb = await tx(f, "POSITION", 30, 70, 7.5, O, true, 390, null, 11);
   if (eb) { eb.letterSpacing = {value: 16, unit: "PERCENT"}; eb.name = "Statement / Eyebrow"; }
-  const h1 = await tx(f, "Every surface", 28, 86, 30, D, true, 394, null, 36);
+  rct(f, 30, 88, 24, 2, O, "Statement / Brand Rule");
+  const h1 = await tx(f, "Asphalt is the canvas.", 30, 160, 31, D, true, 390, null, 33.5);
   if (h1) h1.name = "Statement / H1 / Line 1";
-  const h2 = await tx(f, "tells the city's", 28, 124, 30, D, true, 394, null, 36);
+  const h2 = await tx(f, "The city is the gallery.", 30, 200, 31, O, true, 390, null, 33.5);
   if (h2) h2.name = "Statement / H1 / Line 2";
-  const h3 = await tx(f, "story first.", 28, 162, 30, O, true, 394, null, 36);
-  if (h3) h3.name = "Statement / H1 / Line 3";
-  rct(f, 28, 214, 32, 2, O, "Statement / Brand Rule");
-  const body = await tx(f, "From a community crosswalk in Sechelt to a transit corridor in Toronto, the mark on the street carries meaning beyond its function. Specify it right. Choose it to last twenty years.", 28, 230, 9.5, D, false, 330, null, 14);
+  const body = await tx(f, "Every crosswalk we install is a small public artwork. Every BRT lane, a piece of civic identity. Every Indigenous medallion, a recognition that streets carry meaning long after the paint fades.", 30, 275, 10, M, false, 350, null, 14);
   if (body) body.name = "Statement / Body";
-  rct(f, 28, 398, 394, 1, F, "Statement / Footer / Rule");
-  const url = await tx(f, "hubss.com", 28, 410, 7, O, true, 394, "right", 11);
-  if (url) url.name = "Statement / Footer / URL";
+  rct(f, 30, 400, 48, 2, O, "Statement / Footer / Rule");
+  const foot = await tx(f, "HUB SURFACE SYSTEMS   ·   ESTABLISHED 1994", 30, 414, 5.5, F, false, 390, null, 8);
+  if (foot) { foot.letterSpacing = {value: 10, unit: "PERCENT"}; foot.name = "Statement / Footer"; }
   return f;
 }
 
@@ -1301,7 +1300,7 @@ async function buildCatalogue(d, section) {
     const dpsBL = d.section_openers && d.section_openers.dps_b_left;
     const dpsBR = d.section_openers && d.section_openers.dps_b_right;
     if (dpsBL) {
-      const [bL, bR] = await pageDoublespread("Across Canada", dpsBL, "Five hundred municipalities. One standard.", undefined, dpsBR || dpsBL);
+      const [bL, bR] = await pageDoublespread("Across Canada", dpsBL, "Ten provinces. One standard.", undefined, dpsBR || dpsBL);
       frames.push(bL, bR);
     }
   }

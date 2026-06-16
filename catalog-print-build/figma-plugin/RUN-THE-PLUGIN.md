@@ -7,17 +7,17 @@
 2. **Import plugin from manifest…** → choose
    `catalog-print-build/figma-plugin/manifest.json` (in this repo, on your machine).
 3. Open a fresh Figma page, run the plugin. A panel opens **immediately** (no dark screen).
-4. Click **Build entire book**. Immediately a toast says **"Build started — loading fonts, then placing pages…"** (so you always know it heard the click), then "Building… N frames" ticks up with the bar, and it ends on **✓ Done — 116 frames**. Close the plugin.
+4. Click **Build entire book**. A toast says **"Build started…"**, then **"Loading N photos from staging…"** (the bar ticks through ~89 images — this is the new part, give it a moment), then "Building… N frames", ending on **✓ Done — 116 frames**. Close the plugin.
    - **If anything goes wrong it now tells you, loudly:** a red **✕ message stays in the panel** and an error toast appears (8 s). It no longer closes itself on error — so you'll never again get a silent blank canvas. If you see a ✕, copy the message to me.
 5. If "entire book" ever stalls on a given day, use the **section buttons** (Products / Applications / Projects / Network / Reference) — each is a separate safe pass onto the same page. (This is the documented fallback.)
 
 ## What you get
 - Native, fully-editable frames: **live text layers** (edit type directly), **named layers** per archetype, the design-system **text styles + components**. Restructure pages freely.
 - Re-running migrates the text styles in place (the `_ensureTextStyle` upsert) — it won't create duplicates.
-- Photos render as named **`[PHOTO]` placeholder rectangles** — drop your images into them (or pull from the flipbook/PDF). We deliberately do **not** embed images in the plugin (that's what caused the dark screen).
+- **Photos now stream in automatically** — the plugin fetches each one from the hosted images (staging) via `createImageAsync` and applies it as a fill, so the frames come in with real photography. (Streamed, *not* embedded — embedding the image bank is what dark-screened Figma. Anything that can't be fetched falls back to a named `[PHOTO]` placeholder you can drop into.) Needs internet; the manifest allows the staging + hubss.com domains.
 
 ## Two honest caveats
-- **Page coverage:** the plugin currently builds the **~100-page** structure from `catalogue-layout.json`. It does **not yet** include the §4 colour-system spread or the §7 StreetPrint process strip that are in the 140-page print/flipbook (v58). Closing that gap (porting those archetypes into the plugin) is the next step — flagged so the frame count won't surprise you.
+- **Page coverage (parity work in progress):** the plugin builds **116 frames**; the print/flipbook is **140**. The gap — §4 colour-system spread, §7 StreetPrint process strip, and applications rendered as 2-page spreads — is the increment I'm porting next. So expect 116 for now; it'll grow to 140.
 - **Verification:** beyond syntax-checking, a headless harness (`catalogue-finishing/_figma_harness.js`) now runs code.js against a **font-aware mock of the Figma API** — it rejects fake style names (this is what would have caught the `"SemiBold"` bug) and confirms all 116 frames build. But I still can't run a *real* Figma plugin headless, so **your Build is the final test.** If anything misbehaves, the panel will show a ✕ — send me that line and I'll fix it.
 
 _Layout data: `catalogue-layout.json` (here + served at `/catalogue/figma/catalogue-layout.json`). Regenerate after content changes: `python -B -m src.export_json && python -m src.generate_plugin` from `catalog-print-build/` — and do **not** run `embed_images` (that re-creates the 22.7 MB bank)._

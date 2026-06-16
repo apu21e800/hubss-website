@@ -201,6 +201,25 @@ Committed `0e85a41` → branch + **staging fast-forward** (clean, `origin/stagin
 
 `code.js` regenerated **~112 KB** (gitignored). Kept: streaming, `_ensureTextStyle` upsert, `[PHOTO]` placeholders, named layers, live text, batched yields. Committed `2887b23`. **Real-Figma run is still Vern's confirmation** — but the failure is now loud, so the next run is diagnostic even if something else is wrong.
 
+## Session 9 — "no images / does it match the flipbook?" → stream photos + plan full parity
+
+Vern ran the fixed plugin: it built, but showed **no images**, and he asked whether it aligns with the v58 PDF/flipbook. Honest answer: it was the editable skeleton — same data source (so text + photo *slots* line up), but (a) photos were `[PHOTO]` placeholders, (b) 116 frames vs the book's 140, (c) type not 1:1. He chose **stream images + full 140-page parity**.
+
+**Part A — image streaming (DONE, committed `ed495e5`).** The plugin couldn't show images without the embedded base64 bank (= the 22.7 MB dark-screen). Replaced with runtime streaming:
+| Piece | Detail |
+|---|---|
+| `figma.createImageAsync` | New `preloadImages()` fetches every photo URL from `IMAGE_BASE` (staging) into `IMAGE_HASHES`, batched w/ progress; shared `_fillImage()` (used by `ph`/`phFit`/`logo`) applies the streamed hash, placeholder on miss. code.js stays **~102 KB**. |
+| URL rewrite | `generate_plugin.py` rewrites all image paths → root-relative hosted URLs (`/public/images/*`→`/images/*`; booklet→`/images/catalogue-assets/*`). 91 rewritten. |
+| Booklet hosting | 7 build-only `booklet/` photos (cover etc., 205 MB full-res) → downscaled web JPEGs (~4.9 MB) at `public/images/catalogue-assets/` via `host_booklet_assets.py` + `_manifest.json`. |
+| manifest | `networkAccess.allowedDomains` = staging + hubss.com (required by createImageAsync). |
+| harness | mocks `createImageAsync`, tracks streamed URLs, dumps frame names (`--names`). **BUILD OK 116 frames · 89 images streamed · fonts loaded · wiring OK.** Served URLs verified 200. |
+
+**Part B — full 140-page parity (PLANNED ☐).** Plugin builds 116 frames; book is 140. Gap, confirmed against print `build()`:
+- **§4 colour spread (+2):** port `page_colour_system_a` (37 chips, Traditional + Signature, 6-col grid) + `page_colour_system_b` (11 SR chips 4-col + SRI/R/E verbatim + standards line + soft-LEED + 3 Cycle-Lane chips). Needs `COLOUR_SYSTEM` injected into plugin data (lives in `catalog_content.py`, not the export). Insert after StreetBondSR spec.
+- **§7 process strip (+2):** `page_process_left` (3 steps: num / title / desc + install photo) + `page_process_right` (full-bleed `products/streetprint/streetprint-77.jpg` + scrim + caption). Insert after StreetPrint spec.
+- **Applications as 2-page spreads (+~17):** print uses `page_full_image` + `page_app_card` per app; plugin combines into 1 frame. Split to mirror the plugin's existing project hero/story pattern.
+- **Spacers** (`page_spacer`) to land exactly 140.
+
 ## §8/§9 — Quality, nav, build  ☐
 
 | Item | Action |

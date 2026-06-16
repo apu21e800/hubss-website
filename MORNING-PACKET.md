@@ -2,7 +2,7 @@
 
 **Status: shipped to staging.** Final finishing pass (overlay legibility + four photo calls) complete, regenerated as **v58 / 140 pp**, merged to `staging` (fast-forward, no conflicts), staging deployment **READY**. Nothing touched main/production.
 
-_Built: 2026-06-13. Branch `chore/catalogue-final-revision` → `staging` (clean FF). v58 print/flipbook artifacts unchanged; the latest pushes are plugin fixes only (`code.js` is gitignored/local). Plugin font fix: `2887b23`._
+_Branch `chore/catalogue-final-revision` → `staging` (clean FF); staging **READY**. v58 print/flipbook artifacts unchanged. **Plugin now streams real photos** (createImageAsync from the hosted images — `ed495e5`); all booklet URLs verified 200. Next increment: full 140-page parity (§4 colour spread + §7 process strip + applications as 2-page spreads). Font fix `2887b23`._
 
 ---
 

@@ -287,6 +287,18 @@ After the parity build, the workstation slowed → mouse lag → froze, twice. D
 
 Harness: PARITY OK, 140 frames. Committed `41ee2c7`. No PDF/flipbook rebuild; main untouched. Memory updated with the Figma-image-load caveat.
 
+## Session 14 — OVERNIGHT PREMIUM PASS (Figma plugin only, cloud-safe)
+
+Elevated the product pages + colour/reference spreads to a design-led standard, **in `generate_plugin.py` only** — no ReportLab/PyMuPDF, no PDF/flipbook rebuild (v58 frozen). Commit-per-page; harness stayed **PARITY OK (140 frames, fonts loaded)** after each.
+
+- `d27f4c1` — **Product SPEC** (all 11): snapped off-ramp sizes to TYPE-SPEC (name/title 22→21, subhead 10.5→**12.5**, body 9.5→**10**, label 6.0→**6.5**); even 2-col spec grid (equal 186px cols + 22px gutter, was 28/230 mismatched); `noOrphan` on title.
+- `2a35934` — **Product HERO** (all 11): tagline 22→**21** (TYPE-SPEC), lh 26→25, `noOrphan`.
+- `f5310e9` — **§4 colour A**: 37-chip grid → mathematically even edge-to-edge (`STRIDE=(394−chipW)/(cols−1)`), first chip flush at margin, last at 422, names baseline-aligned.
+- `c1abcf2` — **§4 colour B**: SR 4-col + 3 cycle-lane chips evened edge-to-edge; SRI·R·E aligned under each SR chip.
+- `1780c02` — **Reference "systems" table**: spec col was overrunning desc; reset to true 3 cols name|spec|desc at x=30/186/264, no overlap, spec small-caps baseline-nudged +3, row rules to 0.6px hairline.
+
+Shared: added **`noOrphan()`** helper (binds last two display-line words with nbsp). Built **blind** (no real Figma) — per-page eyeball list in **`catalogue-finishing/PREMIUM-PASS.md`**, which also carries the explicit **deferred print-regen steps** (port the 5 refinements to `final_catalog.py` → rebuild PDF + flipbook → v59) for the attended session, after Vern approves the pass in the plugin. Branch + **staging fast-forwarded** through `6309dad` (report). main untouched.
+
 ## §8/§9 — Quality, nav, build  ☐
 
 | Item | Action |

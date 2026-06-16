@@ -225,6 +225,18 @@ Vern ran the fixed plugin: it built, but showed **no images**, and he asked whet
 - **Applications as 2-page spreads (+~17):** print uses `page_full_image` + `page_app_card` per app; plugin combines into 1 frame. Split to mirror the plugin's existing project hero/story pattern.
 - **Spacers** (`page_spacer`) to land exactly 140.
 
+## Session 10 — DDB quality pass: section dividers (Figma↔print alignment)
+
+Vern's visual Figma review (real images now landing — Increment 1 confirmed): section dividers were "not quite right." Two issues, both because the plugin never inherited the print build's Session-5 overlay pass:
+| Issue (Figma render) | Cause | Fix |
+|---|---|---|
+| White heading low-contrast over bright photo (Reference over green crosswalk; Applications over sky) | section openers had **no scrim** (DPS captions did) | new **`overlayScrim()`** — vertical navy gradient (transparent → ~0.74 floor, 78u ramp; mirrors print `overlay_scrim` FLOOR_ALPHA 188 / TRANSITION 78) on **all 5 dividers** (`pageSectionOpen` ×4 + `pageNetworkOpen`) |
+| Heading too big; **"Applications." clipped to "Applicatio"** | title hardcoded **64 pt** (frame is 450 wide) | title **64 → 52** (matches print `page_section_open`); fits, no clip. Added `displaySizeFor()` (port of `display_size_for`) for reuse |
+
+**Audit of all other display headings** (plugin vs print, ≥37pt): manifesto 36≈37, TOC/why 32, "500+" stat 60 (match), closing "Built to outlast" 52 (match) — **no other oversized/clipping heading**. Text-on-photo only occurs on cover (50% wash ✓), the 5 dividers (now scrim ✓), and DPS captions (0.62 band, reads well ✓); everywhere else type sits on white/navy panels. So contrast + oversize were isolated to the dividers.
+
+Print PDF + web flipbook already had this (Session 5) — **no PDF/web change**; this aligns the **Figma file** to them. Harness: BUILD OK 116 frames · 89 images · fonts/wiring OK. Committed `8d27a2e`. **Gradient orientation is the one thing the headless harness can't verify** → Vern's visual run confirms. Increment 2 (140-page parity) still on HOLD.
+
 ## §8/§9 — Quality, nav, build  ☐
 
 | Item | Action |

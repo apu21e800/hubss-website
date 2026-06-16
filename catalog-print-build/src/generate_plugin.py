@@ -638,6 +638,35 @@ async function pageColourSystemB(d) {
   return f;
 }
 
+// Applications render as a 2-page spread (print parity): full-bleed photo page +
+// white card page. Mirrors print page_full_image + page_app_card (_card_shell).
+async function pageAppImage(app) {
+  const f = fr("App Photo — " + (app.name || ""), N);
+  ph(f, 0, 0, 450, 450, "App Photo / " + (app.name || ""), app.image);
+  return f;
+}
+async function pageAppCard(app, idx) {
+  const f = fr("App " + String(idx).padStart(2, "0") + " — " + (app.name || ""));
+  const dot = figma.createEllipse(); dot.resize(3, 3); dot.x = 28; dot.y = 65;
+  dot.fills = [{type:"SOLID", color: O}]; dot.name = "App Card / Dot"; f.appendChild(dot);
+  const eb = await tx(f, (app.name || "").toUpperCase(), 40, 61, 7.5, O, true, 380, null, 11);
+  if (eb) { eb.letterSpacing = {value: 16, unit: "PERCENT"}; eb.name = "App Card / Eyebrow"; }
+  rct(f, 28, 86, 32, 2.5, O, "App Card / Rule");
+  const head = await tx(f, app.tagline || app.name || "", 28, 126, 26, D, true, 394, null, 28);
+  if (head) head.name = "App Card / Headline";
+  if (app.location) {
+    const loc = await tx(f, String(app.location).toUpperCase(), 28, 220, 6.5, F, true, 394, null, 9);
+    if (loc) { loc.letterSpacing = {value: 16, unit: "PERCENT"}; loc.name = "App Card / Location"; }
+  }
+  const body = await tx(f, app.body || "", 28, 245, 10, M, false, 394, null, 14.5);
+  if (body) body.name = "App Card / Body";
+  const url = await tx(f, "HUBSS.COM", 28, 432, 5.5, O, true, 190, null, 9);
+  if (url) { url.letterSpacing = {value: 16, unit: "PERCENT"}; url.name = "App Card / Footer / URL"; }
+  const ctr = await tx(f, "APPLICATION " + String(idx).padStart(2, "0"), 232, 432, 5.5, F, true, 190, "right", 9);
+  if (ctr) { ctr.letterSpacing = {value: 16, unit: "PERCENT"}; ctr.name = "App Card / Footer / Counter"; }
+  return f;
+}
+
 async function pageApplication(app, idx, total) {
   const f = fr(`App ${String(idx).padStart(2,"0")} — ${app.name}`);
   // v52 parity with print page_application: photo bleed-extended
@@ -1423,7 +1452,8 @@ async function buildCatalogue(d, section) {
   for (const app of (d.applications || [])) {
     appIdx++;
     const _idx = appIdx;
-    frames.push(await safeBuild("Application — " + (app && app.name || "?"), () => pageApplication(app, _idx, nApps)));
+    frames.push(await safeBuild("App Photo — " + (app && app.name || "?"), () => pageAppImage(app)));
+    frames.push(await safeBuild("App Card — " + (app && app.name || "?"), () => pageAppCard(app, _idx)));
     await progress("Applications");
   }
   } // end applications
@@ -1698,10 +1728,15 @@ def main():
     # Inject §4 colour-system (lives in catalog_content, not the export) + §7 process
     # data. Image paths here are rewritten to hosted URLs by _rewrite_image_urls below.
     try:
-        from .catalog_content import COLOUR_SYSTEM
+        from .catalog_content import COLOUR_SYSTEM, APPLICATIONS
         data["colour_system"] = COLOUR_SYSTEM
-    except Exception as e:  # noqa: BLE001 — §4 degrades to empty chips, never crashes the build
-        print(f"  colour_system inject skipped: {e}")
+        # Merge verified application location tags (export drops them; print keeps them).
+        _loc = {a.get("name"): a.get("location") for a in APPLICATIONS if a.get("location")}
+        for _app in data.get("applications", []):
+            if _app.get("name") in _loc:
+                _app["location"] = _loc[_app["name"]]
+    except Exception as e:  # noqa: BLE001 — §4/locations degrade gracefully, never crash the build
+        print(f"  content inject skipped: {e}")
     _inst = ROOT.parent / "public" / "images" / "assets" / "installation-images"
     data["process"] = {
         "steps": [

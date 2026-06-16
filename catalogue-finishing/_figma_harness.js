@@ -34,6 +34,7 @@ const loadedFonts = new Set();
 const fontRejects = [];      // styles real Figma would reject (e.g. "Inter SemiBold")
 const unloadedWrites = [];   // .characters written on a node whose font wasn't loaded
 const imageUrls = [];        // urls passed to figma.createImageAsync (streamed photos)
+const rects = [];            // every rectangle created (to count those that get IMAGE fills)
 
 // permissive node stub: stores set props (so reads like f.name.replace work),
 // returns chainable callables for unknown methods. TEXT nodes additionally
@@ -84,7 +85,7 @@ const figma = {
   },
   createFrame: () => node("FRAME"),
   createText: () => node("TEXT"),
-  createRectangle: () => node("RECTANGLE"),
+  createRectangle: () => { const r = node("RECTANGLE"); rects.push(r); return r; },
   createEllipse: () => node("ELLIPSE"),
   createComponent: () => node("COMPONENT"),
   createPage: () => node("PAGE"),
@@ -144,6 +145,12 @@ function wiringCheck() {
   console.log("fonts requested:", [...requestedFonts].join("  ·  ") || "(none)");
   console.log("fonts loaded:   ", [...loadedFonts].join("  ·  ") || "(none)");
   console.log("images streamed:", imageUrls.length + " via createImageAsync" + (imageUrls.length ? "  (e.g. " + imageUrls[imageUrls.length - 1] + ")" : ""));
+  // Apply-path proof: how many rects actually received an IMAGE fill (the streamed photo)?
+  const imgFilled = rects.filter((r) => {
+    try { return Array.isArray(r.fills) && r.fills.some((f) => f && f.type === "IMAGE" && f.imageHash); } catch (e) { return false; }
+  });
+  const uniqueHashes = new Set(imgFilled.map((r) => r.fills.find((f) => f.type === "IMAGE").imageHash));
+  console.log("IMAGE fills applied:", imgFilled.length + " rect(s) got an image fill, " + uniqueHashes.size + " unique image(s)");
   if (fontRejects.length)    console.log("FONT REJECTS (real Figma would FAIL):", [...new Set(fontRejects)].join(", "));
   if (unloadedWrites.length) console.log("UNLOADED-FONT WRITES:", [...new Set(unloadedWrites)].join(", "));
 

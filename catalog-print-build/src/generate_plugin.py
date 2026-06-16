@@ -455,10 +455,10 @@ async function pageProductHero(prod) {
   // Display tagline — Medium weight (Vernon v48: NO Inter Bold, NO italic, NO serif)
   const tag = figma.createText();
   tag.fontName = {family: "Inter", style: "Medium"};
-  tag.characters = prod.tagline || "";
-  tag.fontSize = 22;
+  tag.characters = noOrphan(prod.tagline || "");
+  tag.fontSize = 21;
   tag.fills = [{type:"SOLID", color: D}];
-  tag.lineHeight = {value: 26, unit: "PIXELS"};
+  tag.lineHeight = {value: 25, unit: "PIXELS"};
   tag.letterSpacing = {value: -1.4, unit: "PERCENT"};
   tag.textAutoResize = "HEIGHT";
   tag.resize(394, 400);

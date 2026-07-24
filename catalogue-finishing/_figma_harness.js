@@ -172,8 +172,8 @@ function wiringCheck() {
     console.log("PARITY: total=" + P.total + "  Products p" + P.Products + "  Apps p" + P.Apps +
       "  Projects p" + P.Projects + "  Network p" + P.Network + "  Ref p" + P.Reference +
       "  §4=" + (P.s4 ? "yes" : "NO") + "  §7=" + (P.s7 ? "yes" : "NO"));
-    parityFail = !(P.total === 140 && P.s4 && P.s7 && P.Products && P.Apps && P.Projects && P.Network && P.Reference);
-    console.log("PARITY " + (parityFail ? "INCOMPLETE (want 140 frames + §4 + §7 + all 5 sections)" : "OK — full 140-page v58 book"));
+    parityFail = !(P.total === 137 && P.s4 && P.s7 && P.Products && P.Apps && P.Projects && P.Network && P.Reference);
+    console.log("PARITY " + (parityFail ? "INCOMPLETE (want 137 frames + §4 + §7 + all 5 sections)" : "OK — 137-page figma edition (v58 content, bind padding dropped)"));
   }
 
   const fontProblem = fontRejects.length || unloadedWrites.length;

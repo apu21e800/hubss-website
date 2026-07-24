@@ -44,7 +44,17 @@ JS = r"""
 //        print-parity NOTES pages; 3 duplicate photos de-duped
 //        (§7 result / DPS-C right / back cover); -2% display tracking on
 //        section openers (print parity); closing display stride tightened;
-//        spreads build through safeSpread so a bad photo can't blank a page.
+//        spreads build through safeSpread so a bad photo can't blank a page;
+//        r2: bind padding dropped (137-page figma edition) + app-card
+//        location/body group optically centred under the headline.
+//        r3: estLines() metrics replace node.height reads (fixes app-card
+//        body rendering off-frame); H2 standfirsts on app cards; installer
+//        pages re-gridded at 28px with collision-proof contact rule; three
+//        near-duplicate pairs rebuilt as true panoramic spreads (BC
+//        Children's, White Rock Seaside Stroll, Built to Last); York VIVA
+//        detail photo de-duped; app photos re-matched to copy (Pedestrian
+//        Safety / LEED / Commercial); "By the Numbers" row 3 aligned to the
+//        verified 10-provinces claim; 28px margin unification.
 // PLUGIN_VERSION history:
 //   v52.2 (overnight QA pass)
 //   v52.2 (Phase 5): layer naming extended to Hub Numbers + Statement;
@@ -556,6 +566,25 @@ function noOrphan(s) {
   return (i < 0) ? s : s.slice(0, i) + String.fromCharCode(160) + s.slice(i + 1);
 }
 
+// estLines — deterministic line-count estimate for Inter (avg advance ≈
+// 0.52em Medium / 0.545em Bold). Used for layout maths instead of reading
+// node.height, which is NOT reliable immediately after resize() on an
+// auto-height text node (it read 400 and pushed the app-card body clean out
+// of the frame — Vern: "you deleted the body copy").
+function estLines(text, size, bold, maxW) {
+  const str = String(text || "");
+  if (!str) return 0;
+  const cw = size * (bold ? 0.545 : 0.52);
+  const perLine = Math.max(4, Math.floor(maxW / cw));
+  const words = str.split(/\s+/);
+  let lines = 1, len = 0;
+  for (const w of words) {
+    const add = w.length + (len ? 1 : 0);
+    if (len + add > perLine) { lines++; len = w.length; } else { len += add; }
+  }
+  return lines;
+}
+
 // §7 StreetPrint process strip (verso) — 3-step "Reheat. Stamp. Coat." with
 // real install photos. Mirrors print page_process_left.
 async function pageProcessLeft(d) {
@@ -690,13 +719,38 @@ async function pageAppCard(app, idx) {
   const eb = await tx(f, (app.name || "").toUpperCase(), MG + 11, 46, 7.5, O, true, CW - 11, null, 11);
   if (eb) { eb.letterSpacing = {value: 16, unit: "PERCENT"}; eb.name = "App Card / Eyebrow"; }
   rct(f, MG, 70, 32, 2.5, O, "App Card / Rule");
-  const head = await tx(f, app.tagline || app.name || "", MG, 100, 26, D, true, CW, null, 29);
+  const headline = app.tagline || app.name || "";
+  const head = await tx(f, headline, MG, 100, 26, D, true, CW, null, 29);
   if (head) head.name = "App Card / Headline";
+  // Layout maths use estLines(), never node.height (see estLines note).
+  // Vern 2026-07: fixed y=244/268 left a dead band under short headlines —
+  // the standfirst+body group is optically placed between headline and
+  // footer (42% of the spare air above the group, 58% below).
+  const headBottom = 100 + estLines(headline, 26, true, CW) * 29;
+  // H2 standfirst — the body's opening sentence, promoted (Vern: "maybe we
+  // should add an H2 on those pages?"). Only when it's genuinely deck-length;
+  // longer openers stay in the body so no copy is ever rewritten.
+  const rawBody = String(app.body || "");
+  const dotAt = rawBody.indexOf(". ");
+  const standfirst = (dotAt > 12 && dotAt <= 110) ? rawBody.slice(0, dotAt + 1) : null;
+  const bodyText = standfirst ? rawBody.slice(dotAt + 2) : rawBody;
+  const locLines = app.location ? 1 : 0;
+  const h2Lines = standfirst ? estLines(standfirst, 12.5, false, CW) : 0;
+  const bodyLines = estLines(bodyText, 10, false, CW - 26);
+  const groupH = locLines * 24 + (h2Lines ? h2Lines * 16 + 12 : 0) + bodyLines * 14.5;
+  const zoneTop = headBottom + 18, zoneBottom = 396;   // 16px clear of the footer
+  let gy = Math.round(zoneTop + Math.max(10, (zoneBottom - zoneTop - groupH) * 0.42));
   if (app.location) {
-    const loc = await tx(f, String(app.location).toUpperCase(), MG, 244, 6.5, F, true, CW, null, 9);
+    const loc = await tx(f, String(app.location).toUpperCase(), MG, gy, 6.5, F, true, CW, null, 9);
     if (loc) { loc.letterSpacing = {value: 16, unit: "PERCENT"}; loc.name = "App Card / Location"; }
+    gy += 24;
   }
-  const body = await tx(f, app.body || "", MG, 268, 10, M, false, CW - 26, null, 14.5);
+  if (standfirst) {
+    const h2 = await tx(f, standfirst, MG, gy, 12.5, D, false, CW, null, 16);
+    if (h2) h2.name = "App Card / Standfirst";
+    gy += h2Lines * 16 + 12;
+  }
+  const body = await tx(f, bodyText, MG, gy, 10, M, false, CW - 26, null, 14.5);
   if (body) body.name = "App Card / Body";
   // Footer anchored inside the bottom safe margin (450 - 38) — balances the top.
   const url = await tx(f, "HUBSS.COM", MG, 412, 5.5, O, true, 180, null, 9);
@@ -767,9 +821,9 @@ async function pageProjectStory(proj, idx) {
   if (eb) { eb.letterSpacing = {value: 16, unit: "PERCENT"}; eb.name = "Project Story / Eyebrow"; }
   const name = await tx(f, proj.name || "", 28, 348, 17, D, true, 394, null, 20);
   if (name) name.name = "Project Story / Title";
-  const meta = await tx(f, ((proj.location||"") + "    " + (proj.product||"")).toUpperCase(), 28, 376, 5.5, F, true, 394, null, 8);
+  const meta = await tx(f, ((proj.location||"") + "    " + (proj.product||"")).toUpperCase(), 28, 372, 5.5, F, true, 394, null, 8);
   if (meta) { meta.letterSpacing = {value: 16, unit: "PERCENT"}; meta.name = "Project Story / Meta"; }
-  const story = await tx(f, proj.story || "", 28, 394, 8.0, M, false, 394, null, 11);
+  const story = await tx(f, proj.story || "", 28, 388, 8.0, M, false, 394, null, 11);
   if (story) story.name = "Project Story / Body";
   return f;
 }
@@ -779,26 +833,29 @@ async function pageInstaller(inst, idx, total) {
   // header band): orange credential label, logo top-right, editorial photo,
   // region + name + body, orange rule, Phone / Online footer.
   const f = fr("Installer — " + inst.name);
-  const t1 = await tx(f, "HUB CERTIFIED INSTALLER", 30, 30, 6.5, O, false, 280, null, 9);
+  // 28px page grid (was 30 — uniformity pass); body sized by estLines so its
+  // last line can never cross the contact rule (it did on the 4-line bodies).
+  const t1 = await tx(f, "HUB CERTIFIED INSTALLER", 28, 30, 6.5, O, false, 280, null, 9);
   if (t1) { t1.letterSpacing = {value: 10, unit: "PERCENT"}; t1.name = "Installer / Credential"; }
-  // Logo zone top-right (installer logo if present, else named placeholder)
-  logo(f, 320, 26, 100, 28, "Installer / Logo / " + inst.name, inst.logo);
-  // Editorial photo
-  ph(f, 30, 72, 390, 170, "Installer / Photo / " + inst.name, inst.image);
-  const tRegion = await tx(f, (inst.region || "").toUpperCase(), 30, 258, 6.5, F, false, 380, null, 9);
+  logo(f, 322, 26, 100, 28, "Installer / Logo / " + inst.name, inst.logo);
+  ph(f, 28, 72, 394, 168, "Installer / Photo / " + inst.name, inst.image);
+  const tRegion = await tx(f, (inst.region || "").toUpperCase(), 28, 256, 6.5, F, false, 394, null, 9);
   if (tRegion) { tRegion.letterSpacing = {value: 8, unit: "PERCENT"}; tRegion.name = "Installer / Region"; }
-  const tName = await tx(f, inst.name, 30, 270, 26, D, true, 380, null, 28);
+  const tName = await tx(f, inst.name, 28, 268, 26, D, true, 394, null, 28);
   if (tName) tName.name = "Installer / Name";
-  const body = await tx(f, inst.body || "", 30, 325, 10, D, false, 380, null, 14);
+  const bLines = estLines(inst.body || "", 9.5, false, 394);
+  const bLh = bLines > 4 ? 12.5 : 13.5;
+  const body = await tx(f, inst.body || "", 28, 312, 9.5, D, false, 394, null, bLh);
   if (body) body.name = "Installer / Body";
-  rct(f, 30, 380, 380, 1.2, O, "Installer / Rule");
-  const phLbl = await tx(f, "PHONE", 30, 395, 6.5, F, false, 180, null, 9);
+  const ruleY = Math.max(382, Math.min(392, 312 + bLines * bLh + 12));
+  rct(f, 28, ruleY, 394, 1.2, O, "Installer / Rule");
+  const phLbl = await tx(f, "PHONE", 28, ruleY + 14, 6.5, F, false, 180, null, 9);
   if (phLbl) { phLbl.letterSpacing = {value: 8, unit: "PERCENT"}; phLbl.name = "Installer / Phone Label"; }
-  const phone = await tx(f, inst.phone || "", 30, 408, 14.5, D, true, 180);
+  const phone = await tx(f, inst.phone || "", 28, ruleY + 26, 14.5, D, true, 190);
   if (phone) phone.name = "Installer / Phone";
-  const onLbl = await tx(f, "ONLINE", 220, 395, 6.5, F, false, 200, null, 9);
+  const onLbl = await tx(f, "ONLINE", 232, ruleY + 14, 6.5, F, false, 190, null, 9);
   if (onLbl) { onLbl.letterSpacing = {value: 8, unit: "PERCENT"}; onLbl.name = "Installer / Online Label"; }
-  const url = await tx(f, inst.url || "", 220, 408, 14.5, O, true, 200);
+  const url = await tx(f, inst.url || "", 232, ruleY + 26, 14.5, O, true, 190);
   if (url) url.name = "Installer / URL";
   return f;
 }
@@ -880,9 +937,9 @@ async function pageImageSpread(label, imagePath, headline) {
 async function pageTechnical() {
   const f = fr("Reference — Technical");
   // v58 parity with print page_technical_reference — "The systems." + 11 products.
-  const eb = await tx(f, "PRODUCT REFERENCE", 30, 40, 7.5, O, true, 370, null, 11);
+  const eb = await tx(f, "PRODUCT REFERENCE", 28, 40, 7.5, O, true, 394, null, 11);
   if (eb) { eb.letterSpacing = {value: 14, unit: "PERCENT"}; eb.name = "Technical / Eyebrow"; }
-  await tx(f, "The systems.", 30, 68, 26, D, true, 370);
+  await tx(f, "The systems.", 28, 68, 26, D, true, 394);
   const prods = [
     ["TrafficPatternsXD", "150 mil",     "Heavy-duty thermoplastic"],
     ["TrafficPatterns",   "125 mil",     "Standard thermoplastic"],
@@ -897,13 +954,13 @@ async function pageTechnical() {
     ["AirMark",           "Airfield",    "Non-runway preformed thermoplastic"],
   ];
   let y = 130;
-  const COL = [30, 186, 264];   // name | spec | description — even 10px gutters, no overlap (was 180/270, key overran desc)
+  const COL = [28, 186, 264];   // name | spec | description — 28px grid (uniformity pass)
   for (const [name, key, desc] of prods) {
     await tx(f, name, COL[0], y, 10, D, true, 146);
     const k = await tx(f, key.toUpperCase(), COL[1], y + 3, 6.5, O, false, 68, null, 9);  // +3 baseline-aligns the small caps to the name
     if (k) { k.letterSpacing = {value: 8, unit: "PERCENT"}; k.name = "Technical / Row Spec"; }
     await tx(f, desc, COL[2], y + 1, 8.6, M, false, 158, null, 12);
-    rct(f, 30, y + 15, 390, 0.6, F, "Technical / Row Rule");   // hairline rule
+    rct(f, 28, y + 15, 394, 0.6, F, "Technical / Row Rule");   // hairline rule
     y += 22;
   }
   return f;
@@ -912,21 +969,21 @@ async function pageTechnical() {
 async function pageCities(d) {
   const f = fr("Reference — Cities");
   // v58 parity with print page_cities — "10" provinces hero + 2-column city list.
-  await tx(f, "10", 30, 28, 60, O, true, 390, null, 64);
-  const s1 = await tx(f, "provinces and territories", 30, 98, 10, D, false, 280, null, 14);
+  await tx(f, "10", 28, 28, 60, O, true, 394, null, 64);
+  const s1 = await tx(f, "provinces and territories", 28, 98, 10, D, false, 280, null, 14);
   if (s1) s1.name = "Cities / Subtitle 1";
-  const s2 = await tx(f, "specify HUB systems by name, coast to coast.", 30, 113, 10, M, false, 280, null, 14);
+  const s2 = await tx(f, "specify HUB systems by name, coast to coast.", 28, 113, 10, M, false, 280, null, 14);
   if (s2) s2.name = "Cities / Subtitle 2";
-  const eb = await tx(f, "FROM HALIFAX TO VANCOUVER", 30, 133, 5.5, F, false, 390, null, 8);
+  const eb = await tx(f, "FROM HALIFAX TO VANCOUVER", 28, 133, 5.5, F, false, 394, null, 8);
   if (eb) { eb.letterSpacing = {value: 12, unit: "PERCENT"}; eb.name = "Cities / Eyebrow"; }
-  rct(f, 30, 150, 390, 1, F, "Cities / Rule");
-  await tx(f, "A partial list", 30, 158, 7.8, M, false, 390, "right", 11);
+  rct(f, 28, 150, 394, 1, F, "Cities / Rule");
+  await tx(f, "A partial list", 28, 158, 7.8, M, false, 394, "right", 11);
   // City list — 2 columns, 8.6pt, 13px spacing (print page_cities)
   const cities = d.cities || [];
   let y = 172;
   for (let i = 0; i < cities.length; i += 2) {
     if (y > 418) break;
-    await tx(f, cities[i] || "", 30, y, 8.6, D, false, 185, null, 12);
+    await tx(f, cities[i] || "", 28, y, 8.6, D, false, 185, null, 12);
     if (cities[i + 1]) await tx(f, cities[i + 1], 235, y, 8.6, D, false, 175, null, 12);
     y += 13;
   }
@@ -939,7 +996,7 @@ async function pageLunchLearn(d) {
   // BOOK NOW pill, contacts. FIGMA REVIEW PASS: QR replaced by Moose the
   // site dog, bottom-right (Vern, 2026-07).
   const f = fr("CTA — Lunch and Learn", N);
-  const LX = 30;
+  const LX = 28;   // 28px grid (uniformity pass)
   const ONDARK = {r:0.90, g:0.91, b:0.94};   // near-white body on navy (print CMYK_ON_DARK_BODY)
 
   rct(f, LX, 56, 32, 2.5, O, "L&L / Brand Rule");
@@ -999,25 +1056,25 @@ async function pageContact(d) {
   const f = fr("Contact");
   // Navy header — visual weight without breaking the clean layout
   rct(f, 0, 0, 450, 82, N, "Contact / Header / Navy Band");
-  const t1 = await tx(f, "TWO OFFICES. ONE NETWORK.", 30, 14, 5.5, O, false, 390, null, 8);
+  const t1 = await tx(f, "TWO OFFICES. ONE NETWORK.", 28, 14, 5.5, O, false, 390, null, 8);
   if (t1) t1.name = "Contact / Header / Eyebrow";
-  const r1 = rul(f, 30, 30, 24); if (r1) r1.name = "Contact / Header / Brand Rule";
-  const t2 = await tx(f, "Speak with HUB.", 30, 44, 28, W, true, 390);
+  const r1 = rul(f, 28, 30, 24); if (r1) r1.name = "Contact / Header / Brand Rule";
+  const t2 = await tx(f, "Speak with HUB.", 28, 44, 28, W, true, 394);
   if (t2) t2.name = "Contact / Header / Display";
   // Content zone
-  const intro = await tx(f, "Every project starts with a conversation.", 30, 96, 10, M, false, 390, null, 15);
+  const intro = await tx(f, "Every project starts with a conversation.", 28, 96, 10, M, false, 394, null, 15);
   if (intro) intro.name = "Contact / Intro";
-  rct(f, 30, 128, 390, 1, F, "Contact / Divider Rule 1");
+  rct(f, 28, 128, 394, 1, F, "Contact / Divider Rule 1");
   // West contact block
-  const w1 = await tx(f, "WESTERN CANADA", 30, 144, 5.5, O, false, 188, null, 8);
+  const w1 = await tx(f, "WESTERN CANADA", 28, 144, 5.5, O, false, 188, null, 8);
   if (w1) w1.name = "Contact / West / Label";
-  const w2 = await tx(f, "Cleve Stordy", 30, 158, 20, D, true, 188);
+  const w2 = await tx(f, "Cleve Stordy", 28, 158, 20, D, true, 188);
   if (w2) w2.name = "Contact / West / Name";
-  const w3 = await tx(f, "cleve.stordy@hubss.com", 30, 194, 8.5, D, false, 188);
+  const w3 = await tx(f, "cleve.stordy@hubss.com", 28, 194, 8.5, D, false, 188);
   if (w3) w3.name = "Contact / West / Email";
-  const w4 = await tx(f, "604.309.8212", 30, 212, 8.5, M, false, 188);
+  const w4 = await tx(f, "604.309.8212", 28, 212, 8.5, M, false, 188);
   if (w4) w4.name = "Contact / West / Phone";
-  const w5 = await tx(f, "Ladysmith, British Columbia", 30, 230, 7, M, false, 188);
+  const w5 = await tx(f, "Ladysmith, British Columbia", 28, 230, 7, M, false, 188);
   if (w5) w5.name = "Contact / West / City";
   // East contact block
   const e1 = await tx(f, "EASTERN CANADA", 242, 144, 5.5, O, false, 178, null, 8);
@@ -1030,13 +1087,13 @@ async function pageContact(d) {
   if (e4) e4.name = "Contact / East / Phone";
   const e5 = await tx(f, "Milton, Ontario", 242, 230, 7, M, false, 178);
   if (e5) e5.name = "Contact / East / City";
-  rct(f, 30, 258, 390, 1, F, "Contact / Divider Rule 2");
-  const u1 = await tx(f, "hubss.com", 30, 272, 16, O, true, 390);
+  rct(f, 28, 258, 394, 1, F, "Contact / Divider Rule 2");
+  const u1 = await tx(f, "hubss.com", 28, 272, 16, O, true, 394);
   if (u1) u1.name = "Contact / URL";
-  const u2 = await tx(f, "Spec sheets · project gallery · installer network · lunch + learn booking", 30, 304, 8, M, false, 390, null, 12);
+  const u2 = await tx(f, "Spec sheets · project gallery · installer network · lunch + learn booking", 28, 304, 8, M, false, 394, null, 12);
   if (u2) u2.name = "Contact / URL Subline";
-  rct(f, 30, 338, 390, 1, F, "Contact / Footer / Rule");
-  const cp = await tx(f, "© 2026 HUB Surface Systems   ·   Established 1994   ·   Coast to Coast", 30, 350, 5.5, F, false, 390, "center", 8);
+  rct(f, 28, 338, 394, 1, F, "Contact / Footer / Rule");
+  const cp = await tx(f, "© 2026 HUB Surface Systems   ·   Established 1994   ·   Coast to Coast", 28, 350, 5.5, F, false, 394, "center", 8);
   if (cp) cp.name = "Contact / Footer / Copyright";
   return f;
 }
@@ -1142,6 +1199,73 @@ async function addFolio(frame, num) {
   await tx(frame, String(num), 28, 415, 5.5, M, false, 394, "center", 8);
 }
 
+// phPano — half of a panoramic image: one photo spans a facing pair, left
+// half on the verso, right half on the recto (Vern 2026-07: "2 page image
+// spreads"). sy/ty select an aspect-correct horizontal band of the source
+// (computed at generation time from the real image dimensions), so each half
+// fills its 450x450 page with zero distortion.
+function phPano(p, label, imagePath, half, sy, ty) {
+  const r = rct(p, 0, 0, 450, 450, PH, "[PHOTO] " + label);
+  const hash = IMAGE_HASHES[imagePath];
+  if (hash) {
+    try {
+      r.fills = [{type: "IMAGE", scaleMode: "CROP", imageHash: hash,
+                  imageTransform: [[0.5, 0, half === "R" ? 0.5 : 0], [0, sy || 0.667, ty || 0.167]]}];
+      r.name = label;
+    } catch (e) {}
+  }
+  return r;
+}
+
+// pageProjectPano — a project told as one panoramic spread instead of the
+// hero/story pair (used where hero and detail photos were near-duplicates).
+// All approved copy is preserved: title on the verso scrim, full story on
+// the recto scrim.
+async function pageProjectPano(proj) {
+  const pano = proj.pano || {};
+  const fL = fr("Pano L — " + (proj.name || ""), N);
+  phPano(fL, "Pano L / Photo / " + (proj.name || ""), proj.hero, "L", pano.sy, pano.ty);
+  overlayScrim(fL, 316, "Pano L");
+  const lRule = rul(fL, 28, 316, 24); if (lRule) lRule.name = "Pano L / Brand Rule";
+  const lEb = await tx(fL, (proj.product || "").toUpperCase(), 28, 326, 7.5, O, false, 394, null, 11);
+  if (lEb) { lEb.letterSpacing = {value: 12, unit: "PERCENT"}; lEb.name = "Pano L / Eyebrow"; }
+  const lCap = await tx(fL, noOrphan(proj.title || proj.name || ""), 28, 344, 21, W, true, 394, null, 23);
+  if (lCap) lCap.name = "Pano L / Title";
+
+  const fR = fr("Pano R — " + (proj.name || ""), N);
+  phPano(fR, "Pano R / Photo / " + (proj.name || ""), proj.hero, "R", pano.sy, pano.ty);
+  const storyLines = estLines(proj.story || "", 8, false, 394);
+  const storyTop = 450 - 24 - storyLines * 11.5;
+  overlayScrim(fR, Math.min(340, storyTop - 26), "Pano R");
+  const rLoc = await tx(fR, (proj.location || "").toUpperCase(), 28, storyTop - 16, 5.5, O, true, 394, null, 8);
+  if (rLoc) { rLoc.letterSpacing = {value: 16, unit: "PERCENT"}; rLoc.name = "Pano R / Location"; }
+  const ONP = {r: 0.90, g: 0.91, b: 0.94};
+  const rStory = await tx(fR, proj.story || "", 28, storyTop, 8, ONP, false, 394, null, 11.5);
+  if (rStory) rStory.name = "Pano R / Story";
+  const rUrl = await tx(fR, "hubss.com", 28, 430, 6, O, true, 394, "right", 9);
+  if (rUrl) rUrl.name = "Pano R / URL";
+  return [fL, fR];
+}
+
+// pageSpreadPano — DPS variant: one image across both pages, caption grammar
+// of the standard doublespread on the verso.
+async function pageSpreadPano(label, caption, imagePath, pano) {
+  pano = pano || {};
+  const fL = fr("Pano Spread L — " + (label || ""), N);
+  phPano(fL, "Pano Spread L / Photo / " + label, imagePath, "L", pano.sy, pano.ty);
+  overlayScrim(fL, 300, "Pano Spread L");
+  const lRule = rul(fL, 28, 316, 24); if (lRule) lRule.name = "Pano Spread L / Brand Rule";
+  const lEb = await tx(fL, (label || "").toUpperCase(), 28, 326, 7.5, O, false, 394, null, 11);
+  if (lEb) lEb.name = "Pano Spread L / Eyebrow";
+  const lCap = await tx(fL, caption || "", 28, 344, 21, W, true, 394, null, 23);
+  if (lCap) lCap.name = "Pano Spread L / Caption";
+  const fR = fr("Pano Spread R — " + (label || ""), N);
+  phPano(fR, "Pano Spread R / Photo / " + label, imagePath, "R", pano.sy, pano.ty);
+  const rUrl = await tx(fR, "hubss.com", 28, 426, 7.5, O, true, 394, "right", 11);
+  if (rUrl) rUrl.name = "Pano Spread R / URL";
+  return [fL, fR];
+}
+
 async function pageFieldNotes() {
   const f = fr("Field Notes");
   // Header: small-caps label + orange rule — same visual grammar as the rest of the catalogue
@@ -1170,7 +1294,7 @@ async function pageHubNumbers() {
   const rows = [
     ["30+",    "years building Canadian streets"],
     ["1,000+", "projects completed coast to coast"],
-    ["500+",   "municipalities that specify HUB by name"],
+    ["10",     "provinces & territories specify HUB by name"],
   ];
   let sy = 80;
   let ri = 0;
@@ -1192,17 +1316,17 @@ async function pageHubNumbers() {
 async function pageStatement() {
   const f = fr("Editorial — Statement");
   // v58 parity with print page_statement — "Position" pull-quote on white.
-  const eb = await tx(f, "POSITION", 30, 70, 7.5, O, true, 390, null, 11);
+  const eb = await tx(f, "POSITION", 28, 70, 7.5, O, true, 394, null, 11);
   if (eb) { eb.letterSpacing = {value: 16, unit: "PERCENT"}; eb.name = "Statement / Eyebrow"; }
-  rct(f, 30, 88, 24, 2, O, "Statement / Brand Rule");
-  const h1 = await tx(f, "Asphalt is the canvas.", 30, 160, 31, D, true, 390, null, 33.5);
+  rct(f, 28, 88, 24, 2, O, "Statement / Brand Rule");
+  const h1 = await tx(f, "Asphalt is the canvas.", 28, 160, 31, D, true, 394, null, 33.5);
   if (h1) h1.name = "Statement / H1 / Line 1";
-  const h2 = await tx(f, "The city is the gallery.", 30, 200, 31, O, true, 390, null, 33.5);
+  const h2 = await tx(f, "The city is the gallery.", 28, 200, 31, O, true, 394, null, 33.5);
   if (h2) h2.name = "Statement / H1 / Line 2";
-  const body = await tx(f, "Every crosswalk we install is a small public artwork. Every BRT lane, a piece of civic identity. Every Indigenous medallion, a recognition that streets carry meaning long after the paint fades.", 30, 275, 10, M, false, 350, null, 14);
+  const body = await tx(f, "Every crosswalk we install is a small public artwork. Every BRT lane, a piece of civic identity. Every Indigenous medallion, a recognition that streets carry meaning long after the paint fades.", 28, 275, 10, M, false, 350, null, 14);
   if (body) body.name = "Statement / Body";
-  rct(f, 30, 400, 48, 2, O, "Statement / Footer / Rule");
-  const foot = await tx(f, "HUB SURFACE SYSTEMS   ·   ESTABLISHED 1994", 30, 414, 5.5, F, false, 390, null, 8);
+  rct(f, 28, 400, 48, 2, O, "Statement / Footer / Rule");
+  const foot = await tx(f, "HUB SURFACE SYSTEMS   ·   ESTABLISHED 1994", 28, 414, 5.5, F, false, 394, null, 8);
   if (foot) { foot.letterSpacing = {value: 10, unit: "PERCENT"}; foot.name = "Statement / Footer"; }
   return f;
 }
@@ -1525,8 +1649,13 @@ async function buildCatalogue(d, section) {
     projIdx++;
     const _idx = projIdx;
     const _proj = projs[pi];
-    frames.push(await safeBuild("Project Hero — " + (_proj && _proj.name || "?"), () => pageProjectHero(_proj)));
-    frames.push(await safeBuild("Project Story — " + (_proj && _proj.name || "?"), () => pageProjectStory(_proj, _idx)));
+    if (_proj && _proj.pano) {
+      const [pnL, pnR] = await safeSpread("Pano — " + (_proj.name || "?"), () => pageProjectPano(_proj));
+      frames.push(pnL, pnR);
+    } else {
+      frames.push(await safeBuild("Project Hero — " + (_proj && _proj.name || "?"), () => pageProjectHero(_proj)));
+      frames.push(await safeBuild("Project Story — " + (_proj && _proj.name || "?"), () => pageProjectStory(_proj, _idx)));
+    }
     await progress("Projects");
     // Double-page spread halfway through projects — visual pause between project stories.
     // Left: editorial_projects image. Right: reference section opener (different category).
@@ -1564,7 +1693,9 @@ async function buildCatalogue(d, section) {
     const dpsCL = d.section_openers && d.section_openers.dps_c_left;
     const dpsCR = d.section_openers && d.section_openers.dps_c_right;
     if (dpsCL) {
-      const [cL, cR] = await safeSpread("DPS — Built to Last", () => pageDoublespread("Built to Last", dpsCL, "The surface underfoot. The city above.", undefined, dpsCR || dpsCL));
+      const [cL, cR] = d.dps_c_pano
+        ? await safeSpread("Pano — Built to Last", () => pageSpreadPano("Built to Last", "The surface underfoot. The city above.", dpsCL, d.dps_c_pano))
+        : await safeSpread("DPS — Built to Last", () => pageDoublespread("Built to Last", dpsCL, "The surface underfoot. The city above.", undefined, dpsCR || dpsCL));
       frames.push(cL, cR);
     }
   }
@@ -1601,10 +1732,9 @@ async function buildCatalogue(d, section) {
 
   // Closing matter — full builds only.
   if (ALL) {
-  // Pad to next multiple of 4 — saddle-stitch / perfect-bind requirement.
-  while ((frames.length + 3) % 4 !== 0) {
-    frames.push(await pageBlank(frames.length + 1));
-  }
+  // Bind padding REMOVED from the Figma edition (Vern 2026-07: "3 extra lined
+  // pages we don't need") — imposition padding belongs to the ReportLab print
+  // build, not the editable book. pageBlank() stays available if it returns.
   // Closing pair + back cover
   frames.push(await pageClosing());
   frames.push(await pageQuietMark(d));
@@ -1638,7 +1768,9 @@ async function buildCatalogue(d, section) {
 
   // Add folios to content pages (skip cover, section openers, DPS, blanks, quarter-ads).
   const _noFolioNames = new Set(["Cover", "Back Cover", "Half Title"]);
-  const _noFolioPrefix = ["Rest ", "Notes ", "Section ", "Spread ", "QuarterAd", "By the Numbers"];
+  const _noFolioPrefix = ["Rest ", "Notes ", "Section ", "Spread ", "QuarterAd", "By the Numbers",
+    // pages that own a bottom footer/meta row — a centred folio collides:
+    "Spec —", "Hero —", "Story ", "Installer —", "§7", "§4", "CTA —", "Contact", "Field Notes", "Pano"];
   for (let i = 0; i < frames.length; i++) {
     const f = frames[i];
     if (!f) continue;
@@ -1837,6 +1969,46 @@ def main():
     data.setdefault("section_openers", {})["dps_c_right"] = str(_pub / "products" / "streetprint" / "streetprint-62.jpg")
     data.setdefault("brand", {})["asphalt_photo"] = str(_pub / "applications" / "parking-lots" / "parking-lots-53.jpg")
     data["brand"]["mascot"] = str(_pub / "catalogue-assets" / "moose-mascot.png")
+
+    # Round 3 (Vern 2026-07-24): panoramic spreads for near-duplicate photo
+    # pairs, one image spanning the facing pages; aspect-correct band params
+    # (sy/ty) computed from the real image dimensions at generation time.
+    def _pano_params(img_path):
+        try:
+            from PIL import Image as _Img
+            w, h = _Img.open(img_path).size
+            sy = round((w / 2) / h, 4)
+            if sy >= 0.999:  # ultra-wide source: use full height
+                return {"sy": 1.0, "ty": 0.0}
+            return {"sy": sy, "ty": round((1 - sy) / 2, 4)}
+        except Exception:
+            return {"sy": 0.667, "ty": 0.167}
+    _PANO_PROJECTS = {"BC Children's Hospital", "White Rock Seaside Stroll"}
+    for _prj in data.get("projects", []):
+        if _prj.get("name") in _PANO_PROJECTS and _prj.get("hero"):
+            _hp = _prj["hero"]
+            _local = (ROOT.parent / "public" / _hp.lstrip("/")) if str(_hp).startswith("/images/") else Path(str(_hp))
+            _prj["pano"] = _pano_params(_local)
+        if _prj.get("name") == "York Region VIVA BRT":
+            # hero (mmax-16) and detail (mmax-15) were sequential shots of the
+            # same lane — perceptual near-dupes. Distinct close-up instead.
+            _prj["detail"] = str(_pub / "products" / "mmax" / "mmax-07.jpg")
+    _dcl = data.get("section_openers", {}).get("dps_c_left")
+    if _dcl:
+        _local = (ROOT.parent / "public" / str(_dcl).lstrip("/")) if str(_dcl).startswith("/images/") else Path(str(_dcl))
+        data["dps_c_pano"] = _pano_params(_local)
+    # App photos re-matched to their copy (Vern: "make sure the images match
+    # the text"): Pedestrian Safety shows a high-vis station crossing, LEED
+    # shows a light solar-reflective surface, Commercial shows premium
+    # stamped hardscape.
+    _APP_SWAPS = {
+        "Pedestrian Safety": _pub / "applications" / "crosswalks" / "crosswalks-19.jpg",
+        "LEED & Heat Island": _pub / "applications" / "crosswalks" / "crosswalks-18.jpg",
+        "Commercial Spaces": _pub / "products" / "streetprint" / "streetprint-54.jpg",
+    }
+    for _app in data.get("applications", []):
+        if _app.get("name") in _APP_SWAPS:
+            _app["image"] = str(_APP_SWAPS[_app["name"]])
     # -------------------------------------------------------------------------
 
     booklet = _load_booklet_manifest()

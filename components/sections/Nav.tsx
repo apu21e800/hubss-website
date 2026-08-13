@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
 import { resourceDocuments } from "@/lib/resource-documents";
@@ -850,11 +850,11 @@ const APP_TAGLINE: Record<string, string> = {
 };
 
 // Stagger variants — used on the content wrapper so child sections animate in sequence
-const menuContainerVariants = {
+const menuContainerVariants: Variants = {
   hidden: {},
   show: { transition: { staggerChildren: 0.055, delayChildren: 0.08 } },
 };
-const menuSectionVariants = {
+const menuSectionVariants: Variants = {
   hidden: { opacity: 0, y: 8 },
   show: { opacity: 1, y: 0, transition: { duration: 0.32, ease: [0.22, 1, 0.36, 1] } },
 };

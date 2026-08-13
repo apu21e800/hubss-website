@@ -57,7 +57,7 @@ const SECURITY_HEADERS = [
 ];
 
 const nextConfig: NextConfig = {
-  typescript: { ignoreBuildErrors: true },
+  typescript: { ignoreBuildErrors: false },
   poweredByHeader: false,
   // Mirror Vercel's VERCEL_ENV into a NEXT_PUBLIC_* variable so client
   // components can read it (Next inlines NEXT_PUBLIC_* at build time).

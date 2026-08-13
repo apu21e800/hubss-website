@@ -692,7 +692,7 @@ export default function CanadaMap() {
         if (!source?.getClusterExpansionZoom) return;
         try {
           const zoom: number = await source.getClusterExpansionZoom(clusterId);
-          const coords = (feature.geometry as { coordinates: [number, number] }).coordinates;
+          const coords = (feature.geometry as unknown as { coordinates: [number, number] }).coordinates;
           mapRef.current?.flyTo({
             center: coords,
             zoom: zoom + 0.5,

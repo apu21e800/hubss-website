@@ -5,7 +5,7 @@
  *
  * Upload budget: 950 MB max (free tier limit). Only "safe" categories are uploaded:
  *   - public/images/hero/          ~2 MB   → pages/homepage homepageHero.heroImage1-3
- *   - public/images/blog/*/featured.*  ~10 MB  → blogPost.featuredImage (by slug)
+ *   - public/images/blog/*\/featured.*  ~10 MB  → blogPost.featuredImage (by slug)
  *   - public/images/lunch-learn/   ~24 MB  → siteSettings lunchLearn* component assets
  *   - public/docs/**\/*.pdf         ~84 MB  → product.documents[].fileAsset
  *

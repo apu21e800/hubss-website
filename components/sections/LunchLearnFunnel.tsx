@@ -232,7 +232,7 @@ export default function LunchLearnFunnel({
               </p>
 
               <div className="flex flex-wrap gap-5 mb-10">
-                {["30+ Years in Canada", "500+ Municipalities", "Free CE Credits"].map((t) => (
+                {["30+ Years in Canada", "10 Provinces", "Free CE Credits"].map((t) => (
                   <div key={t} className="flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: "#f97316" }} />
                     <span className="text-sm font-semibold" style={{ color: "rgba(255,255,255,0.6)" }}>{t}</span>

@@ -101,7 +101,7 @@ function DocCard({
     <div
       className="group rounded-xl flex flex-col justify-between overflow-hidden transition-all duration-200 ease-out hover:-translate-y-[2px] hover:shadow-[0_8px_24px_-12px_rgba(249,115,22,0.35)]"
       style={{
-        background: "#1e1e1e",
+        background: "var(--bg-card-neutral)",
         border: "1px solid rgba(255,255,255,0.08)",
       }}
       onMouseEnter={(e) => {
@@ -110,7 +110,7 @@ function DocCard({
       }}
       onMouseLeave={(e) => {
         (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(255,255,255,0.08)";
-        (e.currentTarget as HTMLDivElement).style.background = "#1e1e1e";
+        (e.currentTarget as HTMLDivElement).style.background = "var(--bg-card-neutral)";
       }}
     >
       {/* Flyer thumbnail strip */}

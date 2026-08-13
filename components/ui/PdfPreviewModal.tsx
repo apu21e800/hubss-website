@@ -41,7 +41,7 @@ export default function PdfPreviewModal({
       <div
         className="relative flex flex-col w-full max-w-5xl rounded-xl overflow-hidden"
         style={{
-          background: "#1a1e28",
+          background: "var(--bg-card)",
           border: "1px solid rgba(255,255,255,0.1)",
           height: "calc(100dvh - 2rem)",
           maxHeight: "900px",

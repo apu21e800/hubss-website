@@ -167,7 +167,7 @@ export default async function ApplicationPage({ params }: Props) {
 
             {/* Right: related products */}
             <div>
-              <div className="rounded-xl p-8 mb-8 sticky top-24 relative overflow-hidden" style={{ background: "#111111", border: "1px solid rgba(255,255,255,0.08)" }}>
+              <div className="rounded-xl p-8 mb-8 sticky top-24 relative overflow-hidden" style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.08)" }}>
                 {/* Orange top accent */}
                 <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
                 <h3 className="font-bold text-lg mb-6" style={{ color: "#F5F0EB" }}>Recommended Products</h3>

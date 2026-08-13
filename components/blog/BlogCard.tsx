@@ -22,7 +22,7 @@ export default function BlogCard({ post }: { post: PostMeta }) {
   return (
     <Link
       href={`/blog/${post.slug}`}
-      className="group flex flex-col overflow-hidden rounded-xl transition-all duration-300 hover:-translate-y-1 bg-[#1e1e1e] hover:bg-[#252525]"
+      className="group flex flex-col overflow-hidden rounded-xl transition-all duration-300 hover:-translate-y-1 bg-[var(--bg-card-neutral)] hover:bg-[var(--bg-card-hover)]"
     >
       {/* Image with gradient overlay */}
       <div className="relative h-52 overflow-hidden flex-shrink-0">

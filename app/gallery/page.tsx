@@ -329,7 +329,7 @@ export default function GalleryPage() {
                   style={{
                     position: "relative",
                     paddingBottom: img.tall ? "133%" : "66.66%",
-                    background: "#1a1e28",
+                    background: "var(--bg-card)",
                   }}
                 >
                   <Image

@@ -24,6 +24,7 @@
 
   /* ─── Brand — never change between themes ───────── */
   --color-orange:   #F97316;
+  --color-charcoal: #20201F;   /* HUBSS official grey — "Charcoal" */
   --color-amber:    #EAB308;
   --gradient-brand: linear-gradient(90deg, #F97316, #EAB308);
   --gradient-brand-vertical: linear-gradient(180deg, #F97316, #EAB308);
@@ -37,12 +38,12 @@
   --bg-slate:       #111C2D;   /* blue accent sections */
   --bg-slate-light: #182436;
 
-  /* UI surfaces — Claude grey system, sitting ON the blue world */
+  /* UI surfaces — HUBSS charcoal card system (official grey #20201F) */
   --bg-neutral:        #141414;  /* warm neutral anchor — stats/utility sections */
-  --bg-card:           #1a1e28;  /* card on dark-blue bg — bridges both worlds */
-  --bg-card-surface:   #222838;  /* card hover on dark-blue bg */
-  --bg-card-hover:     #222838;
-  --bg-card-neutral:   #1e1e1e;  /* card on neutral/grey bg — resources, docs */
+  --bg-card:           #232221;  /* charcoal card on dark-blue bg — one step above official grey */
+  --bg-card-surface:   #2A2927;  /* card hover */
+  --bg-card-hover:     #2A2927;
+  --bg-card-neutral:   #20201F;  /* card on neutral/grey bg — the official charcoal itself */
 
   /* ─── Text ──────────────────────────────────────── */
   --text-primary:   #ffffff;

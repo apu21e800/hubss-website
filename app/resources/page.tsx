@@ -134,7 +134,7 @@ export default async function ResourcesPage() {
       <section
         className="relative overflow-hidden"
         style={{
-          background: "#1a1e28",
+          background: "var(--bg-card)",
           borderTop: "1px solid rgba(255,255,255,0.08)",
           borderBottom: "1px solid rgba(255,255,255,0.08)",
         }}

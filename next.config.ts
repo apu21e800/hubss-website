@@ -78,6 +78,9 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      // 2026 colour card supersedes the old StreetBond colour guide — keep the
+      // old URL alive (Sanity resource entries + external links still point at it).
+      { source: "/docs/StreetBond/StreetBond/StreetBond-Colour-Guide.pdf", destination: "/docs/StreetBond/StreetBond/StreetBond-Colour-Card-2026.pdf", permanent: true },
       // Products
       { source: "/trafficpatternsxd", destination: "/products/traffic-patterns-xd", permanent: true },
       { source: "/trafficpatterns", destination: "/products/traffic-patterns", permanent: true },

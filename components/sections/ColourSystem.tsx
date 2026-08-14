@@ -9,10 +9,14 @@ export default function ColourSystem({
   families,
   heading = "The colour system.",
   intro,
+  downloadHref,
+  downloadLabel,
 }: {
   families: ColourFamily[];
   heading?: string;
   intro?: string;
+  downloadHref?: string;
+  downloadLabel?: string;
 }) {
   if (!families.length) return null;
   return (
@@ -61,15 +65,9 @@ export default function ColourSystem({
                   <p className="mt-2 text-[0.8rem] font-medium leading-tight" style={{ color: "var(--text-body)" }}>
                     {c.name}
                   </p>
-                  {c.sri !== undefined ? (
-                    <p className="text-[0.66rem] tracking-wide mt-0.5" style={{ color: "var(--text-muted)", fontVariantNumeric: "tabular-nums" }}>
-                      SRI {c.sri} · R {c.r?.toFixed(2)} · E {c.e?.toFixed(2)}
-                    </p>
-                  ) : (
-                    <p className="text-[0.66rem] uppercase tracking-wide mt-0.5" style={{ color: "var(--text-muted)" }}>
-                      {c.hex}
-                    </p>
-                  )}
+                  <p className="text-[0.66rem] tracking-wide mt-0.5" style={{ color: "var(--text-muted)", fontVariantNumeric: "tabular-nums" }}>
+                    {c.sr !== undefined ? `SR ${c.sr.toFixed(2)}` : c.pms ?? c.hex.toUpperCase()}
+                  </p>
                 </div>
               ))}
             </div>
@@ -78,9 +76,13 @@ export default function ColourSystem({
       </div>
 
       <p className="mt-8 text-[0.72rem] leading-relaxed max-w-2xl" style={{ color: "var(--text-faint)" }}>
-        Screen-reference values. Specification and print work use supplier colour formulas —
-        request the current StreetBond colour card for physical samples. Full Pantone custom
-        matching available.
+        Screen-reference values — colours vary by monitor and substrate. Specify from physical
+        samples.{" "}
+        {downloadHref && (
+          <a href={downloadHref} className="underline underline-offset-2 hover:text-orange-400 transition-colors" target="_blank" rel="noopener noreferrer">
+            {downloadLabel ?? "Download the colour reference (PDF)"}
+          </a>
+        )}
       </p>
     </section>
   );

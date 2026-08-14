@@ -9,7 +9,7 @@ import DocumentDownloads from "@/components/sections/DocumentDownloads";
 import GalleryGrid, { type GalleryImage } from "@/components/ui/GalleryGrid";
 import ColourSystem from "@/components/sections/ColourSystem";
 import PavingPatterns from "@/components/sections/PavingPatterns";
-import { familiesFor } from "@/lib/colours";
+import { familiesFor, colourSectionFor } from "@/lib/colours";
 import { galleryFor } from "@/lib/asset-scan";
 import JsonLd from "@/components/ui/JsonLd";
 import { products } from "@/lib/products";
@@ -208,12 +208,10 @@ export default async function ProductPage({ params }: Props) {
             {familiesFor(product.slug).length > 0 && (
               <ColourSystem
                 families={familiesFor(product.slug)}
-                heading={product.slug === "streetbondsr" ? "Solar-reflective colours." : "The colour system."}
-                intro={
-                  product.slug === "streetbondsr"
-                    ? "Eleven SRI-rated colourants plus three cycle-lane greens — solar-reflective surfaces that qualify for LEED Heat Island Reduction credits."
-                    : "Thirty-seven standard colourants across two families, plus full Pantone custom matching."
-                }
+                heading={colourSectionFor(product.slug)?.heading}
+                intro={colourSectionFor(product.slug)?.intro}
+                downloadHref={colourSectionFor(product.slug)?.downloadHref}
+                downloadLabel={colourSectionFor(product.slug)?.downloadLabel}
               />
             )}
             {product.slug === "streetprint" && <PavingPatterns />}

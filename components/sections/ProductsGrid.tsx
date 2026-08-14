@@ -151,7 +151,7 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
                   href={`/products/${product.slug}`}
                   className="group relative flex flex-col h-full rounded-2xl overflow-hidden transition-all duration-250"
                   style={{
-                    background: "#1a2235",
+                    background: "var(--bg-card)",
                     border: "1px solid rgba(255,255,255,0.11)",
                     boxShadow: "0 2px 12px rgba(0,0,0,0.3)",
                   }}

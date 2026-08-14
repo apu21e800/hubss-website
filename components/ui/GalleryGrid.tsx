@@ -125,10 +125,10 @@ function GalleryTile({
         className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
         sizes={
           aspect === "aspect-[16/9]"
-            ? "100vw"
+            ? "(max-width: 1280px) 100vw, 1280px"
             : "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         }
-        unoptimized
+        quality={aspect === "aspect-[16/9]" ? 75 : 70}
       />
 
       {/* Hover overlay — subtle bottom gradient */}

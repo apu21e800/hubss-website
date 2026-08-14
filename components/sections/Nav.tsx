@@ -8,7 +8,6 @@ import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
 import { resourceDocuments } from "@/lib/resource-documents";
-import { showCatalogue } from "@/lib/feature-flags";
 
 // ── Nav link config ──────────────────────────────────────────────────────────
 const PLAIN_LINKS = [
@@ -228,7 +227,7 @@ const PRODUCT_CATEGORIES: ProductCategory[] = [
     slugs: ["streetprint"],
     // Single-product category — note + secondary link give it visual parity.
     pillarNote: "A category-defining system. Brick, cobblestone, herringbone, fan, or fully custom patterns — stamped directly into new or existing asphalt. Flush surface, snowplow-safe.",
-    secondary: { label: "Pattern gallery", href: "/applications/private-driveways", meta: "60+ stamped installs" },
+    secondary: { label: "Pattern gallery", href: "/patterns", meta: "16 stamping templates" },
   },
   {
     label: "Asphalt Repair",
@@ -330,7 +329,6 @@ function MegaShell({ children }: { children: React.ReactNode }) {
 const ACCENT = "#FB923C";  // small-text accent (WCAG-safe on dark surfaces)
 const BRAND  = "#F97316";  // brand orange — reserved for larger / button use
 function ProductsMegaMenu() {
-  const catalogueVisible = showCatalogue();
   return (
     <MegaShell>
       <div className="grid grid-cols-12 gap-6">
@@ -455,63 +453,6 @@ function ProductsMegaMenu() {
         </div>
       </div>
 
-      {/* Catalogue 2026 — primary CTA banner. Sits ABOVE Featured Project
-          so it reads as a clear "browse the catalogue" link rather than a
-          project tile. Feature-gated: hidden on production until Doug
-          approves, visible on Vercel preview by default. */}
-      {catalogueVisible && (
-        <Link
-          href="/catalogue?utm_source=megamenu&utm_medium=catalogue_banner&utm_campaign=catalogue"
-          className="mt-5 flex items-stretch gap-0 overflow-hidden rounded-xl group transition-all hover:-translate-y-[2px] hover:shadow-[0_8px_28px_rgba(249,115,22,0.18)]"
-          style={{
-            background:
-              "linear-gradient(90deg, rgba(249,115,22,0.10) 0%, rgba(249,115,22,0.04) 55%, rgba(255,255,255,0.025) 100%)",
-            border: "1px solid rgba(249,115,22,0.28)",
-          }}
-        >
-          <div
-            className="relative flex-shrink-0 overflow-hidden bg-black"
-            style={{ width: 96, height: 96 }}
-          >
-            <Image
-              src="/catalogue/cover.webp"
-              alt="HUB Surface Systems 2026 Catalogue — browse 140 pages online"
-              fill
-              sizes="96px"
-              className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-            />
-          </div>
-          <div className="flex-1 min-w-0 py-3 pl-4 pr-2">
-            <p
-              className="text-[10px] font-bold tracking-[0.22em] uppercase mb-1 flex items-center gap-2"
-              style={{ color: "#FB923C" }}
-            >
-              Catalogue 2026
-              <span
-                className="text-[9px] font-bold tracking-[0.18em] uppercase px-1.5 py-0.5 rounded"
-                style={{ background: "rgba(249,115,22,0.20)", color: "#FB923C" }}
-              >
-                New
-              </span>
-            </p>
-            <p className="text-[15px] font-bold leading-snug" style={{ color: "#F5F0EB" }}>
-              Browse the catalogue in your browser
-            </p>
-            <p className="text-[11px] mt-0.5" style={{ color: "rgba(255,255,255,0.62)" }}>
-              140 pages · all products · all applications · free to read
-            </p>
-          </div>
-          <div className="flex-shrink-0 self-center pr-5">
-            <span
-              className="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-[0.18em] uppercase transition-transform duration-200 group-hover:translate-x-1"
-              style={{ color: "#FB923C" }}
-            >
-              Open <span aria-hidden="true">→</span>
-            </span>
-          </div>
-        </Link>
-      )}
-
       {/* Featured project strip */}
       <div className="mt-5 pt-4 rounded-xl overflow-hidden relative" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
         <div className="flex items-center gap-4 p-4">
@@ -532,7 +473,7 @@ function ProductsMegaMenu() {
       <div className="mt-5 pt-4 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
         <Link href="/resources"
           className="flex items-center justify-between px-4 py-2.5 rounded-lg transition-colors hover:bg-white/5"
-          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
+          style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
             <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Spec sheets</p>
@@ -542,7 +483,7 @@ function ProductsMegaMenu() {
         </Link>
         <Link href="/projects"
           className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
-          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
+          style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
             <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Project gallery</p>
@@ -552,7 +493,7 @@ function ProductsMegaMenu() {
         </Link>
         <Link href="/lunch-learn"
           className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
-          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
+          style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
             <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Lunch &amp; Learn</p>
@@ -676,7 +617,7 @@ function FieldNotesMegaMenu() {
       <div className="mt-5 pt-4 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
         <Link href="/blog"
           className="flex items-center justify-between px-4 py-2.5 rounded-lg transition-colors hover:bg-white/5"
-          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
+          style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
             <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>All field notes</p>
@@ -686,7 +627,7 @@ function FieldNotesMegaMenu() {
         </Link>
         <Link href="/projects"
           className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
-          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
+          style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
             <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Project gallery</p>
@@ -696,7 +637,7 @@ function FieldNotesMegaMenu() {
         </Link>
         <Link href="/resources"
           className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
-          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
+          style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
             <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Resources</p>
@@ -791,7 +732,7 @@ function ApplicationsMegaMenu() {
       <div className="mt-5 pt-4 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
         <Link href="/projects"
           className="flex items-center justify-between px-4 py-2.5 rounded-lg transition-colors hover:bg-white/5"
-          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
+          style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
             <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Project gallery</p>
@@ -801,7 +742,7 @@ function ApplicationsMegaMenu() {
         </Link>
         <Link href="/blog"
           className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
-          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
+          style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
             <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Field notes</p>
@@ -811,7 +752,7 @@ function ApplicationsMegaMenu() {
         </Link>
         <Link href="/contact"
           className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
-          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
+          style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
             <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Request a quote</p>

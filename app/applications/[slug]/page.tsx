@@ -10,6 +10,7 @@ import ResidentialDriveways from "@/components/sections/ResidentialDriveways";
 import JsonLd from "@/components/ui/JsonLd";
 import { applications } from "@/lib/applications";
 import { getMergedApplication } from "@/lib/applications.server";
+import { galleryFor } from "@/lib/asset-scan";
 import { products } from "@/lib/products";
 import { buildMetadata } from "@/lib/seo";
 
@@ -40,8 +41,8 @@ export default async function ApplicationPage({ params }: Props) {
   const application = await getMergedApplication(slug);
   if (!application) notFound();
 
-  // Gallery — use application.gallery if available, otherwise fall back to featured image
-  const appGallery = application.gallery ?? [];
+  // Gallery — folder-driven (see lib/asset-scan.ts + docs/ASSETS.md).
+  const appGallery = galleryFor(application.imageUrl, application.gallery);
   const galleryLabels = ["Overview", "Installation", "Detail", "Completed", "In Service", "Close-up"];
 
   const gallerySources = appGallery.length > 0 ? appGallery : [application.imageUrl];

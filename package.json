@@ -8,7 +8,8 @@
     "start": "next start",
     "migrate:sanity": "tsx scripts/migrate-to-sanity.ts",
     "migrate:sanity:dry": "tsx scripts/migrate-to-sanity.ts --dry-run",
-    "migrate:sanity:purge": "tsx scripts/migrate-to-sanity.ts --purge"
+    "migrate:sanity:purge": "tsx scripts/migrate-to-sanity.ts --purge",
+    "assets:inventory": "node scripts/asset-inventory.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",

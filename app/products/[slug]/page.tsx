@@ -10,6 +10,7 @@ import GalleryGrid, { type GalleryImage } from "@/components/ui/GalleryGrid";
 import ColourSystem from "@/components/sections/ColourSystem";
 import PavingPatterns from "@/components/sections/PavingPatterns";
 import { familiesFor } from "@/lib/colours";
+import { galleryFor } from "@/lib/asset-scan";
 import JsonLd from "@/components/ui/JsonLd";
 import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
@@ -68,8 +69,10 @@ export default async function ProductPage({ params }: Props) {
   // Featured image from lib/featured-images.ts (audited, correct per product)
   const featuredImg = productImages[slug] ? resolveImage(productImages[slug]) : null;
 
-  // Gallery — use product.gallery if available, otherwise fall back to featured image
-  const productGallery = product.gallery ?? [];
+  // Gallery — folder-driven: scans the product's image folder at build time
+  // (drop/delete files in public/images/products/<dir>/ to curate).
+  // Falls back to the curated array, then the featured image.
+  const productGallery = galleryFor(product.imageUrl, product.gallery);
   const galleryLabels = ["Overview", "Installation", "Detail", "Completed", "In Service", "Close-up"];
 
   const gallerySources = productGallery.length > 0 ? productGallery : (featuredImg ? [featuredImg.src] : [product.imageUrl]);

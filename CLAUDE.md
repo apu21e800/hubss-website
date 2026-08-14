@@ -85,3 +85,15 @@ npm run start   # run production locally
 
 ## Deploy
 Vercel — connected to GitHub, auto-deploys on push to main
+
+
+## Bundle import protocol (Claude Cowork -> this repo)
+
+When Vern says "import the bundle": find the newest hubss-*.bundle in this
+folder or C:\Users\cleve\Downloads (move it here if needed), then:
+1. git bundle verify <file>   — stop and report if it fails
+2. git checkout v2 && git pull --ff-only
+3. git fetch "<file>" v2:v2   — on non-fast-forward, fetch to v2-cloud and
+   push origin v2-cloud:v2 instead
+4. git push origin v2
+5. Delete the bundle file; show git log --oneline -3 + confirm remote SHA.

@@ -65,13 +65,22 @@ export default function GalleryGrid({ images }: { images: GalleryImage[] }) {
           <p className="text-xs" style={{ color: "#6B7280" }}>
             Showing {displayed.length} of {images.length}
           </p>
-          <button
-            onClick={() => setPage((p) => p + 1)}
-            className="px-5 py-2.5 rounded-lg text-sm font-semibold transition-all hover:brightness-110"
-            style={{ background: "#f97316", color: "#fff" }}
-          >
-            Load {Math.min(PAGE_SIZE, images.length - displayed.length)} more
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setPage(Math.ceil(images.length / PAGE_SIZE))}
+              className="px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors hover:bg-white/10"
+              style={{ background: "var(--bg-card-neutral)", color: "var(--text-body)", border: "1px solid rgba(255,255,255,0.1)" }}
+            >
+              Show all {images.length}
+            </button>
+            <button
+              onClick={() => setPage((p) => p + 1)}
+              className="px-5 py-2.5 rounded-lg text-sm font-semibold transition-all hover:brightness-110"
+              style={{ background: "#f97316", color: "#fff" }}
+            >
+              Load {Math.min(PAGE_SIZE, images.length - displayed.length)} more
+            </button>
+          </div>
         </div>
       )}
 

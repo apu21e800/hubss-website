@@ -20,7 +20,7 @@ export default function ColourSystem({
 }) {
   if (!families.length) return null;
   return (
-    <section className="mt-14">
+    <section id="colours" className="mt-14 scroll-mt-24">
       <h2 className="text-2xl font-bold mb-2" style={{ color: "var(--text-primary)" }}>
         {heading}
       </h2>

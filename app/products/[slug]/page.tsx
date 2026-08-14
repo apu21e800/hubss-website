@@ -10,7 +10,7 @@ import GalleryGrid, { type GalleryImage } from "@/components/ui/GalleryGrid";
 import ColourSystem from "@/components/sections/ColourSystem";
 import PavingPatterns from "@/components/sections/PavingPatterns";
 import { familiesFor, colourSectionFor } from "@/lib/colours";
-import { galleryFor } from "@/lib/asset-scan";
+import { galleryFor, altFor } from "@/lib/asset-scan";
 import JsonLd from "@/components/ui/JsonLd";
 import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
@@ -73,13 +73,11 @@ export default async function ProductPage({ params }: Props) {
   // (drop/delete files in public/images/products/<dir>/ to curate).
   // Falls back to the curated array, then the featured image.
   const productGallery = galleryFor(product.imageUrl, product.gallery);
-  const galleryLabels = ["Overview", "Installation", "Detail", "Completed", "In Service", "Close-up"];
-
   const gallerySources = productGallery.length > 0 ? productGallery : (featuredImg ? [featuredImg.src] : [product.imageUrl]);
-  const gallery: GalleryImage[] = gallerySources.map((src, idx) => ({
+  const gallery: GalleryImage[] = gallerySources.map((src) => ({
     src,
-    alt: `${product.name} — ${galleryLabels[idx % galleryLabels.length]}`,
-    caption: `${product.name} · ${galleryLabels[idx % galleryLabels.length]}`,
+    alt: altFor(src, `${product.name} decorative pavement by HUB Surface Systems`),
+    caption: altFor(src, product.name),
   }));
 
   const relatedAppData = product.relatedApplications

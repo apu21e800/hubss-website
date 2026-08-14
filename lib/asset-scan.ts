@@ -56,3 +56,21 @@ export function galleryFor(imageUrl: string, fallback: string[] | undefined): st
   const scanned = scanGallery(dir, { excludeBasenames: [hero] });
   return scanned.length > 0 ? scanned : fallback ?? [];
 }
+
+/**
+ * Human alt text from a filename + page context. Numbered series files
+ * ("crosswalks-45.jpg") become "<context> — installation photo 45"; named
+ * files ("vaughan-woodbridge-crosswalk.jpg") are humanized into title case.
+ */
+export function altFor(src: string, context: string): string {
+  const base = path.posix.basename(src).replace(/\.(jpe?g|png|webp)$/i, "");
+  const numbered = base.match(/^(.*?)[-_](\d+)$/);
+  if (numbered) {
+    return `${context} — installation photo ${parseInt(numbered[2], 10)}`;
+  }
+  const human = base
+    .replace(/[-_]+/g, " ")
+    .replace(/\b\w/g, (ch) => ch.toUpperCase())
+    .trim();
+  return `${context} — ${human}`;
+}

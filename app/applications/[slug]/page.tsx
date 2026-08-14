@@ -10,7 +10,7 @@ import ResidentialDriveways from "@/components/sections/ResidentialDriveways";
 import JsonLd from "@/components/ui/JsonLd";
 import { applications } from "@/lib/applications";
 import { getMergedApplication } from "@/lib/applications.server";
-import { galleryFor } from "@/lib/asset-scan";
+import { galleryFor, altFor } from "@/lib/asset-scan";
 import { products } from "@/lib/products";
 import { buildMetadata } from "@/lib/seo";
 
@@ -43,13 +43,11 @@ export default async function ApplicationPage({ params }: Props) {
 
   // Gallery — folder-driven (see lib/asset-scan.ts + docs/ASSETS.md).
   const appGallery = galleryFor(application.imageUrl, application.gallery);
-  const galleryLabels = ["Overview", "Installation", "Detail", "Completed", "In Service", "Close-up"];
-
   const gallerySources = appGallery.length > 0 ? appGallery : [application.imageUrl];
-  const gallery: GalleryImage[] = gallerySources.map((src, idx) => ({
+  const gallery: GalleryImage[] = gallerySources.map((src) => ({
     src,
-    alt: `${application.name} — ${galleryLabels[idx % galleryLabels.length]}`,
-    caption: `${application.name} · ${galleryLabels[idx % galleryLabels.length]}`,
+    alt: altFor(src, `${application.name} surface systems by HUB — Canadian installation`),
+    caption: altFor(src, application.name),
   }));
 
   const relatedProductData = application.relatedProducts

@@ -51,12 +51,12 @@ const WHAT_YOU_GET = [
   {
     num: "02",
     title: "The Lifecycle Cost Math",
-    desc: "Lifecycle cost math, side by side. How HUB systems deliver years of high-performance service versus repeated seasonal interventions — the numbers usually surprise people.",
+    desc: "Lifecycle cost math, side by side. How HUB systems deliver years of high-performance service versus repeated seasonal interventions — asphalt-life math your procurement team will ask for.",
   },
   {
     num: "03",
-    title: "Lunch Included. No Catch.",
-    desc: "In-person sessions include catered lunch for your team. Virtual sessions come with a $25 lunch voucher delivered before we connect.",
+    title: "Samples, Sheets, and an Installer Map",
+    desc: "Physical material samples, current technical data sheets, and the certified HUB applicator list for your region — everything a team needs to move from interest to tender.",
   },
 ];
 
@@ -78,7 +78,7 @@ const PERSONAS = [
   },
   {
     title: "Contractors & Applicators",
-    desc: "Learn about the HUB certified applicator program — unlock territory rights and bid on jobs your competitors can't touch.",
+    desc: "Learn about the HUB certified applicator program — territory-protected bidding and direct manufacturer support through the certified program.",
     badge: "Certified Applicator Program",
   },
 ];
@@ -89,8 +89,8 @@ const FAQS = [
     a: "30–45 minutes of presentation, followed by open Q&A. We're respectful of your team's calendar and stick to the time we agree on.",
   },
   {
-    q: "Is this actually free?",
-    a: "100% free. No invoice, no minimum order attached, and we won't badger you afterward. We just want you to know what you're specifying — the rest follows naturally.",
+    q: "What does it cost?",
+    a: "Nothing. Sessions are how we introduce our systems to the people who specify them — no invoice, no minimum order, and no follow-up pressure.",
   },
   {
     q: "Do we get continuing education credits?",
@@ -113,20 +113,20 @@ const TICKER = [...CITIES, ...CITIES];
 
 const STATS = [
   { value: "45 min", label: "Focused Session" },
-  { value: "100% Free", label: "No Invoice Ever" },
+  { value: "No Cost", label: "Hosted by HUB" },
   { value: "Lunch Included", label: "Every In-Person" },
   { value: "CE Credits", label: "AIBC · RAIC · PEO" },
 ];
 
 export default function LunchLearnFunnel({
-  eyebrow      = "Free · No Obligation · Coast to Coast",
-  headingLine1 = "Lunch Is On Us.",
-  headingLine2 = "Your Next Spec Is Free.",
-  subheading   = "A 45-minute HUB Lunch & Learn delivers everything your team needs to confidently specify decorative pavement, thermoplastic crosswalks, and coloured coatings — real Canadian case studies and spec language you can drop straight into your next RFP.",
-  ctaLabel     = "Book Your Free Session",
-  formHeading  = "Claim Your Free Lunch & Learn",
-  formSubheading = "Tell us who you are and where you are — we handle the rest. Usually within 24 hours.",
-  submitLabel  = "Claim Your Free Lunch & Learn →",
+  eyebrow      = "Professional Development · In-Person or Virtual · Coast to Coast",
+  headingLine1 = "Specify with confidence.",
+  headingLine2 = "Lunch is on us.",
+  subheading   = "A focused 45-minute session that gives your team the technical grounding to specify decorative pavement, thermoplastic crosswalks, and coloured coatings — real Canadian case studies and spec language you can drop straight into your next RFP.",
+  ctaLabel     = "Book a Session",
+  formHeading  = "Book your Lunch & Learn",
+  formSubheading = "Tell us who you are and where you are — we confirm date and details within one business day.",
+  submitLabel  = "Book the Session →",
   whatYouGet,
   personas,
   faqs,
@@ -136,7 +136,7 @@ export default function LunchLearnFunnel({
   const personaItems       = personas?.length   ? personas   : PERSONAS;
   const faqItems           = faqs?.length       ? faqs       : FAQS;
   const whatYouGetEyebrow  = sectionHeadings?.whatYouGetEyebrow ?? "What You Walk Away With";
-  const whatYouGetHeading  = sectionHeadings?.whatYouGetHeading ?? "Not a Sales Pitch. An Education.";
+  const whatYouGetHeading  = sectionHeadings?.whatYouGetHeading ?? "Not a sales pitch. A working session.";
   const personasEyebrow    = sectionHeadings?.personasEyebrow   ?? "Who It's Built For";
   const personasHeading    = sectionHeadings?.personasHeading   ?? "Your Whole Team. One Session.";
   const faqEyebrow         = sectionHeadings?.faqEyebrow        ?? "Common Questions";
@@ -162,7 +162,7 @@ export default function LunchLearnFunnel({
         body: JSON.stringify({ ...formData, formType: "lunch-learn" }),
       });
       if (!response.ok) throw new Error(`API error: ${response.statusText}`);
-      setSubmitState({ status: "success", message: "You're on the list. We'll be in touch within 24 hours to confirm your date and details." });
+      setSubmitState({ status: "success", message: "You're booked in. We'll be in touch within one business day to confirm your date and details." });
       setFormData({ name: "", email: "", company: "", city: "", phone: "" });
       window.gtag?.("event", "generate_lead", { event_category: "conversion", form_type: "lunch-learn" });
       track("lunch_learn_submit", { form_type: "lunch-learn" });
@@ -232,7 +232,7 @@ export default function LunchLearnFunnel({
               </p>
 
               <div className="flex flex-wrap gap-5 mb-10">
-                {["30+ Years in Canada", "10 Provinces", "Free CE Credits"].map((t) => (
+                {["30+ Years in Canada", "10 Provinces", "CE-Credit Sessions"].map((t) => (
                   <div key={t} className="flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: "#f97316" }} />
                     <span className="text-sm font-semibold" style={{ color: "rgba(255,255,255,0.6)" }}>{t}</span>
@@ -277,7 +277,7 @@ export default function LunchLearnFunnel({
             >
               <Image
                 src="/images/lunch-learn/moose-final.png"
-                alt="HUB Surface Systems moose mascot — book a free Lunch & Learn"
+                alt="Moose, the HUB Surface Systems site dog, in a hard hat and safety vest — book a Lunch & Learn"
                 width={256}
                 height={290}
                 style={{

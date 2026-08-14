@@ -16,7 +16,8 @@ export const metadata: Metadata = buildMetadata({
 function TemplateCard({ t, wide = false }: { t: PatternTemplate; wide?: boolean }) {
   return (
     <div
-      className="rounded-xl overflow-hidden"
+      id={t.slug}
+      className="rounded-xl overflow-hidden scroll-mt-24"
       style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.08)" }}
     >
       <div className="p-4 sm:p-5">

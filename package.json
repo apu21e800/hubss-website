@@ -4,14 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node scripts/gen-blog-index.mjs && node scripts/gen-gallery-manifest.mjs && next build",
     "start": "next start",
     "migrate:sanity": "tsx scripts/migrate-to-sanity.ts",
     "migrate:sanity:dry": "tsx scripts/migrate-to-sanity.ts --dry-run",
     "migrate:sanity:purge": "tsx scripts/migrate-to-sanity.ts --purge",
-    "assets:inventory": "node scripts/asset-inventory.mjs",
     "gen:blog-index": "node scripts/gen-blog-index.mjs",
-    "prebuild": "node scripts/gen-blog-index.mjs && node scripts/asset-inventory.mjs"
+    "assets:inventory": "node scripts/asset-inventory.mjs",
+    "gen:gallery-manifest": "node scripts/gen-gallery-manifest.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",
@@ -58,11 +58,5 @@
     "prettier": "^3.8.1",
     "tailwindcss": "^4",
     "typescript": "^5"
-  },
-  "allowScripts": {
-    "esbuild@0.28.0": true,
-    "esbuild@0.27.7": true,
-    "sharp": true,
-    "unrs-resolver": true
   }
 }

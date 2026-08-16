@@ -1,14 +1,5 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# Catalogue print master — 150MB+ CMYK PDF, delivered out-of-band (needs Git LFS)
-/print/*.pdf
-# Catalogue build artifacts + transient QA renders (not committed)
-/catalog-print-build/output/*.pdf
-/catalogue-finishing/compare/
-/catalogue-finishing/compare-fixed/
-/catalogue-finishing/compare-6x6/
-/catalogue-2026-finish/*.pdf
-
 # dependencies
 /node_modules
 /.pnp
@@ -55,6 +46,5 @@ next-env.d.ts
 .claude/worktrees/
 scripts/.gallery-checkpoint.json
 
-# Phase-1 transient QA renders
-/catalogue-finishing/compare-wash/
-/catalogue-finishing/live_p46.webp
+# Generated at build time by scripts/gen-gallery-manifest.mjs
+lib/gallery-manifest.json

@@ -123,4 +123,4 @@ in `lib/products.ts` / `lib/applications.ts`.
 
 _Top-level loose files in /public/images: 6 (0.2 MB)._
 
-Generated: 2026-08-14
+Generated: 2026-08-16

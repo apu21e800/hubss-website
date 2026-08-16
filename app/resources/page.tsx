@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
-import { resourceDocuments } from "@/lib/resource-documents";
+import { resourceDocuments, applyDocOverrides } from "@/lib/resource-documents";
 import ResourcesClient from "@/components/resources/ResourcesClient";
 import { getResourceDocuments } from "@/lib/sanity.queries";
 import { showCatalogue } from "@/lib/feature-flags";
@@ -27,14 +27,16 @@ export default async function ResourcesPage() {
   // imported into Sanity yet. Previous logic (`sanityDocs ?? hardcoded`)
   // replaced wholesale, so any Sanity response — even just the 89 legacy
   // spec sheets — silently dropped the catalogue and flyers from view.
-  const merged = sanityDocs
-    ? [
-        ...sanityDocs,
-        ...resourceDocuments.filter(
-          (d) => !sanityDocs.some((s) => s.id === d.id),
-        ),
-      ]
-    : resourceDocuments;
+  const merged = applyDocOverrides(
+    sanityDocs
+      ? [
+          ...sanityDocs,
+          ...resourceDocuments.filter(
+            (d) => !sanityDocs.some((s) => s.id === d.id),
+          ),
+        ]
+      : resourceDocuments,
+  );
 
   // Catalogue card is gated on the same flag as the /catalogue route it
   // links to: visible on staging/preview for review, hidden on production

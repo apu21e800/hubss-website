@@ -45,3 +45,6 @@ next-env.d.ts
 .superpowers/
 .claude/worktrees/
 scripts/.gallery-checkpoint.json
+
+# Generated at build time by scripts/gen-gallery-manifest.mjs
+lib/gallery-manifest.json

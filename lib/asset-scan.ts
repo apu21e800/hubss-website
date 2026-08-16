@@ -1,59 +1,59 @@
 /**
- * Folder-driven galleries — the asset-management enabler.
+ * Folder-driven galleries — the asset-management layer.
  *
- * scanGallery() reads a /public image folder at BUILD TIME and returns every
- * gallery-eligible file, naturally sorted. This makes the folder itself the
- * curation surface: drop a photo in → it appears on the next deploy; delete
- * it → it's gone. No arrays to edit.
+ * A product's or application's gallery is the CONTENTS of its image folder:
+ * drop a file in and it appears, delete it and it's gone, prefix "_" to hide,
+ * number the files to order them. See docs/IMAGE-WORKFLOW.md.
  *
- * Rules (documented in docs/ASSETS.md):
- *   - included: .jpg .jpeg .png .webp
- *   - excluded: filenames containing "logo", files starting with "_"
- *     (the keep-but-hide escape hatch), and .svg
- *   - sorted naturally: name-2 before name-10
+ * The folder listing is built at BUILD TIME into lib/gallery-manifest.json by
+ * scripts/gen-gallery-manifest.mjs (wired into the "build" npm script), and
+ * this module only reads that JSON.
  *
- * SERVER ONLY — import from server components / *.server.ts, never from
- * client components ("use client" files).
+ * DO NOT reintroduce `fs` here. Reading the filesystem from a page makes the
+ * Next.js tracer bundle all of /public into the serverless function (2.4 GB
+ * against Vercel's 250 MB ceiling — it fails the deploy outright). The
+ * manifest keeps the behaviour and keeps the function tiny.
+ *
+ * Safe to import from server components. No Node built-ins, no side effects.
  */
-import * as fs from "fs";
-import * as path from "path";
+import manifest from "./gallery-manifest.json";
 
+const GALLERIES = manifest as Record<string, string[]>;
+
+/** "/images/products/streetbond/hero.jpg" -> "images/products/streetbond" */
+export function publicDirOf(imageUrl: string): string {
+  const clean = imageUrl.split("?")[0].replace(/^\/+/, "");
+  const i = clean.lastIndexOf("/");
+  return i === -1 ? clean : clean.slice(0, i);
+}
+
+function basename(p: string): string {
+  const clean = p.split("?")[0];
+  return clean.slice(clean.lastIndexOf("/") + 1);
+}
+
+/** Every gallery-eligible image in a public folder, naturally sorted. */
 export function scanGallery(
   publicDir: string,
   opts?: { excludeBasenames?: string[] }
 ): string[] {
-  const clean = publicDir.replace(/^\/+/, "");
-  const abs = path.join(process.cwd(), "public", clean);
-  let files: string[];
-  try {
-    files = fs.readdirSync(abs);
-  } catch {
-    return [];
-  }
-  const excluded = new Set((opts?.excludeBasenames ?? []).map((b) => b.toLowerCase()));
-  const out = files
-    .filter((f) => /\.(jpe?g|png|webp)$/i.test(f))
-    .filter((f) => !/logo/i.test(f))
-    .filter((f) => !f.startsWith("_"))
-    .filter((f) => !excluded.has(f.toLowerCase()));
-  out.sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" }));
-  return out.map((f) => `/${clean}/${f}`);
-}
-
-/** Derive the containing public dir of an image URL: /images/x/y.jpg -> images/x */
-export function publicDirOf(imageUrl: string): string {
-  return path.posix.dirname(imageUrl).replace(/^\/+/, "");
+  const key = publicDir.replace(/^\/+/, "");
+  const files = GALLERIES[key];
+  if (!files?.length) return [];
+  if (!opts?.excludeBasenames?.length) return files;
+  const excluded = new Set(opts.excludeBasenames.map((b) => b.toLowerCase()));
+  return files.filter((f) => !excluded.has(basename(f).toLowerCase()));
 }
 
 /**
- * Gallery for an entity: scan the folder its hero lives in; fall back to the
- * curated array when the folder is missing/empty. The hero file itself is
- * excluded so it doesn't render twice on the page.
+ * Gallery for an entity: the contents of the folder its hero lives in, with
+ * the hero itself removed so it doesn't render twice. Falls back to the
+ * curated array when the folder is missing or empty.
  */
 export function galleryFor(imageUrl: string, fallback: string[] | undefined): string[] {
-  const dir = publicDirOf(imageUrl);
-  const hero = path.posix.basename(imageUrl);
-  const scanned = scanGallery(dir, { excludeBasenames: [hero] });
+  const scanned = scanGallery(publicDirOf(imageUrl), {
+    excludeBasenames: [basename(imageUrl)],
+  });
   return scanned.length > 0 ? scanned : fallback ?? [];
 }
 
@@ -63,7 +63,7 @@ export function galleryFor(imageUrl: string, fallback: string[] | undefined): st
  * files ("vaughan-woodbridge-crosswalk.jpg") are humanized into title case.
  */
 export function altFor(src: string, context: string): string {
-  const base = path.posix.basename(src).replace(/\.(jpe?g|png|webp)$/i, "");
+  const base = basename(src).replace(/\.(jpe?g|png|webp)$/i, "");
   const numbered = base.match(/^(.*?)[-_](\d+)$/);
   if (numbered) {
     return `${context} — installation photo ${parseInt(numbered[2], 10)}`;

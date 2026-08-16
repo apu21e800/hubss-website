@@ -13,6 +13,70 @@ export const metadata: Metadata = buildMetadata({
   slug: "patterns",
 });
 
+/**
+ * SectionHead — the catalogue's page-heading archetype (Templates spreads,
+ * p21–p24): a small brand dot beside a wide-tracked eyebrow, the display
+ * title, then a hairline brand rule across the measure.
+ */
+function SectionHead({
+  eyebrow,
+  title,
+  count,
+  children,
+}: {
+  eyebrow: string;
+  title: string;
+  count?: string;
+  children?: React.ReactNode;
+}) {
+  return (
+    <div className="mb-10">
+      <div className="flex items-center gap-2.5 mb-3">
+        <span
+          className="inline-block rounded-full flex-shrink-0"
+          style={{ width: 5, height: 5, background: "#F97316" }}
+          aria-hidden="true"
+        />
+        <p
+          className="text-[0.7rem] font-semibold uppercase"
+          style={{ letterSpacing: "0.2em", color: "var(--text-secondary)" }}
+        >
+          {eyebrow}
+        </p>
+        {count && (
+          <span
+            className="text-[0.7rem] font-semibold uppercase ml-auto"
+            style={{ letterSpacing: "0.14em", color: "var(--text-muted)" }}
+          >
+            {count}
+          </span>
+        )}
+      </div>
+
+      <h2
+        className="font-black"
+        style={{
+          color: "var(--text-primary)",
+          fontSize: "clamp(1.9rem, 3.2vw, 2.75rem)",
+          lineHeight: 1.05,
+          letterSpacing: "-0.03em",
+          textWrap: "balance",
+        }}
+      >
+        {title}
+      </h2>
+
+      <div
+        className="mt-5 mb-6"
+        style={{ height: 1, background: "rgba(255,255,255,0.14)" }}
+        aria-hidden="true"
+      />
+
+      {children}
+    </div>
+  );
+}
+
 function TemplateCard({ t, wide = false }: { t: PatternTemplate; wide?: boolean }) {
   return (
     <div
@@ -44,17 +108,32 @@ export default function PatternsPage() {
       <Nav />
 
       {/* ── Hero ─────────────────────────────────────────────── */}
-      <section className="pt-36 pb-14" style={{ background: "var(--bg-dark)" }}>
+      <section className="pt-36 pb-12" style={{ background: "var(--bg-dark)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="grad-text text-xs font-semibold tracking-[0.2em] uppercase mb-3">
-            StreetPrint Templates
-          </p>
+          <div className="flex items-center gap-2.5 mb-3">
+            <span
+              className="inline-block rounded-full flex-shrink-0"
+              style={{ width: 6, height: 6, background: "#F97316" }}
+              aria-hidden="true"
+            />
+            <p
+              className="text-[0.72rem] font-semibold uppercase"
+              style={{ letterSpacing: "0.22em", color: "var(--text-secondary)" }}
+            >
+              StreetPrint Templates
+            </p>
+          </div>
           <h1
-            className="font-black mb-5"
-            style={{ color: "var(--text-primary)", fontSize: "clamp(2.4rem, 5vw, 4rem)", lineHeight: 1.05, letterSpacing: "-0.03em" }}
+            className="font-black"
+            style={{ color: "var(--text-primary)", fontSize: "clamp(2.4rem, 5vw, 4rem)", lineHeight: 1.02, letterSpacing: "-0.035em" }}
           >
             The pattern library.
           </h1>
+          <div
+            className="mt-6 mb-6"
+            style={{ height: 1, background: "rgba(255,255,255,0.16)" }}
+            aria-hidden="true"
+          />
           <p className="text-base sm:text-lg max-w-2xl leading-relaxed" style={{ color: "var(--text-secondary)" }}>
             Sixteen stamping templates, shown as installed — dimensioned to the inch. Flexible
             templates press the pattern into warm asphalt; StreetBond colour locks it in. Every
@@ -66,12 +145,11 @@ export default function PatternsPage() {
       {/* ── Field templates ─────────────────────────────────── */}
       <section className="py-16" style={{ background: "var(--bg-primary)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-baseline gap-3 mb-8">
-            <h2 className="text-2xl font-bold" style={{ color: "var(--text-primary)" }}>Field templates.</h2>
-            <span className="text-[0.68rem] font-semibold tracking-[0.14em] uppercase" style={{ color: "var(--text-muted)" }}>
-              {fieldTemplates.length} patterns
-            </span>
-          </div>
+          <SectionHead
+            eyebrow="Field Templates"
+            title="The pattern across the surface."
+            count={`${fieldTemplates.length} patterns`}
+          />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {fieldTemplates.map((t) => <TemplateCard key={t.slug} t={t} />)}
           </div>
@@ -81,12 +159,11 @@ export default function PatternsPage() {
       {/* ── Border templates ────────────────────────────────── */}
       <section className="pb-16" style={{ background: "var(--bg-primary)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-baseline gap-3 mb-8">
-            <h2 className="text-2xl font-bold" style={{ color: "var(--text-primary)" }}>Border courses.</h2>
-            <span className="text-[0.68rem] font-semibold tracking-[0.14em] uppercase" style={{ color: "var(--text-muted)" }}>
-              {borderTemplates.length} patterns
-            </span>
-          </div>
+          <SectionHead
+            eyebrow="Border Templates"
+            title="Tile and brick borders."
+            count={`${borderTemplates.length} patterns`}
+          />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {borderTemplates.map((t) => <TemplateCard key={t.slug} t={t} wide />)}
           </div>

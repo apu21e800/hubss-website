@@ -10,7 +10,7 @@
  * "Traffic Patterns Color Palette" guide; pms = specified Pantone match.
  *
  * Screen reference only — physical samples for specification.
- * PDFs: /docs/StreetBond/StreetBond/StreetBond-Colour-Guide.pdf ·
+ * PDFs: /docs/StreetBond/StreetBond/StreetBond-Colour-Card-2026.pdf ·
  * /docs/TrafficPatternsXD/TrafficPatternsXD-Colour-Guide.pdf
  */
 
@@ -205,20 +205,20 @@ const SECTION_META: Record<string, ColourSectionMeta> = {
   streetbond: {
     heading: "The colour system.",
     intro: "Sixty-three EMA colours from the 2026 colour card, each with published solar reflectance. Full Pantone custom matching for branded environments.",
-    downloadHref: "/docs/StreetBond/StreetBond/StreetBond-Colour-Guide.pdf",
-    downloadLabel: "Download the colour card (PDF)",
+    downloadHref: "/docs/StreetBond/StreetBond/StreetBond-Colour-Card-2026.pdf",
+    downloadLabel: "Download the 2026 colour card (PDF)",
   },
   streetbondsr: {
     heading: "Solar-reflective colours.",
     intro: "The SR series from the 2026 colour card — high-reflectance colourants for cooler surfaces and LEED Heat Island Reduction credits.",
-    downloadHref: "/docs/StreetBond/StreetBond/StreetBond-Colour-Guide.pdf",
-    downloadLabel: "Download the colour card (PDF)",
+    downloadHref: "/docs/StreetBond/StreetBond/StreetBond-Colour-Card-2026.pdf",
+    downloadLabel: "Download the 2026 colour card (PDF)",
   },
   durashield: {
     heading: "DuraShield colours.",
     intro: "Two engineered greys for protective overcoat work, from the 2026 colour card.",
-    downloadHref: "/docs/StreetBond/StreetBond/StreetBond-Colour-Guide.pdf",
-    downloadLabel: "Download the colour card (PDF)",
+    downloadHref: "/docs/StreetBond/StreetBond/StreetBond-Colour-Card-2026.pdf",
+    downloadLabel: "Download the 2026 colour card (PDF)",
   },
   "traffic-patterns-xd": {
     heading: "The colour palette.",

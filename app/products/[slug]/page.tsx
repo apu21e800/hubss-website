@@ -6,6 +6,9 @@ import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
 import DocumentDownloads from "@/components/sections/DocumentDownloads";
+import ColourSystem from "@/components/sections/ColourSystem";
+import { familiesFor, colourSectionFor } from "@/lib/colours";
+import { galleryFor, altFor } from "@/lib/asset-scan";
 import GalleryGrid, { type GalleryImage } from "@/components/ui/GalleryGrid";
 import JsonLd from "@/components/ui/JsonLd";
 import { products } from "@/lib/products";
@@ -66,14 +69,15 @@ export default async function ProductPage({ params }: Props) {
   const featuredImg = productImages[slug] ? resolveImage(productImages[slug]) : null;
 
   // Gallery — use product.gallery if available, otherwise fall back to featured image
-  const productGallery = product.gallery ?? [];
-  const galleryLabels = ["Overview", "Installation", "Detail", "Completed", "In Service", "Close-up"];
+  // Folder-driven gallery: the contents of the product's image folder ARE the
+  // gallery (see docs/IMAGE-WORKFLOW.md). Falls back to the curated array.
+  const productGallery = galleryFor(product.imageUrl, product.gallery);
 
   const gallerySources = productGallery.length > 0 ? productGallery : (featuredImg ? [featuredImg.src] : [product.imageUrl]);
-  const gallery: GalleryImage[] = gallerySources.map((src, idx) => ({
+  const gallery: GalleryImage[] = gallerySources.map((src) => ({
     src,
-    alt: `${product.name} — ${galleryLabels[idx % galleryLabels.length]}`,
-    caption: `${product.name} · ${galleryLabels[idx % galleryLabels.length]}`,
+    alt: altFor(src, `${product.name} decorative pavement by HUB Surface Systems`),
+    caption: altFor(src, product.name),
   }));
 
   const relatedAppData = product.relatedApplications
@@ -199,7 +203,17 @@ export default async function ProductPage({ params }: Props) {
               {product.description}
             </p>
 
-            <h2 className="text-2xl font-bold mb-6" style={{ color: "var(--text-primary)" }}>Gallery</h2>
+            {familiesFor(product.slug).length > 0 && (
+              <ColourSystem
+                families={familiesFor(product.slug)}
+                heading={colourSectionFor(product.slug)?.heading}
+                intro={colourSectionFor(product.slug)?.intro}
+                downloadHref={colourSectionFor(product.slug)?.downloadHref}
+                downloadLabel={colourSectionFor(product.slug)?.downloadLabel}
+              />
+            )}
+
+            <h2 className="text-2xl font-bold mb-6 mt-14" style={{ color: "var(--text-primary)" }}>Gallery</h2>
             <GalleryGrid images={gallery} />
 
             <DocumentDownloads slug={product.slug} />

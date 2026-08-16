@@ -8,6 +8,25 @@ import { motion, AnimatePresence } from "framer-motion";
 import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
 import { resourceDocuments } from "@/lib/resource-documents";
+import { familiesFor } from "@/lib/colours";
+import { PRODUCT_KEYWORDS, APPLICATION_KEYWORDS, FALLBACK_SUGGESTIONS } from "@/lib/search-keywords";
+import blogIndex from "@/lib/blog-index.json";
+
+// Flat colour list for search — one entry per colourant, first product wins.
+const COLOUR_ITEMS: { name: string; hex: string; product: string; href: string }[] = (() => {
+  const seen = new Set<string>();
+  const out: { name: string; hex: string; product: string; href: string }[] = [];
+  for (const [slug, label] of [["streetbond", "StreetBond"], ["streetbondsr", "StreetBondSR"], ["durashield", "DuraShield"], ["traffic-patterns-xd", "TrafficPatternsXD"]] as const) {
+    for (const fam of familiesFor(slug)) {
+      for (const c of fam.colours) {
+        if (seen.has(c.name)) continue;
+        seen.add(c.name);
+        out.push({ name: c.name, hex: c.hex, product: label, href: `/products/${slug}#colours` });
+      }
+    }
+  }
+  return out;
+})();
 
 // ── Nav link config ──────────────────────────────────────────────────────────
 const PLAIN_LINKS = [
@@ -47,16 +66,22 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
   }, [onClose]);
 
   const q = query.toLowerCase().trim();
-  const matchedProducts = q.length < 2 ? [] : products.filter(p => p.name.toLowerCase().includes(q) || p.shortDesc?.toLowerCase().includes(q));
-  const matchedApps = q.length < 2 ? [] : applications.filter(a => a.name.toLowerCase().includes(q) || a.shortDesc?.toLowerCase().includes(q));
-  const matchedPages = q.length < 2 ? [] : PAGES.filter(p => p.label.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q));
-  const matchedCategories = q.length < 2 ? [] : CATEGORIES.filter(c => c.label.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q));
+  // Tokenized AND-match across name + description + curated synonyms, so the
+  // words people actually type ("pothole", "rainbow", "stamped asphalt") land.
+  const tokens = q.split(/\s+/).filter(Boolean);
+  const hit = (hay: string) => tokens.length > 0 && tokens.every((t) => hay.includes(t));
+  const matchedProducts = q.length < 2 ? [] : products.filter(p =>
+    hit(`${p.name} ${p.shortDesc ?? ""} ${(PRODUCT_KEYWORDS[p.slug] ?? []).join(" ")}`.toLowerCase()));
+  const matchedApps = q.length < 2 ? [] : applications.filter(a =>
+    hit(`${a.name} ${a.shortDesc ?? ""} ${(APPLICATION_KEYWORDS[a.slug] ?? []).join(" ")}`.toLowerCase()));
+  const matchedPages = q.length < 2 ? [] : PAGES.filter(p => hit(`${p.label} ${p.desc}`.toLowerCase()));
+  const matchedCategories = q.length < 2 ? [] : CATEGORIES.filter(c => hit(`${c.label} ${c.desc}`.toLowerCase()));
   const matchedDocs = q.length < 2 ? [] : resourceDocuments.filter(doc =>
-    doc.title.toLowerCase().includes(q) ||
-    doc.productName.toLowerCase().includes(q) ||
-    doc.type.toLowerCase().includes(q)
-  );
-  const hasResults = matchedProducts.length > 0 || matchedApps.length > 0 || matchedPages.length > 0 || matchedCategories.length > 0 || matchedDocs.length > 0;
+    hit(`${doc.title} ${doc.productName} ${doc.type}`.toLowerCase()));
+  const matchedColours = q.length < 2 ? [] : COLOUR_ITEMS.filter(c => hit(`${c.name} ${c.product} colour color`.toLowerCase()));
+  const matchedPosts = q.length < 2 ? [] : (blogIndex as { slug: string; title: string; excerpt: string }[]).filter(b => hit(`${b.title} ${b.excerpt}`.toLowerCase()));
+  const matchedSuggestions = q.length < 2 ? [] : FALLBACK_SUGGESTIONS.filter(f => f.terms.some(t => q.includes(t) || t.includes(q)));
+  const hasResults = matchedProducts.length > 0 || matchedApps.length > 0 || matchedPages.length > 0 || matchedCategories.length > 0 || matchedDocs.length > 0 || matchedColours.length > 0 || matchedPosts.length > 0;
   const showEmpty = q.length >= 2 && !hasResults;
 
   const handleResultClick = (href: string) => { onClose(); router.push(href); };
@@ -129,6 +154,27 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
                   ))}
                 </div>
               )}
+              {matchedColours.length > 0 && (
+                <div className="p-4 border-b" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
+                  <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "rgba(249,115,22,0.7)" }}>Colours</p>
+                  {matchedColours.slice(0, 6).map((c) => (
+                    <button key={c.name} onClick={() => handleResultClick(c.href)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left hover:bg-white/5">
+                      <span className="flex-shrink-0 w-5 h-5 rounded-md" style={{ background: c.hex, border: "1px solid rgba(255,255,255,0.15)" }} />
+                      <div><p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>{c.name}</p><p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>{c.product} colour system</p></div>
+                    </button>
+                  ))}
+                </div>
+              )}
+              {matchedPosts.length > 0 && (
+                <div className="p-4 border-b" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
+                  <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "rgba(249,115,22,0.7)" }}>Field Notes</p>
+                  {matchedPosts.slice(0, 4).map((b) => (
+                    <button key={b.slug} onClick={() => handleResultClick(`/blog/${b.slug}`)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left hover:bg-white/5">
+                      <div><p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>{b.title}</p><p className="text-xs line-clamp-1" style={{ color: "rgba(255,255,255,0.4)" }}>{b.excerpt}</p></div>
+                    </button>
+                  ))}
+                </div>
+              )}
               {matchedCategories.length > 0 && (
                 <div className="p-4 border-b" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
                   <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "rgba(249,115,22,0.7)" }}>Product Categories</p>
@@ -174,9 +220,18 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
 
           {/* No results */}
           {showEmpty && (
-            <div className="px-4 py-10 text-center">
+            <div className="px-4 py-8 text-center">
               <p className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>No results for <span style={{ color: "#F5F0EB" }}>"{ query}"</span></p>
-              <p className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.25)" }}>Try a product name, application type, or page</p>
+              <p className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.25)" }}>Try a product, application, colour name, or topic</p>
+              {matchedSuggestions.length > 0 && (
+                <div className="mt-4 flex flex-wrap justify-center gap-2">
+                  {matchedSuggestions.map((f) => (
+                    <button key={f.href} onClick={() => handleResultClick(f.href)} className="px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-white/10 transition-colors" style={{ background: "var(--bg-card-neutral)", color: "#F5F0EB", border: "1px solid rgba(255,255,255,0.1)" }}>
+                      {f.label} →
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 

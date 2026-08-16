@@ -93,7 +93,7 @@ const ALL_DOCS: Record<string, ProductDocument[]> = {
 
   "streetbond": [
     { label: "Brochure",                             type: "brochure",     href: "/docs/StreetBond/StreetBond/StreetBond-Brochure.pdf" },
-    { label: "Colour Guide",                         type: "colour",       href: "/docs/StreetBond/StreetBond/StreetBond-Colour-Guide.pdf" },
+    { label: "Colour Card — 2026 Edition",           type: "colour",       href: "/docs/StreetBond/StreetBond/StreetBond-Colour-Card-2026.pdf" },
     { label: "Substrate Guide",                      type: "other",        href: "/docs/StreetBond/StreetBond/StreetBond_Substrate_Guide.pdf" },
     { label: "Colorant Technical Data Sheet",        type: "tds",          href: "/docs/StreetBond/StreetBond/StreetBond-Colorant.pdf" },
     { label: "SB120 Technical Data Sheet",           type: "tds",          href: "/docs/StreetBond/StreetBond%20120/StreetBond-SB120-Data-Sheet-12.22-Rev.pdf" },

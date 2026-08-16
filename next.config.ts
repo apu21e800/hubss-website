@@ -72,6 +72,9 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      // The 2026 colour card (HUB co-branded) supersedes the old colour guide.
+      // Keeps stale links working — Sanity resource records, bookmarks, emails.
+      { source: "/docs/StreetBond/StreetBond/StreetBond-Colour-Guide.pdf", destination: "/docs/StreetBond/StreetBond/StreetBond-Colour-Card-2026.pdf", permanent: true },
       // Products
       { source: "/trafficpatternsxd", destination: "/products/traffic-patterns-xd", permanent: true },
       { source: "/trafficpatterns", destination: "/products/traffic-patterns", permanent: true },

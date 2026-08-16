@@ -110,15 +110,15 @@ export const resourceDocuments: ResourceDocument[] = [
   },
   {
     id: 'sb-colour-001',
-    title: 'StreetBond Colour Guide',
+    title: 'StreetBond Colour Card — 2026 Edition',
     type: 'Colour Guide',
     product: 'streetbond',
     productName: 'StreetBond',
     subcategory: 'StreetBond',
     applications: productApplications['streetbond'],
-    fileUrl: '/docs/StreetBond/StreetBond/StreetBond-Colour-Guide.pdf',
-    fileSize: '3.8 MB',
-    updatedDate: 'Feb 2024',
+    fileUrl: '/docs/StreetBond/StreetBond/StreetBond-Colour-Card-2026.pdf',
+    fileSize: '0.2 MB',
+    updatedDate: 'Aug 2026',
   },
   {
     id: 'sb-guide-001',
@@ -837,3 +837,28 @@ export const resourceDocuments: ResourceDocument[] = [
     updatedDate: 'Feb 2024',
   },
 ]
+
+
+/**
+ * Stale-record overrides for the Resources library.
+ *
+ * The Resources page prefers the Sanity-managed document list, which was
+ * seeded in Feb 2024. When a document is superseded before the Studio record
+ * catches up, add the correction here — it is applied on top of whichever
+ * source wins, so code, Sanity, and bookmarked URLs all agree.
+ *
+ * Delete an entry once its Sanity record has been updated in the Studio.
+ */
+const DOC_OVERRIDES: Record<string, Partial<ResourceDocument>> = {
+  // Superseded Aug 2026 by the GAF 2026 colour card (HUB co-branded edition).
+  'sb-colour-001': {
+    title: 'StreetBond Colour Card — 2026 Edition',
+    fileUrl: '/docs/StreetBond/StreetBond/StreetBond-Colour-Card-2026.pdf',
+    fileSize: '0.2 MB',
+    updatedDate: 'Aug 2026',
+  },
+}
+
+export function applyDocOverrides<T extends { id: string }>(docs: T[]): T[] {
+  return docs.map((d) => (DOC_OVERRIDES[d.id] ? { ...d, ...DOC_OVERRIDES[d.id] } : d))
+}

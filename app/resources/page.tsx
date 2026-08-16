@@ -6,7 +6,7 @@ import path from "node:path";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
-import { resourceDocuments } from "@/lib/resource-documents";
+import { resourceDocuments, applyDocOverrides } from "@/lib/resource-documents";
 import ResourcesClient from "@/components/resources/ResourcesClient";
 import { getResourceDocuments } from "@/lib/sanity.queries";
 import { showCatalogue } from "@/lib/feature-flags";
@@ -45,7 +45,7 @@ export const metadata: Metadata = buildMetadata({
 
 export default async function ResourcesPage() {
   const sanityDocs = await getResourceDocuments().catch(() => null);
-  const docs = sanityDocs ?? resourceDocuments;
+  const docs = applyDocOverrides(sanityDocs ?? resourceDocuments);
   // Skip cover lookup entirely when the catalogue is hidden — keeps the
   // gated section from leaking even an image path.
   const catalogue = showCatalogue() ? await getCatalogueCover() : null;

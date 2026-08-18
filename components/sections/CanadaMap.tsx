@@ -124,9 +124,27 @@ function PanelCard({
 }) {
   return (
     <div
+      role="button"
+      tabIndex={0}
+      aria-pressed={selected}
+      aria-label={`${project.title} — view on map`}
       onMouseEnter={() => onHover(project.id)}
       onMouseLeave={() => onHover(null)}
+      onFocus={() => onHover(project.id)}
+      onBlur={() => onHover(null)}
       onClick={() => onClick(project)}
+      onKeyDown={(e) => {
+        // Card is a <div> (needs to sit inside a horizontally-scrolling,
+        // image+text layout that <button> fights), so Enter/Space activation
+        // has to be wired up by hand to make it keyboard-operable at all —
+        // previously this whole list was mouse-only (axe: also the cause of
+        // scrollable-region-focusable, since a scroll region with zero
+        // focusable descendants can't be reached by keyboard either).
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onClick(project);
+        }
+      }}
       style={{
         display: "flex",
         gap: 10,
@@ -163,7 +181,7 @@ function PanelCard({
       >
         <Image
           src={project.images[0]}
-          alt={project.title}
+          alt=""
           width={64}
           height={46}
           style={{ width: "100%", height: "100%", objectFit: "cover" }}
@@ -209,7 +227,7 @@ function PanelCard({
         <p
           style={{
             fontSize: 10.5,
-            color: "#6B7280",
+            color: "#868C98",
             margin: "2px 0 0",
             lineHeight: 1,
           }}
@@ -346,7 +364,7 @@ function ProjectModal({
                   fontWeight: 600,
                   letterSpacing: "0.1em",
                   textTransform: "uppercase",
-                  color: "#6B7280",
+                  color: "#868C98",
                   background: "rgba(255,255,255,0.05)",
                   padding: "3px 10px",
                   borderRadius: 6,
@@ -1265,7 +1283,7 @@ export default function CanadaMap() {
                 <span
                   style={{
                     fontSize: 11,
-                    color: scrollEnabled ? "#F97316" : "#6B7280",
+                    color: scrollEnabled ? "#F97316" : "#868C98",
                     fontWeight: 500,
                     transition: "color 0.2s ease",
                   }}
@@ -1338,7 +1356,7 @@ export default function CanadaMap() {
                 <p
                   style={{
                     fontSize: 10.5,
-                    color: "#6B7280",
+                    color: "#868C98",
                     margin: "0 0 10px",
                     lineHeight: 1.4,
                   }}
@@ -1362,7 +1380,7 @@ export default function CanadaMap() {
                     height="13"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke="#6B7280"
+                    stroke="#868C98"
                     strokeWidth={2.5}
                     strokeLinecap="round"
                     strokeLinejoin="round"

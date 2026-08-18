@@ -57,15 +57,55 @@ const CATEGORIES = [
 function SearchOverlay({ onClose }: { onClose: () => void }) {
   const [query, setQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
-  useEffect(() => { setTimeout(() => inputRef.current?.focus(), 50); }, []);
+  // Focus the input on open, and — since this overlay is a mount/unmount
+  // (not a hidden/shown toggle) — save whatever had focus before it opened
+  // and give it back on close. Without this, closing via Escape/Clear-click/
+  // backdrop-click dropped focus to <body>, so keyboard users had to Tab in
+  // from the top of the page again.
+  useEffect(() => {
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    const t = setTimeout(() => inputRef.current?.focus(), 50);
+    return () => {
+      clearTimeout(t);
+      previouslyFocused?.focus();
+    };
+  }, []);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
     document.addEventListener("keydown", handler);
     return () => document.removeEventListener("keydown", handler);
   }, [onClose]);
+
+  // Trap Tab/Shift+Tab inside the overlay. The page behind it is still in the
+  // DOM (not inert), so without this, tabbing past the last result silently
+  // moved focus into content hidden behind the backdrop — invisible focus,
+  // effectively as disorienting as a true keyboard trap in the other
+  // direction. Results re-render as you type, so the focusable set is read
+  // fresh on every Tab press rather than cached.
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key !== "Tab" || !dialogRef.current) return;
+      const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input, [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, []);
 
   const q = query.toLowerCase().trim();
   // Tokenized AND-match: every word the visitor types must land somewhere in
@@ -97,24 +137,29 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
       onClick={onClose}
     >
       <motion.div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Site search"
         initial={{ opacity: 0, scale: 0.97, y: -12 }} animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.97, y: -12 }} transition={{ duration: 0.18 }}
         className="w-full max-w-2xl mx-4" onClick={(e) => e.stopPropagation()}
       >
         {/* Input */}
         <div className="flex items-center gap-3 px-4 py-3 rounded-2xl" style={{ background: "rgba(15,20,32,0.98)", border: "1px solid rgba(249,115,22,0.4)", boxShadow: "0 24px 80px rgba(0,0,0,0.7)" }}>
-          <svg className="flex-shrink-0" width="18" height="18" fill="none" stroke="rgba(255,255,255,0.4)" viewBox="0 0 24 24">
+          <svg className="flex-shrink-0" width="18" height="18" fill="none" stroke="rgba(255,255,255,0.5)" viewBox="0 0 24 24">
             <circle cx="11" cy="11" r="8" strokeWidth={2} /><path d="M21 21l-4.35-4.35" strokeWidth={2} strokeLinecap="round" />
           </svg>
           <input ref={inputRef} type="text" value={query} onChange={(e) => setQuery(e.target.value)}
+            aria-label="Search products, applications, pages"
             placeholder="Search products, applications, pages…" className="flex-1 bg-transparent outline-none text-base"
             style={{ color: "#F5F0EB", caretColor: "#F97316" }} />
           {query && (
-            <button onClick={() => setQuery("")} aria-label="Clear search" className="flex-shrink-0 p-1 rounded-md hover:bg-white/10" style={{ color: "rgba(255,255,255,0.4)" }}>
+            <button onClick={() => setQuery("")} aria-label="Clear search" className="flex-shrink-0 p-1 rounded-md hover:bg-white/10" style={{ color: "rgba(255,255,255,0.5)" }}>
               <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" strokeWidth={2} strokeLinecap="round" /></svg>
             </button>
           )}
-          <kbd className="flex-shrink-0 px-2 py-0.5 rounded text-xs font-mono" style={{ background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.35)", border: "1px solid rgba(255,255,255,0.1)" }}>ESC</kbd>
+          <kbd className="flex-shrink-0 px-2 py-0.5 rounded text-xs font-mono" style={{ background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.55)", border: "1px solid rgba(255,255,255,0.1)" }}>ESC</kbd>
         </div>
 
         {/* Results panel */}
@@ -122,7 +167,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
           {/* Default quick links */}
           {q.length < 2 && (
             <div className="p-4">
-              <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "rgba(255,255,255,0.3)" }}>Quick links</p>
+              <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "rgba(255,255,255,0.5)" }}>Quick links</p>
               <div className="grid grid-cols-2 gap-1">
                 {[{ label: "All Products", href: "/products" }, { label: "All Applications", href: "/applications" }, { label: "Project Gallery", href: "/gallery" }, { label: "Spec Sheets", href: "/resources" }, { label: "Lunch & Learn", href: "/lunch-learn" }, { label: "Contact Us", href: "/contact" }].map((item) => (
                   <button key={item.href} onClick={() => handleResultClick(item.href)} className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-left hover:bg-white/5" style={{ color: "rgba(255,255,255,0.6)" }}>
@@ -142,7 +187,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
                   <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "rgba(249,115,22,0.7)" }}>Products</p>
                   {matchedProducts.slice(0, 4).map((p) => (
                     <button key={p.slug} onClick={() => handleResultClick(`/products/${p.slug}`)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left hover:bg-white/5">
-                      <div><p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>{p.name}</p>{p.shortDesc && <p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>{p.shortDesc}</p>}</div>
+                      <div><p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>{p.name}</p>{p.shortDesc && <p className="text-xs" style={{ color: "rgba(255,255,255,0.5)" }}>{p.shortDesc}</p>}</div>
                     </button>
                   ))}
                 </div>
@@ -152,7 +197,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
                   <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "rgba(249,115,22,0.7)" }}>Applications</p>
                   {matchedApps.slice(0, 4).map((a) => (
                     <button key={a.slug} onClick={() => handleResultClick(`/applications/${a.slug}`)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left hover:bg-white/5">
-                      <div><p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>{a.name}</p>{a.shortDesc && <p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>{a.shortDesc}</p>}</div>
+                      <div><p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>{a.name}</p>{a.shortDesc && <p className="text-xs" style={{ color: "rgba(255,255,255,0.5)" }}>{a.shortDesc}</p>}</div>
                     </button>
                   ))}
                 </div>
@@ -163,7 +208,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
                   {matchedColours.slice(0, 6).map((c) => (
                     <button key={c.name} onClick={() => handleResultClick(c.href)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left hover:bg-white/5">
                       <span className="flex-shrink-0 w-5 h-5 rounded-md" style={{ background: c.hex, border: "1px solid rgba(255,255,255,0.15)" }} />
-                      <div><p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>{c.name}</p><p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>{c.product} colour system</p></div>
+                      <div><p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>{c.name}</p><p className="text-xs" style={{ color: "rgba(255,255,255,0.5)" }}>{c.product} colour system</p></div>
                     </button>
                   ))}
                 </div>
@@ -173,7 +218,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
                   <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "rgba(249,115,22,0.7)" }}>Stamping Templates</p>
                   {matchedTemplates.slice(0, 4).map((t) => (
                     <button key={t.slug} onClick={() => handleResultClick(`/patterns#${t.slug}`)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left hover:bg-white/5">
-                      <div><p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>{t.name}</p><p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>{t.note} · StreetPrint template</p></div>
+                      <div><p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>{t.name}</p><p className="text-xs" style={{ color: "rgba(255,255,255,0.5)" }}>{t.note} · StreetPrint template</p></div>
                     </button>
                   ))}
                 </div>
@@ -183,7 +228,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
                   <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "rgba(249,115,22,0.7)" }}>Field Notes</p>
                   {matchedPosts.slice(0, 4).map((b) => (
                     <button key={b.slug} onClick={() => handleResultClick(`/blog/${b.slug}`)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left hover:bg-white/5">
-                      <div><p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>{b.title}</p><p className="text-xs line-clamp-1" style={{ color: "rgba(255,255,255,0.4)" }}>{b.excerpt}</p></div>
+                      <div><p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>{b.title}</p><p className="text-xs line-clamp-1" style={{ color: "rgba(255,255,255,0.5)" }}>{b.excerpt}</p></div>
                     </button>
                   ))}
                 </div>
@@ -193,7 +238,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
                   <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "rgba(249,115,22,0.7)" }}>Product Categories</p>
                   {matchedCategories.map((c) => (
                     <button key={c.label} onClick={() => handleResultClick(c.href)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left hover:bg-white/5">
-                      <div><p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>{c.label}</p><p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>{c.desc}</p></div>
+                      <div><p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>{c.label}</p><p className="text-xs" style={{ color: "rgba(255,255,255,0.5)" }}>{c.desc}</p></div>
                     </button>
                   ))}
                 </div>
@@ -203,7 +248,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
                   <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "rgba(249,115,22,0.7)" }}>Pages</p>
                   {matchedPages.map((p) => (
                     <button key={p.href} onClick={() => handleResultClick(p.href)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left hover:bg-white/5">
-                      <div><p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>{p.label}</p><p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>{p.desc}</p></div>
+                      <div><p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>{p.label}</p><p className="text-xs" style={{ color: "rgba(255,255,255,0.5)" }}>{p.desc}</p></div>
                     </button>
                   ))}
                 </div>
@@ -222,7 +267,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
                       </svg>
                       <div>
                         <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>{doc.title}</p>
-                        <p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>{doc.productName} · {doc.type}</p>
+                        <p className="text-xs" style={{ color: "rgba(255,255,255,0.5)" }}>{doc.productName} · {doc.type}</p>
                       </div>
                     </a>
                   ))}
@@ -234,8 +279,8 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
           {/* No results */}
           {showEmpty && (
             <div className="px-4 py-8 text-center">
-              <p className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>No results for <span style={{ color: "#F5F0EB" }}>"{ query}"</span></p>
-              <p className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.25)" }}>Try a product, application, colour name, pattern, or topic</p>
+              <p className="text-sm" style={{ color: "rgba(255,255,255,0.5)" }}>No results for <span style={{ color: "#F5F0EB" }}>"{ query}"</span></p>
+              <p className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.5)" }}>Try a product, application, colour name, pattern, or topic</p>
               {matchedSuggestions.length > 0 && (
                 <div className="mt-4 flex flex-wrap justify-center gap-2">
                   {matchedSuggestions.map((f) => (
@@ -249,7 +294,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
           )}
 
           <div className="px-4 py-2.5 border-t flex items-center" style={{ borderColor: "rgba(255,255,255,0.05)", background: "rgba(255,255,255,0.02)" }}>
-            <span className="text-xs" style={{ color: "rgba(255,255,255,0.25)" }}>Type to search · <kbd className="font-mono">ESC</kbd> to close</span>
+            <span className="text-xs" style={{ color: "rgba(255,255,255,0.5)" }}>Type to search · <kbd className="font-mono">ESC</kbd> to close</span>
           </div>
         </div>
       </motion.div>
@@ -884,7 +929,7 @@ function MobileMenuLabel({ children }: { children: React.ReactNode }) {
 function MobileGroupDivider({ label }: { label: string }) {
   return (
     <div className="flex items-center gap-3 px-1 pt-5 pb-2">
-      <span className="text-[9px] font-bold tracking-[0.22em] uppercase" style={{ color: "rgba(255,255,255,0.3)" }}>{label}</span>
+      <span className="text-[9px] font-bold tracking-[0.22em] uppercase" style={{ color: "rgba(255,255,255,0.5)" }}>{label}</span>
       <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.06)" }} />
     </div>
   );
@@ -1261,6 +1306,16 @@ export default function Nav() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const navRef = useRef<HTMLElement>(null);
+  const productsBtnRef = useRef<HTMLButtonElement>(null);
+  const applicationsBtnRef = useRef<HTMLButtonElement>(null);
+  // Set right before a trigger's onClick opens its panel (Enter/Space or a
+  // real mouse click — never by onFocus/onMouseEnter alone) so the effect
+  // below knows to move focus INTO the panel. Without this, the panel's own
+  // links were unreachable by Tab: the panel renders after the whole link
+  // row in the DOM, so tabbing forward from "Products" lands on
+  // "Applications" next, not inside the products panel — the open panel and
+  // the tab sequence pointed two different directions.
+  const focusPanelOnOpen = useRef(false);
 
   // Close mega menu on outside click
   useEffect(() => {
@@ -1271,6 +1326,48 @@ export default function Nav() {
     };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  // Escape closes an open mega menu and returns focus to its trigger — before
+  // this, a keyboard user who opened "Products" with Enter had no way to
+  // dismiss it short of Shift+Tabbing all the way back to the button and
+  // pressing it again, or tabbing forward through the whole menu into page
+  // content while the panel stayed open behind them.
+  useEffect(() => {
+    if (!openPanel) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      const triggerRef = openPanel === "products" ? productsBtnRef : openPanel === "applications" ? applicationsBtnRef : null;
+      setOpenPanel(null);
+      triggerRef?.current?.focus();
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, [openPanel]);
+
+  // After an explicit activation (not a hover/focus preview) opens a panel,
+  // move focus to its first link so Tab continues on into the panel's own
+  // content instead of jumping to the next top-level trigger.
+  useEffect(() => {
+    if (!openPanel || !focusPanelOnOpen.current) return;
+    focusPanelOnOpen.current = false;
+    const id = openPanel === "products" ? "products-mega-menu" : "applications-mega-menu";
+    const t = setTimeout(() => {
+      const panel = document.getElementById(id);
+      const first = panel?.querySelector<HTMLElement>('a[href], button:not([disabled])');
+      first?.focus();
+    }, 0);
+    return () => clearTimeout(t);
+  }, [openPanel]);
+
+  // Close the mega menu once keyboard focus leaves the nav entirely (e.g.
+  // Tab past "Lunch & Learn" into page content) so it doesn't stay open —
+  // pushed open in normal flow, not overlaid — above content the user has
+  // already tabbed past. Mirrors the existing onMouseLeave behaviour below.
+  const handleNavBlur = useCallback((e: React.FocusEvent<HTMLElement>) => {
+    if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
+      setOpenPanel(null);
+    }
   }, []);
 
   // Scroll state — adds shadow + accent border on scroll
@@ -1300,6 +1397,7 @@ export default function Nav() {
           transition: "border-color 0.3s ease, box-shadow 0.3s ease",
         }}
         onMouseLeave={() => setOpenPanel(null)}
+        onBlur={handleNavBlur}
       >
         {/* Main bar */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between gap-4">
@@ -1336,7 +1434,7 @@ export default function Nav() {
               </svg>
               <span
                 className="text-[10px] font-bold tracking-[0.18em] uppercase"
-                style={{ color: "rgba(255,255,255,0.42)", lineHeight: 1 }}
+                style={{ color: "rgba(255,255,255,0.55)", lineHeight: 1 }}
               >
                 Canadian
               </span>
@@ -1348,8 +1446,24 @@ export default function Nav() {
 
             {/* Products mega menu trigger */}
             <button
+              ref={productsBtnRef}
               onMouseEnter={() => setOpenPanel("products")}
-              onClick={() => setOpenPanel(openPanel === "products" ? null : "products")}
+              // Deliberately no onFocus-opens-panel here (unlike the plain
+              // links below): this button's onClick TOGGLES based on the
+              // current openPanel, so if focus alone had already set it to
+              // "products", the very next Enter/Space press would read as
+              // "already open, so close" and the panel would never actually
+              // catch a keyboard user's Enter as "open". Tab lands on the
+              // button inert; Enter/Space is what opens it — and immediately
+              // hands focus into the panel's first link.
+              onClick={() => {
+                const next = openPanel === "products" ? null : "products";
+                if (next) focusPanelOnOpen.current = true;
+                setOpenPanel(next);
+              }}
+              aria-expanded={openPanel === "products"}
+              aria-haspopup="true"
+              aria-controls="products-mega-menu"
               className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[13px] font-medium transition-colors hover:text-orange-400 hover:bg-white/5"
               style={{ color: openPanel === "products" ? "#F97316" : "rgba(255,255,255,0.65)" }}
             >
@@ -1362,8 +1476,20 @@ export default function Nav() {
 
             {/* Applications mega menu trigger */}
             <button
+              ref={applicationsBtnRef}
               onMouseEnter={() => setOpenPanel("applications")}
-              onClick={() => setOpenPanel(openPanel === "applications" ? null : "applications")}
+              // Deliberately no onFocus-opens-panel here — see the identical
+              // comment on the Products trigger above. This button's onClick
+              // TOGGLES based on the current openPanel, so onFocus setting it
+              // first would make Enter/Space always read as "close".
+              onClick={() => {
+                const next = openPanel === "applications" ? null : "applications";
+                if (next) focusPanelOnOpen.current = true;
+                setOpenPanel(next);
+              }}
+              aria-expanded={openPanel === "applications"}
+              aria-haspopup="true"
+              aria-controls="applications-mega-menu"
               className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[13px] font-medium transition-colors hover:text-orange-400 hover:bg-white/5"
               style={{ color: openPanel === "applications" ? "#F97316" : "rgba(255,255,255,0.65)" }}
             >
@@ -1374,11 +1500,14 @@ export default function Nav() {
               </svg>
             </button>
 
-            {/* Field Notes — navigates to /blog on click, shows dropdown on hover */}
+            {/* Field Notes — navigates to /blog on click, shows dropdown on hover/focus */}
             <Link
               href="/blog"
               onMouseEnter={() => setOpenPanel("fieldnotes")}
+              onFocus={() => setOpenPanel("fieldnotes")}
               onClick={() => setOpenPanel(null)}
+              aria-expanded={openPanel === "fieldnotes"}
+              aria-haspopup="true"
               className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[13px] font-medium transition-colors hover:text-orange-400 hover:bg-white/5"
               style={{ color: openPanel === "fieldnotes" ? "#F97316" : "rgba(255,255,255,0.65)" }}
             >
@@ -1393,6 +1522,7 @@ export default function Nav() {
             {PLAIN_LINKS.map((link) => (
               <Link key={link.href} href={link.href}
                 onMouseEnter={() => setOpenPanel(null)}
+                onFocus={() => setOpenPanel(null)}
                 className="px-2.5 py-1.5 rounded-lg text-[13px] font-medium transition-colors hover:text-orange-400 hover:bg-white/5"
                 style={{ color: "rgba(255,255,255,0.65)" }}
               >
@@ -1456,6 +1586,7 @@ export default function Nav() {
           {openPanel && (
             <motion.div
               key={openPanel}
+              id={openPanel === "products" ? "products-mega-menu" : openPanel === "applications" ? "applications-mega-menu" : undefined}
               initial={{ opacity: 0, y: -4 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -4 }}

@@ -14,7 +14,7 @@ import { client } from "@/lib/sanity.client";
 import type { SanityProduct, SanityApplication } from "@/types/sanity";
 import type { ResourceDocument } from "@/lib/resource-documents";
 
-// ── Products ─────────────────────────────────────────────────────────────────
+// ── Products ──────────────────────────────────────────────────────────
 
 const PRODUCT_FIELDS = `
   _id,
@@ -64,7 +64,7 @@ export const getAllSanityProducts = unstable_cache(
   { tags: ["products"], revalidate: 3600 }
 );
 
-// ── Applications ─────────────────────────────────────────────────────────────
+// ── Applications ──────────────────────────────────────────────────────
 
 const APPLICATION_FIELDS = `
   _id,
@@ -110,7 +110,7 @@ export const getAllSanityApplications = unstable_cache(
   { tags: ["applications"], revalidate: 3600 }
 );
 
-// ── Pages ────────────────────────────────────────────────────────────────────
+// ── Pages ───────────────────────────────────────────────────────────
 
 export interface SanityPageContent {
   _id: string;
@@ -196,7 +196,7 @@ export const getSanityPageContent = unstable_cache(
   { tags: ["pages"], revalidate: 3600 }
 );
 
-// ── Resource Documents (siteSettings) ────────────────────────────────────────
+// ── Resource Documents (siteSettings) ───────────────────────────────────
 
 /**
  * Fetch the resource documents array from the siteSettings singleton.
@@ -206,11 +206,32 @@ export const getSanityPageContent = unstable_cache(
 export const getResourceDocuments = unstable_cache(
   async (): Promise<ResourceDocument[] | null> => {
     try {
+      // The Studio schema calls this field `docType`; the app's ResourceDocument
+      // calls it `type`. Projecting it across here is the whole fix for the
+      // /resources search crashing: every one of the 67 Sanity documents was
+      // arriving with `type: undefined`, and the client filter calls
+      // `doc.type.toLowerCase()` — so the first keystroke threw a TypeError and
+      // the error boundary swallowed the page. `applications` is likewise
+      // required by the interface but absent in Studio, so it defaults to [].
       const result = await client.fetch<{ resourceDocuments: ResourceDocument[] } | null>(
-        `*[_type == "siteSettings"][0]{ resourceDocuments }`
+        `*[_type == "siteSettings"][0]{
+           "resourceDocuments": resourceDocuments[]{
+             ...,
+             "type": coalesce(docType, type, "Other"),
+             "applications": coalesce(applications, [])
+           }
+         }`
       );
       if (!result?.resourceDocuments?.length) return null;
-      return result.resourceDocuments;
+      // Belt and braces: a document added in Studio tomorrow with the field left
+      // blank must not be able to take the page down again.
+      return result.resourceDocuments.map((d) => ({
+        ...d,
+        type: typeof d.type === "string" && d.type ? d.type : "Other",
+        title: typeof d.title === "string" ? d.title : "",
+        productName: typeof d.productName === "string" ? d.productName : "",
+        applications: Array.isArray(d.applications) ? d.applications : [],
+      }));
     } catch {
       return null;
     }
@@ -219,7 +240,7 @@ export const getResourceDocuments = unstable_cache(
   { tags: ["siteSettings"], revalidate: 3600 }
 );
 
-// ── Sanity availability check ────────────────────────────────────────────────
+// ── Sanity availability check ─────────────────────────────────────────
 
 /**
  * Returns true if the Sanity project ID env var is set.

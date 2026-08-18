@@ -305,7 +305,10 @@ export default function ResourcesClient({
   const typeOptions = useMemo(() => {
     const counts = new Map<string, number>();
     for (const d of documents) {
-      counts.set(d.type, (counts.get(d.type) ?? 0) + 1);
+      // Guard: a document with no type used to insert an `undefined` key here,
+      // which then reached `a.localeCompare(b)` below and threw.
+      const t = typeof d.type === "string" && d.type ? d.type : "Other";
+      counts.set(t, (counts.get(t) ?? 0) + 1);
     }
     const entries = Array.from(counts.entries());
     entries.sort(([a], [b]) => {
@@ -314,7 +317,7 @@ export default function ResourcesClient({
       if (ai !== -1 && bi !== -1) return ai - bi;
       if (ai !== -1) return -1;
       if (bi !== -1) return 1;
-      return a.localeCompare(b);
+      return String(a).localeCompare(String(b));
     });
     return entries.map(([value, count]) => ({ value, count }));
   }, [documents]);
@@ -333,11 +336,29 @@ export default function ResourcesClient({
     return documents.filter((doc) => {
       if (debouncedSearch) {
         const q = debouncedSearch.toLowerCase();
-        const matchesSearch =
-          doc.title.toLowerCase().includes(q) ||
-          doc.productName.toLowerCase().includes(q) ||
-          doc.type.toLowerCase().includes(q);
-        if (!matchesSearch) return false;
+        // Build one haystack with ?? "" guards. These fields are typed as
+        // required, but they arrive from Sanity via an unchecked fetch cast, so
+        // TypeScript can't actually promise they're there — and when `type` was
+        // missing, `doc.type.toLowerCase()` threw on the first keystroke and the
+        // error boundary replaced the whole page. Searching more fields is also
+        // just better: file name and product slug are things people type.
+        const haystack = [
+          doc.title,
+          doc.productName,
+          doc.type,
+          doc.product,
+          doc.subcategory,
+          doc.documentType,
+          doc.fileUrl,
+        ]
+          .filter((v): v is string => typeof v === "string")
+          .join(" ")
+          .toLowerCase();
+        // Every whitespace-separated word must appear somewhere, so
+        // "streetbond colour" finds the colour card rather than nothing.
+        if (!q.split(/\s+/).filter(Boolean).every((t) => haystack.includes(t))) {
+          return false;
+        }
       }
       if (featuredOnly && doc.featured !== true) return false;
       if (newOnly && doc.isNew !== true) return false;
@@ -401,7 +422,7 @@ export default function ResourcesClient({
         />
       )}
 
-      {/* ── Tab Navigation ─────────────────────────────────── */}
+      {/* ── Tab Navigation ───────────────────────────────── */}
       <div id="documents" className="scroll-mt-24 mb-8">
         <div className="flex gap-2">
           {TABS.map((tab) => (
@@ -424,7 +445,7 @@ export default function ResourcesClient({
         </div>
       </div>
 
-      {/* ── Search + Filter Bar ──────────────────────────── */}
+      {/* ── Search + Filter Bar ────────────────────────── */}
       <div className="flex flex-col sm:flex-row gap-3 mb-8">
         <div className="relative flex-1">
           <Search
@@ -617,12 +638,12 @@ export default function ResourcesClient({
         </div>
       )}
 
-      {/* ── Results count ────────────────────────────────── */}
+      {/* ── Results count ──────────────────────────────── */}
       <p className="text-sm mb-6" style={{ color: "#6B7280" }}>
         {filtered.length} document{filtered.length !== 1 ? "s" : ""} found
       </p>
 
-      {/* ── Document Grid ────────────────────────────────── */}
+      {/* ── Document Grid ──────────────────────────────── */}
       {visible.length > 0 ? (
         <>
           {activeTab === "By Product" &&

@@ -334,7 +334,11 @@ export default function LunchLearnFunnel({
                 >
                   {stat.value}
                 </span>
-                <span className="text-xs font-semibold tracking-[0.12em] uppercase" style={{ color: "rgba(255,255,255,0.4)" }}>
+                {/* 0.45, not 0.40: at 12px on --bg-dark, 0.40 composites to #6c6f76
+                    for 3.8:1 against WCAG AA's 4.5:1 floor. 0.45 is the smallest
+                    step that clears it (4.51:1) — the four stat captions here are
+                    the last non-CTA contrast failures on the site. */}
+                <span className="text-xs font-semibold tracking-[0.12em] uppercase" style={{ color: "rgba(255,255,255,0.45)" }}>
                   {stat.label}
                 </span>
               </motion.div>

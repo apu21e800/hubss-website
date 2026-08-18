@@ -29,7 +29,7 @@ export default function GalleryGrid({ images }: { images: GalleryImage[] }) {
   return (
     <>
       {/* Count */}
-      <p className="text-xs mb-6 font-medium tracking-wide" style={{ color: "#6B7280" }}>
+      <p className="text-xs mb-6 font-medium tracking-wide" style={{ color: "#868C98" }}>
         {images.length} photo{images.length !== 1 ? "s" : ""}
       </p>
 
@@ -62,7 +62,7 @@ export default function GalleryGrid({ images }: { images: GalleryImage[] }) {
       {/* ── Load more ─────────────────────────────────────────── */}
       {hasMore && (
         <div className="mt-8 flex items-center justify-between">
-          <p className="text-xs" style={{ color: "#6B7280" }}>
+          <p className="text-xs" style={{ color: "#868C98" }}>
             Showing {displayed.length} of {images.length}
           </p>
           <div className="flex items-center gap-2">
@@ -122,7 +122,15 @@ function GalleryTile({
       tabIndex={0}
       aria-label={`View ${img.alt} fullscreen`}
       onClick={onClick}
-      onKeyDown={(e) => e.key === "Enter" && onClick()}
+      onKeyDown={(e) => {
+        // Space must also activate a role="button" div per the ARIA button
+        // pattern (Enter-only left keyboard users half-supported); Space
+        // additionally needs preventDefault so the page doesn't scroll.
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onClick();
+        }
+      }}
       className={`group relative overflow-hidden rounded-xl cursor-zoom-in w-full ${aspect} focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-500`}
     >
       <Image

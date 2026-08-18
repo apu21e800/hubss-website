@@ -265,7 +265,7 @@ export default function GalleryPage() {
           >
             Field Documentation
           </h1>
-          <p style={{ color: "#6b7280", fontSize: "1.05rem" }}>
+          <p style={{ color: "#868c98", fontSize: "1.05rem" }}>
             {IMAGES.length}+ installations documented across Canada.
           </p>
         </div>

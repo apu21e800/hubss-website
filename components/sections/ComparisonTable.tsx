@@ -72,7 +72,7 @@ export default function ComparisonTable() {
                 <p className="text-sm font-semibold leading-snug" style={{ color: "#ffffff" }}>
                   Longer service life
                 </p>
-                <p className="text-xs mt-0.5" style={{ color: "#6b7280" }}>
+                <p className="text-xs mt-0.5" style={{ color: "#868c98" }}>
                   vs. painted markings — proven in the field since 1999
                 </p>
               </div>
@@ -154,7 +154,7 @@ export default function ComparisonTable() {
               </table>
             </div>
 
-            <p className="text-sm mt-6" style={{ color: "#6b7280" }}>
+            <p className="text-sm mt-6" style={{ color: "#868c98" }}>
               Proven in 10 provinces, coast to coast, since 1999
             </p>
           </motion.div>

@@ -271,7 +271,7 @@ export default function PublicArtPage() {
                         </p>
                         <p
                           className="text-xs truncate"
-                          style={{ color: "#6B7280" }}
+                          style={{ color: "#868C98" }}
                         >
                           {product.shortDesc}
                         </p>

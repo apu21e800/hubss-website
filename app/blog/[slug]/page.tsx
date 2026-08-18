@@ -209,7 +209,7 @@ export default async function BlogPostPage({ params }: Props) {
                 }}>H</div>
                 <div>
                   <p style={{ fontSize: 13, fontWeight: 700, color: "#ffffff", margin: 0 }}>HUB Surface Systems</p>
-                  <p style={{ fontSize: 11, color: "#6B7280", margin: 0 }}>Field Notes</p>
+                  <p style={{ fontSize: 11, color: "#868C98", margin: 0 }}>Field Notes</p>
                 </div>
               </div>
               <p style={{ fontSize: 12, color: "#9CA3AF", lineHeight: 1.6, margin: 0 }}>
@@ -221,7 +221,7 @@ export default async function BlogPostPage({ params }: Props) {
 
             {/* Share */}
             <div style={{ marginTop: 24 }}>
-              <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", color: "#6B7280", marginBottom: 12 }}>
+              <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", color: "#868C98", marginBottom: 12 }}>
                 Share
               </p>
               <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>

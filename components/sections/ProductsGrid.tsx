@@ -219,7 +219,7 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
                             className="text-[9.5px] font-semibold px-2 py-0.5 rounded-full tracking-wide"
                             style={{
                               background: "rgba(255,255,255,0.07)",
-                              color: "rgba(255,255,255,0.35)",
+                              color: "rgba(255,255,255,0.55)",
                             }}
                           >
                             {app}
@@ -228,7 +228,7 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
                       </div>
                       <span
                         className="flex-shrink-0 text-[11px] font-semibold transition-all duration-200 group-hover:translate-x-1"
-                        style={{ color: "rgba(249,115,22,0.6)" }}
+                        style={{ color: "rgba(249,115,22,0.92)" }}
                       >
                         Specs →
                       </span>
@@ -252,7 +252,7 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
 
         {/* Footer row */}
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-[11px] order-2 sm:order-1" style={{ color: "rgba(255,255,255,0.22)" }}>
+          <p className="text-[11px] order-2 sm:order-1" style={{ color: "rgba(255,255,255,0.5)" }}>
             Also available: PreMark · DuraShield · DuraTherm · AirMark
           </p>
           <Link

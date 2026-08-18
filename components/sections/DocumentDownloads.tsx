@@ -137,7 +137,7 @@ export default function DocumentDownloads({ slug }: { slug: string }) {
                 <h2 className="text-xl font-bold" style={{ color: "#F5F0EB" }}>Downloads</h2>
               </div>
               <div className="flex-1 h-px ml-4" style={{ background: "rgba(255,255,255,0.08)" }} />
-              <span className="text-xs shrink-0" style={{ color: "rgba(255,255,255,0.35)" }}>
+              <span className="text-xs shrink-0" style={{ color: "rgba(255,255,255,0.55)" }}>
                 {docs.length} file{docs.length !== 1 ? "s" : ""}
               </span>
             </div>

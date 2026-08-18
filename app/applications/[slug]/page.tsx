@@ -189,7 +189,7 @@ export default async function ApplicationPage({ params }: Props) {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="font-semibold text-sm truncate" style={{ color: "#F5F0EB" }}>{product.name}</p>
-                        <p className="text-xs truncate" style={{ color: "#6B7280" }}>{product.shortDesc}</p>
+                        <p className="text-xs truncate" style={{ color: "#868C98" }}>{product.shortDesc}</p>
                       </div>
                       <svg className="w-4 h-4 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: "#f97316" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

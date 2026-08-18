@@ -105,7 +105,7 @@ export default function BlogCard({ post }: { post: PostMeta }) {
             Read Post &rarr;
           </span>
           {post.readTime && (
-            <span className="text-[10px]" style={{ color: "#6B7280" }}>{post.readTime}</span>
+            <span className="text-[10px]" style={{ color: "#868C98" }}>{post.readTime}</span>
           )}
         </div>
       </div>

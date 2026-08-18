@@ -35,7 +35,7 @@ export default function Loading() {
             fontWeight: 700,
             letterSpacing: "0.22em",
             textTransform: "uppercase",
-            color: "#6B7280",
+            color: "#868C98",
             margin: 0,
           }}
         >

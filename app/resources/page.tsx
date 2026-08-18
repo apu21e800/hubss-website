@@ -80,7 +80,7 @@ export default async function ResourcesPage() {
         >
           Specification Library
         </h1>
-        <p className="text-base max-w-2xl" style={{ color: "#6B7280" }}>
+        <p className="text-base max-w-2xl" style={{ color: "#868C98" }}>
           Technical data sheets, brochures, safety guides, and installation
           resources for every HUBSS product.
         </p>
@@ -175,7 +175,7 @@ export default async function ResourcesPage() {
               className="flex-1 h-px"
               style={{ background: "rgba(255,255,255,0.07)" }}
             />
-            <span className="text-xs" style={{ color: "#6B7280" }}>
+            <span className="text-xs" style={{ color: "#868C98" }}>
               {docs.length} total
             </span>
           </div>

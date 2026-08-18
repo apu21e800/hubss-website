@@ -113,7 +113,7 @@ const ALL_DOCS: Record<string, ProductDocument[]> = {
 
   "streetbondsr": [
     { label: "Brochure",                             type: "brochure",     href: "/docs/StreetBondSR/StreetBondSR-Brochure.pdf" },
-    { label: "Colour Guide",                         type: "colour",       href: "/docs/StreetBondSR/Colour-Guide-1.pdf" },
+    { label: "Colour Guide",                         type: "colour",       href: "/docs/StreetBondSR/StreetBondSR-Colour-Guide-2026.pdf" },
     { label: "Friction Certificate of Analysis",     type: "certificate",  href: "/docs/StreetBondSR/StreetBond-SR-Certificate-of-Analysis-Friction.pdf" },
     { label: "Flat Surface Specification",           type: "spec",         href: "/docs/StreetBondSR/StreetBond-SR-Flat-Surface-Specification.pdf" },
   ],

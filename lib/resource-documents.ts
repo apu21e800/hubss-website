@@ -386,9 +386,9 @@ export const resourceDocuments: ResourceDocument[] = [
     product: 'streetbond-sr',
     productName: 'StreetBondSR',
     applications: productApplications['streetbond-sr'],
-    fileUrl: '/docs/StreetBondSR/Colour-Guide-1.pdf',
-    fileSize: '2.8 MB',
-    updatedDate: 'Mar 2023',
+    fileUrl: '/docs/StreetBondSR/StreetBondSR-Colour-Guide-2026.pdf',
+    fileSize: '0.6 MB',
+    updatedDate: 'Aug 2026',
   },
 
   // ── TrafficPatterns ──────────────────────────────────────────
@@ -1096,6 +1096,16 @@ const DOC_OVERRIDES: Record<string, Partial<ResourceDocument>> = {
     title: 'StreetBond Colour Card — 2026 Edition',
     fileUrl: '/docs/StreetBond/StreetBond/StreetBond-Colour-Card-2026.pdf',
     fileSize: '0.2 MB',
+    updatedDate: 'Aug 2026',
+  },
+  // The old SR guide's back page was GAF-only — Parsippany NJ address and a US
+  // customer-service number, no Canadian contacts. Replaced Aug 2026 with an
+  // edition carrying the HUB block. The 308 in next.config.ts already catches
+  // the old URL; this stops /resources rendering a link that needs redirecting
+  // in the first place, until the Sanity record is updated in Studio.
+  'sbsr-colour-001': {
+    fileUrl: '/docs/StreetBondSR/StreetBondSR-Colour-Guide-2026.pdf',
+    fileSize: '0.6 MB',
     updatedDate: 'Aug 2026',
   },
 }

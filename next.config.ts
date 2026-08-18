@@ -81,6 +81,10 @@ const nextConfig: NextConfig = {
       // 2026 colour card supersedes the old StreetBond colour guide — keep the
       // old URL alive (Sanity resource entries + external links still point at it).
       { source: "/docs/StreetBond/StreetBond/StreetBond-Colour-Guide.pdf", destination: "/docs/StreetBond/StreetBond/StreetBond-Colour-Card-2026.pdf", permanent: true },
+      // The old StreetBondSR guide had a GAF-only back page — US address and phone,
+      // no Canadian contacts. Replaced by the 2026 edition; this keeps every link
+      // already sitting in someone's inbox or spec package working.
+      { source: "/docs/StreetBondSR/Colour-Guide-1.pdf", destination: "/docs/StreetBondSR/StreetBondSR-Colour-Guide-2026.pdf", permanent: true },
       // Products
       { source: "/trafficpatternsxd", destination: "/products/traffic-patterns-xd", permanent: true },
       { source: "/trafficpatterns", destination: "/products/traffic-patterns", permanent: true },

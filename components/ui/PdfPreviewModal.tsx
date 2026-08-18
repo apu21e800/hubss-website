@@ -1,6 +1,8 @@
 "use client";
 import { useEffect } from "react";
 import { X, Download, ExternalLink } from "lucide-react";
+import Image from "next/image";
+import { previewFor } from "@/lib/pdf-previews";
 
 interface PdfPreviewModalProps {
   href: string;
@@ -17,6 +19,10 @@ export default function PdfPreviewModal({
   productLabel,
   onClose,
 }: PdfPreviewModalProps) {
+  // Pre-rendered page images render on every browser. An inline PDF does not:
+  // Android Chrome and in-app webviews show a blank panel instead.
+  const preview = previewFor(href);
+
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -135,13 +141,41 @@ export default function PdfPreviewModal({
           </button>
         </div>
 
-        {/* PDF iframe */}
-        <iframe
-          src={`${href}#toolbar=1&navpanes=0&scrollbar=1`}
-          className="flex-1 w-full"
-          style={{ border: "none", minHeight: 0 }}
-          title={label}
-        />
+        {/* Body — pre-rendered pages where we have them, native PDF otherwise */}
+        {preview ? (
+          <div
+            className="flex-1 overflow-y-auto"
+            style={{ background: "rgba(0,0,0,0.35)", minHeight: 0 }}
+          >
+            <div className="flex flex-col items-center gap-4 px-4 py-5">
+              {preview.pages.map((pg, i) => (
+                <Image
+                  key={pg.src}
+                  src={pg.src}
+                  alt={`${label} — page ${i + 1} of ${preview.total}`}
+                  width={pg.w}
+                  height={pg.h}
+                  priority={i === 0}
+                  sizes="(max-width: 640px) 100vw, 760px"
+                  className="w-full h-auto rounded-md"
+                  style={{ maxWidth: "760px", border: "1px solid rgba(255,255,255,0.08)" }}
+                />
+              ))}
+              {preview.total > preview.pages.length && (
+                <p className="text-xs text-center px-4" style={{ color: "#6B7280" }}>
+                  Showing {preview.pages.length} of {preview.total} pages — download for the full document.
+                </p>
+              )}
+            </div>
+          </div>
+        ) : (
+          <iframe
+            src={`${href}#toolbar=1&navpanes=0&scrollbar=1`}
+            className="flex-1 w-full"
+            style={{ border: "none", minHeight: 0 }}
+            title={label}
+          />
+        )}
 
         {/* Fallback footer */}
         <div
@@ -151,7 +185,7 @@ export default function PdfPreviewModal({
             color: "#6B7280",
           }}
         >
-          PDF not rendering?&nbsp;
+          {preview ? "Want the full document?" : "PDF not rendering?"}&nbsp;
           <a
             href={href}
             target="_blank"
@@ -159,7 +193,7 @@ export default function PdfPreviewModal({
             className="inline-flex items-center gap-1 transition-colors hover:text-orange-400"
             style={{ color: "#F97316" }}
           >
-            Open in new tab <ExternalLink className="w-3 h-3" />
+            {preview ? "Open full PDF" : "Open in new tab"} <ExternalLink className="w-3 h-3" />
           </a>
         </div>
       </div>

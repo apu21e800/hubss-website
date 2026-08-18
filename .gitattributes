@@ -1,0 +1,63 @@
+# Line endings — why this file exists
+#
+# Without it, `git status` in this repo showed 250 modified files. Every one of
+# them was a phantom: 69,472 insertions against 69,460 deletions, and running
+# `git diff --ignore-all-space` reduced the whole thing to a single real
+# 12-line change. Nothing had been edited. Windows editors, Claude Code, and
+# Python scripts each write a different newline, and with no policy git treats
+# every one of those as a rewrite of the entire file.
+#
+# The cost isn't cosmetic: a real one-line fix is invisible inside a 250-file
+# diff, so nobody can review anything and every commit feels dangerous.
+#
+# `text=auto` means: normalise to LF in the repository, check out whatever the
+# platform wants. Everyone gets native endings; git stores one canonical form.
+* text=auto
+
+# Always LF, on every platform — these break when a tool hands them CRLF.
+*.sh          text eol=lf
+*.mjs         text eol=lf
+*.cjs         text eol=lf
+*.js          text eol=lf
+*.jsx         text eol=lf
+*.ts          text eol=lf
+*.tsx         text eol=lf
+*.json        text eol=lf
+*.md          text eol=lf
+*.mdx         text eol=lf
+*.css         text eol=lf
+*.yml         text eol=lf
+*.yaml        text eol=lf
+*.toml        text eol=lf
+.gitattributes text eol=lf
+.gitignore    text eol=lf
+
+# Windows-native files keep CRLF.
+*.bat         text eol=crlf
+*.cmd         text eol=crlf
+*.ps1         text eol=crlf
+
+# Binary — never touch the bytes, never try to diff them.
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.webp binary
+*.gif  binary
+*.ico  binary
+*.avif binary
+*.pdf  binary
+*.ai   binary
+*.eps  binary
+*.psd  binary
+*.zip  binary
+*.woff binary
+*.woff2 binary
+*.ttf  binary
+*.otf  binary
+*.mp4  binary
+*.mov  binary
+*.bundle binary
+
+# Generated — collapse in PR diffs so review stays readable.
+package-lock.json    linguist-generated=true -diff
+lib/gallery-manifest.json linguist-generated=true -diff

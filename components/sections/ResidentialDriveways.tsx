@@ -108,11 +108,14 @@ export default function ResidentialDriveways() {
 
           {/* ── Right — hero image ──────────────────────────────────────── */}
           <div className="relative min-h-[360px] lg:min-h-0 overflow-hidden">
+            {/* Not marked priority: this section renders at the very
+                bottom of /applications/residential-driveways (right before
+                LunchLearn + Footer), well below the fold. The route's real
+                LCP hero is the banner image at the top of the page. */}
             <Image
               src={HERO_IMAGE}
               alt="Residential StreetPrint driveway — aerial view, circular stamp pattern, home with double garage"
               fill
-              priority
               className="object-cover object-top"
               sizes="(max-width: 1024px) 100vw, 50vw"
             />

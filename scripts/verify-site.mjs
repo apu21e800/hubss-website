@@ -65,6 +65,17 @@ async function ensureServer() {
 }
 const stopServer = () => { if (server) { try { process.kill(-server.pid); } catch {} } };
 
+// Chromium lives at a fixed path in some sandboxes and wherever Playwright put
+// it everywhere else. Hardcoding the former made this script work here and fail
+// in CI and on a laptop, which would have quietly disabled the browser checks
+// exactly where they matter most.
+const launchOpts = () => {
+  const sandboxChromium = "/opt/pw-browsers/chromium";
+  return fs.existsSync(sandboxChromium)
+    ? { executablePath: sandboxChromium, args: ["--no-sandbox"] }
+    : { args: ["--no-sandbox"] };
+};
+
 const head = async (url) => {
   try { const r = await fetch(url, { redirect: "manual", signal: AbortSignal.timeout(20000) }); return r.status; }
   catch { return 0; }
@@ -320,7 +331,7 @@ function checkGalleryDistinctness() {
 async function checkImageWeight(routes, chromium) {
   const sample = ["/", "/blog", "/resources", "/contact", "/products/streetbond", "/applications/crosswalks"]
     .filter((r) => routes.includes(r) || r === "/");
-  const B = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium", args: ["--no-sandbox"] });
+  const B = await chromium.launch(launchOpts());
   const over = [];
   for (const r of sample) {
     const ctx = await B.newContext({ viewport: { width: 390, height: 844 } });
@@ -347,7 +358,7 @@ async function checkImageWeight(routes, chromium) {
 // own forms is a credibility problem, not just a technical one.
 async function checkA11y(chromium, AxeBuilder) {
   const sample = ["/", "/products/streetbond", "/resources", "/contact", "/blog", "/lunch-learn"];
-  const B = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium", args: ["--no-sandbox"] });
+  const B = await chromium.launch(launchOpts());
   const bad = [];
   for (const r of sample) {
     const ctx = await B.newContext({ viewport: { width: 1440, height: 900 } });

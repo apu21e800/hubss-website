@@ -41,8 +41,9 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <div className="mb-5">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              {/* next/image: fixed 140x44 render size (see style below), never
+                  scales with viewport, so no `sizes` prop is needed here. */}
+              <Image
                 src="/images/hub-logo-white.png"
                 alt="HUB Surface Systems"
                 width={140}

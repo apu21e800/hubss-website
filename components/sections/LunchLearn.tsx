@@ -306,6 +306,11 @@ export default function LunchLearn({ hideMoose }: { hideMoose?: boolean } = {}) 
                   height={400}
                   className="w-full h-auto drop-shadow-2xl"
                   style={{ objectFit: "contain" }}
+                  // Wrapper is 55% of this grid column (see the parent's
+                  // `width: "55%"` above); the column itself is full-width
+                  // below `lg` (1024px), then half of the max-w-7xl content
+                  // area (capped at 1280px) from `lg` up.
+                  sizes="(max-width: 1023px) 55vw, (max-width: 1280px) 25vw, 320px"
                 />
               </div>
             )}

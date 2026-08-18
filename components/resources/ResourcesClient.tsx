@@ -58,7 +58,7 @@ const STREETBOND_SUBCATEGORIES = [
 function typeBadgeStyle(type: string): React.CSSProperties {
   const isHighlighted = ["Spec Sheet", "Data Sheet", "Brochure", "Safety Data Sheet", "Flyer", "Catalogue"].includes(type);
   return {
-    color: isHighlighted ? "#f97316" : "rgba(255,255,255,0.4)",
+    color: isHighlighted ? "#f97316" : "rgba(255,255,255,0.55)",
     background: "transparent",
     border: "none",
     padding: 0,
@@ -153,7 +153,7 @@ function DocCard({
             <span
               className="inline-block text-xs px-2 py-0.5 rounded-full"
               style={{
-                color: "#c96a18",
+                color: "#e87527",
                 background: "rgba(249,115,22,0.07)",
                 border: "1px solid rgba(249,115,22,0.12)",
               }}
@@ -167,7 +167,7 @@ function DocCard({
           style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
         >
           {/* File meta */}
-          <div className="flex items-center gap-1.5 text-xs flex-1 min-w-0" style={{ color: "#6B7280" }}>
+          <div className="flex items-center gap-1.5 text-xs flex-1 min-w-0" style={{ color: "#868C98" }}>
             <span>{doc.fileSize}</span>
             <span
               className="w-1 h-1 rounded-full flex-shrink-0"
@@ -450,11 +450,12 @@ export default function ResourcesClient({
         <div className="relative flex-1">
           <Search
             className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4"
-            style={{ color: "#6B7280" }}
+            style={{ color: "#868C98" }}
           />
           <input
             type="text"
             placeholder="Search documents..."
+            aria-label="Search documents"
             value={search}
             onChange={(e) => {
               setSearch(e.target.value);
@@ -466,8 +467,9 @@ export default function ResourcesClient({
           {search && (
             <button
               onClick={() => setSearch("")}
+              aria-label="Clear search"
               className="absolute right-3 top-1/2 -translate-y-1/2 hover:text-zinc-300 transition-colors"
-              style={{ color: "#6B7280" }}
+              style={{ color: "#868C98" }}
             >
               <X className="w-4 h-4" />
             </button>
@@ -483,6 +485,7 @@ export default function ResourcesClient({
                 setSubcategoryFilter("all");
                 setVisibleCount(PAGE_SIZE);
               }}
+              aria-label="Filter by product"
               className="appearance-none w-full sm:w-48 px-4 py-3 pr-10 rounded-lg text-sm cursor-pointer outline-none focus:ring-1 focus:ring-[#F97316]/40"
               style={selectStyle}
             >
@@ -494,7 +497,7 @@ export default function ResourcesClient({
             </select>
             <ChevronDown
               className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
-              style={{ color: "#6B7280" }}
+              style={{ color: "#868C98" }}
             />
           </div>
         )}
@@ -639,7 +642,7 @@ export default function ResourcesClient({
       )}
 
       {/* ── Results count ──────────────────────────────── */}
-      <p className="text-sm mb-6" style={{ color: "#6B7280" }}>
+      <p className="text-sm mb-6" style={{ color: "#868C98" }}>
         {filtered.length} document{filtered.length !== 1 ? "s" : ""} found
       </p>
 
@@ -672,7 +675,7 @@ export default function ResourcesClient({
                           className="flex-1 h-px"
                           style={{ background: "rgba(255,255,255,0.08)" }}
                         />
-                        <span className="text-xs" style={{ color: "#6B7280" }}>
+                        <span className="text-xs" style={{ color: "#868C98" }}>
                           {docs.length} doc{docs.length !== 1 ? "s" : ""}
                         </span>
                       </div>
@@ -726,7 +729,7 @@ export default function ResourcesClient({
           >
             No documents found
           </h3>
-          <p className="mb-6" style={{ color: "#6B7280" }}>
+          <p className="mb-6" style={{ color: "#868C98" }}>
             Try adjusting your filters or search terms
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">

@@ -248,10 +248,15 @@ export default async function ProductPage({ params }: Props) {
             <div className="grid grid-cols-1 lg:grid-cols-2">
               <div className="p-10 lg:p-12 flex flex-col justify-center">
                 <div className="flex items-center gap-4 mb-6">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  {/* SVG source — the optimizer 400s on SVG unless
+                      dangerouslyAllowSVG is set in next.config, so this opts
+                      out of optimization. Fixed 72x72, no `sizes` needed. */}
+                  <Image
                     src="/images/products/streetbondsr/leed-logo.svg"
                     alt="LEED — U.S. Green Building Council"
+                    width={72}
+                    height={72}
+                    unoptimized
                     style={{ width: 72, height: 72, objectFit: "contain", filter: "invert(1) brightness(0.75) sepia(1) hue-rotate(60deg) saturate(2)" }}
                   />
                   <div>

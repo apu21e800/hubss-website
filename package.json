@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "node scripts/gen-blog-index.mjs && node scripts/gen-gallery-manifest.mjs && next build",
+    "build": "node scripts/gen-blog-index.mjs && node scripts/gen-gallery-manifest.mjs && next build --webpack",
     "start": "next start",
     "migrate:sanity": "tsx scripts/migrate-to-sanity.ts",
     "migrate:sanity:dry": "tsx scripts/migrate-to-sanity.ts --dry-run",

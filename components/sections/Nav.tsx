@@ -570,7 +570,8 @@ function ProductsMegaMenu() {
       <div className="mt-5 pt-4 rounded-xl overflow-hidden relative" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
         <div className="flex items-center gap-4 p-4">
           <div className="flex-shrink-0 rounded-lg overflow-hidden" style={{ width: 72, height: 72 }}>
-            <img src="/images/blog/ubc-musqueam-crosswalk/featured.jpg" alt="UBC Musqueam Indigenous recognition crosswalk — decorative preformed thermoplastic by HUB Surface Systems" loading="lazy" decoding="async" className="w-full h-full object-cover" style={{ objectPosition: "center 65%" }} />
+            {/* Fixed 72x72 box — width/height match the wrapper exactly, so no `sizes` needed. */}
+            <Image src="/images/blog/ubc-musqueam-crosswalk/featured.jpg" alt="UBC Musqueam Indigenous recognition crosswalk — decorative preformed thermoplastic by HUB Surface Systems" width={72} height={72} className="w-full h-full object-cover" style={{ objectPosition: "center 65%" }} />
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-[10px] font-bold tracking-[0.18em] uppercase mb-1" style={{ color: ACCENT }}>Featured Project</p>
@@ -830,7 +831,8 @@ function ApplicationsMegaMenu() {
       <div className="mt-5 pt-4 rounded-xl overflow-hidden relative" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
         <div className="flex items-center gap-4 p-4">
           <div className="flex-shrink-0 rounded-lg overflow-hidden" style={{ width: 72, height: 72 }}>
-            <img src="/images/blog/keeping-pedestrians-safe/featured.png" alt="Featured field note" loading="lazy" decoding="async" className="w-full h-full object-cover" style={{ objectPosition: "center 65%" }} />
+            {/* Fixed 72x72 box — width/height match the wrapper exactly, so no `sizes` needed. */}
+            <Image src="/images/blog/keeping-pedestrians-safe/featured.png" alt="Featured field note" width={72} height={72} className="w-full h-full object-cover" style={{ objectPosition: "center 65%" }} />
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-[9px] font-bold tracking-[0.2em] uppercase mb-1" style={{ color: "#F97316" }}>Featured Field Note</p>
@@ -1073,14 +1075,21 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
               backdropFilter: "blur(16px)",
             }}
           >
-            <Link href="/" onClick={onClose} className="flex items-center active:opacity-70 transition-opacity">
+            {/* prefetch={false}: this Link is the site logo, always visible.
+                Its default viewport-prefetch of "/" was fetching the homepage
+                hero image (~1.2MB) on every other route on first paint — pure
+                waste, since that image never renders here. Trades a touch of
+                nav-to-home snappiness for a lot of unused bytes on every
+                other page. */}
+            <Link href="/" onClick={onClose} prefetch={false} className="flex items-center active:opacity-70 transition-opacity">
+              {/* Not the LCP hero — each route has its own priority hero
+                  image; this is a small header logo. */}
               <Image
                 src="/images/hub-official-logo.svg"
                 alt="HUB Surface Systems"
                 width={150} height={36}
                 style={{ height: 30, width: "auto" }}
                 unoptimized
-                priority
               />
             </Link>
 
@@ -1403,14 +1412,20 @@ export default function Nav() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between gap-4">
 
           {/* Logo + integrated "Canadian" accent — small flag glyph + label, vertically centered with the logo wordmark */}
-          <Link href="/" className="flex-shrink-0 flex items-center gap-3 group">
+          {/* prefetch={false}: default viewport-prefetch of "/" was pulling
+              the homepage's ~1.2MB hero image on every other route's first
+              paint (React/Next eagerly resolve fetchPriority="high" <img> in
+              prefetched RSC data). Nothing on this route shows that image,
+              so it was pure waste. */}
+          <Link href="/" prefetch={false} className="flex-shrink-0 flex items-center gap-3 group">
+            {/* Not the LCP hero — every route has its own dedicated priority
+                hero image further down; this is just the header logo. */}
             <Image
               src="/images/hub-official-logo.svg"
               alt="HUB Surface Systems"
               width={160}
               height={38}
               style={{ height: 34, width: "auto" }}
-              priority
               unoptimized
             />
             <span

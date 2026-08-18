@@ -6,6 +6,7 @@ import { resourceDocuments, applyDocOverrides } from "@/lib/resource-documents";
 import ResourcesClient from "@/components/resources/ResourcesClient";
 import { getResourceDocuments } from "@/lib/sanity.queries";
 import { showCatalogue } from "@/lib/feature-flags";
+import Image from "next/image";
 
 import { buildMetadata } from "@/lib/seo";
 
@@ -104,11 +105,17 @@ export default async function ResourcesPage() {
             }}
           >
             <div className="relative flex-shrink-0 overflow-hidden bg-black sm:w-[200px] h-[150px] sm:h-auto">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              {/* Card is full-width (minus the px-6 page padding) below the
+                  `sm` breakpoint (640px), then a fixed 200px sidebar above it.
+                  Empirically the LCP element on this route (measured via
+                  PerformanceObserver), so it's the one priority image here. */}
+              <Image
                 src="/catalogue/cover.webp"
                 alt="HUB Surface Systems 2026 Catalogue cover"
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                fill
+                sizes="(max-width: 639px) calc(100vw - 48px), 200px"
+                priority
+                className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
               />
             </div>
             <div className="flex-1 min-w-0 p-6 sm:p-7 flex flex-col justify-center">

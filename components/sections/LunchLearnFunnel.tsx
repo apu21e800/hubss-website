@@ -456,7 +456,7 @@ export default function LunchLearnFunnel({
                     {p.badge}
                   </span>
                 </div>
-                <p className="text-sm leading-relaxed" style={{ color: "#6B7280" }}>{p.desc}</p>
+                <p className="text-sm leading-relaxed" style={{ color: "#868C98" }}>{p.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -465,7 +465,7 @@ export default function LunchLearnFunnel({
 
       {/* ── CITY MARQUEE ─────────────────────────────────────────────── */}
       <div style={{ background: "#070b12", borderTop: "1px solid rgba(255,255,255,0.05)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-        <p className="text-center text-[10px] font-bold tracking-[0.2em] uppercase pt-8 pb-4" style={{ color: "rgba(255,255,255,0.18)" }}>
+        <p className="text-center text-[10px] font-bold tracking-[0.2em] uppercase pt-8 pb-4" style={{ color: "rgba(255,255,255,0.48)" }}>
           Previous Lunch &amp; Learn clients include
         </p>
         <div
@@ -475,7 +475,7 @@ export default function LunchLearnFunnel({
           <div className="flex gap-0 whitespace-nowrap" style={{ animation: "ll-marquee 40s linear infinite" }}>
             {TICKER.map((name, i) => (
               <span key={i} style={{ display: "inline-flex", alignItems: "center", flexShrink: 0 }}>
-                <span className="text-sm font-medium px-5" style={{ color: "rgba(255,255,255,0.32)", lineHeight: 1 }}>{name}</span>
+                <span className="text-sm font-medium px-5" style={{ color: "rgba(255,255,255,0.55)", lineHeight: 1 }}>{name}</span>
                 <span aria-hidden="true" style={{ display: "block", width: 4, height: 4, borderRadius: "50%", background: "rgba(249,115,22,0.45)", flexShrink: 0 }} />
               </span>
             ))}
@@ -557,10 +557,10 @@ export default function LunchLearnFunnel({
                     { name: "company", placeholder: "Company or organization", type: "text", required: false },
                     { name: "city", placeholder: "City", type: "text", required: false },
                   ].map((field) => (
-                    <input key={field.name} type={field.type} name={field.name} placeholder={field.placeholder} value={formData[field.name as keyof FormState]} onChange={handleChange} required={field.required} className="px-4 py-3.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-orange-500/50 transition-all" style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: "#F5F0EB" }} />
+                    <input key={field.name} type={field.type} name={field.name} placeholder={field.placeholder} aria-label={field.placeholder} value={formData[field.name as keyof FormState]} onChange={handleChange} required={field.required} className="px-4 py-3.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-orange-500/50 transition-all" style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: "#F5F0EB" }} />
                   ))}
                 </div>
-                <input type="tel" name="phone" placeholder="Phone number" value={formData.phone} onChange={handleChange} className="w-full px-4 py-3.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-orange-500/50 transition-all" style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: "#F5F0EB" }} />
+                <input type="tel" name="phone" placeholder="Phone number" aria-label="Phone number" value={formData.phone} onChange={handleChange} className="w-full px-4 py-3.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-orange-500/50 transition-all" style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: "#F5F0EB" }} />
                 <button type="submit" disabled={submitState.status === "loading"} className="w-full py-5 rounded-xl font-bold text-base transition-all disabled:opacity-50" style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff", boxShadow: "0 6px 24px rgba(249,115,22,0.38)" }}>
                   {submitState.status === "loading" ? "Sending your request…" : submitLabel}
                 </button>

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { X, Download, ExternalLink } from "lucide-react";
 
 interface PdfPreviewModalProps {
@@ -17,6 +17,9 @@ export default function PdfPreviewModal({
   productLabel,
   onClose,
 }: PdfPreviewModalProps) {
+  const panelRef = useRef<HTMLDivElement>(null);
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
+
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -29,6 +32,51 @@ export default function PdfPreviewModal({
     };
   }, [onClose]);
 
+  // Move focus into the dialog on open and back to whatever opened it (the
+  // doc card's "Preview" button) on close. Previously focus wasn't managed
+  // at all: opening the modal left focus sitting on a "Preview" button that
+  // was now visually buried behind the overlay, and closing it dropped focus
+  // to <body> — the keyboard-equivalent of the modal not existing.
+  useEffect(() => {
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    const t = setTimeout(() => closeBtnRef.current?.focus(), 50);
+    return () => {
+      clearTimeout(t);
+      previouslyFocused?.focus();
+    };
+  }, []);
+
+  // Trap Tab/Shift+Tab inside the dialog. The page behind it is still in the
+  // DOM and not inert, so without this, tabbing past the last link (or
+  // shift-tabbing before the first) walked focus into the resources grid
+  // sitting invisibly underneath the overlay. The PDF <iframe> is deliberately
+  // NOT one of the trapped stops (see tabIndex={-1} below): once focus moves
+  // into the browser's native PDF plugin, further Tab/Escape presses are
+  // consumed by the plugin itself and never reach this document's listeners
+  // — an unfixable browser-level keyboard trap. Skipping the iframe in the
+  // Tab sequence avoids that trap entirely; the footer's "Open in new tab"
+  // link is the keyboard-reachable equivalent.
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key !== "Tab" || !panelRef.current) return;
+      const focusable = panelRef.current.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, []);
+
   return (
     <div
       className="fixed inset-0 z-[200] flex items-start justify-center p-4 sm:p-8"
@@ -39,6 +87,10 @@ export default function PdfPreviewModal({
     >
       {/* Modal panel */}
       <div
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Preview — ${label}`}
         className="relative flex flex-col w-full max-w-5xl rounded-xl overflow-hidden"
         style={{
           background: "var(--bg-card)",
@@ -126,6 +178,7 @@ export default function PdfPreviewModal({
 
           {/* Close button */}
           <button
+            ref={closeBtnRef}
             onClick={onClose}
             className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-all hover:brightness-125"
             style={{ background: "rgba(255,255,255,0.06)", color: "#9CA3AF" }}
@@ -135,12 +188,18 @@ export default function PdfPreviewModal({
           </button>
         </div>
 
-        {/* PDF iframe */}
+        {/* PDF iframe — excluded from the Tab sequence (tabIndex=-1). Once
+            keyboard focus enters the browser's native PDF plugin, Tab and
+            Escape are consumed by the plugin and never reach this page's
+            key handlers, so it can never be Tab'd into or out of; mouse
+            users can still click into it and use its native controls as
+            normal. "Open in new tab" below is the keyboard equivalent. */}
         <iframe
           src={`${href}#toolbar=1&navpanes=0&scrollbar=1`}
           className="flex-1 w-full"
           style={{ border: "none", minHeight: 0 }}
           title={label}
+          tabIndex={-1}
         />
 
         {/* Fallback footer */}
@@ -148,7 +207,7 @@ export default function PdfPreviewModal({
           className="flex items-center justify-center gap-1 px-5 py-2.5 flex-shrink-0 text-xs"
           style={{
             borderTop: "1px solid rgba(255,255,255,0.06)",
-            color: "#6B7280",
+            color: "#868C98",
           }}
         >
           PDF not rendering?&nbsp;

@@ -76,6 +76,7 @@ export interface SanityProduct {
   // External URL fields used during migration (before CDN upload)
   heroImageUrl?: string;
   galleryUrls?: string[];
+  relatedApplicationSlugs?: string[];
 }
 
 // ── application ─────────────────────────────────────────────────────────────
@@ -93,6 +94,7 @@ export interface SanityApplication {
   // External URL fields used during migration
   heroImageUrl?: string;
   galleryUrls?: string[];
+  relatedProductSlugs?: string[];
 }
 
 // ── blogPost ────────────────────────────────────────────────────────────────

@@ -25,11 +25,11 @@ const PRODUCT_FIELDS = `
   shortDesc,
   description,
   homepageBlurb,
-  heroImageUrl,
+  "heroImageUrl": heroImage.asset->url,
   heroPosition,
-  galleryUrls,
+  "galleryUrls": gallery[].asset->url,
   specs,
-  relatedApplicationSlugs,
+  "relatedApplicationSlugs": relatedApplications[]->slug.current,
   seo
 `;
 
@@ -73,9 +73,9 @@ const APPLICATION_FIELDS = `
   "slug": slug.current,
   shortDesc,
   description,
-  heroImageUrl,
-  galleryUrls,
-  relatedProductSlugs,
+  "heroImageUrl": heroImage.asset->url,
+  "galleryUrls": gallery[].asset->url,
+  "relatedProductSlugs": relatedProducts[]->slug.current,
   seo
 `;
 

@@ -1,5 +1,10 @@
 import type { NextConfig } from "next";
 import path from "path";
+import { projects } from "./lib/projects";
+
+// The 9 real, currently-built project pages. Derived from lib/projects.ts so
+// adding a project can never silently re-break the redirect below.
+const LIVE_PROJECT_SLUGS = projects.map((p) => p.slug);
 
 // ── Security headers ────────────────────────────────────────────────────────
 // Production-safe set. CSP is shipped in REPORT-ONLY mode for launch — it
@@ -81,10 +86,6 @@ const nextConfig: NextConfig = {
       // 2026 colour card supersedes the old StreetBond colour guide — keep the
       // old URL alive (Sanity resource entries + external links still point at it).
       { source: "/docs/StreetBond/StreetBond/StreetBond-Colour-Guide.pdf", destination: "/docs/StreetBond/StreetBond/StreetBond-Colour-Card-2026.pdf", permanent: true },
-      // The old StreetBondSR guide had a GAF-only back page — US address and phone,
-      // no Canadian contacts. Replaced by the 2026 edition; this keeps every link
-      // already sitting in someone's inbox or spec package working.
-      { source: "/docs/StreetBondSR/Colour-Guide-1.pdf", destination: "/docs/StreetBondSR/StreetBondSR-Colour-Guide-2026.pdf", permanent: true },
       // Products
       { source: "/trafficpatternsxd", destination: "/products/traffic-patterns-xd", permanent: true },
       { source: "/trafficpatterns", destination: "/products/traffic-patterns", permanent: true },
@@ -318,8 +319,23 @@ const nextConfig: NextConfig = {
       // Old feed URLs
       { source: "/feed", destination: "/blog", permanent: true },
       { source: "/feed/:path*", destination: "/blog", permanent: true },
-      // Catch-all for any remaining /projects/ URLs → gallery
-      { source: "/projects/:path*", destination: "/gallery", permanent: true },
+      // Catch-all for any remaining LEGACY /projects/ URLs → gallery.
+      //
+      // This rule used to be an unguarded /projects/:path*, which meant it also
+      // swallowed the 9 REAL project pages the site builds and advertises in its
+      // own sitemap. Every one of them — UBC Musqueam Crosswalk, York Region
+      // Hwy7 Viva, Toronto Priority Bus Lanes and the rest — was prerendered,
+      // listed for Google, and then 308'd to a generic gallery. Nine named
+      // municipal case studies, built and unreachable, and nine sitemap URLs
+      // that all redirected to the same page.
+      //
+      // The negative lookahead exempts exactly the slugs in lib/projects.ts and
+      // nothing else, so genuine WordPress leftovers still land on /gallery.
+      {
+        source: `/projects/:path((?!(?:${LIVE_PROJECT_SLUGS.join("|")})$).*)`,
+        destination: "/gallery",
+        permanent: true,
+      },
     ];
   },
   // turbopack config removed — Sanity Studio is incompatible with Turbopack

@@ -42,7 +42,7 @@ export default async function ApplicationPage({ params }: Props) {
   if (!application) notFound();
 
   // Gallery — folder-driven (see lib/asset-scan.ts + docs/ASSETS.md).
-  const appGallery = galleryFor(application.imageUrl, application.gallery);
+  const appGallery = galleryFor(application.imageUrl, application.gallery, `images/applications/${application.slug}`);
   const gallerySources = appGallery.length > 0 ? appGallery : [application.imageUrl];
   const gallery: GalleryImage[] = gallerySources.map((src) => ({
     src,

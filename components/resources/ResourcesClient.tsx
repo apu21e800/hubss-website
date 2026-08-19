@@ -58,7 +58,7 @@ const STREETBOND_SUBCATEGORIES = [
 function typeBadgeStyle(type: string): React.CSSProperties {
   const isHighlighted = ["Spec Sheet", "Data Sheet", "Brochure", "Safety Data Sheet", "Flyer", "Catalogue"].includes(type);
   return {
-    color: isHighlighted ? "#f97316" : "rgba(255,255,255,0.4)",
+    color: isHighlighted ? "#f97316" : "rgba(255,255,255,0.55)",
     background: "transparent",
     border: "none",
     padding: 0,
@@ -97,9 +97,42 @@ function DocCard({
       ? `/products/${doc.product}`
       : null;
 
+  /**
+   * The whole card opens the document. Previously only the small "Preview"
+   * button did, which is a ~90px target on a ~350px card — on a phone that's
+   * most of the card doing nothing when you tap it.
+   *
+   * Deliberately NOT role="button" + tabIndex. This card contains real buttons
+   * and links, and wrapping those in another button control is the
+   * `nested-interactive` accessibility violation — it would break the zero
+   * critical violations the site currently holds, and screen readers would
+   * announce the whole card as one control. Keyboard and assistive-tech users
+   * already have the real <button> inside; this is a pointer affordance layered
+   * on top of it, which is exactly what it should be.
+   */
+  const openDocument = () => {
+    // Don't hijack the click when someone is selecting the title text.
+    if (typeof window !== "undefined" && window.getSelection()?.toString()) return;
+    if (isCatalogue) {
+      window.open(doc.fileUrl, "_blank", "noopener,noreferrer");
+      return;
+    }
+    onPreview({
+      href: doc.fileUrl,
+      label: doc.title,
+      typeLabel: doc.type,
+      productLabel: doc.productName,
+    });
+  };
+
+  // Inner links and buttons keep their own behaviour — without this, tapping
+  // Download would also fire the card and open the preview behind the download.
+  const stop = (e: React.MouseEvent) => e.stopPropagation();
+
   return (
     <div
-      className="group rounded-xl flex flex-col justify-between overflow-hidden transition-all duration-200 ease-out hover:-translate-y-[2px] hover:shadow-[0_8px_24px_-12px_rgba(249,115,22,0.35)]"
+      onClick={openDocument}
+      className="group rounded-xl flex flex-col justify-between overflow-hidden transition-all duration-200 ease-out hover:-translate-y-[2px] hover:shadow-[0_8px_24px_-12px_rgba(249,115,22,0.35)] cursor-pointer"
       style={{
         background: "var(--bg-card-neutral)",
         border: "1px solid rgba(255,255,255,0.08)",
@@ -143,6 +176,7 @@ function DocCard({
           {productLink && (
             <Link
               href={productLink}
+              onClick={stop}
               className="inline-block text-xs mb-2 transition-colors hover:text-orange-400"
               style={{ color: "#9CA3AF" }}
             >
@@ -153,7 +187,7 @@ function DocCard({
             <span
               className="inline-block text-xs px-2 py-0.5 rounded-full"
               style={{
-                color: "#c96a18",
+                color: "#e87527",
                 background: "rgba(249,115,22,0.07)",
                 border: "1px solid rgba(249,115,22,0.12)",
               }}
@@ -167,7 +201,7 @@ function DocCard({
           style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
         >
           {/* File meta */}
-          <div className="flex items-center gap-1.5 text-xs flex-1 min-w-0" style={{ color: "#6B7280" }}>
+          <div className="flex items-center gap-1.5 text-xs flex-1 min-w-0" style={{ color: "#868C98" }}>
             <span>{doc.fileSize}</span>
             <span
               className="w-1 h-1 rounded-full flex-shrink-0"
@@ -182,6 +216,7 @@ function DocCard({
               href={doc.fileUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={stop}
               className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors duration-200 flex-shrink-0"
               style={{ background: "rgba(255,255,255,0.08)", color: "#9CA3AF" }}
               onMouseEnter={(e) => {
@@ -199,14 +234,15 @@ function DocCard({
             </a>
           ) : (
             <button
-              onClick={() =>
+              onClick={(e) => {
+                stop(e);
                 onPreview({
                   href: doc.fileUrl,
                   label: doc.title,
                   typeLabel: doc.type,
                   productLabel: doc.productName,
-                })
-              }
+                });
+              }}
               className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors duration-200 flex-shrink-0"
               style={{ background: "rgba(255,255,255,0.08)", color: "#9CA3AF" }}
               onMouseEnter={(e) => {
@@ -227,6 +263,7 @@ function DocCard({
           {isCatalogue ? (
             <Link
               href={doc.fileUrl}
+              onClick={stop}
               className="flex items-center justify-center w-8 h-8 rounded-lg transition-colors duration-200 flex-shrink-0"
               style={{
                 background: "rgba(249,115,22,0.10)",
@@ -249,6 +286,7 @@ function DocCard({
             <a
               href={doc.fileUrl}
               download
+              onClick={stop}
               className="flex items-center justify-center w-8 h-8 rounded-lg transition-colors duration-200 flex-shrink-0"
               style={{
                 background: "rgba(249,115,22,0.10)",
@@ -445,16 +483,17 @@ export default function ResourcesClient({
         </div>
       </div>
 
-      {/* ── Search + Filter Bar ────────────────────────── */}
+      {/* ── Search + Filter Bar ──────────────────────────── */}
       <div className="flex flex-col sm:flex-row gap-3 mb-8">
         <div className="relative flex-1">
           <Search
             className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4"
-            style={{ color: "#6B7280" }}
+            style={{ color: "#868C98" }}
           />
           <input
             type="text"
             placeholder="Search documents..."
+            aria-label="Search documents"
             value={search}
             onChange={(e) => {
               setSearch(e.target.value);
@@ -466,8 +505,9 @@ export default function ResourcesClient({
           {search && (
             <button
               onClick={() => setSearch("")}
+              aria-label="Clear search"
               className="absolute right-3 top-1/2 -translate-y-1/2 hover:text-zinc-300 transition-colors"
-              style={{ color: "#6B7280" }}
+              style={{ color: "#868C98" }}
             >
               <X className="w-4 h-4" />
             </button>
@@ -483,6 +523,7 @@ export default function ResourcesClient({
                 setSubcategoryFilter("all");
                 setVisibleCount(PAGE_SIZE);
               }}
+              aria-label="Filter by product"
               className="appearance-none w-full sm:w-48 px-4 py-3 pr-10 rounded-lg text-sm cursor-pointer outline-none focus:ring-1 focus:ring-[#F97316]/40"
               style={selectStyle}
             >
@@ -494,7 +535,7 @@ export default function ResourcesClient({
             </select>
             <ChevronDown
               className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
-              style={{ color: "#6B7280" }}
+              style={{ color: "#868C98" }}
             />
           </div>
         )}
@@ -610,7 +651,7 @@ export default function ResourcesClient({
         )}
       </div>
 
-      {/* ── StreetBond Subcategory Pills ─────────────────── */}
+      {/* ── StreetBond Subcategory Pills ────────────────────── */}
       {activeTab === "By Product" && productFilter === "streetbond" && (
         <div className="flex flex-wrap gap-2 mb-6">
           {STREETBOND_SUBCATEGORIES.map((sc) => (
@@ -638,12 +679,12 @@ export default function ResourcesClient({
         </div>
       )}
 
-      {/* ── Results count ──────────────────────────────── */}
-      <p className="text-sm mb-6" style={{ color: "#6B7280" }}>
+      {/* ── Results count ─────────────────────────────── */}
+      <p className="text-sm mb-6" style={{ color: "#868C98" }}>
         {filtered.length} document{filtered.length !== 1 ? "s" : ""} found
       </p>
 
-      {/* ── Document Grid ──────────────────────────────── */}
+      {/* ── Document Grid ────────────────────────────── */}
       {visible.length > 0 ? (
         <>
           {activeTab === "By Product" &&
@@ -672,7 +713,7 @@ export default function ResourcesClient({
                           className="flex-1 h-px"
                           style={{ background: "rgba(255,255,255,0.08)" }}
                         />
-                        <span className="text-xs" style={{ color: "#6B7280" }}>
+                        <span className="text-xs" style={{ color: "#868C98" }}>
                           {docs.length} doc{docs.length !== 1 ? "s" : ""}
                         </span>
                       </div>
@@ -726,7 +767,7 @@ export default function ResourcesClient({
           >
             No documents found
           </h3>
-          <p className="mb-6" style={{ color: "#6B7280" }}>
+          <p className="mb-6" style={{ color: "#868C98" }}>
             Try adjusting your filters or search terms
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">

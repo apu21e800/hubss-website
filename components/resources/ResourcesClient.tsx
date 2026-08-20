@@ -91,9 +91,37 @@ function DocCard({
   doc: ResourceDocument;
   onPreview: (state: PreviewState) => void;
 }) {
+  /**
+   * The whole card opens the document. Previously only the small "Preview"
+   * button did, which is a ~90px target on a ~350px card — on a phone that's
+   * most of the card doing nothing when you tap it.
+   *
+   * Deliberately NOT role="button" + tabIndex. This card contains a real button
+   * and a real link, and wrapping those in another button control is the
+   * `nested-interactive` accessibility violation — a screen reader would
+   * announce the whole card as a single control. Keyboard and assistive-tech
+   * users already have the <button> inside; this is a pointer affordance
+   * layered on top of it, which is what it should be.
+   */
+  const openDocument = () => {
+    // Don't hijack the click when someone is selecting the title text.
+    if (typeof window !== "undefined" && window.getSelection()?.toString()) return;
+    onPreview({
+      href: doc.fileUrl,
+      label: doc.title,
+      typeLabel: doc.type,
+      productLabel: doc.productName,
+    });
+  };
+
+  // Inner controls keep their own behaviour — without this, tapping Download
+  // would also fire the card and open a preview behind the download.
+  const stop = (e: React.MouseEvent) => e.stopPropagation();
+
   return (
     <div
-      className="group rounded-xl p-5 flex flex-col justify-between transition-all duration-200"
+      onClick={openDocument}
+      className="group rounded-xl p-5 flex flex-col justify-between transition-all duration-200 cursor-pointer"
       style={{
         background: "#1e1e1e",
         border: "1px solid rgba(255,255,255,0.08)",
@@ -144,14 +172,15 @@ function DocCard({
 
         {/* Preview button */}
         <button
-          onClick={() =>
+          onClick={(e) => {
+            stop(e);
             onPreview({
               href: doc.fileUrl,
               label: doc.title,
               typeLabel: doc.type,
               productLabel: doc.productName,
-            })
-          }
+            });
+          }}
           className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors duration-200 flex-shrink-0"
           style={{ background: "rgba(255,255,255,0.08)", color: "#9CA3AF" }}
           onMouseEnter={(e) => {
@@ -171,6 +200,7 @@ function DocCard({
         <a
           href={doc.fileUrl}
           download
+          onClick={stop}
           className="flex items-center justify-center w-8 h-8 rounded-lg transition-colors duration-200 flex-shrink-0"
           style={{
             background: "rgba(249,115,22,0.10)",
@@ -302,7 +332,7 @@ export default function ResourcesClient({
         </div>
       </div>
 
-      {/* ── Search + Filter Bar ──────────────────────────── */}
+      {/* ── Search + Filter Bar ─────────────────────────────── */}
       <div className="flex flex-col sm:flex-row gap-3 mb-8">
         <div className="relative flex-1">
           <Search
@@ -391,7 +421,7 @@ export default function ResourcesClient({
         )}
       </div>
 
-      {/* ── Document Type Pills ──────────────────────────── */}
+      {/* ── Document Type Pills ─────────────────────────────── */}
       {activeTab === "By Document Type" && (
         <div className="flex flex-wrap gap-2 mb-6">
           {DOCUMENT_TYPE_FILTERS.map((dt) => (
@@ -418,7 +448,7 @@ export default function ResourcesClient({
         </div>
       )}
 
-      {/* ── StreetBond Subcategory Pills ─────────────────── */}
+      {/* ── StreetBond Subcategory Pills ────────────────────── */}
       {activeTab === "By Product" && productFilter === "streetbond" && (
         <div className="flex flex-wrap gap-2 mb-6">
           {STREETBOND_SUBCATEGORIES.map((sc) => (
@@ -445,12 +475,12 @@ export default function ResourcesClient({
         </div>
       )}
 
-      {/* ── Results count ────────────────────────────────── */}
+      {/* ── Results count ───────────────────────────────── */}
       <p className="text-sm mb-6" style={{ color: "#6B7280" }}>
         {filtered.length} document{filtered.length !== 1 ? "s" : ""} found
       </p>
 
-      {/* ── Document Grid ────────────────────────────────── */}
+      {/* ── Document Grid ───────────────────────────────── */}
       {visible.length > 0 ? (
         <>
           {activeTab === "By Product" &&

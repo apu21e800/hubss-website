@@ -31,27 +31,32 @@
   --gradient-brand-subtle: linear-gradient(90deg, rgba(249,115,22,0.12) 0%, rgba(234,179,8,0.12) 100%);
   --gradient-glow:  0 0 20px rgba(249,115,22,0.25);
 
-  /* ─── Section backgrounds ──────────────────────── */
+  /* ─── Section backgrounds ──────────────────── */
   /* Blue territory — HUBSS brand identity */
   --bg-primary:     #0f1620;   /* main page bg — blue-charcoal */
   --bg-dark:        #0d1117;   /* deep navy — hero / footer / feature sections */
   --bg-slate:       #111C2D;   /* blue accent sections */
   --bg-slate-light: #182436;
 
-  /* UI surfaces — blue elevation ladder (Vernon, Aug 2026: "the slate grey
-     needs to be a bit darker on the cards site wide, seems too weak").
-     The old warm charcoal cards (#232221/#20201F — HUBSS print grey) sat on
-     the cool navy page background; warm-on-cool at near-equal darkness reads
-     muddy, not elevated. Cards now step up the SAME blue family as the page
-     — deeper and richer than the old grey, with clearly better separation.
-     The official charcoal survives as --color-charcoal for print/brand use. */
-  --bg-neutral:        #141414;  /* warm neutral anchor — stats/utility sections */
-  --bg-card:           #172234;  /* raised card on dark-blue bg (L2) */
-  --bg-card-surface:   #1D2A3F;  /* hover / active surface (L3) */
-  --bg-card-hover:     #1D2A3F;
-  --bg-card-neutral:   #131C2B;  /* resting card (L1) — blog, resources, doc cards */
+  /* UI surfaces — ASPHALT elevation ladder (Vernon, Aug 2026: "establish an
+     asphalt grey and weave it intelligently across the pages… I like the
+     blue background but the cards need to be dark slate grey, the odd slate
+     grey background — too much blue, we need to add more grey, carefully").
+     The system: NAVY is the canvas (page bg, hero, map, footer), ASPHALT is
+     the material (cards + alternating section bands), ORANGE is the marking
+     paint. HUB lays asphalt surfaces for a living — so does the UI now.
+     These greys are cool-neutral (sat ~10%) so they read unmistakably GREY
+     against the saturated navy, unlike the warm print charcoal (#20201F)
+     that clashed in May, and unlike the blue ladder that read as "more
+     blue" in August. --color-charcoal survives for print/brand use. */
+  --bg-neutral:          #141414;  /* warm neutral anchor — stats/utility sections */
+  --bg-section-asphalt:  #16181B;  /* "the odd slate grey background" — paved section bands */
+  --bg-card:             #24282D;  /* raised card (L2) — wet-asphalt grey */
+  --bg-card-surface:     #2A2F35;  /* hover / active surface (L3) */
+  --bg-card-hover:       #2A2F35;
+  --bg-card-neutral:     #1C1F23;  /* resting card (L1) — blog, resources, doc cards */
 
-  /* ─── Text ──────────────────────────────── */
+  /* ─── Text ──────────────────────── */
   --text-primary:   #ffffff;
   --text-body:      #e0e0e0;
   --text-secondary: #8b8b8b;
@@ -65,7 +70,7 @@
   --text-faint:     #808080;
   --text-hint:      #2a2a2a;
 
-  /* ─── Borders ───────────────────────────── */
+  /* ─── Borders ───────────────────── */
   --border-color:   rgba(255,255,255,0.07);  /* on dark-blue bg */
   --border-subtle:  rgba(255,255,255,0.05);
   --border-faint:   rgba(255,255,255,0.03);
@@ -197,7 +202,7 @@ p {
   animation: grain 8s steps(1) infinite;
 }
 
-/* ─── Client ticker ───────────────────────────── */
+/* ─── Client ticker ───────────────────────── */
 @keyframes ticker {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
@@ -212,7 +217,7 @@ p {
   padding: 0 1.5rem;
 }
 
-/* ─── Generic fade up ─────────────────────────── */
+/* ─── Generic fade up ─────────────────────── */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -246,7 +251,7 @@ p {
 }
 
 
-/* ─── CTA button gradient ───────────────────────── */
+/* ─── CTA button gradient ─────────────────────── */
 .btn-primary,
 .cta-btn {
   background: linear-gradient(90deg, #F97316 0%, #D97706 100%);
@@ -480,7 +485,7 @@ p {
   color: #d1d5db;
 }
 
-/* ─── Asphalt noise texture ────────────────────── */
+/* ─── Asphalt noise texture ──────────────────── */
 /* Apply to full-black sections (Hero, Footer).            */
 /* SWAP ::before background-image with real asphalt photo  */
 /* once available at /images/textures/asphalt.jpg          */
@@ -519,7 +524,7 @@ p {
   --border-subtle: #1f1f1f;
 }
 
-/* ─── Page-load gradient sweep ───────────────────── */
+/* ─── Page-load gradient sweep ─────────────────── */
 @keyframes page-sweep {
   from { transform: translateX(-100%); }
   to   { transform: translateX(100%); }
@@ -585,7 +590,7 @@ p {
   transform: scaleX(1);
 }
 
-/* ─── Site-wide finish (investor pass, Wave 1) ─────────────────────────
+/* ─── Site-wide finish (investor pass, Wave 1) ─────────────────────
    The details a visitor's OS would otherwise fill in with defaults:
    grey Windows scrollbars on a dark site, blue text selection, invisible
    keyboard focus. Each is one small rule; together they read as "finished". */

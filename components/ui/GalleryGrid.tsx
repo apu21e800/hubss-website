@@ -13,27 +13,53 @@ export interface GalleryImage {
   caption?: string;
 }
 
-const PAGE_SIZE = 7;
+// Vernon (Aug 2026): "show the hero gallery image then the first 6 images,
+// then load chunks of ... maybe 12." INITIAL = hero + 6; each Load more
+// appends CHUNK. Deliberately button-driven (no auto infinite scroll) —
+// product/application pages have specs, related systems, and the CTA below
+// the gallery, and an auto-loader would push them forever out of reach.
+const INITIAL = 7;
+const CHUNK = 12;
 
 export default function GalleryGrid({ images }: { images: GalleryImage[] }) {
   const [lightboxIndex, setLightboxIndex] = useState(-1);
-  const [page, setPage] = useState(1);
+  const [visible, setVisible] = useState(INITIAL);
 
-  const displayed = images.slice(0, page * PAGE_SIZE);
+  const displayed = images.slice(0, visible);
   const hasMore = displayed.length < images.length;
+  const remaining = images.length - displayed.length;
 
   // Hero = first image; grid = the rest
   const hero = displayed[0] ?? null;
   const grid = displayed.slice(1);
 
+  // Entrance stagger — items in a freshly loaded chunk cascade in. Initial
+  // items get a short ramp; later chunks restart the ramp at their own start.
+  const delayFor = (globalIdx: number) => {
+    const inChunk =
+      globalIdx < INITIAL ? globalIdx : (globalIdx - INITIAL) % CHUNK;
+    return `${Math.min(inChunk, 11) * 35}ms`;
+  };
+
   return (
     <>
+      {/* Tile entrance — scoped keyframes; collapses under reduced motion */}
+      <style>{`
+        @keyframes gallery-tile-in {
+          from { opacity: 0; transform: translateY(10px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .gallery-tile-anim { animation: none !important; opacity: 1 !important; }
+        }
+      `}</style>
+
       {/* Count */}
       <p className="text-xs mb-6 font-medium tracking-wide" style={{ color: "#868C98" }}>
         {images.length} photo{images.length !== 1 ? "s" : ""}
       </p>
 
-      {/* ── Hero — first image, full width, 16:9 ──────────────── */}
+      {/* ── Hero — first image, full width, 16:9 ──────────────────── */}
       {hero && (
         <GalleryTile
           img={hero}
@@ -44,9 +70,10 @@ export default function GalleryGrid({ images }: { images: GalleryImage[] }) {
         />
       )}
 
-      {/* ── Grid — uniform 4:3, 1→2→3 col ────────────────────── */}
+      {/* ── Grid — 2-up on phones so the gallery reads as an app grid,
+             not a one-column scroll; 3-up from lg ─────────────── */}
       {grid.length > 0 && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-3">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 mt-2 sm:mt-3">
           {grid.map((img, i) => (
             <GalleryTile
               key={`${img.src}-${i}`}
@@ -54,37 +81,38 @@ export default function GalleryGrid({ images }: { images: GalleryImage[] }) {
               globalIdx={i + 1}
               aspect="aspect-[4/3]"
               onClick={() => setLightboxIndex(i + 1)}
+              entranceDelay={delayFor(i + 1)}
             />
           ))}
         </div>
       )}
 
-      {/* ── Load more ─────────────────────────────────────────── */}
+      {/* ── Load more ─────────────────────────────────────── */}
       {hasMore && (
-        <div className="mt-8 flex items-center justify-between">
-          <p className="text-xs" style={{ color: "#868C98" }}>
+        <div className="mt-8 flex flex-wrap items-center justify-between gap-3">
+          <p className="text-xs" style={{ color: "#868C98" }} aria-live="polite">
             Showing {displayed.length} of {images.length}
           </p>
           <div className="flex items-center gap-2">
             <button
-              onClick={() => setPage(Math.ceil(images.length / PAGE_SIZE))}
-              className="px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors hover:bg-white/10"
+              onClick={() => setVisible(images.length)}
+              className="px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors hover:bg-white/10 active:scale-[0.97]"
               style={{ background: "var(--bg-card-neutral)", color: "var(--text-body)", border: "1px solid rgba(255,255,255,0.1)" }}
             >
               Show all {images.length}
             </button>
             <button
-              onClick={() => setPage((p) => p + 1)}
-              className="px-5 py-2.5 rounded-lg text-sm font-semibold transition-all hover:brightness-110"
+              onClick={() => setVisible((v) => Math.min(v + CHUNK, images.length))}
+              className="px-5 py-2.5 rounded-lg text-sm font-semibold transition-all hover:brightness-110 active:scale-[0.97]"
               style={{ background: "#f97316", color: "#fff" }}
             >
-              Load {Math.min(PAGE_SIZE, images.length - displayed.length)} more
+              Load {Math.min(CHUNK, remaining)} more
             </button>
           </div>
         </div>
       )}
 
-      {/* ── Lightbox ──────────────────────────────────────────── */}
+      {/* ── Lightbox ────────────────────────────────────── */}
       <Lightbox
         slides={images.map((img) => ({
           src: img.src,
@@ -102,19 +130,21 @@ export default function GalleryGrid({ images }: { images: GalleryImage[] }) {
   );
 }
 
-// ── Tile ────────────────────────────────────────────────────────────────────
+// ── Tile ──────────────────────────────────────────────────────────────────
 function GalleryTile({
   img,
   globalIdx,
   aspect,
   onClick,
   priority = false,
+  entranceDelay,
 }: {
   img: GalleryImage;
   globalIdx: number;
   aspect: string;
   onClick: () => void;
   priority?: boolean;
+  entranceDelay?: string;
 }) {
   return (
     <div
@@ -131,7 +161,12 @@ function GalleryTile({
           onClick();
         }
       }}
-      className={`group relative overflow-hidden rounded-xl cursor-zoom-in w-full ${aspect} focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-500`}
+      className={`gallery-tile-anim group relative overflow-hidden rounded-xl cursor-zoom-in w-full ${aspect} focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-500 active:scale-[0.985] transition-transform duration-100`}
+      style={
+        entranceDelay
+          ? { animation: "gallery-tile-in 0.4s ease both", animationDelay: entranceDelay }
+          : undefined
+      }
     >
       <Image
         src={img.src}
@@ -143,7 +178,7 @@ function GalleryTile({
         sizes={
           aspect === "aspect-[16/9]"
             ? "(max-width: 1280px) 100vw, 1280px"
-            : "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            : "(max-width: 1024px) 50vw, 33vw"
         }
         quality={aspect === "aspect-[16/9]" ? 75 : 70}
       />
@@ -180,7 +215,7 @@ function GalleryTile({
           className="absolute bottom-0 inset-x-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out px-4 py-3 pointer-events-none"
           style={{ background: "rgba(8,8,8,0.88)", backdropFilter: "blur(8px)" }}
         >
-          <p className="text-[0.7rem] leading-snug truncate" style={{ color: "#9ca3af" }}>
+          <p className="text-[11px] leading-snug truncate" style={{ color: "#9ca3af" }}>
             {img.caption}
           </p>
         </div>

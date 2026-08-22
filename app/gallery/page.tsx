@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import Nav from "@/components/sections/Nav";
@@ -17,7 +17,7 @@ interface GalleryImage {
 }
 
 const IMAGES: GalleryImage[] = [
-  // ── Crosswalks ──────────────────────────────────────────────────────────────
+  // ── Crosswalks ────────────────────────────────────────────────────────────────
   { src: "/images/blog/best-crosswalks-canada/featured.jpg", alt: "High-Visibility Crosswalk", category: "crosswalks", location: "Canada-Wide", tall: true },
   { src: "/images/blog/decorative-crosswalk-meridian/featured.jpg", alt: "Decorative Crosswalk — Meridian", category: "crosswalks", location: "Meridian, ON" },
   { src: "/images/blog/decorative-asphalt-high-traffic/featured.jpg", alt: "High-Traffic Decorative Asphalt", category: "crosswalks", location: "Ontario" },
@@ -82,7 +82,7 @@ const IMAGES: GalleryImage[] = [
   { src: "/images/applications/community-branding/community-branding-08.jpg", alt: "Public Art Crosswalk", category: "community", location: "Canada" },
   { src: "/images/applications/community-branding/community-branding-12.jpg", alt: "Cultural Crosswalk", category: "community", location: "British Columbia" },
 
-  // ── Parks & Paths ───────────────────────────────────────────────────────────
+  // ── Parks & Paths ─────────────────────────────────────────────────────────────
   { src: "/images/blog/spirit-trail-wayfinding-vancouver/featured.jpg", alt: "Spirit Trail Wayfinding", category: "parks", location: "Vancouver, BC", tall: true },
   { src: "/images/blog/bowen-island-asphalt-path/featured.jpg", alt: "Bowen Island Path", category: "parks", location: "Bowen Island, BC" },
   { src: "/images/blog/parc-riviera-streetbond-walkway/featured.jpg", alt: "Parc Riviera Walkway", category: "parks", location: "Quebec" },
@@ -91,7 +91,7 @@ const IMAGES: GalleryImage[] = [
   { src: "/images/applications/parks-paths/parks-paths-99.png", alt: "Decorated Path", category: "parks", location: "British Columbia" },
   { src: "/images/applications/parks-paths/parks-paths-103.png", alt: "Community Path", category: "parks", location: "Canada", tall: true },
 
-  // ── Recreation ──────────────────────────────────────────────────────────────
+  // ── Recreation ──────────────────────────────────────────────────────────────────
   { src: "/images/blog/bc-childrens-hospital-labyrinth/featured.jpg", alt: "BC Children's Hospital Labyrinth", category: "recreation", location: "Vancouver, BC", tall: true },
   { src: "/images/blog/durable-coatings-waterparks/featured.jpg", alt: "Waterpark Surface Coating", category: "recreation", location: "Canada" },
   { src: "/images/blog/playgrounds-recreation/featured.jpg", alt: "Playground Surface", category: "recreation", location: "Canada" },
@@ -102,7 +102,7 @@ const IMAGES: GalleryImage[] = [
   { src: "/images/applications/sport-courts/sport-courts-05.jpg", alt: "Coloured Sport Court", category: "recreation", location: "Ontario", tall: true },
   { src: "/images/applications/sport-courts/sport-courts-10.jpg", alt: "Multi-Sport Court", category: "recreation", location: "Canada" },
 
-  // ── Parking ─────────────────────────────────────────────────────────────────
+  // ── Parking ───────────────────────────────────────────────────────────────────
   { src: "/images/blog/stamped-asphalt-parking-lot/featured.jpg", alt: "Stamped Asphalt Parking Lot", category: "parking", location: "Ontario", tall: true },
   { src: "/images/blog/commercial-applications/featured.jpg", alt: "Commercial Pavement", category: "parking", location: "Canada" },
   { src: "/images/applications/townhomes/townhomes-01.jpg", alt: "Townhome Driveway", category: "parking", location: "Ontario" },
@@ -119,7 +119,7 @@ const CATEGORIES: { value: Category; label: string; count: (imgs: GalleryImage[]
   { value: "parking", label: "Parking & Driveways", count: (imgs) => imgs.filter(i => i.category === "parking").length },
 ];
 
-// ── Lightbox ─────────────────────────────────────────────────────────────────
+// ── Lightbox ─────────────────────────────────────────────────────────────────────
 function Lightbox({
   images,
   index,
@@ -159,7 +159,7 @@ function Lightbox({
       <button
         onClick={onClose}
         className="absolute top-5 right-5 z-10 p-2.5 rounded-full"
-        style={{ background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.7)" }}
+        style={{ background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.7)" }}
       >
         <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path d="M18 6L6 18M6 6l12 12" strokeWidth={2} strokeLinecap="round" />
@@ -170,7 +170,7 @@ function Lightbox({
       <button
         onClick={(e) => { e.stopPropagation(); onPrev(); }}
         className="absolute left-4 top-1/2 -translate-y-1/2 z-10 p-3 rounded-full"
-        style={{ background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.7)" }}
+        style={{ background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.7)" }}
       >
         <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path d="M15 18l-6-6 6-6" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
@@ -206,7 +206,7 @@ function Lightbox({
       <button
         onClick={(e) => { e.stopPropagation(); onNext(); }}
         className="absolute right-4 top-1/2 -translate-y-1/2 z-10 p-3 rounded-full"
-        style={{ background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.7)" }}
+        style={{ background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.7)" }}
       >
         <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path d="M9 18l6-6-6-6" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
@@ -221,12 +221,42 @@ function Lightbox({
   );
 }
 
-// ── Main Gallery Page ─────────────────────────────────────────────────────────
+// ── Main Gallery Page ───────────────────────────────────────────────────────────────
+// Vernon (Aug 2026): break up how many images load at once. The archive was
+// rendering all photos in one 10,800px wall. Now: first PAGE, then +PAGE
+// as you approach the end — auto-load is right HERE (only the footer sits
+// below), while product/application galleries stay button-driven.
+const PAGE = 24;
+
 export default function GalleryPage() {
   const [active, setActive] = useState<Category>("all");
   const [lightbox, setLightbox] = useState<number | null>(null);
+  const [visible, setVisible] = useState(PAGE);
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
   const filtered = active === "all" ? IMAGES : IMAGES.filter((img) => img.category === active);
+  const displayed = filtered.slice(0, visible);
+  const hasMore = displayed.length < filtered.length;
+
+  // Auto-load the next page when the sentinel nears the viewport.
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el || !hasMore) return;
+    const obs = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setVisible((v) => Math.min(v + PAGE, filtered.length));
+        }
+      },
+      { rootMargin: "600px 0px" }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+    // `visible` in the deps recreates the observer after every chunk: the
+    // fresh observation re-checks immediately, so a sentinel that never left
+    // the 600px margin (tall viewport, fast scroll) keeps cascading instead
+    // of stalling after the first load.
+  }, [hasMore, filtered.length, visible]);
 
   const openLightbox = useCallback((i: number) => setLightbox(i), []);
   const closeLightbox = useCallback(() => setLightbox(null), []);
@@ -278,7 +308,7 @@ export default function GalleryPage() {
             return (
               <button
                 key={cat.value}
-                onClick={() => { setActive(cat.value); setLightbox(null); }}
+                onClick={() => { setActive(cat.value); setLightbox(null); setVisible(PAGE); }}
                 className="flex items-center gap-1.5 text-xs font-semibold px-4 py-2 rounded-full transition-all whitespace-nowrap"
                 style={{
                   background: isActive ? "#F97316" : "rgba(255,255,255,0.05)",
@@ -302,7 +332,19 @@ export default function GalleryPage() {
           })}
         </div>
 
-        {/* Masonry grid — CSS columns */}
+        {/* Tile entrance — collapses under reduced motion */}
+        <style>{`
+          @keyframes archive-tile-in {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+          }
+          @media (prefers-reduced-motion: reduce) {
+            .archive-tile { animation: none !important; opacity: 1 !important; }
+          }
+        `}</style>
+
+        {/* Uniform app grid — stable pagination (new tiles append at the end,
+            nothing reflows), 2-up on phones like a native photo app */}
         <AnimatePresence mode="wait">
           <motion.div
             key={active}
@@ -310,25 +352,23 @@ export default function GalleryPage() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            style={{
-              columns: "3 320px",
-              columnGap: "12px",
-            }}
+            className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-3"
           >
-            {filtered.map((img, i) => (
+            {displayed.map((img, i) => (
               <div
                 key={img.src + i}
-                className="group relative overflow-hidden rounded-xl cursor-pointer mb-3"
+                className="archive-tile group relative overflow-hidden rounded-xl cursor-pointer active:scale-[0.985] transition-transform duration-100"
                 style={{
-                  breakInside: "avoid",
-                  border: "1px solid rgba(255,255,255,0.06)",
+                  border: "1px solid rgba(255,255,255,0.07)",
+                  animation: "archive-tile-in 0.4s ease both",
+                  animationDelay: `${(i % PAGE) % 12 * 30}ms`,
                 }}
                 onClick={() => openLightbox(i)}
               >
                 <div
                   style={{
                     position: "relative",
-                    paddingBottom: img.tall ? "133%" : "66.66%",
+                    paddingBottom: "75%",
                     background: "var(--bg-card)",
                   }}
                 >
@@ -336,8 +376,10 @@ export default function GalleryPage() {
                     src={img.src}
                     alt={img.alt}
                     fill
+                    loading={i < 8 ? "eager" : "lazy"}
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    sizes="(max-width: 768px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                    quality={70}
                   />
                   {/* Hover overlay */}
                   <div
@@ -359,6 +401,22 @@ export default function GalleryPage() {
             ))}
           </motion.div>
         </AnimatePresence>
+
+        {/* Load more — sentinel auto-loads as it approaches; button as backup */}
+        {hasMore && (
+          <div ref={sentinelRef} className="mt-10 flex flex-col items-center gap-3">
+            <p className="text-xs" style={{ color: "#868c98" }} aria-live="polite">
+              Showing {displayed.length} of {filtered.length}
+            </p>
+            <button
+              onClick={() => setVisible((v) => Math.min(v + PAGE, filtered.length))}
+              className="px-6 py-2.5 rounded-lg text-sm font-semibold transition-all hover:brightness-110 active:scale-[0.97]"
+              style={{ background: "#f97316", color: "#fff" }}
+            >
+              Load more
+            </button>
+          </div>
+        )}
 
         {/* Empty state */}
         {filtered.length === 0 && (

@@ -163,7 +163,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
         </div>
 
         {/* Results panel */}
-        <div className="mt-2 rounded-2xl overflow-hidden" style={{ background: "rgba(10,14,23,0.98)", border: "1px solid rgba(255,255,255,0.08)", boxShadow: "0 24px 80px rgba(0,0,0,0.6)" }}>
+        <div className="mt-2 rounded-2xl overflow-hidden" style={{ background: "rgba(10,14,23,0.98)", border: "1px solid rgba(255,255,255,0.07)", boxShadow: "0 24px 80px rgba(0,0,0,0.6)" }}>
           {/* Default quick links */}
           {q.length < 2 && (
             <div className="p-4">
@@ -314,7 +314,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
             </div>
           )}
 
-          <div className="px-4 py-2.5 border-t flex items-center" style={{ borderColor: "rgba(255,255,255,0.05)", background: "rgba(255,255,255,0.02)" }}>
+          <div className="px-4 py-2.5 border-t flex items-center" style={{ borderColor: "rgba(255,255,255,0.05)", background: "rgba(255,255,255,0.025)" }}>
             <span className="text-xs" style={{ color: "rgba(255,255,255,0.5)" }}>Type to search · <kbd className="font-mono">ESC</kbd> to close</span>
           </div>
         </div>
@@ -497,7 +497,7 @@ function ProductsMegaMenu() {
               <div
                 key={cat.label}
                 className="rounded-xl overflow-hidden flex flex-col"
-                style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.06)" }}
+                style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
               >
                 <Link href="/products" className="relative block group" style={{ height: 80 }}>
                   <Image
@@ -542,7 +542,7 @@ function ProductsMegaMenu() {
                           {p.name}
                         </p>
                         {PRODUCT_TAGLINE[p.slug] && (
-                          <p className="text-[12px] leading-snug mt-1" style={{ color: "rgba(255,255,255,0.72)" }}>
+                          <p className="text-[12px] leading-snug mt-1" style={{ color: "rgba(255,255,255,0.7)" }}>
                             {PRODUCT_TAGLINE[p.slug]}
                           </p>
                         )}
@@ -559,7 +559,7 @@ function ProductsMegaMenu() {
                     <Link
                       href={cat.secondary.href}
                       className="group flex items-start justify-between gap-2 px-2 py-2.5 mt-1.5 rounded-md transition-colors hover:bg-white/5"
-                      style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
+                      style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
                     >
                       <div className="min-w-0">
                         <p className="text-[10px] font-bold tracking-[0.18em] uppercase" style={{ color: ACCENT }}>
@@ -588,7 +588,7 @@ function ProductsMegaMenu() {
       </div>
 
       {/* Featured project strip */}
-      <div className="mt-2 rounded-xl overflow-hidden relative" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
+      <div className="mt-2 rounded-xl overflow-hidden relative" style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}>
         <div className="flex items-center gap-4 px-4 py-2">
           <div className="flex-shrink-0 rounded-lg overflow-hidden" style={{ width: 56, height: 56 }}>
             {/* Fixed 56x56 box — width/height match the wrapper exactly, so no `sizes` needed. */}
@@ -597,7 +597,7 @@ function ProductsMegaMenu() {
           <div className="flex-1 min-w-0">
             <p className="text-[10px] font-bold tracking-[0.18em] uppercase mb-1" style={{ color: ACCENT }}>Featured Project</p>
             <p className="text-[13px] font-semibold leading-snug" style={{ color: "#F5F0EB" }}>UBC Musqueam Cultural Crosswalk</p>
-            <p className="text-[11px] mt-0.5" style={{ color: "rgba(255,255,255,0.62)" }}>TrafficPatterns · Vancouver, BC</p>
+            <p className="text-[11px] mt-0.5" style={{ color: "rgba(255,255,255,0.6)" }}>TrafficPatterns · Vancouver, BC</p>
           </div>
           <a href="/projects" className="flex-shrink-0 text-[11px] font-bold" style={{ color: ACCENT }}>See all →</a>
         </div>
@@ -605,14 +605,14 @@ function ProductsMegaMenu() {
 
       {/* Bottom strip — secondary entry points. Catalogue moved out of this
           row up to its own banner so it doesn't read as "another project." */}
-      <div className="mt-2.5 pt-2.5 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+      <div className="mt-2.5 pt-2.5 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
         <Link href="/resources"
           className="flex items-center justify-between px-4 py-2.5 rounded-lg transition-colors hover:bg-white/5"
           style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
             <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Spec sheets</p>
-            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.62)" }}>TDS, install guides, SDS</p>
+            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.6)" }}>TDS, install guides, SDS</p>
           </div>
           <svg width="14" height="14" fill="none" stroke="#FB923C" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
         </Link>
@@ -622,7 +622,7 @@ function ProductsMegaMenu() {
         >
           <div>
             <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Project gallery</p>
-            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.62)" }}>See products in the field</p>
+            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.6)" }}>See products in the field</p>
           </div>
           <svg width="14" height="14" fill="none" stroke="#FB923C" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
         </Link>
@@ -632,7 +632,7 @@ function ProductsMegaMenu() {
         >
           <div>
             <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Lunch &amp; Learn</p>
-            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.62)" }}>Free CPD session for your team</p>
+            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.6)" }}>Free CPD session for your team</p>
           </div>
           <svg width="14" height="14" fill="none" stroke="#FB923C" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
         </Link>
@@ -724,7 +724,7 @@ function FieldNotesMegaMenu() {
               key={post.slug}
               href={`/blog/${post.slug}`}
               className="group flex gap-3 p-3 rounded-xl transition-colors hover:bg-white/5"
-              style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.06)" }}
+              style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
             >
               <div className="relative flex-shrink-0 rounded-lg overflow-hidden" style={{ width: 72, height: 72 }}>
                 <Image
@@ -749,7 +749,7 @@ function FieldNotesMegaMenu() {
       </div>
 
       {/* Bottom strip — secondary entry points */}
-      <div className="mt-2.5 pt-2.5 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+      <div className="mt-2.5 pt-2.5 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
         <Link href="/blog"
           className="flex items-center justify-between px-4 py-2.5 rounded-lg transition-colors hover:bg-white/5"
           style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
@@ -849,7 +849,7 @@ function ApplicationsMegaMenu() {
       </div>
 
       {/* Featured field note strip */}
-      <div className="mt-2 rounded-xl overflow-hidden relative" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
+      <div className="mt-2 rounded-xl overflow-hidden relative" style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}>
         <div className="flex items-center gap-4 px-4 py-2">
           <div className="flex-shrink-0 rounded-lg overflow-hidden" style={{ width: 56, height: 56 }}>
             {/* Fixed 56x56 box — width/height match the wrapper exactly, so no `sizes` needed. */}
@@ -865,7 +865,7 @@ function ApplicationsMegaMenu() {
       </div>
 
       {/* Bottom strip — secondary entry points */}
-      <div className="mt-2.5 pt-2.5 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+      <div className="mt-2.5 pt-2.5 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
         <Link href="/projects"
           className="flex items-center justify-between px-4 py-2.5 rounded-lg transition-colors hover:bg-white/5"
           style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
@@ -953,7 +953,7 @@ function MobileGroupDivider({ label }: { label: string }) {
   return (
     <div className="flex items-center gap-3 px-1 pt-5 pb-2">
       <span className="text-[9px] font-bold tracking-[0.22em] uppercase" style={{ color: "rgba(255,255,255,0.5)" }}>{label}</span>
-      <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.06)" }} />
+      <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.07)" }} />
     </div>
   );
 }
@@ -1224,7 +1224,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                       onClick={onClose}
                       className="flex gap-4 p-3 rounded-2xl active:scale-[0.98] active:opacity-75 transition-[transform,opacity] duration-100"
                       style={{
-                        background: "rgba(255,255,255,0.03)",
+                        background: "rgba(255,255,255,0.025)",
                         border: "1px solid rgba(255,255,255,0.07)",
                       }}
                     >
@@ -1274,7 +1274,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
           <div
             className="flex-shrink-0 px-4 pt-3 pb-4"
             style={{
-              borderTop: "1px solid rgba(255,255,255,0.08)",
+              borderTop: "1px solid rgba(255,255,255,0.07)",
               background: "rgba(7,11,18,0.96)",
               backdropFilter: "blur(20px)",
               paddingBottom: "max(16px, env(safe-area-inset-bottom))",
@@ -1584,7 +1584,7 @@ export default function Nav() {
             {/* Resources — ghost */}
             <a href="/resources"
               className="px-3 py-1.5 rounded-lg text-[13px] font-semibold transition-all hover:border-orange-500/50 hover:text-orange-400"
-              style={{ border: "1px solid rgba(255,255,255,0.22)", color: "rgba(255,255,255,0.75)" }}
+              style={{ border: "1px solid rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.75)" }}
             >
               Resources
             </a>

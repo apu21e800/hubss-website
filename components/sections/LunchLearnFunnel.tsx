@@ -515,7 +515,7 @@ export default function LunchLearnFunnel({
               </div>
             ))}
           </div>
-        </section>
+        </div>
       </section>
 
       {/* ── FORM ──────────────────────────────────────────────────────────── */}

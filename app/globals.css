@@ -31,21 +31,27 @@
   --gradient-brand-subtle: linear-gradient(90deg, rgba(249,115,22,0.12) 0%, rgba(234,179,8,0.12) 100%);
   --gradient-glow:  0 0 20px rgba(249,115,22,0.25);
 
-  /* ─── Section backgrounds ────────────────────────────────── */
+  /* ─── Section backgrounds ──────────────────────── */
   /* Blue territory — HUBSS brand identity */
   --bg-primary:     #0f1620;   /* main page bg — blue-charcoal */
   --bg-dark:        #0d1117;   /* deep navy — hero / footer / feature sections */
   --bg-slate:       #111C2D;   /* blue accent sections */
   --bg-slate-light: #182436;
 
-  /* UI surfaces — HUBSS charcoal card system (official grey #20201F) */
+  /* UI surfaces — blue elevation ladder (Vernon, Aug 2026: "the slate grey
+     needs to be a bit darker on the cards site wide, seems too weak").
+     The old warm charcoal cards (#232221/#20201F — HUBSS print grey) sat on
+     the cool navy page background; warm-on-cool at near-equal darkness reads
+     muddy, not elevated. Cards now step up the SAME blue family as the page
+     — deeper and richer than the old grey, with clearly better separation.
+     The official charcoal survives as --color-charcoal for print/brand use. */
   --bg-neutral:        #141414;  /* warm neutral anchor — stats/utility sections */
-  --bg-card:           #232221;  /* charcoal card on dark-blue bg — one step above official grey */
-  --bg-card-surface:   #2A2927;  /* card hover */
-  --bg-card-hover:     #2A2927;
-  --bg-card-neutral:   #20201F;  /* card on neutral/grey bg — the official charcoal itself */
+  --bg-card:           #172234;  /* raised card on dark-blue bg (L2) */
+  --bg-card-surface:   #1D2A3F;  /* hover / active surface (L3) */
+  --bg-card-hover:     #1D2A3F;
+  --bg-card-neutral:   #131C2B;  /* resting card (L1) — blog, resources, doc cards */
 
-  /* ─── Text ──────────────────────────────────────── */
+  /* ─── Text ──────────────────────────────── */
   --text-primary:   #ffffff;
   --text-body:      #e0e0e0;
   --text-secondary: #8b8b8b;
@@ -59,7 +65,7 @@
   --text-faint:     #808080;
   --text-hint:      #2a2a2a;
 
-  /* ─── Borders ───────────────────────────────────── */
+  /* ─── Borders ───────────────────────────── */
   --border-color:   rgba(255,255,255,0.07);  /* on dark-blue bg */
   --border-subtle:  rgba(255,255,255,0.05);
   --border-faint:   rgba(255,255,255,0.03);
@@ -151,7 +157,7 @@ p {
   line-height: 1.75;
 }
 
-/* ─── Section padding utility ─────────────────────────── */
+/* ─── Section padding utility ───────────────────── */
 .section-padding {
   padding-top: 96px;
   padding-bottom: 96px;
@@ -164,7 +170,7 @@ p {
   }
 }
 
-/* ─── Scrollbar hide utility ─────────────────────────── */
+/* ─── Scrollbar hide utility ───────────────────── */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
@@ -173,7 +179,7 @@ p {
   scrollbar-width: none;
 }
 
-/* ─── Grain texture animation ─────────────────────────── */
+/* ─── Grain texture animation ───────────────────── */
 @keyframes grain {
   0%, 100% { transform: translate(0, 0); }
   10%       { transform: translate(-2%, -3%); }
@@ -191,7 +197,7 @@ p {
   animation: grain 8s steps(1) infinite;
 }
 
-/* ─── Client ticker ───────────────────────────────────── */
+/* ─── Client ticker ───────────────────────────── */
 @keyframes ticker {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
@@ -206,13 +212,13 @@ p {
   padding: 0 1.5rem;
 }
 
-/* ─── Generic fade up ─────────────────────────────────── */
+/* ─── Generic fade up ─────────────────────────── */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ─── Asphalt texture background ─────────────────────── */
+/* ─── Asphalt texture background ─────────────────── */
 /* Fallback: pure CSS noise pattern if asphalt-texture.jpg is missing */
 .bg-asphalt-subtle {
   background-color: #0f1620;
@@ -224,7 +230,7 @@ p {
   background-blend-mode: soft-light, normal, normal;
 }
 
-/* ─── Gradient text utilities ─────────────────────────── */
+/* ─── Gradient text utilities ───────────────────── */
 .grad-text,
 .gradient-text {
   background:              var(--gradient-brand);
@@ -233,14 +239,14 @@ p {
   background-clip:         text;
 }
 
-/* ─── Gradient bottom border ──────────────────────────── */
+/* ─── Gradient bottom border ────────────────────── */
 .gradient-border-bottom {
   border-bottom: 2px solid transparent;
   border-image: var(--gradient-brand) 1;
 }
 
 
-/* ─── CTA button gradient ─────────────────────────────── */
+/* ─── CTA button gradient ───────────────────────── */
 .btn-primary,
 .cta-btn {
   background: linear-gradient(90deg, #F97316 0%, #D97706 100%);
@@ -254,7 +260,7 @@ p {
 }
 
 
-/* ─── yet-another-react-lightbox theming ─────────────── */
+/* ─── yet-another-react-lightbox theming ───────────── */
 .yarl__root {
   --yarl__color_backdrop:              rgba(8, 8, 8, 0.97);
   --yarl__color_button:                #f97316;
@@ -265,7 +271,7 @@ p {
   --yarl__slide_captions_container_background: linear-gradient(to top, rgba(0,0,0,0.82), transparent);
 }
 
-/* ─── Blog article prose overrides ───────────────────── */
+/* ─── Blog article prose overrides ───────────────── */
 .blog-prose {
   color: #c9d1db;
   font-size: 1rem;
@@ -474,7 +480,7 @@ p {
   color: #d1d5db;
 }
 
-/* ─── Asphalt noise texture ──────────────────────────── */
+/* ─── Asphalt noise texture ────────────────────── */
 /* Apply to full-black sections (Hero, Footer).            */
 /* SWAP ::before background-image with real asphalt photo  */
 /* once available at /images/textures/asphalt.jpg          */
@@ -493,7 +499,7 @@ p {
   z-index: 0;
 }
 
-/* ─── Section / grid utility classes ─────────────────── */
+/* ─── Section / grid utility classes ───────────────── */
 /* Vernon: no repeating grid/graph-paper textures anywhere.   */
 /* Classes preserved as solid-colour backgrounds so existing  */
 /* call sites stay valid; the repeating gradient is removed.  */
@@ -513,7 +519,7 @@ p {
   --border-subtle: #1f1f1f;
 }
 
-/* ─── Page-load gradient sweep ───────────────────────── */
+/* ─── Page-load gradient sweep ───────────────────── */
 @keyframes page-sweep {
   from { transform: translateX(-100%); }
   to   { transform: translateX(100%); }
@@ -546,7 +552,7 @@ p {
   100% { opacity: 0; }
 }
 
-/* ─── CTA button pulse (single, on appear) ───────────── */
+/* ─── CTA button pulse (single, on appear) ─────────── */
 @keyframes cta-pulse {
   0%   { box-shadow: 0 0 0 0 rgba(249,115,22,0.4); }
   70%  { box-shadow: 0 0 0 10px rgba(249,115,22,0); }
@@ -557,7 +563,7 @@ p {
   animation: cta-pulse 0.8s ease-out 0.5s 1;
 }
 
-/* ─── Gradient underline hover (scaleX 0→1) ──────────── */
+/* ─── Gradient underline hover (scaleX 0→1) ────────── */
 .hover-underline-gradient {
   position: relative;
 }
@@ -577,4 +583,57 @@ p {
 
 .hover-underline-gradient:hover::after {
   transform: scaleX(1);
+}
+
+/* ─── Site-wide finish (investor pass, Wave 1) ─────────────────────────
+   The details a visitor's OS would otherwise fill in with defaults:
+   grey Windows scrollbars on a dark site, blue text selection, invisible
+   keyboard focus. Each is one small rule; together they read as "finished". */
+
+/* Text selection in brand orange — visible on every page, costs nothing. */
+::selection {
+  background: rgba(249, 115, 22, 0.85);
+  color: #0d1117;
+}
+
+/* Keyboard focus: one consistent ring everywhere. Mouse clicks stay clean
+   (:focus-visible only), so this shows up exactly when someone tabs. */
+:focus-visible {
+  outline: 2px solid rgba(249, 115, 22, 0.8);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Scrollbars themed to the page instead of OS default grey-on-white.
+   Component-level scrollbar classes (panel/strip) still override these. */
+html {
+  scrollbar-color: rgba(255, 255, 255, 0.18) #0d1117; /* Firefox */
+}
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-track {
+  background: #0d1117;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+  border: 3px solid #0d1117; /* inset look */
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(249, 115, 22, 0.55);
+}
+
+/* Respect reduced-motion: collapse animations/transitions to instants.
+   Framer Motion reads the same media query for its own animations. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

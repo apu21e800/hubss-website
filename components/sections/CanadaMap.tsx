@@ -626,29 +626,33 @@ function FilterChip({
   onClick,
   children,
   count,
+  title,
 }: {
   active: boolean;
   onClick: () => void;
   children: React.ReactNode;
   count?: number;
+  title?: string;
 }) {
   return (
     <button
       type="button"
       aria-pressed={active}
       onClick={onClick}
+      title={title}
+      aria-label={title}
       style={{
         display: "inline-flex",
         alignItems: "center",
         gap: 6,
-        padding: "7px 13px",
+        padding: "6px 12px",
         borderRadius: 20,
         border: active
           ? "1px solid rgba(249,115,22,0.65)"
           : "1px solid rgba(255,255,255,0.1)",
         background: active ? "rgba(249,115,22,0.16)" : "rgba(255,255,255,0.03)",
         color: active ? "#F5F0EB" : "#B7BDC8",
-        fontSize: 12,
+        fontSize: 11.5,
         fontWeight: 600,
         cursor: "pointer",
         whiteSpace: "nowrap",
@@ -675,7 +679,7 @@ function FilterChip({
   );
 }
 
-// ── Main component ──────────────────────────────────────────────────────────────
+// ── Main component ──────────────────────────────────────────────────────────────────
 export default function CanadaMap() {
   const mapRef = useRef<MapRef>(null);
   const sectionRef = useRef<HTMLElement>(null);
@@ -709,7 +713,7 @@ export default function CanadaMap() {
   }, []);
   const popupClearTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // ── Product filter drives the pins themselves ──────────────────────
+  // ── Product filter drives the pins themselves ──────────────────
   const filteredProjects = useMemo(
     () => (productFilter ? mapProjects.filter((p) => p.product === productFilter) : mapProjects),
     [productFilter]
@@ -736,7 +740,7 @@ export default function CanadaMap() {
     [filteredProjects]
   );
 
-  // ── GeoJSON for hover ring ─────────────────────────────────────────
+  // ── GeoJSON for hover ring ─────────────────────────────────
   const hoveredProject = useMemo(
     () => (hoveredId ? mapProjects.find((p) => p.id === hoveredId) ?? null : null),
     [hoveredId]
@@ -802,7 +806,7 @@ export default function CanadaMap() {
     mapRef.current?.fitBounds(CANADA_BOUNDS, { ...FIT_OPTIONS, duration: 1100 });
   }, []);
 
-  // ── Province quick-zoom ──────────────────────────────────────────────
+  // ── Province quick-zoom ──────────────────────────────────────
   const handleProvince = useCallback(
     (prov: string | null) => {
       if (prov === null) {
@@ -832,7 +836,7 @@ export default function CanadaMap() {
     []
   );
 
-  // ── Map layer click handler ──────────────────────────────────────────
+  // ── Map layer click handler ──────────────────────────────────────
   // maplibre-gl v3+ uses Promise (not callback) for getClusterExpansionZoom
   const handleMapLayerClick = useCallback(
     async (event: MapLayerMouseEvent) => {
@@ -873,7 +877,7 @@ export default function CanadaMap() {
     []
   );
 
-  // ── Mouse move — hover on layers ──────────────────────────────────────
+  // ── Mouse move — hover on layers ──────────────────────────────────
   // When a popup is PINNED, hover never replaces or clears it. Only marker-click
   // and the close button toggle the pinned popup.
   const handleMouseMove = useCallback(
@@ -946,7 +950,7 @@ export default function CanadaMap() {
     return () => document.removeEventListener("keydown", onKey);
   }, [popupProject, selectedProject]);
 
-  // ── Panel card interaction ─────────────────────────────────────────
+  // ── Panel card interaction ─────────────────────────────────
   const handlePanelHover = useCallback((id: string | null) => {
     setHoveredId(id);
     // Don't show hover popups from the panel — but never kill a PINNED one:
@@ -1051,12 +1055,18 @@ export default function CanadaMap() {
           background: rgba(249,115,22,0.25);
           border-radius: 4px;
         }
-        /* Chip rows scroll horizontally on small screens instead of wrapping forever */
+        /* Chip rows: always ONE line each — scroll, never wrap (Vernon: three
+           wrapped rows of pills buried the map). Scrollbar hidden; at desktop
+           widths everything fits anyway. */
         .canada-map-chips {
           display: flex;
           gap: 8px;
-          flex-wrap: wrap;
+          flex-wrap: nowrap;
+          overflow-x: auto;
+          scrollbar-width: none;
+          -webkit-overflow-scrolling: touch;
         }
+        .canada-map-chips::-webkit-scrollbar { display: none; }
         /* Mobile strip — replaces the side panel below 900px */
         .canada-map-strip { display: none; }
         .canada-map-strip-scroll::-webkit-scrollbar { height: 4px; }
@@ -1067,12 +1077,6 @@ export default function CanadaMap() {
         @media (max-width: 900px) {
           .canada-map-panel { display: none !important; }
           .canada-map-strip { display: block; }
-          .canada-map-chips {
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            padding-bottom: 6px;
-            -webkit-overflow-scrolling: touch;
-          }
           .canada-map-layout { height: clamp(320px, 52vh, 560px) !important; }
         }
         @media (max-width: 640px) {
@@ -1175,7 +1179,7 @@ export default function CanadaMap() {
           </div>
 
           {/* ── Province quick-zoom ────────────────────────────────────────── */}
-          <div className="canada-map-chips" style={{ marginBottom: 10 }} role="group" aria-label="Zoom to province">
+          <div className="canada-map-chips" style={{ marginBottom: 8 }} role="group" aria-label="Zoom to province">
             <FilterChip active={provinceFocus === null && !viewMoved} onClick={() => handleProvince(null)}>
               All Canada
             </FilterChip>
@@ -1185,14 +1189,15 @@ export default function CanadaMap() {
                 active={provinceFocus === prov}
                 onClick={() => handleProvince(prov)}
                 count={count}
+                title={PROVINCE_LABEL[prov] ?? prov}
               >
-                {PROVINCE_LABEL[prov] ?? prov}
+                {prov}
               </FilterChip>
             ))}
           </div>
 
           {/* ── Product filter ─────────────────────────────────────────────── */}
-          <div className="canada-map-chips" style={{ marginBottom: 14 }} role="group" aria-label="Filter by product system">
+          <div className="canada-map-chips" style={{ marginBottom: 12 }} role="group" aria-label="Filter by product system">
             <FilterChip active={productFilter === null} onClick={() => handleProductFilter(null)}>
               All systems
             </FilterChip>

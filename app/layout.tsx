@@ -64,6 +64,11 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en">
       <body className={`${geist.variable} ${inter.variable} antialiased`}>
+        {/* Resource hints — React 19 hoists these into <head>. The landing
+            page's map pulls style + tiles + glyphs from CARTO; warming the
+            connection here shaves the first paint of the section. */}
+        <link rel="preconnect" href="https://basemaps.cartocdn.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://basemaps.cartocdn.com" />
         {children}
         <StickyBar />
         <CrispChat />

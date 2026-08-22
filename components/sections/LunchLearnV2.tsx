@@ -172,7 +172,7 @@ function MoreLink() {
 }
 
 // ═════════════════════════════════════════════════════════════════════════════
-// Variant A — "Boardroom": one elevated card, inset form, Moose on the corner
+// Variant A — "Boardroom": one elevated card, inset form, Moose as host
 // ═════════════════════════════════════════════════════════════════════════════
 function Boardroom() {
   const f = useLunchLearnForm(true);
@@ -193,13 +193,27 @@ function Boardroom() {
             <div className="grid grid-cols-1 lg:grid-cols-12">
               {/* Copy side */}
               <div className="lg:col-span-7 p-7 sm:p-10 lg:p-12 lg:pr-6">
-                <div className="flex items-center gap-3 mb-5">
-                  <span className="relative flex-shrink-0 w-10 h-10 rounded-full overflow-hidden" style={{ background: "rgba(249,115,22,0.14)", border: "1px solid rgba(249,115,22,0.3)" }}>
-                    <Image src={MOOSE.src} alt={MOOSE.alt} fill className="object-cover object-top" sizes="40px" />
+                {/* Vernon (Aug 2026): corner Moose removed; the host avatar
+                    carries him instead — bigger, ringed, face-first billing. */}
+                <div className="flex items-center gap-4 mb-6">
+                  <span
+                    className="relative flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden"
+                    style={{
+                      background: "rgba(249,115,22,0.14)",
+                      border: "2px solid rgba(249,115,22,0.5)",
+                      boxShadow: "0 0 0 3px rgba(249,115,22,0.12), 0 6px 20px rgba(0,0,0,0.35)",
+                    }}
+                  >
+                    <Image src={MOOSE.src} alt={MOOSE.alt} fill className="object-cover object-top" sizes="64px" />
                   </span>
-                  <p className="text-[11px] font-bold tracking-[0.2em] uppercase" style={{ color: "#FB923C" }}>
-                    Lunch &amp; Learn · Hosted by the HUB team — and Moose
-                  </p>
+                  <div>
+                    <p className="text-[11px] font-bold tracking-[0.2em] uppercase" style={{ color: "#FB923C" }}>
+                      Lunch &amp; Learn
+                    </p>
+                    <p className="text-[14px] font-semibold mt-0.5" style={{ color: "#F5F0EB" }}>
+                      Hosted by the HUB team — and Moose, site dog
+                    </p>
+                  </div>
                 </div>
 
                 <h2 className="font-black mb-4" style={{ fontSize: "clamp(2rem, 4vw, 3.1rem)", lineHeight: 1.0, letterSpacing: "-0.03em", color: "#F5F0EB" }}>
@@ -298,18 +312,6 @@ function Boardroom() {
                 </div>
               </div>
             </div>
-          </motion.div>
-
-          {/* Moose on the card corner — desktop */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.15 }}
-            className="hidden lg:block absolute pointer-events-none select-none"
-            style={{ right: -8, bottom: -6, width: 150, zIndex: 10 }}
-          >
-            <Image src={MOOSE.src} alt="" aria-hidden="true" width={320} height={400} className="w-full h-auto drop-shadow-2xl" sizes="150px" />
           </motion.div>
         </div>
       </div>

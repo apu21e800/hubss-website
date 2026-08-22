@@ -11,6 +11,7 @@ interface ContactPayload {
   city?: string;
   phone?: string;
   projectType?: string;
+  format?: string; // lunch-learn: In-person | Virtual | Either
   message?: string;
   website?: string; // honeypot
 }
@@ -23,6 +24,7 @@ function buildEmailHtml(data: ContactPayload): string {
     data.city && `<tr><td><strong>City</strong></td><td>${data.city}</td></tr>`,
     data.phone && `<tr><td><strong>Phone</strong></td><td>${data.phone}</td></tr>`,
     data.projectType && `<tr><td><strong>Project Type</strong></td><td>${data.projectType}</td></tr>`,
+    data.format && `<tr><td><strong>Session Format</strong></td><td>${data.format}</td></tr>`,
     data.message && `<tr><td><strong>Message</strong></td><td style="white-space:pre-wrap">${data.message}</td></tr>`,
   ]
     .filter(Boolean)

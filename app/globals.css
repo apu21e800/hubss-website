@@ -38,12 +38,18 @@
   --bg-slate:       #111C2D;   /* blue accent sections */
   --bg-slate-light: #182436;
 
-  /* UI surfaces — HUBSS charcoal card system (official grey #20201F) */
+  /* UI surfaces — blue elevation ladder (Vernon, Aug 2026: "the slate grey
+     needs to be a bit darker on the cards site wide, seems too weak").
+     The old warm charcoal cards (#232221/#20201F — HUBSS print grey) sat on
+     the cool navy page background; warm-on-cool at near-equal darkness reads
+     muddy, not elevated. Cards now step up the SAME blue family as the page
+     — deeper and richer than the old grey, with clearly better separation.
+     The official charcoal survives as --color-charcoal for print/brand use. */
   --bg-neutral:        #141414;  /* warm neutral anchor — stats/utility sections */
-  --bg-card:           #232221;  /* charcoal card on dark-blue bg — one step above official grey */
-  --bg-card-surface:   #2A2927;  /* card hover */
-  --bg-card-hover:     #2A2927;
-  --bg-card-neutral:   #20201F;  /* card on neutral/grey bg — the official charcoal itself */
+  --bg-card:           #172234;  /* raised card on dark-blue bg (L2) */
+  --bg-card-surface:   #1D2A3F;  /* hover / active surface (L3) */
+  --bg-card-hover:     #1D2A3F;
+  --bg-card-neutral:   #131C2B;  /* resting card (L1) — blog, resources, doc cards */
 
   /* ─── Text ──────────────────────────────── */
   --text-primary:   #ffffff;

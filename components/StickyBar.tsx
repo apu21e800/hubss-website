@@ -70,6 +70,12 @@ export default function StickyBar() {
         <div className="flex items-center gap-2.5 w-full lg:w-auto">
           <Link
             href="/products"
+            // Bar is translated off-screen + aria-hidden when !visible, but a
+            // real <a> stays keyboard-focusable regardless of transform or
+            // aria-hidden — Tab would silently land on an invisible link
+            // (axe: aria-hidden-focus). tabIndex={-1} pulls it out of the tab
+            // order to match what's actually on screen.
+            tabIndex={visible ? undefined : -1}
             className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 border text-white px-5 text-[12px] font-bold tracking-[0.04em] transition-all whitespace-nowrap"
             style={{
               borderColor: "rgba(255,255,255,0.2)",
@@ -89,6 +95,7 @@ export default function StickyBar() {
           </Link>
           <Link
             href="/lunch-learn"
+            tabIndex={visible ? undefined : -1}
             className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 text-white px-5 text-[12px] font-bold tracking-[0.04em] transition-colors whitespace-nowrap"
             style={{
               background: "#F97316",

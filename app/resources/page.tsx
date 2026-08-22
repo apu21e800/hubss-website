@@ -1,8 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
-import { promises as fs } from "node:fs";
-import path from "node:path";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
@@ -10,29 +6,9 @@ import { resourceDocuments, applyDocOverrides } from "@/lib/resource-documents";
 import ResourcesClient from "@/components/resources/ResourcesClient";
 import { getResourceDocuments } from "@/lib/sanity.queries";
 import { showCatalogue } from "@/lib/feature-flags";
+import Image from "next/image";
 
 import { buildMetadata } from "@/lib/seo";
-
-// Mirror /catalogue's auto-detect so the Resources feature card always
-// shows the cover from the newest rendered catalogue version.
-async function getCatalogueCover(): Promise<{ src: string; pageCount: number } | null> {
-  try {
-    const root = path.join(process.cwd(), "public", "catalogue");
-    const dirs = await fs.readdir(root, { withFileTypes: true });
-    const versions = dirs
-      .filter((d) => d.isDirectory() && /^v\d+$/.test(d.name))
-      .map((d) => ({ name: d.name, n: parseInt(d.name.slice(1), 10) }))
-      .sort((a, b) => b.n - a.n);
-    for (const v of versions) {
-      const versionDir = path.join(root, v.name);
-      const files = (await fs.readdir(versionDir)).filter((f) => /^page-\d{3}\.webp$/.test(f));
-      if (files.length > 0) {
-        return { src: `/catalogue/${v.name}/page-001.webp`, pageCount: files.length };
-      }
-    }
-  } catch { /* fall through */ }
-  return null;
-}
 
 export const revalidate = 3600;
 
@@ -45,10 +21,30 @@ export const metadata: Metadata = buildMetadata({
 
 export default async function ResourcesPage() {
   const sanityDocs = await getResourceDocuments().catch(() => null);
-  const docs = applyDocOverrides(sanityDocs ?? resourceDocuments);
-  // Skip cover lookup entirely when the catalogue is hidden — keeps the
-  // gated section from leaking even an image path.
-  const catalogue = showCatalogue() ? await getCatalogueCover() : null;
+  // Sanity-curated entries take precedence (Vernon's siteSettings array
+  // wins when an id exists in both). Then append any hardcoded entries
+  // whose id is NOT present in Sanity — that's how the Catalogue + the
+  // 14 product flyers reach the page even though they haven't been
+  // imported into Sanity yet. Previous logic (`sanityDocs ?? hardcoded`)
+  // replaced wholesale, so any Sanity response — even just the 89 legacy
+  // spec sheets — silently dropped the catalogue and flyers from view.
+  const merged = applyDocOverrides(
+    sanityDocs
+      ? [
+          ...sanityDocs,
+          ...resourceDocuments.filter(
+            (d) => !sanityDocs.some((s) => s.id === d.id),
+          ),
+        ]
+      : resourceDocuments,
+  );
+
+  // Catalogue card is gated on the same flag as the /catalogue route it
+  // links to: visible on staging/preview for review, hidden on production
+  // until NEXT_PUBLIC_SHOW_CATALOGUE is set — so it never dead-links.
+  const docs = showCatalogue()
+    ? merged
+    : merged.filter((d) => d.id !== "catalogue-2026");
 
   return (
     <main
@@ -85,70 +81,61 @@ export default async function ResourcesPage() {
         >
           Specification Library
         </h1>
-        <p className="text-base max-w-2xl" style={{ color: "#6B7280" }}>
+        <p className="text-base max-w-2xl" style={{ color: "#868C98" }}>
           Technical data sheets, brochures, safety guides, and installation
           resources for every HUBSS product.
         </p>
       </div>
 
-      {/* ── Catalogue 2026 feature — compact flipbook CTA ──────
-            Tidy horizontal card: cover thumb + label + arrow. Sits
-            modestly above the document library so it's findable
-            without dominating the hero. */}
-      {catalogue && (
-        <div className="relative max-w-3xl mx-auto px-6 pb-10 sm:pb-12">
-          <Link
+      {/* ── Catalogue 2026 feature card ──────────────────────
+          Prominent, flag-gated entry to the flipbook (mirrors the
+          mega-menu banner). The catalogue also stays in the filterable
+          library below; this card guarantees it's accessible without
+          paging. Hidden on production until NEXT_PUBLIC_SHOW_CATALOGUE. */}
+      {showCatalogue() && (
+        <div className="relative max-w-7xl mx-auto px-6 -mt-6 mb-14">
+          <a
             href="/catalogue?utm_source=resources&utm_medium=feature_card&utm_campaign=catalogue"
-            className="group flex items-stretch gap-4 sm:gap-5 overflow-hidden rounded-xl pr-4 sm:pr-5 transition-all duration-300 hover:-translate-y-[2px] hover:shadow-[0_8px_28px_rgba(249,115,22,0.15)]"
+            className="group flex flex-col sm:flex-row items-stretch overflow-hidden rounded-2xl transition-all hover:-translate-y-[2px]"
             style={{
-              background: "rgba(255,255,255,0.025)",
-              border: "1px solid rgba(255,255,255,0.08)",
+              background:
+                "linear-gradient(90deg, rgba(249,115,22,0.12) 0%, rgba(249,115,22,0.05) 50%, rgba(255,255,255,0.03) 100%)",
+              border: "1px solid rgba(249,115,22,0.30)",
+              boxShadow: "0 8px 30px rgba(0,0,0,0.25)",
             }}
           >
-            {/* Cover thumb — newest rendered v{NN} page-001 (UBC + Musqueam) */}
-            <div
-              className="relative flex-shrink-0 overflow-hidden bg-black"
-              style={{ width: 88, height: 88 }}
-            >
+            <div className="relative flex-shrink-0 overflow-hidden bg-black sm:w-[200px] h-[150px] sm:h-auto">
+              {/* Card is full-width (minus the px-6 page padding) below the
+                  `sm` breakpoint (640px), then a fixed 200px sidebar above it.
+                  Empirically the LCP element on this route (measured via
+                  PerformanceObserver), so it's the one priority image here. */}
               <Image
-                src={catalogue.src}
-                alt="HUB Surface Systems Catalogue 2026 — cover thumbnail"
+                src="/catalogue/cover.webp"
+                alt="HUB Surface Systems 2026 Catalogue cover"
                 fill
-                sizes="88px"
+                sizes="(max-width: 639px) calc(100vw - 48px), 200px"
+                priority
                 className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
               />
             </div>
-
-            {/* Label */}
-            <div className="flex-1 min-w-0 py-3">
-              <p
-                className="text-[10px] font-bold tracking-[0.2em] uppercase mb-0.5"
-                style={{ color: "#FB923C" }}
-              >
+            <div className="flex-1 min-w-0 p-6 sm:p-7 flex flex-col justify-center">
+              <p className="text-[11px] font-bold tracking-[0.22em] uppercase mb-2 flex items-center gap-2" style={{ color: "#FB923C" }}>
                 Catalogue 2026
+                <span className="text-[9px] font-bold tracking-[0.18em] uppercase px-1.5 py-0.5 rounded" style={{ background: "rgba(249,115,22,0.20)" }}>New</span>
               </p>
-              <p
-                className="text-sm sm:text-base font-semibold leading-snug"
-                style={{ color: "#F5F0EB" }}
-              >
-                Browse the catalogue in your browser
-              </p>
-              <p
-                className="text-[11px] mt-0.5"
-                style={{ color: "rgba(255,255,255,0.55)" }}
-              >
-                {catalogue.pageCount} pages · free to read
+              <h2 className="text-xl sm:text-2xl font-bold leading-snug mb-1.5" style={{ color: "#F5F0EB" }}>
+                Browse the 2026 catalogue in your browser
+              </h2>
+              <p className="text-sm" style={{ color: "rgba(255,255,255,0.65)" }}>
+                140 pages · every product &amp; application · free to read, no download
               </p>
             </div>
-
-            {/* Arrow */}
-            <span
-              className="flex-shrink-0 self-center inline-flex items-center gap-1.5 text-[11px] font-bold tracking-[0.18em] uppercase transition-transform duration-200 group-hover:translate-x-1"
-              style={{ color: "#FB923C" }}
-            >
-              Open <span aria-hidden="true">→</span>
-            </span>
-          </Link>
+            <div className="flex-shrink-0 self-center pr-7 pb-6 sm:pb-0">
+              <span className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.18em] uppercase transition-transform duration-200 group-hover:translate-x-1" style={{ color: "#FB923C" }}>
+                Open <span aria-hidden="true">→</span>
+              </span>
+            </div>
+          </a>
         </div>
       )}
 
@@ -156,7 +143,7 @@ export default async function ResourcesPage() {
       <section
         className="relative overflow-hidden"
         style={{
-          background: "#1a1e28",
+          background: "var(--bg-card)",
           borderTop: "1px solid rgba(255,255,255,0.08)",
           borderBottom: "1px solid rgba(255,255,255,0.08)",
         }}
@@ -195,7 +182,7 @@ export default async function ResourcesPage() {
               className="flex-1 h-px"
               style={{ background: "rgba(255,255,255,0.07)" }}
             />
-            <span className="text-xs" style={{ color: "#6B7280" }}>
+            <span className="text-xs" style={{ color: "#868C98" }}>
               {docs.length} total
             </span>
           </div>
@@ -203,7 +190,7 @@ export default async function ResourcesPage() {
         </div>
       </section>
 
-      <LunchLearn />
+            <LunchLearn />
       <Footer />
     </main>
   );

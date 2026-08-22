@@ -46,7 +46,7 @@ export const APPLICATION_KEYWORDS: Record<string, string[]> = {
 
 /** Words that should always lead somewhere useful even with zero matches elsewhere. */
 export const FALLBACK_SUGGESTIONS = [
-  { label: "StreetPrint patterns", href: "/products/streetprint", terms: ["pattern", "template", "stamp", "herringbone", "cobble", "ashlar", "brick"] },
+  { label: "The pattern library", href: "/patterns", terms: ["pattern", "template", "stamp", "herringbone", "cobble", "ashlar", "brick"] },
   { label: "Colour systems", href: "/products/streetbond#colours", terms: ["colour", "color", "palette", "swatch", "pantone", "pms"] },
   { label: "Resource library", href: "/resources", terms: ["pdf", "spec", "tds", "sds", "data sheet", "download"] },
   { label: "Book a Lunch & Learn", href: "/lunch-learn", terms: ["lunch", "learn", "presentation", "ce credit", "training", "seminar"] },

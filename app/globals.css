@@ -1,5 +1,19 @@
-@import "tailwindcss";
+/* Tailwind v4 auto-scans every non-gitignored file for class names and
+   chokes on binary files whose extensions miss its case-sensitive text
+   blocklist (.icc colour profile, .eps/.dwg vector originals, uppercase
+   .JPG photos). That's what killed every Vercel build since early June —
+   "CssSyntaxError: Invalid code point" reported here at 1:1. This repo
+   deliberately carries large binary asset trees (catalog-print-build/,
+   public/images/), so auto-detection is the wrong mode: source(none)
+   turns it off and the explicit @source list below scans only the dirs
+   where class names actually live. */
+@import "tailwindcss" source(none);
 @plugin "@tailwindcss/typography";
+@source "../app";
+@source "../components";
+@source "../lib";
+@source "../content";
+@source "../sanity";
 
 :root {
   --font-geist: '';
@@ -10,6 +24,7 @@
 
   /* ─── Brand — never change between themes ───────── */
   --color-orange:   #F97316;
+  --color-charcoal: #20201F;   /* HUBSS official grey — "Charcoal" */
   --color-amber:    #EAB308;
   --gradient-brand: linear-gradient(90deg, #F97316, #EAB308);
   --gradient-brand-vertical: linear-gradient(180deg, #F97316, #EAB308);
@@ -23,19 +38,25 @@
   --bg-slate:       #111C2D;   /* blue accent sections */
   --bg-slate-light: #182436;
 
-  /* UI surfaces — Claude grey system, sitting ON the blue world */
+  /* UI surfaces — HUBSS charcoal card system (official grey #20201F) */
   --bg-neutral:        #141414;  /* warm neutral anchor — stats/utility sections */
-  --bg-card:           #1a1e28;  /* card on dark-blue bg — bridges both worlds */
-  --bg-card-surface:   #222838;  /* card hover on dark-blue bg */
-  --bg-card-hover:     #222838;
-  --bg-card-neutral:   #1e1e1e;  /* card on neutral/grey bg — resources, docs */
+  --bg-card:           #232221;  /* charcoal card on dark-blue bg — one step above official grey */
+  --bg-card-surface:   #2A2927;  /* card hover */
+  --bg-card-hover:     #2A2927;
+  --bg-card-neutral:   #20201F;  /* card on neutral/grey bg — the official charcoal itself */
 
   /* ─── Text ──────────────────────────────────────── */
   --text-primary:   #ffffff;
   --text-body:      #e0e0e0;
   --text-secondary: #8b8b8b;
-  --text-muted:     #5a5a5a;
-  --text-faint:     #3a3a3a;
+  /* --text-muted / --text-faint bumped for WCAG 2.1 AA — the previous values
+     (#5a5a5a / #3a3a3a) measured as low as 1.99:1 and 1.66:1 against the
+     card/section backgrounds they're actually painted on sitewide (axe
+     color-contrast audit, Aug 2026). Same hue, lightened just enough to
+     clear 4.5:1 against the darkest background each is used on, with a
+     small margin. Not a palette change — brand colours are untouched. */
+  --text-muted:     #969696;
+  --text-faint:     #808080;
   --text-hint:      #2a2a2a;
 
   /* ─── Borders ───────────────────────────────────── */

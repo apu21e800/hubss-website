@@ -3,8 +3,8 @@ Print specifications for the HUB Surface Systems 2026 Catalog.
 
 All units in points (1 inch = 72 points). ReportLab uses points natively.
 
-Trim size: 5" x 5" (square)
-Bleed:     0.125" on all sides (1/8")  -> document size 5.25" x 5.25"
+Trim size: 6" x 6" (square)   [Vernon-confirmed 2026-06: 6x6, not 5x5]
+Bleed:     0.125" on all sides (1/8")  -> document size 6.25" x 6.25"
 Safe area: 0.25" inside trim (text/logos must not cross this line)
 Output:    CMYK PDF, 300 DPI raster, vector text + shapes
 """
@@ -15,14 +15,14 @@ from reportlab.lib.colors import CMYKColor
 # ---------------------------------------------------------------------------
 # Page geometry
 # ---------------------------------------------------------------------------
-TRIM_W = 5.0 * inch
-TRIM_H = 5.0 * inch
+TRIM_W = 6.0 * inch
+TRIM_H = 6.0 * inch
 
 BLEED = 0.125 * inch     # 1/8" bleed on every side
 SAFE  = 0.25  * inch     # 1/4" safe area inside trim
 
-PAGE_W = TRIM_W + 2 * BLEED      # 5.25" — actual document size
-PAGE_H = TRIM_H + 2 * BLEED      # 5.25"
+PAGE_W = TRIM_W + 2 * BLEED      # 6.25" — actual document size
+PAGE_H = TRIM_H + 2 * BLEED      # 6.25"
 
 # Coordinate helpers (origin is bottom-left of the bleed page).
 # Anything inside the TRIM box is what gets printed and cut.
@@ -88,12 +88,59 @@ ALLCAPS_TRACKING = 1.6
 # Stronger contrast value for body copy on dark backgrounds — was 15% K, too pale on press
 HUBSS_TEXT_ON_DARK = "WHITE_85"  # use 85% white instead of 15% black-tinted grey
 
-# Default font families. We use built-in PDF fonts for portability;
-# swap to embedded TTFs later (see fonts.py) for a custom look.
-FONT_SANS_REG  = "Helvetica"
-FONT_SANS_BOLD = "Helvetica-Bold"
-FONT_SANS_OBL  = "Helvetica-Oblique"
-FONT_SERIF     = "Times-Roman"
+# v48 — Vernon: 'the font is Inter, not Helvetica. Helvetica is too dated.'
+# Inter TTFs ship in catalog-print-build/assets/fonts/inter/ and get
+# registered with ReportLab via specs.register_inter_fonts() (called
+# once at module import below). Helvetica is now retired from the print
+# pipeline — the website + Figma plugin already use Inter, so this
+# brings print into parity. Inter-Light/Thin intentionally NOT registered
+# (Vernon flagged thin font as a problem). No serif anywhere.
+FONT_SANS_REG     = "Inter"
+FONT_SANS_MEDIUM  = "Inter-Medium"
+FONT_SANS_SEMI    = "Inter-SemiBold"
+FONT_SANS_BOLD    = "Inter-Bold"
+FONT_SANS_OBL     = "Inter-Italic"
+FONT_SANS_BOLD_OBL = "Inter-BoldItalic"
+# Backward-compat alias — some legacy code may still reference FONT_SERIF
+# for italic emphasis. Map to Inter-Italic (no actual serif anywhere).
+FONT_SERIF        = FONT_SANS_OBL
+
+
+def register_inter_fonts():
+    """Register Inter TTFs with ReportLab. Idempotent — safe to call
+    multiple times; subsequent calls are no-ops."""
+    from reportlab.pdfbase import pdfmetrics
+    from reportlab.pdfbase.ttfonts import TTFont
+    from pathlib import Path
+    if "Inter" in pdfmetrics.getRegisteredFontNames():
+        return  # already registered
+    fonts_dir = Path(__file__).resolve().parent.parent / "assets" / "fonts" / "inter"
+    variants = [
+        ("Inter",            "Inter-Regular.ttf"),
+        ("Inter-Medium",     "Inter-Medium.ttf"),
+        ("Inter-SemiBold",   "Inter-SemiBold.ttf"),
+        ("Inter-Bold",       "Inter-Bold.ttf"),
+        ("Inter-Italic",     "Inter-Italic.ttf"),
+        ("Inter-BoldItalic", "Inter-BoldItalic.ttf"),
+    ]
+    for name, fname in variants:
+        path = fonts_dir / fname
+        if path.exists():
+            pdfmetrics.registerFont(TTFont(name, str(path)))
+    # Font-family mapping so styled draws (bold-on-italic etc.) resolve
+    # to the right TTF without falling back to Helvetica.
+    from reportlab.pdfbase.pdfmetrics import registerFontFamily
+    registerFontFamily(
+        "Inter",
+        normal="Inter",
+        bold="Inter-Bold",
+        italic="Inter-Italic",
+        boldItalic="Inter-BoldItalic",
+    )
+
+
+# Register on import so any subsequent ReportLab usage sees Inter.
+register_inter_fonts()
 
 # ---------------------------------------------------------------------------
 # Image specs

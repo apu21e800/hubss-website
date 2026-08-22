@@ -81,10 +81,15 @@ export function middleware(req: NextRequest) {
     }
   }
 
-  // Gate /admin/* and /studio/* behind Basic Auth.
+  // Gate /admin/* behind Basic Auth.
+  //
+  // /studio is deliberately NOT gated here. Sanity Studio has its own per-user
+  // login (Google / GitHub / email) with a real audit trail of who changed what.
+  // Putting a shared Basic Auth password in front of it meant two passwords for
+  // one CMS and no way to tell editors apart — worse security AND worse UX.
+  // Studio is noindex by default and every write is authorised by Sanity.
   if (
     path.startsWith("/admin") ||
-    path.startsWith("/studio") ||
     path.startsWith("/api/blog/approve") ||
     path.startsWith("/api/blog/drafts") ||
     path.startsWith("/api/blog/generate") ||
@@ -102,7 +107,6 @@ export const config = {
     "/catalogue",
     "/catalogue/:path*",
     "/admin/:path*",
-    "/studio/:path*",
     "/api/blog/approve/:path*",
     "/api/blog/drafts/:path*",
     "/api/blog/generate/:path*",

@@ -60,7 +60,13 @@ export default function ColourSystem({
                         ? "1px solid rgba(255,255,255,0.35)"
                         : "1px solid rgba(255,255,255,0.06)",
                     }}
-                    aria-label={`${c.name} colour swatch`}
+                    /* aria-label was invalid here — a plain <div> has role
+                       "generic", which strips aria-label per the ARIA spec, so
+                       assistive tech silently got NO name at all (axe:
+                       aria-prohibited-attr). The colour name + value are
+                       already visible as real text right below, so the swatch
+                       itself is decorative and just needs hiding, not a name. */
+                    aria-hidden="true"
                   />
                   <p className="mt-2 text-[0.8rem] font-medium leading-tight" style={{ color: "var(--text-body)" }}>
                     {c.name}

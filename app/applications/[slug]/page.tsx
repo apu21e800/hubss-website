@@ -41,10 +41,8 @@ export default async function ApplicationPage({ params }: Props) {
   const application = await getMergedApplication(slug);
   if (!application) notFound();
 
-  // Gallery — use application.gallery if available, otherwise fall back to featured image
-  // Folder-driven gallery (see docs/IMAGE-WORKFLOW.md).
+  // Gallery — folder-driven (see lib/asset-scan.ts + docs/IMAGE-WORKFLOW.md).
   const appGallery = galleryFor(application.imageUrl, application.gallery, `images/applications/${application.slug}`);
-
   const gallerySources = appGallery.length > 0 ? appGallery : [application.imageUrl];
   const gallery: GalleryImage[] = gallerySources.map((src) => ({
     src,
@@ -168,7 +166,7 @@ export default async function ApplicationPage({ params }: Props) {
 
             {/* Right: related products */}
             <div>
-              <div className="rounded-xl p-8 mb-8 sticky top-24 relative overflow-hidden" style={{ background: "#111111", border: "1px solid rgba(255,255,255,0.08)" }}>
+              <div className="rounded-xl p-8 mb-8 sticky top-24 relative overflow-hidden" style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.08)" }}>
                 {/* Orange top accent */}
                 <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
                 <h3 className="font-bold text-lg mb-6" style={{ color: "#F5F0EB" }}>Recommended Products</h3>
@@ -191,7 +189,7 @@ export default async function ApplicationPage({ params }: Props) {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="font-semibold text-sm truncate" style={{ color: "#F5F0EB" }}>{product.name}</p>
-                        <p className="text-xs truncate" style={{ color: "#6B7280" }}>{product.shortDesc}</p>
+                        <p className="text-xs truncate" style={{ color: "#868C98" }}>{product.shortDesc}</p>
                       </div>
                       <svg className="w-4 h-4 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: "#f97316" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

@@ -12,7 +12,9 @@
     "migrate:sanity:purge": "tsx scripts/migrate-to-sanity.ts --purge",
     "gen:blog-index": "node scripts/gen-blog-index.mjs",
     "assets:inventory": "node scripts/asset-inventory.mjs",
-    "gen:gallery-manifest": "node scripts/gen-gallery-manifest.mjs"
+    "gen:gallery-manifest": "node scripts/gen-gallery-manifest.mjs",
+    "verify": "node scripts/verify-site.mjs",
+    "verify:quick": "node scripts/verify-site.mjs --quick"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",
@@ -46,8 +48,8 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@eslint/eslintrc": "^3.3.5",
-    "tsx": "^4.22.0",
     "@sanity/types": "^5.25.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
@@ -56,8 +58,10 @@
     "eslint": "^10.0.3",
     "eslint-config-next": "^16.1.6",
     "eslint-config-prettier": "^10.1.8",
+    "playwright": "^1.62.1",
     "prettier": "^3.8.1",
     "tailwindcss": "^4",
+    "tsx": "^4.22.0",
     "typescript": "^5"
   }
 }

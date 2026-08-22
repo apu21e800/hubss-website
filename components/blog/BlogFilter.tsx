@@ -72,7 +72,7 @@ export default function BlogFilter({ posts, allProducts }: Props) {
       className="text-xs font-semibold px-3 rounded transition-all whitespace-nowrap flex-shrink-0 inline-flex items-center"
       style={{
         background:   active ? "#f97316" : "#2a2a2a",
-        color:        active ? "#fff"    : "#8b8b8b",
+        color:        active ? "#fff"    : "#9a9a9a",
         border:       "1px solid",
         borderColor:  active ? "#f97316" : "rgba(255,255,255,0.07)",
         minHeight:    "44px",
@@ -117,13 +117,14 @@ export default function BlogFilter({ posts, allProducts }: Props) {
             <input
               type="text"
               placeholder="Search..."
+              aria-label="Search field notes"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full pl-8 pr-7 rounded text-sm"
               style={{ background: "#2a2a2a", border: "1px solid rgba(255,255,255,0.07)", color: "#ffffff", minHeight: "44px" }}
             />
             {search && (
-              <button onClick={() => { setSearch(""); pushParams({ search: "" }); }} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-400 w-6 h-6 flex items-center justify-center">
+              <button onClick={() => { setSearch(""); pushParams({ search: "" }); }} aria-label="Clear search" className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-400 w-6 h-6 flex items-center justify-center">
                 <X className="w-3 h-3" />
               </button>
             )}
@@ -133,8 +134,9 @@ export default function BlogFilter({ posts, allProducts }: Props) {
             <select
               value={sort}
               onChange={(e) => setAndSync(setSort, "sort", e.target.value as typeof sort)}
+              aria-label="Sort posts"
               className="appearance-none pl-3 pr-7 rounded text-sm cursor-pointer"
-              style={{ background: "#2a2a2a", border: "1px solid rgba(255,255,255,0.07)", color: "#8b8b8b", minHeight: "44px" }}
+              style={{ background: "#2a2a2a", border: "1px solid rgba(255,255,255,0.07)", color: "#9a9a9a", minHeight: "44px" }}
             >
               <option value="newest">Newest</option>
               <option value="oldest">Oldest</option>

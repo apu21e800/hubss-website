@@ -7,15 +7,16 @@ the Figma layout 1:1.
 
 Coordinate conversion:
   Figma artboard is 450x450 design units.
-  Print trim is 5x5" = 360 pt.
-  Scale factor SCALE = 360 / 450 = 0.8.
-  Document page is 5.25x5.25" = 378 pt (trim + 0.125" bleed each side).
+  Print trim is 6x6" = 432 pt.
+  Scale factor SCALE = TRIM_W / 450 = 432 / 450 = 0.96 (auto-derived from specs).
+  Document page is 6.25x6.25" = 450 pt (trim + 0.125" bleed each side).
   ReportLab origin is bottom-left; Figma is top-left.
 
-Type fallback:
-  We keep Helvetica family for the proof (no embedded Inter yet).
-  Inter Black/Bold -> Helvetica-Bold. Inter Regular -> Helvetica.
-  Roboto Condensed -> Helvetica (slight visual fudge).
+Type (v48):
+  Inter is the locked typeface across print + website + Figma plugin.
+  TTFs registered by specs.register_inter_fonts() at module import.
+  pick_font() maps Figma weight → Inter-Bold (≥600) / SemiBold (≥500)
+  / Regular (<500). No Helvetica anywhere. No Light/Thin weights.
 
 Color:
   Figma cream paper -> CMYK_CREAM (light tone). Navy -> HUBSS_NAVY.
@@ -64,16 +65,35 @@ CMYK_TEXT_FAINT = CMYKColor(0.0, 0.0, 0.0, 0.35)
 
 
 # --- font mapping -------------------------------------------------------
-def pick_font(figma_font: str | None, weight: int | None) -> str:
-    """Map a Figma font + weight to one of our embedded PDF fonts."""
-    fam = (figma_font or "").lower()
+def pick_font(figma_font: str | None, weight: int | None,
+              italic: bool = False) -> str:
+    """v48 — Map Figma font + weight to embedded Inter TTF.
+
+    Inter family registered in specs.register_inter_fonts().
+
+    Weight buckets — v49 bumps the default body weight from Regular →
+    Medium per Vernon ('the font is still thin'). Inter Regular reads
+    visibly lighter than Helvetica Regular at small sizes; Medium gives
+    body type the weight Doug expects in a premium catalogue without
+    going so bold it looks dense. Explicit weights (600/800) keep v48
+    semantics so nothing regresses.
+       w >= 600 -> Bold       (preserved from v48 — display + caps)
+       w >= 500 -> SemiBold
+       else     -> Medium     (was Regular — body now visibly heavier)
+    Italic flag picks Inter-Italic (or BoldItalic at w≥600).
+    """
+    from .specs import (
+        FONT_SANS_MEDIUM, FONT_SANS_SEMI, FONT_SANS_BOLD,
+        FONT_SANS_OBL, FONT_SANS_BOLD_OBL,
+    )
     w = weight or 400
-    if "serif" in fam or "times" in fam or "roboto serif" in fam:
-        return FONT_SERIF
-    # Bold/black tier
+    if italic:
+        return FONT_SANS_BOLD_OBL if w >= 600 else FONT_SANS_OBL
     if w >= 600:
         return FONT_SANS_BOLD
-    return FONT_SANS_REG
+    if w >= 500:
+        return FONT_SANS_SEMI
+    return FONT_SANS_MEDIUM   # v49: was FONT_SANS_REG; bumped per Vernon
 
 
 # --- low-level draw helpers --------------------------------------------
@@ -99,6 +119,10 @@ def draw_text_block(
     `font_size_figma` is the size as found in Figma (we scale internally).
     Wraps when max_w_figma is provided. Returns the bottom y in PDF coords.
     """
+    # Type-pass micro-typography: typeset apostrophes (U+2019) everywhere —
+    # render-side so content files stay untouched. Straight double quotes
+    # are NOT touched (inch marks like 6×6" must survive).
+    text = text.replace("'", "’")
     font = pick_font(figma_font, weight)
     size = fs(font_size_figma)
     leading = fs(leading_figma) if leading_figma else size * 1.25

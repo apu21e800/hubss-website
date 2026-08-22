@@ -105,7 +105,7 @@ export default function PublicArtPage() {
           <div
             className="rounded-xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-10"
             style={{
-              background: "#111111",
+              background: "var(--bg-card-neutral)",
               border: "1px solid rgba(249,115,22,0.2)",
             }}
           >
@@ -197,7 +197,7 @@ export default function PublicArtPage() {
                     key={project.name}
                     className="p-6 rounded-xl"
                     style={{
-                      background: "#111111",
+                      background: "var(--bg-card-neutral)",
                       border: "1px solid rgba(255,255,255,0.08)",
                     }}
                   >
@@ -223,7 +223,7 @@ export default function PublicArtPage() {
               <div
                 className="rounded-xl p-8 mb-8 sticky top-24 relative overflow-hidden"
                 style={{
-                  background: "#111111",
+                  background: "var(--bg-card-neutral)",
                   border: "1px solid rgba(255,255,255,0.08)",
                 }}
               >
@@ -271,7 +271,7 @@ export default function PublicArtPage() {
                         </p>
                         <p
                           className="text-xs truncate"
-                          style={{ color: "#6B7280" }}
+                          style={{ color: "#868C98" }}
                         >
                           {product.shortDesc}
                         </p>

@@ -119,7 +119,7 @@ export default function NotFound() {
             </Link>
           </div>
 
-          <div style={{ display: "flex", gap: 24, justifyContent: "center", flexWrap: "wrap", fontSize: 13, color: "#6B7280" }}>
+          <div style={{ display: "flex", gap: 24, justifyContent: "center", flexWrap: "wrap", fontSize: 13, color: "#868C98" }}>
             <span>West Office · Cleve Stordy · 604-309-8212</span>
             <span style={{ color: "rgba(255,255,255,0.15)" }}>·</span>
             <span>East Office · Doug Bain · 416-540-9287</span>

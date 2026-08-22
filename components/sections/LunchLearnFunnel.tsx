@@ -51,12 +51,12 @@ const WHAT_YOU_GET = [
   {
     num: "02",
     title: "The Lifecycle Cost Math",
-    desc: "Lifecycle cost math, side by side. How HUB systems deliver years of high-performance service versus repeated seasonal interventions — the numbers usually surprise people.",
+    desc: "Lifecycle cost math, side by side. How HUB systems deliver years of high-performance service versus repeated seasonal interventions — asphalt-life math your procurement team will ask for.",
   },
   {
     num: "03",
-    title: "Lunch Included. No Catch.",
-    desc: "In-person sessions include catered lunch for your team. Virtual sessions come with a $25 lunch voucher delivered before we connect.",
+    title: "Samples, Sheets, and an Installer Map",
+    desc: "Physical material samples, current technical data sheets, and the certified HUB applicator list for your region — everything a team needs to move from interest to tender.",
   },
 ];
 
@@ -78,7 +78,7 @@ const PERSONAS = [
   },
   {
     title: "Contractors & Applicators",
-    desc: "Learn about the HUB certified applicator program — unlock territory rights and bid on jobs your competitors can't touch.",
+    desc: "Learn about the HUB certified applicator program — territory-protected bidding and direct manufacturer support through the certified program.",
     badge: "Certified Applicator Program",
   },
 ];
@@ -89,8 +89,8 @@ const FAQS = [
     a: "30–45 minutes of presentation, followed by open Q&A. We're respectful of your team's calendar and stick to the time we agree on.",
   },
   {
-    q: "Is this actually free?",
-    a: "100% free. No invoice, no minimum order attached, and we won't badger you afterward. We just want you to know what you're specifying — the rest follows naturally.",
+    q: "What does it cost?",
+    a: "Nothing. Sessions are how we introduce our systems to the people who specify them — no invoice, no minimum order, and no follow-up pressure.",
   },
   {
     q: "Do we get continuing education credits?",
@@ -113,20 +113,20 @@ const TICKER = [...CITIES, ...CITIES];
 
 const STATS = [
   { value: "45 min", label: "Focused Session" },
-  { value: "100% Free", label: "No Invoice Ever" },
+  { value: "No Cost", label: "Hosted by HUB" },
   { value: "Lunch Included", label: "Every In-Person" },
   { value: "CE Credits", label: "AIBC · RAIC · PEO" },
 ];
 
 export default function LunchLearnFunnel({
-  eyebrow      = "Free · No Obligation · Coast to Coast",
-  headingLine1 = "Lunch Is On Us.",
-  headingLine2 = "Your Next Spec Is Free.",
-  subheading   = "A 45-minute HUB Lunch & Learn delivers everything your team needs to confidently specify decorative pavement, thermoplastic crosswalks, and coloured coatings — real Canadian case studies and spec language you can drop straight into your next RFP.",
-  ctaLabel     = "Book Your Free Session",
-  formHeading  = "Claim Your Free Lunch & Learn",
-  formSubheading = "Tell us who you are and where you are — we handle the rest. Usually within 24 hours.",
-  submitLabel  = "Claim Your Free Lunch & Learn →",
+  eyebrow      = "Professional Development · In-Person or Virtual · Coast to Coast",
+  headingLine1 = "Specify with confidence.",
+  headingLine2 = "Lunch is on us.",
+  subheading   = "A focused 45-minute session that gives your team the technical grounding to specify decorative pavement, thermoplastic crosswalks, and coloured coatings — real Canadian case studies and spec language you can drop straight into your next RFP.",
+  ctaLabel     = "Book a Session",
+  formHeading  = "Book your Lunch & Learn",
+  formSubheading = "Tell us who you are and where you are — we confirm date and details within one business day.",
+  submitLabel  = "Book the Session →",
   whatYouGet,
   personas,
   faqs,
@@ -136,7 +136,7 @@ export default function LunchLearnFunnel({
   const personaItems       = personas?.length   ? personas   : PERSONAS;
   const faqItems           = faqs?.length       ? faqs       : FAQS;
   const whatYouGetEyebrow  = sectionHeadings?.whatYouGetEyebrow ?? "What You Walk Away With";
-  const whatYouGetHeading  = sectionHeadings?.whatYouGetHeading ?? "Not a Sales Pitch. An Education.";
+  const whatYouGetHeading  = sectionHeadings?.whatYouGetHeading ?? "Not a sales pitch. A working session.";
   const personasEyebrow    = sectionHeadings?.personasEyebrow   ?? "Who It's Built For";
   const personasHeading    = sectionHeadings?.personasHeading   ?? "Your Whole Team. One Session.";
   const faqEyebrow         = sectionHeadings?.faqEyebrow        ?? "Common Questions";
@@ -162,7 +162,7 @@ export default function LunchLearnFunnel({
         body: JSON.stringify({ ...formData, formType: "lunch-learn" }),
       });
       if (!response.ok) throw new Error(`API error: ${response.statusText}`);
-      setSubmitState({ status: "success", message: "You're on the list. We'll be in touch within 24 hours to confirm your date and details." });
+      setSubmitState({ status: "success", message: "You're booked in. We'll be in touch within one business day to confirm your date and details." });
       setFormData({ name: "", email: "", company: "", city: "", phone: "" });
       window.gtag?.("event", "generate_lead", { event_category: "conversion", form_type: "lunch-learn" });
       track("lunch_learn_submit", { form_type: "lunch-learn" });
@@ -232,7 +232,7 @@ export default function LunchLearnFunnel({
               </p>
 
               <div className="flex flex-wrap gap-5 mb-10">
-                {["30+ Years in Canada", "10 Provinces", "Free CE Credits"].map((t) => (
+                {["30+ Years in Canada", "10 Provinces", "CE-Credit Sessions"].map((t) => (
                   <div key={t} className="flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: "#f97316" }} />
                     <span className="text-sm font-semibold" style={{ color: "rgba(255,255,255,0.6)" }}>{t}</span>
@@ -277,7 +277,7 @@ export default function LunchLearnFunnel({
             >
               <Image
                 src="/images/lunch-learn/moose-final.png"
-                alt="HUB Surface Systems moose mascot — book a free Lunch & Learn"
+                alt="Moose, the HUB Surface Systems site dog, in a hard hat and safety vest — book a Lunch & Learn"
                 width={256}
                 height={290}
                 style={{
@@ -334,7 +334,11 @@ export default function LunchLearnFunnel({
                 >
                   {stat.value}
                 </span>
-                <span className="text-xs font-semibold tracking-[0.12em] uppercase" style={{ color: "rgba(255,255,255,0.4)" }}>
+                {/* 0.45, not 0.40: at 12px on --bg-dark, 0.40 composites to #6c6f76
+                    for 3.8:1 against WCAG AA's 4.5:1 floor. 0.45 is the smallest
+                    step that clears it (4.51:1) — the four stat captions here are
+                    the last non-CTA contrast failures on the site. */}
+                <span className="text-xs font-semibold tracking-[0.12em] uppercase" style={{ color: "rgba(255,255,255,0.45)" }}>
                   {stat.label}
                 </span>
               </motion.div>
@@ -456,7 +460,7 @@ export default function LunchLearnFunnel({
                     {p.badge}
                   </span>
                 </div>
-                <p className="text-sm leading-relaxed" style={{ color: "#6B7280" }}>{p.desc}</p>
+                <p className="text-sm leading-relaxed" style={{ color: "#868C98" }}>{p.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -465,7 +469,7 @@ export default function LunchLearnFunnel({
 
       {/* ── CITY MARQUEE ─────────────────────────────────────────────── */}
       <div style={{ background: "#070b12", borderTop: "1px solid rgba(255,255,255,0.05)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-        <p className="text-center text-[10px] font-bold tracking-[0.2em] uppercase pt-8 pb-4" style={{ color: "rgba(255,255,255,0.18)" }}>
+        <p className="text-center text-[10px] font-bold tracking-[0.2em] uppercase pt-8 pb-4" style={{ color: "rgba(255,255,255,0.48)" }}>
           Previous Lunch &amp; Learn clients include
         </p>
         <div
@@ -475,7 +479,7 @@ export default function LunchLearnFunnel({
           <div className="flex gap-0 whitespace-nowrap" style={{ animation: "ll-marquee 40s linear infinite" }}>
             {TICKER.map((name, i) => (
               <span key={i} style={{ display: "inline-flex", alignItems: "center", flexShrink: 0 }}>
-                <span className="text-sm font-medium px-5" style={{ color: "rgba(255,255,255,0.32)", lineHeight: 1 }}>{name}</span>
+                <span className="text-sm font-medium px-5" style={{ color: "rgba(255,255,255,0.55)", lineHeight: 1 }}>{name}</span>
                 <span aria-hidden="true" style={{ display: "block", width: 4, height: 4, borderRadius: "50%", background: "rgba(249,115,22,0.45)", flexShrink: 0 }} />
               </span>
             ))}
@@ -557,10 +561,10 @@ export default function LunchLearnFunnel({
                     { name: "company", placeholder: "Company or organization", type: "text", required: false },
                     { name: "city", placeholder: "City", type: "text", required: false },
                   ].map((field) => (
-                    <input key={field.name} type={field.type} name={field.name} placeholder={field.placeholder} value={formData[field.name as keyof FormState]} onChange={handleChange} required={field.required} className="px-4 py-3.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-orange-500/50 transition-all" style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: "#F5F0EB" }} />
+                    <input key={field.name} type={field.type} name={field.name} placeholder={field.placeholder} aria-label={field.placeholder} value={formData[field.name as keyof FormState]} onChange={handleChange} required={field.required} className="px-4 py-3.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-orange-500/50 transition-all" style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: "#F5F0EB" }} />
                   ))}
                 </div>
-                <input type="tel" name="phone" placeholder="Phone number" value={formData.phone} onChange={handleChange} className="w-full px-4 py-3.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-orange-500/50 transition-all" style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: "#F5F0EB" }} />
+                <input type="tel" name="phone" placeholder="Phone number" aria-label="Phone number" value={formData.phone} onChange={handleChange} className="w-full px-4 py-3.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-orange-500/50 transition-all" style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: "#F5F0EB" }} />
                 <button type="submit" disabled={submitState.status === "loading"} className="w-full py-5 rounded-xl font-bold text-base transition-all disabled:opacity-50" style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff", boxShadow: "0 6px 24px rgba(249,115,22,0.38)" }}>
                   {submitState.status === "loading" ? "Sending your request…" : submitLabel}
                 </button>

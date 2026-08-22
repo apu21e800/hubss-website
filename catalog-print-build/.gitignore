@@ -7,6 +7,9 @@ __pycache__/
 assets/booklet/
 assets/cover/
 assets/fonts/
+# v48 — assets/fonts/inter/ is tracked via `git add -f` (~2.5 MB
+# Inter TTFs needed for ReportLab font registration). The broad
+# ignore above is preserved for any future heavy font dirs.
 assets/images/
 assets/products/
 assets/projects/
@@ -24,6 +27,11 @@ output/previews/
 
 # Generated plugin (embed_images bloats to 40MB — regenerate locally)
 figma-plugin/code.js
+
+# Stray generated artifact: generate_plugin.py writes a QR PNG under a
+# build-local public/ (ROOT/public/), NOT the served repo-root public/.
+# Regenerable each run — keep out of git.
+public/
 
 # Large binary output PDFs (version-controlled via Figma, not git)
 output/*.pdf

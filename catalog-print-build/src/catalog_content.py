@@ -1,4 +1,5 @@
 """Catalog content — pulled from live HUBSS website data."""
+import csv
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -53,29 +54,53 @@ SECTION_OPENERS = {
     # projects: VIVA BRT aerial corridor — strong infrastructure shot, distinct from TPXD product imagery
     "projects":            _pick(BLOG_DIR / "multimodal-connectivity-york-region" / "featured.jpg",
                                  APPS_DIR / "bus-lanes" / "bus-lanes-20.jpg"),
-    # network: London East Link red BRT lane at Ontario city intersection — correct bus lane imagery
-    # (bus-lanes-01.jpg was WRONG: StreetPrint commercial entrance, not a bus corridor)
-    "network":             _pick(APPS_DIR / "bus-lanes" / "bus-lanes-03.jpg",
+    # network: certified crew + application machine laying a red/white
+    # thermoplastic crosswalk, transit bus behind — the installer-network
+    # story in one frame. 2400×1800 (≈288 DPI square-cropped). Replaces
+    # bus-lanes-03.jpg, which duplicated the London East Link project hero
+    # (§3 dedup — the photo IS London's red BRT lane, so the project keeps it).
+    "network":             _pick(PUBLIC_IMG / "assets" / "installation-images" / "page49_img02.png",
                                  APPS_DIR / "bus-lanes" / "bus-lanes-20.jpg"),
     "reference":           _pick(APPS_DIR / "bike-lanes" / "bike-lanes-09.jpg"),
     # DPS right-side images — distinct from left, avoids mirrored spreads
     "editorial_products":  _pick(BLOG_DIR / "decorative-crosswalk-commercial-drive" / "featured.jpg",
                                  APPS_DIR / "community-branding" / "community-branding-02.jpg"),
     # editorial_products_r: DPS1 right-side — community branding (distinct from crosswalks-06 apps opener)
-    "editorial_products_r": _pick(APPS_DIR / "community-branding" / "community-branding-03.jpg",
+    "editorial_products_r": _pick(APPS_DIR / "crosswalks" / "crosswalks-19.jpg",
                                   APPS_DIR / "crosswalks" / "crosswalks-03.jpg"),
     "editorial_projects":  _pick(APPS_DIR / "community-branding" / "community-branding-10.jpg",
                                  APPS_DIR / "community-branding" / "community-branding-04.jpg"),
+    # editorial_projects_r: "Every Mark" DPS right. Was undefined — build()'s
+    # fallback chain landed on SO["reference"] (bike-lanes-09), silently
+    # duplicating the Reference opener AND putting the white caption on the
+    # bright green lane (worst-but-one contrast flag). crosswalks-01: macro
+    # of a yellow/charcoal stamped mark — literally "every mark tells a
+    # story," dark lower-left holds white type (v45: photo choice, no scrim).
+    "editorial_projects_r": _pick(APPS_DIR / "crosswalks" / "crosswalks-01.jpg"),
     "editorial_closing":   _pick(BLOG_DIR / "spirit-trail-wayfinding-vancouver" / "featured.jpg",
                                  APPS_DIR / "bike-lanes" / "bike-lanes-09.jpg"),
     # Three new full-bleed DPS — Vernon swaps images manually in Figma for final
     "dps_a_left":   _pick(BLOG_DIR / "richmond-brighouse-crosswalk" / "featured.jpeg"),
-    "dps_a_right":  _pick(BLOG_DIR / "branded-crosswalks-vancouver-richmond" / "featured.jpg",
+    # dps_a_right: was blog branded-crosswalks-vancouver-richmond/featured.jpg —
+    # that file is BYTE-IDENTICAL (same md5) to decorative-crosswalk-commercial-
+    # drive/featured.jpg, so p10 repeated the Little Italy photo shown on the
+    # In-the-Field DPS (p36). (First fix attempt used crosswalks-03 — caught by
+    # the perceptual-hash sweep duplicating the Crosswalks application page.)
+    # crosswalks-11 (3264×2448): residential intersection with a full compass-
+    # rose medallion in coloured stamped asphalt + red stamped crosswalk —
+    # "from every intersection, a statement," literally. Unused in any slot.
+    "dps_a_right":  _pick(APPS_DIR / "crosswalks" / "crosswalks-11.jpg",
                           APPS_DIR / "crosswalks" / "crosswalks-06.jpg"),
     "dps_b_left":   _pick(APPS_DIR / "community-branding" / "community-branding-05.jpg"),
     "dps_b_right":  _pick(APPS_DIR / "community-branding" / "community-branding-12.jpg"),
     "dps_c_left":   _pick(BLOG_DIR / "parc-riviera-streetbond-walkway" / "featured.jpg"),
-    "dps_c_right":  _pick(APPS_DIR / "community-branding" / "community-branding-13.jpg"),
+    # dps_c_right: "Built to Last" caption sat on a bright region of
+    # community-branding-13 (median 219/255 — the book's worst white-on-photo
+    # flag). streetprint-69: grey herringbone stalls beneath a rising
+    # building — "the surface underfoot, the city above," literally — with a
+    # dark lower-left that holds the caption (v45: photo choice, no scrim).
+    "dps_c_right":  _pick(PRODUCTS_DIR / "streetprint" / "streetprint-69.jpg",
+                          APPS_DIR / "community-branding" / "community-branding-13.jpg"),
 }
 
 MANIFESTO = {
@@ -91,9 +116,9 @@ WHY_HUB = {
     "title_lines": ["The durable", "decorative hardscape."],
     "subtitle": "Specified by engineers. Loved by communities.",
     "stats": [
-        ("30+",     "Years",          "Installations across North America"),
+        ("30+",     "Years",          "Installations across Canada, coast to coast"),
         ("1,000+",  "Projects",       "Completed coast to coast"),
-        ("500+",    "Municipalities", "Specified by name"),
+        ("10",      "Provinces",      "Specified coast to coast"),
         ("20yr",    "Performance",    "Colour retention on stamped asphalt"),
     ],
     "proof": [
@@ -102,7 +127,7 @@ WHY_HUB = {
         ("02", "Lower lifecycle cost than paint",
                "Thermoplastic and MMA last 6 to 8 times longer than paint — with no annual repaint window."),
         ("03", "Visible in every condition",
-               "Retroreflective crosswalks. High-contrast colour. Slip-resistant by design."),
+               "High-contrast decorative thermoplastic. Retroreflective regulatory markings where required. Slip-resistant by design."),
         ("04", "Specified coast to coast",
                "Trusted by transportation engineers, urban designers, and municipal procurement from Vancouver to Halifax."),
     ],
@@ -112,6 +137,7 @@ WHY_HUB = {
 # ===== PRODUCTS (12 — AirMark removed per Doug) =====
 PRODUCTS = [
     {"name": "TrafficPatternsXD",
+     "category": "Heavy-Duty Preformed Thermoplastic",
      "tagline": "When the surface has to hold.",
      # tpxd-03.jpg WRONG: showed StreetPrint herringbone brick pattern, not TPXD thermoplastic markings
      # tpxd-05.jpg: green/white decorative TPXD crosswalk — shows actual preformed thermoplastic panels ✓
@@ -124,8 +150,9 @@ PRODUCTS = [
      "body": "TrafficPatternsXD is HUB's heaviest thermoplastic — 150-mil preformed material with performance aggregate reinforced through the full cross-section. Delivers exceptional skid resistance under wet-surface bus traffic, turning movements, and concentrated wheel loads where painted markings and lighter thermoplastics fail. Heat-fused permanently to asphalt or concrete. Specified by Canadian transit authorities and municipalities coast to coast for BRT corridors, high-volume crosswalks, and bus stop pads.",
      "uses": ["Crosswalks", "Bike Lanes", "Bus Lanes", "BRT Corridors"],
      "spec_pairs": [("Thickness", "150 mil"), ("Aggregate", "Bound through full cross-section"),
-                    ("Retroreflectivity", "Glass beads — full depth"), ("Service Life", "Multi-year — outlasts paint")]},
+                    ("Skid Resistance", "60 BPN — ASTM E303"), ("Service Life", "Multi-year — outlasts paint")]},
     {"name": "TrafficPatterns",
+     "category": "Preformed Thermoplastic",
      "tagline": "Outlasts paint by seasons, not months.",
      # tp-08.jpg WRONG: showed UBC Musqueam DecoMark cultural crosswalk, not standard TP markings
      # tp-05.jpg: Indigenous recognition crosswalk — at least shows flat thermoplastic (not stamped asphalt)
@@ -134,23 +161,25 @@ PRODUCTS = [
      "title": "Standard thermoplastic.",
      "italic": "125-mil preformed. Heat-fused. No repaint cycle.",
      "callout": "125 mil",
-     "callout_unit": "Preformed thermoplastic — glass beads embedded through full cross-section",
-     "body": "Factory-manufactured preformed thermoplastic at 125mil — heat-fused to asphalt or concrete with retroreflective glass beads embedded through the full cross-section. Holds nighttime visibility through snowplow cycles and de-icing salt seasons where paint requires annual reapplication. Customizable designs and colours let planners embed community character and identity into the crosswalk itself. Open to traffic within hours of installation.",
+     "callout_unit": "Preformed thermoplastic — anti-skid aggregate intermixed through full cross-section",
+     "body": "Factory-manufactured preformed thermoplastic at 125mil — heat-fused to asphalt or concrete with anti-skid aggregate (Mohs 8, 60 BPN) intermixed through the full cross-section. Holds high-contrast colour through snowplow cycles and de-icing salt seasons where paint requires annual reapplication. Customizable designs and colours let planners embed community character and identity into the crosswalk itself. Open to traffic within hours of installation.",
      "uses": ["Crosswalks", "Bike Lanes", "Parks", "Regulatory"],
-     "spec_pairs": [("Thickness", "125 mil"), ("Retroreflectivity", "Full-depth glass beads"),
+     "spec_pairs": [("Thickness", "125 mil"), ("Skid Resistance", "60 BPN — ASTM E303"),
                     ("Open to Traffic", "Hours"), ("Service Life", "Multi-year — outlasts paint")]},
     {"name": "StreetBond",
+     "category": "Coloured Acrylic Coating",
      "tagline": "Coloured pavement that moves with asphalt.",
      "hero": _pick(PRODUCTS_DIR / "streetbond" / "streetbond-112.jpg"),
      "title": "The colour system.",
-     "italic": "Flexible acrylic. Bonds at the molecular level. Will not peel.",
+     "italic": "Flexible acrylic engineered to resist peeling, cracking, and fading.",
      "callout": "Pantone",
      "callout_unit": "Full custom matching plus standard palette — bike lanes, plazas, driveways",
-     "body": "Flexible acrylic engineered to move with the pavement — resisting the cracking from excessive hardness, premature wear from excessive flexibility, and slipperiness from overly smooth surfaces that compromise inferior coatings. Available in a curated standard palette plus full custom Pantone matching. BC Ministry of Transportation recognized. 30–50 sq ft per gallon.",
+     "body": "Flexible acrylic engineered to move with the pavement — resisting the cracking from excessive hardness, premature wear from excessive flexibility, and slipperiness from overly smooth surfaces that compromise inferior coatings. Available in 37 standard colours — 17 Traditional, 20 Signature — plus full custom Pantone matching. 30–50 sq ft per gallon.",
      "uses": ["Bike Lanes", "Plazas", "Courts", "Parking"],
      "spec_pairs": [("Type", "Flexible acrylic"), ("Surfaces", "Asphalt and concrete"),
-                    ("Colour", "Full Pantone matching"), ("Coverage", "30–50 sq ft / gallon")]},
+                    ("Colours", "37 standard + custom Pantone"), ("Coverage", "30–50 sq ft / gallon")]},
     {"name": "StreetPrint",
+     "category": "Stamped Asphalt System",
      "tagline": "Stamped asphalt at a fraction of stone's lifecycle cost.",
      "hero": _pick(PRODUCTS_DIR / "streetprint" / "streetprint-40.jpg"),
      "title": "Stamped asphalt.",
@@ -162,6 +191,7 @@ PRODUCTS = [
      "spec_pairs": [("System", "In-place stamping + StreetBond coating"), ("Patterns", "12+ standard + custom"),
                     ("Snowplow Safe", "Yes — flush surface"), ("Base", "New lay or existing asphalt")]},
     {"name": "DecoMark",
+     "category": "Custom Preformed Thermoplastic",
      "tagline": "A crosswalk is a canvas.",
      "hero": _pick(PRODUCTS_DIR / "decomark" / "decomark-43.jpg",
                    PRODUCTS_DIR / "decomark" / "decomark-01.jpg"),
@@ -174,6 +204,7 @@ PRODUCTS = [
      "spec_pairs": [("System", "Preformed components"), ("Colour", "Custom Pantone"),
                     ("Design", "Vector artwork"), ("Install", "Certified crews")]},
     {"name": "MMAX",
+     "category": "MMA Resin Lane Coating",
      "tagline": "Traffic-ready overnight. Engineered for transit lanes.",
      "hero": _pick(PRODUCTS_DIR / "mmax" / "mmax-05.jpg"),
      "title": "MMA resin lane coating.",
@@ -185,17 +216,23 @@ PRODUCTS = [
      "spec_pairs": [("Material", "Methyl methacrylate (MMA) resin"), ("Cure", "45–60 min — traffic-ready"),
                     ("Traction", "Embedded aggregate"), ("Min Temp", "+3°C and rising")]},
     {"name": "StreetBondSR",
+     "category": "Solar-Reflective Acrylic Coating",
      "tagline": "Solar reflective. LEED-aligned.",
      "hero": _pick(PRODUCTS_DIR / "streetbondsr" / "streetbondsr-02.jpg"),
      "title": "Cool surface coating.",
-     "italic": "Initial SRI ≥ 0.33. LEED v4 SS Credit: Heat Island Reduction.",
-     "callout": "SRI",
-     "callout_unit": "≥ 0.33 initial Solar Reflectance Index — meets LEED v4 Heat Island threshold",
-     "body": "Solar reflective acrylic coating with Initial Solar Reflectance ≥ 0.33 — meeting the LEED v4 SS Credit: Heat Island Reduction threshold for non-roof hardscape. Same flexible chemistry and adhesion characteristics as StreetBond. Reduces pavement surface temperatures, mitigates urban heat island, and supports climate action plan implementation. Available in a curated palette of SRI-optimized tones plus custom Pantone matching.",
+     # SRI→SR terminology fix (final-revision pass): SRI is the 0–100 index
+     # (the SR palette rates SRI 31–73 — see the colour spread); the LEED v4
+     # threshold is Solar Reflectance ≥ 0.33, a 0–1 value. Body + spec grid
+     # already said it correctly; the subhead conflated the two.
+     "italic": "Initial Solar Reflectance ≥ 0.33. LEED v4 SS Credit: Heat Island Reduction.",
+     "callout": "SR",
+     "callout_unit": "≥ 0.33 initial Solar Reflectance — meets LEED v4 Heat Island threshold",
+     "body": "Solar reflective acrylic coating with Initial Solar Reflectance ≥ 0.33 — meeting the LEED v4 SS Credit: Heat Island Reduction threshold for non-roof hardscape. Same flexible chemistry and adhesion characteristics as StreetBond. Reduces pavement surface temperatures, mitigates urban heat island, and supports climate action plan implementation. Available in eleven SRI-rated tones plus custom Pantone matching.",
      "uses": ["Parking", "Plazas", "LEED Sites", "Schools"],
      "spec_pairs": [("Solar Reflectance", "≥ 0.33 initial"), ("LEED", "v4 SS Credit: Heat Island"),
                     ("Surfaces", "Asphalt and concrete"), ("Coverage", "30–50 sq ft / gallon")]},
     {"name": "DuraTherm",
+     "category": "Inlaid Preformed Thermoplastic",
      "tagline": "Inlaid. Flush. Invisible to snowplows.",
      "hero": _pick(PRODUCTS_DIR / "duratherm" / "duratherm-01.jpg"),
      "title": "Inlaid thermoplastic.",
@@ -207,8 +244,9 @@ PRODUCTS = [
      "spec_pairs": [("Install", "Inlaid into milled groove"), ("Profile", "Zero — flush with road"),
                     ("Snowplow Safe", "Yes — no shear risk"), ("Bond", "Heat-fused to asphalt substrate")]},
     {"name": "DuraShield",
+     "category": "Pavement Maintenance Coating",
      "tagline": "Maintain a surface, do not replace it.",
-     "hero": _pick(PRODUCTS_DIR / "durashield" / "durashield-04.jpg"),
+     "hero": _pick(PRODUCTS_DIR / "durashield" / "durashield-11.jpg", PRODUCTS_DIR / "durashield" / "durashield-04.jpg"),
      "title": "Pavement maintenance coating.",
      "italic": "Two-component epoxy-modified acrylic. Solar Reflectance 0.34.",
      "callout": "SR 0.34",
@@ -218,8 +256,14 @@ PRODUCTS = [
      "spec_pairs": [("Type", "Epoxy-modified acrylic coating"), ("Solar Reflectance", "0.34"),
                     ("Chemical Resistance", "Fuel, oil, deicing agents"), ("Anti-Slip", "Available")]},
     {"name": "PreMark",
+     "category": "Preformed Regulatory Markings",
      "tagline": "Pre-cut. Heat-applied. Open immediately.",
-     "hero": _pick(PRODUCTS_DIR / "premark" / "premark-01.jpg"),
+     # FINAL PASS photo call: premark-01 was a plain striped crosswalk at a
+     # casino construction site — no regulatory SYMBOL. premark-11 shows
+     # preformed regulatory legends (30 KM/H) + turn arrows being heat-applied
+     # by the SR-120 machine at Granville Island, Vancouver — true on-product.
+     "hero": _pick(PRODUCTS_DIR / "premark" / "premark-11.jpg",
+                   PRODUCTS_DIR / "premark" / "premark-01.jpg"),
      "title": "Road marking symbols.",
      "italic": "Arrows. Stop bars. Legends. Bike pictographs. No stencils.",
      "callout": "125 mil",
@@ -228,8 +272,20 @@ PRODUCTS = [
      "uses": ["Bike Lanes", "Crosswalks", "Regulatory", "Parking"],
      "spec_pairs": [("Thickness", "125mil standard / 90mil ViziGrip"), ("Installation", "Heat-applied — drive-on immediately"),
                     ("Retroreflectivity", "Intersection-grade glass bead"), ("Service Life", "Multi-year municipal use")]},
+    # v41 — Vernon's call: ChipFill, AggreFill, Fast Patch removed from the
+    # CATALOGUE publication. They remain on the WEBSITE (lib/products.ts
+    # entries + /products/chipfill etc.). The print catalogue holds the
+    # 11 core specified-by-engineers products only. Repair products are a
+    # transactional-buyer story and don't belong in the engineer/planner
+    # spec book.
     {"name": "AirMark",
+     "category": "Airfield Preformed Thermoplastic",
      "tagline": "Airfield markings, certified to last.",
+     # FINAL PASS photo call: airmark-04 is already correct on-product — yellow
+     # TAXIWAY/APRON hold markings + control tower, NON-RUNWAY (4032x3024).
+     # Do NOT "upgrade" to airmark-21 (the red "13R-31L" shot): those are RUNWAY
+     # designation markings, and AirMark is explicitly non-runway per the PPG
+     # exclusion (the critical CLAIMS-VERIFICATION liability fix). Kept as-is.
      "hero": _pick(PRODUCTS_DIR / "airmark" / "airmark-04.jpg",
                    PRODUCTS_DIR / "airmark" / "airmark-01.jpg"),
      "title": "Airfield thermoplastic.",
@@ -245,9 +301,15 @@ PRODUCTS = [
 
 # ===== APPLICATIONS (17 — Airports removed) =====
 APPLICATIONS = [
+    # §7.4 — "location" renders as the card's meta line (same style as
+    # project cards) when the facing photo's install location is verifiable.
+    # Never guess: tags below are photo-evident (street sign in frame) or
+    # documented in the Stage-B swap notes. Open IDs tracked in ISSUES.md.
     {"name": "Crosswalks", "tagline": "Pedestrian safety, designed in.",
      "image": _pick(_app_img("crosswalks", 3)),
-     "body": "TrafficPatterns and TrafficPatternsXD thermoplastic hold ASTM-rated retroreflectivity through snowplow cycles and de-icing seasons where paint fails within a year. DecoMark and StreetBond open the intersection as a canvas — Pride crossings, Indigenous cultural art, neighbourhood identity. Specified by municipalities from Halifax to Vancouver."},
+     # West Beaver Creek Rd street sign visible in frame (York Region)
+     "location": "Richmond Hill, Ontario",
+     "body": "TrafficPatterns and TrafficPatternsXD thermoplastic hold ASTM-rated skid resistance and high-contrast colour through snowplow cycles and de-icing seasons where paint fails within a year. DecoMark and StreetBond open the intersection as a canvas — Pride crossings, Indigenous cultural art, neighbourhood identity. Specified by municipalities from Halifax to Vancouver."},
     {"name": "Bike Lanes", "tagline": "Visibility that holds, season after season.",
      "image": _pick(_app_img("bike-lanes", 14)),
      "body": "A faded bike lane is a dangerous bike lane. StreetBond UV-stable acrylic and MMAX MMA resin maintain vivid colour through years of traffic and weather without chalking or fading. Bond strength above 3 MPa for cured MMAX zones."},
@@ -256,7 +318,7 @@ APPLICATIONS = [
      "body": "BRT corridors are among the most demanding surfaces in any city's network. MMAX MMA resin cures to traffic-ready in 45–60 minutes, enabling complete overnight installation without disrupting weekday service. TrafficPatternsXD aggregate-reinforced thermoplastic delivers high skid resistance at bus stops and turning movements. Both outlast painted markings season after season."},
     {"name": "Parking Lots", "tagline": "Looks maintained, performs safely, costs less.",
      "image": _pick(_app_img("parking-lots", 1)),
-     "body": "Parking lots take a disproportionate beating. DuraShield asphalt maintenance coating (SR 0.34) protects oxidized surfaces from UV, heat, and chemical degradation. TrafficPatterns and PreMark thermoplastic stall markings hold retroreflectivity without annual repainting. StreetBond creates branded wayfinding zones and fire lane designations."},
+     "body": "Parking lots take a disproportionate beating. DuraShield asphalt maintenance coating (SR 0.34) protects oxidized surfaces from UV, heat, and chemical degradation. PreMark retroreflective and TrafficPatterns high-contrast thermoplastic stall markings hold up without annual repainting. StreetBond creates branded wayfinding zones and fire lane designations."},
     {"name": "Parks & Paths", "tagline": "Surfaces worth spending time on.",
      # parks-paths-01.jpg WRONG: showed playground/daycare with play equipment, not a path
      # parks-paths-04.jpg: StreetPrint crosswalk in pedestrian park area (heritage building, pedestrian bollard) ✓
@@ -269,8 +331,10 @@ APPLICATIONS = [
     {"name": "Community Branding", "tagline": "Neighbourhood identity, embedded in the street.",
      # community-branding-08.jpg WRONG: tiny dim "4 Yates St." marker, not representative of community branding
      # community-branding-03.jpg: strong community branding crosswalk installation ✓
-     "image": _pick(_app_img("community-branding", 3),
-                    _app_img("community-branding", 8)),
+     "image": _pick(_app_img("community-branding", 9),
+                    _app_img("community-branding", 13)),
+     # Stage-B swap notes: Coast Salish salmon medallion, Moody Centre Station
+     "location": "Port Moody, British Columbia",
      "body": "Every neighbourhood has a story. Most go untold on the street. DecoMark embeds Pantone-accurate custom graphics directly into asphalt: First Nations cultural artwork, BIA wayfinding, neighbourhood crests, Pride declarations, heritage commemorations."},
     {"name": "Private Driveways", "tagline": "Stone-paver looks. No demolition required.",
      "image": _pick(_app_img("residential-driveways", 1)),
@@ -292,7 +356,7 @@ APPLICATIONS = [
      "body": "Townhome and strata developments live and die by their first impression. StreetPrint stamped asphalt driveways and entry courts deliver the look of clay pavers or stone cobble at a fraction of the cost — no settling, no weeding."},
     {"name": "Pedestrian Safety", "tagline": "Vision Zero, on the surface.",
      "image": _pick(_app_img("crosswalks", 18)),
-     "body": "Pedestrian safety isn't aesthetic aspiration — it's a measurable outcome. Retroreflective thermoplastic. High-contrast colour that persists through de-icing salt cycles. The complete specification for engineers taking Vision Zero seriously."},
+     "body": "Pedestrian safety isn't aesthetic aspiration — it's a measurable outcome. Retroreflective regulatory markings. High-contrast decorative thermoplastic that persists through de-icing salt cycles. The complete specification for engineers taking Vision Zero seriously."},
     {"name": "Traffic Calming", "tagline": "Drivers slow without barriers.",
      "image": _pick(_app_img("traffic-calming", 1)),
      "body": "Colour changes driver behaviour. Gateway treatments, speed table surface markings, and intersection colour reduce vehicle entry speeds without requiring physical barriers that impede emergency response."},
@@ -303,6 +367,21 @@ APPLICATIONS = [
      "image": _pick(_app_img("community-branding", 11), _app_img("community-branding", 4)),
      "body": "The street is one of the largest untapped canvases in any city. HUB public art installations turn that canvas into permanent, weather-resistant community expression. From BC Children's Hospital labyrinth to UBC Indigenous cultural crosswalks."},
 ]
+
+# §8 — Applications grouping order (master prompt: crosswalks → bike/bus →
+# traffic calming → public spaces → sport → commercial). Civic safety first,
+# recreation + identity in the middle, commercial/residential cluster last.
+# Sort-by-list keeps each entry's content diff-free above.
+_APP_ORDER = [
+    "Crosswalks", "Pedestrian Safety", "Bike Lanes", "Bus Lanes",
+    "Traffic Calming", "Parks & Paths", "Playgrounds", "Splash Pads",
+    "Sport Courts", "Public Spaces", "Public Art", "Community Branding",
+    "LEED & Heat Island", "Commercial Spaces", "Townhomes",
+    "Private Driveways", "Parking Lots",
+]
+assert sorted(_APP_ORDER) == sorted(a["name"] for a in APPLICATIONS), \
+    "_APP_ORDER out of sync with APPLICATIONS"
+APPLICATIONS.sort(key=lambda a: _APP_ORDER.index(a["name"]))
 
 
 # ===== PROJECTS (18 — capital/transit projects first, community art second) =====
@@ -333,7 +412,7 @@ PROJECTS = [
     {"name": "BC Children's Hospital", "location": "Vancouver, British Columbia", "product": "StreetBond + DecoMark",
      "hero": _pick(BLOG_DIR / "bc-childrens-hospital-labyrinth" / "featured.jpg",
                    PRODUCTS_DIR / "streetbond" / "streetbond-95.jpg"),
-     "detail": _pick(PRODUCTS_DIR / "decomark" / "decomark-43.jpg"),
+     "detail": _pick(BLOG_DIR / "bc-childrens-hospital-labyrinth" / "detail.jpg", PRODUCTS_DIR / "decomark" / "decomark-43.jpg"),
      "title": "Playful surfaces. Healing spaces.",
      "story": "StreetBond coatings and DecoMark surface graphics — including a meditation labyrinth — installed across active wards and ground-level plazas at BC Children's Hospital. Designed with Connect Landscape Architecture. The surfaces are slip-resistant, chemical-resistant, and built to perform in a healthcare environment."},
     {"name": "New Westminster Complete Streets", "location": "New Westminster, British Columbia", "product": "StreetBond + TrafficPatterns",
@@ -341,13 +420,13 @@ PROJECTS = [
                    _app_img("bike-lanes", 22)),
      "detail": _pick(_app_img("bike-lanes", 32)),
      "title": "Modal clarity, written in colour.",
-     "story": "Complete Streets across New Westminster: StreetBond green for protected bike lanes, TrafficPatterns retroreflective crosswalks, high-contrast colour at every conflict point. Modal priority made legible. Cyclists protected. Pedestrians seen. The Complete Streets specification that transportation engineers and urban planners return to."},
+     "story": "Complete Streets across New Westminster: StreetBond green for protected bike lanes, TrafficPatterns high-contrast crosswalks, high-contrast colour at every conflict point. Modal priority made legible. Cyclists protected. Pedestrians seen. The Complete Streets specification that transportation engineers and urban planners return to."},
     {"name": "York Region Pedestrian Safety", "location": "York Region, Ontario", "product": "TrafficPatternsXD",
      # Blog: trafficpatternsxd-urban-design — "Heritage Crosswalks in Woodbridge: How TPXD Delivered the Look"
      # Shows dark charcoal TPXD crosswalk in a York Region (Woodbridge/Vaughan) suburb — winter, GTA homes ✓
      "hero": _pick(BLOG_DIR / "trafficpatternsxd-urban-design" / "featured.jpg",
                    _app_img("crosswalks", 3)),
-     "detail": _pick(_app_img("crosswalks", 26),
+     "detail": _pick(APPS_DIR / "crosswalks" / "vaughan-woodbridge-crosswalk.jpg",
                      PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-94.jpg"),
      "title": "Outlasts paint by eight times.",
      "story": "TrafficPatternsXD 150-mil aggregate-reinforced crosswalk markings specified across York Region intersections. Eight times the service life of paint. A measurable reduction in annual maintenance spend. The kind of lifecycle arithmetic that procurement teams and transportation engineers notice — and specify again."},
@@ -359,7 +438,7 @@ PROJECTS = [
                    _app_img("crosswalks", 11)),
      "detail": _pick(_app_img("crosswalks", 31)),
      "title": "High-visibility holds lives.",
-     "story": "Where painted crosswalks fade by spring, retroreflective thermoplastic holds visibility through every season. Specified by municipalities from Halifax to Victoria pursuing Vision Zero — the standard for engineers who need pedestrian safety outcomes, not just pedestrian safety intentions."},
+     "story": "Where painted crosswalks fade by spring, high-contrast thermoplastic holds its colour through every season. Specified by municipalities from Halifax to Victoria pursuing Vision Zero — the standard for engineers who need pedestrian safety outcomes, not just pedestrian safety intentions."},
     {"name": "Vancouver BIA Crosswalks", "location": "Vancouver, British Columbia", "product": "StreetPrint",
      # Blog: vancouver-decorative-crosswalk-design — BC TransLink bus + colourful leaf/wave crosswalk design ✓
      # (streetprint-23.jpg was WRONG: showed indoor covered commercial walkway, not an outdoor BIA street)
@@ -369,9 +448,15 @@ PROJECTS = [
      "title": "District identity, cast in pavement.",
      "story": "StreetPrint stamped-asphalt crosswalks across five Vancouver Business Improvement Districts. District identity embedded permanently in the street — walked over every day, maintaining visual coherence through snowplow seasons and years of traffic load."},
     {"name": "UBC Musqueam Crosswalk", "location": "Vancouver, British Columbia", "product": "StreetPrint and DecoMark",
-     # Blog: ubc-musqueam-crosswalk — actual UBC campus + Coast Salish salmon design, UBC letters in background ✓
-     # (aboriginal crosswalk 1.png was WRONG: showed an aerial B&W/blue eagle design, different project)
-     "hero": _pick(BLOG_DIR / "ubc-musqueam-crosswalk" / "featured.jpg",
+     # Blog: ubc-musqueam-crosswalk — actual UBC campus + Coast Salish salmon design.
+     # FINAL PASS cover-reuse fix: featured.jpg is the SAME UBC-letters+salmon
+     # composition as the cover (UBC Crosswalk 1.png) — a cover/project twin, and
+     # the only authentic UBC frame in the libraries. salmon-detail.jpg is a crop
+     # of that authentic photo to the Coast Salish salmon medallion (drops the UBC
+     # sculpture) — distinct from the cover, truthful, and on-message for "a
+     # surface is also a statement." (~263 DPI at hero size; print-acceptable.)
+     "hero": _pick(BLOG_DIR / "ubc-musqueam-crosswalk" / "salmon-detail.jpg",
+                   BLOG_DIR / "ubc-musqueam-crosswalk" / "featured.jpg",
                    ASSETS / "aboriginal crosswalk 1.png"),
      "detail": _pick(PRODUCTS_DIR / "streetprint" / "streetprint-77.jpg"),
      "title": "A surface is also a statement.",
@@ -385,10 +470,11 @@ PROJECTS = [
      "title": "Six laneways. Six artists.",
      "story": "Six Vancouver laneways. Six artists. StreetBond coloured pavement turned utility corridors into civic gallery space — public art at street scale, permanent and weather-resistant."},
     {"name": "White Rock Pier", "location": "White Rock, British Columbia", "product": "TrafficPatternsXD",
-     # tpxd-95.jpg WRONG: showed Toronto high-rise intersection, not White Rock pier or coastal setting
-     # Using actual White Rock pier blog photo — coastal bollards + thermoplastic crosswalk, correct location ✓
-     "hero": _pick(BLOG_DIR / "white-rock-pier-crosswalk" / "featured.png",
-                   PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-95.jpg"),
+     # v45 FIX: blog featured.png was 206×134 = 62 KB — pixelated when upscaled
+     # to a 5x5" print page. Swapped to the 2480×1860 (7.4 MB) booklet PNG
+     # of the same shot, which is print-grade. Vernon flagged p79 as blurry.
+     "hero": _pick(ASSETS / "Whiterock-Pier-Crosswalk-TrafficPatternsXD-1 1.png",
+                   BLOG_DIR / "white-rock-pier-crosswalk" / "featured.png"),
      "detail": _pick(PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-140.jpg"),
      "title": "Salt air. Holiday traffic. Held.",
      "story": "Salt spray. Summer surge. Winter rain. The pier crosswalk at White Rock faces the full force of the BC coast — and holds season after season. TrafficPatternsXD installed where paint would be gone by July."},
@@ -404,8 +490,11 @@ PROJECTS = [
      # (decomark-74.jpg detail was WRONG: showed "Little Italy - The Drive" Vancouver, wrong project)
      "hero": _pick(BLOG_DIR / "veterans-crosswalk-kitchener" / "featured.jpeg",
                    _app_img("community-branding", 1)),
-     "detail": _pick(BLOG_DIR / "veterans-crosswalk-kitchener" / "featured.jpeg",
-                     PRODUCTS_DIR / "decomark" / "decomark-74.jpg"),
+     # p84: only ONE authentic Kitchener photo exists, and it's 4:3/low-res —
+     # a true 2-page bleed would crop the flag-top and "Lest We Forget". So p83
+     # stays the full-bleed hero and p84 renders as a clean story page
+     # (detail=None -> no duplicate image). Flagged for Vernon in ISSUES.
+     "detail": None,
      "title": "Paint fades. Memory shouldn't.",
      "story": "Kitchener's Veterans Crosswalk: a permanent civic tribute walked over every day. DecoMark thermoplastic graphic embedded into the street — durable enough to outlast the paint that failed before it, respectful enough to honour what it commemorates."},
     {"name": "Every Child Matters", "location": "Town of Georgina, Ontario", "product": "TrafficPatterns",
@@ -428,7 +517,7 @@ PROJECTS = [
                    PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-127.jpg"),
      "detail": _pick(PRODUCTS_DIR / "traffic-patterns-xd" / "traffic-patterns-xd-129.jpg"),
      "title": "Two years of fundraising. One street.",
-     "story": "A young Simcoe resident's two-year fundraising campaign, realized in TrafficPatternsXD by Multiseal. A rainbow crosswalk that holds colour and retroreflectivity season after season — long after painted alternatives would have faded from memory."},
+     "story": "A young Simcoe resident's two-year fundraising campaign, realized in TrafficPatternsXD by Multiseal. A rainbow crosswalk that holds colour and skid resistance season after season — long after painted alternatives would have faded from memory."},
     {"name": "Bowen Island Path", "location": "Snug Cove, British Columbia", "product": "StreetBond",
      # Authentic Bowen Island shot from the blog post — actual project >
      # higher-res generic StreetBond stock.
@@ -451,7 +540,7 @@ PROJECTS = [
      "product": "TrafficPatterns",
      # Coastal wave-inspired mural by artist Amy (Yun Ru) Bao on Johnston Road, Uptown.
      "hero": _pick(BLOG_DIR / "white-rock-langley-trafficpatterns" / "featured.jpg"),
-     "detail": _pick(BLOG_DIR / "white-rock-langley-trafficpatterns" / "featured.jpg"),
+     "detail": _pick(BLOG_DIR / "white-rock-langley-trafficpatterns" / "detail.jpg", BLOG_DIR / "white-rock-langley-trafficpatterns" / "featured.jpg"),
      "title": "The waterfront, brought inland.",
      "story": "White Rock commissioned Vancouver artist Amy Bao to carry the coastal identity of the waterfront into the Uptown district on Johnston Road. Her 'Seaside Stroll' — flowing wave lines in the tones of White Rock's sandy beaches — was realized in TrafficPatterns preformed thermoplastic. Permanent. UV-stable. Slip-resistant. In its first season, Uptown reported 40% more foot traffic to the district."},
     {"name": "Langley Railroad Heritage", "location": "Langley City, British Columbia",
@@ -502,3 +591,38 @@ CITIES = [
     "Richmond Hill",           "City of Saskatoon",
     "BC Ministry of Transport","BC Children's Hospital",
 ]
+
+
+# ===== COLOUR SYSTEM (§4 colour spread — pp26–27, after StreetBondSR) =====
+# Source of truth: COLOUR-MANIFEST.csv at the repo root — the official
+# StreetBond colour list (17 Traditional + 20 Signature + 11 Solar-Reflective
+# + 3 Cycle-Lane). Hex values are screen-reference sampled from the official
+# chart; the build converts them through the vendored FOGRA39 profile for
+# CMYK output. Supplier CMYK formulas must replace these before any press
+# run (tracked in ISSUES.md) — never treat the hex conversion as press-final.
+_COLOUR_MANIFEST = ROOT.parent / "COLOUR-MANIFEST.csv"
+
+
+def _load_colour_system():
+    fams = {"Traditional": [], "Signature": [],
+            "Solar-Reflective": [], "Cycle-Lane": []}
+    with open(_COLOUR_MANIFEST, newline="", encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            fam = row["family"].strip()
+            if fam not in fams:
+                continue
+            fams[fam].append({
+                "name": row["name"].strip(),
+                "hex": row["hex_srgb_reference"].strip(),
+                "sri": row["sri"].strip(),
+                "reflectance": row["reflectance"].strip(),
+                "emittance": row["emittance"].strip(),
+            })
+    counts = {k: len(v) for k, v in fams.items()}
+    assert counts == {"Traditional": 17, "Signature": 20,
+                      "Solar-Reflective": 11, "Cycle-Lane": 3}, \
+        f"COLOUR-MANIFEST.csv counts changed: {counts}"
+    return fams
+
+
+COLOUR_SYSTEM = _load_colour_system()

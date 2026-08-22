@@ -86,7 +86,7 @@ products:
   hero_image: assets/booklet/Intergrated Rumble Bars (TrafficPatterns) 1.png
   detail_image: assets/booklet/Intergrated Rumble Bars 2 (TrafficPatterns) 1.png
   description: ''
-  spec_line: 90mil. Open in hours. No repaint cycle.
+  spec_line: 125mil. Open in hours. No repaint cycle.
   project_examples:
   - ../public/images/products/traffic-patterns/traffic-patterns-37.jpg
   - ../public/images/products/traffic-patterns/traffic-patterns-36.jpg
@@ -188,16 +188,6 @@ products:
   - ../public/images/products/premark/premark-03.jpg
   - ../public/images/products/premark/premark-01.jpg
   - ../public/images/products/premark/premark-11.jpg
-- name: Fast Patch.
-  tagline: A pothole, gone in thirty minutes.
-  hero_image: assets/booklet/compactor on streetprint 1.png
-  detail_image: ../public/images/products/streetprint/streetprint-67.jpg
-  description: ''
-  spec_line: 30 minute cure. -10°C to +40°C.
-  project_examples:
-  - ../public/images/products/streetprint/streetprint-69.jpg
-  - ../public/images/products/streetprint/streetprint-68.jpg
-  - ../public/images/products/streetprint/streetprint-89.jpg
 applications_divider:
   eyebrow: Section Three
   title: Applications.

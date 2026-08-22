@@ -1,0 +1,137 @@
+page_v54,section,role,depicts,caption_or_headline,product,location,source_path,source_status,dedup_notes
+1,Front,cover,Whiterock pier crosswalk hero,"Catalogue 2026 / REDEFINING HARDSCAPES",TrafficPatternsXD,"White Rock, BC","assets/booklet/Whiterock-Pier-Crosswalk-TrafficPatternsXD-1 1.png",MAPPED-BOOKLET,"Hero also used on cover & project p99 — confirm intentional cover/project echo"
+2,Front,inside-front,Walking on crosswalk,"ESTABLISHED 1994",,,"assets/booklet/HUB Catalogue 2024 (walking) 1.png",MAPPED-BOOKLET,
+3,Front,toc,Table of contents,"WHAT'S INSIDE — Products 11 / Applications 37 / Projects 75 / Network 118 / Reference 125 / L&L 128 / Contact 129",,,,TEXT-PAGE,"TOC must be repaginated +2 after colour-spread insertion (see COLOUR-SPREAD-PLAN.md)"
+4,Front,manifesto,Editorial,"The people who made your city look like your city",,Canada,,TEXT-PAGE,"Verify background image source if any"
+5,Front,stat-spread,Why HUB stats,"WHY HUB — 30+ years / 1,000+ projects",,,,TEXT-PAGE,"Stats cross-checked in CLAIMS-VERIFICATION.csv"
+6,Front,stat-spread,Four reasons,"FOUR REASONS — freeze-thaw, salts, plows",,,,TEXT-PAGE,
+7,Front,stat-spread,By the numbers,"BY THE NUMBERS — 30+ / 1,000+ / 10 provinces",,,,TEXT-PAGE,
+8,Front,manifesto,Position statement,"Asphalt is the canvas. The city is the gallery.",,,,TEXT-PAGE,
+9,Front,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,"Identify source photo; check it is not duplicated elsewhere"
+10,Front,overlay-caption,The Work intro,"THE WORK — From every intersection, a statement",,,,FIGMA-ID-NEEDED,"Overlay caption — verify scrim contrast >=4.5:1"
+11,Products,divider,Section One divider,"SECTION ONE — Products",,,,TEXT-PAGE,"Dark divider — apply Products section accent colour (§8 nav)"
+12,Products,product-name,TPXD name page,"TRAFFICPATTERNSXD — When the surface has to hold",TrafficPatternsXD,,"assets/booklet/Intersection installation TPXD 1.png",MAPPED-BOOKLET,
+13,Products,product-spec,TPXD spec grid,"150-mil aggregate-reinforced thermoplastic",TrafficPatternsXD,,"assets/booklet/IMG_1347 1.png",MAPPED-BOOKLET,"Spec grid must match p126 table & TDS"
+14,Products,product-name,TP name page,"TRAFFICPATTERNS — Outlasts paint by seasons",TrafficPatterns,,"assets/booklet/Intergrated Rumble Bars (TrafficPatterns) 1.png",MAPPED-BOOKLET,
+15,Products,product-spec,TP spec grid,"125-mil preformed, heat-fused",TrafficPatterns,,"assets/booklet/Intergrated Rumble Bars 2 (TrafficPatterns) 1.png",MAPPED-BOOKLET,"catalog.yaml says 90mil — reconcile to 125mil"
+16,Products,product-name,StreetBond name page,"STREETBOND — Coloured pavement that moves with asphalt",StreetBond,"Vancouver, BC","assets/booklet/StreetBond - Vancouver sidewalk 1.png",MAPPED-BOOKLET,
+17,Products,product-spec,StreetBond spec grid + RAINBOW LOGO,"The colour system / resist peeling, cracking, fading",StreetBond,,"assets/booklet/StreetBond Circle Design 1.png",MAPPED-BOOKLET,"§5: place streetbond-Full Color-wh.png (light-bg) on white body, NOT dark band"
+18,Products,product-name,StreetPrint name page,"STREETPRINT — Stamped asphalt at a fraction of stone's cost",StreetPrint,"Surrey, BC","assets/booklet/StreetPrint - Maridian Surrey 1.png",MAPPED-BOOKLET,"§7.3: add Reheat>Stamp>Coat process strip on/facing this page"
+19,Products,product-spec,StreetPrint spec grid,"12+ patterns, flush, snowplow safe",StreetPrint,,"assets/booklet/StreetPrint walkway 1.png",MAPPED-BOOKLET,
+20,Products,product-name,DecoMark name page,"DECOMARK — A crosswalk is a canvas",DecoMark,,"assets/booklet/DecoMark community park 1.png",MAPPED-BOOKLET,
+21,Products,product-spec,DecoMark spec grid,"Custom graphics, Pride, Indigenous art",DecoMark,,"assets/booklet/DecoMark community park 2 1.png",MAPPED-BOOKLET,
+22,Products,product-name,MMAX name page,"MMAX — Traffic-ready overnight",MMAX,,"assets/booklet/Look listen live 1.png",MAPPED-BOOKLET,"Hero shared with project Look Listen Live — verify acceptable reuse"
+23,Products,product-spec,MMAX spec grid,"45-60 min cure, +3C and rising",MMAX,,"../public/images/products/mmax/mmax-04.jpg",MAPPED-WEBSITE,
+24,Products,product-name,StreetBondSR name page,"STREETBONDSR — Solar reflective. LEED-aligned",StreetBondSR,,"assets/booklet/StreetBond on concrets and vertical surfaces 1.png",MAPPED-BOOKLET,
+25,Products,product-spec,StreetBondSR spec grid,"Initial SRI >= 0.33; LEED v4 Heat Island",StreetBondSR,,"assets/booklet/StreetBond Moxing 1.png",MAPPED-BOOKLET,"*** COLOUR SYSTEM SPREAD INSERTS IMMEDIATELY AFTER THIS PAGE (new pp26-27) ***"
+26,Products,product-name,DuraTherm name page,"DURATHERM — Inlaid. Flush. Invisible to snowplows",DuraTherm,,"assets/booklet/DuraTherm stecils on asphalt 1.png",MAPPED-BOOKLET,"Benchmark dark page (§9). Becomes p28 after insertion"
+27,Products,product-spec,DuraTherm spec grid,"Inlaid into milled groove, zero profile",DuraTherm,,"assets/booklet/duratherm1 1.png",MAPPED-BOOKLET,
+28,Products,product-name,DuraShield name page,"DURASHIELD — Maintain a surface, do not replace it",DuraShield,,"../public/images/products/durashield/durashield-04.jpg",MAPPED-WEBSITE,
+29,Products,product-spec,DuraShield spec grid,"Two-component epoxy-modified acrylic, SR 0.34",DuraShield,,"../public/images/products/durashield/durashield-07.jpg",MAPPED-WEBSITE,
+30,Products,product-name,PreMark name page,"PREMARK — Pre-cut. Heat-applied. Open immediately",PreMark,,"assets/booklet/StreetPrint - bikes 1.png",MAPPED-BOOKLET,"Hero is a bike-lane shot — verify it reads as PreMark not StreetPrint"
+31,Products,product-spec,PreMark spec grid,"125mil standard / 90mil ViziGrip",PreMark,,"../public/images/products/premark/premark-09.jpg",MAPPED-WEBSITE,"Ensure 125mil standard (was reversed on website)"
+32,Products,product-name,AirMark name page,"AIRMARK — Airfield markings, certified to last",AirMark,,"assets/booklet/Airport Sports Court 1.png",MAPPED-BOOKLET,"NB hero is a sports court — confirm an airfield image is intended for AirMark"
+33,Products,product-spec,AirMark spec grid,"Airfield thermoplastic, non-runway",AirMark,,"../public/images/products/airmark/airmark-04.jpg",MAPPED-WEBSITE,"Confirm non-runway scope explicit"
+34,Products,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+35,Products,overlay-caption,In the field intro,"IN THE FIELD — Designed for the city. Built for the street.",,,,FIGMA-ID-NEEDED,"§8: prompt flags p35 overlay scrim weak in v50 — verify in v54"
+36,Products,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+37,Applications,divider,Section Two divider,"SECTION TWO — Applications",,,,TEXT-PAGE,"Apply Applications section accent colour"
+38,Applications,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+39,Applications,app-text,Crosswalks,"CROSSWALKS — Pedestrian safety, designed in",TrafficPatterns/TPXD,,,FIGMA-ID-NEEDED,
+40,Applications,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,"Check not dup of p39 hero"
+41,Applications,app-text,Bike lanes,"BIKE LANES — Visibility that holds",StreetBond/MMAX,,"../public/images/applications/bike-lanes/bike-lanes-12.jpg",MAPPED-WEBSITE,
+42,Applications,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+43,Applications,app-text,Bus lanes,"BUS LANES — Engineered for the harshest urban loads",MMAX,,,FIGMA-ID-NEEDED,
+44,Applications,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+45,Applications,app-text,Parking lots,"PARKING LOTS — Looks maintained, performs safely",DuraShield,,,FIGMA-ID-NEEDED,
+46,Applications,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+47,Applications,app-text,Parks & paths,"PARKS & PATHS — Surfaces worth spending time on",StreetBond,,"../public/images/applications/parks-paths/parks-paths-132.jpg",MAPPED-WEBSITE,
+48,Applications,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+49,Applications,app-text,Playgrounds,"PLAYGROUNDS — Vibrant, slip-resistant",DecoMark,,,FIGMA-ID-NEEDED,
+50,Applications,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+51,Applications,app-text,Community branding,"COMMUNITY BRANDING — Neighbourhood identity",DecoMark,,"../public/images/applications/community-branding/community-branding-08.jpg",MAPPED-WEBSITE,
+52,Applications,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+53,Applications,app-text,Private driveways,"PRIVATE DRIVEWAYS — Stone-paver looks, no demolition",StreetPrint,,"assets/booklet/StreetPrin Driveway 1.png",MAPPED-BOOKLET,
+54,Applications,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+55,Applications,app-text,Sport courts,"SPORT COURTS — Court colour and lines that hold",StreetBond,,"assets/booklet/school sport court 1.png",MAPPED-BOOKLET,
+56,Applications,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+57,Applications,app-text,Splash pads,"SPLASH PADS — Slip-resistant. Cool to touch. Vivid",StreetBond,,"assets/booklet/Splash Pad 1.png",MAPPED-BOOKLET,
+58,Applications,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+59,Applications,app-text,Public spaces,"PUBLIC SPACES — Civic plazas, transit forecourts",StreetPrint/StreetBond,,,FIGMA-ID-NEEDED,
+60,Applications,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+61,Applications,app-text,Commercial spaces,"COMMERCIAL SPACES — Premium hardscape",StreetPrint,,,FIGMA-ID-NEEDED,
+62,Applications,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+63,Applications,app-text,Townhomes,"TOWNHOMES — Cohesive hardscape for strata",StreetPrint,,,FIGMA-ID-NEEDED,
+64,Applications,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,"§3.2 prompt: v50 p64 had Surrey/BC-Children's mismatch — verify v54 content"
+65,Applications,app-text,Pedestrian safety,"PEDESTRIAN SAFETY — Vision Zero, on the surface",TPXD/PreMark,,,FIGMA-ID-NEEDED,"Remove any ASTM D4956 reference per audit"
+66,Applications,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+67,Applications,app-text,Traffic calming,"TRAFFIC CALMING — Drivers slow without barriers",StreetBond/StreetPrint,,,FIGMA-ID-NEEDED,
+68,Applications,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,"§3.3 prompt: v50 p68 York/UBC mismatch — verify v54 content; reserve UBC photo for p93"
+69,Applications,app-text,LEED & heat island,"LEED & HEAT ISLAND — Solar reflective. Climate-aligned",StreetBondSR,,,FIGMA-ID-NEEDED,"LEED wording must match colour-spread Page B"
+70,Applications,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+71,Applications,app-text,Public art,"PUBLIC ART — The street as canvas",DecoMark/StreetBond,,,FIGMA-ID-NEEDED,
+72,Applications,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+73,Applications,app-text,Across Canada,"ACROSS CANADA — Ten provinces. One standard",,Canada,,FIGMA-ID-NEEDED,
+74,Applications,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+75,Projects,divider,Section Three divider,"SECTION THREE — Projects",,,,TEXT-PAGE,"Apply Projects section accent colour"
+76,Projects,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+77,Projects,project-text,York Region VIVA BRT,"MMAX — BRT corridor, open in 90 minutes",MMAX,"York Region, ON","blog/imprinted-asphalt-york-transit/featured.jpg",MAPPED-WEBSITE,
+78,Projects,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,"§3.4: confirm not duplicate of p77 hero"
+79,Projects,project-text,Toronto priority bus lanes,"MMAX — Twelve corridors. One transit network",MMAX,"Toronto, ON","blog/extending-transit-lane-lifespan/featured.jpg",MAPPED-WEBSITE,
+80,Projects,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,"§3.4: confirm not duplicate of p79 hero"
+81,Projects,project-text,London East Link BRT,"STREETBOND — A transit corridor with a clear identity",StreetBond,"London, ON","blog/cycling-transit-integration-surface-solutions/featured.jpeg",MAPPED-WEBSITE,"PROJECT-IMAGE-AUDIT flags london-east as placeholder — confirm real photo"
+82,Projects,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+83,Projects,project-text,BC Children's Hospital,"STREETBOND + DECOMARK — Playful surfaces. Healing spaces",StreetBond/DecoMark,"Vancouver, BC","blog/bc-childrens-hospital-labyrinth/featured.jpg",MAPPED-WEBSITE,"§3.2: this is the correct home for BC Children's copy+image"
+84,Projects,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,"§3.4: confirm not duplicate of p83 hero"
+85,Projects,project-text,New Westminster Complete Streets,"STREETBOND + TRAFFICPATTERNS — Modal clarity in colour",StreetBond/TrafficPatterns,"New Westminster, BC","blog/complete-streets-new-westminster/featured.jpg",MAPPED-WEBSITE,
+86,Projects,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,"§3.4: confirm not duplicate of p85 hero"
+87,Projects,project-text,York Region TPXD,"TRAFFICPATTERNSXD — Outlasts paint by eight times",TrafficPatternsXD,"York Region, ON","blog/trafficpatternsxd-urban-design/featured.jpg",MAPPED-WEBSITE,"§3.3: real York Region image belongs here, not UBC"
+88,Projects,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+89,Projects,project-text,Canada-wide high-visibility,"TRAFFICPATTERNS — High-visibility holds lives",TrafficPatterns,Canada,,FIGMA-ID-NEEDED,"Generic by design — verify a real Canadian shot"
+90,Projects,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+91,Projects,project-text,Vancouver BIA crosswalks,"STREETPRINT — District identity, cast in pavement",StreetPrint,"Vancouver, BC","blog/decorative-crosswalk-commercial-drive/featured.jpg",MAPPED-WEBSITE,"Five Vancouver BIAs — Commercial Drive is one"
+92,Projects,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+93,Projects,project-text,UBC Musqueam,"STREETPRINT AND DECOMARK — A surface is also a statement",StreetPrint/DecoMark,"Vancouver, BC","blog/ubc-musqueam-crosswalk/featured.jpg",MAPPED-WEBSITE,"§3.3: reserve UBC salmon/Coast Salish photography for THIS page only"
+94,Projects,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+95,Projects,project-text,More Awesome Now laneways,"STREETBOND — Six laneways. Six artists",StreetBond,"Vancouver, BC","blog/laneway-project/featured.png",MAPPED-WEBSITE,
+96,Projects,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+97,Projects,overlay-caption,Every mark intro,"EVERY MARK — Every mark tells a story",,,,FIGMA-ID-NEEDED,
+98,Projects,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+99,Projects,project-text,White Rock Pier,"TRAFFICPATTERNSXD — Salt air. Holiday traffic. Held",TrafficPatternsXD,"White Rock, BC","blog/white-rock-pier-crosswalk/featured.png",MAPPED-WEBSITE,"Same project as cover p1 — confirm distinct in-situ photo here"
+100,Projects,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+101,Projects,project-text,Indigenous Recognition,"DECOMARK — Recognition, cast in pavement",DecoMark,"Multiple municipalities, Canada","assets/booklet/aboriginal crosswalk 1.png",MAPPED-BOOKLET,
+102,Projects,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+103,Projects,project-text,Kitchener Veterans,"DECOMARK — Paint fades. Memory shouldn't",DecoMark,"Kitchener, ON","blog/veterans-crosswalk-kitchener/featured.jpeg",MAPPED-WEBSITE,
+104,Projects,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+105,Projects,project-text,Every Child Matters,"TRAFFICPATTERNS — Honouring residential school survivors",TrafficPatterns,"Town of Georgina, ON","blog/every-child-matters-crosswalk/featured.png",MAPPED-WEBSITE,
+106,Projects,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+107,Projects,project-text,shishalh Nation,"TRAFFICPATTERNS — The origin story of the shishalh Nation",TrafficPatterns,"Sunshine Coast, BC","blog/pictograph-crosswalk-sechelt/featured.jpg",MAPPED-WEBSITE,"PROJECT-IMAGE-AUDIT flags Sechelt pictograph image may be mislabeled — verify"
+108,Projects,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+109,Projects,project-text,Simcoe fundraising crosswalk,"TRAFFICPATTERNSXD — Two years of fundraising. One street",TrafficPatternsXD,"Simcoe, ON","blog/simcoe-rainbow-crosswalk/featured.jpg",MAPPED-WEBSITE,"Confirm Simcoe vs Collingwood (audit lists Collingwood Rainbow Crosswalk)"
+110,Projects,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+111,Projects,project-text,Bowen Island Snug Cove,"STREETBOND — Forest. Sunset. Water. Earth",StreetBond,"Snug Cove, Bowen Island, BC","blog/bowen-island-asphalt-path/featured.jpg",MAPPED-WEBSITE,
+112,Projects,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+113,Projects,project-text,Murrayville Schoolhouse,"STREETPRINT — A schoolhouse, a sidewalk, a memory",StreetPrint,"Langley, BC","blog/murrayville-schoolhouse-sidewalk/featured.jpg",MAPPED-WEBSITE,
+114,Projects,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+115,Projects,project-text,White Rock waterfront (Amy Bao),"TRAFFICPATTERNS — The waterfront, brought inland",TrafficPatterns,"White Rock, BC","blog/white-rock-langley-trafficpatterns/featured.jpg",MAPPED-WEBSITE,
+116,Projects,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+117,Projects,project-text,Langley City Linwood Park,"TRAFFICPATTERNS — Heritage cast in thermoplastic",TrafficPatterns,"Langley City, BC",,PLACEHOLDER-FLAGGED,"PROJECT-IMAGE-AUDIT: langley-railroad-heritage uses _placeholder.svg — NEEDS real photo (Square One Paving may have it)"
+118,Network,divider,Section Four divider,"SECTION FOUR — Network",,,,TEXT-PAGE,"Apply Network section accent colour"
+119,Network,installer,Square One Paving,"HUB CERTIFIED INSTALLER — Square One Paving",,"British Columbia",,FIGMA-ID-NEEDED,"Installer logo placeholder [LOGO] — supply Square One logo"
+120,Network,installer,Thermo Design,"HUB CERTIFIED INSTALLER — Thermo Design",,"Quebec",,FIGMA-ID-NEEDED,"Installer logo placeholder"
+121,Network,installer,Virtue Construction,"HUB CERTIFIED INSTALLER — Virtue Construction",,"Saskatchewan",,FIGMA-ID-NEEDED,"Installer logo placeholder"
+122,Network,installer,ULS Landscaping,"HUB CERTIFIED INSTALLER — ULS Landscaping",,"Alberta and Saskatchewan",,FIGMA-ID-NEEDED,"Installer logo placeholder"
+123,Network,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+124,Network,overlay-caption,Built to last,"BUILT TO LAST — The surface underfoot. The city above",,,,FIGMA-ID-NEEDED,
+125,Reference,divider,Section Five divider,"SECTION FIVE — Reference",,,,TEXT-PAGE,"Apply Reference section accent colour"
+126,Reference,reference-table,Product reference table,"PRODUCT REFERENCE — TPXD 150mil / TP 125mil / StreetBond acrylic ...",,,,TEXT-PAGE,"= prompt 'p107'. Must agree w/ spec grids, claims CSV & new colour counts (37 std + 11 SR)"
+127,Reference,cities-served,Cities served,"FROM HALIFAX TO VANCOUVER — A partial list",,Canada,,TEXT-PAGE,
+128,Lunch & Learn,cta,Lunch & Learn invite,"AN INVITATION — Lunch is on us. Your spec is free",,,"assets/booklet/StreetBond Splash Pad 1.png (catalog.yaml cta_image)",MAPPED-BOOKLET,"Keep approved L&L CTA; live hyperlink in web PDF"
+129,Contact,contact,Two offices,"TWO OFFICES. ONE NETWORK. — Cleve / Doug",,"Ladysmith BC; Milton ON",,TEXT-PAGE,"tel:/mailto: live links in web PDF"
+130,Closing,field-notes,Project notes,"FIELD NOTES — Project notes",,,,TEXT-PAGE,
+131,Closing,full-bleed,Photographic spread,"(full-bleed)",,,,FIGMA-ID-NEEDED,
+132,Closing,manifesto,Thirty years,"THIRTY YEARS IN THE MAKING — Built to outlast",,,,FIGMA-ID-NEEDED,
+133,Closing,notes,Notes,"NOTES — HUBSS.COM",,,,TEXT-PAGE,
+134,Closing,manifesto,A final word,"A FINAL WORD — The public realm. Ours to build right",,,,FIGMA-ID-NEEDED,
+135,Closing,closing,Thank you,"HUB SURFACE SYSTEMS — Thank you",,,,TEXT-PAGE,
+136,Closing,back-cover,Back cover,"Canada's Leading Decorative Pavement Solutions / hubss.com QR",,,"assets/booklet/StreetBond. path 1.png (catalog.yaml back_cover)",MAPPED-BOOKLET,

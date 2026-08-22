@@ -245,6 +245,8 @@ function DocCard({
               }}
               className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors duration-200 flex-shrink-0"
               style={{ background: "rgba(255,255,255,0.08)", color: "#9CA3AF" }}
+              aria-label={`Preview ${doc.title}`}
+              title={`Preview ${doc.title}`}
               onMouseEnter={(e) => {
                 (e.currentTarget as HTMLButtonElement).style.background = "rgba(249,115,22,0.12)";
                 (e.currentTarget as HTMLButtonElement).style.color = "#f97316";

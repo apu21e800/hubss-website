@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useRef } from "react";
 import { X, Download, ExternalLink } from "lucide-react";
+import Image from "next/image";
+import { previewFor } from "@/lib/pdf-previews";
 
 interface PdfPreviewModalProps {
   href: string;
@@ -19,6 +21,10 @@ export default function PdfPreviewModal({
 }: PdfPreviewModalProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
+
+  // Pre-rendered page images render on every browser. An inline PDF does not:
+  // Android Chrome and in-app webviews show a blank panel instead.
+  const preview = previewFor(href);
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -49,8 +55,8 @@ export default function PdfPreviewModal({
   // Trap Tab/Shift+Tab inside the dialog. The page behind it is still in the
   // DOM and not inert, so without this, tabbing past the last link (or
   // shift-tabbing before the first) walked focus into the resources grid
-  // sitting invisibly underneath the overlay. The PDF <iframe> is deliberately
-  // NOT one of the trapped stops (see tabIndex={-1} below): once focus moves
+  // sitting invisibly underneath the overlay. The fallback PDF <iframe> is
+  // deliberately NOT one of the trapped stops (tabIndex={-1}): once focus moves
   // into the browser's native PDF plugin, further Tab/Escape presses are
   // consumed by the plugin itself and never reach this document's listeners
   // — an unfixable browser-level keyboard trap. Skipping the iframe in the
@@ -188,19 +194,56 @@ export default function PdfPreviewModal({
           </button>
         </div>
 
-        {/* PDF iframe — excluded from the Tab sequence (tabIndex=-1). Once
-            keyboard focus enters the browser's native PDF plugin, Tab and
-            Escape are consumed by the plugin and never reach this page's
-            key handlers, so it can never be Tab'd into or out of; mouse
-            users can still click into it and use its native controls as
-            normal. "Open in new tab" below is the keyboard equivalent. */}
-        <iframe
-          src={`${href}#toolbar=1&navpanes=0&scrollbar=1`}
-          className="flex-1 w-full"
-          style={{ border: "none", minHeight: 0 }}
-          title={label}
-          tabIndex={-1}
-        />
+        {/* Body — pre-rendered pages where we have them, native PDF otherwise.
+            The page images are ordinary DOM, so unlike the iframe they sit
+            inside the focus trap without fighting it. The scroll container
+            takes tabIndex={0} because it has no focusable children of its
+            own: without it a keyboard user can reach Download/Close/"Open
+            full PDF" but has no way to scroll the pages they came to read. */}
+        {preview ? (
+          <div
+            className="flex-1 overflow-y-auto"
+            style={{ background: "rgba(0,0,0,0.35)", minHeight: 0 }}
+            tabIndex={0}
+            role="region"
+            aria-label={`${label} — page preview, ${preview.pages.length} of ${preview.total} pages`}
+          >
+            <div className="flex flex-col items-center gap-4 px-4 py-5">
+              {preview.pages.map((pg, i) => (
+                <Image
+                  key={pg.src}
+                  src={pg.src}
+                  alt={`${label} — page ${i + 1} of ${preview.total}`}
+                  width={pg.w}
+                  height={pg.h}
+                  priority={i === 0}
+                  sizes="(max-width: 640px) 100vw, 760px"
+                  className="w-full h-auto rounded-md"
+                  style={{ maxWidth: "760px", border: "1px solid rgba(255,255,255,0.08)" }}
+                />
+              ))}
+              {preview.total > preview.pages.length && (
+                <p className="text-xs text-center px-4" style={{ color: "#6B7280" }}>
+                  Showing {preview.pages.length} of {preview.total} pages — download for the full document.
+                </p>
+              )}
+            </div>
+          </div>
+        ) : (
+          /* PDF iframe fallback — excluded from the Tab sequence
+             (tabIndex=-1). Once keyboard focus enters the browser's native PDF
+             plugin, Tab and Escape are consumed by the plugin and never reach
+             this page's key handlers, so it can never be Tab'd into or out of;
+             mouse users can still click into it and use its native controls as
+             normal. "Open in new tab" below is the keyboard equivalent. */
+          <iframe
+            src={`${href}#toolbar=1&navpanes=0&scrollbar=1`}
+            className="flex-1 w-full"
+            style={{ border: "none", minHeight: 0 }}
+            title={label}
+            tabIndex={-1}
+          />
+        )}
 
         {/* Fallback footer */}
         <div
@@ -210,7 +253,7 @@ export default function PdfPreviewModal({
             color: "#868C98",
           }}
         >
-          PDF not rendering?&nbsp;
+          {preview ? "Want the full document?" : "PDF not rendering?"}&nbsp;
           <a
             href={href}
             target="_blank"
@@ -218,7 +261,7 @@ export default function PdfPreviewModal({
             className="inline-flex items-center gap-1 transition-colors hover:text-orange-400"
             style={{ color: "#F97316" }}
           >
-            Open in new tab <ExternalLink className="w-3 h-3" />
+            {preview ? "Open full PDF" : "Open in new tab"} <ExternalLink className="w-3 h-3" />
           </a>
         </div>
       </div>

@@ -445,7 +445,7 @@ const FEATURED_POSTS = [
 // Wide container, generous padding, dark surface, accent top line.
 function MegaShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="max-w-[1480px] mx-auto px-6 lg:px-10 py-6">
+    <div className="max-w-[1480px] mx-auto px-6 lg:px-10 pt-5 pb-3 max-h-[calc(100vh-72px)] overflow-y-auto overscroll-contain">
       {children}
     </div>
   );
@@ -465,7 +465,7 @@ const BRAND  = "#F97316";  // brand orange — reserved for larger / button use
 function ProductsMegaMenu() {
   return (
     <MegaShell>
-      <div className="grid grid-cols-12 gap-6">
+      <div className="grid grid-cols-12 gap-8">
         {/* Lead column */}
         <div className="col-span-12 lg:col-span-3">
           <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3" style={{ color: ACCENT }}>
@@ -487,7 +487,7 @@ function ProductsMegaMenu() {
         </div>
 
         {/* Category tiles — 4 cards with image headers */}
-        <div className="col-span-12 lg:col-span-9 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="col-span-12 lg:col-span-9 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {PRODUCT_CATEGORIES.map((cat) => {
             const items = cat.slugs.flatMap((s) => {
               const p = products.find((x) => x.slug === s);
@@ -499,7 +499,7 @@ function ProductsMegaMenu() {
                 className="rounded-xl overflow-hidden flex flex-col"
                 style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.06)" }}
               >
-                <Link href="/products" className="relative block group" style={{ height: 120 }}>
+                <Link href="/products" className="relative block group" style={{ height: 80 }}>
                   <Image
                     src={cat.image}
                     alt={cat.label}
@@ -515,34 +515,34 @@ function ProductsMegaMenu() {
                     <p className="text-[10px] font-bold tracking-[0.18em] uppercase mb-0.5" style={{ color: ACCENT }}>
                       {cat.icon} {cat.tag}
                     </p>
-                    <p className="text-[13px] font-bold leading-tight" style={{ color: "#F5F0EB" }}>{cat.label}</p>
+                    <p className="text-[14px] font-bold leading-tight" style={{ color: "#F5F0EB" }}>{cat.label}</p>
                   </div>
                 </Link>
 
                 {/* Optional pillar note — rebalances lean columns (e.g. Stamped Asphalt) */}
                 {cat.pillarNote && (
                   <div className="px-4 pt-3.5 pb-1">
-                    <p className="text-[11.5px] leading-snug" style={{ color: "rgba(255,255,255,0.7)" }}>
+                    <p className="text-[12px] leading-relaxed" style={{ color: "rgba(255,255,255,0.75)" }}>
                       {cat.pillarNote}
                     </p>
                   </div>
                 )}
 
                 {/* Product list — name + 5-7 word tagline per Vernon */}
-                <div className="flex-1 px-3 py-3 space-y-0.5">
+                <div className="flex-1 px-3.5 py-3.5 space-y-1">
                   {items.map((p) => (
                     <Link
                       key={p.slug}
                       href={`/products/${p.slug}`}
-                      className="group flex items-start justify-between gap-2 px-2 py-2.5 rounded-md transition-colors hover:bg-white/5"
+                      className="group flex items-start justify-between gap-2 px-2 py-2 rounded-md transition-colors hover:bg-white/5"
                     >
                       <div className="min-w-0">
-                        <p className="text-[13px] font-semibold leading-tight transition-colors group-hover:text-[color:var(--accent-hover)]"
+                        <p className="text-[14px] font-semibold leading-snug transition-colors group-hover:text-[color:var(--accent-hover)]"
                           style={{ color: "#F5F0EB", ['--accent-hover' as never]: ACCENT }}>
                           {p.name}
                         </p>
                         {PRODUCT_TAGLINE[p.slug] && (
-                          <p className="text-[11px] leading-snug mt-0.5" style={{ color: "rgba(255,255,255,0.62)" }}>
+                          <p className="text-[12px] leading-snug mt-1" style={{ color: "rgba(255,255,255,0.72)" }}>
                             {PRODUCT_TAGLINE[p.slug]}
                           </p>
                         )}
@@ -565,7 +565,7 @@ function ProductsMegaMenu() {
                         <p className="text-[10px] font-bold tracking-[0.18em] uppercase" style={{ color: ACCENT }}>
                           See also
                         </p>
-                        <p className="text-[13px] font-semibold leading-tight mt-0.5" style={{ color: "#F5F0EB" }}>
+                        <p className="text-[14px] font-semibold leading-tight mt-0.5" style={{ color: "#F5F0EB" }}>
                           {cat.secondary.label}
                         </p>
                         {cat.secondary.meta && (
@@ -588,11 +588,11 @@ function ProductsMegaMenu() {
       </div>
 
       {/* Featured project strip */}
-      <div className="mt-5 pt-4 rounded-xl overflow-hidden relative" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
-        <div className="flex items-center gap-4 p-4">
-          <div className="flex-shrink-0 rounded-lg overflow-hidden" style={{ width: 72, height: 72 }}>
-            {/* Fixed 72x72 box — width/height match the wrapper exactly, so no `sizes` needed. */}
-            <Image src="/images/blog/ubc-musqueam-crosswalk/featured.jpg" alt="UBC Musqueam Indigenous recognition crosswalk — decorative preformed thermoplastic by HUB Surface Systems" width={72} height={72} className="w-full h-full object-cover" style={{ objectPosition: "center 65%" }} />
+      <div className="mt-2 rounded-xl overflow-hidden relative" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
+        <div className="flex items-center gap-4 px-4 py-2">
+          <div className="flex-shrink-0 rounded-lg overflow-hidden" style={{ width: 56, height: 56 }}>
+            {/* Fixed 56x56 box — width/height match the wrapper exactly, so no `sizes` needed. */}
+            <Image src="/images/blog/ubc-musqueam-crosswalk/featured.jpg" alt="UBC Musqueam Indigenous recognition crosswalk — decorative preformed thermoplastic by HUB Surface Systems" width={56} height={56} className="w-full h-full object-cover" style={{ objectPosition: "center 65%" }} />
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-[10px] font-bold tracking-[0.18em] uppercase mb-1" style={{ color: ACCENT }}>Featured Project</p>
@@ -605,7 +605,7 @@ function ProductsMegaMenu() {
 
       {/* Bottom strip — secondary entry points. Catalogue moved out of this
           row up to its own banner so it doesn't read as "another project." */}
-      <div className="mt-5 pt-4 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+      <div className="mt-2.5 pt-2.5 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
         <Link href="/resources"
           className="flex items-center justify-between px-4 py-2.5 rounded-lg transition-colors hover:bg-white/5"
           style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
@@ -647,7 +647,7 @@ function FieldNotesMegaMenu() {
 
   return (
     <MegaShell>
-      <div className="grid grid-cols-12 gap-6">
+      <div className="grid grid-cols-12 gap-8">
         {/* Lead column */}
         <div className="col-span-12 lg:col-span-3">
           <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#F97316" }}>
@@ -656,7 +656,7 @@ function FieldNotesMegaMenu() {
           <h3 className="text-xl font-bold leading-tight mb-2" style={{ color: "#F5F0EB" }}>
             What we learn from the road.
           </h3>
-          <p className="text-[13px] leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.55)" }}>
+          <p className="text-[13px] leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.65)" }}>
             Project profiles, case studies, technical guides, and white papers from 30+ years of decorative pavement work across Canada.
           </p>
           <div className="space-y-2.5">
@@ -749,7 +749,7 @@ function FieldNotesMegaMenu() {
       </div>
 
       {/* Bottom strip — secondary entry points */}
-      <div className="mt-5 pt-4 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+      <div className="mt-2.5 pt-2.5 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
         <Link href="/blog"
           className="flex items-center justify-between px-4 py-2.5 rounded-lg transition-colors hover:bg-white/5"
           style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
@@ -789,7 +789,7 @@ function FieldNotesMegaMenu() {
 function ApplicationsMegaMenu() {
   return (
     <MegaShell>
-      <div className="grid grid-cols-12 gap-6">
+      <div className="grid grid-cols-12 gap-8">
         {/* Lead column */}
         <div className="col-span-12 lg:col-span-3">
           <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#F97316" }}>
@@ -798,7 +798,7 @@ function ApplicationsMegaMenu() {
           <h3 className="text-xl font-bold leading-tight mb-2" style={{ color: "#F5F0EB" }}>
             Surfaces that do real work.
           </h3>
-          <p className="text-[13px] leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.55)" }}>
+          <p className="text-[13px] leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.65)" }}>
             Crosswalks, transit lanes, parks, plazas, parking lots, airfields — every surface where decorative pavement and durable markings meet the brief.
           </p>
           <Link href="/applications"
@@ -811,7 +811,7 @@ function ApplicationsMegaMenu() {
         </div>
 
         {/* Category groupings — 4 columns, no subtext */}
-        <div className="col-span-12 lg:col-span-9 grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-7">
+        <div className="col-span-12 lg:col-span-9 grid grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-8">
           {APPLICATION_GROUPS.map((group) => {
             const items = group.slugs.flatMap((s) => {
               const a = applications.find((x) => x.slug === s);
@@ -825,14 +825,14 @@ function ApplicationsMegaMenu() {
                 }}>
                   {group.label}
                 </p>
-                <div className="space-y-0.5">
+                <div className="space-y-1">
                   {items.map((a) => (
                     <Link
                       key={a.slug}
                       href={`/applications/${a.slug}`}
-                      className="group flex items-center justify-between gap-2 px-2 py-2 rounded-md transition-colors hover:bg-white/5"
+                      className="group flex items-center justify-between gap-2 px-2.5 py-2.5 rounded-md transition-colors hover:bg-white/5"
                     >
-                      <span className="text-[13px] font-semibold group-hover:text-orange-400 transition-colors" style={{ color: "#F5F0EB" }}>
+                      <span className="text-[14px] font-semibold group-hover:text-orange-400 transition-colors" style={{ color: "#F5F0EB" }}>
                         {a.name}
                       </span>
                       <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -849,11 +849,11 @@ function ApplicationsMegaMenu() {
       </div>
 
       {/* Featured field note strip */}
-      <div className="mt-5 pt-4 rounded-xl overflow-hidden relative" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
-        <div className="flex items-center gap-4 p-4">
-          <div className="flex-shrink-0 rounded-lg overflow-hidden" style={{ width: 72, height: 72 }}>
-            {/* Fixed 72x72 box — width/height match the wrapper exactly, so no `sizes` needed. */}
-            <Image src="/images/blog/keeping-pedestrians-safe/featured.png" alt="Featured field note" width={72} height={72} className="w-full h-full object-cover" style={{ objectPosition: "center 65%" }} />
+      <div className="mt-2 rounded-xl overflow-hidden relative" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
+        <div className="flex items-center gap-4 px-4 py-2">
+          <div className="flex-shrink-0 rounded-lg overflow-hidden" style={{ width: 56, height: 56 }}>
+            {/* Fixed 56x56 box — width/height match the wrapper exactly, so no `sizes` needed. */}
+            <Image src="/images/blog/keeping-pedestrians-safe/featured.png" alt="Featured field note" width={56} height={56} className="w-full h-full object-cover" style={{ objectPosition: "center 65%" }} />
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-[9px] font-bold tracking-[0.2em] uppercase mb-1" style={{ color: "#F97316" }}>Featured Field Note</p>
@@ -865,7 +865,7 @@ function ApplicationsMegaMenu() {
       </div>
 
       {/* Bottom strip — secondary entry points */}
-      <div className="mt-5 pt-4 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+      <div className="mt-2.5 pt-2.5 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
         <Link href="/projects"
           className="flex items-center justify-between px-4 py-2.5 rounded-lg transition-colors hover:bg-white/5"
           style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}

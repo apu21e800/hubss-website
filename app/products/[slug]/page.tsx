@@ -8,6 +8,7 @@ import LunchLearn from "@/components/sections/LunchLearn";
 import DocumentDownloads from "@/components/sections/DocumentDownloads";
 import ColourSystem from "@/components/sections/ColourSystem";
 import PavingPatterns from "@/components/sections/PavingPatterns";
+import PatternGalleryCTA from "@/components/sections/PatternGalleryCTA";
 import { familiesFor, colourSectionFor } from "@/lib/colours";
 import { galleryFor, altFor } from "@/lib/asset-scan";
 import GalleryGrid, { type GalleryImage } from "@/components/ui/GalleryGrid";
@@ -213,6 +214,7 @@ export default async function ProductPage({ params }: Props) {
               />
             )}
             {product.slug === "streetprint" && <PavingPatterns />}
+            {(product.slug === "streetbond" || product.slug === "traffic-patterns-xd") && <PatternGalleryCTA />}
 
             <h2 className="text-2xl font-bold mb-6 mt-14" style={{ color: "var(--text-primary)" }}>Gallery</h2>
             <GalleryGrid images={gallery} />

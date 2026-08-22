@@ -587,7 +587,7 @@ function ProductsMegaMenu() {
       <div className="mt-5 pt-4 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
         <Link href="/resources"
           className="flex items-center justify-between px-4 py-2.5 rounded-lg transition-colors hover:bg-white/5"
-          style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.07)" }}
+          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
             <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Spec sheets</p>
@@ -597,7 +597,7 @@ function ProductsMegaMenu() {
         </Link>
         <Link href="/projects"
           className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
-          style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.07)" }}
+          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
             <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Project gallery</p>
@@ -607,7 +607,7 @@ function ProductsMegaMenu() {
         </Link>
         <Link href="/lunch-learn"
           className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
-          style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.07)" }}
+          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
             <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Lunch &amp; Learn</p>
@@ -731,7 +731,7 @@ function FieldNotesMegaMenu() {
       <div className="mt-5 pt-4 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
         <Link href="/blog"
           className="flex items-center justify-between px-4 py-2.5 rounded-lg transition-colors hover:bg-white/5"
-          style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.07)" }}
+          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
             <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>All field notes</p>
@@ -741,7 +741,7 @@ function FieldNotesMegaMenu() {
         </Link>
         <Link href="/projects"
           className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
-          style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.07)" }}
+          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
             <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Project gallery</p>
@@ -751,7 +751,7 @@ function FieldNotesMegaMenu() {
         </Link>
         <Link href="/resources"
           className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
-          style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.07)" }}
+          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
             <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Resources</p>
@@ -847,7 +847,7 @@ function ApplicationsMegaMenu() {
       <div className="mt-5 pt-4 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
         <Link href="/projects"
           className="flex items-center justify-between px-4 py-2.5 rounded-lg transition-colors hover:bg-white/5"
-          style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.07)" }}
+          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
             <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Project gallery</p>
@@ -857,7 +857,7 @@ function ApplicationsMegaMenu() {
         </Link>
         <Link href="/blog"
           className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
-          style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.07)" }}
+          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
             <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Field notes</p>
@@ -867,7 +867,7 @@ function ApplicationsMegaMenu() {
         </Link>
         <Link href="/contact"
           className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
-          style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.07)" }}
+          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
         >
           <div>
             <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Request a quote</p>

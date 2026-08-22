@@ -17,8 +17,8 @@ export default function ComparisonTable() {
       className="py-24 relative overflow-hidden"
       style={{
         background: "#0d1117",
-        borderTop: "1px solid rgba(255,255,255,0.06)",
-        borderBottom: "1px solid rgba(255,255,255,0.06)",
+        borderTop: "1px solid rgba(255,255,255,0.07)",
+        borderBottom: "1px solid rgba(255,255,255,0.07)",
       }}
     >
       {/* Subtle orange glow top-left */}
@@ -52,7 +52,7 @@ export default function ComparisonTable() {
             <div
               className="rounded-xl p-6 mb-8 flex items-center gap-5"
               style={{
-                background: "#111827",
+                background: "var(--bg-card)",
                 borderLeft: "3px solid #f97316",
               }}
             >
@@ -88,7 +88,7 @@ export default function ComparisonTable() {
             </Link>
           </motion.div>
 
-          {/* ── RIGHT: Comparison table ─────────────────────────── */}
+          {/* ── RIGHT: Comparison table ─────────────────────── */}
           <motion.div
             initial={{ opacity: 0, x: 16 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -112,13 +112,13 @@ export default function ComparisonTable() {
                   <tr>
                     <th
                       className="text-left text-sm font-bold px-6 py-4"
-                      style={{ background: "#111827", color: "#fff" }}
+                      style={{ background: "var(--bg-card)", color: "#fff" }}
                     >
                       Performance Metric
                     </th>
                     <th
                       className="text-left text-sm font-bold px-6 py-4"
-                      style={{ background: "#111827", color: "#9ca3af" }}
+                      style={{ background: "var(--bg-card)", color: "#9ca3af" }}
                     >
                       Traditional Markings
                     </th>
@@ -135,8 +135,8 @@ export default function ComparisonTable() {
                     <tr
                       key={row.metric}
                       style={{
-                        background: i % 2 === 0 ? "rgba(255,255,255,0.03)" : "rgba(255,255,255,0.01)",
-                        borderBottom: "1px solid rgba(255,255,255,0.06)",
+                        background: i % 2 === 0 ? "rgba(255,255,255,0.025)" : "rgba(255,255,255,0.025)",
+                        borderBottom: "1px solid rgba(255,255,255,0.07)",
                       }}
                     >
                       <td className="px-3 py-2 text-sm font-medium" style={{ color: "#e5e7eb" }}>

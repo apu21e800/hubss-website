@@ -80,7 +80,7 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
     <section
       id="systems"
       className="py-28 lg:py-32"
-      style={{ backgroundColor: "#0f1420" }}
+      style={{ backgroundColor: "var(--bg-section-asphalt)" }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -152,7 +152,7 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
                   className="group relative flex flex-col h-full rounded-2xl overflow-hidden transition-all duration-250"
                   style={{
                     background: "var(--bg-card)",
-                    border: "1px solid rgba(255,255,255,0.11)",
+                    border: "1px solid rgba(255,255,255,0.1)",
                     boxShadow: "0 2px 12px rgba(0,0,0,0.3)",
                   }}
                   onMouseEnter={(e) => {
@@ -162,7 +162,7 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
                     e.currentTarget.style.transform = "translateY(-3px)";
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.09)";
+                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)";
                     e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.2)";
                     e.currentTarget.style.transform = "translateY(0)";
                   }}
@@ -204,7 +204,7 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
 
                     {/* Description */}
                     <p
-                      className="text-[12.5px] leading-relaxed flex-1 mb-4"
+                      className="text-[13px] leading-relaxed flex-1 mb-4"
                       style={{ color: "var(--text-secondary)" }}
                     >
                       {what}
@@ -216,7 +216,7 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
                         {apps.slice(0, 3).map((app) => (
                           <span
                             key={app}
-                            className="text-[9.5px] font-semibold px-2 py-0.5 rounded-full tracking-wide"
+                            className="text-[10px] font-semibold px-2 py-0.5 rounded-full tracking-wide"
                             style={{
                               background: "rgba(255,255,255,0.07)",
                               color: "rgba(255,255,255,0.55)",

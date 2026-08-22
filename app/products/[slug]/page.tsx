@@ -71,7 +71,7 @@ export default async function ProductPage({ params }: Props) {
   // Gallery — use product.gallery if available, otherwise fall back to featured image
   // Folder-driven gallery: the contents of the product's image folder ARE the
   // gallery (see docs/IMAGE-WORKFLOW.md). Falls back to the curated array.
-  const productGallery = galleryFor(product.imageUrl, product.gallery);
+  const productGallery = galleryFor(product.imageUrl, product.gallery, `images/products/${product.slug}`);
 
   const gallerySources = productGallery.length > 0 ? productGallery : (featuredImg ? [featuredImg.src] : [product.imageUrl]);
   const gallery: GalleryImage[] = gallerySources.map((src) => ({

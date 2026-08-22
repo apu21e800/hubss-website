@@ -14,6 +14,7 @@
  */
 import * as fs from "fs";
 import * as path from "path";
+import { CROSSPOSTS } from "../lib/gallery-crossposts.mjs";
 
 const ROOT = process.cwd();
 const PUB = path.join(ROOT, "public");
@@ -42,7 +43,33 @@ for (const root of SCAN_ROOTS) {
   }
 }
 
+// Fold in cross-posts: one photo appearing in a second gallery (lib/gallery-crossposts.mjs).
+// They render AFTER the folder's own images, are de-duplicated against them, and
+// any path pointing at a file that no longer exists is dropped loudly rather than
+// shipped as a broken <img>.
+let crossAdded = 0;
+const crossMissing = [];
+for (const [key, paths] of Object.entries(CROSSPOSTS)) {
+  const own = manifest[key] ?? [];
+  const have = new Set(own);
+  const add = [];
+  for (const rel of paths) {
+    if (have.has(rel)) continue;
+    if (!fs.existsSync(path.join(PUB, rel.replace(/^\/+/, "")))) { crossMissing.push(`${key} <- ${rel}`); continue; }
+    have.add(rel);
+    add.push(rel);
+  }
+  if (add.length) { manifest[key] = own.concat(add); crossAdded += add.length; }
+}
+if (crossMissing.length) {
+  console.warn(`gallery-manifest: ${crossMissing.length} cross-post(s) point at missing files:`);
+  for (const m of crossMissing.slice(0, 10)) console.warn(`  ${m}`);
+}
+
 fs.mkdirSync(path.dirname(OUT), { recursive: true });
 fs.writeFileSync(OUT, JSON.stringify(manifest, null, 0));
 const total = Object.values(manifest).reduce((n, a) => n + a.length, 0);
-console.log(`gallery-manifest: ${Object.keys(manifest).length} folders, ${total} images`);
+console.log(
+  `gallery-manifest: ${Object.keys(manifest).length} galleries, ${total} images ` +
+  `(${total - crossAdded} from folders + ${crossAdded} cross-posted)`
+);

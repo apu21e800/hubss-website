@@ -46,14 +46,33 @@ export function scanGallery(
 }
 
 /**
- * Gallery for an entity: the contents of the folder its hero lives in, with
- * the hero itself removed so it doesn't render twice. Falls back to the
- * curated array when the folder is missing or empty.
+ * Gallery for an entity, in strict priority order:
+ *
+ *   1. its OWN gallery key ("images/applications/private-driveways") — the
+ *      folder of that name plus anything cross-posted into it;
+ *   2. the folder its hero image happens to live in;
+ *   3. the curated array in lib/products.ts / lib/applications.ts.
+ *
+ * Step 1 exists because four applications have no folder of their own and used
+ * to fall through to step 2, which quietly served a NEIGHBOUR'S gallery —
+ * /applications/private-driveways rendered the identical 44 photos as
+ * /applications/residential-driveways, and pedestrian-safety was a clone of
+ * crosswalks. Keying on the entity first makes each page show its own
+ * curation; the hero's folder is now only a fallback.
+ *
+ * The hero is removed either way so it never renders twice.
  */
-export function galleryFor(imageUrl: string, fallback: string[] | undefined): string[] {
-  const scanned = scanGallery(publicDirOf(imageUrl), {
-    excludeBasenames: [basename(imageUrl)],
-  });
+export function galleryFor(
+  imageUrl: string,
+  fallback: string[] | undefined,
+  ownKey?: string
+): string[] {
+  const exclude = { excludeBasenames: [basename(imageUrl)] };
+  if (ownKey) {
+    const own = scanGallery(ownKey, exclude);
+    if (own.length > 0) return own;
+  }
+  const scanned = scanGallery(publicDirOf(imageUrl), exclude);
   return scanned.length > 0 ? scanned : fallback ?? [];
 }
 

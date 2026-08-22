@@ -300,13 +300,13 @@ export default function LunchLearnFunnel({
         }} />
       </section>
 
-      {/* ── STATS STRIP ──────────────────────────────────────────── */}
+      {/* ── STATS STRIP ────────────────────────────────────────────── */}
       <section
         className="py-10"
         style={{
           background: "#0a0f1a",
-          borderTop: "1px solid rgba(255,255,255,0.06)",
-          borderBottom: "1px solid rgba(255,255,255,0.06)",
+          borderTop: "1px solid rgba(255,255,255,0.07)",
+          borderBottom: "1px solid rgba(255,255,255,0.07)",
         }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -319,7 +319,7 @@ export default function LunchLearnFunnel({
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.07, duration: 0.35 }}
                 className="flex flex-col items-center text-center lg:border-r last:border-r-0"
-                style={{ borderColor: "rgba(255,255,255,0.06)" }}
+                style={{ borderColor: "rgba(255,255,255,0.07)" }}
               >
                 <span
                   className="font-black mb-1"
@@ -347,7 +347,7 @@ export default function LunchLearnFunnel({
         </div>
       </section>
 
-      {/* ── WHAT YOU WALK AWAY WITH ──────────────────────────────── */}
+      {/* ── WHAT YOU WALK AWAY WITH ──────────────────────────────────── */}
       <section className="py-20 lg:py-24" style={{ background: "#0a0f1a" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-14 text-center">
@@ -377,8 +377,8 @@ export default function LunchLearnFunnel({
                 transition={{ delay: i * 0.08, duration: 0.4 }}
                 className="relative rounded-2xl p-8 flex flex-col gap-5"
                 style={{
-                  background: "#111827",
-                  border: "1px solid rgba(255,255,255,0.08)",
+                  background: "var(--bg-card)",
+                  border: "1px solid rgba(255,255,255,0.07)",
                   boxShadow: "0 2px 20px rgba(0,0,0,0.2)",
                 }}
               >
@@ -413,7 +413,7 @@ export default function LunchLearnFunnel({
         </div>
       </section>
 
-      {/* ── PERFECT FOR ──────────────────────────────────────────── */}
+      {/* ── PERFECT FOR ──────────────────────────────────────────────── */}
       <section className="py-20" style={{ background: "#070b12" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-12">
@@ -443,8 +443,8 @@ export default function LunchLearnFunnel({
                 transition={{ delay: i * 0.06, duration: 0.35 }}
                 className="flex flex-col p-8 rounded-xl"
                 style={{
-                  background: "rgba(255,255,255,0.04)",
-                  border: "1px solid rgba(255,255,255,0.09)",
+                  background: "rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(255,255,255,0.07)",
                 }}
               >
                 <div className="flex items-start justify-between gap-3 mb-3">
@@ -467,9 +467,9 @@ export default function LunchLearnFunnel({
         </div>
       </section>
 
-      {/* ── CITY MARQUEE ─────────────────────────────────────────────── */}
+      {/* ── CITY MARQUEE ─────────────────────────────────────────────────── */}
       <div style={{ background: "#070b12", borderTop: "1px solid rgba(255,255,255,0.05)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-        <p className="text-center text-[10px] font-bold tracking-[0.2em] uppercase pt-8 pb-4" style={{ color: "rgba(255,255,255,0.48)" }}>
+        <p className="text-center text-[10px] font-bold tracking-[0.2em] uppercase pt-8 pb-4" style={{ color: "rgba(255,255,255,0.5)" }}>
           Previous Lunch &amp; Learn clients include
         </p>
         <div
@@ -498,10 +498,10 @@ export default function LunchLearnFunnel({
           </div>
           <div className="space-y-3">
             {faqItems.map((faq, i) => (
-              <div key={faq.q} className="rounded-xl overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.08)", background: openFaq === i ? "#111827" : "rgba(255,255,255,0.02)" }}>
+              <div key={faq.q} className="rounded-xl overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.07)", background: openFaq === i ? "var(--bg-card)" : "rgba(255,255,255,0.025)" }}>
                 <button className="w-full text-left flex items-center justify-between gap-4 px-6 py-5" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
                   <span className="font-semibold text-base" style={{ color: "#F5F0EB" }}>{faq.q}</span>
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-transform duration-200" style={{ background: openFaq === i ? "rgba(249,115,22,0.2)" : "rgba(255,255,255,0.06)", color: openFaq === i ? "#f97316" : "#9CA3AF", transform: openFaq === i ? "rotate(45deg)" : "rotate(0deg)" }}>
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-transform duration-200" style={{ background: openFaq === i ? "rgba(249,115,22,0.2)" : "rgba(255,255,255,0.07)", color: openFaq === i ? "#f97316" : "#9CA3AF", transform: openFaq === i ? "rotate(45deg)" : "rotate(0deg)" }}>
                     <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 5v14M5 12h14" /></svg>
                   </span>
                 </button>
@@ -515,7 +515,7 @@ export default function LunchLearnFunnel({
               </div>
             ))}
           </div>
-        </div>
+        </section>
       </section>
 
       {/* ── FORM ──────────────────────────────────────────────────────────── */}
@@ -561,14 +561,14 @@ export default function LunchLearnFunnel({
                     { name: "company", placeholder: "Company or organization", type: "text", required: false },
                     { name: "city", placeholder: "City", type: "text", required: false },
                   ].map((field) => (
-                    <input key={field.name} type={field.type} name={field.name} placeholder={field.placeholder} aria-label={field.placeholder} value={formData[field.name as keyof FormState]} onChange={handleChange} required={field.required} className="px-4 py-3.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-orange-500/50 transition-all" style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: "#F5F0EB" }} />
+                    <input key={field.name} type={field.type} name={field.name} placeholder={field.placeholder} aria-label={field.placeholder} value={formData[field.name as keyof FormState]} onChange={handleChange} required={field.required} className="px-4 py-3.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-orange-500/50 transition-all" style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", color: "#F5F0EB" }} />
                   ))}
                 </div>
-                <input type="tel" name="phone" placeholder="Phone number" aria-label="Phone number" value={formData.phone} onChange={handleChange} className="w-full px-4 py-3.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-orange-500/50 transition-all" style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: "#F5F0EB" }} />
+                <input type="tel" name="phone" placeholder="Phone number" aria-label="Phone number" value={formData.phone} onChange={handleChange} className="w-full px-4 py-3.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-orange-500/50 transition-all" style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", color: "#F5F0EB" }} />
                 <button type="submit" disabled={submitState.status === "loading"} className="w-full py-5 rounded-xl font-bold text-base transition-all disabled:opacity-50" style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff", boxShadow: "0 6px 24px rgba(249,115,22,0.38)" }}>
                   {submitState.status === "loading" ? "Sending your request…" : submitLabel}
                 </button>
-                <p className="text-center text-xs" style={{ color: "rgba(255,255,255,0.28)" }}>No obligation. No invoice. Lunch included. We&apos;ll reach out within 24 hours.</p>
+                <p className="text-center text-xs" style={{ color: "rgba(255,255,255,0.3)" }}>No obligation. No invoice. Lunch included. We&apos;ll reach out within 24 hours.</p>
                 {submitState.status === "error" && (
                   <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="p-4 rounded-xl text-sm" style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.25)", color: "#fca5a5" }}>
                     {submitState.message}
@@ -583,7 +583,7 @@ export default function LunchLearnFunnel({
               { region: "Eastern Canada", name: "Doug Bain", phone: "416-540-9287", email: "doug.bain@hubss.com" },
               { region: "Western Canada", name: "Cleve Stordy", phone: "604-309-8212", email: "cleve.stordy@hubss.com" },
             ].map((office) => (
-              <div key={office.region} className="rounded-xl p-5 text-center" style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.06)" }}>
+              <div key={office.region} className="rounded-xl p-5 text-center" style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}>
                 <p className="text-[10px] font-bold tracking-[0.15em] uppercase mb-2" style={{ color: "#f97316" }}>{office.region}</p>
                 <p className="text-sm font-semibold mb-1" style={{ color: "#F5F0EB" }}>{office.name}</p>
                 <a href={`tel:+1${office.phone.replace(/-/g, "")}`} className="text-xs block mb-0.5 hover:text-orange-400 transition-colors" style={{ color: "#9CA3AF" }}>{office.phone}</a>

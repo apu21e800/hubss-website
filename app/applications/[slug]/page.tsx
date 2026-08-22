@@ -43,7 +43,7 @@ export default async function ApplicationPage({ params }: Props) {
 
   // Gallery — use application.gallery if available, otherwise fall back to featured image
   // Folder-driven gallery (see docs/IMAGE-WORKFLOW.md).
-  const appGallery = galleryFor(application.imageUrl, application.gallery);
+  const appGallery = galleryFor(application.imageUrl, application.gallery, `images/applications/${application.slug}`);
 
   const gallerySources = appGallery.length > 0 ? appGallery : [application.imageUrl];
   const gallery: GalleryImage[] = gallerySources.map((src) => ({

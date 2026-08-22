@@ -62,8 +62,14 @@ const SECURITY_HEADERS = [
 ];
 
 const nextConfig: NextConfig = {
-  typescript: { ignoreBuildErrors: true },
+  typescript: { ignoreBuildErrors: false },
   poweredByHeader: false,
+  // Mirror Vercel's VERCEL_ENV into a NEXT_PUBLIC_* variable so client
+  // components can read it (Next inlines NEXT_PUBLIC_* at build time).
+  // Used by lib/feature-flags.ts → showCatalogue() in the Nav mega menu.
+  env: {
+    NEXT_PUBLIC_VERCEL_ENV: process.env.VERCEL_ENV ?? "",
+  },
   // Sanity Studio uses rxjs + CommonJS internals that Turbopack can't bundle.
   // Marking them external lets Node handle them at runtime instead.
   serverExternalPackages: ["sanity", "@sanity/client", "next-sanity", "@sanity/vision"],
@@ -77,9 +83,13 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
-      // The 2026 colour card (HUB co-branded) supersedes the old colour guide.
-      // Keeps stale links working — Sanity resource records, bookmarks, emails.
+      // 2026 colour card supersedes the old StreetBond colour guide — keep the
+      // old URL alive (Sanity resource entries + external links still point at it).
       { source: "/docs/StreetBond/StreetBond/StreetBond-Colour-Guide.pdf", destination: "/docs/StreetBond/StreetBond/StreetBond-Colour-Card-2026.pdf", permanent: true },
+      // The old StreetBondSR guide had a GAF-only back page — US address and phone,
+      // no Canadian contacts. Replaced by the 2026 edition; this keeps every link
+      // already sitting in someone's inbox or spec package working.
+      { source: "/docs/StreetBondSR/Colour-Guide-1.pdf", destination: "/docs/StreetBondSR/StreetBondSR-Colour-Guide-2026.pdf", permanent: true },
       // Products
       { source: "/trafficpatternsxd", destination: "/products/traffic-patterns-xd", permanent: true },
       { source: "/trafficpatterns", destination: "/products/traffic-patterns", permanent: true },
@@ -319,7 +329,9 @@ const nextConfig: NextConfig = {
       // swallowed the 9 REAL project pages the site builds and advertises in its
       // own sitemap. Every one of them — UBC Musqueam Crosswalk, York Region
       // Hwy7 Viva, Toronto Priority Bus Lanes and the rest — was prerendered,
-      // listed for Google, and then 308'd to a generic gallery.
+      // listed for Google, and then 308'd to a generic gallery. Nine named
+      // municipal case studies, built and unreachable, and nine sitemap URLs
+      // that all redirected to the same page.
       //
       // The negative lookahead exempts exactly the slugs in lib/projects.ts and
       // nothing else, so genuine WordPress leftovers still land on /gallery.

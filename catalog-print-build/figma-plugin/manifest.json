@@ -4,8 +4,16 @@
   "api": "1.0.0",
   "main": "code.js",
   "ui": "ui.html",
-  "editorType": ["figma"],
+  "editorType": [
+    "figma"
+  ],
   "networkAccess": {
-    "allowedDomains": ["none"]
+    "allowedDomains": [
+      "https://hubss-website-git-chore-catalogue-final-revision-based-agency.vercel.app",
+      "https://hubss-website-git-staging-based-agency.vercel.app",
+      "https://hubss.com",
+      "https://www.hubss.com"
+    ],
+    "reasoning": "Streams catalogue photos at build time via figma.createImageAsync from the hosted (served) images, instead of embedding a base64 image bank. Branch preview domain carries the colour-managed print-res copies for the Figma review pass."
   }
 }

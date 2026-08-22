@@ -1,0 +1,55 @@
+# Runs the safety net on every push and PR.
+#
+# This repo had no CI, no tests, and no test runner until now — 141 pages, a
+# live client site, and nothing that could tell anyone when something broke.
+# Every check in scripts/verify-site.mjs exists because a real bug shipped and
+# sat on production for weeks before a human happened to find it.
+#
+# The job is deliberately cheap: build once, run the checks, done. If it starts
+# taking long enough that people want to skip it, it has failed at its job.
+name: verify
+
+on:
+  push:
+    branches: [main, v2, "feat/**", "fix/**", "integrate/**"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      - name: Build
+        run: npm run build
+        env:
+          NEXT_TURBOPACK_EXPERIMENTAL_USE_SYSTEM_TLS_CERTS: "1"
+
+      # The fast checks: routes, links, assets, gallery distinctness, and the
+      # CMS field contract. No browser, so this is the one that gates merges.
+      - name: Verify
+        run: npm run verify -- --quick
+
+      # Browser checks (accessibility + image weight) are heavier and need
+      # Chromium, so they run but don't block — a11y regressions get reported
+      # rather than silently merged.
+      - name: Install browser
+        run: npx playwright install --with-deps chromium
+        continue-on-error: true
+
+      - name: Accessibility and image weight
+        run: npm run verify
+        continue-on-error: true

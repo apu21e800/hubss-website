@@ -28,8 +28,15 @@ function readEnvFlag(name: string): boolean | null {
  * card, Products mega-menu entry) gated behind a single flag.
  *
  *   - Explicit NEXT_PUBLIC_SHOW_CATALOGUE wins, in every environment.
- *   - On Vercel preview/development (VERCEL_ENV !== 'production'), default ON.
- *   - On Vercel production (or wherever VERCEL_ENV='production'), default OFF.
+ *   - Otherwise: HIDDEN, everywhere — production AND previews.
+ *
+ * Previews used to auto-show the catalogue so reviewers could see it without
+ * an env edit. That backfired: the v2 preview is watched on a second screen
+ * and gets shown to people, and Vernon's instruction is that the catalogue
+ * must not appear anywhere until it launches ("we will add that soon").
+ * Hidden-by-default-everywhere means no surface can leak it; flipping it on
+ * is one env var (NEXT_PUBLIC_SHOW_CATALOGUE=true) plus a redeploy, per
+ * environment, when launch day comes.
  *
  * `NEXT_PUBLIC_*` is required because some consumers are client components
  * (the Nav mega menu); Next.js inlines NEXT_PUBLIC_* at build time so the
@@ -38,8 +45,5 @@ function readEnvFlag(name: string): boolean | null {
 export function showCatalogue(): boolean {
   const explicit = readEnvFlag("NEXT_PUBLIC_SHOW_CATALOGUE");
   if (explicit !== null) return explicit;
-  // Vercel sets VERCEL_ENV to 'production' | 'preview' | 'development'.
-  // Anything other than 'production' is treated as a reviewer environment.
-  const vercelEnv = process.env.NEXT_PUBLIC_VERCEL_ENV ?? process.env.VERCEL_ENV;
-  return vercelEnv !== "production";
+  return false;
 }

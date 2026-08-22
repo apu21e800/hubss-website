@@ -13,6 +13,10 @@ export interface ResourceDocument {
   fileUrl: string
   fileSize: string
   updatedDate: string
+  documentType?: string    // 'flyer' | 'catalogue' | 'spec-sheet' | etc. (slug form). Optional so existing entries don't need it.
+  featured?: boolean       // Pre-selected for the Featured filter chip
+  isNew?: boolean          // Pre-selected for the "New Documents" filter chip (catalogue + 2026 flyers)
+  previewImageUrl?: string // Thumbnail for flyer cards (1200px WebP)
 }
 
 const productNameMap: Record<string, string> = {
@@ -27,6 +31,9 @@ const productNameMap: Record<string, string> = {
   'premark':             'PreMark',
   'duratherm':           'DuraTherm',
   'airmark':             'AirMark',
+  'chipfill':            'ChipFill',
+  'aggrefill':           'AggreFill',
+  'fast-patch':          'Fast Patch DPR',
 }
 
 export function getProductName(slug: string): string {
@@ -46,6 +53,9 @@ const productApplications: Record<string, string[]> = {
   'premark':             ['regulatory-markings', 'crosswalks', 'bike-bus-lanes'],
   'duratherm':           ['crosswalks', 'parking-lots', 'community-branding'],
   'airmark':             ['airports'],
+  'chipfill':            ['driveways', 'parking-lots', 'parks-paths'],
+  'aggrefill':           ['driveways', 'parking-lots', 'parks-paths'],
+  'fast-patch':          ['driveways', 'parking-lots', 'parks-paths'],
 }
 
 export const resourceDocuments: ResourceDocument[] = [
@@ -376,9 +386,9 @@ export const resourceDocuments: ResourceDocument[] = [
     product: 'streetbond-sr',
     productName: 'StreetBondSR',
     applications: productApplications['streetbond-sr'],
-    fileUrl: '/docs/StreetBondSR/Colour-Guide-1.pdf',
-    fileSize: '2.8 MB',
-    updatedDate: 'Mar 2023',
+    fileUrl: '/docs/StreetBondSR/StreetBondSR-Colour-Guide-2026.pdf',
+    fileSize: '0.6 MB',
+    updatedDate: 'Aug 2026',
   },
 
   // ── TrafficPatterns ──────────────────────────────────────────
@@ -836,16 +846,247 @@ export const resourceDocuments: ResourceDocument[] = [
     fileSize: '3.8 MB',
     updatedDate: 'Feb 2024',
   },
+
+  // ── 2026 Catalogue (flipbook viewer, not a downloadable PDF) ──
+  {
+    id: 'catalogue-2026',
+    title: 'HUB Surface Systems Catalogue 2026',
+    type: 'Catalogue',
+    product: 'all',
+    productName: 'Full Line',
+    applications: [],
+    fileUrl: '/catalogue',
+    fileSize: '140 pages',
+    updatedDate: 'June 2026',
+    documentType: 'catalogue',
+    featured: true,
+    isNew: true,
+    // Version-agnostic cover (written by build_flipbook.py) — never goes
+    // stale on a flipbook version bump, unlike the old hardcoded /vNN/ path.
+    previewImageUrl: '/catalogue/cover.webp',
+  },
+
+  // ── 2026 Product Flyers (14, one per product) ─────────────────
+  {
+    id: 'flyer-traffic-patterns-xd',
+    title: 'TrafficPatternsXD — 2026 Product Flyer',
+    type: 'Flyer',
+    product: 'traffic-patterns-xd',
+    productName: 'TrafficPatternsXD',
+    applications: productApplications['traffic-patterns-xd'],
+    fileUrl: '/resources/flyers/HUBSS-Flyer-traffic-patterns-xd-v01.pdf',
+    fileSize: '~1.5 MB',
+    updatedDate: 'May 2026',
+    documentType: 'flyer',
+    isNew: true,
+    featured: true,
+    previewImageUrl: '/resources/flyers/traffic-patterns-xd-preview.webp',
+  },
+  {
+    id: 'flyer-traffic-patterns',
+    title: 'TrafficPatterns — 2026 Product Flyer',
+    type: 'Flyer',
+    product: 'traffic-patterns',
+    productName: 'TrafficPatterns',
+    applications: productApplications['traffic-patterns'],
+    fileUrl: '/resources/flyers/HUBSS-Flyer-traffic-patterns-v01.pdf',
+    fileSize: '~1.5 MB',
+    updatedDate: 'May 2026',
+    documentType: 'flyer',
+    isNew: true,
+    featured: false,
+    previewImageUrl: '/resources/flyers/traffic-patterns-preview.webp',
+  },
+  {
+    id: 'flyer-streetbond',
+    title: 'StreetBond — 2026 Product Flyer',
+    type: 'Flyer',
+    product: 'streetbond',
+    productName: 'StreetBond',
+    applications: productApplications['streetbond'],
+    fileUrl: '/resources/flyers/HUBSS-Flyer-streetbond-v01.pdf',
+    fileSize: '~1.5 MB',
+    updatedDate: 'May 2026',
+    documentType: 'flyer',
+    isNew: true,
+    featured: true,
+    previewImageUrl: '/resources/flyers/streetbond-preview.webp',
+  },
+  {
+    id: 'flyer-streetprint',
+    title: 'StreetPrint — 2026 Product Flyer',
+    type: 'Flyer',
+    product: 'streetprint',
+    productName: 'StreetPrint',
+    applications: productApplications['streetprint'],
+    fileUrl: '/resources/flyers/HUBSS-Flyer-streetprint-v01.pdf',
+    fileSize: '~1.5 MB',
+    updatedDate: 'May 2026',
+    documentType: 'flyer',
+    isNew: true,
+    featured: true,
+    previewImageUrl: '/resources/flyers/streetprint-preview.webp',
+  },
+  {
+    id: 'flyer-decomark',
+    title: 'DecoMark — 2026 Product Flyer',
+    type: 'Flyer',
+    product: 'decomark',
+    productName: 'DecoMark',
+    applications: productApplications['decomark'],
+    fileUrl: '/resources/flyers/HUBSS-Flyer-decomark-v01.pdf',
+    fileSize: '~1.5 MB',
+    updatedDate: 'May 2026',
+    documentType: 'flyer',
+    isNew: true,
+    featured: false,
+    previewImageUrl: '/resources/flyers/decomark-preview.webp',
+  },
+  {
+    id: 'flyer-mmax',
+    title: 'MMAX — 2026 Product Flyer',
+    type: 'Flyer',
+    product: 'mmax',
+    productName: 'MMAX',
+    applications: productApplications['mmax'],
+    fileUrl: '/resources/flyers/HUBSS-Flyer-mmax-v01.pdf',
+    fileSize: '~1.5 MB',
+    updatedDate: 'May 2026',
+    documentType: 'flyer',
+    isNew: true,
+    featured: false,
+    previewImageUrl: '/resources/flyers/mmax-preview.webp',
+  },
+  {
+    id: 'flyer-streetbond-sr',
+    title: 'StreetBondSR — 2026 Product Flyer',
+    type: 'Flyer',
+    product: 'streetbond-sr',
+    productName: 'StreetBondSR',
+    applications: productApplications['streetbond-sr'],
+    fileUrl: '/resources/flyers/HUBSS-Flyer-streetbondsr-v01.pdf',
+    fileSize: '~1.5 MB',
+    updatedDate: 'May 2026',
+    documentType: 'flyer',
+    isNew: true,
+    featured: true,
+    previewImageUrl: '/resources/flyers/streetbondsr-preview.webp',
+  },
+  {
+    id: 'flyer-duratherm',
+    title: 'DuraTherm — 2026 Product Flyer',
+    type: 'Flyer',
+    product: 'duratherm',
+    productName: 'DuraTherm',
+    applications: productApplications['duratherm'],
+    fileUrl: '/resources/flyers/HUBSS-Flyer-duratherm-v01.pdf',
+    fileSize: '~1.5 MB',
+    updatedDate: 'May 2026',
+    documentType: 'flyer',
+    isNew: true,
+    featured: true,
+    previewImageUrl: '/resources/flyers/duratherm-preview.webp',
+  },
+  {
+    id: 'flyer-durashield',
+    title: 'DuraShield — 2026 Product Flyer',
+    type: 'Flyer',
+    product: 'durashield',
+    productName: 'DuraShield',
+    applications: productApplications['durashield'],
+    fileUrl: '/resources/flyers/HUBSS-Flyer-durashield-v01.pdf',
+    fileSize: '~1.5 MB',
+    updatedDate: 'May 2026',
+    documentType: 'flyer',
+    isNew: true,
+    featured: false,
+    previewImageUrl: '/resources/flyers/durashield-preview.webp',
+  },
+  {
+    id: 'flyer-airmark',
+    title: 'AirMark — 2026 Product Flyer',
+    type: 'Flyer',
+    product: 'airmark',
+    productName: 'AirMark',
+    applications: productApplications['airmark'],
+    fileUrl: '/resources/flyers/HUBSS-Flyer-airmark-v01.pdf',
+    fileSize: '~1.5 MB',
+    updatedDate: 'May 2026',
+    documentType: 'flyer',
+    isNew: true,
+    featured: false,
+    previewImageUrl: '/resources/flyers/airmark-preview.webp',
+  },
+  {
+    id: 'flyer-premark',
+    title: 'PreMark — 2026 Product Flyer',
+    type: 'Flyer',
+    product: 'premark',
+    productName: 'PreMark',
+    applications: productApplications['premark'],
+    fileUrl: '/resources/flyers/HUBSS-Flyer-premark-v01.pdf',
+    fileSize: '~1.5 MB',
+    updatedDate: 'May 2026',
+    documentType: 'flyer',
+    isNew: true,
+    featured: false,
+    previewImageUrl: '/resources/flyers/premark-preview.webp',
+  },
+  {
+    id: 'flyer-chipfill',
+    title: 'ChipFill — 2026 Product Flyer',
+    type: 'Flyer',
+    product: 'chipfill',
+    productName: 'ChipFill',
+    applications: productApplications['chipfill'],
+    fileUrl: '/resources/flyers/HUBSS-Flyer-chipfill-v01.pdf',
+    fileSize: '~1.5 MB',
+    updatedDate: 'May 2026',
+    documentType: 'flyer',
+    isNew: true,
+    featured: false,
+    previewImageUrl: '/resources/flyers/chipfill-preview.webp',
+  },
+  {
+    id: 'flyer-aggrefill',
+    title: 'AggreFill — 2026 Product Flyer',
+    type: 'Flyer',
+    product: 'aggrefill',
+    productName: 'AggreFill',
+    applications: productApplications['aggrefill'],
+    fileUrl: '/resources/flyers/HUBSS-Flyer-aggrefill-v01.pdf',
+    fileSize: '~1.5 MB',
+    updatedDate: 'May 2026',
+    documentType: 'flyer',
+    isNew: true,
+    featured: false,
+    previewImageUrl: '/resources/flyers/aggrefill-preview.webp',
+  },
+  {
+    id: 'flyer-fast-patch',
+    title: 'Fast Patch DPR — 2026 Product Flyer',
+    type: 'Flyer',
+    product: 'fast-patch',
+    productName: 'Fast Patch DPR',
+    applications: productApplications['fast-patch'],
+    fileUrl: '/resources/flyers/HUBSS-Flyer-fast-patch-v01.pdf',
+    fileSize: '~1.5 MB',
+    updatedDate: 'May 2026',
+    documentType: 'flyer',
+    isNew: true,
+    featured: false,
+    previewImageUrl: '/resources/flyers/fast-patch-preview.webp',
+  },
 ]
 
 
 /**
  * Stale-record overrides for the Resources library.
  *
- * The Resources page prefers the Sanity-managed document list, which was
- * seeded in Feb 2024. When a document is superseded before the Studio record
- * catches up, add the correction here — it is applied on top of whichever
- * source wins, so code, Sanity, and bookmarked URLs all agree.
+ * The Resources page prefers the Sanity-managed document list, seeded in
+ * Feb 2024. When a document is superseded before the Studio record catches
+ * up, correct it here — applied on top of whichever source wins, so code,
+ * Sanity, and bookmarked URLs all agree.
  *
  * Delete an entry once its Sanity record has been updated in the Studio.
  */
@@ -855,6 +1096,16 @@ const DOC_OVERRIDES: Record<string, Partial<ResourceDocument>> = {
     title: 'StreetBond Colour Card — 2026 Edition',
     fileUrl: '/docs/StreetBond/StreetBond/StreetBond-Colour-Card-2026.pdf',
     fileSize: '0.2 MB',
+    updatedDate: 'Aug 2026',
+  },
+  // The old SR guide's back page was GAF-only — Parsippany NJ address and a US
+  // customer-service number, no Canadian contacts. Replaced Aug 2026 with an
+  // edition carrying the HUB block. The 308 in next.config.ts already catches
+  // the old URL; this stops /resources rendering a link that needs redirecting
+  // in the first place, until the Sanity record is updated in Studio.
+  'sbsr-colour-001': {
+    fileUrl: '/docs/StreetBondSR/StreetBondSR-Colour-Guide-2026.pdf',
+    fileSize: '0.6 MB',
     updatedDate: 'Aug 2026',
   },
 }

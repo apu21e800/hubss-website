@@ -7,8 +7,10 @@ downsample during the CMYK conversion step (cached on first use).
 """
 
 from __future__ import annotations
+import functools
+import hashlib
 from pathlib import Path
-from PIL import Image
+from PIL import Image, ImageCms
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.lib.utils import ImageReader
 
@@ -16,6 +18,38 @@ from .specs import TARGET_DPI, MIN_DPI_WARN, PAGE_W
 
 
 _CONVERTED_CACHE_DIR = Path(__file__).resolve().parent.parent / "output" / "_cmyk_cache"
+_FOGRA39_ICC = Path(__file__).resolve().parent.parent / "assets" / "profiles" / "CoatedFOGRA39.icc"
+
+
+@functools.lru_cache(maxsize=1)
+def _srgb_to_fogra39():
+    """Perceptual sRGB->FOGRA39 (Coated) transform. Returns None if the profile
+    or ImageCms is unavailable, in which case _to_cmyk falls back to vibrant RGB.
+
+    NB: the previous naive `im.convert('RGB').convert('CMYK')` had no profile and
+    desaturated every photo ~44% when rendered (the 'washed/gauzy' defect). A
+    profile-aware perceptual transform maps sRGB into the FOGRA39 gamut and keeps
+    colour vibrant — and satisfies the printer's FOGRA39L coated requirement.
+    """
+    try:
+        if not _FOGRA39_ICC.exists():
+            return None
+        srgb = ImageCms.createProfile("sRGB")
+        fogra = ImageCms.getOpenProfile(str(_FOGRA39_ICC))
+        return ImageCms.buildTransform(
+            srgb, fogra, "RGB", "CMYK",
+            renderingIntent=ImageCms.Intent.PERCEPTUAL,
+        )
+    except Exception:
+        return None
+
+
+def _to_cmyk(rgb_im):
+    """RGB PIL image -> vibrant FOGRA39 CMYK (or RGB fallback if no profile)."""
+    tr = _srgb_to_fogra39()
+    if tr is None:
+        return rgb_im  # vibrant RGB beats a washed profileless CMYK
+    return ImageCms.applyTransform(rgb_im, tr)
 
 # Page is 5.25" wide. At 300 DPI a full-bleed image needs 1575 pixels.
 # Cap the long edge of the cached version a bit higher to allow some crop slack.
@@ -23,8 +57,15 @@ MAX_LONG_EDGE = 2000
 
 
 def _cmyk_cache_path(src):
+    """Cache filename includes a hash of the FULL resolved path so two files
+    with the same basename (e.g. both 'featured.jpg' under different project
+    folders) get separate cache entries. The earlier 'src.stem__cmyk.jpg'
+    naming caused silent collisions and swapped images on rebuild."""
     _CONVERTED_CACHE_DIR.mkdir(parents=True, exist_ok=True)
-    return _CONVERTED_CACHE_DIR / f"{src.stem}__cmyk.jpg"
+    digest = hashlib.md5(str(src.resolve()).encode("utf-8")).hexdigest()[:12]
+    # '__fogra' suffix (was '__cmyk') invalidates the old naive-CMYK cache so
+    # every photo re-converts through the profile-aware path on the next build.
+    return _CONVERTED_CACHE_DIR / f"{src.stem}__{digest}__fogra.jpg"
 
 
 def ensure_cmyk(src):
@@ -45,8 +86,8 @@ def ensure_cmyk(src):
         if im.mode == "CMYK":
             cmyk = im
         else:
-            cmyk = im.convert("RGB").convert("CMYK")
-        cmyk.save(out, format="JPEG", quality=88, dpi=(TARGET_DPI, TARGET_DPI))
+            cmyk = _to_cmyk(im.convert("RGB"))
+        cmyk.save(out, format="JPEG", quality=92, dpi=(TARGET_DPI, TARGET_DPI))
     return out
 
 

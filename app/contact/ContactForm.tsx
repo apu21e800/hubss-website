@@ -84,7 +84,7 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
 
               <div className="mt-6 pt-6" style={{ borderTop: "1px solid var(--border-subtle)" }}>
                 <div className="flex items-center gap-4 flex-wrap">
-                  <p className="text-xs font-semibold uppercase tracking-widest flex-shrink-0" style={{ color: "rgba(255,255,255,0.3)" }}>Follow Our Work</p>
+                  <p className="text-xs font-semibold uppercase tracking-widest flex-shrink-0" style={{ color: "rgba(255,255,255,0.5)" }}>Follow Our Work</p>
                   <SocialLinks size="sm" className="gap-4" />
                 </div>
               </div>
@@ -138,8 +138,9 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
                     { label: "Company", key: "company", type: "text", placeholder: "City of Toronto" },
                   ].map((f) => (
                     <div key={f.key}>
-                      <label className="block text-sm mb-2" style={{ color: "#d1d5db" }}>{f.label}</label>
+                      <label htmlFor={`contact-${f.key}`} className="block text-sm mb-2" style={{ color: "#d1d5db" }}>{f.label}</label>
                       <input
+                        id={`contact-${f.key}`}
                         type={f.type}
                         required
                         value={form[f.key as keyof typeof form]}
@@ -156,8 +157,9 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
                   { label: "Phone", key: "phone", type: "tel", placeholder: "416-555-0100" },
                 ].map((f) => (
                   <div key={f.key}>
-                    <label className="block text-sm mb-2" style={{ color: "#d1d5db" }}>{f.label}</label>
+                    <label htmlFor={`contact-${f.key}`} className="block text-sm mb-2" style={{ color: "#d1d5db" }}>{f.label}</label>
                     <input
+                      id={`contact-${f.key}`}
                       type={f.type}
                       required={f.key === "email"}
                       value={form[f.key as keyof typeof form]}
@@ -169,8 +171,9 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
                   </div>
                 ))}
                 <div>
-                  <label className="block text-sm mb-2" style={{ color: "#d1d5db" }}>Project Type</label>
+                  <label htmlFor="contact-projectType" className="block text-sm mb-2" style={{ color: "#d1d5db" }}>Project Type</label>
                   <select
+                    id="contact-projectType"
                     value={form.projectType}
                     onChange={(e) => setForm({ ...form, projectType: e.target.value })}
                     className="w-full px-4 py-3 rounded-lg text-base outline-none focus:ring-1 focus:ring-orange-500 min-h-[48px]"
@@ -181,8 +184,9 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm mb-2" style={{ color: "#d1d5db" }}>Message</label>
+                  <label htmlFor="contact-message" className="block text-sm mb-2" style={{ color: "#d1d5db" }}>Message</label>
                   <textarea
+                    id="contact-message"
                     rows={4}
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}

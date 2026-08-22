@@ -22,7 +22,7 @@ async function resolveCoverImage(): Promise<string> {
       catch { /* try older */ }
     }
   } catch { /* fall through */ }
-  return "/catalogue/v31/page-001.webp";
+  return "/catalogue/cover.webp";
 }
 
 import { showCatalogue } from "@/lib/feature-flags";

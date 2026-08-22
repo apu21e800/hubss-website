@@ -29,7 +29,7 @@ export const applications: Application[] = [
     shortDesc: "Durable, high-visibility, high-contrast crosswalk systems that elevate the intersection.",
     imageUrl: "/images/applications/crosswalks/crosswalks-01.jpg",
     gallery: [1,3,6,8,11,13,16,18,21,23,26,28,31,33,36,38,41,43,45,48,50,53,55,58,60,63,65,68,70,73,75,78,80,83,85,87,90,92,95,97,100,102,105,107,110,112,115,117,120,122].map(n => {
-      const ext = [115].includes(n) ? "png" : "jpg";
+      const ext = [41, 112, 115].includes(n) ? "png" : "jpg";
       return `/images/applications/crosswalks/crosswalks-${String(n).padStart(2,"0")}.${ext}`;
     }),
     description: "A crosswalk does two jobs: it protects pedestrians, and it tells a driver that someone is about to cross. HUB crosswalk systems are specified where both those jobs need to stay done — season after season. TrafficPatterns and TrafficPatternsXD thermoplastic fuse permanently to the road surface, maintaining ASTM-rated retroreflectivity through snowplow cycles, de-icing chemical seasons, and freeze-thaw cycles that challenge any surface. DecoMark and StreetBond open the crosswalk up as a creative surface — Pride rainbow crossings, Indigenous cultural art, neighbourhood identity installations, and commemorative designs that make the intersection a landmark, not just a safety device. Specified by municipalities from Halifax to Vancouver.",
@@ -72,7 +72,7 @@ export const applications: Application[] = [
     shortDesc: "Decorative surface systems for urban paths, park plazas, and multi-use trails.",
     imageUrl: "/images/applications/parks-paths/parks-paths-01.jpg",
     gallery: [1,4,7,10,13,16,19,22,25,28,31,34,37,40,43,46,49,52,55,58,61,64,67,70,73,76,79,82,85,88,91,94,97,100,103,106,109,112,115,118,121,124,127,130,133,136,139,142,143,144].map(n => {
-      const ext = [100, 103].includes(n) ? "png" : "jpg";
+      const ext = [97, 100, 103].includes(n) ? "png" : "jpg";
       return `/images/applications/parks-paths/parks-paths-${String(n).padStart(2,"0")}.${ext}`;
     }),
     description: "The path through a park sets the tone for the whole space. A grey, cracked asphalt trail communicates neglect. A vibrant, well-designed surface communicates care — and invites people to use it. HUB surface systems transform utilitarian park infrastructure into environments worth spending time in. StreetBond applies vivid, UV-stable colour to existing asphalt trail and plaza surfaces, turning functional routes into wayfinding systems and amenity destinations. DecoMark brings mural-quality custom graphic thermoplastic to the ground plane for cultural recognition art, wayfinding symbols, and community identity installations. StreetPrint in-place stamped asphalt gives plazas, seating courts, and entry areas the visual richness of traditional stone paving without the maintenance complexity. DuraShield extends the life of aging path surfaces where rejuvenation is more cost-effective than replacement.",
@@ -174,7 +174,7 @@ export const applications: Application[] = [
     shortDesc: "Retroreflective thermoplastic markings that support Vision Zero crosswalk standards.",
     imageUrl: "/images/applications/crosswalks/crosswalks-03.jpg",
     gallery: [1,3,6,8,11,13,16,18,21,23,26,28,31,33,36,38,41,43,45,48,50,53,55,58,60,63,65,68,70,73,75,78,80,83,85,87,90,92,95,97,100,102,105,107,110,112,115,117,120,122].map(n => {
-      const ext = [115].includes(n) ? "png" : "jpg";
+      const ext = [41, 112, 115].includes(n) ? "png" : "jpg";
       return `/images/applications/crosswalks/crosswalks-${String(n).padStart(2,"0")}.${ext}`;
     }),
     description: "Pedestrian safety isn't an aesthetic aspiration — it's a measurable outcome. Crosswalk markings that are visible at night in the rain, school zone treatments that read at speed, and pedestrian priority zones that communicate unambiguously to a driver are all functions of durable, retroreflective pavement systems that hold their performance specification through Canadian winters, not just in the season they were installed. TrafficPatterns and TrafficPatternsXD thermoplastic deliver retroreflective performance at crosswalks and school zones season after season without repainting. StreetBond and MMAX high-contrast colour coatings mark pedestrian priority zones, raised intersection treatments, and school zone warning areas with colours that persist through de-icing salt cycles and freeze-thaw conditions. The complete specification for municipalities and engineers taking Vision Zero and Complete Streets commitments seriously.",

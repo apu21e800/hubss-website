@@ -46,7 +46,7 @@ export default function PersonaEntryPoints() {
                 >
                   {p.label}
                 </p>
-                <p className="text-xs leading-relaxed" style={{ color: "#6B7280" }}>
+                <p className="text-xs leading-relaxed" style={{ color: "#868C98" }}>
                   {p.desc}
                 </p>
               </div>

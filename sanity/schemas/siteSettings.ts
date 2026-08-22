@@ -8,8 +8,6 @@ export default defineType({
   type: "document",
   icon: CogIcon,
 
-  // Prevent creating more than one instance
-  __experimental_actions: ["update", "publish"],
 
   groups: [
     { name: "offices",   title: "Offices",   default: true },

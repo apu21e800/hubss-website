@@ -44,7 +44,7 @@ export default function PavingPatterns() {
             key={t.slug}
             href="/patterns"
             className="rounded-xl overflow-hidden group transition-transform hover:-translate-y-0.5"
-            style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.08)" }}
+            style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.07)" }}
           >
             <div className="p-3 sm:p-4">
               <Image
@@ -56,7 +56,7 @@ export default function PavingPatterns() {
                 sizes="(max-width: 768px) 50vw, 33vw"
               />
             </div>
-            <div className="px-4 pb-3.5 pt-2.5" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+            <div className="px-4 pb-3.5 pt-2.5" style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
               <p className="font-semibold text-[13px]" style={{ color: "var(--text-primary)" }}>{t.name}</p>
             </div>
           </Link>

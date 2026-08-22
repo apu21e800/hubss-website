@@ -13,7 +13,8 @@
     "assets:inventory": "node scripts/asset-inventory.mjs",
     "gen:gallery-manifest": "node scripts/gen-gallery-manifest.mjs",
     "verify": "node scripts/verify-site.mjs",
-    "verify:quick": "node scripts/verify-site.mjs --quick"
+    "verify:quick": "node scripts/verify-site.mjs --quick",
+    "images:add": "node scripts/add-images.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",

@@ -73,8 +73,8 @@ const PERSONAS = [
   },
   {
     title: "Engineering & Consulting Firms",
-    desc: "CE credits available. Walk away with real spec sheets, sample materials, and a list of certified HUB installers in your region.",
-    badge: "CE Credits",
+    desc: "Lifecycle cost data, performance specs, and installation standards you can cite directly in tender documents — plus the certified HUB applicator contacts for your region.",
+    badge: "Spec Support",
   },
   {
     title: "Contractors & Applicators",
@@ -93,8 +93,8 @@ const FAQS = [
     a: "Nothing. Sessions are how we introduce our systems to the people who specify them — no invoice, no minimum order, and no follow-up pressure.",
   },
   {
-    q: "Do we get continuing education credits?",
-    a: "Yes. HUB Lunch & Learn sessions count toward AIBC, RAIC, and PEO continuing professional development requirements. We provide the documentation.",
+    q: "Who should be in the room?",
+    a: "Engineers, planners, landscape architects, project managers, procurement — anyone who touches the surface spec. Sessions are built for mixed teams, and there's no cap on seats.",
   },
   {
     q: "In-person or virtual?",
@@ -115,11 +115,14 @@ const STATS = [
   { value: "45 min", label: "Focused Session" },
   { value: "No Cost", label: "Hosted by HUB" },
   { value: "Lunch Included", label: "Every In-Person" },
-  { value: "CE Credits", label: "AIBC · RAIC · PEO" },
+  { value: "2 Offices", label: "Milton ON · Ladysmith BC" },
 ];
 
+const FORMATS = ["In-Person", "Virtual", "Either"] as const;
+type SessionFormat = (typeof FORMATS)[number];
+
 export default function LunchLearnFunnel({
-  eyebrow      = "Professional Development · In-Person or Virtual · Coast to Coast",
+  eyebrow      = "Lunch & Learn · In-Person or Virtual · Coast to Coast",
   headingLine1 = "Specify with confidence.",
   headingLine2 = "Lunch is on us.",
   subheading   = "A focused 45-minute session that gives your team the technical grounding to specify decorative pavement, thermoplastic crosswalks, and coloured coatings — real Canadian case studies and spec language you can drop straight into your next RFP.",
@@ -144,6 +147,8 @@ export default function LunchLearnFunnel({
   const [formData, setFormData] = useState<FormState>({
     name: "", email: "", company: "", city: "", phone: "",
   });
+  const [format, setFormat] = useState<SessionFormat>("Either");
+  const [hp, setHp] = useState("");
   const [submitState, setSubmitState] = useState<SubmitState>({ status: "idle" });
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
@@ -154,12 +159,17 @@ export default function LunchLearnFunnel({
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // Honeypot: bots that fill the hidden field get a silent "success".
+    if (hp) {
+      setSubmitState({ status: "success", message: "You're booked in. We'll be in touch within one business day to confirm your date and details." });
+      return;
+    }
     setSubmitState({ status: "loading" });
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, formType: "lunch-learn" }),
+        body: JSON.stringify({ ...formData, format, formType: "lunch-learn" }),
       });
       if (!response.ok) throw new Error(`API error: ${response.statusText}`);
       setSubmitState({ status: "success", message: "You're booked in. We'll be in touch within one business day to confirm your date and details." });
@@ -174,7 +184,7 @@ export default function LunchLearnFunnel({
   return (
     <div style={{ background: "var(--bg-primary)" }}>
 
-      {/* ── HERO ────────────────────────────────────────────────── */}
+      {/* ── HERO ────────────────────────────────────────── */}
       <section
         className="relative overflow-hidden"
         style={{ background: "#070b12", minHeight: "80vh" }}
@@ -201,7 +211,7 @@ export default function LunchLearnFunnel({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <p className="text-xs font-bold tracking-[0.22em] uppercase mb-5" style={{ color: "#f97316" }}>
+              <p className="text-xs font-bold tracking-[0.22em] uppercase mb-5" style={{ color: "#FB923C" }}>
                 {eyebrow}
               </p>
               <h1
@@ -232,7 +242,7 @@ export default function LunchLearnFunnel({
               </p>
 
               <div className="flex flex-wrap gap-5 mb-10">
-                {["30+ Years in Canada", "10 Provinces", "CE-Credit Sessions"].map((t) => (
+                {["30+ Years in Canada", "10 Provinces", "Lunch Included"].map((t) => (
                   <div key={t} className="flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: "#f97316" }} />
                     <span className="text-sm font-semibold" style={{ color: "rgba(255,255,255,0.6)" }}>{t}</span>
@@ -243,12 +253,12 @@ export default function LunchLearnFunnel({
               <div className="flex flex-col gap-3">
                 <a
                   href="#book"
-                  className="inline-flex items-center justify-center gap-2 px-8 rounded-lg font-bold text-sm transition-all self-start"
+                  className="inline-flex items-center justify-center gap-2 px-8 rounded-lg font-bold text-sm transition-all self-start hover:brightness-110 active:scale-[0.98]"
                   style={{
                     background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
                     color: "#fff",
                     boxShadow: "0 6px 28px rgba(249,115,22,0.42)",
-                    minHeight: "44px",
+                    minHeight: "48px",
                   }}
                 >
                   {ctaLabel}
@@ -296,17 +306,16 @@ export default function LunchLearnFunnel({
         </div>
 
         <div className="absolute bottom-0 inset-x-0 h-16 pointer-events-none" style={{
-          background: "linear-gradient(to bottom, transparent, var(--bg-primary))",
+          background: "linear-gradient(to bottom, transparent, var(--bg-section-asphalt))",
         }} />
       </section>
 
-      {/* ── STATS STRIP ────────────────────────────────────────────── */}
+      {/* ── STATS STRIP — asphalt band starts here ──────────────────── */}
       <section
         className="py-10"
         style={{
-          background: "#0a0f1a",
-          borderTop: "1px solid rgba(255,255,255,0.07)",
-          borderBottom: "1px solid rgba(255,255,255,0.07)",
+          background: "var(--bg-section-asphalt)",
+          borderBottom: "1px solid rgba(255,255,255,0.06)",
         }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -334,11 +343,11 @@ export default function LunchLearnFunnel({
                 >
                   {stat.value}
                 </span>
-                {/* 0.45, not 0.40: at 12px on --bg-dark, 0.40 composites to #6c6f76
-                    for 3.8:1 against WCAG AA's 4.5:1 floor. 0.45 is the smallest
-                    step that clears it (4.51:1) — the four stat captions here are
-                    the last non-CTA contrast failures on the site. */}
-                <span className="text-xs font-semibold tracking-[0.12em] uppercase" style={{ color: "rgba(255,255,255,0.45)" }}>
+                {/* Solid #9CA3AF, not white-alpha: on the asphalt band (#16181B,
+                    lighter than the old navy) rgba(255,255,255,0.45) composites
+                    to ~4.3:1 — under WCAG AA's 4.5:1. #9CA3AF clears it at ~6.6:1
+                    and matches the body-grey used on every asphalt card. */}
+                <span className="text-xs font-semibold tracking-[0.12em] uppercase" style={{ color: "#9CA3AF" }}>
                   {stat.label}
                 </span>
               </motion.div>
@@ -347,11 +356,11 @@ export default function LunchLearnFunnel({
         </div>
       </section>
 
-      {/* ── WHAT YOU WALK AWAY WITH ──────────────────────────────────── */}
-      <section className="py-20 lg:py-24" style={{ background: "#0a0f1a" }}>
+      {/* ── WHAT YOU WALK AWAY WITH — same asphalt band ──────────────── */}
+      <section className="py-20 lg:py-24" style={{ background: "var(--bg-section-asphalt)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-14 text-center">
-            <p className="text-xs font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#f97316" }}>
+            <p className="text-xs font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#FB923C" }}>
               {whatYouGetEyebrow}
             </p>
             <h2
@@ -389,7 +398,7 @@ export default function LunchLearnFunnel({
                 <span
                   className="font-black leading-none select-none"
                   style={{
-                    fontSize: "5rem",
+                    fontSize: "4.25rem",
                     background: "linear-gradient(135deg, #F97316 0%, #EAB308 100%)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
@@ -413,11 +422,11 @@ export default function LunchLearnFunnel({
         </div>
       </section>
 
-      {/* ── PERFECT FOR ──────────────────────────────────────────────── */}
-      <section className="py-20" style={{ background: "#070b12" }}>
+      {/* ── PERFECT FOR — back to navy canvas ────────────────────── */}
+      <section className="py-20" style={{ background: "var(--bg-primary)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-12">
-            <p className="text-xs font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#f97316" }}>
+            <p className="text-xs font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#FB923C" }}>
               {personasEyebrow}
             </p>
             <h2
@@ -443,7 +452,7 @@ export default function LunchLearnFunnel({
                 transition={{ delay: i * 0.06, duration: 0.35 }}
                 className="flex flex-col p-8 rounded-xl"
                 style={{
-                  background: "rgba(255,255,255,0.05)",
+                  background: "var(--bg-card-neutral)",
                   border: "1px solid rgba(255,255,255,0.07)",
                 }}
               >
@@ -453,24 +462,24 @@ export default function LunchLearnFunnel({
                     className="flex-shrink-0 rounded-full px-2.5 py-0.5 text-[10px] font-bold tracking-wide whitespace-nowrap"
                     style={{
                       background: "rgba(249,115,22,0.12)",
-                      color: "#f97316",
+                      color: "#FB923C",
                       border: "1px solid rgba(249,115,22,0.22)",
                     }}
                   >
                     {p.badge}
                   </span>
                 </div>
-                <p className="text-sm leading-relaxed" style={{ color: "#868C98" }}>{p.desc}</p>
+                <p className="text-sm leading-relaxed" style={{ color: "#9CA3AF" }}>{p.desc}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── CITY MARQUEE ─────────────────────────────────────────────────── */}
-      <div style={{ background: "#070b12", borderTop: "1px solid rgba(255,255,255,0.05)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+      {/* ── CITY MARQUEE ─────────────────────────────────────── */}
+      <div style={{ background: "var(--bg-primary)", borderTop: "1px solid rgba(255,255,255,0.05)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
         <p className="text-center text-[10px] font-bold tracking-[0.2em] uppercase pt-8 pb-4" style={{ color: "rgba(255,255,255,0.5)" }}>
-          Previous Lunch &amp; Learn clients include
+          You&apos;ll find HUB systems on the ground with
         </p>
         <div
           className="overflow-hidden pb-8"
@@ -487,21 +496,21 @@ export default function LunchLearnFunnel({
         </div>
       </div>
 
-      {/* ── FAQ ──────────────────────────────────────────────────────── */}
-      <section className="py-20 lg:py-24" style={{ background: "#0a0f1a" }}>
+      {/* ── FAQ — asphalt band ───────────────────────────────── */}
+      <section className="py-20 lg:py-24" style={{ background: "var(--bg-section-asphalt)" }}>
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-12 text-center">
-            <p className="text-xs font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#f97316" }}>{faqEyebrow}</p>
+            <p className="text-xs font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#FB923C" }}>{faqEyebrow}</p>
             <h2 className="font-black" style={{ fontSize: "clamp(1.9rem, 3.5vw, 2.9rem)", lineHeight: 1.05, letterSpacing: "-0.03em", color: "#F5F0EB" }}>
               {faqHeading}
             </h2>
           </div>
           <div className="space-y-3">
             {faqItems.map((faq, i) => (
-              <div key={faq.q} className="rounded-xl overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.07)", background: openFaq === i ? "var(--bg-card)" : "rgba(255,255,255,0.025)" }}>
+              <div key={faq.q} className="rounded-xl overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.07)", background: openFaq === i ? "var(--bg-card)" : "var(--bg-card-neutral)" }}>
                 <button className="w-full text-left flex items-center justify-between gap-4 px-6 py-5" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
                   <span className="font-semibold text-base" style={{ color: "#F5F0EB" }}>{faq.q}</span>
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-transform duration-200" style={{ background: openFaq === i ? "rgba(249,115,22,0.2)" : "rgba(255,255,255,0.07)", color: openFaq === i ? "#f97316" : "#9CA3AF", transform: openFaq === i ? "rotate(45deg)" : "rotate(0deg)" }}>
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-transform duration-200" style={{ background: openFaq === i ? "rgba(249,115,22,0.2)" : "rgba(255,255,255,0.07)", color: openFaq === i ? "#FB923C" : "#9CA3AF", transform: openFaq === i ? "rotate(45deg)" : "rotate(0deg)" }}>
                     <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 5v14M5 12h14" /></svg>
                   </span>
                 </button>
@@ -518,14 +527,14 @@ export default function LunchLearnFunnel({
         </div>
       </section>
 
-      {/* ── FORM ──────────────────────────────────────────────────────────── */}
+      {/* ── FORM ────────────────────────────────────────────── */}
       <section id="book" className="py-20 lg:py-28 relative overflow-hidden" style={{ background: "#070b12" }}>
         <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 50% 50%, rgba(249,115,22,0.09) 0%, transparent 65%)" }} />
         <div className="absolute top-0 inset-x-0 h-px" style={{ background: "linear-gradient(90deg, transparent 0%, rgba(249,115,22,0.4) 50%, transparent 100%)" }} />
 
         <div className="relative z-10 max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
-            <p className="text-xs font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#f97316" }}>Book Your Session</p>
+            <p className="text-xs font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#FB923C" }}>Book Your Session</p>
             <h2 className="font-black mb-4" style={{ fontSize: "clamp(2rem, 4vw, 3.25rem)", lineHeight: 1.0, letterSpacing: "-0.035em", background: "linear-gradient(92deg, #F97316 0%, #EAB308 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
               {formHeading}
             </h2>
@@ -541,7 +550,7 @@ export default function LunchLearnFunnel({
             ))}
           </div>
 
-          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.45 }} className="relative rounded-2xl p-8 sm:p-10" style={{ background: "#0f1520", border: "1px solid rgba(249,115,22,0.2)", boxShadow: "0 0 0 1px rgba(249,115,22,0.06) inset, 0 20px 60px rgba(0,0,0,0.3)" }}>
+          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.45 }} className="relative rounded-2xl p-8 sm:p-10" style={{ background: "var(--bg-card)", border: "1px solid rgba(249,115,22,0.25)", boxShadow: "0 0 0 1px rgba(249,115,22,0.06) inset, 0 20px 60px rgba(0,0,0,0.3)" }}>
             <div className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
 
             {submitState.status === "success" ? (
@@ -558,17 +567,42 @@ export default function LunchLearnFunnel({
                   {[
                     { name: "name", placeholder: "Your name", type: "text", required: true },
                     { name: "email", placeholder: "Email address", type: "email", required: true },
-                    { name: "company", placeholder: "Company or organization", type: "text", required: false },
-                    { name: "city", placeholder: "City", type: "text", required: false },
+                    { name: "company", placeholder: "Organization (optional)", type: "text", required: false },
+                    { name: "city", placeholder: "City (optional)", type: "text", required: false },
                   ].map((field) => (
                     <input key={field.name} type={field.type} name={field.name} placeholder={field.placeholder} aria-label={field.placeholder} value={formData[field.name as keyof FormState]} onChange={handleChange} required={field.required} className="px-4 py-3.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-orange-500/50 transition-all" style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", color: "#F5F0EB" }} />
                   ))}
                 </div>
-                <input type="tel" name="phone" placeholder="Phone number" aria-label="Phone number" value={formData.phone} onChange={handleChange} className="w-full px-4 py-3.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-orange-500/50 transition-all" style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", color: "#F5F0EB" }} />
-                <button type="submit" disabled={submitState.status === "loading"} className="w-full py-5 rounded-xl font-bold text-base transition-all disabled:opacity-50" style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff", boxShadow: "0 6px 24px rgba(249,115,22,0.38)" }}>
+                <input type="tel" name="phone" placeholder="Phone number (optional)" aria-label="Phone number (optional)" value={formData.phone} onChange={handleChange} className="w-full px-4 py-3.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-orange-500/50 transition-all" style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", color: "#F5F0EB" }} />
+
+                <div>
+                  <p className="text-xs font-semibold mb-2 tracking-wide uppercase" style={{ color: "#9CA3AF" }}>Session format</p>
+                  <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Session format">
+                    {FORMATS.map((f) => (
+                      <button
+                        key={f}
+                        type="button"
+                        role="radio"
+                        aria-checked={format === f}
+                        onClick={() => setFormat(f)}
+                        className="py-3 rounded-xl text-sm font-semibold transition-all active:scale-[0.98]"
+                        style={format === f
+                          ? { background: "rgba(249,115,22,0.16)", border: "1px solid rgba(249,115,22,0.55)", color: "#FDBA74" }
+                          : { background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", color: "#9CA3AF" }}
+                      >
+                        {f}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Honeypot — hidden from real users, tempting to bots */}
+                <input type="text" name="website" value={hp} onChange={(e) => setHp(e.currentTarget.value)} tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
+
+                <button type="submit" disabled={submitState.status === "loading"} className="w-full py-5 rounded-xl font-bold text-base transition-all disabled:opacity-50 hover:brightness-110 active:scale-[0.99]" style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff", boxShadow: "0 6px 24px rgba(249,115,22,0.38)" }}>
                   {submitState.status === "loading" ? "Sending your request…" : submitLabel}
                 </button>
-                <p className="text-center text-xs" style={{ color: "rgba(255,255,255,0.3)" }}>No obligation. No invoice. Lunch included. We&apos;ll reach out within 24 hours.</p>
+                <p className="text-center text-xs" style={{ color: "rgba(255,255,255,0.35)" }}>No obligation. No invoice. Lunch included. We&apos;ll reach out within 24 hours.</p>
                 {submitState.status === "error" && (
                   <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="p-4 rounded-xl text-sm" style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.25)", color: "#fca5a5" }}>
                     {submitState.message}
@@ -584,7 +618,7 @@ export default function LunchLearnFunnel({
               { region: "Western Canada", name: "Cleve Stordy", phone: "604-309-8212", email: "cleve.stordy@hubss.com" },
             ].map((office) => (
               <div key={office.region} className="rounded-xl p-5 text-center" style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}>
-                <p className="text-[10px] font-bold tracking-[0.15em] uppercase mb-2" style={{ color: "#f97316" }}>{office.region}</p>
+                <p className="text-[10px] font-bold tracking-[0.15em] uppercase mb-2" style={{ color: "#FB923C" }}>{office.region}</p>
                 <p className="text-sm font-semibold mb-1" style={{ color: "#F5F0EB" }}>{office.name}</p>
                 <a href={`tel:+1${office.phone.replace(/-/g, "")}`} className="text-xs block mb-0.5 hover:text-orange-400 transition-colors" style={{ color: "#9CA3AF" }}>{office.phone}</a>
                 <a href={`mailto:${office.email}`} className="text-xs hover:text-orange-400 transition-colors" style={{ color: "#9CA3AF" }}>{office.email}</a>

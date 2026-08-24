@@ -159,11 +159,11 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
               <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" strokeWidth={2} strokeLinecap="round" /></svg>
             </button>
           )}
-          <kbd className="flex-shrink-0 px-2 py-0.5 rounded text-xs font-mono" style={{ background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.55)", border: "1px solid rgba(255,255,255,0.1)" }}>ESC</kbd>
+          <kbd className="flex-shrink-0 px-2 py-0.5 rounded text-xs font-mono" style={{ background: "var(--fill-subtle)", color: "rgba(255,255,255,0.55)", border: "1px solid rgba(255,255,255,0.1)" }}>ESC</kbd>
         </div>
 
         {/* Results panel */}
-        <div className="mt-2 rounded-2xl overflow-hidden" style={{ background: "rgba(10,14,23,0.98)", border: "1px solid rgba(255,255,255,0.07)", boxShadow: "0 24px 80px rgba(0,0,0,0.6)" }}>
+        <div className="mt-2 rounded-2xl overflow-hidden" style={{ background: "rgba(10,14,23,0.98)", border: "1px solid var(--border-color)", boxShadow: "0 24px 80px rgba(0,0,0,0.6)" }}>
           {/* Default quick links */}
           {q.length < 2 && (
             <div className="p-4">
@@ -472,7 +472,7 @@ function LLMenuCard() {
 // ── Full-width Products mega menu ────────────────────────────────────────
 // DDB polish pass (May 25):
 //   • Orange #F97316 fails WCAG AA at 9–11px on dark. Small-text accents
-//     bumped to ACCENT (#FB923C, ≈5.1:1 on #070b12) so eyebrows + sublabels
+//     bumped to ACCENT (#FB923C, ≈5.1:1 on #0D0D0D) so eyebrows + sublabels
 //     are actually legible. Reserved #F97316 for larger or graphical use.
 //   • Stamped Asphalt rebalanced: pillarNote + secondary link give the
 //     single-product category visual parity with the 6-product column.
@@ -516,7 +516,7 @@ function ProductsMegaMenu() {
               <div
                 key={cat.label}
                 className="rounded-xl overflow-hidden flex flex-col"
-                style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
+                style={{ background: "rgba(255,255,255,0.025)", border: "1px solid var(--border-color)" }}
               >
                 <Link href="/products" className="relative block group" style={{ height: 80 }}>
                   <Image
@@ -578,7 +578,7 @@ function ProductsMegaMenu() {
                     <Link
                       href={cat.secondary.href}
                       className="group flex items-start justify-between gap-2 px-2 py-2.5 mt-1.5 rounded-md transition-colors hover:bg-white/5"
-                      style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
+                      style={{ borderTop: "1px solid var(--border-color)" }}
                     >
                       <div className="min-w-0">
                         <p className="text-[10px] font-bold tracking-[0.18em] uppercase" style={{ color: ACCENT }}>
@@ -678,7 +678,7 @@ function FieldNotesMegaMenu() {
               key={post.slug}
               href={`/blog/${post.slug}`}
               className="group flex gap-3 p-3 rounded-xl transition-colors hover:bg-white/5"
-              style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
+              style={{ background: "rgba(255,255,255,0.025)", border: "1px solid var(--border-color)" }}
             >
               <div className="relative flex-shrink-0 rounded-lg overflow-hidden" style={{ width: 72, height: 72 }}>
                 <Image
@@ -826,7 +826,7 @@ function MobileGroupDivider({ label }: { label: string }) {
   return (
     <div className="flex items-center gap-3 px-1 pt-5 pb-2">
       <span className="text-[9px] font-bold tracking-[0.22em] uppercase" style={{ color: "rgba(255,255,255,0.5)" }}>{label}</span>
-      <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.07)" }} />
+      <div className="flex-1 h-px" style={{ background: "var(--fill-subtle)" }} />
     </div>
   );
 }
@@ -954,7 +954,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
           transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
           className="fixed inset-0 z-[60] md:hidden flex flex-col outline-none"
           style={{
-            background: "#070b12",
+            background: "#0D0D0D",
             height: "100dvh",
           }}
           onClick={(e) => e.stopPropagation()}
@@ -964,7 +964,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
             className="flex-shrink-0 flex items-center justify-between px-5"
             style={{
               height: 64,
-              borderBottom: "1px solid rgba(255,255,255,0.07)",
+              borderBottom: "1px solid var(--border-color)",
               background: "rgba(7,11,18,0.92)",
               backdropFilter: "blur(16px)",
             }}
@@ -1009,7 +1009,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                 style={{
                   width: 48, height: 48,
                   color: "#F5F0EB",
-                  background: "rgba(255,255,255,0.07)",
+                  background: "var(--fill-subtle)",
                   border: "1px solid rgba(255,255,255,0.1)",
                 }}
               >
@@ -1098,7 +1098,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                       className="flex gap-4 p-3 rounded-2xl active:scale-[0.98] active:opacity-75 transition-[transform,opacity] duration-100"
                       style={{
                         background: "rgba(255,255,255,0.025)",
-                        border: "1px solid rgba(255,255,255,0.07)",
+                        border: "1px solid var(--border-color)",
                       }}
                     >
                       <div className="relative flex-shrink-0 rounded-xl overflow-hidden" style={{ width: 64, height: 64 }}>
@@ -1114,7 +1114,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
               </motion.div>
 
               {/* ── Secondary links ───────────────────────────────── */}
-              <motion.div variants={menuSectionVariants} className="mt-8 pt-6" style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
+              <motion.div variants={menuSectionVariants} className="mt-8 pt-6" style={{ borderTop: "1px solid var(--border-color)" }}>
                 {[
                   { label: "About", href: "/about" },
                   { label: "Contact", href: "/contact" },
@@ -1147,7 +1147,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
           <div
             className="flex-shrink-0 px-4 pt-3 pb-4"
             style={{
-              borderTop: "1px solid rgba(255,255,255,0.07)",
+              borderTop: "1px solid var(--border-color)",
               background: "rgba(7,11,18,0.96)",
               backdropFilter: "blur(20px)",
               paddingBottom: "max(16px, env(safe-area-inset-bottom))",
@@ -1293,7 +1293,7 @@ export default function Nav() {
           backdropFilter: "blur(12px)",
           borderBottom: scrolled
             ? "1px solid rgba(249,115,22,0.18)"
-            : "1px solid rgba(255,255,255,0.07)",
+            : "1px solid var(--border-color)",
           boxShadow: scrolled
             ? "0 4px 32px rgba(0,0,0,0.55), 0 1px 0 rgba(249,115,22,0.08)"
             : "none",
@@ -1504,7 +1504,7 @@ export default function Nav() {
               transition={{ duration: 0.15 }}
               style={{
                 background: "rgba(7,11,18,0.98)",
-                borderTop: "1px solid rgba(255,255,255,0.07)",
+                borderTop: "1px solid var(--border-color)",
                 borderBottom: "1px solid rgba(249,115,22,0.12)",
                 boxShadow: "0 20px 60px rgba(0,0,0,0.6)",
               }}

@@ -9,6 +9,7 @@ import GalleryGrid, { type GalleryImage } from "@/components/ui/GalleryGrid";
 import { galleryFor, altFor } from "@/lib/asset-scan";
 import ResidentialDriveways from "@/components/sections/ResidentialDriveways";
 import JsonLd from "@/components/ui/JsonLd";
+import { imageObject, seoCaption } from "@/lib/image-seo";
 import { applications } from "@/lib/applications";
 import { getMergedApplication } from "@/lib/applications.server";
 import { products } from "@/lib/products";
@@ -47,7 +48,10 @@ export default async function ApplicationPage({ params }: Props) {
   const gallery: GalleryImage[] = gallerySources.map((src) => ({
     src,
     alt: altFor(src, `${application.name} surface systems by HUB — Canadian installation`),
-    caption: altFor(src, application.name),
+    // Written for a reader looking at the photo, not a copy of the alt. Visible
+    // text beside an image outweighs the alt attribute for Google Images and
+    // for the AI crawlers.
+    caption: seoCaption(src) ?? altFor(src, application.name),
   }));
 
   const relatedProductData = application.relatedProducts
@@ -61,8 +65,30 @@ export default async function ApplicationPage({ params }: Props) {
     description: application.description,
     provider: { "@type": "Organization", name: "HUB Surface Systems" },
     url: `https://hubss.com/applications/${application.slug}`,
-    image: application.imageUrl,
+    // ImageObject nodes rather than a bare URL — see the note on the product
+    // page. A URL string is eligible for a rich result and nothing else; these
+    // carry the caption, credit, keywords, and licence that make the photo
+    // competitive in Google Images.
+    image: [
+      imageObject(application.imageUrl, { representativeOfPage: true }),
+      ...gallerySources.slice(1, 12).map((src) => imageObject(src)),
+    ],
   };
+
+  /** The gallery as a named, addressable set — see the product page note. */
+  const gallerySchema = gallery.length > 1 ? {
+    "@context": "https://schema.org",
+    "@type": "ImageGallery",
+    "@id": `https://hubss.com/applications/${application.slug}#gallery`,
+    name: `${application.name} installation photographs`,
+    description: `Field photography of ${application.name.toLowerCase()} installed by HUB Surface Systems across Canada.`,
+    url: `https://hubss.com/applications/${application.slug}`,
+    isPartOf: { "@id": `https://hubss.com/applications/${application.slug}` },
+    numberOfItems: gallery.length,
+    associatedMedia: gallery
+      .slice(0, 40)
+      .map((g) => imageObject(g.src, { alt: g.alt, caption: g.caption })),
+  } : null;
 
   const breadcrumbSchema = {
     "@context": "https://schema.org",
@@ -78,6 +104,7 @@ export default async function ApplicationPage({ params }: Props) {
     <main style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
       <JsonLd data={applicationSchema} />
       <JsonLd data={breadcrumbSchema} />
+      {gallerySchema && <JsonLd data={gallerySchema} />}
       <Nav />
 
       {/* Hero banner */}
@@ -119,7 +146,7 @@ export default async function ApplicationPage({ params }: Props) {
       </div>
 
       {/* Main content */}
-      <div className="relative" style={{ background: "#0f1620" }}>
+      <div className="relative" style={{ background: "#151515" }}>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
 
           {/* Specify CTA bar */}

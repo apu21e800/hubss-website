@@ -123,7 +123,7 @@ export default function BlogFilter({ posts, allProducts }: Props) {
         <span
           className="text-[11px] font-bold tabular-nums px-1.5 rounded-full"
           style={{
-            background: active ? "rgba(0,0,0,0.18)" : "rgba(255,255,255,0.07)",
+            background: active ? "rgba(0,0,0,0.18)" : "var(--border-color)",
             color:      active ? "rgba(255,255,255,0.9)" : "#6f757d",
           }}
         >

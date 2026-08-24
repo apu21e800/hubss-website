@@ -81,7 +81,7 @@ export default function FeaturedBlogPost() {
             className="grid grid-cols-1 md:grid-cols-5 gap-0 overflow-hidden rounded-2xl border transition-all duration-300 group-hover:shadow-[0_8px_32px_rgba(249,115,22,0.12)] group-hover:border-orange-500/25"
             style={{
               background: "var(--bg-card-neutral)",
-              borderColor: "rgba(255,255,255,0.07)",
+              borderColor: "var(--border-color)",
             }}
           >
             {/* Image — 3/5 on desktop */}
@@ -162,7 +162,7 @@ export default function FeaturedBlogPost() {
                       key={p}
                       className="text-xs px-2.5 py-1 rounded-md font-medium"
                       style={{
-                        background: "rgba(255,255,255,0.07)",
+                        background: "var(--fill-subtle)",
                         color: "var(--text-muted)",
                       }}
                     >
@@ -201,7 +201,7 @@ export default function FeaturedBlogPost() {
                   className="group flex flex-col overflow-hidden rounded-xl border transition-all duration-200 hover:shadow-[0_4px_20px_rgba(249,115,22,0.1)] hover:border-orange-500/25"
                   style={{
                     background: "var(--bg-card-neutral)",
-                    borderColor: "rgba(255,255,255,0.07)",
+                    borderColor: "var(--border-color)",
                   }}
                 >
                   {/* Thumbnail — full width, 16:9 */}

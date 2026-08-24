@@ -162,7 +162,7 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
                     e.currentTarget.style.transform = "translateY(-3px)";
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)";
+                    e.currentTarget.style.borderColor = "var(--border-color)";
                     e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.2)";
                     e.currentTarget.style.transform = "translateY(0)";
                   }}
@@ -218,7 +218,7 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
                             key={app}
                             className="text-[10px] font-semibold px-2 py-0.5 rounded-full tracking-wide"
                             style={{
-                              background: "rgba(255,255,255,0.07)",
+                              background: "var(--fill-subtle)",
                               color: "rgba(255,255,255,0.55)",
                             }}
                           >

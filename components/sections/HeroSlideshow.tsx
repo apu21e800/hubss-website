@@ -36,7 +36,7 @@ export default function HeroSlideshow({
     <section
       data-hero
       className="relative w-full overflow-hidden"
-      style={{ minHeight: "88vh", background: "#0d1117" }}
+      style={{ minHeight: "88vh", background: "#101010" }}
       aria-label="Hero"
     >
       {/* ── Background image — plain <img>, not next/image and not CSS background-image.

@@ -73,7 +73,7 @@ export default async function InstagramStrip() {
   const useLive   = livePosts.length > 0;
 
   return (
-    <section className="py-24" style={{ background: "#080d16", borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+    <section className="py-24" style={{ background: "#101010", borderTop: "1px solid rgba(255,255,255,0.05)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}
@@ -98,7 +98,7 @@ export default async function InstagramStrip() {
                 // Live: media_url and permalink come from THE SAME post object — always matched
                 <a key={post.id} href={post.permalink} target="_blank" rel="noopener noreferrer"
                   className="group relative overflow-hidden rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_8px_32px_rgba(249,115,22,0.2)]"
-                  style={{ aspectRatio: "1/1", border: "1px solid rgba(255,255,255,0.07)" }}>
+                  style={{ aspectRatio: "1/1", border: "1px solid var(--border-color)" }}>
                   <Image src={post.media_url} alt="HUB Surface Systems Instagram — recent decorative pavement project from the field" fill
                     className="object-cover transition-transform duration-500 group-hover:scale-110"
                     sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 17vw" unoptimized />
@@ -114,7 +114,7 @@ export default async function InstagramStrip() {
                 // Fallback: links to profile (not individual posts) since we can't guarantee match
                 <a key={photo.src} href={photo.instagramUrl} target="_blank" rel="noopener noreferrer"
                   className="group relative overflow-hidden rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_8px_32px_rgba(249,115,22,0.2)]"
-                  style={{ aspectRatio: "1/1", border: "1px solid rgba(255,255,255,0.07)" }}>
+                  style={{ aspectRatio: "1/1", border: "1px solid var(--border-color)" }}>
                   <Image src={photo.src} alt={photo.alt} fill
                     className="object-cover transition-transform duration-500 group-hover:scale-110"
                     sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 17vw" />
@@ -134,9 +134,9 @@ export default async function InstagramStrip() {
           {SOCIAL_CHANNELS.map((ch) => (
             <a key={ch.name} href={ch.href} target="_blank" rel="noopener noreferrer"
               className="group flex items-center gap-4 p-4 rounded-xl transition-colors hover:bg-white/[0.06] hover:border-orange-500/20"
-              style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}>
+              style={{ background: "rgba(255,255,255,0.025)", border: "1px solid var(--border-color)" }}>
               <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors group-hover:bg-orange-500/15"
-                style={{ background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.5)" }}>{ch.icon}</div>
+                style={{ background: "var(--fill-subtle)", color: "rgba(255,255,255,0.5)" }}>{ch.icon}</div>
               <div className="min-w-0">
                 <p className="text-sm font-semibold group-hover:text-orange-400 transition-colors" style={{ color: "rgba(255,255,255,0.8)" }}>{ch.name}</p>
                 <p className="text-xs truncate" style={{ color: "rgba(255,255,255,0.5)" }}>{ch.desc}</p>
@@ -148,7 +148,7 @@ export default async function InstagramStrip() {
           ))}
         </div>
 
-        <div className="border-t pt-8" style={{ borderColor: "rgba(255,255,255,0.07)" }}>
+        <div className="border-t pt-8" style={{ borderColor: "var(--border-color)" }}>
           <SocialLinks className="justify-center gap-8" iconClassName="w-5 h-5" />
         </div>
       </div>

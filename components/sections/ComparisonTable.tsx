@@ -16,9 +16,9 @@ export default function ComparisonTable() {
     <section
       className="py-24 relative overflow-hidden"
       style={{
-        background: "#0d1117",
-        borderTop: "1px solid rgba(255,255,255,0.07)",
-        borderBottom: "1px solid rgba(255,255,255,0.07)",
+        background: "#101010",
+        borderTop: "1px solid var(--border-color)",
+        borderBottom: "1px solid var(--border-color)",
       }}
     >
       {/* Subtle orange glow top-left */}
@@ -136,7 +136,7 @@ export default function ComparisonTable() {
                       key={row.metric}
                       style={{
                         background: i % 2 === 0 ? "rgba(255,255,255,0.025)" : "rgba(255,255,255,0.025)",
-                        borderBottom: "1px solid rgba(255,255,255,0.07)",
+                        borderBottom: "1px solid var(--border-color)",
                       }}
                     >
                       <td className="px-3 py-2 text-sm font-medium" style={{ color: "#e5e7eb" }}>

@@ -42,7 +42,7 @@ export default function ColourSystem({
           <details
             key={family.key}
             className="group rounded-xl overflow-hidden"
-            style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
+            style={{ background: "rgba(255,255,255,0.025)", border: "1px solid var(--border-color)" }}
           >
             <summary className="flex items-center gap-4 px-4 sm:px-5 py-4 cursor-pointer select-none list-none [&::-webkit-details-marker]:hidden transition-colors hover:bg-white/[0.03]">
               <div className="min-w-0 flex-1">
@@ -70,7 +70,7 @@ export default function ColourSystem({
                         background: c.hex,
                         border: c.keyline
                           ? "1px solid rgba(255,255,255,0.35)"
-                          : "1px solid rgba(255,255,255,0.07)",
+                          : "1px solid var(--border-color)",
                       }}
                     />
                   ))}
@@ -105,7 +105,7 @@ export default function ColourSystem({
                         background: c.hex,
                         border: c.keyline
                           ? "1px solid rgba(255,255,255,0.35)"
-                          : "1px solid rgba(255,255,255,0.07)",
+                          : "1px solid var(--border-color)",
                       }}
                       /* aria-label was invalid here — a plain <div> has role
                          "generic", which strips aria-label per the ARIA spec, so

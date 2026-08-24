@@ -28,7 +28,7 @@ function DocRow({
   return (
     <div
       className="flex items-center gap-3 py-2.5"
-      style={{ borderBottom: isLast ? "none" : "1px solid rgba(255,255,255,0.07)" }}
+      style={{ borderBottom: isLast ? "none" : "1px solid var(--border-color)" }}
     >
       {/* PDF icon */}
       <span
@@ -120,7 +120,7 @@ export default function DocumentDownloads({ slug }: { slug: string }) {
         <div
           className="rounded-2xl overflow-hidden"
           style={{
-            background: "#0f1420",
+            background: "#151515",
             border: "1px solid rgba(255,255,255,0.1)",
           }}
         >
@@ -136,7 +136,7 @@ export default function DocumentDownloads({ slug }: { slug: string }) {
                 </p>
                 <h2 className="text-xl font-bold" style={{ color: "#F5F0EB" }}>Downloads</h2>
               </div>
-              <div className="flex-1 h-px ml-4" style={{ background: "rgba(255,255,255,0.07)" }} />
+              <div className="flex-1 h-px ml-4" style={{ background: "var(--fill-subtle)" }} />
               <span className="text-xs shrink-0" style={{ color: "rgba(255,255,255,0.55)" }}>
                 {docs.length} file{docs.length !== 1 ? "s" : ""}
               </span>

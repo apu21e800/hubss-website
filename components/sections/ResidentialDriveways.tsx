@@ -8,7 +8,7 @@ const HERO_IMAGE = "/images/applications/residential-driveways/residential-drive
 
 export default function ResidentialDriveways() {
   return (
-    <section style={{ backgroundColor: "#0f1420" }}>
+    <section style={{ backgroundColor: "#151515" }}>
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[540px]">
 

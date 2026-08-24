@@ -72,7 +72,7 @@ export default function BlogPage() {
   };
 
   return (
-    <main className="min-h-screen" style={{ background: "#0f1620" }}>
+    <main className="min-h-screen" style={{ background: "#151515" }}>
       <JsonLd data={blogSchema} />
       <JsonLd data={breadcrumbSchema} />
       <Nav />

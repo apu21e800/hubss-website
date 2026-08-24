@@ -1,16 +1,19 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import Link from "next/link";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
 import BlogFilter from "@/components/blog/BlogFilter";
+import JsonLd from "@/components/ui/JsonLd";
 import { getAllPosts } from "@/lib/mdx";
+import { FIELD_NOTE_TYPES } from "@/lib/field-notes-taxonomy";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Field Notes — Pavement Engineering & Case Studies",
+  title: "Field Notes — Case Studies, Guides & Pavement White Papers",
   description:
-    "Real project data, case studies, and technical insights on decorative pavement, Vision Zero, Complete Streets, and Canadian municipal infrastructure.",
+    "Canadian decorative pavement documented: project case studies, specification guides, white papers, and field records on crosswalks, transit lanes, and stamped asphalt.",
   slug: "blog",
 });
 
@@ -28,13 +31,56 @@ export default function BlogPage() {
     .sort((a, b) => b[1] - a[1])
     .map(([name]) => name);
 
+  const typeCounts = FIELD_NOTE_TYPES.map((t) => ({
+    ...t,
+    count: posts.filter((p) => p.category === t.label).length,
+  })).filter((t) => t.count > 0);
+
+  /**
+   * Library-level schema. The index declares itself a Blog with a named
+   * publisher and the full subject list the library covers, so a crawler
+   * reading one post can place it inside a body of work rather than treating
+   * it as a loose page. The type hubs each carry their own CollectionPage.
+   */
+  const blogSchema = {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "@id": "https://hubss.com/blog#blog",
+    name: "HUB Surface Systems Field Notes",
+    description:
+      "Case studies, specification guides, project profiles, and white papers on decorative pavement, thermoplastic markings, and coloured coatings in Canada.",
+    url: "https://hubss.com/blog",
+    inLanguage: "en-CA",
+    publisher: { "@id": "https://hubss.com/#organization" },
+    about: [...new Set(posts.flatMap((p) => p.keywords))]
+      .slice(0, 20)
+      .map((k) => ({ "@type": "Thing", name: k })),
+    hasPart: typeCounts.map((t) => ({
+      "@type": "CollectionPage",
+      "@id": `https://hubss.com/blog/${t.slug}#collection`,
+      name: t.plural,
+      url: `https://hubss.com/blog/${t.slug}`,
+    })),
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://hubss.com" },
+      { "@type": "ListItem", position: 2, name: "Field Notes", item: "https://hubss.com/blog" },
+    ],
+  };
+
   return (
     <main className="min-h-screen" style={{ background: "#0f1620" }}>
+      <JsonLd data={blogSchema} />
+      <JsonLd data={breadcrumbSchema} />
       <Nav />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-24 sm:pt-32 pb-16 sm:pb-24">
         {/* Header */}
-        <div className="mb-14">
+        <div className="mb-10">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-3" style={{ color: "#f97316" }}>
             Field Notes
           </p>
@@ -49,9 +95,34 @@ export default function BlogPage() {
           >
             Field Notes from the Front Lines of Canadian Pavement
           </h1>
-          <p className="text-lg" style={{ color: "var(--text-secondary)" }}>
-            Case studies, technical insights, and project stories from HUB Surface Systems installations across Canada.
+          <p className="text-lg" style={{ color: "var(--text-secondary)", maxWidth: "62ch" }}>
+            {posts.length} documented pieces on decorative pavement in Canada — the projects,
+            the specifications, and the lifecycle math behind them.
           </p>
+        </div>
+
+        {/* Type hubs — real indexed pages, not query-string filter state.
+            These give each content shape a URL that can rank on its own and
+            gives a reader who knows what they came for a direct route in. */}
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-2.5 mb-12">
+          {typeCounts.map((t) => (
+            <Link
+              key={t.slug}
+              href={`/blog/${t.slug}`}
+              className="group flex flex-col justify-between p-4 rounded-xl transition-colors hover:bg-white/5"
+              style={{ background: "var(--bg-card-neutral)", border: `1px solid ${t.border}` }}
+            >
+              <span className="text-[22px] font-black leading-none mb-1.5" style={{ color: t.text }}>
+                {t.count}
+              </span>
+              <span className="text-[13px] font-bold leading-tight" style={{ color: "#F5F0EB" }}>
+                {t.plural}
+              </span>
+              <span className="text-[11px] leading-snug mt-1" style={{ color: "rgba(255,255,255,0.5)" }}>
+                {t.blurb}
+              </span>
+            </Link>
+          ))}
         </div>
 
         {/* Filter + grid — wrapped in Suspense for useSearchParams */}

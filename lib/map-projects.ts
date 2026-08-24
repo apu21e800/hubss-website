@@ -68,23 +68,28 @@ export const mapProjects: MapProject[] = [
       "DecoMark custom preformed thermoplastic with full Pantone-matched colour — poppy motifs in regimental red, fused directly to asphalt. The installation has maintained sharp colour and edge definition through four winters.",
   },
   {
-    id: "collingwood-rainbow",
-    title: "Collingwood Rainbow Crosswalk",
-    city: "Collingwood",
+    // Corrected Aug 2026: this entry was "Collingwood Rainbow Crosswalk" but
+    // wore SIMCOE's photo (and the wrong product) — the documented HUB project
+    // behind that photo is Simcoe, ON: TrafficPatternsXD, installed by
+    // certified applicator Multiseal, 2023 (see blog: simcoe-rainbow-crosswalk).
+    id: "simcoe-rainbow",
+    title: "Simcoe Pride Rainbow Crosswalk",
+    city: "Simcoe",
     province: "ON",
-    lat: 44.5001,
-    lng: -80.2168,
-    product: "StreetBond",
+    lat: 42.8368,
+    lng: -80.306,
+    product: "TrafficPatternsXD",
     application: "Community Branding",
+    year: "2023",
     images: [
       "/images/blog/simcoe-rainbow-crosswalk/featured.jpg",
     ],
     excerpt:
-      "Pride crosswalk installation delivering permanent rainbow colour that survives snowplows and de-icing chemicals.",
+      "A young resident's two-year fundraising campaign became a permanent Pride rainbow crosswalk — TrafficPatternsXD colour that survives snowplows and de-icing chemicals.",
     problem:
-      "The town needed a pride crosswalk that would survive Ontario winters — previous installations used paint and faded or chipped within one season, requiring costly annual repaints.",
+      "Simcoe wanted a Pride crosswalk that would survive Ontario winters — painted rainbow crossings fade and chip within a season, turning a symbol of inclusion into a maintenance liability.",
     solution:
-      "StreetBond multi-colour installation with each stripe applied as a separate coloured coating pass. The system bonds to asphalt and is engineered to withstand plow blades and calcium chloride.",
+      "TrafficPatternsXD preformed thermoplastic installed by certified applicator Multiseal — each colour heat-fused into the asphalt for a high-traction, plow-safe surface that keeps its vibrancy year after year.",
   },
   {
     id: "georgina-every-child-matters",

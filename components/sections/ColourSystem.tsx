@@ -51,7 +51,7 @@ export default function ColourSystem({
                     {family.name}
                   </h3>
                   <span
-                    className="text-[0.68rem] font-semibold tracking-[0.14em] uppercase"
+                    className="text-[11px] font-semibold tracking-[0.14em] uppercase"
                     style={{ color: "var(--text-muted)" }}
                   >
                     {family.colours.length} colours
@@ -70,7 +70,7 @@ export default function ColourSystem({
                         background: c.hex,
                         border: c.keyline
                           ? "1px solid rgba(255,255,255,0.35)"
-                          : "1px solid rgba(255,255,255,0.08)",
+                          : "1px solid rgba(255,255,255,0.07)",
                       }}
                     />
                   ))}
@@ -105,7 +105,7 @@ export default function ColourSystem({
                         background: c.hex,
                         border: c.keyline
                           ? "1px solid rgba(255,255,255,0.35)"
-                          : "1px solid rgba(255,255,255,0.06)",
+                          : "1px solid rgba(255,255,255,0.07)",
                       }}
                       /* aria-label was invalid here — a plain <div> has role
                          "generic", which strips aria-label per the ARIA spec, so
@@ -115,10 +115,10 @@ export default function ColourSystem({
                          itself is decorative and just needs hiding, not a name. */
                       aria-hidden="true"
                     />
-                    <p className="mt-2 text-[0.8rem] font-medium leading-tight" style={{ color: "var(--text-body)" }}>
+                    <p className="mt-2 text-[13px] font-medium leading-tight" style={{ color: "var(--text-body)" }}>
                       {c.name}
                     </p>
-                    <p className="text-[0.66rem] tracking-wide mt-0.5" style={{ color: "var(--text-muted)", fontVariantNumeric: "tabular-nums" }}>
+                    <p className="text-[11px] tracking-wide mt-0.5" style={{ color: "var(--text-muted)", fontVariantNumeric: "tabular-nums" }}>
                       {c.sr !== undefined ? `SR ${c.sr.toFixed(2)}` : c.pms ?? c.hex.toUpperCase()}
                     </p>
                   </div>
@@ -129,7 +129,7 @@ export default function ColourSystem({
         ))}
       </div>
 
-      <p className="mt-6 text-[0.72rem] leading-relaxed max-w-2xl" style={{ color: "var(--text-faint)" }}>
+      <p className="mt-6 text-[12px] leading-relaxed max-w-2xl" style={{ color: "var(--text-faint)" }}>
         Screen-reference values — colours vary by monitor and substrate. Specify from physical
         samples.{" "}
         {downloadHref && (

@@ -31,7 +31,7 @@
   --gradient-brand-subtle: linear-gradient(90deg, rgba(249,115,22,0.12) 0%, rgba(234,179,8,0.12) 100%);
   --gradient-glow:  0 0 20px rgba(249,115,22,0.25);
 
-  /* ─── Section backgrounds ──────────────────── */
+  /* ─── Section backgrounds ──────────────────────── */
   /* Blue territory — HUBSS brand identity */
   --bg-primary:     #0f1620;   /* main page bg — blue-charcoal */
   --bg-dark:        #0d1117;   /* deep navy — hero / footer / feature sections */
@@ -56,7 +56,7 @@
   --bg-card-hover:       #2A2F35;
   --bg-card-neutral:     #1C1F23;  /* resting card (L1) — blog, resources, doc cards */
 
-  /* ─── Text ──────────────────────── */
+  /* ─── Text ──────────────────────────────── */
   --text-primary:   #ffffff;
   --text-body:      #e0e0e0;
   --text-secondary: #8b8b8b;
@@ -70,7 +70,7 @@
   --text-faint:     #808080;
   --text-hint:      #2a2a2a;
 
-  /* ─── Borders ───────────────────── */
+  /* ─── Borders ───────────────────────────── */
   --border-color:   rgba(255,255,255,0.07);  /* on dark-blue bg */
   --border-subtle:  rgba(255,255,255,0.05);
   --border-faint:   rgba(255,255,255,0.03);
@@ -202,7 +202,7 @@ p {
   animation: grain 8s steps(1) infinite;
 }
 
-/* ─── Client ticker ───────────────────────── */
+/* ─── Client ticker ───────────────────────────── */
 @keyframes ticker {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
@@ -217,7 +217,7 @@ p {
   padding: 0 1.5rem;
 }
 
-/* ─── Generic fade up ─────────────────────── */
+/* ─── Generic fade up ─────────────────────────── */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -251,7 +251,7 @@ p {
 }
 
 
-/* ─── CTA button gradient ─────────────────────── */
+/* ─── CTA button gradient ───────────────────────── */
 .btn-primary,
 .cta-btn {
   background: linear-gradient(90deg, #F97316 0%, #D97706 100%);
@@ -485,7 +485,7 @@ p {
   color: #d1d5db;
 }
 
-/* ─── Asphalt noise texture ──────────────────── */
+/* ─── Asphalt noise texture ────────────────────── */
 /* Apply to full-black sections (Hero, Footer).            */
 /* SWAP ::before background-image with real asphalt photo  */
 /* once available at /images/textures/asphalt.jpg          */
@@ -524,7 +524,7 @@ p {
   --border-subtle: #1f1f1f;
 }
 
-/* ─── Page-load gradient sweep ─────────────────── */
+/* ─── Page-load gradient sweep ───────────────────── */
 @keyframes page-sweep {
   from { transform: translateX(-100%); }
   to   { transform: translateX(100%); }
@@ -590,7 +590,7 @@ p {
   transform: scaleX(1);
 }
 
-/* ─── Site-wide finish (investor pass, Wave 1) ─────────────────────
+/* ─── Site-wide finish (investor pass, Wave 1) ─────────────────────────
    The details a visitor's OS would otherwise fill in with defaults:
    grey Windows scrollbars on a dark site, blue text selection, invisible
    keyboard focus. Each is one small rule; together they read as "finished". */
@@ -640,5 +640,34 @@ html {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* ── Coarse-pointer tap targets (mobile sweep, Aug 2026) ──────────────────
+   A phone audit across fifteen routes found interactive elements sized by
+   their text: footer product links at 17px tall, icon-only buttons at 26px,
+   filter chips at 34px. Apple asks for 44pt, Android for 48dp; anything
+   under that is a coin-flip tap on the first try.
+
+   This rule only fires for `pointer: coarse` — a finger, not a mouse — so
+   desktop density is untouched. Components that already carry their own
+   inline minHeight keep it (inline styles win); this catches the elements
+   marked with data-tap and normalises the two icon-button rows that
+   collapse to icon-only on small screens. */
+@media (pointer: coarse) {
+  [data-tap="44"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* MapLibre ships its zoom/rotate controls at 29px. They are the map's only
+   on-canvas controls, so on a phone they get the same 44px floor as
+   everything else — the icon inside is unchanged, only the button grows. */
+@media (pointer: coarse) {
+  .maplibregl-ctrl button,
+  .maplibregl-ctrl-group button {
+    width: 44px !important;
+    height: 44px !important;
   }
 }

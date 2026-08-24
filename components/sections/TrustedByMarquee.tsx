@@ -28,8 +28,8 @@ export default function TrustedByMarquee() {
       className="relative overflow-hidden"
       style={{
         background: "#070b12",
-        borderTop: "1px solid rgba(255,255,255,0.06)",
-        borderBottom: "1px solid rgba(255,255,255,0.06)",
+        borderTop: "1px solid rgba(255,255,255,0.07)",
+        borderBottom: "1px solid rgba(255,255,255,0.07)",
         paddingTop: "3.25rem",
         paddingBottom: "3.25rem",
       }}
@@ -38,7 +38,7 @@ export default function TrustedByMarquee() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <p
           className="text-[10px] font-bold tracking-[0.22em] uppercase text-center"
-          style={{ color: "rgba(255,255,255,0.48)" }}
+          style={{ color: "rgba(255,255,255,0.5)" }}
         >
           Trusted by
         </p>

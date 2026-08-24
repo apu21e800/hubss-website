@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { PostMeta } from "@/lib/mdx";
+import { TYPE_BY_LABEL } from "@/lib/field-notes-taxonomy";
 
 const FALLBACKS = [
   "/images/applications/crosswalks/crosswalks-01.jpg",
@@ -18,6 +19,10 @@ function getFallback(slug: string) {
 export default function BlogCard({ post }: { post: PostMeta }) {
   const imgSrc = post.featuredImage ?? getFallback(post.slug);
   const isExternal = imgSrc.startsWith("http");
+  // Badge palette comes from the taxonomy so every surface that shows a type
+  // (card, hub header, post hero) agrees. The old inline map used indigo and
+  // emerald — two colours that exist nowhere else in the asphalt system.
+  const type = TYPE_BY_LABEL[post.category] ?? TYPE_BY_LABEL["Blog"];
 
   return (
     <Link
@@ -52,15 +57,7 @@ export default function BlogCard({ post }: { post: PostMeta }) {
         <div className="flex items-center justify-between mb-2 gap-2">
           <span
             className="text-[11px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wider flex-shrink-0"
-            style={
-              post.category === "Case Study"
-                ? { background: "rgba(249,115,22,0.18)", color: "#f97316" }
-                : post.category === "White Paper"
-                ? { background: "rgba(99,102,241,0.15)", color: "#818cf8" }
-                : post.category === "Project Profile"
-                ? { background: "rgba(16,185,129,0.15)", color: "#34d399" }
-                : { background: "rgba(255,255,255,0.07)", color: "#9CA3AF" }
-            }
+            style={{ background: type.tint, color: type.text, border: `1px solid ${type.border}` }}
           >
             {post.category}
           </span>

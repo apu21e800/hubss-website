@@ -184,7 +184,7 @@ export default function LunchLearnFunnel({
   return (
     <div style={{ background: "var(--bg-primary)" }}>
 
-      {/* ── HERO ────────────────────────────────────────── */}
+      {/* ── HERO ────────────────────────────────────── */}
       <section
         className="relative overflow-hidden"
         style={{ background: "#070b12", minHeight: "80vh" }}
@@ -267,11 +267,11 @@ export default function LunchLearnFunnel({
                   </svg>
                 </a>
                 <div className="flex items-center gap-4 flex-wrap">
-                  <a href="tel:+14165409287" className="text-sm font-semibold transition-colors hover:text-orange-400" style={{ color: "rgba(255,255,255,0.45)" }}>
+                  <a href="tel:+14165409287" className="text-sm font-semibold inline-flex items-center transition-colors hover:text-orange-400" style={{ color: "rgba(255,255,255,0.45)", minHeight: 40 }}>
                     East: 416-540-9287
                   </a>
                   <span style={{ color: "rgba(255,255,255,0.2)" }}>·</span>
-                  <a href="tel:+16043098212" className="text-sm font-semibold transition-colors hover:text-orange-400" style={{ color: "rgba(255,255,255,0.45)" }}>
+                  <a href="tel:+16043098212" className="text-sm font-semibold inline-flex items-center transition-colors hover:text-orange-400" style={{ color: "rgba(255,255,255,0.45)", minHeight: 40 }}>
                     West: 604-309-8212
                   </a>
                 </div>
@@ -585,10 +585,10 @@ export default function LunchLearnFunnel({
                         role="radio"
                         aria-checked={format === f}
                         onClick={() => setFormat(f)}
-                        className="py-3 rounded-xl text-sm font-semibold transition-all active:scale-[0.98]"
+                        className="rounded-xl text-sm font-semibold transition-all active:scale-[0.98]"
                         style={format === f
-                          ? { background: "rgba(249,115,22,0.16)", border: "1px solid rgba(249,115,22,0.55)", color: "#FDBA74" }
-                          : { background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", color: "#9CA3AF" }}
+                          ? { background: "rgba(249,115,22,0.16)", border: "1px solid rgba(249,115,22,0.55)", color: "#FDBA74", minHeight: 46 }
+                          : { background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", color: "#9CA3AF", minHeight: 46 }}
                       >
                         {f}
                       </button>
@@ -620,8 +620,8 @@ export default function LunchLearnFunnel({
               <div key={office.region} className="rounded-xl p-5 text-center" style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}>
                 <p className="text-[10px] font-bold tracking-[0.15em] uppercase mb-2" style={{ color: "#FB923C" }}>{office.region}</p>
                 <p className="text-sm font-semibold mb-1" style={{ color: "#F5F0EB" }}>{office.name}</p>
-                <a href={`tel:+1${office.phone.replace(/-/g, "")}`} className="text-xs block mb-0.5 hover:text-orange-400 transition-colors" style={{ color: "#9CA3AF" }}>{office.phone}</a>
-                <a href={`mailto:${office.email}`} className="text-xs hover:text-orange-400 transition-colors" style={{ color: "#9CA3AF" }}>{office.email}</a>
+                <a href={`tel:+1${office.phone.replace(/-/g, "")}`} className="text-xs flex items-center justify-center hover:text-orange-400 transition-colors" style={{ minHeight: 44, color: "#9CA3AF" }}>{office.phone}</a>
+                <a href={`mailto:${office.email}`} className="text-xs flex items-center justify-center hover:text-orange-400 transition-colors" style={{ minHeight: 44, color: "#9CA3AF" }}>{office.email}</a>
               </div>
             ))}
           </div>

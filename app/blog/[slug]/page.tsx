@@ -6,7 +6,10 @@ import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
 import JsonLd from "@/components/ui/JsonLd";
-import { getAllPosts, getPost } from "@/lib/mdx";
+import { getAllPosts, getPost, getRelatedPosts } from "@/lib/mdx";
+import { TYPE_BY_LABEL } from "@/lib/field-notes-taxonomy";
+import PostConversion, { PRODUCT_SLUGS } from "@/components/blog/PostConversion";
+import SystemsInPost from "@/components/blog/SystemsInPost";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
 import { buildMetadata } from "@/lib/seo";
@@ -41,34 +44,77 @@ export default async function BlogPostPage({ params }: Props) {
   let post;
   try { post = getPost(slug); } catch { notFound(); }
 
-  const allPosts = getAllPosts();
+  const related = getRelatedPosts(post);
   const postUrl = `https://hubss.com/blog/${post.slug}`;
+  const type = TYPE_BY_LABEL[post.category] ?? TYPE_BY_LABEL["Blog"];
 
+  /**
+   * Article schema, typed by content kind (Aug 2026).
+   *
+   * Every post used to emit a bare `Article` with five properties. Search
+   * engines and AI answer engines both read this graph to decide what a page
+   * IS and whether it is worth citing — a TechArticle carrying keywords, a
+   * word count, a declared section, and links to the products it discusses is
+   * a far stronger candidate for a specification query than an untyped
+   * Article that could be anything. `speakable` marks the passages an
+   * assistant should read aloud when answering from this page.
+   */
   const articleSchema = {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": type.schemaType,
+    "@id": `${postUrl}#article`,
     headline: post.title,
     description: post.excerpt,
     datePublished: post.date,
-    author: { "@type": "Organization", name: "HUB Surface Systems" },
+    dateModified: post.date,
+    articleSection: post.category,
+    wordCount: post.wordCount,
+    inLanguage: "en-CA",
+    isAccessibleForFree: true,
+    ...(post.keywords.length ? { keywords: post.keywords.join(", ") } : {}),
+    ...(post.keywords.length
+      ? { about: post.keywords.map((k) => ({ "@type": "Thing", name: k })) }
+      : {}),
+    ...(post.products.length
+      ? {
+          mentions: post.products
+            .filter((n) => PRODUCT_SLUGS[n])
+            .map((n) => ({
+              "@type": "Product",
+              name: n,
+              brand: { "@type": "Brand", name: "HUB Surface Systems" },
+              url: `https://hubss.com/products/${PRODUCT_SLUGS[n]}`,
+            })),
+        }
+      : {}),
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: ["h1", ".blog-prose > p:first-of-type"],
+    },
+    author: { "@type": "Organization", name: "HUB Surface Systems", url: "https://hubss.com" },
     publisher: {
       "@type": "Organization",
       name: "HUB Surface Systems",
       logo: { "@type": "ImageObject", url: "https://hubss.com/images/hub-official-logo.svg" },
     },
+    isPartOf: { "@type": "Blog", "@id": "https://hubss.com/blog#blog", name: "HUB Surface Systems Field Notes" },
+    mainEntityOfPage: { "@type": "WebPage", "@id": postUrl },
     url: postUrl,
     image: post.featuredImage
       ? `https://hubss.com${post.featuredImage}`
       : "https://hubss.com/images/og-default.jpg",
   };
 
+  // Breadcrumb now passes through the type hub, so the trail matches the
+  // site's real shape and each hub accumulates internal link equity.
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: "https://hubss.com" },
       { "@type": "ListItem", position: 2, name: "Field Notes", item: "https://hubss.com/blog" },
-      { "@type": "ListItem", position: 3, name: post.title, item: postUrl },
+      { "@type": "ListItem", position: 3, name: type.plural, item: `https://hubss.com/blog/${type.slug}` },
+      { "@type": "ListItem", position: 4, name: post.title, item: postUrl },
     ],
   };
 
@@ -82,7 +128,7 @@ export default async function BlogPostPage({ params }: Props) {
       <JsonLd data={breadcrumbSchema} />
       <Nav />
 
-      {/* ── Cinematic hero ────────────────────── */}
+      {/* ── Cinematic hero ──────────────────────── */}
       <header className="relative w-full overflow-hidden" style={{ height: "68vh", minHeight: 460 }}>
         {post.featuredImage ? (
           <Image
@@ -108,7 +154,26 @@ export default async function BlogPostPage({ params }: Props) {
         {/* Category + meta bar */}
         <div className="absolute top-0 inset-x-0" style={{ paddingTop: "6rem" }}>
           <div className="max-w-7xl mx-auto px-6">
+            {/* Type badge doubles as the hub link — the reader always knows
+                what kind of document they opened, and can get to the rest of
+                that kind in one click. Tags used to sit here, but only three
+                posts in the library ever had any. */}
             <div className="flex items-center gap-3 flex-wrap">
+              <Link
+                href={`/blog/${type.slug}`}
+                style={{
+                  fontSize: 10, fontWeight: 700, letterSpacing: "0.18em",
+                  textTransform: "uppercase", color: type.text,
+                  background: type.tint,
+                  border: `1px solid ${type.border}`,
+                  padding: "5px 12px", borderRadius: 4,
+                  backdropFilter: "blur(6px)",
+                  textDecoration: "none",
+                  display: "inline-flex", alignItems: "center", minHeight: 40,
+                }}
+              >
+                {post.category}
+              </Link>
               {post.tags?.slice(0, 2).map((tag: string) => (
                 <span key={tag} style={{
                   fontSize: 10, fontWeight: 700, letterSpacing: "0.18em",
@@ -157,10 +222,10 @@ export default async function BlogPostPage({ params }: Props) {
         </div>
       </header>
 
-      {/* ── Orange accent divider ─────────────────── */}
+      {/* ── Orange accent divider ────────────────────── */}
       <div style={{ height: 2, background: "linear-gradient(90deg, #F97316 0%, #EAB308 50%, transparent 100%)" }} />
 
-      {/* ── Article layout ────────────────────── */}
+      {/* ── Article layout ──────────────────────── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-8 lg:grid lg:gap-16" style={{ gridTemplateColumns: "1fr 220px" }}>
 
         {/* Article body */}
@@ -193,8 +258,8 @@ export default async function BlogPostPage({ params }: Props) {
           <div className="sticky" style={{ top: "7rem" }}>
             {/* Author card */}
             <div style={{
-              background: "rgba(255,255,255,0.03)",
-              border: "1px solid rgba(255,255,255,0.08)",
+              background: "rgba(255,255,255,0.025)",
+              border: "1px solid rgba(255,255,255,0.07)",
               borderRadius: 12,
               padding: "20px",
               marginBottom: 24,
@@ -230,7 +295,7 @@ export default async function BlogPostPage({ params }: Props) {
                   target="_blank" rel="noopener noreferrer"
                   style={{
                     display: "flex", alignItems: "center", gap: 8, padding: "8px 12px",
-                    background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)",
+                    background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.07)",
                     borderRadius: 8, color: "#9CA3AF", fontSize: 12, fontWeight: 600, textDecoration: "none",
                     transition: "border-color 0.2s",
                   }}
@@ -243,7 +308,7 @@ export default async function BlogPostPage({ params }: Props) {
                   target="_blank" rel="noopener noreferrer"
                   style={{
                     display: "flex", alignItems: "center", gap: 8, padding: "8px 12px",
-                    background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)",
+                    background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.07)",
                     borderRadius: 8, color: "#9CA3AF", fontSize: 12, fontWeight: 600, textDecoration: "none",
                   }}
                 >
@@ -257,54 +322,17 @@ export default async function BlogPostPage({ params }: Props) {
         </aside>
       </div>
 
-      {/* ── Editorial CTA ─────────────────────── */}
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
-        <div style={{
-          background: "linear-gradient(135deg, rgba(249,115,22,0.08) 0%, rgba(249,115,22,0.03) 100%)",
-          border: "1px solid rgba(249,115,22,0.2)",
-          borderRadius: 20,
-          padding: "clamp(2rem, 4vw, 3.5rem)",
-          display: "flex",
-          flexDirection: "column",
-          gap: 8,
-        }}>
-          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#F97316", margin: 0 }}>
-            Take the next step
-          </p>
-          <h2 style={{ fontSize: "clamp(1.5rem, 2.5vw, 2.25rem)", fontWeight: 800, color: "#ffffff", margin: "0 0 8px", lineHeight: 1.15 }}>
-            Ready to transform your streetscape?
-          </h2>
-          <p style={{ fontSize: 16, color: "#9CA3AF", maxWidth: "55ch", margin: "0 0 28px", lineHeight: 1.7 }}>
-            Get a custom spec sheet for your project, or book a complimentary Lunch &amp; Learn with our team.
-          </p>
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-            <Link href="/contact" style={{
-              background: "linear-gradient(135deg, #F97316, #ea6c10)",
-              color: "#fff", fontWeight: 700, fontSize: 14,
-              padding: "12px 28px", borderRadius: 8, textDecoration: "none",
-              boxShadow: "0 4px 20px rgba(249,115,22,0.3)",
-            }}>
-              See the Systems →
-            </Link>
-            <Link href="/lunch-learn" style={{
-              background: "transparent",
-              color: "#F5F0EB", fontWeight: 600, fontSize: 14,
-              padding: "12px 28px", borderRadius: 8, textDecoration: "none",
-              border: "1px solid rgba(255,255,255,0.2)",
-            }}>
-              Book Lunch &amp; Learn
-            </Link>
-          </div>
-        </div>
-      </div>
+      {/* ── Systems rail + typed conversion ──────── */}
+      <SystemsInPost products={post.products} />
+      <PostConversion post={post} type={type} />
 
-      {/* ── Related posts ─────────────────────── */}
-      <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", background: "#0c0c0c" }}>
+      {/* ── Related posts ──────────────────────── */}
+      <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)", background: "#0c0c0c" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
           <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#F97316", marginBottom: 20 }}>
             Continue Reading
           </p>
-          <RelatedPosts posts={allPosts} currentSlug={post.slug} />
+          <RelatedPosts posts={related} currentSlug={post.slug} />
         </div>
       </div>
 

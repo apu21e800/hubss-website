@@ -27,8 +27,8 @@ export default function PavingPatterns() {
         </h2>
         <Link
           href="/patterns"
-          className="text-sm font-bold flex-shrink-0 hover:translate-x-0.5 transition-transform"
-          style={{ color: "#FB923C" }}
+          className="text-sm font-bold flex-shrink-0 inline-flex items-center hover:translate-x-0.5 transition-transform"
+          style={{ color: "#FB923C", minHeight: 44 }}
         >
           All 16 templates →
         </Link>

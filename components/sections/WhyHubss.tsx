@@ -104,7 +104,7 @@ export default function WhyHubss() {
 
         <div
           className="grid grid-cols-2 sm:grid-cols-4 mb-12 rounded-xl overflow-hidden"
-          style={{ border: "1px solid rgba(255,255,255,0.10)", background: "rgba(255,255,255,0.025)" }}
+          style={{ border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.025)" }}
         >
           {STATS.map((s, i) => (
             <motion.div
@@ -114,8 +114,8 @@ export default function WhyHubss() {
               transition={{ delay: i * 0.07, duration: 0.35 }}
               className="flex flex-col items-center justify-center gap-1 py-7 px-4 text-center"
               style={{
-                borderRight:  i < 3 ? "1px solid rgba(255,255,255,0.08)" : "none",
-                borderBottom: i < 2 ? "1px solid rgba(255,255,255,0.08)" : "none",
+                borderRight:  i < 3 ? "1px solid rgba(255,255,255,0.07)" : "none",
+                borderBottom: i < 2 ? "1px solid rgba(255,255,255,0.07)" : "none",
               }}
             >
               <span className="text-3xl sm:text-4xl font-black tracking-tight leading-none" style={{ color: "#f97316" }}>

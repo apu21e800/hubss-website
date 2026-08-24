@@ -1473,12 +1473,14 @@ export default function Nav() {
 
           {/* Mobile — search + hamburger */}
           <div className="md:hidden flex items-center gap-2">
-            <button onClick={openSearch} aria-label="Open search" className="p-2" style={{ color: "rgba(255,255,255,0.6)" }}>
+            {/* 44x44 tap targets — the mobile sweep found these at 36x36,
+                under both the iOS 44pt and Android 48dp minimums. */}
+            <button onClick={openSearch} aria-label="Open search" className="flex items-center justify-center" style={{ width: 44, height: 44, color: "rgba(255,255,255,0.6)" }}>
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <circle cx="11" cy="11" r="8" strokeWidth={2} /><path d="M21 21l-4.35-4.35" strokeWidth={2} strokeLinecap="round" />
               </svg>
             </button>
-            <button onClick={() => setMobileOpen(!mobileOpen)} aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"} aria-expanded={mobileOpen} className="p-2" style={{ color: "rgba(255,255,255,0.6)" }}>
+            <button onClick={() => setMobileOpen(!mobileOpen)} aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"} aria-expanded={mobileOpen} className="flex items-center justify-center" style={{ width: 44, height: 44, color: "rgba(255,255,255,0.6)" }}>
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 {mobileOpen ? (
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

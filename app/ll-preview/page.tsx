@@ -1,5 +1,7 @@
-// SANDBOX-ONLY preview route for the three Lunch & Learn variants.
-// Never pushed to the repo — exists to screenshot the options for Vernon.
+// Internal preview route for the three Lunch & Learn variants — used to
+// review design options on branch deployments. Hard-404s in production:
+// only the chosen variant (Boardroom, via LunchLearn.tsx) ships to visitors.
+import { notFound } from "next/navigation";
 import LunchLearnV2 from "@/components/sections/LunchLearnV2";
 
 export const metadata = { robots: { index: false, follow: false } };
@@ -15,6 +17,7 @@ function Label({ children }: { children: React.ReactNode }) {
 }
 
 export default function LLPreview() {
+  if (process.env.VERCEL_ENV === "production") notFound();
   return (
     <main style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
       <div id="v-boardroom">

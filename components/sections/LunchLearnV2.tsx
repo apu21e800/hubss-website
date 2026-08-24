@@ -101,7 +101,7 @@ function useLunchLearnForm(withFormat: boolean) {
 }
 
 const inputStyle: React.CSSProperties = {
-  background: "rgba(255,255,255,0.07)",
+  background: "var(--fill-subtle)",
   border: "1px solid rgba(255,255,255,0.1)",
   color: "#F5F0EB",
 };
@@ -186,7 +186,7 @@ function Boardroom() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
             className="relative rounded-3xl overflow-hidden"
-            style={{ background: "var(--bg-card)", border: "1px solid rgba(255,255,255,0.07)", boxShadow: "0 24px 80px rgba(0,0,0,0.35)" }}
+            style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)", boxShadow: "0 24px 80px rgba(0,0,0,0.35)" }}
           >
             <div className="absolute top-0 left-0 right-0 h-1" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
 
@@ -253,7 +253,7 @@ function Boardroom() {
 
                 <div className="flex flex-wrap gap-2.5 mb-8">
                   {STAT_CHIPS.map((s) => (
-                    <span key={s.v} className="inline-flex items-baseline gap-1.5 px-3 py-1.5 rounded-lg" style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.07)" }}>
+                    <span key={s.v} className="inline-flex items-baseline gap-1.5 px-3 py-1.5 rounded-lg" style={{ background: "rgba(255,255,255,0.05)", border: "1px solid var(--border-color)" }}>
                       <span className="text-[13px] font-black" style={{ color: "#FB923C" }}>{s.v}</span>
                       <span className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: "rgba(255,255,255,0.55)" }}>{s.l}</span>
                     </span>
@@ -270,7 +270,7 @@ function Boardroom() {
 
               {/* Form side — inset panel */}
               <div className="lg:col-span-5 p-5 sm:p-7 lg:p-8 lg:pl-2 flex">
-                <div className="relative w-full rounded-2xl p-6 sm:p-7 self-center" style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.07)" }}>
+                <div className="relative w-full rounded-2xl p-6 sm:p-7 self-center" style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--border-color)" }}>
                   {f.submitState.status === "success" ? (
                     <SuccessPanel message={f.submitState.message} />
                   ) : (
@@ -362,7 +362,7 @@ function Ticket() {
             viewport={{ once: true }}
             transition={{ duration: 0.45 }}
             className="lg:col-span-5 rounded-2xl overflow-hidden flex flex-col"
-            style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.07)" }}
+            style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--border-color)" }}
           >
             <div className="px-6 py-4 flex items-center justify-between" style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)" }}>
               <span className="text-[11px] font-black tracking-[0.2em] uppercase text-white">HUB · Lunch &amp; Learn</span>
@@ -531,7 +531,7 @@ function Proof() {
             transition={{ duration: 0.55, delay: 0.08 }}
             className="relative"
           >
-            <div className="relative rounded-2xl overflow-hidden" style={{ aspectRatio: "5/4", border: "1px solid rgba(255,255,255,0.07)", boxShadow: "0 20px 60px rgba(0,0,0,0.4)" }}>
+            <div className="relative rounded-2xl overflow-hidden" style={{ aspectRatio: "5/4", border: "1px solid var(--border-color)", boxShadow: "0 20px 60px rgba(0,0,0,0.4)" }}>
               <Image src={IMG.src} alt={IMG.alt} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 50vw" />
               <span className="absolute top-3 left-3 px-2.5 py-1 rounded-md text-[10px] font-black tracking-[0.14em] uppercase" style={{ background: "rgba(7,11,18,0.75)", color: "#FB923C", border: "1px solid rgba(249,115,22,0.3)", backdropFilter: "blur(6px)" }}>
                 StreetBond · Real installation

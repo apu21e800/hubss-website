@@ -187,7 +187,7 @@ export default function LunchLearnFunnel({
       {/* ── HERO ────────────────────────────────────── */}
       <section
         className="relative overflow-hidden"
-        style={{ background: "#070b12", minHeight: "80vh" }}
+        style={{ background: "#0D0D0D", minHeight: "80vh" }}
       >
         <div className="absolute inset-0 pointer-events-none" style={{
           background: "radial-gradient(ellipse at 12% 65%, rgba(249,115,22,0.18) 0%, transparent 55%)",
@@ -328,7 +328,7 @@ export default function LunchLearnFunnel({
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.07, duration: 0.35 }}
                 className="flex flex-col items-center text-center lg:border-r last:border-r-0"
-                style={{ borderColor: "rgba(255,255,255,0.07)" }}
+                style={{ borderColor: "var(--border-color)" }}
               >
                 <span
                   className="font-black mb-1"
@@ -343,7 +343,7 @@ export default function LunchLearnFunnel({
                 >
                   {stat.value}
                 </span>
-                {/* Solid #9CA3AF, not white-alpha: on the asphalt band (#16181B,
+                {/* Solid #9CA3AF, not white-alpha: on the asphalt band (#1A1A19,
                     lighter than the old navy) rgba(255,255,255,0.45) composites
                     to ~4.3:1 — under WCAG AA's 4.5:1. #9CA3AF clears it at ~6.6:1
                     and matches the body-grey used on every asphalt card. */}
@@ -387,7 +387,7 @@ export default function LunchLearnFunnel({
                 className="relative rounded-2xl p-8 flex flex-col gap-5"
                 style={{
                   background: "var(--bg-card)",
-                  border: "1px solid rgba(255,255,255,0.07)",
+                  border: "1px solid var(--border-color)",
                   boxShadow: "0 2px 20px rgba(0,0,0,0.2)",
                 }}
               >
@@ -453,7 +453,7 @@ export default function LunchLearnFunnel({
                 className="flex flex-col p-8 rounded-xl"
                 style={{
                   background: "var(--bg-card-neutral)",
-                  border: "1px solid rgba(255,255,255,0.07)",
+                  border: "1px solid var(--border-color)",
                 }}
               >
                 <div className="flex items-start justify-between gap-3 mb-3">
@@ -507,10 +507,10 @@ export default function LunchLearnFunnel({
           </div>
           <div className="space-y-3">
             {faqItems.map((faq, i) => (
-              <div key={faq.q} className="rounded-xl overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.07)", background: openFaq === i ? "var(--bg-card)" : "var(--bg-card-neutral)" }}>
+              <div key={faq.q} className="rounded-xl overflow-hidden" style={{ border: "1px solid var(--border-color)", background: openFaq === i ? "var(--bg-card)" : "var(--bg-card-neutral)" }}>
                 <button className="w-full text-left flex items-center justify-between gap-4 px-6 py-5" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
                   <span className="font-semibold text-base" style={{ color: "#F5F0EB" }}>{faq.q}</span>
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-transform duration-200" style={{ background: openFaq === i ? "rgba(249,115,22,0.2)" : "rgba(255,255,255,0.07)", color: openFaq === i ? "#FB923C" : "#9CA3AF", transform: openFaq === i ? "rotate(45deg)" : "rotate(0deg)" }}>
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-transform duration-200" style={{ background: openFaq === i ? "rgba(249,115,22,0.2)" : "var(--border-color)", color: openFaq === i ? "#FB923C" : "#9CA3AF", transform: openFaq === i ? "rotate(45deg)" : "rotate(0deg)" }}>
                     <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 5v14M5 12h14" /></svg>
                   </span>
                 </button>
@@ -528,7 +528,7 @@ export default function LunchLearnFunnel({
       </section>
 
       {/* ── FORM ────────────────────────────────────────────── */}
-      <section id="book" className="py-20 lg:py-28 relative overflow-hidden" style={{ background: "#070b12" }}>
+      <section id="book" className="py-20 lg:py-28 relative overflow-hidden" style={{ background: "#0D0D0D" }}>
         <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 50% 50%, rgba(249,115,22,0.09) 0%, transparent 65%)" }} />
         <div className="absolute top-0 inset-x-0 h-px" style={{ background: "linear-gradient(90deg, transparent 0%, rgba(249,115,22,0.4) 50%, transparent 100%)" }} />
 
@@ -570,10 +570,10 @@ export default function LunchLearnFunnel({
                     { name: "company", placeholder: "Organization (optional)", type: "text", required: false },
                     { name: "city", placeholder: "City (optional)", type: "text", required: false },
                   ].map((field) => (
-                    <input key={field.name} type={field.type} name={field.name} placeholder={field.placeholder} aria-label={field.placeholder} value={formData[field.name as keyof FormState]} onChange={handleChange} required={field.required} className="px-4 py-3.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-orange-500/50 transition-all" style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", color: "#F5F0EB" }} />
+                    <input key={field.name} type={field.type} name={field.name} placeholder={field.placeholder} aria-label={field.placeholder} value={formData[field.name as keyof FormState]} onChange={handleChange} required={field.required} className="px-4 py-3.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-orange-500/50 transition-all" style={{ background: "var(--fill-subtle)", border: "1px solid rgba(255,255,255,0.1)", color: "#F5F0EB" }} />
                   ))}
                 </div>
-                <input type="tel" name="phone" placeholder="Phone number (optional)" aria-label="Phone number (optional)" value={formData.phone} onChange={handleChange} className="w-full px-4 py-3.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-orange-500/50 transition-all" style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", color: "#F5F0EB" }} />
+                <input type="tel" name="phone" placeholder="Phone number (optional)" aria-label="Phone number (optional)" value={formData.phone} onChange={handleChange} className="w-full px-4 py-3.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-orange-500/50 transition-all" style={{ background: "var(--fill-subtle)", border: "1px solid rgba(255,255,255,0.1)", color: "#F5F0EB" }} />
 
                 <div>
                   <p className="text-xs font-semibold mb-2 tracking-wide uppercase" style={{ color: "#9CA3AF" }}>Session format</p>
@@ -617,7 +617,7 @@ export default function LunchLearnFunnel({
               { region: "Eastern Canada", name: "Doug Bain", phone: "416-540-9287", email: "doug.bain@hubss.com" },
               { region: "Western Canada", name: "Cleve Stordy", phone: "604-309-8212", email: "cleve.stordy@hubss.com" },
             ].map((office) => (
-              <div key={office.region} className="rounded-xl p-5 text-center" style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}>
+              <div key={office.region} className="rounded-xl p-5 text-center" style={{ background: "rgba(255,255,255,0.025)", border: "1px solid var(--border-color)" }}>
                 <p className="text-[10px] font-bold tracking-[0.15em] uppercase mb-2" style={{ color: "#FB923C" }}>{office.region}</p>
                 <p className="text-sm font-semibold mb-1" style={{ color: "#F5F0EB" }}>{office.name}</p>
                 <a href={`tel:+1${office.phone.replace(/-/g, "")}`} className="text-xs flex items-center justify-center hover:text-orange-400 transition-colors" style={{ minHeight: 44, color: "#9CA3AF" }}>{office.phone}</a>

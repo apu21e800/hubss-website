@@ -20,7 +20,7 @@
   --font-inter: '';
 
   /* ─── Primary background (HUBSS deep navy + blue-charcoal) ── */
-  --color-bg-primary: #0f1620;
+  --color-bg-primary: #151515;
 
   /* ─── Brand — never change between themes ───────── */
   --color-orange:   #F97316;
@@ -32,11 +32,24 @@
   --gradient-glow:  0 0 20px rgba(249,115,22,0.25);
 
   /* ─── Section backgrounds ──────────────────────── */
-  /* Blue territory — HUBSS brand identity */
-  --bg-primary:     #0f1620;   /* main page bg — blue-charcoal */
-  --bg-dark:        #0d1117;   /* deep navy — hero / footer / feature sections */
-  --bg-slate:       #111C2D;   /* blue accent sections */
-  --bg-slate-light: #182436;
+  /* Vernon, Aug 2026: "improve the grey contrast between the cards and the
+     background, use the example colours I just gave you #20201F #151515,
+     (card border #4D4D4C) I think these greys work better… it's time to go
+     pro." Those three values are the palette now, and they resolve something
+     the ladder had been fighting all month: every previous attempt kept a
+     blue cast in the ground, so the cards had to be tinted blue-grey to sit
+     on it, which left the whole surface reading slightly cold and slightly
+     dated. On a true neutral ground the cards can be #20201F — the HUBSS
+     brand charcoal that never fit before — and the border does the work of
+     separating them instead of the fill. Low-contrast fill, visible hairline:
+     that is the grammar of a professional dark interface.
+
+     The blue slate tokens below are retained as brand references but are no
+     longer painted anywhere (zero call sites at the time of this change). */
+  --bg-primary:     #151515;   /* page ground */
+  --bg-dark:        #101010;   /* deepest — hero, footer, feature sections */
+  --bg-slate:       #111C2D;   /* legacy blue accent — unused */
+  --bg-slate-light: #182436;   /* legacy blue accent — unused */
 
   /* UI surfaces — ASPHALT elevation ladder (Vernon, Aug 2026: "establish an
      asphalt grey and weave it intelligently across the pages… I like the
@@ -49,12 +62,12 @@
      against the saturated navy, unlike the warm print charcoal (#20201F)
      that clashed in May, and unlike the blue ladder that read as "more
      blue" in August. --color-charcoal survives for print/brand use. */
-  --bg-neutral:          #141414;  /* warm neutral anchor — stats/utility sections */
-  --bg-section-asphalt:  #16181B;  /* "the odd slate grey background" — paved section bands */
-  --bg-card:             #24282D;  /* raised card (L2) — wet-asphalt grey */
-  --bg-card-surface:     #2A2F35;  /* hover / active surface (L3) */
-  --bg-card-hover:       #2A2F35;
-  --bg-card-neutral:     #1C1F23;  /* resting card (L1) — blog, resources, doc cards */
+  --bg-neutral:          #151515;  /* neutral anchor — stats/utility sections */
+  --bg-section-asphalt:  #1A1A19;  /* paved section bands — one step off the ground */
+  --bg-card:             #20201F;  /* raised card (L2) — HUBSS Charcoal */
+  --bg-card-surface:     #2A2A28;  /* hover / active surface (L3) */
+  --bg-card-hover:       #2A2A28;
+  --bg-card-neutral:     #1B1B1A;  /* resting card (L1) — blog, resources, doc cards */
 
   /* ─── Text ──────────────────────────────── */
   --text-primary:   #ffffff;
@@ -68,12 +81,25 @@
      small margin. Not a palette change — brand colours are untouched. */
   --text-muted:     #969696;
   --text-faint:     #808080;
-  --text-hint:      #2a2a2a;
+  --text-hint:      #20201F;
 
   /* ─── Borders ───────────────────────────── */
-  --border-color:   rgba(255,255,255,0.07);  /* on dark-blue bg */
-  --border-subtle:  rgba(255,255,255,0.05);
-  --border-faint:   rgba(255,255,255,0.03);
+  /* Three tiers, and the distinction matters. --border-color is the CARD
+     OUTLINE: a real, visible hairline at Vernon's #4D4D4C, which is what lets
+     a #20201F card read as a distinct object on a #151515 ground without
+     needing a heavy fill. --border-subtle and --border-faint stay as low-alpha
+     whites because they are dividers inside a surface, and promoting those to
+     the same weight would turn every panel into a wireframe. */
+  --border-color:   #4D4D4C;                 /* card outline */
+  --border-subtle:  rgba(255,255,255,0.05);  /* divider inside a surface */
+  --border-faint:   rgba(255,255,255,0.03);  /* hairline */
+
+  /* Not a border. This is the FILL behind chips, inputs, kbd keys and
+     the thin rules that separate a heading from its row — surfaces that
+     want to be barely lighter than what they sit on. It shares the value
+     the card outline used to have, which is exactly why it needs its own
+     name now that the outline has moved to #4D4D4C. */
+  --fill-subtle:    rgba(255,255,255,0.07);
 
   /* ─── Deep blue — engineering / credential tone ─────── */
   --color-blue-deep:  #111C2D;   /* same as --bg-slate — one uniform value */
@@ -93,7 +119,7 @@
   --bg-card-surface:#F5F4F0;
   --bg-card-hover:  #ECEAE4;
   --text-primary:   #0A0A0A;
-  --text-body:      #1F2937;
+  --text-body:      #26262A;
   --text-secondary: #4B5563;
   --text-muted:     #6B7280;
   --text-faint:     #9CA3AF;
@@ -226,7 +252,7 @@ p {
 /* ─── Asphalt texture background ─────────────────── */
 /* Fallback: pure CSS noise pattern if asphalt-texture.jpg is missing */
 .bg-asphalt-subtle {
-  background-color: #0f1620;
+  background-color: #151515;
   background-image:
     url('/images/textures/asphalt-texture.jpg'),
     radial-gradient(circle at 20% 30%, rgba(255,255,255,0.02) 0%, transparent 50%),
@@ -434,7 +460,7 @@ p {
 
 .blog-prose td {
   padding: 0.7rem 1.1rem;
-  border-bottom: 1px solid #2a2a2a;
+  border-bottom: 1px solid #20201F;
   color: #d1d5db;
   vertical-align: top;
 }
@@ -512,9 +538,9 @@ p {
 [data-theme="dark"] .section-grid-bg { /* same */ }
 
 .bg-grid      { background-color: #ffffff; }
-.bg-grid-dark { background-color: #0d1117; }
+.bg-grid-dark { background-color: #101010; }
 .bg-dot-grid-dark { background-color: #1a1a1a; }
-.bg-dot-grid-blue { background-color: #0f1620; }
+.bg-dot-grid-blue { background-color: #151515; }
 
 /* ─── Hero always-dark override (theme-agnostic) ─────── */
 /* Hero has a full-bleed image + black overlay — text stays white in all themes */
@@ -598,7 +624,7 @@ p {
 /* Text selection in brand orange — visible on every page, costs nothing. */
 ::selection {
   background: rgba(249, 115, 22, 0.85);
-  color: #0d1117;
+  color: #101010;
 }
 
 /* Keyboard focus: one consistent ring everywhere. Mouse clicks stay clean
@@ -612,19 +638,19 @@ p {
 /* Scrollbars themed to the page instead of OS default grey-on-white.
    Component-level scrollbar classes (panel/strip) still override these. */
 html {
-  scrollbar-color: rgba(255, 255, 255, 0.18) #0d1117; /* Firefox */
+  scrollbar-color: rgba(255, 255, 255, 0.18) #101010; /* Firefox */
 }
 ::-webkit-scrollbar {
   width: 12px;
   height: 12px;
 }
 ::-webkit-scrollbar-track {
-  background: #0d1117;
+  background: #101010;
 }
 ::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.16);
   border-radius: 8px;
-  border: 3px solid #0d1117; /* inset look */
+  border: 3px solid #101010; /* inset look */
 }
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(249, 115, 22, 0.55);

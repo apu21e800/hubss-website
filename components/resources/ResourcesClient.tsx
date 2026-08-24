@@ -135,14 +135,14 @@ function DocCard({
       className="group rounded-xl flex flex-col justify-between overflow-hidden transition-all duration-200 ease-out hover:-translate-y-[2px] hover:shadow-[0_8px_24px_-12px_rgba(249,115,22,0.35)] cursor-pointer"
       style={{
         background: "var(--bg-card-neutral)",
-        border: "1px solid rgba(255,255,255,0.07)",
+        border: "1px solid var(--border-color)",
       }}
       onMouseEnter={(e) => {
         (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(249,115,22,0.28)";
         (e.currentTarget as HTMLDivElement).style.background = "#242424";
       }}
       onMouseLeave={(e) => {
-        (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(255,255,255,0.07)";
+        (e.currentTarget as HTMLDivElement).style.borderColor = "var(--border-color)";
         (e.currentTarget as HTMLDivElement).style.background = "var(--bg-card-neutral)";
       }}
     >
@@ -150,7 +150,7 @@ function DocCard({
       {hasThumb && doc.previewImageUrl && (
         <div
           className="relative w-full h-32 overflow-hidden"
-          style={{ background: "#0f0f0f", borderBottom: "1px solid rgba(255,255,255,0.07)" }}
+          style={{ background: "#0f0f0f", borderBottom: "1px solid var(--border-color)" }}
         >
           <Image
             src={doc.previewImageUrl}
@@ -198,7 +198,7 @@ function DocCard({
         </div>
         <div
           className="flex items-center gap-2 mt-5 pt-4"
-          style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
+          style={{ borderTop: "1px solid var(--border-color)" }}
         >
           {/* File meta */}
           <div className="flex items-center gap-1.5 text-xs flex-1 min-w-0" style={{ color: "#868C98" }}>
@@ -218,13 +218,13 @@ function DocCard({
               rel="noopener noreferrer"
               onClick={stop}
               className="flex items-center justify-center gap-1.5 text-xs font-semibold px-3 rounded-lg transition-colors duration-200 flex-shrink-0" data-tap="44"
-              style={{ background: "rgba(255,255,255,0.07)", color: "#9CA3AF" }}
+              style={{ background: "var(--fill-subtle)", color: "#9CA3AF" }}
               onMouseEnter={(e) => {
                 (e.currentTarget as HTMLAnchorElement).style.background = "rgba(249,115,22,0.12)";
                 (e.currentTarget as HTMLAnchorElement).style.color = "#f97316";
               }}
               onMouseLeave={(e) => {
-                (e.currentTarget as HTMLAnchorElement).style.background = "rgba(255,255,255,0.07)";
+                (e.currentTarget as HTMLAnchorElement).style.background = "var(--border-color)";
                 (e.currentTarget as HTMLAnchorElement).style.color = "#9CA3AF";
               }}
               title="Open the 2026 catalogue flipbook"
@@ -244,7 +244,7 @@ function DocCard({
                 });
               }}
               className="flex items-center justify-center gap-1.5 text-xs font-semibold px-3 rounded-lg transition-colors duration-200 flex-shrink-0" data-tap="44"
-              style={{ background: "rgba(255,255,255,0.07)", color: "#9CA3AF" }}
+              style={{ background: "var(--fill-subtle)", color: "#9CA3AF" }}
               aria-label={`Preview ${doc.title}`}
               title={`Preview ${doc.title}`}
               onMouseEnter={(e) => {
@@ -252,7 +252,7 @@ function DocCard({
                 (e.currentTarget as HTMLButtonElement).style.color = "#f97316";
               }}
               onMouseLeave={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.07)";
+                (e.currentTarget as HTMLButtonElement).style.background = "var(--border-color)";
                 (e.currentTarget as HTMLButtonElement).style.color = "#9CA3AF";
               }}
             >
@@ -479,7 +479,7 @@ export default function ResourcesClient({
                 border:
                   activeTab === tab
                     ? "1px solid transparent"
-                    : "1px solid rgba(255,255,255,0.07)",
+                    : "1px solid var(--border-color)",
               }}
             >
               {tab}
@@ -598,7 +598,7 @@ export default function ResourcesClient({
               : {
                   background: "rgba(255,255,255,0.05)",
                   color: "#9CA3AF",
-                  border: "1px solid rgba(255,255,255,0.07)",
+                  border: "1px solid var(--border-color)",
                 }
           }
         >
@@ -625,7 +625,7 @@ export default function ResourcesClient({
                   : {
                       background: "rgba(255,255,255,0.05)",
                       color: "#D1D5DB",
-                      border: "1px solid rgba(255,255,255,0.07)",
+                      border: "1px solid var(--border-color)",
                     }
               }
             >
@@ -674,7 +674,7 @@ export default function ResourcesClient({
                   : {
                       background: "rgba(255,255,255,0.05)",
                       color: "#D1D5DB",
-                      border: "1px solid rgba(255,255,255,0.07)",
+                      border: "1px solid var(--border-color)",
                     }
               }
             >
@@ -716,7 +716,7 @@ export default function ResourcesClient({
                         </h3>
                         <div
                           className="flex-1 h-px"
-                          style={{ background: "rgba(255,255,255,0.07)" }}
+                          style={{ background: "var(--fill-subtle)" }}
                         />
                         <span className="text-xs" style={{ color: "#868C98" }}>
                           {docs.length} doc{docs.length !== 1 ? "s" : ""}

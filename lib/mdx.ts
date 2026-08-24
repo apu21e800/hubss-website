@@ -118,8 +118,16 @@ function build(slug: string, data: Record<string, unknown>, content: string): Po
   // a newly authored .mdx can declare its own type and be believed.
   const category =
     curatedType(slug) ?? (data.category as PostCategory) ?? inferCategory(slug, title);
-  const products =
-    (data.products as string[]) ?? scanProducts(title, excerpt, content);
+  // Union, not precedence. Only 7 of 67 posts ever got a `products:` array,
+  // and the ones that did listed the two or three systems the author had in
+  // mind rather than every system the piece actually discusses — so treating
+  // frontmatter as authoritative made "StreetBond" return 4 posts out of a
+  // library where roughly half the articles talk about StreetBond. Frontmatter
+  // is the author's deliberate emphasis and leads the list; the body scan adds
+  // whatever else is genuinely named in the text.
+  const declared = (data.products as string[]) ?? [];
+  const scanned = scanProducts(title, excerpt, content);
+  const products = [...declared, ...scanned.filter((p) => !declared.includes(p))];
   return {
     slug,
     title,

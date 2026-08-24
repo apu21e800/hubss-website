@@ -2,7 +2,8 @@
 
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Search, X, ChevronDown } from "lucide-react";
+import Link from "next/link";
+import { Search, X, ChevronDown, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import BlogCard from "./BlogCard";
 import type { PostMeta } from "@/lib/mdx";
@@ -13,6 +14,27 @@ interface Props {
   allProducts: string[];
 }
 
+/**
+ * Field Notes filter.
+ *
+ * Vernon, Aug 2026: "we just want to improve the filter system." What was
+ * wrong with the old one, in the order it mattered:
+ *
+ *   1. TYPE AND PRODUCT WERE THE SAME CONTROL. Five type pills and four
+ *      product pills sat in one undifferentiated row, and picking either one
+ *      silently reset the other — so "Guides" and "StreetBond" could never be
+ *      asked together, which is the single most useful question on the page.
+ *      Type is now the pill row; product is a labelled dropdown; they compose.
+ *   2. ONLY FOUR PRODUCTS WERE REACHABLE. `allProducts.slice(0, 4)` truncated
+ *      the list to whatever fit, so three systems could not be filtered at all.
+ *      The dropdown carries every product, each with its live count.
+ *   3. THE COUNT WAS HIDDEN UNTIL YOU FILTERED. A reader landing on 67 posts
+ *      saw no number anywhere. It is now always on screen.
+ *   4. THE ENTRANCE STAGGER SCALED WITH THE WHOLE LIST. `delay: index * 0.05`
+ *      meant the 60th card waited three seconds after entering view; scrolling
+ *      at any speed left rows visibly blank, which reads as "there are fewer
+ *      posts than it says." The ramp is now capped at six cards.
+ */
 export default function BlogFilter({ posts, allProducts }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -41,11 +63,6 @@ export default function BlogFilter({ posts, allProducts }: Props) {
     return () => clearTimeout(id);
   }, [search]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  function setAndSync<T extends string>(setter: (v: T) => void, key: string, value: T) {
-    setter(value);
-    pushParams({ [key]: value });
-  }
-
   const hasFilters = search !== "" || product !== "all" || category !== "all" || sort !== "newest";
 
   function clearFilters() {
@@ -53,119 +70,191 @@ export default function BlogFilter({ posts, allProducts }: Props) {
     router.replace("/blog", { scroll: false });
   }
 
+  /** Type counts respect the active product, so the pills never promise rows
+      that a combined filter would not return. */
+  const byProduct = useMemo(
+    () => (product === "all" ? posts : posts.filter((p) => p.products.includes(product))),
+    [posts, product]
+  );
+
+  const productOptions = useMemo(
+    () =>
+      allProducts
+        .map((name) => ({ name, count: posts.filter((p) => p.products.includes(name)).length }))
+        .filter((p) => p.count > 0),
+    [allProducts, posts]
+  );
+
   const filtered = useMemo(() => {
     let result = [...posts];
     if (search) {
       const q = search.toLowerCase();
-      result = result.filter((p) => p.title.toLowerCase().includes(q) || p.excerpt.toLowerCase().includes(q));
+      result = result.filter(
+        (p) =>
+          p.title.toLowerCase().includes(q) ||
+          p.excerpt.toLowerCase().includes(q) ||
+          p.keywords?.some((k) => k.toLowerCase().includes(q))
+      );
     }
-    if (product !== "all")   result = result.filter((p) => p.products.includes(product));
-    if (category !== "all")  result = result.filter((p) => p.category === category);
-    if (sort === "oldest") result.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    if (product !== "all")  result = result.filter((p) => p.products.includes(product));
+    if (category !== "all") result = result.filter((p) => p.category === category);
+    if (sort === "oldest")  result.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
     else if (sort === "az") result.sort((a, b) => a.title.localeCompare(b.title));
     return result;
   }, [posts, search, product, category, sort]);
 
-  // Filter button — min-height 44px for iOS tap target compliance
-  const Btn = ({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) => (
+  const activeType = FIELD_NOTE_TYPES.find((t) => t.label === category);
+
+  const Pill = ({ label, count, active, onClick }: { label: string; count?: number; active: boolean; onClick: () => void }) => (
     <button
       onClick={onClick}
-      className="text-xs font-semibold px-3 rounded transition-all whitespace-nowrap flex-shrink-0 inline-flex items-center"
+      aria-pressed={active}
+      className="text-[13px] font-semibold px-3.5 rounded-full transition-colors whitespace-nowrap flex-shrink-0 inline-flex items-center gap-1.5"
       style={{
-        background:   active ? "#f97316" : "#2a2a2a",
-        color:        active ? "#fff"    : "#9a9a9a",
-        border:       "1px solid",
-        borderColor:  active ? "#f97316" : "rgba(255,255,255,0.07)",
-        minHeight:    "44px",
+        background:  active ? "#f97316" : "var(--bg-card-neutral)",
+        color:       active ? "#fff"    : "#9aa0a8",
+        border:      "1px solid",
+        borderColor: active ? "#f97316" : "rgba(255,255,255,0.09)",
+        minHeight:   "40px",
       }}
     >
       {label}
+      {count !== undefined && (
+        <span
+          className="text-[11px] font-bold tabular-nums px-1.5 rounded-full"
+          style={{
+            background: active ? "rgba(0,0,0,0.18)" : "rgba(255,255,255,0.07)",
+            color:      active ? "rgba(255,255,255,0.9)" : "#6f757d",
+          }}
+        >
+          {count}
+        </span>
+      )}
     </button>
   );
 
+  const selectStyle = {
+    background: "var(--bg-card-neutral)",
+    border: "1px solid rgba(255,255,255,0.09)",
+    color: "#c8cdd3",
+    minHeight: "44px",
+  } as const;
+
   return (
     <>
-      {/* ── Filter row ──────────────────────────────────────── */}
-      <div className="space-y-3 mb-10">
-        {/* Category + product pills — horizontal scroll on mobile, wraps on larger screens */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-1 sm:flex-wrap sm:overflow-visible scrollbar-none"
+      <div className="mb-8">
+        {/* ── Type — the primary axis ─────────────────────────── */}
+        <div
+          className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 sm:flex-wrap sm:overflow-visible scrollbar-none"
           style={{ WebkitOverflowScrolling: "touch", msOverflowStyle: "none", scrollbarWidth: "none" }}
         >
-          <Btn label="All" active={category === "all" && product === "all"} onClick={() => { setCategory("all"); setProduct("all"); pushParams({ category: "all", product: "all" }); }} />
-
-          <span className="w-px h-4 self-center flex-shrink-0" style={{ background: "rgba(255,255,255,0.1)" }} />
-
-          {/* Type pills, generated from the taxonomy so labels can never drift
-              from what they filter. They used to be hand-written, and the
-              "Guides" pill was wired to category === "Blog" — it showed seven
-              short posts while the twenty-one actual Guides stayed hidden. */}
+          <Pill label="All" count={byProduct.length} active={category === "all"} onClick={() => { setCategory("all"); pushParams({ category: "all" }); }} />
           {FIELD_NOTE_TYPES.map((t) => {
-            const n = posts.filter((p) => p.category === t.label).length;
-            if (n === 0) return null;
+            const n = byProduct.filter((p) => p.category === t.label).length;
+            if (n === 0 && category !== t.label) return null;
             return (
-              <Btn
+              <Pill
                 key={t.label}
-                label={`${t.plural} ${n}`}
+                label={t.plural}
+                count={n}
                 active={category === t.label}
-                onClick={() => { setCategory(t.label); setProduct("all"); pushParams({ category: t.label, product: "all" }); }}
+                onClick={() => { setCategory(t.label); pushParams({ category: t.label }); }}
               />
             );
           })}
-
-          <span className="w-px h-4 self-center flex-shrink-0" style={{ background: "rgba(255,255,255,0.1)" }} />
-
-          {allProducts.slice(0, 4).map((p) => (
-            <Btn key={p} label={p} active={product === p} onClick={() => { setProduct(p); setCategory("all"); pushParams({ product: p, category: "all" }); }} />
-          ))}
         </div>
 
-        {/* Search + sort — min-height 44px on all interactive elements */}
-        <div className="flex gap-3">
-          <div className="relative flex-1 max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none" style={{ color: "#5a5a5a" }} />
+        {/* ── Search · product · sort ─────────────────────────── */}
+        <div className="flex flex-wrap gap-2.5 mt-3">
+          <div className="relative flex-1 min-w-[190px] max-w-sm">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: "#6f757d" }} />
             <input
               type="text"
-              placeholder="Search..."
+              placeholder="Search field notes…"
               aria-label="Search field notes"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-8 pr-7 rounded text-sm"
-              style={{ background: "#2a2a2a", border: "1px solid rgba(255,255,255,0.07)", color: "#ffffff", minHeight: "44px" }}
+              className="w-full pl-9 pr-8 rounded-lg text-sm"
+              style={{ ...selectStyle, color: "#ffffff" }}
             />
             {search && (
-              <button onClick={() => { setSearch(""); pushParams({ search: "" }); }} aria-label="Clear search" className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-400 w-6 h-6 flex items-center justify-center">
-                <X className="w-3 h-3" />
+              <button
+                onClick={() => { setSearch(""); pushParams({ search: "" }); }}
+                aria-label="Clear search"
+                className="absolute right-1.5 top-1/2 -translate-y-1/2 flex items-center justify-center rounded"
+                style={{ width: 32, height: 32, color: "#6f757d" }}
+              >
+                <X className="w-3.5 h-3.5" />
               </button>
             )}
+          </div>
+
+          {/* Product is its own axis, not another pill. Every system is here —
+              the old row showed the top four and dropped the rest. */}
+          <div className="relative">
+            <select
+              value={product}
+              onChange={(e) => { setProduct(e.target.value); pushParams({ product: e.target.value }); }}
+              aria-label="Filter by product system"
+              className="appearance-none pl-3 pr-8 rounded-lg text-sm cursor-pointer w-full"
+              style={selectStyle}
+            >
+              <option value="all">All systems</option>
+              {productOptions.map((p) => (
+                <option key={p.name} value={p.name}>{p.name} ({p.count})</option>
+              ))}
+            </select>
+            <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none" style={{ color: "#6f757d" }} />
           </div>
 
           <div className="relative">
             <select
               value={sort}
-              onChange={(e) => setAndSync(setSort, "sort", e.target.value as typeof sort)}
-              aria-label="Sort posts"
-              className="appearance-none pl-3 pr-7 rounded text-sm cursor-pointer"
-              style={{ background: "#2a2a2a", border: "1px solid rgba(255,255,255,0.07)", color: "#9a9a9a", minHeight: "44px" }}
+              onChange={(e) => { setSort(e.target.value as typeof sort); pushParams({ sort: e.target.value }); }}
+              aria-label="Sort field notes"
+              className="appearance-none pl-3 pr-8 rounded-lg text-sm cursor-pointer w-full"
+              style={selectStyle}
             >
-              <option value="newest">Newest</option>
-              <option value="oldest">Oldest</option>
+              <option value="newest">Newest first</option>
+              <option value="oldest">Oldest first</option>
               <option value="az">A – Z</option>
             </select>
-            <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3 pointer-events-none" style={{ color: "#5a5a5a" }} />
+            <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none" style={{ color: "#6f757d" }} />
           </div>
 
           {hasFilters && (
-            <button onClick={clearFilters} className="text-sm px-3 rounded inline-flex items-center" style={{ color: "#f97316", minHeight: "44px" }}>
+            <button
+              onClick={clearFilters}
+              className="text-sm font-semibold px-3.5 rounded-lg inline-flex items-center"
+              style={{ color: "#f97316", minHeight: "44px" }}
+            >
               Clear
             </button>
           )}
         </div>
 
-        {hasFilters && (
-          <p className="text-xs" style={{ color: "#555" }}>
-            {filtered.length} post{filtered.length !== 1 ? "s" : ""}
+        {/* ── Always-on result line ───────────────────────────── */}
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mt-3.5">
+          <p className="text-xs tabular-nums" style={{ color: "#6f757d" }} aria-live="polite">
+            {filtered.length === posts.length
+              ? `All ${posts.length} field notes`
+              : `${filtered.length} of ${posts.length} field notes`}
           </p>
-        )}
+
+          {/* The type hubs are real indexed pages. Rather than advertising all
+              five at the top of the page, the one you asked for is offered
+              once you have asked for it. */}
+          {activeType && (
+            <Link
+              href={`/blog/${activeType.slug}`}
+              className="text-xs font-semibold inline-flex items-center gap-1 transition-colors hover:brightness-125"
+              style={{ color: activeType.text }}
+            >
+              Open the {activeType.plural} page
+              <ArrowRight className="w-3 h-3" />
+            </Link>
+          )}
+        </div>
       </div>
 
       {/* ── Grid ─────────────────────────────────────────────── */}
@@ -174,10 +263,13 @@ export default function BlogFilter({ posts, allProducts }: Props) {
           {filtered.map((post, index) => (
             <motion.div
               key={post.slug}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.1 }}
-              transition={{ duration: 0.4, delay: index * 0.05 }}
+              viewport={{ once: true, amount: 0.05 }}
+              // Ramp capped at six. The delay used to be index * 0.05 against
+              // the whole list, so the sixtieth card sat invisible for three
+              // seconds after scrolling into view.
+              transition={{ duration: 0.35, delay: Math.min(index % 6, 5) * 0.04 }}
             >
               <BlogCard post={post} />
             </motion.div>
@@ -185,12 +277,12 @@ export default function BlogFilter({ posts, allProducts }: Props) {
         </div>
       ) : (
         <div className="text-center py-20">
-          <p className="text-base font-semibold mb-2" style={{ color: "var(--text-primary)" }}>No posts match your filters</p>
-          <p className="text-sm mb-6" style={{ color: "var(--text-secondary)" }}>Try adjusting your search or filters.</p>
+          <p className="text-base font-semibold mb-2" style={{ color: "var(--text-primary)" }}>No field notes match those filters</p>
+          <p className="text-sm mb-6" style={{ color: "var(--text-secondary)" }}>Try a different system, or clear the filters to see all {posts.length}.</p>
           <button
             onClick={clearFilters}
-            className="text-xs font-semibold px-5 py-2.5 rounded"
-            style={{ background: "#f97316", color: "#fff" }}
+            className="text-sm font-semibold px-5 rounded-lg inline-flex items-center"
+            style={{ background: "#f97316", color: "#fff", minHeight: "44px" }}
           >
             Clear all filters
           </button>

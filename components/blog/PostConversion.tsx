@@ -146,8 +146,8 @@ export default function PostConversion({
 
           <a
             href="tel:+14165409287"
-            className="text-[13px] font-semibold transition-colors hover:text-orange-400"
-            style={{ color: "rgba(255,255,255,0.45)" }}
+            className="text-[13px] font-semibold inline-flex items-center transition-colors hover:text-orange-400"
+            style={{ color: "rgba(255,255,255,0.45)", minHeight: 44 }}
           >
             or call 416-540-9287
           </a>

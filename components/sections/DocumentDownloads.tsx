@@ -86,7 +86,7 @@ function DocRow({
           minHeight: "44px",
           color: "rgba(255,255,255,0.4)",
           background: "rgba(255,255,255,0.05)",
-          border: "1px solid rgba(255,255,255,0.10)",
+          border: "1px solid rgba(255,255,255,0.1)",
         }}
         title={`Download ${labelText}`}
         aria-label={`Download ${labelText}`}
@@ -121,7 +121,7 @@ export default function DocumentDownloads({ slug }: { slug: string }) {
           className="rounded-2xl overflow-hidden"
           style={{
             background: "#0f1420",
-            border: "1px solid rgba(255,255,255,0.10)",
+            border: "1px solid rgba(255,255,255,0.1)",
           }}
         >
           <div className="px-8 py-8">
@@ -136,7 +136,7 @@ export default function DocumentDownloads({ slug }: { slug: string }) {
                 </p>
                 <h2 className="text-xl font-bold" style={{ color: "#F5F0EB" }}>Downloads</h2>
               </div>
-              <div className="flex-1 h-px ml-4" style={{ background: "rgba(255,255,255,0.08)" }} />
+              <div className="flex-1 h-px ml-4" style={{ background: "rgba(255,255,255,0.07)" }} />
               <span className="text-xs shrink-0" style={{ color: "rgba(255,255,255,0.55)" }}>
                 {docs.length} file{docs.length !== 1 ? "s" : ""}
               </span>

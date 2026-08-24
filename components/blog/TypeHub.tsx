@@ -75,7 +75,7 @@ export default function TypeHub({ type }: { type: FieldNoteTypeMeta }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-24 sm:pt-32 pb-14">
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-2 text-[12px]">
-          <Link href="/blog" className="transition-colors hover:text-orange-400" style={{ color: "rgba(255,255,255,0.5)" }}>
+          <Link href="/blog" className="inline-flex items-center transition-colors hover:text-orange-400" style={{ color: "rgba(255,255,255,0.5)", minHeight: 40 }}>
             Field Notes
           </Link>
           <span style={{ color: "rgba(255,255,255,0.25)" }}>/</span>

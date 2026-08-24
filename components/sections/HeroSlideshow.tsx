@@ -139,7 +139,7 @@ export default function HeroSlideshow({
                 fontSize: "clamp(1.25rem, 2vw, 1.625rem)",
                 lineHeight: 1.25,
                 letterSpacing: "-0.02em",
-                color: "rgba(255,255,255,0.86)",
+                color: "rgba(255,255,255,0.85)",
                 textShadow: "0 1px 12px rgba(0,0,0,0.5)",
               }}
             >
@@ -167,8 +167,8 @@ export default function HeroSlideshow({
                 href={cta2Href}
                 className="inline-flex items-center justify-center gap-2 px-7 rounded-lg font-semibold text-sm border transition-all hover:bg-white/[0.06]"
                 style={{
-                  borderColor: "rgba(255,255,255,0.28)",
-                  color: "rgba(255,255,255,0.82)",
+                  borderColor: "rgba(255,255,255,0.3)",
+                  color: "rgba(255,255,255,0.8)",
                   minHeight: "44px",
                 }}
               >

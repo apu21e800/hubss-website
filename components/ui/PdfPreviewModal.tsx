@@ -115,7 +115,7 @@ export default function PdfPreviewModal({
         {/* Header */}
         <div
           className="flex items-center gap-3 px-5 py-4 flex-shrink-0"
-          style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}
+          style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}
         >
           {/* PDF icon */}
           <span
@@ -187,7 +187,7 @@ export default function PdfPreviewModal({
             ref={closeBtnRef}
             onClick={onClose}
             className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-all hover:brightness-125"
-            style={{ background: "rgba(255,255,255,0.06)", color: "#9CA3AF" }}
+            style={{ background: "rgba(255,255,255,0.07)", color: "#9CA3AF" }}
             aria-label="Close preview"
           >
             <X className="w-4 h-4" />
@@ -219,7 +219,7 @@ export default function PdfPreviewModal({
                   priority={i === 0}
                   sizes="(max-width: 640px) 100vw, 760px"
                   className="w-full h-auto rounded-md"
-                  style={{ maxWidth: "760px", border: "1px solid rgba(255,255,255,0.08)" }}
+                  style={{ maxWidth: "760px", border: "1px solid rgba(255,255,255,0.07)" }}
                 />
               ))}
               {preview.total > preview.pages.length && (
@@ -249,7 +249,7 @@ export default function PdfPreviewModal({
         <div
           className="flex items-center justify-center gap-1 px-5 py-2.5 flex-shrink-0 text-xs"
           style={{
-            borderTop: "1px solid rgba(255,255,255,0.06)",
+            borderTop: "1px solid rgba(255,255,255,0.07)",
             color: "#868C98",
           }}
         >

@@ -235,7 +235,7 @@ function PanelCard({
           border:
             hovered || selected
               ? "1.5px solid rgba(249,115,22,0.55)"
-              : "1.5px solid rgba(255,255,255,0.07)",
+              : "1.5px solid var(--border-color)",
           transition: "border-color 0.15s ease",
         }}
       >
@@ -359,7 +359,7 @@ function ProjectModal({
         aria-modal="true"
         aria-label={`Project details: ${project.title}`}
         style={{
-          background: "#111827",
+          background: "#1A1A19",
           border: "1px solid rgba(249,115,22,0.25)",
           borderRadius: 20,
           maxWidth: 880,
@@ -476,7 +476,7 @@ function ProjectModal({
                 borderRadius: 12,
                 overflow: "hidden",
                 aspectRatio: "16/9",
-                background: "#0d1117",
+                background: "#101010",
               }}
             >
               <Image
@@ -1113,7 +1113,7 @@ export default function CanadaMap() {
       <section
         ref={sectionRef}
         aria-label="Installations across Canada — interactive project map"
-        style={{ background: "#080d16", paddingTop: "5rem", paddingBottom: "5rem" }}
+        style={{ background: "#101010", paddingTop: "5rem", paddingBottom: "5rem" }}
       >
         <div style={{ maxWidth: 1340, margin: "0 auto", padding: "0 1.25rem" }}>
 
@@ -1332,7 +1332,7 @@ export default function CanadaMap() {
                       style={{
                         position: "relative",
                         width: 240,
-                        background: "#0f1620",
+                        background: "#151515",
                         border: `1px solid ${popupPinned ? "rgba(249,115,22,0.6)" : "rgba(249,115,22,0.32)"}`,
                         borderRadius: 12,
                         overflow: "hidden",
@@ -1615,8 +1615,8 @@ export default function CanadaMap() {
                 width: 310,
                 flexShrink: 0,
                 borderRadius: 20,
-                border: "1px solid rgba(255,255,255,0.07)",
-                background: "#0c1119",
+                border: "1px solid var(--border-color)",
+                background: "#111111",
                 display: "flex",
                 flexDirection: "column",
                 overflow: "hidden",
@@ -1626,7 +1626,7 @@ export default function CanadaMap() {
               <div
                 style={{
                   padding: "14px 16px 12px",
-                  borderBottom: "1px solid rgba(255,255,255,0.07)",
+                  borderBottom: "1px solid var(--border-color)",
                   flexShrink: 0,
                 }}
               >
@@ -2083,7 +2083,7 @@ export default function CanadaMap() {
                       border:
                         hoveredId === project.id
                           ? "1px solid rgba(249,115,22,0.45)"
-                          : "1px solid rgba(255,255,255,0.07)",
+                          : "1px solid var(--border-color)",
                     }}
                   >
                     <span

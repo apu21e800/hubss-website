@@ -72,15 +72,21 @@
   /* ─── Text ──────────────────────────────── */
   --text-primary:   #ffffff;
   --text-body:      #e0e0e0;
-  --text-secondary: #8b8b8b;
+  --text-secondary: #949494;
   /* --text-muted / --text-faint bumped for WCAG 2.1 AA — the previous values
      (#5a5a5a / #3a3a3a) measured as low as 1.99:1 and 1.66:1 against the
      card/section backgrounds they're actually painted on sitewide (axe
      color-contrast audit, Aug 2026). Same hue, lightened just enough to
      clear 4.5:1 against the darkest background each is used on, with a
-     small margin. Not a palette change — brand colours are untouched. */
-  --text-muted:     #969696;
-  --text-faint:     #808080;
+     small margin. Not a palette change — brand colours are untouched.
+
+     Re-solved when the ground moved to #151515: the neutral ladder is a
+     little lighter than the blue one it replaced, so #808080 and #8b8b8b
+     fell to 4.13:1 and 4.22:1 on the hover surface — passing before, failing
+     after. Every muted grey now clears 4.5:1 against the LIGHTEST surface it
+     is ever painted on (#2A2A28), which means it clears it everywhere. */
+  --text-muted:     #9C9C9C;
+  --text-faint:     #949494;
   --text-hint:      #20201F;
 
   /* ─── Borders ───────────────────────────── */

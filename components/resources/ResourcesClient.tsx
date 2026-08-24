@@ -135,14 +135,14 @@ function DocCard({
       className="group rounded-xl flex flex-col justify-between overflow-hidden transition-all duration-200 ease-out hover:-translate-y-[2px] hover:shadow-[0_8px_24px_-12px_rgba(249,115,22,0.35)] cursor-pointer"
       style={{
         background: "var(--bg-card-neutral)",
-        border: "1px solid rgba(255,255,255,0.08)",
+        border: "1px solid rgba(255,255,255,0.07)",
       }}
       onMouseEnter={(e) => {
         (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(249,115,22,0.28)";
         (e.currentTarget as HTMLDivElement).style.background = "#242424";
       }}
       onMouseLeave={(e) => {
-        (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(255,255,255,0.08)";
+        (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(255,255,255,0.07)";
         (e.currentTarget as HTMLDivElement).style.background = "var(--bg-card-neutral)";
       }}
     >
@@ -150,7 +150,7 @@ function DocCard({
       {hasThumb && doc.previewImageUrl && (
         <div
           className="relative w-full h-32 overflow-hidden"
-          style={{ background: "#0f0f0f", borderBottom: "1px solid rgba(255,255,255,0.06)" }}
+          style={{ background: "#0f0f0f", borderBottom: "1px solid rgba(255,255,255,0.07)" }}
         >
           <Image
             src={doc.previewImageUrl}
@@ -217,14 +217,14 @@ function DocCard({
               target="_blank"
               rel="noopener noreferrer"
               onClick={stop}
-              className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors duration-200 flex-shrink-0"
-              style={{ background: "rgba(255,255,255,0.08)", color: "#9CA3AF" }}
+              className="flex items-center justify-center gap-1.5 text-xs font-semibold px-3 rounded-lg transition-colors duration-200 flex-shrink-0" data-tap="44"
+              style={{ background: "rgba(255,255,255,0.07)", color: "#9CA3AF" }}
               onMouseEnter={(e) => {
                 (e.currentTarget as HTMLAnchorElement).style.background = "rgba(249,115,22,0.12)";
                 (e.currentTarget as HTMLAnchorElement).style.color = "#f97316";
               }}
               onMouseLeave={(e) => {
-                (e.currentTarget as HTMLAnchorElement).style.background = "rgba(255,255,255,0.08)";
+                (e.currentTarget as HTMLAnchorElement).style.background = "rgba(255,255,255,0.07)";
                 (e.currentTarget as HTMLAnchorElement).style.color = "#9CA3AF";
               }}
               title="Open the 2026 catalogue flipbook"
@@ -243,8 +243,8 @@ function DocCard({
                   productLabel: doc.productName,
                 });
               }}
-              className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors duration-200 flex-shrink-0"
-              style={{ background: "rgba(255,255,255,0.08)", color: "#9CA3AF" }}
+              className="flex items-center justify-center gap-1.5 text-xs font-semibold px-3 rounded-lg transition-colors duration-200 flex-shrink-0" data-tap="44"
+              style={{ background: "rgba(255,255,255,0.07)", color: "#9CA3AF" }}
               aria-label={`Preview ${doc.title}`}
               title={`Preview ${doc.title}`}
               onMouseEnter={(e) => {
@@ -252,7 +252,7 @@ function DocCard({
                 (e.currentTarget as HTMLButtonElement).style.color = "#f97316";
               }}
               onMouseLeave={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.08)";
+                (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.07)";
                 (e.currentTarget as HTMLButtonElement).style.color = "#9CA3AF";
               }}
             >
@@ -266,7 +266,7 @@ function DocCard({
             <Link
               href={doc.fileUrl}
               onClick={stop}
-              className="flex items-center justify-center w-8 h-8 rounded-lg transition-colors duration-200 flex-shrink-0"
+              className="flex items-center justify-center w-8 h-8 rounded-lg transition-colors duration-200 flex-shrink-0" data-tap="44"
               style={{
                 background: "rgba(249,115,22,0.10)",
                 color: "#f97316",
@@ -281,6 +281,7 @@ function DocCard({
                 (e.currentTarget as HTMLAnchorElement).style.color = "#f97316";
               }}
               title="Open catalogue"
+              aria-label={`Open ${doc.title}`}
             >
               <Eye className="w-3.5 h-3.5" />
             </Link>
@@ -289,7 +290,7 @@ function DocCard({
               href={doc.fileUrl}
               download
               onClick={stop}
-              className="flex items-center justify-center w-8 h-8 rounded-lg transition-colors duration-200 flex-shrink-0"
+              className="flex items-center justify-center w-8 h-8 rounded-lg transition-colors duration-200 flex-shrink-0" data-tap="44"
               style={{
                 background: "rgba(249,115,22,0.10)",
                 color: "#f97316",
@@ -304,6 +305,7 @@ function DocCard({
                 (e.currentTarget as HTMLAnchorElement).style.color = "#f97316";
               }}
               title="Download PDF"
+              aria-label={`Download ${doc.title} (PDF)`}
             >
               <Download className="w-3.5 h-3.5" />
             </a>
@@ -469,14 +471,15 @@ export default function ResourcesClient({
             <button
               key={tab}
               onClick={() => handleTabChange(tab)}
-              className="px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
+              className="px-4 rounded-lg text-sm font-medium transition-colors duration-200"
               style={{
+                minHeight: 44,
                 background: activeTab === tab ? "#F97316" : "rgba(255,255,255,0.05)",
                 color: activeTab === tab ? "#ffffff" : "#9CA3AF",
                 border:
                   activeTab === tab
                     ? "1px solid transparent"
-                    : "1px solid rgba(255,255,255,0.08)",
+                    : "1px solid rgba(255,255,255,0.07)",
               }}
             >
               {tab}
@@ -593,9 +596,9 @@ export default function ResourcesClient({
             featuredOnly
               ? { background: "#F97316", color: "#fff", border: "1px solid transparent" }
               : {
-                  background: "rgba(255,255,255,0.04)",
+                  background: "rgba(255,255,255,0.05)",
                   color: "#9CA3AF",
-                  border: "1px solid rgba(255,255,255,0.08)",
+                  border: "1px solid rgba(255,255,255,0.07)",
                 }
           }
         >
@@ -620,9 +623,9 @@ export default function ResourcesClient({
                 active
                   ? { background: "#F97316", color: "#fff", border: "1px solid transparent" }
                   : {
-                      background: "rgba(255,255,255,0.04)",
+                      background: "rgba(255,255,255,0.05)",
                       color: "#D1D5DB",
-                      border: "1px solid rgba(255,255,255,0.08)",
+                      border: "1px solid rgba(255,255,255,0.07)",
                     }
               }
             >
@@ -630,7 +633,7 @@ export default function ResourcesClient({
               <span
                 className="inline-flex items-center justify-center text-[10px] font-bold rounded-full min-w-[20px] px-1.5 py-0.5"
                 style={{
-                  background: active ? "rgba(255,255,255,0.22)" : "rgba(255,255,255,0.05)",
+                  background: active ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.05)",
                   color: active ? "#fff" : "#9CA3AF",
                 }}
               >
@@ -669,9 +672,9 @@ export default function ResourcesClient({
                 subcategoryFilter === sc.value
                   ? { background: "#F97316", color: "#fff", border: "1px solid transparent" }
                   : {
-                      background: "rgba(255,255,255,0.04)",
+                      background: "rgba(255,255,255,0.05)",
                       color: "#D1D5DB",
-                      border: "1px solid rgba(255,255,255,0.08)",
+                      border: "1px solid rgba(255,255,255,0.07)",
                     }
               }
             >
@@ -713,7 +716,7 @@ export default function ResourcesClient({
                         </h3>
                         <div
                           className="flex-1 h-px"
-                          style={{ background: "rgba(255,255,255,0.08)" }}
+                          style={{ background: "rgba(255,255,255,0.07)" }}
                         />
                         <span className="text-xs" style={{ color: "#868C98" }}>
                           {docs.length} doc{docs.length !== 1 ? "s" : ""}

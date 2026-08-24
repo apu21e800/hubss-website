@@ -44,13 +44,13 @@ const BENEFITS = [
   "45-minute session tailored to your projects — in your office or virtual",
   "Spec language you can drop straight into your next RFP",
   "Physical samples, technical data sheets, and the certified installer map",
-  "CE credits — counts toward AIBC, RAIC, and PEO requirements",
+  "Lunch on HUB — and a $25 voucher when the session's virtual",
 ];
 
 const STAT_CHIPS = [
   { v: "45 min", l: "focused" },
   { v: "$0", l: "hosted by HUB" },
-  { v: "CE", l: "AIBC · RAIC · PEO" },
+  { v: "30+", l: "years in the field" },
   { v: "10", l: "provinces served" },
 ];
 
@@ -59,7 +59,7 @@ const CITY_WALL = ["City of Toronto", "York Region", "City of Vancouver", "UBC",
 const IMG = { src: "/images/products/streetbond/streetbond-112.jpg", alt: "StreetBond coloured pavement installation — the systems covered in a HUB Lunch & Learn session" };
 const MOOSE = { src: "/images/lunch-learn/moose.png", alt: "Moose, the HUB Surface Systems site dog, in his hard hat and safety vest" };
 
-// ── Shared form brain ────────────────────────────────────────────────────
+// ── Shared form brain ────────────────────────────────────
 function useLunchLearnForm(withFormat: boolean) {
   const [formData, setFormData] = useState<FormState>(EMPTY);
   const [format, setFormat] = useState<string>("Either");
@@ -171,9 +171,9 @@ function MoreLink() {
   );
 }
 
-// ═════════════════════════════════════════════════════════════════════════════
+// ═════════════════════════════════════════════════════════════════════
 // Variant A — "Boardroom": one elevated card, inset form, Moose as host
-// ═════════════════════════════════════════════════════════════════════════════
+// ═════════════════════════════════════════════════════════════════════
 function Boardroom() {
   const f = useLunchLearnForm(true);
   return (
@@ -196,15 +196,28 @@ function Boardroom() {
                 {/* Vernon (Aug 2026): corner Moose removed; the host avatar
                     carries him instead — bigger, ringed, face-first billing. */}
                 <div className="flex items-center gap-4 mb-6">
-                  <span
-                    className="relative flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden"
-                    style={{
-                      background: "rgba(249,115,22,0.14)",
-                      border: "2px solid rgba(249,115,22,0.5)",
-                      boxShadow: "0 0 0 3px rgba(249,115,22,0.12), 0 6px 20px rgba(0,0,0,0.35)",
-                    }}
-                  >
-                    <Image src={MOOSE.src} alt={MOOSE.alt} fill className="object-cover object-top" sizes="64px" />
+                  {/* Breakout avatar — Vernon: "make the dog bigger, or like
+                      he's coming out of the circle." The ring clips nothing:
+                      Moose is drawn unclipped and bottom-anchored, so his hard
+                      hat rises past the rim. */}
+                  <span className="relative flex-shrink-0 w-[72px] h-[72px] sm:w-20 sm:h-20">
+                    <span
+                      className="absolute inset-0 rounded-full"
+                      style={{
+                        background: "rgba(249,115,22,0.14)",
+                        border: "2px solid rgba(249,115,22,0.5)",
+                        boxShadow: "0 0 0 3px rgba(249,115,22,0.12), 0 6px 20px rgba(0,0,0,0.35)",
+                      }}
+                    />
+                    <Image
+                      src={MOOSE.src}
+                      alt={MOOSE.alt}
+                      width={320}
+                      height={400}
+                      sizes="96px"
+                      className="absolute bottom-0 left-1/2 w-auto"
+                      style={{ height: "127%", maxWidth: "none", transform: "translateX(-50%)", filter: "drop-shadow(0 3px 6px rgba(0,0,0,0.45))" }}
+                    />
                   </span>
                   <div>
                     <p className="text-[11px] font-bold tracking-[0.2em] uppercase" style={{ color: "#FB923C" }}>
@@ -319,14 +332,14 @@ function Boardroom() {
   );
 }
 
-// ═════════════════════════════════════════════════════════════════════════════
+// ═════════════════════════════════════════════════════════════════════
 // Variant B — "Ticket": session ticket + booking panel with a format picker
-// ═════════════════════════════════════════════════════════════════════════════
+// ═════════════════════════════════════════════════════════════════════
 const TICKET_META = [
   { k: "Duration", v: "45 minutes + Q&A" },
   { k: "Cost", v: "$0 — hosted by HUB" },
   { k: "Format", v: "In-person or virtual" },
-  { k: "Credits", v: "AIBC · RAIC · PEO" },
+  { k: "Materials", v: "Samples + spec sheets" },
 ];
 
 function Ticket() {
@@ -468,9 +481,9 @@ function Ticket() {
   );
 }
 
-// ═════════════════════════════════════════════════════════════════════════════
+// ═════════════════════════════════════════════════════════════════════
 // Variant C — "Proof": photo-led with caption + city wall; slim form below
-// ═════════════════════════════════════════════════════════════════════════════
+// ═════════════════════════════════════════════════════════════════════
 function Proof() {
   const f = useLunchLearnForm(false);
   return (
@@ -487,8 +500,8 @@ function Proof() {
               </span>
             </h2>
             <p className="text-[15px] leading-relaxed mb-7 max-w-lg" style={{ color: "rgba(255,255,255,0.7)" }}>
-              45 minutes with the HUB technical team — spec language for your next RFP, samples on
-              the table, CE credits documented. In your office or virtual, lunch on us.
+              45 minutes with the HUB technical team — spec language for your next RFP and samples
+              on the table. In your office or virtual, lunch on us.
             </p>
 
             <div className="mb-7">
@@ -506,7 +519,7 @@ function Proof() {
             <div className="flex items-center gap-4 flex-wrap">
               <MoreLink />
               <span className="hidden sm:block" style={{ color: "rgba(255,255,255,0.15)" }}>|</span>
-              <span className="text-[13px] font-semibold" style={{ color: "rgba(255,255,255,0.45)" }}>CE credits: AIBC · RAIC · PEO</span>
+              <span className="text-[13px] font-semibold" style={{ color: "rgba(255,255,255,0.45)" }}>Samples and spec sheets included</span>
             </div>
           </motion.div>
 
@@ -578,7 +591,7 @@ function Proof() {
   );
 }
 
-// ── Export ──────────────────────────────────────────────────────────────────────
+// ── Export ────────────────────────────────────────────────────────────────
 export default function LunchLearnV2({ variant = "boardroom" }: { variant?: LunchLearnVariant }) {
   if (variant === "ticket") return <Ticket />;
   if (variant === "proof") return <Proof />;

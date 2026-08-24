@@ -6,8 +6,8 @@ import { buildMetadata } from "@/lib/seo";
 import { getSanityPageContent } from "@/lib/sanity.queries";
 
 export const metadata = buildMetadata({
-  title: "Lunch & Learn — Free CPD Session for Engineers & Specifiers",
-  description: "Book a free Lunch & Learn with HUB Surface Systems. We bring the food, the specs, and 30 years of decorative pavement expertise to your office. CPD-eligible for engineers.",
+  title: "Lunch & Learn — Free Spec Session for Engineers & Planners",
+  description: "Book a free Lunch & Learn with HUB Surface Systems. We bring lunch, material samples, and 30 years of decorative pavement expertise to your office — in person or virtual, coast to coast.",
   slug: "lunch-learn",
 });
 
@@ -29,18 +29,18 @@ const faqSchema = {
     },
     {
       "@type": "Question",
-      name: "Is this actually free?",
+      name: "What does it cost?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "100% free. No invoice, no minimum order attached, and we won't badger you afterward. We just want you to know what you're specifying — the rest follows naturally.",
+        text: "Nothing. Sessions are how we introduce our systems to the people who specify them — no invoice, no minimum order, and no follow-up pressure.",
       },
     },
     {
       "@type": "Question",
-      name: "Do we get continuing education credits?",
+      name: "Who should be in the room?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Yes. HUB Lunch & Learn sessions count toward AIBC, RAIC, and PEO continuing professional development requirements. We provide the documentation.",
+        text: "Engineers, planners, landscape architects, project managers, procurement — anyone who touches the surface spec. Sessions are built for mixed teams, and there's no cap on seats.",
       },
     },
     {
@@ -54,16 +54,16 @@ const faqSchema = {
   ],
 };
 
-// Service schema — Lunch & Learn is a free CPD offering, eligible for
+// Service schema — Lunch & Learn is a free technical session, eligible for
 // SERP enrichment with offer + provider linkage to the home-page Organization.
 const serviceSchema = {
   "@context": "https://schema.org",
   "@type": "Service",
   "@id": "https://hubss.com/lunch-learn#service",
-  name: "HUB Lunch & Learn — Decorative Pavement CPD",
-  serviceType: "Continuing Professional Development",
+  name: "HUB Lunch & Learn — Decorative Pavement Spec Session",
+  serviceType: "Technical Lunch & Learn Presentation",
   description:
-    "Free 30–45 minute presentation for engineering, architecture, and municipal-procurement teams covering decorative pavement systems, thermoplastic markings, and coloured coatings. Counts toward AIBC, RAIC, and PEO CPD requirements.",
+    "Free 30–45 minute presentation for engineering, architecture, and municipal-procurement teams covering decorative pavement systems, thermoplastic markings, and coloured coatings. Includes material samples, spec sheets, and regional installer contacts.",
   provider: { "@id": "https://hubss.com/#organization" },
   areaServed: { "@type": "Country", name: "Canada" },
   audience: {
@@ -114,7 +114,7 @@ export default async function LunchLearnPage() {
     return h.whatYouGetHeading === "Not a Sales Pitch. An Education." ? undefined : h;
   }
   const hero = {
-    eyebrow:        fresh("eyebrow", sanityPage?.lunchLearnHero?.eyebrow)               ?? "Professional Development · In-Person or Virtual · Coast to Coast",
+    eyebrow:        fresh("eyebrow", sanityPage?.lunchLearnHero?.eyebrow)               ?? "Lunch & Learn · In-Person or Virtual · Coast to Coast",
     headingLine1:   fresh("headingLine1", sanityPage?.lunchLearnHero?.headingLine1)     ?? "Specify with confidence.",
     headingLine2:   fresh("headingLine2", sanityPage?.lunchLearnHero?.headingLine2)     ?? "Lunch is on us.",
     subheading:     sanityPage?.lunchLearnHero?.subheading && sanityPage.lunchLearnHero.subheading.startsWith("A 45-minute HUB Lunch & Learn delivers") ? "A focused 45-minute session that gives your team the technical grounding to specify decorative pavement, thermoplastic crosswalks, and coloured coatings — real Canadian case studies and spec language you can drop straight into your next RFP." : (sanityPage?.lunchLearnHero?.subheading ?? "A focused 45-minute session that gives your team the technical grounding to specify decorative pavement, thermoplastic crosswalks, and coloured coatings — real Canadian case studies and spec language you can drop straight into your next RFP."),

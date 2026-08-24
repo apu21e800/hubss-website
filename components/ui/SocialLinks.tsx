@@ -29,8 +29,13 @@ export function SocialLinks({ size = 'md', className = '', iconClassName = '' }:
     { key: 'x', label: 'X' },
   ] as const;
 
+  // Mobile sweep (Aug 2026): the glyph stays 16–22px, but the anchor now
+  // fills a 44×44 box so it is actually tappable on a phone. Previously the
+  // hit area WAS the icon — an 18px target against Apple's 44pt and
+  // Android's 48dp minimums, which is a miss more often than a hit. The
+  // negative margin cancels the added box so nothing shifts visually.
   return (
-    <div className={`flex items-center gap-3 ${className}`}>
+    <div className={`flex items-center gap-3 -mx-1.5 ${className}`}>
       {platforms.map(({ key, label }) => (
         <a
           key={key}
@@ -38,7 +43,8 @@ export function SocialLinks({ size = 'md', className = '', iconClassName = '' }:
           target="_blank"
           rel="noopener noreferrer"
           aria-label={label}
-          className={`text-zinc-500 hover:text-orange-500 transition-colors duration-200 ${iconClassName}`}
+          className={`flex items-center justify-center text-zinc-500 hover:text-orange-500 transition-colors duration-200 ${iconClassName}`}
+          style={{ width: 44, height: 44, marginInline: -2 }}
         >
           <svg width={sizeMap[size]} height={sizeMap[size]} viewBox="0 0 24 24" fill="currentColor"><path d={iconPaths[key]} /></svg>
         </a>

@@ -6,6 +6,7 @@ import { Search, X, ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
 import BlogCard from "./BlogCard";
 import type { PostMeta } from "@/lib/mdx";
+import { FIELD_NOTE_TYPES } from "@/lib/field-notes-taxonomy";
 
 interface Props {
   posts: PostMeta[];
@@ -84,7 +85,7 @@ export default function BlogFilter({ posts, allProducts }: Props) {
 
   return (
     <>
-      {/* ── Filter row ──────────────────────────────────── */}
+      {/* ── Filter row ──────────────────────────────────────── */}
       <div className="space-y-3 mb-10">
         {/* Category + product pills — horizontal scroll on mobile, wraps on larger screens */}
         <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-1 sm:flex-wrap sm:overflow-visible scrollbar-none"
@@ -94,14 +95,22 @@ export default function BlogFilter({ posts, allProducts }: Props) {
 
           <span className="w-px h-4 self-center flex-shrink-0" style={{ background: "rgba(255,255,255,0.1)" }} />
 
-          {(["Case Study", "Project Profile", "Blog", "White Paper"] as const).map((cat) => (
-            <Btn
-              key={cat}
-              label={cat === "Case Study" ? "Case Studies" : cat === "Project Profile" ? "Project Profiles" : cat === "Blog" ? "Guides" : "White Papers"}
-              active={category === cat}
-              onClick={() => { setCategory(cat); setProduct("all"); pushParams({ category: cat, product: "all" }); }}
-            />
-          ))}
+          {/* Type pills, generated from the taxonomy so labels can never drift
+              from what they filter. They used to be hand-written, and the
+              "Guides" pill was wired to category === "Blog" — it showed seven
+              short posts while the twenty-one actual Guides stayed hidden. */}
+          {FIELD_NOTE_TYPES.map((t) => {
+            const n = posts.filter((p) => p.category === t.label).length;
+            if (n === 0) return null;
+            return (
+              <Btn
+                key={t.label}
+                label={`${t.plural} ${n}`}
+                active={category === t.label}
+                onClick={() => { setCategory(t.label); setProduct("all"); pushParams({ category: t.label, product: "all" }); }}
+              />
+            );
+          })}
 
           <span className="w-px h-4 self-center flex-shrink-0" style={{ background: "rgba(255,255,255,0.1)" }} />
 
@@ -159,7 +168,7 @@ export default function BlogFilter({ posts, allProducts }: Props) {
         )}
       </div>
 
-      {/* ── Grid ──────────────────────────────────────────── */}
+      {/* ── Grid ─────────────────────────────────────────────── */}
       {filtered.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {filtered.map((post, index) => (

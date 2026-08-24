@@ -6,6 +6,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import PhotoLightbox from "@/components/ui/PhotoLightbox";
+import JsonLd from "@/components/ui/JsonLd";
+import { imageObject } from "@/lib/image-seo";
 
 type Category = "all" | "crosswalks" | "transit" | "community" | "parks" | "recreation" | "parking";
 
@@ -161,8 +163,50 @@ export default function GalleryPage() {
   const closeLightbox = useCallback(() => setLightbox(null), []);
 
 
+  /**
+   * The archive as an addressable collection.
+   *
+   * This page is the densest photography on the site and it carried no
+   * structured data whatsoever — 78 documented Canadian installations that a
+   * crawler could see only as anonymous <img> tags. As an ImageGallery of
+   * ImageObjects, each photograph arrives with its location, its subject, the
+   * credit, and the licence terms that make it eligible for the Licensable
+   * badge in Google Images; and the set as a whole becomes something an AI
+   * crawler can cite by name rather than merely scrape.
+   */
+  const gallerySchema = {
+    "@context": "https://schema.org",
+    "@type": "ImageGallery",
+    "@id": "https://hubss.com/gallery#gallery",
+    name: "HUB Surface Systems field documentation",
+    description:
+      `${IMAGES.length} documented decorative pavement installations across Canada — crosswalks, transit lanes, ` +
+      "parks and paths, playgrounds, and community branding by HUB Surface Systems.",
+    url: "https://hubss.com/gallery",
+    inLanguage: "en-CA",
+    numberOfItems: IMAGES.length,
+    author: { "@id": "https://hubss.com/#organization" },
+    associatedMedia: IMAGES.map((img) =>
+      imageObject(img.src, {
+        alt: `${img.alt} — ${img.location} — decorative pavement by HUB Surface Systems`,
+        caption: `${img.alt}, ${img.location}. Installed by HUB Surface Systems.`,
+      })
+    ),
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://hubss.com" },
+      { "@type": "ListItem", position: 2, name: "Photo Archive", item: "https://hubss.com/gallery" },
+    ],
+  };
+
   return (
-    <main style={{ background: "#0a0e17", minHeight: "100vh" }}>
+    <main style={{ background: "#101010", minHeight: "100vh" }}>
+      <JsonLd data={gallerySchema} />
+      <JsonLd data={breadcrumbSchema} />
       <Nav />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-20">
@@ -212,7 +256,7 @@ export default function GalleryPage() {
                 <span
                   className="text-[10px] font-mono px-1.5 py-0.5 rounded-full"
                   style={{
-                    background: isActive ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.07)",
+                    background: isActive ? "rgba(255,255,255,0.2)" : "var(--border-color)",
                     color: isActive ? "#fff" : "rgba(255,255,255,0.4)",
                   }}
                 >
@@ -250,7 +294,7 @@ export default function GalleryPage() {
                 key={img.src + i}
                 className="archive-tile group relative overflow-hidden rounded-xl cursor-pointer active:scale-[0.985] transition-transform duration-100"
                 style={{
-                  border: "1px solid rgba(255,255,255,0.07)",
+                  border: "1px solid var(--border-color)",
                   animation: "archive-tile-in 0.4s ease both",
                   animationDelay: `${(i % PAGE) % 12 * 30}ms`,
                 }}
@@ -323,7 +367,11 @@ export default function GalleryPage() {
       <PhotoLightbox
         photos={filtered.map((img) => ({
           src: img.src,
-          alt: img.alt,
+          // Same descriptive string the tile carries. This used to be the bare
+          // label ("High-Visibility Crosswalk"), so the fullscreen view — the
+          // one a reader actually studies — was the least described surface
+          // on the page.
+          alt: `${img.alt} — ${img.location} — decorative pavement by HUB Surface Systems`,
           caption: `${img.alt} — ${img.location}`,
         }))}
         index={lightbox ?? -1}

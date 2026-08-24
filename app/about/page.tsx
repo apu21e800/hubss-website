@@ -73,11 +73,11 @@ export default async function AboutPage() {
     sanityPartnerDescs.get(key) ?? PARTNER_DESC_FALLBACK[key] ?? "";
 
   return (
-    <main style={{ background: "#0f1620", minHeight: "100vh" }}>
+    <main style={{ background: "#151515", minHeight: "100vh" }}>
       <Nav />
 
       {/* ── Hero ──────────────────────────────── */}
-      <div className="relative overflow-hidden min-h-[500px]" style={{ background: "#0d1117" }}>
+      <div className="relative overflow-hidden min-h-[500px]" style={{ background: "#101010" }}>
         <Image
           src="/images/hero/hero-3.jpg"
           alt="HUB Surface Systems — Canadian decorative pavement specialists"
@@ -128,7 +128,7 @@ export default async function AboutPage() {
       </div>
 
       {/* ── Stats Bar ───────────────────────── */}
-      <div style={{ background: "#141b2d", borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
+      <div style={{ background: "#1A1A19", borderBottom: "1px solid var(--border-color)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/[0.06]">
             {stats.map((s) => (
@@ -149,7 +149,7 @@ export default async function AboutPage() {
       </div>
 
       {/* ── Story ──────────────────────────────── */}
-      <div className="py-28" style={{ background: "#0f1620" }}>
+      <div className="py-28" style={{ background: "#151515" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
             <div>
@@ -190,12 +190,12 @@ export default async function AboutPage() {
       </div>
 
       {/* ── Values ────────────────────────────── */}
-      <div style={{ background: "#141b2d", borderTop: "1px solid rgba(255,255,255,0.05)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+      <div style={{ background: "#1A1A19", borderTop: "1px solid rgba(255,255,255,0.05)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-12" style={{ color: "#f97316" }}>
             What We Stand For
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 divide-y divide-white/[0.06] md:divide-y-0 md:divide-x md:divide-white/[0.06]" style={{ border: "1px solid rgba(255,255,255,0.07)", borderRadius: "16px", overflow: "hidden" }}>
+          <div className="grid grid-cols-1 md:grid-cols-3 divide-y divide-white/[0.06] md:divide-y-0 md:divide-x md:divide-white/[0.06]" style={{ border: "1px solid var(--border-color)", borderRadius: "16px", overflow: "hidden" }}>
             {values.map((v) => (
               <div key={v.heading} className="p-8 md:p-10" style={{ background: "var(--bg-card)" }}>
                 <div className="w-8 h-[2px] mb-6" style={{ background: "#f97316" }} />
@@ -208,7 +208,7 @@ export default async function AboutPage() {
       </div>
 
       {/* ── Offices ───────────────────────────── */}
-      <div className="py-20" style={{ background: "#0f1620" }}>
+      <div className="py-20" style={{ background: "#151515" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold mb-10" style={{ color: "#ffffff" }}>Regional Offices</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -216,7 +216,7 @@ export default async function AboutPage() {
               { region: "West Office", city: "Ladysmith, British Columbia", contact: "Cleve Stordy", email: "cleve.stordy@hubss.com", phone: "604-309-8212", provinces: ["BC", "AB", "SK", "NT", "YT", "NU"] },
               { region: "East Office", city: "Milton, Ontario", contact: "Doug Bain", email: "doug.bain@hubss.com", phone: "416-540-9287", provinces: ["ON", "QC", "NS", "NB", "PE", "NL", "MB"] },
             ].map((office) => (
-              <div key={office.region} className="p-8 rounded-xl relative overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid rgba(255,255,255,0.07)" }}>
+              <div key={office.region} className="p-8 rounded-xl relative overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}>
                 <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "#f97316" }} />
                 <p className="text-xs font-semibold tracking-widest uppercase mb-3" style={{ color: "#f97316" }}>{office.region}</p>
                 <h3 className="text-xl font-bold mb-1" style={{ color: "#ffffff" }}>{office.city}</h3>
@@ -236,12 +236,12 @@ export default async function AboutPage() {
       </div>
 
       {/* ── Why HUB ───────────────────────────── */}
-      <div className="py-28" style={{ background: "#0d1117" }}>
+      <div className="py-28" style={{ background: "#101010" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold mb-12" style={{ color: "#ffffff" }}>Why HUB</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {differentiators.map((d) => (
-              <div key={d.title} className="p-8 rounded-xl" style={{ background: "var(--bg-card)", border: "1px solid rgba(255,255,255,0.07)" }}>
+              <div key={d.title} className="p-8 rounded-xl" style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}>
                 <div className="w-8 h-0.5 mb-5" style={{ background: "#f97316" }} />
                 <h3 className="font-bold text-lg mb-3" style={{ color: "#ffffff" }}>{d.title}</h3>
                 <p className="text-[15px] leading-relaxed" style={{ color: "#8b8b8b" }}>{d.desc}</p>
@@ -252,7 +252,7 @@ export default async function AboutPage() {
       </div>
 
       {/* ── Manufacturer Partners ────────────────────── */}
-      <div className="py-20" style={{ background: "#0f1620" }}>
+      <div className="py-20" style={{ background: "#151515" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "#f97316" }}>Manufacturer Partners</p>
           <h2 className="text-3xl font-bold mb-6" style={{ color: "#ffffff" }}>Backed by Industry Leaders</h2>
@@ -264,9 +264,9 @@ export default async function AboutPage() {
               { name: "GAF",         key: "gaf",         sub: "",                logo: "/images/partners/gaf-logo.png", logoW: 80, logoH: 40, products: ["StreetBond", "StreetBondSR", "DuraShield", "MMAX"],                                                  desc: partnerDesc("gaf"),         accent: "#E05C1A" },
               { name: "Ennis-Flint", key: "ennis-flint", sub: "A PPG Company",   logo: "/images/partners/ppg-logo.svg", logoW: 80, logoH: 40, products: ["TrafficPatterns", "TrafficPatternsXD", "PreMark", "AirMark", "DuraTherm", "DecoMark"],          desc: partnerDesc("ennis-flint"), accent: "#0057A8" },
             ].map((partner) => (
-              <div key={partner.name} className="rounded-xl relative overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid rgba(255,255,255,0.07)" }}>
+              <div key={partner.name} className="rounded-xl relative overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}>
                 <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: partner.accent }} />
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-5 sm:px-8 py-5 sm:py-6" style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-5 sm:px-8 py-5 sm:py-6" style={{ borderBottom: "1px solid var(--border-color)" }}>
                   <div className="flex items-center justify-center rounded-lg flex-shrink-0" style={{ background: "#ffffff", width: 100, height: 52, padding: "8px 14px" }}>
                     <Image src={partner.logo} width={partner.logoW} height={partner.logoH} alt={partner.name} style={{ maxHeight: 32, width: "auto", objectFit: "contain" }} unoptimized />
                   </div>

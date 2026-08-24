@@ -13,6 +13,7 @@ import { familiesFor, colourSectionFor } from "@/lib/colours";
 import { galleryFor, altFor } from "@/lib/asset-scan";
 import GalleryGrid, { type GalleryImage } from "@/components/ui/GalleryGrid";
 import JsonLd from "@/components/ui/JsonLd";
+import { imageObject, seoCaption } from "@/lib/image-seo";
 import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
 import { productImages, resolveImage } from "@/lib/featured-images";
@@ -78,7 +79,11 @@ export default async function ProductPage({ params }: Props) {
   const gallery: GalleryImage[] = gallerySources.map((src) => ({
     src,
     alt: altFor(src, `${product.name} decorative pavement by HUB Surface Systems`),
-    caption: altFor(src, product.name),
+    // A caption that repeats the alt word for word is wasted surface. This one
+    // is written for a reader looking at the photo in the lightbox — and
+    // visible text beside an image is weighted more heavily by Google Images
+    // and by AI crawlers than the alt attribute is.
+    caption: seoCaption(src) ?? altFor(src, product.name),
   }));
 
   const relatedAppData = product.relatedApplications
@@ -97,13 +102,43 @@ export default async function ProductPage({ params }: Props) {
     description: product.description,
     brand: { "@type": "Brand", name: "HUB Surface Systems" },
     url: `https://hubss.com/products/${product.slug}`,
-    image: heroImageUrl,
+    // `image` used to be a bare URL string. Google accepts that, but a bare
+    // string carries no caption, no credit, no licence and no keywords — so
+    // the photo was eligible for a rich result and nothing else. As ImageObject
+    // nodes each photo arrives with the words that describe it and the licence
+    // terms that make it eligible for the Licensable badge in Google Images.
+    // First entry is the hero, which is what a rich result will show.
+    image: [
+      imageObject(featuredImg?.src ?? product.imageUrl, { representativeOfPage: true }),
+      ...gallerySources.slice(1, 12).map((src) => imageObject(src)),
+    ],
     manufacturer: {
       "@type": "Organization",
       "@id": "https://hubss.com/#organization",
       name: "HUB Surface Systems",
     },
   };
+
+  /**
+   * The gallery as an addressable collection. Without this the photographs are
+   * loose <img> elements that happen to share a page; with it they are a named
+   * set about a named subject, which is the shape an AI crawler can actually
+   * cite ("HUB's TrafficPatternsXD installation photographs") rather than
+   * merely scrape.
+   */
+  const gallerySchema = gallery.length > 1 ? {
+    "@context": "https://schema.org",
+    "@type": "ImageGallery",
+    "@id": `https://hubss.com/products/${product.slug}#gallery`,
+    name: `${product.name} installation photographs`,
+    description: `Field photography of ${product.name} installations by HUB Surface Systems across Canada.`,
+    url: `https://hubss.com/products/${product.slug}`,
+    isPartOf: { "@id": `https://hubss.com/products/${product.slug}` },
+    numberOfItems: gallery.length,
+    associatedMedia: gallery
+      .slice(0, 40)
+      .map((g) => imageObject(g.src, { alt: g.alt, caption: g.caption })),
+  } : null;
 
   const breadcrumbSchema = {
     "@context": "https://schema.org",
@@ -119,6 +154,7 @@ export default async function ProductPage({ params }: Props) {
     <main style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
       <JsonLd data={productSchema} />
       <JsonLd data={breadcrumbSchema} />
+      {gallerySchema && <JsonLd data={gallerySchema} />}
       <Nav />
 
       {/* Hero banner */}

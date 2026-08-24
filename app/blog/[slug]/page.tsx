@@ -123,7 +123,7 @@ export default async function BlogPostPage({ params }: Props) {
   });
 
   return (
-    <main className="min-h-screen" style={{ background: "#080d16" }}>
+    <main className="min-h-screen" style={{ background: "#101010" }}>
       <JsonLd data={articleSchema} />
       <JsonLd data={breadcrumbSchema} />
       <Nav />
@@ -140,7 +140,7 @@ export default async function BlogPostPage({ params }: Props) {
             sizes="100vw"
           />
         ) : (
-          <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, #0d1117 0%, #1a1e2e 100%)" }} />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, #101010 0%, #20201F 100%)" }} />
         )}
 
         {/* Multi-layer gradient for editorial depth */}
@@ -259,7 +259,7 @@ export default async function BlogPostPage({ params }: Props) {
             {/* Author card */}
             <div style={{
               background: "rgba(255,255,255,0.025)",
-              border: "1px solid rgba(255,255,255,0.07)",
+              border: "1px solid var(--border-color)",
               borderRadius: 12,
               padding: "20px",
               marginBottom: 24,
@@ -295,7 +295,7 @@ export default async function BlogPostPage({ params }: Props) {
                   target="_blank" rel="noopener noreferrer"
                   style={{
                     display: "flex", alignItems: "center", gap: 8, padding: "8px 12px",
-                    background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.07)",
+                    background: "rgba(255,255,255,0.05)", border: "1px solid var(--border-color)",
                     borderRadius: 8, color: "#9CA3AF", fontSize: 12, fontWeight: 600, textDecoration: "none",
                     transition: "border-color 0.2s",
                   }}
@@ -308,7 +308,7 @@ export default async function BlogPostPage({ params }: Props) {
                   target="_blank" rel="noopener noreferrer"
                   style={{
                     display: "flex", alignItems: "center", gap: 8, padding: "8px 12px",
-                    background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.07)",
+                    background: "rgba(255,255,255,0.05)", border: "1px solid var(--border-color)",
                     borderRadius: 8, color: "#9CA3AF", fontSize: 12, fontWeight: 600, textDecoration: "none",
                   }}
                 >
@@ -327,7 +327,7 @@ export default async function BlogPostPage({ params }: Props) {
       <PostConversion post={post} type={type} />
 
       {/* ── Related posts ──────────────────────── */}
-      <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)", background: "#0c0c0c" }}>
+      <div style={{ borderTop: "1px solid var(--border-color)", background: "#0c0c0c" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
           <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#F97316", marginBottom: 20 }}>
             Continue Reading

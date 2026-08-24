@@ -3,6 +3,7 @@ import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
 import { projects } from "@/lib/projects";
 import { getAllPosts } from "@/lib/mdx";
+import { FIELD_NOTE_TYPES } from "@/lib/field-notes-taxonomy";
 import { productImages, applicationImages, resolveImage } from "@/lib/featured-images";
 
 const BASE_URL = "https://hubss.com";
@@ -34,6 +35,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/gallery`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
     { url: `${BASE_URL}/patterns`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE_URL}/blog`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
+    // Field Notes type hubs (Aug 2026) — each is an indexable collection page
+    // carrying its own CollectionPage/ItemList schema, so they belong in the
+    // sitemap alongside /blog rather than being discovered only by crawl.
+    ...FIELD_NOTE_TYPES.map((t) => ({
+      url: `${BASE_URL}/blog/${t.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.75,
+    })),
     { url: `${BASE_URL}/resources`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE_URL}/about`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.6 },
     { url: `${BASE_URL}/contact`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.6 },

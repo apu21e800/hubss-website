@@ -128,7 +128,7 @@ export default async function AboutPage() {
       </div>
 
       {/* ── Stats Bar ───────────────────────── */}
-      <div style={{ background: "#141b2d", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+      <div style={{ background: "#141b2d", borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/[0.06]">
             {stats.map((s) => (
@@ -195,7 +195,7 @@ export default async function AboutPage() {
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-12" style={{ color: "#f97316" }}>
             What We Stand For
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 divide-y divide-white/[0.06] md:divide-y-0 md:divide-x md:divide-white/[0.06]" style={{ border: "1px solid rgba(255,255,255,0.06)", borderRadius: "16px", overflow: "hidden" }}>
+          <div className="grid grid-cols-1 md:grid-cols-3 divide-y divide-white/[0.06] md:divide-y-0 md:divide-x md:divide-white/[0.06]" style={{ border: "1px solid rgba(255,255,255,0.07)", borderRadius: "16px", overflow: "hidden" }}>
             {values.map((v) => (
               <div key={v.heading} className="p-8 md:p-10" style={{ background: "var(--bg-card)" }}>
                 <div className="w-8 h-[2px] mb-6" style={{ background: "#f97316" }} />
@@ -226,8 +226,8 @@ export default async function AboutPage() {
                     <span key={prov} className="text-xs font-bold px-2 py-0.5 rounded" style={{ background: "rgba(249,115,22,0.10)", color: "#f97316", border: "1px solid rgba(249,115,22,0.20)" }}>{prov}</span>
                   ))}
                 </div>
-                <a href={`mailto:${office.email}`} className="text-sm block mb-1.5 transition-colors hover:text-[#f97316]" style={{ color: "#e0e0e0" }}>{office.email}</a>
-                <a href={`tel:${office.phone.replace(/-/g, "")}`} className="text-sm transition-colors hover:text-[#f97316]" style={{ color: "#e0e0e0" }}>{office.phone}</a>
+                <a href={`mailto:${office.email}`} className="text-sm flex items-center transition-colors hover:text-[#f97316]" style={{ color: "#e0e0e0", minHeight: 40 }}>{office.email}</a>
+                <a href={`tel:${office.phone.replace(/-/g, "")}`} className="text-sm flex items-center transition-colors hover:text-[#f97316]" style={{ color: "#e0e0e0", minHeight: 40 }}>{office.phone}</a>
               </div>
             ))}
           </div>
@@ -266,7 +266,7 @@ export default async function AboutPage() {
             ].map((partner) => (
               <div key={partner.name} className="rounded-xl relative overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid rgba(255,255,255,0.07)" }}>
                 <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: partner.accent }} />
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-5 sm:px-8 py-5 sm:py-6" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-5 sm:px-8 py-5 sm:py-6" style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
                   <div className="flex items-center justify-center rounded-lg flex-shrink-0" style={{ background: "#ffffff", width: 100, height: 52, padding: "8px 14px" }}>
                     <Image src={partner.logo} width={partner.logoW} height={partner.logoH} alt={partner.name} style={{ maxHeight: 32, width: "auto", objectFit: "contain" }} unoptimized />
                   </div>

@@ -169,6 +169,7 @@ export default async function BlogPostPage({ params }: Props) {
                   padding: "5px 12px", borderRadius: 4,
                   backdropFilter: "blur(6px)",
                   textDecoration: "none",
+                  display: "inline-flex", alignItems: "center", minHeight: 40,
                 }}
               >
                 {post.category}

@@ -197,12 +197,15 @@ export default function GalleryPage() {
               <button
                 key={cat.value}
                 onClick={() => { setActive(cat.value); setLightbox(null); setVisible(PAGE); }}
-                className="flex items-center gap-1.5 text-xs font-semibold px-4 py-2 rounded-full transition-all whitespace-nowrap"
+                className="flex items-center gap-1.5 text-xs font-semibold px-4 rounded-full transition-all whitespace-nowrap"
                 style={{
                   background: isActive ? "#F97316" : "rgba(255,255,255,0.05)",
                   color: isActive ? "#fff" : "#9ca3af",
                   border: "1px solid",
                   borderColor: isActive ? "#F97316" : "rgba(255,255,255,0.1)",
+                  // 44px floor — these were 35px tall, and category filters are
+                  // the first thing a phone user reaches for on this page.
+                  minHeight: 44,
                 }}
               >
                 {cat.label}

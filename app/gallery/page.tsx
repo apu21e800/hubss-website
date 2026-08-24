@@ -64,7 +64,7 @@ const IMAGES: GalleryImage[] = [
   { src: "/images/applications/bus-lanes/bus-lanes-39.png", alt: "Red Resin Bus Lane", category: "transit", location: "Ontario", tall: true },
   { src: "/images/applications/bus-lanes/bus-lanes-40.png", alt: "MMA Bus Lane", category: "transit", location: "Canada" },
 
-  // ── Community Branding ──────────────────────────────────────────────────────
+  // ── Community Branding ────────────────────────────────────────────────────
   { src: "/images/blog/branded-crosswalks-vancouver-richmond/featured.jpg", alt: "Branded Crosswalks", category: "community", location: "Vancouver, BC", tall: true },
   { src: "/images/blog/community-branding-case-study/featured.jpg", alt: "Community Branding", category: "community", location: "Ontario" },
   { src: "/images/blog/simcoe-rainbow-crosswalk/featured.jpg", alt: "Rainbow Crosswalk", category: "community", location: "Simcoe, ON" },
@@ -102,7 +102,7 @@ const IMAGES: GalleryImage[] = [
   { src: "/images/applications/sport-courts/sport-courts-05.jpg", alt: "Coloured Sport Court", category: "recreation", location: "Ontario", tall: true },
   { src: "/images/applications/sport-courts/sport-courts-10.jpg", alt: "Multi-Sport Court", category: "recreation", location: "Canada" },
 
-  // ── Parking ───────────────────────────────────────────────────────────────────
+  // ── Parking ─────────────────────────────────────────────────────────────────────
   { src: "/images/blog/stamped-asphalt-parking-lot/featured.jpg", alt: "Stamped Asphalt Parking Lot", category: "parking", location: "Ontario", tall: true },
   { src: "/images/blog/commercial-applications/featured.jpg", alt: "Commercial Pavement", category: "parking", location: "Canada" },
   { src: "/images/applications/townhomes/townhomes-01.jpg", alt: "Townhome Driveway", category: "parking", location: "Ontario" },
@@ -119,7 +119,7 @@ const CATEGORIES: { value: Category; label: string; count: (imgs: GalleryImage[]
   { value: "parking", label: "Parking & Driveways", count: (imgs) => imgs.filter(i => i.category === "parking").length },
 ];
 
-// ── Lightbox ─────────────────────────────────────────────────────────────────────
+// ── Lightbox ─────────────────────────────────────────────────────────────────────────
 function Lightbox({
   images,
   index,
@@ -221,7 +221,7 @@ function Lightbox({
   );
 }
 
-// ── Main Gallery Page ───────────────────────────────────────────────────────────────
+// ── Main Gallery Page ─────────────────────────────────────────────────────────────────
 // Vernon (Aug 2026): break up how many images load at once. The archive was
 // rendering all photos in one 10,800px wall. Now: first PAGE, then +PAGE
 // as you approach the end — auto-load is right HERE (only the footer sits
@@ -374,7 +374,7 @@ export default function GalleryPage() {
                 >
                   <Image
                     src={img.src}
-                    alt={img.alt}
+                    alt={`${img.alt} — ${img.location} — decorative pavement by HUB Surface Systems`}
                     fill
                     loading={i < 8 ? "eager" : "lazy"}
                     className="object-cover transition-transform duration-500 group-hover:scale-105"

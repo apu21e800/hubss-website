@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
+import PhotoLightbox from "@/components/ui/PhotoLightbox";
 
 type Category = "all" | "crosswalks" | "transit" | "community" | "parks" | "recreation" | "parking";
 
@@ -64,7 +65,7 @@ const IMAGES: GalleryImage[] = [
   { src: "/images/applications/bus-lanes/bus-lanes-39.png", alt: "Red Resin Bus Lane", category: "transit", location: "Ontario", tall: true },
   { src: "/images/applications/bus-lanes/bus-lanes-40.png", alt: "MMA Bus Lane", category: "transit", location: "Canada" },
 
-  // ── Community Branding ────────────────────────────────────────────────────
+  // ── Community Branding ──────────────────────────────────────────────────
   { src: "/images/blog/branded-crosswalks-vancouver-richmond/featured.jpg", alt: "Branded Crosswalks", category: "community", location: "Vancouver, BC", tall: true },
   { src: "/images/blog/community-branding-case-study/featured.jpg", alt: "Community Branding", category: "community", location: "Ontario" },
   { src: "/images/blog/simcoe-rainbow-crosswalk/featured.jpg", alt: "Rainbow Crosswalk", category: "community", location: "Simcoe, ON" },
@@ -119,109 +120,7 @@ const CATEGORIES: { value: Category; label: string; count: (imgs: GalleryImage[]
   { value: "parking", label: "Parking & Driveways", count: (imgs) => imgs.filter(i => i.category === "parking").length },
 ];
 
-// ── Lightbox ─────────────────────────────────────────────────────────────────────────
-function Lightbox({
-  images,
-  index,
-  onClose,
-  onPrev,
-  onNext,
-}: {
-  images: GalleryImage[];
-  index: number;
-  onClose: () => void;
-  onPrev: () => void;
-  onNext: () => void;
-}) {
-  const img = images[index];
-
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-      if (e.key === "ArrowLeft") onPrev();
-      if (e.key === "ArrowRight") onNext();
-    };
-    document.addEventListener("keydown", handler);
-    return () => document.removeEventListener("keydown", handler);
-  }, [onClose, onPrev, onNext]);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.2 }}
-      className="fixed inset-0 z-[9999] flex items-center justify-center"
-      style={{ background: "rgba(0,0,0,0.93)", backdropFilter: "blur(16px)" }}
-      onClick={onClose}
-    >
-      {/* Close */}
-      <button
-        onClick={onClose}
-        className="absolute top-5 right-5 z-10 p-2.5 rounded-full"
-        style={{ background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.7)" }}
-      >
-        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path d="M18 6L6 18M6 6l12 12" strokeWidth={2} strokeLinecap="round" />
-        </svg>
-      </button>
-
-      {/* Prev */}
-      <button
-        onClick={(e) => { e.stopPropagation(); onPrev(); }}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-10 p-3 rounded-full"
-        style={{ background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.7)" }}
-      >
-        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path d="M15 18l-6-6 6-6" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </button>
-
-      {/* Image */}
-      <motion.div
-        key={index}
-        initial={{ opacity: 0, scale: 0.97 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.2 }}
-        className="relative mx-16 w-full max-w-5xl"
-        style={{ maxHeight: "85vh", aspectRatio: "16/9" }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <Image
-          src={img.src}
-          alt={img.alt}
-          fill
-          className="object-contain"
-          sizes="90vw"
-          priority
-        />
-        {/* Caption */}
-        <div className="absolute bottom-0 left-0 right-0 pt-12 pb-4 px-4 text-center" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%)" }}>
-          <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>{img.alt}</p>
-          <p className="text-xs mt-0.5" style={{ color: "rgba(255,255,255,0.5)" }}>{img.location}</p>
-        </div>
-      </motion.div>
-
-      {/* Next */}
-      <button
-        onClick={(e) => { e.stopPropagation(); onNext(); }}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-10 p-3 rounded-full"
-        style={{ background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.7)" }}
-      >
-        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path d="M9 18l6-6-6-6" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </button>
-
-      {/* Counter */}
-      <div className="absolute bottom-5 left-1/2 -translate-x-1/2 text-xs font-mono" style={{ color: "rgba(255,255,255,0.35)" }}>
-        {index + 1} / {images.length}
-      </div>
-    </motion.div>
-  );
-}
-
-// ── Main Gallery Page ─────────────────────────────────────────────────────────────────
+// ── Main Gallery Page ───────────────────────────────────────────────────────────────────────
 // Vernon (Aug 2026): break up how many images load at once. The archive was
 // rendering all photos in one 10,800px wall. Now: first PAGE, then +PAGE
 // as you approach the end — auto-load is right HERE (only the footer sits
@@ -260,18 +159,7 @@ export default function GalleryPage() {
 
   const openLightbox = useCallback((i: number) => setLightbox(i), []);
   const closeLightbox = useCallback(() => setLightbox(null), []);
-  const prevImage = useCallback(() => setLightbox((i) => (i === null ? null : (i - 1 + filtered.length) % filtered.length)), [filtered.length]);
-  const nextImage = useCallback(() => setLightbox((i) => (i === null ? null : (i + 1) % filtered.length)), [filtered.length]);
 
-  // Lock body scroll when lightbox is open
-  useEffect(() => {
-    if (lightbox !== null) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => { document.body.style.overflow = ""; };
-  }, [lightbox]);
 
   return (
     <main style={{ background: "#0a0e17", minHeight: "100vh" }}>
@@ -428,18 +316,17 @@ export default function GalleryPage() {
 
       <Footer />
 
-      {/* Lightbox */}
-      <AnimatePresence>
-        {lightbox !== null && (
-          <Lightbox
-            images={filtered}
-            index={lightbox}
-            onClose={closeLightbox}
-            onPrev={prevImage}
-            onNext={nextImage}
-          />
-        )}
-      </AnimatePresence>
+      {/* Lightbox — shared cinematic viewer */}
+      <PhotoLightbox
+        photos={filtered.map((img) => ({
+          src: img.src,
+          alt: img.alt,
+          caption: `${img.alt} — ${img.location}`,
+        }))}
+        index={lightbox ?? -1}
+        onClose={closeLightbox}
+        onIndexChange={(i) => setLightbox(i)}
+      />
     </main>
   );
 }

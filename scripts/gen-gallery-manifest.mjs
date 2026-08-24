@@ -14,7 +14,9 @@
  */
 import * as fs from "fs";
 import * as path from "path";
+import { createHash } from "crypto";
 import { CROSSPOSTS } from "../lib/gallery-crossposts.mjs";
+import { NEAR_DUPES } from "../lib/gallery-near-dupes.mjs";
 
 const ROOT = process.cwd();
 const PUB = path.join(ROOT, "public");
@@ -66,10 +68,42 @@ if (crossMissing.length) {
   for (const m of crossMissing.slice(0, 10)) console.warn(`  ${m}`);
 }
 
+// ── Image-hygiene pass (Aug 2026 — Vernon: "look for duplicate images in all
+// galleries and fix them") ──────────────────────────────────────
+//
+// 1. CONTENT dedupe: the same photo often exists as a physical copy under two
+//    names (decomark-07.jpg == playgrounds-19.jpg), and cross-posting then
+//    served both into ONE gallery. De-duplicating by md5 per gallery keeps the
+//    first occurrence (folder order, then cross-posts) and drops the rest —
+//    117 within-gallery duplicate sets at the time of writing, self-healing
+//    for any future copies.
+// 2. NEAR dupes: re-encoded/resized copies have different bytes but the same
+//    picture. Those can't be hashed away byte-wise; lib/gallery-near-dupes.mjs
+//    carries the perceptual-hash sweep's verdicts as basenames to drop.
+const md5Of = (abs) => createHash("md5").update(fs.readFileSync(abs)).digest("hex");
+let dupesDropped = 0;
+let nearDropped = 0;
+for (const [key, paths] of Object.entries(manifest)) {
+  const nearSet = new Set((NEAR_DUPES[key] ?? []).map((b) => b.toLowerCase()));
+  const seen = new Set();
+  const kept = [];
+  for (const rel of paths) {
+    const base = rel.slice(rel.lastIndexOf("/") + 1).toLowerCase();
+    if (nearSet.has(base)) { nearDropped++; continue; }
+    const abs = path.join(PUB, rel.replace(/^\/+/, ""));
+    let h;
+    try { h = md5Of(abs); } catch { kept.push(rel); continue; }
+    if (seen.has(h)) { dupesDropped++; continue; }
+    seen.add(h);
+    kept.push(rel);
+  }
+  manifest[key] = kept;
+}
+
 fs.mkdirSync(path.dirname(OUT), { recursive: true });
 fs.writeFileSync(OUT, JSON.stringify(manifest, null, 0));
 const total = Object.values(manifest).reduce((n, a) => n + a.length, 0);
 console.log(
   `gallery-manifest: ${Object.keys(manifest).length} galleries, ${total} images ` +
-  `(${total - crossAdded} from folders + ${crossAdded} cross-posted)`
+  `(${crossAdded} cross-posted; dropped ${dupesDropped} byte-duplicates + ${nearDropped} near-duplicates)`
 );

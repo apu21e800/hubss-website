@@ -43,6 +43,15 @@ const PRODUCT_COUNTS: [string, number][] = (() => {
   return Object.entries(c).sort((a, b) => b[1] - a[1]);
 })();
 
+// Application filter options — second filter dimension (Vernon: "improve the
+// filter system"). Lives as a compact select beside search, NOT a third chip
+// row — the chip rows are locked to one line each.
+const APPLICATION_COUNTS: [string, number][] = (() => {
+  const c: Record<string, number> = {};
+  for (const p of mapProjects) c[p.application] = (c[p.application] ?? 0) + 1;
+  return Object.entries(c).sort((a, b) => b[1] - a[1]);
+})();
+
 // Province display order: west → east, the way the section's copy reads.
 const PROVINCE_ORDER = ["BC", "AB", "SK", "MB", "ON", "QC", "NB", "NS", "PE", "NL"];
 const PROVINCE_LABEL: Record<string, string> = {
@@ -245,7 +254,7 @@ function PanelCard({
         <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 3 }}>
           <span
             style={{
-              fontSize: 9,
+              fontSize: 11,
               fontWeight: 700,
               letterSpacing: "0.1em",
               textTransform: "uppercase",
@@ -646,6 +655,10 @@ function FilterChip({
         alignItems: "center",
         gap: 6,
         padding: "6px 12px",
+        // 44px floor: these province chips are the map's primary control and
+        // sat at 34px, under the iOS minimum. Padding alone kept them short
+        // because the label is a single 11.5px line.
+        minHeight: 44,
         borderRadius: 20,
         border: active
           ? "1px solid rgba(249,115,22,0.65)"
@@ -698,6 +711,7 @@ export default function CanadaMap() {
   const [visibleProjects, setVisibleProjects] = useState<MapProject[]>(mapProjects);
   const [searchQuery, setSearchQuery] = useState("");
   const [productFilter, setProductFilter] = useState<string | null>(null);
+  const [appFilter, setAppFilter] = useState<string | null>(null);
   const [provinceFocus, setProvinceFocus] = useState<string | null>(null);
   const [viewMoved, setViewMoved] = useState(false);
   const [styleFailed, setStyleFailed] = useState(false);
@@ -713,11 +727,13 @@ export default function CanadaMap() {
   }, []);
   const popupClearTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // ── Product filter drives the pins themselves ──────────────────
-  const filteredProjects = useMemo(
-    () => (productFilter ? mapProjects.filter((p) => p.product === productFilter) : mapProjects),
-    [productFilter]
-  );
+  // ── Product + application filters drive the pins themselves ───────────
+  const filteredProjects = useMemo(() => {
+    let base = mapProjects;
+    if (productFilter) base = base.filter((p) => p.product === productFilter);
+    if (appFilter) base = base.filter((p) => p.application === appFilter);
+    return base;
+  }, [productFilter, appFilter]);
 
   const projectsGeoJSON = useMemo<FeatureCollection<Point>>(
     () => ({
@@ -778,8 +794,10 @@ export default function CanadaMap() {
             p.application.toLowerCase().includes(q)
         )
       : visibleProjects;
-    return productFilter ? base.filter((p) => p.product === productFilter) : base;
-  }, [searchQuery, visibleProjects, productFilter]);
+    let out = productFilter ? base.filter((p) => p.product === productFilter) : base;
+    if (appFilter) out = out.filter((p) => p.application === appFilter);
+    return out;
+  }, [searchQuery, visibleProjects, productFilter, appFilter]);
 
   // ── Update panel list based on map bounds ──────────────────────────────
   const updateVisibleProjects = useCallback(() => {
@@ -825,6 +843,12 @@ export default function CanadaMap() {
     },
     [filteredProjects, resetView]
   );
+
+  const handleAppFilter = useCallback((application: string | null) => {
+    setAppFilter(application);
+    setPopupProject(null);
+    setPinned(false);
+  }, [setPinned]);
 
   const handleProductFilter = useCallback(
     (product: string | null) => {
@@ -984,9 +1008,10 @@ export default function CanadaMap() {
   useEffect(() => {
     function handleOffSectionClick(e: MouseEvent) {
       if (selectedProject) return; // modal backdrop is outside the section
-      if (!viewMoved && !provinceFocus && !productFilter) return;
+      if (!viewMoved && !provinceFocus && !productFilter && !appFilter) return;
       if (sectionRef.current && !sectionRef.current.contains(e.target as Node)) {
         setProductFilter(null);
+        setAppFilter(null);
         setSearchQuery("");
         setPopupProject(null);
         setPinned(false);
@@ -995,7 +1020,7 @@ export default function CanadaMap() {
     }
     document.addEventListener("mousedown", handleOffSectionClick);
     return () => document.removeEventListener("mousedown", handleOffSectionClick);
-  }, [selectedProject, viewMoved, provinceFocus, productFilter, resetView]);
+  }, [selectedProject, viewMoved, provinceFocus, productFilter, appFilter, resetView]);
 
   const handleCloseModal = useCallback(() => {
     setSelectedProject(null);
@@ -1410,7 +1435,7 @@ export default function CanadaMap() {
                         <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8, flexWrap: "wrap" }}>
                           <span
                             style={{
-                              fontSize: 9,
+                              fontSize: 11,
                               fontWeight: 700,
                               letterSpacing: "0.13em",
                               textTransform: "uppercase",
@@ -1425,7 +1450,7 @@ export default function CanadaMap() {
                           </span>
                           <span
                             style={{
-                              fontSize: 9,
+                              fontSize: 11,
                               fontWeight: 600,
                               letterSpacing: "0.1em",
                               textTransform: "uppercase",
@@ -1736,6 +1761,35 @@ export default function CanadaMap() {
                     </button>
                   )}
                 </div>
+
+                {/* Application filter — second dimension, compact select */}
+                <select
+                  value={appFilter ?? ""}
+                  onChange={(e) => handleAppFilter(e.target.value || null)}
+                  aria-label="Filter by application" data-tap="44"
+                  style={{
+                    width: "100%",
+                    marginTop: 6,
+                    padding: "7px 10px",
+                    background: appFilter ? "rgba(249,115,22,0.1)" : "rgba(255,255,255,0.05)",
+                    border: appFilter
+                      ? "1px solid rgba(249,115,22,0.4)"
+                      : "1px solid rgba(255,255,255,0.1)",
+                    borderRadius: 9,
+                    color: appFilter ? "#FDBA74" : "#9CA3AF",
+                    fontSize: 12,
+                    outline: "none",
+                    cursor: "pointer",
+                    transition: "border-color 0.15s ease",
+                  }}
+                >
+                  <option value="">All applications</option>
+                  {APPLICATION_COUNTS.map(([app, count]) => (
+                    <option key={app} value={app}>
+                      {app} ({count})
+                    </option>
+                  ))}
+                </select>
               </div>
 
               {/* Scrollable project list */}
@@ -1947,6 +2001,33 @@ export default function CanadaMap() {
               )}
             </div>
 
+            {/* Mobile application filter */}
+            <select
+              value={appFilter ?? ""}
+              onChange={(e) => handleAppFilter(e.target.value || null)}
+              aria-label="Filter by application" data-tap="44"
+              style={{
+                width: "100%",
+                marginBottom: 10,
+                padding: "9px 12px",
+                background: appFilter ? "rgba(249,115,22,0.1)" : "rgba(255,255,255,0.05)",
+                border: appFilter
+                  ? "1px solid rgba(249,115,22,0.4)"
+                  : "1px solid rgba(255,255,255,0.1)",
+                borderRadius: 10,
+                color: appFilter ? "#FDBA74" : "#9CA3AF",
+                fontSize: 13,
+                outline: "none",
+              }}
+            >
+              <option value="">All applications</option>
+              {APPLICATION_COUNTS.map(([app, count]) => (
+                <option key={app} value={app}>
+                  {app} ({count})
+                </option>
+              ))}
+            </select>
+
             {/* Horizontal snap cards */}
             <div
               className="canada-map-strip-scroll"
@@ -2028,7 +2109,7 @@ export default function CanadaMap() {
                       <span
                         style={{
                           display: "block",
-                          fontSize: 9,
+                          fontSize: 11,
                           fontWeight: 700,
                           letterSpacing: "0.1em",
                           textTransform: "uppercase",

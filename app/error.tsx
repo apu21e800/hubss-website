@@ -15,7 +15,7 @@ export default function GlobalError({ error, reset }: ErrorProps) {
   }, [error]);
 
   return (
-    <main style={{ background: "#070b12", minHeight: "100vh" }}>
+    <main style={{ background: "#0D0D0D", minHeight: "100vh" }}>
       <section
         style={{
           minHeight: "100vh",

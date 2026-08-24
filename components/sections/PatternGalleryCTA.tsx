@@ -26,7 +26,7 @@ export default function PatternGalleryCTA() {
     <Link
       href="/patterns"
       className="group mt-14 flex items-center gap-4 sm:gap-5 rounded-xl px-4 sm:px-5 py-4 transition-all duration-200 ease-out hover:-translate-y-[2px] hover:shadow-[0_8px_24px_-12px_rgba(249,115,22,0.35)]"
-      style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
+      style={{ background: "rgba(255,255,255,0.025)", border: "1px solid var(--border-color)" }}
     >
       {/* Three fanned template sheets — decorative; the text carries the meaning */}
       <div className="relative flex flex-shrink-0 -space-x-4" aria-hidden="true">
@@ -37,7 +37,7 @@ export default function PatternGalleryCTA() {
             style={{
               width: 62,
               height: 48,
-              background: "#151b26",
+              background: "#1A1A19",
               border: "1px solid rgba(255,255,255,0.12)",
               transform: `rotate(${(i - 1) * 4}deg)`,
               zIndex: 3 - i,

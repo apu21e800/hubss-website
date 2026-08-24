@@ -5,6 +5,8 @@ import { projects } from "@/lib/projects";
 import { getAllPosts } from "@/lib/mdx";
 import { FIELD_NOTE_TYPES } from "@/lib/field-notes-taxonomy";
 import { productImages, applicationImages, resolveImage } from "@/lib/featured-images";
+import { galleryFor } from "@/lib/asset-scan";
+import { sitemapImages } from "@/lib/image-seo";
 
 const BASE_URL = "https://hubss.com";
 
@@ -57,8 +59,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     .map((p) => {
       // Use the featured image from featured-images.ts (audited, correct) over the raw imageUrl
       const featured = productImages[p.slug] ? resolveImage(productImages[p.slug]).src : p.imageUrl;
-      // Include first 3 gallery images so Google Image indexes installation photos
-      const galleryImgs = (p.gallery ?? []).slice(0, 3).map(abs);
+      // Every photo in the product's folder, not the first three.
+      //
+      // This is the only route by which most of the library reaches Google
+      // Images. The galleries render seven tiles and load the rest behind a
+      // button, and a crawler never presses the button — so for a folder like
+      // /images/products/traffic-patterns-xd (138 photos) the sitemap was
+      // offering four and hiding 134. Google accepts up to 1,000 image entries
+      // per URL; the largest folder here is 141.
+      const galleryImgs = sitemapImages(galleryFor(featured, p.gallery, `images/products/${p.slug}`));
       const images = [abs(featured), ...galleryImgs].filter((v, i, a) => a.indexOf(v) === i);
       return {
         url: `${BASE_URL}/products/${p.slug}`,
@@ -71,9 +80,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const applicationRoutes: MetadataRoute.Sitemap = applications.map((a) => {
     const featured = applicationImages[a.slug] ? resolveImage(applicationImages[a.slug]).src : a.imageUrl;
-    // Include first 3 gallery images (parity with productRoutes above) so
-    // Google Images indexes real installation photography per application.
-    const galleryImgs = (a.gallery ?? []).slice(0, 3).map(abs);
+    // Full folder, same reasoning as productRoutes above.
+    const galleryImgs = sitemapImages(galleryFor(featured, a.gallery, `images/applications/${a.slug}`));
     const images = [abs(featured), ...galleryImgs].filter((v, i, arr) => arr.indexOf(v) === i);
     return {
       url: `${BASE_URL}/applications/${a.slug}`,

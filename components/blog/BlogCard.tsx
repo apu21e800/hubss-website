@@ -27,7 +27,13 @@ export default function BlogCard({ post }: { post: PostMeta }) {
   return (
     <Link
       href={`/blog/${post.slug}`}
-      className="group flex flex-col overflow-hidden rounded-xl transition-all duration-300 hover:-translate-y-1 bg-[var(--bg-card-neutral)] hover:bg-[var(--bg-card-hover)]"
+      // The card had no border at all — just a fill a few percent off the page,
+      // which on a neutral ground left it reading as a smudge rather than an
+      // object. The hairline is what makes it a card; the orange glow on hover
+      // is the same accent the featured rail uses, so the whole library
+      // responds to the cursor in one language.
+      className="group flex flex-col overflow-hidden rounded-xl transition-all duration-300 hover:-translate-y-1 bg-[var(--bg-card-neutral)] hover:bg-[var(--bg-card-hover)] border hover:border-orange-500/40 hover:shadow-[0_8px_28px_rgba(249,115,22,0.14)]"
+      style={{ borderColor: "var(--border-color)" }}
     >
       {/* Image with gradient overlay */}
       <div className="relative h-52 overflow-hidden flex-shrink-0">

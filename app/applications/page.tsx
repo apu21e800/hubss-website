@@ -15,7 +15,7 @@ export const metadata = buildMetadata({
 export default async function ApplicationsPage() {
   const applications = await getMergedApplications();
   return (
-    <main style={{ background: "#0f1620", minHeight: "100vh" }}>
+    <main style={{ background: "#151515", minHeight: "100vh" }}>
       <Nav />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-16 sm:pb-24">
         <div className="mb-16 max-w-2xl">

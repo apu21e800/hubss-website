@@ -11,7 +11,7 @@ export const metadata = buildMetadata({
 
 export default function NotFound() {
   return (
-    <main style={{ background: "#070b12", minHeight: "100vh" }}>
+    <main style={{ background: "#0D0D0D", minHeight: "100vh" }}>
       <Nav />
       <section
         style={{

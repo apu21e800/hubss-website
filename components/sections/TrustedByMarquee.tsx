@@ -27,9 +27,9 @@ export default function TrustedByMarquee() {
     <section
       className="relative overflow-hidden"
       style={{
-        background: "#070b12",
-        borderTop: "1px solid rgba(255,255,255,0.07)",
-        borderBottom: "1px solid rgba(255,255,255,0.07)",
+        background: "#0D0D0D",
+        borderTop: "1px solid var(--border-color)",
+        borderBottom: "1px solid var(--border-color)",
         paddingTop: "3.25rem",
         paddingBottom: "3.25rem",
       }}

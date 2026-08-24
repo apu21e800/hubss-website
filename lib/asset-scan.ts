@@ -17,6 +17,7 @@
  * Safe to import from server components. No Node built-ins, no side effects.
  */
 import manifest from "./gallery-manifest.json";
+import { seoAlt } from "./image-seo";
 
 const GALLERIES = manifest as Record<string, string[]>;
 
@@ -77,19 +78,32 @@ export function galleryFor(
 }
 
 /**
- * Human alt text from a filename + page context. Numbered series files
- * ("crosswalks-45.jpg") become "<context> — installation photo 45"; named
- * files ("vaughan-woodbridge-crosswalk.jpg") are humanized into title case.
+ * Alt text for a gallery image.
+ *
+ * The first stop is lib/image-seo.ts, which composes a descriptive, keyword-led
+ * sentence from what the folder lets us truthfully say — the application or
+ * product, the class of system HUB specifies for it, the setting, and the
+ * place. That matters because this function is the single source of alt text
+ * for roughly 1,500 photographs: it used to return "<page context> —
+ * installation photo 45", so all 121 photos in /applications/crosswalks
+ * carried near-identical strings containing no phrase anyone would ever type
+ * into a search box. Google Images ranks on the words in and around a picture;
+ * a gallery described 121 times the same way competes for nothing.
+ *
+ * Folders the SEO layer has no documented subject for — blog featured images,
+ * hero art, one-offs — fall back to the original behaviour below: numbered
+ * series files ("crosswalks-45.jpg") become "<context> — installation photo
+ * 45", named files ("vaughan-woodbridge-crosswalk.jpg") are humanized. A
+ * generic true sentence beats a specific invented one.
  */
 export function altFor(src: string, context: string): string {
   const base = basename(src).replace(/\.(jpe?g|png|webp)$/i, "");
   const numbered = base.match(/^(.*?)[-_](\d+)$/);
-  if (numbered) {
-    return `${context} — installation photo ${parseInt(numbered[2], 10)}`;
-  }
-  const human = base
-    .replace(/[-_]+/g, " ")
-    .replace(/\b\w/g, (ch) => ch.toUpperCase())
-    .trim();
-  return `${context} — ${human}`;
+  const fallback = numbered
+    ? `${context} — installation photo ${parseInt(numbered[2], 10)}`
+    : `${context} — ${base
+        .replace(/[-_]+/g, " ")
+        .replace(/\b\w/g, (ch) => ch.toUpperCase())
+        .trim()}`;
+  return seoAlt(src, fallback);
 }

@@ -20,7 +20,7 @@ export default function SystemsInPost({ products }: { products: string[] }) {
     <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-2">
       <div
         className="rounded-xl p-5 sm:p-6"
-        style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.07)" }}
+        style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--border-color)" }}
       >
         <p className="text-[10px] font-bold tracking-[0.2em] uppercase mb-3.5" style={{ color: "#FB923C" }}>
           Systems in this piece

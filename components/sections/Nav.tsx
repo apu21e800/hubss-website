@@ -29,13 +29,13 @@ const COLOUR_ITEMS: { name: string; hex: string; product: string; href: string }
   return out;
 })();
 
-// ── Nav link config ──────────────────────────────────────────────────────────
+// ── Nav link config ────────────────────────────────────────────
 const PLAIN_LINKS = [
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
 
-// ── Search data ──────────────────────────────────────────────────────────────
+// ── Search data ────────────────────────────────────────────────────
 const PAGES = [
   { label: "Field Notes", href: "/blog", desc: "Field notes and industry insights" },
   { label: "About", href: "/about", desc: "Our story and team" },
@@ -53,7 +53,7 @@ const CATEGORIES = [
   { label: "Asphalt Repair", href: "/products", desc: "ChipFill, AggreFill, Fast Patch — permanent cold-mix pothole repair" },
 ];
 
-// ── Search overlay ───────────────────────────────────────────────────────────
+// ── Search overlay ───────────────────────────────────────────────
 function SearchOverlay({ onClose }: { onClose: () => void }) {
   const [query, setQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -233,27 +233,9 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
                   ))}
                 </div>
               )}
-              {matchedColours.length > 0 && (
-                <div className="p-4 border-b" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
-                  <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "rgba(249,115,22,0.7)" }}>Colours</p>
-                  {matchedColours.slice(0, 6).map((c) => (
-                    <button key={c.name} onClick={() => handleResultClick(c.href)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left hover:bg-white/5">
-                      <span className="flex-shrink-0 w-5 h-5 rounded-md" style={{ background: c.hex, border: "1px solid rgba(255,255,255,0.15)" }} />
-                      <div><p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>{c.name}</p><p className="text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>{c.product} colour system</p></div>
-                    </button>
-                  ))}
-                </div>
-              )}
-              {matchedPosts.length > 0 && (
-                <div className="p-4 border-b" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
-                  <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "rgba(249,115,22,0.7)" }}>Field Notes</p>
-                  {matchedPosts.slice(0, 4).map((b) => (
-                    <button key={b.slug} onClick={() => handleResultClick(`/blog/${b.slug}`)} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left hover:bg-white/5">
-                      <div><p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>{b.title}</p><p className="text-xs line-clamp-1" style={{ color: "rgba(255,255,255,0.4)" }}>{b.excerpt}</p></div>
-                    </button>
-                  ))}
-                </div>
-              )}
+              {/* (duplicate Colours + Field Notes blocks removed Aug 2026 —
+                  both sections rendered TWICE whenever they matched, an old
+                  copy-paste artifact found during the Wave-2 token sweep) */}
               {matchedCategories.length > 0 && (
                 <div className="p-4 border-b" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
                   <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "rgba(249,115,22,0.7)" }}>Product Categories</p>
@@ -323,7 +305,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
   );
 }
 
-// ── Product category data ────────────────────────────────────────────────────
+// ── Product category data ────────────────────────────────────────────
 // Each category may carry a `pillarNote` (a short rationale shown when the
 // column would otherwise look thin — e.g. Stamped Asphalt only has one
 // product) and a `secondary` link (a related secondary destination — patterns,
@@ -392,7 +374,7 @@ const PRODUCT_TAGLINE: Record<string, string> = {
   "fast-patch":          "Water-activated cold-mix repair",
 };
 
-// ── Application category groupings for mega menu ─────────────────────────────
+// ── Application category groupings for mega menu ─────────────────────────
 const APPLICATION_GROUPS = [
   {
     label: "Traffic & Safety",
@@ -412,7 +394,7 @@ const APPLICATION_GROUPS = [
   },
 ];
 
-// ── Curated Field Notes for mega menu ────────────────────────────────────────
+// ── Curated Field Notes for mega menu ────────────────────────────────────
 // Hardcoded for client-component context; swap manually when featuring different posts.
 const FEATURED_POSTS = [
   {
@@ -441,17 +423,53 @@ const FEATURED_POSTS = [
   },
 ];
 
-// ── Mega menu — shared shell ─────────────────────────────────────────────────
+// ── Mega menu — shared shell ─────────────────────────────────────────
 // Wide container, generous padding, dark surface, accent top line.
 function MegaShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="max-w-[1480px] mx-auto px-6 lg:px-10 pt-5 pb-3 max-h-[calc(100vh-72px)] overflow-y-auto overscroll-contain">
+    <div className="max-w-[1480px] mx-auto px-6 lg:px-10 pt-5 pb-5 max-h-[calc(100vh-72px)] overflow-y-auto overscroll-contain">
       {children}
     </div>
   );
 }
 
-// ── Full-width Products mega menu ────────────────────────────────────────────
+// ── Lunch & Learn slot — the ONE in-menu CTA (Mega Menu 2.0) ─────────────
+// Doug: the L&L call-to-action should "appear intelligently across the site
+// without being overwhelming." This card is its home inside every mega menu:
+// same position (bottom of the lead column), same quiet weight, every time.
+// The old layout scattered L&L across bottom strips and duplicate rows — those
+// are gone; one consistent slot reads as intentional instead of insistent.
+function LLMenuCard() {
+  return (
+    <Link
+      href="/lunch-learn"
+      className="group flex items-center gap-3 mt-5 px-3.5 py-3 rounded-xl transition-colors hover:bg-white/5"
+      style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(249,115,22,0.22)" }}
+    >
+      <span className="relative flex-shrink-0 w-10 h-10">
+        <span className="absolute inset-0 rounded-full" style={{ background: "rgba(249,115,22,0.14)", border: "1.5px solid rgba(249,115,22,0.45)" }} />
+        <Image
+          src="/images/lunch-learn/moose.png"
+          alt="Moose, the HUB site dog"
+          width={160}
+          height={200}
+          sizes="48px"
+          className="absolute bottom-0 left-1/2 w-auto"
+          style={{ height: "122%", maxWidth: "none", transform: "translateX(-50%)" }}
+        />
+      </span>
+      <span className="flex-1 min-w-0">
+        <span className="block text-[12px] font-bold" style={{ color: "#F5F0EB" }}>Book a Lunch &amp; Learn</span>
+        <span className="block text-[11px] mt-0.5" style={{ color: "rgba(255,255,255,0.6)" }}>Free spec session — lunch on us</span>
+      </span>
+      <svg width="13" height="13" fill="none" stroke="#FB923C" viewBox="0 0 24 24" className="flex-shrink-0 transition-transform group-hover:translate-x-0.5">
+        <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </Link>
+  );
+}
+
+// ── Full-width Products mega menu ────────────────────────────────────────
 // DDB polish pass (May 25):
 //   • Orange #F97316 fails WCAG AA at 9–11px on dark. Small-text accents
 //     bumped to ACCENT (#FB923C, ≈5.1:1 on #070b12) so eyebrows + sublabels
@@ -484,6 +502,7 @@ function ProductsMegaMenu() {
             Browse all products
             <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
           </Link>
+          <LLMenuCard />
         </div>
 
         {/* Category tiles — 4 cards with image headers */}
@@ -587,61 +606,11 @@ function ProductsMegaMenu() {
         </div>
       </div>
 
-      {/* Featured project strip */}
-      <div className="mt-2 rounded-xl overflow-hidden relative" style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}>
-        <div className="flex items-center gap-4 px-4 py-2">
-          <div className="flex-shrink-0 rounded-lg overflow-hidden" style={{ width: 56, height: 56 }}>
-            {/* Fixed 56x56 box — width/height match the wrapper exactly, so no `sizes` needed. */}
-            <Image src="/images/blog/ubc-musqueam-crosswalk/featured.jpg" alt="UBC Musqueam Indigenous recognition crosswalk — decorative preformed thermoplastic by HUB Surface Systems" width={56} height={56} className="w-full h-full object-cover" style={{ objectPosition: "center 65%" }} />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-[10px] font-bold tracking-[0.18em] uppercase mb-1" style={{ color: ACCENT }}>Featured Project</p>
-            <p className="text-[13px] font-semibold leading-snug" style={{ color: "#F5F0EB" }}>UBC Musqueam Cultural Crosswalk</p>
-            <p className="text-[11px] mt-0.5" style={{ color: "rgba(255,255,255,0.6)" }}>TrafficPatterns · Vancouver, BC</p>
-          </div>
-          <a href="/projects" className="flex-shrink-0 text-[11px] font-bold" style={{ color: ACCENT }}>See all →</a>
-        </div>
-      </div>
-
-      {/* Bottom strip — secondary entry points. Catalogue moved out of this
-          row up to its own banner so it doesn't read as "another project." */}
-      <div className="mt-2.5 pt-2.5 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
-        <Link href="/resources"
-          className="flex items-center justify-between px-4 py-2.5 rounded-lg transition-colors hover:bg-white/5"
-          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
-        >
-          <div>
-            <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Spec sheets</p>
-            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.6)" }}>TDS, install guides, SDS</p>
-          </div>
-          <svg width="14" height="14" fill="none" stroke="#FB923C" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
-        </Link>
-        <Link href="/projects"
-          className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
-          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
-        >
-          <div>
-            <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Project gallery</p>
-            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.6)" }}>See products in the field</p>
-          </div>
-          <svg width="14" height="14" fill="none" stroke="#FB923C" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
-        </Link>
-        <Link href="/lunch-learn"
-          className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
-          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
-        >
-          <div>
-            <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Lunch &amp; Learn</p>
-            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.6)" }}>Free CPD session for your team</p>
-          </div>
-          <svg width="14" height="14" fill="none" stroke="#FB923C" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
-        </Link>
-      </div>
     </MegaShell>
   );
 }
 
-// ── Field Notes mega menu ────────────────────────────────────────────────────
+// ── Field Notes mega menu ────────────────────────────────────────────
 function FieldNotesMegaMenu() {
   const [featured, ...rest] = FEATURED_POSTS;
 
@@ -659,29 +628,14 @@ function FieldNotesMegaMenu() {
           <p className="text-[13px] leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.65)" }}>
             Project profiles, case studies, technical guides, and white papers from 30+ years of decorative pavement work across Canada.
           </p>
-          <div className="space-y-2.5">
-            <Link href="/blog"
-              className="flex items-center justify-between w-full px-4 py-2.5 rounded-lg transition-all"
-              style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff", boxShadow: "0 4px 16px rgba(249,115,22,0.3)" }}
-            >
-              <span className="text-xs font-bold">All field notes</span>
-              <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
-            </Link>
-            <Link href="/projects"
-              className="flex items-center justify-between w-full px-4 py-2.5 rounded-lg transition-colors hover:bg-white/5"
-              style={{ color: "rgba(255,255,255,0.65)", border: "1px solid rgba(255,255,255,0.12)" }}
-            >
-              <span className="text-xs font-semibold">Project gallery</span>
-              <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
-            </Link>
-            <Link href="/resources"
-              className="flex items-center justify-between w-full px-4 py-2.5 rounded-lg transition-colors hover:bg-white/5"
-              style={{ color: "rgba(255,255,255,0.65)", border: "1px solid rgba(255,255,255,0.12)" }}
-            >
-              <span className="text-xs font-semibold">Resources &amp; spec sheets</span>
-              <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
-            </Link>
-          </div>
+          <Link href="/blog"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold transition-all"
+            style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff", boxShadow: "0 4px 16px rgba(249,115,22,0.3)" }}
+          >
+            All field notes
+            <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
+          </Link>
+          <LLMenuCard />
         </div>
 
         {/* Featured large card — taller for parity with Products/Applications mega heights */}
@@ -748,44 +702,11 @@ function FieldNotesMegaMenu() {
         </div>
       </div>
 
-      {/* Bottom strip — secondary entry points */}
-      <div className="mt-2.5 pt-2.5 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
-        <Link href="/blog"
-          className="flex items-center justify-between px-4 py-2.5 rounded-lg transition-colors hover:bg-white/5"
-          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
-        >
-          <div>
-            <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>All field notes</p>
-            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>Project profiles, case studies, guides</p>
-          </div>
-          <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
-        </Link>
-        <Link href="/projects"
-          className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
-          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
-        >
-          <div>
-            <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Project gallery</p>
-            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>Installations across Canada</p>
-          </div>
-          <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
-        </Link>
-        <Link href="/resources"
-          className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
-          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
-        >
-          <div>
-            <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Resources</p>
-            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>Spec sheets, install guides, SDS</p>
-          </div>
-          <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
-        </Link>
-      </div>
     </MegaShell>
   );
 }
 
-// ── Full-width Applications mega menu ────────────────────────────────────────
+// ── Full-width Applications mega menu ────────────────────────────────────
 function ApplicationsMegaMenu() {
   return (
     <MegaShell>
@@ -808,6 +729,7 @@ function ApplicationsMegaMenu() {
             Browse all applications
             <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
           </Link>
+          <LLMenuCard />
         </div>
 
         {/* Category groupings — 4 columns, no subtext */}
@@ -848,60 +770,11 @@ function ApplicationsMegaMenu() {
         </div>
       </div>
 
-      {/* Featured field note strip */}
-      <div className="mt-2 rounded-xl overflow-hidden relative" style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}>
-        <div className="flex items-center gap-4 px-4 py-2">
-          <div className="flex-shrink-0 rounded-lg overflow-hidden" style={{ width: 56, height: 56 }}>
-            {/* Fixed 56x56 box — width/height match the wrapper exactly, so no `sizes` needed. */}
-            <Image src="/images/blog/keeping-pedestrians-safe/featured.png" alt="Featured field note" width={56} height={56} className="w-full h-full object-cover" style={{ objectPosition: "center 65%" }} />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-[9px] font-bold tracking-[0.2em] uppercase mb-1" style={{ color: "#F97316" }}>Featured Field Note</p>
-            <p className="text-[13px] font-semibold leading-snug" style={{ color: "#F5F0EB" }}>Keeping Pedestrians Safe — TrafficPatternsXD</p>
-            <p className="text-[11px] mt-0.5" style={{ color: "rgba(255,255,255,0.45)" }}>Technical · Municipalities</p>
-          </div>
-          <a href="/blog" className="flex-shrink-0 text-[11px] font-bold" style={{ color: "#F97316" }}>See all →</a>
-        </div>
-      </div>
-
-      {/* Bottom strip — secondary entry points */}
-      <div className="mt-2.5 pt-2.5 grid grid-cols-1 sm:grid-cols-3 gap-3" style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
-        <Link href="/projects"
-          className="flex items-center justify-between px-4 py-2.5 rounded-lg transition-colors hover:bg-white/5"
-          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
-        >
-          <div>
-            <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Project gallery</p>
-            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>Real installations, real outcomes</p>
-          </div>
-          <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
-        </Link>
-        <Link href="/blog"
-          className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
-          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
-        >
-          <div>
-            <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Field notes</p>
-            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>Project profiles &amp; case studies</p>
-          </div>
-          <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
-        </Link>
-        <Link href="/contact"
-          className="flex items-center justify-between px-4 py-3 rounded-lg transition-colors hover:bg-white/5"
-          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)" }}
-        >
-          <div>
-            <p className="text-[13px] font-semibold" style={{ color: "#F5F0EB" }}>Request a quote</p>
-            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.5)" }}>Talk to your regional rep</p>
-          </div>
-          <svg width="14" height="14" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
-        </Link>
-      </div>
     </MegaShell>
   );
 }
 
-// ── Mobile overlay ───────────────────────────────────────────────────────────
+// ── Mobile overlay ───────────────────────────────────────────────────
 // ── Mobile menu — application taglines (mirror PRODUCT_TAGLINE style) ────────
 const APP_TAGLINE: Record<string, string> = {
   "crosswalks":              "High-visibility pedestrian crossings",
@@ -1026,7 +899,7 @@ function MobileViewAll({ href, label, onClose }: { href: string; label: string; 
   );
 }
 
-// ── Premium full-screen mobile menu ─────────────────────────────────────────
+// ── Premium full-screen mobile menu ─────────────────────────────────────
 function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onClose: () => void; onSearchOpen: () => void }) {
   const overlayRef = useRef<HTMLDivElement>(null);
 
@@ -1086,7 +959,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
           }}
           onClick={(e) => e.stopPropagation()}
         >
-          {/* ── Header ────────────────────────────────────────────────────── */}
+          {/* ── Header ────────────────────────────────────────────── */}
           <div
             className="flex-shrink-0 flex items-center justify-between px-5"
             style={{
@@ -1147,7 +1020,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
             </div>
           </div>
 
-          {/* ── Scrollable body ───────────────────────────────────────────── */}
+          {/* ── Scrollable body ───────────────────────────────────────── */}
           <div className="flex-1 overflow-y-auto overscroll-contain" style={{ WebkitOverflowScrolling: "touch" } as React.CSSProperties}>
             <motion.div
               variants={menuContainerVariants}
@@ -1156,7 +1029,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
               className="px-4 pb-8"
             >
 
-              {/* ── Products ──────────────────────────────────────────────── */}
+              {/* ── Products ──────────────────────────────────────── */}
               <motion.div variants={menuSectionVariants}>
                 <div className="flex items-center justify-between">
                   <MobileMenuLabel>Products</MobileMenuLabel>
@@ -1183,7 +1056,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                 ))}
               </motion.div>
 
-              {/* ── Applications ──────────────────────────────────────────── */}
+              {/* ── Applications ──────────────────────────────────── */}
               <motion.div variants={menuSectionVariants} className="mt-2">
                 <div className="flex items-center justify-between">
                   <MobileMenuLabel>Applications</MobileMenuLabel>
@@ -1210,7 +1083,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                 ))}
               </motion.div>
 
-              {/* ── Field Notes ───────────────────────────────────────────── */}
+              {/* ── Field Notes ───────────────────────────────────── */}
               <motion.div variants={menuSectionVariants} className="mt-2">
                 <div className="flex items-center justify-between">
                   <MobileMenuLabel>Field Notes</MobileMenuLabel>
@@ -1240,7 +1113,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                 </div>
               </motion.div>
 
-              {/* ── Secondary links ───────────────────────────────────────── */}
+              {/* ── Secondary links ───────────────────────────────── */}
               <motion.div variants={menuSectionVariants} className="mt-8 pt-6" style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
                 {[
                   { label: "About", href: "/about" },
@@ -1270,7 +1143,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
             </motion.div>
           </div>
 
-          {/* ── Sticky bottom CTA ─────────────────────────────────────────── */}
+          {/* ── Sticky bottom CTA ─────────────────────────────────────── */}
           <div
             className="flex-shrink-0 px-4 pt-3 pb-4"
             style={{
@@ -1329,7 +1202,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
   );
 }
 
-// ── Main Nav ─────────────────────────────────────────────────────────────────
+// ── Main Nav ─────────────────────────────────────────────────────────
 export default function Nav() {
   const [openPanel, setOpenPanel] = useState<"products" | "applications" | "fieldnotes" | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);

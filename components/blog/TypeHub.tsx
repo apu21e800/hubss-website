@@ -113,7 +113,7 @@ export default function TypeHub({ type }: { type: FieldNoteTypeMeta }) {
               <span
                 key={l}
                 className="text-[11px] font-medium px-2.5 py-1 rounded-full capitalize"
-                style={{ background: "var(--bg-card-neutral)", color: "#9CA3AF", border: "1px solid rgba(255,255,255,0.07)" }}
+                style={{ background: "var(--bg-card-neutral)", color: "#9CA3AF", border: "1px solid var(--border-color)" }}
               >
                 {l}
               </span>
@@ -128,7 +128,7 @@ export default function TypeHub({ type }: { type: FieldNoteTypeMeta }) {
           <Link
             href={`/blog/${lead.slug}`}
             className="group relative block rounded-2xl overflow-hidden"
-            style={{ border: "1px solid rgba(255,255,255,0.07)", minHeight: 300 }}
+            style={{ border: "1px solid var(--border-color)", minHeight: 300 }}
           >
             {lead.featuredImage && (
               <Image
@@ -205,7 +205,7 @@ export default function TypeHub({ type }: { type: FieldNoteTypeMeta }) {
                   key={t.slug}
                   href={`/blog/${t.slug}`}
                   className="group flex flex-col p-4 rounded-xl transition-colors hover:bg-white/5"
-                  style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.07)" }}
+                  style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--border-color)" }}
                 >
                   <span className="text-[10px] font-bold uppercase tracking-[0.16em] mb-1.5" style={{ color: t.text }}>
                     {n} {n === 1 ? t.label : t.plural}

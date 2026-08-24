@@ -33,7 +33,7 @@ export default async function ProductsPage() {
   });
 
   return (
-    <main style={{ background: "#0f1620", minHeight: "100vh" }}>
+    <main style={{ background: "#151515", minHeight: "100vh" }}>
       <Nav />
 
       <div className="relative">
@@ -126,7 +126,7 @@ export default async function ProductsPage() {
                             key={product.slug}
                             href={`/products/${product.slug}`}
                             className="group h-full flex flex-col relative overflow-hidden rounded-xl transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(249,115,22,0.12)]"
-                            style={{ background: "var(--bg-card)", border: "1px solid rgba(255,255,255,0.07)" }}
+                            style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}
                           >
                             <div
                               className="absolute top-0 left-0 right-0 h-[2px] z-10"

@@ -141,7 +141,7 @@ export default function Hero() {
             <div
               style={{
                 height: 1,
-                background: "linear-gradient(90deg, rgba(249,115,22,0.35) 0%, rgba(255,255,255,0.07) 60%, transparent 100%)",
+                background: "linear-gradient(90deg, rgba(249,115,22,0.35) 0%, var(--border-color) 60%, transparent 100%)",
                 marginBottom: "1.25rem",
                 maxWidth: "28rem",
               }}

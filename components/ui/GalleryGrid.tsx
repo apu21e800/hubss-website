@@ -84,6 +84,36 @@ export default function GalleryGrid({ images }: { images: GalleryImage[] }) {
         </div>
       )}
 
+      {/* ── Crawlable fallback for everything below the fold ────────
+             The grid above renders seven tiles and keeps the rest behind a
+             button. A crawler never presses the button, so for a folder like
+             /applications/parks-paths that meant 134 of 141 photographs never
+             reached the HTML at all — invisible to Google Images no matter how
+             good their alt text was.
+
+             This is the pattern Google documents for lazy-loaded imagery: the
+             same photos as plain <img> inside <noscript>, which Googlebot reads
+             and a browser with JS never renders or fetches. No layout cost, no
+             extra requests, nothing duplicated for a human — it is the list the
+             sitemap already declares, said again in markup. */}
+      {hasMore && (
+        <noscript>
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 mt-2 sm:mt-3">
+            {images.slice(visible).map((img) => (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img
+                key={img.src}
+                src={img.src}
+                alt={img.alt}
+                loading="lazy"
+                decoding="async"
+                className="w-full h-auto rounded-xl"
+              />
+            ))}
+          </div>
+        </noscript>
+      )}
+
       {/* ── Load more ─────────────────────────────────── */}
       {hasMore && (
         <div className="mt-8 flex flex-wrap items-center justify-between gap-3">

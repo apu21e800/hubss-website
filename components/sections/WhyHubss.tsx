@@ -50,7 +50,7 @@ export default function WhyHubss() {
     <section
       ref={sectionRef}
       className="relative overflow-hidden"
-      style={{ background: "#070b12" }}
+      style={{ background: "#0D0D0D" }}
     >
       <div
         className="absolute pointer-events-none"
@@ -114,8 +114,8 @@ export default function WhyHubss() {
               transition={{ delay: i * 0.07, duration: 0.35 }}
               className="flex flex-col items-center justify-center gap-1 py-7 px-4 text-center"
               style={{
-                borderRight:  i < 3 ? "1px solid rgba(255,255,255,0.07)" : "none",
-                borderBottom: i < 2 ? "1px solid rgba(255,255,255,0.07)" : "none",
+                borderRight:  i < 3 ? "1px solid var(--border-color)" : "none",
+                borderBottom: i < 2 ? "1px solid var(--border-color)" : "none",
               }}
             >
               <span className="text-3xl sm:text-4xl font-black tracking-tight leading-none" style={{ color: "#f97316" }}>
@@ -131,7 +131,7 @@ export default function WhyHubss() {
           ))}
         </div>
 
-        <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
+        <div style={{ borderTop: "1px solid var(--border-color)" }}>
           {PROOF.map((p, i) => (
             <motion.div
               key={p.claim}
@@ -139,7 +139,7 @@ export default function WhyHubss() {
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.2 + i * 0.08, duration: 0.35 }}
               className="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-2 lg:gap-10 py-5 px-1"
-              style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}
+              style={{ borderBottom: "1px solid var(--border-color)" }}
             >
               <div className="flex items-center gap-3">
                 <span className="text-[10px] font-bold tabular-nums" style={{ color: "rgba(249,115,22,0.4)" }}>

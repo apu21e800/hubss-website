@@ -49,7 +49,7 @@ export default async function ResourcesPage() {
   return (
     <main
       className="min-h-screen relative overflow-hidden"
-      style={{ background: "linear-gradient(160deg, #0d1117 0%, #141b2d 60%, #0d1117 100%)" }}
+      style={{ background: "linear-gradient(160deg, #101010 0%, #1A1A19 60%, #101010 100%)" }}
     >
       {/* Orange glow — top left */}
       <div
@@ -180,7 +180,7 @@ export default async function ResourcesPage() {
             </h2>
             <div
               className="flex-1 h-px"
-              style={{ background: "rgba(255,255,255,0.07)" }}
+              style={{ background: "var(--fill-subtle)" }}
             />
             <span className="text-xs" style={{ color: "#868C98" }}>
               {docs.length} total

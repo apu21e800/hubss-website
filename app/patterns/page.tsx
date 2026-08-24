@@ -193,7 +193,7 @@ export default function PatternsPage() {
               <Link
                 href="/contact"
                 className="px-5 py-2.5 rounded-lg text-sm font-bold"
-                style={{ background: "linear-gradient(90deg, #F97316, #EAB308)", color: "#0d1117" }}
+                style={{ background: "linear-gradient(90deg, #F97316, #EAB308)", color: "#101010" }}
               >
                 Start a project
               </Link>

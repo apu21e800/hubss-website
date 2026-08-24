@@ -2,10 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import Lightbox from "yet-another-react-lightbox";
-import Captions from "yet-another-react-lightbox/plugins/captions";
-import "yet-another-react-lightbox/styles.css";
-import "yet-another-react-lightbox/plugins/captions.css";
+import PhotoLightbox from "@/components/ui/PhotoLightbox";
 
 export interface GalleryImage {
   src: string;
@@ -87,7 +84,7 @@ export default function GalleryGrid({ images }: { images: GalleryImage[] }) {
         </div>
       )}
 
-      {/* ── Load more ─────────────────────────────────────── */}
+      {/* ── Load more ─────────────────────────────────── */}
       {hasMore && (
         <div className="mt-8 flex flex-wrap items-center justify-between gap-3">
           <p className="text-xs" style={{ color: "#868C98" }} aria-live="polite">
@@ -112,25 +109,18 @@ export default function GalleryGrid({ images }: { images: GalleryImage[] }) {
         </div>
       )}
 
-      {/* ── Lightbox ────────────────────────────────────── */}
-      <Lightbox
-        slides={images.map((img) => ({
-          src: img.src,
-          alt: img.alt,
-          title: img.alt,
-          description: img.caption,
-        }))}
-        open={lightboxIndex >= 0}
+      {/* ── Lightbox — shared cinematic viewer (PhotoLightbox) ───── */}
+      <PhotoLightbox
+        photos={images}
         index={lightboxIndex}
-        close={() => setLightboxIndex(-1)}
-        plugins={[Captions]}
-        controller={{ closeOnBackdropClick: true }}
+        onClose={() => setLightboxIndex(-1)}
+        onIndexChange={setLightboxIndex}
       />
     </>
   );
 }
 
-// ── Tile ──────────────────────────────────────────────────────────────────
+// ── Tile ──────────────────────────────────────────────────────────
 function GalleryTile({
   img,
   globalIdx,

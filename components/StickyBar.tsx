@@ -56,7 +56,7 @@ export default function StickyBar() {
         className="flex items-center gap-3 px-4 lg:px-8 py-3"
         style={{
           background: "#0d1117",
-          borderTop: "1px solid rgba(255,255,255,0.08)",
+          borderTop: "1px solid rgba(255,255,255,0.07)",
           boxShadow: "0 -4px 24px rgba(0,0,0,0.35)",
           paddingBottom: "max(12px, env(safe-area-inset-bottom))",
         }}
@@ -84,7 +84,7 @@ export default function StickyBar() {
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.borderColor = "rgba(255,255,255,0.45)";
-              e.currentTarget.style.background = "rgba(255,255,255,0.06)";
+              e.currentTarget.style.background = "rgba(255,255,255,0.07)";
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)";

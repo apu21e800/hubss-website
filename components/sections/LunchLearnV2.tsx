@@ -164,7 +164,7 @@ function ErrorNote({ message }: { message?: string }) {
 
 function MoreLink() {
   return (
-    <Link href="/lunch-learn" className="inline-flex items-center gap-1.5 text-[13px] font-semibold transition-colors hover:text-orange-300" style={{ color: "#FB923C" }}>
+    <Link href="/lunch-learn" className="inline-flex items-center gap-1.5 text-[13px] font-semibold transition-colors hover:text-orange-300" style={{ color: "#FB923C", minHeight: 40 }}>
       Everything about the session
       <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" /></svg>
     </Link>
@@ -263,8 +263,8 @@ function Boardroom() {
                 <div className="flex items-center gap-4 flex-wrap">
                   <MoreLink />
                   <span className="hidden sm:block" style={{ color: "rgba(255,255,255,0.15)" }}>|</span>
-                  <a href="tel:+14165409287" className="text-[13px] font-semibold hover:text-orange-400 transition-colors" style={{ color: "rgba(255,255,255,0.45)" }}>East 416-540-9287</a>
-                  <a href="tel:+16043098212" className="text-[13px] font-semibold hover:text-orange-400 transition-colors" style={{ color: "rgba(255,255,255,0.45)" }}>West 604-309-8212</a>
+                  <a href="tel:+14165409287" className="text-[13px] font-semibold inline-flex items-center hover:text-orange-400 transition-colors" style={{ color: "rgba(255,255,255,0.45)", minHeight: 40 }}>East 416-540-9287</a>
+                  <a href="tel:+16043098212" className="text-[13px] font-semibold inline-flex items-center hover:text-orange-400 transition-colors" style={{ color: "rgba(255,255,255,0.45)", minHeight: 40 }}>West 604-309-8212</a>
                 </div>
               </div>
 
@@ -288,11 +288,11 @@ function Boardroom() {
                             type="button"
                             aria-pressed={f.format === opt}
                             onClick={() => f.setFormat(opt)}
-                            className="py-2 rounded-lg text-[12.5px] font-semibold transition-all active:scale-[0.97]"
+                            className="rounded-lg text-[12.5px] font-semibold transition-all active:scale-[0.97]"
                             style={
                               f.format === opt
-                                ? { background: "rgba(249,115,22,0.16)", border: "1px solid rgba(249,115,22,0.5)", color: "#FB923C" }
-                                : { background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.65)" }
+                                ? { background: "rgba(249,115,22,0.16)", border: "1px solid rgba(249,115,22,0.5)", color: "#FB923C", minHeight: 44 }
+                                : { background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.65)", minHeight: 44 }
                             }
                           >
                             {opt}
@@ -440,11 +440,11 @@ function Ticket() {
                         type="button"
                         aria-pressed={f.format === opt}
                         onClick={() => f.setFormat(opt)}
-                        className="py-2.5 rounded-lg text-[13px] font-semibold transition-all active:scale-[0.97]"
+                        className="rounded-lg text-[13px] font-semibold transition-all active:scale-[0.97]"
                         style={
                           f.format === opt
-                            ? { background: "rgba(249,115,22,0.16)", border: "1px solid rgba(249,115,22,0.5)", color: "#FB923C" }
-                            : { background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.65)" }
+                            ? { background: "rgba(249,115,22,0.16)", border: "1px solid rgba(249,115,22,0.5)", color: "#FB923C", minHeight: 44 }
+                            : { background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.65)", minHeight: 44 }
                         }
                       >
                         {opt}

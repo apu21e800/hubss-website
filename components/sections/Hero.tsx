@@ -94,7 +94,7 @@ export default function Hero() {
 
           <p
             className="text-lg sm:text-xl leading-relaxed max-w-2xl mb-10 sm:mb-12"
-            style={{ color: "rgba(255,255,255,0.78)", textShadow: "0 1px 16px rgba(0,0,0,0.55)", fontWeight: 400 }}
+            style={{ color: "rgba(255,255,255,0.8)", textShadow: "0 1px 16px rgba(0,0,0,0.55)", fontWeight: 400 }}
           >
             HUB Surface Systems redefines hardscapes for freeze-thaw climates.
             Stamped asphalt, thermoplastics, and specialty coatings built for
@@ -125,7 +125,7 @@ export default function Hero() {
             <a
               href="/lunch-learn"
               className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-lg font-semibold text-sm border transition-all hover:border-orange-500/50 hover:text-orange-400"
-              style={{ borderColor: "rgba(255,255,255,0.25)", color: "rgba(255,255,255,0.78)" }}
+              style={{ borderColor: "rgba(255,255,255,0.25)", color: "rgba(255,255,255,0.8)" }}
             >
               Book Lunch &amp; Learn
             </a>
@@ -141,7 +141,7 @@ export default function Hero() {
             <div
               style={{
                 height: 1,
-                background: "linear-gradient(90deg, rgba(249,115,22,0.35) 0%, rgba(255,255,255,0.08) 60%, transparent 100%)",
+                background: "linear-gradient(90deg, rgba(249,115,22,0.35) 0%, rgba(255,255,255,0.07) 60%, transparent 100%)",
                 marginBottom: "1.25rem",
                 maxWidth: "28rem",
               }}
@@ -167,7 +167,7 @@ export default function Hero() {
                   <span
                     style={{
                       fontSize: "0.8rem",
-                      color: "rgba(255,255,255,0.52)",
+                      color: "rgba(255,255,255,0.5)",
                       fontWeight: 500,
                       lineHeight: 1.25,
                       maxWidth: "6.5rem",
@@ -186,7 +186,7 @@ export default function Hero() {
       {/* ── Client ticker ──────────────────────────────────────────────────────── */}
       <div
         className="relative z-10 border-t"
-        style={{ borderColor: "rgba(255,255,255,0.10)" }}
+        style={{ borderColor: "rgba(255,255,255,0.1)" }}
       >
         <div
           className="overflow-hidden py-4"
@@ -204,7 +204,7 @@ export default function Hero() {
               <span
                 key={i}
                 className="text-sm font-medium flex items-center gap-3"
-                style={{ color: "rgba(255,255,255,0.40)", lineHeight: 1 }}
+                style={{ color: "rgba(255,255,255,0.4)", lineHeight: 1 }}
               >
                 {item}
                 <span

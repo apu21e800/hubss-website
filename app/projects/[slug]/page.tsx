@@ -94,7 +94,7 @@ export default async function ProjectPage({ params }: Props) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20" style={{ background: "#0A0A0A" }}>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
           <div className="lg:col-span-2">
-            <h2 className="text-2xl font-bold mb-5" style={{ color: "#f5f0eb" }}>Project Overview</h2>
+            <h2 className="text-2xl font-bold mb-5" style={{ color: "#f5f0eb", letterSpacing: "-0.02em" }}>What was built</h2>
             <p className="text-[16px] leading-relaxed mb-10" style={{ color: "#e5e7eb" }}>
               {project.excerpt}
             </p>
@@ -105,7 +105,9 @@ export default async function ProjectPage({ params }: Props) {
             <div className="rounded-xl p-8 sticky top-24 relative overflow-hidden" style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.08)" }}>
               {/* Orange top accent */}
               <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
-              <h3 className="font-bold text-lg mb-6" style={{ color: "#f5f0eb" }}>Project Details</h3>
+              {/* Orphan <h3> under the Overview <h2> — the detail table was
+                  filed inside the narrative for every screen reader. */}
+              <h2 className="font-bold text-lg mb-6" style={{ color: "#f5f0eb", letterSpacing: "-0.01em" }}>On the record</h2>
               <div className="space-y-4">
                 {[
                   { label: "Product", value: project.product },
@@ -139,7 +141,7 @@ export default async function ProjectPage({ params }: Props) {
 
         {relatedProjects.length > 0 && (
           <div className="mt-20 pt-16" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
-            <h2 className="text-2xl font-bold mb-8" style={{ color: "#f5f0eb" }}>Related Projects</h2>
+            <h2 className="text-2xl font-bold mb-8" style={{ color: "#f5f0eb", letterSpacing: "-0.02em" }}>More from the field</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {relatedProjects.map((p) => (
                 <Link

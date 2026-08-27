@@ -181,13 +181,26 @@ export default async function ApplicationPage({ params }: Props) {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
             {/* Left: description + gallery */}
             <div className="lg:col-span-2">
-              <h2 className="text-2xl sm:text-3xl font-bold mb-5" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>About {application.name}</h2>
+              {/* "About <thing>" is a filing label. The product pages now say
+                  "How it works" over the equivalent copy, and saying the same
+                  thing in the same words in both places is the naming
+                  convention doing its job — a reader who learns the shape of
+                  one page already knows the shape of the other. */}
+              <h2 className="text-2xl sm:text-3xl font-bold mb-5" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
+                How it works
+              </h2>
               <p className="mb-12 leading-[1.85]" style={{ color: "var(--text-body)", fontSize: "clamp(1rem, 1.8vw, 1.075rem)", maxWidth: "65ch" }}>
                 {application.description}
               </p>
 
               {/* Gallery */}
-              <h2 className="text-2xl font-bold mb-6" style={{ color: "var(--text-primary)" }}>Gallery</h2>
+              {/* The catalogue's word for its photography, matching /products. */}
+              <h2 className="text-2xl font-bold mb-1.5" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
+                The work
+              </h2>
+              <p className="mb-6 text-sm" style={{ color: "var(--text-secondary)" }}>
+                {application.name} photographed on site across Canada.
+              </p>
               <GalleryGrid images={gallery} />
             </div>
 
@@ -196,7 +209,13 @@ export default async function ApplicationPage({ params }: Props) {
               <div className="rounded-xl p-8 mb-8 sticky top-24 relative overflow-hidden" style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.08)" }}>
                 {/* Orange top accent */}
                 <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
-                <h3 className="font-bold text-lg mb-6" style={{ color: "#F5F0EB" }}>Recommended Products</h3>
+                {/* Was an orphan <h3> under the preceding <h2>, and "Recommended"
+                    undersells it — HUB specifies these systems for this work, it
+                    does not suggest them. Mirrors "Where <product> goes" on the
+                    product page, pointing the other way down the same axis. */}
+                <h2 className="font-bold text-lg mb-6" style={{ color: "#F5F0EB", letterSpacing: "-0.01em" }}>
+                  Systems for {application.name}
+                </h2>
                 <div className="space-y-3">
                   {relatedProductData.map((product) => (
                     <Link

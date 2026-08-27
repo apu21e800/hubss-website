@@ -26,11 +26,11 @@ export default function RecentProjects() {
             </p>
           </div>
           <Link
-            href="/projects"
+            href="/blog/project-profiles"
             className="hidden md:block text-sm font-semibold px-6 py-3 rounded transition-colors hover:border-gray-500"
             style={{ border: "1px solid var(--border-color)", color: "var(--text-secondary)" }}
           >
-            Browse All Projects
+            Browse all project profiles
           </Link>
         </div>
 
@@ -146,11 +146,11 @@ export default function RecentProjects() {
 
         <div className="mt-8 text-center md:hidden">
           <Link
-            href="/projects"
+            href="/blog/project-profiles"
             className="text-sm font-semibold px-6 py-3 rounded"
             style={{ border: "1px solid var(--border-color)", color: "var(--text-secondary)" }}
           >
-            Browse All Projects
+            Browse all project profiles
           </Link>
         </div>
       </div>

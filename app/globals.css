@@ -691,6 +691,14 @@ html {
     min-height: 44px;
     min-width: 44px;
   }
+  /* 40px tier — footer link columns, office contact rows, legal links. These
+     carried an inline minHeight:40 from the mobile sweep, unconditionally, so
+     a 14px list rendered as 40px rows on a desktop monitor and the footer read
+     as loose and unresolved: every row was carrying a thumb's worth of padding
+     to a cursor. A thumb still needs the floor; a cursor does not. */
+  [data-tap="40"] {
+    min-height: 40px;
+  }
 }
 
 /* MapLibre ships its zoom/rotate controls at 29px. They are the map's only

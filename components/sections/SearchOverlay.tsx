@@ -44,15 +44,19 @@ const QUICK: { label: string; href: string; hint: string }[] = [
 
 const TRY = ["stamped asphalt", "rainbow crosswalk", "150 mil", "LEED heat island", "bike lane", "colour card"];
 
-const TYPE_TINT: Record<string, string> = {
-  Product: "#f97316",
-  Application: "#f59e0b",
-  "Field note": "#8b9bb4",
-  Document: "#6ee7b7",
-  Colour: "#c4b5fd",
-  Pattern: "#93c5fd",
-  Page: "#9aa0a8",
-};
+/**
+ * Group labels are typography, not colour.
+ *
+ * The first pass gave each of the seven types its own tint — orange, amber,
+ * blue-grey, mint, violet, sky, grey. Seven hues in a 400px panel is a legend,
+ * not a hierarchy: the eye has to decode a colour key before it can read a
+ * result, and none of the colours meant anything a reader could act on.
+ *
+ * One muted grey for every label. Colour in this panel now says exactly one
+ * thing — "this row is selected" — which is the only thing in a keyboard
+ * palette that actually needs to shout.
+ */
+const LABEL = "var(--text-faint)";
 
 /** Wraps the matched run in <mark> without letting query text become markup. */
 function Highlight({ text, term }: { text: string; term: string }) {
@@ -62,7 +66,13 @@ function Highlight({ text, term }: { text: string; term: string }) {
   return (
     <>
       {text.slice(0, i)}
-      <mark style={{ background: "rgba(249,115,22,0.22)", color: "inherit", borderRadius: 3, padding: "0 1px" }}>
+      {/* Weight and brightness, not a highlighter. An orange block behind
+          every match turned a list of eighteen results into a field of orange
+          rectangles — the marks competed with each other and with the selected
+          row, so nothing read as primary. Lifting the matched run to full
+          brightness and semibold does the same job and disappears when you are
+          not looking for it. */}
+      <mark style={{ background: "transparent", color: "var(--text-primary)", fontWeight: 650 }}>
         {text.slice(i, i + term.length)}
       </mark>
       {text.slice(i + term.length)}
@@ -168,11 +178,11 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
         <div
           className="flex items-center gap-3 px-4 rounded-2xl"
           style={{
-            background: "var(--bg-card)", border: "1px solid rgba(249,115,22,0.45)",
+            background: "var(--bg-card)", border: "1px solid var(--border-color)",
             boxShadow: "0 24px 80px rgba(0,0,0,0.7)", minHeight: 60,
           }}
         >
-          <svg className="flex-shrink-0" width="19" height="19" fill="none" stroke="#f97316" viewBox="0 0 24 24">
+          <svg className="flex-shrink-0" width="19" height="19" fill="none" stroke="var(--text-faint)" viewBox="0 0 24 24">
             <circle cx="11" cy="11" r="8" strokeWidth={2} /><path d="M21 21l-4.35-4.35" strokeWidth={2} strokeLinecap="round" />
           </svg>
           <input
@@ -239,7 +249,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                 <div key={group.type}>
                   <p
                     className="text-[10px] font-bold uppercase tracking-[0.18em] px-4 pt-4 pb-1.5 sticky top-0"
-                    style={{ color: TYPE_TINT[group.type] ?? "var(--text-faint)", background: "var(--bg-card-neutral)" }}
+                    style={{ color: LABEL, background: "var(--bg-card-neutral)" }}
                   >
                     {group.type}
                     <span style={{ color: "var(--text-faint)", marginLeft: 8, letterSpacing: 0 }}>{group.hits.length}</span>
@@ -256,15 +266,27 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                         data-active={isActive}
                         onMouseEnter={() => setActive(myIndex)}
                         onClick={() => go(h.href)}
-                        className="w-full text-left px-4 py-2.5 flex items-center gap-3 transition-colors"
-                        style={{ background: isActive ? "rgba(249,115,22,0.10)" : "transparent" }}
+                        className="w-full text-left pr-4 py-2.5 flex items-center gap-3 transition-colors"
+                        // One signal, not three. The active row previously
+                        // carried an orange wash AND an orange dot AND an
+                        // orange badge; now the rule on the left says "here"
+                        // and the surface lifts a step, the way a raised
+                        // element does everywhere else on the site.
+                        style={{
+                          background: isActive ? "var(--bg-card-surface)" : "transparent",
+                          borderLeft: `2px solid ${isActive ? "#f97316" : "transparent"}`,
+                          paddingLeft: 14,
+                        }}
                       >
                         {h.hex ? (
-                          <span className="flex-shrink-0 rounded" style={{ width: 22, height: 22, background: h.hex, border: "1px solid rgba(255,255,255,0.18)" }} />
+                          // A colourant result should show the colour at a size
+                          // you can actually judge, with its hex, because that
+                          // is the whole reason someone searched for it.
+                          <span className="flex-shrink-0 rounded" style={{ width: 26, height: 26, background: h.hex, border: "1px solid rgba(255,255,255,0.22)" }} />
                         ) : (
                           <span
                             className="flex-shrink-0 rounded-full"
-                            style={{ width: 6, height: 6, background: isActive ? "#f97316" : "var(--border-color)" }}
+                            style={{ width: 5, height: 5, background: "var(--border-color)" }}
                           />
                         )}
                         <span className="min-w-0 flex-1">
@@ -274,11 +296,12 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                           {h.subtitle && (
                             <span className="block text-xs truncate" style={{ color: "var(--text-faint)" }}>
                               <Highlight text={h.subtitle} term={h.matched} />
+                              {h.hex && <span style={{ fontFamily: "monospace", marginLeft: 8 }}>{h.hex.toUpperCase()}</span>}
                             </span>
                           )}
                         </span>
                         {isActive && (
-                          <span className="flex-shrink-0 text-[10px] font-mono px-1.5 py-0.5 rounded" style={{ color: "#f97316", border: "1px solid rgba(249,115,22,0.35)" }}>
+                          <span className="flex-shrink-0 text-[10px] font-mono px-1.5 py-0.5 rounded" style={{ color: "var(--text-faint)", border: "1px solid var(--border-color)" }}>
                             ↵
                           </span>
                         )}

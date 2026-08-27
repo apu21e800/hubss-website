@@ -35,8 +35,8 @@ export default function Footer() {
         }}
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-12">
 
           {/* Brand */}
           <div>
@@ -54,13 +54,13 @@ export default function Footer() {
 
             {/* Monument tagline */}
             <p
-              className="font-light tracking-wide leading-snug mb-2"
-              style={{ color: "var(--text-primary)", fontSize: "1rem" }}
+              className="font-light tracking-wide mb-3"
+              style={{ color: "var(--text-primary)", fontSize: "0.9375rem", lineHeight: 1.45 }}
             >
               Pedestrian safety. Traffic calming.<br />Civic identity. Coast to coast since 1999.
             </p>
 
-            <p className="text-xs mb-6 flex items-center gap-2 flex-wrap" style={{ color: "var(--text-muted)" }}>
+            <p className="text-[11px] mb-5 flex items-center gap-2 flex-wrap" style={{ color: "var(--text-muted)", lineHeight: 1.5 }}>
               <span
                 className="inline-flex items-center gap-1.5"
                 aria-label="Canadian"
@@ -87,21 +87,22 @@ export default function Footer() {
               <span>Owned and operated · Coast to coast · Since 1999</span>
             </p>
 
-            <SocialLinks className="mt-3" />
+            <SocialLinks className="mt-1" />
 
             {/* Earlier per-line flag removed — consolidated into the "Canadian | Owned and operated" treatment above for visual consistency with the nav + about page. */}
           </div>
 
           {/* Products */}
           <div>
-            <h4 className="font-semibold text-sm mb-5" style={{ color: "var(--text-primary)" }}>Products</h4>
-            <ul className="space-y-1">
+            <h4 className="font-semibold text-sm mb-3.5" style={{ color: "var(--text-primary)" }}>Products</h4>
+            <ul className="space-y-0.5">
               {products.filter((p) => !p.comingSoon && !p.hideFromFooter).map((p) => (
                 <li key={p.slug}>
                   <Link
                     href={`/products/${p.slug}`}
                     className="text-sm flex items-center transition-colors hover:text-[#f97316] underline-offset-4 hover:underline"
-                    style={{ color: "var(--text-secondary)", minHeight: 40 }}
+                    data-tap="40"
+                    style={{ color: "var(--text-secondary)", paddingTop: 3, paddingBottom: 3 }}
                   >
                     {p.name}
                   </Link>
@@ -112,14 +113,15 @@ export default function Footer() {
 
           {/* Applications */}
           <div>
-            <h4 className="font-semibold text-sm mb-5" style={{ color: "var(--text-primary)" }}>Applications</h4>
-            <ul className="space-y-1">
+            <h4 className="font-semibold text-sm mb-3.5" style={{ color: "var(--text-primary)" }}>Applications</h4>
+            <ul className="space-y-0.5">
               {footerApplications.map((a) => (
                 <li key={a.slug}>
                   <Link
                     href={`/applications/${a.slug}`}
                     className="text-sm flex items-center transition-colors hover:text-[#f97316] underline-offset-4 hover:underline"
-                    style={{ color: "var(--text-secondary)", minHeight: 40 }}
+                    data-tap="40"
+                    style={{ color: "var(--text-secondary)", paddingTop: 3, paddingBottom: 3 }}
                   >
                     {a.label}
                   </Link>
@@ -130,7 +132,7 @@ export default function Footer() {
 
           {/* Offices */}
           <div>
-            <h4 className="font-semibold text-sm mb-5" style={{ color: "var(--text-primary)" }}>Offices</h4>
+            <h4 className="font-semibold text-sm mb-3.5" style={{ color: "var(--text-primary)" }}>Offices</h4>
             <div className="space-y-6">
 
               {/* West */}
@@ -143,10 +145,10 @@ export default function Footer() {
                   West Office
                 </p>
                 <p className="text-sm mb-1" style={{ color: "var(--text-primary)" }}>Ladysmith, BC</p>
-                <a href="mailto:cleve.stordy@hubss.com" className="text-xs flex items-center transition-colors hover:text-white underline-offset-4 hover:underline" style={{ minHeight: 40, color: "var(--text-secondary)" }}>
+                <a href="mailto:cleve.stordy@hubss.com" className="text-xs flex items-center transition-colors hover:text-white underline-offset-4 hover:underline" data-tap="40" style={{ color: "var(--text-secondary)", paddingTop: 2, paddingBottom: 2 }}>
                   cleve.stordy@hubss.com
                 </a>
-                <a href="tel:6043098212" className="text-xs flex items-center transition-colors hover:text-white" style={{ minHeight: 40, color: "var(--text-secondary)" }}>
+                <a href="tel:6043098212" className="text-xs flex items-center transition-colors hover:text-white" data-tap="40" style={{ color: "var(--text-secondary)", paddingTop: 2, paddingBottom: 2 }}>
                   604-309-8212
                 </a>
               </div>
@@ -161,10 +163,10 @@ export default function Footer() {
                   East Office
                 </p>
                 <p className="text-sm mb-1" style={{ color: "var(--text-primary)" }}>Milton, Ontario</p>
-                <a href="mailto:doug.bain@hubss.com" className="text-xs flex items-center transition-colors hover:text-white underline-offset-4 hover:underline" style={{ minHeight: 40, color: "var(--text-secondary)" }}>
+                <a href="mailto:doug.bain@hubss.com" className="text-xs flex items-center transition-colors hover:text-white underline-offset-4 hover:underline" data-tap="40" style={{ color: "var(--text-secondary)", paddingTop: 2, paddingBottom: 2 }}>
                   doug.bain@hubss.com
                 </a>
-                <a href="tel:4165409287" className="text-xs flex items-center transition-colors hover:text-white" style={{ minHeight: 40, color: "var(--text-secondary)" }}>
+                <a href="tel:4165409287" className="text-xs flex items-center transition-colors hover:text-white" data-tap="40" style={{ color: "var(--text-secondary)", paddingTop: 2, paddingBottom: 2 }}>
                   416-540-9287
                 </a>
               </div>
@@ -174,17 +176,17 @@ export default function Footer() {
         </div>
 
         <div
-          className="mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4"
+          className="mt-12 pt-6 flex flex-col md:flex-row items-center justify-between gap-3"
           style={{ borderTop: "1px solid var(--border-subtle)" }}
         >
           <p className="text-xs" style={{ color: "var(--text-muted)" }}>
             &copy; {new Date().getFullYear()} HUB Surface Systems. All rights reserved.
           </p>
           <div className="flex gap-6">
-            <Link href="/privacy" className="text-xs inline-flex items-center transition-colors hover:text-white underline-offset-4 hover:underline" style={{ color: "var(--text-muted)", minHeight: 40 }}>
+            <Link href="/privacy" className="text-xs inline-flex items-center transition-colors hover:text-white underline-offset-4 hover:underline" data-tap="40" style={{ color: "var(--text-muted)", paddingTop: 2, paddingBottom: 2 }}>
               Privacy Policy
             </Link>
-            <Link href="/terms" className="text-xs inline-flex items-center transition-colors hover:text-white underline-offset-4 hover:underline" style={{ color: "var(--text-muted)", minHeight: 40 }}>
+            <Link href="/terms" className="text-xs inline-flex items-center transition-colors hover:text-white underline-offset-4 hover:underline" data-tap="40" style={{ color: "var(--text-muted)", paddingTop: 2, paddingBottom: 2 }}>
               Terms of Use
             </Link>
           </div>

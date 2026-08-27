@@ -153,7 +153,11 @@ export default async function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
             <div>
-              <h2 className="text-3xl font-bold mb-6" style={{ color: "#ffffff" }}>Our Story</h2>
+              {/* "Our Story" and "Our Mission" are what a company calls these sections
+                  when it has not decided what they say. The copy underneath is
+                  specific — a founding belief, a date, two offices, a named
+                  installer programme — so the headings can be specific too. */}
+              <h2 className="text-3xl font-bold mb-6" style={{ color: "#ffffff", letterSpacing: "-0.02em" }}>How we got here</h2>
               <div className="space-y-4 text-base leading-relaxed" style={{ color: "#e0e0e0" }}>
                 {storyParagraphs.map((para, i) => (
                   <p key={i}>{para}</p>
@@ -171,7 +175,7 @@ export default async function AboutPage() {
                 />
                 <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, transparent 50%, rgba(13,17,23,0.7) 100%)" }} />
               </div>
-              <h2 className="text-3xl font-bold mb-6" style={{ color: "#ffffff" }}>Our Mission</h2>
+              <h2 className="text-3xl font-bold mb-6" style={{ color: "#ffffff", letterSpacing: "-0.02em" }}>What the work is for</h2>
               <p
                 className="text-xl leading-relaxed mb-4"
                 style={{ color: "#ffffff", borderLeft: "3px solid #f97316", paddingLeft: "24px" }}
@@ -210,7 +214,7 @@ export default async function AboutPage() {
       {/* ── Offices ───────────────────────────── */}
       <div className="py-20" style={{ background: "#151515" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold mb-10" style={{ color: "#ffffff" }}>Regional Offices</h2>
+          <h2 className="text-3xl font-bold mb-10" style={{ color: "#ffffff", letterSpacing: "-0.02em" }}>Two coasts, two offices</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
               { region: "West Office", city: "Ladysmith, British Columbia", contact: "Cleve Stordy", email: "cleve.stordy@hubss.com", phone: "604-309-8212", provinces: ["BC", "AB", "SK", "NT", "YT", "NU"] },
@@ -255,7 +259,7 @@ export default async function AboutPage() {
       <div className="py-20" style={{ background: "#151515" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "#f97316" }}>Manufacturer Partners</p>
-          <h2 className="text-3xl font-bold mb-6" style={{ color: "#ffffff" }}>Backed by Industry Leaders</h2>
+          <h2 className="text-3xl font-bold mb-6" style={{ color: "#ffffff", letterSpacing: "-0.02em" }}>Who stands behind the systems</h2>
           <p className="text-base leading-relaxed max-w-2xl mb-8" style={{ color: "#8b8b8b" }}>
             {partnersIntro}
           </p>

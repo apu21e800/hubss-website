@@ -465,6 +465,33 @@ const PLACES: Record<string, string> = {
   "images/blog/decorative-crosswalk-meridian": "Meridian, ON",
 };
 
+/**
+ * Hero photography.
+ *
+ * The homepage hero shipped as `alt="" aria-hidden="true"`. As an accessibility
+ * decision that is defensible — the H1 sits on top of it and carries the
+ * meaning. As an SEO decision it was costly: this is the single image Google
+ * associates with hubss.com, it is the first entry in the sitemap, it is the
+ * Open Graph image, and it was declaring itself to be decoration.
+ *
+ * It is not decoration. It is the UBC Musqueam crosswalk — a documented HUB
+ * installation, with its own field note. Naming it costs nothing and describes
+ * the photograph rather than repeating the headline, so a screen reader hears
+ * the picture and the H1 as two different things instead of the same thing
+ * twice.
+ */
+const HERO_ALT: Record<string, string> = {
+  "/images/hero/hero-1.jpg":
+    "The UBC Musqueam crosswalk at the University of British Columbia campus entrance in Vancouver — Coast Salish artwork rendered in coloured pavement by HUB Surface Systems",
+};
+
+export function heroAlt(src: string): string {
+  return (
+    HERO_ALT[src.split("?")[0]] ??
+    seoAlt(src, "Decorative pavement installation by HUB Surface Systems in Canada")
+  );
+}
+
 /** "/images/products/streetbond/streetbond-04.jpg" -> "images/products/streetbond" */
 function folderOf(src: string): string {
   const clean = src.split("?")[0].replace(/^\/+/, "");

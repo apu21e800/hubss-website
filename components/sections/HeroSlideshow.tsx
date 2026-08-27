@@ -4,6 +4,8 @@ import Link from "next/link";
 // (async server component context) AND CSS background-image rendering failures on Vercel.
 // fetchPriority="high" ensures the browser's HTML preload scanner picks this up first.
 // || instead of ?? guards against empty-string heroImageSrc from Sanity.
+import { heroAlt } from "@/lib/image-seo";
+
 const FALLBACK_HERO = "/images/hero/hero-1.jpg";
 
 interface HeroSlideshowProps {
@@ -45,8 +47,7 @@ export default function HeroSlideshow({
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={src}
-        alt=""
-        aria-hidden="true"
+        alt={heroAlt(src)}
         // @ts-ignore fetchPriority is valid HTML but TS types lag
         fetchPriority="high"
         style={{

@@ -398,15 +398,27 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                           // Accent 3: the return key, on the one row Enter will
                           // open. This is the palette's actual next action, so
                           // it is the one row-level element that earns colour.
+                          //
+                          // Drawn rather than typed. The ↵ character renders at
+                          // whatever weight and baseline the font happens to
+                          // give it — at 10px that was a grey smudge nobody
+                          // could read as "press Enter". An SVG is the same
+                          // shape at every size on every machine, and pairing
+                          // it with the word removes the last of the guessing.
                           <span
-                            className="flex-shrink-0 text-[10px] font-mono px-1.5 py-0.5 rounded"
+                            className="flex-shrink-0 inline-flex items-center gap-1.5 pl-2 pr-2.5 rounded-md"
                             style={{
+                              height: 24,
                               color: "#F97316",
-                              border: "1px solid rgba(249,115,22,0.38)",
-                              background: "rgba(249,115,22,0.07)",
+                              border: "1px solid rgba(249,115,22,0.42)",
+                              background: "rgba(249,115,22,0.10)",
                             }}
                           >
-                            ↵
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                              <path d="M20 5v6a3 3 0 0 1-3 3H5" />
+                              <path d="M9 10l-4 4 4 4" />
+                            </svg>
+                            <span className="text-[10px] font-bold uppercase tracking-[0.1em]">Open</span>
                           </span>
                         )}
                       </button>
@@ -448,7 +460,12 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
           >
             <span className="hidden sm:flex items-center gap-3">
               <span><kbd style={{ fontFamily: "monospace" }}>↑↓</kbd> move</span>
-              <span><kbd style={{ fontFamily: "monospace" }}>↵</kbd> open</span>
+              <span className="inline-flex items-center gap-1">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M20 5v6a3 3 0 0 1-3 3H5" /><path d="M9 10l-4 4 4 4" />
+                </svg>
+                open
+              </span>
               <span><kbd style={{ fontFamily: "monospace" }}>esc</kbd> close</span>
             </span>
             <span className="sm:hidden">Tap a result</span>

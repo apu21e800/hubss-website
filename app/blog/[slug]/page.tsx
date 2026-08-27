@@ -38,6 +38,50 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   });
 }
 
+/**
+ * Drop a leading `# Heading` from an MDX body.
+ *
+ * Only the FIRST heading, and only if it is an h1 reached before any prose —
+ * so a post that genuinely opens with body copy and uses `# ` as a mid-article
+ * section marker is left alone. Leading MDX comments and blank lines are
+ * skipped over on the way.
+ */
+function stripLeadingH1(body: string): string {
+  const lines = body.split("\n");
+  let i = 0;
+  let inComment = false;
+
+  while (i < lines.length) {
+    const line = lines[i].trim();
+
+    // Most posts open with a multi-line {/* … */} block of authoring notes
+    // ("Edit text directly in this file", "Swap hero image: …"). Skipping only
+    // lines that START with {/* walked into the second line of that block,
+    // decided it was prose, and left every one of those posts with its title
+    // still restated in the body.
+    if (inComment) {
+      if (line.includes("*/}")) inComment = false;
+      i++;
+      continue;
+    }
+    if (line.startsWith("{/*")) {
+      if (!line.includes("*/}")) inComment = true;
+      i++;
+      continue;
+    }
+    if (line === "") { i++; continue; }
+
+    if (/^#\s+\S/.test(line)) {
+      lines.splice(i, 1);
+      // Collapse the blank line the heading left behind.
+      if (lines[i]?.trim() === "") lines.splice(i, 1);
+      return lines.join("\n");
+    }
+    return body;   // first real content is not an h1 — leave it be
+  }
+  return body;
+}
+
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
 
@@ -246,9 +290,30 @@ export default async function BlogPostPage({ params }: Props) {
             </p>
           )}
 
+          {/* Two guards on the body's headings.
+
+              44 of the 67 posts open their markdown with a `# ` that restates
+              the title — 31 of them word for word. Rendered under a template
+              that already prints the title as the page <h1>, that gave every
+              one of those pages TWO h1 elements saying nearly the same thing:
+              an ambiguous outline for Google and for a screen reader, and a
+              visible duplicate heading for everyone else.
+
+              Fixed here rather than in 44 .mdx files. Two of those files are
+              CRLF-encoded and a bulk rewrite has silently reverted edits in
+              this repo before; more to the point, an author adding a post next
+              month would reintroduce it, and the Sanity migration will bring
+              more authors, not fewer.
+
+              `stripLeadingH1` removes the restatement. The h1→h2 mapping
+              catches any `# ` further down, so the page can never again have a
+              second h1 no matter what someone types into the editor. */}
           <MDXRemote
-            source={post.content}
-            components={{ BlogImage }}
+            source={stripLeadingH1(post.content)}
+            components={{
+              BlogImage,
+              h1: (props: React.ComponentPropsWithoutRef<"h2">) => <h2 {...props} />,
+            }}
             options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
           />
         </article>

@@ -690,7 +690,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
           }}
           onClick={(e) => e.stopPropagation()}
         >
-          {/* ── Header ────────────────────────────────────── */}
+          {/* ── Header ────────────────────────────────────────────── */}
           <div
             className="flex-shrink-0 flex items-center justify-between px-5"
             style={{

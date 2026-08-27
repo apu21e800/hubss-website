@@ -31,6 +31,21 @@ import { withColours, search, groupHits, type SearchHit } from "@/lib/search";
  * close, the active row always scrolled into view, the matched term marked in
  * every row, and a live count. Rows are one line of title plus one line of
  * context so a screenful is eight results rather than three.
+ *
+ * THE ORANGE RULE. HUB's orange is marking paint. On a road, paint marks the
+ * one thing a driver must not miss — it is never applied to the whole surface,
+ * and it is never decorative. The same discipline governs it here:
+ *
+ *   At rest this panel is monochrome. Orange appears ONLY where the visitor has
+ *   acted — the caret they are typing with, the rule that tracks their query,
+ *   the count that answers them, and the return key on the row they are about
+ *   to open. Stop typing and all of it recedes.
+ *
+ * Four accents, each one tied to a live state, none larger than a few pixels.
+ * That is the difference between an interface that uses a brand colour and one
+ * that is merely tinted with it. The earlier draft had seven decorative hues;
+ * the draft after that had none at all, which was correct about the noise and
+ * wrong about the craft.
  */
 
 const QUICK: { label: string; href: string; hint: string }[] = [
@@ -190,10 +205,33 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
             type into, and the caret is already in it. Removing the box removes
             an orange accent and a border, and gives the text room to breathe. */}
         <div
-          className="flex items-center gap-3.5 px-5"
+          className="flex items-center gap-3.5 px-5 relative"
           style={{ minHeight: 68, borderBottom: "1px solid var(--border-color)" }}
         >
-          <svg className="flex-shrink-0" width="19" height="19" fill="none" stroke="var(--text-faint)" viewBox="0 0 24 24">
+          {/* Accent 2: the query rule.
+              Zero-width at rest, drawn across the full field the moment the
+              query is live — marking paint being laid down as you type. It is
+              the one piece of motion in the panel, it costs nothing, and it is
+              the detail that makes the thing feel built rather than assembled. */}
+          <span
+            aria-hidden="true"
+            style={{
+              position: "absolute", left: 0, bottom: -1, height: 2,
+              width: showResults ? "100%" : "0%",
+              background: "linear-gradient(90deg, #F97316 0%, #EAB308 100%)",
+              transition: "width 420ms cubic-bezier(0.22, 1, 0.36, 1)",
+              transformOrigin: "left",
+            }}
+          />
+          <svg
+            className="flex-shrink-0"
+            width="19" height="19" fill="none"
+            // The glyph warms the moment the query is live. Not a state badge —
+            // just the interface acknowledging that it is listening.
+            stroke={showResults ? "#F97316" : "var(--text-faint)"}
+            style={{ transition: "stroke 220ms ease" }}
+            viewBox="0 0 24 24"
+          >
             <circle cx="11" cy="11" r="8" strokeWidth={2} /><path d="M21 21l-4.35-4.35" strokeWidth={2} strokeLinecap="round" />
           </svg>
           <input
@@ -208,7 +246,9 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
             className="flex-1 bg-transparent outline-none"
             style={{
               color: "var(--text-primary)",
-              caretColor: "var(--text-primary)",
+              // Accent 1: the caret. The smallest possible mark, on the exact
+              // pixel the visitor is looking at, alive because it blinks.
+              caretColor: "#F97316",
               fontSize: "1.0625rem",
               paddingTop: 14,
               paddingBottom: 14,
@@ -238,10 +278,20 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                 {QUICK.map((item) => (
                   <button
                     key={item.href} onClick={() => go(item.href)}
-                    className="flex items-center justify-between gap-2 px-3 rounded-lg text-left hover:bg-white/[0.06] transition-colors"
+                    className="group flex items-center justify-between gap-2 px-3 rounded-lg text-left hover:bg-white/[0.06] transition-colors"
                     style={{ minHeight: 44 }}
                   >
-                    <span className="text-sm font-semibold" style={{ color: "var(--text-body)" }}>{item.label}</span>
+                    <span className="text-sm font-semibold flex items-center gap-2" style={{ color: "var(--text-body)" }}>
+                      {/* A two-pixel mark that appears under the cursor. The
+                          jump links are destinations; the mark says which one
+                          you are pointing at, in the site's own paint. */}
+                      <span
+                        aria-hidden="true"
+                        className="opacity-0 group-hover:opacity-100 transition-opacity"
+                        style={{ width: 3, height: 14, background: "#F97316", borderRadius: 2 }}
+                      />
+                      {item.label}
+                    </span>
                     <span className="text-[11px]" style={{ color: "var(--text-faint)" }}>{item.hint}</span>
                   </button>
                 ))}
@@ -251,7 +301,9 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                 {TRY.map((t) => (
                   <button
                     key={t} onClick={() => { setQuery(t); inputRef.current?.focus(); }}
-                    className="text-xs font-medium px-3 py-2 rounded-full transition-colors hover:bg-white/[0.08]"
+                    // Suggestion chips warm on hover — the one place in the
+                    // empty state where the visitor has expressed intent.
+                    className="text-xs font-medium px-3 py-2 rounded-full transition-colors hover:bg-white/[0.06] hover:border-orange-500/45 hover:text-white"
                     style={{ background: "var(--fill-subtle)", color: "var(--text-secondary)", border: "1px solid var(--border-color)" }}
                   >
                     {t}
@@ -321,7 +373,17 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                           )}
                         </span>
                         {isActive && (
-                          <span className="flex-shrink-0 text-[10px] font-mono px-1.5 py-0.5 rounded" style={{ color: "var(--text-faint)", border: "1px solid var(--border-color)" }}>
+                          // Accent 3: the return key, on the one row Enter will
+                          // open. This is the palette's actual next action, so
+                          // it is the one row-level element that earns colour.
+                          <span
+                            className="flex-shrink-0 text-[10px] font-mono px-1.5 py-0.5 rounded"
+                            style={{
+                              color: "#F97316",
+                              border: "1px solid rgba(249,115,22,0.38)",
+                              background: "rgba(249,115,22,0.07)",
+                            }}
+                          >
                             ↵
                           </span>
                         )}
@@ -346,7 +408,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                 {TRY.map((t) => (
                   <button
                     key={t} onClick={() => { setQuery(t); inputRef.current?.focus(); }}
-                    className="text-xs font-medium px-3 py-2 rounded-full hover:bg-white/[0.08]"
+                    className="text-xs font-medium px-3 py-2 rounded-full transition-colors hover:bg-white/[0.06] hover:border-orange-500/45 hover:text-white"
                     style={{ background: "var(--fill-subtle)", color: "var(--text-secondary)", border: "1px solid var(--border-color)" }}
                   >
                     {t}
@@ -368,8 +430,20 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
               <span><kbd style={{ fontFamily: "monospace" }}>esc</kbd> close</span>
             </span>
             <span className="sm:hidden">Tap a result</span>
-            <span aria-live="polite">
-              {showResults ? `${flat.length} result${flat.length === 1 ? "" : "s"}` : `${entries.length} pages indexed`}
+            {/* Accent 4: the count. It is the only number in the panel that
+                answers the visitor directly, and it changes on every keystroke,
+                so it is the one place a colour reads as responsiveness rather
+                than decoration. At rest — no query — it stays grey, because at
+                rest it is describing the index, not answering anyone. */}
+            <span aria-live="polite" className="tabular-nums">
+              {showResults ? (
+                <>
+                  <span style={{ color: "#F97316", fontWeight: 650 }}>{flat.length}</span>
+                  {` result${flat.length === 1 ? "" : "s"}`}
+                </>
+              ) : (
+                `${entries.length} pages indexed`
+              )}
             </span>
           </div>
         </div>

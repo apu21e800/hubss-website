@@ -251,12 +251,35 @@ const nextConfig: NextConfig = {
       { source: "/driveways-gallery", destination: "/applications/private-driveways", permanent: true },
       { source: "/public-art-gallery", destination: "/applications/public-art", permanent: true },
       { source: "/regulatory-safety-markings-gallery", destination: "/applications/regulatory-markings", permanent: true },
-      { source: "/streetscapes-gallery", destination: "/projects", permanent: true },
+      { source: "/streetscapes-gallery", destination: "/blog/project-profiles", permanent: true },
 
-      // WordPress projects sub-tree — bulk taxonomy/pagination URLs
-      { source: "/projects/category/:cat*", destination: "/projects", permanent: true },
-      { source: "/projects/page/:n", destination: "/projects", permanent: true },
-      { source: "/projects/featured-projects/:n", destination: "/projects", permanent: true },
+      // ── /projects ───────────────────────────────────────────────────────────
+      // /projects was folded into Field Notes; app/projects/page.tsx calls
+      // redirect("/blog/project-profiles"). But that route prerenders, so Next
+      // ships the redirect in the RSC payload instead of as an HTTP status:
+      // measured on production, an arriving visitor got a bare "LOADING" screen
+      // with no navigation for ~600ms, then a client-side navigation at 1.15s.
+      // Crawlers saw worse — a 200 carrying the layout's rich "Project Gallery"
+      // title over an empty body, i.e. a thin page competing with the real one.
+      //
+      // Doing it here moves the decision to the edge: no shell renders, no
+      // flash, no thin page. The page component stays as the fallback if this
+      // rule is ever removed.
+      //
+      // TEMPORARY (307), deliberately, and this is the one rule in this file
+      // that is. A 308 is cached by the browser forever with no server-side
+      // way to revoke it — so if /projects is ever rebuilt as a real gallery
+      // index, every visitor who had already been bounced would keep being
+      // bounced. Flip this to `permanent: true` once that decision is settled.
+      { source: "/projects", destination: "/blog/project-profiles", permanent: false },
+
+      // WordPress projects sub-tree — bulk taxonomy/pagination URLs.
+      // Pointed straight at the destination rather than at /projects: Next does
+      // not collapse redirect chains, so hopping through /projects cost a second
+      // round trip and, before the rule above existed, a rendered shell too.
+      { source: "/projects/category/:cat*", destination: "/blog/project-profiles", permanent: true },
+      { source: "/projects/page/:n", destination: "/blog/project-profiles", permanent: true },
+      { source: "/projects/featured-projects/:n", destination: "/blog/project-profiles", permanent: true },
 
       // /projects/[slug] — route to matching blog post on new site
       { source: "/projects/best-crosswalks-canada", destination: "/blog/best-crosswalks-canada", permanent: true },

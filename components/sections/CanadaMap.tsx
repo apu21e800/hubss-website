@@ -241,7 +241,7 @@ function PanelCard({
       >
         <Image
           src={project.images[0]}
-          alt=""
+          alt={`${project.title} — ${project.city}`}
           width={64}
           height={46}
           style={{ width: "100%", height: "100%", objectFit: "cover" }}
@@ -2098,7 +2098,7 @@ export default function CanadaMap() {
                     >
                       <Image
                         src={project.images[0]}
-                        alt=""
+                        alt={`${project.title} — ${project.city}`}
                         width={62}
                         height={48}
                         style={{ width: "100%", height: "100%", objectFit: "cover" }}

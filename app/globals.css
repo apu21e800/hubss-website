@@ -641,6 +641,21 @@ p {
   border-radius: 2px;
 }
 
+/* …with one exception: the command palette's own field.
+
+   That input is focused programmatically the instant the overlay opens, so the
+   ring is not telling a keyboard user anything they did not already know — it
+   just draws a bright orange rectangle around the largest element on screen,
+   permanently, for everyone. The palette already exposes focus properly: the
+   dialog is aria-modal, the list is a role="listbox", and the highlighted row
+   carries aria-selected. The visible focus indicator is the selected row, which
+   is where the reader's attention actually needs to be.
+
+   Scoped by attribute so no other field on the site loses its ring. */
+[data-palette-input]:focus-visible {
+  outline: none;
+}
+
 /* Scrollbars themed to the page instead of OS default grey-on-white.
    Component-level scrollbar classes (panel/strip) still override these. */
 html {

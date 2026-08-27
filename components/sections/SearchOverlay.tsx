@@ -172,26 +172,47 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
         role="dialog" aria-modal="true" aria-label="Site search"
         initial={{ opacity: 0, scale: 0.98, y: -10 }} animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.98, y: -10 }} transition={{ duration: 0.16 }}
-        className="w-full max-w-2xl" onClick={(e) => e.stopPropagation()}
+        className="w-full max-w-2xl rounded-2xl overflow-hidden"
+        style={{
+          background: "var(--bg-card-neutral)",
+          border: "1px solid var(--border-color)",
+          boxShadow: "0 32px 90px rgba(0,0,0,0.72)",
+        }}
+        onClick={(e) => e.stopPropagation()}
       >
-        {/* Input */}
+        {/* Input.
+
+            This was a separate floating card sitting above a second card, with
+            its own border and an orange ring around it. Command palettes are
+            one surface — Raycast, Linear, Vercel, GitHub all do it the same
+            way, and the reason is that a search field inside a modal does not
+            need to announce itself as a field: it is the only thing you can
+            type into, and the caret is already in it. Removing the box removes
+            an orange accent and a border, and gives the text room to breathe. */}
         <div
-          className="flex items-center gap-3 px-4 rounded-2xl"
-          style={{
-            background: "var(--bg-card)", border: "1px solid var(--border-color)",
-            boxShadow: "0 24px 80px rgba(0,0,0,0.7)", minHeight: 60,
-          }}
+          className="flex items-center gap-3.5 px-5"
+          style={{ minHeight: 68, borderBottom: "1px solid var(--border-color)" }}
         >
           <svg className="flex-shrink-0" width="19" height="19" fill="none" stroke="var(--text-faint)" viewBox="0 0 24 24">
             <circle cx="11" cy="11" r="8" strokeWidth={2} /><path d="M21 21l-4.35-4.35" strokeWidth={2} strokeLinecap="round" />
           </svg>
           <input
             ref={inputRef} type="text" value={query} onChange={(e) => setQuery(e.target.value)}
+            data-palette-input
+            role="combobox"
+            aria-expanded={showResults}
+            aria-autocomplete="list"
             aria-label="Search the site"
             aria-controls="search-results"
             placeholder="Search systems, applications, specs, field notes…"
-            className="flex-1 bg-transparent outline-none text-base"
-            style={{ color: "var(--text-primary)", caretColor: "#F97316" }}
+            className="flex-1 bg-transparent outline-none"
+            style={{
+              color: "var(--text-primary)",
+              caretColor: "var(--text-primary)",
+              fontSize: "1.0625rem",
+              paddingTop: 14,
+              paddingBottom: 14,
+            }}
           />
           {query && (
             <button
@@ -209,10 +230,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
         </div>
 
         {/* Results */}
-        <div
-          className="mt-2 rounded-2xl overflow-hidden"
-          style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--border-color)", boxShadow: "0 24px 80px rgba(0,0,0,0.6)" }}
-        >
+        <div>
           {!showResults && (
             <div className="p-4">
               <p className="text-[11px] font-bold uppercase tracking-[0.16em] mb-2.5" style={{ color: "var(--text-faint)" }}>Jump to</p>
@@ -248,12 +266,16 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
               {groups.map((group) => (
                 <div key={group.type}>
                   <p
-                    className="text-[10px] font-bold uppercase tracking-[0.18em] px-4 pt-4 pb-1.5 sticky top-0"
+                    className="text-[10px] font-bold uppercase tracking-[0.18em] px-5 pt-4 pb-2 sticky top-0"
                     style={{ color: LABEL, background: "var(--bg-card-neutral)" }}
                   >
                     {group.type}
                     <span style={{ color: "var(--text-faint)", marginLeft: 8, letterSpacing: 0 }}>{group.hits.length}</span>
                   </p>
+                  {/* Inset by the panel's own gutter so an active row is a
+                      rounded block floating on the surface, not a stripe
+                      running edge to edge. */}
+                  <div className="px-2 pb-1">
                   {group.hits.map((h: SearchHit) => {
                     index += 1;
                     const isActive = index === active;
@@ -266,17 +288,15 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                         data-active={isActive}
                         onMouseEnter={() => setActive(myIndex)}
                         onClick={() => go(h.href)}
-                        className="w-full text-left pr-4 py-2.5 flex items-center gap-3 transition-colors"
-                        // One signal, not three. The active row previously
-                        // carried an orange wash AND an orange dot AND an
-                        // orange badge; now the rule on the left says "here"
-                        // and the surface lifts a step, the way a raised
-                        // element does everywhere else on the site.
-                        style={{
-                          background: isActive ? "var(--bg-card-surface)" : "transparent",
-                          borderLeft: `2px solid ${isActive ? "#f97316" : "transparent"}`,
-                          paddingLeft: 14,
-                        }}
+                        className="w-full text-left px-3 py-2.5 flex items-center gap-3 rounded-lg transition-colors"
+                        // Selection is elevation, not colour. The orange left
+                        // rule read as a status marker — the kind of thing that
+                        // means "unread" or "error" — when all it means is
+                        // "your cursor is here". Every palette worth copying
+                        // says that with a raised, inset, rounded surface and
+                        // nothing else; the row lifts off the panel and the eye
+                        // finds it without being flagged down.
+                        style={{ background: isActive ? "var(--bg-card-surface)" : "transparent" }}
                       >
                         {h.hex ? (
                           // A colourant result should show the colour at a size
@@ -308,6 +328,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                       </button>
                     );
                   })}
+                  </div>
                 </div>
               ))}
             </div>

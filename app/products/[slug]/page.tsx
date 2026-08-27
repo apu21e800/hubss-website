@@ -19,6 +19,8 @@ import { applications } from "@/lib/applications";
 import { productImages, resolveImage } from "@/lib/featured-images";
 import { buildMetadata } from "@/lib/seo";
 import { getProductFamily } from "@/lib/product-taxonomy";
+import { catalogueFor } from "@/lib/product-catalogue";
+import ProductSpecCard from "@/components/products/ProductSpecCard";
 import { getProductBySlug } from "@/lib/sanity.queries";
 
 export const revalidate = 3600;
@@ -67,6 +69,9 @@ export default async function ProductPage({ params }: Props) {
   })();
 
   if (!product || product.comingSoon) notFound();
+
+  // Catalogue editorial for this product, where the print book covers it.
+  const catalogue = catalogueFor(slug);
 
   // Featured image from lib/featured-images.ts (audited, correct per product)
   const featuredImg = productImages[slug] ? resolveImage(productImages[slug]) : null;
@@ -186,6 +191,14 @@ export default async function ProductPage({ params }: Props) {
             >
               {product.name}
             </h1>
+            {/* The orange signature dash from the catalogue's product spread —
+                the one piece of the printed page that makes a product name read
+                as a masthead rather than a label. */}
+            <div
+              className="mb-4"
+              style={{ width: 56, height: 3, background: "#f97316", borderRadius: 2 }}
+              aria-hidden="true"
+            />
             <p
               className="text-base sm:text-lg max-w-xl leading-relaxed"
               style={{ color: "rgba(255,255,255,0.78)", textShadow: "0 1px 12px rgba(0,0,0,0.5)" }}
@@ -198,9 +211,45 @@ export default async function ProductPage({ params }: Props) {
 
       {/* Main content */}
       <div className="relative" style={{ background: "var(--bg-dark)" }}>
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 pb-20 sm:pb-28">
 
-        {/* Specify CTA bar */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
+          {/* Left: description + gallery */}
+          <div className="lg:col-span-2">
+            {/* Lead with the catalogue's positioning spread where we have one.
+                The heading used to read "About <product>" — a filing label, in
+                the one position on the page where a specifier is still deciding
+                whether to keep reading. */}
+            {catalogue ? (
+              <>
+                <ProductSpecCard entry={catalogue} productName={product.name} />
+                <h2 className="text-xl sm:text-2xl font-bold mb-4" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
+                  How it works
+                </h2>
+                <p className="mb-12 leading-[1.85]" style={{ color: "var(--text-body)", fontSize: "clamp(1rem, 1.8vw, 1.075rem)", maxWidth: "65ch" }}>
+                  {product.description}
+                </p>
+              </>
+            ) : (
+              <>
+                <h2 className="text-2xl sm:text-3xl font-bold mb-5" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
+                  What {product.name} is
+                </h2>
+                <p className="mb-12 leading-[1.85]" style={{ color: "var(--text-body)", fontSize: "clamp(1rem, 1.8vw, 1.075rem)", maxWidth: "65ch" }}>
+                  {product.description}
+                </p>
+              </>
+            )}
+
+            {/* The ask, after the argument.
+
+                This bar used to sit above everything — the first thing on the
+                page after the hero was a request to book a session, before the
+                page had said what the product is or why it holds up. Moving it
+                below the positioning spread and the "How it works" copy means a
+                specifier meets it having just read the thickness, the skid
+                rating and the service life, which is the moment the offer is
+                worth anything. */}
         <div
           className="rounded-xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 mb-10 relative overflow-hidden"
           style={{
@@ -232,13 +281,6 @@ export default async function ProductPage({ params }: Props) {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
-          {/* Left: description + gallery */}
-          <div className="lg:col-span-2">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-5" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>About {product.name}</h2>
-            <p className="mb-12 leading-[1.85]" style={{ color: "var(--text-body)", fontSize: "clamp(1rem, 1.8vw, 1.075rem)", maxWidth: "65ch" }}>
-              {product.description}
-            </p>
 
             {familiesFor(product.slug).length > 0 && (
               <ColourSystem
@@ -252,7 +294,16 @@ export default async function ProductPage({ params }: Props) {
             {product.slug === "streetprint" && <PavingPatterns />}
             {(product.slug === "streetbond" || product.slug === "traffic-patterns-xd") && <PatternGalleryCTA />}
 
-            <h2 className="text-2xl font-bold mb-6 mt-14" style={{ color: "var(--text-primary)" }}>Gallery</h2>
+            {/* "Gallery" is what a CMS calls a folder. The catalogue calls its
+                photography "The Work" — better, and already the client's own
+                word for it. The standfirst keeps it unambiguous for a reader
+                and for search. */}
+            <h2 className="text-2xl font-bold mb-1.5 mt-14" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
+              The work
+            </h2>
+            <p className="mb-6 text-sm" style={{ color: "var(--text-secondary)" }}>
+              {product.name} installations photographed on site across Canada.
+            </p>
             <GalleryGrid images={gallery} />
 
             <DocumentDownloads slug={product.slug} />
@@ -262,7 +313,12 @@ export default async function ProductPage({ params }: Props) {
           <div>
             <div className="rounded-xl p-8 mb-8 sticky top-24 relative overflow-hidden" style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.08)" }}>
               <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
-              <h3 className="font-bold text-lg mb-6" style={{ color: "#F5F0EB" }}>Product Features</h3>
+              {/* Was an <h3> sitting under the Downloads <h2>, which filed the
+                  spec table inside "Downloads" for every screen reader and for
+                  Google's outline. It is its own section and now says so. */}
+              <h2 className="font-bold text-lg mb-6" style={{ color: "#F5F0EB", letterSpacing: "-0.01em" }}>
+                Full specification
+              </h2>
               <div className="space-y-4">
                 {product.specs.map((spec) => (
                   <div key={spec.label} className="flex justify-between text-sm" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", paddingBottom: "12px" }}>
@@ -368,10 +424,13 @@ export default async function ProductPage({ params }: Props) {
             <div className="flex items-end justify-between mb-8">
               <div>
                 <p className="text-xs font-bold tracking-[0.2em] uppercase mb-3" style={{ color: "#f97316" }}>
-                  Where It&apos;s Used
+                  Specified for
                 </p>
-                <h2 className="text-2xl font-bold" style={{ color: "var(--text-primary)" }}>
-                  Applications
+                {/* The eyebrow said "Where It's Used" and the heading said
+                    "Applications" — the same fact twice, once in the reader's
+                    language and once in the database's. Keeping the reader's. */}
+                <h2 className="text-2xl font-bold" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
+                  Where {product.name} goes
                 </h2>
               </div>
               <Link

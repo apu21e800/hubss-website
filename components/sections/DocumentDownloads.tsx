@@ -134,7 +134,12 @@ export default function DocumentDownloads({ slug }: { slug: string }) {
                 >
                   Documents
                 </p>
-                <h2 className="text-xl font-bold" style={{ color: "#F5F0EB" }}>Downloads</h2>
+                {/* "Downloads" describes the mechanism. A municipal engineer is
+                    not looking for a download, they are looking for the sheet
+                    they have to attach to a submittal. */}
+                <h2 className="text-xl font-bold" style={{ color: "#F5F0EB", letterSpacing: "-0.01em" }}>
+                  Spec &amp; submittal
+                </h2>
               </div>
               <div className="flex-1 h-px ml-4" style={{ background: "var(--fill-subtle)" }} />
               <span className="text-xs shrink-0" style={{ color: "rgba(255,255,255,0.55)" }}>

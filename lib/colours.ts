@@ -203,7 +203,11 @@ export interface ColourSectionMeta {
 
 const SECTION_META: Record<string, ColourSectionMeta> = {
   streetbond: {
-    heading: "The colour system.",
+    // Was "The colour system." — which is now the catalogue positioning line
+    // at the top of the StreetBond page, so the phrase was appearing twice as
+    // an <h2> on one document. This section is the chips themselves; naming it
+    // for the count is both distinct and the more useful fact.
+    heading: "Sixty-three colours.",
     intro: "Sixty-three EMA colours from the 2026 colour card, each with published solar reflectance. Full Pantone custom matching for branded environments.",
     downloadHref: "/docs/StreetBond/StreetBond/StreetBond-Colour-Card-2026.pdf",
     downloadLabel: "Download the 2026 colour card (PDF)",

@@ -633,6 +633,19 @@ p {
   color: #101010;
 }
 
+/* The command palette's live dot — breathing, not blinking. A hard blink
+   reads as an alarm; a slow opacity swell reads as attention. Collapses to a
+   static dot under prefers-reduced-motion. */
+@keyframes palette-dot {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.45; }
+}
+@media (prefers-reduced-motion: reduce) {
+  @keyframes palette-dot {
+    0%, 100% { opacity: 1; }
+  }
+}
+
 /* Keyboard focus: one consistent ring everywhere. Mouse clicks stay clean
    (:focus-visible only), so this shows up exactly when someone tabs. */
 :focus-visible {

@@ -208,21 +208,6 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
           className="flex items-center gap-3.5 px-5 relative"
           style={{ minHeight: 68, borderBottom: "1px solid var(--border-color)" }}
         >
-          {/* Accent 2: the query rule.
-              Zero-width at rest, drawn across the full field the moment the
-              query is live — marking paint being laid down as you type. It is
-              the one piece of motion in the panel, it costs nothing, and it is
-              the detail that makes the thing feel built rather than assembled. */}
-          <span
-            aria-hidden="true"
-            style={{
-              position: "absolute", left: 0, bottom: -1, height: 2,
-              width: showResults ? "100%" : "0%",
-              background: "linear-gradient(90deg, #F97316 0%, #EAB308 100%)",
-              transition: "width 420ms cubic-bezier(0.22, 1, 0.36, 1)",
-              transformOrigin: "left",
-            }}
-          />
           <svg
             className="flex-shrink-0"
             width="19" height="19" fill="none"
@@ -249,9 +234,33 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
               // Accent 1: the caret. The smallest possible mark, on the exact
               // pixel the visitor is looking at, alive because it blinks.
               caretColor: "#F97316",
-              fontSize: "1.0625rem",
+              fontSize: "1.125rem",
+              letterSpacing: "-0.01em",
               paddingTop: 14,
               paddingBottom: 14,
+            }}
+          />
+          {/* Accent 2: the live dot.
+
+              A rule across the field was too much surface for what it had to
+              say. The dot is also the catalogue's own mark — Vernon set an
+              Orange Dot on the half title, a dot on every section opener, and a
+              dot leading every row of the contents page. Bringing it here means
+              the interface and the printed book are marking things the same
+              way, which is what a design system is for.
+
+              Present only while the query is live, and breathing rather than
+              blinking so it reads as attention, not as an alarm. */}
+          <span
+            aria-hidden="true"
+            className="flex-shrink-0"
+            style={{
+              width: 7, height: 7, borderRadius: "50%", background: "#F97316",
+              opacity: showResults ? 1 : 0,
+              transform: showResults ? "scale(1)" : "scale(0.4)",
+              transition: "opacity 260ms ease, transform 320ms cubic-bezier(0.34, 1.56, 0.64, 1)",
+              animation: showResults ? "palette-dot 2.4s ease-in-out infinite" : "none",
+              boxShadow: "0 0 0 4px rgba(249,115,22,0.10)",
             }}
           />
           {query && (
@@ -264,8 +273,12 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
               <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" strokeWidth={2} strokeLinecap="round" /></svg>
             </button>
           )}
-          {/* Hidden on phones — at 390px it pushed past the panel edge, and a
+          {/* A hairline between the action and the hint — clearing the field
+              and closing the panel are different things, and without a break
+              the trailing edge read as one undifferentiated cluster of chrome.
+              Hidden on phones: at 390px it pushed past the panel edge, and a
               touch user has no ESC key to press anyway. */}
+          <span className="hidden sm:block flex-shrink-0" aria-hidden="true" style={{ width: 1, height: 18, background: "var(--border-color)" }} />
           <kbd className="hidden sm:block flex-shrink-0 px-2 py-0.5 rounded text-[11px] font-mono" style={{ background: "var(--fill-subtle)", color: "var(--text-faint)", border: "1px solid var(--border-color)" }}>ESC</kbd>
         </div>
 
@@ -321,8 +334,16 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                     className="text-[10px] font-bold uppercase tracking-[0.18em] px-5 pt-4 pb-2 sticky top-0"
                     style={{ color: LABEL, background: "var(--bg-card-neutral)" }}
                   >
+                    {/* Dot · label · count — the contents-page row from the
+                        catalogue, at UI scale. Structural, so the dot is
+                        neutral; the orange one is reserved for live state. */}
+                    <span
+                      aria-hidden="true"
+                      className="inline-block align-middle"
+                      style={{ width: 4, height: 4, borderRadius: "50%", background: "currentColor", marginRight: 9, marginBottom: 2, opacity: 0.7 }}
+                    />
                     {group.type}
-                    <span style={{ color: "var(--text-faint)", marginLeft: 8, letterSpacing: 0 }}>{group.hits.length}</span>
+                    <span style={{ color: "var(--text-faint)", marginLeft: 9, letterSpacing: 0, opacity: 0.75 }}>{group.hits.length}</span>
                   </p>
                   {/* Inset by the panel's own gutter so an active row is a
                       rounded block floating on the surface, not a stripe
@@ -356,10 +377,11 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                           // is the whole reason someone searched for it.
                           <span className="flex-shrink-0 rounded" style={{ width: 26, height: 26, background: h.hex, border: "1px solid rgba(255,255,255,0.22)" }} />
                         ) : (
-                          <span
-                            className="flex-shrink-0 rounded-full"
-                            style={{ width: 5, height: 5, background: "var(--border-color)" }}
-                          />
+                          // No bullet. Every row carried a neutral dot that
+                          // marked nothing — with a dot now leading each group
+                          // label it was dot soup, and the title is a stronger
+                          // left edge than a 5px circle ever was.
+                          null
                         )}
                         <span className="min-w-0 flex-1">
                           <span className="block text-sm font-semibold truncate" style={{ color: isActive ? "#fff" : "var(--text-body)" }}>

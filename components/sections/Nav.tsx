@@ -690,7 +690,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
           }}
           onClick={(e) => e.stopPropagation()}
         >
-          {/* ── Header ────────────────────────────────────────────── */}
+          {/* ── Header ────────────────────────────────────── */}
           <div
             className="flex-shrink-0 flex items-center justify-between px-5"
             style={{
@@ -1012,6 +1012,46 @@ export default function Nav() {
   }, []);
 
   const openSearch = useCallback(() => setSearchOpen(true), []);
+
+  /**
+   * Cmd/Ctrl-K, and "/" as the documentation-site convention.
+   *
+   * There was no hotkey at all. A palette you can only reach by finding and
+   * clicking a small control in the corner is a menu, not a palette — the
+   * whole point is that it is one keystroke away from anywhere on the site.
+   *
+   * "/" only fires when the visitor is not already typing into something,
+   * because otherwise it would eat the character out of the contact form.
+   */
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const el = document.activeElement as HTMLElement | null;
+      const typing =
+        !!el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.tagName === "SELECT" || el.isContentEditable);
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setSearchOpen((v) => !v);
+        return;
+      }
+      if (e.key === "/" && !typing && !e.metaKey && !e.ctrlKey && !e.altKey) {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, []);
+
+  /**
+   * Print the key the visitor actually has. Resolved after mount so the
+   * server-rendered markup and the first client render agree — deciding this
+   * during render would hydrate-mismatch on every Mac.
+   */
+  const [shortcutLabel, setShortcutLabel] = useState("Ctrl K");
+  useEffect(() => {
+    const mac = /Mac|iPhone|iPad|iPod/.test(navigator.platform || navigator.userAgent);
+    setShortcutLabel(mac ? "⌘K" : "Ctrl K");
+  }, []);
   const closeSearch = useCallback(() => setSearchOpen(false), []);
 
   return (
@@ -1104,7 +1144,7 @@ export default function Nav() {
               aria-expanded={openPanel === "products"}
               aria-haspopup="true"
               aria-controls="products-mega-menu"
-              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[13px] font-medium transition-colors hover:text-orange-400 hover:bg-white/5"
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[13px] font-medium whitespace-nowrap transition-colors hover:text-orange-400 hover:bg-white/5"
               style={{ color: openPanel === "products" ? "#F97316" : "rgba(255,255,255,0.65)" }}
             >
               Products
@@ -1130,7 +1170,7 @@ export default function Nav() {
               aria-expanded={openPanel === "applications"}
               aria-haspopup="true"
               aria-controls="applications-mega-menu"
-              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[13px] font-medium transition-colors hover:text-orange-400 hover:bg-white/5"
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[13px] font-medium whitespace-nowrap transition-colors hover:text-orange-400 hover:bg-white/5"
               style={{ color: openPanel === "applications" ? "#F97316" : "rgba(255,255,255,0.65)" }}
             >
               Applications
@@ -1148,7 +1188,7 @@ export default function Nav() {
               onClick={() => setOpenPanel(null)}
               aria-expanded={openPanel === "fieldnotes"}
               aria-haspopup="true"
-              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[13px] font-medium transition-colors hover:text-orange-400 hover:bg-white/5"
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[13px] font-medium whitespace-nowrap transition-colors hover:text-orange-400 hover:bg-white/5"
               style={{ color: openPanel === "fieldnotes" ? "#F97316" : "rgba(255,255,255,0.65)" }}
             >
               Field Notes
@@ -1163,7 +1203,11 @@ export default function Nav() {
               <Link key={link.href} href={link.href}
                 onMouseEnter={() => setOpenPanel(null)}
                 onFocus={() => setOpenPanel(null)}
-                className="px-2.5 py-1.5 rounded-lg text-[13px] font-medium transition-colors hover:text-orange-400 hover:bg-white/5"
+                // whitespace-nowrap: at ~1100px "Field Notes" broke across two
+                // lines and pushed the whole nav row out of alignment. A nav
+                // label is a single object; it should shrink the row, never
+                // wrap inside it.
+                className="px-2.5 py-1.5 rounded-lg text-[13px] font-medium whitespace-nowrap transition-colors hover:text-orange-400 hover:bg-white/5"
                 style={{ color: "rgba(255,255,255,0.65)" }}
               >
                 {link.label}
@@ -1173,16 +1217,55 @@ export default function Nav() {
 
           {/* Desktop right — search + CTAs */}
           <div className="hidden md:flex items-center gap-2">
-            {/* Search */}
+            {/* Search.
+
+                This was a 45%-opacity text button that read as a tertiary nav
+                link — the same visual weight as anything else in the row, so
+                nothing said "you can search this site". Every product with a
+                search worth using ships the same control: something shaped like
+                a field, with the shortcut printed on it. Looks like an input,
+                behaves like a button, opens the palette. */}
             <button
               onClick={openSearch}
-              className="flex items-center gap-2 px-2 py-1.5 rounded-lg text-[13px] transition-all hover:bg-white/5"
-              style={{ color: "rgba(255,255,255,0.45)" }}
+              aria-label="Search the site"
+              aria-keyshortcuts="Meta+K Control+K"
+              className="group hidden lg:flex items-center gap-2.5 pl-3 pr-2 rounded-lg transition-colors w-[160px] xl:w-[232px]"
+              style={{
+                height: 36,
+                background: "var(--bg-card-neutral)",
+                border: "1px solid var(--border-color)",
+                color: "var(--text-faint)",
+              }}
             >
-              <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="flex-shrink-0 transition-colors group-hover:stroke-[#F97316]" width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <circle cx="11" cy="11" r="8" strokeWidth={2} /><path d="M21 21l-4.35-4.35" strokeWidth={2} strokeLinecap="round" />
               </svg>
-              <span className="text-xs hidden lg:block">Search</span>
+              {/* The long label wraps below xl and blows the field's height out
+                  to two lines, so it is only spent where there is room for it.
+                  Fixed width rather than min-width: a nav control that resizes
+                  with its own label makes the whole row twitch. */}
+              <span className="text-[13px] flex-1 text-left whitespace-nowrap overflow-hidden transition-colors group-hover:text-[color:var(--text-secondary)]">
+                <span className="hidden xl:inline">Search the site</span>
+                <span className="xl:hidden">Search</span>
+              </span>
+              <kbd
+                className="flex-shrink-0 text-[10px] font-mono px-1.5 py-0.5 rounded"
+                style={{ background: "var(--fill-subtle)", border: "1px solid var(--border-color)", color: "var(--text-faint)" }}
+              >
+                {shortcutLabel}
+              </kbd>
+            </button>
+
+            {/* Icon-only below lg, where the field will not fit. */}
+            <button
+              onClick={openSearch}
+              aria-label="Search the site"
+              className="lg:hidden flex items-center justify-center rounded-lg transition-colors hover:bg-white/5"
+              style={{ width: 36, height: 36, color: "rgba(255,255,255,0.55)" }}
+            >
+              <svg width="17" height="17" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8" strokeWidth={2} /><path d="M21 21l-4.35-4.35" strokeWidth={2} strokeLinecap="round" />
+              </svg>
             </button>
 
             {/* Resources — ghost */}

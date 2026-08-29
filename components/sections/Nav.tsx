@@ -1336,83 +1336,30 @@ export default function Nav() {
 
           {/* Desktop right — search + CTAs */}
           <div className="hidden md:flex items-center gap-2">
-            {/* Search — a glass that opens into a bar.
+            {/* Search — a magnifying glass, nothing else.
 
-                The always-on field was correct about making search findable and
-                wrong about what it cost: 232px of permanent chrome in a row that
-                also has to hold three mega-menu triggers, two links and a
-                primary CTA. Vernon: "just make it a magnifying glass that
-                expands to a search bar on click I guess."
-
-                So it rests as a 36px glass and opens on hover, focus, or tap —
-                one width transition, no state, nothing to fall out of sync. The
-                label and shortcut fade in slightly behind the width so the bar
-                appears to fill rather than to stretch, which is the difference
-                between an animation and a gesture. Clicking at any point in the
-                sequence opens the palette.
-
-                CSS-only on purpose: a nav control that owns React state is a
-                nav control that can be left open by a route change. */}
-            {/* The bar grows leftward OVER the row, not through it.
-
-                Expanding in normal flow works, but it shoves everything to its
-                left along for the ride — 200px of nav sliding sideways every
-                time a cursor crosses the glass. A control that rearranges the
-                page on hover is a twitch, not an affordance. So the wrapper
-                holds a fixed 36px in the layout and the bar is anchored to its
-                right edge, opening across the nav on its own layer. Nothing
-                else on the row moves. */}
-            <span className="hidden lg:block relative flex-shrink-0" style={{ width: 36, height: 36 }}>
+                History, so nobody resurrects the corpses: this was a permanent
+                232px field (cost: chrome competing with the primary CTA), then
+                a glass that grew into a bar on hover (cost: a costume change
+                nobody asked for — Vernon: "there's a hover effect that extends
+                the search bar, just remove that, it's useless"). He's right.
+                The palette is the search experience; this button's whole job
+                is to open it. One glyph, orange on hover, ⌘K in the tooltip. */}
             <button
               onClick={openSearch}
               aria-label="Search the site"
               aria-keyshortcuts="Meta+K Control+K"
-              className="group/search absolute right-0 top-0 flex items-center rounded-lg overflow-hidden
-                         w-9 hover:w-[232px] focus-visible:w-[232px]
-                         transition-[width,background-color,border-color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
-                         hover:bg-[var(--bg-card-neutral)] focus-visible:bg-[var(--bg-card-neutral)]"
-              style={{
-                height: 36,
-                border: "1px solid transparent",
-                // At rest this is a bare glyph with no border and no label, so
-                // it has to carry its own affordance: --text-faint read as
-                // decoration next to the outlined Resources button beside it.
-                color: "var(--text-secondary)",
-                zIndex: 20,
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = "var(--border-color)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = "transparent"; }}
-              onFocus={(e) => { e.currentTarget.style.borderColor = "var(--border-color)"; }}
-              onBlur={(e) => { e.currentTarget.style.borderColor = "transparent"; }}
+              title={`Search — ${shortcutLabel}`}
+              className="hidden lg:flex items-center justify-center flex-shrink-0 rounded-lg transition-colors hover:bg-white/5"
+              style={{ width: 36, height: 36, color: "var(--text-secondary)" }}
             >
-              {/* The glass holds the 36px square on its own so the icon never
-                  shifts as the bar grows out from behind it. */}
-              <span className="flex items-center justify-center flex-shrink-0" style={{ width: 34, height: 34 }}>
-                <svg
-                  className="transition-colors duration-200 group-hover/search:stroke-[#F97316] group-focus-visible/search:stroke-[#F97316]"
-                  width="17" height="17" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                >
-                  <circle cx="11" cy="11" r="8" strokeWidth={2} /><path d="M21 21l-4.35-4.35" strokeWidth={2} strokeLinecap="round" />
-                </svg>
-              </span>
-
-              <span
-                className="flex items-center gap-2 flex-1 min-w-0 pr-2
-                           opacity-0 group-hover/search:opacity-100 group-focus-visible/search:opacity-100
-                           transition-opacity duration-200 delay-100"
+              <svg
+                className="transition-colors duration-200 hover:stroke-[#F97316]"
+                width="17" height="17" fill="none" stroke="currentColor" viewBox="0 0 24 24"
               >
-                <span className="text-[13px] flex-1 text-left whitespace-nowrap" style={{ color: "var(--text-secondary)" }}>
-                  Search the site
-                </span>
-                <kbd
-                  className="flex-shrink-0 text-[10px] font-mono px-1.5 py-0.5 rounded"
-                  style={{ background: "var(--fill-subtle)", border: "1px solid var(--border-color)", color: "var(--text-faint)" }}
-                >
-                  {shortcutLabel}
-                </kbd>
-              </span>
+                <circle cx="11" cy="11" r="8" strokeWidth={2} /><path d="M21 21l-4.35-4.35" strokeWidth={2} strokeLinecap="round" />
+              </svg>
             </button>
-            </span>
 
             {/* Icon-only below lg, where the field will not fit. */}
             <button

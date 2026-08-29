@@ -71,7 +71,7 @@ const PRODUCT_CATEGORIES: ProductCategory[] = [
 const PRODUCT_TAGLINE: Record<string, string> = {
   "traffic-patterns-xd": "Aggregate-reinforced thermoplastic",
   "traffic-patterns":    "Preformed thermoplastic markings",
-  "premark":             "Symbols, arrows, regulatory markings",
+  "premark":             "Arrows, stop bars, legends",
   "duratherm":           "Inlaid flush-mount thermoplastic",
   "decomark":            "Custom graphic thermoplastic",
   "airmark":             "Airfield thermoplastic markings",

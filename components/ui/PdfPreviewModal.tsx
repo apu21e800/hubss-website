@@ -218,6 +218,15 @@ export default function PdfPreviewModal({
                   height={pg.h}
                   priority={i === 0}
                   sizes="(max-width: 640px) 100vw, 760px"
+                  /* These are already WebP, already rendered at a 1000px long
+                     edge by scripts/gen-pdf-previews.py, and already ~70 KB.
+                     There is nothing for the optimizer to do — but routing
+                     them through it spent transformation budget and, once that
+                     budget ran out, made every one of them a 402 and every
+                     document preview a blank panel. Serving the static file
+                     takes 286 images off the optimizer and makes previews
+                     immune to the quota. */
+                  unoptimized
                   className="w-full h-auto rounded-md"
                   style={{ maxWidth: "760px", border: "1px solid var(--border-color)" }}
                 />

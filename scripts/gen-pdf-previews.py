@@ -25,7 +25,14 @@ DOCS_DIR = ROOT / "public" / "docs"
 OUT_DIR  = ROOT / "public" / "doc-previews"
 MANIFEST = ROOT / "lib" / "pdf-previews.json"
 
-MAX_PAGES = 3       # cover + 2 — enough to judge the document before downloading
+# Every page. Was 3 ("cover + 2 — enough to judge the document before
+# downloading"), which is a fine rule for a two-page spec sheet and a bad one
+# for the documents people actually browse: the StreetPrint Template Catalog
+# showed 3 of 23 template patterns, the DuraTherm Design Manual 3 of 20. A
+# client opened the template catalogue expecting to page through the patterns
+# and got three. All 286 pages across all 67 documents costs ~9 MB, and the
+# modal lazy-loads everything after the first page.
+MAX_PAGES = None    # None = all pages
 LONG_EDGE = 1000    # px
 QUALITY   = 75      # WebP
 
@@ -50,7 +57,7 @@ def render_pdf(pdf_path: Path) -> dict | None:
         return None
     out_sub.mkdir(parents=True, exist_ok=True)
     pages = []
-    for i in range(min(MAX_PAGES, total)):
+    for i in range(total if MAX_PAGES is None else min(MAX_PAGES, total)):
         page = doc.load_page(i)
         rect = page.rect
         longest = max(rect.width, rect.height) or 1

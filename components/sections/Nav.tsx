@@ -191,6 +191,69 @@ function LLMenuCard() {
 //   • Product taglines lifted from 45% → 62% white for readability.
 const ACCENT = "#FB923C";  // small-text accent (WCAG-safe on dark surfaces)
 const BRAND  = "#F97316";  // brand orange — reserved for larger / button use
+
+// ── Menu footer strip — editorial + promotion for the directory menus ────
+// The Field Notes takeover carries the latest stories and a PROMOTED slot;
+// the two directory dropdowns now carry the same band along their floor:
+// the newest field note on the left, the house promotion on the right.
+// One component so the twins cannot drift. The post is FEATURED_POSTS[0] —
+// the same curated "most recent" the Field Notes cover leads with; swap the
+// list to change both surfaces at once. PROMOTED stays house inventory
+// (the 2027 Catalogue — a real page), honestly labelled.
+function MenuFooterStrip() {
+  const latest = FEATURED_POSTS[0];
+  return (
+    <div
+      className="mt-9 pt-6 grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-10"
+      style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}
+    >
+      <Link
+        href={`/blog/${latest.slug}`}
+        className="group flex items-center gap-4 px-3 py-2.5 rounded-xl transition-colors hover:bg-white/5"
+      >
+        <div className="relative flex-shrink-0 rounded-md overflow-hidden" style={{ width: 64, height: 64 }}>
+          <Image
+            src={latest.image}
+            alt={latest.title}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            sizes="96px"
+          />
+        </div>
+        <div className="min-w-0">
+          <p className="text-[10px] font-bold tracking-[0.18em] uppercase mb-1" style={{ color: ACCENT }}>
+            From the field notes
+          </p>
+          <p className="text-[14px] font-semibold leading-snug line-clamp-2 group-hover:text-orange-400 transition-colors" style={{ color: "#F5F0EB" }}>
+            {latest.title}
+          </p>
+        </div>
+      </Link>
+
+      <Link
+        href="/catalogue"
+        className="group flex items-center justify-between gap-4 rounded-xl px-4 py-2.5 transition-colors hover:bg-white/5"
+        style={{
+          background: "linear-gradient(135deg, rgba(249,115,22,0.10) 0%, rgba(255,255,255,0.02) 100%)",
+          border: "1px solid rgba(249,115,22,0.35)",
+        }}
+      >
+        <div className="min-w-0">
+          <p className="text-[9px] font-bold tracking-[0.2em] uppercase mb-1" style={{ color: "rgba(255,255,255,0.45)" }}>
+            Promoted
+          </p>
+          <p className="text-[14px] font-bold" style={{ color: "#F5F0EB" }}>The 2027 Catalogue</p>
+          <p className="text-[12px] mt-0.5 truncate" style={{ color: "rgba(255,255,255,0.62)" }}>
+            Every system, spec, and pattern — one book.
+          </p>
+        </div>
+        <svg width="13" height="13" fill="none" stroke={ACCENT} viewBox="0 0 24 24" className="flex-shrink-0 transition-transform group-hover:translate-x-0.5">
+          <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </Link>
+    </div>
+  );
+}
 function ProductsMegaMenu() {
   return (
     <MegaShell>
@@ -299,6 +362,7 @@ function ProductsMegaMenu() {
         </div>
       </div>
 
+      <MenuFooterStrip />
     </MegaShell>
   );
 }
@@ -555,6 +619,7 @@ function ApplicationsMegaMenu() {
         </div>
       </div>
 
+      <MenuFooterStrip />
     </MegaShell>
   );
 }

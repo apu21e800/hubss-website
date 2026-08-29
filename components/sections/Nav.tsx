@@ -251,7 +251,7 @@ function ProductsMegaMenu() {
                           {p.name}
                         </span>
                         {PRODUCT_TAGLINE[p.slug] && (
-                          <span className="block text-[12px] leading-snug mt-0.5" style={{ color: "rgba(255,255,255,0.62)" }}>
+                          <span className="block text-[11px] leading-snug mt-0.5 truncate" style={{ color: "rgba(255,255,255,0.62)" }}>
                             {PRODUCT_TAGLINE[p.slug]}
                           </span>
                         )}
@@ -281,7 +281,7 @@ function ProductsMegaMenu() {
                           {cat.secondary.label}
                         </span>
                         {cat.secondary.meta && (
-                          <span className="block text-[12px] leading-snug mt-0.5" style={{ color: "rgba(255,255,255,0.62)" }}>
+                          <span className="block text-[11px] leading-snug mt-0.5 truncate" style={{ color: "rgba(255,255,255,0.62)" }}>
                             {cat.secondary.meta}
                           </span>
                         )}
@@ -345,9 +345,11 @@ function FieldNotesMegaMenu() {
               <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-2" style={{ color: ACCENT }}>
                 Field Notes
               </p>
-              <p className="text-lg font-bold leading-tight mb-4" style={{ color: "#F5F0EB" }}>
+              <p className="text-lg font-bold leading-tight" style={{ color: "#F5F0EB" }}>
                 What we learn from the road.
               </p>
+              {/* The catalogue's signature dash — eyebrow, name, orange rule. */}
+              <span aria-hidden className="block mt-2.5 mb-4 rounded-full" style={{ width: 44, height: 3, background: "#F97316" }} />
               <Link href="/blog"
                 className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold border border-white/20 bg-black/25 backdrop-blur-sm hover:border-orange-400/60 hover:text-orange-400 transition-colors"
                 style={{ color: "#F5F0EB" }}

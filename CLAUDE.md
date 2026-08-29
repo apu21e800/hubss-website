@@ -89,11 +89,34 @@ Vercel — connected to GitHub, auto-deploys on push to main
 
 ## Bundle import protocol (Claude Cowork -> this repo)
 
+Bundles exist because pushes from the Cowork sandbox are blocked by a proxy
+403 ("not in this session's authorized repository set"), and the API fallback
+used for text files cannot carry binaries — it stores base64 as literal text,
+which was measured, not assumed: a 2,704-byte WebP came back as 3,429 bytes of
+garbage. Anything binary therefore travels as a git bundle.
+
+To end this entirely: github.com/settings/installations -> Claude -> grant
+access to apu21e800/hubss-website. Then ordinary pushes work and bundles stop
+being necessary.
+
+**This repo deploys from `main`.** An earlier version of these steps said `v2`.
+That branch still exists on origin and is 100 commits behind, so following the
+old instructions imported cleanly onto a branch nobody serves — a silent
+no-op where the import reports success and the site never changes.
+
 When Vern says "import the bundle": find the newest hubss-*.bundle in this
 folder or C:\Users\cleve\Downloads (move it here if needed), then:
-1. git bundle verify <file>   — stop and report if it fails
-2. git checkout v2 && git pull --ff-only
-3. git fetch "<file>" v2:v2   — on non-fast-forward, fetch to v2-cloud and
-   push origin v2-cloud:v2 instead
-4. git push origin v2
-5. Delete the bundle file; show git log --oneline -3 + confirm remote SHA.
+1. git bundle verify <file>          — stop and report if it fails
+2. git checkout main && git pull --ff-only
+3. Confirm the base commit the bundle names is present: git cat-file -t <sha>
+4. git fetch "<file>" <branch>:<branch>   — the branch name is in the bundle;
+   read it with `git bundle list-heads <file>` rather than guessing
+5. git merge --ff-only <branch>
+   On non-fast-forward: do NOT force. Show `git log --oneline <base>..main`
+   and stop — main moved and the bundle needs rebuilding against it.
+6. git push origin main
+7. Delete the bundle file; show git log --oneline -3 + confirm remote SHA.
+
+Never `git reset --hard` in this repo. Banner-dash drift in comment blocks is
+known-benign — prove it with `tr -d '─═━'` + `cmp`, then recover a single file
+with `git checkout origin/main -- <path>`.

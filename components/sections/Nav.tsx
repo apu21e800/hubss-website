@@ -138,7 +138,7 @@ const FEATURED_POSTS = [
 // Wide container, generous padding, dark surface, accent top line.
 function MegaShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="max-w-[1480px] mx-auto px-6 lg:px-10 pt-5 pb-5 max-h-[calc(100vh-72px)] overflow-y-auto overscroll-contain">
+    <div className="max-w-[1480px] mx-auto px-6 lg:px-10 pt-6 pb-9 max-h-[calc(100vh-72px)] overflow-y-auto overscroll-contain">
       {children}
     </div>
   );
@@ -194,7 +194,7 @@ const BRAND  = "#F97316";  // brand orange — reserved for larger / button use
 function ProductsMegaMenu() {
   return (
     <MegaShell>
-      <div className="grid grid-cols-12 gap-8">
+      <div className="grid grid-cols-12 gap-8 lg:min-h-[420px]">
         {/* Lead column */}
         <div className="col-span-12 lg:col-span-3">
           <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3" style={{ color: ACCENT }}>
@@ -303,116 +303,189 @@ function ProductsMegaMenu() {
   );
 }
 
-// ── Field Notes mega menu ────────────────────────────────────────────
+// ── Field Notes mega menu — the cinematic one ────────────────────────
+// Products and Applications are directories and behave like twins: same
+// grammar, same 420px floor. Field Notes is the editorial surface, and per
+// Vern it goes the other way entirely: a full-bleed magazine cover, not a
+// panel of columns. The featured story's photograph runs edge to edge under
+// a scrim; the masthead and cover line sit on the image like a title page;
+// the right rail is a glass surface carrying the latest three, the type
+// index, one PROMOTED house slot (the 2027 Catalogue tonight — a real
+// destination, never a fake advertiser), and the standing Lunch & Learn
+// card. Same 10px letterspaced ACCENT labels and hairline rules as its
+// siblings — the outlier in structure stays in the family by grammar.
 function FieldNotesMegaMenu() {
   const [featured, ...rest] = FEATURED_POSTS;
 
   return (
-    <MegaShell>
-      <div className="grid grid-cols-12 gap-8">
-        {/* Lead column */}
-        <div className="col-span-12 lg:col-span-3">
-          <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3" style={{ color: ACCENT }}>
-            Field Notes
-          </p>
-          <h3 className="text-xl font-bold leading-tight mb-2" style={{ color: "#F5F0EB" }}>
-            What we learn from the road.
-          </h3>
-          <p className="text-[13px] leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.65)" }}>
-            Project profiles, case studies, technical guides, and white papers from 30+ years of decorative pavement work across Canada.
-          </p>
-          <Link href="/blog"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold transition-all"
-            style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff", boxShadow: "0 4px 16px rgba(249,115,22,0.3)" }}
-          >
-            Browse all field notes
-            <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
-          </Link>
-          <LLMenuCard />
-        </div>
+    <div className="w-full max-h-[calc(100vh-72px)] overflow-y-auto overscroll-contain">
+      <div className="relative lg:min-h-[540px]">
+        {/* The cover, full bleed */}
+        <Image
+          src={featured.image}
+          alt={featured.title}
+          fill
+          className="object-cover"
+          style={{ objectPosition: "center 42%" }}
+          sizes="100vw"
+        />
+        {/* Scrims: one for the title block, one to seat the masthead */}
+        <div className="absolute inset-0" style={{
+          background: "linear-gradient(to top, rgba(5,8,14,0.96) 0%, rgba(5,8,14,0.42) 48%, rgba(5,8,14,0.30) 100%)"
+        }} />
+        <div className="absolute inset-0" style={{
+          background: "linear-gradient(to right, rgba(5,8,14,0.55) 0%, rgba(5,8,14,0.12) 45%, transparent 70%)"
+        }} />
 
-        {/* THE OUTLIER, KEPT ON PURPOSE. Products and Applications are
-            directories — flat columns, because their job is wayfinding. Field
-            Notes is a magazine, and a magazine gets a spread: one featured
-            story at full bleed, the latest three beside it. What makes it
-            "in alignment" is the grammar, not the structure: same 10px
-            letterspaced ACCENT labels, same hairline column rule, same flat
-            hover rows, same heights. Editorial layout, house typography. */}
-        <Link
-          href={`/blog/${featured.slug}`}
-          className="col-span-12 lg:col-span-5 group relative rounded-xl overflow-hidden block"
-          style={{ minHeight: 240 }}
-        >
-          <Image
-            src={featured.image}
-            alt={featured.title}
-            fill
-            className="object-cover transition-transform duration-700 group-hover:scale-105"
-            sizes="(max-width:1024px) 100vw, 620px"
-          />
-          <div className="absolute inset-0" style={{
-            background: "linear-gradient(to top, rgba(7,11,18,0.96) 0%, rgba(7,11,18,0.55) 50%, rgba(7,11,18,0.1) 100%)"
-          }} />
-          <div className="absolute bottom-0 left-0 right-0 p-6">
-            <span
-              className="inline-block text-[10px] font-bold tracking-[0.18em] uppercase mb-3 px-2.5 py-1 rounded"
-              style={{ color: ACCENT, background: "rgba(249,115,22,0.15)", border: "1px solid rgba(249,115,22,0.3)" }}
-            >
-              {featured.category}
-            </span>
-            <p className="text-lg lg:text-xl font-bold leading-tight" style={{ color: "#F5F0EB" }}>
-              {featured.title}
-            </p>
-            <p className="text-sm mt-2 flex items-center gap-2 font-semibold" style={{ color: "#F97316" }}>
-              Read field note
-              <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" /></svg>
-            </p>
-          </div>
-        </Link>
-
-        {/* Latest — a proper column with the house header, not a stack of
-            bordered boxes. The thumbnails stay (this is the editorial menu);
-            the borders go, because nothing else in any menu draws boxes
-            around its rows — hover carries the affordance, same as every
-            other item on this surface. */}
-        <div className="col-span-12 lg:col-span-4">
-          <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3 pb-2.5" style={{
-            color: ACCENT,
-            borderBottom: "1px solid rgba(249,115,22,0.18)"
-          }}>
-            Latest from the road
-          </p>
-          <div className="space-y-1">
-            {rest.map((post) => (
-              <Link
-                key={post.slug}
-                href={`/blog/${post.slug}`}
-                className="group flex gap-3 px-2.5 py-2 rounded-md transition-colors hover:bg-white/5"
+        <div className="relative grid grid-cols-12 lg:min-h-[540px]">
+          {/* Cover story */}
+          <div className="col-span-12 lg:col-span-8 flex flex-col justify-between gap-10 p-7 lg:p-10">
+            {/* Masthead */}
+            <div>
+              <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-2" style={{ color: ACCENT }}>
+                Field Notes
+              </p>
+              <p className="text-lg font-bold leading-tight mb-4" style={{ color: "#F5F0EB" }}>
+                What we learn from the road.
+              </p>
+              <Link href="/blog"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold transition-all"
+                style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff", boxShadow: "0 4px 16px rgba(249,115,22,0.3)" }}
               >
-                <div className="relative flex-shrink-0 rounded-md overflow-hidden" style={{ width: 56, height: 56 }}>
-                  <Image
-                    src={post.image}
-                    alt={post.title}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    sizes="72px"
-                  />
-                </div>
-                <div className="flex-1 min-w-0 flex flex-col justify-center">
-                  <p className="text-[10px] font-bold tracking-[0.18em] uppercase mb-0.5" style={{ color: ACCENT }}>
-                    {post.category}
-                  </p>
-                  <p className="text-[13px] font-semibold leading-snug group-hover:text-orange-400 transition-colors line-clamp-2" style={{ color: "#F5F0EB" }}>
-                    {post.title}
-                  </p>
-                </div>
+                Browse all field notes
+                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
               </Link>
-            ))}
+            </div>
+
+            {/* Cover line */}
+            <Link href={`/blog/${featured.slug}`} className="group block max-w-2xl">
+              <span
+                className="inline-block text-[10px] font-bold tracking-[0.18em] uppercase mb-3 px-2.5 py-1 rounded"
+                style={{ color: ACCENT, background: "rgba(249,115,22,0.15)", border: "1px solid rgba(249,115,22,0.3)" }}
+              >
+                {featured.category}
+              </span>
+              <span className="block font-black leading-[1.04]" style={{
+                color: "#F5F0EB",
+                fontSize: "clamp(1.7rem, 3.1vw, 2.7rem)",
+                letterSpacing: "-0.025em",
+                textShadow: "0 2px 24px rgba(0,0,0,0.45)",
+              }}>
+                {featured.title}
+              </span>
+              <span className="mt-3 flex items-center gap-2 text-sm font-semibold" style={{ color: ACCENT }}>
+                Read field note
+                <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" className="transition-transform group-hover:translate-x-1"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" /></svg>
+              </span>
+            </Link>
+          </div>
+
+          {/* The rail — glass over the cover */}
+          <div
+            className="col-span-12 lg:col-span-4 flex flex-col p-6 lg:p-7"
+            style={{
+              background: "rgba(7,11,18,0.84)",
+              borderLeft: "1px solid rgba(255,255,255,0.08)",
+              backdropFilter: "blur(10px)",
+              WebkitBackdropFilter: "blur(10px)",
+            }}
+          >
+            <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3 pb-2.5" style={{
+              color: ACCENT,
+              borderBottom: "1px solid rgba(249,115,22,0.18)"
+            }}>
+              Latest from the road
+            </p>
+            <div className="space-y-1">
+              {rest.map((post) => (
+                <Link
+                  key={post.slug}
+                  href={`/blog/${post.slug}`}
+                  className="group flex gap-3 px-2 py-2 rounded-md transition-colors hover:bg-white/5"
+                >
+                  <div className="relative flex-shrink-0 rounded-md overflow-hidden" style={{ width: 52, height: 52 }}>
+                    <Image
+                      src={post.image}
+                      alt={post.title}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      sizes="72px"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0 flex flex-col justify-center">
+                    <p className="text-[10px] font-bold tracking-[0.18em] uppercase mb-0.5" style={{ color: ACCENT }}>
+                      {post.category}
+                    </p>
+                    <p className="text-[13px] font-semibold leading-snug group-hover:text-orange-400 transition-colors line-clamp-2" style={{ color: "#F5F0EB" }}>
+                      {post.title}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            {/* Browse by type — slugs mirror lib/field-notes-taxonomy.ts;
+                hardcoded so the nav bundle doesn't carry the whole taxonomy
+                (keyword maps and all) for five stable links. */}
+            <div className="mt-4 pt-3.5" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+              <p className="text-[10px] font-bold tracking-[0.18em] uppercase mb-2" style={{ color: "rgba(255,255,255,0.45)" }}>
+                Browse by type
+              </p>
+              <div className="flex flex-wrap gap-x-4 gap-y-1.5">
+                {[
+                  { label: "Case Studies", href: "/blog/case-studies" },
+                  { label: "Project Profiles", href: "/blog/project-profiles" },
+                  { label: "Guides", href: "/blog/guides" },
+                  { label: "White Papers", href: "/blog/white-papers" },
+                  { label: "Posts", href: "/blog/posts" },
+                ].map((t) => (
+                  <Link
+                    key={t.href}
+                    href={t.href}
+                    className="text-[12px] font-semibold transition-colors hover:text-orange-400"
+                    style={{ color: "rgba(255,255,255,0.68)" }}
+                  >
+                    {t.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* The advertisement slot — a designed space, honestly labelled.
+                House promotions only: tonight it runs the 2027 Catalogue,
+                a real page (/catalogue). If a partner placement ever lands
+                here, the PROMOTED label is already telling the truth. */}
+            <Link
+              href="/catalogue"
+              className="group block mt-auto rounded-xl px-4 py-3.5 transition-colors hover:bg-white/5"
+              style={{
+                background: "linear-gradient(135deg, rgba(249,115,22,0.10) 0%, rgba(255,255,255,0.02) 100%)",
+                border: "1px solid rgba(249,115,22,0.35)",
+              }}
+            >
+              <span className="flex items-center justify-between mb-1">
+                <span className="text-[9px] font-bold tracking-[0.2em] uppercase" style={{ color: "rgba(255,255,255,0.45)" }}>
+                  Promoted
+                </span>
+                <svg width="12" height="12" fill="none" stroke={ACCENT} viewBox="0 0 24 24" className="transition-transform group-hover:translate-x-0.5">
+                  <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </span>
+              <span className="block text-[14px] font-bold" style={{ color: "#F5F0EB" }}>
+                The 2027 Catalogue
+              </span>
+              <span className="block text-[12px] mt-0.5" style={{ color: "rgba(255,255,255,0.62)" }}>
+                Every system, spec, and pattern — one book.
+              </span>
+            </Link>
+
+            <div className="mt-3">
+              <LLMenuCard />
+            </div>
           </div>
         </div>
       </div>
-
-    </MegaShell>
+    </div>
   );
 }
 
@@ -420,7 +493,7 @@ function FieldNotesMegaMenu() {
 function ApplicationsMegaMenu() {
   return (
     <MegaShell>
-      <div className="grid grid-cols-12 gap-8">
+      <div className="grid grid-cols-12 gap-8 lg:min-h-[420px]">
         {/* Lead column */}
         <div className="col-span-12 lg:col-span-3">
           <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3" style={{ color: ACCENT }}>

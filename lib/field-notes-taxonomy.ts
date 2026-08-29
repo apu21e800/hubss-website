@@ -75,9 +75,16 @@ export const FIELD_NOTE_TYPES: FieldNoteTypeMeta[] = [
     promise:
       "The field record: where it is, what went down, which system, and what it looks like now. Quick reads for browsing what is possible — and proof that the work exists outside a brochure.",
     schemaType: "Article",
-    tint: "rgba(234,179,8,0.12)",
-    border: "rgba(234,179,8,0.3)",
-    text: "#EAB308",
+    // Was #EAB308 — Tailwind yellow-500, a straggler from the pass that
+    // collapsed the seven per-type tints. HUB has no yellow: the brand is
+    // orange on charcoal, and a yellow chip on the hub the homepage CTA lands
+    // on read as a second accent colour nobody chose. Project Profiles and
+    // Case Studies are both "evidence that the work exists", so they share
+    // one orange rather than inventing a hue to tell them apart — the label
+    // already does that.
+    tint: "rgba(249,115,22,0.14)",
+    border: "rgba(249,115,22,0.35)",
+    text: "#FB923C",
   },
   {
     label: "Guide",

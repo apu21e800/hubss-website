@@ -207,8 +207,8 @@ function ProductsMegaMenu() {
             14 specified systems for crosswalks, transit lanes, plazas, and decorative hardscape — installed coast to coast.
           </p>
           <Link href="/products"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold transition-all"
-            style={{ background: `linear-gradient(135deg, ${BRAND} 0%, #EA8C16 100%)`, color: "#fff", boxShadow: "0 4px 16px rgba(249,115,22,0.3)" }}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold border border-white/15 bg-white/[0.03] hover:border-orange-400/60 hover:text-orange-400 transition-colors"
+            style={{ color: "#F5F0EB" }}
           >
             Browse all products
             <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -225,7 +225,7 @@ function ProductsMegaMenu() {
             that Applications doesn't need: a one-line tagline per item —
             "MMAX" tells a specifier nothing, "MMA resin lane coating" does.
             Application names describe themselves; product names are brands. */}
-        <div className="col-span-12 lg:col-span-9 grid grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-8">
+        <div className="col-span-12 lg:col-span-9 grid grid-cols-2 xl:grid-cols-4 gap-x-10 gap-y-8">
           {PRODUCT_CATEGORIES.map((cat) => {
             const items = cat.slugs.flatMap((sl) => {
               const p = products.find((x) => x.slug === sl);
@@ -349,8 +349,8 @@ function FieldNotesMegaMenu() {
                 What we learn from the road.
               </p>
               <Link href="/blog"
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold transition-all"
-                style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff", boxShadow: "0 4px 16px rgba(249,115,22,0.3)" }}
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold border border-white/20 bg-black/25 backdrop-blur-sm hover:border-orange-400/60 hover:text-orange-400 transition-colors"
+                style={{ color: "#F5F0EB" }}
               >
                 Browse all field notes
                 <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -506,8 +506,8 @@ function ApplicationsMegaMenu() {
             Crosswalks, transit lanes, parks, plazas, parking lots, airfields — every surface where decorative pavement and durable markings meet the brief.
           </p>
           <Link href="/applications"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold transition-all"
-            style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff", boxShadow: "0 4px 16px rgba(249,115,22,0.3)" }}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold border border-white/15 bg-white/[0.03] hover:border-orange-400/60 hover:text-orange-400 transition-colors"
+            style={{ color: "#F5F0EB" }}
           >
             Browse all applications
             <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -516,7 +516,7 @@ function ApplicationsMegaMenu() {
         </div>
 
         {/* Category groupings — 4 columns, no subtext */}
-        <div className="col-span-12 lg:col-span-9 grid grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-8">
+        <div className="col-span-12 lg:col-span-9 grid grid-cols-2 xl:grid-cols-4 gap-x-10 gap-y-8">
           {APPLICATION_GROUPS.map((group) => {
             const items = group.slugs.flatMap((s) => {
               const a = applications.find((x) => x.slug === s);

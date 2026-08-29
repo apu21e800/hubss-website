@@ -373,6 +373,41 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "plus.unsplash.com" },
     ],
+
+    // ── Optimizer budget ────────────────────────────────────────────────────
+    // Every distinct (source image × width × quality × format) is one billed
+    // transformation. On 2026-08-27 this project exhausted its allowance and
+    // Vercel began answering /_next/image with `402 Payment Required`
+    // (x-vercel-error: OPTIMIZED_IMAGE_REQUEST_PAYMENT_REQUIRED). Uncached
+    // images rendered as broken-image icons across the site — the client saw
+    // it as blank document previews and blue question marks. The raw files
+    // were always fine; only the transform was refused.
+    //
+    // The defaults are extravagant for this site. 8 device widths × 8 image
+    // widths, re-optimized every 60 seconds, over ~1,740 source images, is
+    // tens of thousands of transformations for a catalogue that only ever
+    // renders at a handful of real sizes.
+    //
+    // NOTE: this reduces future consumption. It cannot restore an allowance
+    // already spent — only the plan can do that.
+
+    // 60s (the default) meant a variant could be re-billed every minute. A
+    // month means a variant is generated once and then served from cache.
+    minimumCacheTTL: 2678400,
+
+    // Four breakpoints instead of eight. The widest layout column is 1920;
+    // 2048 and 3840 were being generated for displays this site never
+    // targets, at the largest and most expensive sizes.
+    deviceSizes: [640, 828, 1200, 1920],
+
+    // Three thumbnail widths instead of eight. Gallery tiles, card thumbs and
+    // document previews are the only fixed-size images here.
+    imageSizes: [128, 256, 384],
+
+    // WebP only. Adding AVIF doubles the transformation count for a marginal
+    // byte saving, and every call site already requests q=75.
+    formats: ["image/webp"],
+    qualities: [75],
   },
 };
 

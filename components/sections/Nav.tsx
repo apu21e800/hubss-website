@@ -138,7 +138,7 @@ const FEATURED_POSTS = [
 // Wide container, generous padding, dark surface, accent top line.
 function MegaShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="max-w-[1480px] mx-auto px-6 lg:px-10 pt-6 pb-9 max-h-[calc(100vh-72px)] overflow-y-auto overscroll-contain">
+    <div className="px-8 lg:px-14 xl:px-20 2xl:px-28 pt-7 pb-10 max-h-[calc(100vh-72px)] overflow-y-auto overscroll-contain">
       {children}
     </div>
   );
@@ -194,7 +194,7 @@ const BRAND  = "#F97316";  // brand orange — reserved for larger / button use
 function ProductsMegaMenu() {
   return (
     <MegaShell>
-      <div className="grid grid-cols-12 gap-8 lg:min-h-[420px]">
+      <div className="grid grid-cols-12 gap-10 xl:gap-14 lg:min-h-[420px]">
         {/* Lead column */}
         <div className="col-span-12 lg:col-span-3">
           <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3" style={{ color: ACCENT }}>
@@ -225,7 +225,7 @@ function ProductsMegaMenu() {
             that Applications doesn't need: a one-line tagline per item —
             "MMAX" tells a specifier nothing, "MMA resin lane coating" does.
             Application names describe themselves; product names are brands. */}
-        <div className="col-span-12 lg:col-span-9 grid grid-cols-2 xl:grid-cols-4 gap-x-10 gap-y-8">
+        <div className="col-span-12 lg:col-span-9 grid grid-cols-2 xl:grid-cols-4 gap-x-12 xl:gap-x-16 gap-y-8">
           {PRODUCT_CATEGORIES.map((cat) => {
             const items = cat.slugs.flatMap((sl) => {
               const p = products.find((x) => x.slug === sl);
@@ -319,7 +319,7 @@ function FieldNotesMegaMenu() {
 
   return (
     <div className="w-full max-h-[calc(100vh-72px)] overflow-y-auto overscroll-contain">
-      <div className="relative lg:min-h-[540px]">
+      <div className="relative lg:min-h-[calc(100vh-72px)]">
         {/* The cover, full bleed */}
         <Image
           src={featured.image}
@@ -337,7 +337,7 @@ function FieldNotesMegaMenu() {
           background: "linear-gradient(to right, rgba(5,8,14,0.55) 0%, rgba(5,8,14,0.12) 45%, transparent 70%)"
         }} />
 
-        <div className="relative grid grid-cols-12 lg:min-h-[540px]">
+        <div className="relative grid grid-cols-12 lg:min-h-[calc(100vh-72px)]">
           {/* Cover story */}
           <div className="col-span-12 lg:col-span-8 flex flex-col justify-between gap-10 p-7 lg:p-10">
             {/* Masthead */}
@@ -369,7 +369,7 @@ function FieldNotesMegaMenu() {
               </span>
               <span className="block font-black leading-[1.04]" style={{
                 color: "#F5F0EB",
-                fontSize: "clamp(1.7rem, 3.1vw, 2.7rem)",
+                fontSize: "clamp(1.9rem, 3.6vw, 3.4rem)",
                 letterSpacing: "-0.025em",
                 textShadow: "0 2px 24px rgba(0,0,0,0.45)",
               }}>
@@ -495,7 +495,7 @@ function FieldNotesMegaMenu() {
 function ApplicationsMegaMenu() {
   return (
     <MegaShell>
-      <div className="grid grid-cols-12 gap-8 lg:min-h-[420px]">
+      <div className="grid grid-cols-12 gap-10 xl:gap-14 lg:min-h-[420px]">
         {/* Lead column */}
         <div className="col-span-12 lg:col-span-3">
           <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3" style={{ color: ACCENT }}>
@@ -518,7 +518,7 @@ function ApplicationsMegaMenu() {
         </div>
 
         {/* Category groupings — 4 columns, no subtext */}
-        <div className="col-span-12 lg:col-span-9 grid grid-cols-2 xl:grid-cols-4 gap-x-10 gap-y-8">
+        <div className="col-span-12 lg:col-span-9 grid grid-cols-2 xl:grid-cols-4 gap-x-12 xl:gap-x-16 gap-y-8">
           {APPLICATION_GROUPS.map((group) => {
             const items = group.slugs.flatMap((s) => {
               const a = applications.find((x) => x.slug === s);

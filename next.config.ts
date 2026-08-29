@@ -83,6 +83,21 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      // ── One host ────────────────────────────────────────────────────────────
+      // hubss.com and www.hubss.com both answered 200 with identical content —
+      // no redirect either way (verified live, Aug 2026). Every canonical tag
+      // and the sitemap point at the apex, which papers over the split for
+      // Google, but papering is all it does: links people share to www URLs
+      // build authority on a host we then ask Google to ignore, and this site
+      // has an Authority Score of 18 — it cannot afford to bank equity in two
+      // accounts. One host, one ledger. Apex wins because the canonicals
+      // already say so; changing the winner now would reset the ledger again.
+      {
+        source: "/:path*",
+        has: [{ type: "host" as const, value: "www.hubss.com" }],
+        destination: "https://hubss.com/:path*",
+        permanent: true,
+      },
       // 2026 colour card supersedes the old StreetBond colour guide — keep the
       // old URL alive (Sanity resource entries + external links still point at it).
       { source: "/docs/StreetBond/StreetBond/StreetBond-Colour-Guide.pdf", destination: "/docs/StreetBond/StreetBond/StreetBond-Colour-Card-2026.pdf", permanent: true },

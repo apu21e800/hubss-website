@@ -21,6 +21,8 @@ import { buildMetadata } from "@/lib/seo";
 import { getProductFamily } from "@/lib/product-taxonomy";
 import { catalogueFor } from "@/lib/product-catalogue";
 import ProductSpecCard from "@/components/products/ProductSpecCard";
+import ProductFaq from "@/components/products/ProductFaq";
+import { faqsFor } from "@/lib/product-faqs";
 import { getProductBySlug } from "@/lib/sanity.queries";
 
 export const revalidate = 3600;
@@ -72,6 +74,8 @@ export default async function ProductPage({ params }: Props) {
 
   // Catalogue editorial for this product, where the print book covers it.
   const catalogue = catalogueFor(slug);
+  // FAQ content, where the product's own documents provide it.
+  const faqs = faqsFor(slug);
 
   // Featured image from lib/featured-images.ts (audited, correct per product)
   const featuredImg = productImages[slug] ? resolveImage(productImages[slug]) : null;
@@ -122,7 +126,45 @@ export default async function ProductPage({ params }: Props) {
       "@id": "https://hubss.com/#organization",
       name: "HUB Surface Systems",
     },
+    // The catalogue's four headline specs, as machine-readable properties.
+    // These are the values a specifier searches by — "150 mil", "60 BPN",
+    // "8–9 Mohs" — and until now they existed only as visible text. As
+    // PropertyValue nodes they are quotable by AI engines and eligible for
+    // spec-style treatment in product results. Same source as the visible
+    // spec grid (lib/product-catalogue.ts), so they cannot disagree with
+    // what the page shows.
+    ...(catalogue
+      ? {
+          additionalProperty: catalogue.specs.map((s) => ({
+            "@type": "PropertyValue",
+            name: s.label,
+            value: s.value,
+          })),
+        }
+      : {}),
   };
+
+  /**
+   * The FAQ as schema.org FAQPage. Of the 58 keywords this site ranks for in
+   * Canada, 45 trigger People Also Ask and 35 trigger AI Overviews (Semrush,
+   * Aug 2026) — question-shaped surfaces that quote question-shaped markup.
+   * Built from the same lib/product-faqs.ts data the visible section renders,
+   * so the markup can never claim what the page does not show. Google's
+   * FAQPage rich result is restricted to government and health sites since
+   * 2023 — that is not why this exists. It exists because the schema makes
+   * each Q&A pair an addressable, quotable unit for answer engines.
+   */
+  const faqSchema = faqs
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: faqs.map((f) => ({
+          "@type": "Question",
+          name: f.q,
+          acceptedAnswer: { "@type": "Answer", text: f.a },
+        })),
+      }
+    : null;
 
   /**
    * The gallery as an addressable collection. Without this the photographs are
@@ -160,6 +202,7 @@ export default async function ProductPage({ params }: Props) {
       <JsonLd data={productSchema} />
       <JsonLd data={breadcrumbSchema} />
       {gallerySchema && <JsonLd data={gallerySchema} />}
+      {faqSchema && <JsonLd data={faqSchema} />}
       <Nav />
 
       {/* Hero banner */}
@@ -305,6 +348,12 @@ export default async function ProductPage({ params }: Props) {
               {product.name} installations photographed on site across Canada.
             </p>
             <GalleryGrid images={gallery} />
+
+            {/* The questions people search, answered in the client's own
+                words, above the fold of the documents section — a visitor
+                who scrolled this far is evaluating, and evaluation is made
+                of questions. Source: lib/product-faqs.ts. */}
+            {faqs && <ProductFaq productName={product.name} faqs={faqs} />}
 
             <DocumentDownloads slug={product.slug} />
           </div>

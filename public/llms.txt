@@ -8,7 +8,7 @@ HUB Surface Systems designs and installs purpose-built surface solutions enginee
 
 - [StreetPrint](https://hubss.com/products/streetprint): In-place stamped asphalt. Cobblestone, brick, herringbone, and 12+ patterns impressed directly into existing asphalt. No demolition, no raised edges, snowplow-safe. 20+ year service life.
 - [StreetBond](https://hubss.com/products/streetbond): UV-stable water-based acrylic coatings for bike lanes, bus lanes, driveways, and decorative surfaces. Full Pantone colour matching.
-- [StreetBondSR](https://hubss.com/products/streetbondsr): Solar-reflective variant of StreetBond. High SRI rating reduces urban heat island effect. Contributes to LEED v4 SS credit for heat island reduction.
+- [StreetBondSR](https://hubss.com/products/streetbondsr): Solar-reflective variant of StreetBond. High SRI rating reduces urban heat island effect. Contributes to the LEED V5 SS credit for urban heat island reduction.
 - [TrafficPatterns](https://hubss.com/products/traffic-patterns): Preformed thermoplastic crosswalk markings, factory-manufactured to 125mil thickness. Specified by municipalities coast to coast.
 - [TrafficPatternsXD](https://hubss.com/products/traffic-patterns-xd): Aggregate-reinforced preformed thermoplastic for BRT corridors, high-traffic intersections, and heavy vehicle environments. High skid resistance.
 - [MMAX](https://hubss.com/products/mmax): MMA methyl methacrylate resin for red bus lanes, bike lanes, and coloured area markings. Traffic-ready in under an hour. Applies at +3°C and rising.
@@ -37,7 +37,7 @@ HUB Surface Systems designs and installs purpose-built surface solutions enginee
 
 - [Blog / Case Studies](https://hubss.com/blog): Project case studies, technical articles, and municipal specification guides.
 - [Resources / Spec Sheets](https://hubss.com/resources): PDF data sheets, application guides, and specification documents.
-- [Lunch & Learn](https://hubss.com/lunch-learn): Free 45-minute CE-credit session for engineers, planners, and architects. Catered lunch included.
+- [Lunch & Learn](https://hubss.com/lunch-learn): Free 45-minute session for engineers, planners, and architects, delivered at your office. Catered lunch included.
 
 ## Contact
 

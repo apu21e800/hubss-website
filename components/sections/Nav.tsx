@@ -37,52 +37,32 @@ const CATEGORIES = [
 // ── Search overlay ───────────────────────────────────────────────
 
 // ── Product category data ────────────────────────────────────────────
-// Each category may carry a `pillarNote` (a short rationale shown when the
-// column would otherwise look thin — e.g. Stamped Asphalt only has one
-// product) and a `secondary` link (a related secondary destination — patterns,
-// case studies — to give a lean column visual weight and intentional rhythm).
+// The photo-card era of this menu carried icon/tag/image/pillarNote per
+// category. Those fields died with the cards (see the note on
+// ProductsMegaMenu); what remains is exactly what a directory needs: a
+// label, the members, and at most one "see also" destination.
 type ProductCategory = {
   label: string;
-  icon: string;
-  tag: string;
-  image: string;
   slugs: string[];
-  pillarNote?: string;
   secondary?: { label: string; href: string; meta?: string };
 };
 
 const PRODUCT_CATEGORIES: ProductCategory[] = [
   {
     label: "Preformed Thermoplastics",
-    icon: "◈",
-    tag: "Heat-fused permanent markings",
-    image: "/images/products/traffic-patterns/traffic-patterns-01.jpg",
     slugs: ["traffic-patterns-xd", "traffic-patterns", "premark", "duratherm", "decomark", "airmark"],
   },
   {
     label: "Coatings",
-    icon: "◉",
-    tag: "Coloured pavement systems",
-    image: "/images/products/streetbond/streetbond-01.png",
     slugs: ["streetbond", "streetbondsr", "mmax", "durashield"],
   },
   {
     label: "Stamped Asphalt",
-    icon: "◧",
-    tag: "In-place decorative hardscape",
-    image: "/images/products/streetprint/streetprint-01.jpg",
     slugs: ["streetprint"],
-    // Single-product category — note + secondary link give it visual parity.
-    pillarNote: "A category-defining system. Brick, cobblestone, herringbone, fan, or fully custom patterns — stamped directly into new or existing asphalt. Flush surface, snowplow-safe.",
     secondary: { label: "Pattern gallery", href: "/patterns", meta: "16 stamping templates" },
   },
   {
     label: "Asphalt Repair",
-    icon: "◌",
-    tag: "Permanent pothole + crack repair",
-    // Was chipfill-aggrefill-bags.jpg — GEVEKO branding visible.
-    // Swapped to clean pothole hero (the problem AggreFill + ChipFill solve).
-    image: "/images/products/chipfill/chipfill-road-repair.webp",
     slugs: ["chipfill", "aggrefill", "fast-patch"],
   },
 ];
@@ -236,67 +216,46 @@ function ProductsMegaMenu() {
           <LLMenuCard />
         </div>
 
-        {/* Category tiles — 4 cards with image headers */}
-        <div className="col-span-12 lg:col-span-9 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Category columns — Applications' grammar, verbatim: orange
+            letterspaced header over a hairline rule, flat items, chevron on
+            hover. This menu used to be four photo-topped cards; the photos put
+            10px type over imagery (illegible), the tallest card set the height
+            for all four (dead wells under the short ones), and the whole panel
+            ran ~250px taller than its siblings. The one thing Products keeps
+            that Applications doesn't need: a one-line tagline per item —
+            "MMAX" tells a specifier nothing, "MMA resin lane coating" does.
+            Application names describe themselves; product names are brands. */}
+        <div className="col-span-12 lg:col-span-9 grid grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-8">
           {PRODUCT_CATEGORIES.map((cat) => {
-            const items = cat.slugs.flatMap((s) => {
-              const p = products.find((x) => x.slug === s);
+            const items = cat.slugs.flatMap((sl) => {
+              const p = products.find((x) => x.slug === sl);
               return p ? [p] : [];
             });
             return (
-              <div
-                key={cat.label}
-                className="rounded-xl overflow-hidden flex flex-col"
-                style={{ background: "rgba(255,255,255,0.025)", border: "1px solid var(--border-color)" }}
-              >
-                <Link href="/products" className="relative block group" style={{ height: 80 }}>
-                  <Image
-                    src={cat.image}
-                    alt={cat.label}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    style={{ objectPosition: "center 65%" }}
-                    sizes="(max-width:1024px) 50vw, 25vw"
-                  />
-                  <div className="absolute inset-0" style={{
-                    background: "linear-gradient(to top, rgba(7,11,18,0.96) 0%, rgba(7,11,18,0.55) 55%, rgba(7,11,18,0.1) 100%)"
-                  }} />
-                  <div className="absolute bottom-0 left-0 right-0 px-4 pb-3">
-                    <p className="text-[10px] font-bold tracking-[0.18em] uppercase mb-0.5" style={{ color: ACCENT }}>
-                      {cat.icon} {cat.tag}
-                    </p>
-                    <p className="text-[14px] font-bold leading-tight" style={{ color: "#F5F0EB" }}>{cat.label}</p>
-                  </div>
-                </Link>
-
-                {/* Optional pillar note — rebalances lean columns (e.g. Stamped Asphalt) */}
-                {cat.pillarNote && (
-                  <div className="px-4 pt-3.5 pb-1">
-                    <p className="text-[12px] leading-relaxed" style={{ color: "rgba(255,255,255,0.75)" }}>
-                      {cat.pillarNote}
-                    </p>
-                  </div>
-                )}
-
-                {/* Product list — name + 5-7 word tagline per Vernon */}
-                <div className="flex-1 px-3.5 py-3.5 space-y-1">
+              <div key={cat.label}>
+                <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3 pb-2.5" style={{
+                  color: ACCENT,
+                  borderBottom: "1px solid rgba(249,115,22,0.18)"
+                }}>
+                  {cat.label}
+                </p>
+                <div className="space-y-1">
                   {items.map((p) => (
                     <Link
                       key={p.slug}
                       href={`/products/${p.slug}`}
-                      className="group flex items-start justify-between gap-2 px-2 py-2 rounded-md transition-colors hover:bg-white/5"
+                      className="group flex items-start justify-between gap-2 px-2.5 py-2 rounded-md transition-colors hover:bg-white/5"
                     >
-                      <div className="min-w-0">
-                        <p className="text-[14px] font-semibold leading-snug transition-colors group-hover:text-[color:var(--accent-hover)]"
-                          style={{ color: "#F5F0EB", ['--accent-hover' as never]: ACCENT }}>
+                      <span className="min-w-0">
+                        <span className="block text-[14px] font-semibold leading-snug group-hover:text-orange-400 transition-colors" style={{ color: "#F5F0EB" }}>
                           {p.name}
-                        </p>
+                        </span>
                         {PRODUCT_TAGLINE[p.slug] && (
-                          <p className="text-[12px] leading-snug mt-1" style={{ color: "rgba(255,255,255,0.7)" }}>
+                          <span className="block text-[12px] leading-snug mt-0.5" style={{ color: "rgba(255,255,255,0.62)" }}>
                             {PRODUCT_TAGLINE[p.slug]}
-                          </p>
+                          </span>
                         )}
-                      </div>
+                      </span>
                       <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                         className="opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1.5" style={{ color: ACCENT }}>
                         <path d="M9 18l6-6-6-6" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
@@ -304,26 +263,29 @@ function ProductsMegaMenu() {
                     </Link>
                   ))}
 
-                  {/* Optional secondary destination — gives sparse columns intentional weight */}
+                  {/* "See also" — the one structural extra a column may carry.
+                      Uneven column lengths are fine in a text directory (the
+                      Applications columns run 6/5/5/4); what a lean column
+                      gets is a real secondary destination, not filler. */}
                   {cat.secondary && (
                     <Link
                       href={cat.secondary.href}
-                      className="group flex items-start justify-between gap-2 px-2 py-2.5 mt-1.5 rounded-md transition-colors hover:bg-white/5"
+                      className="group flex items-start justify-between gap-2 px-2.5 py-2.5 mt-2 rounded-md transition-colors hover:bg-white/5"
                       style={{ borderTop: "1px solid var(--border-color)" }}
                     >
-                      <div className="min-w-0">
-                        <p className="text-[10px] font-bold tracking-[0.18em] uppercase" style={{ color: ACCENT }}>
+                      <span className="min-w-0">
+                        <span className="block text-[10px] font-bold tracking-[0.18em] uppercase" style={{ color: ACCENT }}>
                           See also
-                        </p>
-                        <p className="text-[14px] font-semibold leading-tight mt-0.5" style={{ color: "#F5F0EB" }}>
+                        </span>
+                        <span className="block text-[14px] font-semibold leading-tight mt-0.5 group-hover:text-orange-400 transition-colors" style={{ color: "#F5F0EB" }}>
                           {cat.secondary.label}
-                        </p>
+                        </span>
                         {cat.secondary.meta && (
-                          <p className="text-[11px] leading-snug mt-0.5" style={{ color: "rgba(255,255,255,0.55)" }}>
+                          <span className="block text-[12px] leading-snug mt-0.5" style={{ color: "rgba(255,255,255,0.62)" }}>
                             {cat.secondary.meta}
-                          </p>
+                          </span>
                         )}
-                      </div>
+                      </span>
                       <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                         className="opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1.5" style={{ color: ACCENT }}>
                         <path d="M9 18l6-6-6-6" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
@@ -350,7 +312,7 @@ function FieldNotesMegaMenu() {
       <div className="grid grid-cols-12 gap-8">
         {/* Lead column */}
         <div className="col-span-12 lg:col-span-3">
-          <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#F97316" }}>
+          <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3" style={{ color: ACCENT }}>
             Field Notes
           </p>
           <h3 className="text-xl font-bold leading-tight mb-2" style={{ color: "#F5F0EB" }}>
@@ -363,13 +325,19 @@ function FieldNotesMegaMenu() {
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold transition-all"
             style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff", boxShadow: "0 4px 16px rgba(249,115,22,0.3)" }}
           >
-            All field notes
+            Browse all field notes
             <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
           </Link>
           <LLMenuCard />
         </div>
 
-        {/* Featured large card — taller for parity with Products/Applications mega heights */}
+        {/* THE OUTLIER, KEPT ON PURPOSE. Products and Applications are
+            directories — flat columns, because their job is wayfinding. Field
+            Notes is a magazine, and a magazine gets a spread: one featured
+            story at full bleed, the latest three beside it. What makes it
+            "in alignment" is the grammar, not the structure: same 10px
+            letterspaced ACCENT labels, same hairline column rule, same flat
+            hover rows, same heights. Editorial layout, house typography. */}
         <Link
           href={`/blog/${featured.slug}`}
           className="col-span-12 lg:col-span-5 group relative rounded-xl overflow-hidden block"
@@ -388,7 +356,7 @@ function FieldNotesMegaMenu() {
           <div className="absolute bottom-0 left-0 right-0 p-6">
             <span
               className="inline-block text-[10px] font-bold tracking-[0.18em] uppercase mb-3 px-2.5 py-1 rounded"
-              style={{ color: "#F97316", background: "rgba(249,115,22,0.15)", border: "1px solid rgba(249,115,22,0.3)" }}
+              style={{ color: ACCENT, background: "rgba(249,115,22,0.15)", border: "1px solid rgba(249,115,22,0.3)" }}
             >
               {featured.category}
             </span>
@@ -402,34 +370,45 @@ function FieldNotesMegaMenu() {
           </div>
         </Link>
 
-        {/* Recent posts grid — slightly larger thumbnails for parity */}
-        <div className="col-span-12 lg:col-span-4 grid grid-cols-1 gap-3">
-          {rest.map((post) => (
-            <Link
-              key={post.slug}
-              href={`/blog/${post.slug}`}
-              className="group flex gap-3 p-3 rounded-xl transition-colors hover:bg-white/5"
-              style={{ background: "rgba(255,255,255,0.025)", border: "1px solid var(--border-color)" }}
-            >
-              <div className="relative flex-shrink-0 rounded-lg overflow-hidden" style={{ width: 72, height: 72 }}>
-                <Image
-                  src={post.image}
-                  alt={post.title}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  sizes="96px"
-                />
-              </div>
-              <div className="flex-1 min-w-0 flex flex-col justify-center">
-                <p className="text-[9px] font-bold tracking-[0.18em] uppercase mb-1" style={{ color: "#F97316" }}>
-                  {post.category}
-                </p>
-                <p className="text-[13px] font-semibold leading-snug group-hover:text-orange-400 transition-colors line-clamp-2" style={{ color: "#F5F0EB" }}>
-                  {post.title}
-                </p>
-              </div>
-            </Link>
-          ))}
+        {/* Latest — a proper column with the house header, not a stack of
+            bordered boxes. The thumbnails stay (this is the editorial menu);
+            the borders go, because nothing else in any menu draws boxes
+            around its rows — hover carries the affordance, same as every
+            other item on this surface. */}
+        <div className="col-span-12 lg:col-span-4">
+          <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3 pb-2.5" style={{
+            color: ACCENT,
+            borderBottom: "1px solid rgba(249,115,22,0.18)"
+          }}>
+            Latest from the road
+          </p>
+          <div className="space-y-1">
+            {rest.map((post) => (
+              <Link
+                key={post.slug}
+                href={`/blog/${post.slug}`}
+                className="group flex gap-3 px-2.5 py-2 rounded-md transition-colors hover:bg-white/5"
+              >
+                <div className="relative flex-shrink-0 rounded-md overflow-hidden" style={{ width: 56, height: 56 }}>
+                  <Image
+                    src={post.image}
+                    alt={post.title}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    sizes="72px"
+                  />
+                </div>
+                <div className="flex-1 min-w-0 flex flex-col justify-center">
+                  <p className="text-[10px] font-bold tracking-[0.18em] uppercase mb-0.5" style={{ color: ACCENT }}>
+                    {post.category}
+                  </p>
+                  <p className="text-[13px] font-semibold leading-snug group-hover:text-orange-400 transition-colors line-clamp-2" style={{ color: "#F5F0EB" }}>
+                    {post.title}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -444,7 +423,7 @@ function ApplicationsMegaMenu() {
       <div className="grid grid-cols-12 gap-8">
         {/* Lead column */}
         <div className="col-span-12 lg:col-span-3">
-          <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#F97316" }}>
+          <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3" style={{ color: ACCENT }}>
             Applications
           </p>
           <h3 className="text-xl font-bold leading-tight mb-2" style={{ color: "#F5F0EB" }}>
@@ -473,7 +452,7 @@ function ApplicationsMegaMenu() {
             return (
               <div key={group.label}>
                 <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3 pb-2.5" style={{
-                  color: "rgba(249,115,22,0.95)",
+                  color: ACCENT,
                   borderBottom: "1px solid rgba(249,115,22,0.18)"
                 }}>
                   {group.label}

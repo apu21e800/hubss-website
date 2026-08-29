@@ -245,7 +245,6 @@ function PanelCard({
           width={64}
           height={46}
           style={{ width: "100%", height: "100%", objectFit: "cover" }}
-          unoptimized
         />
       </div>
 
@@ -485,7 +484,6 @@ function ProjectModal({
                 fill
                 className="object-contain"
                 sizes="(max-width: 880px) 100vw, 880px"
-                unoptimized
               />
               {project.imageIsRepresentative && (
                 <RepresentativeTag style={{ position: "absolute", top: 10, left: 10 }} />
@@ -525,7 +523,6 @@ function ProjectModal({
                       fill
                       className="object-cover"
                       sizes="68px"
-                      unoptimized
                     />
                   </button>
                 ))}
@@ -1414,7 +1411,6 @@ export default function CanadaMap() {
                           fill
                           className="object-cover"
                           sizes="240px"
-                          unoptimized
                         />
                         <div
                           style={{
@@ -2102,7 +2098,6 @@ export default function CanadaMap() {
                         width={62}
                         height={48}
                         style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                        unoptimized
                       />
                     </span>
                     <span style={{ minWidth: 0, display: "block" }}>

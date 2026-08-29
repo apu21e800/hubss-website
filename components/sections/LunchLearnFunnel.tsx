@@ -299,7 +299,6 @@ export default function LunchLearnFunnel({
                   mixBlendMode: "screen",
                 }}
                 priority
-                unoptimized
               />
             </motion.div>
           </div>

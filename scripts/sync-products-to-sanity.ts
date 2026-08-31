@@ -134,7 +134,7 @@ async function main() {
     "traffic-patterns-xd":
       "Aggregate-reinforced, preformed thermoplastic that is purpose engineered for the toughest environments. High performance crosswalks, entrance features and endless other applications.",
     "traffic-patterns":
-      "Crisp preformed thermoplastic markings, factory-manufactured to 125mil and specified by municipalities coast to coast.",
+      "Preformed thermoplastic that is custom fabricated to put your design into a functional surface for use in endless environments. Used all across North America for unique messaging, branding, community expression, schools, etc.",
     "mmax":
       "MMA resin with performance aggregates for use in area markings like bus lanes, bike lanes, and other visual needs in high traffic environments. Fast installation. Full range of colours. Extended season formula for shoulder season applications.",
     "decomark":

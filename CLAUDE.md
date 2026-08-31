@@ -117,6 +117,12 @@ folder or C:\Users\cleve\Downloads (move it here if needed), then:
 6. git push origin main
 7. Delete the bundle file; show git log --oneline -3 + confirm remote SHA.
 
+SHELL TRAP, learned the hard way: `pkill -f "next"` (or "next start") matches
+the invoking shell's OWN command line and kills it mid-command — everything
+after the pkill silently never runs, and the exit code is 144. Hours were
+lost to stale .next builds this caused. Always write it as
+`pkill -f "[n]ext start"` — the character class cannot match itself.
+
 Never `git reset --hard` in this repo. Banner-dash drift in comment blocks is
 known-benign — prove it with `tr -d '─═━'` + `cmp`, then recover a single file
 with `git checkout origin/main -- <path>`.

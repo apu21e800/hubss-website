@@ -314,7 +314,7 @@ function Boardroom() {
                         className="w-full py-4 rounded-xl font-bold text-[15px] transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50"
                         style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff", boxShadow: "0 6px 24px rgba(249,115,22,0.35)" }}
                       >
-                        {f.submitState.status === "loading" ? "Sending…" : "Request Lunch & Learn"}
+                        {f.submitState.status === "loading" ? "Sending…" : "Book a Lunch & Learn"}
                       </button>
                       <p className="text-center text-[11px]" style={{ color: "rgba(255,255,255,0.35)" }}>
                         No obligation. No invoice. Lunch included.
@@ -579,7 +579,7 @@ function Proof() {
                   className="w-full py-3.5 rounded-xl font-bold text-[14px] transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50"
                   style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff", boxShadow: "0 6px 24px rgba(249,115,22,0.35)" }}
                 >
-                  {f.submitState.status === "loading" ? "Sending…" : "Request Lunch & Learn"}
+                  {f.submitState.status === "loading" ? "Sending…" : "Book a Lunch & Learn"}
                 </button>
               </div>
               {f.submitState.status === "error" && <ErrorNote message={f.submitState.message} />}

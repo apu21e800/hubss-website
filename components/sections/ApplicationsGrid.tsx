@@ -61,7 +61,12 @@ export default function ApplicationsGrid({ applications: appsProp }: Props = {})
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-10">
+        {/* MOBILE DIET — same treatment as ProductsGrid: swipe row on phones
+            (this section was 3,094px of stacked cards), untouched grid from
+            sm up. */}
+        <div className="flex overflow-x-auto snap-x snap-mandatory gap-3 -mx-4 px-4 pb-3 mb-10
+                        sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:overflow-visible sm:mx-0 sm:px-0 sm:pb-0"
+             style={{ scrollbarWidth: "none" }}>
           {featured.map((app, i) => (
             <motion.div
               key={app.slug}
@@ -69,7 +74,7 @@ export default function ApplicationsGrid({ applications: appsProp }: Props = {})
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.1 }}
               transition={{ duration: 0.4, delay: i * 0.05 }}
-              className="relative overflow-hidden group"
+              className="relative overflow-hidden group snap-start flex-shrink-0 w-[78vw] max-w-[320px] sm:w-auto sm:max-w-none sm:flex-shrink"
               style={{ borderRadius: "12px", aspectRatio: "4/3" }}
             >
               <Link href={`/applications/${app.slug}`} className="block w-full h-full">

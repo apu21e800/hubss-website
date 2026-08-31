@@ -125,7 +125,14 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
         </div>
 
         {/* Product grid — 1 col → 2 col → 3 col */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {/* MOBILE DIET (Vern-approved, front-page brief Call 1). On phones
+            this section stacked six ~500px cards into 3,364px of scroll. Now
+            a native swipe row: scroll-snap, CSS only, nothing removed — every
+            card still there, sideways. From sm up the grid is byte-identical
+            to what it was. */}
+        <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 -mx-4 px-4 pb-3
+                        sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:overflow-visible sm:mx-0 sm:px-0 sm:pb-0"
+             style={{ scrollbarWidth: "none" }}>
           {featured.map((product, i) => {
             const imgSrc = productImages[product.slug]
               ? resolveImage(productImages[product.slug]).src
@@ -145,7 +152,7 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
                 whileInView={{ y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.06, duration: 0.35 }}
-                className="h-full"
+                className="h-full snap-start flex-shrink-0 w-[82vw] max-w-[340px] sm:w-auto sm:max-w-none sm:flex-shrink"
               >
                 <Link
                   href={`/products/${product.slug}`}

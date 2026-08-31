@@ -26,6 +26,22 @@ const TYPE_PRIORITY = [
   "Other",
 ];
 
+// ── Chip buckets ─────────────────────────────────────────────────────────
+// Twelve type chips across two rows was the taxonomy wearing the UI (Vern:
+// "reduce the chips, it's too much"). Five buckets, one row. The underlying
+// docType stays untouched — a bucket chip simply matches every type it
+// contains, and each row still prints its precise type as the eyebrow.
+const TYPE_BUCKETS: { label: string; types: string[] }[] = [
+  { label: "Spec Sheets", types: ["Spec Sheet"] },
+  { label: "Data Sheets", types: ["Data Sheet", "Safety Data Sheet"] },
+  { label: "Guides & Manuals", types: ["Colour Guide", "Design Manual", "Installation Guide", "Guide"] },
+  { label: "Brochures & Flyers", types: ["Brochure", "Flyer", "Catalogue"] },
+  { label: "Other", types: ["Certificate", "Other"] },
+];
+const BUCKET_BY_TYPE: Record<string, string> = {};
+for (const b of TYPE_BUCKETS) for (const t of b.types) BUCKET_BY_TYPE[t] = b.label;
+const bucketFor = (t: string) => BUCKET_BY_TYPE[t] ?? "Other";
+
 const PRODUCTS = [
   { label: "All Products", value: "all" },
   { label: "TrafficPatterns", value: "traffic-patterns" },
@@ -53,19 +69,6 @@ const STREETBOND_SUBCATEGORIES = [
   { label: "Pro 220", value: "Pro 220" },
   { label: "Pro 250", value: "Pro 250" },
 ];
-
-// Badge styles — monochrome, typography-differentiated
-function typeBadgeStyle(type: string): React.CSSProperties {
-  const isHighlighted = ["Spec Sheet", "Data Sheet", "Brochure", "Safety Data Sheet", "Flyer", "Catalogue"].includes(type);
-  return {
-    color: isHighlighted ? "#f97316" : "rgba(255,255,255,0.55)",
-    background: "transparent",
-    border: "none",
-    padding: 0,
-    fontWeight: 700,
-    letterSpacing: "0.15em",
-  };
-}
 
 const PAGE_SIZE = 12;
 
@@ -132,83 +135,60 @@ function DocCard({
   return (
     <div
       onClick={openDocument}
-      className="group rounded-xl flex flex-col justify-between overflow-hidden transition-all duration-200 ease-out hover:-translate-y-[2px] hover:shadow-[0_8px_24px_-12px_rgba(249,115,22,0.35)] cursor-pointer"
-      style={{
-        background: "var(--bg-card-neutral)",
-        border: "1px solid var(--border-color)",
-      }}
-      onMouseEnter={(e) => {
-        (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(249,115,22,0.28)";
-        (e.currentTarget as HTMLDivElement).style.background = "#242424";
-      }}
-      onMouseLeave={(e) => {
-        (e.currentTarget as HTMLDivElement).style.borderColor = "var(--border-color)";
-        (e.currentTarget as HTMLDivElement).style.background = "var(--bg-card-neutral)";
-      }}
+      className="group flex items-center gap-3 sm:gap-4 px-4 sm:px-5 py-3 cursor-pointer transition-colors hover:bg-white/[0.04]"
     >
-      {/* Flyer thumbnail strip */}
-      {hasThumb && doc.previewImageUrl && (
-        <div
-          className="relative w-full h-32 overflow-hidden"
-          style={{ background: "#0f0f0f", borderBottom: "1px solid var(--border-color)" }}
-        >
-          <Image
-            src={doc.previewImageUrl}
-            alt={`${doc.title} preview`}
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="object-cover object-top transition-transform duration-300 group-hover:scale-[1.02]"
-          />
+      {/* THE REGISTER ROW (Vern: "switch to a nice list view"). A document is
+          metadata, not imagery — 81 of them want a file register, not a wall
+          of cards. Flyers and the catalogue keep a postage-stamp cover; text
+          documents get a quiet file glyph. Every behaviour of the card
+          survives: whole row opens the preview, buttons keep their own
+          clicks, catalogue still opens the flipbook. */}
+      {hasThumb && doc.previewImageUrl ? (
+        <div className="relative hidden sm:block flex-shrink-0 rounded-[3px] overflow-hidden" style={{ width: 34, height: 44, border: "1px solid var(--border-color)" }}>
+          <Image src={doc.previewImageUrl} alt="" fill sizes="34px" className="object-cover object-top" />
+        </div>
+      ) : (
+        <div className="hidden sm:flex items-center justify-center flex-shrink-0 rounded-[3px]" style={{ width: 34, height: 44, background: "var(--fill-subtle)", border: "1px solid var(--border-color)" }}>
+          <FileText className="w-4 h-4" style={{ color: "#6B7280" }} />
         </div>
       )}
 
-      <div className="p-5 flex flex-col justify-between flex-1">
-        <div>
-          <span
-            className="inline-block text-xs font-semibold px-2.5 py-1 rounded-md mb-4"
-            style={typeBadgeStyle(doc.type)}
-          >
-            {doc.type}
-          </span>
-          <h3 className="font-semibold leading-snug mb-2" style={{ color: "#F5F0EB" }}>
-            {doc.title}
-          </h3>
-          {productLink && (
-            <Link
-              href={productLink}
-              onClick={stop}
-              className="inline-block text-xs mb-2 transition-colors hover:text-orange-400"
-              style={{ color: "#9CA3AF" }}
-            >
-              View product page &rarr;
-            </Link>
-          )}
-          <div className="mt-1">
-            <span
-              className="inline-block text-xs px-2 py-0.5 rounded-full"
-              style={{
-                color: "#e87527",
-                background: "rgba(249,115,22,0.07)",
-                border: "1px solid rgba(249,115,22,0.12)",
-              }}
-            >
-              {doc.productName}
-            </span>
-          </div>
-        </div>
-        <div
-          className="flex items-center gap-2 mt-5 pt-4"
-          style={{ borderTop: "1px solid var(--border-color)" }}
+      <div className="flex-1 min-w-0">
+        <p className="text-[10px] font-bold tracking-[0.16em] uppercase mb-0.5" style={{ color: "#FB923C" }}>
+          {doc.type}
+        </p>
+        <h3 className="text-[14.5px] font-semibold leading-snug truncate transition-colors group-hover:text-orange-400" style={{ color: "#F5F0EB" }}>
+          {doc.title}
+        </h3>
+        <p className="text-[11.5px] mt-0.5 truncate sm:hidden" style={{ color: "#868C98" }}>
+          {doc.productName} · {doc.fileSize} · {doc.updatedDate}
+        </p>
+      </div>
+
+      {productLink ? (
+        <Link
+          href={productLink}
+          onClick={stop}
+          className="hidden md:inline-block text-xs px-2 py-0.5 rounded-full flex-shrink-0 transition-colors hover:text-orange-300"
+          style={{ color: "#e87527", background: "rgba(249,115,22,0.07)", border: "1px solid rgba(249,115,22,0.12)" }}
+          title="View product page"
         >
-          {/* File meta */}
-          <div className="flex items-center gap-1.5 text-xs flex-1 min-w-0" style={{ color: "#868C98" }}>
-            <span>{doc.fileSize}</span>
-            <span
-              className="w-1 h-1 rounded-full flex-shrink-0"
-              style={{ background: "rgba(255,255,255,0.15)" }}
-            />
-            <span className="truncate">{doc.updatedDate}</span>
-          </div>
+          {doc.productName}
+        </Link>
+      ) : (
+        <span
+          className="hidden md:inline-block text-xs px-2 py-0.5 rounded-full flex-shrink-0"
+          style={{ color: "#e87527", background: "rgba(249,115,22,0.07)", border: "1px solid rgba(249,115,22,0.12)" }}
+        >
+          {doc.productName}
+        </span>
+      )}
+
+      <span className="hidden sm:flex items-center justify-end gap-1.5 text-xs flex-shrink-0 w-[128px]" style={{ color: "#868C98" }}>
+        <span>{doc.fileSize}</span>
+        <span className="w-1 h-1 rounded-full flex-shrink-0" style={{ background: "rgba(255,255,255,0.15)" }} />
+        <span className="truncate">{doc.updatedDate}</span>
+      </span>
 
           {/* Preview button — catalogue opens flipbook in a new tab; everything else uses the PDF modal */}
           {isCatalogue ? (
@@ -310,8 +290,6 @@ function DocCard({
               <Download className="w-3.5 h-3.5" />
             </a>
           )}
-        </div>
-      </div>
     </div>
   );
 }
@@ -352,16 +330,13 @@ export default function ResourcesClient({
       const t = typeof d.type === "string" && d.type ? d.type : "Other";
       counts.set(t, (counts.get(t) ?? 0) + 1);
     }
-    const entries = Array.from(counts.entries());
-    entries.sort(([a], [b]) => {
-      const ai = TYPE_PRIORITY.indexOf(a);
-      const bi = TYPE_PRIORITY.indexOf(b);
-      if (ai !== -1 && bi !== -1) return ai - bi;
-      if (ai !== -1) return -1;
-      if (bi !== -1) return 1;
-      return String(a).localeCompare(String(b));
-    });
-    return entries.map(([value, count]) => ({ value, count }));
+    // Bucketed for display; TYPE_PRIORITY still orders anything that ever
+    // falls outside the buckets (belt for future doc types).
+    void TYPE_PRIORITY;
+    return TYPE_BUCKETS.map((b) => ({
+      value: b.label,
+      count: b.types.reduce((sum, t) => sum + (counts.get(t) ?? 0), 0),
+    })).filter((o) => o.count > 0);
   }, [documents]);
 
   function toggleType(value: string) {
@@ -416,7 +391,7 @@ export default function ResourcesClient({
       }
       // Multi-select type filter (applies on both tabs). Empty selection = no
       // type constraint.
-      if (selectedTypes.size > 0 && !selectedTypes.has(doc.type)) return false;
+      if (selectedTypes.size > 0 && !selectedTypes.has(bucketFor(doc.type))) return false;
       return true;
     });
   }, [documents, debouncedSearch, activeTab, productFilter, subcategoryFilter, selectedTypes, featuredOnly, newOnly]);
@@ -722,7 +697,7 @@ export default function ResourcesClient({
                           {docs.length} doc{docs.length !== 1 ? "s" : ""}
                         </span>
                       </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                      <div className="rounded-xl overflow-hidden divide-y divide-[rgba(255,255,255,0.06)] border border-[var(--border-color)] bg-[var(--bg-card-neutral)]">
                         {docs.map((doc) => (
                           <DocCard
                             key={doc.id}
@@ -737,7 +712,7 @@ export default function ResourcesClient({
               );
             })()
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="rounded-xl overflow-hidden divide-y divide-[rgba(255,255,255,0.06)] border border-[var(--border-color)] bg-[var(--bg-card-neutral)]">
               {visible.map((doc) => (
                 <DocCard key={doc.id} doc={doc} onPreview={setPreview} />
               ))}

@@ -6,8 +6,9 @@ const stats = [
   { value: "1,000+", label: "Streets transformed" },
   { value: "10",     label: "Provinces, coast to coast" },
   { value: "1999",   label: "Year we started" },
-  // Softened from "20yr" — Doug-style discipline on bold numbers.
-  { value: "DECADES", label: "Performance documented" },
+  // The catalogue's own figure for stamped asphalt (p19), replacing a vague
+  // "DECADES" that was itself a softening of an unsupported "20yr".
+  { value: "10–20yr", label: "Stamped asphalt service life" },
 ];
 
 export default function StatsBar() {

@@ -83,7 +83,7 @@ const PAGES: Omit<SearchEntry, "boost">[] = [
   { id: "p-resources", type: "Page", title: "Specification library", subtitle: "Spec sheets, data sheets, colour cards and submittals", href: "/resources", keywords: "resources downloads documents spec sheets pdf submittal data sheet", body: "" },
   { id: "p-ll", type: "Page", title: "Lunch & Learn", subtitle: "Free spec session for engineers, planners and architects", href: "/lunch-learn", keywords: "lunch learn session training presentation cpd book booking teach", body: "" },
   { id: "p-patterns", type: "Page", title: "Pattern library", subtitle: "Stamped asphalt patterns and border templates", href: "/patterns", keywords: "patterns templates stamps brick cobblestone herringbone", body: "" },
-  { id: "p-about", type: "Page", title: "About HUB", subtitle: "Thirty years of Canadian decorative pavement", href: "/about", keywords: "about company history team offices who we are", body: "" },
+  { id: "p-about", type: "Page", title: "About HUB", subtitle: "Canadian decorative pavement since 1999", href: "/about", keywords: "about company history team offices who we are", body: "" },
   { id: "p-contact", type: "Page", title: "Contact", subtitle: "Milton, Ontario and Ladysmith, British Columbia", href: "/contact", keywords: "contact email phone offices rep quote enquiry sales", body: "" },
 ];
 

@@ -4,33 +4,37 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
 const STATS = [
-  { num: "30+",    label: "Years",          sub: "Installations across North America" },
+  // The catalogue's own numbers (2027 edition, closing spread): "27 years ·
+  // 1,000+ projects · coast to coast". The site had said "30+ Years" and
+  // "500+ Municipalities" — the first contradicts a 1999 founding date printed
+  // on the same website, and the second is a figure no HUB document states.
+  { num: "27",     label: "Years",          sub: "Canadian-owned and operated since 1999" },
   { num: "1,000+", label: "Projects",       sub: "Completed coast to coast" },
-  { num: "500+",   label: "Municipalities", sub: "Specified coast to coast" },
-  // Softened from "20yr" — Doug-style proactive QA on bold quantitative claims (Vernon's call).
-  { num: "DECADES", label: "Performance",   sub: "Colour retention on stamped asphalt and coatings" },
+  { num: "10",     label: "Provinces",      sub: "Specified coast to coast" },
+  { num: "10–20yr", label: "Service life",  sub: "Stamped asphalt, installed on sound pavement" },
 ];
 
+// The catalogue's four proof points, in the catalogue's own words (p5).
 const PROOF = [
   {
     num: "01",
     claim: "Built for freeze-thaw climates",
-    detail: "Freeze-thaw cycles, de-icing salts, snowplow blades. Stress-tested for every climate coast to coast.",
+    detail: "Stress-tested for temperature swings, snowplow blades, and constant use.",
   },
   {
     num: "02",
-    claim: "Outstanding lifecycle value",
-    detail: "Thermoplastic and MMA systems deliver 6–8 years of high-visibility performance — with no seasonal reapplication or lane closures.",
+    claim: "Year after year of proven performance",
+    detail: "Our materials outperform traditional systems using innovative technologies.",
   },
   {
     num: "03",
-    claim: "Visible in every condition",
-    detail: "Retroreflective crosswalk systems, high-contrast colour combinations, and slip-resistant surfaces engineered for rain, snow, and low-light performance.",
+    claim: "Visibility and safety in every condition",
+    detail: "High-contrast colours and patterns. Retroreflective elements where needed. Slip-resistant by design.",
   },
   {
     num: "04",
-    claim: "Specified by engineers coast to coast",
-    detail: "Trusted by transportation engineers, urban designers, and municipal procurement teams from Vancouver to Halifax.",
+    claim: "Specified coast to coast",
+    detail: "Trusted by transportation engineers, urban designers, landscape architects and communities Canada wide.",
   },
 ];
 
@@ -94,11 +98,11 @@ export default function WhyHubss() {
             }}
           >
             The durable decorative hardscape.
-            <br />Specified by Engineers.
-            <br />Loved by Communities.
+            <br />Specified by engineers.
+            <br />Loved by communities.
           </h2>
           <p className="text-base leading-relaxed max-w-xl" style={{ color: "#9CA3AF" }}>
-            Thirty years. 500+ municipalities. One standard — if it goes on the street, it stays on the street.
+            Understanding what works. Solutions for Canada. One standard — if it goes on the street, it stays on the street.
           </p>
         </motion.div>
 

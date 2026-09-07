@@ -98,7 +98,7 @@ export default function Hero() {
           >
             HUB Surface Systems redefines hardscapes for freeze-thaw climates.
             Stamped asphalt, thermoplastics, and specialty coatings built for
-            performance and lasting visual impact — for 30+ years.
+            performance and lasting visual impact — coast to coast since 1999.
           </p>
 
           {/* ── CTAs ─────────────────────────────────────────────────── */}
@@ -148,9 +148,12 @@ export default function Hero() {
             />
             <div className="flex flex-wrap gap-x-10 gap-y-4">
               {[
-                { stat: "30+", label: "Years in Canada" },
+                // The catalogue's own numbers. "20yr" was a service-life claim
+                // no HUB document makes as a flat figure — the printed spreads
+                // give StreetPrint 10–20 years, and that is what this says now.
+                { stat: "27", label: "Years in Canada" },
                 { stat: "1,000+", label: "Projects coast to coast" },
-                { stat: "20yr", label: "Proven service life" },
+                { stat: "10–20yr", label: "Stamped asphalt service life" },
               ].map(({ stat, label }) => (
                 <div key={stat} className="flex items-center gap-3">
                   <span

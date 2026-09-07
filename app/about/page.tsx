@@ -7,12 +7,14 @@ import { getSanityPageContent } from "@/lib/sanity.queries";
 
 export const metadata = buildMetadata({
   title: "About HUB Surface Systems",
-  description: "30+ years making Canadian streets better. Two regional offices serving every province — we're the people who made your city look like your city.",
+  description: "27 years making Canadian streets better. Two regional offices serving every province — we're the people who made your city look like your city.",
   slug: "about",
 });
 
 const stats = [
-  { value: "30+", label: "Years in Business" },
+  // The catalogue prints "27 years"; the site prints "Since 1999" in six
+  // other places. Both cannot be true of a company that says 30+.
+  { value: "27", label: "Years in Business" },
   { value: "1,000+", label: "Projects Completed" },
   { value: "10", label: "Provinces Served" },
   { value: "2", label: "Regional Offices" },
@@ -20,14 +22,21 @@ const stats = [
 
 // Fallbacks used if the Sanity page doc has no matching field. These are also
 // the canonical copies for the sync script (scripts/sync-pages-to-sanity.ts).
+//
+// HEADS UP: the Sanity doc `page-about` currently HAS these fields, so Sanity
+// wins on the live page and editing this file alone changes nothing there.
+// Corrections made here (Sep 2026: "over thirty years" → since 1999, and an
+// "Indigenous art installations on BC ferries" line that no HUB document
+// supports) reach hubss.com only when someone runs the sync script with a
+// SANITY_API_WRITE_TOKEN, or edits the doc in Sanity Studio.
 const STORY_FALLBACK: string[] = [
-  "HUB Surface Systems was founded on a simple belief: streets don't have to be grey. For decades, Canadian cities treated pavement as pure utility — functional, forgettable, interchangeable. We saw an opportunity to change that, starting with StreetPrint decorative stamped asphalt in the mid-1990s.",
-  "Over thirty years, we grew our portfolio to address every surface challenge a Canadian municipality might face — from high-traffic arterial markings in York Region to decorative community crosswalks at UBC to Indigenous art installations on BC ferries. Every city, every application, every climate.",
+  "HUB Surface Systems was founded on a simple belief: streets don't have to be grey. For decades, Canadian cities treated pavement as pure utility — functional, forgettable, interchangeable. We saw an opportunity to change that, and built the company around StreetPrint decorative stamped asphalt — the original stamped asphalt system, a Canadian invention installed here since 1992.",
+  "Since 1999 we have grown the portfolio to address every surface challenge a Canadian municipality might face — from high-traffic transit corridors in York Region and London to decorative community crosswalks at UBC to Indigenous recognition artwork in Sechelt, Vancouver and Burnaby. Every city, every application, every climate.",
   "Today, HUB operates from two regional offices — East in Milton, Ontario, and West in Ladysmith, British Columbia — backed by a network of certified applicators trained and authorized by HUB to install each system to spec. That credentialed installer program is what turns a quality product into a quality outcome.",
 ];
 
 const STORY_ASIDE_FALLBACK =
-  "York Region. City of Toronto. City of Vancouver. UBC. The City of Sechelt. When you walk through a Canadian city and feel something — when a crosswalk catches your eye, when a plaza feels like it belongs — there's a chance we were there. That's what thirty years looks like on the ground.";
+  "York Region. City of Toronto. City of Vancouver. UBC. The City of Sechelt. When you walk through a Canadian city and feel something — when a crosswalk catches your eye, when a plaza feels like it belongs — there's a chance we were there. That's what a thousand projects look like on the ground.";
 
 const VALUES_FALLBACK = [
   { heading: "What We Build",     body: "Decorative crosswalks, civic plazas, community murals, transit lanes, private driveways, and parks. Surface solutions that carry meaning — from high-visibility school zones in Milton to Indigenous art installations in Sechelt." },
@@ -57,7 +66,7 @@ export default async function AboutPage() {
   const hero = {
     eyebrow:    sanityPage?.aboutHero?.eyebrow    ?? "Canadian-Operated Since 1999 · All 10 Provinces",
     heading:    sanityPage?.aboutHero?.heading    ?? "The people who made your city look like your city.",
-    subheading: sanityPage?.aboutHero?.subheading ?? "For over thirty years, HUB Surface Systems — a proudly Canadian company, coast to coast — has been connecting communities with pavement technologies that do more than carry traffic. They carry identity.",
+    subheading: sanityPage?.aboutHero?.subheading ?? "Since 1999, HUB Surface Systems — a proudly Canadian company, coast to coast — has been connecting communities with pavement technologies that do more than carry traffic. They carry identity.",
   };
   const missionQuote = sanityPage?.aboutMission ?? "Every surface tells a story. We give communities the language to write it.";
 

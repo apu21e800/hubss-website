@@ -7,7 +7,7 @@ import { getSanityPageContent } from "@/lib/sanity.queries";
 
 export const metadata = buildMetadata({
   title: "Lunch & Learn — Free Spec Session for Engineers & Planners",
-  description: "Book a free Lunch & Learn with HUB Surface Systems. We bring lunch, material samples, and 30 years of decorative pavement expertise to your office — in person or virtual, coast to coast.",
+  description: "Book a free Lunch & Learn with HUB Surface Systems. We bring lunch, material samples, and 27 years of decorative pavement expertise to your office — in person or virtual, coast to coast.",
   slug: "lunch-learn",
 });
 

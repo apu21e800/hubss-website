@@ -14,7 +14,13 @@
     "assets:inventory": "node scripts/asset-inventory.mjs",
     "gen:gallery-manifest": "node scripts/gen-gallery-manifest.mjs",
     "verify": "node scripts/verify-site.mjs",
-    "verify:quick": "node scripts/verify-site.mjs --quick"
+    "verify:quick": "node scripts/verify-site.mjs --quick",
+    "sync:products": "tsx scripts/sync-products-to-sanity.ts",
+    "sync:products:dry": "tsx scripts/sync-products-to-sanity.ts --dry-run",
+    "sync:applications": "tsx scripts/sync-applications-to-sanity.ts",
+    "sync:applications:dry": "tsx scripts/sync-applications-to-sanity.ts --dry-run",
+    "sync:pages": "tsx scripts/sync-pages-to-sanity.ts",
+    "sync:pages:dry": "tsx scripts/sync-pages-to-sanity.ts --dry-run"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",

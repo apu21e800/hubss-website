@@ -83,7 +83,13 @@ export default async function ProductPage({ params }: Props) {
   // Gallery — folder-driven: scans the product's image folder at build time
   // (drop/delete files in public/images/products/<dir>/ to curate; see
   // docs/IMAGE-WORKFLOW.md). Falls back to the curated array, then the featured image.
-  const productGallery = galleryFor(product.imageUrl, product.gallery, `images/products/${product.slug}`);
+  // The exclusion must name the photo the hero banner ACTUALLY shows —
+  // featuredImg when one is configured, not product.imageUrl. Keying it on
+  // imageUrl meant every product with a distinct featured image (seven of
+  // eleven) repeated its banner photo inside "The work" while the imageUrl
+  // photo, shown nowhere, was silently dropped from the gallery.
+  const heroSrc = featuredImg?.src ?? product.imageUrl;
+  const productGallery = galleryFor(heroSrc, product.gallery, `images/products/${product.slug}`);
   const gallerySources = productGallery.length > 0 ? productGallery : (featuredImg ? [featuredImg.src] : [product.imageUrl]);
   const gallery: GalleryImage[] = gallerySources.map((src) => ({
     src,

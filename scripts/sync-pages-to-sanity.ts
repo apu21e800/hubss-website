@@ -45,14 +45,24 @@ const client = createClient({
 // ─── About page baseline ────────────────────────────────────────────────────
 // Verbatim copies of the hardcoded values in app/about/page.tsx.
 
+// KEEP IN STEP WITH app/about/page.tsx. This script holds its own copy of the
+// about-page text and is what actually reaches Sanity; the constants in the
+// page component are only the fallback for when Sanity has no value. Editing
+// one without the other is how the live page and the code drift apart.
+//
+// Sep 2026 corrections: "mid-1990s" and "over thirty years" contradicted the
+// "Since 1999" printed across the rest of the site, and "Indigenous art
+// installations on BC ferries" is a claim no HUB document supports — the
+// documented Indigenous work is UBC, Sechelt, Granville Street, Burnaby and
+// London.
 const ABOUT_STORY: string[] = [
-  "HUB Surface Systems was founded on a simple belief: streets don't have to be grey. For decades, Canadian cities treated pavement as pure utility — functional, forgettable, interchangeable. We saw an opportunity to change that, starting with StreetPrint decorative stamped asphalt in the mid-1990s.",
-  "Over thirty years, we grew our portfolio to address every surface challenge a Canadian municipality might face — from high-traffic arterial markings in York Region to decorative community crosswalks at UBC to Indigenous art installations on BC ferries. Every city, every application, every climate.",
+  "HUB Surface Systems was founded on a simple belief: streets don't have to be grey. For decades, Canadian cities treated pavement as pure utility — functional, forgettable, interchangeable. We saw an opportunity to change that, and built the company around StreetPrint decorative stamped asphalt — the original stamped asphalt system, a Canadian invention installed here since 1992.",
+  "Since 1999 we have grown the portfolio to address every surface challenge a Canadian municipality might face — from high-traffic transit corridors in York Region and London to decorative community crosswalks at UBC to Indigenous recognition artwork in Sechelt, Vancouver and Burnaby. Every city, every application, every climate.",
   "Today, HUB operates from two regional offices — East in Milton, Ontario, and West in Ladysmith, British Columbia — backed by a network of certified applicators trained and authorized by HUB to install each system to spec. That credentialed installer program is what turns a quality product into a quality outcome.",
 ];
 
 const ABOUT_STORY_ASIDE =
-  "York Region. City of Toronto. City of Vancouver. UBC. The City of Sechelt. When you walk through a Canadian city and feel something — when a crosswalk catches your eye, when a plaza feels like it belongs — there's a chance we were there. That's what thirty years looks like on the ground.";
+  "York Region. City of Toronto. City of Vancouver. UBC. The City of Sechelt. When you walk through a Canadian city and feel something — when a crosswalk catches your eye, when a plaza feels like it belongs — there's a chance we were there. That's what a thousand projects look like on the ground.";
 
 const ABOUT_VALUES: { heading: string; body: string }[] = [
   {

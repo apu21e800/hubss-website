@@ -27,7 +27,7 @@ export const applications: Application[] = [
     seoTitle: "Decorative Crosswalks — Thermoplastic Pedestrian Markings",
     seoDescription: "Aggregate-reinforced preformed thermoplastic crosswalk markings for high-visibility pedestrian safety, traffic calming, and community identity — specified across Canada.",
     shortDesc: "Durable, high-visibility, high-contrast crosswalk systems that elevate the intersection.",
-    imageUrl: "/images/applications/crosswalks/crosswalks-01.jpg",
+    imageUrl: "/images/applications/crosswalks/crosswalks-09.jpg",
     gallery: [1,3,6,8,11,13,16,18,21,23,26,28,31,33,36,38,41,43,45,48,50,53,55,58,60,63,65,68,70,73,75,78,80,83,85,87,90,92,95,97,100,102,105,107,110,112,115,117,120,122].map(n => {
       const ext = [41, 112, 115].includes(n) ? "png" : "jpg";
       return `/images/applications/crosswalks/crosswalks-${String(n).padStart(2,"0")}.${ext}`;
@@ -94,7 +94,7 @@ export const applications: Application[] = [
     name: "Community Branding",
     slug: "community-branding",
     shortDesc: "Neighbourhood identity, cultural art, and civic pride — embedded permanently in the street.",
-    imageUrl: "/images/applications/community-branding/community-branding-01.jpg",
+    imageUrl: "/images/blog/white-rock-langley-trafficpatterns/featured.jpg",
     gallery: gallery("community-branding", "community-branding", 14),
     description: "Every neighbourhood has a story. Most of them go untold on the street. HUB community branding installations change that — transforming the surface beneath people's feet into a canvas for the neighbourhood's culture, history, and identity. DecoMark thermoplastic embeds Pantone-accurate custom graphics directly into asphalt and concrete: First Nations cultural artwork in reconciliation partnerships, BIA wayfinding and business district branding, neighbourhood crest and name installations, Pride declarations, and heritage commemorations. StreetBond colour treatments create branded corridors, cultural district colour schemes, and civic identity systems that people can feel underfoot and see from a block away. From Bowen Island's community art path to the UBC Musqueam cultural crosswalk — this is what it looks like when a community decides the street deserves to tell its story.",
     relatedProducts: ["decomark", "streetbond", "streetprint", "duratherm"],
@@ -103,7 +103,7 @@ export const applications: Application[] = [
     name: "Private Driveways",
     slug: "private-driveways",
     shortDesc: "Stamped asphalt driveways — the look of stone pavers without the demolition or maintenance.",
-    imageUrl: "/images/applications/residential-driveways/residential-driveways-01.jpg",
+    imageUrl: "/images/applications/residential-driveways/residential-driveways-18.jpg",
     gallery: gallery("residential-driveways", "residential-driveways", 44),
     description: "Tearing out an existing driveway to install natural stone or concrete pavers is expensive, disruptive, and creates a raised edge profile that chips, shifts, and weeds. StreetPrint offers a better path: in-place stamped asphalt that works with the driveway already there, impressing cobblestone, brick, herringbone, or slate patterns directly into the surface, then sealing it with StreetBond UV-stable acrylic colour. The result is a rich decorative hardscape finish at a fraction of full paver installation cost — with a flush, snowplow-safe, weed-free surface that requires none of the maintenance that natural stone demands. For existing driveways showing their age, DuraShield penetrating rejuvenator restores the asphalt base and extends surface life before cosmetic treatment.",
     relatedProducts: ["streetprint", "streetbond", "durashield"],
@@ -112,7 +112,7 @@ export const applications: Application[] = [
     name: "Sport Courts",
     slug: "sport-courts",
     shortDesc: "Permanent court coatings for tennis, basketball, pickleball, and multi-sport surfaces.",
-    imageUrl: "/images/applications/sport-courts/sport-courts-01.jpg",
+    imageUrl: "/images/products/streetbond/streetbond-67.png",
     gallery: gallery("sport-courts", "sport-courts", 21, "jpg", [19]),
     description: "Sport courts are one of the most demanding colour environments in outdoor pavement — lateral movement, constant foot traffic, UV exposure, and the precise line geometry that competition depends on. StreetBond acrylic bonds permanently to asphalt and acid-etched concrete, delivering vivid, UV-stable court surface colours and crisp line markings that hold their geometry and contrast season after season without repainting. Available in standard court colour palettes and custom Pantone matching for branded facilities. DecoMark thermoplastic line markings provide precise boundary lines, service boxes, and three-point arcs that won't shift or peel under the lateral forces of hard court play.",
     relatedProducts: ["streetbond", "decomark", "streetprint", "premark"],
@@ -130,7 +130,7 @@ export const applications: Application[] = [
     name: "Public Spaces",
     slug: "public-spaces",
     shortDesc: "Decorative hardscape for civic plazas, transit forecourts, and university campuses.",
-    imageUrl: "/images/applications/public-spaces/public-spaces-01.jpg",
+    imageUrl: "/images/applications/commercial-spaces/commercial-spaces-55.jpg",
     gallery: [1,2,3,5,6,7,9,10,11,13,14,15,17,18,19,21,22,23,25,26,27,29,30,31,33,34,35,37,38,39,41,42,43,45,46,47,49,50,51,53,54,55,57,58,59,61,62,63,65,66].map(n => {
       const ext = [9,10,11,13,14,15,17,18,19,21,22,23,25,26,27,29,30,31,33,34,35,37,38].includes(n) ? "png" : "jpg";
       return `/images/applications/public-spaces/public-spaces-${String(n).padStart(2,"0")}.${ext}`;
@@ -142,7 +142,7 @@ export const applications: Application[] = [
     name: "Commercial Spaces",
     slug: "commercial-spaces",
     shortDesc: "Premium hardscape finishes for retail centres, mixed-use developments, and hospitality entries.",
-    imageUrl: "/images/applications/commercial-spaces/commercial-spaces-01.jpg",
+    imageUrl: "/images/applications/crosswalks/crosswalks-110.jpg",
     gallery: [1,3,5,8,10,12,15,17,19,22,24,26,29,31,33,36,38,40,43,45,47,50,52,54,57,59,61,64,66,68,71,73,75,78,80,82,85,87,89,92,94,96,99,101,103,106,108,110,113,115].map(n => {
       const ext = [110].includes(n) ? "png" : "jpg";
       return `/images/applications/commercial-spaces/commercial-spaces-${String(n).padStart(2,"0")}.${ext}`;
@@ -163,7 +163,7 @@ export const applications: Application[] = [
     name: "Residential Driveways",
     slug: "residential-driveways",
     shortDesc: "Transform an existing driveway into decorative stamped asphalt — no demolition required.",
-    imageUrl: "/images/applications/residential-driveways/residential-driveways-01.jpg",
+    imageUrl: "/images/applications/residential-driveways/residential-driveways-18.jpg",
     gallery: gallery("residential-driveways", "residential-driveways", 44),
     description: "A beautifully finished driveway is one of the most visible improvements a homeowner can make — and one of the most cost-effective when done right. StreetPrint's in-place stamped asphalt process works directly on the existing driveway surface, impressing cobblestone, brick, herringbone, or slate patterns without tearing out and replacing the base. StreetBond UV-stable acrylic colour then seals the surface in the homeowner's choice of colour — warm buff tones, bold reds, classic charcoal — that holds its finish season after season without the chalking, fading, or cracking that standard driveway sealers deliver. No demolition. No concrete forms. No landscape damage from excavation. The finished result: a premium decorative hardscape that adds lasting curb appeal at a fraction of the cost of natural stone or interlocking paver installation.",
     relatedProducts: ["streetprint", "streetbond", "durashield"],
@@ -216,7 +216,7 @@ export const applications: Application[] = [
     name: "Public Art",
     slug: "public-art",
     shortDesc: "Civic-scale pavement murals, Indigenous art installations, and landmark street graphics.",
-    imageUrl: "/images/applications/community-branding/community-branding-01.jpg",
+    imageUrl: "/images/applications/community-branding/community-branding-02.jpg",
     gallery: gallery("community-branding", "community-branding", 14),
     description: "The street is one of the largest untapped canvases in any city. HUB public art installations turn that canvas into permanent, weather-resistant community expression — working with artists, Indigenous nations, planners, and community organizations to translate creative vision into durable ground-plane art at a scale that commands attention. From labyrinth walk installations at BC Children's Hospital to Indigenous cultural crosswalks at UBC to Pride commemorations in downtown corridors: these are not temporary installations. They are permanent features of the places they inhabit, designed to last the full service life of the asphalt surface itself.",
     relatedProducts: ["decomark", "streetbond", "streetprint"],

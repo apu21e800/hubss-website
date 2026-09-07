@@ -160,6 +160,9 @@ export const products: Product[] = [
   {
     name: "DecoMark",
     slug: "decomark",
+    // The catalogue hero is a portrait photograph with the medallion in its
+    // lower half; a centred crop shows concrete. Aim the banner at the artwork.
+    heroPosition: "center 74%",
     seoTitle: "DecoMark — Custom Horizontal Graphics and Wayfinding",
     seoDescription: "Elevate your brand with durable custom horizontal graphics, civic art, and pavement wayfinding solutions.",
     shortDesc: "Custom-graphic preformed thermoplastic for wayfinding, public art, schools, and parks.",

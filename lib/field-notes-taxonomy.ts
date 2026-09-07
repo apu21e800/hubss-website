@@ -433,7 +433,7 @@ export const FIELD_NOTES: Record<string, Entry> = {
   },
 
   // ── From the 2027 print catalogue (Sep 2026) ──────────────────
-  // Six posts written out of the booklet's own spreads and project stories,
+  // Seven posts written out of the booklet's own spreads and project stories,
   // so the site says in long form what the book says in print.
   "how-stamped-asphalt-is-installed": {
     type: "Guide",

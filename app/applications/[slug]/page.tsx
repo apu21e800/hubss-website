@@ -13,6 +13,7 @@ import { imageObject, seoCaption } from "@/lib/image-seo";
 import { applications } from "@/lib/applications";
 import { getMergedApplication } from "@/lib/applications.server";
 import { products } from "@/lib/products";
+import { productImages, resolveImage } from "@/lib/featured-images";
 import { buildMetadata } from "@/lib/seo";
 
 // Exclude slugs that have their own dedicated page (e.g. /applications/public-art/page.tsx)
@@ -225,8 +226,11 @@ export default async function ApplicationPage({ params }: Props) {
                       style={{ border: "1px solid rgba(255,255,255,0.06)", minHeight: "52px" }}
                     >
                       <div className="relative overflow-hidden rounded-md flex-shrink-0" style={{ width: 48, height: 48 }}>
+                        {/* The same photograph the product's own page leads with
+                            (lib/featured-images.ts) — product.imageUrl is the
+                            older fallback and, for TrafficPatterns, a logo. */}
                         <Image
-                          src={product.imageUrl}
+                          src={productImages[product.slug] ? resolveImage(productImages[product.slug]).src : product.imageUrl}
                           alt={product.name}
                           fill
                           className="object-cover"

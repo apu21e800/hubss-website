@@ -32,6 +32,10 @@
  * grid and "stake holders" in the TrafficPatternsXD description; both are
  * corrected here and flagged to Vernon for the print file. Everything else is
  * verbatim, including the Canadian spellings and Vernon's "eh?".
+ *
+ * Re-read against the Figma file on 7 Sep 2026 (every page frame extracted
+ * as text) and brought back into line where the print file had moved on —
+ * subheads, the MMAX colour count, DuraTherm's uses strip, PreMark's beads.
  */
 
 export interface CatalogueSpec {
@@ -59,7 +63,7 @@ export interface CatalogueEntry {
 export const PRODUCT_CATALOGUE: Record<string, CatalogueEntry> = {
   "traffic-patterns": {
     title: "Preformed thermoplastic.",
-    subhead: "You design it, we build it. Think jigsaw puzzle…",
+    subhead: "You design it, we build it, we make it part of the road.",
     description:
       "Anti-skid aggregate is intermixed through the full cross-section, not broadcast across the top — so the grip lasts as long as the colour. Customisable to community artwork.",
     specs: [
@@ -76,7 +80,7 @@ export const PRODUCT_CATALOGUE: Record<string, CatalogueEntry> = {
     title: "For the toughest environments.",
     subhead: "Aggregate-reinforced, preformed thermoplastic. Traffic tough, proven coast to coast.",
     description:
-      "The toughest material in the range, built for performance. Performance proven with bus traffic and concentrated wheel loads. High colour contrast for safety. Specified by Canadian transit authorities, municipalities and stakeholders across Canada.",
+      "The toughest material in the range, built for performance in Canada. Proven in high traffic and concentrated wheel loads. High colour contrast for increased safety. Specified by Canadian transit authorities, municipalities and stakeholders across Canada.",
     specs: [
       { label: "Thickness", value: "150 mil" },
       { label: "Aggregate", value: "8–9 Mohs rating" },
@@ -89,9 +93,9 @@ export const PRODUCT_CATALOGUE: Record<string, CatalogueEntry> = {
 
   streetprint: {
     title: "Stamped asphalt.",
-    subhead: "The original. A Canadian invention, eh?",
+    subhead: "The original. Since 1992. A Canadian invention, eh?",
     description:
-      "Patterns are stamped into existing asphalt, then coloured and sealed with our StreetBond coatings. The surface stays flush — nothing for a plow blade to catch, no joints to weed, no pavers to settle, asphalt stays flexible.",
+      "Patterns are stamped into existing asphalt, then coloured and sealed with StreetBond coatings. The surface stays flush — nothing for a plow blade to catch, no joints to weed, no pavers to settle, asphalt stays flexible.",
     specs: [
       { label: "System", value: "In-place stamping + StreetBond coating" },
       { label: "Patterns", value: "Standard and custom options" },
@@ -104,7 +108,7 @@ export const PRODUCT_CATALOGUE: Record<string, CatalogueEntry> = {
 
   streetbond: {
     title: "The colour system.",
-    subhead: "Epoxy modified acrylic, engineered to perform.",
+    subhead: "Engineered to perform in Canada.",
     description:
       "Designed to move with the pavement, avoiding the three failures of rigid coatings: cracking, premature wear, and slipperiness. Sixty-three standard colours plus full custom colour matching.",
     specs: [
@@ -120,12 +124,12 @@ export const PRODUCT_CATALOGUE: Record<string, CatalogueEntry> = {
 
   streetbondsr: {
     title: "Solar reflective coating.",
-    subhead: "LEED V5 Credit: Urban heat island reduction.",
+    subhead: "Mitigating the urban heat island effect.",
     description:
-      "The same flexible chemistry as StreetBond, formulated to reflect rather than absorb. Twelve colours carry SR 0.33 or higher and can contribute to LEED V5 heat-island credits.",
+      "The same flexible chemistry as StreetBond, formulated to reflect rather than absorb. Twelve colours carry SR 0.33 or higher and can contribute to LEED V5 urban heat-island credits (non-roof).",
     specs: [
       { label: "Solar reflectance", value: "≥ 0.33 initial" },
-      { label: "LEED", value: "V5 SS Credit: Heat Island" },
+      { label: "LEED", value: "V5 SS Credit: Urban Heat Island" },
       { label: "Surfaces", value: "Asphalt" },
       { label: "Life cycle", value: "8+ years" },
     ],
@@ -135,9 +139,9 @@ export const PRODUCT_CATALOGUE: Record<string, CatalogueEntry> = {
 
   decomark: {
     title: "Custom graphics.",
-    subhead: "Custom graphics. Community identity. Civic landmarks at street scale.",
+    subhead: "Community identity. Public art. Innovative material.",
     description:
-      "Factory fabricated to your vector artwork using our colour palette, then heat-fused permanently to the substrate. Community identity, commemorative art, wayfinding and civic landmarks at street scale.",
+      "Factory fabricated to your vector artwork using our colour palette, then heat-fused to the substrate. Community identity, commemorative art, wayfinding and civic landmarks at street scale.",
     specs: [
       { label: "System", value: "Preformed thermoplastic" },
       { label: "Colour", value: "Standard and premium options" },
@@ -150,9 +154,9 @@ export const PRODUCT_CATALOGUE: Record<string, CatalogueEntry> = {
 
   mmax: {
     title: "MMA area markings.",
-    subhead: "Methyl methacrylate. 45–60 min cure. Built for Canadian climates.",
+    subhead: "Methyl methacrylate. Fast installation. Built for Canada.",
     description:
-      "Fast return to service, so an active corridor goes in overnight without touching weekday service. Best in class performance.",
+      "Fast return to service, so an active corridor goes in fast without community disruption. Best in class performance. Available in 8 standard colours along with 15 premium colours.",
     specs: [
       { label: "Material", value: "Methyl methacrylate (MMA) resin" },
       { label: "Cure", value: "45–60 min — traffic-ready" },
@@ -174,7 +178,7 @@ export const PRODUCT_CATALOGUE: Record<string, CatalogueEntry> = {
       { label: "Snowplow safe", value: "Yes — no shear risk" },
       { label: "Bond", value: "Heat-fused to asphalt substrate" },
     ],
-    uses: ["Crosswalks", "Streetscape", "Calming", "Identity"],
+    uses: ["Crosswalks", "Speed bumps", "Calming", "Identity"],
     page: 34,
   },
 
@@ -195,13 +199,13 @@ export const PRODUCT_CATALOGUE: Record<string, CatalogueEntry> = {
 
   premark: {
     title: "Road marking symbols.",
-    subhead: "Arrows. Stop bars. Legends. Bike symbols. No stencils.",
+    subhead: "Arrows. Stop bars. Legends. Bike symbols. Custom.",
     description:
       "Arrows, stop bars, yield triangles, school legends, bike symbols and ladder lines, pre-cut to specification. Heat-applied by torch — no stencils, no curing window, drive on immediately. Provincially approved across Canada.",
     specs: [
       { label: "Thickness", value: "125 mil standard / 90 mil ViziGrip" },
       { label: "Installation", value: "Heat-applied — drive on immediately" },
-      { label: "Retroreflectivity", value: "Intersection-grade glass bead" },
+      { label: "Retroreflectivity", value: "Integrated glass beads" },
       { label: "Service life", value: "6–8 years" },
     ],
     uses: ["Bike lanes", "Crosswalks", "Regulatory", "Parking"],

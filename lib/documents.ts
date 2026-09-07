@@ -119,6 +119,7 @@ const ALL_DOCS: Record<string, ProductDocument[]> = {
   ],
 
   "mmax": [
+    { label: "Colour Palette",                       type: "colour",       href: "/docs/MMAX/MMAX-Colour-Palette.pdf" },
     { label: "Product Data Sheet",                   type: "tds",          href: "/docs/MMAX/MMAX-Product-Data.pdf" },
     { label: "Next Gen Brochure",                    type: "brochure",     href: "/docs/MMAX/MMAX-Next-Gen-Brochure_06_09_23-1.pdf" },
     { label: "Extended Season Corundum PDS",         type: "tds",          href: "/docs/MMAX/Extended-Season-MMAX-Corundum-PDS-070723.pdf" },

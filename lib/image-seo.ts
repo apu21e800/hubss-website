@@ -466,6 +466,31 @@ const PLACES: Record<string, string> = {
 };
 
 /**
+ * Per-file places — photographs whose location the client captioned in the
+ * 2026 catalogue (Figma frame titles, Sep 2026). A file entry wins over its
+ * folder; everything else stays on the folder rule above.
+ */
+const FILE_PLACES: Record<string, string> = {
+  "/images/products/traffic-patterns/traffic-patterns-87.jpg": "Kitchener, ON",
+  "/images/products/traffic-patterns/traffic-patterns-88.jpg": "UBC, Vancouver, BC",
+  "/images/products/traffic-patterns/traffic-patterns-89.jpg": "UBC, Vancouver, BC",
+  "/images/products/traffic-patterns/traffic-patterns-90.jpg": "UBC, Vancouver, BC",
+  "/images/products/traffic-patterns/traffic-patterns-91.jpg": "UBC, Vancouver, BC",
+  "/images/products/mmax/mmax-04.jpg": "London, ON",
+  "/images/applications/bus-lanes/bus-lanes-37.png": "London, ON",
+  "/images/applications/parking-lots/parking-lots-60.jpg": "Toronto Premium Outlets, Halton Hills, ON",
+  "/images/applications/crosswalks/crosswalks-110.jpg": "Oakville, ON",
+  "/images/applications/crosswalks/crosswalks-128.jpg": "Langley, BC",
+  "/images/applications/crosswalks/crosswalks-23.jpg": "Grimsby, ON",
+  "/images/applications/commercial-spaces/commercial-spaces-99.jpg": "Kitchener, ON",
+  "/images/applications/commercial-spaces/commercial-spaces-75.jpg": "Toronto Premium Outlets, Halton Hills, ON",
+  "/images/applications/public-art/public-art-05.jpg": "Sechelt, BC",
+  "/images/applications/traffic-calming/traffic-calming-58.jpg": "Maple Ridge, BC",
+  "/images/applications/bike-lanes/bike-lanes-40.jpg": "Dovercourt Village, Toronto, ON",
+  "/images/applications/parks-paths/parks-paths-145.jpg": "Okanagan, BC",
+};
+
+/**
  * Hero photography.
  *
  * The homepage hero shipped as `alt="" aria-hidden="true"`. As an accessibility
@@ -519,7 +544,7 @@ export function subjectFor(src: string): ImageSubject | null {
 }
 
 export function placeFor(src: string): string {
-  return PLACES[folderOf(src)] ?? CANADA;
+  return FILE_PLACES[src.split("?")[0]] ?? PLACES[folderOf(src)] ?? CANADA;
 }
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);

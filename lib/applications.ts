@@ -39,7 +39,7 @@ export const applications: Application[] = [
     name: "Bike Lanes",
     slug: "bike-lanes",
     shortDesc: "Coloured bike lane systems that hold visibility and protect cyclists season after season.",
-    imageUrl: "/images/applications/bike-lanes/bike-lanes-01.jpg",
+    imageUrl: "/images/applications/bike-lanes/bike-lanes-39.jpg",
     gallery: gallery("bike-lanes", "bike-lanes", 38, "jpg", [32]),
     description: "A faded bike lane is a dangerous bike lane. When the green disappears, so does the driver's understanding that this space belongs to someone else. HUB bike lane systems are engineered to stay visible — StreetBond UV-stable acrylic maintains vivid green, red, and custom Pantone colour through years of traffic and weather without chalking or fading. MMAX methyl methacrylate is specified where overnight curing is required in transit-adjacent corridors — full cure in 30-60 minutes, bond strength exceeding 3 MPa. PreMark preformed thermoplastic symbols and edge lines provide retroreflective bicycle pictographs, arrows, and conflict zone markings that hold their geometry and visibility through seasons of heavy use. The complete specification for protected bike lanes, intersection treatments, and multi-use path markings that need to perform as long as the infrastructure itself.",
     relatedProducts: ["streetbond", "mmax", "premark", "traffic-patterns", "traffic-patterns-xd"],
@@ -48,7 +48,7 @@ export const applications: Application[] = [
     name: "Bus Lanes",
     slug: "bus-lanes",
     shortDesc: "BRT corridor and bus priority lane treatments engineered for the harshest urban loads.",
-    imageUrl: "/images/applications/bus-lanes/bus-lanes-01.jpg",
+    imageUrl: "/images/applications/bus-lanes/bus-lanes-41.jpg",
     gallery: gallery("bus-lanes", "bus-lanes", 40, "jpg", [37, 38, 39, 40]),
     // TODO: doug-review — Doug's note ended mid-sentence ("...survive this. Our MMAX line of MMA resin cures in...."). Polished here per Vernon; revisit when Doug clarifies the intended completion.
     description: "Bus priority lanes and BRT corridors are among the most demanding surfaces in any city's network — concentrated axle loads, tight turning radii, and the expectation that markings stay legible through thousands of bus movements a day. HUB's MMAX line of MMA resin cures in 45–60 minutes, traffic-ready in under an hour, enabling complete overnight installation in a single maintenance window without disrupting weekday transit operations. TrafficPatternsXD 150mil aggregate-reinforced thermoplastic delivers high skid resistance at bus stops and turning movements where wet-surface traction directly affects passenger safety. Both systems are engineered for season after season of performance in these demanding environments — ready when transit needs them. The specified solution for red bus lanes, transit signal priority corridors, and BRT station zones across Canada.",
@@ -58,7 +58,7 @@ export const applications: Application[] = [
     name: "Parking Lots",
     slug: "parking-lots",
     shortDesc: "Durable stall markings, wayfinding colour, and surface rejuvenation for commercial parking.",
-    imageUrl: "/images/applications/parking-lots/parking-lots-01.jpg",
+    imageUrl: "/images/applications/parking-lots/parking-lots-60.jpg",
     gallery: [1,2,3,4,5,7,8,9,10,11,13,14,15,16,17,19,20,21,22,23,25,26,27,28,29,31,32,33,34,35,37,38,39,40,41,43,44,45,46,47,49,50,51,52,53,55,56,57,58,59].map(n =>
       `/images/applications/parking-lots/parking-lots-${String(n).padStart(2,"0")}.jpg`),
     description: "Parking lots take a disproportionate beating — sun exposure, oil contamination, and high wheel-load cycles degrade asphalt and surface markings faster than almost any other paved environment. HUB parking lot solutions address the whole surface, not just the stripes. DuraShield penetrating rejuvenator restores oxidized asphalt and seals the surface against further deterioration, extending pavement life at a fraction of replacement cost. TrafficPatterns and PreMark thermoplastic stall markings and accessible parking symbols hold retroreflectivity season after season without annual repainting. StreetBond colour treatments create branded wayfinding zones, coloured drive aisles, and fire lane designations that read clearly and last. For REITs, property managers, and facility teams: the result is a parking surface that looks maintained, performs safely, and costs less to operate.",
@@ -84,7 +84,7 @@ export const applications: Application[] = [
     seoTitle: "Playgrounds & Recreation — Schoolyard Paving",
     seoDescription: "Transform schoolyards with StreetBond — cost-effective, vibrant playground surfacing that increases physical activity and student engagement.",
     shortDesc: "Vibrant, slip-resistant playground surface graphics that stand up to hard use.",
-    imageUrl: "/images/applications/playgrounds/playgrounds-01.jpg",
+    imageUrl: "/images/applications/parks-paths/parks-paths-96.jpg",
     gallery: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52].map(n =>
       `/images/applications/playgrounds/playgrounds-${String(n).padStart(2,"0")}.jpg`),
     description: "Children are hard on surfaces. Playground treatments get knees, bikes, basketballs, and a decade of foot traffic — and they need to look vibrant, be safe, and require no annual repainting to do their job. DecoMark custom thermoplastic graphics bring hopscotch courts, number grids, compass roses, wayfinding games, and mural-scale artwork to paved play surfaces with Pantone-accurate colour and flush-surface edges that eliminate trip hazards. StreetBond acrylic adds vivid, UV-stable colour to existing asphalt play courts, four-square grids, and multi-use activity areas. Both systems deliver surfaces that are safe to fall on, easy to clean, and designed to remain bright and engaging season after season without repainting.",
@@ -154,7 +154,7 @@ export const applications: Application[] = [
     name: "Townhomes",
     slug: "townhomes",
     shortDesc: "Cohesive stamped asphalt hardscape for townhome and strata developments.",
-    imageUrl: "/images/applications/townhomes/townhomes-01.jpg",
+    imageUrl: "/images/applications/townhomes/townhomes-20.jpg",
     gallery: gallery("townhomes", "townhomes", 18, "jpg", [4, 5, 6, 18]),
     description: "Townhome and strata developments live and die by their first impression — the moment a prospective buyer pulls up to the curb and reads the quality of the project through what's underfoot. StreetPrint stamped asphalt driveways and entry courts deliver the look of traditional clay pavers or stone cobble at a fraction of the installation cost, with none of the ongoing maintenance: no settling, no weeding between joints, no freeze-thaw displacement. StreetBond colour treatments unify guest parking areas, amenity courts, and pedestrian corridors into a cohesive hardscape system that reads as intentional design. For existing strata boards managing aging asphalt surfaces, DuraShield penetrating rejuvenator restores the surface and extends its useful life before cosmetic treatment is considered.",
     relatedProducts: ["streetprint", "streetbond", "durashield"],
@@ -172,7 +172,7 @@ export const applications: Application[] = [
     name: "Pedestrian Safety",
     slug: "pedestrian-safety",
     shortDesc: "Retroreflective thermoplastic markings that support Vision Zero crosswalk standards.",
-    imageUrl: "/images/applications/crosswalks/crosswalks-03.jpg",
+    imageUrl: "/images/applications/crosswalks/crosswalks-123.jpg",
     gallery: [1,3,6,8,11,13,16,18,21,23,26,28,31,33,36,38,41,43,45,48,50,53,55,58,60,63,65,68,70,73,75,78,80,83,85,87,90,92,95,97,100,102,105,107,110,112,115,117,120,122].map(n => {
       const ext = [41, 112, 115].includes(n) ? "png" : "jpg";
       return `/images/applications/crosswalks/crosswalks-${String(n).padStart(2,"0")}.${ext}`;
@@ -184,7 +184,7 @@ export const applications: Application[] = [
     name: "Traffic Calming",
     slug: "traffic-calming",
     shortDesc: "Coloured pavement treatments that reduce vehicle speeds without physical barriers.",
-    imageUrl: "/images/applications/traffic-calming/traffic-calming-01.jpg",
+    imageUrl: "/images/applications/traffic-calming/traffic-calming-57.jpg",
     gallery: [1,2,3,4,5,6,7,8,9,11,12,13,14,15,16,17,18,19,21,22,23,24,25,26,27,28,29,31,32,33,34,35,36,37,38,39,41,42,43,44,45,46,47,48,49,51,52,53,54,55].map(n => {
       const ext = [43].includes(n) ? "png" : "jpg";
       return `/images/applications/traffic-calming/traffic-calming-${String(n).padStart(2,"0")}.${ext}`;
@@ -216,7 +216,7 @@ export const applications: Application[] = [
     name: "Public Art",
     slug: "public-art",
     shortDesc: "Civic-scale pavement murals, Indigenous art installations, and landmark street graphics.",
-    imageUrl: "/images/applications/community-branding/community-branding-02.jpg",
+    imageUrl: "/images/applications/public-art/public-art-01.jpg",
     gallery: gallery("community-branding", "community-branding", 14),
     description: "The street is one of the largest untapped canvases in any city. HUB public art installations turn that canvas into permanent, weather-resistant community expression — working with artists, Indigenous nations, planners, and community organizations to translate creative vision into durable ground-plane art at a scale that commands attention. From labyrinth walk installations at BC Children's Hospital to Indigenous cultural crosswalks at UBC to Pride commemorations in downtown corridors: these are not temporary installations. They are permanent features of the places they inhabit, designed to last the full service life of the asphalt surface itself.",
     relatedProducts: ["decomark", "streetbond", "streetprint"],

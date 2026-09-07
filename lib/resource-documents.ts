@@ -562,6 +562,18 @@ export const resourceDocuments: ResourceDocument[] = [
 
   // ── MMAX ─────────────────────────────────────────────────────
   {
+    id: 'mx-colour-001',
+    title: 'MMAX Colour Palette',
+    type: 'Colour Guide',
+    product: 'mmax',
+    productName: 'MMAX',
+    applications: productApplications['mmax'],
+    fileUrl: '/docs/MMAX/MMAX-Colour-Palette.pdf',
+    fileSize: '1.1 MB',
+    updatedDate: 'Sep 2026',
+    isNew: true,
+  },
+  {
     id: 'mx-brochure-001',
     title: 'MMAX Next-Gen Brochure',
     type: 'Brochure',

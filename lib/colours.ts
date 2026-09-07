@@ -11,7 +11,8 @@
  *
  * Screen reference only — physical samples for specification.
  * PDFs: /docs/StreetBond/StreetBond/StreetBond-Colour-Card-2026.pdf ·
- * /docs/TrafficPatternsXD/TrafficPatternsXD-Colour-Guide.pdf
+ * /docs/TrafficPatternsXD/TrafficPatternsXD-Colour-Guide.pdf ·
+ * /docs/MMAX/MMAX-Colour-Palette.pdf
  */
 
 export interface Colourant {
@@ -291,8 +292,8 @@ const SECTION_META: Record<string, ColourSectionMeta> = {
   mmax: {
     heading: "Twenty-three colours.",
     intro: "Eight standard and fifteen premium MMA colours from the manufacturer's MMAX colour palette, PMS-matched. Physical samples available on request for specification.",
-    // downloadHref is added by the same commit that carries the PDF itself —
-    // a link to a file not yet on the server is a 404, not a feature.
+    downloadHref: "/docs/MMAX/MMAX-Colour-Palette.pdf",
+    downloadLabel: "Download the MMAX colour palette (PDF)",
   },
 };
 

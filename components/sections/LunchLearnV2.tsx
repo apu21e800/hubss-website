@@ -50,7 +50,7 @@ const BENEFITS = [
 const STAT_CHIPS = [
   { v: "45 min", l: "focused" },
   { v: "$0", l: "hosted by HUB" },
-  { v: "30+", l: "years in the field" },
+  { v: "27", l: "years in the field" },
   { v: "10", l: "provinces served" },
 ];
 

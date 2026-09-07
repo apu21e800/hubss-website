@@ -18,6 +18,12 @@ import ApplicationSpread from "@/components/applications/ApplicationSpread";
 import { applicationCatalogueFor } from "@/lib/application-catalogue";
 import { buildMetadata } from "@/lib/seo";
 
+// Sanity is the CMS for this page's copy, so the page has to be allowed to go
+// and re-read it. Without a revalidate the route is prerendered once at build
+// and never asks Sanity again — an editor's change sits invisible until the
+// next deploy. One hour, matching the product pages.
+export const revalidate = 3600;
+
 // Exclude slugs that have their own dedicated page (e.g. /applications/public-art/page.tsx)
 const DEDICATED_PAGES = new Set(["public-art"]);
 

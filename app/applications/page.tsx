@@ -6,6 +6,12 @@ import Link from "next/link";
 import { getMergedApplications } from "@/lib/applications.server";
 import { buildMetadata } from "@/lib/seo";
 
+// Sanity is the CMS for this page's copy, so the page has to be allowed to go
+// and re-read it. Without a revalidate the route is prerendered once at build
+// and never asks Sanity again — an editor's change sits invisible until the
+// next deploy. One hour, matching the product pages.
+export const revalidate = 3600;
+
 export const metadata = buildMetadata({
   title: "Pavement Marking Applications",
   description: "Crosswalks, bus lanes, bike infrastructure, airports, public art, and community branding — purpose-matched surface systems for Canadian municipal and commercial applications.",

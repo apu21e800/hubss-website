@@ -5,6 +5,12 @@ import { buildMetadata } from "@/lib/seo";
 import Image from "next/image";
 import { getSanityPageContent } from "@/lib/sanity.queries";
 
+// Sanity is the CMS for this page's copy, so the page has to be allowed to go
+// and re-read it. Without a revalidate the route is prerendered once at build
+// and never asks Sanity again — an editor's change sits invisible until the
+// next deploy. One hour, matching the product pages.
+export const revalidate = 3600;
+
 export const metadata = buildMetadata({
   title: "About HUB Surface Systems",
   description: "27 years making Canadian streets better. Two regional offices serving every province — we're the people who made your city look like your city.",

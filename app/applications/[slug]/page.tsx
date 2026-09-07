@@ -14,6 +14,8 @@ import { applications } from "@/lib/applications";
 import { getMergedApplication } from "@/lib/applications.server";
 import { products } from "@/lib/products";
 import { productImages, resolveImage } from "@/lib/featured-images";
+import ApplicationSpread from "@/components/applications/ApplicationSpread";
+import { applicationCatalogueFor } from "@/lib/application-catalogue";
 import { buildMetadata } from "@/lib/seo";
 
 // Exclude slugs that have their own dedicated page (e.g. /applications/public-art/page.tsx)
@@ -44,6 +46,7 @@ export default async function ApplicationPage({ params }: Props) {
   if (!application) notFound();
 
   // Gallery — folder-driven (see lib/asset-scan.ts + docs/IMAGE-WORKFLOW.md).
+  const spread = applicationCatalogueFor(application.slug);
   const appGallery = galleryFor(application.imageUrl, application.gallery, `images/applications/${application.slug}`);
   const gallerySources = appGallery.length > 0 ? appGallery : [application.imageUrl];
   const gallery: GalleryImage[] = gallerySources.map((src) => ({
@@ -182,6 +185,12 @@ export default async function ApplicationPage({ params }: Props) {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
             {/* Left: description + gallery */}
             <div className="lg:col-span-2">
+              {/* The catalogue's spread first, where the printed book has one:
+                  headline, pull line, and the SPECIFY list naming which systems
+                  go in this work and why. Doug-approved copy, and the most
+                  useful thing on the page for someone writing a spec. */}
+              {spread && <ApplicationSpread entry={spread} applicationName={application.name} />}
+
               {/* "About <thing>" is a filing label. The product pages now say
                   "How it works" over the equivalent copy, and saying the same
                   thing in the same words in both places is the naming

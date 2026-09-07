@@ -2,7 +2,11 @@
 
 ## Client
 HUB Surface Systems — Canadian leader in decorative and functional pavement
-solutions. 30+ years experience. Two regional offices:
+solutions. Canadian-owned since 1999; the 2027 catalogue says "27 years ·
+1,000+ projects · coast to coast" and those are the numbers the site uses.
+StreetPrint itself is older — a Canadian invention installed since 1992 —
+so "over 30 years" is true of the PRODUCT, never of the company. Two
+regional offices:
 - East: Milton, Ontario (doug.bain@hubss.com / 416-540-9287)
 - West: Ladysmith, BC (cleve.stordy@hubss.com / 604-309-8212)
 
@@ -20,8 +24,11 @@ Markings, Parks & Paths, Community Branding, Town Homes, Parking Lots, Airports.
 - Tone: Municipal authority meets civic pride. Technical credibility + visual impact.
 - Positioning: "Redefining hardscapes" — surfaces as community identity, not
   just infrastructure
-- Key proof points: Vision Zero, Complete Streets, AODA compliance, 20-year
-  durability, used by York Region, City of Toronto, Vancouver, UBC
+- Key proof points: Vision Zero, Complete Streets, AODA compliance, used by
+  York Region, City of Toronto, Vancouver, UBC. Service life is per system,
+  from the catalogue: StreetPrint 10–20 yr, TrafficPatternsXD 10+,
+  TrafficPatterns 8+, StreetBond 8+, PreMark 6–8. There is no site-wide
+  "20-year durability" claim — do not reintroduce one.
 
 ## Tech Stack
 - Next.js 16.1.6 (App Router, Turbopack)
@@ -85,6 +92,22 @@ npm run start   # run production locally
 
 ## Deploy
 Vercel — connected to GitHub, auto-deploys on push to main
+
+## Copy source of truth
+The 2027 print catalogue (Figma file GGxfcnIv3MozUSa8R7KtT9, page
+"Catalogue 2027") is the approved copy. Doug has signed off on the printed
+page; where the site and the book disagree, the book wins. It is transcribed
+into lib/product-catalogue.ts (product spreads) and lib/application-catalogue.ts
+(the 17 application spreads and their SPECIFY lists), and lib/products.ts /
+lib/applications.ts are written from it.
+
+BEFORE changing product or application copy, read docs/SANITY-COPY-SYNC.md.
+Sanity holds shortDesc, description and (for products) specs and OVERRIDES
+the code on the product and application pages — editing the lib file alone
+changes nothing on those two page types. `npm run sync:products` and friends
+push the code into Sanity; each has a `:dry` variant that reports first.
+Everything else — the catalogue spreads, images, galleries, related
+products, colours, documents, blog — is code-only and deploys on push.
 
 
 ## Bundle import protocol (Claude Cowork -> this repo)

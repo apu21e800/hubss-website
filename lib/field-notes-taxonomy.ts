@@ -431,6 +431,38 @@ export const FIELD_NOTES: Record<string, Entry> = {
     type: "Blog",
     keywords: ["street art pavement", "community identity pavement"],
   },
+
+  // ── From the 2027 print catalogue (Sep 2026) ──────────────────
+  // Six posts written out of the booklet's own spreads and project stories,
+  // so the site says in long form what the book says in print.
+  "how-stamped-asphalt-is-installed": {
+    type: "Guide",
+    keywords: ["how is stamped asphalt installed", "stamped asphalt process", "infrared asphalt reheating"],
+  },
+  "snowplow-safe-decorative-pavement": {
+    type: "Guide",
+    keywords: ["snowplow safe pavement marking", "freeze-thaw decorative pavement", "durable crosswalk material"],
+  },
+  "thermoplastic-colour-selection": {
+    type: "Guide",
+    keywords: ["thermoplastic pavement colours", "StreetBond colour chart", "pavement marking Pantone"],
+  },
+  "hub-certified-installer-network": {
+    type: "Blog",
+    keywords: ["certified pavement installer Canada", "thermoplastic applicator", "stamped asphalt contractor"],
+  },
+  "london-east-link-brt": {
+    type: "Project Profile",
+    keywords: ["BRT lane surface", "red bus lane London Ontario", "transit corridor pavement"],
+  },
+  "toronto-premium-outlets-14-years": {
+    type: "Project Profile",
+    keywords: ["retail parking lot crosswalk", "commercial pavement durability", "decorative crossing service life"],
+  },
+  "geary-works-toronto-park-walkway": {
+    type: "Project Profile",
+    keywords: ["park walkway graphics", "pavement placemaking", "DecoMark thermoplastic"],
+  },
 };
 
 /** Curated type for a slug, or undefined when the post is new to the library. */

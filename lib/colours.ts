@@ -186,12 +186,64 @@ const TP_PREMIUM: ColourFamily = {
   ],
 };
 
+/**
+ * MMAX: transcribed from the manufacturer's "MMAX Color Palette" sheet
+ * (Ennis-Flint, file MMAX Colors Pantone 180104 — supplied by Vern, Sep 2026).
+ * Hexes are the sheet's own vector swatch fills, read from the PDF, not
+ * approximated from PMS. Product codes (999660G etc.) are the manufacturer's
+ * order codes and are kept out of the UI — they belong on the PDF.
+ *
+ * The sheet's own footnotes, carried into the blurbs so the site never claims
+ * more than the document does: seven of the eight standard colours are marked
+ * as producible in Pickering (all in Salem); premium colours carry a minimum
+ * order of 20 kits (40 gallons).
+ */
+const MMAX_STANDARD: ColourFamily = {
+  key: "mmax-standard",
+  name: "Standard",
+  blurb: "The eight standard MMAX colours, each matched to its closest PMS reference. Seven of the eight can be produced at the Pickering, Ontario plant.",
+  colours: [
+      { name: "EF Green", hex: "#4fba37", pms: "PMS 361C" },
+      { name: "NYC Green", hex: "#81af8a", pms: "PMS 556C" },
+      { name: "NYC Red", hex: "#aa5d69", pms: "PMS 696C" },
+      { name: "Terracotta", hex: "#7f4f47", pms: "PMS 7595C" },
+      { name: "Truffle", hex: "#b3a385", pms: "PMS 7530C" },
+      { name: "Red", hex: "#c8243e", pms: "PMS 200C" },
+      { name: "Desert Khaki", hex: "#c4b7aa", pms: "PMS 7529C" },
+      { name: "Emerald L.A. Green", hex: "#006842", pms: "PMS 7484C" },
+  ],
+};
+
+const MMAX_PREMIUM: ColourFamily = {
+  key: "mmax-premium",
+  name: "Premium",
+  blurb: "Fifteen premium colours for lane identity, wayfinding, and safety work. Premium colours carry a minimum order of 20 kits (40 gallons).",
+  colours: [
+      { name: "Grey", hex: "#aeb1b0", pms: "PMS 423C" },
+      { name: "Irish Cream", hex: "#d1b7a3", pms: "PMS 481C" },
+      { name: "Federal Red", hex: "#a24547", pms: "PMS 492C" },
+      { name: "Brick Red", hex: "#94413b", pms: "PMS 7624C" },
+      { name: "Smooth Grey", hex: "#8e999f", pms: "PMS 430C" },
+      { name: "Black", hex: "#000000" },
+      { name: "White", hex: "#ffffff", keyline: true },
+      { name: "Orange", hex: "#e56e2e", pms: "PMS 7579C" },
+      { name: "London Blue", hex: "#007da0", pms: "PMS 7706C" },
+      { name: "Blue", hex: "#004e9e", pms: "PMS 654C" },
+      { name: "Light Blue", hex: "#55a9d7", pms: "PMS 7688C" },
+      { name: "Pink", hex: "#f98c95", pms: "PMS 190C" },
+      { name: "Yellow", hex: "#f8c800", pms: "PMS 7408C" },
+      { name: "Purple", hex: "#82358a", pms: "PMS 259C" },
+      { name: "Seafarer", hex: "#2ed4dc", pms: "PMS 319C" },
+  ],
+};
+
 const PRODUCT_COLOURS: Record<string, ColourFamily[]> = {
   streetbond: [EMA_2026],
   streetbondsr: [SR_SERIES],
   durashield: [DURASHIELD],
   "traffic-patterns-xd": [TP_STANDARD, TP_PREMIUM],
   "traffic-patterns": [TP_STANDARD, TP_PREMIUM],
+  mmax: [MMAX_STANDARD, MMAX_PREMIUM],
 };
 
 export interface ColourSectionMeta {
@@ -235,6 +287,12 @@ const SECTION_META: Record<string, ColourSectionMeta> = {
     intro: "Twenty standard and seventeen premium preformed-thermoplastic colours, PMS-matched. Physical samples available on request.",
     downloadHref: "/docs/TrafficPatternsXD/TrafficPatternsXD-Colour-Guide.pdf",
     downloadLabel: "Download the colour guide (PDF)",
+  },
+  mmax: {
+    heading: "Twenty-three colours.",
+    intro: "Eight standard and fifteen premium MMA colours from the manufacturer's MMAX colour palette, PMS-matched. Physical samples available on request for specification.",
+    // downloadHref is added by the same commit that carries the PDF itself —
+    // a link to a file not yet on the server is a 404, not a feature.
   },
 };
 

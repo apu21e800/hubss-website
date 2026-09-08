@@ -26,9 +26,19 @@ export interface PdfPreview {
 
 const PREVIEWS = manifest as Record<string, PdfPreview>;
 
+// Case-insensitive index. The manifest keys come from walking public/docs on
+// disk ("/docs/StreetPrint/..."), while the app's data files spell some of the
+// same folders lowercase ("/docs/streetprint/..."). On Windows both paths
+// serve the same file, so the mismatch is invisible in local dev — on the
+// case-sensitive Linux build it silently disqualified 14 of the 48 documents
+// that HAVE generated previews, dropping them to the iframe fallback that
+// blanks out on Android. Exact-case wins when both exist.
+const BY_LOWER: Record<string, PdfPreview> = {};
+for (const [k, v] of Object.entries(PREVIEWS)) BY_LOWER[k.toLowerCase()] = v;
+
 /** Pre-rendered previews for a PDF href, or null when none were generated. */
 export function previewFor(href: string | undefined | null): PdfPreview | null {
   if (!href) return null;
   const clean = href.split("?")[0].split("#")[0];
-  return PREVIEWS[clean] ?? null;
+  return PREVIEWS[clean] ?? BY_LOWER[clean.toLowerCase()] ?? null;
 }

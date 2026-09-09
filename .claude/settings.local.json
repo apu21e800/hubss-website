@@ -29,7 +29,9 @@
       "Bash(cmd /c \"rmdir /s /q \"\"C:\\\\Users\\\\cleve\\\\Based_Agency\\\\Web_Projects\\\\based-agency-site\\\\.claude\\\\worktrees\\\\amazing-kirch\"\"\")",
       "Bash(cmd /c \"rmdir /s /q \"\"C:\\\\Users\\\\cleve\\\\Based_Agency\\\\Web_Projects\\\\based-agency-site\\\\.claude\\\\worktrees\\\\hardcore-blackwell\"\"\")",
       "Bash(powershell -Command \"Remove-Item -Recurse -Force ''C:\\\\Users\\\\cleve\\\\Based_Agency\\\\based-agncy_os\\\\Web_Projects\\\\squareone-website\\\\.claude\\\\worktrees\\\\'' -ErrorAction SilentlyContinue; Write-Host ''Done''\")",
-      "Bash(powershell -Command \"Remove-Item -Recurse -Force ''C:\\\\Users\\\\cleve\\\\Based_Agency\\\\Web_Projects\\\\based-agency-site\\\\.claude\\\\worktrees\\\\'' -ErrorAction SilentlyContinue; Write-Host ''Done''\")"
+      "Bash(powershell -Command \"Remove-Item -Recurse -Force ''C:\\\\Users\\\\cleve\\\\Based_Agency\\\\Web_Projects\\\\based-agency-site\\\\.claude\\\\worktrees\\\\'' -ErrorAction SilentlyContinue; Write-Host ''Done''\")",
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "mcp__Claude_in_Chrome__browser_batch"
     ]
   }
 }

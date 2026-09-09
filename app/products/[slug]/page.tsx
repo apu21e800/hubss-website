@@ -104,7 +104,7 @@ export default async function ProductPage({ params }: Props) {
             backgroundImage: "url('/images/textures/stamped-asphalt-texture.webp')",
             backgroundSize: "480px auto",
             backgroundRepeat: "repeat",
-            opacity: 0.04,
+            opacity: 0.02,
             mixBlendMode: "luminosity",
           }}
         />
@@ -149,13 +149,16 @@ export default async function ProductPage({ params }: Props) {
           <div>
             {/* Brand logo */}
             {product.brandLogo && (
-              <div className="mb-6">
+              <div
+                className="rounded-xl mb-6 flex items-center justify-start"
+                style={{ padding: "0.5rem 0" }}
+              >
                 <Image
                   src={product.brandLogo.src}
                   alt={product.brandLogo.alt}
-                  width={240}
-                  height={96}
-                  style={{ objectFit: "contain", objectPosition: "left center" }}
+                  width={320}
+                  height={120}
+                  style={{ width: "100%", height: "auto", maxWidth: 320, objectFit: "contain", objectPosition: "left center" }}
                   unoptimized
                 />
               </div>

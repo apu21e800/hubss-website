@@ -105,6 +105,12 @@ export const products: Product[] = [
     imageUrl: "/images/products/streetprint/streetprint-01.jpg",
     gallery: gallery("streetprint", "streetprint", 91),
     description: "StreetPrint transforms existing asphalt into rich decorative hardscape. A proprietary in-place stamping process available in 12+ standard patterns and fully custom designs. Installed coast to coast by certified HUB applicators.",
+    brandLogo: {
+      src: "/images/assets/logos/product-logos/StreetPrint/large_StreetPrint_Logo.png",
+      alt: "StreetPrint Genuine Stamped Asphalt by HUB Surface Systems",
+      width: 800,
+      height: 550,
+    },
     specs: [
       { label: "System", value: "In-place asphalt stamping + StreetBond coating" },
       { label: "Patterns", value: "12+ standard patterns, custom available" },
@@ -180,10 +186,10 @@ export const products: Product[] = [
       { name: "Sage", hex: "#9CAF88" },
     ],
     brandLogo: {
-      src: "/images/products/streetbond/streetbond-logo.png",
-      alt: "StreetBondSR solar reflective coating system by HUB Surface Systems",
-      width: 280,
-      height: 80,
+      src: "/images/assets/logos/product-logos/StreetBondSR/StreetBondSR-tags.png",
+      alt: "StreetBondSR Solar Reflective Coatings for Asphalt by HUB Surface Systems",
+      width: 600,
+      height: 380,
     },
     relatedApplications: ["parking-lots", "private-driveways", "parks-paths", "community-branding"],
   },

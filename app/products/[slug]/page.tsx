@@ -150,12 +150,12 @@ export default async function ProductPage({ params }: Props) {
             {/* Brand logo badge in sidebar */}
             {product.brandLogo && (
               <div
-                className="rounded-xl p-5 mb-6 flex items-center justify-center"
+                className="rounded-xl mb-6 flex items-center justify-center"
                 style={{
                   background: "#ffffff",
                   border: "1px solid rgba(255,255,255,0.06)",
-                  minHeight: 120,
-                  padding: "1.5rem 2rem",
+                  minHeight: 130,
+                  padding: "1.75rem 2rem",
                 }}
               >
                 <Image
@@ -163,7 +163,7 @@ export default async function ProductPage({ params }: Props) {
                   alt={product.brandLogo.alt}
                   width={product.brandLogo.width}
                   height={product.brandLogo.height}
-                  style={{ width: "auto", height: "auto", maxWidth: "100%", maxHeight: 80, objectFit: "contain" }}
+                  style={{ width: "auto", height: "auto", maxWidth: "100%", maxHeight: 96, objectFit: "contain" }}
                   unoptimized
                 />
               </div>

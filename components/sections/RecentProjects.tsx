@@ -13,7 +13,7 @@ export default function RecentProjects() {
   return (
     <section className="py-28 lg:py-32" style={{ background: "#0f1420" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-end justify-between mb-16">
+        <div className="flex flex-wrap items-end justify-between gap-4 mb-16">
           <div>
             <p className="gradient-text text-xs font-semibold tracking-[0.2em] uppercase mb-3">
               Portfolio
@@ -53,7 +53,7 @@ export default function RecentProjects() {
                 sizes="(max-width: 768px) 100vw, 60vw"
               />
             </div>
-            <div className="md:col-span-2 p-10 flex flex-col justify-center">
+            <div className="md:col-span-2 p-6 sm:p-8 md:p-10 flex flex-col justify-center">
               <div className="flex gap-2 mb-5">
                 <span
                   className="text-xs font-semibold px-3 py-1 rounded-full"
@@ -114,7 +114,7 @@ export default function RecentProjects() {
                     sizes="(max-width: 768px) 100vw, 50vw"
                   />
                 </div>
-                <div className="p-7">
+                <div className="p-5 sm:p-7">
                   <div className="flex gap-2 mb-4">
                     <span
                       className="text-xs font-semibold px-3 py-1 rounded-full"

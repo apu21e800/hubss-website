@@ -13,7 +13,7 @@ export default function ResidentialDriveways() {
         <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[540px]">
 
           {/* ── Left — content ─────────────────────────────────────────── */}
-          <div className="flex flex-col justify-center px-8 sm:px-12 lg:px-16 py-16 lg:py-24">
+          <div className="flex flex-col justify-center px-5 sm:px-8 md:px-12 lg:px-16 py-12 lg:py-24">
 
             {/* NEW APPLICATION badge */}
             <div className="mb-6">

@@ -123,12 +123,15 @@ export default function WhyHubss() {
               initial={{ opacity: 0, y: 10 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: i * 0.07, duration: 0.35 }}
-              className="flex flex-col items-center justify-center gap-1 py-7 px-4 text-center"
-              style={{
-                background: "rgba(255,255,255,0.02)",
-                borderRight: i < 3 ? "1px solid rgba(255,255,255,0.07)" : "none",
-                borderBottom: i < 2 ? "1px solid rgba(255,255,255,0.07)" : "none",
-              }}
+              className={[
+                "flex flex-col items-center justify-center gap-1 py-7 px-4 text-center",
+                // Mobile (2-col): right border on cols 0,2 (left col); bottom border on top row (items 0,1)
+                // Desktop (4-col): right border on cols 0-2; no bottom border needed
+                i % 2 === 0 ? "border-r border-white/[0.07]" : "",
+                i < 2 ? "border-b border-white/[0.07] sm:border-b-0" : "",
+                i < 3 ? "sm:border-r sm:border-white/[0.07]" : "sm:border-r-0",
+              ].filter(Boolean).join(" ")}
+              style={{ background: "rgba(255,255,255,0.02)" }}
             >
               <span className="text-3xl sm:text-4xl font-black tracking-tight leading-none" style={{ color: "#f97316" }}>
                 {s.num}

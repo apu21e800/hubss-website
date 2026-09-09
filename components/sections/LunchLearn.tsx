@@ -73,8 +73,8 @@ export default function LunchLearn({ hideMoose = false }: LunchLearnProps) {
         aria-hidden="true"
       />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-48 sm:pb-52">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24 pb-16 sm:pb-48 lg:pb-52">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
 
           {/* ── Left — content panel ──────────────────────────── */}
           <div className="relative">
@@ -308,7 +308,7 @@ export default function LunchLearn({ hideMoose = false }: LunchLearnProps) {
       {/* Moose — paws on section fold line, tracks form card right edge at all widths */}
       {!hideMoose && (
         <div
-          className="absolute z-10 pointer-events-none"
+          className="hidden sm:block absolute z-10 pointer-events-none"
           style={{
             bottom: 0,
             right: "clamp(16px, calc((100vw - 1280px) / 2 + 16px), 400px)",

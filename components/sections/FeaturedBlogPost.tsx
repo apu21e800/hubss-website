@@ -36,7 +36,7 @@ export default function FeaturedBlogPost() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* ── Section header ─────────────────────────────────────── */}
-        <div className="flex items-end justify-between mb-14">
+        <div className="flex flex-wrap items-end justify-between gap-4 mb-14">
           <div>
             <p className="gradient-text text-xs font-semibold tracking-[0.2em] uppercase mb-3">
               Field Notes
@@ -111,7 +111,7 @@ export default function FeaturedBlogPost() {
             </div>
 
             {/* Content — 2/5 on desktop */}
-            <div className="md:col-span-2 p-10 flex flex-col justify-center">
+            <div className="md:col-span-2 p-6 sm:p-8 md:p-10 flex flex-col justify-center">
               {/* Category + read time */}
               <div className="flex items-center gap-3 mb-5">
                 <span

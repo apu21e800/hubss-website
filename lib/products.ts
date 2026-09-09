@@ -8,6 +8,29 @@ export interface Product {
   specs: { label: string; value: string }[];
   relatedApplications: string[];
   colourCollections?: { name: string; hex: string }[];
+  /**
+   * DELIBERATELY NOT RENDERED. Five products carry a brandLogo and nothing on
+   * the site reads this field — that is the intended state, not an unfinished
+   * feature, and it has now been re-reported as a "live production bug" three
+   * times by people who found the data with no consumer and inferred the
+   * rendering had never shipped. It did ship, in April 2026, and was removed
+   * on purpose on 14 May 2026 (5d3def1):
+   *
+   *     "Logo display removed from both main content column and sidebar.
+   *      Hero H1 + photography does the job better. brandLogo data preserved
+   *      in products.ts so we can revisit placement later without re-adding
+   *      data."
+   *
+   * So the data is a parked asset, kept so a future placement does not have to
+   * be researched again. The five files exist under /public/images/products/.
+   *
+   * DO NOT "fix" this by applying an April-era patch or worktree — 0001-design-
+   * final-pass.patch and the tender-chandrasekhar worktree (240x96 → 320x120)
+   * both predate the removal and target a product page that has since been
+   * rebuilt around the catalogue spread. Restoring logos is a design decision
+   * for Vernon and Doug, and if it is taken, it should be written fresh against
+   * the current page rather than reverted into it.
+   */
   brandLogo?: { src: string; alt: string; width: number; height: number; blendMode?: string; };
   comingSoon?: boolean;
   // Overrides the hero eyebrow on /products/[slug] (which otherwise falls back to taxonomy).

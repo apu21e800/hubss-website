@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { X, Download, ExternalLink } from "lucide-react";
 import Image from "next/image";
 import { previewFor } from "@/lib/pdf-previews";
@@ -25,6 +25,22 @@ export default function PdfPreviewModal({
   // Pre-rendered page images render on every browser. An inline PDF does not:
   // Android Chrome and in-app webviews show a blank panel instead.
   const preview = previewFor(href);
+
+  // A page image that fails to load leaves a broken-image glyph — a grey box
+  // with a question mark in it — and the panel gives no way out of that state.
+  // That is precisely how a transient 404, a blocked request or a half-written
+  // deploy is reported back to us: "the catalog isn't loading, I think I see a
+  // question mark." Each failure is recorded so its slot can say what happened
+  // and offer the PDF; if every page fails the panel falls back to the native
+  // PDF <iframe>, the same fallback used for documents with no previews.
+  const [failedPages, setFailedPages] = useState<Record<string, true>>({});
+  const markFailed = (src: string) =>
+    setFailedPages((f) => (f[src] ? f : { ...f, [src]: true }));
+  const allPagesFailed =
+    !!preview &&
+    preview.pages.length > 0 &&
+    preview.pages.every((pg) => failedPages[pg.src]);
+  const showPages = !!preview && !allPagesFailed;
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -200,7 +216,7 @@ export default function PdfPreviewModal({
             takes tabIndex={0} because it has no focusable children of its
             own: without it a keyboard user can reach Download/Close/"Open
             full PDF" but has no way to scroll the pages they came to read. */}
-        {preview ? (
+        {showPages && preview ? (
           <div
             className="flex-1 overflow-y-auto"
             style={{ background: "rgba(0,0,0,0.35)", minHeight: 0 }}
@@ -209,28 +225,66 @@ export default function PdfPreviewModal({
             aria-label={`${label} — page preview, ${preview.pages.length} of ${preview.total} pages`}
           >
             <div className="flex flex-col items-center gap-4 px-4 py-5">
-              {preview.pages.map((pg, i) => (
-                <Image
-                  key={pg.src}
-                  src={pg.src}
-                  alt={`${label} — page ${i + 1} of ${preview.total}`}
-                  width={pg.w}
-                  height={pg.h}
-                  priority={i === 0}
-                  sizes="(max-width: 640px) 100vw, 760px"
-                  /* These are already WebP, already rendered at a 1000px long
-                     edge by scripts/gen-pdf-previews.py, and already ~70 KB.
-                     There is nothing for the optimizer to do — but routing
-                     them through it spent transformation budget and, once that
-                     budget ran out, made every one of them a 402 and every
-                     document preview a blank panel. Serving the static file
-                     takes 286 images off the optimizer and makes previews
-                     immune to the quota. */
-                  unoptimized
-                  className="w-full h-auto rounded-md"
-                  style={{ maxWidth: "760px", border: "1px solid var(--border-color)" }}
-                />
-              ))}
+              {preview.pages.map((pg, i) =>
+                failedPages[pg.src] ? (
+                  /* Keeps the page's slot at its real aspect ratio so the
+                     document's length still reads correctly, and says which
+                     page is missing instead of showing a broken-image icon. */
+                  <div
+                    key={pg.src}
+                    className="w-full flex items-center justify-center rounded-md px-6 text-xs text-center"
+                    style={{
+                      maxWidth: "760px",
+                      aspectRatio: `${pg.w} / ${pg.h}`,
+                      background: "var(--bg-card-neutral)",
+                      border: "1px solid var(--border-color)",
+                      color: "#868C98",
+                    }}
+                  >
+                    <span>
+                      Page {i + 1} didn&rsquo;t load.{" "}
+                      <a
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="transition-colors hover:text-orange-400"
+                        style={{ color: "#F97316" }}
+                      >
+                        Open the full PDF
+                      </a>
+                      .
+                    </span>
+                  </div>
+                ) : (
+                  <Image
+                    key={pg.src}
+                    src={pg.src}
+                    alt={`${label} — page ${i + 1} of ${preview.total}`}
+                    width={pg.w}
+                    height={pg.h}
+                    priority={i === 0}
+                    /* Pages 2 and 3 are fetched up front as well. Everything
+                       below them stays lazy — a 23-page catalogue is 1.6 MB —
+                       but the first scroll of the panel then has something in
+                       it immediately, rather than reading as a document that
+                       stopped after one page. */
+                    loading={i > 0 && i < 3 ? "eager" : undefined}
+                    sizes="(max-width: 640px) 100vw, 760px"
+                    /* These are already WebP, already rendered at a 1000px long
+                       edge by scripts/gen-pdf-previews.py, and already ~70 KB.
+                       There is nothing for the optimizer to do — but routing
+                       them through it spent transformation budget and, once that
+                       budget ran out, made every one of them a 402 and every
+                       document preview a blank panel. Serving the static file
+                       takes 286 images off the optimizer and makes previews
+                       immune to the quota. */
+                    unoptimized
+                    onError={() => markFailed(pg.src)}
+                    className="w-full h-auto rounded-md"
+                    style={{ maxWidth: "760px", border: "1px solid var(--border-color)" }}
+                  />
+                )
+              )}
               {preview.total > preview.pages.length && (
                 <p className="text-xs text-center px-4" style={{ color: "#6B7280" }}>
                   Showing {preview.pages.length} of {preview.total} pages — download for the full document.
@@ -262,7 +316,7 @@ export default function PdfPreviewModal({
             color: "#868C98",
           }}
         >
-          {preview ? "Want the full document?" : "PDF not rendering?"}&nbsp;
+          {showPages ? "Want the full document?" : "PDF not rendering?"}&nbsp;
           <a
             href={href}
             target="_blank"
@@ -270,7 +324,7 @@ export default function PdfPreviewModal({
             className="inline-flex items-center gap-1 transition-colors hover:text-orange-400"
             style={{ color: "#F97316" }}
           >
-            {preview ? "Open full PDF" : "Open in new tab"} <ExternalLink className="w-3 h-3" />
+            {showPages ? "Open full PDF" : "Open in new tab"} <ExternalLink className="w-3 h-3" />
           </a>
         </div>
       </div>

@@ -73,9 +73,9 @@ const STREETBOND_SUBCATEGORIES = [
 const PAGE_SIZE = 12;
 
 const selectStyle: React.CSSProperties = {
-  background: "#242424",
-  border: "1px solid rgba(255,255,255,0.1)",
-  color: "#e5e7eb",
+  background: "var(--bg-code)",
+  border: "1px solid var(--ink-10)",
+  color: "var(--text-body)",
 };
 
 interface PreviewState {
@@ -135,7 +135,7 @@ function DocCard({
   return (
     <div
       onClick={openDocument}
-      className="group flex items-center gap-3 sm:gap-4 px-4 sm:px-5 py-3 cursor-pointer transition-colors hover:bg-white/[0.04]"
+      className="group flex items-center gap-3 sm:gap-4 px-4 sm:px-5 py-3 cursor-pointer transition-colors hover:bg-[var(--ink-04)]"
     >
       {/* THE REGISTER ROW (Vern: "switch to a nice list view"). A document is
           metadata, not imagery — 81 of them want a file register, not a wall
@@ -149,18 +149,18 @@ function DocCard({
         </div>
       ) : (
         <div className="hidden sm:flex items-center justify-center flex-shrink-0 rounded-[3px]" style={{ width: 34, height: 44, background: "var(--fill-subtle)", border: "1px solid var(--border-color)" }}>
-          <FileText className="w-4 h-4" style={{ color: "#6B7280" }} />
+          <FileText className="w-4 h-4" style={{ color: "var(--text-hint)" }} />
         </div>
       )}
 
       <div className="flex-1 min-w-0">
-        <p className="text-[10px] font-bold tracking-[0.16em] uppercase mb-0.5" style={{ color: "#FB923C" }}>
+        <p className="text-[10px] font-bold tracking-[0.16em] uppercase mb-0.5" style={{ color: "var(--accent-text)" }}>
           {doc.type}
         </p>
-        <h3 className="text-[14.5px] font-semibold leading-snug truncate transition-colors group-hover:text-orange-400" style={{ color: "#F5F0EB" }}>
+        <h3 className="text-[14.5px] font-semibold leading-snug truncate transition-colors group-hover:text-[var(--accent-text)]" style={{ color: "var(--text-primary)" }}>
           {doc.title}
         </h3>
-        <p className="text-[11.5px] mt-0.5 truncate sm:hidden" style={{ color: "#868C98" }}>
+        <p className="text-[11.5px] mt-0.5 truncate sm:hidden" style={{ color: "var(--text-secondary)" }}>
           {doc.productName} · {doc.fileSize} · {doc.updatedDate}
         </p>
       </div>
@@ -169,7 +169,7 @@ function DocCard({
         <Link
           href={productLink}
           onClick={stop}
-          className="hidden md:inline-block text-xs px-2 py-0.5 rounded-full flex-shrink-0 transition-colors hover:text-orange-300"
+          className="hidden md:inline-block text-xs px-2 py-0.5 rounded-full flex-shrink-0 transition-colors hover:text-[var(--accent-soft-text)]"
           style={{ color: "#e87527", background: "rgba(249,115,22,0.07)", border: "1px solid rgba(249,115,22,0.12)" }}
           title="View product page"
         >
@@ -184,9 +184,9 @@ function DocCard({
         </span>
       )}
 
-      <span className="hidden sm:flex items-center justify-end gap-1.5 text-xs flex-shrink-0 w-[128px]" style={{ color: "#868C98" }}>
+      <span className="hidden sm:flex items-center justify-end gap-1.5 text-xs flex-shrink-0 w-[128px]" style={{ color: "var(--text-secondary)" }}>
         <span>{doc.fileSize}</span>
-        <span className="w-1 h-1 rounded-full flex-shrink-0" style={{ background: "rgba(255,255,255,0.15)" }} />
+        <span className="w-1 h-1 rounded-full flex-shrink-0" style={{ background: "var(--ink-15)" }} />
         <span className="truncate">{doc.updatedDate}</span>
       </span>
 
@@ -198,14 +198,14 @@ function DocCard({
               rel="noopener noreferrer"
               onClick={stop}
               className="flex items-center justify-center gap-1.5 text-xs font-semibold px-3 rounded-lg transition-colors duration-200 flex-shrink-0" data-tap="44"
-              style={{ background: "var(--fill-subtle)", color: "#9CA3AF" }}
+              style={{ background: "var(--fill-subtle)", color: "var(--text-muted)" }}
               onMouseEnter={(e) => {
                 (e.currentTarget as HTMLAnchorElement).style.background = "rgba(249,115,22,0.12)";
-                (e.currentTarget as HTMLAnchorElement).style.color = "#f97316";
+                (e.currentTarget as HTMLAnchorElement).style.color = "var(--accent-text-lg)";
               }}
               onMouseLeave={(e) => {
                 (e.currentTarget as HTMLAnchorElement).style.background = "var(--border-color)";
-                (e.currentTarget as HTMLAnchorElement).style.color = "#9CA3AF";
+                (e.currentTarget as HTMLAnchorElement).style.color = "var(--text-muted)";
               }}
               title="Open the 2026 catalogue flipbook"
             >
@@ -224,16 +224,16 @@ function DocCard({
                 });
               }}
               className="flex items-center justify-center gap-1.5 text-xs font-semibold px-3 rounded-lg transition-colors duration-200 flex-shrink-0" data-tap="44"
-              style={{ background: "var(--fill-subtle)", color: "#9CA3AF" }}
+              style={{ background: "var(--fill-subtle)", color: "var(--text-muted)" }}
               aria-label={`Preview ${doc.title}`}
               title={`Preview ${doc.title}`}
               onMouseEnter={(e) => {
                 (e.currentTarget as HTMLButtonElement).style.background = "rgba(249,115,22,0.12)";
-                (e.currentTarget as HTMLButtonElement).style.color = "#f97316";
+                (e.currentTarget as HTMLButtonElement).style.color = "var(--accent-text-lg)";
               }}
               onMouseLeave={(e) => {
                 (e.currentTarget as HTMLButtonElement).style.background = "var(--border-color)";
-                (e.currentTarget as HTMLButtonElement).style.color = "#9CA3AF";
+                (e.currentTarget as HTMLButtonElement).style.color = "var(--text-muted)";
               }}
             >
               <Eye className="w-3.5 h-3.5" />
@@ -249,16 +249,16 @@ function DocCard({
               className="flex items-center justify-center w-8 h-8 rounded-lg transition-colors duration-200 flex-shrink-0" data-tap="44"
               style={{
                 background: "rgba(249,115,22,0.10)",
-                color: "#f97316",
+                color: "var(--accent-text-lg)",
                 border: "1px solid rgba(249,115,22,0.2)",
               }}
               onMouseEnter={(e) => {
                 (e.currentTarget as HTMLAnchorElement).style.background = "#f97316";
-                (e.currentTarget as HTMLAnchorElement).style.color = "#ffffff";
+                (e.currentTarget as HTMLAnchorElement).style.color = "var(--on-accent)";
               }}
               onMouseLeave={(e) => {
                 (e.currentTarget as HTMLAnchorElement).style.background = "rgba(249,115,22,0.10)";
-                (e.currentTarget as HTMLAnchorElement).style.color = "#f97316";
+                (e.currentTarget as HTMLAnchorElement).style.color = "var(--accent-text-lg)";
               }}
               title="Open catalogue"
               aria-label={`Open ${doc.title}`}
@@ -273,16 +273,16 @@ function DocCard({
               className="flex items-center justify-center w-8 h-8 rounded-lg transition-colors duration-200 flex-shrink-0" data-tap="44"
               style={{
                 background: "rgba(249,115,22,0.10)",
-                color: "#f97316",
+                color: "var(--accent-text-lg)",
                 border: "1px solid rgba(249,115,22,0.2)",
               }}
               onMouseEnter={(e) => {
                 (e.currentTarget as HTMLAnchorElement).style.background = "#f97316";
-                (e.currentTarget as HTMLAnchorElement).style.color = "#ffffff";
+                (e.currentTarget as HTMLAnchorElement).style.color = "var(--on-accent)";
               }}
               onMouseLeave={(e) => {
                 (e.currentTarget as HTMLAnchorElement).style.background = "rgba(249,115,22,0.10)";
-                (e.currentTarget as HTMLAnchorElement).style.color = "#f97316";
+                (e.currentTarget as HTMLAnchorElement).style.color = "var(--accent-text-lg)";
               }}
               title="Download PDF"
               aria-label={`Download ${doc.title} (PDF)`}
@@ -449,8 +449,8 @@ export default function ResourcesClient({
               className="px-4 rounded-lg text-sm font-medium transition-colors duration-200"
               style={{
                 minHeight: 44,
-                background: activeTab === tab ? "#F97316" : "rgba(255,255,255,0.05)",
-                color: activeTab === tab ? "#ffffff" : "#9CA3AF",
+                background: activeTab === tab ? "#F97316" : "var(--ink-05)",
+                color: activeTab === tab ? "var(--on-accent)" : "var(--text-muted)",
                 border:
                   activeTab === tab
                     ? "1px solid transparent"
@@ -468,7 +468,7 @@ export default function ResourcesClient({
         <div className="relative flex-1">
           <Search
             className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4"
-            style={{ color: "#868C98" }}
+            style={{ color: "var(--text-secondary)" }}
           />
           <input
             type="text"
@@ -486,8 +486,8 @@ export default function ResourcesClient({
             <button
               onClick={() => setSearch("")}
               aria-label="Clear search"
-              className="absolute right-3 top-1/2 -translate-y-1/2 hover:text-zinc-300 transition-colors"
-              style={{ color: "#868C98" }}
+              className="absolute right-3 top-1/2 -translate-y-1/2 hover:text-[var(--text-body)] transition-colors"
+              style={{ color: "var(--text-secondary)" }}
             >
               <X className="w-4 h-4" />
             </button>
@@ -515,7 +515,7 @@ export default function ResourcesClient({
             </select>
             <ChevronDown
               className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
-              style={{ color: "#868C98" }}
+              style={{ color: "var(--text-secondary)" }}
             />
           </div>
         )}
@@ -523,8 +523,8 @@ export default function ResourcesClient({
         {hasActiveFilters && (
           <button
             onClick={clearAllFilters}
-            className="text-sm transition-colors whitespace-nowrap py-3 px-3 min-h-[44px] hover:text-orange-400"
-            style={{ color: "#F97316" }}
+            className="text-sm transition-colors whitespace-nowrap py-3 px-3 min-h-[44px] hover:text-[var(--accent-text)]"
+            style={{ color: "var(--accent-text-lg)" }}
           >
             Clear all filters
           </button>
@@ -545,10 +545,10 @@ export default function ResourcesClient({
           className="inline-flex items-center gap-1.5 px-4 min-h-[44px] rounded-full text-sm font-medium transition-all duration-150 ease-out hover:scale-[1.02] active:scale-[0.98]"
           style={
             newOnly
-              ? { background: "#F97316", color: "#fff", border: "1px solid transparent" }
+              ? { background: "#F97316", color: "var(--on-accent)", border: "1px solid transparent" }
               : {
                   background: "rgba(249,115,22,0.08)",
-                  color: "#FB923C",
+                  color: "var(--accent-text)",
                   border: "1px solid rgba(249,115,22,0.22)",
                 }
           }
@@ -569,10 +569,10 @@ export default function ResourcesClient({
           className="inline-flex items-center gap-1.5 px-4 min-h-[44px] rounded-full text-sm font-medium transition-all duration-150 ease-out hover:scale-[1.02] active:scale-[0.98]"
           style={
             featuredOnly
-              ? { background: "#F97316", color: "#fff", border: "1px solid transparent" }
+              ? { background: "#F97316", color: "var(--on-accent)", border: "1px solid transparent" }
               : {
-                  background: "rgba(255,255,255,0.05)",
-                  color: "#9CA3AF",
+                  background: "var(--ink-05)",
+                  color: "var(--text-muted)",
                   border: "1px solid var(--border-color)",
                 }
           }
@@ -596,10 +596,10 @@ export default function ResourcesClient({
               className="inline-flex items-center gap-1.5 px-4 min-h-[44px] rounded-full text-sm font-medium transition-all duration-150 ease-out hover:scale-[1.02] active:scale-[0.98]"
               style={
                 active
-                  ? { background: "#F97316", color: "#fff", border: "1px solid transparent" }
+                  ? { background: "#F97316", color: "var(--on-accent)", border: "1px solid transparent" }
                   : {
-                      background: "rgba(255,255,255,0.05)",
-                      color: "#D1D5DB",
+                      background: "var(--ink-05)",
+                      color: "var(--text-body)",
                       border: "1px solid var(--border-color)",
                     }
               }
@@ -608,8 +608,8 @@ export default function ResourcesClient({
               <span
                 className="inline-flex items-center justify-center text-[10px] font-bold rounded-full min-w-[20px] px-1.5 py-0.5"
                 style={{
-                  background: active ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.05)",
-                  color: active ? "#fff" : "#9CA3AF",
+                  background: active ? "var(--ink-20)" : "var(--ink-05)",
+                  color: active ? "var(--text-primary)" : "var(--text-muted)",
                 }}
               >
                 {opt.count}
@@ -624,7 +624,7 @@ export default function ResourcesClient({
               setSelectedTypes(new Set());
               setVisibleCount(PAGE_SIZE);
             }}
-            className="text-xs text-orange-400 hover:text-orange-300 transition-colors px-2 min-h-[44px]"
+            className="text-xs text-[var(--accent-text)] hover:text-[var(--accent-soft-text)] transition-colors px-2 min-h-[44px]"
           >
             clear types
           </button>
@@ -645,10 +645,10 @@ export default function ResourcesClient({
               className="inline-flex items-center px-3.5 min-h-[36px] rounded-full text-xs font-medium transition-all duration-150 ease-out hover:scale-[1.02] active:scale-[0.98]"
               style={
                 subcategoryFilter === sc.value
-                  ? { background: "#F97316", color: "#fff", border: "1px solid transparent" }
+                  ? { background: "#F97316", color: "var(--on-accent)", border: "1px solid transparent" }
                   : {
-                      background: "rgba(255,255,255,0.05)",
-                      color: "#D1D5DB",
+                      background: "var(--ink-05)",
+                      color: "var(--text-body)",
                       border: "1px solid var(--border-color)",
                     }
               }
@@ -660,7 +660,7 @@ export default function ResourcesClient({
       )}
 
       {/* ── Results count ──────────────────────────────── */}
-      <p className="text-sm mb-6" style={{ color: "#868C98" }}>
+      <p className="text-sm mb-6" style={{ color: "var(--text-secondary)" }}>
         {filtered.length} document{filtered.length !== 1 ? "s" : ""} found
       </p>
 
@@ -685,7 +685,7 @@ export default function ResourcesClient({
                       <div className="flex items-center gap-4 mb-6">
                         <h3
                           className="text-sm font-bold tracking-widest uppercase"
-                          style={{ color: "#F97316" }}
+                          style={{ color: "var(--accent-text-lg)" }}
                         >
                           {productName}
                         </h3>
@@ -693,11 +693,11 @@ export default function ResourcesClient({
                           className="flex-1 h-px"
                           style={{ background: "var(--fill-subtle)" }}
                         />
-                        <span className="text-xs" style={{ color: "#868C98" }}>
+                        <span className="text-xs" style={{ color: "var(--text-secondary)" }}>
                           {docs.length} doc{docs.length !== 1 ? "s" : ""}
                         </span>
                       </div>
-                      <div className="rounded-xl overflow-hidden divide-y divide-[rgba(255,255,255,0.06)] border border-[var(--border-color)] bg-[var(--bg-card-neutral)]">
+                      <div className="rounded-xl overflow-hidden divide-y divide-[var(--ink-06)] border border-[var(--border-color)] bg-[var(--bg-card-neutral)]">
                         {docs.map((doc) => (
                           <DocCard
                             key={doc.id}
@@ -712,7 +712,7 @@ export default function ResourcesClient({
               );
             })()
           ) : (
-            <div className="rounded-xl overflow-hidden divide-y divide-[rgba(255,255,255,0.06)] border border-[var(--border-color)] bg-[var(--bg-card-neutral)]">
+            <div className="rounded-xl overflow-hidden divide-y divide-[var(--ink-06)] border border-[var(--border-color)] bg-[var(--bg-card-neutral)]">
               {visible.map((doc) => (
                 <DocCard key={doc.id} doc={doc} onPreview={setPreview} />
               ))}
@@ -723,11 +723,11 @@ export default function ResourcesClient({
             <div className="text-center mt-10">
               <button
                 onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
-                className="px-8 py-3 rounded-lg text-sm font-medium transition-all duration-200 hover:text-[#F97316] hover:border-[#F97316]/30"
+                className="px-8 py-3 rounded-lg text-sm font-medium transition-all duration-200 hover:text-[var(--accent-text-lg)] hover:border-[#F97316]/30"
                 style={{
                   background: "transparent",
-                  border: "1px solid rgba(255,255,255,0.12)",
-                  color: "#9CA3AF",
+                  border: "1px solid var(--ink-12)",
+                  color: "var(--text-muted)",
                 }}
               >
                 Load more ({filtered.length - visibleCount} remaining)
@@ -739,29 +739,29 @@ export default function ResourcesClient({
         <div className="text-center py-20">
           <FileText
             className="w-12 h-12 mx-auto mb-4"
-            style={{ color: "rgba(255,255,255,0.15)" }}
+            style={{ color: "var(--ink-15)" }}
           />
           <h3
             className="text-xl font-semibold mb-2"
-            style={{ color: "#F5F0EB" }}
+            style={{ color: "var(--text-primary)" }}
           >
             No documents found
           </h3>
-          <p className="mb-6" style={{ color: "#868C98" }}>
+          <p className="mb-6" style={{ color: "var(--text-secondary)" }}>
             Try adjusting your filters or search terms
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <button
               onClick={clearAllFilters}
               className="px-6 py-2.5 rounded-lg text-sm font-medium transition-all hover:brightness-110"
-              style={{ background: "#F97316", color: "#fff" }}
+              style={{ background: "#F97316", color: "var(--on-accent)" }}
             >
               Clear all filters
             </button>
             <Link
               href="/contact"
-              className="px-6 py-2.5 rounded-lg text-sm font-medium transition-all hover:text-white hover:border-white/20"
-              style={{ border: "1px solid rgba(255,255,255,0.12)", color: "#9CA3AF" }}
+              className="px-6 py-2.5 rounded-lg text-sm font-medium transition-all hover:text-[var(--text-primary)] hover:border-[var(--ink-20)]"
+              style={{ border: "1px solid var(--ink-12)", color: "var(--text-muted)" }}
             >
               Can&apos;t find what you need? Contact us &rarr;
             </Link>

@@ -153,10 +153,10 @@ function RepresentativeTag({ style }: { style?: React.CSSProperties }) {
         fontWeight: 700,
         letterSpacing: "0.1em",
         textTransform: "uppercase",
-        color: "rgba(255,255,255,0.85)",
+        color: "var(--ink-85)",
         background: "rgba(8,13,22,0.72)",
         backdropFilter: "blur(4px)",
-        border: "1px solid rgba(255,255,255,0.18)",
+        border: "1px solid var(--ink-18)",
         padding: "2px 7px",
         borderRadius: 5,
         whiteSpace: "nowrap",
@@ -210,7 +210,7 @@ function PanelCard({
         gap: 10,
         padding: "11px 14px",
         cursor: "pointer",
-        borderBottom: "1px solid rgba(255,255,255,0.05)",
+        borderBottom: "1px solid var(--ink-05)",
         background: selected
           ? "rgba(249,115,22,0.12)"
           : hovered
@@ -257,7 +257,7 @@ function PanelCard({
               fontWeight: 700,
               letterSpacing: "0.1em",
               textTransform: "uppercase",
-              color: "#F97316",
+              color: "var(--accent-text-lg)",
               background: "rgba(249,115,22,0.12)",
               padding: "1.5px 6px",
               borderRadius: 4,
@@ -272,7 +272,7 @@ function PanelCard({
           style={{
             fontSize: 11.5,
             fontWeight: 600,
-            color: hovered || selected ? "#F5F0EB" : "#D1D5DB",
+            color: hovered || selected ? "var(--text-primary)" : "var(--text-body)",
             lineHeight: 1.35,
             margin: 0,
             whiteSpace: "nowrap",
@@ -286,7 +286,7 @@ function PanelCard({
         <p
           style={{
             fontSize: 10.5,
-            color: "#868C98",
+            color: "var(--text-secondary)",
             margin: "2px 0 0",
             lineHeight: 1,
           }}
@@ -302,7 +302,7 @@ function PanelCard({
           height="13"
           viewBox="0 0 24 24"
           fill="none"
-          stroke={hovered || selected ? "#F97316" : "#374151"}
+          stroke={hovered || selected ? "var(--accent-text-lg)" : "#374151"}
           strokeWidth={2}
           strokeLinecap="round"
           style={{ transition: "stroke 0.15s ease" }}
@@ -358,7 +358,7 @@ function ProjectModal({
         aria-modal="true"
         aria-label={`Project details: ${project.title}`}
         style={{
-          background: "#1A1A19",
+          background: "var(--bg-section-asphalt)",
           border: "1px solid rgba(249,115,22,0.25)",
           borderRadius: 20,
           maxWidth: 880,
@@ -384,8 +384,8 @@ function ProjectModal({
             position: "absolute",
             top: 12,
             right: 12,
-            background: "rgba(255,255,255,0.08)",
-            border: "1px solid rgba(255,255,255,0.12)",
+            background: "var(--ink-08)",
+            border: "1px solid var(--ink-12)",
             borderRadius: "50%",
             width: 44,
             height: 44,
@@ -393,7 +393,7 @@ function ProjectModal({
             alignItems: "center",
             justifyContent: "center",
             cursor: "pointer",
-            color: "#9CA3AF",
+            color: "var(--text-muted)",
             zIndex: 10,
           }}
           aria-label="Close"
@@ -425,7 +425,7 @@ function ProjectModal({
                   fontWeight: 700,
                   letterSpacing: "0.15em",
                   textTransform: "uppercase",
-                  color: "#F97316",
+                  color: "var(--accent-text-lg)",
                   background: "rgba(249,115,22,0.12)",
                   padding: "3px 10px",
                   borderRadius: 6,
@@ -440,8 +440,8 @@ function ProjectModal({
                   fontWeight: 600,
                   letterSpacing: "0.1em",
                   textTransform: "uppercase",
-                  color: "#868C98",
-                  background: "rgba(255,255,255,0.05)",
+                  color: "var(--text-secondary)",
+                  background: "var(--ink-05)",
                   padding: "3px 10px",
                   borderRadius: 6,
                 }}
@@ -453,7 +453,7 @@ function ProjectModal({
               style={{
                 fontSize: "clamp(1.1rem, 3vw, 1.4rem)",
                 fontWeight: 800,
-                color: "#F5F0EB",
+                color: "var(--text-primary)",
                 margin: "0 0 4px",
                 letterSpacing: "-0.02em",
                 lineHeight: 1.2,
@@ -461,7 +461,7 @@ function ProjectModal({
             >
               {project.title}
             </h2>
-            <p style={{ fontSize: 13, color: "#9CA3AF", margin: 0 }}>
+            <p style={{ fontSize: 13, color: "var(--text-muted)", margin: 0 }}>
               📍 {project.city}, {project.province}
               {project.year ? ` · ${project.year}` : ""}
             </p>
@@ -475,7 +475,7 @@ function ProjectModal({
                 borderRadius: 12,
                 overflow: "hidden",
                 aspectRatio: "16/9",
-                background: "#101010",
+                background: "var(--bg-dark)",
               }}
             >
               <Image
@@ -490,7 +490,7 @@ function ProjectModal({
               )}
             </div>
             {project.imageIsRepresentative && (
-              <p style={{ fontSize: 11, color: "#868C98", margin: 0, lineHeight: 1.5 }}>
+              <p style={{ fontSize: 11, color: "var(--text-secondary)", margin: 0, lineHeight: 1.5 }}>
                 Representative photo — HUB work in the same system and application.
                 This installation&apos;s own photography is on its way.
               </p>
@@ -510,7 +510,7 @@ function ProjectModal({
                       border:
                         i === imgIndex
                           ? "2px solid #F97316"
-                          : "2px solid rgba(255,255,255,0.1)",
+                          : "2px solid var(--ink-10)",
                       cursor: "pointer",
                       padding: 0,
                       flexShrink: 0,
@@ -533,8 +533,8 @@ function ProjectModal({
           <div className="canada-map-modal-grid">
             <div
               style={{
-                background: "rgba(255,255,255,0.04)",
-                border: "1px solid rgba(255,255,255,0.08)",
+                background: "var(--ink-04)",
+                border: "1px solid var(--ink-08)",
                 borderRadius: 12,
                 padding: "16px 18px",
               }}
@@ -545,13 +545,13 @@ function ProjectModal({
                   fontWeight: 700,
                   letterSpacing: "0.15em",
                   textTransform: "uppercase",
-                  color: "#F97316",
+                  color: "var(--accent-text-lg)",
                   margin: "0 0 8px",
                 }}
               >
                 The Challenge
               </p>
-              <p style={{ fontSize: 13, color: "#D1D5DB", lineHeight: 1.65, margin: 0 }}>
+              <p style={{ fontSize: 13, color: "var(--text-body)", lineHeight: 1.65, margin: 0 }}>
                 {project.problem}
               </p>
             </div>
@@ -569,13 +569,13 @@ function ProjectModal({
                   fontWeight: 700,
                   letterSpacing: "0.15em",
                   textTransform: "uppercase",
-                  color: "#F97316",
+                  color: "var(--accent-text-lg)",
                   margin: "0 0 8px",
                 }}
               >
                 The Solution
               </p>
-              <p style={{ fontSize: 13, color: "#D1D5DB", lineHeight: 1.65, margin: 0 }}>
+              <p style={{ fontSize: 13, color: "var(--text-body)", lineHeight: 1.65, margin: 0 }}>
                 {project.solution}
               </p>
             </div>
@@ -586,7 +586,7 @@ function ProjectModal({
               href="/contact"
               style={{
                 background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
-                color: "#fff",
+                color: "var(--on-accent)",
                 fontWeight: 700,
                 fontSize: 13,
                 padding: "13px 24px",
@@ -605,14 +605,14 @@ function ProjectModal({
               href="/contact"
               style={{
                 background: "transparent",
-                color: "#9CA3AF",
+                color: "var(--text-muted)",
                 fontWeight: 600,
                 fontSize: 13,
                 padding: "13px 24px",
                 minHeight: 44,
                 borderRadius: 8,
                 textDecoration: "none",
-                border: "1px solid rgba(255,255,255,0.12)",
+                border: "1px solid var(--ink-12)",
                 display: "inline-flex",
                 alignItems: "center",
               }}
@@ -659,9 +659,9 @@ function FilterChip({
         borderRadius: 20,
         border: active
           ? "1px solid rgba(249,115,22,0.65)"
-          : "1px solid rgba(255,255,255,0.1)",
-        background: active ? "rgba(249,115,22,0.16)" : "rgba(255,255,255,0.03)",
-        color: active ? "#F5F0EB" : "#B7BDC8",
+          : "1px solid var(--ink-10)",
+        background: active ? "rgba(249,115,22,0.16)" : "var(--ink-03)",
+        color: active ? "var(--text-primary)" : "var(--text-muted)",
         fontSize: 11.5,
         fontWeight: 600,
         cursor: "pointer",
@@ -676,8 +676,8 @@ function FilterChip({
           style={{
             fontSize: 10,
             fontWeight: 700,
-            color: active ? "#F97316" : "#6B7280",
-            background: active ? "rgba(249,115,22,0.14)" : "rgba(255,255,255,0.06)",
+            color: active ? "var(--accent-text-lg)" : "#6B7280",
+            background: active ? "rgba(249,115,22,0.14)" : "var(--ink-06)",
             borderRadius: 10,
             padding: "1px 7px",
           }}
@@ -1051,7 +1051,7 @@ export default function CanadaMap() {
         .maplibregl-cooperative-gesture-screen {
           background: rgba(8,13,22,0.78) !important;
           backdrop-filter: blur(6px);
-          color: #F5F0EB !important;
+          color: var(--text-primary) !important;
           font-size: 13px !important;
           font-weight: 600 !important;
           display: flex;
@@ -1067,7 +1067,7 @@ export default function CanadaMap() {
           border-radius: 8px 0 0 0;
         }
         .maplibregl-ctrl-attrib a {
-          color: rgba(255,255,255,0.45) !important;
+          color: var(--ink-45) !important;
           font-size: 10px;
         }
         /* Panel scrollbar */
@@ -1110,7 +1110,7 @@ export default function CanadaMap() {
       <section
         ref={sectionRef}
         aria-label="Installations across Canada — interactive project map"
-        style={{ background: "#101010", paddingTop: "5rem", paddingBottom: "5rem" }}
+        style={{ background: "var(--bg-dark)", paddingTop: "5rem", paddingBottom: "5rem" }}
       >
         <div style={{ maxWidth: 1340, margin: "0 auto", padding: "0 1.25rem" }}>
 
@@ -1132,7 +1132,7 @@ export default function CanadaMap() {
                   fontWeight: 700,
                   letterSpacing: "0.2em",
                   textTransform: "uppercase",
-                  color: "#F97316",
+                  color: "var(--accent-text-lg)",
                   marginBottom: 10,
                 }}
               >
@@ -1142,7 +1142,7 @@ export default function CanadaMap() {
                 style={{
                   fontSize: "clamp(1.75rem, 3.5vw, 2.75rem)",
                   fontWeight: 900,
-                  color: "#F5F0EB",
+                  color: "var(--text-primary)",
                   margin: "0 0 10px",
                   lineHeight: 1.1,
                   letterSpacing: "-0.03em",
@@ -1163,7 +1163,7 @@ export default function CanadaMap() {
               <p
                 style={{
                   fontSize: 15,
-                  color: "#9CA3AF",
+                  color: "var(--text-muted)",
                   maxWidth: 460,
                   margin: 0,
                   lineHeight: 1.6,
@@ -1194,7 +1194,7 @@ export default function CanadaMap() {
                   boxShadow: "0 0 8px rgba(249,115,22,0.85)",
                 }}
               />
-              <span style={{ fontSize: 13, fontWeight: 700, color: "#F5F0EB" }}>
+              <span style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)" }}>
                 {mapProjects.length} Projects Mapped
               </span>
             </div>
@@ -1218,7 +1218,7 @@ export default function CanadaMap() {
             ))}
           </div>
 
-          {/* ── Product filter ─────────────────────────────────────────────── */}
+          {/* ── Product filter ───────────────────────────────────────────── */}
           <div className="canada-map-chips" style={{ marginBottom: 12 }} role="group" aria-label="Filter by product system">
             <FilterChip active={productFilter === null} onClick={() => handleProductFilter(null)}>
               All systems
@@ -1235,9 +1235,10 @@ export default function CanadaMap() {
             ))}
           </div>
 
-          {/* ── Map + Panel ───────────────────────────────────────────────── */}
+          {/* ── Map + Panel ─────────────────────────────────────────────── */}
           <div
             className="canada-map-layout"
+            data-surface="dark"
             style={{
               display: "flex",
               gap: 12,
@@ -1255,7 +1256,7 @@ export default function CanadaMap() {
                 overflow: "hidden",
                 border: "1px solid rgba(249,115,22,0.15)",
                 boxShadow:
-                  "0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04)",
+                  "0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px var(--ink-04)",
                 position: "relative",
               }}
             >
@@ -1329,13 +1330,13 @@ export default function CanadaMap() {
                       style={{
                         position: "relative",
                         width: 240,
-                        background: "#151515",
+                        background: "var(--bg-primary)",
                         border: `1px solid ${popupPinned ? "rgba(249,115,22,0.6)" : "rgba(249,115,22,0.32)"}`,
                         borderRadius: 12,
                         overflow: "hidden",
                         boxShadow: popupPinned
                           ? "0 14px 40px rgba(0,0,0,0.85), 0 0 0 1px rgba(249,115,22,0.2)"
-                          : "0 10px 32px rgba(0,0,0,0.78), 0 0 0 1px rgba(255,255,255,0.03)",
+                          : "0 10px 32px rgba(0,0,0,0.78), 0 0 0 1px var(--ink-03)",
                       }}
                       onMouseEnter={() => {
                         popupHoveredRef.current = true;
@@ -1370,12 +1371,12 @@ export default function CanadaMap() {
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
-                            border: "1px solid rgba(255,255,255,0.18)",
+                            border: "1px solid var(--ink-18)",
                             borderRadius: "50%",
                             background: "rgba(15,22,32,0.85)",
                             backdropFilter: "blur(4px)",
                             cursor: "pointer",
-                            color: "#F5F0EB",
+                            color: "var(--text-primary)",
                             padding: 0,
                           }}
                         >
@@ -1435,7 +1436,7 @@ export default function CanadaMap() {
                               fontWeight: 700,
                               letterSpacing: "0.13em",
                               textTransform: "uppercase",
-                              color: "#F97316",
+                              color: "var(--accent-text-lg)",
                               background: "rgba(249,115,22,0.13)",
                               padding: "2px 7px",
                               borderRadius: 4,
@@ -1450,7 +1451,7 @@ export default function CanadaMap() {
                               fontWeight: 600,
                               letterSpacing: "0.1em",
                               textTransform: "uppercase",
-                              color: "rgba(255,255,255,0.45)",
+                              color: "var(--ink-45)",
                             }}
                           >
                             {popupProject.application}
@@ -1462,7 +1463,7 @@ export default function CanadaMap() {
                           style={{
                             fontSize: 13,
                             fontWeight: 700,
-                            color: "#F5F0EB",
+                            color: "var(--text-primary)",
                             lineHeight: 1.3,
                             margin: "0 0 6px",
                             letterSpacing: "-0.01em",
@@ -1476,7 +1477,7 @@ export default function CanadaMap() {
                           style={{
                             fontSize: 11,
                             fontWeight: 500,
-                            color: "rgba(255,255,255,0.5)",
+                            color: "var(--ink-50)",
                             margin: 0,
                             display: "flex",
                             alignItems: "center",
@@ -1488,7 +1489,7 @@ export default function CanadaMap() {
                           </span>
                           {popupProject.year && (
                             <>
-                              <span style={{ color: "rgba(255,255,255,0.2)" }}>·</span>
+                              <span style={{ color: "var(--ink-20)" }}>·</span>
                               <span>{popupProject.year}</span>
                             </>
                           )}
@@ -1499,7 +1500,7 @@ export default function CanadaMap() {
                           style={{
                             fontSize: 10,
                             fontWeight: 700,
-                            color: "#F97316",
+                            color: "var(--accent-text-lg)",
                             margin: "9px 0 0",
                             letterSpacing: "0.08em",
                             textTransform: "uppercase",
@@ -1529,11 +1530,11 @@ export default function CanadaMap() {
                     left: "50%",
                     transform: "translateX(-50%)",
                     background: "rgba(8,13,22,0.9)",
-                    border: "1px solid rgba(255,255,255,0.12)",
+                    border: "1px solid var(--ink-12)",
                     borderRadius: 10,
                     padding: "8px 16px",
                     fontSize: 12,
-                    color: "#B7BDC8",
+                    color: "var(--text-muted)",
                     zIndex: 20,
                     pointerEvents: "none",
                   }}
@@ -1556,17 +1557,17 @@ export default function CanadaMap() {
                     alignItems: "center",
                     gap: 7,
                     background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
-                    border: "1px solid rgba(255,255,255,0.15)",
+                    border: "1px solid var(--ink-15)",
                     borderRadius: 10,
                     padding: "10px 16px",
                     fontSize: 12.5,
                     fontWeight: 800,
-                    color: "#fff",
+                    color: "var(--on-accent)",
                     cursor: "pointer",
                     boxShadow: "0 6px 20px rgba(249,115,22,0.45)",
                   }}
                 >
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text-primary)" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round">
                     <path d="M3 12a9 9 0 1 0 3-6.7" />
                     <path d="M3 4v5h5" />
                   </svg>
@@ -1583,7 +1584,7 @@ export default function CanadaMap() {
                   transform: "translateX(-50%)",
                   background: "rgba(8,13,22,0.88)",
                   backdropFilter: "blur(10px)",
-                  border: "1px solid rgba(255,255,255,0.08)",
+                  border: "1px solid var(--ink-08)",
                   borderRadius: 24,
                   padding: "6px 16px",
                   pointerEvents: "none",
@@ -1593,7 +1594,7 @@ export default function CanadaMap() {
                   textOverflow: "ellipsis",
                 }}
               >
-                <span style={{ fontSize: 11, color: "#868C98", fontWeight: 500 }}>
+                <span style={{ fontSize: 11, color: "var(--text-secondary)", fontWeight: 500 }}>
                   {hoveredId
                     ? "Click to open project details"
                     : productFilter
@@ -1612,7 +1613,7 @@ export default function CanadaMap() {
                 flexShrink: 0,
                 borderRadius: 20,
                 border: "1px solid var(--border-color)",
-                background: "#111111",
+                background: "var(--bg-dark)",
                 display: "flex",
                 flexDirection: "column",
                 overflow: "hidden",
@@ -1640,7 +1641,7 @@ export default function CanadaMap() {
                       fontWeight: 700,
                       letterSpacing: "0.14em",
                       textTransform: "uppercase",
-                      color: "#F97316",
+                      color: "var(--accent-text-lg)",
                       margin: 0,
                     }}
                   >
@@ -1650,7 +1651,7 @@ export default function CanadaMap() {
                     style={{
                       fontSize: 11,
                       fontWeight: 700,
-                      color: "#F5F0EB",
+                      color: "var(--text-primary)",
                       background: "rgba(249,115,22,0.14)",
                       padding: "2px 10px",
                       borderRadius: 20,
@@ -1662,7 +1663,7 @@ export default function CanadaMap() {
                 <p
                   style={{
                     fontSize: 10.5,
-                    color: "#868C98",
+                    color: "var(--text-secondary)",
                     margin: "0 0 10px",
                     lineHeight: 1.4,
                   }}
@@ -1688,7 +1689,7 @@ export default function CanadaMap() {
                     height="13"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke="#868C98"
+                    stroke="var(--text-secondary)"
                     strokeWidth={2.5}
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -1711,12 +1712,12 @@ export default function CanadaMap() {
                     style={{
                       width: "100%",
                       padding: "7px 30px 7px 30px",
-                      background: "rgba(255,255,255,0.05)",
+                      background: "var(--ink-05)",
                       border: searchQuery.trim()
                         ? "1px solid rgba(249,115,22,0.4)"
-                        : "1px solid rgba(255,255,255,0.1)",
+                        : "1px solid var(--ink-10)",
                       borderRadius: 9,
-                      color: "#F5F0EB",
+                      color: "var(--text-primary)",
                       fontSize: 12,
                       outline: "none",
                       transition: "border-color 0.15s ease",
@@ -1726,7 +1727,7 @@ export default function CanadaMap() {
                     }}
                     onBlur={(e) => {
                       if (!searchQuery.trim())
-                        e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)";
+                        e.currentTarget.style.borderColor = "var(--ink-10)";
                     }}
                   />
                   {/* Clear button */}
@@ -1736,7 +1737,7 @@ export default function CanadaMap() {
                       style={{
                         position: "absolute",
                         right: 8,
-                        background: "rgba(255,255,255,0.1)",
+                        background: "var(--ink-10)",
                         border: "none",
                         borderRadius: "50%",
                         width: 16,
@@ -1746,7 +1747,7 @@ export default function CanadaMap() {
                         justifyContent: "center",
                         cursor: "pointer",
                         padding: 0,
-                        color: "#9CA3AF",
+                        color: "var(--text-muted)",
                         flexShrink: 0,
                       }}
                       aria-label="Clear search"
@@ -1767,12 +1768,12 @@ export default function CanadaMap() {
                     width: "100%",
                     marginTop: 6,
                     padding: "7px 10px",
-                    background: appFilter ? "rgba(249,115,22,0.1)" : "rgba(255,255,255,0.05)",
+                    background: appFilter ? "rgba(249,115,22,0.1)" : "var(--ink-05)",
                     border: appFilter
                       ? "1px solid rgba(249,115,22,0.4)"
-                      : "1px solid rgba(255,255,255,0.1)",
+                      : "1px solid var(--ink-10)",
                     borderRadius: 9,
-                    color: appFilter ? "#FDBA74" : "#9CA3AF",
+                    color: appFilter ? "var(--accent-soft-text)" : "var(--text-muted)",
                     fontSize: 12,
                     outline: "none",
                     cursor: "pointer",
@@ -1814,7 +1815,7 @@ export default function CanadaMap() {
                           onClick={() => setSearchQuery("")}
                           style={{
                             fontSize: 12,
-                            color: "#F97316",
+                            color: "var(--accent-text-lg)",
                             background: "transparent",
                             border: "1px solid rgba(249,115,22,0.3)",
                             borderRadius: 8,
@@ -1835,7 +1836,7 @@ export default function CanadaMap() {
                           onClick={resetView}
                           style={{
                             fontSize: 12,
-                            color: "#F97316",
+                            color: "var(--accent-text-lg)",
                             background: "transparent",
                             border: "1px solid rgba(249,115,22,0.3)",
                             borderRadius: 8,
@@ -1866,7 +1867,7 @@ export default function CanadaMap() {
               <div
                 style={{
                   padding: "10px 16px",
-                  borderTop: "1px solid rgba(255,255,255,0.06)",
+                  borderTop: "1px solid var(--ink-06)",
                   flexShrink: 0,
                 }}
               >
@@ -1881,7 +1882,7 @@ export default function CanadaMap() {
                     padding: "9px 0",
                     borderRadius: 9,
                     background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
-                    color: "#fff",
+                    color: "var(--on-accent)",
                     fontWeight: 700,
                     fontSize: 12,
                     textDecoration: "none",
@@ -1921,7 +1922,7 @@ export default function CanadaMap() {
                   fontWeight: 700,
                   letterSpacing: "0.14em",
                   textTransform: "uppercase",
-                  color: "#F97316",
+                  color: "var(--accent-text-lg)",
                   margin: 0,
                 }}
               >
@@ -1931,7 +1932,7 @@ export default function CanadaMap() {
                 style={{
                   fontSize: 11,
                   fontWeight: 700,
-                  color: "#F5F0EB",
+                  color: "var(--text-primary)",
                   background: "rgba(249,115,22,0.14)",
                   padding: "2px 10px",
                   borderRadius: 20,
@@ -1944,7 +1945,7 @@ export default function CanadaMap() {
             {/* Mobile search */}
             <div style={{ position: "relative", display: "flex", alignItems: "center", marginBottom: 10 }}>
               <svg
-                width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#868C98"
+                width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)"
                 strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round"
                 style={{ position: "absolute", left: 12, pointerEvents: "none" }}
               >
@@ -1960,12 +1961,12 @@ export default function CanadaMap() {
                 style={{
                   width: "100%",
                   padding: "10px 34px",
-                  background: "rgba(255,255,255,0.05)",
+                  background: "var(--ink-05)",
                   border: searchQuery.trim()
                     ? "1px solid rgba(249,115,22,0.4)"
-                    : "1px solid rgba(255,255,255,0.1)",
+                    : "1px solid var(--ink-10)",
                   borderRadius: 10,
-                  color: "#F5F0EB",
+                  color: "var(--text-primary)",
                   fontSize: 13,
                   outline: "none",
                 }}
@@ -1977,7 +1978,7 @@ export default function CanadaMap() {
                   style={{
                     position: "absolute",
                     right: 10,
-                    background: "rgba(255,255,255,0.1)",
+                    background: "var(--ink-10)",
                     border: "none",
                     borderRadius: "50%",
                     width: 20,
@@ -1987,7 +1988,7 @@ export default function CanadaMap() {
                     justifyContent: "center",
                     cursor: "pointer",
                     padding: 0,
-                    color: "#9CA3AF",
+                    color: "var(--text-muted)",
                   }}
                 >
                   <svg width="8" height="8" viewBox="0 0 12 12" fill="none">
@@ -2006,12 +2007,12 @@ export default function CanadaMap() {
                 width: "100%",
                 marginBottom: 10,
                 padding: "9px 12px",
-                background: appFilter ? "rgba(249,115,22,0.1)" : "rgba(255,255,255,0.05)",
+                background: appFilter ? "rgba(249,115,22,0.1)" : "var(--ink-05)",
                 border: appFilter
                   ? "1px solid rgba(249,115,22,0.4)"
-                  : "1px solid rgba(255,255,255,0.1)",
+                  : "1px solid var(--ink-10)",
                 borderRadius: 10,
-                color: appFilter ? "#FDBA74" : "#9CA3AF",
+                color: appFilter ? "var(--accent-soft-text)" : "var(--text-muted)",
                 fontSize: 13,
                 outline: "none",
               }}
@@ -2042,7 +2043,7 @@ export default function CanadaMap() {
                   <button
                     onClick={resetView}
                     style={{
-                      color: "#F97316",
+                      color: "var(--accent-text-lg)",
                       background: "none",
                       border: "none",
                       padding: 0,
@@ -2075,7 +2076,7 @@ export default function CanadaMap() {
                       background:
                         hoveredId === project.id
                           ? "rgba(249,115,22,0.1)"
-                          : "rgba(255,255,255,0.03)",
+                          : "var(--ink-03)",
                       border:
                         hoveredId === project.id
                           ? "1px solid rgba(249,115,22,0.45)"
@@ -2108,7 +2109,7 @@ export default function CanadaMap() {
                           fontWeight: 700,
                           letterSpacing: "0.1em",
                           textTransform: "uppercase",
-                          color: "#F97316",
+                          color: "var(--accent-text-lg)",
                           marginBottom: 3,
                         }}
                       >
@@ -2122,7 +2123,7 @@ export default function CanadaMap() {
                           overflow: "hidden",
                           fontSize: 11.5,
                           fontWeight: 600,
-                          color: "#E5E7EB",
+                          color: "var(--text-body)",
                           lineHeight: 1.3,
                         }}
                       >
@@ -2132,7 +2133,7 @@ export default function CanadaMap() {
                         style={{
                           display: "block",
                           fontSize: 10,
-                          color: "#868C98",
+                          color: "var(--text-secondary)",
                           marginTop: 3,
                         }}
                       >
@@ -2157,7 +2158,7 @@ export default function CanadaMap() {
                 padding: "12px 0",
                 borderRadius: 10,
                 background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
-                color: "#fff",
+                color: "var(--on-accent)",
                 fontWeight: 700,
                 fontSize: 13,
                 textDecoration: "none",

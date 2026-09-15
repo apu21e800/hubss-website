@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Inter } from "next/font/google";
 import "./globals.css";
-// ThemeToggle deferred — light mode requires full CSS var migration of hardcoded hex sections
-// import ThemeToggle from "@/components/ui/ThemeToggle";
 // Crisp Chat — sign up at crisp.chat (free), grab Website ID from Settings → Setup
 import CrispChat from "@/components/CrispChat";
 import StickyBar from "@/components/StickyBar";
@@ -12,6 +10,10 @@ import { VercelToolbar } from "@vercel/toolbar/next";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+
+// Runs before first paint. Order: ?theme= in the URL (persisted, so a review
+// link sticks as the reader navigates) → localStorage → dark.
+const THEME_INIT = `(function(){try{var q=location.search,m=/[?&]theme=(dark|mixed|light)(?=[&#]|$)/.exec(q),t=m?m[1]:null;if(t){try{localStorage.setItem('hubss-theme',t)}catch(e){}}if(!t){try{t=localStorage.getItem('hubss-theme')}catch(e){}}if(t!=='mixed'&&t!=='light'){t='dark'}document.documentElement.setAttribute('data-theme',t)}catch(e){}})();`;
 
 const geist = Geist({ variable: "--font-geist", subsets: ["latin"] });
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"], weight: ["300","400","500","600","700"] });
@@ -62,7 +64,23 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    // suppressHydrationWarning: the theme bootstrap below sets data-theme on
+    // <html> before React hydrates, and that attribute is not in the server
+    // markup by design (it depends on the visitor's saved choice).
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Theme bootstrap — runs before first paint so a saved "light" never
+            flashes dark. Order: ?theme= in the URL (persisted, so a review link
+            sticks as the reader navigates) → localStorage → dark. The three
+            modes are documented in components/ui/ThemeToggle.tsx. */}
+        {/* A plain <script>, not next/script: `beforeInteractive` does not emit
+            inline children in the App Router — it only ships them in the RSC
+            payload, which runs after paint and defeats the purpose. */}
+        <script
+          id="hubss-theme-init"
+          dangerouslySetInnerHTML={{ __html: THEME_INIT }}
+        />
+      </head>
       <body className={`${geist.variable} ${inter.variable} antialiased`}>
         {/* Resource hints — React 19 hoists these into <head>. The landing
             page's map pulls style + tiles + glyphs from CARTO; warming the

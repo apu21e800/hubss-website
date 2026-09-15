@@ -1,59 +1,76 @@
 "use client";
 
+/**
+ * Theme switch — Dark · Mixed · Light.
+ *
+ * The site is themed with CSS custom properties (app/globals.css). This
+ * control only sets `data-theme` on <html> and remembers the choice in
+ * localStorage; the no-flash bootstrap in app/layout.tsx applies it before
+ * first paint on the next load. `?theme=light` in any URL does the same and
+ * persists, so a review link can drop someone straight into a mode.
+ *
+ *   dark   — the site as shipped
+ *   mixed  — dark shell, the reading sections (catalogue spread, spec, FAQ,
+ *            documents, About story) on paper. Doug: "add some white sections."
+ *   light  — paper site; photo heroes, the footer and the Lunch & Learn band
+ *            stay dark.
+ */
 import { useEffect, useState } from "react";
 
-export default function ThemeToggle() {
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
+export type ThemeMode = "dark" | "mixed" | "light";
+export const THEME_KEY = "hubss-theme";
+const MODES: { id: ThemeMode; label: string; title: string }[] = [
+  { id: "dark",  label: "Dark",  title: "Dark — the site as shipped" },
+  { id: "mixed", label: "Mixed", title: "Mixed — dark shell, reading sections on paper" },
+  { id: "light", label: "Light", title: "Light — paper site, dark photo bands" },
+];
+
+export function applyTheme(mode: ThemeMode) {
+  document.documentElement.setAttribute("data-theme", mode);
+  try { localStorage.setItem(THEME_KEY, mode); } catch { /* private mode */ }
+}
+
+export default function ThemeToggle({ compact = false }: { compact?: boolean }) {
+  const [mode, setMode] = useState<ThemeMode>("dark");
 
   useEffect(() => {
-    const saved = localStorage.getItem("hubss-theme") as "dark" | "light" | null;
-    if (saved) {
-      setTheme(saved);
-      if (saved === "light") {
-        document.documentElement.setAttribute("data-theme", "light");
-      }
-    }
+    const current = document.documentElement.getAttribute("data-theme") as ThemeMode | null;
+    if (current === "dark" || current === "mixed" || current === "light") setMode(current);
   }, []);
 
-  function toggle() {
-    const next = theme === "dark" ? "light" : "dark";
-    setTheme(next);
-    if (next === "light") {
-      document.documentElement.setAttribute("data-theme", "light");
-    } else {
-      document.documentElement.removeAttribute("data-theme");
-    }
-    localStorage.setItem("hubss-theme", next);
-  }
+  const choose = (m: ThemeMode) => { setMode(m); applyTheme(m); };
 
   return (
-    <button
-      onClick={toggle}
-      aria-label="Toggle light theme"
-      title="Toggle light theme"
-      style={{
-        position: "fixed",
-        bottom: 20,
-        right: 20,
-        zIndex: 50,
-        width: 32,
-        height: 32,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        borderRadius: "9999px",
-        background: "var(--bg-card)",
-        border: "1px solid var(--border-color)",
-        color: "var(--text-faint)",
-        fontSize: "0.875rem",
-        cursor: "pointer",
-        transition: "color 0.15s ease, border-color 0.15s ease",
-        opacity: 0.5,
-      }}
-      onMouseEnter={e => (e.currentTarget.style.opacity = "1")}
-      onMouseLeave={e => (e.currentTarget.style.opacity = "0.5")}
+    <div
+      role="radiogroup"
+      aria-label="Colour theme"
+      className="inline-flex items-center rounded-full p-0.5"
+      style={{ background: "var(--fill-subtle)", border: "1px solid var(--border-color)" }}
     >
-      ☀
-    </button>
+      {MODES.map((m) => {
+        const active = m.id === mode;
+        return (
+          <button
+            key={m.id}
+            type="button"
+            role="radio"
+            aria-checked={active}
+            title={m.title}
+            onClick={() => choose(m.id)}
+            className="rounded-full font-semibold transition-colors"
+            style={{
+              padding: compact ? "5px 9px" : "6px 12px",
+              fontSize: compact ? 11 : 12,
+              lineHeight: 1,
+              minHeight: 28,
+              background: active ? "var(--accent)" : "transparent",
+              color: active ? "var(--on-accent)" : "var(--text-secondary)",
+            }}
+          >
+            {m.label}
+          </button>
+        );
+      })}
+    </div>
   );
 }

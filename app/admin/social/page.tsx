@@ -59,10 +59,10 @@ const PLATFORM_META: Record<Platform, { name: string; color: string; icon: typeo
 };
 
 const STATUS_CONFIG: Record<PostStatus, { label: string; color: string; icon: typeof Clock }> = {
-  draft:     { label: "Draft",     color: "text-gray-400 bg-gray-500/10 border-gray-500/20", icon: Edit3 },
+  draft:     { label: "Draft",     color: "text-[var(--text-muted)] bg-gray-500/10 border-gray-500/20", icon: Edit3 },
   scheduled: { label: "Scheduled", color: "text-blue-400 bg-blue-500/10 border-blue-500/20", icon: Clock },
-  posted:    { label: "Posted",    color: "text-green-400 bg-green-500/10 border-green-500/20", icon: CheckCircle2 },
-  failed:    { label: "Failed",    color: "text-red-400 bg-red-500/10 border-red-500/20", icon: XCircle },
+  posted:    { label: "Posted",    color: "text-[var(--ok-text)] bg-green-500/10 border-green-500/20", icon: CheckCircle2 },
+  failed:    { label: "Failed",    color: "text-[var(--err-text)] bg-red-500/10 border-red-500/20", icon: XCircle },
 };
 
 const ALL_PLATFORMS: Platform[] = ["linkedin", "facebook", "instagram", "x"];
@@ -306,16 +306,16 @@ export default function SocialAdminPage() {
 
   if (!authed) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center px-4">
+      <div className="min-h-screen bg-[var(--bg-deepest)] flex items-center justify-center px-4">
         <form onSubmit={handleLogin} className="w-full max-w-sm">
-          <h1 className="text-2xl font-bold text-[#f5f0eb] mb-2">Social Dashboard</h1>
-          <p className="text-sm text-gray-500 mb-6">Enter admin password to continue</p>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)] mb-2">Social Dashboard</h1>
+          <p className="text-sm text-[var(--text-secondary)] mb-6">Enter admin password to continue</p>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Admin password"
-            className="w-full px-4 py-3 rounded-lg bg-zinc-900 border border-zinc-800 text-[#f5f0eb] placeholder-gray-600 focus:outline-none focus:border-orange-500/50 mb-4"
+            className="w-full px-4 py-3 rounded-lg bg-[var(--bg-card-neutral)] border border-[var(--border-strong)] text-[var(--text-primary)] placeholder-gray-600 focus:outline-none focus:border-orange-500/50 mb-4"
           />
           <button
             type="submit"
@@ -331,15 +331,15 @@ export default function SocialAdminPage() {
   // ── Main dashboard ───────────────────────────────────────────
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-[#f5f0eb]">
+    <div className="min-h-screen bg-[var(--bg-deepest)] text-[var(--text-primary)]">
       {/* Header */}
-      <header className="border-b border-zinc-800 bg-[#0a0a0a]/80 backdrop-blur sticky top-0 z-40">
+      <header className="border-b border-[var(--border-strong)] bg-[#0a0a0a]/80 backdrop-blur sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Link href="/" className="text-gray-500 hover:text-gray-300 text-sm">
+            <Link href="/" className="text-[var(--text-secondary)] hover:text-[var(--text-body)] text-sm">
               HUBSS
             </Link>
-            <span className="text-zinc-700">/</span>
+            <span className="text-[var(--text-hint)]">/</span>
             <h1 className="text-lg font-bold">Social Media</h1>
           </div>
           <div className="flex items-center gap-3">
@@ -352,7 +352,7 @@ export default function SocialAdminPage() {
             </button>
             <button
               onClick={loadQueue}
-              className="p-2 rounded-lg border border-zinc-800 text-gray-400 hover:text-gray-200 hover:border-zinc-700 transition-colors"
+              className="p-2 rounded-lg border border-[var(--border-strong)] text-[var(--text-muted)] hover:text-[var(--text-body)] hover:border-[var(--border-color)] transition-colors"
             >
               <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
             </button>
@@ -363,58 +363,58 @@ export default function SocialAdminPage() {
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Messages */}
         {message && (
-          <div className="mb-6 px-4 py-3 rounded-lg bg-green-500/10 border border-green-500/20 text-green-400 text-sm flex items-center gap-2">
+          <div className="mb-6 px-4 py-3 rounded-lg bg-green-500/10 border border-green-500/20 text-[var(--ok-text)] text-sm flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 shrink-0" />
             {message}
-            <button onClick={() => setMessage("")} className="ml-auto text-green-400/50 hover:text-green-400">&times;</button>
+            <button onClick={() => setMessage("")} className="ml-auto text-green-400/50 hover:text-[var(--ok-text)]">&times;</button>
           </div>
         )}
         {error && (
-          <div className="mb-6 px-4 py-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm flex items-center gap-2">
+          <div className="mb-6 px-4 py-3 rounded-lg bg-red-500/10 border border-red-500/20 text-[var(--err-text)] text-sm flex items-center gap-2">
             <AlertCircle className="w-4 h-4 shrink-0" />
             {error}
-            <button onClick={() => setError("")} className="ml-auto text-red-400/50 hover:text-red-400">&times;</button>
+            <button onClick={() => setError("")} className="ml-auto text-red-400/50 hover:text-[var(--err-text)]">&times;</button>
           </div>
         )}
 
         {/* ── AI Generator Panel ──────────────────────────────── */}
         {showGenerator && (
-          <div className="mb-8 p-6 rounded-xl bg-zinc-900 border border-zinc-800">
+          <div className="mb-8 p-6 rounded-xl bg-[var(--bg-card-neutral)] border border-[var(--border-strong)]">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-lg font-bold flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-orange-400" />
+                <Sparkles className="w-5 h-5 text-[var(--accent-text)]" />
                 AI Post Generator
               </h2>
-              <button onClick={() => setShowGenerator(false)} className="text-gray-500 hover:text-gray-300">&times;</button>
+              <button onClick={() => setShowGenerator(false)} className="text-[var(--text-secondary)] hover:text-[var(--text-body)]">&times;</button>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Source */}
               <div>
-                <label className="block text-sm text-gray-400 mb-2">Source</label>
+                <label className="block text-sm text-[var(--text-muted)] mb-2">Source</label>
                 <select
                   value={genBlogSlug}
                   onChange={(e) => { setGenBlogSlug(e.target.value); if (e.target.value) setGenTopic(""); }}
-                  className="w-full px-3 py-2 rounded-lg bg-zinc-800 border border-zinc-700 text-sm mb-3"
+                  className="w-full px-3 py-2 rounded-lg bg-[var(--bg-card)] border border-[var(--border-color)] text-sm mb-3"
                 >
                   <option value="">Select a blog post...</option>
                   {blogPosts.map((p) => (
                     <option key={p.slug} value={p.slug}>{p.title}</option>
                   ))}
                 </select>
-                <div className="text-xs text-gray-500 mb-2">— or custom topic —</div>
+                <div className="text-xs text-[var(--text-secondary)] mb-2">— or custom topic —</div>
                 <input
                   type="text"
                   value={genTopic}
                   onChange={(e) => { setGenTopic(e.target.value); if (e.target.value) setGenBlogSlug(""); }}
                   placeholder="e.g. Vision Zero crosswalk safety"
-                  className="w-full px-3 py-2 rounded-lg bg-zinc-800 border border-zinc-700 text-sm"
+                  className="w-full px-3 py-2 rounded-lg bg-[var(--bg-card)] border border-[var(--border-color)] text-sm"
                 />
               </div>
 
               {/* Options */}
               <div>
-                <label className="block text-sm text-gray-400 mb-2">Platforms</label>
+                <label className="block text-sm text-[var(--text-muted)] mb-2">Platforms</label>
                 <div className="flex flex-wrap gap-2 mb-4">
                   {ALL_PLATFORMS.map((p) => {
                     const meta = PLATFORM_META[p];
@@ -425,8 +425,8 @@ export default function SocialAdminPage() {
                         onClick={() => setGenPlatforms(active ? genPlatforms.filter((x) => x !== p) : [...genPlatforms, p])}
                         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
                           active
-                            ? "border-orange-500/30 bg-orange-500/10 text-orange-400"
-                            : "border-zinc-700 text-gray-500 hover:border-zinc-600"
+                            ? "border-orange-500/30 bg-orange-500/10 text-[var(--accent-text)]"
+                            : "border-[var(--border-color)] text-[var(--text-secondary)] hover:border-[var(--border-color)]"
                         }`}
                       >
                         <meta.icon className="w-3.5 h-3.5" />
@@ -436,7 +436,7 @@ export default function SocialAdminPage() {
                   })}
                 </div>
 
-                <label className="block text-sm text-gray-400 mb-2">Tone</label>
+                <label className="block text-sm text-[var(--text-muted)] mb-2">Tone</label>
                 <div className="flex gap-2">
                   {(["professional", "engaging", "casual"] as const).map((t) => (
                     <button
@@ -444,8 +444,8 @@ export default function SocialAdminPage() {
                       onClick={() => setGenTone(t)}
                       className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all capitalize ${
                         genTone === t
-                          ? "border-orange-500/30 bg-orange-500/10 text-orange-400"
-                          : "border-zinc-700 text-gray-500 hover:border-zinc-600"
+                          ? "border-orange-500/30 bg-orange-500/10 text-[var(--accent-text)]"
+                          : "border-[var(--border-color)] text-[var(--text-secondary)] hover:border-[var(--border-color)]"
                       }`}
                     >
                       {t}
@@ -469,14 +469,14 @@ export default function SocialAdminPage() {
 
             {/* Generated preview */}
             {generatedContent && (
-              <div className="mt-6 border-t border-zinc-800 pt-6">
+              <div className="mt-6 border-t border-[var(--border-strong)] pt-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-sm font-semibold text-gray-300">
+                  <h3 className="text-sm font-semibold text-[var(--text-body)]">
                     Generated: {genBlogTitle}
                   </h3>
                   <button
                     onClick={queueGenerated}
-                    className="flex items-center gap-2 px-4 py-2 rounded-lg border border-orange-500/30 text-orange-400 text-sm font-medium hover:bg-orange-500/10 transition-all"
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg border border-orange-500/30 text-[var(--accent-text)] text-sm font-medium hover:bg-orange-500/10 transition-all"
                   >
                     <Plus className="w-4 h-4" />
                     Add to Queue
@@ -493,8 +493,8 @@ export default function SocialAdminPage() {
                         onClick={() => setPreviewPlatform(p)}
                         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                           previewPlatform === p
-                            ? "bg-zinc-800 text-white"
-                            : "text-gray-500 hover:text-gray-300"
+                            ? "bg-[var(--bg-card)] text-[var(--text-primary)]"
+                            : "text-[var(--text-secondary)] hover:text-[var(--text-body)]"
                         }`}
                       >
                         <meta.icon className="w-3.5 h-3.5" />
@@ -505,11 +505,11 @@ export default function SocialAdminPage() {
                 </div>
 
                 {/* Content preview */}
-                <div className="bg-zinc-800 rounded-lg p-4">
-                  <pre className="whitespace-pre-wrap text-sm text-gray-300 font-sans leading-relaxed">
+                <div className="bg-[var(--bg-card)] rounded-lg p-4">
+                  <pre className="whitespace-pre-wrap text-sm text-[var(--text-body)] font-sans leading-relaxed">
                     {generatedContent[previewPlatform] || "No content for this platform"}
                   </pre>
-                  <div className="mt-3 text-xs text-gray-500">
+                  <div className="mt-3 text-xs text-[var(--text-secondary)]">
                     {(generatedContent[previewPlatform] || "").length} / {PLATFORM_META[previewPlatform].maxLen} characters
                   </div>
                 </div>
@@ -521,14 +521,14 @@ export default function SocialAdminPage() {
         {/* ── Edit Modal ──────────────────────────────────────── */}
         {editingPost && (
           <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="w-full max-w-2xl bg-zinc-900 rounded-xl border border-zinc-800 p-6 max-h-[90vh] overflow-y-auto">
+            <div className="w-full max-w-2xl bg-[var(--bg-card-neutral)] rounded-xl border border-[var(--border-strong)] p-6 max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-lg font-bold">Edit Post</h2>
-                <button onClick={() => setEditingPost(null)} className="text-gray-500 hover:text-gray-300">&times;</button>
+                <button onClick={() => setEditingPost(null)} className="text-[var(--text-secondary)] hover:text-[var(--text-body)]">&times;</button>
               </div>
 
               {/* Platforms */}
-              <label className="block text-sm text-gray-400 mb-2">Platforms</label>
+              <label className="block text-sm text-[var(--text-muted)] mb-2">Platforms</label>
               <div className="flex flex-wrap gap-2 mb-4">
                 {ALL_PLATFORMS.map((p) => {
                   const meta = PLATFORM_META[p];
@@ -538,7 +538,7 @@ export default function SocialAdminPage() {
                       key={p}
                       onClick={() => setEditPlatforms(active ? editPlatforms.filter((x) => x !== p) : [...editPlatforms, p])}
                       className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
-                        active ? "border-orange-500/30 bg-orange-500/10 text-orange-400" : "border-zinc-700 text-gray-500"
+                        active ? "border-orange-500/30 bg-orange-500/10 text-[var(--accent-text)]" : "border-[var(--border-color)] text-[var(--text-secondary)]"
                       }`}
                     >
                       <meta.icon className="w-3.5 h-3.5" />
@@ -549,28 +549,28 @@ export default function SocialAdminPage() {
               </div>
 
               {/* Content */}
-              <label className="block text-sm text-gray-400 mb-2">Content</label>
+              <label className="block text-sm text-[var(--text-muted)] mb-2">Content</label>
               <textarea
                 value={editText}
                 onChange={(e) => setEditText(e.target.value)}
                 rows={10}
-                className="w-full px-3 py-2 rounded-lg bg-zinc-800 border border-zinc-700 text-sm text-[#f5f0eb] resize-y mb-1"
+                className="w-full px-3 py-2 rounded-lg bg-[var(--bg-card)] border border-[var(--border-color)] text-sm text-[var(--text-primary)] resize-y mb-1"
               />
-              <div className="text-xs text-gray-500 mb-4">{editText.length} characters</div>
+              <div className="text-xs text-[var(--text-secondary)] mb-4">{editText.length} characters</div>
 
               {/* Schedule */}
-              <label className="block text-sm text-gray-400 mb-2">Schedule (optional)</label>
+              <label className="block text-sm text-[var(--text-muted)] mb-2">Schedule (optional)</label>
               <input
                 type="datetime-local"
                 value={editSchedule}
                 onChange={(e) => setEditSchedule(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg bg-zinc-800 border border-zinc-700 text-sm text-[#f5f0eb] mb-6"
+                className="w-full px-3 py-2 rounded-lg bg-[var(--bg-card)] border border-[var(--border-color)] text-sm text-[var(--text-primary)] mb-6"
               />
 
               <div className="flex justify-end gap-3">
                 <button
                   onClick={() => setEditingPost(null)}
-                  className="px-4 py-2 rounded-lg border border-zinc-700 text-gray-400 text-sm hover:text-gray-200 transition-colors"
+                  className="px-4 py-2 rounded-lg border border-[var(--border-color)] text-[var(--text-muted)] text-sm hover:text-[var(--text-body)] transition-colors"
                 >
                   Cancel
                 </button>
@@ -596,12 +596,12 @@ export default function SocialAdminPage() {
                 key={s}
                 onClick={() => setFilter(filter === s ? "all" : s)}
                 className={`p-4 rounded-xl border transition-all text-left ${
-                  filter === s ? "border-orange-500/30 bg-orange-500/5" : "border-zinc-800 bg-zinc-900 hover:border-zinc-700"
+                  filter === s ? "border-orange-500/30 bg-orange-500/5" : "border-[var(--border-strong)] bg-[var(--bg-card-neutral)] hover:border-[var(--border-color)]"
                 }`}
               >
-                <Icon className={`w-5 h-5 mb-2 ${filter === s ? "text-orange-400" : "text-gray-500"}`} />
+                <Icon className={`w-5 h-5 mb-2 ${filter === s ? "text-[var(--accent-text)]" : "text-[var(--text-secondary)]"}`} />
                 <div className="text-2xl font-bold">{count}</div>
-                <div className="text-xs text-gray-500 capitalize">{s}</div>
+                <div className="text-xs text-[var(--text-secondary)] capitalize">{s}</div>
               </button>
             );
           })}
@@ -612,27 +612,27 @@ export default function SocialAdminPage() {
           <h2 className="text-lg font-bold">
             Queue
             {filter !== "all" && (
-              <span className="ml-2 text-sm font-normal text-gray-500">
+              <span className="ml-2 text-sm font-normal text-[var(--text-secondary)]">
                 — {filter}
-                <button onClick={() => setFilter("all")} className="ml-2 text-orange-400 hover:text-orange-300">clear</button>
+                <button onClick={() => setFilter("all")} className="ml-2 text-[var(--accent-text)] hover:text-[var(--accent-soft-text)]">clear</button>
               </span>
             )}
           </h2>
-          <div className="text-sm text-gray-500">{posts.length} post{posts.length !== 1 ? "s" : ""}</div>
+          <div className="text-sm text-[var(--text-secondary)]">{posts.length} post{posts.length !== 1 ? "s" : ""}</div>
         </div>
 
         {loading && posts.length === 0 ? (
-          <div className="text-center py-16 text-gray-500">
+          <div className="text-center py-16 text-[var(--text-secondary)]">
             <Loader2 className="w-6 h-6 animate-spin mx-auto mb-3" />
             Loading queue...
           </div>
         ) : posts.length === 0 ? (
           <div className="text-center py-16">
-            <FileText className="w-10 h-10 text-zinc-700 mx-auto mb-3" />
-            <p className="text-gray-500 mb-2">No posts in queue</p>
+            <FileText className="w-10 h-10 text-[var(--text-hint)] mx-auto mb-3" />
+            <p className="text-[var(--text-secondary)] mb-2">No posts in queue</p>
             <button
               onClick={() => setShowGenerator(true)}
-              className="text-sm text-orange-400 hover:text-orange-300"
+              className="text-sm text-[var(--accent-text)] hover:text-[var(--accent-soft-text)]"
             >
               Generate your first post
             </button>
@@ -645,7 +645,7 @@ export default function SocialAdminPage() {
               return (
                 <div
                   key={post.id}
-                  className="rounded-xl bg-zinc-900 border border-zinc-800 p-5 transition-all hover:border-zinc-700"
+                  className="rounded-xl bg-[var(--bg-card-neutral)] border border-[var(--border-strong)] p-5 transition-all hover:border-[var(--border-color)]"
                 >
                   {/* Top row: platforms + status + date */}
                   <div className="flex items-center justify-between mb-3">
@@ -656,7 +656,7 @@ export default function SocialAdminPage() {
                         return (
                           <span
                             key={p}
-                            className="flex items-center gap-1 text-xs text-gray-400"
+                            className="flex items-center gap-1 text-xs text-[var(--text-muted)]"
                             title={meta.name}
                           >
                             <Icon className="w-3.5 h-3.5" style={{ color: meta.color }} />
@@ -666,7 +666,7 @@ export default function SocialAdminPage() {
                       {post.blogSlug && (
                         <Link
                           href={`/blog/${post.blogSlug}`}
-                          className="text-xs text-orange-400/60 hover:text-orange-400 ml-2"
+                          className="text-xs text-orange-400/60 hover:text-[var(--accent-text)] ml-2"
                         >
                           from blog
                         </Link>
@@ -681,13 +681,13 @@ export default function SocialAdminPage() {
                   </div>
 
                   {/* Content preview */}
-                  <p className="text-sm text-gray-300 line-clamp-3 mb-3 leading-relaxed">
+                  <p className="text-sm text-[var(--text-body)] line-clamp-3 mb-3 leading-relaxed">
                     {post.content.text}
                   </p>
 
                   {/* Error */}
                   {post.error && (
-                    <p className="text-xs text-red-400 bg-red-500/5 rounded px-2 py-1 mb-3">
+                    <p className="text-xs text-[var(--err-text)] bg-red-500/5 rounded px-2 py-1 mb-3">
                       {post.error}
                     </p>
                   )}
@@ -705,7 +705,7 @@ export default function SocialAdminPage() {
                             href={url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-xs text-gray-400 hover:text-gray-200"
+                            className="inline-flex items-center gap-1 text-xs text-[var(--text-muted)] hover:text-[var(--text-body)]"
                           >
                             <Icon className="w-3 h-3" />
                             View
@@ -717,7 +717,7 @@ export default function SocialAdminPage() {
 
                   {/* Meta + actions */}
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3 text-xs text-gray-600">
+                    <div className="flex items-center gap-3 text-xs text-[var(--text-hint)]">
                       {post.scheduledFor && (
                         <span className="flex items-center gap-1">
                           <Calendar className="w-3 h-3" />
@@ -732,7 +732,7 @@ export default function SocialAdminPage() {
                     <div className="flex items-center gap-1">
                       <button
                         onClick={() => startEdit(post)}
-                        className="p-1.5 rounded-lg text-gray-500 hover:text-gray-300 hover:bg-zinc-800 transition-colors"
+                        className="p-1.5 rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-body)] hover:bg-[var(--bg-card)] transition-colors"
                         title="Edit"
                       >
                         <Edit3 className="w-4 h-4" />
@@ -741,7 +741,7 @@ export default function SocialAdminPage() {
                         <button
                           onClick={() => publishPost(post.id)}
                           disabled={posting === post.id}
-                          className="p-1.5 rounded-lg text-gray-500 hover:text-orange-400 hover:bg-zinc-800 transition-colors disabled:opacity-40"
+                          className="p-1.5 rounded-lg text-[var(--text-secondary)] hover:text-[var(--accent-text)] hover:bg-[var(--bg-card)] transition-colors disabled:opacity-40"
                           title="Publish now"
                         >
                           {posting === post.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
@@ -749,7 +749,7 @@ export default function SocialAdminPage() {
                       )}
                       <button
                         onClick={() => { if (confirm("Delete this post?")) deletePost(post.id); }}
-                        className="p-1.5 rounded-lg text-gray-500 hover:text-red-400 hover:bg-zinc-800 transition-colors"
+                        className="p-1.5 rounded-lg text-[var(--text-secondary)] hover:text-[var(--err-text)] hover:bg-[var(--bg-card)] transition-colors"
                         title="Delete"
                       >
                         <Trash2 className="w-4 h-4" />

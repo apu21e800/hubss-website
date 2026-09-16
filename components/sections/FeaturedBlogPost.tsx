@@ -51,13 +51,13 @@ export default function FeaturedBlogPost() {
                 textWrap: "balance",
               }}
             >
-              Proven in the Field.<br className="hidden sm:block" /> Built to Last.
+              How it goes in.<br className="hidden sm:block" /> And how it holds up.
             </h2>
             <p
               className="text-base mt-2 max-w-xl"
               style={{ color: "var(--text-secondary)" }}
             >
-              Real project data, case studies, and spec-ready content for engineers and project managers.
+              Installation guides, project write-ups, and the specification detail behind them.
             </p>
           </div>
           <Link
@@ -101,19 +101,14 @@ export default function FeaturedBlogPost() {
                     "linear-gradient(to right, transparent 60%, rgba(8,13,22,0.6) 100%)",
                 }}
               />
-              {/* Stat credibility pill */}
-              <div
-                className="absolute bottom-5 left-5 flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold backdrop-blur-sm"
-                style={{
-                  background: "rgba(249,115,22,0.9)",
-                  color: "#fff",
-                }}
-              >
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-                </svg>
-                Real Installation · Verified Data
-              </div>
+              {/* No badge here. There was one — an orange tick reading "Real
+                  Installation · Verified Data" — and Doug's note on it was
+                  exactly right: it asserts credibility instead of saying
+                  anything. Nothing on the site verifies data, the photo is
+                  plainly a real driveway, and a reader who needs to be told
+                  a photograph is real has already stopped believing it. If a
+                  badge goes back on this card it has to carry a fact the
+                  photo does not — a place, a year, a system. */}
             </div>
 
             {/* Content — 2/5 on desktop */}

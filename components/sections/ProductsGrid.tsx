@@ -42,11 +42,23 @@ const PRODUCT_STAT: Record<string, string> = {
   "decomark":            "Custom Pantone graphics",
 };
 
+// Hand-kept, and it drifted: TrafficPatterns and TrafficPatternsXD both
+// carried a "Bike Lanes" chip here long after Doug had said twice, in May,
+// that neither goes in a bike lane — "this is PreMark… TP's isn't used in
+// bike lanes" and "Bike lanes don't use TPXD". The September catalogue pass
+// corrected relatedApplications in lib/products.ts, which is what the
+// product PAGES read; this map is the homepage's own copy and nothing
+// pointed the fix at it. The catalogue's bike-lane spread (p50) specifies
+// MMAX and PreMark, and only those two.
+//
+// Keep this list matching the SPECIFY lists in lib/application-catalogue.ts.
+// If it needs a third source of truth, derive it from relatedApplications
+// instead of retyping it.
 const PRODUCT_APPS: Record<string, string[]> = {
   "streetprint":         ["Crosswalks", "Driveways", "Plazas", "Intersections"],
   "streetbond":          ["Bike Lanes", "Bus Lanes", "Driveways", "Paths"],
-  "traffic-patterns-xd": ["Crosswalks", "BRT Corridors", "Bike Lanes"],
-  "traffic-patterns":    ["Crosswalks", "Bike Lanes", "Parking Lots"],
+  "traffic-patterns-xd": ["Crosswalks", "BRT Corridors", "Parking Lots"],
+  "traffic-patterns":    ["Crosswalks", "Parks & Paths", "Parking Lots"],
   "mmax":                ["Bus Lanes", "Bike Lanes", "Crosswalks"],
   "decomark":            ["Public Art", "Crosswalks", "Community Branding"],
 };
@@ -101,14 +113,15 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
                   textWrap: "balance",
                 }}
               >
-                Purpose-Built.<br className="hidden sm:block" /> Performance-Proven.
+                Six systems.<br className="hidden sm:block" /> Six different jobs.
               </h2>
               <p
                 className="text-base font-light max-w-lg leading-relaxed"
                 style={{ color: "var(--text-secondary)" }}
               >
-                Six systems that are purpose built for life in Canada. Turning asphalt and
-                concrete into your signature surface.
+                Stamped asphalt, preformed thermoplastic and coatings — chosen by what
+                the surface has to take. Turning asphalt and concrete into your signature
+                surface.
               </p>
             </div>
             <Link

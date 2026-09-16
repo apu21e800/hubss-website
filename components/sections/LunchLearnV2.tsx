@@ -171,9 +171,9 @@ function MoreLink() {
   );
 }
 
-// ═════════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════
 // Variant A — "Boardroom": one elevated card, inset form, Moose as host
-// ═════════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════
 function Boardroom() {
   const f = useLunchLearnForm(true);
   return (
@@ -332,9 +332,9 @@ function Boardroom() {
   );
 }
 
-// ═════════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════
 // Variant B — "Ticket": session ticket + booking panel with a format picker
-// ═════════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════
 const TICKET_META = [
   { k: "Duration", v: "45 minutes + Q&A" },
   { k: "Cost", v: "$0 — hosted by HUB" },
@@ -481,9 +481,9 @@ function Ticket() {
   );
 }
 
-// ═════════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════
 // Variant C — "Proof": photo-led with caption + city wall; slim form below
-// ═════════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════
 function Proof() {
   const f = useLunchLearnForm(false);
   return (
@@ -534,7 +534,7 @@ function Proof() {
             <div className="relative rounded-2xl overflow-hidden" style={{ aspectRatio: "5/4", border: "1px solid var(--border-color)", boxShadow: "0 20px 60px rgba(0,0,0,0.4)" }}>
               <Image src={IMG.src} alt={IMG.alt} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 50vw" />
               <span className="absolute top-3 left-3 px-2.5 py-1 rounded-md text-[10px] font-black tracking-[0.14em] uppercase" style={{ background: "rgba(7,11,18,0.75)", color: "#FB923C", border: "1px solid rgba(249,115,22,0.3)", backdropFilter: "blur(6px)" }}>
-                StreetBond · Real installation
+                StreetBond
               </span>
               {/* Caption keeps clear of Moose (right padding tracks his width) */}
               <div className="absolute bottom-0 inset-x-0 pl-5 pr-[38%] sm:pr-[34%] py-3.5" style={{ background: "linear-gradient(to top, rgba(7,11,18,0.92) 0%, rgba(7,11,18,0.55) 70%, transparent 100%)" }}>
@@ -591,7 +591,7 @@ function Proof() {
   );
 }
 
-// ── Export ────────────────────────────────────────────────────────────────
+// ── Export ─────────────────────────────────────────────────────────────────
 export default function LunchLearnV2({ variant = "boardroom" }: { variant?: LunchLearnVariant }) {
   if (variant === "ticket") return <Ticket />;
   if (variant === "proof") return <Proof />;

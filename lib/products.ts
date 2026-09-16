@@ -156,7 +156,7 @@ export const products: Product[] = [
     name: "StreetPrint",
     slug: "streetprint",
     seoTitle: "StreetPrint® — Stamped Asphalt Solutions for Urban Design",
-    seoDescription: "StreetPrint is a state-of-the-art decorative pavement solution that combines the durability of asphalt with the aesthetics of brick, stone, or custom designs.",
+    seoDescription: "StreetPrint is stamped asphalt — a Canadian invention installed since 1992 — combining the durability of asphalt with the look of brick, stone, or custom designs.",
     shortDesc: "Stamped asphalt. The original — since 1992, a Canadian invention.",
     imageUrl: "/images/products/streetprint/streetprint-01.jpg",
     gallery: [1,3,5,7,9,10,11,13,15,17,19,21,23,25,27,29,31,32,33,35,37,39,41,43,45,47,49,51,53,55,56,57,59,61,63,65,67,69,71,73,75,77,79,80,81,83,85,87,89,91].map(n => {
@@ -185,7 +185,7 @@ export const products: Product[] = [
     // lower half; a centred crop shows concrete. Aim the banner at the artwork.
     heroPosition: "center 74%",
     seoTitle: "DecoMark — Custom Horizontal Graphics and Wayfinding",
-    seoDescription: "Elevate your brand with durable custom horizontal graphics, civic art, and pavement wayfinding solutions.",
+    seoDescription: "Custom horizontal graphics, civic art, and pavement wayfinding in preformed thermoplastic.",
     shortDesc: "Custom graphics. Community identity. Public art.",
     imageUrl: "/images/products/decomark/decomark-01.jpg",
     gallery: gallery("decomark", "decomark", 78),

@@ -81,10 +81,10 @@ const ABOUT_VALUES: { heading: string; body: string }[] = [
 
 const ABOUT_WHY_HUB: { title: string; desc: string }[] = [
   { title: "Flexibility vs Concrete",          desc: "Asphalt-based systems flex with Canada's freeze-thaw cycles, outlasting concrete alternatives by 2–3x in northern climates." },
-  { title: "6–8 Years of Proven Performance",  desc: "Thermoplastic and MMA markings deliver 6–8 years of high-visibility service life — documented across hundreds of Canadian municipalities in every climate." },
+  { title: "6–8 Year Marking Life",           desc: "PreMark thermoplastic carries a 6–8 year service life, and MMAX returns a lane to traffic in 45–60 minutes. Both figures are the catalogue's." },
   { title: "Vision Zero Aligned",              desc: "Every HUB product is designed to support Vision Zero frameworks — from retroreflective crosswalk markings to high-contrast bike lane systems." },
   { title: "High-Visibility by Design",        desc: "Tactile and high-contrast marking solutions engineered for pedestrian safety and legibility in every lighting condition and season." },
-  { title: "20-Year Performance",              desc: "StreetPrint and StreetBond installations are engineered for 20-year colour retention — documented across hundreds of Canadian municipalities." },
+  { title: "Service Life, by System",          desc: "StreetPrint runs 10–20 years on sound pavement; TrafficPatternsXD 10+, TrafficPatterns 8+, StreetBond 8+. Quoted per system, because they do not wear the same." },
   { title: "Climate-Tested",                   desc: "Every system is stress-tested for freeze-thaw extremes, de-icing salts, and snowplow blades — from coastal BC to the Great Lakes." },
 ];
 

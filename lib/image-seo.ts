@@ -355,7 +355,7 @@ const PRODUCT_SUBJECTS: Record<string, ImageSubject> = {
     material: "UV-stable acrylic pavement coating",
     purpose: "long-life colour on asphalt and concrete",
     settings: ["a coloured crosswalk", "a bike lane", "a plaza surface", "a playground", "a sport court", "a transit lane"],
-    also: ["coloured pavement coating", "asphalt paint", "bike lane green coating", "20-year colour retention"],
+    also: ["coloured pavement coating", "asphalt paint", "bike lane green coating"],
   },
   streetbondsr: {
     keyword: "StreetBondSR solar-reflective coating",

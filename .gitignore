@@ -48,3 +48,6 @@ scripts/.gallery-checkpoint.json
 
 # Generated at build time by scripts/gen-gallery-manifest.mjs
 lib/gallery-manifest.json
+
+# Generated at build time by scripts/gen-doc-sizes.mjs
+lib/document-sizes.json

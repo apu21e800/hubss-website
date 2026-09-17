@@ -161,7 +161,7 @@ old instructions imported cleanly onto a branch nobody serves — a silent
 no-op where the import reports success and the site never changes.
 
 When Vern says "import the bundle": find the newest hubss-*.bundle in this
-folder or C:\\Users\\cleve\\Downloads (move it here if needed), then:
+folder or C:\Users\cleve\Downloads (move it here if needed), then:
 1. git bundle verify <file>          — stop and report if it fails
 2. git checkout main && git pull --ff-only
 3. Confirm the base commit the bundle names is present: git cat-file -t <sha>

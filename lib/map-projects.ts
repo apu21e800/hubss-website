@@ -1,3 +1,9 @@
+// lib/map-projects.ts — the homepage project map's dataset.
+//
+// Two sources, merged at the bottom of this file: the curated entries below,
+// and pins generated from blog posts by scripts/gen-map-blog.mjs.
+import blogMap from "./map-blog-projects.json";
+
 export interface MapProject {
   id: string;
   title: string;
@@ -21,14 +27,22 @@ export interface MapProject {
   excerpt: string;
   problem: string;
   solution: string;
+  /**
+   * The blog post this project is written up in, if there is one. Set
+   * automatically — never by hand. For curated entries it is inferred from the
+   * image path (a pin whose photo lives in /images/blog/<slug>/ IS that post's
+   * pin, which is how the link was expressed long before anything could read
+   * it); for blog-derived entries it is the post itself.
+   */
+  slug?: string;
 }
 
 // Curated 2026-05-12 per Vernon: ONLY projects where we have a verified image-to-location
 // correlation (typically via a dedicated blog post + featured image in /public/images/blog/<slug>/).
 // All earlier generic-stock entries removed — better to show fewer real projects than a long list
 // with stand-in photography.
-export const mapProjects: MapProject[] = [
-  // ── Ontario ────────────────────────────────────────────────────────────────
+const curatedProjects: MapProject[] = [
+  // ── Ontario ─────────────────────────────────────────────────────────────────
   {
     id: "york-region-viva",
     title: "York Region Hwy 7 VIVA BRT Corridor",
@@ -173,7 +187,7 @@ export const mapProjects: MapProject[] = [
       "TrafficPatternsXD's virtually-flush, aggregate-reinforced structure installs as an 8+ year solution. The material resists snowplow blades, retains retroreflectivity, and requires no annual maintenance cycle.",
   },
 
-  // ── British Columbia ───────────────────────────────────────────────────────
+  // ── British Columbia ────────────────────────────────────────────────────────
   {
     id: "vancouver-commercial-drive",
     title: "Commercial Drive Decorative Crosswalk",
@@ -485,7 +499,7 @@ export const mapProjects: MapProject[] = [
       "DecoMark custom thermoplastic decals surface-applied to the existing asphalt sidewalks. The UV-stable graphics are designed to last 6–8 times longer than paint and require no special maintenance.",
   },
 
-  // ── More Ontario ───────────────────────────────────────────────────────────
+  // ── More Ontario ──────────────────────────────────────────────────────────────
   {
     id: "toronto-leslieville-laneway",
     title: "Leslieville Laneway Revitalization",
@@ -546,6 +560,14 @@ export const mapProjects: MapProject[] = [
       "MMAX MMA coatings applied during overnight windows, traffic-ready before morning rush. The MMA chemistry bonds to asphalt and resists the lateral shear forces from bus turning movements that defeat standard acrylic coatings.",
   },
   {
+    // One photo, three projects. content/blog/pedestrian-channelization-public-spaces
+    // covers Spencer Smith Park (Burlington), the David Foster Harbour Pathway
+    // (Victoria) and Parc Guido-Nincheri (Montréal), and carries a single
+    // featured image. All three pins pointed at it and none was tagged, so the
+    // site showed one photograph as the verified record of three installations
+    // 4,500 km apart — at most one of which it can be. Which one is a question
+    // only Doug can answer; until he does, all three say "Representative".
+    // Untag whichever he names.
     id: "burlington-spencer-smith",
     title: "Spencer Smith Park Lakeshore Promenade",
     city: "Burlington",
@@ -558,6 +580,7 @@ export const mapProjects: MapProject[] = [
     images: [
       "/images/blog/pedestrian-channelization-public-spaces/featured.jpg",
     ],
+    imageIsRepresentative: true,
     excerpt:
       "5,600 m² of StreetBond150 Cobalt Blue on Burlington's Spencer Smith Park lakeshore promenade — durable, skid-resistant surface coating replacing the original StreetPrint installation after 20 years.",
     problem:
@@ -624,7 +647,7 @@ export const mapProjects: MapProject[] = [
       "TrafficPatternsXD in a brick-pattern flush-to-surface profile: visually indistinguishable from masonry at street level, snowplow-safe, and specified by the City's Urban Design team for all pedestrian crosswalks on the project.",
   },
 
-  // ── More British Columbia ──────────────────────────────────────────────────
+  // ── More British Columbia ────────────────────────────────────────────────
   {
     id: "coquitlam-windsor-gate",
     title: "Windsor Gate Masterplanned Community",
@@ -675,6 +698,7 @@ export const mapProjects: MapProject[] = [
     images: [
       "/images/blog/pedestrian-channelization-public-spaces/featured.jpg",
     ],
+    imageIsRepresentative: true,
     excerpt:
       "StreetBond Safety Blue along Victoria's David Foster Harbour Pathway — five kilometres connecting Rock Bay to Ogden Point, celebrating Lekwungen First Nations history and the working harbour.",
     problem:
@@ -683,7 +707,7 @@ export const mapProjects: MapProject[] = [
       "StreetBond in high-visibility Safety Blue — water-based, slip-resistant coating applied along the full 5 km+ pathway. The coastal environment has not degraded the surface colour or friction performance since installation.",
   },
 
-  // ── Québec ─────────────────────────────────────────────────────────────────
+  // ── Québec ──────────────────────────────────────────────────────────────────
   {
     id: "montreal-guido-nincheri",
     title: "Parc Guido-Nincheri Promenade",
@@ -696,6 +720,7 @@ export const mapProjects: MapProject[] = [
     images: [
       "/images/blog/pedestrian-channelization-public-spaces/featured.jpg",
     ],
+    imageIsRepresentative: true,
     excerpt:
       "StreetBond150 over concrete at Parc Guido-Nincheri's promenade Ville-de-Québec — bold flowing lines designed by Civiliti as a gateway to Space for Life and the Olympic Park.",
     problem:
@@ -704,7 +729,7 @@ export const mapProjects: MapProject[] = [
       "StreetBond150 applied over concrete substrate in the promenade's architectural colour palette. The coating bonds permanently to the concrete and has maintained its flow-line design through multiple freeze-thaw seasons.",
   },
 
-  // ── Alberta ────────────────────────────────────────────────────────────────
+  // ── Alberta ─────────────────────────────────────────────────────────────────
   {
     // TODO: Vernon to locate project image for Calgary MAX BRT corridor
     id: "calgary-max-brt",
@@ -802,7 +827,7 @@ export const mapProjects: MapProject[] = [
     solution: "DecoMark custom thermoplastic graphics at key nodes and crossings throughout the district, providing durable wayfinding and visual identity across the cultural corridor.",
   },
 
-  // ── More Ontario ───────────────────────────────────────────────────────────
+  // ── More Ontario ──────────────────────────────────────────────────────────────
   {
     // TODO: image Ottawa Every Child Matters Crosswalk
     id: "ottawa-every-child-matters",
@@ -876,7 +901,7 @@ export const mapProjects: MapProject[] = [
     solution: "TrafficPatternsXD aggregate-reinforced thermoplastic at pedestrian crossings near the approach — engineered for the lateral forces generated by commercial truck turning movements.",
   },
 
-  // ── More British Columbia ──────────────────────────────────────────────────
+  // ── More British Columbia ────────────────────────────────────────────────
   {
     // TODO: image Burnaby Active Transportation Corridor
     id: "burnaby-active-transport",
@@ -950,7 +975,7 @@ export const mapProjects: MapProject[] = [
     solution: "TrafficPatternsXD aggregate-reinforced thermoplastic at conflict zones along the active transportation network, engineered for the Interior's full temperature range.",
   },
 
-  // ── Saskatchewan ──────────────────────────────────────────────────────────
+  // ── Saskatchewan ───────────────────────────────────────────────────────────
   {
     // TODO: image Saskatoon Bridge City Crosswalk
     id: "saskatoon-bridge-city",
@@ -988,7 +1013,7 @@ export const mapProjects: MapProject[] = [
     solution: "StreetBond coloured coating on key pathway segments and crossings, providing durable colour that maintains visibility through prairie freeze-thaw cycles.",
   },
 
-  // ── Manitoba ───────────────────────────────────────────────────────────────
+  // ── Manitoba ──────────────────────────────────────────────────────────────
   {
     // TODO: image Winnipeg Exchange District Streetscape
     id: "winnipeg-exchange-district",
@@ -1026,7 +1051,7 @@ export const mapProjects: MapProject[] = [
     solution: "DecoMark custom preformed thermoplastic with Indigenous cultural motifs, applied at key pathway nodes and gathering areas throughout the garden.",
   },
 
-  // ── Québec (additional) ────────────────────────────────────────────────────
+  // ── Québec (additional) ───────────────────────────────────────────────────
   {
     // TODO: image Montréal Plateau Ruelle Verte
     id: "montreal-plateau-ruelle",
@@ -1100,7 +1125,7 @@ export const mapProjects: MapProject[] = [
     solution: "TrafficPatternsXD at pedestrian conflict zones and bus lane delineations — aggregate-reinforced thermoplastic with zero documented edge damage through multiple Québec winters.",
   },
 
-  // ── Atlantic Canada ────────────────────────────────────────────────────────
+  // ── Atlantic Canada ──────────────────────────────────────────────────────
   {
     // TODO: image Halifax Waterfront Boardwalk
     id: "halifax-waterfront",
@@ -1174,3 +1199,47 @@ export const mapProjects: MapProject[] = [
     solution: "StreetBond in bold complementary colours at key pedestrian crossings and gathering areas — UV-stable coating engineered to survive the Atlantic freeze-thaw cycle.",
   },
 ];
+
+// ──────────────────────────────────────────────────────────────────────────
+// Blog-derived pins
+//
+// scripts/gen-map-blog.mjs reads content/blog/*.mdx at build time and emits
+// lib/map-blog-projects.json: a pin for every post that states where it is.
+// That file is generated and gitignored, same arrangement as the gallery
+// manifest and the document sizes, for the same reason — globbing content/
+// from inside a page defeats Next's dependency tracer.
+//
+// Curated entries above win on their own slug: they carry hand-written
+// problem/solution prose a post does not expose in machine-readable form. A
+// post that is NOT already curated becomes a new pin on the next deploy, with
+// nobody to remember. That is the whole point.
+//
+// See the header of scripts/gen-map-blog.mjs for the six frontmatter keys.
+// ──────────────────────────────────────────────────────────────────────────
+
+const linkedSlugs = blogMap.linkedSlugs as Record<string, true>;
+
+/** Curated entries, each linked to its post where the image path names one. */
+const curatedWithSlugs: MapProject[] = curatedProjects.map((p) => {
+  // Split rather than a regex, deliberately: a pattern for this path needs
+  // escaped slashes, and a backslash anywhere in this file has to survive a
+  // JSON-escaping round trip to reach the repo. One already came back
+  // double-escaped. There is nothing here a regex does better.
+  const parts = (p.images[0] ?? "").split("/");
+  const candidate =
+    parts[1] === "images" && parts[2] === "blog" ? parts[3] : undefined;
+  const slug = candidate && linkedSlugs[candidate] ? candidate : undefined;
+  return slug ? { ...p, slug } : p;
+});
+
+export const mapProjects: MapProject[] = [
+  ...curatedWithSlugs,
+  ...(blogMap.projects as MapProject[]),
+];
+
+/**
+ * The number the page is allowed to say out loud. Measured, not typed — the
+ * phone card used to advertise "84 projects" while the header forty pixels
+ * below it said 59.
+ */
+export const mapProjectCount = mapProjects.length;

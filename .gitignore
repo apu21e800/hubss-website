@@ -51,3 +51,7 @@ lib/gallery-manifest.json
 
 # Generated at build time by scripts/gen-doc-sizes.mjs
 lib/document-sizes.json
+
+# Generated at build time by scripts/gen-map-blog.mjs
+lib/map-blog-projects.json
+lib/map-count.json

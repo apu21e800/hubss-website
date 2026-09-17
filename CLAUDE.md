@@ -80,6 +80,39 @@ hubss-website/
 - Add PDF spec sheet: drop in /public/docs/, update link in products page
 - New project: add entry to /content/projects/project-name.mdx
 
+### Putting a project on the homepage map
+The map used to be a hand-typed list with no connection to anything. A blog
+post now becomes a pin by itself: add these to its frontmatter and it appears
+on the next deploy.
+
+```yaml
+mapCity: "Toronto"
+mapProvince: "ON"            # two-letter code
+mapLat: 43.6710              # decimal degrees
+mapLng: -79.4400
+mapProduct: "DecoMark"       # exactly as the product is branded
+mapApplication: "Community Branding"
+mapYear: "2023"              # optional
+mapRepresentative: true      # optional — set it when the featured image is
+                             # HUB work in the same system rather than a photo
+                             # of THIS install. The pin then carries the
+                             # "Representative" tag. Never let a stand-in pass
+                             # as the project.
+```
+
+Some but not all of those keys is treated as a mistake: the build prints a
+warning naming what is missing and creates no pin, rather than failing quietly.
+
+A post whose image already lives in `/public/images/blog/<slug>/` is linked to
+its existing curated pin automatically — that pin gains a "Read the write-up"
+link and nothing is duplicated. `lib/map-projects.ts` still holds the curated
+entries and their hand-written Challenge/Solution prose, and always wins on
+its own slug.
+
+The project count the page prints comes from `lib/map-count.json`, regenerated
+every build. Do not type a project count anywhere: the phone card used to say
+"84 projects" while the map's own header, forty pixels below it, said 59.
+
 ## Conversion Goals
 Primary CTA: "Request Spec Sheet" + "Book Lunch & Learn"
 Secondary: Project gallery browsing → contact form
@@ -128,7 +161,7 @@ old instructions imported cleanly onto a branch nobody serves — a silent
 no-op where the import reports success and the site never changes.
 
 When Vern says "import the bundle": find the newest hubss-*.bundle in this
-folder or C:\Users\cleve\Downloads (move it here if needed), then:
+folder or C:\\Users\\cleve\\Downloads (move it here if needed), then:
 1. git bundle verify <file>          — stop and report if it fails
 2. git checkout main && git pull --ff-only
 3. Confirm the base commit the bundle names is present: git cat-file -t <sha>

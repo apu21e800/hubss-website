@@ -2,6 +2,15 @@
 // Flat document array for the Resources page filtering system.
 // Generated from lib/documents.ts + lib/products.ts — keep in sync.
 
+// Measured at build time by scripts/gen-doc-sizes.mjs. Plain data, so it is
+// safe on either side of the client boundary — this module is imported by
+// lib/search.ts as well as the /resources server component. Cast because
+// resolveJsonModule types the import as its 82 literal keys, and it is looked
+// up with URLs that come from Sanity at runtime.
+import documentSizesJson from './document-sizes.json'
+
+const DOCUMENT_SIZES = documentSizesJson as Record<string, string>
+
 export interface ResourceDocument {
   id: string
   title: string
@@ -68,7 +77,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'StreetPrint',
     applications: productApplications['streetprint'],
     fileUrl: '/docs/streetprint/StreetPrint-Asphalt-Texturing-Specification.pdf',
-    fileSize: '1.2 MB',
+    fileSize: '0.9 MB',
     updatedDate: 'Jan 2024',
   },
   {
@@ -79,7 +88,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'StreetPrint',
     applications: productApplications['streetprint'],
     fileUrl: '/docs/streetprint/streetprint-colour-guide.pdf',
-    fileSize: '3.6 MB',
+    fileSize: '0.7 MB',
     updatedDate: 'Mar 2024',
   },
   {
@@ -90,7 +99,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'StreetPrint',
     applications: productApplications['streetprint'],
     fileUrl: '/docs/streetprint/streetprint-template-catalog.pdf',
-    fileSize: '5.1 MB',
+    fileSize: '2.4 MB',
     updatedDate: 'Feb 2024',
   },
   {
@@ -101,7 +110,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'StreetPrint',
     applications: productApplications['streetprint'],
     fileUrl: '/docs/streetprint/streetprint-faq.pdf',
-    fileSize: '0.8 MB',
+    fileSize: '0.3 MB',
     updatedDate: 'Jan 2024',
   },
 
@@ -115,7 +124,7 @@ export const resourceDocuments: ResourceDocument[] = [
     subcategory: 'StreetBond',
     applications: productApplications['streetbond'],
     fileUrl: '/docs/StreetBond/StreetBond/StreetBond-Brochure.pdf',
-    fileSize: '4.2 MB',
+    fileSize: '4.9 MB',
     updatedDate: 'Mar 2024',
   },
   {
@@ -139,7 +148,7 @@ export const resourceDocuments: ResourceDocument[] = [
     subcategory: 'StreetBond',
     applications: productApplications['streetbond'],
     fileUrl: '/docs/StreetBond/StreetBond/StreetBond_Substrate_Guide.pdf',
-    fileSize: '1.4 MB',
+    fileSize: '0.6 MB',
     updatedDate: 'Jan 2024',
   },
   {
@@ -151,7 +160,7 @@ export const resourceDocuments: ResourceDocument[] = [
     subcategory: 'StreetBond',
     applications: productApplications['streetbond'],
     fileUrl: '/docs/StreetBond/StreetBond/StreetBond-Colorant.pdf',
-    fileSize: '0.6 MB',
+    fileSize: '0.3 MB',
     updatedDate: 'Feb 2026',
   },
 
@@ -165,7 +174,7 @@ export const resourceDocuments: ResourceDocument[] = [
     subcategory: 'SB120',
     applications: productApplications['streetbond'],
     fileUrl: '/docs/StreetBond/StreetBond%20120/StreetBond_SB120_Specifications.pdf',
-    fileSize: '1.1 MB',
+    fileSize: '0.6 MB',
     updatedDate: 'Jan 2024',
   },
   {
@@ -177,7 +186,7 @@ export const resourceDocuments: ResourceDocument[] = [
     subcategory: 'SB120',
     applications: productApplications['streetbond'],
     fileUrl: '/docs/StreetBond/StreetBond%20120/StreetBond-SB120-Data-Sheet-12.22-Rev.pdf',
-    fileSize: '0.9 MB',
+    fileSize: '0.4 MB',
     updatedDate: 'Feb 2024',
   },
   {
@@ -189,7 +198,7 @@ export const resourceDocuments: ResourceDocument[] = [
     subcategory: 'SB120',
     applications: productApplications['streetbond'],
     fileUrl: '/docs/StreetBond/StreetBond%20120/StreetBond-SB120-Over-Concrete-Specification.pdf',
-    fileSize: '1.0 MB',
+    fileSize: '0.5 MB',
     updatedDate: 'Mar 2023',
   },
 
@@ -203,7 +212,7 @@ export const resourceDocuments: ResourceDocument[] = [
     subcategory: 'SB150',
     applications: productApplications['streetbond'],
     fileUrl: '/docs/StreetBond/StreetBond%20150/StreetBond_SB150_Specifications.pdf',
-    fileSize: '1.1 MB',
+    fileSize: '0.6 MB',
     updatedDate: 'Jan 2024',
   },
   {
@@ -215,7 +224,7 @@ export const resourceDocuments: ResourceDocument[] = [
     subcategory: 'SB150',
     applications: productApplications['streetbond'],
     fileUrl: '/docs/StreetBond/StreetBond%20150/StreetBond-SB150-Data-Sheet-12.22-Rev.pdf',
-    fileSize: '0.9 MB',
+    fileSize: '0.4 MB',
     updatedDate: 'Feb 2024',
   },
   {
@@ -227,7 +236,7 @@ export const resourceDocuments: ResourceDocument[] = [
     subcategory: 'SB150',
     applications: productApplications['streetbond'],
     fileUrl: '/docs/StreetBond/StreetBond%20150/StreetBond-SB150AL-Data-Sheet-12.22-Rev.pdf',
-    fileSize: '0.9 MB',
+    fileSize: '0.4 MB',
     updatedDate: 'Mar 2024',
   },
   {
@@ -239,7 +248,7 @@ export const resourceDocuments: ResourceDocument[] = [
     subcategory: 'SB150',
     applications: productApplications['streetbond'],
     fileUrl: '/docs/StreetBond/StreetBond%20150/StreetBond-SB150-Over-Concrete-Specification.pdf',
-    fileSize: '1.0 MB',
+    fileSize: '0.8 MB',
     updatedDate: 'Jan 2024',
   },
 
@@ -253,7 +262,7 @@ export const resourceDocuments: ResourceDocument[] = [
     subcategory: 'Concrete Primer',
     applications: productApplications['streetbond'],
     fileUrl: '/docs/StreetBond/StreetBond%20Concrete%20Primer/StreetBond-Concrete-Primer-WB-TDS.pdf',
-    fileSize: '0.7 MB',
+    fileSize: '0.3 MB',
     updatedDate: 'Feb 2024',
   },
   {
@@ -265,7 +274,7 @@ export const resourceDocuments: ResourceDocument[] = [
     subcategory: 'Concrete Primer',
     applications: productApplications['streetbond'],
     fileUrl: '/docs/StreetBond/StreetBond%20Concrete%20Primer/StreetBond-QS-Concrete-TDS.pdf',
-    fileSize: '0.7 MB',
+    fileSize: '0.3 MB',
     updatedDate: 'Feb 2024',
   },
 
@@ -279,7 +288,7 @@ export const resourceDocuments: ResourceDocument[] = [
     subcategory: 'Pro 220',
     applications: productApplications['streetbond'],
     fileUrl: '/docs/StreetBond/StreetBond%20Pro%20220%20%5BMMA%5D/StreetBond-Pro-220-and-250-Intallation.pdf',
-    fileSize: '2.1 MB',
+    fileSize: '4.2 MB',
     updatedDate: 'Mar 2024',
   },
   {
@@ -291,7 +300,7 @@ export const resourceDocuments: ResourceDocument[] = [
     subcategory: 'Pro 220',
     applications: productApplications['streetbond'],
     fileUrl: '/docs/StreetBond/StreetBond%20Pro%20220%20%5BMMA%5D/StreetBond-Pro-220-Pro-250-Brochure-1.pdf',
-    fileSize: '3.4 MB',
+    fileSize: '8.6 MB',
     updatedDate: 'Mar 2024',
   },
   {
@@ -303,7 +312,7 @@ export const resourceDocuments: ResourceDocument[] = [
     subcategory: 'Pro 220',
     applications: productApplications['streetbond'],
     fileUrl: '/docs/StreetBond/StreetBond%20Pro%20220%20%5BMMA%5D/StreetBond-Pro-220-TDS.pdf',
-    fileSize: '0.8 MB',
+    fileSize: '0.4 MB',
     updatedDate: 'Mar 2024',
   },
 
@@ -317,7 +326,7 @@ export const resourceDocuments: ResourceDocument[] = [
     subcategory: 'Pro 250',
     applications: productApplications['streetbond'],
     fileUrl: '/docs/StreetBond/StreetBond%20Pro%20250%20%5BMMA%5D/Installation_StreetBond-Pro-220-and-250.pdf',
-    fileSize: '2.3 MB',
+    fileSize: '4.2 MB',
     updatedDate: 'Mar 2024',
   },
   {
@@ -329,7 +338,7 @@ export const resourceDocuments: ResourceDocument[] = [
     subcategory: 'Pro 250',
     applications: productApplications['streetbond'],
     fileUrl: '/docs/StreetBond/StreetBond%20Pro%20250%20%5BMMA%5D/StreetBond-Pro-220-Pro-250-Brochure.pdf',
-    fileSize: '3.5 MB',
+    fileSize: '8.4 MB',
     updatedDate: 'Mar 2024',
   },
   {
@@ -341,7 +350,7 @@ export const resourceDocuments: ResourceDocument[] = [
     subcategory: 'Pro 250',
     applications: productApplications['streetbond'],
     fileUrl: '/docs/StreetBond/StreetBond%20Pro%20250%20%5BMMA%5D/Data-Sheet-StreetBond-Pro-250.pdf',
-    fileSize: '0.8 MB',
+    fileSize: '0.5 MB',
     updatedDate: 'Mar 2024',
   },
 
@@ -354,7 +363,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'StreetBondSR',
     applications: productApplications['streetbond-sr'],
     fileUrl: '/docs/StreetBondSR/StreetBondSR-Brochure.pdf',
-    fileSize: '3.2 MB',
+    fileSize: '0.3 MB',
     updatedDate: 'Mar 2023',
   },
   {
@@ -365,7 +374,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'StreetBondSR',
     applications: productApplications['streetbond-sr'],
     fileUrl: '/docs/StreetBondSR/StreetBond-SR-Flat-Surface-Specification.pdf',
-    fileSize: '0.9 MB',
+    fileSize: '0.5 MB',
     updatedDate: 'Mar 2023',
   },
   {
@@ -376,7 +385,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'StreetBondSR',
     applications: productApplications['streetbond-sr'],
     fileUrl: '/docs/StreetBondSR/StreetBond-SR-Certificate-of-Analysis-Friction.pdf',
-    fileSize: '0.4 MB',
+    fileSize: '0.6 MB',
     updatedDate: 'Mar 2023',
   },
   {
@@ -400,7 +409,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'TrafficPatterns',
     applications: productApplications['traffic-patterns'],
     fileUrl: '/docs/TrafficPatterns/TS001_TrafficPatterns_220204.pdf',
-    fileSize: '1.5 MB',
+    fileSize: '0.8 MB',
     updatedDate: 'Feb 2022',
   },
   {
@@ -411,7 +420,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'TrafficPatterns',
     applications: productApplications['traffic-patterns'],
     fileUrl: '/docs/TrafficPatterns/TrafficPatterns-Design-Manual.pdf',
-    fileSize: '6.2 MB',
+    fileSize: '4.8 MB',
     updatedDate: 'Jan 2024',
   },
   {
@@ -422,7 +431,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'TrafficPatterns',
     applications: productApplications['traffic-patterns'],
     fileUrl: '/docs/TrafficPatterns/TrafficPatterns-Custom-Design-Guidelines.pdf',
-    fileSize: '1.6 MB',
+    fileSize: '0.4 MB',
     updatedDate: 'Jan 2024',
   },
   {
@@ -433,7 +442,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'TrafficPatterns',
     applications: productApplications['traffic-patterns'],
     fileUrl: '/docs/TrafficPatterns/TrafficPatterns-125-with-SA-Specification.pdf',
-    fileSize: '1.0 MB',
+    fileSize: '0.3 MB',
     updatedDate: 'Feb 2024',
   },
   {
@@ -444,7 +453,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'TrafficPatterns',
     applications: productApplications['traffic-patterns'],
     fileUrl: '/docs/TrafficPatterns/TrafficPatterns-Solid-Sheets-125-Specification.pdf',
-    fileSize: '1.0 MB',
+    fileSize: '0.3 MB',
     updatedDate: 'Feb 2024',
   },
   {
@@ -455,7 +464,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'TrafficPatterns',
     applications: productApplications['traffic-patterns'],
     fileUrl: '/docs/TrafficPatterns/TrafficPatterns-Specification-Two-Component-Sealer.pdf',
-    fileSize: '0.9 MB',
+    fileSize: '0.3 MB',
     updatedDate: 'Jan 2024',
   },
   {
@@ -466,7 +475,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'TrafficPatterns',
     applications: productApplications['traffic-patterns'],
     fileUrl: '/docs/TrafficPatterns/TrafficPatterns-Colour-Guidelines.pdf',
-    fileSize: '3.2 MB',
+    fileSize: '0.2 MB',
     updatedDate: 'Mar 2024',
   },
 
@@ -479,7 +488,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'TrafficPatternsXD',
     applications: productApplications['traffic-patterns-xd'],
     fileUrl: '/docs/TrafficPatternsXD/TS002_TrafficPatternsXD_220204.pdf',
-    fileSize: '1.5 MB',
+    fileSize: '0.8 MB',
     updatedDate: 'Feb 2022',
   },
   {
@@ -490,7 +499,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'TrafficPatternsXD',
     applications: productApplications['traffic-patterns-xd'],
     fileUrl: '/docs/TrafficPatternsXD/TrafficPatternsXD-Design-Manual.pdf',
-    fileSize: '5.8 MB',
+    fileSize: '5.2 MB',
     updatedDate: 'Jan 2024',
   },
   {
@@ -501,7 +510,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'TrafficPatternsXD',
     applications: productApplications['traffic-patterns-xd'],
     fileUrl: '/docs/TrafficPatternsXD/TrafficPatternsXD-Specification.pdf',
-    fileSize: '1.2 MB',
+    fileSize: '0.5 MB',
     updatedDate: 'Feb 2024',
   },
   {
@@ -512,7 +521,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'TrafficPatternsXD',
     applications: productApplications['traffic-patterns-xd'],
     fileUrl: '/docs/TrafficPatternsXD/TrafficPatternsXD-Specification-Branded.pdf',
-    fileSize: '1.3 MB',
+    fileSize: '0.4 MB',
     updatedDate: 'Feb 2024',
   },
   {
@@ -523,7 +532,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'TrafficPatternsXD',
     applications: productApplications['traffic-patterns-xd'],
     fileUrl: '/docs/TrafficPatternsXD/TrafficPatternsXD-Specification-FR.pdf',
-    fileSize: '1.2 MB',
+    fileSize: '0.3 MB',
     updatedDate: 'Feb 2024',
   },
   {
@@ -534,7 +543,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'TrafficPatternsXD',
     applications: productApplications['traffic-patterns-xd'],
     fileUrl: '/docs/TrafficPatternsXD/TrafficPatternsXD-Two-Component-Sealer.pdf',
-    fileSize: '0.9 MB',
+    fileSize: '0.2 MB',
     updatedDate: 'Jan 2024',
   },
   {
@@ -545,7 +554,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'TrafficPatternsXD',
     applications: productApplications['traffic-patterns-xd'],
     fileUrl: '/docs/TrafficPatternsXD/TrafficPatternsXD-Colour-Guide.pdf',
-    fileSize: '3.4 MB',
+    fileSize: '0.3 MB',
     updatedDate: 'Mar 2024',
   },
   {
@@ -556,7 +565,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'TrafficPatternsXD',
     applications: productApplications['traffic-patterns-xd'],
     fileUrl: '/docs/TrafficPatternsXD/TrafficPatternsXD-CrossSection-Detail.pdf',
-    fileSize: '0.6 MB',
+    fileSize: '1.1 MB',
     updatedDate: 'Jan 2024',
   },
 
@@ -581,7 +590,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'MMAX',
     applications: productApplications['mmax'],
     fileUrl: '/docs/MMAX/MMAX-Next-Gen-Brochure_06_09_23-1.pdf',
-    fileSize: '3.9 MB',
+    fileSize: '1.4 MB',
     updatedDate: 'Jun 2023',
   },
   {
@@ -592,7 +601,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'MMAX',
     applications: productApplications['mmax'],
     fileUrl: '/docs/MMAX/Application_Instructions_MMAX_Corundum_Area_Markings.pdf',
-    fileSize: '1.8 MB',
+    fileSize: '0.5 MB',
     updatedDate: 'Jan 2024',
   },
   {
@@ -603,7 +612,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'MMAX',
     applications: productApplications['mmax'],
     fileUrl: '/docs/MMAX/MMAX-Product-Data.pdf',
-    fileSize: '0.9 MB',
+    fileSize: '0.5 MB',
     updatedDate: 'Feb 2024',
   },
   {
@@ -614,7 +623,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'MMAX',
     applications: productApplications['mmax'],
     fileUrl: '/docs/MMAX/Extended-Season-MMAX-Corundum-PDS-070723.pdf',
-    fileSize: '1.3 MB',
+    fileSize: '0.2 MB',
     updatedDate: 'Jul 2023',
   },
   {
@@ -625,7 +634,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'MMAX',
     applications: productApplications['mmax'],
     fileUrl: '/docs/MMAX/Extended-Season-MMAX-product-data-sheet.pdf',
-    fileSize: '0.9 MB',
+    fileSize: '0.2 MB',
     updatedDate: 'Mar 2024',
   },
 
@@ -638,7 +647,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'DecoMark',
     applications: productApplications['decomark'],
     fileUrl: '/docs/decomark/TS004_DecoMark_220204.pdf',
-    fileSize: '1.4 MB',
+    fileSize: '0.3 MB',
     updatedDate: 'Feb 2022',
   },
   {
@@ -649,7 +658,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'DecoMark',
     applications: productApplications['decomark'],
     fileUrl: '/docs/decomark/decomark-application-instructions.pdf',
-    fileSize: '1.9 MB',
+    fileSize: '0.7 MB',
     updatedDate: 'Jan 2024',
   },
   {
@@ -660,7 +669,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'DecoMark',
     applications: productApplications['decomark'],
     fileUrl: '/docs/decomark/decomark-custom-design-guidelines.pdf',
-    fileSize: '1.5 MB',
+    fileSize: '0.7 MB',
     updatedDate: 'Jan 2024',
   },
   {
@@ -671,7 +680,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'DecoMark',
     applications: productApplications['decomark'],
     fileUrl: '/docs/decomark/DecoMark-Specification.pdf',
-    fileSize: '1.0 MB',
+    fileSize: '0.3 MB',
     updatedDate: 'Feb 2024',
   },
   {
@@ -682,7 +691,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'DecoMark',
     applications: productApplications['decomark'],
     fileUrl: '/docs/decomark/decomark-colour-guide.pdf',
-    fileSize: '3.3 MB',
+    fileSize: '0.3 MB',
     updatedDate: 'Mar 2024',
   },
 
@@ -695,7 +704,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'DuraShield',
     applications: productApplications['durashield'],
     fileUrl: '/docs/DuraShield/DuraShield-Pavement-Coating-Part-A-B-Color-Asphalt-TDS.pdf',
-    fileSize: '0.8 MB',
+    fileSize: '0.5 MB',
     updatedDate: 'Jan 2024',
   },
   {
@@ -706,7 +715,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'DuraShield',
     applications: productApplications['durashield'],
     fileUrl: '/docs/DuraShield/DuraShield-Pavement-Coating-Part-A-B-Color-Solar-Gray-TDS.pdf',
-    fileSize: '0.8 MB',
+    fileSize: '0.5 MB',
     updatedDate: 'Jan 2024',
   },
 
@@ -719,7 +728,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'PreMark',
     applications: productApplications['premark'],
     fileUrl: '/docs/PreMark/TS005_PreMark_220204.pdf',
-    fileSize: '1.3 MB',
+    fileSize: '0.4 MB',
     updatedDate: 'Feb 2022',
   },
   {
@@ -730,7 +739,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'PreMark',
     applications: productApplications['premark'],
     fileUrl: '/docs/PreMark/PreMarkXF-Brochure.pdf',
-    fileSize: '3.9 MB',
+    fileSize: '0.3 MB',
     updatedDate: 'Feb 2024',
   },
 
@@ -743,7 +752,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'DuraTherm',
     applications: productApplications['duratherm'],
     fileUrl: '/docs/duratherm/TS003_DuraTherm_220204.pdf',
-    fileSize: '1.4 MB',
+    fileSize: '1.1 MB',
     updatedDate: 'Feb 2022',
   },
   {
@@ -754,7 +763,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'DuraTherm',
     applications: productApplications['duratherm'],
     fileUrl: '/docs/duratherm/duratherm-design-manual.pdf',
-    fileSize: '5.4 MB',
+    fileSize: '7.3 MB',
     updatedDate: 'Jan 2024',
   },
   {
@@ -765,7 +774,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'DuraTherm',
     applications: productApplications['duratherm'],
     fileUrl: '/docs/duratherm/DuraTherm-Specification-Branded.pdf',
-    fileSize: '1.1 MB',
+    fileSize: '0.4 MB',
     updatedDate: 'Feb 2024',
   },
   {
@@ -776,7 +785,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'DuraTherm',
     applications: productApplications['duratherm'],
     fileUrl: '/docs/duratherm/duratherm-custom-design-guidelines.pdf',
-    fileSize: '1.5 MB',
+    fileSize: '2.4 MB',
     updatedDate: 'Jan 2024',
   },
   {
@@ -787,7 +796,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'DuraTherm',
     applications: productApplications['duratherm'],
     fileUrl: '/docs/duratherm/duratherm-colour-guide.pdf',
-    fileSize: '3.1 MB',
+    fileSize: '0.2 MB',
     updatedDate: 'Mar 2024',
   },
 
@@ -800,7 +809,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'AirMark',
     applications: productApplications['airmark'],
     fileUrl: '/docs/AirMark/AirMark/AirMark_Brocure.pdf',
-    fileSize: '4.3 MB',
+    fileSize: '0.2 MB',
     updatedDate: 'Feb 2024',
   },
   {
@@ -811,7 +820,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'AirMark',
     applications: productApplications['airmark'],
     fileUrl: '/docs/AirMark/AirMark/AirMark-Brocure-FR.pdf',
-    fileSize: '4.3 MB',
+    fileSize: '1.0 MB',
     updatedDate: 'Feb 2024',
   },
   {
@@ -822,7 +831,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'AirMark',
     applications: productApplications['airmark'],
     fileUrl: '/docs/AirMark/Airfield%20Paint/TrafficPaint-for-Airfields.pdf',
-    fileSize: '3.6 MB',
+    fileSize: '1.0 MB',
     updatedDate: 'Mar 2024',
   },
   {
@@ -833,7 +842,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'AirMark',
     applications: productApplications['airmark'],
     fileUrl: '/docs/AirMark/Airfield%20Paint/TrafficPaint-for-Airfields-FR.pdf',
-    fileSize: '3.6 MB',
+    fileSize: '1.0 MB',
     updatedDate: 'Mar 2024',
   },
   {
@@ -844,7 +853,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'AirMark',
     applications: productApplications['airmark'],
     fileUrl: '/docs/AirMark/Airfield%20Paint/WB-Airfield-Product-Data.pdf',
-    fileSize: '0.9 MB',
+    fileSize: '0.5 MB',
     updatedDate: 'Jan 2024',
   },
   {
@@ -855,7 +864,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'AirMark',
     applications: productApplications['airmark'],
     fileUrl: '/docs/AirMark/PreMark%20-%20Groundside/PreMark-for-Airports.pdf',
-    fileSize: '3.8 MB',
+    fileSize: '3.0 MB',
     updatedDate: 'Feb 2024',
   },
 
@@ -887,7 +896,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'TrafficPatternsXD',
     applications: productApplications['traffic-patterns-xd'],
     fileUrl: '/resources/flyers/HUBSS-Flyer-traffic-patterns-xd-v01.pdf',
-    fileSize: '~1.5 MB',
+    fileSize: '3.1 MB',
     updatedDate: 'May 2026',
     documentType: 'flyer',
     isNew: true,
@@ -902,7 +911,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'TrafficPatterns',
     applications: productApplications['traffic-patterns'],
     fileUrl: '/resources/flyers/HUBSS-Flyer-traffic-patterns-v01.pdf',
-    fileSize: '~1.5 MB',
+    fileSize: '4.7 MB',
     updatedDate: 'May 2026',
     documentType: 'flyer',
     isNew: true,
@@ -917,7 +926,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'StreetBond',
     applications: productApplications['streetbond'],
     fileUrl: '/resources/flyers/HUBSS-Flyer-streetbond-v01.pdf',
-    fileSize: '~1.5 MB',
+    fileSize: '3.2 MB',
     updatedDate: 'May 2026',
     documentType: 'flyer',
     isNew: true,
@@ -932,7 +941,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'StreetPrint',
     applications: productApplications['streetprint'],
     fileUrl: '/resources/flyers/HUBSS-Flyer-streetprint-v01.pdf',
-    fileSize: '~1.5 MB',
+    fileSize: '4.8 MB',
     updatedDate: 'May 2026',
     documentType: 'flyer',
     isNew: true,
@@ -947,7 +956,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'DecoMark',
     applications: productApplications['decomark'],
     fileUrl: '/resources/flyers/HUBSS-Flyer-decomark-v01.pdf',
-    fileSize: '~1.5 MB',
+    fileSize: '3.6 MB',
     updatedDate: 'May 2026',
     documentType: 'flyer',
     isNew: true,
@@ -962,7 +971,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'MMAX',
     applications: productApplications['mmax'],
     fileUrl: '/resources/flyers/HUBSS-Flyer-mmax-v01.pdf',
-    fileSize: '~1.5 MB',
+    fileSize: '2.7 MB',
     updatedDate: 'May 2026',
     documentType: 'flyer',
     isNew: true,
@@ -977,7 +986,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'StreetBondSR',
     applications: productApplications['streetbond-sr'],
     fileUrl: '/resources/flyers/HUBSS-Flyer-streetbondsr-v01.pdf',
-    fileSize: '~1.5 MB',
+    fileSize: '5.5 MB',
     updatedDate: 'May 2026',
     documentType: 'flyer',
     isNew: true,
@@ -992,7 +1001,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'DuraTherm',
     applications: productApplications['duratherm'],
     fileUrl: '/resources/flyers/HUBSS-Flyer-duratherm-v01.pdf',
-    fileSize: '~1.5 MB',
+    fileSize: '2.7 MB',
     updatedDate: 'May 2026',
     documentType: 'flyer',
     isNew: true,
@@ -1007,7 +1016,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'DuraShield',
     applications: productApplications['durashield'],
     fileUrl: '/resources/flyers/HUBSS-Flyer-durashield-v01.pdf',
-    fileSize: '~1.5 MB',
+    fileSize: '2.5 MB',
     updatedDate: 'May 2026',
     documentType: 'flyer',
     isNew: true,
@@ -1022,7 +1031,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'AirMark',
     applications: productApplications['airmark'],
     fileUrl: '/resources/flyers/HUBSS-Flyer-airmark-v01.pdf',
-    fileSize: '~1.5 MB',
+    fileSize: '2.9 MB',
     updatedDate: 'May 2026',
     documentType: 'flyer',
     isNew: true,
@@ -1037,7 +1046,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'PreMark',
     applications: productApplications['premark'],
     fileUrl: '/resources/flyers/HUBSS-Flyer-premark-v01.pdf',
-    fileSize: '~1.5 MB',
+    fileSize: '1.9 MB',
     updatedDate: 'May 2026',
     documentType: 'flyer',
     isNew: true,
@@ -1052,7 +1061,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'ChipFill',
     applications: productApplications['chipfill'],
     fileUrl: '/resources/flyers/HUBSS-Flyer-chipfill-v01.pdf',
-    fileSize: '~1.5 MB',
+    fileSize: '0.7 MB',
     updatedDate: 'May 2026',
     documentType: 'flyer',
     isNew: true,
@@ -1067,7 +1076,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'AggreFill',
     applications: productApplications['aggrefill'],
     fileUrl: '/resources/flyers/HUBSS-Flyer-aggrefill-v01.pdf',
-    fileSize: '~1.5 MB',
+    fileSize: '0.9 MB',
     updatedDate: 'May 2026',
     documentType: 'flyer',
     isNew: true,
@@ -1082,7 +1091,7 @@ export const resourceDocuments: ResourceDocument[] = [
     productName: 'Fast Patch DPR',
     applications: productApplications['fast-patch'],
     fileUrl: '/resources/flyers/HUBSS-Flyer-fast-patch-v01.pdf',
-    fileSize: '~1.5 MB',
+    fileSize: '2.8 MB',
     updatedDate: 'May 2026',
     documentType: 'flyer',
     isNew: true,
@@ -1122,6 +1131,41 @@ const DOC_OVERRIDES: Record<string, Partial<ResourceDocument>> = {
   },
 }
 
+/**
+ * Applies the id-keyed overrides above, then replaces every fileSize with the
+ * size the file actually is.
+ *
+ * The sizes on this page used to be typed by hand, and in September 2026
+ * sixty-two of eighty-five were wrong — usually three to ten times too large.
+ * They had also been imported into Sanity, so the CMS and the code agreed with
+ * each other and disagreed with the files, which is the hardest kind of wrong
+ * to notice. DOCUMENT_SIZES is measured at build time by
+ * scripts/gen-doc-sizes.mjs, so it wins over both and cannot drift: replace a
+ * PDF and the number follows it on the next deploy.
+ *
+ * Order matters. The id overrides run first because two of them repoint
+ * fileUrl at a replacement file; the size is then looked up for the document
+ * the visitor will actually download, not the one the record used to name.
+ *
+ * A fileUrl with no measured size keeps whatever it had. That is the intended
+ * path for /catalogue, which is a route rather than a file and is measured in
+ * pages.
+ */
 export function applyDocOverrides<T extends { id: string }>(docs: T[]): T[] {
-  return docs.map((d) => (DOC_OVERRIDES[d.id] ? { ...d, ...DOC_OVERRIDES[d.id] } : d))
+  return docs.map((d) => {
+    const merged = DOC_OVERRIDES[d.id] ? { ...d, ...DOC_OVERRIDES[d.id] } : d
+    const url = (merged as { fileUrl?: string }).fileUrl
+    if (typeof url !== 'string') return merged
+    // Several fileUrls are percent-encoded because the folders they point into
+    // have spaces in their names ("StreetBond 120"). The generated map is keyed
+    // by the decoded path.
+    let decoded: string
+    try {
+      decoded = decodeURIComponent(url)
+    } catch {
+      decoded = url
+    }
+    const measured = DOCUMENT_SIZES[decoded]
+    return measured ? { ...merged, fileSize: measured } : merged
+  })
 }

@@ -35,7 +35,7 @@ const FIT_OPTIONS = {
   maxZoom: 7,
 } as const;
 
-// ── Static rollups (module scope — mapProjects never changes at runtime) ───
+// ── Static rollups (module scope — mapProjects never changes at runtime)
 const PRODUCT_COUNTS: [string, number][] = (() => {
   // (plain record — `Map` is shadowed by the react-map-gl component import)
   const c: Record<string, number> = {};
@@ -53,6 +53,25 @@ const APPLICATION_COUNTS: [string, number][] = (() => {
 })();
 
 // Province display order: west → east, the way the section's copy reads.
+/**
+ * Display name → product page slug. Only the six systems that appear in the
+ * map data are listed; the fallback is the kebab-case of the name, which is
+ * how every other slug in lib/products.ts is formed, so a seventh system
+ * added to the data lands on its real page without an edit here. Verified
+ * against production: all six return 200.
+ */
+const PRODUCT_SLUGS: Record<string, string> = {
+  StreetPrint: "streetprint",
+  StreetBond: "streetbond",
+  TrafficPatterns: "traffic-patterns",
+  TrafficPatternsXD: "traffic-patterns-xd",
+  MMAX: "mmax",
+  DecoMark: "decomark",
+};
+const productSlug = (name: string) =>
+  PRODUCT_SLUGS[name] ??
+  name.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
+
 const PROVINCE_ORDER = ["BC", "AB", "SK", "MB", "ON", "QC", "NB", "NS", "PE", "NL"];
 const PROVINCE_LABEL: Record<string, string> = {
   BC: "British Columbia", AB: "Alberta", SK: "Saskatchewan", MB: "Manitoba",
@@ -78,7 +97,7 @@ function boundsFor(projects: MapProject[]): [[number, number], [number, number]]
   return [[w - padLng, s - padLat], [e + padLng, n + padLat]];
 }
 
-// ── Layer specs ────────────────────────────────────────────────────────────
+// ── Layer specs
 const CLUSTER_LAYER = {
   id: "clusters",
   type: "circle" as const,
@@ -140,7 +159,7 @@ const HOVERED_RING_LAYER = {
   },
 };
 
-// ── Small shared chip for the "representative photo" honesty tag ───────────
+// ── Small shared chip for the "representative photo" honesty tag
 // Entries flagged imageIsRepresentative show HUB work in the same product +
 // application, not that exact installation (May 2026 rule: stand-in
 // photography must never pass as the project). The tag is small but always
@@ -168,7 +187,7 @@ function RepresentativeTag({ style }: { style?: React.CSSProperties }) {
   );
 }
 
-// ── Panel project card ──────────────────────────────────────────────────────
+// ── Panel project card
 function PanelCard({
   project,
   hovered,
@@ -314,27 +333,96 @@ function PanelCard({
   );
 }
 
-// ── Project detail modal ────────────────────────────────────────────────────
+// ── Project detail modal
 function ProjectModal({
   project,
   onClose,
+  onShowOnMap,
 }: {
   project: MapProject;
   onClose: () => void;
+  onShowOnMap: (p: MapProject) => void;
 }) {
   const [imgIndex, setImgIndex] = useState(0);
   const closeRef = useRef<HTMLButtonElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const returnFocusRef = useRef<HTMLElement | null>(null);
 
-  // Focus the close button on open; Escape closes. Modal is small enough that
-  // full focus-trap machinery isn't warranted, but keyboard users must be able
-  // to land in it and leave it without a mouse.
+  /**
+   * Escape closes, focus is trapped, the page behind is frozen, and focus goes
+   * back where it came from on the way out.
+   *
+   * The previous version did the first of those and reasoned the rest was not
+   * warranted because the dialog is small. Measured with a keyboard: focus
+   * left the dialog on 10 of 12 tab presses, landing on the page underneath —
+   * where a sighted mouse user sees a dimmed backdrop and a screen-reader user
+   * is simply reading a page they cannot see. Size is not what decides this;
+   * being modal is.
+   */
   useEffect(() => {
+    returnFocusRef.current = document.activeElement as HTMLElement | null;
     closeRef.current?.focus();
+
+    // Freeze the page behind, without the scroll position jumping to the top
+    // when position:fixed is applied — the compensating `top` is what stops
+    // that, and the scrollbar-width padding stops the layout shifting sideways.
+    const scrollY = window.scrollY;
+    const body = document.body;
+    const prev = {
+      position: body.style.position,
+      top: body.style.top,
+      width: body.style.width,
+      paddingRight: body.style.paddingRight,
+    };
+    const gap = window.innerWidth - document.documentElement.clientWidth;
+    body.style.position = "fixed";
+    body.style.top = `-${scrollY}px`;
+    body.style.width = "100%";
+    if (gap > 0) body.style.paddingRight = `${gap}px`;
+
     function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") {
+        e.stopPropagation();
+        onClose();
+        return;
+      }
+      if (e.key !== "Tab") return;
+      const root = dialogRef.current;
+      if (!root) return;
+      const focusable = Array.from(
+        root.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        )
+        // getClientRects rather than offsetParent: offsetParent is null for
+        // anything positioned fixed, and this dialog lives inside a fixed
+        // backdrop — the offsetParent test would have filtered out every
+        // candidate and quietly disabled the trap it was meant to build.
+      ).filter((el) => el.getClientRects().length > 0);
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      } else if (!root.contains(document.activeElement)) {
+        e.preventDefault();
+        first.focus();
+      }
     }
+
     document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      body.style.position = prev.position;
+      body.style.top = prev.top;
+      body.style.width = prev.width;
+      body.style.paddingRight = prev.paddingRight;
+      window.scrollTo(0, scrollY);
+      returnFocusRef.current?.focus?.();
+    };
   }, [onClose]);
 
   return (
@@ -353,6 +441,7 @@ function ProjectModal({
       onClick={onClose}
     >
       <div
+        ref={dialogRef}
         className="canada-map-modal"
         role="dialog"
         aria-modal="true"
@@ -461,8 +550,15 @@ function ProjectModal({
             >
               {project.title}
             </h2>
-            <p style={{ fontSize: 13, color: "#9CA3AF", margin: 0 }}>
-              📍 {project.city}, {project.province}
+            {/* Was a 📍 emoji, the only one in the section — it rendered at a
+                different weight and colour to everything around it. A drawn
+                pin matches the icon set the rest of the card uses. */}
+            <p style={{ fontSize: 13, color: "#9CA3AF", margin: 0, display: "flex", alignItems: "center", gap: 6 }}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }} aria-hidden="true">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0Z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              {project.city}, {project.province}
               {project.year ? ` · ${project.year}` : ""}
             </p>
           </div>
@@ -601,8 +697,34 @@ function ProjectModal({
             >
               Request Similar Project →
             </a>
+            {/* Present whenever the project has a write-up. 29 of them do, and
+                until now the modal gave no way to reach it — the connection
+                existed only as an image path nobody could follow. */}
+            {project.slug && (
+              <a
+                href={`/blog/${project.slug}`}
+                style={{
+                  background: "rgba(249,115,22,0.10)",
+                  color: "#FDBA74",
+                  fontWeight: 700,
+                  fontSize: 13,
+                  padding: "13px 24px",
+                  minHeight: 44,
+                  borderRadius: 8,
+                  textDecoration: "none",
+                  border: "1px solid rgba(249,115,22,0.3)",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                }}
+              >
+                Read the write-up →
+              </a>
+            )}
+            {/* Was href="/contact" — the same destination as the button beside
+                it, under a label promising the product pages. */}
             <a
-              href="/contact"
+              href={`/products/${productSlug(project.product)}`}
               style={{
                 background: "transparent",
                 color: "#9CA3AF",
@@ -617,8 +739,34 @@ function ProjectModal({
                 alignItems: "center",
               }}
             >
-              See the Systems →
+              About {project.product} →
             </a>
+            {/* The way back to the map, by name. Without it the only exit from
+                a case study is dismissal, and the pin you came from is lost. */}
+            <button
+              type="button"
+              onClick={() => onShowOnMap(project)}
+              style={{
+                background: "transparent",
+                color: "#9CA3AF",
+                fontWeight: 600,
+                fontSize: 13,
+                padding: "13px 24px",
+                minHeight: 44,
+                borderRadius: 8,
+                border: "1px solid rgba(255,255,255,0.12)",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 7,
+                cursor: "pointer",
+              }}
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0Z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              Show on map
+            </button>
           </div>
         </div>
       </div>
@@ -626,7 +774,7 @@ function ProjectModal({
   );
 }
 
-// ── Filter chip (shared by province + product rows) ─────────────────────────
+// ── Filter chip (shared by province + product rows)
 function FilterChip({
   active,
   onClick,
@@ -689,7 +837,7 @@ function FilterChip({
   );
 }
 
-// ── Main component ──────────────────────────────────────────────────────────────────
+// ── Main component
 export default function CanadaMap() {
   const mapRef = useRef<MapRef>(null);
   const sectionRef = useRef<HTMLElement>(null);
@@ -712,6 +860,27 @@ export default function CanadaMap() {
   const [provinceFocus, setProvinceFocus] = useState<string | null>(null);
   const [viewMoved, setViewMoved] = useState(false);
   const [styleFailed, setStyleFailed] = useState(false);
+  /**
+   * The map's own width, measured. The popup is sized from this rather than
+   * from the viewport, because the map is only part of the viewport — on a
+   * 390px phone the map box is 348px, and a popup that assumed the viewport
+   * would still overflow its container and clip its own close button.
+   */
+  const [mapWidth, setMapWidth] = useState(0);
+  useEffect(() => {
+    const el = mapContainerRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(([entry]) => {
+      setMapWidth(entry.contentRect.width);
+    });
+    ro.observe(el);
+    setMapWidth(el.getBoundingClientRect().width);
+    return () => ro.disconnect();
+  }, []);
+  // 240 is the designed width; below a ~330px map it steps down so the card
+  // plus its anchor offset always fit inside the frame.
+  const popupWidth = mapWidth > 0 ? Math.min(240, Math.max(180, mapWidth - 72)) : 240;
+  const isNarrow = mapWidth > 0 && mapWidth < 560;
   // Popup hover bridge — grace timeout + popup-card hover keeps it alive.
   const popupHoveredRef = useRef(false);
   // Mirror of popupPinned for handlers that must not re-create on pin/unpin.
@@ -724,7 +893,7 @@ export default function CanadaMap() {
   }, []);
   const popupClearTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // ── Product + application filters drive the pins themselves ───────────
+  // ── Product + application filters drive the pins themselves
   const filteredProjects = useMemo(() => {
     let base = mapProjects;
     if (productFilter) base = base.filter((p) => p.product === productFilter);
@@ -753,7 +922,7 @@ export default function CanadaMap() {
     [filteredProjects]
   );
 
-  // ── GeoJSON for hover ring ─────────────────────────────────
+  // ── GeoJSON for hover ring
   const hoveredProject = useMemo(
     () => (hoveredId ? mapProjects.find((p) => p.id === hoveredId) ?? null : null),
     [hoveredId]
@@ -778,7 +947,7 @@ export default function CanadaMap() {
     [hoveredProject]
   );
 
-  // ── Panel list: search wins, else viewport ∩ product filter ────────────
+  // ── Panel list: search wins, else viewport ∩ product filter
   const displayedProjects = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     const base = q
@@ -796,7 +965,7 @@ export default function CanadaMap() {
     return out;
   }, [searchQuery, visibleProjects, productFilter, appFilter]);
 
-  // ── Update panel list based on map bounds ──────────────────────────────
+  // ── Update panel list based on map bounds
   const updateVisibleProjects = useCallback(() => {
     const map = mapRef.current?.getMap();
     if (!map) return;
@@ -821,7 +990,7 @@ export default function CanadaMap() {
     mapRef.current?.fitBounds(CANADA_BOUNDS, { ...FIT_OPTIONS, duration: 1100 });
   }, []);
 
-  // ── Province quick-zoom ──────────────────────────────────────
+  // ── Province quick-zoom
   const handleProvince = useCallback(
     (prov: string | null) => {
       if (prov === null) {
@@ -857,7 +1026,7 @@ export default function CanadaMap() {
     []
   );
 
-  // ── Map layer click handler ──────────────────────────────────────
+  // ── Map layer click handler
   // maplibre-gl v3+ uses Promise (not callback) for getClusterExpansionZoom
   const handleMapLayerClick = useCallback(
     async (event: MapLayerMouseEvent) => {
@@ -886,19 +1055,47 @@ export default function CanadaMap() {
         const project = mapProjects.find((p) => p.id === id);
         if (project) {
           if (popupClearTimeoutRef.current) clearTimeout(popupClearTimeoutRef.current);
-          // Click-to-pin: marker click PINS the popup (does not open the modal directly).
-          // Clicking the popup body opens the full case study modal. This makes hover
-          // dismissal a non-issue — once pinned, the popup persists until closed explicitly.
+          setHoveredId(id);
+
+          /**
+           * On a phone, a pin opens the case study. No popup.
+           *
+           * The popup is a ~290px card and the mobile map is ~438px tall. It
+           * does not fit alongside the things already living in that frame: it
+           * was clipped through the top edge when anchored above a pin —
+           * taking its own close button out of the container, which left no
+           * way to dismiss it at all — and once it was allowed to flip below,
+           * it landed under "Back to Canada" and the zoom controls instead.
+           * There is no corner of a 438px map where a 290px card does not
+           * collide with something.
+           *
+           * So it is not a layout problem to solve, it is a control that does
+           * not belong on touch. The popup exists to preview a pin under a
+           * hovering cursor, and there is no cursor here. The modal is the
+           * better version of it on a phone anyway — full width, readable,
+           * with a 44px close button, Escape, and a trapped focus ring. A tap
+           * goes straight there, which also makes pins and list cards behave
+           * identically instead of one of them opening a middleman.
+           */
+          if (isNarrow) {
+            setPopupProject(null);
+            setPinned(false);
+            setSelectedProject(project);
+            return;
+          }
+
+          // Desktop: marker click pins the preview. Clicking its body opens the
+          // case study. Pinning makes hover dismissal a non-issue — the card
+          // persists until it is closed explicitly.
           setPopupProject(project);
           setPinned(true);
-          setHoveredId(id);
         }
       }
     },
-    []
+    [isNarrow, setPinned]
   );
 
-  // ── Mouse move — hover on layers ──────────────────────────────────
+  // ── Mouse move — hover on layers
   // When a popup is PINNED, hover never replaces or clears it. Only marker-click
   // and the close button toggle the pinned popup.
   const handleMouseMove = useCallback(
@@ -971,7 +1168,7 @@ export default function CanadaMap() {
     return () => document.removeEventListener("keydown", onKey);
   }, [popupProject, selectedProject]);
 
-  // ── Panel card interaction ─────────────────────────────────
+  // ── Panel card interaction
   const handlePanelHover = useCallback((id: string | null) => {
     setHoveredId(id);
     // Don't show hover popups from the panel — but never kill a PINNED one:
@@ -980,50 +1177,107 @@ export default function CanadaMap() {
     if (!popupPinnedRef.current) setPopupProject(null);
   }, []);
 
-  const handlePanelClick = useCallback((project: MapProject, openModal = false) => {
+  /**
+   * Clicking a project card opens that project. It does not fly the camera.
+   *
+   * It used to do both: fly to zoom 13 and pin a popup. At zoom 13 the
+   * viewport is four streets wide, and this list is filtered by the viewport —
+   * so one click on one card collapsed the list of 59 projects to 1, and the
+   * strip a phone user was mid-swipe through collapsed from 23 to 1 under
+   * their thumb. The thing you clicked ate the thing you were browsing. That
+   * was the single worst moment in the section, on both breakpoints.
+   *
+   * A card carrying a photo, a product tag and an arrow promises to open the
+   * project. So it opens the project. The list is left exactly as it was, and
+   * the camera only ever moves when the visitor moves it — or asks, through
+   * "Show on map" inside the modal.
+   *
+   * The pin is highlighted so the eye can find it while the modal is open, and
+   * `panTo` (never `flyTo`, never a zoom change) brings it on screen if it is
+   * outside the current frame. Panning at constant zoom keeps every neighbour
+   * where it was, so the list under the map does not move either.
+   */
+  const handlePanelClick = useCallback((project: MapProject) => {
     if (popupClearTimeoutRef.current) clearTimeout(popupClearTimeoutRef.current);
     setPinned(false);
+    setPopupProject(null);
     setHoveredId(project.id);
-    if (openModal) {
-      setPopupProject(null);
-      setSelectedProject(project);
-    } else {
-      setSelectedProject(null);
-      // Pin the popup at the destination so the flight lands on something.
-      setPopupProject(project);
-      setPinned(true);
-    }
-    mapRef.current?.flyTo({
-      center: [project.lng, project.lat],
-      zoom: 13,
-      duration: 1100,
-      essential: true,
-    });
-  }, []);
+    setSelectedProject(project);
 
-  // Click anywhere off the map section -> back to the zero state.
-  useEffect(() => {
-    function handleOffSectionClick(e: MouseEvent) {
-      if (selectedProject) return; // modal backdrop is outside the section
-      if (!viewMoved && !provinceFocus && !productFilter && !appFilter) return;
-      if (sectionRef.current && !sectionRef.current.contains(e.target as Node)) {
-        setProductFilter(null);
-        setAppFilter(null);
-        setSearchQuery("");
-        setPopupProject(null);
-        setPinned(false);
-        resetView();
+    const map = mapRef.current?.getMap();
+    const bounds = map?.getBounds();
+    if (map && bounds) {
+      const outside =
+        project.lng < bounds.getWest() ||
+        project.lng > bounds.getEast() ||
+        project.lat < bounds.getSouth() ||
+        project.lat > bounds.getNorth();
+      if (outside) {
+        map.panTo([project.lng, project.lat], { duration: 700 });
       }
     }
-    document.addEventListener("mousedown", handleOffSectionClick);
-    return () => document.removeEventListener("mousedown", handleOffSectionClick);
-  }, [selectedProject, viewMoved, provinceFocus, productFilter, appFilter, resetView]);
+  }, [setPinned]);
 
+  /**
+   * "Show on map", from inside the modal. The one path that is allowed to
+   * change zoom, because the visitor asked for it by name. Zoom 9 is a region,
+   * not a driveway: the pin is unmistakable and its neighbours are still on
+   * screen, so the list keeps a dozen entries rather than one.
+   */
+  const handleShowOnMap = useCallback(
+    (project: MapProject) => {
+      setSelectedProject(null);
+      setHoveredId(project.id);
+      // No preview card on a phone — see handleMapLayerClick. The highlight
+      // ring and the flight are the answer to "where is it"; tapping the pin
+      // brings this modal straight back.
+      setPopupProject(isNarrow ? null : project);
+      setPinned(!isNarrow);
+      mapRef.current?.flyTo({
+        center: [project.lng, project.lat],
+        zoom: 9,
+        duration: 900,
+        essential: true,
+      });
+      mapContainerRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    },
+    [isNarrow, setPinned]
+  );
+
+  /**
+   * Closing the modal closes the modal. Nothing else.
+   *
+   * It used to also fitBounds back to the whole country, which meant opening a
+   * project in Victoria and closing it again threw you to a view of Canada —
+   * your filters still set, your place gone, with no undo. Leaving the camera
+   * alone is the whole fix: you come back to exactly where you were.
+   */
   const handleCloseModal = useCallback(() => {
     setSelectedProject(null);
-    setPinned(false);
-    mapRef.current?.fitBounds(CANADA_BOUNDS, { ...FIT_OPTIONS, duration: 1400 });
   }, []);
+
+  /**
+   * One explicit control that undoes everything, for the visitor who has
+   * filtered themselves into a corner and wants out.
+   *
+   * There used to be an invisible version of this: a document-level mousedown
+   * listener that silently wiped every filter and reset the camera whenever
+   * you clicked anywhere else on the page. Scroll down, tap a heading, and the
+   * work you had done in the section evaporated with nothing to say it had.
+   * State a visitor set should only be cleared by a control that says it will.
+   */
+  const anyFilterActive =
+    !!productFilter || !!appFilter || !!searchQuery.trim() || !!provinceFocus || viewMoved;
+
+  const clearEverything = useCallback(() => {
+    setProductFilter(null);
+    setAppFilter(null);
+    setSearchQuery("");
+    setPopupProject(null);
+    setPinned(false);
+    setHoveredId(null);
+    resetView();
+  }, [resetView, setPinned]);
 
   const LAYOUT_HEIGHT = "clamp(360px, 68vh, 840px)";
 
@@ -1114,7 +1368,7 @@ export default function CanadaMap() {
       >
         <div style={{ maxWidth: 1340, margin: "0 auto", padding: "0 1.25rem" }}>
 
-          {/* ── Header ─────────────────────────────────────────────────── */}
+          {/* ── Header */}
           <div
             style={{
               display: "flex",
@@ -1200,7 +1454,7 @@ export default function CanadaMap() {
             </div>
           </div>
 
-          {/* ── Province quick-zoom ────────────────────────────────────────── */}
+          {/* ── Province quick-zoom */}
           <div className="canada-map-chips" style={{ marginBottom: 8 }} role="group" aria-label="Zoom to province">
             <FilterChip active={provinceFocus === null && !viewMoved} onClick={() => handleProvince(null)}>
               All Canada
@@ -1218,7 +1472,7 @@ export default function CanadaMap() {
             ))}
           </div>
 
-          {/* ── Product filter ─────────────────────────────────────────────── */}
+          {/* ── Product filter */}
           <div className="canada-map-chips" style={{ marginBottom: 12 }} role="group" aria-label="Filter by product system">
             <FilterChip active={productFilter === null} onClick={() => handleProductFilter(null)}>
               All systems
@@ -1233,9 +1487,41 @@ export default function CanadaMap() {
                 {product}
               </FilterChip>
             ))}
+            {/* The visible replacement for a document-level mousedown listener
+                that used to wipe all of this whenever you clicked anywhere
+                else on the page. One control, it says what it does, and it is
+                only here when there is something to undo. */}
+            {anyFilterActive && (
+              <button
+                type="button"
+                onClick={clearEverything}
+                style={{
+                  flexShrink: 0,
+                  marginLeft: 4,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                  minHeight: 44,
+                  padding: "0 16px",
+                  borderRadius: 999,
+                  border: "1px dashed rgba(249,115,22,0.45)",
+                  background: "transparent",
+                  color: "#FDBA74",
+                  fontSize: 12.5,
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" strokeWidth={2} strokeLinecap="round" />
+                </svg>
+                Start over
+              </button>
+            )}
           </div>
 
-          {/* ── Map + Panel ───────────────────────────────────────────────── */}
+          {/* ── Map + Panel */}
           <div
             className="canada-map-layout"
             style={{
@@ -1285,9 +1571,14 @@ export default function CanadaMap() {
                   if (String(e?.error ?? "").includes("style")) setStyleFailed(true);
                 }}
               >
+                {/* The compass/pitch control is three stacked buttons tall.
+                    On a 348×437 phone map that is a meaningful share of the
+                    frame spent on a control nobody uses on a 2D basemap with
+                    rotation left at zero. Zoom only, below 560px. */}
                 <NavigationControl
                   position="bottom-right"
-                  style={{ marginBottom: 16, marginRight: 16 }}
+                  showCompass={!isNarrow}
+                  style={{ marginBottom: isNarrow ? 34 : 16, marginRight: isNarrow ? 12 : 16 }}
                 />
                 <AttributionControl compact position="bottom-left" />
 
@@ -1314,12 +1605,21 @@ export default function CanadaMap() {
                     Marker click PINS the popup (popupPinned=true). Hover dismissal is
                     disabled while pinned. Close button on the card or click-outside the
                     map dismisses it. Card body click opens the full case-study modal. */}
-                {popupProject && !selectedProject && (
+                {popupProject && !selectedProject && !isNarrow && (
                   <Popup
                     longitude={popupProject.lng}
                     latitude={popupProject.lat}
-                    anchor="bottom"
-                    offset={20}
+                    /* anchor was pinned to "bottom", which forbids MapLibre
+                       from flipping the card when there is no room above the
+                       pin. On a 390px phone the map is ~438px tall and this
+                       card is ~290px: a pin anywhere in the upper half pushed
+                       the card past the top edge of a container with
+                       overflow:hidden, and the close button in its top-right
+                       corner was the first thing clipped away. Letting
+                       MapLibre choose the anchor is the fix — it flips to
+                       "top" when the space is below. */
+                    offset={18}
+                    maxWidth={`${popupWidth}px`}
                     closeButton={false}
                     closeOnClick={false}
                   >
@@ -1328,7 +1628,14 @@ export default function CanadaMap() {
                       aria-label={`Project preview: ${popupProject.title}`}
                       style={{
                         position: "relative",
-                        width: 240,
+                        // Was a flat 240px. Inside a 348px-wide map on a 390px
+                        // phone, a 240px card anchored to a pin near an edge
+                        // hung outside the container and was clipped — taking
+                        // its close button off-screen with it, which left no
+                        // way at all to dismiss the thing. Capped to the map's
+                        // own width so it can always be closed.
+                        width: popupWidth,
+                        maxWidth: "calc(100vw - 48px)",
                         background: "#151515",
                         border: `1px solid ${popupPinned ? "rgba(249,115,22,0.6)" : "rgba(249,115,22,0.32)"}`,
                         borderRadius: 12,
@@ -1349,41 +1656,61 @@ export default function CanadaMap() {
                         }
                       }}
                     >
-                      {/* Close button — visible whenever popup is pinned */}
-                      {popupPinned && (
-                        <button
-                          type="button"
-                          aria-label="Close project preview"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setPinned(false);
-                            setPopupProject(null);
-                            setHoveredId(null);
-                          }}
+                      {/* Close button.
+                          Two changes. It was 28×28 — Apple and Google both put
+                          the floor at 44, and on a phone this is the control
+                          standing between a visitor and the rest of the page.
+                          And it only rendered while pinned: on a touch screen
+                          there is no hover, so the popup is ALWAYS pinned and
+                          the condition was noise — but any future path that
+                          opened it unpinned would have opened a card with no
+                          way out. It is always there now. */}
+                      <button
+                        type="button"
+                        aria-label="Close project preview"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setPinned(false);
+                          setPopupProject(null);
+                          setHoveredId(null);
+                        }}
+                        style={{
+                          position: "absolute",
+                          top: 6,
+                          right: 6,
+                          zIndex: 5,
+                          width: 44,
+                          height: 44,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          border: "none",
+                          background: "transparent",
+                          cursor: "pointer",
+                          color: "#F5F0EB",
+                          padding: 0,
+                        }}
+                      >
+                        {/* The visible disc stays small; the tappable square
+                            around it is the full 44. */}
+                        <span
                           style={{
-                            position: "absolute",
-                            top: 7,
-                            right: 7,
-                            zIndex: 5,
-                            width: 28,
-                            height: 28,
+                            width: 30,
+                            height: 30,
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
-                            border: "1px solid rgba(255,255,255,0.18)",
+                            border: "1px solid rgba(255,255,255,0.22)",
                             borderRadius: "50%",
-                            background: "rgba(15,22,32,0.85)",
+                            background: "rgba(15,22,32,0.9)",
                             backdropFilter: "blur(4px)",
-                            cursor: "pointer",
-                            color: "#F5F0EB",
-                            padding: 0,
                           }}
                         >
-                          <svg width="10" height="10" viewBox="0 0 14 14" fill="none">
-                            <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" />
+                          <svg width="11" height="11" viewBox="0 0 14 14" fill="none">
+                            <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" strokeWidth={1.9} strokeLinecap="round" />
                           </svg>
-                        </button>
-                      )}
+                        </span>
+                      </button>
 
                       <button
                         type="button"
@@ -1549,8 +1876,17 @@ export default function CanadaMap() {
                   onClick={resetView}
                   style={{
                     position: "absolute",
-                    top: 14,
-                    left: 14,
+                    /* On a phone the map is ~348×437 and the popup is ~290
+                       tall, so a button in the top-left corner landed on top
+                       of the project photo — two controls fighting over the
+                       same pixels, one of them obscuring the thing the
+                       visitor had just asked to see. Below ~560px it moves to
+                       the bottom-left, clear of the popup, clear of the zoom
+                       controls on the right, and raised just above the
+                       attribution strip it would otherwise cover. */
+                    ...(isNarrow
+                      ? { bottom: 38, left: 12 }
+                      : { top: 14, left: 14 }),
                     zIndex: 20,
                     display: "flex",
                     alignItems: "center",
@@ -1574,7 +1910,13 @@ export default function CanadaMap() {
                 </button>
               )}
 
-              {/* Status pill — bottom center */}
+              {/* Status pill — bottom centre, desktop only.
+                  On a phone it sat on the same line as the CARTO/OpenStreetMap
+                  attribution and the two rendered through each other into
+                  something unreadable. Attribution is a licence condition and
+                  cannot move; the pill is a hint and can. The chip rows above
+                  already carry the counts it was repeating. */}
+              {!isNarrow && (
               <div
                 style={{
                   position: "absolute",
@@ -1601,9 +1943,10 @@ export default function CanadaMap() {
                     : "Tap pins for details · Two fingers or Ctrl + scroll to zoom"}
                 </span>
               </div>
+              )}
             </div>
 
-            {/* ── Right panel (desktop) ────────────────────────────────────── */}
+            {/* ── Right panel (desktop) */}
             <div
               className="canada-map-panel"
               ref={panelRef}
@@ -1856,7 +2199,7 @@ export default function CanadaMap() {
                       hovered={hoveredId === project.id}
                       selected={selectedProject?.id === project.id}
                       onHover={handlePanelHover}
-                      onClick={(p) => handlePanelClick(p, !!searchQuery.trim())}
+                      onClick={handlePanelClick}
                     />
                   ))
                 )}
@@ -1905,7 +2248,7 @@ export default function CanadaMap() {
             </div>
           </div>
 
-          {/* ── Mobile strip — the panel's job, phone-shaped ───────────────── */}
+          {/* ── Mobile strip — the panel's job, phone-shaped */}
           <div className="canada-map-strip" style={{ marginTop: 12 }}>
             <div
               style={{
@@ -2059,7 +2402,7 @@ export default function CanadaMap() {
                   <button
                     key={project.id}
                     type="button"
-                    onClick={() => handlePanelClick(project, false)}
+                    onClick={() => handlePanelClick(project)}
                     aria-label={`${project.title} — view on map`}
                     style={{
                       all: "unset",
@@ -2176,7 +2519,11 @@ export default function CanadaMap() {
 
       {/* Project modal */}
       {selectedProject && (
-        <ProjectModal project={selectedProject} onClose={handleCloseModal} />
+        <ProjectModal
+          project={selectedProject}
+          onClose={handleCloseModal}
+          onShowOnMap={handleShowOnMap}
+        />
       )}
     </>
   );

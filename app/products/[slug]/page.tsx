@@ -343,30 +343,11 @@ export default async function ProductPage({ params }: Props) {
             {product.slug === "streetprint" && <PavingPatterns />}
             {(product.slug === "streetbond" || product.slug === "traffic-patterns-xd") && <PatternGalleryCTA />}
 
-            {/* "Gallery" is what a CMS calls a folder. The catalogue calls its
-                photography "The Work" — better, and already the client's own
-                word for it. The standfirst keeps it unambiguous for a reader
-                and for search. */}
-            <h2 className="text-2xl font-bold mb-1.5 mt-14" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
-              The work
-            </h2>
-            <p className="mb-6 text-sm" style={{ color: "var(--text-secondary)" }}>
-              {product.name} installations photographed on site across Canada.
-            </p>
-            <GalleryGrid images={gallery} />
-
-            {/* The questions people search, answered in the client's own
-                words, above the fold of the documents section — a visitor
-                who scrolled this far is evaluating, and evaluation is made
-                of questions. Source: lib/product-faqs.ts. */}
-            {faqs && <ProductFaq productName={product.name} faqs={faqs} />}
-
-            <DocumentDownloads slug={product.slug} />
           </div>
 
           {/* Right: specs */}
           <div>
-            <div className="rounded-xl p-8 mb-8 sticky top-24 relative overflow-hidden" style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--ink-08)" }}>
+            <div data-surface="paper" className="rounded-xl p-8 mb-8 sticky top-24 relative overflow-hidden" style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--ink-08)" }}>
               <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
               {/* Was an <h3> sitting under the Downloads <h2>, which filed the
                   spec table inside "Downloads" for every screen reader and for
@@ -386,6 +367,41 @@ export default async function ProductPage({ params }: Props) {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Vern, 21 Sep: the dark holds at the top of this page — hero, the
+            argument, the spec card — and then the work, the documents and the
+            applications want relief.
+
+            This band used to sit inside the left column of the grid above,
+            which made it two thirds of a screen wide with a dark gutter beside
+            it: a white panel that looked cropped rather than placed. Lifting
+            it out of the grid lets it run edge to edge, which is the whole
+            point of a band — Powershifter's blocks span the page, and that is
+            why they read as structure rather than as a stray card.
+
+            The intro row above keeps the spec card beside the argument, which
+            is where a specifier wants it anyway. */}
+        <div data-surface="paper" className="mt-16 pt-16 pb-16 px-6 sm:px-10 -mx-4 sm:-mx-6 lg:-mx-8 rounded-2xl" style={{ background: "var(--bg-primary)" }}>
+          {/* "Gallery" is what a CMS calls a folder. The catalogue calls its
+              photography "The Work" — better, and already the client's own
+              word for it. The standfirst keeps it unambiguous for a reader
+              and for search. */}
+          <h2 className="text-2xl font-bold mb-1.5" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
+            The work
+          </h2>
+          <p className="mb-6 text-sm" style={{ color: "var(--text-secondary)" }}>
+            {product.name} installations photographed on site across Canada.
+          </p>
+          <GalleryGrid images={gallery} />
+
+          {/* The questions people search, answered in the client's own
+              words, above the fold of the documents section — a visitor
+              who scrolled this far is evaluating, and evaluation is made
+              of questions. Source: lib/product-faqs.ts. */}
+          {faqs && <ProductFaq productName={product.name} faqs={faqs} />}
+
+          <DocumentDownloads slug={product.slug} />
         </div>
 
         {/* StreetBondSR LEED callout */}
@@ -475,7 +491,7 @@ export default async function ProductPage({ params }: Props) {
 
         {/* Applications this product is used for */}
         {relatedAppData.length > 0 && (
-          <div className="mt-16 pt-16" style={{ borderTop: "1px solid var(--ink-08)" }}>
+          <div data-surface="paper" className="mt-16 pt-16 pb-16 px-6 sm:px-10 -mx-4 sm:-mx-6 lg:-mx-8 rounded-2xl" style={{ background: "var(--bg-primary)", borderTop: "1px solid var(--ink-08)" }}>
             <div className="flex items-end justify-between mb-8">
               <div>
                 <p className="text-xs font-bold tracking-[0.2em] uppercase mb-3" style={{ color: "var(--accent-text-lg)" }}>
@@ -508,7 +524,13 @@ export default async function ProductPage({ params }: Props) {
                   className="group relative overflow-hidden rounded-lg flex flex-col"
                   style={{ background: "var(--bg-card)", border: "1px solid var(--border-faint)" }}
                 >
-                  <div className="relative overflow-hidden" style={{ height: 130 }}>
+                  {/* The card title is laid over the photograph behind a 40%
+                      black scrim, so it needs light type whatever the page
+                      around it is doing. Without this pin, "Specified for"
+                      going to paper turned four of these titles to charcoal on
+                      a charcoal photo — legible on the dark shots, invisible on
+                      the bright ones. */}
+                  <div data-surface="dark" className="relative overflow-hidden" style={{ height: 130 }}>
                     <Image
                       src={app.imageUrl}
                       alt={`${app.name} — ${app.shortDesc.slice(0, 60)}`}

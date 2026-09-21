@@ -204,11 +204,13 @@ export default function GalleryPage() {
   };
 
   return (
-    <main style={{ background: "var(--bg-dark)", minHeight: "100vh" }}>
+    <main data-surface="paper" style={{ background: "var(--bg-dark)", minHeight: "100vh" }}>
       <JsonLd data={gallerySchema} />
       <JsonLd data={breadcrumbSchema} />
       <Nav />
 
+      {/* Photographs carry their own dark scrims (GalleryGrid pins them), so the page
+              around them can go light without touching the tiles. */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-20">
 
         {/* Header */}
@@ -316,8 +318,12 @@ export default function GalleryPage() {
                     sizes="(max-width: 768px) 50vw, (max-width: 1280px) 33vw, 25vw"
                     quality={70}
                   />
-                  {/* Hover overlay */}
+                  {/* Hover overlay. Pinned dark: it is an 85% black scrim over
+                      the photograph, so its caption needs light type no matter
+                      what the page around it is doing — and this page is paper
+                      now. */}
                   <div
+                    data-surface="dark"
                     className="absolute inset-0 flex flex-col justify-end p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                     style={{ background: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.1) 60%, transparent 100%)" }}
                   >

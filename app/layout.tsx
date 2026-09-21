@@ -11,9 +11,14 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
-// Runs before first paint. Order: ?theme= in the URL (persisted, so a review
-// link sticks as the reader navigates) → localStorage → dark.
-const THEME_INIT = `(function(){try{var q=location.search,m=/[?&]theme=(dark|mixed|light)(?=[&#]|$)/.exec(q),t=m?m[1]:null;if(t){try{localStorage.setItem('hubss-theme',t)}catch(e){}}if(!t){try{t=localStorage.getItem('hubss-theme')}catch(e){}}if(t!=='mixed'&&t!=='light'){t='dark'}document.documentElement.setAttribute('data-theme',t)}catch(e){}})();`;
+// Runs before first paint. Order: ?theme= in the URL (persisted, so a link
+// sticks as the reader navigates) → localStorage → the server's own
+// data-theme, which is mixed.
+//
+// Mixed is the default as of 21 Sep, on Vern's call. The <html> tag ships with
+// data-theme="mixed" already on it, so a first-time visitor never sees a frame
+// of anything else and this script's only job is to honour a saved choice.
+const THEME_INIT = `(function(){try{var q=location.search,m=/[?&]theme=(dark|mixed|light)(?=[&#]|$)/.exec(q),t=m?m[1]:null;if(t){try{localStorage.setItem('hubss-theme',t)}catch(e){}}if(!t){try{t=localStorage.getItem('hubss-theme')}catch(e){}}if(t!=='mixed'&&t!=='light'&&t!=='dark'){t='mixed'}document.documentElement.setAttribute('data-theme',t)}catch(e){}})();`;
 
 const geist = Geist({ variable: "--font-geist", subsets: ["latin"] });
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"], weight: ["300","400","500","600","700"] });
@@ -67,7 +72,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     // suppressHydrationWarning: the theme bootstrap below sets data-theme on
     // <html> before React hydrates, and that attribute is not in the server
     // markup by design (it depends on the visitor's saved choice).
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" data-theme="mixed" suppressHydrationWarning>
       <head>
         {/* Theme bootstrap — runs before first paint so a saved "light" never
             flashes dark. Order: ?theme= in the URL (persisted, so a review link

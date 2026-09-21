@@ -20,8 +20,8 @@ import { useEffect, useState } from "react";
 export type ThemeMode = "dark" | "mixed" | "light";
 export const THEME_KEY = "hubss-theme";
 const MODES: { id: ThemeMode; label: string; title: string }[] = [
-  { id: "dark",  label: "Dark",  title: "Dark — the site as shipped" },
-  { id: "mixed", label: "Mixed", title: "Mixed — dark shell, reading sections on paper" },
+  { id: "dark",  label: "Dark",  title: "Dark — the original site" },
+  { id: "mixed", label: "Mixed", title: "Mixed — dark shell, reading sections on paper (default)" },
   { id: "light", label: "Light", title: "Light — paper site, dark photo bands" },
 ];
 
@@ -31,7 +31,7 @@ export function applyTheme(mode: ThemeMode) {
 }
 
 export default function ThemeToggle({ compact = false }: { compact?: boolean }) {
-  const [mode, setMode] = useState<ThemeMode>("dark");
+  const [mode, setMode] = useState<ThemeMode>("mixed");
 
   useEffect(() => {
     const current = document.documentElement.getAttribute("data-theme") as ThemeMode | null;

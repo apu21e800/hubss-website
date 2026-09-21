@@ -72,11 +72,13 @@ export default function BlogPage() {
   };
 
   return (
-    <main className="min-h-screen" style={{ background: "var(--bg-primary)" }}>
+    <main data-surface="paper" className="min-h-screen" style={{ background: "var(--bg-primary)" }}>
       <JsonLd data={blogSchema} />
       <JsonLd data={breadcrumbSchema} />
       <Nav />
 
+      {/* Field Notes reads as a magazine — paper all the way down to the Lunch &
+              Learn band, which keeps the shell (Vern, 21 Sep). */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-24 sm:pt-32 pb-16 sm:pb-24">
         {/* Header — deliberately compact. The library is 67 pieces deep and the
             job of this page is to get a reader into one of them, so the masthead

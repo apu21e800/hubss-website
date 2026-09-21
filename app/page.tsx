@@ -38,7 +38,7 @@ const organizationSchema = {
     "https://www.linkedin.com/company/hub-surface-systems",
     "https://www.instagram.com/hubsurfacesystems",
     "https://www.facebook.com/hubsurfacesystems",
-    "https://www.youtube.com/@hubsurfacesystems",
+    "https://www.youtube.com/@hubsurfacesystems8112",
   ],
   subOrganization: [
     {

@@ -1,10 +1,21 @@
 import type { NextConfig } from "next";
+import fs from "fs";
 import path from "path";
 import { projects } from "./lib/projects";
 
 // The 9 real, currently-built project pages. Derived from lib/projects.ts so
 // adding a project can never silently re-break the redirect below.
 const LIVE_PROJECT_SLUGS = projects.map((p) => p.slug);
+
+// Every blog post that actually renders. content/blog is the only source of
+// /blog routes — app/blog/[slug] and app/sitemap.ts both read this directory —
+// so a file here is exactly the condition for /blog/<slug> returning 200.
+// Derived rather than hardcoded for the same reason as LIVE_PROJECT_SLUGS:
+// the legacy redirects below must never outlive the posts they point at.
+const BLOG_SLUGS = fs
+  .readdirSync(path.join(process.cwd(), "content/blog"))
+  .filter((f) => f.endsWith(".mdx"))
+  .map((f) => f.replace(/\.mdx$/, ""));
 
 // ── Security headers ────────────────────────────────────────────────────────
 // Production-safe set. CSP is shipped in REPORT-ONLY mode for launch — it
@@ -323,6 +334,25 @@ const nextConfig: NextConfig = {
       // Old feed URLs
       { source: "/feed", destination: "/blog", permanent: true },
       { source: "/feed/:path*", destination: "/blog", permanent: true },
+
+      // ── Legacy category-prefixed permalinks (added 2026-09-21) ──────────
+      // Alongside the flat /%postname%/ URLs mapped above, the old site also
+      // served posts under a /%category%/%postname%/ permalink. Two of those
+      // category prefixes — /stamped-asphalt/ and /streetbond/ — had no rule
+      // at all, so every URL beneath them 404s. (The sibling /projects/
+      // archives for the same two categories are already handled above.)
+      //
+      // The pair of slug rules below only fire when content/blog/<slug>.mdx
+      // exists, so a legacy URL is 1:1 mapped onto a post only when that post
+      // is really there. Everything else under the prefix falls through to
+      // the product hub — a 301 onto a second 404 is worse than the 404 it
+      // replaces, so the fallback deliberately does not guess at /blog/:slug.
+      // Same destinations as the /projects/category/ rules above, for
+      // consistency: stamped asphalt is the StreetPrint system.
+      { source: `/stamped-asphalt/:slug(${BLOG_SLUGS.join("|")})`, destination: "/blog/:slug", permanent: true },
+      { source: `/streetbond/:slug(${BLOG_SLUGS.join("|")})`, destination: "/blog/:slug", permanent: true },
+      { source: "/stamped-asphalt/:path*", destination: "/products/streetprint", permanent: true },
+      { source: "/streetbond/:path*", destination: "/products/streetbond", permanent: true },
       // Catch-all for any remaining LEGACY /projects/ URLs → gallery.
       //
       // This rule used to be an unguarded /projects/:path*, which meant it also

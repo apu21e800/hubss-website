@@ -4,7 +4,7 @@ export default function Loading() {
       aria-busy="true"
       aria-label="Loading"
       style={{
-        background: "#0D0D0D",
+        background: "var(--bg-deepest)",
         minHeight: "100vh",
         display: "flex",
         alignItems: "center",
@@ -35,7 +35,7 @@ export default function Loading() {
             fontWeight: 700,
             letterSpacing: "0.22em",
             textTransform: "uppercase",
-            color: "#868C98",
+            color: "var(--text-secondary)",
             margin: 0,
           }}
         >

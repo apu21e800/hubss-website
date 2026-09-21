@@ -52,7 +52,7 @@ export default function GalleryGrid({ images }: { images: GalleryImage[] }) {
       `}</style>
 
       {/* Count */}
-      <p className="text-xs mb-6 font-medium tracking-wide" style={{ color: "#868C98" }}>
+      <p className="text-xs mb-6 font-medium tracking-wide" style={{ color: "var(--text-secondary)" }}>
         {images.length} photo{images.length !== 1 ? "s" : ""}
       </p>
 
@@ -117,21 +117,21 @@ export default function GalleryGrid({ images }: { images: GalleryImage[] }) {
       {/* ── Load more ─────────────────────────────────── */}
       {hasMore && (
         <div className="mt-8 flex flex-wrap items-center justify-between gap-3">
-          <p className="text-xs" style={{ color: "#868C98" }} aria-live="polite">
+          <p className="text-xs" style={{ color: "var(--text-secondary)" }} aria-live="polite">
             Showing {displayed.length} of {images.length}
           </p>
           <div className="flex items-center gap-2">
             <button
               onClick={() => setVisible(images.length)}
-              className="px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors hover:bg-white/10 active:scale-[0.97]"
-              style={{ background: "var(--bg-card-neutral)", color: "var(--text-body)", border: "1px solid rgba(255,255,255,0.1)" }}
+              className="px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors hover:bg-[var(--ink-10)] active:scale-[0.97]"
+              style={{ background: "var(--bg-card-neutral)", color: "var(--text-body)", border: "1px solid var(--ink-10)" }}
             >
               Show all {images.length}
             </button>
             <button
               onClick={() => setVisible((v) => Math.min(v + CHUNK, images.length))}
               className="px-5 py-2.5 rounded-lg text-sm font-semibold transition-all hover:brightness-110 active:scale-[0.97]"
-              style={{ background: "#f97316", color: "#fff" }}
+              style={{ background: "#f97316", color: "var(--on-accent)" }}
             >
               Load {Math.min(CHUNK, remaining)} more
             </button>
@@ -181,6 +181,10 @@ function GalleryTile({
           onClick();
         }
       }}
+      /* The caption sits on a dark scrim over the photograph, in every theme.
+         Without pinning the surface, the light theme gave it #6B6862 on a
+         near-black scrim — a contrast ratio of 3.6 on fourteen tiles. */
+      data-surface="dark"
       className={`gallery-tile-anim group relative overflow-hidden rounded-xl cursor-zoom-in w-full ${aspect} focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-500 active:scale-[0.985] transition-transform duration-100`}
       style={
         entranceDelay
@@ -222,7 +226,7 @@ function GalleryTile({
           backdropFilter: "blur(4px)",
         }}
       >
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth={2.5} strokeLinecap="round">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text-primary)" strokeWidth={2.5} strokeLinecap="round">
           <circle cx="11" cy="11" r="8" />
           <path d="m21 21-4.35-4.35" />
           <path d="M11 8v6M8 11h6" />
@@ -235,7 +239,7 @@ function GalleryTile({
           className="absolute bottom-0 inset-x-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out px-4 py-3 pointer-events-none"
           style={{ background: "rgba(8,8,8,0.88)", backdropFilter: "blur(8px)" }}
         >
-          <p className="text-[11px] leading-snug truncate" style={{ color: "#9ca3af" }}>
+          <p className="text-[11px] leading-snug truncate" style={{ color: "var(--text-muted)" }}>
             {img.caption}
           </p>
         </div>

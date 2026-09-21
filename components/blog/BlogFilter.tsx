@@ -112,9 +112,9 @@ export default function BlogFilter({ posts, allProducts }: Props) {
       className="text-[13px] font-semibold px-3.5 rounded-full transition-colors whitespace-nowrap flex-shrink-0 inline-flex items-center gap-1.5"
       style={{
         background:  active ? "#f97316" : "var(--bg-card-neutral)",
-        color:       active ? "#fff"    : "#9aa0a8",
+        color:       active ? "var(--on-accent)"    : "var(--text-muted)",
         border:      "1px solid",
-        borderColor: active ? "#f97316" : "rgba(255,255,255,0.09)",
+        borderColor: active ? "#f97316" : "var(--ink-09)",
         minHeight:   "40px",
       }}
     >
@@ -124,7 +124,7 @@ export default function BlogFilter({ posts, allProducts }: Props) {
           className="text-[11px] font-bold tabular-nums px-1.5 rounded-full"
           style={{
             background: active ? "rgba(0,0,0,0.18)" : "var(--border-color)",
-            color:      active ? "rgba(255,255,255,0.9)" : "#6f757d",
+            color:      active ? "var(--ink-90)" : "var(--text-hint)",
           }}
         >
           {count}
@@ -135,7 +135,7 @@ export default function BlogFilter({ posts, allProducts }: Props) {
 
   const selectStyle = {
     background: "var(--bg-card-neutral)",
-    border: "1px solid rgba(255,255,255,0.09)",
+    border: "1px solid var(--ink-09)",
     color: "#c8cdd3",
     minHeight: "44px",
   } as const;
@@ -167,7 +167,7 @@ export default function BlogFilter({ posts, allProducts }: Props) {
         {/* ── Search · product · sort ─────────────────────────── */}
         <div className="flex flex-wrap gap-2.5 mt-3">
           <div className="relative flex-1 min-w-[190px] max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: "#6f757d" }} />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: "var(--text-hint)" }} />
             <input
               type="text"
               placeholder="Search field notes…"
@@ -175,14 +175,14 @@ export default function BlogFilter({ posts, allProducts }: Props) {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full pl-9 pr-8 rounded-lg text-sm"
-              style={{ ...selectStyle, color: "#ffffff" }}
+              style={{ ...selectStyle, color: "var(--text-primary)" }}
             />
             {search && (
               <button
                 onClick={() => { setSearch(""); pushParams({ search: "" }); }}
                 aria-label="Clear search"
                 className="absolute right-1.5 top-1/2 -translate-y-1/2 flex items-center justify-center rounded"
-                style={{ width: 32, height: 32, color: "#6f757d" }}
+                style={{ width: 32, height: 32, color: "var(--text-hint)" }}
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -204,7 +204,7 @@ export default function BlogFilter({ posts, allProducts }: Props) {
                 <option key={p.name} value={p.name}>{p.name} ({p.count})</option>
               ))}
             </select>
-            <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none" style={{ color: "#6f757d" }} />
+            <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none" style={{ color: "var(--text-hint)" }} />
           </div>
 
           <div className="relative">
@@ -219,14 +219,14 @@ export default function BlogFilter({ posts, allProducts }: Props) {
               <option value="oldest">Oldest first</option>
               <option value="az">A – Z</option>
             </select>
-            <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none" style={{ color: "#6f757d" }} />
+            <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none" style={{ color: "var(--text-hint)" }} />
           </div>
 
           {hasFilters && (
             <button
               onClick={clearFilters}
               className="text-sm font-semibold px-3.5 rounded-lg inline-flex items-center"
-              style={{ color: "#f97316", minHeight: "44px" }}
+              style={{ color: "var(--accent-text-lg)", minHeight: "44px" }}
             >
               Clear
             </button>
@@ -235,7 +235,7 @@ export default function BlogFilter({ posts, allProducts }: Props) {
 
         {/* ── Always-on result line ───────────────────────────── */}
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mt-3.5">
-          <p className="text-xs tabular-nums" style={{ color: "#6f757d" }} aria-live="polite">
+          <p className="text-xs tabular-nums" style={{ color: "var(--text-hint)" }} aria-live="polite">
             {filtered.length === posts.length
               ? `All ${posts.length} field notes`
               : `${filtered.length} of ${posts.length} field notes`}
@@ -282,7 +282,7 @@ export default function BlogFilter({ posts, allProducts }: Props) {
           <button
             onClick={clearFilters}
             className="text-sm font-semibold px-5 rounded-lg inline-flex items-center"
-            style={{ background: "#f97316", color: "#fff", minHeight: "44px" }}
+            style={{ background: "#f97316", color: "var(--on-accent)", minHeight: "44px" }}
           >
             Clear all filters
           </button>

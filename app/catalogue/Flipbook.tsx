@@ -171,7 +171,7 @@ export default function Flipbook({ pages, alt: altText = [], downloadHref }: Pro
 
   return (
     <main
-      className="relative h-dvh w-screen overflow-hidden bg-black text-white select-none"
+      className="relative h-dvh w-screen overflow-hidden bg-black text-[var(--text-primary)] select-none"
       onMouseMove={wakeChrome}
       onTouchStart={wakeChrome}
     >
@@ -285,13 +285,13 @@ export default function Flipbook({ pages, alt: altText = [], downloadHref }: Pro
         <Link
           href="/"
           className="pointer-events-auto inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.2em]
-                     text-white/80 hover:text-white"
+                     text-[var(--ink-80)] hover:text-[var(--text-primary)]"
         >
           <span aria-hidden>←</span> Hubss.com
         </Link>
         <div className="pointer-events-none text-center">
-          <p className="text-[10px] uppercase tracking-[0.25em] text-orange-400">Catalogue 2026</p>
-          <p className="text-[11px] text-white/70 tabular-nums">
+          <p className="text-[10px] uppercase tracking-[0.25em] text-[var(--accent-text)]">Catalogue 2026</p>
+          <p className="text-[11px] text-[var(--ink-70)] tabular-nums">
             {idx + 1} / {total}
           </p>
         </div>
@@ -301,8 +301,8 @@ export default function Flipbook({ pages, alt: altText = [], downloadHref }: Pro
               href={downloadHref}
               download
               className="inline-flex items-center gap-1.5 rounded-full
-                         border border-white/15 bg-white/10 px-3 py-1.5 text-[11px] uppercase
-                         tracking-[0.18em] text-white hover:bg-white/20"
+                         border border-[var(--ink-15)] bg-[var(--ink-10)] px-3 py-1.5 text-[11px] uppercase
+                         tracking-[0.18em] text-[var(--text-primary)] hover:bg-[var(--ink-20)]"
               aria-label="Download the catalogue as a PDF"
             >
               <DownloadIcon /> PDF
@@ -313,8 +313,8 @@ export default function Flipbook({ pages, alt: altText = [], downloadHref }: Pro
               type="button"
               onClick={onShare}
               className="inline-flex items-center gap-1.5 rounded-full
-                         border border-white/15 bg-white/10 px-3 py-1.5 text-[11px] uppercase
-                         tracking-[0.18em] text-white hover:bg-white/20"
+                         border border-[var(--ink-15)] bg-[var(--ink-10)] px-3 py-1.5 text-[11px] uppercase
+                         tracking-[0.18em] text-[var(--text-primary)] hover:bg-[var(--ink-20)]"
               aria-label="Share this catalogue"
             >
               <ShareIcon /> Share
@@ -354,8 +354,8 @@ export default function Flipbook({ pages, alt: altText = [], downloadHref }: Pro
             href="tel:+16043098212"
             data-event="phone_click"
             aria-label="Call 604-309-8212"
-            className="inline-grid h-12 w-12 place-items-center rounded-full border border-white/15
-                       bg-white/10 text-white hover:bg-white/20"
+            className="inline-grid h-12 w-12 place-items-center rounded-full border border-[var(--ink-15)]
+                       bg-[var(--ink-10)] text-[var(--text-primary)] hover:bg-[var(--ink-20)]"
           >
             <PhoneIcon />
           </a>
@@ -363,8 +363,8 @@ export default function Flipbook({ pages, alt: altText = [], downloadHref }: Pro
             href="mailto:info@hubss.com"
             data-event="email_click"
             aria-label="Email info@hubss.com"
-            className="inline-grid h-12 w-12 place-items-center rounded-full border border-white/15
-                       bg-white/10 text-white hover:bg-white/20"
+            className="inline-grid h-12 w-12 place-items-center rounded-full border border-[var(--ink-15)]
+                       bg-[var(--ink-10)] text-[var(--text-primary)] hover:bg-[var(--ink-20)]"
           >
             <MailIcon />
           </a>
@@ -377,8 +377,8 @@ export default function Flipbook({ pages, alt: altText = [], downloadHref }: Pro
         type="button"
         onClick={prev}
         disabled={idx === 0}
-        className="absolute left-2 top-1/2 z-10 hidden -translate-y-1/2 rounded-full border border-white/15
-                   bg-black/40 p-3 text-white backdrop-blur transition hover:bg-black/60
+        className="absolute left-2 top-1/2 z-10 hidden -translate-y-1/2 rounded-full border border-[var(--ink-15)]
+                   bg-black/40 p-3 text-[var(--text-primary)] backdrop-blur transition hover:bg-black/60
                    disabled:opacity-30 sm:block"
         aria-label="Previous page"
       >
@@ -388,8 +388,8 @@ export default function Flipbook({ pages, alt: altText = [], downloadHref }: Pro
         type="button"
         onClick={next}
         disabled={idx === total - 1}
-        className="absolute right-2 top-1/2 z-10 hidden -translate-y-1/2 rounded-full border border-white/15
-                   bg-black/40 p-3 text-white backdrop-blur transition hover:bg-black/60
+        className="absolute right-2 top-1/2 z-10 hidden -translate-y-1/2 rounded-full border border-[var(--ink-15)]
+                   bg-black/40 p-3 text-[var(--text-primary)] backdrop-blur transition hover:bg-black/60
                    disabled:opacity-30 sm:block"
         aria-label="Next page"
       >

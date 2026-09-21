@@ -27,7 +27,7 @@ export default function StatsBar() {
             >
               {/* Vertical divider — desktop only */}
               {i < stats.length - 1 && (
-                <span className="hidden md:block absolute right-0 top-1/4 bottom-1/4 w-px bg-zinc-700" />
+                <span className="hidden md:block absolute right-0 top-1/4 bottom-1/4 w-px bg-[var(--bg-card-surface)]" />
               )}
 
               <p
@@ -35,7 +35,7 @@ export default function StatsBar() {
               >
                 {stat.value}
               </p>
-              <p className="text-sm text-zinc-400">
+              <p className="text-sm text-[var(--text-muted)]">
                 {stat.label}
               </p>
             </motion.div>

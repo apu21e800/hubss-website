@@ -131,14 +131,14 @@ export default async function ApplicationPage({ params }: Props) {
         <div className="absolute inset-0" style={{ background: "linear-gradient(92deg, rgba(8,13,22,0.48) 0%, rgba(8,13,22,0.18) 45%, transparent 65%)" }} />
         <div className="absolute inset-0 flex items-end">
           <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-14">
-            <p className="text-xs font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#f97316" }}>
+            <p className="text-xs font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "var(--accent-text-lg)" }}>
               HUB Application
             </p>
             <h1
               className="font-black leading-[1.05] mb-3"
               style={{
                 fontSize: "clamp(2rem, 5vw, 3.75rem)",
-                color: "#F5F0EB",
+                color: "var(--text-primary)",
                 textShadow: "0 2px 24px rgba(0,0,0,0.5)",
                 letterSpacing: "-0.025em",
               }}
@@ -147,7 +147,7 @@ export default async function ApplicationPage({ params }: Props) {
             </h1>
             <p
               className="text-base sm:text-lg max-w-xl leading-relaxed"
-              style={{ color: "rgba(255,255,255,0.78)", textShadow: "0 1px 12px rgba(0,0,0,0.5)" }}
+              style={{ color: "var(--ink-78)", textShadow: "0 1px 12px rgba(0,0,0,0.5)" }}
             >
               {application.shortDesc}
             </p>
@@ -156,7 +156,7 @@ export default async function ApplicationPage({ params }: Props) {
       </div>
 
       {/* Main content */}
-      <div className="relative" style={{ background: "#151515" }}>
+      <div className="relative" style={{ background: "var(--bg-primary)" }}>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28">
 
           {/* Specify CTA bar */}
@@ -177,12 +177,12 @@ export default async function ApplicationPage({ params }: Props) {
             <div className="flex flex-wrap gap-3 relative flex-shrink-0">
               <Link href="/lunch-learn"
                 className="px-5 rounded-lg text-sm font-semibold transition-all inline-flex items-center"
-                style={{ background: "transparent", color: "var(--text-secondary)", border: "1px solid rgba(255,255,255,0.14)", minHeight: "44px" }}>
+                style={{ background: "transparent", color: "var(--text-secondary)", border: "1px solid var(--ink-14)", minHeight: "44px" }}>
                 Book a Lunch &amp; Learn
               </Link>
               <Link href="/contact"
                 className="px-5 rounded-lg text-sm font-bold transition-all inline-flex items-center"
-                style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff", boxShadow: "0 4px 16px rgba(249,115,22,0.32)", minHeight: "44px" }}>
+                style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "var(--on-accent)", boxShadow: "0 4px 16px rgba(249,115,22,0.32)", minHeight: "44px" }}>
                 See the Systems →
               </Link>
             </div>
@@ -222,14 +222,14 @@ export default async function ApplicationPage({ params }: Props) {
 
             {/* Right: related products */}
             <div>
-              <div className="rounded-xl p-8 mb-8 sticky top-24 relative overflow-hidden" style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.08)" }}>
+              <div className="rounded-xl p-8 mb-8 sticky top-24 relative overflow-hidden" style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--ink-08)" }}>
                 {/* Orange top accent */}
                 <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
                 {/* Was an orphan <h3> under the preceding <h2>, and "Recommended"
                     undersells it — HUB specifies these systems for this work, it
                     does not suggest them. Mirrors "Where <product> goes" on the
                     product page, pointing the other way down the same axis. */}
-                <h2 className="font-bold text-lg mb-6" style={{ color: "#F5F0EB", letterSpacing: "-0.01em" }}>
+                <h2 className="font-bold text-lg mb-6" style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
                   Systems for {application.name}
                 </h2>
                 <div className="space-y-3">
@@ -237,8 +237,8 @@ export default async function ApplicationPage({ params }: Props) {
                     <Link
                       key={product.slug}
                       href={`/products/${product.slug}`}
-                      className="flex items-center gap-3 px-3 rounded-lg transition-all group hover:bg-white/5"
-                      style={{ border: "1px solid rgba(255,255,255,0.06)", minHeight: "52px" }}
+                      className="flex items-center gap-3 px-3 rounded-lg transition-all group hover:bg-[var(--ink-05)]"
+                      style={{ border: "1px solid var(--ink-06)", minHeight: "52px" }}
                     >
                       <div className="relative overflow-hidden rounded-md flex-shrink-0" style={{ width: 48, height: 48 }}>
                         {/* The same photograph the product's own page leads with
@@ -253,10 +253,10 @@ export default async function ApplicationPage({ params }: Props) {
                         />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-sm truncate" style={{ color: "#F5F0EB" }}>{product.name}</p>
-                        <p className="text-xs truncate" style={{ color: "#868C98" }}>{product.shortDesc}</p>
+                        <p className="font-semibold text-sm truncate" style={{ color: "var(--text-primary)" }}>{product.name}</p>
+                        <p className="text-xs truncate" style={{ color: "var(--text-secondary)" }}>{product.shortDesc}</p>
                       </div>
-                      <svg className="w-4 h-4 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: "#f97316" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-4 h-4 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: "var(--accent-text-lg)" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                       </svg>
                     </Link>
@@ -268,7 +268,7 @@ export default async function ApplicationPage({ params }: Props) {
                   className="flex items-center justify-center gap-2 w-full text-center font-bold py-4 rounded-lg mt-8 transition-all text-sm"
                   style={{
                     background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
-                    color: "#fff",
+                    color: "var(--on-accent)",
                     boxShadow: "0 4px 16px rgba(249,115,22,0.35)",
                   }}
                 >
@@ -279,8 +279,8 @@ export default async function ApplicationPage({ params }: Props) {
                 </Link>
                 <Link
                   href="/lunch-learn"
-                  className="flex items-center justify-center gap-2 w-full text-center font-semibold py-3.5 rounded-lg mt-3 transition-all text-sm hover:border-orange-500/40 hover:text-white"
-                  style={{ background: "transparent", color: "#9CA3AF", border: "1px solid rgba(255,255,255,0.12)" }}
+                  className="flex items-center justify-center gap-2 w-full text-center font-semibold py-3.5 rounded-lg mt-3 transition-all text-sm hover:border-orange-500/40 hover:text-[var(--text-primary)]"
+                  style={{ background: "transparent", color: "var(--text-muted)", border: "1px solid var(--ink-12)" }}
                 >
                   Book a Lunch &amp; Learn
                 </Link>

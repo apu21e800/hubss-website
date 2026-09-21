@@ -65,7 +65,7 @@ export const FIELD_NOTE_TYPES: FieldNoteTypeMeta[] = [
     schemaType: "Article",
     tint: "rgba(249,115,22,0.14)",
     border: "rgba(249,115,22,0.35)",
-    text: "#FB923C",
+    text: "var(--accent-text)",
   },
   {
     label: "Project Profile",
@@ -84,7 +84,7 @@ export const FIELD_NOTE_TYPES: FieldNoteTypeMeta[] = [
     // already does that.
     tint: "rgba(249,115,22,0.14)",
     border: "rgba(249,115,22,0.35)",
-    text: "#FB923C",
+    text: "var(--accent-text)",
   },
   {
     label: "Guide",
@@ -96,7 +96,7 @@ export const FIELD_NOTE_TYPES: FieldNoteTypeMeta[] = [
     schemaType: "TechArticle",
     tint: "rgba(249,115,22,0.1)",
     border: "rgba(249,115,22,0.28)",
-    text: "#FDBA74",
+    text: "var(--accent-soft-text)",
   },
   {
     label: "White Paper",
@@ -106,9 +106,9 @@ export const FIELD_NOTE_TYPES: FieldNoteTypeMeta[] = [
     promise:
       "The deep documents: engineering challenges, material systems, installation standards, and cost modelling, assembled for teams building a multi-year surface program.",
     schemaType: "TechArticle",
-    tint: "rgba(255,255,255,0.06)",
+    tint: "var(--ink-06)",
     border: "rgba(255,255,255,0.16)",
-    text: "#E5E7EB",
+    text: "var(--text-body)",
   },
   {
     label: "Blog",
@@ -118,9 +118,9 @@ export const FIELD_NOTE_TYPES: FieldNoteTypeMeta[] = [
     promise:
       "Shorter reads on where decorative pavement is heading in Canada — material context, industry shifts, and the thinking behind the systems.",
     schemaType: "BlogPosting",
-    tint: "rgba(255,255,255,0.05)",
+    tint: "var(--ink-05)",
     border: "rgba(255,255,255,0.12)",
-    text: "#9CA3AF",
+    text: "var(--text-muted)",
   },
 ];
 

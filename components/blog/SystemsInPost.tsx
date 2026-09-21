@@ -22,7 +22,7 @@ export default function SystemsInPost({ products }: { products: string[] }) {
         className="rounded-xl p-5 sm:p-6"
         style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--border-color)" }}
       >
-        <p className="text-[10px] font-bold tracking-[0.2em] uppercase mb-3.5" style={{ color: "#FB923C" }}>
+        <p className="text-[10px] font-bold tracking-[0.2em] uppercase mb-3.5" style={{ color: "var(--accent-text)" }}>
           Systems in this piece
         </p>
         <div className="flex flex-wrap gap-2">
@@ -30,15 +30,15 @@ export default function SystemsInPost({ products }: { products: string[] }) {
             <Link
               key={p}
               href={`/products/${PRODUCT_SLUGS[p]}`}
-              className="group inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-[13px] font-semibold transition-colors hover:bg-white/5"
-              style={{ background: "rgba(249,115,22,0.08)", border: "1px solid rgba(249,115,22,0.2)", color: "#F5F0EB" }}
+              className="group inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-[13px] font-semibold transition-colors hover:bg-[var(--ink-05)]"
+              style={{ background: "rgba(249,115,22,0.08)", border: "1px solid rgba(249,115,22,0.2)", color: "var(--text-primary)" }}
             >
               {p}
               <svg
                 width="11"
                 height="11"
                 fill="none"
-                stroke="#FB923C"
+                stroke="var(--accent-text)"
                 viewBox="0 0 24 24"
                 className="transition-transform group-hover:translate-x-0.5"
               >

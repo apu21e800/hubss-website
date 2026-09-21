@@ -20,7 +20,9 @@ const footerApplications = [
 
 export default function Footer() {
   return (
-    <footer className="asphalt-noise" style={{ background: "var(--bg-dark)", position: "relative" }}>
+    <footer
+      /* always dark */
+      data-surface="dark" className="asphalt-noise" style={{ background: "var(--bg-dark)", position: "relative" }}>
 
       {/* Wheel watermark — subtle background accent */}
       <div style={{ position: "absolute", bottom: "24px", right: "32px", opacity: 0.04, pointerEvents: "none", zIndex: 0 }}>
@@ -66,7 +68,7 @@ export default function Footer() {
                 aria-label="Canadian"
                 style={{
                   paddingRight: 10,
-                  borderRight: "1px solid rgba(255,255,255,0.1)",
+                  borderRight: "1px solid var(--ink-10)",
                 }}
               >
                 <svg
@@ -78,9 +80,9 @@ export default function Footer() {
                   style={{ display: "block", flexShrink: 0, borderRadius: 1 }}
                 >
                   <path fill="#f00" d="m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z" />
-                  <path fill="#fff" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z" />
+                  <path fill="var(--text-primary)" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z" />
                 </svg>
-                <span className="text-[10px] font-bold tracking-[0.18em] uppercase" style={{ color: "rgba(255,255,255,0.55)", lineHeight: 1 }}>
+                <span className="text-[10px] font-bold tracking-[0.18em] uppercase" style={{ color: "var(--ink-55)", lineHeight: 1 }}>
                   Canadian
                 </span>
               </span>
@@ -100,7 +102,7 @@ export default function Footer() {
                 <li key={p.slug}>
                   <Link
                     href={`/products/${p.slug}`}
-                    className="text-sm flex items-center transition-colors hover:text-[#f97316] underline-offset-4 hover:underline"
+                    className="text-sm flex items-center transition-colors hover:text-[var(--accent-text-lg)] underline-offset-4 hover:underline"
                     data-tap="40"
                     style={{ color: "var(--text-secondary)", paddingTop: 3, paddingBottom: 3 }}
                   >
@@ -119,7 +121,7 @@ export default function Footer() {
                 <li key={a.slug}>
                   <Link
                     href={`/applications/${a.slug}`}
-                    className="text-sm flex items-center transition-colors hover:text-[#f97316] underline-offset-4 hover:underline"
+                    className="text-sm flex items-center transition-colors hover:text-[var(--accent-text-lg)] underline-offset-4 hover:underline"
                     data-tap="40"
                     style={{ color: "var(--text-secondary)", paddingTop: 3, paddingBottom: 3 }}
                   >
@@ -141,14 +143,14 @@ export default function Footer() {
                   className="absolute left-0 top-0 bottom-0 w-0.5"
                   style={{ background: "linear-gradient(180deg, #F97316 0%, #EAB308 100%)" }}
                 />
-                <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "#f97316" }}>
+                <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "var(--accent-text-lg)" }}>
                   West Office
                 </p>
                 <p className="text-sm mb-1" style={{ color: "var(--text-primary)" }}>Ladysmith, BC</p>
-                <a href="mailto:cleve.stordy@hubss.com" className="text-xs flex items-center transition-colors hover:text-white underline-offset-4 hover:underline" data-tap="40" style={{ color: "var(--text-secondary)", paddingTop: 2, paddingBottom: 2 }}>
+                <a href="mailto:cleve.stordy@hubss.com" className="text-xs flex items-center transition-colors hover:text-[var(--text-primary)] underline-offset-4 hover:underline" data-tap="40" style={{ color: "var(--text-secondary)", paddingTop: 2, paddingBottom: 2 }}>
                   cleve.stordy@hubss.com
                 </a>
-                <a href="tel:6043098212" className="text-xs flex items-center transition-colors hover:text-white" data-tap="40" style={{ color: "var(--text-secondary)", paddingTop: 2, paddingBottom: 2 }}>
+                <a href="tel:6043098212" className="text-xs flex items-center transition-colors hover:text-[var(--text-primary)]" data-tap="40" style={{ color: "var(--text-secondary)", paddingTop: 2, paddingBottom: 2 }}>
                   604-309-8212
                 </a>
               </div>
@@ -159,14 +161,14 @@ export default function Footer() {
                   className="absolute left-0 top-0 bottom-0 w-0.5"
                   style={{ background: "linear-gradient(180deg, #F97316 0%, #EAB308 100%)" }}
                 />
-                <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "#f97316" }}>
+                <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "var(--accent-text-lg)" }}>
                   East Office
                 </p>
                 <p className="text-sm mb-1" style={{ color: "var(--text-primary)" }}>Milton, Ontario</p>
-                <a href="mailto:doug.bain@hubss.com" className="text-xs flex items-center transition-colors hover:text-white underline-offset-4 hover:underline" data-tap="40" style={{ color: "var(--text-secondary)", paddingTop: 2, paddingBottom: 2 }}>
+                <a href="mailto:doug.bain@hubss.com" className="text-xs flex items-center transition-colors hover:text-[var(--text-primary)] underline-offset-4 hover:underline" data-tap="40" style={{ color: "var(--text-secondary)", paddingTop: 2, paddingBottom: 2 }}>
                   doug.bain@hubss.com
                 </a>
-                <a href="tel:4165409287" className="text-xs flex items-center transition-colors hover:text-white" data-tap="40" style={{ color: "var(--text-secondary)", paddingTop: 2, paddingBottom: 2 }}>
+                <a href="tel:4165409287" className="text-xs flex items-center transition-colors hover:text-[var(--text-primary)]" data-tap="40" style={{ color: "var(--text-secondary)", paddingTop: 2, paddingBottom: 2 }}>
                   416-540-9287
                 </a>
               </div>
@@ -183,10 +185,10 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} HUB Surface Systems. All rights reserved.
           </p>
           <div className="flex gap-6">
-            <Link href="/privacy" className="text-xs inline-flex items-center transition-colors hover:text-white underline-offset-4 hover:underline" data-tap="40" style={{ color: "var(--text-muted)", paddingTop: 2, paddingBottom: 2 }}>
+            <Link href="/privacy" className="text-xs inline-flex items-center transition-colors hover:text-[var(--text-primary)] underline-offset-4 hover:underline" data-tap="40" style={{ color: "var(--text-muted)", paddingTop: 2, paddingBottom: 2 }}>
               Privacy Policy
             </Link>
-            <Link href="/terms" className="text-xs inline-flex items-center transition-colors hover:text-white underline-offset-4 hover:underline" data-tap="40" style={{ color: "var(--text-muted)", paddingTop: 2, paddingBottom: 2 }}>
+            <Link href="/terms" className="text-xs inline-flex items-center transition-colors hover:text-[var(--text-primary)] underline-offset-4 hover:underline" data-tap="40" style={{ color: "var(--text-muted)", paddingTop: 2, paddingBottom: 2 }}>
               Terms of Use
             </Link>
           </div>

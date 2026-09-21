@@ -204,7 +204,7 @@ export default function GalleryPage() {
   };
 
   return (
-    <main style={{ background: "#101010", minHeight: "100vh" }}>
+    <main style={{ background: "var(--bg-dark)", minHeight: "100vh" }}>
       <JsonLd data={gallerySchema} />
       <JsonLd data={breadcrumbSchema} />
       <Nav />
@@ -213,13 +213,13 @@ export default function GalleryPage() {
 
         {/* Header */}
         <div className="mb-12">
-          <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-3" style={{ color: "#f97316" }}>
+          <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-3" style={{ color: "var(--accent-text-lg)" }}>
             Photo Archive
           </p>
           <h1
             className="font-black mb-4"
             style={{
-              color: "#F5F0EB",
+              color: "var(--text-primary)",
               fontSize: "clamp(2rem, 4vw, 3.5rem)",
               lineHeight: 1.0,
               letterSpacing: "-0.03em",
@@ -227,7 +227,7 @@ export default function GalleryPage() {
           >
             Field Documentation
           </h1>
-          <p style={{ color: "#868c98", fontSize: "1.05rem" }}>
+          <p style={{ color: "var(--text-secondary)", fontSize: "1.05rem" }}>
             {IMAGES.length}+ installations documented across Canada.
           </p>
         </div>
@@ -243,10 +243,10 @@ export default function GalleryPage() {
                 onClick={() => { setActive(cat.value); setLightbox(null); setVisible(PAGE); }}
                 className="flex items-center gap-1.5 text-xs font-semibold px-4 rounded-full transition-all whitespace-nowrap"
                 style={{
-                  background: isActive ? "#F97316" : "rgba(255,255,255,0.05)",
-                  color: isActive ? "#fff" : "#9ca3af",
+                  background: isActive ? "#F97316" : "var(--ink-05)",
+                  color: isActive ? "var(--on-accent)" : "var(--text-muted)",
                   border: "1px solid",
-                  borderColor: isActive ? "#F97316" : "rgba(255,255,255,0.1)",
+                  borderColor: isActive ? "#F97316" : "var(--ink-10)",
                   // 44px floor — these were 35px tall, and category filters are
                   // the first thing a phone user reaches for on this page.
                   minHeight: 44,
@@ -256,8 +256,8 @@ export default function GalleryPage() {
                 <span
                   className="text-[10px] font-mono px-1.5 py-0.5 rounded-full"
                   style={{
-                    background: isActive ? "rgba(255,255,255,0.2)" : "var(--border-color)",
-                    color: isActive ? "#fff" : "rgba(255,255,255,0.4)",
+                    background: isActive ? "var(--ink-20)" : "var(--border-color)",
+                    color: isActive ? "var(--text-primary)" : "var(--ink-40)",
                   }}
                 >
                   {count}
@@ -321,10 +321,10 @@ export default function GalleryPage() {
                     className="absolute inset-0 flex flex-col justify-end p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                     style={{ background: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.1) 60%, transparent 100%)" }}
                   >
-                    <p className="text-xs font-bold" style={{ color: "#f97316" }}>{img.category.toUpperCase().replace("-", " ")}</p>
-                    <p className="text-sm font-semibold leading-tight" style={{ color: "#F5F0EB" }}>{img.alt}</p>
-                    <p className="text-xs mt-0.5" style={{ color: "rgba(255,255,255,0.55)" }}>{img.location}</p>
-                    <div className="mt-2 flex items-center gap-1" style={{ color: "rgba(255,255,255,0.35)" }}>
+                    <p className="text-xs font-bold" style={{ color: "var(--accent-text-lg)" }}>{img.category.toUpperCase().replace("-", " ")}</p>
+                    <p className="text-sm font-semibold leading-tight" style={{ color: "var(--text-primary)" }}>{img.alt}</p>
+                    <p className="text-xs mt-0.5" style={{ color: "var(--ink-55)" }}>{img.location}</p>
+                    <div className="mt-2 flex items-center gap-1" style={{ color: "var(--ink-35)" }}>
                       <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" strokeWidth={2} strokeLinecap="round" />
                       </svg>
@@ -340,13 +340,13 @@ export default function GalleryPage() {
         {/* Load more — sentinel auto-loads as it approaches; button as backup */}
         {hasMore && (
           <div ref={sentinelRef} className="mt-10 flex flex-col items-center gap-3">
-            <p className="text-xs" style={{ color: "#868c98" }} aria-live="polite">
+            <p className="text-xs" style={{ color: "var(--text-secondary)" }} aria-live="polite">
               Showing {displayed.length} of {filtered.length}
             </p>
             <button
               onClick={() => setVisible((v) => Math.min(v + PAGE, filtered.length))}
               className="px-6 py-2.5 rounded-lg text-sm font-semibold transition-all hover:brightness-110 active:scale-[0.97]"
-              style={{ background: "#f97316", color: "#fff" }}
+              style={{ background: "#f97316", color: "var(--on-accent)" }}
             >
               Load more
             </button>
@@ -355,7 +355,7 @@ export default function GalleryPage() {
 
         {/* Empty state */}
         {filtered.length === 0 && (
-          <div className="text-center py-24" style={{ color: "rgba(255,255,255,0.3)" }}>
+          <div className="text-center py-24" style={{ color: "var(--ink-30)" }}>
             <p>No photos in this category yet.</p>
           </div>
         )}

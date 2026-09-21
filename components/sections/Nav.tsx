@@ -8,6 +8,7 @@ import SearchOverlay from "@/components/sections/SearchOverlay";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 
 
 // ── Nav link config ────────────────────────────────────────────
@@ -154,7 +155,7 @@ function LLMenuCard() {
   return (
     <Link
       href="/lunch-learn"
-      className="group flex items-center gap-3 mt-5 px-3.5 py-3 rounded-xl transition-colors hover:bg-white/5"
+      className="group flex items-center gap-3 mt-5 px-3.5 py-3 rounded-xl transition-colors hover:bg-[var(--ink-05)]"
       style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(249,115,22,0.22)" }}
     >
       <span className="relative flex-shrink-0 w-10 h-10">
@@ -170,10 +171,10 @@ function LLMenuCard() {
         />
       </span>
       <span className="flex-1 min-w-0">
-        <span className="block text-[12px] font-bold" style={{ color: "#F5F0EB" }}>Book a Lunch &amp; Learn</span>
-        <span className="block text-[11px] mt-0.5" style={{ color: "rgba(255,255,255,0.6)" }}>Free spec session — lunch on us</span>
+        <span className="block text-[12px] font-bold" style={{ color: "var(--text-primary)" }}>Book a Lunch &amp; Learn</span>
+        <span className="block text-[11px] mt-0.5" style={{ color: "var(--ink-60)" }}>Free spec session — lunch on us</span>
       </span>
-      <svg width="13" height="13" fill="none" stroke="#FB923C" viewBox="0 0 24 24" className="flex-shrink-0 transition-transform group-hover:translate-x-0.5">
+      <svg width="13" height="13" fill="none" stroke="var(--accent-text)" viewBox="0 0 24 24" className="flex-shrink-0 transition-transform group-hover:translate-x-0.5">
         <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     </Link>
@@ -189,7 +190,7 @@ function LLMenuCard() {
 //     single-product category visual parity with the 6-product column.
 //   • Asphalt Repair tile image swapped (was GEVEKO-branded bag).
 //   • Product taglines lifted from 45% → 62% white for readability.
-const ACCENT = "#FB923C";  // small-text accent (WCAG-safe on dark surfaces)
+const ACCENT = "var(--accent-text)";  // small-text accent (WCAG-safe on dark surfaces)
 const BRAND  = "#F97316";  // brand orange — reserved for larger / button use
 
 // ── Menu footer strip — editorial + promotion for the directory menus ────
@@ -205,11 +206,11 @@ function MenuFooterStrip() {
   return (
     <div
       className="mt-9 pt-6 grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-10"
-      style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}
+      style={{ borderTop: "1px solid var(--ink-08)" }}
     >
       <Link
         href={`/blog/${latest.slug}`}
-        className="group flex items-center gap-4 px-3 py-2.5 rounded-xl transition-colors hover:bg-white/5"
+        className="group flex items-center gap-4 px-3 py-2.5 rounded-xl transition-colors hover:bg-[var(--ink-05)]"
       >
         <div className="relative flex-shrink-0 rounded-md overflow-hidden" style={{ width: 64, height: 64 }}>
           <Image
@@ -224,7 +225,7 @@ function MenuFooterStrip() {
           <p className="text-[10px] font-bold tracking-[0.18em] uppercase mb-1" style={{ color: ACCENT }}>
             From the field notes
           </p>
-          <p className="text-[14px] font-semibold leading-snug line-clamp-2 group-hover:text-orange-400 transition-colors" style={{ color: "#F5F0EB" }}>
+          <p className="text-[14px] font-semibold leading-snug line-clamp-2 group-hover:text-[var(--accent-text)] transition-colors" style={{ color: "var(--text-primary)" }}>
             {latest.title}
           </p>
         </div>
@@ -232,18 +233,18 @@ function MenuFooterStrip() {
 
       <Link
         href="/catalogue"
-        className="group flex items-center justify-between gap-4 rounded-xl px-4 py-2.5 transition-colors hover:bg-white/5"
+        className="group flex items-center justify-between gap-4 rounded-xl px-4 py-2.5 transition-colors hover:bg-[var(--ink-05)]"
         style={{
-          background: "linear-gradient(135deg, rgba(249,115,22,0.10) 0%, rgba(255,255,255,0.02) 100%)",
+          background: "linear-gradient(135deg, rgba(249,115,22,0.10) 0%, var(--ink-02) 100%)",
           border: "1px solid rgba(249,115,22,0.35)",
         }}
       >
         <div className="min-w-0">
-          <p className="text-[9px] font-bold tracking-[0.2em] uppercase mb-1" style={{ color: "rgba(255,255,255,0.45)" }}>
+          <p className="text-[9px] font-bold tracking-[0.2em] uppercase mb-1" style={{ color: "var(--ink-45)" }}>
             Promoted
           </p>
-          <p className="text-[14px] font-bold" style={{ color: "#F5F0EB" }}>The 2027 Catalogue</p>
-          <p className="text-[12px] mt-0.5 truncate" style={{ color: "rgba(255,255,255,0.62)" }}>
+          <p className="text-[14px] font-bold" style={{ color: "var(--text-primary)" }}>The 2027 Catalogue</p>
+          <p className="text-[12px] mt-0.5 truncate" style={{ color: "var(--ink-62)" }}>
             Every system, spec, and pattern — one book.
           </p>
         </div>
@@ -263,15 +264,15 @@ function ProductsMegaMenu() {
           <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3" style={{ color: ACCENT }}>
             Products
           </p>
-          <h3 className="text-xl font-bold leading-tight mb-2" style={{ color: "#F5F0EB" }}>
+          <h3 className="text-xl font-bold leading-tight mb-2" style={{ color: "var(--text-primary)" }}>
             Decorative pavement, engineered for Canadian streets.
           </h3>
-          <p className="text-[13px] leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.65)" }}>
+          <p className="text-[13px] leading-relaxed mb-4" style={{ color: "var(--ink-65)" }}>
             14 specified systems for crosswalks, transit lanes, plazas, and decorative hardscape — installed coast to coast.
           </p>
           <Link href="/products"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold border border-white/15 bg-white/[0.03] hover:border-orange-400/60 hover:text-orange-400 transition-colors"
-            style={{ color: "#F5F0EB" }}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold border border-[var(--ink-15)] bg-[var(--ink-03)] hover:border-orange-400/60 hover:text-[var(--accent-text)] transition-colors"
+            style={{ color: "var(--text-primary)" }}
           >
             Browse all products
             <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -307,14 +308,14 @@ function ProductsMegaMenu() {
                     <Link
                       key={p.slug}
                       href={`/products/${p.slug}`}
-                      className="group flex items-start justify-between gap-2 px-2.5 py-2 rounded-md transition-colors hover:bg-white/5"
+                      className="group flex items-start justify-between gap-2 px-2.5 py-2 rounded-md transition-colors hover:bg-[var(--ink-05)]"
                     >
                       <span className="min-w-0">
-                        <span className="block text-[14px] font-semibold leading-snug group-hover:text-orange-400 transition-colors" style={{ color: "#F5F0EB" }}>
+                        <span className="block text-[14px] font-semibold leading-snug group-hover:text-[var(--accent-text)] transition-colors" style={{ color: "var(--text-primary)" }}>
                           {p.name}
                         </span>
                         {PRODUCT_TAGLINE[p.slug] && (
-                          <span className="block text-[11px] leading-snug mt-0.5 truncate" style={{ color: "rgba(255,255,255,0.62)" }}>
+                          <span className="block text-[11px] leading-snug mt-0.5 truncate" style={{ color: "var(--ink-62)" }}>
                             {PRODUCT_TAGLINE[p.slug]}
                           </span>
                         )}
@@ -333,18 +334,18 @@ function ProductsMegaMenu() {
                   {cat.secondary && (
                     <Link
                       href={cat.secondary.href}
-                      className="group flex items-start justify-between gap-2 px-2.5 py-2.5 mt-2 rounded-md transition-colors hover:bg-white/5"
+                      className="group flex items-start justify-between gap-2 px-2.5 py-2.5 mt-2 rounded-md transition-colors hover:bg-[var(--ink-05)]"
                       style={{ borderTop: "1px solid var(--border-color)" }}
                     >
                       <span className="min-w-0">
                         <span className="block text-[10px] font-bold tracking-[0.18em] uppercase" style={{ color: ACCENT }}>
                           See also
                         </span>
-                        <span className="block text-[14px] font-semibold leading-tight mt-0.5 group-hover:text-orange-400 transition-colors" style={{ color: "#F5F0EB" }}>
+                        <span className="block text-[14px] font-semibold leading-tight mt-0.5 group-hover:text-[var(--accent-text)] transition-colors" style={{ color: "var(--text-primary)" }}>
                           {cat.secondary.label}
                         </span>
                         {cat.secondary.meta && (
-                          <span className="block text-[11px] leading-snug mt-0.5 truncate" style={{ color: "rgba(255,255,255,0.62)" }}>
+                          <span className="block text-[11px] leading-snug mt-0.5 truncate" style={{ color: "var(--ink-62)" }}>
                             {cat.secondary.meta}
                           </span>
                         )}
@@ -409,14 +410,14 @@ function FieldNotesMegaMenu() {
               <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-2" style={{ color: ACCENT }}>
                 Field Notes
               </p>
-              <p className="text-lg font-bold leading-tight" style={{ color: "#F5F0EB" }}>
+              <p className="text-lg font-bold leading-tight" style={{ color: "var(--text-primary)" }}>
                 What we learn from the road.
               </p>
               {/* The catalogue's signature dash — eyebrow, name, orange rule. */}
               <span aria-hidden className="block mt-2.5 mb-4 rounded-full" style={{ width: 44, height: 3, background: "#F97316" }} />
               <Link href="/blog"
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold border border-white/20 bg-black/25 backdrop-blur-sm hover:border-orange-400/60 hover:text-orange-400 transition-colors"
-                style={{ color: "#F5F0EB" }}
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold border border-[var(--ink-20)] bg-black/25 backdrop-blur-sm hover:border-orange-400/60 hover:text-[var(--accent-text)] transition-colors"
+                style={{ color: "var(--text-primary)" }}
               >
                 Browse all field notes
                 <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -432,7 +433,7 @@ function FieldNotesMegaMenu() {
                 {featured.category}
               </span>
               <span className="block font-black leading-[1.04]" style={{
-                color: "#F5F0EB",
+                color: "var(--text-primary)",
                 fontSize: "clamp(1.9rem, 3.6vw, 3.4rem)",
                 letterSpacing: "-0.025em",
                 textShadow: "0 2px 24px rgba(0,0,0,0.45)",
@@ -451,7 +452,7 @@ function FieldNotesMegaMenu() {
             className="col-span-12 lg:col-span-4 flex flex-col p-6 lg:p-7"
             style={{
               background: "rgba(7,11,18,0.84)",
-              borderLeft: "1px solid rgba(255,255,255,0.08)",
+              borderLeft: "1px solid var(--ink-08)",
               backdropFilter: "blur(10px)",
               WebkitBackdropFilter: "blur(10px)",
             }}
@@ -467,7 +468,7 @@ function FieldNotesMegaMenu() {
                 <Link
                   key={post.slug}
                   href={`/blog/${post.slug}`}
-                  className="group flex gap-3 px-2 py-2 rounded-md transition-colors hover:bg-white/5"
+                  className="group flex gap-3 px-2 py-2 rounded-md transition-colors hover:bg-[var(--ink-05)]"
                 >
                   <div className="relative flex-shrink-0 rounded-md overflow-hidden" style={{ width: 52, height: 52 }}>
                     <Image
@@ -482,7 +483,7 @@ function FieldNotesMegaMenu() {
                     <p className="text-[10px] font-bold tracking-[0.18em] uppercase mb-0.5" style={{ color: ACCENT }}>
                       {post.category}
                     </p>
-                    <p className="text-[13px] font-semibold leading-snug group-hover:text-orange-400 transition-colors line-clamp-2" style={{ color: "#F5F0EB" }}>
+                    <p className="text-[13px] font-semibold leading-snug group-hover:text-[var(--accent-text)] transition-colors line-clamp-2" style={{ color: "var(--text-primary)" }}>
                       {post.title}
                     </p>
                   </div>
@@ -493,8 +494,8 @@ function FieldNotesMegaMenu() {
             {/* Browse by type — slugs mirror lib/field-notes-taxonomy.ts;
                 hardcoded so the nav bundle doesn't carry the whole taxonomy
                 (keyword maps and all) for five stable links. */}
-            <div className="mt-4 pt-3.5" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
-              <p className="text-[10px] font-bold tracking-[0.18em] uppercase mb-2" style={{ color: "rgba(255,255,255,0.45)" }}>
+            <div className="mt-4 pt-3.5" style={{ borderTop: "1px solid var(--ink-08)" }}>
+              <p className="text-[10px] font-bold tracking-[0.18em] uppercase mb-2" style={{ color: "var(--ink-45)" }}>
                 Browse by type
               </p>
               <div className="flex flex-wrap gap-x-4 gap-y-1.5">
@@ -508,8 +509,8 @@ function FieldNotesMegaMenu() {
                   <Link
                     key={t.href}
                     href={t.href}
-                    className="text-[12px] font-semibold transition-colors hover:text-orange-400"
-                    style={{ color: "rgba(255,255,255,0.68)" }}
+                    className="text-[12px] font-semibold transition-colors hover:text-[var(--accent-text)]"
+                    style={{ color: "var(--ink-68)" }}
                   >
                     {t.label}
                   </Link>
@@ -523,24 +524,24 @@ function FieldNotesMegaMenu() {
                 here, the PROMOTED label is already telling the truth. */}
             <Link
               href="/catalogue"
-              className="group block mt-auto rounded-xl px-4 py-3.5 transition-colors hover:bg-white/5"
+              className="group block mt-auto rounded-xl px-4 py-3.5 transition-colors hover:bg-[var(--ink-05)]"
               style={{
-                background: "linear-gradient(135deg, rgba(249,115,22,0.10) 0%, rgba(255,255,255,0.02) 100%)",
+                background: "linear-gradient(135deg, rgba(249,115,22,0.10) 0%, var(--ink-02) 100%)",
                 border: "1px solid rgba(249,115,22,0.35)",
               }}
             >
               <span className="flex items-center justify-between mb-1">
-                <span className="text-[9px] font-bold tracking-[0.2em] uppercase" style={{ color: "rgba(255,255,255,0.45)" }}>
+                <span className="text-[9px] font-bold tracking-[0.2em] uppercase" style={{ color: "var(--ink-45)" }}>
                   Promoted
                 </span>
                 <svg width="12" height="12" fill="none" stroke={ACCENT} viewBox="0 0 24 24" className="transition-transform group-hover:translate-x-0.5">
                   <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </span>
-              <span className="block text-[14px] font-bold" style={{ color: "#F5F0EB" }}>
+              <span className="block text-[14px] font-bold" style={{ color: "var(--text-primary)" }}>
                 The 2027 Catalogue
               </span>
-              <span className="block text-[12px] mt-0.5" style={{ color: "rgba(255,255,255,0.62)" }}>
+              <span className="block text-[12px] mt-0.5" style={{ color: "var(--ink-62)" }}>
                 Every system, spec, and pattern — one book.
               </span>
             </Link>
@@ -565,15 +566,15 @@ function ApplicationsMegaMenu() {
           <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3" style={{ color: ACCENT }}>
             Applications
           </p>
-          <h3 className="text-xl font-bold leading-tight mb-2" style={{ color: "#F5F0EB" }}>
+          <h3 className="text-xl font-bold leading-tight mb-2" style={{ color: "var(--text-primary)" }}>
             Surfaces that do real work.
           </h3>
-          <p className="text-[13px] leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.65)" }}>
+          <p className="text-[13px] leading-relaxed mb-4" style={{ color: "var(--ink-65)" }}>
             Crosswalks, transit lanes, parks, plazas, parking lots, airfields — every surface where decorative pavement and durable markings meet the brief.
           </p>
           <Link href="/applications"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold border border-white/15 bg-white/[0.03] hover:border-orange-400/60 hover:text-orange-400 transition-colors"
-            style={{ color: "#F5F0EB" }}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold border border-[var(--ink-15)] bg-[var(--ink-03)] hover:border-orange-400/60 hover:text-[var(--accent-text)] transition-colors"
+            style={{ color: "var(--text-primary)" }}
           >
             Browse all applications
             <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -601,13 +602,13 @@ function ApplicationsMegaMenu() {
                     <Link
                       key={a.slug}
                       href={`/applications/${a.slug}`}
-                      className="group flex items-center justify-between gap-2 px-2.5 py-2.5 rounded-md transition-colors hover:bg-white/5"
+                      className="group flex items-center justify-between gap-2 px-2.5 py-2.5 rounded-md transition-colors hover:bg-[var(--ink-05)]"
                     >
-                      <span className="text-[14px] font-semibold group-hover:text-orange-400 transition-colors" style={{ color: "#F5F0EB" }}>
+                      <span className="text-[14px] font-semibold group-hover:text-[var(--accent-text)] transition-colors" style={{ color: "var(--text-primary)" }}>
                         {a.name}
                       </span>
                       <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        className="opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: "#F97316" }}>
+                        className="opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: "var(--accent-text-lg)" }}>
                         <path d="M9 18l6-6-6-6" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </Link>
@@ -664,7 +665,7 @@ function MobileMenuLabel({ children }: { children: React.ReactNode }) {
   return (
     <p
       className="px-1 pt-6 pb-3 text-[10px] font-bold tracking-[0.22em] uppercase select-none"
-      style={{ color: "#F97316" }}
+      style={{ color: "var(--accent-text-lg)" }}
     >
       {children}
     </p>
@@ -675,7 +676,7 @@ function MobileMenuLabel({ children }: { children: React.ReactNode }) {
 function MobileGroupDivider({ label }: { label: string }) {
   return (
     <div className="flex items-center gap-3 px-1 pt-5 pb-2">
-      <span className="text-[9px] font-bold tracking-[0.22em] uppercase" style={{ color: "rgba(255,255,255,0.5)" }}>{label}</span>
+      <span className="text-[9px] font-bold tracking-[0.22em] uppercase" style={{ color: "var(--ink-50)" }}>{label}</span>
       <div className="flex-1 h-px" style={{ background: "var(--fill-subtle)" }} />
     </div>
   );
@@ -700,7 +701,7 @@ function MobileNavRow({
       href={href}
       onClick={onClose}
       className="flex items-center gap-4 px-1 py-[18px] rounded-xl active:scale-[0.98] active:opacity-75 transition-[transform,opacity] duration-100"
-      style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}
+      style={{ borderBottom: "1px solid var(--ink-05)" }}
     >
       {/* Thumbnail */}
       <div
@@ -719,13 +720,13 @@ function MobileNavRow({
       </div>
       {/* Text */}
       <div className="flex-1 min-w-0">
-        <p className="text-[15px] font-[500] leading-tight truncate" style={{ color: "#F5F0EB" }}>{name}</p>
+        <p className="text-[15px] font-[500] leading-tight truncate" style={{ color: "var(--text-primary)" }}>{name}</p>
         {tagline && (
-          <p className="text-[13px] mt-0.5 leading-snug truncate" style={{ color: "rgba(255,255,255,0.5)", fontWeight: 400 }}>{tagline}</p>
+          <p className="text-[13px] mt-0.5 leading-snug truncate" style={{ color: "var(--ink-50)", fontWeight: 400 }}>{tagline}</p>
         )}
       </div>
       {/* Arrow */}
-      <svg className="flex-shrink-0 w-4 h-4" style={{ color: "rgba(255,255,255,0.2)" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg className="flex-shrink-0 w-4 h-4" style={{ color: "var(--ink-20)" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 18l6-6-6-6" />
       </svg>
     </Link>
@@ -739,7 +740,7 @@ function MobileViewAll({ href, label, onClose }: { href: string; label: string; 
       href={href}
       onClick={onClose}
       className="inline-flex items-center gap-2 mt-3 px-1 py-2 text-[13px] font-bold active:opacity-60 transition-opacity"
-      style={{ color: "#F97316" }}
+      style={{ color: "var(--accent-text-lg)" }}
     >
       {label}
       <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -804,7 +805,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
           transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
           className="fixed inset-0 z-[60] md:hidden flex flex-col outline-none"
           style={{
-            background: "#0D0D0D",
+            background: "var(--bg-deepest)",
             height: "100dvh",
           }}
           onClick={(e) => e.stopPropagation()}
@@ -843,7 +844,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                 onClick={() => { onClose(); onSearchOpen(); }}
                 aria-label="Open search"
                 className="flex items-center justify-center rounded-xl active:opacity-60 transition-opacity"
-                style={{ width: 48, height: 48, color: "rgba(255,255,255,0.45)" }}
+                style={{ width: 48, height: 48, color: "var(--ink-45)" }}
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <circle cx="11" cy="11" r="8" strokeWidth={1.75} />
@@ -858,9 +859,9 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                 className="flex items-center justify-center rounded-xl active:opacity-60 transition-opacity"
                 style={{
                   width: 48, height: 48,
-                  color: "#F5F0EB",
+                  color: "var(--text-primary)",
                   background: "var(--fill-subtle)",
-                  border: "1px solid rgba(255,255,255,0.1)",
+                  border: "1px solid var(--ink-10)",
                 }}
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -947,7 +948,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                       onClick={onClose}
                       className="flex gap-4 p-3 rounded-2xl active:scale-[0.98] active:opacity-75 transition-[transform,opacity] duration-100"
                       style={{
-                        background: "rgba(255,255,255,0.025)",
+                        background: "var(--ink-025)",
                         border: "1px solid var(--border-color)",
                       }}
                     >
@@ -955,8 +956,8 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                         <Image src={post.image} alt={post.title} fill className="object-cover" sizes="64px" />
                       </div>
                       <div className="flex-1 min-w-0 flex flex-col justify-center gap-1">
-                        <p className="text-[9px] font-bold tracking-[0.18em] uppercase" style={{ color: "#F97316" }}>{post.category}</p>
-                        <p className="text-[14px] font-[500] leading-snug line-clamp-2" style={{ color: "#F5F0EB" }}>{post.title}</p>
+                        <p className="text-[9px] font-bold tracking-[0.18em] uppercase" style={{ color: "var(--accent-text-lg)" }}>{post.category}</p>
+                        <p className="text-[14px] font-[500] leading-snug line-clamp-2" style={{ color: "var(--text-primary)" }}>{post.title}</p>
                       </div>
                     </Link>
                   ))}
@@ -978,12 +979,12 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                     onClick={onClose}
                     className="flex items-center justify-between py-4 px-1 text-[16px] font-[500] active:opacity-60 transition-opacity"
                     style={{
-                      color: "rgba(255,255,255,0.7)",
-                      borderBottom: "1px solid rgba(255,255,255,0.05)",
+                      color: "var(--ink-70)",
+                      borderBottom: "1px solid var(--ink-05)",
                     }}
                   >
                     {link.label}
-                    <svg className="w-4 h-4" style={{ color: "rgba(255,255,255,0.2)" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4" style={{ color: "var(--ink-20)" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 18l6-6-6-6" />
                     </svg>
                   </Link>
@@ -1008,20 +1009,20 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
               <a
                 href="tel:+16043098212"
                 className="flex items-center gap-1.5 text-[12px] font-semibold active:opacity-60 transition-opacity"
-                style={{ color: "rgba(255,255,255,0.55)" }}
+                style={{ color: "var(--ink-55)" }}
               >
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: "#F97316" }}>
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: "var(--accent-text-lg)" }}>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
                 West · 604-309-8212
               </a>
-              <div style={{ width: 1, height: 12, background: "rgba(255,255,255,0.12)" }} />
+              <div style={{ width: 1, height: 12, background: "var(--ink-12)" }} />
               <a
                 href="tel:+14165409287"
                 className="flex items-center gap-1.5 text-[12px] font-semibold active:opacity-60 transition-opacity"
-                style={{ color: "rgba(255,255,255,0.55)" }}
+                style={{ color: "var(--ink-55)" }}
               >
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: "#F97316" }}>
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: "var(--accent-text-lg)" }}>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
                 East · 416-540-9287
@@ -1036,7 +1037,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
               style={{
                 height: 52,
                 background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
-                color: "#fff",
+                color: "var(--on-accent)",
                 boxShadow: "0 4px 24px rgba(249,115,22,0.38)",
               }}
             >
@@ -1177,6 +1178,11 @@ export default function Nav() {
     <>
       <nav
         ref={navRef}
+        /* The bar is charcoal in every theme — the orange-on-charcoal wordmark
+           is the brand's, not the page's. Its background is hardcoded, so its
+           TOKENS have to be pinned dark too: without this the light theme gave
+           it near-black links on near-black glass, a contrast ratio of 1.08. */
+        data-surface="dark"
         className="sticky top-0 z-50"
         style={{
           background: "rgba(7,11,18,0.96)",
@@ -1215,7 +1221,7 @@ export default function Nav() {
             <span
               className="hidden sm:inline-flex items-center gap-1.5 pl-3"
               style={{
-                borderLeft: "1px solid rgba(255,255,255,0.12)",
+                borderLeft: "1px solid var(--ink-12)",
                 height: 22,
               }}
               aria-label="Canadian"
@@ -1229,11 +1235,11 @@ export default function Nav() {
                 style={{ display: "block", flexShrink: 0, borderRadius: 1 }}
               >
                 <path fill="#f00" d="m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z" />
-                <path fill="#fff" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z" />
+                <path fill="var(--text-primary)" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z" />
               </svg>
               <span
                 className="text-[10px] font-bold tracking-[0.18em] uppercase"
-                style={{ color: "rgba(255,255,255,0.55)", lineHeight: 1 }}
+                style={{ color: "var(--ink-55)", lineHeight: 1 }}
               >
                 Canadian
               </span>
@@ -1263,8 +1269,8 @@ export default function Nav() {
               aria-expanded={openPanel === "products"}
               aria-haspopup="true"
               aria-controls="products-mega-menu"
-              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[13px] font-medium whitespace-nowrap transition-colors hover:text-orange-400 hover:bg-white/5"
-              style={{ color: openPanel === "products" ? "#F97316" : "rgba(255,255,255,0.65)" }}
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[13px] font-medium whitespace-nowrap transition-colors hover:text-[var(--accent-text)] hover:bg-[var(--ink-05)]"
+              style={{ color: openPanel === "products" ? "var(--accent-text-lg)" : "var(--ink-65)" }}
             >
               Products
               <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -1289,8 +1295,8 @@ export default function Nav() {
               aria-expanded={openPanel === "applications"}
               aria-haspopup="true"
               aria-controls="applications-mega-menu"
-              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[13px] font-medium whitespace-nowrap transition-colors hover:text-orange-400 hover:bg-white/5"
-              style={{ color: openPanel === "applications" ? "#F97316" : "rgba(255,255,255,0.65)" }}
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[13px] font-medium whitespace-nowrap transition-colors hover:text-[var(--accent-text)] hover:bg-[var(--ink-05)]"
+              style={{ color: openPanel === "applications" ? "var(--accent-text-lg)" : "var(--ink-65)" }}
             >
               Applications
               <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -1307,8 +1313,8 @@ export default function Nav() {
               onClick={() => setOpenPanel(null)}
               aria-expanded={openPanel === "fieldnotes"}
               aria-haspopup="true"
-              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[13px] font-medium whitespace-nowrap transition-colors hover:text-orange-400 hover:bg-white/5"
-              style={{ color: openPanel === "fieldnotes" ? "#F97316" : "rgba(255,255,255,0.65)" }}
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[13px] font-medium whitespace-nowrap transition-colors hover:text-[var(--accent-text)] hover:bg-[var(--ink-05)]"
+              style={{ color: openPanel === "fieldnotes" ? "var(--accent-text-lg)" : "var(--ink-65)" }}
             >
               Field Notes
               <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -1326,8 +1332,8 @@ export default function Nav() {
                 // lines and pushed the whole nav row out of alignment. A nav
                 // label is a single object; it should shrink the row, never
                 // wrap inside it.
-                className="px-2.5 py-1.5 rounded-lg text-[13px] font-medium whitespace-nowrap transition-colors hover:text-orange-400 hover:bg-white/5"
-                style={{ color: "rgba(255,255,255,0.65)" }}
+                className="px-2.5 py-1.5 rounded-lg text-[13px] font-medium whitespace-nowrap transition-colors hover:text-[var(--accent-text)] hover:bg-[var(--ink-05)]"
+                style={{ color: "var(--ink-65)" }}
               >
                 {link.label}
               </Link>
@@ -1345,12 +1351,20 @@ export default function Nav() {
                 the search bar, just remove that, it's useless"). He's right.
                 The palette is the search experience; this button's whole job
                 is to open it. One glyph, orange on hover, ⌘K in the tooltip. */}
+            {/* Theme switch — Dark · Mixed · Light. A review-build control while
+                Doug and Vern settle how light the site should be; see
+                components/ui/ThemeToggle.tsx for what each mode means. Desktop
+                only: a third control in the mobile bar pushes the hamburger off
+                a 390px screen, so phones get it in the menu instead. */}
+            <div className="hidden lg:flex items-center mr-1">
+              <ThemeToggle compact />
+            </div>
             <button
               onClick={openSearch}
               aria-label="Search the site"
               aria-keyshortcuts="Meta+K Control+K"
               title={`Search — ${shortcutLabel}`}
-              className="hidden lg:flex items-center justify-center flex-shrink-0 rounded-lg transition-colors hover:bg-white/5"
+              className="hidden lg:flex items-center justify-center flex-shrink-0 rounded-lg transition-colors hover:bg-[var(--ink-05)]"
               style={{ width: 36, height: 36, color: "var(--text-secondary)" }}
             >
               <svg
@@ -1365,8 +1379,8 @@ export default function Nav() {
             <button
               onClick={openSearch}
               aria-label="Search the site"
-              className="lg:hidden flex items-center justify-center rounded-lg transition-colors hover:bg-white/5"
-              style={{ width: 36, height: 36, color: "rgba(255,255,255,0.55)" }}
+              className="lg:hidden flex items-center justify-center rounded-lg transition-colors hover:bg-[var(--ink-05)]"
+              style={{ width: 36, height: 36, color: "var(--ink-55)" }}
             >
               <svg width="17" height="17" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <circle cx="11" cy="11" r="8" strokeWidth={2} /><path d="M21 21l-4.35-4.35" strokeWidth={2} strokeLinecap="round" />
@@ -1375,8 +1389,8 @@ export default function Nav() {
 
             {/* Resources — ghost */}
             <a href="/resources"
-              className="px-3 py-1.5 rounded-lg text-[13px] font-semibold transition-all hover:border-orange-500/50 hover:text-orange-400"
-              style={{ border: "1px solid rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.75)" }}
+              className="px-3 py-1.5 rounded-lg text-[13px] font-semibold transition-all hover:border-orange-500/50 hover:text-[var(--accent-text)]"
+              style={{ border: "1px solid var(--ink-20)", color: "var(--ink-75)" }}
             >
               Resources
             </a>
@@ -1384,7 +1398,7 @@ export default function Nav() {
             {/* Lunch & Learn — gradient */}
             <a href="/lunch-learn"
               className="px-3 py-1.5 rounded-lg text-[13px] font-bold whitespace-nowrap"
-              style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff" }}
+              style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "var(--on-accent)" }}
             >
               Lunch &amp; Learn
             </a>
@@ -1394,12 +1408,12 @@ export default function Nav() {
           <div className="md:hidden flex items-center gap-2">
             {/* 44x44 tap targets — the mobile sweep found these at 36x36,
                 under both the iOS 44pt and Android 48dp minimums. */}
-            <button onClick={openSearch} aria-label="Open search" className="flex items-center justify-center" style={{ width: 44, height: 44, color: "rgba(255,255,255,0.6)" }}>
+            <button onClick={openSearch} aria-label="Open search" className="flex items-center justify-center" style={{ width: 44, height: 44, color: "var(--ink-60)" }}>
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <circle cx="11" cy="11" r="8" strokeWidth={2} /><path d="M21 21l-4.35-4.35" strokeWidth={2} strokeLinecap="round" />
               </svg>
             </button>
-            <button onClick={() => setMobileOpen(!mobileOpen)} aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"} aria-expanded={mobileOpen} className="flex items-center justify-center" style={{ width: 44, height: 44, color: "rgba(255,255,255,0.6)" }}>
+            <button onClick={() => setMobileOpen(!mobileOpen)} aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"} aria-expanded={mobileOpen} className="flex items-center justify-center" style={{ width: 44, height: 44, color: "var(--ink-60)" }}>
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 {mobileOpen ? (
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

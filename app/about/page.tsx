@@ -88,11 +88,11 @@ export default async function AboutPage() {
     sanityPartnerDescs.get(key) ?? PARTNER_DESC_FALLBACK[key] ?? "";
 
   return (
-    <main style={{ background: "#151515", minHeight: "100vh" }}>
+    <main style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
       <Nav />
 
       {/* ── Hero ──────────────────────────────── */}
-      <div className="relative overflow-hidden min-h-[500px]" style={{ background: "#101010" }}>
+      <div data-hero className="relative overflow-hidden min-h-[500px]" style={{ background: "var(--bg-dark)" }}>
         <Image
           src="/images/hero/hero-3.jpg"
           alt="HUB Surface Systems — Canadian decorative pavement specialists"
@@ -119,16 +119,16 @@ export default async function AboutPage() {
               style={{ display: "block", flexShrink: 0, borderRadius: 2, boxShadow: "0 1px 4px rgba(0,0,0,0.45)" }}
             >
               <path fill="#f00" d="m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z" />
-              <path fill="#fff" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z" />
+              <path fill="var(--text-primary)" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z" />
             </svg>
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "#f97316" }}>
+            <p className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--accent-text-lg)" }}>
               {hero.eyebrow}
             </p>
           </div>
           <h1
             className="font-black mb-6 max-w-4xl"
             style={{
-              color: "#ffffff",
+              color: "var(--text-primary)",
               fontSize: "clamp(2rem, 4vw, 3.5rem)",
               lineHeight: 1.0,
               letterSpacing: "-0.03em",
@@ -136,25 +136,25 @@ export default async function AboutPage() {
           >
             {hero.heading}
           </h1>
-          <p className="text-xl leading-relaxed max-w-2xl" style={{ color: "#8b8b8b" }}>
+          <p className="text-xl leading-relaxed max-w-2xl" style={{ color: "var(--text-faint)" }}>
             {hero.subheading}
           </p>
         </div>
       </div>
 
       {/* ── Stats Bar ───────────────────────── */}
-      <div style={{ background: "#1A1A19", borderBottom: "1px solid var(--border-color)" }}>
+      <div style={{ background: "var(--bg-section-asphalt)", borderBottom: "1px solid var(--border-color)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/[0.06]">
+          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-[var(--ink-06)]">
             {stats.map((s) => (
               <div
                 key={s.label}
                 className="py-8 md:py-10 px-4 sm:px-6 flex flex-col items-center text-center"
               >
-                <span className="text-4xl md:text-5xl font-bold mb-2" style={{ color: "#f97316" }}>
+                <span className="text-4xl md:text-5xl font-bold mb-2" style={{ color: "var(--accent-text-lg)" }}>
                   {s.value}
                 </span>
-                <span className="text-xs font-semibold tracking-widest uppercase" style={{ color: "#9CA3AF" }}>
+                <span className="text-xs font-semibold tracking-widest uppercase" style={{ color: "var(--text-muted)" }}>
                   {s.label}
                 </span>
               </div>
@@ -164,7 +164,7 @@ export default async function AboutPage() {
       </div>
 
       {/* ── Story ──────────────────────────────── */}
-      <div className="py-28" style={{ background: "#151515" }}>
+      <div className="py-28" style={{ background: "var(--bg-primary)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
             <div>
@@ -172,8 +172,8 @@ export default async function AboutPage() {
                   when it has not decided what they say. The copy underneath is
                   specific — a founding belief, a date, two offices, a named
                   installer programme — so the headings can be specific too. */}
-              <h2 className="text-3xl font-bold mb-6" style={{ color: "#ffffff", letterSpacing: "-0.02em" }}>How we got here</h2>
-              <div className="space-y-4 text-base leading-relaxed" style={{ color: "#e0e0e0" }}>
+              <h2 className="text-3xl font-bold mb-6" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>How we got here</h2>
+              <div className="space-y-4 text-base leading-relaxed" style={{ color: "var(--text-body)" }}>
                 {storyParagraphs.map((para, i) => (
                   <p key={i}>{para}</p>
                 ))}
@@ -190,17 +190,17 @@ export default async function AboutPage() {
                 />
                 <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, transparent 50%, rgba(13,17,23,0.7) 100%)" }} />
               </div>
-              <h2 className="text-3xl font-bold mb-6" style={{ color: "#ffffff", letterSpacing: "-0.02em" }}>What the work is for</h2>
+              <h2 className="text-3xl font-bold mb-6" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>What the work is for</h2>
               <p
                 className="text-xl leading-relaxed mb-4"
-                style={{ color: "#ffffff", borderLeft: "3px solid #f97316", paddingLeft: "24px" }}
+                style={{ color: "var(--on-accent)", borderLeft: "3px solid #f97316", paddingLeft: "24px" }}
               >
                 &ldquo;{missionQuote}&rdquo;
               </p>
               <p className="text-sm mb-8" style={{ color: "#5a5a5a", paddingLeft: "24px" }}>
                 — HUB Surface Systems
               </p>
-              <p className="text-base leading-relaxed" style={{ color: "#e0e0e0" }}>
+              <p className="text-base leading-relaxed" style={{ color: "var(--text-body)" }}>
                 {storyAside}
               </p>
             </div>
@@ -209,17 +209,17 @@ export default async function AboutPage() {
       </div>
 
       {/* ── Values ────────────────────────────── */}
-      <div style={{ background: "#1A1A19", borderTop: "1px solid rgba(255,255,255,0.05)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+      <div style={{ background: "var(--bg-section-asphalt)", borderTop: "1px solid var(--ink-05)", borderBottom: "1px solid var(--ink-05)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-          <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-12" style={{ color: "#f97316" }}>
+          <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-12" style={{ color: "var(--accent-text-lg)" }}>
             What We Stand For
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 divide-y divide-white/[0.06] md:divide-y-0 md:divide-x md:divide-white/[0.06]" style={{ border: "1px solid var(--border-color)", borderRadius: "16px", overflow: "hidden" }}>
+          <div className="grid grid-cols-1 md:grid-cols-3 divide-y divide-[var(--ink-06)] md:divide-y-0 md:divide-x md:divide-[var(--ink-06)]" style={{ border: "1px solid var(--border-color)", borderRadius: "16px", overflow: "hidden" }}>
             {values.map((v) => (
               <div key={v.heading} className="p-8 md:p-10" style={{ background: "var(--bg-card)" }}>
                 <div className="w-8 h-[2px] mb-6" style={{ background: "#f97316" }} />
-                <h3 className="text-lg font-bold mb-4" style={{ color: "#ffffff" }}>{v.heading}</h3>
-                <p className="text-sm leading-relaxed" style={{ color: "#8b8b8b" }} dangerouslySetInnerHTML={{ __html: v.body }} />
+                <h3 className="text-lg font-bold mb-4" style={{ color: "var(--text-primary)" }}>{v.heading}</h3>
+                <p className="text-sm leading-relaxed" style={{ color: "var(--text-faint)" }} dangerouslySetInnerHTML={{ __html: v.body }} />
               </div>
             ))}
           </div>
@@ -227,9 +227,9 @@ export default async function AboutPage() {
       </div>
 
       {/* ── Offices ───────────────────────────── */}
-      <div className="py-20" style={{ background: "#151515" }}>
+      <div className="py-20" style={{ background: "var(--bg-primary)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold mb-10" style={{ color: "#ffffff", letterSpacing: "-0.02em" }}>Two coasts, two offices</h2>
+          <h2 className="text-3xl font-bold mb-10" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>Two coasts, two offices</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
               { region: "West Office", city: "Ladysmith, British Columbia", contact: "Cleve Stordy", email: "cleve.stordy@hubss.com", phone: "604-309-8212", provinces: ["BC", "AB", "SK", "NT", "YT", "NU"] },
@@ -237,33 +237,33 @@ export default async function AboutPage() {
             ].map((office) => (
               <div key={office.region} className="p-8 rounded-xl relative overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}>
                 <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "#f97316" }} />
-                <p className="text-xs font-semibold tracking-widest uppercase mb-3" style={{ color: "#f97316" }}>{office.region}</p>
-                <h3 className="text-xl font-bold mb-1" style={{ color: "#ffffff" }}>{office.city}</h3>
-                <p className="text-sm mb-5" style={{ color: "#8b8b8b" }}>{office.contact}</p>
+                <p className="text-xs font-semibold tracking-widest uppercase mb-3" style={{ color: "var(--accent-text-lg)" }}>{office.region}</p>
+                <h3 className="text-xl font-bold mb-1" style={{ color: "var(--text-primary)" }}>{office.city}</h3>
+                <p className="text-sm mb-5" style={{ color: "var(--text-faint)" }}>{office.contact}</p>
                 <div className="flex flex-wrap gap-1.5 mb-6">
                   {office.provinces.map((prov) => (
-                    <span key={prov} className="text-xs font-bold px-2 py-0.5 rounded" style={{ background: "rgba(249,115,22,0.10)", color: "#f97316", border: "1px solid rgba(249,115,22,0.20)" }}>{prov}</span>
+                    <span key={prov} className="text-xs font-bold px-2 py-0.5 rounded" style={{ background: "rgba(249,115,22,0.10)", color: "var(--accent-text-lg)", border: "1px solid rgba(249,115,22,0.20)" }}>{prov}</span>
                   ))}
                 </div>
-                <a href={`mailto:${office.email}`} className="text-sm flex items-center transition-colors hover:text-[#f97316]" style={{ color: "#e0e0e0", minHeight: 40 }}>{office.email}</a>
-                <a href={`tel:${office.phone.replace(/-/g, "")}`} className="text-sm flex items-center transition-colors hover:text-[#f97316]" style={{ color: "#e0e0e0", minHeight: 40 }}>{office.phone}</a>
+                <a href={`mailto:${office.email}`} className="text-sm flex items-center transition-colors hover:text-[var(--accent-text-lg)]" style={{ color: "var(--text-body)", minHeight: 40 }}>{office.email}</a>
+                <a href={`tel:${office.phone.replace(/-/g, "")}`} className="text-sm flex items-center transition-colors hover:text-[var(--accent-text-lg)]" style={{ color: "var(--text-body)", minHeight: 40 }}>{office.phone}</a>
               </div>
             ))}
           </div>
-          <p className="text-center text-sm mt-8" style={{ color: "#9CA3AF" }}>Serving all 10 provinces and 3 territories</p>
+          <p className="text-center text-sm mt-8" style={{ color: "var(--text-muted)" }}>Serving all 10 provinces and 3 territories</p>
         </div>
       </div>
 
       {/* ── Why HUB ───────────────────────────── */}
-      <div className="py-28" style={{ background: "#101010" }}>
+      <div className="py-28" style={{ background: "var(--bg-dark)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold mb-12" style={{ color: "#ffffff" }}>Why HUB</h2>
+          <h2 className="text-3xl font-bold mb-12" style={{ color: "var(--text-primary)" }}>Why HUB</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {differentiators.map((d) => (
               <div key={d.title} className="p-8 rounded-xl" style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}>
                 <div className="w-8 h-0.5 mb-5" style={{ background: "#f97316" }} />
-                <h3 className="font-bold text-lg mb-3" style={{ color: "#ffffff" }}>{d.title}</h3>
-                <p className="text-[15px] leading-relaxed" style={{ color: "#8b8b8b" }}>{d.desc}</p>
+                <h3 className="font-bold text-lg mb-3" style={{ color: "var(--text-primary)" }}>{d.title}</h3>
+                <p className="text-[15px] leading-relaxed" style={{ color: "var(--text-faint)" }}>{d.desc}</p>
               </div>
             ))}
           </div>
@@ -271,11 +271,11 @@ export default async function AboutPage() {
       </div>
 
       {/* ── Manufacturer Partners ────────────────────── */}
-      <div className="py-20" style={{ background: "#151515" }}>
+      <div className="py-20" style={{ background: "var(--bg-primary)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "#f97316" }}>Manufacturer Partners</p>
-          <h2 className="text-3xl font-bold mb-6" style={{ color: "#ffffff", letterSpacing: "-0.02em" }}>Who stands behind the systems</h2>
-          <p className="text-base leading-relaxed max-w-2xl mb-8" style={{ color: "#8b8b8b" }}>
+          <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "var(--accent-text-lg)" }}>Manufacturer Partners</p>
+          <h2 className="text-3xl font-bold mb-6" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>Who stands behind the systems</h2>
+          <p className="text-base leading-relaxed max-w-2xl mb-8" style={{ color: "var(--text-faint)" }}>
             {partnersIntro}
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -296,10 +296,10 @@ export default async function AboutPage() {
                   </div>
                 </div>
                 <div className="px-5 sm:px-8 py-5 sm:py-6">
-                  <h3 className="text-2xl font-bold mb-1" style={{ color: "#ffffff" }}>{partner.name}</h3>
-                  {partner.sub && <p className="text-xs font-semibold tracking-wide uppercase mb-3" style={{ color: "rgba(255,255,255,0.3)" }}>{partner.sub}</p>}
+                  <h3 className="text-2xl font-bold mb-1" style={{ color: "var(--text-primary)" }}>{partner.name}</h3>
+                  {partner.sub && <p className="text-xs font-semibold tracking-wide uppercase mb-3" style={{ color: "var(--ink-30)" }}>{partner.sub}</p>}
                   {!partner.sub && <div className="mb-3" />}
-                  <p className="text-sm leading-relaxed" style={{ color: "#8b8b8b" }}>{partner.desc}</p>
+                  <p className="text-sm leading-relaxed" style={{ color: "var(--text-faint)" }}>{partner.desc}</p>
                 </div>
               </div>
             ))}

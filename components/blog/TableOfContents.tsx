@@ -53,10 +53,10 @@ export default function TableOfContents() {
 
   return (
     <nav aria-label="Table of contents" className="text-sm">
-      <p className="text-xs font-semibold uppercase tracking-widest text-gray-300 mb-4">
+      <p className="text-xs font-semibold uppercase tracking-widest text-[var(--text-body)] mb-4">
         On this page
       </p>
-      <ul className="space-y-2 border-l border-white/10">
+      <ul className="space-y-2 border-l border-[var(--ink-10)]">
         {headings.map((h) => (
           <li key={h.id}>
             <a
@@ -69,8 +69,8 @@ export default function TableOfContents() {
               }}
               className={`block pl-4 py-1 transition-all duration-200 border-l-2 -ml-px ${
                 activeId === h.id
-                  ? "border-orange-400 text-orange-400 font-medium"
-                  : "border-transparent text-gray-300 hover:text-white hover:border-gray-500"
+                  ? "border-orange-400 text-[var(--accent-text)] font-medium"
+                  : "border-transparent text-[var(--text-body)] hover:text-[var(--text-primary)] hover:border-gray-500"
               }`}
             >
               {h.text}

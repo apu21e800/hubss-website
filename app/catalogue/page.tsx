@@ -63,12 +63,12 @@ export default async function CataloguePage() {
 
   if (pages.length === 0) {
     return (
-      <main className="grid min-h-dvh place-items-center px-6 text-center text-white/80">
+      <main className="grid min-h-dvh place-items-center px-6 text-center text-[var(--ink-80)]">
         <div>
-          <p className="text-sm uppercase tracking-[0.25em] text-orange-400">Catalogue</p>
+          <p className="text-sm uppercase tracking-[0.25em] text-[var(--accent-text)]">Catalogue</p>
           <p className="mt-3 text-lg">No catalogue pages have been rendered yet.</p>
-          <p className="mt-2 text-sm text-white/50">
-            Run <code className="rounded bg-white/10 px-2 py-0.5 font-mono text-xs">python scripts/render-catalogue-pages.py</code>
+          <p className="mt-2 text-sm text-[var(--ink-50)]">
+            Run <code className="rounded bg-[var(--ink-10)] px-2 py-0.5 font-mono text-xs">python scripts/render-catalogue-pages.py</code>
           </p>
         </div>
       </main>

@@ -49,7 +49,7 @@ export default async function ResourcesPage() {
   return (
     <main
       className="min-h-screen relative overflow-hidden"
-      style={{ background: "linear-gradient(160deg, #101010 0%, #1A1A19 60%, #101010 100%)" }}
+      style={{ background: "linear-gradient(160deg, var(--bg-dark) 0%, var(--bg-section-asphalt) 60%, var(--bg-dark) 100%)" }}
     >
       {/* Orange glow — top left */}
       <div
@@ -71,17 +71,17 @@ export default async function ResourcesPage() {
       <div className="relative max-w-7xl mx-auto px-6 pt-32 pb-16">
         <p
           className="text-xs font-semibold tracking-[0.2em] uppercase mb-3"
-          style={{ color: "#F97316" }}
+          style={{ color: "var(--accent-text-lg)" }}
         >
           Resources
         </p>
         <h1
           className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 leading-tight"
-          style={{ color: "#F5F0EB" }}
+          style={{ color: "var(--text-primary)" }}
         >
           Specification Library
         </h1>
-        <p className="text-base max-w-2xl" style={{ color: "#868C98" }}>
+        <p className="text-base max-w-2xl" style={{ color: "var(--text-secondary)" }}>
           Technical data sheets, brochures, safety guides, and installation
           resources for every HUBSS product.
         </p>
@@ -99,7 +99,7 @@ export default async function ResourcesPage() {
             className="group flex flex-col sm:flex-row items-stretch overflow-hidden rounded-2xl transition-all hover:-translate-y-[2px]"
             style={{
               background:
-                "linear-gradient(90deg, rgba(249,115,22,0.12) 0%, rgba(249,115,22,0.05) 50%, rgba(255,255,255,0.03) 100%)",
+                "linear-gradient(90deg, rgba(249,115,22,0.12) 0%, rgba(249,115,22,0.05) 50%, var(--ink-03) 100%)",
               border: "1px solid rgba(249,115,22,0.30)",
               boxShadow: "0 8px 30px rgba(0,0,0,0.25)",
             }}
@@ -119,19 +119,19 @@ export default async function ResourcesPage() {
               />
             </div>
             <div className="flex-1 min-w-0 p-6 sm:p-7 flex flex-col justify-center">
-              <p className="text-[11px] font-bold tracking-[0.22em] uppercase mb-2 flex items-center gap-2" style={{ color: "#FB923C" }}>
+              <p className="text-[11px] font-bold tracking-[0.22em] uppercase mb-2 flex items-center gap-2" style={{ color: "var(--accent-text)" }}>
                 Catalogue 2026
                 <span className="text-[9px] font-bold tracking-[0.18em] uppercase px-1.5 py-0.5 rounded" style={{ background: "rgba(249,115,22,0.20)" }}>New</span>
               </p>
-              <h2 className="text-xl sm:text-2xl font-bold leading-snug mb-1.5" style={{ color: "#F5F0EB" }}>
+              <h2 className="text-xl sm:text-2xl font-bold leading-snug mb-1.5" style={{ color: "var(--text-primary)" }}>
                 Browse the 2026 catalogue in your browser
               </h2>
-              <p className="text-sm" style={{ color: "rgba(255,255,255,0.65)" }}>
+              <p className="text-sm" style={{ color: "var(--ink-65)" }}>
                 140 pages · every product &amp; application · free to read, no download
               </p>
             </div>
             <div className="flex-shrink-0 self-center pr-7 pb-6 sm:pb-0">
-              <span className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.18em] uppercase transition-transform duration-200 group-hover:translate-x-1" style={{ color: "#FB923C" }}>
+              <span className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.18em] uppercase transition-transform duration-200 group-hover:translate-x-1" style={{ color: "var(--accent-text)" }}>
                 Open <span aria-hidden="true">→</span>
               </span>
             </div>
@@ -144,8 +144,8 @@ export default async function ResourcesPage() {
         className="relative overflow-hidden"
         style={{
           background: "var(--bg-card)",
-          borderTop: "1px solid rgba(255,255,255,0.08)",
-          borderBottom: "1px solid rgba(255,255,255,0.08)",
+          borderTop: "1px solid var(--ink-08)",
+          borderBottom: "1px solid var(--ink-08)",
         }}
       >
         {/* Orange top accent */}
@@ -174,7 +174,7 @@ export default async function ResourcesPage() {
           <div className="flex items-center gap-4 mb-10">
             <h2
               className="text-sm font-bold tracking-widest uppercase"
-              style={{ color: "#F97316" }}
+              style={{ color: "var(--accent-text-lg)" }}
             >
               All Documents
             </h2>
@@ -182,7 +182,7 @@ export default async function ResourcesPage() {
               className="flex-1 h-px"
               style={{ background: "var(--fill-subtle)" }}
             />
-            <span className="text-xs" style={{ color: "#868C98" }}>
+            <span className="text-xs" style={{ color: "var(--text-secondary)" }}>
               {docs.length} total
             </span>
           </div>

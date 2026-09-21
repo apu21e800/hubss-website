@@ -19,10 +19,8 @@
   --font-geist: '';
   --font-inter: '';
 
-  /* ─── Primary background (HUBSS deep navy + blue-charcoal) ── */
-  --color-bg-primary: #151515;
-
   /* ─── Brand — never change between themes ───────── */
+  --color-bg-primary: #151515;
   --color-orange:   #F97316;
   --color-charcoal: #20201F;   /* HUBSS official grey — "Charcoal" */
   --color-amber:    #EAB308;
@@ -31,108 +29,442 @@
   --gradient-brand-subtle: linear-gradient(90deg, rgba(249,115,22,0.12) 0%, rgba(234,179,8,0.12) 100%);
   --gradient-glow:  0 0 20px rgba(249,115,22,0.25);
 
-  /* ─── Section backgrounds ──────────────────────── */
-  /* Vernon, Aug 2026: "improve the grey contrast between the cards and the
-     background, use the example colours I just gave you #20201F #151515,
-     (card border #4D4D4C) I think these greys work better… it's time to go
-     pro." Those three values are the palette now, and they resolve something
-     the ladder had been fighting all month: every previous attempt kept a
-     blue cast in the ground, so the cards had to be tinted blue-grey to sit
-     on it, which left the whole surface reading slightly cold and slightly
-     dated. On a true neutral ground the cards can be #20201F — the HUBSS
-     brand charcoal that never fit before — and the border does the work of
-     separating them instead of the fill. Low-contrast fill, visible hairline:
-     that is the grammar of a professional dark interface.
+  /* Legacy blue tokens — retained as brand references, painted nowhere. */
+  --bg-slate:       #111C2D;
+  --bg-slate-light: #182436;
+  --color-blue-deep:  #111C2D;
+  --color-blue-mid:   #0C1520;
+  --color-blue-text:  #93C5FD;
+  --color-off-white:  #F5F4F0;
 
-     The blue slate tokens below are retained as brand references but are no
-     longer painted anywhere (zero call sites at the time of this change). */
-  --bg-primary:     #151515;   /* page ground */
-  --bg-dark:        #101010;   /* deepest — hero, footer, feature sections */
-  --bg-slate:       #111C2D;   /* legacy blue accent — unused */
-  --bg-slate-light: #182436;   /* legacy blue accent — unused */
+  /* ─── Theme tokens — DARK is the default ─────────────────────────────
+     History, kept because it explains the values: Vernon, Aug 2026 —
+     "improve the grey contrast between the cards and the background, use
+     the example colours I just gave you #20201F #151515, (card border
+     #4D4D4C)". A true neutral ground, HUBSS charcoal cards, and a visible
+     hairline doing the separating instead of the fill. Every muted grey
+     clears 4.5:1 against the lightest surface it is painted on (#2A2A28).
 
-  /* UI surfaces — ASPHALT elevation ladder (Vernon, Aug 2026: "establish an
-     asphalt grey and weave it intelligently across the pages… I like the
-     blue background but the cards need to be dark slate grey, the odd slate
-     grey background — too much blue, we need to add more grey, carefully").
-     The system: NAVY is the canvas (page bg, hero, map, footer), ASPHALT is
-     the material (cards + alternating section bands), ORANGE is the marking
-     paint. HUB lays asphalt surfaces for a living — so does the UI now.
-     These greys are cool-neutral (sat ~10%) so they read unmistakably GREY
-     against the saturated navy, unlike the warm print charcoal (#20201F)
-     that clashed in May, and unlike the blue ladder that read as "more
-     blue" in August. --color-charcoal survives for print/brand use. */
-  --bg-neutral:          #151515;  /* neutral anchor — stats/utility sections */
-  --bg-section-asphalt:  #1A1A19;  /* paved section bands — one step off the ground */
-  --bg-card:             #20201F;  /* raised card (L2) — HUBSS Charcoal */
-  --bg-card-surface:     #2A2A28;  /* hover / active surface (L3) */
-  --bg-card-hover:       #2A2A28;
-  --bg-card-neutral:     #1B1B1A;  /* resting card (L1) — blog, resources, doc cards */
+     Sep 2026 — the site became themeable. Every colour a component paints
+     is one of these tokens; nothing in app/ or components/ carries a raw
+     dark hex any more. Four blocks below share one list (dark, light, the
+     dark pin, the paper surface) and MUST stay in step — regenerate them
+     from the token table rather than editing one by hand:
 
-  /* ─── Text ──────────────────────────────── */
-  --text-primary:   #ffffff;
-  --text-body:      #e0e0e0;
-  --text-secondary: #949494;
-  /* --text-muted / --text-faint bumped for WCAG 2.1 AA — the previous values
-     (#5a5a5a / #3a3a3a) measured as low as 1.99:1 and 1.66:1 against the
-     card/section backgrounds they're actually painted on sitewide (axe
-     color-contrast audit, Aug 2026). Same hue, lightened just enough to
-     clear 4.5:1 against the darkest background each is used on, with a
-     small margin. Not a palette change — brand colours are untouched.
-
-     Re-solved when the ground moved to #151515: the neutral ladder is a
-     little lighter than the blue one it replaced, so #808080 and #8b8b8b
-     fell to 4.13:1 and 4.22:1 on the hover surface — passing before, failing
-     after. Every muted grey now clears 4.5:1 against the LIGHTEST surface it
-     is ever painted on (#2A2A28), which means it clears it everywhere. */
-  --text-muted:     #9C9C9C;
-  --text-faint:     #949494;
-  --text-hint:      #20201F;
-
-  /* ─── Borders ───────────────────────────── */
-  /* Three tiers, and the distinction matters. --border-color is the CARD
-     OUTLINE: a real, visible hairline at Vernon's #4D4D4C, which is what lets
-     a #20201F card read as a distinct object on a #151515 ground without
-     needing a heavy fill. --border-subtle and --border-faint stay as low-alpha
-     whites because they are dividers inside a surface, and promoting those to
-     the same weight would turn every panel into a wireframe. */
-  --border-color:   #4D4D4C;                 /* card outline */
-  --border-subtle:  rgba(255,255,255,0.05);  /* divider inside a surface */
-  --border-faint:   rgba(255,255,255,0.03);  /* hairline */
-
-  /* Not a border. This is the FILL behind chips, inputs, kbd keys and
-     the thin rules that separate a heading from its row — surfaces that
-     want to be barely lighter than what they sit on. It shares the value
-     the card outline used to have, which is exactly why it needs its own
-     name now that the outline has moved to #4D4D4C. */
-  --fill-subtle:    rgba(255,255,255,0.07);
-
-  /* ─── Deep blue — engineering / credential tone ─────── */
-  --color-blue-deep:  #111C2D;   /* same as --bg-slate — one uniform value */
-  --color-blue-mid:   #0C1520;   /* darker: cards sitting on blue sections */
-  --color-blue-text:  #93C5FD;   /* body text on blue bg   */
-
-  /* ─── Legacy aliases (kept for ComparisonTable / RecentProjects light sections) */
-  --color-off-white:   #F5F4F0;
+       --bg-*        surfaces, deepest → hover, in elevation order
+       --text-*      copy, primary → hint
+       --on-accent   text on an orange fill (never flips)
+       --on-dark     text on an element that is dark in every theme
+       --accent*     the orange: fills stay #F97316 in both themes; TEXT
+                     drops to #C2410C on light ground so 9–12px labels
+                     still clear AA
+       --ink-NN      white at NN% alpha in dark, near-black at NN% in light.
+                     One ladder for text, borders and fills — the property
+                     carries the role, the token carries the theme. */
+  --bg-deepest: #0D0D0D;
+  --bg-dark: #101010;
+  --bg-primary: #151515;
+  --bg-neutral: #151515;
+  --bg-section-asphalt: #1A1A19;
+  --bg-card-neutral: #1B1B1A;
+  --bg-card: #20201F;
+  --bg-card-surface: #2A2A28;
+  --bg-card-hover: #2A2A28;
+  --bg-code: #242424;
+  --bg-input: #1E1E1E;
+  --bg-nav: rgba(7,11,18,0.96);
+  --bg-overlay: rgba(8,8,8,0.97);
+  --text-primary: #F5F0EB;
+  --text-body: #E0E0E0;
+  --text-secondary: #868C98;
+  --text-muted: #9CA3AF;
+  --text-faint: #8B8B8B;
+  --text-hint: #6F757D;
+  --on-accent: #FFFFFF;
+  --on-dark: #F5F0EB;
+  --accent: #F97316;
+  --accent-bright: #FB923C;
+  --accent-text: #FB923C;
+  --accent-text-lg: #F97316;
+  --accent-soft-text: #FDBA74;
+  --ok-text: #4ADE80;
+  --err-text: #F87171;
+  --sheet-invert: 0;
+  --border-color: #4D4D4C;
+  --border-strong: #333333;
+  --border-subtle: rgba(255,255,255,0.05);
+  --border-faint: rgba(255,255,255,0.03);
+  --fill-subtle: rgba(255,255,255,0.07);
+  --ink-02: rgba(255,255,255,0.02);
+  --ink-025: rgba(255,255,255,0.025);
+  --ink-03: rgba(255,255,255,0.03);
+  --ink-04: rgba(255,255,255,0.04);
+  --ink-05: rgba(255,255,255,0.05);
+  --ink-06: rgba(255,255,255,0.06);
+  --ink-07: rgba(255,255,255,0.07);
+  --ink-08: rgba(255,255,255,0.08);
+  --ink-09: rgba(255,255,255,0.09);
+  --ink-10: rgba(255,255,255,0.1);
+  --ink-12: rgba(255,255,255,0.12);
+  --ink-14: rgba(255,255,255,0.14);
+  --ink-15: rgba(255,255,255,0.15);
+  --ink-16: rgba(255,255,255,0.16);
+  --ink-18: rgba(255,255,255,0.18);
+  --ink-20: rgba(255,255,255,0.2);
+  --ink-22: rgba(255,255,255,0.22);
+  --ink-25: rgba(255,255,255,0.25);
+  --ink-30: rgba(255,255,255,0.3);
+  --ink-35: rgba(255,255,255,0.35);
+  --ink-40: rgba(255,255,255,0.4);
+  --ink-45: rgba(255,255,255,0.45);
+  --ink-50: rgba(255,255,255,0.5);
+  --ink-55: rgba(255,255,255,0.55);
+  --ink-58: rgba(255,255,255,0.58);
+  --ink-60: rgba(255,255,255,0.6);
+  --ink-62: rgba(255,255,255,0.62);
+  --ink-65: rgba(255,255,255,0.65);
+  --ink-68: rgba(255,255,255,0.68);
+  --ink-70: rgba(255,255,255,0.7);
+  --ink-72: rgba(255,255,255,0.72);
+  --ink-75: rgba(255,255,255,0.75);
+  --ink-78: rgba(255,255,255,0.78);
+  --ink-80: rgba(255,255,255,0.8);
+  --ink-85: rgba(255,255,255,0.85);
+  --ink-90: rgba(255,255,255,0.9);
+  color-scheme: dark;
 }
 
+/* ─── LIGHT ──────────────────────────────────────────────────────────────
+   Warm, not clinical: the ground is a paper white leaning toward the brand
+   cream (#F5F0EB), cards are pure white, and the charcoal that was the card
+   colour in dark becomes the text colour. Orange fills are unchanged; orange
+   text deepens. Photo heroes, the footer and CTA bands pin themselves dark
+   (data-surface="dark") so the light theme reads as "light with dark bands",
+   which is the version of a light site that still looks like HUB. */
 [data-theme="light"] {
-  --bg-primary:     #FAFAF8;
-  --bg-dark:        #EDEBE6;
-  --bg-slate:       #F0EEE8;
-  --bg-slate-light: #E8E5DE;
-  --bg-card:        #FFFFFF;
-  --bg-card-surface:#F5F4F0;
-  --bg-card-hover:  #ECEAE4;
-  --text-primary:   #0A0A0A;
-  --text-body:      #26262A;
-  --text-secondary: #4B5563;
-  --text-muted:     #6B7280;
-  --text-faint:     #9CA3AF;
-  --text-hint:      #D1D5DB;
-  --border-color:   #E5E3DC;
-  --border-subtle:  #EDEBE6;
-  --border-faint:   rgba(0,0,0,0.06);
+  --bg-deepest: #E9E6DF;
+  --bg-dark: #EFEDE7;
+  --bg-primary: #FAF9F6;
+  --bg-neutral: #FAF9F6;
+  --bg-section-asphalt: #F3F1EB;
+  --bg-card-neutral: #F6F4EF;
+  --bg-card: #FFFFFF;
+  --bg-card-surface: #F0EEE8;
+  --bg-card-hover: #F0EEE8;
+  --bg-code: #F1EFE9;
+  --bg-input: #FFFFFF;
+  --bg-nav: rgba(250,249,246,0.94);
+  --bg-overlay: rgba(250,249,246,0.97);
+  --text-primary: #1B1A18;
+  --text-body: #2E2C29;
+  --text-secondary: #5C5A55;
+  --text-muted: #6B6862;
+  --text-faint: #6A6762;
+  --text-hint: #7D7A75;
+  --on-accent: #FFFFFF;
+  --on-dark: #F5F0EB;
+  --accent: #F97316;
+  --accent-bright: #FB923C;
+  --accent-text: #B83E0B;
+  --accent-text-lg: #B83E0B;
+  --accent-soft-text: #9A3412;
+  --ok-text: #15803D;
+  --err-text: #B91C1C;
+  --sheet-invert: 1;
+  --border-color: #DAD7CF;
+  --border-strong: #CFCCC4;
+  --border-subtle: rgba(0,0,0,0.06);
+  --border-faint: rgba(0,0,0,0.04);
+  --fill-subtle: rgba(0,0,0,0.045);
+  --ink-02: rgba(27,26,24,0.02);
+  --ink-025: rgba(27,26,24,0.03);
+  --ink-03: rgba(27,26,24,0.04);
+  --ink-04: rgba(27,26,24,0.05);
+  --ink-05: rgba(27,26,24,0.06);
+  --ink-06: rgba(27,26,24,0.08);
+  --ink-07: rgba(27,26,24,0.09);
+  --ink-08: rgba(27,26,24,0.1);
+  --ink-09: rgba(27,26,24,0.12);
+  --ink-10: rgba(27,26,24,0.14);
+  --ink-12: rgba(27,26,24,0.17);
+  --ink-14: rgba(27,26,24,0.2);
+  --ink-15: rgba(27,26,24,0.21);
+  --ink-16: rgba(27,26,24,0.23);
+  --ink-18: rgba(27,26,24,0.26);
+  --ink-20: rgba(27,26,24,0.29);
+  --ink-22: rgba(27,26,24,0.32);
+  --ink-25: rgba(27,26,24,0.36);
+  --ink-30: rgba(27,26,24,0.43);
+  --ink-35: rgba(27,26,24,0.49);
+  --ink-40: rgba(27,26,24,0.55);
+  --ink-45: rgba(27,26,24,0.6);
+  --ink-50: rgba(27,26,24,0.65);
+  --ink-55: rgba(27,26,24,0.69);
+  --ink-58: rgba(27,26,24,0.72);
+  --ink-60: rgba(27,26,24,0.74);
+  --ink-62: rgba(27,26,24,0.75);
+  --ink-65: rgba(27,26,24,0.78);
+  --ink-68: rgba(27,26,24,0.8);
+  --ink-70: rgba(27,26,24,0.81);
+  --ink-72: rgba(27,26,24,0.83);
+  --ink-75: rgba(27,26,24,0.85);
+  --ink-78: rgba(27,26,24,0.87);
+  --ink-80: rgba(27,26,24,0.89);
+  --ink-85: rgba(27,26,24,0.92);
+  --ink-90: rgba(27,26,24,0.96);
+  color-scheme: light;
+}
+
+/* ─── SURFACES ───────────────────────────────────────────────────────────
+   Custom properties inherit, so re-declaring the set on a section re-scopes
+   every token beneath it. Two attributes:
+
+     data-surface="dark"   always dark — photo heroes with overlays, the
+                           footer, the Lunch & Learn band. Wins in every theme.
+     data-surface="paper"  the reading sections — catalogue spread, spec,
+                           FAQ, documents, the About story. In MIXED they go
+                           light on the dark shell (Doug: "add some white
+                           sections"); in DARK they stay dark; in LIGHT they
+                           follow the theme.
+
+   Three modes, then: dark (today's site), mixed (dark shell, paper reading
+   sections), light (paper site, dark bands). The toggle in the nav switches
+   data-theme on <html>; ?theme=light|mixed|dark in the URL does the same. */
+/* data-hero — a full-bleed photograph with type laid over it. The overlay is
+   dark in every theme, so the tokens beneath it must be too: the light theme
+   was rendering the About headline in charcoal on a charcoal photo. Pinned
+   here rather than per page, because a hero is a hero on every route. */
+[data-surface="dark"],
+[data-hero] {
+  --bg-deepest: #0D0D0D;
+  --bg-dark: #101010;
+  --bg-primary: #151515;
+  --bg-neutral: #151515;
+  --bg-section-asphalt: #1A1A19;
+  --bg-card-neutral: #1B1B1A;
+  --bg-card: #20201F;
+  --bg-card-surface: #2A2A28;
+  --bg-card-hover: #2A2A28;
+  --bg-code: #242424;
+  --bg-input: #1E1E1E;
+  --bg-nav: rgba(7,11,18,0.96);
+  --bg-overlay: rgba(8,8,8,0.97);
+  --text-primary: #F5F0EB;
+  --text-body: #E0E0E0;
+  --text-secondary: #868C98;
+  --text-muted: #9CA3AF;
+  --text-faint: #8B8B8B;
+  --text-hint: #6F757D;
+  --on-accent: #FFFFFF;
+  --on-dark: #F5F0EB;
+  --accent: #F97316;
+  --accent-bright: #FB923C;
+  --accent-text: #FB923C;
+  --accent-text-lg: #F97316;
+  --accent-soft-text: #FDBA74;
+  --ok-text: #4ADE80;
+  --err-text: #F87171;
+  --sheet-invert: 0;
+  --border-color: #4D4D4C;
+  --border-strong: #333333;
+  --border-subtle: rgba(255,255,255,0.05);
+  --border-faint: rgba(255,255,255,0.03);
+  --fill-subtle: rgba(255,255,255,0.07);
+  --ink-02: rgba(255,255,255,0.02);
+  --ink-025: rgba(255,255,255,0.025);
+  --ink-03: rgba(255,255,255,0.03);
+  --ink-04: rgba(255,255,255,0.04);
+  --ink-05: rgba(255,255,255,0.05);
+  --ink-06: rgba(255,255,255,0.06);
+  --ink-07: rgba(255,255,255,0.07);
+  --ink-08: rgba(255,255,255,0.08);
+  --ink-09: rgba(255,255,255,0.09);
+  --ink-10: rgba(255,255,255,0.1);
+  --ink-12: rgba(255,255,255,0.12);
+  --ink-14: rgba(255,255,255,0.14);
+  --ink-15: rgba(255,255,255,0.15);
+  --ink-16: rgba(255,255,255,0.16);
+  --ink-18: rgba(255,255,255,0.18);
+  --ink-20: rgba(255,255,255,0.2);
+  --ink-22: rgba(255,255,255,0.22);
+  --ink-25: rgba(255,255,255,0.25);
+  --ink-30: rgba(255,255,255,0.3);
+  --ink-35: rgba(255,255,255,0.35);
+  --ink-40: rgba(255,255,255,0.4);
+  --ink-45: rgba(255,255,255,0.45);
+  --ink-50: rgba(255,255,255,0.5);
+  --ink-55: rgba(255,255,255,0.55);
+  --ink-58: rgba(255,255,255,0.58);
+  --ink-60: rgba(255,255,255,0.6);
+  --ink-62: rgba(255,255,255,0.62);
+  --ink-65: rgba(255,255,255,0.65);
+  --ink-68: rgba(255,255,255,0.68);
+  --ink-70: rgba(255,255,255,0.7);
+  --ink-72: rgba(255,255,255,0.72);
+  --ink-75: rgba(255,255,255,0.75);
+  --ink-78: rgba(255,255,255,0.78);
+  --ink-80: rgba(255,255,255,0.8);
+  --ink-85: rgba(255,255,255,0.85);
+  --ink-90: rgba(255,255,255,0.9);
+  color-scheme: dark;
+}
+[data-surface="paper"] { background-color: var(--bg-primary); }
+
+/* The StreetPrint template sheets are white line-art on alpha, drawn for the
+   dark ground. On paper the same drawing prints in charcoal. The token follows
+   whichever surface the sheet sits on, so a sheet inside a dark band on a
+   light page stays white. */
+.pattern-sheet { filter: invert(var(--sheet-invert)); }
+[data-theme="mixed"] [data-surface="paper"] {
+  --bg-deepest: #E9E6DF;
+  --bg-dark: #EFEDE7;
+  --bg-primary: #FAF9F6;
+  --bg-neutral: #FAF9F6;
+  --bg-section-asphalt: #F3F1EB;
+  --bg-card-neutral: #F6F4EF;
+  --bg-card: #FFFFFF;
+  --bg-card-surface: #F0EEE8;
+  --bg-card-hover: #F0EEE8;
+  --bg-code: #F1EFE9;
+  --bg-input: #FFFFFF;
+  --bg-nav: rgba(250,249,246,0.94);
+  --bg-overlay: rgba(250,249,246,0.97);
+  --text-primary: #1B1A18;
+  --text-body: #2E2C29;
+  --text-secondary: #5C5A55;
+  --text-muted: #6B6862;
+  --text-faint: #6A6762;
+  --text-hint: #7D7A75;
+  --on-accent: #FFFFFF;
+  --on-dark: #F5F0EB;
+  --accent: #F97316;
+  --accent-bright: #FB923C;
+  --accent-text: #B83E0B;
+  --accent-text-lg: #B83E0B;
+  --accent-soft-text: #9A3412;
+  --ok-text: #15803D;
+  --err-text: #B91C1C;
+  --sheet-invert: 1;
+  --border-color: #DAD7CF;
+  --border-strong: #CFCCC4;
+  --border-subtle: rgba(0,0,0,0.06);
+  --border-faint: rgba(0,0,0,0.04);
+  --fill-subtle: rgba(0,0,0,0.045);
+  --ink-02: rgba(27,26,24,0.02);
+  --ink-025: rgba(27,26,24,0.03);
+  --ink-03: rgba(27,26,24,0.04);
+  --ink-04: rgba(27,26,24,0.05);
+  --ink-05: rgba(27,26,24,0.06);
+  --ink-06: rgba(27,26,24,0.08);
+  --ink-07: rgba(27,26,24,0.09);
+  --ink-08: rgba(27,26,24,0.1);
+  --ink-09: rgba(27,26,24,0.12);
+  --ink-10: rgba(27,26,24,0.14);
+  --ink-12: rgba(27,26,24,0.17);
+  --ink-14: rgba(27,26,24,0.2);
+  --ink-15: rgba(27,26,24,0.21);
+  --ink-16: rgba(27,26,24,0.23);
+  --ink-18: rgba(27,26,24,0.26);
+  --ink-20: rgba(27,26,24,0.29);
+  --ink-22: rgba(27,26,24,0.32);
+  --ink-25: rgba(27,26,24,0.36);
+  --ink-30: rgba(27,26,24,0.43);
+  --ink-35: rgba(27,26,24,0.49);
+  --ink-40: rgba(27,26,24,0.55);
+  --ink-45: rgba(27,26,24,0.6);
+  --ink-50: rgba(27,26,24,0.65);
+  --ink-55: rgba(27,26,24,0.69);
+  --ink-58: rgba(27,26,24,0.72);
+  --ink-60: rgba(27,26,24,0.74);
+  --ink-62: rgba(27,26,24,0.75);
+  --ink-65: rgba(27,26,24,0.78);
+  --ink-68: rgba(27,26,24,0.8);
+  --ink-70: rgba(27,26,24,0.81);
+  --ink-72: rgba(27,26,24,0.83);
+  --ink-75: rgba(27,26,24,0.85);
+  --ink-78: rgba(27,26,24,0.87);
+  --ink-80: rgba(27,26,24,0.89);
+  --ink-85: rgba(27,26,24,0.92);
+  --ink-90: rgba(27,26,24,0.96);
+  color-scheme: light;
+}
+
+/* data-surface="shell" — return to the page's own shell from inside a paper
+   section. The Lunch & Learn band uses it: on a paper page in MIXED it goes
+   back to dark, because it is the brand's closing statement, not part of
+   the reading. In LIGHT and DARK the shell is the theme, so no rule needed. */
+[data-theme="mixed"] [data-surface="shell"] {
+  --bg-deepest: #0D0D0D;
+  --bg-dark: #101010;
+  --bg-primary: #151515;
+  --bg-neutral: #151515;
+  --bg-section-asphalt: #1A1A19;
+  --bg-card-neutral: #1B1B1A;
+  --bg-card: #20201F;
+  --bg-card-surface: #2A2A28;
+  --bg-card-hover: #2A2A28;
+  --bg-code: #242424;
+  --bg-input: #1E1E1E;
+  --bg-nav: rgba(7,11,18,0.96);
+  --bg-overlay: rgba(8,8,8,0.97);
+  --text-primary: #F5F0EB;
+  --text-body: #E0E0E0;
+  --text-secondary: #868C98;
+  --text-muted: #9CA3AF;
+  --text-faint: #8B8B8B;
+  --text-hint: #6F757D;
+  --on-accent: #FFFFFF;
+  --on-dark: #F5F0EB;
+  --accent: #F97316;
+  --accent-bright: #FB923C;
+  --accent-text: #FB923C;
+  --accent-text-lg: #F97316;
+  --accent-soft-text: #FDBA74;
+  --ok-text: #4ADE80;
+  --err-text: #F87171;
+  --sheet-invert: 0;
+  --border-color: #4D4D4C;
+  --border-strong: #333333;
+  --border-subtle: rgba(255,255,255,0.05);
+  --border-faint: rgba(255,255,255,0.03);
+  --fill-subtle: rgba(255,255,255,0.07);
+  --ink-02: rgba(255,255,255,0.02);
+  --ink-025: rgba(255,255,255,0.025);
+  --ink-03: rgba(255,255,255,0.03);
+  --ink-04: rgba(255,255,255,0.04);
+  --ink-05: rgba(255,255,255,0.05);
+  --ink-06: rgba(255,255,255,0.06);
+  --ink-07: rgba(255,255,255,0.07);
+  --ink-08: rgba(255,255,255,0.08);
+  --ink-09: rgba(255,255,255,0.09);
+  --ink-10: rgba(255,255,255,0.1);
+  --ink-12: rgba(255,255,255,0.12);
+  --ink-14: rgba(255,255,255,0.14);
+  --ink-15: rgba(255,255,255,0.15);
+  --ink-16: rgba(255,255,255,0.16);
+  --ink-18: rgba(255,255,255,0.18);
+  --ink-20: rgba(255,255,255,0.2);
+  --ink-22: rgba(255,255,255,0.22);
+  --ink-25: rgba(255,255,255,0.25);
+  --ink-30: rgba(255,255,255,0.3);
+  --ink-35: rgba(255,255,255,0.35);
+  --ink-40: rgba(255,255,255,0.4);
+  --ink-45: rgba(255,255,255,0.45);
+  --ink-50: rgba(255,255,255,0.5);
+  --ink-55: rgba(255,255,255,0.55);
+  --ink-58: rgba(255,255,255,0.58);
+  --ink-60: rgba(255,255,255,0.6);
+  --ink-62: rgba(255,255,255,0.62);
+  --ink-65: rgba(255,255,255,0.65);
+  --ink-68: rgba(255,255,255,0.68);
+  --ink-70: rgba(255,255,255,0.7);
+  --ink-72: rgba(255,255,255,0.72);
+  --ink-75: rgba(255,255,255,0.75);
+  --ink-78: rgba(255,255,255,0.78);
+  --ink-80: rgba(255,255,255,0.8);
+  --ink-85: rgba(255,255,255,0.85);
+  --ink-90: rgba(255,255,255,0.9);
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -258,7 +590,7 @@ p {
 /* ─── Asphalt texture background ─────────────────── */
 /* Fallback: pure CSS noise pattern if asphalt-texture.jpg is missing */
 .bg-asphalt-subtle {
-  background-color: #151515;
+  background-color: var(--bg-primary);
   background-image:
     url('/images/textures/asphalt-texture.jpg'),
     radial-gradient(circle at 20% 30%, rgba(255,255,255,0.02) 0%, transparent 50%),
@@ -287,7 +619,7 @@ p {
 .btn-primary,
 .cta-btn {
   background: linear-gradient(90deg, #F97316 0%, #D97706 100%);
-  color: #fff;
+  color: var(--text-primary);
   transition: all 0.2s ease;
 }
 .btn-primary:hover,
@@ -309,8 +641,28 @@ p {
 }
 
 /* ─── Blog article prose overrides ───────────────── */
+/* Typography plugin colours follow the theme. The article used `prose-invert`
+   (light-on-dark greys baked in); on paper that was unreadable, so the
+   plugin's own variables are pointed at the tokens instead and the class is
+   plain `prose` now. */
 .blog-prose {
-  color: #c9d1db;
+  --tw-prose-body: var(--text-body);
+  --tw-prose-headings: var(--text-primary);
+  --tw-prose-lead: var(--text-body);
+  --tw-prose-links: var(--accent-text-lg);
+  --tw-prose-bold: var(--text-primary);
+  --tw-prose-counters: var(--text-muted);
+  --tw-prose-bullets: var(--text-muted);
+  --tw-prose-hr: var(--border-color);
+  --tw-prose-quotes: var(--text-primary);
+  --tw-prose-quote-borders: var(--accent);
+  --tw-prose-captions: var(--text-muted);
+  --tw-prose-code: var(--text-primary);
+  --tw-prose-pre-code: var(--text-body);
+  --tw-prose-pre-bg: var(--bg-code);
+  --tw-prose-th-borders: var(--border-color);
+  --tw-prose-td-borders: var(--border-subtle);
+  color: var(--text-body);
   font-size: 1rem;
   line-height: 1.85;
   font-variant-ligatures: common-ligatures;
@@ -319,7 +671,7 @@ p {
 /* Opening paragraph — slightly elevated */
 .blog-prose > p:first-of-type {
   font-size: 1.075rem;
-  color: #d9e0eb;
+  color: var(--text-body);
   line-height: 1.8;
 }
 
@@ -334,7 +686,7 @@ p {
 }
 
 .blog-prose h2 {
-  color: #f5f0eb;
+  color: var(--text-primary);
   font-size: clamp(1.3rem, 2.2vw, 1.65rem);
   font-weight: 800;
   margin-top: 3.5rem;
@@ -355,7 +707,7 @@ p {
 }
 
 .blog-prose h3 {
-  color: #e5e7eb;
+  color: var(--text-body);
   font-size: clamp(1.1rem, 1.8vw, 1.3rem);
   font-weight: 700;
   margin-top: 2.5rem;
@@ -374,7 +726,7 @@ p {
   border-left: 3px solid #F97316;
   font-style: italic;
   font-size: 1.2rem;
-  color: #e5d9c9;
+  color: var(--text-body);
   line-height: 1.7;
 }
 
@@ -383,14 +735,14 @@ p {
 }
 
 .blog-prose a {
-  color: #fb923c;
+  color: var(--accent-text);
   text-decoration: underline;
   text-underline-offset: 4px;
   transition: color 0.2s;
 }
 
 .blog-prose a:hover {
-  color: #fdba74;
+  color: var(--accent-soft-text);
 }
 
 .blog-prose ul {
@@ -431,7 +783,7 @@ p {
   position: absolute;
   left: 0;
   font-weight: 600;
-  color: #f97316;
+  color: var(--accent-text-lg);
 }
 
 .blog-prose img {
@@ -448,15 +800,15 @@ p {
   width: 100%;
   border-collapse: collapse;
   margin: 2rem 0;
-  border: 1px solid #333;
+  border: 1px solid var(--border-strong);
   border-radius: 0.5rem;
   overflow: hidden;
   font-size: 0.95rem;
 }
 
 .blog-prose th {
-  background: #242424;
-  color: #f5f0eb;
+  background: var(--bg-code);
+  color: var(--text-primary);
   font-weight: 600;
   text-align: left;
   padding: 0.75rem 1.1rem;
@@ -466,13 +818,13 @@ p {
 
 .blog-prose td {
   padding: 0.7rem 1.1rem;
-  border-bottom: 1px solid #20201F;
-  color: #d1d5db;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-body);
   vertical-align: top;
 }
 
 .blog-prose tr:nth-child(even) td {
-  background: rgba(255,255,255,0.02);
+  background: var(--ink-02);
 }
 
 .blog-prose tr:last-child td {
@@ -488,22 +840,22 @@ p {
 }
 
 .blog-prose strong {
-  color: #f5f0eb;
+  color: var(--text-primary);
   font-weight: 600;
 }
 
 .blog-prose code {
-  background: #1e1e1e;
-  border: 1px solid #333;
+  background: var(--bg-input);
+  border: 1px solid var(--border-strong);
   border-radius: 4px;
   padding: 0.15em 0.4em;
   font-size: 0.9em;
-  color: #fb923c;
+  color: var(--accent-text);
 }
 
 .blog-prose pre {
-  background: #1e1e1e;
-  border: 1px solid #333;
+  background: var(--bg-input);
+  border: 1px solid var(--border-strong);
   border-radius: 0.5rem;
   padding: 1.25rem;
   overflow-x: auto;
@@ -514,7 +866,7 @@ p {
   background: none;
   border: none;
   padding: 0;
-  color: #d1d5db;
+  color: var(--text-body);
 }
 
 /* ─── Asphalt noise texture ────────────────────── */
@@ -544,9 +896,9 @@ p {
 [data-theme="dark"] .section-grid-bg { /* same */ }
 
 .bg-grid      { background-color: #ffffff; }
-.bg-grid-dark { background-color: #101010; }
-.bg-dot-grid-dark { background-color: #1a1a1a; }
-.bg-dot-grid-blue { background-color: #151515; }
+.bg-grid-dark { background-color: var(--bg-dark); }
+.bg-dot-grid-dark { background-color: var(--bg-section-asphalt); }
+.bg-dot-grid-blue { background-color: var(--bg-primary); }
 
 /* ─── Hero always-dark override (theme-agnostic) ─────── */
 /* Hero has a full-bleed image + black overlay — text stays white in all themes */
@@ -672,19 +1024,19 @@ p {
 /* Scrollbars themed to the page instead of OS default grey-on-white.
    Component-level scrollbar classes (panel/strip) still override these. */
 html {
-  scrollbar-color: rgba(255, 255, 255, 0.18) #101010; /* Firefox */
+  scrollbar-color: var(--ink-18) var(--bg-dark); /* Firefox */
 }
 ::-webkit-scrollbar {
   width: 12px;
   height: 12px;
 }
 ::-webkit-scrollbar-track {
-  background: #101010;
+  background: var(--bg-dark);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.16);
+  background: var(--ink-16);
   border-radius: 8px;
-  border: 3px solid #101010; /* inset look */
+  border: 3px solid var(--bg-dark); /* inset look */
 }
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(249, 115, 22, 0.55);

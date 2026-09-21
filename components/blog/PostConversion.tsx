@@ -93,14 +93,14 @@ export default function PostConversion({
             fontSize: "clamp(1.45rem, 2.6vw, 2.15rem)",
             lineHeight: 1.12,
             letterSpacing: "-0.02em",
-            color: "#F5F0EB",
+            color: "var(--text-primary)",
           }}
         >
           {ask.heading}
         </h2>
         <p
           className="text-[15px] leading-relaxed mb-7"
-          style={{ color: "rgba(255,255,255,0.68)", maxWidth: "58ch" }}
+          style={{ color: "var(--ink-68)", maxWidth: "58ch" }}
         >
           {ask.body}
         </p>
@@ -111,7 +111,7 @@ export default function PostConversion({
             className="inline-flex items-center gap-2 px-7 rounded-lg font-bold text-sm transition-all hover:brightness-110 active:scale-[0.98]"
             style={{
               background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
-              color: "#fff",
+              color: "var(--on-accent)",
               boxShadow: "0 6px 24px rgba(249,115,22,0.35)",
               minHeight: 48,
             }}
@@ -125,10 +125,10 @@ export default function PostConversion({
           {productSlug ? (
             <Link
               href={`/products/${productSlug}`}
-              className="inline-flex items-center px-6 rounded-lg font-semibold text-sm transition-colors hover:bg-white/5"
+              className="inline-flex items-center px-6 rounded-lg font-semibold text-sm transition-colors hover:bg-[var(--ink-05)]"
               style={{
-                border: "1px solid rgba(255,255,255,0.2)",
-                color: "#F5F0EB",
+                border: "1px solid var(--ink-20)",
+                color: "var(--text-primary)",
                 minHeight: 48,
               }}
             >
@@ -137,8 +137,8 @@ export default function PostConversion({
           ) : (
             <Link
               href="/products"
-              className="inline-flex items-center px-6 rounded-lg font-semibold text-sm transition-colors hover:bg-white/5"
-              style={{ border: "1px solid rgba(255,255,255,0.2)", color: "#F5F0EB", minHeight: 48 }}
+              className="inline-flex items-center px-6 rounded-lg font-semibold text-sm transition-colors hover:bg-[var(--ink-05)]"
+              style={{ border: "1px solid var(--ink-20)", color: "var(--text-primary)", minHeight: 48 }}
             >
               See the systems
             </Link>
@@ -146,8 +146,8 @@ export default function PostConversion({
 
           <a
             href="tel:+14165409287"
-            className="text-[13px] font-semibold inline-flex items-center transition-colors hover:text-orange-400"
-            style={{ color: "rgba(255,255,255,0.45)", minHeight: 44 }}
+            className="text-[13px] font-semibold inline-flex items-center transition-colors hover:text-[var(--accent-text)]"
+            style={{ color: "var(--ink-45)", minHeight: 44 }}
           >
             or call 416-540-9287
           </a>

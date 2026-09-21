@@ -42,9 +42,9 @@ export default function ColourSystem({
           <details
             key={family.key}
             className="group rounded-xl overflow-hidden"
-            style={{ background: "rgba(255,255,255,0.025)", border: "1px solid var(--border-color)" }}
+            style={{ background: "var(--ink-025)", border: "1px solid var(--border-color)" }}
           >
-            <summary className="flex items-center gap-4 px-4 sm:px-5 py-4 cursor-pointer select-none list-none [&::-webkit-details-marker]:hidden transition-colors hover:bg-white/[0.03]">
+            <summary className="flex items-center gap-4 px-4 sm:px-5 py-4 cursor-pointer select-none list-none [&::-webkit-details-marker]:hidden transition-colors hover:bg-[var(--ink-03)]">
               <div className="min-w-0 flex-1">
                 <div className="flex items-baseline gap-3">
                   <h3 className="font-bold text-base" style={{ color: "var(--text-primary)" }}>
@@ -78,7 +78,7 @@ export default function ColourSystem({
               </div>
               <span
                 className="flex-shrink-0 inline-flex items-center gap-1.5 text-[11px] font-bold"
-                style={{ color: "#FB923C" }}
+                style={{ color: "var(--accent-text)" }}
               >
                 <span className="hidden sm:inline group-open:hidden">View colours</span>
                 <span className="hidden sm:group-open:inline">Hide</span>
@@ -133,7 +133,7 @@ export default function ColourSystem({
         Screen-reference values — colours vary by monitor and substrate. Specify from physical
         samples.{" "}
         {downloadHref && (
-          <a href={downloadHref} className="underline underline-offset-2 hover:text-orange-400 transition-colors" target="_blank" rel="noopener noreferrer">
+          <a href={downloadHref} className="underline underline-offset-2 hover:text-[var(--accent-text)] transition-colors" target="_blank" rel="noopener noreferrer">
             {downloadLabel ?? "Download the colour reference (PDF)"}
           </a>
         )}

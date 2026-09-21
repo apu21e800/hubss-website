@@ -26,7 +26,7 @@ export default function PatternGalleryCTA() {
     <Link
       href="/patterns"
       className="group mt-14 flex items-center gap-4 sm:gap-5 rounded-xl px-4 sm:px-5 py-4 transition-all duration-200 ease-out hover:-translate-y-[2px] hover:shadow-[0_8px_24px_-12px_rgba(249,115,22,0.35)]"
-      style={{ background: "rgba(255,255,255,0.025)", border: "1px solid var(--border-color)" }}
+      style={{ background: "var(--ink-025)", border: "1px solid var(--border-color)" }}
     >
       {/* Three fanned template sheets — decorative; the text carries the meaning */}
       <div className="relative flex flex-shrink-0 -space-x-4" aria-hidden="true">
@@ -37,8 +37,8 @@ export default function PatternGalleryCTA() {
             style={{
               width: 62,
               height: 48,
-              background: "#1A1A19",
-              border: "1px solid rgba(255,255,255,0.12)",
+              background: "var(--bg-section-asphalt)",
+              border: "1px solid var(--ink-12)",
               transform: `rotate(${(i - 1) * 4}deg)`,
               zIndex: 3 - i,
               boxShadow: "0 2px 8px rgba(0,0,0,0.4)",
@@ -56,7 +56,7 @@ export default function PatternGalleryCTA() {
       </div>
 
       <div className="min-w-0 flex-1">
-        <p className="text-[10px] font-bold tracking-[0.2em] uppercase mb-0.5" style={{ color: "#F97316" }}>
+        <p className="text-[10px] font-bold tracking-[0.2em] uppercase mb-0.5" style={{ color: "var(--accent-text-lg)" }}>
           StreetPrint templates
         </p>
         <p className="text-[15px] font-bold leading-tight" style={{ color: "var(--text-primary)" }}>
@@ -70,12 +70,12 @@ export default function PatternGalleryCTA() {
       {/* Desktop: pill button. Mobile: plain arrow — the whole band is the link. */}
       <span
         className="hidden sm:inline-flex flex-shrink-0 items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold transition-transform duration-200 group-hover:translate-x-0.5"
-        style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff", boxShadow: "0 4px 16px rgba(249,115,22,0.3)" }}
+        style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "var(--on-accent)", boxShadow: "0 4px 16px rgba(249,115,22,0.3)" }}
       >
         Browse patterns
         <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
       </span>
-      <svg width="16" height="16" fill="none" stroke="#F97316" viewBox="0 0 24 24" className="sm:hidden flex-shrink-0 transition-transform duration-200 group-hover:translate-x-0.5"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
+      <svg width="16" height="16" fill="none" stroke="var(--accent-text-lg)" viewBox="0 0 24 24" className="sm:hidden flex-shrink-0 transition-transform duration-200 group-hover:translate-x-0.5"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
     </Link>
   );
 }

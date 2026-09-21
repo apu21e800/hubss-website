@@ -213,7 +213,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
             width="19" height="19" fill="none"
             // The glyph warms the moment the query is live. Not a state badge —
             // just the interface acknowledging that it is listening.
-            stroke={showResults ? "#F97316" : "var(--text-faint)"}
+            stroke={showResults ? "var(--accent-text-lg)" : "var(--text-faint)"}
             style={{ transition: "stroke 220ms ease" }}
             viewBox="0 0 24 24"
           >
@@ -233,7 +233,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
               color: "var(--text-primary)",
               // Accent 1: the caret. The smallest possible mark, on the exact
               // pixel the visitor is looking at, alive because it blinks.
-              caretColor: "#F97316",
+              caretColor: "var(--accent-text-lg)",
               fontSize: "1.125rem",
               letterSpacing: "-0.01em",
               paddingTop: 14,
@@ -267,7 +267,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
             <button
               onClick={() => { setQuery(""); inputRef.current?.focus(); }}
               aria-label="Clear search"
-              className="flex-shrink-0 flex items-center justify-center rounded-md hover:bg-white/10"
+              className="flex-shrink-0 flex items-center justify-center rounded-md hover:bg-[var(--ink-10)]"
               style={{ width: 32, height: 32, color: "var(--text-faint)" }}
             >
               <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" strokeWidth={2} strokeLinecap="round" /></svg>
@@ -291,7 +291,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                 {QUICK.map((item) => (
                   <button
                     key={item.href} onClick={() => go(item.href)}
-                    className="group flex items-center justify-between gap-2 px-3 rounded-lg text-left hover:bg-white/[0.06] transition-colors"
+                    className="group flex items-center justify-between gap-2 px-3 rounded-lg text-left hover:bg-[var(--ink-06)] transition-colors"
                     style={{ minHeight: 44 }}
                   >
                     <span className="text-sm font-semibold flex items-center gap-2" style={{ color: "var(--text-body)" }}>
@@ -316,7 +316,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                     key={t} onClick={() => { setQuery(t); inputRef.current?.focus(); }}
                     // Suggestion chips warm on hover — the one place in the
                     // empty state where the visitor has expressed intent.
-                    className="text-xs font-medium px-3 py-2 rounded-full transition-colors hover:bg-white/[0.06] hover:border-orange-500/45 hover:text-white"
+                    className="text-xs font-medium px-3 py-2 rounded-full transition-colors hover:bg-[var(--ink-06)] hover:border-orange-500/45 hover:text-[var(--text-primary)]"
                     style={{ background: "var(--fill-subtle)", color: "var(--text-secondary)", border: "1px solid var(--border-color)" }}
                   >
                     {t}
@@ -375,7 +375,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                           // A colourant result should show the colour at a size
                           // you can actually judge, with its hex, because that
                           // is the whole reason someone searched for it.
-                          <span className="flex-shrink-0 rounded" style={{ width: 26, height: 26, background: h.hex, border: "1px solid rgba(255,255,255,0.22)" }} />
+                          <span className="flex-shrink-0 rounded" style={{ width: 26, height: 26, background: h.hex, border: "1px solid var(--ink-22)" }} />
                         ) : (
                           // No bullet. Every row carried a neutral dot that
                           // marked nothing — with a dot now leading each group
@@ -384,7 +384,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                           null
                         )}
                         <span className="min-w-0 flex-1">
-                          <span className="block text-sm font-semibold truncate" style={{ color: isActive ? "#fff" : "var(--text-body)" }}>
+                          <span className="block text-sm font-semibold truncate" style={{ color: isActive ? "var(--text-primary)" : "var(--text-body)" }}>
                             <Highlight text={h.title} term={h.matched} />
                           </span>
                           {h.subtitle && (
@@ -409,7 +409,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                             className="flex-shrink-0 inline-flex items-center gap-1.5 pl-2 pr-2.5 rounded-md"
                             style={{
                               height: 24,
-                              color: "#F97316",
+                              color: "var(--accent-text-lg)",
                               border: "1px solid rgba(249,115,22,0.42)",
                               background: "rgba(249,115,22,0.10)",
                             }}
@@ -442,7 +442,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                 {TRY.map((t) => (
                   <button
                     key={t} onClick={() => { setQuery(t); inputRef.current?.focus(); }}
-                    className="text-xs font-medium px-3 py-2 rounded-full transition-colors hover:bg-white/[0.06] hover:border-orange-500/45 hover:text-white"
+                    className="text-xs font-medium px-3 py-2 rounded-full transition-colors hover:bg-[var(--ink-06)] hover:border-orange-500/45 hover:text-[var(--text-primary)]"
                     style={{ background: "var(--fill-subtle)", color: "var(--text-secondary)", border: "1px solid var(--border-color)" }}
                   >
                     {t}
@@ -477,7 +477,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
             <span aria-live="polite" className="tabular-nums">
               {showResults ? (
                 <>
-                  <span style={{ color: "#F97316", fontWeight: 650 }}>{flat.length}</span>
+                  <span style={{ color: "var(--accent-text-lg)", fontWeight: 650 }}>{flat.length}</span>
                   {` result${flat.length === 1 ? "" : "s"}`}
                 </>
               ) : (

@@ -125,7 +125,7 @@ export default async function LunchLearnPage() {
   };
 
   return (
-    <main style={{ background: "#151515", minHeight: "100vh" }}>
+    <main style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
       <JsonLd data={faqSchema} />
       <JsonLd data={serviceSchema} />
       <Nav />

@@ -20,7 +20,7 @@ export default function RelatedPosts({
 
   return (
     <section className="max-w-7xl mx-auto px-6 pb-24">
-      <h2 className="text-2xl font-bold text-[#f5f0eb] mb-8">
+      <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-8">
         Continue Reading
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

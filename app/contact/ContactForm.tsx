@@ -54,7 +54,7 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
           {/* Left */}
           <div className="pt-4">
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "#f97316" }}>{eyebrow}</p>
+            <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "var(--accent-text-lg)" }}>{eyebrow}</p>
             <h1
               className="font-black mb-8"
               style={{
@@ -75,16 +75,16 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
                 { region: "East Office", city: "Milton, Ontario", email: "doug.bain@hubss.com", phone: "416-540-9287" },
               ].map((office) => (
                 <div key={office.region}>
-                  <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "#f97316" }}>{office.region}</p>
+                  <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "var(--accent-text-lg)" }}>{office.region}</p>
                   <p className="text-sm font-medium mb-2" style={{ color: "var(--text-primary)" }}>{office.city}</p>
-                  <a href={`mailto:${office.email}`} className="text-sm flex items-center transition-colors hover:text-[#f97316]" style={{ color: "#d1d5db", minHeight: 44 }}>{office.email}</a>
-                  <a href={`tel:${office.phone.replace(/-/g, "")}`} className="text-sm flex items-center transition-colors hover:text-[#f97316]" style={{ color: "#d1d5db", minHeight: 44 }}>{office.phone}</a>
+                  <a href={`mailto:${office.email}`} className="text-sm flex items-center transition-colors hover:text-[var(--accent-text-lg)]" style={{ color: "var(--text-body)", minHeight: 44 }}>{office.email}</a>
+                  <a href={`tel:${office.phone.replace(/-/g, "")}`} className="text-sm flex items-center transition-colors hover:text-[var(--accent-text-lg)]" style={{ color: "var(--text-body)", minHeight: 44 }}>{office.phone}</a>
                 </div>
               ))}
 
               <div className="mt-6 pt-6" style={{ borderTop: "1px solid var(--border-subtle)" }}>
                 <div className="flex items-center gap-4 flex-wrap">
-                  <p className="text-xs font-semibold uppercase tracking-widest flex-shrink-0" style={{ color: "rgba(255,255,255,0.5)" }}>Follow Our Work</p>
+                  <p className="text-xs font-semibold uppercase tracking-widest flex-shrink-0" style={{ color: "var(--ink-50)" }}>Follow Our Work</p>
                   <SocialLinks size="sm" className="gap-4" />
                 </div>
               </div>
@@ -97,12 +97,12 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
             {submitted ? (
               <div className="flex flex-col items-center justify-center h-full py-16 text-center">
                 <div className="w-16 h-16 rounded-full flex items-center justify-center mb-5" style={{ background: "rgba(249,115,22,0.15)" }}>
-                  <svg className="w-7 h-7" style={{ color: "#f97316" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-7 h-7" style={{ color: "var(--accent-text-lg)" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
                 <h3 className="text-xl font-bold mb-2" style={{ color: "var(--text-primary)" }}>Message Sent!</h3>
-                <p className="text-sm" style={{ color: "#d1d5db" }}>We&apos;ll be in touch within one business day.</p>
+                <p className="text-sm" style={{ color: "var(--text-body)" }}>We&apos;ll be in touch within one business day.</p>
               </div>
             ) : (
               <form
@@ -138,7 +138,7 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
                     { label: "Company", key: "company", type: "text", placeholder: "City of Toronto" },
                   ].map((f) => (
                     <div key={f.key}>
-                      <label htmlFor={`contact-${f.key}`} className="block text-sm mb-2" style={{ color: "#d1d5db" }}>{f.label}</label>
+                      <label htmlFor={`contact-${f.key}`} className="block text-sm mb-2" style={{ color: "var(--text-body)" }}>{f.label}</label>
                       <input
                         id={`contact-${f.key}`}
                         type={f.type}
@@ -157,7 +157,7 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
                   { label: "Phone", key: "phone", type: "tel", placeholder: "416-555-0100" },
                 ].map((f) => (
                   <div key={f.key}>
-                    <label htmlFor={`contact-${f.key}`} className="block text-sm mb-2" style={{ color: "#d1d5db" }}>{f.label}</label>
+                    <label htmlFor={`contact-${f.key}`} className="block text-sm mb-2" style={{ color: "var(--text-body)" }}>{f.label}</label>
                     <input
                       id={`contact-${f.key}`}
                       type={f.type}
@@ -171,7 +171,7 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
                   </div>
                 ))}
                 <div>
-                  <label htmlFor="contact-projectType" className="block text-sm mb-2" style={{ color: "#d1d5db" }}>Project Type</label>
+                  <label htmlFor="contact-projectType" className="block text-sm mb-2" style={{ color: "var(--text-body)" }}>Project Type</label>
                   <select
                     id="contact-projectType"
                     value={form.projectType}
@@ -184,7 +184,7 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
                   </select>
                 </div>
                 <div>
-                  <label htmlFor="contact-message" className="block text-sm mb-2" style={{ color: "#d1d5db" }}>Message</label>
+                  <label htmlFor="contact-message" className="block text-sm mb-2" style={{ color: "var(--text-body)" }}>Message</label>
                   <textarea
                     id="contact-message"
                     rows={4}
@@ -206,14 +206,14 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
                 />
 
                 {error && (
-                  <p className="text-sm text-red-400">{error}</p>
+                  <p className="text-sm text-[var(--err-text)]">{error}</p>
                 )}
 
                 <button
                   type="submit"
                   disabled={loading}
                   className="w-full font-semibold py-4 rounded-lg text-base transition-all disabled:opacity-60 min-h-[48px]"
-                  style={{ background: "#f97316", color: "#fff" }}
+                  style={{ background: "#f97316", color: "var(--on-accent)" }}
                 >
                   {loading ? "Sending..." : "Send Us Your Project"}
                 </button>

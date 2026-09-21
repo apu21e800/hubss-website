@@ -43,7 +43,7 @@ export function SocialLinks({ size = 'md', className = '', iconClassName = '' }:
           target="_blank"
           rel="noopener noreferrer"
           aria-label={label}
-          className={`flex items-center justify-center text-zinc-500 hover:text-orange-500 transition-colors duration-200 ${iconClassName}`}
+          className={`flex items-center justify-center text-[var(--text-secondary)] hover:text-[var(--accent-text-lg)] transition-colors duration-200 ${iconClassName}`}
           style={{ width: 44, height: 44, marginInline: -2 }}
         >
           <svg width={sizeMap[size]} height={sizeMap[size]} viewBox="0 0 24 24" fill="currentColor"><path d={iconPaths[key]} /></svg>

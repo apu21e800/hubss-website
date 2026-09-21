@@ -55,14 +55,14 @@ export default function StickyBar() {
       <div
         className="flex items-center gap-3 px-4 lg:px-8 py-3"
         style={{
-          background: "#101010",
+          background: "var(--bg-dark)",
           borderTop: "1px solid var(--border-color)",
           boxShadow: "0 -4px 24px rgba(0,0,0,0.35)",
           paddingBottom: "max(12px, env(safe-area-inset-bottom))",
         }}
       >
         {/* Brand caption — desktop only */}
-        <p className="hidden lg:block flex-1 text-[10px] uppercase tracking-[0.22em] font-semibold" style={{ color: "rgba(255,255,255,0.25)" }}>
+        <p className="hidden lg:block flex-1 text-[10px] uppercase tracking-[0.22em] font-semibold" style={{ color: "var(--ink-25)" }}>
           Canada&#39;s Decorative Pavement Specialists · Since 1999
         </p>
 
@@ -76,18 +76,18 @@ export default function StickyBar() {
             // (axe: aria-hidden-focus). tabIndex={-1} pulls it out of the tab
             // order to match what's actually on screen.
             tabIndex={visible ? undefined : -1}
-            className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 border text-white px-5 text-[12px] font-bold tracking-[0.04em] transition-all whitespace-nowrap"
+            className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 border text-[var(--text-primary)] px-5 text-[12px] font-bold tracking-[0.04em] transition-all whitespace-nowrap"
             style={{
-              borderColor: "rgba(255,255,255,0.2)",
+              borderColor: "var(--ink-20)",
               borderRadius: "6px",
               minHeight: "44px",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = "rgba(255,255,255,0.45)";
+              e.currentTarget.style.borderColor = "var(--ink-45)";
               e.currentTarget.style.background = "var(--border-color)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)";
+              e.currentTarget.style.borderColor = "var(--ink-20)";
               e.currentTarget.style.background = "transparent";
             }}
           >

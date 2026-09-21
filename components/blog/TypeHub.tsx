@@ -75,11 +75,11 @@ export default function TypeHub({ type }: { type: FieldNoteTypeMeta }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-24 sm:pt-32 pb-14">
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-2 text-[12px]">
-          <Link href="/blog" className="inline-flex items-center transition-colors hover:text-orange-400" style={{ color: "rgba(255,255,255,0.5)", minHeight: 40 }}>
+          <Link href="/blog" className="inline-flex items-center transition-colors hover:text-[var(--accent-text)]" style={{ color: "var(--ink-50)", minHeight: 40 }}>
             Field Notes
           </Link>
-          <span style={{ color: "rgba(255,255,255,0.25)" }}>/</span>
-          <span style={{ color: "#F5F0EB" }}>{type.plural}</span>
+          <span style={{ color: "var(--ink-25)" }}>/</span>
+          <span style={{ color: "var(--text-primary)" }}>{type.plural}</span>
         </nav>
 
         {/* Header */}
@@ -93,7 +93,7 @@ export default function TypeHub({ type }: { type: FieldNoteTypeMeta }) {
           <h1
             className="font-black mb-4"
             style={{
-              color: "#F5F0EB",
+              color: "var(--text-primary)",
               fontSize: "clamp(2rem, 4vw, 3.4rem)",
               lineHeight: 1.02,
               letterSpacing: "-0.03em",
@@ -101,7 +101,7 @@ export default function TypeHub({ type }: { type: FieldNoteTypeMeta }) {
           >
             {type.plural}
           </h1>
-          <p className="text-base sm:text-lg leading-relaxed" style={{ color: "rgba(255,255,255,0.7)" }}>
+          <p className="text-base sm:text-lg leading-relaxed" style={{ color: "var(--ink-70)" }}>
             {type.promise}
           </p>
         </div>
@@ -113,7 +113,7 @@ export default function TypeHub({ type }: { type: FieldNoteTypeMeta }) {
               <span
                 key={l}
                 className="text-[11px] font-medium px-2.5 py-1 rounded-full capitalize"
-                style={{ background: "var(--bg-card-neutral)", color: "#9CA3AF", border: "1px solid var(--border-color)" }}
+                style={{ background: "var(--bg-card-neutral)", color: "var(--text-muted)", border: "1px solid var(--border-color)" }}
               >
                 {l}
               </span>
@@ -153,14 +153,14 @@ export default function TypeHub({ type }: { type: FieldNoteTypeMeta }) {
               </span>
               <h2
                 className="font-black mb-2 max-w-3xl"
-                style={{ color: "#F5F0EB", fontSize: "clamp(1.4rem, 2.6vw, 2.1rem)", lineHeight: 1.1, letterSpacing: "-0.02em" }}
+                style={{ color: "var(--text-primary)", fontSize: "clamp(1.4rem, 2.6vw, 2.1rem)", lineHeight: 1.1, letterSpacing: "-0.02em" }}
               >
                 {lead.title}
               </h2>
-              <p className="text-sm sm:text-[15px] leading-relaxed max-w-2xl mb-3" style={{ color: "rgba(255,255,255,0.72)" }}>
+              <p className="text-sm sm:text-[15px] leading-relaxed max-w-2xl mb-3" style={{ color: "var(--ink-72)" }}>
                 {lead.excerpt.length > 190 ? lead.excerpt.slice(0, lead.excerpt.lastIndexOf(" ", 190)) + "…" : lead.excerpt}
               </p>
-              <span className="text-[13px] font-bold inline-flex items-center gap-1.5" style={{ color: "#FB923C" }}>
+              <span className="text-[13px] font-bold inline-flex items-center gap-1.5" style={{ color: "var(--accent-text)" }}>
                 Read it
                 <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" className="transition-transform group-hover:translate-x-0.5">
                   <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
@@ -184,16 +184,16 @@ export default function TypeHub({ type }: { type: FieldNoteTypeMeta }) {
 
       {posts.length === 0 && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-24 text-center">
-          <p style={{ color: "rgba(255,255,255,0.5)" }}>Nothing filed under {type.plural} yet.</p>
+          <p style={{ color: "var(--ink-50)" }}>Nothing filed under {type.plural} yet.</p>
         </div>
       )}
 
       {/* Cross-links — every hub reachable from every hub, so a crawler that
           finds one finds the whole library, and a reader who wanted proof
           instead of instruction is one click away from it. */}
-      <div style={{ background: "var(--bg-section-asphalt)", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+      <div style={{ background: "var(--bg-section-asphalt)", borderTop: "1px solid var(--ink-06)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
-          <p className="text-[11px] font-bold tracking-[0.2em] uppercase mb-5" style={{ color: "#FB923C" }}>
+          <p className="text-[11px] font-bold tracking-[0.2em] uppercase mb-5" style={{ color: "var(--accent-text)" }}>
             Also in Field Notes
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
@@ -204,13 +204,13 @@ export default function TypeHub({ type }: { type: FieldNoteTypeMeta }) {
                 <Link
                   key={t.slug}
                   href={`/blog/${t.slug}`}
-                  className="group flex flex-col p-4 rounded-xl transition-colors hover:bg-white/5"
+                  className="group flex flex-col p-4 rounded-xl transition-colors hover:bg-[var(--ink-05)]"
                   style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--border-color)" }}
                 >
                   <span className="text-[10px] font-bold uppercase tracking-[0.16em] mb-1.5" style={{ color: t.text }}>
                     {n} {n === 1 ? t.label : t.plural}
                   </span>
-                  <span className="text-[13px] leading-snug" style={{ color: "rgba(255,255,255,0.68)" }}>
+                  <span className="text-[13px] leading-snug" style={{ color: "var(--ink-68)" }}>
                     {t.blurb}
                   </span>
                 </Link>

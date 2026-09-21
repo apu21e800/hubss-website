@@ -33,13 +33,13 @@ export default async function ProductsPage() {
   });
 
   return (
-    <main style={{ background: "#151515", minHeight: "100vh" }}>
+    <main style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
       <Nav />
 
       <div className="relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-16 sm:pb-24">
         <div className="mb-16 max-w-2xl">
-          <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-3" style={{ color: "#f97316" }}>
+          <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-3" style={{ color: "var(--accent-text-lg)" }}>
             The Full Lineup
           </p>
           <h1
@@ -108,12 +108,12 @@ export default async function ProductsPage() {
                     {/* Group header */}
                     <div className="mb-8">
                       <div className="flex items-center gap-4 mb-2">
-                        <h2 className="text-xs font-bold tracking-[0.2em] uppercase whitespace-nowrap" style={{ color: "#F97316" }}>
+                        <h2 className="text-xs font-bold tracking-[0.2em] uppercase whitespace-nowrap" style={{ color: "var(--accent-text-lg)" }}>
                           {group.label}
                         </h2>
-                        <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.08)" }} />
+                        <div className="flex-1 h-px" style={{ background: "var(--ink-08)" }} />
                       </div>
-                      <p className="text-sm max-w-2xl" style={{ color: "#9CA3AF" }}>{group.desc}</p>
+                      <p className="text-sm max-w-2xl" style={{ color: "var(--text-muted)" }}>{group.desc}</p>
                     </div>
 
                     {/* Product cards */}
@@ -133,10 +133,10 @@ export default async function ProductsPage() {
                               style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }}
                             />
                             <div className="p-7 flex flex-col flex-grow">
-                              <h3 className="font-bold text-xl mb-1.5 transition-colors group-hover:text-[#f97316]" style={{ color: "var(--text-primary)" }}>
+                              <h3 className="font-bold text-xl mb-1.5 transition-colors group-hover:text-[var(--accent-text-lg)]" style={{ color: "var(--text-primary)" }}>
                                 {product.name}
                               </h3>
-                              <p className="text-sm font-medium mb-3" style={{ color: "#fb923c" }}>
+                              <p className="text-sm font-medium mb-3" style={{ color: "var(--accent-text)" }}>
                                 {product.shortDesc}
                               </p>
                               <p className="text-sm leading-relaxed mb-5 flex-grow" style={{ color: "var(--text-secondary)" }}>
@@ -153,9 +153,9 @@ export default async function ProductsPage() {
                                       key={slug}
                                       className="text-[11px] font-semibold px-2 py-0.5 rounded-md"
                                       style={{
-                                        background: "rgba(255,255,255,0.06)",
-                                        color: "#9CA3AF",
-                                        border: "1px solid rgba(255,255,255,0.08)",
+                                        background: "var(--ink-06)",
+                                        color: "var(--text-muted)",
+                                        border: "1px solid var(--ink-08)",
                                       }}
                                     >
                                       {APP_LABELS[slug] ?? slug}
@@ -176,7 +176,7 @@ export default async function ProductsPage() {
                                 </div>
                               )}
 
-                              <span className="text-xs font-semibold tracking-widest uppercase flex items-center gap-1.5" style={{ color: "#f97316" }}>
+                              <span className="text-xs font-semibold tracking-widest uppercase flex items-center gap-1.5" style={{ color: "var(--accent-text-lg)" }}>
                                 Explore System
                                 <span className="transition-transform duration-200 group-hover:translate-x-1 inline-block">&rarr;</span>
                               </span>

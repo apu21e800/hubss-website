@@ -90,6 +90,8 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
 
   return (
     <section
+      /* six system cards — the densest reading block on the page */
+      data-surface="paper"
       id="systems"
       className="py-28 lg:py-32"
       style={{ backgroundColor: "var(--bg-section-asphalt)" }}
@@ -126,8 +128,8 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
             </div>
             <Link
               href="/products"
-              className="flex-shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold border transition-all duration-200 hover:text-white hover:border-orange-500/50"
-              style={{ color: "var(--text-secondary)", borderColor: "rgba(255,255,255,0.12)" }}
+              className="flex-shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold border transition-all duration-200 hover:text-[var(--text-primary)] hover:border-orange-500/50"
+              style={{ color: "var(--text-secondary)", borderColor: "var(--ink-12)" }}
             >
               All systems
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -172,7 +174,7 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
                   className="group relative flex flex-col h-full rounded-2xl overflow-hidden transition-all duration-250"
                   style={{
                     background: "var(--bg-card)",
-                    border: "1px solid rgba(255,255,255,0.1)",
+                    border: "1px solid var(--ink-10)",
                     boxShadow: "0 2px 12px rgba(0,0,0,0.3)",
                   }}
                   onMouseEnter={(e) => {
@@ -214,8 +216,8 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
                     {/* Product name + stat */}
                     <div className="flex items-start justify-between gap-3 mb-3">
                       <h3
-                        className="font-bold text-[16px] leading-snug transition-colors duration-200 group-hover:text-orange-400"
-                        style={{ color: "#F5F0EB" }}
+                        className="font-bold text-[16px] leading-snug transition-colors duration-200 group-hover:text-[var(--accent-text)]"
+                        style={{ color: "var(--text-primary)" }}
                       >
                         {product.name}
                       </h3>
@@ -239,7 +241,7 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
                             className="text-[10px] font-semibold px-2 py-0.5 rounded-full tracking-wide"
                             style={{
                               background: "var(--fill-subtle)",
-                              color: "rgba(255,255,255,0.55)",
+                              color: "var(--ink-55)",
                             }}
                           >
                             {app}
@@ -272,13 +274,13 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
 
         {/* Footer row */}
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-[11px] order-2 sm:order-1" style={{ color: "rgba(255,255,255,0.5)" }}>
+          <p className="text-[11px] order-2 sm:order-1" style={{ color: "var(--ink-50)" }}>
             Also available: PreMark · DuraShield · DuraTherm · AirMark
           </p>
           <Link
             href="/products"
-            className="order-1 sm:order-2 inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold border transition-all duration-200 hover:text-white hover:border-orange-500/50"
-            style={{ color: "var(--text-secondary)", borderColor: "rgba(255,255,255,0.12)" }}
+            className="order-1 sm:order-2 inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold border transition-all duration-200 hover:text-[var(--text-primary)] hover:border-orange-500/50"
+            style={{ color: "var(--text-secondary)", borderColor: "var(--ink-12)" }}
           >
             View all systems
           </Link>

@@ -32,7 +32,9 @@ export default function FeaturedBlogPost() {
   });
 
   return (
-    <section id="field-notes" className="py-28 lg:py-32" style={{ background: "var(--bg-section-asphalt)" }}>
+    <section
+      /* Field Notes — reading */
+      data-surface="paper" id="field-notes" className="py-28 lg:py-32" style={{ background: "var(--bg-section-asphalt)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* ── Section header ────────────────────────────────── */}
@@ -62,7 +64,7 @@ export default function FeaturedBlogPost() {
           </div>
           <Link
             href="/blog"
-            className="hidden md:inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-lg transition-all border hover:border-orange-500/40 hover:text-white"
+            className="hidden md:inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-lg transition-all border hover:border-orange-500/40 hover:text-[var(--text-primary)]"
             style={{
               border: "1px solid var(--border-color)",
               color: "var(--text-secondary)",
@@ -119,7 +121,7 @@ export default function FeaturedBlogPost() {
                   className="text-xs font-semibold px-3 py-1 rounded-full"
                   style={{
                     background: "rgba(249,115,22,0.12)",
-                    color: "#f97316",
+                    color: "var(--accent-text-lg)",
                   }}
                 >
                   {hero.category}
@@ -168,8 +170,8 @@ export default function FeaturedBlogPost() {
               )}
 
               <span
-                className="text-sm font-semibold flex items-center gap-2 self-start group-hover:text-orange-300 transition-colors"
-                style={{ color: "#f97316" }}
+                className="text-sm font-semibold flex items-center gap-2 self-start group-hover:text-[var(--accent-soft-text)] transition-colors"
+                style={{ color: "var(--accent-text-lg)" }}
               >
                 Read Case Study
                 <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -213,7 +215,7 @@ export default function FeaturedBlogPost() {
                   <div className="flex flex-col p-6 flex-1">
                     <span
                       className="text-[10px] font-bold tracking-widest uppercase mb-3"
-                      style={{ color: "#f97316" }}
+                      style={{ color: "var(--accent-text-lg)" }}
                     >
                       {post.category}
                     </span>
@@ -238,7 +240,7 @@ export default function FeaturedBlogPost() {
         <div className="mt-8 text-center md:hidden">
           <Link
             href="/blog"
-            className="text-sm font-semibold px-6 py-3 rounded-lg inline-block border transition-all hover:border-orange-500/40 hover:text-white"
+            className="text-sm font-semibold px-6 py-3 rounded-lg inline-block border transition-all hover:border-orange-500/40 hover:text-[var(--text-primary)]"
             style={{ borderColor: "var(--border-color)", color: "var(--text-secondary)" }}
           >
             All Field Notes

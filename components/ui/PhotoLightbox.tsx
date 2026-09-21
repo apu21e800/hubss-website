@@ -31,8 +31,8 @@ const BTN: React.CSSProperties = {
   height: 48,
   borderRadius: "50%",
   background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
-  color: "#fff",
-  boxShadow: "0 4px 20px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.08) inset",
+  color: "var(--text-primary)",
+  boxShadow: "0 4px 20px rgba(0,0,0,0.45), 0 0 0 1px var(--ink-08) inset",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
@@ -110,9 +110,9 @@ export default function PhotoLightbox({
         {/* Counter — top-left pill */}
         <div
           className="absolute top-4 left-4 sm:top-5 sm:left-5 z-10 px-3 py-1.5 rounded-full text-xs font-bold tracking-wide select-none"
-          style={{ background: "rgba(255,255,255,0.09)", color: "rgba(255,255,255,0.75)", border: "1px solid rgba(255,255,255,0.12)", backdropFilter: "blur(8px)" }}
+          style={{ background: "var(--ink-09)", color: "var(--ink-75)", border: "1px solid var(--ink-12)", backdropFilter: "blur(8px)" }}
         >
-          {index + 1} <span style={{ color: "rgba(255,255,255,0.4)" }}>/ {photos.length}</span>
+          {index + 1} <span style={{ color: "var(--ink-40)" }}>/ {photos.length}</span>
         </div>
 
         {/* Close — orange circle, top-right */}
@@ -169,13 +169,13 @@ export default function PhotoLightbox({
             flagged as "a weird shadow"). */}
         <div
           className="absolute bottom-5 left-1/2 -translate-x-1/2 sm:left-6 sm:translate-x-0 z-10 max-w-[86%] sm:max-w-md rounded-xl px-4 py-2.5 pointer-events-none"
-          style={{ background: "rgba(7,10,16,0.72)", border: "1px solid rgba(255,255,255,0.08)", backdropFilter: "blur(10px)", boxShadow: "0 8px 30px rgba(0,0,0,0.4)" }}
+          style={{ background: "rgba(7,10,16,0.72)", border: "1px solid var(--ink-08)", backdropFilter: "blur(10px)", boxShadow: "0 8px 30px rgba(0,0,0,0.4)" }}
           onClick={(e) => e.stopPropagation()}
         >
-          <p className="text-[9px] font-bold tracking-[0.2em] uppercase mb-0.5" style={{ color: "#FB923C" }}>
+          <p className="text-[9px] font-bold tracking-[0.2em] uppercase mb-0.5" style={{ color: "var(--accent-text)" }}>
             HUB Surface Systems
           </p>
-          <p className="text-[13px] sm:text-sm font-semibold leading-snug" style={{ color: "#F5F0EB" }}>
+          <p className="text-[13px] sm:text-sm font-semibold leading-snug" style={{ color: "var(--text-primary)" }}>
             {photo.caption ?? photo.alt}
           </p>
         </div>

@@ -61,7 +61,7 @@ export default function PublicArtPage() {
       <Nav />
 
       {/* Hero */}
-      <div className="relative h-[50vh] min-h-[400px] overflow-hidden">
+      <div data-hero className="relative h-[50vh] min-h-[400px] overflow-hidden">
         <Image
           src="/images/applications/community-branding/community-branding-01.jpg"
           alt="Public art pavement installation — DecoMark custom thermoplastic civic mural by HUB Surface Systems"
@@ -78,7 +78,7 @@ export default function PublicArtPage() {
           <div>
             <p
               className="text-xs font-semibold tracking-[0.2em] uppercase mb-3"
-              style={{ color: "#f97316" }}
+              style={{ color: "var(--accent-text-lg)" }}
             >
               HUB Application
             </p>
@@ -112,13 +112,13 @@ export default function PublicArtPage() {
             <div>
               <p
                 className="font-semibold text-base"
-                style={{ color: "#F5F0EB" }}
+                style={{ color: "var(--text-primary)" }}
               >
                 Commission a Custom Design
               </p>
               <p
                 className="text-sm mt-0.5"
-                style={{ color: "#9CA3AF" }}
+                style={{ color: "var(--text-muted)" }}
               >
                 End-to-end project management — design files, fabrication, and certified installation.
               </p>
@@ -126,15 +126,15 @@ export default function PublicArtPage() {
             <div className="flex flex-wrap gap-3">
               <Link
                 href="/resources"
-                className="px-4 py-2 rounded-lg text-sm transition-all hover:text-white border border-white/15 hover:border-orange-500/50"
-                style={{ color: "#D1D5DB" }}
+                className="px-4 py-2 rounded-lg text-sm transition-all hover:text-[var(--text-primary)] border border-[var(--ink-15)] hover:border-orange-500/50"
+                style={{ color: "var(--text-body)" }}
               >
                 Technical Specs
               </Link>
               <Link
                 href="/contact"
                 className="px-4 py-2 rounded-lg text-sm font-medium transition-all"
-                style={{ background: "#F97316", color: "#fff" }}
+                style={{ background: "#F97316", color: "var(--on-accent)" }}
               >
                 Start a Project
               </Link>
@@ -198,18 +198,18 @@ export default function PublicArtPage() {
                     className="p-6 rounded-xl"
                     style={{
                       background: "var(--bg-card-neutral)",
-                      border: "1px solid rgba(255,255,255,0.08)",
+                      border: "1px solid var(--ink-08)",
                     }}
                   >
                     <h3
                       className="font-bold text-base mb-2"
-                      style={{ color: "#F5F0EB" }}
+                      style={{ color: "var(--text-primary)" }}
                     >
                       {project.name}
                     </h3>
                     <p
                       className="text-sm leading-relaxed"
-                      style={{ color: "#9CA3AF" }}
+                      style={{ color: "var(--text-muted)" }}
                     >
                       {project.desc}
                     </p>
@@ -224,7 +224,7 @@ export default function PublicArtPage() {
                 className="rounded-xl p-8 mb-8 sticky top-24 relative overflow-hidden"
                 style={{
                   background: "var(--bg-card-neutral)",
-                  border: "1px solid rgba(255,255,255,0.08)",
+                  border: "1px solid var(--ink-08)",
                 }}
               >
                 <div
@@ -236,7 +236,7 @@ export default function PublicArtPage() {
                 />
                 <h3
                   className="font-bold text-lg mb-6"
-                  style={{ color: "#F5F0EB" }}
+                  style={{ color: "var(--text-primary)" }}
                 >
                   Products Used
                 </h3>
@@ -245,9 +245,9 @@ export default function PublicArtPage() {
                     <Link
                       key={product.slug}
                       href={`/products/${product.slug}`}
-                      className="flex items-center gap-3 p-3 rounded-lg transition-all group hover:bg-white/5"
+                      className="flex items-center gap-3 p-3 rounded-lg transition-all group hover:bg-[var(--ink-05)]"
                       style={{
-                        border: "1px solid rgba(255,255,255,0.06)",
+                        border: "1px solid var(--ink-06)",
                       }}
                     >
                       <div
@@ -265,20 +265,20 @@ export default function PublicArtPage() {
                       <div className="flex-1 min-w-0">
                         <p
                           className="font-semibold text-sm truncate"
-                          style={{ color: "#F5F0EB" }}
+                          style={{ color: "var(--text-primary)" }}
                         >
                           {product.name}
                         </p>
                         <p
                           className="text-xs truncate"
-                          style={{ color: "#868C98" }}
+                          style={{ color: "var(--text-secondary)" }}
                         >
                           {product.shortDesc}
                         </p>
                       </div>
                       <svg
                         className="w-4 h-4 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                        style={{ color: "#f97316" }}
+                        style={{ color: "var(--accent-text-lg)" }}
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -297,7 +297,7 @@ export default function PublicArtPage() {
                 <Link
                   href="/contact"
                   className="block w-full text-center font-semibold py-4 rounded-lg mt-8 transition-all text-sm hover:brightness-110"
-                  style={{ background: "#f97316", color: "#fff" }}
+                  style={{ background: "#f97316", color: "var(--on-accent)" }}
                 >
                   Commission a Custom Design
                 </Link>
@@ -306,8 +306,8 @@ export default function PublicArtPage() {
                   className="block w-full text-center font-semibold py-4 rounded-lg mt-3 transition-all text-sm hover:border-[#F97316]/50 hover:text-white"
                   style={{
                     background: "transparent",
-                    color: "#9CA3AF",
-                    border: "1px solid rgba(255,255,255,0.12)",
+                    color: "var(--text-muted)",
+                    border: "1px solid var(--ink-12)",
                   }}
                 >
                   Book Lunch &amp; Learn

@@ -167,13 +167,13 @@ export default async function BlogPostPage({ params }: Props) {
   });
 
   return (
-    <main className="min-h-screen" style={{ background: "#101010" }}>
+    <main className="min-h-screen" style={{ background: "var(--bg-dark)" }}>
       <JsonLd data={articleSchema} />
       <JsonLd data={breadcrumbSchema} />
       <Nav />
 
       {/* ── Cinematic hero ──────────────────────── */}
-      <header className="relative w-full overflow-hidden" style={{ height: "68vh", minHeight: 460 }}>
+      <header data-hero className="relative w-full overflow-hidden" style={{ height: "68vh", minHeight: 460 }}>
         {post.featuredImage ? (
           <Image
             src={post.featuredImage}
@@ -184,7 +184,7 @@ export default async function BlogPostPage({ params }: Props) {
             sizes="100vw"
           />
         ) : (
-          <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, #101010 0%, #20201F 100%)" }} />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-card) 100%)" }} />
         )}
 
         {/* Multi-layer gradient for editorial depth */}
@@ -221,7 +221,7 @@ export default async function BlogPostPage({ params }: Props) {
               {post.tags?.slice(0, 2).map((tag: string) => (
                 <span key={tag} style={{
                   fontSize: 10, fontWeight: 700, letterSpacing: "0.18em",
-                  textTransform: "uppercase", color: "#F97316",
+                  textTransform: "uppercase", color: "var(--accent-text-lg)",
                   background: "rgba(249,115,22,0.15)",
                   border: "1px solid rgba(249,115,22,0.3)",
                   padding: "4px 12px", borderRadius: 4,
@@ -244,7 +244,7 @@ export default async function BlogPostPage({ params }: Props) {
               fontWeight: 900,
               lineHeight: 1.08,
               letterSpacing: "-0.025em",
-              color: "#ffffff",
+              color: "var(--text-primary)",
               marginBottom: "1.25rem",
               maxWidth: "22em",
               textShadow: "0 2px 20px rgba(0,0,0,0.4)",
@@ -254,13 +254,13 @@ export default async function BlogPostPage({ params }: Props) {
 
             {/* Meta row */}
             <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
-              <span style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", letterSpacing: "0.02em", lineHeight: 1 }}>
+              <span style={{ fontSize: 13, color: "var(--ink-55)", letterSpacing: "0.02em", lineHeight: 1 }}>
                 {formattedDate}
               </span>
               <span style={{ width: 3, height: 3, borderRadius: "50%", background: "rgba(249,115,22,0.6)", display: "block", flexShrink: 0 }} />
-              <span style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", lineHeight: 1 }}>{post.readTime}</span>
+              <span style={{ fontSize: 13, color: "var(--ink-55)", lineHeight: 1 }}>{post.readTime}</span>
               <span style={{ width: 3, height: 3, borderRadius: "50%", background: "rgba(249,115,22,0.6)", display: "block", flexShrink: 0 }} />
-              <span style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", lineHeight: 1 }}>HUB Surface Systems</span>
+              <span style={{ fontSize: 13, color: "var(--ink-55)", lineHeight: 1 }}>HUB Surface Systems</span>
             </div>
           </div>
         </div>
@@ -279,7 +279,7 @@ export default async function BlogPostPage({ params }: Props) {
             <p style={{
               fontSize: "1.05rem",
               lineHeight: 1.7,
-              color: "rgba(255,255,255,0.7)",
+              color: "var(--ink-70)",
               borderLeft: "3px solid #F97316",
               paddingLeft: "1.25rem",
               marginBottom: "2.5rem",
@@ -323,7 +323,7 @@ export default async function BlogPostPage({ params }: Props) {
           <div className="sticky" style={{ top: "7rem" }}>
             {/* Author card */}
             <div style={{
-              background: "rgba(255,255,255,0.025)",
+              background: "var(--ink-025)",
               border: "1px solid var(--border-color)",
               borderRadius: 12,
               padding: "20px",
@@ -338,11 +338,11 @@ export default async function BlogPostPage({ params }: Props) {
                   flexShrink: 0,
                 }}>H</div>
                 <div>
-                  <p style={{ fontSize: 13, fontWeight: 700, color: "#ffffff", margin: 0 }}>HUB Surface Systems</p>
-                  <p style={{ fontSize: 11, color: "#868C98", margin: 0 }}>Field Notes</p>
+                  <p style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)", margin: 0 }}>HUB Surface Systems</p>
+                  <p style={{ fontSize: 11, color: "var(--text-secondary)", margin: 0 }}>Field Notes</p>
                 </div>
               </div>
-              <p style={{ fontSize: 12, color: "#9CA3AF", lineHeight: 1.6, margin: 0 }}>
+              <p style={{ fontSize: 12, color: "var(--text-muted)", lineHeight: 1.6, margin: 0 }}>
                 Canada&apos;s leader in decorative and functional pavement solutions since 1999.
               </p>
             </div>
@@ -351,7 +351,7 @@ export default async function BlogPostPage({ params }: Props) {
 
             {/* Share */}
             <div style={{ marginTop: 24 }}>
-              <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", color: "#868C98", marginBottom: 12 }}>
+              <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", color: "var(--text-secondary)", marginBottom: 12 }}>
                 Share
               </p>
               <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -360,8 +360,8 @@ export default async function BlogPostPage({ params }: Props) {
                   target="_blank" rel="noopener noreferrer"
                   style={{
                     display: "flex", alignItems: "center", gap: 8, padding: "8px 12px",
-                    background: "rgba(255,255,255,0.05)", border: "1px solid var(--border-color)",
-                    borderRadius: 8, color: "#9CA3AF", fontSize: 12, fontWeight: 600, textDecoration: "none",
+                    background: "var(--ink-05)", border: "1px solid var(--border-color)",
+                    borderRadius: 8, color: "var(--text-muted)", fontSize: 12, fontWeight: 600, textDecoration: "none",
                     transition: "border-color 0.2s",
                   }}
                 >
@@ -373,8 +373,8 @@ export default async function BlogPostPage({ params }: Props) {
                   target="_blank" rel="noopener noreferrer"
                   style={{
                     display: "flex", alignItems: "center", gap: 8, padding: "8px 12px",
-                    background: "rgba(255,255,255,0.05)", border: "1px solid var(--border-color)",
-                    borderRadius: 8, color: "#9CA3AF", fontSize: 12, fontWeight: 600, textDecoration: "none",
+                    background: "var(--ink-05)", border: "1px solid var(--border-color)",
+                    borderRadius: 8, color: "var(--text-muted)", fontSize: 12, fontWeight: 600, textDecoration: "none",
                   }}
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
@@ -394,7 +394,7 @@ export default async function BlogPostPage({ params }: Props) {
       {/* ── Related posts ──────────────────────── */}
       <div style={{ borderTop: "1px solid var(--border-color)", background: "#0c0c0c" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
-          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#F97316", marginBottom: 20 }}>
+          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--accent-text-lg)", marginBottom: 20 }}>
             Continue Reading
           </p>
           <RelatedPosts posts={related} currentSlug={post.slug} />

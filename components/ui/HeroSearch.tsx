@@ -57,10 +57,10 @@ export default function HeroSearch() {
 
   return (
     <div ref={ref} className="relative w-full max-w-md mt-6 sm:mt-8">
-      <div className="flex items-center gap-2 px-4 py-3 rounded-xl border border-zinc-700 bg-zinc-900/80 backdrop-blur focus-within:border-orange-500 transition-colors">
+      <div className="flex items-center gap-2 px-4 py-3 rounded-xl border border-[var(--border-color)] bg-zinc-900/80 backdrop-blur focus-within:border-orange-500 transition-colors">
         {/* Search icon */}
         <svg
-          className="w-4 h-4 flex-shrink-0 text-zinc-500"
+          className="w-4 h-4 flex-shrink-0 text-[var(--text-secondary)]"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -81,7 +81,7 @@ export default function HeroSearch() {
             setOpen(true);
           }}
           onFocus={() => setOpen(true)}
-          className="flex-1 bg-transparent text-sm text-white placeholder-zinc-500 outline-none min-w-0"
+          className="flex-1 bg-transparent text-sm text-[var(--text-primary)] placeholder-[var(--text-hint)] outline-none min-w-0"
         />
         {query && (
           <button
@@ -89,7 +89,7 @@ export default function HeroSearch() {
               setQuery("");
               setOpen(false);
             }}
-            className="text-zinc-500 hover:text-zinc-300 transition-colors"
+            className="text-[var(--text-secondary)] hover:text-[var(--text-body)] transition-colors"
           >
             <svg
               className="w-4 h-4"
@@ -110,12 +110,12 @@ export default function HeroSearch() {
 
       {/* Dropdown */}
       {open && results.length > 0 && (
-        <div className="absolute top-full left-0 right-0 mt-1 rounded-xl border border-zinc-700 bg-zinc-900 shadow-2xl overflow-hidden z-50">
+        <div className="absolute top-full left-0 right-0 mt-1 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card-neutral)] shadow-2xl overflow-hidden z-50">
           {results.map((item) => (
             <button
               key={`${item.type}-${item.slug}`}
               onClick={() => go(item)}
-              className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-zinc-800 transition-colors group"
+              className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-[var(--bg-card)] transition-colors group"
             >
               <span
                 className="text-[10px] font-semibold tracking-widest uppercase px-1.5 py-0.5 rounded flex-shrink-0"
@@ -125,12 +125,12 @@ export default function HeroSearch() {
                       ? "rgba(249,115,22,0.15)"
                       : "rgba(59,130,246,0.15)",
                   color:
-                    item.type === "product" ? "#f97316" : "#60a5fa",
+                    item.type === "product" ? "var(--accent-text-lg)" : "#60a5fa",
                 }}
               >
                 {item.type}
               </span>
-              <span className="text-sm text-zinc-200 group-hover:text-white transition-colors">
+              <span className="text-sm text-[var(--text-body)] group-hover:text-[var(--text-primary)] transition-colors">
                 {item.label}
               </span>
             </button>
@@ -139,8 +139,8 @@ export default function HeroSearch() {
       )}
 
       {open && query.length > 1 && results.length === 0 && (
-        <div className="absolute top-full left-0 right-0 mt-1 rounded-xl border border-zinc-700 bg-zinc-900 shadow-2xl z-50 px-4 py-3">
-          <p className="text-sm text-zinc-500">
+        <div className="absolute top-full left-0 right-0 mt-1 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card-neutral)] shadow-2xl z-50 px-4 py-3">
+          <p className="text-sm text-[var(--text-secondary)]">
             No results for &ldquo;{query}&rdquo;
           </p>
         </div>

@@ -62,7 +62,7 @@ export default function ProductFaq({
                 height="14"
                 viewBox="0 0 14 14"
                 className="flex-shrink-0 translate-y-[2px] transition-transform duration-200 group-open:rotate-45"
-                style={{ color: "#F97316" }}
+                style={{ color: "var(--accent-text-lg)" }}
               >
                 <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
               </svg>

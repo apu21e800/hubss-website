@@ -68,7 +68,7 @@ function SectionHead({
 
       <div
         className="mt-5 mb-6"
-        style={{ height: 1, background: "rgba(255,255,255,0.14)" }}
+        style={{ height: 1, background: "var(--ink-14)" }}
         aria-hidden="true"
       />
 
@@ -82,7 +82,7 @@ function TemplateCard({ t, wide = false }: { t: PatternTemplate; wide?: boolean 
     <div
       id={t.slug}
       className="rounded-xl overflow-hidden scroll-mt-24"
-      style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.08)" }}
+      style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--ink-08)" }}
     >
       <div className="p-4 sm:p-5">
         <Image
@@ -94,7 +94,7 @@ function TemplateCard({ t, wide = false }: { t: PatternTemplate; wide?: boolean 
           sizes={wide ? "(max-width: 768px) 100vw, 50vw" : "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"}
         />
       </div>
-      <div className="px-5 pb-4 pt-1" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+      <div className="px-5 pb-4 pt-1" style={{ borderTop: "1px solid var(--ink-06)" }}>
         <p className="font-semibold text-sm pt-3" style={{ color: "var(--text-primary)" }}>{t.name}</p>
         <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>{t.note}</p>
       </div>
@@ -131,7 +131,7 @@ export default function PatternsPage() {
           </h1>
           <div
             className="mt-6 mb-6"
-            style={{ height: 1, background: "rgba(255,255,255,0.16)" }}
+            style={{ height: 1, background: "var(--ink-16)" }}
             aria-hidden="true"
           />
           <p className="text-base sm:text-lg max-w-2xl leading-relaxed" style={{ color: "var(--text-secondary)" }}>
@@ -171,7 +171,7 @@ export default function PatternsPage() {
           {/* CTA */}
           <div
             className="mt-12 rounded-xl p-8 flex flex-col sm:flex-row sm:items-center gap-6 sm:justify-between"
-            style={{ background: "var(--bg-card)", border: "1px solid rgba(255,255,255,0.08)" }}
+            style={{ background: "var(--bg-card)", border: "1px solid var(--ink-08)" }}
           >
             <div>
               <p className="font-bold text-lg" style={{ color: "var(--text-primary)" }}>
@@ -186,7 +186,7 @@ export default function PatternsPage() {
               <Link
                 href="/products/streetprint"
                 className="px-5 py-2.5 rounded-lg text-sm font-bold transition-colors"
-                style={{ background: "var(--bg-card-surface)", color: "var(--text-primary)", border: "1px solid rgba(255,255,255,0.1)" }}
+                style={{ background: "var(--bg-card-surface)", color: "var(--text-primary)", border: "1px solid var(--ink-10)" }}
               >
                 StreetPrint system
               </Link>

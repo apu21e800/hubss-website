@@ -116,7 +116,7 @@ export default function PdfPreviewModal({
         className="relative flex flex-col w-full max-w-5xl rounded-xl overflow-hidden"
         style={{
           background: "var(--bg-card)",
-          border: "1px solid rgba(255,255,255,0.1)",
+          border: "1px solid var(--ink-10)",
           height: "calc(100dvh - 2rem)",
           maxHeight: "900px",
         }}
@@ -140,7 +140,7 @@ export default function PdfPreviewModal({
           >
             <svg
               className="w-4 h-4"
-              style={{ color: "#F97316" }}
+              style={{ color: "var(--accent-text-lg)" }}
               fill="currentColor"
               viewBox="0 0 20 20"
             >
@@ -157,14 +157,14 @@ export default function PdfPreviewModal({
             {productLabel && (
               <p
                 className="text-[10px] font-bold tracking-[0.2em] uppercase mb-0.5"
-                style={{ color: "#F97316" }}
+                style={{ color: "var(--accent-text-lg)" }}
               >
                 {productLabel}
               </p>
             )}
             <h3
               className="text-sm font-semibold truncate"
-              style={{ color: "#F5F0EB" }}
+              style={{ color: "var(--text-primary)" }}
             >
               {label}
             </h3>
@@ -176,7 +176,7 @@ export default function PdfPreviewModal({
               className="hidden sm:inline text-[10px] font-semibold px-2 py-1 rounded flex-shrink-0"
               style={{
                 background: "rgba(249,115,22,0.10)",
-                color: "#F97316",
+                color: "var(--accent-text-lg)",
                 border: "1px solid rgba(249,115,22,0.2)",
               }}
             >
@@ -191,7 +191,7 @@ export default function PdfPreviewModal({
             className="flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-lg flex-shrink-0 transition-all hover:brightness-110"
             style={{
               background: "linear-gradient(135deg, #f97316, #ea580c)",
-              color: "#fff",
+              color: "var(--on-accent)",
             }}
           >
             <Download className="w-3.5 h-3.5" />
@@ -203,7 +203,7 @@ export default function PdfPreviewModal({
             ref={closeBtnRef}
             onClick={onClose}
             className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-all hover:brightness-125"
-            style={{ background: "var(--fill-subtle)", color: "#9CA3AF" }}
+            style={{ background: "var(--fill-subtle)", color: "var(--text-muted)" }}
             aria-label="Close preview"
           >
             <X className="w-4 h-4" />
@@ -238,7 +238,7 @@ export default function PdfPreviewModal({
                       aspectRatio: `${pg.w} / ${pg.h}`,
                       background: "var(--bg-card-neutral)",
                       border: "1px solid var(--border-color)",
-                      color: "#868C98",
+                      color: "var(--text-secondary)",
                     }}
                   >
                     <span>
@@ -247,8 +247,8 @@ export default function PdfPreviewModal({
                         href={href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="transition-colors hover:text-orange-400"
-                        style={{ color: "#F97316" }}
+                        className="transition-colors hover:text-[var(--accent-text)]"
+                        style={{ color: "var(--accent-text-lg)" }}
                       >
                         Open the full PDF
                       </a>
@@ -286,7 +286,7 @@ export default function PdfPreviewModal({
                 )
               )}
               {preview.total > preview.pages.length && (
-                <p className="text-xs text-center px-4" style={{ color: "#6B7280" }}>
+                <p className="text-xs text-center px-4" style={{ color: "var(--text-hint)" }}>
                   Showing {preview.pages.length} of {preview.total} pages — download for the full document.
                 </p>
               )}
@@ -313,7 +313,7 @@ export default function PdfPreviewModal({
           className="flex items-center justify-center gap-1 px-5 py-2.5 flex-shrink-0 text-xs"
           style={{
             borderTop: "1px solid var(--border-color)",
-            color: "#868C98",
+            color: "var(--text-secondary)",
           }}
         >
           {showPages ? "Want the full document?" : "PDF not rendering?"}&nbsp;
@@ -321,8 +321,8 @@ export default function PdfPreviewModal({
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 transition-colors hover:text-orange-400"
-            style={{ color: "#F97316" }}
+            className="inline-flex items-center gap-1 transition-colors hover:text-[var(--accent-text)]"
+            style={{ color: "var(--accent-text-lg)" }}
           >
             {showPages ? "Open full PDF" : "Open in new tab"} <ExternalLink className="w-3 h-3" />
           </a>

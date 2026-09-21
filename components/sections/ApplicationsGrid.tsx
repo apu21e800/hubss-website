@@ -32,7 +32,9 @@ export default function ApplicationsGrid({ applications: appsProp }: Props = {})
   ).filter(Boolean) as Application[];
 
   return (
-    <section className="py-28" style={{ background: "#101010" }}>
+    <section
+      /* photo-led grid; the big contrast block in the middle of the page */
+      data-surface="dark" className="py-28" style={{ background: "var(--bg-dark)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-16">
           <p className="grad-text text-xs font-semibold tracking-[0.2em] uppercase mb-3">
@@ -105,10 +107,10 @@ export default function ApplicationsGrid({ applications: appsProp }: Props = {})
                 />
 
                 <div className="absolute bottom-0 left-0 right-0 p-5 transition-transform duration-300 group-hover:-translate-y-0.5">
-                  <h3 className="font-bold text-base group-hover:text-orange-400 transition-colors" style={{ color: "var(--text-primary)" }}>
+                  <h3 className="font-bold text-base group-hover:text-[var(--accent-text)] transition-colors" style={{ color: "var(--text-primary)" }}>
                     {app.name}
                   </h3>
-                  <p className="text-sm text-white/60 mt-0.5 line-clamp-2">
+                  <p className="text-sm text-[var(--ink-60)] mt-0.5 line-clamp-2">
                     {app.shortDesc}
                   </p>
                 </div>
@@ -121,7 +123,7 @@ export default function ApplicationsGrid({ applications: appsProp }: Props = {})
         <div className="flex justify-center mt-4">
           <Link
             href="/applications"
-            className="inline-flex items-center gap-2 border border-white/20 hover:border-orange-500/60 text-white font-semibold px-7 py-3.5 rounded-lg transition-all duration-200 hover:bg-white/[0.04] text-sm"
+            className="inline-flex items-center gap-2 border border-[var(--ink-20)] hover:border-orange-500/60 text-[var(--text-primary)] font-semibold px-7 py-3.5 rounded-lg transition-all duration-200 hover:bg-[var(--ink-04)] text-sm"
           >
             View All Applications
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

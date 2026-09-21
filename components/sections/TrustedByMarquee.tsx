@@ -25,9 +25,11 @@ const TICKER = [...TRUSTED, ...TRUSTED];
 export default function TrustedByMarquee() {
   return (
     <section
+      /* client wordmarks; they read better on paper, as on Powershifter */
+      data-surface="paper"
       className="relative overflow-hidden"
       style={{
-        background: "#0D0D0D",
+        background: "var(--bg-deepest)",
         borderTop: "1px solid var(--border-color)",
         borderBottom: "1px solid var(--border-color)",
         paddingTop: "3.25rem",
@@ -38,7 +40,7 @@ export default function TrustedByMarquee() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <p
           className="text-[10px] font-bold tracking-[0.22em] uppercase text-center"
-          style={{ color: "rgba(255,255,255,0.5)" }}
+          style={{ color: "var(--ink-50)" }}
         >
           Trusted by
         </p>
@@ -64,7 +66,7 @@ export default function TrustedByMarquee() {
             >
               <span
                 className="text-sm font-medium px-6"
-                style={{ color: "rgba(255,255,255,0.5)", lineHeight: 1 }}
+                style={{ color: "var(--ink-50)", lineHeight: 1 }}
               >
                 {name}
               </span>

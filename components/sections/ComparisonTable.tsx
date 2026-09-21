@@ -16,7 +16,7 @@ export default function ComparisonTable() {
     <section
       className="py-24 relative overflow-hidden"
       style={{
-        background: "#101010",
+        background: "var(--bg-dark)",
         borderTop: "1px solid var(--border-color)",
         borderBottom: "1px solid var(--border-color)",
       }}
@@ -33,16 +33,16 @@ export default function ComparisonTable() {
             viewport={{ once: true }}
             className="lg:sticky lg:top-32"
           >
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "#f97316" }}>
+            <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "var(--accent-text-lg)" }}>
               Why HUBSS
             </p>
             <h2
               className="text-3xl sm:text-4xl md:text-5xl font-bold mb-5 leading-[1.1]"
-              style={{ color: "#ffffff" }}
+              style={{ color: "var(--text-primary)" }}
             >
               Paint Fades.<br />We Don&apos;t.
             </h2>
-            <p className="text-[15px] leading-relaxed mb-8" style={{ color: "#9ca3af" }}>
+            <p className="text-[15px] leading-relaxed mb-8" style={{ color: "var(--text-muted)" }}>
               Conventional paint markings recur as a yearly municipal expense — reapplication,
               faded retroreflectivity, and plow shear. HUB surface systems are installed once
               and remain in service through multiple budget cycles.
@@ -60,7 +60,7 @@ export default function ComparisonTable() {
               <div className="flex-shrink-0">
                 <p
                   className="text-4xl sm:text-5xl font-black leading-none"
-                  style={{ color: "#f97316" }}
+                  style={{ color: "var(--accent-text-lg)" }}
                 >
                   8x
                 </p>
@@ -69,10 +69,10 @@ export default function ComparisonTable() {
               <div className="w-px self-stretch" style={{ background: "rgba(249,115,22,0.2)" }} />
               {/* Label */}
               <div>
-                <p className="text-sm font-semibold leading-snug" style={{ color: "#ffffff" }}>
+                <p className="text-sm font-semibold leading-snug" style={{ color: "var(--text-primary)" }}>
                   Longer service life
                 </p>
-                <p className="text-xs mt-0.5" style={{ color: "#868c98" }}>
+                <p className="text-xs mt-0.5" style={{ color: "var(--text-secondary)" }}>
                   vs. painted markings — proven in the field since 1999
                 </p>
               </div>
@@ -80,8 +80,8 @@ export default function ComparisonTable() {
 
             <Link
               href="/blog"
-              className="inline-flex items-center gap-1.5 text-sm font-semibold transition-colors duration-150 hover:text-orange-300"
-              style={{ color: "#f97316" }}
+              className="inline-flex items-center gap-1.5 text-sm font-semibold transition-colors duration-150 hover:text-[var(--accent-soft-text)]"
+              style={{ color: "var(--accent-text-lg)" }}
             >
               See our projects
               <span className="text-base leading-none">→</span>
@@ -98,7 +98,7 @@ export default function ComparisonTable() {
             {/* Scroll hint (mobile only) */}
             <p
               className="text-xs font-medium mb-2 text-right sm:hidden"
-              style={{ color: "#9ca3af" }}
+              style={{ color: "var(--text-muted)" }}
             >
               scroll &rarr;
             </p>
@@ -112,19 +112,19 @@ export default function ComparisonTable() {
                   <tr>
                     <th
                       className="text-left text-sm font-bold px-6 py-4"
-                      style={{ background: "var(--bg-card)", color: "#fff" }}
+                      style={{ background: "var(--bg-card)", color: "var(--text-primary)" }}
                     >
                       Performance Metric
                     </th>
                     <th
                       className="text-left text-sm font-bold px-6 py-4"
-                      style={{ background: "var(--bg-card)", color: "#9ca3af" }}
+                      style={{ background: "var(--bg-card)", color: "var(--text-muted)" }}
                     >
                       Traditional Markings
                     </th>
                     <th
                       className="text-left text-sm font-bold px-6 py-4"
-                      style={{ background: "#f97316", color: "#fff" }}
+                      style={{ background: "#f97316", color: "var(--on-accent)" }}
                     >
                       HUB Surface Systems
                     </th>
@@ -135,17 +135,17 @@ export default function ComparisonTable() {
                     <tr
                       key={row.metric}
                       style={{
-                        background: i % 2 === 0 ? "rgba(255,255,255,0.025)" : "rgba(255,255,255,0.025)",
+                        background: i % 2 === 0 ? "var(--ink-025)" : "var(--ink-025)",
                         borderBottom: "1px solid var(--border-color)",
                       }}
                     >
-                      <td className="px-3 py-2 text-sm font-medium" style={{ color: "#e5e7eb" }}>
+                      <td className="px-3 py-2 text-sm font-medium" style={{ color: "var(--text-body)" }}>
                         {row.metric}
                       </td>
                       <td className="px-3 py-2 text-sm font-medium" style={{ color: "#ef4444" }}>
                         {row.trad}
                       </td>
-                      <td className="px-3 py-2 text-sm font-bold" style={{ color: "#f97316" }}>
+                      <td className="px-3 py-2 text-sm font-bold" style={{ color: "var(--accent-text-lg)" }}>
                         {row.hub}
                       </td>
                     </tr>
@@ -154,7 +154,7 @@ export default function ComparisonTable() {
               </table>
             </div>
 
-            <p className="text-sm mt-6" style={{ color: "#868c98" }}>
+            <p className="text-sm mt-6" style={{ color: "var(--text-secondary)" }}>
               Proven in 10 provinces, coast to coast, since 1999
             </p>
           </motion.div>

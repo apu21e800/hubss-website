@@ -12,7 +12,7 @@ export default function HeroCityTicker() {
   const doubled = [...cities, ...cities];
 
   return (
-    <div className="w-full overflow-hidden bg-zinc-900 border-t border-zinc-800 py-3">
+    <div className="w-full overflow-hidden bg-[var(--bg-card-neutral)] border-t border-[var(--border-strong)] py-3">
       <motion.div
         className="flex items-center whitespace-nowrap"
         animate={{ x: ['0%', '-50%'] }}
@@ -20,10 +20,10 @@ export default function HeroCityTicker() {
       >
         {doubled.map((city, i) => (
           <span key={i} className="flex items-center">
-            <span className="text-sm text-zinc-500 font-medium tracking-wider uppercase px-4">
+            <span className="text-sm text-[var(--text-secondary)] font-medium tracking-wider uppercase px-4">
               {city}
             </span>
-            <span aria-hidden="true" style={{ color: '#f97316', fontSize: '0.5rem', lineHeight: 1 }}>·</span>
+            <span aria-hidden="true" style={{ color: 'var(--accent-text-lg)', fontSize: '0.5rem', lineHeight: 1 }}>·</span>
           </span>
         ))}
       </motion.div>

@@ -11,7 +11,7 @@ export default function RecentProjects() {
   const secondary = projects.slice(1, 3);
 
   return (
-    <section className="py-28 lg:py-32" style={{ background: "#151515" }}>
+    <section className="py-28 lg:py-32" style={{ background: "var(--bg-primary)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-end justify-between mb-16">
           <div>
@@ -57,7 +57,7 @@ export default function RecentProjects() {
               <div className="flex gap-2 mb-5">
                 <span
                   className="text-xs font-semibold px-3 py-1 rounded-full"
-                  style={{ background: "rgba(249,115,22,0.12)", color: "#f97316" }}
+                  style={{ background: "rgba(249,115,22,0.12)", color: "var(--accent-text-lg)" }}
                 >
                   {featured.product}
                 </span>
@@ -78,8 +78,8 @@ export default function RecentProjects() {
                 {featured.city}, {featured.province}
               </p>
               <span
-                className="text-sm font-semibold flex items-center gap-2 self-start group-hover:text-orange-300 transition-colors"
-                style={{ color: "#f97316" }}
+                className="text-sm font-semibold flex items-center gap-2 self-start group-hover:text-[var(--accent-soft-text)] transition-colors"
+                style={{ color: "var(--accent-text-lg)" }}
               >
                 View Project
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -118,7 +118,7 @@ export default function RecentProjects() {
                   <div className="flex gap-2 mb-4">
                     <span
                       className="text-xs font-semibold px-3 py-1 rounded-full"
-                      style={{ background: "rgba(249,115,22,0.12)", color: "#f97316" }}
+                      style={{ background: "rgba(249,115,22,0.12)", color: "var(--accent-text-lg)" }}
                     >
                       {project.product}
                     </span>
@@ -130,8 +130,8 @@ export default function RecentProjects() {
                     {project.city}, {project.province}
                   </p>
                   <span
-                    className="text-sm font-semibold flex items-center gap-2 group-hover:text-orange-300 transition-colors"
-                    style={{ color: "#f97316" }}
+                    className="text-sm font-semibold flex items-center gap-2 group-hover:text-[var(--accent-soft-text)] transition-colors"
+                    style={{ color: "var(--accent-text-lg)" }}
                   >
                     View Project
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -73,20 +73,20 @@ export default function ApplicationSpread({
       <div style={{ borderTop: "1px solid var(--border-color)" }}>
         <h3
           className="text-[11px] font-bold uppercase pt-7 pb-4"
-          style={{ color: "#f97316", letterSpacing: "0.18em" }}
+          style={{ color: "var(--accent-text-lg)", letterSpacing: "0.18em" }}
         >
           Specify
           <span className="sr-only"> these systems for {applicationName}</span>
         </h3>
         <ul className="flex flex-col">
           {entry.specify.map((s) => (
-            <li key={s.slug} style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+            <li key={s.slug} style={{ borderTop: "1px solid var(--ink-06)" }}>
               <Link
                 href={`/products/${s.slug}`}
-                className="group flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-6 py-4 transition-colors hover:bg-white/[0.03] -mx-3 px-3 rounded-lg"
+                className="group flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-6 py-4 transition-colors hover:bg-[var(--ink-03)] -mx-3 px-3 rounded-lg"
               >
                 <span
-                  className="font-bold flex-shrink-0 transition-colors group-hover:text-orange-400"
+                  className="font-bold flex-shrink-0 transition-colors group-hover:text-[var(--accent-text)]"
                   style={{ color: "var(--text-primary)", fontSize: "1.0625rem", minWidth: "11rem" }}
                 >
                   {nameOf(s.slug)}

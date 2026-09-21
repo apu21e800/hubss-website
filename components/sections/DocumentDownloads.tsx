@@ -35,13 +35,13 @@ function DocRow({
         className="flex-shrink-0 w-8 h-8 rounded-md flex items-center justify-center"
         style={{ background: "rgba(249,115,22,0.10)" }}
       >
-        <svg className="w-4 h-4" style={{ color: "#F97316" }} fill="currentColor" viewBox="0 0 20 20">
+        <svg className="w-4 h-4" style={{ color: "var(--accent-text-lg)" }} fill="currentColor" viewBox="0 0 20 20">
           <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
         </svg>
       </span>
 
       {/* Document name */}
-      <span className="flex-1 text-sm font-medium min-w-0 truncate" style={{ color: "#E5E7EB" }}>
+      <span className="flex-1 text-sm font-medium min-w-0 truncate" style={{ color: "var(--text-body)" }}>
         {labelText}
       </span>
 
@@ -49,7 +49,7 @@ function DocRow({
       {showBadge && (
         <span
           className="flex-shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded border hidden sm:inline"
-          style={{ background: "rgba(249,115,22,0.08)", color: "#F97316", borderColor: "rgba(249,115,22,0.18)" }}
+          style={{ background: "rgba(249,115,22,0.08)", color: "var(--accent-text-lg)", borderColor: "rgba(249,115,22,0.18)" }}
         >
           {typeLabel}
         </span>
@@ -62,7 +62,7 @@ function DocRow({
         style={{
           minHeight: "44px",
           background: "rgba(249,115,22,0.08)",
-          color: "#F97316",
+          color: "var(--accent-text-lg)",
           border: "1px solid rgba(249,115,22,0.18)",
         }}
         aria-label={`Preview ${labelText}`}
@@ -84,9 +84,9 @@ function DocRow({
         style={{
           minWidth: "44px",
           minHeight: "44px",
-          color: "rgba(255,255,255,0.4)",
-          background: "rgba(255,255,255,0.05)",
-          border: "1px solid rgba(255,255,255,0.1)",
+          color: "var(--ink-40)",
+          background: "var(--ink-05)",
+          border: "1px solid var(--ink-10)",
         }}
         title={`Download ${labelText}`}
         aria-label={`Download ${labelText}`}
@@ -120,8 +120,8 @@ export default function DocumentDownloads({ slug }: { slug: string }) {
         <div
           className="rounded-2xl overflow-hidden"
           style={{
-            background: "#151515",
-            border: "1px solid rgba(255,255,255,0.1)",
+            background: "var(--bg-primary)",
+            border: "1px solid var(--ink-10)",
           }}
         >
           <div className="px-8 py-8">
@@ -130,19 +130,19 @@ export default function DocumentDownloads({ slug }: { slug: string }) {
               <div>
                 <p
                   className="text-xs font-bold tracking-[0.2em] uppercase mb-1"
-                  style={{ color: "#F97316" }}
+                  style={{ color: "var(--accent-text-lg)" }}
                 >
                   Documents
                 </p>
                 {/* "Downloads" describes the mechanism. A municipal engineer is
                     not looking for a download, they are looking for the sheet
                     they have to attach to a submittal. */}
-                <h2 className="text-xl font-bold" style={{ color: "#F5F0EB", letterSpacing: "-0.01em" }}>
+                <h2 className="text-xl font-bold" style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
                   Spec &amp; submittal
                 </h2>
               </div>
               <div className="flex-1 h-px ml-4" style={{ background: "var(--fill-subtle)" }} />
-              <span className="text-xs shrink-0" style={{ color: "rgba(255,255,255,0.55)" }}>
+              <span className="text-xs shrink-0" style={{ color: "var(--ink-55)" }}>
                 {docs.length} file{docs.length !== 1 ? "s" : ""}
               </span>
             </div>

@@ -15,7 +15,7 @@ export default function GlobalError({ error, reset }: ErrorProps) {
   }, [error]);
 
   return (
-    <main style={{ background: "#0D0D0D", minHeight: "100vh" }}>
+    <main style={{ background: "var(--bg-deepest)", minHeight: "100vh" }}>
       <section
         style={{
           minHeight: "100vh",
@@ -32,7 +32,7 @@ export default function GlobalError({ error, reset }: ErrorProps) {
               fontWeight: 700,
               letterSpacing: "0.22em",
               textTransform: "uppercase",
-              color: "#F97316",
+              color: "var(--accent-text-lg)",
               marginBottom: 16,
             }}
           >
@@ -42,7 +42,7 @@ export default function GlobalError({ error, reset }: ErrorProps) {
             style={{
               fontSize: "clamp(2rem, 5vw, 3rem)",
               fontWeight: 900,
-              color: "#F5F0EB",
+              color: "var(--text-primary)",
               lineHeight: 1.1,
               letterSpacing: "-0.02em",
               margin: "0 0 16px",
@@ -50,7 +50,7 @@ export default function GlobalError({ error, reset }: ErrorProps) {
           >
             We hit a pothole on this page.
           </h1>
-          <p style={{ fontSize: 15, color: "#9CA3AF", lineHeight: 1.6, margin: "0 0 28px" }}>
+          <p style={{ fontSize: 15, color: "var(--text-muted)", lineHeight: 1.6, margin: "0 0 28px" }}>
             An unexpected error broke this view. Reload to try again — if it keeps happening, our team has been notified.
           </p>
 
@@ -67,7 +67,7 @@ export default function GlobalError({ error, reset }: ErrorProps) {
                 padding: "12px 22px",
                 borderRadius: 10,
                 background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
-                color: "#fff",
+                color: "var(--on-accent)",
                 fontWeight: 700,
                 fontSize: 14,
                 border: "none",
@@ -83,11 +83,11 @@ export default function GlobalError({ error, reset }: ErrorProps) {
                 padding: "12px 22px",
                 borderRadius: 10,
                 background: "transparent",
-                color: "#F5F0EB",
+                color: "var(--text-primary)",
                 fontWeight: 600,
                 fontSize: 14,
                 textDecoration: "none",
-                border: "1px solid rgba(255,255,255,0.18)",
+                border: "1px solid var(--ink-18)",
               }}
             >
               Back to home

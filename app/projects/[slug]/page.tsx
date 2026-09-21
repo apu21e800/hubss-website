@@ -50,12 +50,12 @@ export default async function ProjectPage({ params }: Props) {
   };
 
   return (
-    <main style={{ background: "#0A0A0A", minHeight: "100vh" }}>
+    <main style={{ background: "var(--bg-deepest)", minHeight: "100vh" }}>
       <JsonLd data={breadcrumbSchema} />
       <Nav />
 
       {/* Hero */}
-      <div className="relative h-[55vh] min-h-[420px] overflow-hidden">
+      <div data-hero className="relative h-[55vh] min-h-[420px] overflow-hidden">
         <Image
           src={project.imageUrl}
           alt={project.title}
@@ -70,53 +70,53 @@ export default async function ProjectPage({ params }: Props) {
             <div className="flex gap-2 mb-4">
               <span
                 className="text-xs font-semibold px-3 py-1 rounded-full"
-                style={{ background: "rgba(249,115,22,0.2)", color: "#f97316" }}
+                style={{ background: "rgba(249,115,22,0.2)", color: "var(--accent-text-lg)" }}
               >
                 {project.product}
               </span>
               <span
                 className="text-xs font-semibold px-3 py-1 rounded-full"
-                style={{ background: "rgba(255,255,255,0.1)", color: "#9ca3af" }}
+                style={{ background: "var(--ink-10)", color: "var(--text-muted)" }}
               >
                 {project.application}
               </span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold leading-tight" style={{ color: "#f5f0eb" }}>
+            <h1 className="text-4xl md:text-5xl font-bold leading-tight" style={{ color: "var(--text-primary)" }}>
               {project.title}
             </h1>
-            <p className="text-sm mt-3" style={{ color: "#9ca3af" }}>
+            <p className="text-sm mt-3" style={{ color: "var(--text-muted)" }}>
               {project.city}, {project.province}
             </p>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20" style={{ background: "#0A0A0A" }}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20" style={{ background: "var(--bg-deepest)" }}>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
           <div className="lg:col-span-2">
-            <h2 className="text-2xl font-bold mb-5" style={{ color: "#f5f0eb", letterSpacing: "-0.02em" }}>What was built</h2>
-            <p className="text-[16px] leading-relaxed mb-10" style={{ color: "#e5e7eb" }}>
+            <h2 className="text-2xl font-bold mb-5" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>What was built</h2>
+            <p className="text-[16px] leading-relaxed mb-10" style={{ color: "var(--text-body)" }}>
               {project.excerpt}
             </p>
 
           </div>
 
           <div>
-            <div className="rounded-xl p-8 sticky top-24 relative overflow-hidden" style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.08)" }}>
+            <div className="rounded-xl p-8 sticky top-24 relative overflow-hidden" style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--ink-08)" }}>
               {/* Orange top accent */}
               <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
               {/* Orphan <h3> under the Overview <h2> — the detail table was
                   filed inside the narrative for every screen reader. */}
-              <h2 className="font-bold text-lg mb-6" style={{ color: "#f5f0eb", letterSpacing: "-0.01em" }}>On the record</h2>
+              <h2 className="font-bold text-lg mb-6" style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}>On the record</h2>
               <div className="space-y-4">
                 {[
                   { label: "Product", value: project.product },
                   { label: "Application", value: project.application },
                   { label: "Location", value: `${project.city}, ${project.province}` },
                 ].map((detail) => (
-                  <div key={detail.label} className="flex justify-between text-sm" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", paddingBottom: "12px" }}>
-                    <span style={{ color: "#9CA3AF" }}>{detail.label}</span>
-                    <span className="font-semibold text-right" style={{ color: "#f5f0eb" }}>{detail.value}</span>
+                  <div key={detail.label} className="flex justify-between text-sm" style={{ borderBottom: "1px solid var(--ink-06)", paddingBottom: "12px" }}>
+                    <span style={{ color: "var(--text-muted)" }}>{detail.label}</span>
+                    <span className="font-semibold text-right" style={{ color: "var(--text-primary)" }}>{detail.value}</span>
                   </div>
                 ))}
               </div>
@@ -124,14 +124,14 @@ export default async function ProjectPage({ params }: Props) {
               <Link
                 href={productEntry ? `/products/${productEntry.slug}` : "/products"}
                 className="block w-full text-center font-semibold py-4 rounded-lg mt-8 text-sm transition-all hover:brightness-110"
-                style={{ background: "#f97316", color: "#fff" }}
+                style={{ background: "#f97316", color: "var(--on-accent)" }}
               >
                 View {project.product} Product
               </Link>
               <Link
                 href="/contact"
                 className="block w-full text-center font-semibold py-4 rounded-lg mt-3 text-sm transition-all hover:border-[#F97316]/50 hover:text-white"
-                style={{ border: "1px solid rgba(255,255,255,0.12)", color: "#9CA3AF" }}
+                style={{ border: "1px solid var(--ink-12)", color: "var(--text-muted)" }}
               >
                 Request a Consultation
               </Link>
@@ -140,15 +140,15 @@ export default async function ProjectPage({ params }: Props) {
         </div>
 
         {relatedProjects.length > 0 && (
-          <div className="mt-20 pt-16" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
-            <h2 className="text-2xl font-bold mb-8" style={{ color: "#f5f0eb", letterSpacing: "-0.02em" }}>More from the field</h2>
+          <div className="mt-20 pt-16" style={{ borderTop: "1px solid var(--ink-08)" }}>
+            <h2 className="text-2xl font-bold mb-8" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>More from the field</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {relatedProjects.map((p) => (
                 <Link
                   key={p.slug}
                   href={`/projects/${p.slug}`}
                   className="group overflow-hidden rounded-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(249,115,22,0.1)]"
-                  style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.08)" }}
+                  style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--ink-08)" }}
                 >
                   <div className="relative h-40 overflow-hidden">
                     <Image
@@ -162,14 +162,14 @@ export default async function ProjectPage({ params }: Props) {
                   <div className="p-5">
                     <span
                       className="text-xs font-semibold px-2 py-1 rounded mb-3 inline-block"
-                      style={{ background: "rgba(249,115,22,0.15)", color: "#f97316" }}
+                      style={{ background: "rgba(249,115,22,0.15)", color: "var(--accent-text-lg)" }}
                     >
                       {p.product}
                     </span>
-                    <h3 className="font-bold text-sm leading-snug group-hover:text-[#f97316] transition-colors" style={{ color: "#f5f0eb" }}>
+                    <h3 className="font-bold text-sm leading-snug group-hover:text-[var(--accent-text-lg)] transition-colors" style={{ color: "var(--text-primary)" }}>
                       {p.title}
                     </h3>
-                    <p className="text-xs mt-1" style={{ color: "#d1d5db" }}>{p.city}, {p.province}</p>
+                    <p className="text-xs mt-1" style={{ color: "var(--text-body)" }}>{p.city}, {p.province}</p>
                   </div>
                 </Link>
               ))}

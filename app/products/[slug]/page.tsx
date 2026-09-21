@@ -226,14 +226,14 @@ export default async function ProductPage({ params }: Props) {
         <div className="absolute inset-0" style={{ background: "linear-gradient(92deg, rgba(8,13,22,0.38) 0%, rgba(8,13,22,0.14) 45%, transparent 65%)" }} />
         <div className="absolute inset-0 flex items-end">
           <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-14">
-            <p className="text-xs font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "#f97316" }}>
+            <p className="text-xs font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "var(--accent-text-lg)" }}>
               {product.eyebrow ?? getProductFamily(product.slug)}
             </p>
             <h1
               className="font-black leading-[1.05] mb-3"
               style={{
                 fontSize: "clamp(2rem, 5vw, 3.75rem)",
-                color: "#F5F0EB",
+                color: "var(--text-primary)",
                 textShadow: "0 2px 24px rgba(0,0,0,0.5)",
                 letterSpacing: "-0.025em",
               }}
@@ -250,7 +250,7 @@ export default async function ProductPage({ params }: Props) {
             />
             <p
               className="text-base sm:text-lg max-w-xl leading-relaxed"
-              style={{ color: "rgba(255,255,255,0.78)", textShadow: "0 1px 12px rgba(0,0,0,0.5)" }}
+              style={{ color: "var(--ink-78)", textShadow: "0 1px 12px rgba(0,0,0,0.5)" }}
             >
               {product.shortDesc}
             </p>
@@ -319,12 +319,12 @@ export default async function ProductPage({ params }: Props) {
           <div className="flex flex-wrap gap-3 relative flex-shrink-0">
             <Link href="/lunch-learn"
               className="px-5 rounded-lg text-sm font-semibold transition-all inline-flex items-center"
-              style={{ background: "transparent", color: "var(--text-secondary)", border: "1px solid rgba(255,255,255,0.14)", minHeight: "44px" }}>
+              style={{ background: "transparent", color: "var(--text-secondary)", border: "1px solid var(--ink-14)", minHeight: "44px" }}>
               Book a Lunch &amp; Learn
             </Link>
             <Link href="/gallery"
               className="px-5 rounded-lg text-sm font-bold transition-all inline-flex items-center"
-              style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "#fff", boxShadow: "0 4px 16px rgba(249,115,22,0.32)", minHeight: "44px" }}>
+              style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "var(--on-accent)", boxShadow: "0 4px 16px rgba(249,115,22,0.32)", minHeight: "44px" }}>
               See Project Gallery →
             </Link>
           </div>
@@ -366,19 +366,19 @@ export default async function ProductPage({ params }: Props) {
 
           {/* Right: specs */}
           <div>
-            <div className="rounded-xl p-8 mb-8 sticky top-24 relative overflow-hidden" style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(255,255,255,0.08)" }}>
+            <div className="rounded-xl p-8 mb-8 sticky top-24 relative overflow-hidden" style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--ink-08)" }}>
               <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
               {/* Was an <h3> sitting under the Downloads <h2>, which filed the
                   spec table inside "Downloads" for every screen reader and for
                   Google's outline. It is its own section and now says so. */}
-              <h2 className="font-bold text-lg mb-6" style={{ color: "#F5F0EB", letterSpacing: "-0.01em" }}>
+              <h2 className="font-bold text-lg mb-6" style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
                 Full specification
               </h2>
               <div className="space-y-4">
                 {product.specs.map((spec) => (
-                  <div key={spec.label} className="flex justify-between text-sm" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", paddingBottom: "12px" }}>
-                    <span style={{ color: "#9CA3AF" }}>{spec.label}</span>
-                    <span className="font-semibold text-right max-w-[60%]" style={{ color: "#F5F0EB" }}>
+                  <div key={spec.label} className="flex justify-between text-sm" style={{ borderBottom: "1px solid var(--ink-06)", paddingBottom: "12px" }}>
+                    <span style={{ color: "var(--text-muted)" }}>{spec.label}</span>
+                    <span className="font-semibold text-right max-w-[60%]" style={{ color: "var(--text-primary)" }}>
                       {spec.value}
                     </span>
                   </div>
@@ -410,14 +410,14 @@ export default async function ProductPage({ params }: Props) {
                   />
                   <div>
                     <p className="text-xs font-bold tracking-[0.2em] uppercase mb-1" style={{ color: "#86c552" }}>Green Building Credentials</p>
-                    <h3 className="text-2xl font-bold" style={{ color: "#F5F0EB", letterSpacing: "-0.02em" }}>
+                    <h3 className="text-2xl font-bold" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
                       Contributes to LEED Points
                     </h3>
                   </div>
                 </div>
-                <p className="leading-[1.8] mb-6" style={{ color: "rgba(255,255,255,0.72)", fontSize: "clamp(0.95rem, 1.6vw, 1.05rem)", maxWidth: "52ch" }}>
+                <p className="leading-[1.8] mb-6" style={{ color: "var(--ink-72)", fontSize: "clamp(0.95rem, 1.6vw, 1.05rem)", maxWidth: "52ch" }}>
                   StreetBondSR&apos;s high Solar Reflectance Index (SRI) qualifies for{" "}
-                  <strong style={{ color: "#F5F0EB" }}>LEED v4 SS Credit: Heat Island Reduction</strong> under the
+                  <strong style={{ color: "var(--text-primary)" }}>LEED v4 SS Credit: Heat Island Reduction</strong> under the
                   U.S. Green Building Council framework. The coating reflects solar radiation rather than absorbing it,
                   reducing surface temperature relative to standard dark asphalt and lowering radiant heat loads on adjacent buildings.
                 </p>
@@ -429,7 +429,7 @@ export default async function ProductPage({ params }: Props) {
                   ].map(({ label, value }) => (
                     <div key={label} className="rounded-xl p-4" style={{ background: "rgba(134,197,82,0.08)", border: "1px solid rgba(134,197,82,0.15)" }}>
                       <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: "rgba(134,197,82,0.7)" }}>{label}</p>
-                      <p className="text-sm font-semibold" style={{ color: "#F5F0EB" }}>{value}</p>
+                      <p className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>{value}</p>
                     </div>
                   ))}
                 </div>
@@ -437,14 +437,14 @@ export default async function ProductPage({ params }: Props) {
                   <Link
                     href="/contact"
                     className="px-6 py-3 rounded-xl text-sm font-bold"
-                    style={{ background: "linear-gradient(135deg, #86c552 0%, #6aad3a 100%)", color: "#fff", boxShadow: "0 4px 16px rgba(134,197,82,0.3)" }}
+                    style={{ background: "linear-gradient(135deg, #86c552 0%, #6aad3a 100%)", color: "var(--on-accent)", boxShadow: "0 4px 16px rgba(134,197,82,0.3)" }}
                   >
                     Request LEED Documentation →
                   </Link>
                   <Link
                     href="/lunch-learn"
                     className="px-6 py-3 rounded-xl text-sm font-semibold"
-                    style={{ color: "rgba(255,255,255,0.65)", border: "1px solid rgba(255,255,255,0.14)" }}
+                    style={{ color: "var(--ink-65)", border: "1px solid var(--ink-14)" }}
                   >
                     Book a Lunch &amp; Learn
                   </Link>
@@ -463,8 +463,8 @@ export default async function ProductPage({ params }: Props) {
                   <div key={heading} className="flex gap-4">
                     <span style={{ fontSize: 22, lineHeight: 1, flexShrink: 0, marginTop: 2 }}>{icon}</span>
                     <div>
-                      <p className="font-bold mb-1" style={{ color: "#F5F0EB", fontSize: "0.95rem" }}>{heading}</p>
-                      <p className="leading-relaxed" style={{ color: "rgba(255,255,255,0.58)", fontSize: "0.875rem" }}>{body}</p>
+                      <p className="font-bold mb-1" style={{ color: "var(--text-primary)", fontSize: "0.95rem" }}>{heading}</p>
+                      <p className="leading-relaxed" style={{ color: "var(--ink-58)", fontSize: "0.875rem" }}>{body}</p>
                     </div>
                   </div>
                 ))}
@@ -475,10 +475,10 @@ export default async function ProductPage({ params }: Props) {
 
         {/* Applications this product is used for */}
         {relatedAppData.length > 0 && (
-          <div className="mt-16 pt-16" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+          <div className="mt-16 pt-16" style={{ borderTop: "1px solid var(--ink-08)" }}>
             <div className="flex items-end justify-between mb-8">
               <div>
-                <p className="text-xs font-bold tracking-[0.2em] uppercase mb-3" style={{ color: "#f97316" }}>
+                <p className="text-xs font-bold tracking-[0.2em] uppercase mb-3" style={{ color: "var(--accent-text-lg)" }}>
                   Specified for
                 </p>
                 {/* The eyebrow said "Where It's Used" and the heading said
@@ -490,7 +490,7 @@ export default async function ProductPage({ params }: Props) {
               </div>
               <Link
                 href="/applications"
-                className="hidden sm:flex items-center gap-1.5 text-xs font-semibold transition-colors duration-150 hover:text-white"
+                className="hidden sm:flex items-center gap-1.5 text-xs font-semibold transition-colors duration-150 hover:text-[var(--text-primary)]"
                 style={{ color: "var(--text-muted)" }}
               >
                 All applications
@@ -535,8 +535,8 @@ export default async function ProductPage({ params }: Props) {
                       {app.shortDesc.slice(0, 80)}{app.shortDesc.length > 80 ? "…" : ""}
                     </p>
                     <span
-                      className="mt-2 text-[11px] font-semibold flex items-center gap-1 uppercase tracking-wider transition-colors duration-150 group-hover:text-[#fb923c]"
-                      style={{ color: "#f97316" }}
+                      className="mt-2 text-[11px] font-semibold flex items-center gap-1 uppercase tracking-wider transition-colors duration-150 group-hover:text-[var(--accent-text)]"
+                      style={{ color: "var(--accent-text-lg)" }}
                     >
                       Explore
                       <svg className="w-2.5 h-2.5 transition-transform duration-150 group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

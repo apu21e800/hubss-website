@@ -8,7 +8,7 @@ const HERO_IMAGE = "/images/applications/residential-driveways/residential-drive
 
 export default function ResidentialDriveways() {
   return (
-    <section style={{ backgroundColor: "#151515" }}>
+    <section style={{ backgroundColor: "var(--bg-primary)" }}>
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[540px]">
 
@@ -21,7 +21,7 @@ export default function ResidentialDriveways() {
                 className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold tracking-[0.14em] uppercase"
                 style={{
                   background: "rgba(249,115,22,0.12)",
-                  color: "#f97316",
+                  color: "var(--accent-text-lg)",
                   border: "1px solid rgba(249,115,22,0.28)",
                 }}
               >
@@ -35,7 +35,7 @@ export default function ResidentialDriveways() {
             >
               Your Driveway.
               <br />
-              <span style={{ color: "#f97316" }}>City&#8209;Grade Materials.</span>
+              <span style={{ color: "var(--accent-text-lg)" }}>City&#8209;Grade Materials.</span>
             </h2>
 
             <p
@@ -63,7 +63,7 @@ export default function ResidentialDriveways() {
                       height="10"
                       viewBox="0 0 24 24"
                       fill="none"
-                      stroke="#f97316"
+                      stroke="var(--accent-text-lg)"
                       strokeWidth={3}
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -87,7 +87,7 @@ export default function ResidentialDriveways() {
               className="inline-flex items-center gap-2 font-bold px-7 py-3.5 rounded-full text-sm transition-all duration-150 hover:brightness-110 self-start"
               style={{
                 background: "linear-gradient(90deg, #F97316, #d97706)",
-                color: "#fff",
+                color: "var(--on-accent)",
               }}
             >
               See Driveway Options

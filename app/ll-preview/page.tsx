@@ -9,7 +9,7 @@ export const metadata = { robots: { index: false, follow: false } };
 function Label({ children }: { children: React.ReactNode }) {
   return (
     <div className="max-w-7xl mx-auto px-8 pt-16 pb-2">
-      <p className="text-sm font-black tracking-[0.3em] uppercase" style={{ color: "#4ade80" }}>
+      <p className="text-sm font-black tracking-[0.3em] uppercase" style={{ color: "var(--ok-text)" }}>
         {children}
       </p>
     </div>

@@ -67,7 +67,7 @@ export default function BlogCard({ post }: { post: PostMeta }) {
           >
             {post.category}
           </span>
-          <span className="text-[10px] flex-shrink-0" style={{ color: "#9CA3AF" }}>
+          <span className="text-[10px] flex-shrink-0" style={{ color: "var(--text-muted)" }}>
             {new Date(post.date).toLocaleDateString("en-CA", { year: "numeric", month: "short", day: "numeric" })}
           </span>
         </div>
@@ -79,7 +79,7 @@ export default function BlogCard({ post }: { post: PostMeta }) {
               <span
                 key={p}
                 className="text-[11px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide"
-                style={{ background: "rgba(249,115,22,0.10)", color: "#f97316", border: "1px solid rgba(249,115,22,0.2)" }}
+                style={{ background: "rgba(249,115,22,0.10)", color: "var(--accent-text-lg)", border: "1px solid rgba(249,115,22,0.2)" }}
               >
                 {p}
               </span>
@@ -89,14 +89,14 @@ export default function BlogCard({ post }: { post: PostMeta }) {
 
         {/* Title */}
         <h3
-          className="font-bold text-sm leading-snug mb-2 transition-colors duration-200 group-hover:text-orange-400"
-          style={{ color: "#F5F0EB" }}
+          className="font-bold text-sm leading-snug mb-2 transition-colors duration-200 group-hover:text-[var(--accent-text)]"
+          style={{ color: "var(--text-primary)" }}
         >
           {post.title}
         </h3>
 
         {/* Excerpt */}
-        <p className="text-xs leading-relaxed flex-1 mb-4" style={{ color: "#9CA3AF" }}>
+        <p className="text-xs leading-relaxed flex-1 mb-4" style={{ color: "var(--text-muted)" }}>
           {post.excerpt.length > 110
             ? post.excerpt.slice(0, post.excerpt.lastIndexOf(" ", 110)) + "..."
             : post.excerpt}
@@ -104,11 +104,11 @@ export default function BlogCard({ post }: { post: PostMeta }) {
 
         {/* CTA + read time */}
         <div className="flex items-center justify-between mt-auto">
-          <span className="text-xs font-semibold flex items-center gap-1" style={{ color: "#f97316" }}>
+          <span className="text-xs font-semibold flex items-center gap-1" style={{ color: "var(--accent-text-lg)" }}>
             Read Post &rarr;
           </span>
           {post.readTime && (
-            <span className="text-[10px]" style={{ color: "#868C98" }}>{post.readTime}</span>
+            <span className="text-[10px]" style={{ color: "var(--text-secondary)" }}>{post.readTime}</span>
           )}
         </div>
       </div>

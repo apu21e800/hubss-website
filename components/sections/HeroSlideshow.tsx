@@ -36,9 +36,11 @@ export default function HeroSlideshow({
 
   return (
     <section
+      /* full-bleed photography with overlaid type — dark in every theme */
+      data-surface="dark"
       data-hero
       className="relative w-full overflow-hidden"
-      style={{ minHeight: "88vh", background: "#101010" }}
+      style={{ minHeight: "88vh", background: "var(--bg-dark)" }}
       aria-label="Hero"
     >
       {/* ── Background image — plain <img>, not next/image and not CSS background-image.
@@ -100,7 +102,7 @@ export default function HeroSlideshow({
             <p
               className="text-sm font-bold tracking-[0.22em] uppercase mb-3"
               style={{
-                color: "#FDBA74",
+                color: "var(--accent-soft-text)",
                 textShadow: "0 1px 12px rgba(0,0,0,0.75)",
               }}
             >
@@ -140,7 +142,7 @@ export default function HeroSlideshow({
                 fontSize: "clamp(1.25rem, 2vw, 1.625rem)",
                 lineHeight: 1.25,
                 letterSpacing: "-0.02em",
-                color: "rgba(255,255,255,0.85)",
+                color: "var(--ink-85)",
                 textShadow: "0 1px 12px rgba(0,0,0,0.5)",
               }}
             >
@@ -154,7 +156,7 @@ export default function HeroSlideshow({
                 className="inline-flex items-center justify-center gap-2 px-7 rounded-lg font-semibold text-sm transition-all"
                 style={{
                   background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
-                  color: "#fff",
+                  color: "var(--on-accent)",
                   boxShadow: "0 6px 28px rgba(249,115,22,0.42)",
                   minHeight: "44px",
                 }}
@@ -166,10 +168,10 @@ export default function HeroSlideshow({
               </Link>
               <Link
                 href={cta2Href}
-                className="inline-flex items-center justify-center gap-2 px-7 rounded-lg font-semibold text-sm border transition-all hover:bg-white/[0.06]"
+                className="inline-flex items-center justify-center gap-2 px-7 rounded-lg font-semibold text-sm border transition-all hover:bg-[var(--ink-06)]"
                 style={{
-                  borderColor: "rgba(255,255,255,0.3)",
-                  color: "rgba(255,255,255,0.8)",
+                  borderColor: "var(--ink-30)",
+                  color: "var(--ink-80)",
                   minHeight: "44px",
                 }}
               >

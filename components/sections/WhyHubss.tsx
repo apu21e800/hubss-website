@@ -54,7 +54,7 @@ export default function WhyHubss() {
     <section
       ref={sectionRef}
       className="relative overflow-hidden"
-      style={{ background: "#0D0D0D" }}
+      style={{ background: "var(--bg-deepest)" }}
     >
       <div
         className="absolute pointer-events-none"
@@ -82,7 +82,7 @@ export default function WhyHubss() {
           transition={{ duration: 0.45 }}
           className="max-w-2xl mb-14"
         >
-          <p className="text-xs font-bold tracking-[0.2em] uppercase mb-4" style={{ color: "#f97316" }}>
+          <p className="text-xs font-bold tracking-[0.2em] uppercase mb-4" style={{ color: "var(--accent-text-lg)" }}>
             Why HUB
           </p>
           <h2
@@ -101,14 +101,14 @@ export default function WhyHubss() {
             <br />Specified by engineers.
             <br />Loved by communities.
           </h2>
-          <p className="text-base leading-relaxed max-w-xl" style={{ color: "#9CA3AF" }}>
+          <p className="text-base leading-relaxed max-w-xl" style={{ color: "var(--text-muted)" }}>
             Understanding what works. Solutions for Canada. One standard — if it goes on the street, it stays on the street.
           </p>
         </motion.div>
 
         <div
           className="grid grid-cols-2 sm:grid-cols-4 mb-12 rounded-xl overflow-hidden"
-          style={{ border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.025)" }}
+          style={{ border: "1px solid var(--ink-10)", background: "var(--ink-025)" }}
         >
           {STATS.map((s, i) => (
             <motion.div
@@ -122,13 +122,13 @@ export default function WhyHubss() {
                 borderBottom: i < 2 ? "1px solid var(--border-color)" : "none",
               }}
             >
-              <span className="text-3xl sm:text-4xl font-black tracking-tight leading-none" style={{ color: "#f97316" }}>
+              <span className="text-3xl sm:text-4xl font-black tracking-tight leading-none" style={{ color: "var(--accent-text-lg)" }}>
                 {s.num}
               </span>
-              <span className="text-[11px] font-bold tracking-wider uppercase mt-1" style={{ color: "#F5F0EB" }}>
+              <span className="text-[11px] font-bold tracking-wider uppercase mt-1" style={{ color: "var(--text-primary)" }}>
                 {s.label}
               </span>
-              <span className="text-[10px] leading-snug" style={{ color: "#9CA3AF" }}>
+              <span className="text-[10px] leading-snug" style={{ color: "var(--text-muted)" }}>
                 {s.sub}
               </span>
             </motion.div>
@@ -149,11 +149,11 @@ export default function WhyHubss() {
                 <span className="text-[10px] font-bold tabular-nums" style={{ color: "rgba(249,115,22,0.4)" }}>
                   {p.num}
                 </span>
-                <h3 className="font-semibold text-sm" style={{ color: "#F5F0EB" }}>
+                <h3 className="font-semibold text-sm" style={{ color: "var(--text-primary)" }}>
                   {p.claim}
                 </h3>
               </div>
-              <p className="text-sm leading-relaxed" style={{ color: "#9CA3AF" }}>
+              <p className="text-sm leading-relaxed" style={{ color: "var(--text-muted)" }}>
                 {p.detail}
               </p>
             </motion.div>
@@ -172,7 +172,7 @@ export default function WhyHubss() {
             className="inline-flex items-center gap-2 font-bold px-7 py-3.5 rounded-lg transition-all text-sm"
             style={{
               background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
-              color: "#fff",
+              color: "var(--on-accent)",
               boxShadow: "0 4px 20px rgba(249,115,22,0.3)",
             }}
           >
@@ -184,16 +184,16 @@ export default function WhyHubss() {
           <a
             href="/lunch-learn"
             className="inline-flex items-center gap-2 text-sm font-semibold transition-colors group"
-            style={{ color: "rgba(255,255,255,0.5)" }}
+            style={{ color: "var(--ink-50)" }}
           >
-            <span className="group-hover:text-orange-400 transition-colors">Book a Lunch &amp; Learn</span>
-            <svg className="w-3.5 h-3.5 group-hover:text-orange-400 group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <span className="group-hover:text-[var(--accent-text)] transition-colors">Book a Lunch &amp; Learn</span>
+            <svg className="w-3.5 h-3.5 group-hover:text-[var(--accent-text)] group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </a>
         </motion.div>
 
-        <p className="text-[10px] font-bold tracking-[0.2em] uppercase mt-10 mb-5" style={{ color: "rgba(255,255,255,0.18)" }}>
+        <p className="text-[10px] font-bold tracking-[0.2em] uppercase mt-10 mb-5" style={{ color: "var(--ink-18)" }}>
           Trusted by
         </p>
       </div>
@@ -208,7 +208,7 @@ export default function WhyHubss() {
         >
           {TICKER.map((name, i) => (
             <span key={i} style={{ display: "inline-flex", alignItems: "center", flexShrink: 0 }}>
-              <span className="text-sm font-medium px-5" style={{ color: "rgba(255,255,255,0.35)", lineHeight: 1 }}>
+              <span className="text-sm font-medium px-5" style={{ color: "var(--ink-35)", lineHeight: 1 }}>
                 {name}
               </span>
               <span

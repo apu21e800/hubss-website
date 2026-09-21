@@ -92,20 +92,20 @@ cleve.stordy@hubss.com | 604-309-8212`,
 
 export default function PrivacyPage() {
   return (
-    <main style={{ background: "#1a1a1a", minHeight: "100vh" }}>
+    <main style={{ background: "var(--bg-section-asphalt)", minHeight: "100vh" }}>
       <Nav />
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24">
-        <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "#f97316" }}>
+        <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "var(--accent-text-lg)" }}>
           Legal
         </p>
-        <h1 className="text-5xl font-bold mb-3 leading-tight" style={{ color: "#f5f0eb" }}>
+        <h1 className="text-5xl font-bold mb-3 leading-tight" style={{ color: "var(--text-primary)" }}>
           Privacy Policy
         </h1>
-        <p className="text-sm mb-12" style={{ color: "#9ca3af" }}>
+        <p className="text-sm mb-12" style={{ color: "var(--text-muted)" }}>
           Last updated: March 2026
         </p>
 
-        <p className="text-base leading-relaxed mb-12" style={{ color: "#9ca3af" }}>
+        <p className="text-base leading-relaxed mb-12" style={{ color: "var(--text-muted)" }}>
           HUB Surface Systems (&ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;) is committed to protecting your privacy.
           This policy explains how we collect, use, and safeguard your personal information when
           you visit hubss.com or contact us about our products and services.
@@ -113,13 +113,13 @@ export default function PrivacyPage() {
 
         <div className="space-y-10">
           {sections.map((section) => (
-            <div key={section.heading} style={{ borderTop: "1px solid #333", paddingTop: "32px" }}>
-              <h2 className="text-xl font-bold mb-4" style={{ color: "#f5f0eb" }}>
+            <div key={section.heading} style={{ borderTop: "1px solid var(--border-strong)", paddingTop: "32px" }}>
+              <h2 className="text-xl font-bold mb-4" style={{ color: "var(--text-primary)" }}>
                 {section.heading}
               </h2>
               <div
                 className="text-sm leading-relaxed space-y-3 whitespace-pre-line"
-                style={{ color: "#9ca3af" }}
+                style={{ color: "var(--text-muted)" }}
               >
                 {section.body}
               </div>

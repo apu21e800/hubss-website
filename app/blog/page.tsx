@@ -72,7 +72,7 @@ export default function BlogPage() {
   };
 
   return (
-    <main className="min-h-screen" style={{ background: "#151515" }}>
+    <main className="min-h-screen" style={{ background: "var(--bg-primary)" }}>
       <JsonLd data={blogSchema} />
       <JsonLd data={breadcrumbSchema} />
       <Nav />
@@ -82,7 +82,7 @@ export default function BlogPage() {
             job of this page is to get a reader into one of them, so the masthead
             gives up height to let the first row of cards reach the fold. */}
         <div className="mb-7">
-          <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-2.5" style={{ color: "#f97316" }}>
+          <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-2.5" style={{ color: "var(--accent-text-lg)" }}>
             Field Notes
           </p>
           <h1
@@ -129,18 +129,18 @@ function BlogSkeleton() {
     <div className="animate-pulse space-y-4">
       <div className="flex gap-2">
         {Array.from({ length: 5 }).map((_, i) => (
-          <div key={i} className="h-8 w-24 rounded-full bg-zinc-800" />
+          <div key={i} className="h-8 w-24 rounded-full bg-[var(--bg-card)]" />
         ))}
       </div>
       <div className="flex gap-3">
-        <div className="h-10 flex-1 rounded-lg bg-zinc-800" />
-        <div className="h-10 w-52 rounded-lg bg-zinc-800" />
-        <div className="h-10 w-44 rounded-lg bg-zinc-800" />
+        <div className="h-10 flex-1 rounded-lg bg-[var(--bg-card)]" />
+        <div className="h-10 w-52 rounded-lg bg-[var(--bg-card)]" />
+        <div className="h-10 w-44 rounded-lg bg-[var(--bg-card)]" />
       </div>
-      <div className="h-72 rounded-2xl bg-zinc-800 mt-8" />
+      <div className="h-72 rounded-2xl bg-[var(--bg-card)] mt-8" />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
         {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} className="h-64 rounded-xl bg-zinc-800" />
+          <div key={i} className="h-64 rounded-xl bg-[var(--bg-card)]" />
         ))}
       </div>
     </div>

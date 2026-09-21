@@ -63,7 +63,7 @@ export default function Hero() {
         >
           <p
             className="text-xs font-bold tracking-[0.2em] uppercase mb-4"
-            style={{ color: "#f97316" }}
+            style={{ color: "var(--accent-text-lg)" }}
           >
             Decorative Hardscapes
           </p>
@@ -77,7 +77,7 @@ export default function Hero() {
               letterSpacing: "-0.04em",
             }}
           >
-            <span style={{ color: "#fff", textShadow: "0 2px 28px rgba(0,0,0,0.45)" }}>
+            <span style={{ color: "var(--text-primary)", textShadow: "0 2px 28px rgba(0,0,0,0.45)" }}>
               The World Is{" "}
             </span>
             <span
@@ -94,7 +94,7 @@ export default function Hero() {
 
           <p
             className="text-lg sm:text-xl leading-relaxed max-w-2xl mb-10 sm:mb-12"
-            style={{ color: "rgba(255,255,255,0.8)", textShadow: "0 1px 16px rgba(0,0,0,0.55)", fontWeight: 400 }}
+            style={{ color: "var(--ink-80)", textShadow: "0 1px 16px rgba(0,0,0,0.55)", fontWeight: 400 }}
           >
             HUB Surface Systems redefines hardscapes for freeze-thaw climates.
             Stamped asphalt, thermoplastics, and specialty coatings built for
@@ -113,7 +113,7 @@ export default function Hero() {
               className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-lg font-semibold text-sm transition-all"
               style={{
                 background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
-                color: "#fff",
+                color: "var(--on-accent)",
                 boxShadow: "0 8px 28px rgba(249,115,22,0.42)",
               }}
             >
@@ -124,8 +124,8 @@ export default function Hero() {
             </a>
             <a
               href="/lunch-learn"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-lg font-semibold text-sm border transition-all hover:border-orange-500/50 hover:text-orange-400"
-              style={{ borderColor: "rgba(255,255,255,0.25)", color: "rgba(255,255,255,0.8)" }}
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-lg font-semibold text-sm border transition-all hover:border-orange-500/50 hover:text-[var(--accent-text)]"
+              style={{ borderColor: "var(--ink-25)", color: "var(--ink-80)" }}
             >
               Book Lunch &amp; Learn
             </a>
@@ -160,7 +160,7 @@ export default function Hero() {
                     style={{
                       fontSize: "1.55rem",
                       fontWeight: 800,
-                      color: "#F97316",
+                      color: "var(--accent-text-lg)",
                       lineHeight: 1,
                       letterSpacing: "-0.04em",
                     }}
@@ -170,7 +170,7 @@ export default function Hero() {
                   <span
                     style={{
                       fontSize: "0.8rem",
-                      color: "rgba(255,255,255,0.5)",
+                      color: "var(--ink-50)",
                       fontWeight: 500,
                       lineHeight: 1.25,
                       maxWidth: "6.5rem",
@@ -189,7 +189,7 @@ export default function Hero() {
       {/* ── Client ticker ──────────────────────────────────────────────────────── */}
       <div
         className="relative z-10 border-t"
-        style={{ borderColor: "rgba(255,255,255,0.1)" }}
+        style={{ borderColor: "var(--ink-10)" }}
       >
         <div
           className="overflow-hidden py-4"
@@ -207,7 +207,7 @@ export default function Hero() {
               <span
                 key={i}
                 className="text-sm font-medium flex items-center gap-3"
-                style={{ color: "rgba(255,255,255,0.4)", lineHeight: 1 }}
+                style={{ color: "var(--ink-40)", lineHeight: 1 }}
               >
                 {item}
                 <span

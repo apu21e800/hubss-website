@@ -14,26 +14,40 @@
 
 export const SITE_FLAGS = {
 
-  // ── Map ──────────────────────────────────────────────────────────────────
+  // ── Map
   /** Canada project map on the homepage. Toggle off if MapLibre is causing
    *  issues or if map data needs to be updated before showing publicly. */
   showMap: true,
 
-  // ── Social proof ─────────────────────────────────────────────────────────
+  // ── Theme
+  /** The Dark · Mixed · Light switch in the nav.
+   *
+   *  It is a review control: it exists so Vern and Doug can compare the three
+   *  modes on a real page. It shipped visible to the public on 21 Sep, which
+   *  was a mistake — a visitor has no reason to be offered the version of the
+   *  site we decided against.
+   *
+   *  Turning it off does NOT turn off the themes. Mixed is still the default,
+   *  and ?theme=dark / ?theme=mixed / ?theme=light still switch and still
+   *  stick, because that lives in the bootstrap in app/layout.tsx. Set this
+   *  true when you want the switch back in the bar. */
+  showThemeToggle: false,
+
+  // ── Social proof
   /** Leo Guddemi / Stantec pull-quote on the Lunch & Learn page.
    *  Pending Vernon's approval before going live. */
   showLeoQuote: false,
 
-  // ── Blog automation ──────────────────────────────────────────────────────
+  // ── Blog automation
   /** /admin/blog AI generation panel. Only useful when ANTHROPIC_API_KEY
    *  is set in Vercel env vars. */
   showAdminBlog: true,
 
-  // ── Social automation ────────────────────────────────────────────────────
+  // ── Social automation
   /** /admin/social post composer. Requires OAuth tokens per platform. */
   showAdminSocial: true,
 
-  // ── Add new flags here ────────────────────────────────────────────────────
+  // ── Add new flags here
   // e.g. showTestimonials: false,
   // e.g. showPricingPage: false,
 

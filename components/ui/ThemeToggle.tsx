@@ -16,6 +16,7 @@
  *            stay dark.
  */
 import { useEffect, useState } from "react";
+import { SITE_FLAGS } from "@/lib/site-flags";
 
 export type ThemeMode = "dark" | "mixed" | "light";
 export const THEME_KEY = "hubss-theme";
@@ -39,6 +40,11 @@ export default function ThemeToggle({ compact = false }: { compact?: boolean }) 
   }, []);
 
   const choose = (m: ThemeMode) => { setMode(m); applyTheme(m); };
+
+  // Gated here rather than at the call site so every place that renders the
+  // switch is covered by the one flag. After the hooks, never before — an
+  // early return above them would change hook order between renders.
+  if (!SITE_FLAGS.showThemeToggle) return null;
 
   return (
     <div

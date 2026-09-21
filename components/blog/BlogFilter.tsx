@@ -110,11 +110,22 @@ export default function BlogFilter({ posts, allProducts }: Props) {
       onClick={onClick}
       aria-pressed={active}
       className="text-[13px] font-semibold px-3.5 rounded-full transition-colors whitespace-nowrap flex-shrink-0 inline-flex items-center gap-1.5"
+      /* Active used to be a solid #F97316 fill with white type. On charcoal
+         that reads as an accent; on paper it is the loudest thing on the page
+         by some distance — Vern, 21 Sep: "too loud". Softened to the same
+         treatment the category chips on the cards below already use, and which
+         nobody has complained about: an orange wash with orange type. Still
+         unmistakably the selected one, because it is the only coloured chip in
+         a row of neutral ones — the signal is hue, not volume.
+
+         The wash is an alpha, so it tints whatever surface it lands on and
+         works unchanged in all three themes; --accent-text carries #FB923C on
+         dark and #B83E0B on paper. */
       style={{
-        background:  active ? "#f97316" : "var(--bg-card-neutral)",
-        color:       active ? "var(--on-accent)"    : "var(--text-muted)",
+        background:  active ? "rgba(249,115,22,0.14)" : "var(--bg-card-neutral)",
+        color:       active ? "var(--accent-text)" : "var(--text-muted)",
         border:      "1px solid",
-        borderColor: active ? "#f97316" : "var(--ink-09)",
+        borderColor: active ? "rgba(249,115,22,0.38)" : "var(--ink-09)",
         minHeight:   "40px",
       }}
     >
@@ -123,8 +134,8 @@ export default function BlogFilter({ posts, allProducts }: Props) {
         <span
           className="text-[11px] font-bold tabular-nums px-1.5 rounded-full"
           style={{
-            background: active ? "rgba(0,0,0,0.18)" : "var(--border-color)",
-            color:      active ? "var(--ink-90)" : "var(--text-hint)",
+            background: active ? "rgba(249,115,22,0.18)" : "var(--border-color)",
+            color:      active ? "var(--accent-text)" : "var(--text-hint)",
           }}
         >
           {count}
@@ -143,7 +154,7 @@ export default function BlogFilter({ posts, allProducts }: Props) {
   return (
     <>
       <div className="mb-8">
-        {/* ── Type — the primary axis ─────────────────────────── */}
+        {/* ── Type — the primary axis  */}
         <div
           className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 sm:flex-wrap sm:overflow-visible scrollbar-none"
           style={{ WebkitOverflowScrolling: "touch", msOverflowStyle: "none", scrollbarWidth: "none" }}
@@ -164,7 +175,7 @@ export default function BlogFilter({ posts, allProducts }: Props) {
           })}
         </div>
 
-        {/* ── Search · product · sort ─────────────────────────── */}
+        {/* ── Search · product · sort  */}
         <div className="flex flex-wrap gap-2.5 mt-3">
           <div className="relative flex-1 min-w-[190px] max-w-sm">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: "var(--text-hint)" }} />
@@ -233,7 +244,7 @@ export default function BlogFilter({ posts, allProducts }: Props) {
           )}
         </div>
 
-        {/* ── Always-on result line ───────────────────────────── */}
+        {/* ── Always-on result line  */}
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mt-3.5">
           <p className="text-xs tabular-nums" style={{ color: "var(--text-hint)" }} aria-live="polite">
             {filtered.length === posts.length
@@ -257,7 +268,7 @@ export default function BlogFilter({ posts, allProducts }: Props) {
         </div>
       </div>
 
-      {/* ── Grid ─────────────────────────────────────────────── */}
+      {/* ── Grid  */}
       {filtered.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {filtered.map((post, index) => (

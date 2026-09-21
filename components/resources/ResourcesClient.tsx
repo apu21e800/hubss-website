@@ -26,7 +26,7 @@ const TYPE_PRIORITY = [
   "Other",
 ];
 
-// ── Chip buckets ─────────────────────────────────────────────────────────
+// ── Chip buckets
 // Twelve type chips across two rows was the taxonomy wearing the UI (Vern:
 // "reduce the chips, it's too much"). Five buckets, one row. The underlying
 // docType stays untouched — a bucket chip simply matches every type it
@@ -439,7 +439,7 @@ export default function ResourcesClient({
         />
       )}
 
-      {/* ── Tab Navigation ───────────────────────────────── */}
+      {/* ── Tab Navigation  */}
       <div id="documents" className="scroll-mt-24 mb-8">
         <div className="flex gap-2">
           {TABS.map((tab) => (
@@ -449,11 +449,16 @@ export default function ResourcesClient({
               className="px-4 rounded-lg text-sm font-medium transition-colors duration-200"
               style={{
                 minHeight: 44,
-                background: activeTab === tab ? "#F97316" : "var(--ink-05)",
-                color: activeTab === tab ? "var(--on-accent)" : "var(--text-muted)",
+                // Same softening as the Field Notes filter chips: a solid
+                // orange fill reads as an accent on charcoal and as an alarm
+                // on paper. The wash is an alpha so it tints whatever surface
+                // it lands on, and it is still the only coloured tab in the
+                // row, which is what makes it the selected one.
+                background: activeTab === tab ? "rgba(249,115,22,0.14)" : "var(--ink-05)",
+                color: activeTab === tab ? "var(--accent-text)" : "var(--text-muted)",
                 border:
                   activeTab === tab
-                    ? "1px solid transparent"
+                    ? "1px solid rgba(249,115,22,0.38)"
                     : "1px solid var(--border-color)",
               }}
             >
@@ -463,7 +468,7 @@ export default function ResourcesClient({
         </div>
       </div>
 
-      {/* ── Search + Filter Bar ────────────────────────── */}
+      {/* ── Search + Filter Bar  */}
       <div className="flex flex-col sm:flex-row gap-3 mb-8">
         <div className="relative flex-1">
           <Search
@@ -531,7 +536,7 @@ export default function ResourcesClient({
         )}
       </div>
 
-      {/* ── Filter Chip Row — Surfacing chips + Document-Type (multi-select) ───
+      {/* ── Filter Chip Row — Surfacing chips + Document-Type (multi-select) 
             Always visible on both tabs. Counts come from the live document
             set so users see what tapping a chip will actually surface.
             "New Documents" surfaces the Catalogue + 2026 Product Flyers. */}
@@ -631,7 +636,7 @@ export default function ResourcesClient({
         )}
       </div>
 
-      {/* ── StreetBond Subcategory Pills ────────────────────── */}
+      {/* ── StreetBond Subcategory Pills  */}
       {activeTab === "By Product" && productFilter === "streetbond" && (
         <div className="flex flex-wrap gap-2 mb-6">
           {STREETBOND_SUBCATEGORIES.map((sc) => (
@@ -659,12 +664,12 @@ export default function ResourcesClient({
         </div>
       )}
 
-      {/* ── Results count ──────────────────────────────── */}
+      {/* ── Results count  */}
       <p className="text-sm mb-6" style={{ color: "var(--text-secondary)" }}>
         {filtered.length} document{filtered.length !== 1 ? "s" : ""} found
       </p>
 
-      {/* ── Document Grid ──────────────────────────────── */}
+      {/* ── Document Grid  */}
       {visible.length > 0 ? (
         <>
           {activeTab === "By Product" &&

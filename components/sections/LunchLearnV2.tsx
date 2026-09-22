@@ -174,7 +174,20 @@ function MoreLink() {
 // ══════════════════════════════════════════════════════════════════
 // Variant A — "Boardroom": one elevated card, inset form, Moose as host
 // ══════════════════════════════════════════════════════════════════
-function Boardroom() {
+/**
+ * `hideForm` exists for /contact.
+ *
+ * Vernon, Sept 2026: "contact page does not need the second email form, it's
+ * repetitive." He is right, and it was worse than repetition — the page asked
+ * for a name and an email address twice, in two different boxes, forty pixels
+ * apart, and a visitor who had just filled one in had no way to tell whether
+ * the second was the same request or a different one.
+ *
+ * The card stays. It is the site's closing statement and it belongs at the
+ * bottom of /contact as much as anywhere. Only the duplicate input panel goes,
+ * replaced by the single button it was competing with.
+ */
+function Boardroom({ hideForm = false }: { hideForm?: boolean }) {
   const f = useLunchLearnForm(true);
   return (
     <section
@@ -273,7 +286,27 @@ function Boardroom() {
               {/* Form side — inset panel */}
               <div className="lg:col-span-5 p-5 sm:p-7 lg:p-8 lg:pl-2 flex">
                 <div className="relative w-full rounded-2xl p-6 sm:p-7 self-center" style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--border-color)" }}>
-                  {f.submitState.status === "success" ? (
+                  {hideForm ? (
+                    <div>
+                      <h3 className="font-bold text-lg mb-1" style={{ color: "var(--text-primary)" }}>Book your session</h3>
+                      <p className="text-[13px] mb-6" style={{ color: "var(--ink-55)" }}>
+                        Pick a date and a format on the Lunch &amp; Learn page. Confirmed within one business day.
+                      </p>
+                      <Link
+                        href="/lunch-learn#book"
+                        className="w-full font-semibold rounded-lg text-base transition-all inline-flex items-center justify-center gap-2"
+                        style={{ background: "#f97316", color: "var(--on-accent)", minHeight: 48 }}
+                      >
+                        Book a Lunch &amp; Learn
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <path d="M5 12h14" /><path d="M13 6l6 6-6 6" />
+                        </svg>
+                      </Link>
+                      <p className="text-[12px] mt-4" style={{ color: "var(--ink-45)" }}>
+                        45 minutes · in-person or virtual · lunch on us
+                      </p>
+                    </div>
+                  ) : f.submitState.status === "success" ? (
                     <SuccessPanel message={f.submitState.message} />
                   ) : (
                     <form onSubmit={f.handleSubmit} className="space-y-3.5">
@@ -594,8 +627,11 @@ function Proof() {
 }
 
 // ── Export ─────────────────────────────────────────────────────────────────
-export default function LunchLearnV2({ variant = "boardroom" }: { variant?: LunchLearnVariant }) {
+export default function LunchLearnV2({
+  variant = "boardroom",
+  hideForm = false,
+}: { variant?: LunchLearnVariant; hideForm?: boolean }) {
   if (variant === "ticket") return <Ticket />;
   if (variant === "proof") return <Proof />;
-  return <Boardroom />;
+  return <Boardroom hideForm={hideForm} />;
 }

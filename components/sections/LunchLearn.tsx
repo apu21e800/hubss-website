@@ -15,6 +15,9 @@
  */
 import LunchLearnV2 from "@/components/sections/LunchLearnV2";
 
-export default function LunchLearn({ hideMoose: _hideMoose }: { hideMoose?: boolean } = {}) {
-  return <LunchLearnV2 variant="boardroom" />;
+export default function LunchLearn({
+  hideMoose: _hideMoose,
+  hideForm = false,
+}: { hideMoose?: boolean; hideForm?: boolean } = {}) {
+  return <LunchLearnV2 variant="boardroom" hideForm={hideForm} />;
 }

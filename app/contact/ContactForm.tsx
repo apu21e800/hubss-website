@@ -222,7 +222,10 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
           </div>
         </div>
       </div>
-      <LunchLearn />
+      {/* hideForm: /contact already asked for a name and an email forty pixels
+          above this. Two forms on one page is two requests, or one request
+          twice, and the visitor cannot tell which. */}
+      <LunchLearn hideForm />
       <Footer />
     </main>
   );

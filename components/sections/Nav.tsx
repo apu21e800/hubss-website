@@ -4,13 +4,31 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import SearchOverlay from "@/components/sections/SearchOverlay";
+import dynamic from "next/dynamic";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { products } from "@/lib/products";
 import { catalogue, catalogueLabel, catalogueTotal } from "@/lib/catalogue";
 import { applications } from "@/lib/applications";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 
+/**
+ * The search palette loads when somebody opens it, not before.
+ *
+ * Nav is on every page, so a static import put the whole palette — and, behind
+ * it, the entire search index: every product, application, document, pattern,
+ * field note and now all fifty-nine installations — into the first JavaScript
+ * payload of every route on the site. It was being parsed on the homepage by
+ * visitors who never pressed a key.
+ *
+ * Nothing about the behaviour changes. The palette is only ever mounted inside
+ * `{searchOpen && …}`, so the chunk is requested on the click or the ⌘K that
+ * was already going to mount it, and the index can now afford to be as complete
+ * as it ought to be.
+ *
+ * ssr:false because it renders nothing until opened and reaches for `document`
+ * and `window` as soon as it does.
+ */
+const SearchOverlay = dynamic(() => import("@/components/sections/SearchOverlay"), { ssr: false });
 
 // ── Nav link config ────────────────────────────────────────────
 const PLAIN_LINKS = [

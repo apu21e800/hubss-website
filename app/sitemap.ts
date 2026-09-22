@@ -8,6 +8,7 @@ import { FIELD_NOTE_TYPES } from "@/lib/field-notes-taxonomy";
 import { productImages, applicationImages, resolveImage } from "@/lib/featured-images";
 import { galleryFor } from "@/lib/asset-scan";
 import { sitemapImages } from "@/lib/image-seo";
+import { withSearchImages } from "@/lib/search-images";
 
 const BASE_URL = "https://hubss.com";
 
@@ -116,11 +117,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     images: p.featuredImage ? [abs(p.featuredImage)] : undefined,
   }));
 
-  return [
+  // Every image above is named by its original, and the originals are the
+  // heaviest files on the site (median 1 MB). withSearchImages points Google
+  // at the 1200px WebP copies the build baked instead — see
+  // lib/search-images.ts. scripts/gen-search-images.ts calls this function to
+  // learn what to bake, so this list is the only list.
+  return withSearchImages([
     ...staticRoutes,
     ...productRoutes,
     ...applicationRoutes,
     ...projectRoutes,
     ...blogRoutes,
-  ];
+  ]);
 }

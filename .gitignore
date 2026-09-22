@@ -56,5 +56,10 @@ lib/document-sizes.json
 lib/map-blog-projects.json
 lib/map-count.json
 
+# Generated at build time by scripts/gen-search-images.ts — ~190 MB of WebP
+# that Vercel bakes and keeps in .next/cache; see the note in that script
+lib/search-images.json
+public/images/search/
+
 # 28 MB print master - the generator's input, never shipped
 catalogue-source/

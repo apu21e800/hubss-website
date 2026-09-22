@@ -43,7 +43,7 @@ const CSP_REPORT_ONLY = [
   "style-src 'self' 'unsafe-inline' https://client.crisp.chat https://fonts.googleapis.com",
   // Images from Unsplash, Vercel optimization, data URIs, blob (for clipboard), Crisp avatars,
   // GA4's pixel fallback when fetch/sendBeacon is unavailable
-  "img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com https://*.crisp.chat https://image.crisp.chat https://basemaps.cartocdn.com https://*.basemaps.cartocdn.com https://*.google-analytics.com https://www.googletagmanager.com",
+  "img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com https://*.crisp.chat https://image.crisp.chat https://basemaps.cartocdn.com https://*.basemaps.cartocdn.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com",
   // Google Fonts files
   "font-src 'self' data: https://fonts.gstatic.com https://client.crisp.chat",
   // Resend API, Crisp WS, Vercel telemetry, MapLibre tiles, GA4 collection
@@ -195,6 +195,9 @@ const nextConfig: NextConfig = {
       { source: "/community-branding-case-study", destination: "/blog/community-branding-case-study", permanent: true },
       { source: "/commercial-applications-case-study", destination: "/blog/commercial-applications", permanent: true },
       { source: "/municipalities-case-studies", destination: "/blog/municipalities-case-study", permanent: true },
+      // Bare form of /projects/community-branding-and-crosswalks-in-canada
+      // (mapped below). Only the /projects/ form had a rule; this one 404'd.
+      { source: "/community-branding-and-crosswalks-in-canada", destination: "/blog/community-branding-case-study", permanent: true },
       { source: "/stamped-asphalt-vs-stamped-concrete", destination: "/blog/stamped-asphalt-vs-concrete", permanent: true },
       // White papers
       { source: "/white-paper-transportation-and-urban-design", destination: "/blog/white-paper-transportation-urban-design", permanent: true },

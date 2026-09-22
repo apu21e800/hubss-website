@@ -304,7 +304,7 @@ export const products: Product[] = [
       { label: "Material", value: "Preformed thermoplastic" },
       { label: "Retroreflectivity", value: "Full-depth glass bead construction" },
       { label: "Colour", value: "White and yellow" },
-      { label: "Service Life", value: "Multi-year — significantly outlasts paint" },
+      { label: "Service Life", value: "Multi-year service life" },
       { label: "Installation", value: "Heat application — certified crews" },
     ],
     // Vernon: taxiways, aprons, helipads, holding-position signs — airfield surfaces.

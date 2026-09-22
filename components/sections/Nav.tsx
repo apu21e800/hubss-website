@@ -70,6 +70,17 @@ const PRODUCT_CATEGORIES: ProductCategory[] = [
 ];
 
 // ── Mega-menu micro-taglines per product (5–7 word noun phrases per Vernon) ──
+//
+// These are rendered without `truncate`. They are 2–4 word noun phrases, and
+// single-line clamping them inside a narrow menu column produced ten ellipses
+// across one panel — "Coloured pavement coati…", "Aggregate-reinforced the…" —
+// every one cutting mid-word. Wrapping costs a second line on about half of
+// them and removes the biggest source of visual noise in the menu.
+//
+// The category headings above them carry a 2.9em min-height for the same
+// reason: "Preformed Thermoplastics" wraps where the other three do not, so
+// without it that column's first product started a line below its neighbours
+// and the four columns never shared a baseline.
 const PRODUCT_TAGLINE: Record<string, string> = {
   "traffic-patterns-xd": "Aggregate-reinforced thermoplastic",
   "traffic-patterns":    "Preformed thermoplastic markings",
@@ -313,9 +324,10 @@ function ProductsMegaMenu() {
             });
             return (
               <div key={cat.label}>
-                <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3 pb-2.5" style={{
+                <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3 pb-2.5 flex items-end" style={{
                   color: ACCENT,
-                  borderBottom: "1px solid rgba(249,115,22,0.18)"
+                  borderBottom: "1px solid rgba(249,115,22,0.18)",
+                  minHeight: 48,
                 }}>
                   {cat.label}
                 </p>
@@ -331,7 +343,7 @@ function ProductsMegaMenu() {
                           {p.name}
                         </span>
                         {PRODUCT_TAGLINE[p.slug] && (
-                          <span className="block text-[11px] leading-snug mt-0.5 truncate" style={{ color: "var(--ink-62)" }}>
+                          <span className="block text-[11px] leading-snug mt-0.5" style={{ color: "var(--ink-62)" }}>
                             {PRODUCT_TAGLINE[p.slug]}
                           </span>
                         )}
@@ -361,7 +373,7 @@ function ProductsMegaMenu() {
                           {cat.secondary.label}
                         </span>
                         {cat.secondary.meta && (
-                          <span className="block text-[11px] leading-snug mt-0.5 truncate" style={{ color: "var(--ink-62)" }}>
+                          <span className="block text-[11px] leading-snug mt-0.5" style={{ color: "var(--ink-62)" }}>
                             {cat.secondary.meta}
                           </span>
                         )}

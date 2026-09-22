@@ -61,6 +61,12 @@ const EDITION_FILE = path.join(ROOT, "lib", "catalogue-edition.json");
 /** Display widths, in CSS pixels. The largest is what a zoom reads from. */
 const WIDTHS = [800, 1400, 2000];
 const QUALITY = 82;
+/**
+ * A small cover for menu callouts and document thumbnails. The nav's promoted
+ * panel showed no picture of the book at all, and pointing it at the 800px
+ * raster would have been 71 KB for a 56px thumb.
+ */
+const COVER_THUMB = 240;
 const FORCE = process.argv.includes("--force");
 /** Redo the alt text and both manifests without re-rasterising anything. */
 const REMANIFEST = process.argv.includes("--remanifest");
@@ -360,6 +366,14 @@ async function main() {
 
   fs.rmSync(tmpDir, { recursive: true, force: true });
 
+  // Cover thumbnail, derived from the page-1 raster we just made.
+  const coverThumb = `cover-${COVER_THUMB}.webp`;
+  await sharp(path.join(outDir, pageFile(1, WIDTHS[0])))
+    .resize({ width: COVER_THUMB, kernel: "lanczos3" })
+    .webp({ quality: 80, effort: 6 })
+    .toFile(path.join(outDir, coverThumb));
+  log(`cover    ${coverThumb} (${Math.round(fs.statSync(path.join(outDir, coverThumb)).size / 1024)} KB)`);
+
   log("reading page text for alt attributes...");
   const pages = [];
   for (let n = 1; n <= total; n++) {
@@ -418,6 +432,7 @@ async function main() {
         aspect: manifest.aspect,
         total,
         download,
+        coverThumb: `/catalogue/${edition}/${coverThumb}`,
         source: manifest.source,
       },
       null,

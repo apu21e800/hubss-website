@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import SearchOverlay from "@/components/sections/SearchOverlay";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { products } from "@/lib/products";
-import { catalogueLabel } from "@/lib/catalogue";
+import { catalogue, catalogueLabel, catalogueTotal } from "@/lib/catalogue";
 import { applications } from "@/lib/applications";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 
@@ -241,13 +241,27 @@ function MenuFooterStrip() {
           border: "1px solid rgba(249,115,22,0.35)",
         }}
       >
+        {catalogue.coverThumb && (
+          /* A picture of the actual book. The panel promoted a catalogue
+             without ever showing one. Plain <img>: the catalogue's rasters
+             never route through /_next/image. */
+          <img
+            src={catalogue.coverThumb}
+            alt=""
+            width={240}
+            height={240}
+            loading="lazy"
+            className="h-12 w-12 flex-shrink-0 rounded-md object-cover"
+            style={{ border: "1px solid rgba(249,115,22,0.30)" }}
+          />
+        )}
         <div className="min-w-0">
           <p className="text-[9px] font-bold tracking-[0.2em] uppercase mb-1" style={{ color: "var(--ink-45)" }}>
             Promoted
           </p>
           <p className="text-[14px] font-bold" style={{ color: "var(--text-primary)" }}>The {catalogueLabel} Catalogue</p>
           <p className="text-[12px] mt-0.5 truncate" style={{ color: "var(--ink-62)" }}>
-            Every system, spec, and pattern — one book.
+            {catalogueTotal} pages — read it in your browser.
           </p>
         </div>
         <svg width="13" height="13" fill="none" stroke={ACCENT} viewBox="0 0 24 24" className="flex-shrink-0 transition-transform group-hover:translate-x-0.5">
@@ -540,11 +554,26 @@ function FieldNotesMegaMenu() {
                   <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </span>
-              <span className="block text-[14px] font-bold" style={{ color: "var(--text-primary)" }}>
-                The {catalogueLabel} Catalogue
-              </span>
-              <span className="block text-[12px] mt-0.5" style={{ color: "var(--ink-62)" }}>
-                Every system, spec, and pattern — one book.
+              <span className="flex items-center gap-3">
+                {catalogue.coverThumb && (
+                  <img
+                    src={catalogue.coverThumb}
+                    alt=""
+                    width={240}
+                    height={240}
+                    loading="lazy"
+                    className="h-14 w-14 flex-shrink-0 rounded-md object-cover"
+                    style={{ border: "1px solid rgba(249,115,22,0.30)" }}
+                  />
+                )}
+                <span className="block min-w-0">
+                  <span className="block text-[14px] font-bold" style={{ color: "var(--text-primary)" }}>
+                    The {catalogueLabel} Catalogue
+                  </span>
+                  <span className="block text-[12px] mt-0.5" style={{ color: "var(--ink-62)" }}>
+                    {catalogueTotal} pages — read it in your browser.
+                  </span>
+                </span>
               </span>
             </Link>
 

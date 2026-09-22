@@ -809,6 +809,11 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
           exit={{ x: "100%" }}
           transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
           className="fixed inset-0 z-[60] md:hidden flex flex-col outline-none"
+          // Dark, like the <nav> it belongs to. The drawer renders outside
+          // that <nav>, so on a paper page it inherited paper tokens: a cream
+          // body under hardcoded dark header and footer strips, with the close
+          // X in --text-primary at 1.02:1 and the phone links at 1.04:1.
+          data-surface="dark"
           style={{
             background: "var(--bg-deepest)",
             height: "100dvh",

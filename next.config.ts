@@ -1,10 +1,22 @@
 import type { NextConfig } from "next";
+import fs from "fs";
 import path from "path";
 import { projects } from "./lib/projects";
 
 // The 9 real, currently-built project pages. Derived from lib/projects.ts so
 // adding a project can never silently re-break the redirect below.
 const LIVE_PROJECT_SLUGS = projects.map((p) => p.slug);
+
+// Every blog post that actually renders. content/blog is the only source of
+// /blog routes — app/blog/[slug] and app/sitemap.ts both read this directory —
+// so a file here is exactly the condition for /blog/<slug> returning 200.
+// Derived rather than hardcoded for the same reason as LIVE_PROJECT_SLUGS:
+// the legacy category-prefixed redirects below must never outlive the posts
+// they point at, or a 301 would land on a 404.
+const BLOG_SLUGS = fs
+  .readdirSync(path.join(process.cwd(), "content/blog"))
+  .filter((f) => f.endsWith(".mdx"))
+  .map((f) => f.replace(/\.mdx$/, ""));
 
 // ── Security headers ────────────────────────────────────────────────────────
 // Production-safe set. CSP is shipped in REPORT-ONLY mode for launch — it
@@ -242,6 +254,35 @@ const nextConfig: NextConfig = {
       { source: "/trafficpatterns-xd.php", destination: "/products/traffic-patterns-xd", permanent: true },
       { source: "/trafficpatterns-xd.php/:path*", destination: "/products/traffic-patterns-xd", permanent: true },
 
+      // More legacy .php pages (added 2026-09-21). These still carry inbound
+      // links — /streetbond-150.php alone has 17 backlinks across 4 referring
+      // domains — and every one of them was returning an error. Each
+      // destination below was checked against production and returns 200.
+      // StreetBond 150 has no page of its own; it is a grade of StreetBond,
+      // so the product hub is the honest destination rather than a guess.
+      { source: "/streetbond-150.php", destination: "/products/streetbond", permanent: true },
+      { source: "/streetbond-sr.php", destination: "/products/streetbondsr", permanent: true },
+      { source: "/decomark.php", destination: "/products/decomark", permanent: true },
+      { source: "/airmark.php", destination: "/products/airmark", permanent: true },
+      { source: "/duratherm.php", destination: "/products/duratherm", permanent: true },
+      { source: "/streetprint-genuine-stamped-asphalt.php", destination: "/products/streetprint", permanent: true },
+      { source: "/specification-support-documents.php", destination: "/resources", permanent: true },
+      { source: "/parks-paths.php", destination: "/applications/parks-paths", permanent: true },
+      { source: "/parking-lot-surfaces.php", destination: "/applications/parking-lots", permanent: true },
+
+      // Legacy /solutions/ tree — two referring domains still point here.
+      // Destination matches the existing /projects/category/driveways mapping
+      // so both legacy shapes land on the same page.
+      { source: "/solutions/decorative-stamped-driveways", destination: "/applications/private-driveways", permanent: true },
+
+      // Legacy category-prefixed permalink: /%category%/%postname%/.
+      // Guarded by BLOG_SLUGS so it only fires when the post really exists —
+      // a 301 onto a 404 is worse than the 404 it replaces. Anything else
+      // under the prefix falls through to the application page rather than
+      // guessing at /blog/:slug.
+      { source: `/traffic-calming-streetscapes/:slug(${BLOG_SLUGS.join("|")})`, destination: "/blog/:slug", permanent: true },
+      { source: "/traffic-calming-streetscapes/:path*", destination: "/applications/traffic-calming", permanent: true },
+
       // Legal pages
       { source: "/terms-conditions", destination: "/terms", permanent: true },
       { source: "/privacy-policy", destination: "/privacy", permanent: true },
@@ -292,7 +333,13 @@ const nextConfig: NextConfig = {
       // Pointed straight at the destination rather than at /projects: Next does
       // not collapse redirect chains, so hopping through /projects cost a second
       // round trip and, before the rule above existed, a rendered shell too.
-      { source: "/projects/category/:cat*", destination: "/blog/project-profiles", permanent: true },
+      //
+      // NOTE: the /projects/category/:cat* catch-all used to sit here. Because
+      // redirects are first-match-wins and :cat* matches any depth, it swallowed
+      // every /projects/category/ URL and left the twelve specific category
+      // rules further down as dead code — /projects/category/crosswalks/x went
+      // to /blog/project-profiles, never /applications/crosswalks. It now lives
+      // *below* those rules, as the final fallback. Keep it there.
       { source: "/projects/page/:n", destination: "/blog/project-profiles", permanent: true },
       { source: "/projects/featured-projects/:n", destination: "/blog/project-profiles", permanent: true },
 
@@ -339,8 +386,18 @@ const nextConfig: NextConfig = {
       { source: "/projects/category/driveways/:path*", destination: "/applications/private-driveways", permanent: true },
       // WordPress date archives → gallery
       { source: "/projects/:year(\\d{4})/:path*", destination: "/gallery", permanent: true },
-      // Any remaining /projects/category/... → gallery
-      { source: "/projects/category/:path*", destination: "/gallery", permanent: true },
+      // Any remaining /projects/category/... → the project-profiles archive.
+      // This is the relocated catch-all (see the note further up). It must stay
+      // last among the /projects/category/ rules so the twelve specific
+      // category mappings above keep winning.
+      //
+      // Destination is /blog/project-profiles, not /gallery: that is where an
+      // unmatched category URL already lands in production today, because the
+      // old misplaced catch-all pointed there and matched first. Keeping it
+      // preserves current live behaviour for categories we have no mapping for,
+      // so this change only ever *improves* a URL's destination — it never
+      // moves one that was already working.
+      { source: "/projects/category/:path*", destination: "/blog/project-profiles", permanent: true },
       // Old commercial parking lots section
       { source: "/commercial-parking-lots/:path*", destination: "/applications/parking-lots", permanent: true },
       // WordPress blog old slugs (blog-slug format)

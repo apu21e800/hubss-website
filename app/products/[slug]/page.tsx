@@ -347,7 +347,7 @@ export default async function ProductPage({ params }: Props) {
 
           {/* Right: specs */}
           <div>
-            <div data-surface="paper" className="rounded-xl p-8 mb-8 sticky top-24 relative overflow-hidden" style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--ink-08)" }}>
+            <div className="rounded-xl p-8 mb-8 sticky top-24 relative overflow-hidden" style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--ink-08)" }}>
               <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
               {/* Was an <h3> sitting under the Downloads <h2>, which filed the
                   spec table inside "Downloads" for every screen reader and for
@@ -382,7 +382,7 @@ export default async function ProductPage({ params }: Props) {
 
             The intro row above keeps the spec card beside the argument, which
             is where a specifier wants it anyway. */}
-        <div data-surface="paper" className="mt-16 pt-16 pb-16 px-6 sm:px-10 -mx-4 sm:-mx-6 lg:-mx-8 rounded-2xl" style={{ background: "var(--bg-primary)" }}>
+        <div className="mt-16 pt-16 pb-16 px-6 sm:px-10 -mx-4 sm:-mx-6 lg:-mx-8 rounded-2xl" style={{ background: "var(--bg-primary)" }}>
           {/* "Gallery" is what a CMS calls a folder. The catalogue calls its
               photography "The Work" — better, and already the client's own
               word for it. The standfirst keeps it unambiguous for a reader
@@ -491,7 +491,7 @@ export default async function ProductPage({ params }: Props) {
 
         {/* Applications this product is used for */}
         {relatedAppData.length > 0 && (
-          <div data-surface="paper" className="mt-16 pt-16 pb-16 px-6 sm:px-10 -mx-4 sm:-mx-6 lg:-mx-8 rounded-2xl" style={{ background: "var(--bg-primary)", borderTop: "1px solid var(--ink-08)" }}>
+          <div className="mt-16 pt-16 pb-16 px-6 sm:px-10 -mx-4 sm:-mx-6 lg:-mx-8 rounded-2xl" style={{ background: "var(--bg-primary)", borderTop: "1px solid var(--ink-08)" }}>
             <div className="flex items-end justify-between mb-8">
               <div>
                 <p className="text-xs font-bold tracking-[0.2em] uppercase mb-3" style={{ color: "var(--accent-text-lg)" }}>
@@ -530,7 +530,7 @@ export default async function ProductPage({ params }: Props) {
                       going to paper turned four of these titles to charcoal on
                       a charcoal photo — legible on the dark shots, invisible on
                       the bright ones. */}
-                  <div data-surface="dark" className="relative overflow-hidden" style={{ height: 130 }}>
+                  <div className="relative overflow-hidden" style={{ height: 130 }}>
                     <Image
                       src={app.imageUrl}
                       alt={`${app.name} — ${app.shortDesc.slice(0, 60)}`}

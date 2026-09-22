@@ -140,7 +140,11 @@ async function main() {
       if (FORCE || ledger[src] !== hash || !fs.existsSync(cached)) {
         await fs.promises.mkdir(path.dirname(cached), { recursive: true });
         // .rotate() applies the EXIF orientation, as next/image does.
-        await sharp(bytes)
+        // failOn "error", not sharp's default "warning": sport-courts-04.jpg
+        // carries a libjpeg warning ("Invalid SOS parameters for sequential
+        // JPEG") that browsers ignore and that failed the whole file here. It
+        // decodes to a correct picture; a genuinely broken file still fails.
+        await sharp(bytes, { failOn: "error" })
           .rotate()
           .resize({ width: SEARCH_IMAGE_WIDTH, withoutEnlargement: true })
           .webp({ quality: SEARCH_IMAGE_QUALITY })

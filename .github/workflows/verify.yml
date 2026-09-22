@@ -30,13 +30,18 @@ jobs:
       - name: Install
         run: npm ci
 
-      - name: Typecheck
-        run: npx tsc --noEmit
-
       - name: Build
         run: npm run build
         env:
           NEXT_TURBOPACK_EXPERIMENTAL_USE_SYSTEM_TLS_CERTS: "1"
+
+      # After Build, not before. Four files the code imports — lib/map-count.json,
+      # gallery-manifest.json, map-blog-projects.json, document-sizes.json — are
+      # gitignored and written by the generator scripts that `npm run build`
+      # runs first. Typechecking a fresh checkout before they exist failed with
+      # TS2307 on every push from 17 Sep, so this job never reached Verify.
+      - name: Typecheck
+        run: npx tsc --noEmit
 
       # The fast checks: routes, links, assets, gallery distinctness, and the
       # CMS field contract. No browser, so this is the one that gates merges.

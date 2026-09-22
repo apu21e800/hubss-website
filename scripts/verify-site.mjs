@@ -204,16 +204,28 @@ async function checkBuiltPagesReachable() {
   // What must never happen is a built page being silently 3xx'd away or 404ing.
   // That's the /projects failure mode, and it's the one this check is for.
   const GATED_OK = new Set([401, 403, 503]);
-  const bad = [], gated = [];
+  // Built pages that are MEANT to redirect, each pinned to where it must land.
+  // /projects: next.config.ts sends it to /blog/project-profiles with a
+  // deliberate 307 and keeps app/projects/page.tsx as the fallback for the day
+  // that rule is removed — built and redirected on purpose. This flagged it on
+  // every run once CI got past Typecheck. Pinned rather than exempted: if
+  // /projects ever redirects anywhere else, that is the shadowing this is for.
+  const REDIRECT_OK = new Map([["/projects", "/blog/project-profiles"]]);
+  const bad = [], gated = [], expected = [];
   for (const r of [...new Set(routes)]) {
     const st = await head(BASE + r);
     if (st === 200) continue;
     if (GATED_OK.has(st)) { gated.push(r); continue; }
+    if (st >= 300 && st < 400 && REDIRECT_OK.has(r)) {
+      const loc = await fetch(BASE + r, { redirect: "manual", signal: AbortSignal.timeout(20000) })
+        .then((res) => res.headers.get("location"), () => null);
+      if (loc && new URL(loc, BASE).pathname === REDIRECT_OK.get(r)) { expected.push(r); continue; }
+    }
     const why = st >= 300 && st < 400 ? "redirected away — is a catch-all shadowing it?" : "built, but not reachable";
     bad.push(`${st || "ERR"}  ${r}   (${why})`);
   }
   record("built pages are reachable", bad.length === 0,
-    `${new Set(routes).size} prerendered${gated.length ? `, ${gated.length} auth-gated` : ""}`, bad);
+    `${new Set(routes).size} prerendered${gated.length ? `, ${gated.length} auth-gated` : ""}${expected.length ? `, ${expected.length} redirected as intended` : ""}`, bad);
 }
 
 // ── 3. the CMS contract — the bug class that keeps recurring ─────────────────

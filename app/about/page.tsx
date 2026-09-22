@@ -88,7 +88,16 @@ export default async function AboutPage() {
     sanityPartnerDescs.get(key) ?? PARTNER_DESC_FALLBACK[key] ?? "";
 
   return (
-    <main style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
+    /* Paper, like /resources. The lesson from the product pages is that a
+       page commits or it does not — three light bands inside a dark page read
+       as a mistake, while a page that goes light keeps its own rhythm because
+       the paper surface redefines every background token (--bg-dark becomes
+       #EFEDE7, --bg-section-asphalt #F3F1EB). The alternating sections still
+       alternate; they just do it in cream instead of charcoal.
+
+       The photo hero below keeps data-hero, which forces the dark token set —
+       white type over a photograph needs it. */
+    <main data-surface="paper" style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
       <Nav />
 
       {/* ── Hero ──────────────────────────────── */}
@@ -193,7 +202,7 @@ export default async function AboutPage() {
               <h2 className="text-3xl font-bold mb-6" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>What the work is for</h2>
               <p
                 className="text-xl leading-relaxed mb-4"
-                style={{ color: "var(--on-accent)", borderLeft: "3px solid #f97316", paddingLeft: "24px" }}
+                style={{ color: "var(--text-primary)", borderLeft: "3px solid #f97316", paddingLeft: "24px", fontWeight: 500 }}
               >
                 &ldquo;{missionQuote}&rdquo;
               </p>
@@ -286,7 +295,7 @@ export default async function AboutPage() {
               <div key={partner.name} className="rounded-xl relative overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}>
                 <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: partner.accent }} />
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-5 sm:px-8 py-5 sm:py-6" style={{ borderBottom: "1px solid var(--border-color)" }}>
-                  <div className="flex items-center justify-center rounded-lg flex-shrink-0" style={{ background: "#ffffff", width: 100, height: 52, padding: "8px 14px" }}>
+                  <div className="flex items-center justify-center rounded-lg flex-shrink-0" style={{ background: "#ffffff", border: "1px solid var(--ink-10)", width: 100, height: 52, padding: "8px 14px" }}>
                     <Image src={partner.logo} width={partner.logoW} height={partner.logoH} alt={partner.name} style={{ maxHeight: 32, width: "auto", objectFit: "contain" }} unoptimized />
                   </div>
                   <div className="flex flex-wrap gap-1.5">

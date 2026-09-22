@@ -1,0 +1,22 @@
+{
+  "edition": "2026-27",
+  "dir": "/catalogue/2026-27",
+  "widths": [
+    800,
+    1400,
+    2000
+  ],
+  "aspect": 1,
+  "total": 144,
+  "download": {
+    "href": "/catalogue/HUBSS-Catalogue-2026-27.pdf",
+    "bytes": 14990538,
+    "label": "14.3 MB"
+  },
+  "source": {
+    "file": "HUBSS-Catalogue-2026-27_144pp_FLIPBOOK-MASTER.pdf",
+    "bytes": 28582102,
+    "sha256": "a46fb687f8c1dcf4",
+    "pages": 144
+  }
+}

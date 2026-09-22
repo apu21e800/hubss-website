@@ -117,6 +117,11 @@ const nextConfig: NextConfig = {
       // no Canadian contacts. Replaced by the 2026 edition; this keeps every link
       // already sitting in someone's inbox or spec package working.
       { source: "/docs/StreetBondSR/Colour-Guide-1.pdf", destination: "/docs/StreetBondSR/StreetBondSR-Colour-Guide-2026.pdf", permanent: true },
+      // Catalogue page one lives at /catalogue, not /catalogue/1 — the reader
+      // deliberately builds no route for it (see app/catalogue/[page]/page.tsx)
+      // and writes /catalogue into the address bar when you turn back to it.
+      // But "page 1" is the URL people type and share, and it was a 404.
+      { source: "/catalogue/1", destination: "/catalogue", permanent: true },
       // Products
       { source: "/trafficpatternsxd", destination: "/products/traffic-patterns-xd", permanent: true },
       { source: "/trafficpatterns", destination: "/products/traffic-patterns", permanent: true },

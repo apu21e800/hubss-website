@@ -3,26 +3,32 @@
 /**
  * The catalogue reader.
  *
- * ONE PAGE AT A TIME. The previous viewer showed a two-page spread on desktop,
- * which sounds like a book and reads like a compromise: the pair is letterboxed
- * into whatever is left of a 16:9 window, so each 6x6in page ends up smaller
- * than it would be alone, and the spread arithmetic (cover alone on the right,
- * odd-even pairs after) is a source of off-by-one bugs nobody can see. This
- * book is square and its pages are designed to be read singly. So: one page,
- * as large as the window allows, on every device.
+ * SPREADS, BECAUSE THE BOOK IS DESIGNED IN SPREADS. An earlier version of this
+ * showed one page at a time and argued for it in the commit message. That was
+ * wrong, and the book says so: pages 14 and 15 are a single colour chart split
+ * across the gutter ("Thirty-seven colours / STANDARD - 20" continuing into
+ * "PREMIUM - 17"), and 26|27 does the same for StreetBond. Showing those one
+ * page at a time cuts a table in half. The pairing is even-left - cover alone,
+ * then 2|3, 4|5 ... 142|143, back cover alone - which is ordinary verso|recto
+ * binding, confirmed against the artwork rather than assumed.
  *
- * NO PAPER. No curl, no shadow down a fake gutter, no page-flip. Those effects
- * are the reason "flipbook" widgets feel like 2009. A page turn here is a
- * 120ms cross-fade between two images that are already decoded.
+ * ONE PAGE ON A PHONE, THOUGH. Two 6x6in pages side by side on a 390px screen
+ * is 195px each; the caption type in this book is 8pt. That is not a compromise
+ * in the layout, it is the only legible option, and the reader already handles
+ * a single page well.
  *
- * NEVER A SPINNER. Two pages either side of the current one are mounted and
- * loading at all times, so a turn has nothing to wait for. The outgoing page
- * stays mounted through the fade, so there is no white flash between them.
+ * NO PAPER. No curl, no shadow down a fake gutter, no page-flip. A turn is a
+ * 160ms cross-fade of the whole spread with a 10px drift in the direction of
+ * travel - enough to say which way you went, not enough to be a effect. Both
+ * pages of a spread move as one object, because they are one object.
  *
- * NOT A TRAP. There is a visible close control, Escape leaves, and page turns
- * use replaceState rather than pushState: the URL is always shareable but the
- * back button exits the catalogue in one press instead of walking back through
- * 144 history entries.
+ * NEVER A SPINNER. The neighbouring spreads stay mounted and loading, so a turn
+ * has nothing to wait for, and the outgoing spread stays mounted through the
+ * fade so there is no white flash between them.
+ *
+ * NOT A TRAP. Visible close, Escape unwinds one layer at a time, and turns use
+ * replaceState rather than pushState: the URL is always shareable but the back
+ * button leaves in one press instead of walking back through 73 history entries.
  */
 
 import Link from "next/link";
@@ -37,18 +43,23 @@ const PrintedCopyForm = dynamic(() => import("@/components/catalogue/PrintedCopy
 
 const MAX_SCALE = 3.2;
 const TAP_ZOOM = 2.2;
-const FADE_MS = 120;
-/** Pages kept mounted either side of the current one. */
-const PRELOAD = 2;
+const FADE_MS = 160;
+/** Spreads kept mounted either side of the current one. */
+const PRELOAD = 1;
 /**
- * Space reserved for the chrome, in px. Asymmetric on purpose: the header is a
- * single row of pills, the footer carries a scrubber, a CTA and the page jump.
- * A symmetric 64/64 put the scrubber over the bottom 40px of every page, which
- * reads as the artwork being clipped even though it is only overlapped.
+ * Space reserved for the chrome. Asymmetric on purpose: the header is one row
+ * of pills, the footer carries a scrubber, a CTA and the page jump.
  */
 const CHROME_TOP = 56;
-const CHROME_BOTTOM = 96;
-const CHROME = CHROME_TOP + CHROME_BOTTOM;
+const CHROME_BOTTOM = 112;
+/** A phone needs a taller control bar and has no room to waste up top. */
+const CHROME_TOP_SM = 48;
+const CHROME_BOTTOM_SM = 152;
+/**
+ * Below this the stage shows one page. At 900px a spread gives each page ~450px
+ * of width, which is where this book's smallest captions stop being readable.
+ */
+const SPREAD_MIN_WIDTH = 900;
 
 type Props = {
   pages: CataloguePage[];
@@ -66,6 +77,18 @@ type View = { s: number; x: number; y: number };
 
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 
+/**
+ * What the stage shows at once. Verso|recto: the cover is a right-hand page on
+ * its own, then every even page opens a spread with the odd page after it, and
+ * a final even page (the back cover) ends up alone.
+ */
+function buildSpreads(total: number): number[][] {
+  const out: number[][] = [[1]];
+  for (let n = 2; n + 1 <= total; n += 2) out.push([n, n + 1]);
+  if (total % 2 === 0 && total > 1) out.push([total]);
+  return out;
+}
+
 export default function CatalogueViewer({
   pages,
   widths,
@@ -80,43 +103,97 @@ export default function CatalogueViewer({
   const total = pages.length;
   const maxWidth = widths[widths.length - 1];
 
-  const [idx, setIdx] = useState(clamp(start - 1, 0, total - 1));
+  const [spreadMode, setSpreadMode] = useState(false);
   const [view, setView] = useState<View>({ s: 1, x: 0, y: 0 });
   const [chrome, setChrome] = useState(true);
   const [stageW, setStageW] = useState<number | null>(null);
   const [canShare, setCanShare] = useState(false);
   const [jump, setJump] = useState("");
   const [askingForPrint, setAskingForPrint] = useState(false);
+  const [dir, setDir] = useState(1);
+  const [chromeTop, setChromeTop] = useState(CHROME_TOP);
+  const [chromeBottom, setChromeBottom] = useState(CHROME_BOTTOM);
+  const [compact, setCompact] = useState(false);
 
   const stageRef = useRef<HTMLDivElement>(null);
+  const compactRef = useRef(false);
   const chromeTimer = useRef<number | null>(null);
   const zoomed = view.s > 1.01;
 
-  // --- page addressing ---------------------------------------------------
-  // replaceState, not a router push: a router push re-runs the server
-  // component for a page turn, and pushState would bury the way out under 144
-  // history entries.
+  // Rebuilding the list on a breakpoint change is what lets the same component
+  // be a spread reader and a single-page reader without two code paths.
+  const views = useMemo(
+    () => (spreadMode ? buildSpreads(total) : Array.from({ length: total }, (_, i) => [i + 1])),
+    [spreadMode, total],
+  );
+
+  const viewOf = useCallback(
+    (page: number) => {
+      const i = views.findIndex((v) => v.includes(page));
+      return i < 0 ? 0 : i;
+    },
+    [views],
+  );
+
+  // The page the reader wants in front of them. Held in a ref, not derived
+  // from `vi`, because `vi` means different things in single-page and spread
+  // mode — this is what survives the switch between them.
+  const pageRef = useRef(start);
+  const [vi, setVi] = useState(() => {
+    // First render is always single-page (the breakpoint is measured in an
+    // effect), so the initial index is simply the page number.
+    const i = start - 1;
+    return i < 0 ? 0 : i;
+  });
+  // Re-seat on the same page whenever the layout flips, so a resize — or the
+  // first measurement after mount — never throws the reader back to the cover.
+  useEffect(() => {
+    setVi(viewOf(pageRef.current));
+  }, [viewOf]);
+
   const goTo = useCallback(
-    (next: number) => {
-      const n = clamp(next, 0, total - 1);
-      setIdx(n);
+    (nextVi: number, direction = 1) => {
+      const n = clamp(nextVi, 0, views.length - 1);
+      setDir(direction);
+      setVi(n);
+      const group = views[n] ?? [1];
+      if (!group.includes(pageRef.current)) pageRef.current = group[0];
       setView({ s: 1, x: 0, y: 0 });
+      const first = views[n]?.[0] ?? 1;
       if (typeof window !== "undefined") {
-        const url = n === 0 ? "/catalogue" : `/catalogue/${n + 1}`;
+        const url = first === 1 ? "/catalogue" : `/catalogue/${first}`;
         window.history.replaceState(null, "", url + window.location.search);
       }
     },
-    [total],
+    [views],
   );
-  const prev = useCallback(() => goTo(idx - 1), [goTo, idx]);
-  const next = useCallback(() => goTo(idx + 1), [goTo, idx]);
+  const goToPage = useCallback(
+    (page: number) => {
+      const direction = page >= (pageRef.current ?? 1) ? 1 : -1;
+      pageRef.current = page;
+      goTo(viewOf(page), direction);
+    },
+    [goTo, viewOf],
+  );
+  const prev = useCallback(() => goTo(vi - 1, -1), [goTo, vi]);
+  const next = useCallback(() => goTo(vi + 1, 1), [goTo, vi]);
 
-  // --- how big the page is drawn, and therefore which raster to fetch ----
+  // --- layout ------------------------------------------------------------
   useEffect(() => {
     const measure = () => {
-      const h = window.innerHeight - CHROME;
       const w = window.innerWidth;
-      setStageW(Math.max(200, Math.min(w, h * aspect)));
+      const wide = w >= SPREAD_MIN_WIDTH;
+      const small = w < 640;
+      const top = small ? CHROME_TOP_SM : CHROME_TOP;
+      const bottom = small ? CHROME_BOTTOM_SM : CHROME_BOTTOM;
+      setSpreadMode(wide);
+      setCompact(small);
+      compactRef.current = small;
+      setChromeTop(top);
+      setChromeBottom(bottom);
+      const h = window.innerHeight - top - bottom;
+      const ratio = wide ? aspect * 2 : aspect;
+      setStageW(Math.max(200, Math.min(w, h * ratio)));
     };
     measure();
     window.addEventListener("resize", measure);
@@ -127,24 +204,12 @@ export default function CatalogueViewer({
     };
   }, [aspect]);
 
-  // `sizes` is the whole width-selection mechanism: the browser multiplies it
-  // by the device pixel ratio and picks from srcset. Zooming widens it, which
-  // is a relevant mutation, so the largest raster is fetched on demand rather
-  // than up front.
-  //
-  // Before JS measures anything, the server has to guess. "100vw" was the old
-  // guess and it is wrong by a lot: the stage is letterboxed to
-  // min(100vw, viewport height - chrome), so on a 1440x900 desktop it is 772px
-  // wide, and a 100vw hint had the browser fetch a raster nearly twice the size
-  // it would draw. The CSS expression below is the stage's actual rule, so the
-  // first paint asks for the right file; a browser that cannot parse math in
-  // `sizes` falls back to the full width, which is the old behaviour.
-  const baseSizes =
-    stageW === null ? `min(100vw, calc(100dvh - ${CHROME}px))` : `${Math.round(stageW)}px`;
-  // Only the page being looked at is worth the widest raster. Applying the
-  // zoomed hint to the whole mounted window fetched 2000px versions of four
-  // neighbours as well - about 930 KB of pages nobody was looking at, every
-  // time someone scrolled to zoom.
+  const stageRatio = spreadMode ? aspect * 2 : aspect;
+  // One page is half the stage in spread mode. The browser multiplies by the
+  // device pixel ratio and picks from srcset; zooming widens the hint so the
+  // largest raster is fetched on demand rather than up front.
+  const pageCss = stageW === null ? null : stageW / (spreadMode ? 2 : 1);
+  const baseSizes = pageCss === null ? "50vw" : `${Math.round(pageCss)}px`;
   const sizesFor = (active: boolean) => (active && zoomed ? `${maxWidth}px` : baseSizes);
 
   useEffect(() => setCanShare(typeof navigator !== "undefined" && "share" in navigator), []);
@@ -176,14 +241,13 @@ export default function CatalogueViewer({
     setView({ s: from.s, x: clamp(from.x + dx, -mx, mx), y: clamp(from.y + dy, -my, my) });
   }, []);
 
-  // Wheel has to be a non-passive native listener; React's onWheel is
-  // registered passive in some builds and preventDefault() is then a no-op.
+  // Wheel must be a non-passive native listener; React's onWheel is registered
+  // passive in some builds and preventDefault() is then a no-op.
   useEffect(() => {
     const el = stageRef.current;
     if (!el) return;
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
-      // A trackpad pinch arrives as ctrl+wheel with much larger deltas.
       const k = e.ctrlKey ? 0.01 : 0.0022;
       setView((v) => {
         const target = v.s * Math.exp(-e.deltaY * k);
@@ -204,13 +268,13 @@ export default function CatalogueViewer({
   }, []);
 
   // --- pointers: tap, swipe, drag-pan, two-finger pinch ------------------
-  // One handler set for mouse, pen and touch. Native pinch-zoom is not usable
-  // here (the stage is a fixed full-viewport element, so the visual viewport
-  // zooms the chrome along with the page and the reader ends up fighting it),
-  // so touch-action is off and the pinch is computed from pointer distance.
+  // One handler set for mouse, pen and touch. Native pinch is not usable on a
+  // fixed full-viewport element, so touch-action is off and the pinch is
+  // computed from pointer distance.
   const pts = useRef(new Map<number, { x: number; y: number }>());
   const pinch = useRef<{ dist: number; view: View } | null>(null);
-  const drag = useRef<{ x: number; y: number; view: View; moved: number; t: number } | null>(null);
+  const drag = useRef<{ x: number; y: number; view: View; moved: number; t: number; touch: boolean } | null>(null);
+  const lastTap = useRef<{ t: number; x: number; y: number } | null>(null);
 
   const onPointerDown = (e: React.PointerEvent) => {
     (e.target as Element).setPointerCapture?.(e.pointerId);
@@ -220,7 +284,7 @@ export default function CatalogueViewer({
       pinch.current = { dist: Math.hypot(a.x - b.x, a.y - b.y), view };
       drag.current = null;
     } else if (pts.current.size === 1) {
-      drag.current = { x: e.clientX, y: e.clientY, view, moved: 0, t: Date.now() };
+      drag.current = { x: e.clientX, y: e.clientY, view, moved: 0, t: Date.now(), touch: e.pointerType !== "mouse" };
     }
   };
 
@@ -276,14 +340,37 @@ export default function CatalogueViewer({
     const dt = Date.now() - d.t;
 
     if (d.view.s <= 1.01) {
-      // Horizontal flick turns the page; a still finger toggles zoom.
       if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.4 && dt < 800) {
         if (dx < 0) next();
         else prev();
         return;
       }
       if (d.moved < 10) {
-        zoomAbout(TAP_ZOOM, e.clientX, e.clientY);
+        // On a mouse, a click zooms — the chrome is revealed by moving the
+        // pointer, so a click has nothing else to do. On touch there is no
+        // hover, so a single tap is the only way to bring the controls back:
+        // tap toggles the chrome, and a double tap zooms. Making a single tap
+        // zoom on a phone meant every attempt to reach the controls magnified
+        // the page instead.
+        if (!d.touch) {
+          zoomAbout(TAP_ZOOM, e.clientX, e.clientY);
+          return;
+        }
+        const now = Date.now();
+        const l = lastTap.current;
+        const isDouble = l && now - l.t < 320 && Math.hypot(e.clientX - l.x, e.clientY - l.y) < 28;
+        lastTap.current = { t: now, x: e.clientX, y: e.clientY };
+        if (isDouble) {
+          lastTap.current = null;
+          zoomAbout(TAP_ZOOM, e.clientX, e.clientY);
+        } else if (!compactRef.current) {
+          if (chrome) {
+            setChrome(false);
+            if (chromeTimer.current) window.clearTimeout(chromeTimer.current);
+          } else {
+            wake();
+          }
+        }
         return;
       }
     } else if (d.moved < 10) {
@@ -296,7 +383,6 @@ export default function CatalogueViewer({
     const onKey = (e: KeyboardEvent) => {
       const el = e.target as HTMLElement | null;
       if (el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.tagName === "SELECT")) return;
-      // Space must not turn the page while someone is filling in a form.
       if (askingForPrint && e.key !== "Escape") return;
       switch (e.key) {
         case "ArrowRight":
@@ -312,11 +398,11 @@ export default function CatalogueViewer({
           break;
         case "Home":
           e.preventDefault();
-          goTo(0);
+          goTo(0, -1);
           break;
         case "End":
           e.preventDefault();
-          goTo(total - 1);
+          goTo(views.length - 1, 1);
           break;
         case "+":
         case "=":
@@ -344,12 +430,17 @@ export default function CatalogueViewer({
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [next, prev, goTo, total, zoomAbout, view.s, zoomed, exitHref, askingForPrint]);
+  }, [next, prev, goTo, views.length, zoomAbout, view.s, zoomed, exitHref, askingForPrint]);
 
   // --- chrome auto-hide --------------------------------------------------
   const wake = useCallback(() => {
     setChrome(true);
     if (chromeTimer.current) window.clearTimeout(chromeTimer.current);
+    // A square page on a tall phone leaves black above and below it whatever
+    // we do. The controls live in that space rather than on top of the
+    // artwork, so there is nothing to auto-hide and hiding them would only
+    // make them hard to find again.
+    if (compactRef.current) return;
     chromeTimer.current = window.setTimeout(() => setChrome(false), 4000);
   }, []);
   useEffect(() => {
@@ -357,17 +448,16 @@ export default function CatalogueViewer({
     return () => {
       if (chromeTimer.current) window.clearTimeout(chromeTimer.current);
     };
-  }, [idx, wake]);
+  }, [vi, wake]);
 
-  // --- which pages are mounted ------------------------------------------
   const mounted = useMemo(() => {
     const s = new Set<number>();
     for (let d = -PRELOAD; d <= PRELOAD; d++) {
-      const i = idx + d;
-      if (i >= 0 && i < total) s.add(i);
+      const i = vi + d;
+      if (i >= 0 && i < views.length) s.add(i);
     }
     return s;
-  }, [idx, total]);
+  }, [vi, views.length]);
 
   const onShare = async () => {
     const url = typeof window !== "undefined" ? window.location.href : "https://hubss.com/catalogue";
@@ -385,9 +475,15 @@ export default function CatalogueViewer({
   const submitJump = (e: React.FormEvent) => {
     e.preventDefault();
     const n = Number(jump);
-    if (Number.isInteger(n) && n >= 1 && n <= total) goTo(n - 1);
+    if (Number.isInteger(n) && n >= 1 && n <= total) goToPage(n);
     setJump("");
   };
+
+  // On a phone the controls sit in the black beside a square page rather than
+  // over the artwork, so there is nothing to auto-hide.
+  const visible = chrome || compact;
+  const shown = views[vi] ?? [1];
+  const label = shown.length === 2 ? `Pages ${shown[0]}–${shown[1]} of ${total}` : `Page ${shown[0]} of ${total}`;
 
   return (
     <main
@@ -395,20 +491,19 @@ export default function CatalogueViewer({
       className="relative h-dvh w-screen select-none overflow-hidden bg-black"
       style={{ color: "var(--text-primary)" }}
       onMouseMove={wake}
-      onPointerDown={wake}
     >
       {/* Stage. The outer element is never transformed, so its rect stays the
           reference frame for every zoom and pan calculation. */}
       <div
         className="absolute inset-x-0 grid place-items-center"
-        style={{ top: CHROME_TOP, bottom: CHROME_BOTTOM }}
+        style={{ top: chromeTop, bottom: chromeBottom }}
       >
         <div
           ref={stageRef}
           className="relative overflow-hidden"
           style={{
             width: stageW === null ? "min(100vw, 100%)" : stageW,
-            aspectRatio: String(aspect),
+            aspectRatio: String(stageRatio),
             touchAction: "none",
             cursor: zoomed ? "grab" : "zoom-in",
           }}
@@ -425,143 +520,157 @@ export default function CatalogueViewer({
               willChange: "transform",
             }}
           >
-            {pages.map((p, i) => {
+            {views.map((group, i) => {
               if (!mounted.has(i)) return null;
-              const active = i === idx;
+              const active = i === vi;
               return (
-                <img
-                  key={p.n}
-                  src={cataloguePageUrl(p.n, widths[0])}
-                  srcSet={cataloguePageSrcSet(p.n)}
-                  sizes={sizesFor(active)}
-                  alt={p.alt}
-                  width={maxWidth}
-                  height={Math.round(maxWidth / aspect)}
-                  draggable={false}
-                  fetchPriority={active ? "high" : "low"}
-                  className="absolute inset-0 h-full w-full object-contain"
+                <div
+                  key={`v${i}-${group.join("-")}`}
+                  className="absolute inset-0 flex items-stretch justify-center"
                   style={{
                     opacity: active ? 1 : 0,
-                    transition: `opacity ${FADE_MS}ms linear`,
+                    // The whole spread moves as one object, because it is one.
+                    transform: active ? "translateX(0)" : `translateX(${dir > 0 ? 10 : -10}px)`,
+                    transition: `opacity ${FADE_MS}ms linear, transform ${FADE_MS}ms cubic-bezier(0.22,1,0.36,1)`,
                     pointerEvents: "none",
                   }}
                   aria-hidden={!active}
-                />
+                >
+                  {group.map((n) => (
+                    <img
+                      key={n}
+                      src={cataloguePageUrl(n, widths[0])}
+                      srcSet={cataloguePageSrcSet(n)}
+                      sizes={sizesFor(active)}
+                      alt={pages[n - 1]?.alt ?? `Catalogue page ${n} of ${total}`}
+                      width={maxWidth}
+                      height={Math.round(maxWidth / aspect)}
+                      draggable={false}
+                      fetchPriority={active ? "high" : "low"}
+                      className="h-full w-auto max-w-none object-contain"
+                    />
+                  ))}
+                </div>
               );
             })}
           </div>
         </div>
       </div>
 
-      {/* Top chrome */}
+      {/* Top chrome.
+          A real bar, not four controls floating at the corners of a black
+          void. Everything sits inside one blurred strip with the content
+          constrained to the same width as the stage, so the chrome reads as
+          belonging to the book rather than to the browser window. */}
       <header
-        className="pointer-events-none absolute inset-x-0 top-0 z-20 flex items-start justify-between gap-3 px-3 pb-3 pt-[max(env(safe-area-inset-top),0.75rem)] sm:px-5"
+        className="absolute inset-x-0 top-0 z-20"
         style={{
-          opacity: chrome ? 1 : 0,
-          transition: "opacity 250ms ease",
-          background: chrome ? "linear-gradient(180deg, rgba(0,0,0,0.62) 0%, rgba(0,0,0,0) 100%)" : "transparent",
+          opacity: visible ? 1 : 0,
+          pointerEvents: visible ? "auto" : "none",
+          transition: "opacity 220ms ease",
+          background: "rgba(10,10,10,0.72)",
+          backdropFilter: "blur(14px)",
+          borderBottom: "1px solid rgba(255,255,255,0.08)",
         }}
       >
-        <Link
-          href={exitHref}
-          className="pointer-events-auto inline-flex items-center gap-2 rounded-full px-3 py-2 text-[11px] uppercase tracking-[0.18em] transition-colors hover:bg-white/10"
-          style={{ color: "rgba(255,255,255,0.82)" }}
-          aria-label="Close the catalogue"
+        <div
+          className="mx-auto flex items-center justify-between gap-3 px-3 pb-2.5 pt-[max(env(safe-area-inset-top),0.6rem)] sm:px-5"
+          style={{ maxWidth: stageW ? Math.max(stageW, 720) : undefined }}
         >
-          <CloseIcon />
-          <span className="hidden sm:inline">Close</span>
-        </Link>
-
-        <div className="pointer-events-none min-w-0 text-center">
-          <p className="truncate text-[10px] font-bold uppercase tracking-[0.24em]" style={{ color: "#fb923c" }}>
-            Catalogue {edition}
-          </p>
-          <p className="text-[11px] tabular-nums" style={{ color: "rgba(255,255,255,0.62)" }}>
-            Page {idx + 1} of {total}
-          </p>
-        </div>
-
-        <div className="pointer-events-auto flex flex-shrink-0 items-center gap-2">
-          {/* A real link, so it can be opened in a new tab or shared, that
-              prefers the in-place overlay on a plain click - nobody should
-              have to leave page 78 to ask for the book. */}
-          <a
-            href={requestHref}
-            className={pill}
-            title="Have a printed copy mailed to you"
-            onClick={(e) => {
-              if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
-              e.preventDefault();
-              setAskingForPrint(true);
-            }}
+          <Link
+            href={exitHref}
+            className="inline-flex flex-shrink-0 items-center gap-2 rounded-full px-2.5 py-2 text-[11px] font-semibold uppercase tracking-[0.16em] transition-colors hover:bg-white/10"
+            style={{ color: "rgba(255,255,255,0.78)" }}
+            aria-label="Close the catalogue"
           >
-            <MailIcon />
-            <span className="hidden md:inline">Printed copy</span>
-          </a>
-          {download && (
-            <a href={download.href} download className={pill} title={`Download the PDF (${download.label})`}>
-              <DownloadIcon />
-              <span className="hidden sm:inline">PDF</span>
-            </a>
-          )}
-          {canShare && (
-            <button type="button" onClick={onShare} className={pill} aria-label="Share this page">
-              <ShareIcon />
-            </button>
-          )}
+            <CloseIcon />
+            <span className="hidden sm:inline">Close</span>
+          </Link>
+
+          <div className="min-w-0 flex-1 text-center">
+            <p className="truncate text-[10px] font-bold uppercase tracking-[0.22em]" style={{ color: "#fb923c" }}>
+              Catalogue {edition}
+            </p>
+            <p className="truncate text-[11px] tabular-nums" style={{ color: "rgba(255,255,255,0.58)" }} aria-live="polite">
+              {label}
+            </p>
+          </div>
+
+          {/* On a phone these live in the bottom bar instead — within reach of
+              a thumb, and grouped with the other controls rather than
+              stranded in the far corner of the screen. */}
+          <div className="hidden flex-shrink-0 items-center gap-2 sm:flex">
+            <Actions
+              requestHref={requestHref}
+              onRequest={() => setAskingForPrint(true)}
+              download={download}
+              canShare={canShare}
+              onShare={onShare}
+            />
+          </div>
+          <span className="w-8 flex-shrink-0 sm:hidden" aria-hidden="true" />
         </div>
       </header>
 
-      {/* Page arrows. Kept off touch-only viewports, where the swipe is the
-          gesture and a 44px target either side of the page would sit on top of
-          the artwork. */}
       <button
         type="button"
         onClick={prev}
-        disabled={idx === 0}
-        aria-label="Previous page"
+        disabled={vi === 0}
+        aria-label="Previous"
         className="absolute left-1 top-1/2 z-10 hidden -translate-y-1/2 rounded-full p-3 transition disabled:opacity-25 sm:block"
-        style={{ background: "rgba(0,0,0,0.42)", color: "#fff", backdropFilter: "blur(6px)", opacity: chrome ? undefined : 0.25 }}
+        style={{ background: "rgba(0,0,0,0.42)", color: "#fff", backdropFilter: "blur(6px)", opacity: visible ? undefined : 0.25 }}
       >
         <ChevronLeft />
       </button>
       <button
         type="button"
         onClick={next}
-        disabled={idx === total - 1}
-        aria-label="Next page"
+        disabled={vi === views.length - 1}
+        aria-label="Next"
         className="absolute right-1 top-1/2 z-10 hidden -translate-y-1/2 rounded-full p-3 transition disabled:opacity-25 sm:block"
-        style={{ background: "rgba(0,0,0,0.42)", color: "#fff", backdropFilter: "blur(6px)", opacity: chrome ? undefined : 0.25 }}
+        style={{ background: "rgba(0,0,0,0.42)", color: "#fff", backdropFilter: "blur(6px)", opacity: visible ? undefined : 0.25 }}
       >
         <ChevronRight />
       </button>
 
-      {/* Bottom chrome: scrubber, jump-to-page, and the one CTA */}
+      {/* Bottom chrome.
+          One grouped control bar rather than a CTA pinned to one corner and a
+          number field pinned to the other with a bare hairline between them.
+          The scrubber runs over pages, not spreads — "page 96" is something a
+          reader wants; "spread 49" is not. */}
       <footer
-        className="absolute inset-x-0 bottom-0 z-20 px-3 pb-[max(env(safe-area-inset-bottom),0.75rem)] pt-8 sm:px-5"
-        style={{ opacity: chrome ? 1 : 0, transition: "opacity 250ms ease", pointerEvents: chrome ? "auto" : "none" }}
+        className="absolute inset-x-0 bottom-0 z-20 px-3 pb-[max(env(safe-area-inset-bottom),0.6rem)] pt-4 sm:px-5"
+        style={{ opacity: visible ? 1 : 0, transition: "opacity 220ms ease", pointerEvents: visible ? "auto" : "none" }}
       >
-        <div className="mx-auto flex max-w-4xl flex-col gap-2.5">
-          <input
-            type="range"
-            min={1}
-            max={total}
-            value={idx + 1}
-            onChange={(e) => goTo(Number(e.target.value) - 1)}
-            aria-label={`Jump to a page. Currently page ${idx + 1} of ${total}.`}
-            className="catalogue-scrub w-full"
-          />
-          <div className="flex items-center justify-between gap-3">
-            <Link
-              href={lunchLearnHref}
-              className="rounded-full px-5 py-3 text-[13px] font-semibold text-white transition-colors"
-              style={{ background: "#F97316", boxShadow: "0 4px 16px rgba(249,115,22,0.30)" }}
-            >
-              Book a Lunch &amp; Learn
-            </Link>
-            <form onSubmit={submitJump} className="hidden items-center gap-2 sm:flex">
-              <label htmlFor="catalogue-jump" className="text-[11px] uppercase tracking-[0.16em]" style={{ color: "rgba(255,255,255,0.5)" }}>
-                Go to page
+        <div
+          className="mx-auto rounded-2xl px-3 py-2.5 sm:px-4"
+          style={{
+            maxWidth: stageW ? Math.max(stageW, 720) : undefined,
+            background: "rgba(18,18,18,0.82)",
+            backdropFilter: "blur(14px)",
+            border: "1px solid rgba(255,255,255,0.10)",
+            boxShadow: "0 8px 30px rgba(0,0,0,0.45)",
+          }}
+        >
+          <div className="flex items-center gap-3">
+            <span className="hidden w-8 flex-shrink-0 text-right text-[11px] tabular-nums sm:block" style={{ color: "rgba(255,255,255,0.40)" }}>
+              1
+            </span>
+            <input
+              type="range"
+              min={1}
+              max={total}
+              value={shown[0]}
+              onChange={(e) => goToPage(Number(e.target.value))}
+              aria-label={`Jump to a page. Currently ${label}.`}
+              className="catalogue-scrub min-w-0 flex-1"
+            />
+            <span className="hidden w-8 flex-shrink-0 text-[11px] tabular-nums sm:block" style={{ color: "rgba(255,255,255,0.40)" }}>
+              {total}
+            </span>
+            <form onSubmit={submitJump} className="hidden flex-shrink-0 items-center gap-2 md:flex">
+              <label htmlFor="catalogue-jump" className="text-[10px] font-semibold uppercase tracking-[0.14em]" style={{ color: "rgba(255,255,255,0.42)" }}>
+                Go to
               </label>
               <input
                 id="catalogue-jump"
@@ -570,11 +679,37 @@ export default function CatalogueViewer({
                 max={total}
                 value={jump}
                 onChange={(e) => setJump(e.target.value)}
-                placeholder={String(idx + 1)}
-                className="w-16 rounded-lg px-2 py-1.5 text-center text-[13px] tabular-nums outline-none"
-                style={{ background: "rgba(255,255,255,0.10)", color: "#fff", border: "1px solid rgba(255,255,255,0.16)" }}
+                placeholder={String(shown[0])}
+                className="w-14 rounded-lg px-2 py-1.5 text-center text-[13px] tabular-nums outline-none"
+                style={{ background: "rgba(255,255,255,0.08)", color: "#fff", border: "1px solid rgba(255,255,255,0.14)" }}
               />
             </form>
+          </div>
+
+          <div className="mt-2.5 flex items-center gap-2 border-t pt-2.5 sm:hidden" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
+            <Actions
+              requestHref={requestHref}
+              onRequest={() => setAskingForPrint(true)}
+              download={download}
+              canShare={canShare}
+              onShare={onShare}
+              stretch
+            />
+          </div>
+
+          <div className="mt-2.5 flex items-center justify-between gap-3 border-t pt-2.5" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
+            {/* Secondary to "Request a copy" above, on purpose: two solid
+                orange buttons on one screen means neither is the primary. */}
+            <Link
+              href={lunchLearnHref}
+              className="inline-flex flex-1 items-center justify-center rounded-xl px-4 py-2.5 text-[13px] font-semibold transition-colors sm:flex-none"
+              style={{ color: "#fdba74", border: "1px solid rgba(249,115,22,0.42)", background: "rgba(249,115,22,0.10)" }}
+            >
+              Book a free Lunch &amp; Learn
+            </Link>
+            <p className="hidden text-[11px] sm:block" style={{ color: "rgba(255,255,255,0.38)" }}>
+              Swipe or use <kbd style={kbd}>&larr;</kbd> <kbd style={kbd}>&rarr;</kbd> to turn &nbsp;·&nbsp; scroll or double-tap to zoom
+            </p>
           </div>
         </div>
       </footer>
@@ -662,9 +797,69 @@ export default function CatalogueViewer({
   );
 }
 
-const pill =
-  "inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-[11px] uppercase tracking-[0.16em] transition-colors " +
+function Actions({
+  requestHref,
+  onRequest,
+  download,
+  canShare,
+  onShare,
+  stretch = false,
+}: {
+  requestHref: string;
+  onRequest: () => void;
+  download: CatalogueDownload | null;
+  canShare: boolean;
+  onShare: () => void;
+  stretch?: boolean;
+}) {
+  return (
+    <>
+      {/* The lead action for this page, so it looks like one. It was a grey
+          pill among grey pills and disappeared into the chrome. */}
+      <a
+        href={requestHref}
+        className={`${btnPrimary}${stretch ? " flex-1 justify-center" : ""}`}
+        title="Have the printed book mailed to you"
+        onClick={(e) => {
+          if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+          e.preventDefault();
+          onRequest();
+        }}
+      >
+        <MailIcon />
+        <span className={stretch ? "" : "hidden sm:inline"}>Request a copy</span>
+      </a>
+      {download && (
+        <a href={download.href} download className={btnGhost} title={`Download the PDF (${download.label})`} aria-label={`Download the PDF, ${download.label}`}>
+          <DownloadIcon />
+          <span className="hidden md:inline">PDF</span>
+        </a>
+      )}
+      {canShare && (
+        <button type="button" onClick={onShare} className={btnGhost} aria-label="Share this page">
+          <ShareIcon />
+        </button>
+      )}
+    </>
+  );
+}
+
+/** The one action this page is actually for. */
+const btnPrimary =
+  "inline-flex items-center gap-1.5 rounded-xl px-3 py-2.5 text-[12px] font-semibold transition-colors " +
+  "bg-[#F97316] text-white hover:bg-[#ea6d12] shadow-[0_2px_10px_rgba(249,115,22,0.35)]";
+/** Everything else. */
+const btnGhost =
+  "inline-flex items-center gap-1.5 rounded-xl px-3 py-2.5 text-[12px] font-semibold transition-colors " +
   "bg-white/10 text-white hover:bg-white/20 border border-white/15";
+const kbd = {
+  display: "inline-block",
+  padding: "1px 5px",
+  borderRadius: 4,
+  border: "1px solid rgba(255,255,255,0.18)",
+  background: "rgba(255,255,255,0.06)",
+  fontSize: 10,
+} as const;
 
 function CloseIcon() {
   return (

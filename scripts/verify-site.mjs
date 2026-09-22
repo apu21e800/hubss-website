@@ -401,6 +401,44 @@ function checkNoUndefined() {
     "scanned prerendered HTML", [...new Set(bad)].slice(0, 10));
 }
 
+// ── 8. every redirect into /blog lands on a post ─────────────────────────────
+// EARNED BY: 36 rules in next.config.ts sending old WordPress URLs to 34
+// /blog/<slug> posts that were planned during the migration and never written,
+// from the Squamish Nation rainbow crosswalk to the Viva Next streetscapes.
+// Each was a 308 onto nothing. Until /blog/[slug] set dynamicParams = false,
+// the missing post also answered 200, so the chain looked healthy from outside
+// and nothing flagged it. Checked against the COMPILED rules, not the source,
+// so a destination built from a variable is covered too. Parameterised
+// destinations (/blog/:slug) are skipped because they carry their own guard.
+function checkBlogRedirectTargets() {
+  const mf = path.join(ROOT, ".next", "routes-manifest.json");
+  if (!fs.existsSync(mf)) { record("redirects into /blog land on a post", false, "no build output — run npm run build"); return; }
+  const { redirects = [] } = JSON.parse(fs.readFileSync(mf, "utf8"));
+
+  // A post exists if its .mdx is there and isn't a draft. getAllPosts() drops
+  // drafts, and the route builds nothing else, so a draft 404s like a missing
+  // file. Static routes under app/blog (/blog/project-profiles, …) count too.
+  const isPost = (slug) => {
+    const f = path.join(ROOT, "content", "blog", `${slug}.mdx`);
+    if (!fs.existsSync(f)) return false;
+    const front = fs.readFileSync(f, "utf8").split(/^---\s*$/m)[1] ?? "";
+    return !/^draft:\s*true\s*$/m.test(front);
+  };
+  const isRoute = (slug) => fs.existsSync(path.join(ROOT, "app", "blog", slug, "page.tsx"));
+
+  let fixed = 0;
+  const bad = [];
+  for (const r of redirects) {
+    if (r.internal) continue;                                   // Next's own trailing-slash rule
+    const m = /^\/blog\/([^/:?#*()]+)\/?$/.exec(r.destination || "");
+    if (!m) continue;
+    fixed++;
+    if (!isPost(m[1]) && !isRoute(m[1])) bad.push(`${r.source}  ->  ${r.destination}   (no such post)`);
+  }
+  record("redirects into /blog land on a post", bad.length === 0,
+    `${fixed} fixed /blog/<slug> destinations`, bad);
+}
+
 // ── run ──────────────────────────────────────────────────────────────────────
 (async () => {
   const t0 = Date.now();
@@ -412,6 +450,7 @@ function checkNoUndefined() {
     await checkBuiltPagesReachable();
     checkGalleryDistinctness();
     checkNoUndefined();
+    checkBlogRedirectTargets();
     try { await checkSanityContract(); }
     catch (e) { record("CMS fields match what the code queries", false, `could not reach Sanity: ${e.message}`); }
 

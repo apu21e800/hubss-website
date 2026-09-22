@@ -155,7 +155,10 @@ async function main() {
       }
       await fs.promises.mkdir(path.dirname(out), { recursive: true });
       await fs.promises.copyFile(cached, out);
-      tally.bytes += (await fs.promises.stat(out)).size;
+      // Await first, then add: `tally.bytes += await …` reads the total before
+      // the await, so parallel jobs overwrote each other and the log undercounted.
+      const { size } = await fs.promises.stat(out);
+      tally.bytes += size;
       nextLedger[src] = hash;
       manifest[src] = rel;
     } catch (e) {

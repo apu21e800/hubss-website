@@ -574,11 +574,19 @@ function ProjectModal({
                 background: "var(--bg-dark)",
               }}
             >
+              {/* cover, not contain. A portrait photo in a 16/9 frame was being
+                  pillarboxed — two black columns either side of the picture,
+                  with the subject (a surface, on the ground) shrunk to fit a
+                  shape it was never shot for. Filling the frame crops the top
+                  and bottom instead, which on a pavement photograph is sky and
+                  foreground, and shows the work at nearly twice the size. The
+                  thumbnails below already do this. */}
               <Image
                 src={project.images[imgIndex]}
                 alt={`${project.title} — photo ${imgIndex + 1}`}
                 fill
-                className="object-contain"
+                className="object-cover"
+                style={{ objectPosition: "center 55%" }}
                 sizes="(max-width: 880px) 100vw, 880px"
               />
               {project.imageIsRepresentative && (

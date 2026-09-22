@@ -10,7 +10,6 @@ import {
   catalogue,
   catalogueCover,
   catalogueLabel,
-  cataloguePageSrcSet,
   cataloguePageUrl,
   catalogueTotal,
 } from "@/lib/catalogue";
@@ -56,21 +55,11 @@ export default async function ResourcesPage() {
   return (
     <main
       className="min-h-screen relative overflow-hidden"
-      style={{ background: "linear-gradient(160deg, var(--bg-dark) 0%, var(--bg-section-asphalt) 60%, var(--bg-dark) 100%)" }}
+      data-surface="paper"
+      style={{ background: "var(--bg-primary)" }}
     >
-      {/* Orange glow — top left */}
-      <div
-        className="absolute pointer-events-none"
-        style={{
-          top: -120,
-          left: -80,
-          width: 500,
-          height: 500,
-          borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(249,115,22,0.08) 0%, transparent 70%)",
-        }}
-        aria-hidden="true"
-      />
+      {/* The orange glow that sat here was tuned for a black page; on paper it
+          reads as a stain, so it is gone rather than dimmed. */}
 
       <Nav />
 
@@ -94,67 +83,50 @@ export default async function ResourcesPage() {
         </p>
       </div>
 
-      {/* ── Catalogue 2026 feature card ──────────────────────
-          Prominent, flag-gated entry to the flipbook (mirrors the
-          mega-menu banner). The catalogue also stays in the filterable
-          library below; this card guarantees it's accessible without
-          paging. Hidden on production until NEXT_PUBLIC_SHOW_CATALOGUE. */}
-      {showCatalogue() && (
-        <div className="relative max-w-7xl mx-auto px-6 -mt-6 mb-14">
-          <a
-            href="/catalogue?utm_source=resources&utm_medium=feature_card&utm_campaign=catalogue"
-            className="group flex flex-col sm:flex-row items-stretch overflow-hidden rounded-2xl transition-all hover:-translate-y-[2px]"
-            style={{
-              background:
-                "linear-gradient(90deg, rgba(249,115,22,0.12) 0%, rgba(249,115,22,0.05) 50%, var(--ink-03) 100%)",
-              border: "1px solid rgba(249,115,22,0.30)",
-              boxShadow: "0 8px 30px rgba(0,0,0,0.25)",
-            }}
+      {/* The catalogue, present but not shouting.
+          It was a full-width panel with a 150px cover and its own h2 — louder
+          than the Specification Library it sits above, which is what people
+          actually come here for. Now it is one quiet row: the book, its name,
+          and the two ways in. */}
+      {showCatalogue() && catalogueCover && (
+        <div className="relative max-w-7xl mx-auto px-6 -mt-4 mb-12">
+          <div
+            className="flex flex-wrap items-center gap-4 rounded-xl px-4 py-3"
+            style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--border-color)" }}
           >
-            <div className="relative flex-shrink-0 overflow-hidden bg-black sm:w-[200px] h-[150px] sm:h-auto">
-              {/* Card is full-width (minus the px-6 page padding) below the
-                  `sm` breakpoint (640px), then a fixed 200px sidebar above it.
-                  Empirically the LCP element on this route (measured via
-                  PerformanceObserver), so it gets fetchPriority high.
-
-                  A plain <img>, not next/image: this is page one of the
-                  catalogue, rendered at the exact widths it is displayed at,
-                  and the catalogue's rasters deliberately never route through
-                  /_next/image. The old src was /catalogue/cover.webp - a
-                  hand-placed file from a previous, different edition, which
-                  went stale silently. */}
-              {catalogueCover && (
-                <img
-                  src={cataloguePageUrl(1, catalogue.widths[0])}
-                  srcSet={cataloguePageSrcSet(1)}
-                  sizes="(max-width: 639px) calc(100vw - 48px), 200px"
-                  alt={`HUB Surface Systems Catalogue ${catalogueLabel} cover`}
-                  fetchPriority="high"
-                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-                />
-              )}
-            </div>
-            <div className="flex-1 min-w-0 p-6 sm:p-7 flex flex-col justify-center">
-              <p className="text-[11px] font-bold tracking-[0.22em] uppercase mb-2 flex items-center gap-2" style={{ color: "var(--accent-text)" }}>
+            <img
+              src={catalogue.coverThumb ?? cataloguePageUrl(1, catalogue.widths[0])}
+              alt={`HUB Surface Systems Catalogue ${catalogueLabel} cover`}
+              width={240}
+              height={240}
+              className="h-11 w-11 flex-shrink-0 rounded-md object-cover"
+              style={{ border: "1px solid var(--ink-12)" }}
+            />
+            <div className="min-w-0 flex-1">
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--text-muted)" }}>
                 Catalogue {catalogueLabel}
-                <span className="text-[9px] font-bold tracking-[0.18em] uppercase px-1.5 py-0.5 rounded" style={{ background: "rgba(249,115,22,0.20)" }}>New</span>
               </p>
-              <h2 className="text-xl sm:text-2xl font-bold leading-snug mb-1.5" style={{ color: "var(--text-primary)" }}>
-                Read the catalogue in your browser
-              </h2>
-              {/* The page count is the manifest's, not a number typed here.
-                  This line said "140 pages" against a 144-page book. */}
-              <p className="text-sm" style={{ color: "var(--ink-65)" }}>
-                {catalogueTotal} pages · every system &amp; application · free to read, or{" "}
-                <span style={{ color: "var(--accent-text)" }}>have it mailed to you</span>
+              <p className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>
+                {catalogueTotal} pages — every system and application
               </p>
             </div>
-            <div className="flex-shrink-0 self-center pr-7 pb-6 sm:pb-0">
-              <span className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.18em] uppercase transition-transform duration-200 group-hover:translate-x-1" style={{ color: "var(--accent-text)" }}>
-                Open <span aria-hidden="true">→</span>
-              </span>
+            <div className="flex flex-shrink-0 items-center gap-2">
+              <a
+                href="/catalogue?utm_source=resources&utm_medium=library_row&utm_campaign=catalogue"
+                className="rounded-lg px-3 py-2 text-xs font-semibold transition-colors"
+                style={{ color: "var(--accent-text)", border: "1px solid rgba(249,115,22,0.32)", background: "rgba(249,115,22,0.08)" }}
+              >
+                Read it
+              </a>
+              <a
+                href="/request-catalogue?utm_source=resources&utm_medium=library_row&utm_campaign=printed_copy"
+                className="rounded-lg px-3 py-2 text-xs font-semibold transition-colors"
+                style={{ color: "var(--text-secondary)", border: "1px solid var(--border-color)" }}
+              >
+                Request a copy
+              </a>
             </div>
-          </a>
+          </div>
         </div>
       )}
 

@@ -28,6 +28,7 @@ interface Edition {
   aspect: number;
   total: number;
   download: CatalogueDownload | null;
+  coverThumb: string | null;
 }
 
 const raw = edition as Partial<Edition>;
@@ -42,6 +43,8 @@ export const catalogue = {
   /** Page width / height. 1 for this edition's 6x6in square book. */
   aspect: typeof raw.aspect === "number" && raw.aspect > 0 ? raw.aspect : 1,
   download: raw.download ?? null,
+  /** ~10 KB cover for menu callouts and document thumbnails. */
+  coverThumb: raw.coverThumb ?? null,
 } as const;
 
 export const catalogueTotal = typeof raw.total === "number" ? raw.total : 0;

@@ -19,6 +19,10 @@ export interface LunchLearnFunnelProps {
   whatYouGet?: { num: string; title: string; desc: string }[];
   personas?: { title: string; desc: string; badge: string }[];
   faqs?: { q: string; a: string }[];
+  /** Drop the hero when the page already leads with the boardroom card. */
+  hideHero?: boolean;
+  /** Drop the bottom form when the boardroom card already carries one. */
+  hideForm?: boolean;
   sectionHeadings?: {
     whatYouGetEyebrow?: string;
     whatYouGetHeading?: string;
@@ -134,6 +138,8 @@ export default function LunchLearnFunnel({
   personas,
   faqs,
   sectionHeadings,
+  hideHero = false,
+  hideForm = false,
 }: LunchLearnFunnelProps = {}) {
   const whatYouGetItems    = whatYouGet?.length ? whatYouGet : WHAT_YOU_GET;
   const personaItems       = personas?.length   ? personas   : PERSONAS;
@@ -185,6 +191,8 @@ export default function LunchLearnFunnel({
     <div style={{ background: "var(--bg-primary)" }}>
 
       {/* ── HERO ────────────────────────────────────── */}
+      {/* Skipped when the page leads with the boardroom card. */}
+      {!hideHero && (
       <section
         className="relative overflow-hidden"
         style={{ background: "var(--bg-deepest)", minHeight: "80vh" }}
@@ -308,6 +316,7 @@ export default function LunchLearnFunnel({
           background: "linear-gradient(to bottom, transparent, var(--bg-section-asphalt))",
         }} />
       </section>
+      )}
 
       {/* ── STATS STRIP — asphalt band starts here ──────────────────── */}
       <section
@@ -527,6 +536,10 @@ export default function LunchLearnFunnel({
       </section>
 
       {/* ── FORM ────────────────────────────────────────────── */}
+      {/* Skipped when the boardroom card above already carries a form —
+          two live forms on one page is two sets of inputs sharing one
+          piece of React state. */}
+      {!hideForm && (
       <section id="book" className="py-20 lg:py-28 relative overflow-hidden" style={{ background: "var(--bg-deepest)" }}>
         <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 50% 50%, rgba(249,115,22,0.09) 0%, transparent 65%)" }} />
         <div className="absolute top-0 inset-x-0 h-px" style={{ background: "linear-gradient(90deg, transparent 0%, rgba(249,115,22,0.4) 50%, transparent 100%)" }} />
@@ -626,6 +639,7 @@ export default function LunchLearnFunnel({
           </div>
         </div>
       </section>
+      )}
 
       <style>{`
         @keyframes ll-marquee {

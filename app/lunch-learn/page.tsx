@@ -1,6 +1,7 @@
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import LunchLearnFunnel from "@/components/sections/LunchLearnFunnel";
+import LunchLearn from "@/components/sections/LunchLearn";
 import JsonLd from "@/components/ui/JsonLd";
 import { buildMetadata } from "@/lib/seo";
 import { getSanityPageContent } from "@/lib/sanity.queries";
@@ -129,7 +130,29 @@ export default async function LunchLearnPage() {
       <JsonLd data={faqSchema} />
       <JsonLd data={serviceSchema} />
       <Nav />
+
+      {/* The page now leads with the same card every other page uses.
+          LunchLearn -> LunchLearnV2 variant="boardroom" is the design that was
+          chosen in Aug 2026 after three were built and reviewed ("just choose
+          the best of the 3 and run with it"). It shipped everywhere — landing,
+          blog index, blog posts, project pages, contact — except here, on the
+          page the whole thing is named after. This page kept the older funnel:
+          a hero whose CTA scrolled 3,000px to a form, behind three sections of
+          identical rhythm.
+
+          The pitch and the form now sit side by side above the fold, and what
+          follows is depth for anyone who wants it rather than a gate in front
+          of the thing they came to do.
+
+          #book stays live as an anchor — plenty of links across the site point
+          at it — and now lands on the form at the top instead of the bottom. */}
+      <div id="book">
+        <LunchLearn />
+      </div>
+
       <LunchLearnFunnel
+        hideHero
+        hideForm
         {...hero}
         whatYouGet={freshArray(sanityPage?.lunchLearnWhatYouGet, "title", STALE_WYG_TITLES)}
         personas={freshArray(sanityPage?.lunchLearnPersonas, "title", STALE_PERSONA_TITLES)}

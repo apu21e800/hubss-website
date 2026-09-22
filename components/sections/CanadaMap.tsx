@@ -862,6 +862,23 @@ export default function CanadaMap() {
   // marker and Popup DOM during transit). Click-to-pin makes the preview bulletproof.
   const [popupPinned, setPopupPinned] = useState(false);
   const [visibleProjects, setVisibleProjects] = useState<MapProject[]>(mapProjects);
+  /**
+   * The project a panel click flew to. Kept separately from selectedProject
+   * (the modal) because clicking the list now moves the camera instead of
+   * opening anything.
+   */
+  const [focusedId, setFocusedId] = useState<string | null>(null);
+  /**
+   * While true, map movement does not re-filter the list.
+   *
+   * This is the whole reason the panel click could not zoom before. The list
+   * is "projects in view", so flying to one project left exactly one project
+   * in view — the list you were reading collapsed to the single row you had
+   * just clicked, and the other nine vanished under your cursor. Freezing the
+   * list through OUR camera move keeps the set you were browsing intact; the
+   * moment you move the map yourself, it unfreezes and filters again.
+   */
+  const suppressListSync = useRef(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [productFilter, setProductFilter] = useState<string | null>(null);
   const [appFilter, setAppFilter] = useState<string | null>(null);
@@ -975,6 +992,7 @@ export default function CanadaMap() {
 
   // ── Update panel list based on map bounds
   const updateVisibleProjects = useCallback(() => {
+    if (suppressListSync.current) return;
     const map = mapRef.current?.getMap();
     if (!map) return;
     const bounds = map.getBounds();
@@ -994,6 +1012,8 @@ export default function CanadaMap() {
   }, []);
 
   const resetView = useCallback(() => {
+    suppressListSync.current = false;
+    setFocusedId(null);
     setProvinceFocus(null);
     mapRef.current?.fitBounds(CANADA_BOUNDS, { ...FIT_OPTIONS, duration: 1100 });
   }, []);
@@ -1207,24 +1227,32 @@ export default function CanadaMap() {
    */
   const handlePanelClick = useCallback((project: MapProject) => {
     if (popupClearTimeoutRef.current) clearTimeout(popupClearTimeoutRef.current);
-    setPinned(false);
-    setPopupProject(null);
     setHoveredId(project.id);
-    setSelectedProject(project);
 
-    const map = mapRef.current?.getMap();
-    const bounds = map?.getBounds();
-    if (map && bounds) {
-      const outside =
-        project.lng < bounds.getWest() ||
-        project.lng > bounds.getEast() ||
-        project.lat < bounds.getSouth() ||
-        project.lat > bounds.getNorth();
-      if (outside) {
-        map.panTo([project.lng, project.lat], { duration: 700 });
-      }
+    // On a phone the map is a 290px square above the list. Flying it to a
+    // single pin shows a visitor a patch of empty basemap and pushes the thing
+    // they tapped off screen, so touch keeps opening the project.
+    if (isNarrow) {
+      setPinned(false);
+      setPopupProject(null);
+      setSelectedProject(project);
+      return;
     }
-  }, [setPinned]);
+
+    // Desktop: the list is a way of driving the map, so drive it. No modal —
+    // the card moves the camera and names the pin, and the modal stays behind
+    // the arrow and the pin itself.
+    setFocusedId(project.id);
+    suppressListSync.current = true;
+    setPopupProject(project);
+    setPinned(true);
+    mapRef.current?.flyTo({
+      center: [project.lng, project.lat],
+      zoom: 9,
+      duration: 900,
+      essential: true,
+    });
+  }, [isNarrow, setPinned]);
 
   /**
    * "Show on map", from inside the modal. The one path that is allowed to
@@ -1571,7 +1599,17 @@ export default function CanadaMap() {
                 onClick={handleMapLayerClick}
                 onMouseMove={handleMouseMove}
                 onMouseLeave={handleMouseLeave}
-                onMoveEnd={updateVisibleProjects}
+                onMoveEnd={(e) => {
+                  // A drag, a scroll or a pinch carries an originalEvent; our
+                  // own flyTo does not. So the visitor moving the map is what
+                  // releases the frozen list — not the arrival of the flight
+                  // we started for them.
+                  if ((e as { originalEvent?: unknown }).originalEvent) {
+                    suppressListSync.current = false;
+                    setFocusedId(null);
+                  }
+                  updateVisibleProjects();
+                }}
                 onLoad={updateVisibleProjects}
                 onError={(e) => {
                   // A failed style fetch would otherwise leave a silent black
@@ -2200,12 +2238,15 @@ export default function CanadaMap() {
                     )}
                   </div>
                 ) : (
+                  /* `selected` takes focusedId as well as the modal: on desktop a
+                     click flies the map instead of opening anything, so without
+                     it nothing would show which row you picked. */
                   displayedProjects.map((project) => (
                     <PanelCard
                       key={project.id}
                       project={project}
                       hovered={hoveredId === project.id}
-                      selected={selectedProject?.id === project.id}
+                      selected={selectedProject?.id === project.id || focusedId === project.id}
                       onHover={handlePanelHover}
                       onClick={handlePanelClick}
                     />

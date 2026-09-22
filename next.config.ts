@@ -23,18 +23,31 @@ const BLOG_SLUGS = fs
 // surfaces violations to the browser console + Vercel logs without blocking
 // anything. After a week of monitoring, flip to enforced mode by changing the
 // header key to "Content-Security-Policy".
+//
+// GA4 (app/layout.tsx → <GoogleAnalytics>) was missing from this policy until
+// 2026-09-22, and the report-only header was hiding it: production logged a
+// violation for gtag/js (script-src) and for every /g/collect hit
+// (connect-src) on every page. Enforced as it stood, GA4 would have stopped
+// recording without a single visible error. The Google hosts below are the
+// ones Google's CSP guide lists for GA4 without Ads features
+// (developers.google.com/tag-platform/security/guides/csp). The wildcards
+// cover the regional collectors (region1.google-analytics.com,
+// region1.analytics.google.com) that some visitors are routed to. If Google
+// Ads is ever linked, that guide lists more hosts (*.g.doubleclick.net,
+// *.google.<tld>). Add them then, not before.
 const CSP_REPORT_ONLY = [
   "default-src 'self'",
   // Inline + eval needed for Next.js + framer-motion runtime
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://client.crisp.chat https://*.vercel-scripts.com https://*.vercel-insights.com https://va.vercel-scripts.com",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://client.crisp.chat https://*.vercel-scripts.com https://*.vercel-insights.com https://va.vercel-scripts.com https://www.googletagmanager.com",
   // Inline styles from framer-motion + Tailwind v4 + Crisp
   "style-src 'self' 'unsafe-inline' https://client.crisp.chat https://fonts.googleapis.com",
-  // Images from Unsplash, Vercel optimization, data URIs, blob (for clipboard), Crisp avatars
-  "img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com https://*.crisp.chat https://image.crisp.chat https://basemaps.cartocdn.com https://*.basemaps.cartocdn.com",
+  // Images from Unsplash, Vercel optimization, data URIs, blob (for clipboard), Crisp avatars,
+  // GA4's pixel fallback when fetch/sendBeacon is unavailable
+  "img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com https://*.crisp.chat https://image.crisp.chat https://basemaps.cartocdn.com https://*.basemaps.cartocdn.com https://*.google-analytics.com https://www.googletagmanager.com",
   // Google Fonts files
   "font-src 'self' data: https://fonts.gstatic.com https://client.crisp.chat",
-  // Resend API, Crisp WS, Vercel telemetry, MapLibre tiles
-  "connect-src 'self' https://api.resend.com https://*.crisp.chat wss://*.crisp.chat https://*.vercel-insights.com https://va.vercel-scripts.com https://*.cartocdn.com https://basemaps.cartocdn.com",
+  // Resend API, Crisp WS, Vercel telemetry, MapLibre tiles, GA4 collection
+  "connect-src 'self' https://api.resend.com https://*.crisp.chat wss://*.crisp.chat https://*.vercel-insights.com https://va.vercel-scripts.com https://*.cartocdn.com https://basemaps.cartocdn.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com",
   // Frame sources — Crisp chat iframe + YouTube embeds (just in case)
   "frame-src 'self' https://client.crisp.chat https://www.youtube.com https://www.youtube-nocookie.com",
   // Disallow plugins
@@ -287,6 +300,16 @@ const nextConfig: NextConfig = {
       // guessing at /blog/:slug.
       { source: `/traffic-calming-streetscapes/:slug(${BLOG_SLUGS.join("|")})`, destination: "/blog/:slug", permanent: true },
       { source: "/traffic-calming-streetscapes/:path*", destination: "/applications/traffic-calming", permanent: true },
+      // Two more category prefixes from the same permalink scheme, same guard.
+      // These were written on 2026-09-21 in fix/legacy-url-redirects (8e3542c),
+      // but that branch was never merged. The traffic-calming pair above
+      // reached main separately, so these two prefixes kept 404ing. The
+      // fallbacks match the /projects/category/ rules further down: stamped
+      // asphalt is the StreetPrint system.
+      { source: `/stamped-asphalt/:slug(${BLOG_SLUGS.join("|")})`, destination: "/blog/:slug", permanent: true },
+      { source: `/streetbond/:slug(${BLOG_SLUGS.join("|")})`, destination: "/blog/:slug", permanent: true },
+      { source: "/stamped-asphalt/:path*", destination: "/products/streetprint", permanent: true },
+      { source: "/streetbond/:path*", destination: "/products/streetbond", permanent: true },
 
       // Legal pages
       { source: "/terms-conditions", destination: "/terms", permanent: true },
@@ -415,7 +438,26 @@ const nextConfig: NextConfig = {
       // Routing /uploads/ specifically to a real image gives the bot a
       // valid 200 image response so indexed thumbnails stop showing as
       // broken. MUST appear before the /wp-content/:path* catch-all.
-      { source: "/wp-content/uploads/:path*", destination: "/images/hero/hero-bg.jpg", permanent: true },
+      //
+      // The same reasoning cuts the other way for documents. /uploads/ also
+      // held the old spec sheets and brochures. The Wayback Machine has 185
+      // PDFs and an estimating-guide .xlsx there, e.g. Brochure_Traffic
+      // PatternsXD_02-06-12.pdf. Sending those to a JPEG gave an engineer
+      // a crosswalk photo for a spec sheet, and gave Google a document URL
+      // answering image/jpeg. They go to the resources hub instead, where the
+      // current editions live. So the rule is split by extension, documents
+      // first:
+      //   documents → /resources
+      //   images    → the hero image, as before
+      //   anything else (Elementor .css, fonts, the bare directory) falls
+      //   through to the /wp-content/:path* rule below, like the rest of
+      //   /wp-content/. None of it is an image, so none of it should be
+      //   answered with one.
+      // Extensions come from the Wayback index of /wp-content/uploads/ (1,732
+      // URLs: jpg/jpeg/png/svg/gif, pdf, xlsx, css, woff2) plus the other
+      // office/CAD formats a spec library carries.
+      { source: "/wp-content/uploads/:path(.*\\.(?:pdf|docx?|xlsx?|pptx?|dwg|dxf|zip))", destination: "/resources", permanent: true },
+      { source: "/wp-content/uploads/:path(.*\\.(?:jpe?g|png|gif|webp|avif|svg|bmp|ico))", destination: "/images/hero/hero-bg.jpg", permanent: true },
       // WordPress wp-content → 410 is ideal but redirect to home is fine
       { source: "/wp-content/:path*", destination: "/", permanent: true },
       { source: "/wp-admin/:path*", destination: "/", permanent: true },

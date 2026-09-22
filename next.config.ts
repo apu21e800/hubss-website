@@ -170,11 +170,24 @@ const nextConfig: NextConfig = {
       { source: "/white-paper-transportation-and-urban-design", destination: "/blog/white-paper-transportation-urban-design", permanent: true },
       { source: "/white-paper-surface-solutions-for-resilient-transit-infrastructure", destination: "/blog/white-paper-resilient-transit-infrastructure", permanent: true },
       // Blog posts & project profiles (2020–2022)
-      { source: "/surface-system-solutions-for-school-playgrounds", destination: "/blog/surface-solutions-school-playgrounds", permanent: true },
-      { source: "/decorative-asphalt-for-communities", destination: "/blog/decorative-asphalt-communities", permanent: true },
-      { source: "/asphalt-coatings-for-parks-and-plazas", destination: "/blog/asphalt-coatings-parks-plazas", permanent: true },
-      { source: "/streetbondsr-for-cooler-asphalt-surfaces", destination: "/blog/streetbondsr-cooler-asphalt", permanent: true },
-      { source: "/enhancing-transit-hubs-in-the-gta-and-metro-vancouver", destination: "/blog/enhancing-transit-hubs-gta-vancouver", permanent: true },
+      //
+      // 34 of these used to point at /blog/<slug> posts that were planned in
+      // the migration and never written. None of those slugs appears anywhere
+      // in git history. Each rule was a 308 onto a missing post, and the
+      // missing post answered 200 until /blog/[slug] set dynamicParams = false.
+      // Repointed Sep 2026 after reading each old page in the Wayback Machine.
+      // The trailing comment on each rule records what that page was. Where a
+      // post covers the SAME project or repeats the same material, the rule
+      // points there. Otherwise it points to the application page for what
+      // was built. It never points to a post that only shares a topic,
+      // because that would promise a write-up that doesn't exist.
+      // scripts/verify-site.mjs check 8 fails if any fixed /blog/<slug>
+      // destination in this file has no post behind it.
+      { source: "/surface-system-solutions-for-school-playgrounds", destination: "/applications/playgrounds", permanent: true }, // StreetBond + DecoMark for playgrounds and water parks
+      { source: "/decorative-asphalt-for-communities", destination: "/applications/community-branding", permanent: true }, // decorative asphalt for BIAs and community curb appeal
+      { source: "/asphalt-coatings-for-parks-and-plazas", destination: "/applications/parks-paths", permanent: true }, // StreetBond coatings for parks and plazas
+      { source: "/streetbondsr-for-cooler-asphalt-surfaces", destination: "/applications/leed-urban-heat-island", permanent: true }, // StreetBondSR and urban heat islands
+      { source: "/enhancing-transit-hubs-in-the-gta-and-metro-vancouver", destination: "/applications/public-spaces", permanent: true }, // roundup of transit station work, VIVA and TransLink
       { source: "/new-traffic-pattern-crosswalk-upgrade-for-tsain-ko-centre", destination: "/blog/tsain-ko-crosswalk-sechelt", permanent: true },
       { source: "/decorative-asphalt-crosswalks", destination: "/blog/decorative-asphalt-crosswalks", permanent: true },
       { source: "/roadway-accents-natures-walk", destination: "/blog/roadway-accents-natures-walk", permanent: true },
@@ -184,32 +197,32 @@ const nextConfig: NextConfig = {
       { source: "/decorative-crosswalk-and-meridian", destination: "/blog/decorative-crosswalk-meridian", permanent: true },
       { source: "/the-laneway-project", destination: "/blog/laneway-project", permanent: true },
       { source: "/parc-riviera-mews-streetbond-asphalt-walkway", destination: "/blog/parc-riviera-streetbond-walkway", permanent: true },
-      { source: "/decorative-asphalt-for-rutland-centennial-park-kelowna", destination: "/blog/rutland-centennial-park-kelowna", permanent: true },
-      { source: "/societe-de-transport-du-saguenay", destination: "/blog/societe-transport-saguenay", permanent: true },
-      { source: "/bikeway-intersection", destination: "/blog/bikeway-intersection", permanent: true },
-      { source: "/decorative-asphalt-renewal", destination: "/blog/decorative-asphalt-renewal", permanent: true },
-      { source: "/asphalt-coatings-for-playgrounds", destination: "/blog/asphalt-coatings-playgrounds", permanent: true },
-      { source: "/west-vancouver-rainbow-crosswalk", destination: "/blog/west-vancouver-rainbow-crosswalk", permanent: true },
-      { source: "/ackerys-alley-decorative-asphalt-orpheum-theatre-laneway", destination: "/blog/ackerys-alley-orpheum-laneway", permanent: true },
-      { source: "/decorative-paving-stamped-asphalt-after-2-years-wear", destination: "/blog/stamped-asphalt-2-years-wear", permanent: true },
-      { source: "/ralphs-farm-market-decorative-asphalt-parking-lot", destination: "/blog/ralphs-farm-market-parking-lot", permanent: true },
+      { source: "/decorative-asphalt-for-rutland-centennial-park-kelowna", destination: "/applications/parks-paths", permanent: true }, // StreetBond in the Rutland Centennial Park revitalization
+      { source: "/societe-de-transport-du-saguenay", destination: "/applications/crosswalks", permanent: true }, // TrafficPatternsXD station crosswalks, Saguenay
+      { source: "/bikeway-intersection", destination: "/applications/bike-lanes", permanent: true }, // never archived; destination read from the URL alone
+      { source: "/decorative-asphalt-renewal", destination: "/applications/playgrounds", permanent: true }, // StreetBond playground coating, Brewers Park
+      { source: "/asphalt-coatings-for-playgrounds", destination: "/blog/playgrounds-recreation", permanent: true }, // same Boston schoolyard study this post reports
+      { source: "/west-vancouver-rainbow-crosswalk", destination: "/applications/crosswalks", permanent: true }, // TrafficPatterns rainbow crosswalk, 2020
+      { source: "/ackerys-alley-decorative-asphalt-orpheum-theatre-laneway", destination: "/applications/public-art", permanent: true }, // StreetBond laneway for the DVBIA behind the Orpheum
+      { source: "/decorative-paving-stamped-asphalt-after-2-years-wear", destination: "/applications/crosswalks", permanent: true }, // TrafficPatternsXD crosswalk on Granville Island after two years
+      { source: "/ralphs-farm-market-decorative-asphalt-parking-lot", destination: "/applications/parking-lots", permanent: true }, // StreetBond parking lot, Ralph's Farm Market
       { source: "/reunion-murrayville-schoolhouse-decorative-asphalt-sidewalk", destination: "/blog/murrayville-schoolhouse-sidewalk", permanent: true },
       { source: "/decorative-crosswalk_richmond-brighouse", destination: "/blog/richmond-brighouse-crosswalk", permanent: true },
       { source: "/decorative-asphalt-path", destination: "/blog/bowen-island-asphalt-path", permanent: true },
       { source: "/ubc-musqueam-crosswalk", destination: "/blog/ubc-musqueam-crosswalk", permanent: true },
       { source: "/white-rock-pier-decoraive-crosswalk", destination: "/blog/white-rock-pier-crosswalk", permanent: true },
-      { source: "/squamish-nation-rainbow-crosswalk", destination: "/blog/squamish-nation-rainbow-crosswalk", permanent: true },
-      { source: "/melfort-saskatchewan-waterpark-splash-pad", destination: "/blog/melfort-waterpark-splash-pad", permanent: true },
-      { source: "/victoria-harbor-decorative-asphalt-walkway", destination: "/blog/victoria-harbour-walkway", permanent: true },
-      { source: "/sports-court-asphalt-paving", destination: "/blog/sports-court-asphalt-paving", permanent: true },
-      { source: "/rainbow-crosswalk-sechelt", destination: "/blog/rainbow-crosswalk-sechelt", permanent: true },
-      { source: "/white-rock-stamped-asphalt-pathway", destination: "/blog/white-rock-stamped-pathway", permanent: true },
-      { source: "/checkerboard-decorative-asphalt-crosswalk", destination: "/blog/checkerboard-crosswalk-coquitlam", permanent: true },
-      { source: "/first-nations-decorative-crosswalk-design-granville-street", destination: "/blog/first-nations-crosswalk-granville", permanent: true },
-      { source: "/lickman-interchange-decorative-asphalt-roundabout", destination: "/blog/lickman-interchange-roundabout", permanent: true },
-      { source: "/stamped-asphalt-streetscapes-viva-next", destination: "/blog/stamped-asphalt-viva-next", permanent: true },
-      { source: "/decorative-paving-for-townhomes-canada", destination: "/blog/decorative-paving-townhomes", permanent: true },
-      { source: "/decorative-paving-public-art", destination: "/blog/decorative-paving-public-art-joyce", permanent: true },
+      { source: "/squamish-nation-rainbow-crosswalk", destination: "/applications/crosswalks", permanent: true }, // TrafficPatterns rainbow crosswalk, Capilano Rd
+      { source: "/melfort-saskatchewan-waterpark-splash-pad", destination: "/applications/splash-pads", permanent: true }, // StreetBond splash pad, Spruce Haven Park
+      { source: "/victoria-harbor-decorative-asphalt-walkway", destination: "/blog/pedestrian-channelization-public-spaces", permanent: true }, // David Foster Walkway, which this post covers
+      { source: "/sports-court-asphalt-paving", destination: "/applications/sport-courts", permanent: true }, // StreetBond basketball court, Brookmere Park
+      { source: "/rainbow-crosswalk-sechelt", destination: "/applications/crosswalks", permanent: true }, // TrafficPatterns rainbow crosswalk, Cowrie St
+      { source: "/white-rock-stamped-asphalt-pathway", destination: "/applications/parks-paths", permanent: true }, // StreetPrint pathway at the White Rock Pier
+      { source: "/checkerboard-decorative-asphalt-crosswalk", destination: "/applications/crosswalks", permanent: true }, // TrafficPatterns checkerboard crosswalk, Coquitlam
+      { source: "/first-nations-decorative-crosswalk-design-granville-street", destination: "/applications/crosswalks", permanent: true }, // Musqueam artist's crosswalk, TrafficPatterns
+      { source: "/lickman-interchange-decorative-asphalt-roundabout", destination: "/applications/traffic-calming", permanent: true }, // StreetPrint roundabout, Lickman Interchange
+      { source: "/stamped-asphalt-streetscapes-viva-next", destination: "/blog/multimodal-connectivity-york-region", permanent: true }, // TrafficPatternsXD on the VIVA Hwy 7 rapidway, which this post covers
+      { source: "/decorative-paving-for-townhomes-canada", destination: "/blog/community-branding-case-study", permanent: true }, // Windsor Gate, Coquitlam, which this post covers
+      { source: "/decorative-paving-public-art", destination: "/applications/public-art", permanent: true }, // StreetBond public art, Joyce SkyTrain station
       { source: "/decorative-crosswalk-commercial-drive", destination: "/blog/decorative-crosswalk-commercial-drive", permanent: true },
       { source: "/pedestrian-channelization-public-spaces", destination: "/blog/pedestrian-channelization-public-spaces", permanent: true },
       { source: "/decorative-paving-labyrinth-bc-childrens-hospital", destination: "/blog/bc-childrens-hospital-labyrinth", permanent: true },
@@ -219,14 +232,14 @@ const nextConfig: NextConfig = {
       { source: "/community-branding-horizontal-wayfinding-for-vancouvers-spirit-trail", destination: "/blog/spirit-trail-wayfinding-vancouver", permanent: true },
       { source: "/performance-crosswalks-for-asphalt-and-concrete", destination: "/blog/performance-crosswalks-asphalt-concrete", permanent: true },
       { source: "/imprinted-asphalt-crosswalks-for-york-transit-corridor", destination: "/blog/imprinted-asphalt-york-transit", permanent: true },
-      { source: "/residential-decorative-paving", destination: "/blog/residential-decorative-paving", permanent: true },
-      { source: "/laneway-revitalization", destination: "/blog/laneway-revitalization-vancouver", permanent: true },
-      { source: "/residential-decorative-driveways", destination: "/blog/residential-decorative-driveways", permanent: true },
-      { source: "/decorative-paving-for-playgrounds", destination: "/blog/decorative-paving-playgrounds", permanent: true },
-      { source: "/parking-lot-wayfinding", destination: "/blog/parking-lot-wayfinding", permanent: true },
-      { source: "/durable-coatings-for-asphalt", destination: "/blog/durable-coatings-asphalt", permanent: true },
-      { source: "/stamped-asphalt-decorative-crosswalks", destination: "/blog/stamped-asphalt-decorative-crosswalks", permanent: true },
-      { source: "/enhanced-parking-lot-surfaces", destination: "/blog/enhanced-parking-lot-surfaces", permanent: true },
+      { source: "/residential-decorative-paving", destination: "/applications/townhomes", permanent: true }, // decorative paving for townhouse developers
+      { source: "/laneway-revitalization", destination: "/blog/laneway-project", permanent: true }, // More Awesome Now laneways, which this post covers
+      { source: "/residential-decorative-driveways", destination: "/applications/private-driveways", permanent: true }, // StreetPrint driveway, Burnaby; matches /residential-driveways
+      { source: "/decorative-paving-for-playgrounds", destination: "/applications/playgrounds", permanent: true }, // StreetBond schoolyards, Dufferin-Peel Catholic board
+      { source: "/parking-lot-wayfinding", destination: "/applications/parking-lots", permanent: true }, // DecoMark drive-through wayfinding
+      { source: "/durable-coatings-for-asphalt", destination: "/applications/leed-urban-heat-island", permanent: true }, // StreetBondSR solar reflective coating, Toronto, after 7 years
+      { source: "/stamped-asphalt-decorative-crosswalks", destination: "/applications/crosswalks", permanent: true }, // TrafficPatternsXD crosswalks, Montréal, 2013
+      { source: "/enhanced-parking-lot-surfaces", destination: "/applications/parking-lots", permanent: true }, // TrafficPatternsXD at a Home Depot storefront
       // Footer/nav link variants
       { source: "/traffic-patterns", destination: "/products/traffic-patterns", permanent: true },
       // Other pages
@@ -303,8 +316,8 @@ const nextConfig: NextConfig = {
       { source: "/projects/airfield-markings", destination: "/applications/airports", permanent: true },
       { source: "/projects/community-branding", destination: "/applications/community-branding", permanent: true },
       { source: "/projects/decorative-crosswalk_richmond-brighouse", destination: "/blog/richmond-brighouse-crosswalk", permanent: true },
-      { source: "/projects/decorative-paving-public-art", destination: "/blog/decorative-paving-public-art-joyce", permanent: true },
-      { source: "/projects/decorative-paving-for-townhomes-canada", destination: "/blog/decorative-paving-townhomes", permanent: true },
+      { source: "/projects/decorative-paving-public-art", destination: "/applications/public-art", permanent: true }, // as /decorative-paving-public-art
+      { source: "/projects/decorative-paving-for-townhomes-canada", destination: "/blog/community-branding-case-study", permanent: true }, // as /decorative-paving-for-townhomes-canada
       { source: "/projects/solar-reflective-asphalt-surfaces", destination: "/blog/streetbondsr-solar-reflective-coatings", permanent: true },
       { source: "/projects/solar-reflective-coatings-for-asphalt-and-concrete", destination: "/blog/streetbondsr-solar-reflective-coatings", permanent: true },
       { source: "/projects/solar-reflective-hardscapes", destination: "/blog/streetbondsr-solar-reflective-coatings", permanent: true },

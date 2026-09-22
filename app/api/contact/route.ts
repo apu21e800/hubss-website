@@ -2,14 +2,33 @@ import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 
 const TO_EMAIL = process.env.CONTACT_EMAIL ?? "info@hubss.com";
+// Printed-catalogue requests are fulfilment, not enquiries: Doug wants to see
+// them apart from the rest. Today a distinct subject line does that with a mail
+// rule; setting CATALOGUE_EMAIL later moves them to their own inbox with no
+// code change.
+const CATALOGUE_TO_EMAIL = process.env.CATALOGUE_EMAIL ?? TO_EMAIL;
+
+/**
+ * Everything below is interpolated into an HTML email. Unescaped, a stray "<"
+ * in a message body silently mangles the rest of the mail, and a deliberate one
+ * injects markup into Doug's inbox. Escape at the boundary.
+ */
+function esc(v: string): string {
+  return v
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
 
 interface ContactPayload {
-  formType: "contact" | "lunch-learn" | "newsletter";
+  formType: "contact" | "lunch-learn" | "newsletter" | "catalogue-print";
   name?: string;
   email?: string;
   company?: string;
   city?: string;
   phone?: string;
+  address?: string; // catalogue-print: street, then "City PR A1A 1A1"
   projectType?: string;
   format?: string; // lunch-learn: In-person | Virtual | Either
   message?: string;
@@ -17,15 +36,19 @@ interface ContactPayload {
 }
 
 function buildEmailHtml(data: ContactPayload): string {
+  // City is folded into the address block for catalogue requests, so printing
+  // it twice would just look like a mistake on a shipping label.
+  const showCity = Boolean(data.city) && data.formType !== "catalogue-print";
   const rows = [
-    data.name && `<tr><td><strong>Name</strong></td><td>${data.name}</td></tr>`,
-    data.email && `<tr><td><strong>Email</strong></td><td>${data.email}</td></tr>`,
-    data.company && `<tr><td><strong>Company</strong></td><td>${data.company}</td></tr>`,
-    data.city && `<tr><td><strong>City</strong></td><td>${data.city}</td></tr>`,
-    data.phone && `<tr><td><strong>Phone</strong></td><td>${data.phone}</td></tr>`,
-    data.projectType && `<tr><td><strong>Project Type</strong></td><td>${data.projectType}</td></tr>`,
-    data.format && `<tr><td><strong>Session Format</strong></td><td>${data.format}</td></tr>`,
-    data.message && `<tr><td><strong>Message</strong></td><td style="white-space:pre-wrap">${data.message}</td></tr>`,
+    data.name && `<tr><td><strong>Name</strong></td><td>${esc(data.name)}</td></tr>`,
+    data.email && `<tr><td><strong>Email</strong></td><td>${esc(data.email)}</td></tr>`,
+    data.company && `<tr><td><strong>Company</strong></td><td>${esc(data.company)}</td></tr>`,
+    showCity && `<tr><td><strong>City</strong></td><td>${esc(data.city!)}</td></tr>`,
+    data.phone && `<tr><td><strong>Phone</strong></td><td>${esc(data.phone)}</td></tr>`,
+    data.address && `<tr><td valign="top"><strong>Mail to</strong></td><td style="white-space:pre-wrap">${esc(data.address)}</td></tr>`,
+    data.projectType && `<tr><td><strong>Project Type</strong></td><td>${esc(data.projectType)}</td></tr>`,
+    data.format && `<tr><td><strong>Session Format</strong></td><td>${esc(data.format)}</td></tr>`,
+    data.message && `<tr><td valign="top"><strong>Message</strong></td><td style="white-space:pre-wrap">${esc(data.message)}</td></tr>`,
   ]
     .filter(Boolean)
     .join("\n");
@@ -36,9 +59,11 @@ function buildEmailHtml(data: ContactPayload): string {
       <h2 style="margin:0 0 16px;color:#1a1a1a">
         ${
           data.formType === "lunch-learn"
-            ? "New Lunch & Learn Request"
+            ? "New Lunch &amp; Learn Request"
             : data.formType === "newsletter"
             ? "Newsletter Signup"
+            : data.formType === "catalogue-print"
+            ? "Printed Catalogue Request"
             : "New Contact Form Submission"
         }
       </h2>
@@ -61,6 +86,9 @@ function buildSubjectLine(data: ContactPayload): string {
   }
   if (data.formType === "newsletter") {
     return `Newsletter Signup — ${data.email}`;
+  }
+  if (data.formType === "catalogue-print") {
+    return `Printed Catalogue Request — ${data.name ?? "Unknown"} @ ${data.company ?? "Unknown"}`;
   }
   return `Contact Form — ${data.name ?? "Unknown"} @ ${data.company ?? "Unknown"}`;
 }
@@ -87,7 +115,7 @@ export async function POST(req: NextRequest) {
     const resend = new Resend(process.env.RESEND_API_KEY);
     const { error } = await resend.emails.send({
       from: "HUB Surface Systems <noreply@hubss.com>",
-      to: [TO_EMAIL],
+      to: [body.formType === "catalogue-print" ? CATALOGUE_TO_EMAIL : TO_EMAIL],
       replyTo: body.email,
       subject: buildSubjectLine(body),
       html: buildEmailHtml(body),

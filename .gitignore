@@ -55,3 +55,6 @@ lib/document-sizes.json
 # Generated at build time by scripts/gen-map-blog.mjs
 lib/map-blog-projects.json
 lib/map-count.json
+
+# 28 MB print master - the generator's input, never shipped
+catalogue-source/

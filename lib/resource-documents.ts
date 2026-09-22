@@ -8,6 +8,7 @@
 // resolveJsonModule types the import as its 82 literal keys, and it is looked
 // up with URLs that come from Sanity at runtime.
 import documentSizesJson from './document-sizes.json'
+import { catalogue, catalogueCover, catalogueLabel, catalogueTotal } from "./catalogue";
 
 const DOCUMENT_SIZES = documentSizesJson as Record<string, string>
 
@@ -868,24 +869,46 @@ export const resourceDocuments: ResourceDocument[] = [
     updatedDate: 'Feb 2024',
   },
 
-  // ── 2026 Catalogue (flipbook viewer, not a downloadable PDF) ──
+  // ── The catalogue, twice: the reader and the PDF ──
+  // Two rows on purpose. The reader is the thing to send an architect; the PDF
+  // is the thing they attach to a submittal. Offering only one of them means
+  // somebody has to ask for the other.
+  //
+  // Every field that could go stale on an edition bump is derived from
+  // lib/catalogue-edition.json instead of typed here. The previous entry said
+  // '140 pages' for a 144-page book and pointed its thumbnail at
+  // /catalogue/cover.webp, a hand-placed file from an older edition.
   {
     id: 'catalogue-2026',
-    title: 'HUB Surface Systems Catalogue 2026',
+    title: `HUB Surface Systems Catalogue ${catalogueLabel}`,
     type: 'Catalogue',
     product: 'all',
     productName: 'Full Line',
     applications: [],
     fileUrl: '/catalogue',
-    fileSize: '140 pages',
-    updatedDate: 'June 2026',
+    fileSize: `${catalogueTotal} pages`,
+    updatedDate: 'Sep 2026',
     documentType: 'catalogue',
     featured: true,
     isNew: true,
-    // Version-agnostic cover (written by build_flipbook.py) — never goes
-    // stale on a flipbook version bump, unlike the old hardcoded /vNN/ path.
-    previewImageUrl: '/catalogue/cover.webp',
+    previewImageUrl: catalogueCover ?? undefined,
   },
+  ...(catalogue.download
+    ? [
+        {
+          id: 'catalogue-pdf',
+          title: `HUB Surface Systems Catalogue ${catalogueLabel} (PDF)`,
+          type: 'Catalogue',
+          product: 'all',
+          productName: 'Full Line',
+          applications: [],
+          fileUrl: catalogue.download.href,
+          fileSize: catalogue.download.label,
+          updatedDate: 'Sep 2026',
+          isNew: true,
+        } as ResourceDocument,
+      ]
+    : []),
 
   // ── 2026 Product Flyers (14, one per product) ─────────────────
   {

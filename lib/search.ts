@@ -28,6 +28,26 @@
  *
  * The index is built once at module scope. It is a few hundred entries over
  * static imports, so this costs nothing at runtime and needs no network call.
+ *
+ * SEPT 2026 — four things this still got wrong.
+ *
+ *   PLACES WERE NOT IN IT. "Oakville" returned nothing. So did "Saskatoon",
+ *   "New Westminster" and "British Columbia", on a site whose central claim is
+ *   fifty-nine installations across ten provinces. The work was pinned on the
+ *   map and unreachable from the search box. All fifty-nine are entries now,
+ *   searchable by project, by city, by province code and by province name.
+ *
+ *   ACCENTS BROKE NAMES. The normaliser deleted any character outside
+ *   [a-z0-9+.-], so "Montréal" became "montr al". Nobody could find the three
+ *   Montréal installations by typing either spelling.
+ *
+ *   DOCUMENTS POINTED AT THE LIBRARY, NOT THE DOCUMENT. Every one of the
+ *   eighty-two spec sheets linked to /resources: search found you the right
+ *   sheet and then made you find it again. fileUrl was on the record all along.
+ *
+ *   A MATCH COULD NOT EXPLAIN ITSELF. Scoring knew which lane a token landed
+ *   in and threw it away, so a row that matched on a hidden keyword rendered
+ *   with nothing marked and looked like a bug. The lane is returned now.
  */
 
 import { products } from "./products";
@@ -36,17 +56,22 @@ import { resourceDocuments } from "./resource-documents";
 import { PATTERN_TEMPLATES } from "./pattern-templates";
 import { PRODUCT_KEYWORDS, APPLICATION_KEYWORDS } from "./search-keywords";
 import { PRODUCT_CATALOGUE } from "./product-catalogue";
+import { mapProjects } from "./map-projects";
 import blogIndex from "./blog-index.json";
 import { curatedType, curatedKeywords } from "./field-notes-taxonomy";
 
 export type SearchType =
   | "Product"
   | "Application"
+  | "Project"
   | "Field note"
   | "Document"
   | "Colour"
   | "Pattern"
   | "Page";
+
+/** Which lane a token landed in. Decides whether the match is visible in the row. */
+export type MatchLane = "title" | "subtitle" | "keywords" | "body";
 
 export interface SearchEntry {
   id: string;
@@ -62,13 +87,47 @@ export interface SearchEntry {
   boost: number;
   /** Colour swatch, where the entry is a colourant. */
   hex?: string;
+  /**
+   * Short tag for the row's trailing slot — "PDF" on a document, a province on
+   * a project. Says what pressing Enter will actually do, which matters most
+   * where it leaves the page flow entirely.
+   */
+  badge?: string;
+  /** True when the href is a file rather than a route, so the click is a download. */
+  isFile?: boolean;
 }
 
 export interface SearchHit extends SearchEntry {
   score: number;
   /** The token that produced the strongest match, for highlighting. */
   matched: string;
+  /**
+   * Where that token landed. A hit in `keywords` or `body` is invisible in the
+   * rendered row — the reason "Townhomes" answers "streetbond" is real, but it
+   * is in a lane the visitor cannot see, so the row has to say so itself.
+   */
+  where: MatchLane;
 }
+
+/**
+ * Province codes spelled out, for the keyword lane only.
+ *
+ * The dataset stores "BC". A visitor types "British Columbia", or "Ontario",
+ * or "Quebec" without the accent. All three should find the eleven projects
+ * out west, and none of them did.
+ */
+const PROVINCE_NAMES: Record<string, string> = {
+  AB: "Alberta",
+  BC: "British Columbia",
+  MB: "Manitoba",
+  NB: "New Brunswick",
+  NL: "Newfoundland and Labrador",
+  NS: "Nova Scotia",
+  ON: "Ontario",
+  PE: "Prince Edward Island PEI",
+  QC: "Quebec Québec",
+  SK: "Saskatchewan",
+};
 
 // ── Static pages ──────────────────────────────────────────────────────────────
 const PAGES: Omit<SearchEntry, "boost">[] = [
@@ -149,16 +208,47 @@ function buildIndex(): SearchEntry[] {
     });
   }
 
+  // Every documented installation. Before this, a place query — "Oakville",
+  // "Saskatoon", "New Westminster" — returned nothing at all, on a site whose
+  // central claim is fifty-nine installations across ten provinces. The work
+  // was on the map and nowhere a search box could reach it.
+  //
+  // Product and application go in the BODY lane, not keywords, on purpose: a
+  // project should be unmissable when you search for the place or the job, and
+  // should sit quietly below the systems when you search for a material.
+  for (const p of mapProjects) {
+    out.push({
+      id: `project-${p.id}`,
+      type: "Project",
+      title: p.title,
+      subtitle: `${p.city}, ${p.province}${p.year ? ` · ${p.year}` : ""} · ${p.product}`,
+      // A project with a write-up goes to the write-up. The rest go to the map,
+      // which is where they are actually documented — inventing a page for them
+      // would be worse than sending someone to the thing that exists.
+      href: p.slug ? `/blog/${p.slug}` : "/#map",
+      keywords: `${p.city} ${p.province} ${PROVINCE_NAMES[p.province] ?? ""} installation project reference`,
+      body: `${p.excerpt} ${p.product} ${p.application}`,
+      boost: 20,
+      badge: p.province,
+    });
+  }
+
   for (const d of resourceDocuments) {
+    // The href was /resources for every document — search found the right
+    // sheet, then dropped you on a library of eighty-two to find it again.
+    // fileUrl has been on the record all along.
+    const isPdf = /\.pdf($|\?)/i.test(d.fileUrl);
     out.push({
       id: `doc-${d.title}`,
       type: "Document",
       title: d.title,
       subtitle: `${d.productName} · ${d.type}`,
-      href: "/resources",
+      href: d.fileUrl,
       keywords: `${d.productName} ${d.type} pdf download spec sheet submittal`,
       body: "",
       boost: 8,
+      badge: isPdf ? "PDF" : undefined,
+      isFile: isPdf,
     });
   }
 
@@ -168,7 +258,9 @@ function buildIndex(): SearchEntry[] {
       type: "Pattern",
       title: t.name,
       subtitle: t.note,
-      href: "/patterns",
+      // /patterns renders id={t.slug} on every template, so the anchor lands on
+      // the pattern rather than the top of a page of sixty.
+      href: `/patterns#${t.slug}`,
       keywords: "pattern template stamp streetprint stamped asphalt border",
       body: "",
       boost: 4,
@@ -208,8 +300,23 @@ export function withColours(
 
 // ── Scoring ───────────────────────────────────────────────────────────────────
 
+/**
+ * Accents are folded before anything else. The old normaliser lowercased and
+ * then deleted every character outside [a-z0-9+.-], which turned "Montréal"
+ * into "montr al" and "Québec City" into "qu bec city" — so the three Montréal
+ * installations and the Québec City one could not be found by anybody typing
+ * the name the ordinary way, with or without the accent. Decomposing first and
+ * dropping the combining marks makes both spellings the same string.
+ */
 const norm = (s: string) =>
-  s.toLowerCase().replace(/[‐-―]/g, "-").replace(/[^a-z0-9+.\-\s]/g, " ").replace(/\s+/g, " ").trim();
+  s
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/[‐-―]/g, "-")
+    .replace(/[^a-z0-9+.\-\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 /**
  * Damerau-Levenshtein, bailing out as soon as it exceeds `max`.
@@ -249,45 +356,65 @@ const slack = (t: string) => (t.length >= 8 ? 2 : t.length >= 5 ? 1 : 0);
  * rather than accumulating, so a title hit is never out-voted by a body that
  * happens to repeat the word five times.
  */
-function scoreToken(token: string, e: SearchEntry): number {
+interface TokenMatch {
+  s: number;
+  lane: MatchLane;
+}
+const NONE: TokenMatch = { s: 0, lane: "body" };
+
+function scoreToken(token: string, e: SearchEntry): TokenMatch {
   const title = norm(e.title);
   const sub = norm(e.subtitle);
   const kw = norm(e.keywords);
   const body = norm(e.body);
   const words = title.split(" ");
 
-  if (title === token) return 1000;
-  if (title.startsWith(token)) return 620;
-  if (words.some((w) => w === token)) return 480;
-  if (words.some((w) => w.startsWith(token))) return 360;
-  if (title.includes(token)) return 260;
+  if (title === token) return { s: 1000, lane: "title" };
+  if (title.startsWith(token)) return { s: 620, lane: "title" };
+  if (words.some((w) => w === token)) return { s: 480, lane: "title" };
+  if (words.some((w) => w.startsWith(token))) return { s: 360, lane: "title" };
+  if (title.includes(token)) return { s: 260, lane: "title" };
 
   // Typo tolerance, title only. Narrow on purpose: a slipped key, not a guess.
   const s = slack(token);
-  if (s > 0 && words.some((w) => w.length >= 4 && within(w, token, s))) return 210;
+  if (s > 0 && words.some((w) => w.length >= 4 && within(w, token, s))) return { s: 210, lane: "title" };
 
-  if (kw.split(" ").some((w) => w === token)) return 190;
-  if (kw.includes(token)) return 150;
+  if (kw.split(" ").some((w) => w === token)) return { s: 190, lane: "keywords" };
+  if (kw.includes(token)) return { s: 150, lane: "keywords" };
   // Domain vocabulary lives in the keyword lane, not in titles — "thermoplastic",
   // "retroreflective", "methacrylate". Those are exactly the words a visitor
   // mistypes, so the fuzzy pass has to reach them too.
-  if (s > 0 && kw.split(" ").some((w) => w.length >= 5 && within(w, token, s))) return 130;
-  if (sub.split(" ").some((w) => w === token)) return 120;
-  if (sub.includes(token)) return 90;
-  if (body.includes(token)) return 55;
+  if (s > 0 && kw.split(" ").some((w) => w.length >= 5 && within(w, token, s))) return { s: 130, lane: "keywords" };
+  if (sub.split(" ").some((w) => w === token)) return { s: 120, lane: "subtitle" };
+  if (sub.includes(token)) return { s: 90, lane: "subtitle" };
+  if (body.includes(token)) return { s: 55, lane: "body" };
 
   // Singular/plural, cheaply. "crosswalks" should find "crosswalk".
   const stem = token.endsWith("s") ? token.slice(0, -1) : token + "s";
   if (stem.length > 3) {
-    if (words.some((w) => w === stem)) return 300;
-    if (title.includes(stem)) return 180;
-    if (kw.includes(stem)) return 120;
-    if (body.includes(stem)) return 40;
+    if (words.some((w) => w === stem)) return { s: 300, lane: "title" };
+    if (title.includes(stem)) return { s: 180, lane: "title" };
+    if (kw.includes(stem)) return { s: 120, lane: "keywords" };
+    if (body.includes(stem)) return { s: 40, lane: "body" };
   }
-  return 0;
+  return NONE;
 }
 
-export function search(query: string, entries: SearchEntry[], limit = 120): SearchHit[] {
+/**
+ * `limit` bounds the sorted array, not the panel — groupHits() does the
+ * capping, and it can render at most thirty-eight rows however many hits it is
+ * handed. It has to sit well above that, because the slice happens BEFORE the
+ * grouping and takes the tail off the whole result set at once.
+ *
+ * At 120 it silently started doing exactly that. Adding fifty-nine
+ * installations pushed "streetbond" past the ceiling — every StreetBond
+ * project matched its own subtitle at 140 and every StreetBond colourant at
+ * 122, and the five applications that matched in body text at 83 fell off the
+ * end. The panel lost its APPLICATION group entirely: no error, no empty
+ * state, just five correct answers that stopped appearing. 400 leaves room for
+ * the index to grow again without the same quiet failure.
+ */
+export function search(query: string, entries: SearchEntry[], limit = 400): SearchHit[] {
   const q = norm(query);
   if (q.length < 2) return [];
   const tokens = q.split(" ").filter(Boolean);
@@ -297,19 +424,20 @@ export function search(query: string, entries: SearchEntry[], limit = 120): Sear
     let total = 0;
     let best = 0;
     let matched = tokens[0];
+    let where: MatchLane = "body";
     let missed = false;
     for (const t of tokens) {
-      const s = scoreToken(t, e);
-      if (s === 0) { missed = true; break; }   // every token must land somewhere
-      total += s;
-      if (s > best) { best = s; matched = t; }
+      const m = scoreToken(t, e);
+      if (m.s === 0) { missed = true; break; }   // every token must land somewhere
+      total += m.s;
+      if (m.s > best) { best = m.s; matched = t; where = m.lane; }
     }
     if (missed) continue;
 
     // The whole phrase appearing intact is the strongest signal there is.
     if (tokens.length > 1 && norm(`${e.title} ${e.subtitle} ${e.keywords}`).includes(q)) total += 400;
 
-    hits.push({ ...e, score: total / tokens.length + e.boost, matched });
+    hits.push({ ...e, score: total / tokens.length + e.boost, matched, where });
   }
 
   return hits
@@ -317,7 +445,7 @@ export function search(query: string, entries: SearchEntry[], limit = 120): Sear
     .slice(0, limit);
 }
 
-const ORDER: SearchType[] = ["Product", "Application", "Page", "Field note", "Document", "Pattern", "Colour"];
+const ORDER: SearchType[] = ["Product", "Application", "Project", "Page", "Field note", "Document", "Pattern", "Colour"];
 
 /**
  * Per-type caps.
@@ -331,6 +459,7 @@ const ORDER: SearchType[] = ["Product", "Application", "Page", "Field note", "Do
 const CAP: Record<SearchType, number> = {
   Product: 5,
   Application: 5,
+  Project: 5,
   Page: 3,
   "Field note": 8,
   Document: 4,

@@ -57,7 +57,11 @@ const QUICK: { label: string; href: string; hint: string }[] = [
   { label: "Lunch & Learn", href: "/lunch-learn", hint: "Book a session" },
 ];
 
-const TRY = ["stamped asphalt", "rainbow crosswalk", "150 mil", "LEED heat island", "bike lane", "colour card"];
+// "Vancouver" earns its place by teaching the one thing nobody would guess:
+// the index knows where the work is. Fifty-nine installations across ten
+// provinces are searchable by city and by province name, and a visitor only
+// finds that out if something tells them.
+const TRY = ["stamped asphalt", "rainbow crosswalk", "150 mil", "Vancouver", "LEED heat island", "bike lane", "colour card"];
 
 /**
  * Group labels are typography, not colour.
@@ -133,7 +137,21 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
   useEffect(() => { inputRef.current?.focus(); }, []);
 
   const go = useCallback(
-    (href: string) => { onClose(); router.push(href); },
+    (href: string, isFile?: boolean) => {
+      // A spec sheet is a file, not a route. router.push("/docs/…pdf") asks the
+      // App Router to resolve a page that does not exist — the visitor gets a
+      // beat of nothing before the browser gives up and hard-loads it.
+      //
+      // It also opens in its own tab and leaves the palette standing, because a
+      // specifier assembling a submittal pulls three or four sheets in a row.
+      // Closing the search after each one would make them reopen it each time.
+      if (isFile) {
+        window.open(href, "_blank", "noopener,noreferrer");
+        return;
+      }
+      onClose();
+      router.push(href);
+    },
     [onClose, router]
   );
 
@@ -149,7 +167,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
       }
       if (e.key === "Enter") {
         const target = flat[active];
-        if (target) { e.preventDefault(); go(target.href); }
+        if (target) { e.preventDefault(); go(target.href, target.isFile); }
         return;
       }
       if (e.key === "Tab" && dialogRef.current) {
@@ -353,6 +371,10 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                     index += 1;
                     const isActive = index === active;
                     const myIndex = index;
+                    // The strongest token landed somewhere the row does not
+                    // show — a keyword or a body field. Nothing will be marked
+                    // in either line, so the row states its own reason.
+                    const hiddenMatch = h.where === "keywords" || h.where === "body";
                     return (
                       <button
                         key={h.id}
@@ -360,7 +382,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                         aria-selected={isActive}
                         data-active={isActive}
                         onMouseEnter={() => setActive(myIndex)}
-                        onClick={() => go(h.href)}
+                        onClick={() => go(h.href, h.isFile)}
                         className="w-full text-left px-3 py-2.5 flex items-center gap-3 rounded-lg transition-colors"
                         // Selection is elevation, not colour. The orange left
                         // rule read as a status marker — the kind of thing that
@@ -394,10 +416,27 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                             </span>
                           )}
                         </span>
-                        {isActive && (
-                          // Accent 3: the return key, on the one row Enter will
-                          // open. This is the palette's actual next action, so
-                          // it is the one row-level element that earns colour.
+                        {/* The trailing slot. One per row, never two.
+
+                            Active row: the action, and it names the action
+                            honestly — a document leaves the site and lands in a
+                            new tab, so it says PDF with a download arrow rather
+                            than promising to "open" something in place.
+
+                            Inactive row: the reason, if the row needs one.
+                            Searching "streetbond" returned Townhomes, Bike
+                            Lanes and Splash Pads with nothing marked in either
+                            line, because they matched in the keyword lane —
+                            correct, and indistinguishable from a bug. Naming
+                            the term that landed turns five confusing rows into
+                            five obviously-deliberate ones.
+
+                            Otherwise the badge: a province on a project, PDF on
+                            a download. Both answer "what am I about to get". */}
+                        {isActive ? (
+                          // Accent 3: the one row Enter will act on. This is the
+                          // palette's actual next action, so it is the one
+                          // row-level element that earns colour.
                           //
                           // Drawn rather than typed. The ↵ character renders at
                           // whatever weight and baseline the font happens to
@@ -414,13 +453,34 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                               background: "rgba(249,115,22,0.10)",
                             }}
                           >
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                              <path d="M20 5v6a3 3 0 0 1-3 3H5" />
-                              <path d="M9 10l-4 4 4 4" />
-                            </svg>
-                            <span className="text-[10px] font-bold uppercase tracking-[0.1em]">Open</span>
+                            {h.isFile ? (
+                              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                <path d="M12 3v12" /><path d="M7 11l5 5 5-5" /><path d="M5 20h14" />
+                              </svg>
+                            ) : (
+                              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                <path d="M20 5v6a3 3 0 0 1-3 3H5" />
+                                <path d="M9 10l-4 4 4 4" />
+                              </svg>
+                            )}
+                            <span className="text-[10px] font-bold uppercase tracking-[0.1em]">{h.isFile ? "PDF" : "Open"}</span>
                           </span>
-                        )}
+                        ) : hiddenMatch ? (
+                          <span
+                            className="flex-shrink-0 inline-flex items-center rounded text-[10px] font-semibold px-1.5"
+                            style={{ height: 20, color: "var(--text-faint)", background: "var(--fill-subtle)", border: "1px solid var(--border-color)", maxWidth: 132 }}
+                            title={`Matched “${h.matched}”`}
+                          >
+                            <span className="truncate">{h.matched}</span>
+                          </span>
+                        ) : h.badge ? (
+                          <span
+                            className="flex-shrink-0 text-[10px] font-semibold tabular-nums"
+                            style={{ color: "var(--text-faint)", letterSpacing: "0.06em" }}
+                          >
+                            {h.badge}
+                          </span>
+                        ) : null}
                       </button>
                     );
                   })}

@@ -113,8 +113,17 @@ export default async function Home() {
       <FeaturedBlogPost />
       {/* off-white → slate (lunch learn) */}
       <InstagramStrip />
-      {/* Canada map — controlled by SITE_FLAGS.showMap in lib/site-flags.ts */}
-      {SITE_FLAGS.showMap && <CanadaMapWrapper />}
+      {/* Canada map — controlled by SITE_FLAGS.showMap in lib/site-flags.ts.
+          #map is a real anchor: thirty of the fifty-nine installations have no
+          write-up of their own, and a search for one of those places sends the
+          visitor here, to the map where it is actually documented. Wrapped here
+          rather than set on the section inside CanadaMap so the anchor survives
+          whatever that component does to its own markup. */}
+      {SITE_FLAGS.showMap && (
+        <div id="map" style={{ scrollMarginTop: 80 }}>
+          <CanadaMapWrapper />
+        </div>
+      )}
       {/* LunchLearn — Moose mascot rendered internally by the component */}
       <LunchLearn />
       <Footer />

@@ -18,6 +18,25 @@ import RelatedPosts from "@/components/blog/RelatedPosts";
 import InstagramShareButton from "@/components/blog/InstagramShareButton";
 import BlogImage from "@/components/blog/BlogImage";
 
+/**
+ * The posts in content/blog are the only posts. Any other slug is a real 404.
+ *
+ * Left at the default (true), an unknown slug was rendered on demand, and the
+ * response was already committed as a 200 before notFound() ran. The root
+ * app/loading.tsx puts every page behind a Suspense boundary, so the shell
+ * streams first. Measured on production, Sep 2026: /blog/<anything> returned
+ * 200 with the site-default title and robots "index, follow", which made every
+ * dead link an indexable page. Set to false, Next answers an unknown slug from
+ * the route table with a 404 before anything renders. /catalogue/[page]
+ * already works this way.
+ *
+ * Nothing legitimate needs a slug the build didn't know about. Posts go live
+ * by commit and deploy. Drafts preview from content/blog/drafts through the
+ * admin API, never through this route. A post marked `draft: true` is left out
+ * by getAllPosts(), so it 404s here too.
+ */
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   return getAllPosts().map((p) => ({ slug: p.slug }));
 }

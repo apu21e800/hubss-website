@@ -9,7 +9,14 @@ import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { products } from "@/lib/products";
 import { catalogue, catalogueLabel, catalogueTotal } from "@/lib/catalogue";
 import { applications } from "@/lib/applications";
+import { CHROME_MARKS } from "@/lib/chrome-images.mjs";
+import { FEATURED_POSTS } from "@/lib/nav-featured-posts.mjs";
 import ThemeToggle from "@/components/ui/ThemeToggle";
+// Every photograph in this file is a ChromeImg: baked at build time, served
+// static. Nothing the menus draw may go through /_next/image — opening the
+// phone drawer alone used to fire ~35 optimiser transforms. The two header
+// logos below stay on next/image because they are SVGs marked `unoptimized`.
+import ChromeImg from "@/components/ui/ChromeImg";
 
 /**
  * The search palette loads when somebody opens it, not before.
@@ -137,33 +144,8 @@ const APPLICATION_GROUPS = [
 ];
 
 // ── Curated Field Notes for mega menu ────────────────────────────────────
-// Hardcoded for client-component context; swap manually when featuring different posts.
-const FEATURED_POSTS = [
-  {
-    slug: "best-crosswalks-canada",
-    title: "Best crosswalks in Canada",
-    category: "Field Notes",
-    image: "/images/blog/best-crosswalks-canada/featured.jpg",
-  },
-  {
-    slug: "ubc-musqueam-crosswalk",
-    title: "UBC × Musqueam — cultural identity in the street surface",
-    category: "Project Profile",
-    image: "/images/blog/ubc-musqueam-crosswalk/featured.jpg",
-  },
-  {
-    slug: "streetbondsr-solar-reflective-coatings",
-    title: "StreetBondSR — cooler asphalt for hot cities",
-    category: "Field Notes",
-    image: "/images/blog/streetbondsr-solar-reflective-coatings/featured.jpg",
-  },
-  {
-    slug: "transportation-infrastructure-guide",
-    title: "Transportation infrastructure — the surface specifier's guide",
-    category: "White Paper",
-    image: "/images/blog/transportation-infrastructure-guide/featured.jpg",
-  },
-];
+// FEATURED_POSTS lives in lib/nav-featured-posts.mjs — swap posts there. The
+// image baker reads the same list, so a swapped post gets its thumbnails.
 
 // ── Mega menu — shared shell ─────────────────────────────────────────
 // Wide container, generous padding, dark surface, accent top line.
@@ -190,12 +172,14 @@ function LLMenuCard() {
     >
       <span className="relative flex-shrink-0 w-10 h-10">
         <span className="absolute inset-0 rounded-full" style={{ background: "rgba(249,115,22,0.14)", border: "1.5px solid rgba(249,115,22,0.45)" }} />
-        <Image
-          src="/images/lunch-learn/moose.png"
+        {/* 122% of the 40px ring = 49px tall; Moose is square, so 49px wide. */}
+        <ChromeImg
+          family="moose"
+          src={CHROME_MARKS.moose}
           alt="Moose, the HUB site dog"
           width={160}
           height={200}
-          sizes="48px"
+          sizes="49px"
           className="absolute bottom-0 left-1/2 w-auto"
           style={{ height: "122%", maxWidth: "none", transform: "translateX(-50%)" }}
         />
@@ -244,12 +228,12 @@ function MenuFooterStrip() {
         className="group flex items-center gap-4 px-3 py-2.5 rounded-xl transition-colors hover:bg-[var(--ink-05)]"
       >
         <div className="relative flex-shrink-0 rounded-md overflow-hidden" style={{ width: 64, height: 64 }}>
-          <Image
+          <ChromeImg
+            family="post"
             src={latest.image}
             alt={latest.title}
-            fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-            sizes="96px"
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            sizes="64px"
           />
         </div>
         <div className="min-w-0">
@@ -432,11 +416,11 @@ function FieldNotesMegaMenu() {
     <div className="w-full max-h-[calc(100vh-72px)] overflow-y-auto overscroll-contain">
       <div className="relative lg:min-h-[calc(100vh-72px)]">
         {/* The cover, full bleed */}
-        <Image
+        <ChromeImg
+          family="cover"
           src={featured.image}
           alt={featured.title}
-          fill
-          className="object-cover"
+          className="absolute inset-0 h-full w-full object-cover"
           style={{ objectPosition: "center 42%" }}
           sizes="100vw"
         />
@@ -517,12 +501,12 @@ function FieldNotesMegaMenu() {
                   className="group flex gap-3 px-2 py-2 rounded-md transition-colors hover:bg-[var(--ink-05)]"
                 >
                   <div className="relative flex-shrink-0 rounded-md overflow-hidden" style={{ width: 52, height: 52 }}>
-                    <Image
+                    <ChromeImg
+                      family="post"
                       src={post.image}
                       alt={post.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      sizes="72px"
+                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      sizes="52px"
                     />
                   </div>
                   <div className="flex-1 min-w-0 flex flex-col justify-center">
@@ -764,18 +748,19 @@ function MobileNavRow({
       className="flex items-center gap-4 px-1 py-[18px] rounded-xl active:scale-[0.98] active:opacity-75 transition-[transform,opacity] duration-100"
       style={{ borderBottom: "1px solid var(--ink-05)" }}
     >
-      {/* Thumbnail */}
+      {/* Thumbnail — a square baked at the old object-position, center 65%,
+          so the file is exactly what this box used to crop to. */}
       <div
         className="flex-shrink-0 rounded-lg overflow-hidden"
         style={{ width: 56, height: 56 }}
       >
-        <Image
+        <ChromeImg
+          family="row"
           src={imageUrl}
           alt={name}
           width={56}
           height={56}
           className="w-full h-full object-cover"
-          style={{ objectPosition: "center 65%" }}
           sizes="56px"
         />
       </div>
@@ -1014,7 +999,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                       }}
                     >
                       <div className="relative flex-shrink-0 rounded-xl overflow-hidden" style={{ width: 64, height: 64 }}>
-                        <Image src={post.image} alt={post.title} fill className="object-cover" sizes="64px" />
+                        <ChromeImg family="post" src={post.image} alt={post.title} className="absolute inset-0 h-full w-full object-cover" sizes="64px" />
                       </div>
                       <div className="flex-1 min-w-0 flex flex-col justify-center gap-1">
                         <p className="text-[9px] font-bold tracking-[0.18em] uppercase" style={{ color: "var(--accent-text-lg)" }}>{post.category}</p>

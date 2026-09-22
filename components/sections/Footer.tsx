@@ -1,7 +1,10 @@
 import Link from "next/link";
-import Image from "next/image";
 import { products } from "@/lib/products";
+import { CHROME_MARKS } from "@/lib/chrome-images.mjs";
 import { SocialLinks } from "@/components/ui/SocialLinks";
+// The footer is on every page; its two marks are baked at build time and
+// served static rather than transformed by /_next/image on every visit.
+import ChromeImg from "@/components/ui/ChromeImg";
 
 const footerApplications = [
   { label: "Crosswalks",          slug: "crosswalks" },
@@ -26,7 +29,7 @@ export default function Footer() {
 
       {/* Wheel watermark — subtle background accent */}
       <div style={{ position: "absolute", bottom: "24px", right: "32px", opacity: 0.04, pointerEvents: "none", zIndex: 0 }}>
-        <Image src="/images/hub-wheel-orange.png" alt="" width={180} height={180} aria-hidden="true" />
+        <ChromeImg family="wheel" src={CHROME_MARKS.wheel} alt="" width={180} height={180} sizes="180px" aria-hidden="true" />
       </div>
 
       {/* Full-width gradient divider */}
@@ -43,13 +46,15 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <div className="mb-5">
-              {/* next/image: fixed 140x44 render size (see style below), never
-                  scales with viewport, so no `sizes` prop is needed here. */}
-              <Image
-                src="/images/hub-logo-white.png"
+              {/* Fixed 44px tall, never scales with the viewport; at the
+                  logo's 2432x701 aspect that is 153px wide. */}
+              <ChromeImg
+                family="logo"
+                src={CHROME_MARKS.logo}
                 alt="HUB Surface Systems"
                 width={140}
                 height={44}
+                sizes="153px"
                 style={{ display: "block", height: 44, width: "auto" }}
               />
             </div>

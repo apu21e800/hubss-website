@@ -21,6 +21,8 @@ import { useState, FormEvent } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { CHROME_MARKS } from "@/lib/chrome-images.mjs";
+import ChromeImg from "@/components/ui/ChromeImg";
 
 export type LunchLearnVariant = "boardroom" | "ticket" | "proof";
 
@@ -57,7 +59,10 @@ const STAT_CHIPS = [
 const CITY_WALL = ["City of Toronto", "York Region", "City of Vancouver", "UBC", "TransLink", "City of Ottawa", "Halifax RM", "City of Calgary"];
 
 const IMG = { src: "/images/products/streetbond/streetbond-112.jpg", alt: "StreetBond coloured pavement installation — the systems covered in a HUB Lunch & Learn session" };
-const MOOSE = { src: "/images/lunch-learn/moose.png", alt: "Moose, the HUB Surface Systems site dog, in his hard hat and safety vest" };
+// Boardroom — the variant on every page via LunchLearn.tsx — draws Moose as a
+// baked ChromeImg. Ticket and Proof only render on /ll-preview and still use
+// next/image; Proof draws him far larger than the baked sizes go.
+const MOOSE = { src: CHROME_MARKS.moose, alt: "Moose, the HUB Surface Systems site dog, in his hard hat and safety vest" };
 
 // ── Shared form brain ────────────────────────────────────
 function useLunchLearnForm(withFormat: boolean) {
@@ -224,12 +229,15 @@ function Boardroom({ hideForm = false }: { hideForm?: boolean }) {
                         boxShadow: "0 0 0 3px rgba(249,115,22,0.12), 0 6px 20px rgba(0,0,0,0.35)",
                       }}
                     />
-                    <Image
+                    {/* 127% of the ring: 91px tall on phones, 102px from sm
+                        up; Moose is square, so the same wide. */}
+                    <ChromeImg
+                      family="moose"
                       src={MOOSE.src}
                       alt={MOOSE.alt}
                       width={320}
                       height={400}
-                      sizes="96px"
+                      sizes="(min-width: 640px) 102px, 91px"
                       className="absolute bottom-0 left-1/2 w-auto"
                       style={{ height: "127%", maxWidth: "none", transform: "translateX(-50%)", filter: "drop-shadow(0 3px 6px rgba(0,0,0,0.45))" }}
                     />

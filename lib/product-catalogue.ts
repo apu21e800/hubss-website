@@ -220,3 +220,28 @@ export const PRODUCT_CATALOGUE: Record<string, CatalogueEntry> = {
 export function catalogueFor(slug: string): CatalogueEntry | undefined {
   return PRODUCT_CATALOGUE[slug];
 }
+
+/**
+ * The book's own index — page 8 of the 2026-27 master, "Ten systems / Our
+ * systems, how they work, and where to find them." One line per system, in the
+ * order the page prints them. Transcribed from public/catalogue/2026-27/
+ * p008-1400.webp on 22 Sep 2026, verbatim — including the lines that end
+ * without a full stop, because that is how the printed page sets them.
+ *
+ * The /products index uses these as its card lines: it is the only place the
+ * book describes every system in one breath, so it is the closest thing the
+ * book has to an index card. The four systems the book does not cover
+ * (AirMark, ChipFill, AggreFill, Fast Patch DPR) have no line here, on purpose.
+ */
+export const SYSTEMS_INDEX: Record<string, string> = {
+  "traffic-patterns": "Using colour, your design, heat-fused onto asphalt or concrete.",
+  "traffic-patterns-xd": "Using patterns, colour and aggregate, heat fused and stamped on asphalt",
+  streetprint: "The original stamped asphalt system.",
+  streetbond: "Performance coatings that add colour and preservation to your projects.",
+  streetbondsr: "Solar reflective coatings",
+  decomark: "Wayfinding, messaging, graphics, public art, heat-fused to asphalt or concrete",
+  mmax: "Industry leading MMA, transit lanes and area markings",
+  duratherm: "Inlaid, flush mounted thermoplastic markings",
+  durashield: "Maintenance coating for asphalt.",
+  premark: "Pre-cut, heat-applied thermoplastic markings",
+};

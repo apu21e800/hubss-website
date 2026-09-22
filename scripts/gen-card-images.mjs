@@ -49,14 +49,34 @@ const FORCE = process.argv.includes("--force");
 const log = (...a) => console.log("[cards]", ...a);
 const warn = (...a) => console.warn("[cards]", ...a);
 
-/** "50% 75%" -> [0.5, 0.75]; anything unparseable centres. */
-function parsePosition(position) {
-  const parts = String(position ?? "").trim().split(/\s+/);
-  const pct = (s) => {
-    const m = /^(-?\d+(?:\.\d+)?)%$/.exec(s ?? "");
-    return m ? Math.min(1, Math.max(0, Number(m[1]) / 100)) : 0.5;
-  };
-  return [pct(parts[0]), pct(parts[1] ?? parts[0])];
+/**
+ * CSS object-position, the subset that makes sense for a crop: percentages and
+ * the keywords left / center / right / top / bottom, x then y. One value means
+ * that x and a centred y, as in CSS ("30%" is "30% 50%", "left" is "0% 50%";
+ * "top" or "bottom" alone set y). Anything else is warned about and centred.
+ */
+function parsePosition(slug, position) {
+  const KEYWORDS = { left: [0, null], right: [1, null], top: [null, 0], bottom: [null, 1], center: [null, null] };
+  const parts = String(position ?? "").trim().toLowerCase().split(/\s+/).filter(Boolean);
+  let x = 0.5;
+  let y = 0.5;
+  let ok = parts.length > 0 && parts.length <= 2;
+  parts.forEach((p, i) => {
+    const pct = /^(-?\d+(?:\.\d+)?)%$/.exec(p);
+    if (pct) {
+      const v = Math.min(1, Math.max(0, Number(pct[1]) / 100));
+      if (i === 0) x = v;
+      else y = v;
+    } else if (p in KEYWORDS) {
+      const [kx, ky] = KEYWORDS[p];
+      if (kx !== null) x = kx;
+      if (ky !== null) y = ky;
+    } else {
+      ok = false;
+    }
+  });
+  if (!ok) warn(`${slug}: position "${position}" not understood — centring the crop`);
+  return [x, y];
 }
 
 function readManifest() {
@@ -92,7 +112,7 @@ async function bake(slug, entry, previous) {
   // computed on the picture as a person sees it, not as the sensor stored it.
   const upright = await sharp(bytes).rotate().toBuffer({ resolveWithObject: true });
   const { width: srcW, height: srcH } = upright.info;
-  const [px, py] = parsePosition(entry.position);
+  const [px, py] = parsePosition(slug, entry.position);
 
   let cropW = srcW;
   let cropH = Math.round((srcW * 3) / 4);
@@ -103,8 +123,11 @@ async function bake(slug, entry, previous) {
   const left = Math.round((srcW - cropW) * px);
   const top = Math.round((srcH - cropH) * py);
 
+  // Every standard width the crop can fill, then the crop's own width as the
+  // top size when it falls short of the largest — once, even if it happens to
+  // equal a standard width (an 800x600 source must not list 800 twice).
   const widths = WIDTHS.filter((w) => w <= cropW);
-  if (widths.length < WIDTHS.length) widths.push(cropW);
+  if (cropW < WIDTHS[WIDTHS.length - 1] && !widths.includes(cropW)) widths.push(cropW);
 
   fs.mkdirSync(OUT_DIR, { recursive: true });
   for (const w of widths) {

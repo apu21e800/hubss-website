@@ -38,12 +38,14 @@ export const PRODUCT_CATEGORIES: ProductCategory[] = [
   {
     label: "Coatings",
     slugs: ["streetbond", "streetbondsr", "mmax", "durashield"],
-    // Each clause is a member's own catalogue line: "The colour system."
-    // (StreetBond title), "Solar reflective coating." (SR title), "transit
-    // lanes and area markings" (MMAX, p8), "Pavement maintenance coating."
-    // (DuraShield title; its spec: "Preserves and protects asphalt").
+    // Each clause is a member's own catalogue line: "Performance coatings
+    // that add colour" (StreetBond, p8 — the printed spread retitled it "The
+    // colour.", so the older "colour system" wording is not used), "Solar
+    // reflective coating." (SR title), "transit lanes and area markings"
+    // (MMAX, p8), "Pavement maintenance coating." (DuraShield title; its spec:
+    // "Preserves and protects asphalt").
     intro:
-      "Colour, reflectance and protection for pavement — the StreetBond colour system, solar-reflective StreetBondSR, MMA lane and area markings, and DuraShield maintenance coating.",
+      "Colour, reflectance and protection for pavement — StreetBond performance coatings, solar-reflective StreetBondSR, MMA lane and area markings, and DuraShield maintenance coating.",
   },
   {
     label: "Stamped Asphalt",

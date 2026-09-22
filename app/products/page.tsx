@@ -142,7 +142,7 @@ export const metadata = buildMetadata({
 const SIZES = {
   three: "(min-width: 1280px) 389px, (min-width: 1024px) calc((100vw - 112px) / 3), (min-width: 640px) calc((100vw - 72px) / 2), calc(100vw - 32px)",
   four: "(min-width: 1280px) 286px, (min-width: 640px) calc((100vw - 72px) / 2), calc(100vw - 32px)",
-  feature: "(min-width: 1280px) 480px, (min-width: 1024px) calc((100vw - 64px) * 0.4), calc(100vw - 32px)",
+  feature: "(min-width: 1280px) 480px, (min-width: 1024px) calc((100vw - 64px) * 0.4), (min-width: 640px) calc((100vw - 72px) / 2), calc(100vw - 32px)",
 };
 
 function Photo({ image, sizes, eager = false, className = "" }: { image: CardImage; sizes: string; eager?: boolean; className?: string }) {
@@ -182,9 +182,12 @@ function Facts({ facts }: { facts: Fact[] }) {
   );
 }
 
+// Resting colours live in classes, not inline styles, so the hover: variants
+// can override them — an inline style beats any class. The keyboard focus ring
+// comes from the paper rule in globals.css (--accent-text, the card's own
+// corners), not from here: that rule is unlayered and would win anyway.
 const cardClass =
-  "group flex h-full flex-col overflow-hidden rounded-xl border transition-all duration-200 hover:-translate-y-1 hover:border-[rgba(184,62,11,0.45)] hover:shadow-[0_12px_32px_rgba(27,26,24,0.10)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent-text)]";
-const cardStyle = { background: "var(--bg-card)", borderColor: "var(--border-color)" } as const;
+  "group flex h-full flex-col overflow-hidden rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] transition-all duration-200 hover:-translate-y-1 hover:border-[rgba(184,62,11,0.45)] hover:shadow-[0_12px_32px_rgba(27,26,24,0.10)]";
 
 function ViewLink({ label = "View system" }: { label?: string }) {
   return (
@@ -199,7 +202,7 @@ function ViewLink({ label = "View system" }: { label?: string }) {
 
 function SystemCard({ card, sizes, eager }: { card: Card; sizes: string; eager: boolean }) {
   return (
-    <Link href={`/products/${card.slug}`} className={cardClass} style={cardStyle}>
+    <Link href={`/products/${card.slug}`} className={cardClass}>
       {card.image && (
         <div className="relative aspect-[4/3] overflow-hidden" style={{ background: "var(--bg-card-surface)" }}>
           <Photo image={card.image} sizes={sizes} eager={eager} />
@@ -227,7 +230,7 @@ function SystemCard({ card, sizes, eager }: { card: Card; sizes: string; eager: 
 function FeatureCard({ card }: { card: Card }) {
   const subhead = catalogueFor(card.slug)?.subhead;
   return (
-    <Link href={`/products/${card.slug}`} className={`${cardClass} lg:flex-row`} style={cardStyle}>
+    <Link href={`/products/${card.slug}`} className={`${cardClass} lg:flex-row`}>
       {card.image && (
         <div className="relative aspect-[4/3] overflow-hidden lg:w-3/5 lg:flex-none" style={{ background: "var(--bg-card-surface)" }}>
           <Photo image={card.image} sizes={SIZES.feature} />
@@ -249,7 +252,7 @@ function FeatureCard({ card }: { card: Card }) {
 
 function SecondaryTile({ secondary }: { secondary: NonNullable<ProductCategory["secondary"]> }) {
   return (
-    <Link href={secondary.href} className={cardClass} style={cardStyle}>
+    <Link href={secondary.href} className={cardClass}>
       <div className="flex flex-1 flex-col p-6 sm:p-8">
         {/* The herringbone template sheet — the real dimensioned CAD drawing
             from the catalogue's template pages. The file is white line-work
@@ -262,8 +265,8 @@ function SecondaryTile({ secondary }: { secondary: NonNullable<ProductCategory["
           alt=""
           loading="lazy"
           decoding="async"
-          className="mb-6 h-auto w-full"
-          style={{ filter: "invert(1)", opacity: 0.55 }}
+          className="pattern-sheet mb-6 h-auto w-full"
+          style={{ opacity: 0.55 }}
         />
         <h3 className="text-xl" style={{ color: "var(--text-primary)" }}>
           {secondary.label}
@@ -312,8 +315,7 @@ export default function ProductsPage() {
               <li key={id}>
                 <a
                   href={`#${id}`}
-                  className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-colors hover:border-[rgba(184,62,11,0.45)] hover:text-[var(--accent-text)]"
-                  style={{ borderColor: "var(--border-color)", color: "var(--text-secondary)", background: "var(--bg-card)" }}
+                  className="inline-flex items-center gap-2 rounded-full border border-[var(--border-color)] bg-[var(--bg-card)] px-4 py-2 text-sm font-semibold text-[var(--text-secondary)] transition-colors hover:border-[rgba(184,62,11,0.45)] hover:text-[var(--accent-text)]"
                 >
                   {category.label}
                   <span className="text-xs font-semibold" style={{ color: "var(--text-faint)" }}>
@@ -374,8 +376,8 @@ export default function ProductsPage() {
               </div>
 
               {single ? (
-                <div className="grid gap-6 lg:grid-cols-3">
-                  <div className={category.secondary ? "lg:col-span-2" : "lg:col-span-3"}>
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                  <div className={category.secondary ? "lg:col-span-2" : "sm:col-span-2 lg:col-span-3"}>
                     <FeatureCard card={cards[0]} />
                   </div>
                   {category.secondary && <SecondaryTile secondary={category.secondary} />}

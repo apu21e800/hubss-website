@@ -56,9 +56,9 @@ const PRODUCT_TAGLINE: Record<string, string> = {
   "mmax":                "MMA resin lane coating",
   "durashield":          "Pavement maintenance coating",
   "streetprint":         "Stamped asphalt patterns",
-  "chipfill":            "Cold-pour crack and joint repair",
+  "chipfill":            "Heat-activated preformed pothole repair",
   "aggrefill":           "Aggregate-filled pothole repair",
-  "fast-patch":          "Water-activated cold-mix repair",
+  "fast-patch":          "Cold-mix polymer pothole repair",
 };
 
 // ── Application category groupings for mega menu ─────────────────────────

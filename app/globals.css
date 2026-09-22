@@ -1021,6 +1021,25 @@ p {
   outline: none;
 }
 
+/* …and on light surfaces, a ring you can see. The orange at 80% measures
+   2.1–2.3:1 against cream, under the 3:1 WCAG 1.4.11 asks of a focus
+   indicator, and the border-radius above squares off every rounded card and
+   chip the moment it takes focus. On paper (and in the light theme) the ring
+   is drawn in --accent-text instead — #B83E0B, 4.5:1 or better on every paper
+   background — and the element keeps its own corners. Inside a dark band on a
+   paper page (nav, footer, Lunch & Learn) --accent-text resolves to the dark
+   surface's #FB923C, so those rings stay bright on black.
+
+   Only colour and radius change, never outline-style, so the palette field
+   above keeps its outline: none. Deliberately NOT done by moving the global
+   rule into a cascade layer: 16 elements carry Tailwind's outline-none, which
+   would then silence their ring entirely. */
+[data-theme="light"] :focus-visible,
+[data-theme="mixed"] [data-surface="paper"] :focus-visible {
+  outline-color: var(--accent-text);
+  border-radius: revert-layer;
+}
+
 /* Scrollbars themed to the page instead of OS default grey-on-white.
    Component-level scrollbar classes (panel/strip) still override these. */
 html {

@@ -2,14 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 
 // ── Catalogue feature gate ───────────────────────────────────────────────────
 // Mirrors lib/feature-flags.ts (kept inline because middleware runs on Edge
-// runtime and we want zero external imports). NEXT_PUBLIC_SHOW_CATALOGUE is
-// the explicit override; absent that, hidden on Vercel production only.
+// runtime and we want zero external imports). NEXT_PUBLIC_SHOW_CATALOGUE is the
+// explicit override; absent that, visible - same default as the flag module.
+// These two drifted before: the flag said "hidden everywhere" while this said
+// "hidden on production only", so previews served a page the flag had disowned.
 function isCatalogueVisible(): boolean {
   const raw = (process.env.NEXT_PUBLIC_SHOW_CATALOGUE ?? "").toLowerCase();
   if (raw === "1" || raw === "true" || raw === "on" || raw === "yes") return true;
   if (raw === "0" || raw === "false" || raw === "off" || raw === "no") return false;
-  const vercelEnv = process.env.NEXT_PUBLIC_VERCEL_ENV ?? process.env.VERCEL_ENV;
-  return vercelEnv !== "production";
+  return true;
 }
 
 // ── Admin Basic Auth ─────────────────────────────────────────────────────────

@@ -28,15 +28,18 @@ function readEnvFlag(name: string): boolean | null {
  * card, Products mega-menu entry) gated behind a single flag.
  *
  *   - Explicit NEXT_PUBLIC_SHOW_CATALOGUE wins, in every environment.
- *   - Otherwise: HIDDEN, everywhere — production AND previews.
+ *   - Otherwise: VISIBLE.
  *
- * Previews used to auto-show the catalogue so reviewers could see it without
- * an env edit. That backfired: the v2 preview is watched on a second screen
- * and gets shown to people, and Vernon's instruction is that the catalogue
- * must not appear anywhere until it launches ("we will add that soon").
- * Hidden-by-default-everywhere means no surface can leak it; flipping it on
- * is one env var (NEXT_PUBLIC_SHOW_CATALOGUE=true) plus a redeploy, per
- * environment, when launch day comes.
+ * It was hidden-by-default-everywhere for most of 2026, because the catalogue
+ * on the site was an unfinished viewer of the wrong edition and the v2 preview
+ * gets shown to people on a second screen. The 2026-27 reader replaces it, so
+ * the default flips: merging this to main is meant to put the catalogue live,
+ * and a flag that defaults to off would make the merge look like it did
+ * nothing.
+ *
+ * The override survives on purpose. If Doug wants it pulled, it is one env var
+ * (NEXT_PUBLIC_SHOW_CATALOGUE=false) plus a redeploy - no revert, no code
+ * change, and every surface goes at once.
  *
  * `NEXT_PUBLIC_*` is required because some consumers are client components
  * (the Nav mega menu); Next.js inlines NEXT_PUBLIC_* at build time so the
@@ -45,5 +48,5 @@ function readEnvFlag(name: string): boolean | null {
 export function showCatalogue(): boolean {
   const explicit = readEnvFlag("NEXT_PUBLIC_SHOW_CATALOGUE");
   if (explicit !== null) return explicit;
-  return false;
+  return true;
 }

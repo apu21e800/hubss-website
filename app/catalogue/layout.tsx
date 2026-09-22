@@ -1,57 +1,46 @@
-// Catalogue (flipbook) — minimal black-stage layout so the 5×5 pages pop on
-// any device. Doesn't replace the site's root layout (analytics, chat, etc.
-// still mount), but suppresses any page chrome that the global StickyBar
-// could collide with.
+/**
+ * The reader's stage: black, full-bleed, no site chrome.
+ *
+ * Deliberately not the root layout's job. Analytics and chat still mount from
+ * the root; this only removes the page furniture that would otherwise sit on
+ * top of the artwork. `data-surface="dark"` re-scopes the theme tokens so the
+ * chrome stays legible when the site is in light or mixed mode - the previous
+ * viewer used --text-primary unscoped, which on a light theme would have put
+ * near-black text on a black stage.
+ */
 import type { Metadata } from "next";
-import { promises as fs } from "node:fs";
-import path from "node:path";
-
-// Resolve the cover image from the newest rendered version on disk so OG
-// metadata follows the same auto-detected version as the viewer itself.
-async function resolveCoverImage(): Promise<string> {
-  try {
-    const root = path.join(process.cwd(), "public", "catalogue");
-    const dirs = await fs.readdir(root, { withFileTypes: true });
-    const versions = dirs
-      .filter((d) => d.isDirectory() && /^v\d+$/.test(d.name))
-      .map((d) => ({ name: d.name, n: parseInt(d.name.slice(1), 10) }))
-      .sort((a, b) => b.n - a.n);
-    for (const v of versions) {
-      const candidate = path.join(root, v.name, "page-001.webp");
-      try { await fs.access(candidate); return `/catalogue/${v.name}/page-001.webp`; }
-      catch { /* try older */ }
-    }
-  } catch { /* fall through */ }
-  return "/catalogue/cover.webp";
-}
-
+import { catalogue, catalogueReady, catalogueTotal, cataloguePageUrl } from "@/lib/catalogue";
 import { showCatalogue } from "@/lib/feature-flags";
 
-export async function generateMetadata(): Promise<Metadata> {
-  // When the flag is off, advertise nothing — the page returns 404
-  // anyway, and a 404 with rich OG metadata is a bad smell.
-  if (!showCatalogue()) {
+export function generateMetadata(): Metadata {
+  // Nothing to advertise when the route 404s.
+  if (!showCatalogue() || !catalogueReady) {
     return { robots: { index: false, follow: false } };
   }
-  const cover = await resolveCoverImage();
+  const big = catalogue.widths[catalogue.widths.length - 1];
+  const cover = cataloguePageUrl(1, big);
+  const edition = catalogue.edition ?? "";
+  // Page count comes from the manifest. The old copy here said "116 pages"
+  // while the folder it pointed at held 140 and the book has 144.
+  const description = `Read the HUB Surface Systems catalogue in your browser - ${catalogueTotal} pages of decorative pavement systems, applications and specifications for Canadian municipalities, developers and contractors.`;
   return {
-    title: "Catalogue 2026 — HUB Surface Systems",
-    description:
-      "Digital edition of the HUB Surface Systems 2026 Catalogue. 116 pages of decorative pavement solutions for Canadian municipalities, developers, and contractors.",
+    // `absolute`, not a bare string: the root layout defines a
+    // "%s | HUB Surface Systems" template, and a layout title goes through it.
+    title: { absolute: `Catalogue ${edition} | HUB Surface Systems` },
+    description,
+    alternates: { canonical: "https://hubss.com/catalogue" },
     openGraph: {
-      title: "HUBSS Catalogue 2026",
-      description:
-        "Browse the HUB Surface Systems 2026 Catalogue — 116 pages of decorative pavement solutions.",
-      images: [{ url: cover, width: 1200, height: 1200 }],
+      title: `HUB Surface Systems Catalogue ${edition}`,
+      description,
+      url: "https://hubss.com/catalogue",
+      images: [{ url: `https://hubss.com${cover}`, width: big, height: Math.round(big / catalogue.aspect) }],
     },
   };
 }
 
-export default function CatalogueLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default function CatalogueLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <div className="min-h-dvh bg-black" data-catalogue-route>
+    <div className="min-h-dvh bg-black" data-surface="dark" data-catalogue-route>
       {children}
     </div>
   );

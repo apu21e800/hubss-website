@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import SearchOverlay from "@/components/sections/SearchOverlay";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { products } from "@/lib/products";
+import { catalogueLabel } from "@/lib/catalogue";
 import { applications } from "@/lib/applications";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 
@@ -200,7 +201,8 @@ const BRAND  = "#F97316";  // brand orange — reserved for larger / button use
 // One component so the twins cannot drift. The post is FEATURED_POSTS[0] —
 // the same curated "most recent" the Field Notes cover leads with; swap the
 // list to change both surfaces at once. PROMOTED stays house inventory
-// (the 2027 Catalogue — a real page), honestly labelled.
+// (the current catalogue — a real page), honestly labelled. Its name comes
+// from lib/catalogue-manifest.json, so an edition bump renames it everywhere.
 function MenuFooterStrip() {
   const latest = FEATURED_POSTS[0];
   return (
@@ -243,7 +245,7 @@ function MenuFooterStrip() {
           <p className="text-[9px] font-bold tracking-[0.2em] uppercase mb-1" style={{ color: "var(--ink-45)" }}>
             Promoted
           </p>
-          <p className="text-[14px] font-bold" style={{ color: "var(--text-primary)" }}>The 2027 Catalogue</p>
+          <p className="text-[14px] font-bold" style={{ color: "var(--text-primary)" }}>The {catalogueLabel} Catalogue</p>
           <p className="text-[12px] mt-0.5 truncate" style={{ color: "var(--ink-62)" }}>
             Every system, spec, and pattern — one book.
           </p>
@@ -375,7 +377,7 @@ function ProductsMegaMenu() {
 // panel of columns. The featured story's photograph runs edge to edge under
 // a scrim; the masthead and cover line sit on the image like a title page;
 // the right rail is a glass surface carrying the latest three, the type
-// index, one PROMOTED house slot (the 2027 Catalogue tonight — a real
+// index, one PROMOTED house slot (the current catalogue — a real
 // destination, never a fake advertiser), and the standing Lunch & Learn
 // card. Same 10px letterspaced ACCENT labels and hairline rules as its
 // siblings — the outlier in structure stays in the family by grammar.
@@ -519,8 +521,8 @@ function FieldNotesMegaMenu() {
             </div>
 
             {/* The advertisement slot — a designed space, honestly labelled.
-                House promotions only: tonight it runs the 2027 Catalogue,
-                a real page (/catalogue). If a partner placement ever lands
+                House promotions only: tonight it runs the current
+                catalogue, a real page (/catalogue). If a partner placement ever lands
                 here, the PROMOTED label is already telling the truth. */}
             <Link
               href="/catalogue"
@@ -539,7 +541,7 @@ function FieldNotesMegaMenu() {
                 </svg>
               </span>
               <span className="block text-[14px] font-bold" style={{ color: "var(--text-primary)" }}>
-                The 2027 Catalogue
+                The {catalogueLabel} Catalogue
               </span>
               <span className="block text-[12px] mt-0.5" style={{ color: "var(--ink-62)" }}>
                 Every system, spec, and pattern — one book.

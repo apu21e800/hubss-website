@@ -207,10 +207,10 @@ function DocCard({
                 (e.currentTarget as HTMLAnchorElement).style.background = "var(--border-color)";
                 (e.currentTarget as HTMLAnchorElement).style.color = "var(--text-muted)";
               }}
-              title="Open the 2026 catalogue flipbook"
+              title="Open the catalogue in the reader"
             >
               <Eye className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Open Flipbook</span>
+              <span className="hidden sm:inline">Open reader</span>
             </a>
           ) : (
             <button

@@ -6,7 +6,14 @@ import { resourceDocuments, applyDocOverrides } from "@/lib/resource-documents";
 import ResourcesClient from "@/components/resources/ResourcesClient";
 import { getResourceDocuments } from "@/lib/sanity.queries";
 import { showCatalogue } from "@/lib/feature-flags";
-import Image from "next/image";
+import {
+  catalogue,
+  catalogueCover,
+  catalogueLabel,
+  cataloguePageSrcSet,
+  cataloguePageUrl,
+  catalogueTotal,
+} from "@/lib/catalogue";
 
 import { buildMetadata } from "@/lib/seo";
 
@@ -108,26 +115,38 @@ export default async function ResourcesPage() {
               {/* Card is full-width (minus the px-6 page padding) below the
                   `sm` breakpoint (640px), then a fixed 200px sidebar above it.
                   Empirically the LCP element on this route (measured via
-                  PerformanceObserver), so it's the one priority image here. */}
-              <Image
-                src="/catalogue/cover.webp"
-                alt="HUB Surface Systems 2026 Catalogue cover"
-                fill
-                sizes="(max-width: 639px) calc(100vw - 48px), 200px"
-                priority
-                className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-              />
+                  PerformanceObserver), so it gets fetchPriority high.
+
+                  A plain <img>, not next/image: this is page one of the
+                  catalogue, rendered at the exact widths it is displayed at,
+                  and the catalogue's rasters deliberately never route through
+                  /_next/image. The old src was /catalogue/cover.webp - a
+                  hand-placed file from a previous, different edition, which
+                  went stale silently. */}
+              {catalogueCover && (
+                <img
+                  src={cataloguePageUrl(1, catalogue.widths[0])}
+                  srcSet={cataloguePageSrcSet(1)}
+                  sizes="(max-width: 639px) calc(100vw - 48px), 200px"
+                  alt={`HUB Surface Systems Catalogue ${catalogueLabel} cover`}
+                  fetchPriority="high"
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                />
+              )}
             </div>
             <div className="flex-1 min-w-0 p-6 sm:p-7 flex flex-col justify-center">
               <p className="text-[11px] font-bold tracking-[0.22em] uppercase mb-2 flex items-center gap-2" style={{ color: "var(--accent-text)" }}>
-                Catalogue 2026
+                Catalogue {catalogueLabel}
                 <span className="text-[9px] font-bold tracking-[0.18em] uppercase px-1.5 py-0.5 rounded" style={{ background: "rgba(249,115,22,0.20)" }}>New</span>
               </p>
               <h2 className="text-xl sm:text-2xl font-bold leading-snug mb-1.5" style={{ color: "var(--text-primary)" }}>
-                Browse the 2026 catalogue in your browser
+                Read the catalogue in your browser
               </h2>
+              {/* The page count is the manifest's, not a number typed here.
+                  This line said "140 pages" against a 144-page book. */}
               <p className="text-sm" style={{ color: "var(--ink-65)" }}>
-                140 pages · every product &amp; application · free to read, no download
+                {catalogueTotal} pages · every system &amp; application · free to read, or{" "}
+                <span style={{ color: "var(--accent-text)" }}>have it mailed to you</span>
               </p>
             </div>
             <div className="flex-shrink-0 self-center pr-7 pb-6 sm:pb-0">

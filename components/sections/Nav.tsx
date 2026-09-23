@@ -8,6 +8,7 @@ import dynamic from "next/dynamic";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { products } from "@/lib/products";
 import { catalogue, catalogueLabel, catalogueTotal } from "@/lib/catalogue";
+import { showCatalogue } from "@/lib/feature-flags";
 import { applications } from "@/lib/applications";
 import { PRODUCT_CATEGORIES } from "@/lib/product-categories";
 import { CHROME_MARKS } from "@/lib/chrome-images.mjs";
@@ -220,41 +221,43 @@ function MenuFooterStrip() {
         </div>
       </Link>
 
-      <Link
-        href="/catalogue"
-        className="group flex items-center justify-between gap-4 rounded-xl px-4 py-2.5 transition-colors hover:bg-[var(--ink-05)]"
-        style={{
-          background: "linear-gradient(135deg, rgba(249,115,22,0.10) 0%, var(--ink-02) 100%)",
-          border: "1px solid rgba(249,115,22,0.35)",
-        }}
-      >
-        {catalogue.coverThumb && (
-          /* A picture of the actual book. The panel promoted a catalogue
-             without ever showing one. Plain <img>: the catalogue's rasters
-             never route through /_next/image. */
-          <img
-            src={catalogue.coverThumb}
-            alt=""
-            width={240}
-            height={240}
-            loading="lazy"
-            className="h-12 w-12 flex-shrink-0 rounded-md object-cover"
-            style={{ border: "1px solid rgba(249,115,22,0.30)" }}
-          />
-        )}
-        <div className="min-w-0">
-          <p className="text-[9px] font-bold tracking-[0.2em] uppercase mb-1" style={{ color: "var(--ink-45)" }}>
-            Promoted
-          </p>
-          <p className="text-[14px] font-bold" style={{ color: "var(--text-primary)" }}>The {catalogueLabel} Catalogue</p>
-          <p className="text-[12px] mt-0.5 truncate" style={{ color: "var(--ink-62)" }}>
-            {catalogueTotal} pages — read it in your browser.
-          </p>
-        </div>
-        <svg width="13" height="13" fill="none" stroke={ACCENT} viewBox="0 0 24 24" className="flex-shrink-0 transition-transform group-hover:translate-x-0.5">
-          <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </Link>
+      {showCatalogue() && (
+        <Link
+          href="/catalogue"
+          className="group flex items-center justify-between gap-4 rounded-xl px-4 py-2.5 transition-colors hover:bg-[var(--ink-05)]"
+          style={{
+            background: "linear-gradient(135deg, rgba(249,115,22,0.10) 0%, var(--ink-02) 100%)",
+            border: "1px solid rgba(249,115,22,0.35)",
+          }}
+        >
+          {catalogue.coverThumb && (
+            /* A picture of the actual book. The panel promoted a catalogue
+               without ever showing one. Plain <img>: the catalogue's rasters
+               never route through /_next/image. */
+            <img
+              src={catalogue.coverThumb}
+              alt=""
+              width={240}
+              height={240}
+              loading="lazy"
+              className="h-12 w-12 flex-shrink-0 rounded-md object-cover"
+              style={{ border: "1px solid rgba(249,115,22,0.30)" }}
+            />
+          )}
+          <div className="min-w-0">
+            <p className="text-[9px] font-bold tracking-[0.2em] uppercase mb-1" style={{ color: "var(--ink-45)" }}>
+              Promoted
+            </p>
+            <p className="text-[14px] font-bold" style={{ color: "var(--text-primary)" }}>The {catalogueLabel} Catalogue</p>
+            <p className="text-[12px] mt-0.5 truncate" style={{ color: "var(--ink-62)" }}>
+              {catalogueTotal} pages — read it in your browser.
+            </p>
+          </div>
+          <svg width="13" height="13" fill="none" stroke={ACCENT} viewBox="0 0 24 24" className="flex-shrink-0 transition-transform group-hover:translate-x-0.5">
+            <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </Link>
+      )}
     </div>
   );
 }
@@ -526,44 +529,46 @@ function FieldNotesMegaMenu() {
                 House promotions only: tonight it runs the current
                 catalogue, a real page (/catalogue). If a partner placement ever lands
                 here, the PROMOTED label is already telling the truth. */}
-            <Link
-              href="/catalogue"
-              className="group block mt-auto rounded-xl px-4 py-3.5 transition-colors hover:bg-[var(--ink-05)]"
-              style={{
-                background: "linear-gradient(135deg, rgba(249,115,22,0.10) 0%, var(--ink-02) 100%)",
-                border: "1px solid rgba(249,115,22,0.35)",
-              }}
-            >
-              <span className="flex items-center justify-between mb-1">
-                <span className="text-[9px] font-bold tracking-[0.2em] uppercase" style={{ color: "var(--ink-45)" }}>
-                  Promoted
-                </span>
-                <svg width="12" height="12" fill="none" stroke={ACCENT} viewBox="0 0 24 24" className="transition-transform group-hover:translate-x-0.5">
-                  <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </span>
-              <span className="flex items-center gap-3">
-                {catalogue.coverThumb && (
-                  <img
-                    src={catalogue.coverThumb}
-                    alt=""
-                    width={240}
-                    height={240}
-                    loading="lazy"
-                    className="h-14 w-14 flex-shrink-0 rounded-md object-cover"
-                    style={{ border: "1px solid rgba(249,115,22,0.30)" }}
-                  />
-                )}
-                <span className="block min-w-0">
-                  <span className="block text-[14px] font-bold" style={{ color: "var(--text-primary)" }}>
-                    The {catalogueLabel} Catalogue
+            {showCatalogue() && (
+              <Link
+                href="/catalogue"
+                className="group block mt-auto rounded-xl px-4 py-3.5 transition-colors hover:bg-[var(--ink-05)]"
+                style={{
+                  background: "linear-gradient(135deg, rgba(249,115,22,0.10) 0%, var(--ink-02) 100%)",
+                  border: "1px solid rgba(249,115,22,0.35)",
+                }}
+              >
+                <span className="flex items-center justify-between mb-1">
+                  <span className="text-[9px] font-bold tracking-[0.2em] uppercase" style={{ color: "var(--ink-45)" }}>
+                    Promoted
                   </span>
-                  <span className="block text-[12px] mt-0.5" style={{ color: "var(--ink-62)" }}>
-                    {catalogueTotal} pages — read it in your browser.
+                  <svg width="12" height="12" fill="none" stroke={ACCENT} viewBox="0 0 24 24" className="transition-transform group-hover:translate-x-0.5">
+                    <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </span>
+                <span className="flex items-center gap-3">
+                  {catalogue.coverThumb && (
+                    <img
+                      src={catalogue.coverThumb}
+                      alt=""
+                      width={240}
+                      height={240}
+                      loading="lazy"
+                      className="h-14 w-14 flex-shrink-0 rounded-md object-cover"
+                      style={{ border: "1px solid rgba(249,115,22,0.30)" }}
+                    />
+                  )}
+                  <span className="block min-w-0">
+                    <span className="block text-[14px] font-bold" style={{ color: "var(--text-primary)" }}>
+                      The {catalogueLabel} Catalogue
+                    </span>
+                    <span className="block text-[12px] mt-0.5" style={{ color: "var(--ink-62)" }}>
+                      {catalogueTotal} pages — read it in your browser.
+                    </span>
                   </span>
                 </span>
-              </span>
-            </Link>
+              </Link>
+            )}
 
             <div className="mt-3">
               <LLMenuCard />
@@ -904,6 +909,48 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
               animate="show"
               className="px-4 pb-8"
             >
+
+              {/* ── Catalogue ─────────────────────────────────────── */}
+              {/* The phone menu never linked to the catalogue; only the
+                  desktop mega menu did, so on a phone the book was a typed
+                  URL away. First in the drawer, so it is two taps from any
+                  page: the menu button, then this. Same card as the Field
+                  Notes rows below, tinted like the desktop "Promoted" card. */}
+              {showCatalogue() && (
+                <motion.div variants={menuSectionVariants} className="pt-5">
+                  <Link
+                    href="/catalogue"
+                    onClick={onClose}
+                    className="flex items-center gap-4 p-3 rounded-2xl active:scale-[0.98] active:opacity-75 transition-[transform,opacity] duration-100"
+                    style={{
+                      background: "linear-gradient(135deg, rgba(249,115,22,0.12) 0%, var(--ink-025) 100%)",
+                      border: "1px solid rgba(249,115,22,0.35)",
+                    }}
+                  >
+                    {catalogue.coverThumb && (
+                      /* Plain <img>: the catalogue's rasters never route
+                         through /_next/image. */
+                      <img
+                        src={catalogue.coverThumb}
+                        alt=""
+                        width={240}
+                        height={240}
+                        loading="lazy"
+                        className="flex-shrink-0 rounded-xl object-cover"
+                        style={{ width: 64, height: 64, border: "1px solid rgba(249,115,22,0.30)" }}
+                      />
+                    )}
+                    <div className="flex-1 min-w-0 flex flex-col justify-center gap-1">
+                      <p className="text-[9px] font-bold tracking-[0.18em] uppercase" style={{ color: "var(--accent-text-lg)" }}>Catalogue</p>
+                      <p className="text-[15px] font-[500] leading-snug" style={{ color: "var(--text-primary)" }}>The {catalogueLabel} Catalogue</p>
+                      <p className="text-[13px] leading-snug" style={{ color: "var(--ink-50)" }}>{catalogueTotal} pages — read it in your browser.</p>
+                    </div>
+                    <svg className="flex-shrink-0 w-4 h-4" style={{ color: "var(--accent-text-lg)" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 18l6-6-6-6" />
+                    </svg>
+                  </Link>
+                </motion.div>
+              )}
 
               {/* ── Products ──────────────────────────────────────── */}
               <motion.div variants={menuSectionVariants}>

@@ -14,8 +14,7 @@
 const TRUE_VALUES = new Set(["1", "true", "on", "yes"]);
 const FALSE_VALUES = new Set(["0", "false", "off", "no"]);
 
-function readEnvFlag(name: string): boolean | null {
-  const raw = process.env[name];
+function parseFlag(raw: string | undefined): boolean | null {
   if (raw === undefined || raw === "") return null;
   const v = raw.toLowerCase();
   if (TRUE_VALUES.has(v)) return true;
@@ -46,7 +45,12 @@ function readEnvFlag(name: string): boolean | null {
  * value reaches the browser bundle.
  */
 export function showCatalogue(): boolean {
-  const explicit = readEnvFlag("NEXT_PUBLIC_SHOW_CATALOGUE");
+  // Read with the name written out in full, never as process.env[name].
+  // Next inlines NEXT_PUBLIC_* into client bundles only for a literal
+  // process.env.NEXT_PUBLIC_X; process.env[name] is undefined in the browser,
+  // so the Nav (a client component) always saw "visible" and the kill switch
+  // left its catalogue links pointing at a 404.
+  const explicit = parseFlag(process.env.NEXT_PUBLIC_SHOW_CATALOGUE);
   if (explicit !== null) return explicit;
   return true;
 }

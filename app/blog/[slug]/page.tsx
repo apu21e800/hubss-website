@@ -138,14 +138,18 @@ export default async function BlogPostPage({ params }: Props) {
     ...(post.keywords.length
       ? { about: post.keywords.map((k) => ({ "@type": "Thing", name: k })) }
       : {}),
+    // A mention is a pointer, not a product listing. These used to be typed
+    // "Product", so Google checked every one for price, reviews or a rating,
+    // which a blog post can't carry: 53 of the 67 invalid Product snippets in
+    // Search Console (Sep 2026) were blog mentions. The product itself is
+    // described once, on its own page; the url here links the two.
     ...(post.products.length
       ? {
           mentions: post.products
             .filter((n) => PRODUCT_SLUGS[n])
             .map((n) => ({
-              "@type": "Product",
+              "@type": "Thing",
               name: n,
-              brand: { "@type": "Brand", name: "HUB Surface Systems" },
               url: `https://hubss.com/products/${PRODUCT_SLUGS[n]}`,
             })),
         }

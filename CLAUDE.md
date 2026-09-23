@@ -151,9 +151,13 @@ used for text files cannot carry binaries — it stores base64 as literal text,
 which was measured, not assumed: a 2,704-byte WebP came back as 3,429 bytes of
 garbage. Anything binary therefore travels as a git bundle.
 
-To end this entirely: github.com/settings/installations -> Claude -> grant
-access to apu21e800/hubss-website. Then ordinary pushes work and bundles stop
-being necessary.
+The GitHub side is NOT the blocker. Checked 23 Sep 2026: the Claude GitHub App
+already has "All repositories" on apu21e800 (github.com/settings/installations).
+The proxy refuses because the repo isn't attached to the Cowork session:
+"apu21e800/hubss-website is not in this session's authorized repository set ...
+add the repository to the session's sources." It can't be added to a session
+that is already running. Start the Cowork task with this repo attached as a
+source and ordinary pushes should work; until then, bundles.
 
 **This repo deploys from `main`.** An earlier version of these steps said `v2`.
 That branch still exists on origin and is 100 commits behind, so following the

@@ -3,8 +3,9 @@
 // IMPORTANT: image src and href always come from the SAME post object
 // so they are guaranteed to match — fixes the tile mismatch bug.
 import Image from "next/image";
-import { SOCIAL_LINKS } from '@/lib/social-links';
+import { SOCIAL_LINKS, INSTAGRAM_HANDLE } from '@/lib/social-links';
 import { SocialLinks } from '@/components/ui/SocialLinks';
+import FALLBACK_PHOTOS from '@/lib/follow-the-work.json';
 
 export const revalidate = 3600;
 
@@ -15,16 +16,13 @@ interface InstagramPost {
   media_type: "IMAGE" | "VIDEO" | "CAROUSEL_ALBUM";
 }
 
-// Static fallback — shown when token is not set or API is down.
-// Each entry's src and instagramUrl ARE matched (same project, verified manually).
-const FALLBACK_PHOTOS = [
-  { src: "/images/blog/decorative-crosswalk-commercial-drive/featured.jpg", alt: "Commercial Drive Crosswalk — Vancouver, BC",     instagramUrl: "https://www.instagram.com/hub_surface_systems/" },
-  { src: "/images/blog/simcoe-rainbow-crosswalk/featured.jpg",              alt: "Rainbow Crosswalk — Simcoe, ON",                  instagramUrl: "https://www.instagram.com/hub_surface_systems/" },
-  { src: "/images/blog/ubc-musqueam-crosswalk/featured.jpg",                alt: "UBC Musqueam Crosswalk — Vancouver, BC",          instagramUrl: "https://www.instagram.com/hub_surface_systems/" },
-  { src: "/images/blog/bc-childrens-hospital-labyrinth/featured.jpg",       alt: "BC Children's Hospital Labyrinth — Vancouver, BC", instagramUrl: "https://www.instagram.com/hub_surface_systems/" },
-  { src: "/images/blog/complete-streets-new-westminster/featured.jpg",      alt: "Complete Streets — New Westminster, BC",           instagramUrl: "https://www.instagram.com/hub_surface_systems/" },
-  { src: "/images/blog/branded-crosswalks-vancouver-richmond/featured.jpg", alt: "Branded Crosswalks — Vancouver & Richmond, BC",   instagramUrl: "https://www.instagram.com/hub_surface_systems/" },
-];
+// Static fallback — shown when the token is not set or the API is down. The six
+// tiles live in lib/follow-the-work.json so scripts/verify-site.mjs can read
+// them: until 23 Sep 2026, tiles 1 and 6 were two different blog folders
+// holding byte-identical files, so the Little Italy roundel showed twice. The
+// check now fails if any two tiles resolve to the same bytes. Every tile is a
+// real photo of the project its alt text names — never a stand-in. They all
+// link to the profile, not to posts, because we can't guarantee a post match.
 
 async function fetchInstagramPosts(): Promise<InstagramPost[]> {
   const token  = process.env.INSTAGRAM_ACCESS_TOKEN;
@@ -89,7 +87,7 @@ export default async function InstagramStrip() {
             className="flex items-center gap-2.5 px-5 py-3 rounded-xl text-sm font-semibold flex-shrink-0 transition-colors hover:border-orange-500 hover:text-[var(--accent-text)]"
             style={{ border: "1px solid var(--ink-12)", color: "var(--ink-70)", background: "var(--ink-025)" }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style={{ opacity: 0.7 }}><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-            @hubsurfacesystems
+            {INSTAGRAM_HANDLE}
           </a>
         </div>
 
@@ -114,7 +112,7 @@ export default async function InstagramStrip() {
               ))
             : FALLBACK_PHOTOS.map((photo) => (
                 // Fallback: links to profile (not individual posts) since we can't guarantee match
-                <a key={photo.src} href={photo.instagramUrl} target="_blank" rel="noopener noreferrer"
+                <a key={photo.src} href={SOCIAL_LINKS.instagram} target="_blank" rel="noopener noreferrer"
                   className="group relative overflow-hidden rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_8px_32px_rgba(249,115,22,0.2)]"
                   style={{ aspectRatio: "1/1", border: "1px solid var(--border-color)" }}>
                   <Image src={photo.src} alt={photo.alt} fill

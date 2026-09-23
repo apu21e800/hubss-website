@@ -32,6 +32,7 @@
 import fs from "fs";
 import path from "path";
 import { spawn } from "child_process";
+import { createHash } from "crypto";
 
 const args = process.argv.slice(2);
 const QUICK = args.includes("--quick");
@@ -336,6 +337,32 @@ function checkGalleryDistinctness() {
     `${Object.keys(m).length} galleries compared`, dupes);
 }
 
+// ── 4b. the Follow the Work strip shows six different photographs ───────────
+// EARNED BY: the homepage strip showed the Little Italy roundel twice. Tile 1
+// and tile 6 pointed at two different blog folders (Commercial Drive, and the
+// Vancouver & Richmond case study), and the paths looked distinct — but the two
+// featured.jpg files were byte-identical copies. Comparing paths could never
+// catch that, so this compares the bytes the paths resolve to.
+function checkFollowTheWorkDistinct() {
+  const name = "Follow the Work tiles are distinct";
+  const tf = path.join(ROOT, "lib", "follow-the-work.json");
+  if (!fs.existsSync(tf)) { record(name, false, "lib/follow-the-work.json is missing"); return; }
+  const tiles = JSON.parse(fs.readFileSync(tf, "utf8"));
+  const problems = [], seen = new Map();
+  // The strip is a six-column row on desktop; any other count leaves a hole.
+  if (tiles.length !== 6) problems.push(`${tiles.length} tiles, the strip is laid out for 6`);
+  tiles.forEach((t, i) => {
+    const file = path.join(ROOT, "public", decodeURI(t.src));
+    if (!fs.existsSync(file)) { problems.push(`tile ${i + 1}: ${t.src} does not exist`); return; }
+    const hash = createHash("sha256").update(fs.readFileSync(file)).digest("hex");
+    if (seen.has(hash)) {
+      const j = seen.get(hash);
+      problems.push(`tile ${i + 1} (${t.src}) is the same file as tile ${j + 1} (${tiles[j].src})`);
+    } else seen.set(hash, i);
+  });
+  record(name, problems.length === 0, `${tiles.length} tiles compared by content`, problems);
+}
+
 // ── 5. image weight per route ────────────────────────────────────────────────
 // EARNED BY: /blog shipped 4,398 KB of images to a 390px phone, because three
 // blog photos were referenced with markdown syntax — which compiles to a plain
@@ -461,6 +488,7 @@ function checkBlogRedirectTargets() {
     await checkLinks(routes);
     await checkBuiltPagesReachable();
     checkGalleryDistinctness();
+    checkFollowTheWorkDistinct();
     checkNoUndefined();
     checkBlogRedirectTargets();
     try { await checkSanityContract(); }

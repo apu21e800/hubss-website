@@ -17,6 +17,7 @@ import { SITE_FLAGS } from "@/lib/site-flags";
 import { getSanityPageContent } from "@/lib/sanity.queries";
 import { getMergedApplications } from "@/lib/applications.server";
 import { getMergedProducts } from "@/lib/products.server";
+import { SOCIAL_LINKS } from "@/lib/social-links";
 
 export const metadata: Metadata = buildMetadata({
   title: "Decorative Pavement & Road Marking Solutions",
@@ -34,12 +35,10 @@ const organizationSchema = {
   foundingDate: "1999",
   description:
     "Canadian leader in decorative pavement and traffic safety solutions. Stamped asphalt, thermoplastic markings, and specialty coatings for municipalities and developers across Canada.",
-  sameAs: [
-    "https://www.linkedin.com/company/hub-surface-systems",
-    "https://www.instagram.com/hubsurfacesystems",
-    "https://www.facebook.com/hubsurfacesystems",
-    "https://www.youtube.com/@hubsurfacesystems8112",
-  ],
+  // One source with the footer and the Follow the Work strip. This list used
+  // to be typed by hand and pointed Google at an Instagram account HUB does
+  // not own, and it left out X.
+  sameAs: Object.values(SOCIAL_LINKS),
   subOrganization: [
     {
       "@type": "LocalBusiness",

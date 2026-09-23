@@ -120,7 +120,7 @@ export default defineType({
           name: "instagram",
           type: "url",
           title: "Instagram URL",
-          description: "Full URL (e.g. https://www.instagram.com/hubsurfacesystems/).",
+          description: "Full URL (e.g. https://www.instagram.com/hub_surface_systems/).",
         }),
         defineField({
           name: "linkedin",

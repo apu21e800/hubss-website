@@ -112,9 +112,9 @@ async function migrateSiteSettings() {
   // Social links from lib/social-links.ts (inlined to avoid import issues)
   const SOCIAL_LINKS = {
     linkedin:  "https://www.linkedin.com/company/hub-surface-systems",
-    youtube:   "https://www.youtube.com/@hubsurfacesystems",
+    youtube:   "https://www.youtube.com/@hubsurfacesystems8112",
     facebook:  "https://www.facebook.com/hubsurfacesystems",
-    instagram: "https://www.instagram.com/hubsurfacesystems",
+    instagram: "https://www.instagram.com/hub_surface_systems/",
     x:         "https://x.com/HUB_SS",
   };
 

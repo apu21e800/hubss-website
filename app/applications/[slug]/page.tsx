@@ -24,6 +24,17 @@ import { buildMetadata } from "@/lib/seo";
 // next deploy. One hour, matching the product pages.
 export const revalidate = 3600;
 
+// Only the applications in lib/applications.ts exist. Left at the default (true), an unknown
+// slug was rendered on demand behind the root loading.tsx Suspense boundary,
+// so a 200 had already gone out before notFound() ran: /applications/<anything>
+// answered 200 with the homepage's title and canonical, and Google kept
+// crawling old WordPress addresses like /applications/bike-bus-lanes as pages.
+// The same fix /blog/[slug] got in PR #54. It is safe here because the page
+// can only render a slug the code knows: Sanity overrides fields on an
+// existing entry and cannot add one (checked 23 Sep 2026: Sanity holds 14
+// products and 20 applications, all of them in the code).
+export const dynamicParams = false;
+
 // Exclude slugs that have their own dedicated page (e.g. /applications/public-art/page.tsx)
 const DEDICATED_PAGES = new Set(["public-art"]);
 

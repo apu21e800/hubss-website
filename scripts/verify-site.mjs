@@ -478,6 +478,49 @@ function checkBlogRedirectTargets() {
     `${fixed} fixed /blog/<slug> destinations`, bad);
 }
 
+// ── 9. an unknown slug is a real 404 ─────────────────────────────────────────
+// EARNED BY: /blog/<anything>, /applications/<anything> and /products/<anything>
+// all answered 200 with the homepage's title and canonical, because the route
+// rendered on demand and the root loading.tsx had already streamed a 200 shell
+// before notFound() ran. Google crawled old WordPress addresses as live pages.
+// Each dynamic route now sets dynamicParams = false; this proves it stays so.
+async function checkUnknownSlugs404() {
+  // /projects is left out on purpose: an unknown /projects/<slug> is an old
+  // WordPress address and 308s to /gallery by design (next.config.ts).
+  const probes = ["/blog", "/applications", "/products", "/catalogue"]
+    .map((r) => `${r}/zz-verify-not-a-page`);
+  const bad = [];
+  for (const r of probes) {
+    const s = await head(BASE + r);
+    if (s !== 404) bad.push(`${s || "ERR"}  ${r}  (expected 404)`);
+  }
+  record("unknown slugs return 404", bad.length === 0, `${probes.length} dynamic routes probed`, bad);
+}
+
+// ── 10. Product markup only where a product is described ─────────────────────
+// EARNED BY: 67 invalid Product snippets in Search Console (Sep 2026), 53 of
+// them blog posts that typed every product they mentioned as a schema.org
+// Product. Google then demands a price, a review or a rating for each one, and
+// a blog post has none of those. A product is described once, on its own page.
+function checkProductMarkup() {
+  const dir = path.join(ROOT, ".next", "server", "app");
+  if (!fs.existsSync(dir)) { record("Product markup only on product pages", false, "no build output"); return; }
+  const bad = [];
+  let scanned = 0;
+  (function walk(d) {
+    for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+      const p = path.join(d, e.name);
+      if (e.isDirectory()) { walk(p); continue; }
+      if (!e.name.endsWith(".html")) continue;
+      scanned++;
+      const rel = path.relative(dir, p).split(path.sep).join("/");
+      if (rel.startsWith("products/")) continue;
+      if (/"@type":\s*"Product"/.test(fs.readFileSync(p, "utf8"))) bad.push(rel);
+    }
+  })(dir);
+  record("Product markup only on product pages", bad.length === 0, `${scanned} prerendered pages scanned`, bad);
+}
+
 // ── run ──────────────────────────────────────────────────────────────────────
 (async () => {
   const t0 = Date.now();
@@ -491,6 +534,8 @@ function checkBlogRedirectTargets() {
     checkFollowTheWorkDistinct();
     checkNoUndefined();
     checkBlogRedirectTargets();
+    await checkUnknownSlugs404();
+    checkProductMarkup();
     try { await checkSanityContract(); }
     catch (e) { record("CMS fields match what the code queries", false, `could not reach Sanity: ${e.message}`); }
 

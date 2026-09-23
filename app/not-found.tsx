@@ -1,13 +1,22 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import { buildMetadata } from "@/lib/seo";
 
-export const metadata = buildMetadata({
-  title: "Page Not Found",
-  description: "The page you're looking for doesn't exist. Browse our products, applications, or get in touch.",
-  slug: "404",
-});
+// buildMetadata gives every page a canonical and "index, follow". On the 404
+// page both contradicted the noindex Next adds, and the canonical claimed a
+// /404 URL that doesn't exist. A missing page should name no canonical and ask
+// not to be indexed.
+export const metadata: Metadata = {
+  ...buildMetadata({
+    title: "Page Not Found",
+    description: "The page you're looking for doesn't exist. Browse our products, applications, or get in touch.",
+    slug: "404",
+  }),
+  alternates: { canonical: null },
+  robots: { index: false, follow: true },
+};
 
 export default function NotFound() {
   return (

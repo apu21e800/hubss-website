@@ -1,0 +1,112 @@
+{
+  "traffic-patterns-xd": {
+    "base": "/images/cards/traffic-patterns-xd",
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "alt": "Red brick-pattern TrafficPatternsXD crosswalk with white edge lines at the White Rock Pier, BC",
+    "hash": "628b7d294afbd8b5"
+  },
+  "traffic-patterns": {
+    "base": "/images/cards/traffic-patterns",
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "alt": "TrafficPatterns crosswalk carrying an Indigenous formline medallion",
+    "hash": "eccef5b95ede604c"
+  },
+  "premark": {
+    "base": "/images/cards/premark",
+    "widths": [
+      480,
+      800,
+      1037
+    ],
+    "alt": "PreMark shared-lane legend with pedestrian, bicycle and car symbols",
+    "hash": "249c69b76c03697d"
+  },
+  "duratherm": {
+    "base": "/images/cards/duratherm",
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "alt": "DuraTherm inlaid pattern crosswalk sitting flush with the road beside a wood-clad civic building",
+    "hash": "51a851cc03f04081"
+  },
+  "decomark": {
+    "base": "/images/cards/decomark",
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "alt": "Aerial view of a large DecoMark Indigenous-art medallion on a concrete plaza",
+    "hash": "b9ba394ed642c621"
+  },
+  "airmark": {
+    "base": "/images/cards/airmark",
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "alt": "Yellow AirMark holding-position markings on an airport taxiway, control tower behind",
+    "hash": "8daf181907708c58"
+  },
+  "streetbond": {
+    "base": "/images/cards/streetbond",
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "alt": "Red and white StreetBond coated plaza leading to the Olympic Stadium tower, Montréal",
+    "hash": "116049a18802e95e"
+  },
+  "streetbondsr": {
+    "base": "/images/cards/streetbondsr",
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "alt": "Pale grey StreetBondSR solar-reflective coating on a parking lot",
+    "hash": "72dc8dc2541e86c5"
+  },
+  "mmax": {
+    "base": "/images/cards/mmax",
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "alt": "Red MMAX bus-only lane in London, Ontario",
+    "hash": "4a3c029e922d3587"
+  },
+  "durashield": {
+    "base": "/images/cards/durashield",
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "alt": "Freshly coated DuraShield parking lot in front of a glass-fronted building",
+    "hash": "873864e19ca576c9"
+  },
+  "streetprint": {
+    "base": "/images/cards/streetprint",
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "alt": "Red brick-pattern StreetPrint stamped asphalt on a roundabout apron",
+    "hash": "4d27be250755e792"
+  }
+}

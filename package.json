@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "node scripts/gen-blog-index.mjs && node scripts/gen-gallery-manifest.mjs && node scripts/gen-doc-sizes.mjs && node scripts/gen-map-blog.mjs && node scripts/gen-catalogue-pages.mjs && node scripts/gen-chrome-images.mjs && tsx scripts/gen-search-images.ts && next build",
+    "build": "node scripts/gen-blog-index.mjs && node scripts/gen-gallery-manifest.mjs && node scripts/gen-doc-sizes.mjs && node scripts/gen-map-blog.mjs && node scripts/gen-catalogue-pages.mjs && node scripts/gen-chrome-images.mjs && tsx scripts/gen-search-images.ts && node scripts/gen-card-images.mjs && next build",
     "start": "next start",
     "images:add": "node scripts/add-images.mjs",
     "migrate:sanity": "tsx scripts/migrate-to-sanity.ts",
@@ -18,6 +18,7 @@
     "gen:catalogue": "node scripts/gen-catalogue-pages.mjs",
     "gen:chrome": "node scripts/gen-chrome-images.mjs",
     "gen:search-images": "tsx scripts/gen-search-images.ts",
+    "gen:cards": "node scripts/gen-card-images.mjs",
     "verify": "node scripts/verify-site.mjs",
     "verify:quick": "node scripts/verify-site.mjs --quick",
     "sync:products": "tsx scripts/sync-products-to-sanity.ts",

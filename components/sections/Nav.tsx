@@ -9,6 +9,7 @@ import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { products } from "@/lib/products";
 import { catalogue, catalogueLabel, catalogueTotal } from "@/lib/catalogue";
 import { applications } from "@/lib/applications";
+import { PRODUCT_CATEGORIES } from "@/lib/product-categories";
 import { CHROME_MARKS } from "@/lib/chrome-images.mjs";
 import { FEATURED_POSTS } from "@/lib/nav-featured-posts.mjs";
 import ThemeToggle from "@/components/ui/ThemeToggle";
@@ -64,35 +65,8 @@ const CATEGORIES = [
 // ── Search overlay ───────────────────────────────────────────────
 
 // ── Product category data ────────────────────────────────────────────
-// The photo-card era of this menu carried icon/tag/image/pillarNote per
-// category. Those fields died with the cards (see the note on
-// ProductsMegaMenu); what remains is exactly what a directory needs: a
-// label, the members, and at most one "see also" destination.
-type ProductCategory = {
-  label: string;
-  slugs: string[];
-  secondary?: { label: string; href: string; meta?: string };
-};
-
-const PRODUCT_CATEGORIES: ProductCategory[] = [
-  {
-    label: "Preformed Thermoplastics",
-    slugs: ["traffic-patterns-xd", "traffic-patterns", "premark", "duratherm", "decomark", "airmark"],
-  },
-  {
-    label: "Coatings",
-    slugs: ["streetbond", "streetbondsr", "mmax", "durashield"],
-  },
-  {
-    label: "Stamped Asphalt",
-    slugs: ["streetprint"],
-    secondary: { label: "Pattern gallery", href: "/patterns", meta: "16 stamping templates" },
-  },
-  {
-    label: "Asphalt Repair",
-    slugs: ["chipfill", "aggrefill", "fast-patch"],
-  },
-];
+// PRODUCT_CATEGORIES lives in lib/product-categories.ts, shared with the
+// /products index so the menu and the page can never name a family twice.
 
 // ── Mega-menu micro-taglines per product (5–7 word noun phrases per Vernon) ──
 //
@@ -118,9 +92,9 @@ const PRODUCT_TAGLINE: Record<string, string> = {
   "mmax":                "MMA resin lane coating",
   "durashield":          "Pavement maintenance coating",
   "streetprint":         "Stamped asphalt patterns",
-  "chipfill":            "Cold-pour crack and joint repair",
+  "chipfill":            "Heat-activated preformed pothole repair",
   "aggrefill":           "Aggregate-filled pothole repair",
-  "fast-patch":          "Water-activated cold-mix repair",
+  "fast-patch":          "Cold-mix polymer pothole repair",
 };
 
 // ── Application category groupings for mega menu ─────────────────────────
@@ -850,6 +824,11 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
           exit={{ x: "100%" }}
           transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
           className="fixed inset-0 z-[60] md:hidden flex flex-col outline-none"
+          // Dark, like the <nav> it belongs to. The drawer renders outside
+          // that <nav>, so on a paper page it inherited paper tokens: a cream
+          // body under hardcoded dark header and footer strips, with the close
+          // X in --text-primary at 1.02:1 and the phone links at 1.04:1.
+          data-surface="dark"
           style={{
             background: "var(--bg-deepest)",
             height: "100dvh",

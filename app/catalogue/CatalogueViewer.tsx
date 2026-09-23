@@ -47,19 +47,34 @@ const FADE_MS = 160;
 /** Spreads kept mounted either side of the current one. */
 const PRELOAD = 1;
 /**
- * Space reserved for the chrome. Asymmetric on purpose: the header is one row
- * of pills, the footer carries a scrubber, a CTA and the page jump.
+ * Space reserved for the chrome before it has been measured. Once the header
+ * and footer are on screen their real heights are used instead: the constants
+ * used to be the only source, and in landscape on a phone the footer came out
+ * 21px taller than its constant and sat on the bottom of the page.
  */
 const CHROME_TOP = 56;
 const CHROME_BOTTOM = 112;
-/** A phone needs a taller control bar and has no room to waste up top. */
-const CHROME_TOP_SM = 48;
-const CHROME_BOTTOM_SM = 152;
+const CHROME_TOP_SM = 56;
+const CHROME_BOTTOM_SM = 170;
 /**
  * Below this the stage shows one page. At 900px a spread gives each page ~450px
  * of width, which is where this book's smallest captions stop being readable.
+ * It needs the height too: a phone on its side can be 932px wide and 430 tall,
+ * and a spread there would be two postage stamps.
  */
 const SPREAD_MIN_WIDTH = 900;
+const SPREAD_MIN_HEIGHT = 600;
+/** A phone on its side: short enough that every pixel of chrome costs page. */
+const SHORT_MAX_HEIGHT = 500;
+/**
+ * Phones read the 800px pages unzoomed and fetch the 2000px page only when
+ * someone zooms. A 390px-wide phone at 3x would otherwise pick the 1400px set
+ * for a page whose 8pt captions nobody can read without zooming anyway: 19 MB
+ * of book instead of 9.6 MB. A media query, not a measurement, so the right
+ * file is chosen while the HTML is still arriving. Tablets are taller than
+ * 1000px on either side and keep the full srcset.
+ */
+const PHONE_MQ = "(max-width: 899px) and (max-height: 1000px), (max-height: 499px)";
 
 type Props = {
   pages: CataloguePage[];
@@ -114,8 +129,13 @@ export default function CatalogueViewer({
   const [chromeTop, setChromeTop] = useState(CHROME_TOP);
   const [chromeBottom, setChromeBottom] = useState(CHROME_BOTTOM);
   const [compact, setCompact] = useState(false);
+  const [short, setShort] = useState(false);
 
   const stageRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLElement>(null);
+  const footerRef = useRef<HTMLElement>(null);
+  /** Chrome that stays put: a phone either way up, where it lives beside the
+   *  page rather than over it. */
   const compactRef = useRef(false);
   const chromeTimer = useRef<number | null>(null);
   const zoomed = view.s > 1.01;
@@ -182,25 +202,36 @@ export default function CatalogueViewer({
   useEffect(() => {
     const measure = () => {
       const w = window.innerWidth;
-      const wide = w >= SPREAD_MIN_WIDTH;
-      const small = w < 640;
-      const top = small ? CHROME_TOP_SM : CHROME_TOP;
-      const bottom = small ? CHROME_BOTTOM_SM : CHROME_BOTTOM;
+      const vh = window.innerHeight;
+      const wide = w >= SPREAD_MIN_WIDTH && vh >= SPREAD_MIN_HEIGHT;
+      const low = vh < SHORT_MAX_HEIGHT && w > vh;
+      const small = w < 640 && !low;
+      // The chrome's real height, once it exists. The stage sits between the
+      // two bars, so they can never cover the page whatever the screen does.
+      const top = headerRef.current?.offsetHeight || (small ? CHROME_TOP_SM : CHROME_TOP);
+      const bottom = footerRef.current?.offsetHeight || (small ? CHROME_BOTTOM_SM : CHROME_BOTTOM);
       setSpreadMode(wide);
       setCompact(small);
-      compactRef.current = small;
+      setShort(low);
+      compactRef.current = small || low;
       setChromeTop(top);
       setChromeBottom(bottom);
-      const h = window.innerHeight - top - bottom;
+      const h = vh - top - bottom;
       const ratio = wide ? aspect * 2 : aspect;
-      setStageW(Math.max(200, Math.min(w, h * ratio)));
+      setStageW(Math.max(160, Math.min(w, h * ratio)));
     };
     measure();
     window.addEventListener("resize", measure);
     window.addEventListener("orientationchange", measure);
+    // The bars change height when the layout flips (a phone turned on its
+    // side drops a row), which a resize event alone doesn't cover.
+    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(() => measure()) : null;
+    if (headerRef.current) ro?.observe(headerRef.current);
+    if (footerRef.current) ro?.observe(footerRef.current);
     return () => {
       window.removeEventListener("resize", measure);
       window.removeEventListener("orientationchange", measure);
+      ro?.disconnect();
     };
   }, [aspect]);
 
@@ -209,7 +240,9 @@ export default function CatalogueViewer({
   // device pixel ratio and picks from srcset; zooming widens the hint so the
   // largest raster is fetched on demand rather than up front.
   const pageCss = stageW === null ? null : stageW / (spreadMode ? 2 : 1);
-  const baseSizes = pageCss === null ? "50vw" : `${Math.round(pageCss)}px`;
+  // Before the stage is measured, a media-query guess at the same answer, so
+  // the first paint doesn't fetch one width and the measurement another.
+  const baseSizes = pageCss === null ? "(max-width: 899px) and (orientation: portrait) 100vw, (max-width: 899px) calc(100vh - 110px), 50vw" : `${Math.round(pageCss)}px`;
   const sizesFor = (active: boolean) => (active && zoomed ? `${maxWidth}px` : baseSizes);
 
   useEffect(() => setCanShare(typeof navigator !== "undefined" && "share" in navigator), []);
@@ -481,7 +514,7 @@ export default function CatalogueViewer({
 
   // On a phone the controls sit in the black beside a square page rather than
   // over the artwork, so there is nothing to auto-hide.
-  const visible = chrome || compact;
+  const visible = chrome || compact || short;
   const shown = views[vi] ?? [1];
   const label = shown.length === 2 ? `Pages ${shown[0]}–${shown[1]} of ${total}` : `Page ${shown[0]} of ${total}`;
 
@@ -537,18 +570,22 @@ export default function CatalogueViewer({
                   aria-hidden={!active}
                 >
                   {group.map((n) => (
-                    <img
-                      key={n}
-                      src={cataloguePageUrl(n, widths[0])}
-                      srcSet={cataloguePageSrcSet(n)}
-                      sizes={sizesFor(active)}
-                      alt={pages[n - 1]?.alt ?? `Catalogue page ${n} of ${total}`}
-                      width={maxWidth}
-                      height={Math.round(maxWidth / aspect)}
-                      draggable={false}
-                      fetchPriority={active ? "high" : "low"}
-                      className="h-full w-auto max-w-none object-contain"
-                    />
+                    // display: contents, so the <img> lays out exactly as it
+                    // did before it had a <picture> around it.
+                    <picture key={n} style={{ display: "contents" }}>
+                      <source media={PHONE_MQ} srcSet={cataloguePageUrl(n, active && zoomed ? maxWidth : widths[0])} />
+                      <img
+                        src={cataloguePageUrl(n, widths[0])}
+                        srcSet={cataloguePageSrcSet(n)}
+                        sizes={sizesFor(active)}
+                        alt={pages[n - 1]?.alt ?? `Catalogue page ${n} of ${total}`}
+                        width={maxWidth}
+                        height={Math.round(maxWidth / aspect)}
+                        draggable={false}
+                        fetchPriority={active ? "high" : "low"}
+                        className="h-full w-auto max-w-none object-contain"
+                      />
+                    </picture>
                   ))}
                 </div>
               );
@@ -563,6 +600,7 @@ export default function CatalogueViewer({
           constrained to the same width as the stage, so the chrome reads as
           belonging to the book rather than to the browser window. */}
       <header
+        ref={headerRef}
         className="absolute inset-x-0 top-0 z-20"
         style={{
           opacity: visible ? 1 : 0,
@@ -574,7 +612,9 @@ export default function CatalogueViewer({
         }}
       >
         <div
-          className="mx-auto flex items-center justify-between gap-3 px-3 pb-2.5 pt-[max(env(safe-area-inset-top),0.6rem)] sm:px-5"
+          className={`mx-auto flex items-center justify-between gap-3 px-3 sm:px-5 ${
+            short ? "pb-1.5 pt-[max(env(safe-area-inset-top),0.35rem)]" : "pb-2.5 pt-[max(env(safe-area-inset-top),0.6rem)]"
+          }`}
           style={{ maxWidth: stageW ? Math.max(stageW, 720) : undefined }}
         >
           <Link
@@ -599,7 +639,7 @@ export default function CatalogueViewer({
           {/* On a phone these live in the bottom bar instead — within reach of
               a thumb, and grouped with the other controls rather than
               stranded in the far corner of the screen. */}
-          <div className="hidden flex-shrink-0 items-center gap-2 sm:flex">
+          <div className={`${short ? "hidden" : "hidden sm:flex"} flex-shrink-0 items-center gap-2`}>
             <Actions
               requestHref={requestHref}
               onRequest={() => setAskingForPrint(true)}
@@ -608,7 +648,7 @@ export default function CatalogueViewer({
               onShare={onShare}
             />
           </div>
-          <span className="w-8 flex-shrink-0 sm:hidden" aria-hidden="true" />
+          <span className={`w-8 flex-shrink-0 ${short ? "" : "sm:hidden"}`} aria-hidden="true" />
         </div>
       </header>
 
@@ -639,11 +679,14 @@ export default function CatalogueViewer({
           The scrubber runs over pages, not spreads — "page 96" is something a
           reader wants; "spread 49" is not. */}
       <footer
-        className="absolute inset-x-0 bottom-0 z-20 px-3 pb-[max(env(safe-area-inset-bottom),0.6rem)] pt-4 sm:px-5"
+        ref={footerRef}
+        className={`absolute inset-x-0 bottom-0 z-20 px-3 sm:px-5 ${
+          short ? "pb-[max(env(safe-area-inset-bottom),0.35rem)] pt-1.5" : "pb-[max(env(safe-area-inset-bottom),0.6rem)] pt-4"
+        }`}
         style={{ opacity: visible ? 1 : 0, transition: "opacity 220ms ease", pointerEvents: visible ? "auto" : "none" }}
       >
         <div
-          className="mx-auto rounded-2xl px-3 py-2.5 sm:px-4"
+          className={`mx-auto rounded-2xl px-3 sm:px-4 ${short ? "py-1.5" : "py-2.5"}`}
           style={{
             maxWidth: stageW ? Math.max(stageW, 720) : undefined,
             background: "rgba(18,18,18,0.82)",
@@ -668,7 +711,20 @@ export default function CatalogueViewer({
             <span className="hidden w-8 flex-shrink-0 text-[11px] tabular-nums sm:block" style={{ color: "rgba(255,255,255,0.40)" }}>
               {total}
             </span>
-            <form onSubmit={submitJump} className="hidden flex-shrink-0 items-center gap-2 md:flex">
+            {/* On a phone on its side the controls share one row with the
+                scrubber: the page gets the height a second row would take. */}
+            {short && (
+              <div className="flex flex-shrink-0 items-center gap-2">
+                <Actions
+                  requestHref={requestHref}
+                  onRequest={() => setAskingForPrint(true)}
+                  download={download}
+                  canShare={canShare}
+                  onShare={onShare}
+                />
+              </div>
+            )}
+            <form onSubmit={submitJump} className={`${short ? "hidden" : "hidden md:flex"} flex-shrink-0 items-center gap-2`}>
               <label htmlFor="catalogue-jump" className="text-[10px] font-semibold uppercase tracking-[0.14em]" style={{ color: "rgba(255,255,255,0.42)" }}>
                 Go to
               </label>
@@ -697,7 +753,7 @@ export default function CatalogueViewer({
             />
           </div>
 
-          <div className="mt-2.5 flex items-center justify-between gap-3 border-t pt-2.5" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
+          <div className={`mt-2.5 items-center justify-between gap-3 border-t pt-2.5 ${short ? "hidden" : "flex"}`} style={{ borderColor: "rgba(255,255,255,0.08)" }}>
             {/* Secondary to "Request a copy" above, on purpose: two solid
                 orange buttons on one screen means neither is the primary. */}
             <Link

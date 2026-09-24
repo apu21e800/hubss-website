@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+import PhotoImage from "@/components/ui/PhotoImage";
+import { isSanityImage, sanitySized } from "@/lib/photos";
 import PhotoLightbox from "@/components/ui/PhotoLightbox";
 
 export interface GalleryImage {
@@ -103,7 +104,7 @@ export default function GalleryGrid({ images }: { images: GalleryImage[] }) {
               /* eslint-disable-next-line @next/next/no-img-element */
               <img
                 key={img.src}
-                src={img.src}
+                src={isSanityImage(img.src) ? sanitySized(img.src, 1200) : img.src}
                 alt={img.alt}
                 loading="lazy"
                 decoding="async"
@@ -192,7 +193,7 @@ function GalleryTile({
           : undefined
       }
     >
-      <Image
+      <PhotoImage
         src={img.src}
         alt={img.alt}
         fill

@@ -26,7 +26,10 @@
     "sync:applications": "tsx scripts/sync-applications-to-sanity.ts",
     "sync:applications:dry": "tsx scripts/sync-applications-to-sanity.ts --dry-run",
     "sync:pages": "tsx scripts/sync-pages-to-sanity.ts",
-    "sync:pages:dry": "tsx scripts/sync-pages-to-sanity.ts --dry-run"
+    "sync:pages:dry": "tsx scripts/sync-pages-to-sanity.ts --dry-run",
+    "photos:dry": "tsx scripts/sync-photos-to-sanity.ts --dry-run",
+    "photos:sync": "tsx scripts/sync-photos-to-sanity.ts",
+    "photos:check": "tsx scripts/sync-photos-to-sanity.ts --check"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",

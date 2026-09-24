@@ -256,9 +256,14 @@ async function checkSanityContract() {
   const askedIn = (block) => {
     const m = src.match(new RegExp(block + "\\s*=\\s*`([^`]*)`", "s"));
     if (!m) return [];
-    return m[1].split(",").map((l) => l.trim())
+    // Top-level fields only. A nested projection like heroImage{ alt, "url":
+    // asset->url } names fields of the image, not of the document, so it is
+    // dropped before splitting, and gallery[] is checked as gallery.
+    let body = m[1];
+    for (let prev = null; prev !== body; ) { prev = body; body = body.replace(/\{[^{}]*\}/g, ""); }
+    return body.split(",").map((l) => l.trim())
       .filter((l) => l && !l.startsWith("_") && !/^"/.test(l))
-      .map((l) => l.split(/[.\s]/)[0])
+      .map((l) => l.split(/[.\s[]/)[0])
       .filter(Boolean);
   };
 

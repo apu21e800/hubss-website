@@ -5,30 +5,43 @@ and the exact prompts to send Claude Code.
 
 ---
 
-## The one rule
+## The one rule (since Sep 2026)
 
-**The folder IS the gallery.**
+**The galleries live in Sanity Studio.** Open hubss.com/studio, pick a product
+or an application, and go to the Media tab. Publish, and the page updates within
+seconds.
 
-Every product and every application has one folder. Whatever is in that folder is
-what shows on that page — in filename order. There is no list to edit, no code to
-touch, no developer needed.
-
-| You want to… | You do… |
+| You want to… | In Studio you… |
 |---|---|
-| Add a photo | Drop the file in the folder |
-| Remove a photo | Delete the file |
-| Hide a photo but keep it | Rename it with a `_` in front: `_maybe-later.jpg` |
-| Reorder | Rename with number prefixes — `01-`, `02-`, `03-` |
-| Change the *hero* (the big one at top) | Tell me which photo; that one's still set in code |
+| Add a photo | Drag it into **Gallery images**, write its alt text, Publish |
+| Remove a photo | Open its menu (⋯) → Remove, Publish |
+| Reorder | Drag it up or down. The first photo is shown large. Publish |
+| Change the hero (the wide photo behind the title) | Replace **Hero image** on the same tab, Publish |
+| Change the homepage or About hero | Pages → Homepage (or About) → the hero photo, Publish |
 
-Then: **commit and push** (one prompt, below). Live in about two minutes.
+Every photo needs alt text before Studio will publish it. Describe what's in
+the picture: that's what screen readers read out and what Google Images ranks.
 
-> ⚠️ This is live once you import the current bundle. Until then the site still
-> uses the old fixed lists. It's the first thing the import unlocks.
+Photos are served by Sanity's image CDN, resized for each screen, and never go
+through Vercel's image optimizer (lib/photos.ts).
+
+### The folders are now the backup
+
+A page whose Sanity gallery is empty shows its `/public/images` folder, exactly
+as before, so a mistake in Studio can never leave a page without photos. Adding
+a file to a folder no longer changes a page that has a Sanity gallery: add it
+in Studio instead.
+
+The folders are also where the galleries came from. `npm run photos:sync`
+copied each page's photos, order, alt text and captions into Sanity on
+24 Sep 2026 (`scripts/sync-photos-to-sanity.ts`); `npm run photos:check`
+compares Sanity with the folders. Don't re-run the sync without a reason: it
+makes Sanity match the folders again, which would undo gallery edits made in
+Studio.
 
 ---
 
-## Where everything lives
+## The folders (the fallback)
 
 Open: `...\Web_Projects\hubss-website\public\images\`
 

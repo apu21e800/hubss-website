@@ -63,7 +63,7 @@ export default defineType({
     }),
 
     // ── Media ────────────────────────────────────────────────────────────────
-    richImageField("heroImage", "Hero image", false, "media"),
+    richImageField("heroImage", "Hero image (the wide photo behind the title)", true, "media"),
     defineField({
       name: "heroImageUrl",
       title: "Hero image URL (legacy — read only)",
@@ -78,7 +78,7 @@ export default defineType({
       title: "Gallery images",
       type: "array",
       group: "media",
-      description: "Photos showcasing real installations of this application type — shown in the gallery on the application page. Add alt text to every image describing what's in the photo (required for accessibility). Drag and drop to reorder.",
+      description: "The photos in \"The work\" on this application's page, in this order. The first one is shown large. Drag to reorder, drop new photos in, remove any that shouldn't be there. Every photo needs alt text. Publish and the page updates within seconds.",
       of: [galleryImageItem],
     }),
 

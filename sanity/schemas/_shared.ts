@@ -71,14 +71,14 @@ export const galleryImageItem = {
       name: "alt",
       title: "Alt text",
       type: "string",
-      description: "Describe the image for screen readers and SEO. Required for AODA compliance.",
-      validation: (Rule) => Rule.required().warning("All gallery images should have alt text"),
+      description: "Describe the photo for screen readers and Google Images, e.g. 'Red brick-pattern crosswalk at a Toronto intersection'. Required for AODA compliance.",
+      validation: (Rule) => Rule.required().error("Every photo needs alt text before it can be published (AODA)"),
     }),
     defineField({
       name: "caption",
       title: "Caption (optional)",
       type: "string",
-      description: "Short caption shown below the image in Studio and optionally on the site.",
+      description: "Shown under the photo when a visitor opens it full screen. Leave blank to show the alt text there instead.",
     }),
   ],
 };

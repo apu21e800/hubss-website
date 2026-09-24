@@ -111,9 +111,9 @@ export default defineType({
           title: "Secondary CTA link",
           description: 'URL or anchor the secondary button points to (e.g. "#systems" or "/products").',
         }),
-        richImageField("heroImage1", "Hero slide 1 (primary)"),
-        richImageField("heroImage2", "Hero slide 2"),
-        richImageField("heroImage3", "Hero slide 3"),
+        richImageField("heroImage1", "Hero photo (shown on the homepage)"),
+        richImageField("heroImage2", "Hero slide 2 (not shown on the site yet)"),
+        richImageField("heroImage3", "Hero slide 3 (not shown on the site yet)"),
       ],
     }),
 
@@ -146,7 +146,7 @@ export default defineType({
           description: "Paragraph below the heading — 2–3 sentences about HUB's story or mission.",
           validation: (r) => r.max(400).warning("Keep the subheading under 400 characters"),
         }),
-        richImageField("heroImage", "Hero background image"),
+        richImageField("heroImage", "Hero background photo (behind the About page title)"),
       ],
     }),
 

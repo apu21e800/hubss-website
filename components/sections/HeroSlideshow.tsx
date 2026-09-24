@@ -5,6 +5,7 @@ import Link from "next/link";
 // fetchPriority="high" ensures the browser's HTML preload scanner picks this up first.
 // || instead of ?? guards against empty-string heroImageSrc from Sanity.
 import { heroAlt } from "@/lib/image-seo";
+import { isSanityImage, sanitySized, sanitySrcSet } from "@/lib/photos";
 
 const FALLBACK_HERO = "/images/hero/hero-1.jpg";
 
@@ -19,6 +20,8 @@ interface HeroSlideshowProps {
   cta2Href?: string;
   /** Sanity-supplied hero image URL. Falls back to local /public/images/hero/hero-1.jpg. */
   heroImageSrc?: string;
+  /** Alt text from Studio for that image. */
+  heroImageAlt?: string;
 }
 
 export default function HeroSlideshow({
@@ -31,8 +34,12 @@ export default function HeroSlideshow({
   cta2Label  = "See the Systems",
   cta2Href   = "#systems",
   heroImageSrc,
+  heroImageAlt,
 }: HeroSlideshowProps = {}) {
   const src = heroImageSrc || FALLBACK_HERO;
+  // A Sanity photo is sized by Sanity's CDN (lib/photos.ts): a phone gets an
+  // 828px WebP instead of the full-size original.
+  const fromSanity = isSanityImage(src);
 
   return (
     <section
@@ -48,8 +55,10 @@ export default function HeroSlideshow({
            the browser HTML preload scanner immediately, before CSS/JS parsing. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src={src}
-        alt={heroAlt(src)}
+        src={fromSanity ? sanitySized(src, 1920) : src}
+        srcSet={fromSanity ? sanitySrcSet(src) : undefined}
+        sizes={fromSanity ? "100vw" : undefined}
+        alt={heroImageAlt || heroAlt(src)}
         // @ts-ignore fetchPriority is valid HTML but TS types lag
         fetchPriority="high"
         style={{

@@ -17,6 +17,7 @@ import { unstable_cache } from "next/cache";
 import { client } from "@/lib/sanity.client";
 import type { SanityProduct, SanityApplication } from "@/types/sanity";
 import type { ResourceDocument } from "@/lib/resource-documents";
+import type { SanityPhotoProjected } from "@/lib/photos";
 
 /**
  * Every Sanity read goes through here. On failure it logs and throws:
@@ -47,8 +48,11 @@ const CACHE_VERSION = "2026-09-24";
 // Only fields the dataset really has. heroImageUrl (nulled on every doc by
 // scripts/sanity-strip-legacy-fields.mjs), galleryUrls (never a schema field)
 // and relatedApplicationSlugs (unset by the same script) were dropped in Sep
-// 2026: nothing read them, and `npm run verify` failed on them. The images live
-// in heroImage and gallery, which nothing queries yet.
+// 2026: nothing read them, and `npm run verify` failed on them.
+//
+// heroImage and gallery come with their CDN URL, pixel size and alt/caption,
+// plus the /public path each photo was migrated from (asset->source.url), which
+// lib/image-seo.ts needs for SEO keywords. See lib/photos.ts.
 const PRODUCT_FIELDS = `
   _id,
   _type,
@@ -59,6 +63,8 @@ const PRODUCT_FIELDS = `
   description,
   homepageBlurb,
   heroPosition,
+  heroImage{ alt, caption, "url": asset->url, "width": asset->metadata.dimensions.width, "height": asset->metadata.dimensions.height, "origin": asset->source.url },
+  gallery[]{ alt, caption, "url": asset->url, "width": asset->metadata.dimensions.width, "height": asset->metadata.dimensions.height, "origin": asset->source.url },
   specs,
   seo
 `;
@@ -97,6 +103,8 @@ const APPLICATION_FIELDS = `
   "slug": slug.current,
   shortDesc,
   description,
+  heroImage{ alt, caption, "url": asset->url, "width": asset->metadata.dimensions.width, "height": asset->metadata.dimensions.height, "origin": asset->source.url },
+  gallery[]{ alt, caption, "url": asset->url, "width": asset->metadata.dimensions.width, "height": asset->metadata.dimensions.height, "origin": asset->source.url },
   seo
 `;
 
@@ -141,6 +149,9 @@ export interface SanityPageContent {
     cta2Label?: string;
     cta2Href?: string;
   };
+  // Resolved hero photos (projected in getSanityPageContent)
+  homepageHeroImage?: SanityPhotoProjected | null;
+  aboutHeroImage?: SanityPhotoProjected | null;
   // About
   aboutHero?: {
     eyebrow?: string;
@@ -198,7 +209,14 @@ export const getSanityPageContent = unstable_cache(
   async (slug: string): Promise<SanityPageContent | null> =>
     sanityFetch<SanityPageContent | null>(
       `page ${slug}`,
-      `*[_type == "page" && slug.current == $slug][0]`,
+      // The whole document, plus the two hero photos the site shows, resolved to
+      // CDN URLs (see lib/photos.ts). Slides 2 and 3 of the homepage hero exist
+      // in the schema but aren't shown yet.
+      `*[_type == "page" && slug.current == $slug][0]{
+        ...,
+        "homepageHeroImage": homepageHero.heroImage1{ alt, caption, "url": asset->url, "width": asset->metadata.dimensions.width, "height": asset->metadata.dimensions.height, "origin": asset->source.url },
+        "aboutHeroImage": aboutHero.heroImage{ alt, caption, "url": asset->url, "width": asset->metadata.dimensions.width, "height": asset->metadata.dimensions.height, "origin": asset->source.url }
+      }`,
       { slug }
     ),
   [`page-by-slug:${CACHE_VERSION}`],

@@ -67,7 +67,8 @@ export function buildMetadata({
   publishedTime,
 }: SeoOptions): Metadata {
   const url = slug ? `${BASE_URL}/${slug}` : BASE_URL;
-  const imageUrl = `${BASE_URL}${image}`;
+  // A Sanity photo arrives as a full CDN URL; a /public image as a path.
+  const imageUrl = /^https?:\/\//.test(image) ? image : `${BASE_URL}${image}`;
   const clampedTitle = composeTitle(title, TITLE_SUFFIX);
   // Descriptions go through whole for the same reason: the old 155-character
   // slice appended an ellipsis that Google would have added itself, and put it

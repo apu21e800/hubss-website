@@ -631,12 +631,25 @@ export const HUB_ORGANIZATION = {
  */
 export function imageObject(
   src: string,
-  opts?: { alt?: string; caption?: string; representativeOfPage?: boolean; width?: number; height?: number }
+  opts?: {
+    alt?: string;
+    caption?: string;
+    representativeOfPage?: boolean;
+    width?: number;
+    height?: number;
+    /**
+     * The path whose folder describes the photo. A Sanity CDN URL has no
+     * folder, so a photo migrated from /public passes its original path here
+     * and keeps exactly the alt, caption and keywords it had before.
+     */
+    seoSrc?: string;
+  }
 ) {
   const abs = src.startsWith("http") ? src : `${SITE}${src.startsWith("/") ? "" : "/"}${src}`;
-  const alt = opts?.alt ?? seoAlt(src, "Decorative pavement installation by HUB Surface Systems");
-  const caption = opts?.caption ?? seoCaption(src);
-  const keywords = seoKeywords(src);
+  const seo = opts?.seoSrc ?? src;
+  const alt = opts?.alt ?? seoAlt(seo, "Decorative pavement installation by HUB Surface Systems");
+  const caption = opts?.caption ?? seoCaption(seo);
+  const keywords = seoKeywords(seo);
 
   return {
     "@type": "ImageObject",
@@ -654,6 +667,26 @@ export function imageObject(
     ...(opts?.width ? { width: opts.width } : {}),
     ...(opts?.height ? { height: opts.height } : {}),
   };
+}
+
+/**
+ * imageObject for a Photo (lib/photos.ts). A photo migrated from /public keeps
+ * the SEO text of its original path; a photo added in Studio uses its own alt
+ * and caption. `ownText` forces the photo's own alt and caption, as the gallery
+ * schema always did.
+ */
+export function photoObject(
+  p: { src: string; alt: string; caption?: string; origin?: string; width?: number; height?: number },
+  opts?: { representativeOfPage?: boolean; ownText?: boolean }
+) {
+  const own = opts?.ownText || (!p.origin && /^https?:\/\//.test(p.src));
+  return imageObject(p.src, {
+    seoSrc: p.origin,
+    ...(own ? { alt: p.alt, caption: p.caption } : {}),
+    ...(p.width ? { width: p.width } : {}),
+    ...(p.height ? { height: p.height } : {}),
+    ...(opts?.representativeOfPage ? { representativeOfPage: true } : {}),
+  });
 }
 
 /** Absolute URLs for the sitemap's image extension. */

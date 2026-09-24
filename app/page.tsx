@@ -15,6 +15,7 @@ import { buildMetadata } from "@/lib/seo";
 import CanadaMapWrapper from "@/components/sections/CanadaMapWrapper";
 import { SITE_FLAGS } from "@/lib/site-flags";
 import { getSanityPageContent } from "@/lib/sanity.queries";
+import { toPhoto } from "@/lib/photos";
 import { getMergedApplications } from "@/lib/applications.server";
 import { getMergedProducts } from "@/lib/products.server";
 import { SOCIAL_LINKS } from "@/lib/social-links";
@@ -83,6 +84,7 @@ export default async function Home() {
     getMergedApplications(),
     getMergedProducts(),
   ]);
+  const heroPhoto = toPhoto(sanityPage?.homepageHeroImage, "");
   const hero = {
     eyebrow:    sanityPage?.homepageHero?.eyebrow    ?? "Redefining Hardscapes · Since 1999",
     heading:    sanityPage?.homepageHero?.heading    ?? "The World Is",
@@ -92,6 +94,9 @@ export default async function Home() {
     cta1Href:   sanityPage?.homepageHero?.cta1Href   ?? "#field-notes",
     cta2Label:  sanityPage?.homepageHero?.cta2Label  ?? "See the Systems",
     cta2Href:   sanityPage?.homepageHero?.cta2Href   ?? "#systems",
+    // Hero slide 1 in Studio; /images/hero/hero-1.jpg when it's empty.
+    heroImageSrc: heroPhoto?.src,
+    heroImageAlt: heroPhoto?.alt,
   };
 
   return (

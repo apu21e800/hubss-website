@@ -4,6 +4,8 @@ import LunchLearn from "@/components/sections/LunchLearn";
 import { buildMetadata } from "@/lib/seo";
 import Image from "next/image";
 import { getSanityPageContent } from "@/lib/sanity.queries";
+import { toPhoto } from "@/lib/photos";
+import PhotoImage from "@/components/ui/PhotoImage";
 
 // Sanity is the CMS for this page's copy, so the page has to be allowed to go
 // and re-read it. Without a revalidate the route is prerendered once at build
@@ -75,6 +77,11 @@ export default async function AboutPage() {
     subheading: sanityPage?.aboutHero?.subheading ?? "Since 1999, HUB Surface Systems — a proudly Canadian company, coast to coast — has been connecting communities with pavement technologies that do more than carry traffic. They carry identity.",
   };
   const missionQuote = sanityPage?.aboutMission ?? "Every surface tells a story. We give communities the language to write it.";
+  // The hero photo from Studio; /images/hero/hero-3.jpg when it's empty.
+  const aboutHeroPhoto = toPhoto(sanityPage?.aboutHeroImage, "HUB Surface Systems — Canadian decorative pavement specialists") ?? {
+    src: "/images/hero/hero-3.jpg",
+    alt: "HUB Surface Systems — Canadian decorative pavement specialists",
+  };
 
   const storyParagraphs = sanityPage?.aboutStory?.length ? sanityPage.aboutStory : STORY_FALLBACK;
   const storyAside      = sanityPage?.aboutStoryAside ?? STORY_ASIDE_FALLBACK;
@@ -102,9 +109,9 @@ export default async function AboutPage() {
 
       {/* ── Hero ──────────────────────────────── */}
       <div data-hero className="relative overflow-hidden min-h-[500px]" style={{ background: "var(--bg-dark)" }}>
-        <Image
-          src="/images/hero/hero-3.jpg"
-          alt="HUB Surface Systems — Canadian decorative pavement specialists"
+        <PhotoImage
+          src={aboutHeroPhoto.src}
+          alt={aboutHeroPhoto.alt}
           fill
           className="object-cover object-center"
           priority

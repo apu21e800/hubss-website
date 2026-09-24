@@ -37,7 +37,9 @@ Markings, Parks & Paths, Community Branding, Town Homes, Parking Lots, Airports.
 - MDX for blog posts (markdown with components)
 - Framer Motion for animations
 - Resend for transactional email (contact + lunch & learn forms)
-- Images: /public/images/ — swap by replacing files, no code change needed
+- Images: product and application galleries and heroes, and the homepage and
+  About heroes, come from Sanity Studio (lib/photos.ts, docs/IMAGE-WORKFLOW.md);
+  /public/images is their fallback and holds everything else
 - Documents: /public/docs/ — PDFs linked by filename
 
 ## Environment Variables
@@ -145,8 +147,11 @@ through another, both on the rule in lib/cms-merge.ts: a blank Sanity field
 falls back to the code. The /products index is code-only.
 `npm run sync:products`, `sync:applications` and `sync:pages` push the code
 into Sanity; each has a `:dry` variant that reports first and needs no token.
-Everything else — the catalogue spreads, images, galleries, related
-products, colours, documents, blog — is code-only and deploys on push.
+The product and application galleries and hero photos, and the homepage and
+About hero photos, also come from Sanity (docs/IMAGE-WORKFLOW.md), with the
+/public/images folders as the fallback. Everything else — the catalogue
+spreads, related products, colours, documents, blog — is code-only and deploys
+on push.
 
 
 ## Bundle import protocol (Claude Cowork -> this repo)

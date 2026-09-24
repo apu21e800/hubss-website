@@ -28,7 +28,8 @@ the code (`lib/cms-merge.ts`, the `||` rule).
 | `specs` (Full specification) | **Sanity wins** | — |
 | SEO title and description | **Sanity wins** | **Sanity wins** |
 | `homepageBlurb` (homepage Systems card) | **Sanity wins** | — |
-| images, gallery, related products/applications, catalogue spreads | code | code |
+| hero photo and gallery (docs/IMAGE-WORKFLOW.md) | **Sanity wins** (folder fallback) | **Sanity wins** (folder fallback) |
+| related products/applications, catalogue spreads | code | code |
 
 `/products` (the index) is code-only by design and reads no Sanity.
 
@@ -108,6 +109,8 @@ fallback text in `app/page.tsx`, `app/about/page.tsx` or `app/contact/page.tsx`
 does not appear on the live site, this is why. Run the matching dry run first;
 it shows you the field.
 
-Images, galleries, related products, the catalogue spreads, colours, documents
-and blog posts are **not** affected: they come from code only, and deploy the
-moment the push lands.
+Related products, the catalogue spreads, colours, documents and blog posts are
+**not** affected: they come from code only, and deploy the moment the push
+lands. Photos are separate too: they have their own sync
+(`npm run photos:sync`, docs/IMAGE-WORKFLOW.md), and after the one-time
+migration they are edited in Studio, not synced.

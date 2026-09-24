@@ -12,13 +12,15 @@
  *
  * Fields that can come from Sanity: name, eyebrow, shortDesc, description,
  * specs, seoTitle, seoDescription, homepageBlurb (with PRODUCT_WHAT in
- * components/sections/ProductsGrid.tsx as the fallback). Images, gallery,
- * related applications, brand logo and the rest of the UI metadata come from
+ * components/sections/ProductsGrid.tsx as the fallback), and the hero photo and
+ * gallery (with lib/featured-images.ts and the /public folders as the fallback).
+ * Related applications, brand logo and the rest of the UI metadata come from
  * lib/products.ts only.
  */
 import { products, type Product } from "@/lib/products";
 import { blocksToPlainText } from "@/lib/portable-text";
 import { cmsList, cmsText } from "@/lib/cms-merge";
+import { toPhoto, toPhotos, type Photo, type SanityPhotoProjected } from "@/lib/photos";
 import {
   getAllSanityProducts,
   getProductBySlug,
@@ -27,13 +29,22 @@ import type { SanityBlock, SanityProduct } from "@/types/sanity";
 
 // GROQ projection aliases slug.current to a string; runtime shape differs from
 // the typed Sanity document shape on this field.
-type SanityProductProjected = Omit<SanityProduct, "slug"> & { slug: string };
+// heroImage and gallery arrive projected to URLs and alt text (lib/photos.ts).
+type SanityProductProjected = Omit<SanityProduct, "slug" | "heroImage" | "gallery"> & {
+  slug: string;
+  heroImage?: SanityPhotoProjected | null;
+  gallery?: SanityPhotoProjected[] | null;
+};
 
 export type MergedProduct = Product & {
   homepageBlurb?: string;
   /** The Sanity description as rich text, when Sanity has one. `description`
    *  stays plain text for JSON-LD and meta tags; the page renders these blocks. */
   descriptionBlocks?: SanityBlock[];
+  /** The hero photo from Sanity, when it has one. Else the page uses lib/featured-images.ts. */
+  heroPhoto?: Photo;
+  /** The gallery from Sanity, when it has any photos. Else the page reads the /public folder. */
+  galleryPhotos?: Photo[];
 };
 
 function merge(code: Product, sanity: SanityProductProjected | null | undefined): MergedProduct {
@@ -42,6 +53,7 @@ function merge(code: Product, sanity: SanityProductProjected | null | undefined)
   // in Studio cannot put a blank line in the spec table.
   const sanitySpecs = sanity.specs?.filter((s) => s?.label?.trim() && s?.value?.trim());
   const sanityDescription = blocksToPlainText(sanity.description);
+  const sanityGallery = toPhotos(sanity.gallery, `${code.name} decorative pavement by HUB Surface Systems`);
   return {
     ...code,
     name: cmsText(sanity.name, code.name),
@@ -53,6 +65,8 @@ function merge(code: Product, sanity: SanityProductProjected | null | undefined)
     seoTitle: cmsText(sanity.seo?.title, code.seoTitle),
     seoDescription: cmsText(sanity.seo?.description, code.seoDescription),
     homepageBlurb: cmsText(sanity.homepageBlurb, undefined),
+    heroPhoto: toPhoto(sanity.heroImage, code.name) ?? undefined,
+    galleryPhotos: sanityGallery.length ? sanityGallery : undefined,
   };
 }
 

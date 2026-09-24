@@ -3,7 +3,7 @@
  * Images, and writes the manifest the sitemap swaps them in from.
  *
  * WHAT IT DOES
- * Calls the real app/sitemap.ts — so the list it bakes is, by construction, the
+ * Calls the real sitemap (lib/sitemap.ts) — so the list it bakes is, by construction, the
  * list the sitemap prints — and for each /images/… photo writes a
  * SEARCH_IMAGE_WIDTH WebP to /public/images/search/<same path>.webp. Then it
  * records every file it wrote in lib/search-images.json. Sizes, paths and the
@@ -67,13 +67,16 @@ const warn = (...a: unknown[]) => console.warn("[search-images]", ...a);
 
 /** Every /images/… photo the sitemap names, as source paths. */
 async function sitemapSources(): Promise<string[]> {
-  const { default: sitemap } = await import("../app/sitemap");
+  // buildSitemap, not the default export: that one reads Sanity through Next's
+  // cache, which doesn't exist here. With no photo data the list is every
+  // /public photo, a superset of what the live sitemap names.
+  const { buildSitemap } = await import("../lib/sitemap");
   // sitemap() already swaps in copies a previous run baked (when this runs
   // locally, the manifest may still be on disk); map those back to sources.
   const previous = readSearchImageManifest();
   const sourceOf = new Map(Object.entries(previous).map(([src, baked]) => [baked, src]));
   const found = new Set<string>();
-  for (const entry of sitemap()) {
+  for (const entry of buildSitemap()) {
     for (const url of entry.images ?? []) {
       const p = url.startsWith(SITE) ? url.slice(SITE.length) : url;
       const src = sourceOf.get(p) ?? p;

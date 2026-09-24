@@ -17,7 +17,7 @@
  */
 
 import { useCallback, useEffect, useRef } from "react";
-import Image from "next/image";
+import PhotoImage from "@/components/ui/PhotoImage";
 import { motion, AnimatePresence } from "framer-motion";
 
 export interface LightboxPhoto {
@@ -151,7 +151,7 @@ export default function PhotoLightbox({
           style={{ height: "min(82vh, 900px)" }}
           onClick={(e) => e.stopPropagation()}
         >
-          <Image
+          <PhotoImage
             src={photo.src}
             alt={photo.alt}
             fill
@@ -197,7 +197,7 @@ export default function PhotoLightbox({
         {/* Adjacent-frame preload (hidden) */}
         <div aria-hidden="true" style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", opacity: 0, pointerEvents: "none" }}>
           {preload.map((p) => (
-            <Image key={p.src} src={p.src} alt="" width={16} height={16} sizes="16px" />
+            <PhotoImage key={p.src} src={p.src} alt="" width={16} height={16} sizes="16px" />
           ))}
         </div>
       </motion.div>

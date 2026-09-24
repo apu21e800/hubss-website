@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Image from "next/image";
+import PhotoImage from "@/components/ui/PhotoImage";
 import Link from "next/link";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
@@ -9,7 +10,8 @@ import GalleryGrid, { type GalleryImage } from "@/components/ui/GalleryGrid";
 import { galleryFor, altFor } from "@/lib/asset-scan";
 import ResidentialDriveways from "@/components/sections/ResidentialDriveways";
 import JsonLd from "@/components/ui/JsonLd";
-import { imageObject, seoCaption } from "@/lib/image-seo";
+import { photoObject, seoCaption } from "@/lib/image-seo";
+import { isSanityImage, sanityOgImage, type Photo } from "@/lib/photos";
 import { applications } from "@/lib/applications";
 import { getMergedApplication } from "@/lib/applications.server";
 import RichText from "@/components/ui/RichText";
@@ -51,10 +53,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const application = await getMergedApplication(slug);
   if (!application) return {};
+  const heroSrc = application.heroPhoto?.src ?? application.imageUrl;
   return buildMetadata({
     title: application.seoTitle ?? application.name,
     description: application.seoDescription ?? (application.shortDesc + " — " + application.description.slice(0, 120) + "…"),
     slug: `applications/${application.slug}`,
+    image: isSanityImage(heroSrc) ? sanityOgImage(heroSrc) : heroSrc,
   });
 }
 
@@ -63,18 +67,26 @@ export default async function ApplicationPage({ params }: Props) {
   const application = await getMergedApplication(slug);
   if (!application) notFound();
 
-  // Gallery — folder-driven (see lib/asset-scan.ts + docs/IMAGE-WORKFLOW.md).
   const spread = applicationCatalogueFor(application.slug);
-  const appGallery = galleryFor(application.imageUrl, application.gallery, `images/applications/${application.slug}`);
-  const gallerySources = appGallery.length > 0 ? appGallery : [application.imageUrl];
-  const gallery: GalleryImage[] = gallerySources.map((src) => ({
-    src,
-    alt: altFor(src, `${application.name} surface systems by HUB — Canadian installation`),
-    // Written for a reader looking at the photo, not a copy of the alt. Visible
-    // text beside an image outweighs the alt attribute for Google Images and
-    // for the AI crawlers.
-    caption: seoCaption(src) ?? altFor(src, application.name),
-  }));
+
+  // The hero photo and the gallery come from Sanity, where Doug curates them
+  // (lib/photos.ts). An application whose Sanity document has none falls back
+  // to exactly what this page showed before: imageUrl, and the application's
+  // /public folder scanned at build time (lib/asset-scan.ts,
+  // docs/IMAGE-WORKFLOW.md).
+  const hero: Photo = application.heroPhoto ?? { src: application.imageUrl, alt: application.name };
+  const galleryPhotos: Photo[] = application.galleryPhotos ?? (() => {
+    const fromFolder = galleryFor(application.imageUrl, application.gallery, `images/applications/${application.slug}`);
+    return (fromFolder.length > 0 ? fromFolder : [application.imageUrl]).map((src) => ({
+      src,
+      alt: altFor(src, `${application.name} surface systems by HUB — Canadian installation`),
+      // Written for a reader looking at the photo, not a copy of the alt. Visible
+      // text beside an image outweighs the alt attribute for Google Images and
+      // for the AI crawlers.
+      caption: seoCaption(src) ?? altFor(src, application.name),
+    }));
+  })();
+  const gallery: GalleryImage[] = galleryPhotos.map((p) => ({ src: p.src, alt: p.alt, caption: p.caption ?? p.alt }));
 
   const relatedProductData = application.relatedProducts
     .map((s) => products.find((p) => p.slug === s))
@@ -92,8 +104,8 @@ export default async function ApplicationPage({ params }: Props) {
     // carry the caption, credit, keywords, and licence that make the photo
     // competitive in Google Images.
     image: [
-      imageObject(application.imageUrl, { representativeOfPage: true }),
-      ...gallerySources.slice(1, 12).map((src) => imageObject(src)),
+      photoObject(hero, { representativeOfPage: true }),
+      ...galleryPhotos.slice(1, 12).map((p) => photoObject(p)),
     ],
   };
 
@@ -107,9 +119,9 @@ export default async function ApplicationPage({ params }: Props) {
     url: `https://hubss.com/applications/${application.slug}`,
     isPartOf: { "@id": `https://hubss.com/applications/${application.slug}` },
     numberOfItems: gallery.length,
-    associatedMedia: gallery
+    associatedMedia: galleryPhotos
       .slice(0, 40)
-      .map((g) => imageObject(g.src, { alt: g.alt, caption: g.caption })),
+      .map((p) => photoObject({ ...p, caption: p.caption ?? p.alt }, { ownText: true })),
   } : null;
 
   const breadcrumbSchema = {
@@ -131,9 +143,9 @@ export default async function ApplicationPage({ params }: Props) {
 
       {/* Hero banner */}
       <div data-hero className="relative overflow-hidden" style={{ height: "clamp(360px, 52vh, 560px)" }}>
-        <Image
-          src={application.imageUrl}
-          alt={application.name}
+        <PhotoImage
+          src={hero.src}
+          alt={hero.alt}
           fill
           className="object-cover"
           priority

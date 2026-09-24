@@ -80,7 +80,7 @@ export default defineType({
     }),
 
     // ── Media ────────────────────────────────────────────────────────────────
-    richImageField("heroImage", "Hero image", false, "media"),
+    richImageField("heroImage", "Hero image (the wide photo behind the title)", true, "media"),
     defineField({
       name: "heroPosition",
       title: "Hero crop position",
@@ -102,7 +102,7 @@ export default defineType({
       title: "Gallery images",
       type: "array",
       group: "media",
-      description: "Product photos shown in the gallery slider on this product's page. Add alt text to every image for screen reader accessibility — describe what's in the photo. You can drag and drop to reorder.",
+      description: "The photos in \"The work\" on this product's page, in this order. The first one is shown large. Drag to reorder, drop new photos in, remove any that shouldn't be there. Every photo needs alt text. Publish and the page updates within seconds.",
       of: [galleryImageItem],
     }),
 

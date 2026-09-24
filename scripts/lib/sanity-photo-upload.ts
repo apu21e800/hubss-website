@@ -40,7 +40,12 @@ export function sha1Of(src: string): string {
 }
 
 async function resized(src: string): Promise<Buffer> {
-  return sharp(absPath(src))
+  // failOn "none": decode what a browser would. sport-courts-04.jpg (a Samsung
+  // phone photo) trips libjpeg's "Invalid SOS parameters for sequential JPEG"
+  // warning, which sharp treats as fatal by default; the whole image decodes
+  // fine when it's allowed to. It was the only one of 1,618 photos, and it
+  // stopped the first full sync on 24 Sep 2026.
+  return sharp(absPath(src), { failOn: "none" })
     .rotate()
     .resize({ width: MAX_EDGE, height: MAX_EDGE, fit: "inside", withoutEnlargement: true })
     .flatten({ background: "#ffffff" })

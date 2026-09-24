@@ -68,6 +68,11 @@ export async function uploadedPhotos(client: SanityClient): Promise<Map<string, 
 /**
  * Uploads every photo in `srcs` that `bySha` doesn't have yet, four at a time,
  * and adds each new asset to `bySha`.
+ *
+ * One bad file or a dropped connection doesn't stop the batch: each upload is
+ * tried three times (waiting 2 s, then 8 s), the rest carry on, and the photos
+ * that still failed are listed at the end and thrown, so no document is ever
+ * pointed at a missing asset. Everything uploaded is kept; a re-run skips it.
  */
 export async function uploadMissing(client: SanityClient, srcs: string[], bySha: Map<string, string>): Promise<{ uploaded: number; bytes: number }> {
   const todo = [...new Set(srcs)].filter((s) => !bySha.has(sha1Of(s)));
@@ -75,18 +80,33 @@ export async function uploadMissing(client: SanityClient, srcs: string[], bySha:
   const bySrcSha = new Map<string, string>();
   for (const s of todo) if (![...bySrcSha.values()].includes(sha1Of(s))) bySrcSha.set(s, sha1Of(s));
   const unique = [...bySrcSha.keys()];
+  const failed: { src: string; reason: string }[] = [];
   let done = 0, bytes = 0;
   await pool(unique, 4, async (src) => {
-    const body = await resized(src);
-    const asset = await client.assets.upload("image", body, {
-      filename: path.basename(src).replace(/\.(png|webp|jpe?g)$/i, ".jpg"),
-      source: { name: PHOTO_SOURCE, id: sha1Of(src), url: src },
-      creditLine: "HUB Surface Systems",
-    });
-    bySha.set(sha1Of(src), asset._id);
-    done++; bytes += body.length;
-    process.stdout.write(`\r  uploaded ${done}/${unique.length} (${(bytes / 1048576).toFixed(0)} MB)   `);
+    for (let attempt = 1; ; attempt++) {
+      try {
+        const body = await resized(src);
+        const asset = await client.assets.upload("image", body, {
+          filename: path.basename(src).replace(/\.(png|webp|jpe?g)$/i, ".jpg"),
+          source: { name: PHOTO_SOURCE, id: sha1Of(src), url: src },
+          creditLine: "HUB Surface Systems",
+        });
+        bySha.set(sha1Of(src), asset._id);
+        done++; bytes += body.length;
+        process.stdout.write(`\r  uploaded ${done}/${unique.length} (${(bytes / 1048576).toFixed(0)} MB)   `);
+        return;
+      } catch (err) {
+        const reason = err instanceof Error ? err.message : String(err);
+        if (attempt >= 3) { failed.push({ src, reason }); return; }
+        await new Promise((r) => setTimeout(r, attempt === 1 ? 2000 : 8000));
+      }
+    }
   });
   if (unique.length) process.stdout.write("\n");
+  if (failed.length) {
+    console.error(`\n  ${failed.length} photo(s) could not be uploaded (the other ${done} were, and a re-run skips them):`);
+    for (const f of failed) console.error(`   - ${f.src}: ${f.reason}`);
+    throw new Error(`${failed.length} photo(s) failed to upload; nothing was pointed at them. Re-run to retry.`);
+  }
   return { uploaded: unique.length, bytes };
 }

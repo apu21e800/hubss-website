@@ -65,6 +65,9 @@ const client = createClient({
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production",
   apiVersion: "2024-01-01",
   useCdn: false,
+  // A stalled upload errors after two minutes and is retried
+  // (scripts/lib/sanity-photo-upload.ts) instead of hanging the run.
+  timeout: 120_000,
   perspective: token ? "raw" : "published",
   token: token || undefined,
 });

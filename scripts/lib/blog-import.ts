@@ -7,7 +7,7 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
-import { markdownToPortableText, type PortableNode } from "./markdown-to-portable-text";
+import { markdownToPortableText, type PortableNode } from "../../lib/markdown-to-portable-text";
 import { sha1Of } from "./sanity-photo-upload";
 import { curatedType, curatedKeywords, FIELD_NOTE_TYPES } from "../../lib/field-notes-taxonomy";
 import { countMarkdownWords, inferCategory, readTimeFor, scanProducts } from "../../lib/blog-taxonomy";

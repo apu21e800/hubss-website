@@ -1,11 +1,17 @@
 /**
  * Markdown (the body of a content/blog/*.mdx post) → Sanity portable text.
  *
- * Used by scripts/import-blog-to-sanity.ts. It covers exactly what the 74 posts
- * contain, checked on 24 Sep 2026: headings, paragraphs with bold, italic and
- * links, bullet and numbered lists (nested), quotes, tables, horizontal rules
- * and images. It is written so that components/blog/PostBody.tsx renders the
- * result as the same HTML the MDX renderer produced.
+ * Used by the one-time import (scripts/import-blog-to-sanity.ts) and by the
+ * AI drafter (lib/field-note-drafter.ts), which writes markdown. It covers
+ * exactly what the 74 posts contained, checked on 24 Sep 2026: headings,
+ * paragraphs with bold, italic and links, bullet and numbered lists (nested),
+ * quotes, tables, horizontal rules and images. It is written so that
+ * components/blog/PostBody.tsx renders the result as the same HTML the MDX
+ * renderer produced.
+ *
+ * unified and remark-parse arrive through next-mdx-remote and @next/mdx
+ * (remark-gfm is a direct dependency). If those two are ever removed from
+ * package.json, add unified and remark-parse there first.
  *
  * Rules that keep the rendered page identical:
  *  - MDX authoring comments ({/* … *\/}) are removed.

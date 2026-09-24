@@ -81,6 +81,8 @@ hubss-website/
 - New blog post: Studio → Blog / Field Notes → create, then Publish. It is live
   about five minutes later (the site rebuilds to add the page); edits to live
   posts show within seconds. docs/BLOG-IN-SANITY.md
+- Blog ideas: Studio → Field Notes plan. Mark one Ready and the Tuesday AI
+  drafter writes it up as an unpublished draft for review (never publishes).
 - Swap hero image: replace /public/images/hero.jpg
 - Add PDF spec sheet: drop in /public/docs/, update link in products page
 - New project: add entry to /content/projects/project-name.mdx

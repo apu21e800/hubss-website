@@ -5,7 +5,7 @@
  * 2026) as a blogPost document, so that the site, which now reads Studio
  * (lib/blog.ts), shows exactly what it showed from the files:
  *
- *  - body: markdown → portable text (scripts/lib/markdown-to-portable-text.ts).
+ *  - body: markdown → portable text (lib/markdown-to-portable-text.ts).
  *    Rendered by components/blog/PostBody.tsx, all 74 posts came out with the
  *    same headings, paragraphs, lists, quotes, tables, links, bold and italic
  *    as the MDX pages (1,909 blocks compared, 24 Sep 2026).

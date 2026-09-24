@@ -20,6 +20,7 @@ import {
   EditIcon,
   PinIcon,
   CogIcon,
+  BulbOutlineIcon,
   ImagesIcon,
 } from "@sanity/icons";
 
@@ -79,6 +80,17 @@ export const structure: StructureResolver = (S) =>
         .icon(BlockContentIcon),
 
       S.divider(),
+
+      // ── Field Notes plan ─────────────────────────────────────────────────────
+      // What to write next. The Tuesday drafter takes the top "Ready" item.
+      S.listItem()
+        .title("Field Notes plan")
+        .icon(BulbOutlineIcon)
+        .child(
+          S.documentTypeList("storyIdea")
+            .title("Field Notes plan")
+            .defaultOrdering([{ field: "priority", direction: "asc" }, { field: "_createdAt", direction: "asc" }])
+        ),
 
       // ── Blog / Field Notes ───────────────────────────────────────────────────
       // The site's only copy of the blog (lib/blog.ts). Newest first.

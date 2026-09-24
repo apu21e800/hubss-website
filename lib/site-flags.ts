@@ -38,10 +38,9 @@ export const SITE_FLAGS = {
    *  Pending Vernon's approval before going live. */
   showLeoQuote: false,
 
-  // ── Blog automation
-  /** /admin/blog AI generation panel. Only useful when ANTHROPIC_API_KEY
-   *  is set in Vercel env vars. */
-  showAdminBlog: true,
+  // Blog automation has no flag: the AI drafter runs on a schedule and writes
+  // unpublished drafts into Studio (lib/field-note-pipeline.ts). The old
+  // /admin/blog panel, which saved files Vercel can't write, was removed.
 
   // ── Social automation
   /** /admin/social post composer. Requires OAuth tokens per platform. */

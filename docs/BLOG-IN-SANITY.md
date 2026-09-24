@@ -41,6 +41,40 @@ appear together; no card ever links to a page that doesn't exist yet.
   any other HUB system named in the text is added after them automatically.
 - **Read time**: leave blank; the site works it out at 225 words a minute.
 
+## AI drafts (every Tuesday)
+
+Studio's **Field Notes plan** is the list of posts HUB wants written. Every
+Tuesday at 13:00 UTC (9:00 in Toronto) the drafter
+(`app/api/cron/draft-field-note`, scheduled in `vercel.json`) takes the plan
+item marked **Ready** with the highest priority and:
+
+1. collects the facts it may use: the catalogue pages of the item's systems and
+   applications, the company lines the site already prints, and the item's
+   brief (`lib/field-note-facts.ts`);
+2. has Claude write the post from those facts only, then has Claude check the
+   draft against the same facts (`lib/field-note-drafter.ts`);
+3. saves it in Blog / Field Notes as an **unpublished draft**, with a stand-in
+   photo from the first system's page and the fact check in "Notes for the
+   editor";
+4. marks the plan item Drafted and emails `BLOG_DRAFT_NOTIFY`.
+
+It never publishes. A draft's id starts with `drafts.`, which the site can't
+read. Someone opens it in Studio, checks the notes, edits, sets the date and
+presses Publish; the rebuild puts it live about five minutes later.
+
+- **Run it now:** Vercel → hubss-website → Settings → Cron Jobs → Run.
+- **A particular item:** `/api/cron/draft-field-note?idea=<its id>`, with the
+  `Authorization: Bearer $CRON_SECRET` header.
+- **Real projects:** the drafter only knows what the catalogue and the brief
+  tell it. To write up an install, put the facts in the brief: where, when,
+  which system, what the client needed.
+- **Settings (Vercel, Production):** `CRON_SECRET`, `ANTHROPIC_API_KEY`,
+  `SANITY_API_WRITE_TOKEN` (an Editor token), `BLOG_DRAFT_NOTIFY` (emails,
+  comma-separated), `RESEND_API_KEY`; optionally `BLOG_DRAFT_MODEL`.
+- **The first plan items** came from Semrush (Canada) on 24 Sep 2026:
+  searches with real volume, low difficulty and buying intent that no post
+  targets yet (`scripts/seed-field-notes-plan.ts`, `npm run plan:seed`).
+
 ## The import (done once, 24 Sep 2026)
 
 `scripts/import-blog-to-sanity.ts` wrote the 74 posts, with ids kept for the 67

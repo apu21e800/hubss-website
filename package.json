@@ -30,7 +30,8 @@
     "photos:check": "tsx scripts/sync-photos-to-sanity.ts --check",
     "blog:dry": "tsx scripts/import-blog-to-sanity.ts --dry-run",
     "blog:import": "tsx scripts/import-blog-to-sanity.ts",
-    "blog:check": "tsx scripts/import-blog-to-sanity.ts --check"
+    "blog:check": "tsx scripts/import-blog-to-sanity.ts --check",
+    "plan:seed": "tsx scripts/seed-field-notes-plan.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",

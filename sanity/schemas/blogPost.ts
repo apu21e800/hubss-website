@@ -215,6 +215,14 @@ export default defineType({
       ],
     }),
     defineField({
+      name: "editorNotes",
+      title: "Notes for the editor",
+      type: "text",
+      rows: 6,
+      group: "content",
+      description: "Never shown on the site. The AI drafter lists here what it based the draft on and any sentence its fact check couldn't match to the HUB catalogue: check those before you publish.",
+    }),
+    defineField({
       name: "readTime",
       title: "Read time (optional)",
       type: "string",

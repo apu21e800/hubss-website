@@ -134,11 +134,17 @@ into lib/product-catalogue.ts (product spreads) and lib/application-catalogue.ts
 (the 17 application spreads and their SPECIFY lists), and lib/products.ts /
 lib/applications.ts are written from it.
 
-BEFORE changing product or application copy, read docs/SANITY-COPY-SYNC.md.
-Sanity holds shortDesc, description and (for products) specs and OVERRIDES
-the code on the product and application pages — editing the lib file alone
-changes nothing on those two page types. `npm run sync:products` and friends
-push the code into Sanity; each has a `:dry` variant that reports first.
+BEFORE changing product, application or page copy, read docs/SANITY-COPY-SYNC.md.
+Sanity OVERRIDES the code for: product and application name, shortDesc,
+description and SEO title/description, plus product eyebrow, specs and homepage
+blurb (on the product pages, the application pages, /applications and the
+homepage), and the hero and About text on /, /about, /contact and /lunch-learn.
+Editing the lib file or a page's fallback alone changes nothing there until the
+sync runs. Products go through one merge (lib/products.server.ts), applications
+through another, both on the rule in lib/cms-merge.ts: a blank Sanity field
+falls back to the code. The /products index is code-only.
+`npm run sync:products`, `sync:applications` and `sync:pages` push the code
+into Sanity; each has a `:dry` variant that reports first and needs no token.
 Everything else — the catalogue spreads, images, galleries, related
 products, colours, documents, blog — is code-only and deploys on push.
 

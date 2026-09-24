@@ -14,8 +14,21 @@ import { client } from "@/lib/sanity.client";
 import type { SanityProduct, SanityApplication } from "@/types/sanity";
 import type { ResourceDocument } from "@/lib/resource-documents";
 
+// Every cache key below carries this version. Vercel's Data Cache outlives
+// deploys, and on 24 Sep 2026 /products/mmax was still showing a subtitle that
+// had left both the code and Sanity on 7 Sep; Sanity itself returned the new
+// text for the same query. A new version means every entry is fetched fresh on
+// the next deploy. Change it again if a live page is ever stuck on old Sanity
+// text that the Studio and the API no longer have.
+const CACHE_VERSION = "2026-09-24";
+
 // ── Products ──────────────────────────────────────────────────────────
 
+// Only fields the dataset really has. heroImageUrl (nulled on every doc by
+// scripts/sanity-strip-legacy-fields.mjs), galleryUrls (never a schema field)
+// and relatedApplicationSlugs (unset by the same script) were dropped in Sep
+// 2026: nothing read them, and `npm run verify` failed on them. The images live
+// in heroImage and gallery, which nothing queries yet.
 const PRODUCT_FIELDS = `
   _id,
   _type,
@@ -25,11 +38,8 @@ const PRODUCT_FIELDS = `
   shortDesc,
   description,
   homepageBlurb,
-  heroImageUrl,
   heroPosition,
-  galleryUrls,
   specs,
-  relatedApplicationSlugs,
   seo
 `;
 
@@ -45,7 +55,7 @@ export const getProductBySlug = unstable_cache(
       return null;
     }
   },
-  ["product-by-slug"],
+  [`product-by-slug:${CACHE_VERSION}`],
   { tags: ["products"], revalidate: 3600 }
 );
 
@@ -60,12 +70,14 @@ export const getAllSanityProducts = unstable_cache(
       return [];
     }
   },
-  ["all-products"],
+  [`all-products:${CACHE_VERSION}`],
   { tags: ["products"], revalidate: 3600 }
 );
 
 // ── Applications ──────────────────────────────────────────────────────
 
+// Same clean-up as PRODUCT_FIELDS: heroImageUrl, galleryUrls and
+// relatedProductSlugs are gone from the dataset.
 const APPLICATION_FIELDS = `
   _id,
   _type,
@@ -73,9 +85,6 @@ const APPLICATION_FIELDS = `
   "slug": slug.current,
   shortDesc,
   description,
-  heroImageUrl,
-  galleryUrls,
-  relatedProductSlugs,
   seo
 `;
 
@@ -91,7 +100,7 @@ export const getApplicationBySlug = unstable_cache(
       return null;
     }
   },
-  ["application-by-slug"],
+  [`application-by-slug:${CACHE_VERSION}`],
   { tags: ["applications"], revalidate: 3600 }
 );
 
@@ -106,7 +115,7 @@ export const getAllSanityApplications = unstable_cache(
       return [];
     }
   },
-  ["all-applications"],
+  [`all-applications:${CACHE_VERSION}`],
   { tags: ["applications"], revalidate: 3600 }
 );
 
@@ -192,7 +201,7 @@ export const getSanityPageContent = unstable_cache(
       return null;
     }
   },
-  ["page-by-slug"],
+  [`page-by-slug:${CACHE_VERSION}`],
   { tags: ["pages"], revalidate: 3600 }
 );
 

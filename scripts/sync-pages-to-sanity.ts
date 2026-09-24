@@ -1,14 +1,22 @@
 /**
  * scripts/sync-pages-to-sanity.ts
  *
- * Phase 2, Increment 3 — About + Lunch & Learn extended-section sync.
+ * Pushes the page copy in the code into Sanity's page docs, idempotently:
+ *   - homepage, about, contact: the hero text (and the about mission line)
+ *   - about: story, values, whyHub, partners
+ *   - lunch-learn: whatYouGet, personas, faqs, section headings
  *
- * Idempotently backfills the new page-doc fields added in this increment
- * (About story/values/whyHub/partners, Lunch & Learn whatYouGet/personas/
- * faqs/section headings) from the current hardcoded values in the source.
+ * Hero text was added on 24 Sep 2026. Before that the heroes were left alone
+ * ("already populated in a prior migration"), so when the code's About hero was
+ * corrected from "For over thirty years" to "Since 1999" on 7 Sep, the live
+ * page kept the old line: Sanity overrides the code and nothing pushed the fix.
+ * Hero fields are set by path (homepageHero.tagline, ...), so the hero image
+ * stored beside them is never touched.
  *
- * Hero / mission / contact-hero fields were already populated in a prior
- * migration and are NOT touched by this script.
+ * Before any write, every string this script would send for the homepage,
+ * about and contact pages is checked against the page component it copies. If
+ * a component has changed and this file has not, the script stops and names
+ * the string instead of writing stale copy over the live page.
  *
  * Usage:
  *   npx tsx scripts/sync-pages-to-sanity.ts            # apply
@@ -17,6 +25,7 @@
 
 import { createClient } from "@sanity/client";
 import path from "path";
+import { readFileSync } from "fs";
 import { fileURLToPath } from "url";
 import { config as loadDotenv } from "dotenv";
 
@@ -39,8 +48,38 @@ const client = createClient({
   dataset:   process.env.NEXT_PUBLIC_SANITY_DATASET   ?? "production",
   apiVersion: "2024-01-01",
   useCdn: false,
-  token: token ?? "dry-run-no-token",
+  // A dry run reads the public dataset with no token at all; a placeholder token
+  // is sent as a real one and Sanity answers 401, so the dry run never ran.
+  token: token || undefined,
 });
+
+// ─── Hero text ──────────────────────────────────────────────────────────────
+// Verbatim copies of the fallbacks in app/page.tsx, app/about/page.tsx and
+// app/contact/page.tsx. Keys are paths into the page doc.
+
+const HOME_HERO_TEXT: Record<string, string> = {
+  "homepageHero.eyebrow":    "Redefining Hardscapes · Since 1999",
+  "homepageHero.heading":    "The World Is",
+  "homepageHero.subheading": "Your Canvas.",
+  "homepageHero.tagline":    "Let’s build your signature space.",
+  "homepageHero.cta1Label":  "See the Work",
+  "homepageHero.cta1Href":   "#field-notes",
+  "homepageHero.cta2Label":  "See the Systems",
+  "homepageHero.cta2Href":   "#systems",
+};
+
+const ABOUT_HERO_TEXT: Record<string, string> = {
+  "aboutHero.eyebrow":    "Canadian-Operated Since 1999 · All 10 Provinces",
+  "aboutHero.heading":    "The people who made your city look like your city.",
+  "aboutHero.subheading": "Since 1999, HUB Surface Systems — a proudly Canadian company, coast to coast — has been connecting communities with pavement technologies that do more than carry traffic. They carry identity.",
+  aboutMission:           "Every surface tells a story. We give communities the language to write it.",
+};
+
+const CONTACT_HERO_TEXT: Record<string, string> = {
+  "contactHero.eyebrow":    "Get In Touch",
+  "contactHero.heading":    "Start a Project",
+  "contactHero.subheading": "Tell us about your community, your timeline, and your vision. We'll tell you which surface system brings it to life.",
+};
 
 // ─── About page baseline ────────────────────────────────────────────────────
 // Verbatim copies of the hardcoded values in app/about/page.tsx.
@@ -152,6 +191,38 @@ function normalize(value: unknown): unknown {
   return value;
 }
 
+/** Value at a dotted path ("aboutHero.subheading") or a plain field name. */
+function atPath(doc: Record<string, unknown>, field: string): unknown {
+  return field.split(".").reduce<unknown>(
+    (o, k) => (o && typeof o === "object" ? (o as Record<string, unknown>)[k] : undefined),
+    doc,
+  );
+}
+
+function stringsIn(value: unknown): string[] {
+  if (typeof value === "string") return [value];
+  if (Array.isArray(value)) return value.flatMap(stringsIn);
+  if (value && typeof value === "object") {
+    return Object.entries(value as Record<string, unknown>)
+      .filter(([k]) => k !== "_key")
+      .flatMap(([, v]) => stringsIn(v));
+  }
+  return [];
+}
+
+/**
+ * Stop before writing if a string this script would send is no longer in the
+ * component it was copied from. Lunch & Learn is not checked: its copy was
+ * rewritten in the component, and app/lunch-learn/page.tsx deliberately
+ * ignores the seeded strings this script still holds.
+ */
+function assertStillInSource(file: string, desired: Record<string, unknown>): string[] {
+  const source = readFileSync(path.join(ROOT, file), "utf8");
+  return stringsIn(desired)
+    .filter((s) => !source.includes(s) && !source.includes(JSON.stringify(s).slice(1, -1)))
+    .map((s) => `${file} no longer contains: "${s.length > 90 ? s.slice(0, 90) + "…" : s}"`);
+}
+
 async function patchPage(slug: string, desired: Record<string, unknown>) {
   const remote = await client.fetch(
     `*[_type == "page" && slug.current == $slug][0]`,
@@ -164,7 +235,7 @@ async function patchPage(slug: string, desired: Record<string, unknown>) {
 
   const diffs: string[] = [];
   for (const [field, value] of Object.entries(desired)) {
-    if (!jsonEqual(remote[field], value)) {
+    if (!jsonEqual(atPath(remote, field), value)) {
       diffs.push(field);
     }
   }
@@ -184,12 +255,14 @@ async function patchPage(slug: string, desired: Record<string, unknown>) {
 }
 
 async function main() {
-  console.log(`Sync page-doc extended sections → Sanity${DRY_RUN ? " (DRY RUN)" : ""}`);
+  console.log(`Sync page copy → Sanity${DRY_RUN ? " (DRY RUN)" : ""}`);
 
   let changed = 0, skipped = 0, missing = 0;
 
-  // About page
+  const homeDesired = { ...HOME_HERO_TEXT };
+  const contactDesired = { ...CONTACT_HERO_TEXT };
   const aboutDesired = {
+    ...ABOUT_HERO_TEXT,
     aboutStory: ABOUT_STORY,
     aboutStoryAside: ABOUT_STORY_ASIDE,
     aboutValues: arrayWithKeys(ABOUT_VALUES, "v"),
@@ -197,8 +270,23 @@ async function main() {
     aboutPartnersIntro: ABOUT_PARTNERS_INTRO,
     aboutPartners: arrayWithKeys(ABOUT_PARTNERS, "p"),
   };
-  const aboutResult = await patchPage("about", aboutDesired);
-  changed += aboutResult.changed; skipped += aboutResult.skipped; missing += aboutResult.missing;
+
+  const drift = [
+    ...assertStillInSource("app/page.tsx", homeDesired),
+    ...assertStillInSource("app/about/page.tsx", aboutDesired),
+    ...assertStillInSource("app/contact/page.tsx", contactDesired),
+  ];
+  if (drift.length) {
+    console.error("\nSTOPPED, nothing written. This script's copy of the page text is out of date:");
+    for (const d of drift) console.error(`  ${d}`);
+    console.error("Update the constants in scripts/sync-pages-to-sanity.ts to match, then run it again.");
+    process.exit(1);
+  }
+
+  for (const [slug, desired] of [["homepage", homeDesired], ["about", aboutDesired], ["contact", contactDesired]] as const) {
+    const result = await patchPage(slug, desired);
+    changed += result.changed; skipped += result.skipped; missing += result.missing;
+  }
 
   // Lunch & Learn page
   const llDesired = {

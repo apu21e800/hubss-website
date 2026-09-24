@@ -1,17 +1,19 @@
 /**
  * Server-only merge layer for application content.
  *
- * Reads from Sanity (via lib/sanity.queries) and falls back to the static
- * lib/applications.ts baseline on a per-field basis. The merged result
- * matches the existing Application shape, so callers do not need to know
- * whether the data came from Sanity or the static lib.
+ * Used by the homepage, /applications and /applications/[slug]. Reads Sanity
+ * (via lib/sanity.queries) and falls back to the lib/applications.ts baseline
+ * field by field, with the rule in lib/cms-merge.ts: a blank Sanity value falls
+ * back to the code. The merged result has the Application shape, so callers do
+ * not need to know where a value came from.
  *
- * Fields merged from Sanity (when present): name, shortDesc, description,
- * seoTitle, seoDescription. Image/gallery and relatedProducts continue to
- * come from the static lib in phase 2.
+ * Fields that can come from Sanity: name, shortDesc, description, seoTitle,
+ * seoDescription. Images, gallery and relatedProducts come from
+ * lib/applications.ts only.
  */
 import { applications, type Application } from "@/lib/applications";
 import { blocksToPlainText } from "@/lib/portable-text";
+import { cmsText } from "@/lib/cms-merge";
 import {
   getAllSanityApplications,
   getApplicationBySlug,
@@ -22,16 +24,15 @@ import type { SanityApplication } from "@/types/sanity";
 // so at runtime sanity.slug is a string even though SanityApplication types it as SanitySlug.
 type SanityAppProjected = Omit<SanityApplication, "slug"> & { slug: string };
 
-function merge(libApp: Application, sanityApp: SanityAppProjected | null | undefined): Application {
-  if (!sanityApp) return libApp;
-  const sanityDescription = blocksToPlainText(sanityApp.description);
+function merge(code: Application, sanityApp: SanityAppProjected | null | undefined): Application {
+  if (!sanityApp) return code;
   return {
-    ...libApp,
-    name: sanityApp.name?.trim() || libApp.name,
-    shortDesc: sanityApp.shortDesc?.trim() || libApp.shortDesc,
-    description: sanityDescription || libApp.description,
-    seoTitle: sanityApp.seo?.title || libApp.seoTitle,
-    seoDescription: sanityApp.seo?.description || libApp.seoDescription,
+    ...code,
+    name: cmsText(sanityApp.name, code.name),
+    shortDesc: cmsText(sanityApp.shortDesc, code.shortDesc),
+    description: cmsText(blocksToPlainText(sanityApp.description), code.description),
+    seoTitle: cmsText(sanityApp.seo?.title, code.seoTitle),
+    seoDescription: cmsText(sanityApp.seo?.description, code.seoDescription),
   };
 }
 

@@ -43,7 +43,9 @@ const client = createClient({
   dataset:   process.env.NEXT_PUBLIC_SANITY_DATASET   ?? "production",
   apiVersion: "2024-01-01",
   useCdn: false,
-  token: token ?? "dry-run-no-token",
+  // A dry run reads the public dataset with no token at all; a placeholder token
+  // is sent as a real one and Sanity answers 401, so the dry run never ran.
+  token: token || undefined,
 });
 
 interface LibApplication {

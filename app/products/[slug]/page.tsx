@@ -23,7 +23,7 @@ import { catalogueFor } from "@/lib/product-catalogue";
 import ProductSpecCard from "@/components/products/ProductSpecCard";
 import ProductFaq from "@/components/products/ProductFaq";
 import { faqsFor } from "@/lib/product-faqs";
-import { getProductBySlug } from "@/lib/sanity.queries";
+import { getMergedProduct } from "@/lib/products.server";
 
 export const revalidate = 3600;
 
@@ -46,12 +46,14 @@ type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const product = products.find((p) => p.slug === slug);
+  // The same merged product the page renders, so <title> and the meta
+  // description follow the SEO fields in Studio like the rest of the page does.
+  const product = await getMergedProduct(slug);
   if (!product) return {};
   const featuredImg = productImages[slug] ? resolveImage(productImages[slug]) : null;
   return buildMetadata({
-    title: product.seoTitle ?? product.name,
-    description: product.seoDescription ?? (product.shortDesc + " — " + product.description.slice(0, 120) + "…"),
+    title: product.seoTitle || product.name,
+    description: product.seoDescription || (product.shortDesc + " — " + product.description.slice(0, 120) + "…"),
     slug: `products/${product.slug}`,
     image: featuredImg?.src ?? product.imageUrl,
   });
@@ -60,26 +62,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
 
-  // Try Sanity first; fall back to static data if not populated yet.
-  const sanityProduct = await getProductBySlug(slug);
-
-  const product = (() => {
-    const staticProduct = products.find((p) => p.slug === slug);
-    if (!staticProduct) return null;
-
-    if (sanityProduct?.name) {
-      return {
-        ...staticProduct,
-        shortDesc: sanityProduct.shortDesc ?? staticProduct.shortDesc,
-        description:
-          sanityProduct.heroImageUrl
-            ? staticProduct.description
-            : staticProduct.description,
-      };
-    }
-
-    return staticProduct;
-  })();
+  // lib/products.ts merged with Sanity, field by field, by the one merge in
+  // lib/products.server.ts: name, eyebrow, shortDesc, description, specs and the
+  // SEO fields follow Studio, and a blank Studio field falls back to the code.
+  // Until Sep 2026 this page had its own inline merge that took shortDesc alone,
+  // so `npm run sync:products` changed nothing here.
+  const product = await getMergedProduct(slug);
 
   if (!product || product.comingSoon) notFound();
 

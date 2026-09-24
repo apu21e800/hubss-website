@@ -59,12 +59,20 @@ Phase 2 never happened. `lib/sanity-image.ts` exists and is imported by nothing.
 
 ## Friction found while looking
 
-**`/studio` sits behind HTTP Basic Auth** (`middleware.ts` gates `/studio/:path*`
-with `ADMIN_USER`/`ADMIN_PASSWORD`) **on top of** Sanity's own per-user login.
-That's two passwords for one CMS, and the Basic Auth one is shared rather than
-per-person. Sanity's own auth is already secure and gives a real audit trail —
-the Basic Auth gate in front of it should probably come off before Doug is
-invited in.
+**`/studio` is not behind Basic Auth, and that is the decision.** (Corrected
+24 Sep 2026. An earlier version of this paragraph said `middleware.ts` gated
+`/studio/:path*`; it does not. Its comment exempts Studio on purpose and the
+matcher does not list it.) Studio relies on Sanity's own per-user login
+(Google / GitHub / email), which gives every editor their own account and an
+audit trail of who changed what. A shared Basic Auth password in front of it
+would add a second password and hide who made an edit.
+
+Why that is acceptable: the `/studio` page is public, but it shows nothing and
+can change nothing until someone signs in with an account that is a member of
+Sanity project `9dbro2m1`. The published dataset is public-read through
+Sanity's API anyway, so the page reveals nothing the API doesn't. The real
+lock is project membership: invite editors by name at sanity.io/manage, and
+remove them when they leave.
 
 Also unset in production: `SANITY_API_WRITE_TOKEN` and `SANITY_WEBHOOK_SECRET`
 (the publish → rebuild webhook). Without the webhook, Studio edits appear on the

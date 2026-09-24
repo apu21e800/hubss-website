@@ -76,19 +76,31 @@ blobs on main just have not been rewritten.
 
 ## THE TRAP THAT COSTS THE MOST TIME
 
-**Sanity overrides the code on product and application pages.**
+**Sanity overrides the code on product pages, application pages, the
+homepage, /about, /contact and /lunch-learn.**
 
 | Field | Products | Applications |
 |---|---|---|
+| `name` (the H1) | **Sanity wins** | **Sanity wins** |
+| `eyebrow` | **Sanity wins** | — |
 | `shortDesc` (line under the H1) | **Sanity wins** | **Sanity wins** |
 | `description` ("How it works") | **Sanity wins** | **Sanity wins** |
 | `specs` (Full specification) | **Sanity wins** | — |
+| SEO title and description | **Sanity wins** | **Sanity wins** |
+| `homepageBlurb` (homepage Systems card) | **Sanity wins** | — |
 | images, galleries, related products, catalogue spreads, colours, docs, blog | code | code |
 
-Edit `lib/products.ts`, build clean, deploy green, see no change on the live
-page — that is this. `/about` behaves the same way via `page-about`.
+A blank Sanity field falls back to the code (`lib/cms-merge.ts`). One merge per
+type: `lib/products.server.ts` and `lib/applications.server.ts`. The
+`/products` index is code-only. Until 24 Sep 2026 the product page had its own
+merge that took only `shortDesc`, so this table was not true there.
 
-The fix is one command with a `SANITY_API_WRITE_TOKEN` in `.env.local`:
+Edit `lib/products.ts`, build clean, deploy green, see no change on the live
+page — that is this. The pages behave the same way via `page-homepage`,
+`page-about`, `page-contact` and `page-lunch-learn`.
+
+The fix is one command per type, with a `SANITY_API_WRITE_TOKEN` in
+`.env.local` (the dry runs need no token):
 
 ```bash
 npm run sync:products:dry      # look first, writes nothing
@@ -97,12 +109,14 @@ npm run sync:applications
 npm run sync:pages
 ```
 
-**Read `docs/SANITY-COPY-SYNC.md` before touching product or application copy.**
-As of 9 Sep all three are synced — a dry run returns 0 changes.
+**Read `docs/SANITY-COPY-SYNC.md` before touching product, application or
+page copy.** Run the three dry runs before any copy deploy; they list what is
+out of step.
 
 Second-order gotcha: `scripts/sync-pages-to-sanity.ts` holds its **own** copy
-of the /about text rather than reading `app/about/page.tsx`. Both must move
-together. There is a note at the top of the script saying so.
+of the page text rather than reading the page components. Both must move
+together. Since 24 Sep the script checks its homepage, About and Contact text
+against the pages before writing, and stops if they have drifted.
 
 ---
 

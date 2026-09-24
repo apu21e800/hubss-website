@@ -7,16 +7,19 @@ import { projects } from "./lib/projects";
 // adding a project can never silently re-break the redirect below.
 const LIVE_PROJECT_SLUGS = projects.map((p) => p.slug);
 
-// Every blog post that actually renders. content/blog is the only source of
-// /blog routes — app/blog/[slug] and app/sitemap.ts both read this directory —
-// so a file here is exactly the condition for /blog/<slug> returning 200.
-// Derived rather than hardcoded for the same reason as LIVE_PROJECT_SLUGS:
-// the legacy category-prefixed redirects below must never outlive the posts
-// they point at, or a 301 would land on a 404.
-const BLOG_SLUGS = fs
-  .readdirSync(path.join(process.cwd(), "content/blog"))
-  .filter((f) => f.endsWith(".mdx"))
-  .map((f) => f.replace(/\.mdx$/, ""));
+// Every blog post this build publishes. The posts live in Sanity, and
+// scripts/gen-blog-index.ts writes the ones a build includes to
+// lib/blog-index.json before `next build` starts; app/blog/[slug] builds
+// exactly those pages and 404s anything else. So an entry here is exactly the
+// condition for /blog/<slug> returning 200. Derived rather than hardcoded for
+// the same reason as LIVE_PROJECT_SLUGS: the legacy category-prefixed
+// redirects below must never outlive the posts they point at, or a 301 would
+// land on a 404.
+const BLOG_INDEX = path.join(process.cwd(), "lib", "blog-index.json");
+if (!fs.existsSync(BLOG_INDEX)) {
+  throw new Error("lib/blog-index.json is missing. Run `npm run gen:blog-index` (npm run build and npm run dev do it first).");
+}
+const BLOG_SLUGS: string[] = JSON.parse(fs.readFileSync(BLOG_INDEX, "utf8")).map((p: { slug: string }) => p.slug);
 
 // ── Security headers ────────────────────────────────────────────────────────
 // Production-safe set. CSP is shipped in REPORT-ONLY mode for launch — it

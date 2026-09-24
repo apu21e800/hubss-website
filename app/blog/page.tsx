@@ -5,7 +5,7 @@ import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
 import BlogFilter from "@/components/blog/BlogFilter";
 import JsonLd from "@/components/ui/JsonLd";
-import { getAllPosts } from "@/lib/mdx";
+import { getAllPosts } from "@/lib/blog";
 import { FIELD_NOTE_TYPES } from "@/lib/field-notes-taxonomy";
 import { buildMetadata } from "@/lib/seo";
 
@@ -16,8 +16,8 @@ export const metadata: Metadata = buildMetadata({
   slug: "blog",
 });
 
-export default function BlogPage() {
-  const posts = getAllPosts();
+export default async function BlogPage() {
+  const posts = await getAllPosts();
 
   // Build the product list from what's actually in the posts (sorted by frequency)
   const productCounts = new Map<string, number>();

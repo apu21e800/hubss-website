@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Search, X, ChevronDown, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import BlogCard from "./BlogCard";
-import type { PostMeta } from "@/lib/mdx";
+import type { PostMeta } from "@/lib/blog";
 import { FIELD_NOTE_TYPES } from "@/lib/field-notes-taxonomy";
 
 interface Props {

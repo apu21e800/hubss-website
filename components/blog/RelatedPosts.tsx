@@ -1,4 +1,4 @@
-import type { PostMeta } from "@/lib/mdx";
+import type { PostMeta } from "@/lib/blog";
 import BlogCard from "./BlogCard";
 
 interface RelatedPostsProps {

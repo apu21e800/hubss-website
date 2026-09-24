@@ -58,7 +58,6 @@ import { PRODUCT_KEYWORDS, APPLICATION_KEYWORDS } from "./search-keywords";
 import { PRODUCT_CATALOGUE } from "./product-catalogue";
 import { mapProjects } from "./map-projects";
 import blogIndex from "./blog-index.json";
-import { curatedType, curatedKeywords } from "./field-notes-taxonomy";
 
 export type SearchType =
   | "Product"
@@ -191,18 +190,18 @@ function buildIndex(): SearchEntry[] {
     });
   }
 
-  type BlogRow = { slug: string; title: string; excerpt: string };
+  type BlogRow = { slug: string; title: string; excerpt: string; type: string; keywords: string[] };
   for (const b of blogIndex as BlogRow[]) {
-    // blog-index.json carries only slug/title/excerpt, so the type and the SEO
-    // keyword lane come from the curated taxonomy. Without them "case study",
-    // "white paper" and "rainbow crosswalk" match nothing in the library.
+    // The type and the search phrases come with each post from Sanity
+    // (scripts/gen-blog-index.ts). Without them "case study", "white paper"
+    // and "rainbow crosswalk" match nothing in the library.
     out.push({
       id: `post-${b.slug}`,
       type: "Field note",
       title: b.title,
       subtitle: b.excerpt,
       href: `/blog/${b.slug}`,
-      keywords: [curatedType(b.slug) ?? "", ...curatedKeywords(b.slug)].join(" "),
+      keywords: [b.type, ...b.keywords].join(" "),
       body: b.excerpt,
       boost: 0,
     });

@@ -1,13 +1,13 @@
 /**
  * The sitemap's contents. app/sitemap.ts serves it; scripts/gen-search-images.ts
- * reads it (with no photo data) to know which /public photos to bake.
+ * reads it (with no Sanity data) to know which /public photos to bake.
  */
 import type { MetadataRoute } from "next";
 import { catalogueReady } from "@/lib/catalogue";
 import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
 import { projects } from "@/lib/projects";
-import { getAllPosts } from "@/lib/mdx";
+import type { PostMeta } from "@/lib/blog";
 import { FIELD_NOTE_TYPES } from "@/lib/field-notes-taxonomy";
 import { productImages, applicationImages, resolveImage } from "@/lib/featured-images";
 import { galleryFor } from "@/lib/asset-scan";
@@ -33,11 +33,12 @@ const photoUrl = (src: string) => (isSanityImage(src) ? sanitySearchImage(src) :
  * The sitemap, from whatever photo data it is given. Galleries and heroes come
  * from Sanity where it has them (lib/photos.ts), so the route below passes the
  * merged products and applications and the image sitemap lists the photos each
- * page actually shows. scripts/gen-search-images.ts calls this with no photo
- * data: it only bakes /public photos, and it runs outside Next, where the
- * cached Sanity queries can't.
+ * page actually shows, and the blog posts, which live in Sanity (lib/blog.ts).
+ * scripts/gen-search-images.ts calls this with no Sanity data: it only bakes
+ * /public photos, and it runs outside Next, where the cached Sanity queries
+ * can't.
  */
-export function buildSitemap(photos?: PhotoSources): MetadataRoute.Sitemap {
+export function buildSitemap(photos?: PhotoSources, posts: PostMeta[] = []): MetadataRoute.Sitemap {
   const productPhotos = photos?.products ?? new Map();
   const applicationPhotos = photos?.applications ?? new Map();
 
@@ -143,12 +144,12 @@ export function buildSitemap(photos?: PhotoSources): MetadataRoute.Sitemap {
     images: p.imageUrl ? [abs(p.imageUrl)] : undefined,
   }));
 
-  const blogRoutes: MetadataRoute.Sitemap = getAllPosts().map((p) => ({
+  const blogRoutes: MetadataRoute.Sitemap = posts.map((p) => ({
     url: `${BASE_URL}/blog/${p.slug}`,
     lastModified: new Date(p.date),
     changeFrequency: "monthly" as const,
     priority: 0.7,
-    images: p.featuredImage ? [abs(p.featuredImage)] : undefined,
+    images: p.featuredImage ? [abs(photoUrl(p.featuredImage))] : undefined,
   }));
 
   // Every image above is named by its original, and the originals are the

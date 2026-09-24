@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
-import { getPost, getAllPosts } from "@/lib/mdx";
+import { getPost, getAllPosts } from "@/lib/blog";
 import type { Platform } from "@/lib/social";
 
 const ADMIN_PW = process.env.ADMIN_PASSWORD;
@@ -46,38 +46,37 @@ export async function POST(req: NextRequest) {
     let blogUrl = "";
 
     if (blogSlug) {
-      try {
-        const post = getPost(blogSlug);
-        blogTitle = post.title;
-        blogUrl = `https://hubss.com/blog/${blogSlug}`;
-        // Use first 3000 chars of content to stay within reasonable prompt size
-        const truncatedContent = post.content.substring(0, 3000);
-        context = `Blog post title: "${post.title}"
+      const post = await getPost(blogSlug);
+      if (!post) {
+        return NextResponse.json({ error: "Blog post not found" }, { status: 404 });
+      }
+      blogTitle = post.title;
+      blogUrl = `https://hubss.com/blog/${blogSlug}`;
+      // Use first 3000 chars of content to stay within reasonable prompt size
+      const truncatedContent = post.text.substring(0, 3000);
+      context = `Blog post title: "${post.title}"
 Blog URL: ${blogUrl}
 Excerpt: ${post.excerpt}
 Content (truncated):
 ${truncatedContent}`;
-      } catch {
-        return NextResponse.json({ error: "Blog post not found" }, { status: 404 });
-      }
     } else if (topic) {
       context = `Topic: ${topic}
 
 Generate social media content about this topic for HUB Surface Systems (HUBSS), a Canadian leader in decorative and functional pavement solutions. Products include stamped asphalt (StreetPrint), preformed thermoplastics (TrafficPatterns, TrafficPatternsXD), MMA coatings (MMAX), decorative markings (DecoMark, DuraTherm), protective coatings (DuraShield, StreetBond), preformed markings (PreMark), and airport markings (AirMark).`;
     } else {
       // Auto-select a recent blog post
-      const posts = getAllPosts();
-      if (posts.length === 0) {
+      const posts = await getAllPosts();
+      const post = posts.length ? await getPost(posts[0].slug) : null;
+      if (!post) {
         return NextResponse.json({ error: "No blog posts available" }, { status: 404 });
       }
-      const post = getPost(posts[0].slug);
       blogTitle = post.title;
       blogUrl = `https://hubss.com/blog/${post.slug}`;
       context = `Blog post title: "${post.title}"
 Blog URL: ${blogUrl}
 Excerpt: ${post.excerpt}
 Content (truncated):
-${post.content.substring(0, 3000)}`;
+${post.text.substring(0, 3000)}`;
     }
 
     const platformInstructions = targetPlatforms

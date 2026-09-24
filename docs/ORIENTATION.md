@@ -89,7 +89,8 @@ homepage, /about, /contact and /lunch-learn.**
 | SEO title and description | **Sanity wins** | **Sanity wins** |
 | `homepageBlurb` (homepage Systems card) | **Sanity wins** | — |
 | hero photo and gallery | **Sanity wins** (folder fallback) | **Sanity wins** (folder fallback) |
-| related products, catalogue spreads, colours, docs, blog | code | code |
+| related products, catalogue spreads, colours, docs | code | code |
+| blog posts | **Sanity only** (docs/BLOG-IN-SANITY.md) | — |
 
 A blank Sanity field falls back to the code (`lib/cms-merge.ts`). One merge per
 type: `lib/products.server.ts` and `lib/applications.server.ts`. The

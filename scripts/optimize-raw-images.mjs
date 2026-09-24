@@ -41,7 +41,11 @@ const HERO_LONG_EDGE = 1920;
 const QUALITY = 82;
 const HERO_QUALITY = 80;
 
-/** Images referenced by markdown image syntax in content/blog/*.mdx. */
+/**
+ * Images referenced by markdown image syntax in content/blog/*.mdx.
+ * Since Sep 2026 the blog lives in Sanity, whose CDN sizes its photos, and the
+ * .mdx files moved to content/blog-archive, so this finds nothing now.
+ */
 function mdxImages() {
   const dir = path.join(ROOT, "content", "blog");
   if (!fs.existsSync(dir)) return [];

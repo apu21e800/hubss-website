@@ -27,7 +27,7 @@ import type { SanityPhotoProjected } from "@/lib/photos";
  *    good page;
  *  - unstable_cache never stores a failure, so the next request tries again.
  */
-async function sanityFetch<T>(label: string, query: string, params: Record<string, unknown> = {}): Promise<T> {
+export async function sanityFetch<T>(label: string, query: string, params: Record<string, unknown> = {}): Promise<T> {
   try {
     return await client.fetch<T>(query, params);
   } catch (err) {
@@ -41,7 +41,7 @@ async function sanityFetch<T>(label: string, query: string, params: Record<strin
 // deploys, so changing it makes every entry refetch from Sanity on the next
 // deploy. It was bumped on 24 Sep 2026 while chasing a stale /products/mmax
 // subtitle; the real cause was a Studio draft (see lib/sanity.client.ts).
-const CACHE_VERSION = "2026-09-24";
+export const CACHE_VERSION = "2026-09-24";
 
 // ── Products ──────────────────────────────────────────────────────────
 

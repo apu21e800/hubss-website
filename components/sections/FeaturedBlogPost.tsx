@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
-import { getAllPosts } from "@/lib/mdx";
+import PhotoImage from "@/components/ui/PhotoImage";
+import { getAllPosts } from "@/lib/blog";
 
 // Fallback images from confirmed project paths in lib/projects.ts
 const FALLBACK_IMAGES = [
@@ -9,8 +9,8 @@ const FALLBACK_IMAGES = [
   "/images/applications/commercial-spaces/commercial-spaces-01.jpg",
 ];
 
-export default function FeaturedBlogPost() {
-  const posts = getAllPosts();
+export default async function FeaturedBlogPost() {
+  const posts = await getAllPosts();
 
   // Pin the residential driveways post as hero; fall back to most recent
   const hero =
@@ -88,7 +88,7 @@ export default function FeaturedBlogPost() {
           >
             {/* Image — 3/5 on desktop */}
             <div className="relative md:col-span-3 h-72 md:h-auto min-h-[380px] overflow-hidden">
-              <Image
+              <PhotoImage
                 src={heroImg}
                 alt={hero.title}
                 fill
@@ -203,7 +203,7 @@ export default function FeaturedBlogPost() {
                 >
                   {/* Thumbnail — full width, 16:9 */}
                   <div className="relative w-full overflow-hidden" style={{ aspectRatio: "16/9" }}>
-                    <Image
+                    <PhotoImage
                       src={img}
                       alt={post.title}
                       fill

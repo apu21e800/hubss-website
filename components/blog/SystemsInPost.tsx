@@ -9,7 +9,7 @@ import { PRODUCT_SLUGS } from "./PostConversion";
  * TrafficPatternsXD does had no way to go read its specs, and search engines
  * saw 67 pages discussing products with zero internal links to the product
  * pages those posts should be strengthening. Products are now scanned from the
- * whole post body (see scanProducts in lib/mdx.ts), so this rail is complete
+ * whole post body (see scanProducts in lib/blog-taxonomy.ts), so this rail is complete
  * rather than excerpt-deep.
  */
 export default function SystemsInPost({ products }: { products: string[] }) {

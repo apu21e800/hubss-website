@@ -25,11 +25,25 @@
  *        Projection  { _id, _type }
  *        HTTP method POST
  *        Secret      the same string as SANITY_WEBHOOK_SECRET
+ *   3. For blog posts (below): a Vercel Deploy Hook on main, its URL in
+ *      VERCEL_DEPLOY_HOOK_URL (Production). `vercel deploy-hooks create
+ *      sanity-blog --ref main` prints one.
+ *
+ * NEW BLOG POSTS NEED A REBUILD
+ * /blog/[slug] only serves the posts its build knew about (dynamicParams =
+ * false; an unknown address has to be a real 404), and lib/blog.ts keeps every
+ * listing to the same list, lib/blog-index.json. An edit to a live post just
+ * expires the "blog" tag like any other document. A post this deployment didn't
+ * build (a new one, or one whose slug changed), or a built post that is no
+ * longer published, also starts a rebuild through the Deploy Hook: about five
+ * minutes later the post and its page appear, or go, together.
  */
 
 import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 import { parseBody, type ParsedBody } from "next-sanity/webhook";
+import { clientNoCache } from "@/lib/sanity.client";
+import blogIndex from "@/lib/blog-index.json";
 
 // Each Sanity type → the cache tag its queries carry in lib/sanity.queries.ts.
 const TYPE_TO_TAG: Record<string, string> = {
@@ -37,10 +51,42 @@ const TYPE_TO_TAG: Record<string, string> = {
   application: "applications",
   page: "pages",
   siteSettings: "siteSettings",
-  // No query reads blog posts from Sanity yet. The blog moves there next
-  // (claude/HUBSS-next-task.md, Phase C), and its queries will carry "blog".
   blogPost: "blog",
 };
+
+const BUILT_POSTS = blogIndex as { _id: string; slug: string }[];
+
+/**
+ * Why this blog post needs a rebuild, or null when it doesn't. The conditions
+ * match scripts/gen-blog-index.ts, which decides what a build includes.
+ */
+async function blogRebuildReason(docId: string): Promise<string | null> {
+  const built = BUILT_POSTS.find((p) => p._id === docId);
+  const now = await clientNoCache.fetch<{ slug?: string | null } | null>(
+    `*[_id == $id && _type == "blogPost" && defined(slug.current) && defined(title) && defined(publishedAt)][0]{ "slug": slug.current }`,
+    { id: docId }
+  );
+  if (now?.slug && !built) return `new post "${now.slug}"`;
+  if (now?.slug && built && built.slug !== now.slug) return `slug changed from "${built.slug}" to "${now.slug}"`;
+  if (!now && built) return `post "${built.slug}" is no longer published`;
+  return null;
+}
+
+/** Asks Vercel for a production build of main. */
+async function rebuild(reason: string): Promise<string> {
+  const hook = process.env.VERCEL_DEPLOY_HOOK_URL;
+  if (!hook) {
+    console.error(`[revalidate] ${reason} needs a rebuild, but VERCEL_DEPLOY_HOOK_URL is not set. It appears on the next deploy.`);
+    return "needed, but VERCEL_DEPLOY_HOOK_URL is not set";
+  }
+  const res = await fetch(hook, { method: "POST" });
+  if (!res.ok) {
+    console.error(`[revalidate] ${reason}: the deploy hook answered ${res.status}`);
+    return `deploy hook failed (${res.status})`;
+  }
+  console.log(`[revalidate] ${reason}: rebuild started`);
+  return "started";
+}
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   const secret = process.env.SANITY_WEBHOOK_SECRET;
@@ -85,11 +131,25 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   revalidateTag(tag, { expire: 0 });
   console.log(`[revalidate] ${docType} ${docId}: expired tag "${tag}"`);
 
+  let rebuildStatus: string | undefined;
+  if (docType === "blogPost" && !docId.startsWith("drafts.")) {
+    try {
+      const reason = await blogRebuildReason(docId);
+      if (reason) rebuildStatus = await rebuild(reason);
+    } catch (err) {
+      // The tag is already expired; only the rebuild check failed. Say so
+      // loudly, and still answer 200 so Sanity doesn't resend the event.
+      console.error(`[revalidate] blog rebuild check for ${docId} failed:`, err);
+      rebuildStatus = "check failed; see the function log";
+    }
+  }
+
   return NextResponse.json({
     revalidated: true,
     tag,
     docId,
     docType,
+    ...(rebuildStatus ? { rebuild: rebuildStatus } : {}),
     timestamp: new Date().toISOString(),
   });
 }

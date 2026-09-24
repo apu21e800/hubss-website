@@ -61,7 +61,8 @@ public/images/
 │   ├── bike-lanes/ bus-lanes/ parks-paths/ playgrounds/ …
 │   └── (one folder per application, same naming rule)
 │
-├── blog/<post-slug>/        ← one folder per Field Note: featured.jpg + inline images
+├── blog/<post-slug>/        ← the blog's photos before Sep 2026; posts now use Studio uploads,
+│                              but lib/map-projects.ts pins still point here
 ├── patterns/                ← StreetPrint template drawings
 ├── hero/                    ← homepage hero slides
 ├── projects/  about/  partners/  logos/  lunch-learn/  instagram/

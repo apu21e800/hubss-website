@@ -8,12 +8,12 @@
  * lib/image-seo.ts, lib/featured-images.ts), so the result can't drift from
  * what visitors see.
  *
- * Each photo is uploaded once: at most 2400px on the long edge, JPEG q82,
- * camera metadata stripped. The asset records where it came from
- * (source.name "hubss-public", source.id = sha1 of the original file,
- * source.url = its /public path), so a re-run skips everything already
- * uploaded, and the site can still read SEO keywords from the original folder
- * (lib/photos.ts, `origin`).
+ * Each photo is uploaded once (scripts/lib/sanity-photo-upload.ts, shared with
+ * the blog import): at most 2400px on the long edge, JPEG q82, camera metadata
+ * stripped. The asset records where it came from (source.name "hubss-public",
+ * source.id = sha1 of the original file, source.url = its /public path), so a
+ * re-run skips everything already uploaded, and the site can still read SEO
+ * keywords from the original folder (lib/photos.ts, `origin`).
  *
  * USAGE (from the repo root)
  *   npm run photos:dry                               # the plan, and what would be uploaded
@@ -26,11 +26,10 @@
  */
 
 import { createClient } from "@sanity/client";
-import { createHash } from "crypto";
 import fs from "fs";
 import path from "path";
-import sharp from "sharp";
 import { config as loadDotenv } from "dotenv";
+import { absPath, sha1Of, uploadedPhotos, uploadMissing } from "./lib/sanity-photo-upload";
 import { products } from "../lib/products";
 import { applications } from "../lib/applications";
 import { galleryFor, altFor } from "../lib/asset-scan";
@@ -61,10 +60,6 @@ const client = createClient({
   perspective: "published",
   token: token || undefined,
 });
-
-const SOURCE = "hubss-public";
-const MAX_EDGE = 2400;
-const QUALITY = 82;
 
 // ─── The plan: what each page shows today ──────────────────────────────────
 
@@ -125,33 +120,6 @@ function planPages(): Target[] {
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-const absPath = (src: string) => path.join(ROOT, "public", src.replace(/^\/+/, ""));
-const sha1Cache = new Map<string, string>();
-function sha1Of(src: string): string {
-  let h = sha1Cache.get(src);
-  if (!h) {
-    h = createHash("sha1").update(fs.readFileSync(absPath(src))).digest("hex");
-    sha1Cache.set(src, h);
-  }
-  return h;
-}
-
-async function resized(src: string): Promise<Buffer> {
-  return sharp(absPath(src))
-    .rotate()
-    .resize({ width: MAX_EDGE, height: MAX_EDGE, fit: "inside", withoutEnlargement: true })
-    .flatten({ background: "#ffffff" })
-    .jpeg({ quality: QUALITY, mozjpeg: true })
-    .toBuffer();
-}
-
-async function pool<T>(items: T[], n: number, work: (item: T, i: number) => Promise<void>) {
-  let next = 0;
-  await Promise.all(Array.from({ length: Math.min(n, items.length) }, async () => {
-    while (next < items.length) { const i = next++; await work(items[i], i); }
-  }));
-}
-
 const imageValue = (assetId: string, photo: PlannedPhoto, key?: string) => ({
   ...(key ? { _key: key } : {}),
   _type: "image",
@@ -184,11 +152,7 @@ async function main() {
   if (CHECK) return check(targets);
 
   // What Sanity already has from earlier runs, by the sha1 of the original file.
-  const existing: { _id: string; id: string }[] = await client.fetch(
-    `*[_type == "sanity.imageAsset" && source.name == $source]{ _id, "id": source.id }`,
-    { source: SOURCE }
-  );
-  const assetBySha = new Map(existing.map((a) => [a.id, a._id]));
+  const assetBySha = await uploadedPhotos(client);
   const toUpload = allSrcs.filter((s) => !assetBySha.has(sha1Of(s)));
 
   const docs: Record<string, unknown>[] = await client.fetch(`*[_id in $ids]`, { ids: targets.map((t) => t.docId) });
@@ -214,19 +178,7 @@ async function main() {
   console.log(`\n  Backup of the current photos: ${path.resolve(BACKUP!)}`);
 
   // Upload what's missing.
-  let done = 0, bytes = 0;
-  await pool(toUpload, 4, async (src) => {
-    const body = await resized(src);
-    const asset = await client.assets.upload("image", body, {
-      filename: path.basename(src).replace(/\.(png|webp|jpe?g)$/i, ".jpg"),
-      source: { name: SOURCE, id: sha1Of(src), url: src },
-      creditLine: "HUB Surface Systems",
-    });
-    assetBySha.set(sha1Of(src), asset._id);
-    done++; bytes += body.length;
-    process.stdout.write(`\r  uploaded ${done}/${toUpload.length} (${(bytes / 1048576).toFixed(0)} MB)   `);
-  });
-  if (toUpload.length) process.stdout.write("\n");
+  await uploadMissing(client, toUpload, assetBySha);
 
   // Point every document at its photos, in the site's order.
   for (const t of targets) {

@@ -63,3 +63,6 @@ public/images/search/
 
 # 28 MB print master - the generator's input, never shipped
 catalogue-source/
+
+# Generated at the start of every build from Sanity by scripts/gen-blog-index.ts
+lib/blog-index.json

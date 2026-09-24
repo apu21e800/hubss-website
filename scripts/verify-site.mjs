@@ -282,6 +282,18 @@ async function checkSanityContract() {
     }
   }
 
+  // Blog posts (lib/blog.ts). Any one post may leave a field blank, so the
+  // test is that each field the site reads exists somewhere in a sample of
+  // posts: what this catches is a rename, e.g. the query asking for
+  // `category` after the schema called it something else.
+  const blogFields = ["title", "slug", "publishedAt", "excerpt", "category", "body", "featuredImage", "keywords", "relatedProducts"];
+  const posts = await q(`*[_type=="blogPost"] | order(publishedAt desc)[0...20]`);
+  if (!posts?.length) problems.push("blogPost: no documents in dataset");
+  else {
+    const present = new Set(posts.flatMap((d) => Object.keys(d).filter((k) => d[k] !== null)));
+    for (const f of blogFields) if (!present.has(f)) problems.push(`blogPost.${f} — read by lib/blog.ts, but on none of ${posts.length} sampled posts`);
+  }
+
   // resourceDocuments is an inline array on siteSettings, checked against the
   // interface the client actually consumes
   const rd = await q(`*[_type=="siteSettings"][0].resourceDocuments[0...80]`);
@@ -459,15 +471,13 @@ function checkBlogRedirectTargets() {
   if (!fs.existsSync(mf)) { record("redirects into /blog land on a post", false, "no build output — run npm run build"); return; }
   const { redirects = [] } = JSON.parse(fs.readFileSync(mf, "utf8"));
 
-  // A post exists if its .mdx is there and isn't a draft. getAllPosts() drops
-  // drafts, and the route builds nothing else, so a draft 404s like a missing
-  // file. Static routes under app/blog (/blog/project-profiles, …) count too.
-  const isPost = (slug) => {
-    const f = path.join(ROOT, "content", "blog", `${slug}.mdx`);
-    if (!fs.existsSync(f)) return false;
-    const front = fs.readFileSync(f, "utf8").split(/^---\s*$/m)[1] ?? "";
-    return !/^draft:\s*true\s*$/m.test(front);
-  };
+  // A post exists if this build published it: the posts live in Sanity, and
+  // the build writes the ones it built to lib/blog-index.json (the route
+  // builds nothing else). Static routes under app/blog (/blog/project-profiles,
+  // …) count too.
+  const indexFile = path.join(ROOT, "lib", "blog-index.json");
+  const built = new Set(fs.existsSync(indexFile) ? JSON.parse(fs.readFileSync(indexFile, "utf8")).map((p) => p.slug) : []);
+  const isPost = (slug) => built.has(slug);
   const isRoute = (slug) => fs.existsSync(path.join(ROOT, "app", "blog", slug, "page.tsx"));
 
   let fixed = 0;

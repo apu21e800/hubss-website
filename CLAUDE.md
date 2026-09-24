@@ -34,7 +34,8 @@ Markings, Parks & Paths, Community Branding, Town Homes, Parking Lots, Airports.
 - Next.js 16.1.6 (App Router, Turbopack)
 - Tailwind CSS 4
 - TypeScript (strict)
-- MDX for blog posts (markdown with components)
+- Blog posts in Sanity Studio, rendered by components/blog/PostBody.tsx
+  (docs/BLOG-IN-SANITY.md); the old .mdx files are in content/blog-archive
 - Framer Motion for animations
 - Resend for transactional email (contact + lunch & learn forms)
 - Images: product and application galleries and heroes, and the homepage and
@@ -62,7 +63,7 @@ hubss-website/
 │   ├── sections/ (hero, projects, lunch-learn, footer)
 │   └── blog/ (post layout, card)
 ├── content/
-│   └── blog/ (*.mdx files — add posts here)
+│   └── blog-archive/ (the blog's .mdx files until Sep 2026; not read by the site)
 ├── public/
 │   ├── images/
 │   └── docs/
@@ -73,43 +74,27 @@ hubss-website/
    lunch & learn CTA, footer
 2. Projects page — filterable grid by product/application
 3. Products page — each product with specs
-4. Blog — MDX-powered, easy to add posts
+4. Blog — written and published in Sanity Studio
 5. Contact — form + both office locations
 
 ## Adding Content (no developer needed)
-- New blog post: create /content/blog/post-name.mdx
+- New blog post: Studio → Blog / Field Notes → create, then Publish. It is live
+  about five minutes later (the site rebuilds to add the page); edits to live
+  posts show within seconds. docs/BLOG-IN-SANITY.md
 - Swap hero image: replace /public/images/hero.jpg
 - Add PDF spec sheet: drop in /public/docs/, update link in products page
 - New project: add entry to /content/projects/project-name.mdx
 
 ### Putting a project on the homepage map
-The map used to be a hand-typed list with no connection to anything. A blog
-post now becomes a pin by itself: add these to its frontmatter and it appears
-on the next deploy.
-
-```yaml
-mapCity: "Toronto"
-mapProvince: "ON"            # two-letter code
-mapLat: 43.6710              # decimal degrees
-mapLng: -79.4400
-mapProduct: "DecoMark"       # exactly as the product is branded
-mapApplication: "Community Branding"
-mapYear: "2023"              # optional
-mapRepresentative: true      # optional — set it when the featured image is
-                             # HUB work in the same system rather than a photo
-                             # of THIS install. The pin then carries the
-                             # "Representative" tag. Never let a stand-in pass
-                             # as the project.
-```
-
-Some but not all of those keys is treated as a mistake: the build prints a
-warning naming what is missing and creates no pin, rather than failing quietly.
-
-A post whose image already lives in `/public/images/blog/<slug>/` is linked to
-its existing curated pin automatically — that pin gains a "Read the write-up"
-link and nothing is duplicated. `lib/map-projects.ts` still holds the curated
-entries and their hand-written Challenge/Solution prose, and always wins on
-its own slug.
+The map's pins are the curated entries in `lib/map-projects.ts`, with their
+hand-written Challenge/Solution prose. A pin whose photo lives in
+`/public/images/blog/<slug>/` is that post's pin and gains a "Read the
+write-up" link, as long as the post is published in Sanity
+(scripts/gen-map-blog.mjs). Until Sep 2026 a post could also make its own pin
+from map* keys in its .mdx frontmatter; no post used them, and they went with
+the files. Studio has a "Projects (Map Pins)" list from the May 2026
+migration, but the map does not read it yet (its Studio title says so);
+moving the map into Sanity is the way to let Doug add pins.
 
 The project count the page prints comes from `lib/map-count.json`, regenerated
 every build. Do not type a project count anywhere: the phone card used to say
@@ -150,8 +135,9 @@ into Sanity; each has a `:dry` variant that reports first and needs no token.
 The product and application galleries and hero photos, and the homepage and
 About hero photos, also come from Sanity (docs/IMAGE-WORKFLOW.md), with the
 /public/images folders as the fallback. Everything else — the catalogue
-spreads, related products, colours, documents, blog — is code-only and deploys
-on push.
+spreads, related products, colours, documents — is code-only and deploys on
+push. The blog is the exception the other way: it is Sanity-only
+(docs/BLOG-IN-SANITY.md), with no code fallback.
 
 
 ## Bundle import protocol (Claude Cowork -> this repo)

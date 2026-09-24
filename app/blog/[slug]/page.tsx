@@ -1,25 +1,25 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
 import JsonLd from "@/components/ui/JsonLd";
-import { getAllPosts, getPost, getRelatedPosts } from "@/lib/mdx";
+import { BUILT_POSTS, getPost, getRelatedPosts } from "@/lib/blog";
 import { TYPE_BY_LABEL } from "@/lib/field-notes-taxonomy";
 import PostConversion, { PRODUCT_SLUGS } from "@/components/blog/PostConversion";
 import SystemsInPost from "@/components/blog/SystemsInPost";
-import { MDXRemote } from "next-mdx-remote/rsc";
-import remarkGfm from "remark-gfm";
 import { buildMetadata } from "@/lib/seo";
 import TableOfContents from "@/components/blog/TableOfContents";
 import RelatedPosts from "@/components/blog/RelatedPosts";
 import InstagramShareButton from "@/components/blog/InstagramShareButton";
-import BlogImage from "@/components/blog/BlogImage";
+import PostBody from "@/components/blog/PostBody";
+import PhotoImage from "@/components/ui/PhotoImage";
+import { isSanityImage, sanityOgImage, sanitySized } from "@/lib/photos";
 
 /**
- * The posts in content/blog are the only posts. Any other slug is a real 404.
+ * The posts this deployment built (lib/blog-index.json, from Sanity) are the
+ * only posts. Any other slug is a real 404.
  *
  * Left at the default (true), an unknown slug was rendered on demand, and the
  * response was already committed as a 200 before notFound() ran. The root
@@ -30,84 +30,39 @@ import BlogImage from "@/components/blog/BlogImage";
  * the route table with a 404 before anything renders. /catalogue/[page]
  * already works this way.
  *
- * Nothing legitimate needs a slug the build didn't know about. Posts go live
- * by commit and deploy. Drafts preview from content/blog/drafts through the
- * admin API, never through this route. A post marked `draft: true` is left out
- * by getAllPosts(), so it 404s here too.
+ * Nothing legitimate needs a slug the build didn't know about. A post that is
+ * new in Studio starts a rebuild when it's published (app/api/revalidate), and
+ * appears with that deployment. A Studio draft is never built.
  */
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  return getAllPosts().map((p) => ({ slug: p.slug }));
+  return BUILT_POSTS.map((p) => ({ slug: p.slug }));
 }
 
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  let post;
-  try { post = getPost(slug); } catch { return {}; }
+  const post = await getPost(slug);
+  if (!post) return {};
   return buildMetadata({
-    title: post.title,
-    description: post.excerpt,
+    title: post.seoTitle ?? post.title,
+    description: post.seoDescription ?? post.excerpt,
     slug: `blog/${slug}`,
     type: "article",
     publishedTime: post.date,
-    image: post.featuredImage,
+    image: post.featuredImage && isSanityImage(post.featuredImage) ? sanityOgImage(post.featuredImage) : post.featuredImage,
   });
-}
-
-/**
- * Drop a leading `# Heading` from an MDX body.
- *
- * Only the FIRST heading, and only if it is an h1 reached before any prose —
- * so a post that genuinely opens with body copy and uses `# ` as a mid-article
- * section marker is left alone. Leading MDX comments and blank lines are
- * skipped over on the way.
- */
-function stripLeadingH1(body: string): string {
-  const lines = body.split("\n");
-  let i = 0;
-  let inComment = false;
-
-  while (i < lines.length) {
-    const line = lines[i].trim();
-
-    // Most posts open with a multi-line {/* … */} block of authoring notes
-    // ("Edit text directly in this file", "Swap hero image: …"). Skipping only
-    // lines that START with {/* walked into the second line of that block,
-    // decided it was prose, and left every one of those posts with its title
-    // still restated in the body.
-    if (inComment) {
-      if (line.includes("*/}")) inComment = false;
-      i++;
-      continue;
-    }
-    if (line.startsWith("{/*")) {
-      if (!line.includes("*/}")) inComment = true;
-      i++;
-      continue;
-    }
-    if (line === "") { i++; continue; }
-
-    if (/^#\s+\S/.test(line)) {
-      lines.splice(i, 1);
-      // Collapse the blank line the heading left behind.
-      if (lines[i]?.trim() === "") lines.splice(i, 1);
-      return lines.join("\n");
-    }
-    return body;   // first real content is not an h1 — leave it be
-  }
-  return body;
 }
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
 
-  let post;
-  try { post = getPost(slug); } catch { notFound(); }
+  const post = await getPost(slug);
+  if (!post) notFound();
 
-  const related = getRelatedPosts(post);
+  const related = await getRelatedPosts(post);
   const postUrl = `https://hubss.com/blog/${post.slug}`;
   const type = TYPE_BY_LABEL[post.category] ?? TYPE_BY_LABEL["Blog"];
 
@@ -168,7 +123,7 @@ export default async function BlogPostPage({ params }: Props) {
     mainEntityOfPage: { "@type": "WebPage", "@id": postUrl },
     url: postUrl,
     image: post.featuredImage
-      ? `https://hubss.com${post.featuredImage}`
+      ? (isSanityImage(post.featuredImage) ? sanitySized(post.featuredImage, 1200) : `https://hubss.com${post.featuredImage}`)
       : "https://hubss.com/images/og-default.jpg",
   };
 
@@ -198,9 +153,9 @@ export default async function BlogPostPage({ params }: Props) {
       {/* ── Cinematic hero ──────────────────────── */}
       <header data-hero className="relative w-full overflow-hidden" style={{ height: "68vh", minHeight: 460 }}>
         {post.featuredImage ? (
-          <Image
+          <PhotoImage
             src={post.featuredImage}
-            alt={post.title}
+            alt={post.featuredImageAlt ?? post.title}
             fill
             className="object-cover"
             priority
@@ -296,7 +251,9 @@ export default async function BlogPostPage({ params }: Props) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-8 lg:grid lg:gap-16" style={{ gridTemplateColumns: "1fr 220px" }}>
 
         {/* Article body */}
-        <article className="blog-prose prose prose-invert" style={{ maxWidth: "72ch" }}>
+        {/* data-blog-content is what TableOfContents looks for. It was missing
+            until Sep 2026, so the sidebar's "On this page" never appeared. */}
+        <article data-blog-content className="blog-prose prose prose-invert" style={{ maxWidth: "72ch" }}>
           {/* Excerpt / lede */}
           {post.excerpt && (
             <p style={{
@@ -313,32 +270,11 @@ export default async function BlogPostPage({ params }: Props) {
             </p>
           )}
 
-          {/* Two guards on the body's headings.
-
-              44 of the 67 posts open their markdown with a `# ` that restates
-              the title — 31 of them word for word. Rendered under a template
-              that already prints the title as the page <h1>, that gave every
-              one of those pages TWO h1 elements saying nearly the same thing:
-              an ambiguous outline for Google and for a screen reader, and a
-              visible duplicate heading for everyone else.
-
-              Fixed here rather than in 44 .mdx files. Two of those files are
-              CRLF-encoded and a bulk rewrite has silently reverted edits in
-              this repo before; more to the point, an author adding a post next
-              month would reintroduce it, and the Sanity migration will bring
-              more authors, not fewer.
-
-              `stripLeadingH1` removes the restatement. The h1→h2 mapping
-              catches any `# ` further down, so the page can never again have a
-              second h1 no matter what someone types into the editor. */}
-          <MDXRemote
-            source={stripLeadingH1(post.content)}
-            components={{
-              BlogImage,
-              h1: (props: React.ComponentPropsWithoutRef<"h2">) => <h2 {...props} />,
-            }}
-            options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
-          />
+          {/* The body, from Sanity. PostBody never renders a second h1: the
+              title above is the page's only one (44 of the old posts restated
+              it as a `# ` heading; the import dropped those, and a Heading 1
+              typed in Studio comes out as an h2). */}
+          <PostBody body={post.body} />
         </article>
 
         {/* Sidebar */}

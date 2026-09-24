@@ -23,7 +23,7 @@ import {
   ImagesIcon,
 } from "@sanity/icons";
 
-// Page document IDs — set by migrate-to-sanity.ts
+// Page document IDs — set by the May 2026 migration
 const PAGE_IDS = {
   homepage:   "page-homepage",
   about:      "page-about",
@@ -81,13 +81,21 @@ export const structure: StructureResolver = (S) =>
       S.divider(),
 
       // ── Blog / Field Notes ───────────────────────────────────────────────────
-      S.documentTypeListItem("blogPost")
+      // The site's only copy of the blog (lib/blog.ts). Newest first.
+      S.listItem()
         .title("Blog / Field Notes")
-        .icon(EditIcon),
+        .icon(EditIcon)
+        .child(
+          S.documentTypeList("blogPost")
+            .title("Blog / Field Notes")
+            .defaultOrdering([{ field: "publishedAt", direction: "desc" }])
+        ),
 
       // ── Projects (Map Pins) ──────────────────────────────────────────────────
+      // Not read by the site yet: the map's pins are still lib/map-projects.ts.
+      // Said in the title so nobody edits a pin and waits for it to change.
       S.documentTypeListItem("project")
-        .title("Projects (Map Pins)")
+        .title("Projects (Map Pins) — not live yet")
         .icon(PinIcon),
 
       S.divider(),

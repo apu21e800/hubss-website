@@ -1,11 +1,11 @@
 import Link from "next/link";
-import Image from "next/image";
+import PhotoImage from "@/components/ui/PhotoImage";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
 import JsonLd from "@/components/ui/JsonLd";
 import BlogCard from "@/components/blog/BlogCard";
-import { getPostsByType } from "@/lib/mdx";
+import { getAllPosts } from "@/lib/blog";
 import { FIELD_NOTE_TYPES, type FieldNoteTypeMeta } from "@/lib/field-notes-taxonomy";
 
 /**
@@ -21,8 +21,9 @@ import { FIELD_NOTE_TYPES, type FieldNoteTypeMeta } from "@/lib/field-notes-taxo
  * the standard structure Google and AI answer engines read to understand that
  * a site has depth on a subject rather than one page mentioning it.
  */
-export default function TypeHub({ type }: { type: FieldNoteTypeMeta }) {
-  const posts = getPostsByType(type.label);
+export default async function TypeHub({ type }: { type: FieldNoteTypeMeta }) {
+  const all = await getAllPosts();
+  const posts = all.filter((p) => p.category === type.label);
   const others = FIELD_NOTE_TYPES.filter((t) => t.slug !== type.slug);
   const hubUrl = `https://hubss.com/blog/${type.slug}`;
 
@@ -131,7 +132,7 @@ export default function TypeHub({ type }: { type: FieldNoteTypeMeta }) {
             style={{ border: "1px solid var(--border-color)", minHeight: 300 }}
           >
             {lead.featuredImage && (
-              <Image
+              <PhotoImage
                 src={lead.featuredImage}
                 alt={lead.title}
                 fill
@@ -198,7 +199,7 @@ export default function TypeHub({ type }: { type: FieldNoteTypeMeta }) {
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {others.map((t) => {
-              const n = getPostsByType(t.label).length;
+              const n = all.filter((p) => p.category === t.label).length;
               if (n === 0) return null;
               return (
                 <Link

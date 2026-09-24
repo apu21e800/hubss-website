@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { PostMeta } from "@/lib/mdx";
+import type { PostMeta } from "@/lib/blog";
 import type { FieldNoteTypeMeta } from "@/lib/field-notes-taxonomy";
 
 /**

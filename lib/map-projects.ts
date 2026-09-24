@@ -1203,16 +1203,15 @@ const curatedProjects: MapProject[] = [
 // ──────────────────────────────────────────────────────────────────────────
 // Blog-derived pins
 //
-// scripts/gen-map-blog.mjs reads content/blog/*.mdx at build time and emits
-// lib/map-blog-projects.json: a pin for every post that states where it is.
+// scripts/gen-map-blog.mjs emits lib/map-blog-projects.json at build time:
+// which curated pins have a published post to link to ("Read the write-up").
 // That file is generated and gitignored, same arrangement as the gallery
 // manifest and the document sizes, for the same reason — globbing content/
 // from inside a page defeats Next's dependency tracer.
 //
-// Curated entries above win on their own slug: they carry hand-written
-// problem/solution prose a post does not expose in machine-readable form. A
-// post that is NOT already curated becomes a new pin on the next deploy, with
-// nobody to remember. That is the whole point.
+// Until Sep 2026 it also made a pin for every post whose .mdx frontmatter
+// stated where it was. No post did, and the blog has since moved into Sanity,
+// so `projects` is empty now; it is kept so this file reads the same shape.
 //
 // See the header of scripts/gen-map-blog.mjs for the six frontmatter keys.
 // ──────────────────────────────────────────────────────────────────────────

@@ -109,8 +109,9 @@ fallback text in `app/page.tsx`, `app/about/page.tsx` or `app/contact/page.tsx`
 does not appear on the live site, this is why. Run the matching dry run first;
 it shows you the field.
 
-Related products, the catalogue spreads, colours, documents and blog posts are
-**not** affected: they come from code only, and deploy the moment the push
-lands. Photos are separate too: they have their own sync
+Related products, the catalogue spreads, colours and documents are **not**
+affected: they come from code only, and deploy the moment the push lands. Blog
+posts aren't either, the other way round: since Sep 2026 they exist only in
+Sanity, with no code copy to sync (docs/BLOG-IN-SANITY.md). Photos are separate too: they have their own sync
 (`npm run photos:sync`, docs/IMAGE-WORKFLOW.md), and after the one-time
 migration they are edited in Studio, not synced.

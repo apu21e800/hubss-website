@@ -1,6 +1,14 @@
 /**
  * Field Notes taxonomy — the curated classification layer (Aug 2026).
  *
+ * SINCE SEP 2026 the posts live in Sanity, and each post's type and search
+ * phrases are fields on it in Studio ("Type", "Search phrases"). The per-post
+ * map below (FIELD_NOTES, curatedType, curatedKeywords) was where the import
+ * (scripts/import-blog-to-sanity.ts) got them from; the site no longer reads
+ * it, so change a post's type in Studio, not here. The types themselves
+ * (FIELD_NOTE_TYPES: labels, hubs, badge colours, schema types) are still
+ * read everywhere, Studio's Type list included.
+ *
  * Vernon: "update all Field notes — Case Studies, Project Profiles, Guides,
  * White Papers, Blog posts! This is high priority, also SEO optimize, this is
  * a lead engine."

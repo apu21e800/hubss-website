@@ -1,6 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
-import type { PostMeta } from "@/lib/mdx";
+import PhotoImage from "@/components/ui/PhotoImage";
+import type { PostMeta } from "@/lib/blog";
+import { isSanityImage } from "@/lib/photos";
 import { TYPE_BY_LABEL } from "@/lib/field-notes-taxonomy";
 
 const FALLBACKS = [
@@ -18,7 +19,9 @@ function getFallback(slug: string) {
 
 export default function BlogCard({ post }: { post: PostMeta }) {
   const imgSrc = post.featuredImage ?? getFallback(post.slug);
-  const isExternal = imgSrc.startsWith("http");
+  // Sanity photos are sized by Sanity's CDN (PhotoImage); any other outside
+  // URL is shown as it is.
+  const isExternal = imgSrc.startsWith("http") && !isSanityImage(imgSrc);
   // Badge palette comes from the taxonomy so every surface that shows a type
   // (card, hub header, post hero) agrees. The old inline map used indigo and
   // emerald — two colours that exist nowhere else in the asphalt system.
@@ -37,7 +40,7 @@ export default function BlogCard({ post }: { post: PostMeta }) {
     >
       {/* Image with gradient overlay */}
       <div className="relative h-52 overflow-hidden flex-shrink-0">
-        <Image
+        <PhotoImage
           src={imgSrc}
           alt={post.title}
           fill

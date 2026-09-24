@@ -42,8 +42,9 @@ const CSP_REPORT_ONLY = [
   // Inline styles from framer-motion + Tailwind v4 + Crisp
   "style-src 'self' 'unsafe-inline' https://client.crisp.chat https://fonts.googleapis.com",
   // Images from Unsplash, Vercel optimization, data URIs, blob (for clipboard), Crisp avatars,
-  // GA4's pixel fallback when fetch/sendBeacon is unavailable
-  "img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com https://*.crisp.chat https://image.crisp.chat https://basemaps.cartocdn.com https://*.basemaps.cartocdn.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com",
+  // GA4's pixel fallback when fetch/sendBeacon is unavailable, and Sanity's image CDN, which
+  // serves the product, application and page photos curated in Studio (lib/photos.ts)
+  "img-src 'self' data: blob: https://cdn.sanity.io https://images.unsplash.com https://plus.unsplash.com https://*.crisp.chat https://image.crisp.chat https://basemaps.cartocdn.com https://*.basemaps.cartocdn.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com",
   // Google Fonts files
   "font-src 'self' data: https://fonts.gstatic.com https://client.crisp.chat",
   // Resend API, Crisp WS, Vercel telemetry, MapLibre tiles, GA4 collection

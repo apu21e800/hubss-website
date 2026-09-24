@@ -2,9 +2,11 @@
  * POST /api/revalidate — Sanity calls this when a document is published.
  *
  * It checks Sanity's signature (the webhook's Secret field, sent in the
- * `sanity-webhook-signature` header), waits about 3 s for Sanity's CDN to catch
- * up (next-sanity's parseBody does that), then expires the cache tag for the
- * document's type. The next visitor gets a freshly rendered page.
+ * `sanity-webhook-signature` header), waits about 3 s for the Content Lake to
+ * settle (next-sanity's parseBody does that), then expires the cache tag for
+ * the document's type. The next visitor gets a page rendered from the API
+ * itself, not Sanity's CDN (lib/sanity.client.ts says why). Measured on
+ * 24 Sep 2026: Publish to live in 5 s.
  *
  * Until 24 Sep 2026 this route could never have worked:
  *   - it expected `Authorization: Bearer <secret>`, which Sanity does not send;
@@ -16,7 +18,9 @@
  * Setup, once:
  *   1. Vercel → hubss-website → Settings → Environment Variables:
  *      SANITY_WEBHOOK_SECRET (Production) = a long random string. Redeploy.
- *   2. sanity.io/manage → project 9dbro2m1 → API → Webhooks → Create webhook:
+ *   2. One webhook in project 9dbro2m1, created through the API on 24 Sep 2026
+ *      (the manage page's edits of the Secret didn't take, and an old duplicate
+ *      had been firing unsigned). Exactly one should point here:
  *        Name        hubss.com revalidate
  *        URL         https://hubss.com/api/revalidate
  *        Dataset     production

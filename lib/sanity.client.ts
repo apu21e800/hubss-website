@@ -25,17 +25,25 @@ export const apiVersion = "2024-01-01";
 // Pressing Publish in Studio is what puts copy on the site.
 const perspective = "published" as const;
 
+// Straight to the API, not Sanity's CDN. Next's Data Cache (unstable_cache,
+// lib/sanity.queries.ts) is the site's cache, and the webhook empties it on
+// Publish; the fetch that refills it must see what was just published. The CDN
+// can lag a publish by seconds. Measured 24 Sep 2026 08:30 UTC: an edit went
+// live in 5 s, but a second publish 6 s later was rendered from the CDN's copy
+// of the first, and /contact showed the wrong text until someone published
+// again. Uncached reads only happen when a page is rebuilt, so the API load is
+// small.
 export const client = createClient({
   projectId,
   dataset,
   apiVersion,
-  useCdn: true,
+  useCdn: false,
   perspective,
   // Read token. With perspective "published" it cannot expose drafts.
   token: process.env.SANITY_API_READ_TOKEN,
 });
 
-/** For server-side fetches that bypass CDN (e.g. ISR revalidation handlers) */
+/** The same client; kept so older imports keep working. */
 export const clientNoCache = createClient({
   projectId,
   dataset,

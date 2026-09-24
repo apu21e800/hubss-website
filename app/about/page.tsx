@@ -68,7 +68,7 @@ const PARTNER_DESC_FALLBACK: Record<string, string> = {
 };
 
 export default async function AboutPage() {
-  const sanityPage = await getSanityPageContent("about").catch(() => null);
+  const sanityPage = await getSanityPageContent("about");
   const hero = {
     eyebrow:    sanityPage?.aboutHero?.eyebrow    ?? "Canadian-Operated Since 1999 · All 10 Provinces",
     heading:    sanityPage?.aboutHero?.heading    ?? "The people who made your city look like your city.",

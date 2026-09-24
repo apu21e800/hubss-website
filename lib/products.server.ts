@@ -23,25 +23,32 @@ import {
   getAllSanityProducts,
   getProductBySlug,
 } from "@/lib/sanity.queries";
-import type { SanityProduct } from "@/types/sanity";
+import type { SanityBlock, SanityProduct } from "@/types/sanity";
 
 // GROQ projection aliases slug.current to a string; runtime shape differs from
 // the typed Sanity document shape on this field.
 type SanityProductProjected = Omit<SanityProduct, "slug"> & { slug: string };
 
-export type MergedProduct = Product & { homepageBlurb?: string };
+export type MergedProduct = Product & {
+  homepageBlurb?: string;
+  /** The Sanity description as rich text, when Sanity has one. `description`
+   *  stays plain text for JSON-LD and meta tags; the page renders these blocks. */
+  descriptionBlocks?: SanityBlock[];
+};
 
 function merge(code: Product, sanity: SanityProductProjected | null | undefined): MergedProduct {
   if (!sanity) return code;
   // A spec row counts only when both halves are filled in, so a half-typed row
   // in Studio cannot put a blank line in the spec table.
   const sanitySpecs = sanity.specs?.filter((s) => s?.label?.trim() && s?.value?.trim());
+  const sanityDescription = blocksToPlainText(sanity.description);
   return {
     ...code,
     name: cmsText(sanity.name, code.name),
     eyebrow: cmsText(sanity.eyebrow, code.eyebrow),
     shortDesc: cmsText(sanity.shortDesc, code.shortDesc),
-    description: cmsText(blocksToPlainText(sanity.description), code.description),
+    description: cmsText(sanityDescription, code.description),
+    descriptionBlocks: sanityDescription.trim() ? sanity.description : undefined,
     specs: cmsList(sanitySpecs, code.specs),
     seoTitle: cmsText(sanity.seo?.title, code.seoTitle),
     seoDescription: cmsText(sanity.seo?.description, code.seoDescription),
@@ -53,13 +60,13 @@ function merge(code: Product, sanity: SanityProductProjected | null | undefined)
 export async function getMergedProduct(slug: string): Promise<MergedProduct | undefined> {
   const code = products.find((p) => p.slug === slug);
   if (!code) return undefined;
-  const sanity = (await getProductBySlug(slug).catch(() => null)) as SanityProductProjected | null;
+  const sanity = (await getProductBySlug(slug)) as SanityProductProjected | null;
   return merge(code, sanity);
 }
 
 /** Fetch all products, merging Sanity values over the lib baseline. */
 export async function getMergedProducts(): Promise<MergedProduct[]> {
-  const sanityList = (await getAllSanityProducts().catch(() => [])) as SanityProductProjected[];
+  const sanityList = (await getAllSanityProducts()) as unknown as SanityProductProjected[];
   const bySlug = new Map<string, SanityProductProjected>(sanityList.map((s) => [s.slug, s]));
   return products.map((code) => merge(code, bySlug.get(code.slug)));
 }

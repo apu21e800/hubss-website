@@ -12,6 +12,7 @@ import JsonLd from "@/components/ui/JsonLd";
 import { imageObject, seoCaption } from "@/lib/image-seo";
 import { applications } from "@/lib/applications";
 import { getMergedApplication } from "@/lib/applications.server";
+import RichText from "@/components/ui/RichText";
 import { products } from "@/lib/products";
 import { productImages, resolveImage } from "@/lib/featured-images";
 import ApplicationSpread from "@/components/applications/ApplicationSpread";
@@ -216,9 +217,13 @@ export default async function ApplicationPage({ params }: Props) {
               <h2 className="text-2xl sm:text-3xl font-bold mb-5" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
                 How it works
               </h2>
-              <p className="mb-12 leading-[1.85]" style={{ color: "var(--text-body)", fontSize: "clamp(1rem, 1.8vw, 1.075rem)", maxWidth: "65ch" }}>
-                {application.description}
-              </p>
+              {application.descriptionBlocks ? (
+                <RichText value={application.descriptionBlocks} />
+              ) : (
+                <p className="mb-12 leading-[1.85]" style={{ color: "var(--text-body)", fontSize: "clamp(1rem, 1.8vw, 1.075rem)", maxWidth: "65ch" }}>
+                  {application.description}
+                </p>
+              )}
 
               {/* Gallery */}
               {/* The catalogue's word for its photography, matching /products. */}

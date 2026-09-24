@@ -26,7 +26,7 @@ export const metadata: Metadata = buildMetadata({
 });
 
 export default async function ResourcesPage() {
-  const sanityDocs = await getResourceDocuments().catch(() => null);
+  const sanityDocs = await getResourceDocuments();
   // Sanity-curated entries take precedence (Vernon's siteSettings array
   // wins when an id exists in both). Then append any hardcoded entries
   // whose id is NOT present in Sanity — that's how the Catalogue + the

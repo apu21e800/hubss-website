@@ -74,6 +74,14 @@ Sanity's API anyway, so the page reveals nothing the API doesn't. The real
 lock is project membership: invite editors by name at sanity.io/manage, and
 remove them when they leave.
 
-Also unset in production: `SANITY_API_WRITE_TOKEN` and `SANITY_WEBHOOK_SECRET`
-(the publish → rebuild webhook). Without the webhook, Studio edits appear on the
-next deploy or after the 1-hour ISR window, not immediately.
+Also unset in production: `SANITY_API_WRITE_TOKEN` (correct: only the sync
+scripts write, from Vern's machine) and `SANITY_WEBHOOK_SECRET`. Without the
+webhook, Studio edits appear on the next deploy or after the 1-hour ISR window.
+The route itself was fixed on 24 Sep 2026 (it never could have worked: wrong
+auth scheme, no `page` entry, a misspelt tag); the settings for Vercel and
+sanity.io/manage are at the top of `app/api/revalidate/route.ts`.
+
+Sanity failures are loud since 24 Sep 2026. A failed request throws instead of
+turning into null (`sanityFetch` in `lib/sanity.queries.ts`): a build fails
+rather than shipping pages without their CMS copy, and an hourly refresh that
+fails keeps serving the last good page and logs `[sanity] ... failed`.

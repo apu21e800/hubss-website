@@ -13,6 +13,7 @@ import { familiesFor, colourSectionFor } from "@/lib/colours";
 import { galleryFor, altFor } from "@/lib/asset-scan";
 import GalleryGrid, { type GalleryImage } from "@/components/ui/GalleryGrid";
 import JsonLd from "@/components/ui/JsonLd";
+import RichText from "@/components/ui/RichText";
 import { imageObject, seoCaption } from "@/lib/image-seo";
 import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
@@ -274,18 +275,26 @@ export default async function ProductPage({ params }: Props) {
                 <h2 className="text-xl sm:text-2xl font-bold mb-4" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
                   How it works
                 </h2>
-                <p className="mb-12 leading-[1.85]" style={{ color: "var(--text-body)", fontSize: "clamp(1rem, 1.8vw, 1.075rem)", maxWidth: "65ch" }}>
-                  {product.description}
-                </p>
+                {product.descriptionBlocks ? (
+                  <RichText value={product.descriptionBlocks} />
+                ) : (
+                  <p className="mb-12 leading-[1.85]" style={{ color: "var(--text-body)", fontSize: "clamp(1rem, 1.8vw, 1.075rem)", maxWidth: "65ch" }}>
+                    {product.description}
+                  </p>
+                )}
               </>
             ) : (
               <>
                 <h2 className="text-2xl sm:text-3xl font-bold mb-5" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
                   What {product.name} is
                 </h2>
-                <p className="mb-12 leading-[1.85]" style={{ color: "var(--text-body)", fontSize: "clamp(1rem, 1.8vw, 1.075rem)", maxWidth: "65ch" }}>
-                  {product.description}
-                </p>
+                {product.descriptionBlocks ? (
+                  <RichText value={product.descriptionBlocks} />
+                ) : (
+                  <p className="mb-12 leading-[1.85]" style={{ color: "var(--text-body)", fontSize: "clamp(1rem, 1.8vw, 1.075rem)", maxWidth: "65ch" }}>
+                    {product.description}
+                  </p>
+                )}
               </>
             )}
 

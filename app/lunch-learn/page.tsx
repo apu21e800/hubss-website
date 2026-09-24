@@ -81,7 +81,7 @@ const serviceSchema = {
 };
 
 export default async function LunchLearnPage() {
-  const sanityPage = await getSanityPageContent("lunch-learn").catch(() => null);
+  const sanityPage = await getSanityPageContent("lunch-learn");
   // Copy migration shim (Aug 2026): the Sanity lunch-learn doc still carries
   // the launch-era "free lunch" register. Until that doc is updated in Studio,
   // treat those exact stale strings as unset so the revised copy serves.

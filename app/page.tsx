@@ -78,7 +78,7 @@ const organizationSchema = {
 };
 
 export default async function Home() {
-  const sanityPage = await getSanityPageContent("homepage").catch(() => null);
+  const sanityPage = await getSanityPageContent("homepage");
   const [mergedApplications, mergedProducts] = await Promise.all([
     getMergedApplications(),
     getMergedProducts(),

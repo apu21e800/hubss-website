@@ -185,13 +185,16 @@ no `revalidate` and never re-read Sanity — fixed, 3600s, matching products.
    verification is the only missing step. Easiest path is URL-prefix + HTML
    tag; the tag goes in `app/layout.tsx` under `metadata.verification.google`.
    Bing then imports from Search Console in one click.
-2. **`SANITY_WEBHOOK_SECRET` is not set.** `app/api/revalidate/route.ts`
-   exists to let Sanity push a cache invalidation on publish. Until the secret
-   is set in Vercel and Sanity, one hour is the floor on how fast a Sanity
-   edit reaches the site.
-3. **GitHub app access for Cowork sessions** —
-   github.com/settings/installations → Claude → Configure → add
-   `apu21e800/hubss-website`. Ends the git-bundle workaround for binaries.
+2. **The publish webhook needs its secret.** `app/api/revalidate/route.ts`
+   was fixed on 24 Sep 2026: it now checks Sanity's signature, covers the page
+   docs, and expires the cache immediately. It still needs
+   `SANITY_WEBHOOK_SECRET` in Vercel and the webhook in sanity.io/manage; the
+   exact settings are at the top of that file. Until both exist, one hour is
+   the floor on how fast a Sanity edit reaches the site.
+3. **Pushing from Cowork is not possible yet.** There is no setting to attach a
+   repo to a Cowork session (open bugs anthropics/claude-code #84581 and
+   #96075). Cowork builds, Claude Code on Vern's PC imports the bundle and
+   pushes.
 
 **Agent work, in priority order:**
 4. **Bring v2's five commits forward to main.** The CRLF renormalization will

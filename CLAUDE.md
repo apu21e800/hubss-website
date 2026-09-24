@@ -161,9 +161,9 @@ The GitHub side is NOT the blocker. Checked 23 Sep 2026: the Claude GitHub App
 already has "All repositories" on apu21e800 (github.com/settings/installations).
 The proxy refuses because the repo isn't attached to the Cowork session:
 "apu21e800/hubss-website is not in this session's authorized repository set ...
-add the repository to the session's sources." It can't be added to a session
-that is already running. Start the Cowork task with this repo attached as a
-source and ordinary pushes should work; until then, bundles.
+add the repository to the session's sources." As of 24 Sep 2026 Cowork has no
+setting to do that (open bugs anthropics/claude-code #84581 and #96075), so:
+bundles, imported and pushed by Claude Code on Vern's PC.
 
 **This repo deploys from `main`.** An earlier version of these steps said `v2`.
 That branch still exists on origin and is 100 commits behind, so following the

@@ -72,7 +72,12 @@ npm run sync:pages
 ```
 
 The site revalidates on its own within the hour, or redeploy to see it
-immediately.
+immediately. Once the publish webhook is set up (settings at the top of
+`app/api/revalidate/route.ts`), a Publish in Studio, or a sync, shows on the
+site within seconds.
+
+Product and application descriptions render as rich text: headings, lists,
+links, bold and quotes typed in Studio reach the page (`components/ui/RichText.tsx`).
 
 - **`sync:pages` keeps its own copy of the page text**, because the page
   components can't be imported by a script. Before writing, it checks that every

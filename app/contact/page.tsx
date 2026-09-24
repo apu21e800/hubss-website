@@ -97,7 +97,7 @@ const contactSchema = {
 };
 
 export default async function ContactPage() {
-  const sanityPage = await getSanityPageContent("contact").catch(() => null);
+  const sanityPage = await getSanityPageContent("contact");
   const hero = {
     eyebrow:    sanityPage?.contactHero?.eyebrow    ?? "Get In Touch",
     heading:    sanityPage?.contactHero?.heading    ?? "Start a Project",

@@ -32,6 +32,12 @@ the code (`lib/cms-merge.ts`, the `||` rule).
 
 `/products` (the index) is code-only by design and reads no Sanity.
 
+**Only published documents reach the site.** A draft in Studio stays off the
+site until someone presses Publish. Until 24 Sep 2026 the site read drafts too,
+because its read token made Sanity include them; an abandoned MMAX draft kept an
+old subtitle live for weeks. `lib/sanity.client.ts` now asks for published
+documents only, and so do the sync scripts.
+
 The pages work the same way. `page-homepage`, `page-about`, `page-contact` and
 `page-lunch-learn` hold the hero text, the About story, values, "Why HUB",
 partners and the Lunch & Learn sections, and each overrides the fallback text

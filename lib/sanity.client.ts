@@ -16,12 +16,22 @@ export const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? "9dbro2m1"
 export const dataset   = process.env.NEXT_PUBLIC_SANITY_DATASET   ?? "production";
 export const apiVersion = "2024-01-01";
 
+// Published documents only. Without this, a request that carries a token gets
+// the "raw" perspective (the default for API versions before 2025-02-19), which
+// returns drafts alongside published documents. Every query takes [0], and a
+// draft's _id ("drafts.…") sorts first, so an unpublished Studio edit went live.
+// That is how /products/mmax kept an old subtitle from an abandoned draft on
+// 24 Sep 2026 while the published document and the code both had the new one.
+// Pressing Publish in Studio is what puts copy on the site.
+const perspective = "published" as const;
+
 export const client = createClient({
   projectId,
   dataset,
   apiVersion,
   useCdn: true,
-  // Read token — only needed for draft/private content
+  perspective,
+  // Read token. With perspective "published" it cannot expose drafts.
   token: process.env.SANITY_API_READ_TOKEN,
 });
 
@@ -31,6 +41,7 @@ export const clientNoCache = createClient({
   dataset,
   apiVersion,
   useCdn: false,
+  perspective,
   token: process.env.SANITY_API_READ_TOKEN,
 });
 

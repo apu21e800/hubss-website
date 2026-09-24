@@ -48,6 +48,9 @@ const client = createClient({
   dataset:   process.env.NEXT_PUBLIC_SANITY_DATASET   ?? "production",
   apiVersion: "2024-01-01",
   useCdn: false,
+  // Published documents only, so the diff and the patch target what the site
+  // shows. With a token the default perspective would mix in Studio drafts.
+  perspective: "published",
   // A dry run reads the public dataset with no token at all; a placeholder token
   // is sent as a real one and Sanity answers 401, so the dry run never ran.
   token: token || undefined,

@@ -15,11 +15,9 @@ import type { SanityProduct, SanityApplication } from "@/types/sanity";
 import type { ResourceDocument } from "@/lib/resource-documents";
 
 // Every cache key below carries this version. Vercel's Data Cache outlives
-// deploys, and on 24 Sep 2026 /products/mmax was still showing a subtitle that
-// had left both the code and Sanity on 7 Sep; Sanity itself returned the new
-// text for the same query. A new version means every entry is fetched fresh on
-// the next deploy. Change it again if a live page is ever stuck on old Sanity
-// text that the Studio and the API no longer have.
+// deploys, so changing it makes every entry refetch from Sanity on the next
+// deploy. It was bumped on 24 Sep 2026 while chasing a stale /products/mmax
+// subtitle; the real cause was a Studio draft (see lib/sanity.client.ts).
 const CACHE_VERSION = "2026-09-24";
 
 // ── Products ──────────────────────────────────────────────────────────

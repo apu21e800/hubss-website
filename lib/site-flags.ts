@@ -42,9 +42,10 @@ export const SITE_FLAGS = {
   // unpublished drafts into Studio (lib/field-note-pipeline.ts). The old
   // /admin/blog panel, which saved files Vercel can't write, was removed.
 
-  // ── Social automation
-  /** /admin/social post composer. Requires OAuth tokens per platform. */
-  showAdminSocial: true,
+  // Social automation has no flag either: new Field Notes become Buffer
+  // drafts, one per channel, for approval in Buffer (lib/social-pipeline.ts).
+  // The old /admin/social composer saved its queue as files, which Vercel
+  // can't write, and was removed.
 
   // ── Add new flags here
   // e.g. showTestimonials: false,

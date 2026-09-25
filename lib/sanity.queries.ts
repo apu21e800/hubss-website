@@ -63,8 +63,8 @@ const PRODUCT_FIELDS = `
   description,
   homepageBlurb,
   heroPosition,
-  heroImage{ alt, caption, "url": asset->url, "width": asset->metadata.dimensions.width, "height": asset->metadata.dimensions.height, "origin": asset->source.url },
-  gallery[]{ alt, caption, "url": asset->url, "width": asset->metadata.dimensions.width, "height": asset->metadata.dimensions.height, "origin": asset->source.url },
+  heroImage{ alt, caption, "url": asset->url, "width": asset->metadata.dimensions.width, "height": asset->metadata.dimensions.height, "origin": select(originSha == asset->source.id => origin, asset->source.url) },
+  gallery[]{ alt, caption, "url": asset->url, "width": asset->metadata.dimensions.width, "height": asset->metadata.dimensions.height, "origin": select(originSha == asset->source.id => origin, asset->source.url) },
   specs,
   seo
 `;
@@ -103,8 +103,8 @@ const APPLICATION_FIELDS = `
   "slug": slug.current,
   shortDesc,
   description,
-  heroImage{ alt, caption, "url": asset->url, "width": asset->metadata.dimensions.width, "height": asset->metadata.dimensions.height, "origin": asset->source.url },
-  gallery[]{ alt, caption, "url": asset->url, "width": asset->metadata.dimensions.width, "height": asset->metadata.dimensions.height, "origin": asset->source.url },
+  heroImage{ alt, caption, "url": asset->url, "width": asset->metadata.dimensions.width, "height": asset->metadata.dimensions.height, "origin": select(originSha == asset->source.id => origin, asset->source.url) },
+  gallery[]{ alt, caption, "url": asset->url, "width": asset->metadata.dimensions.width, "height": asset->metadata.dimensions.height, "origin": select(originSha == asset->source.id => origin, asset->source.url) },
   seo
 `;
 
@@ -214,8 +214,8 @@ export const getSanityPageContent = unstable_cache(
       // in the schema but aren't shown yet.
       `*[_type == "page" && slug.current == $slug][0]{
         ...,
-        "homepageHeroImage": homepageHero.heroImage1{ alt, caption, "url": asset->url, "width": asset->metadata.dimensions.width, "height": asset->metadata.dimensions.height, "origin": asset->source.url },
-        "aboutHeroImage": aboutHero.heroImage{ alt, caption, "url": asset->url, "width": asset->metadata.dimensions.width, "height": asset->metadata.dimensions.height, "origin": asset->source.url }
+        "homepageHeroImage": homepageHero.heroImage1{ alt, caption, "url": asset->url, "width": asset->metadata.dimensions.width, "height": asset->metadata.dimensions.height, "origin": select(originSha == asset->source.id => origin, asset->source.url) },
+        "aboutHeroImage": aboutHero.heroImage{ alt, caption, "url": asset->url, "width": asset->metadata.dimensions.width, "height": asset->metadata.dimensions.height, "origin": select(originSha == asset->source.id => origin, asset->source.url) }
       }`,
       { slug }
     ),

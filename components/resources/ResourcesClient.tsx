@@ -184,8 +184,8 @@ function DocCard({
         </span>
       )}
 
-      <span className="hidden sm:flex items-center justify-end gap-1.5 text-xs flex-shrink-0 w-[128px]" style={{ color: "var(--text-secondary)" }}>
-        <span>{doc.fileSize}</span>
+      <span className="hidden sm:flex items-center justify-end gap-1.5 text-xs flex-shrink-0 w-[152px]" style={{ color: "var(--text-secondary)" }}>
+        <span className="whitespace-nowrap">{doc.fileSize}</span>
         <span className="w-1 h-1 rounded-full flex-shrink-0" style={{ background: "var(--ink-15)" }} />
         <span className="truncate">{doc.updatedDate}</span>
       </span>
@@ -241,8 +241,35 @@ function DocCard({
             </button>
           )}
 
-          {/* Download / open button. Catalogue gets a "View" link (no PDF download); everything else downloads. */}
-          {isCatalogue ? (
+          {/* Download button. The catalogue's row opens the reader, so its
+              download is the PDF edition (downloadUrl); a catalogue without
+              one keeps a plain link to the reader. Everything else downloads
+              its own file. */}
+          {isCatalogue && doc.downloadUrl ? (
+            <a
+              href={doc.downloadUrl}
+              download
+              onClick={stop}
+              className="flex items-center justify-center w-8 h-8 rounded-lg transition-colors duration-200 flex-shrink-0" data-tap="44"
+              style={{
+                background: "rgba(249,115,22,0.10)",
+                color: "var(--accent-text-lg)",
+                border: "1px solid rgba(249,115,22,0.2)",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.background = "#f97316";
+                (e.currentTarget as HTMLAnchorElement).style.color = "var(--on-accent)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.background = "rgba(249,115,22,0.10)";
+                (e.currentTarget as HTMLAnchorElement).style.color = "var(--accent-text-lg)";
+              }}
+              title={`Download the PDF${doc.downloadSize ? ` (${doc.downloadSize})` : ""}`}
+              aria-label={`Download ${doc.title} as a PDF${doc.downloadSize ? `, ${doc.downloadSize}` : ""}`}
+            >
+              <Download className="w-3.5 h-3.5" />
+            </a>
+          ) : isCatalogue ? (
             <Link
               href={doc.fileUrl}
               onClick={stop}

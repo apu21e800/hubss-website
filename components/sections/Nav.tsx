@@ -224,7 +224,7 @@ function MenuFooterStrip() {
       {showCatalogue() && (
         <Link
           href="/catalogue"
-          className="group flex items-center justify-between gap-4 rounded-xl px-4 py-2.5 transition-colors hover:bg-[var(--ink-05)]"
+          className="group flex items-center gap-4 rounded-xl px-4 py-2.5 transition-colors hover:bg-[var(--ink-05)]"
           style={{
             background: "linear-gradient(135deg, rgba(249,115,22,0.10) 0%, var(--ink-02) 100%)",
             border: "1px solid rgba(249,115,22,0.35)",
@@ -244,7 +244,10 @@ function MenuFooterStrip() {
               style={{ border: "1px solid rgba(249,115,22,0.30)" }}
             />
           )}
-          <div className="min-w-0">
+          {/* flex-1: the text sits beside the cover and the arrow goes to the
+              far edge. It was justify-between on the card, which spread the
+              three pieces out and left the text floating mid-card. */}
+          <div className="min-w-0 flex-1">
             <p className="text-[9px] font-bold tracking-[0.2em] uppercase mb-1" style={{ color: "var(--ink-45)" }}>
               Promoted
             </p>

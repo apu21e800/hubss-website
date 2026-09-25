@@ -123,10 +123,18 @@ function planPages(): Target[] {
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
+// `origin` is this use's /public path. One file can sit in two folders (a
+// cross-post) and is uploaded once, so the asset's source.url names only the
+// first; each page reads SEO text from its own folder (lib/image-seo.ts).
+// `originSha` is that file's sha1: the queries only trust `origin` while it
+// matches the asset (source.id), so swapping the photo in Studio can't leave a
+// stale path behind.
 const imageValue = (assetId: string, photo: PlannedPhoto, key?: string) => ({
   ...(key ? { _key: key } : {}),
   _type: "image",
   asset: { _type: "reference", _ref: assetId },
+  origin: photo.src,
+  originSha: sha1Of(photo.src),
   alt: photo.alt,
   ...(photo.caption ? { caption: photo.caption } : {}),
 });
@@ -205,7 +213,7 @@ async function main() {
 
 async function check(targets: Target[]) {
   type Got = { origin?: string; alt?: string; caption?: string } | null;
-  const img = `{ alt, caption, "origin": asset->source.url }`;
+  const img = `{ alt, caption, "origin": select(originSha == asset->source.id => origin, asset->source.url) }`;
   const docs: { _id: string; heroImage: Got; homeHero: Got; aboutHero: Got; gallery: Got[] | null }[] = await client.fetch(
     `*[_id in $ids]{ _id, "heroImage": heroImage${img}, "homeHero": homepageHero.heroImage1${img}, "aboutHero": aboutHero.heroImage${img}, "gallery": gallery[]${img} }`,
     { ids: targets.map((t) => t.docId) }

@@ -27,6 +27,8 @@ export interface ResourceDocument {
   featured?: boolean       // Pre-selected for the Featured filter chip
   isNew?: boolean          // Pre-selected for the "New Documents" filter chip (catalogue + 2026 flyers)
   previewImageUrl?: string // Thumbnail for flyer cards (1200px WebP)
+  downloadUrl?: string     // A separate file to download, when fileUrl opens a reader (the catalogue's PDF)
+  downloadSize?: string    // Its size, e.g. "14.3 MB"
 }
 
 const productNameMap: Record<string, string> = {
@@ -869,10 +871,11 @@ export const resourceDocuments: ResourceDocument[] = [
     updatedDate: 'Feb 2024',
   },
 
-  // ── The catalogue, twice: the reader and the PDF ──
-  // Two rows on purpose. The reader is the thing to send an architect; the PDF
-  // is the thing they attach to a submittal. Offering only one of them means
-  // somebody has to ask for the other.
+  // ── The catalogue: one row, two ways in ──
+  // The reader is the thing to send an architect; the PDF is the thing they
+  // attach to a submittal, so the row offers both: "Open reader", and a
+  // download button for the PDF. Until Sep 2026 they were two rows with nearly
+  // the same title, which read as the catalogue listed twice.
   //
   // Every field that could go stale on an edition bump is derived from
   // lib/catalogue-edition.json instead of typed here. The previous entry said
@@ -892,23 +895,8 @@ export const resourceDocuments: ResourceDocument[] = [
     featured: true,
     isNew: true,
     previewImageUrl: catalogueCover ?? undefined,
+    ...(catalogue.download ? { downloadUrl: catalogue.download.href, downloadSize: catalogue.download.label } : {}),
   },
-  ...(catalogue.download
-    ? [
-        {
-          id: 'catalogue-pdf',
-          title: `HUB Surface Systems Catalogue ${catalogueLabel} (PDF)`,
-          type: 'Catalogue',
-          product: 'all',
-          productName: 'Full Line',
-          applications: [],
-          fileUrl: catalogue.download.href,
-          fileSize: catalogue.download.label,
-          updatedDate: 'Sep 2026',
-          isNew: true,
-        } as ResourceDocument,
-      ]
-    : []),
 
   // ── 2026 Product Flyers (14, one per product) ─────────────────
   {

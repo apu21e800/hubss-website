@@ -90,37 +90,43 @@ export default async function ResourcesPage() {
           and the two ways in. */}
       {showCatalogue() && catalogueCover && (
         <div className="relative max-w-7xl mx-auto px-6 -mt-4 mb-12">
+          {/* On a phone the buttons take their own row, full width, so the
+              text keeps the whole line. They used to share one row with it,
+              which squeezed the text to three words a line and broke
+              "2026–27" in two. */}
           <div
-            className="flex flex-wrap items-center gap-4 rounded-xl px-4 py-3"
+            className="flex flex-wrap items-center gap-x-4 gap-y-3 rounded-xl px-4 py-3"
             style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--border-color)" }}
           >
-            <img
-              src={catalogue.coverThumb ?? cataloguePageUrl(1, catalogue.widths[0])}
-              alt={`HUB Surface Systems Catalogue ${catalogueLabel} cover`}
-              width={240}
-              height={240}
-              className="h-11 w-11 flex-shrink-0 rounded-md object-cover"
-              style={{ border: "1px solid var(--ink-12)" }}
-            />
-            <div className="min-w-0 flex-1">
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--text-muted)" }}>
-                Catalogue {catalogueLabel}
-              </p>
-              <p className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>
-                {catalogueTotal} pages — every system and application
-              </p>
+            <div className="flex min-w-0 flex-1 basis-64 items-center gap-4">
+              <img
+                src={catalogue.coverThumb ?? cataloguePageUrl(1, catalogue.widths[0])}
+                alt={`HUB Surface Systems Catalogue ${catalogueLabel} cover`}
+                width={240}
+                height={240}
+                className="h-11 w-11 flex-shrink-0 rounded-md object-cover"
+                style={{ border: "1px solid var(--ink-12)" }}
+              />
+              <div className="min-w-0">
+                <p className="whitespace-nowrap text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--text-muted)" }}>
+                  Catalogue {catalogueLabel}
+                </p>
+                <p className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>
+                  {catalogueTotal} pages — every system and application
+                </p>
+              </div>
             </div>
-            <div className="flex flex-shrink-0 items-center gap-2">
+            <div className="flex w-full items-center gap-2 sm:w-auto">
               <a
                 href="/catalogue?utm_source=resources&utm_medium=library_row&utm_campaign=catalogue"
-                className="rounded-lg px-3 py-2 text-xs font-semibold transition-colors"
+                className="flex-1 whitespace-nowrap rounded-lg px-3 py-2 text-center text-xs font-semibold transition-colors sm:flex-none"
                 style={{ color: "var(--accent-text)", border: "1px solid rgba(249,115,22,0.32)", background: "rgba(249,115,22,0.08)" }}
               >
                 Read it
               </a>
               <a
                 href="/request-catalogue?utm_source=resources&utm_medium=library_row&utm_campaign=printed_copy"
-                className="rounded-lg px-3 py-2 text-xs font-semibold transition-colors"
+                className="flex-1 whitespace-nowrap rounded-lg px-3 py-2 text-center text-xs font-semibold transition-colors sm:flex-none"
                 style={{ color: "var(--text-secondary)", border: "1px solid var(--border-color)" }}
               >
                 Request a copy

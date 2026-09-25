@@ -47,6 +47,15 @@ export const richImageField = (
         title: "Caption (optional)",
         description: "Short caption shown below the image in some contexts.",
       }),
+      defineField({
+        name: "origin",
+        title: "Original file",
+        type: "string",
+        hidden: true,
+        readOnly: true,
+        description: "The /public path this photo was migrated from. Set by scripts/sync-photos-to-sanity.ts: the same file can live in two folders, and each page reads SEO text from its own (lib/photos.ts).",
+      }),
+      defineField({ name: "originSha", title: "Original file sha1", type: "string", hidden: true, readOnly: true }),
     ],
   });
 
@@ -80,5 +89,14 @@ export const galleryImageItem = {
       type: "string",
       description: "Shown under the photo when a visitor opens it full screen. Leave blank to show the alt text there instead.",
     }),
+    defineField({
+      name: "origin",
+      title: "Original file",
+      type: "string",
+      hidden: true,
+      readOnly: true,
+      description: "The /public path this photo was migrated from. Set by scripts/sync-photos-to-sanity.ts: the same file can live in two folders, and each page reads SEO text from its own (lib/photos.ts).",
+    }),
+    defineField({ name: "originSha", title: "Original file sha1", type: "string", hidden: true, readOnly: true }),
   ],
 };

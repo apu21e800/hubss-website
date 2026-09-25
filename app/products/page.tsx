@@ -121,11 +121,8 @@ const FAMILIES = PRODUCT_CATEGORIES.map((category) => ({
     .filter((p): p is Product => Boolean(p))
     .map(cardFor),
 }));
-const TOTAL = FAMILIES.reduce((n, f) => n + f.cards.length, 0);
-
-const WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty"];
-const word = (n: number) => WORDS[n] ?? String(n);
-const capital = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+// No counts on this page since 25 Sep 2026 (Doug's round): the families are
+// named, the systems listed, nothing is tallied.
 const familyList = (() => {
   const labels = PRODUCT_CATEGORIES.map((c) => c.label.toLowerCase());
   return labels.length > 1 ? `${labels.slice(0, -1).join(", ")} and ${labels[labels.length - 1]}` : labels.join("");
@@ -133,7 +130,7 @@ const familyList = (() => {
 
 export const metadata = buildMetadata({
   title: "Decorative Pavement & Marking Systems",
-  description: `${capital(word(TOTAL))} surface systems in ${word(PRODUCT_CATEGORIES.length)} families — ${familyList}. Specs, spec sheets and certified installers, coast to coast.`,
+  description: `HUB's surface systems in four families — ${familyList}. Specs, spec sheets and certified installers, coast to coast.`,
   slug: "products",
 });
 
@@ -305,8 +302,7 @@ export default function ProductsPage() {
             Surface Systems for the Built Environment.
           </h1>
           <p className="max-w-2xl text-lg" style={{ color: "var(--text-secondary)" }}>
-            {capital(word(TOTAL))} systems in {word(PRODUCT_CATEGORIES.length)} families — {familyList}. Built for
-            freeze-thaw climates. Specified coast to coast.
+            Four families — {familyList}. Built for freeze-thaw climates. Specified coast to coast.
           </p>
         </div>
 
@@ -319,9 +315,6 @@ export default function ProductsPage() {
                   className="inline-flex items-center gap-2 rounded-full border border-[var(--border-color)] bg-[var(--bg-card)] px-4 py-2 text-sm font-semibold text-[var(--text-secondary)] transition-colors hover:border-[rgba(184,62,11,0.45)] hover:text-[var(--accent-text)]"
                 >
                   {category.label}
-                  <span className="text-xs font-semibold" style={{ color: "var(--text-faint)" }}>
-                    {cards.length}
-                  </span>
                 </a>
               </li>
             ))}
@@ -365,9 +358,6 @@ export default function ProductsPage() {
           >
             <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
               <div className="mb-10 max-w-3xl">
-                <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: "var(--accent-text-lg)" }}>
-                  {cards.length === 1 ? "One system" : `${capital(word(cards.length))} systems`}
-                </p>
                 <h2 id={`${id}-heading`} className="text-3xl sm:text-4xl" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
                   {category.label}
                 </h2>
@@ -397,7 +387,7 @@ export default function ProductsPage() {
         );
       })}
 
-      <LunchLearn />
+      <LunchLearn compact />
       <Footer />
     </main>
   );

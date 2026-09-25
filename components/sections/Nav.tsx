@@ -10,14 +10,10 @@ import { products } from "@/lib/products";
 import { ideaBook } from "@/lib/catalogue";
 import { applications } from "@/lib/applications";
 import { PRODUCT_CATEGORIES } from "@/lib/product-categories";
-import { CHROME_MARKS } from "@/lib/chrome-images.mjs";
-import { FEATURED_POSTS } from "@/lib/nav-featured-posts.mjs";
 import ThemeToggle from "@/components/ui/ThemeToggle";
-// Every photograph in this file is a ChromeImg: baked at build time, served
-// static. Nothing the menus draw may go through /_next/image — opening the
-// phone drawer alone used to fire ~35 optimiser transforms. The two header
-// logos below stay on next/image because they are SVGs marked `unoptimized`.
-import ChromeImg from "@/components/ui/ChromeImg";
+// The menus draw no photographs since 25 Sep 2026 (Doug's round: one job per
+// panel, names first). The two header logos are SVGs on next/image marked
+// `unoptimized`; nothing here goes through /_next/image.
 
 /**
  * The search palette loads when somebody opens it, not before.
@@ -39,7 +35,11 @@ import ChromeImg from "@/components/ui/ChromeImg";
 const SearchOverlay = dynamic(() => import("@/components/sections/SearchOverlay"), { ssr: false });
 
 // ── Nav link config ────────────────────────────────────────────
+// Insights is a plain link (Doug's round, 25 Sep 2026): its dropdown was a
+// full-bleed magazine cover of a Walmart Supercentre sign carrying eighty-odd
+// words and four calls to action. The library has its own front page.
 const PLAIN_LINKS = [
+  { label: "Insights", href: "/blog" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
@@ -51,529 +51,147 @@ const PLAIN_LINKS = [
 // ── Product category data ────────────────────────────────────────────
 // PRODUCT_CATEGORIES lives in lib/product-categories.ts, shared with the
 // /products index so the menu and the page can never name a family twice.
-
-// ── Mega-menu micro-taglines per product (5–7 word noun phrases per Vernon) ──
 //
-// These are rendered without `truncate`. They are 2–4 word noun phrases, and
-// single-line clamping them inside a narrow menu column produced ten ellipses
-// across one panel — "Coloured pavement coati…", "Aggregate-reinforced the…" —
-// every one cutting mid-word. Wrapping costs a second line on about half of
-// them and removes the biggest source of visual noise in the menu.
-//
-// The category headings above them carry a 2.9em min-height for the same
-// reason: "Preformed Thermoplastics" wraps where the other three do not, so
-// without it that column's first product started a line below its neighbours
-// and the four columns never shared a baseline.
-const PRODUCT_TAGLINE: Record<string, string> = {
-  "traffic-patterns-xd": "Aggregate-reinforced thermoplastic",
-  "traffic-patterns":    "Preformed thermoplastic markings",
-  "premark":             "Arrows, stop bars, legends",
-  "duratherm":           "Inlaid flush-mount thermoplastic",
-  "decomark":            "Custom graphic thermoplastic",
-  "airmark":             "Airfield thermoplastic markings",
-  "streetbond":          "Coloured pavement coating",
-  "streetbondsr":        "Solar-reflective coating",
-  "mmax":                "MMA resin lane coating",
-  "durashield":          "Pavement maintenance coating",
-  "streetprint":         "Stamped asphalt patterns",
-  "chipfill":            "Heat-activated preformed pothole repair",
-  "aggrefill":           "Aggregate-filled pothole repair",
-  "fast-patch":          "Cold-mix polymer pothole repair",
-};
+// MENU PRINCIPLES (Doug's round, 25 Sep 2026): one job per panel — show where
+// you can go, grouped clearly. Names first; the family heading already says
+// what its members are, so the per-product taglines went ("MMA resin lane
+// coating" under MMAX was the one real loss; the Coatings heading and the
+// product page carry it). One "View all" per panel. No promotions, no
+// repeated calls to action (the header already carries Lunch & Learn), no
+// article teaser. Same family names as /products, the product pages and the
+// Idea Book. Each desktop panel under 60 words; the phone drawer under 120.
 
-// ── Application category groupings for mega menu ─────────────────────────
+// ── Application groupings ─────────────────────────────────────────────
+// Four groups a specifier would recognise, each named for the place, not the
+// buyer. The old fourth group, "Residential & Sustainability", put LEED &
+// Urban Heat Island next to driveways; the heat-island credit is earned on
+// parking lots and commercial hardscape, so it sits with them. Two driveway
+// pages remain (private, residential) — merging them is Doug's call; if they
+// merge, add the redirect in next.config.ts.
 const APPLICATION_GROUPS = [
   {
-    label: "Traffic & Safety",
+    label: "Streets & Safety",
     slugs: ["crosswalks", "bike-lanes", "bus-lanes", "pedestrian-safety", "traffic-calming", "regulatory-markings"],
   },
   {
-    label: "Public & Civic",
-    slugs: ["parks-paths", "public-spaces", "community-branding", "public-art", "playgrounds"],
+    label: "Parks & Public Spaces",
+    slugs: ["parks-paths", "public-spaces", "playgrounds", "splash-pads", "public-art", "community-branding"],
   },
   {
-    label: "Commercial",
-    slugs: ["parking-lots", "commercial-spaces", "sport-courts", "splash-pads", "airports"],
+    label: "Commercial & Sustainability",
+    slugs: ["parking-lots", "commercial-spaces", "sport-courts", "airports", "leed-urban-heat-island"],
   },
   {
-    label: "Residential & Sustainability",
-    slugs: ["private-driveways", "residential-driveways", "townhomes", "leed-urban-heat-island"],
+    label: "Residential",
+    slugs: ["private-driveways", "residential-driveways", "townhomes"],
   },
 ];
-
-// ── Curated Insights articles for the mega menu ──────────────────────────
-// FEATURED_POSTS lives in lib/nav-featured-posts.mjs — swap posts there. The
-// image baker reads the same list, so a swapped post gets its thumbnails.
 
 // ── Mega menu — shared shell ─────────────────────────────────────────
 // Wide container, generous padding, dark surface, accent top line.
 function MegaShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="px-8 lg:px-14 xl:px-20 2xl:px-28 pt-7 pb-10 max-h-[calc(100vh-72px)] overflow-y-auto overscroll-contain">
+    <div className="px-8 lg:px-14 xl:px-20 2xl:px-28 pt-7 pb-8 max-h-[calc(100vh-72px)] overflow-y-auto overscroll-contain">
       {children}
     </div>
   );
 }
 
-// ── Lunch & Learn slot — the ONE in-menu CTA (Mega Menu 2.0) ─────────────
-// Doug: the L&L call-to-action should "appear intelligently across the site
-// without being overwhelming." This card is its home inside every mega menu:
-// same position (bottom of the lead column), same quiet weight, every time.
-// The old layout scattered L&L across bottom strips and duplicate rows — those
-// are gone; one consistent slot reads as intentional instead of insistent.
-function LLMenuCard() {
+const ACCENT = "var(--accent-text)";  // small-text accent (WCAG-safe on dark surfaces)
+
+// ── Directory column — one family or group: heading, names ────────────
+function MenuColumn({ label, items }: { label: string; items: { href: string; name: string }[] }) {
   return (
-    <Link
-      href="/lunch-learn"
-      className="group flex items-center gap-3 mt-5 px-3.5 py-3 rounded-xl transition-colors hover:bg-[var(--ink-05)]"
-      style={{ background: "var(--bg-card-neutral)", border: "1px solid rgba(249,115,22,0.22)" }}
-    >
-      <span className="relative flex-shrink-0 w-10 h-10">
-        <span className="absolute inset-0 rounded-full" style={{ background: "rgba(249,115,22,0.14)", border: "1.5px solid rgba(249,115,22,0.45)" }} />
-        {/* 122% of the 40px ring = 49px tall; Moose is square, so 49px wide. */}
-        <ChromeImg
-          family="moose"
-          src={CHROME_MARKS.moose}
-          alt="Moose, the HUB site dog"
-          width={160}
-          height={200}
-          sizes="49px"
-          className="absolute bottom-0 left-1/2 w-auto"
-          style={{ height: "122%", maxWidth: "none", transform: "translateX(-50%)" }}
-        />
-      </span>
-      <span className="flex-1 min-w-0">
-        <span className="block text-[12px] font-bold" style={{ color: "var(--text-primary)" }}>Book a Lunch &amp; Learn</span>
-        <span className="block text-[11px] mt-0.5" style={{ color: "var(--ink-60)" }}>Free spec session — lunch on us</span>
-      </span>
-      <svg width="13" height="13" fill="none" stroke="var(--accent-text)" viewBox="0 0 24 24" className="flex-shrink-0 transition-transform group-hover:translate-x-0.5">
-        <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    </Link>
+    <div>
+      <p
+        className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3 pb-2.5"
+        style={{ color: ACCENT, borderBottom: "1px solid rgba(249,115,22,0.18)" }}
+      >
+        {label}
+      </p>
+      <ul className="space-y-0.5">
+        {items.map((it) => (
+          <li key={it.href}>
+            <Link
+              href={it.href}
+              className="group flex items-center justify-between gap-2 px-2.5 py-2 rounded-md transition-colors hover:bg-[var(--ink-05)]"
+            >
+              <span className="text-[14px] font-semibold leading-snug group-hover:text-[var(--accent-text)] transition-colors" style={{ color: "var(--text-primary)" }}>
+                {it.name}
+              </span>
+              <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                className="opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" style={{ color: ACCENT }} aria-hidden="true">
+                <path d="M9 18l6-6-6-6" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
-// ── Full-width Products mega menu ────────────────────────────────────────
-// DDB polish pass (May 25):
-//   • Orange #F97316 fails WCAG AA at 9–11px on dark. Small-text accents
-//     bumped to ACCENT (#FB923C, ≈5.1:1 on #0D0D0D) so eyebrows + sublabels
-//     are actually legible. Reserved #F97316 for larger or graphical use.
-//   • Stamped Asphalt rebalanced: pillarNote + secondary link give the
-//     single-product category visual parity with the 6-product column.
-//   • Asphalt Repair tile image swapped (was GEVEKO-branded bag).
-//   • Product taglines lifted from 45% → 62% white for readability.
-const ACCENT = "var(--accent-text)";  // small-text accent (WCAG-safe on dark surfaces)
-const BRAND  = "#F97316";  // brand orange — reserved for larger / button use
-
-// ── Menu footer strip — the newest article, for the directory menus ─────
-// The two directory dropdowns carry one band along their floor: the newest
-// Insights article. One component so the twins cannot drift. The post is
-// FEATURED_POSTS[0] — the same curated "most recent" the Insights cover
-// leads with; swap the list to change both surfaces at once.
-//
-// Until 25 Sep 2026 the band also carried a PROMOTED card for the Idea Book,
-// as did the Insights rail and the phone drawer. Doug asked for the menus to
-// carry no Idea Book promotion at all; the book has one call to action, on
-// the homepage, and quiet links from /products, Resources and the phone
-// drawer's plain list.
-function MenuFooterStrip() {
-  const latest = FEATURED_POSTS[0];
+// ── The one "View all" per panel ──────────────────────────────────────
+function MenuViewAll({ href, label }: { href: string; label: string }) {
   return (
-    <div
-      className="mt-9 pt-6"
-      style={{ borderTop: "1px solid var(--ink-08)" }}
-    >
+    <div className="mt-7 pt-4" style={{ borderTop: "1px solid var(--ink-08)" }}>
       <Link
-        href={`/blog/${latest.slug}`}
-        className="group flex items-center gap-4 px-3 py-2.5 rounded-xl transition-colors hover:bg-[var(--ink-05)]"
+        href={href}
+        className="group inline-flex items-center gap-2 px-2.5 py-1.5 rounded-md text-[13px] font-bold transition-colors hover:bg-[var(--ink-05)] hover:text-[var(--accent-text)]"
+        style={{ color: "var(--text-primary)" }}
       >
-        <div className="relative flex-shrink-0 rounded-md overflow-hidden" style={{ width: 64, height: 64 }}>
-          <ChromeImg
-            family="post"
-            src={latest.image}
-            alt={latest.title}
-            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-            sizes="64px"
-          />
-        </div>
-        <div className="min-w-0">
-          <p className="text-[10px] font-bold tracking-[0.18em] uppercase mb-1" style={{ color: ACCENT }}>
-            Latest from Insights
-          </p>
-          <p className="text-[14px] font-semibold leading-snug line-clamp-2 group-hover:text-[var(--accent-text)] transition-colors" style={{ color: "var(--text-primary)" }}>
-            {latest.title}
-          </p>
-        </div>
+        {label}
+        <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" className="transition-transform group-hover:translate-x-0.5" aria-hidden="true">
+          <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
       </Link>
     </div>
   );
 }
+
+// ── Products panel — four families, names only ────────────────────────
 function ProductsMegaMenu() {
   return (
     <MegaShell>
-      <div className="grid grid-cols-12 gap-10 xl:gap-14 lg:min-h-[420px]">
-        {/* Lead column */}
-        <div className="col-span-12 lg:col-span-3">
-          <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3" style={{ color: ACCENT }}>
-            Products
-          </p>
-          <h3 className="text-xl font-bold leading-tight mb-2" style={{ color: "var(--text-primary)" }}>
-            Decorative pavement, engineered for Canadian streets.
-          </h3>
-          <p className="text-[13px] leading-relaxed mb-4" style={{ color: "var(--ink-65)" }}>
-            14 specified systems for crosswalks, transit lanes, plazas, and decorative hardscape — installed coast to coast.
-          </p>
-          <Link href="/products"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold border border-[var(--ink-15)] bg-[var(--ink-03)] hover:border-orange-400/60 hover:text-[var(--accent-text)] transition-colors"
-            style={{ color: "var(--text-primary)" }}
-          >
-            Browse all products
-            <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
-          </Link>
-          <LLMenuCard />
-        </div>
-
-        {/* Category columns — Applications' grammar, verbatim: orange
-            letterspaced header over a hairline rule, flat items, chevron on
-            hover. This menu used to be four photo-topped cards; the photos put
-            10px type over imagery (illegible), the tallest card set the height
-            for all four (dead wells under the short ones), and the whole panel
-            ran ~250px taller than its siblings. The one thing Products keeps
-            that Applications doesn't need: a one-line tagline per item —
-            "MMAX" tells a specifier nothing, "MMA resin lane coating" does.
-            Application names describe themselves; product names are brands. */}
-        <div className="col-span-12 lg:col-span-9 grid grid-cols-2 xl:grid-cols-4 gap-x-12 xl:gap-x-16 gap-y-8">
-          {PRODUCT_CATEGORIES.map((cat) => {
-            const items = cat.slugs.flatMap((sl) => {
-              const p = products.find((x) => x.slug === sl);
-              return p ? [p] : [];
-            });
-            return (
-              <div key={cat.label}>
-                <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3 pb-2.5 flex items-end" style={{
-                  color: ACCENT,
-                  borderBottom: "1px solid rgba(249,115,22,0.18)",
-                  minHeight: 48,
-                }}>
-                  {cat.label}
-                </p>
-                <div className="space-y-1">
-                  {items.map((p) => (
-                    <Link
-                      key={p.slug}
-                      href={`/products/${p.slug}`}
-                      className="group flex items-start justify-between gap-2 px-2.5 py-2 rounded-md transition-colors hover:bg-[var(--ink-05)]"
-                    >
-                      <span className="min-w-0">
-                        <span className="block text-[14px] font-semibold leading-snug group-hover:text-[var(--accent-text)] transition-colors" style={{ color: "var(--text-primary)" }}>
-                          {p.name}
-                        </span>
-                        {PRODUCT_TAGLINE[p.slug] && (
-                          <span className="block text-[11px] leading-snug mt-0.5" style={{ color: "var(--ink-62)" }}>
-                            {PRODUCT_TAGLINE[p.slug]}
-                          </span>
-                        )}
-                      </span>
-                      <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        className="opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1.5" style={{ color: ACCENT }}>
-                        <path d="M9 18l6-6-6-6" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </Link>
-                  ))}
-
-                  {/* "See also" — the one structural extra a column may carry.
-                      Uneven column lengths are fine in a text directory (the
-                      Applications columns run 6/5/5/4); what a lean column
-                      gets is a real secondary destination, not filler. */}
-                  {cat.secondary && (
-                    <Link
-                      href={cat.secondary.href}
-                      className="group flex items-start justify-between gap-2 px-2.5 py-2.5 mt-2 rounded-md transition-colors hover:bg-[var(--ink-05)]"
-                      style={{ borderTop: "1px solid var(--border-color)" }}
-                    >
-                      <span className="min-w-0">
-                        <span className="block text-[10px] font-bold tracking-[0.18em] uppercase" style={{ color: ACCENT }}>
-                          See also
-                        </span>
-                        <span className="block text-[14px] font-semibold leading-tight mt-0.5 group-hover:text-[var(--accent-text)] transition-colors" style={{ color: "var(--text-primary)" }}>
-                          {cat.secondary.label}
-                        </span>
-                        {cat.secondary.meta && (
-                          <span className="block text-[11px] leading-snug mt-0.5" style={{ color: "var(--ink-62)" }}>
-                            {cat.secondary.meta}
-                          </span>
-                        )}
-                      </span>
-                      <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        className="opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1.5" style={{ color: ACCENT }}>
-                        <path d="M9 18l6-6-6-6" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </Link>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
+      <div className="grid grid-cols-2 xl:grid-cols-4 gap-x-12 xl:gap-x-16 gap-y-8">
+        {PRODUCT_CATEGORIES.map((cat) => {
+          const items = cat.slugs.flatMap((sl) => {
+            const p = products.find((x) => x.slug === sl);
+            return p ? [{ href: `/products/${p.slug}`, name: p.name }] : [];
+          });
+          // The one structural extra a column may carry: a real secondary
+          // destination (the pattern gallery under Stamped Asphalt).
+          if (cat.secondary) items.push({ href: cat.secondary.href, name: cat.secondary.label });
+          return <MenuColumn key={cat.label} label={cat.label} items={items} />;
+        })}
       </div>
-
-      <MenuFooterStrip />
+      <MenuViewAll href="/products" label="View all products" />
     </MegaShell>
   );
 }
 
-// ── Insights mega menu — the cinematic one ───────────────────────────
-// Products and Applications are directories and behave like twins: same
-// grammar, same 420px floor. Insights (Field Notes until 25 Sep 2026) is the
-// editorial surface, and per Vern it goes the other way entirely: a
-// full-bleed magazine cover, not a panel of columns. The featured story's
-// photograph runs edge to edge under a scrim; the masthead and cover line sit
-// on the image like a title page; the right rail is a glass surface carrying
-// the latest three, the type index and the standing Lunch & Learn card.
-// Same 10px letterspaced ACCENT labels and hairline rules as its siblings —
-// the outlier in structure stays in the family by grammar.
-function FieldNotesMegaMenu() {
-  const [featured, ...rest] = FEATURED_POSTS;
-
-  return (
-    <div className="w-full max-h-[calc(100vh-72px)] overflow-y-auto overscroll-contain">
-      <div className="relative lg:min-h-[calc(100vh-72px)]">
-        {/* The cover, full bleed */}
-        <ChromeImg
-          family="cover"
-          src={featured.image}
-          alt={featured.title}
-          className="absolute inset-0 h-full w-full object-cover"
-          style={{ objectPosition: "center 42%" }}
-          sizes="100vw"
-        />
-        {/* Scrims: one for the title block, one to seat the masthead */}
-        <div className="absolute inset-0" style={{
-          background: "linear-gradient(to top, rgba(5,8,14,0.96) 0%, rgba(5,8,14,0.42) 48%, rgba(5,8,14,0.30) 100%)"
-        }} />
-        <div className="absolute inset-0" style={{
-          background: "linear-gradient(to right, rgba(5,8,14,0.55) 0%, rgba(5,8,14,0.12) 45%, transparent 70%)"
-        }} />
-
-        <div className="relative grid grid-cols-12 lg:min-h-[calc(100vh-72px)]">
-          {/* Cover story */}
-          <div className="col-span-12 lg:col-span-8 flex flex-col justify-between gap-10 p-7 lg:p-10">
-            {/* Masthead */}
-            <div>
-              <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-2" style={{ color: ACCENT }}>
-                Insights
-              </p>
-              <p className="text-lg font-bold leading-tight" style={{ color: "var(--text-primary)" }}>
-                What we learn from the road.
-              </p>
-              {/* The catalogue's signature dash — eyebrow, name, orange rule. */}
-              <span aria-hidden className="block mt-2.5 mb-4 rounded-full" style={{ width: 44, height: 3, background: "#F97316" }} />
-              <Link href="/blog"
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold border border-[var(--ink-20)] bg-black/25 backdrop-blur-sm hover:border-orange-400/60 hover:text-[var(--accent-text)] transition-colors"
-                style={{ color: "var(--text-primary)" }}
-              >
-                Browse all Insights
-                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
-              </Link>
-            </div>
-
-            {/* Cover line */}
-            <Link href={`/blog/${featured.slug}`} className="group block max-w-2xl">
-              <span
-                className="inline-block text-[10px] font-bold tracking-[0.18em] uppercase mb-3 px-2.5 py-1 rounded"
-                style={{ color: ACCENT, background: "rgba(249,115,22,0.15)", border: "1px solid rgba(249,115,22,0.3)" }}
-              >
-                {featured.category}
-              </span>
-              <span className="block font-black leading-[1.04]" style={{
-                color: "var(--text-primary)",
-                fontSize: "clamp(1.9rem, 3.6vw, 3.4rem)",
-                letterSpacing: "-0.025em",
-                textShadow: "0 2px 24px rgba(0,0,0,0.45)",
-              }}>
-                {featured.title}
-              </span>
-              <span className="mt-3 flex items-center gap-2 text-sm font-semibold" style={{ color: ACCENT }}>
-                Read the article
-                <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" className="transition-transform group-hover:translate-x-1"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" /></svg>
-              </span>
-            </Link>
-          </div>
-
-          {/* The rail — glass over the cover */}
-          <div
-            className="col-span-12 lg:col-span-4 flex flex-col p-6 lg:p-7"
-            style={{
-              background: "rgba(7,11,18,0.84)",
-              borderLeft: "1px solid var(--ink-08)",
-              backdropFilter: "blur(10px)",
-              WebkitBackdropFilter: "blur(10px)",
-            }}
-          >
-            <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3 pb-2.5" style={{
-              color: ACCENT,
-              borderBottom: "1px solid rgba(249,115,22,0.18)"
-            }}>
-              Latest from the road
-            </p>
-            <div className="space-y-1">
-              {rest.map((post) => (
-                <Link
-                  key={post.slug}
-                  href={`/blog/${post.slug}`}
-                  className="group flex gap-3 px-2 py-2 rounded-md transition-colors hover:bg-[var(--ink-05)]"
-                >
-                  <div className="relative flex-shrink-0 rounded-md overflow-hidden" style={{ width: 52, height: 52 }}>
-                    <ChromeImg
-                      family="post"
-                      src={post.image}
-                      alt={post.title}
-                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      sizes="52px"
-                    />
-                  </div>
-                  <div className="flex-1 min-w-0 flex flex-col justify-center">
-                    <p className="text-[10px] font-bold tracking-[0.18em] uppercase mb-0.5" style={{ color: ACCENT }}>
-                      {post.category}
-                    </p>
-                    <p className="text-[13px] font-semibold leading-snug group-hover:text-[var(--accent-text)] transition-colors line-clamp-2" style={{ color: "var(--text-primary)" }}>
-                      {post.title}
-                    </p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-
-            {/* Browse by type — slugs mirror lib/field-notes-taxonomy.ts;
-                hardcoded so the nav bundle doesn't carry the whole taxonomy
-                (keyword maps and all) for five stable links. */}
-            <div className="mt-4 pt-3.5" style={{ borderTop: "1px solid var(--ink-08)" }}>
-              <p className="text-[10px] font-bold tracking-[0.18em] uppercase mb-2" style={{ color: "var(--ink-45)" }}>
-                Browse by type
-              </p>
-              <div className="flex flex-wrap gap-x-4 gap-y-1.5">
-                {[
-                  { label: "Case Studies", href: "/blog/case-studies" },
-                  { label: "Project Profiles", href: "/blog/project-profiles" },
-                  { label: "Guides", href: "/blog/guides" },
-                  { label: "White Papers", href: "/blog/white-papers" },
-                  { label: "Articles", href: "/blog/posts" },
-                ].map((t) => (
-                  <Link
-                    key={t.href}
-                    href={t.href}
-                    className="text-[12px] font-semibold transition-colors hover:text-[var(--accent-text)]"
-                    style={{ color: "var(--ink-68)" }}
-                  >
-                    {t.label}
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            <div className="mt-auto pt-3">
-              <LLMenuCard />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ── Full-width Applications mega menu ────────────────────────────────────
+// ── Applications panel — four groups, names only ──────────────────────
 function ApplicationsMegaMenu() {
   return (
     <MegaShell>
-      <div className="grid grid-cols-12 gap-10 xl:gap-14 lg:min-h-[420px]">
-        {/* Lead column */}
-        <div className="col-span-12 lg:col-span-3">
-          <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3" style={{ color: ACCENT }}>
-            Applications
-          </p>
-          <h3 className="text-xl font-bold leading-tight mb-2" style={{ color: "var(--text-primary)" }}>
-            Surfaces that do real work.
-          </h3>
-          <p className="text-[13px] leading-relaxed mb-4" style={{ color: "var(--ink-65)" }}>
-            Crosswalks, transit lanes, parks, plazas, parking lots, airfields — every surface where decorative pavement and durable markings meet the brief.
-          </p>
-          <Link href="/applications"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold border border-[var(--ink-15)] bg-[var(--ink-03)] hover:border-orange-400/60 hover:text-[var(--accent-text)] transition-colors"
-            style={{ color: "var(--text-primary)" }}
-          >
-            Browse all applications
-            <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
-          </Link>
-          <LLMenuCard />
-        </div>
-
-        {/* Category groupings — 4 columns, no subtext */}
-        <div className="col-span-12 lg:col-span-9 grid grid-cols-2 xl:grid-cols-4 gap-x-12 xl:gap-x-16 gap-y-8">
-          {APPLICATION_GROUPS.map((group) => {
-            const items = group.slugs.flatMap((s) => {
-              const a = applications.find((x) => x.slug === s);
-              return a ? [a] : [];
-            });
-            return (
-              <div key={group.label}>
-                <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3 pb-2.5" style={{
-                  color: ACCENT,
-                  borderBottom: "1px solid rgba(249,115,22,0.18)"
-                }}>
-                  {group.label}
-                </p>
-                <div className="space-y-1">
-                  {items.map((a) => (
-                    <Link
-                      key={a.slug}
-                      href={`/applications/${a.slug}`}
-                      className="group flex items-center justify-between gap-2 px-2.5 py-2.5 rounded-md transition-colors hover:bg-[var(--ink-05)]"
-                    >
-                      <span className="text-[14px] font-semibold group-hover:text-[var(--accent-text)] transition-colors" style={{ color: "var(--text-primary)" }}>
-                        {a.name}
-                      </span>
-                      <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        className="opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: "var(--accent-text-lg)" }}>
-                        <path d="M9 18l6-6-6-6" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            );
-          })}
-        </div>
+      <div className="grid grid-cols-2 xl:grid-cols-4 gap-x-12 xl:gap-x-16 gap-y-8">
+        {APPLICATION_GROUPS.map((group) => {
+          const items = group.slugs.flatMap((sl) => {
+            const a = applications.find((x) => x.slug === sl);
+            return a ? [{ href: `/applications/${a.slug}`, name: a.name }] : [];
+          });
+          return <MenuColumn key={group.label} label={group.label} items={items} />;
+        })}
       </div>
-
-      <MenuFooterStrip />
+      <MenuViewAll href="/applications" label="View all applications" />
     </MegaShell>
   );
 }
 
 // ── Mobile overlay ───────────────────────────────────────────────────
-// ── Mobile menu — application taglines (mirror PRODUCT_TAGLINE style) ────────
-const APP_TAGLINE: Record<string, string> = {
-  "crosswalks":              "High-visibility pedestrian crossings",
-  "bike-lanes":              "Durable coloured cycling infrastructure",
-  "bus-lanes":               "MMA resin transit priority lanes",
-  "pedestrian-safety":       "Slip-resistant pedestrian zones",
-  "traffic-calming":         "Surface-based speed reduction",
-  "regulatory-markings":     "Symbols, arrows, zone legends",
-  "parks-paths":             "Coloured pathway treatments",
-  "public-spaces":           "Plazas, promenades, gathering areas",
-  "community-branding":      "Custom civic identity surfaces",
-  "public-art":              "Large-scale pavement murals",
-  "playgrounds":             "Vibrant schoolyard surfaces",
-  "parking-lots":            "Markings, coatings, rejuvenation",
-  "commercial-spaces":       "Branded commercial hardscape",
-  "sport-courts":            "Sport surface colour and markings",
-  "splash-pads":             "Coloured water play surfaces",
-  "airports":                "Airfield thermoplastic markings",
-  "private-driveways":       "Stamped decorative driveways",
-  "residential-driveways":   "Stamped asphalt driveway systems",
-  "townhomes":               "Development entry and sidewalks",
-  "leed-urban-heat-island":  "Solar-reflective LEED coatings",
-};
+// Names only, grouped the same way as the desktop panels, no thumbnails and
+// no taglines: the drawer is the phone's site map, and it used to run to
+// 262 words and thirty-four photographs (Doug's round, 25 Sep 2026).
 
 // Stagger variants — used on the content wrapper so child sections animate in sequence
 const menuContainerVariants: Variants = {
@@ -607,52 +225,17 @@ function MobileGroupDivider({ label }: { label: string }) {
   );
 }
 
-// Individual product or application row: 56px thumb + name + tagline + arrow
-function MobileNavRow({
-  href,
-  imageUrl,
-  name,
-  tagline,
-  onClose,
-}: {
-  href: string;
-  imageUrl: string;
-  name: string;
-  tagline?: string;
-  onClose: () => void;
-}) {
+// One destination in the drawer: name, chevron, a full-width tap target.
+function MobileNavRow({ href, name, onClose }: { href: string; name: string; onClose: () => void }) {
   return (
     <Link
       href={href}
       onClick={onClose}
-      className="flex items-center gap-4 px-1 py-[18px] rounded-xl active:scale-[0.98] active:opacity-75 transition-[transform,opacity] duration-100"
+      className="flex items-center justify-between gap-4 px-1 py-3 rounded-lg active:opacity-60 transition-opacity"
       style={{ borderBottom: "1px solid var(--ink-05)" }}
     >
-      {/* Thumbnail — a square baked at the old object-position, center 65%,
-          so the file is exactly what this box used to crop to. */}
-      <div
-        className="flex-shrink-0 rounded-lg overflow-hidden"
-        style={{ width: 56, height: 56 }}
-      >
-        <ChromeImg
-          family="row"
-          src={imageUrl}
-          alt={name}
-          width={56}
-          height={56}
-          className="w-full h-full object-cover"
-          sizes="56px"
-        />
-      </div>
-      {/* Text */}
-      <div className="flex-1 min-w-0">
-        <p className="text-[15px] font-[500] leading-tight truncate" style={{ color: "var(--text-primary)" }}>{name}</p>
-        {tagline && (
-          <p className="text-[13px] mt-0.5 leading-snug truncate" style={{ color: "var(--ink-50)", fontWeight: 400 }}>{tagline}</p>
-        )}
-      </div>
-      {/* Arrow */}
-      <svg className="flex-shrink-0 w-4 h-4" style={{ color: "var(--ink-20)" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <span className="text-[15px] font-[500] leading-tight" style={{ color: "var(--text-primary)" }}>{name}</span>
+      <svg className="flex-shrink-0 w-4 h-4" style={{ color: "var(--ink-20)" }} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 18l6-6-6-6" />
       </svg>
     </Link>
@@ -823,17 +406,11 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                     {cat.slugs.map((slug) => {
                       const p = products.find((x) => x.slug === slug);
                       if (!p) return null;
-                      return (
-                        <MobileNavRow
-                          key={slug}
-                          href={`/products/${slug}`}
-                          imageUrl={p.imageUrl}
-                          name={p.name}
-                          tagline={PRODUCT_TAGLINE[slug]}
-                          onClose={onClose}
-                        />
-                      );
+                      return <MobileNavRow key={slug} href={`/products/${slug}`} name={p.name} onClose={onClose} />;
                     })}
+                    {cat.secondary && (
+                      <MobileNavRow href={cat.secondary.href} name={cat.secondary.label} onClose={onClose} />
+                    )}
                   </div>
                 ))}
               </motion.div>
@@ -850,60 +427,22 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                     {group.slugs.map((slug) => {
                       const a = applications.find((x) => x.slug === slug);
                       if (!a) return null;
-                      return (
-                        <MobileNavRow
-                          key={slug}
-                          href={`/applications/${slug}`}
-                          imageUrl={a.imageUrl}
-                          name={a.name}
-                          tagline={APP_TAGLINE[slug]}
-                          onClose={onClose}
-                        />
-                      );
+                      return <MobileNavRow key={slug} href={`/applications/${slug}`} name={a.name} onClose={onClose} />;
                     })}
                   </div>
                 ))}
               </motion.div>
 
-              {/* ── Insights ──────────────────────────────────────── */}
-              <motion.div variants={menuSectionVariants} className="mt-2">
-                <div className="flex items-center justify-between">
-                  <MobileMenuLabel>Insights</MobileMenuLabel>
-                  <MobileViewAll href="/blog" label="All" onClose={onClose} />
-                </div>
-                <div className="mt-1 space-y-2">
-                  {FEATURED_POSTS.map((post) => (
-                    <Link
-                      key={post.slug}
-                      href={`/blog/${post.slug}`}
-                      onClick={onClose}
-                      className="flex gap-4 p-3 rounded-2xl active:scale-[0.98] active:opacity-75 transition-[transform,opacity] duration-100"
-                      style={{
-                        background: "var(--ink-025)",
-                        border: "1px solid var(--border-color)",
-                      }}
-                    >
-                      <div className="relative flex-shrink-0 rounded-xl overflow-hidden" style={{ width: 64, height: 64 }}>
-                        <ChromeImg family="post" src={post.image} alt={post.title} className="absolute inset-0 h-full w-full object-cover" sizes="64px" />
-                      </div>
-                      <div className="flex-1 min-w-0 flex flex-col justify-center gap-1">
-                        <p className="text-[9px] font-bold tracking-[0.18em] uppercase" style={{ color: "var(--accent-text-lg)" }}>{post.category}</p>
-                        <p className="text-[14px] font-[500] leading-snug line-clamp-2" style={{ color: "var(--text-primary)" }}>{post.title}</p>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </motion.div>
-
-              {/* ── Secondary links ───────────────────────────────── */}
+              {/* ── Everything else, as a plain list ──────────────── */}
               <motion.div variants={menuSectionVariants} className="mt-8 pt-6" style={{ borderTop: "1px solid var(--border-color)" }}>
                 {[
+                  { label: "Insights", href: "/blog" },
+                  { label: ideaBook.short, href: ideaBook.href },
+                  { label: "Resources", href: "/resources" },
+                  { label: "Project Gallery", href: "/gallery" },
                   { label: "About", href: "/about" },
                   { label: "Contact", href: "/contact" },
-                  { label: "Resources", href: "/resources" },
-                  { label: ideaBook.short, href: ideaBook.href },
                   { label: "Lunch & Learn", href: "/lunch-learn" },
-                  { label: "Project Gallery", href: "/gallery" },
                 ].map((link) => (
                   <Link
                     key={link.href}
@@ -987,7 +526,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
 
 // ── Main Nav ─────────────────────────────────────────────────────────
 export default function Nav() {
-  const [openPanel, setOpenPanel] = useState<"products" | "applications" | "fieldnotes" | null>(null);
+  const [openPanel, setOpenPanel] = useState<"products" | "applications" | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -1023,7 +562,7 @@ export default function Nav() {
     if (!openPanel) return;
     const handler = (e: KeyboardEvent) => {
       if (e.key !== "Escape") return;
-      const triggerRef = openPanel === "products" ? productsBtnRef : openPanel === "applications" ? applicationsBtnRef : null;
+      const triggerRef = openPanel === "products" ? productsBtnRef : applicationsBtnRef;
       setOpenPanel(null);
       triggerRef?.current?.focus();
     };
@@ -1237,24 +776,6 @@ export default function Nav() {
               </svg>
             </button>
 
-            {/* Insights — navigates to /blog on click, shows dropdown on hover/focus */}
-            <Link
-              href="/blog"
-              onMouseEnter={() => setOpenPanel("fieldnotes")}
-              onFocus={() => setOpenPanel("fieldnotes")}
-              onClick={() => setOpenPanel(null)}
-              aria-expanded={openPanel === "fieldnotes"}
-              aria-haspopup="true"
-              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[13px] font-medium whitespace-nowrap transition-colors hover:text-[var(--accent-text)] hover:bg-[var(--ink-05)]"
-              style={{ color: openPanel === "fieldnotes" ? "var(--accent-text-lg)" : "var(--ink-65)" }}
-            >
-              Insights
-              <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                style={{ opacity: 0.5, transform: openPanel === "fieldnotes" ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </Link>
-
             {/* Plain links */}
             {PLAIN_LINKS.map((link) => (
               <Link key={link.href} href={link.href}
@@ -1362,7 +883,7 @@ export default function Nav() {
           {openPanel && (
             <motion.div
               key={openPanel}
-              id={openPanel === "products" ? "products-mega-menu" : openPanel === "applications" ? "applications-mega-menu" : undefined}
+              id={openPanel === "products" ? "products-mega-menu" : "applications-mega-menu"}
               initial={{ opacity: 0, y: -4 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -4 }}
@@ -1376,7 +897,6 @@ export default function Nav() {
             >
               {openPanel === "products" && <ProductsMegaMenu />}
               {openPanel === "applications" && <ApplicationsMegaMenu />}
-              {openPanel === "fieldnotes" && <FieldNotesMegaMenu />}
             </motion.div>
           )}
         </AnimatePresence>

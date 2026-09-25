@@ -24,6 +24,8 @@ VOICE: relaxed, professional, leaders in the field. Confident and plain, never s
 
 FACTS: say only what the ARTICLE says. No new numbers, claims, places, clients or promises.
 
+HOUSE STYLE (docs/STYLE.md): sentence case for headings ("Where the colour goes", not "Where The Colour Goes"). Product names exactly: TrafficPatternsXD, TrafficPatterns, PreMark, DuraTherm, DecoMark, AirMark, StreetBond, StreetBondSR, MMAX, DuraShield, StreetPrint, ChipFill, AggreFill, Fast Patch DPR. The company is HUB Surface Systems, then HUB; never "Hub". The printed book is the Idea Book, never "the catalogue". Places as city and province spelled out (Milton, Ontario). Spaced em dash for an aside, en dash for spans (10–20 years). No counts as a selling point.
+
 EACH POST: one idea from the article that a specifier, planner or property manager would stop for, then the link, then ONE ask. The ask is always the same: the article ends with an offer of a 45-minute Lunch & Learn for their team (samples, specs, lunch included), so invite them to read it and book one. One link only: the exact URL given for that channel.
 
 CHANNELS:

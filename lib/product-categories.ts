@@ -50,7 +50,8 @@ export const PRODUCT_CATEGORIES: ProductCategory[] = [
   {
     label: "Stamped Asphalt",
     slugs: ["streetprint"],
-    secondary: { label: "Pattern gallery", href: "/patterns", meta: "16 stamping templates" },
+    // No count in the meta (Doug's round, 25 Sep 2026): the gallery is named, not measured.
+    secondary: { label: "Pattern gallery", href: "/patterns" },
     // Catalogue p8 ("The original stamped asphalt system."), p19 and the
     // StreetPrint spread: in-place stamping + StreetBond coating, new or
     // existing asphalt, flush with "nothing for a plow blade to catch".

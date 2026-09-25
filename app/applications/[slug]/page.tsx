@@ -320,7 +320,7 @@ export default async function ApplicationPage({ params }: Props) {
       </div>
       {/* Feature callout — residential driveways page only */}
       {slug === "residential-driveways" && <ResidentialDriveways />}
-      <LunchLearn />
+      <LunchLearn compact />
       <Footer />
     </main>
   );

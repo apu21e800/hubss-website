@@ -3,17 +3,17 @@ import Link from "next/link";
 const PERSONAS = [
   {
     label: "Municipalities",
-    desc: "Every crosswalk, transit corridor, and plaza that defines your city — Vision Zero aligned, accessibility-aware, installed by certified crews from Halifax to Victoria.",
+    desc: "Crosswalks, transit corridors and plazas — Vision Zero aligned, accessible, installed by certified crews coast to coast.",
     href: "/applications",
   },
   {
     label: "Designers & Specifiers",
-    desc: "12+ StreetPrint patterns, full Pantone matching, snowplow-safe, and engineering-approved. Beautiful that actually survives the job site.",
+    desc: "Stamped patterns, PMS-matched colour and snowplow-safe systems, with spec sheets and spec language for the tender.",
     href: "/products",
   },
   {
     label: "Contractors",
-    desc: "Hub Surface Systems certifies, trains and supports a network of contractors across Canada",
+    desc: "HUB certifies, trains and supports its installer network across Canada.",
     href: "/contact",
   },
 ];

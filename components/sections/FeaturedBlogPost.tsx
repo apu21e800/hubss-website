@@ -175,7 +175,7 @@ export default async function FeaturedBlogPost() {
                 className="text-sm font-semibold flex items-center gap-2 self-start group-hover:text-[var(--accent-soft-text)] transition-colors"
                 style={{ color: "var(--accent-text-lg)" }}
               >
-                Read Case Study
+                Read the {badgeFor(hero.category).toLowerCase()}
                 <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>

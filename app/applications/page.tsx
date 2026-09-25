@@ -73,7 +73,7 @@ export default async function ApplicationsPage() {
           ))}
         </div>
       </div>
-      <LunchLearn />
+      <LunchLearn compact />
       <Footer />
     </main>
   );

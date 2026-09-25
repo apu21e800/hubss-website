@@ -151,7 +151,7 @@ export default function Footer() {
                 <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "var(--accent-text-lg)" }}>
                   West Office
                 </p>
-                <p className="text-sm mb-1" style={{ color: "var(--text-primary)" }}>Ladysmith, BC</p>
+                <p className="text-sm mb-1" style={{ color: "var(--text-primary)" }}>Ladysmith, British Columbia</p>
                 <a href="mailto:cleve.stordy@hubss.com" className="text-xs flex items-center transition-colors hover:text-[var(--text-primary)] underline-offset-4 hover:underline" data-tap="40" style={{ color: "var(--text-secondary)", paddingTop: 2, paddingBottom: 2 }}>
                   cleve.stordy@hubss.com
                 </a>

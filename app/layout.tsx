@@ -3,7 +3,6 @@ import { Geist, Inter } from "next/font/google";
 import "./globals.css";
 // Crisp Chat — sign up at crisp.chat (free), grab Website ID from Settings → Setup
 import CrispChat from "@/components/CrispChat";
-import StickyBar from "@/components/StickyBar";
 import AnalyticsEvents from "@/components/AnalyticsEvents";
 // VercelToolbar — only on staging/preview, never on production
 import { VercelToolbar } from "@vercel/toolbar/next";
@@ -93,7 +92,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <link rel="preconnect" href="https://basemaps.cartocdn.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://basemaps.cartocdn.com" />
         {children}
-        <StickyBar />
+        {/* The scroll-up sticky bar (components/StickyBar.tsx) is off since
+            25 Sep 2026: with the header's Lunch & Learn button and the band at
+            the foot of every page it was the same ask a third time. */}
         <CrispChat />
         {process.env.VERCEL_ENV !== "production" && <VercelToolbar />}
         <Analytics />

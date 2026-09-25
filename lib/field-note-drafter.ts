@@ -49,7 +49,9 @@ SHAPE: 900 to 1,300 words of markdown. Open with one or two short paragraphs, no
 
 LINKS: link the first mention of each HUB system to its page, and link one to three of the RELATED POSTS where they genuinely help, with the URLs given. No other links.
 
-SEARCH: use the target search phrase naturally in the title, in the first paragraph and in one heading. Don't stuff it.`;
+SEARCH: use the target search phrase naturally in the title, in the first paragraph and in one heading. Don't stuff it.
+
+HOUSE STYLE (docs/STYLE.md): sentence case for headings ("Where the colour goes", not "Where The Colour Goes"). Product names exactly: TrafficPatternsXD, TrafficPatterns, PreMark, DuraTherm, DecoMark, AirMark, StreetBond, StreetBondSR, MMAX, DuraShield, StreetPrint, ChipFill, AggreFill, Fast Patch DPR. The company is HUB Surface Systems, then HUB; never "Hub". The printed book is the Idea Book, never "the catalogue". Places as city and province spelled out (Milton, Ontario). Spaced em dash for an aside, en dash for spans (10–20 years). No counts as a selling point.`;
 
 const SAVE_DRAFT: Anthropic.Tool = {
   name: "save_draft",

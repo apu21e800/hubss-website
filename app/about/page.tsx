@@ -323,7 +323,7 @@ export default async function AboutPage() {
         </div>
       </div>
 
-      <LunchLearn />
+      <LunchLearn compact />
       <Footer />
     </main>
   );

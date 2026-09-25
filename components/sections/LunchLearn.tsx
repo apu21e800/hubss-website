@@ -11,13 +11,19 @@
  * session-format picker was grafted into its form, so Doug and Cleve see
  * In-person / Virtual / Either right in the request email.
  *
- * The full three-variant component lives in LunchLearnV2.tsx.
+ * The full component lives in LunchLearnV2.tsx.
+ *
+ * Since 25 Sep 2026 (Doug's round) the boardroom card runs only on the
+ * homepage and /lunch-learn. Every other template passes `compact` and gets
+ * the band: Moose, one line, one button, pointing at /lunch-learn.
  */
 import LunchLearnV2 from "@/components/sections/LunchLearnV2";
 
 export default function LunchLearn({
   hideMoose: _hideMoose,
   hideForm = false,
-}: { hideMoose?: boolean; hideForm?: boolean } = {}) {
+  compact = false,
+}: { hideMoose?: boolean; hideForm?: boolean; compact?: boolean } = {}) {
+  if (compact) return <LunchLearnV2 variant="band" />;
   return <LunchLearnV2 variant="boardroom" hideForm={hideForm} />;
 }

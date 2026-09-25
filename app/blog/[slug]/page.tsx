@@ -360,7 +360,7 @@ export default async function BlogPostPage({ params }: Props) {
         </div>
       </div>
 
-      <LunchLearn />
+      <LunchLearn compact />
       <Footer />
     </main>
   );

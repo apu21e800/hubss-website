@@ -186,7 +186,7 @@ export default async function ResourcesPage() {
         </div>
       </section>
 
-            <LunchLearn />
+            <LunchLearn compact />
       <Footer />
     </main>
   );

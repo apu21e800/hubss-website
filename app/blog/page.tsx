@@ -100,8 +100,8 @@ export default async function BlogPage() {
             Insights from the Front Lines of Canadian Pavement
           </h1>
           <p className="text-base" style={{ color: "var(--text-secondary)", maxWidth: "62ch" }}>
-            {posts.length} documented pieces on decorative pavement in Canada — the projects,
-            the specifications, and the lifecycle math behind them.
+            Decorative pavement in Canada, documented — the projects, the specifications
+            and the lifecycle math behind them.
           </p>
         </div>
 
@@ -120,7 +120,7 @@ export default async function BlogPage() {
         </Suspense>
       </div>
 
-      <LunchLearn />
+      <LunchLearn compact />
       <Footer />
     </main>
   );

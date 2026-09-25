@@ -27,6 +27,7 @@ import ProductSpecCard from "@/components/products/ProductSpecCard";
 import ProductFaq from "@/components/products/ProductFaq";
 import { faqsFor } from "@/lib/product-faqs";
 import { getMergedProduct } from "@/lib/products.server";
+import { getMergedApplications, type MergedApplication } from "@/lib/applications.server";
 
 export const revalidate = 3600;
 
@@ -112,9 +113,15 @@ export default async function ProductPage({ params }: Props) {
   })();
   const gallery: GalleryImage[] = galleryPhotos.map((p) => ({ src: p.src, alt: p.alt, caption: p.caption ?? p.alt }));
 
-  const relatedAppData = product.relatedApplications
-    .map((s) => applications.find((a) => a.slug === s))
-    .filter(Boolean) as typeof applications;
+  // The related applications, merged with Sanity so each card can carry the
+  // application's own hero from cdn.sanity.io through the PhotoImage loader.
+  // Until 25 Sep 2026 the cards used the /public photo through next/image,
+  // which was the last big source of /_next/image transforms on the site
+  // (35 on this page for MMAX).
+  const mergedApps = await getMergedApplications();
+  const relatedAppData: MergedApplication[] = product.relatedApplications
+    .map((s) => mergedApps.find((a) => a.slug === s) ?? applications.find((a) => a.slug === s))
+    .filter((a): a is MergedApplication => Boolean(a));
 
   const productSchema = {
     "@context": "https://schema.org",
@@ -418,87 +425,44 @@ export default async function ProductPage({ params }: Props) {
           <DocumentDownloads slug={product.slug} />
         </div>
 
-        {/* StreetBondSR LEED callout */}
+        {/* StreetBondSR LEED callout — the book's facts, and only those.
+            Until 25 Sep 2026 this block said "LEED v4" (the Idea Book says
+            V5), listed rating systems and quoted surface and city
+            temperatures that appear in no HUB document. Doug's round: the
+            book wins, nothing invented, one call to action. */}
         {slug === "streetbondsr" && (
           <div
             className="mt-16 rounded-2xl overflow-hidden"
             style={{ border: "1px solid rgba(134,197,82,0.25)", background: "rgba(134,197,82,0.04)" }}
           >
-            <div className="grid grid-cols-1 lg:grid-cols-2">
-              <div className="p-10 lg:p-12 flex flex-col justify-center">
-                <div className="flex items-center gap-4 mb-6">
-                  {/* SVG source — the optimizer 400s on SVG unless
-                      dangerouslyAllowSVG is set in next.config, so this opts
-                      out of optimization. Fixed 72x72, no `sizes` needed. */}
-                  <Image
-                    src="/images/products/streetbondsr/leed-logo.svg"
-                    alt="LEED — U.S. Green Building Council"
-                    width={72}
-                    height={72}
-                    unoptimized
-                    style={{ width: 72, height: 72, objectFit: "contain", filter: "invert(1) brightness(0.75) sepia(1) hue-rotate(60deg) saturate(2)" }}
-                  />
-                  <div>
-                    <p className="text-xs font-bold tracking-[0.2em] uppercase mb-1" style={{ color: "#86c552" }}>Green Building Credentials</p>
-                    <h3 className="text-2xl font-bold" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
-                      Contributes to LEED Points
-                    </h3>
-                  </div>
-                </div>
-                <p className="leading-[1.8] mb-6" style={{ color: "var(--ink-72)", fontSize: "clamp(0.95rem, 1.6vw, 1.05rem)", maxWidth: "52ch" }}>
-                  StreetBondSR&apos;s high Solar Reflectance Index (SRI) qualifies for{" "}
-                  <strong style={{ color: "var(--text-primary)" }}>LEED v4 SS Credit: Heat Island Reduction</strong> under the
-                  U.S. Green Building Council framework. The coating reflects solar radiation rather than absorbing it,
-                  reducing surface temperature relative to standard dark asphalt and lowering radiant heat loads on adjacent buildings.
+            <div className="p-8 sm:p-10 lg:p-12 flex flex-col gap-6 lg:flex-row lg:items-center lg:gap-10">
+              {/* SVG source — the optimizer 400s on SVG unless
+                  dangerouslyAllowSVG is set in next.config, so this opts
+                  out of optimization. Fixed 72x72, no `sizes` needed. */}
+              <Image
+                src="/images/products/streetbondsr/leed-logo.svg"
+                alt="LEED — U.S. Green Building Council"
+                width={72}
+                height={72}
+                unoptimized
+                style={{ width: 72, height: 72, objectFit: "contain", flexShrink: 0, filter: "invert(1) brightness(0.75) sepia(1) hue-rotate(60deg) saturate(2)" }}
+              />
+              <div className="flex-1 min-w-0">
+                <h3 className="text-2xl font-bold" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
+                  Contributes to LEED v5 urban heat-island credits
+                </h3>
+                <p className="mt-3 leading-relaxed" style={{ color: "var(--ink-72)", fontSize: "clamp(0.95rem, 1.6vw, 1.05rem)", maxWidth: "60ch" }}>
+                  Twelve colours carry a solar reflectance of 0.33 or higher and can contribute to the LEED v5
+                  Sustainable Sites credit for urban heat island (non-roof).
                 </p>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-                  {[
-                    { label: "Credit Category", value: "Sustainable Sites" },
-                    { label: "Applicable Rating", value: "LEED BD+C, ID+C, O+M" },
-                    { label: "Credit Pathway", value: "High-SRI paving materials" },
-                  ].map(({ label, value }) => (
-                    <div key={label} className="rounded-xl p-4" style={{ background: "rgba(134,197,82,0.08)", border: "1px solid rgba(134,197,82,0.15)" }}>
-                      <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: "rgba(134,197,82,0.7)" }}>{label}</p>
-                      <p className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>{value}</p>
-                    </div>
-                  ))}
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  <Link
-                    href="/contact"
-                    className="px-6 py-3 rounded-xl text-sm font-bold"
-                    style={{ background: "linear-gradient(135deg, #86c552 0%, #6aad3a 100%)", color: "var(--on-accent)", boxShadow: "0 4px 16px rgba(134,197,82,0.3)" }}
-                  >
-                    Request LEED Documentation →
-                  </Link>
-                  <Link
-                    href="/lunch-learn"
-                    className="px-6 py-3 rounded-xl text-sm font-semibold"
-                    style={{ color: "var(--ink-65)", border: "1px solid var(--ink-14)" }}
-                  >
-                    Book a Lunch &amp; Learn
-                  </Link>
-                </div>
               </div>
-
-              <div className="p-10 lg:p-12 flex flex-col justify-center gap-5 border-t border-t-[rgba(134,197,82,0.15)] lg:border-t-0 lg:border-l lg:border-l-[rgba(134,197,82,0.15)]">
-                <p className="text-xs font-bold tracking-[0.2em] uppercase mb-2" style={{ color: "rgba(134,197,82,0.6)" }}>
-                  Why It Matters
-                </p>
-                {[
-                  { icon: "🌡️", heading: "Cooler Surfaces", body: "Dark asphalt can reach 60–70°C in direct sun. High-SRI coatings reflect solar energy off the surface, reducing pavement temperature and the heat radiated back to pedestrians and cyclists." },
-                  { icon: "🏙️", heading: "Urban Heat Island Mitigation", body: "Cities run 2–4°C warmer than surrounding rural areas due to heat-absorbing surfaces. High-SRI pavement coatings are one of the established mitigation strategies in municipal climate action plans." },
-                  { icon: "⚡", heading: "Building Energy Performance", body: "Cooler adjacent pavement reduces radiant heat loads on nearby buildings, contributing to lower cooling energy consumption — recognized as a co-benefit in LEED whole-building assessments." },
-                ].map(({ icon, heading, body }) => (
-                  <div key={heading} className="flex gap-4">
-                    <span style={{ fontSize: 22, lineHeight: 1, flexShrink: 0, marginTop: 2 }}>{icon}</span>
-                    <div>
-                      <p className="font-bold mb-1" style={{ color: "var(--text-primary)", fontSize: "0.95rem" }}>{heading}</p>
-                      <p className="leading-relaxed" style={{ color: "var(--ink-58)", fontSize: "0.875rem" }}>{body}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <Link
+                href="/contact"
+                className="inline-flex flex-shrink-0 items-center px-6 py-3 rounded-xl text-sm font-bold"
+                style={{ background: "linear-gradient(135deg, #86c552 0%, #6aad3a 100%)", color: "var(--on-accent)", boxShadow: "0 4px 16px rgba(134,197,82,0.3)" }}
+              >
+                Request LEED documentation →
+              </Link>
             </div>
           </div>
         )}
@@ -508,12 +472,8 @@ export default async function ProductPage({ params }: Props) {
           <div className="mt-16 pt-16 pb-16 px-6 sm:px-10 -mx-4 sm:-mx-6 lg:-mx-8 rounded-2xl" style={{ background: "var(--bg-primary)", borderTop: "1px solid var(--ink-08)" }}>
             <div className="flex items-end justify-between mb-8">
               <div>
-                <p className="text-xs font-bold tracking-[0.2em] uppercase mb-3" style={{ color: "var(--accent-text-lg)" }}>
-                  Specified for
-                </p>
-                {/* The eyebrow said "Where It's Used" and the heading said
-                    "Applications" — the same fact twice, once in the reader's
-                    language and once in the database's. Keeping the reader's. */}
+                {/* One heading, no eyebrow: "Specified for" above "Where X
+                    goes" said the same thing twice (Doug's round, 25 Sep 2026). */}
                 <h2 className="text-2xl font-bold" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
                   Where {product.name} goes
                 </h2>
@@ -530,64 +490,53 @@ export default async function ProductPage({ params }: Props) {
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {relatedAppData.map((app) => (
-                <Link
-                  key={app.slug}
-                  href={`/applications/${app.slug}`}
-                  className="group relative overflow-hidden rounded-lg flex flex-col"
-                  style={{ background: "var(--bg-card)", border: "1px solid var(--border-faint)" }}
-                >
-                  {/* The card title is laid over the photograph behind a 40%
-                      black scrim, so it needs light type whatever the page
-                      around it is doing. Without this pin, "Specified for"
-                      going to paper turned four of these titles to charcoal on
-                      a charcoal photo — legible on the dark shots, invisible on
-                      the bright ones. */}
-                  <div className="relative overflow-hidden" style={{ height: 130 }}>
-                    <Image
-                      src={app.imageUrl}
-                      alt={`${app.name} — ${app.shortDesc.slice(0, 60)}`}
-                      fill
-                      style={{ objectPosition: "center 60%" }}
-                      className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                    />
-                    <div
-                      className="absolute inset-0 transition-opacity duration-300 opacity-50 group-hover:opacity-70"
-                      style={{ background: "rgba(0,0,0,0.4)" }}
-                    />
-                    <div className="absolute inset-0 flex items-end p-3">
-                      <div>
-                        <div className="w-5 h-px mb-2 transition-all duration-200 group-hover:w-8" style={{ background: "#f97316" }} />
-                        <p className="font-bold text-sm leading-tight" style={{ color: "var(--text-primary)" }}>
-                          {app.name}
-                        </p>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              {relatedAppData.map((app) => {
+                const photo: Photo | null = app.heroPhoto ?? null;
+                return (
+                  <Link
+                    key={app.slug}
+                    href={`/applications/${app.slug}`}
+                    className="group relative overflow-hidden rounded-lg"
+                    style={{ background: "var(--bg-card)", border: "1px solid var(--border-faint)" }}
+                  >
+                    {/* Names first (Doug's round, 25 Sep 2026): the card used to
+                        carry the application's line, cut mid-word at eighty
+                        characters, and an "Explore" label. The name over the
+                        photograph is the whole card; the line lives on the
+                        application's own page. The title sits on a 40% scrim,
+                        so it stays light whatever the page's surface. */}
+                    <div className="relative overflow-hidden" style={{ height: 150 }}>
+                      <PhotoImage
+                        src={photo?.src ?? app.imageUrl}
+                        alt={photo?.alt ?? app.name}
+                        fill
+                        style={{ objectPosition: "center 60%" }}
+                        className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+                        sizes="(max-width: 1024px) 50vw, 25vw"
+                      />
+                      <div
+                        className="absolute inset-0 transition-opacity duration-300 opacity-50 group-hover:opacity-70"
+                        style={{ background: "rgba(0,0,0,0.4)" }}
+                      />
+                      <div className="absolute inset-0 flex items-end p-3">
+                        <div>
+                          <div className="w-5 h-px mb-2 transition-all duration-200 group-hover:w-8" style={{ background: "#f97316" }} />
+                          <p className="font-bold text-sm leading-tight" style={{ color: "#fff" }}>
+                            {app.name}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="px-4 py-3 flex-1 flex flex-col">
-                    <p className="text-xs leading-relaxed flex-1" style={{ color: "var(--text-muted)" }}>
-                      {app.shortDesc.slice(0, 80)}{app.shortDesc.length > 80 ? "…" : ""}
-                    </p>
-                    <span
-                      className="mt-2 text-[11px] font-semibold flex items-center gap-1 uppercase tracking-wider transition-colors duration-150 group-hover:text-[var(--accent-text)]"
-                      style={{ color: "var(--accent-text-lg)" }}
-                    >
-                      Explore
-                      <svg className="w-2.5 h-2.5 transition-transform duration-150 group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                      </svg>
-                    </span>
-                  </div>
-                </Link>
-              ))}
+                  </Link>
+                );
+              })}
             </div>
           </div>
         )}
       </div>
       </div>
-      <LunchLearn />
+      <LunchLearn compact />
       <Footer />
     </main>
   );

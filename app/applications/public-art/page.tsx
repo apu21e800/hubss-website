@@ -318,7 +318,7 @@ export default function PublicArtPage() {
         </div>
       </div>
 
-      <LunchLearn />
+      <LunchLearn compact />
       <Footer />
     </main>
   );

@@ -85,12 +85,6 @@ export default async function TypeHub({ type }: { type: FieldNoteTypeMeta }) {
 
         {/* Header */}
         <div className="max-w-3xl">
-          <span
-            className="inline-block text-[10px] font-bold px-2.5 py-1 rounded uppercase tracking-[0.18em] mb-4"
-            style={{ background: type.tint, color: type.text, border: `1px solid ${type.border}` }}
-          >
-            {posts.length} {posts.length === 1 ? type.badge : type.plural}
-          </span>
           <h1
             className="font-black mb-4"
             style={{
@@ -221,7 +215,7 @@ export default async function TypeHub({ type }: { type: FieldNoteTypeMeta }) {
         </div>
       </div>
 
-      <LunchLearn />
+      <LunchLearn compact />
       <Footer />
     </main>
   );

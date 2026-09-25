@@ -24,7 +24,7 @@ import Link from "next/link";
 import { CHROME_MARKS } from "@/lib/chrome-images.mjs";
 import ChromeImg from "@/components/ui/ChromeImg";
 
-export type LunchLearnVariant = "boardroom" | "ticket" | "proof";
+export type LunchLearnVariant = "boardroom" | "ticket" | "proof" | "band";
 
 interface FormState {
   name: string;
@@ -635,10 +635,67 @@ function Proof() {
 }
 
 // ── Export ─────────────────────────────────────────────────────────────────
+// ── Band — the quiet version for every page that isn't the homepage or
+// /lunch-learn (Doug's round, 25 Sep 2026). The boardroom card is 131 words
+// and ran at the foot of thirteen templates, under a header that already
+// carries the Lunch & Learn button: the same ask three times a page. The band
+// keeps Moose, the name, one line and one button, and sends people to
+// /lunch-learn, where the form and the detail live.
+function Band() {
+  return (
+    <section
+      aria-labelledby="ll-band-heading"
+      data-surface="shell"
+      className="relative py-10 sm:py-12"
+      style={{ background: "var(--bg-primary)", borderTop: "1px solid var(--border-color)" }}
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col items-center gap-6 text-center sm:flex-row sm:text-left sm:gap-8">
+          <span className="relative flex-shrink-0 w-16 h-16" aria-hidden="true">
+            <span
+              className="absolute inset-0 rounded-full"
+              style={{ background: "rgba(249,115,22,0.14)", border: "2px solid rgba(249,115,22,0.5)" }}
+            />
+            <ChromeImg
+              family="moose"
+              src={MOOSE.src}
+              alt=""
+              width={320}
+              height={400}
+              sizes="81px"
+              className="absolute bottom-0 left-1/2 w-auto"
+              style={{ height: "127%", maxWidth: "none", transform: "translateX(-50%)", filter: "drop-shadow(0 3px 6px rgba(0,0,0,0.45))" }}
+            />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-[11px] font-bold tracking-[0.2em] uppercase mb-1.5" style={{ color: "var(--accent-text)" }}>
+              Lunch &amp; Learn
+            </p>
+            <h2 id="ll-band-heading" className="text-lg sm:text-xl font-bold leading-snug" style={{ color: "var(--text-primary)" }}>
+              A free working session for engineers, architects and municipal teams — case studies, spec language and samples on the table.
+            </h2>
+          </div>
+          <Link
+            href="/lunch-learn"
+            className="inline-flex flex-shrink-0 items-center gap-2 rounded-lg px-5 py-3 text-sm font-bold whitespace-nowrap"
+            style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "var(--on-accent)", boxShadow: "0 4px 24px rgba(249,115,22,0.30)" }}
+          >
+            Book a Lunch &amp; Learn
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function LunchLearnV2({
   variant = "boardroom",
   hideForm = false,
 }: { variant?: LunchLearnVariant; hideForm?: boolean }) {
+  if (variant === "band") return <Band />;
   if (variant === "ticket") return <Ticket />;
   if (variant === "proof") return <Proof />;
   return <Boardroom hideForm={hideForm} />;

@@ -71,7 +71,7 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
             </p>
             <div className="space-y-8">
               {[
-                { region: "West Office", city: "Ladysmith, BC", email: "cleve.stordy@hubss.com", phone: "604-309-8212" },
+                { region: "West Office", city: "Ladysmith, British Columbia", email: "cleve.stordy@hubss.com", phone: "604-309-8212" },
                 { region: "East Office", city: "Milton, Ontario", email: "doug.bain@hubss.com", phone: "416-540-9287" },
               ].map((office) => (
                 <div key={office.region}>
@@ -225,7 +225,7 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
       {/* hideForm: /contact already asked for a name and an email forty pixels
           above this. Two forms on one page is two requests, or one request
           twice, and the visitor cannot tell which. */}
-      <LunchLearn hideForm />
+      <LunchLearn compact />
       <Footer />
     </main>
   );

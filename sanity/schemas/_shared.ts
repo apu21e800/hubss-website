@@ -55,7 +55,7 @@ export const richImageField = (
         readOnly: true,
         description: "The /public path this photo was migrated from. Set by scripts/sync-photos-to-sanity.ts: the same file can live in two folders, and each page reads SEO text from its own (lib/photos.ts).",
       }),
-      defineField({ name: "originSha", title: "Original file sha1", type: "string", hidden: true, readOnly: true }),
+      defineField({ name: "originAsset", title: "Asset the original file was uploaded as", type: "string", hidden: true, readOnly: true }),
     ],
   });
 
@@ -97,6 +97,6 @@ export const galleryImageItem = {
       readOnly: true,
       description: "The /public path this photo was migrated from. Set by scripts/sync-photos-to-sanity.ts: the same file can live in two folders, and each page reads SEO text from its own (lib/photos.ts).",
     }),
-    defineField({ name: "originSha", title: "Original file sha1", type: "string", hidden: true, readOnly: true }),
+    defineField({ name: "originAsset", title: "Asset the original file was uploaded as", type: "string", hidden: true, readOnly: true }),
   ],
 };

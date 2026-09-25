@@ -40,7 +40,7 @@ only content is newline characters.
 ## Run it
 
 Do this when you have five minutes and aren't mid-task. From
-`C:\Users\cleve\Based_Agency\based-agncy_os\Web_Projects\hubss-website`:
+`D:\STUDIO-01\21e8.studio\clients\hubss-website`:
 
 ```bash
 # 0. Keep the one real change (12 lines in your editor config)

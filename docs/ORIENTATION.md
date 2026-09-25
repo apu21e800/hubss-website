@@ -225,22 +225,23 @@ no `revalidate` and never re-read Sanity — fixed, 3600s, matching products.
 ## REPO GEOGRAPHY
 
 ```
-C:\Users\cleve\Based_Agency\based-agncy_os\Web_Projects\hubss-website
+D:\STUDIO-01\21e8.studio\clients\hubss-website
 ```
 
-**Trap 1:** `C:\Users\cleve\Based_Agency\projects\HUBSS` is not this repo and
-not a git repo — its `.git` has only `config` and `hooks/`. With no HEAD, git
-walks up and answers from the `Based_Agency` parent. It misled two sessions.
+Moved here 2026-09-24. The agency repo `D:\STUDIO-01\21e8.studio` holds the map; this
+folder is its own git repo (the agency repo ignores it). `node D:\STUDIO-01\21e8.studio\scripts\check.mjs`
+is the truth about where things are.
 
-**Trap 2:** `based-agncy_os` is itself a git repo containing this one. Git run
-from the wrong directory resolves to the parent.
+**Trap (historical):** on C:, a non-repo `projects\HUBSS` folder and the
+`based-agncy_os` parent repo both made git answer for the wrong directory and
+misled two sessions. On D: the parent `21e8.studio` is also a git repo, so the
+same rule holds:
 
 **Always confirm `git rev-parse --show-toplevel` before trusting git output.**
 
-Pending migration to `D:\STUDIO-01\02-HUBSS\`. Until it lands, **C: is
-canonical**; the two copies already on D: (`hubss-website\` and
-`site\hubss-website-repo\`) are stale — ignore both. Do not create new
-worktrees or hardcode C: paths.
+The old copies (`C:\Users\cleve\Based_Agency\...\hubss-website` and the two under
+`D:\STUDIO-01\02-HUBSS\`) are retired; anything left of them is in `D:\STUDIO-01\07-ARCHIVE`.
+Do not create new worktrees or hardcode C: paths.
 
 Safety tag `safety/pre-rebase-20260908` marks the pre-merge state (local only,
 not on origin).

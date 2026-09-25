@@ -8,7 +8,7 @@ import { buildMetadata } from "@/lib/seo";
 const TYPE = TYPE_BY_LABEL["Blog"];
 
 export const metadata: Metadata = buildMetadata({
-  title: "Field Notes Posts — Decorative Pavement Industry Insight",
+  title: "Articles — Decorative Pavement Industry Insight",
   description: "Shorter reads on where decorative pavement is heading in Canada: material context, industry shifts, and the thinking behind the systems HUB specifies.",
   slug: "blog/posts",
 });

@@ -1,6 +1,6 @@
 # Social through Buffer
 
-**What happens:** every day at 14:00 UTC the site checks for Field Notes that
+**What happens:** every day at 14:00 UTC the site checks for Insights articles that
 went live since the last run (`app/api/cron/social-drafts`,
 `lib/social-pipeline.ts`). For each one, Claude writes a post per network from
 the article (nothing it doesn't say), and each becomes a **draft** in that
@@ -9,7 +9,7 @@ to `BLOG_DRAFT_NOTIFY`. Nothing is posted until someone approves and schedules
 it in Buffer.
 
 Every link carries UTM tags (`utm_source` = network, `utm_medium=social`,
-`utm_campaign=field-notes`, `utm_content` = the post's slug), and every post
+`utm_campaign=insights`, `utm_content` = the post's slug), and every post
 makes one ask: read the article and book a Lunch & Learn, which is the offer at
 the end of every post. GA4 then shows which posts and networks bring bookings.
 

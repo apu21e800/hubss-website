@@ -11,7 +11,7 @@ import {
   catalogueCover,
   catalogueLabel,
   cataloguePageUrl,
-  catalogueTotal,
+  ideaBook,
 } from "@/lib/catalogue";
 
 import { buildMetadata } from "@/lib/seo";
@@ -45,9 +45,8 @@ export default async function ResourcesPage() {
       : resourceDocuments,
   );
 
-  // Catalogue card is gated on the same flag as the /catalogue route it
-  // links to: visible on staging/preview for review, hidden on production
-  // until NEXT_PUBLIC_SHOW_CATALOGUE is set — so it never dead-links.
+  // The Idea Book row is gated on the same flag as the /idea-book route it
+  // links to, so it never dead-links.
   const docs = showCatalogue()
     ? merged
     : merged.filter((d) => d.id !== "catalogue-2026");
@@ -83,11 +82,11 @@ export default async function ResourcesPage() {
         </p>
       </div>
 
-      {/* The catalogue, present but not shouting.
+      {/* The Idea Book, present but not shouting.
           It was a full-width panel with a 150px cover and its own h2 — louder
           than the Specification Library it sits above, which is what people
           actually come here for. Now it is one quiet row: the book, its name,
-          and the two ways in. */}
+          and the two ways in. No page count (Doug, 25 Sep 2026). */}
       {showCatalogue() && catalogueCover && (
         <div className="relative max-w-7xl mx-auto px-6 -mt-4 mb-12">
           {/* On a phone the buttons take their own row, full width, so the
@@ -101,7 +100,7 @@ export default async function ResourcesPage() {
             <div className="flex min-w-0 flex-1 basis-64 items-center gap-4">
               <img
                 src={catalogue.coverThumb ?? cataloguePageUrl(1, catalogue.widths[0])}
-                alt={`HUB Surface Systems Catalogue ${catalogueLabel} cover`}
+                alt={`${ideaBook.title} cover`}
                 width={240}
                 height={240}
                 className="h-11 w-11 flex-shrink-0 rounded-md object-cover"
@@ -109,23 +108,23 @@ export default async function ResourcesPage() {
               />
               <div className="min-w-0">
                 <p className="whitespace-nowrap text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--text-muted)" }}>
-                  Catalogue {catalogueLabel}
+                  {catalogueLabel} edition
                 </p>
                 <p className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>
-                  {catalogueTotal} pages — every system and application
+                  {ideaBook.title} — every system and application
                 </p>
               </div>
             </div>
             <div className="flex w-full items-center gap-2 sm:w-auto">
               <a
-                href="/catalogue?utm_source=resources&utm_medium=library_row&utm_campaign=catalogue"
+                href={`${ideaBook.href}?utm_source=resources&utm_medium=library_row&utm_campaign=idea-book`}
                 className="flex-1 whitespace-nowrap rounded-lg px-3 py-2 text-center text-xs font-semibold transition-colors sm:flex-none"
                 style={{ color: "var(--accent-text)", border: "1px solid rgba(249,115,22,0.32)", background: "rgba(249,115,22,0.08)" }}
               >
                 Read it
               </a>
               <a
-                href="/request-catalogue?utm_source=resources&utm_medium=library_row&utm_campaign=printed_copy"
+                href={`${ideaBook.requestHref}?utm_source=resources&utm_medium=library_row&utm_campaign=printed_copy`}
                 className="flex-1 whitespace-nowrap rounded-lg px-3 py-2 text-center text-xs font-semibold transition-colors sm:flex-none"
                 style={{ color: "var(--text-secondary)", border: "1px solid var(--border-color)" }}
               >

@@ -21,8 +21,10 @@ export const PRODUCT_TAXONOMY = [
     slugs: ["streetprint"],
   },
   {
-    label: "Asphalt Repair",
-    desc: "Cold-mix and permanent repair compounds for potholes, utility cuts, and surface defects.",
+    // Same family name as lib/product-categories.ts (the menu and /products):
+    // one name everywhere. Not "cold-mix": ChipFill is heat-activated.
+    label: "Asphalt & Concrete Repair",
+    desc: "Permanent repair compounds for potholes, utility cuts and surface defects, on asphalt and concrete.",
     slugs: ["chipfill", "aggrefill", "fast-patch"],
   },
 ] as const;

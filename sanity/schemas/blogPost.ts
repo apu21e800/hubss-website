@@ -15,7 +15,7 @@ import { FIELD_NOTE_TYPES } from "../../lib/field-notes-taxonomy";
  */
 export default defineType({
   name: "blogPost",
-  title: "Blog Post / Field Note",
+  title: "Insights article",
   type: "document",
   icon: EditIcon,
 
@@ -58,9 +58,9 @@ export default defineType({
       title: "Type",
       type: "string",
       group: "content",
-      description: "What kind of piece this is. It decides the badge on the post and which Field Notes hub lists it.",
+      description: "What kind of piece this is. It decides the badge on the post and which Insights hub lists it.",
       options: {
-        list: FIELD_NOTE_TYPES.map((t) => ({ title: t.label, value: t.label })),
+        list: FIELD_NOTE_TYPES.map((t) => ({ title: t.badge, value: t.label })),
         layout: "radio",
       },
       validation: (r) => r.required().warning("Pick a type, or the site guesses one from the title"),
@@ -70,7 +70,7 @@ export default defineType({
       title: "Publish date",
       type: "datetime",
       group: "content",
-      description: "The date printed on the post and used to sort Field Notes, newest first. Pressing Publish is what puts a post on the site; a date in the future does not hold it back.",
+      description: "The date printed on the post and used to sort Insights, newest first. Pressing Publish is what puts a post on the site; a date in the future does not hold it back.",
       options: { timeStep: 60 },
       validation: (r) => r.required().error("Publish date is required"),
     }),
@@ -222,7 +222,7 @@ export default defineType({
       type: "text",
       rows: 6,
       group: "content",
-      description: "Never shown on the site. The AI drafter lists here what it based the draft on and any sentence its fact check couldn't match to the HUB catalogue: check those before you publish.",
+      description: "Never shown on the site. The AI drafter lists here what it based the draft on and any sentence its fact check couldn't match to the HUB Idea Book: check those before you publish.",
     }),
     defineField({
       name: "readTime",

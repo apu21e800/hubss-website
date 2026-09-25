@@ -63,7 +63,7 @@ function buildEmailHtml(data: ContactPayload): string {
             : data.formType === "newsletter"
             ? "Newsletter Signup"
             : data.formType === "catalogue-print"
-            ? "Printed Catalogue Request"
+            ? "Printed Idea Book Request"
             : "New Contact Form Submission"
         }
       </h2>
@@ -88,7 +88,7 @@ function buildSubjectLine(data: ContactPayload): string {
     return `Newsletter Signup — ${data.email}`;
   }
   if (data.formType === "catalogue-print") {
-    return `Printed Catalogue Request — ${data.name ?? "Unknown"} @ ${data.company ?? "Unknown"}`;
+    return `Printed Idea Book Request — ${data.name ?? "Unknown"} @ ${data.company ?? "Unknown"}`;
   }
   return `Contact Form — ${data.name ?? "Unknown"} @ ${data.company ?? "Unknown"}`;
 }

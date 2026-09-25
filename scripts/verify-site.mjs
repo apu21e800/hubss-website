@@ -502,7 +502,7 @@ function checkBlogRedirectTargets() {
 async function checkUnknownSlugs404() {
   // /projects is left out on purpose: an unknown /projects/<slug> is an old
   // WordPress address and 308s to /gallery by design (next.config.ts).
-  const probes = ["/blog", "/applications", "/products", "/catalogue"]
+  const probes = ["/blog", "/applications", "/products", "/idea-book"]
     .map((r) => `${r}/zz-verify-not-a-page`);
   const bad = [];
   for (const r of probes) {

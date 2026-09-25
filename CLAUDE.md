@@ -78,10 +78,10 @@ hubss-website/
 5. Contact — form + both office locations
 
 ## Adding Content (no developer needed)
-- New blog post: Studio → Blog / Field Notes → create, then Publish. It is live
+- New article: Studio → Insights → create, then Publish. It is live
   about five minutes later (the site rebuilds to add the page); edits to live
   posts show within seconds. docs/BLOG-IN-SANITY.md
-- Blog ideas: Studio → Field Notes plan. Mark one Ready and the Tuesday AI
+- Article ideas: Studio → Insights plan. Mark one Ready and the Tuesday AI
   drafter writes it up as an unpublished draft for review (never publishes).
 - Swap hero image: replace /public/images/hero.jpg
 - Add PDF spec sheet: drop in /public/docs/, update link in products page
@@ -115,9 +115,23 @@ npm run start   # run production locally
 ## Deploy
 Vercel — connected to GitHub, auto-deploys on push to main
 
+## Names (Doug's round, 25 Sep 2026)
+- The printed book is the **Idea Book** on the site ("The HUB Idea Book ·
+  Volume 5"), never "catalogue", and no page count is printed anywhere. The
+  reader is /idea-book, the form /request-idea-book; the old /catalogue URLs
+  redirect. One source for the name: `ideaBook` in lib/catalogue.ts. Code
+  identifiers (lib/catalogue.ts, showCatalogue, /public/catalogue) keep the
+  old word on purpose.
+- The blog is **Insights** (was Field Notes). Labels only: /blog URLs, the
+  Sanity types (blogPost, storyIdea), the cron routes and env names are
+  unchanged. The "Blog" post type prints as "Article" (lib/field-notes-taxonomy.ts,
+  `badge`); its stored value stays "Blog".
+- The repair family is **Asphalt & Concrete Repair** (lib/product-categories.ts,
+  lib/product-taxonomy.ts, the three product eyebrows in lib/products.ts).
+
 ## Copy source of truth
-The 2027 print catalogue (Figma file GGxfcnIv3MozUSa8R7KtT9, page
-"Catalogue 2027") is the approved copy. Doug has signed off on the printed
+The 2027 print catalogue — the Idea Book, Volume 5 — (Figma file
+GGxfcnIv3MozUSa8R7KtT9, page "Catalogue 2027") is the approved copy. Doug has signed off on the printed
 page; where the site and the book disagree, the book wins. It is transcribed
 into lib/product-catalogue.ts (product spreads) and lib/application-catalogue.ts
 (the 17 application spreads and their SPECIFY lists), and lib/products.ts /

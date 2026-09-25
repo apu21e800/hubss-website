@@ -3,7 +3,7 @@
  * reads it (with no Sanity data) to know which /public photos to bake.
  */
 import type { MetadataRoute } from "next";
-import { catalogueReady } from "@/lib/catalogue";
+import { catalogueReady, ideaBook } from "@/lib/catalogue";
 import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
 import { projects } from "@/lib/projects";
@@ -80,9 +80,9 @@ export function buildSitemap(photos?: PhotoSources, posts: PostMeta[] = []): Met
     // prerendered, but they are 144 near-identical images of one book and
     // listing them all would drown the rest of the sitemap in them.
     ...(catalogueReady
-      ? [{ url: `${BASE_URL}/catalogue`, lastModified: new Date(), changeFrequency: "yearly" as const, priority: 0.7 }]
+      ? [{ url: `${BASE_URL}${ideaBook.href}`, lastModified: new Date(), changeFrequency: "yearly" as const, priority: 0.7 }]
       : []),
-    { url: `${BASE_URL}/request-catalogue`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.5 },
+    { url: `${BASE_URL}${ideaBook.requestHref}`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.5 },
     { url: `${BASE_URL}/about`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.6 },
     { url: `${BASE_URL}/contact`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.6 },
     { url: `${BASE_URL}/lunch-learn`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },

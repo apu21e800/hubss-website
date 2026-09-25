@@ -209,7 +209,9 @@ function unspace(line) {
 
 /** The most useful line of real text on a page, used as alt text. */
 async function pageAlt(pdf, n, total) {
-  const generic = `HUB Surface Systems catalogue, page ${n} of ${total}`;
+  // "Idea Book" is the book's name on the site (lib/catalogue.ts, ideaBook);
+  // no "of N": Doug asked for no page counts anywhere (25 Sep 2026).
+  const generic = `HUB Idea Book, page ${n}`;
   const r = await run("pdftotext", ["-f", String(n), "-l", String(n), "-nopgbrk", pdf, "-"]);
   if (r.code !== 0) return generic;
   // A text layer is not always text. Page 23 of this edition reports its
@@ -243,7 +245,7 @@ async function pageAlt(pdf, n, total) {
   // substance to it, and fall back to whatever there is.
   let head = lines.find((s) => s.length >= 12) ?? lines[0];
   if (head.length > 90) head = head.slice(0, 87).replace(/\s+\S*$/, "") + "...";
-  return `${head} - catalogue page ${n} of ${total}`;
+  return `${head} - Idea Book, page ${n}`;
 }
 
 async function renderPage(pdf, n, dpi, outDir, tmpDir) {
@@ -379,7 +381,7 @@ async function main() {
   for (let n = 1; n <= total; n++) {
     pages.push({ n, alt: await pageAlt(pdf, n, total) });
   }
-  const withText = pages.filter((p) => !/^HUB Surface Systems catalogue, page/.test(p.alt)).length;
+  const withText = pages.filter((p) => !/^HUB Idea Book, page/.test(p.alt)).length;
   log(`  ${withText}/${total} pages carry a text layer`);
 
   // The download is the printer's own web-optimised export when it is sitting

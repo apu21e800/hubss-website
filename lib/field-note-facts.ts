@@ -24,7 +24,7 @@ const SITE = "https://hubss.com";
  */
 export const COMPANY_FACTS = [
   "HUB Surface Systems is a Canadian leader in decorative and functional pavement solutions: stamped asphalt, preformed thermoplastics and specialty coatings, for municipalities, developers and contractors across Canada.",
-  "Canadian-owned since 1999. The 2027 catalogue: 27 years, 1,000+ projects, coast to coast.",
+  "Canadian-owned since 1999. The HUB Idea Book (Volume 5, the 2026-27 print edition; the site never calls it a catalogue): 27 years, 1,000+ projects, coast to coast.",
   "StreetPrint, HUB's stamped asphalt system, is a Canadian invention installed since 1992. (Over 30 years is true of StreetPrint, never of the company.)",
   "Two regional offices: Milton, Ontario (East) and Ladysmith, British Columbia (West).",
   `Spec sheets and product documents are on ${SITE}/resources. HUB runs Lunch & Learn sessions for design teams: ${SITE}/lunch-learn. Enquiries: ${SITE}/contact.`,
@@ -38,11 +38,11 @@ export function productFacts(slug: string): string | null {
   if (!p) return null;
   const c = PRODUCT_CATALOGUE[slug];
   const lines = [`### ${p.name} (page: ${SITE}/products/${slug})`];
-  if (SYSTEMS_INDEX[slug]) lines.push(`Catalogue index line: ${SYSTEMS_INDEX[slug]}`);
+  if (SYSTEMS_INDEX[slug]) lines.push(`Idea Book index line: ${SYSTEMS_INDEX[slug]}`);
   if (c) {
-    lines.push(`Catalogue, page ${c.page}: "${c.title}" ${c.subhead} ${c.description}`);
-    lines.push(`Catalogue specs: ${c.specs.map((s) => `${s.label}: ${s.value}`).join("; ")}`);
-    lines.push(`Where it goes (catalogue): ${c.uses.join(", ")}`);
+    lines.push(`Idea Book, page ${c.page}: "${c.title}" ${c.subhead} ${c.description}`);
+    lines.push(`Idea Book specs: ${c.specs.map((s) => `${s.label}: ${s.value}`).join("; ")}`);
+    lines.push(`Where it goes (Idea Book): ${c.uses.join(", ")}`);
     if (c.alsoNeed) lines.push(`${c.alsoNeed.heading}: ${c.alsoNeed.items.join(", ")}`);
   }
   lines.push(`Website summary: ${plain(p.shortDesc)}`);
@@ -57,10 +57,10 @@ export function applicationFacts(slug: string): string | null {
   const c = APPLICATION_CATALOGUE[slug];
   const lines = [`### ${a.name} (page: ${SITE}/applications/${slug})`];
   if (c) {
-    lines.push(`Catalogue, page ${c.page}: "${c.title}" ${c.statement} ${c.body}`);
+    lines.push(`Idea Book, page ${c.page}: "${c.title}" ${c.statement} ${c.body}`);
     if (c.specify.length) {
       const names = (s: string) => products.find((p) => p.slug === s)?.name ?? s;
-      lines.push(`Catalogue "Specify": ${c.specify.map((s) => `${names(s.slug)}: ${s.note}`).join("; ")}`);
+      lines.push(`Idea Book "Specify": ${c.specify.map((s) => `${names(s.slug)}: ${s.note}`).join("; ")}`);
     }
   }
   lines.push(`Website summary: ${plain(a.shortDesc)}`);
@@ -86,9 +86,9 @@ export function factsBlock(opts: { productSlugs: string[]; applicationSlugs: str
     COMPANY_FACTS.map((f) => `- ${f}`).join("\n"),
   ];
   const prods = opts.productSlugs.map(productFacts).filter(Boolean) as string[];
-  if (prods.length) sections.push("## Systems (from the approved 2026-27 catalogue and the website)", prods.join("\n\n"));
+  if (prods.length) sections.push("## Systems (from the approved 2026-27 Idea Book and the website)", prods.join("\n\n"));
   const apps = opts.applicationSlugs.map(applicationFacts).filter(Boolean) as string[];
-  if (apps.length) sections.push("## Applications (from the approved catalogue and the website)", apps.join("\n\n"));
+  if (apps.length) sections.push("## Applications (from the approved Idea Book and the website)", apps.join("\n\n"));
   if (opts.brief?.trim()) sections.push("## From HUB's editor (the brief; treat as true)", opts.brief.trim());
   return sections.join("\n\n");
 }

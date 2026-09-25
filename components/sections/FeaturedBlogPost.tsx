@@ -1,6 +1,7 @@
 import Link from "next/link";
 import PhotoImage from "@/components/ui/PhotoImage";
 import { getAllPosts } from "@/lib/blog";
+import { badgeFor } from "@/lib/field-notes-taxonomy";
 
 // Fallback images from confirmed project paths in lib/projects.ts
 const FALLBACK_IMAGES = [
@@ -33,7 +34,8 @@ export default async function FeaturedBlogPost() {
 
   return (
     <section
-      /* Field Notes — reading */
+      /* Insights — reading. The id stays "field-notes": the homepage hero's
+         first button points at it, and that href lives in Sanity (page-homepage). */
       data-surface="paper" id="field-notes" className="py-28 lg:py-32" style={{ background: "var(--bg-section-asphalt)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -41,7 +43,7 @@ export default async function FeaturedBlogPost() {
         <div className="flex items-end justify-between mb-14">
           <div>
             <p className="gradient-text text-xs font-semibold tracking-[0.2em] uppercase mb-3">
-              Field Notes
+              Insights
             </p>
             <h2
               className="font-black"
@@ -124,7 +126,7 @@ export default async function FeaturedBlogPost() {
                     color: "var(--accent-text-lg)",
                   }}
                 >
-                  {hero.category}
+                  {badgeFor(hero.category)}
                 </span>
                 {hero.readTime && (
                   <span className="text-xs" style={{ color: "var(--text-muted)" }}>
@@ -217,7 +219,7 @@ export default async function FeaturedBlogPost() {
                       className="text-[10px] font-bold tracking-widest uppercase mb-3"
                       style={{ color: "var(--accent-text-lg)" }}
                     >
-                      {post.category}
+                      {badgeFor(post.category)}
                     </span>
                     <h4
                       className="text-base font-bold leading-snug mb-3 group-hover:text-orange-100 transition-colors line-clamp-2"
@@ -243,7 +245,7 @@ export default async function FeaturedBlogPost() {
             className="text-sm font-semibold px-6 py-3 rounded-lg inline-block border transition-all hover:border-orange-500/40 hover:text-[var(--text-primary)]"
             style={{ borderColor: "var(--border-color)", color: "var(--text-secondary)" }}
           >
-            All Field Notes
+            All Insights
           </Link>
         </div>
 

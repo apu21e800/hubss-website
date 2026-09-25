@@ -18,7 +18,7 @@ export interface SocialCopy {
   short: string;
 }
 
-const SYSTEM = `You write social posts for HUB Surface Systems, a Canadian decorative and functional pavement company, to bring readers to a new Field Notes article on hubss.com.
+const SYSTEM = `You write social posts for HUB Surface Systems, a Canadian decorative and functional pavement company, to bring readers to a new Insights article on hubss.com.
 
 VOICE: relaxed, professional, leaders in the field. Confident and plain, never salesy. Canadian English. No hype words, no clickbait, no ALL CAPS. At most one emoji, and only on Facebook or Instagram.
 

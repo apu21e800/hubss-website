@@ -34,7 +34,7 @@
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { cataloguePageSrcSet, cataloguePageUrl, type CatalogueDownload } from "@/lib/catalogue";
+import { cataloguePageSrcSet, cataloguePageUrl, ideaBook, type CatalogueDownload } from "@/lib/catalogue";
 import type { CataloguePage } from "@/lib/catalogue-pages";
 
 // Loaded only when someone asks for the book, so the reader's bundle stays
@@ -181,7 +181,7 @@ export default function CatalogueViewer({
       setView({ s: 1, x: 0, y: 0 });
       const first = views[n]?.[0] ?? 1;
       if (typeof window !== "undefined") {
-        const url = first === 1 ? "/catalogue" : `/catalogue/${first}`;
+        const url = first === 1 ? ideaBook.href : `${ideaBook.href}/${first}`;
         window.history.replaceState(null, "", url + window.location.search);
       }
     },
@@ -493,11 +493,11 @@ export default function CatalogueViewer({
   }, [vi, views.length]);
 
   const onShare = async () => {
-    const url = typeof window !== "undefined" ? window.location.href : "https://hubss.com/catalogue";
+    const url = typeof window !== "undefined" ? window.location.href : `https://hubss.com${ideaBook.href}`;
     try {
       await navigator.share({
-        title: `HUB Surface Systems Catalogue ${edition}`,
-        text: "Decorative Pavement Solutions - the HUB Surface Systems catalogue.",
+        title: ideaBook.title,
+        text: "Decorative Pavement Solutions - the HUB Surface Systems Idea Book.",
         url,
       });
     } catch {
@@ -578,7 +578,7 @@ export default function CatalogueViewer({
                         src={cataloguePageUrl(n, widths[0])}
                         srcSet={cataloguePageSrcSet(n)}
                         sizes={sizesFor(active)}
-                        alt={pages[n - 1]?.alt ?? `Catalogue page ${n} of ${total}`}
+                        alt={pages[n - 1]?.alt ?? `${ideaBook.short}, page ${n}`}
                         width={maxWidth}
                         height={Math.round(maxWidth / aspect)}
                         draggable={false}
@@ -621,7 +621,7 @@ export default function CatalogueViewer({
             href={exitHref}
             className="inline-flex flex-shrink-0 items-center gap-2 rounded-full px-2.5 py-2 text-[11px] font-semibold uppercase tracking-[0.16em] transition-colors hover:bg-white/10"
             style={{ color: "rgba(255,255,255,0.78)" }}
-            aria-label="Close the catalogue"
+            aria-label="Close the Idea Book"
           >
             <CloseIcon />
             <span className="hidden sm:inline">Close</span>
@@ -629,7 +629,7 @@ export default function CatalogueViewer({
 
           <div className="min-w-0 flex-1 text-center">
             <p className="truncate text-[10px] font-bold uppercase tracking-[0.22em]" style={{ color: "#fb923c" }}>
-              Catalogue {edition}
+              {ideaBook.short} · {ideaBook.volume}
             </p>
             <p className="truncate text-[11px] tabular-nums" style={{ color: "rgba(255,255,255,0.58)" }} aria-live="polite">
               {label}
@@ -781,20 +781,20 @@ export default function CatalogueViewer({
           <div
             role="dialog"
             aria-modal="true"
-            aria-label="Request a printed catalogue"
+            aria-label="Request a printed copy of the Idea Book"
             className="mx-auto my-8 w-[min(680px,calc(100vw-2rem))] rounded-2xl p-6 sm:p-8"
             style={{ background: "var(--bg-primary)", border: "1px solid var(--border-color)" }}
           >
             <div className="mb-5 flex items-start justify-between gap-4">
               <div>
                 <p className="text-[11px] font-bold uppercase tracking-[0.22em]" style={{ color: "var(--accent-text)" }}>
-                  Catalogue {edition}
+                  {ideaBook.short} · {ideaBook.volume} · {edition}
                 </p>
                 <h2 className="mt-1.5 text-xl font-bold sm:text-2xl" style={{ color: "var(--text-primary)" }}>
                   Have the printed book mailed to you
                 </h2>
                 <p className="mt-1.5 text-sm" style={{ color: "var(--text-secondary)" }}>
-                  {total} pages, perfect bound, with the material samples that go with it.
+                  Perfect bound, with the material samples that go with it.
                 </p>
               </div>
               <button
@@ -886,7 +886,7 @@ function Actions({
         <span className={stretch ? "" : "hidden sm:inline"}>Request a copy</span>
       </a>
       {download && (
-        <a href={download.href} download className={btnGhost} title={`Download the PDF (${download.label})`} aria-label={`Download the PDF, ${download.label}`}>
+        <a href={download.href} download={ideaBook.fileName} className={btnGhost} title={`Download the PDF (${download.label})`} aria-label={`Download the PDF, ${download.label}`}>
           <DownloadIcon />
           <span className="hidden md:inline">PDF</span>
         </a>

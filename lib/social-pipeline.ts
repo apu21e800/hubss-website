@@ -40,7 +40,9 @@ const SERVICES: Record<string, { copy: keyof SocialCopy; utm: string; image?: "p
 };
 
 const utmLink = (slug: string, source: string) =>
-  `https://hubss.com/blog/${slug}?utm_source=${source}&utm_medium=social&utm_campaign=field-notes&utm_content=${encodeURIComponent(slug)}`;
+  // utm_campaign was "field-notes" until 25 Sep 2026; renamed with the site's
+  // Insights label before the first post went out, so GA4 has one campaign.
+  `https://hubss.com/blog/${slug}?utm_source=${source}&utm_medium=social&utm_campaign=insights&utm_content=${encodeURIComponent(slug)}`;
 
 /** Instagram wants 4:5 portrait; everything else gets the 1200×630 share crop. */
 function imageFor(src: string | undefined, shape: "portrait" | "landscape" | undefined): string | undefined {
@@ -130,7 +132,7 @@ async function notify(r: SocialResult) {
   const to = (process.env.BLOG_DRAFT_NOTIFY ?? "").split(",").map((s) => s.trim()).filter(Boolean);
   if (!to.length || !process.env.RESEND_API_KEY) return;
   const text = [
-    `Social drafts for the new Field Note "${r.title}" are waiting in Buffer. Nothing posts until you approve and schedule them.`,
+    `Social drafts for the new Insights article "${r.title}" are waiting in Buffer. Nothing posts until you approve and schedule them.`,
     "",
     r.drafted.length ? `Drafted: ${channelList(r.drafted)}` : "Nothing was drafted.",
     ...(r.skipped.length ? ["", "Skipped:", ...r.skipped.map((s) => `- ${s.channel} (${s.service}): ${s.why}`)] : []),

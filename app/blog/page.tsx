@@ -10,7 +10,7 @@ import { FIELD_NOTE_TYPES } from "@/lib/field-notes-taxonomy";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Field Notes — Case Studies, Guides & Pavement White Papers",
+  title: "Insights — Case Studies, Guides & Pavement White Papers",
   description:
     "Canadian decorative pavement documented: project case studies, specification guides, white papers, and field records on crosswalks, transit lanes, and stamped asphalt.",
   slug: "blog",
@@ -45,7 +45,7 @@ export default async function BlogPage() {
     "@context": "https://schema.org",
     "@type": "Blog",
     "@id": "https://hubss.com/blog#blog",
-    name: "HUB Surface Systems Field Notes",
+    name: "HUB Surface Systems Insights",
     description:
       "Case studies, specification guides, project profiles, and white papers on decorative pavement, thermoplastic markings, and coloured coatings in Canada.",
     url: "https://hubss.com/blog",
@@ -67,7 +67,7 @@ export default async function BlogPage() {
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: "https://hubss.com" },
-      { "@type": "ListItem", position: 2, name: "Field Notes", item: "https://hubss.com/blog" },
+      { "@type": "ListItem", position: 2, name: "Insights", item: "https://hubss.com/blog" },
     ],
   };
 
@@ -77,7 +77,7 @@ export default async function BlogPage() {
       <JsonLd data={breadcrumbSchema} />
       <Nav />
 
-      {/* Field Notes reads as a magazine — paper all the way down to the Lunch &
+      {/* Insights reads as a magazine — paper all the way down to the Lunch &
               Learn band, which keeps the shell (Vern, 21 Sep). */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-24 sm:pt-32 pb-16 sm:pb-24">
         {/* Header — deliberately compact. The library is 67 pieces deep and the
@@ -85,7 +85,7 @@ export default async function BlogPage() {
             gives up height to let the first row of cards reach the fold. */}
         <div className="mb-7">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-2.5" style={{ color: "var(--accent-text-lg)" }}>
-            Field Notes
+            Insights
           </p>
           <h1
             className="font-black mb-3"
@@ -97,7 +97,7 @@ export default async function BlogPage() {
               maxWidth: "20ch",
             }}
           >
-            Field Notes from the Front Lines of Canadian Pavement
+            Insights from the Front Lines of Canadian Pavement
           </h1>
           <p className="text-base" style={{ color: "var(--text-secondary)", maxWidth: "62ch" }}>
             {posts.length} documented pieces on decorative pavement in Canada — the projects,

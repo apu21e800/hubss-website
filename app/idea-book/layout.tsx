@@ -9,7 +9,7 @@
  * near-black text on a black stage.
  */
 import type { Metadata } from "next";
-import { catalogue, catalogueReady, catalogueTotal, cataloguePageUrl } from "@/lib/catalogue";
+import { catalogue, catalogueReady, cataloguePageUrl, ideaBook } from "@/lib/catalogue";
 import { showCatalogue } from "@/lib/feature-flags";
 
 export function generateMetadata(): Metadata {
@@ -20,19 +20,19 @@ export function generateMetadata(): Metadata {
   const big = catalogue.widths[catalogue.widths.length - 1];
   const cover = cataloguePageUrl(1, big);
   const edition = catalogue.edition ?? "";
-  // Page count comes from the manifest. The old copy here said "116 pages"
-  // while the folder it pointed at held 140 and the book has 144.
-  const description = `Read the HUB Surface Systems catalogue in your browser - ${catalogueTotal} pages of decorative pavement systems, applications and specifications for Canadian municipalities, developers and contractors.`;
+  // No page count here, by Doug's ask (25 Sep 2026): the book is named, not
+  // measured. (The old copy said "116 pages" for a 144-page book anyway.)
+  const description = `Read ${ideaBook.title} in your browser: HUB Surface Systems' decorative pavement systems, applications and specifications for Canadian municipalities, developers and contractors. ${edition} edition.`;
   return {
     // `absolute`, not a bare string: the root layout defines a
     // "%s | HUB Surface Systems" template, and a layout title goes through it.
-    title: { absolute: `Catalogue ${edition} | HUB Surface Systems` },
+    title: { absolute: `${ideaBook.title} | HUB Surface Systems` },
     description,
-    alternates: { canonical: "https://hubss.com/catalogue" },
+    alternates: { canonical: `https://hubss.com${ideaBook.href}` },
     openGraph: {
-      title: `HUB Surface Systems Catalogue ${edition}`,
+      title: ideaBook.title,
       description,
-      url: "https://hubss.com/catalogue",
+      url: `https://hubss.com${ideaBook.href}`,
       images: [{ url: `https://hubss.com${cover}`, width: big, height: Math.round(big / catalogue.aspect) }],
     },
   };

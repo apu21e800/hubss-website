@@ -53,7 +53,9 @@ const QUICK: { label: string; href: string; hint: string }[] = [
   { label: "All applications", href: "/applications", hint: "20 uses" },
   { label: "Photo archive", href: "/gallery", hint: "Installations" },
   { label: "Specification library", href: "/resources", hint: "Spec sheets" },
-  { label: "Field Notes", href: "/blog", hint: "67 pieces" },
+  // No count in the hint: it said "67 pieces" against a 74-post library, and
+  // Doug asked for fewer numbers on the site anyway.
+  { label: "Insights", href: "/blog", hint: "Case studies, guides, white papers" },
   { label: "Lunch & Learn", href: "/lunch-learn", hint: "Book a session" },
 ];
 
@@ -245,7 +247,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
             aria-autocomplete="list"
             aria-label="Search the site"
             aria-controls="search-results"
-            placeholder="Search systems, applications, specs, field notes…"
+            placeholder="Search systems, applications, specs, insights…"
             className="flex-1 bg-transparent outline-none"
             style={{
               color: "var(--text-primary)",

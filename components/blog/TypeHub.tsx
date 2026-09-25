@@ -36,11 +36,11 @@ export default async function TypeHub({ type }: { type: FieldNoteTypeMeta }) {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     "@id": `${hubUrl}#collection`,
-    name: `${type.plural} — HUB Surface Systems Field Notes`,
+    name: `${type.plural} — HUB Surface Systems Insights`,
     description: type.blurb,
     url: hubUrl,
     inLanguage: "en-CA",
-    isPartOf: { "@type": "Blog", "@id": "https://hubss.com/blog#blog", name: "HUB Surface Systems Field Notes" },
+    isPartOf: { "@type": "Blog", "@id": "https://hubss.com/blog#blog", name: "HUB Surface Systems Insights" },
     about: lanes.map((l) => ({ "@type": "Thing", name: l })),
     publisher: { "@id": "https://hubss.com/#organization" },
     mainEntity: {
@@ -60,7 +60,7 @@ export default async function TypeHub({ type }: { type: FieldNoteTypeMeta }) {
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: "https://hubss.com" },
-      { "@type": "ListItem", position: 2, name: "Field Notes", item: "https://hubss.com/blog" },
+      { "@type": "ListItem", position: 2, name: "Insights", item: "https://hubss.com/blog" },
       { "@type": "ListItem", position: 3, name: type.plural, item: hubUrl },
     ],
   };
@@ -77,7 +77,7 @@ export default async function TypeHub({ type }: { type: FieldNoteTypeMeta }) {
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-2 text-[12px]">
           <Link href="/blog" className="inline-flex items-center transition-colors hover:text-[var(--accent-text)]" style={{ color: "var(--ink-50)", minHeight: 40 }}>
-            Field Notes
+            Insights
           </Link>
           <span style={{ color: "var(--ink-25)" }}>/</span>
           <span style={{ color: "var(--text-primary)" }}>{type.plural}</span>
@@ -89,7 +89,7 @@ export default async function TypeHub({ type }: { type: FieldNoteTypeMeta }) {
             className="inline-block text-[10px] font-bold px-2.5 py-1 rounded uppercase tracking-[0.18em] mb-4"
             style={{ background: type.tint, color: type.text, border: `1px solid ${type.border}` }}
           >
-            {posts.length} {posts.length === 1 ? type.label : type.plural}
+            {posts.length} {posts.length === 1 ? type.badge : type.plural}
           </span>
           <h1
             className="font-black mb-4"
@@ -150,7 +150,7 @@ export default async function TypeHub({ type }: { type: FieldNoteTypeMeta }) {
                 className="self-start text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-[0.18em] mb-3"
                 style={{ background: type.tint, color: type.text, border: `1px solid ${type.border}` }}
               >
-                Latest {type.label}
+                Latest {type.badge}
               </span>
               <h2
                 className="font-black mb-2 max-w-3xl"
@@ -195,7 +195,7 @@ export default async function TypeHub({ type }: { type: FieldNoteTypeMeta }) {
       <div style={{ background: "var(--bg-section-asphalt)", borderTop: "1px solid var(--ink-06)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
           <p className="text-[11px] font-bold tracking-[0.2em] uppercase mb-5" style={{ color: "var(--accent-text)" }}>
-            Also in Field Notes
+            Also in Insights
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {others.map((t) => {
@@ -209,7 +209,7 @@ export default async function TypeHub({ type }: { type: FieldNoteTypeMeta }) {
                   style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--border-color)" }}
                 >
                   <span className="text-[10px] font-bold uppercase tracking-[0.16em] mb-1.5" style={{ color: t.text }}>
-                    {n} {n === 1 ? t.label : t.plural}
+                    {n} {n === 1 ? t.badge : t.plural}
                   </span>
                   <span className="text-[13px] leading-snug" style={{ color: "var(--ink-68)" }}>
                     {t.blurb}

@@ -50,7 +50,7 @@ export default defineType({
       title: "Eyebrow label",
       type: "string",
       group: "content",
-      description: "Short category label shown above the product name (e.g. 'Concrete and Asphalt Repair', 'Thermoplastic Pavement Marking').",
+      description: "Short category label shown above the product name (e.g. 'Asphalt & Concrete Repair', 'Thermoplastic Pavement Marking').",
     }),
     defineField({
       name: "shortDesc",

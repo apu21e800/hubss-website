@@ -3,7 +3,7 @@
 /**
  * Request a printed catalogue.
  *
- * Used twice from one definition: as the body of /request-catalogue, and as an
+ * Used twice from one definition: as the body of /request-idea-book, and as an
  * overlay inside the reader so nobody has to leave page 78 to ask for the book.
  *
  * Submissions go to /api/contact with formType "catalogue-print", which gives
@@ -190,7 +190,7 @@ export default function PrintedCopyForm({ compact = false }: { compact?: boolean
       </button>
 
       <p className="text-xs" style={{ color: "var(--text-hint)" }}>
-        Canadian addresses only. We use this to mail the catalogue and to follow up once - nothing else.
+        Canadian addresses only. We use this to mail the Idea Book and to follow up once - nothing else.
       </p>
     </form>
   );

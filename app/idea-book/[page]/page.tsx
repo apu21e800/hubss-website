@@ -1,5 +1,5 @@
 /**
- * /catalogue/12 - a real, shareable, prerendered route per page.
+ * /idea-book/12 - a real, shareable, prerendered route per page.
  *
  * All 144 are generated at build time, so a shared link opens on the right page
  * with no client round-trip and no flash of page one. Turning pages inside the
@@ -9,7 +9,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import CatalogueViewer from "../CatalogueViewer";
-import { catalogue, catalogueReady, catalogueTotal, cataloguePageUrl, normalisePage } from "@/lib/catalogue";
+import { catalogue, catalogueReady, catalogueTotal, cataloguePageUrl, ideaBook, normalisePage } from "@/lib/catalogue";
 import { cataloguePages } from "@/lib/catalogue-pages";
 import { showCatalogue } from "@/lib/feature-flags";
 import { EXIT_HREF, LUNCH_LEARN_HREF, REQUEST_HREF } from "../links";
@@ -18,7 +18,7 @@ export const dynamicParams = false;
 
 export function generateStaticParams() {
   if (!catalogueReady) return [];
-  // Page one lives at /catalogue; a duplicate route for it would split the
+  // Page one lives at /idea-book; a duplicate route for it would split the
   // signal between two URLs for the same content.
   return cataloguePages.slice(1).map((p) => ({ page: String(p.n) }));
 }
@@ -30,13 +30,13 @@ export async function generateMetadata({ params }: { params: Promise<{ page: str
   const alt = cataloguePages[n - 1]?.alt ?? "";
   const big = catalogue.widths[catalogue.widths.length - 1];
   return {
-    title: { absolute: `Catalogue ${catalogue.edition}, page ${n} | HUB Surface Systems` },
+    title: { absolute: `${ideaBook.title}, page ${n} | HUB Surface Systems` },
     description: alt,
-    alternates: { canonical: `https://hubss.com/catalogue/${n}` },
+    alternates: { canonical: `https://hubss.com${ideaBook.href}/${n}` },
     openGraph: {
-      title: `HUB Surface Systems Catalogue ${catalogue.edition} - page ${n}`,
+      title: `${ideaBook.title} - page ${n}`,
       description: alt,
-      url: `https://hubss.com/catalogue/${n}`,
+      url: `https://hubss.com${ideaBook.href}/${n}`,
       images: [{ url: `https://hubss.com${cataloguePageUrl(n, big)}`, width: big, height: Math.round(big / catalogue.aspect) }],
     },
   };

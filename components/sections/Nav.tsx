@@ -7,8 +7,7 @@ import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { products } from "@/lib/products";
-import { catalogue, catalogueLabel, catalogueTotal } from "@/lib/catalogue";
-import { showCatalogue } from "@/lib/feature-flags";
+import { ideaBook } from "@/lib/catalogue";
 import { applications } from "@/lib/applications";
 import { PRODUCT_CATEGORIES } from "@/lib/product-categories";
 import { CHROME_MARKS } from "@/lib/chrome-images.mjs";
@@ -45,25 +44,9 @@ const PLAIN_LINKS = [
   { label: "Contact", href: "/contact" },
 ];
 
-// ── Search data ────────────────────────────────────────────────────
-const PAGES = [
-  { label: "Field Notes", href: "/blog", desc: "Field notes and industry insights" },
-  { label: "About", href: "/about", desc: "Our story and team" },
-  { label: "Contact", href: "/contact", desc: "Get in touch with our team" },
-  { label: "Resources", href: "/resources", desc: "Spec sheets, SDS, install guides" },
-  { label: "Lunch & Learn", href: "/lunch-learn", desc: "Book a free product presentation" },
-  { label: "Gallery", href: "/gallery", desc: "Photo archive of our installations" },
-  { label: "Pattern Library", href: "/patterns", desc: "StreetPrint stamping templates — herringbone, brick, cobble, ashlar, borders" },
-];
-
-const CATEGORIES = [
-  { label: "Preformed Thermoplastics", href: "/products", desc: "TrafficPatternsXD, TrafficPatterns, PreMark, DuraTherm, DecoMark, AirMark" },
-  { label: "Coatings", href: "/products", desc: "StreetBond, StreetBondSR, MMAX, DuraShield — coloured pavement coatings" },
-  { label: "Stamped Asphalt & Concrete", href: "/products", desc: "StreetPrint — in-place decorative stamped asphalt" },
-  { label: "Asphalt Repair", href: "/products", desc: "ChipFill, AggreFill, Fast Patch — permanent cold-mix pothole repair" },
-];
-
-// ── Search overlay ───────────────────────────────────────────────
+// The search palette's data lives in lib/search.ts. A stale copy of it used
+// to sit here, unread, and was the last place on the site still calling the
+// repair family "cold-mix" (ChipFill is heat-activated) — gone, 25 Sep 2026.
 
 // ── Product category data ────────────────────────────────────────────
 // PRODUCT_CATEGORIES lives in lib/product-categories.ts, shared with the
@@ -118,7 +101,7 @@ const APPLICATION_GROUPS = [
   },
 ];
 
-// ── Curated Field Notes for mega menu ────────────────────────────────────
+// ── Curated Insights articles for the mega menu ──────────────────────────
 // FEATURED_POSTS lives in lib/nav-featured-posts.mjs — swap posts there. The
 // image baker reads the same list, so a swapped post gets its thumbnails.
 
@@ -182,20 +165,22 @@ function LLMenuCard() {
 const ACCENT = "var(--accent-text)";  // small-text accent (WCAG-safe on dark surfaces)
 const BRAND  = "#F97316";  // brand orange — reserved for larger / button use
 
-// ── Menu footer strip — editorial + promotion for the directory menus ────
-// The Field Notes takeover carries the latest stories and a PROMOTED slot;
-// the two directory dropdowns now carry the same band along their floor:
-// the newest field note on the left, the house promotion on the right.
-// One component so the twins cannot drift. The post is FEATURED_POSTS[0] —
-// the same curated "most recent" the Field Notes cover leads with; swap the
-// list to change both surfaces at once. PROMOTED stays house inventory
-// (the current catalogue — a real page), honestly labelled. Its name comes
-// from lib/catalogue-manifest.json, so an edition bump renames it everywhere.
+// ── Menu footer strip — the newest article, for the directory menus ─────
+// The two directory dropdowns carry one band along their floor: the newest
+// Insights article. One component so the twins cannot drift. The post is
+// FEATURED_POSTS[0] — the same curated "most recent" the Insights cover
+// leads with; swap the list to change both surfaces at once.
+//
+// Until 25 Sep 2026 the band also carried a PROMOTED card for the Idea Book,
+// as did the Insights rail and the phone drawer. Doug asked for the menus to
+// carry no Idea Book promotion at all; the book has one call to action, on
+// the homepage, and quiet links from /products, Resources and the phone
+// drawer's plain list.
 function MenuFooterStrip() {
   const latest = FEATURED_POSTS[0];
   return (
     <div
-      className="mt-9 pt-6 grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-10"
+      className="mt-9 pt-6"
       style={{ borderTop: "1px solid var(--ink-08)" }}
     >
       <Link
@@ -213,54 +198,13 @@ function MenuFooterStrip() {
         </div>
         <div className="min-w-0">
           <p className="text-[10px] font-bold tracking-[0.18em] uppercase mb-1" style={{ color: ACCENT }}>
-            From the field notes
+            Latest from Insights
           </p>
           <p className="text-[14px] font-semibold leading-snug line-clamp-2 group-hover:text-[var(--accent-text)] transition-colors" style={{ color: "var(--text-primary)" }}>
             {latest.title}
           </p>
         </div>
       </Link>
-
-      {showCatalogue() && (
-        <Link
-          href="/catalogue"
-          className="group flex items-center gap-4 rounded-xl px-4 py-2.5 transition-colors hover:bg-[var(--ink-05)]"
-          style={{
-            background: "linear-gradient(135deg, rgba(249,115,22,0.10) 0%, var(--ink-02) 100%)",
-            border: "1px solid rgba(249,115,22,0.35)",
-          }}
-        >
-          {catalogue.coverThumb && (
-            /* A picture of the actual book. The panel promoted a catalogue
-               without ever showing one. Plain <img>: the catalogue's rasters
-               never route through /_next/image. */
-            <img
-              src={catalogue.coverThumb}
-              alt=""
-              width={240}
-              height={240}
-              loading="lazy"
-              className="h-12 w-12 flex-shrink-0 rounded-md object-cover"
-              style={{ border: "1px solid rgba(249,115,22,0.30)" }}
-            />
-          )}
-          {/* flex-1: the text sits beside the cover and the arrow goes to the
-              far edge. It was justify-between on the card, which spread the
-              three pieces out and left the text floating mid-card. */}
-          <div className="min-w-0 flex-1">
-            <p className="text-[9px] font-bold tracking-[0.2em] uppercase mb-1" style={{ color: "var(--ink-45)" }}>
-              Promoted
-            </p>
-            <p className="text-[14px] font-bold" style={{ color: "var(--text-primary)" }}>The {catalogueLabel} Catalogue</p>
-            <p className="text-[12px] mt-0.5 truncate" style={{ color: "var(--ink-62)" }}>
-              {catalogueTotal} pages — read it in your browser.
-            </p>
-          </div>
-          <svg width="13" height="13" fill="none" stroke={ACCENT} viewBox="0 0 24 24" className="flex-shrink-0 transition-transform group-hover:translate-x-0.5">
-            <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </Link>
-      )}
     </div>
   );
 }
@@ -378,17 +322,16 @@ function ProductsMegaMenu() {
   );
 }
 
-// ── Field Notes mega menu — the cinematic one ────────────────────────
+// ── Insights mega menu — the cinematic one ───────────────────────────
 // Products and Applications are directories and behave like twins: same
-// grammar, same 420px floor. Field Notes is the editorial surface, and per
-// Vern it goes the other way entirely: a full-bleed magazine cover, not a
-// panel of columns. The featured story's photograph runs edge to edge under
-// a scrim; the masthead and cover line sit on the image like a title page;
-// the right rail is a glass surface carrying the latest three, the type
-// index, one PROMOTED house slot (the current catalogue — a real
-// destination, never a fake advertiser), and the standing Lunch & Learn
-// card. Same 10px letterspaced ACCENT labels and hairline rules as its
-// siblings — the outlier in structure stays in the family by grammar.
+// grammar, same 420px floor. Insights (Field Notes until 25 Sep 2026) is the
+// editorial surface, and per Vern it goes the other way entirely: a
+// full-bleed magazine cover, not a panel of columns. The featured story's
+// photograph runs edge to edge under a scrim; the masthead and cover line sit
+// on the image like a title page; the right rail is a glass surface carrying
+// the latest three, the type index and the standing Lunch & Learn card.
+// Same 10px letterspaced ACCENT labels and hairline rules as its siblings —
+// the outlier in structure stays in the family by grammar.
 function FieldNotesMegaMenu() {
   const [featured, ...rest] = FEATURED_POSTS;
 
@@ -418,7 +361,7 @@ function FieldNotesMegaMenu() {
             {/* Masthead */}
             <div>
               <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-2" style={{ color: ACCENT }}>
-                Field Notes
+                Insights
               </p>
               <p className="text-lg font-bold leading-tight" style={{ color: "var(--text-primary)" }}>
                 What we learn from the road.
@@ -429,7 +372,7 @@ function FieldNotesMegaMenu() {
                 className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold border border-[var(--ink-20)] bg-black/25 backdrop-blur-sm hover:border-orange-400/60 hover:text-[var(--accent-text)] transition-colors"
                 style={{ color: "var(--text-primary)" }}
               >
-                Browse all field notes
+                Browse all Insights
                 <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
               </Link>
             </div>
@@ -451,7 +394,7 @@ function FieldNotesMegaMenu() {
                 {featured.title}
               </span>
               <span className="mt-3 flex items-center gap-2 text-sm font-semibold" style={{ color: ACCENT }}>
-                Read field note
+                Read the article
                 <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" className="transition-transform group-hover:translate-x-1"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" /></svg>
               </span>
             </Link>
@@ -514,7 +457,7 @@ function FieldNotesMegaMenu() {
                   { label: "Project Profiles", href: "/blog/project-profiles" },
                   { label: "Guides", href: "/blog/guides" },
                   { label: "White Papers", href: "/blog/white-papers" },
-                  { label: "Posts", href: "/blog/posts" },
+                  { label: "Articles", href: "/blog/posts" },
                 ].map((t) => (
                   <Link
                     key={t.href}
@@ -528,52 +471,7 @@ function FieldNotesMegaMenu() {
               </div>
             </div>
 
-            {/* The advertisement slot — a designed space, honestly labelled.
-                House promotions only: tonight it runs the current
-                catalogue, a real page (/catalogue). If a partner placement ever lands
-                here, the PROMOTED label is already telling the truth. */}
-            {showCatalogue() && (
-              <Link
-                href="/catalogue"
-                className="group block mt-auto rounded-xl px-4 py-3.5 transition-colors hover:bg-[var(--ink-05)]"
-                style={{
-                  background: "linear-gradient(135deg, rgba(249,115,22,0.10) 0%, var(--ink-02) 100%)",
-                  border: "1px solid rgba(249,115,22,0.35)",
-                }}
-              >
-                <span className="flex items-center justify-between mb-1">
-                  <span className="text-[9px] font-bold tracking-[0.2em] uppercase" style={{ color: "var(--ink-45)" }}>
-                    Promoted
-                  </span>
-                  <svg width="12" height="12" fill="none" stroke={ACCENT} viewBox="0 0 24 24" className="transition-transform group-hover:translate-x-0.5">
-                    <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </span>
-                <span className="flex items-center gap-3">
-                  {catalogue.coverThumb && (
-                    <img
-                      src={catalogue.coverThumb}
-                      alt=""
-                      width={240}
-                      height={240}
-                      loading="lazy"
-                      className="h-14 w-14 flex-shrink-0 rounded-md object-cover"
-                      style={{ border: "1px solid rgba(249,115,22,0.30)" }}
-                    />
-                  )}
-                  <span className="block min-w-0">
-                    <span className="block text-[14px] font-bold" style={{ color: "var(--text-primary)" }}>
-                      The {catalogueLabel} Catalogue
-                    </span>
-                    <span className="block text-[12px] mt-0.5" style={{ color: "var(--ink-62)" }}>
-                      {catalogueTotal} pages — read it in your browser.
-                    </span>
-                  </span>
-                </span>
-              </Link>
-            )}
-
-            <div className="mt-3">
+            <div className="mt-auto pt-3">
               <LLMenuCard />
             </div>
           </div>
@@ -913,48 +811,6 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
               className="px-4 pb-8"
             >
 
-              {/* ── Catalogue ─────────────────────────────────────── */}
-              {/* The phone menu never linked to the catalogue; only the
-                  desktop mega menu did, so on a phone the book was a typed
-                  URL away. First in the drawer, so it is two taps from any
-                  page: the menu button, then this. Same card as the Field
-                  Notes rows below, tinted like the desktop "Promoted" card. */}
-              {showCatalogue() && (
-                <motion.div variants={menuSectionVariants} className="pt-5">
-                  <Link
-                    href="/catalogue"
-                    onClick={onClose}
-                    className="flex items-center gap-4 p-3 rounded-2xl active:scale-[0.98] active:opacity-75 transition-[transform,opacity] duration-100"
-                    style={{
-                      background: "linear-gradient(135deg, rgba(249,115,22,0.12) 0%, var(--ink-025) 100%)",
-                      border: "1px solid rgba(249,115,22,0.35)",
-                    }}
-                  >
-                    {catalogue.coverThumb && (
-                      /* Plain <img>: the catalogue's rasters never route
-                         through /_next/image. */
-                      <img
-                        src={catalogue.coverThumb}
-                        alt=""
-                        width={240}
-                        height={240}
-                        loading="lazy"
-                        className="flex-shrink-0 rounded-xl object-cover"
-                        style={{ width: 64, height: 64, border: "1px solid rgba(249,115,22,0.30)" }}
-                      />
-                    )}
-                    <div className="flex-1 min-w-0 flex flex-col justify-center gap-1">
-                      <p className="text-[9px] font-bold tracking-[0.18em] uppercase" style={{ color: "var(--accent-text-lg)" }}>Catalogue</p>
-                      <p className="text-[15px] font-[500] leading-snug" style={{ color: "var(--text-primary)" }}>The {catalogueLabel} Catalogue</p>
-                      <p className="text-[13px] leading-snug" style={{ color: "var(--ink-50)" }}>{catalogueTotal} pages — read it in your browser.</p>
-                    </div>
-                    <svg className="flex-shrink-0 w-4 h-4" style={{ color: "var(--accent-text-lg)" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 18l6-6-6-6" />
-                    </svg>
-                  </Link>
-                </motion.div>
-              )}
-
               {/* ── Products ──────────────────────────────────────── */}
               <motion.div variants={menuSectionVariants}>
                 <div className="flex items-center justify-between">
@@ -1009,10 +865,10 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                 ))}
               </motion.div>
 
-              {/* ── Field Notes ───────────────────────────────────── */}
+              {/* ── Insights ──────────────────────────────────────── */}
               <motion.div variants={menuSectionVariants} className="mt-2">
                 <div className="flex items-center justify-between">
-                  <MobileMenuLabel>Field Notes</MobileMenuLabel>
+                  <MobileMenuLabel>Insights</MobileMenuLabel>
                   <MobileViewAll href="/blog" label="All" onClose={onClose} />
                 </div>
                 <div className="mt-1 space-y-2">
@@ -1045,6 +901,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                   { label: "About", href: "/about" },
                   { label: "Contact", href: "/contact" },
                   { label: "Resources", href: "/resources" },
+                  { label: ideaBook.short, href: ideaBook.href },
                   { label: "Lunch & Learn", href: "/lunch-learn" },
                   { label: "Project Gallery", href: "/gallery" },
                 ].map((link) => (
@@ -1380,7 +1237,7 @@ export default function Nav() {
               </svg>
             </button>
 
-            {/* Field Notes — navigates to /blog on click, shows dropdown on hover/focus */}
+            {/* Insights — navigates to /blog on click, shows dropdown on hover/focus */}
             <Link
               href="/blog"
               onMouseEnter={() => setOpenPanel("fieldnotes")}
@@ -1391,7 +1248,7 @@ export default function Nav() {
               className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[13px] font-medium whitespace-nowrap transition-colors hover:text-[var(--accent-text)] hover:bg-[var(--ink-05)]"
               style={{ color: openPanel === "fieldnotes" ? "var(--accent-text-lg)" : "var(--ink-65)" }}
             >
-              Field Notes
+              Insights
               <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                 style={{ opacity: 0.5, transform: openPanel === "fieldnotes" ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -1403,7 +1260,7 @@ export default function Nav() {
               <Link key={link.href} href={link.href}
                 onMouseEnter={() => setOpenPanel(null)}
                 onFocus={() => setOpenPanel(null)}
-                // whitespace-nowrap: at ~1100px "Field Notes" broke across two
+                // whitespace-nowrap: at ~1100px "Field Notes" (now "Insights") broke across two
                 // lines and pushed the whole nav row out of alignment. A nav
                 // label is a single object; it should shrink the row, never
                 // wrap inside it.

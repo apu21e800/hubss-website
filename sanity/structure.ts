@@ -81,25 +81,26 @@ export const structure: StructureResolver = (S) =>
 
       S.divider(),
 
-      // ── Field Notes plan ─────────────────────────────────────────────────────
+      // ── Insights plan ────────────────────────────────────────────────────────
       // What to write next. The Tuesday drafter takes the top "Ready" item.
+      // ("Field Notes" until 25 Sep 2026; the document types keep their names.)
       S.listItem()
-        .title("Field Notes plan")
+        .title("Insights plan")
         .icon(BulbOutlineIcon)
         .child(
           S.documentTypeList("storyIdea")
-            .title("Field Notes plan")
+            .title("Insights plan")
             .defaultOrdering([{ field: "priority", direction: "asc" }, { field: "_createdAt", direction: "asc" }])
         ),
 
-      // ── Blog / Field Notes ───────────────────────────────────────────────────
+      // ── Insights ─────────────────────────────────────────────────────────────
       // The site's only copy of the blog (lib/blog.ts). Newest first.
       S.listItem()
-        .title("Blog / Field Notes")
+        .title("Insights")
         .icon(EditIcon)
         .child(
           S.documentTypeList("blogPost")
-            .title("Blog / Field Notes")
+            .title("Insights")
             .defaultOrdering([{ field: "publishedAt", direction: "desc" }])
         ),
 

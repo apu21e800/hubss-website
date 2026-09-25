@@ -1,5 +1,12 @@
 /**
- * Field Notes taxonomy — the curated classification layer (Aug 2026).
+ * Insights taxonomy — the curated classification layer (Aug 2026).
+ *
+ * "Field Notes" became "Insights" on the site on 25 Sep 2026 (Doug's round:
+ * the industry-standard name for a B2B manufacturer's library). Labels only:
+ * the /blog URLs, the Sanity type names (blogPost, storyIdea), the cron routes
+ * and the env names all keep their old spelling, so nothing in the pipeline
+ * moved. The type VALUES below ("Blog" included) are what Sanity stores on
+ * every post, so they stay too; what the site prints is `badge`.
  *
  * SINCE SEP 2026 the posts live in Sanity, and each post's type and search
  * phrases are fields on it in Studio ("Type", "Search phrases"). The per-post
@@ -40,8 +47,18 @@ export type FieldNoteType =
   | "Blog";
 
 export interface FieldNoteTypeMeta {
-  /** Singular label shown on the card badge and the post hero. */
+  /**
+   * The type's VALUE: what Sanity stores in a post's `category` and what the
+   * drafter writes. Never rename one - every post filed under it would fall
+   * back to guessing its type. Print `badge`, not this.
+   */
   label: FieldNoteType;
+  /**
+   * Singular name shown on the card badge and the post hero. Equal to the
+   * value except for "Blog", which prints as "Article": a badge saying "Blog"
+   * inside a library called Insights read as a category nobody chose.
+   */
+  badge: string;
   /** Plural label for the hub page and filter pills. */
   plural: string;
   /** URL segment: /blog/case-studies */
@@ -65,6 +82,7 @@ export interface FieldNoteTypeMeta {
 export const FIELD_NOTE_TYPES: FieldNoteTypeMeta[] = [
   {
     label: "Case Study",
+    badge: "Case Study",
     plural: "Case Studies",
     slug: "case-studies",
     blurb: "Named projects with the brief, the constraint, and the measured outcome.",
@@ -77,6 +95,7 @@ export const FIELD_NOTE_TYPES: FieldNoteTypeMeta[] = [
   },
   {
     label: "Project Profile",
+    badge: "Project Profile",
     plural: "Project Profiles",
     slug: "project-profiles",
     blurb: "Short-form records of installations across the country.",
@@ -96,6 +115,7 @@ export const FIELD_NOTE_TYPES: FieldNoteTypeMeta[] = [
   },
   {
     label: "Guide",
+    badge: "Guide",
     plural: "Guides",
     slug: "guides",
     blurb: "How to choose, specify, and defend a surface decision.",
@@ -108,6 +128,7 @@ export const FIELD_NOTE_TYPES: FieldNoteTypeMeta[] = [
   },
   {
     label: "White Paper",
+    badge: "White Paper",
     plural: "White Papers",
     slug: "white-papers",
     blurb: "Long-form technical documents for public works and engineering teams.",
@@ -120,7 +141,9 @@ export const FIELD_NOTE_TYPES: FieldNoteTypeMeta[] = [
   },
   {
     label: "Blog",
-    plural: "Posts",
+    badge: "Article",
+    plural: "Articles",
+    // The hub keeps its address (/blog/posts): URLs never change for a label.
     slug: "posts",
     blurb: "Industry notes, product context, and what we are seeing on the road.",
     promise:
@@ -140,6 +163,16 @@ export const TYPE_BY_LABEL: Record<FieldNoteType, FieldNoteTypeMeta> =
 
 export const TYPE_BY_SLUG: Record<string, FieldNoteTypeMeta> =
   Object.fromEntries(FIELD_NOTE_TYPES.map((t) => [t.slug, t]));
+
+/**
+ * What to print for a post's stored type. A value the taxonomy doesn't know
+ * (an old import, a typo in Studio) prints as it is, which is what happened
+ * before too.
+ */
+export function badgeFor(category: string | undefined | null): string {
+  if (!category) return TYPE_BY_LABEL["Blog"].badge;
+  return TYPE_BY_LABEL[category as FieldNoteType]?.badge ?? category;
+}
 
 interface Entry {
   type: FieldNoteType;

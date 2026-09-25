@@ -1,9 +1,9 @@
 /**
- * /catalogue - the reader, open at page one.
+ * /idea-book - the reader, open at page one.
  *
  * Statically prerendered. The manifest is an import, not a filesystem read, so
  * nothing here is traced into a serverless function and nothing has to be
- * dynamic. /catalogue/[page] serves every other page off the same component.
+ * dynamic. /idea-book/[page] serves every other page off the same component.
  */
 import { notFound } from "next/navigation";
 import CatalogueViewer from "./CatalogueViewer";

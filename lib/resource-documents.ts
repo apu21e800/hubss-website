@@ -8,7 +8,7 @@
 // resolveJsonModule types the import as its 82 literal keys, and it is looked
 // up with URLs that come from Sanity at runtime.
 import documentSizesJson from './document-sizes.json'
-import { catalogue, catalogueCover, catalogueLabel, catalogueTotal } from "./catalogue";
+import { catalogue, catalogueCover, catalogueLabel, ideaBook } from "./catalogue";
 
 const DOCUMENT_SIZES = documentSizesJson as Record<string, string>
 
@@ -883,13 +883,14 @@ export const resourceDocuments: ResourceDocument[] = [
   // /catalogue/cover.webp, a hand-placed file from an older edition.
   {
     id: 'catalogue-2026',
-    title: `HUB Surface Systems Catalogue ${catalogueLabel}`,
-    type: 'Catalogue',
+    title: ideaBook.title,
+    type: 'Idea Book',
     product: 'all',
     productName: 'Full Line',
     applications: [],
-    fileUrl: '/catalogue',
-    fileSize: `${catalogueTotal} pages`,
+    fileUrl: ideaBook.href,
+    // The edition, not a page count: Doug asked for no page counts anywhere.
+    fileSize: `${catalogueLabel} edition`,
     updatedDate: 'Sep 2026',
     documentType: 'catalogue',
     featured: true,

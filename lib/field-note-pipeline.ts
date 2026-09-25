@@ -86,21 +86,21 @@ async function notify(title: string, excerpt: string, docId: string, check: Fact
   }
   const link = `https://hubss.com/studio/intent/edit/id=${docId};type=blogPost`;
   const text = [
-    "A new Field Notes draft is waiting in Studio. Nothing is on hubss.com until you publish it.",
+    "A new Insights draft is waiting in Studio. Nothing is on hubss.com until you publish it.",
     "",
     title,
     excerpt,
     "",
     check.unsupported.length
       ? `Fact check: ${check.unsupported.length} statement(s) to check before publishing. They're listed in the draft's "Notes for the editor".`
-      : "Fact check: every statement about HUB matches the catalogue.",
+      : "Fact check: every statement about HUB matches the Idea Book.",
     "",
     `Open it: ${link}`,
   ].join("\n");
   const { error } = await new Resend(process.env.RESEND_API_KEY).emails.send({
     from: "HUB Surface Systems <noreply@hubss.com>",
     to,
-    subject: `Field Notes draft ready: ${title}`,
+    subject: `Insights draft ready: ${title}`,
     text,
   });
   if (error) {
@@ -130,8 +130,8 @@ export function buildDraftDocument(idea: Idea, draft: Draft, check: FactCheck, s
     `Drafted by Claude on ${today} from the plan item "${idea.title}". Not on the site until someone presses Publish.`,
     "",
     check.unsupported.length
-      ? `FACT CHECK: ${check.unsupported.length} statement(s) the HUB catalogue doesn't back up. Fix or remove them before publishing:`
-      : "FACT CHECK: every statement about HUB matches the catalogue and the brief.",
+      ? `FACT CHECK: ${check.unsupported.length} statement(s) the HUB Idea Book doesn't back up. Fix or remove them before publishing:`
+      : "FACT CHECK: every statement about HUB matches the Idea Book and the brief.",
     ...check.unsupported.map((u) => `- "${u.quote}": ${u.reason}`),
     "",
     photoFrom

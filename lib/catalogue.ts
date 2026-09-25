@@ -1,9 +1,11 @@
 /**
- * The catalogue's identity: edition, page count, download, page URLs.
+ * The Idea Book's identity: edition, page count, download, page URLs.
+ * (Known in the code as the catalogue; see `ideaBook` below for the name the
+ * site prints.)
  *
- * Deliberately does NOT carry the 144-entry page array. The nav's promoted
- * panel, the Resources document list and the search index all need the edition
- * name and the page count, and all three end up inside a client bundle -
+ * Deliberately does NOT carry the 144-entry page array. The Resources document
+ * list and the search index need the edition name, and both end up inside a
+ * client bundle -
  * importing the full manifest here would ship 144 alt strings to anyone who
  * opens the search overlay. The pages live in lib/catalogue-pages.ts, which
  * only the reader imports.
@@ -48,6 +50,40 @@ export const catalogue = {
 } as const;
 
 export const catalogueTotal = typeof raw.total === "number" ? raw.total : 0;
+
+/**
+ * What the book is called on the site, in one place.
+ *
+ * Doug's word (25 Sep 2026) is "Idea Book", and it is what the book itself
+ * says: its cover reads "HUB Surface Systems · Decorative Pavement Solutions ·
+ * Volume 5" and never "catalogue". Every user-facing surface - the reader, the
+ * request page, the Resources row, the homepage band, search, metadata - takes
+ * its name from here so the word cannot drift again. Code identifiers keep the
+ * old name on purpose; renaming files and flags buys nothing a visitor sees.
+ *
+ * The volume number is printed on the cover (page 2's text layer reads
+ * "Volume 5") and is not derivable from the PDF's filename, so it is typed here
+ * and bumped with the edition. No page count travels with the name: Doug asked
+ * for none anywhere.
+ */
+export const ideaBook = {
+  /** Short form, for buttons and links: "Idea Book". */
+  short: "Idea Book",
+  /** Full title, for headings and metadata: "The HUB Idea Book · Volume 5". */
+  title: "The HUB Idea Book · Volume 5",
+  /** The printed volume, as the cover says it. */
+  volume: "Volume 5",
+  /** The reader's route. */
+  href: "/idea-book",
+  /** The printed-copy form's route. */
+  requestHref: "/request-idea-book",
+  /**
+   * The name the PDF saves under. The file on disk keeps its old name (moving
+   * 15 MB through the bundle pipeline buys nothing), so the download link
+   * renames it on the way out.
+   */
+  fileName: `HUB-Idea-Book-${raw.edition ?? "edition"}.pdf`,
+} as const;
 
 /** Has anything been rendered? Gates the reader's empty state. */
 export const catalogueReady = catalogueTotal > 0 && catalogue.dir !== "";

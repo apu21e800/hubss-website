@@ -2,7 +2,7 @@ import Link from "next/link";
 import PhotoImage from "@/components/ui/PhotoImage";
 import type { PostMeta } from "@/lib/blog";
 import { isSanityImage } from "@/lib/photos";
-import { TYPE_BY_LABEL } from "@/lib/field-notes-taxonomy";
+import { TYPE_BY_LABEL, badgeFor } from "@/lib/field-notes-taxonomy";
 
 const FALLBACKS = [
   "/images/applications/crosswalks/crosswalks-01.jpg",
@@ -68,7 +68,7 @@ export default function BlogCard({ post }: { post: PostMeta }) {
             className="text-[11px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wider flex-shrink-0"
             style={{ background: type.tint, color: type.text, border: `1px solid ${type.border}` }}
           >
-            {post.category}
+            {badgeFor(post.category)}
           </span>
           <span className="text-[10px] flex-shrink-0" style={{ color: "var(--text-muted)" }}>
             {new Date(post.date).toLocaleDateString("en-CA", { year: "numeric", month: "short", day: "numeric" })}

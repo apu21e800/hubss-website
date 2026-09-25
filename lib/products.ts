@@ -332,11 +332,14 @@ export const products: Product[] = [
   },
 
 
-  // ── Asphalt Repair ────────────────────────────────────────────────────────────────────────────────────
+  // ── Asphalt & Concrete Repair ─────────────────────────────────────────────────────────────────────────
+  // The eyebrow is the family's name from lib/product-categories.ts. Sanity
+  // overrides it: after changing it here, run `npm run sync:products:dry`,
+  // then `npm run sync:products` (docs/SANITY-COPY-SYNC.md).
   {
     name: "ChipFill",
     slug: "chipfill",
-    eyebrow: "Concrete and Asphalt Repair",
+    eyebrow: "Asphalt & Concrete Repair",
     shortDesc: "Heat-activated preformed material for permanent pothole repair. Year-round, all-weather.",
     // De-brand swap (companion to fix/aggrefill-hero): the prior hero
     // (`chipfill-aggrefill-bags.jpg`) showed two GEVEKO-branded supplier
@@ -372,7 +375,7 @@ export const products: Product[] = [
   {
     name: "AggreFill",
     slug: "aggrefill",
-    eyebrow: "Concrete and Asphalt Repair",
+    eyebrow: "Asphalt & Concrete Repair",
     shortDesc: "Pre-coated aggregate filler for larger potholes up to 1 m². Combined with ChipFill for permanent repair.",
     // De-brand swap: the prior hero (`aggrefill-application.webp` /
     // `aggrefill-01.jpg`) showed a GEVEKO-branded supplier bag, violating
@@ -410,7 +413,7 @@ export const products: Product[] = [
   {
     name: "Fast Patch DPR",
     slug: "fast-patch",
-    eyebrow: "Concrete and Asphalt Repair",
+    eyebrow: "Asphalt & Concrete Repair",
     shortDesc: "Cold-mix polymer repair for potholes, spalls, and utility cuts. Back in service in under an hour.",
     imageUrl: "/images/products/fast-patch/fastpatch-repaired.jpg",
     heroPosition: "center 50%",

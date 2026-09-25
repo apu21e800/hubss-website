@@ -53,6 +53,7 @@
 import { products } from "./products";
 import { applications } from "./applications";
 import { resourceDocuments } from "./resource-documents";
+import { ideaBook } from "./catalogue";
 import { PATTERN_TEMPLATES } from "./pattern-templates";
 import { PRODUCT_KEYWORDS, APPLICATION_KEYWORDS } from "./search-keywords";
 import { PRODUCT_CATALOGUE } from "./product-catalogue";
@@ -63,7 +64,7 @@ export type SearchType =
   | "Product"
   | "Application"
   | "Project"
-  | "Field note"
+  | "Insight"
   | "Document"
   | "Colour"
   | "Pattern"
@@ -131,9 +132,12 @@ const PROVINCE_NAMES: Record<string, string> = {
 // ── Static pages ──────────────────────────────────────────────────────────────
 const PAGES: Omit<SearchEntry, "boost">[] = [
   { id: "p-products", type: "Page", title: "All systems", subtitle: "Every HUB product, grouped by family", href: "/products", keywords: "products range catalogue systems materials", body: "" },
+  // The book, by the name Doug gave it. "catalogue" stays in the keywords so
+  // anyone who knew it by the old name still lands on it.
+  { id: "p-idea-book", type: "Page", title: ideaBook.title, subtitle: "Every system and application, read in your browser", href: ideaBook.href, keywords: "idea book catalogue brochure volume 5 book read flipbook printed copy", body: "" },
   { id: "p-apps", type: "Page", title: "All applications", subtitle: "Where HUB systems are specified", href: "/applications", keywords: "applications uses where sectors", body: "" },
   { id: "p-gallery", type: "Page", title: "Photo archive", subtitle: "Documented installations across Canada", href: "/gallery", keywords: "gallery photos images archive installations portfolio work", body: "" },
-  { id: "p-blog", type: "Page", title: "Field Notes", subtitle: "Case studies, guides, white papers and project profiles", href: "/blog", keywords: "blog articles library research writing notes", body: "" },
+  { id: "p-blog", type: "Page", title: "Insights", subtitle: "Case studies, guides, white papers and project profiles", href: "/blog", keywords: "blog articles library research writing notes field notes insights", body: "" },
   { id: "p-guides", type: "Page", title: "Guides", subtitle: "How to choose, specify, and defend a surface decision", href: "/blog/guides", keywords: "guides how to specify comparison decision", body: "" },
   { id: "p-cases", type: "Page", title: "Case studies", subtitle: "Named projects with the brief and the measured outcome", href: "/blog/case-studies", keywords: "case studies projects outcomes results evidence", body: "" },
   { id: "p-white", type: "Page", title: "White papers", subtitle: "Long-form technical documents for public works teams", href: "/blog/white-papers", keywords: "white papers technical research engineering", body: "" },
@@ -197,7 +201,7 @@ function buildIndex(): SearchEntry[] {
     // and "rainbow crosswalk" match nothing in the library.
     out.push({
       id: `post-${b.slug}`,
-      type: "Field note",
+      type: "Insight",
       title: b.title,
       subtitle: b.excerpt,
       href: `/blog/${b.slug}`,
@@ -236,6 +240,9 @@ function buildIndex(): SearchEntry[] {
     // The href was /resources for every document — search found the right
     // sheet, then dropped you on a library of eighty-two to find it again.
     // fileUrl has been on the record all along.
+    // The Idea Book has its own Page entry above; listing its document row
+    // too would show the same book twice for "idea book".
+    if (d.documentType === "catalogue") continue;
     const isPdf = /\.pdf($|\?)/i.test(d.fileUrl);
     out.push({
       id: `doc-${d.title}`,
@@ -444,7 +451,7 @@ export function search(query: string, entries: SearchEntry[], limit = 400): Sear
     .slice(0, limit);
 }
 
-const ORDER: SearchType[] = ["Product", "Application", "Project", "Page", "Field note", "Document", "Pattern", "Colour"];
+const ORDER: SearchType[] = ["Product", "Application", "Project", "Page", "Insight", "Document", "Pattern", "Colour"];
 
 /**
  * Per-type caps.
@@ -460,7 +467,7 @@ const CAP: Record<SearchType, number> = {
   Application: 5,
   Project: 5,
   Page: 3,
-  "Field note": 8,
+  Insight: 8,
   Document: 4,
   Pattern: 3,
   Colour: 4,

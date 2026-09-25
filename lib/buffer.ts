@@ -69,7 +69,7 @@ export async function createBufferDraft(input: DraftPostInput): Promise<string> 
       mode: "addToQueue",
       saveToDraft: true,
       aiAssisted: true,
-      source: "hubss.com Field Notes",
+      source: "hubss.com Insights",
       assets: input.imageUrl
         ? [{ image: { url: input.imageUrl, ...(input.imageAlt ? { metadata: { altText: input.imageAlt } } : {}) } }]
         : [],

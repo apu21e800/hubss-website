@@ -6,7 +6,7 @@ import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
 import JsonLd from "@/components/ui/JsonLd";
 import { BUILT_POSTS, getPost, getRelatedPosts } from "@/lib/blog";
-import { TYPE_BY_LABEL } from "@/lib/field-notes-taxonomy";
+import { TYPE_BY_LABEL, badgeFor } from "@/lib/field-notes-taxonomy";
 import PostConversion, { PRODUCT_SLUGS } from "@/components/blog/PostConversion";
 import SystemsInPost from "@/components/blog/SystemsInPost";
 import { buildMetadata } from "@/lib/seo";
@@ -119,7 +119,7 @@ export default async function BlogPostPage({ params }: Props) {
       name: "HUB Surface Systems",
       logo: { "@type": "ImageObject", url: "https://hubss.com/images/hub-official-logo.svg" },
     },
-    isPartOf: { "@type": "Blog", "@id": "https://hubss.com/blog#blog", name: "HUB Surface Systems Field Notes" },
+    isPartOf: { "@type": "Blog", "@id": "https://hubss.com/blog#blog", name: "HUB Surface Systems Insights" },
     mainEntityOfPage: { "@type": "WebPage", "@id": postUrl },
     url: postUrl,
     image: post.featuredImage
@@ -134,7 +134,7 @@ export default async function BlogPostPage({ params }: Props) {
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: "https://hubss.com" },
-      { "@type": "ListItem", position: 2, name: "Field Notes", item: "https://hubss.com/blog" },
+      { "@type": "ListItem", position: 2, name: "Insights", item: "https://hubss.com/blog" },
       { "@type": "ListItem", position: 3, name: type.plural, item: `https://hubss.com/blog/${type.slug}` },
       { "@type": "ListItem", position: 4, name: post.title, item: postUrl },
     ],
@@ -194,7 +194,7 @@ export default async function BlogPostPage({ params }: Props) {
                   display: "inline-flex", alignItems: "center", minHeight: 40,
                 }}
               >
-                {post.category}
+                {badgeFor(post.category)}
               </Link>
               {post.tags?.slice(0, 2).map((tag: string) => (
                 <span key={tag} style={{
@@ -298,7 +298,7 @@ export default async function BlogPostPage({ params }: Props) {
                 }}>H</div>
                 <div>
                   <p style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)", margin: 0 }}>HUB Surface Systems</p>
-                  <p style={{ fontSize: 11, color: "var(--text-secondary)", margin: 0 }}>Field Notes</p>
+                  <p style={{ fontSize: 11, color: "var(--text-secondary)", margin: 0 }}>Insights</p>
                 </div>
               </div>
               <p style={{ fontSize: 12, color: "var(--text-muted)", lineHeight: 1.6, margin: 0 }}>

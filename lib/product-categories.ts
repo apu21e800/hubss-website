@@ -17,8 +17,8 @@ export type ProductCategory = {
   /**
    * One sentence under the family's heading on /products. The print catalogue
    * never groups its systems into families, so there is no book copy to lift;
-   * each intro is assembled only from lines the book (or, for Asphalt Repair,
-   * lib/products.ts) already states about the members. Sources are noted on
+   * each intro is assembled only from lines the book (or, for Asphalt &
+   * Concrete Repair, lib/products.ts) already states about the members. Sources are noted on
    * each one. Do not add a claim here that no member's page makes.
    */
   intro: string;
@@ -58,13 +58,16 @@ export const PRODUCT_CATEGORIES: ProductCategory[] = [
       "The original stamped asphalt system. Patterns are stamped into new or existing asphalt and coloured with StreetBond — flush, with nothing for a plow blade to catch.",
   },
   {
-    label: "Asphalt Repair",
+    // "Asphalt & Concrete Repair" (Doug, 25 Sep 2026): all three members list
+    // "Substrate: asphalt and concrete" in their specs, and their eyebrow
+    // already said so. The old "Asphalt Repair" undersold two of the three.
+    label: "Asphalt & Concrete Repair",
     slugs: ["chipfill", "aggrefill", "fast-patch"],
     // Not in the print catalogue. Every clause is stated by all three members
     // in lib/products.ts: permanent repair, asphalt and concrete substrates,
     // year-round deployment. Deliberately NOT "no heating" (ChipFill uses a
-    // torch), "no compaction" (Fast Patch is compacted) or a single cure time
-    // (they differ).
+    // torch), "no compaction" (Fast Patch is compacted), a single cure time
+    // (they differ) or "cold-mix" (ChipFill is heat-activated).
     intro: "Permanent pothole and pavement repair for asphalt and concrete, deployable year-round.",
   },
 ];

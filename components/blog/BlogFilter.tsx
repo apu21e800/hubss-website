@@ -181,8 +181,8 @@ export default function BlogFilter({ posts, allProducts }: Props) {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: "var(--text-hint)" }} />
             <input
               type="text"
-              placeholder="Search field notes…"
-              aria-label="Search field notes"
+              placeholder="Search Insights…"
+              aria-label="Search Insights"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full pl-9 pr-8 rounded-lg text-sm"
@@ -222,7 +222,7 @@ export default function BlogFilter({ posts, allProducts }: Props) {
             <select
               value={sort}
               onChange={(e) => { setSort(e.target.value as typeof sort); pushParams({ sort: e.target.value }); }}
-              aria-label="Sort field notes"
+              aria-label="Sort Insights"
               className="appearance-none pl-3 pr-8 rounded-lg text-sm cursor-pointer w-full"
               style={selectStyle}
             >
@@ -248,8 +248,8 @@ export default function BlogFilter({ posts, allProducts }: Props) {
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mt-3.5">
           <p className="text-xs tabular-nums" style={{ color: "var(--text-hint)" }} aria-live="polite">
             {filtered.length === posts.length
-              ? `All ${posts.length} field notes`
-              : `${filtered.length} of ${posts.length} field notes`}
+              ? `All ${posts.length} articles`
+              : `${filtered.length} of ${posts.length} articles`}
           </p>
 
           {/* The type hubs are real indexed pages. Rather than advertising all
@@ -288,7 +288,7 @@ export default function BlogFilter({ posts, allProducts }: Props) {
         </div>
       ) : (
         <div className="text-center py-20">
-          <p className="text-base font-semibold mb-2" style={{ color: "var(--text-primary)" }}>No field notes match those filters</p>
+          <p className="text-base font-semibold mb-2" style={{ color: "var(--text-primary)" }}>No articles match those filters</p>
           <p className="text-sm mb-6" style={{ color: "var(--text-secondary)" }}>Try a different system, or clear the filters to see all {posts.length}.</p>
           <button
             onClick={clearFilters}

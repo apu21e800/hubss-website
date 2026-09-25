@@ -6,6 +6,7 @@ import { products, type Product } from "@/lib/products";
 import { PRODUCT_CATEGORIES, type ProductCategory } from "@/lib/product-categories";
 import { catalogueFor, SYSTEMS_INDEX } from "@/lib/product-catalogue";
 import { showCatalogue } from "@/lib/feature-flags";
+import { ideaBook } from "@/lib/catalogue";
 import cardImageManifest from "@/lib/card-images.json";
 import { buildMetadata } from "@/lib/seo";
 
@@ -333,8 +334,8 @@ export default function ProductsPage() {
             <span aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-1">&rarr;</span>
           </Link>
           {catalogueOn && (
-            <Link href="/catalogue" className="group inline-flex items-center gap-1.5" style={{ color: "var(--accent-text)" }}>
-              Read the catalogue
+            <Link href={ideaBook.href} className="group inline-flex items-center gap-1.5" style={{ color: "var(--accent-text)" }}>
+              Open the {ideaBook.short}
               <span aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-1">&rarr;</span>
             </Link>
           )}

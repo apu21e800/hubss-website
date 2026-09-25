@@ -13,7 +13,7 @@ import { FIELD_NOTE_TYPES } from "../../lib/field-notes-taxonomy";
  */
 export default defineType({
   name: "storyIdea",
-  title: "Field Notes plan",
+  title: "Insights plan",
   type: "document",
   icon: BulbOutlineIcon,
   // A plan item has no draft/publish step: a change (say, to Ready) counts the
@@ -37,7 +37,7 @@ export default defineType({
         list: [
           { title: "Idea: not ready to draft", value: "idea" },
           { title: "Ready: draft it next", value: "ready" },
-          { title: "Drafted: waiting in Blog / Field Notes", value: "drafted" },
+          { title: "Drafted: waiting in Insights", value: "drafted" },
           { title: "Published", value: "published" },
           { title: "Not doing it", value: "dropped" },
         ],
@@ -72,7 +72,7 @@ export default defineType({
       title: "Type",
       type: "string",
       options: {
-        list: FIELD_NOTE_TYPES.map((t) => ({ title: t.label, value: t.label })),
+        list: FIELD_NOTE_TYPES.map((t) => ({ title: t.badge, value: t.label })),
         layout: "radio",
       },
     }),
@@ -80,7 +80,7 @@ export default defineType({
       name: "systems",
       title: "Systems",
       type: "array",
-      description: "The HUB systems the post is about. The drafter reads their catalogue pages, and the first one's photo becomes the draft's stand-in photo.",
+      description: "The HUB systems the post is about. The drafter reads their Idea Book pages, and the first one's photo becomes the draft's stand-in photo.",
       of: [{ type: "reference", to: [{ type: "product" }] }],
     }),
     defineField({

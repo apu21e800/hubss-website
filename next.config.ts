@@ -134,11 +134,27 @@ const nextConfig: NextConfig = {
       // no Canadian contacts. Replaced by the 2026 edition; this keeps every link
       // already sitting in someone's inbox or spec package working.
       { source: "/docs/StreetBondSR/Colour-Guide-1.pdf", destination: "/docs/StreetBondSR/StreetBondSR-Colour-Guide-2026.pdf", permanent: true },
-      // Catalogue page one lives at /catalogue, not /catalogue/1 — the reader
-      // deliberately builds no route for it (see app/catalogue/[page]/page.tsx)
-      // and writes /catalogue into the address bar when you turn back to it.
-      // But "page 1" is the URL people type and share, and it was a 404.
-      { source: "/catalogue/1", destination: "/catalogue", permanent: true },
+      // ── The Idea Book ─────────────────────────────────────────────────────
+      // "Catalogue" became "Idea Book" on 25 Sep 2026 (Doug's word, and the
+      // book's own: its cover says "Volume 5", never "catalogue"). The reader
+      // moved from /catalogue to /idea-book and the printed-copy form from
+      // /request-catalogue to /request-idea-book. Every old address answers
+      // 308 to the new one, so shared links and Google's index carry over.
+      //
+      // Page one lives at /idea-book, not /idea-book/1 — the reader
+      // deliberately builds no route for it (see app/idea-book/[page]/page.tsx)
+      // and writes /idea-book into the address bar when you turn back to it.
+      // But "page 1" is the URL people type and share, so it lands on the book.
+      { source: "/catalogue/1", destination: "/idea-book", permanent: true },
+      { source: "/idea-book/1", destination: "/idea-book", permanent: true },
+      { source: "/catalogue", destination: "/idea-book", permanent: true },
+      // Only page numbers. The rendered pages and the PDF still live under
+      // /catalogue/2026-27/… and /catalogue/HUBSS-Catalogue-2026-27.pdf (moving
+      // 433 rasters buys nothing a visitor sees), and redirects run before the
+      // public folder is checked, so an unconstrained :page here would have
+      // sent the PDF download to a 404.
+      { source: "/catalogue/:page(\\d{1,3})", destination: "/idea-book/:page", permanent: true },
+      { source: "/request-catalogue", destination: "/request-idea-book", permanent: true },
       // Products
       { source: "/trafficpatternsxd", destination: "/products/traffic-patterns-xd", permanent: true },
       { source: "/trafficpatterns", destination: "/products/traffic-patterns", permanent: true },

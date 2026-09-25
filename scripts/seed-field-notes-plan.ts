@@ -158,7 +158,7 @@ async function main() {
     await client.createIfNotExists(doc);
     console.log(`  + ${s.title} [${s.status}, priority ${s.priority}]`);
   }
-  console.log(DRY ? "\n(dry run — nothing written)" : "\nDone. Studio → Field Notes plan.");
+  console.log(DRY ? "\n(dry run — nothing written)" : "\nDone. Studio → Insights plan.");
 }
 
 main().catch((err) => { console.error(err); process.exit(1); });

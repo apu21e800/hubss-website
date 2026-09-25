@@ -6,13 +6,14 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ResourceDocument } from "@/lib/resource-documents";
 import PdfPreviewModal from "@/components/ui/PdfPreviewModal";
+import { ideaBook } from "@/lib/catalogue";
 
 const TABS = ["By Product", "By Document Type"] as const;
 type TabType = (typeof TABS)[number];
 
 // Display-order for type chips: most-relevant types first, then alphabetical.
 const TYPE_PRIORITY = [
-  "Catalogue",
+  "Idea Book",
   "Flyer",
   "Spec Sheet",
   "Data Sheet",
@@ -35,7 +36,7 @@ const TYPE_BUCKETS: { label: string; types: string[] }[] = [
   { label: "Spec Sheets", types: ["Spec Sheet"] },
   { label: "Data Sheets", types: ["Data Sheet", "Safety Data Sheet"] },
   { label: "Guides & Manuals", types: ["Colour Guide", "Design Manual", "Installation Guide", "Guide"] },
-  { label: "Brochures & Flyers", types: ["Brochure", "Flyer", "Catalogue"] },
+  { label: "Brochures & Flyers", types: ["Brochure", "Flyer", "Idea Book"] },
   { label: "Other", types: ["Certificate", "Other"] },
 ];
 const BUCKET_BY_TYPE: Record<string, string> = {};
@@ -207,7 +208,7 @@ function DocCard({
                 (e.currentTarget as HTMLAnchorElement).style.background = "var(--border-color)";
                 (e.currentTarget as HTMLAnchorElement).style.color = "var(--text-muted)";
               }}
-              title="Open the catalogue in the reader"
+              title="Open the Idea Book in the reader"
             >
               <Eye className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Open reader</span>
@@ -248,7 +249,7 @@ function DocCard({
           {isCatalogue && doc.downloadUrl ? (
             <a
               href={doc.downloadUrl}
-              download
+              download={ideaBook.fileName}
               onClick={stop}
               className="flex items-center justify-center w-8 h-8 rounded-lg transition-colors duration-200 flex-shrink-0" data-tap="44"
               style={{
@@ -287,7 +288,7 @@ function DocCard({
                 (e.currentTarget as HTMLAnchorElement).style.background = "rgba(249,115,22,0.10)";
                 (e.currentTarget as HTMLAnchorElement).style.color = "var(--accent-text-lg)";
               }}
-              title="Open catalogue"
+              title="Open the Idea Book"
               aria-label={`Open ${doc.title}`}
             >
               <Eye className="w-3.5 h-3.5" />

@@ -6,6 +6,7 @@ import TrustedByMarquee from "@/components/sections/TrustedByMarquee";
 import PersonaEntryPoints from "@/components/sections/PersonaEntryPoints";
 import ProductsGrid from "@/components/sections/ProductsGrid";
 import ApplicationsGrid from "@/components/sections/ApplicationsGrid";
+import IdeaBookBand from "@/components/sections/IdeaBookBand";
 import FeaturedBlogPost from "@/components/sections/FeaturedBlogPost";
 import InstagramStrip from "@/components/sections/InstagramStrip";
 import LunchLearn from "@/components/sections/LunchLearn";
@@ -113,7 +114,10 @@ export default async function Home() {
       <ProductsGrid products={mergedProducts} />
       {/* dark → slate */}
       <ApplicationsGrid applications={mergedApplications} />
-      {/* Featured blog post — Field Notes */}
+      {/* The Idea Book's one homepage call to action (Doug, 25 Sep 2026):
+          after the applications, before the reading. */}
+      <IdeaBookBand />
+      {/* Featured article — Insights */}
       <FeaturedBlogPost />
       {/* off-white → slate (lunch learn) */}
       <InstagramStrip />

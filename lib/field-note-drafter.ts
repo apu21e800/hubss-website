@@ -35,7 +35,7 @@ export interface DraftBrief {
   type?: string | null;
 }
 
-const VOICE = `You write Field Notes for HUB Surface Systems (hubss.com): articles for the people who specify, approve and pay for decorative and functional pavement in Canada — municipal engineers, planners, landscape architects, transit agencies, developers and property managers.
+const VOICE = `You write Insights articles for HUB Surface Systems (hubss.com): articles for the people who specify, approve and pay for decorative and functional pavement in Canada — municipal engineers, planners, landscape architects, transit agencies, developers and property managers.
 
 VOICE: relaxed, professional, leaders in the field. Write like a senior specifier explaining something to a peer: plain, confident, concrete, useful. Canadian English (colour, centre, metre, curb). No hype words (revolutionary, game-changing, cutting-edge, unparalleled, world-class), no exclamation marks, no questions to the reader as headings, no "In today's world" openings.
 
@@ -53,7 +53,7 @@ SEARCH: use the target search phrase naturally in the title, in the first paragr
 
 const SAVE_DRAFT: Anthropic.Tool = {
   name: "save_draft",
-  description: "Save the finished Field Notes draft.",
+  description: "Save the finished Insights draft.",
   input_schema: {
     type: "object",
     properties: {
@@ -109,7 +109,7 @@ async function toolCall<T>(client: Anthropic, system: string, user: string, tool
 export async function writeDraft(brief: DraftBrief, facts: string, relatedPosts: string[]): Promise<Draft> {
   const client = new Anthropic();
   const user = [
-    `Write a Field Notes post.`,
+    `Write an Insights article.`,
     ``,
     `WORKING TITLE: ${brief.title}`,
     brief.type ? `TYPE: ${brief.type}` : "",
@@ -130,7 +130,7 @@ export async function writeDraft(brief: DraftBrief, facts: string, relatedPosts:
 
 export async function checkDraft(draft: Draft, facts: string): Promise<FactCheck> {
   const client = new Anthropic();
-  const system = `You fact-check Field Notes for HUB Surface Systems before a human editor publishes them. You are strict and literal. You compare the DRAFT with the FACTS and list every statement in the draft about HUB, its systems, specifications, numbers, standards, places, projects or clients that the FACTS do not support, including numbers that differ, capabilities the FACTS don't claim, and any named city, agency, project or client not in the FACTS. General context that isn't about HUB and has no numbers (what Vision Zero is, why contrast helps) is fine; don't list it. Links are fine. If everything is supported, the verdict is "clean" and the list is empty.`;
+  const system = `You fact-check Insights articles for HUB Surface Systems before a human editor publishes them. You are strict and literal. You compare the DRAFT with the FACTS and list every statement in the draft about HUB, its systems, specifications, numbers, standards, places, projects or clients that the FACTS do not support, including numbers that differ, capabilities the FACTS don't claim, and any named city, agency, project or client not in the FACTS. General context that isn't about HUB and has no numbers (what Vision Zero is, why contrast helps) is fine; don't list it. Links are fine. If everything is supported, the verdict is "clean" and the list is empty.`;
   const user = `FACTS:\n${facts}\n\nDRAFT:\n# ${draft.title}\n\n${draft.excerpt}\n\n${draft.body}\n\nReport with the report tool.`;
   const result = await toolCall<FactCheck>(client, system, user, REPORT, 3000);
   return { verdict: result.unsupported?.length ? "needs edits" : "clean", unsupported: result.unsupported ?? [] };

@@ -174,8 +174,8 @@ async function check(posts: Planned[], productIds: Map<string, string>, applicat
     `*[_type == "blogPost" && !(_id in path("drafts.**")) && slug.current in $slugs]{
       _id, "slug": slug.current, title, excerpt, publishedAt, readTime, category, keywords, tags,
       "products": relatedProducts[]._ref, "applications": relatedApplications[]._ref,
-      "featured": featuredImage{ alt, "origin": asset->source.url },
-      "body": body[]{ ..., _type == "image" => { _type, _key, alt, caption, "src": asset->source.url } }
+      "featured": featuredImage{ alt, "origin": select(originAsset == asset._ref => origin, asset->source.url) },
+      "body": body[]{ ..., _type == "image" => { _type, _key, alt, caption, "src": select(originAsset == asset._ref => origin, asset->source.url) } }
     }`,
     { slugs: posts.map((p) => p.slug) }
   );
@@ -209,7 +209,7 @@ async function check(posts: Planned[], productIds: Map<string, string>, applicat
       }
       const wantBody = p.blocks.map((b) => (b._type === "image" ? { _type: "image", _key: b._key, alt: b.alt, ...(b.caption ? { caption: b.caption } : {}), src: b.src } : b));
       const haveBody = (d.body ?? []).map((b) =>
-        Object.fromEntries(Object.entries(b).filter(([k, v]) => v !== null && !(b._type === "image" && k === "asset"))));
+        Object.fromEntries(Object.entries(b).filter(([k, v]) => v !== null && !(b._type === "image" && ["asset", "origin", "originAsset"].includes(k)))));
       if (norm(wantBody) !== norm(haveBody)) {
         const i = wantBody.findIndex((b, n) => norm(b) !== norm(haveBody[n]));
         problems.push(`body differs from block ${i + 1} (of ${wantBody.length}; Sanity has ${haveBody.length})`);

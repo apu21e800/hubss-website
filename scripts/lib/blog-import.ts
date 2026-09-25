@@ -114,6 +114,9 @@ export function toDocument(p: Planned, docId: string, assetBySha: Map<string, st
       _type: "image",
       _key: b._key,
       asset: ref(assetFor(b.src)),
+      // This use's own file, as for the gallery photos (scripts/sync-photos-to-sanity.ts).
+      origin: b.src,
+      originAsset: assetFor(b.src),
       alt: b.alt,
       ...(b.caption ? { caption: b.caption } : {}),
     };
@@ -128,7 +131,7 @@ export function toDocument(p: Planned, docId: string, assetBySha: Map<string, st
     excerpt: p.excerpt,
     body,
     readTime: p.readTime,
-    featuredImage: { _type: "image", asset: ref(assetFor(p.featured.src)), alt: p.featured.alt },
+    featuredImage: { _type: "image", asset: ref(assetFor(p.featured.src)), origin: p.featured.src, originAsset: assetFor(p.featured.src), alt: p.featured.alt },
     keywords: p.keywords,
     relatedProducts: p.products.map((name) => ref(productIds.get(name)!, `p-${name.toLowerCase()}`)),
     relatedApplications: p.applications.map((a) => ref(applicationIds.get(a.toLowerCase())!, `a-${a.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`)),

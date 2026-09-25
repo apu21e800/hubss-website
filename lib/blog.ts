@@ -91,7 +91,7 @@ export const META_FIELDS = `
   keywords,
   tags,
   seo,
-  "featured": featuredImage{ alt, "url": asset->url, "origin": asset->source.url },
+  "featured": featuredImage{ alt, "url": asset->url, "origin": select(originAsset == asset._ref => origin, asset->source.url) },
   "declaredProducts": relatedProducts[]->name,
   "applications": relatedApplications[]->name,
   "text": pt::text(body),

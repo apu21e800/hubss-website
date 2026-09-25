@@ -151,6 +151,8 @@ export default defineType({
               type: "string",
               description: "Printed under the photo.",
             }),
+            defineField({ name: "origin", title: "Original file", type: "string", hidden: true, readOnly: true }),
+            defineField({ name: "originAsset", title: "Asset the original file was uploaded as", type: "string", hidden: true, readOnly: true }),
           ],
         }),
         defineArrayMember({
@@ -246,6 +248,9 @@ export default defineType({
           description: "Describe the photo for screen readers and Google Images, e.g. 'Red brick-pattern crosswalk at a Toronto intersection'.",
           validation: (r) => r.required().error("Every photo needs alt text before it can be published (AODA)"),
         }),
+        // Set by the 2026 import: the /public file this photo came from (see sanity/schemas/_shared.ts).
+        defineField({ name: "origin", title: "Original file", type: "string", hidden: true, readOnly: true }),
+        defineField({ name: "originAsset", title: "Asset the original file was uploaded as", type: "string", hidden: true, readOnly: true }),
       ],
       validation: (r) => r.required().warning("Without a photo the post gets a stock HUB photo on its card and a plain header"),
     }),

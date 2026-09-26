@@ -183,6 +183,7 @@ export default function CatalogueViewer({
   const [installEvt, setInstallEvt] = useState<BeforeInstallPromptEvent | null>(null);
   const [device, setDevice] = useState({ ios: false, standalone: false, fullscreen: false });
   const [presenting, setPresenting] = useState(false);
+  const [qrSvg, setQrSvg] = useState<string | null>(null);
   const mainRef = useRef<HTMLElement>(null);
 
   const stageRef = useRef<HTMLDivElement>(null);
@@ -647,6 +648,25 @@ export default function CatalogueViewer({
       document.removeEventListener("fullscreenchange", onFs);
     };
   }, [start, total]);
+
+  // A QR code of this page, for a room: the book is on the screen, the
+  // phones in the room scan it and have the same spread, and the app, in
+  // their pockets. Drawn only when the Contents panel opens on a screen that
+  // is not itself a phone; the encoder loads then, not with the reader.
+  useEffect(() => {
+    if (!showContents || compact) return;
+    let cancelled = false;
+    const url = new URL(window.location.href);
+    url.search = "";
+    url.searchParams.set("utm_source", "qr");
+    url.searchParams.set("utm_medium", "reader");
+    url.searchParams.set("utm_campaign", "idea-book");
+    import("qrcode")
+      .then((QR) => QR.toString(url.toString(), { type: "svg", margin: 1, errorCorrectionLevel: "M", color: { dark: "#0D0D0D", light: "#FFFFFF" } }))
+      .then((svg) => { if (!cancelled) setQrSvg(svg); })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, [showContents, compact, shownFirst]);
 
   const saveOffline = async () => {
     if (!("caches" in window) || offline.status === "saving") return;
@@ -1201,6 +1221,20 @@ export default function CatalogueViewer({
                   {device.standalone && " Installed on this device."}
                 </p>
               </div>
+              {qrSvg && !compact && (
+                <div className="mt-5 flex items-center gap-4">
+                  <div
+                    className="h-[104px] w-[104px] flex-shrink-0 overflow-hidden rounded-lg bg-white p-1.5 [&>svg]:h-full [&>svg]:w-full"
+                    aria-label={`QR code for page ${shownFirst}`}
+                    role="img"
+                    dangerouslySetInnerHTML={{ __html: qrSvg }}
+                  />
+                  <p className="text-[12px] leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                    <span className="font-semibold" style={{ color: "var(--text-primary)" }}>Open this page on a phone.</span>
+                    {" "}Point the camera here: the same spread, on their screen, with the whole book behind it. Made for a room.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>

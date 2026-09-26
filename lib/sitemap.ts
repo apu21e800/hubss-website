@@ -80,7 +80,11 @@ export function buildSitemap(photos?: PhotoSources, posts: PostMeta[] = []): Met
     // prerendered, but they are 144 near-identical images of one book and
     // listing them all would drown the rest of the sitemap in them.
     ...(catalogueReady
-      ? [{ url: `${BASE_URL}${ideaBook.href}`, lastModified: new Date(), changeFrequency: "yearly" as const, priority: 0.7 }]
+      ? [
+          { url: `${BASE_URL}${ideaBook.href}`, lastModified: new Date(), changeFrequency: "yearly" as const, priority: 0.7 },
+          // The book's words on one page, for search engines and screen readers.
+          { url: `${BASE_URL}${ideaBook.href}/contents`, lastModified: new Date(), changeFrequency: "yearly" as const, priority: 0.5 },
+        ]
       : []),
     { url: `${BASE_URL}${ideaBook.requestHref}`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.5 },
     { url: `${BASE_URL}/about`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.6 },

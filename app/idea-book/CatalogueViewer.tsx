@@ -17,10 +17,12 @@
  * in the layout, it is the only legible option, and the reader already handles
  * a single page well.
  *
- * NO PAPER. No curl, no shadow down a fake gutter, no page-flip. A turn is a
- * 160ms cross-fade of the whole spread with a 10px drift in the direction of
- * travel - enough to say which way you went, not enough to be a effect. Both
- * pages of a spread move as one object, because they are one object.
+ * A PAGE TURN, ON A DESKTOP. Since Doug's round (phase 3, Sep 2026) a turn
+ * between two spreads is a leaf turning on the gutter: the page you're leaving
+ * on the front, the page arriving on the back, 700 ms, CSS 3D, no library, no
+ * WebGL. Everything else - a phone's single pages, a zoomed spread, the cover,
+ * anyone who asked for reduced motion - keeps the 160 ms cross-fade with a
+ * 10 px drift, which says which way you went without being an effect.
  *
  * NEVER A SPINNER. The neighbouring spreads stay mounted and loading, so a turn
  * has nothing to wait for, and the outgoing spread stays mounted through the
@@ -36,6 +38,7 @@ import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { cataloguePageSrcSet, cataloguePageUrl, ideaBook, type CatalogueDownload } from "@/lib/catalogue";
 import type { CataloguePage } from "@/lib/catalogue-pages";
+import type { IdeaBookContentsSection, IdeaBookLinks } from "@/lib/idea-book-links";
 
 // Loaded only when someone asks for the book, so the reader's bundle stays
 // the reader.
@@ -44,6 +47,8 @@ const PrintedCopyForm = dynamic(() => import("@/components/catalogue/PrintedCopy
 const MAX_SCALE = 3.2;
 const TAP_ZOOM = 2.2;
 const FADE_MS = 160;
+/** The leaf's turn, gutter to gutter. */
+const TURN_MS = 700;
 /** Spreads kept mounted either side of the current one. */
 const PRELOAD = 1;
 /**
@@ -86,9 +91,26 @@ type Props = {
   exitHref: string;
   requestHref: string;
   lunchLearnHref: string;
+  /** Page number → what that spread shows (lib/idea-book-links.ts). */
+  links: IdeaBookLinks;
+  contents: IdeaBookContentsSection[];
 };
 
 type View = { s: number; x: number; y: number };
+
+/** A turn in progress: which spreads, which way, and whether the leaf has started to move. */
+type Turn = { from: number; to: number; dir: 1 | -1; started: boolean };
+
+/**
+ * GA4, through the gtag the root layout's <GoogleAnalytics> installs. Every
+ * event carries the page so a report can say which spreads people reach.
+ * Quiet when analytics is blocked: the reader never waits on it.
+ */
+function track(name: string, params: Record<string, string | number | undefined>) {
+  if (typeof window === "undefined") return;
+  const w = window as Window & { gtag?: (...args: unknown[]) => void };
+  w.gtag?.("event", name, { event_category: "idea_book", ...params });
+}
 
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 
@@ -114,9 +136,21 @@ export default function CatalogueViewer({
   exitHref,
   requestHref,
   lunchLearnHref,
+  links,
+  contents,
 }: Props) {
   const total = pages.length;
   const maxWidth = widths[widths.length - 1];
+  const [turn, setTurn] = useState<Turn | null>(null);
+  const [showContents, setShowContents] = useState(false);
+  const reducedMotion = useRef(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => { reducedMotion.current = mq.matches; };
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
 
   const [spreadMode, setSpreadMode] = useState(false);
   const [view, setView] = useState<View>({ s: 1, x: 0, y: 0 });
@@ -175,7 +209,6 @@ export default function CatalogueViewer({
     (nextVi: number, direction = 1) => {
       const n = clamp(nextVi, 0, views.length - 1);
       setDir(direction);
-      setVi(n);
       const group = views[n] ?? [1];
       if (!group.includes(pageRef.current)) pageRef.current = group[0];
       setView({ s: 1, x: 0, y: 0 });
@@ -184,9 +217,47 @@ export default function CatalogueViewer({
         const url = first === 1 ? ideaBook.href : `${ideaBook.href}/${first}`;
         window.history.replaceState(null, "", url + window.location.search);
       }
+      // A leaf turns only between two full spreads, one step apart, on a
+      // desktop, unzoomed, for someone who hasn't asked for reduced motion.
+      // The cover and the back cover sit alone on the stage, so a turn to or
+      // from them cross-fades as before.
+      setVi((cur) => {
+        const step = n - cur;
+        const canTurn =
+          spreadMode && !reducedMotion.current && Math.abs(step) === 1 &&
+          (views[cur]?.length ?? 0) === 2 && (views[n]?.length ?? 0) === 2;
+        if (canTurn) {
+          setTurn({ from: cur, to: n, dir: step > 0 ? 1 : -1, started: false });
+          return cur;
+        }
+        return n;
+      });
     },
-    [views],
+    [views, spreadMode],
   );
+
+  // The leaf is mounted flat, then told to turn on the next frame so the CSS
+  // transition has something to move from; when it lands the real spread takes
+  // over and the leaf goes.
+  useEffect(() => {
+    if (!turn || turn.started) return;
+    // Two frames, not one: a state change inside the first animation frame is
+    // flushed before the browser paints the flat leaf, and a transition with
+    // no painted starting state is a jump.
+    let raf2 = 0;
+    const raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(() => setTurn((t) => (t ? { ...t, started: true } : t)));
+    });
+    return () => { cancelAnimationFrame(raf1); cancelAnimationFrame(raf2); };
+  }, [turn]);
+  useEffect(() => {
+    if (!turn?.started) return;
+    const t = window.setTimeout(() => {
+      setVi(turn.to);
+      setTurn(null);
+    }, TURN_MS + 30);
+    return () => window.clearTimeout(t);
+  }, [turn]);
   const goToPage = useCallback(
     (page: number) => {
       const direction = page >= (pageRef.current ?? 1) ? 1 : -1;
@@ -195,8 +266,17 @@ export default function CatalogueViewer({
     },
     [goTo, viewOf],
   );
-  const prev = useCallback(() => goTo(vi - 1, -1), [goTo, vi]);
-  const next = useCallback(() => goTo(vi + 1, 1), [goTo, vi]);
+  const prev = useCallback(() => { if (!turn) goTo(vi - 1, -1); }, [goTo, vi, turn]);
+  const next = useCallback(() => { if (!turn) goTo(vi + 1, 1); }, [goTo, vi, turn]);
+
+  // GA4: the book was opened, and each spread reached (settled for a moment,
+  // so a scrub through the pages counts once).
+  const shownFirst = views[vi]?.[0] ?? 1;
+  useEffect(() => { track("idea_book_open", { page: start }); }, [start]);
+  useEffect(() => {
+    const t = window.setTimeout(() => track("idea_book_page", { page: shownFirst }), 800);
+    return () => window.clearTimeout(t);
+  }, [shownFirst]);
 
   // --- layout ------------------------------------------------------------
   useEffect(() => {
@@ -416,7 +496,7 @@ export default function CatalogueViewer({
     const onKey = (e: KeyboardEvent) => {
       const el = e.target as HTMLElement | null;
       if (el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.tagName === "SELECT")) return;
-      if (askingForPrint && e.key !== "Escape") return;
+      if ((askingForPrint || showContents) && e.key !== "Escape") return;
       switch (e.key) {
         case "ArrowRight":
         case "PageDown":
@@ -449,7 +529,10 @@ export default function CatalogueViewer({
         case "Escape":
           // Escape unwinds one layer at a time: the form, then the zoom, then
           // the catalogue. Never all three at once, and never nothing.
-          if (askingForPrint) {
+          if (showContents) {
+            e.preventDefault();
+            setShowContents(false);
+          } else if (askingForPrint) {
             e.preventDefault();
             setAskingForPrint(false);
           } else if (zoomed) {
@@ -463,7 +546,7 @@ export default function CatalogueViewer({
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [next, prev, goTo, views.length, zoomAbout, view.s, zoomed, exitHref, askingForPrint]);
+  }, [next, prev, goTo, views.length, zoomAbout, view.s, zoomed, exitHref, askingForPrint, showContents]);
 
   // --- chrome auto-hide --------------------------------------------------
   const wake = useCallback(() => {
@@ -553,9 +636,83 @@ export default function CatalogueViewer({
               willChange: "transform",
             }}
           >
+            {turn && (() => {
+              // Forward: the base shows the left page staying and the far
+              // right page arriving; the leaf carries the right page away
+              // on its front and brings the next left page on its back.
+              // Backward is the mirror.
+              const a = views[turn.from]; const b = views[turn.to];
+              const baseLeft = turn.dir > 0 ? a[0] : b[0];
+              const baseRight = turn.dir > 0 ? b[1] : a[1];
+              const front = turn.dir > 0 ? a[1] : a[0];
+              const back = turn.dir > 0 ? b[0] : b[1];
+              const page = (n: number, side: "left" | "right") => (
+                <img
+                  src={cataloguePageUrl(n, widths[0])}
+                  srcSet={cataloguePageSrcSet(n)}
+                  sizes={baseSizes}
+                  alt=""
+                  width={maxWidth}
+                  height={Math.round(maxWidth / aspect)}
+                  draggable={false}
+                  className={`h-full w-auto max-w-none object-contain ${side === "left" ? "ml-auto" : "mr-auto"}`}
+                />
+              );
+              const angle = turn.started ? (turn.dir > 0 ? -180 : 180) : 0;
+              return (
+                <div className="absolute inset-0" style={{ perspective: "2600px" }} aria-hidden>
+                  <div className="absolute inset-y-0 left-0 flex w-1/2">{page(baseLeft, "left")}</div>
+                  <div className="absolute inset-y-0 right-0 flex w-1/2">{page(baseRight, "right")}</div>
+                  {/* The gutter's shadow on the page being uncovered. */}
+                  <div
+                    className="absolute inset-y-0 w-1/2"
+                    style={{
+                      left: turn.dir > 0 ? "50%" : 0,
+                      background: turn.dir > 0
+                        ? "linear-gradient(to right, rgba(0,0,0,0.38), rgba(0,0,0,0) 35%)"
+                        : "linear-gradient(to left, rgba(0,0,0,0.38), rgba(0,0,0,0) 35%)",
+                      opacity: turn.started ? 0 : 1,
+                      transition: `opacity ${TURN_MS}ms ease-in`,
+                    }}
+                  />
+                  <div
+                    className="absolute inset-y-0 w-1/2"
+                    style={{
+                      left: turn.dir > 0 ? "50%" : 0,
+                      transformOrigin: turn.dir > 0 ? "left center" : "right center",
+                      transformStyle: "preserve-3d",
+                      transform: `rotateY(${angle}deg)`,
+                      transition: `transform ${TURN_MS}ms cubic-bezier(0.45, 0.05, 0.25, 1)`,
+                      willChange: "transform",
+                    }}
+                  >
+                    <div className="absolute inset-0 flex" style={{ backfaceVisibility: "hidden" }}>
+                      {page(front, turn.dir > 0 ? "right" : "left")}
+                      <div className="absolute inset-0" style={{
+                        background: turn.dir > 0
+                          ? "linear-gradient(to right, rgba(0,0,0,0.28), rgba(0,0,0,0) 40%)"
+                          : "linear-gradient(to left, rgba(0,0,0,0.28), rgba(0,0,0,0) 40%)",
+                        opacity: turn.started ? 1 : 0,
+                        transition: `opacity ${TURN_MS / 2}ms ease-in`,
+                      }} />
+                    </div>
+                    <div className="absolute inset-0 flex" style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}>
+                      {page(back, turn.dir > 0 ? "left" : "right")}
+                      <div className="absolute inset-0" style={{
+                        background: turn.dir > 0
+                          ? "linear-gradient(to left, rgba(0,0,0,0.30), rgba(0,0,0,0) 40%)"
+                          : "linear-gradient(to right, rgba(0,0,0,0.30), rgba(0,0,0,0) 40%)",
+                        opacity: turn.started ? 0 : 1,
+                        transition: `opacity ${TURN_MS}ms ease-out`,
+                      }} />
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
             {views.map((group, i) => {
               if (!mounted.has(i)) return null;
-              const active = i === vi;
+              const active = i === vi && !turn;
               return (
                 <div
                   key={`v${i}-${group.join("-")}`}
@@ -643,6 +800,7 @@ export default function CatalogueViewer({
             <Actions
               requestHref={requestHref}
               onRequest={() => setAskingForPrint(true)}
+              onContents={() => setShowContents(true)}
               download={download}
               canShare={canShare}
               onShare={onShare}
@@ -695,6 +853,34 @@ export default function CatalogueViewer({
             boxShadow: "0 8px 30px rgba(0,0,0,0.45)",
           }}
         >
+          {/* Hotspots: what these pages show, as chips to the product and
+              application pages (lib/idea-book-links.ts). A chip for the
+              spread rather than a rectangle over the photograph: exact,
+              tappable at any size, and readable by a screen reader. */}
+          {(() => {
+            const seen = new Set<string>();
+            const here = shown.flatMap((n) => links[n] ?? []).filter((l) => (seen.has(l.href) ? false : (seen.add(l.href), true)));
+            if (here.length === 0) return null;
+            return (
+              <div className={`flex flex-wrap items-center gap-x-2 gap-y-1.5 ${short ? "mb-1" : "mb-2.5"}`}>
+                <span className="text-[10px] font-semibold uppercase tracking-[0.14em]" style={{ color: "rgba(255,255,255,0.42)" }}>
+                  On {shown.length === 2 ? "these pages" : "this page"}
+                </span>
+                {here.map((l) => (
+                  <Link
+                    key={l.href}
+                    href={l.href}
+                    onClick={() => track("idea_book_hotspot", { page: shown[0], target: l.href })}
+                    className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[12px] font-semibold transition-colors hover:bg-white/20"
+                    style={{ background: "rgba(255,255,255,0.10)", color: "#fff", border: "1px solid rgba(255,255,255,0.14)" }}
+                  >
+                    {l.label}
+                    <span aria-hidden style={{ color: "#fb923c" }}>→</span>
+                  </Link>
+                ))}
+              </div>
+            );
+          })()}
           <div className="flex items-center gap-3">
             <span className="hidden w-8 flex-shrink-0 text-right text-[11px] tabular-nums sm:block" style={{ color: "rgba(255,255,255,0.40)" }}>
               1
@@ -718,6 +904,7 @@ export default function CatalogueViewer({
                 <Actions
                   requestHref={requestHref}
                   onRequest={() => setAskingForPrint(true)}
+                  onContents={() => setShowContents(true)}
                   download={download}
                   canShare={canShare}
                   onShare={onShare}
@@ -746,6 +933,7 @@ export default function CatalogueViewer({
             <Actions
               requestHref={requestHref}
               onRequest={() => setAskingForPrint(true)}
+              onContents={() => setShowContents(true)}
               download={download}
               canShare={canShare}
               onShare={onShare}
@@ -769,6 +957,83 @@ export default function CatalogueViewer({
           </div>
         </div>
       </footer>
+
+      {showContents && (
+        <div
+          className="absolute inset-0 z-30 overflow-y-auto overscroll-contain"
+          style={{ background: "rgba(0,0,0,0.72)", backdropFilter: "blur(4px)" }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowContents(false);
+          }}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Contents"
+            className="mx-auto my-8 w-[min(720px,calc(100vw-2rem))] rounded-2xl p-6 sm:p-8"
+            style={{ background: "var(--bg-primary)", border: "1px solid var(--border-color)" }}
+          >
+            <div className="mb-5 flex items-start justify-between gap-4">
+              <div>
+                <p className="text-[11px] font-bold uppercase tracking-[0.22em]" style={{ color: "var(--accent-text)" }}>
+                  {ideaBook.short} · {ideaBook.volume}
+                </p>
+                <h2 className="mt-1.5 text-xl font-bold sm:text-2xl" style={{ color: "var(--text-primary)" }}>
+                  Contents
+                </h2>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowContents(false)}
+                aria-label="Close"
+                className="rounded-full p-2 transition-colors hover:bg-[var(--ink-10)]"
+                style={{ color: "var(--text-muted)" }}
+              >
+                <CloseIcon />
+              </button>
+            </div>
+            <p className="mb-5 text-[13px]" style={{ color: "var(--text-secondary)" }}>
+              Tap a title to turn to it, or open its full page on the site.{" "}
+              <Link href={`${ideaBook.href}/contents`} className="font-semibold underline" style={{ color: "var(--accent-text)" }}>
+                Contents as a page
+              </Link>
+            </p>
+            <div className="grid gap-6 sm:grid-cols-2">
+              {contents.map((section) => (
+                <div key={section.title}>
+                  <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--text-muted)" }}>
+                    {section.title}
+                  </p>
+                  <ul className="space-y-0.5">
+                    {section.items.map((item) => (
+                      <li key={item.href} className="flex items-center justify-between gap-3">
+                        <button
+                          type="button"
+                          onClick={() => { setShowContents(false); goToPage(item.page); }}
+                          className="flex min-w-0 flex-1 items-baseline gap-3 rounded-md px-2 py-1.5 text-left text-[14px] font-semibold transition-colors hover:bg-[var(--ink-05)]"
+                          style={{ color: "var(--text-primary)" }}
+                        >
+                          <span className="w-7 flex-shrink-0 text-[11px] tabular-nums" style={{ color: "var(--text-muted)" }}>{item.page}</span>
+                          <span className="truncate">{item.label}</span>
+                        </button>
+                        <Link
+                          href={item.href}
+                          onClick={() => track("idea_book_hotspot", { page: item.page, target: item.href })}
+                          className="flex-shrink-0 rounded-md px-2 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] transition-colors hover:bg-[var(--ink-05)]"
+                          style={{ color: "var(--accent-text)" }}
+                          aria-label={`${item.label} on the site`}
+                        >
+                          Page →
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {askingForPrint && (
         <div
@@ -856,6 +1121,7 @@ export default function CatalogueViewer({
 function Actions({
   requestHref,
   onRequest,
+  onContents,
   download,
   canShare,
   onShare,
@@ -863,6 +1129,7 @@ function Actions({
 }: {
   requestHref: string;
   onRequest: () => void;
+  onContents: () => void;
   download: CatalogueDownload | null;
   canShare: boolean;
   onShare: () => void;
@@ -870,6 +1137,10 @@ function Actions({
 }) {
   return (
     <>
+      <button type="button" onClick={onContents} className={btnGhost} aria-label="Contents" title="Contents">
+        <ListIcon />
+        <span className="hidden md:inline">Contents</span>
+      </button>
       {/* The lead action for this page, so it looks like one. It was a grey
           pill among grey pills and disappeared into the chrome. */}
       <a
@@ -877,6 +1148,7 @@ function Actions({
         className={`${btnPrimary}${stretch ? " flex-1 justify-center" : ""}`}
         title="Have the printed book mailed to you"
         onClick={(e) => {
+          track("idea_book_request", {});
           if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
           e.preventDefault();
           onRequest();
@@ -886,7 +1158,7 @@ function Actions({
         <span className={stretch ? "" : "hidden sm:inline"}>Request a copy</span>
       </a>
       {download && (
-        <a href={download.href} download={ideaBook.fileName} className={btnGhost} title={`Download the PDF (${download.label})`} aria-label={`Download the PDF, ${download.label}`}>
+        <a href={download.href} download={ideaBook.fileName} onClick={() => track("idea_book_pdf", {})} className={btnGhost} title={`Download the PDF (${download.label})`} aria-label={`Download the PDF, ${download.label}`}>
           <DownloadIcon />
           <span className="hidden md:inline">PDF</span>
         </a>
@@ -917,6 +1189,13 @@ const kbd = {
   fontSize: 10,
 } as const;
 
+function ListIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
 function CloseIcon() {
   return (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>

@@ -11,6 +11,7 @@ import CatalogueEmpty from "./CatalogueEmpty";
 import { catalogue, catalogueReady } from "@/lib/catalogue";
 import { cataloguePages } from "@/lib/catalogue-pages";
 import { showCatalogue } from "@/lib/feature-flags";
+import { buildIdeaBookContents, buildIdeaBookLinks } from "@/lib/idea-book-links";
 import { EXIT_HREF, LUNCH_LEARN_HREF, REQUEST_HREF } from "./links";
 
 export default function CataloguePage() {
@@ -28,6 +29,8 @@ export default function CataloguePage() {
       exitHref={EXIT_HREF}
       requestHref={REQUEST_HREF}
       lunchLearnHref={LUNCH_LEARN_HREF}
+      links={buildIdeaBookLinks()}
+      contents={buildIdeaBookContents()}
     />
   );
 }

@@ -12,6 +12,7 @@ import CatalogueViewer from "../CatalogueViewer";
 import { catalogue, catalogueReady, catalogueTotal, cataloguePageUrl, ideaBook, normalisePage } from "@/lib/catalogue";
 import { cataloguePages } from "@/lib/catalogue-pages";
 import { showCatalogue } from "@/lib/feature-flags";
+import { buildIdeaBookContents, buildIdeaBookLinks } from "@/lib/idea-book-links";
 import { EXIT_HREF, LUNCH_LEARN_HREF, REQUEST_HREF } from "../links";
 
 export const dynamicParams = false;
@@ -59,6 +60,8 @@ export default async function CataloguePageAt({ params }: { params: Promise<{ pa
       exitHref={EXIT_HREF}
       requestHref={REQUEST_HREF}
       lunchLearnHref={LUNCH_LEARN_HREF}
+      links={buildIdeaBookLinks()}
+      contents={buildIdeaBookContents()}
     />
   );
 }

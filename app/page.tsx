@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import { existsSync } from "node:fs";
-import { join } from "node:path";
 import Nav from "@/components/sections/Nav";
 import HeroSlideshow from "@/components/sections/HeroSlideshow";
 // WhyHubss stats/claims block removed per Doug; TrustedByMarquee restored as standalone social proof.
@@ -82,11 +80,16 @@ const organizationSchema = {
 };
 
 /**
- * The hero, art-directed. The Studio photograph is the default; when a
- * designer has cut these from the same master (docs/IMAGE-WORKFLOW.md, "The
- * hero at every size"), a wide screen and a phone get their own framing,
- * each with the HUB sign in the middle. Any file that is not on disk
- * is simply not offered, so the page never points at a picture nobody made.
+ * The hero, art-directed. The Studio photograph is the default; a wide
+ * screen and a phone get their own framing, cut from the same master by
+ * scripts/hero-cuts.mjs (docs/IMAGE-WORKFLOW.md, "The hero at every size"),
+ * each with the HUB sign in the middle. The files are committed in
+ * /public/images/hero and listed here by hand: a <source> that 404s shows a
+ * broken picture, so remove the entry when removing the file.
+ *
+ * Never check for them with fs at runtime. The first version did, and
+ * Vercel's file tracing then packed the whole /public folder (2.84 GB of
+ * rasters) into the page's function, which failed the deploy of `ddff97b`.
  */
 const HERO_SOURCES = [
   // A wide, short window (a laptop, a 21:9 monitor): a 2:1 frame.
@@ -115,7 +118,7 @@ export default async function Home() {
     // Hero slide 1 in Studio; /images/hero/hero-1.jpg when it's empty.
     heroImageSrc: heroPhoto?.src,
     heroImageAlt: heroPhoto?.alt,
-    heroSources: HERO_SOURCES.filter((v) => existsSync(join(process.cwd(), "public", v.file.slice(1)))),
+    heroSources: HERO_SOURCES,
   };
 
   return (

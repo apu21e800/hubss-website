@@ -18,6 +18,12 @@ export const metadata = buildMetadata({
   slug: "applications",
 });
 
+/** The first 80 characters of a line, cut at a word, with an ellipsis. */
+function blurb(text: string, max = 80): string {
+  if (text.length <= max) return text;
+  return text.slice(0, max).replace(/\s+\S*$/, "").replace(/[,;:]$/, "") + "…";
+}
+
 export default async function ApplicationsPage() {
   const applications = await getMergedApplications();
   return (
@@ -50,6 +56,11 @@ export default async function ApplicationsPage() {
             <Link
               key={app.slug}
               href={`/applications/${app.slug}`}
+              // data-hero: a photograph with type laid over it, so the text
+              // tokens are the dark set whatever the page around it is. On
+              // paper, --text-primary is charcoal, and Vern's phone (26 Sep
+              // 2026) showed charcoal names on a charcoal scrim: unreadable.
+              data-hero
               className="group relative overflow-hidden rounded-xl block"
               style={{ aspectRatio: "4/3" }}
             >
@@ -60,13 +71,21 @@ export default async function ApplicationsPage() {
                 className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               />
-              <div className="absolute inset-0 transition-all" style={{ background: "rgba(26,26,26,0.6)" }} />
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: "rgba(249,115,22,0.2)" }} />
+              {/* A bottom-weighted scrim: the photograph reads at the top,
+                  the type sits on the darkest part. */}
+              <div
+                className="absolute inset-0"
+                style={{ background: "linear-gradient(180deg, rgba(13,13,13,0.08) 0%, rgba(13,13,13,0.30) 45%, rgba(13,13,13,0.88) 100%)" }}
+              />
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: "rgba(249,115,22,0.18)" }} />
               <div className="absolute bottom-0 left-0 right-0 p-5">
-                <h2 className="font-bold text-lg mb-1" style={{ color: "var(--text-primary)" }}>{app.name}</h2>
+                <h2 className="font-bold text-lg mb-1" style={{ color: "var(--text-primary)", textShadow: "0 1px 2px rgba(0,0,0,0.45)" }}>{app.name}</h2>
                 {/* Description always visible on mobile (no hover), fades in on desktop */}
-                <p className="text-xs leading-relaxed opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity" style={{ color: "var(--text-primary)" }}>
-                  {app.shortDesc.slice(0, 80)}...
+                <p
+                  className="text-xs leading-relaxed opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
+                  style={{ color: "var(--text-body)", textShadow: "0 1px 2px rgba(0,0,0,0.45)" }}
+                >
+                  {blurb(app.shortDesc)}
                 </p>
               </div>
             </Link>

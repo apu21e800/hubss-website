@@ -10,7 +10,7 @@ import { productImages, resolveImage } from "@/lib/featured-images";
 // Used as the fallback when Sanity has not set `homepageBlurb` on a product.
 const PRODUCT_WHAT: Record<string, string> = {
   "streetprint":
-    "In-place stamped asphalt — cobblestone, brick, herringbone and a wide variety of other patterns. No demolition, no raised edges, snowplow-safe. Looks like stone, performs like asphalt.",
+    "In-place stamped asphalt: cobblestone, brick, herringbone and a wide variety of other patterns. No demolition, no raised edges, snowplow-safe. Looks like stone, performs like asphalt.",
   "streetbond":
     "Water based, epoxy modified acrylic coatings that transform asphalt and concrete.",
   "traffic-patterns-xd":
@@ -101,7 +101,7 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
         {/* Section header */}
         <div className="mb-14 md:mb-16">
           <p className="gradient-text text-xs tracking-[0.15em] font-semibold uppercase mb-3">
-            The Systems
+            The systems
           </p>
           <div className="flex items-end justify-between gap-6 flex-wrap">
             <div>
@@ -121,7 +121,7 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
                 className="text-base font-light max-w-lg leading-relaxed"
                 style={{ color: "var(--text-secondary)" }}
               >
-                Stamped asphalt, preformed thermoplastic and coatings — chosen by what
+                Stamped asphalt, preformed thermoplastic and coatings, chosen by what
                 the surface has to take. Turning asphalt and concrete into your signature
                 surface.
               </p>

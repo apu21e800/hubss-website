@@ -126,14 +126,14 @@ export default async function ProjectPage({ params }: Props) {
                 className="block w-full text-center font-semibold py-4 rounded-lg mt-8 text-sm transition-all hover:brightness-110"
                 style={{ background: "#f97316", color: "var(--on-accent)" }}
               >
-                View {project.product} Product
+                View {project.product} product
               </Link>
               <Link
                 href="/contact"
                 className="block w-full text-center font-semibold py-4 rounded-lg mt-3 text-sm transition-all hover:border-[#F97316]/50 hover:text-white"
                 style={{ border: "1px solid var(--ink-12)", color: "var(--text-muted)" }}
               >
-                Request a Consultation
+                Request a consultation
               </Link>
             </div>
           </div>

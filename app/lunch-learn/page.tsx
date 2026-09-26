@@ -7,8 +7,8 @@ import { buildMetadata } from "@/lib/seo";
 import { getSanityPageContent } from "@/lib/sanity.queries";
 
 export const metadata = buildMetadata({
-  title: "Lunch & Learn — Free Spec Session for Engineers & Planners",
-  description: "Book a free Lunch & Learn with HUB Surface Systems. We bring lunch, material samples, and 27 years of decorative pavement expertise to your office — in person or virtual, coast to coast.",
+  title: "Lunch & Learn · Free Spec Session for Engineers & Planners",
+  description: "Book a free Lunch & Learn with HUB Surface Systems. We bring lunch, material samples, and 27 years of decorative pavement expertise to your office, in person or virtual, coast to coast.",
   slug: "lunch-learn",
 });
 
@@ -33,7 +33,7 @@ const faqSchema = {
       name: "What does it cost?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Nothing. Sessions are how we introduce our systems to the people who specify them — no invoice, no minimum order, and no follow-up pressure.",
+        text: "Nothing. Sessions are how we introduce our systems to the people who specify them: no invoice, no minimum order, and no follow-up pressure.",
       },
     },
     {
@@ -41,7 +41,7 @@ const faqSchema = {
       name: "Who should be in the room?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Engineers, planners, landscape architects, project managers, procurement — anyone who touches the surface spec. Sessions are built for mixed teams, and there's no cap on seats.",
+        text: "Engineers, planners, landscape architects, project managers, procurement: anyone who touches the surface spec. Sessions are built for mixed teams, and there's no cap on seats.",
       },
     },
     {
@@ -49,7 +49,7 @@ const faqSchema = {
       name: "Is the session in-person or virtual?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Both. In-person sessions are available coast to coast through our certified applicator network. Virtual sessions use Zoom or Teams — we mail sample kits before we connect.",
+        text: "Both. In-person sessions are available coast to coast through our certified applicator network. Virtual sessions use Zoom or Teams. We mail sample kits before we connect.",
       },
     },
   ],
@@ -61,7 +61,7 @@ const serviceSchema = {
   "@context": "https://schema.org",
   "@type": "Service",
   "@id": "https://hubss.com/lunch-learn#service",
-  name: "HUB Lunch & Learn — Decorative Pavement Spec Session",
+  name: "HUB Lunch & Learn · Decorative Pavement Spec Session",
   serviceType: "Technical Lunch & Learn Presentation",
   description:
     "Free 30–45 minute presentation for engineering, architecture, and municipal-procurement teams covering decorative pavement systems, thermoplastic markings, and coloured coatings. Includes material samples, spec sheets, and regional installer contacts.",
@@ -115,14 +115,14 @@ export default async function LunchLearnPage() {
     return h.whatYouGetHeading === "Not a Sales Pitch. An Education." ? undefined : h;
   }
   const hero = {
-    eyebrow:        fresh("eyebrow", sanityPage?.lunchLearnHero?.eyebrow)               ?? "Lunch & Learn · In-Person or Virtual · Coast to Coast",
+    eyebrow:        fresh("eyebrow", sanityPage?.lunchLearnHero?.eyebrow)               ?? "Lunch & Learn · In-person or virtual · Coast to coast",
     headingLine1:   fresh("headingLine1", sanityPage?.lunchLearnHero?.headingLine1)     ?? "Specify with confidence.",
     headingLine2:   fresh("headingLine2", sanityPage?.lunchLearnHero?.headingLine2)     ?? "Lunch is on us.",
-    subheading:     sanityPage?.lunchLearnHero?.subheading && sanityPage.lunchLearnHero.subheading.startsWith("A 45-minute HUB Lunch & Learn delivers") ? "A focused 45-minute session that gives your team the technical grounding to specify decorative pavement, thermoplastic crosswalks, and coloured coatings — real Canadian case studies and spec language you can drop straight into your next RFP." : (sanityPage?.lunchLearnHero?.subheading ?? "A focused 45-minute session that gives your team the technical grounding to specify decorative pavement, thermoplastic crosswalks, and coloured coatings — real Canadian case studies and spec language you can drop straight into your next RFP."),
-    ctaLabel:       fresh("ctaLabel", sanityPage?.lunchLearnHero?.ctaLabel)             ?? "Book a Session",
+    subheading:     sanityPage?.lunchLearnHero?.subheading && sanityPage.lunchLearnHero.subheading.startsWith("A 45-minute HUB Lunch & Learn delivers") ? "A focused 45-minute session that gives your team the technical grounding to specify decorative pavement, thermoplastic crosswalks, and coloured coatings. Real Canadian case studies and spec language you can drop straight into your next RFP." : (sanityPage?.lunchLearnHero?.subheading ?? "A focused 45-minute session that gives your team the technical grounding to specify decorative pavement, thermoplastic crosswalks, and coloured coatings. Real Canadian case studies and spec language you can drop straight into your next RFP."),
+    ctaLabel:       fresh("ctaLabel", sanityPage?.lunchLearnHero?.ctaLabel)             ?? "Book a session",
     formHeading:    fresh("formHeading", sanityPage?.lunchLearnHero?.formHeading)       ?? "Book your Lunch & Learn",
-    formSubheading: fresh("formSubheading", sanityPage?.lunchLearnHero?.formSubheading) ?? "Tell us who you are and where you are — we confirm date and details within one business day.",
-    submitLabel:    fresh("submitLabel", sanityPage?.lunchLearnHero?.submitLabel)     ?? "Book the Session →",
+    formSubheading: fresh("formSubheading", sanityPage?.lunchLearnHero?.formSubheading) ?? "Tell us who you are and where you are. We confirm date and details within one business day.",
+    submitLabel:    fresh("submitLabel", sanityPage?.lunchLearnHero?.submitLabel)     ?? "Book the session →",
   };
 
   return (

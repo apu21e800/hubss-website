@@ -30,7 +30,7 @@ export default function ProductFaq({
         className="text-xl sm:text-2xl font-bold mb-2"
         style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}
       >
-        {productName} — common questions
+        {productName} · common questions
       </h2>
       <p className="mb-7 text-sm" style={{ color: "var(--text-secondary)" }}>
         Answers from HUB&apos;s field and technical documentation.

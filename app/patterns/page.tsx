@@ -7,9 +7,9 @@ import { buildMetadata } from "@/lib/seo";
 import { fieldTemplates, borderTemplates, patternSrc, type PatternTemplate } from "@/lib/pattern-templates";
 
 export const metadata: Metadata = buildMetadata({
-  title: "StreetPrint Pattern Library — Stamping Templates",
+  title: "StreetPrint Pattern Library · Stamping Templates",
   description:
-    "Sixteen dimensioned StreetPrint stamping templates — herringbone, offset brick, ashlar slate, cobble, tiles, and border courses. The patterns pressed into asphalt, as specified.",
+    "Sixteen dimensioned StreetPrint stamping templates: herringbone, offset brick, ashlar slate, cobble, tiles, and border courses. The patterns pressed into asphalt, as specified.",
   slug: "patterns",
 });
 
@@ -87,7 +87,7 @@ function TemplateCard({ t, wide = false }: { t: PatternTemplate; wide?: boolean 
       <div className="p-4 sm:p-5">
         <Image
           src={patternSrc(t)}
-          alt={`${t.name} — StreetPrint stamping template, dimensioned drawing`}
+          alt={`${t.name}, StreetPrint stamping template, dimensioned drawing`}
           width={1600}
           height={1238}
           className="w-full h-auto"
@@ -120,7 +120,7 @@ export default function PatternsPage() {
               className="text-[0.72rem] font-semibold uppercase"
               style={{ letterSpacing: "0.22em", color: "var(--text-secondary)" }}
             >
-              StreetPrint Templates
+              StreetPrint templates
             </p>
           </div>
           <h1
@@ -135,7 +135,7 @@ export default function PatternsPage() {
             aria-hidden="true"
           />
           <p className="text-base sm:text-lg max-w-2xl leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-            Sixteen stamping templates, shown as installed — dimensioned to the inch. Flexible
+            Sixteen stamping templates, shown as installed, dimensioned to the inch. Flexible
             templates press the pattern into warm asphalt; StreetBond colour locks it in. Every
             field pattern combines with every border course, plus fully custom designs.
           </p>
@@ -146,7 +146,7 @@ export default function PatternsPage() {
       <section className="py-16" style={{ background: "var(--bg-primary)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHead
-            eyebrow="Field Templates"
+            eyebrow="Field templates"
             title="The pattern across the surface."
             count={`${fieldTemplates.length} patterns`}
           />
@@ -160,7 +160,7 @@ export default function PatternsPage() {
       <section className="pb-16" style={{ background: "var(--bg-primary)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHead
-            eyebrow="Border Templates"
+            eyebrow="Border templates"
             title="Tile and brick borders."
             count={`${borderTemplates.length} patterns`}
           />
@@ -178,7 +178,7 @@ export default function PatternsPage() {
                 Custom patterns, cut to order.
               </p>
               <p className="text-sm mt-1 max-w-xl" style={{ color: "var(--text-secondary)" }}>
-                Logos, cultural art, wayfinding, one-off geometry — if it can be drawn, it can be
+                Logos, cultural art, wayfinding, one-off geometry: if it can be drawn, it can be
                 pressed into the street. See the system behind the patterns, or talk to a specialist.
               </p>
             </div>

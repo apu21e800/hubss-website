@@ -21,15 +21,15 @@ export default function LLPreview() {
   return (
     <main style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
       <div id="v-boardroom">
-        <Label>Option A — Boardroom</Label>
+        <Label>Option A · Boardroom</Label>
         <LunchLearnV2 variant="boardroom" />
       </div>
       <div id="v-ticket">
-        <Label>Option B — Ticket</Label>
+        <Label>Option B · Ticket</Label>
         <LunchLearnV2 variant="ticket" />
       </div>
       <div id="v-proof">
-        <Label>Option C — Proof</Label>
+        <Label>Option C · Proof</Label>
         <LunchLearnV2 variant="proof" />
       </div>
     </main>

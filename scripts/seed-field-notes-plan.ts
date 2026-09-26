@@ -162,7 +162,7 @@ const SEEDS: Seed[] = [
     type: "Guide",
     systems: ["streetprint", "streetbond", "traffic-patterns-xd"],
     applications: ["traffic-calming", "crosswalks"],
-    brief: "Cover the usual measures a municipality weighs (speed tables, raised crossings, curb extensions, narrowed lanes, gateway treatments) in plain words, then show where the surface does the work: the Idea Book's traffic-calming spread (page 54) — StreetPrint for traffic calming device treatments, StreetBond for sidewalks, pathways and plazas, TrafficPatternsXD for durable road surface treatments. Use 'speed table' naturally as a second phrase. Link the raised-crosswalk post if it exists by then. No speed-reduction percentages.",
+    brief: "Cover the usual measures a municipality weighs (speed tables, raised crossings, curb extensions, narrowed lanes, gateway treatments) in plain words, then show where the surface does the work: the Idea Book's traffic-calming spread (page 54): StreetPrint for traffic calming device treatments, StreetBond for sidewalks, pathways and plazas, TrafficPatternsXD for durable road surface treatments. Use 'speed table' naturally as a second phrase. Link the raised-crosswalk post if it exists by then. No speed-reduction percentages.",
   },
   {
     key: "asphalt-driveway-resurfacing",
@@ -173,7 +173,7 @@ const SEEDS: Seed[] = [
     type: "Guide",
     systems: ["streetprint", "durashield"],
     applications: ["private-driveways"],
-    brief: "For homeowners with a grey, tired but sound asphalt driveway. Set out the three honest options — a seal (recurring), a maintenance coating (DuraShield, from the book), or reheating and stamping the existing asphalt with StreetPrint (the book's driveway spread, page 76: 'stone-paver looks, without demolition') — and how to tell which one the driveway needs. Link the existing driveway posts rather than repeating them. No prices.",
+    brief: "For homeowners with a grey, tired but sound asphalt driveway. Set out the three honest options and how to tell which one the driveway needs: a seal (recurring), a maintenance coating (DuraShield, from the book), or reheating and stamping the existing asphalt with StreetPrint (the book's driveway spread, page 76: 'stone-paver looks, without demolition'). Link the existing driveway posts rather than repeating them. No prices.",
   },
   {
     key: "york-region-viva-brt",
@@ -184,7 +184,7 @@ const SEEDS: Seed[] = [
     type: "Case Study",
     systems: ["mmax"],
     applications: ["bus-lanes"],
-    brief: "REAL PROJECT — needs Doug before it is marked Ready: the year, what York Region needed, what was specified and why (MMAX, per the map pin), how the lanes were installed and how they have held up, and a photo of this installation. The drafter writes only what this brief and the Idea Book say; it must not invent the client's requirements or results. Audience: transit agencies and municipal engineers.",
+    brief: "REAL PROJECT. Needs Doug before it is marked Ready: the year, what York Region needed, what was specified and why (MMAX, per the map pin), how the lanes were installed and how they have held up, and a photo of this installation. The drafter writes only what this brief and the Idea Book say; it must not invent the client's requirements or results. Audience: transit agencies and municipal engineers.",
   },
   {
     key: "kelowna-crosswalk-network",
@@ -195,7 +195,7 @@ const SEEDS: Seed[] = [
     type: "Case Study",
     systems: ["traffic-patterns-xd"],
     applications: ["crosswalks"],
-    brief: "REAL PROJECT — needs Doug before it is marked Ready: the years, how many crossings and where, what the City needed, why TrafficPatternsXD was specified (per the map pin), and a photo of the installation. The drafter writes only what this brief and the Idea Book say. Audience: municipal engineers in mid-sized cities.",
+    brief: "REAL PROJECT. Needs Doug before it is marked Ready: the years, how many crossings and where, what the City needed, why TrafficPatternsXD was specified (per the map pin), and a photo of the installation. The drafter writes only what this brief and the Idea Book say. Audience: municipal engineers in mid-sized cities.",
   },
 ];
 

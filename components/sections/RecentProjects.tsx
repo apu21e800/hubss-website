@@ -19,10 +19,10 @@ export default function RecentProjects() {
               Portfolio
             </p>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold" style={{ color: "var(--text-primary)" }}>
-              Projects That Changed How Cities Look
+              Projects that changed how cities look
             </h2>
             <p className="text-base mt-2 max-w-xl" style={{ color: "var(--text-secondary)" }}>
-              Real installations. Real municipalities. Real performance data.
+              Real installations, real municipalities, real performance data.
             </p>
           </div>
           <Link
@@ -81,7 +81,7 @@ export default function RecentProjects() {
                 className="text-sm font-semibold flex items-center gap-2 self-start group-hover:text-[var(--accent-soft-text)] transition-colors"
                 style={{ color: "var(--accent-text-lg)" }}
               >
-                View Project
+                View project
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
@@ -133,7 +133,7 @@ export default function RecentProjects() {
                     className="text-sm font-semibold flex items-center gap-2 group-hover:text-[var(--accent-soft-text)] transition-colors"
                     style={{ color: "var(--accent-text-lg)" }}
                   >
-                    View Project
+                    View project
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                     </svg>

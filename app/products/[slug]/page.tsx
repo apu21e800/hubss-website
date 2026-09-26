@@ -58,7 +58,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const heroSrc = product.heroPhoto?.src ?? featuredImg?.src ?? product.imageUrl;
   return buildMetadata({
     title: product.seoTitle || product.name,
-    description: product.seoDescription || (product.shortDesc + " — " + product.description.slice(0, 120) + "…"),
+    description: product.seoDescription || (product.shortDesc + " " + product.description.slice(0, 120) + "…"),
     slug: `products/${product.slug}`,
     image: isSanityImage(heroSrc) ? sanityOgImage(heroSrc) : heroSrc,
   });
@@ -96,7 +96,7 @@ export default async function ProductPage({ params }: Props) {
   // photo, shown nowhere, was silently dropped from the gallery.
   const hero: Photo = product.heroPhoto ?? {
     src: featuredImg?.src ?? product.imageUrl,
-    alt: featuredImg?.alt ?? `${product.name} — ${product.shortDesc}`,
+    alt: featuredImg?.alt ?? `${product.name}: ${product.shortDesc}`,
   };
   const galleryPhotos: Photo[] = product.galleryPhotos ?? (() => {
     const bannerSrc = featuredImg?.src ?? product.imageUrl;
@@ -441,7 +441,7 @@ export default async function ProductPage({ params }: Props) {
                   out of optimization. Fixed 72x72, no `sizes` needed. */}
               <Image
                 src="/images/products/streetbondsr/leed-logo.svg"
-                alt="LEED — U.S. Green Building Council"
+                alt="LEED, U.S. Green Building Council"
                 width={72}
                 height={72}
                 unoptimized

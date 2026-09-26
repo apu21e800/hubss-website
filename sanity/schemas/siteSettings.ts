@@ -23,13 +23,13 @@ export default defineType({
       title: "Regional offices",
       type: "object",
       group: "offices",
-      description: "Contact details for both HUB offices — shown on the Contact page and in the footer.",
+      description: "Contact details for both HUB offices, shown on the Contact page and in the footer.",
       fields: [
         defineField({
           name: "east",
           title: "East office (Milton, ON)",
           type: "object",
-          description: "Eastern Canada contact — Doug Bain covers Ontario and east.",
+          description: "Eastern Canada contact: Doug Bain covers Ontario and east.",
           fields: [
             defineField({
               name: "name",
@@ -69,7 +69,7 @@ export default defineType({
           name: "west",
           title: "West office (Ladysmith, BC)",
           type: "object",
-          description: "Western Canada contact — Cleve Stordy covers BC and west.",
+          description: "Western Canada contact: Cleve Stordy covers BC and west.",
           fields: [
             defineField({
               name: "name",
@@ -114,7 +114,7 @@ export default defineType({
       title: "Social media links",
       type: "object",
       group: "social",
-      description: "Full URLs for HUB's social media profiles — shown in the footer and contact page.",
+      description: "Full URLs for HUB's social media profiles, shown in the footer and contact page.",
       fields: [
         defineField({
           name: "instagram",
@@ -178,7 +178,7 @@ export default defineType({
       title: "Resource library documents",
       type: "array",
       group: "resources",
-      description: "All downloadable documents shown on the Resources page. Documents can also be attached directly to products — this list is for standalone resources not tied to a specific product.",
+      description: "All downloadable documents shown on the Resources page. Documents can also be attached directly to products. This list is for standalone resources not tied to a specific product.",
       of: [{
         type: "object",
         fields: [
@@ -186,7 +186,7 @@ export default defineType({
             name: "id",
             type: "string",
             title: "Unique ID",
-            description: "Internal identifier used by the site (e.g. 'streetbond-tds-en'). Once set, do not change — it may break saved links.",
+            description: "Internal identifier used by the site (e.g. 'streetbond-tds-en'). Once set, do not change: it may break saved links.",
             validation: (r) => r.required().error("ID is required"),
           }),
           defineField({
@@ -220,7 +220,7 @@ export default defineType({
             name: "product",
             type: "string",
             title: "Product slug",
-            description: "The product this document belongs to — use the product's URL slug (e.g. 'streetbond', 'trafficpatterns'). Used for filtering.",
+            description: "The product this document belongs to. Use the product's URL slug (e.g. 'streetbond', 'trafficpatterns'). Used for filtering.",
           }),
           defineField({
             name: "productName",
@@ -232,7 +232,7 @@ export default defineType({
             name: "fileAsset",
             type: "file",
             title: "PDF file (Sanity CDN)",
-            description: "Upload the PDF here — Sanity stores and serves it from cdn.sanity.io. Preferred over the legacy file URL. After uploading, verify the file opens correctly.",
+            description: "Upload the PDF here. Sanity stores and serves it from cdn.sanity.io (preferred over the legacy file URL). After uploading, verify the file opens correctly.",
             options: { accept: ".pdf,application/pdf" },
           }),
           defineField({
@@ -251,7 +251,7 @@ export default defineType({
             name: "updatedDate",
             type: "string",
             title: "Last updated date",
-            description: "Date this document was last updated — shown to visitors (e.g. 'May 2024').",
+            description: "Date this document was last updated, shown to visitors (e.g. 'May 2024').",
           }),
         ],
         preview: { select: { title: "title", subtitle: "productName" } },

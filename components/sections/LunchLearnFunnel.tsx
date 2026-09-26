@@ -49,41 +49,41 @@ interface SubmitState {
 const WHAT_YOU_GET = [
   {
     num: "01",
-    title: "Spec Language Ready for Your RFP",
+    title: "Spec language ready for your RFP",
     desc: "Pre-written specification language for thermoplastic crosswalks, MMA bus lanes, coloured bike lanes, and more. Copy it straight into your next tender document.",
   },
   {
     num: "02",
-    title: "The Lifecycle Cost Math",
-    desc: "Lifecycle cost math, side by side. How HUB systems deliver years of high-performance service versus repeated seasonal interventions — asphalt-life math your procurement team will ask for.",
+    title: "The lifecycle cost math",
+    desc: "Lifecycle cost math, side by side. How HUB systems deliver years of high-performance service versus repeated seasonal interventions: asphalt-life math your procurement team will ask for.",
   },
   {
     num: "03",
-    title: "Samples, Sheets, and an Installer Map",
-    desc: "Physical material samples, current technical data sheets, and the certified HUB applicator list for your region — everything a team needs to move from interest to tender.",
+    title: "Samples, sheets, and an installer map",
+    desc: "Physical material samples, current technical data sheets, and the certified HUB applicator list for your region: everything a team needs to move from interest to tender.",
   },
 ];
 
 const PERSONAS = [
   {
-    title: "Municipal Engineers & Planners",
+    title: "Municipal engineers & planners",
     desc: "Crosswalks, transit corridors, and complete streets that meet Vision Zero and Complete Streets specifications, with accessibility-aware design. Real installation data from Canadian municipalities coast to coast.",
     badge: "Vision Zero · Complete Streets",
   },
   {
-    title: "Landscape Architects & Designers",
-    desc: "12+ StreetPrint patterns, full StreetBond Pantone palette, and decorative surfaces engineered to outlast the design life of the asphalt beneath them. Snowplow-safe. Engineering-approved.",
+    title: "Landscape architects & designers",
+    desc: "12+ StreetPrint patterns, full StreetBond Pantone palette, and decorative surfaces engineered to outlast the design life of the asphalt beneath them. Snowplow-safe and engineering-approved.",
     badge: "Public Art · Driveways",
   },
   {
-    title: "Engineering & Consulting Firms",
-    desc: "Lifecycle cost data, performance specs, and installation standards you can cite directly in tender documents — plus the certified HUB applicator contacts for your region.",
-    badge: "Spec Support",
+    title: "Engineering & consulting firms",
+    desc: "Lifecycle cost data, performance specs, and installation standards you can cite directly in tender documents, plus the certified HUB applicator contacts for your region.",
+    badge: "Spec support",
   },
   {
-    title: "Contractors & Applicators",
-    desc: "Learn about the HUB certified applicator program — territory-protected bidding and direct manufacturer support through the certified program.",
-    badge: "Certified Applicator Program",
+    title: "Contractors & applicators",
+    desc: "Learn about the HUB certified applicator program: territory-protected bidding and direct manufacturer support through the certified program.",
+    badge: "Certified applicator program",
   },
 ];
 
@@ -94,15 +94,15 @@ const FAQS = [
   },
   {
     q: "What does it cost?",
-    a: "Nothing. Sessions are how we introduce our systems to the people who specify them — no invoice, no minimum order, and no follow-up pressure.",
+    a: "Nothing. Sessions are how we introduce our systems to the people who specify them: no invoice, no minimum order, and no follow-up pressure.",
   },
   {
     q: "Who should be in the room?",
-    a: "Engineers, planners, landscape architects, project managers, procurement — anyone who touches the surface spec. Sessions are built for mixed teams, and there's no cap on seats.",
+    a: "Engineers, planners, landscape architects, project managers, procurement: anyone who touches the surface spec. Sessions are built for mixed teams, and there's no cap on seats.",
   },
   {
     q: "In-person or virtual?",
-    a: "Both. In-person sessions are available coast to coast through our certified applicator network. Virtual sessions use Zoom or Teams — we mail sample kits before we connect.",
+    a: "Both. In-person sessions are available coast to coast through our certified applicator network. Virtual sessions use Zoom or Teams. We mail sample kits before we connect.",
   },
 ];
 
@@ -116,24 +116,24 @@ const CITIES = [
 const TICKER = [...CITIES, ...CITIES];
 
 const STATS = [
-  { value: "45 min", label: "Focused Session" },
-  { value: "No Cost", label: "Hosted by HUB" },
-  { value: "Lunch Included", label: "Every In-Person" },
-  { value: "2 Offices", label: "Milton ON · Ladysmith BC" },
+  { value: "45 min", label: "Focused session" },
+  { value: "No cost", label: "Hosted by HUB" },
+  { value: "Lunch included", label: "Every in-person" },
+  { value: "2 offices", label: "Milton ON · Ladysmith BC" },
 ];
 
-const FORMATS = ["In-Person", "Virtual", "Either"] as const;
+const FORMATS = ["In-person", "Virtual", "Either"] as const;
 type SessionFormat = (typeof FORMATS)[number];
 
 export default function LunchLearnFunnel({
-  eyebrow      = "Lunch & Learn · In-Person or Virtual · Coast to Coast",
+  eyebrow      = "Lunch & Learn · In-person or virtual · Coast to coast",
   headingLine1 = "Specify with confidence.",
   headingLine2 = "Lunch is on us.",
-  subheading   = "A focused 45-minute session that gives your team the technical grounding to specify decorative pavement, thermoplastic crosswalks, and coloured coatings — real Canadian case studies and spec language you can drop straight into your next RFP.",
-  ctaLabel     = "Book a Session",
+  subheading   = "A focused 45-minute session that gives your team the technical grounding to specify decorative pavement, thermoplastic crosswalks, and coloured coatings. Real Canadian case studies and spec language you can drop straight into your next RFP.",
+  ctaLabel     = "Book a session",
   formHeading  = "Book your Lunch & Learn",
-  formSubheading = "Tell us who you are and where you are — we confirm date and details within one business day.",
-  submitLabel  = "Book the Session →",
+  formSubheading = "Tell us who you are and where you are. We confirm date and details within one business day.",
+  submitLabel  = "Book the session →",
   whatYouGet,
   personas,
   faqs,
@@ -144,12 +144,12 @@ export default function LunchLearnFunnel({
   const whatYouGetItems    = whatYouGet?.length ? whatYouGet : WHAT_YOU_GET;
   const personaItems       = personas?.length   ? personas   : PERSONAS;
   const faqItems           = faqs?.length       ? faqs       : FAQS;
-  const whatYouGetEyebrow  = sectionHeadings?.whatYouGetEyebrow ?? "What You Walk Away With";
-  const whatYouGetHeading  = sectionHeadings?.whatYouGetHeading ?? "Not a sales pitch. A working session.";
-  const personasEyebrow    = sectionHeadings?.personasEyebrow   ?? "Who It's Built For";
-  const personasHeading    = sectionHeadings?.personasHeading   ?? "Your Whole Team. One Session.";
-  const faqEyebrow         = sectionHeadings?.faqEyebrow        ?? "Common Questions";
-  const faqHeading         = sectionHeadings?.faqHeading        ?? "Everything You Need to Know";
+  const whatYouGetEyebrow  = sectionHeadings?.whatYouGetEyebrow ?? "What you walk away with";
+  const whatYouGetHeading  = sectionHeadings?.whatYouGetHeading ?? "A working session for your team.";
+  const personasEyebrow    = sectionHeadings?.personasEyebrow   ?? "Who it's built for";
+  const personasHeading    = sectionHeadings?.personasHeading   ?? "Your whole team, one session.";
+  const faqEyebrow         = sectionHeadings?.faqEyebrow        ?? "Common questions";
+  const faqHeading         = sectionHeadings?.faqHeading        ?? "Everything you need to know";
   const [formData, setFormData] = useState<FormState>({
     name: "", email: "", company: "", city: "", phone: "",
   });
@@ -250,7 +250,7 @@ export default function LunchLearnFunnel({
               </p>
 
               <div className="flex flex-wrap gap-5 mb-10">
-                {["27 Years in Canada", "10 Provinces", "Lunch Included"].map((t) => (
+                {["27 years in Canada", "10 provinces", "Lunch included"].map((t) => (
                   <div key={t} className="flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: "#f97316" }} />
                     <span className="text-sm font-semibold" style={{ color: "var(--ink-60)" }}>{t}</span>
@@ -276,11 +276,11 @@ export default function LunchLearnFunnel({
                 </a>
                 <div className="flex items-center gap-4 flex-wrap">
                   <a href="tel:+14165409287" className="text-sm font-semibold inline-flex items-center transition-colors hover:text-[var(--accent-text)]" style={{ color: "var(--ink-45)", minHeight: 40 }}>
-                    East: 416-540-9287
+                    East · 416-540-9287
                   </a>
                   <span style={{ color: "var(--ink-20)" }}>·</span>
                   <a href="tel:+16043098212" className="text-sm font-semibold inline-flex items-center transition-colors hover:text-[var(--accent-text)]" style={{ color: "var(--ink-45)", minHeight: 40 }}>
-                    West: 604-309-8212
+                    West · 604-309-8212
                   </a>
                 </div>
               </div>
@@ -295,7 +295,7 @@ export default function LunchLearnFunnel({
             >
               <Image
                 src="/images/lunch-learn/moose-final.png"
-                alt="Moose, the HUB Surface Systems site dog, in a hard hat and safety vest — book a Lunch & Learn"
+                alt="Moose, the HUB Surface Systems site dog, in a hard hat and safety vest. Book a Lunch & Learn"
                 width={256}
                 height={290}
                 style={{
@@ -546,7 +546,7 @@ export default function LunchLearnFunnel({
 
         <div className="relative z-10 max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
-            <p className="text-xs font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "var(--accent-text)" }}>Book Your Session</p>
+            <p className="text-xs font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "var(--accent-text)" }}>Book your session</p>
             <h2 className="font-black mb-4" style={{ fontSize: "clamp(2rem, 4vw, 3.25rem)", lineHeight: 1.0, letterSpacing: "-0.035em", background: "linear-gradient(92deg, #F97316 0%, #EAB308 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
               {formHeading}
             </h2>
@@ -614,7 +614,7 @@ export default function LunchLearnFunnel({
                 <button type="submit" disabled={submitState.status === "loading"} className="w-full py-5 rounded-xl font-bold text-base transition-all disabled:opacity-50 hover:brightness-110 active:scale-[0.99]" style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "var(--on-accent)", boxShadow: "0 6px 24px rgba(249,115,22,0.38)" }}>
                   {submitState.status === "loading" ? "Sending your request…" : submitLabel}
                 </button>
-                <p className="text-center text-xs" style={{ color: "var(--ink-35)" }}>No obligation. No invoice. Lunch included. We&apos;ll reach out within 24 hours.</p>
+                <p className="text-center text-xs" style={{ color: "var(--ink-35)" }}>No obligation, no invoice, lunch included. We&apos;ll reach out within 24 hours.</p>
                 {submitState.status === "error" && (
                   <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="p-4 rounded-xl text-sm" style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.25)", color: "var(--err-text)" }}>
                     {submitState.message}

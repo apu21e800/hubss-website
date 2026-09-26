@@ -14,7 +14,7 @@ export const revalidate = 3600;
 
 export const metadata = buildMetadata({
   title: "Pavement Marking Applications",
-  description: "Crosswalks, bus lanes, bike infrastructure, airports, public art, and community branding — purpose-matched surface systems for Canadian municipal and commercial applications.",
+  description: "Crosswalks, bus lanes, bike infrastructure, airports, public art, and community branding. Purpose-matched surface systems for Canadian municipal and commercial applications.",
   slug: "applications",
 });
 
@@ -27,7 +27,7 @@ export default async function ApplicationsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-16 sm:pb-24">
         <div className="mb-16 max-w-2xl">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-3" style={{ color: "var(--accent-text-lg)" }}>
-            In the Field
+            In the field
           </p>
           <h1
             className="font-black mb-5"
@@ -38,10 +38,10 @@ export default async function ApplicationsPage() {
               letterSpacing: "-0.03em",
             }}
           >
-            Where Our Systems Live.
+            Where our systems live.
           </h1>
           <p className="text-lg" style={{ color: "var(--text-secondary)" }}>
-            Each application has its own performance demands — retroreflectivity, snowplow tolerance, slip resistance, urban heat reduction, decorative finish. Product specs are matched to the demand. Installation is by certified HUB applicators.
+            Each application has its own performance demands: retroreflectivity, snowplow tolerance, slip resistance, urban heat reduction, decorative finish. Product specs are matched to the demand. Installation is by certified HUB applicators.
           </p>
         </div>
 

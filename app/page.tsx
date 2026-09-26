@@ -45,7 +45,7 @@ const organizationSchema = {
     {
       "@type": "LocalBusiness",
       "@id": "https://hubss.com/#west-office",
-      name: "HUB Surface Systems — West Office",
+      name: "HUB Surface Systems · West Office",
       image: "https://hubss.com/images/hero/hero-1.jpg",
       url: "https://hubss.com/contact",
       telephone: "+1-604-309-8212",
@@ -62,7 +62,7 @@ const organizationSchema = {
     {
       "@type": "LocalBusiness",
       "@id": "https://hubss.com/#east-office",
-      name: "HUB Surface Systems — East Office",
+      name: "HUB Surface Systems · East Office",
       image: "https://hubss.com/images/hero/hero-1.jpg",
       url: "https://hubss.com/contact",
       telephone: "+1-416-540-9287",

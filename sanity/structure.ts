@@ -108,7 +108,7 @@ export const structure: StructureResolver = (S) =>
       // Not read by the site yet: the map's pins are still lib/map-projects.ts.
       // Said in the title so nobody edits a pin and waits for it to change.
       S.documentTypeListItem("project")
-        .title("Projects (Map Pins) — not live yet")
+        .title("Projects (Map Pins) · not live yet")
         .icon(PinIcon),
 
       S.divider(),

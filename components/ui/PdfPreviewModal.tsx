@@ -112,7 +112,7 @@ export default function PdfPreviewModal({
         ref={panelRef}
         role="dialog"
         aria-modal="true"
-        aria-label={`Preview — ${label}`}
+        aria-label={`Preview: ${label}`}
         className="relative flex flex-col w-full max-w-5xl rounded-xl overflow-hidden"
         style={{
           background: "var(--bg-card)",
@@ -222,7 +222,7 @@ export default function PdfPreviewModal({
             style={{ background: "rgba(0,0,0,0.35)", minHeight: 0 }}
             tabIndex={0}
             role="region"
-            aria-label={`${label} — page preview, ${preview.pages.length} of ${preview.total} pages`}
+            aria-label={`${label}: page preview, ${preview.pages.length} of ${preview.total} pages`}
           >
             <div className="flex flex-col items-center gap-4 px-4 py-5">
               {preview.pages.map((pg, i) =>
@@ -259,7 +259,7 @@ export default function PdfPreviewModal({
                   <Image
                     key={pg.src}
                     src={pg.src}
-                    alt={`${label} — page ${i + 1} of ${preview.total}`}
+                    alt={`${label}, page ${i + 1} of ${preview.total}`}
                     width={pg.w}
                     height={pg.h}
                     priority={i === 0}
@@ -287,7 +287,7 @@ export default function PdfPreviewModal({
               )}
               {preview.total > preview.pages.length && (
                 <p className="text-xs text-center px-4" style={{ color: "var(--text-hint)" }}>
-                  Showing {preview.pages.length} of {preview.total} pages — download for the full document.
+                  Showing {preview.pages.length} of {preview.total} pages. Download for the full document.
                 </p>
               )}
             </div>

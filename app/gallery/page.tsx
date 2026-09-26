@@ -22,7 +22,7 @@ interface GalleryImage {
 const IMAGES: GalleryImage[] = [
   // ── Crosswalks ────────────────────────────────────────────────────────────────
   { src: "/images/blog/best-crosswalks-canada/featured.jpg", alt: "High-Visibility Crosswalk", category: "crosswalks", location: "Canada-Wide", tall: true },
-  { src: "/images/blog/decorative-crosswalk-meridian/featured.jpg", alt: "Decorative Crosswalk — Meridian", category: "crosswalks", location: "Meridian, ON" },
+  { src: "/images/blog/decorative-crosswalk-meridian/featured.jpg", alt: "Decorative Crosswalk · Meridian", category: "crosswalks", location: "Meridian, ON" },
   { src: "/images/blog/decorative-asphalt-high-traffic/featured.jpg", alt: "High-Traffic Decorative Asphalt", category: "crosswalks", location: "Ontario" },
   { src: "/images/blog/complete-streets-new-westminster/featured.jpg", alt: "Complete Streets", category: "crosswalks", location: "New Westminster, BC", tall: true },
   { src: "/images/blog/pedestrian-channelization-public-spaces/featured.jpg", alt: "Pedestrian Channelization", category: "crosswalks", location: "British Columbia" },
@@ -47,23 +47,23 @@ const IMAGES: GalleryImage[] = [
   { src: "/images/applications/crosswalks/crosswalks-10.jpg", alt: "Urban Crosswalk", category: "crosswalks", location: "Ontario" },
   { src: "/images/applications/crosswalks/crosswalks-14.jpg", alt: "Stamped Crosswalk", category: "crosswalks", location: "Canada" },
   { src: "/images/applications/crosswalks/crosswalks-18.jpg", alt: "Coloured Crosswalk", category: "crosswalks", location: "British Columbia" },
-  { src: "/images/applications/crosswalks/crosswalks-43.jpg", alt: "Crosswalk — Community Art", category: "crosswalks", location: "Canada", tall: true },
+  { src: "/images/applications/crosswalks/crosswalks-43.jpg", alt: "Crosswalk · Community Art", category: "crosswalks", location: "Canada", tall: true },
   { src: "/images/applications/crosswalks/crosswalks-50.jpg", alt: "Crosswalk Install", category: "crosswalks", location: "Ontario" },
   { src: "/images/applications/crosswalks/crosswalks-65.jpg", alt: "Crosswalk Detail", category: "crosswalks", location: "Canada" },
   { src: "/images/applications/crosswalks/crosswalks-84.jpg", alt: "Municipal Crosswalk", category: "crosswalks", location: "Ontario" },
-  { src: "/images/applications/crosswalks/crosswalks-100.jpg", alt: "Crosswalk — TPXD", category: "crosswalks", location: "Canada" },
+  { src: "/images/applications/crosswalks/crosswalks-100.jpg", alt: "Crosswalk · TPXD", category: "crosswalks", location: "Canada" },
 
   // ── Bike & Bus Lanes ────────────────────────────────────────────────────────
   { src: "/images/blog/multimodal-connectivity-york-region/featured.jpg", alt: "York Region Transit Corridor", category: "transit", location: "York Region, ON", tall: true },
   { src: "/images/blog/durable-transit-lanes-crossings/featured.jpg", alt: "Durable Transit Lanes", category: "transit", location: "Ontario" },
-  { src: "/images/blog/extending-transit-lane-lifespan/featured.jpg", alt: "Bus Lane — Extended Lifespan", category: "transit", location: "Ontario" },
+  { src: "/images/blog/extending-transit-lane-lifespan/featured.jpg", alt: "Bus Lane · Extended Lifespan", category: "transit", location: "Ontario" },
   { src: "/images/blog/imprinted-asphalt-york-transit/featured.jpg", alt: "York Region VIVA BRT", category: "transit", location: "York Region, ON", tall: true },
   { src: "/images/blog/safety-durability-transit-stations/featured.jpg", alt: "Transit Station Surface", category: "transit", location: "Ontario" },
   { src: "/images/blog/streetbondsr-solar-reflective-coatings/featured.jpg", alt: "StreetBondSR Bike Lane", category: "transit", location: "Canada" },
   { src: "/images/applications/bike-lanes/bike-lanes-01.jpg", alt: "Protected Bike Lane", category: "transit", location: "Canada", tall: true },
   { src: "/images/applications/bike-lanes/bike-lanes-03.jpg", alt: "Coloured Bike Lane", category: "transit", location: "British Columbia" },
   { src: "/images/applications/bike-lanes/bike-lanes-07.jpg", alt: "Bike Lane Marking", category: "transit", location: "Ontario" },
-  { src: "/images/applications/bike-lanes/bike-lanes-14.jpg", alt: "Bike Lane — Urban", category: "transit", location: "Canada" },
+  { src: "/images/applications/bike-lanes/bike-lanes-14.jpg", alt: "Bike Lane · Urban", category: "transit", location: "Canada" },
   { src: "/images/applications/bus-lanes/bus-lanes-39.png", alt: "Red Resin Bus Lane", category: "transit", location: "Ontario", tall: true },
   { src: "/images/applications/bus-lanes/bus-lanes-40.png", alt: "MMA Bus Lane", category: "transit", location: "Canada" },
 
@@ -180,7 +180,7 @@ export default function GalleryPage() {
     "@id": "https://hubss.com/gallery#gallery",
     name: "HUB Surface Systems field documentation",
     description:
-      `${IMAGES.length} documented decorative pavement installations across Canada — crosswalks, transit lanes, ` +
+      `${IMAGES.length} documented decorative pavement installations across Canada: crosswalks, transit lanes, ` +
       "parks and paths, playgrounds, and community branding by HUB Surface Systems.",
     url: "https://hubss.com/gallery",
     inLanguage: "en-CA",
@@ -188,7 +188,7 @@ export default function GalleryPage() {
     author: { "@id": "https://hubss.com/#organization" },
     associatedMedia: IMAGES.map((img) =>
       imageObject(img.src, {
-        alt: `${img.alt} — ${img.location} — decorative pavement by HUB Surface Systems`,
+        alt: `${img.alt}, ${img.location}, decorative pavement by HUB Surface Systems`,
         caption: `${img.alt}, ${img.location}. Installed by HUB Surface Systems.`,
       })
     ),
@@ -216,7 +216,7 @@ export default function GalleryPage() {
         {/* Header */}
         <div className="mb-12">
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-3" style={{ color: "var(--accent-text-lg)" }}>
-            Photo Archive
+            Photo archive
           </p>
           <h1
             className="font-black mb-4"
@@ -227,7 +227,7 @@ export default function GalleryPage() {
               letterSpacing: "-0.03em",
             }}
           >
-            Field Documentation
+            Field documentation
           </h1>
           <p style={{ color: "var(--text-secondary)", fontSize: "1.05rem" }}>
             {IMAGES.length}+ installations documented across Canada.
@@ -311,7 +311,7 @@ export default function GalleryPage() {
                 >
                   <Image
                     src={img.src}
-                    alt={`${img.alt} — ${img.location} — decorative pavement by HUB Surface Systems`}
+                    alt={`${img.alt}, ${img.location}, decorative pavement by HUB Surface Systems`}
                     fill
                     loading={i < 8 ? "eager" : "lazy"}
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -377,8 +377,8 @@ export default function GalleryPage() {
           // label ("High-Visibility Crosswalk"), so the fullscreen view — the
           // one a reader actually studies — was the least described surface
           // on the page.
-          alt: `${img.alt} — ${img.location} — decorative pavement by HUB Surface Systems`,
-          caption: `${img.alt} — ${img.location}`,
+          alt: `${img.alt}, ${img.location}, decorative pavement by HUB Surface Systems`,
+          caption: `${img.alt} · ${img.location}`,
         }))}
         index={lightbox ?? -1}
         onClose={closeLightbox}

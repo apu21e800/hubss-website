@@ -50,16 +50,16 @@ export default function ApplicationsGrid({ applications: appsProp }: Props = {})
               textWrap: "balance",
             }}
           >
-            Every Surface,{" "}
+            Every surface,{" "}
             <span style={{
               background: "linear-gradient(90deg, #F97316 0%, #EAB308 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
-            }}>A Statement.</span>
+            }}>a statement.</span>
           </h2>
           <p className="text-base sm:text-lg max-w-2xl leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-            Crosswalks, bike lanes, civic art, driveways — wherever people move, gather, or stop, the surface underneath is doing work.
+            Crosswalks, bike lanes, civic art, driveways: wherever people move, gather, or stop, the surface underneath is doing work.
           </p>
         </div>
 
@@ -125,7 +125,7 @@ export default function ApplicationsGrid({ applications: appsProp }: Props = {})
             href="/applications"
             className="inline-flex items-center gap-2 border border-[var(--ink-20)] hover:border-orange-500/60 text-[var(--text-primary)] font-semibold px-7 py-3.5 rounded-lg transition-all duration-200 hover:bg-[var(--ink-04)] text-sm"
           >
-            View All Applications
+            View all applications
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>

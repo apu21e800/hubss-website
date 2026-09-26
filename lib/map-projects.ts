@@ -56,7 +56,7 @@ const curatedProjects: MapProject[] = [
       "/images/blog/imprinted-asphalt-york-transit/featured.jpg",
     ],
     excerpt:
-      "VIVA rapid transit corridor receives MMAX red resin bus lane demarcation — fast-cure overnight installation across the Hwy 7 rapidway.",
+      "VIVA rapid transit corridor receives MMAX red resin bus lane demarcation: fast-cure overnight installation across the Hwy 7 rapidway.",
     problem:
       "The VIVA BRT expansion required consistent, high-durability bus lane markings across the Hwy 7 rapidway. Short traffic closure windows demanded fast-cure materials.",
     solution:
@@ -75,11 +75,11 @@ const curatedProjects: MapProject[] = [
       "/images/blog/veterans-crosswalk-kitchener/featured.jpeg",
     ],
     excerpt:
-      "Custom DecoMark thermoplastic crosswalk honouring Kitchener's veterans at the city cenotaph — poppy motifs in regimental colours.",
+      "Custom DecoMark thermoplastic crosswalk honouring Kitchener's veterans at the city cenotaph: poppy motifs in regimental colours.",
     problem:
       "The City of Kitchener wanted a permanent public art installation at the cenotaph crosswalk that would honour veterans without requiring annual maintenance. Painted designs had faded within one season.",
     solution:
-      "DecoMark custom preformed thermoplastic with full Pantone-matched colour — poppy motifs in regimental red, fused directly to asphalt. The installation has maintained sharp colour and edge definition through four winters.",
+      "DecoMark custom preformed thermoplastic with full Pantone-matched colour: poppy motifs in regimental red, fused directly to asphalt. The installation has maintained sharp colour and edge definition through four winters.",
   },
   {
     // Corrected Aug 2026: this entry was "Collingwood Rainbow Crosswalk" but
@@ -99,11 +99,11 @@ const curatedProjects: MapProject[] = [
       "/images/blog/simcoe-rainbow-crosswalk/featured.jpg",
     ],
     excerpt:
-      "A young resident's two-year fundraising campaign became a permanent Pride rainbow crosswalk — TrafficPatternsXD colour that survives snowplows and de-icing chemicals.",
+      "A young resident's two-year fundraising campaign became a permanent Pride rainbow crosswalk: TrafficPatternsXD colour that survives snowplows and de-icing chemicals.",
     problem:
-      "Simcoe wanted a Pride crosswalk that would survive Ontario winters — painted rainbow crossings fade and chip within a season, turning a symbol of inclusion into a maintenance liability.",
+      "Simcoe wanted a Pride crosswalk that would survive Ontario winters. Painted rainbow crossings fade and chip within a season, turning a symbol of inclusion into a maintenance liability.",
     solution:
-      "TrafficPatternsXD preformed thermoplastic installed by certified applicator Multiseal — each colour heat-fused into the asphalt for a high-traction, plow-safe surface that keeps its vibrancy year after year.",
+      "TrafficPatternsXD preformed thermoplastic installed by certified applicator Multiseal, each colour heat-fused into the asphalt for a high-traction, plow-safe surface that keeps its vibrancy year after year.",
   },
   {
     id: "georgina-every-child-matters",
@@ -119,7 +119,7 @@ const curatedProjects: MapProject[] = [
       "/images/blog/every-child-matters-crosswalk/featured.png",
     ],
     excerpt:
-      "A TrafficPatterns thermoplastic crosswalk in York Region's Town of Georgina honouring the Every Child Matters movement — permanent colour that survives Ontario winters.",
+      "A TrafficPatterns thermoplastic crosswalk in York Region's Town of Georgina honouring the Every Child Matters movement: permanent colour that survives Ontario winters.",
     problem:
       "The Town of Georgina sought a durable way to honour the Every Child Matters movement in a public space that would be visible year-round without requiring annual maintenance.",
     solution:
@@ -142,12 +142,12 @@ const curatedProjects: MapProject[] = [
     problem:
       "The Humberwest Parkway corridor needed a decorative crosswalk and median treatment that could withstand heavy vehicle turning movements and aggressive winter maintenance without the maintenance overhead of concrete pavers.",
     solution:
-      "TrafficPatternsXD for the crosswalk field — aggregate-reinforced and virtually flush with the asphalt — paired with StreetBond 150 coloured coating on the median. Both systems are snowplow-safe and require no repainting.",
+      "TrafficPatternsXD for the crosswalk field (aggregate-reinforced and virtually flush with the asphalt), paired with StreetBond 150 coloured coating on the median. Both systems are snowplow-safe and require no repainting.",
   },
   {
     // TODO: Vernon to confirm exact corridor location + locate image for East London Link BRT
     id: "london-east-brt",
-    title: "East London Link — Bus Rapid Transit",
+    title: "East London Link · Bus Rapid Transit",
     city: "London",
     province: "ON",
     lat: 42.9836,
@@ -159,11 +159,11 @@ const curatedProjects: MapProject[] = [
     ],
     imageIsRepresentative: true,
     excerpt:
-      "MMAX MMA resin bicycle lanes and TrafficPatternsXD crosswalks on London's East London Link BRT corridor — fast-cure installation with minimal transit disruption.",
+      "MMAX MMA resin bicycle lanes and TrafficPatternsXD crosswalks on London's East London Link BRT corridor: fast-cure installation with minimal transit disruption.",
     problem:
-      "London's East London Link required surface solutions capable of withstanding heavy transit wear while supporting safe cycling integration on a busy BRT corridor.",
+      "London's East London Link required surfaces capable of withstanding heavy transit wear while supporting safe cycling integration on a busy BRT corridor.",
     solution:
-      "MMAX MMA resin applied to define bicycle lanes — fast cure, slip-resistant, and vibrant. TrafficPatternsXD installed at pedestrian conflict zones for high-traction, long-life crosswalk markings through Ontario freeze-thaw cycles.",
+      "MMAX MMA resin applied to define bicycle lanes: fast cure, slip-resistant, and vibrant. TrafficPatternsXD installed at pedestrian conflict zones for high-traction, long-life crosswalk markings through Ontario freeze-thaw cycles.",
   },
   {
     // TODO: Vernon to locate project image for City of Vaughan TrafficPatternsXD crosswalks
@@ -180,11 +180,11 @@ const curatedProjects: MapProject[] = [
     ],
     imageIsRepresentative: true,
     excerpt:
-      "TrafficPatternsXD crosswalks across Vaughan's high-volume arterials — aggregate-reinforced thermoplastic engineered to withstand heavy traffic and aggressive winter clearing.",
+      "TrafficPatternsXD crosswalks across Vaughan's high-volume arterials: aggregate-reinforced thermoplastic engineered to withstand heavy traffic and aggressive winter clearing.",
     problem:
       "Vaughan's arterial crosswalks see some of York Region's heaviest vehicle counts. Standard paint and thermoplastic markings were failing within one to two seasons under snowplow contact.",
     solution:
-      "TrafficPatternsXD's virtually-flush, aggregate-reinforced structure installs as an 8+ year solution. The material resists snowplow blades, retains retroreflectivity, and requires no annual maintenance cycle.",
+      "TrafficPatternsXD's virtually-flush, aggregate-reinforced structure installs as an 8+ year surface. The material resists snowplow blades, retains retroreflectivity, and requires no annual maintenance cycle.",
   },
 
   // ── British Columbia ────────────────────────────────────────────────────────
@@ -201,7 +201,7 @@ const curatedProjects: MapProject[] = [
       "/images/blog/decorative-crosswalk-commercial-drive/featured.jpg",
     ],
     excerpt:
-      "Stamped asphalt crosswalk celebrating the Commercial Drive BIA's multicultural identity — brick pattern in warm terracotta.",
+      "Stamped asphalt crosswalk celebrating the Commercial Drive BIA's multicultural identity: brick pattern in warm terracotta.",
     problem:
       "The Commercial Drive BIA wanted raised crosswalk aesthetics without the maintenance costs of brick or concrete pavers. The area sees extremely high pedestrian traffic.",
     solution:
@@ -222,7 +222,7 @@ const curatedProjects: MapProject[] = [
     excerpt:
       "A ceremonial crosswalk honouring the Musqueam Nation's traditional territory, featuring Coast Salish art installed at University Boulevard and Wesbrook Mall.",
     problem:
-      "UBC sought to embed cultural recognition into the physical campus landscape in a way that was permanent, respectful, and visible year-round — not a plaque or sign but part of the surface itself.",
+      "UBC sought to embed cultural recognition into the physical campus landscape in a way that was permanent, respectful, and visible year-round: part of the surface itself rather than a plaque or sign.",
     solution:
       "Custom preformed thermoplastic with Coast Salish pattern templates developed with Musqueam cultural advisors. The crosswalk acts as a daily reminder of the land acknowledgement, embedded in the path every student and faculty member walks.",
   },
@@ -279,7 +279,7 @@ const curatedProjects: MapProject[] = [
     excerpt:
       "Complete Streets implementation using StreetBond to create differentiated pedestrian zones, bike corridors, and transit priority areas.",
     problem:
-      "New Westminster's downtown core needed a unified Complete Streets approach — differentiating pedestrian, cycling, and transit zones without expensive reconstruction.",
+      "New Westminster's downtown core needed a unified Complete Streets approach, differentiating pedestrian, cycling, and transit zones without expensive reconstruction.",
     solution:
       "StreetBond in three distinct colour palettes: burnt orange for pedestrian priority zones, green for cycling infrastructure, and red for transit boarding areas. The system created legible street hierarchy without a single lane being rebuilt.",
   },
@@ -296,7 +296,7 @@ const curatedProjects: MapProject[] = [
       "/images/blog/white-rock-pier-crosswalk/featured.png",
     ],
     excerpt:
-      "Coastal crosswalk installation near White Rock's iconic pier — durable thermoplastic engineered for salt air and heavy summer tourist traffic.",
+      "Coastal crosswalk installation near White Rock's iconic pier: durable thermoplastic engineered for salt air and heavy summer tourist traffic.",
     problem:
       "White Rock's Marine Drive crosswalks endure intense summer pedestrian loads, salt spray, and sandy conditions that accelerate wear on painted markings.",
     solution:
@@ -315,11 +315,11 @@ const curatedProjects: MapProject[] = [
       "/images/blog/tsain-ko-crosswalk-sechelt/featured.jpg",
     ],
     excerpt:
-      "Custom thermoplastic crosswalk featuring shíshálh Nation (Sechelt) cultural imagery — a permanent expression of reconciliation on the Sunshine Coast.",
+      "Custom thermoplastic crosswalk featuring shíshálh Nation (Sechelt) cultural imagery, a permanent expression of reconciliation on the Sunshine Coast.",
     problem:
       "The District of Sechelt and shíshálh Nation wanted a crosswalk that honoured Indigenous culture at the gateway to the community. Painted designs would fade within a season in the coastal climate.",
     solution:
-      "DecoMark custom thermoplastic with shíshálh-inspired design elements, developed with Nation leadership. Pantone-accurate colours fused into the surface — weather-resistant and maintenance-free for years.",
+      "DecoMark custom thermoplastic with shíshálh-inspired design elements, developed with Nation leadership. Pantone-accurate colours fused into the surface, weather-resistant and maintenance-free for years.",
   },
   {
     id: "north-van-spirit-trail",
@@ -353,7 +353,7 @@ const curatedProjects: MapProject[] = [
       "/images/blog/terry-fox-plaza-coquitlam/featured.jpg",
     ],
     excerpt:
-      "Stamped and coloured asphalt plaza honouring Terry Fox — a civic centrepiece blending heritage aesthetic with low-maintenance pavement technology.",
+      "Stamped and coloured asphalt plaza honouring Terry Fox, a civic centrepiece blending heritage aesthetic with low-maintenance pavement technology.",
     problem:
       "The City of Coquitlam was planning the Terry Fox commemorative plaza and needed a surface that could carry the weight of civic significance without requiring annual restoration budgets.",
     solution:
@@ -372,7 +372,7 @@ const curatedProjects: MapProject[] = [
       "/images/blog/bowen-island-asphalt-path/featured.jpg",
     ],
     excerpt:
-      "StreetBond coloured pathway linking Bowen Island's ferry terminal to the village centre — slip-resistant and environmentally sensitive.",
+      "StreetBond coloured pathway linking Bowen Island's ferry terminal to the village centre, slip-resistant and environmentally sensitive.",
     problem:
       "Bowen Island's foreshore path needed a coloured surface treatment that would stand up to heavy rainfall and salt air, while meeting the community's environmental standards for waterway proximity.",
     solution:
@@ -391,7 +391,7 @@ const curatedProjects: MapProject[] = [
       "/images/blog/bc-childrens-hospital-labyrinth/featured.jpg",
     ],
     excerpt:
-      "A meditative walking labyrinth on BC Children's Hospital grounds — permanent coloured pavement designed as a healing garden feature.",
+      "A meditative walking labyrinth on BC Children's Hospital grounds: permanent coloured pavement designed as a healing garden feature.",
     problem:
       "BC Children's Hospital wanted a therapeutic labyrinth in their outdoor healing garden. The design needed to be durable enough for daily use, visually distinct, and zero-maintenance given hospital grounds staffing constraints.",
     solution:
@@ -399,7 +399,7 @@ const curatedProjects: MapProject[] = [
   },
   {
     id: "sechelt-pictograph-crosswalk",
-    title: "Pictograph Crosswalk — Cowrie St & Trail Ave",
+    title: "Pictograph Crosswalk, Cowrie St & Trail Ave",
     city: "Sechelt",
     province: "BC",
     lat: 49.4745,
@@ -413,7 +413,7 @@ const curatedProjects: MapProject[] = [
     excerpt:
       "Indigenous artists Dionne Paul and Lindsey Kyoko Adams created a pictograph-themed crosswalk at Cowrie St & Trail Ave in Sechelt, telling the origin story of the shíshálh Nation.",
     problem:
-      "The District of Sechelt commissioned two artists — one with Indigenous pictograph motifs, one with a bee and dogwood pollinator theme — to create crosswalks that would celebrate community identity without the maintenance burden of paint.",
+      "The District of Sechelt commissioned two artists (one with Indigenous pictograph motifs, one with a bee and dogwood pollinator theme) to create crosswalks that would celebrate community identity without the maintenance burden of paint.",
     solution:
       "TrafficPatterns preformed thermoplastic capturing fine artistic detail. The panels are heat-fused to the asphalt, maintaining crisp colour and edge definition through the Sunshine Coast's wet coastal seasons.",
   },
@@ -439,7 +439,7 @@ const curatedProjects: MapProject[] = [
   },
   {
     id: "white-rock-seaside-stroll",
-    title: "White Rock Seaside Stroll — Johnston Rd",
+    title: "White Rock Seaside Stroll, Johnston Rd",
     city: "White Rock",
     province: "BC",
     lat: 49.0284,
@@ -450,7 +450,7 @@ const curatedProjects: MapProject[] = [
       "/images/blog/white-rock-langley-trafficpatterns/featured.jpg",
     ],
     excerpt:
-      "Artist Amy Bao's wave-inspired crosswalk mural on Johnston Road — TrafficPatterns thermoplastic that brought the White Rock waterfront identity into the Uptown district.",
+      "Artist Amy Bao's wave-inspired crosswalk mural on Johnston Road: TrafficPatterns thermoplastic that brought the White Rock waterfront identity into the Uptown district.",
     problem:
       "White Rock's Uptown district lacked the visual character of the iconic waterfront. The city commissioned artist Amy Bao to design a crosswalk connecting Uptown to the coast's identity. Painted murals had previously faded within months.",
     solution:
@@ -472,11 +472,11 @@ const curatedProjects: MapProject[] = [
     ],
     imageIsRepresentative: true,
     excerpt:
-      "Railroad tie-and-rail pattern crosswalk at the entrance to Linwood Park, Langley City — connecting modern pedestrian infrastructure to the Fraser Valley's railway heritage.",
+      "Railroad tie-and-rail pattern crosswalk at the entrance to Linwood Park, Langley City, connecting modern pedestrian infrastructure to the Fraser Valley's railway heritage.",
     problem:
       "Langley City wanted to mark the gateway to Linwood Park with a design that honoured the city's railway roots. Painted surfaces would fail quickly under the foot traffic of an active park entrance.",
     solution:
-      "TrafficPatterns preformed thermoplastic in a railroad tie-and-rail pattern — tan rectangular panels and white lines fused permanently to the asphalt. Installed by Square One Paving in March 2025.",
+      "TrafficPatterns preformed thermoplastic in a railroad tie-and-rail pattern: tan rectangular panels and white lines fused permanently to the asphalt. Installed by Square One Paving in March 2025.",
   },
   {
     id: "langley-murrayville-reunion",
@@ -492,7 +492,7 @@ const curatedProjects: MapProject[] = [
       "/images/blog/murrayville-schoolhouse-sidewalk/featured.jpg",
     ],
     excerpt:
-      "Decorative asphalt sidewalks at the Reunion Housing Complex in Murrayville, Langley — DecoMark thermoplastic decals adding classic design character to a new residential community.",
+      "Decorative asphalt sidewalks at the Reunion Housing Complex in Murrayville, Langley: DecoMark thermoplastic decals adding classic design character to a new residential community.",
     problem:
       "The Reunion Housing Complex in Murrayville needed decorative sidewalk treatments that would differentiate the development from standard residential streetscapes and hold up to year-round pedestrian use.",
     solution:
@@ -514,7 +514,7 @@ const curatedProjects: MapProject[] = [
       "/images/blog/municipalities-case-study/featured.jpg",
     ],
     excerpt:
-      "City of Toronto and the Laneway Project non-profit used StreetBond150 to transform a Leslieville back lane into a vibrant, welcoming public space — bold colour patterns that survive foot traffic and weather.",
+      "City of Toronto and the Laneway Project non-profit used StreetBond150 to transform a Leslieville back lane into a vibrant, welcoming public space: bold colour patterns that survive foot traffic and weather.",
     problem:
       "Toronto's Leslieville laneway was an underused service corridor. The Laneway Project needed a durable surface treatment that could withstand daily foot traffic while delivering bold, welcoming aesthetics.",
     solution:
@@ -534,11 +534,11 @@ const curatedProjects: MapProject[] = [
       "/images/blog/decorative-asphalt-high-traffic/featured.jpg",
     ],
     excerpt:
-      "Emery Village BIA replaced failing unit pavers with TrafficPatternsXD — matching the original 'Emery Blue' design in aggregate-reinforced thermoplastic that handles heavy commercial truck loads.",
+      "Emery Village BIA replaced failing unit pavers with TrafficPatternsXD, matching the original 'Emery Blue' design in aggregate-reinforced thermoplastic that handles heavy commercial truck loads.",
     problem:
-      "Twelve-year-old coloured unit pavers at the Emery Village BIA gateway were failing under heavy truck traffic, requiring constant patching. The BIA needed a permanent solution that preserved the community's 'Emery Blue' design identity.",
+      "Twelve-year-old coloured unit pavers at the Emery Village BIA gateway were failing under heavy truck traffic, requiring constant patching. The BIA needed a permanent replacement that preserved the community's 'Emery Blue' design identity.",
     solution:
-      "TrafficPatternsXD across 440 m² of crossings, Pantone-matched to Emery Blue. The monolithic thermoplastic bond to asphalt eliminated joint failure and edge displacement — the mechanisms that had destroyed the pavers.",
+      "TrafficPatternsXD across 440 m² of crossings, Pantone-matched to Emery Blue. The monolithic thermoplastic bond to asphalt eliminated joint failure and edge displacement, the mechanisms that had destroyed the pavers.",
   },
   {
     id: "toronto-ttc-bus-corridors",
@@ -553,7 +553,7 @@ const curatedProjects: MapProject[] = [
       "/images/blog/extending-transit-lane-lifespan/featured.jpg",
     ],
     excerpt:
-      "MMAX MMA red bus lane coatings across TTC's busiest priority corridors — overnight installs that cure before morning service, eliminating the repainting cycle.",
+      "MMAX MMA red bus lane coatings across TTC's busiest priority corridors: overnight installs that cure before morning service, eliminating the repainting cycle.",
     problem:
       "Toronto's TTC bus priority corridors required constant repainting under high axle loads and aggressive snowplow operations. Each repainting cycle caused service disruptions and lane closures.",
     solution:
@@ -582,11 +582,11 @@ const curatedProjects: MapProject[] = [
     ],
     imageIsRepresentative: true,
     excerpt:
-      "5,600 m² of StreetBond150 Cobalt Blue on Burlington's Spencer Smith Park lakeshore promenade — durable, skid-resistant surface coating replacing the original StreetPrint installation after 20 years.",
+      "5,600 m² of StreetBond150 Cobalt Blue on Burlington's Spencer Smith Park lakeshore promenade: durable, skid-resistant surface coating replacing the original StreetPrint installation after 20 years.",
     problem:
       "Spencer Smith Park's StreetPrint lakeshore promenade had reached the end of its 20-year lifecycle under Lake Ontario's harsh winters. The city needed a replacement surface that could handle the Canada Rib Fest crowds and year-round lakefront conditions.",
     solution:
-      "New asphalt base topped with 5,600 m² of StreetBond150 in Cobalt Blue — fast-install, skid-free, and accessible. No stamping this time; the colour coating alone delivers the visual identity the park requires.",
+      "New asphalt base topped with 5,600 m² of StreetBond150 in Cobalt Blue: fast-install, skid-free, and accessible. No stamping this time; the colour coating alone delivers the visual identity the park requires.",
   },
   {
     id: "waterloo-grandlinq-lrt",
@@ -601,7 +601,7 @@ const curatedProjects: MapProject[] = [
       "/images/blog/safety-durability-transit-stations/featured.jpg",
     ],
     excerpt:
-      "TrafficPatternsXD at LRT platform edges, pedestrian crossings, and modal transition points across the ION corridor — high-traction, fade-resistant surfacing through Waterloo Region winters.",
+      "TrafficPatternsXD at LRT platform edges, pedestrian crossings, and modal transition points across the ION corridor: high-traction, fade-resistant surfacing through Waterloo Region winters.",
     problem:
       "GrandLinq's ION LRT corridor needed platform-edge and crossing treatments that could withstand year-round freeze-thaw cycling, de-icing salts, and the lateral forces from LRT and bus movements without service disruption.",
     solution:
@@ -609,7 +609,7 @@ const curatedProjects: MapProject[] = [
   },
   {
     id: "kitchener-cadillac-fairview",
-    title: "Cadillac Fairview Parking Lot — Kitchener",
+    title: "Cadillac Fairview Parking Lot, Kitchener",
     city: "Kitchener",
     province: "ON",
     lat: 43.4337,
@@ -621,11 +621,11 @@ const curatedProjects: MapProject[] = [
       "/images/blog/stamped-asphalt-parking-lot/featured.jpg",
     ],
     excerpt:
-      "TrafficPatternsXD crosswalks and traffic calming devices at Cadillac Fairview Kitchener — aggregate-reinforced thermoplastic delivering brick-like aesthetics and lasting safety markings across a high-volume retail parking lot.",
+      "TrafficPatternsXD crosswalks and traffic calming devices at Cadillac Fairview Kitchener: aggregate-reinforced thermoplastic delivering brick-like aesthetics and lasting safety markings across a high-volume retail parking lot.",
     problem:
       "Cadillac Fairview's Kitchener shopping centre needed pedestrian crosswalk treatments that could withstand year-round vehicle traffic and snowplow operations without the maintenance liability of traditional paint or unit pavers.",
     solution:
-      "TrafficPatternsXD brick-pattern crosswalks heat-fused to the asphalt surface — no raised edges, no repainting, and a visual quality consistent with a premium retail environment.",
+      "TrafficPatternsXD brick-pattern crosswalks heat-fused to the asphalt surface: no raised edges, no repainting, and a visual quality consistent with a premium retail environment.",
   },
   {
     id: "vaughan-woodbridge-heritage",
@@ -640,9 +640,9 @@ const curatedProjects: MapProject[] = [
       "/images/blog/trafficpatternsxd-urban-design/featured.jpg",
     ],
     excerpt:
-      "Heritage Conservation District crosswalks on Woodbridge Avenue — TrafficPatternsXD brick-pattern thermoplastic that satisfies the character requirements of a designated heritage streetscape while surviving Canadian winters.",
+      "Heritage Conservation District crosswalks on Woodbridge Avenue: TrafficPatternsXD brick-pattern thermoplastic that satisfies the character requirements of a designated heritage streetscape while surviving Canadian winters.",
     problem:
-      "The City of Vaughan's Woodbridge Avenue streetscape improvement required crosswalks matching the Heritage Conservation District character. Real brick pavers were ruled out — snowplow blades displace them, making them an ongoing maintenance liability.",
+      "The City of Vaughan's Woodbridge Avenue streetscape improvement required crosswalks matching the Heritage Conservation District character. Real brick pavers were ruled out: snowplow blades displace them, making them an ongoing maintenance liability.",
     solution:
       "TrafficPatternsXD in a brick-pattern flush-to-surface profile: visually indistinguishable from masonry at street level, snowplow-safe, and specified by the City's Urban Design team for all pedestrian crosswalks on the project.",
   },
@@ -661,9 +661,9 @@ const curatedProjects: MapProject[] = [
       "/images/blog/community-branding-case-study/featured.jpg",
     ],
     excerpt:
-      "Polygon Realty's Windsor Gate community in Coquitlam — StreetPrint stamped asphalt roadways and driveways creating brick-street aesthetics that reinforce the community's identity throughout.",
+      "Polygon Realty's Windsor Gate community in Coquitlam: StreetPrint stamped asphalt roadways and driveways creating brick-street aesthetics that reinforce the community's identity throughout.",
     problem:
-      "Polygon Realty needed roadways and driveways at Windsor Gate that would communicate premium residential quality and a cohesive community identity — without the long-term maintenance liability of real brick or stone.",
+      "Polygon Realty needed roadways and driveways at Windsor Gate that would communicate premium residential quality and a cohesive community identity, without the long-term maintenance liability of real brick or stone.",
     solution:
       "StreetPrint genuine stamped asphalt with the community's logo mark integrated into key surfaces. The tricolour design and brick-pattern stamping create an immediate sense of entry and place throughout the development.",
   },
@@ -680,7 +680,7 @@ const curatedProjects: MapProject[] = [
       "/images/blog/performance-crosswalks-asphalt-concrete/featured.jpg",
     ],
     excerpt:
-      "80+ TrafficPatternsXD crosswalks installed across Kelowna's city core over 13 years — one of Canada's largest single-city thermoplastic crosswalk programs.",
+      "80+ TrafficPatternsXD crosswalks installed across Kelowna's city core over 13 years, one of Canada's largest single-city thermoplastic crosswalk programs.",
     problem:
       "Kelowna began investing in active transportation infrastructure and needed crosswalk treatments that could handle Okanagan summers and winters while supporting the city's aesthetic and safety goals across dozens of locations.",
     solution:
@@ -700,11 +700,11 @@ const curatedProjects: MapProject[] = [
     ],
     imageIsRepresentative: true,
     excerpt:
-      "StreetBond Safety Blue along Victoria's David Foster Harbour Pathway — five kilometres connecting Rock Bay to Ogden Point, celebrating Lekwungen First Nations history and the working harbour.",
+      "StreetBond Safety Blue along Victoria's David Foster Harbour Pathway: five kilometres connecting Rock Bay to Ogden Point, celebrating Lekwungen First Nations history and the working harbour.",
     problem:
       "Victoria's Inner Harbour pathway renovation needed a surface treatment that would hold vibrant colour in a high-humidity marine environment while remaining slip-resistant for cyclists and pedestrians year-round.",
     solution:
-      "StreetBond in high-visibility Safety Blue — water-based, slip-resistant coating applied along the full 5 km+ pathway. The coastal environment has not degraded the surface colour or friction performance since installation.",
+      "StreetBond in high-visibility Safety Blue: water-based, slip-resistant coating applied along the full 5 km+ pathway. The coastal environment has not degraded the surface colour or friction performance since installation.",
   },
 
   // ── Québec ──────────────────────────────────────────────────────────────────
@@ -722,7 +722,7 @@ const curatedProjects: MapProject[] = [
     ],
     imageIsRepresentative: true,
     excerpt:
-      "StreetBond150 over concrete at Parc Guido-Nincheri's promenade Ville-de-Québec — bold flowing lines designed by Civiliti as a gateway to Space for Life and the Olympic Park.",
+      "StreetBond150 over concrete at Parc Guido-Nincheri's promenade Ville-de-Québec: bold flowing lines designed by Civiliti as a gateway to Space for Life and the Olympic Park.",
     problem:
       "Civiliti's landscape design for the promenade required a surface coating that could reproduce flowing organic line-work in vivid colour on concrete, adjacent to major institutional landmarks, and survive Montréal winters.",
     solution:
@@ -745,9 +745,9 @@ const curatedProjects: MapProject[] = [
     ],
     imageIsRepresentative: true,
     excerpt:
-      "MMAX MMA bus lane surfacing on Calgary Transit's MAX BRT network — fast-cure MMA coatings in red and green applied overnight to keep Calgary's rapid transit corridors visually legible through prairie winters.",
+      "MMAX MMA bus lane surfacing on Calgary Transit's MAX BRT network: fast-cure MMA coatings in red and green applied overnight to keep Calgary's rapid transit corridors visually legible through prairie winters.",
     problem:
-      "Calgary Transit's MAX BRT corridors needed bus lane coatings that could withstand Alberta's temperature extremes — from -40°C winters to +35°C summers — without the adhesion failures that defeat standard acrylic coatings.",
+      "Calgary Transit's MAX BRT corridors needed bus lane coatings that could withstand Alberta's temperature extremes (from -40°C winters to +35°C summers) without the adhesion failures that defeat standard acrylic coatings.",
     solution:
       "MMAX MMA two-component coating system applied during overnight closures. MMA chemistry cures in 30–60 minutes regardless of ambient temperature, making it uniquely suited to Alberta's unpredictable installation conditions.",
   },
@@ -766,9 +766,9 @@ const curatedProjects: MapProject[] = [
     ],
     imageIsRepresentative: true,
     excerpt:
-      "TrafficPatternsXD pedestrian crossings and platform markings along Edmonton's Valley Line LRT — high-traction thermoplastic engineered for Edmonton's severe freeze-thaw cycles.",
+      "TrafficPatternsXD pedestrian crossings and platform markings along Edmonton's Valley Line LRT: high-traction thermoplastic engineered for Edmonton's severe freeze-thaw cycles.",
     problem:
-      "Edmonton's Valley Line LRT at-grade crossings required high-traction, long-life surface markings at pedestrian conflict zones. The city's severe winter conditions — more than 60 freeze-thaw cycles per year — eliminate standard paint within a season.",
+      "Edmonton's Valley Line LRT at-grade crossings required high-traction, long-life surface markings at pedestrian conflict zones. The city's severe winter conditions (more than 60 freeze-thaw cycles per year) eliminate standard paint within a season.",
     solution:
       "TrafficPatternsXD heat-fused thermoplastic at key crossings and platform zones along the Valley Line. The aggregate-reinforced system maintains BPN 65+ traction and full retroreflectivity through Edmonton's winter cycle without repainting.",
   },
@@ -786,7 +786,7 @@ const curatedProjects: MapProject[] = [
       "/images/applications/crosswalks/crosswalks-91.jpg",
     ],
     imageIsRepresentative: true,
-    excerpt: "Custom TrafficPatterns thermoplastic crosswalk honouring reconciliation — permanent Indigenous-inspired design in Calgary's city core.",
+    excerpt: "Custom TrafficPatterns thermoplastic crosswalk honouring reconciliation: permanent Indigenous-inspired design in Calgary's city core.",
     problem: "The City of Calgary sought a durable public art installation that would honour reconciliation commitments at a high-visibility intersection.",
     solution: "TrafficPatterns custom preformed thermoplastic with Indigenous-inspired motifs, heat-fused permanently to the asphalt surface.",
   },
@@ -804,7 +804,7 @@ const curatedProjects: MapProject[] = [
       "/images/applications/community-branding/community-branding-10.jpg",
     ],
     imageIsRepresentative: true,
-    excerpt: "StreetBond coloured pavement treatments along Edmonton's Whyte Avenue — Canada's most walkable main street gets a durable surface identity.",
+    excerpt: "StreetBond coloured pavement treatments along Edmonton's Whyte Avenue. Canada's most walkable main street gets a durable surface identity.",
     problem: "Edmonton's Whyte Avenue BIA needed pavement treatments that could communicate the street's creative, community-driven identity while surviving prairie winters.",
     solution: "StreetBond coloured coating applied at key intersections and pedestrian zones along the corridor, maintaining vivid colour through Edmonton's extreme temperature cycles.",
   },
@@ -822,7 +822,7 @@ const curatedProjects: MapProject[] = [
       "/images/applications/community-branding/community-branding-01.jpg",
     ],
     imageIsRepresentative: true,
-    excerpt: "DecoMark custom pavement graphics anchoring Lethbridge's cultural district — wayfinding and community identity embedded in the street surface.",
+    excerpt: "DecoMark custom pavement graphics anchoring Lethbridge's cultural district: wayfinding and community identity embedded in the street surface.",
     problem: "Lethbridge's cultural district needed surface treatments that could tie together civic buildings, arts venues, and pedestrian connections into a coherent identity.",
     solution: "DecoMark custom thermoplastic graphics at key nodes and crossings throughout the district, providing durable wayfinding and visual identity across the cultural corridor.",
   },
@@ -842,9 +842,9 @@ const curatedProjects: MapProject[] = [
       "/images/blog/every-child-matters-crosswalk/featured.png",
     ],
     imageIsRepresentative: true,
-    excerpt: "TrafficPatterns thermoplastic crosswalk in Ottawa honouring the Every Child Matters movement — permanent orange design embedded in the nation's capital.",
+    excerpt: "TrafficPatterns thermoplastic crosswalk in Ottawa honouring the Every Child Matters movement: permanent orange design embedded in the nation's capital.",
     problem: "The City of Ottawa needed a permanent, visible tribute to the Every Child Matters movement at a prominent public crossing.",
-    solution: "TrafficPatterns preformed thermoplastic in orange, heat-fused to the crosswalk surface — enduring through Ottawa's severe freeze-thaw winters without repainting.",
+    solution: "TrafficPatterns preformed thermoplastic in orange, heat-fused to the crosswalk surface, enduring through Ottawa's severe freeze-thaw winters without repainting.",
   },
   {
     // TODO: image Mississauga Civic Centre Plaza
@@ -860,9 +860,9 @@ const curatedProjects: MapProject[] = [
       "/images/applications/public-spaces/public-spaces-31.png",
     ],
     imageIsRepresentative: true,
-    excerpt: "StreetPrint stamped asphalt plaza treatments at Mississauga's Civic Centre — premium heritage aesthetic surrounding one of Canada's most recognized civic buildings.",
+    excerpt: "StreetPrint stamped asphalt plaza treatments at Mississauga's Civic Centre: a heritage aesthetic surrounding one of Canada's most recognized civic buildings.",
     problem: "The Mississauga Civic Centre plaza required decorative surface treatments matching the landmark building's heritage aesthetic, without the maintenance liability of interlocking stone.",
-    solution: "StreetPrint cobblestone-pattern stamped asphalt with warm pigment — flush, snowplow-safe, and visually consistent with the building's architectural character.",
+    solution: "StreetPrint cobblestone-pattern stamped asphalt with warm pigment: flush, snowplow-safe, and visually consistent with the building's architectural character.",
   },
   {
     // TODO: image Hamilton James Street Crosswalk
@@ -878,9 +878,9 @@ const curatedProjects: MapProject[] = [
       "/images/applications/community-branding/community-branding-02.jpg",
     ],
     imageIsRepresentative: true,
-    excerpt: "StreetBond coloured crosswalk treatments on Hamilton's James Street North arts corridor — permanent colour marking one of Canada's most celebrated art-walk destinations.",
+    excerpt: "StreetBond coloured crosswalk treatments on Hamilton's James Street North arts corridor: permanent colour marking one of Canada's most celebrated art-walk destinations.",
     problem: "Hamilton's James Street North BIA needed crosswalk treatments that would reflect the street's creative character and survive the city's heavy winter maintenance cycle.",
-    solution: "StreetBond multi-colour installation at key crossings along the arts corridor — UV-stable, snowplow-safe, and low-maintenance for the BIA's operations team.",
+    solution: "StreetBond multi-colour installation at key crossings along the arts corridor: UV-stable, snowplow-safe, and low-maintenance for the BIA's operations team.",
   },
   {
     // TODO: image Windsor Ambassador Bridge Approach
@@ -896,9 +896,9 @@ const curatedProjects: MapProject[] = [
       "/images/applications/crosswalks/crosswalks-54.jpg",
     ],
     imageIsRepresentative: true,
-    excerpt: "TrafficPatternsXD high-performance crosswalks at Canada's busiest commercial border crossing — durable markings engineered for extreme vehicle loads.",
+    excerpt: "TrafficPatternsXD high-performance crosswalks at Canada's busiest commercial border crossing: durable markings engineered for extreme vehicle loads.",
     problem: "The Ambassador Bridge approach handles some of Canada's highest commercial vehicle counts. Standard painted crosswalk markings failed within weeks under the concentrated axle loads.",
-    solution: "TrafficPatternsXD aggregate-reinforced thermoplastic at pedestrian crossings near the approach — engineered for the lateral forces generated by commercial truck turning movements.",
+    solution: "TrafficPatternsXD aggregate-reinforced thermoplastic at pedestrian crossings near the approach, engineered for the lateral forces generated by commercial truck turning movements.",
   },
 
   // ── More British Columbia ────────────────────────────────────────────────
@@ -916,9 +916,9 @@ const curatedProjects: MapProject[] = [
       "/images/applications/bike-lanes/bike-lanes-14.jpg",
     ],
     imageIsRepresentative: true,
-    excerpt: "StreetBond green bike lane coatings across Burnaby's active transportation network — durable colour demarcation connecting SkyTrain stations to cycling routes.",
+    excerpt: "StreetBond green bike lane coatings across Burnaby's active transportation network: durable colour demarcation connecting SkyTrain stations to cycling routes.",
     problem: "Burnaby needed bike lane treatments that could survive the city's wet Pacific climate and frequent intersection turning movements without the constant repainting cycle of standard paint.",
-    solution: "StreetBond coloured coating in green along the active transportation corridor — chemically bonded to asphalt with UV-stable pigments that hold colour through repeated wet seasons.",
+    solution: "StreetBond coloured coating in green along the active transportation corridor, chemically bonded to asphalt with UV-stable pigments that hold colour through repeated wet seasons.",
   },
   {
     // TODO: image Victoria Chinatown Cultural Crosswalk
@@ -934,9 +934,9 @@ const curatedProjects: MapProject[] = [
       "/images/applications/community-branding/community-branding-07.jpg",
     ],
     imageIsRepresentative: true,
-    excerpt: "DecoMark custom thermoplastic crosswalk celebrating Victoria's Chinatown — Canada's oldest Chinatown gets a permanent cultural marker at the Gate of Harmonious Interest.",
+    excerpt: "DecoMark custom thermoplastic crosswalk celebrating Victoria's Chinatown. Canada's oldest Chinatown gets a permanent cultural marker at the Gate of Harmonious Interest.",
     problem: "The City of Victoria wanted a durable, culturally respectful crosswalk installation near the Gate of Harmonious Interest that would honour the district's heritage without requiring annual maintenance.",
-    solution: "DecoMark custom preformed thermoplastic with Chinese-inspired design elements — Pantone-accurate colour fused into the asphalt surface for season-after-season visibility.",
+    solution: "DecoMark custom preformed thermoplastic with Chinese-inspired design elements: Pantone-accurate colour fused into the asphalt surface for season-after-season visibility.",
   },
   {
     // TODO: image Nanaimo Harbour Pathway
@@ -952,7 +952,7 @@ const curatedProjects: MapProject[] = [
       "/images/applications/parks-paths/parks-paths-41.jpg",
     ],
     imageIsRepresentative: true,
-    excerpt: "StreetBond coloured pathway along Nanaimo's harbour waterfront — slip-resistant surface treatment connecting the downtown ferry terminal to the seawall.",
+    excerpt: "StreetBond coloured pathway along Nanaimo's harbour waterfront: slip-resistant surface treatment connecting the downtown ferry terminal to the seawall.",
     problem: "Nanaimo's harbour pathway needed a coloured surface treatment that would hold up to salt air, wet conditions, and high pedestrian volume from ferry traffic.",
     solution: "StreetBond water-based coating with anti-slip aggregate in a coastal-appropriate colour, applied to the existing pathway asphalt.",
   },
@@ -970,8 +970,8 @@ const curatedProjects: MapProject[] = [
       "/images/applications/bike-lanes/bike-lanes-19.jpg",
     ],
     imageIsRepresentative: true,
-    excerpt: "TrafficPatternsXD crosswalk treatments at key active transportation intersections across Kamloops — high-traction thermoplastic built for the Interior's temperature extremes.",
-    problem: "Kamloops experiences some of BC's most extreme temperature swings — from -25°C winters to +40°C summers. Standard painted bike lane crossings failed within one season.",
+    excerpt: "TrafficPatternsXD crosswalk treatments at key active transportation intersections across Kamloops: high-traction thermoplastic built for the Interior's temperature extremes.",
+    problem: "Kamloops experiences some of BC's most extreme temperature swings, from -25°C winters to +40°C summers. Standard painted bike lane crossings failed within one season.",
     solution: "TrafficPatternsXD aggregate-reinforced thermoplastic at conflict zones along the active transportation network, engineered for the Interior's full temperature range.",
   },
 
@@ -990,8 +990,8 @@ const curatedProjects: MapProject[] = [
       "/images/applications/crosswalks/crosswalks-59.jpg",
     ],
     imageIsRepresentative: true,
-    excerpt: "TrafficPatternsXD crosswalks in Saskatoon's downtown core — durable thermoplastic engineered for Saskatchewan's extreme temperature range.",
-    problem: "Saskatoon's downtown crosswalks experience extreme temperature cycling — -40°C winters and +35°C summers destroy standard painted markings within a season.",
+    excerpt: "TrafficPatternsXD crosswalks in Saskatoon's downtown core: durable thermoplastic engineered for Saskatchewan's extreme temperature range.",
+    problem: "Saskatoon's downtown crosswalks experience extreme temperature cycling: -40°C winters and +35°C summers destroy standard painted markings within a season.",
     solution: "TrafficPatternsXD monolithically bonded to the asphalt surface, expanding and contracting with the pavement through Saskatchewan's full annual temperature range.",
   },
   {
@@ -1008,7 +1008,7 @@ const curatedProjects: MapProject[] = [
       "/images/applications/parks-paths/parks-paths-81.jpg",
     ],
     imageIsRepresentative: true,
-    excerpt: "StreetBond coloured pathway treatments at Wascana Centre — one of Canada's largest urban parks gets a durable, low-maintenance surface identity.",
+    excerpt: "StreetBond coloured pathway treatments at Wascana Centre. One of Canada's largest urban parks gets a durable, low-maintenance surface identity.",
     problem: "Wascana Centre's pathway network needed a surface treatment that could withstand Regina's harsh winters and provide year-round wayfinding clarity across the extensive park system.",
     solution: "StreetBond coloured coating on key pathway segments and crossings, providing durable colour that maintains visibility through prairie freeze-thaw cycles.",
   },
@@ -1028,9 +1028,9 @@ const curatedProjects: MapProject[] = [
       "/images/applications/public-spaces/public-spaces-41.jpg",
     ],
     imageIsRepresentative: true,
-    excerpt: "StreetPrint stamped asphalt in Winnipeg's Exchange District — heritage brick aesthetics for Canada's largest collection of turn-of-the-century commercial architecture.",
+    excerpt: "StreetPrint stamped asphalt in Winnipeg's Exchange District: heritage brick aesthetics for Canada's largest collection of turn-of-the-century commercial architecture.",
     problem: "Winnipeg's Exchange District National Historic Site needed pedestrian zone treatments that respected the neighbourhood's heritage character while withstanding Manitoba's severe winters.",
-    solution: "StreetPrint cobblestone and brick patterns heat-stamped into asphalt, flush with the road surface and fully snowplow-compatible — no raised edges for Manitoba's plow fleet to catch.",
+    solution: "StreetPrint cobblestone and brick patterns heat-stamped into asphalt, flush with the road surface and fully snowplow-compatible: no raised edges for Manitoba's plow fleet to catch.",
   },
   {
     // TODO: image Winnipeg Indigenous Cultural Garden
@@ -1046,7 +1046,7 @@ const curatedProjects: MapProject[] = [
       "/images/applications/parks-paths/parks-paths-96.png",
     ],
     imageIsRepresentative: true,
-    excerpt: "DecoMark custom thermoplastic pathway markings at Winnipeg's Indigenous Cultural Garden — permanent cultural graphics embedded in the surface of a landmark public space.",
+    excerpt: "DecoMark custom thermoplastic pathway markings at Winnipeg's Indigenous Cultural Garden: permanent cultural graphics embedded in the surface of a landmark public space.",
     problem: "The Indigenous Cultural Garden required pathway and gathering area surface treatments that could carry cultural imagery through Winnipeg's extreme winter conditions without fading or cracking.",
     solution: "DecoMark custom preformed thermoplastic with Indigenous cultural motifs, applied at key pathway nodes and gathering areas throughout the garden.",
   },
@@ -1066,9 +1066,9 @@ const curatedProjects: MapProject[] = [
       "/images/applications/parks-paths/parks-paths-31.jpg",
     ],
     imageIsRepresentative: true,
-    excerpt: "StreetBond bold colours transform a Plateau-Mont-Royal back laneway into a vibrant public green corridor — Montréal's ruelle verte program meets permanent pavement art.",
+    excerpt: "StreetBond bold colours transform a Plateau-Mont-Royal back laneway into a vibrant public green corridor. Montréal's ruelle verte program meets permanent pavement art.",
     problem: "Montréal's ruelle verte program needed surface coatings that could withstand Québec winters while delivering the vivid colours central to the laneway revitalization vision.",
-    solution: "StreetBond applied in the project's signature colour palette — chemically bonded to the laneway asphalt with UV-stable pigments that survive repeated freeze-thaw cycles.",
+    solution: "StreetBond applied in the project's signature colour palette, chemically bonded to the laneway asphalt with UV-stable pigments that survive repeated freeze-thaw cycles.",
   },
   {
     // TODO: image Montréal Rosemont Vision Zéro Crosswalks
@@ -1085,7 +1085,7 @@ const curatedProjects: MapProject[] = [
     ],
     imageIsRepresentative: true,
     excerpt: "TrafficPatternsXD high-visibility crosswalks in Rosemont–La Petite-Patrie as part of Montréal's Vision Zéro pedestrian safety program.",
-    problem: "Montréal's Rosemont borough needed high-visibility crosswalk upgrades at its most dangerous pedestrian intersections — painted markings failed within two seasons under Québec's extreme freeze-thaw cycling.",
+    problem: "Montréal's Rosemont borough needed high-visibility crosswalk upgrades at its most dangerous pedestrian intersections. Painted markings failed within two seasons under Québec's extreme freeze-thaw cycling.",
     solution: "TrafficPatternsXD thermoplastic crosswalks heat-fused to the asphalt surface, maintaining retroreflective performance through Montréal winters without repainting.",
   },
   {
@@ -1102,7 +1102,7 @@ const curatedProjects: MapProject[] = [
       "/images/applications/public-spaces/public-spaces-51.jpg",
     ],
     imageIsRepresentative: true,
-    excerpt: "StreetBond coloured crosswalks in Québec City's St-Roch quartier — durable surface identity for one of the province's most dynamic urban renewal corridors.",
+    excerpt: "StreetBond coloured crosswalks in Québec City's St-Roch quartier: durable surface identity for one of the province's most dynamic urban renewal corridors.",
     problem: "Quartier St-Roch's urban renewal required crosswalk treatments that could express the neighbourhood's creative identity while surviving Québec City's heavy winter maintenance program.",
     solution: "StreetBond coloured coating at key intersections through the quartier, UV-stable through multiple seasons of salt, plowing, and Québec's characteristically heavy snowfall.",
   },
@@ -1120,9 +1120,9 @@ const curatedProjects: MapProject[] = [
       "/images/applications/bus-lanes/bus-lanes-25.jpg",
     ],
     imageIsRepresentative: true,
-    excerpt: "TrafficPatternsXD crosswalk and bus lane treatments at Laval's Carrefour transit hub — high-durability surface markings at one of Québec's busiest transit interchanges.",
+    excerpt: "TrafficPatternsXD crosswalk and bus lane treatments at Laval's Carrefour transit hub: high-durability surface markings at one of Québec's busiest transit interchanges.",
     problem: "The Carrefour transit hub handles high bus volumes and thousands of daily pedestrian movements. Painted markings at the modal interchange failed rapidly under turning bus loads.",
-    solution: "TrafficPatternsXD at pedestrian conflict zones and bus lane delineations — aggregate-reinforced thermoplastic with zero documented edge damage through multiple Québec winters.",
+    solution: "TrafficPatternsXD at pedestrian conflict zones and bus lane delineations: aggregate-reinforced thermoplastic with zero documented edge damage through multiple Québec winters.",
   },
 
   // ── Atlantic Canada ──────────────────────────────────────────────────────
@@ -1140,7 +1140,7 @@ const curatedProjects: MapProject[] = [
       "/images/applications/parks-paths/parks-paths-119.jpg",
     ],
     imageIsRepresentative: true,
-    excerpt: "StreetBond coloured pathway treatments along Halifax's waterfront — slip-resistant surface coating for one of Canada's most visited harbour promenades.",
+    excerpt: "StreetBond coloured pathway treatments along Halifax's waterfront: slip-resistant surface coating for one of Canada's most visited harbour promenades.",
     problem: "Halifax's waterfront boardwalk area needed durable, slip-resistant surface treatments that could handle salt air, heavy summer tourist traffic, and Nova Scotia's winter maintenance.",
     solution: "StreetBond anti-slip coating applied along the waterfront pathway, providing year-round traction and colour definition in an exposed salt-air marine environment.",
   },
@@ -1158,9 +1158,9 @@ const curatedProjects: MapProject[] = [
       "/images/applications/crosswalks/crosswalks-69.jpg",
     ],
     imageIsRepresentative: true,
-    excerpt: "TrafficPatternsXD decorative crosswalks on Moncton's Main Street — durable thermoplastic marking the heart of New Brunswick's largest city.",
+    excerpt: "TrafficPatternsXD decorative crosswalks on Moncton's Main Street: durable thermoplastic marking the heart of New Brunswick's largest city.",
     problem: "Moncton's Main Street commercial corridor needed crosswalk treatments that could hold up under the city's substantial winter maintenance program and high vehicle volumes.",
-    solution: "TrafficPatternsXD installed at key Main Street crossings — aggregate-reinforced, snowplow-safe, and maintenance-free through Atlantic Canada's wet winters.",
+    solution: "TrafficPatternsXD installed at key Main Street crossings: aggregate-reinforced, snowplow-safe, and maintenance-free through Atlantic Canada's wet winters.",
   },
   {
     // TODO: image Charlottetown Confederation Landing
@@ -1176,9 +1176,9 @@ const curatedProjects: MapProject[] = [
       "/images/applications/parks-paths/parks-paths-131.jpg",
     ],
     imageIsRepresentative: true,
-    excerpt: "StreetPrint stamped asphalt at Charlottetown's Confederation Landing — heritage cobblestone aesthetics honouring the birthplace of Confederation.",
+    excerpt: "StreetPrint stamped asphalt at Charlottetown's Confederation Landing: heritage cobblestone aesthetics honouring the birthplace of Confederation.",
     problem: "Charlottetown's Confederation Landing historic area needed surface treatments consistent with its heritage character. Traditional stone pavers required ongoing maintenance under PEI's frost-heave conditions.",
-    solution: "StreetPrint cobblestone-pattern stamped asphalt — the historic aesthetic without the maintenance. Flush surface handles frost-heave and snowplow operations without structural disruption.",
+    solution: "StreetPrint cobblestone-pattern stamped asphalt: the historic aesthetic without the maintenance. Flush surface handles frost-heave and snowplow operations without structural disruption.",
   },
   {
     // TODO: image St. John's Jellybean Row
@@ -1194,9 +1194,9 @@ const curatedProjects: MapProject[] = [
       "/images/applications/community-branding/community-branding-13.jpg",
     ],
     imageIsRepresentative: true,
-    excerpt: "StreetBond coloured pavement treatments complementing St. John's iconic Jellybean Row — a surface palette as vivid as the Victorian rowhouses above.",
+    excerpt: "StreetBond coloured pavement treatments complementing St. John's iconic Jellybean Row, a surface palette as vivid as the Victorian rowhouses above.",
     problem: "St. John's vibrant Jellybean Row neighbourhood needed street surface treatments that could echo the area's famous colour palette and survive Newfoundland's extreme freeze-thaw climate.",
-    solution: "StreetBond in bold complementary colours at key pedestrian crossings and gathering areas — UV-stable coating engineered to survive the Atlantic freeze-thaw cycle.",
+    solution: "StreetBond in bold complementary colours at key pedestrian crossings and gathering areas: UV-stable coating engineered to survive the Atlantic freeze-thaw cycle.",
   },
 ];
 

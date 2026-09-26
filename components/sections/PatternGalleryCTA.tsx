@@ -63,7 +63,7 @@ export default function PatternGalleryCTA() {
           Pattern gallery
         </p>
         <p className="text-[12px] mt-0.5 hidden sm:block" style={{ color: "var(--text-secondary)" }}>
-          16 dimensioned stamping templates — herringbone, cobble, ashlar, fan
+          16 dimensioned stamping templates: herringbone, cobble, ashlar, fan
         </p>
       </div>
 

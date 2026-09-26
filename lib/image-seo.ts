@@ -507,7 +507,7 @@ const FILE_PLACES: Record<string, string> = {
  */
 const HERO_ALT: Record<string, string> = {
   "/images/hero/hero-1.jpg":
-    "The UBC Musqueam crosswalk at the University of British Columbia campus entrance in Vancouver — Coast Salish artwork rendered in coloured pavement by HUB Surface Systems",
+    "The UBC Musqueam crosswalk at the University of British Columbia campus entrance in Vancouver: Coast Salish artwork rendered in coloured pavement by HUB Surface Systems",
 };
 
 export function heroAlt(src: string): string {
@@ -561,12 +561,12 @@ const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
  * makes them ungrammatical.
  */
 const FRAMES: ((s: ImageSubject, setting: string, place: string) => string)[] = [
-  (s, setting, place) => `${cap(s.keyword)} at ${setting} in ${place} — installed by HUB Surface Systems`,
-  (s, setting, place) => `${cap(s.keyword)} in ${s.material} — ${setting}, ${place}`,
-  (s, setting) => `HUB Surface Systems ${s.keyword} — ${s.purpose} at ${setting}`,
+  (s, setting, place) => `${cap(s.keyword)} at ${setting} in ${place}, installed by HUB Surface Systems`,
+  (s, setting, place) => `${cap(s.keyword)} in ${s.material} at ${setting}, ${place}`,
+  (s, setting) => `HUB Surface Systems ${s.keyword}: ${s.purpose} at ${setting}`,
   (s, setting, place) => `${cap(s.keyword)} installation in ${place}: ${s.purpose} at ${setting}`,
-  (s, setting) => `${cap(s.keyword)} specified for ${s.purpose} — ${setting}`,
-  (s, setting, place) => `Canadian ${s.keyword} project by HUB Surface Systems — ${setting} in ${place}`,
+  (s, setting) => `${cap(s.keyword)} specified for ${s.purpose} at ${setting}`,
+  (s, setting, place) => `Canadian ${s.keyword} project by HUB Surface Systems at ${setting} in ${place}`,
 ];
 
 /**
@@ -597,7 +597,7 @@ export function seoCaption(src: string): string | undefined {
   if (!subject) return undefined;
   const place = placeFor(src);
   const setting = subject.settings[hashIndex(src) % subject.settings.length];
-  return `${cap(subject.keyword)} — ${setting}, ${place}. ${cap(subject.material)}.`;
+  return `${cap(subject.keyword)} at ${setting}, ${place}. ${cap(subject.material)}.`;
 }
 
 /** Search phrases a folder legitimately serves, for schema `keywords`. */

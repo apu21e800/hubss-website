@@ -98,7 +98,7 @@ export default function CanadaMapWrapper() {
           {mapCount.count} projects, coast to coast.
         </p>
         <p className="text-sm mb-5" style={{ color: "var(--ink-65)" }}>
-          Every pin is a real installation — filter by system, browse by province.
+          Every pin is a real installation. Filter by system, browse by province.
         </p>
         <span className="inline-flex items-center gap-2 text-sm font-bold" style={{ color: "var(--accent-text)" }}>
           Open the map

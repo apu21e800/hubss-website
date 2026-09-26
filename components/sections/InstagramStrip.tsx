@@ -79,9 +79,9 @@ export default async function InstagramStrip() {
         {/* Header */}
         <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-14 gap-6">
           <div>
-            <p className="text-xs font-bold tracking-[0.2em] uppercase mb-3" style={{ color: "rgba(249,115,22,0.8)" }}>On The Ground</p>
-            <h2 className="text-3xl md:text-4xl font-bold" style={{ color: "var(--text-primary)" }}>Follow the Work</h2>
-            <p className="mt-3 text-base" style={{ color: "var(--ink-45)" }}>Projects across Canada — documented as they happen.</p>
+            <p className="text-xs font-bold tracking-[0.2em] uppercase mb-3" style={{ color: "rgba(249,115,22,0.8)" }}>On the ground</p>
+            <h2 className="text-3xl md:text-4xl font-bold" style={{ color: "var(--text-primary)" }}>Follow the work</h2>
+            <p className="mt-3 text-base" style={{ color: "var(--ink-45)" }}>Projects across Canada, documented as they happen.</p>
           </div>
           <a href={SOCIAL_LINKS.instagram} target="_blank" rel="noopener noreferrer"
             className="flex items-center gap-2.5 px-5 py-3 rounded-xl text-sm font-semibold flex-shrink-0 transition-colors hover:border-orange-500 hover:text-[var(--accent-text)]"
@@ -99,7 +99,7 @@ export default async function InstagramStrip() {
                 <a key={post.id} href={post.permalink} target="_blank" rel="noopener noreferrer"
                   className="group relative overflow-hidden rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_8px_32px_rgba(249,115,22,0.2)]"
                   style={{ aspectRatio: "1/1", border: "1px solid var(--border-color)" }}>
-                  <Image src={post.media_url} alt="HUB Surface Systems Instagram — recent decorative pavement project from the field" fill
+                  <Image src={post.media_url} alt="HUB Surface Systems Instagram, recent decorative pavement project from the field" fill
                     className="object-cover transition-transform duration-500 group-hover:scale-110"
                     sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 17vw" />
                   <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200"

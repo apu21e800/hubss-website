@@ -100,7 +100,7 @@ export const FIELD_NOTE_TYPES: FieldNoteTypeMeta[] = [
     slug: "project-profiles",
     blurb: "Short-form records of installations across the country.",
     promise:
-      "The field record: where it is, what went down, which system, and what it looks like now. Quick reads for browsing what is possible — and proof that the work exists outside a brochure.",
+      "The field record: where it is, what went down, which system, and what it looks like now. Quick reads for browsing what is possible, and proof that the work exists outside a brochure.",
     schemaType: "Article",
     // Was #EAB308 — Tailwind yellow-500, a straggler from the pass that
     // collapsed the seven per-type tints. HUB has no yellow: the brand is
@@ -120,7 +120,7 @@ export const FIELD_NOTE_TYPES: FieldNoteTypeMeta[] = [
     slug: "guides",
     blurb: "How to choose, specify, and defend a surface decision.",
     promise:
-      "Decision support for engineers, landscape architects, and procurement teams — comparisons, lifecycle math, spec language, and the failure modes to design around in a freeze-thaw climate.",
+      "Decision support for engineers, landscape architects, and procurement teams: comparisons, lifecycle math, spec language, and the failure modes to design around in a freeze-thaw climate.",
     schemaType: "TechArticle",
     tint: "rgba(249,115,22,0.1)",
     border: "rgba(249,115,22,0.28)",
@@ -147,7 +147,7 @@ export const FIELD_NOTE_TYPES: FieldNoteTypeMeta[] = [
     slug: "posts",
     blurb: "Industry notes, product context, and what we are seeing on the road.",
     promise:
-      "Shorter reads on where decorative pavement is heading in Canada — material context, industry shifts, and the thinking behind the systems.",
+      "Shorter reads on where decorative pavement is heading in Canada: material context, industry shifts, and the thinking behind the systems.",
     schemaType: "BlogPosting",
     tint: "var(--ink-05)",
     border: "rgba(255,255,255,0.12)",

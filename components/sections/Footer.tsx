@@ -64,7 +64,7 @@ export default function Footer() {
               className="font-light tracking-wide mb-3"
               style={{ color: "var(--text-primary)", fontSize: "0.9375rem", lineHeight: 1.45 }}
             >
-              Pedestrian safety. Traffic calming.<br />Civic identity. Coast to coast since 1999.
+              Pedestrian safety, traffic calming, civic identity.<br />Coast to coast since 1999.
             </p>
 
             <p className="text-[11px] mb-5 flex items-center gap-2 flex-wrap" style={{ color: "var(--text-muted)", lineHeight: 1.5 }}>
@@ -149,7 +149,7 @@ export default function Footer() {
                   style={{ background: "linear-gradient(180deg, #F97316 0%, #EAB308 100%)" }}
                 />
                 <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "var(--accent-text-lg)" }}>
-                  West Office
+                  West office
                 </p>
                 <p className="text-sm mb-1" style={{ color: "var(--text-primary)" }}>Ladysmith, British Columbia</p>
                 <a href="mailto:cleve.stordy@hubss.com" className="text-xs flex items-center transition-colors hover:text-[var(--text-primary)] underline-offset-4 hover:underline" data-tap="40" style={{ color: "var(--text-secondary)", paddingTop: 2, paddingBottom: 2 }}>
@@ -167,7 +167,7 @@ export default function Footer() {
                   style={{ background: "linear-gradient(180deg, #F97316 0%, #EAB308 100%)" }}
                 />
                 <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "var(--accent-text-lg)" }}>
-                  East Office
+                  East office
                 </p>
                 <p className="text-sm mb-1" style={{ color: "var(--text-primary)" }}>Milton, Ontario</p>
                 <a href="mailto:doug.bain@hubss.com" className="text-xs flex items-center transition-colors hover:text-[var(--text-primary)] underline-offset-4 hover:underline" data-tap="40" style={{ color: "var(--text-secondary)", paddingTop: 2, paddingBottom: 2 }}>

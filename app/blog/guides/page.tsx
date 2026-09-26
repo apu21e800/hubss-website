@@ -8,7 +8,7 @@ import { buildMetadata } from "@/lib/seo";
 const TYPE = TYPE_BY_LABEL["Guide"];
 
 export const metadata: Metadata = buildMetadata({
-  title: "Specification Guides — Choosing & Defending a Surface System",
+  title: "Specification Guides · Choosing & Defending a Surface System",
   description: "Decision support for engineers, landscape architects, and procurement: comparisons, lifecycle cost math, spec language, and freeze-thaw failure modes to design around.",
   slug: "blog/guides",
 });

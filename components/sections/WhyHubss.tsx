@@ -102,7 +102,7 @@ export default function WhyHubss() {
             <br />Loved by communities.
           </h2>
           <p className="text-base leading-relaxed max-w-xl" style={{ color: "var(--text-muted)" }}>
-            Understanding what works. Solutions for Canada. One standard — if it goes on the street, it stays on the street.
+            Understanding what works. Solutions for Canada. One standard: if it goes on the street, it stays on the street.
           </p>
         </motion.div>
 
@@ -176,7 +176,7 @@ export default function WhyHubss() {
               boxShadow: "0 4px 20px rgba(249,115,22,0.3)",
             }}
           >
-            Request a Quote
+            Request a quote
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>

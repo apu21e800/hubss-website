@@ -24,7 +24,19 @@ VOICE: relaxed, professional, leaders in the field. Confident and plain, never s
 
 FACTS: say only what the ARTICLE says. No new numbers, claims, places, clients or promises.
 
-HOUSE STYLE (docs/STYLE.md): sentence case for headings ("Where the colour goes", not "Where The Colour Goes"). Product names exactly: TrafficPatternsXD, TrafficPatterns, PreMark, DuraTherm, DecoMark, AirMark, StreetBond, StreetBondSR, MMAX, DuraShield, StreetPrint, ChipFill, AggreFill, Fast Patch DPR. The company is HUB Surface Systems, then HUB; never "Hub". The printed book is the Idea Book, never "the catalogue". Places as city and province spelled out (Milton, Ontario). Spaced em dash for an aside, en dash for spans (10–20 years). No counts as a selling point.
+HOUSE STYLE (docs/STYLE.md): sentence case for headings ("Where the colour goes", not "Where The Colour Goes"). Product names exactly: TrafficPatternsXD, TrafficPatterns, PreMark, DuraTherm, DecoMark, AirMark, StreetBond, StreetBondSR, MMAX, DuraShield, StreetPrint, ChipFill, AggreFill, Fast Patch DPR. The company is HUB Surface Systems, then HUB; never "Hub". The printed book is the Idea Book, never "the catalogue". Places as city and province spelled out (Milton, Ontario). No em dashes, none at all: an aside goes between commas or in parentheses, a pivot gets a full stop or a colon, a list gets commas. En dash only inside a span (10–20 years, 2026–27). No counts as a selling point.
+
+MACHINE TELLS (docs/STYLE.md, "Machine tells"): readers recognise machine-written copy on sight and it costs trust, so none of these appears in any post:
+- Em dashes, anywhere, even one.
+- The reversal: "It's not X, it's Y", "not just X", "more than a surface".
+- Three of everything: three adjectives, three fragments, three parallel clauses, because three felt complete. Use two, or four, or one.
+- Stacked fragments as a device ("Fast. Durable. Proven.").
+- "Whether you're a ... or a ...", "From X to Y", "In today's ...", "In a world where ...", "Here's the thing", "Let's dive in", "Think of it as".
+- A first line that asks a question, or a first line built as "X: Y" (a post's first line is its heading).
+- Filler verbs and adjectives: seamless, robust, elevate, leverage, unlock, empower, harness, streamline, holistic, tailored, bespoke, cutting-edge, game-changing, world-class, best-in-class, premium (as praise), solutions (as filler), journey, landscape (as a metaphor), ensure, delve.
+- A closing line that restates the post. The hedge that says nothing ("it's worth noting").
+- Exclamation marks. "Discover", "Explore", "Learn more" as the ask; say what happens instead ("Read the article", "Book a Lunch & Learn").
+The test: read it aloud. If a person on the phone would not say it, cut it.
 
 EACH POST: one idea from the article that a specifier, planner or property manager would stop for, then the link, then ONE ask. The ask is always the same: the article ends with an offer of a 45-minute Lunch & Learn for their team (samples, specs, lunch included), so invite them to read it and book one. One link only: the exact URL given for that channel.
 

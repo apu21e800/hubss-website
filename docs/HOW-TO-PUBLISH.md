@@ -14,19 +14,19 @@ overnight.
 
 **Insights → the + button**, then fill in, top to bottom:
 
-- **Title** — under 70 characters if you can.
-- **Type** — Case Study, Project Profile, Guide, White Paper or Article. It
+- **Title:** under 70 characters if you can.
+- **Type:** Case Study, Project Profile, Guide, White Paper or Article. It
   sets the badge and which Insights hub the piece appears in.
-- **Publish date** — the date printed on the article. Publishing is what puts
+- **Publish date:** the date printed on the article. Publishing is what puts
   it on the site; a future date does not hold it back.
-- **Excerpt** — two or three sentences. It is the card text, the italic lead-in
+- **Excerpt:** two or three sentences. It is the card text, the italic lead-in
   and what Google shows.
-- **Body** — use **Heading 2** for each section (they become the "On this page"
+- **Body:** use **Heading 2** for each section (they become the "On this page"
   list) and Heading 3 inside a section. Don't repeat the title as a heading.
   In a table, the first row is the heading row.
-- **Featured photo** — HUB's own photograph, with alt text (see 3).
-- **Systems this post is about** — tick them; they lead the sidebar.
-- **Read time** — leave blank; the site works it out.
+- **Featured photo:** HUB's own photograph, with alt text (see 3).
+- **Systems this post is about:** tick them; they lead the sidebar.
+- **Read time:** leave blank; the site works it out.
 
 Press **Publish**. A new article takes about five minutes to appear, because
 the site rebuilds itself to add the page. Its card and its page appear
@@ -38,7 +38,7 @@ shared, so pick the title you mean.
 Only HUB's own photographs: no stock, no supplier packaging in frame, no
 storefront brands unless you're happy to name them. Every photo needs alt
 text: one plain sentence saying what is in the picture, with the place and the
-system if you know them — "TrafficPatternsXD crosswalk in a brick pattern,
+system if you know them: "TrafficPatternsXD crosswalk in a brick pattern,
 Oakville, Ontario". It is what screen readers say and what Google reads.
 
 ## 4. The plan, and the Tuesday drafts

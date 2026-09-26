@@ -130,7 +130,7 @@ const familyList = (() => {
 
 export const metadata = buildMetadata({
   title: "Decorative Pavement & Marking Systems",
-  description: `HUB's surface systems in four families — ${familyList}. Specs, spec sheets and certified installers, coast to coast.`,
+  description: `HUB's surface systems in four families: ${familyList}. Specs, spec sheets and certified installers, coast to coast.`,
   slug: "products",
 });
 
@@ -299,10 +299,10 @@ export default function ProductsPage() {
             className="mb-5"
             style={{ color: "var(--text-primary)", fontSize: "clamp(2rem, 4vw, 3.5rem)", lineHeight: 1.0, letterSpacing: "-0.03em" }}
           >
-            Surface Systems for the Built Environment.
+            Surface systems for the built environment.
           </h1>
           <p className="max-w-2xl text-lg" style={{ color: "var(--text-secondary)" }}>
-            Four families — {familyList}. Built for freeze-thaw climates. Specified coast to coast.
+            Four families: {familyList}. Built for freeze-thaw climates. Specified coast to coast.
           </p>
         </div>
 

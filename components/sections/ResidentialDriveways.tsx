@@ -25,7 +25,7 @@ export default function ResidentialDriveways() {
                   border: "1px solid rgba(249,115,22,0.28)",
                 }}
               >
-                New Application
+                New application
               </span>
             </div>
 
@@ -33,9 +33,9 @@ export default function ResidentialDriveways() {
               className="text-3xl sm:text-4xl lg:text-5xl font-black leading-[1.05] mb-5"
               style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}
             >
-              Your Driveway.
+              Your driveway.
               <br />
-              <span style={{ color: "var(--accent-text-lg)" }}>City&#8209;Grade Materials.</span>
+              <span style={{ color: "var(--accent-text-lg)" }}>City&#8209;grade materials.</span>
             </h2>
 
             <p
@@ -43,7 +43,7 @@ export default function ResidentialDriveways() {
               style={{ color: "var(--text-secondary)" }}
             >
               The same StreetPrint patterns specified for Toronto&apos;s streetscapes, applied to
-              residential driveways. 20&#8209;year service life. 1&#8209;2 day installation.
+              residential driveways. 20&#8209;year service life, 1–2 day installation.
             </p>
 
             {/* Benefit bullets */}
@@ -51,7 +51,7 @@ export default function ResidentialDriveways() {
               {[
                 "Brick, cobblestone, slate, herringbone, and custom pattern options",
                 "Specified for Canadian freeze‑thaw cycles and winter maintenance",
-                "Same material specification used on public streets — no downgrade for residential applications",
+                "Same material specification used on public streets: no downgrade for residential applications",
               ].map((item) => (
                 <li key={item} className="flex items-start gap-3">
                   <span
@@ -90,7 +90,7 @@ export default function ResidentialDriveways() {
                 color: "var(--on-accent)",
               }}
             >
-              See Driveway Options
+              See driveway options
               <svg
                 width="14"
                 height="14"
@@ -114,7 +114,7 @@ export default function ResidentialDriveways() {
                 LCP hero is the banner image at the top of the page. */}
             <Image
               src={HERO_IMAGE}
-              alt="Residential StreetPrint driveway — aerial view, circular stamp pattern, home with double garage"
+              alt="Residential StreetPrint driveway: aerial view, circular stamp pattern, home with double garage"
               fill
               className="object-cover object-top"
               sizes="(max-width: 1024px) 100vw, 50vw"

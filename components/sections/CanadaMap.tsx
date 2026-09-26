@@ -206,7 +206,7 @@ function PanelCard({
       role="button"
       tabIndex={0}
       aria-pressed={selected}
-      aria-label={`${project.title} — view on map`}
+      aria-label={`${project.title}, view on map`}
       onMouseEnter={() => onHover(project.id)}
       onMouseLeave={() => onHover(null)}
       onFocus={() => onHover(project.id)}
@@ -260,7 +260,7 @@ function PanelCard({
       >
         <Image
           src={project.images[0]}
-          alt={`${project.title} — ${project.city}`}
+          alt={`${project.title}, ${project.city}`}
           width={64}
           height={46}
           style={{ width: "100%", height: "100%", objectFit: "cover" }}
@@ -583,7 +583,7 @@ function ProjectModal({
                   thumbnails below already do this. */}
               <Image
                 src={project.images[imgIndex]}
-                alt={`${project.title} — photo ${imgIndex + 1}`}
+                alt={`${project.title}, photo ${imgIndex + 1}`}
                 fill
                 className="object-cover"
                 style={{ objectPosition: "center 55%" }}
@@ -595,7 +595,7 @@ function ProjectModal({
             </div>
             {project.imageIsRepresentative && (
               <p style={{ fontSize: 11, color: "var(--text-secondary)", margin: 0, lineHeight: 1.5 }}>
-                Representative photo — HUB work in the same system and application.
+                Representative photo: HUB work in the same system and application.
                 This installation&apos;s own photography is on its way.
               </p>
             )}
@@ -653,7 +653,7 @@ function ProjectModal({
                   margin: "0 0 8px",
                 }}
               >
-                The Challenge
+                The challenge
               </p>
               <p style={{ fontSize: 13, color: "var(--text-body)", lineHeight: 1.65, margin: 0 }}>
                 {project.problem}
@@ -677,7 +677,7 @@ function ProjectModal({
                   margin: "0 0 8px",
                 }}
               >
-                The Solution
+                The solution
               </p>
               <p style={{ fontSize: 13, color: "var(--text-body)", lineHeight: 1.65, margin: 0 }}>
                 {project.solution}
@@ -703,7 +703,7 @@ function ProjectModal({
                 boxShadow: "0 4px 16px rgba(249,115,22,0.35)",
               }}
             >
-              Request Similar Project →
+              Request similar project →
             </a>
             {/* Present whenever the project has a write-up. 29 of them do, and
                 until now the modal gave no way to reach it — the connection
@@ -1399,7 +1399,7 @@ export default function CanadaMap() {
 
       <section
         ref={sectionRef}
-        aria-label="Installations across Canada — interactive project map"
+        aria-label="Installations across Canada, interactive project map"
         style={{ background: "var(--bg-dark)", paddingTop: "5rem", paddingBottom: "5rem" }}
       >
         <div style={{ maxWidth: 1340, margin: "0 auto", padding: "0 1.25rem" }}>
@@ -1426,7 +1426,7 @@ export default function CanadaMap() {
                   marginBottom: 10,
                 }}
               >
-                Installations Across Canada
+                Installations across Canada
               </p>
               <h2
                 style={{
@@ -1438,7 +1438,7 @@ export default function CanadaMap() {
                   letterSpacing: "-0.03em",
                 }}
               >
-                Coast to Coast.{" "}
+                Coast to coast.{" "}
                 <span
                   style={{
                     background: "linear-gradient(90deg, #F97316, #EAB308)",
@@ -1447,7 +1447,7 @@ export default function CanadaMap() {
                     backgroundClip: "text",
                   }}
                 >
-                  Every Surface.
+                  Every surface.
                 </span>
               </h2>
               <p
@@ -1485,7 +1485,7 @@ export default function CanadaMap() {
                 }}
               />
               <span style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)" }}>
-                {mapProjects.length} Projects Mapped
+                {mapProjects.length} projects mapped
               </span>
             </div>
           </div>
@@ -1911,7 +1911,7 @@ export default function CanadaMap() {
                     pointerEvents: "none",
                   }}
                 >
-                  Base map didn&apos;t load — pins and projects still work.
+                  Base map didn&apos;t load. Pins and projects still work.
                 </div>
               )}
 
@@ -2059,7 +2059,7 @@ export default function CanadaMap() {
                   {searchQuery.trim()
                     ? `Searching all ${mapProjects.length} projects`
                     : productFilter
-                    ? `${productFilter} only — pan or zoom to filter further`
+                    ? `${productFilter} only. Pan or zoom to filter further`
                     : "Pan or zoom to filter"}
                 </p>
 
@@ -2280,7 +2280,7 @@ export default function CanadaMap() {
                     boxShadow: "0 4px 14px rgba(249,115,22,0.3)",
                   }}
                 >
-                  Request a Project Like This
+                  Request a project like this
                   <svg
                     width="12"
                     height="12"
@@ -2430,7 +2430,7 @@ export default function CanadaMap() {
             >
               {displayedProjects.length === 0 ? (
                 <p style={{ color: "#4B5563", fontSize: 13, padding: "14px 4px" }}>
-                  No projects here{productFilter ? ` for ${productFilter}` : ""} —{" "}
+                  No projects here{productFilter ? ` for ${productFilter}` : ""}.{" "}
                   <button
                     onClick={resetView}
                     style={{
@@ -2443,7 +2443,7 @@ export default function CanadaMap() {
                       textDecoration: "underline",
                     }}
                   >
-                    reset the view
+                    Reset the view
                   </button>
                 </p>
               ) : (
@@ -2452,7 +2452,7 @@ export default function CanadaMap() {
                     key={project.id}
                     type="button"
                     onClick={() => handlePanelClick(project)}
-                    aria-label={`${project.title} — view on map`}
+                    aria-label={`${project.title}, view on map`}
                     style={{
                       all: "unset",
                       boxSizing: "border-box",
@@ -2486,7 +2486,7 @@ export default function CanadaMap() {
                     >
                       <Image
                         src={project.images[0]}
-                        alt={`${project.title} — ${project.city}`}
+                        alt={`${project.title}, ${project.city}`}
                         width={62}
                         height={48}
                         style={{ width: "100%", height: "100%", objectFit: "cover" }}
@@ -2556,7 +2556,7 @@ export default function CanadaMap() {
                 boxShadow: "0 4px 14px rgba(249,115,22,0.3)",
               }}
             >
-              Request a Project Like This
+              Request a project like this
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round">
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>

@@ -3,11 +3,11 @@
 import { useState, useEffect } from 'react';
 
 const PHRASES = [
-  "The Street Is Your Canvas.",
-  "Safety Starts at Street Level.",
-  "Every Surface Tells a Story.",
-  "Canada's Standard for Pavement That Performs.",
-  "Built for Canadian Winters. Built to Last Decades.",
+  "The street is your canvas.",
+  "Safety starts at street level.",
+  "Every surface tells a story.",
+  "Canada's standard for pavement that performs.",
+  "Built for Canadian winters. Built to last decades.",
 ];
 
 interface TypewriterHeadingProps {

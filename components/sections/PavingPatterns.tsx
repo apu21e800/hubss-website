@@ -34,7 +34,7 @@ export default function PavingPatterns() {
         </Link>
       </div>
       <p className="text-sm leading-relaxed mb-8 max-w-2xl" style={{ color: "var(--text-secondary)" }}>
-        The stamping templates as installed — dimensioned to the inch. Field patterns combine
+        The stamping templates as installed, dimensioned to the inch. Field patterns combine
         with border courses; fully custom designs cut to order.
       </p>
 
@@ -49,7 +49,7 @@ export default function PavingPatterns() {
             <div className="p-3 sm:p-4">
               <Image
                 src={patternSrc(t)}
-                alt={`${t.name} — StreetPrint stamping template`}
+                alt={`${t.name}, StreetPrint stamping template`}
                 width={1600}
                 height={1238}
                 className="w-full h-auto"

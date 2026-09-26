@@ -228,7 +228,7 @@ export default function BlogFilter({ posts, allProducts }: Props) {
             >
               <option value="newest">Newest first</option>
               <option value="oldest">Oldest first</option>
-              <option value="az">A – Z</option>
+              <option value="az">A–Z</option>
             </select>
             <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none" style={{ color: "var(--text-hint)" }} />
           </div>

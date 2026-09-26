@@ -27,31 +27,31 @@ const ASK: Record<string, { eyebrow: string; heading: string; body: string; cta:
   "Guide": {
     eyebrow: "Still deciding?",
     heading: "Bring the rest of this decision to your team.",
-    body: "A 45-minute Lunch & Learn covers the comparisons this piece opened — lifecycle math for your climate, spec language you can paste into a tender, and material samples on the table for the people who have to sign off.",
+    body: "A 45-minute Lunch & Learn covers the comparisons this piece opened: lifecycle math for your climate, spec language you can paste into a tender, and material samples on the table for the people who have to sign off.",
     cta: "Book a Lunch & Learn",
   },
   "Case Study": {
     eyebrow: "Want this on your project?",
-    heading: "See the system that did it — in person.",
+    heading: "See the system that did it, in person.",
     body: "We bring the same materials from this project to your office: physical samples, the technical data sheets, and the certified installer list for your region. Lunch included, no obligation.",
     cta: "Book a Lunch & Learn",
   },
   "Project Profile": {
     eyebrow: "Something like this?",
     heading: "Let's talk about what your surface could do.",
-    body: "Book a 45-minute session and we will walk your team through the systems behind installations like this one — what they cost, how they hold up through Canadian winters, and who installs them near you.",
+    body: "Book a 45-minute session and we will walk your team through the systems behind installations like this one: what they cost, how they hold up through Canadian winters, and who installs them near you.",
     cta: "Book a Lunch & Learn",
   },
   "White Paper": {
     eyebrow: "Take it further",
     heading: "Turn the document into a working session.",
-    body: "We present this material directly to public works, engineering, and procurement teams — the engineering challenges, the material systems, and the cost modelling, with time for the questions a document cannot answer.",
+    body: "We present this material directly to public works, engineering, and procurement teams: the engineering challenges, the material systems, and the cost modelling, with time for the questions a document cannot answer.",
     cta: "Book a Lunch & Learn",
   },
   "Blog": {
     eyebrow: "Go deeper",
     heading: "Get the technical version, over lunch.",
-    body: "A 45-minute Lunch & Learn puts the specifications, samples, and Canadian case data in front of your whole team. In your office or virtual — lunch is on us either way.",
+    body: "A 45-minute Lunch & Learn puts the specifications, samples, and Canadian case data in front of your whole team. In your office or virtual, lunch is on us either way.",
     cta: "Book a Lunch & Learn",
   },
 };

@@ -66,7 +66,7 @@ export default defineType({
     richImageField("heroImage", "Hero image (the wide photo behind the title)", true, "media"),
     defineField({
       name: "heroImageUrl",
-      title: "Hero image URL (legacy — read only)",
+      title: "Hero image URL (legacy, read only)",
       type: "string",
       group: "media",
       readOnly: true,
@@ -88,7 +88,7 @@ export default defineType({
       title: "Related products",
       type: "array",
       group: "related",
-      description: "Products used in this application — shown as cross-links on the application page.",
+      description: "Products used in this application, shown as cross-links on the application page.",
       of: [{ type: "reference", to: [{ type: "product" }] }],
     }),
 

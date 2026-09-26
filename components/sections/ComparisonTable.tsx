@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 const rows = [
   { metric: "Snow plow resistance", trad: "Poor",                hub: "Excellent" },
-  { metric: "Service life",         trad: "1–2 Years",           hub: "8+ Years" },
+  { metric: "Service life",         trad: "1–2 years",           hub: "8+ years" },
   { metric: "Installation",         trad: "Yearly maintenance",  hub: "One-time application" },
   { metric: "Skid resistance",      trad: "Low",                 hub: "High" },
   { metric: "Visibility",           trad: "Fades quickly",       hub: "Colour stable" },
@@ -34,16 +34,16 @@ export default function ComparisonTable() {
             className="lg:sticky lg:top-32"
           >
             <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "var(--accent-text-lg)" }}>
-              Why HUBSS
+              Why HUB
             </p>
             <h2
               className="text-3xl sm:text-4xl md:text-5xl font-bold mb-5 leading-[1.1]"
               style={{ color: "var(--text-primary)" }}
             >
-              Paint Fades.<br />We Don&apos;t.
+              Paint fades.<br />We don&apos;t.
             </h2>
             <p className="text-[15px] leading-relaxed mb-8" style={{ color: "var(--text-muted)" }}>
-              Conventional paint markings recur as a yearly municipal expense — reapplication,
+              Conventional paint markings recur as a yearly municipal expense: reapplication,
               faded retroreflectivity, and plow shear. HUB surface systems are installed once
               and remain in service through multiple budget cycles.
             </p>
@@ -73,7 +73,7 @@ export default function ComparisonTable() {
                   Longer service life
                 </p>
                 <p className="text-xs mt-0.5" style={{ color: "var(--text-secondary)" }}>
-                  vs. painted markings — proven in the field since 1999
+                  vs. painted markings, proven in the field since 1999
                 </p>
               </div>
             </div>
@@ -114,13 +114,13 @@ export default function ComparisonTable() {
                       className="text-left text-sm font-bold px-6 py-4"
                       style={{ background: "var(--bg-card)", color: "var(--text-primary)" }}
                     >
-                      Performance Metric
+                      Performance metric
                     </th>
                     <th
                       className="text-left text-sm font-bold px-6 py-4"
                       style={{ background: "var(--bg-card)", color: "var(--text-muted)" }}
                     >
-                      Traditional Markings
+                      Traditional markings
                     </th>
                     <th
                       className="text-left text-sm font-bold px-6 py-4"

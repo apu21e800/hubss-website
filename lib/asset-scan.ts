@@ -92,7 +92,7 @@ export function galleryFor(
  *
  * Folders the SEO layer has no documented subject for — blog featured images,
  * hero art, one-offs — fall back to the original behaviour below: numbered
- * series files ("crosswalks-45.jpg") become "<context> — installation photo
+ * series files ("crosswalks-45.jpg") become "<context>, installation photo
  * 45", named files ("vaughan-woodbridge-crosswalk.jpg") are humanized. A
  * generic true sentence beats a specific invented one.
  */
@@ -100,8 +100,8 @@ export function altFor(src: string, context: string): string {
   const base = basename(src).replace(/\.(jpe?g|png|webp)$/i, "");
   const numbered = base.match(/^(.*?)[-_](\d+)$/);
   const fallback = numbered
-    ? `${context} — installation photo ${parseInt(numbered[2], 10)}`
-    : `${context} — ${base
+    ? `${context}, installation photo ${parseInt(numbered[2], 10)}`
+    : `${context}, ${base
         .replace(/[-_]+/g, " ")
         .replace(/\b\w/g, (ch) => ch.toUpperCase())
         .trim()}`;

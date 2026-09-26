@@ -74,11 +74,11 @@ export default async function ResourcesPage() {
           className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 leading-tight"
           style={{ color: "var(--text-primary)" }}
         >
-          Specification Library
+          Specification library
         </h1>
         <p className="text-base max-w-2xl" style={{ color: "var(--text-secondary)" }}>
           Technical data sheets, brochures, safety guides, and installation
-          resources for every HUBSS product.
+          resources for every HUB product.
         </p>
       </div>
 
@@ -111,7 +111,7 @@ export default async function ResourcesPage() {
                   {catalogueLabel} edition
                 </p>
                 <p className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>
-                  {ideaBook.title} — every system and application
+                  {ideaBook.title}: every system and application
                 </p>
               </div>
             </div>
@@ -172,7 +172,7 @@ export default async function ResourcesPage() {
               className="text-sm font-bold tracking-widest uppercase"
               style={{ color: "var(--accent-text-lg)" }}
             >
-              All Documents
+              All documents
             </h2>
             <div
               className="flex-1 h-px"

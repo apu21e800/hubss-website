@@ -56,7 +56,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const heroSrc = application.heroPhoto?.src ?? application.imageUrl;
   return buildMetadata({
     title: application.seoTitle ?? application.name,
-    description: application.seoDescription ?? (application.shortDesc + " — " + application.description.slice(0, 120) + "…"),
+    description: application.seoDescription ?? (application.shortDesc + " " + application.description.slice(0, 120) + "…"),
     slug: `applications/${application.slug}`,
     image: isSanityImage(heroSrc) ? sanityOgImage(heroSrc) : heroSrc,
   });
@@ -79,7 +79,7 @@ export default async function ApplicationPage({ params }: Props) {
     const fromFolder = galleryFor(application.imageUrl, application.gallery, `images/applications/${application.slug}`);
     return (fromFolder.length > 0 ? fromFolder : [application.imageUrl]).map((src) => ({
       src,
-      alt: altFor(src, `${application.name} surface systems by HUB — Canadian installation`),
+      alt: altFor(src, `${application.name} surface systems by HUB, Canadian installation`),
       // Written for a reader looking at the photo, not a copy of the alt. Visible
       // text beside an image outweighs the alt attribute for Google Images and
       // for the AI crawlers.
@@ -156,7 +156,7 @@ export default async function ApplicationPage({ params }: Props) {
         <div className="absolute inset-0 flex items-end">
           <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-14">
             <p className="text-xs font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "var(--accent-text-lg)" }}>
-              HUB Application
+              HUB application
             </p>
             <h1
               className="font-black leading-[1.05] mb-3"
@@ -195,7 +195,7 @@ export default async function ApplicationPage({ params }: Props) {
             {/* Left accent bar */}
             <div className="absolute left-0 top-0 bottom-0 w-1 rounded-l-xl" style={{ background: "linear-gradient(180deg, #F97316, #EAB308)" }} />
             <div className="relative pl-3">
-              <p className="font-bold text-lg leading-snug" style={{ color: "var(--text-primary)" }}>Designing for {application.name}?</p>
+              <p className="font-bold text-lg leading-snug" style={{ color: "var(--text-primary)" }}>Designing for {application.name}</p>
               <p className="text-sm mt-1" style={{ color: "var(--text-secondary)" }}>Product matching, technical data, and certified installer support across Canada.</p>
             </div>
             <div className="flex flex-wrap gap-3 relative flex-shrink-0">
@@ -207,7 +207,7 @@ export default async function ApplicationPage({ params }: Props) {
               <Link href="/contact"
                 className="px-5 rounded-lg text-sm font-bold transition-all inline-flex items-center"
                 style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "var(--on-accent)", boxShadow: "0 4px 16px rgba(249,115,22,0.32)", minHeight: "44px" }}>
-                See the Systems →
+                See the systems →
               </Link>
             </div>
           </div>
@@ -300,7 +300,7 @@ export default async function ApplicationPage({ params }: Props) {
                     boxShadow: "0 4px 16px rgba(249,115,22,0.35)",
                   }}
                 >
-                  See the Systems
+                  See the systems
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>

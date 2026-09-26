@@ -75,7 +75,7 @@ export default defineType({
       type: "text",
       rows: 3,
       group: "content",
-      description: "2–3 sentence description used ONLY on the homepage 'Systems' grid card. Distinct from the short description above — keep it plain-spoken: what it does and who uses it.",
+      description: "2–3 sentence description used ONLY on the homepage 'Systems' grid card. Distinct from the short description above. Keep it plain-spoken: what it does and who uses it.",
       validation: (r) => r.max(400).warning("Homepage blurb should be under 400 characters"),
     }),
 
@@ -90,7 +90,7 @@ export default defineType({
     }),
     defineField({
       name: "heroImageUrl",
-      title: "Hero image URL (legacy — read only)",
+      title: "Hero image URL (legacy, read only)",
       type: "string",
       group: "media",
       readOnly: true,
@@ -141,7 +141,7 @@ export default defineType({
       title: "Related applications",
       type: "array",
       group: "related",
-      description: "Applications where this product is used — shown as cross-links on the product page.",
+      description: "Applications where this product is used, shown as cross-links on the product page.",
       of: [{ type: "reference", to: [{ type: "application" }] }],
     }),
     defineField({
@@ -149,7 +149,7 @@ export default defineType({
       title: "Product documents",
       type: "array",
       group: "related",
-      description: "Spec sheets, TDS, guides, and brochures for this product. Editors can upload PDFs directly — no developer needed.",
+      description: "Spec sheets, TDS, guides, and brochures for this product. Editors can upload PDFs directly, no developer needed.",
       of: [{
         type: "object",
         fields: [
@@ -184,7 +184,7 @@ export default defineType({
             name: "fileAsset",
             type: "file",
             title: "PDF file (Sanity CDN)",
-            description: "Upload the PDF here. Sanity stores and serves it from cdn.sanity.io — preferred over the legacy file path. After uploading, copy the URL from the file field to verify it opens correctly.",
+            description: "Upload the PDF here. Sanity stores and serves it from cdn.sanity.io (preferred over the legacy file path). After uploading, copy the URL from the file field to verify it opens correctly.",
             options: { accept: ".pdf,application/pdf" },
           }),
           defineField({

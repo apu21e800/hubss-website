@@ -47,11 +47,11 @@ export const projects: Project[] = [
     application: "Bus & Bike Lanes",
     province: "Ontario",
     city: "York Region",
-    excerpt: "MMAX red MMA resin bus lane markings for the VIVA BRT corridor — high-durability, fast-cure application that opened to traffic within 90 minutes.",
+    excerpt: "MMAX red MMA resin bus lane markings for the VIVA BRT corridor: high-durability, fast-cure application that opened to traffic within 90 minutes.",
     imageUrl: "/images/applications/bus-lanes/bus-lanes-01.jpg",
   },
   {
-    title: "City of Toronto Priority Bus Lanes — MMAX Red Resin",
+    title: "City of Toronto Priority Bus Lanes · MMAX Red Resin",
     slug: "toronto-priority-bus-lanes",
     product: "MMAX",
     application: "Bus & Bike Lanes",
@@ -77,7 +77,7 @@ export const projects: Project[] = [
     application: "Community Branding",
     province: "Ontario",
     city: "Kitchener",
-    excerpt: "A custom DecoMark installation honouring Kitchener's veterans — a decorative crosswalk featuring poppy motifs and regimental colours at the city's cenotaph.",
+    excerpt: "A custom DecoMark installation honouring Kitchener's veterans: a decorative crosswalk featuring poppy motifs and regimental colours at the city's cenotaph.",
     imageUrl: "/images/applications/community-branding/community-branding-01.jpg",
   },
   {

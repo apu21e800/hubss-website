@@ -1,4 +1,4 @@
-# House style — hubss.com
+# House style: hubss.com
 
 One page. For everyone who writes a word that reaches the site: the pages, the
 Idea Book transcriptions, Studio, the AI drafter and social prompts
@@ -10,19 +10,47 @@ inconsistency before anything else.
 
 A senior specifier explaining something to a peer: plain, confident,
 concrete, useful. Say the fact, then stop. Nothing shouts. One idea per
-sentence; one job per section.
+sentence; one job per section. Written by a person who has stood on the
+pavement: the sentences vary in length, the verbs do the work, and a
+paragraph ends when the point is made, not with a line that sums it up.
+
+## Machine tells (Vern, 26 Sep 2026)
+
+Readers now recognise machine-written copy on sight, and it costs trust.
+None of the following appears on the site, in Studio, in the drafter's
+output or in the emails:
+
+- Em dashes. None, anywhere, not even one. An aside goes between commas or
+  in parentheses; a pivot gets a full stop or a colon; a list gets commas.
+  The en dash stays only inside a range (10–20 years, 2026–27).
+- The reversal: "It's not X, it's Y", "not just X", "more than a surface".
+- Three of everything: three adjectives, three fragments, three parallel
+  clauses, because three felt complete.
+- Stacked fragments as a device: "Fast. Durable. Proven."
+- "Whether you're a … or a …", "From X to Y", "In today's …", "In a world
+  where …", "Here's the thing", "Let's dive in", "Think of it as".
+- Headings that ask a question, headings built as "X: Y", and a page where
+  every heading is a two-beat couplet.
+- Filler verbs and adjectives: seamless, robust, elevate, leverage, unlock,
+  empower, harness, streamline, holistic, tailored, bespoke, cutting-edge,
+  game-changing, world-class, best-in-class, premium (as praise), solutions
+  (as filler), journey, landscape (as metaphor), ensure, delve.
+- The summing-up line at the end of a paragraph that restates the
+  paragraph. The hedge that says nothing ("it's worth noting").
+- Exclamation marks. Emoji. "Discover", "Explore", "Learn more" as buttons.
+
+The test: read it aloud. If a person on the phone would not say it, cut it.
 
 ## Spelling and grammar
 
 - Canadian English: colour, centre, metre, kilometre, curb, aluminum,
-  program, catalogue (the word, when it ever needs writing — the book is the
+  program, catalogue (the word, when it ever needs writing; the book is the
   Idea Book), licence (noun) / license (verb).
 - Sentence case for headings, buttons, labels and eyebrows: "Open the Idea
   Book", "Where MMAX goes", "Specification library". Capitals only for proper
   nouns and product names. The CSS may set an eyebrow in small caps; the
   source text is still sentence case.
-- No exclamation marks. No questions as headings. No "In today's world",
-  "actually", "just".
+- No exclamation marks. No questions as headings. No "actually", "just".
 - Ampersand only inside a name (Lunch & Learn, Asphalt & Concrete Repair,
   Parks & Paths); "and" in a sentence.
 
@@ -39,7 +67,7 @@ sentence; one job per section.
 - Sections: Insights (the library; its pieces are articles, case studies,
   guides, white papers, project profiles), the Idea Book ("The HUB Idea Book ·
   Volume 5" in full), Resources (the specification library), Lunch & Learn.
-- Places: city and province, province spelled out in prose — Milton,
+- Places: city and province, province spelled out in prose: Milton,
   Ontario; Ladysmith, British Columbia. Abbreviate (ON, BC) only in an
   address block or a table.
 - Offices: East and West.
@@ -60,9 +88,9 @@ sentence; one job per section.
 
 ## Dashes and punctuation
 
-- Spaced em dash for an aside — like this — and never more than one a
-  sentence. En dash, no spaces, for spans: 10–20 years, 2026–27. Hyphen for
-  compounds: freeze-thaw, heat-activated, snowplow-safe.
+- No em dashes (see Machine tells). En dash, no spaces, for spans: 10–20
+  years, 2026–27. Hyphen for compounds: freeze-thaw, heat-activated,
+  snowplow-safe.
 - Middle dot to join a label and its qualifier: "Idea Book · Volume 5",
   "West · 604-309-8212".
 - Dates as the site prints them: Sep 25, 2026.

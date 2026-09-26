@@ -354,7 +354,7 @@ export default async function BlogPostPage({ params }: Props) {
       <div style={{ borderTop: "1px solid var(--border-color)", background: "#0c0c0c" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
           <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--accent-text-lg)", marginBottom: 20 }}>
-            Continue Reading
+            Continue reading
           </p>
           <RelatedPosts posts={related} currentSlug={post.slug} />
         </div>

@@ -65,10 +65,10 @@ export const PRODUCT_CATALOGUE: Record<string, CatalogueEntry> = {
     title: "Preformed thermoplastic.",
     subhead: "You design it, we build it, we make it part of the road.",
     description:
-      "Anti-skid aggregate is intermixed through the full cross-section, not broadcast across the top — so the grip lasts as long as the colour. Customisable to community artwork.",
+      "Anti-skid aggregate is intermixed through the full cross-section, not broadcast across the top, so the grip lasts as long as the colour. Customisable to community artwork.",
     specs: [
       { label: "Thickness", value: "125 mil" },
-      { label: "Skid resistance", value: "60 BPN — ASTM E303" },
+      { label: "Skid resistance", value: "60 BPN (ASTM E303)" },
       { label: "Open to traffic", value: "Hours" },
       { label: "Service life", value: "8+ years" },
     ],
@@ -84,7 +84,7 @@ export const PRODUCT_CATALOGUE: Record<string, CatalogueEntry> = {
     specs: [
       { label: "Thickness", value: "150 mil" },
       { label: "Aggregate", value: "8–9 Mohs rating" },
-      { label: "Skid resistance", value: "60 BPN — ASTM E303" },
+      { label: "Skid resistance", value: "60 BPN (ASTM E303)" },
       { label: "Service life", value: "10+ years" },
     ],
     uses: ["Crosswalks", "Entrances", "Transit", "Streetscapes"],
@@ -95,7 +95,7 @@ export const PRODUCT_CATALOGUE: Record<string, CatalogueEntry> = {
     title: "Stamped asphalt.",
     subhead: "The original. Since 1992. A Canadian invention, eh?",
     description:
-      "Patterns are stamped into existing asphalt, then coloured and sealed with StreetBond coatings. The surface stays flush — nothing for a plow blade to catch, no joints to weed, no pavers to settle, asphalt stays flexible.",
+      "Patterns are stamped into existing asphalt, then coloured and sealed with StreetBond coatings. The surface stays flush: nothing for a plow blade to catch, no joints to weed, no pavers to settle, asphalt stays flexible.",
     specs: [
       { label: "System", value: "In-place stamping + StreetBond coating" },
       { label: "Patterns", value: "Standard and custom options" },
@@ -159,7 +159,7 @@ export const PRODUCT_CATALOGUE: Record<string, CatalogueEntry> = {
       "Fast return to service, so an active corridor goes in fast without community disruption. Best in class performance. Available in 8 standard colours along with 15 premium colours.",
     specs: [
       { label: "Material", value: "Methyl methacrylate (MMA) resin" },
-      { label: "Cure", value: "45–60 min — traffic-ready" },
+      { label: "Cure", value: "45–60 min, traffic-ready" },
       { label: "Traction", value: "Embedded aggregate / non-slip" },
       { label: "Min temp", value: "+3°C" },
     ],
@@ -171,11 +171,11 @@ export const PRODUCT_CATALOGUE: Record<string, CatalogueEntry> = {
     title: "Inlaid thermoplastic.",
     subhead: "Heat fused thermoplastic into a stamped surface. Zero profile above grade.",
     description:
-      "Inlaid into a stamped impression so the finished surface sits flush with the road — nothing for a plow blade to catch, nothing to trip on, no shear damage through winter maintenance.",
+      "Inlaid into a stamped impression so the finished surface sits flush with the road: nothing for a plow blade to catch, nothing to trip on, no shear damage through winter maintenance.",
     specs: [
       { label: "Install", value: "Inlaid into a stamped surface" },
-      { label: "Profile", value: "Zero — flush with road" },
-      { label: "Snowplow safe", value: "Yes — no shear risk" },
+      { label: "Profile", value: "Zero, flush with road" },
+      { label: "Snowplow safe", value: "Yes, no shear risk" },
       { label: "Bond", value: "Heat-fused to asphalt substrate" },
     ],
     uses: ["Crosswalks", "Speed bumps", "Calming", "Identity"],
@@ -201,10 +201,10 @@ export const PRODUCT_CATALOGUE: Record<string, CatalogueEntry> = {
     title: "Road marking symbols.",
     subhead: "Arrows. Stop bars. Legends. Bike symbols. Custom.",
     description:
-      "Arrows, stop bars, yield triangles, school legends, bike symbols and ladder lines, pre-cut to specification. Heat-applied by torch — no stencils, no curing window, drive on immediately. Provincially approved across Canada.",
+      "Arrows, stop bars, yield triangles, school legends, bike symbols and ladder lines, pre-cut to specification. Heat-applied by torch: no stencils, no curing window, drive on immediately. Provincially approved across Canada.",
     specs: [
       { label: "Thickness", value: "125 mil standard / 90 mil ViziGrip" },
-      { label: "Installation", value: "Heat-applied — drive on immediately" },
+      { label: "Installation", value: "Heat-applied, drive on immediately" },
       { label: "Retroreflectivity", value: "Integrated glass beads" },
       { label: "Service life", value: "6–8 years" },
     ],

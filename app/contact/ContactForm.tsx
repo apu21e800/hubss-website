@@ -84,7 +84,7 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
 
               <div className="mt-6 pt-6" style={{ borderTop: "1px solid var(--border-subtle)" }}>
                 <div className="flex items-center gap-4 flex-wrap">
-                  <p className="text-xs font-semibold uppercase tracking-widest flex-shrink-0" style={{ color: "var(--ink-50)" }}>Follow Our Work</p>
+                  <p className="text-xs font-semibold uppercase tracking-widest flex-shrink-0" style={{ color: "var(--ink-50)" }}>Follow our work</p>
                   <SocialLinks size="sm" className="gap-4" />
                 </div>
               </div>
@@ -101,7 +101,7 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold mb-2" style={{ color: "var(--text-primary)" }}>Message Sent!</h3>
+                <h3 className="text-xl font-bold mb-2" style={{ color: "var(--text-primary)" }}>Message sent</h3>
                 <p className="text-sm" style={{ color: "var(--text-body)" }}>We&apos;ll be in touch within one business day.</p>
               </div>
             ) : (
@@ -134,7 +134,7 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
               >
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {[
-                    { label: "Full Name", key: "name", type: "text", placeholder: "Jane Smith" },
+                    { label: "Full name", key: "name", type: "text", placeholder: "Jane Smith" },
                     { label: "Company", key: "company", type: "text", placeholder: "City of Toronto" },
                   ].map((f) => (
                     <div key={f.key}>
@@ -171,7 +171,7 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
                   </div>
                 ))}
                 <div>
-                  <label htmlFor="contact-projectType" className="block text-sm mb-2" style={{ color: "var(--text-body)" }}>Project Type</label>
+                  <label htmlFor="contact-projectType" className="block text-sm mb-2" style={{ color: "var(--text-body)" }}>Project type</label>
                   <select
                     id="contact-projectType"
                     value={form.projectType}
@@ -215,7 +215,7 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
                   className="w-full font-semibold py-4 rounded-lg text-base transition-all disabled:opacity-60 min-h-[48px]"
                   style={{ background: "#f97316", color: "var(--on-accent)" }}
                 >
-                  {loading ? "Sending..." : "Send Us Your Project"}
+                  {loading ? "Sending..." : "Send us your project"}
                 </button>
               </form>
             )}

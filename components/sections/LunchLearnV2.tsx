@@ -43,10 +43,10 @@ interface SubmitState {
 const EMPTY: FormState = { name: "", email: "", company: "", city: "", phone: "", website: "" };
 
 const BENEFITS = [
-  "45-minute session tailored to your projects — in your office or virtual",
+  "45-minute session about your projects, in your office or virtual",
   "Spec language you can drop straight into your next RFP",
   "Physical samples, technical data sheets, and the certified installer map",
-  "Lunch on HUB — and a $25 voucher when the session's virtual",
+  "Lunch on HUB, and a $25 voucher when the session's virtual",
 ];
 
 const STAT_CHIPS = [
@@ -58,7 +58,7 @@ const STAT_CHIPS = [
 
 const CITY_WALL = ["City of Toronto", "York Region", "City of Vancouver", "UBC", "TransLink", "City of Ottawa", "Halifax RM", "City of Calgary"];
 
-const IMG = { src: "/images/products/streetbond/streetbond-112.jpg", alt: "StreetBond coloured pavement installation — the systems covered in a HUB Lunch & Learn session" };
+const IMG = { src: "/images/products/streetbond/streetbond-112.jpg", alt: "StreetBond coloured pavement installation, the systems covered in a HUB Lunch & Learn session" };
 // Boardroom — the variant on every page via LunchLearn.tsx — draws Moose as a
 // baked ChromeImg. Ticket and Proof only render on /ll-preview and still use
 // next/image; Proof draws him far larger than the baked sizes go.
@@ -247,7 +247,7 @@ function Boardroom({ hideForm = false }: { hideForm?: boolean }) {
                       Lunch &amp; Learn
                     </p>
                     <p className="text-[14px] font-semibold mt-0.5" style={{ color: "var(--text-primary)" }}>
-                      Hosted by the HUB team — and Moose, site dog
+                      Hosted by the HUB team (and Moose, site dog)
                     </p>
                   </div>
                 </div>
@@ -259,7 +259,7 @@ function Boardroom({ hideForm = false }: { hideForm?: boolean }) {
                   </span>
                 </h2>
                 <p className="text-[15px] leading-relaxed mb-8 max-w-xl" style={{ color: "var(--ink-70)" }}>
-                  A working session for engineers, architects, and municipal teams — real Canadian
+                  A working session for engineers, architects, and municipal teams: real Canadian
                   case studies, spec language, and samples on the table.
                 </p>
 
@@ -286,8 +286,8 @@ function Boardroom({ hideForm = false }: { hideForm?: boolean }) {
                 <div className="flex items-center gap-4 flex-wrap">
                   <MoreLink />
                   <span className="hidden sm:block" style={{ color: "var(--ink-15)" }}>|</span>
-                  <a href="tel:+14165409287" className="text-[13px] font-semibold inline-flex items-center hover:text-[var(--accent-text)] transition-colors" style={{ color: "var(--ink-45)", minHeight: 40 }}>East 416-540-9287</a>
-                  <a href="tel:+16043098212" className="text-[13px] font-semibold inline-flex items-center hover:text-[var(--accent-text)] transition-colors" style={{ color: "var(--ink-45)", minHeight: 40 }}>West 604-309-8212</a>
+                  <a href="tel:+14165409287" className="text-[13px] font-semibold inline-flex items-center hover:text-[var(--accent-text)] transition-colors" style={{ color: "var(--ink-45)", minHeight: 40 }}>East · 416-540-9287</a>
+                  <a href="tel:+16043098212" className="text-[13px] font-semibold inline-flex items-center hover:text-[var(--accent-text)] transition-colors" style={{ color: "var(--ink-45)", minHeight: 40 }}>West · 604-309-8212</a>
                 </div>
               </div>
 
@@ -360,7 +360,7 @@ function Boardroom({ hideForm = false }: { hideForm?: boolean }) {
                         {f.submitState.status === "loading" ? "Sending…" : "Book a Lunch & Learn"}
                       </button>
                       <p className="text-center text-[11px]" style={{ color: "var(--ink-35)" }}>
-                        No obligation. No invoice. Lunch included.
+                        No obligation, no invoice, lunch included.
                       </p>
                       {f.submitState.status === "error" && <ErrorNote message={f.submitState.message} />}
                     </form>
@@ -380,7 +380,7 @@ function Boardroom({ hideForm = false }: { hideForm?: boolean }) {
 // ══════════════════════════════════════════════════════════════════
 const TICKET_META = [
   { k: "Duration", v: "45 minutes + Q&A" },
-  { k: "Cost", v: "$0 — hosted by HUB" },
+  { k: "Cost", v: "$0 · hosted by HUB" },
   { k: "Format", v: "In-person or virtual" },
   { k: "Materials", v: "Samples + spec sheets" },
 ];
@@ -419,7 +419,7 @@ function Ticket() {
                 </span>
                 <div>
                   <p className="text-[14px] font-bold leading-tight" style={{ color: "var(--text-primary)" }}>Hosted by the HUB technical team</p>
-                  <p className="text-[12px] mt-0.5" style={{ color: "var(--ink-55)" }}>Moose, site dog — attendance subject to snack availability.</p>
+                  <p className="text-[12px] mt-0.5" style={{ color: "var(--ink-55)" }}>Moose, site dog. Attendance subject to snack availability.</p>
                 </div>
               </div>
 
@@ -443,7 +443,7 @@ function Ticket() {
               </div>
 
               <div className="mt-auto pt-4 flex items-center justify-between gap-3" style={{ borderTop: "1px dashed var(--ink-15)" }}>
-                <span className="text-[12px] font-semibold" style={{ color: "var(--ink-55)" }}>Lunch included — $25 voucher on virtual</span>
+                <span className="text-[12px] font-semibold" style={{ color: "var(--ink-55)" }}>Lunch included · $25 voucher on virtual</span>
                 <MoreLink />
               </div>
             </div>
@@ -511,9 +511,9 @@ function Ticket() {
                   className="w-full py-4 rounded-xl font-bold text-[15px] transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50"
                   style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "var(--on-accent)", boxShadow: "0 6px 24px rgba(249,115,22,0.35)" }}
                 >
-                  {f.submitState.status === "loading" ? "Sending…" : `Reserve — ${f.format.toLowerCase()}`}
+                  {f.submitState.status === "loading" ? "Sending…" : `Reserve · ${f.format.toLowerCase()}`}
                 </button>
-                <p className="text-center text-[11px]" style={{ color: "var(--ink-35)" }}>No obligation. No invoice. We reach out within one business day.</p>
+                <p className="text-center text-[11px]" style={{ color: "var(--ink-35)" }}>No obligation, no invoice. We reach out within one business day.</p>
                 {f.submitState.status === "error" && <ErrorNote message={f.submitState.message} />}
               </form>
             )}
@@ -543,7 +543,7 @@ function Proof() {
               </span>
             </h2>
             <p className="text-[15px] leading-relaxed mb-7 max-w-lg" style={{ color: "var(--ink-70)" }}>
-              45 minutes with the HUB technical team — spec language for your next RFP and samples
+              45 minutes with the HUB technical team: spec language for your next RFP and samples
               on the table. In your office or virtual, lunch on us.
             </p>
 
@@ -672,7 +672,7 @@ function Band() {
               Lunch &amp; Learn
             </p>
             <h2 id="ll-band-heading" className="text-lg sm:text-xl font-bold leading-snug" style={{ color: "var(--text-primary)" }}>
-              A free working session for engineers, architects and municipal teams — case studies, spec language and samples on the table.
+              A free working session for engineers, architects and municipal teams: case studies, spec language and samples on the table.
             </h2>
           </div>
           <Link

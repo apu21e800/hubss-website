@@ -43,7 +43,7 @@ export type MergedApplication = Application & {
 function merge(code: Application, sanityApp: SanityAppProjected | null | undefined): MergedApplication {
   if (!sanityApp) return code;
   const sanityDescription = blocksToPlainText(sanityApp.description);
-  const sanityGallery = toPhotos(sanityApp.gallery, `${code.name} surface systems by HUB — Canadian installation`);
+  const sanityGallery = toPhotos(sanityApp.gallery, `${code.name} surface systems by HUB, Canadian installation`);
   return {
     ...code,
     name: cmsText(sanityApp.name, code.name),

@@ -46,8 +46,8 @@ function buildEmailHtml(data: ContactPayload): string {
     showCity && `<tr><td><strong>City</strong></td><td>${esc(data.city!)}</td></tr>`,
     data.phone && `<tr><td><strong>Phone</strong></td><td>${esc(data.phone)}</td></tr>`,
     data.address && `<tr><td valign="top"><strong>Mail to</strong></td><td style="white-space:pre-wrap">${esc(data.address)}</td></tr>`,
-    data.projectType && `<tr><td><strong>Project Type</strong></td><td>${esc(data.projectType)}</td></tr>`,
-    data.format && `<tr><td><strong>Session Format</strong></td><td>${esc(data.format)}</td></tr>`,
+    data.projectType && `<tr><td><strong>Project type</strong></td><td>${esc(data.projectType)}</td></tr>`,
+    data.format && `<tr><td><strong>Session format</strong></td><td>${esc(data.format)}</td></tr>`,
     data.message && `<tr><td valign="top"><strong>Message</strong></td><td style="white-space:pre-wrap">${esc(data.message)}</td></tr>`,
   ]
     .filter(Boolean)
@@ -59,12 +59,12 @@ function buildEmailHtml(data: ContactPayload): string {
       <h2 style="margin:0 0 16px;color:#1a1a1a">
         ${
           data.formType === "lunch-learn"
-            ? "New Lunch &amp; Learn Request"
+            ? "New Lunch &amp; Learn request"
             : data.formType === "newsletter"
-            ? "Newsletter Signup"
+            ? "Newsletter signup"
             : data.formType === "catalogue-print"
-            ? "Printed Idea Book Request"
-            : "New Contact Form Submission"
+            ? "Printed Idea Book request"
+            : "New contact form submission"
         }
       </h2>
       <table style="width:100%;border-collapse:collapse">
@@ -82,15 +82,15 @@ function buildEmailHtml(data: ContactPayload): string {
 
 function buildSubjectLine(data: ContactPayload): string {
   if (data.formType === "lunch-learn") {
-    return `Lunch & Learn Request — ${data.name ?? "Unknown"} @ ${data.company ?? "Unknown"}`;
+    return `Lunch & Learn Request: ${data.name ?? "Unknown"} @ ${data.company ?? "Unknown"}`;
   }
   if (data.formType === "newsletter") {
-    return `Newsletter Signup — ${data.email}`;
+    return `Newsletter Signup: ${data.email}`;
   }
   if (data.formType === "catalogue-print") {
-    return `Printed Idea Book Request — ${data.name ?? "Unknown"} @ ${data.company ?? "Unknown"}`;
+    return `Printed Idea Book Request: ${data.name ?? "Unknown"} @ ${data.company ?? "Unknown"}`;
   }
-  return `Contact Form — ${data.name ?? "Unknown"} @ ${data.company ?? "Unknown"}`;
+  return `Contact Form: ${data.name ?? "Unknown"} @ ${data.company ?? "Unknown"}`;
 }
 
 export async function POST(req: NextRequest) {

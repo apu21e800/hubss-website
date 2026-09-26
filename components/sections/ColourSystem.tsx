@@ -130,7 +130,7 @@ export default function ColourSystem({
       </div>
 
       <p className="mt-6 text-[12px] leading-relaxed max-w-2xl" style={{ color: "var(--text-faint)" }}>
-        Screen-reference values — colours vary by monitor and substrate. Specify from physical
+        Screen-reference values: colours vary by monitor and substrate. Specify from physical
         samples.{" "}
         {downloadHref && (
           <a href={downloadHref} className="underline underline-offset-2 hover:text-[var(--accent-text)] transition-colors" target="_blank" rel="noopener noreferrer">

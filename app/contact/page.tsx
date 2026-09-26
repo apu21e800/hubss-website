@@ -13,7 +13,7 @@ const contactSchema = {
     {
       "@type": "LocalBusiness",
       "@id": "https://hubss.com/#west-office-contact",
-      name: "HUB Surface Systems — Western Canada",
+      name: "HUB Surface Systems · Western Canada",
       description:
         "Decorative pavement and thermoplastic-marking sales, specification support, and Lunch & Learn delivery for British Columbia, Alberta, Saskatchewan, NWT, Yukon, and Nunavut.",
       parentOrganization: { "@id": "https://hubss.com/#organization" },
@@ -44,7 +44,7 @@ const contactSchema = {
       },
       contactPoint: {
         "@type": "ContactPoint",
-        contactType: "Sales — Western Canada",
+        contactType: "Sales · Western Canada",
         telephone: "+1-604-309-8212",
         email: "cleve.stordy@hubss.com",
         areaServed: "CA",
@@ -54,7 +54,7 @@ const contactSchema = {
     {
       "@type": "LocalBusiness",
       "@id": "https://hubss.com/#east-office-contact",
-      name: "HUB Surface Systems — Eastern Canada",
+      name: "HUB Surface Systems · Eastern Canada",
       description:
         "Decorative pavement and thermoplastic-marking sales, specification support, and Lunch & Learn delivery for Ontario, Quebec, and the Atlantic provinces.",
       parentOrganization: { "@id": "https://hubss.com/#organization" },
@@ -86,7 +86,7 @@ const contactSchema = {
       },
       contactPoint: {
         "@type": "ContactPoint",
-        contactType: "Sales — Eastern Canada",
+        contactType: "Sales · Eastern Canada",
         telephone: "+1-416-540-9287",
         email: "doug.bain@hubss.com",
         areaServed: "CA",
@@ -99,8 +99,8 @@ const contactSchema = {
 export default async function ContactPage() {
   const sanityPage = await getSanityPageContent("contact");
   const hero = {
-    eyebrow:    sanityPage?.contactHero?.eyebrow    ?? "Get In Touch",
-    heading:    sanityPage?.contactHero?.heading    ?? "Start a Project",
+    eyebrow:    sanityPage?.contactHero?.eyebrow    ?? "Get in touch",
+    heading:    sanityPage?.contactHero?.heading    ?? "Start a project",
     subheading: sanityPage?.contactHero?.subheading ?? "Tell us about your community, your timeline, and your vision. We'll tell you which surface system brings it to life.",
   };
 

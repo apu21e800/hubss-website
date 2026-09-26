@@ -41,7 +41,7 @@ export const PRODUCT_CATEGORIES: ProductCategory[] = [
     // application (AirMark, lib/products.ts). Airfield markings are AirMark's
     // own line in lib/products.ts; the book does not cover AirMark.
     intro:
-      "Thermoplastic, heat-applied to the pavement — decorative crosswalks, custom graphics, regulatory symbols, flush inlaid markings and airfield markings.",
+      "Thermoplastic, heat-applied to the pavement: decorative crosswalks, custom graphics, regulatory symbols, flush inlaid markings and airfield markings.",
     menuNote: "Heat-applied markings and graphics",
   },
   {
@@ -54,7 +54,7 @@ export const PRODUCT_CATEGORIES: ProductCategory[] = [
     // (MMAX, p8), "Pavement maintenance coating." (DuraShield title; its spec:
     // "Preserves and protects asphalt").
     intro:
-      "Colour, reflectance and protection for pavement — StreetBond performance coatings, solar-reflective StreetBondSR, MMA lane and area markings, and DuraShield maintenance coating.",
+      "Colour, reflectance and protection for pavement: StreetBond performance coatings, solar-reflective StreetBondSR, MMA lane and area markings, and DuraShield maintenance coating.",
     menuNote: "Colour, reflectance and protection",
   },
   {
@@ -66,7 +66,7 @@ export const PRODUCT_CATEGORIES: ProductCategory[] = [
     // StreetPrint spread: in-place stamping + StreetBond coating, new or
     // existing asphalt, flush with "nothing for a plow blade to catch".
     intro:
-      "The original stamped asphalt system. Patterns are stamped into new or existing asphalt and coloured with StreetBond — flush, with nothing for a plow blade to catch.",
+      "The original stamped asphalt system. Patterns are stamped into new or existing asphalt and coloured with StreetBond. The surface stays flush, with nothing for a plow blade to catch.",
     menuNote: "Patterns stamped into asphalt",
   },
   {

@@ -101,14 +101,14 @@ export default function BlogCard({ post }: { post: PostMeta }) {
         {/* Excerpt */}
         <p className="text-xs leading-relaxed flex-1 mb-4" style={{ color: "var(--text-muted)" }}>
           {post.excerpt.length > 110
-            ? post.excerpt.slice(0, post.excerpt.lastIndexOf(" ", 110)) + "..."
+            ? post.excerpt.slice(0, post.excerpt.lastIndexOf(" ", 110)) + "…"
             : post.excerpt}
         </p>
 
         {/* CTA + read time */}
         <div className="flex items-center justify-between mt-auto">
           <span className="text-xs font-semibold flex items-center gap-1" style={{ color: "var(--accent-text-lg)" }}>
-            Read Post &rarr;
+            Read post &rarr;
           </span>
           {post.readTime && (
             <span className="text-[10px]" style={{ color: "var(--text-secondary)" }}>{post.readTime}</span>

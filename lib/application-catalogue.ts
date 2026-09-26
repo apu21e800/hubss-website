@@ -68,9 +68,9 @@ export const APPLICATION_CATALOGUE: Record<string, ApplicationCatalogueEntry> = 
     statement: "The intersection is where a street proves itself.",
     body: "Preformed thermoplastic holds ASTM-rated skid resistance and high-contrast colour through snowplow cycles and de-icing seasons.",
     specify: [
-      { slug: "traffic-patterns-xd", note: "150 mil, aggregate-reinforced — high-volume intersections" },
-      { slug: "traffic-patterns", note: "125 mil preformed — standard crossings" },
-      { slug: "decomark", note: "Custom graphics — community identity" },
+      { slug: "traffic-patterns-xd", note: "150 mil, aggregate-reinforced: high-volume intersections" },
+      { slug: "traffic-patterns", note: "125 mil preformed: standard crossings" },
+      { slug: "decomark", note: "Custom graphics: community identity" },
     ],
     page: 46,
   },
@@ -81,7 +81,7 @@ export const APPLICATION_CATALOGUE: Record<string, ApplicationCatalogueEntry> = 
     body: "Using StreetBond to transform an asphalt playground into a vibrant, coloured surface. Non-slip, UV stable and tough enough for years of play.",
     specify: [
       { slug: "streetbond", note: "Court colour on asphalt or concrete" },
-      { slug: "streetbondsr", note: "Solar reflective — cooler underfoot" },
+      { slug: "streetbondsr", note: "Solar reflective: cooler underfoot" },
     ],
     page: 48,
   },
@@ -91,7 +91,7 @@ export const APPLICATION_CATALOGUE: Record<string, ApplicationCatalogueEntry> = 
     statement: "Durability. Performance. Visibility. Safety.",
     body: "With proven performance coast to coast our materials offer cyclists the added safety of non-slip, high contrast, durable cycling surfaces.",
     specify: [
-      { slug: "mmax", note: "MMA resin — fast to return to service" },
+      { slug: "mmax", note: "MMA resin: fast to return to service" },
       { slug: "premark", note: "Pre-cut bike symbols" },
     ],
     page: 50,
@@ -106,9 +106,9 @@ export const APPLICATION_CATALOGUE: Record<string, ApplicationCatalogueEntry> = 
     statement: "In high-traffic corridors, every detail counts.",
     body: "Transit corridors, campus arteries and shopping-centre entrances concentrate wear into a few square metres. Aggregate-reinforced thermoplastic and MMA resin carry the load where paint and thin coatings wear through in a season.",
     specify: [
-      { slug: "traffic-patterns-xd", note: "150 mil, aggregate-reinforced — crossings, thresholds, loading aprons" },
-      { slug: "mmax", note: "MMA resin — lane and area markings, traffic-ready in about an hour" },
-      { slug: "duratherm", note: "Inlaid and flush — plow-safe crossings in the corridor" },
+      { slug: "traffic-patterns-xd", note: "150 mil, aggregate-reinforced: crossings, thresholds, loading aprons" },
+      { slug: "mmax", note: "MMA resin: lane and area markings, traffic-ready in about an hour" },
+      { slug: "duratherm", note: "Inlaid and flush: plow-safe crossings in the corridor" },
     ],
     page: 52,
     spreadName: "High-Traffic Corridors",
@@ -142,23 +142,23 @@ export const APPLICATION_CATALOGUE: Record<string, ApplicationCatalogueEntry> = 
   "splash-pads": {
     title: "Slip-resistant. Cool to touch. Vivid colour.",
     statement: "Splash pad surfaces are uniquely demanding: constant water exposure, chemical treatments, bare feet.",
-    body: "A slip-resistant texture built for constant water, chemical treatment and bare feet — with solar-reflective options that stay cooler underfoot.",
+    body: "A slip-resistant texture built for constant water, chemical treatment and bare feet, with solar-reflective options that stay cooler underfoot.",
     specify: [
       { slug: "streetbond", note: "Excellent skid and slip resistance" },
-      { slug: "streetbondsr", note: "SR ≥ 0.33 — coatings that keep the surface cooler" },
+      { slug: "streetbondsr", note: "SR ≥ 0.33: coatings that keep the surface cooler" },
     ],
     page: 60,
   },
 
   "pedestrian-safety": {
     title: "Vision Zero, starting at the surface.",
-    statement: "Pedestrian safety isn't just aesthetic aspiration — it's a measurable outcome.",
+    statement: "Pedestrian safety isn't just aesthetic aspiration: it's a measurable outcome.",
     body: "High-contrast material combined with retro-reflective markings that stay visible year round. Proven performance in the harshest environments.",
     specify: [
-      { slug: "traffic-patterns-xd", note: "150 mil, aggregate-reinforced — high-volume crossings" },
-      { slug: "traffic-patterns", note: "125 mil preformed — high-contrast markings" },
+      { slug: "traffic-patterns-xd", note: "150 mil, aggregate-reinforced: high-volume crossings" },
+      { slug: "traffic-patterns", note: "125 mil preformed: high-contrast markings" },
       { slug: "premark", note: "Retroreflective symbols and legends" },
-      { slug: "mmax", note: "MMA resin — 45–60 minute cure" },
+      { slug: "mmax", note: "MMA resin: 45–60 minute cure" },
     ],
     page: 62,
   },
@@ -178,7 +178,7 @@ export const APPLICATION_CATALOGUE: Record<string, ApplicationCatalogueEntry> = 
   "public-art": {
     title: "Public art, at the scale of the street.",
     statement: "The street is one of the largest untapped canvases in any city.",
-    body: "Artist artwork can be reproduced and installed into the roadway — durable, slip-resistant, vibrant additions to any community.",
+    body: "Artist artwork can be reproduced and installed into the roadway: durable, slip-resistant, vibrant additions to any community.",
     specify: [
       { slug: "decomark", note: "Artwork and graphics" },
       { slug: "streetbond", note: "Large-scale colour fields" },
@@ -247,7 +247,7 @@ export const APPLICATION_CATALOGUE: Record<string, ApplicationCatalogueEntry> = 
       { slug: "durashield", note: "Maintenance coating" },
       { slug: "streetbond", note: "Coloured coating to enhance and preserve" },
       { slug: "streetprint", note: "Stamped asphalt treated with StreetBond coating" },
-      { slug: "traffic-patterns-xd", note: "150 mil, aggregate-reinforced — high-traffic bays and crossings" },
+      { slug: "traffic-patterns-xd", note: "150 mil, aggregate-reinforced: high-traffic bays and crossings" },
     ],
     page: 78,
   },

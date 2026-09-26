@@ -77,7 +77,7 @@ export default function NotFound() {
               marginRight: "auto",
             }}
           >
-            The page you were looking for has moved or never existed. Try one of the routes below — or call your regional office.
+            The page you were looking for has moved or never existed. Try one of the routes below, or call your regional office.
           </p>
 
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginBottom: 32 }}>

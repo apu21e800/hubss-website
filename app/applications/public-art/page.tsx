@@ -9,9 +9,9 @@ import { products } from "@/lib/products";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Public Art — Pavement as Community Expression",
+  title: "Public Art · Pavement as Community Expression",
   description:
-    "Indigenous art installations, Pride crosswalks, transit station murals, and labyrinth designs — permanent civic art at full street scale, executed in DecoMark preformed thermoplastic and StreetBond coloured coatings.",
+    "Indigenous art installations, Pride crosswalks, transit station murals, and labyrinth designs. Permanent civic art at full street scale, executed in DecoMark preformed thermoplastic and StreetBond coloured coatings.",
   slug: "applications/public-art",
 });
 
@@ -43,7 +43,7 @@ const RELATED_SLUGS = ["decomark", "streetbond", "streetprint"];
 const applicationSchema = {
   "@context": "https://schema.org",
   "@type": "Service",
-  name: "Public Art — Pavement Installations",
+  name: "Public Art · Pavement Installations",
   description:
     "Permanent pavement art installations including Indigenous art, pride crosswalks, transit murals, and community labyrinth designs using DecoMark and StreetBond systems.",
   provider: { "@type": "Organization", name: "HUB Surface Systems" },
@@ -64,7 +64,7 @@ export default function PublicArtPage() {
       <div data-hero className="relative h-[50vh] min-h-[400px] overflow-hidden">
         <Image
           src="/images/applications/community-branding/community-branding-01.jpg"
-          alt="Public art pavement installation — DecoMark custom thermoplastic civic mural by HUB Surface Systems"
+          alt="Public art pavement installation, DecoMark custom thermoplastic civic mural by HUB Surface Systems"
           fill
           className="object-cover"
           priority
@@ -80,13 +80,13 @@ export default function PublicArtPage() {
               className="text-xs font-semibold tracking-[0.2em] uppercase mb-3"
               style={{ color: "var(--accent-text-lg)" }}
             >
-              HUB Application
+              HUB application
             </p>
             <h1
               className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold"
               style={{ color: "var(--text-primary)" }}
             >
-              The Street as Canvas
+              The street as canvas
             </h1>
             <p
               className="text-lg mt-2 max-w-2xl"
@@ -114,13 +114,13 @@ export default function PublicArtPage() {
                 className="font-semibold text-base"
                 style={{ color: "var(--text-primary)" }}
               >
-                Commission a Custom Design
+                Commission a custom design
               </p>
               <p
                 className="text-sm mt-0.5"
                 style={{ color: "var(--text-muted)" }}
               >
-                End-to-end project management — design files, fabrication, and certified installation.
+                End-to-end project management: design files, fabrication, and certified installation.
               </p>
             </div>
             <div className="flex flex-wrap gap-3">
@@ -129,14 +129,14 @@ export default function PublicArtPage() {
                 className="px-4 py-2 rounded-lg text-sm transition-all hover:text-[var(--text-primary)] border border-[var(--ink-15)] hover:border-orange-500/50"
                 style={{ color: "var(--text-body)" }}
               >
-                Technical Specs
+                Technical specs
               </Link>
               <Link
                 href="/contact"
                 className="px-4 py-2 rounded-lg text-sm font-medium transition-all"
                 style={{ background: "#F97316", color: "var(--on-accent)" }}
               >
-                Start a Project
+                Start a project
               </Link>
             </div>
           </div>
@@ -148,13 +148,13 @@ export default function PublicArtPage() {
                 className="text-2xl font-bold mb-5"
                 style={{ color: "var(--text-primary)" }}
               >
-                Pavement as Public Art
+                Pavement as public art
               </h2>
               <p
                 className="text-[16px] leading-relaxed mb-12"
                 style={{ color: "var(--text-body)" }}
               >
-                Indigenous art installations, labyrinth designs, Pride crosswalks, and transit station murals — pavement carries civic art at full street scale. DecoMark custom-graphic preformed thermoplastic provides print-quality images with full Pantone matching. StreetBond covers large-format colour fields and mural backgrounds. Both systems are designed to remain in service for the full life of the asphalt substrate.
+                Indigenous art installations, labyrinth designs, Pride crosswalks, and transit station murals. Pavement carries civic art at full street scale. DecoMark custom-graphic preformed thermoplastic provides print-quality images with full Pantone matching. StreetBond covers large-format colour fields and mural backgrounds. Both systems are designed to remain in service for the full life of the asphalt substrate.
               </p>
 
               {/* Gallery grid */}
@@ -175,7 +175,7 @@ export default function PublicArtPage() {
                       src={`/images/applications/community-branding/community-branding-${String(
                         Math.min(i, 14)
                       ).padStart(2, "0")}.jpg`}
-                      alt={`Public art pavement installation — HUB Surface Systems civic mural project ${i}`}
+                      alt={`Public art pavement installation, HUB Surface Systems civic mural project ${i}`}
                       fill
                       className="object-cover"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -189,7 +189,7 @@ export default function PublicArtPage() {
                 className="text-2xl font-bold mb-6"
                 style={{ color: "var(--text-primary)" }}
               >
-                Featured Projects
+                Featured projects
               </h2>
               <div className="space-y-4">
                 {FEATURED_PROJECTS.map((project) => (
@@ -238,7 +238,7 @@ export default function PublicArtPage() {
                   className="font-bold text-lg mb-6"
                   style={{ color: "var(--text-primary)" }}
                 >
-                  Products Used
+                  Products used
                 </h3>
                 <div className="space-y-3">
                   {relatedProducts.map((product) => (
@@ -299,7 +299,7 @@ export default function PublicArtPage() {
                   className="block w-full text-center font-semibold py-4 rounded-lg mt-8 transition-all text-sm hover:brightness-110"
                   style={{ background: "#f97316", color: "var(--on-accent)" }}
                 >
-                  Commission a Custom Design
+                  Commission a custom design
                 </Link>
                 <Link
                   href="/lunch-learn"

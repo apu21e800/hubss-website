@@ -942,7 +942,7 @@ export default function Nav() {
               onClick={openSearch}
               aria-label="Search the site"
               aria-keyshortcuts="Meta+K Control+K"
-              title={`Search — ${shortcutLabel}`}
+              title={`Search · ${shortcutLabel}`}
               className="hidden lg:flex items-center justify-center flex-shrink-0 rounded-lg transition-colors hover:bg-[var(--ink-05)]"
               style={{ width: 36, height: 36, color: "var(--text-secondary)" }}
             >

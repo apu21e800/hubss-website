@@ -497,7 +497,7 @@ export default function CatalogueViewer({
     try {
       await navigator.share({
         title: ideaBook.title,
-        text: "Decorative Pavement Solutions - the HUB Surface Systems Idea Book.",
+        text: "Decorative Pavement Solutions, the HUB Surface Systems Idea Book.",
         url,
       });
     } catch {

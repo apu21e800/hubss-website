@@ -72,15 +72,15 @@ const HOME_HERO_TEXT: Record<string, string> = {
 };
 
 const ABOUT_HERO_TEXT: Record<string, string> = {
-  "aboutHero.eyebrow":    "Canadian-Operated Since 1999 · All 10 Provinces",
+  "aboutHero.eyebrow":    "Canadian-operated since 1999 · All 10 provinces",
   "aboutHero.heading":    "The people who made your city look like your city.",
-  "aboutHero.subheading": "Since 1999, HUB Surface Systems — a proudly Canadian company, coast to coast — has been connecting communities with pavement technologies that do more than carry traffic. They carry identity.",
+  "aboutHero.subheading": "Since 1999, HUB Surface Systems, a proudly Canadian company, has been connecting communities coast to coast with pavement technologies that carry identity as well as traffic.",
   aboutMission:           "Every surface tells a story. We give communities the language to write it.",
 };
 
 const CONTACT_HERO_TEXT: Record<string, string> = {
-  "contactHero.eyebrow":    "Get In Touch",
-  "contactHero.heading":    "Start a Project",
+  "contactHero.eyebrow":    "Get in touch",
+  "contactHero.heading":    "Start a project",
   "contactHero.subheading": "Tell us about your community, your timeline, and your vision. We'll tell you which surface system brings it to life.",
 };
 
@@ -98,44 +98,44 @@ const CONTACT_HERO_TEXT: Record<string, string> = {
 // documented Indigenous work is UBC, Sechelt, Granville Street, Burnaby and
 // London.
 const ABOUT_STORY: string[] = [
-  "HUB Surface Systems was founded on a simple belief: streets don't have to be grey. For decades, Canadian cities treated pavement as pure utility — functional, forgettable, interchangeable. We saw an opportunity to change that, and built the company around StreetPrint decorative stamped asphalt — the original stamped asphalt system, a Canadian invention installed here since 1992.",
-  "Since 1999 we have grown the portfolio to address every surface challenge a Canadian municipality might face — from high-traffic transit corridors in York Region and London to decorative community crosswalks at UBC to Indigenous recognition artwork in Sechelt, Vancouver and Burnaby. Every city, every application, every climate.",
-  "Today, HUB operates from two regional offices — East in Milton, Ontario, and West in Ladysmith, British Columbia — backed by a network of certified applicators trained and authorized by HUB to install each system to spec. That credentialed installer program is what turns a quality product into a quality outcome.",
+  "HUB Surface Systems was founded on a simple belief: streets don't have to be grey. For decades, Canadian cities treated pavement as pure utility, functional and forgettable. We saw an opportunity to change that, and built the company around StreetPrint decorative stamped asphalt: the original stamped asphalt system, a Canadian invention installed here since 1992.",
+  "Since 1999 we have grown the portfolio to address every surface challenge a Canadian municipality might face: high-traffic transit corridors in York Region and London, decorative community crosswalks at UBC, Indigenous recognition artwork in Sechelt, Vancouver and Burnaby.",
+  "Today, HUB operates from two regional offices (East in Milton, Ontario, and West in Ladysmith, British Columbia), backed by a network of certified applicators trained and authorized by HUB to install each system to spec. That credentialed installer program is what turns a quality product into a quality outcome.",
 ];
 
 const ABOUT_STORY_ASIDE =
-  "York Region. City of Toronto. City of Vancouver. UBC. The City of Sechelt. When you walk through a Canadian city and feel something — when a crosswalk catches your eye, when a plaza feels like it belongs — there's a chance we were there. That's what a thousand projects look like on the ground.";
+  "York Region, the City of Toronto, the City of Vancouver, UBC, the City of Sechelt. When you walk through a Canadian city and feel something, when a crosswalk catches your eye, when a plaza feels like it belongs, there's a chance we were there. That's what a thousand projects look like on the ground.";
 
 const ABOUT_VALUES: { heading: string; body: string }[] = [
   {
-    heading: "What We Build",
-    body: "Decorative crosswalks, civic plazas, community murals, transit lanes, private driveways, and parks. Surface solutions that carry meaning — from high-visibility school zones in Milton to Indigenous art installations in Sechelt.",
+    heading: "What we build",
+    body: "Decorative crosswalks, civic plazas, community murals, transit lanes, private driveways, and parks. Surfaces that carry meaning, from high-visibility school zones in Milton to Indigenous art installations in Sechelt.",
   },
   {
-    heading: "Who We Build For",
-    body: "Municipalities, landscape architects, urban planners, developers, and certified contractors across every Canadian province. If it's a surface that people walk, drive, or gather on — we have a system for it.",
+    heading: "Who we build for",
+    body: "Municipalities, landscape architects, urban planners, developers, and certified contractors across every Canadian province. If it's a surface that people walk, drive, or gather on, we have a system for it.",
   },
   {
-    heading: "Why It Matters",
-    body: "Beautiful streets make walkable cities. Legible surfaces slow cars. Identity-rich public spaces build community. This isn't just infrastructure — it's the civic layer that tells a city it's worth caring about.",
+    heading: "Why it matters",
+    body: "Beautiful streets make walkable cities. Legible surfaces slow cars. Identity-rich public spaces build community. This is the civic layer that tells a city it's worth caring about.",
   },
 ];
 
 const ABOUT_WHY_HUB: { title: string; desc: string }[] = [
-  { title: "Flexibility vs Concrete",          desc: "Asphalt-based systems flex with Canada's freeze-thaw cycles, outlasting concrete alternatives by 2–3x in northern climates." },
-  { title: "6–8 Year Marking Life",           desc: "PreMark thermoplastic carries a 6–8 year service life, and MMAX returns a lane to traffic in 45–60 minutes. Both figures are the Idea Book's." },
-  { title: "Vision Zero Aligned",              desc: "Every HUB product is designed to support Vision Zero frameworks — from retroreflective crosswalk markings to high-contrast bike lane systems." },
-  { title: "High-Visibility by Design",        desc: "Tactile and high-contrast marking solutions engineered for pedestrian safety and legibility in every lighting condition and season." },
-  { title: "Service Life, by System",          desc: "StreetPrint runs 10–20 years on sound pavement; TrafficPatternsXD 10+, TrafficPatterns 8+, StreetBond 8+. Quoted per system, because they do not wear the same." },
-  { title: "Climate-Tested",                   desc: "Every system is stress-tested for freeze-thaw extremes, de-icing salts, and snowplow blades — from coastal BC to the Great Lakes." },
+  { title: "Flexibility vs concrete",          desc: "Asphalt-based systems flex with Canada's freeze-thaw cycles, outlasting concrete alternatives by 2–3x in northern climates." },
+  { title: "6–8 year marking life",           desc: "PreMark thermoplastic carries a 6–8 year service life, and MMAX returns a lane to traffic in 45–60 minutes. Both figures are the Idea Book's." },
+  { title: "Vision Zero aligned",              desc: "Every HUB product is designed to support Vision Zero frameworks, from retroreflective crosswalk markings to high-contrast bike lane systems." },
+  { title: "High-visibility by design",        desc: "Tactile and high-contrast marking systems engineered for pedestrian safety and legibility in every lighting condition and season." },
+  { title: "Service life, by system",          desc: "StreetPrint runs 10–20 years on sound pavement; TrafficPatternsXD 10+, TrafficPatterns 8+, StreetBond 8+. Quoted per system, because they do not wear the same." },
+  { title: "Climate-tested",                   desc: "Every system is stress-tested for freeze-thaw extremes, de-icing salts, and snowplow blades, from coastal BC to the Great Lakes." },
 ];
 
 const ABOUT_PARTNERS_INTRO =
-  "HUB is an authorized distributor and applicator partner for the manufacturers behind our core product systems — giving clients access to the broadest decorative pavement portfolio in Canada, with direct manufacturer technical support and specification backup.";
+  "HUB is an authorized distributor and applicator partner for the manufacturers behind our core product systems, giving clients access to the broadest decorative pavement portfolio in Canada, with direct manufacturer technical support and specification backup.";
 
 const ABOUT_PARTNERS: { key: string; desc: string }[] = [
-  { key: "gaf",          desc: "GAF is the manufacturer behind HUB's coloured pavement coating systems — StreetBond, StreetBondSR (solar reflective), DuraShield, and MMAX. Their coatings technology has been the foundation of thousands of decorative surface installations across Canada." },
-  { key: "ennis-flint",  desc: "Ennis-Flint (a PPG company) is the manufacturer behind HUB's full thermoplastics range — including TrafficPatterns, TrafficPatternsXD, PreMark, AirMark, DuraTherm, and DecoMark. Their preformed thermoplastic systems are the gold standard for high-durability pavement markings across Canada." },
+  { key: "gaf",          desc: "GAF is the manufacturer behind HUB's coloured pavement coating systems: StreetBond, StreetBondSR (solar reflective), DuraShield, and MMAX. Their coatings technology has been the foundation of thousands of decorative surface installations across Canada." },
+  { key: "ennis-flint",  desc: "Ennis-Flint (a PPG company) is the manufacturer behind HUB's full thermoplastics range, including TrafficPatterns, TrafficPatternsXD, PreMark, AirMark, DuraTherm, and DecoMark. Their preformed thermoplastic systems are the gold standard for high-durability pavement markings across Canada." },
 ];
 
 // ─── Lunch & Learn page baseline ───────────────────────────────────────────
@@ -143,7 +143,7 @@ const ABOUT_PARTNERS: { key: string; desc: string }[] = [
 
 const LL_WHAT_YOU_GET = [
   { num: "01", title: "Spec Language Ready for Your RFP", desc: "Pre-written specification language for thermoplastic crosswalks, MMA bus lanes, coloured bike lanes, and more. Copy it straight into your next tender document." },
-  { num: "02", title: "The Lifecycle Cost Math",          desc: "Lifecycle cost math, side by side. How HUB systems deliver years of high-performance service versus repeated seasonal interventions — the numbers usually surprise people." },
+  { num: "02", title: "The Lifecycle Cost Math",          desc: "Lifecycle cost math, side by side. How HUB systems deliver years of high-performance service versus repeated seasonal interventions. The numbers usually surprise people." },
   { num: "03", title: "Lunch Included. No Catch.",        desc: "In-person sessions include catered lunch for your team. Virtual sessions come with a $25 lunch voucher delivered before we connect." },
 ];
 
@@ -151,14 +151,14 @@ const LL_PERSONAS = [
   { title: "Municipal Engineers & Planners",     desc: "Crosswalks, transit corridors, and complete streets that meet Vision Zero and Complete Streets specifications, with accessibility-aware design. Real installation data from Canadian municipalities coast to coast.", badge: "Vision Zero · Complete Streets" },
   { title: "Landscape Architects & Designers",   desc: "12+ StreetPrint patterns, full StreetBond Pantone palette, and decorative surfaces engineered to outlast the design life of the asphalt beneath them. Snowplow-safe. Engineering-approved.", badge: "Public Art · Driveways" },
   { title: "Engineering & Consulting Firms",     desc: "CE credits available. Walk away with real spec sheets, sample materials, and a list of certified HUB installers in your region.", badge: "CE Credits" },
-  { title: "Contractors & Applicators",          desc: "Learn about the HUB certified applicator program — unlock territory rights and bid on jobs your competitors can't touch.", badge: "Certified Applicator Program" },
+  { title: "Contractors & Applicators",          desc: "Learn about the HUB certified applicator program: territory rights and the chance to bid on jobs your competitors can't touch.", badge: "Certified Applicator Program" },
 ];
 
 const LL_FAQS = [
   { q: "How long is the session?",                       a: "30–45 minutes of presentation, followed by open Q&A. We're respectful of your team's calendar and stick to the time we agree on." },
-  { q: "Is this actually free?",                         a: "100% free. No invoice, no minimum order attached, and we won't badger you afterward. We just want you to know what you're specifying — the rest follows naturally." },
+  { q: "Is this actually free?",                         a: "100% free. No invoice, no minimum order attached, and we won't badger you afterward. We just want you to know what you're specifying. The rest follows naturally." },
   { q: "Do we get continuing education credits?",        a: "Yes. HUB Lunch & Learn sessions count toward AIBC, RAIC, and PEO continuing professional development requirements. We provide the documentation." },
-  { q: "In-person or virtual?",                          a: "Both. In-person sessions are available coast to coast through our certified applicator network. Virtual sessions use Zoom or Teams — we mail sample kits before we connect." },
+  { q: "In-person or virtual?",                          a: "Both. In-person sessions are available coast to coast through our certified applicator network. Virtual sessions use Zoom or Teams, and we mail sample kits before we connect." },
 ];
 
 const LL_SECTION_HEADINGS = {

@@ -8,7 +8,7 @@ import { buildMetadata } from "@/lib/seo";
 const TYPE = TYPE_BY_LABEL["Case Study"];
 
 export const metadata: Metadata = buildMetadata({
-  title: "Pavement Case Studies — Canadian Municipal & Commercial Projects",
+  title: "Pavement Case Studies · Canadian Municipal & Commercial Projects",
   description: "Documented decorative pavement projects across Canada: the brief, the specification, the installation, and how each surface has performed since. Written for specifiers.",
   slug: "blog/case-studies",
 });

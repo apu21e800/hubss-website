@@ -30,17 +30,17 @@ export default defineType({
       title: "Internal title",
       type: "string",
       group: "identity",
-      description: "Editor-only label — not shown on the public site. Used to identify this document in the Studio list.",
+      description: "Editor-only label, not shown on the public site. Used to identify this document in the Studio list.",
       validation: (r) => r.required().error("Internal title is required"),
     }),
     defineField({
       name: "slug",
-      title: "Page identifier (read only — do not change)",
+      title: "Page identifier (read only, do not change)",
       type: "slug",
       group: "identity",
       readOnly: true,
       options: { source: "title" },
-      description: 'This is fixed — do not change it. It tells the website which page these settings belong to.',
+      description: 'This is fixed. Do not change it. It tells the website which page these settings belong to.',
       validation: (r) =>
         r
           .required()
@@ -58,10 +58,10 @@ export default defineType({
 
     defineField({
       name: "homepageHero",
-      title: "Homepage — Hero",
+      title: "Homepage · Hero",
       type: "object",
       group: "homepage",
-      description: "Full-screen hero at the top of the homepage. This is the first thing visitors see — make it count.",
+      description: "Full-screen hero at the top of the homepage. This is the first thing visitors see.",
       fields: [
         defineField({
           name: "eyebrow",
@@ -121,7 +121,7 @@ export default defineType({
 
     defineField({
       name: "aboutHero",
-      title: "About — Hero",
+      title: "About · Hero",
       type: "object",
       group: "about",
       description: "The large heading block at the top of the About page.",
@@ -143,7 +143,7 @@ export default defineType({
           type: "text",
           title: "Hero subheading",
           rows: 3,
-          description: "Paragraph below the heading — 2–3 sentences about HUB's story or mission.",
+          description: "Paragraph below the heading: 2–3 sentences about HUB's story or mission.",
           validation: (r) => r.max(400).warning("Keep the subheading under 400 characters"),
         }),
         richImageField("heroImage", "Hero background photo (behind the About page title)"),
@@ -152,15 +152,15 @@ export default defineType({
 
     defineField({
       name: "aboutMission",
-      title: "About — Mission quote",
+      title: "About · Mission quote",
       type: "string",
       group: "about",
-      description: 'The pull-quote displayed in the Our Story section — make it memorable (e.g. "Every surface tells a story. We give communities the language to write it.").',
+      description: 'The pull-quote displayed in the Our Story section (e.g. "Every surface tells a story. We give communities the language to write it.").',
       validation: (r) => r.max(200).warning("Mission quote should be under 200 characters"),
     }),
     defineField({
       name: "aboutStory",
-      title: "About — Our Story paragraphs",
+      title: "About · Our Story paragraphs",
       type: "array",
       group: "about",
       description: "The 3-paragraph 'Our Story' body in the left column of the Story section.",
@@ -168,7 +168,7 @@ export default defineType({
     }),
     defineField({
       name: "aboutStoryAside",
-      title: "About — Story aside paragraph",
+      title: "About · Story aside paragraph",
       type: "text",
       rows: 3,
       group: "about",
@@ -176,7 +176,7 @@ export default defineType({
     }),
     defineField({
       name: "aboutValues",
-      title: "About — Values cards",
+      title: "About · Values cards",
       type: "array",
       group: "about",
       description: "The three 'What We Stand For' cards (heading + body).",
@@ -191,7 +191,7 @@ export default defineType({
     }),
     defineField({
       name: "aboutWhyHub",
-      title: "About — Why HUB differentiators",
+      title: "About · Why HUB differentiators",
       type: "array",
       group: "about",
       description: "The 'Why HUB' grid cards (title + description). Six entries by default.",
@@ -206,7 +206,7 @@ export default defineType({
     }),
     defineField({
       name: "aboutPartnersIntro",
-      title: "About — Manufacturer Partners intro",
+      title: "About · Manufacturer Partners intro",
       type: "text",
       rows: 4,
       group: "about",
@@ -214,10 +214,10 @@ export default defineType({
     }),
     defineField({
       name: "aboutPartners",
-      title: "About — Manufacturer Partner descriptions",
+      title: "About · Manufacturer Partner descriptions",
       type: "array",
       group: "about",
-      description: "Per-partner description text. Keep partner keys ('gaf', 'ennis-flint') stable — the matching logo/products array stays in code.",
+      description: "Per-partner description text. Keep partner keys ('gaf', 'ennis-flint') stable: the matching logo/products array stays in code.",
       of: [{
         type: "object",
         fields: [
@@ -232,7 +232,7 @@ export default defineType({
 
     defineField({
       name: "contactHero",
-      title: "Contact — Hero",
+      title: "Contact · Hero",
       type: "object",
       group: "contact",
       description: "The heading block on the left side of the contact page.",
@@ -264,7 +264,7 @@ export default defineType({
 
     defineField({
       name: "lunchLearnHero",
-      title: "Lunch & Learn — Hero",
+      title: "Lunch & Learn · Hero",
       type: "object",
       group: "lunchLearn",
       description: "The hero section on the Lunch & Learn landing page.",
@@ -311,7 +311,7 @@ export default defineType({
           name: "formSubheading",
           type: "string",
           title: "Form section subheading",
-          description: 'Short line below the form heading (e.g. "Tell us who you are and where you are — we handle the rest.").',
+          description: 'Short line below the form heading (e.g. "Tell us who you are and where you are. We handle the rest.").',
         }),
         defineField({
           name: "submitLabel",
@@ -324,7 +324,7 @@ export default defineType({
     }),
     defineField({
       name: "lunchLearnWhatYouGet",
-      title: "Lunch & Learn — 'What You Walk Away With' cards",
+      title: "Lunch & Learn · 'What You Walk Away With' cards",
       type: "array",
       group: "lunchLearn",
       description: "Three numbered cards in the 'What You Walk Away With' section.",
@@ -340,7 +340,7 @@ export default defineType({
     }),
     defineField({
       name: "lunchLearnPersonas",
-      title: "Lunch & Learn — Persona cards",
+      title: "Lunch & Learn · Persona cards",
       type: "array",
       group: "lunchLearn",
       description: "The 'Perfect For' / 'Who It's Built For' audience cards (title + desc + badge).",
@@ -356,7 +356,7 @@ export default defineType({
     }),
     defineField({
       name: "lunchLearnFaqs",
-      title: "Lunch & Learn — FAQ accordion items",
+      title: "Lunch & Learn · FAQ accordion items",
       type: "array",
       group: "lunchLearn",
       description: "Frequently-asked questions shown in the FAQ accordion.",
@@ -371,17 +371,17 @@ export default defineType({
     }),
     defineField({
       name: "lunchLearnSectionHeadings",
-      title: "Lunch & Learn — Section eyebrows & headings",
+      title: "Lunch & Learn · Section eyebrows and headings",
       type: "object",
       group: "lunchLearn",
       description: "Short marketing eyebrows + headings for the three mid-page sections.",
       fields: [
-        defineField({ name: "whatYouGetEyebrow", type: "string", title: "What You Get — eyebrow" }),
-        defineField({ name: "whatYouGetHeading", type: "string", title: "What You Get — heading" }),
-        defineField({ name: "personasEyebrow",   type: "string", title: "Personas — eyebrow" }),
-        defineField({ name: "personasHeading",   type: "string", title: "Personas — heading" }),
-        defineField({ name: "faqEyebrow",        type: "string", title: "FAQ — eyebrow" }),
-        defineField({ name: "faqHeading",        type: "string", title: "FAQ — heading" }),
+        defineField({ name: "whatYouGetEyebrow", type: "string", title: "What You Get · eyebrow" }),
+        defineField({ name: "whatYouGetHeading", type: "string", title: "What You Get · heading" }),
+        defineField({ name: "personasEyebrow",   type: "string", title: "Personas · eyebrow" }),
+        defineField({ name: "personasHeading",   type: "string", title: "Personas · heading" }),
+        defineField({ name: "faqEyebrow",        type: "string", title: "FAQ · eyebrow" }),
+        defineField({ name: "faqHeading",        type: "string", title: "FAQ · heading" }),
       ],
     }),
 

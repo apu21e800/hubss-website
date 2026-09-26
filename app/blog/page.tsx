@@ -10,7 +10,7 @@ import { FIELD_NOTE_TYPES } from "@/lib/field-notes-taxonomy";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Insights — Case Studies, Guides & Pavement White Papers",
+  title: "Insights · Case Studies, Guides & Pavement White Papers",
   description:
     "Canadian decorative pavement documented: project case studies, specification guides, white papers, and field records on crosswalks, transit lanes, and stamped asphalt.",
   slug: "blog",
@@ -97,10 +97,10 @@ export default async function BlogPage() {
               maxWidth: "20ch",
             }}
           >
-            Insights from the Front Lines of Canadian Pavement
+            Insights from the front lines of Canadian pavement
           </h1>
           <p className="text-base" style={{ color: "var(--text-secondary)", maxWidth: "62ch" }}>
-            Decorative pavement in Canada, documented — the projects, the specifications
+            Decorative pavement in Canada, documented: the projects, the specifications
             and the lifecycle math behind them.
           </p>
         </div>

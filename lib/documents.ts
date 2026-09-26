@@ -93,7 +93,7 @@ const ALL_DOCS: Record<string, ProductDocument[]> = {
 
   "streetbond": [
     { label: "Brochure",                             type: "brochure",     href: "/docs/StreetBond/StreetBond/StreetBond-Brochure.pdf" },
-    { label: "Colour Card — 2026 Edition",           type: "colour",       href: "/docs/StreetBond/StreetBond/StreetBond-Colour-Card-2026.pdf" },
+    { label: "Colour Card · 2026 Edition",           type: "colour",       href: "/docs/StreetBond/StreetBond/StreetBond-Colour-Card-2026.pdf" },
     { label: "Substrate Guide",                      type: "other",        href: "/docs/StreetBond/StreetBond/StreetBond_Substrate_Guide.pdf" },
     { label: "Colorant Technical Data Sheet",        type: "tds",          href: "/docs/StreetBond/StreetBond/StreetBond-Colorant.pdf" },
     { label: "SB120 Technical Data Sheet",           type: "tds",          href: "/docs/StreetBond/StreetBond%20120/StreetBond-SB120-Data-Sheet-12.22-Rev.pdf" },
@@ -107,8 +107,8 @@ const ALL_DOCS: Record<string, ProductDocument[]> = {
     { label: "Pro 220 & 250 Installation Guide",     type: "installation", href: "/docs/StreetBond/StreetBond%20Pro%20220%20%5BMMA%5D/StreetBond-Pro-220-and-250-Intallation.pdf" },
     { label: "Pro 220 & 250 Brochure",               type: "brochure",     href: "/docs/StreetBond/StreetBond%20Pro%20220%20%5BMMA%5D/StreetBond-Pro-220-Pro-250-Brochure-1.pdf" },
     { label: "Pro 250 Technical Data Sheet",         type: "tds",          href: "/docs/StreetBond/StreetBond%20Pro%20250%20%5BMMA%5D/Data-Sheet-StreetBond-Pro-250.pdf" },
-    { label: "Concrete Primer QS — Technical Data Sheet", type: "tds",    href: "/docs/StreetBond/StreetBond%20Concrete%20Primer/StreetBond-QS-Concrete-TDS.pdf" },
-    { label: "Concrete Primer WB — Technical Data Sheet", type: "tds",    href: "/docs/StreetBond/StreetBond%20Concrete%20Primer/StreetBond-Concrete-Primer-WB-TDS.pdf" },
+    { label: "Concrete Primer QS · Technical Data Sheet", type: "tds",    href: "/docs/StreetBond/StreetBond%20Concrete%20Primer/StreetBond-QS-Concrete-TDS.pdf" },
+    { label: "Concrete Primer WB · Technical Data Sheet", type: "tds",    href: "/docs/StreetBond/StreetBond%20Concrete%20Primer/StreetBond-Concrete-Primer-WB-TDS.pdf" },
   ],
 
   "streetbondsr": [
@@ -124,12 +124,12 @@ const ALL_DOCS: Record<string, ProductDocument[]> = {
     { label: "Next Gen Brochure",                    type: "brochure",     href: "/docs/MMAX/MMAX-Next-Gen-Brochure_06_09_23-1.pdf" },
     { label: "Extended Season Corundum PDS",         type: "tds",          href: "/docs/MMAX/Extended-Season-MMAX-Corundum-PDS-070723.pdf" },
     { label: "Extended Season Product Data Sheet",   type: "tds",          href: "/docs/MMAX/Extended-Season-MMAX-product-data-sheet.pdf" },
-    { label: "Corundum Area Markings — Application Instructions", type: "installation", href: "/docs/MMAX/Application_Instructions_MMAX_Corundum_Area_Markings.pdf" },
+    { label: "Corundum Area Markings · Application Instructions", type: "installation", href: "/docs/MMAX/Application_Instructions_MMAX_Corundum_Area_Markings.pdf" },
   ],
 
   "durashield": [
-    { label: "Part A+B Asphalt — Technical Data Sheet",     type: "tds", href: "/docs/DuraShield/DuraShield-Pavement-Coating-Part-A-B-Color-Asphalt-TDS.pdf" },
-    { label: "Part A+B Solar Gray — Technical Data Sheet",  type: "tds", href: "/docs/DuraShield/DuraShield-Pavement-Coating-Part-A-B-Color-Solar-Gray-TDS.pdf" },
+    { label: "Part A+B Asphalt · Technical Data Sheet",     type: "tds", href: "/docs/DuraShield/DuraShield-Pavement-Coating-Part-A-B-Color-Asphalt-TDS.pdf" },
+    { label: "Part A+B Solar Gray · Technical Data Sheet",  type: "tds", href: "/docs/DuraShield/DuraShield-Pavement-Coating-Part-A-B-Color-Solar-Gray-TDS.pdf" },
   ],
 
   "streetprint": [

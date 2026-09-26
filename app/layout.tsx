@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     description: "Canadian leader in decorative pavement and traffic safety solutions. Stamped asphalt, thermoplastic markings, and specialty coatings for municipalities and developers across Canada.",
     url: "https://hubss.com",
     siteName: "HUB Surface Systems",
-    images: [{ url: "/images/hero/hero-1.jpg", width: 1200, height: 630, alt: "HUB Surface Systems — Decorative Pavement Solutions" }],
+    images: [{ url: "/images/hero/hero-1.jpg", width: 1200, height: 630, alt: "HUB Surface Systems · Decorative Pavement Solutions" }],
     type: "website",
   },
   twitter: {

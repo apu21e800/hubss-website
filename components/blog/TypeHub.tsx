@@ -36,7 +36,7 @@ export default async function TypeHub({ type }: { type: FieldNoteTypeMeta }) {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     "@id": `${hubUrl}#collection`,
-    name: `${type.plural} — HUB Surface Systems Insights`,
+    name: `${type.plural} · HUB Surface Systems Insights`,
     description: type.blurb,
     url: hubUrl,
     inLanguage: "en-CA",

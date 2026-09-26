@@ -245,7 +245,7 @@ async function pageAlt(pdf, n, total) {
   // substance to it, and fall back to whatever there is.
   let head = lines.find((s) => s.length >= 12) ?? lines[0];
   if (head.length > 90) head = head.slice(0, 87).replace(/\s+\S*$/, "") + "...";
-  return `${head} - Idea Book, page ${n}`;
+  return `${head} (Idea Book, page ${n})`;
 }
 
 async function renderPage(pdf, n, dpi, outDir, tmpDir) {

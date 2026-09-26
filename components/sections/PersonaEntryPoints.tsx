@@ -3,11 +3,11 @@ import Link from "next/link";
 const PERSONAS = [
   {
     label: "Municipalities",
-    desc: "Crosswalks, transit corridors and plazas — Vision Zero aligned, accessible, installed by certified crews coast to coast.",
+    desc: "Crosswalks, transit corridors and plazas: Vision Zero aligned, accessible, installed by certified crews coast to coast.",
     href: "/applications",
   },
   {
-    label: "Designers & Specifiers",
+    label: "Designers & specifiers",
     desc: "Stamped patterns, PMS-matched colour and snowplow-safe systems, with spec sheets and spec language for the tender.",
     href: "/products",
   },

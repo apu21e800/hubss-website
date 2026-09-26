@@ -132,7 +132,7 @@ export const resourceDocuments: ResourceDocument[] = [
   },
   {
     id: 'sb-colour-001',
-    title: 'StreetBond Colour Card — 2026 Edition',
+    title: 'StreetBond Colour Card · 2026 Edition',
     type: 'Colour Guide',
     product: 'streetbond',
     productName: 'StreetBond',
@@ -382,7 +382,7 @@ export const resourceDocuments: ResourceDocument[] = [
   },
   {
     id: 'sbsr-cert-001',
-    title: 'StreetBondSR Certificate of Analysis — Friction',
+    title: 'StreetBondSR Certificate of Analysis · Friction',
     type: 'Certificate',
     product: 'streetbond-sr',
     productName: 'StreetBondSR',
@@ -518,7 +518,7 @@ export const resourceDocuments: ResourceDocument[] = [
   },
   {
     id: 'tpxd-spec-branded',
-    title: 'TrafficPatternsXD Specification — Branded',
+    title: 'TrafficPatternsXD Specification · Branded',
     type: 'Spec Sheet',
     product: 'traffic-patterns-xd',
     productName: 'TrafficPatternsXD',
@@ -771,7 +771,7 @@ export const resourceDocuments: ResourceDocument[] = [
   },
   {
     id: 'dt-spec-001',
-    title: 'DuraTherm Specification — Branded',
+    title: 'DuraTherm Specification · Branded',
     type: 'Spec Sheet',
     product: 'duratherm',
     productName: 'DuraTherm',
@@ -861,7 +861,7 @@ export const resourceDocuments: ResourceDocument[] = [
   },
   {
     id: 'am-brochure-005',
-    title: 'AirMark PreMark — Groundside Airports',
+    title: 'AirMark PreMark · Groundside Airports',
     type: 'Brochure',
     product: 'airmark',
     productName: 'AirMark',
@@ -902,7 +902,7 @@ export const resourceDocuments: ResourceDocument[] = [
   // ── 2026 Product Flyers (14, one per product) ─────────────────
   {
     id: 'flyer-traffic-patterns-xd',
-    title: 'TrafficPatternsXD — 2026 Product Flyer',
+    title: 'TrafficPatternsXD · 2026 Product Flyer',
     type: 'Flyer',
     product: 'traffic-patterns-xd',
     productName: 'TrafficPatternsXD',
@@ -917,7 +917,7 @@ export const resourceDocuments: ResourceDocument[] = [
   },
   {
     id: 'flyer-traffic-patterns',
-    title: 'TrafficPatterns — 2026 Product Flyer',
+    title: 'TrafficPatterns · 2026 Product Flyer',
     type: 'Flyer',
     product: 'traffic-patterns',
     productName: 'TrafficPatterns',
@@ -932,7 +932,7 @@ export const resourceDocuments: ResourceDocument[] = [
   },
   {
     id: 'flyer-streetbond',
-    title: 'StreetBond — 2026 Product Flyer',
+    title: 'StreetBond · 2026 Product Flyer',
     type: 'Flyer',
     product: 'streetbond',
     productName: 'StreetBond',
@@ -947,7 +947,7 @@ export const resourceDocuments: ResourceDocument[] = [
   },
   {
     id: 'flyer-streetprint',
-    title: 'StreetPrint — 2026 Product Flyer',
+    title: 'StreetPrint · 2026 Product Flyer',
     type: 'Flyer',
     product: 'streetprint',
     productName: 'StreetPrint',
@@ -962,7 +962,7 @@ export const resourceDocuments: ResourceDocument[] = [
   },
   {
     id: 'flyer-decomark',
-    title: 'DecoMark — 2026 Product Flyer',
+    title: 'DecoMark · 2026 Product Flyer',
     type: 'Flyer',
     product: 'decomark',
     productName: 'DecoMark',
@@ -977,7 +977,7 @@ export const resourceDocuments: ResourceDocument[] = [
   },
   {
     id: 'flyer-mmax',
-    title: 'MMAX — 2026 Product Flyer',
+    title: 'MMAX · 2026 Product Flyer',
     type: 'Flyer',
     product: 'mmax',
     productName: 'MMAX',
@@ -992,7 +992,7 @@ export const resourceDocuments: ResourceDocument[] = [
   },
   {
     id: 'flyer-streetbond-sr',
-    title: 'StreetBondSR — 2026 Product Flyer',
+    title: 'StreetBondSR · 2026 Product Flyer',
     type: 'Flyer',
     product: 'streetbond-sr',
     productName: 'StreetBondSR',
@@ -1007,7 +1007,7 @@ export const resourceDocuments: ResourceDocument[] = [
   },
   {
     id: 'flyer-duratherm',
-    title: 'DuraTherm — 2026 Product Flyer',
+    title: 'DuraTherm · 2026 Product Flyer',
     type: 'Flyer',
     product: 'duratherm',
     productName: 'DuraTherm',
@@ -1022,7 +1022,7 @@ export const resourceDocuments: ResourceDocument[] = [
   },
   {
     id: 'flyer-durashield',
-    title: 'DuraShield — 2026 Product Flyer',
+    title: 'DuraShield · 2026 Product Flyer',
     type: 'Flyer',
     product: 'durashield',
     productName: 'DuraShield',
@@ -1037,7 +1037,7 @@ export const resourceDocuments: ResourceDocument[] = [
   },
   {
     id: 'flyer-airmark',
-    title: 'AirMark — 2026 Product Flyer',
+    title: 'AirMark · 2026 Product Flyer',
     type: 'Flyer',
     product: 'airmark',
     productName: 'AirMark',
@@ -1052,7 +1052,7 @@ export const resourceDocuments: ResourceDocument[] = [
   },
   {
     id: 'flyer-premark',
-    title: 'PreMark — 2026 Product Flyer',
+    title: 'PreMark · 2026 Product Flyer',
     type: 'Flyer',
     product: 'premark',
     productName: 'PreMark',
@@ -1067,7 +1067,7 @@ export const resourceDocuments: ResourceDocument[] = [
   },
   {
     id: 'flyer-chipfill',
-    title: 'ChipFill — 2026 Product Flyer',
+    title: 'ChipFill · 2026 Product Flyer',
     type: 'Flyer',
     product: 'chipfill',
     productName: 'ChipFill',
@@ -1082,7 +1082,7 @@ export const resourceDocuments: ResourceDocument[] = [
   },
   {
     id: 'flyer-aggrefill',
-    title: 'AggreFill — 2026 Product Flyer',
+    title: 'AggreFill · 2026 Product Flyer',
     type: 'Flyer',
     product: 'aggrefill',
     productName: 'AggreFill',
@@ -1097,7 +1097,7 @@ export const resourceDocuments: ResourceDocument[] = [
   },
   {
     id: 'flyer-fast-patch',
-    title: 'Fast Patch DPR — 2026 Product Flyer',
+    title: 'Fast Patch DPR · 2026 Product Flyer',
     type: 'Flyer',
     product: 'fast-patch',
     productName: 'Fast Patch DPR',
@@ -1126,7 +1126,7 @@ export const resourceDocuments: ResourceDocument[] = [
 const DOC_OVERRIDES: Record<string, Partial<ResourceDocument>> = {
   // Superseded Aug 2026 by the GAF 2026 colour card (HUB co-branded edition).
   'sb-colour-001': {
-    title: 'StreetBond Colour Card — 2026 Edition',
+    title: 'StreetBond Colour Card · 2026 Edition',
     fileUrl: '/docs/StreetBond/StreetBond/StreetBond-Colour-Card-2026.pdf',
     fileSize: '0.2 MB',
     updatedDate: 'Aug 2026',

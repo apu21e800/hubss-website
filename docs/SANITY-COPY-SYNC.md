@@ -1,4 +1,4 @@
-# The Sanity override — why some copy changes don't show up
+# The Sanity override (why some copy changes don't show up)
 
 **Short version:** for products, applications and four pages, Sanity wins over
 the code. Editing `lib/products.ts` or a page's fallback text alone does not
@@ -22,12 +22,12 @@ the code (`lib/cms-merge.ts`, the `||` rule).
 | Field | Product pages + homepage grid | Application pages, `/applications`, homepage |
 |---|---|---|
 | `name` (the H1) | **Sanity wins** | **Sanity wins** |
-| `eyebrow` | **Sanity wins** | — |
+| `eyebrow` | **Sanity wins** | (no such field) |
 | `shortDesc` (the line under the H1) | **Sanity wins** | **Sanity wins** |
 | `description` ("How it works") | **Sanity wins** | **Sanity wins** |
-| `specs` (Full specification) | **Sanity wins** | — |
+| `specs` (Full specification) | **Sanity wins** | (no such field) |
 | SEO title and description | **Sanity wins** | **Sanity wins** |
-| `homepageBlurb` (homepage Systems card) | **Sanity wins** | — |
+| `homepageBlurb` (homepage Systems card) | **Sanity wins** | (no such field) |
 | hero photo and gallery (docs/IMAGE-WORKFLOW.md) | **Sanity wins** (folder fallback) | **Sanity wins** (folder fallback) |
 | related products/applications, catalogue spreads | code | code |
 

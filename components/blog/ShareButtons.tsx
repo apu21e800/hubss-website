@@ -83,8 +83,8 @@ export default function ShareButtons({ url, title }: ShareButtonsProps) {
       {/* Instagram — copy link to share in story or bio */}
       <button
         onClick={handleInstagramCopy}
-        aria-label="Share to Instagram — copy link, then paste into your story or bio"
-        title="Share to Instagram — copy link, then paste into your story or bio"
+        aria-label="Share to Instagram: copy link, then paste into your story or bio"
+        title="Share to Instagram: copy link, then paste into your story or bio"
         className={btnClass}
       >
         {igCopied ? (

@@ -29,7 +29,7 @@ export const richImageField = (
     title,
     type: "image",
     ...(group ? { group } : {}),
-    description: "Use the hotspot tool (crosshair icon) to mark the focal point — ensures the right area is visible on all screen sizes.",
+    description: "Use the hotspot tool (crosshair icon) to mark the focal point, so the right area is visible on all screen sizes.",
     options: { hotspot: true },
     fields: [
       defineField({

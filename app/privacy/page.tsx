@@ -5,48 +5,48 @@ import { buildMetadata } from "@/lib/seo";
 export const metadata = buildMetadata({
   title: "Privacy Policy",
   description:
-    "How HUB Surface Systems collects, uses, and protects your personal information under PIPEDA — Canada's Personal Information Protection and Electronic Documents Act.",
+    "How HUB Surface Systems collects, uses, and protects your personal information under PIPEDA, Canada's Personal Information Protection and Electronic Documents Act.",
   slug: "privacy",
 });
 
 const sections = [
   {
-    heading: "1. Information We Collect",
+    heading: "1. Information we collect",
     body: `When you use hubss.com or submit an inquiry, we may collect the following personal information:
 
-— Contact details: name, email address, phone number, company name, and job title
-— Project information: location, project type, and details you provide in form submissions
-— Usage data: pages visited, time on site, browser type, and referring URL (collected via cookies and analytics tools)
-— Communications: records of email correspondence or form submissions
+- Contact details: name, email address, phone number, company name, and job title
+- Project information: location, project type, and details you provide in form submissions
+- Usage data: pages visited, time on site, browser type, and referring URL (collected via cookies and analytics tools)
+- Communications: records of email correspondence or form submissions
 
 We collect this information only when you voluntarily provide it, or when it is automatically collected through your use of the site.`,
   },
   {
-    heading: "2. How We Use Your Information",
+    heading: "2. How we use your information",
     body: `We use collected information to:
 
-— Respond to your inquiries and project requests
-— Send requested product information, spec sheets, or follow-up materials
-— Schedule and confirm Lunch & Learn sessions
-— Improve our website and service offerings
-— Send relevant updates or product announcements (only with your consent)
-— Comply with legal obligations
+- Respond to your inquiries and project requests
+- Send requested product information, spec sheets, or follow-up materials
+- Schedule and confirm Lunch & Learn sessions
+- Improve our website and service offerings
+- Send relevant updates or product announcements (only with your consent)
+- Comply with legal obligations
 
 We do not sell, rent, or trade your personal information to third parties.`,
   },
   {
-    heading: "3. Legal Basis (PIPEDA)",
-    body: `HUB Surface Systems is a Canadian company subject to the Personal Information Protection and Electronic Documents Act (PIPEDA). We collect, use, and disclose personal information with your consent — either express (you fill out a form) or implied (you provide a business card at a trade show).
+    heading: "3. Legal basis (PIPEDA)",
+    body: `HUB Surface Systems is a Canadian company subject to the Personal Information Protection and Electronic Documents Act (PIPEDA). We collect, use, and disclose personal information with your consent, either express (you fill out a form) or implied (you provide a business card at a trade show).
 
 You may withdraw consent at any time by contacting us at the addresses below, subject to legal or contractual restrictions.`,
   },
   {
-    heading: "4. Third-Party Services",
+    heading: "4. Third-party services",
     body: `We use the following third-party services that may process your data:
 
-— Email delivery: Resend (email transmission for form submissions)
-— Analytics: Google Analytics (anonymized usage data; IP anonymization enabled)
-— Hosting: Vercel (site hosting; data processed in North America)
+- Email delivery: Resend (email transmission for form submissions)
+- Analytics: Google Analytics (anonymized usage data; IP anonymization enabled)
+- Hosting: Vercel (site hosting; data processed in North America)
 
 Each service operates under its own privacy policy. We choose partners who maintain data protection standards consistent with PIPEDA.`,
   },
@@ -54,38 +54,38 @@ Each service operates under its own privacy policy. We choose partners who maint
     heading: "5. Cookies",
     body: `hubss.com uses cookies to:
 
-— Remember your preferences and session state
-— Collect anonymized analytics data
-— Improve site performance
+- Remember your preferences and session state
+- Collect anonymized analytics data
+- Improve site performance
 
 You can disable cookies in your browser settings. Disabling cookies may affect some site functionality. We do not use cookies for advertising or cross-site tracking.`,
   },
   {
-    heading: "6. Data Retention",
+    heading: "6. Data retention",
     body: `We retain personal information for as long as necessary to fulfill the purposes described in this policy, or as required by law. Inquiry records are typically retained for 3 years from the date of last contact. You may request deletion of your data at any time.`,
   },
   {
-    heading: "7. Your Rights",
+    heading: "7. Your rights",
     body: `Under PIPEDA, you have the right to:
 
-— Access the personal information we hold about you
-— Correct inaccurate or incomplete information
-— Withdraw consent to our use of your information
-— Request deletion of your personal information
-— File a complaint with the Office of the Privacy Commissioner of Canada
+- Access the personal information we hold about you
+- Correct inaccurate or incomplete information
+- Withdraw consent to our use of your information
+- Request deletion of your personal information
+- File a complaint with the Office of the Privacy Commissioner of Canada
 
 To exercise any of these rights, contact us using the information below.`,
   },
   {
-    heading: "8. Contact Us",
+    heading: "8. Contact us",
     body: `For privacy-related inquiries, contact:
 
 HUB Surface Systems
 
-East Office — Milton, Ontario
+East Office · Milton, Ontario
 doug.bain@hubss.com | 416-540-9287
 
-West Office — Ladysmith, British Columbia
+West Office · Ladysmith, British Columbia
 cleve.stordy@hubss.com | 604-309-8212`,
   },
 ];

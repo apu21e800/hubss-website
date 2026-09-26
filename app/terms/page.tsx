@@ -5,17 +5,17 @@ import { buildMetadata } from "@/lib/seo";
 export const metadata = buildMetadata({
   title: "Terms of Use",
   description:
-    "Terms governing use of hubss.com — governing law, intellectual property, content licensing, and disclaimer of warranties for HUB Surface Systems' web properties.",
+    "Terms governing use of hubss.com: governing law, intellectual property, content licensing, and disclaimer of warranties for HUB Surface Systems' web properties.",
   slug: "terms",
 });
 
 const sections = [
   {
-    heading: "1. Acceptance of Terms",
+    heading: "1. Acceptance of terms",
     body: `By accessing or using hubss.com (the "Site"), you agree to be bound by these Terms of Use. If you do not agree, please do not use the Site. HUB Surface Systems reserves the right to modify these terms at any time. Continued use of the Site following any changes constitutes your acceptance of the revised terms.`,
   },
   {
-    heading: "2. Use of the Site",
+    heading: "2. Use of the site",
     body: `You may use this Site for lawful purposes only. You agree not to:
 
 - Use the Site in any way that violates applicable federal, provincial, or local laws
@@ -25,35 +25,35 @@ const sections = [
 - Reproduce, republish, or redistribute any content without prior written consent`,
   },
   {
-    heading: "3. Intellectual Property",
-    body: `All content on this Site — including text, images, product descriptions, logos, graphics, and design — is the property of HUB Surface Systems or its licensors and is protected by Canadian and international copyright law.
+    heading: "3. Intellectual property",
+    body: `All content on this Site (including text, images, product descriptions, logos, graphics, and design) is the property of HUB Surface Systems or its licensors and is protected by Canadian and international copyright law.
 
-Product names including TrafficPatterns, TrafficPatternsXD, StreetPrint, StreetBond, MMAX, DecoMark, DuraShield, DuraTherm, PreMark, and AirMark may be trademarks of their respective owners. Nothing on this Site grants any license or right to use any trademark without prior written permission.`,
+Product names including TrafficPatterns, TrafficPatternsXD, StreetPrint, StreetBond, MMAX, DecoMark, DuraShield, DuraTherm, PreMark, and AirMark may be trademarks of their respective owners. Nothing on this Site grants any licence or right to use any trademark without prior written permission.`,
   },
   {
-    heading: "4. Product Information",
+    heading: "4. Product information",
     body: `Product specifications, performance data, and application guidelines are provided for general information purposes. Actual performance may vary based on site conditions, climate, substrate type, application method, and maintenance practices.
 
 HUB Surface Systems recommends consulting with a regional representative before specifying products for any project. Specification data sheets from your regional office represent the authoritative source for product performance.`,
   },
   {
-    heading: "5. Disclaimer of Warranties",
+    heading: "5. Disclaimer of warranties",
     body: `This Site and its content are provided "as is" without warranty of any kind, express or implied, including but not limited to warranties of merchantability, fitness for a particular purpose, or non-infringement.
 
 HUB Surface Systems does not warrant that the Site will be error-free, uninterrupted, or free of viruses or other harmful components.`,
   },
   {
-    heading: "6. Limitation of Liability",
+    heading: "6. Limitation of liability",
     body: `To the maximum extent permitted by applicable law, HUB Surface Systems shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising out of or related to your use of this Site.
 
 Our total liability for any claim arising out of or relating to these Terms shall not exceed one hundred Canadian dollars (CAD $100).`,
   },
   {
-    heading: "7. Links to Third-Party Sites",
+    heading: "7. Links to third-party sites",
     body: `This Site may contain links to third-party websites for your convenience only. HUB Surface Systems does not endorse and is not responsible for the content, privacy practices, or accuracy of any third-party site. Accessing linked sites is at your own risk.`,
   },
   {
-    heading: "8. Governing Law",
+    heading: "8. Governing law",
     body: `These Terms of Use are governed by the laws of the Province of Ontario and the federal laws of Canada applicable therein, without regard to conflict of law principles.
 
 Any dispute arising out of or relating to these Terms shall be subject to the exclusive jurisdiction of the courts of Ontario, Canada.`,
@@ -64,10 +64,10 @@ Any dispute arising out of or relating to these Terms shall be subject to the ex
 
 HUB Surface Systems
 
-East Office — Milton, Ontario
+East Office · Milton, Ontario
 doug.bain@hubss.com | 416-540-9287
 
-West Office — Ladysmith, British Columbia
+West Office · Ladysmith, British Columbia
 cleve.stordy@hubss.com | 604-309-8212`,
   },
 ];

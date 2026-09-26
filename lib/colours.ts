@@ -35,7 +35,7 @@ export interface ColourFamily {
 
 const EMA_2026: ColourFamily = {
   key: "ema-2026",
-  name: "EMA Colours — 2026 Colour Card",
+  name: "EMA Colours · 2026 Colour Card",
   blurb: "All 63 epoxy-modified acrylic colours, each with its published solar reflectance. Full Pantone custom matching available.",
   colours: [
       { name: "Safety Red", hex: "#b32a22", sr: 0.46 },
@@ -107,7 +107,7 @@ const EMA_2026: ColourFamily = {
 const SR_SERIES: ColourFamily = {
   key: "sr-series",
   name: "SR Series",
-  blurb: "The solar-reflective colourants from the 2026 card — engineered to reject heat and qualify surfaces for LEED Heat Island Reduction credits.",
+  blurb: "The solar-reflective colourants from the 2026 card, engineered to reject heat and qualify surfaces for LEED Heat Island Reduction credits.",
   colours: [
       { name: "SR Paprika", hex: "#a04438", sr: 0.36 },
       { name: "SR Mustard", hex: "#c87f3a", sr: 0.41 },
@@ -137,7 +137,7 @@ const DURASHIELD: ColourFamily = {
 const TP_STANDARD: ColourFamily = {
   key: "tp-standard",
   name: "Standard",
-  blurb: "The core preformed-thermoplastic range — earth and masonry tones matched to the closest PMS reference.",
+  blurb: "The core preformed-thermoplastic range: earth and masonry tones matched to the closest PMS reference.",
   colours: [
       { name: "Black", hex: "#000000" },
       { name: "Salmon", hex: "#ff8766", pms: "PMS 486C" },
@@ -267,7 +267,7 @@ const SECTION_META: Record<string, ColourSectionMeta> = {
   },
   streetbondsr: {
     heading: "Solar-reflective colours.",
-    intro: "The SR series from the 2026 colour card — high-reflectance colourants for cooler surfaces and LEED Heat Island Reduction credits.",
+    intro: "The SR series from the 2026 colour card: high-reflectance colourants for cooler surfaces and LEED Heat Island Reduction credits.",
     downloadHref: "/docs/StreetBond/StreetBond/StreetBond-Colour-Card-2026.pdf",
     downloadLabel: "Download the 2026 colour card (PDF)",
   },

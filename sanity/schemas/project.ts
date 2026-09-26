@@ -52,7 +52,7 @@ export default defineType({
       rows: 2,
       group: "details",
       description: "A single sentence that summarises what was done. Shown in the map popup (e.g. 'Stamped asphalt crosswalk program across 12 intersections').",
-      validation: (r) => r.max(200).warning("Keep the excerpt under 200 characters — it appears in tight spaces"),
+      validation: (r) => r.max(200).warning("Keep the excerpt under 200 characters: it appears in tight spaces"),
     }),
     defineField({
       name: "problem",
@@ -126,11 +126,11 @@ export default defineType({
     richImageField("image", "Project image", false, "media"),
     defineField({
       name: "imageUrl",
-      title: "Image URL (legacy — read only)",
+      title: "Image URL (legacy, read only)",
       type: "string",
       group: "media",
       readOnly: true,
-      description: "Auto-populated during migration. If this shows '/images/projects/_placeholder.svg', this map pin still needs a real photo — upload one in the Image field above, then this field will clear automatically.",
+      description: "Auto-populated during migration. If this shows '/images/projects/_placeholder.svg', this map pin still needs a real photo. Upload one in the Image field above, then this field will clear automatically.",
     }),
 
     // ── Related ──────────────────────────────────────────────────────────────

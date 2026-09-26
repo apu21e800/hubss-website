@@ -8,7 +8,7 @@ import type { ResourceDocument } from "@/lib/resource-documents";
 import PdfPreviewModal from "@/components/ui/PdfPreviewModal";
 import { ideaBook } from "@/lib/catalogue";
 
-const TABS = ["By Product", "By Document Type"] as const;
+const TABS = ["By product", "By document type"] as const;
 type TabType = (typeof TABS)[number];
 
 // Display-order for type chips: most-relevant types first, then alphabetical.
@@ -33,10 +33,10 @@ const TYPE_PRIORITY = [
 // docType stays untouched — a bucket chip simply matches every type it
 // contains, and each row still prints its precise type as the eyebrow.
 const TYPE_BUCKETS: { label: string; types: string[] }[] = [
-  { label: "Spec Sheets", types: ["Spec Sheet"] },
-  { label: "Data Sheets", types: ["Data Sheet", "Safety Data Sheet"] },
-  { label: "Guides & Manuals", types: ["Colour Guide", "Design Manual", "Installation Guide", "Guide"] },
-  { label: "Brochures & Flyers", types: ["Brochure", "Flyer", "Idea Book"] },
+  { label: "Spec sheets", types: ["Spec Sheet"] },
+  { label: "Data sheets", types: ["Data Sheet", "Safety Data Sheet"] },
+  { label: "Guides & manuals", types: ["Colour Guide", "Design Manual", "Installation Guide", "Guide"] },
+  { label: "Brochures & flyers", types: ["Brochure", "Flyer", "Idea Book"] },
   { label: "Other", types: ["Certificate", "Other"] },
 ];
 const BUCKET_BY_TYPE: Record<string, string> = {};
@@ -44,7 +44,7 @@ for (const b of TYPE_BUCKETS) for (const t of b.types) BUCKET_BY_TYPE[t] = b.lab
 const bucketFor = (t: string) => BUCKET_BY_TYPE[t] ?? "Other";
 
 const PRODUCTS = [
-  { label: "All Products", value: "all" },
+  { label: "All products", value: "all" },
   { label: "TrafficPatterns", value: "traffic-patterns" },
   { label: "TrafficPatternsXD", value: "traffic-patterns-xd" },
   { label: "StreetPrint", value: "streetprint" },
@@ -329,7 +329,7 @@ export default function ResourcesClient({
 }) {
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
-  const [activeTab, setActiveTab] = useState<TabType>("By Product");
+  const [activeTab, setActiveTab] = useState<TabType>("By product");
   const [productFilter, setProductFilter] = useState("all");
   const [subcategoryFilter, setSubcategoryFilter] = useState("all");
   // selectedTypes: empty Set = no type filter (shows all). Multi-select on
@@ -407,11 +407,11 @@ export default function ResourcesClient({
       }
       if (featuredOnly && doc.featured !== true) return false;
       if (newOnly && doc.isNew !== true) return false;
-      if (activeTab === "By Product" && productFilter !== "all") {
+      if (activeTab === "By product" && productFilter !== "all") {
         if (doc.product !== productFilter) return false;
       }
       if (
-        activeTab === "By Product" &&
+        activeTab === "By product" &&
         productFilter === "streetbond" &&
         subcategoryFilter !== "all"
       ) {
@@ -432,8 +432,8 @@ export default function ResourcesClient({
     featuredOnly ||
     newOnly ||
     selectedTypes.size > 0 ||
-    (activeTab === "By Product" && productFilter !== "all") ||
-    (activeTab === "By Product" && subcategoryFilter !== "all");
+    (activeTab === "By product" && productFilter !== "all") ||
+    (activeTab === "By product" && subcategoryFilter !== "all");
 
   function clearAllFilters() {
     setSearch("");
@@ -505,7 +505,7 @@ export default function ResourcesClient({
           />
           <input
             type="text"
-            placeholder="Search documents..."
+            placeholder="Search documents…"
             aria-label="Search documents"
             value={search}
             onChange={(e) => {
@@ -527,7 +527,7 @@ export default function ResourcesClient({
           )}
         </div>
 
-        {activeTab === "By Product" && (
+        {activeTab === "By product" && (
           <div className="relative">
             <select
               value={productFilter}
@@ -591,7 +591,7 @@ export default function ResourcesClient({
             fill={newOnly ? "currentColor" : "none"}
             strokeWidth={2}
           />
-          <span>New Documents</span>
+          <span>New documents</span>
         </button>
         <button
           onClick={() => {
@@ -659,13 +659,13 @@ export default function ResourcesClient({
             }}
             className="text-xs text-[var(--accent-text)] hover:text-[var(--accent-soft-text)] transition-colors px-2 min-h-[44px]"
           >
-            clear types
+            Clear types
           </button>
         )}
       </div>
 
       {/* ── StreetBond Subcategory Pills  */}
-      {activeTab === "By Product" && productFilter === "streetbond" && (
+      {activeTab === "By product" && productFilter === "streetbond" && (
         <div className="flex flex-wrap gap-2 mb-6">
           {STREETBOND_SUBCATEGORIES.map((sc) => (
             <button
@@ -700,7 +700,7 @@ export default function ResourcesClient({
       {/* ── Document Grid  */}
       {visible.length > 0 ? (
         <>
-          {activeTab === "By Product" &&
+          {activeTab === "By product" &&
           productFilter === "all" &&
           selectedTypes.size === 0 &&
           !featuredOnly &&

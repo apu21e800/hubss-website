@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: { params: Promise<{ page: str
     description: alt,
     alternates: { canonical: `https://hubss.com${ideaBook.href}/${n}` },
     openGraph: {
-      title: `${ideaBook.title} - page ${n}`,
+      title: `${ideaBook.title}, page ${n}`,
       description: alt,
       url: `https://hubss.com${ideaBook.href}/${n}`,
       images: [{ url: `https://hubss.com${cataloguePageUrl(n, big)}`, width: big, height: Math.round(big / catalogue.aspect) }],

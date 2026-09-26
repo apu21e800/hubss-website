@@ -7,6 +7,7 @@
  *   row    every `imageUrl: "…"` in lib/products.ts and lib/applications.ts
  *   post   every FEATURED_POSTS image (lib/nav-featured-posts.mjs)
  *   cover  FEATURED_POSTS[0].image
+ *   panel  CHROME_PANELS (lib/chrome-images.mjs), the menu column photos
  *   moose / wheel / logo   CHROME_MARKS (lib/chrome-images.mjs)
  * and writes each family's widths as WebP q75 — the optimiser's own quality —
  * to /public/images/chrome/<family>/<stem>-<width>.webp. Square families are
@@ -40,7 +41,7 @@ import { createHash } from "node:crypto";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import sharp from "sharp";
-import { CHROME_FAMILIES, CHROME_MARKS, chromeStem, chromeUrl } from "../lib/chrome-images.mjs";
+import { CHROME_FAMILIES, CHROME_MARKS, CHROME_PANELS, chromeStem, chromeUrl } from "../lib/chrome-images.mjs";
 import { FEATURED_POSTS } from "../lib/nav-featured-posts.mjs";
 
 const ROOT = process.cwd();
@@ -81,6 +82,7 @@ function collectJobs() {
   }
   for (const post of FEATURED_POSTS) jobs.push({ family: "post", src: post.image });
   if (FEATURED_POSTS[0]) jobs.push({ family: "cover", src: FEATURED_POSTS[0].image });
+  for (const src of Object.values(CHROME_PANELS)) jobs.push({ family: "panel", src });
   for (const [family, src] of Object.entries(CHROME_MARKS)) jobs.push({ family, src });
 
   // One job per output; two sources that flatten to one stem would overwrite
@@ -135,14 +137,17 @@ async function bake(key, { family, src }, previous) {
   const { width: srcW, height: srcH } = upright.info;
 
   let region = { left: 0, top: 0, width: srcW, height: srcH };
-  if (spec.square) {
-    const side = Math.min(srcW, srcH);
+  const aspect = spec.square ? 1 : spec.aspect;
+  if (aspect) {
+    // The largest box of that shape that fits, placed at `position`.
+    const w = Math.min(srcW, Math.round(srcH * aspect));
+    const h = Math.min(srcH, Math.round(w / aspect));
     const [px, py] = spec.position;
     region = {
-      left: Math.round((srcW - side) * px),
-      top: Math.round((srcH - side) * py),
-      width: side,
-      height: side,
+      left: Math.round((srcW - w) * px),
+      top: Math.round((srcH - h) * py),
+      width: w,
+      height: h,
     };
   }
 
@@ -158,7 +163,7 @@ async function bake(key, { family, src }, previous) {
       .toFile(outputs[i]);
     actual.push(outW === w ? `${w}` : `${w}(=${outW})`);
   }
-  log(`${key}: ${srcW}x${srcH}${spec.square ? ` -> ${region.width}² crop` : ""} -> ${actual.join("/")}`);
+  log(`${key}: ${srcW}x${srcH}${aspect ? ` -> ${region.width}x${region.height} crop` : ""} -> ${actual.join("/")}`);
   return { skipped: false, entry: { src, hash } };
 }
 

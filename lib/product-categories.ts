@@ -22,6 +22,14 @@ export type ProductCategory = {
    * each one. Do not add a claim here that no member's page makes.
    */
   intro: string;
+  /**
+   * The menu's four-word version of `intro`, under the family name in the
+   * Products panel and the phone drawer (Vern, 26 Sep 2026: names alone read
+   * as a directory listing; a family name like "Preformed Thermoplastics"
+   * earns one plain line saying what the family does). Same sources as
+   * `intro`; no claim that isn't already in it.
+   */
+  menuNote: string;
 };
 
 export const PRODUCT_CATEGORIES: ProductCategory[] = [
@@ -34,6 +42,7 @@ export const PRODUCT_CATEGORIES: ProductCategory[] = [
     // own line in lib/products.ts; the book does not cover AirMark.
     intro:
       "Thermoplastic, heat-applied to the pavement — decorative crosswalks, custom graphics, regulatory symbols, flush inlaid markings and airfield markings.",
+    menuNote: "Heat-applied markings and graphics",
   },
   {
     label: "Coatings",
@@ -46,6 +55,7 @@ export const PRODUCT_CATEGORIES: ProductCategory[] = [
     // "Preserves and protects asphalt").
     intro:
       "Colour, reflectance and protection for pavement — StreetBond performance coatings, solar-reflective StreetBondSR, MMA lane and area markings, and DuraShield maintenance coating.",
+    menuNote: "Colour, reflectance and protection",
   },
   {
     label: "Stamped Asphalt",
@@ -57,6 +67,7 @@ export const PRODUCT_CATEGORIES: ProductCategory[] = [
     // existing asphalt, flush with "nothing for a plow blade to catch".
     intro:
       "The original stamped asphalt system. Patterns are stamped into new or existing asphalt and coloured with StreetBond — flush, with nothing for a plow blade to catch.",
+    menuNote: "Patterns stamped into asphalt",
   },
   {
     // "Asphalt & Concrete Repair" (Doug, 25 Sep 2026): all three members list
@@ -70,5 +81,6 @@ export const PRODUCT_CATEGORIES: ProductCategory[] = [
     // torch), "no compaction" (Fast Patch is compacted), a single cure time
     // (they differ) or "cold-mix" (ChipFill is heat-activated).
     intro: "Permanent pothole and pavement repair for asphalt and concrete, deployable year-round.",
+    menuNote: "Permanent pothole and pavement repair",
   },
 ];

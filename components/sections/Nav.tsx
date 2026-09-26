@@ -11,6 +11,8 @@ import { ideaBook } from "@/lib/catalogue";
 import { applications } from "@/lib/applications";
 import { PRODUCT_CATEGORIES } from "@/lib/product-categories";
 import ThemeToggle from "@/components/ui/ThemeToggle";
+import ChromeImg from "@/components/ui/ChromeImg";
+import { CHROME_PANELS } from "@/lib/chrome-images.mjs";
 // The menus draw no photographs since 25 Sep 2026 (Doug's round: one job per
 // panel, names first). The two header logos are SVGs on next/image marked
 // `unoptimized`; nothing here goes through /_next/image.
@@ -52,14 +54,17 @@ const PLAIN_LINKS = [
 // PRODUCT_CATEGORIES lives in lib/product-categories.ts, shared with the
 // /products index so the menu and the page can never name a family twice.
 //
-// MENU PRINCIPLES (Doug's round, 25 Sep 2026): one job per panel — show where
-// you can go, grouped clearly. Names first; the family heading already says
-// what its members are, so the per-product taglines went ("MMA resin lane
-// coating" under MMAX was the one real loss; the Coatings heading and the
-// product page carry it). One "View all" per panel. No promotions, no
-// repeated calls to action (the header already carries Lunch & Learn), no
-// article teaser. Same family names as /products, the product pages and the
-// Idea Book. Each desktop panel under 60 words; the phone drawer under 120.
+// MENU PRINCIPLES (Doug's round, 25 Sep 2026; balanced 26 Sep): one job per
+// panel — show where you can go, grouped clearly. Names are the content; the
+// per-product taglines went ("MMA resin lane coating" under MMAX was the one
+// real loss; the Coatings heading and the product page carry it). What each
+// family or group gets instead is one photograph, its lead member's, and a
+// product family gets a four-word note (lib/product-categories.ts menuNote),
+// because a panel of bare names read as a directory listing. One "View all"
+// per panel. No promotions, no repeated calls to action (the header already
+// carries Lunch & Learn), no article teaser. Same family names as /products,
+// the product pages and the Idea Book. Each desktop panel under 60 words;
+// the phone drawer under 120.
 
 // ── Application groupings ─────────────────────────────────────────────
 // Four groups a specifier would recognise, each named for the place, not the
@@ -99,16 +104,45 @@ function MegaShell({ children }: { children: React.ReactNode }) {
 
 const ACCENT = "var(--accent-text)";  // small-text accent (WCAG-safe on dark surfaces)
 
-// ── Directory column — one family or group: heading, names ────────────
-function MenuColumn({ label, items }: { label: string; items: { href: string; name: string }[] }) {
+// ── Directory column — one family or group: a photo, a heading, names ──
+// BALANCE (Vern, 26 Sep 2026): the names-only panels of 25 Sep read as a
+// directory listing — "we went from one extreme to another". Each column now
+// opens with one photograph the width of the column (CHROME_PANELS), and a
+// product family carries its four-word note. Four pictures a panel, not
+// fourteen; the names are still the content, and the panels stay under 60 words.
+function MenuColumn({
+  label, note, image, imageAlt, items,
+}: {
+  label: string;
+  note?: string;
+  image?: string;
+  imageAlt?: string;
+  items: { href: string; name: string }[];
+}) {
   return (
     <div>
-      <p
-        className="text-[10px] font-bold tracking-[0.22em] uppercase mb-3 pb-2.5"
-        style={{ color: ACCENT, borderBottom: "1px solid rgba(249,115,22,0.18)" }}
-      >
-        {label}
-      </p>
+      {image && (
+        <ChromeImg
+          family="panel"
+          src={image}
+          alt={imageAlt ?? ""}
+          sizes="(min-width: 1536px) 300px, (min-width: 1280px) 22vw, 40vw"
+          width={640}
+          height={320}
+          className="mb-4 aspect-[2/1] w-full rounded-xl object-cover"
+          style={{ border: "1px solid var(--ink-10)" }}
+        />
+      )}
+      <div className="mb-3 pb-3" style={{ borderBottom: "1px solid rgba(249,115,22,0.18)" }}>
+        <p className="text-[10px] font-bold tracking-[0.22em] uppercase" style={{ color: ACCENT }}>
+          {label}
+        </p>
+        {note && (
+          <p className="mt-1 text-[12px] leading-snug" style={{ color: "var(--ink-55)" }}>
+            {note}
+          </p>
+        )}
+      </div>
       <ul className="space-y-0.5">
         {items.map((it) => (
           <li key={it.href}>
@@ -149,20 +183,44 @@ function MenuViewAll({ href, label }: { href: string; label: string }) {
   );
 }
 
-// ── Products panel — four families, names only ────────────────────────
+// The picture a family or group opens with: CHROME_PANELS in
+// lib/chrome-images.mjs, keyed by the label the menu prints, so the baker and
+// the menu read one list and nothing here can ask for a file nobody baked.
+// Plain <img srcset> over baked WebPs, never /_next/image.
+function panelPhoto(label: string) {
+  const image = (CHROME_PANELS as Record<string, string>)[label];
+  return { image, imageAlt: image ? `${label}` : "" };
+}
+
+function productFamily(cat: (typeof PRODUCT_CATEGORIES)[number]) {
+  const items = cat.slugs.flatMap((sl) => {
+    const p = products.find((x) => x.slug === sl);
+    return p ? [{ href: `/products/${p.slug}`, name: p.name }] : [];
+  });
+  // The one structural extra a column may carry: a real secondary
+  // destination (the pattern gallery under Stamped Asphalt).
+  if (cat.secondary) items.push({ href: cat.secondary.href, name: cat.secondary.label });
+  return { items, ...panelPhoto(cat.label) };
+}
+
+function applicationGroup(group: (typeof APPLICATION_GROUPS)[number]) {
+  const items = group.slugs.flatMap((sl) => {
+    const a = applications.find((x) => x.slug === sl);
+    return a ? [{ href: `/applications/${a.slug}`, name: a.name }] : [];
+  });
+  return { items, ...panelPhoto(group.label) };
+}
+
+// ── Products panel — four families: photo, name, note, members ────────
 function ProductsMegaMenu() {
   return (
     <MegaShell>
-      <div className="grid grid-cols-2 xl:grid-cols-4 gap-x-12 xl:gap-x-16 gap-y-8">
+      <div className="grid grid-cols-2 xl:grid-cols-4 gap-x-12 xl:gap-x-16 gap-y-10">
         {PRODUCT_CATEGORIES.map((cat) => {
-          const items = cat.slugs.flatMap((sl) => {
-            const p = products.find((x) => x.slug === sl);
-            return p ? [{ href: `/products/${p.slug}`, name: p.name }] : [];
-          });
-          // The one structural extra a column may carry: a real secondary
-          // destination (the pattern gallery under Stamped Asphalt).
-          if (cat.secondary) items.push({ href: cat.secondary.href, name: cat.secondary.label });
-          return <MenuColumn key={cat.label} label={cat.label} items={items} />;
+          const { items, image, imageAlt } = productFamily(cat);
+          return (
+            <MenuColumn key={cat.label} label={cat.label} note={cat.menuNote} image={image} imageAlt={imageAlt} items={items} />
+          );
         })}
       </div>
       <MenuViewAll href="/products" label="View all products" />
@@ -170,17 +228,16 @@ function ProductsMegaMenu() {
   );
 }
 
-// ── Applications panel — four groups, names only ──────────────────────
+// ── Applications panel — four groups: photo, name, members ────────────
+// The group names say where you are (Streets & Safety, Residential), so
+// they carry a photo but no note.
 function ApplicationsMegaMenu() {
   return (
     <MegaShell>
-      <div className="grid grid-cols-2 xl:grid-cols-4 gap-x-12 xl:gap-x-16 gap-y-8">
+      <div className="grid grid-cols-2 xl:grid-cols-4 gap-x-12 xl:gap-x-16 gap-y-10">
         {APPLICATION_GROUPS.map((group) => {
-          const items = group.slugs.flatMap((sl) => {
-            const a = applications.find((x) => x.slug === sl);
-            return a ? [{ href: `/applications/${a.slug}`, name: a.name }] : [];
-          });
-          return <MenuColumn key={group.label} label={group.label} items={items} />;
+          const { items, image, imageAlt } = applicationGroup(group);
+          return <MenuColumn key={group.label} label={group.label} image={image} imageAlt={imageAlt} items={items} />;
         })}
       </div>
       <MenuViewAll href="/applications" label="View all applications" />
@@ -189,9 +246,10 @@ function ApplicationsMegaMenu() {
 }
 
 // ── Mobile overlay ───────────────────────────────────────────────────
-// Names only, grouped the same way as the desktop panels, no thumbnails and
-// no taglines: the drawer is the phone's site map, and it used to run to
-// 262 words and thirty-four photographs (Doug's round, 25 Sep 2026).
+// The phone's site map, grouped the same way as the desktop panels. Each
+// family or group is a row with one photograph that drops its members open;
+// it used to be 262 words and thirty-four photographs (Doug's round, 25 Sep
+// 2026), then a plain list of thirty-two names (26 Sep). This is the middle.
 
 // Stagger variants — used on the content wrapper so child sections animate in sequence
 const menuContainerVariants: Variants = {
@@ -215,30 +273,87 @@ function MobileMenuLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
-// Thin divider between category groups
-function MobileGroupDivider({ label }: { label: string }) {
+// One family or group in the drawer: a row you can open. Photo, name, the
+// family's note, a chevron; its members drop down underneath. Closed by
+// default, so the drawer is eight rows of pictures instead of thirty-two
+// names (Vern, 26 Sep 2026: the plain list was "the other extreme").
+function MobileFamily({
+  label, note, image, imageAlt, items, open, onToggle, onClose,
+}: {
+  label: string;
+  note?: string;
+  image?: string;
+  imageAlt?: string;
+  items: { href: string; name: string }[];
+  open: boolean;
+  onToggle: () => void;
+  onClose: () => void;
+}) {
+  const id = `drawer-${label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
   return (
-    <div className="flex items-center gap-3 px-1 pt-5 pb-2">
-      <span className="text-[9px] font-bold tracking-[0.22em] uppercase" style={{ color: "var(--ink-50)" }}>{label}</span>
-      <div className="flex-1 h-px" style={{ background: "var(--fill-subtle)" }} />
+    <div style={{ borderBottom: "1px solid var(--ink-05)" }}>
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-expanded={open}
+        aria-controls={id}
+        className="flex w-full items-center gap-3.5 px-1 py-3 text-left active:opacity-70 transition-opacity"
+      >
+        {image && (
+          <ChromeImg
+            family="panel"
+            src={image}
+            alt={imageAlt ?? ""}
+            sizes="96px"
+            width={96}
+            height={48}
+            className="h-12 w-24 flex-shrink-0 rounded-lg object-cover"
+            style={{ border: "1px solid var(--ink-10)" }}
+          />
+        )}
+        <span className="min-w-0 flex-1">
+          <span className="block text-[15px] font-semibold leading-tight" style={{ color: "var(--text-primary)" }}>{label}</span>
+          {note && <span className="mt-0.5 block text-[12px] leading-snug" style={{ color: "var(--ink-50)" }}>{note}</span>}
+        </span>
+        <svg
+          className="w-4 h-4 flex-shrink-0 transition-transform duration-200"
+          style={{ color: "var(--ink-30)", transform: open ? "rotate(90deg)" : "none" }}
+          fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 18l6-6-6-6" />
+        </svg>
+      </button>
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            id={id}
+            key="members"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+            className="overflow-hidden"
+          >
+            <ul className="pb-2 pl-[110px]">
+              {items.map((it) => (
+                <li key={it.href}>
+                  <Link
+                    href={it.href}
+                    onClick={onClose}
+                    className="flex items-center justify-between gap-4 py-2.5 pr-1 active:opacity-60 transition-opacity"
+                  >
+                    <span className="text-[15px] leading-tight" style={{ color: "var(--ink-80)" }}>{it.name}</span>
+                    <svg className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "var(--ink-20)" }} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 18l6-6-6-6" />
+                    </svg>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
-  );
-}
-
-// One destination in the drawer: name, chevron, a full-width tap target.
-function MobileNavRow({ href, name, onClose }: { href: string; name: string; onClose: () => void }) {
-  return (
-    <Link
-      href={href}
-      onClick={onClose}
-      className="flex items-center justify-between gap-4 px-1 py-3 rounded-lg active:opacity-60 transition-opacity"
-      style={{ borderBottom: "1px solid var(--ink-05)" }}
-    >
-      <span className="text-[15px] font-[500] leading-tight" style={{ color: "var(--text-primary)" }}>{name}</span>
-      <svg className="flex-shrink-0 w-4 h-4" style={{ color: "var(--ink-20)" }} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 18l6-6-6-6" />
-      </svg>
-    </Link>
   );
 }
 
@@ -262,6 +377,9 @@ function MobileViewAll({ href, label, onClose }: { href: string; label: string; 
 // ── Premium full-screen mobile menu ─────────────────────────────────────
 function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onClose: () => void; onSearchOpen: () => void }) {
   const overlayRef = useRef<HTMLDivElement>(null);
+  // Which family or group is dropped open; one at a time, none on open.
+  const [openFamily, setOpenFamily] = useState<string | null>(null);
+  useEffect(() => { if (!isOpen) setOpenFamily(null); }, [isOpen]);
 
   // iOS-safe scroll lock: fixes body at scroll position, restores on close
   useEffect(() => {
@@ -400,19 +518,22 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                   <MobileMenuLabel>Products</MobileMenuLabel>
                   <MobileViewAll href="/products" label="All" onClose={onClose} />
                 </div>
-                {PRODUCT_CATEGORIES.map((cat) => (
-                  <div key={cat.label}>
-                    <MobileGroupDivider label={cat.label} />
-                    {cat.slugs.map((slug) => {
-                      const p = products.find((x) => x.slug === slug);
-                      if (!p) return null;
-                      return <MobileNavRow key={slug} href={`/products/${slug}`} name={p.name} onClose={onClose} />;
-                    })}
-                    {cat.secondary && (
-                      <MobileNavRow href={cat.secondary.href} name={cat.secondary.label} onClose={onClose} />
-                    )}
-                  </div>
-                ))}
+                {PRODUCT_CATEGORIES.map((cat) => {
+                  const { items, image, imageAlt } = productFamily(cat);
+                  return (
+                    <MobileFamily
+                      key={cat.label}
+                      label={cat.label}
+                      note={cat.menuNote}
+                      image={image}
+                      imageAlt={imageAlt}
+                      items={items}
+                      open={openFamily === cat.label}
+                      onToggle={() => setOpenFamily(openFamily === cat.label ? null : cat.label)}
+                      onClose={onClose}
+                    />
+                  );
+                })}
               </motion.div>
 
               {/* ── Applications ──────────────────────────────────── */}
@@ -421,16 +542,21 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                   <MobileMenuLabel>Applications</MobileMenuLabel>
                   <MobileViewAll href="/applications" label="All" onClose={onClose} />
                 </div>
-                {APPLICATION_GROUPS.map((group) => (
-                  <div key={group.label}>
-                    <MobileGroupDivider label={group.label} />
-                    {group.slugs.map((slug) => {
-                      const a = applications.find((x) => x.slug === slug);
-                      if (!a) return null;
-                      return <MobileNavRow key={slug} href={`/applications/${slug}`} name={a.name} onClose={onClose} />;
-                    })}
-                  </div>
-                ))}
+                {APPLICATION_GROUPS.map((group) => {
+                  const { items, image, imageAlt } = applicationGroup(group);
+                  return (
+                    <MobileFamily
+                      key={group.label}
+                      label={group.label}
+                      image={image}
+                      imageAlt={imageAlt}
+                      items={items}
+                      open={openFamily === group.label}
+                      onToggle={() => setOpenFamily(openFamily === group.label ? null : group.label)}
+                      onClose={onClose}
+                    />
+                  );
+                })}
               </motion.div>
 
               {/* ── Everything else, as a plain list ──────────────── */}

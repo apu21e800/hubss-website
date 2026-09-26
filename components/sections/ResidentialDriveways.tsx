@@ -43,7 +43,7 @@ export default function ResidentialDriveways() {
               style={{ color: "var(--text-secondary)" }}
             >
               The same StreetPrint patterns specified for Toronto&apos;s streetscapes, applied to
-              residential driveways. 20&#8209;year service life, 1–2 day installation.
+              residential driveways. 10–20 year service life, 1–2 day installation.
             </p>
 
             {/* Benefit bullets */}

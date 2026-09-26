@@ -184,7 +184,7 @@ const curatedProjects: MapProject[] = [
     problem:
       "Vaughan's arterial crosswalks see some of York Region's heaviest vehicle counts. Standard paint and thermoplastic markings were failing within one to two seasons under snowplow contact.",
     solution:
-      "TrafficPatternsXD's virtually-flush, aggregate-reinforced structure installs as an 8+ year surface. The material resists snowplow blades, retains retroreflectivity, and requires no annual maintenance cycle.",
+      "TrafficPatternsXD's virtually-flush, aggregate-reinforced structure installs as a 10+ year surface. The material resists snowplow blades, retains retroreflectivity, and requires no annual maintenance cycle.",
   },
 
   // ── British Columbia ────────────────────────────────────────────────────────

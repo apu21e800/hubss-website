@@ -20,6 +20,21 @@
  * would compete with the first. "Runway markings" (140/mo) is the wrong
  * search: AirMark is for taxiways and aprons, not runways.
  *
+ * Added 26 Sep 2026 from a second Semrush (Canada) pass, same rules:
+ *
+ *   bike box                       720/mo  KD 15   (MMAX + PreMark: the book's
+ *                                                   bike-lane spread, p50)
+ *   traffic calming measures       140/mo  KD 27   (+ "speed table", 110/mo KD 21)
+ *   asphalt driveway resurfacing   110/mo  KD 15
+ *
+ * and two real installations from the homepage map that have no write-up yet
+ * (York Region VIVA, Kelowna's crosswalk network). Their briefs say what Doug
+ * has to add before marking them Ready; the drafter only knows what the brief
+ * and the Idea Book tell it. Skipped: "pavement markings" (260/mo) competes
+ * with the thermoplastic-pavement-markings post; "parking lot painting"
+ * (590/mo) with the line-painting item above; "driveway coating" (70/mo,
+ * KD 35) is the sealing item under another name.
+ *
  * The first two are marked Ready, so the Tuesday drafter has work; the rest
  * wait for Vern or Doug to mark them. Each item is created once, with a fixed
  * id, and never overwritten: a re-run leaves Studio edits alone.
@@ -124,6 +139,63 @@ const SEEDS: Seed[] = [
     systems: ["traffic-patterns-xd", "duratherm", "streetprint"],
     applications: ["crosswalks", "traffic-calming"],
     brief: "A raised crosswalk slows traffic; its surface is what makes it read as a crossing. Explain how the surface choice (preformed thermoplastic, inlaid thermoplastic, stamped asphalt) affects visibility and winter maintenance, from the catalogue. No crash statistics.",
+  },
+
+  // ── 26 Sep 2026 ──────────────────────────────────────────────────────────
+  {
+    key: "bike-box",
+    title: "Bike boxes: what they are, and how the green stays green",
+    status: "idea",
+    priority: 2,
+    searchPhrase: "bike box",
+    type: "Guide",
+    systems: ["mmax", "premark"],
+    applications: ["bike-lanes", "regulatory-markings"],
+    brief: "A bike box is the coloured advance stop area for cyclists at a signalized intersection. Explain plainly what it does for a cyclist and a driver, then how the coloured surface is built to last: MMAX for the green area and PreMark for the pre-cut bike symbol, exactly as the Idea Book's bike-lane spread specifies (page 50), with the open-to-traffic time and the colour facts from the book. Audience: municipal engineers and active-transportation planners. No collision statistics, no claims about other cities' programs.",
+  },
+  {
+    key: "traffic-calming-measures",
+    title: "Traffic calming measures that start with the surface",
+    status: "idea",
+    priority: 2,
+    searchPhrase: "traffic calming measures",
+    type: "Guide",
+    systems: ["streetprint", "streetbond", "traffic-patterns-xd"],
+    applications: ["traffic-calming", "crosswalks"],
+    brief: "Cover the usual measures a municipality weighs (speed tables, raised crossings, curb extensions, narrowed lanes, gateway treatments) in plain words, then show where the surface does the work: the Idea Book's traffic-calming spread (page 54) — StreetPrint for traffic calming device treatments, StreetBond for sidewalks, pathways and plazas, TrafficPatternsXD for durable road surface treatments. Use 'speed table' naturally as a second phrase. Link the raised-crosswalk post if it exists by then. No speed-reduction percentages.",
+  },
+  {
+    key: "asphalt-driveway-resurfacing",
+    title: "Resurfacing an asphalt driveway: seal it, coat it, or stamp it",
+    status: "idea",
+    priority: 3,
+    searchPhrase: "asphalt driveway resurfacing",
+    type: "Guide",
+    systems: ["streetprint", "durashield"],
+    applications: ["private-driveways"],
+    brief: "For homeowners with a grey, tired but sound asphalt driveway. Set out the three honest options — a seal (recurring), a maintenance coating (DuraShield, from the book), or reheating and stamping the existing asphalt with StreetPrint (the book's driveway spread, page 76: 'stone-paver looks, without demolition') — and how to tell which one the driveway needs. Link the existing driveway posts rather than repeating them. No prices.",
+  },
+  {
+    key: "york-region-viva-brt",
+    title: "York Region VIVA: red bus lanes on Highway 7",
+    status: "idea",
+    priority: 3,
+    searchPhrase: "bus rapid transit red lanes",
+    type: "Case Study",
+    systems: ["mmax"],
+    applications: ["bus-lanes"],
+    brief: "REAL PROJECT — needs Doug before it is marked Ready: the year, what York Region needed, what was specified and why (MMAX, per the map pin), how the lanes were installed and how they have held up, and a photo of this installation. The drafter writes only what this brief and the Idea Book say; it must not invent the client's requirements or results. Audience: transit agencies and municipal engineers.",
+  },
+  {
+    key: "kelowna-crosswalk-network",
+    title: "Kelowna's crosswalk network, one intersection at a time",
+    status: "idea",
+    priority: 3,
+    searchPhrase: "decorative crosswalks Kelowna",
+    type: "Case Study",
+    systems: ["traffic-patterns-xd"],
+    applications: ["crosswalks"],
+    brief: "REAL PROJECT — needs Doug before it is marked Ready: the years, how many crossings and where, what the City needed, why TrafficPatternsXD was specified (per the map pin), and a photo of the installation. The drafter writes only what this brief and the Idea Book say. Audience: municipal engineers in mid-sized cities.",
   },
 ];
 

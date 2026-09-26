@@ -84,15 +84,16 @@ const organizationSchema = {
 /**
  * The hero, art-directed. The Studio photograph is the default; when a
  * designer has cut these from the same master (docs/IMAGE-WORKFLOW.md, "The
- * hero at every size"), a wide screen and a phone held upright get their own
- * framing, each with the HUB sign in the middle. Any file that is not on disk
+ * hero at every size"), a wide screen and a phone get their own framing,
+ * each with the HUB sign in the middle. Any file that is not on disk
  * is simply not offered, so the page never points at a picture nobody made.
  */
 const HERO_SOURCES = [
   // A wide, short window (a laptop, a 21:9 monitor): a 2:1 frame.
   { file: "/images/hero/hero-1-wide.jpg", media: "(min-aspect-ratio: 16/9) and (min-width: 768px)" },
-  // A phone held upright: a 9:16 frame.
-  { file: "/images/hero/hero-1-portrait.jpg", media: "(max-width: 767px) and (orientation: portrait)" },
+  // A phone: the whole scene as a 4:3 picture above the headline
+  // (HeroSlideshow.tsx lays the hero out that way below the sm breakpoint).
+  { file: "/images/hero/hero-1-mobile.jpg", media: "(max-width: 639px)" },
 ];
 
 export default async function Home() {

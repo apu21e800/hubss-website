@@ -7,9 +7,9 @@
  *
  *   public/images/hero/hero-1.jpg           16:10, 2400 px wide  (Studio, every screen by default)
  *   public/images/hero/hero-1-wide.jpg       2:1,   2560 px wide  (wide, short windows)
- *   public/images/hero/hero-1-portrait.jpg   9:16,  1080 px wide  (phones held upright)
+ *   public/images/hero/hero-1-mobile.jpg     4:3,   1200 px wide  (the phone's picture, above the headline)
  *
- * app/page.tsx offers the wide and portrait files through <picture> when
+ * app/page.tsx offers the wide and mobile files through <picture> when
  * they exist; the 16:10 file is the one to push to Studio with
  * `npm run photos:sync -- --only=homepage`.
  *
@@ -38,7 +38,11 @@ const OUT = path.join(process.cwd(), "public", "images", "hero");
 const CUTS = [
   { file: "hero-1.jpg", aspect: 16 / 10, width: 2400 },
   { file: "hero-1-wide.jpg", aspect: 2, width: 2560 },
-  { file: "hero-1-portrait.jpg", aspect: 9 / 16, width: 1080 },
+  // The phone: the whole scene as a 4:3 picture above the headline, not a
+  // full-bleed crop (a 9:16 slice of this scene is all sign and no street:
+  // "too zoomed in", Vern, 26 Sep 2026). Nothing sits on top of it, so the
+  // sign goes dead centre.
+  { file: "hero-1-mobile.jpg", aspect: 4 / 3, width: 1200, place: [0.5, 0.5] },
 ];
 
 const master = sharp(masterArg).rotate();
@@ -54,8 +58,20 @@ for (const cut of CUTS) {
     h = H;
     w = Math.round(h * cut.aspect);
   }
-  const left = Math.round(Math.min(Math.max(fx * W - px * w, 0), W - w));
-  const top = Math.round(Math.min(Math.max(fy * H - py * h, 0), H - h));
+  const [cx, cy] = cut.place ?? [px, py];
+  // Where the sign should land. A crop as wide as the master cannot move
+  // sideways, so for a cut that asks to centre an off-centre sign, narrow
+  // the crop until it can (the phone picture asks for exactly that).
+  if (cut.place) {
+    const ideal = fx * W - cx * w;
+    if (ideal < 0 || ideal + w > W) {
+      w = Math.floor(2 * Math.min(fx * W, W - fx * W));
+      h = Math.min(H, Math.round(w / cut.aspect));
+      w = Math.round(h * cut.aspect);
+    }
+  }
+  const left = Math.round(Math.min(Math.max(fx * W - cx * w, 0), W - w));
+  const top = Math.round(Math.min(Math.max(fy * H - cy * h, 0), H - h));
   const outW = Math.min(cut.width, w);
   const outH = Math.round(outW / cut.aspect);
   const target = path.join(OUT, cut.file);

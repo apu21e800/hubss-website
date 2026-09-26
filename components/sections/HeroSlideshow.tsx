@@ -49,18 +49,24 @@ export default function HeroSlideshow({
       /* full-bleed photography with overlaid type — dark in every theme */
       data-surface="dark"
       data-hero
-      className="relative w-full overflow-hidden"
-      style={{ minHeight: "88vh", background: "var(--bg-dark)" }}
+      className="relative w-full overflow-hidden sm:min-h-[88vh]"
+      style={{ background: "var(--bg-dark)" }}
       aria-label="Hero"
     >
+      {/* ── The photograph. On a phone (below sm) it is a 4:3 picture in the
+           flow, the whole scene with the sign in the middle, and the headline
+           sits under it: a 9:16 slice of this scene was all sign and no street
+           (Vern, 26 Sep 2026: "too zoomed in, too cropped"). From sm up it is
+           the full-bleed background it always was, type over the street. The
+           gradients live inside this box so they cover exactly the picture. */}
+      <div className="hero-photo relative aspect-[4/3] w-full sm:absolute sm:inset-0 sm:aspect-auto">
       {/* ── Background image — plain <img>, not next/image and not CSS background-image.
            Both prior approaches failed on Vercel. Plain img src is picked up by
            the browser HTML preload scanner immediately, before CSS/JS parsing. */}
-      {/* A <picture>, so a wide screen or a phone held upright can get its
-          own framing of the photograph (heroSources: the sign in the middle
-          of each) while everything else gets the Studio original. With no
-          such files the <source>s are absent and this is the plain <img> it
-          always was. */}
+      {/* A <picture>, so a wide screen or a phone can get its own framing of
+          the photograph (heroSources: the sign in the middle of each) while
+          everything else gets the Studio original. With no such files the
+          <source>s are absent and this is the plain <img> it always was. */}
       <picture>
         {heroSources.map((v) => (
           <source key={v.file} media={v.media} srcSet={v.file} />
@@ -93,8 +99,10 @@ export default function HeroSlideshow({
       </picture>
 
       {/* ── Gradients — lightened per Doug review for brighter hero ───── */}
+      {/* On a phone the picture is lighter (the type is not on it) and only
+          its foot fades into the panel below; from sm up the full scrim. */}
       <div
-        className="absolute inset-0"
+        className="absolute inset-0 hidden sm:block"
         style={{
           background:
             "linear-gradient(180deg, rgba(13,17,23,0.38) 0%, rgba(13,17,23,0.28) 40%, rgba(13,17,23,0.5) 70%, rgba(13,17,23,0.86) 100%)",
@@ -102,7 +110,15 @@ export default function HeroSlideshow({
         }}
       />
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="absolute inset-0 sm:hidden"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(13,17,23,0.18) 0%, rgba(13,17,23,0) 30%, rgba(13,17,23,0) 70%, rgba(16,16,16,0.92) 100%)",
+          zIndex: 2,
+        }}
+      />
+      <div
+        className="absolute inset-0 pointer-events-none hidden sm:block"
         style={{
           background:
             "linear-gradient(95deg, rgba(13,17,23,0.48) 0%, rgba(13,17,23,0.18) 42%, transparent 62%)",
@@ -118,16 +134,17 @@ export default function HeroSlideshow({
           zIndex: 2,
         }}
       />
+      </div>
 
-      {/* ── Content zone, anchored low ────────────────────── */}
-      {/* Since 26 Sep 2026 the photograph is composed with the HUB sign in
-          the upper middle of every framing, so the type sits in the lower
-          part of the frame, over the street and the crosswalk, and never
-          over the letters. It used to be vertically centred, which put
-          "Your Canvas." straight across the sign once the sign was central. */}
+      {/* ── Content zone ────────────────────── */}
+      {/* On a phone: a panel under the picture. From sm up: anchored low in
+          the frame, over the street and the crosswalk, never over the
+          letters, since 26 Sep 2026 the photograph is composed with the HUB
+          sign in the upper middle of every framing. (Vertically centred, it
+          put "Your Canvas." straight across the sign.) */}
       <div
-        className="absolute inset-0 flex items-end"
-        style={{ zIndex: 10, paddingTop: "4rem", paddingBottom: "clamp(1.75rem, 6vh, 5rem)" }}
+        className="relative -mt-8 pb-10 pt-0 sm:absolute sm:inset-0 sm:mt-0 sm:flex sm:items-end sm:pt-16 sm:pb-[clamp(1.75rem,6vh,5rem)]"
+        style={{ zIndex: 10 }}
       >
         <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">

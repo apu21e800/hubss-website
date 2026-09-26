@@ -79,17 +79,14 @@ export default function HeroSlideshow({
             width: "100%",
             height: "100%",
             objectFit: "cover",
-            // The HUB sign is the photograph's subject, and it sits high and
-            // right of centre (its top at 4% of the height, its middle at 60%
-            // of the width). A phone shows the landscape image full height
-            // and crops the sides: 65% across puts the whole word in the
-            // middle of the screen. A desktop shows the full width and crops
-            // top and bottom: 0% down keeps the top of the letters in view
-            // instead of under the header (Vern, 26 Sep 2026); what goes is
-            // crosswalk at the bottom, which the headline covers anyway. The
-            // art-directed files, when they exist, are composed with the sign
-            // in the middle, so these values leave it where the designer put it.
-            objectPosition: "65% 0%",
+            // The HUB sign is the photograph's subject. Since 26 Sep 2026 the
+            // files are cut from a master with the sign in the middle of
+            // every framing (scripts/hero-cuts.mjs), so a centred crop keeps
+            // it in the middle at every size; a phone gets the 9:16 cut and
+            // a wide window the 2:1 cut through the <picture> above. (The
+            // earlier single landscape file needed 65% across and 0% down to
+            // keep the sign whole; that photograph is gone.)
+            objectPosition: "50% 50%",
             zIndex: 1,
           }}
         />
@@ -122,17 +119,24 @@ export default function HeroSlideshow({
         }}
       />
 
-      {/* ── Centered content zone ────────────────────── */}
+      {/* ── Content zone, anchored low ────────────────────── */}
+      {/* Since 26 Sep 2026 the photograph is composed with the HUB sign in
+          the upper middle of every framing, so the type sits in the lower
+          part of the frame, over the street and the crosswalk, and never
+          over the letters. It used to be vertically centred, which put
+          "Your Canvas." straight across the sign once the sign was central. */}
       <div
-        className="absolute inset-0 flex items-center"
-        style={{ zIndex: 10, paddingTop: "4rem" }}
+        className="absolute inset-0 flex items-end"
+        style={{ zIndex: 10, paddingTop: "4rem", paddingBottom: "clamp(1.75rem, 6vh, 5rem)" }}
       >
         <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
 
             {/* Eyebrow — #FDBA74 (orange-300) reads clearly over the hero photo; shadow adds contrast */}
+            {/* One line on a phone too: at 0.22em tracking the eyebrow wrapped
+                and pushed the headline up into the sign. */}
             <p
-              className="text-sm font-bold tracking-[0.22em] uppercase mb-3"
+              className="text-[11px] tracking-[0.16em] sm:text-sm sm:tracking-[0.22em] font-bold uppercase mb-3"
               style={{
                 color: "var(--accent-soft-text)",
                 textShadow: "0 1px 12px rgba(0,0,0,0.75)",

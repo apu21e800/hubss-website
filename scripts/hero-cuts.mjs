@@ -13,9 +13,12 @@
  * they exist; the 16:10 file is the one to push to Studio with
  * `npm run photos:sync -- --only=homepage`.
  *
- * Usage:  node scripts/hero-cuts.mjs <master.png|jpg> [--focus=0.5,0.5]
+ * Usage:  node scripts/hero-cuts.mjs <master.png|jpg> [--focus=0.5,0.5] [--place=0.5,0.36]
  * --focus is where the sign's centre sits in the master, as fractions of its
- * width and height; the default assumes the designer centred it.
+ * width and height; the default assumes the designer centred it. --place is
+ * where that point should land in each cut: 0.5,0.36 puts the sign in the
+ * upper middle, which leaves the lower part of the frame to the headline
+ * (HeroSlideshow.tsx anchors the type low for exactly this reason).
  */
 import sharp from "sharp";
 import * as fs from "node:fs";
@@ -28,6 +31,8 @@ if (!masterArg) {
 }
 const focusFlag = flags.find((f) => f.startsWith("--focus="));
 const [fx, fy] = focusFlag ? focusFlag.slice(8).split(",").map(Number) : [0.5, 0.5];
+const placeFlag = flags.find((f) => f.startsWith("--place="));
+const [px, py] = placeFlag ? placeFlag.slice(8).split(",").map(Number) : [0.5, 0.36];
 
 const OUT = path.join(process.cwd(), "public", "images", "hero");
 const CUTS = [
@@ -38,19 +43,19 @@ const CUTS = [
 
 const master = sharp(masterArg).rotate();
 const { width: W, height: H } = await master.metadata();
-console.log(`master ${W}x${H}, focus ${fx},${fy}`);
+console.log(`master ${W}x${H}, focus ${fx},${fy}, placed at ${px},${py}`);
 
 for (const cut of CUTS) {
   // The largest box of this shape that fits the master, placed so the focus
-  // point is as central as the edges allow.
+  // point lands at (px, py) of the box, as far as the edges allow.
   let w = W;
   let h = Math.round(w / cut.aspect);
   if (h > H) {
     h = H;
     w = Math.round(h * cut.aspect);
   }
-  const left = Math.round(Math.min(Math.max(fx * W - w / 2, 0), W - w));
-  const top = Math.round(Math.min(Math.max(fy * H - h / 2, 0), H - h));
+  const left = Math.round(Math.min(Math.max(fx * W - px * w, 0), W - w));
+  const top = Math.round(Math.min(Math.max(fy * H - py * h, 0), H - h));
   const outW = Math.min(cut.width, w);
   const outH = Math.round(outW / cut.aspect);
   const target = path.join(OUT, cut.file);

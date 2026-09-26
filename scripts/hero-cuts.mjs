@@ -13,7 +13,7 @@
  * they exist; the 16:10 file is the one to push to Studio with
  * `npm run photos:sync -- --only=homepage`.
  *
- * Usage:  node scripts/hero-cuts.mjs <master.png|jpg> [--focus=0.5,0.5] [--place=0.5,0.36]
+ * Usage:  node scripts/hero-cuts.mjs <master.png|jpg> [--focus=0.5,0.5] [--place=0.5,0.36] [--grade=photo|generated|none]
  * --focus is where the sign's centre sits in the master, as fractions of its
  * width and height; the default assumes the designer centred it. --place is
  * where that point should land in each cut: 0.5,0.36 puts the sign in the
@@ -45,13 +45,21 @@ const CUTS = [
   // Closer than the whole scene (Vern: "on mobile it needs to be more
   // zoomed in on the HUB"), but not the 9:16 slice: 58% of the master's
   // width, 5:4, the sign a little above the middle so some crosswalk shows.
-  { file: "hero-1-mobile.jpg", aspect: 5 / 4, width: 1200, place: [0.5, 0.42], zoom: 0.58 },
+  { file: "hero-1-mobile.jpg", aspect: 5 / 4, width: 1200, place: [0.5, 0.4], zoom: 0.62 },
 ];
 
 // A light grade on every cut (Vern: "add more colour and realism, it feels
-// muted"): a touch more saturation and contrast, and a little sharpening,
-// which the generated master, soft and flat out of the tool, takes well.
-const GRADE = { saturation: 1.18, contrast: 1.1, sharpen: 0.8 };
+// muted", then "light it"). `photo` is for a real photograph: a small lift
+// in brightness, saturation and contrast and a little sharpening. `generated`
+// is stronger, for a master that came soft and flat out of an image tool.
+// Pick with --grade=photo|generated|none.
+const GRADES = {
+  photo: { brightness: 1.04, saturation: 1.1, contrast: 1.06, sharpen: 0.6 },
+  generated: { brightness: 1.0, saturation: 1.18, contrast: 1.1, sharpen: 0.8 },
+  none: { brightness: 1.0, saturation: 1.0, contrast: 1.0, sharpen: 0 },
+};
+const gradeFlag = flags.find((f) => f.startsWith("--grade="));
+const GRADE = GRADES[gradeFlag ? gradeFlag.slice(8) : "photo"] ?? GRADES.photo;
 
 const master = sharp(masterArg).rotate();
 const { width: W, height: H } = await master.metadata();
@@ -87,10 +95,10 @@ for (const cut of CUTS) {
     .rotate()
     .extract({ left, top, width: w, height: h })
     .resize(outW, outH)
-    .modulate({ saturation: GRADE.saturation })
+    .modulate({ brightness: GRADE.brightness, saturation: GRADE.saturation })
     // Contrast about mid-grey: out = in * c + 128 * (1 - c).
     .linear(GRADE.contrast, 128 * (1 - GRADE.contrast))
-    .sharpen({ sigma: GRADE.sharpen })
+    .sharpen(GRADE.sharpen ? { sigma: GRADE.sharpen } : undefined)
     .jpeg({ quality: 88, mozjpeg: true })
     .toFile(target);
   const kb = Math.round(fs.statSync(target).size / 1024);

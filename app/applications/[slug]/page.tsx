@@ -151,8 +151,8 @@ export default async function ApplicationPage({ params }: Props) {
           priority
           sizes="100vw"
         />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(8,13,22,0.55) 0%, rgba(8,13,22,0.62) 55%, rgba(8,13,22,0.88) 100%)" }} />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(92deg, rgba(8,13,22,0.48) 0%, rgba(8,13,22,0.18) 45%, transparent 65%)" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(8,13,22,0.36) 0%, rgba(8,13,22,0.42) 55%, rgba(8,13,22,0.86) 100%)" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(92deg, rgba(8,13,22,0.42) 0%, rgba(8,13,22,0.14) 45%, transparent 65%)" }} />
         <div className="absolute inset-0 flex items-end">
           <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-14">
             <p className="text-xs font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "var(--accent-text-lg)" }}>

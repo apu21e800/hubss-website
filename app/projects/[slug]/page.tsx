@@ -64,7 +64,8 @@ export default async function ProjectPage({ params }: Props) {
           priority
           sizes="100vw"
         />
-        <div className="absolute inset-0" style={{ background: "rgba(26,26,26,0.7)" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(8,13,22,0.30) 0%, rgba(8,13,22,0.40) 55%, rgba(8,13,22,0.86) 100%)" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(92deg, rgba(8,13,22,0.42) 0%, rgba(8,13,22,0.14) 45%, transparent 65%)" }} />
         <div className="absolute inset-0 flex items-end max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
           <div className="max-w-3xl">
             <div className="flex gap-2 mb-4">

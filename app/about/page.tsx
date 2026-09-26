@@ -117,7 +117,11 @@ export default async function AboutPage() {
           priority
           sizes="100vw"
         />
-        <div className="absolute inset-0 bg-black/72 pointer-events-none" />
+        {/* Optics (Vern, 26 Sep 2026): a flat 72% black over the photograph
+            read as mud. A scrim that is light at the top, dark at the foot
+            and on the left where the type sits, so the picture shows. */}
+        <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(180deg, rgba(8,13,22,0.34) 0%, rgba(8,13,22,0.44) 50%, rgba(8,13,22,0.86) 100%)" }} />
+        <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(92deg, rgba(8,13,22,0.52) 0%, rgba(8,13,22,0.22) 45%, transparent 70%)" }} />
         <div
           className="absolute bottom-0 left-0 right-0 h-[2px] pointer-events-none z-10"
           style={{ background: "linear-gradient(90deg, #F97316 0%, transparent 60%)" }}

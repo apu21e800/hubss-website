@@ -23,12 +23,12 @@ const CANADA_BOUNDS: [[number, number], [number, number]] = [
   [-52.0, 56.0],  // NE: Newfoundland
 ];
 
-// Hard travel limit — generous margin around Canada so exploration never
-// wanders off to another continent and "where did the pins go?".
-const MAX_BOUNDS: [[number, number], [number, number]] = [
-  [-155.0, 35.0],
-  [-40.0, 74.0],
-];
+// There used to be a hard travel limit here (a box around Canada) so a
+// visitor could never wander off to another continent. Vern (26 Sep 2026):
+// "it's awkward to navigate this map, should be able to drag around the
+// whole globe, the current UI feels locked-in". So the map roams free; the
+// "Back to Canada" button appears the moment the view leaves the country
+// frame, which is the answer to "where did the pins go?".
 
 const FIT_OPTIONS = {
   padding: { top: 60, bottom: 80, left: 60, right: 60 },
@@ -1007,8 +1007,13 @@ export default function CanadaMap() {
     setVisibleProjects(
       mapProjects.filter((p) => p.lng >= w && p.lng <= e && p.lat >= s && p.lat <= n)
     );
-    // "Reset view" affordance appears once the user has left the country frame.
-    setViewMoved(map.getZoom() > 4.6);
+    // "Back to Canada" appears once the user has left the country frame:
+    // zoomed in past the whole-country view, or dragged so the centre of the
+    // view is outside Canada's box.
+    const c = map.getCenter();
+    const outside =
+      c.lng < CANADA_BOUNDS[0][0] || c.lng > CANADA_BOUNDS[1][0] || c.lat < CANADA_BOUNDS[0][1] || c.lat > CANADA_BOUNDS[1][1];
+    setViewMoved(map.getZoom() > 4.6 || map.getZoom() < 2.4 || outside);
   }, []);
 
   const resetView = useCallback(() => {
@@ -1589,10 +1594,11 @@ export default function CanadaMap() {
                   fitBoundsOptions: FIT_OPTIONS,
                 }}
                 style={{ width: "100%", height: "100%" }}
-                minZoom={2.8}
+                minZoom={1.2}
                 maxZoom={18}
-                maxBounds={MAX_BOUNDS}
                 attributionControl={false}
+                dragRotate={false}
+                touchPitch={false}
                 cooperativeGestures
                 cursor={cursor}
                 interactiveLayerIds={["clusters", "unclustered-point"]}
@@ -1986,7 +1992,7 @@ export default function CanadaMap() {
                     ? "Click to open project details"
                     : productFilter
                     ? `${filteredProjects.length} ${productFilter} installations · Tap pins for details`
-                    : "Tap pins for details · Two fingers or Ctrl + scroll to zoom"}
+                    : "Drag anywhere · Ctrl + scroll or two fingers to zoom · Tap a pin for details"}
                 </span>
               </div>
               )}

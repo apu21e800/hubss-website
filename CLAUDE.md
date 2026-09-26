@@ -190,6 +190,20 @@ folder or C:\Users\cleve\Downloads (move it here if needed), then:
 6. git push origin main
 7. Delete the bundle file; show git log --oneline -3 + confirm remote SHA.
 
+DEPLOY TRAP, learned 26 Sep 2026: never read /public with fs at runtime
+(existsSync, readdirSync, path.join(process.cwd(), "public", ...)) from a
+page or component. Vercel's file tracing then packs the whole /public
+folder, 2.84 GB of Idea Book rasters included, into that page's function
+and the deploy fails ("exceeds the maximum uncompressed size limit of
+250mb"). List files by hand or generate a JSON at build time (the
+scripts/gen-*.mjs pattern) and import that.
+
+Two ways work reach this repo from Cowork now: text changes go straight to
+GitHub through Vern's GitHub connector (one commit per push, files must be
+text); anything binary (images, PDFs) still travels as a bundle, per the
+protocol above.
+Anything that writes to Sanity runs on Vern's PC.
+
 SHELL TRAP, learned the hard way: `pkill -f "next"` (or "next start") matches
 the invoking shell's OWN command line and kills it mid-command — everything
 after the pkill silently never runs, and the exit code is 144. Hours were

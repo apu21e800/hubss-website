@@ -67,12 +67,15 @@ export default function HeroSlideshow({
           width: "100%",
           height: "100%",
           objectFit: "cover",
-          // The HUB sign sits right of centre in the photo (its middle is at
-          // 60% of the width). A phone shows the image full height and crops
-          // the sides, so 65% puts the sign in the middle of the screen with
-          // the whole word visible; on a desktop the width fits and the value
-          // changes nothing.
-          objectPosition: "65% 55%",
+          // The HUB sign is the photograph's subject, and it sits high and
+          // right of centre (its top at 4% of the height, its middle at 60%
+          // of the width). A phone shows the image full height and crops the
+          // sides: 65% across puts the whole word in the middle of the
+          // screen. A desktop shows the full width and crops top and bottom:
+          // 0% down keeps the top of the letters in view instead of under
+          // the header (Vern, 26 Sep 2026); what goes is crosswalk at the
+          // bottom, which the headline covers anyway.
+          objectPosition: "65% 0%",
           zIndex: 1,
         }}
       />

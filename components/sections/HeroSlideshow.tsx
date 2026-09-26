@@ -67,7 +67,12 @@ export default function HeroSlideshow({
           width: "100%",
           height: "100%",
           objectFit: "cover",
-          objectPosition: "50% 55%",
+          // The HUB sign sits right of centre in the photo (its middle is at
+          // 60% of the width). A phone shows the image full height and crops
+          // the sides, so 65% puts the sign in the middle of the screen with
+          // the whole word visible; on a desktop the width fits and the value
+          // changes nothing.
+          objectPosition: "65% 55%",
           zIndex: 1,
         }}
       />

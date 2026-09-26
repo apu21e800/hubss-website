@@ -19,7 +19,7 @@ import { PRODUCT_CATALOGUE } from "@/lib/product-catalogue";
 import { APPLICATION_CATALOGUE } from "@/lib/application-catalogue";
 
 export const metadata: Metadata = {
-  title: { absolute: `${ideaBook.title} — contents | HUB Surface Systems` },
+  title: { absolute: `${ideaBook.title} · contents | HUB Surface Systems` },
   description: `Every system and application in ${ideaBook.title}, with the page each one is on and a link to its full page on hubss.com.`,
   alternates: { canonical: `https://hubss.com${ideaBook.href}/contents` },
 };

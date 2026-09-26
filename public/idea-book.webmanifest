@@ -1,0 +1,18 @@
+{
+  "name": "HUB Idea Book",
+  "short_name": "Idea Book",
+  "description": "The HUB Surface Systems Idea Book, Volume 5: every system and every application, readable with no signal once saved.",
+  "id": "/idea-book",
+  "start_url": "/idea-book?utm_source=homescreen&utm_medium=pwa&utm_campaign=idea-book",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#000000",
+  "theme_color": "#0D0D0D",
+  "lang": "en-CA",
+  "icons": [
+    { "src": "/idea-book/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/idea-book/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/idea-book/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

@@ -114,6 +114,21 @@ function track(name: string, params: Record<string, string | number | undefined>
 
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 
+// --- the app layer -----------------------------------------------------------
+// The reader is installable and works with no signal (Vern, 26 Sep 2026: "a
+// wicked website application, mobile and desktop"). Three pieces: a manifest
+// (/idea-book.webmanifest, linked only on these routes), a service worker
+// (/idea-book-sw.js: page rasters cache-first, reader routes network-first),
+// and "Save for offline", which fills the same cache with every page at the
+// phone width from the page itself, so it can show progress. Nothing here
+// runs on the rest of the site.
+const OFFLINE_CACHE = "idea-book-v1";
+type OfflineStatus = "idle" | "saving" | "saved" | "failed";
+type BeforeInstallPromptEvent = Event & {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
+};
+
 /**
  * What the stage shows at once. Verso|recto: the cover is a right-hand page on
  * its own, then every even page opens a spread with the odd page after it, and
@@ -164,6 +179,11 @@ export default function CatalogueViewer({
   const [chromeBottom, setChromeBottom] = useState(CHROME_BOTTOM);
   const [compact, setCompact] = useState(false);
   const [short, setShort] = useState(false);
+  const [offline, setOffline] = useState<{ status: OfflineStatus; done: number }>({ status: "idle", done: 0 });
+  const [installEvt, setInstallEvt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [device, setDevice] = useState({ ios: false, standalone: false, fullscreen: false });
+  const [presenting, setPresenting] = useState(false);
+  const mainRef = useRef<HTMLElement>(null);
 
   const stageRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLElement>(null);
@@ -204,6 +224,18 @@ export default function CatalogueViewer({
   useEffect(() => {
     setVi(viewOf(pageRef.current));
   }, [viewOf]);
+  // With no signal, the service worker answers any reader address with the
+  // last reader page it has, so the HTML may say page 1 while the address
+  // says page 80. The address wins: read it once on mount and re-seat.
+  useEffect(() => {
+    const m = /\/idea-book\/(\d{1,3})(?:[/?#]|$)/.exec(window.location.pathname);
+    const wanted = m ? Number(m[1]) : 1;
+    if (wanted >= 1 && wanted <= total && wanted !== pageRef.current) {
+      pageRef.current = wanted;
+      setVi(viewOf(wanted));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- once, on mount
+  }, []);
 
   const goTo = useCallback(
     (nextVi: number, direction = 1) => {
@@ -575,6 +607,97 @@ export default function CatalogueViewer({
     return s;
   }, [vi, views.length]);
 
+  // The app layer: register the worker, listen for the install prompt, learn
+  // what this device can do, and see whether the book is already saved.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if ("serviceWorker" in navigator) navigator.serviceWorker.register("/idea-book-sw.js").catch(() => {});
+    const ua = navigator.userAgent;
+    const ios = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    const standalone =
+      window.matchMedia("(display-mode: standalone)").matches || (navigator as Navigator & { standalone?: boolean }).standalone === true;
+    const fullscreen = typeof document.documentElement.requestFullscreen === "function";
+    setDevice({ ios, standalone, fullscreen });
+    if (standalone) track("idea_book_app_open", { page: start });
+    const onPrompt = (e: Event) => {
+      e.preventDefault();
+      setInstallEvt(e as BeforeInstallPromptEvent);
+    };
+    const onInstalled = () => {
+      setInstallEvt(null);
+      track("idea_book_install", {});
+    };
+    const onFs = () => setPresenting(Boolean(document.fullscreenElement));
+    window.addEventListener("beforeinstallprompt", onPrompt);
+    window.addEventListener("appinstalled", onInstalled);
+    document.addEventListener("fullscreenchange", onFs);
+    if ("caches" in window) {
+      caches
+        .open(OFFLINE_CACHE)
+        .then((c) => c.keys())
+        .then((keys) => {
+          const have = keys.filter((k) => /\/p\d{3}-\d+\.webp$/.test(new URL(k.url).pathname)).length;
+          if (have >= total) setOffline({ status: "saved", done: total });
+        })
+        .catch(() => {});
+    }
+    return () => {
+      window.removeEventListener("beforeinstallprompt", onPrompt);
+      window.removeEventListener("appinstalled", onInstalled);
+      document.removeEventListener("fullscreenchange", onFs);
+    };
+  }, [start, total]);
+
+  const saveOffline = async () => {
+    if (!("caches" in window) || offline.status === "saving") return;
+    setOffline({ status: "saving", done: 0 });
+    track("idea_book_offline_save", { page: shownFirst });
+    try {
+      const cache = await caches.open(OFFLINE_CACHE);
+      // The app itself first: this page's HTML, the reader's front page, and
+      // every script and stylesheet the page has loaded, so the reader is
+      // interactive with no signal, not just a picture of itself. Then the
+      // pages.
+      const shell = new Set<string>([ideaBook.href, `${ideaBook.href}/contents`, window.location.pathname, "/idea-book.webmanifest"]);
+      for (const e of performance.getEntriesByType("resource") as PerformanceResourceTiming[]) {
+        const u = new URL(e.name, window.location.href);
+        if (u.origin === window.location.origin && u.pathname.startsWith("/_next/static/")) shell.add(u.pathname + u.search);
+      }
+      await Promise.all([...shell].map((u) => cache.add(u).catch(() => {})));
+      const urls = pages.map((_, i) => cataloguePageUrl(i + 1, widths[0]));
+      let done = 0;
+      const BATCH = 6;
+      for (let i = 0; i < urls.length; i += BATCH) {
+        await Promise.all(
+          urls.slice(i, i + BATCH).map(async (u) => {
+            if (!(await cache.match(u))) await cache.add(u);
+            done += 1;
+          }),
+        );
+        setOffline({ status: "saving", done });
+      }
+      setOffline({ status: "saved", done: urls.length });
+    } catch {
+      setOffline({ status: "failed", done: 0 });
+    }
+  };
+
+  const install = async () => {
+    if (!installEvt) return;
+    await installEvt.prompt();
+    const { outcome } = await installEvt.userChoice;
+    track("idea_book_install_prompt", { outcome });
+    if (outcome === "accepted") setInstallEvt(null);
+  };
+
+  const present = () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {});
+      return;
+    }
+    mainRef.current?.requestFullscreen?.().then(() => track("idea_book_present", { page: shownFirst })).catch(() => {});
+  };
+
   const onShare = async () => {
     const url = typeof window !== "undefined" ? window.location.href : `https://hubss.com${ideaBook.href}`;
     try {
@@ -603,6 +726,7 @@ export default function CatalogueViewer({
 
   return (
     <main
+      ref={mainRef}
       data-surface="dark"
       className="relative h-dvh w-screen select-none overflow-hidden bg-black"
       style={{ color: "var(--text-primary)" }}
@@ -804,6 +928,8 @@ export default function CatalogueViewer({
               download={download}
               canShare={canShare}
               onShare={onShare}
+              onPresent={device.fullscreen && !compact ? present : undefined}
+              presenting={presenting}
             />
           </div>
           <span className={`w-8 flex-shrink-0 ${short ? "" : "sm:hidden"}`} aria-hidden="true" />
@@ -1031,6 +1157,51 @@ export default function CatalogueViewer({
                 </div>
               ))}
             </div>
+
+            {/* The app layer, where the reader already is: save every page
+                to this device, put it on the home screen. */}
+            <div className="mt-7 border-t pt-5" style={{ borderColor: "var(--border-color)" }}>
+              <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--text-muted)" }}>
+                Take it with you
+              </p>
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+                <button
+                  type="button"
+                  onClick={saveOffline}
+                  disabled={offline.status === "saving" || offline.status === "saved"}
+                  className="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-[13px] font-semibold transition-colors disabled:cursor-default"
+                  style={{
+                    background: offline.status === "saved" ? "var(--ink-05)" : "rgba(249,115,22,0.12)",
+                    color: offline.status === "saved" ? "var(--text-secondary)" : "var(--accent-text)",
+                    border: `1px solid ${offline.status === "saved" ? "var(--border-color)" : "rgba(249,115,22,0.42)"}`,
+                  }}
+                >
+                  {offline.status === "saved" ? <CheckIcon /> : <DownloadIcon />}
+                  {offline.status === "idle" && "Save every page for offline"}
+                  {offline.status === "saving" && `Saving, ${offline.done} of ${total}`}
+                  {offline.status === "saved" && "Saved on this device"}
+                  {offline.status === "failed" && "Could not save, try again on Wi-Fi"}
+                </button>
+                {installEvt && !device.standalone && (
+                  <button
+                    type="button"
+                    onClick={install}
+                    className="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-[13px] font-semibold transition-colors"
+                    style={{ background: "rgba(249,115,22,0.12)", color: "var(--accent-text)", border: "1px solid rgba(249,115,22,0.42)" }}
+                  >
+                    <PhoneIcon />
+                    Add to home screen
+                  </button>
+                )}
+                <p className="text-[12px] leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                  {offline.status === "saved"
+                    ? "The whole book opens with no signal."
+                    : "About 10 MB. Once saved, the whole book opens with no signal."}
+                  {device.ios && !device.standalone && " On an iPhone, tap Share, then Add to Home Screen, and it opens like an app."}
+                  {device.standalone && " Installed on this device."}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -1125,6 +1296,8 @@ function Actions({
   download,
   canShare,
   onShare,
+  onPresent,
+  presenting = false,
   stretch = false,
 }: {
   requestHref: string;
@@ -1133,6 +1306,9 @@ function Actions({
   download: CatalogueDownload | null;
   canShare: boolean;
   onShare: () => void;
+  /** Full-screen "Present" mode, where the browser offers it (a boardroom screen, a projector). */
+  onPresent?: () => void;
+  presenting?: boolean;
   stretch?: boolean;
 }) {
   return (
@@ -1141,6 +1317,19 @@ function Actions({
         <ListIcon />
         <span className="hidden md:inline">Contents</span>
       </button>
+      {onPresent && (
+        <button
+          type="button"
+          onClick={onPresent}
+          className={btnGhost}
+          aria-label={presenting ? "Leave full screen" : "Present full screen"}
+          title={presenting ? "Leave full screen (Esc)" : "Present: the book full screen, for a room"}
+          aria-pressed={presenting}
+        >
+          <PresentIcon />
+          <span className="hidden md:inline">{presenting ? "Exit" : "Present"}</span>
+        </button>
+      )}
       {/* The lead action for this page, so it looks like one. It was a grey
           pill among grey pills and disappeared into the chrome. */}
       <a
@@ -1228,6 +1417,28 @@ function ShareIcon() {
   return (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
       <path d="M12 16V4m0 0-4 4m4-4 4 4M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+function PresentIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M4 9V5a1 1 0 0 1 1-1h4M15 4h4a1 1 0 0 1 1 1v4M20 15v4a1 1 0 0 1-1 1h-4M9 20H5a1 1 0 0 1-1-1v-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+function CheckIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="m5 12 4 4L19 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+function PhoneIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <rect x="7" y="2.5" width="10" height="19" rx="2" stroke="currentColor" strokeWidth="2" />
+      <path d="M11 18h2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
     </svg>
   );
 }

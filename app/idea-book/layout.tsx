@@ -29,6 +29,12 @@ export function generateMetadata(): Metadata {
     title: { absolute: `${ideaBook.title} | HUB Surface Systems` },
     description,
     alternates: { canonical: `https://hubss.com${ideaBook.href}` },
+    // The reader is installable (public/idea-book.webmanifest, registered by
+    // the viewer with /idea-book-sw.js). Linked here, on these routes only,
+    // so a phone offers to install the book and not the whole site.
+    manifest: "/idea-book.webmanifest",
+    appleWebApp: { capable: true, title: ideaBook.short, statusBarStyle: "black-translucent" },
+    icons: { apple: "/idea-book/apple-touch-icon.png" },
     openGraph: {
       title: ideaBook.title,
       description,

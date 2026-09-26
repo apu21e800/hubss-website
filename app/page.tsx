@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import Nav from "@/components/sections/Nav";
 import HeroSlideshow from "@/components/sections/HeroSlideshow";
 // WhyHubss stats/claims block removed per Doug; TrustedByMarquee restored as standalone social proof.
@@ -79,6 +81,20 @@ const organizationSchema = {
   ],
 };
 
+/**
+ * The hero, art-directed. The Studio photograph is the default; when a
+ * designer has cut these from the same master (docs/IMAGE-WORKFLOW.md, "The
+ * hero at every size"), a wide screen and a phone held upright get their own
+ * framing, each with the HUB sign in the middle. Any file that is not on disk
+ * is simply not offered, so the page never points at a picture nobody made.
+ */
+const HERO_SOURCES = [
+  // A wide, short window (a laptop, a 21:9 monitor): a 2:1 frame.
+  { file: "/images/hero/hero-1-wide.jpg", media: "(min-aspect-ratio: 16/9) and (min-width: 768px)" },
+  // A phone held upright: a 9:16 frame.
+  { file: "/images/hero/hero-1-portrait.jpg", media: "(max-width: 767px) and (orientation: portrait)" },
+];
+
 export default async function Home() {
   const sanityPage = await getSanityPageContent("homepage");
   const [mergedApplications, mergedProducts] = await Promise.all([
@@ -98,6 +114,7 @@ export default async function Home() {
     // Hero slide 1 in Studio; /images/hero/hero-1.jpg when it's empty.
     heroImageSrc: heroPhoto?.src,
     heroImageAlt: heroPhoto?.alt,
+    heroSources: HERO_SOURCES.filter((v) => existsSync(join(process.cwd(), "public", v.file.slice(1)))),
   };
 
   return (

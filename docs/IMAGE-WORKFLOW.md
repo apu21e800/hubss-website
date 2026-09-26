@@ -183,3 +183,32 @@ Want a hero changed? Tell me the product and the filename.
 2. **Sanity does not manage the photos.** Galleries are folders. Only the words
    are in the CMS. That split is deliberate: photos are files, and files belong
    in folders.
+
+
+## The hero at every size (26 Sep 2026)
+
+The homepage photograph has one subject, the HUB sign, and it has to be
+whole and in the middle on every screen: Doug looks for exactly this. A
+single landscape file cannot do that, because the sign sits in the top 40%
+of the frame; a phone held upright shows the full height and the sign sits
+high, a wide laptop window crops the bottom and looks zoomed. So the hero
+is art-directed from one master:
+
+1. The designer makes a master with room around the scene: a large canvas
+   (2400 px on the short side or more), the sign in the middle, sky above
+   it, the crosswalk below, street either side (generative expand from the
+   retouched photo). Save it as image_convert/hero-master.png.
+2. `node scripts/hero-cuts.mjs image_convert/hero-master.png` cuts three
+   centred framings into public/images/hero/: hero-1.jpg (16:10, the
+   default), hero-1-wide.jpg (2:1, wide and short windows) and
+   hero-1-portrait.jpg (9:16, phones held upright). If the sign is not dead
+   centre in the master, pass `--focus=0.55,0.45` (fractions of width and
+   height).
+3. `npm run photos:sync -- --only=homepage --backup=<file>` pushes
+   hero-1.jpg to Studio, which is where the default comes from. The wide and
+   portrait files are served straight from /public through <picture>
+   (app/page.tsx HERO_SOURCES): a file that is not there is not offered.
+
+Until the master exists the page serves the landscape photograph with the
+sign kept whole (object-position 65% across, 0% down), which is the best a
+single file allows.

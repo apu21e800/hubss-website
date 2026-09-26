@@ -22,6 +22,8 @@ interface HeroSlideshowProps {
   heroImageSrc?: string;
   /** Alt text from Studio for that image. */
   heroImageAlt?: string;
+  /** Art-directed framings of the same photograph, by media query (app/page.tsx). */
+  heroSources?: { file: string; media: string }[];
 }
 
 export default function HeroSlideshow({
@@ -35,6 +37,7 @@ export default function HeroSlideshow({
   cta2Href   = "#systems",
   heroImageSrc,
   heroImageAlt,
+  heroSources = [],
 }: HeroSlideshowProps = {}) {
   const src = heroImageSrc || FALLBACK_HERO;
   // A Sanity photo is sized by Sanity's CDN (lib/photos.ts): a phone gets an
@@ -53,32 +56,44 @@ export default function HeroSlideshow({
       {/* ── Background image — plain <img>, not next/image and not CSS background-image.
            Both prior approaches failed on Vercel. Plain img src is picked up by
            the browser HTML preload scanner immediately, before CSS/JS parsing. */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={fromSanity ? sanitySized(src, 1920) : src}
-        srcSet={fromSanity ? sanitySrcSet(src) : undefined}
-        sizes={fromSanity ? "100vw" : undefined}
-        alt={heroImageAlt || heroAlt(src)}
-        // @ts-ignore fetchPriority is valid HTML but TS types lag
-        fetchPriority="high"
-        style={{
-          position: "absolute",
-          inset: 0,
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-          // The HUB sign is the photograph's subject, and it sits high and
-          // right of centre (its top at 4% of the height, its middle at 60%
-          // of the width). A phone shows the image full height and crops the
-          // sides: 65% across puts the whole word in the middle of the
-          // screen. A desktop shows the full width and crops top and bottom:
-          // 0% down keeps the top of the letters in view instead of under
-          // the header (Vern, 26 Sep 2026); what goes is crosswalk at the
-          // bottom, which the headline covers anyway.
-          objectPosition: "65% 0%",
-          zIndex: 1,
-        }}
-      />
+      {/* A <picture>, so a wide screen or a phone held upright can get its
+          own framing of the photograph (heroSources: the sign in the middle
+          of each) while everything else gets the Studio original. With no
+          such files the <source>s are absent and this is the plain <img> it
+          always was. */}
+      <picture>
+        {heroSources.map((v) => (
+          <source key={v.file} media={v.media} srcSet={v.file} />
+        ))}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={fromSanity ? sanitySized(src, 1920) : src}
+          srcSet={fromSanity ? sanitySrcSet(src) : undefined}
+          sizes={fromSanity ? "100vw" : undefined}
+          alt={heroImageAlt || heroAlt(src)}
+          // @ts-ignore fetchPriority is valid HTML but TS types lag
+          fetchPriority="high"
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            // The HUB sign is the photograph's subject, and it sits high and
+            // right of centre (its top at 4% of the height, its middle at 60%
+            // of the width). A phone shows the landscape image full height
+            // and crops the sides: 65% across puts the whole word in the
+            // middle of the screen. A desktop shows the full width and crops
+            // top and bottom: 0% down keeps the top of the letters in view
+            // instead of under the header (Vern, 26 Sep 2026); what goes is
+            // crosswalk at the bottom, which the headline covers anyway. The
+            // art-directed files, when they exist, are composed with the sign
+            // in the middle, so these values leave it where the designer put it.
+            objectPosition: "65% 0%",
+            zIndex: 1,
+          }}
+        />
+      </picture>
 
       {/* ── Gradients — lightened per Doug review for brighter hero ───── */}
       <div

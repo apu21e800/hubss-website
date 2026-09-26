@@ -53,13 +53,13 @@ export default function HeroSlideshow({
       style={{ background: "var(--bg-dark)" }}
       aria-label="Hero"
     >
-      {/* ── The photograph. On a phone (below sm) it is a 4:3 picture in the
-           flow, the whole scene with the sign in the middle, and the headline
+      {/* ── The photograph. On a phone (below sm) it is a 5:4 picture in the
+           flow, the scene close on the sign, and the headline
            sits under it: a 9:16 slice of this scene was all sign and no street
            (Vern, 26 Sep 2026: "too zoomed in, too cropped"). From sm up it is
            the full-bleed background it always was, type over the street. The
            gradients live inside this box so they cover exactly the picture. */}
-      <div className="hero-photo relative aspect-[4/3] w-full sm:absolute sm:inset-0 sm:aspect-auto">
+      <div className="hero-photo relative aspect-[5/4] w-full sm:absolute sm:inset-0 sm:aspect-auto">
       {/* ── Background image — plain <img>, not next/image and not CSS background-image.
            Both prior approaches failed on Vercel. Plain img src is picked up by
            the browser HTML preload scanner immediately, before CSS/JS parsing. */}
@@ -105,7 +105,10 @@ export default function HeroSlideshow({
         className="absolute inset-0 hidden sm:block"
         style={{
           background:
-            "linear-gradient(180deg, rgba(13,17,23,0.38) 0%, rgba(13,17,23,0.28) 40%, rgba(13,17,23,0.5) 70%, rgba(13,17,23,0.86) 100%)",
+            // Lighter than it was (Vern, 26 Sep 2026: "it feels muted"):
+            // the photograph carries its own colour now; the foot stays dark
+            // for the type.
+            "linear-gradient(180deg, rgba(13,17,23,0.24) 0%, rgba(13,17,23,0.12) 40%, rgba(13,17,23,0.42) 70%, rgba(13,17,23,0.86) 100%)",
           zIndex: 2,
         }}
       />
@@ -113,7 +116,7 @@ export default function HeroSlideshow({
         className="absolute inset-0 sm:hidden"
         style={{
           background:
-            "linear-gradient(180deg, rgba(13,17,23,0.18) 0%, rgba(13,17,23,0) 30%, rgba(13,17,23,0) 70%, rgba(16,16,16,0.92) 100%)",
+            "linear-gradient(180deg, rgba(13,17,23,0.10) 0%, rgba(13,17,23,0) 25%, rgba(13,17,23,0) 72%, rgba(16,16,16,0.92) 100%)",
           zIndex: 2,
         }}
       />
@@ -121,7 +124,7 @@ export default function HeroSlideshow({
         className="absolute inset-0 pointer-events-none hidden sm:block"
         style={{
           background:
-            "linear-gradient(95deg, rgba(13,17,23,0.48) 0%, rgba(13,17,23,0.18) 42%, transparent 62%)",
+            "linear-gradient(95deg, rgba(13,17,23,0.38) 0%, rgba(13,17,23,0.12) 42%, transparent 62%)",
           zIndex: 2,
         }}
       />

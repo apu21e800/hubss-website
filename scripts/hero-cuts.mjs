@@ -7,7 +7,7 @@
  *
  *   public/images/hero/hero-1.jpg           16:10, 2400 px wide  (Studio, every screen by default)
  *   public/images/hero/hero-1-wide.jpg       2:1,   2560 px wide  (wide, short windows)
- *   public/images/hero/hero-1-mobile.jpg     4:3,   1200 px wide  (the phone's picture, above the headline)
+ *   public/images/hero/hero-1-mobile.jpg     5:4,   1200 px wide  (the phone's picture, above the headline, closer)
  *
  * app/page.tsx offers the wide and mobile files through <picture> when
  * they exist; the 16:10 file is the one to push to Studio with
@@ -42,8 +42,16 @@ const CUTS = [
   // full-bleed crop (a 9:16 slice of this scene is all sign and no street:
   // "too zoomed in", Vern, 26 Sep 2026). Nothing sits on top of it, so the
   // sign goes dead centre.
-  { file: "hero-1-mobile.jpg", aspect: 4 / 3, width: 1200, place: [0.5, 0.5] },
+  // Closer than the whole scene (Vern: "on mobile it needs to be more
+  // zoomed in on the HUB"), but not the 9:16 slice: 58% of the master's
+  // width, 5:4, the sign a little above the middle so some crosswalk shows.
+  { file: "hero-1-mobile.jpg", aspect: 5 / 4, width: 1200, place: [0.5, 0.42], zoom: 0.58 },
 ];
+
+// A light grade on every cut (Vern: "add more colour and realism, it feels
+// muted"): a touch more saturation and contrast, and a little sharpening,
+// which the generated master, soft and flat out of the tool, takes well.
+const GRADE = { saturation: 1.18, contrast: 1.1, sharpen: 0.8 };
 
 const master = sharp(masterArg).rotate();
 const { width: W, height: H } = await master.metadata();
@@ -52,7 +60,7 @@ console.log(`master ${W}x${H}, focus ${fx},${fy}, placed at ${px},${py}`);
 for (const cut of CUTS) {
   // The largest box of this shape that fits the master, placed so the focus
   // point lands at (px, py) of the box, as far as the edges allow.
-  let w = W;
+  let w = cut.zoom ? Math.round(W * cut.zoom) : W;
   let h = Math.round(w / cut.aspect);
   if (h > H) {
     h = H;
@@ -79,6 +87,10 @@ for (const cut of CUTS) {
     .rotate()
     .extract({ left, top, width: w, height: h })
     .resize(outW, outH)
+    .modulate({ saturation: GRADE.saturation })
+    // Contrast about mid-grey: out = in * c + 128 * (1 - c).
+    .linear(GRADE.contrast, 128 * (1 - GRADE.contrast))
+    .sharpen({ sigma: GRADE.sharpen })
     .jpeg({ quality: 88, mozjpeg: true })
     .toFile(target);
   const kb = Math.round(fs.statSync(target).size / 1024);

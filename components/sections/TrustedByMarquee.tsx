@@ -2,7 +2,12 @@
 // Extracted from the original WhyHubss section so it can run on the homepage
 // without the stats / numbered claims block that Doug asked us to drop.
 
-const TRUSTED = [
+// One list for both "who uses HUB" marquees: this one and the Lunch & Learn
+// page's, which imports it (LunchLearnFunnel.tsx). Each used to keep its own
+// copy, and the Lunch & Learn one had grown four names this one never had.
+// It lives here, not in the client component, so this server component can
+// read it as plain data.
+export const TRUSTED_BY = [
   "City of Toronto",
   "York Region",
   "City of Vancouver",
@@ -20,7 +25,7 @@ const TRUSTED = [
 ];
 
 // Duplicate the list so the marquee can scroll seamlessly via -50% translate.
-const TICKER = [...TRUSTED, ...TRUSTED];
+const TICKER = [...TRUSTED_BY, ...TRUSTED_BY];
 
 export default function TrustedByMarquee() {
   return (

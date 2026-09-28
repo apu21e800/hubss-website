@@ -1,21 +1,24 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import type { CSSProperties } from "react";
 import Link from "next/link";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
+import LunchLearnCard from "@/components/sections/LunchLearnCard";
 import JsonLd from "@/components/ui/JsonLd";
-import { BUILT_POSTS, getPost, getRelatedPosts } from "@/lib/blog";
-import { TYPE_BY_LABEL, badgeFor } from "@/lib/field-notes-taxonomy";
-import PostConversion, { PRODUCT_SLUGS } from "@/components/blog/PostConversion";
+import { LIVE_POSTS, getPost, getRelatedPosts, type Post } from "@/lib/blog";
+import { TYPE_BY_LABEL, sectionFor, type InsightsSection } from "@/lib/field-notes-taxonomy";
+import PostConversion, { PRODUCT_SLUGS, postFocus } from "@/components/blog/PostConversion";
 import SystemsInPost from "@/components/blog/SystemsInPost";
 import { buildMetadata } from "@/lib/seo";
 import TableOfContents from "@/components/blog/TableOfContents";
 import RelatedPosts from "@/components/blog/RelatedPosts";
-import InstagramShareButton from "@/components/blog/InstagramShareButton";
+import ShareButtons from "@/components/blog/ShareButtons";
 import PostBody from "@/components/blog/PostBody";
 import PhotoImage from "@/components/ui/PhotoImage";
 import { isSanityImage, sanityOgImage, sanitySized } from "@/lib/photos";
+import { focalObjectPosition, formatPostDate } from "@/lib/blog-taxonomy";
 
 /**
  * The posts this deployment built (lib/blog-index.json, from Sanity) are the
@@ -36,11 +39,108 @@ import { isSanityImage, sanityOgImage, sanitySized } from "@/lib/photos";
  */
 export const dynamicParams = false;
 
+// LIVE_POSTS leaves out the archived posts (lib/field-notes-taxonomy.ts), whose
+// addresses next.config.ts redirects to the posts that replaced them.
 export async function generateStaticParams() {
-  return BUILT_POSTS.map((p) => ({ slug: p.slug }));
+  return LIVE_POSTS.map((p) => ({ slug: p.slug }));
+}
+
+/**
+ * A featured photo narrower than this is not stretched across the hero (QA
+ * rest#13): the White Rock Pier photo is 206 px wide and was blown up to
+ * 1440, and seventeen more under 1200 px looked soft. Those get the inset
+ * hero below.
+ */
+const FULL_BLEED_MIN_WIDTH = 1200;
+
+/**
+ * The reading column: 17 px type on a desktop (16 on a phone) and a 70
+ * character measure. Everything that lines up with the article (the share
+ * row, the Lunch & Learn card below lg, the systems rail and the conversion
+ * block) takes the same pair, since `ch` is measured in the element's own
+ * font size.
+ */
+const MEASURE: CSSProperties = { maxWidth: "70ch", fontSize: "clamp(1rem, 0.96rem + 0.2vw, 1.0625rem)" };
+
+/**
+ * The section label, title and meta line, the same over either hero.
+ *
+ * The label sits directly over the title (28 Sep 2026). At the top of the
+ * photo it covered whatever the photo was of: on a phone it sat on the
+ * TORONTO of the Toronto Premium Outlets sign. It is also the way into the
+ * section, so the reader can reach the rest of that kind in one click. One
+ * label only (Vern, 28 Sep 2026): the tag chips that sat beside it went with
+ * the product chips on the cards. It keeps its solid dark backing: orange
+ * straight onto a photograph fails contrast on a pale one (QA rest#19).
+ */
+function HeroTitle({ post, section }: { post: Post; section: InsightsSection }) {
+  return (
+    <>
+      <Link
+        href={`/blog/${section.slug}`}
+        className="group -my-2 mb-2 inline-flex items-center"
+        style={{ minHeight: 44, textDecoration: "none" }}
+      >
+        <span
+          className="transition-colors group-hover:border-orange-400"
+          style={{
+            fontSize: 10.5, fontWeight: 700, letterSpacing: "0.18em", lineHeight: 1,
+            textTransform: "uppercase", color: "#FB923C",
+            background: "rgba(10,10,10,0.72)",
+            border: "1px solid rgba(249,115,22,0.45)",
+            padding: "7px 12px 6px", borderRadius: 4,
+            backdropFilter: "blur(6px)", WebkitBackdropFilter: "blur(6px)",
+          }}
+        >
+          {section.singular}
+        </span>
+      </Link>
+      <h1
+        style={{
+          fontSize: "clamp(1.75rem, 3.2vw, 2.75rem)",
+          fontWeight: 900,
+          lineHeight: 1.08,
+          letterSpacing: "-0.025em",
+          color: "var(--text-primary)",
+          marginBottom: "1.25rem",
+          maxWidth: "22em",
+          textShadow: "0 2px 20px rgba(0,0,0,0.4)",
+        }}
+      >
+        {post.title}
+      </h1>
+      {/* "Sep 8, 2026", as the cards print it (docs/STYLE.md). Each dot
+          travels with the item after it, so a phone never ends a line on one. */}
+      <div style={{ display: "flex", alignItems: "center", columnGap: 16, rowGap: 8, flexWrap: "wrap", fontSize: 13, color: "var(--ink-70)", lineHeight: 1 }}>
+        {[formatPostDate(post.date), post.readTime, "HUB Surface Systems"].map((item, i) => (
+          // The byline from sm up: every post is HUB's, and on a phone it
+          // pushed the line to a second row.
+          <span key={i} className={i === 2 ? "hidden sm:inline-flex" : "inline-flex"} style={{ alignItems: "center", gap: 16, whiteSpace: "nowrap", letterSpacing: i === 0 ? "0.02em" : undefined }}>
+            {i > 0 && <span aria-hidden="true" style={{ width: 3, height: 3, borderRadius: "50%", background: "rgba(249,115,22,0.7)", display: "block", flexShrink: 0 }} />}
+            {item}
+          </span>
+        ))}
+      </div>
+    </>
+  );
 }
 
 type Props = { params: Promise<{ slug: string }> };
+
+/**
+ * The share card's 1200 x 630 crop, held on Studio's focal point when there
+ * is one (Sanity's crop=focalpoint), so a link preview of the Toronto Premium
+ * Outlets post shows the sign, as the hero does.
+ */
+function ogImage(src: string, hotspot: Post["featuredImageHotspot"]): string {
+  const url = new URL(sanityOgImage(src));
+  if (hotspot) {
+    url.searchParams.set("crop", "focalpoint");
+    url.searchParams.set("fp-x", hotspot.x.toFixed(3));
+    url.searchParams.set("fp-y", hotspot.y.toFixed(3));
+  }
+  return url.toString();
+}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
@@ -52,7 +152,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     slug: `blog/${slug}`,
     type: "article",
     publishedTime: post.date,
-    image: post.featuredImage && isSanityImage(post.featuredImage) ? sanityOgImage(post.featuredImage) : post.featuredImage,
+    image: post.featuredImage && isSanityImage(post.featuredImage) ? ogImage(post.featuredImage, post.featuredImageHotspot) : post.featuredImage,
   });
 }
 
@@ -65,6 +165,10 @@ export default async function BlogPostPage({ params }: Props) {
   const related = await getRelatedPosts(post);
   const postUrl = `https://hubss.com/blog/${post.slug}`;
   const type = TYPE_BY_LABEL[post.category] ?? TYPE_BY_LABEL["Blog"];
+  const section = sectionFor(post.category);
+  // The system the post is about, or its subject: the "See StreetPrint"
+  // button, the order of the systems rail and every Lunch & Learn topic.
+  const { system, topic } = postFocus(post);
 
   /**
    * Article schema, typed by content kind (Aug 2026).
@@ -85,7 +189,7 @@ export default async function BlogPostPage({ params }: Props) {
     description: post.excerpt,
     datePublished: post.date,
     dateModified: post.date,
-    articleSection: post.category,
+    articleSection: section.plural,
     wordCount: post.wordCount,
     inLanguage: "en-CA",
     isAccessibleForFree: true,
@@ -127,240 +231,252 @@ export default async function BlogPostPage({ params }: Props) {
       : "https://hubss.com/images/og-default.jpg",
   };
 
-  // Breadcrumb now passes through the type hub, so the trail matches the
-  // site's real shape and each hub accumulates internal link equity.
+  // Breadcrumb passes through the section, so the trail matches the site's
+  // real shape and each section accumulates internal link equity.
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: "https://hubss.com" },
       { "@type": "ListItem", position: 2, name: "Insights", item: "https://hubss.com/blog" },
-      { "@type": "ListItem", position: 3, name: type.plural, item: `https://hubss.com/blog/${type.slug}` },
+      { "@type": "ListItem", position: 3, name: section.plural, item: `https://hubss.com/blog/${section.slug}` },
       { "@type": "ListItem", position: 4, name: post.title, item: postUrl },
     ],
   };
 
-  const formattedDate = new Date(post.date).toLocaleDateString("en-CA", {
-    year: "numeric", month: "long", day: "numeric",
-  });
+  const hero = post.featuredImage;
+  const heroW = post.featuredImageWidth;
+  const heroH = post.featuredImageHeight;
+  const inset = !!hero && !!heroW && !!heroH && heroW < FULL_BLEED_MIN_WIDTH;
+  const focus = focalObjectPosition(post.featuredImageHotspot, heroW, heroH);
+  // The inset photo is shown at its own size or smaller, never enlarged:
+  // at most 520 x 440 beside the title, the column's width on a phone.
+  const insetScale = inset ? Math.min(1, 520 / heroW!, 440 / heroH!) : 1;
+  const insetW = inset ? Math.round(heroW! * insetScale) : 0;
 
   return (
-    <main className="min-h-screen" style={{ background: "var(--bg-dark)" }}>
+    // Paper under a dark hero, like the rest of the site (Vern, 28 Sep 2026):
+    // data-surface="paper" re-scopes the colour tokens for everything below
+    // the hero, which keeps the dark set through data-hero.
+    <main data-surface="paper" className="min-h-screen" style={{ background: "var(--bg-primary)" }}>
       <JsonLd data={articleSchema} />
       <JsonLd data={breadcrumbSchema} />
       <Nav />
 
-      {/* ── Cinematic hero ──────────────────────── */}
-      <header data-hero className="relative w-full overflow-hidden" style={{ height: "68vh", minHeight: 460 }}>
-        {post.featuredImage ? (
-          <PhotoImage
-            src={post.featuredImage}
-            alt={post.featuredImageAlt ?? post.title}
-            fill
-            className="object-cover"
-            priority
-            sizes="100vw"
-          />
-        ) : (
-          <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-card) 100%)" }} />
-        )}
+      {inset ? (
+        /* ── Inset hero ──────────────────────────
+           A photo under 1200 px wide, shown sharp at its own size beside the
+           title, over a blurred wash of its own colours (Sanity's 20 px
+           preview, stretched and blurred), rather than enlarged to the width
+           of the screen. */
+        // No minimum height below lg: on a phone the photo and the title set
+        // it, so a small photo doesn't float above a gap.
+        <header data-hero className="relative w-full overflow-hidden lg:min-h-[max(68vh,460px)]" style={{ background: "var(--bg-dark)" }}>
+          <div className="absolute inset-0" aria-hidden="true">
+            {/* eslint-disable-next-line @next/next/no-img-element -- a blurred wash, not a photo to optimise */}
+            <img
+              src={post.featuredImageLqip ?? sanitySized(hero!, 64, 50)}
+              alt=""
+              className="absolute inset-0 h-full w-full object-cover"
+              style={{ filter: "blur(36px) saturate(1.15)", transform: "scale(1.3)" }}
+            />
+          </div>
+          <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(8,13,22,0.96) 0%, rgba(8,13,22,0.74) 40%, rgba(8,13,22,0.48) 100%)" }} />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgba(8,13,22,0.55) 0%, transparent 70%)" }} />
 
-        {/* Multi-layer gradient for editorial depth */}
-        <div className="absolute inset-0" style={{
-          background: "linear-gradient(to top, rgba(8,13,22,1) 0%, rgba(8,13,22,0.75) 35%, rgba(8,13,22,0.3) 65%, rgba(8,13,22,0.15) 100%)"
-        }} />
-        <div className="absolute inset-0" style={{
-          background: "linear-gradient(90deg, rgba(8,13,22,0.6) 0%, transparent 60%)"
-        }} />
-
-        {/* Category + meta bar */}
-        <div className="absolute top-0 inset-x-0" style={{ paddingTop: "6rem" }}>
-          <div className="max-w-7xl mx-auto px-6">
-            {/* Type badge doubles as the hub link — the reader always knows
-                what kind of document they opened, and can get to the rest of
-                that kind in one click. Tags used to sit here, but only three
-                posts in the library ever had any. */}
-            <div className="flex items-center gap-3 flex-wrap">
-              <Link
-                href={`/blog/${type.slug}`}
-                style={{
-                  fontSize: 10, fontWeight: 700, letterSpacing: "0.18em",
-                  textTransform: "uppercase", color: type.text,
-                  background: type.tint,
-                  border: `1px solid ${type.border}`,
-                  padding: "5px 12px", borderRadius: 4,
-                  backdropFilter: "blur(6px)",
-                  textDecoration: "none",
-                  display: "inline-flex", alignItems: "center", minHeight: 40,
-                }}
-              >
-                {badgeFor(post.category)}
-              </Link>
-              {post.tags?.slice(0, 2).map((tag: string) => (
-                <span key={tag} style={{
-                  fontSize: 10, fontWeight: 700, letterSpacing: "0.18em",
-                  textTransform: "uppercase", color: "var(--accent-text-lg)",
-                  background: "rgba(249,115,22,0.15)",
-                  border: "1px solid rgba(249,115,22,0.3)",
-                  padding: "4px 12px", borderRadius: 4,
-                }}>
-                  {tag}
-                </span>
-              ))}
+          {/* Photo first on a phone, then the title; side by side from lg,
+              the title held to the foot of the hero as on a full-bleed one. */}
+          <div
+            className="relative max-w-7xl mx-auto px-6 pt-8 pb-12 sm:pt-12 sm:pb-14 flex flex-col justify-between gap-7 lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-x-14"
+            style={{ minHeight: "inherit" }}
+          >
+            <figure
+              className="m-0 w-full lg:col-start-2 lg:row-start-1 lg:self-center lg:w-[var(--inset-w)]"
+              style={{ maxWidth: insetW, "--inset-w": `${insetW}px` } as CSSProperties}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element -- Sanity's CDN sizes it; see lib/photos.ts */}
+              <img
+                src={sanitySized(hero!, Math.min(heroW!, 1040))}
+                srcSet={[insetW, insetW * 2]
+                  .map((w) => Math.min(w, heroW!))
+                  .filter((w, i, a) => a.indexOf(w) === i)
+                  .map((w) => `${sanitySized(hero!, w)} ${w}w`)
+                  .join(", ")}
+                sizes={`(max-width: 1023px) min(calc(100vw - 48px), ${insetW}px), ${insetW}px`}
+                alt={post.featuredImageAlt ?? post.title}
+                width={heroW}
+                height={heroH}
+                fetchPriority="high"
+                className="block h-auto w-full"
+                style={{ borderRadius: 10, border: "1px solid rgba(255,255,255,0.16)", boxShadow: "0 24px 60px rgba(0,0,0,0.5)" }}
+              />
+            </figure>
+            <div className="lg:col-start-1 lg:row-start-1 lg:self-end">
+              <HeroTitle post={post} section={section} />
             </div>
           </div>
-        </div>
+        </header>
+      ) : (
+        /* ── Full-bleed hero ───────────────────── */
+        <header data-hero className="relative w-full overflow-hidden" style={{ height: "68vh", minHeight: 460 }}>
+          {hero ? (
+            // containerType: the focal point (Studio's hotspot) is placed
+            // against this box's own size; see focalObjectPosition (QA rest#29).
+            <div className="absolute inset-0" style={{ containerType: "size" }}>
+              <PhotoImage
+                src={hero}
+                alt={post.featuredImageAlt ?? post.title}
+                fill
+                className="object-cover"
+                style={focus ? { objectPosition: focus } : undefined}
+                priority
+                sizes="100vw"
+              />
+            </div>
+          ) : (
+            <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-card) 100%)" }} />
+          )}
 
-        {/* Title block — anchored to bottom */}
-        <div className="absolute inset-x-0 bottom-0">
-          <div className="max-w-7xl mx-auto px-6 pb-14">
-            {/* Orange rule */}
-            <div style={{ width: 48, height: 3, background: "linear-gradient(90deg, #F97316, #EAB308)", borderRadius: 2, marginBottom: "1.25rem" }} />
+          {/* Multi-layer gradient for editorial depth */}
+          <div className="absolute inset-0" style={{
+            background: "linear-gradient(to top, rgba(8,13,22,1) 0%, rgba(8,13,22,0.75) 35%, rgba(8,13,22,0.3) 65%, rgba(8,13,22,0.15) 100%)"
+          }} />
+          <div className="absolute inset-0" style={{
+            background: "linear-gradient(90deg, rgba(8,13,22,0.6) 0%, transparent 60%)"
+          }} />
 
-            <h1 style={{
-              fontSize: "clamp(1.75rem, 3.2vw, 2.75rem)",
-              fontWeight: 900,
-              lineHeight: 1.08,
-              letterSpacing: "-0.025em",
-              color: "var(--text-primary)",
-              marginBottom: "1.25rem",
-              maxWidth: "22em",
-              textShadow: "0 2px 20px rgba(0,0,0,0.4)",
-            }}>
-              {post.title}
-            </h1>
-
-            {/* Meta row */}
-            <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
-              <span style={{ fontSize: 13, color: "var(--ink-55)", letterSpacing: "0.02em", lineHeight: 1 }}>
-                {formattedDate}
-              </span>
-              <span style={{ width: 3, height: 3, borderRadius: "50%", background: "rgba(249,115,22,0.6)", display: "block", flexShrink: 0 }} />
-              <span style={{ fontSize: 13, color: "var(--ink-55)", lineHeight: 1 }}>{post.readTime}</span>
-              <span style={{ width: 3, height: 3, borderRadius: "50%", background: "rgba(249,115,22,0.6)", display: "block", flexShrink: 0 }} />
-              <span style={{ fontSize: 13, color: "var(--ink-55)", lineHeight: 1 }}>HUB Surface Systems</span>
+          {/* Label, title and meta, anchored to the bottom */}
+          <div className="absolute inset-x-0 bottom-0">
+            <div className="max-w-7xl mx-auto px-6 pb-12 sm:pb-14">
+              <HeroTitle post={post} section={section} />
             </div>
           </div>
-        </div>
-      </header>
+        </header>
+      )}
 
       {/* ── Orange accent divider ────────────────────── */}
       <div style={{ height: 2, background: "linear-gradient(90deg, #F97316 0%, #EAB308 50%, transparent 100%)" }} />
 
-      {/* ── Article layout ──────────────────────── */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-8 lg:grid lg:gap-16" style={{ gridTemplateColumns: "1fr 220px" }}>
+      {/* ── Article + sidebar ───────────────────── */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-10 lg:grid lg:gap-16" style={{ gridTemplateColumns: "minmax(0, 1fr) 320px" }}>
+        {/* A container, so a wide table (PostBody) can take the column's full
+            width (100cqw) past the text's measure before it has to scroll. */}
+        <div className="min-w-0" style={{ containerType: "inline-size" }}>
+          {/* data-blog-content is what TableOfContents looks for. It was missing
+              until Sep 2026, so the sidebar's "On this page" never appeared.
+              Plain `prose`, never prose-invert: the plugin's colours point at
+              the tokens (app/globals.css), so the type reads dark on paper. */}
+          <article
+            data-blog-content
+            className="blog-prose prose"
+            style={MEASURE}
+          >
+            {/* Excerpt / lede */}
+            {post.excerpt && (
+              <p style={{
+                fontSize: "1.1rem",
+                lineHeight: 1.7,
+                color: "var(--text-secondary)",
+                borderLeft: "3px solid #F97316",
+                paddingLeft: "1.25rem",
+                marginBottom: "2.5rem",
+                fontStyle: "italic",
+                fontWeight: 400,
+              }}>
+                {post.excerpt}
+              </p>
+            )}
 
-        {/* Article body */}
-        {/* data-blog-content is what TableOfContents looks for. It was missing
-            until Sep 2026, so the sidebar's "On this page" never appeared. */}
-        <article data-blog-content className="blog-prose prose prose-invert" style={{ maxWidth: "72ch" }}>
-          {/* Excerpt / lede */}
-          {post.excerpt && (
-            <p style={{
-              fontSize: "1.05rem",
-              lineHeight: 1.7,
-              color: "var(--ink-70)",
-              borderLeft: "3px solid #F97316",
-              paddingLeft: "1.25rem",
-              marginBottom: "2.5rem",
-              fontStyle: "italic",
-              fontWeight: 400,
-            }}>
-              {post.excerpt}
-            </p>
-          )}
+            {/* The body, from Sanity. PostBody never renders a second h1: the
+                title above is the page's only one (44 of the old posts restated
+                it as a `# ` heading; the import dropped those, and a Heading 1
+                typed in Studio comes out as an h2). */}
+            <PostBody body={post.body} lunchLearnTopic={topic} />
+          </article>
 
-          {/* The body, from Sanity. PostBody never renders a second h1: the
-              title above is the page's only one (44 of the old posts restated
-              it as a `# ` heading; the import dropped those, and a Heading 1
-              typed in Studio comes out as an h2). */}
-          <PostBody body={post.body} />
-        </article>
+          {/* Sharing, after the last paragraph and out of the way. */}
+          <div className="mt-12 pt-5" style={{ ...MEASURE, borderTop: "1px solid var(--border-color)" }}>
+            <ShareButtons url={postUrl} title={post.title} />
+          </div>
+
+          {/* Below lg there is no sidebar: the Lunch & Learn comes straight
+              after the article, never before it. */}
+          <div className="mt-8 lg:hidden" style={MEASURE}>
+            <LunchLearnCard topic={topic} from="insights" layout="row" />
+          </div>
+        </div>
 
         {/* Sidebar */}
         <aside className="hidden lg:block">
-          <div className="sticky" style={{ top: "7rem" }}>
-            {/* Author card */}
-            <div style={{
-              background: "var(--ink-025)",
-              border: "1px solid var(--border-color)",
-              borderRadius: 12,
-              padding: "20px",
-              marginBottom: 24,
-            }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
-                <div style={{
-                  width: 40, height: 40, borderRadius: "50%",
-                  background: "linear-gradient(135deg, #F97316, #EAB308)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 16, fontWeight: 900, color: "#000",
-                  flexShrink: 0,
-                }}>H</div>
-                <div>
-                  <p style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)", margin: 0 }}>HUB Surface Systems</p>
-                  <p style={{ fontSize: 11, color: "var(--text-secondary)", margin: 0 }}>Insights</p>
-                </div>
+          {/* Author card: scrolls away, so the sticky part below has the room. */}
+          <div style={{
+            background: "var(--bg-card)",
+            border: "1px solid var(--border-color)",
+            borderRadius: 12,
+            padding: "18px 20px",
+            marginBottom: 24,
+          }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10 }}>
+              <div style={{
+                width: 40, height: 40, borderRadius: "50%",
+                background: "linear-gradient(135deg, #F97316, #EAB308)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 16, fontWeight: 900, color: "#fff",
+                flexShrink: 0,
+              }} aria-hidden="true">H</div>
+              <div>
+                <p style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)", margin: 0, lineHeight: 1.4 }}>HUB Surface Systems</p>
+                <p style={{ fontSize: 11.5, color: "var(--text-secondary)", margin: 0, lineHeight: 1.4 }}>Insights</p>
               </div>
-              <p style={{ fontSize: 12, color: "var(--text-muted)", lineHeight: 1.6, margin: 0 }}>
-                Canada&apos;s leader in decorative and functional pavement solutions since 1999.
-              </p>
             </div>
+            {/* Facts the site already prints (CLAUDE.md). The line it replaces
+                called HUB "Canada's leader in … pavement solutions": a ranking
+                with no source, and "solutions" is on docs/STYLE.md's list. */}
+            <p style={{ fontSize: 12.5, color: "var(--text-secondary)", lineHeight: 1.6, margin: 0 }}>
+              Canadian-owned since 1999, with offices in Milton, Ontario and Ladysmith, British Columbia.
+            </p>
+          </div>
 
-            <TableOfContents />
-
-            {/* Share */}
-            <div style={{ marginTop: 24 }}>
-              <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", color: "var(--text-secondary)", marginBottom: 12 }}>
-                Share
-              </p>
-              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                <a
-                  href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(postUrl)}&text=${encodeURIComponent(post.title)}`}
-                  target="_blank" rel="noopener noreferrer"
-                  style={{
-                    display: "flex", alignItems: "center", gap: 8, padding: "8px 12px",
-                    background: "var(--ink-05)", border: "1px solid var(--border-color)",
-                    borderRadius: 8, color: "var(--text-muted)", fontSize: 12, fontWeight: 600, textDecoration: "none",
-                    transition: "border-color 0.2s",
-                  }}
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                  Post to X
-                </a>
-                <a
-                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(postUrl)}`}
-                  target="_blank" rel="noopener noreferrer"
-                  style={{
-                    display: "flex", alignItems: "center", gap: 8, padding: "8px 12px",
-                    background: "var(--ink-05)", border: "1px solid var(--border-color)",
-                    borderRadius: 8, color: "var(--text-muted)", fontSize: 12, fontWeight: 600, textDecoration: "none",
-                  }}
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                  Facebook
-                </a>
-                <InstagramShareButton postUrl={postUrl} />
-              </div>
+          {/* Contents and the Lunch & Learn stay in view while the article
+              scrolls. The card replaced the Share block (X, Facebook,
+              Instagram) on 28 Sep 2026: Vern, "the social callout is not that
+              great here". It is held to the bottom of the sticky column and
+              the contents scroll inside theirs if a post has many sections,
+              so the card is never pushed off the screen. */}
+          <div className="sticky flex flex-col gap-6" style={{ top: "6rem", maxHeight: "calc(100vh - 7.5rem)" }}>
+            <div className="min-h-0 overflow-y-auto scrollbar-hide">
+              <TableOfContents />
+            </div>
+            <div className="flex-shrink-0">
+              <LunchLearnCard topic={topic} from="insights" />
             </div>
           </div>
         </aside>
       </div>
 
       {/* ── Systems rail + typed conversion ──────── */}
-      <SystemsInPost products={post.products} />
-      <PostConversion post={post} type={type} />
+      {/* In the reading column's line and measure, so the page reads down one
+          edge instead of stepping in to a centred box. */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-12 sm:pb-16">
+        <div className="flex flex-col gap-8" style={MEASURE}>
+          <SystemsInPost products={post.products} primary={system} />
+          {/* The typed ask, from lg up. Below lg the Lunch & Learn card has
+              just followed the article, and the same button twice on one
+              phone screen is the repetition Doug's round took out (25 Sep). */}
+          <div className="hidden lg:block">
+            <PostConversion post={post} />
+          </div>
+        </div>
+      </div>
 
       {/* ── Related posts ──────────────────────── */}
-      <div style={{ borderTop: "1px solid var(--border-color)", background: "#0c0c0c" }}>
+      <div style={{ borderTop: "1px solid var(--border-color)", background: "var(--bg-section-asphalt)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
-          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--accent-text-lg)", marginBottom: 20 }}>
-            Continue reading
-          </p>
           <RelatedPosts posts={related} currentSlug={post.slug} />
         </div>
       </div>
 
-      <LunchLearn compact />
+      <LunchLearn compact topic={topic} from="insights" />
       <Footer />
     </main>
   );

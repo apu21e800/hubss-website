@@ -66,3 +66,9 @@ catalogue-source/
 
 # Generated at the start of every build from Sanity by scripts/gen-blog-index.ts
 lib/blog-index.json
+
+# Sanity plans, backups and the applier live on Vern's machine only (they
+# can hold whole documents); never commit them.
+/.sanity-work/
+# Local browser-tool scratch on Vern's machine.
+/.playwright-mcp/

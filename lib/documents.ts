@@ -10,6 +10,7 @@ export type DocType =
   | "colour"
   | "installation"
   | "brochure"
+  | "catalogue"
   | "faq"
   | "design"
   | "application"
@@ -29,6 +30,7 @@ export const docTypeLabel: Record<DocType, string> = {
   colour:       "Colour Guide",
   installation: "Installation Guide",
   brochure:     "Brochure",
+  catalogue:    "Catalogue",
   faq:          "FAQ",
   design:       "Design Manual",
   application:  "Application Guide",
@@ -38,13 +40,22 @@ export const docTypeLabel: Record<DocType, string> = {
 
 // All product docs keyed by product slug.
 // Paths relative to /public — spaces encoded as %20, brackets as %5B/%5D.
+//
+// Names (QA, 27 Sep 2026): one name for one kind of document on every
+// product ("Specification" everywhere, not "Spec" on one), Canadian spelling
+// even where the supplier's PDF is American ("Catalogue", "Colourant"), and
+// no two rows on a page with the same name. TrafficPatternsXD had three rows
+// called "Specification": the branded sheet names TrafficPatternsXD and
+// Ennis-Flint, the generic one (and its French edition) names neither, for
+// tenders that cannot name a product. /resources uses the same words
+// ("· Branded", "· Generic"; lib/resource-documents.ts).
 const ALL_DOCS: Record<string, ProductDocument[]> = {
 
   "traffic-patterns-xd": [
-    { label: "Specification",                        type: "spec",         href: "/docs/TrafficPatternsXD/TrafficPatternsXD-Specification-Branded.pdf" },
-    { label: "Specification",                        type: "spec",         href: "/docs/TrafficPatternsXD/TrafficPatternsXD-Specification.pdf" },
-    { label: "Specification",                        type: "spec",  lang: "FR", href: "/docs/TrafficPatternsXD/TrafficPatternsXD-Specification-FR.pdf" },
-    { label: "Two-Component Sealer Spec",             type: "spec",         href: "/docs/TrafficPatternsXD/TrafficPatternsXD-Two-Component-Sealer.pdf" },
+    { label: "Specification · Branded",              type: "spec",         href: "/docs/TrafficPatternsXD/TrafficPatternsXD-Specification-Branded.pdf" },
+    { label: "Specification · Generic",              type: "spec",         href: "/docs/TrafficPatternsXD/TrafficPatternsXD-Specification.pdf" },
+    { label: "Specification · Generic",              type: "spec",  lang: "FR", href: "/docs/TrafficPatternsXD/TrafficPatternsXD-Specification-FR.pdf" },
+    { label: "Two-Component Sealer Specification",   type: "spec",         href: "/docs/TrafficPatternsXD/TrafficPatternsXD-Two-Component-Sealer.pdf" },
     { label: "Cross-Section Detail",                 type: "other",        href: "/docs/TrafficPatternsXD/TrafficPatternsXD-CrossSection-Detail.pdf" },
     { label: "Colour Guide",                         type: "colour",       href: "/docs/TrafficPatternsXD/TrafficPatternsXD-Colour-Guide.pdf" },
     { label: "Technical Data Sheet",                 type: "tds",          href: "/docs/TrafficPatternsXD/TS002_TrafficPatternsXD_220204.pdf" },
@@ -83,10 +94,10 @@ const ALL_DOCS: Record<string, ProductDocument[]> = {
   ],
 
   "airmark": [
-    { label: "AirMark Brochure",                     type: "brochure",     href: "/docs/AirMark/AirMark/AirMark_Brocure.pdf" },
-    { label: "AirMark Brochure",                     type: "brochure", lang: "FR", href: "/docs/AirMark/AirMark/AirMark-Brocure-FR.pdf" },
+    { label: "Brochure",                             type: "brochure",     href: "/docs/AirMark/AirMark/AirMark_Brocure.pdf" },
+    { label: "Brochure",                             type: "brochure", lang: "FR", href: "/docs/AirMark/AirMark/AirMark-Brocure-FR.pdf" },
     { label: "PreMark for Airports",                 type: "application",  href: "/docs/AirMark/PreMark%20-%20Groundside/PreMark-for-Airports.pdf" },
-    { label: "Airfield Paint Product Data",           type: "tds",          href: "/docs/AirMark/Airfield%20Paint/WB-Airfield-Product-Data.pdf" },
+    { label: "Airfield Paint Product Data Sheet",     type: "tds",          href: "/docs/AirMark/Airfield%20Paint/WB-Airfield-Product-Data.pdf" },
     { label: "Traffic Paint for Airfields",           type: "application",  href: "/docs/AirMark/Airfield%20Paint/TrafficPaint-for-Airfields.pdf" },
     { label: "Traffic Paint for Airfields",           type: "application", lang: "FR", href: "/docs/AirMark/Airfield%20Paint/TrafficPaint-for-Airfields-FR.pdf" },
   ],
@@ -95,7 +106,7 @@ const ALL_DOCS: Record<string, ProductDocument[]> = {
     { label: "Brochure",                             type: "brochure",     href: "/docs/StreetBond/StreetBond/StreetBond-Brochure.pdf" },
     { label: "Colour Card · 2026 Edition",           type: "colour",       href: "/docs/StreetBond/StreetBond/StreetBond-Colour-Card-2026.pdf" },
     { label: "Substrate Guide",                      type: "other",        href: "/docs/StreetBond/StreetBond/StreetBond_Substrate_Guide.pdf" },
-    { label: "Colorant Technical Data Sheet",        type: "tds",          href: "/docs/StreetBond/StreetBond/StreetBond-Colorant.pdf" },
+    { label: "Colourant Technical Data Sheet",       type: "tds",          href: "/docs/StreetBond/StreetBond/StreetBond-Colorant.pdf" },
     { label: "SB120 Technical Data Sheet",           type: "tds",          href: "/docs/StreetBond/StreetBond%20120/StreetBond-SB120-Data-Sheet-12.22-Rev.pdf" },
     { label: "SB120 Specification",                  type: "spec",         href: "/docs/StreetBond/StreetBond%20120/StreetBond_SB120_Specifications.pdf" },
     { label: "SB120 Over Concrete Specification",    type: "spec",         href: "/docs/StreetBond/StreetBond%20120/StreetBond-SB120-Over-Concrete-Specification.pdf" },
@@ -122,7 +133,7 @@ const ALL_DOCS: Record<string, ProductDocument[]> = {
     { label: "Colour Palette",                       type: "colour",       href: "/docs/MMAX/MMAX-Colour-Palette.pdf" },
     { label: "Product Data Sheet",                   type: "tds",          href: "/docs/MMAX/MMAX-Product-Data.pdf" },
     { label: "Next Gen Brochure",                    type: "brochure",     href: "/docs/MMAX/MMAX-Next-Gen-Brochure_06_09_23-1.pdf" },
-    { label: "Extended Season Corundum PDS",         type: "tds",          href: "/docs/MMAX/Extended-Season-MMAX-Corundum-PDS-070723.pdf" },
+    { label: "Extended Season Corundum Product Data Sheet", type: "tds",   href: "/docs/MMAX/Extended-Season-MMAX-Corundum-PDS-070723.pdf" },
     { label: "Extended Season Product Data Sheet",   type: "tds",          href: "/docs/MMAX/Extended-Season-MMAX-product-data-sheet.pdf" },
     { label: "Corundum Area Markings · Application Instructions", type: "installation", href: "/docs/MMAX/Application_Instructions_MMAX_Corundum_Area_Markings.pdf" },
   ],
@@ -136,7 +147,7 @@ const ALL_DOCS: Record<string, ProductDocument[]> = {
     { label: "FAQ",                                  type: "faq",          href: "/docs/streetprint/streetprint-faq.pdf" },
     { label: "Colour Guide",                         type: "colour",       href: "/docs/streetprint/streetprint-colour-guide.pdf" },
     { label: "Asphalt Texturing Specification",      type: "spec",         href: "/docs/streetprint/StreetPrint-Asphalt-Texturing-Specification.pdf" },
-    { label: "Template Catalog",                     type: "other",        href: "/docs/streetprint/streetprint-template-catalog.pdf" },
+    { label: "Template Catalogue",                   type: "catalogue",    href: "/docs/streetprint/streetprint-template-catalog.pdf" },
   ],
 };
 

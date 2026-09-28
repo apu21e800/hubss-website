@@ -3,19 +3,23 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
-import { motion, AnimatePresence, type Variants } from "framer-motion";
+import { motion, AnimatePresence, MotionConfig, useReducedMotion, type Variants } from "framer-motion";
 import { products } from "@/lib/products";
-import { ideaBook } from "@/lib/catalogue";
+import { catalogue, catalogueReady, cataloguePageUrl, ideaBook } from "@/lib/catalogue";
+import { showCatalogue } from "@/lib/feature-flags";
 import { applications } from "@/lib/applications";
-import { PRODUCT_CATEGORIES } from "@/lib/product-categories";
+import { PRODUCT_CATEGORIES, PRODUCT_MENU_LINES } from "@/lib/product-categories";
+import { lunchLearnHref } from "@/lib/lunch-learn";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 import ChromeImg from "@/components/ui/ChromeImg";
-import { CHROME_PANELS } from "@/lib/chrome-images.mjs";
-// The menus draw no photographs since 25 Sep 2026 (Doug's round: one job per
-// panel, names first). The two header logos are SVGs on next/image marked
-// `unoptimized`; nothing here goes through /_next/image.
+import { CHROME_MARKS, CHROME_PANELS } from "@/lib/chrome-images.mjs";
+import navInsights from "@/lib/nav-insights.json";
+// Nothing the menus draw goes through /_next/image. Family and group photos
+// and Moose are ChromeImg (baked at build time); Insights photos are Sanity
+// CDN addresses (or, for the fallback cover, baked chrome files) written at
+// build time into lib/nav-insights.json; the Idea Book cover is the book's own
+// raster. The two header logos are SVGs on next/image marked `unoptimized`.
 
 /**
  * The search palette loads when somebody opens it, not before.
@@ -37,14 +41,22 @@ import { CHROME_PANELS } from "@/lib/chrome-images.mjs";
 const SearchOverlay = dynamic(() => import("@/components/sections/SearchOverlay"), { ssr: false });
 
 // ── Nav link config ────────────────────────────────────────────
-// Insights is a plain link (Doug's round, 25 Sep 2026): its dropdown was a
-// full-bleed magazine cover of a Walmart Supercentre sign carrying eighty-odd
-// words and four calls to action. The library has its own front page.
+// Insights has its panel back (Vern, 28 Sep 2026: "it had an editorial feel
+// to it, that part was working, just needed improvement"). What Doug objected
+// to on 25 Sep, a full-bleed, viewport-high magazine cover of a Walmart sign
+// carrying eighty-odd words and four calls to action, is what went: the
+// cover is now one photo in a column, and the panel keeps one "View all".
 const PLAIN_LINKS = [
-  { label: "Insights", href: "/blog" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
+
+type Panel = "products" | "applications" | "insights";
+const PANEL_IDS: Record<Panel, string> = {
+  products: "products-mega-menu",
+  applications: "applications-mega-menu",
+  insights: "insights-mega-menu",
+};
 
 // The search palette's data lives in lib/search.ts. A stale copy of it used
 // to sit here, unread, and was the last place on the site still calling the
@@ -54,17 +66,16 @@ const PLAIN_LINKS = [
 // PRODUCT_CATEGORIES lives in lib/product-categories.ts, shared with the
 // /products index so the menu and the page can never name a family twice.
 //
-// MENU PRINCIPLES (Doug's round, 25 Sep 2026; balanced 26 Sep): one job per
-// panel — show where you can go, grouped clearly. Names are the content; the
-// per-product taglines went ("MMA resin lane coating" under MMAX was the one
-// real loss; the Coatings heading and the product page carry it). What each
-// family or group gets instead is one photograph, its lead member's, and a
-// product family gets a four-word note (lib/product-categories.ts menuNote),
-// because a panel of bare names read as a directory listing. One "View all"
-// per panel. No promotions, no repeated calls to action (the header already
-// carries Lunch & Learn), no article teaser. Same family names as /products,
-// the product pages and the Idea Book. Each desktop panel under 60 words;
-// the phone drawer under 120.
+// MENU PRINCIPLES (Doug's round, 25 Sep 2026; balanced 26 and 28 Sep): show
+// where you can go, grouped clearly, names first. Each family or group opens
+// with one photograph; each product name carries one short line saying what
+// it is (PRODUCT_MENU_LINES, the Idea Book's own words), because "MMAX" tells
+// a specifier nothing and a panel of bare names read as a directory listing
+// (Vern, 28 Sep: "we stripped the last version a bit too much"). Application
+// names describe themselves and carry no line. Every panel ends the same way:
+// one "View all" and one quiet Lunch & Learn card, in the same place each time
+// (Vern, 28 Sep: add the Lunch & Learn button back to both directories). Same
+// family names as /products, the product pages and the Idea Book.
 
 // ── Application groupings ─────────────────────────────────────────────
 // Four groups a specifier would recognise, each named for the place, not the
@@ -92,69 +103,193 @@ const APPLICATION_GROUPS = [
   },
 ];
 
+// ── Insights data ─────────────────────────────────────────────────────
+// The cover story and the newest posts, written at build time from Sanity by
+// scripts/gen-nav-insights.ts (the checked-in copy is the fallback when
+// Sanity can't be reached). Photos are Sanity CDN URLs already sized for the
+// menu. It replaces the hand-picked FEATURED_POSTS (lib/nav-featured-posts.mjs),
+// whose titles and types had drifted from the posts they named.
+interface NavImage { src: string; srcSet: string }
+interface NavPost { slug: string; title: string; type: string; publishedAt: string; date: string; thumb: NavImage }
+interface NavInsights { cover: (NavPost & { image: NavImage }) | null; latest: NavPost[] }
+const INSIGHTS = navInsights as NavInsights;
+
+// Insights' three sections under their new names (28 Sep 2026). A post's
+// stored type (lib/field-notes-taxonomy.ts) prints as the section it lives in.
+const INSIGHT_KIND: Record<string, string> = {
+  "Case Study": "Project",
+  "Project Profile": "Project",
+  Guide: "Guide",
+  "White Paper": "Guide",
+  Blog: "Article",
+};
+const kindOf = (type: string) => INSIGHT_KIND[type] ?? "Article";
+const INSIGHT_SECTIONS = [
+  { label: "Projects", href: "/blog/projects" },
+  { label: "Guides", href: "/blog/guides" },
+  { label: "Articles", href: "/blog/articles" },
+];
+
+// The Idea Book, as a publication in the Insights panel and the drawer: its
+// cover, its name, one line, a link to the reader. It sits there as the thing
+// it is, next to the articles, never as a promotion (Doug, 25 Sep: no
+// catalogue buttons in the menus). Hidden with the other Idea Book surfaces
+// when NEXT_PUBLIC_SHOW_CATALOGUE is off (lib/feature-flags.ts).
+const IDEA_BOOK_LINE = "Every system and every application, in one book.";
+const ideaBookCover = catalogue.coverThumb ?? null;
+// The 240px thumbnail, and the 800px first page for a 2x screen (the page the
+// homepage band shows); plain files under /catalogue, never /_next/image.
+const ideaBookCoverSet = ideaBookCover
+  ? `${ideaBookCover} 240w, ${cataloguePageUrl(1, catalogue.widths[0])} ${catalogue.widths[0]}w`
+  : undefined;
+const showIdeaBook = () => showCatalogue() && catalogueReady && ideaBookCover !== null;
+
+// Lunch & Learn, in the words the site already uses (LunchLearnCard: "A free
+// 45-minute working session ... Lunch is on us.").
+const LL_LINE = "A free 45-minute session. Lunch is on us.";
+
 // ── Mega menu — shared shell ─────────────────────────────────────────
-// Wide container, generous padding, dark surface, accent top line.
+// Same container as the bar above it, so the panel's left edge lines up with
+// the logo and its right edge with the Lunch & Learn button.
 function MegaShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="px-8 lg:px-14 xl:px-20 2xl:px-28 pt-7 pb-8 max-h-[calc(100vh-72px)] overflow-y-auto overscroll-contain">
-      {children}
+    <div className="max-h-[calc(100vh-72px)] overflow-y-auto overscroll-contain">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-7 pb-6">{children}</div>
     </div>
   );
 }
 
 const ACCENT = "var(--accent-text)";  // small-text accent (WCAG-safe on dark surfaces)
 
-// ── Directory column — one family or group: a photo, a heading, names ──
-// BALANCE (Vern, 26 Sep 2026): the names-only panels of 25 Sep read as a
-// directory listing — "we went from one extreme to another". Each column now
-// opens with one photograph the width of the column (CHROME_PANELS), and a
-// product family carries its four-word note. Four pictures a panel, not
-// fourteen; the names are still the content, and the panels stay under 60 words.
-function MenuColumn({
-  label, note, image, imageAlt, items,
-}: {
-  label: string;
-  note?: string;
-  image?: string;
-  imageAlt?: string;
-  items: { href: string; name: string }[];
-}) {
+// The letterspaced label every column and section opens with.
+function MenuLabel({ children, rule = true, className = "" }: { children: React.ReactNode; rule?: boolean; className?: string }) {
   return (
-    <div>
-      {image && (
-        <ChromeImg
-          family="panel"
-          src={image}
-          alt={imageAlt ?? ""}
-          sizes="(min-width: 1536px) 300px, (min-width: 1280px) 22vw, 40vw"
-          width={640}
-          height={320}
-          className="mb-4 aspect-[2/1] w-full rounded-xl object-cover"
-          style={{ border: "1px solid var(--ink-10)" }}
-        />
-      )}
-      <div className="mb-3 pb-3" style={{ borderBottom: "1px solid rgba(249,115,22,0.18)" }}>
-        <p className="text-[10px] font-bold tracking-[0.22em] uppercase" style={{ color: ACCENT }}>
-          {label}
-        </p>
-        {note && (
-          <p className="mt-1 text-[12px] leading-snug" style={{ color: "var(--ink-55)" }}>
-            {note}
-          </p>
+    <div
+      className={`text-[10.5px] font-bold tracking-[0.2em] uppercase ${rule ? "pb-3 mb-2" : ""} ${className}`}
+      style={{ color: ACCENT, borderBottom: rule ? "1px solid rgba(249,115,22,0.18)" : undefined }}
+    >
+      {children}
+    </div>
+  );
+}
+
+// ── Photographs and the ruled tile ───────────────────────────────────
+// A family's or group's picture is its CHROME_PANELS entry (lib/chrome-images.mjs),
+// keyed by the label the menu prints, so the baker and the menu read one list.
+// A family with no photo that meets the rules gets a ruled tile instead: the
+// hatching an engineer draws through asphalt or concrete cut in section, and
+// one fact about the family in type. That is Asphalt & Concrete Repair since
+// 28 Sep 2026 (its only photo carried a third party's copyright, QA pa#7).
+const TILE_LINES: Record<string, string> = {
+  // lib/product-categories.ts intro: "... for asphalt and concrete, deployable year-round."
+  "Asphalt & Concrete Repair": "For asphalt and concrete, year-round",
+};
+const HATCH = "repeating-linear-gradient(-45deg, var(--ink-06) 0 1px, transparent 1px 9px)";
+
+function RuledTile({ line, compact = false }: { line?: string; compact?: boolean }) {
+  return (
+    <div
+      aria-hidden="true"
+      className={`relative overflow-hidden ${compact ? "h-12 w-24 flex-shrink-0 rounded-lg" : "aspect-[2/1] max-xl:aspect-[5/2] w-full rounded-xl"}`}
+      style={{ background: `${HATCH}, var(--bg-card)`, border: "1px solid var(--ink-10)" }}
+    >
+      <div className={`absolute ${compact ? "left-2.5 bottom-2.5" : "left-4 right-4 bottom-4"}`}>
+        <span className="block rounded-full" style={{ width: compact ? 18 : 28, height: 3, background: "#F97316" }} />
+        {!compact && line && (
+          <div className="font-display mt-2.5 text-[15px] font-bold leading-snug text-balance" style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
+            {line}
+          </div>
         )}
       </div>
-      <ul className="space-y-0.5">
+    </div>
+  );
+}
+
+function GroupPicture({ label, compact = false }: { label: string; compact?: boolean }) {
+  const photo = (CHROME_PANELS as Record<string, { src: string } | undefined>)[label];
+  if (!photo) return <RuledTile line={TILE_LINES[label]} compact={compact} />;
+  return compact ? (
+    <ChromeImg
+      family="panel"
+      src={photo.src}
+      alt=""
+      sizes="96px"
+      width={96}
+      height={48}
+      className="h-12 w-24 flex-shrink-0 rounded-lg object-cover"
+      style={{ border: "1px solid var(--ink-10)" }}
+    />
+  ) : (
+    <ChromeImg
+      family="panel"
+      src={photo.src}
+      alt=""
+      sizes="(min-width: 1280px) 290px, 22vw"
+      width={640}
+      height={320}
+      // 5:2 below xl, where the descriptors wrap: a 1024x768 screen then
+      // shows the whole panel without scrolling.
+      className="aspect-[2/1] max-xl:aspect-[5/2] w-full rounded-xl object-cover"
+      style={{ border: "1px solid var(--ink-10)" }}
+    />
+  );
+}
+
+type MenuItem = { href: string; name: string; line?: string };
+
+function productFamily(cat: (typeof PRODUCT_CATEGORIES)[number]): MenuItem[] {
+  const items: MenuItem[] = cat.slugs.flatMap((sl) => {
+    const p = products.find((x) => x.slug === sl);
+    return p ? [{ href: `/products/${p.slug}`, name: p.name, line: PRODUCT_MENU_LINES[p.slug] }] : [];
+  });
+  // The one structural extra a column may carry: a real secondary
+  // destination (the pattern gallery under Stamped Asphalt).
+  if (cat.secondary) items.push({ href: cat.secondary.href, name: cat.secondary.label, line: cat.secondary.menuLine });
+  return items;
+}
+
+function applicationGroup(group: (typeof APPLICATION_GROUPS)[number]): MenuItem[] {
+  return group.slugs.flatMap((sl) => {
+    const a = applications.find((x) => x.slug === sl);
+    return a ? [{ href: `/applications/${a.slug}`, name: a.name }] : [];
+  });
+}
+
+// ── Directory column: one family or group, its picture, label, names ──
+// The rows hang 10px outside the column (-mx-2.5) so their text lines up
+// with the picture and the label while the hover fill still has room.
+// The four columns share three rows (subgrid): when a label wraps, as
+// "Commercial & Sustainability" does at 1024px, every label row grows with
+// it and the text sits on its rule, so the four lists still start level.
+function MenuColumn({ label, items }: { label: string; items: MenuItem[] }) {
+  return (
+    <div className="row-span-3 grid grid-rows-subgrid">
+      <div className="mb-4">
+        <GroupPicture label={label} />
+      </div>
+      <MenuLabel className="flex items-end">{label}</MenuLabel>
+      <ul>
         {items.map((it) => (
           <li key={it.href}>
             <Link
               href={it.href}
-              className="group flex items-center justify-between gap-2 px-2.5 py-2 rounded-md transition-colors hover:bg-[var(--ink-05)]"
+              // data-tap: a 44px floor on touch screens (app/globals.css), for
+              // the tablets wide enough to get these panels.
+              data-tap="44"
+              className={`group -mx-2.5 flex ${it.line ? "items-start" : "items-center"} justify-between gap-3 px-2.5 py-2 rounded-lg transition-colors hover:bg-[var(--ink-05)]`}
             >
-              <span className="text-[14px] font-semibold leading-snug group-hover:text-[var(--accent-text)] transition-colors" style={{ color: "var(--text-primary)" }}>
-                {it.name}
+              <span className="min-w-0">
+                <span className="block text-[14.5px] font-semibold leading-snug group-hover:text-[var(--accent-text)] transition-colors" style={{ color: "var(--text-primary)" }}>
+                  {it.name}
+                </span>
+                {it.line && (
+                  <span className="mt-0.5 block text-[12.5px] leading-snug text-pretty" style={{ color: "var(--ink-58)" }}>
+                    {it.line}
+                  </span>
+                )}
               </span>
               <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                className="opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" style={{ color: ACCENT }} aria-hidden="true">
+                className={`${it.line ? "mt-[5px]" : ""} opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0`} style={{ color: ACCENT }} aria-hidden="true">
                 <path d="M9 18l6-6-6-6" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </Link>
@@ -165,13 +300,64 @@ function MenuColumn({
   );
 }
 
-// ── The one "View all" per panel ──────────────────────────────────────
-function MenuViewAll({ href, label }: { href: string; label: string }) {
+// ── Lunch & Learn: the one card per panel ────────────────────────────
+// Vern, 28 Sep 2026: "add the Lunch & Learn button back to the Product and
+// Applications mega menu." It lives in each panel's footer, the same place
+// every time, and stays quieter than the photographs: a small Moose, one
+// line, an outlined button (the bar above already carries the orange one).
+// The link carries a topic into the booking form (lib/lunch-learn.ts), so
+// Doug's request email says which menu the visitor booked from.
+function MooseAvatar({ size = 40 }: { size?: number }) {
   return (
-    <div className="mt-7 pt-4" style={{ borderTop: "1px solid var(--ink-08)" }}>
+    <span aria-hidden="true" className="relative flex-shrink-0" style={{ width: size, height: size }}>
+      <span className="absolute inset-0 rounded-full" style={{ background: "rgba(249,115,22,0.14)", border: "1.5px solid rgba(249,115,22,0.45)" }} />
+      {/* 122% of the ring, bottom-aligned: Moose looks out over the edge. */}
+      <ChromeImg
+        family="moose"
+        src={CHROME_MARKS.moose}
+        alt=""
+        width={160}
+        height={160}
+        sizes={`${Math.round(size * 1.22)}px`}
+        className="absolute bottom-0 left-1/2 w-auto"
+        style={{ height: "122%", maxWidth: "none", transform: "translateX(-50%)" }}
+      />
+    </span>
+  );
+}
+
+function LunchLearnSlot({ topic }: { topic: string }) {
+  return (
+    <div
+      className="flex items-center gap-3.5 rounded-xl py-2.5 pl-3.5 pr-2.5"
+      style={{ background: "var(--ink-03)", border: "1px solid var(--ink-08)" }}
+    >
+      <MooseAvatar size={38} />
+      <div className="min-w-0">
+        <div className="text-[13px] font-bold leading-tight" style={{ color: "var(--text-primary)" }}>Lunch &amp; Learn</div>
+        <div className="mt-0.5 text-[12px] leading-snug" style={{ color: "var(--ink-60)" }}>{LL_LINE}</div>
+      </div>
+      <Link
+        href={lunchLearnHref(topic, "menu")}
+        className="ml-2 inline-flex min-h-[44px] flex-shrink-0 items-center gap-2 rounded-lg px-4 text-[13px] font-bold whitespace-nowrap transition-colors hover:bg-[rgba(249,115,22,0.12)]"
+        style={{ color: ACCENT, border: "1px solid rgba(249,115,22,0.45)" }}
+      >
+        Book a session
+        <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.25} strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </Link>
+    </div>
+  );
+}
+
+// ── Every panel's footer: the one "View all", and Lunch & Learn ──────
+function MenuFooter({ href, label, topic }: { href: string; label: string; topic: string }) {
+  return (
+    <div className="mt-7 flex flex-wrap items-center justify-between gap-x-8 gap-y-4 pt-4" style={{ borderTop: "1px solid var(--ink-08)" }}>
       <Link
         href={href}
-        className="group inline-flex items-center gap-2 px-2.5 py-1.5 rounded-md text-[13px] font-bold transition-colors hover:bg-[var(--ink-05)] hover:text-[var(--accent-text)]"
+        className="group -ml-3 inline-flex min-h-[44px] items-center gap-2 rounded-lg px-3 text-[13.5px] font-bold transition-colors hover:bg-[var(--ink-05)] hover:text-[var(--accent-text)]"
         style={{ color: "var(--text-primary)" }}
       >
         {label}
@@ -179,77 +365,187 @@ function MenuViewAll({ href, label }: { href: string; label: string }) {
           <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </Link>
+      <LunchLearnSlot topic={topic} />
     </div>
   );
 }
 
-// The picture a family or group opens with: CHROME_PANELS in
-// lib/chrome-images.mjs, keyed by the label the menu prints, so the baker and
-// the menu read one list and nothing here can ask for a file nobody baked.
-// Plain <img srcset> over baked WebPs, never /_next/image.
-function panelPhoto(label: string) {
-  const image = (CHROME_PANELS as Record<string, string>)[label];
-  return { image, imageAlt: image ? `${label}` : "" };
-}
-
-function productFamily(cat: (typeof PRODUCT_CATEGORIES)[number]) {
-  const items = cat.slugs.flatMap((sl) => {
-    const p = products.find((x) => x.slug === sl);
-    return p ? [{ href: `/products/${p.slug}`, name: p.name }] : [];
-  });
-  // The one structural extra a column may carry: a real secondary
-  // destination (the pattern gallery under Stamped Asphalt).
-  if (cat.secondary) items.push({ href: cat.secondary.href, name: cat.secondary.label });
-  return { items, ...panelPhoto(cat.label) };
-}
-
-function applicationGroup(group: (typeof APPLICATION_GROUPS)[number]) {
-  const items = group.slugs.flatMap((sl) => {
-    const a = applications.find((x) => x.slug === sl);
-    return a ? [{ href: `/applications/${a.slug}`, name: a.name }] : [];
-  });
-  return { items, ...panelPhoto(group.label) };
-}
-
-// ── Products panel — four families: photo, name, note, members ────────
+// ── Products panel: four families, each with its products and lines ──
 function ProductsMegaMenu() {
   return (
     <MegaShell>
-      <div className="grid grid-cols-2 xl:grid-cols-4 gap-x-12 xl:gap-x-16 gap-y-10">
-        {PRODUCT_CATEGORIES.map((cat) => {
-          const { items, image, imageAlt } = productFamily(cat);
-          return (
-            <MenuColumn key={cat.label} label={cat.label} note={cat.menuNote} image={image} imageAlt={imageAlt} items={items} />
-          );
-        })}
+      <div className="grid grid-cols-4 gap-x-8 xl:gap-x-12">
+        {PRODUCT_CATEGORIES.map((cat) => (
+          <MenuColumn key={cat.label} label={cat.label} items={productFamily(cat)} />
+        ))}
       </div>
-      <MenuViewAll href="/products" label="View all products" />
+      {/* The topic is the whole range: which family a visitor last hovered
+          on the way down to this card says little about what they want. */}
+      <MenuFooter href="/products" label="View all products" topic="HUB systems" />
     </MegaShell>
   );
 }
 
-// ── Applications panel — four groups: photo, name, members ────────────
-// The group names say where you are (Streets & Safety, Residential), so
-// they carry a photo but no note.
+// ── Applications panel: four groups, picture, label, names ───────────
 function ApplicationsMegaMenu() {
   return (
     <MegaShell>
-      <div className="grid grid-cols-2 xl:grid-cols-4 gap-x-12 xl:gap-x-16 gap-y-10">
-        {APPLICATION_GROUPS.map((group) => {
-          const { items, image, imageAlt } = applicationGroup(group);
-          return <MenuColumn key={group.label} label={group.label} image={image} imageAlt={imageAlt} items={items} />;
-        })}
+      <div className="grid grid-cols-4 gap-x-8 xl:gap-x-12">
+        {APPLICATION_GROUPS.map((group) => (
+          <MenuColumn key={group.label} label={group.label} items={applicationGroup(group)} />
+        ))}
       </div>
-      <MenuViewAll href="/applications" label="View all applications" />
+      <MenuFooter href="/applications" label="View all applications" topic="your application" />
+    </MegaShell>
+  );
+}
+
+// A Sanity CDN photo from lib/nav-insights.json: plain <img srcset>, sized at
+// build time, never /_next/image.
+function InsightImg({ image, sizes, className, style }: { image: NavImage; sizes: string; className?: string; style?: React.CSSProperties }) {
+  // eslint-disable-next-line @next/next/no-img-element -- deliberate, see lib/chrome-images.mjs
+  return <img src={image.src} srcSet={image.srcSet} sizes={sizes} alt="" loading="lazy" decoding="async" className={className} style={style} />;
+}
+
+// ── Insights panel: the editorial one ─────────────────────────────────
+// Products and Applications are directories; Insights reads like the front
+// page of a magazine: a masthead with its sections, a cover story, the latest
+// pieces, and the Idea Book on the shelf beside them as the publication it
+// is. The same letterspaced labels, hairlines and footer as its siblings keep
+// it in the family. Every word is on a photo-free ground: titles sit under
+// their pictures, never on them.
+function InsightsMegaMenu() {
+  const { cover, latest } = INSIGHTS;
+  const book = showIdeaBook();
+  return (
+    <MegaShell>
+      {/* Masthead: the name, the library's own lede (from /blog), and its
+          sections. */}
+      <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-4 pb-5" style={{ borderBottom: "1px solid var(--ink-08)" }}>
+        <div className="flex flex-wrap items-baseline gap-x-5 gap-y-1">
+          <div className="font-display text-[30px] font-black leading-none" style={{ color: "var(--text-primary)", letterSpacing: "-0.03em" }}>
+            Insights
+          </div>
+          <div className="text-[14px]" style={{ color: "var(--ink-60)" }}>
+            Decorative pavement in Canada, documented.
+          </div>
+        </div>
+        <div role="group" aria-label="Insights by type" className="flex items-center gap-1.5">
+          <span className="mr-2 text-[10.5px] font-bold tracking-[0.18em] uppercase" style={{ color: "var(--ink-45)" }}>Browse by type</span>
+          {INSIGHT_SECTIONS.map((s) => (
+            <Link
+              key={s.href}
+              href={s.href}
+              data-tap="44"
+              className="inline-flex min-h-[36px] items-center rounded-full px-3.5 text-[13px] font-semibold transition-colors hover:border-[rgba(249,115,22,0.55)] hover:text-[var(--accent-text)]"
+              style={{ color: "var(--ink-80)", border: "1px solid var(--ink-15)" }}
+            >
+              {s.label}
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-12 gap-x-8 xl:gap-x-10 pt-6">
+        {/* Cover story */}
+        {cover && (
+          <div className="col-span-5">
+            <MenuLabel>Cover story</MenuLabel>
+            <Link href={`/blog/${cover.slug}`} className="group mt-3 block">
+              <span className="block overflow-hidden rounded-xl" style={{ border: "1px solid var(--ink-10)" }}>
+                <InsightImg
+                  image={cover.image}
+                  sizes="(min-width: 1280px) 500px, (min-width: 1024px) 38vw, 45vw"
+                  className="block aspect-[16/9] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+                />
+              </span>
+              <span className="mt-4 flex items-center gap-2 text-[10.5px] font-bold tracking-[0.18em] uppercase">
+                <span style={{ color: ACCENT }}>{kindOf(cover.type)}</span>
+                <span aria-hidden="true" style={{ color: "var(--ink-30)" }}>·</span>
+                <span className="text-[12px] font-medium normal-case tracking-normal" style={{ color: "var(--ink-50)" }}>{cover.date}</span>
+              </span>
+              <span
+                className="font-display mt-2 block text-[22px] font-bold leading-[1.18] text-balance transition-colors group-hover:text-[var(--accent-text)]"
+                style={{ color: "var(--text-primary)", letterSpacing: "-0.015em" }}
+              >
+                {cover.title}
+              </span>
+            </Link>
+          </div>
+        )}
+
+        {/* The latest */}
+        <div className={cover ? "col-span-4" : "col-span-9"}>
+          <MenuLabel>Latest</MenuLabel>
+          <ul>
+            {latest.map((post) => (
+              <li key={post.slug}>
+                <Link
+                  href={`/blog/${post.slug}`}
+                  className="group -mx-2.5 flex items-center gap-4 rounded-lg px-2.5 py-2.5 transition-colors hover:bg-[var(--ink-05)]"
+                >
+                  <InsightImg
+                    image={post.thumb}
+                    sizes="64px"
+                    className="h-16 w-16 flex-shrink-0 rounded-lg object-cover"
+                    style={{ border: "1px solid var(--ink-10)" }}
+                  />
+                  <span className="min-w-0">
+                    <span className="block text-[10px] font-bold tracking-[0.18em] uppercase" style={{ color: ACCENT }}>{kindOf(post.type)}</span>
+                    <span className="mt-1 block text-[14px] font-semibold leading-snug line-clamp-2 transition-colors group-hover:text-[var(--accent-text)]" style={{ color: "var(--text-primary)" }}>
+                      {post.title}
+                    </span>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* The Idea Book, on the shelf */}
+        {book && ideaBookCover && (
+          <div className="col-span-3 pl-8 xl:pl-10" style={{ borderLeft: "1px solid var(--ink-08)" }}>
+            <MenuLabel>In print</MenuLabel>
+            <Link href={ideaBook.href} className="group mt-3 block">
+              {/* eslint-disable-next-line @next/next/no-img-element -- the book's own raster, lib/catalogue.ts */}
+              <img
+                src={ideaBookCover}
+                srcSet={ideaBookCoverSet}
+                sizes="128px"
+                alt=""
+                width={240}
+                height={240}
+                loading="lazy"
+                decoding="async"
+                className="h-32 w-32 flex-shrink-0 rounded-[3px] object-cover transition-transform duration-300 group-hover:-translate-y-1"
+                style={{ border: "1px solid var(--ink-12)", boxShadow: "0 14px 30px rgba(0,0,0,0.5), 0 2px 6px rgba(0,0,0,0.35)" }}
+              />
+              <span className="mt-5 block">
+                <span className="block text-[14.5px] font-bold leading-snug" style={{ color: "var(--text-primary)" }}>{ideaBook.title}</span>
+                <span className="mt-1.5 block text-[12.5px] leading-snug" style={{ color: "var(--ink-60)" }}>{IDEA_BOOK_LINE}</span>
+                <span className="mt-3 inline-flex items-center gap-1.5 text-[12.5px] font-bold transition-colors group-hover:text-[var(--accent-text)]" style={{ color: "var(--ink-80)" }}>
+                  Open the {ideaBook.short}
+                  <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24" className="transition-transform group-hover:translate-x-0.5" aria-hidden="true">
+                    <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.25} strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </span>
+              </span>
+            </Link>
+          </div>
+        )}
+      </div>
+
+      <MenuFooter href="/blog" label="View all Insights" topic="HUB systems" />
     </MegaShell>
   );
 }
 
 // ── Mobile overlay ───────────────────────────────────────────────────
-// The phone's site map, grouped the same way as the desktop panels. Each
-// family or group is a row with one photograph that drops its members open;
-// it used to be 262 words and thirty-four photographs (Doug's round, 25 Sep
-// 2026), then a plain list of thirty-two names (26 Sep). This is the middle.
+// The phone's site map, the desktop panels adapted: each family or group is a
+// row with its photograph that drops its members open (products with their
+// one line), then Insights with its newest pieces and the Idea Book, then the
+// rest. Lunch & Learn and the two offices stay pinned to the bottom. Every
+// link and button is at least 44px tall (QA pa#38: the office numbers were 20).
 
 // Stagger variants — used on the content wrapper so child sections animate in sequence
 const menuContainerVariants: Variants = {
@@ -261,34 +557,36 @@ const menuSectionVariants: Variants = {
   show: { opacity: 1, y: 0, transition: { duration: 0.32, ease: [0.22, 1, 0.36, 1] } },
 };
 
-// Section label — uppercase orange/neutral heading used above product + app groups
-function MobileMenuLabel({ children }: { children: React.ReactNode }) {
+// Section header: the orange label and its 44px "All" link on one line
+function MobileSectionHead({ label, href, onClose }: { label: string; href: string; onClose: () => void }) {
   return (
-    <p
-      className="px-1 pt-6 pb-3 text-[10px] font-bold tracking-[0.22em] uppercase select-none"
-      style={{ color: "var(--accent-text-lg)" }}
-    >
-      {children}
-    </p>
+    <div className="flex items-center justify-between pt-5 pb-1">
+      <div
+        className="px-1 text-[10px] font-bold tracking-[0.22em] uppercase select-none"
+        style={{ color: "var(--accent-text-lg)" }}
+      >
+        {label}
+      </div>
+      <MobileViewAll href={href} label="All" onClose={onClose} />
+    </div>
   );
 }
 
-// One family or group in the drawer: a row you can open. Photo, name, the
+// One family or group in the drawer: a row you can open. Picture, name, the
 // family's note, a chevron; its members drop down underneath. Closed by
 // default, so the drawer is eight rows of pictures instead of thirty-two
 // names (Vern, 26 Sep 2026: the plain list was "the other extreme").
 function MobileFamily({
-  label, note, image, imageAlt, items, open, onToggle, onClose,
+  label, note, items, open, onToggle, onClose,
 }: {
   label: string;
   note?: string;
-  image?: string;
-  imageAlt?: string;
-  items: { href: string; name: string }[];
+  items: MenuItem[];
   open: boolean;
   onToggle: () => void;
   onClose: () => void;
 }) {
+  const reduce = useReducedMotion();
   const id = `drawer-${label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
   return (
     <div style={{ borderBottom: "1px solid var(--ink-05)" }}>
@@ -299,18 +597,7 @@ function MobileFamily({
         aria-controls={id}
         className="flex w-full items-center gap-3.5 px-1 py-3 text-left active:opacity-70 transition-opacity"
       >
-        {image && (
-          <ChromeImg
-            family="panel"
-            src={image}
-            alt={imageAlt ?? ""}
-            sizes="96px"
-            width={96}
-            height={48}
-            className="h-12 w-24 flex-shrink-0 rounded-lg object-cover"
-            style={{ border: "1px solid var(--ink-10)" }}
-          />
-        )}
+        <GroupPicture label={label} compact />
         <span className="min-w-0 flex-1">
           <span className="block text-[15px] font-semibold leading-tight" style={{ color: "var(--text-primary)" }}>{label}</span>
           {note && <span className="mt-0.5 block text-[12px] leading-snug" style={{ color: "var(--ink-50)" }}>{note}</span>}
@@ -331,7 +618,7 @@ function MobileFamily({
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+            transition={reduce ? { duration: 0 } : { duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
             className="overflow-hidden"
           >
             <ul className="pb-2 pl-[110px]">
@@ -340,9 +627,12 @@ function MobileFamily({
                   <Link
                     href={it.href}
                     onClick={onClose}
-                    className="flex items-center justify-between gap-4 py-2.5 pr-1 active:opacity-60 transition-opacity"
+                    className="flex min-h-[48px] items-center justify-between gap-4 py-2 pr-1 active:opacity-60 transition-opacity"
                   >
-                    <span className="text-[15px] leading-tight" style={{ color: "var(--ink-80)" }}>{it.name}</span>
+                    <span className="min-w-0">
+                      <span className="block text-[15px] leading-tight" style={{ color: "var(--ink-85)" }}>{it.name}</span>
+                      {it.line && <span className="mt-1 block text-[12.5px] leading-snug text-pretty" style={{ color: "var(--ink-50)" }}>{it.line}</span>}
+                    </span>
                     <svg className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "var(--ink-20)" }} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 18l6-6-6-6" />
                     </svg>
@@ -357,19 +647,42 @@ function MobileFamily({
   );
 }
 
-// "View all X →" footer link inside a section
+// "All →" beside a drawer section's label, 44px tall
 function MobileViewAll({ href, label, onClose }: { href: string; label: string; onClose: () => void }) {
   return (
     <Link
       href={href}
       onClick={onClose}
-      className="inline-flex items-center gap-2 mt-3 px-1 py-2 text-[13px] font-bold active:opacity-60 transition-opacity"
+      className="inline-flex min-h-[44px] items-center gap-2 px-1 text-[13px] font-bold active:opacity-60 transition-opacity"
       style={{ color: "var(--accent-text-lg)" }}
     >
       {label}
-      <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 12h14M12 5l7 7-7 7" />
       </svg>
+    </Link>
+  );
+}
+
+// A row in the drawer's Insights section: thumbnail, kind, title.
+function MobilePostRow({ post, onClose }: { post: NavPost; onClose: () => void }) {
+  return (
+    <Link
+      href={`/blog/${post.slug}`}
+      onClick={onClose}
+      className="flex items-center gap-3.5 px-1 py-3 active:opacity-70 transition-opacity"
+      style={{ borderBottom: "1px solid var(--ink-05)" }}
+    >
+      <InsightImg
+        image={post.thumb}
+        sizes="56px"
+        className="h-14 w-14 flex-shrink-0 rounded-lg object-cover"
+        style={{ border: "1px solid var(--ink-10)" }}
+      />
+      <span className="min-w-0 flex-1">
+        <span className="block text-[10px] font-bold tracking-[0.18em] uppercase" style={{ color: "var(--accent-text-lg)" }}>{kindOf(post.type)}</span>
+        <span className="mt-1 block text-[14.5px] font-medium leading-snug line-clamp-2" style={{ color: "var(--text-primary)" }}>{post.title}</span>
+      </span>
     </Link>
   );
 }
@@ -377,6 +690,7 @@ function MobileViewAll({ href, label, onClose }: { href: string; label: string; 
 // ── Premium full-screen mobile menu ─────────────────────────────────────
 function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onClose: () => void; onSearchOpen: () => void }) {
   const overlayRef = useRef<HTMLDivElement>(null);
+  const reduce = useReducedMotion();
   // Which family or group is dropped open; one at a time, none on open.
   const [openFamily, setOpenFamily] = useState<string | null>(null);
   useEffect(() => { if (!isOpen) setOpenFamily(null); }, [isOpen]);
@@ -417,6 +731,12 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
     };
   }, [isOpen]);
 
+  // The cover story and the next two; the desktop panel shows four more.
+  const posts = [...(INSIGHTS.cover ? [INSIGHTS.cover] : []), ...INSIGHTS.latest].slice(0, 3);
+  const book = showIdeaBook();
+  // The session topic follows the family or group the visitor has open.
+  const llTopic = openFamily ?? "HUB systems";
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -429,8 +749,8 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
           initial={{ x: "100%" }}
           animate={{ x: 0 }}
           exit={{ x: "100%" }}
-          transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-          className="fixed inset-0 z-[60] md:hidden flex flex-col outline-none"
+          transition={reduce ? { duration: 0 } : { duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+          className="fixed inset-0 z-[60] lg:hidden flex flex-col outline-none"
           // Dark, like the <nav> it belongs to. The drawer renders outside
           // that <nav>, so on a paper page it inherited paper tokens: a cream
           // body under hardcoded dark header and footer strips, with the close
@@ -458,7 +778,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                 waste, since that image never renders here. Trades a touch of
                 nav-to-home snappiness for a lot of unused bytes on every
                 other page. */}
-            <Link href="/" onClick={onClose} prefetch={false} className="flex items-center active:opacity-70 transition-opacity">
+            <Link href="/" onClick={onClose} prefetch={false} className="flex min-h-[44px] items-center active:opacity-70 transition-opacity">
               {/* Not the LCP hero — each route has its own priority hero
                   image; this is a small header logo. */}
               <Image
@@ -478,7 +798,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                 className="flex items-center justify-center rounded-xl active:opacity-60 transition-opacity"
                 style={{ width: 48, height: 48, color: "var(--ink-45)" }}
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <circle cx="11" cy="11" r="8" strokeWidth={1.75} />
                   <path d="M21 21l-4.35-4.35" strokeWidth={1.75} strokeLinecap="round" />
                 </svg>
@@ -496,7 +816,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                   border: "1px solid var(--ink-10)",
                 }}
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
@@ -509,66 +829,95 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
               variants={menuContainerVariants}
               initial="hidden"
               animate="show"
-              className="px-4 pb-8"
+              className="px-4 pb-8 max-w-2xl mx-auto"
             >
 
               {/* ── Products ──────────────────────────────────────── */}
               <motion.div variants={menuSectionVariants}>
-                <div className="flex items-center justify-between">
-                  <MobileMenuLabel>Products</MobileMenuLabel>
-                  <MobileViewAll href="/products" label="All" onClose={onClose} />
-                </div>
-                {PRODUCT_CATEGORIES.map((cat) => {
-                  const { items, image, imageAlt } = productFamily(cat);
-                  return (
-                    <MobileFamily
-                      key={cat.label}
-                      label={cat.label}
-                      note={cat.menuNote}
-                      image={image}
-                      imageAlt={imageAlt}
-                      items={items}
-                      open={openFamily === cat.label}
-                      onToggle={() => setOpenFamily(openFamily === cat.label ? null : cat.label)}
-                      onClose={onClose}
-                    />
-                  );
-                })}
+                <MobileSectionHead label="Products" href="/products" onClose={onClose} />
+                {PRODUCT_CATEGORIES.map((cat) => (
+                  <MobileFamily
+                    key={cat.label}
+                    label={cat.label}
+                    note={cat.menuNote}
+                    items={productFamily(cat)}
+                    open={openFamily === cat.label}
+                    onToggle={() => setOpenFamily(openFamily === cat.label ? null : cat.label)}
+                    onClose={onClose}
+                  />
+                ))}
               </motion.div>
 
               {/* ── Applications ──────────────────────────────────── */}
               <motion.div variants={menuSectionVariants} className="mt-2">
-                <div className="flex items-center justify-between">
-                  <MobileMenuLabel>Applications</MobileMenuLabel>
-                  <MobileViewAll href="/applications" label="All" onClose={onClose} />
+                <MobileSectionHead label="Applications" href="/applications" onClose={onClose} />
+                {APPLICATION_GROUPS.map((group) => (
+                  <MobileFamily
+                    key={group.label}
+                    label={group.label}
+                    items={applicationGroup(group)}
+                    open={openFamily === group.label}
+                    onToggle={() => setOpenFamily(openFamily === group.label ? null : group.label)}
+                    onClose={onClose}
+                  />
+                ))}
+              </motion.div>
+
+              {/* ── Insights ──────────────────────────────────────── */}
+              <motion.div variants={menuSectionVariants} className="mt-2">
+                <MobileSectionHead label="Insights" href="/blog" onClose={onClose} />
+                {posts.map((post) => (
+                  <MobilePostRow key={post.slug} post={post} onClose={onClose} />
+                ))}
+                <div className="flex flex-wrap gap-2 px-1 pt-4 pb-1" role="group" aria-label="Insights by type">
+                  {INSIGHT_SECTIONS.map((s) => (
+                    <Link
+                      key={s.href}
+                      href={s.href}
+                      onClick={onClose}
+                      className="inline-flex min-h-[44px] items-center rounded-full px-4 text-[14px] font-semibold active:opacity-60 transition-opacity"
+                      style={{ color: "var(--ink-80)", border: "1px solid var(--ink-15)" }}
+                    >
+                      {s.label}
+                    </Link>
+                  ))}
                 </div>
-                {APPLICATION_GROUPS.map((group) => {
-                  const { items, image, imageAlt } = applicationGroup(group);
-                  return (
-                    <MobileFamily
-                      key={group.label}
-                      label={group.label}
-                      image={image}
-                      imageAlt={imageAlt}
-                      items={items}
-                      open={openFamily === group.label}
-                      onToggle={() => setOpenFamily(openFamily === group.label ? null : group.label)}
-                      onClose={onClose}
+                {book && ideaBookCover && (
+                  <Link
+                    href={ideaBook.href}
+                    onClick={onClose}
+                    className="mt-3 flex items-center gap-3.5 px-1 py-3 active:opacity-70 transition-opacity"
+                    style={{ borderTop: "1px solid var(--ink-05)", borderBottom: "1px solid var(--ink-05)" }}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element -- the book's own raster, lib/catalogue.ts */}
+                    <img
+                      src={ideaBookCover}
+                      alt=""
+                      width={240}
+                      height={240}
+                      loading="lazy"
+                      decoding="async"
+                      className="h-14 w-14 flex-shrink-0 rounded-[3px] object-cover"
+                      style={{ border: "1px solid var(--ink-12)", boxShadow: "0 8px 18px rgba(0,0,0,0.45)" }}
                     />
-                  );
-                })}
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-[14.5px] font-semibold leading-snug" style={{ color: "var(--text-primary)" }}>{ideaBook.title}</span>
+                      <span className="mt-0.5 block text-[12.5px] leading-snug" style={{ color: "var(--ink-50)" }}>{IDEA_BOOK_LINE}</span>
+                    </span>
+                    <svg className="w-4 h-4 flex-shrink-0" style={{ color: "var(--ink-30)" }} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 18l6-6-6-6" />
+                    </svg>
+                  </Link>
+                )}
               </motion.div>
 
               {/* ── Everything else, as a plain list ──────────────── */}
-              <motion.div variants={menuSectionVariants} className="mt-8 pt-6" style={{ borderTop: "1px solid var(--border-color)" }}>
+              <motion.div variants={menuSectionVariants} className="mt-8 pt-2" style={{ borderTop: "1px solid var(--border-color)" }}>
                 {[
-                  { label: "Insights", href: "/blog" },
-                  { label: ideaBook.short, href: ideaBook.href },
                   { label: "Resources", href: "/resources" },
-                  { label: "Project Gallery", href: "/gallery" },
+                  { label: "Gallery", href: "/gallery" },
                   { label: "About", href: "/about" },
                   { label: "Contact", href: "/contact" },
-                  { label: "Lunch & Learn", href: "/lunch-learn" },
                 ].map((link) => (
                   <Link
                     key={link.href}
@@ -581,7 +930,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                     }}
                   >
                     {link.label}
-                    <svg className="w-4 h-4" style={{ color: "var(--ink-20)" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4" style={{ color: "var(--ink-20)" }} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 18l6-6-6-6" />
                     </svg>
                   </Link>
@@ -591,58 +940,67 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
             </motion.div>
           </div>
 
-          {/* ── Sticky bottom CTA ─────────────────────────────────────── */}
+          {/* ── Pinned: the offices and Lunch & Learn ─────────────────── */}
           <div
-            className="flex-shrink-0 px-4 pt-3 pb-4"
+            className="flex-shrink-0 px-4 pt-1.5"
             style={{
               borderTop: "1px solid var(--border-color)",
               background: "rgba(7,11,18,0.96)",
               backdropFilter: "blur(20px)",
-              paddingBottom: "max(16px, env(safe-area-inset-bottom))",
+              paddingBottom: "max(14px, env(safe-area-inset-bottom))",
             }}
           >
-            {/* Regional phones */}
-            <div className="flex items-center justify-center gap-5 mb-3">
-              <a
-                href="tel:+16043098212"
-                className="flex items-center gap-1.5 text-[12px] font-semibold active:opacity-60 transition-opacity"
-                style={{ color: "var(--ink-55)" }}
-              >
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: "var(--accent-text-lg)" }}>
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
-                West · 604-309-8212
-              </a>
-              <div style={{ width: 1, height: 12, background: "var(--ink-12)" }} />
-              <a
-                href="tel:+14165409287"
-                className="flex items-center gap-1.5 text-[12px] font-semibold active:opacity-60 transition-opacity"
-                style={{ color: "var(--ink-55)" }}
-              >
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: "var(--accent-text-lg)" }}>
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
-                East · 416-540-9287
-              </a>
+            {/* Regional phones: 44px tall targets (QA pa#38: they were 20). */}
+            <div className="flex items-center justify-center max-w-2xl mx-auto">
+              {[
+                { label: "West · 604-309-8212", href: "tel:+16043098212" },
+                { label: "East · 416-540-9287", href: "tel:+14165409287" },
+              ].map((office, i) => (
+                <span key={office.href} className="flex items-center">
+                  {i > 0 && <span aria-hidden="true" className="mx-1" style={{ width: 1, height: 14, background: "var(--ink-12)" }} />}
+                  <a
+                    href={office.href}
+                    className="inline-flex min-h-[44px] items-center gap-1.5 px-3 text-[12.5px] font-semibold active:opacity-60 transition-opacity"
+                    style={{ color: "var(--ink-60)" }}
+                  >
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: "var(--accent-text-lg)" }} aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    </svg>
+                    {office.label}
+                  </a>
+                </span>
+              ))}
             </div>
 
-            {/* Primary CTA */}
-            <Link
-              href="/lunch-learn"
-              onClick={onClose}
-              className="flex items-center justify-center gap-2 w-full rounded-2xl text-[15px] font-bold active:scale-[0.97] active:opacity-90 transition-[transform,opacity] duration-100"
-              style={{
-                height: 52,
-                background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
-                color: "var(--on-accent)",
-                boxShadow: "0 4px 24px rgba(249,115,22,0.38)",
-              }}
+            {/* Lunch & Learn: the card the desktop panels carry, with the
+                button in the brand orange here, where it is the drawer's one
+                call to action. */}
+            <div
+              className="mt-1 flex items-center gap-3 rounded-2xl py-2.5 pl-3 pr-2.5 max-w-2xl mx-auto"
+              style={{ background: "var(--ink-04)", border: "1px solid var(--ink-10)" }}
             >
-              Book a Lunch &amp; Learn
-              <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </Link>
+              <MooseAvatar size={40} />
+              <div className="min-w-0 flex-1">
+                <div className="text-[14px] font-bold leading-tight" style={{ color: "var(--text-primary)" }}>Lunch &amp; Learn</div>
+                <div className="mt-0.5 text-[12px] leading-snug" style={{ color: "var(--ink-60)" }}>{LL_LINE}</div>
+              </div>
+              <Link
+                href={lunchLearnHref(llTopic, "menu")}
+                onClick={onClose}
+                aria-label="Book a Lunch & Learn"
+                className="inline-flex min-h-[44px] flex-shrink-0 items-center gap-1.5 rounded-xl px-4 text-[14px] font-bold active:scale-[0.97] active:opacity-90 transition-[transform,opacity] duration-100"
+                style={{
+                  background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
+                  color: "var(--on-accent)",
+                  boxShadow: "0 4px 18px rgba(249,115,22,0.32)",
+                }}
+              >
+                Book
+                <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </Link>
+            </div>
           </div>
         </motion.div>
       )}
@@ -652,13 +1010,19 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
 
 // ── Main Nav ─────────────────────────────────────────────────────────
 export default function Nav() {
-  const [openPanel, setOpenPanel] = useState<"products" | "applications" | null>(null);
+  const [openPanel, setOpenPanel] = useState<Panel | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const navRef = useRef<HTMLElement>(null);
   const productsBtnRef = useRef<HTMLButtonElement>(null);
   const applicationsBtnRef = useRef<HTMLButtonElement>(null);
+  const insightsBtnRef = useRef<HTMLButtonElement>(null);
+  const triggerRefs: Record<Panel, React.RefObject<HTMLButtonElement | null>> = {
+    products: productsBtnRef,
+    applications: applicationsBtnRef,
+    insights: insightsBtnRef,
+  };
   // Set right before a trigger's onClick opens its panel (Enter/Space or a
   // real mouse click — never by onFocus/onMouseEnter alone) so the effect
   // below knows to move focus INTO the panel. Without this, the panel's own
@@ -667,6 +1031,56 @@ export default function Nav() {
   // "Applications" next, not inside the products panel — the open panel and
   // the tab sequence pointed two different directions.
   const focusPanelOnOpen = useRef(false);
+  // How the open panel was opened. A click on a trigger whose panel the
+  // pointer has just opened by hovering keeps it open: before, hover opened
+  // it and the click that followed closed it again, which read as broken,
+  // and Insights (a plain link until 28 Sep 2026) would have done it to
+  // everyone who clicked it out of habit.
+  const openedByHover = useRef(false);
+  // Hover intent: a pointer crossing the bar on its way somewhere else
+  // should not flash a panel open. Once one is open, moving along the
+  // triggers switches at once.
+  const hoverTimer = useRef<number | null>(null);
+  const cancelHover = () => {
+    if (hoverTimer.current !== null) window.clearTimeout(hoverTimer.current);
+    hoverTimer.current = null;
+  };
+  useEffect(() => {
+    const timer = hoverTimer;
+    return () => { if (timer.current !== null) window.clearTimeout(timer.current); };
+  }, []);
+
+  const hoverOpen = (panel: Panel) => {
+    cancelHover();
+    if (openPanel === panel) return;
+    if (openPanel) {
+      openedByHover.current = true;
+      setOpenPanel(panel);
+      return;
+    }
+    hoverTimer.current = window.setTimeout(() => {
+      openedByHover.current = true;
+      setOpenPanel(panel);
+    }, 90);
+  };
+
+  const clickTrigger = (panel: Panel) => {
+    cancelHover();
+    if (openPanel === panel && openedByHover.current) {
+      openedByHover.current = false;
+      return;
+    }
+    const next = openPanel === panel ? null : panel;
+    if (next) focusPanelOnOpen.current = true;
+    openedByHover.current = false;
+    setOpenPanel(next);
+  };
+
+  const closePanels = useCallback(() => {
+    if (hoverTimer.current !== null) window.clearTimeout(hoverTimer.current);
+    hoverTimer.current = null;
+    setOpenPanel(null);
+  }, []);
 
   // Close mega menu on outside click
   useEffect(() => {
@@ -686,11 +1100,11 @@ export default function Nav() {
   // content while the panel stayed open behind them.
   useEffect(() => {
     if (!openPanel) return;
+    const trigger = { products: productsBtnRef, applications: applicationsBtnRef, insights: insightsBtnRef }[openPanel];
     const handler = (e: KeyboardEvent) => {
       if (e.key !== "Escape") return;
-      const triggerRef = openPanel === "products" ? productsBtnRef : applicationsBtnRef;
       setOpenPanel(null);
-      triggerRef?.current?.focus();
+      trigger.current?.focus();
     };
     document.addEventListener("keydown", handler);
     return () => document.removeEventListener("keydown", handler);
@@ -702,9 +1116,8 @@ export default function Nav() {
   useEffect(() => {
     if (!openPanel || !focusPanelOnOpen.current) return;
     focusPanelOnOpen.current = false;
-    const id = openPanel === "products" ? "products-mega-menu" : "applications-mega-menu";
     const t = setTimeout(() => {
-      const panel = document.getElementById(id);
+      const panel = document.getElementById(PANEL_IDS[openPanel]);
       const first = panel?.querySelector<HTMLElement>('a[href], button:not([disabled])');
       first?.focus();
     }, 0);
@@ -712,9 +1125,9 @@ export default function Nav() {
   }, [openPanel]);
 
   // Close the mega menu once keyboard focus leaves the nav entirely (e.g.
-  // Tab past "Lunch & Learn" into page content) so it doesn't stay open —
-  // pushed open in normal flow, not overlaid — above content the user has
-  // already tabbed past. Mirrors the existing onMouseLeave behaviour below.
+  // Tab past "Lunch & Learn" into page content) so it doesn't stay open
+  // over content the user has already tabbed past. Mirrors the existing
+  // onMouseLeave behaviour below.
   const handleNavBlur = useCallback((e: React.FocusEvent<HTMLElement>) => {
     if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
       setOpenPanel(null);
@@ -771,8 +1184,17 @@ export default function Nav() {
   }, []);
   const closeSearch = useCallback(() => setSearchOpen(false), []);
 
+  // The three panel triggers share one look and one behaviour.
+  const triggers: { panel: Panel; label: string }[] = [
+    { panel: "products", label: "Products" },
+    { panel: "applications", label: "Applications" },
+    { panel: "insights", label: "Insights" },
+  ];
+
   return (
-    <>
+    // reducedMotion="user": with the system setting on, the panels, the
+    // drawer and its sections appear without sliding (opacity only).
+    <MotionConfig reducedMotion="user">
       <nav
         ref={navRef}
         /* The bar is charcoal in every theme — the orange-on-charcoal wordmark
@@ -792,7 +1214,7 @@ export default function Nav() {
             : "none",
           transition: "border-color 0.3s ease, box-shadow 0.3s ease",
         }}
-        onMouseLeave={() => setOpenPanel(null)}
+        onMouseLeave={closePanels}
         onBlur={handleNavBlur}
       >
         {/* Main bar */}
@@ -843,70 +1265,48 @@ export default function Nav() {
             </span>
           </Link>
 
-          {/* Desktop links */}
-          <div className="hidden md:flex items-center gap-0.5">
+          {/* Desktop links, from lg (1024px). Below that the bar is the
+              phone's: search and the drawer. Until 28 Sep 2026 the switch
+              was at md, where the full bar measured 998px in a 768px window
+              and pushed search, Resources and Lunch & Learn off the screen;
+              a touch tablet is better served by the drawer anyway. */}
+          <div className="hidden lg:flex items-center gap-0.5">
 
-            {/* Products mega menu trigger */}
-            <button
-              ref={productsBtnRef}
-              onMouseEnter={() => setOpenPanel("products")}
-              // Deliberately no onFocus-opens-panel here (unlike the plain
-              // links below): this button's onClick TOGGLES based on the
-              // current openPanel, so if focus alone had already set it to
-              // "products", the very next Enter/Space press would read as
-              // "already open, so close" and the panel would never actually
-              // catch a keyboard user's Enter as "open". Tab lands on the
-              // button inert; Enter/Space is what opens it — and immediately
-              // hands focus into the panel's first link.
-              onClick={() => {
-                const next = openPanel === "products" ? null : "products";
-                if (next) focusPanelOnOpen.current = true;
-                setOpenPanel(next);
-              }}
-              aria-expanded={openPanel === "products"}
-              aria-haspopup="true"
-              aria-controls="products-mega-menu"
-              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[13px] font-medium whitespace-nowrap transition-colors hover:text-[var(--accent-text)] hover:bg-[var(--ink-05)]"
-              style={{ color: openPanel === "products" ? "var(--accent-text-lg)" : "var(--ink-65)" }}
-            >
-              Products
-              <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                style={{ opacity: 0.5, transform: openPanel === "products" ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-
-            {/* Applications mega menu trigger */}
-            <button
-              ref={applicationsBtnRef}
-              onMouseEnter={() => setOpenPanel("applications")}
-              // Deliberately no onFocus-opens-panel here — see the identical
-              // comment on the Products trigger above. This button's onClick
-              // TOGGLES based on the current openPanel, so onFocus setting it
-              // first would make Enter/Space always read as "close".
-              onClick={() => {
-                const next = openPanel === "applications" ? null : "applications";
-                if (next) focusPanelOnOpen.current = true;
-                setOpenPanel(next);
-              }}
-              aria-expanded={openPanel === "applications"}
-              aria-haspopup="true"
-              aria-controls="applications-mega-menu"
-              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[13px] font-medium whitespace-nowrap transition-colors hover:text-[var(--accent-text)] hover:bg-[var(--ink-05)]"
-              style={{ color: openPanel === "applications" ? "var(--accent-text-lg)" : "var(--ink-65)" }}
-            >
-              Applications
-              <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                style={{ opacity: 0.5, transform: openPanel === "applications" ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
+            {/* Mega menu triggers: Products, Applications, Insights.
+                Deliberately no onFocus-opens-panel here (unlike the plain
+                links below): the onClick TOGGLES based on the current
+                openPanel, so if focus alone had already set it, the very
+                next Enter/Space press would read as "already open, so close"
+                and the panel would never catch a keyboard user's Enter as
+                "open". Tab lands on the button inert; Enter/Space is what
+                opens it, and immediately hands focus into the panel's first
+                link. */}
+            {triggers.map(({ panel, label }) => (
+              <button
+                key={panel}
+                ref={triggerRefs[panel]}
+                type="button"
+                onMouseEnter={() => hoverOpen(panel)}
+                onClick={() => clickTrigger(panel)}
+                aria-expanded={openPanel === panel}
+                aria-haspopup="true"
+                aria-controls={PANEL_IDS[panel]}
+                className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[13px] font-medium whitespace-nowrap transition-colors hover:text-[var(--accent-text)] hover:bg-[var(--ink-05)]"
+                style={{ color: openPanel === panel ? "var(--accent-text-lg)" : "var(--ink-65)" }}
+              >
+                {label}
+                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"
+                  style={{ opacity: 0.5, transform: openPanel === panel ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+            ))}
 
             {/* Plain links */}
             {PLAIN_LINKS.map((link) => (
               <Link key={link.href} href={link.href}
-                onMouseEnter={() => setOpenPanel(null)}
-                onFocus={() => setOpenPanel(null)}
+                onMouseEnter={closePanels}
+                onFocus={closePanels}
                 // whitespace-nowrap: at ~1100px "Field Notes" (now "Insights") broke across two
                 // lines and pushed the whole nav row out of alignment. A nav
                 // label is a single object; it should shrink the row, never
@@ -920,7 +1320,7 @@ export default function Nav() {
           </div>
 
           {/* Desktop right — search + CTAs */}
-          <div className="hidden md:flex items-center gap-2">
+          <div className="hidden lg:flex items-center gap-2" onMouseEnter={closePanels}>
             {/* Search — a magnifying glass, nothing else.
 
                 History, so nobody resurrects the corpses: this was a permanent
@@ -984,7 +1384,7 @@ export default function Nav() {
           </div>
 
           {/* Mobile — search + hamburger */}
-          <div className="md:hidden flex items-center gap-2">
+          <div className="lg:hidden flex items-center gap-2">
             {/* 44x44 tap targets — the mobile sweep found these at 36x36,
                 under both the iOS 44pt and Android 48dp minimums. */}
             <button onClick={openSearch} aria-label="Open search" className="flex items-center justify-center" style={{ width: 44, height: 44, color: "var(--ink-60)" }}>
@@ -1004,30 +1404,57 @@ export default function Nav() {
           </div>
         </div>
 
-        {/* Full-width mega menu panels */}
+        {/* The mega menu panel. It hangs below the bar (absolute, top-full)
+            over the page instead of pushing the page down: in normal flow,
+            opening a panel shifted everything under it by the panel's height
+            (about 580px). One container for all three, so moving from one
+            trigger to the next swaps the content in place with no second
+            fade. */}
         <AnimatePresence>
           {openPanel && (
             <motion.div
-              key={openPanel}
-              id={openPanel === "products" ? "products-mega-menu" : "applications-mega-menu"}
-              initial={{ opacity: 0, y: -4 }}
+              key="mega"
+              initial={{ opacity: 0, y: -6 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -4 }}
-              transition={{ duration: 0.15 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.16, ease: [0.22, 1, 0.36, 1] }}
+              className="absolute inset-x-0 top-full hidden lg:block"
               style={{
-                background: "rgba(7,11,18,0.98)",
-                borderTop: "1px solid var(--border-color)",
-                borderBottom: "1px solid rgba(249,115,22,0.12)",
-                boxShadow: "0 20px 60px rgba(0,0,0,0.6)",
+                // Opaque: at 98.5% the hero headline under it showed through.
+                background: "rgb(7,11,18)",
+                borderTop: "1px solid var(--ink-08)",
+                borderBottom: "1px solid rgba(249,115,22,0.14)",
+                boxShadow: "0 28px 60px rgba(0,0,0,0.55)",
               }}
             >
-              {openPanel === "products" && <ProductsMegaMenu />}
-              {openPanel === "applications" && <ApplicationsMegaMenu />}
+              <div id={PANEL_IDS[openPanel]}>
+                {openPanel === "products" && <ProductsMegaMenu />}
+                {openPanel === "applications" && <ApplicationsMegaMenu />}
+                {openPanel === "insights" && <InsightsMegaMenu />}
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
 
       </nav>
+
+      {/* Dims the page under an open panel so the panel reads as a layer.
+          pointer-events: none, so moving onto the page still leaves the nav
+          and closes the panel, and nothing under it stops being clickable. */}
+      <AnimatePresence>
+        {openPanel && (
+          <motion.div
+            key="mega-scrim"
+            aria-hidden="true"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-40 hidden lg:block pointer-events-none"
+            style={{ background: "rgba(5,8,14,0.45)" }}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Mobile overlay — rendered outside <nav> so its z-index is not capped by the nav stacking context */}
       <MobileOverlay isOpen={mobileOpen} onClose={() => setMobileOpen(false)} onSearchOpen={openSearch} />
@@ -1036,6 +1463,6 @@ export default function Nav() {
       <AnimatePresence>
         {searchOpen && <SearchOverlay onClose={closeSearch} />}
       </AnimatePresence>
-    </>
+    </MotionConfig>
   );
 }

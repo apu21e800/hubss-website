@@ -5,14 +5,20 @@
  * WHAT IT DOES
  * Collects the sources from the same data the chrome renders:
  *   row    every `imageUrl: "…"` in lib/products.ts and lib/applications.ts
- *   post   every FEATURED_POSTS image (lib/nav-featured-posts.mjs)
- *   cover  FEATURED_POSTS[0].image
- *   panel  CHROME_PANELS (lib/chrome-images.mjs), the menu column photos
+ *   panel  CHROME_PANELS (lib/chrome-images.mjs), the menu column photos,
+ *          each cropped at its own `position`
+ *   cover / post   CHROME_COVER (lib/chrome-images.mjs), the Insights menu's
+ *          fallback cover story and its thumbnail
  *   moose / wheel / logo   CHROME_MARKS (lib/chrome-images.mjs)
  * and writes each family's widths as WebP q75 — the optimiser's own quality —
  * to /public/images/chrome/<family>/<stem>-<width>.webp. Square families are
  * cropped 1:1 at their object-position first. Sizes, crops and the URL scheme
  * all live in lib/chrome-images.mjs; this script only executes them.
+ *
+ * Until 28 Sep 2026 it also baked the hand-picked FEATURED_POSTS
+ * (lib/nav-featured-posts.mjs). The Insights menu now shows the newest posts,
+ * straight from Sanity's CDN (scripts/gen-nav-insights.ts), so their old
+ * post and cover files are reported below as unused.
  *
  * WHY NOT next/image
  * In August 2026 this project exhausted its Vercel image-optimisation allowance
@@ -41,8 +47,7 @@ import { createHash } from "node:crypto";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import sharp from "sharp";
-import { CHROME_FAMILIES, CHROME_MARKS, CHROME_PANELS, chromeStem, chromeUrl } from "../lib/chrome-images.mjs";
-import { FEATURED_POSTS } from "../lib/nav-featured-posts.mjs";
+import { CHROME_COVER, CHROME_FAMILIES, CHROME_MARKS, CHROME_PANELS, chromeStem, chromeUrl } from "../lib/chrome-images.mjs";
 
 const ROOT = process.cwd();
 const PUBLIC = path.join(ROOT, "public");
@@ -80,19 +85,24 @@ function collectJobs() {
   for (const rel of ["lib/products.ts", "lib/applications.ts"]) {
     for (const src of imageUrlsIn(rel)) jobs.push({ family: "row", src });
   }
-  for (const post of FEATURED_POSTS) jobs.push({ family: "post", src: post.image });
-  if (FEATURED_POSTS[0]) jobs.push({ family: "cover", src: FEATURED_POSTS[0].image });
-  for (const src of Object.values(CHROME_PANELS)) jobs.push({ family: "panel", src });
+  for (const { src, position } of Object.values(CHROME_PANELS)) jobs.push({ family: "panel", src, position });
+  jobs.push({ family: "cover", src: CHROME_COVER.src, position: CHROME_COVER.position });
+  jobs.push({ family: "post", src: CHROME_COVER.src, position: CHROME_COVER.position });
   for (const [family, src] of Object.entries(CHROME_MARKS)) jobs.push({ family, src });
 
   // One job per output; two sources that flatten to one stem would overwrite
-  // each other, so that stops the build.
+  // each other, so that stops the build. So does one source asked for at two
+  // crop positions in the same family: the URL does not carry the position,
+  // so one of the two would silently get the other's framing.
   const byKey = new Map();
   for (const job of jobs) {
     const key = `${job.family}/${chromeStem(job.src)}`;
     const seen = byKey.get(key);
     if (seen && seen.src !== job.src) {
       throw new Error(`${seen.src} and ${job.src} both bake to ${key} — rename one of them`);
+    }
+    if (seen && JSON.stringify(seen.position) !== JSON.stringify(job.position)) {
+      throw new Error(`${job.src} is asked for at two crop positions in ${job.family}; pick one`);
     }
     byKey.set(key, job);
   }
@@ -110,8 +120,10 @@ function readLedger() {
 const filesFor = (family, src) =>
   CHROME_FAMILIES[family].widths.map((w) => path.join(PUBLIC, chromeUrl(family, src, w)));
 
-async function bake(key, { family, src }, previous) {
-  const spec = CHROME_FAMILIES[family];
+async function bake(key, { family, src, position }, previous) {
+  // A job's own crop position (CHROME_PANELS, CHROME_COVER) overrides its
+  // family's; it goes into the hash, so moving a crop re-bakes that picture.
+  const spec = position ? { ...CHROME_FAMILIES[family], position } : CHROME_FAMILIES[family];
   const file = path.join(PUBLIC, src.replace(/^\/+/, ""));
   const outputs = filesFor(family, src);
   if (!fs.existsSync(file)) {

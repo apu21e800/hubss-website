@@ -1,6 +1,7 @@
 import { defineField, defineType } from "sanity";
 import { BulbOutlineIcon } from "@sanity/icons";
 import { FIELD_NOTE_TYPES } from "../../lib/field-notes-taxonomy";
+import { copyStyle } from "./_shared";
 
 /**
  * The Field Notes plan: the list of posts HUB wants written.
@@ -95,6 +96,8 @@ export default defineType({
       type: "text",
       rows: 6,
       description: "What the post must cover, and any real facts to use: the project, the city, the year, what the client needed, what was installed. The drafter treats what you write here as true and invents nothing else, so a project it doesn't know about has to be described here.",
+      // The drafter copies the brief's wording, dashes and all.
+      validation: (r) => copyStyle(r),
     }),
     defineField({
       name: "draftSlug",

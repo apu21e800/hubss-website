@@ -54,9 +54,12 @@ export default function RequestIdeaBookPage() {
                 <strong style={{ color: "var(--text-primary)" }}>{ideaBook.title}.</strong> Decorative pavement
                 solutions, coast to coast.
               </p>
+              {/* The two links were 17 px tall on a phone (QA, 27 Sep 2026).
+                  44 px rows below 640 px and on any touch screen
+                  (data-tap="44"); a mouse keeps the line height. */}
               {catalogueReady && (
                 <p className="mb-2">
-                  <Link href={ideaBook.href} className="font-semibold underline" style={{ color: "var(--accent-text)" }}>
+                  <Link href={ideaBook.href} data-tap="44" className="inline-flex items-center min-h-11 sm:min-h-0 font-semibold underline" style={{ color: "var(--accent-text)" }}>
                     Read it online now
                   </Link>{" "}
                   while you wait for the post.
@@ -64,7 +67,7 @@ export default function RequestIdeaBookPage() {
               )}
               {catalogue.download && (
                 <p>
-                  <a href={catalogue.download.href} download={ideaBook.fileName} className="font-semibold underline" style={{ color: "var(--accent-text)" }}>
+                  <a href={catalogue.download.href} download={ideaBook.fileName} data-tap="44" className="inline-flex items-center min-h-11 sm:min-h-0 font-semibold underline" style={{ color: "var(--accent-text)" }}>
                     Download the PDF
                   </a>{" "}
                   <span style={{ color: "var(--text-hint)" }}>({catalogue.download.label})</span>

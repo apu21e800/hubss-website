@@ -1,10 +1,12 @@
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
-import Image from "next/image";
+import PhotoImage from "@/components/ui/PhotoImage";
 import Link from "next/link";
 import { getMergedApplications } from "@/lib/applications.server";
 import { buildMetadata } from "@/lib/seo";
+import { applicationImages, resolveImage } from "@/lib/featured-images";
+import { HERO_POSITION } from "@/lib/hero-framing";
 
 // Sanity is the CMS for this page's copy, so the page has to be allowed to go
 // and re-read it. Without a revalidate the route is prerendered once at build
@@ -17,12 +19,6 @@ export const metadata = buildMetadata({
   description: "Crosswalks, bus lanes, bike infrastructure, airports, public art, and community branding. Purpose-matched surface systems for Canadian municipal and commercial applications.",
   slug: "applications",
 });
-
-/** The first 80 characters of a line, cut at a word, with an ellipsis. */
-function blurb(text: string, max = 80): string {
-  if (text.length <= max) return text;
-  return text.slice(0, max).replace(/\s+\S*$/, "").replace(/[,;:]$/, "") + "…";
-}
 
 export default async function ApplicationsPage() {
   const applications = await getMergedApplications();
@@ -51,8 +47,18 @@ export default async function ApplicationsPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {applications.map((app) => (
+        {/* Four across from xl: twenty cards make five full rows, where three
+            across left two cards on the last (QA pa#25). Each card shows the
+            application's own hero from Sanity, the photo its page leads with,
+            so no photo repeats between two cards (QA pa#4) and nothing goes
+            through /_next/image (QA pa#40). The line under the name is the
+            whole short description: it was cut at 80 characters mid-phrase
+            ("protect cyclists season…", QA pa#24). */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {applications.map((app) => {
+            const featured = applicationImages[app.slug] ? resolveImage(applicationImages[app.slug]) : null;
+            const photo = app.heroPhoto ?? { src: featured?.src ?? app.imageUrl, alt: featured?.alt ?? app.name };
+            return (
             <Link
               key={app.slug}
               href={`/applications/${app.slug}`}
@@ -64,35 +70,39 @@ export default async function ApplicationsPage() {
               className="group relative overflow-hidden rounded-xl block"
               style={{ aspectRatio: "4/3" }}
             >
-              <Image
-                src={app.imageUrl}
-                alt={app.name}
+              <PhotoImage
+                src={photo.src}
+                alt={photo.alt}
                 fill
-                className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                // A /public fallback is served as the file itself, never
+                // through the optimiser that ran out in Aug 2026.
+                unoptimized={!photo.src.startsWith("https://")}
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                style={{ objectPosition: HERO_POSITION[photo.origin ?? photo.src] ?? "center" }}
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
               />
               {/* A bottom-weighted scrim: the photograph reads at the top,
                   the type sits on the darkest part. */}
               <div
                 className="absolute inset-0"
-                style={{ background: "linear-gradient(180deg, rgba(13,13,13,0.08) 0%, rgba(13,13,13,0.30) 45%, rgba(13,13,13,0.88) 100%)" }}
+                style={{ background: "linear-gradient(180deg, rgba(13,13,13,0.04) 0%, rgba(13,13,13,0.22) 42%, rgba(13,13,13,0.86) 100%)" }}
               />
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: "rgba(249,115,22,0.18)" }} />
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: "rgba(249,115,22,0.16)" }} />
               <div className="absolute bottom-0 left-0 right-0 p-5">
-                <h2 className="font-bold text-lg mb-1" style={{ color: "var(--text-primary)", textShadow: "0 1px 2px rgba(0,0,0,0.45)" }}>{app.name}</h2>
-                {/* Description always visible on mobile (no hover), fades in on desktop */}
+                <h2 className="font-bold text-lg mb-1 leading-tight" style={{ color: "var(--text-primary)", textShadow: "0 1px 2px rgba(0,0,0,0.45)" }}>{app.name}</h2>
                 <p
-                  className="text-xs leading-relaxed opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
-                  style={{ color: "var(--text-body)", textShadow: "0 1px 2px rgba(0,0,0,0.45)" }}
+                  className="text-[12.5px] leading-snug"
+                  style={{ color: "var(--text-body)", textShadow: "0 1px 2px rgba(0,0,0,0.5)" }}
                 >
-                  {blurb(app.shortDesc)}
+                  {app.shortDesc}
                 </p>
               </div>
             </Link>
-          ))}
+            );
+          })}
         </div>
       </div>
-      <LunchLearn compact />
+      <LunchLearn compact from="applications" />
       <Footer />
     </main>
   );

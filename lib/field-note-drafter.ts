@@ -8,9 +8,16 @@
  * support. Those go into the draft's "Notes for the editor" in Studio, so the
  * person who presses Publish knows exactly what to check. The pipeline never
  * publishes (lib/field-note-pipeline.ts).
+ *
+ * Between the two, a style pass (styleRewrite, shared with the social
+ * drafter): lib/style-lint.ts finds any sentence with an em dash or another
+ * machine tell, one short call asks Claude to rewrite just those sentences,
+ * and whatever still fails is listed in the notes too. Doug does not want a
+ * single em dash on the site, and the prompt alone has never been enough.
  */
 
 import Anthropic from "@anthropic-ai/sdk";
+import { flagSentences, keepsFacts, PRODUCT_NAMES, type FlagOptions, type StyleRule } from "@/lib/style-lint";
 
 /** Override with BLOG_DRAFT_MODEL; the default is the model the repo already used. */
 const MODEL = process.env.BLOG_DRAFT_MODEL || "claude-opus-4-5";
@@ -51,7 +58,7 @@ LINKS: link the first mention of each HUB system to its page, and link one to th
 
 SEARCH: use the target search phrase naturally in the title, in the first paragraph and in one heading. Don't stuff it.
 
-HOUSE STYLE (docs/STYLE.md): sentence case for headings ("Where the colour goes", not "Where The Colour Goes"). Product names exactly: TrafficPatternsXD, TrafficPatterns, PreMark, DuraTherm, DecoMark, AirMark, StreetBond, StreetBondSR, MMAX, DuraShield, StreetPrint, ChipFill, AggreFill, Fast Patch DPR. The company is HUB Surface Systems, then HUB; never "Hub". The printed book is the Idea Book, never "the catalogue". Places as city and province spelled out (Milton, Ontario). No em dashes, none at all: an aside goes between commas or in parentheses, a pivot gets a full stop or a colon, a list gets commas. En dash only inside a span (10–20 years, 2026–27). No counts as a selling point.
+HOUSE STYLE (docs/STYLE.md): sentence case for headings ("Where the colour goes", not "Where The Colour Goes"). Product names exactly: ${PRODUCT_NAMES.join(", ")}. The company is HUB Surface Systems, then HUB; never "Hub". The printed book is the Idea Book, never "the catalogue". Places as city and province spelled out (Milton, Ontario). No em dashes, none at all: an aside goes between commas or in parentheses, a pivot gets a full stop or a colon, a list gets commas. En dash only inside a span (10–20 years, 2026–27). No counts as a selling point.
 
 MACHINE TELLS (docs/STYLE.md, "Machine tells"): readers recognise machine-written copy on sight and it costs trust, so none of these appears in the draft:
 - Em dashes, anywhere, even one.
@@ -105,9 +112,9 @@ const REPORT: Anthropic.Tool = {
   },
 };
 
-async function toolCall<T>(client: Anthropic, system: string, user: string, tool: Anthropic.Tool, maxTokens: number): Promise<T> {
+async function toolCall<T>(client: Anthropic, system: string, user: string, tool: Anthropic.Tool, maxTokens: number, model = MODEL): Promise<T> {
   const res = await client.messages.create({
-    model: MODEL,
+    model,
     max_tokens: maxTokens,
     system,
     tools: [tool],
@@ -148,4 +155,138 @@ export async function checkDraft(draft: Draft, facts: string): Promise<FactCheck
   const user = `FACTS:\n${facts}\n\nDRAFT:\n# ${draft.title}\n\n${draft.excerpt}\n\n${draft.body}\n\nReport with the report tool.`;
   const result = await toolCall<FactCheck>(client, system, user, REPORT, 3000);
   return { verdict: result.unsupported?.length ? "needs edits" : "clean", unsupported: result.unsupported ?? [] };
+}
+
+// ── the style pass ──────────────────────────────────────────────────────────
+
+/** One piece of copy for the style pass: a field of a draft, or one network's post. */
+export interface CopyPiece {
+  key: string;
+  /** How the prompt and the editor's notes name it: "Title", "Body", "LinkedIn". */
+  label: string;
+  text: string;
+  /** "whole": the text is a title; "markdown": its # lines are headings; "none": no headings. */
+  headings: FlagOptions["headings"];
+  /** Rules this piece may break (a Facebook post may carry one emoji). */
+  ignore?: StyleRule[];
+}
+
+export interface StylePass {
+  /** The copy after the rewrite, by key. */
+  text: Record<string, string>;
+  /** How many sentences broke the house style as Claude first wrote them. */
+  flagged: number;
+  /** The sentences that still do, for a person to fix. */
+  left: { label: string; sentence: string; problems: string[] }[];
+  /** Why the rewrite didn't happen, when it didn't. */
+  error?: string;
+}
+
+const REWRITE: Anthropic.Tool = {
+  name: "save_rewrites",
+  description: "Save the rewritten sentences.",
+  input_schema: {
+    type: "object",
+    properties: {
+      rewrites: {
+        type: "array",
+        items: {
+          type: "object",
+          properties: {
+            n: { type: "integer", description: "The sentence's number, as given." },
+            rewrite: { type: "string", description: "The rewritten sentence, and nothing else." },
+          },
+          required: ["n", "rewrite"],
+        },
+      },
+    },
+    required: ["rewrites"],
+  },
+};
+
+const EDITOR = `You are now the copy editor, not the writer. You get sentences from a draft that break the house style, each with its problem. Rewrite each one so the problem is gone, and change nothing else:
+- Keep every fact: the same numbers, product names, places, names and links, and the same markdown (bold, italic, links).
+- Change only what the problem needs; keep the rest of the wording.
+- One rewrite per number: no new points, and don't merge it with the text around it. Two sentences under one number may come back as one or two.
+- A title or heading stays short, in sentence case (capitals on the first word and on names only), and keeps its search phrase.
+- No dash between clauses, of any kind: use a comma, a colon, a full stop or parentheses.
+- Don't make it longer than it is.`;
+
+/** The rewrite as the original sat in the text: no quotes or markdown marks Claude added round it. */
+function asWritten(rewrite: string, original: string): string {
+  let out = rewrite.trim();
+  if (/^["\u201C][\s\S]*["\u201D]$/.test(out) && !/^["\u201C]/.test(original)) out = out.slice(1, -1).trim();
+  if (!/^#/.test(original)) out = out.replace(/^#{1,6}\s+/, "");
+  if (!/^[-*+]\s/.test(original)) out = out.replace(/^[-*+]\s+/, "");
+  return out;
+}
+
+/**
+ * The style pass, shared by the Insights and social drafters: lint the copy
+ * (lib/style-lint.ts), ask Claude ONCE to rewrite only the sentences that
+ * break the house style, keeping every fact, then lint again. A rewrite is
+ * used only if it kept the sentence's numbers, links and product names and
+ * didn't grow (maxGrowth); otherwise the original stays and is reported. If
+ * the call fails, the copy is kept as written and everything flagged is
+ * reported: a style problem never costs a draft.
+ */
+export async function styleRewrite(pieces: CopyPiece[], opts: { model: string; system: string; maxGrowth?: number }): Promise<StylePass> {
+  const text: Record<string, string> = Object.fromEntries(pieces.map((p) => [p.key, p.text]));
+  const flag = (p: CopyPiece) => flagSentences(text[p.key] ?? "", { headings: p.headings, ignore: p.ignore });
+  const problems = (issues: { message: string }[]) => [...new Set(issues.map((i) => i.message))];
+  const items = pieces.flatMap((piece) => flag(piece).map((f) => ({ piece, f })));
+  if (!items.length) return { text, flagged: 0, left: [] };
+
+  let error: string | undefined;
+  try {
+    const list = items.map(({ piece, f }, i) => `${i + 1}. [${piece.label}] ${f.text}\n   Problem: ${problems(f.issues).join(" ")}`);
+    const user = `Rewrite these ${items.length} sentence(s), then save them with save_rewrites.\n\n${list.join("\n\n")}`;
+    const res = await toolCall<{ rewrites?: { n: number; rewrite: string }[] }>(
+      new Anthropic(), `${opts.system}\n\n${EDITOR}`, user, REWRITE, 4000, opts.model
+    );
+    const growth = opts.maxGrowth ?? 1.3;
+    for (const r of res.rewrites ?? []) {
+      const item = items[r.n - 1];
+      if (!item || typeof r.rewrite !== "string") continue;
+      const before = item.f.text;
+      const after = asWritten(r.rewrite, before);
+      if (after === before || !keepsFacts(before, after) || after.length > before.length * growth + 10) continue;
+      const current = text[item.piece.key];
+      if (current.includes(before)) text[item.piece.key] = current.split(before).join(after);
+    }
+  } catch (err) {
+    error = err instanceof Error ? err.message : String(err);
+  }
+  const left = pieces.flatMap((p) => flag(p).map((f) => ({ label: p.label, sentence: f.text, problems: problems(f.issues) })));
+  return { text, flagged: items.length, left, ...(error ? { error } : {}) };
+}
+
+/**
+ * The style pass for the editor to read: one line when it's clean, else the
+ * sentences to fix. `fix` says where: "before publishing", "in Buffer".
+ */
+export function styleReport(style: StylePass, fix: string): string[] {
+  if (!style.left.length) {
+    return [style.flagged
+      ? `STYLE CHECK: clean. The drafter rewrote ${style.flagged} sentence(s) that had an em dash or another machine tell.`
+      : "STYLE CHECK: clean, no em dashes or machine tells."];
+  }
+  const why = style.error ? ` The automatic rewrite didn't run (${style.error}).` : "";
+  return [
+    `STYLE CHECK: ${style.left.length} sentence(s) still have an em dash or another machine tell.${why} Fix them ${fix}:`,
+    ...style.left.map((l) => `- ${l.label}: "${l.sentence}" ${l.problems.join(" ")}`),
+  ];
+}
+
+/** An Insights draft through the style pass: title (sentence case too), excerpt and body. */
+export async function polishDraft(draft: Draft): Promise<{ draft: Draft; style: StylePass }> {
+  const style = await styleRewrite(
+    [
+      { key: "title", label: "Title", text: draft.title, headings: "whole" },
+      { key: "excerpt", label: "Excerpt", text: draft.excerpt, headings: "none" },
+      { key: "body", label: "Body", text: draft.body, headings: "markdown" },
+    ],
+    { model: MODEL, system: VOICE }
+  );
+  return { draft: { ...draft, title: style.text.title, excerpt: style.text.excerpt, body: style.text.body }, style };
 }

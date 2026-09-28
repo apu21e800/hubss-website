@@ -245,6 +245,9 @@ async function pageAlt(pdf, n, total) {
   // substance to it, and fall back to whatever there is.
   let head = lines.find((s) => s.length >= 12) ?? lines[0];
   if (head.length > 90) head = head.slice(0, 87).replace(/\s+\S*$/, "") + "...";
+  // The book sets asides with em dashes; the site uses none (docs/STYLE.md,
+  // and `npm run verify` fails on one in an alt attribute).
+  head = head.replace(/\s*\u2014\s*/g, ", ");
   return `${head} (Idea Book, page ${n})`;
 }
 

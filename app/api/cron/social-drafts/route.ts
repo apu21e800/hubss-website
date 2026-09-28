@@ -4,6 +4,8 @@
  * Vercel Cron calls it (vercel.json) with `Authorization: Bearer $CRON_SECRET`.
  * Run it now: Vercel → hubss-website → Settings → Cron Jobs → Run.
  * See lib/social-pipeline.ts. Drafts only; nothing is ever posted from here.
+ * The copy gets the house style pass (lib/style-lint.ts); what it can't fix
+ * is in the email and in Studio under Social drafts.
  *
  * Needs, in Vercel (Production): CRON_SECRET, BUFFER_API_KEY,
  * ANTHROPIC_API_KEY, SANITY_API_WRITE_TOKEN; BLOG_DRAFT_NOTIFY and

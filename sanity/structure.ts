@@ -5,6 +5,7 @@
  *   📄 Website Pages  → singletons per page (no confusing "create new" list)
  *   📦 Products & Applications
  *   ✍️  Blog / Field Notes
+ *   📣  Social drafts (read only: what went to Buffer, and its style check)
  *   📍  Projects (Map Pins)
  *   ⚙️  Site Settings (singleton)
  */
@@ -22,6 +23,7 @@ import {
   CogIcon,
   BulbOutlineIcon,
   ImagesIcon,
+  ShareIcon,
 } from "@sanity/icons";
 
 // Page document IDs — set by the May 2026 migration
@@ -102,6 +104,20 @@ export const structure: StructureResolver = (S) =>
           S.documentTypeList("blogPost")
             .title("Insights")
             .defaultOrdering([{ field: "publishedAt", direction: "desc" }])
+        ),
+
+      // ── Social drafts ────────────────────────────────────────────────────────
+      // What the daily social drafter left in Buffer for each new article, with
+      // the style check on its copy (lib/social-pipeline.ts). The pipeline
+      // writes these; nothing here is created or edited by hand.
+      S.listItem()
+        .title("Social drafts")
+        .icon(ShareIcon)
+        .child(
+          S.documentTypeList("socialLog")
+            .title("Social drafts")
+            .defaultOrdering([{ field: "createdAt", direction: "desc" }])
+            .initialValueTemplates([])
         ),
 
       // ── Projects (Map Pins) ──────────────────────────────────────────────────

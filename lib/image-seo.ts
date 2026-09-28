@@ -334,17 +334,19 @@ const APPLICATION_SUBJECTS: Record<string, ImageSubject> = {
 // Here the folder IS the product, so naming the product is a documented claim.
 const PRODUCT_SUBJECTS: Record<string, ImageSubject> = {
   "traffic-patterns-xd": {
-    keyword: "TrafficPatternsXD stamped asphalt",
+    // Preformed thermoplastic, never "stamped asphalt" (QA, 27 Sep 2026: 112
+    // captions called it stamped asphalt, then named the material correctly).
+    keyword: "TrafficPatternsXD preformed thermoplastic",
     plural: "TrafficPatternsXD installations",
-    material: "150mil aggregate-reinforced preformed thermoplastic",
+    material: "150 mil aggregate-reinforced preformed thermoplastic",
     purpose: "high-traffic decorative pavement with skid resistance",
     settings: ["a municipal intersection", "a BRT corridor", "a civic plaza", "a high-volume crosswalk", "a transit station zone"],
-    also: ["aggregate reinforced thermoplastic", "heavy duty pavement marking", "stamped asphalt crosswalk"],
+    also: ["aggregate reinforced thermoplastic", "heavy duty pavement marking", "decorative thermoplastic crosswalk"],
   },
   "traffic-patterns": {
     keyword: "TrafficPatterns thermoplastic pavement marking",
     plural: "TrafficPatterns installations",
-    material: "125mil preformed thermoplastic",
+    material: "125 mil preformed thermoplastic",
     purpose: "decorative, durable pattern paving",
     settings: ["a crosswalk", "an intersection treatment", "a pedestrian plaza", "a main street corridor"],
     also: ["preformed thermoplastic", "pattern paving", "decorative pavement marking"],
@@ -361,7 +363,7 @@ const PRODUCT_SUBJECTS: Record<string, ImageSubject> = {
     keyword: "StreetBondSR solar-reflective coating",
     plural: "StreetBondSR installations",
     material: "solar-reflective, low-VOC acrylic pavement coating",
-    purpose: "surface temperature reduction and LEED credit",
+    purpose: "cooler surfaces that can contribute to LEED heat-island credits",
     settings: ["a plaza", "a pedestrian pathway", "a courtyard surface"],
     also: ["cool pavement coating", "SRI coating", "LEED heat island reduction", "urban heat island mitigation"],
   },
@@ -389,13 +391,16 @@ const PRODUCT_SUBJECTS: Record<string, ImageSubject> = {
     settings: ["a bus lane", "a bike lane", "a transit corridor", "a cold-weather installation"],
     also: ["MMA pavement coating", "fast cure road surfacing", "methyl methacrylate resin", "overnight lane marking"],
   },
+  // Inlaid thermoplastic, flush with the road (the Idea Book: "Inlaid
+  // thermoplastic. Zero profile above grade."); it was captioned as imprinted
+  // asphalt until 27 Sep 2026.
   duratherm: {
-    keyword: "DuraTherm imprinted asphalt",
+    keyword: "DuraTherm inlaid thermoplastic",
     plural: "DuraTherm installations",
-    material: "heat-imprinted asphalt with durable colour system",
-    purpose: "decorative hardscape in asphalt",
+    material: "preformed thermoplastic inlaid flush with the asphalt",
+    purpose: "flush, plow-safe decorative markings",
     settings: ["a pathway", "a crosswalk", "a courtyard", "a streetscape treatment"],
-    also: ["imprinted asphalt", "decorative asphalt", "stamped asphalt pattern"],
+    also: ["inlaid thermoplastic", "flush pavement marking", "plow-safe decorative crosswalk"],
   },
   durashield: {
     keyword: "DuraShield asphalt coating",
@@ -408,7 +413,7 @@ const PRODUCT_SUBJECTS: Record<string, ImageSubject> = {
   premark: {
     keyword: "PreMark preformed thermoplastic",
     plural: "PreMark installations",
-    material: "125mil preformed thermoplastic symbols and legends",
+    material: "125 mil preformed thermoplastic symbols and legends",
     purpose: "retroreflective symbols, arrows, and legends",
     settings: ["a roadway", "a bike lane", "a parking facility", "an intersection"],
     also: ["thermoplastic symbols", "preformed road markings", "pavement legends", "bike symbol marking"],
@@ -455,14 +460,18 @@ const PRODUCT_SUBJECTS: Record<string, ImageSubject> = {
 const PLACES: Record<string, string> = {
   "images/blog/complete-streets-new-westminster": "New Westminster, BC",
   "images/blog/bc-childrens-hospital-labyrinth": "Vancouver, BC",
-  "images/blog/branded-crosswalks-vancouver-richmond": "Vancouver and Richmond, BC",
+  // The post covers both cities, but its photo is Vancouver's Little Italy
+  // crosswalk (the same file as Commercial Drive's). Sep 2026.
+  "images/blog/branded-crosswalks-vancouver-richmond": "Vancouver, BC",
   "images/blog/bowen-island-asphalt-path": "Bowen Island, BC",
   "images/blog/murrayville-schoolhouse-sidewalk": "Murrayville, BC",
   "images/blog/decorative-crosswalk-commercial-drive": "Vancouver, BC",
   "images/blog/white-rock-langley-trafficpatterns": "White Rock and Langley, BC",
   "images/blog/ubc-musqueam-crosswalk": "Vancouver, BC",
   "images/blog/simcoe-rainbow-crosswalk": "Simcoe, ON",
-  "images/blog/decorative-crosswalk-meridian": "Meridian, ON",
+  // There is no Meridian, ON: "Meridian" was the post's slip for "median".
+  // The post places it on Humberwest Parkway, which is in Brampton. Sep 2026.
+  "images/blog/decorative-crosswalk-meridian": "Humberwest Parkway, Brampton, ON",
 };
 
 /**

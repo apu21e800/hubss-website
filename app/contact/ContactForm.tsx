@@ -114,7 +114,10 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
                     const res = await fetch("/api/contact", {
                       method: "POST",
                       headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({ ...form, formType: "contact", website: "" }),
+                      // A blank company is left out rather than sent as "",
+                      // so the email drops its Company row and the subject
+                      // line falls back instead of ending on "@ ".
+                      body: JSON.stringify({ ...form, company: form.company.trim() || undefined, formType: "contact", website: "" }),
                     });
                     const data = await res.json();
                     if (!res.ok || data.error) {
@@ -132,17 +135,24 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
                 }}
                 className="space-y-5"
               >
+                {/* Company is optional (QA, 27 Sep 2026): this is the only
+                    enquiry form, and a homeowner coming from the driveway
+                    pages had to invent a company to send it. The API
+                    (app/api/contact/route.ts) requires only an email. */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {[
-                    { label: "Full name", key: "name", type: "text", placeholder: "Jane Smith" },
-                    { label: "Company", key: "company", type: "text", placeholder: "City of Toronto" },
+                    { label: "Full name", key: "name", type: "text", placeholder: "Jane Smith", optional: false },
+                    { label: "Company", key: "company", type: "text", placeholder: "City of Toronto", optional: true },
                   ].map((f) => (
                     <div key={f.key}>
-                      <label htmlFor={`contact-${f.key}`} className="block text-sm mb-2" style={{ color: "var(--text-body)" }}>{f.label}</label>
+                      <label htmlFor={`contact-${f.key}`} className="block text-sm mb-2" style={{ color: "var(--text-body)" }}>
+                        {f.label}
+                        {f.optional && <span style={{ opacity: 0.6 }}> (optional)</span>}
+                      </label>
                       <input
                         id={`contact-${f.key}`}
                         type={f.type}
-                        required
+                        required={!f.optional}
                         value={form[f.key as keyof typeof form]}
                         onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}
                         placeholder={f.placeholder}

@@ -6,8 +6,10 @@
  * one particular plan item: add ?idea=<its document id>.
  *
  * It takes the top "Ready" item in Studio's Field Notes plan, has Claude write
- * and then fact-check a draft, saves it as an UNPUBLISHED Blog / Field Notes
- * draft, and emails BLOG_DRAFT_NOTIFY. See lib/field-note-pipeline.ts.
+ * a draft, rewrite any sentence that breaks the house style (lib/style-lint.ts)
+ * and fact-check it, saves it as an UNPUBLISHED Blog / Field Notes draft with
+ * both checks in its notes, and emails BLOG_DRAFT_NOTIFY. See
+ * lib/field-note-pipeline.ts.
  *
  * Needs, in Vercel (Production): CRON_SECRET, ANTHROPIC_API_KEY,
  * SANITY_API_WRITE_TOKEN (an Editor token), BLOG_DRAFT_NOTIFY, RESEND_API_KEY.
@@ -16,7 +18,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { draftNextFieldNote } from "@/lib/field-note-pipeline";
 
-// Two long Claude calls: writing (about a minute) and checking.
+// Three Claude calls: writing (about a minute), a short style rewrite, and checking.
 export const maxDuration = 300;
 export const dynamic = "force-dynamic";
 

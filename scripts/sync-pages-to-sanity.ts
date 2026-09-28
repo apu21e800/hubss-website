@@ -121,13 +121,14 @@ const ABOUT_VALUES: { heading: string; body: string }[] = [
   },
 ];
 
+// Matches DIFFERENTIATORS_FALLBACK in app/about/page.tsx since 28 Sep 2026
+// (QA rest#18): one service-life card, no internal note, no unsourced claims.
 const ABOUT_WHY_HUB: { title: string; desc: string }[] = [
-  { title: "Flexibility vs concrete",          desc: "Asphalt-based systems flex with Canada's freeze-thaw cycles, outlasting concrete alternatives by 2–3x in northern climates." },
-  { title: "6–8 year marking life",           desc: "PreMark thermoplastic carries a 6–8 year service life, and MMAX returns a lane to traffic in 45–60 minutes. Both figures are the Idea Book's." },
-  { title: "Vision Zero aligned",              desc: "Every HUB product is designed to support Vision Zero frameworks, from retroreflective crosswalk markings to high-contrast bike lane systems." },
+  { title: "Flexibility vs concrete",          desc: "Asphalt-based systems flex with Canada's freeze-thaw cycles." },
+  { title: "Vision Zero aligned",              desc: "HUB's marking systems support Vision Zero frameworks, from retroreflective crosswalk markings to high-contrast bike lane systems." },
   { title: "High-visibility by design",        desc: "Tactile and high-contrast marking systems engineered for pedestrian safety and legibility in every lighting condition and season." },
-  { title: "Service life, by system",          desc: "StreetPrint runs 10–20 years on sound pavement; TrafficPatternsXD 10+, TrafficPatterns 8+, StreetBond 8+. Quoted per system, because they do not wear the same." },
-  { title: "Climate-tested",                   desc: "Every system is stress-tested for freeze-thaw extremes, de-icing salts, and snowplow blades, from coastal BC to the Great Lakes." },
+  { title: "Service life, by system",          desc: "StreetPrint 10–20 years, TrafficPatternsXD 10+, TrafficPatterns 8+, StreetBond 8+, PreMark 6–8. Quoted per system, because they do not wear the same." },
+  { title: "Built for winter maintenance",     desc: "StreetPrint and DuraTherm sit flush with the road, with nothing for a plow blade to catch, and preformed thermoplastic holds its skid resistance and colour through snowplow cycles and de-icing seasons." },
 ];
 
 const ABOUT_PARTNERS_INTRO =

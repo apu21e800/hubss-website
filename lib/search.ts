@@ -59,6 +59,7 @@ import { PRODUCT_KEYWORDS, APPLICATION_KEYWORDS } from "./search-keywords";
 import { PRODUCT_CATALOGUE } from "./product-catalogue";
 import { mapProjects } from "./map-projects";
 import blogIndex from "./blog-index.json";
+import { ARCHIVED_POSTS, SECTION_BY_KEY, isArchivedPost, sectionFor } from "./field-notes-taxonomy";
 
 export type SearchType =
   | "Product"
@@ -137,11 +138,13 @@ const PAGES: Omit<SearchEntry, "boost">[] = [
   { id: "p-idea-book", type: "Page", title: ideaBook.title, subtitle: "Every system and application, read in your browser", href: ideaBook.href, keywords: "idea book catalogue brochure volume 5 book read flipbook printed copy", body: "" },
   { id: "p-apps", type: "Page", title: "All applications", subtitle: "Where HUB systems are specified", href: "/applications", keywords: "applications uses where sectors", body: "" },
   { id: "p-gallery", type: "Page", title: "Photo archive", subtitle: "Documented installations across Canada", href: "/gallery", keywords: "gallery photos images archive installations portfolio work", body: "" },
-  { id: "p-blog", type: "Page", title: "Insights", subtitle: "Case studies, guides, white papers and project profiles", href: "/blog", keywords: "blog articles library research writing notes field notes insights", body: "" },
-  { id: "p-guides", type: "Page", title: "Guides", subtitle: "How to choose, specify, and defend a surface decision", href: "/blog/guides", keywords: "guides how to specify comparison decision", body: "" },
-  { id: "p-cases", type: "Page", title: "Case studies", subtitle: "Named projects with the brief and the measured outcome", href: "/blog/case-studies", keywords: "case studies projects outcomes results evidence", body: "" },
-  { id: "p-white", type: "Page", title: "White papers", subtitle: "Long-form technical documents for public works teams", href: "/blog/white-papers", keywords: "white papers technical research engineering", body: "" },
-  { id: "p-profiles", type: "Page", title: "Project profiles", subtitle: "Short-form records of installations across the country", href: "/blog/project-profiles", keywords: "projects profiles installations portfolio", body: "" },
+  // Insights and its three sections (28 Sep 2026: five types became Projects,
+  // Guides and Articles, lib/field-notes-taxonomy.ts). The old type names stay
+  // in the keywords, so "case study" or "white paper" still lands somewhere.
+  { id: "p-blog", type: "Page", title: "Insights", subtitle: "Projects, guides and articles on Canadian pavement", href: "/blog", keywords: "blog articles posts library research writing notes field notes insights", body: "" },
+  { id: "p-projects", type: "Page", title: "Projects", subtitle: SECTION_BY_KEY.projects.blurb, href: `/blog/${SECTION_BY_KEY.projects.slug}`, keywords: "projects case studies case study project profiles installations portfolio outcomes evidence", body: "" },
+  { id: "p-guides", type: "Page", title: "Guides", subtitle: SECTION_BY_KEY.guides.blurb, href: `/blog/${SECTION_BY_KEY.guides.slug}`, keywords: "guides how to specify comparison decision white papers white paper technical research engineering", body: "" },
+  { id: "p-articles", type: "Page", title: "Articles", subtitle: SECTION_BY_KEY.articles.blurb, href: `/blog/${SECTION_BY_KEY.articles.slug}`, keywords: "articles industry notes news blog", body: "" },
   { id: "p-resources", type: "Page", title: "Specification library", subtitle: "Spec sheets, data sheets, colour cards and submittals", href: "/resources", keywords: "resources downloads documents spec sheets pdf submittal data sheet", body: "" },
   { id: "p-ll", type: "Page", title: "Lunch & Learn", subtitle: "Free spec session for engineers, planners and architects", href: "/lunch-learn", keywords: "lunch learn session training presentation cpd book booking teach", body: "" },
   { id: "p-patterns", type: "Page", title: "Pattern library", subtitle: "Stamped asphalt patterns and border templates", href: "/patterns", keywords: "patterns templates stamps brick cobblestone herringbone", body: "" },
@@ -196,16 +199,20 @@ function buildIndex(): SearchEntry[] {
 
   type BlogRow = { slug: string; title: string; excerpt: string; type: string; keywords: string[] };
   for (const b of blogIndex as BlogRow[]) {
+    // An archived post (lib/field-notes-taxonomy.ts) redirects to its
+    // replacement and is offered nowhere, search included.
+    if (isArchivedPost(b.slug)) continue;
     // The type and the search phrases come with each post from Sanity
     // (scripts/gen-blog-index.ts). Without them "case study", "white paper"
-    // and "rainbow crosswalk" match nothing in the library.
+    // and "rainbow crosswalk" match nothing in the library. The section's
+    // label ("Project") goes in beside the stored type.
     out.push({
       id: `post-${b.slug}`,
       type: "Insight",
       title: b.title,
       subtitle: b.excerpt,
       href: `/blog/${b.slug}`,
-      keywords: [b.type, ...b.keywords].join(" "),
+      keywords: [b.type, sectionFor(b.type).singular, ...b.keywords].join(" "),
       body: b.excerpt,
       boost: 0,
     });
@@ -228,7 +235,7 @@ function buildIndex(): SearchEntry[] {
       // A project with a write-up goes to the write-up. The rest go to the map,
       // which is where they are actually documented — inventing a page for them
       // would be worse than sending someone to the thing that exists.
-      href: p.slug ? `/blog/${p.slug}` : "/#map",
+      href: p.slug ? `/blog/${isArchivedPost(p.slug) ? ARCHIVED_POSTS[p.slug] : p.slug}` : "/#map",
       keywords: `${p.city} ${p.province} ${PROVINCE_NAMES[p.province] ?? ""} installation project reference`,
       body: `${p.excerpt} ${p.product} ${p.application}`,
       boost: 20,

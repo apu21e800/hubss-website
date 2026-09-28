@@ -17,12 +17,14 @@
  *                 underneath. Boldest, most editorial.
  */
 
-import { useState, FormEvent } from "react";
+import { useEffect, useState, FormEvent } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { CHROME_MARKS } from "@/lib/chrome-images.mjs";
 import ChromeImg from "@/components/ui/ChromeImg";
+import { lunchLearnHref, readLunchLearnParams } from "@/lib/lunch-learn";
 
 export type LunchLearnVariant = "boardroom" | "ticket" | "proof" | "band";
 
@@ -69,6 +71,16 @@ function useLunchLearnForm(withFormat: boolean) {
   const [formData, setFormData] = useState<FormState>(EMPTY);
   const [format, setFormat] = useState<string>("Either");
   const [submitState, setSubmitState] = useState<SubmitState>({ status: "idle" });
+  // The session topic and the page that sent the visitor, from a contextual
+  // link (lib/lunch-learn.ts): /lunch-learn?topic=StreetPrint&from=product#book.
+  // Read after mount so the static page stays static.
+  const [topic, setTopic] = useState<string | undefined>();
+  const [from, setFrom] = useState<string | undefined>();
+  useEffect(() => {
+    const p = readLunchLearnParams(window.location.search);
+    setTopic(p.topic);
+    setFrom(p.from);
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.currentTarget;
@@ -85,6 +97,8 @@ function useLunchLearnForm(withFormat: boolean) {
         body: JSON.stringify({
           ...formData,
           ...(withFormat ? { format } : {}),
+          ...(topic ? { topic } : {}),
+          ...(from ? { from } : {}),
           formType: "lunch-learn",
         }),
       });
@@ -102,7 +116,26 @@ function useLunchLearnForm(withFormat: boolean) {
     }
   };
 
-  return { formData, format, setFormat, submitState, handleChange, handleSubmit };
+  return { formData, format, setFormat, submitState, handleChange, handleSubmit, topic, clearTopic: () => setTopic(undefined) };
+}
+
+/** The topic the visitor arrived with, shown above the form so they can see it and drop it. */
+function TopicChip({ topic, onClear }: { topic: string; onClear: () => void }) {
+  return (
+    <div className="flex items-center gap-2 rounded-lg px-3 py-2" style={{ background: "rgba(249,115,22,0.10)", border: "1px solid rgba(249,115,22,0.35)" }}>
+      <span className="text-[11px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--accent-text)" }}>Topic</span>
+      <span className="min-w-0 flex-1 truncate text-[13.5px] font-semibold" style={{ color: "var(--text-primary)" }}>{topic}</span>
+      <button
+        type="button"
+        onClick={onClear}
+        aria-label={`Remove the topic ${topic}`}
+        className="-mr-1 inline-flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-md transition-colors hover:bg-[var(--ink-05)]"
+        style={{ color: "var(--ink-55)" }}
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+      </button>
+    </div>
+  );
 }
 
 const inputStyle: React.CSSProperties = {
@@ -168,6 +201,9 @@ function ErrorNote({ message }: { message?: string }) {
 }
 
 function MoreLink() {
+  // On /lunch-learn this link pointed at the page it sat on (QA, 27 Sep 2026).
+  const pathname = usePathname();
+  if (pathname === "/lunch-learn") return null;
   return (
     <Link href="/lunch-learn" className="inline-flex items-center gap-1.5 text-[13px] font-semibold transition-colors hover:text-[var(--accent-soft-text)]" style={{ color: "var(--accent-text)", minHeight: 40 }}>
       Everything about the session
@@ -322,6 +358,7 @@ function Boardroom({ hideForm = false }: { hideForm?: boolean }) {
                         <h3 className="font-bold text-lg mb-1" style={{ color: "var(--text-primary)" }}>Book your session</h3>
                         <p className="text-[13px]" style={{ color: "var(--ink-55)" }}>Confirmed within one business day.</p>
                       </div>
+                      {f.topic && <TopicChip topic={f.topic} onClear={f.clearTopic} />}
                       <Honeypot value={f.formData.website} onChange={f.handleChange} />
                       {/* Format picker — grafted from the Ticket option; feeds the email */}
                       <div className="grid grid-cols-3 gap-2" role="group" aria-label="Session format">
@@ -641,7 +678,7 @@ function Proof() {
 // carries the Lunch & Learn button: the same ask three times a page. The band
 // keeps Moose, the name, one line and one button, and sends people to
 // /lunch-learn, where the form and the detail live.
-function Band() {
+function Band({ topic, from }: { topic?: string; from?: string }) {
   return (
     <section
       aria-labelledby="ll-band-heading"
@@ -672,11 +709,13 @@ function Band() {
               Lunch &amp; Learn
             </p>
             <h2 id="ll-band-heading" className="text-lg sm:text-xl font-bold leading-snug" style={{ color: "var(--text-primary)" }}>
-              A free working session for engineers, architects and municipal teams: case studies, spec language and samples on the table.
+              {topic
+                ? `A free working session on ${topic} for your team: case studies, spec language and samples on the table.`
+                : "A free working session for engineers, architects and municipal teams: case studies, spec language and samples on the table."}
             </h2>
           </div>
           <Link
-            href="/lunch-learn"
+            href={lunchLearnHref(topic, from)}
             className="inline-flex flex-shrink-0 items-center gap-2 rounded-lg px-5 py-3 text-sm font-bold whitespace-nowrap"
             style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "var(--on-accent)", boxShadow: "0 4px 24px rgba(249,115,22,0.30)" }}
           >
@@ -694,8 +733,10 @@ function Band() {
 export default function LunchLearnV2({
   variant = "boardroom",
   hideForm = false,
-}: { variant?: LunchLearnVariant; hideForm?: boolean }) {
-  if (variant === "band") return <Band />;
+  topic,
+  from,
+}: { variant?: LunchLearnVariant; hideForm?: boolean; topic?: string; from?: string }) {
+  if (variant === "band") return <Band topic={topic} from={from} />;
   if (variant === "ticket") return <Ticket />;
   if (variant === "proof") return <Proof />;
   return <Boardroom hideForm={hideForm} />;

@@ -24,7 +24,10 @@ export default function ProductFaq({
   faqs: ProductFaqEntry[];
 }) {
   return (
-    <section aria-labelledby="product-faq" className="mb-14">
+    /* mt-16: the section follows the photo gallery, and on StreetPrint its
+       heading sat against "Showing 7 of 77" and the gallery buttons (QA,
+       27 Sep 2026). */
+    <section aria-labelledby="product-faq" className="mt-16 mb-14">
       <h2
         id="product-faq"
         className="text-xl sm:text-2xl font-bold mb-2"

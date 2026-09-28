@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 import fs from "fs";
 import path from "path";
 import { projects } from "./lib/projects";
+import { ARCHIVED_POSTS, retiredProjectHref } from "./lib/field-notes-taxonomy";
 
 // The 9 real, currently-built project pages. Derived from lib/projects.ts so
 // adding a project can never silently re-break the redirect below.
@@ -189,6 +190,19 @@ const nextConfig: NextConfig = {
       // { source: "/applications/public-art", destination: "/applications/community-branding", permanent: true },
       // Public Spaces now has its own page in applications.ts — redirect removed
       { source: "/decorative-streetscape-solutions", destination: "/applications/crosswalks", permanent: true },
+      // ── Insights sections (28 Sep 2026) ───────────────────────────────────
+      // The five type hubs became three sections (lib/field-notes-taxonomy.ts):
+      // case studies and project profiles are Projects, white papers are with
+      // the Guides, and the "Blog" type's hub moved from /blog/posts to
+      // /blog/articles. Each old page (app/blog/<old>/page.tsx) redirects too,
+      // as a fallback; keep the destinations the same.
+      { source: "/blog/case-studies", destination: "/blog/projects", permanent: true },
+      { source: "/blog/project-profiles", destination: "/blog/projects", permanent: true },
+      { source: "/blog/white-papers", destination: "/blog/guides", permanent: true },
+      { source: "/blog/posts", destination: "/blog/articles", permanent: true },
+      // Archived posts: still published in Studio, kept off the site, each
+      // sent to the post that replaced it (ARCHIVED_POSTS, same file).
+      ...Object.entries(ARCHIVED_POSTS).map(([from, to]) => ({ source: `/blog/${from}`, destination: `/blog/${to}`, permanent: true })),
       // Blog post redirects
       { source: "/keeping-pedestrians-safe-and-operation-budgets-low", destination: "/blog/keeping-pedestrians-safe", permanent: true },
       { source: "/pedestrian-safety-solutions", destination: "/blog/pedestrian-safety-solutions", permanent: true },
@@ -284,7 +298,7 @@ const nextConfig: NextConfig = {
       { source: "/complete-streets-new-westminster", destination: "/blog/complete-streets-new-westminster", permanent: true },
       { source: "/community-branding-horizontal-wayfinding-for-vancouvers-spirit-trail", destination: "/blog/spirit-trail-wayfinding-vancouver", permanent: true },
       { source: "/performance-crosswalks-for-asphalt-and-concrete", destination: "/blog/performance-crosswalks-asphalt-concrete", permanent: true },
-      { source: "/imprinted-asphalt-crosswalks-for-york-transit-corridor", destination: "/blog/imprinted-asphalt-york-transit", permanent: true },
+      { source: "/imprinted-asphalt-crosswalks-for-york-transit-corridor", destination: "/blog/multimodal-connectivity-york-region", permanent: true }, // the stub it used to land on is archived (QA rest#9)
       { source: "/residential-decorative-paving", destination: "/applications/townhomes", permanent: true }, // decorative paving for townhouse developers
       { source: "/laneway-revitalization", destination: "/blog/laneway-project", permanent: true }, // More Awesome Now laneways, which this post covers
       { source: "/residential-decorative-driveways", destination: "/applications/private-driveways", permanent: true }, // StreetPrint driveway, Burnaby; matches /residential-driveways
@@ -371,11 +385,11 @@ const nextConfig: NextConfig = {
       { source: "/driveways-gallery", destination: "/applications/private-driveways", permanent: true },
       { source: "/public-art-gallery", destination: "/applications/public-art", permanent: true },
       { source: "/regulatory-safety-markings-gallery", destination: "/applications/regulatory-markings", permanent: true },
-      { source: "/streetscapes-gallery", destination: "/blog/project-profiles", permanent: true },
+      { source: "/streetscapes-gallery", destination: "/blog/projects", permanent: true },
 
       // ── /projects ───────────────────────────────────────────────────────────
-      // /projects was folded into Field Notes; app/projects/page.tsx calls
-      // redirect("/blog/project-profiles"). But that route prerenders, so Next
+      // /projects was folded into Insights; app/projects/page.tsx calls
+      // permanentRedirect("/blog/projects"). But that route prerenders, so Next
       // ships the redirect in the RSC payload instead of as an HTTP status:
       // measured on production, an arriving visitor got a bare "LOADING" screen
       // with no navigation for ~600ms, then a client-side navigation at 1.15s.
@@ -386,12 +400,18 @@ const nextConfig: NextConfig = {
       // flash, no thin page. The page component stays as the fallback if this
       // rule is ever removed.
       //
-      // TEMPORARY (307), deliberately, and this is the one rule in this file
-      // that is. A 308 is cached by the browser forever with no server-side
-      // way to revoke it — so if /projects is ever rebuilt as a real gallery
-      // index, every visitor who had already been bounced would keep being
-      // bounced. Flip this to `permanent: true` once that decision is settled.
-      { source: "/projects", destination: "/blog/project-profiles", permanent: false },
+      // It was TEMPORARY (307) until 28 Sep 2026, deliberately: a 308 is
+      // cached by the browser forever, so it waited for the decision on where
+      // projects live. That is settled: the Insights Projects section, which
+      // holds the case studies and the project profiles. Permanent now.
+      { source: "/projects", destination: "/blog/projects", permanent: true },
+      // The project pages themselves, retired the same day: each /projects/
+      // <slug> built from lib/projects.ts goes to the Insights write-up of the
+      // same job (RETIRED_PROJECT_PAGES in lib/field-notes-taxonomy.ts), or to
+      // /blog/projects where there is none. app/projects/[slug]/page.tsx does
+      // the same as a fallback and is not prerendered. These sit above the
+      // /projects catch-all at the end of this list, so they match first.
+      ...LIVE_PROJECT_SLUGS.map((slug) => ({ source: `/projects/${slug}`, destination: retiredProjectHref(slug), permanent: true })),
 
       // WordPress projects sub-tree — bulk taxonomy/pagination URLs.
       // Pointed straight at the destination rather than at /projects: Next does
@@ -402,10 +422,10 @@ const nextConfig: NextConfig = {
       // redirects are first-match-wins and :cat* matches any depth, it swallowed
       // every /projects/category/ URL and left the twelve specific category
       // rules further down as dead code — /projects/category/crosswalks/x went
-      // to /blog/project-profiles, never /applications/crosswalks. It now lives
+      // to the project archive, never /applications/crosswalks. It now lives
       // *below* those rules, as the final fallback. Keep it there.
-      { source: "/projects/page/:n", destination: "/blog/project-profiles", permanent: true },
-      { source: "/projects/featured-projects/:n", destination: "/blog/project-profiles", permanent: true },
+      { source: "/projects/page/:n", destination: "/blog/projects", permanent: true },
+      { source: "/projects/featured-projects/:n", destination: "/blog/projects", permanent: true },
 
       // /projects/[slug] — route to matching blog post on new site
       { source: "/projects/best-crosswalks-canada", destination: "/blog/best-crosswalks-canada", permanent: true },
@@ -450,18 +470,19 @@ const nextConfig: NextConfig = {
       { source: "/projects/category/driveways/:path*", destination: "/applications/private-driveways", permanent: true },
       // WordPress date archives → gallery
       { source: "/projects/:year(\\d{4})/:path*", destination: "/gallery", permanent: true },
-      // Any remaining /projects/category/... → the project-profiles archive.
+      // Any remaining /projects/category/... → the Projects archive.
       // This is the relocated catch-all (see the note further up). It must stay
       // last among the /projects/category/ rules so the twelve specific
       // category mappings above keep winning.
       //
-      // Destination is /blog/project-profiles, not /gallery: that is where an
-      // unmatched category URL already lands in production today, because the
-      // old misplaced catch-all pointed there and matched first. Keeping it
-      // preserves current live behaviour for categories we have no mapping for,
-      // so this change only ever *improves* a URL's destination — it never
-      // moves one that was already working.
-      { source: "/projects/category/:path*", destination: "/blog/project-profiles", permanent: true },
+      // Destination is the Insights project archive, not /gallery: that is
+      // where an unmatched category URL already landed in production, because
+      // the old misplaced catch-all pointed there and matched first. Keeping it
+      // preserves live behaviour for categories we have no mapping for, so this
+      // change only ever *improves* a URL's destination and never moves one
+      // that was already working. (/blog/project-profiles until 28 Sep 2026,
+      // now /blog/projects, pointed at directly to avoid a second hop.)
+      { source: "/projects/category/:path*", destination: "/blog/projects", permanent: true },
       // Old commercial parking lots section
       { source: "/commercial-parking-lots/:path*", destination: "/applications/parking-lots", permanent: true },
       // WordPress blog old slugs (blog-slug format)
@@ -502,6 +523,11 @@ const nextConfig: NextConfig = {
       { source: "/feed", destination: "/blog", permanent: true },
       { source: "/feed/:path*", destination: "/blog", permanent: true },
       // Catch-all for any remaining LEGACY /projects/ URLs → gallery.
+      //
+      // Since 28 Sep 2026 the pages it exempts are retired too: the rules
+      // beside /projects above send each to its Insights write-up before this
+      // one is reached. The exemption stays so that remains true if those
+      // rules move.
       //
       // This rule used to be an unguarded /projects/:path*, which meant it also
       // swallowed the 9 REAL project pages the site builds and advertises in its

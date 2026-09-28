@@ -18,14 +18,27 @@ export interface GalleryImage {
 // the gallery, and an auto-loader would push them forever out of reach.
 const INITIAL = 7;
 const CHUNK = 12;
+// A gallery of eight or nine used to end on "Load 1 more" (QA, 27 Sep 2026):
+// a button for a stub reads as a mistake. When three or fewer photos would be
+// left behind the button, they are shown instead, at first paint and after
+// every "Load more".
+const TAIL = 3;
+const settle = (count: number, total: number) =>
+  total - count <= TAIL ? total : Math.min(count, total);
 
 export default function GalleryGrid({ images }: { images: GalleryImage[] }) {
   const [lightboxIndex, setLightboxIndex] = useState(-1);
   const [visible, setVisible] = useState(INITIAL);
 
-  const displayed = images.slice(0, visible);
+  const shown = settle(visible, images.length);
+  const displayed = images.slice(0, shown);
   const hasMore = displayed.length < images.length;
-  const remaining = images.length - displayed.length;
+  // What the next press adds, tail included, so the label tells the truth.
+  const nextShown = settle(shown + CHUNK, images.length);
+  const nextCount = nextShown - shown;
+  // When the next chunk is the rest, "Load N more" and "Show all" are the
+  // same button twice; only "Show all" stays.
+  const nextIsAll = nextShown >= images.length;
 
   // Hero = first image; grid = the rest
   const hero = displayed[0] ?? null;
@@ -100,7 +113,7 @@ export default function GalleryGrid({ images }: { images: GalleryImage[] }) {
       {hasMore && (
         <noscript>
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 mt-2 sm:mt-3">
-            {images.slice(visible).map((img) => (
+            {images.slice(shown).map((img) => (
               /* eslint-disable-next-line @next/next/no-img-element */
               <img
                 key={img.src}
@@ -124,18 +137,20 @@ export default function GalleryGrid({ images }: { images: GalleryImage[] }) {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setVisible(images.length)}
-              className="px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors hover:bg-[var(--ink-10)] active:scale-[0.97]"
+              className="px-4 py-2.5 min-h-11 rounded-lg text-sm font-semibold transition-colors hover:bg-[var(--ink-10)] active:scale-[0.97]"
               style={{ background: "var(--bg-card-neutral)", color: "var(--text-body)", border: "1px solid var(--ink-10)" }}
             >
               Show all {images.length}
             </button>
-            <button
-              onClick={() => setVisible((v) => Math.min(v + CHUNK, images.length))}
-              className="px-5 py-2.5 rounded-lg text-sm font-semibold transition-all hover:brightness-110 active:scale-[0.97]"
-              style={{ background: "#f97316", color: "var(--on-accent)" }}
-            >
-              Load {Math.min(CHUNK, remaining)} more
-            </button>
+            {!nextIsAll && (
+              <button
+                onClick={() => setVisible(nextShown)}
+                className="px-5 py-2.5 min-h-11 rounded-lg text-sm font-semibold transition-all hover:brightness-110 active:scale-[0.97]"
+                style={{ background: "#f97316", color: "var(--on-accent)" }}
+              >
+                Load {nextCount} more
+              </button>
+            )}
           </div>
         </div>
       )}

@@ -11,7 +11,10 @@ import Map, {
   type MapLayerMouseEvent,
 } from "react-map-gl/maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
-import Image from "next/image";
+// PhotoImage, not next/image: the stand-in photos are gallery copies on
+// Sanity's CDN and must never reach /_next/image. /public paths render exactly
+// as they did.
+import PhotoImage from "@/components/ui/PhotoImage";
 import { mapProjects, type MapProject } from "@/lib/map-projects";
 import type { FeatureCollection, Point } from "geojson";
 
@@ -54,11 +57,12 @@ const APPLICATION_COUNTS: [string, number][] = (() => {
 
 // Province display order: west → east, the way the section's copy reads.
 /**
- * Display name → product page slug. Only the six systems that appear in the
+ * Display name → product page slug. Only the systems that appear in the
  * map data are listed; the fallback is the kebab-case of the name, which is
- * how every other slug in lib/products.ts is formed, so a seventh system
+ * how every other slug in lib/products.ts is formed, so a new system
  * added to the data lands on its real page without an edit here. Verified
- * against production: all six return 200.
+ * against production: all six return 200. DuraTherm (the Spirit Trail pin,
+ * Sep 2026) is listed because kebab-case would give "dura-therm".
  */
 const PRODUCT_SLUGS: Record<string, string> = {
   StreetPrint: "streetprint",
@@ -67,6 +71,7 @@ const PRODUCT_SLUGS: Record<string, string> = {
   TrafficPatternsXD: "traffic-patterns-xd",
   MMAX: "mmax",
   DecoMark: "decomark",
+  DuraTherm: "duratherm",
 };
 const productSlug = (name: string) =>
   PRODUCT_SLUGS[name] ??
@@ -187,6 +192,30 @@ function RepresentativeTag({ style }: { style?: React.CSSProperties }) {
   );
 }
 
+// ── Thumbnail for a pin with no photograph yet (Sep 2026): a plain tile with
+// a pin mark, never a stand-in. Fills whatever frame it is put in.
+function NoPhotoThumb() {
+  return (
+    <span
+      aria-hidden="true"
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "100%",
+        height: "100%",
+        background: "var(--ink-05)",
+        color: "var(--text-secondary)",
+      }}
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0Z" />
+        <circle cx="12" cy="10" r="3" />
+      </svg>
+    </span>
+  );
+}
+
 // ── Panel project card
 function PanelCard({
   project,
@@ -258,13 +287,17 @@ function PanelCard({
           transition: "border-color 0.15s ease",
         }}
       >
-        <Image
-          src={project.images[0]}
-          alt={`${project.title}, ${project.city}`}
-          width={64}
-          height={46}
-          style={{ width: "100%", height: "100%", objectFit: "cover" }}
-        />
+        {project.images[0] ? (
+          <PhotoImage
+            src={project.images[0]}
+            alt={`${project.title}, ${project.city}`}
+            width={64}
+            height={46}
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+          />
+        ) : (
+          <NoPhotoThumb />
+        )}
       </div>
 
       {/* Info */}
@@ -563,6 +596,9 @@ function ProjectModal({
             </p>
           </div>
 
+          {/* A pin with no photograph (Sep 2026) skips this block: no empty
+              frame, no tag, straight to the challenge and solution. */}
+          {project.images.length > 0 && (
           <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 20 }}>
             <div
               style={{
@@ -581,7 +617,7 @@ function ProjectModal({
                   and bottom instead, which on a pavement photograph is sky and
                   foreground, and shows the work at nearly twice the size. The
                   thumbnails below already do this. */}
-              <Image
+              <PhotoImage
                 src={project.images[imgIndex]}
                 alt={`${project.title}, photo ${imgIndex + 1}`}
                 fill
@@ -621,7 +657,7 @@ function ProjectModal({
                     }}
                     aria-label={`Photo ${i + 1}`}
                   >
-                    <Image
+                    <PhotoImage
                       src={src}
                       alt={`${project.title} photo ${i + 1}`}
                       fill
@@ -633,6 +669,7 @@ function ProjectModal({
               </div>
             )}
           </div>
+          )}
 
           <div className="canada-map-modal-grid">
             <div
@@ -705,8 +742,8 @@ function ProjectModal({
             >
               Request similar project →
             </a>
-            {/* Present whenever the project has a write-up. 29 of them do, and
-                until now the modal gave no way to reach it — the connection
+            {/* Present whenever the project has a write-up (most curated pins
+                do), and until now the modal gave no way to reach it — the connection
                 existed only as an image path nobody could follow. */}
             {project.slug && (
               <a
@@ -884,6 +921,32 @@ export default function CanadaMap() {
   const [appFilter, setAppFilter] = useState<string | null>(null);
   const [provinceFocus, setProvinceFocus] = useState<string | null>(null);
   const [viewMoved, setViewMoved] = useState(false);
+  /**
+   * The camera the map opened on, recorded on load and again whenever "Back
+   * to Canada" lands (the Canada frame depends on the map's size). "Moved"
+   * means a real departure from it. It used to be a fixed zoom band, 2.4 to
+   * 4.6, and a phone opens below 2.4, so every phone started out "moved":
+   * Back to Canada showing and All Canada unlit before anyone had touched it.
+   */
+  const homeRef = useRef<{ lng: number; lat: number; zoom: number } | null>(null);
+  /** Set while a "Back to Canada" flight is in the air. */
+  const reframingRef = useRef(false);
+  const recordHome = useCallback((onlyIfFramed: boolean) => {
+    const map = mapRef.current?.getMap();
+    if (!map) return;
+    if (onlyIfFramed) {
+      // Only a flight that actually landed on the Canada frame moves home;
+      // one cut short by a drag or another click does not.
+      const cam = map.cameraForBounds(CANADA_BOUNDS, FIT_OPTIONS);
+      if (!cam?.center || cam.zoom === undefined) return;
+      const aim = map.project(cam.center);
+      const mid = map.project(map.getCenter());
+      const zoom = Math.max(map.getMinZoom(), cam.zoom);
+      if (Math.abs(map.getZoom() - zoom) > 0.05 || Math.hypot(aim.x - mid.x, aim.y - mid.y) > 4) return;
+    }
+    const c = map.getCenter();
+    homeRef.current = { lng: c.lng, lat: c.lat, zoom: map.getZoom() };
+  }, []);
   const [styleFailed, setStyleFailed] = useState(false);
   /**
    * The map's own width, measured. The popup is sized from this rather than
@@ -1007,19 +1070,23 @@ export default function CanadaMap() {
     setVisibleProjects(
       mapProjects.filter((p) => p.lng >= w && p.lng <= e && p.lat >= s && p.lat <= n)
     );
-    // "Back to Canada" appears once the user has left the country frame:
-    // zoomed in past the whole-country view, or dragged so the centre of the
-    // view is outside Canada's box.
-    const c = map.getCenter();
-    const outside =
-      c.lng < CANADA_BOUNDS[0][0] || c.lng > CANADA_BOUNDS[1][0] || c.lat < CANADA_BOUNDS[0][1] || c.lat > CANADA_BOUNDS[1][1];
-    setViewMoved(map.getZoom() > 4.6 || map.getZoom() < 2.4 || outside);
+    // "Back to Canada" appears once the view has really left the frame it
+    // opened on: zoomed by more than a quarter step, or panned more than
+    // 48px. Before that frame is recorded, nothing counts as moved.
+    const home = homeRef.current;
+    if (!home) return;
+    const at = map.project([home.lng, home.lat]);
+    const mid = map.project(map.getCenter());
+    setViewMoved(
+      Math.abs(map.getZoom() - home.zoom) > 0.25 || Math.hypot(at.x - mid.x, at.y - mid.y) > 48
+    );
   }, []);
 
   const resetView = useCallback(() => {
     suppressListSync.current = false;
     setFocusedId(null);
     setProvinceFocus(null);
+    reframingRef.current = true;
     mapRef.current?.fitBounds(CANADA_BOUNDS, { ...FIT_OPTIONS, duration: 1100 });
   }, []);
 
@@ -1613,10 +1680,17 @@ export default function CanadaMap() {
                   if ((e as { originalEvent?: unknown }).originalEvent) {
                     suppressListSync.current = false;
                     setFocusedId(null);
+                    reframingRef.current = false;
+                  } else if (reframingRef.current) {
+                    reframingRef.current = false;
+                    recordHome(true);
                   }
                   updateVisibleProjects();
                 }}
-                onLoad={updateVisibleProjects}
+                onLoad={() => {
+                  recordHome(false);
+                  updateVisibleProjects();
+                }}
                 onError={(e) => {
                   // A failed style fetch would otherwise leave a silent black
                   // box. Pins still work without the basemap, but say so.
@@ -1782,9 +1856,11 @@ export default function CanadaMap() {
                           setHoveredId(null);
                         }}
                       >
-                      {/* Image with gradient bottom for legibility */}
+                      {/* Image with gradient bottom for legibility. A pin with
+                          no photograph (Sep 2026) goes straight to the text. */}
+                      {popupProject.images[0] && (
                       <div style={{ position: "relative", width: "100%", height: 110, overflow: "hidden" }}>
-                        <Image
+                        <PhotoImage
                           src={popupProject.images[0]}
                           alt={popupProject.title}
                           fill
@@ -1803,9 +1879,11 @@ export default function CanadaMap() {
                           <RepresentativeTag style={{ position: "absolute", top: 8, left: 8 }} />
                         )}
                       </div>
+                      )}
 
-                      {/* Meta — agency-grade 4 lines */}
-                      <div style={{ padding: "11px 13px 13px" }}>
+                      {/* Meta — agency-grade 4 lines. Without a photo the
+                          close button sits over this text, so it keeps clear. */}
+                      <div style={{ padding: popupProject.images[0] ? "11px 13px 13px" : "13px 50px 13px 13px" }}>
                         {/* Line 1: product · application pills */}
                         <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8, flexWrap: "wrap" }}>
                           <span
@@ -1928,18 +2006,17 @@ export default function CanadaMap() {
                   onClick={resetView}
                   style={{
                     position: "absolute",
-                    /* On a phone the map is ~348×437 and the popup is ~290
-                       tall, so a button in the top-left corner landed on top
-                       of the project photo — two controls fighting over the
-                       same pixels, one of them obscuring the thing the
-                       visitor had just asked to see. Below ~560px it moves to
-                       the bottom-left, clear of the popup, clear of the zoom
-                       controls on the right, and raised just above the
-                       attribution strip it would otherwise cover. */
+                    /* Top-left at every width (Sep 2026). On phones it sat at
+                       the bottom-left to dodge the preview popup, which put it
+                       on the CARTO/OpenStreetMap credit when that credit opens
+                       out to two lines. Phones no longer show a popup (a pin
+                       opens the case study), so the corner is free, and the
+                       credit, a licence condition, stays clear at 390 and 1440. */
                     ...(isNarrow
-                      ? { bottom: 38, left: 12 }
+                      ? { top: 12, left: 12 }
                       : { top: 14, left: 14 }),
                     zIndex: 20,
+                    minHeight: 44,
                     display: "flex",
                     alignItems: "center",
                     gap: 7,
@@ -1972,7 +2049,11 @@ export default function CanadaMap() {
               <div
                 style={{
                   position: "absolute",
-                  bottom: 16,
+                  /* Measured on hubss.com (Sep 2026): the open credit is 238px
+                     wide and this pill about 418px, so below a ~940px map the
+                     two met (touching at 1280, overlapping at 1024). Narrower
+                     maps lift the pill above the credit's line. */
+                  bottom: mapWidth >= 940 ? 16 : 46,
                   left: "50%",
                   transform: "translateX(-50%)",
                   background: "rgba(8,13,22,0.88)",
@@ -2490,13 +2571,17 @@ export default function CanadaMap() {
                         display: "block",
                       }}
                     >
-                      <Image
-                        src={project.images[0]}
-                        alt={`${project.title}, ${project.city}`}
-                        width={62}
-                        height={48}
-                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                      />
+                      {project.images[0] ? (
+                        <PhotoImage
+                          src={project.images[0]}
+                          alt={`${project.title}, ${project.city}`}
+                          width={62}
+                          height={48}
+                          style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                        />
+                      ) : (
+                        <NoPhotoThumb />
+                      )}
                     </span>
                     <span style={{ minWidth: 0, display: "block" }}>
                       <span

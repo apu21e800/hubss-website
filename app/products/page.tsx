@@ -68,16 +68,29 @@ const BOOK_FACTS: Record<string, string[]> = {
 };
 
 /**
+ * Print slips corrected on the web and flagged for the print file, the way
+ * lib/product-catalogue.ts corrects "acylic". A find-and-replace, not a whole
+ * line, so the card still shows the book's line if the book changes it.
+ */
+const INDEX_LINE_FIXES: Record<string, [from: string, to: string]> = {
+  // Page 8 prints "Industry leading MMA…". A compound before a noun takes a
+  // hyphen (docs/STYLE.md). QA pa#35, 28 Sep 2026; proposed to Doug for print.
+  mmax: ["Industry leading", "Industry-leading"],
+};
+
+/**
  * Systems the book does not cover. `line` is a sentence already in that
- * product's shortDesc (lib/products.ts), `facts` are its spec labels there.
- * Trimmed, never extended: AirMark drops "Used in Canada's busiest airports"
- * and AggreFill drops "up to 1 m²", neither of which any document backs.
+ * product's shortDesc (lib/products.ts), `facts` are its spec labels there,
+ * matched exactly: "Cure Time" against the spec's "Cure time" left the Fast
+ * Patch DPR card without a fact until 28 Sep 2026 (QA pa#26). Trimmed, never
+ * extended. "Used in Canada's busiest airports" and "up to 1 m²", which no
+ * document backs, were cut here first and on 28 Sep from lib/products.ts too.
  */
 const SITE_ONLY: Record<string, { line: string; facts: string[] }> = {
   airmark: { line: "Preformed thermoplastic for non-runway airfield markings.", facts: ["Application"] },
   chipfill: { line: "Heat-activated preformed material for permanent pothole repair.", facts: ["Weather"] },
   aggrefill: { line: "Pre-coated aggregate filler for larger potholes, combined with ChipFill for permanent repair.", facts: ["Substrate"] },
-  "fast-patch": { line: "Cold-mix polymer repair for potholes, spalls, and utility cuts.", facts: ["Cure Time"] },
+  "fast-patch": { line: "Polymer-blend repair for potholes, spalls, and utility cuts.", facts: ["Cure time"] },
 };
 
 type Fact = { label: string; value: string };
@@ -94,10 +107,11 @@ function cardFor(product: Product): Card {
   const book = catalogueFor(product.slug);
   const bookLine = SYSTEMS_INDEX[product.slug];
   if (book && bookLine) {
+    const fix = INDEX_LINE_FIXES[product.slug];
     return {
       slug: product.slug,
       name: product.name,
-      line: bookLine,
+      line: fix ? bookLine.replace(fix[0], fix[1]) : bookLine,
       facts: pick(book.specs, BOOK_FACTS[product.slug] ?? []),
       image: CARD_IMAGES[product.slug],
     };

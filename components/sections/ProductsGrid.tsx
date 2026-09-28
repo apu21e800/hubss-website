@@ -59,7 +59,10 @@ const PRODUCT_APPS: Record<string, string[]> = {
   "streetbond":          ["Bike Lanes", "Bus Lanes", "Driveways", "Paths"],
   "traffic-patterns-xd": ["Crosswalks", "BRT Corridors", "Parking Lots"],
   "traffic-patterns":    ["Crosswalks", "Parks & Paths", "Parking Lots"],
-  "mmax":                ["Bus Lanes", "Bike Lanes", "Crosswalks"],
+  // Not "Crosswalks": the book specifies MMAX for bus and bike lanes, calming
+  // and pedestrian priority zones, and the MMAX page lists no crosswalks since
+  // the 28 Sep 2026 relations pass (lib/products.ts).
+  "mmax":                ["Bus Lanes", "Bike Lanes", "Traffic Calming"],
   "decomark":            ["Public Art", "Crosswalks", "Community Branding"],
 };
 
@@ -78,6 +81,11 @@ const FEATURED_SLUGS = [
   "decomark",
 ];
 
+// Named under the grid, each linked to its page. Slugs as in lib/products.ts;
+// the names come from the same merged list as the cards, so they always
+// match the product pages and a slug change can't leave a dead link.
+const ALSO_AVAILABLE_SLUGS = ["premark", "durashield", "duratherm", "airmark"];
+
 type Props = {
   products?: (Product & { homepageBlurb?: string })[];
 };
@@ -87,6 +95,9 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
   const featured = FEATURED_SLUGS.map((slug) =>
     source.find((p) => p.slug === slug)
   ).filter(Boolean) as (Product & { homepageBlurb?: string })[];
+  const alsoAvailable = ALSO_AVAILABLE_SLUGS.map((slug) =>
+    source.find((p) => p.slug === slug)
+  ).filter(Boolean) as Product[];
 
   return (
     <section
@@ -115,7 +126,13 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
                   textWrap: "balance",
                 }}
               >
-                Six systems.<br className="hidden sm:block" /> Six different jobs.
+                {/* One sentence in place of two fragments ("Six systems. Six
+                    different jobs."), in the wording already proposed to Doug
+                    (docs/COPY-FOR-DOUG.md §2). Each phrase is an inline-block,
+                    so a phone breaks the line between them and never mid-phrase
+                    (balance alone gave "Six systems. Six / different jobs."). */}
+                <span className="inline-block">Six systems,</span>{" "}
+                <span className="inline-block">six different jobs.</span>
               </h2>
               <p
                 className="text-base font-light max-w-lg leading-relaxed"
@@ -126,8 +143,10 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
                 surface.
               </p>
             </div>
+            {/* data-tap: this pill measured 42px; the touch floor is 44. */}
             <Link
               href="/products"
+              data-tap="44"
               className="flex-shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold border transition-all duration-200 hover:text-[var(--text-primary)] hover:border-orange-500/50"
               style={{ color: "var(--text-secondary)", borderColor: "var(--ink-12)" }}
             >
@@ -184,8 +203,11 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
                     e.currentTarget.style.transform = "translateY(-3px)";
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = "var(--border-color)";
-                    e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.2)";
+                    // Back to the resting values set in `style` above. These
+                    // used to differ, so a card the pointer had crossed kept a
+                    // lighter shadow and border than its neighbours.
+                    e.currentTarget.style.borderColor = "var(--ink-10)";
+                    e.currentTarget.style.boxShadow = "0 2px 12px rgba(0,0,0,0.3)";
                     e.currentTarget.style.transform = "translateY(0)";
                   }}
                 >
@@ -274,8 +296,27 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
 
         {/* Footer row */}
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-[11px] order-2 sm:order-1" style={{ color: "var(--ink-50)" }}>
-            Also available: PreMark · DuraShield · DuraTherm · AirMark
+          {/* The four names were plain text; each now opens its product page.
+              data-tap gives every link the 44px floor on touch screens only
+              (globals.css), so the desktop line stays compact. On a phone the
+              label takes its own row and the four names fit on the next. */}
+          <p
+            className="order-2 sm:order-1 flex flex-wrap items-center justify-center sm:justify-start gap-x-1 text-[13px]"
+            style={{ color: "var(--ink-50)" }}
+          >
+            <span className="basis-full sm:basis-auto text-center">Also available:</span>
+            {alsoAvailable.map((p, i) => (
+              <span key={p.slug} className="inline-flex items-center gap-x-1">
+                {i > 0 && <span aria-hidden="true">·</span>}
+                <Link
+                  href={`/products/${p.slug}`}
+                  data-tap="44"
+                  className="inline-flex items-center justify-center px-1 text-[var(--text-secondary)] underline decoration-[color:var(--ink-30)] underline-offset-4 transition-colors hover:text-[var(--accent-text)] hover:decoration-current"
+                >
+                  {p.name}
+                </Link>
+              </span>
+            ))}
           </p>
           <Link
             href="/products"

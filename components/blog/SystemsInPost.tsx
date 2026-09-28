@@ -12,17 +12,21 @@ import { PRODUCT_SLUGS } from "./PostConversion";
  * whole post body (see scanProducts in lib/blog-taxonomy.ts), so this rail is complete
  * rather than excerpt-deep.
  */
-export default function SystemsInPost({ products }: { products: string[] }) {
-  const linkable = products.filter((p) => PRODUCT_SLUGS[p]);
+export default function SystemsInPost({ products, primary }: { products: string[]; primary?: string }) {
+  // The system the post is about leads (PostConversion's postFocus), then the
+  // rest in the order Studio and the text name them.
+  const ordered = primary ? [primary, ...products.filter((p) => p !== primary)] : products;
+  const linkable = ordered.filter((p) => PRODUCT_SLUGS[p]);
   if (linkable.length === 0) return null;
 
+  // No page margins of its own: the post page sets it in the reading column.
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-2">
+    <div>
       <div
         className="rounded-xl p-5 sm:p-6"
-        style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--border-color)" }}
+        style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}
       >
-        <p className="text-[10px] font-bold tracking-[0.2em] uppercase mb-3.5" style={{ color: "var(--accent-text)" }}>
+        <p className="text-[10.5px] font-bold tracking-[0.2em] uppercase mb-3.5" style={{ color: "var(--accent-text)" }}>
           Systems in this piece
         </p>
         <div className="flex flex-wrap gap-2">
@@ -30,8 +34,8 @@ export default function SystemsInPost({ products }: { products: string[] }) {
             <Link
               key={p}
               href={`/products/${PRODUCT_SLUGS[p]}`}
-              className="group inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-[13px] font-semibold transition-colors hover:bg-[var(--ink-05)]"
-              style={{ background: "rgba(249,115,22,0.08)", border: "1px solid rgba(249,115,22,0.2)", color: "var(--text-primary)" }}
+              className="group inline-flex items-center gap-2 px-3.5 rounded-lg text-[13px] font-semibold transition-colors hover:bg-[var(--ink-05)]"
+              style={{ background: "rgba(249,115,22,0.08)", border: "1px solid rgba(249,115,22,0.24)", color: "var(--text-primary)", minHeight: 44 }}
             >
               {p}
               <svg

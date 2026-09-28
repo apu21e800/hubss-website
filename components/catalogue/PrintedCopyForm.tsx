@@ -175,7 +175,7 @@ export default function PrintedCopyForm({ compact = false }: { compact?: boolean
       </div>
 
       {status === "error" && (
-        <p className="text-sm" style={{ color: "#f97316" }}>
+        <p className="text-sm" style={{ color: "var(--err-text)" }}>
           {error} You can also email <a href="mailto:info@hubss.com" className="underline">info@hubss.com</a>.
         </p>
       )}
@@ -189,8 +189,10 @@ export default function PrintedCopyForm({ compact = false }: { compact?: boolean
         {status === "sending" ? "Sending..." : "Request a printed copy"}
       </button>
 
+      {/* Was "to follow up once - nothing else": a typed dash standing in for
+          an em dash (QA, 27 Sep 2026). Same promise, plainly. */}
       <p className="text-xs" style={{ color: "var(--text-hint)" }}>
-        Canadian addresses only. We use this to mail the Idea Book and to follow up once - nothing else.
+        Canadian addresses only. We use this only to mail the Idea Book and to follow up once.
       </p>
     </form>
   );

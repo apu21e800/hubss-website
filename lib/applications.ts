@@ -20,6 +20,9 @@ function gallery(slug: string, dir: string, count: number, ext: string = "jpg", 
   });
 }
 
+// relatedProducts mirrors relatedApplications in lib/products.ts, with the Idea Book SPECIFY lists
+// (lib/application-catalogue.ts) as the authority: see RELATIONS at the top of lib/products.ts. Where a
+// system came off a page on 28 Sep 2026 (QA pa#31), the "How it works" copy stopped naming it too.
 export const applications: Application[] = [
   {
     name: "Crosswalks",
@@ -33,7 +36,8 @@ export const applications: Application[] = [
       return `/images/applications/crosswalks/crosswalks-${String(n).padStart(2,"0")}.${ext}`;
     }),
     description: "A crosswalk does two jobs: it protects pedestrians, and it tells a driver that someone is about to cross. HUB crosswalk systems are specified where both those jobs need to stay done, season after season. TrafficPatterns and TrafficPatternsXD thermoplastic fuse permanently to the road surface, maintaining ASTM-rated retroreflectivity through snowplow cycles, de-icing chemical seasons, and freeze-thaw cycles that challenge any surface. DecoMark and StreetBond open the crosswalk up as a creative surface: Pride rainbow crossings, Indigenous cultural art, neighbourhood identity installations, and commemorative designs that make the intersection a landmark. Specified by municipalities from Halifax to Vancouver.",
-    relatedProducts: ["traffic-patterns-xd", "traffic-patterns", "decomark", "streetbond", "duratherm", "premark"],
+    // StreetPrint added (pa#31): its own spread names crosswalks, and its page already listed this one.
+    relatedProducts: ["traffic-patterns-xd", "traffic-patterns", "decomark", "streetbond", "duratherm", "premark", "streetprint"],
   },
   {
     name: "Bike Lanes",
@@ -41,8 +45,12 @@ export const applications: Application[] = [
     shortDesc: "Coloured bike lane systems that hold visibility and protect cyclists season after season.",
     imageUrl: "/images/applications/bike-lanes/bike-lanes-01.jpg",
     gallery: gallery("bike-lanes", "bike-lanes", 38, "jpg", [32]),
-    description: "A faded bike lane is a dangerous bike lane. When the green disappears, so does the driver's understanding that this space belongs to someone else. HUB bike lane systems are engineered to stay visible. StreetBond UV-stable acrylic maintains vivid green, red, and custom Pantone colour through years of traffic and weather without chalking or fading. MMAX methyl methacrylate is specified where overnight curing is required in transit-adjacent corridors: full cure in 45–60 minutes, bond strength exceeding 3 MPa. PreMark preformed thermoplastic symbols and edge lines provide retroreflective bicycle pictographs, arrows, and conflict zone markings that hold their geometry and visibility through seasons of heavy use. The complete specification for protected bike lanes, intersection treatments, and multi-use path markings that need to perform as long as the infrastructure itself.",
-    relatedProducts: ["mmax", "premark", "streetbond", "traffic-patterns", "traffic-patterns-xd"],
+    // 28 Sep 2026: "bond strength exceeding 3 MPa" is in no MMAX document (QA pa#12; CLAIMS-VERIFICATION.csv
+    // had already softened it); the slogan opener and the verbless last line rewritten plainly (pa#34).
+    description: "A bike lane protects cyclists only while drivers can see it, so its colour and markings have to last. StreetBond UV-stable acrylic holds green, red and custom Pantone colour through years of traffic and weather without chalking or fading. MMAX methyl methacrylate cures fully in 45–60 minutes, so it is specified for overnight work in transit-adjacent corridors. PreMark preformed thermoplastic provides the retroreflective bicycle symbols, arrows and conflict-zone markings for lanes, intersections and multi-use paths, and they hold their shape and visibility through seasons of heavy use.",
+    // TrafficPatterns and TrafficPatternsXD out (pa#31): the spread specifies MMAX and PreMark, and Doug
+    // said in May that neither thermoplastic goes in a bike lane (components/sections/ProductsGrid.tsx).
+    relatedProducts: ["mmax", "premark", "streetbond"],
   },
   {
     name: "Bus Lanes",
@@ -52,7 +60,8 @@ export const applications: Application[] = [
     gallery: gallery("bus-lanes", "bus-lanes", 40, "jpg", [37, 38, 39, 40]),
     // TODO: doug-review — Doug's note ended mid-sentence ("...survive this. Our MMAX line of MMA resin cures in...."). Polished here per Vernon; revisit when Doug clarifies the intended completion.
     description: "Bus priority lanes and BRT corridors are among the most demanding surfaces in any city's network: concentrated axle loads, tight turning radii, and the expectation that markings stay legible through thousands of bus movements a day. HUB's MMAX line of MMA resin cures in 45–60 minutes, traffic-ready in under an hour, enabling complete overnight installation in a single maintenance window without disrupting weekday transit operations. TrafficPatternsXD 150mil aggregate-reinforced thermoplastic delivers high skid resistance at bus stops and turning movements where wet-surface traction directly affects passenger safety. Both systems are engineered for season after season of performance in these demanding environments, ready when transit needs them. Specified for red bus lanes, transit signal priority corridors, and BRT station zones across Canada.",
-    relatedProducts: ["traffic-patterns-xd", "mmax", "duratherm", "streetbond", "premark"],
+    // PreMark out (pa#31): not in the spread's SPECIFY, and PreMark's page never listed bus lanes.
+    relatedProducts: ["traffic-patterns-xd", "mmax", "duratherm", "streetbond"],
   },
   {
     name: "Parking Lots",
@@ -62,7 +71,8 @@ export const applications: Application[] = [
     gallery: [1,2,3,4,5,7,8,9,10,11,13,14,15,16,17,19,20,21,22,23,25,26,27,28,29,31,32,33,34,35,37,38,39,40,41,43,44,45,46,47,49,50,51,52,53,55,56,57,58,59].map(n =>
       `/images/applications/parking-lots/parking-lots-${String(n).padStart(2,"0")}.jpg`),
     description: "Parking lots take a disproportionate beating: sun exposure, oil contamination, and high wheel-load cycles degrade asphalt and surface markings faster than almost any other paved environment. HUB parking lot systems treat the whole surface, stripes included. DuraShield maintenance coating seals oxidized asphalt against fuel, oil and de-icing agents, protecting the substrate underneath and extending pavement life at a fraction of replacement cost. TrafficPatterns and PreMark thermoplastic stall markings and accessible parking symbols hold retroreflectivity season after season without annual repainting. StreetBond colour treatments create branded wayfinding zones, coloured drive aisles, and fire lane designations that read clearly and last. For REITs, property managers, and facility teams: the result is a parking surface that looks maintained, performs safely, and costs less to operate.",
-    relatedProducts: ["durashield", "streetbond", "streetprint", "traffic-patterns-xd", "traffic-patterns", "premark", "duratherm"],
+    // StreetBondSR added (pa#31): its own spread names parking, and its page already listed this one.
+    relatedProducts: ["durashield", "streetbond", "streetprint", "traffic-patterns-xd", "traffic-patterns", "premark", "duratherm", "streetbondsr"],
   },
   {
     name: "Parks & Paths",
@@ -75,8 +85,11 @@ export const applications: Application[] = [
       const ext = [97, 100, 103].includes(n) ? "png" : "jpg";
       return `/images/applications/parks-paths/parks-paths-${String(n).padStart(2,"0")}.${ext}`;
     }),
-    description: "The path through a park sets the tone for the whole space. A grey, cracked asphalt trail communicates neglect. A vibrant, well-designed surface communicates care and invites people to use it. HUB surface systems transform utilitarian park infrastructure into environments worth spending time in. StreetBond applies vivid, UV-stable colour to existing asphalt trail and plaza surfaces, turning functional routes into wayfinding systems and amenity destinations. DecoMark brings mural-quality custom graphic thermoplastic to the ground plane for cultural recognition art, wayfinding symbols, and community identity installations. StreetPrint in-place stamped asphalt gives plazas, seating courts, and entry areas the visual richness of traditional stone paving without the maintenance complexity. DuraShield extends the life of aging path surfaces where rejuvenation is more cost-effective than replacement.",
-    relatedProducts: ["streetbond", "decomark", "durashield", "streetprint"],
+    // Rewritten plainly, 28 Sep 2026 (QA pa#34): the paired "neglect / care" slogans are gone. DuraShield
+    // is a coating, not a rejuvenator (CLAIMS-VERIFICATION.csv), so "rejuvenation" went too.
+    description: "A well-kept, colourful path invites people into a park. StreetBond puts UV-stable colour on existing asphalt trails and plazas, so a route can double as wayfinding or become a destination in itself. DecoMark adds custom thermoplastic graphics at ground level for cultural recognition art, wayfinding symbols and community identity. StreetPrint stamped asphalt gives plazas, seating courts and entries the look of stone paving with less maintenance. DuraShield maintenance coating extends the life of aging path surfaces that are still sound.",
+    // TrafficPatterns added (pa#31): its own spread names parks, and its page already listed this one.
+    relatedProducts: ["streetbond", "decomark", "durashield", "streetprint", "traffic-patterns"],
   },
   {
     name: "Playgrounds",
@@ -88,7 +101,8 @@ export const applications: Application[] = [
     gallery: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52].map(n =>
       `/images/applications/playgrounds/playgrounds-${String(n).padStart(2,"0")}.jpg`),
     description: "Children are hard on surfaces. Playground treatments get knees, bikes, basketballs, and a decade of foot traffic, and they need to look vibrant, be safe, and require no annual repainting to do their job. DecoMark custom thermoplastic graphics bring hopscotch courts, number grids, compass roses, wayfinding games, and mural-scale artwork to paved play surfaces with Pantone-accurate colour and flush-surface edges that eliminate trip hazards. StreetBond acrylic adds vivid, UV-stable colour to existing asphalt play courts, four-square grids, and multi-use activity areas. Both systems deliver surfaces that are safe to fall on, easy to clean, and designed to remain bright and engaging season after season without repainting.",
-    relatedProducts: ["decomark", "streetbond", "streetbondsr", "streetprint", "traffic-patterns"],
+    // StreetPrint out (pa#31): not in the Play Surfaces spread, and StreetPrint's page never listed it.
+    relatedProducts: ["decomark", "streetbond", "streetbondsr", "traffic-patterns"],
   },
   {
     name: "Community Branding",
@@ -96,8 +110,11 @@ export const applications: Application[] = [
     shortDesc: "Neighbourhood identity, cultural art, and civic pride, embedded permanently in the street.",
     imageUrl: "/images/blog/white-rock-langley-trafficpatterns/featured.jpg",
     gallery: gallery("community-branding", "community-branding", 14),
-    description: "Every neighbourhood has a story. Most of them go untold on the street. HUB community branding installations change that, transforming the surface beneath people's feet into a canvas for the neighbourhood's culture, history, and identity. DecoMark thermoplastic embeds Pantone-accurate custom graphics directly into asphalt and concrete: First Nations cultural artwork in reconciliation partnerships, BIA wayfinding and business district branding, neighbourhood crest and name installations, Pride declarations, and heritage commemorations. StreetBond colour treatments create branded corridors, cultural district colour schemes, and civic identity systems that people can feel underfoot and see from a block away. Bowen Island's community art path and the UBC Musqueam cultural crosswalk are what it looks like when a community decides the street deserves to tell its story.",
-    relatedProducts: ["decomark", "traffic-patterns-xd", "traffic-patterns", "streetbond", "streetprint", "duratherm"],
+    // Rewritten plainly, 28 Sep 2026 (QA pa#34): the opener repeated the Idea Book's pull line above it,
+    // and the close was a slogan. DecoMark is heat-fused to the surface (its own page), not embedded.
+    description: "Community branding puts a neighbourhood's culture, history and identity into the surface of its streets. DecoMark heat-fuses custom graphics to asphalt and concrete: First Nations cultural artwork made in reconciliation partnerships, BIA wayfinding and business district branding, neighbourhood crests and names, Pride crossings and heritage commemorations. Bowen Island's community art path and the UBC Musqueam cultural crosswalk are examples of HUB's work.",
+    // StreetBond out (pa#31): not in the spread's SPECIFY, and StreetBond's page never listed it.
+    relatedProducts: ["decomark", "traffic-patterns-xd", "traffic-patterns", "streetprint", "duratherm"],
   },
   {
     name: "Private Driveways",
@@ -114,8 +131,11 @@ export const applications: Application[] = [
     shortDesc: "Permanent court coatings for tennis, basketball, pickleball, and multi-sport surfaces.",
     imageUrl: "/images/products/streetbond/streetbond-67.png",
     gallery: gallery("sport-courts", "sport-courts", 21, "jpg", [19]),
-    description: "Sport courts are one of the most demanding colour environments in outdoor pavement: lateral movement, constant foot traffic, UV exposure, and the precise line geometry that competition depends on. StreetBond acrylic bonds permanently to asphalt and acid-etched concrete, delivering vivid, UV-stable court surface colours and crisp line markings that hold their geometry and contrast season after season without repainting. Available in standard court colour palettes and custom Pantone matching for branded facilities. DecoMark thermoplastic line markings provide precise boundary lines, service boxes, and three-point arcs that won't shift or peel under the lateral forces of hard court play.",
-    relatedProducts: ["streetbond", "streetbondsr", "decomark", "streetprint", "premark"],
+    // 28 Sep 2026 (pa#31): the court spread specifies StreetBond and StreetBondSR only, and none of DecoMark,
+    // StreetPrint or PreMark listed Sport Courts, so they are off the list and the DecoMark sentence is
+    // gone. The verbless "Available in…" line it left at the end now has a verb.
+    description: "Sport courts are one of the most demanding colour environments in outdoor pavement: lateral movement, constant foot traffic, UV exposure, and the precise line geometry that competition depends on. StreetBond acrylic bonds permanently to asphalt and acid-etched concrete, delivering vivid, UV-stable court surface colours and crisp line markings that hold their geometry and contrast season after season without repainting. It comes in standard court colour palettes, with custom Pantone matching for branded facilities.",
+    relatedProducts: ["streetbond", "streetbondsr"],
   },
   {
     name: "Splash Pads",
@@ -123,8 +143,11 @@ export const applications: Application[] = [
     shortDesc: "Vivid, slip-resistant splash pad coatings designed for constant water exposure.",
     imageUrl: "/images/applications/splash-pads/splash-pads-01.jpg",
     gallery: gallery("splash-pads", "splash-pads", 19, "jpg", [11]),
-    description: "Splash pad surfaces are a uniquely demanding environment: constant water exposure, chemical treatments, bare feet, and an absolute requirement for slip resistance under wet conditions. StreetBond's acrylic formulation is applied to acid-etched concrete splash pad surfaces, building a slip-resistant texture that meets wet-surface safety standards while delivering the vivid, engaging colours that make a splash pad worth coming back to. UV-stable pigments maintain colour fidelity through seasons of sun exposure and chemical splash, without the chalking or delamination that afflicts lesser coatings on wet surfaces.",
-    relatedProducts: ["streetbond", "streetbondsr", "decomark", "durashield"],
+    // "Meets wet-surface safety standards" removed, 28 Sep 2026 (QA pa#12): the StreetBond data sheets
+    // give wet friction values but name no standard met. The slip-resistant texture is the book's claim.
+    description: "Splash pad surfaces are a uniquely demanding environment: constant water exposure, chemical treatments, bare feet, and an absolute requirement for slip resistance under wet conditions. StreetBond's acrylic formulation is applied to acid-etched concrete splash pad surfaces, building a slip-resistant texture in the vivid, engaging colours that make a splash pad worth coming back to. UV-stable pigments maintain colour fidelity through seasons of sun exposure and chemical splash, without the chalking or delamination that afflicts lesser coatings on wet surfaces.",
+    // DecoMark and DuraShield out (pa#31): the spread specifies StreetBond and StreetBondSR only.
+    relatedProducts: ["streetbond", "streetbondsr"],
   },
   {
     name: "Public Spaces",
@@ -147,8 +170,13 @@ export const applications: Application[] = [
       const ext = [110].includes(n) ? "png" : "jpg";
       return `/images/applications/commercial-spaces/commercial-spaces-${String(n).padStart(2,"0")}.${ext}`;
     }),
-    description: "Retail centres, mixed-use developments, hotel porte-cochères, and commercial campus entries are evaluated by tenants and customers before they walk through the door. The surface underfoot signals the quality of everything inside. StreetPrint stamped asphalt delivers the visual weight and material richness of premium stone paving (cobblestone entry courts, herringbone pedestrian corridors, fan-pattern plaza surfaces) at a fraction of full natural stone installation cost and without the settlement, weeding, and re-leveling that real pavers require. StreetBond colour treatments define branded wayfinding, tenant zone distinctions, and fire lane markings. DuraShield extends the life of existing commercial asphalt surfaces that have oxidized but don't need full replacement. The complete hardscape system for developers and property managers who want the look of stone without the maintenance overhead.",
-    relatedProducts: ["traffic-patterns-xd", "streetprint", "streetbond", "durashield", "traffic-patterns"],
+    // Rewritten plainly, 28 Sep 2026 (QA pa#34): no verbless closing line, no "premium" as praise. The
+    // cost line is the StreetPrint FAQ's ("a significant cost advantage over brick and paver
+    // alternatives"). StreetBond and DuraShield came off this page (pa#31), so their sentences went too.
+    description: "Tenants and customers judge retail centres, mixed-use developments, hotel porte-cochères and commercial campus entries before they walk through the door. StreetPrint stamped asphalt gives these surfaces the look of stone paving (cobblestone entry courts, herringbone walkways, fan-pattern plazas) at a lower cost than natural stone. It also avoids the settling, weeding and re-levelling that real pavers need.",
+    // The spread specifies TrafficPatternsXD alone; StreetPrint stays because its page lists this one too.
+    // StreetBond, DuraShield and TrafficPatterns out (pa#31): none listed Commercial Spaces back.
+    relatedProducts: ["traffic-patterns-xd", "streetprint"],
   },
   {
     name: "Townhomes",
@@ -166,7 +194,9 @@ export const applications: Application[] = [
     imageUrl: "/images/applications/residential-driveways/residential-driveways-18.jpg",
     gallery: gallery("residential-driveways", "residential-driveways", 44),
     description: "A beautifully finished driveway is one of the most visible improvements a homeowner can make, and one of the most cost-effective when done right. StreetPrint's in-place stamped asphalt process works directly on the existing driveway surface, impressing cobblestone, brick, herringbone, or slate patterns without tearing out and replacing the base. StreetBond UV-stable acrylic colour then seals the surface in the homeowner's choice of colour (warm buff tones, bold reds, classic charcoal) that holds its finish season after season without the chalking, fading, or cracking that standard driveway sealers deliver. No demolition, no concrete forms, no landscape damage from excavation. The finished result: a decorative hardscape that adds lasting curb appeal at a fraction of the cost of natural stone or interlocking paver installation.",
-    relatedProducts: ["streetprint", "streetbond", "durashield"],
+    // StreetBond out (pa#31): the driveway spread specifies StreetPrint alone and StreetBond's page lists
+    // Private Driveways only. The copy above still names StreetBond as StreetPrint's own coating.
+    relatedProducts: ["streetprint", "durashield"],
   },
   {
     name: "Pedestrian Safety",
@@ -177,8 +207,13 @@ export const applications: Application[] = [
       const ext = [41, 112, 115].includes(n) ? "png" : "jpg";
       return `/images/applications/crosswalks/crosswalks-${String(n).padStart(2,"0")}.${ext}`;
     }),
-    description: "Pedestrian safety is a measurable outcome. Crosswalk markings that are visible at night in the rain, school zone treatments that read at speed, and pedestrian priority zones that communicate unambiguously to a driver are all functions of durable, retroreflective pavement systems that hold their performance specification through Canadian winters, long after the season they were installed. TrafficPatterns and TrafficPatternsXD thermoplastic deliver retroreflective performance at crosswalks and school zones season after season without repainting. StreetBond and MMAX high-contrast colour coatings mark pedestrian priority zones, raised intersection treatments, and school zone warning areas with colours that persist through de-icing salt cycles and freeze-thaw conditions. The complete specification for municipalities and engineers taking Vision Zero and Complete Streets commitments seriously.",
-    relatedProducts: ["traffic-patterns-xd", "traffic-patterns", "premark", "mmax", "streetbond", "decomark"],
+    // Rewritten plainly, 28 Sep 2026 (QA pa#34): the opener repeated the Idea Book's pull line above it and
+    // the close had no verb. TrafficPatterns and TrafficPatternsXD are "high-contrast", the spread's own
+    // word for them; the product pages dropped their glass-bead claims in Sep. StreetBond came off this
+    // page (pa#31), so its mention went too.
+    description: "A crosswalk marking has to be visible at night in the rain, and a school zone treatment has to read at speed. Both depend on markings that hold up through Canadian winters, long after the season they were installed. TrafficPatterns and TrafficPatternsXD give crosswalks and school zones high-contrast markings that last season after season without repainting. MMAX marks pedestrian priority zones, raised intersections and school zone warning areas in colour that holds through de-icing salt and freeze-thaw.",
+    // Now exactly the spread's SPECIFY list (pa#31): StreetBond and DecoMark never listed this page.
+    relatedProducts: ["traffic-patterns-xd", "traffic-patterns", "premark", "mmax"],
   },
   {
     name: "Traffic Calming",
@@ -189,8 +224,12 @@ export const applications: Application[] = [
       const ext = [43].includes(n) ? "png" : "jpg";
       return `/images/applications/traffic-calming/traffic-calming-${String(n).padStart(2,"0")}.${ext}`;
     }),
-    description: "Colour changes driver behaviour. Research consistently shows that gateway treatments, speed table surface markings, and intersection colour treatments reduce vehicle entry speeds without requiring physical barriers or speed humps that impede emergency response. HUB coloured pavement systems give traffic calming installations the visual weight they need to do their job. StreetBond and MMAX deliver high-visibility colour that persists through winter maintenance cycles. StreetPrint gateway stamped asphalt signals a neighbourhood boundary through material texture and visual contrast that drivers respond to instinctively. TrafficPatterns and TrafficPatternsXD provide durable thermoplastic markings at raised crosswalks and school zone warning treatments where retroreflectivity is required year-round.",
-    relatedProducts: ["streetprint", "streetbond", "traffic-patterns-xd", "mmax", "traffic-patterns"],
+    // 28 Sep 2026 (QA pa#12): "Research consistently shows…" cited no research, and "that drivers respond to
+    // instinctively" made the same claim again; both gone. The spread above says what the book says about
+    // drivers. TrafficPatterns came off this page (pa#31), and XD's retroreflectivity clause went with it.
+    description: "Colour changes driver behaviour. HUB coloured pavement systems give gateway treatments, speed tables and intersection treatments the visual weight they need to do their job. StreetBond and MMAX deliver high-visibility colour that persists through winter maintenance cycles. StreetPrint gateway stamped asphalt signals a neighbourhood boundary through material texture and visual contrast. TrafficPatternsXD provides durable thermoplastic markings at raised crosswalks and school zone warning treatments.",
+    // TrafficPatterns out (pa#31): not in the spread's SPECIFY, and its page never listed traffic calming.
+    relatedProducts: ["streetprint", "streetbond", "traffic-patterns-xd", "mmax"],
   },
   {
     name: "Airports",
@@ -206,11 +245,17 @@ export const applications: Application[] = [
     slug: "leed-urban-heat-island",
     seoTitle: "LEED & Urban Heat Island · Cool Pavement Coatings",
     seoDescription: "Creating cooler, more sustainable urban spaces: high-SRI StreetBond coatings reduce pavement surface temperature and support LEED Heat Island Reduction credits.",
-    shortDesc: "Solar reflective pavement coatings that reduce urban heat island effect and earn LEED credits.",
+    // "Earn LEED credits" softened to "can contribute", 28 Sep 2026 (QA pa#12), as the StreetBondSR page and
+    // the Idea Book say it. Only the claim changed: replacing the whole line is proposed to Doug in
+    // docs/COPY-FOR-DOUG.md §3 and still waits on him.
+    shortDesc: "Solar reflective pavement coatings that reduce the urban heat island effect and can contribute to LEED v5 credits.",
     imageUrl: "/images/applications/leed-urban-heat-island/leed-urban-heat-island-01.jpg",
     gallery: gallery("leed-urban-heat-island", "leed-urban-heat-island", 2),
-    description: "Standard dark asphalt absorbs the vast majority of solar radiation, contributing directly to the urban heat island effect: the measurable temperature premium that cities carry over surrounding rural areas. It drives air conditioning energy demand, accelerates pavement degradation, and creates dangerous heat conditions for vulnerable populations during summer weather events. StreetBondSR is HUB's high-Solar Reflectance Index coating system, a reflective paving surface treatment that reduces pavement surface temperatures and contributes to LEED v5 Sustainable Sites credit for urban heat island reduction. The specification for sustainable development projects, climate action plan implementations, and any site team where green building certification and energy performance outcomes matter.",
-    relatedProducts: ["streetbondsr", "streetbond", "durashield"],
+    // Rewritten plainly (pa#34): no verbless closing line. Solar reflectance and the credit are worded as on
+    // the StreetBondSR page, which follows the book ("SR 0.33 or higher", "can contribute").
+    description: "Dark asphalt absorbs most of the sun's energy and adds to the urban heat island effect, the measurable temperature difference between a city and the rural areas around it. The extra heat raises air-conditioning demand and makes summer heat events more dangerous for vulnerable people. StreetBondSR is a solar-reflective coating that lowers pavement surface temperature. Its colours with an initial solar reflectance of 0.33 or higher can contribute to the LEED v5 Sustainable Sites credit for urban heat island reduction (non-roof).",
+    // StreetBond out (pa#31): no spread covers this page and StreetBond's page never listed it.
+    relatedProducts: ["streetbondsr", "durashield"],
   },
   {
     name: "Public Art",
@@ -230,7 +275,12 @@ export const applications: Application[] = [
       const ext = [43].includes(n) ? "png" : "jpg";
       return `/images/applications/traffic-calming/traffic-calming-${String(n).padStart(2,"0")}.${ext}`;
     }),
-    description: "Regulatory pavement markings carry legal weight. Stop bars, turn arrows, yield lines, school zone legends, accessible parking symbols, and lane designations are part of the road's legal operating standard, not decorative elements. They need to be where they're supposed to be, dimensionally accurate, and legible at night in the rain, through the entire maintenance cycle between installations. TrafficPatterns and TrafficPatternsXD thermoplastic deliver retroreflective stop bars, lane lines, and intersection markings that hold ASTM-rated visibility season after season without seasonal reapplication. PreMark preformed thermoplastic provides fast, stencil-free installation for school zone legends, accessible parking symbols, crosswalk ladder lines, and standard symbol inventory: open to traffic immediately, no curing window required.",
-    relatedProducts: ["traffic-patterns", "traffic-patterns-xd", "premark", "duratherm", "airmark"],
+    // Rewritten plainly, 28 Sep 2026 (QA pa#34): no "not decorative elements" reversal. TrafficPatterns and
+    // TrafficPatternsXD came off this page (pa#31), and with them an "ASTM-rated visibility" claim no
+    // document makes for them; the PreMark facts are those on PreMark's own page.
+    description: "Stop bars, turn arrows, yield lines, school zone legends, accessible parking symbols and lane designations carry legal weight on the road. Each one has to sit where it belongs, keep its dimensions and stay legible at night in the rain until the next maintenance cycle. PreMark preformed thermoplastic comes pre-cut to specification for arrows, stop bars, yield triangles, school legends, accessible parking symbols and crosswalk ladder lines, and is heat-applied without stencils. Integrated glass beads make it retroreflective, and it is open to traffic immediately, with no curing window.",
+    // No spread covers this page. TrafficPatterns, TrafficPatternsXD and DuraTherm out (pa#31): none of
+    // their pages listed it and their spreads don't name it. PreMark's spread names "Regulatory".
+    relatedProducts: ["premark", "airmark"],
   },
 ];

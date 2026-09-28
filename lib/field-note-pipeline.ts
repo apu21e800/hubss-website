@@ -1,6 +1,6 @@
 /**
- * The Field Notes pipeline: plan item → AI draft → fact check → unpublished
- * draft in Studio → an email to the editors.
+ * The Field Notes pipeline: plan item → AI draft → style pass → fact check →
+ * unpublished draft in Studio → an email to the editors.
  *
  * Run by app/api/cron/draft-field-note every Tuesday morning (vercel.json),
  * and on demand from Vercel → Settings → Cron Jobs → Run.
@@ -15,7 +15,7 @@ import { Resend } from "resend";
 import { sanityWriteClient } from "@/lib/sanity.write";
 import { markdownToPortableText } from "@/lib/markdown-to-portable-text";
 import { factsBlock, relatedPostLines } from "@/lib/field-note-facts";
-import { writeDraft, checkDraft, type Draft, type FactCheck } from "@/lib/field-note-drafter";
+import { writeDraft, checkDraft, polishDraft, styleReport, type Draft, type FactCheck, type StylePass } from "@/lib/field-note-drafter";
 import { getAllPosts } from "@/lib/blog";
 import { inferCategory } from "@/lib/blog-taxonomy";
 import { FIELD_NOTE_TYPES } from "@/lib/field-notes-taxonomy";
@@ -34,7 +34,7 @@ export interface Idea {
 
 export type PipelineResult =
   | { drafted: false; reason: string }
-  | { drafted: true; idea: string; slug: string; title: string; factCheck: FactCheck["verdict"]; toCheck: number; notified: string[] };
+  | { drafted: true; idea: string; slug: string; title: string; factCheck: FactCheck["verdict"]; toCheck: number; style: { flagged: number; left: number }; notified: string[] };
 
 const LINKED = `{ _id, name, "slug": slug.current, "hero": heroImage{ "asset": asset._ref, alt } }`;
 const IDEA = `{ _id, title, status, searchPhrase, type, brief, "systems": systems[]->${LINKED}, "applications": applications[]->${LINKED} }`;
@@ -60,7 +60,9 @@ export async function draftNextFieldNote(opts: { ideaId?: string } = {}): Promis
   const facts = factsBlock({ productSlugs: systems.map((s) => s.slug), applicationSlugs: apps.map((a) => a.slug), brief: idea.brief });
   const related = relatedPostLines(await getAllPosts(), systems.map((s) => s.name));
 
-  const draft = await writeDraft({ title: idea.title, searchPhrase: idea.searchPhrase, type: idea.type }, facts, related);
+  const written = await writeDraft({ title: idea.title, searchPhrase: idea.searchPhrase, type: idea.type }, facts, related);
+  // House style before the fact check, so the check (and the notes) quote the final wording.
+  const { draft, style } = await polishDraft(written);
   const check = await checkDraft(draft, facts);
 
   // A slug nobody uses, drafts included.
@@ -68,17 +70,17 @@ export async function draftNextFieldNote(opts: { ideaId?: string } = {}): Promis
   let slug = base;
   for (let n = 2; await client.fetch<number>(`count(*[_type == "blogPost" && slug.current == $slug])`, { slug }); n++) slug = `${base}-${n}`;
 
-  const doc = buildDraftDocument(idea, draft, check, slug);
+  const doc = buildDraftDocument(idea, draft, check, slug, style);
   await client.create(doc);
   await client.patch(idea._id).set({ status: "drafted", draftSlug: slug, draftedAt: new Date().toISOString() }).commit();
-  console.log(`[field-notes] drafted "${doc.title}" as ${doc._id} from ${idea._id}; fact check: ${check.verdict} (${check.unsupported.length})`);
+  console.log(`[field-notes] drafted "${doc.title}" as ${doc._id} from ${idea._id}; fact check: ${check.verdict} (${check.unsupported.length}); style: ${style.left.length} of ${style.flagged} left${style.error ? ` (rewrite failed: ${style.error})` : ""}`);
 
-  const notified = await notify(doc.title, doc.excerpt, `blogpost-${slug}`, check);
-  return { drafted: true, idea: idea._id, slug, title: doc.title, factCheck: check.verdict, toCheck: check.unsupported.length, notified };
+  const notified = await notify(doc.title, doc.excerpt, `blogpost-${slug}`, check, style);
+  return { drafted: true, idea: idea._id, slug, title: doc.title, factCheck: check.verdict, toCheck: check.unsupported.length, style: { flagged: style.flagged, left: style.left.length }, notified };
 }
 
 /** One email to BLOG_DRAFT_NOTIFY (comma-separated), through Resend. */
-async function notify(title: string, excerpt: string, docId: string, check: FactCheck): Promise<string[]> {
+async function notify(title: string, excerpt: string, docId: string, check: FactCheck, style: StylePass): Promise<string[]> {
   const to = (process.env.BLOG_DRAFT_NOTIFY ?? "").split(",").map((s) => s.trim()).filter(Boolean);
   if (!to.length || !process.env.RESEND_API_KEY) {
     console.warn("[field-notes] no email sent: BLOG_DRAFT_NOTIFY or RESEND_API_KEY is not set");
@@ -94,6 +96,9 @@ async function notify(title: string, excerpt: string, docId: string, check: Fact
     check.unsupported.length
       ? `Fact check: ${check.unsupported.length} statement(s) to check before publishing. They're listed in the draft's "Notes for the editor".`
       : "Fact check: every statement about HUB matches the Idea Book.",
+    style.left.length
+      ? `Style check: ${style.left.length} sentence(s) still have an em dash or another machine tell. They're listed in the notes and marked in yellow in Studio.`
+      : "Style check: no em dashes or machine tells.",
     "",
     `Open it: ${link}`,
   ].join("\n");
@@ -112,9 +117,10 @@ async function notify(title: string, excerpt: string, docId: string, check: Fact
 
 /**
  * The unpublished blogPost document for a draft. Pure, so it can be tested
- * without Claude or Sanity.
+ * without Claude or Sanity. `style` is the style pass's result
+ * (lib/field-note-drafter.ts); its leftovers go in the notes.
  */
-export function buildDraftDocument(idea: Idea, draft: Draft, check: FactCheck, slug: string) {
+export function buildDraftDocument(idea: Idea, draft: Draft, check: FactCheck, slug: string, style?: StylePass) {
   const systems = (idea.systems ?? []).filter((s): s is Linked => !!s?.slug);
   const apps = (idea.applications ?? []).filter((a): a is Linked => !!a?.slug);
   // The drafter writes no photos; drop any it wrote anyway (they'd point nowhere).
@@ -134,6 +140,7 @@ export function buildDraftDocument(idea: Idea, draft: Draft, check: FactCheck, s
       : "FACT CHECK: every statement about HUB matches the Idea Book and the brief.",
     ...check.unsupported.map((u) => `- "${u.quote}": ${u.reason}`),
     "",
+    ...(style ? [...styleReport(style, "before publishing (Studio marks them in yellow too)"), ""] : []),
     photoFrom
       ? `PHOTO: a stand-in, the ${photoFrom.name} page's hero photo. If the post describes a particular project, swap in a photo of it.`
       : "PHOTO: none. Add a featured photo of HUB's own work before publishing.",

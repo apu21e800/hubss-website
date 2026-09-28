@@ -1,6 +1,7 @@
 import { defineArrayMember, defineField, defineType } from "sanity";
 import { EditIcon, InsertAboveIcon, ThListIcon } from "@sanity/icons";
 import { FIELD_NOTE_TYPES } from "../../lib/field-notes-taxonomy";
+import { bodyStyle, copyStyle, headingStyle } from "./_shared";
 
 /**
  * A Field Notes post. Since Sep 2026 this is the only copy of the blog: the
@@ -33,7 +34,8 @@ export default defineType({
       type: "string",
       group: "content",
       description: "The headline, shown at the top of the post and on its card. Keep it punchy, ideally under 70 characters.",
-      validation: (r) => r.required().error("Post title is required"),
+      // Title Case warns here too; whether post titles go sentence case is Doug's call (docs/STYLE.md).
+      validation: (r) => [r.required().error("Post title is required"), headingStyle(r)],
     }),
     defineField({
       name: "slug",
@@ -81,7 +83,7 @@ export default defineType({
       rows: 3,
       group: "content",
       description: "Two or three sentences. Shown on the post's card, as the italic lede at the top of the post, and to Google as the description unless you set one under Meta & SEO.",
-      validation: (r) => r.required().warning("Posts without an excerpt show an empty card").max(300).warning("Keep the excerpt under 300 characters"),
+      validation: (r) => [r.required().warning("Posts without an excerpt show an empty card").max(300).warning("Keep the excerpt under 300 characters"), copyStyle(r)],
     }),
     defineField({
       name: "body",
@@ -89,6 +91,7 @@ export default defineType({
       type: "array",
       group: "content",
       description: "The article. Use Heading 2 for each section (they become the post's table of contents), Heading 3 inside a section, and the toolbar for bold, italic, links, lists, photos, tables and dividers. The post's title is printed above the body, so don't repeat it here.",
+      validation: (r) => bodyStyle(r),
       of: [
         defineArrayMember({
           type: "block",
@@ -246,7 +249,7 @@ export default defineType({
           title: "Alt text",
           type: "string",
           description: "Describe the photo for screen readers and Google Images, e.g. 'Red brick-pattern crosswalk at a Toronto intersection'.",
-          validation: (r) => r.required().error("Every photo needs alt text before it can be published (AODA)"),
+          validation: (r) => [r.required().error("Every photo needs alt text before it can be published (AODA)"), copyStyle(r)],
         }),
         // Set by the 2026 import: the /public file this photo came from (see sanity/schemas/_shared.ts).
         defineField({ name: "origin", title: "Original file", type: "string", hidden: true, readOnly: true }),
@@ -301,7 +304,7 @@ export default defineType({
           type: "string",
           title: "Title in search results",
           description: "Shown in the browser tab and as the blue link in Google. Ideal: 50–60 characters.",
-          validation: (r) => r.max(60).warning("Google cuts titles longer than about 60 characters"),
+          validation: (r) => [r.max(60).warning("Google cuts titles longer than about 60 characters"), copyStyle(r)],
         }),
         defineField({
           name: "metaDescription",
@@ -309,7 +312,7 @@ export default defineType({
           title: "Description in search results",
           rows: 2,
           description: "The grey text under the link in Google. Ideal: 140–160 characters.",
-          validation: (r) => r.max(160).warning("Google cuts descriptions longer than about 160 characters"),
+          validation: (r) => [r.max(160).warning("Google cuts descriptions longer than about 160 characters"), copyStyle(r)],
         }),
       ],
     }),

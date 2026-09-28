@@ -52,13 +52,22 @@ const VALUES_FALLBACK = [
   { heading: "Why it matters",    body: "Beautiful streets make walkable cities. Legible surfaces slow cars. Identity-rich public spaces build community. This is the civic layer that tells a city it's worth caring about." },
 ];
 
+// "Why HUB", QA of 27 Sep 2026. The two service-life cards are one card: the
+// per-system figures from the Idea Book, as CLAUDE.md lists them, PreMark
+// included. The other card offered PreMark's 6–8 years as a reason on its own
+// and ended on a note to ourselves ("Both figures are the Idea Book's").
+// Claims no HUB document supports were cut back to what the book says: no
+// "2–3x" over concrete, no "every HUB product" for Vision Zero, no
+// "stress-tested". The winter card is the book's own lines (StreetPrint,
+// DuraTherm, the crosswalk spread). docs/COPY-FOR-DOUG.md §4 proposed the
+// merge and the concrete cut to Doug; Sanity (aboutWhyHub) still shows the
+// old six until it is synced.
 const DIFFERENTIATORS_FALLBACK = [
-  { title: "Flexibility vs concrete",          desc: "Asphalt-based systems flex with Canada's freeze-thaw cycles, outlasting concrete alternatives by 2–3x in northern climates." },
-  { title: "6–8 year marking life",           desc: "PreMark thermoplastic carries a 6–8 year service life, and MMAX returns a lane to traffic in 45–60 minutes. Both figures are the Idea Book's." },
-  { title: "Vision Zero aligned",              desc: "Every HUB product is designed to support Vision Zero frameworks, from retroreflective crosswalk markings to high-contrast bike lane systems." },
+  { title: "Flexibility vs concrete",          desc: "Asphalt-based systems flex with Canada's freeze-thaw cycles." },
+  { title: "Vision Zero aligned",              desc: "HUB's marking systems support Vision Zero frameworks, from retroreflective crosswalk markings to high-contrast bike lane systems." },
   { title: "High-visibility by design",        desc: "Tactile and high-contrast marking systems engineered for pedestrian safety and legibility in every lighting condition and season." },
-  { title: "Service life, by system",          desc: "StreetPrint runs 10–20 years on sound pavement; TrafficPatternsXD 10+, TrafficPatterns 8+, StreetBond 8+. Quoted per system, because they do not wear the same." },
-  { title: "Climate-tested",                   desc: "Every system is stress-tested for freeze-thaw extremes, de-icing salts, and snowplow blades, from coastal BC to the Great Lakes." },
+  { title: "Service life, by system",          desc: "StreetPrint 10–20 years, TrafficPatternsXD 10+, TrafficPatterns 8+, StreetBond 8+, PreMark 6–8. Quoted per system, because they do not wear the same." },
+  { title: "Built for winter maintenance",     desc: "StreetPrint and DuraTherm sit flush with the road, with nothing for a plow blade to catch, and preformed thermoplastic holds its skid resistance and colour through snowplow cycles and de-icing seasons." },
 ];
 
 const PARTNERS_INTRO_FALLBACK =
@@ -119,8 +128,10 @@ export default async function AboutPage() {
         />
         {/* Optics (Vern, 26 Sep 2026): a flat 72% black over the photograph
             read as mud. A scrim that is light at the top, dark at the foot
-            and on the left where the type sits, so the picture shows. */}
-        <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(180deg, rgba(8,13,22,0.34) 0%, rgba(8,13,22,0.44) 50%, rgba(8,13,22,0.86) 100%)" }} />
+            and on the left where the type sits, so the picture shows.
+            QA, 27 Sep 2026: the subtext fell under 4.5:1 over the paler
+            pavers, so the lower half now darkens sooner; the top is as it was. */}
+        <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(180deg, rgba(8,13,22,0.34) 0%, rgba(8,13,22,0.55) 40%, rgba(8,13,22,0.92) 100%)" }} />
         <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(92deg, rgba(8,13,22,0.52) 0%, rgba(8,13,22,0.22) 45%, transparent 70%)" }} />
         <div
           className="absolute bottom-0 left-0 right-0 h-[2px] pointer-events-none z-10"
@@ -129,7 +140,15 @@ export default async function AboutPage() {
         />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-36 pb-16 sm:pb-24 relative z-10">
-          <div className="flex items-center gap-3 mb-4">
+          {/* The eyebrow sits on its own dark backing. On a phone it lands on
+              the pale sky at the top of the photograph, where orange measured
+              well under 4.5:1 (QA, 27 Sep 2026); a scrim dark enough to fix
+              that would darken the whole sky. The backing holds whatever
+              photo Studio supplies. */}
+          <div
+            className="flex w-fit max-w-full items-center gap-3 mb-4 rounded-md px-3 py-2"
+            style={{ background: "rgba(8,13,22,0.72)", backdropFilter: "blur(6px)", WebkitBackdropFilter: "blur(6px)" }}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 9600 4800"
@@ -156,7 +175,9 @@ export default async function AboutPage() {
           >
             {hero.heading}
           </h1>
-          <p className="text-xl leading-relaxed max-w-2xl" style={{ color: "var(--text-faint)" }}>
+          {/* --ink-85 with the product hero's shadow; --text-faint (#8B8B8B)
+              was grey on grey paving. */}
+          <p className="text-xl leading-relaxed max-w-2xl" style={{ color: "var(--ink-85)", textShadow: "0 1px 12px rgba(0,0,0,0.5)" }}>
             {hero.subheading}
           </p>
         </div>
@@ -270,7 +291,10 @@ export default async function AboutPage() {
               </div>
             ))}
           </div>
-          <p className="text-center text-sm mt-8" style={{ color: "var(--text-muted)" }}>Serving all 10 provinces and 3 territories</p>
+          {/* A centred "Serving all 10 provinces and 3 territories" sat here.
+              The book's figure is 10 provinces, which the stats band and the
+              hero eyebrow already print, so the line went (QA, 27 Sep 2026).
+              The province chips above say which office covers where. */}
         </div>
       </div>
 
@@ -278,9 +302,11 @@ export default async function AboutPage() {
       <div className="py-28" style={{ background: "var(--bg-dark)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold mb-12" style={{ color: "var(--text-primary)" }}>Why HUB</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Flex, not grid: the cards on a short last row widen to fill it, so
+              five cards read as three and two rather than three and a gap. */}
+          <div className="flex flex-wrap gap-6">
             {differentiators.map((d) => (
-              <div key={d.title} className="p-8 rounded-xl" style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}>
+              <div key={d.title} className="grow min-w-0 basis-full md:basis-[calc(50%_-_12px)] lg:basis-[calc((100%_-_48px)/3)] p-8 rounded-xl" style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}>
                 <div className="w-8 h-0.5 mb-5" style={{ background: "#f97316" }} />
                 <h3 className="font-bold text-lg mb-3" style={{ color: "var(--text-primary)" }}>{d.title}</h3>
                 <p className="text-[15px] leading-relaxed" style={{ color: "var(--text-faint)" }}>{d.desc}</p>

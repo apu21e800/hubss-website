@@ -19,97 +19,100 @@ interface GalleryImage {
   tall?: boolean;
 }
 
+// Sep 2026 QA pass. Seven entries were the same photograph as another under a
+// new caption (the Little Italy crosswalk three times; the UBC crosswalk,
+// Windsor Gate, the Leslieville laneway and two more twice each), so the
+// repeats are gone. Places come from each post; a folder photo whose place is
+// not recorded says "Canada" rather than a guessed province, as lib/image-seo.ts
+// does. Some projects keep two different photographs.
 const IMAGES: GalleryImage[] = [
   // ── Crosswalks ────────────────────────────────────────────────────────────────
-  { src: "/images/blog/best-crosswalks-canada/featured.jpg", alt: "High-Visibility Crosswalk", category: "crosswalks", location: "Canada-Wide", tall: true },
-  { src: "/images/blog/decorative-crosswalk-meridian/featured.jpg", alt: "Decorative Crosswalk · Meridian", category: "crosswalks", location: "Meridian, ON" },
-  { src: "/images/blog/decorative-asphalt-high-traffic/featured.jpg", alt: "High-Traffic Decorative Asphalt", category: "crosswalks", location: "Ontario" },
+  { src: "/images/blog/best-crosswalks-canada/featured.jpg", alt: "High-Visibility Crosswalk", category: "crosswalks", location: "Canada", tall: true },
+  { src: "/images/blog/decorative-crosswalk-meridian/featured.jpg", alt: "Humberwest Parkway Crosswalk and Median", category: "crosswalks", location: "Brampton, ON" },
+  { src: "/images/blog/decorative-asphalt-high-traffic/featured.jpg", alt: "Emery Village Crosswalk", category: "crosswalks", location: "Toronto, ON" },
   { src: "/images/blog/complete-streets-new-westminster/featured.jpg", alt: "Complete Streets", category: "crosswalks", location: "New Westminster, BC", tall: true },
-  { src: "/images/blog/pedestrian-channelization-public-spaces/featured.jpg", alt: "Pedestrian Channelization", category: "crosswalks", location: "British Columbia" },
-  { src: "/images/blog/performance-crosswalks-asphalt-concrete/featured.jpg", alt: "Performance Crosswalks", category: "crosswalks", location: "Canada" },
-  { src: "/images/blog/trafficpatternsxd-urban-design/featured.jpg", alt: "TrafficPatternsXD Urban Design", category: "crosswalks", location: "Urban Canada", tall: true },
-  { src: "/images/blog/stamped-asphalt-vs-concrete/featured.jpg", alt: "Stamped Asphalt Crosswalk", category: "crosswalks", location: "Ontario" },
-  { src: "/images/blog/decorative-asphalt-crosswalks/featured.jpg", alt: "Decorative Asphalt Crosswalks", category: "crosswalks", location: "British Columbia" },
+  { src: "/images/blog/pedestrian-channelization-public-spaces/featured.jpg", alt: "Pedestrian Channelization", category: "crosswalks", location: "Canada" },
+  { src: "/images/blog/performance-crosswalks-asphalt-concrete/featured.jpg", alt: "Performance Crosswalks", category: "crosswalks", location: "Kelowna, BC" },
+  { src: "/images/blog/trafficpatternsxd-urban-design/featured.jpg", alt: "Woodbridge Heritage Crosswalk", category: "crosswalks", location: "Vaughan, ON", tall: true },
+  { src: "/images/blog/stamped-asphalt-vs-concrete/featured.jpg", alt: "Stamped Asphalt Crosswalk", category: "crosswalks", location: "Canada" },
   { src: "/images/blog/decorative-crosswalk-commercial-drive/featured.jpg", alt: "Commercial Drive Crosswalk", category: "crosswalks", location: "Vancouver, BC", tall: true },
-  { src: "/images/blog/decorative-crosswalks-community-identity/featured.jpg", alt: "Community Identity Crosswalk", category: "crosswalks", location: "Canada" },
-  { src: "/images/blog/decorative-hardscape-grey-is-new-black/featured.jpg", alt: "Decorative Hardscape", category: "crosswalks", location: "Ontario" },
-  { src: "/images/blog/municipalities-case-study/featured.jpg", alt: "Municipal Crosswalk", category: "crosswalks", location: "Ontario" },
+  { src: "/images/blog/decorative-hardscape-grey-is-new-black/featured.jpg", alt: "Decorative Hardscape", category: "crosswalks", location: "Canada" },
+  { src: "/images/blog/municipalities-case-study/featured.jpg", alt: "Leslieville Laneway", category: "crosswalks", location: "Toronto, ON" },
   { src: "/images/blog/white-rock-langley-trafficpatterns/featured.jpg", alt: "TrafficPatterns Installation", category: "crosswalks", location: "White Rock, BC", tall: true },
   { src: "/images/blog/keeping-pedestrians-safe/featured.png", alt: "Pedestrian Safety Crosswalk", category: "crosswalks", location: "Canada" },
-  { src: "/images/blog/educational-facilities/featured.jpg", alt: "School Zone Crosswalk", category: "crosswalks", location: "British Columbia" },
+  { src: "/images/blog/educational-facilities/featured.jpg", alt: "UBC Campus Entrance Crosswalk", category: "crosswalks", location: "Vancouver, BC" },
   { src: "/images/blog/murrayville-schoolhouse-sidewalk/featured.jpg", alt: "Murrayville Schoolhouse Sidewalk", category: "crosswalks", location: "Murrayville, BC" },
   { src: "/images/blog/transportation-infrastructure-guide/featured.jpg", alt: "Transportation Infrastructure", category: "crosswalks", location: "Canada", tall: true },
   // Application images (live after git push)
   { src: "/images/applications/crosswalks/crosswalks-01.jpg", alt: "Crosswalk Installation", category: "crosswalks", location: "Canada" },
-  { src: "/images/applications/crosswalks/crosswalks-03.jpg", alt: "Thermoplastic Crosswalk", category: "crosswalks", location: "Ontario" },
-  { src: "/images/applications/crosswalks/crosswalks-05.jpg", alt: "High-Vis Crosswalk", category: "crosswalks", location: "British Columbia" },
+  { src: "/images/applications/crosswalks/crosswalks-03.jpg", alt: "Thermoplastic Crosswalk", category: "crosswalks", location: "Canada" },
+  { src: "/images/applications/crosswalks/crosswalks-05.jpg", alt: "High-Vis Crosswalk", category: "crosswalks", location: "Canada" },
   { src: "/images/applications/crosswalks/crosswalks-07.jpg", alt: "Decorative Crosswalk", category: "crosswalks", location: "Canada", tall: true },
-  { src: "/images/applications/crosswalks/crosswalks-10.jpg", alt: "Urban Crosswalk", category: "crosswalks", location: "Ontario" },
+  { src: "/images/applications/crosswalks/crosswalks-10.jpg", alt: "Urban Crosswalk", category: "crosswalks", location: "Canada" },
   { src: "/images/applications/crosswalks/crosswalks-14.jpg", alt: "Stamped Crosswalk", category: "crosswalks", location: "Canada" },
-  { src: "/images/applications/crosswalks/crosswalks-18.jpg", alt: "Coloured Crosswalk", category: "crosswalks", location: "British Columbia" },
+  { src: "/images/applications/crosswalks/crosswalks-18.jpg", alt: "Coloured Crosswalk", category: "crosswalks", location: "Canada" },
   { src: "/images/applications/crosswalks/crosswalks-43.jpg", alt: "Crosswalk · Community Art", category: "crosswalks", location: "Canada", tall: true },
-  { src: "/images/applications/crosswalks/crosswalks-50.jpg", alt: "Crosswalk Install", category: "crosswalks", location: "Ontario" },
+  { src: "/images/applications/crosswalks/crosswalks-50.jpg", alt: "Crosswalk Install", category: "crosswalks", location: "Canada" },
   { src: "/images/applications/crosswalks/crosswalks-65.jpg", alt: "Crosswalk Detail", category: "crosswalks", location: "Canada" },
-  { src: "/images/applications/crosswalks/crosswalks-84.jpg", alt: "Municipal Crosswalk", category: "crosswalks", location: "Ontario" },
-  { src: "/images/applications/crosswalks/crosswalks-100.jpg", alt: "Crosswalk · TPXD", category: "crosswalks", location: "Canada" },
+  { src: "/images/applications/crosswalks/crosswalks-84.jpg", alt: "Municipal Crosswalk", category: "crosswalks", location: "Canada" },
+  { src: "/images/applications/crosswalks/crosswalks-100.jpg", alt: "TrafficPatternsXD Crosswalk", category: "crosswalks", location: "Canada" },
 
   // ── Bike & Bus Lanes ────────────────────────────────────────────────────────
-  { src: "/images/blog/multimodal-connectivity-york-region/featured.jpg", alt: "York Region Transit Corridor", category: "transit", location: "York Region, ON", tall: true },
   { src: "/images/blog/durable-transit-lanes-crossings/featured.jpg", alt: "Durable Transit Lanes", category: "transit", location: "Ontario" },
   { src: "/images/blog/extending-transit-lane-lifespan/featured.jpg", alt: "Bus Lane · Extended Lifespan", category: "transit", location: "Ontario" },
   { src: "/images/blog/imprinted-asphalt-york-transit/featured.jpg", alt: "York Region VIVA BRT", category: "transit", location: "York Region, ON", tall: true },
-  { src: "/images/blog/safety-durability-transit-stations/featured.jpg", alt: "Transit Station Surface", category: "transit", location: "Ontario" },
-  { src: "/images/blog/streetbondsr-solar-reflective-coatings/featured.jpg", alt: "StreetBondSR Bike Lane", category: "transit", location: "Canada" },
+  // The same file as the York case study's hero, but the signs in it are
+  // Kitchener's: this is the ION corridor, as on the map's GrandLinq pin.
+  { src: "/images/blog/safety-durability-transit-stations/featured.jpg", alt: "ION Corridor Crossing", category: "transit", location: "Waterloo Region, ON" },
   { src: "/images/applications/bike-lanes/bike-lanes-01.jpg", alt: "Protected Bike Lane", category: "transit", location: "Canada", tall: true },
-  { src: "/images/applications/bike-lanes/bike-lanes-03.jpg", alt: "Coloured Bike Lane", category: "transit", location: "British Columbia" },
-  { src: "/images/applications/bike-lanes/bike-lanes-07.jpg", alt: "Bike Lane Marking", category: "transit", location: "Ontario" },
+  { src: "/images/applications/bike-lanes/bike-lanes-03.jpg", alt: "Coloured Bike Lane", category: "transit", location: "Canada" },
+  { src: "/images/applications/bike-lanes/bike-lanes-07.jpg", alt: "Bike Lane Marking", category: "transit", location: "Canada" },
   { src: "/images/applications/bike-lanes/bike-lanes-14.jpg", alt: "Bike Lane · Urban", category: "transit", location: "Canada" },
-  { src: "/images/applications/bus-lanes/bus-lanes-39.png", alt: "Red Resin Bus Lane", category: "transit", location: "Ontario", tall: true },
+  { src: "/images/applications/bus-lanes/bus-lanes-39.png", alt: "Red Resin Bus Lane", category: "transit", location: "Canada", tall: true },
   { src: "/images/applications/bus-lanes/bus-lanes-40.png", alt: "MMA Bus Lane", category: "transit", location: "Canada" },
 
   // ── Community Branding ──────────────────────────────────────────────────
-  { src: "/images/blog/branded-crosswalks-vancouver-richmond/featured.jpg", alt: "Branded Crosswalks", category: "community", location: "Vancouver, BC", tall: true },
-  { src: "/images/blog/community-branding-case-study/featured.jpg", alt: "Community Branding", category: "community", location: "Ontario" },
+  { src: "/images/blog/community-branding-case-study/featured.jpg", alt: "Windsor Gate Community", category: "community", location: "Coquitlam, BC" },
   { src: "/images/blog/simcoe-rainbow-crosswalk/featured.jpg", alt: "Rainbow Crosswalk", category: "community", location: "Simcoe, ON" },
-  { src: "/images/blog/terry-fox-plaza-coquitlam/featured.jpg", alt: "Terry Fox Plaza", category: "community", location: "Coquitlam, BC", tall: true },
+  { src: "/images/blog/terry-fox-plaza-coquitlam/featured.jpg", alt: "Terry Fox Plaza", category: "community", location: "Port Coquitlam, BC", tall: true },
   { src: "/images/blog/tsain-ko-crosswalk-sechelt/featured.jpg", alt: "Tsain-Ko Crosswalk", category: "community", location: "Sechelt, BC" },
   { src: "/images/blog/pictograph-crosswalk-sechelt/featured.jpg", alt: "Pictograph Crosswalk", category: "community", location: "Sechelt, BC" },
   { src: "/images/blog/ubc-musqueam-crosswalk/featured.jpg", alt: "UBC Musqueam Crosswalk", category: "community", location: "Vancouver, BC", tall: true },
-  { src: "/images/blog/every-child-matters-crosswalk/featured.png", alt: "Every Child Matters Crosswalk", category: "community", location: "British Columbia" },
-  { src: "/images/blog/laneway-project/featured.png", alt: "Vancouver Laneway Project", category: "community", location: "Vancouver, BC" },
+  { src: "/images/blog/every-child-matters-crosswalk/featured.png", alt: "Every Child Matters Crosswalk", category: "community", location: "Georgina, ON" },
   { src: "/images/blog/white-rock-pier-crosswalk/featured.png", alt: "White Rock Pier Crosswalk", category: "community", location: "White Rock, BC", tall: true },
-  { src: "/images/blog/community-spaces/featured.jpg", alt: "Community Space", category: "community", location: "British Columbia" },
+  { src: "/images/blog/community-spaces/featured.jpg", alt: "Little Italy Roundel", category: "community", location: "Vancouver, BC" },
   { src: "/images/blog/decorative-paving-solutions/featured.jpg", alt: "Decorative Paving", category: "community", location: "Canada" },
-  { src: "/images/applications/community-branding/community-branding-01.jpg", alt: "Community Identity", category: "community", location: "Canada" },
-  { src: "/images/applications/community-branding/community-branding-04.jpg", alt: "Branded Intersection", category: "community", location: "British Columbia", tall: true },
   { src: "/images/applications/community-branding/community-branding-08.jpg", alt: "Public Art Crosswalk", category: "community", location: "Canada" },
-  { src: "/images/applications/community-branding/community-branding-12.jpg", alt: "Cultural Crosswalk", category: "community", location: "British Columbia" },
+  { src: "/images/applications/community-branding/community-branding-12.jpg", alt: "Cultural Crosswalk", category: "community", location: "Canada" },
 
   // ── Parks & Paths ─────────────────────────────────────────────────────────────
-  { src: "/images/blog/spirit-trail-wayfinding-vancouver/featured.jpg", alt: "Spirit Trail Wayfinding", category: "parks", location: "Vancouver, BC", tall: true },
+  { src: "/images/blog/spirit-trail-wayfinding-vancouver/featured.jpg", alt: "Spirit Trail Crosswalk", category: "parks", location: "North Vancouver, BC", tall: true },
   { src: "/images/blog/bowen-island-asphalt-path/featured.jpg", alt: "Bowen Island Path", category: "parks", location: "Bowen Island, BC" },
-  { src: "/images/blog/parc-riviera-streetbond-walkway/featured.jpg", alt: "Parc Riviera Walkway", category: "parks", location: "Quebec" },
-  { src: "/images/blog/roadway-accents-natures-walk/featured.jpg", alt: "Nature Walk Accent", category: "parks", location: "Ontario", tall: true },
+  { src: "/images/blog/parc-riviera-streetbond-walkway/featured.jpg", alt: "Parc Riviera Walkway", category: "parks", location: "Canada" },
+  { src: "/images/blog/roadway-accents-natures-walk/featured.jpg", alt: "Nature's Walk Roadway Accent", category: "parks", location: "Pitt Meadows, BC", tall: true },
+  // Was "StreetBondSR Bike Lane" under Bike & Bus Lanes: the post shows a
+  // park pathway in Osoyoos.
+  { src: "/images/blog/streetbondsr-solar-reflective-coatings/featured.jpg", alt: "StreetBondSR Pathway", category: "parks", location: "Osoyoos, BC" },
   { src: "/images/applications/parks-paths/parks-paths-96.png", alt: "Parks Path", category: "parks", location: "Canada" },
-  { src: "/images/applications/parks-paths/parks-paths-99.png", alt: "Decorated Path", category: "parks", location: "British Columbia" },
+  { src: "/images/applications/parks-paths/parks-paths-99.png", alt: "Decorated Path", category: "parks", location: "Canada" },
   { src: "/images/applications/parks-paths/parks-paths-103.png", alt: "Community Path", category: "parks", location: "Canada", tall: true },
 
   // ── Recreation ──────────────────────────────────────────────────────────────────
   { src: "/images/blog/bc-childrens-hospital-labyrinth/featured.jpg", alt: "BC Children's Hospital Labyrinth", category: "recreation", location: "Vancouver, BC", tall: true },
   { src: "/images/blog/durable-coatings-waterparks/featured.jpg", alt: "Waterpark Surface Coating", category: "recreation", location: "Canada" },
   { src: "/images/blog/playgrounds-recreation/featured.jpg", alt: "Playground Surface", category: "recreation", location: "Canada" },
-  { src: "/images/applications/splash-pads/splash-pads-01.jpg", alt: "Splash Pad Surface", category: "recreation", location: "Ontario", tall: true },
+  { src: "/images/applications/splash-pads/splash-pads-01.jpg", alt: "Splash Pad Surface", category: "recreation", location: "Canada", tall: true },
   { src: "/images/applications/splash-pads/splash-pads-04.jpg", alt: "Splash Pad Design", category: "recreation", location: "Canada" },
-  { src: "/images/applications/splash-pads/splash-pads-08.jpg", alt: "Splash Pad Installation", category: "recreation", location: "British Columbia" },
+  { src: "/images/applications/splash-pads/splash-pads-08.jpg", alt: "Splash Pad Installation", category: "recreation", location: "Canada" },
   { src: "/images/applications/sport-courts/sport-courts-01.jpg", alt: "Sport Court Surface", category: "recreation", location: "Canada" },
-  { src: "/images/applications/sport-courts/sport-courts-05.jpg", alt: "Coloured Sport Court", category: "recreation", location: "Ontario", tall: true },
+  { src: "/images/applications/sport-courts/sport-courts-05.jpg", alt: "Coloured Sport Court", category: "recreation", location: "Canada", tall: true },
   { src: "/images/applications/sport-courts/sport-courts-10.jpg", alt: "Multi-Sport Court", category: "recreation", location: "Canada" },
 
   // ── Parking ─────────────────────────────────────────────────────────────────────
-  { src: "/images/blog/stamped-asphalt-parking-lot/featured.jpg", alt: "Stamped Asphalt Parking Lot", category: "parking", location: "Ontario", tall: true },
-  { src: "/images/blog/commercial-applications/featured.jpg", alt: "Commercial Pavement", category: "parking", location: "Canada" },
-  { src: "/images/applications/townhomes/townhomes-01.jpg", alt: "Townhome Driveway", category: "parking", location: "Ontario" },
-  { src: "/images/applications/townhomes/townhomes-05.png", alt: "Residential Driveway", category: "parking", location: "British Columbia", tall: true },
+  { src: "/images/blog/stamped-asphalt-parking-lot/featured.jpg", alt: "Stamped Asphalt Parking Lot", category: "parking", location: "Kitchener, ON", tall: true },
+  { src: "/images/blog/commercial-applications/featured.jpg", alt: "Commercial Pavement", category: "parking", location: "Kitchener, ON" },
+  { src: "/images/applications/townhomes/townhomes-01.jpg", alt: "Townhome Driveway", category: "parking", location: "Canada" },
+  { src: "/images/applications/townhomes/townhomes-05.png", alt: "Residential Driveway", category: "parking", location: "Canada", tall: true },
 ];
 
 const CATEGORIES: { value: Category; label: string; count: (imgs: GalleryImage[]) => number }[] = [
@@ -167,7 +170,7 @@ export default function GalleryPage() {
    * The archive as an addressable collection.
    *
    * This page is the densest photography on the site and it carried no
-   * structured data whatsoever — 78 documented Canadian installations that a
+   * structured data whatsoever: dozens of photographs of Canadian work that a
    * crawler could see only as anonymous <img> tags. As an ImageGallery of
    * ImageObjects, each photograph arrives with its location, its subject, the
    * credit, and the licence terms that make it eligible for the Licensable
@@ -179,8 +182,9 @@ export default function GalleryPage() {
     "@type": "ImageGallery",
     "@id": "https://hubss.com/gallery#gallery",
     name: "HUB Surface Systems field documentation",
+    // Photographs, not installations: some projects appear in two.
     description:
-      `${IMAGES.length} documented decorative pavement installations across Canada: crosswalks, transit lanes, ` +
+      `${IMAGES.length} photographs of decorative pavement across Canada: crosswalks, transit lanes, ` +
       "parks and paths, playgrounds, and community branding by HUB Surface Systems.",
     url: "https://hubss.com/gallery",
     inLanguage: "en-CA",
@@ -229,8 +233,10 @@ export default function GalleryPage() {
           >
             Field documentation
           </h1>
+          {/* Was "{IMAGES.length}+ installations": the "+" overstated a counted
+              list, and some installations have two photos (Sep 2026). */}
           <p style={{ color: "var(--text-secondary)", fontSize: "1.05rem" }}>
-            {IMAGES.length}+ installations documented across Canada.
+            {IMAGES.length} photographs of HUB work across Canada.
           </p>
         </div>
 

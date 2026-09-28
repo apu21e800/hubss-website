@@ -3,8 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 
-// Residential driveway — stamped asphalt with visible home/garage context
-const HERO_IMAGE = "/images/applications/residential-driveways/residential-driveways-08.jpg";
+// Residential driveway: stamped asphalt with the home in frame. Since 28 Sep
+// 2026 a photo that is not in this page's own gallery above it (QA pa#2: the
+// old one was gallery photo 12), chosen by the photo edit (4032 px wide).
+const HERO_IMAGE = "/images/callouts/residential-driveway-1600.webp"; // residential-driveways-29.jpg at 1600 px, outside the gallery folder so it never joins the gallery; served as is, no optimiser
 
 export default function ResidentialDriveways() {
   return (
@@ -15,35 +17,25 @@ export default function ResidentialDriveways() {
           {/* ── Left — content ─────────────────────────────────────────── */}
           <div className="flex flex-col justify-center px-8 sm:px-12 lg:px-16 py-16 lg:py-24">
 
-            {/* NEW APPLICATION badge */}
-            <div className="mb-6">
-              <span
-                className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold tracking-[0.14em] uppercase"
-                style={{
-                  background: "rgba(249,115,22,0.12)",
-                  color: "var(--accent-text-lg)",
-                  border: "1px solid rgba(249,115,22,0.28)",
-                }}
-              >
-                New application
-              </span>
-            </div>
-
+            {/* The "New application" badge went on 28 Sep 2026: the page is
+                not new to anyone reading it (QA pa#2). */}
+            <p className="text-xs font-bold tracking-[0.18em] uppercase mb-4" style={{ color: "var(--accent-text-lg)" }}>
+              For homeowners
+            </p>
             <h2
               className="text-3xl sm:text-4xl lg:text-5xl font-black leading-[1.05] mb-5"
               style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}
             >
-              Your driveway.
-              <br />
-              <span style={{ color: "var(--accent-text-lg)" }}>City&#8209;grade materials.</span>
+              Your driveway, in{" "}
+              <span style={{ color: "var(--accent-text-lg)" }}>city&#8209;grade StreetPrint.</span>
             </h2>
 
             <p
               className="text-base leading-relaxed mb-8 max-w-md"
               style={{ color: "var(--text-secondary)" }}
             >
-              The same StreetPrint patterns specified for Toronto&apos;s streetscapes, applied to
-              residential driveways. 10–20 year service life, 1–2 day installation.
+              The StreetPrint patterns specified for city streetscapes, stamped into your
+              driveway. A 10–20 year service life, flush with nothing for a plow to catch.
             </p>
 
             {/* Benefit bullets */}
@@ -51,7 +43,7 @@ export default function ResidentialDriveways() {
               {[
                 "Brick, cobblestone, slate, herringbone, and custom pattern options",
                 "Specified for Canadian freeze‑thaw cycles and winter maintenance",
-                "Same material specification used on public streets: no downgrade for residential applications",
+                "The same materials specified for public streets, with no downgrade for homes",
               ].map((item) => (
                 <li key={item} className="flex items-start gap-3">
                   <span
@@ -82,28 +74,23 @@ export default function ResidentialDriveways() {
               ))}
             </ul>
 
-            <Link
-              href="/applications/residential-driveways"
-              className="inline-flex items-center gap-2 font-bold px-7 py-3.5 rounded-full text-sm transition-all duration-150 hover:brightness-110 self-start"
-              style={{
-                background: "linear-gradient(90deg, #F97316, #d97706)",
-                color: "var(--on-accent)",
-              }}
-            >
-              See driveway options
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2.5}
-                strokeLinecap="round"
-                aria-hidden
+            {/* The button used to link to this same page, so pressing it
+                reloaded it (QA pa#2). A homeowner here wants a price. */}
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-2 font-bold px-6 rounded-lg text-sm transition-[filter] duration-150 hover:brightness-110"
+                style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "var(--on-accent)", minHeight: 44 }}
               >
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </Link>
+                Ask for a quote
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" aria-hidden>
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </Link>
+              <Link href="/products/streetprint" className="inline-flex items-center text-sm font-semibold hover:underline underline-offset-2" style={{ color: "var(--text-primary)", minHeight: 44 }}>
+                About StreetPrint
+              </Link>
+            </div>
           </div>
 
           {/* ── Right — hero image ──────────────────────────────────────── */}
@@ -114,9 +101,11 @@ export default function ResidentialDriveways() {
                 LCP hero is the banner image at the top of the page. */}
             <Image
               src={HERO_IMAGE}
-              alt="Residential StreetPrint driveway: aerial view, circular stamp pattern, home with double garage"
+              alt="Residential StreetPrint stamped asphalt driveway in front of a home"
               fill
-              className="object-cover object-top"
+              unoptimized
+              className="object-cover"
+              style={{ objectPosition: "50% 30%" }}
               sizes="(max-width: 1024px) 100vw, 50vw"
             />
             {/* Subtle orange left-edge glow where image meets content panel */}

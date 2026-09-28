@@ -101,14 +101,19 @@ export default function HeroSlideshow({
       {/* ── Gradients — lightened per Doug review for brighter hero ───── */}
       {/* On a phone the picture is lighter (the type is not on it) and only
           its foot fades into the panel below; from sm up the full scrim. */}
+      {/* From sm up the type sits in the lower left, over the crosswalk.
+          Until 28 Sep 2026 a full-width dark foot (0.86 at the bottom) sat
+          over the whole crosswalk and greyed its colours out (Vern: "needs to
+          show more of the crosswalk and needs some colour pop"). Now the dark
+          is shaped to the type: a soft pool in the lower left behind the
+          headline, a light join under the nav, and a short foot into the
+          section below, so the painted crosswalk shows in full colour across
+          the rest of the frame. */}
       <div
         className="absolute inset-0 hidden sm:block"
         style={{
           background:
-            // Lighter than it was (Vern, 26 Sep 2026: "it feels muted"):
-            // the photograph carries its own colour now; the foot stays dark
-            // for the type.
-            "linear-gradient(180deg, rgba(13,17,23,0.24) 0%, rgba(13,17,23,0.12) 40%, rgba(13,17,23,0.42) 70%, rgba(13,17,23,0.86) 100%)",
+            "linear-gradient(180deg, rgba(13,17,23,0.20) 0%, rgba(13,17,23,0) 20%, rgba(13,17,23,0) 80%, rgba(13,17,23,0.38) 100%)",
           zIndex: 2,
         }}
       />
@@ -124,7 +129,7 @@ export default function HeroSlideshow({
         className="absolute inset-0 pointer-events-none hidden sm:block"
         style={{
           background:
-            "linear-gradient(95deg, rgba(13,17,23,0.38) 0%, rgba(13,17,23,0.12) 42%, transparent 62%)",
+            "radial-gradient(ellipse 72% 88% at 0% 100%, rgba(13,17,23,0.80) 0%, rgba(13,17,23,0.60) 38%, rgba(13,17,23,0.24) 72%, rgba(13,17,23,0) 100%)",
           zIndex: 2,
         }}
       />

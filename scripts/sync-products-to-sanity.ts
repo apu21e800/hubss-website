@@ -25,6 +25,10 @@
  * Usage:
  *   npx tsx scripts/sync-products-to-sanity.ts            # apply
  *   npx tsx scripts/sync-products-to-sanity.ts --dry-run  # report only
+ *   npx tsx scripts/sync-products-to-sanity.ts --dry-run --emit=plan.json
+ *     writes the patches it would send as a plan file (id, _rev, set, and the
+ *     current values as expect) for .sanity-work/sanity_apply.py on Vern's
+ *     machine, which checks each revision, backs up and applies. Needs no token.
  */
 
 import { createClient } from "@sanity/client";
@@ -39,6 +43,7 @@ const ROOT = path.resolve(__dirname, "..");
 loadDotenv({ path: path.join(ROOT, ".env.local") });
 
 const DRY_RUN = process.argv.includes("--dry-run");
+const EMIT = process.argv.find((a) => a.startsWith("--emit="))?.slice(7);
 
 const token = process.env.SANITY_API_WRITE_TOKEN;
 if (!token && !DRY_RUN) {
@@ -91,6 +96,7 @@ function specKey(label: string, i: number): string {
 interface SpecItem { _key?: string; label: string; value: string }
 interface RemoteProduct {
   _id: string;
+  _rev?: string;
   name?: string;
   eyebrow?: string;
   shortDesc?: string;
@@ -133,7 +139,7 @@ async function main() {
   // and must be kept in sync if that file changes.
   const PRODUCT_WHAT: Record<string, string> = {
     "streetprint":
-      "In-place stamped asphalt — cobblestone, brick, herringbone and a wide variety of other patterns. No demolition, no raised edges, snowplow-safe. Looks like stone, performs like asphalt.",
+      "In-place stamped asphalt: cobblestone, brick, herringbone and a wide variety of other patterns. No demolition, no raised edges, snowplow-safe. Looks like stone, performs like asphalt.",
     "streetbond":
       "Water based, epoxy modified acrylic coatings that transform asphalt and concrete.",
     "traffic-patterns-xd":
@@ -147,13 +153,14 @@ async function main() {
   };
 
   const remoteList: (RemoteProduct & { slug: string })[] = await client.fetch(
-    `*[_type == "product"]{ _id, name, eyebrow, shortDesc, description, homepageBlurb, specs, seo, "slug": slug.current }`
+    `*[_type == "product"]{ _id, _rev, name, eyebrow, shortDesc, description, homepageBlurb, specs, seo, "slug": slug.current }`
   );
   const remoteBySlug = new Map(remoteList.map(r => [r.slug, r]));
 
   let changedCount = 0;
   let skippedCount = 0;
   let missingCount = 0;
+  const planDocs: { id: string; rev: string; set: Record<string, unknown>; expect: Record<string, unknown> }[] = [];
 
   for (const p of libProducts) {
     const remote = remoteBySlug.get(p.slug);
@@ -202,18 +209,29 @@ async function main() {
     console.log(`  ✏  ${p.slug}`);
     for (const d of diffs) console.log(`      ${d}`);
 
+    const set = {
+      name: p.name,
+      eyebrow: desiredEyebrow,
+      shortDesc: p.shortDesc,
+      description: desiredDescription,
+      homepageBlurb: desiredHomepageBlurb,
+      specs: desiredSpecs,
+      seo: desiredSeo,
+    };
+    if (EMIT) {
+      // The same set this script would send, plus the values it replaces, so
+      // the applier refuses a document someone edited since.
+      const expect: Record<string, unknown> = {};
+      for (const k of Object.keys(set)) {
+        const now = (remote as unknown as Record<string, unknown>)[k];
+        if (now !== undefined && now !== null) expect[k] = now;
+      }
+      planDocs.push({ id: remote._id, rev: remote._rev ?? "", set, expect });
+    }
     if (!DRY_RUN) {
       await client
         .patch(remote._id)
-        .set({
-          name: p.name,
-          eyebrow: desiredEyebrow,
-          shortDesc: p.shortDesc,
-          description: desiredDescription,
-          homepageBlurb: desiredHomepageBlurb,
-          specs: desiredSpecs,
-          seo: desiredSeo,
-        })
+        .set(set)
         .commit({ autoGenerateArrayKeys: false });
     }
     changedCount++;
@@ -221,6 +239,11 @@ async function main() {
 
   console.log(`\nDone. ${changedCount} updated, ${skippedCount} already in sync, ${missingCount} missing in Sanity.`);
   if (DRY_RUN) console.log("(dry run — no writes made)");
+  if (EMIT) {
+    const fs = await import("fs");
+    fs.writeFileSync(EMIT, JSON.stringify({ label: "sync-products", docs: planDocs }, null, 1) + "\n");
+    console.log(`Plan for sanity_apply.py: ${EMIT} (${planDocs.length} documents)`);
+  }
 }
 
 main().catch((e) => {

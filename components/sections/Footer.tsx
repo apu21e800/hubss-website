@@ -1,24 +1,55 @@
 import Link from "next/link";
 import { products } from "@/lib/products";
+import { applications } from "@/lib/applications";
+import { ideaBook } from "@/lib/catalogue";
 import { CHROME_MARKS } from "@/lib/chrome-images.mjs";
 import { SocialLinks } from "@/components/ui/SocialLinks";
 // The footer is on every page; its two marks are baked at build time and
 // served static rather than transformed by /_next/image on every visit.
 import ChromeImg from "@/components/ui/ChromeImg";
 
-const footerApplications = [
-  { label: "Crosswalks",          slug: "crosswalks" },
-  { label: "Bike Lanes",          slug: "bike-lanes" },
-  { label: "Bus Lanes",           slug: "bus-lanes" },
-  { label: "Regulatory Markings", slug: "regulatory-markings" },
-  { label: "Parks & Paths",       slug: "parks-paths" },
-  { label: "Community Branding",  slug: "community-branding" },
-  { label: "Parking Lots",        slug: "parking-lots" },
-  { label: "Private Driveways",   slug: "private-driveways" },
-  { label: "Public Art",            slug: "public-art" },
-  { label: "Pedestrian Safety",    slug: "pedestrian-safety" },
-  { label: "Traffic Calming",      slug: "traffic-calming" },
+// The homepage's nine applications, in the homepage's order (FEATURED_SLUGS in
+// components/sections/ApplicationsGrid.tsx). The footer had its own eleven,
+// two of them not on the homepage and missing two that are (QA, 27 Sep 2026).
+// Names come from lib/applications.ts, the list the menus print, so the menus,
+// the homepage and the footer name each application the same way.
+const FOOTER_APPLICATION_SLUGS = [
+  "crosswalks",
+  "commercial-spaces",
+  "parks-paths",
+  "bike-lanes",
+  "bus-lanes",
+  "community-branding",
+  "public-art",
+  "traffic-calming",
+  "townhomes",
 ];
+const footerApplications = FOOTER_APPLICATION_SLUGS.flatMap((slug) => {
+  const a = applications.find((x) => x.slug === slug);
+  return a ? [{ label: a.name, href: `/applications/${a.slug}` }] : [];
+});
+
+// The pages the phone drawer reaches that the footer did not.
+const companyLinks = [
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
+  { label: "Insights", href: "/blog" },
+  { label: "Resources", href: "/resources" },
+  { label: ideaBook.short, href: ideaBook.href },
+  { label: "Gallery", href: "/gallery" },
+  { label: "Lunch & Learn", href: "/lunch-learn" },
+];
+
+// Tap height (QA, 27 Sep 2026): footer links measured 20 to 26 px tall on a
+// phone. 44 px rows below 640 px wide, and on any touch screen through
+// data-tap="44"; a mouse keeps the compact list (see the data-tap note in
+// app/globals.css on why the desktop footer is not padded).
+const footerLink =
+  "text-sm flex items-center min-h-11 sm:min-h-0 transition-colors hover:text-[var(--accent-text-lg)] underline-offset-4 hover:underline";
+const officeLink =
+  "text-xs flex items-center min-h-11 sm:min-h-0 [overflow-wrap:anywhere] transition-colors hover:text-[var(--text-primary)]";
+const legalLink =
+  "text-xs inline-flex items-center min-h-11 sm:min-h-0 transition-colors hover:text-[var(--text-primary)] underline-offset-4 hover:underline";
 
 
 export default function Footer() {
@@ -41,10 +72,14 @@ export default function Footer() {
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-12">
+        {/* Five columns from xl: brand, products, applications, company,
+            offices. At lg the company links stack over the offices in the
+            fourth column; below lg it is two columns, the lists side by side,
+            so the taller phone rows do not double the footer's length. */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-[1.3fr_1fr_1fr_1fr_1.15fr] gap-x-6 sm:gap-x-10 lg:gap-x-12 gap-y-10 lg:gap-y-12">
 
           {/* Brand */}
-          <div>
+          <div className="col-span-2 lg:col-span-1">
             <div className="mb-5">
               {/* Fixed 44px tall, never scales with the viewport; at the
                   logo's 2432x701 aspect that is 153px wide. */}
@@ -59,12 +94,13 @@ export default function Footer() {
               />
             </div>
 
-            {/* Monument tagline */}
+            {/* Monument tagline. Its second line, "Coast to coast since 1999.",
+                went: the line below says it again (QA, 27 Sep 2026). */}
             <p
               className="font-light tracking-wide mb-3"
               style={{ color: "var(--text-primary)", fontSize: "0.9375rem", lineHeight: 1.45 }}
             >
-              Pedestrian safety, traffic calming, civic identity.<br />Coast to coast since 1999.
+              Pedestrian safety, traffic calming, civic identity.
             </p>
 
             <p className="text-[11px] mb-5 flex items-center gap-2 flex-wrap" style={{ color: "var(--text-muted)", lineHeight: 1.5 }}>
@@ -107,8 +143,8 @@ export default function Footer() {
                 <li key={p.slug}>
                   <Link
                     href={`/products/${p.slug}`}
-                    className="text-sm flex items-center transition-colors hover:text-[var(--accent-text-lg)] underline-offset-4 hover:underline"
-                    data-tap="40"
+                    className={footerLink}
+                    data-tap="44"
                     style={{ color: "var(--text-secondary)", paddingTop: 3, paddingBottom: 3 }}
                   >
                     {p.name}
@@ -123,11 +159,11 @@ export default function Footer() {
             <h4 className="font-semibold text-sm mb-3.5" style={{ color: "var(--text-primary)" }}>Applications</h4>
             <ul className="space-y-0.5">
               {footerApplications.map((a) => (
-                <li key={a.slug}>
+                <li key={a.href}>
                   <Link
-                    href={`/applications/${a.slug}`}
-                    className="text-sm flex items-center transition-colors hover:text-[var(--accent-text-lg)] underline-offset-4 hover:underline"
-                    data-tap="40"
+                    href={a.href}
+                    className={footerLink}
+                    data-tap="44"
                     style={{ color: "var(--text-secondary)", paddingTop: 3, paddingBottom: 3 }}
                   >
                     {a.label}
@@ -137,47 +173,71 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Offices */}
-          <div>
-            <h4 className="font-semibold text-sm mb-3.5" style={{ color: "var(--text-primary)" }}>Offices</h4>
-            <div className="space-y-6">
+          {/* Company and offices: one column at lg, two columns from xl and
+              below lg (display: contents lets them join the outer grid). */}
+          <div className="col-span-2 grid grid-cols-2 gap-x-6 sm:gap-x-10 lg:col-span-1 lg:flex lg:flex-col lg:gap-y-10 xl:contents">
 
-              {/* West */}
-              <div className="relative pl-4">
-                <span
-                  className="absolute left-0 top-0 bottom-0 w-0.5"
-                  style={{ background: "linear-gradient(180deg, #F97316 0%, #EAB308 100%)" }}
-                />
-                <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "var(--accent-text-lg)" }}>
-                  West office
-                </p>
-                <p className="text-sm mb-1" style={{ color: "var(--text-primary)" }}>Ladysmith, British Columbia</p>
-                <a href="mailto:cleve.stordy@hubss.com" className="text-xs flex items-center transition-colors hover:text-[var(--text-primary)] underline-offset-4 hover:underline" data-tap="40" style={{ color: "var(--text-secondary)", paddingTop: 2, paddingBottom: 2 }}>
-                  cleve.stordy@hubss.com
-                </a>
-                <a href="tel:6043098212" className="text-xs flex items-center transition-colors hover:text-[var(--text-primary)]" data-tap="40" style={{ color: "var(--text-secondary)", paddingTop: 2, paddingBottom: 2 }}>
-                  604-309-8212
-                </a>
+            {/* Company */}
+            <div>
+              <h4 className="font-semibold text-sm mb-3.5" style={{ color: "var(--text-primary)" }}>Company</h4>
+              <ul className="space-y-0.5">
+                {companyLinks.map((l) => (
+                  <li key={l.href}>
+                    <Link
+                      href={l.href}
+                      className={footerLink}
+                      data-tap="44"
+                      style={{ color: "var(--text-secondary)", paddingTop: 3, paddingBottom: 3 }}
+                    >
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Offices */}
+            <div>
+              <h4 className="font-semibold text-sm mb-3.5" style={{ color: "var(--text-primary)" }}>Offices</h4>
+              <div className="space-y-6">
+
+                {/* West */}
+                <div className="relative pl-4">
+                  <span
+                    className="absolute left-0 top-0 bottom-0 w-0.5"
+                    style={{ background: "linear-gradient(180deg, #F97316 0%, #EAB308 100%)" }}
+                  />
+                  <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "var(--accent-text-lg)" }}>
+                    West office
+                  </p>
+                  <p className="text-sm mb-1" style={{ color: "var(--text-primary)" }}>Ladysmith, British Columbia</p>
+                  <a href="mailto:cleve.stordy@hubss.com" className={`${officeLink} underline-offset-4 hover:underline`} data-tap="44" style={{ color: "var(--text-secondary)", paddingTop: 2, paddingBottom: 2 }}>
+                    cleve.stordy@hubss.com
+                  </a>
+                  <a href="tel:6043098212" className={officeLink} data-tap="44" style={{ color: "var(--text-secondary)", paddingTop: 2, paddingBottom: 2 }}>
+                    604-309-8212
+                  </a>
+                </div>
+
+                {/* East */}
+                <div className="relative pl-4">
+                  <span
+                    className="absolute left-0 top-0 bottom-0 w-0.5"
+                    style={{ background: "linear-gradient(180deg, #F97316 0%, #EAB308 100%)" }}
+                  />
+                  <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "var(--accent-text-lg)" }}>
+                    East office
+                  </p>
+                  <p className="text-sm mb-1" style={{ color: "var(--text-primary)" }}>Milton, Ontario</p>
+                  <a href="mailto:doug.bain@hubss.com" className={`${officeLink} underline-offset-4 hover:underline`} data-tap="44" style={{ color: "var(--text-secondary)", paddingTop: 2, paddingBottom: 2 }}>
+                    doug.bain@hubss.com
+                  </a>
+                  <a href="tel:4165409287" className={officeLink} data-tap="44" style={{ color: "var(--text-secondary)", paddingTop: 2, paddingBottom: 2 }}>
+                    416-540-9287
+                  </a>
+                </div>
+
               </div>
-
-              {/* East */}
-              <div className="relative pl-4">
-                <span
-                  className="absolute left-0 top-0 bottom-0 w-0.5"
-                  style={{ background: "linear-gradient(180deg, #F97316 0%, #EAB308 100%)" }}
-                />
-                <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "var(--accent-text-lg)" }}>
-                  East office
-                </p>
-                <p className="text-sm mb-1" style={{ color: "var(--text-primary)" }}>Milton, Ontario</p>
-                <a href="mailto:doug.bain@hubss.com" className="text-xs flex items-center transition-colors hover:text-[var(--text-primary)] underline-offset-4 hover:underline" data-tap="40" style={{ color: "var(--text-secondary)", paddingTop: 2, paddingBottom: 2 }}>
-                  doug.bain@hubss.com
-                </a>
-                <a href="tel:4165409287" className="text-xs flex items-center transition-colors hover:text-[var(--text-primary)]" data-tap="40" style={{ color: "var(--text-secondary)", paddingTop: 2, paddingBottom: 2 }}>
-                  416-540-9287
-                </a>
-              </div>
-
             </div>
           </div>
         </div>
@@ -190,11 +250,11 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} HUB Surface Systems. All rights reserved.
           </p>
           <div className="flex gap-6">
-            <Link href="/privacy" className="text-xs inline-flex items-center transition-colors hover:text-[var(--text-primary)] underline-offset-4 hover:underline" data-tap="40" style={{ color: "var(--text-muted)", paddingTop: 2, paddingBottom: 2 }}>
-              Privacy Policy
+            <Link href="/privacy" className={legalLink} data-tap="44" style={{ color: "var(--text-muted)", paddingTop: 2, paddingBottom: 2 }}>
+              Privacy policy
             </Link>
-            <Link href="/terms" className="text-xs inline-flex items-center transition-colors hover:text-[var(--text-primary)] underline-offset-4 hover:underline" data-tap="40" style={{ color: "var(--text-muted)", paddingTop: 2, paddingBottom: 2 }}>
-              Terms of Use
+            <Link href="/terms" className={legalLink} data-tap="44" style={{ color: "var(--text-muted)", paddingTop: 2, paddingBottom: 2 }}>
+              Terms of use
             </Link>
           </div>
         </div>

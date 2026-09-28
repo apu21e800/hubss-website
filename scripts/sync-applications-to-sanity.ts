@@ -31,6 +31,9 @@ const ROOT = path.resolve(__dirname, "..");
 loadDotenv({ path: path.join(ROOT, ".env.local") });
 
 const DRY_RUN = process.argv.includes("--dry-run");
+// --emit=plan.json (with --dry-run): write the patches as a plan file for
+// .sanity-work/sanity_apply.py, as scripts/sync-products-to-sanity.ts does.
+const EMIT = process.argv.find((a) => a.startsWith("--emit="))?.slice(7);
 
 const token = process.env.SANITY_API_WRITE_TOKEN;
 if (!token && !DRY_RUN) {
@@ -103,7 +106,7 @@ async function main() {
   console.log(`  Loaded ${libApps.length} applications from lib/applications.ts`);
 
   const remoteList: RemoteApp[] = await client.fetch(
-    `*[_type == "application"]{ _id, name, shortDesc, description, seo, "slug": slug.current }`
+    `*[_type == "application"]{ _id, _rev, name, shortDesc, description, seo, "slug": slug.current }`
   );
   const remoteBySlug = new Map<string, RemoteApp & { slug: string }>(
     remoteList.map(r => [(r as RemoteApp & { slug: string }).slug, r as RemoteApp & { slug: string }])
@@ -112,6 +115,7 @@ async function main() {
   let changedCount = 0;
   let skippedCount = 0;
   let missingCount = 0;
+  const planDocs: { id: string; rev: string; set: Record<string, unknown>; expect: Record<string, unknown> }[] = [];
 
   for (const app of libApps) {
     const remote = remoteBySlug.get(app.slug);
@@ -147,15 +151,24 @@ async function main() {
     console.log(`  ✏  ${app.slug}`);
     for (const d of diffs) console.log(`      ${d}`);
 
+    const set = {
+      name: app.name,
+      shortDesc: app.shortDesc,
+      description: desiredDescription,
+      seo: desiredSeo,
+    };
+    if (EMIT) {
+      const expect: Record<string, unknown> = {};
+      for (const k of Object.keys(set)) {
+        const now = (remote as unknown as Record<string, unknown>)[k];
+        if (now !== undefined && now !== null) expect[k] = now;
+      }
+      planDocs.push({ id: remote._id, rev: (remote as unknown as { _rev?: string })._rev ?? "", set, expect });
+    }
     if (!DRY_RUN) {
       await client
         .patch(remote._id)
-        .set({
-          name: app.name,
-          shortDesc: app.shortDesc,
-          description: desiredDescription,
-          seo: desiredSeo,
-        })
+        .set(set)
         .commit({ autoGenerateArrayKeys: false });
     }
     changedCount++;
@@ -163,6 +176,11 @@ async function main() {
 
   console.log(`\nDone. ${changedCount} updated, ${skippedCount} already in sync, ${missingCount} missing in Sanity.`);
   if (DRY_RUN) console.log("(dry run — no writes made)");
+  if (EMIT) {
+    const fs = await import("fs");
+    fs.writeFileSync(EMIT, JSON.stringify({ label: "sync-applications", docs: planDocs }, null, 1) + "\n");
+    console.log(`Plan for sanity_apply.py: ${EMIT} (${planDocs.length} documents)`);
+  }
 }
 
 main().catch((e) => {

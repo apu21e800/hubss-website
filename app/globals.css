@@ -472,8 +472,14 @@
   --font-display: var(--font-geist);   /* headings → Geist */
 }
 
+/* clip, not hidden: `overflow-x: hidden` on html and body made body a scroll
+   container, so nothing on the site could stick (the nav, the post sidebar,
+   the product spec card all scrolled away; found 28 Sep 2026). clip cuts the
+   same sideways overflow without creating a scroller. hidden stays first as
+   the fallback for browsers without clip (Safari before 16). */
 html {
   overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body {
@@ -483,6 +489,7 @@ body {
   font-family: var(--font-inter), "Inter", system-ui, -apple-system, sans-serif;
   line-height: 1.7;
   overflow-x: hidden;
+  overflow-x: clip;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

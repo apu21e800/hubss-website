@@ -6,13 +6,13 @@ import LunchLearn from "@/components/sections/LunchLearn";
 import BlogFilter from "@/components/blog/BlogFilter";
 import JsonLd from "@/components/ui/JsonLd";
 import { getAllPosts } from "@/lib/blog";
-import { FIELD_NOTE_TYPES } from "@/lib/field-notes-taxonomy";
+import { INSIGHTS_SECTIONS } from "@/lib/field-notes-taxonomy";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Insights · Case Studies, Guides & Pavement White Papers",
+  title: "Insights · Projects, Guides & Articles on Canadian Pavement",
   description:
-    "Canadian decorative pavement documented: project case studies, specification guides, white papers, and field records on crosswalks, transit lanes, and stamped asphalt.",
+    "Canadian decorative pavement, documented: installations written up, specification guides and articles on crosswalks, transit lanes and stamped asphalt.",
   slug: "blog",
 });
 
@@ -30,16 +30,13 @@ export default async function BlogPage() {
     .sort((a, b) => b[1] - a[1])
     .map(([name]) => name);
 
-  const typeCounts = FIELD_NOTE_TYPES.map((t) => ({
-    ...t,
-    count: posts.filter((p) => p.category === t.label).length,
-  })).filter((t) => t.count > 0);
+  const sections = INSIGHTS_SECTIONS.filter((s) => posts.some((p) => (s.types as string[]).includes(p.category)));
 
   /**
    * Library-level schema. The index declares itself a Blog with a named
    * publisher and the full subject list the library covers, so a crawler
    * reading one post can place it inside a body of work rather than treating
-   * it as a loose page. The type hubs each carry their own CollectionPage.
+   * it as a loose page. The section pages each carry their own CollectionPage.
    */
   const blogSchema = {
     "@context": "https://schema.org",
@@ -47,18 +44,18 @@ export default async function BlogPage() {
     "@id": "https://hubss.com/blog#blog",
     name: "HUB Surface Systems Insights",
     description:
-      "Case studies, specification guides, project profiles, and white papers on decorative pavement, thermoplastic markings, and coloured coatings in Canada.",
+      "Projects, specification guides and articles on decorative pavement, thermoplastic markings and coloured coatings in Canada.",
     url: "https://hubss.com/blog",
     inLanguage: "en-CA",
     publisher: { "@id": "https://hubss.com/#organization" },
     about: [...new Set(posts.flatMap((p) => p.keywords))]
       .slice(0, 20)
       .map((k) => ({ "@type": "Thing", name: k })),
-    hasPart: typeCounts.map((t) => ({
+    hasPart: sections.map((s) => ({
       "@type": "CollectionPage",
-      "@id": `https://hubss.com/blog/${t.slug}#collection`,
-      name: t.plural,
-      url: `https://hubss.com/blog/${t.slug}`,
+      "@id": `https://hubss.com/blog/${s.slug}#collection`,
+      name: s.plural,
+      url: `https://hubss.com/blog/${s.slug}`,
     })),
   };
 
@@ -120,7 +117,7 @@ export default async function BlogPage() {
         </Suspense>
       </div>
 
-      <LunchLearn compact />
+      <LunchLearn compact from="insights" />
       <Footer />
     </main>
   );
@@ -130,8 +127,8 @@ function BlogSkeleton() {
   return (
     <div className="animate-pulse space-y-4">
       <div className="flex gap-2">
-        {Array.from({ length: 5 }).map((_, i) => (
-          <div key={i} className="h-8 w-24 rounded-full bg-[var(--bg-card)]" />
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="h-11 w-24 rounded-full bg-[var(--bg-card)]" />
         ))}
       </div>
       <div className="flex gap-3">

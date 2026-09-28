@@ -36,6 +36,7 @@ import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { cataloguePageSrcSet, cataloguePageUrl, ideaBook, type CatalogueDownload } from "@/lib/catalogue";
 import type { CataloguePage } from "@/lib/catalogue-pages";
+import { leaveIdeaBook } from "./links";
 
 // Loaded only when someone asks for the book, so the reader's bundle stays
 // the reader.
@@ -456,7 +457,9 @@ export default function CatalogueViewer({
             e.preventDefault();
             setView({ s: 1, x: 0, y: 0 });
           } else {
-            window.location.href = exitHref;
+            // Back to the page the reader came from on this site, else exitHref
+            // (QA rest#8: Close always went to /resources). links.ts explains.
+            leaveIdeaBook(exitHref);
           }
           break;
       }
@@ -619,6 +622,12 @@ export default function CatalogueViewer({
         >
           <Link
             href={exitHref}
+            onClick={(e) => {
+              // A modified click (new tab, new window) keeps the plain link.
+              if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+              e.preventDefault();
+              leaveIdeaBook(exitHref);
+            }}
             className="inline-flex flex-shrink-0 items-center gap-2 rounded-full px-2.5 py-2 text-[11px] font-semibold uppercase tracking-[0.16em] transition-colors hover:bg-white/10"
             style={{ color: "rgba(255,255,255,0.78)" }}
             aria-label="Close the Idea Book"

@@ -55,7 +55,7 @@ const QUICK: { label: string; href: string; hint: string }[] = [
   { label: "Specification library", href: "/resources", hint: "Spec sheets" },
   // No count in the hint: it said "67 pieces" against a 74-post library, and
   // Doug asked for fewer numbers on the site anyway.
-  { label: "Insights", href: "/blog", hint: "Case studies, guides, white papers" },
+  { label: "Insights", href: "/blog", hint: "Projects, guides and articles" },
   { label: "Lunch & Learn", href: "/lunch-learn", hint: "Book a session" },
 ];
 

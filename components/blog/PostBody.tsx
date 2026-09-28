@@ -22,10 +22,23 @@
  *    field only accepts full URLs, so that is how they are stored.
  *  - empty paragraphs (Studio leaves one when you press Enter twice) are
  *    skipped; MDX never rendered them either.
+ *
+ * And, since the QA round of 27 Sep 2026:
+ *  - a table sits in a box that scrolls sideways, because the page itself
+ *    can't (rest#7), and a blank first row is not made into a heading row;
+ *  - a quote gets curly marks from its own text and none from the stylesheet,
+ *    which used to add a second pair (rest#12); a short line after a closing
+ *    quote mark is set as its attribution;
+ *  - a paragraph that is only links between middots ("Community branding ·
+ *    Parks and paths · See DecoMark") becomes a row of buttons at least 44 px
+ *    tall (rest#36);
+ *  - a link to /lunch-learn carries the post's topic into the booking form
+ *    (lib/lunch-learn.ts), as every other Lunch & Learn link does.
  */
 
 import { Fragment, type ReactNode } from "react";
 import { isSanityImage, sanitySized } from "@/lib/photos";
+import { lunchLearnHref } from "@/lib/lunch-learn";
 
 export interface PostSpan {
   _type: "span";
@@ -91,14 +104,22 @@ function blockText(b: PostTextBlock): string {
   return (b.children ?? []).map((c) => c.text ?? "").join("");
 }
 
-function hrefFor(def: PostMarkDef | undefined): string {
-  const href = def?.href?.trim() ?? "";
+/** What the renderer needs to know about the post it is rendering. */
+interface Ctx {
+  /** Where a /lunch-learn link goes: the booking form, with the post's topic. */
+  lunchLearn: string;
+}
+
+function hrefFor(def: PostMarkDef | undefined, ctx: Ctx): string {
+  let href = def?.href?.trim() ?? "";
   for (const origin of SITE_ORIGINS) {
     if (href === origin) return "/";
     if (href.startsWith(`${origin}/`) || href.startsWith(`${origin}#`) || href.startsWith(`${origin}?`)) {
-      return href.slice(origin.length);
+      href = href.slice(origin.length);
+      break;
     }
   }
+  if (/^\/lunch-learn\/?(#.*)?$/.test(href)) return ctx.lunchLearn;
   return href;
 }
 
@@ -119,7 +140,7 @@ function withBreaks(text: string, key: string): ReactNode {
  * same depth are wrapped once, so "**bold [link](/x) bold**" becomes one
  * <strong> around the text and the link, as MDX wrote it.
  */
-function renderSpans(spans: PostSpan[], defs: PostMarkDef[], depth: number, keyBase: string): ReactNode[] {
+function renderSpans(spans: PostSpan[], defs: PostMarkDef[], depth: number, keyBase: string, ctx: Ctx): ReactNode[] {
   const out: ReactNode[] = [];
   let i = 0;
   while (i < spans.length) {
@@ -132,14 +153,14 @@ function renderSpans(spans: PostSpan[], defs: PostMarkDef[], depth: number, keyB
     }
     let j = i;
     while (j < spans.length && spans[j].marks?.[depth] === mark) j++;
-    const inner = renderSpans(spans.slice(i, j), defs, depth + 1, key);
+    const inner = renderSpans(spans.slice(i, j), defs, depth + 1, key, ctx);
     if (mark === "strong") out.push(<strong key={key}>{inner}</strong>);
     else if (mark === "em") out.push(<em key={key}>{inner}</em>);
     else {
       const def = defs.find((d) => d._key === mark);
       if (def && def._type === "link" && def.href) {
         const blank = def.blank ? { target: "_blank", rel: "noopener noreferrer" } : {};
-        out.push(<a key={key} href={hrefFor(def)} {...blank}>{inner}</a>);
+        out.push(<a key={key} href={hrefFor(def, ctx)} {...blank}>{inner}</a>);
       } else {
         // A decorator or annotation this renderer doesn't know: keep the words.
         out.push(<Fragment key={key}>{inner}</Fragment>);
@@ -150,8 +171,128 @@ function renderSpans(spans: PostSpan[], defs: PostMarkDef[], depth: number, keyB
   return out;
 }
 
-function inline(b: PostTextBlock): ReactNode[] {
-  return renderSpans(b.children ?? [], b.markDefs ?? [], 0, b._key);
+function inline(b: PostTextBlock, ctx: Ctx): ReactNode[] {
+  return renderSpans(b.children ?? [], b.markDefs ?? [], 0, b._key, ctx);
+}
+
+// ── Quotes ─────────────────────────────────────────────────────────────
+
+// An opening mark follows nothing, a space, a bracket, a slash or a dash
+// (em or en dash written as escapes: the house style has no em dash, even here).
+const OPENS_AFTER = /^$|[\s([{\u2014\u2013/-]$/;
+
+/** Straight quote marks as curly ones, reading left to right (docs/STYLE.md: curly on the page). */
+function curl(text: string, before: string): string {
+  let out = "";
+  let prev = before;
+  for (const ch of text) {
+    if (ch === '"') out += OPENS_AFTER.test(prev) ? "“" : "”";
+    else if (ch === "'") out += OPENS_AFTER.test(prev) ? "‘" : "’";
+    else out += ch;
+    prev = ch;
+  }
+  return out;
+}
+
+function curlBlock(b: PostTextBlock): PostTextBlock {
+  let before = "";
+  const children = (b.children ?? []).map((c) => {
+    const text = curl(c.text ?? "", before);
+    before = text.slice(-1) || before;
+    return { ...c, text };
+  });
+  return { ...b, children };
+}
+
+/**
+ * A quote run as one <blockquote>. The typography plugin used to open the
+ * first paragraph and close the last with its own marks, on text that
+ * already had them: “"TrafficPatternsXD has proven…". `quotes: none` stops
+ * that; the text's own marks stay, curled. When a short paragraph follows one
+ * that closes a quotation, it is the speaker, set as a footer, not quoted.
+ */
+function renderQuote(run: PostTextBlock[], ctx: Ctx): ReactNode {
+  const curled = run.map(curlBlock);
+  return (
+    // Type and padding step down on a phone, where 1.2rem italic in a narrow
+    // box ran a three-sentence quote to fourteen lines.
+    <blockquote
+      key={`q-${run[0]._key}`}
+      style={{
+        quotes: "none",
+        fontSize: "clamp(1.05rem, 0.98rem + 0.45vw, 1.2rem)",
+        padding: "clamp(1.1rem, 3vw, 1.5rem) clamp(1.15rem, 3.5vw, 1.75rem)",
+      }}
+    >
+      {curled.map((b, i) => {
+        const text = blockText(b).trim();
+        const prev = i > 0 ? blockText(curled[i - 1]).trim() : "";
+        const isSpeaker = i > 0 && /”[.,]?$/.test(prev) && !/^[“‘]/.test(text) && text.length <= 140;
+        return isSpeaker ? (
+          <footer
+            key={b._key}
+            style={{ fontStyle: "normal", fontSize: "0.82rem", fontWeight: 600, letterSpacing: "0.01em", color: "var(--text-secondary)", marginTop: "0.9rem", lineHeight: 1.5 }}
+          >
+            {inline(b, ctx)}
+          </footer>
+        ) : (
+          // The stylesheet sets quote paragraphs to margin 0; a second one
+          // needs air above it.
+          <p key={b._key} style={i > 0 ? { marginTop: "0.9rem" } : undefined}>{inline(b, ctx)}</p>
+        );
+      })}
+    </blockquote>
+  );
+}
+
+// ── Link rows ──────────────────────────────────────────────────────────
+
+/**
+ * The links in a paragraph that is nothing but links between middots, or
+ * null. The September posts end on one ("See MMAX · See TrafficPatternsXD ·
+ * Bus lanes and transit corridors"), which set as text made three 20 px tap
+ * targets on a phone.
+ */
+function linkRow(b: PostTextBlock): { key: string; text: string; def: PostMarkDef }[] | null {
+  if (b.listItem || (b.style && b.style !== "normal")) return null;
+  const defs = b.markDefs ?? [];
+  const links: { key: string; text: string; def: PostMarkDef }[] = [];
+  for (const c of b.children ?? []) {
+    const def = defs.find((d) => d._type === "link" && d.href && c.marks?.includes(d._key));
+    if (def) {
+      const last = links[links.length - 1];
+      // Neighbouring spans of one link (a bold word inside it) are one button.
+      if (last && last.def._key === def._key) last.text += c.text ?? "";
+      else links.push({ key: `${b._key}-${links.length}`, text: c.text ?? "", def });
+    } else if (!/^[\s·|]*$/.test(c.text ?? "")) {
+      return null;
+    }
+  }
+  return links.length >= 2 ? links.map((l) => ({ ...l, text: l.text.trim() })) : null;
+}
+
+function renderLinkRow(b: PostTextBlock, links: NonNullable<ReturnType<typeof linkRow>>, ctx: Ctx): ReactNode {
+  return (
+    <div key={b._key} className="not-prose flex flex-col gap-2 sm:flex-row sm:flex-wrap" style={{ margin: "2.25rem 0 0" }}>
+      {links.map((l) => {
+        const blank = l.def.blank ? { target: "_blank", rel: "noopener noreferrer" } : {};
+        return (
+          <a
+            key={l.key}
+            href={hrefFor(l.def, ctx)}
+            {...blank}
+            className="group inline-flex items-center justify-between gap-3 rounded-lg border border-[var(--border-color)] px-4 text-[14px] font-semibold transition-colors hover:border-orange-500/60 sm:justify-start"
+            style={{ minHeight: 44, color: "var(--text-primary)", textDecoration: "none", background: "var(--bg-card)" }}
+          >
+            {l.text}
+            <svg width="13" height="13" fill="none" stroke="var(--accent-text)" viewBox="0 0 24 24" className="flex-shrink-0 transition-transform group-hover:translate-x-0.5" aria-hidden="true">
+              <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </a>
+        );
+      })}
+    </div>
+  );
 }
 
 // ── Lists ──────────────────────────────────────────────────────────────
@@ -189,11 +330,11 @@ function buildLists(blocks: PostTextBlock[]): ListNode[] {
   return roots;
 }
 
-function renderList(list: ListNode): ReactNode {
+function renderList(list: ListNode, ctx: Ctx): ReactNode {
   const items = list.items.map(({ block, lists }) => (
     <li key={block._key}>
-      {inline(block)}
-      {lists.map(renderList)}
+      {inline(block, ctx)}
+      {lists.map((l) => renderList(l, ctx))}
     </li>
   ));
   return list.kind === "number"
@@ -212,25 +353,68 @@ function cell(text: string, key: string): ReactNode[] {
   );
 }
 
+const isBlankRow = (r: { cells?: string[] }) => (r.cells ?? []).every((c) => !c || !c.trim());
+
+// Behind the table: the page colour covering each end of the scrolled
+// content, over a soft shadow at each edge of the box. At rest the right
+// shadow shows that there is more; scrolled to the end, the cover hides it.
+const TABLE_SCROLL_HINT = [
+  "linear-gradient(to right, var(--bg-primary) 30%, transparent) left center / 40px 100% no-repeat local",
+  "linear-gradient(to left, var(--bg-primary) 30%, transparent) right center / 40px 100% no-repeat local",
+  "radial-gradient(farthest-side at 0 50%, rgba(0,0,0,0.16), transparent) left center / 14px 100% no-repeat scroll",
+  "radial-gradient(farthest-side at 100% 50%, rgba(0,0,0,0.16), transparent) right center / 14px 100% no-repeat scroll",
+].join(", ");
+
 function renderTable(t: PostTableBlock): ReactNode {
   const rows = (t.rows ?? []).filter((r) => (r.cells ?? []).length > 0);
   if (!rows.length) return null;
-  const [head, ...rest] = rows;
+  // Studio's rule is "the first row is the heading row", but a first row with
+  // nothing in it is a spacer left from the markdown import, and made the
+  // Kitchener post print an empty header bar. Its table has no heading row.
+  const hasHead = !isBlankRow(rows[0]);
+  const head = hasHead ? rows[0] : undefined;
+  const body = (hasHead ? rows.slice(1) : rows).filter((r) => !isBlankRow(r));
   return (
-    <table key={t._key}>
-      <thead>
-        <tr>{(head.cells ?? []).map((c, i) => <th key={i}>{cell(c, `${t._key}-h${i}`)}</th>)}</tr>
-      </thead>
-      {rest.length > 0 && (
-        <tbody>
-          {rest.map((r, ri) => (
-            <tr key={r._key ?? ri}>
-              {(r.cells ?? []).map((c, i) => <td key={i}>{cell(c, `${t._key}-${ri}-${i}`)}</td>)}
-            </tr>
-          ))}
-        </tbody>
-      )}
-    </table>
+    // The page can't scroll sideways (html has overflow-x: hidden), so on a
+    // phone a wide comparison table was cut off with no way to reach its last
+    // column. It scrolls inside this box instead; tabIndex lets a keyboard do it.
+    // Its width: the text's measure, or the table's narrowest possible width
+    // if that is more (a five-column comparison), up to the width of the
+    // reading column (100cqw; the post page makes that column a container).
+    // Past that it scrolls.
+    <div
+      key={t._key}
+      role="region"
+      aria-label={head ? `Table: ${(head.cells ?? []).filter(Boolean).join(", ")}` : "Table"}
+      tabIndex={0}
+      style={{
+        overflowX: "auto",
+        WebkitOverflowScrolling: "touch",
+        margin: "2rem 0",
+        borderRadius: "0.5rem",
+        background: TABLE_SCROLL_HINT,
+        width: "min-content",
+        minWidth: "100%",
+        maxWidth: "100cqw",
+      }}
+    >
+      <table style={{ margin: 0 }}>
+        {head && (
+          <thead>
+            <tr>{(head.cells ?? []).map((c, i) => <th key={i}>{cell(c, `${t._key}-h${i}`)}</th>)}</tr>
+          </thead>
+        )}
+        {body.length > 0 && (
+          <tbody>
+            {body.map((r, ri) => (
+              <tr key={r._key ?? ri}>
+                {(r.cells ?? []).map((c, i) => <td key={i}>{cell(c, `${t._key}-${ri}-${i}`)}</td>)}
+              </tr>
+            ))}
+          </tbody>
+        )}
+      </table>
+    </div>
   );
 }
 
@@ -250,17 +434,23 @@ function renderImage(img: PostImageBlock): ReactNode {
       <img
         src={sanitySized(src, Math.min(natural, 1280))}
         srcSet={widths.map((w) => `${sanitySized(src, w)} ${w}w`).join(", ")}
-        sizes="(max-width: 768px) 100vw, 680px"
+        // The reading column's measure, or the photo's own width if it is
+        // narrower: `sizes` is the width the browser draws it at, so a small
+        // photo is never enlarged.
+        sizes={`(max-width: 1023px) 100vw, ${Math.min(natural, 760)}px`}
         alt={alt}
         width={img.width ?? undefined}
         height={img.height ?? undefined}
         loading="lazy"
         decoding="async"
+        // A photo narrower than the column sits in its middle, not against
+        // the left edge; a tall one stops short of filling the screen.
+        style={{ marginLeft: "auto", marginRight: "auto", maxHeight: "80vh" }}
       />
     );
   } else {
     // eslint-disable-next-line @next/next/no-img-element -- a /public file, as MDX rendered it
-    el = <img src={src} alt={alt} loading="lazy" decoding="async" />;
+    el = <img src={src} alt={alt} loading="lazy" decoding="async" style={{ marginLeft: "auto", marginRight: "auto" }} />;
   }
   const caption = img.caption?.trim();
   return caption
@@ -268,26 +458,36 @@ function renderImage(img: PostImageBlock): ReactNode {
     : <p key={img._key}>{el}</p>;
 }
 
-function renderTextBlock(b: PostTextBlock, ids: Map<string, number>): ReactNode {
+function renderTextBlock(b: PostTextBlock, ids: Map<string, number>, ctx: Ctx): ReactNode {
   const style = b.style ?? "normal";
   if (style === "h1" || style === "h2") {
     // Never a second h1: the page prints the title as its only h1.
     const base = headingId(blockText(b)) || `section-${b._key}`;
     const seen = ids.get(base) ?? 0;
     ids.set(base, seen + 1);
-    return <h2 key={b._key} id={seen ? `${base}-${seen + 1}` : base}>{inline(b)}</h2>;
+    return <h2 key={b._key} id={seen ? `${base}-${seen + 1}` : base}>{inline(b, ctx)}</h2>;
   }
-  if (style === "h3") return <h3 key={b._key}>{inline(b)}</h3>;
-  if (style === "h4" || style === "h5" || style === "h6") return <h4 key={b._key}>{inline(b)}</h4>;
-  return <p key={b._key}>{inline(b)}</p>;
+  if (style === "h3") return <h3 key={b._key}>{inline(b, ctx)}</h3>;
+  if (style === "h4" || style === "h5" || style === "h6") return <h4 key={b._key}>{inline(b, ctx)}</h4>;
+  const links = linkRow(b);
+  if (links) return renderLinkRow(b, links, ctx);
+  return <p key={b._key}>{inline(b, ctx)}</p>;
 }
 
 const isBlock = (n: PostBodyNode): n is PostTextBlock => n._type === "block";
 const hasText = (b: PostTextBlock) => blockText(b).trim().length > 0;
 
-export default function PostBody({ body }: { body: PostBodyNode[] | null | undefined }) {
+export default function PostBody({
+  body,
+  lunchLearnTopic,
+}: {
+  body: PostBodyNode[] | null | undefined;
+  /** The post's system or subject, carried by its /lunch-learn links into the booking form. */
+  lunchLearnTopic?: string;
+}) {
   const nodes = (body ?? []).filter((n) => !isBlock(n) || hasText(n));
   const ids = new Map<string, number>();
+  const ctx: Ctx = { lunchLearn: lunchLearnHref(lunchLearnTopic, "insights") };
   const out: ReactNode[] = [];
 
   let i = 0;
@@ -300,7 +500,7 @@ export default function PostBody({ body }: { body: PostBodyNode[] | null | undef
         run.push(nodes[i] as PostTextBlock);
         i++;
       }
-      out.push(...buildLists(run).map(renderList));
+      out.push(...buildLists(run).map((l) => renderList(l, ctx)));
       continue;
     }
 
@@ -310,15 +510,11 @@ export default function PostBody({ body }: { body: PostBodyNode[] | null | undef
         run.push(nodes[i] as PostTextBlock);
         i++;
       }
-      out.push(
-        <blockquote key={`q-${run[0]._key}`}>
-          {run.map((b) => <p key={b._key}>{inline(b)}</p>)}
-        </blockquote>
-      );
+      out.push(renderQuote(run, ctx));
       continue;
     }
 
-    if (isBlock(n)) out.push(renderTextBlock(n, ids));
+    if (isBlock(n)) out.push(renderTextBlock(n, ids, ctx));
     else if (n._type === "image") out.push(renderImage(n as PostImageBlock));
     else if (n._type === "table") out.push(renderTable(n as PostTableBlock));
     else if (n._type === "divider") out.push(<hr key={n._key} />);

@@ -1,6 +1,6 @@
 import { defineField, defineType } from "sanity";
 import { PackageIcon } from "@sanity/icons";
-import { richImageField, galleryImageItem } from "./_shared";
+import { bodyStyle, copyStyle, headingStyle, richImageField, galleryImageItem } from "./_shared";
 
 /** Matches lib/products.ts shape — 14 surface systems */
 export default defineType({
@@ -51,6 +51,7 @@ export default defineType({
       type: "string",
       group: "content",
       description: "Short category label shown above the product name (e.g. 'Asphalt & Concrete Repair', 'Thermoplastic Pavement Marking').",
+      validation: (r) => headingStyle(r),
     }),
     defineField({
       name: "shortDesc",
@@ -59,7 +60,7 @@ export default defineType({
       rows: 2,
       group: "content",
       description: "1–2 sentence summary shown in the hero and product cards. Keep under 160 characters for best display.",
-      validation: (r) => r.max(200).warning("Short description should be under 200 characters for best display"),
+      validation: (r) => [r.max(200).warning("Short description should be under 200 characters for best display"), copyStyle(r)],
     }),
     defineField({
       name: "description",
@@ -67,6 +68,7 @@ export default defineType({
       type: "array",
       group: "content",
       description: "Rich text body shown on the product detail page. Use headings, bullet points, and bold for scannable copy.",
+      validation: (r) => bodyStyle(r),
       of: [{ type: "block" }],
     }),
     defineField({
@@ -76,7 +78,7 @@ export default defineType({
       rows: 3,
       group: "content",
       description: "2–3 sentence description used ONLY on the homepage 'Systems' grid card. Distinct from the short description above. Keep it plain-spoken: what it does and who uses it.",
-      validation: (r) => r.max(400).warning("Homepage blurb should be under 400 characters"),
+      validation: (r) => [r.max(400).warning("Homepage blurb should be under 400 characters"), copyStyle(r)],
     }),
 
     // ── Media ────────────────────────────────────────────────────────────────
@@ -217,7 +219,7 @@ export default defineType({
           type: "string",
           title: "Meta title",
           description: "Appears in browser tabs and search results. Ideal length: 50–60 characters.",
-          validation: (r) => r.max(60).warning("Meta title should be under 60 characters for best display in search results"),
+          validation: (r) => [r.max(60).warning("Meta title should be under 60 characters for best display in search results"), copyStyle(r)],
         }),
         defineField({
           name: "description",
@@ -225,7 +227,7 @@ export default defineType({
           title: "Meta description",
           rows: 2,
           description: "Appears in search result snippets. Ideal length: 140–160 characters.",
-          validation: (r) => r.max(160).warning("Meta description should be under 160 characters for best display in search results"),
+          validation: (r) => [r.max(160).warning("Meta description should be under 160 characters for best display in search results"), copyStyle(r)],
         }),
       ],
     }),

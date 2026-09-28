@@ -31,6 +31,8 @@ interface ContactPayload {
   address?: string; // catalogue-print: street, then "City PR A1A 1A1"
   projectType?: string;
   format?: string; // lunch-learn: In-person | Virtual | Either
+  topic?: string; // lunch-learn: what the session is about, from the link that sent them (lib/lunch-learn.ts)
+  from?: string; // lunch-learn: the kind of page that sent them (product, application, insights, menu)
   message?: string;
   website?: string; // honeypot
 }
@@ -48,6 +50,8 @@ function buildEmailHtml(data: ContactPayload): string {
     data.address && `<tr><td valign="top"><strong>Mail to</strong></td><td style="white-space:pre-wrap">${esc(data.address)}</td></tr>`,
     data.projectType && `<tr><td><strong>Project type</strong></td><td>${esc(data.projectType)}</td></tr>`,
     data.format && `<tr><td><strong>Session format</strong></td><td>${esc(data.format)}</td></tr>`,
+    data.topic && `<tr><td><strong>Session topic</strong></td><td>${esc(data.topic.slice(0, 80))}</td></tr>`,
+    data.from && `<tr><td><strong>Booked from</strong></td><td>${esc(data.from.slice(0, 40))}</td></tr>`,
     data.message && `<tr><td valign="top"><strong>Message</strong></td><td style="white-space:pre-wrap">${esc(data.message)}</td></tr>`,
   ]
     .filter(Boolean)
@@ -81,16 +85,20 @@ function buildEmailHtml(data: ContactPayload): string {
 }
 
 function buildSubjectLine(data: ContactPayload): string {
+  // Company is optional on every form since 27 Sep 2026: leave the "@ …" out
+  // when it is blank rather than printing "@ Unknown" in Doug's inbox.
+  const who = `${data.name?.trim() || "Unknown"}${data.company?.trim() ? ` @ ${data.company.trim()}` : ""}`;
   if (data.formType === "lunch-learn") {
-    return `Lunch & Learn Request: ${data.name ?? "Unknown"} @ ${data.company ?? "Unknown"}`;
+    const topic = data.topic?.trim() ? ` · ${data.topic.trim().slice(0, 80)}` : "";
+    return `Lunch & Learn Request: ${who}${topic}`;
   }
   if (data.formType === "newsletter") {
     return `Newsletter Signup: ${data.email}`;
   }
   if (data.formType === "catalogue-print") {
-    return `Printed Idea Book Request: ${data.name ?? "Unknown"} @ ${data.company ?? "Unknown"}`;
+    return `Printed Idea Book Request: ${who}`;
   }
-  return `Contact Form: ${data.name ?? "Unknown"} @ ${data.company ?? "Unknown"}`;
+  return `Contact Form: ${who}`;
 }
 
 export async function POST(req: NextRequest) {

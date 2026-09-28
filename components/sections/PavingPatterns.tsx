@@ -52,7 +52,10 @@ export default function PavingPatterns() {
                 alt={`${t.name}, StreetPrint stamping template`}
                 width={1600}
                 height={1238}
-                className="w-full h-auto"
+                // White line art drawn for the dark ground; pattern-sheet
+                // inverts it to charcoal on paper (app/globals.css). Without
+                // it the drawings vanished when the page went light (28 Sep 2026).
+                className="w-full h-auto pattern-sheet"
                 sizes="(max-width: 768px) 50vw, 33vw"
               />
             </div>

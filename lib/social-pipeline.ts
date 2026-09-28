@@ -14,13 +14,19 @@
  * Every link carries UTM tags (utm_source = the network, utm_medium=social,
  * utm_campaign=field-notes, utm_content = the post's slug), so GA4 shows which
  * posts and networks bring Lunch & Learn bookings.
+ *
+ * The copy goes through the same style pass as the Insights drafts
+ * (lib/field-note-drafter.ts): any sentence with an em dash or another machine
+ * tell is rewritten once, and whatever is left is written on the post's log,
+ * which Studio shows under "Social drafts", and put in the email.
  */
 
 import { Resend } from "resend";
 import { sanityWriteClient } from "@/lib/sanity.write";
 import { getAllPosts, getPost } from "@/lib/blog";
 import { bufferChannels, createBufferDraft, type BufferChannel } from "@/lib/buffer";
-import { writeSocialCopy, type SocialCopy } from "@/lib/social-drafter";
+import { writeSocialCopy, polishSocialCopy, type SocialCopy } from "@/lib/social-drafter";
+import { styleReport } from "@/lib/field-note-drafter";
 import { isSanityImage, sanityOgImage } from "@/lib/photos";
 
 /** Posts published before this never get social drafts (the imported library). */
@@ -62,6 +68,8 @@ export interface SocialResult {
   title: string;
   drafted: { service: string; channel: string }[];
   skipped: { service: string; channel: string; why: string }[];
+  /** The style pass on the copy: "clean", or the sentences to fix in Buffer. */
+  styleCheck: string;
 }
 
 export async function draftSocialForNewPosts(now = new Date()): Promise<{ posts: SocialResult[]; waiting: number }> {
@@ -83,10 +91,18 @@ export async function draftSocialForNewPosts(now = new Date()): Promise<{ posts:
       x: utmLink(post.slug, "x"),
       short: utmLink(post.slug, "threads"),
     };
-    const copy = await writeSocialCopy({ title: post.title, excerpt: post.excerpt, text: post.text, type: post.category }, links);
+    const written = await writeSocialCopy({ title: post.title, excerpt: post.excerpt, text: post.text, type: post.category }, links);
+    const { copy, style } = await polishSocialCopy(written);
 
-    const result: SocialResult = { slug: post.slug, title: post.title, drafted: [], skipped: [] };
-    const drafts: { _key: string; service: string; channel: string; bufferPostId: string }[] = [];
+    const result: SocialResult = {
+      slug: post.slug,
+      title: post.title,
+      drafted: [],
+      skipped: [],
+      styleCheck: styleReport(style, "in Buffer before approving").join("\n"),
+    };
+    // _type names the array items for Studio's "Social drafts" view (sanity/schemas/socialLog.ts).
+    const drafts: { _key: string; _type: "bufferDraft"; service: string; channel: string; bufferPostId: string }[] = [];
     for (const ch of channels) {
       const service = ch.service.toLowerCase();
       const rule = SERVICES[service];
@@ -99,7 +115,7 @@ export async function draftSocialForNewPosts(now = new Date()): Promise<{ posts:
       if (rule.needsImage && !imageUrl) { result.skipped.push({ service, channel: label, why: "Instagram needs a photo and the post has none" }); continue; }
       try {
         const id = await createBufferDraft({ channelId: ch.id, text, imageUrl, imageAlt: post.featuredImageAlt ?? post.title, metadata: rule.metadata });
-        drafts.push({ _key: ch.id, service, channel: label, bufferPostId: id });
+        drafts.push({ _key: ch.id, _type: "bufferDraft", service, channel: label, bufferPostId: id });
         result.drafted.push({ service, channel: label });
       } catch (err) {
         result.skipped.push({ service, channel: label, why: err instanceof Error ? err.message : String(err) });
@@ -115,9 +131,10 @@ export async function draftSocialForNewPosts(now = new Date()): Promise<{ posts:
       title: post.title,
       createdAt: now.toISOString(),
       drafts,
-      skipped: result.skipped.map((s, i) => ({ _key: `s${i}`, ...s })),
+      skipped: result.skipped.map((s, i) => ({ _key: `s${i}`, _type: "skippedChannel", ...s })),
+      styleCheck: result.styleCheck,
     });
-    console.log(`[social] ${post.slug}: ${result.drafted.length} Buffer draft(s), ${result.skipped.length} skipped`);
+    console.log(`[social] ${post.slug}: ${result.drafted.length} Buffer draft(s), ${result.skipped.length} skipped; style: ${style.left.length} of ${style.flagged} left${style.error ? ` (rewrite failed: ${style.error})` : ""}`);
     await notify(result);
     results.push(result);
   }
@@ -136,6 +153,8 @@ async function notify(r: SocialResult) {
     "",
     r.drafted.length ? `Drafted: ${channelList(r.drafted)}` : "Nothing was drafted.",
     ...(r.skipped.length ? ["", "Skipped:", ...r.skipped.map((s) => `- ${s.channel} (${s.service}): ${s.why}`)] : []),
+    "",
+    r.styleCheck,
     "",
     "Review them: https://publish.buffer.com/drafts",
   ].join("\n");

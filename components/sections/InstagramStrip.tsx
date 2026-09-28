@@ -23,6 +23,9 @@ interface InstagramPost {
 // check now fails if any two tiles resolve to the same bytes. Every tile is a
 // real photo of the project its alt text names — never a stand-in. They all
 // link to the profile, not to posts, because we can't guarantee a post match.
+// Sep 2026: the UBC tile became the Leslieville laneway. UBC is the homepage
+// hero and its TrafficPatterns card, so it was on the page three times. The
+// Leslieville photo is already a map pin, so nothing new for /_next/image.
 
 async function fetchInstagramPosts(): Promise<InstagramPost[]> {
   const token  = process.env.INSTAGRAM_ACCESS_TOKEN;

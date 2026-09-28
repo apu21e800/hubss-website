@@ -6,9 +6,8 @@ import type { MetadataRoute } from "next";
 import { catalogueReady, ideaBook } from "@/lib/catalogue";
 import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
-import { projects } from "@/lib/projects";
 import type { PostMeta } from "@/lib/blog";
-import { FIELD_NOTE_TYPES } from "@/lib/field-notes-taxonomy";
+import { INSIGHTS_SECTIONS, isArchivedPost } from "@/lib/field-notes-taxonomy";
 import { productImages, applicationImages, resolveImage } from "@/lib/featured-images";
 import { galleryFor } from "@/lib/asset-scan";
 import { sitemapImages } from "@/lib/image-seo";
@@ -66,11 +65,13 @@ export function buildSitemap(photos?: PhotoSources, posts: PostMeta[] = []): Met
     { url: `${BASE_URL}/gallery`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
     { url: `${BASE_URL}/patterns`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE_URL}/blog`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
-    // Field Notes type hubs (Aug 2026) — each is an indexable collection page
+    // The Insights sections (Projects, Guides, Articles since 28 Sep 2026;
+    // the five type hubs before). Each is an indexable collection page
     // carrying its own CollectionPage/ItemList schema, so they belong in the
     // sitemap alongside /blog rather than being discovered only by crawl.
-    ...FIELD_NOTE_TYPES.map((t) => ({
-      url: `${BASE_URL}/blog/${t.slug}`,
+    // The old hub addresses redirect, so they are not listed.
+    ...INSIGHTS_SECTIONS.map((s) => ({
+      url: `${BASE_URL}/blog/${s.slug}`,
       lastModified: new Date(),
       changeFrequency: "weekly" as const,
       priority: 0.75,
@@ -136,15 +137,13 @@ export function buildSitemap(photos?: PhotoSources, posts: PostMeta[] = []): Met
     };
   });
 
-  const projectRoutes: MetadataRoute.Sitemap = projects.map((p) => ({
-    url: `${BASE_URL}/projects/${p.slug}`,
-    lastModified: new Date(),
-    changeFrequency: "monthly" as const,
-    priority: 0.7,
-    images: p.imageUrl ? [abs(p.imageUrl)] : undefined,
-  }));
+  // No /projects/<slug> entries since 28 Sep 2026: those pages redirect to
+  // their write-ups in Insights (next.config.ts), which are listed below, and
+  // a sitemap that lists redirects fails scripts/verify-site.mjs (check 1).
 
-  const blogRoutes: MetadataRoute.Sitemap = posts.map((p) => ({
+  // lib/blog.ts already leaves archived posts out; this holds if a caller
+  // passes a list from anywhere else.
+  const blogRoutes: MetadataRoute.Sitemap = posts.filter((p) => !isArchivedPost(p.slug)).map((p) => ({
     url: `${BASE_URL}/blog/${p.slug}`,
     lastModified: new Date(p.date),
     changeFrequency: "monthly" as const,
@@ -161,7 +160,6 @@ export function buildSitemap(photos?: PhotoSources, posts: PostMeta[] = []): Met
     ...staticRoutes,
     ...productRoutes,
     ...applicationRoutes,
-    ...projectRoutes,
     ...blogRoutes,
   ]);
 }

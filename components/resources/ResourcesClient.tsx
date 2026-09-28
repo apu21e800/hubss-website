@@ -18,11 +18,13 @@ const TYPE_PRIORITY = [
   "Spec Sheet",
   "Data Sheet",
   "Brochure",
+  "Catalogue",
   "Safety Data Sheet",
   "Colour Guide",
   "Design Manual",
   "Installation Guide",
   "Guide",
+  "FAQ",
   "Certificate",
   "Other",
 ];
@@ -32,11 +34,14 @@ const TYPE_PRIORITY = [
 // "reduce the chips, it's too much"). Five buckets, one row. The underlying
 // docType stays untouched — a bucket chip simply matches every type it
 // contains, and each row still prints its precise type as the eyebrow.
+// "Catalogue" (the StreetPrint Template Catalogue) and "FAQ" were filed as
+// "Other" until 27 Sep 2026 (QA); a type must sit in a bucket or its chip does
+// not count it.
 const TYPE_BUCKETS: { label: string; types: string[] }[] = [
   { label: "Spec sheets", types: ["Spec Sheet"] },
   { label: "Data sheets", types: ["Data Sheet", "Safety Data Sheet"] },
-  { label: "Guides & manuals", types: ["Colour Guide", "Design Manual", "Installation Guide", "Guide"] },
-  { label: "Brochures & flyers", types: ["Brochure", "Flyer", "Idea Book"] },
+  { label: "Guides & manuals", types: ["Colour Guide", "Design Manual", "Installation Guide", "Guide", "FAQ"] },
+  { label: "Brochures & flyers", types: ["Brochure", "Flyer", "Idea Book", "Catalogue"] },
   { label: "Other", types: ["Certificate", "Other"] },
 ];
 const BUCKET_BY_TYPE: Record<string, string> = {};
@@ -579,10 +584,12 @@ export default function ResourcesClient({
           style={
             newOnly
               ? { background: "#F97316", color: "var(--on-accent)", border: "1px solid transparent" }
-              : {
-                  background: "rgba(249,115,22,0.08)",
-                  color: "var(--accent-text)",
-                  border: "1px solid rgba(249,115,22,0.22)",
+              : /* Same neutral chip as "Featured" beside it. The orange tint
+                   it had when off read as already selected (QA, 27 Sep 2026). */
+                {
+                  background: "var(--ink-05)",
+                  color: "var(--text-muted)",
+                  border: "1px solid var(--border-color)",
                 }
           }
         >

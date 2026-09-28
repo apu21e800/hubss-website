@@ -30,11 +30,7 @@ import fs from "fs";
 import path from "path";
 import { config as loadDotenv } from "dotenv";
 import { absPath, sha1Of, uploadedPhotos, uploadMissing } from "./lib/sanity-photo-upload";
-import { products } from "../lib/products";
-import { applications } from "../lib/applications";
-import { galleryFor, altFor } from "../lib/asset-scan";
-import { seoCaption, heroAlt } from "../lib/image-seo";
-import { productImages, resolveImage } from "../lib/featured-images";
+import { planProducts, planApplications, planPages, type PlannedPhoto, type Target } from "./lib/photo-plan";
 
 const ROOT = process.cwd();
 loadDotenv({ path: path.join(ROOT, ".env.local") });
@@ -64,62 +60,7 @@ const client = createClient({
   token: token || undefined,
 });
 
-// ─── The plan: what each page shows today ──────────────────────────────────
-
-interface PlannedPhoto { src: string; alt: string; caption?: string }
-interface Target {
-  label: string;            // slug, or "homepage" / "about"
-  docId: string;
-  heroField: string;        // path of the hero image field in the document
-  hero: PlannedPhoto;
-  gallery: PlannedPhoto[] | null;  // null: this document has no gallery (pages)
-}
-
-function planProducts(): Target[] {
-  return products.filter((p) => !p.comingSoon).map((p) => {
-    const featured = productImages[p.slug] ? resolveImage(productImages[p.slug]) : null;
-    const bannerSrc = featured?.src ?? p.imageUrl;
-    const fromFolder = galleryFor(bannerSrc, p.gallery, `images/products/${p.slug}`);
-    return {
-      label: p.slug,
-      docId: `product-${p.slug}`,
-      heroField: "heroImage",
-      hero: { src: bannerSrc, alt: featured?.alt ?? `${p.name} — ${p.shortDesc}` },
-      gallery: (fromFolder.length > 0 ? fromFolder : [bannerSrc]).map((src) => ({
-        src,
-        alt: altFor(src, `${p.name} decorative pavement by HUB Surface Systems`),
-        caption: seoCaption(src) ?? altFor(src, p.name),
-      })),
-    };
-  });
-}
-
-function planApplications(): Target[] {
-  return applications.map((a) => {
-    const fromFolder = galleryFor(a.imageUrl, a.gallery, `images/applications/${a.slug}`);
-    return {
-      label: a.slug,
-      docId: `application-${a.slug}`,
-      heroField: "heroImage",
-      hero: { src: a.imageUrl, alt: altFor(a.imageUrl, `${a.name} surface systems by HUB — Canadian installation`) },
-      gallery: (fromFolder.length > 0 ? fromFolder : [a.imageUrl]).map((src) => ({
-        src,
-        alt: altFor(src, `${a.name} surface systems by HUB — Canadian installation`),
-        caption: seoCaption(src) ?? altFor(src, a.name),
-      })),
-    };
-  });
-}
-
-function planPages(): Target[] {
-  // The photos app/page.tsx (HeroSlideshow) and app/about/page.tsx show today.
-  return [
-    { label: "homepage", docId: "page-homepage", heroField: "homepageHero.heroImage1",
-      hero: { src: "/images/hero/hero-1.jpg", alt: heroAlt("/images/hero/hero-1.jpg") }, gallery: null },
-    { label: "about", docId: "page-about", heroField: "aboutHero.heroImage",
-      hero: { src: "/images/hero/hero-3.jpg", alt: "HUB Surface Systems — Canadian decorative pavement specialists" }, gallery: null },
-  ];
-}
+// ─── The plan: what each page shows today (scripts/lib/photo-plan.ts) ──────
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 

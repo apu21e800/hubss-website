@@ -1,0 +1,63 @@
+{
+ "cover": {
+  "slug": "geary-works-toronto-park-walkway",
+  "title": "Geary Works: Placemaking Done With the Pavement Itself",
+  "type": "Project Profile",
+  "publishedAt": "2026-09-08T12:00:00.000Z",
+  "date": "Sep 8, 2026",
+  "thumb": {
+   "src": "https://cdn.sanity.io/images/9dbro2m1/production/06cd4e8b7cfd065a0f3248fe06e3b0c3f9ae87f8-2400x1800.jpg?w=128&h=128&fit=crop&crop=focalpoint&fp-x=0.367&fp-y=0.454&auto=format",
+   "srcSet": "https://cdn.sanity.io/images/9dbro2m1/production/06cd4e8b7cfd065a0f3248fe06e3b0c3f9ae87f8-2400x1800.jpg?w=64&h=64&fit=crop&crop=focalpoint&fp-x=0.367&fp-y=0.454&auto=format 64w, https://cdn.sanity.io/images/9dbro2m1/production/06cd4e8b7cfd065a0f3248fe06e3b0c3f9ae87f8-2400x1800.jpg?w=128&h=128&fit=crop&crop=focalpoint&fp-x=0.367&fp-y=0.454&auto=format 128w, https://cdn.sanity.io/images/9dbro2m1/production/06cd4e8b7cfd065a0f3248fe06e3b0c3f9ae87f8-2400x1800.jpg?w=192&h=192&fit=crop&crop=focalpoint&fp-x=0.367&fp-y=0.454&auto=format 192w"
+  },
+  "image": {
+   "src": "https://cdn.sanity.io/images/9dbro2m1/production/06cd4e8b7cfd065a0f3248fe06e3b0c3f9ae87f8-2400x1800.jpg?w=960&h=540&fit=crop&crop=focalpoint&fp-x=0.367&fp-y=0.454&auto=format",
+   "srcSet": "https://cdn.sanity.io/images/9dbro2m1/production/06cd4e8b7cfd065a0f3248fe06e3b0c3f9ae87f8-2400x1800.jpg?w=640&h=360&fit=crop&crop=focalpoint&fp-x=0.367&fp-y=0.454&auto=format 640w, https://cdn.sanity.io/images/9dbro2m1/production/06cd4e8b7cfd065a0f3248fe06e3b0c3f9ae87f8-2400x1800.jpg?w=960&h=540&fit=crop&crop=focalpoint&fp-x=0.367&fp-y=0.454&auto=format 960w, https://cdn.sanity.io/images/9dbro2m1/production/06cd4e8b7cfd065a0f3248fe06e3b0c3f9ae87f8-2400x1800.jpg?w=1280&h=720&fit=crop&crop=focalpoint&fp-x=0.367&fp-y=0.454&auto=format 1280w"
+  }
+ },
+ "latest": [
+  {
+   "slug": "how-stamped-asphalt-is-installed",
+   "title": "Reheat, Stamp, Coat: How Stamped Asphalt Is Actually Installed",
+   "type": "Guide",
+   "publishedAt": "2026-09-08T11:59:00.000Z",
+   "date": "Sep 8, 2026",
+   "thumb": {
+    "src": "https://cdn.sanity.io/images/9dbro2m1/production/58d95130447a89746727a9fedf0bc90f1ed82a77-1920x818.jpg?w=128&h=128&fit=crop&auto=format",
+    "srcSet": "https://cdn.sanity.io/images/9dbro2m1/production/58d95130447a89746727a9fedf0bc90f1ed82a77-1920x818.jpg?w=64&h=64&fit=crop&auto=format 64w, https://cdn.sanity.io/images/9dbro2m1/production/58d95130447a89746727a9fedf0bc90f1ed82a77-1920x818.jpg?w=128&h=128&fit=crop&auto=format 128w, https://cdn.sanity.io/images/9dbro2m1/production/58d95130447a89746727a9fedf0bc90f1ed82a77-1920x818.jpg?w=192&h=192&fit=crop&auto=format 192w"
+   }
+  },
+  {
+   "slug": "hub-certified-installer-network",
+   "title": "Who Actually Installs It: The HUB Certified Installer Network",
+   "type": "Blog",
+   "publishedAt": "2026-09-08T11:58:00.000Z",
+   "date": "Sep 8, 2026",
+   "thumb": {
+    "src": "https://cdn.sanity.io/images/9dbro2m1/production/d9ee32e490cf1880569cdf6fbd654041227dc76e-2400x1800.jpg?w=128&h=128&fit=crop&auto=format",
+    "srcSet": "https://cdn.sanity.io/images/9dbro2m1/production/d9ee32e490cf1880569cdf6fbd654041227dc76e-2400x1800.jpg?w=64&h=64&fit=crop&auto=format 64w, https://cdn.sanity.io/images/9dbro2m1/production/d9ee32e490cf1880569cdf6fbd654041227dc76e-2400x1800.jpg?w=128&h=128&fit=crop&auto=format 128w, https://cdn.sanity.io/images/9dbro2m1/production/d9ee32e490cf1880569cdf6fbd654041227dc76e-2400x1800.jpg?w=192&h=192&fit=crop&auto=format 192w"
+   }
+  },
+  {
+   "slug": "london-east-link-brt",
+   "title": "East London Link BRT: Two Products, One Corridor",
+   "type": "Project Profile",
+   "publishedAt": "2026-09-08T11:57:00.000Z",
+   "date": "Sep 8, 2026",
+   "thumb": {
+    "src": "https://cdn.sanity.io/images/9dbro2m1/production/217e5873e43b99d6b4689bdf8ddc53c0da4c7d8b-2400x1800.jpg?w=128&h=128&fit=crop&auto=format",
+    "srcSet": "https://cdn.sanity.io/images/9dbro2m1/production/217e5873e43b99d6b4689bdf8ddc53c0da4c7d8b-2400x1800.jpg?w=64&h=64&fit=crop&auto=format 64w, https://cdn.sanity.io/images/9dbro2m1/production/217e5873e43b99d6b4689bdf8ddc53c0da4c7d8b-2400x1800.jpg?w=128&h=128&fit=crop&auto=format 128w, https://cdn.sanity.io/images/9dbro2m1/production/217e5873e43b99d6b4689bdf8ddc53c0da4c7d8b-2400x1800.jpg?w=192&h=192&fit=crop&auto=format 192w"
+   }
+  },
+  {
+   "slug": "snowplow-safe-decorative-pavement",
+   "title": "The Plow Came Through. The Pattern Stayed.",
+   "type": "Guide",
+   "publishedAt": "2026-09-08T11:56:00.000Z",
+   "date": "Sep 8, 2026",
+   "thumb": {
+    "src": "https://cdn.sanity.io/images/9dbro2m1/production/a06cb995d5ca80d38e15c68e8695e4a03e526f0c-1800x2400.jpg?w=128&h=128&fit=crop&auto=format",
+    "srcSet": "https://cdn.sanity.io/images/9dbro2m1/production/a06cb995d5ca80d38e15c68e8695e4a03e526f0c-1800x2400.jpg?w=64&h=64&fit=crop&auto=format 64w, https://cdn.sanity.io/images/9dbro2m1/production/a06cb995d5ca80d38e15c68e8695e4a03e526f0c-1800x2400.jpg?w=128&h=128&fit=crop&auto=format 128w, https://cdn.sanity.io/images/9dbro2m1/production/a06cb995d5ca80d38e15c68e8695e4a03e526f0c-1800x2400.jpg?w=192&h=192&fit=crop&auto=format 192w"
+   }
+  }
+ ]
+}

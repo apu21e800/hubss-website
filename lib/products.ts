@@ -63,6 +63,14 @@ function gallery(slug: string, dir: string, count: number, ext: string = "jpg", 
 // (DuraShield = coating not penetrating, AirMark non-runway, PreMark 125mil standard, MMAX +3°C and rising,
 // TrafficPatterns 125mil, StreetBond legacy HUBSS voice). Related-applications audited against Vernon's
 // authoritative mapping — Bike Lanes is MMAX + PreMark only, etc.
+//
+// RELATIONS (28 Sep 2026, QA pa#31): relatedApplications here and relatedProducts in lib/applications.ts
+// must mirror each other, or "Where X goes" and "Systems for Y" contradict each other. The authority is
+// the Idea Book SPECIFY lists (lib/application-catalogue.ts): every pair the book names is listed on both
+// sides. A pair the book does not name stays only where both sides already listed it, or where the
+// product's own spread (`uses` in lib/product-catalogue.ts) names the application. The one exception is
+// the three repair products, which point one way: repair suits any asphalt, and no application page
+// lists them.
 
 export const products: Product[] = [
   // ── Flagship Group ─────────────────────────────────────────────────────────────────────────────────────
@@ -85,7 +93,9 @@ export const products: Product[] = [
       { label: "Service life", value: "10+ years" },
     ],
     // Expanded per Vernon's final audit: BRT corridors, high-volume crosswalks, bus priority, intersections, civic plazas.
-    relatedApplications: ["crosswalks", "bus-lanes", "pedestrian-safety", "public-spaces", "traffic-calming"],
+    // 28 Sep 2026 (pa#31): public-spaces out (the book's Public Spaces spread does not specify XD); the
+    // Community Branding, Parking Lots and Commercial Spaces spreads, which do, added.
+    relatedApplications: ["crosswalks", "bus-lanes", "pedestrian-safety", "traffic-calming", "community-branding", "parking-lots", "commercial-spaces"],
   },
   {
     name: "TrafficPatterns",
@@ -103,7 +113,9 @@ export const products: Product[] = [
       { label: "Service life", value: "8+ years" },
     ],
     // Expanded per Vernon: crosswalks, parks, schools (→playgrounds), public spaces, parking lots.
-    relatedApplications: ["crosswalks", "parks-paths", "playgrounds", "public-spaces", "parking-lots", "pedestrian-safety"],
+    // 28 Sep 2026 (pa#31): public-spaces out (not in that spread's SPECIFY); Community Branding and
+    // Public Art, whose spreads specify TrafficPatterns, added.
+    relatedApplications: ["crosswalks", "parks-paths", "playgrounds", "parking-lots", "pedestrian-safety", "community-branding", "public-art"],
   },
   {
     name: "StreetBond",
@@ -150,7 +162,8 @@ export const products: Product[] = [
     ],
     // Expanded per Vernon: bike lanes, bus lanes, crosswalks, parking lots, pedestrian plazas (public-spaces),
     // driveways, sports surfaces, playgrounds.
-    relatedApplications: ["bike-lanes", "bus-lanes", "crosswalks", "parking-lots", "public-spaces", "private-driveways", "sport-courts", "playgrounds", "parks-paths"],
+    // 28 Sep 2026 (pa#31): the four spreads that specify StreetBond and were missing here added.
+    relatedApplications: ["bike-lanes", "bus-lanes", "crosswalks", "parking-lots", "public-spaces", "private-driveways", "sport-courts", "playgrounds", "parks-paths", "splash-pads", "townhomes", "traffic-calming", "public-art"],
   },
   {
     name: "StreetPrint",
@@ -174,7 +187,8 @@ export const products: Product[] = [
     ],
     // Expanded per Vernon: crosswalks, driveways, plazas (public-spaces), parks/paths, townhomes,
     // heritage districts (community-branding), public art settings.
-    relatedApplications: ["crosswalks", "private-driveways", "residential-driveways", "public-spaces", "parks-paths", "townhomes", "community-branding", "public-art", "commercial-spaces"],
+    // 28 Sep 2026 (pa#31): Parking Lots and Traffic Calming, whose spreads specify StreetPrint, added.
+    relatedApplications: ["crosswalks", "private-driveways", "residential-driveways", "public-spaces", "parks-paths", "townhomes", "community-branding", "public-art", "commercial-spaces", "parking-lots", "traffic-calming"],
   },
 
   // ── Specialty & Regulatory Group ───────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -216,7 +230,9 @@ export const products: Product[] = [
       { label: "Colours", value: "8 standard + 15 premium" },
     ],
     // Expanded per Vernon: bike lanes, bus lanes, BRT corridors (→bus-lanes also), crosswalks, traffic-calming.
-    relatedApplications: ["bike-lanes", "bus-lanes", "crosswalks", "traffic-calming", "pedestrian-safety"],
+    // 28 Sep 2026 (pa#31): crosswalks out. The Crosswalks spread does not specify MMAX, its page never
+    // listed it, and MMAX's own spread names bus lanes, bike lanes, calming and transit.
+    relatedApplications: ["bike-lanes", "bus-lanes", "traffic-calming", "pedestrian-safety"],
   },
   {
     name: "StreetBondSR",
@@ -253,7 +269,10 @@ export const products: Product[] = [
       height: 80,
     },
     // Expanded per Vernon: parking lots, schools (playgrounds), urban heat-island reduction, parks/paths.
-    relatedApplications: ["leed-urban-heat-island", "parking-lots", "playgrounds", "parks-paths", "commercial-spaces"],
+    // 28 Sep 2026 (pa#31): parks-paths and commercial-spaces out (no spread specifies SR there, and neither
+    // page listed it); Splash Pads and Sport Courts, whose spreads do, added. Parking stays: SR's own
+    // spread names it.
+    relatedApplications: ["leed-urban-heat-island", "parking-lots", "playgrounds", "splash-pads", "sport-courts"],
   },
   {
     name: "DuraTherm",
@@ -271,7 +290,9 @@ export const products: Product[] = [
       { label: "Bond", value: "Heat-fused to asphalt substrate" },
     ],
     // Expanded per Vernon: streetscape inlays (community-branding), heritage districts, pedestrian plazas (public-spaces).
-    relatedApplications: ["crosswalks", "community-branding", "public-spaces", "parking-lots", "pedestrian-safety"],
+    // 28 Sep 2026 (pa#31): pedestrian-safety out (not in that spread's SPECIFY); Bus Lanes, whose
+    // High-Traffic Corridors spread specifies DuraTherm, added.
+    relatedApplications: ["crosswalks", "community-branding", "public-spaces", "parking-lots", "bus-lanes"],
   },
   {
     name: "DuraShield",
@@ -288,23 +309,31 @@ export const products: Product[] = [
       { label: "Purpose", value: "Preserves and protects asphalt" },
     ],
     // Expanded per Vernon: pedestrian areas, residential roadways, heat-island mitigation surfaces.
-    relatedApplications: ["parking-lots", "private-driveways", "residential-driveways", "parks-paths", "leed-urban-heat-island", "pedestrian-safety"],
+    // 28 Sep 2026 (pa#31): pedestrian-safety out (not in that spread's SPECIFY); Townhomes, whose spread
+    // specifies DuraShield, added.
+    relatedApplications: ["parking-lots", "private-driveways", "residential-driveways", "parks-paths", "leed-urban-heat-island", "townhomes"],
   },
   {
     name: "AirMark",
     slug: "airmark",
     seoTitle: "AirMark · Advanced Airport Pavement Markings",
     seoDescription: "AirMark is an advanced, high-quality airport pavement markings system specifically designed for taxiways, aprons, and other non-runway aviation applications.",
-    shortDesc: "Preformed thermoplastic for non-runway airfield markings. Used in Canada's busiest airports.",
+    // 28 Sep 2026 (QA pa#12, pa#36): "Used in Canada's busiest airports" is in no HUB document (the
+    // AirMark brochure in /public/docs names no airport or country), so it is gone from the line and the
+    // body. The body is cut to four sentences of facts it already stated. Sanity overrides shortDesc,
+    // description and specs: sync after changing them.
+    shortDesc: "Preformed thermoplastic for non-runway airfield markings.",
     imageUrl: "/images/products/airmark/airmark-01.jpg",
     gallery: gallery("airmark", "airmark", 22),
-    description: "AirMark is an advanced pavement markings system designed specifically for airports, engineered for taxiways, aprons, helipads, and other non-runway aviation surfaces. Glass beads embedded through the full material cross-section deliver high visibility for aviation personnel under all lighting conditions, holding retroreflectivity as the surface wears. Heat-applied by certified crews. Withstands jet blast, snow clearing operations, rubber removal treatments, and the daily operational demands of an active airfield while maintaining visibility year after year, significantly outlasting painted alternatives with no annual repainting cycle. Used in Canada's busiest airports for taxiway centrelines, apron designations, holding position signs, and ground-vehicle markings.",
+    description: "AirMark is preformed thermoplastic for airfield markings on taxiways, aprons, helipads and other non-runway surfaces. Glass beads are embedded through the full cross-section of the material, so retroreflectivity holds as the surface wears. Certified crews heat-apply it, and it stands up to jet blast, snow clearing and rubber removal treatments. It is specified for taxiway centrelines, apron designations, holding position signs and ground-vehicle markings.",
     specs: [
       { label: "Application", value: "Taxiways, aprons, helipads, non-runway airfield surfaces" },
       { label: "Material", value: "Preformed thermoplastic" },
       { label: "Retroreflectivity", value: "Full-depth glass bead construction" },
       { label: "Colour", value: "White and yellow" },
-      { label: "Service life", value: "Multi-year service life" },
+      // Was "Multi-year service life", the label said twice. No HUB document gives AirMark a figure;
+      // this is the softened wording in CLAIMS-VERIFICATION.csv.
+      { label: "Service life", value: "Multi-year, no annual repainting" },
       { label: "Installation", value: "Heat application by certified crews" },
     ],
     // Vernon: taxiways, aprons, helipads, holding-position signs — airfield surfaces.
@@ -328,7 +357,9 @@ export const products: Product[] = [
       { label: "Approval", value: "Provincially approved across Canada" },
     ],
     // Expanded per Vernon: bike lanes, regulatory markings, symbols/arrows, school zones (playgrounds), crosswalks.
-    relatedApplications: ["bike-lanes", "regulatory-markings", "crosswalks", "parking-lots", "playgrounds", "pedestrian-safety", "traffic-calming"],
+    // 28 Sep 2026 (pa#31): playgrounds and traffic-calming out. Neither spread specifies PreMark, neither
+    // page listed it, and PreMark's own spread names bike lanes, crosswalks, regulatory and parking.
+    relatedApplications: ["bike-lanes", "regulatory-markings", "crosswalks", "parking-lots", "pedestrian-safety"],
   },
 
 
@@ -360,7 +391,8 @@ export const products: Product[] = [
       "/images/products/chipfill/chipfill-02.jpg",
       "/images/products/chipfill/chipfill-03.jpg",
     ],
-    description: "ChipFill is a heat-activated preformed pothole repair material engineered for permanent restoration of road surface damage. The material is laid into the prepared excavation and activated with a propane heat torch: no specialized equipment, no hot-mix plant, no aggregate batching. Once heated, ChipFill conforms to the contours of the damage and bonds chemically to the surrounding asphalt or concrete, sealing the substrate from the water intrusion that accelerates freeze-thaw damage and turns minor surface defects into deep structural failures. Deployable year-round regardless of temperature or weather conditions, a critical advantage in Canadian climates where hot-mix asphalt plants close seasonally and potholes peak in early spring. Sets rapidly so the lane can reopen to traffic within minutes of application. Specified by Canadian municipalities and road maintenance contractors for routine patrol patching, emergency response programs, utility cut restoration, edge joint repair, and pedestrian infrastructure maintenance across roads, parking lots, sidewalks, and pathways.",
+    // Cut to four sentences, 28 Sep 2026 (QA pa#36): the same facts, without the 180-word paragraph.
+    description: "ChipFill is laid into the prepared excavation and activated with a propane torch, so it needs no specialized equipment and no hot-mix plant. Once heated, it conforms to the shape of the damage and bonds to the surrounding asphalt or concrete, sealing out the water that drives freeze-thaw damage. It can be installed year-round in any weather, and the lane reopens to traffic within minutes. It is used for patrol patching, emergency repairs, utility cuts and edge joints on roads, parking lots, sidewalks and pathways.",
     specs: [
       { label: "Type", value: "Heat-activated preformed pothole repair material" },
       { label: "Application", value: "Heat torch, no specialized equipment required" },
@@ -370,13 +402,17 @@ export const products: Product[] = [
       { label: "Use case", value: "Smaller potholes, cracks, joints, surface defects" },
     ],
     // ChipFill/AggreFill/Fast Patch DPR — pothole + crack repair across all paved surfaces.
+    // One-way on purpose (pa#31, 28 Sep 2026): no Idea Book spread specifies a repair product, so the
+    // application pages do not list them back. See RELATIONS at the top of this file.
     relatedApplications: ["parking-lots", "private-driveways", "residential-driveways", "parks-paths", "commercial-spaces", "townhomes"],
   },
   {
     name: "AggreFill",
     slug: "aggrefill",
     eyebrow: "Asphalt & Concrete Repair",
-    shortDesc: "Pre-coated aggregate filler for larger potholes up to 1 m². Combined with ChipFill for permanent repair.",
+    // "Up to 1 m²" dropped from the line, body and spec, 28 Sep 2026 (QA pa#12): no document in
+    // /public/docs states it, and "1 m² in diameter" mixed an area with a length.
+    shortDesc: "Pre-coated aggregate filler for larger potholes. Combined with ChipFill for permanent repair.",
     // De-brand swap: the prior hero (`aggrefill-application.webp` /
     // `aggrefill-01.jpg`) showed a GEVEKO-branded supplier bag, violating
     // the no-supplier-names standing rule. Switched to `aggrefill-02.jpg`
@@ -399,12 +435,13 @@ export const products: Product[] = [
       "/images/products/chipfill/chipfill-road-repair.webp",
       "/images/products/aggrefill/aggrefill-03.jpg",
     ],
-    description: "AggreFill is a pre-coated aggregate filler used in combination with ChipFill to permanently repair larger potholes, up to approximately 1 m² in diameter. Where the damage is too deep or wide for a stand-alone material, AggreFill provides the structural mass to fill the void; ChipFill bonds the aggregate matrix and seals the repaired surface flush. The combined system applies cold then receives a heat torch finish, bonding chemically to the surrounding asphalt or concrete substrate and returning the lane to traffic within minutes. Year-round deployment regardless of weather or season, eliminating the dependency on hot-mix plant availability that leaves deep damage unrepaired through Canadian winters. Specified for the deeper road surface failures, parking lot craters, industrial-site damage, and utility cut restoration where conventional cold-mix patching migrates under heavy wheel loading or fails to achieve durable bond at substrate edges. The AggreFill + ChipFill system is a permanent repair.",
+    // Cut to four sentences, 28 Sep 2026 (QA pa#36).
+    description: "AggreFill is a pre-coated aggregate filler used with ChipFill to permanently repair larger potholes: deep road failures, parking lot craters, industrial-site damage and utility cuts. Where the damage is too deep or wide for ChipFill alone, AggreFill fills the void and ChipFill bonds the aggregate and seals the repair flush. The system goes in cold and is finished with a heat torch, bonding to the surrounding asphalt or concrete. Like ChipFill on its own, it can be installed year-round in any weather, and the lane reopens to traffic within minutes.",
     specs: [
       { label: "Type", value: "Pre-coated aggregate filler, paired with ChipFill" },
       { label: "Application", value: "Cold-applied aggregate + heat-torch ChipFill matrix" },
       { label: "Substrate", value: "Asphalt and concrete" },
-      { label: "Repair size", value: "Larger damages, up to ~1 m² in diameter" },
+      { label: "Repair size", value: "Potholes too deep or wide for ChipFill alone" },
       { label: "Cure", value: "Rapid set: minutes to reopen to traffic" },
       { label: "Weather", value: "Year-round, all-conditions deployment" },
     ],
@@ -414,7 +451,10 @@ export const products: Product[] = [
     name: "Fast Patch DPR",
     slug: "fast-patch",
     eyebrow: "Asphalt & Concrete Repair",
-    shortDesc: "Cold-mix polymer repair for potholes, spalls, and utility cuts. Back in service in under an hour.",
+    // Not "cold-mix" (28 Sep 2026, QA pa#36): the hero called it cold-mix while the body sold it against
+    // cold-mix products. Its own flyer (/resources/flyers/HUBSS-Flyer-fast-patch-v01.pdf) calls it a
+    // polymer-blend pourable repair material, and the spec below already says polymer-blend.
+    shortDesc: "Polymer-blend repair for potholes, spalls, and utility cuts. Back in service in under an hour.",
     imageUrl: "/images/products/fast-patch/fastpatch-repaired.jpg",
     heroPosition: "center 50%",
     brandLogo: {
@@ -428,7 +468,10 @@ export const products: Product[] = [
       "/images/products/fast-patch/fastpatch-bucket.jpg",
       "/images/products/fast-patch/fast-patch-01.png",
     ],
-    description: "Fast Patch DPR is an easy-to-apply distressed pavement repair material for asphalt and concrete, a unique polymer blend of recycled and renewable materials engineered for high-strength, fast-return-to-service repair of potholes, spalls, joints, wheel paths, and utility cuts. Minimal site preparation required: clean the area, apply the material, compact, and the repaired surface is back in service in less than 45 minutes. The optional Fast Patch Kicker accelerator shortens cure time further in cooler conditions, making Fast Patch DPR deployable year-round across Canadian temperature ranges where traditional cold-mix products lose performance. Bonds chemically to the surrounding asphalt or concrete substrate with excellent freeze-thaw resistance and impact absorption. The repair is permanent. Completely odourless, making it suitable for indoor environments including warehouse floors, loading docks, and underground parkades where ventilation constraints rule out petroleum-based materials. Used by Canadian municipalities, property managers, and contractors on roadways and bridges, parking lots, sidewalks and curbs (trip-hazard remediation), and any public or commercial environment where extended downtime is not an option.",
+    // Cut to four sentences (pa#36). "Compact" went with "cold-mix": the flyer's method is mix, pour,
+    // finish. "Permanent" and "year-round" stay: the family intro in lib/product-categories.ts relies on
+    // all three repair products stating both.
+    description: "Fast Patch DPR is a distressed pavement repair material for asphalt and concrete: a pourable polymer blend of recycled and renewable materials for high-strength repairs to potholes, spalls, joints, wheel paths and utility cuts. With minimal site preparation, a repair is back in service in less than 45 minutes, and the optional Fast Patch Kicker accelerator shortens the cure in cooler conditions so the work can go on year-round. The repair is permanent, bonding to the surrounding pavement with excellent freeze-thaw resistance and impact absorption. Because it is odourless, it can be used indoors on warehouse floors, loading docks and underground parkades, as well as on roads, bridges, parking lots, sidewalks and curbs.",
     specs: [
       { label: "Type", value: "Polymer-blend distressed pavement repair" },
       { label: "Composition", value: "Recycled and renewable polymer matrix" },

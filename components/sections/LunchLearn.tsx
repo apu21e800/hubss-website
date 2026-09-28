@@ -23,7 +23,11 @@ export default function LunchLearn({
   hideMoose: _hideMoose,
   hideForm = false,
   compact = false,
-}: { hideMoose?: boolean; hideForm?: boolean; compact?: boolean } = {}) {
-  if (compact) return <LunchLearnV2 variant="band" />;
+  topic,
+  from,
+}: { hideMoose?: boolean; hideForm?: boolean; compact?: boolean; topic?: string; from?: string } = {}) {
+  // topic/from: the band names the session and carries both into the form
+  // (lib/lunch-learn.ts), so a StreetPrint page books a StreetPrint session.
+  if (compact) return <LunchLearnV2 variant="band" topic={topic} from={from} />;
   return <LunchLearnV2 variant="boardroom" hideForm={hideForm} />;
 }

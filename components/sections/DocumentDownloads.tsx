@@ -40,8 +40,10 @@ function DocRow({
         </svg>
       </span>
 
-      {/* Document name */}
-      <span className="flex-1 text-sm font-medium min-w-0 truncate" style={{ color: "var(--text-body)" }}>
+      {/* Document name. Wraps rather than truncates: at 390 px about thirty
+          names ended mid-word ("Asphalt Texturing Sp…"), and a specifier
+          cannot pick the sheet they need from half its name (QA, 27 Sep 2026). */}
+      <span className="flex-1 text-sm font-medium min-w-0 break-words leading-snug" style={{ color: "var(--text-body)" }}>
         {labelText}
       </span>
 
@@ -124,7 +126,8 @@ export default function DocumentDownloads({ slug }: { slug: string }) {
             border: "1px solid var(--ink-10)",
           }}
         >
-          <div className="px-8 py-8">
+          {/* Narrower padding on phones leaves the names room for two lines. */}
+          <div className="px-4 py-6 sm:px-8 sm:py-8">
             {/* Header */}
             <div className="flex items-center gap-4 mb-6">
               <div>

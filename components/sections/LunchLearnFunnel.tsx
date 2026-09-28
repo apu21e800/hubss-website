@@ -4,6 +4,7 @@ import { useState, FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { track } from "@vercel/analytics";
+import { TRUSTED_BY } from "@/components/sections/TrustedByMarquee";
 
 export interface LunchLearnFunnelProps {
   eyebrow?: string;
@@ -55,7 +56,8 @@ const WHAT_YOU_GET = [
   {
     num: "02",
     title: "The lifecycle cost math",
-    desc: "Lifecycle cost math, side by side. How HUB systems deliver years of high-performance service versus repeated seasonal interventions: asphalt-life math your procurement team will ask for.",
+    // Opened "Lifecycle cost math, side by side.", its own title again.
+    desc: "Years of service from a HUB system, costed against repeated seasonal interventions over the life of the asphalt: the numbers your procurement team will ask for.",
   },
   {
     num: "03",
@@ -106,21 +108,9 @@ const FAQS = [
   },
 ];
 
-const CITIES = [
-  "City of Toronto", "York Region", "City of Vancouver", "University of British Columbia",
-  "City of Ottawa", "City of Calgary", "City of Brampton", "City of Mississauga",
-  "TransLink", "City of Surrey", "City of Edmonton", "City of Winnipeg",
-  "City of Burnaby", "City of Richmond Hill", "Halifax Regional Municipality",
-  "City of Victoria", "District of Saanich", "Strathcona County",
-];
-const TICKER = [...CITIES, ...CITIES];
-
-const STATS = [
-  { value: "45 min", label: "Focused session" },
-  { value: "No cost", label: "Hosted by HUB" },
-  { value: "Lunch included", label: "Every in-person" },
-  { value: "2 offices", label: "Milton ON · Ladysmith BC" },
-];
+// The homepage's "Trusted by" list. This page kept its own copy, which had
+// grown four names the homepage never showed; one list now serves both.
+const TICKER = [...TRUSTED_BY, ...TRUSTED_BY];
 
 const FORMATS = ["In-person", "Virtual", "Either"] as const;
 type SessionFormat = (typeof FORMATS)[number];
@@ -318,53 +308,12 @@ export default function LunchLearnFunnel({
       </section>
       )}
 
-      {/* ── STATS STRIP — asphalt band starts here ──────────────────── */}
-      <section
-        className="py-10"
-        style={{
-          background: "var(--bg-section-asphalt)",
-          borderBottom: "1px solid var(--ink-06)",
-        }}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-0">
-            {STATS.map((stat, i) => (
-              <motion.div
-                key={stat.value}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.07, duration: 0.35 }}
-                className="flex flex-col items-center text-center lg:border-r last:border-r-0"
-                style={{ borderColor: "var(--border-color)" }}
-              >
-                <span
-                  className="font-black mb-1"
-                  style={{
-                    fontSize: "clamp(1.5rem, 2.5vw, 2.25rem)",
-                    letterSpacing: "-0.03em",
-                    background: "linear-gradient(92deg, #F97316 0%, #EAB308 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  }}
-                >
-                  {stat.value}
-                </span>
-                {/* Solid #9CA3AF, not white-alpha: on the asphalt band (#1A1A19,
-                    lighter than the old navy) rgba(255,255,255,0.45) composites
-                    to ~4.3:1 — under WCAG AA's 4.5:1. #9CA3AF clears it at ~6.6:1
-                    and matches the body-grey used on every asphalt card. */}
-                <span className="text-xs font-semibold tracking-[0.12em] uppercase" style={{ color: "var(--text-muted)" }}>
-                  {stat.label}
-                </span>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* A stats row stood here (45 min, No cost, Lunch included, 2 offices).
+          The boardroom card that leads /lunch-learn carries the same facts in
+          its 45 min and $0 chips, its lunch line and its two phone numbers,
+          so the page said each one twice. Removed; the card keeps them. */}
 
-      {/* ── WHAT YOU WALK AWAY WITH — same asphalt band ──────────────── */}
+      {/* ── WHAT YOU WALK AWAY WITH: the asphalt band starts here ──────── */}
       <section className="py-20 lg:py-24" style={{ background: "var(--bg-section-asphalt)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-14 text-center">
@@ -464,7 +413,10 @@ export default function LunchLearnFunnel({
                   border: "1px solid var(--border-color)",
                 }}
               >
-                <div className="flex items-start justify-between gap-3 mb-3">
+                {/* Tag under the title below lg. Beside it, the no-wrap tag
+                    left the title a sliver of the card and squeezed it onto
+                    three lines on a phone. */}
+                <div className="flex flex-col items-start gap-2 mb-3 lg:flex-row lg:justify-between lg:gap-3">
                   <p className="font-semibold text-base leading-snug" style={{ color: "var(--text-primary)", fontWeight: 500 }}>{p.title}</p>
                   <span
                     className="flex-shrink-0 rounded-full px-2.5 py-0.5 text-[10px] font-bold tracking-wide whitespace-nowrap"

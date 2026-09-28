@@ -96,8 +96,8 @@ export const resourceDocuments: ResourceDocument[] = [
   },
   {
     id: 'sp-other-001',
-    title: 'StreetPrint Template Catalog',
-    type: 'Other',
+    title: 'StreetPrint Template Catalogue',
+    type: 'Catalogue',
     product: 'streetprint',
     productName: 'StreetPrint',
     applications: productApplications['streetprint'],
@@ -108,7 +108,7 @@ export const resourceDocuments: ResourceDocument[] = [
   {
     id: 'sp-other-002',
     title: 'StreetPrint FAQ',
-    type: 'Other',
+    type: 'FAQ',
     product: 'streetprint',
     productName: 'StreetPrint',
     applications: productApplications['streetprint'],
@@ -156,7 +156,7 @@ export const resourceDocuments: ResourceDocument[] = [
   },
   {
     id: 'sb-data-008',
-    title: 'StreetBond Colorant Data Sheet',
+    title: 'StreetBond Colourant Technical Data Sheet',
     type: 'Data Sheet',
     product: 'streetbond',
     productName: 'StreetBond',
@@ -461,7 +461,7 @@ export const resourceDocuments: ResourceDocument[] = [
   },
   {
     id: 'tp-spec-003',
-    title: 'TrafficPatterns Two Component Sealer Specification',
+    title: 'TrafficPatterns Two-Component Sealer Specification',
     type: 'Spec Sheet',
     product: 'traffic-patterns',
     productName: 'TrafficPatterns',
@@ -507,7 +507,7 @@ export const resourceDocuments: ResourceDocument[] = [
   },
   {
     id: 'tpxd-spec-001',
-    title: 'TrafficPatternsXD Specification',
+    title: 'TrafficPatternsXD Specification · Generic',
     type: 'Spec Sheet',
     product: 'traffic-patterns-xd',
     productName: 'TrafficPatternsXD',
@@ -529,7 +529,7 @@ export const resourceDocuments: ResourceDocument[] = [
   },
   {
     id: 'tpxd-spec-002',
-    title: 'TrafficPatternsXD Specification (FR)',
+    title: 'TrafficPatternsXD Specification · Generic (FR)',
     type: 'Spec Sheet',
     product: 'traffic-patterns-xd',
     productName: 'TrafficPatternsXD',
@@ -540,7 +540,7 @@ export const resourceDocuments: ResourceDocument[] = [
   },
   {
     id: 'tpxd-spec-003',
-    title: 'TrafficPatternsXD Two Component Sealer Specification',
+    title: 'TrafficPatternsXD Two-Component Sealer Specification',
     type: 'Spec Sheet',
     product: 'traffic-patterns-xd',
     productName: 'TrafficPatternsXD',
@@ -701,7 +701,7 @@ export const resourceDocuments: ResourceDocument[] = [
   // ── DuraShield ───────────────────────────────────────────────
   {
     id: 'ds-data-001',
-    title: 'DuraShield Color Asphalt Technical Data Sheet',
+    title: 'DuraShield Part A+B Asphalt · Technical Data Sheet',
     type: 'Data Sheet',
     product: 'durashield',
     productName: 'DuraShield',
@@ -712,7 +712,7 @@ export const resourceDocuments: ResourceDocument[] = [
   },
   {
     id: 'ds-data-002',
-    title: 'DuraShield Color Solar Gray Technical Data Sheet',
+    title: 'DuraShield Part A+B Solar Gray · Technical Data Sheet',
     type: 'Data Sheet',
     product: 'durashield',
     productName: 'DuraShield',
@@ -1141,6 +1141,20 @@ const DOC_OVERRIDES: Record<string, Partial<ResourceDocument>> = {
     fileSize: '0.6 MB',
     updatedDate: 'Aug 2026',
   },
+  // QA, 27 Sep 2026. Names and types that the Studio records still carry in
+  // their Feb 2024 form: two StreetPrint files filed as "Other", US spellings
+  // ("Catalog", "Colorant", "Color"), "Two Component" unhyphenated, and a
+  // TrafficPatternsXD generic specification named as if it were the only one.
+  // The names match the product pages' document lists (lib/documents.ts).
+  'sp-other-001': { title: 'StreetPrint Template Catalogue', type: 'Catalogue' },
+  'sp-other-002': { type: 'FAQ' },
+  'sb-data-008': { title: 'StreetBond Colourant Technical Data Sheet' },
+  'tp-spec-003': { title: 'TrafficPatterns Two-Component Sealer Specification' },
+  'tpxd-spec-001': { title: 'TrafficPatternsXD Specification · Generic' },
+  'tpxd-spec-002': { title: 'TrafficPatternsXD Specification · Generic (FR)' },
+  'tpxd-spec-003': { title: 'TrafficPatternsXD Two-Component Sealer Specification' },
+  'ds-data-001': { title: 'DuraShield Part A+B Asphalt · Technical Data Sheet' },
+  'ds-data-002': { title: 'DuraShield Part A+B Solar Gray · Technical Data Sheet' },
 }
 
 /**

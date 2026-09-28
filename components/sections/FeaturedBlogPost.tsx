@@ -55,7 +55,13 @@ export default async function FeaturedBlogPost() {
                 textWrap: "balance",
               }}
             >
-              How it goes in.<br className="hidden sm:block" /> And how it holds up.
+              {/* One heading in place of two fragments ("How it goes in. And
+                  how it holds up."). Each phrase is an inline-block, so a
+                  phone breaks the line between them and never mid-phrase
+                  (the old one wrapped as "How it goes in. And / how it holds
+                  up."). From sm up it fits on one line. */}
+              <span className="inline-block">How it goes in</span>{" "}
+              <span className="inline-block">and how it holds up.</span>
             </h2>
             <p
               className="text-base mt-2 max-w-xl"
@@ -64,15 +70,19 @@ export default async function FeaturedBlogPost() {
               Installation guides, project write-ups, and the specification detail behind them.
             </p>
           </div>
+          {/* "All Insights", as the phone button below says: it opens the whole
+              library, and "Articles" is also the name of one of its filters.
+              data-tap lifts it from 42px to the 44px touch floor on tablets. */}
           <Link
             href="/blog"
+            data-tap="44"
             className="hidden md:inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-lg transition-all border hover:border-orange-500/40 hover:text-[var(--text-primary)]"
             style={{
               border: "1px solid var(--border-color)",
               color: "var(--text-secondary)",
             }}
           >
-            All articles
+            All Insights
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
@@ -135,8 +145,11 @@ export default async function FeaturedBlogPost() {
                 )}
               </div>
 
+              {/* Hover class on the accent token, not orange-100, which would
+                  all but vanish on this paper section. The inline colour
+                  still outranks it, as before. */}
               <h3
-                className="text-2xl font-bold mb-3 leading-tight group-hover:text-orange-100 transition-colors duration-200"
+                className="text-2xl font-bold mb-3 leading-tight group-hover:text-[var(--accent-text)] transition-colors duration-200"
                 style={{ color: "var(--text-primary)" }}
               >
                 {hero.title}
@@ -153,29 +166,17 @@ export default async function FeaturedBlogPost() {
                 {heroDate}
               </p>
 
-              {/* Tagged products */}
-              {hero.products.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-7">
-                  {hero.products.map((p) => (
-                    <span
-                      key={p}
-                      className="text-xs px-2.5 py-1 rounded-md font-medium"
-                      style={{
-                        background: "var(--fill-subtle)",
-                        color: "var(--text-muted)",
-                      }}
-                    >
-                      {p}
-                    </span>
-                  ))}
-                </div>
-              )}
+              {/* The product chips went on 28 Sep 2026, with the chips on
+                  the Insights cards (Vern: "extra tags on cards might be a bit
+                  overkill"). The type label above says what the piece is. */}
 
               <span
                 className="text-sm font-semibold flex items-center gap-2 self-start group-hover:text-[var(--accent-soft-text)] transition-colors"
                 style={{ color: "var(--accent-text-lg)" }}
               >
-                Read the {badgeFor(hero.category).toLowerCase()}
+                {/* "Read the project" read oddly once the types became
+                    Project, Guide and Article (28 Sep 2026). */}
+                Read the story
                 <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
@@ -222,7 +223,7 @@ export default async function FeaturedBlogPost() {
                       {badgeFor(post.category)}
                     </span>
                     <h4
-                      className="text-base font-bold leading-snug mb-3 group-hover:text-orange-100 transition-colors line-clamp-2"
+                      className="text-base font-bold leading-snug mb-3 group-hover:text-[var(--accent-text)] transition-colors line-clamp-2"
                       style={{ color: "var(--text-primary)" }}
                     >
                       {post.title}

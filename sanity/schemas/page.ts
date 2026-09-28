@@ -1,6 +1,6 @@
-import { defineField, defineType } from "sanity";
+import { defineArrayMember, defineField, defineType } from "sanity";
 import { HomeIcon } from "@sanity/icons";
-import { richImageField } from "./_shared";
+import { copyStyle, headingStyle, richImageField } from "./_shared";
 
 /**
  * Page schema — structured fields per page type.
@@ -68,30 +68,35 @@ export default defineType({
           type: "string",
           title: "Eyebrow text",
           description: 'Small label above the main heading (e.g. "Redefining Hardscapes · Since 1999").',
+          validation: (r) => headingStyle(r),
         }),
         defineField({
           name: "heading",
           type: "string",
           title: "Heading line 1",
           description: 'First line of the large hero heading (e.g. "The World Is").',
+          validation: (r) => headingStyle(r),
         }),
         defineField({
           name: "subheading",
           type: "string",
           title: "Heading line 2 (gradient accent)",
           description: 'Second line rendered with the orange gradient (e.g. "Your Canvas.").',
+          validation: (r) => headingStyle(r),
         }),
         defineField({
           name: "tagline",
           type: "string",
           title: "Tagline",
           description: 'Short line below the heading (e.g. "Let\'s build your signature space.").',
+          validation: (r) => copyStyle(r),
         }),
         defineField({
           name: "cta1Label",
           type: "string",
           title: "Primary CTA label",
           description: 'Text on the main call-to-action button (e.g. "See the Work").',
+          validation: (r) => headingStyle(r),
         }),
         defineField({
           name: "cta1Href",
@@ -104,6 +109,7 @@ export default defineType({
           type: "string",
           title: "Secondary CTA label",
           description: 'Text on the secondary button (e.g. "See the Systems").',
+          validation: (r) => headingStyle(r),
         }),
         defineField({
           name: "cta2Href",
@@ -131,12 +137,14 @@ export default defineType({
           type: "string",
           title: "Eyebrow text",
           description: 'Small label above the heading (e.g. "Canadian-Operated Since 1999 · All 10 Provinces").',
+          validation: (r) => headingStyle(r),
         }),
         defineField({
           name: "heading",
           type: "string",
           title: "Hero heading",
           description: 'The main About page headline (e.g. "The people who made your city look like your city.").',
+          validation: (r) => headingStyle(r),
         }),
         defineField({
           name: "subheading",
@@ -144,7 +152,7 @@ export default defineType({
           title: "Hero subheading",
           rows: 3,
           description: "Paragraph below the heading: 2–3 sentences about HUB's story or mission.",
-          validation: (r) => r.max(400).warning("Keep the subheading under 400 characters"),
+          validation: (r) => [r.max(400).warning("Keep the subheading under 400 characters"), copyStyle(r)],
         }),
         richImageField("heroImage", "Hero background photo (behind the About page title)"),
       ],
@@ -156,7 +164,7 @@ export default defineType({
       type: "string",
       group: "about",
       description: 'The pull-quote displayed in the Our Story section (e.g. "Every surface tells a story. We give communities the language to write it.").',
-      validation: (r) => r.max(200).warning("Mission quote should be under 200 characters"),
+      validation: (r) => [r.max(200).warning("Mission quote should be under 200 characters"), copyStyle(r)],
     }),
     defineField({
       name: "aboutStory",
@@ -164,7 +172,7 @@ export default defineType({
       type: "array",
       group: "about",
       description: "The 3-paragraph 'Our Story' body in the left column of the Story section.",
-      of: [{ type: "text", rows: 4 }],
+      of: [defineArrayMember({ type: "text", rows: 4, validation: (r) => copyStyle(r) })],
     }),
     defineField({
       name: "aboutStoryAside",
@@ -173,6 +181,7 @@ export default defineType({
       rows: 3,
       group: "about",
       description: "The short paragraph below the mission quote (e.g. 'York Region. City of Toronto. City of Vancouver. UBC. ...').",
+      validation: (r) => copyStyle(r),
     }),
     defineField({
       name: "aboutValues",
@@ -183,8 +192,8 @@ export default defineType({
       of: [{
         type: "object",
         fields: [
-          defineField({ name: "heading", type: "string", title: "Heading", validation: (r) => r.required() }),
-          defineField({ name: "body", type: "text", title: "Body", rows: 4, validation: (r) => r.required() }),
+          defineField({ name: "heading", type: "string", title: "Heading", validation: (r) => [r.required(), headingStyle(r)] }),
+          defineField({ name: "body", type: "text", title: "Body", rows: 4, validation: (r) => [r.required(), copyStyle(r)] }),
         ],
         preview: { select: { title: "heading", subtitle: "body" } },
       }],
@@ -198,8 +207,8 @@ export default defineType({
       of: [{
         type: "object",
         fields: [
-          defineField({ name: "title", type: "string", title: "Title", validation: (r) => r.required() }),
-          defineField({ name: "desc", type: "text", title: "Description", rows: 3, validation: (r) => r.required() }),
+          defineField({ name: "title", type: "string", title: "Title", validation: (r) => [r.required(), headingStyle(r)] }),
+          defineField({ name: "desc", type: "text", title: "Description", rows: 3, validation: (r) => [r.required(), copyStyle(r)] }),
         ],
         preview: { select: { title: "title", subtitle: "desc" } },
       }],
@@ -211,6 +220,7 @@ export default defineType({
       rows: 4,
       group: "about",
       description: "The intro paragraph below the 'Backed by Industry Leaders' heading.",
+      validation: (r) => copyStyle(r),
     }),
     defineField({
       name: "aboutPartners",
@@ -222,7 +232,7 @@ export default defineType({
         type: "object",
         fields: [
           defineField({ name: "key", type: "string", title: "Partner key (e.g. gaf, ennis-flint)", validation: (r) => r.required() }),
-          defineField({ name: "desc", type: "text", title: "Description", rows: 4, validation: (r) => r.required() }),
+          defineField({ name: "desc", type: "text", title: "Description", rows: 4, validation: (r) => [r.required(), copyStyle(r)] }),
         ],
         preview: { select: { title: "key", subtitle: "desc" } },
       }],
@@ -242,12 +252,14 @@ export default defineType({
           type: "string",
           title: "Eyebrow text",
           description: 'Small label above the heading (e.g. "Get In Touch").',
+          validation: (r) => headingStyle(r),
         }),
         defineField({
           name: "heading",
           type: "string",
           title: "Page heading",
           description: 'The main Contact page headline (e.g. "Start a Project").',
+          validation: (r) => headingStyle(r),
         }),
         defineField({
           name: "subheading",
@@ -255,7 +267,7 @@ export default defineType({
           title: "Intro paragraph",
           rows: 2,
           description: "1–2 sentences below the heading that invite visitors to reach out.",
-          validation: (r) => r.max(250).warning("Keep the intro under 250 characters"),
+          validation: (r) => [r.max(250).warning("Keep the intro under 250 characters"), copyStyle(r)],
         }),
       ],
     }),
@@ -274,18 +286,21 @@ export default defineType({
           type: "string",
           title: "Eyebrow text",
           description: 'Small label above the heading (e.g. "Free · No Obligation · Coast to Coast").',
+          validation: (r) => headingStyle(r),
         }),
         defineField({
           name: "headingLine1",
           type: "string",
           title: "Heading line 1",
           description: 'First line of the hero heading (e.g. "Lunch Is On Us.").',
+          validation: (r) => headingStyle(r),
         }),
         defineField({
           name: "headingLine2",
           type: "string",
           title: "Heading line 2 (gradient accent)",
           description: 'Second line rendered with the orange gradient (e.g. "Your Next Spec Is Free.").',
+          validation: (r) => headingStyle(r),
         }),
         defineField({
           name: "subheading",
@@ -293,31 +308,35 @@ export default defineType({
           title: "Intro paragraph",
           rows: 3,
           description: "2–3 sentences below the heading describing the offer.",
-          validation: (r) => r.max(400).warning("Keep the intro under 400 characters"),
+          validation: (r) => [r.max(400).warning("Keep the intro under 400 characters"), copyStyle(r)],
         }),
         defineField({
           name: "ctaLabel",
           type: "string",
           title: "Primary CTA label",
           description: 'Text on the scroll-to-form button (e.g. "Book Your Free Session").',
+          validation: (r) => headingStyle(r),
         }),
         defineField({
           name: "formHeading",
           type: "string",
           title: "Form section heading",
           description: 'Heading above the registration form (e.g. "Claim Your Free Lunch & Learn").',
+          validation: (r) => headingStyle(r),
         }),
         defineField({
           name: "formSubheading",
           type: "string",
           title: "Form section subheading",
           description: 'Short line below the form heading (e.g. "Tell us who you are and where you are. We handle the rest.").',
+          validation: (r) => copyStyle(r),
         }),
         defineField({
           name: "submitLabel",
           type: "string",
           title: "Submit button label",
           description: 'Text on the form submit button (e.g. "Claim Your Free Lunch & Learn →").',
+          validation: (r) => headingStyle(r),
         }),
         richImageField("mascotImage", "Mascot / hero image (optional)"),
       ],
@@ -332,8 +351,8 @@ export default defineType({
         type: "object",
         fields: [
           defineField({ name: "num", type: "string", title: "Number (e.g. 01)", validation: (r) => r.required() }),
-          defineField({ name: "title", type: "string", title: "Card title", validation: (r) => r.required() }),
-          defineField({ name: "desc", type: "text", title: "Description", rows: 3, validation: (r) => r.required() }),
+          defineField({ name: "title", type: "string", title: "Card title", validation: (r) => [r.required(), headingStyle(r)] }),
+          defineField({ name: "desc", type: "text", title: "Description", rows: 3, validation: (r) => [r.required(), copyStyle(r)] }),
         ],
         preview: { select: { title: "title", subtitle: "desc" } },
       }],
@@ -347,9 +366,9 @@ export default defineType({
       of: [{
         type: "object",
         fields: [
-          defineField({ name: "title", type: "string", title: "Audience title", validation: (r) => r.required() }),
-          defineField({ name: "desc", type: "text", title: "Description", rows: 3, validation: (r) => r.required() }),
-          defineField({ name: "badge", type: "string", title: "Badge text", validation: (r) => r.required() }),
+          defineField({ name: "title", type: "string", title: "Audience title", validation: (r) => [r.required(), headingStyle(r)] }),
+          defineField({ name: "desc", type: "text", title: "Description", rows: 3, validation: (r) => [r.required(), copyStyle(r)] }),
+          defineField({ name: "badge", type: "string", title: "Badge text", validation: (r) => [r.required(), headingStyle(r)] }),
         ],
         preview: { select: { title: "title", subtitle: "badge" } },
       }],
@@ -363,8 +382,8 @@ export default defineType({
       of: [{
         type: "object",
         fields: [
-          defineField({ name: "q", type: "string", title: "Question", validation: (r) => r.required() }),
-          defineField({ name: "a", type: "text", title: "Answer", rows: 4, validation: (r) => r.required() }),
+          defineField({ name: "q", type: "string", title: "Question", validation: (r) => [r.required(), headingStyle(r)] }),
+          defineField({ name: "a", type: "text", title: "Answer", rows: 4, validation: (r) => [r.required(), copyStyle(r)] }),
         ],
         preview: { select: { title: "q", subtitle: "a" } },
       }],
@@ -376,12 +395,12 @@ export default defineType({
       group: "lunchLearn",
       description: "Short marketing eyebrows + headings for the three mid-page sections.",
       fields: [
-        defineField({ name: "whatYouGetEyebrow", type: "string", title: "What You Get · eyebrow" }),
-        defineField({ name: "whatYouGetHeading", type: "string", title: "What You Get · heading" }),
-        defineField({ name: "personasEyebrow",   type: "string", title: "Personas · eyebrow" }),
-        defineField({ name: "personasHeading",   type: "string", title: "Personas · heading" }),
-        defineField({ name: "faqEyebrow",        type: "string", title: "FAQ · eyebrow" }),
-        defineField({ name: "faqHeading",        type: "string", title: "FAQ · heading" }),
+        defineField({ name: "whatYouGetEyebrow", type: "string", title: "What You Get · eyebrow", validation: (r) => headingStyle(r) }),
+        defineField({ name: "whatYouGetHeading", type: "string", title: "What You Get · heading", validation: (r) => headingStyle(r) }),
+        defineField({ name: "personasEyebrow",   type: "string", title: "Personas · eyebrow", validation: (r) => headingStyle(r) }),
+        defineField({ name: "personasHeading",   type: "string", title: "Personas · heading", validation: (r) => headingStyle(r) }),
+        defineField({ name: "faqEyebrow",        type: "string", title: "FAQ · eyebrow", validation: (r) => headingStyle(r) }),
+        defineField({ name: "faqHeading",        type: "string", title: "FAQ · heading", validation: (r) => headingStyle(r) }),
       ],
     }),
 
@@ -399,7 +418,7 @@ export default defineType({
           type: "string",
           title: "Meta title",
           description: "Appears in browser tabs and search results. Ideal: 50–60 characters.",
-          validation: (r) => r.max(60).warning("Meta title should be under 60 characters for best display in search results"),
+          validation: (r) => [r.max(60).warning("Meta title should be under 60 characters for best display in search results"), copyStyle(r)],
         }),
         defineField({
           name: "metaDescription",
@@ -407,7 +426,7 @@ export default defineType({
           title: "Meta description",
           rows: 2,
           description: "Appears in search result snippets. Ideal: 140–160 characters.",
-          validation: (r) => r.max(160).warning("Meta description should be under 160 characters"),
+          validation: (r) => [r.max(160).warning("Meta description should be under 160 characters"), copyStyle(r)],
         }),
         defineField({
           name: "ogImage",

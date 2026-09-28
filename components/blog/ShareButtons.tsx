@@ -3,18 +3,10 @@
 import { useState } from "react";
 import { Linkedin, Facebook, Link2, Check } from "lucide-react";
 
-function XIcon({ size = 18 }: { size?: number }) {
+function XIcon({ size = 17 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-    </svg>
-  );
-}
-
-function InstagramIcon({ size = 18 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
     </svg>
   );
 }
@@ -24,89 +16,67 @@ interface ShareButtonsProps {
   title: string;
 }
 
-const btnClass =
-  "flex items-center justify-center w-10 h-10 rounded-full border border-[var(--ink-10)] text-[var(--text-body)] hover:text-[var(--accent-text)] hover:border-orange-400/30 transition-all duration-200";
+/**
+ * The share row at the foot of an Insights post (28 Sep 2026).
+ *
+ * The sidebar used to carry a Share block (X, Facebook and a gradient "Copy
+ * for Instagram" button) at the height where a reader decides whether to act.
+ * Vern: "the social callout is not that great here." That slot is the Lunch &
+ * Learn card now, and sharing moved here: after the last paragraph, quiet,
+ * four icons. LinkedIn leads because that is where specifiers share; the
+ * Instagram button went, since Instagram can't take a link and the button
+ * only copied one. Each target is 44 px square.
+ */
+const btn =
+  "inline-flex items-center justify-center w-11 h-11 rounded-full transition-colors text-[var(--text-muted)] hover:text-[var(--accent-text)] hover:bg-[var(--ink-05)]";
 
 export default function ShareButtons({ url, title }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false);
-  const [igCopied, setIgCopied] = useState(false);
 
   const encodedUrl = encodeURIComponent(url);
   const encodedTitle = encodeURIComponent(title);
 
   const shareLinks = [
-    {
-      label: "LinkedIn",
-      href: `https://www.linkedin.com/shareArticle?mini=true&url=${encodedUrl}&title=${encodedTitle}`,
-      icon: <Linkedin size={18} />,
-    },
-    {
-      label: "X",
-      href: `https://x.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}&via=HUB_SS`,
-      icon: <XIcon />,
-    },
-    {
-      label: "Facebook",
-      href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
-      icon: <Facebook size={18} />,
-    },
+    { label: "LinkedIn", href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`, icon: <Linkedin size={17} aria-hidden="true" /> },
+    { label: "X", href: `https://x.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`, icon: <XIcon /> },
+    { label: "Facebook", href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`, icon: <Facebook size={17} aria-hidden="true" /> },
   ];
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(url);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  const handleInstagramCopy = async () => {
-    await navigator.clipboard.writeText(url);
-    setIgCopied(true);
-    setTimeout(() => setIgCopied(false), 2000);
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // No clipboard (an insecure context, or permission refused): the
+      // address bar still has the link.
+    }
   };
 
   return (
-    <div className="flex items-center gap-2">
-      {shareLinks.map((link) => (
-        <a
-          key={link.label}
-          href={link.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={`Share on ${link.label}`}
-          title={`Share on ${link.label}`}
-          className={btnClass}
-        >
-          {link.icon}
-        </a>
-      ))}
-
-      {/* Instagram — copy link to share in story or bio */}
-      <button
-        onClick={handleInstagramCopy}
-        aria-label="Share to Instagram: copy link, then paste into your story or bio"
-        title="Share to Instagram: copy link, then paste into your story or bio"
-        className={btnClass}
-      >
-        {igCopied ? (
-          <Check size={18} className="text-[var(--ok-text)]" />
-        ) : (
-          <InstagramIcon />
-        )}
-      </button>
-
-      {/* Copy link */}
-      <button
-        onClick={handleCopy}
-        aria-label="Copy link"
-        title="Copy link"
-        className={btnClass}
-      >
-        {copied ? (
-          <Check size={18} className="text-[var(--ok-text)]" />
-        ) : (
-          <Link2 size={18} />
-        )}
-      </button>
+    <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+      <span className="text-[11px] font-bold uppercase tracking-[0.18em]" style={{ color: "var(--text-muted)" }}>
+        Share this post
+      </span>
+      <div className="flex items-center gap-0.5">
+        <button type="button" onClick={handleCopy} aria-label={copied ? "Link copied" : "Copy link"} title={copied ? "Link copied" : "Copy link"} className={btn}>
+          {copied ? <Check size={17} className="text-[var(--ok-text)]" aria-hidden="true" /> : <Link2 size={17} aria-hidden="true" />}
+        </button>
+        {shareLinks.map((link) => (
+          <a
+            key={link.label}
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Share on ${link.label}`}
+            title={`Share on ${link.label}`}
+            className={btn}
+          >
+            {link.icon}
+          </a>
+        ))}
+        <span className="sr-only" aria-live="polite">{copied ? "Link copied" : ""}</span>
+      </div>
     </div>
   );
 }

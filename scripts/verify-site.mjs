@@ -33,6 +33,7 @@ import fs from "fs";
 import path from "path";
 import { spawn } from "child_process";
 import { createHash } from "crypto";
+import { scanBuiltPages, dashesInHtml, formatHit } from "./check-copy.mjs";
 
 const args = process.argv.slice(2);
 const QUICK = args.includes("--quick");
@@ -45,7 +46,8 @@ const IMAGE_BUDGET_KB = 2000;   // per route, mobile viewport
 const MAX_CRITICAL_A11Y = 0;
 
 const results = [];
-const record = (name, ok, detail, items = []) => results.push({ name, ok, detail, items });
+// `limit`: how many items to print (12 unless a check needs every one listed).
+const record = (name, ok, detail, items = [], limit = 12) => results.push({ name, ok, detail, items, limit });
 const kb = (n) => `${Math.round(n / 1024)} KB`;
 
 // ── server ───────────────────────────────────────────────────────────────────
@@ -206,12 +208,12 @@ async function checkBuiltPagesReachable() {
   // That's the /projects failure mode, and it's the one this check is for.
   const GATED_OK = new Set([401, 403, 503]);
   // Built pages that are MEANT to redirect, each pinned to where it must land.
-  // /projects: next.config.ts sends it to /blog/project-profiles with a
-  // deliberate 307 and keeps app/projects/page.tsx as the fallback for the day
-  // that rule is removed — built and redirected on purpose. This flagged it on
-  // every run once CI got past Typecheck. Pinned rather than exempted: if
+  // /projects: next.config.ts sends it to /blog/projects (a 308 since 28 Sep
+  // 2026, when the Insights sections became Projects, Guides and Articles) and
+  // keeps app/projects/page.tsx as the fallback for the day that rule is
+  // removed: built and redirected on purpose. Pinned rather than exempted: if
   // /projects ever redirects anywhere else, that is the shadowing this is for.
-  const REDIRECT_OK = new Map([["/projects", "/blog/project-profiles"]]);
+  const REDIRECT_OK = new Map([["/projects", "/blog/projects"]]);
   const bad = [], gated = [], expected = [];
   for (const r of [...new Set(routes)]) {
     const st = await head(BASE + r);
@@ -536,6 +538,42 @@ function checkProductMarkup() {
   record("Product markup only on product pages", bad.length === 0, `${scanned} prerendered pages scanned`, bad);
 }
 
+// ── 11. no em dash a reader can see ──────────────────────────────────────────
+// EARNED BY: Doug's round, 27 Sep 2026. Readers take the em dash as the mark
+// of machine-written copy (docs/STYLE.md "Machine tells"), so every one was
+// taken out of the code and out of Sanity by hand. Studio now warns while copy
+// is typed; this catches whatever still reaches a page: a fallback in code, a
+// field Studio doesn't lint, a component's own label. It reads what a visitor
+// or a screen reader gets (page text, alt, title, aria-label, the description
+// and title meta tags), not scripts, JSON-LD or comments. Every hit is listed
+// with its route. The scan itself is scripts/check-copy.mjs, which also runs
+// alone as `npm run check:copy`, no server needed.
+async function checkNoEmDashes(routes) {
+  const name = "no em dashes on the page";
+  let hits = [], scanned = 0;
+  if (EXTERNAL) {
+    // Auditing a deployed site: read its pages, not the local build.
+    for (const r of routes) {
+      try {
+        const html = await (await fetch(BASE + r, { signal: AbortSignal.timeout(20000) })).text();
+        scanned++;
+        const seen = new Set();
+        for (const h of dashesInHtml(html)) {
+          const key = `${h.where}|${h.snippet}`;
+          if (!seen.has(key)) { seen.add(key); hits.push({ route: r, ...h }); }
+        }
+      } catch {}
+    }
+  } else {
+    const res = scanBuiltPages(ROOT);
+    if (!res) { record(name, false, "no build output: run npm run build"); return; }
+    ({ hits, scanned } = res);
+  }
+  const pages = new Set(hits.map((h) => h.route)).size;
+  record(name, hits.length === 0,
+    hits.length ? `${hits.length} on ${pages} of ${scanned} pages` : `${scanned} pages scanned`, hits.map(formatHit), Infinity);
+}
+
 // ── run ──────────────────────────────────────────────────────────────────────
 (async () => {
   const t0 = Date.now();
@@ -551,6 +589,7 @@ function checkProductMarkup() {
     checkBlogRedirectTargets();
     await checkUnknownSlugs404();
     checkProductMarkup();
+    await checkNoEmDashes(routes);
     try { await checkSanityContract(); }
     catch (e) { record("CMS fields match what the code queries", false, `could not reach Sanity: ${e.message}`); }
 
@@ -576,8 +615,9 @@ function checkProductMarkup() {
   console.log("  " + "─".repeat(74));
   for (const r of results) {
     console.log(`  ${r.ok ? "PASS" : "FAIL"}  ${r.name.padEnd(46)} ${r.detail}`);
-    for (const i of (r.items || []).slice(0, 12)) console.log(`          ${i}`);
-    if ((r.items || []).length > 12) console.log(`          … +${r.items.length - 12} more`);
+    const limit = r.limit ?? 12;
+    for (const i of (r.items || []).slice(0, limit)) console.log(`          ${i}`);
+    if ((r.items || []).length > limit) console.log(`          … +${r.items.length - limit} more`);
   }
   console.log("  " + "─".repeat(74));
   const failed = results.filter((r) => !r.ok);

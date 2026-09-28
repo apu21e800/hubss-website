@@ -6,6 +6,8 @@
  */
 
 import Anthropic from "@anthropic-ai/sdk";
+import { PRODUCT_NAMES } from "@/lib/style-lint";
+import { styleRewrite, type StylePass } from "@/lib/field-note-drafter";
 
 const MODEL = process.env.SOCIAL_DRAFT_MODEL || process.env.BLOG_DRAFT_MODEL || "claude-opus-4-5";
 
@@ -24,7 +26,7 @@ VOICE: relaxed, professional, leaders in the field. Confident and plain, never s
 
 FACTS: say only what the ARTICLE says. No new numbers, claims, places, clients or promises.
 
-HOUSE STYLE (docs/STYLE.md): sentence case for headings ("Where the colour goes", not "Where The Colour Goes"). Product names exactly: TrafficPatternsXD, TrafficPatterns, PreMark, DuraTherm, DecoMark, AirMark, StreetBond, StreetBondSR, MMAX, DuraShield, StreetPrint, ChipFill, AggreFill, Fast Patch DPR. The company is HUB Surface Systems, then HUB; never "Hub". The printed book is the Idea Book, never "the catalogue". Places as city and province spelled out (Milton, Ontario). No em dashes, none at all: an aside goes between commas or in parentheses, a pivot gets a full stop or a colon, a list gets commas. En dash only inside a span (10–20 years, 2026–27). No counts as a selling point.
+HOUSE STYLE (docs/STYLE.md): sentence case for headings ("Where the colour goes", not "Where The Colour Goes"). Product names exactly: ${PRODUCT_NAMES.join(", ")}. The company is HUB Surface Systems, then HUB; never "Hub". The printed book is the Idea Book, never "the catalogue". Places as city and province spelled out (Milton, Ontario). No em dashes, none at all: an aside goes between commas or in parentheses, a pivot gets a full stop or a colon, a list gets commas. En dash only inside a span (10–20 years, 2026–27). No counts as a selling point.
 
 MACHINE TELLS (docs/STYLE.md, "Machine tells"): readers recognise machine-written copy on sight and it costs trust, so none of these appears in any post:
 - Em dashes, anywhere, even one.
@@ -91,4 +93,36 @@ export async function writeSocialCopy(article: { title: string; excerpt: string;
     if (typeof copy[k] !== "string" || !copy[k].trim()) throw new Error(`The ${k} copy came back empty`);
   }
   return copy;
+}
+
+/** How the style pass and its report name each version. */
+const CHANNELS: Record<keyof SocialCopy, string> = {
+  linkedin: "LinkedIn",
+  facebook: "Facebook",
+  instagram: "Instagram",
+  x: "X",
+  short: "Threads, Bluesky and Mastodon",
+};
+
+/**
+ * The social copy through the style pass (lib/field-note-drafter.ts): one
+ * rewrite of any sentence with an em dash or another machine tell, then a
+ * second lint. A rewrite may not make a post longer (X has a hard limit), and
+ * Facebook and Instagram keep the one emoji SYSTEM allows them.
+ */
+export async function polishSocialCopy(copy: SocialCopy): Promise<{ copy: SocialCopy; style: StylePass }> {
+  const keys = Object.keys(CHANNELS) as (keyof SocialCopy)[];
+  const style = await styleRewrite(
+    keys.map((k) => ({
+      key: k,
+      label: CHANNELS[k],
+      text: copy[k],
+      headings: "none" as const,
+      ignore: k === "facebook" || k === "instagram" ? ["emoji" as const] : [],
+    })),
+    { model: MODEL, system: SYSTEM, maxGrowth: 1 }
+  );
+  const out: SocialCopy = { ...copy };
+  for (const k of keys) out[k] = style.text[k] ?? copy[k];
+  return { copy: out, style };
 }

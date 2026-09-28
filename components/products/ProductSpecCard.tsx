@@ -1,4 +1,12 @@
+import Link from "next/link";
 import type { CatalogueEntry } from "@/lib/product-catalogue";
+import { products } from "@/lib/products";
+
+/** The product page a cross-sell name points to, when the name is a product. */
+const productHref = (name: string): string | null => {
+  const p = products.find((x) => x.name === name);
+  return p ? `/products/${p.slug}` : null;
+};
 
 /**
  * The catalogue's product spread, rendered for the web.
@@ -116,9 +124,35 @@ export default function ProductSpecCard({
           >
             You may also need · {entry.alsoNeed.heading}
           </p>
-          <p className="text-sm font-medium" style={{ color: "var(--text-body)" }}>
-            {entry.alsoNeed.items.join("  ·  ")}
-          </p>
+          {/* The names are links (QA, 27 Sep 2026): on the printed page a
+              reader turns to the product; here they could only read its name
+              and go looking. The words are the book's and stay as printed.
+              44 px rows on phones, natural height with a mouse. */}
+          <ul className="flex flex-wrap items-center text-sm font-medium" style={{ color: "var(--text-body)" }}>
+            {entry.alsoNeed.items.map((name, i) => {
+              const href = productHref(name);
+              return (
+                <li key={name} className="flex items-center">
+                  {i > 0 && (
+                    <span aria-hidden="true" className="px-2" style={{ color: "var(--text-faint)" }}>
+                      ·
+                    </span>
+                  )}
+                  {href ? (
+                    <Link
+                      href={href}
+                      data-tap="44"
+                      className="inline-flex items-center min-h-11 sm:min-h-0 text-[var(--text-primary)] underline underline-offset-4 decoration-[var(--ink-25)] transition-colors hover:text-[var(--accent-text-lg)] hover:decoration-current"
+                    >
+                      {name}
+                    </Link>
+                  ) : (
+                    <span>{name}</span>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
         </div>
       )}
     </section>

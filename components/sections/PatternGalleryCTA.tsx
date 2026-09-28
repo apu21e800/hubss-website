@@ -5,7 +5,7 @@ import { PATTERN_TEMPLATES, patternSrc } from "@/lib/pattern-templates";
 /**
  * PatternGalleryCTA — one slim band linking to /patterns, for product pages
  * where patterns matter but a full template grid would crowd the page
- * (StreetBond, TrafficPatternsXD). StreetPrint keeps its inline six-tile
+ * (StreetBond). StreetPrint keeps its inline six-tile
  * PavingPatterns preview — it's the stamping product, the templates ARE the
  * pitch there. Server component, no client JS.
  *
@@ -13,6 +13,16 @@ import { PATTERN_TEMPLATES, patternSrc } from "@/lib/pattern-templates";
  * screen real-estate ... a button that takes the user to the pattern gallery
  * page." This is that button, dressed for the part — three fanned template
  * sheets, one line of copy, one arrow.
+ *
+ * WHOSE TEMPLATES (QA, 27 Sep 2026): the library at /patterns is StreetPrint's
+ * (Idea Book pp. 21–24). The band used to read "16 dimensioned stamping
+ * templates" on a coating page and a thermoplastic page, as if they were that
+ * product's own. It now says what it links to: StreetPrint's stamping
+ * templates. The book says StreetPrint patterns are "coloured and sealed with
+ * StreetBond coatings", so it belongs on StreetBond. TrafficPatternsXD is imprinted with
+ * its own wire-rope grids (its Design Manual, in the page's documents), so
+ * this band should not render there. No count (house style), and no "fan":
+ * none of the templates on /patterns is a fan.
  */
 
 const PREVIEW_SLUGS = ["herringbone", "british-cobble", "ashlar-slate"];
@@ -44,12 +54,14 @@ export default function PatternGalleryCTA() {
               boxShadow: "0 2px 8px rgba(0,0,0,0.4)",
             }}
           >
+            {/* pattern-sheet: the drawings are white line art for a dark
+                ground; on a paper section the token inverts them to charcoal. */}
             <Image
               src={patternSrc(t)}
               alt=""
               width={124}
               height={96}
-              className="w-full h-full object-cover opacity-90"
+              className="pattern-sheet w-full h-full object-cover opacity-90"
             />
           </div>
         ))}
@@ -59,11 +71,12 @@ export default function PatternGalleryCTA() {
         <p className="text-[10px] font-bold tracking-[0.2em] uppercase mb-0.5" style={{ color: "var(--accent-text-lg)" }}>
           StreetPrint templates
         </p>
+        {/* Eyebrow and title mirror the page it opens (/patterns). */}
         <p className="text-[15px] font-bold leading-tight" style={{ color: "var(--text-primary)" }}>
-          Pattern gallery
+          The pattern library
         </p>
         <p className="text-[12px] mt-0.5 hidden sm:block" style={{ color: "var(--text-secondary)" }}>
-          16 dimensioned stamping templates: herringbone, cobble, ashlar, fan
+          Stamped into the asphalt, then coloured and sealed with StreetBond: herringbone, brick, cobble, ashlar and tile.
         </p>
       </div>
 

@@ -13,8 +13,9 @@
  * map below (FIELD_NOTES, curatedType, curatedKeywords) was where the import
  * (scripts/import-blog-to-sanity.ts) got them from; the site no longer reads
  * it, so change a post's type in Studio, not here. The types themselves
- * (FIELD_NOTE_TYPES: labels, hubs, badge colours, schema types) are still
- * read everywhere, Studio's Type list included.
+ * (FIELD_NOTE_TYPES: values, schema types, Studio's Type list) are still read
+ * everywhere. Since 28 Sep 2026 the site lists them in three sections
+ * (INSIGHTS_SECTIONS, below): Projects, Guides and Articles.
  *
  * Vernon: "update all Field notes — Case Studies, Project Profiles, Guides,
  * White Papers, Blog posts! This is high priority, also SEO optimize, this is
@@ -46,26 +47,114 @@ export type FieldNoteType =
   | "White Paper"
   | "Blog";
 
+/**
+ * THE THREE SECTIONS (Vern, 28 Sep 2026): "Case Studies 14, Project Profiles
+ * 25, Guides 24, White Papers 3, Articles: these categories feel like they
+ * have not been refined enough. Insights = blog." Five hubs split one library
+ * along lines a reader could not see (a case study and a project profile are
+ * both a write-up of a job; a white paper is a long guide), and two of them
+ * held three posts and eight. The site now shows three sections, and a card
+ * or a post carries one label: Project, Guide or Article.
+ *
+ * Labels and routes only. The five stored values below are unchanged, so
+ * Studio, the drafter and every published post keep working; each type just
+ * names the section it is listed in. The old hub addresses redirect
+ * (next.config.ts): /blog/case-studies and /blog/project-profiles to
+ * /blog/projects, /blog/white-papers to /blog/guides, /blog/posts to
+ * /blog/articles.
+ */
+export type InsightsSectionKey = "projects" | "guides" | "articles";
+
+export interface InsightsSection {
+  key: InsightsSectionKey;
+  /** The label on a card and on the post hero: "Project". */
+  singular: string;
+  /** The section's name: its page H1, its filter pill, its breadcrumb. */
+  plural: string;
+  /** URL segment: /blog/projects */
+  slug: string;
+  /** The stored types the section lists. */
+  types: FieldNoteType[];
+  /** One line: the section's meta description lede and its cross-link card. */
+  blurb: string;
+  /** The paragraph under the section page's H1. */
+  promise: string;
+  /** Label tint, border and text. The brand's orange family and one neutral. */
+  tint: string;
+  border: string;
+  text: string;
+}
+
+export const INSIGHTS_SECTIONS: InsightsSection[] = [
+  {
+    key: "projects",
+    singular: "Project",
+    plural: "Projects",
+    slug: "projects",
+    types: ["Case Study", "Project Profile"],
+    blurb: "Canadian installations, written up, with the system used on each.",
+    // Merged from the two old hub promises, keeping only what both could
+    // stand behind: a profile is a short record, a case study the full brief.
+    promise:
+      "Installations across Canada, written up: where each one is, which system went down and how it looks now. The case studies add the brief and the specification, for the people who have to defend one.",
+    tint: "rgba(249,115,22,0.14)",
+    border: "rgba(249,115,22,0.35)",
+    text: "var(--accent-text)",
+  },
+  {
+    key: "guides",
+    singular: "Guide",
+    plural: "Guides",
+    slug: "guides",
+    types: ["Guide", "White Paper"],
+    blurb: "How to choose, specify and defend a surface decision.",
+    promise:
+      "Decision support for engineers, landscape architects and procurement teams: comparisons, lifecycle math, spec language and the failure modes to design around in a freeze-thaw climate. The long technical papers for public works teams are here too.",
+    tint: "rgba(249,115,22,0.1)",
+    border: "rgba(249,115,22,0.28)",
+    text: "var(--accent-soft-text)",
+  },
+  {
+    key: "articles",
+    singular: "Article",
+    plural: "Articles",
+    slug: "articles",
+    types: ["Blog"],
+    blurb: "Industry notes, product context and what we are seeing on the road.",
+    promise:
+      "Shorter reads on where decorative pavement is heading in Canada: material context, industry shifts and the thinking behind the systems.",
+    tint: "var(--ink-05)",
+    border: "var(--ink-12)",
+    text: "var(--text-muted)",
+  },
+];
+
+export const SECTION_BY_KEY: Record<InsightsSectionKey, InsightsSection> =
+  Object.fromEntries(INSIGHTS_SECTIONS.map((s) => [s.key, s])) as Record<InsightsSectionKey, InsightsSection>;
+
 export interface FieldNoteTypeMeta {
   /**
    * The type's VALUE: what Sanity stores in a post's `category` and what the
    * drafter writes. Never rename one - every post filed under it would fall
-   * back to guessing its type. Print `badge`, not this.
+   * back to guessing its type. Print `badgeFor()`, not this.
    */
   label: FieldNoteType;
   /**
-   * Singular name shown on the card badge and the post hero. Equal to the
-   * value except for "Blog", which prints as "Article": a badge saying "Blog"
-   * inside a library called Insights read as a category nobody chose.
+   * The type's name in Studio's Type list (sanity/schemas/blogPost.ts and
+   * storyIdea.ts read it), so an editor still sees five distinct choices.
+   * Since 28 Sep 2026 the site prints the section's label instead: badgeFor().
    */
   badge: string;
-  /** Plural label for the hub page and filter pills. */
+  /** Which of the three sections lists it. */
+  section: InsightsSectionKey;
+  /**
+   * The type's plural, hub segment, blurb and promise, from when each type
+   * had its own hub. The site prints the section's (INSIGHTS_SECTIONS); the
+   * old hub addresses redirect to it.
+   */
   plural: string;
-  /** URL segment: /blog/case-studies */
   slug: string;
-  /** One line under the hub-page H1 — also the hub's meta description lede. */
   blurb: string;
-  /** What the reader gets — the promise, used on the hub page. */
   promise: string;
   /** schema.org @type for posts of this kind. */
   schemaType: string;
@@ -83,6 +172,7 @@ export const FIELD_NOTE_TYPES: FieldNoteTypeMeta[] = [
   {
     label: "Case Study",
     badge: "Case Study",
+    section: "projects",
     plural: "Case Studies",
     slug: "case-studies",
     blurb: "Named projects with the brief, the constraint, and the measured outcome.",
@@ -96,6 +186,7 @@ export const FIELD_NOTE_TYPES: FieldNoteTypeMeta[] = [
   {
     label: "Project Profile",
     badge: "Project Profile",
+    section: "projects",
     plural: "Project Profiles",
     slug: "project-profiles",
     blurb: "Short-form records of installations across the country.",
@@ -116,6 +207,7 @@ export const FIELD_NOTE_TYPES: FieldNoteTypeMeta[] = [
   {
     label: "Guide",
     badge: "Guide",
+    section: "guides",
     plural: "Guides",
     slug: "guides",
     blurb: "How to choose, specify, and defend a surface decision.",
@@ -129,6 +221,7 @@ export const FIELD_NOTE_TYPES: FieldNoteTypeMeta[] = [
   {
     label: "White Paper",
     badge: "White Paper",
+    section: "guides",
     plural: "White Papers",
     slug: "white-papers",
     blurb: "Long-form technical documents for public works and engineering teams.",
@@ -136,21 +229,23 @@ export const FIELD_NOTE_TYPES: FieldNoteTypeMeta[] = [
       "The deep documents: engineering challenges, material systems, installation standards, and cost modelling, assembled for teams building a multi-year surface program.",
     schemaType: "TechArticle",
     tint: "var(--ink-06)",
-    border: "rgba(255,255,255,0.16)",
+    border: "var(--ink-16)",
     text: "var(--text-body)",
   },
   {
     label: "Blog",
     badge: "Article",
+    section: "articles",
     plural: "Articles",
-    // The hub keeps its address (/blog/posts): URLs never change for a label.
+    // Its hub was /blog/posts until 28 Sep 2026; that address now redirects
+    // to /blog/articles, the Articles section.
     slug: "posts",
     blurb: "Industry notes, product context, and what we are seeing on the road.",
     promise:
       "Shorter reads on where decorative pavement is heading in Canada: material context, industry shifts, and the thinking behind the systems.",
     schemaType: "BlogPosting",
     tint: "var(--ink-05)",
-    border: "rgba(255,255,255,0.12)",
+    border: "var(--ink-12)",
     text: "var(--text-muted)",
   },
 ];
@@ -165,14 +260,66 @@ export const TYPE_BY_SLUG: Record<string, FieldNoteTypeMeta> =
   Object.fromEntries(FIELD_NOTE_TYPES.map((t) => [t.slug, t]));
 
 /**
- * What to print for a post's stored type. A value the taxonomy doesn't know
- * (an old import, a typo in Studio) prints as it is, which is what happened
- * before too.
+ * The section a post's stored type is listed in. A value the taxonomy doesn't
+ * know (an old import, a typo in Studio) is listed with the articles, as an
+ * untyped post always was.
  */
-export function badgeFor(category: string | undefined | null): string {
-  if (!category) return TYPE_BY_LABEL["Blog"].badge;
-  return TYPE_BY_LABEL[category as FieldNoteType]?.badge ?? category;
+export function sectionFor(category: string | undefined | null): InsightsSection {
+  const type = category ? TYPE_BY_LABEL[category as FieldNoteType] : undefined;
+  return SECTION_BY_KEY[type?.section ?? "articles"];
 }
+
+/** What a card or a post hero prints for a post's stored type: Project, Guide or Article. */
+export function badgeFor(category: string | undefined | null): string {
+  return sectionFor(category).singular;
+}
+
+/**
+ * Posts that are still published in Studio but kept off the site, each with
+ * the post that replaced it (28 Sep 2026). next.config.ts redirects the old
+ * address to the new one, and lib/blog.ts and lib/search.ts leave the post out
+ * of every listing, related list, the sitemap and search. Sanity is not
+ * touched; once a post is unpublished there, its line here does nothing.
+ */
+export const ARCHIVED_POSTS: Record<string, string> = {
+  // "Imprinted Asphalt Crosswalks for York Transit Corridor": one paragraph
+  // saying it has been archived and pointing at the York Region case study
+  // (QA rest#9).
+  "imprinted-asphalt-york-transit": "multimodal-connectivity-york-region",
+};
+
+export const ARCHIVED_SLUGS: readonly string[] = Object.keys(ARCHIVED_POSTS);
+
+/**
+ * The /projects/<slug> pages, retired 28 Sep 2026, each with the Insights
+ * write-up of the same job. next.config.ts sends every project in
+ * lib/projects.ts to its line here (308), and app/projects/[slug]/page.tsx
+ * does the same if that rule is ever removed; a project with no line goes to
+ * /blog/projects. The pages were built from lib/projects.ts, a short list
+ * written before the posts, and had drifted from them: UBC Musqueam as
+ * StreetPrint stamped asphalt over a playground photo, the East London Link
+ * as StreetBond, and figures no source supports ("outlasted paint by 8x",
+ * "12 major arterials"). Each destination covers the same project: Toronto's
+ * is the TTC bus-priority section of the transit-lane case study.
+ */
+export const RETIRED_PROJECT_PAGES: Record<string, string> = {
+  "keeping-pedestrians-safe": "/blog/keeping-pedestrians-safe",
+  "pedestrian-safety-high-visibility": "/blog/pedestrian-safety-solutions",
+  "vancouver-crosswalk-design-2025": "/blog/vancouver-decorative-crosswalk-design",
+  "york-region-hwy7-viva": "/blog/multimodal-connectivity-york-region",
+  "toronto-priority-bus-lanes": "/blog/extending-transit-lane-lifespan",
+  "london-east-link-brt": "/blog/london-east-link-brt",
+  "kitchener-veterans-memorial": "/blog/veterans-crosswalk-kitchener",
+  "ubc-musqueam-crosswalk": "/blog/ubc-musqueam-crosswalk",
+  "vancouver-more-awesome-laneway": "/blog/laneway-project",
+};
+
+/** Where a retired /projects/<slug> page now points. */
+export const retiredProjectHref = (slug: string): string =>
+  Object.prototype.hasOwnProperty.call(RETIRED_PROJECT_PAGES, slug) ? RETIRED_PROJECT_PAGES[slug] : "/blog/projects";
+
+export const isArchivedPost = (slug: string): boolean =>
+  Object.prototype.hasOwnProperty.call(ARCHIVED_POSTS, slug);
 
 interface Entry {
   type: FieldNoteType;

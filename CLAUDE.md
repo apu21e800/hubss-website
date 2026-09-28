@@ -213,3 +213,30 @@ lost to stale .next builds this caused. Always write it as
 Never `git reset --hard` in this repo. Banner-dash drift in comment blocks is
 known-benign — prove it with `tr -d '─═━'` + `cmp`, then recover a single file
 with `git checkout origin/main -- <path>`.
+
+## Round 3 (28 Sep 2026): what later work must keep
+- Light reading under dark heroes: product, application and Insights pages keep
+  the dark photo hero, and everything under it sits on `data-surface="paper"`
+  (tokens in app/globals.css). The Lunch & Learn band and the footer close each
+  page in the dark.
+- html and body use `overflow-x: clip`, not hidden: hidden made body a scroll
+  container and nothing could stick (nav, spec card, post sidebar).
+- Lunch & Learn links carry their topic: lunchLearnHref(topic, from) in
+  lib/lunch-learn.ts, e.g. /lunch-learn?topic=StreetPrint&from=product#book.
+  The form shows the topic as a chip and the request email prints both.
+  components/sections/LunchLearnCard.tsx is the in-page card.
+- Hero photos: products from productImages, applications from applicationImages
+  (lib/featured-images.ts; imageUrl is only the last fallback), framed by
+  HERO_POSITION in lib/hero-framing.ts, keyed by the photo's /public path.
+- Insights has three sections: Projects (/blog/projects), Guides (/blog/guides),
+  Articles (/blog/articles). Stored Sanity types are unchanged; the old hub
+  URLs and /projects/<slug> redirect (lib/field-notes-taxonomy.ts).
+- The Insights mega menu reads lib/nav-insights.json, written at build from
+  Sanity by scripts/gen-nav-insights.ts.
+- Copy syncs can emit a plan instead of writing:
+  `npx tsx scripts/sync-products-to-sanity.ts --dry-run --emit=plan.json`
+  (also sync-applications). The plan is applied on Vern's machine with
+  .sanity-work/sanity_apply_v2.py (dry run, backup, ifRevisionID per document).
+- Studio shows yellow style warnings (lib/style-lint.ts): em dashes, "--",
+  the "not X, it's Y" reversal, Title Case headings. `npm run verify` fails on
+  an em dash in any built page.

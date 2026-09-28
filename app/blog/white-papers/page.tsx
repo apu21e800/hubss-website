@@ -1,18 +1,17 @@
-import type { Metadata } from "next";
-import TypeHub from "@/components/blog/TypeHub";
-import { TYPE_BY_LABEL } from "@/lib/field-notes-taxonomy";
-import { buildMetadata } from "@/lib/seo";
+import { permanentRedirect } from "next/navigation";
 
-// Static route — takes precedence over /blog/[slug], which only ever
-// generates real post slugs (see its generateStaticParams).
-const TYPE = TYPE_BY_LABEL["White Paper"];
+// Rendered on request, never at build: nothing should reach this page while
+// the next.config.ts rule stands, and a prerendered redirect would count as a
+// built page that answers 308 in scripts/verify-site.mjs (check 2).
+export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = buildMetadata({
-  title: "White Papers · Technical Guides for Public Works & Engineering",
-  description: "Long-form technical documents on resilient transit corridors, material systems, installation standards, and surface-program cost modelling in Canadian conditions.",
-  slug: "blog/white-papers",
-});
-
+/**
+ * /blog/white-papers was the White Papers hub until 28 Sep 2026, when the five Insights
+ * types became three sections (lib/field-notes-taxonomy.ts). It now lives at
+ * /blog/guides. next.config.ts answers this address with a 308 at the edge;
+ * this page is the fallback if that rule is ever removed, as
+ * app/projects/page.tsx is for /projects. Keep the two destinations the same.
+ */
 export default function Page() {
-  return <TypeHub type={TYPE} />;
+  permanentRedirect("/blog/guides");
 }

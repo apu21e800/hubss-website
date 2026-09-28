@@ -1,18 +1,17 @@
-import type { Metadata } from "next";
-import TypeHub from "@/components/blog/TypeHub";
-import { TYPE_BY_LABEL } from "@/lib/field-notes-taxonomy";
-import { buildMetadata } from "@/lib/seo";
+import { permanentRedirect } from "next/navigation";
 
-// Static route — takes precedence over /blog/[slug], which only ever
-// generates real post slugs (see its generateStaticParams).
-const TYPE = TYPE_BY_LABEL["Case Study"];
+// Rendered on request, never at build: nothing should reach this page while
+// the next.config.ts rule stands, and a prerendered redirect would count as a
+// built page that answers 308 in scripts/verify-site.mjs (check 2).
+export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Pavement Case Studies · Canadian Municipal & Commercial Projects",
-  description: "Documented decorative pavement projects across Canada: the brief, the specification, the installation, and how each surface has performed since. Written for specifiers.",
-  slug: "blog/case-studies",
-});
-
+/**
+ * /blog/case-studies was the Case Studies hub until 28 Sep 2026, when the five Insights
+ * types became three sections (lib/field-notes-taxonomy.ts). It now lives at
+ * /blog/projects. next.config.ts answers this address with a 308 at the edge;
+ * this page is the fallback if that rule is ever removed, as
+ * app/projects/page.tsx is for /projects. Keep the two destinations the same.
+ */
 export default function Page() {
-  return <TypeHub type={TYPE} />;
+  permanentRedirect("/blog/projects");
 }

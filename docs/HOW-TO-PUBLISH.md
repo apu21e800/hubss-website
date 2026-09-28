@@ -48,10 +48,10 @@ working title, a target search phrase and a brief. Set one to **Ready**.
 
 Every Tuesday morning (13:00 UTC, 9 a.m. in Toronto during summer time) the
 drafter takes the Ready idea with the highest priority and writes a draft.
-You get an email. The draft is in Insights, unpublished, with a fact check in
-**Notes for the editor**. Read the notes, check every sentence it flagged, edit
-as you would any draft, set the date and press Publish. Nothing reaches the
-site until you do.
+You get an email. The draft is in Insights, unpublished, with a fact check and
+a style check in **Notes for the editor**. Read the notes, check every sentence
+it flagged, edit as you would any draft, set the date and press Publish.
+Nothing reaches the site until you do.
 
 To have it write up a real project, put the facts in the brief: where, when,
 which system, what the client needed. It only knows what the brief and the
@@ -69,13 +69,55 @@ Idea Book tell it.
 
 The day after an article goes live, draft social posts for it appear in
 Buffer, one per channel, each with the photo and a tracked link. Nothing is
-posted until someone approves and schedules it in Buffer.
+posted until someone approves and schedules it in Buffer. The email, and
+**Social drafts** in Studio, list any line in them that still breaks the
+house style (see 8): fix it in Buffer before you approve.
 
 ## 7. Product and application pages
 
 These are the Idea Book's approved copy. Studio can edit them, but the printed
 book wins: send Vern the change and he'll put it through so the site and the
 book stay the same.
+
+## 8. Yellow warnings: the house style
+
+Studio puts a yellow warning under any words that break the house style. It
+never stops you publishing. It says what to change and quotes the words, so
+you can find them; fix them and the warning goes as you type. What each one
+means:
+
+- **Em dash** (the long dash): use a comma, a colon or a full stop instead.
+  "Colour for asphalt, applied in a day."
+- **Two hyphens, or a dash or hyphen with spaces round it**: the same fix.
+  A range of numbers is written closed up with the short dash: 10–20 years.
+- **"Not just…", "It isn't X, it's Y", "Not only… but…", "More than a…"**:
+  say what it is, once. "StreetPrint is stamped into the asphalt", not
+  "StreetPrint isn't paint. It's stamped in."
+- **Short fragments in a row** ("Fast. Durable. Proven."): write one plain
+  sentence.
+- **Filler words** (seamless, robust, elevate, leverage, solutions, ensure and
+  the rest of the list in the house style): say the plain fact instead, like
+  how long it lasts or what it does.
+- **Stock phrases** ("Whether you're…", "In today's…", "Think of it as…"): cut
+  them and start with the point.
+- **Exclamation marks and emoji**: take them out.
+- **"Learn more", "Explore" or "Discover" on a button**: say what happens,
+  like "Book a Lunch & Learn".
+- **"Catalogue"**: the printed book is the Idea Book.
+- **"Field Notes"**: the blog is called Insights.
+- **Title Case** (Every Word With A Capital): headings, buttons and labels
+  take a capital on the first word and on names only: "Where the colour goes".
+  The older articles' titles are yours to decide; the warning only points
+  them out.
+
+On a product or application page the words are the Idea Book's approved copy,
+so a warning there is a suggestion: send Vern the change (see 7). If a warning
+is simply wrong (a name it doesn't know, read as Title Case), publish anyway
+and tell Vern; he can teach it the name.
+
+The Tuesday drafts and the social drafts go through the same check before you
+see them: the drafter rewrites any sentence that breaks these rules and lists
+whatever it couldn't fix in its notes.
 
 ## If something looks wrong
 

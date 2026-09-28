@@ -9,84 +9,115 @@ export const metadata = buildMetadata({
   slug: "privacy",
 });
 
-const sections = [
+// A section body is a run of blocks: a string is a paragraph, an array of
+// strings is a bulleted list. The lists used to be typed hyphens inside one
+// pre-formatted string, which printed as "- Contact details: …" (QA, 27 Sep
+// 2026); they are real <ul> lists now.
+type Block = string | string[];
+
+// Sep 2026 review. Mailing addresses are listed because /request-idea-book
+// asks for one. The third-party services are the ones the code calls, checked
+// against it on 27 Sep 2026: Resend (app/api/contact/route.ts), Vercel hosting
+// with Vercel Web Analytics and Speed Insights, Google Analytics (both in
+// app/layout.tsx), Sanity (text and photographs, cdn.sanity.io) and CARTO (the
+// homepage map's tiles, components/sections/CanadaMap.tsx). The Crisp chat
+// component does nothing unless NEXT_PUBLIC_CRISP_WEBSITE_ID is set, and the
+// live build does not set it, so Crisp is not listed; add it here if it is
+// ever switched on. The old list's "data processed in North America" and
+// "anonymized ... IP anonymization enabled" were dropped: nothing in the repo
+// configures or documents either.
+const sections: { heading: string; blocks: Block[] }[] = [
   {
     heading: "1. Information we collect",
-    body: `When you use hubss.com or submit an inquiry, we may collect the following personal information:
-
-- Contact details: name, email address, phone number, company name, and job title
-- Project information: location, project type, and details you provide in form submissions
-- Usage data: pages visited, time on site, browser type, and referring URL (collected via cookies and analytics tools)
-- Communications: records of email correspondence or form submissions
-
-We collect this information only when you voluntarily provide it, or when it is automatically collected through your use of the site.`,
+    blocks: [
+      "When you use hubss.com or submit an inquiry, we may collect the following personal information:",
+      [
+        "Contact details: name, email address, phone number, company name, and job title",
+        "Mailing address: the address you give us when you request a printed Idea Book",
+        "Project information: location, project type, and details you provide in form submissions",
+        "Usage data: pages visited, time on site, browser type, and referring URL (collected via cookies and analytics tools)",
+        "Communications: records of email correspondence or form submissions",
+      ],
+      "We collect this information only when you voluntarily provide it, or when it is automatically collected through your use of the site.",
+    ],
   },
   {
     heading: "2. How we use your information",
-    body: `We use collected information to:
-
-- Respond to your inquiries and project requests
-- Send requested product information, spec sheets, or follow-up materials
-- Schedule and confirm Lunch & Learn sessions
-- Improve our website and service offerings
-- Send relevant updates or product announcements (only with your consent)
-- Comply with legal obligations
-
-We do not sell, rent, or trade your personal information to third parties.`,
+    blocks: [
+      "We use collected information to:",
+      [
+        "Respond to your inquiries and project requests",
+        "Send requested product information, spec sheets, or follow-up materials",
+        "Mail the printed Idea Book to the address you give us",
+        "Schedule and confirm Lunch & Learn sessions",
+        "Improve our website and service offerings",
+        "Send relevant updates or product announcements (only with your consent)",
+        "Comply with legal obligations",
+      ],
+      "We do not sell, rent, or trade your personal information to third parties.",
+    ],
   },
   {
     heading: "3. Legal basis (PIPEDA)",
-    body: `HUB Surface Systems is a Canadian company subject to the Personal Information Protection and Electronic Documents Act (PIPEDA). We collect, use, and disclose personal information with your consent, either express (you fill out a form) or implied (you provide a business card at a trade show).
-
-You may withdraw consent at any time by contacting us at the addresses below, subject to legal or contractual restrictions.`,
+    blocks: [
+      "HUB Surface Systems is a Canadian company subject to the Personal Information Protection and Electronic Documents Act (PIPEDA). We collect, use, and disclose personal information with your consent, either express (you fill out a form) or implied (you provide a business card at a trade show).",
+      "You may withdraw consent at any time by contacting us at the addresses below, subject to legal or contractual restrictions.",
+    ],
   },
   {
     heading: "4. Third-party services",
-    body: `We use the following third-party services that may process your data:
-
-- Email delivery: Resend (email transmission for form submissions)
-- Analytics: Google Analytics (anonymized usage data; IP anonymization enabled)
-- Hosting: Vercel (site hosting; data processed in North America)
-
-Each service operates under its own privacy policy. We choose partners who maintain data protection standards consistent with PIPEDA.`,
+    blocks: [
+      "We use the following third-party services that may process your data:",
+      [
+        "Email delivery: Resend (sends the forms on this site to our inbox)",
+        "Hosting: Vercel (hosts the site; Vercel Web Analytics and Speed Insights measure page visits and loading speed)",
+        "Analytics: Google Analytics (pages visited, time on site, browser type, and referring URL)",
+        "Content: Sanity (stores the site's text and serves its photographs)",
+        "Maps: CARTO (supplies the map on the homepage)",
+      ],
+      "Each service operates under its own privacy policy. We choose partners who maintain data protection standards consistent with PIPEDA.",
+    ],
   },
   {
     heading: "5. Cookies",
-    body: `hubss.com uses cookies to:
-
-- Remember your preferences and session state
-- Collect anonymized analytics data
-- Improve site performance
-
-You can disable cookies in your browser settings. Disabling cookies may affect some site functionality. We do not use cookies for advertising or cross-site tracking.`,
+    blocks: [
+      "hubss.com uses cookies to:",
+      [
+        "Remember your preferences and session state",
+        "Collect analytics data",
+        "Improve site performance",
+      ],
+      "You can disable cookies in your browser settings. Disabling cookies may affect some site functionality. We do not use cookies for advertising or cross-site tracking.",
+    ],
   },
   {
     heading: "6. Data retention",
-    body: `We retain personal information for as long as necessary to fulfill the purposes described in this policy, or as required by law. Inquiry records are typically retained for 3 years from the date of last contact. You may request deletion of your data at any time.`,
+    blocks: [
+      "We retain personal information for as long as necessary to fulfil the purposes described in this policy, or as required by law. Inquiry records are typically retained for 3 years from the date of last contact. You may request deletion of your data at any time.",
+    ],
   },
   {
     heading: "7. Your rights",
-    body: `Under PIPEDA, you have the right to:
-
-- Access the personal information we hold about you
-- Correct inaccurate or incomplete information
-- Withdraw consent to our use of your information
-- Request deletion of your personal information
-- File a complaint with the Office of the Privacy Commissioner of Canada
-
-To exercise any of these rights, contact us using the information below.`,
+    blocks: [
+      "Under PIPEDA, you have the right to:",
+      [
+        "Access the personal information we hold about you",
+        "Correct inaccurate or incomplete information",
+        "Withdraw consent to our use of your information",
+        "Request deletion of your personal information",
+        "File a complaint with the Office of the Privacy Commissioner of Canada",
+      ],
+      "To exercise any of these rights, contact us using the information below.",
+    ],
   },
   {
     heading: "8. Contact us",
-    body: `For privacy-related inquiries, contact:
-
-HUB Surface Systems
-
-East Office · Milton, Ontario
-doug.bain@hubss.com | 416-540-9287
-
-West Office · Ladysmith, British Columbia
-cleve.stordy@hubss.com | 604-309-8212`,
+    blocks: [
+      "For privacy-related inquiries, contact:",
+      "HUB Surface Systems",
+      "East office · Milton, Ontario\ndoug.bain@hubss.com · 416-540-9287",
+      "West office · Ladysmith, British Columbia\ncleve.stordy@hubss.com · 604-309-8212",
+    ],
   },
 ];
 
@@ -99,10 +130,10 @@ export default function PrivacyPage() {
           Legal
         </p>
         <h1 className="text-5xl font-bold mb-3 leading-tight" style={{ color: "var(--text-primary)" }}>
-          Privacy Policy
+          Privacy policy
         </h1>
         <p className="text-sm mb-12" style={{ color: "var(--text-muted)" }}>
-          Last updated: March 2026
+          Last updated: Sep 27, 2026
         </p>
 
         <p className="text-base leading-relaxed mb-12" style={{ color: "var(--text-muted)" }}>
@@ -117,11 +148,18 @@ export default function PrivacyPage() {
               <h2 className="text-xl font-bold mb-4" style={{ color: "var(--text-primary)" }}>
                 {section.heading}
               </h2>
-              <div
-                className="text-sm leading-relaxed space-y-3 whitespace-pre-line"
-                style={{ color: "var(--text-muted)" }}
-              >
-                {section.body}
+              <div className="text-sm leading-relaxed space-y-3" style={{ color: "var(--text-muted)" }}>
+                {section.blocks.map((block, i) =>
+                  typeof block === "string" ? (
+                    <p key={i} className="whitespace-pre-line">{block}</p>
+                  ) : (
+                    <ul key={i} className="list-disc pl-5 space-y-1.5 marker:text-[var(--text-hint)]">
+                      {block.map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                  ),
+                )}
               </div>
             </div>
           ))}

@@ -64,9 +64,10 @@ The test: read it aloud. If a person on the phone would not say it, cut it.
 - Families, the same in the menu, on /products, on the product page and in
   the book: Preformed Thermoplastics, Coatings, Stamped Asphalt, Asphalt &
   Concrete Repair.
-- Sections: Insights (the library; its pieces are articles, case studies,
-  guides, white papers, project profiles), the Idea Book ("The HUB Idea Book ·
-  Volume 5" in full), Resources (the specification library), Lunch & Learn.
+- Sections: Insights (the library, filed under Projects, Guides and Articles;
+  each piece is a project, a guide or an article), the Idea Book ("The HUB Idea
+  Book · Volume 5" in full), Resources (the specification library),
+  Lunch & Learn.
 - Places: city and province, province spelled out in prose: Milton,
   Ontario; Ladysmith, British Columbia. Abbreviate (ON, BC) only in an
   address block or a table.
@@ -112,7 +113,54 @@ CPD credit claims).
 - An eyebrow only when it adds a fact the heading doesn't (the family above a
   product name). Never the heading again in other words.
 - A descriptor under a name only where the name is opaque and the descriptor
-  earns its place. The menus carry names.
+  earns its place. A menu carries names plus, at most, one short line under
+  each name, and nothing more: in the Products menu that line is the
+  product's descriptor, taken from the Idea Book or the product's own line.
 - The approved book copy (lib/product-catalogue.ts, lib/application-catalogue.ts,
   and the Sanity fields synced from them) is Doug's. Propose edits to him;
   don't cut it.
+
+## The checks that enforce this (27 Sep 2026)
+
+The rules above that a machine can see are code, in one place:
+`lib/style-lint.ts`. Three things run them.
+
+- **Studio** warns in yellow under any field whose words break them: post
+  titles, excerpts, bodies (headings, paragraphs, photo alt text and
+  captions, table cells) and search fields; product and application eyebrows,
+  short descriptions, full descriptions, homepage blurbs and SEO fields; the
+  page hero, About, Contact and Lunch & Learn text; photo alt text and
+  captions; the brief of an Insights plan item (the drafter copies its
+  wording). A warning never blocks Publish. docs/HOW-TO-PUBLISH.md (section 8)
+  tells Doug what each one means.
+- **The AI drafters** (the Tuesday Insights draft and the social posts) lint
+  what Claude wrote, make one call asking it to rewrite only the flagged
+  sentences with every fact kept, and lint again. A rewrite that loses a
+  number, a link or a product name is thrown away. What still fails is listed
+  in the draft's "Notes for the editor", or for social copy in the email and
+  in Studio under Social drafts.
+- **`npm run verify`** fails if a built page shows an em dash: page text, alt,
+  title and aria-label attributes, the description and title meta tags (not
+  scripts or JSON-LD). `npm run check:copy` runs that scan alone, after a
+  build, with no server.
+
+What the lint flags, and what it deliberately leaves alone:
+
+| Rule | Flags | Leaves alone |
+|---|---|---|
+| Em dash | the em dash and its lookalike, the horizontal bar | nothing |
+| Dash stand-ins | "--", an en dash with a space beside it, " - " between words | 10–20, 2026–27, -10°C, list bullets, table rules, web addresses |
+| Reversal | "not just", "isn't X. It's Y", "is not a …; it is", "not only … but", "Not a X. A Y.", "more than just", "is more than a …" | "more than a decade" and other quantities, "not the same job" |
+| Fragments | three or more fragments of up to three words in a row | two |
+| Filler | the words listed under Machine tells and Words we don't use | "premium colours" (MMAX's range), "Toronto Premium Outlets", "landscape architects", a literally seamless surface, "elevated temperatures" |
+| Stock phrases | "Whether you're", "In today's", "In a world where", "Here's the thing", "dive in", "Think of it as", "worth noting" | |
+| Buttons | a label of four words or fewer that starts "Learn more", "Explore" or "Discover" | the same words inside a longer sentence |
+| Punctuation | exclamation marks, emoji (social posts on Facebook and Instagram may keep one) | |
+| Names | "the catalogue" (and "our", "HUB's", "the 2027" catalogue) for the book; "Field Notes" | "a catalogue of four patterns", "Template Catalog" |
+| Title Case (headings, titles, eyebrows, buttons) | three or more capitalised words that aren't names | product names, HUB's names, places, acronyms, street names; a single run of capitals after a lowercase word, read as a name ("at Toronto Premium Outlets") |
+
+Changing a rule: edit `lib/style-lint.ts`, add a good and a bad sample to
+`scripts/check-copy.mjs`, and run `npm run test:copy`. If Studio calls a
+heading Title Case only because of a name it doesn't know, add the name to
+`PROPER_NAMES` there. The product names in both drafters' prompts come from
+its `PRODUCT_NAMES`.

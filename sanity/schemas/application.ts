@@ -1,6 +1,6 @@
 import { defineField, defineType } from "sanity";
 import { BlockContentIcon } from "@sanity/icons";
-import { richImageField, galleryImageItem } from "./_shared";
+import { bodyStyle, copyStyle, richImageField, galleryImageItem } from "./_shared";
 
 /** Matches lib/applications.ts shape — 20+ application types */
 export default defineType({
@@ -51,7 +51,7 @@ export default defineType({
       rows: 2,
       group: "content",
       description: "1–2 sentence summary shown in application cards and the hero subheading. Keep under 160 characters.",
-      validation: (r) => r.max(200).warning("Short description should be under 200 characters for best display"),
+      validation: (r) => [r.max(200).warning("Short description should be under 200 characters for best display"), copyStyle(r)],
     }),
     defineField({
       name: "description",
@@ -59,6 +59,7 @@ export default defineType({
       type: "array",
       group: "content",
       description: "Rich text body shown on the application detail page.",
+      validation: (r) => bodyStyle(r),
       of: [{ type: "block" }],
     }),
 
@@ -105,7 +106,7 @@ export default defineType({
           type: "string",
           title: "Meta title",
           description: "Appears in browser tabs and search results. Ideal: 50–60 characters.",
-          validation: (r) => r.max(60).warning("Meta title should be under 60 characters"),
+          validation: (r) => [r.max(60).warning("Meta title should be under 60 characters"), copyStyle(r)],
         }),
         defineField({
           name: "description",
@@ -113,7 +114,7 @@ export default defineType({
           title: "Meta description",
           rows: 2,
           description: "Appears in search result snippets. Ideal: 140–160 characters.",
-          validation: (r) => r.max(160).warning("Meta description should be under 160 characters"),
+          validation: (r) => [r.max(160).warning("Meta description should be under 160 characters"), copyStyle(r)],
         }),
       ],
     }),

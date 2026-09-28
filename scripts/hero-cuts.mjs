@@ -13,7 +13,7 @@
  * they exist; the 16:10 file is the one to push to Studio with
  * `npm run photos:sync -- --only=homepage`.
  *
- * Usage:  node scripts/hero-cuts.mjs <master.png|jpg> [--focus=0.5,0.5] [--place=0.5,0.36] [--grade=photo|generated|none]
+ * Usage:  node scripts/hero-cuts.mjs <master.png|jpg> [--focus=0.5,0.5] [--place=0.5,0.36] [--grade=photo|pop|generated|none]
  * --focus is where the sign's centre sits in the master, as fractions of its
  * width and height; the default assumes the designer centred it. --place is
  * where that point should land in each cut: 0.5,0.36 puts the sign in the
@@ -52,9 +52,13 @@ const CUTS = [
 // muted", then "light it"). `photo` is for a real photograph: a small lift
 // in brightness, saturation and contrast and a little sharpening. `generated`
 // is stronger, for a master that came soft and flat out of an image tool.
-// Pick with --grade=photo|generated|none.
+// Pick with --grade=photo|pop|generated|none.
+// `pop` (27 Sep 2026, Vern: the desktop hero "needs some colour pop, seems too
+// muted") pushes the crosswalk's blues, greens and gold without touching the
+// steel sign, which is grey and barely moves under saturation.
 const GRADES = {
   photo: { brightness: 1.04, saturation: 1.1, contrast: 1.06, sharpen: 0.6 },
+  pop: { brightness: 1.05, saturation: 1.24, contrast: 1.08, sharpen: 0.6 },
   generated: { brightness: 1.0, saturation: 1.18, contrast: 1.1, sharpen: 0.8 },
   none: { brightness: 1.0, saturation: 1.0, contrast: 1.0, sharpen: 0 },
 };

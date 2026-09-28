@@ -161,8 +161,17 @@ export default function HeroSlideshow({
           letters, since 26 Sep 2026 the photograph is composed with the HUB
           sign in the upper middle of every framing. (Vertically centred, it
           put "Your Canvas." straight across the sign.) */}
+      {/* 28 Sep 2026: the block sat too low, the buttons about 55 px off the
+          foot of the photo at 1264 x 906 (Vern: "headings are sitting a bit
+          low ... add padding under the buttons"). From sm up the room under
+          the buttons is now about 11% of the screen's height (about 100 px
+          there), which lifts the block while the eyebrow stays below the
+          sign. On a short laptop screen (1366 x 768) that lift pushed "The
+          World Is" into the sign, so under 820 px tall the room stays small
+          and the headline scales with the height as well as the width
+          (.hero-copy in app/globals.css). */}
       <div
-        className="relative -mt-8 pb-10 pt-0 sm:absolute sm:inset-0 sm:mt-0 sm:flex sm:items-end sm:pt-16 sm:pb-[clamp(1.75rem,6vh,5rem)]"
+        className="hero-copy relative -mt-8 pb-10 pt-0 sm:absolute sm:inset-0 sm:mt-0 sm:flex sm:items-end sm:pt-16"
         style={{ zIndex: 10 }}
       >
         <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
@@ -187,7 +196,7 @@ export default function HeroSlideshow({
             <h1
               className="font-black mb-4"
               style={{
-                fontSize: "clamp(2.5rem, 7vw, 5.75rem)",
+                fontSize: "clamp(2.5rem, min(7vw, 11vh), 5.75rem)",
                 lineHeight: 0.95,
                 letterSpacing: "-0.04em",
                 color: "white",

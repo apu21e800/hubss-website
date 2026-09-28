@@ -118,7 +118,7 @@ export default function DocumentDownloads({ slug }: { slug: string }) {
         />
       )}
 
-      <div className="mt-14 -mx-4 sm:mx-0">
+      <div id="spec-sheets" className="mt-14 scroll-mt-24">
         <div
           className="rounded-2xl overflow-hidden"
           style={{

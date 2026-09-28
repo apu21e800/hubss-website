@@ -6,6 +6,7 @@ import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
 import DocumentDownloads from "@/components/sections/DocumentDownloads";
+import { getDocsForProduct } from "@/lib/documents";
 import ColourSystem from "@/components/sections/ColourSystem";
 import PavingPatterns from "@/components/sections/PavingPatterns";
 import PatternGalleryCTA from "@/components/sections/PatternGalleryCTA";
@@ -81,6 +82,10 @@ export default async function ProductPage({ params }: Props) {
   const catalogue = catalogueFor(slug);
   // FAQ content, where the product's own documents provide it.
   const faqs = faqsFor(slug);
+  // Fast Patch has no documents yet: its "Spec sheets" button led to an empty
+  // band (QA, 28 Sep 2026). The button and the section show only when there is
+  // something to open.
+  const hasDocs = getDocsForProduct(product.slug).length > 0;
 
   // Featured image from lib/featured-images.ts (audited, correct per product)
   const featuredImg = productImages[slug] ? resolveImage(productImages[slug]) : null;
@@ -379,11 +384,13 @@ export default async function ProductPage({ params }: Props) {
               style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "var(--on-accent)", boxShadow: "0 4px 16px rgba(249,115,22,0.28)", minHeight: "44px" }}>
               Book a Lunch &amp; Learn
             </Link>
-            <a href="#documents"
-              className="px-5 rounded-lg text-sm font-semibold transition-colors inline-flex items-center hover:bg-[var(--ink-04)]"
-              style={{ background: "transparent", color: "var(--text-primary)", border: "1px solid var(--ink-15)", minHeight: "44px" }}>
-              Spec sheets
-            </a>
+            {hasDocs && (
+              <a href="#spec-sheets"
+                className="px-5 rounded-lg text-sm font-semibold transition-colors inline-flex items-center hover:bg-[var(--ink-04)]"
+                style={{ background: "transparent", color: "var(--text-primary)", border: "1px solid var(--ink-15)", minHeight: "44px" }}>
+                Spec sheets
+              </a>
+            )}
           </div>
         </div>
 
@@ -476,6 +483,7 @@ export default async function ProductPage({ params }: Props) {
         {/* The questions people search, answered in the client's own words,
             then the documents: a visitor who scrolled this far is evaluating,
             and evaluation is made of questions and data sheets. */}
+        {(faqs || hasDocs || slug === "streetbondsr") && (
         <section id="documents" className="scroll-mt-24" style={{ background: "var(--bg-primary)", borderTop: "1px solid var(--border-color)" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-2 pb-14 sm:pb-20">
             {faqs && <ProductFaq productName={product.name} faqs={faqs} />}
@@ -515,6 +523,7 @@ export default async function ProductPage({ params }: Props) {
             )}
           </div>
         </section>
+        )}
 
         {/* Applications this product is used for */}
         {relatedAppData.length > 0 && (

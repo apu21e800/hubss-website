@@ -53,7 +53,7 @@ export default async function ResourcesPage() {
 
   return (
     <main
-      className="min-h-screen relative overflow-hidden"
+      className="min-h-screen relative overflow-clip"
       data-surface="paper"
       style={{ background: "var(--bg-primary)" }}
     >

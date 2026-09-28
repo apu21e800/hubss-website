@@ -107,10 +107,6 @@ export default function Footer() {
               <span
                 className="inline-flex items-center gap-1.5"
                 aria-label="Canadian"
-                style={{
-                  paddingRight: 10,
-                  borderRight: "1px solid var(--ink-10)",
-                }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -127,7 +123,15 @@ export default function Footer() {
                   Canadian
                 </span>
               </span>
-              <span>Owned and operated · Coast to coast · Since 1999</span>
+              {/* No divider after "Canadian", and each phrase kept whole: in the
+                  narrow column the line wrapped and left a bar or a dot
+                  hanging at the end of a line (QA, 28 Sep 2026). A wrap now
+                  falls before a dot, never after one. */}
+              <span>
+                <span className="whitespace-nowrap">Owned and operated</span>{" "}
+                <span className="whitespace-nowrap">· Coast to coast</span>{" "}
+                <span className="whitespace-nowrap">· Since 1999</span>
+              </span>
             </p>
 
             <SocialLinks className="mt-1" />

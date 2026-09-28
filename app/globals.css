@@ -1132,3 +1132,15 @@ html {
     height: 44px !important;
   }
 }
+
+/* HOMEPAGE HERO COPY (components/sections/HeroSlideshow.tsx), 28 Sep 2026.
+   From sm up the headline block sits on the photo, anchored low; this is the
+   room under its buttons. Unlayered, so it wins over the pb-10 utility the
+   phone layout uses. A short screen keeps the old, smaller room, or the lift
+   puts the headline into the HUB sign. */
+@media (min-width: 640px) {
+  .hero-copy { padding-bottom: clamp(3.5rem, 11vh, 8rem); }
+}
+@media (min-width: 640px) and (max-height: 820px) {
+  .hero-copy { padding-bottom: clamp(1.75rem, 5vh, 3rem); }
+}

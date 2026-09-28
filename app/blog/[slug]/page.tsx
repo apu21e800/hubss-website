@@ -411,36 +411,12 @@ export default async function BlogPostPage({ params }: Props) {
 
         {/* Sidebar */}
         <aside className="hidden lg:block">
-          {/* Author card: scrolls away, so the sticky part below has the room. */}
-          <div style={{
-            background: "var(--bg-card)",
-            border: "1px solid var(--border-color)",
-            borderRadius: 12,
-            padding: "18px 20px",
-            marginBottom: 24,
-          }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10 }}>
-              <div style={{
-                width: 40, height: 40, borderRadius: "50%",
-                background: "linear-gradient(135deg, #F97316, #EAB308)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: 16, fontWeight: 900, color: "#fff",
-                flexShrink: 0,
-              }} aria-hidden="true">H</div>
-              <div>
-                <p style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)", margin: 0, lineHeight: 1.4 }}>HUB Surface Systems</p>
-                <p style={{ fontSize: 11.5, color: "var(--text-secondary)", margin: 0, lineHeight: 1.4 }}>Insights</p>
-              </div>
-            </div>
-            {/* Facts the site already prints (CLAUDE.md). The line it replaces
-                called HUB "Canada's leader in … pavement solutions": a ranking
-                with no source, and "solutions" is on docs/STYLE.md's list. */}
-            <p style={{ fontSize: 12.5, color: "var(--text-secondary)", lineHeight: 1.6, margin: 0 }}>
-              Canadian-owned since 1999, with offices in Milton, Ontario and Ladysmith, British Columbia.
-            </p>
-          </div>
+          {/* The "HUB Surface Systems · Insights" author card that sat here
+              went on 28 Sep 2026 (Vern: "not sure we need this section on the
+              blog posts"). The publisher is still in the post's schema.org
+              markup; on the page the byline under the title says who wrote it.
 
-          {/* Contents and the Lunch & Learn stay in view while the article
+              Contents and the Lunch & Learn stay in view while the article
               scrolls. The card replaced the Share block (X, Facebook,
               Instagram) on 28 Sep 2026: Vern, "the social callout is not that
               great here". It is held to the bottom of the sticky column and

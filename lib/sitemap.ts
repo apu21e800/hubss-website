@@ -51,17 +51,9 @@ export function buildSitemap(photos?: PhotoSources, posts: PostMeta[] = []): Met
     },
     { url: `${BASE_URL}/products`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE_URL}/applications`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
-    // /applications/public-art — sub-route not covered by the [slug] map below
-    {
-      url: `${BASE_URL}/applications/public-art`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-      images: [
-        abs("/images/blog/best-crosswalks-canada/featured.jpg"),
-        abs("/images/blog/ubc-musqueam-crosswalk/featured.jpg"),
-      ],
-    },
+    // /applications/public-art is in lib/applications.ts since round 3, so the
+    // application routes below list it with its own photos. Its hand-made entry
+    // here listed it twice (QA, 28 Sep 2026).
     { url: `${BASE_URL}/gallery`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
     { url: `${BASE_URL}/patterns`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE_URL}/blog`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },

@@ -237,6 +237,14 @@ with `git checkout origin/main -- <path>`.
   `npx tsx scripts/sync-products-to-sanity.ts --dry-run --emit=plan.json`
   (also sync-applications). The plan is applied on Vern's machine with
   .sanity-work/sanity_apply_v2.py (dry run, backup, ifRevisionID per document).
+- The favicon is the HUB wheel on a white disc (app/icon.png, app/favicon.ico,
+  app/apple-icon.png), made from
+  public/images/assets/logos/hubss-logos/HUB-wheel_official-orange-transparent.png.
+  Never knock the white out: the white is the H's and the ring round the wheel,
+  and without it the mark reads as orange blobs on a dark tab (Vern, 28 Sep).
+- Homepage hero: the room under the buttons is `.hero-copy` in app/globals.css
+  (about 11% of the screen's height; smaller under 820 px tall, where the lift
+  would put the headline into the HUB sign).
 - Studio shows yellow style warnings (lib/style-lint.ts): em dashes, "--",
   the "not X, it's Y" reversal, Title Case headings. `npm run verify` fails on
   an em dash in any built page.

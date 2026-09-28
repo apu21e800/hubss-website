@@ -38,18 +38,18 @@ export const HERO_POSITION: Record<string, string> = {
   "/images/products/streetprint/streetprint-25.jpg": "60% 75%", // Parking Lots: the red border and stalls
   "/images/applications/parks-paths/parks-paths-09.jpg": "40% 40%", // path, arrows and the water
   "/images/applications/playgrounds/playgrounds-01.jpg": "50% 60%",
-  "/images/applications/community-branding/community-branding-17.jpg": "40% 62%", // the Geary Works lettering and gears
-  "/images/applications/residential-driveways/residential-driveways-21.jpg": "50% 55%", // Private Driveways: drive and garage
+  "/images/applications/community-branding/community-branding-17.jpg": "40% 52%", // the Geary Works lettering whole (was 62%: "GEARY WO…", 28 Sep QA)
+  "/images/applications/residential-driveways/residential-driveways-21.jpg": "50% 32%", // Private Driveways: drive and the whole garage (28 Sep QA)
   "/images/products/streetbond/streetbond-67.png": "50% 60%", // Sport Courts
-  "/images/applications/splash-pads/splash-pads-01.jpg": "50% 55%",
-  "/images/applications/commercial-spaces/commercial-spaces-55.jpg": "60% 55%", // Public Spaces: promenade and planters
-  "/images/applications/commercial-spaces/commercial-spaces-75.jpg": "50% 60%", // the crossing fills the frame
-  "/images/applications/townhomes/townhomes-16.jpg": "50% 45%", // townhouses above, the lane below
+  "/images/applications/splash-pads/splash-pads-01.jpg": "50% 35%", // the umbrellas stay in (28 Sep QA)
+  "/images/applications/commercial-spaces/commercial-spaces-55.jpg": "60% 40%", // Public Spaces: promenade, planters and the bird sculpture (28 Sep QA)
+  "/images/applications/commercial-spaces/commercial-spaces-75.jpg": "50% 42%", // the crossing, and the Toronto Premium Outlets sign whole (28 Sep QA)
+  "/images/applications/townhomes/townhomes-16.jpg": "50% 25%", // townhouses with their rooflines, the lane below (28 Sep QA)
   "/images/applications/residential-driveways/residential-driveways-18.jpg": "50% 55%", // lit pillars and the medallion
   "/images/applications/crosswalks/crosswalks-03.jpg": "40% 60%", // Pedestrian Safety: crosswalk and bike crossing
   "/images/applications/traffic-calming/traffic-calming-58.jpg": "50% 62%", // the roundabout and its chevron sign
   "/images/applications/airports/airports-08.jpg": "60% 0%", // plane and trucks; the marking shows on a phone
   "/images/applications/leed-urban-heat-island/leed-urban-heat-island-01.jpg": "50% 50%",
-  "/images/applications/public-art/public-art-01.jpg": "50% 70%", // the artwork, street behind
+  "/images/applications/public-art/public-art-01.jpg": "50% 88%", // the artwork; at 70% a storefront's "CANNABIS" sign read in the top left at 1440 (28 Sep QA)
   "/images/applications/bike-lanes/bike-lanes-12.jpg": "85% 62%", // Regulatory Markings: ONLY BUS legend and bike lane
 };

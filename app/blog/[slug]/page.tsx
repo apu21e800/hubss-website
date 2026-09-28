@@ -307,7 +307,7 @@ export default async function BlogPostPage({ params }: Props) {
                 width={heroW}
                 height={heroH}
                 fetchPriority="high"
-                className="block h-auto w-full"
+                className="block h-auto w-full hero-pop"
                 style={{ borderRadius: 10, border: "1px solid rgba(255,255,255,0.16)", boxShadow: "0 24px 60px rgba(0,0,0,0.5)" }}
               />
             </figure>
@@ -327,7 +327,7 @@ export default async function BlogPostPage({ params }: Props) {
                 src={hero}
                 alt={post.featuredImageAlt ?? post.title}
                 fill
-                className="object-cover"
+                className="object-cover hero-pop"
                 style={focus ? { objectPosition: focus } : undefined}
                 priority
                 sizes="100vw"
@@ -337,12 +337,15 @@ export default async function BlogPostPage({ params }: Props) {
             <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-card) 100%)" }} />
           )}
 
-          {/* Multi-layer gradient for editorial depth */}
+          {/* Dark only where the title sits: the foot of the hero and the
+              left edge. The old scrim was 75% black a third of the way up
+              and 30% at the middle, which greyed the photograph (Doug, 28 Sep
+              2026: colour, but not overkill). */}
           <div className="absolute inset-0" style={{
-            background: "linear-gradient(to top, rgba(8,13,22,1) 0%, rgba(8,13,22,0.75) 35%, rgba(8,13,22,0.3) 65%, rgba(8,13,22,0.15) 100%)"
+            background: "linear-gradient(to top, rgba(8,13,22,0.94) 0%, rgba(8,13,22,0.62) 28%, rgba(8,13,22,0.16) 58%, rgba(8,13,22,0.06) 100%)"
           }} />
           <div className="absolute inset-0" style={{
-            background: "linear-gradient(90deg, rgba(8,13,22,0.6) 0%, transparent 60%)"
+            background: "linear-gradient(90deg, rgba(8,13,22,0.5) 0%, transparent 58%)"
           }} />
 
           {/* Label, title and meta, anchored to the bottom */}

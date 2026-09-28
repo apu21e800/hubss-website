@@ -122,7 +122,7 @@ export default async function AboutPage() {
           src={aboutHeroPhoto.src}
           alt={aboutHeroPhoto.alt}
           fill
-          className="object-cover object-center"
+          className="object-cover object-center hero-pop"
           priority
           sizes="100vw"
         />
@@ -131,7 +131,9 @@ export default async function AboutPage() {
             and on the left where the type sits, so the picture shows.
             QA, 27 Sep 2026: the subtext fell under 4.5:1 over the paler
             pavers, so the lower half now darkens sooner; the top is as it was. */}
-        <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(180deg, rgba(8,13,22,0.34) 0%, rgba(8,13,22,0.55) 40%, rgba(8,13,22,0.92) 100%)" }} />
+        {/* 28 Sep 2026: the top third lighter again, so the photograph's
+            colour shows above the type; the foot keeps the QA's darkness. */}
+        <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(180deg, rgba(8,13,22,0.16) 0%, rgba(8,13,22,0.40) 42%, rgba(8,13,22,0.90) 100%)" }} />
         <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(92deg, rgba(8,13,22,0.52) 0%, rgba(8,13,22,0.22) 45%, transparent 70%)" }} />
         <div
           className="absolute bottom-0 left-0 right-0 h-[2px] pointer-events-none z-10"

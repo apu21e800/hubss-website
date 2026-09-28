@@ -310,6 +310,21 @@
 }
 [data-surface="paper"] { background-color: var(--bg-primary); }
 
+/* ─── HERO COLOUR ────────────────────────────────────────────────────────
+   Doug, 28 Sep 2026 (through Vern): "architects like colour", but not
+   overkill. One setting for every photo hero on the site (products,
+   applications, Insights posts, About): a lift in saturation and contrast
+   and a touch of brightness, small enough that concrete stays grey, sky
+   stays sky and skin stays skin. Change it here and every hero follows.
+   The homepage hero file is graded when it is cut (scripts/hero-cuts.mjs
+   --grade=pop), so it gets the lighter setting. */
+:root {
+  --hero-pop: saturate(1.16) contrast(1.06) brightness(1.03);
+  --hero-pop-lite: saturate(1.06) contrast(1.03);
+}
+.hero-pop { filter: var(--hero-pop); }
+.hero-pop-lite { filter: var(--hero-pop-lite); }
+
 /* The StreetPrint template sheets are white line-art on alpha, drawn for the
    dark ground. On paper the same drawing prints in charcoal. The token follows
    whichever surface the sheet sits on, so a sheet inside a dark band on a

@@ -79,6 +79,9 @@ export default function HeroSlideshow({
           alt={heroImageAlt || heroAlt(src)}
           // @ts-ignore fetchPriority is valid HTML but TS types lag
           fetchPriority="high"
+          // The file is graded when it is cut; this adds the site's lighter
+          // hero colour on top (app/globals.css, HERO COLOUR).
+          className="hero-pop-lite"
           style={{
             position: "absolute",
             inset: 0,
@@ -92,7 +95,13 @@ export default function HeroSlideshow({
             // a wide window the 2:1 cut through the <picture> above. (The
             // earlier single landscape file needed 65% across and 0% down to
             // keep the sign whole; that photograph is gone.)
-            objectPosition: "50% 50%",
+            // 28 Sep 2026: across, 69% keeps the whole sign in a portrait
+            // tablet's frame (at 50% the B was cut off at 768 x 1024); it
+            // changes nothing on a landscape screen, where the photo is as
+            // wide as the frame. Down, 42% gives the sign a little more air
+            // under the nav where the frame is wider than the photo (16:10
+            // photo in a 1.8:1 frame at 1440 x 900).
+            objectPosition: "69% 42%",
             zIndex: 1,
           }}
         />
@@ -129,7 +138,9 @@ export default function HeroSlideshow({
         className="absolute inset-0 pointer-events-none hidden sm:block"
         style={{
           background:
-            "radial-gradient(ellipse 72% 88% at 0% 100%, rgba(13,17,23,0.80) 0%, rgba(13,17,23,0.60) 38%, rgba(13,17,23,0.24) 72%, rgba(13,17,23,0) 100%)",
+            // Tall enough to sit behind the eyebrow as well as the headline
+            // (the eyebrow was orange on bare pavement at 1366 and 1440).
+            "radial-gradient(ellipse 72% 100% at 0% 100%, rgba(13,17,23,0.80) 0%, rgba(13,17,23,0.58) 40%, rgba(13,17,23,0.22) 74%, rgba(13,17,23,0) 100%)",
           zIndex: 2,
         }}
       />
@@ -164,7 +175,9 @@ export default function HeroSlideshow({
               className="text-[11px] tracking-[0.16em] sm:text-sm sm:tracking-[0.22em] font-bold uppercase mb-3"
               style={{
                 color: "var(--accent-soft-text)",
-                textShadow: "0 1px 12px rgba(0,0,0,0.75)",
+                // A tight shadow for the letter edges, a soft one for the
+                // ground: it reads over sunlit pavement as well as shadow.
+                textShadow: "0 1px 2px rgba(0,0,0,0.65), 0 1px 12px rgba(0,0,0,0.75)",
               }}
             >
               {eyebrow}
@@ -189,7 +202,9 @@ export default function HeroSlideshow({
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
-                  filter: "drop-shadow(0 0 24px rgba(249,115,22,0.18))",
+                  // A dark shadow under the glow: "Canvas." is yellow over the
+                  // crosswalk's gold and green, and lost its edges there.
+                  filter: "drop-shadow(0 2px 10px rgba(0,0,0,0.45)) drop-shadow(0 0 24px rgba(249,115,22,0.18))",
                 }}
               >
                 {subheading}

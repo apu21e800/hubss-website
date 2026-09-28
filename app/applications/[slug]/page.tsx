@@ -165,8 +165,8 @@ export default async function ApplicationPage({ params }: Props) {
           src={hero.src}
           alt={hero.alt}
           fill
-          className="object-cover"
-          style={{ objectPosition: heroPosition, filter: "saturate(1.12) contrast(1.04) brightness(1.05)" }}
+          className="object-cover hero-pop"
+          style={{ objectPosition: heroPosition }}
           priority
           sizes="100vw"
         />

@@ -228,7 +228,7 @@ function MoreLink() {
  * bottom of /contact as much as anywhere. Only the duplicate input panel goes,
  * replaced by the single button it was competing with.
  */
-function Boardroom({ hideForm = false }: { hideForm?: boolean }) {
+function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boolean; titleAs?: "h1" | "h2" }) {
   const f = useLunchLearnForm(true);
   return (
     <section
@@ -288,12 +288,16 @@ function Boardroom({ hideForm = false }: { hideForm?: boolean }) {
                   </div>
                 </div>
 
-                <h2 className="font-black mb-4" style={{ fontSize: "clamp(2rem, 4vw, 3.1rem)", lineHeight: 1.0, letterSpacing: "-0.03em", color: "var(--text-primary)" }}>
+                {/* The page title on /lunch-learn (an h1 there, since 28 Sep
+                    2026: the page had none); a section heading everywhere
+                    else. h1 and h2 share one rule in app/globals.css, so it
+                    looks the same either way. */}
+                <Title className="font-black mb-4" style={{ fontSize: "clamp(2rem, 4vw, 3.1rem)", lineHeight: 1.0, letterSpacing: "-0.03em", color: "var(--text-primary)" }}>
                   Specify with confidence.{" "}
                   <span style={{ background: "linear-gradient(92deg, #F97316 0%, #EAB308 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
                     Lunch is on us.
                   </span>
-                </h2>
+                </Title>
                 <p className="text-[15px] leading-relaxed mb-8 max-w-xl" style={{ color: "var(--ink-70)" }}>
                   A working session for engineers, architects, and municipal teams: real Canadian
                   case studies, spec language, and samples on the table.
@@ -735,9 +739,10 @@ export default function LunchLearnV2({
   hideForm = false,
   topic,
   from,
-}: { variant?: LunchLearnVariant; hideForm?: boolean; topic?: string; from?: string }) {
+  titleAs,
+}: { variant?: LunchLearnVariant; hideForm?: boolean; topic?: string; from?: string; titleAs?: "h1" | "h2" }) {
   if (variant === "band") return <Band topic={topic} from={from} />;
   if (variant === "ticket") return <Ticket />;
   if (variant === "proof") return <Proof />;
-  return <Boardroom hideForm={hideForm} />;
+  return <Boardroom hideForm={hideForm} titleAs={titleAs} />;
 }

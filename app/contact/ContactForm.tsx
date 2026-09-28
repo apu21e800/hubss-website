@@ -187,10 +187,13 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
                     value={form.projectType}
                     onChange={(e) => setForm({ ...form, projectType: e.target.value })}
                     className="w-full px-4 py-3 rounded-lg text-base outline-none focus:ring-1 focus:ring-orange-500 min-h-[48px]"
-                    style={{ background: "var(--bg-primary)", border: "1px solid var(--border-subtle)", color: "var(--text-primary)" }}
+                    // Empty, it reads in the placeholder grey of the fields
+                    // above (Chrome's: the text colour at half strength), not
+                    // in white like a chosen value (QA, 28 Sep 2026).
+                    style={{ background: "var(--bg-primary)", border: "1px solid var(--border-subtle)", color: form.projectType ? "var(--text-primary)" : "color-mix(in srgb, var(--text-primary) 50%, transparent)" }}
                   >
                     <option value="">Select project type...</option>
-                    {projectTypes.map((t) => <option key={t} value={t}>{t}</option>)}
+                    {projectTypes.map((t) => <option key={t} value={t} style={{ color: "var(--text-primary)" }}>{t}</option>)}
                   </select>
                 </div>
                 <div>

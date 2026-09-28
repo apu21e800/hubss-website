@@ -147,7 +147,8 @@ export default async function LunchLearnPage() {
           #book stays live as an anchor — plenty of links across the site point
           at it — and now lands on the form at the top instead of the bottom. */}
       <div id="book">
-        <LunchLearn />
+        {/* The card's heading is this page's h1 (QA, 28 Sep 2026: none). */}
+        <LunchLearn titleAs="h1" />
       </div>
 
       <LunchLearnFunnel

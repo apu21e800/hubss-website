@@ -109,9 +109,23 @@ const APPLICATION_GROUPS = [
 // Sanity can't be reached). Photos are Sanity CDN URLs already sized for the
 // menu. It replaces the hand-picked FEATURED_POSTS (lib/nav-featured-posts.mjs),
 // whose titles and types had drifted from the posts they named.
+// Since 28 Sep 2026 each post also carries its excerpt (the cover story's
+// deck) and its read time as the post page prints it, and the file carries
+// the three sections with their one line (lib/field-notes-taxonomy.ts) and
+// the number of posts each lists. Optional here so a copy written before
+// that still renders.
 interface NavImage { src: string; srcSet: string }
-interface NavPost { slug: string; title: string; type: string; publishedAt: string; date: string; thumb: NavImage }
-interface NavInsights { cover: (NavPost & { image: NavImage }) | null; latest: NavPost[] }
+interface NavPost {
+  slug: string; title: string; type: string; publishedAt: string; date: string;
+  excerpt?: string; readTime?: string; thumb: NavImage;
+}
+interface NavSection { key: string; label: string; href: string; blurb: string; count: number }
+interface NavInsights {
+  cover: (NavPost & { image: NavImage }) | null;
+  latest: NavPost[];
+  sections?: NavSection[];
+  total?: number;
+}
 const INSIGHTS = navInsights as NavInsights;
 
 // Insights' three sections under their new names (28 Sep 2026). A post's
@@ -129,6 +143,11 @@ const INSIGHT_SECTIONS = [
   { label: "Guides", href: "/blog/guides" },
   { label: "Articles", href: "/blog/articles" },
 ];
+// The sections as the build wrote them, with their lines and counts; the
+// bare names above when the file has none (no line, no count is printed).
+const NAV_SECTIONS: NavSection[] = INSIGHTS.sections?.length
+  ? INSIGHTS.sections
+  : INSIGHT_SECTIONS.map((s) => ({ key: s.href, label: s.label, href: s.href, blurb: "", count: 0 }));
 
 // The Idea Book, as a publication in the Insights panel and the drawer: its
 // cover, its name, one line, a link to the reader. It sits there as the thing
@@ -205,8 +224,35 @@ function RuledTile({ line, compact = false }: { line?: string; compact?: boolean
   );
 }
 
+// The drawer's small row picture for a family with no panel photo. Asphalt &
+// Concrete Repair (28 Sep 2026: on the phone the striped tile read as a
+// missing picture) shows AggreFill's product photo, aggrefill-02.jpg:
+// the product's own hero on its page (lib/products.ts), with no supplier
+// packaging and no third-party credit in the file, unlike
+// fastpatch-repaired.jpg. At 96 x 48 its 476px source is plenty; the 2:1
+// panel column on desktop is not, so the Products menu keeps the ruled tile.
+// It is the "row" size the drawer already bakes for every product
+// (lib/chrome-images.mjs), so no new file is made.
+const DRAWER_PHOTOS: Record<string, string> = {
+  "Asphalt & Concrete Repair": "/images/products/aggrefill/aggrefill-02.jpg",
+};
+
 function GroupPicture({ label, compact = false }: { label: string; compact?: boolean }) {
   const photo = (CHROME_PANELS as Record<string, { src: string } | undefined>)[label];
+  if (!photo && compact && DRAWER_PHOTOS[label]) {
+    return (
+      <ChromeImg
+        family="row"
+        src={DRAWER_PHOTOS[label]}
+        alt=""
+        sizes="96px"
+        width={96}
+        height={48}
+        className="h-12 w-24 flex-shrink-0 rounded-lg object-cover"
+        style={{ border: "1px solid var(--ink-10)" }}
+      />
+    );
+  }
   if (!photo) return <RuledTile line={TILE_LINES[label]} compact={compact} />;
   return compact ? (
     <ChromeImg
@@ -407,136 +453,242 @@ function InsightImg({ image, sizes, className, style }: { image: NavImage; sizes
   return <img src={image.src} srcSet={image.srcSet} sizes={sizes} alt="" loading="lazy" decoding="async" className={className} style={style} />;
 }
 
-// ── Insights panel: the editorial one ─────────────────────────────────
-// Products and Applications are directories; Insights reads like the front
-// page of a magazine: a masthead with its sections, a cover story, the latest
-// pieces, and the Idea Book on the shelf beside them as the publication it
-// is. The same letterspaced labels, hairlines and footer as its siblings keep
-// it in the family. Every word is on a photo-free ground: titles sit under
-// their pictures, never on them.
+// ── Insights panel: the section front ─────────────────────────────────
+// Products and Applications are directories; Insights is laid out like the
+// section front of a magazine (Vern, 28 Sep 2026: "needs to look more pro
+// editorial"). A masthead; the cover story large, with its kicker (section,
+// date, read time), headline and deck; the latest pieces as a ruled list;
+// the three sections as big type with their line and their count; the Idea
+// Book on the shelf as the printed publication it is; and one quiet band for
+// "All Insights" and Lunch & Learn. Column rules and hairlines instead of
+// cards, one photograph, orange only where it means something (the cover's
+// section, a hover). Every word sits on a photo-free ground, and every title,
+// date, count and line comes from Sanity or the taxonomy via
+// lib/nav-insights.json.
+//
+// It is taller than its siblings, about two thirds of the screen, and the
+// page behind it is dimmed and softened further (the scrim below), so
+// nothing on the page competes with it. Opening, closing, hover intent and
+// the keyboard are the shared ones in Nav().
+const HAIRLINE = "1px solid var(--ink-10)";
+const RULE = "1px solid var(--ink-16)";
+
+// The small letterspaced label a column opens with, over its hairline.
+function FrontLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <div
+      className="pb-2.5 text-[10.5px] font-bold uppercase tracking-[0.22em]"
+      style={{ color: "var(--ink-50)", borderBottom: RULE }}
+    >
+      {children}
+    </div>
+  );
+}
+
+// "Project · Sep 8, 2026 · 3 min read": the section in capitals, the rest
+// as it reads.
+function Kicker({ post, accent = false, className = "" }: { post: NavPost; accent?: boolean; className?: string }) {
+  const dot = <span aria-hidden="true" className="mx-2" style={{ color: "var(--ink-30)" }}>·</span>;
+  return (
+    <span className={`flex flex-wrap items-baseline text-[12px] leading-none ${className}`} style={{ color: "var(--ink-50)" }}>
+      <span className="text-[10.5px] font-bold uppercase tracking-[0.2em]" style={{ color: accent ? ACCENT : "var(--ink-70)" }}>
+        {kindOf(post.type)}
+      </span>
+      {dot}
+      <span>{post.date}</span>
+      {post.readTime && (
+        <>
+          {dot}
+          <span>{post.readTime}</span>
+        </>
+      )}
+    </span>
+  );
+}
+
+// Headline links underline on hover, in the brand orange, the way a
+// newspaper's do; colour alone was the widget's convention.
+const HEADLINE_HOVER =
+  "decoration-[rgba(249,115,22,0.7)] decoration-2 underline-offset-[5px] group-hover:underline group-focus-visible:underline";
+
 function InsightsMegaMenu() {
   const { cover, latest } = INSIGHTS;
-  const book = showIdeaBook();
+  const book = showIdeaBook() && ideaBookCover !== null;
+  const total = INSIGHTS.total ?? 0;
   return (
-    <MegaShell>
-      {/* Masthead: the name, the library's own lede (from /blog), and its
-          sections. */}
-      <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-4 pb-5" style={{ borderBottom: "1px solid var(--ink-08)" }}>
-        <div className="flex flex-wrap items-baseline gap-x-5 gap-y-1">
-          <div className="font-display text-[30px] font-black leading-none" style={{ color: "var(--text-primary)", letterSpacing: "-0.03em" }}>
-            Insights
-          </div>
-          <div className="text-[14px]" style={{ color: "var(--ink-60)" }}>
-            Decorative pavement in Canada, documented.
-          </div>
-        </div>
-        <div role="group" aria-label="Insights by type" className="flex items-center gap-1.5">
-          <span className="mr-2 text-[10.5px] font-bold tracking-[0.18em] uppercase" style={{ color: "var(--ink-45)" }}>Browse by type</span>
-          {INSIGHT_SECTIONS.map((s) => (
-            <Link
-              key={s.href}
-              href={s.href}
-              data-tap="44"
-              className="inline-flex min-h-[36px] items-center rounded-full px-3.5 text-[13px] font-semibold transition-colors hover:border-[rgba(249,115,22,0.55)] hover:text-[var(--accent-text)]"
-              style={{ color: "var(--ink-80)", border: "1px solid var(--ink-15)" }}
+    <div className="max-h-[calc(100vh-72px)] overflow-y-auto overscroll-contain">
+      {/* About two thirds of the screen: 612px of a 900px one, 560px of 800. */}
+      <div className="flex flex-col" style={{ minHeight: "clamp(560px, 68vh, 720px)" }}>
+        <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-4 sm:px-6 lg:px-8">
+          {/* Masthead: the name and the library's own lede (from /blog). */}
+          <div className="flex items-baseline gap-5 pt-6 pb-4 [@media(max-height:860px)]:pt-5" style={{ borderBottom: RULE }}>
+            <div
+              className="font-display text-[34px] font-black leading-none"
+              style={{ color: "var(--text-primary)", letterSpacing: "-0.035em" }}
             >
-              {s.label}
-            </Link>
-          ))}
-        </div>
-      </div>
-
-      <div className="grid grid-cols-12 gap-x-8 xl:gap-x-10 pt-6">
-        {/* Cover story */}
-        {cover && (
-          <div className="col-span-5">
-            <MenuLabel>Cover story</MenuLabel>
-            <Link href={`/blog/${cover.slug}`} className="group mt-3 block">
-              <span className="block overflow-hidden rounded-xl" style={{ border: "1px solid var(--ink-10)" }}>
-                <InsightImg
-                  image={cover.image}
-                  sizes="(min-width: 1280px) 500px, (min-width: 1024px) 38vw, 45vw"
-                  className="block aspect-[16/9] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
-                />
-              </span>
-              <span className="mt-4 flex items-center gap-2 text-[10.5px] font-bold tracking-[0.18em] uppercase">
-                <span style={{ color: ACCENT }}>{kindOf(cover.type)}</span>
-                <span aria-hidden="true" style={{ color: "var(--ink-30)" }}>·</span>
-                <span className="text-[12px] font-medium normal-case tracking-normal" style={{ color: "var(--ink-50)" }}>{cover.date}</span>
-              </span>
-              <span
-                className="font-display mt-2 block text-[22px] font-bold leading-[1.18] text-balance transition-colors group-hover:text-[var(--accent-text)]"
-                style={{ color: "var(--text-primary)", letterSpacing: "-0.015em" }}
-              >
-                {cover.title}
-              </span>
-            </Link>
+              Insights
+            </div>
+            <div className="text-[14px]" style={{ color: "var(--ink-55)" }}>
+              Decorative pavement in Canada, documented.
+            </div>
           </div>
-        )}
 
-        {/* The latest */}
-        <div className={cover ? "col-span-4" : "col-span-9"}>
-          <MenuLabel>Latest</MenuLabel>
-          <ul>
-            {latest.map((post) => (
-              <li key={post.slug}>
-                <Link
-                  href={`/blog/${post.slug}`}
-                  className="group -mx-2.5 flex items-center gap-4 rounded-lg px-2.5 py-2.5 transition-colors hover:bg-[var(--ink-05)]"
-                >
-                  <InsightImg
-                    image={post.thumb}
-                    sizes="64px"
-                    className="h-16 w-16 flex-shrink-0 rounded-lg object-cover"
-                    style={{ border: "1px solid var(--ink-10)" }}
+          <div className="grid flex-1 grid-cols-12 pt-6 pb-6 [@media(max-height:860px)]:pt-5 [@media(max-height:860px)]:pb-5">
+            {/* The cover story: the photograph takes whatever height the
+                column has, so the panel keeps its proportion on any screen. */}
+            {cover && (
+              <div className="col-span-5 flex flex-col pr-8 xl:pr-10">
+                <Link href={`/blog/${cover.slug}`} className="group flex flex-1 flex-col">
+                  <span className="relative block min-h-[180px] flex-1 overflow-hidden" style={{ background: "var(--ink-05)" }}>
+                    <InsightImg
+                      image={cover.image}
+                      sizes="(min-width: 1280px) 470px, 36vw"
+                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+                    />
+                  </span>
+                  <Kicker post={cover} accent className="mt-5" />
+                  <span
+                    className={`font-display mt-3 block text-[29px] font-bold leading-[1.1] text-balance ${HEADLINE_HOVER}`}
+                    style={{ color: "var(--text-primary)", letterSpacing: "-0.025em" }}
+                  >
+                    {cover.title}
+                  </span>
+                  {cover.excerpt && (
+                    <span className="mt-2.5 text-[15px] leading-[1.5] line-clamp-3 text-pretty" style={{ color: "var(--ink-62)" }}>
+                      {cover.excerpt}
+                    </span>
+                  )}
+                </Link>
+              </div>
+            )}
+
+            {/* The latest, newest first, ruled like a contents list. */}
+            <div className={`${cover ? "col-span-4" : "col-span-9"} flex flex-col px-8 xl:px-10`} style={{ borderLeft: HAIRLINE }}>
+              <FrontLabel>Latest</FrontLabel>
+              <ul className="flex flex-1 flex-col">
+                {latest.map((post, i) => (
+                  <li key={post.slug} className="flex flex-1 flex-col" style={{ borderTop: i > 0 ? HAIRLINE : undefined }}>
+                    <Link href={`/blog/${post.slug}`} className="group block flex-1 py-3">
+                      <Kicker post={post} />
+                      <span
+                        className={`mt-1.5 text-[16px] font-semibold leading-[1.3] line-clamp-3 text-pretty ${HEADLINE_HOVER}`}
+                        style={{ color: "var(--text-primary)" }}
+                      >
+                        {post.title}
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* The sections, then the Idea Book on the shelf. */}
+            <div className="col-span-3 flex flex-col pl-8 xl:pl-10" style={{ borderLeft: HAIRLINE }}>
+              <FrontLabel>Sections</FrontLabel>
+              <ul>
+                {NAV_SECTIONS.map((s, i) => (
+                  <li key={s.key} style={{ borderTop: i > 0 ? HAIRLINE : undefined }}>
+                    <Link href={s.href} className="group block py-2.5">
+                      <span className="flex items-baseline justify-between gap-3">
+                        <span
+                          className="font-display text-[23px] font-bold leading-none transition-colors group-hover:text-[var(--accent-text)]"
+                          style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}
+                        >
+                          {s.label}
+                        </span>
+                        {s.count > 0 && (
+                          <span className="text-[12px] tabular-nums whitespace-nowrap" style={{ color: "var(--ink-50)" }}>
+                            {s.count} {s.count === 1 ? "post" : "posts"}
+                          </span>
+                        )}
+                      </span>
+                      {s.blurb && (
+                        <span className="mt-1.5 block text-[12.5px] leading-snug text-pretty" style={{ color: "var(--ink-58)" }}>
+                          {s.blurb}
+                        </span>
+                      )}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+
+              {book && ideaBookCover && (
+                <Link href={ideaBook.href} className="group mt-auto flex items-center gap-4 pt-4" style={{ borderTop: HAIRLINE }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element -- the book's own raster, lib/catalogue.ts */}
+                  <img
+                    src={ideaBookCover}
+                    srcSet={ideaBookCoverSet}
+                    sizes="(min-height: 880px) 104px, 80px"
+                    alt=""
+                    width={240}
+                    height={240}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-20 w-20 flex-shrink-0 rounded-[2px] object-cover transition-transform duration-300 group-hover:-translate-y-1 [@media(min-height:880px)]:h-[104px] [@media(min-height:880px)]:w-[104px]"
+                    style={{
+                      border: "1px solid var(--ink-12)",
+                      boxShadow: "0 22px 40px -12px rgba(0,0,0,0.75), 0 8px 16px -6px rgba(0,0,0,0.5)",
+                    }}
                   />
                   <span className="min-w-0">
-                    <span className="block text-[10px] font-bold tracking-[0.18em] uppercase" style={{ color: ACCENT }}>{kindOf(post.type)}</span>
-                    <span className="mt-1 block text-[14px] font-semibold leading-snug line-clamp-2 transition-colors group-hover:text-[var(--accent-text)]" style={{ color: "var(--text-primary)" }}>
-                      {post.title}
+                    <span className="block text-[10.5px] font-bold uppercase tracking-[0.22em]" style={{ color: "var(--ink-50)" }}>In print</span>
+                    <span className="mt-1.5 block text-[14px] font-bold leading-snug" style={{ color: "var(--text-primary)" }}>{ideaBook.title}</span>
+                    {/* From xl: under it the column is too narrow for the line
+                        and its arrow, and the title is already the link. */}
+                    <span className="mt-1.5 hidden items-center gap-1.5 text-[12.5px] font-semibold whitespace-nowrap transition-colors group-hover:text-[var(--accent-text)] xl:inline-flex" style={{ color: "var(--ink-70)" }}>
+                      Open the {ideaBook.short}
+                      <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24" className="transition-transform group-hover:translate-x-0.5" aria-hidden="true">
+                        <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.25} strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
                     </span>
                   </span>
                 </Link>
-              </li>
-            ))}
-          </ul>
+              )}
+            </div>
+          </div>
         </div>
 
-        {/* The Idea Book, on the shelf */}
-        {book && ideaBookCover && (
-          <div className="col-span-3 pl-8 xl:pl-10" style={{ borderLeft: "1px solid var(--ink-08)" }}>
-            <MenuLabel>In print</MenuLabel>
-            <Link href={ideaBook.href} className="group mt-3 block">
-              {/* eslint-disable-next-line @next/next/no-img-element -- the book's own raster, lib/catalogue.ts */}
-              <img
-                src={ideaBookCover}
-                srcSet={ideaBookCoverSet}
-                sizes="128px"
-                alt=""
-                width={240}
-                height={240}
-                loading="lazy"
-                decoding="async"
-                className="h-32 w-32 flex-shrink-0 rounded-[3px] object-cover transition-transform duration-300 group-hover:-translate-y-1"
-                style={{ border: "1px solid var(--ink-12)", boxShadow: "0 14px 30px rgba(0,0,0,0.5), 0 2px 6px rgba(0,0,0,0.35)" }}
-              />
-              <span className="mt-5 block">
-                <span className="block text-[14.5px] font-bold leading-snug" style={{ color: "var(--text-primary)" }}>{ideaBook.title}</span>
-                <span className="mt-1.5 block text-[12.5px] leading-snug" style={{ color: "var(--ink-60)" }}>{IDEA_BOOK_LINE}</span>
-                <span className="mt-3 inline-flex items-center gap-1.5 text-[12.5px] font-bold transition-colors group-hover:text-[var(--accent-text)]" style={{ color: "var(--ink-80)" }}>
-                  Open the {ideaBook.short}
-                  <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24" className="transition-transform group-hover:translate-x-0.5" aria-hidden="true">
-                    <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.25} strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
+        {/* The quiet band: everything, and the one offer. */}
+        <div className="flex-shrink-0" style={{ borderTop: HAIRLINE, background: "var(--ink-02)" }}>
+          <div className="mx-auto flex max-w-7xl items-center justify-between gap-8 px-4 py-2 sm:px-6 lg:px-8 [@media(max-height:860px)]:py-1">
+            <Link
+              href="/blog"
+              className="group -ml-3 inline-flex min-h-[44px] items-center gap-2 rounded-lg px-3 text-[13.5px] font-bold transition-colors hover:text-[var(--accent-text)]"
+              style={{ color: "var(--text-primary)" }}
+            >
+              All Insights
+              {total > 0 && (
+                <span className="font-medium" style={{ color: "var(--ink-50)" }}>
+                  <span aria-hidden="true" className="mr-2" style={{ color: "var(--ink-30)" }}>·</span>
+                  {total} posts
                 </span>
-              </span>
+              )}
+              <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" className="transition-transform group-hover:translate-x-0.5" aria-hidden="true">
+                <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
             </Link>
+            <div className="flex items-center gap-3">
+              <MooseAvatar size={30} />
+              <span className="text-[13px] leading-snug" style={{ color: "var(--ink-60)" }}>
+                <span className="font-bold" style={{ color: "var(--text-primary)" }}>Lunch &amp; Learn</span>
+                <span aria-hidden="true" className="mx-2" style={{ color: "var(--ink-30)" }}>·</span>
+                {LL_LINE}
+              </span>
+              <Link
+                href={lunchLearnHref("HUB systems", "menu")}
+                className="ml-1 inline-flex min-h-[44px] items-center gap-1.5 rounded-lg px-3 text-[13px] font-bold whitespace-nowrap transition-colors hover:bg-[rgba(249,115,22,0.1)]"
+                style={{ color: ACCENT }}
+              >
+                Book a session
+                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.25} strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </Link>
+            </div>
           </div>
-        )}
+        </div>
       </div>
-
-      <MenuFooter href="/blog" label="View all Insights" topic="HUB systems" />
-    </MegaShell>
+    </div>
   );
 }
 
@@ -687,6 +839,34 @@ function MobilePostRow({ post, onClose }: { post: NavPost; onClose: () => void }
   );
 }
 
+// The drawer's Insights opens with the cover story, as the desktop panel
+// does: its photograph the width of the drawer, its kicker and headline.
+function MobileCoverStory({ post, onClose }: { post: NavPost & { image: NavImage }; onClose: () => void }) {
+  return (
+    <Link
+      href={`/blog/${post.slug}`}
+      onClick={onClose}
+      className="block px-1 pt-2 pb-4 active:opacity-70 transition-opacity"
+      style={{ borderBottom: "1px solid var(--ink-05)" }}
+    >
+      <span className="block overflow-hidden rounded-lg" style={{ border: "1px solid var(--ink-10)" }}>
+        <InsightImg
+          image={post.image}
+          sizes="(min-width: 672px) 640px, calc(100vw - 40px)"
+          className="block aspect-[16/9] w-full object-cover"
+        />
+      </span>
+      <Kicker post={post} accent className="mt-3.5" />
+      <span
+        className="font-display mt-2 block text-[19px] font-bold leading-[1.22] text-balance"
+        style={{ color: "var(--text-primary)", letterSpacing: "-0.015em" }}
+      >
+        {post.title}
+      </span>
+    </Link>
+  );
+}
+
 // ── Premium full-screen mobile menu ─────────────────────────────────────
 function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onClose: () => void; onSearchOpen: () => void }) {
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -731,8 +911,10 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
     };
   }, [isOpen]);
 
-  // The cover story and the next two; the desktop panel shows four more.
-  const posts = [...(INSIGHTS.cover ? [INSIGHTS.cover] : []), ...INSIGHTS.latest].slice(0, 3);
+  // The cover story with its photograph, then the next two as rows; the
+  // desktop panel lists four.
+  const mobileCover = INSIGHTS.cover;
+  const posts = INSIGHTS.latest.slice(0, mobileCover ? 2 : 3);
   const book = showIdeaBook();
   // The session topic follows the family or group the visitor has open.
   const llTopic = openFamily ?? "HUB systems";
@@ -866,6 +1048,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
               {/* ── Insights ──────────────────────────────────────── */}
               <motion.div variants={menuSectionVariants} className="mt-2">
                 <MobileSectionHead label="Insights" href="/blog" onClose={onClose} />
+                {mobileCover && <MobileCoverStory post={mobileCover} onClose={onClose} />}
                 {posts.map((post) => (
                   <MobilePostRow key={post.slug} post={post} onClose={onClose} />
                 ))}
@@ -1440,7 +1623,11 @@ export default function Nav() {
 
       {/* Dims the page under an open panel so the panel reads as a layer.
           pointer-events: none, so moving onto the page still leaves the nav
-          and closes the panel, and nothing under it stops being clickable. */}
+          and closes the panel, and nothing under it stops being clickable.
+          Under Insights it is darker and softened (28 Sep 2026): that panel
+          ends two thirds of the way down, and the page's own headline under
+          its edge read as part of the menu. Products and Applications keep
+          the lighter one. */}
       <AnimatePresence>
         {openPanel && (
           <motion.div
@@ -1451,7 +1638,12 @@ export default function Nav() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             className="fixed inset-0 z-40 hidden lg:block pointer-events-none"
-            style={{ background: "rgba(5,8,14,0.45)" }}
+            style={{
+              background: openPanel === "insights" ? "rgba(5,8,14,0.74)" : "rgba(5,8,14,0.45)",
+              backdropFilter: openPanel === "insights" ? "blur(6px)" : "none",
+              WebkitBackdropFilter: openPanel === "insights" ? "blur(6px)" : "none",
+              transition: "background-color 0.2s ease",
+            }}
           />
         )}
       </AnimatePresence>

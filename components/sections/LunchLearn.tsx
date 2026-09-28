@@ -25,9 +25,11 @@ export default function LunchLearn({
   compact = false,
   topic,
   from,
-}: { hideMoose?: boolean; hideForm?: boolean; compact?: boolean; topic?: string; from?: string } = {}) {
+  titleAs,
+}: { hideMoose?: boolean; hideForm?: boolean; compact?: boolean; topic?: string; from?: string; titleAs?: "h1" | "h2" } = {}) {
   // topic/from: the band names the session and carries both into the form
   // (lib/lunch-learn.ts), so a StreetPrint page books a StreetPrint session.
   if (compact) return <LunchLearnV2 variant="band" topic={topic} from={from} />;
-  return <LunchLearnV2 variant="boardroom" hideForm={hideForm} />;
+  // titleAs="h1" where the card is the page itself (/lunch-learn).
+  return <LunchLearnV2 variant="boardroom" hideForm={hideForm} titleAs={titleAs} />;
 }

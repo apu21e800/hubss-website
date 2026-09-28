@@ -188,11 +188,15 @@ export default async function AboutPage() {
       {/* ── Stats Bar ───────────────────────── */}
       <div style={{ background: "var(--bg-section-asphalt)", borderBottom: "1px solid var(--border-color)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-[var(--ink-06)]">
+          {/* Four across from md, divided; two by two on phones, where the
+              divider runs only between the two columns (a divide-x there also
+              drew one after "1,000+" at the end of the first row: QA, 28 Sep
+              2026). */}
+          <div className="grid grid-cols-2 md:grid-cols-4 md:divide-x md:divide-[var(--ink-06)]">
             {stats.map((s) => (
               <div
                 key={s.label}
-                className="py-8 md:py-10 px-4 sm:px-6 flex flex-col items-center text-center"
+                className="py-8 md:py-10 px-4 sm:px-6 flex flex-col items-center text-center border-[var(--ink-06)] max-md:odd:border-r"
               >
                 <span className="text-4xl md:text-5xl font-bold mb-2" style={{ color: "var(--accent-text-lg)" }}>
                   {s.value}

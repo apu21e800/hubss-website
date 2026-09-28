@@ -128,9 +128,12 @@ export default function NotFound() {
             </Link>
           </div>
 
-          <div style={{ display: "flex", gap: 24, justifyContent: "center", flexWrap: "wrap", fontSize: 13, color: "var(--text-secondary)" }}>
+          {/* One line with a dot between from md up; stacked, with no dot,
+              below it. Wrapped, the West line kept a trailing dot (QA, 28 Sep
+              2026). */}
+          <div className="flex flex-col items-center gap-1.5 md:flex-row md:justify-center md:gap-6" style={{ fontSize: 13, color: "var(--text-secondary)" }}>
             <span>West Office · Cleve Stordy · 604-309-8212</span>
-            <span style={{ color: "var(--ink-15)" }}>·</span>
+            <span className="hidden md:inline" aria-hidden="true" style={{ color: "var(--ink-15)" }}>·</span>
             <span>East Office · Doug Bain · 416-540-9287</span>
           </div>
         </div>

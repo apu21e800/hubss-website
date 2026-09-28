@@ -143,9 +143,9 @@ export default async function Home() {
       {/* off-white → slate (lunch learn) */}
       <InstagramStrip />
       {/* Canada map — controlled by SITE_FLAGS.showMap in lib/site-flags.ts.
-          #map is a real anchor: thirty of the fifty-nine installations have no
-          write-up of their own, and a search for one of those places sends the
-          visitor here, to the map where it is actually documented. Wrapped here
+          #map is a real anchor: a search for one of the mapped places sends
+          the visitor here. Since 28 Sep 2026 every pin has a published write-up
+          and its own photos (lib/map-projects.ts). Wrapped here
           rather than set on the section inside CanadaMap so the anchor survives
           whatever that component does to its own markup. */}
       {SITE_FLAGS.showMap && (

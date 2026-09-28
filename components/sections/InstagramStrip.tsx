@@ -1,158 +1,245 @@
-// Server component — fetches live from Instagram Graph API every hour.
-// Falls back to static project photos if token is missing or API fails.
-// IMPORTANT: image src and href always come from the SAME post object
-// so they are guaranteed to match — fixes the tile mismatch bug.
-import Image from "next/image";
-import { SOCIAL_LINKS, INSTAGRAM_HANDLE } from '@/lib/social-links';
-import { SocialLinks } from '@/components/ui/SocialLinks';
-import FALLBACK_PHOTOS from '@/lib/follow-the-work.json';
+// The homepage "Follow the work" section: five photographs of finished HUB
+// installations in an editorial mosaic, each captioned with where it is and
+// which system it is, then one row of follow buttons.
+//
+// Rebuilt 28 Sep 2026 (Vern: "when I hover on the SM images the text is dark,
+// anyways the social media sections suck"). It was a row of six equal squares
+// whose hover text used --text-primary, which is charcoal on this paper
+// section, then three channel cards, then the same channels again as icons.
+//
+// THE CAPTIONS ARE DATA, NOT COPY. Each tile names a pin in lib/map-projects.ts,
+// the curated map dataset whose place, system and photo were checked against
+// each write-up in Sep 2026. The caption prints that pin's city and province,
+// and the systems listed below, each of which must be the pin's own product or
+// one the write-up declares in Studio (anything else is dropped at render).
+// `site` is the pin's title, shortened. A pin tagged imageIsRepresentative (a
+// stand-in photo) is never used: its photo is not of the place it names.
+//
+// THE PHOTOS never touch /_next/image (the optimiser allowance ran out on
+// 27 Aug 2026; see next.config.ts). Every pin here has a write-up whose
+// featured photo is the same file, imported to Sanity (its origin is the pin's
+// /public path), so the tile loads it from Sanity's CDN through PhotoImage, as
+// the galleries and the Insights cards do. If Sanity is unreachable the tile
+// falls back to the /public original as a plain file, unoptimised.
+//
+// Each tile opens its write-up. A pin whose post is not live links to HUB's
+// Instagram instead.
+//
+// The old live Instagram feed (Graph API) went with the rebuild. It only ran
+// with INSTAGRAM_ACCESS_TOKEN set, production was showing the fallback photos
+// (checked 28 Sep 2026), Instagram's image host is not in next.config.ts's
+// remotePatterns, and its photos had no place or system to caption them with.
+// lib/follow-the-work.json, the old fallback list, is no longer read by
+// anything; scripts/verify-site.mjs now checks the tiles on the rendered page.
+import Link from "next/link";
+import PhotoImage from "@/components/ui/PhotoImage";
+import FollowButtons from "@/components/sections/FollowButtons";
+import { getAllPosts } from "@/lib/blog";
+import { mapProjects } from "@/lib/map-projects";
+import { isSanityImage } from "@/lib/photos";
+import { SOCIAL_LINKS } from "@/lib/social-links";
 
-export const revalidate = 3600;
-
-interface InstagramPost {
-  id: string;
-  media_url: string;
-  permalink: string;
-  media_type: "IMAGE" | "VIDEO" | "CAROUSEL_ALBUM";
+interface Pick {
+  /** A map pin id in lib/map-projects.ts: the photo, place and write-up. */
+  pin: string;
+  /** The pin's title, shortened for a caption. */
+  site: string;
+  /** Systems to name, in order. Each must be the pin's product or declared by its write-up. */
+  systems: string[];
+  /** object-position for this tile's crop. */
+  position: string;
 }
 
-// Static fallback — shown when the token is not set or the API is down. The six
-// tiles live in lib/follow-the-work.json so scripts/verify-site.mjs can read
-// them: until 23 Sep 2026, tiles 1 and 6 were two different blog folders
-// holding byte-identical files, so the Little Italy roundel showed twice. The
-// check now fails if any two tiles resolve to the same bytes. Every tile is a
-// real photo of the project its alt text names — never a stand-in. They all
-// link to the profile, not to posts, because we can't guarantee a post match.
-// Sep 2026: the UBC tile became the Leslieville laneway. UBC is the homepage
-// hero and its TrafficPatterns card, so it was on the page three times. The
-// Leslieville photo is already a map pin, so nothing new for /_next/image.
-
-async function fetchInstagramPosts(): Promise<InstagramPost[]> {
-  const token  = process.env.INSTAGRAM_ACCESS_TOKEN;
-  const userId = process.env.INSTAGRAM_USER_ID;
-  if (!token || !userId) return [];
-  try {
-    const res = await fetch(
-      `https://graph.instagram.com/v21.0/${userId}/media?fields=id,media_url,permalink,media_type&limit=9&access_token=${token}`,
-      { next: { revalidate: 3600 } }
-    );
-    if (!res.ok) return [];
-    const data = await res.json();
-    if (!data.data) return [];
-    // Images and carousels only — videos have no still media_url
-    return (data.data as InstagramPost[])
-      .filter(p => p.media_type === "IMAGE" || p.media_type === "CAROUSEL_ALBUM")
-      .slice(0, 6);
-  } catch {
-    return [];
-  }
-}
-
-const SOCIAL_CHANNELS = [
-  {
-    name: "Instagram",
-    href: SOCIAL_LINKS.instagram,
-    desc: "Project installs, before & afters",
-    icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>,
-  },
-  {
-    name: "LinkedIn",
-    href: SOCIAL_LINKS.linkedin,
-    desc: "Industry news & case studies",
-    icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>,
-  },
-  {
-    name: "YouTube",
-    href: SOCIAL_LINKS.youtube,
-    desc: "Installation videos & demos",
-    icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>,
-  },
+// In mosaic order: the lead, then the four around it (wide, narrow, narrow,
+// wide on desktop). Six systems between them, in BC and Ontario.
+const PICKS: Pick[] = [
+  // "Commercial Drive Decorative Crosswalk", 2019. The write-up names both
+  // systems for this job.
+  { pin: "vancouver-commercial-drive", site: "Commercial Drive", systems: ["TrafficPatterns", "DecoMark"], position: "30% 70%" },
+  // "Simcoe Pride Rainbow Crosswalk", 2023.
+  { pin: "simcoe-rainbow", site: "Rainbow crosswalk", systems: ["TrafficPatternsXD"], position: "50% 70%" },
+  // "Leslieville Laneway Revitalization", the Laneway Project.
+  { pin: "toronto-leslieville-laneway", site: "Leslieville laneway", systems: ["StreetBond"], position: "40% 75%" },
+  // "Spirit Trail Crosswalks and Wayfinding": the photo is one of its
+  // DuraTherm crosswalks.
+  { pin: "north-van-spirit-trail", site: "Spirit Trail crosswalk", systems: ["DuraTherm"], position: "45% 55%" },
+  // "TTC Bus Priority Corridors": the write-up's "Product Used: MMAX".
+  { pin: "toronto-ttc-bus-corridors", site: "TTC bus priority corridor", systems: ["MMAX"], position: "50% 65%" },
 ];
 
+interface Tile {
+  key: string;
+  src: string;
+  alt: string;
+  place: string;
+  systems: string;
+  href: string;
+  /** True when the tile leaves the site (Instagram). */
+  external: boolean;
+  position: string;
+}
+
+async function getTiles(): Promise<Tile[]> {
+  const posts = await getAllPosts();
+  const bySlug = new Map(posts.map((p) => [p.slug, p]));
+  const tiles: Tile[] = [];
+  for (const pick of PICKS) {
+    const pin = mapProjects.find((p) => p.id === pick.pin);
+    const photo = pin?.images[0];
+    if (!pin || !photo || pin.imageIsRepresentative) continue;
+    const post = pin.slug ? bySlug.get(pin.slug) : undefined;
+    const sameShot = Boolean(post?.featuredImage && post.featuredImageOrigin === photo);
+    const known = new Set([pin.product, ...(post?.declaredProducts ?? [])]);
+    const systems = pick.systems.filter((s) => known.has(s));
+    tiles.push({
+      key: pin.id,
+      src: sameShot && post?.featuredImage ? post.featuredImage : photo,
+      alt: `${pin.title}, ${pin.city}, ${pin.province}`,
+      place: `${pick.site}, ${pin.city}, ${pin.province}`,
+      systems: (systems.length ? systems : [pin.product]).join(" and "),
+      href: post ? `/blog/${post.slug}` : SOCIAL_LINKS.instagram,
+      external: !post,
+      position: pick.position,
+    });
+  }
+  return tiles;
+}
+
+// Grid placement per slot. Phones: the lead across both columns, then a 2 x 2.
+// md: the same, wider. lg: twelve columns, two rows; the lead takes seven
+// columns and both rows, and the four around it alternate wide and narrow.
+const SLOT = [
+  { cls: "col-span-2 aspect-[4/3] md:aspect-[16/9] lg:aspect-auto lg:col-span-7 lg:row-span-2", sizes: "(min-width: 1280px) 704px, (min-width: 1024px) 56vw, 100vw", lead: true },
+  { cls: "aspect-square md:aspect-[4/3] lg:aspect-auto lg:col-span-3", sizes: "(min-width: 1280px) 296px, (min-width: 1024px) 24vw, 50vw", lead: false },
+  { cls: "aspect-square md:aspect-[4/3] lg:aspect-auto lg:col-span-2", sizes: "(min-width: 1280px) 194px, (min-width: 1024px) 16vw, 50vw", lead: false },
+  { cls: "aspect-square md:aspect-[4/3] lg:aspect-auto lg:col-span-2", sizes: "(min-width: 1280px) 194px, (min-width: 1024px) 16vw, 50vw", lead: false },
+  { cls: "aspect-square md:aspect-[4/3] lg:aspect-auto lg:col-span-3", sizes: "(min-width: 1280px) 296px, (min-width: 1024px) 24vw, 50vw", lead: false },
+] as const;
+
+// Fewer than five tiles (a pin removed, a post unpublished) would leave holes
+// in the mosaic, so the tiles fall back to an even grid.
+const EVEN = { cls: "aspect-[4/3]", sizes: "(min-width: 1024px) 400px, 50vw", lead: false } as const;
+
+function TileLink({ tile, slot }: { tile: Tile; slot: { cls: string; sizes: string; lead: boolean } }) {
+  const label = `${tile.place}. ${tile.systems}. ${tile.external ? "HUB on Instagram (opens in a new tab)" : "Read the write-up"}`;
+  const inner = (
+    <>
+      <PhotoImage
+        src={tile.src}
+        alt={tile.alt}
+        fill
+        sizes={slot.sizes}
+        unoptimized={!isSanityImage(tile.src)}
+        className="object-cover transition-transform duration-700 ease-out motion-safe:group-hover:scale-[1.04]"
+        style={{ objectPosition: tile.position }}
+      />
+      {/* The caption: white on a dark gradient, always readable. With a mouse
+          it appears on hover or keyboard focus; on a phone or tablet, where
+          nothing hovers, it is simply there. */}
+      <span
+        aria-hidden="true"
+        className={`absolute inset-x-0 bottom-0 flex flex-col gap-0.5 transition-opacity duration-300 [@media(hover:hover)]:opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 ${
+          slot.lead ? "px-4 pb-4 pt-16 sm:px-6 sm:pb-5 sm:pt-24" : "px-3 pb-3 pt-12 sm:px-4 sm:pb-4 sm:pt-16"
+        }`}
+        style={{
+          background: "linear-gradient(to top, rgba(12,12,12,0.86) 0%, rgba(12,12,12,0.6) 45%, rgba(12,12,12,0) 100%)",
+          textShadow: "0 1px 2px rgba(0,0,0,0.5)",
+        }}
+      >
+        <span className={`font-semibold leading-snug text-white ${slot.lead ? "text-base sm:text-xl" : "text-[13px] sm:text-[15px]"}`}>
+          {tile.place}
+        </span>
+        <span className={`leading-snug ${slot.lead ? "text-[13px] sm:text-sm" : "text-[11.5px] sm:text-[13px]"}`} style={{ color: "rgba(255,255,255,0.85)" }}>
+          {tile.systems}
+        </span>
+      </span>
+      {/* Where the tile goes, shown with the caption on hover or focus. */}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute right-3 top-3 hidden h-9 w-9 items-center justify-center rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100 [@media(hover:hover)]:flex"
+        style={{ background: "rgba(255,255,255,0.94)", color: "#1B1A18" }}
+      >
+        {tile.external ? (
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
+            <path d="M7 17 17 7M8 7h9v9" />
+          </svg>
+        ) : (
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
+            <path d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
+        )}
+      </span>
+    </>
+  );
+  const cls =
+    "group relative block h-full w-full overflow-hidden rounded-xl focus-visible:rounded-xl!";
+  const style = { background: "var(--ink-06)" };
+  return tile.external ? (
+    <a href={tile.href} target="_blank" rel="noopener noreferrer" aria-label={label} className={cls} style={style}>
+      {inner}
+    </a>
+  ) : (
+    <Link href={tile.href} aria-label={label} className={cls} style={style}>
+      {inner}
+    </Link>
+  );
+}
+
 export default async function InstagramStrip() {
-  const livePosts = await fetchInstagramPosts();
-  const useLive   = livePosts.length > 0;
+  const tiles = await getTiles();
+  const mosaic = tiles.length === SLOT.length;
 
   return (
     <section
-      /* a photo strip sits on paper without fighting it */
-      data-surface="paper" className="py-24" style={{ background: "var(--bg-dark)", borderTop: "1px solid var(--ink-05)" }}>
+      id="follow"
+      aria-labelledby="follow-heading"
+      data-surface="paper"
+      className="py-24 lg:py-28"
+      style={{ background: "var(--bg-primary)", borderTop: "1px solid var(--ink-05)" }}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-        {/* Header */}
-        <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-14 gap-6">
-          <div>
-            <p className="text-xs font-bold tracking-[0.2em] uppercase mb-3" style={{ color: "rgba(249,115,22,0.8)" }}>On the ground</p>
-            <h2 className="text-3xl md:text-4xl font-bold" style={{ color: "var(--text-primary)" }}>Follow the work</h2>
-            <p className="mt-3 text-base" style={{ color: "var(--ink-45)" }}>Projects across Canada, documented as they happen.</p>
-          </div>
-          <a href={SOCIAL_LINKS.instagram} target="_blank" rel="noopener noreferrer"
-            className="flex items-center gap-2.5 px-5 py-3 rounded-xl text-sm font-semibold flex-shrink-0 transition-colors hover:border-orange-500 hover:text-[var(--accent-text)]"
-            style={{ border: "1px solid var(--ink-12)", color: "var(--ink-70)", background: "var(--ink-025)" }}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style={{ opacity: 0.7 }}><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-            {INSTAGRAM_HANDLE}
-          </a>
+        <div className="mb-10 md:mb-12">
+          <p className="gradient-text text-xs font-semibold tracking-[0.2em] uppercase mb-3">
+            On the ground
+          </p>
+          <h2
+            id="follow-heading"
+            className="font-black"
+            style={{
+              color: "var(--text-primary)",
+              fontSize: "clamp(2rem, 3.5vw, 3.2rem)",
+              lineHeight: 1.08,
+              letterSpacing: "-0.03em",
+            }}
+          >
+            Follow the work.
+          </h2>
+          <p className="text-base mt-2 max-w-xl" style={{ color: "var(--text-secondary)" }}>
+            Projects across Canada, documented as they happen.
+          </p>
         </div>
 
-        {/* Photo grid — live from Instagram OR matched static fallback */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 mb-14">
-          {useLive
-            ? livePosts.map((post) => (
-                // Live: media_url and permalink come from THE SAME post object — always matched
-                <a key={post.id} href={post.permalink} target="_blank" rel="noopener noreferrer"
-                  className="group relative overflow-hidden rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_8px_32px_rgba(249,115,22,0.2)]"
-                  style={{ aspectRatio: "1/1", border: "1px solid var(--border-color)" }}>
-                  <Image src={post.media_url} alt="HUB Surface Systems Instagram, recent decorative pavement project from the field" fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-110"
-                    sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 17vw" />
-                  <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                    style={{ background: "rgba(0,0,0,0.55)" }}>
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="white" style={{ opacity: 0.9, marginBottom: 6 }}><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                    <span className="text-[var(--text-primary)] text-xs font-semibold opacity-80">View on Instagram</span>
-                  </div>
-                  <div className="absolute top-3 right-3 w-1.5 h-1.5 rounded-full opacity-30" style={{ background: "#f97316" }} />
-                </a>
-              ))
-            : FALLBACK_PHOTOS.map((photo) => (
-                // Fallback: links to profile (not individual posts) since we can't guarantee match
-                <a key={photo.src} href={SOCIAL_LINKS.instagram} target="_blank" rel="noopener noreferrer"
-                  className="group relative overflow-hidden rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_8px_32px_rgba(249,115,22,0.2)]"
-                  style={{ aspectRatio: "1/1", border: "1px solid var(--border-color)" }}>
-                  <Image src={photo.src} alt={photo.alt} fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-110"
-                    sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 17vw" />
-                  <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                    style={{ background: "rgba(0,0,0,0.55)" }}>
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="white" style={{ opacity: 0.9, marginBottom: 6 }}><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                    <span className="text-[var(--text-primary)] text-xs font-semibold opacity-80">View on Instagram</span>
-                  </div>
-                  <div className="absolute top-3 right-3 w-1.5 h-1.5 rounded-full opacity-30" style={{ background: "#f97316" }} />
-                </a>
-              ))
-          }
-        </div>
+        {tiles.length > 0 && (
+          <ul
+            className={
+              mosaic
+                ? "grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-12 lg:grid-rows-[repeat(2,clamp(200px,19vw,272px))]"
+                : "grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-4"
+            }
+          >
+            {tiles.map((tile, i) => {
+              const slot = mosaic ? SLOT[i] : EVEN;
+              return (
+                <li key={tile.key} data-tile={tile.key} className={`relative ${slot.cls}`}>
+                  <TileLink tile={tile} slot={slot} />
+                </li>
+              );
+            })}
+          </ul>
+        )}
 
-        {/* Social channels */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
-          {SOCIAL_CHANNELS.map((ch) => (
-            <a key={ch.name} href={ch.href} target="_blank" rel="noopener noreferrer"
-              className="group flex items-center gap-4 p-4 rounded-xl transition-colors hover:bg-[var(--ink-06)] hover:border-orange-500/20"
-              style={{ background: "var(--ink-025)", border: "1px solid var(--border-color)" }}>
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors group-hover:bg-orange-500/15"
-                style={{ background: "var(--fill-subtle)", color: "var(--ink-50)" }}>{ch.icon}</div>
-              <div className="min-w-0">
-                <p className="text-sm font-semibold group-hover:text-[var(--accent-text)] transition-colors" style={{ color: "var(--ink-80)" }}>{ch.name}</p>
-                <p className="text-xs truncate" style={{ color: "var(--ink-50)" }}>{ch.desc}</p>
-              </div>
-              <svg className="w-4 h-4 flex-shrink-0 ml-auto opacity-0 group-hover:opacity-60 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-              </svg>
-            </a>
-          ))}
-        </div>
-
-        <div className="border-t pt-8" style={{ borderColor: "var(--border-color)" }}>
-          <SocialLinks className="justify-center gap-8" iconClassName="w-5 h-5" />
+        <div className="mt-8 md:mt-10">
+          <FollowButtons />
         </div>
       </div>
     </section>

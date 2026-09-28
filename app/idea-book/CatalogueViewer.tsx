@@ -628,7 +628,11 @@ export default function CatalogueViewer({
               e.preventDefault();
               leaveIdeaBook(exitHref);
             }}
-            className="inline-flex flex-shrink-0 items-center gap-2 rounded-full px-2.5 py-2 text-[11px] font-semibold uppercase tracking-[0.16em] transition-colors hover:bg-white/10"
+            // A 44 px tap target (QA, 28 Sep 2026: 34x30 on a phone). The
+            // negative margins give back the extra 14 px of height (and on a
+            // phone, where the word is hidden, the extra 10 px of width), so
+            // the bar and the icon stay where they were.
+            className="-my-[7px] inline-flex min-h-[44px] min-w-[44px] flex-shrink-0 items-center justify-center gap-2 rounded-full px-2.5 py-2 text-[11px] font-semibold uppercase tracking-[0.16em] transition-colors hover:bg-white/10 max-sm:-mx-[5px]"
             style={{ color: "rgba(255,255,255,0.78)" }}
             aria-label="Close the Idea Book"
           >
@@ -637,9 +641,16 @@ export default function CatalogueViewer({
           </Link>
 
           <div className="min-w-0 flex-1 text-center">
-            <p className="truncate text-[10px] font-bold uppercase tracking-[0.22em]" style={{ color: "#fb923c" }}>
+            {/* The page's h1 (QA, 28 Sep 2026: the reader had none). The
+                inline styles keep it looking as it did as a <p>: the global
+                heading rule in app/globals.css is unlayered, so it would beat
+                the utility classes on font, weight, tracking and leading. */}
+            <h1
+              className="truncate text-[10px] font-bold uppercase tracking-[0.22em]"
+              style={{ color: "#fb923c", fontFamily: "inherit", fontWeight: 700, letterSpacing: "0.22em", lineHeight: "inherit", textWrap: "pretty" }}
+            >
               {ideaBook.short} · {ideaBook.volume}
-            </p>
+            </h1>
             <p className="truncate text-[11px] tabular-nums" style={{ color: "rgba(255,255,255,0.58)" }} aria-live="polite">
               {label}
             </p>

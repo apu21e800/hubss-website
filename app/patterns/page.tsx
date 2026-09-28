@@ -182,17 +182,19 @@ export default function PatternsPage() {
                 pressed into the street. See the system behind the patterns, or talk to a specialist.
               </p>
             </div>
-            <div className="flex gap-3 flex-shrink-0">
+            {/* On phones the two buttons stack, full width: side by side each
+                label wrapped to two lines (QA, 28 Sep 2026). */}
+            <div className="flex flex-col gap-3 flex-shrink-0 sm:flex-row">
               <Link
                 href="/products/streetprint"
-                className="px-5 py-2.5 rounded-lg text-sm font-bold transition-colors"
+                className="px-5 py-2.5 rounded-lg text-sm font-bold transition-colors inline-flex items-center justify-center whitespace-nowrap min-h-[44px]"
                 style={{ background: "var(--bg-card-surface)", color: "var(--text-primary)", border: "1px solid var(--ink-10)" }}
               >
                 StreetPrint system
               </Link>
               <Link
                 href="/contact"
-                className="px-5 py-2.5 rounded-lg text-sm font-bold"
+                className="px-5 py-2.5 rounded-lg text-sm font-bold inline-flex items-center justify-center whitespace-nowrap min-h-[44px]"
                 style={{ background: "linear-gradient(90deg, #F97316, #EAB308)", color: "#101010" }}
               >
                 Start a project

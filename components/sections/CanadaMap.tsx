@@ -89,6 +89,18 @@ const PROVINCE_COUNTS: [string, number][] = (() => {
   return PROVINCE_ORDER.filter((pr) => pr in c).map((pr) => [pr, c[pr]]);
 })();
 
+/**
+ * "British Columbia, Ontario and Québec": the provinces that have pins, west
+ * to east, from the data. The header used to say "from Victoria to St.
+ * John's", which stopped being true the day the St. John's pin went (it had
+ * no project behind it), so the places the copy names now come from the pins.
+ */
+const PROVINCE_NAMES: string = (() => {
+  const names = PROVINCE_COUNTS.map(([pr]) => PROVINCE_LABEL[pr] ?? pr);
+  if (names.length <= 1) return names.join("");
+  return `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
+})();
+
 function boundsFor(projects: MapProject[]): [[number, number], [number, number]] | null {
   if (!projects.length) return null;
   let w = Infinity, s = Infinity, e = -Infinity, n = -Infinity;
@@ -1428,6 +1440,11 @@ export default function CanadaMap() {
           backdrop-filter: blur(4px);
           border-radius: 8px 0 0 0;
         }
+        /* One light colour for the whole credit. The plain words between the
+           links ("contributors") took MapLibre's dark grey and all but vanished
+           on the dark map. */
+        .maplibregl-ctrl-attrib,
+        .maplibregl-ctrl-attrib-inner,
         .maplibregl-ctrl-attrib a {
           color: var(--ink-45) !important;
           font-size: 10px;
@@ -1474,7 +1491,9 @@ export default function CanadaMap() {
         aria-label="Installations across Canada, interactive project map"
         style={{ background: "var(--bg-dark)", paddingTop: "5rem", paddingBottom: "5rem" }}
       >
-        <div style={{ maxWidth: 1340, margin: "0 auto", padding: "0 1.25rem" }}>
+        {/* The standard section container (x = 112 to 1328 at 1440), like every
+            other section on the page. It was a 1340px box of its own. */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           {/* ── Header */}
           <div
@@ -1510,7 +1529,10 @@ export default function CanadaMap() {
                   letterSpacing: "-0.03em",
                 }}
               >
-                Coast to coast.{" "}
+                {/* Was "Coast to coast": no pin east of Québec has a project
+                    behind it yet, and the map should not promise a coast it
+                    does not show. */}
+                Real projects.{" "}
                 <span
                   style={{
                     background: "linear-gradient(90deg, #F97316, #EAB308)",
@@ -1519,7 +1541,7 @@ export default function CanadaMap() {
                     backgroundClip: "text",
                   }}
                 >
-                  Every surface.
+                  Real places.
                 </span>
               </h2>
               <p
@@ -1531,7 +1553,7 @@ export default function CanadaMap() {
                   lineHeight: 1.6,
                 }}
               >
-                {mapProjects.length} projects from Victoria to St. John&apos;s. Tap a
+                {mapProjects.length} documented projects in {PROVINCE_NAMES}. Tap a
                 province to jump in, or filter by system.
               </p>
             </div>

@@ -139,8 +139,13 @@ export default function PrintedCopyForm({ compact = false }: { compact?: boolean
         </div>
         <div>
           <label className={label} style={labelStyle} htmlFor="pc-province">Province</label>
-          <select id="pc-province" name="province" required defaultValue="" className={field} style={fieldStyle}>
-            <option value="" disabled>--</option>
+          {/* The fields' height, set outright: Chrome sizes a select by its
+              font, not the line height, and it sat 4.5 px shorter than City
+              and Postal code beside it (QA, 28 Sep 2026). 15 px text at the
+              body's 1.7 line height, 10 px padding and a 1 px border above
+              and below, as the inputs have. */}
+          <select id="pc-province" name="province" required defaultValue="" className={field} style={{ ...fieldStyle, height: "calc(1.7em + 22px)" }}>
+            <option value="" disabled>Select province</option>
             {PROVINCES.map((p) => (
               <option key={p} value={p}>{p}</option>
             ))}

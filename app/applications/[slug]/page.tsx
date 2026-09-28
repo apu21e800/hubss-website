@@ -19,7 +19,7 @@ import { applicationImages, resolveImage } from "@/lib/featured-images";
 import ApplicationSpread from "@/components/applications/ApplicationSpread";
 import { applicationCatalogueFor } from "@/lib/application-catalogue";
 import { buildMetadata } from "@/lib/seo";
-import { HERO_POSITION } from "@/lib/hero-framing";
+import { HERO_POSITION, heroColourClass } from "@/lib/hero-framing";
 import { lunchLearnHref } from "@/lib/lunch-learn";
 
 // Sanity is the CMS for this page's copy, so the page has to be allowed to go
@@ -165,13 +165,20 @@ export default async function ApplicationPage({ params }: Props) {
           src={hero.src}
           alt={hero.alt}
           fill
-          className="object-cover hero-pop"
+          className={`object-cover ${heroColourClass(hero)}`}
           style={{ objectPosition: heroPosition }}
           priority
           sizes="100vw"
         />
         <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(8,13,22,0.12) 0%, rgba(8,13,22,0.04) 38%, rgba(8,13,22,0.36) 64%, rgba(8,13,22,0.84) 100%)" }} />
         <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgba(8,13,22,0.46) 0%, rgba(8,13,22,0.16) 40%, transparent 62%)" }} />
+        {/* Phones only. On a phone the name wraps and the text block climbs to
+            about 40% of the banner's height, where the scrims above are at
+            their lightest: on LEED & Urban Heat Island the label and the first
+            line of the name sat on a white planter at about 2.5:1 (QA, 28 Sep
+            2026). This band darkens that height; from sm up it is not drawn,
+            so the desktop photo keeps its colour. */}
+        <div className="absolute inset-0 sm:hidden" style={{ background: "linear-gradient(180deg, rgba(8,13,22,0) 16%, rgba(8,13,22,0.5) 34%, rgba(8,13,22,0.56) 62%, rgba(8,13,22,0.3) 100%)" }} />
         <div className="absolute inset-0 flex items-end">
           <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-14">
             {/* Cream, not orange: the orange label measured 2 to 3:1 over the

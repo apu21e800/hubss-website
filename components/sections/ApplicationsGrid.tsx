@@ -84,7 +84,13 @@ export default function ApplicationsGrid({ applications: appsProp }: Props = {})
                   src={applicationImages[app.slug] ? resolveImage(applicationImages[app.slug]).src : app.imageUrl}
                   alt={applicationImages[app.slug] ? resolveImage(applicationImages[app.slug]).alt : app.name}
                   fill
-                  loading="lazy"
+                  // Eager, at low priority. Lazy, a phone only fetched a card's
+                  // photo as it slid into the swipe row, so the next card showed
+                  // as an empty dark box for about a second after each swipe
+                  // (QA, 28 Sep 2026). Low priority keeps the nine from
+                  // competing with the hero; same sizes, same image variants.
+                  loading="eager"
+                  fetchPriority="low"
                   // Subject-foreground bias: pavement surface usually sits in the lower 2/3 of source frames.
                   className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
                   style={{ objectPosition: APP_POSITION[app.slug] ?? "center 60%" }}

@@ -212,22 +212,42 @@ function ViewLink({ label = "View system" }: { label?: string }) {
   );
 }
 
+/**
+ * The cards in a row line up part for part (QA, 28 Sep 2026: the divider and
+ * the spec label, SERVICE LIFE, PROFILE, CURE, sat at different heights
+ * because the lines above them differ in length). Each card is five rows of
+ * the list's grid, shared through subgrid: photo, name, line, spec, link. A
+ * row is as tall as its tallest cell across the cards beside it, so the
+ * dividers and labels share one height, and the links share the card's foot,
+ * even where a spec value runs to two lines (AirMark). The <li> takes
+ * CARD_ROWS; every part is always rendered, empty if a card lacks it, so no
+ * card slips a row.
+ */
+const CARD_ROWS = "row-span-5 grid grid-rows-subgrid gap-0";
+
 function SystemCard({ card, sizes, eager }: { card: Card; sizes: string; eager: boolean }) {
   return (
-    <Link href={`/products/${card.slug}`} className={cardClass}>
-      {card.image && (
+    <Link href={`/products/${card.slug}`} className={cardClass.replace("flex h-full flex-col", CARD_ROWS)}>
+      {card.image ? (
         <div className="relative aspect-[4/3] overflow-hidden" style={{ background: "var(--bg-card-surface)" }}>
           <Photo image={card.image} sizes={sizes} eager={eager} />
         </div>
+      ) : (
+        // No card photo (the repair family): an empty first row keeps the rows
+        // in step. Half of the list's 24 px row gap still falls above the
+        // name, so the name's top padding is 12 px less (pt-2, sm:pt-3).
+        <div aria-hidden="true" />
       )}
-      <div className="flex flex-1 flex-col p-5 sm:p-6">
-        <h3 className="text-xl" style={{ color: "var(--text-primary)" }}>
-          {card.name}
-        </h3>
-        <p className="mt-2 text-[15px]" style={{ color: "var(--text-secondary)", lineHeight: 1.55 }}>
-          {card.line}
-        </p>
+      <h3 className={`px-5 text-xl sm:px-6 ${card.image ? "pt-5 sm:pt-6" : "pt-2 sm:pt-3"}`} style={{ color: "var(--text-primary)" }}>
+        {card.name}
+      </h3>
+      <p className="mt-2 px-5 text-[15px] sm:px-6" style={{ color: "var(--text-secondary)", lineHeight: 1.55 }}>
+        {card.line}
+      </p>
+      <div className="px-5 sm:px-6">
         <Facts facts={card.facts.slice(0, 1)} />
+      </div>
+      <div className="px-5 pb-5 sm:px-6 sm:pb-6">
         <ViewLink />
       </div>
     </Link>
@@ -335,13 +355,15 @@ export default function ProductsPage() {
           </ul>
         </nav>
 
-        <div className="mt-6 flex flex-wrap gap-x-8 gap-y-3 text-sm font-semibold">
-          <Link href="/resources" className="group inline-flex items-center gap-1.5" style={{ color: "var(--accent-text)" }}>
+        {/* On phones the two links stack, each a 44 px tap target (QA, 28 Sep
+            2026: they were 20 px tall); from sm up they sit side by side as before. */}
+        <div className="mt-3 flex flex-wrap gap-x-8 gap-y-0 text-sm font-semibold sm:mt-6 sm:gap-y-3">
+          <Link href="/resources" className="group inline-flex min-h-[44px] items-center gap-1.5 sm:min-h-0" style={{ color: "var(--accent-text)" }}>
             Spec sheets for every system
             <span aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-1">&rarr;</span>
           </Link>
           {catalogueOn && (
-            <Link href={ideaBook.href} className="group inline-flex items-center gap-1.5" style={{ color: "var(--accent-text)" }}>
+            <Link href={ideaBook.href} className="group inline-flex min-h-[44px] items-center gap-1.5 sm:min-h-0" style={{ color: "var(--accent-text)" }}>
               Open the {ideaBook.short}
               <span aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-1">&rarr;</span>
             </Link>
@@ -390,7 +412,7 @@ export default function ProductsPage() {
               ) : (
                 <ul className={grid.cls}>
                   {cards.map((card, j) => (
-                    <li key={card.slug}>
+                    <li key={card.slug} className={CARD_ROWS}>
                       <SystemCard card={card} sizes={grid.sizes} eager={i === 0 && j < 3} />
                     </li>
                   ))}

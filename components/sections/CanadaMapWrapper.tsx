@@ -6,6 +6,20 @@ import dynamic from "next/dynamic";
 // lib/map-projects.ts would drag the whole dataset into the phone bundle.
 import mapCount from "@/lib/map-count.json";
 
+// The provinces with pins, west to east, as scripts/gen-map-blog.mjs wrote
+// them: "British Columbia, Ontario and Québec". The card said "coast to
+// coast" while the Atlantic pins had no project behind them.
+const PROVINCE_LABEL: Record<string, string> = {
+  BC: "British Columbia", AB: "Alberta", SK: "Saskatchewan", MB: "Manitoba",
+  ON: "Ontario", QC: "Québec", NB: "New Brunswick", NS: "Nova Scotia",
+  PE: "PEI", NL: "Newfoundland",
+};
+const provinceNames = (() => {
+  const names = ((mapCount as { provinces?: string[] }).provinces ?? []).map((p) => PROVINCE_LABEL[p] ?? p);
+  if (names.length <= 1) return names.join("");
+  return `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
+})();
+
 const CanadaMap = dynamic(() => import("@/components/sections/CanadaMap"), {
   ssr: false,
   loading: () => <div style={{ height: 680, background: "var(--bg-dark)" }} />,
@@ -95,7 +109,9 @@ export default function CanadaMapWrapper() {
             scroll — said so. The number is now the length of the dataset, so
             the two cannot disagree again. */}
         <p className="font-black leading-tight mb-2" style={{ color: "var(--text-primary)", fontSize: "1.5rem", letterSpacing: "-0.02em" }}>
-          {mapCount.count} projects, coast to coast.
+          {provinceNames
+            ? `${mapCount.count} projects in ${provinceNames}.`
+            : `${mapCount.count} projects on the map.`}
         </p>
         <p className="text-sm mb-5" style={{ color: "var(--ink-65)" }}>
           Every pin is a real installation. Filter by system, browse by province.

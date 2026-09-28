@@ -88,15 +88,18 @@ hubss-website/
 - New project: add entry to /content/projects/project-name.mdx
 
 ### Putting a project on the homepage map
-The map's pins are the curated entries in `lib/map-projects.ts`, with their
-hand-written Challenge/Solution prose. A pin whose photo lives in
-`/public/images/blog/<slug>/` is that post's pin and gains a "Read the
-write-up" link, as long as the post is published in Sanity
-(scripts/gen-map-blog.mjs). Until Sep 2026 a post could also make its own pin
-from map* keys in its .mdx frontmatter; no post used them, and they went with
-the files. Studio has a "Projects (Map Pins)" list from the May 2026
-migration, but the map does not read it yet (its Studio title says so);
-moving the map into Sanity is the way to let Doug add pins.
+Since 28 Sep 2026 the map shows only documented projects (Vern: "no fake
+locations"). A pin stays only when a published Insights post documents that
+job at that place; it sits at the site the post names (where the post names
+only a town or a corridor, the entry's comment says the pin is approximate);
+and every photo on it is of that installation. There are no stand-in or
+"Representative" pins any more. The audit removed 26 pins that rested on
+stand-ins with no post behind them. To add a job: publish its write-up first,
+then add the entry in `lib/map-projects.ts` with the post's own photos. A pin
+whose photo lives in `/public/images/blog/<slug>/` is that post's pin and
+gains a "Read the write-up" link (scripts/gen-map-blog.mjs). Studio has a
+"Projects (Map Pins)" list from the May 2026 migration, but the map does not
+read it yet; moving the map into Sanity is the way to let Doug add pins.
 
 The project count the page prints comes from `lib/map-count.json`, regenerated
 every build. Do not type a project count anywhere: the phone card used to say

@@ -8,14 +8,24 @@ import Link from "next/link";
 // old one was gallery photo 12), chosen by the photo edit (4032 px wide).
 const HERO_IMAGE = "/images/callouts/residential-driveway-1600.webp"; // residential-driveways-29.jpg at 1600 px, outside the gallery folder so it never joins the gallery; served as is, no optimiser
 
+// The page grid, as a breakout grid (QA, 28 Sep 2026: at 1440 the text began
+// at x=144 and the photo stopped 80 px short of the window, matching neither
+// the page's 112 to 1328 column nor full bleed). From lg up the middle two
+// tracks are the halves of the standard container (max-w-7xl less px-8: two
+// 38rem halves) and the outer tracks are the margins, at least 2rem. The text
+// fills the left half, so it starts on the container's left edge; the photo
+// runs from the middle to the right edge of the window. No 100vw, so a
+// desktop scrollbar cannot shift it off the grid.
+const GRID =
+  "grid grid-cols-1 min-h-[540px] lg:grid-cols-[minmax(2rem,1fr)_minmax(0,38rem)_minmax(0,38rem)_minmax(2rem,1fr)]";
+
 export default function ResidentialDriveways() {
   return (
     <section style={{ backgroundColor: "var(--bg-primary)" }}>
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[540px]">
+      <div className={GRID}>
 
-          {/* ── Left — content ─────────────────────────────────────────── */}
-          <div className="flex flex-col justify-center px-8 sm:px-12 lg:px-16 py-16 lg:py-24">
+          {/* ── Left: content, on the container's left edge ────────────── */}
+          <div className="flex flex-col justify-center px-4 sm:px-6 lg:col-start-2 lg:col-end-3 lg:pl-0 lg:pr-16 py-16 lg:py-24">
 
             {/* The "New application" badge went on 28 Sep 2026: the page is
                 not new to anyone reading it (QA pa#2). */}
@@ -93,8 +103,8 @@ export default function ResidentialDriveways() {
             </div>
           </div>
 
-          {/* ── Right — hero image ──────────────────────────────────────── */}
-          <div className="relative min-h-[360px] lg:min-h-0 overflow-hidden">
+          {/* ── Right: hero image, to the window's right edge ──────────── */}
+          <div className="relative min-h-[360px] lg:min-h-0 overflow-hidden lg:col-start-3 lg:col-end-5">
             {/* Not marked priority: this section renders at the very
                 bottom of /applications/residential-driveways (right before
                 LunchLearn + Footer), well below the fold. The route's real
@@ -123,7 +133,6 @@ export default function ResidentialDriveways() {
               }}
             />
           </div>
-        </div>
       </div>
     </section>
   );

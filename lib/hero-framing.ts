@@ -53,3 +53,26 @@ export const HERO_POSITION: Record<string, string> = {
   "/images/applications/public-art/public-art-01.jpg": "50% 88%", // the artwork; at 70% a storefront's "CANNABIS" sign read in the top left at 1440 (28 Sep QA)
   "/images/applications/bike-lanes/bike-lanes-12.jpg": "85% 62%", // Regulatory Markings: ONLY BUS legend and bike lane
 };
+
+/**
+ * Hero colour, per photo. Every photo hero gets the site-wide `hero-pop` lift
+ * (app/globals.css, HERO COLOUR). A few photos were already vivid and the lift
+ * pushed them over (QA, 28 Sep 2026): StreetPrint's lawn went neon green and
+ * its leaves magenta, the lit pillars on Residential Driveways glowed orange,
+ * and StreetBondSR's peach coating read as orange. These get the lighter
+ * `hero-pop-lite` instead. Keyed like HERO_POSITION, by the photo's /public
+ * path (a Sanity photo's `origin`), so the setting follows the photo to
+ * whichever page uses it. A photo not listed here gets `hero-pop`.
+ */
+export const HERO_POP_LITE: ReadonlySet<string> = new Set([
+  "/images/products/streetprint/streetprint-86.jpg", // StreetPrint: the lawn and the autumn leaves
+  "/images/products/streetbondsr/streetbondsr-02.jpg", // StreetBondSR: the peach coating stays peach
+  "/images/applications/residential-driveways/residential-driveways-18.jpg", // Residential Driveways: the lit pillars at dusk
+  "/images/applications/playgrounds/playgrounds-01.jpg", // Playgrounds: turquoise, orange and yellow markings
+  "/images/products/streetbond/streetbond-67.png", // Sport Courts: the pink, orange and yellow court
+]);
+
+/** The colour class for a hero photo: `hero-pop`, or `hero-pop-lite` for the photos above. */
+export function heroColourClass(photo: { src: string; origin?: string }): "hero-pop" | "hero-pop-lite" {
+  return HERO_POP_LITE.has(photo.origin ?? photo.src) ? "hero-pop-lite" : "hero-pop";
+}

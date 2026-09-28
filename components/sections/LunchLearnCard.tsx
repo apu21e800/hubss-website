@@ -88,11 +88,24 @@ export default function LunchLearnCard({
               <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </Link>
-          <p className="flex flex-wrap gap-x-3 text-[12px]" style={{ color: "var(--text-muted)" }}>
-            <span>Or call</span>
-            <a href="tel:+14165409287" className="whitespace-nowrap font-semibold underline-offset-2 hover:underline" style={{ color: "var(--text-secondary)" }}>East · 416-540-9287</a>
-            <a href="tel:+16043098212" className="whitespace-nowrap font-semibold underline-offset-2 hover:underline" style={{ color: "var(--text-secondary)" }}>West · 604-309-8212</a>
-          </p>
+          {row ? (
+            <p className="flex flex-wrap gap-x-3 text-[12px]" style={{ color: "var(--text-muted)" }}>
+              <span>Or call</span>
+              <a href="tel:+14165409287" className="whitespace-nowrap font-semibold underline-offset-2 hover:underline" style={{ color: "var(--text-secondary)" }}>East · 416-540-9287</a>
+              <a href="tel:+16043098212" className="whitespace-nowrap font-semibold underline-offset-2 hover:underline" style={{ color: "var(--text-secondary)" }}>West · 604-309-8212</a>
+            </p>
+          ) : (
+            // In a sidebar the three pieces wrapped as "Or call East · …" over
+            // "West · …", the second number under "Or call" (QA, 28 Sep 2026).
+            // The two numbers stack in their own column, so East and West line up.
+            <p className="flex gap-x-3 text-[12px]" style={{ color: "var(--text-muted)" }}>
+              <span className="flex-shrink-0">Or call</span>
+              <span className="flex flex-col">
+                <a href="tel:+14165409287" className="whitespace-nowrap font-semibold underline-offset-2 hover:underline" style={{ color: "var(--text-secondary)" }}>East · 416-540-9287</a>
+                <a href="tel:+16043098212" className="whitespace-nowrap font-semibold underline-offset-2 hover:underline" style={{ color: "var(--text-secondary)" }}>West · 604-309-8212</a>
+              </span>
+            </p>
+          )}
         </div>
       </div>
     </aside>

@@ -356,30 +356,39 @@ function checkGalleryDistinctness() {
     `${Object.keys(m).length} galleries compared`, dupes);
 }
 
-// ── 4b. the Follow the Work strip shows six different photographs ───────────
+// ── 4b. the Follow the work mosaic shows different photographs ──────────────
 // EARNED BY: the homepage strip showed the Little Italy roundel twice. Tile 1
 // and tile 6 pointed at two different blog folders (Commercial Drive, and the
 // Vancouver & Richmond case study), and the paths looked distinct — but the two
-// featured.jpg files were byte-identical copies. Comparing paths could never
-// catch that, so this compares the bytes the paths resolve to.
-function checkFollowTheWorkDistinct() {
-  const name = "Follow the Work tiles are distinct";
-  const tf = path.join(ROOT, "lib", "follow-the-work.json");
-  if (!fs.existsSync(tf)) { record(name, false, "lib/follow-the-work.json is missing"); return; }
-  const tiles = JSON.parse(fs.readFileSync(tf, "utf8"));
-  const problems = [], seen = new Map();
-  // The strip is a six-column row on desktop; any other count leaves a hole.
-  if (tiles.length !== 6) problems.push(`${tiles.length} tiles, the strip is laid out for 6`);
-  tiles.forEach((t, i) => {
-    const file = path.join(ROOT, "public", decodeURI(t.src));
-    if (!fs.existsSync(file)) { problems.push(`tile ${i + 1}: ${t.src} does not exist`); return; }
-    const hash = createHash("sha256").update(fs.readFileSync(file)).digest("hex");
-    if (seen.has(hash)) {
-      const j = seen.get(hash);
-      problems.push(`tile ${i + 1} (${t.src}) is the same file as tile ${j + 1} (${tiles[j].src})`);
-    } else seen.set(hash, i);
+// featured.jpg files were byte-identical copies. Since 28 Sep 2026 the section
+// is a mosaic of map pins' own photos (components/sections/InstagramStrip.tsx),
+// loaded from Sanity, so this reads the tiles off the rendered page and
+// compares the image files they load (a Sanity asset id is its content hash).
+async function checkFollowTheWorkDistinct() {
+  const name = "Follow the work tiles are distinct";
+  let html = "";
+  try { html = await (await fetch(BASE + "/", { signal: AbortSignal.timeout(20000) })).text(); }
+  catch (e) { record(name, false, `could not load the homepage: ${e.message}`); return; }
+  const at = html.indexOf('id="follow"');
+  if (at < 0) { record(name, false, 'no id="follow" section on the homepage'); return; }
+  const section = html.slice(at, html.indexOf("</section>", at));
+  const tiles = section.split("data-tile=").slice(1).map((chunk) => {
+    const key = chunk.slice(1, chunk.indexOf('"', 1));
+    const src = (chunk.match(/src="([^"]+)"/) || [])[1] || "";
+    // Sanity: /images/<project>/<dataset>/<assetId>-<w>x<h>.<ext>; /_next/image?url=...; or a plain path.
+    const decoded = decodeURIComponent(src.replace(/&amp;/g, "&"));
+    const file = (decoded.match(/images\/[^/]+\/[^/]+\/([a-f0-9]{20,}-\d+x\d+\.\w+)/) || [])[1]
+      || (decoded.match(/url=([^&]+)/) || [])[1] || decoded.split("?")[0];
+    return { key, file };
   });
-  record(name, problems.length === 0, `${tiles.length} tiles compared by content`, problems);
+  const problems = [], seen = new Map();
+  if (tiles.length < 4) problems.push(`${tiles.length} tiles, the mosaic needs at least 4`);
+  tiles.forEach((t, i) => {
+    if (!t.file) { problems.push(`tile ${t.key}: no image`); return; }
+    if (seen.has(t.file)) problems.push(`tile ${t.key} shows the same file as tile ${seen.get(t.file)} (${t.file})`);
+    else seen.set(t.file, t.key);
+  });
+  record(name, problems.length === 0, `${tiles.length} tiles compared by file`, problems);
 }
 
 // ── 5. image weight per route ────────────────────────────────────────────────
@@ -584,7 +593,7 @@ async function checkNoEmDashes(routes) {
     await checkLinks(routes);
     await checkBuiltPagesReachable();
     checkGalleryDistinctness();
-    checkFollowTheWorkDistinct();
+    await checkFollowTheWorkDistinct();
     checkNoUndefined();
     checkBlogRedirectTargets();
     await checkUnknownSlugs404();

@@ -12,6 +12,15 @@ import type { ColourFamily } from "@/lib/colours";
  * Native <details>/<summary> — no client JS, keyboard + screen-reader
  * semantics for free, content stays in the DOM for search engines.
  */
+
+/**
+ * The hairline round a near-white swatch (`keyline` in lib/colours.ts). It was
+ * a white line, drawn for the dark pages, and on the light panel the MMAX White
+ * swatch vanished into it (QA, 28 Sep 2026). --ink-20 is a dark hairline on
+ * paper and a light one on a dark surface.
+ */
+const KEYLINE = "1px solid var(--ink-20)";
+
 export default function ColourSystem({
   families,
   heading = "The colour system.",
@@ -68,9 +77,7 @@ export default function ColourSystem({
                         width: 20,
                         height: 14,
                         background: c.hex,
-                        border: c.keyline
-                          ? "1px solid rgba(255,255,255,0.35)"
-                          : "1px solid var(--border-color)",
+                        border: c.keyline ? KEYLINE : "1px solid var(--border-color)",
                       }}
                     />
                   ))}
@@ -103,9 +110,7 @@ export default function ColourSystem({
                       style={{
                         aspectRatio: "4 / 3",
                         background: c.hex,
-                        border: c.keyline
-                          ? "1px solid rgba(255,255,255,0.35)"
-                          : "1px solid var(--border-color)",
+                        border: c.keyline ? KEYLINE : "1px solid var(--border-color)",
                       }}
                       /* aria-label was invalid here — a plain <div> has role
                          "generic", which strips aria-label per the ARIA spec, so

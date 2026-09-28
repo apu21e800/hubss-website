@@ -73,9 +73,24 @@ function curatedCount(src) {
   return n;
 }
 
+/**
+ * Which provinces have pins, west to east.
+ *
+ * For the phone card, which names the places it covers without importing the
+ * dataset (see the note on COUNT_OUT below). It said "coast to coast" when
+ * the Atlantic pins had no project behind them; now it says what the pins say.
+ */
+const PROVINCE_ORDER = ["BC", "AB", "SK", "MB", "ON", "QC", "NB", "NS", "PE", "NL"];
+function curatedProvinces(src) {
+  const body = src.slice(src.indexOf("const curatedProjects: MapProject[] = ["));
+  const found = new Set([...body.matchAll(/^ {4}province: "([A-Z]{2})"/gm)].map((m) => m[1]));
+  return PROVINCE_ORDER.filter((p) => found.has(p));
+}
+
 const curatedSrc = fs.readFileSync(CURATED, "utf8");
 const alreadyMapped = curatedSlugs(curatedSrc);
 const curated = curatedCount(curatedSrc);
+const provinces = curatedProvinces(curatedSrc);
 
 if (!fs.existsSync(BLOG_INDEX)) {
   throw new Error("gen-map-blog: lib/blog-index.json is missing. scripts/gen-blog-index.ts writes it and runs first in npm run build.");
@@ -104,7 +119,7 @@ fs.writeFileSync(OUT, JSON.stringify(payload, null, 1) + "\n");
 // pull the whole dataset into the initial bundle for visitors who never open
 // the map — which is the precise cost the wrapper exists to avoid. Twenty-odd
 // bytes instead.
-fs.writeFileSync(COUNT_OUT, JSON.stringify({ count: payload.totalCount }) + "\n");
+fs.writeFileSync(COUNT_OUT, JSON.stringify({ count: payload.totalCount, provinces }) + "\n");
 
 console.log(
   `  ✓ lib/map-blog-projects.json — ${payload.totalCount} pins, ${linked.length} linked to a published post`

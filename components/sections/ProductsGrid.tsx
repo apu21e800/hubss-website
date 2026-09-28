@@ -164,8 +164,15 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
             a native swipe row: scroll-snap, CSS only, nothing removed — every
             card still there, sideways. From sm up the grid is byte-identical
             to what it was. */}
-        <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 -mx-4 px-4 pb-3
-                        sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:overflow-visible sm:mx-0 sm:px-0 sm:pb-0"
+        {/* Every card in the swipe row is as tall as the tallest (Vern,
+            28 Sep 2026: on the phone "these cards show different card
+            height"). The row stretches its items; the wrapper below must not
+            set its own height on phones, because height: 100% of a row with
+            no fixed height counts as auto and switches the stretch off. From
+            sm up the grid rows give h-full a real height, and auto-rows-fr
+            makes every row as tall as the tallest, so the two rows match too. */}
+        <div className="flex items-stretch overflow-x-auto snap-x snap-mandatory gap-4 -mx-4 px-4 pb-3
+                        sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:auto-rows-fr sm:overflow-visible sm:mx-0 sm:px-0 sm:pb-0"
              style={{ scrollbarWidth: "none" }}>
           {featured.map((product, i) => {
             const imgSrc = productImages[product.slug]
@@ -186,11 +193,11 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
                 whileInView={{ y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.06, duration: 0.35 }}
-                className="h-full snap-start flex-shrink-0 w-[82vw] max-w-[340px] sm:w-auto sm:max-w-none sm:flex-shrink"
+                className="flex snap-start flex-shrink-0 w-[82vw] max-w-[340px] sm:h-full sm:w-auto sm:max-w-none sm:flex-shrink"
               >
                 <Link
                   href={`/products/${product.slug}`}
-                  className="group relative flex flex-col h-full rounded-2xl overflow-hidden transition-all duration-250"
+                  className="group relative flex flex-col w-full h-full rounded-2xl overflow-hidden transition-all duration-250"
                   style={{
                     background: "var(--bg-card)",
                     border: "1px solid var(--ink-10)",

@@ -21,10 +21,18 @@ import { getMergedApplications } from "@/lib/applications.server";
 import { getMergedProducts } from "@/lib/products.server";
 import { SOCIAL_LINKS } from "@/lib/social-links";
 
+// 30 Sep 2026 (QA A1, E2, E4): "Systems", not the banned "Solutions", in the
+// title; one factual description with no "leader" (the same line as the site
+// default in app/layout.tsx); and the share image is the real 1200 x 630 crop
+// (QA F12), not the 1632 x 1020 hero file declared as 1200 x 630.
+const HOME_DESCRIPTION =
+  "Stamped asphalt, preformed thermoplastic markings and pavement coatings for Canadian municipalities, specifiers and contractors. Canadian-owned since 1999.";
+
 export const metadata: Metadata = buildMetadata({
-  title: "Decorative Pavement & Road Marking Solutions",
-  description: "Canada's leader in decorative stamped asphalt, thermoplastic road markings, and coloured pavement systems. Serving municipalities, developers, and contractors coast to coast since 1999.",
+  title: "Decorative Pavement & Road Marking Systems",
+  description: HOME_DESCRIPTION,
   slug: "",
+  image: "/images/og/default.jpg",
 });
 
 const organizationSchema = {
@@ -35,8 +43,7 @@ const organizationSchema = {
   url: "https://hubss.com",
   logo: "https://hubss.com/images/hub-official-logo.svg",
   foundingDate: "1999",
-  description:
-    "Canadian leader in decorative pavement and traffic safety solutions. Stamped asphalt, thermoplastic markings, and specialty coatings for municipalities and developers across Canada.",
+  description: HOME_DESCRIPTION,
   // One source with the footer and the Follow the Work strip. This list used
   // to be typed by hand and pointed Google at an Instagram account HUB does
   // not own, and it left out X.

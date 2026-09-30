@@ -65,9 +65,11 @@ const HOME_HERO_TEXT: Record<string, string> = {
   "homepageHero.heading":    "The World Is",
   "homepageHero.subheading": "Your Canvas.",
   "homepageHero.tagline":    "Let’s build your signature space.",
-  "homepageHero.cta1Label":  "See the Work",
-  "homepageHero.cta1Href":   "#field-notes",
-  "homepageHero.cta2Label":  "See the Systems",
+  // 30 Sep 2026 (QA A2, E34): the work is the map of documented projects,
+  // and the labels are sentence case, as in app/page.tsx.
+  "homepageHero.cta1Label":  "See the work",
+  "homepageHero.cta1Href":   "#map",
+  "homepageHero.cta2Label":  "See the systems",
   "homepageHero.cta2Href":   "#systems",
 };
 

@@ -118,9 +118,14 @@ export default async function Home() {
     heading:    sanityPage?.homepageHero?.heading    ?? "The World Is",
     subheading: sanityPage?.homepageHero?.subheading ?? "Your Canvas.",
     tagline:    sanityPage?.homepageHero?.tagline    ?? "Let’s build your signature space.",
-    cta1Label:  sanityPage?.homepageHero?.cta1Label  ?? "See the Work",
-    cta1Href:   sanityPage?.homepageHero?.cta1Href   ?? "#field-notes",
-    cta2Label:  sanityPage?.homepageHero?.cta2Label  ?? "See the Systems",
+    // 30 Sep 2026 (QA A2, E34): "See the work" goes to the map of documented
+    // projects (#map), not to the Insights section (#field-notes); both
+    // labels in sentence case. Sanity holds these four fields too
+    // (scripts/sync-pages-to-sanity.ts, HOME_HERO_TEXT), so the live site
+    // changes when that sync runs.
+    cta1Label:  sanityPage?.homepageHero?.cta1Label  ?? "See the work",
+    cta1Href:   sanityPage?.homepageHero?.cta1Href   ?? "#map",
+    cta2Label:  sanityPage?.homepageHero?.cta2Label  ?? "See the systems",
     cta2Href:   sanityPage?.homepageHero?.cta2Href   ?? "#systems",
     // Hero slide 1 in Studio; /images/hero/hero-1.jpg when it's empty.
     heroImageSrc: heroPhoto?.src,

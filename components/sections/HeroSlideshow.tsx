@@ -31,9 +31,11 @@ export default function HeroSlideshow({
   heading    = "The World Is",
   subheading = "Your Canvas.",
   tagline    = "Let's build your signature space.",
-  cta1Label  = "See the Work",
-  cta1Href   = "#field-notes",
-  cta2Label  = "See the Systems",
+  // The same defaults as app/page.tsx (30 Sep 2026, QA A2/E34: the work is
+  // the map, and sentence case).
+  cta1Label  = "See the work",
+  cta1Href   = "#map",
+  cta2Label  = "See the systems",
   cta2Href   = "#systems",
   heroImageSrc,
   heroImageAlt,

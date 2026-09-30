@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PRODUCT_SLUGS } from "./PostConversion";
+import RuleLabel from "./RuleLabel";
 
 /**
  * "Systems in this piece" — the internal-linking rail (Aug 2026).
@@ -20,37 +21,33 @@ export default function SystemsInPost({ products, primary }: { products: string[
   if (linkable.length === 0) return null;
 
   // No page margins of its own: the post page sets it in the reading column.
+  // 30 Sep 2026: a labelled hairline row, like every other block in Insights
+  // (RuleLabel), where it was a box of orange chips.
   return (
     <div>
-      <div
-        className="rounded-xl p-5 sm:p-6"
-        style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}
-      >
-        <p className="text-[10.5px] font-bold tracking-[0.2em] uppercase mb-3.5" style={{ color: "var(--accent-text)" }}>
-          Systems in this piece
-        </p>
-        <div className="flex flex-wrap gap-2">
-          {linkable.map((p) => (
-            <Link
-              key={p}
-              href={`/products/${PRODUCT_SLUGS[p]}`}
-              className="group inline-flex items-center gap-2 px-3.5 rounded-lg text-[13px] font-semibold transition-colors hover:bg-[var(--ink-05)]"
-              style={{ background: "rgba(249,115,22,0.08)", border: "1px solid rgba(249,115,22,0.24)", color: "var(--text-primary)", minHeight: 44 }}
+      <RuleLabel className="mb-1">Systems in this piece</RuleLabel>
+      <div className="flex flex-wrap gap-x-7">
+        {linkable.map((p) => (
+          <Link
+            key={p}
+            href={`/products/${PRODUCT_SLUGS[p]}`}
+            className="group inline-flex min-h-[48px] items-center gap-2 text-[15px] font-semibold transition-colors hover:text-[var(--accent-text)]"
+            style={{ color: "var(--text-primary)" }}
+          >
+            {p}
+            <svg
+              width="12"
+              height="12"
+              fill="none"
+              stroke="var(--accent-text)"
+              viewBox="0 0 24 24"
+              className="transition-transform group-hover:translate-x-0.5"
+              aria-hidden="true"
             >
-              {p}
-              <svg
-                width="11"
-                height="11"
-                fill="none"
-                stroke="var(--accent-text)"
-                viewBox="0 0 24 24"
-                className="transition-transform group-hover:translate-x-0.5"
-              >
-                <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </Link>
-          ))}
-        </div>
+              <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </Link>
+        ))}
       </div>
     </div>
   );

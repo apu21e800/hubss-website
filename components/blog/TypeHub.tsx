@@ -1,14 +1,13 @@
 import Link from "next/link";
-import PhotoImage from "@/components/ui/PhotoImage";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
 import JsonLd from "@/components/ui/JsonLd";
-import BlogCard from "@/components/blog/BlogCard";
+import BlogCard, { StoryLead, pickLead } from "@/components/blog/BlogCard";
 import LunchLearnTile from "@/components/blog/LunchLearnTile";
+import RuleLabel from "@/components/blog/RuleLabel";
 import { getAllPosts } from "@/lib/blog";
 import { INSIGHTS_SECTIONS, sectionFor, type InsightsSection } from "@/lib/field-notes-taxonomy";
-import { clipExcerpt, focalObjectPosition } from "@/lib/blog-taxonomy";
 
 /**
  * An Insights section page: /blog/projects, /blog/guides, /blog/articles.
@@ -27,6 +26,12 @@ import { clipExcerpt, focalObjectPosition } from "@/lib/blog-taxonomy";
  * under the heading is gone (rest#10): they looked like filters and did
  * nothing, and on a phone they filled the first screen. The keywords still go
  * to search engines, in the CollectionPage's `about`.
+ *
+ * 30 Sep 2026 (Vern: "editorial, blogs should follow suit"): laid out like
+ * /blog. The section's one line (its blurb) under the title instead of the
+ * paragraph (its promise, kept in the taxonomy); the sections as tabs on a
+ * hairline; the lead story at editorial size beside its headline, where it
+ * was a dark photograph with the type over it; then the editorial cards.
  */
 export default async function TypeHub({ section }: { section: InsightsSection }) {
   const all = await getAllPosts();
@@ -71,8 +76,8 @@ export default async function TypeHub({ section }: { section: InsightsSection })
     ],
   };
 
-  const [lead, ...rest] = posts;
-  const leadFocus = lead ? focalObjectPosition(lead.featuredImageHotspot, lead.featuredImageWidth, lead.featuredImageHeight) : undefined;
+  const lead = pickLead(posts);
+  const rest = posts.filter((p) => p.slug !== lead?.slug);
 
   // The same row of sections /blog filters by, as links: every section is one
   // click from every other, for readers and for crawlers.
@@ -87,8 +92,8 @@ export default async function TypeHub({ section }: { section: InsightsSection })
       <JsonLd data={breadcrumbSchema} />
       <Nav />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-20 sm:pt-28 pb-8">
-        <nav aria-label="Breadcrumb" className="mb-2 flex items-center gap-2 text-xs font-semibold tracking-[0.2em] uppercase">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-20 sm:pt-28 pb-10">
+        <nav aria-label="Breadcrumb" className="mb-1 flex items-center gap-2 text-xs font-semibold tracking-[0.2em] uppercase">
           <Link href="/blog" className="inline-flex items-center transition-colors hover:text-[var(--accent-text)]" style={{ color: "var(--accent-text-lg)", minHeight: 44 }}>
             Insights
           </Link>
@@ -96,24 +101,27 @@ export default async function TypeHub({ section }: { section: InsightsSection })
           <span style={{ color: "var(--text-secondary)" }}>{section.plural}</span>
         </nav>
 
-        <div className="max-w-3xl mb-7">
+        <header className="mb-8 grid gap-y-3 lg:grid-cols-12 lg:items-end lg:gap-x-12">
           <h1
-            className="font-black mb-3"
+            className="font-display font-black lg:col-span-7"
             style={{
               color: "var(--text-primary)",
-              fontSize: "clamp(1.85rem, 3.2vw, 2.75rem)",
-              lineHeight: 1.05,
-              letterSpacing: "-0.03em",
+              fontSize: "clamp(2rem, 1.2rem + 2.6vw, 3.4rem)",
+              lineHeight: 1.02,
+              letterSpacing: "-0.035em",
             }}
           >
             {section.plural}
           </h1>
-          <p className="text-base leading-relaxed" style={{ color: "var(--text-secondary)", maxWidth: "62ch" }}>
-            {section.promise}
+          <p className="text-base leading-relaxed lg:col-span-5 lg:pb-1.5" style={{ color: "var(--text-secondary)", maxWidth: "44ch" }}>
+            {section.blurb}
           </p>
-        </div>
+        </header>
 
-        <nav aria-label="Insights sections" className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-hide">
+        {/* The same sections /blog filters by, as links on one hairline:
+            every section is one click from every other, for readers and for
+            crawlers. The brand gradient sits under the one you are in. */}
+        <nav aria-label="Insights sections" className="flex items-end gap-6 overflow-x-auto scrollbar-hide" style={{ borderBottom: "1px solid var(--ink-10)" }}>
           {tabs.map((t) => {
             const active = t.key === section.key;
             return (
@@ -121,91 +129,37 @@ export default async function TypeHub({ section }: { section: InsightsSection })
                 key={t.key}
                 href={t.href}
                 aria-current={active ? "page" : undefined}
-                className="text-[13px] font-semibold px-3.5 rounded-full whitespace-nowrap flex-shrink-0 inline-flex items-center gap-1.5 transition-colors hover:border-orange-500/40"
-                style={{
-                  background: active ? "rgba(249,115,22,0.14)" : "var(--bg-card)",
-                  color: active ? "var(--accent-text)" : "var(--text-body)",
-                  border: "1px solid",
-                  borderColor: active ? "rgba(249,115,22,0.38)" : "var(--ink-12)",
-                  minHeight: 44,
-                }}
+                className="relative -mb-px inline-flex min-h-[48px] flex-shrink-0 items-center gap-1.5 whitespace-nowrap text-[15px] transition-colors hover:text-[var(--text-primary)]"
+                style={{ color: active ? "var(--text-primary)" : "var(--text-muted)", fontWeight: active ? 700 : 600 }}
               >
                 {t.label}
                 {/* From sm up, as on /blog: on a phone the four fit without them. */}
-                <span
-                  className="hidden sm:inline text-[11px] font-bold tabular-nums px-1.5 rounded-full"
-                  style={{
-                    background: active ? "rgba(249,115,22,0.18)" : "var(--ink-06)",
-                    color: active ? "var(--accent-text)" : "var(--text-secondary)",
-                  }}
-                >
+                <span className="hidden text-[11px] font-semibold tabular-nums sm:inline" style={{ color: "var(--text-muted)" }}>
                   {t.count}
                 </span>
+                {active && (
+                  <span aria-hidden="true" className="absolute inset-x-0 -bottom-px h-[2px] rounded-full" style={{ background: "var(--gradient-brand)" }} />
+                )}
               </Link>
             );
           })}
         </nav>
       </div>
 
-      {/* Lead article: the newest in the section, given editorial weight. A
-          photograph with type over it, so it keeps the dark tokens. */}
+      {/* The lead story: the newest in the section with a photograph big
+          enough to carry it, beside its headline and deck. */}
       {lead && (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-4">
-          <Link
-            href={`/blog/${lead.slug}`}
-            data-surface="dark"
-            className="group relative block rounded-2xl overflow-hidden"
-            style={{ border: "1px solid var(--border-color)", minHeight: 340, background: "var(--bg-card)" }}
-          >
-            {lead.featuredImage && (
-              <div className="absolute inset-0" style={{ containerType: "size" }}>
-                <PhotoImage
-                  src={lead.featuredImage}
-                  alt={lead.title}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  style={leadFocus ? { objectPosition: leadFocus } : undefined}
-                  sizes="(max-width: 1280px) 100vw, 1232px"
-                  priority
-                />
-              </div>
-            )}
-            <div
-              className="absolute inset-0"
-              style={{ background: "linear-gradient(to top, rgba(7,11,18,0.97) 0%, rgba(7,11,18,0.62) 45%, rgba(7,11,18,0.12) 100%)" }}
-            />
-            <div className="relative p-6 sm:p-10 flex flex-col justify-end" style={{ minHeight: 340 }}>
-              {/* On a solid dark backing: orange straight onto the photo fell
-                  on grass and traffic lights and failed contrast (QA rest#19). */}
-              <span
-                className="self-start text-[10.5px] font-bold px-2.5 py-1 rounded uppercase tracking-[0.18em] mb-3"
-                style={{ background: "rgba(10,10,10,0.86)", color: "#FB923C", border: "1px solid rgba(249,115,22,0.45)", backdropFilter: "blur(6px)", WebkitBackdropFilter: "blur(6px)" }}
-              >
-                Latest {section.singular.toLowerCase()}
-              </span>
-              <h2
-                className="font-black mb-2 max-w-3xl"
-                style={{ color: "var(--text-primary)", fontSize: "clamp(1.4rem, 2.6vw, 2.1rem)", lineHeight: 1.1, letterSpacing: "-0.02em", textShadow: "0 2px 16px rgba(0,0,0,0.35)" }}
-              >
-                {lead.title}
-              </h2>
-              <p className="text-sm sm:text-[15px] leading-relaxed max-w-2xl mb-3" style={{ color: "var(--ink-80)" }}>
-                {clipExcerpt(lead.excerpt, 190)}
-              </p>
-              <span className="text-[13px] font-bold inline-flex items-center gap-1.5" style={{ color: "var(--accent-text)" }}>
-                Read post
-                <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" className="transition-transform group-hover:translate-x-0.5" aria-hidden="true">
-                  <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </span>
-            </div>
-          </Link>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-16 sm:pb-20">
+          <StoryLead post={lead} />
         </div>
       )}
 
       {rest.length > 0 && (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-4 pb-16">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-20">
+          <RuleLabel as="h2" className="mb-8">
+            {`More ${section.plural.toLowerCase()}`}
+          </RuleLabel>
+          <div className="grid grid-cols-1 gap-x-6 gap-y-7 sm:grid-cols-2 sm:gap-y-12 lg:grid-cols-3 lg:gap-x-8">
             {rest.map((post) => (
               <BlogCard key={post.slug} post={post} />
             ))}
@@ -220,30 +174,32 @@ export default async function TypeHub({ section }: { section: InsightsSection })
         </div>
       )}
 
-      {/* The other sections, for the reader who reached the end of this one. */}
+      {/* The other sections, for the reader who reached the end of this one:
+          a name and its line on a hairline, no boxes. */}
       {others.length > 0 && (
         <div style={{ background: "var(--bg-section-asphalt)", borderTop: "1px solid var(--border-color)" }}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
-            <p className="text-[11px] font-bold tracking-[0.2em] uppercase mb-5" style={{ color: "var(--accent-text)" }}>
-              Also in Insights
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-14">
+            <RuleLabel className="mb-2">Also in Insights</RuleLabel>
+            <div className="grid grid-cols-1 sm:grid-cols-2 sm:gap-x-8 lg:gap-x-12">
               {others.map((s) => (
                 <Link
                   key={s.key}
                   href={`/blog/${s.slug}`}
-                  className="group flex items-center justify-between gap-4 p-5 rounded-xl transition-colors hover:border-orange-500/40"
-                  style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}
+                  className="group flex items-center justify-between gap-6 py-5"
+                  style={{ borderBottom: "1px solid var(--ink-10)" }}
                 >
                   <span className="min-w-0">
-                    <span className="block text-lg font-bold mb-1" style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
+                    <span
+                      className="font-display block text-[22px] font-bold transition-colors group-hover:text-[var(--accent-text)]"
+                      style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}
+                    >
                       {s.plural}
                     </span>
-                    <span className="block text-[13.5px] leading-snug" style={{ color: "var(--text-secondary)" }}>
+                    <span className="mt-1 block text-[14px] leading-snug" style={{ color: "var(--text-secondary)" }}>
                       {s.blurb}
                     </span>
                   </span>
-                  <svg width="18" height="18" fill="none" stroke="var(--accent-text)" viewBox="0 0 24 24" className="flex-shrink-0 transition-transform group-hover:translate-x-0.5" aria-hidden="true">
+                  <svg width="18" height="18" fill="none" stroke="var(--accent-text)" viewBox="0 0 24 24" className="flex-shrink-0 transition-transform group-hover:translate-x-1" aria-hidden="true">
                     <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </Link>

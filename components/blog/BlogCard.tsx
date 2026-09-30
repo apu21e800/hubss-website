@@ -5,6 +5,20 @@ import { isSanityImage } from "@/lib/photos";
 import { sectionFor } from "@/lib/field-notes-taxonomy";
 import { clipExcerpt, focalObjectPosition, formatPostDate } from "@/lib/blog-taxonomy";
 
+/**
+ * How Insights shows a post, everywhere a post is listed: the /blog front
+ * page and library, the section pages, and "Continue reading" under a post.
+ *
+ * 30 Sep 2026 (Vern: "it's supposed to have an editorial feel, text
+ * effective, not text heavy. smart. editorial, blogs should follow suit"):
+ * the boxed card with a pill, an excerpt, "Read post" and a read time became
+ * what a magazine prints. A photograph, one kicker line (the section and the
+ * date) and the headline. No box: the photograph is the object and the page
+ * is the ground. The excerpt survives only as the lead story's deck
+ * (StoryLead). On a phone a listed post is a row, thumbnail beside headline,
+ * so the library scans in a few thumb-lengths instead of seventy photographs.
+ */
+
 const FALLBACKS = [
   "/images/applications/crosswalks/crosswalks-01.jpg",
   "/images/applications/traffic-calming/traffic-calming-01.jpg",
@@ -18,90 +32,146 @@ function getFallback(slug: string) {
   return FALLBACKS[hash % FALLBACKS.length];
 }
 
-/** priority: the first row of a list, which is the page's largest paint (LCP). */
-export default function BlogCard({ post, priority = false }: { post: PostMeta; priority?: boolean }) {
-  const imgSrc = post.featuredImage ?? getFallback(post.slug);
-  // Sanity photos are sized by Sanity's CDN (PhotoImage); any other outside
-  // URL is shown as it is.
-  const isExternal = imgSrc.startsWith("http") && !isSanityImage(imgSrc);
-  // Label palette comes from the taxonomy so every surface that shows a
-  // section (card, section page, post hero) agrees.
-  const section = sectionFor(post.category);
-  const focus = post.featuredImage
-    ? focalObjectPosition(post.featuredImageHotspot, post.featuredImageWidth, post.featuredImageHeight)
-    : undefined;
+/** The photo, its focal point, and whether Sanity's CDN sizes it. */
+function photoFor(post: PostMeta) {
+  const src = post.featuredImage ?? getFallback(post.slug);
+  return {
+    src,
+    // Sanity photos are sized by Sanity's CDN (PhotoImage); any other
+    // outside URL is shown as it is.
+    external: src.startsWith("http") && !isSanityImage(src),
+    focus: post.featuredImage
+      ? focalObjectPosition(post.featuredImageHotspot, post.featuredImageWidth, post.featuredImageHeight)
+      : undefined,
+  };
+}
 
+/**
+ * The kicker: the section (in the section's own colour, the way into it on
+ * every surface) and the date, "Sep 8, 2026" as docs/STYLE.md prints dates.
+ */
+export function StoryKicker({ post, className = "" }: { post: PostMeta; className?: string }) {
+  const section = sectionFor(post.category);
   return (
-    <Link
-      href={`/blog/${post.slug}`}
-      // The card had no border at all — just a fill a few percent off the page,
-      // which on a neutral ground left it reading as a smudge rather than an
-      // object. The hairline is what makes it a card; the orange glow on hover
-      // is the same accent the featured rail uses, so the whole library
-      // responds to the cursor in one language.
-      // The border colour is a class, not an inline style: inline, it beat the
-      // hover class and the orange edge never showed.
-      className="group flex h-full flex-col overflow-hidden rounded-xl transition-all duration-300 hover:-translate-y-1 bg-[var(--bg-card)] border border-[var(--border-color)] hover:border-orange-500/40 hover:shadow-[0_8px_28px_rgba(249,115,22,0.14)]"
-    >
+    <span className={`flex flex-wrap items-center gap-x-2 gap-y-1 text-[10.5px] font-bold uppercase tracking-[0.18em] ${className}`}>
+      <span style={{ color: section.text }}>{section.singular}</span>
+      <span aria-hidden="true" className="h-[3px] w-[3px] rounded-full" style={{ background: "var(--ink-30)" }} />
+      <span className="tabular-nums tracking-[0.1em]" style={{ color: "var(--text-muted)" }}>
+        {formatPostDate(post.date)}
+      </span>
+    </span>
+  );
+}
+
+/**
+ * A listed post. `size="small"` is the front page's row of four, a step down
+ * in type; the default is the library's three across.
+ * priority: the first row of a list, which may be the page's largest paint.
+ */
+export default function BlogCard({
+  post,
+  priority = false,
+  size = "default",
+}: {
+  post: PostMeta;
+  priority?: boolean;
+  size?: "default" | "small";
+}) {
+  const photo = photoFor(post);
+  const small = size === "small";
+  return (
+    <Link href={`/blog/${post.slug}`} className="group flex items-start gap-4 sm:block">
       {/* container-type lets the focal point (lib/blog-taxonomy.ts) measure
-          this frame. The dark fade that sat along the bottom of every photo
-          went with the move to paper (28 Sep 2026): it was there to melt the
-          photo into a charcoal card, and on a white one it read as a smudge. */}
-      <div className="relative h-52 overflow-hidden flex-shrink-0" style={{ containerType: "size", background: "var(--bg-card-surface)" }}>
+          this frame. A 4:3 thumbnail on a phone, 3:2 from sm up. */}
+      <span
+        className="relative block aspect-[4/3] w-28 flex-shrink-0 overflow-hidden rounded-lg sm:aspect-[3/2] sm:w-auto sm:rounded-xl"
+        style={{ containerType: "size", background: "var(--ink-05)" }}
+      >
         <PhotoImage
-          src={imgSrc}
-          alt={post.title}
+          src={photo.src}
+          alt=""
           fill
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
-          style={focus ? { objectPosition: focus } : undefined}
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 410px"
-          unoptimized={isExternal}
+          className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+          style={photo.focus ? { objectPosition: photo.focus } : undefined}
+          sizes={small ? "(max-width: 640px) 112px, (max-width: 1024px) 50vw, 300px" : "(max-width: 640px) 112px, (max-width: 1024px) 50vw, 410px"}
+          unoptimized={photo.external}
           priority={priority}
         />
-        {/* Orange accent border on hover */}
-        <div
-          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-          style={{ boxShadow: "inset 0 0 0 1px rgba(249,115,22,0.4)" }}
-        />
-      </div>
-
-      <div className="p-5 flex flex-col flex-1">
-        {/* One label, the section, and the date. The two product chips that
-            sat under it went on 28 Sep 2026 (Vern: "extra tags on cards might
-            be a bit overkill"): the post names its systems, and the filter
-            above the grid finds them. */}
-        <div className="flex items-center justify-between mb-2.5 gap-2">
-          <span
-            className="text-[11px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wider flex-shrink-0"
-            style={{ background: section.tint, color: section.text, border: `1px solid ${section.border}` }}
-          >
-            {section.singular}
-          </span>
-          <span className="text-[11px] flex-shrink-0 tabular-nums" style={{ color: "var(--text-muted)" }}>
-            {formatPostDate(post.date)}
-          </span>
-        </div>
-
+      </span>
+      <span className="block min-w-0 sm:mt-4">
+        <StoryKicker post={post} />
+        {/* Weight, leading and tracking inline: globals.css sets every
+            heading's (800, 1.15, -0.025em) over Tailwind's utilities. */}
         <h3
-          className="font-bold text-[15px] leading-snug mb-2 transition-colors duration-200 group-hover:text-[var(--accent-text)]"
-          style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}
+          className={`font-display mt-2 text-balance transition-colors duration-200 group-hover:text-[var(--accent-text)] ${
+            small ? "text-[16px] sm:text-[17px]" : "text-[16px] sm:text-[19px]"
+          }`}
+          style={{ color: "var(--text-primary)", fontWeight: 700, lineHeight: 1.26, letterSpacing: "-0.012em" }}
         >
           {post.title}
         </h3>
-
-        <p className="text-[13px] leading-relaxed flex-1 mb-4" style={{ color: "var(--text-secondary)" }}>
-          {clipExcerpt(post.excerpt, 120)}
-        </p>
-
-        <div className="flex items-center justify-between mt-auto">
-          <span className="text-xs font-semibold flex items-center gap-1" style={{ color: "var(--accent-text-lg)" }}>
-            Read post &rarr;
-          </span>
-          {post.readTime && (
-            <span className="text-[11px]" style={{ color: "var(--text-muted)" }}>{post.readTime}</span>
-          )}
-        </div>
-      </div>
+      </span>
     </Link>
+  );
+}
+
+/**
+ * The lead story: the photograph at editorial size beside its kicker,
+ * headline and deck (the excerpt, cut to one or two lines). The /blog front
+ * page and each section page open with one.
+ */
+export function StoryLead({ post, headingLevel = "h2" }: { post: PostMeta; headingLevel?: "h2" | "h3" }) {
+  const photo = photoFor(post);
+  const Heading = headingLevel;
+  return (
+    <Link href={`/blog/${post.slug}`} className="group grid items-center gap-6 lg:grid-cols-12 lg:gap-12">
+      <span
+        className="relative block aspect-[3/2] overflow-hidden rounded-2xl lg:col-span-7"
+        style={{ containerType: "size", background: "var(--ink-05)" }}
+      >
+        <PhotoImage
+          src={photo.src}
+          alt=""
+          fill
+          className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+          style={photo.focus ? { objectPosition: photo.focus } : undefined}
+          sizes="(max-width: 1024px) 100vw, 720px"
+          unoptimized={photo.external}
+          priority
+        />
+      </span>
+      <span className="block lg:col-span-5">
+        <StoryKicker post={post} />
+        <Heading
+          className="font-display mt-3 text-balance transition-colors duration-200 group-hover:text-[var(--accent-text)]"
+          style={{ color: "var(--text-primary)", fontSize: "clamp(1.6rem, 1.1rem + 1.5vw, 2.4rem)", fontWeight: 800, lineHeight: 1.08, letterSpacing: "-0.025em" }}
+        >
+          {post.title}
+        </Heading>
+        {post.excerpt && (
+          <span className="mt-4 block text-[16px] leading-relaxed text-pretty" style={{ color: "var(--text-secondary)", maxWidth: "46ch" }}>
+            {clipExcerpt(post.excerpt, 150)}
+          </span>
+        )}
+        {/* The brand's one gradient moment on the page: a short rule that
+            grows when the story is hovered. */}
+        <span
+          aria-hidden="true"
+          className="mt-6 block h-[2px] w-10 rounded-full transition-[width] duration-500 ease-out group-hover:w-20"
+          style={{ background: "var(--gradient-brand)" }}
+        />
+      </span>
+    </Link>
+  );
+}
+
+/**
+ * The lead is the newest post with a photograph big enough to carry it at
+ * this size (QA rest#13: a small photo stretched looks soft), else the newest.
+ */
+export function pickLead<T extends PostMeta>(posts: T[]): T | undefined {
+  return (
+    posts.find((p) => p.featuredImage && (p.featuredImageWidth ?? 0) >= 1600 && (p.featuredImageHeight ?? 0) >= 1000) ??
+    posts[0]
   );
 }

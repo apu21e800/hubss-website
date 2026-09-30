@@ -4,6 +4,8 @@ import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
 import BlogFilter from "@/components/blog/BlogFilter";
+import BlogCard, { StoryLead, pickLead } from "@/components/blog/BlogCard";
+import RuleLabel from "@/components/blog/RuleLabel";
 import JsonLd from "@/components/ui/JsonLd";
 import { getAllPosts } from "@/lib/blog";
 import { INSIGHTS_SECTIONS } from "@/lib/field-notes-taxonomy";
@@ -31,6 +33,12 @@ export default async function BlogPage() {
     .map(([name]) => name);
 
   const sections = INSIGHTS_SECTIONS.filter((s) => posts.some((p) => (s.types as string[]).includes(p.category)));
+
+  // The front page: the lead story, then the next four newest. The library
+  // below continues after them (BlogFilter's frontSlugs).
+  const lead = pickLead(posts);
+  const latest = posts.filter((p) => p.slug !== lead?.slug).slice(0, 4);
+  const frontSlugs = [...(lead ? [lead.slug] : []), ...latest.map((p) => p.slug)];
 
   /**
    * Library-level schema. The index declares itself a Blog with a named
@@ -75,32 +83,30 @@ export default async function BlogPage() {
       <Nav />
 
       {/* Insights reads as a magazine — paper all the way down to the Lunch &
-              Learn band, which keeps the shell (Vern, 21 Sep). */}
+          Learn band, which keeps the shell (Vern, 21 Sep). 30 Sep 2026: and
+          now it is laid out like one. A masthead, a front page (the lead
+          story at editorial size, then the next four), then the library. */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-24 sm:pt-32 pb-16 sm:pb-24">
-        {/* Header — deliberately compact. The library is 67 pieces deep and the
-            job of this page is to get a reader into one of them, so the masthead
-            gives up height to let the first row of cards reach the fold. */}
-        <div className="mb-7">
-          <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-2.5" style={{ color: "var(--accent-text-lg)" }}>
-            Insights
-          </p>
+        {/* Masthead: the title, and its one line beside it from lg. The
+            "Insights" eyebrow over it went: the title already says it. */}
+        <header className="mb-10 grid gap-y-4 sm:mb-12 lg:grid-cols-12 lg:items-end lg:gap-x-12">
           <h1
-            className="font-black mb-3"
+            className="font-display font-black text-balance lg:col-span-8"
             style={{
               color: "var(--text-primary)",
-              fontSize: "clamp(1.85rem, 3.2vw, 2.75rem)",
-              lineHeight: 1.05,
-              letterSpacing: "-0.03em",
-              maxWidth: "20ch",
+              fontSize: "clamp(2rem, 1.2rem + 2.6vw, 3.4rem)",
+              lineHeight: 1.02,
+              letterSpacing: "-0.035em",
+              maxWidth: "18ch",
             }}
           >
             Insights from the front lines of Canadian pavement
           </h1>
-          <p className="text-base" style={{ color: "var(--text-secondary)", maxWidth: "62ch" }}>
+          <p className="text-base leading-relaxed lg:col-span-4 lg:pb-1.5" style={{ color: "var(--text-secondary)", maxWidth: "44ch" }}>
             Decorative pavement in Canada, documented: the projects, the specifications
             and the lifecycle math behind them.
           </p>
-        </div>
+        </header>
 
         {/* The five type hubs used to sit here as a row of big count tiles.
             Vernon, Aug 2026: "we just want to improve the filter system, those
@@ -111,9 +117,27 @@ export default async function BlogPage() {
             (nav, type badges, sitemap, and a text link from the filter once a
             type is chosen); they just no longer shout from the top of /blog. */}
 
+        {/* ── Front page. Server-rendered, so the lead photograph is in the
+            first HTML and is the page's largest paint. */}
+        {lead && (
+          <section aria-label="Latest from Insights" className="mb-16 sm:mb-24">
+            <StoryLead post={lead} />
+            {latest.length > 0 && (
+              <>
+                <RuleLabel className="mt-12 mb-7 sm:mt-16">Latest</RuleLabel>
+                <div className="grid grid-cols-1 gap-y-7 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-4 lg:gap-x-8">
+                  {latest.map((post) => (
+                    <BlogCard key={post.slug} post={post} size="small" />
+                  ))}
+                </div>
+              </>
+            )}
+          </section>
+        )}
+
         {/* Filter + grid — wrapped in Suspense for useSearchParams */}
         <Suspense fallback={<BlogSkeleton />}>
-          <BlogFilter posts={posts} allProducts={allProducts} />
+          <BlogFilter posts={posts} allProducts={allProducts} frontSlugs={frontSlugs} />
         </Suspense>
       </div>
 
@@ -125,21 +149,20 @@ export default async function BlogPage() {
 
 function BlogSkeleton() {
   return (
-    <div className="animate-pulse space-y-4">
-      <div className="flex gap-2">
+    <div className="animate-pulse">
+      <div className="h-3 w-32 rounded bg-[var(--ink-06)]" />
+      <div className="mt-4 flex gap-6 pb-3" style={{ borderBottom: "1px solid var(--ink-10)" }}>
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="h-11 w-24 rounded-full bg-[var(--bg-card)]" />
+          <div key={i} className="h-6 w-20 rounded bg-[var(--ink-06)]" />
         ))}
       </div>
-      <div className="flex gap-3">
-        <div className="h-10 flex-1 rounded-lg bg-[var(--bg-card)]" />
-        <div className="h-10 w-52 rounded-lg bg-[var(--bg-card)]" />
-        <div className="h-10 w-44 rounded-lg bg-[var(--bg-card)]" />
-      </div>
-      <div className="h-72 rounded-2xl bg-[var(--bg-card)] mt-8" />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+      <div className="mt-10 grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
         {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} className="h-64 rounded-xl bg-[var(--bg-card)]" />
+          <div key={i}>
+            <div className="aspect-[3/2] rounded-xl bg-[var(--ink-06)]" />
+            <div className="mt-4 h-3 w-28 rounded bg-[var(--ink-06)]" />
+            <div className="mt-3 h-5 w-4/5 rounded bg-[var(--ink-06)]" />
+          </div>
         ))}
       </div>
     </div>

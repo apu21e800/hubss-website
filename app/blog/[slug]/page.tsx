@@ -9,7 +9,7 @@ import LunchLearnCard from "@/components/sections/LunchLearnCard";
 import JsonLd from "@/components/ui/JsonLd";
 import { LIVE_POSTS, getPost, getRelatedPosts, type Post } from "@/lib/blog";
 import { TYPE_BY_LABEL, sectionFor, type InsightsSection } from "@/lib/field-notes-taxonomy";
-import PostConversion, { PRODUCT_SLUGS, postFocus } from "@/components/blog/PostConversion";
+import { PRODUCT_SLUGS, postFocus } from "@/components/blog/PostConversion";
 import SystemsInPost from "@/components/blog/SystemsInPost";
 import { buildMetadata } from "@/lib/seo";
 import TableOfContents from "@/components/blog/TableOfContents";
@@ -374,18 +374,22 @@ export default async function BlogPostPage({ params }: Props) {
             className="blog-prose prose"
             style={MEASURE}
           >
-            {/* Excerpt / lede */}
+            {/* The standfirst: the excerpt, set as a magazine sets one,
+                larger than the body and upright (30 Sep 2026, editorial pass;
+                it was italic behind an orange bar), then the body. */}
             {post.excerpt && (
-              <p style={{
-                fontSize: "1.1rem",
-                lineHeight: 1.7,
-                color: "var(--text-secondary)",
-                borderLeft: "3px solid #F97316",
-                paddingLeft: "1.25rem",
-                marginBottom: "2.5rem",
-                fontStyle: "italic",
-                fontWeight: 400,
-              }}>
+              <p
+                className="standfirst"
+                style={{
+                  fontSize: "clamp(1.15rem, 1.05rem + 0.35vw, 1.3rem)",
+                  lineHeight: 1.55,
+                  color: "var(--text-primary)",
+                  fontWeight: 500,
+                  letterSpacing: "-0.005em",
+                  marginBottom: "2.25rem",
+                  textWrap: "pretty",
+                }}
+              >
                 {post.excerpt}
               </p>
             )}
@@ -433,18 +437,15 @@ export default async function BlogPostPage({ params }: Props) {
         </aside>
       </div>
 
-      {/* ── Systems rail + typed conversion ──────── */}
+      {/* ── Systems rail ──────── */}
       {/* In the reading column's line and measure, so the page reads down one
-          edge instead of stepping in to a centred box. */}
+          edge instead of stepping in to a centred box. The typed conversion
+          block that followed it went on 30 Sep 2026: with the Lunch & Learn
+          card beside the article and the band before the footer, it was the
+          third ask for the same session on one page. */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-12 sm:pb-16">
-        <div className="flex flex-col gap-8" style={MEASURE}>
+        <div style={MEASURE}>
           <SystemsInPost products={post.products} primary={system} />
-          {/* The typed ask, from lg up. Below lg the Lunch & Learn card has
-              just followed the article, and the same button twice on one
-              phone screen is the repetition Doug's round took out (25 Sep). */}
-          <div className="hidden lg:block">
-            <PostConversion post={post} />
-          </div>
         </div>
       </div>
 

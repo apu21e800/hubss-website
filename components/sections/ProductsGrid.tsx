@@ -143,19 +143,20 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
                 surface.
               </p>
             </div>
-            {/* data-tap: this pill measured 42px; the touch floor is 44.
-                prefetch={false} on this and the other index links here (QA F5,
-                30 Sep 2026): the six cards already prefetch their pages; the
-                index and the "Also available" names do not need to. */}
+            {/* The section's one link to the index (QA A11, 30 Sep 2026: it
+                had this pill above and "View all systems" below). Same
+                classes as "All applications" in ApplicationsGrid.tsx, so the
+                two sections' index buttons look the same; .btn-ghost
+                (app/globals.css) gives it its border, hover and focus ring.
+                prefetch={false} (QA F5): the six cards already prefetch their
+                pages; the index and the "Also available" names need not. */}
             <Link
               href="/products"
               prefetch={false}
-              data-tap="44"
-              className="flex-shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold border transition-all duration-200 hover:text-[var(--text-primary)] hover:border-orange-500/50"
-              style={{ color: "var(--text-secondary)", borderColor: "var(--ink-12)" }}
+              className="btn-ghost flex-shrink-0 inline-flex items-center gap-2 rounded-lg px-7 py-3.5 text-sm font-semibold"
             >
               All systems
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
             </Link>
@@ -305,14 +306,16 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
           })}
         </div>
 
-        {/* Footer row */}
+        {/* Footer row: the four other systems. "View all systems" went from
+            here on 30 Sep 2026 (QA A11): the section opens with "All systems"
+            already, and one index link per section is enough. */}
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4">
           {/* The four names were plain text; each now opens its product page.
               data-tap gives every link the 44px floor on touch screens only
               (globals.css), so the desktop line stays compact. On a phone the
               label takes its own row and the four names fit on the next. */}
           <p
-            className="order-2 sm:order-1 flex flex-wrap items-center justify-center sm:justify-start gap-x-1 text-[13px]"
+            className="flex flex-wrap items-center justify-center sm:justify-start gap-x-1 text-[13px]"
             style={{ color: "var(--ink-50)" }}
           >
             <span className="basis-full sm:basis-auto text-center">Also available:</span>
@@ -330,14 +333,6 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
               </span>
             ))}
           </p>
-          <Link
-            href="/products"
-            prefetch={false}
-            className="order-1 sm:order-2 inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold border transition-all duration-200 hover:text-[var(--text-primary)] hover:border-orange-500/50"
-            style={{ color: "var(--text-secondary)", borderColor: "var(--ink-12)" }}
-          >
-            View all systems
-          </Link>
         </div>
       </div>
     </section>

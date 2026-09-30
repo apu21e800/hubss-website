@@ -125,15 +125,19 @@ export default function ApplicationsGrid({ applications: appsProp }: Props = {})
           ))}
         </div>
 
-        {/* View All CTA */}
+        {/* The section's one link to the index. "All applications", the
+            same classes as "All systems" in ProductsGrid.tsx (QA A11, 30 Sep
+            2026); .btn-ghost (app/globals.css) gives it its border, hover and
+            focus ring. prefetch={false} (QA F5): the nine cards prefetch
+            their own pages already. */}
         <div className="flex justify-center mt-4">
           <Link
             href="/applications"
             prefetch={false}
-            className="inline-flex items-center gap-2 border border-[var(--ink-20)] hover:border-orange-500/60 text-[var(--text-primary)] font-semibold px-7 py-3.5 rounded-lg transition-all duration-200 hover:bg-[var(--ink-04)] text-sm"
+            className="btn-ghost inline-flex items-center gap-2 rounded-lg px-7 py-3.5 text-sm font-semibold"
           >
-            View all applications
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            All applications
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </Link>

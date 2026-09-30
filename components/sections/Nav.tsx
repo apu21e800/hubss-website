@@ -1562,17 +1562,19 @@ export default function Nav() {
               </svg>
             </button>
 
-            {/* Resources — ghost */}
+            {/* Resources — ghost. .btn-ghost (app/globals.css) owns the border,
+                colour, hover and focus ring: the inline border it had beat
+                the hover class, so the button never changed under the
+                pointer (QA A3, C11, 30 Sep 2026). */}
             <a href="/resources"
-              className="px-3 py-1.5 rounded-lg text-[13px] font-semibold transition-all hover:border-orange-500/50 hover:text-[var(--accent-text)]"
-              style={{ border: "1px solid var(--ink-20)", color: "var(--ink-75)" }}
+              className="btn-ghost px-3 py-1.5 rounded-lg text-[13px] font-semibold"
             >
               Resources
             </a>
 
-            {/* Lunch & Learn — gradient */}
+            {/* Lunch & Learn — gradient, .btn-accent for its hover and ring */}
             <a href="/lunch-learn"
-              className="px-3 py-1.5 rounded-lg text-[13px] font-bold whitespace-nowrap"
+              className="btn-accent px-3 py-1.5 rounded-lg text-[13px] font-bold whitespace-nowrap"
               style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "var(--on-accent)" }}
             >
               Lunch &amp; Learn

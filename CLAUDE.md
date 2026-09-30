@@ -249,6 +249,35 @@ with `git checkout origin/main -- <path>`.
   Analytics on success. From 22 to 30 Sep nothing did: the page had moved to
   a form without them.
 
+## Menus and Insights, editorial (30 Sep 2026)
+- Products and Applications panels are typographic, no photographs (Vern:
+  "not sure the images are necessary, unless we have perfect images... DDB
+  agency quality"). Each column is its name in the display face on one
+  hairline whose first 32px are --gradient-brand (RuleAccent in Nav.tsx;
+  components/blog/RuleLabel.tsx is the same rule for pages). One line of
+  explanation per level: products carry PRODUCT_MENU_LINES, application
+  groups carry a note, product families print none. The phone drawer keeps
+  its small row pictures.
+- The bar's Canadian badge shows below lg and from xl only: at 1024px the full
+  row was 42px wider than the window and clipped the Lunch & Learn button.
+- Every listed post is components/blog/BlogCard.tsx: a photograph, one kicker
+  (section and date) and the headline; a row on a phone. StoryLead is the lead
+  story (photo beside headline and deck) and pickLead chooses it (newest post
+  with a photo at least 1600 x 1000). /blog is a masthead, a server-rendered
+  front page (lead plus the next four), then BlogFilter's library: section
+  tabs, search, system, sort, twelve at a time with Show more; unfiltered it
+  starts after the front page. The section pages (TypeHub) use the same parts.
+  No excerpts except the lead's deck, no "Read post", no read times on cards.
+- A post has one Lunch & Learn card beside the article and the band before the
+  footer. PostConversion's block is not rendered any more (postFocus and
+  PRODUCT_SLUGS still live in that file). The standfirst is the excerpt, set
+  upright and larger than the body.
+- Headings: app/globals.css gives every h1-h6 its family, weight (800),
+  tracking (-0.025em) and leading (1.15) as unlayered CSS, which beats
+  Tailwind's utilities. Set those inline on a heading, or use a span.
+- The map's headings carry no count (docs/STYLE.md). "3 of 78" in the project
+  panel is a count inside a control, which the guide allows.
+
 ## Round 3 (28 Sep 2026): what later work must keep
 - Light reading under dark heroes: product, application and Insights pages keep
   the dark photo hero, and everything under it sits on `data-surface="paper"`
@@ -267,12 +296,12 @@ with `git checkout origin/main -- <path>`.
   Articles (/blog/articles). Stored Sanity types are unchanged; the old hub
   URLs and /projects/<slug> redirect (lib/field-notes-taxonomy.ts).
 - The Insights mega menu reads lib/nav-insights.json, written at build from
-  Sanity by scripts/gen-nav-insights.ts. Since 30 Sep 2026 it is picture-led
-  (Vern: "more editorial with great images", "too much text"): the cover
-  story with its headline on the photo, the four newest as picture cards
-  (section and headline only), and one band with the sections, All Insights,
-  the Idea Book and a single Lunch & Learn link. No dates, read times,
-  excerpts, section lines or counts in the panel; they live on /blog.
+  Sanity by scripts/gen-nav-insights.ts. Since 30 Sep 2026 it is a front page
+  (Vern: "editorial feel, text effective, not text heavy. smart"): the lead
+  story with its one photograph and headline, the five latest headlines
+  (kicker and headline), the three sections with their one line, then All
+  Insights, the Idea Book and Book a Lunch & Learn. No dates, read times,
+  excerpts or counts in the panel; they live on /blog.
 - Copy syncs can emit a plan instead of writing:
   `npx tsx scripts/sync-products-to-sanity.ts --dry-run --emit=plan.json`
   (also sync-applications). The plan is applied on Vern's machine with

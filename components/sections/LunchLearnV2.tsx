@@ -17,7 +17,7 @@
  *                 underneath. Boldest, most editorial.
  */
 
-import { useEffect, useState, FormEvent } from "react";
+import { useEffect, useId, useState, FormEvent } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -51,12 +51,13 @@ const BENEFITS = [
   "Lunch on HUB, and a $25 voucher when the session's virtual",
 ];
 
-const STAT_CHIPS = [
-  { v: "45 min", l: "focused" },
-  { v: "$0", l: "hosted by HUB" },
-  { v: "27", l: "years in the field" },
-  { v: "10", l: "provinces served" },
-];
+// The four stat chips (45 min FOCUSED, $0 HOSTED BY HUB, 27 YEARS IN THE
+// FIELD, 10 PROVINCES SERVED) came out on 30 Sep 2026 (Vern: "clean up the
+// lunch and learn page too. it's a bit messy"; QA A20: they wrapped 2-1-1 on
+// phones, "10 provinces" invited a question on a site whose map documents
+// projects in three, and "$0" and "FOCUSED" read as gimmicks). The one fact
+// they added, "45 minutes", is the first tick; "27 years" stays on the
+// homepage and About, where it is sourced from the book.
 
 const CITY_WALL = ["City of Toronto", "York Region", "City of Vancouver", "UBC", "TransLink", "City of Ottawa", "Halifax RM", "City of Calgary"];
 
@@ -144,22 +145,39 @@ const inputStyle: React.CSSProperties = {
   color: "var(--text-primary)",
 };
 
-function Field({ name, placeholder, type = "text", required = false, value, onChange }: {
-  name: string; placeholder: string; type?: string; required?: boolean;
+// A visible label above each field, in the style of the Idea Book request
+// form (components/catalogue/PrintedCopyForm.tsx), since 30 Sep 2026. The
+// fields were placeholder-only, so the label vanished the moment someone
+// typed, and the site's three forms ran three label systems (QA A19, F19,
+// D10; the Idea Book form was named as the model). autoComplete lets a
+// browser fill the five fields in one go.
+const labelClass = "block text-[11px] font-semibold uppercase tracking-[0.16em] mb-1.5";
+const labelStyle: React.CSSProperties = { color: "var(--text-muted)" };
+
+function Field({ name, label, type = "text", required = false, autoComplete, value, onChange }: {
+  name: string; label: string; type?: string; required?: boolean; autoComplete?: string;
   value: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
+  // useId: the /ll-preview page renders three of these forms on one page.
+  const id = useId();
   return (
-    <input
-      type={type}
-      name={name}
-      placeholder={placeholder + (required ? "" : " (optional)")}
-      aria-label={placeholder}
-      value={value}
-      onChange={onChange}
-      required={required}
-      className="w-full px-4 py-3.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-orange-500/50 transition-all"
-      style={inputStyle}
-    />
+    <div>
+      <label htmlFor={id} className={labelClass} style={labelStyle}>
+        {label}
+        {!required && <span style={{ opacity: 0.6 }}> (optional)</span>}
+      </label>
+      <input
+        id={id}
+        type={type}
+        name={name}
+        autoComplete={autoComplete}
+        value={value}
+        onChange={onChange}
+        required={required}
+        className="w-full px-4 py-3 rounded-lg text-[15px] outline-none focus:ring-1 focus:ring-orange-500/50 transition-all"
+        style={inputStyle}
+      />
+    </div>
   );
 }
 
@@ -314,20 +332,25 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
                   ))}
                 </div>
 
-                <div className="flex flex-wrap gap-2.5 mb-8">
-                  {STAT_CHIPS.map((s) => (
-                    <span key={s.v} className="inline-flex items-baseline gap-1.5 px-3 py-1.5 rounded-lg" style={{ background: "var(--ink-05)", border: "1px solid var(--border-color)" }}>
-                      <span className="text-[13px] font-black" style={{ color: "var(--accent-text)" }}>{s.v}</span>
-                      <span className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: "var(--ink-55)" }}>{s.l}</span>
-                    </span>
-                  ))}
-                </div>
-
-                <div className="flex items-center gap-4 flex-wrap">
+                {/* One line for the phones: "Or call: East … · West …". The
+                    "|" that stood before them was there to separate them from
+                    the "Everything about the session" link, which /lunch-learn
+                    does not render, so on that page it was an orphan (QA A21,
+                    30 Sep 2026). data-tap: a 44px row for a thumb, the line
+                    height for a cursor. */}
+                <div className="flex items-center gap-x-5 gap-y-1 flex-wrap">
                   <MoreLink />
-                  <span className="hidden sm:block" style={{ color: "var(--ink-15)" }}>|</span>
-                  <a href="tel:+14165409287" className="text-[13px] font-semibold inline-flex items-center hover:text-[var(--accent-text)] transition-colors" style={{ color: "var(--ink-45)", minHeight: 40 }}>East · 416-540-9287</a>
-                  <a href="tel:+16043098212" className="text-[13px] font-semibold inline-flex items-center hover:text-[var(--accent-text)] transition-colors" style={{ color: "var(--ink-45)", minHeight: 40 }}>West · 604-309-8212</a>
+                  {/* Below sm the two numbers stack under each other, East
+                      over West, and the dot goes: the line wrapped after the
+                      dot on a 390 phone, which put the orphan back. */}
+                  <p className="text-[13px] font-semibold flex items-start gap-x-1.5" style={{ color: "var(--ink-45)" }}>
+                    <span data-tap="44" className="inline-flex items-center flex-shrink-0">Or call:</span>
+                    <span className="flex flex-col sm:flex-row sm:items-center sm:gap-x-1.5">
+                      <a href="tel:+14165409287" data-tap="44" className="inline-flex items-center whitespace-nowrap hover:text-[var(--accent-text)] transition-colors">East 416-540-9287</a>
+                      <span aria-hidden="true" className="hidden sm:inline">·</span>
+                      <a href="tel:+16043098212" data-tap="44" className="inline-flex items-center whitespace-nowrap hover:text-[var(--accent-text)] transition-colors">West 604-309-8212</a>
+                    </span>
+                  </p>
                 </div>
               </div>
 
@@ -384,13 +407,13 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
                         ))}
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                        <Field name="name" placeholder="Your name" required value={f.formData.name} onChange={f.handleChange} />
-                        <Field name="email" placeholder="Email address" type="email" required value={f.formData.email} onChange={f.handleChange} />
+                        <Field name="name" label="Name" required autoComplete="name" value={f.formData.name} onChange={f.handleChange} />
+                        <Field name="email" label="Email" type="email" required autoComplete="email" value={f.formData.email} onChange={f.handleChange} />
                       </div>
-                      <Field name="company" placeholder="Company or organization" value={f.formData.company} onChange={f.handleChange} />
+                      <Field name="company" label="Company or organization" autoComplete="organization" value={f.formData.company} onChange={f.handleChange} />
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                        <Field name="city" placeholder="City" value={f.formData.city} onChange={f.handleChange} />
-                        <Field name="phone" placeholder="Phone" type="tel" value={f.formData.phone} onChange={f.handleChange} />
+                        <Field name="city" label="City" autoComplete="address-level2" value={f.formData.city} onChange={f.handleChange} />
+                        <Field name="phone" label="Phone" type="tel" autoComplete="tel" value={f.formData.phone} onChange={f.handleChange} />
                       </div>
                       <button
                         type="submit"
@@ -539,12 +562,12 @@ function Ticket() {
 
                 <Honeypot value={f.formData.website} onChange={f.handleChange} />
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                  <Field name="name" placeholder="Your name" required value={f.formData.name} onChange={f.handleChange} />
-                  <Field name="email" placeholder="Email address" type="email" required value={f.formData.email} onChange={f.handleChange} />
-                  <Field name="company" placeholder="Company or organization" value={f.formData.company} onChange={f.handleChange} />
-                  <Field name="city" placeholder="City" value={f.formData.city} onChange={f.handleChange} />
+                  <Field name="name" label="Name" required autoComplete="name" value={f.formData.name} onChange={f.handleChange} />
+                  <Field name="email" label="Email" type="email" required autoComplete="email" value={f.formData.email} onChange={f.handleChange} />
+                  <Field name="company" label="Company or organization" autoComplete="organization" value={f.formData.company} onChange={f.handleChange} />
+                  <Field name="city" label="City" autoComplete="address-level2" value={f.formData.city} onChange={f.handleChange} />
                 </div>
-                <Field name="phone" placeholder="Phone" type="tel" value={f.formData.phone} onChange={f.handleChange} />
+                <Field name="phone" label="Phone" type="tel" autoComplete="tel" value={f.formData.phone} onChange={f.handleChange} />
 
                 <button
                   type="submit"
@@ -652,15 +675,15 @@ function Proof() {
               </div>
               <Honeypot value={f.formData.website} onChange={f.handleChange} />
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 mb-3.5">
-                <Field name="name" placeholder="Your name" required value={f.formData.name} onChange={f.handleChange} />
-                <Field name="email" placeholder="Email address" type="email" required value={f.formData.email} onChange={f.handleChange} />
-                <Field name="company" placeholder="Company or organization" value={f.formData.company} onChange={f.handleChange} />
-                <Field name="city" placeholder="City" value={f.formData.city} onChange={f.handleChange} />
-                <Field name="phone" placeholder="Phone" type="tel" value={f.formData.phone} onChange={f.handleChange} />
+                <Field name="name" label="Name" required autoComplete="name" value={f.formData.name} onChange={f.handleChange} />
+                <Field name="email" label="Email" type="email" required autoComplete="email" value={f.formData.email} onChange={f.handleChange} />
+                <Field name="company" label="Company or organization" autoComplete="organization" value={f.formData.company} onChange={f.handleChange} />
+                <Field name="city" label="City" autoComplete="address-level2" value={f.formData.city} onChange={f.handleChange} />
+                <Field name="phone" label="Phone" type="tel" autoComplete="tel" value={f.formData.phone} onChange={f.handleChange} />
                 <button
                   type="submit"
                   disabled={f.submitState.status === "loading"}
-                  className="w-full py-3.5 rounded-xl font-bold text-[14px] transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50"
+                  className="w-full py-3.5 rounded-xl font-bold text-[14px] transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50 self-end"
                   style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "var(--on-accent)", boxShadow: "0 6px 24px rgba(249,115,22,0.35)" }}
                 >
                   {f.submitState.status === "loading" ? "Sending…" : "Book a Lunch & Learn"}

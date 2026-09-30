@@ -93,7 +93,9 @@ export default async function LunchLearnPage() {
 
           #book stays live as an anchor (plenty of links across the site point
           at it) and lands on the form at the top. */}
-      <div id="book">
+      {/* scrollMarginTop: on a phone the card starts at the nav's height, so
+          a #book landing put its top rule flush under the nav (30 Sep 2026). */}
+      <div id="book" style={{ scrollMarginTop: 16 }}>
         {/* The card's heading is this page's h1 (QA, 28 Sep 2026: none). */}
         <LunchLearn titleAs="h1" />
       </div>

@@ -61,8 +61,11 @@ const CSP_REPORT_ONLY = [
   "form-action 'self'",
   // Don't allow this site to be embedded anywhere
   "frame-ancestors 'self'",
-  // Force https for all sub-resources
-  "upgrade-insecure-requests",
+  // upgrade-insecure-requests is NOT in this list (QA F10, 30 Sep 2026): a
+  // report-only policy cannot upgrade anything, so browsers ignored it and
+  // logged a console warning on every page load. Add it back on the day the
+  // key becomes "Content-Security-Policy" (every sub-resource is https
+  // already; HSTS above covers the site itself).
 ].join("; ");
 
 const SECURITY_HEADERS = [
@@ -109,6 +112,12 @@ const nextConfig: NextConfig = {
         source: "/:path*",
         headers: SECURITY_HEADERS,
       },
+      // Sanity Studio is not a page for search engines (QA F2, 30 Sep 2026:
+      // /studio answered 200 with "index, follow"). app/studio/layout.tsx
+      // sets the matching robots meta; the header covers the deep Studio
+      // URLs too.
+      { source: "/studio", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] },
+      { source: "/studio/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] },
     ];
   },
   async redirects() {

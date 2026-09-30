@@ -454,37 +454,21 @@ function InsightImg({ image, sizes, className, style }: { image: NavImage; sizes
   return <img src={image.src} srcSet={image.srcSet} sizes={sizes} alt="" loading="lazy" decoding="async" className={className} style={style} />;
 }
 
-// ── Insights panel: the section front ─────────────────────────────────
-// Products and Applications are directories; Insights is laid out like the
-// section front of a magazine (Vern, 28 Sep 2026: "needs to look more pro
-// editorial"). A masthead; the cover story large, with its kicker (section,
-// date, read time), headline and deck; the latest pieces as a ruled list;
-// the three sections as big type with their line and their count; the Idea
-// Book on the shelf as the printed publication it is; and one quiet band for
-// "All Insights" and Lunch & Learn. Column rules and hairlines instead of
-// cards, one photograph, orange only where it means something (the cover's
-// section, a hover). Every word sits on a photo-free ground, and every title,
-// date, count and line comes from Sanity or the taxonomy via
-// lib/nav-insights.json.
+// ── Insights panel: pictures first ────────────────────────────────────
+// Vern, 30 Sep 2026: "this mega menu is a bit of a mess, make it better more
+// editorial with great images" and "too much text, improve it". The 28 Sep
+// section front (a masthead and lede, kickers with dates and read times, the
+// cover story's deck, each section's line and count, a Lunch & Learn sentence)
+// is cut back to what a reader picks a story by: the photograph and the
+// headline. The cover story large, its headline set on the picture; the four
+// newest as picture cards with their section and headline; one band for the
+// three sections, All Insights, the Idea Book and a single Lunch & Learn link.
+// Titles, sections and photos still come from Sanity via lib/nav-insights.json,
+// and every photo is a Sanity CDN URL, never /_next/image.
 //
-// It is taller than its siblings, about two thirds of the screen, and the
-// page behind it is dimmed and softened further (the scrim below), so
-// nothing on the page competes with it. Opening, closing, hover intent and
-// the keyboard are the shared ones in Nav().
+// Opening, closing, hover intent, the keyboard and the scrim behind the panel
+// are the shared ones in Nav().
 const HAIRLINE = "1px solid var(--ink-10)";
-const RULE = "1px solid var(--ink-16)";
-
-// The small letterspaced label a column opens with, over its hairline.
-function FrontLabel({ children }: { children: React.ReactNode }) {
-  return (
-    <div
-      className="pb-2.5 text-[10.5px] font-bold uppercase tracking-[0.22em]"
-      style={{ color: "var(--ink-50)", borderBottom: RULE }}
-    >
-      {children}
-    </div>
-  );
-}
 
 // "Project · Sep 8, 2026 · 3 min read": the section in capitals, the rest
 // as it reads.
@@ -507,185 +491,160 @@ function Kicker({ post, accent = false, className = "" }: { post: NavPost; accen
   );
 }
 
-// Headline links underline on hover, in the brand orange, the way a
-// newspaper's do; colour alone was the widget's convention.
-const HEADLINE_HOVER =
-  "decoration-[rgba(249,115,22,0.7)] decoration-2 underline-offset-[5px] group-hover:underline group-focus-visible:underline";
+/**
+ * A post's photo at another size. The build writes each post's square thumb
+ * (lib/nav-insights.json); the same Sanity URL at a different width and height
+ * keeps the crop settings it carries, the post's focal point included.
+ */
+function recrop(src: string, w: number, h: number): string {
+  try {
+    const u = new URL(src);
+    u.searchParams.set("w", String(w));
+    u.searchParams.set("h", String(h));
+    return u.toString();
+  } catch {
+    return src;
+  }
+}
+function cardImage(post: NavPost): NavImage {
+  const sizes: Array<[number, number]> = [[320, 200], [480, 300], [640, 400], [960, 600]];
+  return {
+    src: recrop(post.thumb.src, 640, 400),
+    srcSet: sizes.map(([w, h]) => `${recrop(post.thumb.src, w, h)} ${w}w`).join(", "),
+  };
+}
+
+function ArrowSmall() {
+  return (
+    <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" className="transition-transform group-hover:translate-x-0.5" aria-hidden="true">
+      <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.25} strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
 
 function InsightsMegaMenu() {
   const { cover, latest } = INSIGHTS;
+  const cards = latest.slice(0, 4);
   const book = showIdeaBook() && ideaBookCover !== null;
-  const total = INSIGHTS.total ?? 0;
   return (
     <div className="max-h-[calc(100vh-72px)] overflow-y-auto overscroll-contain">
-      {/* About two thirds of the screen: 612px of a 900px one, 560px of 800. */}
-      <div className="flex flex-col" style={{ minHeight: "clamp(560px, 68vh, 720px)" }}>
-        <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-4 sm:px-6 lg:px-8">
-          {/* Masthead: the name and the library's own lede (from /blog). */}
-          <div className="flex items-baseline gap-5 pt-6 pb-4 [@media(max-height:860px)]:pt-5" style={{ borderBottom: RULE }}>
-            <div
-              className="font-display text-[34px] font-black leading-none"
-              style={{ color: "var(--text-primary)", letterSpacing: "-0.035em" }}
+      <div className="mx-auto max-w-7xl px-4 pt-7 pb-7 sm:px-6 lg:px-8 [@media(max-height:860px)]:pt-5 [@media(max-height:860px)]:pb-5">
+        <div className="grid grid-cols-12 gap-x-8 xl:gap-x-10">
+          {/* The cover story: the picture, and its headline on it. */}
+          {cover && (
+            <Link
+              href={`/blog/${cover.slug}`}
+              className="group relative col-span-6 block min-h-[360px] overflow-hidden rounded-xl"
+              style={{ background: "var(--ink-05)" }}
             >
-              Insights
-            </div>
-            <div className="text-[14px]" style={{ color: "var(--ink-55)" }}>
-              Decorative pavement in Canada, documented.
-            </div>
-          </div>
+              <InsightImg
+                image={cover.image}
+                sizes="(min-width: 1280px) 610px, 48vw"
+                className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+              />
+              <span
+                aria-hidden="true"
+                className="absolute inset-0"
+                style={{ background: "linear-gradient(to top, rgba(7,9,13,0.9) 0%, rgba(7,9,13,0.5) 36%, rgba(7,9,13,0) 64%)" }}
+              />
+              <span className="absolute inset-x-7 bottom-6">
+                <span className="block text-[10.5px] font-bold uppercase tracking-[0.22em]" style={{ color: ACCENT }}>
+                  {kindOf(cover.type)}
+                </span>
+                <span
+                  className="font-display mt-2.5 text-[30px] font-bold leading-[1.08] line-clamp-3 text-balance decoration-[rgba(249,115,22,0.8)] decoration-2 underline-offset-[6px] group-hover:underline"
+                  style={{ color: "#FFFFFF", letterSpacing: "-0.025em" }}
+                >
+                  {cover.title}
+                </span>
+              </span>
+            </Link>
+          )}
 
-          <div className="grid flex-1 grid-cols-12 pt-6 pb-6 [@media(max-height:860px)]:pt-5 [@media(max-height:860px)]:pb-5">
-            {/* The cover story: the photograph takes whatever height the
-                column has, so the panel keeps its proportion on any screen. */}
-            {cover && (
-              <div className="col-span-5 flex flex-col pr-8 xl:pr-10">
-                <Link href={`/blog/${cover.slug}`} className="group flex flex-1 flex-col">
-                  <span className="relative block min-h-[180px] flex-1 overflow-hidden" style={{ background: "var(--ink-05)" }}>
+          {/* The four newest: picture, section, headline. */}
+          <ul className={`${cover ? "col-span-6" : "col-span-12"} grid grid-cols-2 content-between gap-x-6 gap-y-6`}>
+            {cards.map((post) => (
+              <li key={post.slug}>
+                <Link href={`/blog/${post.slug}`} className="group block">
+                  <span className="relative block overflow-hidden rounded-lg" style={{ aspectRatio: "16 / 10", background: "var(--ink-05)" }}>
                     <InsightImg
-                      image={cover.image}
-                      sizes="(min-width: 1280px) 470px, 36vw"
-                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+                      image={cardImage(post)}
+                      sizes="(min-width: 1280px) 292px, 23vw"
+                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
                     />
                   </span>
-                  <Kicker post={cover} accent className="mt-5" />
+                  <span className="mt-3 block text-[10.5px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--ink-55)" }}>
+                    {kindOf(post.type)}
+                  </span>
                   <span
-                    className={`font-display mt-3 block text-[29px] font-bold leading-[1.1] text-balance ${HEADLINE_HOVER}`}
-                    style={{ color: "var(--text-primary)", letterSpacing: "-0.025em" }}
+                    className="mt-1.5 text-[15.5px] font-semibold leading-snug line-clamp-2 text-pretty transition-colors group-hover:text-[var(--accent-text)]"
+                    style={{ color: "var(--text-primary)" }}
                   >
-                    {cover.title}
-                  </span>
-                  {cover.excerpt && (
-                    <span className="mt-2.5 text-[15px] leading-[1.5] line-clamp-3 text-pretty" style={{ color: "var(--ink-62)" }}>
-                      {cover.excerpt}
-                    </span>
-                  )}
-                </Link>
-              </div>
-            )}
-
-            {/* The latest, newest first, ruled like a contents list. */}
-            <div className={`${cover ? "col-span-4" : "col-span-9"} flex flex-col px-8 xl:px-10`} style={{ borderLeft: HAIRLINE }}>
-              <FrontLabel>Latest</FrontLabel>
-              <ul className="flex flex-1 flex-col">
-                {latest.map((post, i) => (
-                  <li key={post.slug} className="flex flex-1 flex-col" style={{ borderTop: i > 0 ? HAIRLINE : undefined }}>
-                    <Link href={`/blog/${post.slug}`} className="group block flex-1 py-3">
-                      <Kicker post={post} />
-                      <span
-                        className={`mt-1.5 text-[16px] font-semibold leading-[1.3] line-clamp-3 text-pretty ${HEADLINE_HOVER}`}
-                        style={{ color: "var(--text-primary)" }}
-                      >
-                        {post.title}
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* The sections, then the Idea Book on the shelf. */}
-            <div className="col-span-3 flex flex-col pl-8 xl:pl-10" style={{ borderLeft: HAIRLINE }}>
-              <FrontLabel>Sections</FrontLabel>
-              <ul>
-                {NAV_SECTIONS.map((s, i) => (
-                  <li key={s.key} style={{ borderTop: i > 0 ? HAIRLINE : undefined }}>
-                    <Link href={s.href} className="group block py-2.5">
-                      <span className="flex items-baseline justify-between gap-3">
-                        <span
-                          className="font-display text-[23px] font-bold leading-none transition-colors group-hover:text-[var(--accent-text)]"
-                          style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}
-                        >
-                          {s.label}
-                        </span>
-                        {s.count > 0 && (
-                          <span className="text-[12px] tabular-nums whitespace-nowrap" style={{ color: "var(--ink-50)" }}>
-                            {s.count} {s.count === 1 ? "post" : "posts"}
-                          </span>
-                        )}
-                      </span>
-                      {s.blurb && (
-                        <span className="mt-1.5 block text-[12.5px] leading-snug text-pretty" style={{ color: "var(--ink-58)" }}>
-                          {s.blurb}
-                        </span>
-                      )}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-
-              {book && ideaBookCover && (
-                <Link href={ideaBook.href} className="group mt-auto flex items-center gap-4 pt-4" style={{ borderTop: HAIRLINE }}>
-                  {/* eslint-disable-next-line @next/next/no-img-element -- the book's own raster, lib/catalogue.ts */}
-                  <img
-                    src={ideaBookCover}
-                    srcSet={ideaBookCoverSet}
-                    sizes="(min-height: 880px) 104px, 80px"
-                    alt=""
-                    width={240}
-                    height={240}
-                    loading="lazy"
-                    decoding="async"
-                    className="h-20 w-20 flex-shrink-0 rounded-[2px] object-cover transition-transform duration-300 group-hover:-translate-y-1 [@media(min-height:880px)]:h-[104px] [@media(min-height:880px)]:w-[104px]"
-                    style={{
-                      border: "1px solid var(--ink-12)",
-                      boxShadow: "0 22px 40px -12px rgba(0,0,0,0.75), 0 8px 16px -6px rgba(0,0,0,0.5)",
-                    }}
-                  />
-                  <span className="min-w-0">
-                    <span className="block text-[10.5px] font-bold uppercase tracking-[0.22em]" style={{ color: "var(--ink-50)" }}>In print</span>
-                    <span className="mt-1.5 block text-[14px] font-bold leading-snug" style={{ color: "var(--text-primary)" }}>{ideaBook.title}</span>
-                    {/* From xl: under it the column is too narrow for the line
-                        and its arrow, and the title is already the link. */}
-                    <span className="mt-1.5 hidden items-center gap-1.5 text-[12.5px] font-semibold whitespace-nowrap transition-colors group-hover:text-[var(--accent-text)] xl:inline-flex" style={{ color: "var(--ink-70)" }}>
-                      Open the {ideaBook.short}
-                      <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24" className="transition-transform group-hover:translate-x-0.5" aria-hidden="true">
-                        <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.25} strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </span>
+                    {post.title}
                   </span>
                 </Link>
-              )}
-            </div>
-          </div>
+              </li>
+            ))}
+          </ul>
         </div>
+      </div>
 
-        {/* The quiet band: everything, and the one offer. */}
-        <div className="flex-shrink-0" style={{ borderTop: HAIRLINE, background: "var(--ink-02)" }}>
-          <div className="mx-auto flex max-w-7xl items-center justify-between gap-8 px-4 py-2 sm:px-6 lg:px-8 [@media(max-height:860px)]:py-1">
+      {/* The band: where to go next, in words only where a word is the link. */}
+      <div style={{ borderTop: HAIRLINE, background: "var(--ink-02)" }}>
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-1.5 sm:px-6 lg:px-8">
+          <div className="-ml-3 flex items-center">
+            {NAV_SECTIONS.map((s) => (
+              <Link
+                key={s.key}
+                href={s.href}
+                className="inline-flex min-h-[44px] items-center rounded-lg px-3 text-[14px] font-semibold transition-colors hover:text-[var(--accent-text)]"
+                style={{ color: "var(--ink-75)" }}
+              >
+                {s.label}
+              </Link>
+            ))}
+            <span aria-hidden="true" className="mx-2 h-4 w-px" style={{ background: "var(--ink-15)" }} />
             <Link
               href="/blog"
-              className="group -ml-3 inline-flex min-h-[44px] items-center gap-2 rounded-lg px-3 text-[13.5px] font-bold transition-colors hover:text-[var(--accent-text)]"
+              className="group inline-flex min-h-[44px] items-center gap-2 rounded-lg px-3 text-[14px] font-bold transition-colors hover:text-[var(--accent-text)]"
               style={{ color: "var(--text-primary)" }}
             >
               All Insights
-              {total > 0 && (
-                <span className="font-medium" style={{ color: "var(--ink-50)" }}>
-                  <span aria-hidden="true" className="mr-2" style={{ color: "var(--ink-30)" }}>·</span>
-                  {total} posts
-                </span>
-              )}
-              <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" className="transition-transform group-hover:translate-x-0.5" aria-hidden="true">
-                <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
+              <ArrowSmall />
             </Link>
-            <div className="flex items-center gap-3">
-              <MooseAvatar size={30} />
-              <span className="text-[13px] leading-snug" style={{ color: "var(--ink-60)" }}>
-                <span className="font-bold" style={{ color: "var(--text-primary)" }}>Lunch &amp; Learn</span>
-                <span aria-hidden="true" className="mx-2" style={{ color: "var(--ink-30)" }}>·</span>
-                {LL_LINE}
-              </span>
+          </div>
+          <div className="flex items-center gap-2">
+            {book && ideaBookCover && (
               <Link
-                href={lunchLearnHref("HUB systems", "menu")}
-                className="ml-1 inline-flex min-h-[44px] items-center gap-1.5 rounded-lg px-3 text-[13px] font-bold whitespace-nowrap transition-colors hover:bg-[rgba(249,115,22,0.1)]"
-                style={{ color: ACCENT }}
+                href={ideaBook.href}
+                className="group inline-flex min-h-[44px] items-center gap-3 rounded-lg px-3 text-[13.5px] font-semibold transition-colors hover:text-[var(--accent-text)]"
+                style={{ color: "var(--ink-75)" }}
               >
-                Book a session
-                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.25} strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
+                {/* eslint-disable-next-line @next/next/no-img-element -- the book's own raster, lib/catalogue.ts */}
+                <img
+                  src={ideaBookCover}
+                  srcSet={ideaBookCoverSet}
+                  sizes="36px"
+                  alt=""
+                  width={240}
+                  height={240}
+                  loading="lazy"
+                  decoding="async"
+                  className="h-9 w-9 flex-shrink-0 rounded-[2px] object-cover"
+                  style={{ border: "1px solid var(--ink-12)", boxShadow: "0 6px 14px -6px rgba(0,0,0,0.7)" }}
+                />
+                {ideaBook.title}
               </Link>
-            </div>
+            )}
+            <Link
+              href={lunchLearnHref("HUB systems", "menu")}
+              className="group inline-flex min-h-[44px] items-center gap-2.5 rounded-lg px-3 text-[13.5px] font-bold whitespace-nowrap transition-colors hover:bg-[rgba(249,115,22,0.1)]"
+              style={{ color: ACCENT }}
+            >
+              <MooseAvatar size={28} />
+              Book a Lunch &amp; Learn
+              <ArrowSmall />
+            </Link>
           </div>
         </div>
       </div>

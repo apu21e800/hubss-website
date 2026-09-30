@@ -144,7 +144,9 @@ BEFORE changing product, application or page copy, read docs/SANITY-COPY-SYNC.md
 Sanity OVERRIDES the code for: product and application name, shortDesc,
 description and SEO title/description, plus product eyebrow, specs and homepage
 blurb (on the product pages, the application pages, /applications and the
-homepage), and the hero and About text on /, /about, /contact and /lunch-learn.
+homepage), and the hero and About text on /, /about and /contact. On /lunch-learn
+only the mid-page sections come from Sanity (what you walk away with, who it's
+for, the questions, their headings); its top is code (see below).
 Editing the lib file or a page's fallback alone changes nothing there until the
 sync runs. Products go through one merge (lib/products.server.ts), applications
 through another, both on the rule in lib/cms-merge.ts: a blank Sanity field
@@ -217,6 +219,23 @@ Never `git reset --hard` in this repo. Banner-dash drift in comment blocks is
 known-benign — prove it with `tr -d '─═━'` + `cmp`, then recover a single file
 with `git checkout origin/main -- <path>`.
 
+## Lunch & Learn page (30 Sep 2026)
+- /lunch-learn is components/sections/LunchLearnPage.tsx (Vern: "optimize the
+  L&L page, it needs work"): a dark top with the pitch and the form side by
+  side (on a phone the form follows the headline), topic tiles that put a
+  topic into the form, then on paper what you walk away with, who it's for,
+  the trusted-by band and the questions, and a dark close with both offices.
+  LunchLearnFunnel.tsx is no longer rendered anywhere.
+- #book is the form itself. The page's h1 and form never fade in from
+  opacity 0: they are the first thing a visitor came for.
+- The copy defaults, the FAQPage schema and the topic tiles share one source:
+  lib/lunch-learn-content.ts. The schema is built from the questions the page
+  prints, so they can't drift. No CE credit claims, ever.
+- The booking form (useLunchLearnForm in LunchLearnV2.tsx, shared with the
+  homepage card) sends generate_lead to GA and lunch_learn_submit to Vercel
+  Analytics on success. From 22 to 30 Sep nothing did: the page had moved to
+  a form without them.
+
 ## Round 3 (28 Sep 2026): what later work must keep
 - Light reading under dark heroes: product, application and Insights pages keep
   the dark photo hero, and everything under it sits on `data-surface="paper"`
@@ -235,7 +254,12 @@ with `git checkout origin/main -- <path>`.
   Articles (/blog/articles). Stored Sanity types are unchanged; the old hub
   URLs and /projects/<slug> redirect (lib/field-notes-taxonomy.ts).
 - The Insights mega menu reads lib/nav-insights.json, written at build from
-  Sanity by scripts/gen-nav-insights.ts.
+  Sanity by scripts/gen-nav-insights.ts. Since 30 Sep 2026 it is picture-led
+  (Vern: "more editorial with great images", "too much text"): the cover
+  story with its headline on the photo, the four newest as picture cards
+  (section and headline only), and one band with the sections, All Insights,
+  the Idea Book and a single Lunch & Learn link. No dates, read times,
+  excerpts, section lines or counts in the panel; they live on /blog.
 - Copy syncs can emit a plan instead of writing:
   `npx tsx scripts/sync-products-to-sanity.ts --dry-run --emit=plan.json`
   (also sync-applications). The plan is applied on Vern's machine with

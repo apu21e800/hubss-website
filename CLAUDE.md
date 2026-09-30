@@ -240,11 +240,19 @@ with `git checkout origin/main -- <path>`.
   `npx tsx scripts/sync-products-to-sanity.ts --dry-run --emit=plan.json`
   (also sync-applications). The plan is applied on Vern's machine with
   .sanity-work/sanity_apply_v2.py (dry run, backup, ifRevisionID per document).
-- The favicon is the HUB wheel on a white disc (app/icon.png, app/favicon.ico,
-  app/apple-icon.png), made from
-  public/images/assets/logos/hubss-logos/HUB-wheel_official-orange-transparent.png.
-  Never knock the white out: the white is the H's and the ring round the wheel,
-  and without it the mark reads as orange blobs on a dark tab (Vern, 28 Sep).
+- The favicon (app/icon.png, app/favicon.ico) is the wheel exactly as the
+  header logo draws it: orange disc, white H's, nothing outside the disc.
+  Vern, 30 Sep: "there's still a weird white line around the icon", so the
+  white ring added on 28 Sep is gone. The H's stay white: knock them out and
+  the mark reads as orange blobs on a dark tab (Vern, 28 Sep). Made from
+  public/images/assets/logos/hubss-logos/HUB-wheel_official-orange-transparent.png
+  with the H's filled white inside the fitted circle and the disc edge drawn
+  once, so no white can show round the rim. app/apple-icon.png is still the
+  wheel on a white tile (iOS turns transparency black).
+- The header logo (public/images/hub-official-logo.svg) wraps
+  hubss-logo-white-large.png, whose H's are already white. Never put a white
+  circle behind the wheel to fill the H's: the old file did, and the two edges
+  together left a hairline of white round the wheel.
 - Homepage hero: the room under the buttons is `.hero-copy` in app/globals.css
   (about 11% of the screen's height; smaller under 820 px tall, where the lift
   would put the headline into the HUB sign).

@@ -66,7 +66,10 @@ export default function ApplicationsGrid({ applications: appsProp }: Props = {})
         {/* MOBILE DIET — same treatment as ProductsGrid: swipe row on phones
             (this section was 3,094px of stacked cards), untouched grid from
             sm up. */}
-        <div className="flex overflow-x-auto snap-x snap-mandatory gap-3 -mx-4 px-4 pb-3 mb-10
+        {/* scroll-px-4 (QA A9, 30 Sep 2026): as in ProductsGrid, the snap
+            points sit 16px in, so the first card meets the text gutter and
+            the last keeps room at the end. */}
+        <div className="flex overflow-x-auto snap-x snap-mandatory scroll-px-4 gap-3 -mx-4 px-4 pb-3 mb-10
                         sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:overflow-visible sm:mx-0 sm:px-0 sm:pb-0"
              style={{ scrollbarWidth: "none" }}>
           {featured.map((app, i) => (
@@ -100,11 +103,12 @@ export default function ApplicationsGrid({ applications: appsProp }: Props = {})
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
 
-                {/* Bottom 40% scrim for text legibility — image stays visible above */}
+                {/* Bottom scrim for text legibility — image stays visible above.
+                    Taller on a phone (58%), where the caption runs to three
+                    lines (QA A10, 30 Sep 2026) and the title sat on bare photo. */}
                 <div
-                  className="absolute inset-x-0 bottom-0"
+                  className="absolute inset-x-0 bottom-0 h-[58%] sm:h-[44%]"
                   style={{
-                    height: "44%",
                     background: "linear-gradient(to top, rgba(7,11,18,0.92) 0%, rgba(7,11,18,0.65) 55%, rgba(7,11,18,0) 100%)",
                   }}
                 />
@@ -119,7 +123,10 @@ export default function ApplicationsGrid({ applications: appsProp }: Props = {})
                   <h3 className="font-bold text-base group-hover:text-[var(--accent-text)] transition-colors" style={{ color: "var(--text-primary)" }}>
                     {app.name}
                   </h3>
-                  <p className="text-sm text-[var(--ink-60)] mt-0.5 line-clamp-2">
+                  {/* Three lines on a phone, two from sm (QA A10, 30 Sep
+                      2026): at 304px wide, seven of the nine lines of copy
+                      were cut mid-sentence with an ellipsis at two lines. */}
+                  <p className="text-sm text-[var(--ink-60)] mt-0.5 line-clamp-3 sm:line-clamp-2">
                     {app.shortDesc}
                   </p>
                 </div>

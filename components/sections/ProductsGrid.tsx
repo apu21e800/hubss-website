@@ -176,7 +176,11 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
             no fixed height counts as auto and switches the stretch off. From
             sm up the grid rows give h-full a real height, and auto-rows-fr
             makes every row as tall as the tallest, so the two rows match too. */}
-        <div className="flex items-stretch overflow-x-auto snap-x snap-mandatory gap-4 -mx-4 px-4 pb-3
+        {/* scroll-px-4 (QA A9, 30 Sep 2026): the snap points sit 16px in
+            from the row's edges, so the first card lines up with the text
+            gutter instead of the screen edge (mandatory snapping had pulled
+            it to x=0) and the last card keeps 16px of room at the end. */}
+        <div className="flex items-stretch overflow-x-auto snap-x snap-mandatory scroll-px-4 gap-4 -mx-4 px-4 pb-3
                         sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:auto-rows-fr sm:overflow-visible sm:mx-0 sm:px-0 sm:pb-0"
              style={{ scrollbarWidth: "none" }}>
           {featured.map((product, i) => {

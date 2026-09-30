@@ -40,6 +40,11 @@ import navInsights from "@/lib/nav-insights.json";
  */
 const SearchOverlay = dynamic(() => import("@/components/sections/SearchOverlay"), { ssr: false });
 
+// Every Link inside the three panels and the phone drawer carries
+// prefetch={false} (QA F5, 30 Sep 2026): the nav is on every page, and an
+// open panel or drawer prefetched forty-odd routes' payloads at once. The
+// bar's own links (About, Contact) keep the default prefetch.
+
 // ── Nav link config ────────────────────────────────────────────
 // Insights has its panel back (Vern, 28 Sep 2026: "it had an editorial feel
 // to it, that part was working, just needed improvement"). What Doug objected
@@ -318,7 +323,7 @@ function MenuColumn({ label, items }: { label: string; items: MenuItem[] }) {
       <ul>
         {items.map((it) => (
           <li key={it.href}>
-            <Link
+            <Link prefetch={false}
               href={it.href}
               // data-tap: a 44px floor on touch screens (app/globals.css), for
               // the tablets wide enough to get these panels.
@@ -384,7 +389,7 @@ function LunchLearnSlot({ topic }: { topic: string }) {
         <div className="text-[13px] font-bold leading-tight" style={{ color: "var(--text-primary)" }}>Lunch &amp; Learn</div>
         <div className="mt-0.5 text-[12px] leading-snug" style={{ color: "var(--ink-60)" }}>{LL_LINE}</div>
       </div>
-      <Link
+      <Link prefetch={false}
         href={lunchLearnHref(topic, "menu")}
         className="ml-2 inline-flex min-h-[44px] flex-shrink-0 items-center gap-2 rounded-lg px-4 text-[13px] font-bold whitespace-nowrap transition-colors hover:bg-[rgba(249,115,22,0.12)]"
         style={{ color: ACCENT, border: "1px solid rgba(249,115,22,0.45)" }}
@@ -402,7 +407,7 @@ function LunchLearnSlot({ topic }: { topic: string }) {
 function MenuFooter({ href, label, topic }: { href: string; label: string; topic: string }) {
   return (
     <div className="mt-7 flex flex-wrap items-center justify-between gap-x-8 gap-y-4 pt-4" style={{ borderTop: "1px solid var(--ink-08)" }}>
-      <Link
+      <Link prefetch={false}
         href={href}
         className="group -ml-3 inline-flex min-h-[44px] items-center gap-2 rounded-lg px-3 text-[13.5px] font-bold transition-colors hover:bg-[var(--ink-05)] hover:text-[var(--accent-text)]"
         style={{ color: "var(--text-primary)" }}
@@ -539,7 +544,7 @@ function InsightsMegaMenu() {
                 column has, so the panel keeps its proportion on any screen. */}
             {cover && (
               <div className="col-span-5 flex flex-col pr-8 xl:pr-10">
-                <Link href={`/blog/${cover.slug}`} className="group flex flex-1 flex-col">
+                <Link prefetch={false} href={`/blog/${cover.slug}`} className="group flex flex-1 flex-col">
                   <span className="relative block min-h-[180px] flex-1 overflow-hidden" style={{ background: "var(--ink-05)" }}>
                     <InsightImg
                       image={cover.image}
@@ -569,7 +574,7 @@ function InsightsMegaMenu() {
               <ul className="flex flex-1 flex-col">
                 {latest.map((post, i) => (
                   <li key={post.slug} className="flex flex-1 flex-col" style={{ borderTop: i > 0 ? HAIRLINE : undefined }}>
-                    <Link href={`/blog/${post.slug}`} className="group block flex-1 py-3">
+                    <Link prefetch={false} href={`/blog/${post.slug}`} className="group block flex-1 py-3">
                       <Kicker post={post} />
                       <span
                         className={`mt-1.5 text-[16px] font-semibold leading-[1.3] line-clamp-3 text-pretty ${HEADLINE_HOVER}`}
@@ -589,7 +594,7 @@ function InsightsMegaMenu() {
               <ul>
                 {NAV_SECTIONS.map((s, i) => (
                   <li key={s.key} style={{ borderTop: i > 0 ? HAIRLINE : undefined }}>
-                    <Link href={s.href} className="group block py-2.5">
+                    <Link prefetch={false} href={s.href} className="group block py-2.5">
                       <span className="flex items-baseline justify-between gap-3">
                         <span
                           className="font-display text-[23px] font-bold leading-none transition-colors group-hover:text-[var(--accent-text)]"
@@ -614,7 +619,7 @@ function InsightsMegaMenu() {
               </ul>
 
               {book && ideaBookCover && (
-                <Link href={ideaBook.href} className="group mt-auto flex items-center gap-4 pt-4" style={{ borderTop: HAIRLINE }}>
+                <Link prefetch={false} href={ideaBook.href} className="group mt-auto flex items-center gap-4 pt-4" style={{ borderTop: HAIRLINE }}>
                   {/* eslint-disable-next-line @next/next/no-img-element -- the book's own raster, lib/catalogue.ts */}
                   <img
                     src={ideaBookCover}
@@ -652,7 +657,7 @@ function InsightsMegaMenu() {
         {/* The quiet band: everything, and the one offer. */}
         <div className="flex-shrink-0" style={{ borderTop: HAIRLINE, background: "var(--ink-02)" }}>
           <div className="mx-auto flex max-w-7xl items-center justify-between gap-8 px-4 py-2 sm:px-6 lg:px-8 [@media(max-height:860px)]:py-1">
-            <Link
+            <Link prefetch={false}
               href="/blog"
               className="group -ml-3 inline-flex min-h-[44px] items-center gap-2 rounded-lg px-3 text-[13.5px] font-bold transition-colors hover:text-[var(--accent-text)]"
               style={{ color: "var(--text-primary)" }}
@@ -675,7 +680,7 @@ function InsightsMegaMenu() {
                 <span aria-hidden="true" className="mx-2" style={{ color: "var(--ink-30)" }}>·</span>
                 {LL_LINE}
               </span>
-              <Link
+              <Link prefetch={false}
                 href={lunchLearnHref("HUB systems", "menu")}
                 className="ml-1 inline-flex min-h-[44px] items-center gap-1.5 rounded-lg px-3 text-[13px] font-bold whitespace-nowrap transition-colors hover:bg-[rgba(249,115,22,0.1)]"
                 style={{ color: ACCENT }}
@@ -777,7 +782,7 @@ function MobileFamily({
             <ul className="pb-2 pl-[110px]">
               {items.map((it) => (
                 <li key={it.href}>
-                  <Link
+                  <Link prefetch={false}
                     href={it.href}
                     onClick={onClose}
                     className="flex min-h-[48px] items-center justify-between gap-4 py-2 pr-1 active:opacity-60 transition-opacity"
@@ -803,7 +808,7 @@ function MobileFamily({
 // "All →" beside a drawer section's label, 44px tall
 function MobileViewAll({ href, label, onClose }: { href: string; label: string; onClose: () => void }) {
   return (
-    <Link
+    <Link prefetch={false}
       href={href}
       onClick={onClose}
       className="inline-flex min-h-[44px] items-center gap-2 px-1 text-[13px] font-bold active:opacity-60 transition-opacity"
@@ -820,7 +825,7 @@ function MobileViewAll({ href, label, onClose }: { href: string; label: string; 
 // A row in the drawer's Insights section: thumbnail, kind, title.
 function MobilePostRow({ post, onClose }: { post: NavPost; onClose: () => void }) {
   return (
-    <Link
+    <Link prefetch={false}
       href={`/blog/${post.slug}`}
       onClick={onClose}
       className="flex items-center gap-3.5 px-1 py-3 active:opacity-70 transition-opacity"
@@ -844,7 +849,7 @@ function MobilePostRow({ post, onClose }: { post: NavPost; onClose: () => void }
 // does: its photograph the width of the drawer, its kicker and headline.
 function MobileCoverStory({ post, onClose }: { post: NavPost & { image: NavImage }; onClose: () => void }) {
   return (
-    <Link
+    <Link prefetch={false}
       href={`/blog/${post.slug}`}
       onClick={onClose}
       className="block px-1 pt-2 pb-4 active:opacity-70 transition-opacity"
@@ -1055,7 +1060,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                 ))}
                 <div className="flex flex-wrap gap-2 px-1 pt-4 pb-1" role="group" aria-label="Insights by type">
                   {INSIGHT_SECTIONS.map((s) => (
-                    <Link
+                    <Link prefetch={false}
                       key={s.href}
                       href={s.href}
                       onClick={onClose}
@@ -1067,7 +1072,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                   ))}
                 </div>
                 {book && ideaBookCover && (
-                  <Link
+                  <Link prefetch={false}
                     href={ideaBook.href}
                     onClick={onClose}
                     className="mt-3 flex items-center gap-3.5 px-1 py-3 active:opacity-70 transition-opacity"
@@ -1103,7 +1108,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                   { label: "About", href: "/about" },
                   { label: "Contact", href: "/contact" },
                 ].map((link) => (
-                  <Link
+                  <Link prefetch={false}
                     key={link.href}
                     href={link.href}
                     onClick={onClose}
@@ -1168,7 +1173,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                 <div className="text-[14px] font-bold leading-tight" style={{ color: "var(--text-primary)" }}>Lunch &amp; Learn</div>
                 <div className="mt-0.5 text-[12px] leading-snug" style={{ color: "var(--ink-60)" }}>{LL_LINE}</div>
               </div>
-              <Link
+              <Link prefetch={false}
                 href={lunchLearnHref(llTopic, "menu")}
                 onClick={onClose}
                 aria-label="Book a Lunch & Learn"

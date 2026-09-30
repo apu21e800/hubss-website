@@ -44,6 +44,10 @@ const companyLinks = [
 // phone. 44 px rows below 640 px wide, and on any touch screen through
 // data-tap="44"; a mouse keeps the compact list (see the data-tap note in
 // app/globals.css on why the desktop footer is not padded).
+// Every Link below carries prefetch={false} (QA F5, 30 Sep 2026): the footer
+// is on every page, and its thirty-odd links prefetched thirty routes' RSC
+// payloads the moment a visitor scrolled to the bottom. A click still
+// navigates instantly enough; nothing here is a primary path.
 const footerLink =
   "text-sm flex items-center min-h-11 sm:min-h-0 transition-colors hover:text-[var(--accent-text-lg)] underline-offset-4 hover:underline";
 const officeLink =
@@ -146,6 +150,7 @@ export default function Footer() {
               {products.filter((p) => !p.comingSoon && !p.hideFromFooter).map((p) => (
                 <li key={p.slug}>
                   <Link
+                    prefetch={false}
                     href={`/products/${p.slug}`}
                     className={footerLink}
                     data-tap="44"
@@ -165,6 +170,7 @@ export default function Footer() {
               {footerApplications.map((a) => (
                 <li key={a.href}>
                   <Link
+                    prefetch={false}
                     href={a.href}
                     className={footerLink}
                     data-tap="44"
@@ -188,6 +194,7 @@ export default function Footer() {
                 {companyLinks.map((l) => (
                   <li key={l.href}>
                     <Link
+                      prefetch={false}
                       href={l.href}
                       className={footerLink}
                       data-tap="44"
@@ -254,10 +261,10 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} HUB Surface Systems. All rights reserved.
           </p>
           <div className="flex gap-6">
-            <Link href="/privacy" className={legalLink} data-tap="44" style={{ color: "var(--text-muted)", paddingTop: 2, paddingBottom: 2 }}>
+            <Link prefetch={false} href="/privacy" className={legalLink} data-tap="44" style={{ color: "var(--text-muted)", paddingTop: 2, paddingBottom: 2 }}>
               Privacy policy
             </Link>
-            <Link href="/terms" className={legalLink} data-tap="44" style={{ color: "var(--text-muted)", paddingTop: 2, paddingBottom: 2 }}>
+            <Link prefetch={false} href="/terms" className={legalLink} data-tap="44" style={{ color: "var(--text-muted)", paddingTop: 2, paddingBottom: 2 }}>
               Terms of use
             </Link>
           </div>

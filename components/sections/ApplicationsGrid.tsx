@@ -129,6 +129,7 @@ export default function ApplicationsGrid({ applications: appsProp }: Props = {})
         <div className="flex justify-center mt-4">
           <Link
             href="/applications"
+            prefetch={false}
             className="inline-flex items-center gap-2 border border-[var(--ink-20)] hover:border-orange-500/60 text-[var(--text-primary)] font-semibold px-7 py-3.5 rounded-lg transition-all duration-200 hover:bg-[var(--ink-04)] text-sm"
           >
             View all applications

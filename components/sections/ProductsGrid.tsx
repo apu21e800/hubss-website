@@ -143,9 +143,13 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
                 surface.
               </p>
             </div>
-            {/* data-tap: this pill measured 42px; the touch floor is 44. */}
+            {/* data-tap: this pill measured 42px; the touch floor is 44.
+                prefetch={false} on this and the other index links here (QA F5,
+                30 Sep 2026): the six cards already prefetch their pages; the
+                index and the "Also available" names do not need to. */}
             <Link
               href="/products"
+              prefetch={false}
               data-tap="44"
               className="flex-shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold border transition-all duration-200 hover:text-[var(--text-primary)] hover:border-orange-500/50"
               style={{ color: "var(--text-secondary)", borderColor: "var(--ink-12)" }}
@@ -317,6 +321,7 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
                 {i > 0 && <span aria-hidden="true">·</span>}
                 <Link
                   href={`/products/${p.slug}`}
+                  prefetch={false}
                   data-tap="44"
                   className="inline-flex items-center justify-center px-1 text-[var(--text-secondary)] underline decoration-[color:var(--ink-30)] underline-offset-4 transition-colors hover:text-[var(--accent-text)] hover:decoration-current"
                 >
@@ -327,6 +332,7 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
           </p>
           <Link
             href="/products"
+            prefetch={false}
             className="order-1 sm:order-2 inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold border transition-all duration-200 hover:text-[var(--text-primary)] hover:border-orange-500/50"
             style={{ color: "var(--text-secondary)", borderColor: "var(--ink-12)" }}
           >

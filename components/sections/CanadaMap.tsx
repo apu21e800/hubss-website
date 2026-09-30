@@ -1,104 +1,104 @@
 "use client";
 
-import { useState, useCallback, useRef, useMemo, useEffect } from "react";
+/**
+ * The homepage project map, rebuilt 30 Sep 2026.
+ *
+ * Vern: "the map feels buggy again... make the map a magical experience",
+ * "ace the map UX/UI". What changed, and why:
+ *
+ *   - No popups. The old preview card was a MapLibre Popup, and every bug on
+ *     the list came from it: it flipped under the pin into the hint bar and
+ *     the zoom buttons, it covered other pins and clusters, and it needed a
+ *     hover grace timer to be reachable at all. A project now opens in the
+ *     panel beside the map (a desktop) or in a sheet (a phone), and hovering a
+ *     pin labels it on the map itself, which cannot overlap anything.
+ *   - The panel floats over the map, so the map gets the whole frame. Every
+ *     camera move is padded for it, and "in view" means the part of the map
+ *     you can see, not the part under the panel.
+ *   - The selected project stands up as a photo on the map.
+ *   - A tour: "Take the tour" flies coast to coast through the highlights,
+ *     one project at a time, and stops the moment you touch the map.
+ *   - On a phone the list is a strip of photo cards under the map. Swipe the
+ *     strip and the map follows; tap a pin and the strip follows.
+ *
+ * Kept from the old component, on purpose: cooperative gestures (the page
+ * scrolls past the map; Ctrl + scroll or two fingers zoom it), a list that
+ * does not collapse under your cursor when the camera moves for you, a way
+ * back to the whole country, and 44px controls.
+ *
+ * Every photo goes through lib/map-photo.ts: Sanity's CDN or a /public file,
+ * never /_next/image.
+ */
+
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Map, {
   Source,
   Layer,
-  Popup,
+  Marker,
   NavigationControl,
   AttributionControl,
   type MapRef,
   type MapLayerMouseEvent,
+  type ViewStateChangeEvent,
 } from "react-map-gl/maplibre";
+import type { GeoJSONSource } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-// PhotoImage, not next/image: the stand-in photos are gallery copies on
-// Sanity's CDN and must never reach /_next/image. /public paths render exactly
-// as they did.
-import PhotoImage from "@/components/ui/PhotoImage";
-import { mapProjects, type MapProject } from "@/lib/map-projects";
+import Image from "next/image";
 import type { FeatureCollection, Point } from "geojson";
+import { mapProjects, type MapProject } from "@/lib/map-projects";
+import { mapLoader } from "@/lib/map-photo";
+import ProjectDetail, { provinceName } from "@/components/sections/map/ProjectDetail";
 
-const MAP_STYLE =
-  "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json";
+const MAP_STYLE = "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json";
+/** The fonts CARTO's glyph server holds; its own labels use this stack. */
+const LABEL_FONT = ["Montserrat Medium", "Open Sans Bold", "Noto Sans Regular"];
+/** Whitehorse to Charlottetown, with room either side. */
+const ALL_BOUNDS: [[number, number], [number, number]] = [
+  [-137.5, 41.6],
+  [-52.5, 61.6],
+];
+const PANEL_W = 368;
+/** One tour stop: the flight, then time to look. */
+const TOUR_FLIGHT_MS = 2600;
+const TOUR_STOP_MS = 8200;
 
-const CANADA_BOUNDS: [[number, number], [number, number]] = [
-  [-133.5, 41.5], // SW: BC coast
-  [-52.0, 56.0],  // NE: Newfoundland
+/**
+ * The tour's stops, west to east: the jobs with the strongest photographs,
+ * one or two per region. Filters narrow it; a filtered map with fewer than
+ * three of these tours every project in view that has a photo instead.
+ */
+const TOUR_IDS = [
+  "whitehorse-kwanlin-dun",
+  "victoria-high-school",
+  "ubc-musqueam",
+  "vancouver-commercial-drive",
+  "langley-events-centre",
+  "maple-ridge-spray-park",
+  "osoyoos-jack-shaw-gardens",
+  "kelowna-green-square",
+  "kitchener-veterans",
+  "toronto-leslieville-laneway",
+  "halton-hills-toronto-premium-outlets",
+  "vaughan-woodbridge-heritage",
+  "montreal-guido-nincheri",
+  "mont-megantic-observatory",
+  "saint-john-harbour-passage",
+  "charlottetown-cruise-terminal",
 ];
 
-// There used to be a hard travel limit here (a box around Canada) so a
-// visitor could never wander off to another continent. Vern (26 Sep 2026):
-// "it's awkward to navigate this map, should be able to drag around the
-// whole globe, the current UI feels locked-in". So the map roams free; the
-// "Back to Canada" button appears the moment the view leaves the country
-// frame, which is the answer to "where did the pins go?".
+const PROVINCE_ORDER = ["YT", "NT", "NU", "BC", "AB", "SK", "MB", "ON", "QC", "NB", "NS", "PE", "NL"];
 
-const FIT_OPTIONS = {
-  padding: { top: 60, bottom: 80, left: 60, right: 60 },
-  maxZoom: 7,
-} as const;
-
-// ── Static rollups (module scope — mapProjects never changes at runtime)
-const PRODUCT_COUNTS: [string, number][] = (() => {
-  // (plain record — `Map` is shadowed by the react-map-gl component import)
+function countBy(key: (p: MapProject) => string): [string, number][] {
   const c: Record<string, number> = {};
-  for (const p of mapProjects) c[p.product] = (c[p.product] ?? 0) + 1;
-  return Object.entries(c).sort((a, b) => b[1] - a[1]);
-})();
-
-// Application filter options — second filter dimension (Vernon: "improve the
-// filter system"). Lives as a compact select beside search, NOT a third chip
-// row — the chip rows are locked to one line each.
-const APPLICATION_COUNTS: [string, number][] = (() => {
-  const c: Record<string, number> = {};
-  for (const p of mapProjects) c[p.application] = (c[p.application] ?? 0) + 1;
-  return Object.entries(c).sort((a, b) => b[1] - a[1]);
-})();
-
-// Province display order: west → east, the way the section's copy reads.
-/**
- * Display name → product page slug. Only the systems that appear in the
- * map data are listed; the fallback is the kebab-case of the name, which is
- * how every other slug in lib/products.ts is formed, so a new system
- * added to the data lands on its real page without an edit here. Verified
- * against production: all six return 200. DuraTherm (the Spirit Trail pin,
- * Sep 2026) is listed because kebab-case would give "dura-therm".
- */
-const PRODUCT_SLUGS: Record<string, string> = {
-  StreetPrint: "streetprint",
-  StreetBond: "streetbond",
-  TrafficPatterns: "traffic-patterns",
-  TrafficPatternsXD: "traffic-patterns-xd",
-  MMAX: "mmax",
-  DecoMark: "decomark",
-  DuraTherm: "duratherm",
-};
-const productSlug = (name: string) =>
-  PRODUCT_SLUGS[name] ??
-  name.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
-
-const PROVINCE_ORDER = ["BC", "AB", "SK", "MB", "ON", "QC", "NB", "NS", "PE", "NL"];
-const PROVINCE_LABEL: Record<string, string> = {
-  BC: "British Columbia", AB: "Alberta", SK: "Saskatchewan", MB: "Manitoba",
-  ON: "Ontario", QC: "Québec", NB: "New Brunswick", NS: "Nova Scotia",
-  PE: "PEI", NL: "Newfoundland",
-};
+  for (const p of mapProjects) c[key(p)] = (c[key(p)] ?? 0) + 1;
+  return Object.entries(c).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+}
+const PRODUCT_COUNTS = countBy((p) => p.product);
+const APPLICATION_COUNTS = countBy((p) => p.application);
 const PROVINCE_COUNTS: [string, number][] = (() => {
   const c: Record<string, number> = {};
   for (const p of mapProjects) c[p.province] = (c[p.province] ?? 0) + 1;
   return PROVINCE_ORDER.filter((pr) => pr in c).map((pr) => [pr, c[pr]]);
-})();
-
-/**
- * "British Columbia, Ontario and Québec": the provinces that have pins, west
- * to east, from the data. The header used to say "from Victoria to St.
- * John's", which stopped being true the day the St. John's pin went (it had
- * no project behind it), so the places the copy names now come from the pins.
- */
-const PROVINCE_NAMES: string = (() => {
-  const names = PROVINCE_COUNTS.map(([pr]) => PROVINCE_LABEL[pr] ?? pr);
-  if (names.length <= 1) return names.join("");
-  return `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
 })();
 
 function boundsFor(projects: MapProject[]): [[number, number], [number, number]] | null {
@@ -108,32 +108,54 @@ function boundsFor(projects: MapProject[]): [[number, number], [number, number]]
     w = Math.min(w, p.lng); e = Math.max(e, p.lng);
     s = Math.min(s, p.lat); n = Math.max(n, p.lat);
   }
-  // A single-city province still deserves a sensible frame, not zoom 18.
-  const padLng = Math.max((e - w) * 0.2, 0.35);
-  const padLat = Math.max((n - s) * 0.2, 0.25);
+  const padLng = Math.max((e - w) * 0.12, 0.3);
+  const padLat = Math.max((n - s) * 0.12, 0.2);
   return [[w - padLng, s - padLat], [e + padLng, n + padLat]];
 }
 
-// ── Layer specs
-const CLUSTER_LAYER = {
+function matches(p: MapProject, q: string): boolean {
+  const hay = `${p.title} ${p.city} ${provinceName(p.province)} ${p.province} ${p.product} ${(p.systems ?? []).join(" ")} ${p.application}`.toLowerCase();
+  return q.split(/\s+/).every((w) => hay.includes(w));
+}
+
+function useMedia(query: string): boolean {
+  const [on, setOn] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia(query);
+    const update = () => setOn(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, [query]);
+  return on;
+}
+
+// ── Map layers
+const CLUSTER_HALO = {
+  id: "cluster-halo",
+  type: "circle" as const,
+  source: "projects",
+  filter: ["has", "point_count"] as unknown as boolean,
+  paint: {
+    "circle-color": "#F97316",
+    "circle-opacity": 0.22,
+    "circle-blur": 0.6,
+    "circle-radius": ["step", ["get", "point_count"], 30, 6, 36, 16, 44] as unknown as number,
+  },
+};
+const CLUSTERS = {
   id: "clusters",
   type: "circle" as const,
   source: "projects",
   filter: ["has", "point_count"] as unknown as boolean,
   paint: {
     "circle-color": "#F97316",
-    "circle-radius": [
-      "step",
-      ["get", "point_count"],
-      22, 5, 28, 15, 35,
-    ] as unknown as number,
-    "circle-opacity": 0.92,
-    "circle-stroke-width": 2.5,
-    "circle-stroke-color": "rgba(249,115,22,0.3)",
+    "circle-radius": ["step", ["get", "point_count"], 18, 6, 23, 16, 29] as unknown as number,
+    "circle-stroke-width": 2,
+    "circle-stroke-color": "rgba(255,255,255,0.85)",
   },
 };
-
-const CLUSTER_COUNT_LAYER = {
+const CLUSTER_COUNT = {
   id: "cluster-count",
   type: "symbol" as const,
   source: "projects",
@@ -141,2552 +163,1002 @@ const CLUSTER_COUNT_LAYER = {
   layout: {
     "text-field": "{point_count_abbreviated}",
     "text-size": 13,
-    "text-font": ["Noto Sans Bold", "Noto Sans Regular"],
+    "text-font": LABEL_FONT,
+    "text-allow-overlap": true,
   },
-  paint: {
-    "text-color": "#ffffff",
-  },
+  paint: { "text-color": "#1A0E05" },
 };
-
-const POINT_LAYER = {
-  id: "unclustered-point",
+const POINT_HALO = {
+  id: "point-halo",
   type: "circle" as const,
   source: "projects",
   filter: ["!", ["has", "point_count"]] as unknown as boolean,
   paint: {
     "circle-color": "#F97316",
-    "circle-radius": 7,
-    "circle-stroke-width": 2,
-    "circle-stroke-color": "#ffffff",
-    "circle-opacity": 0.95,
+    "circle-opacity": 0.28,
+    "circle-blur": 0.8,
+    "circle-radius": 15,
   },
 };
-
-const HOVERED_RING_LAYER = {
-  id: "hovered-ring",
+const POINTS = {
+  id: "points",
   type: "circle" as const,
-  source: "hovered",
+  source: "projects",
+  filter: ["!", ["has", "point_count"]] as unknown as boolean,
   paint: {
-    "circle-color": "transparent",
-    "circle-radius": 14,
-    "circle-stroke-width": 3,
-    "circle-stroke-color": "#F97316",
-    "circle-stroke-opacity": 0.9,
-    "circle-opacity": 0,
+    "circle-color": "#F97316",
+    // Starts at 0 and grows once the map has loaded (the transition below):
+    // the pins arrive rather than sit there.
+    "circle-radius": 0,
+    "circle-radius-transition": { duration: 700, delay: 150 },
+    "circle-stroke-width": 2,
+    "circle-stroke-color": "#FFFFFF",
   },
 };
 
-// ── Small shared chip for the "representative photo" honesty tag
-// Entries flagged imageIsRepresentative show HUB work in the same product +
-// application, not that exact installation (May 2026 rule: stand-in
-// photography must never pass as the project). The tag is small but always
-// present wherever the photo appears large enough to read as "the project".
-function RepresentativeTag({ style }: { style?: React.CSSProperties }) {
+// ── Small pieces
+function Thumb({ project, size }: { project: MapProject; size: { w: number; h: number } }) {
+  const src = project.images[0];
   return (
-    <span
-      style={{
-        fontSize: 8.5,
-        fontWeight: 700,
-        letterSpacing: "0.1em",
-        textTransform: "uppercase",
-        color: "var(--ink-85)",
-        background: "rgba(8,13,22,0.72)",
-        backdropFilter: "blur(4px)",
-        border: "1px solid var(--ink-18)",
-        padding: "2px 7px",
-        borderRadius: 5,
-        whiteSpace: "nowrap",
-        ...style,
-      }}
-    >
-      Representative photo
+    <span className="cm-thumb" style={{ width: size.w, height: size.h }}>
+      {src ? (
+        <Image loader={mapLoader} src={src} alt="" fill sizes={`${size.w}px`} style={{ objectFit: "cover" }} />
+      ) : (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0Z" />
+          <circle cx="12" cy="10" r="3" />
+        </svg>
+      )}
     </span>
   );
 }
 
-// ── Thumbnail for a pin with no photograph yet (Sep 2026): a plain tile with
-// a pin mark, never a stand-in. Fills whatever frame it is put in.
-function NoPhotoThumb() {
-  return (
-    <span
-      aria-hidden="true"
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        width: "100%",
-        height: "100%",
-        background: "var(--ink-05)",
-        color: "var(--text-secondary)",
-      }}
-    >
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0Z" />
-        <circle cx="12" cy="10" r="3" />
-      </svg>
-    </span>
-  );
-}
-
-// ── Panel project card
-function PanelCard({
-  project,
-  hovered,
-  selected,
-  onHover,
-  onClick,
-}: {
-  project: MapProject;
-  hovered: boolean;
-  selected: boolean;
-  onHover: (id: string | null) => void;
-  onClick: (project: MapProject) => void;
+function Chip({ active, onClick, children, count, label }: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+  count?: number;
+  label?: string;
 }) {
   return (
-    <div
-      role="button"
-      tabIndex={0}
-      aria-pressed={selected}
-      aria-label={`${project.title}, view on map`}
-      onMouseEnter={() => onHover(project.id)}
-      onMouseLeave={() => onHover(null)}
-      onFocus={() => onHover(project.id)}
-      onBlur={() => onHover(null)}
-      onClick={() => onClick(project)}
-      onKeyDown={(e) => {
-        // Card is a <div> (needs to sit inside a horizontally-scrolling,
-        // image+text layout that <button> fights), so Enter/Space activation
-        // has to be wired up by hand to make it keyboard-operable at all —
-        // previously this whole list was mouse-only (axe: also the cause of
-        // scrollable-region-focusable, since a scroll region with zero
-        // focusable descendants can't be reached by keyboard either).
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          onClick(project);
-        }
-      }}
-      style={{
-        display: "flex",
-        gap: 10,
-        padding: "11px 14px",
-        cursor: "pointer",
-        borderBottom: "1px solid var(--ink-05)",
-        background: selected
-          ? "rgba(249,115,22,0.12)"
-          : hovered
-          ? "rgba(249,115,22,0.07)"
-          : "transparent",
-        borderLeft: selected
-          ? "3px solid #F97316"
-          : hovered
-          ? "3px solid rgba(249,115,22,0.4)"
-          : "3px solid transparent",
-        transition: "background 0.15s ease, border-left-color 0.15s ease",
-      }}
-    >
-      {/* Thumbnail */}
-      <div
-        style={{
-          width: 64,
-          height: 46,
-          borderRadius: 7,
-          overflow: "hidden",
-          flexShrink: 0,
-          border:
-            hovered || selected
-              ? "1.5px solid rgba(249,115,22,0.55)"
-              : "1.5px solid var(--border-color)",
-          transition: "border-color 0.15s ease",
-        }}
-      >
-        {project.images[0] ? (
-          <PhotoImage
-            src={project.images[0]}
-            alt={`${project.title}, ${project.city}`}
-            width={64}
-            height={46}
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
-          />
-        ) : (
-          <NoPhotoThumb />
-        )}
-      </div>
-
-      {/* Info */}
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 3 }}>
-          <span
-            style={{
-              fontSize: 11,
-              fontWeight: 700,
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "var(--accent-text-lg)",
-              background: "rgba(249,115,22,0.12)",
-              padding: "1.5px 6px",
-              borderRadius: 4,
-              flexShrink: 0,
-              whiteSpace: "nowrap",
-            }}
-          >
-            {project.product}
-          </span>
-        </div>
-        <p
-          style={{
-            fontSize: 11.5,
-            fontWeight: 600,
-            color: hovered || selected ? "#F5F0EB" : "#D1D5DB",
-            lineHeight: 1.35,
-            margin: 0,
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            transition: "color 0.15s ease",
-          }}
-        >
-          {project.title}
-        </p>
-        <p
-          style={{
-            fontSize: 10.5,
-            color: "var(--text-secondary)",
-            margin: "2px 0 0",
-            lineHeight: 1,
-          }}
-        >
-          {project.city}, {project.province}
-        </p>
-      </div>
-
-      {/* Arrow */}
-      <div style={{ flexShrink: 0, display: "flex", alignItems: "center" }}>
-        <svg
-          width="13"
-          height="13"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke={hovered || selected ? "#F97316" : "#374151"}
-          strokeWidth={2}
-          strokeLinecap="round"
-          style={{ transition: "stroke 0.15s ease" }}
-        >
-          <path d="M5 12h14M12 5l7 7-7 7" />
-        </svg>
-      </div>
-    </div>
+    <button type="button" className={active ? "cm-pill is-on" : "cm-pill"} aria-pressed={active} aria-label={label} title={label} onClick={onClick}>
+      {children}
+      {count !== undefined && <span className="cm-pill-count">{count}</span>}
+    </button>
   );
 }
 
-// ── Project detail modal
-function ProjectModal({
-  project,
-  onClose,
-  onShowOnMap,
-}: {
+/** The phone sheet: one project, full screen, with a trapped focus ring. */
+function Sheet({ project, onClose, onPrev, onNext, position }: {
   project: MapProject;
   onClose: () => void;
-  onShowOnMap: (p: MapProject) => void;
+  onPrev?: () => void;
+  onNext?: () => void;
+  position?: string;
 }) {
-  const [imgIndex, setImgIndex] = useState(0);
   const closeRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
-  const returnFocusRef = useRef<HTMLElement | null>(null);
 
-  /**
-   * Escape closes, focus is trapped, the page behind is frozen, and focus goes
-   * back where it came from on the way out.
-   *
-   * The previous version did the first of those and reasoned the rest was not
-   * warranted because the dialog is small. Measured with a keyboard: focus
-   * left the dialog on 10 of 12 tab presses, landing on the page underneath —
-   * where a sighted mouse user sees a dimmed backdrop and a screen-reader user
-   * is simply reading a page they cannot see. Size is not what decides this;
-   * being modal is.
-   */
   useEffect(() => {
-    returnFocusRef.current = document.activeElement as HTMLElement | null;
+    const returnTo = document.activeElement as HTMLElement | null;
     closeRef.current?.focus();
-
-    // Freeze the page behind, without the scroll position jumping to the top
-    // when position:fixed is applied — the compensating `top` is what stops
-    // that, and the scrollbar-width padding stops the layout shifting sideways.
     const scrollY = window.scrollY;
     const body = document.body;
-    const prev = {
-      position: body.style.position,
-      top: body.style.top,
-      width: body.style.width,
-      paddingRight: body.style.paddingRight,
-    };
-    const gap = window.innerWidth - document.documentElement.clientWidth;
+    const prev = { position: body.style.position, top: body.style.top, width: body.style.width };
     body.style.position = "fixed";
     body.style.top = `-${scrollY}px`;
     body.style.width = "100%";
-    if (gap > 0) body.style.paddingRight = `${gap}px`;
-
     function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") {
-        e.stopPropagation();
-        onClose();
-        return;
-      }
+      if (e.key === "Escape") { e.stopPropagation(); onClose(); return; }
       if (e.key !== "Tab") return;
       const root = dialogRef.current;
       if (!root) return;
-      const focusable = Array.from(
-        root.querySelectorAll<HTMLElement>(
-          'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        )
-        // getClientRects rather than offsetParent: offsetParent is null for
-        // anything positioned fixed, and this dialog lives inside a fixed
-        // backdrop — the offsetParent test would have filtered out every
-        // candidate and quietly disabled the trap it was meant to build.
-      ).filter((el) => el.getClientRects().length > 0);
-      if (focusable.length === 0) return;
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      } else if (!root.contains(document.activeElement)) {
-        e.preventDefault();
-        first.focus();
-      }
+      const items = Array.from(root.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), summary, [tabindex]:not([tabindex="-1"])'))
+        .filter((el) => el.getClientRects().length > 0);
+      if (!items.length) return;
+      const first = items[0], last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
     }
-
     document.addEventListener("keydown", onKey);
     return () => {
       document.removeEventListener("keydown", onKey);
       body.style.position = prev.position;
       body.style.top = prev.top;
       body.style.width = prev.width;
-      body.style.paddingRight = prev.paddingRight;
       window.scrollTo(0, scrollY);
-      returnFocusRef.current?.focus?.();
+      returnTo?.focus?.();
     };
   }, [onClose]);
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        inset: 0,
-        zIndex: 9999,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "12px",
-        background: "rgba(0,0,0,0.85)",
-        backdropFilter: "blur(8px)",
-      }}
-      onClick={onClose}
-    >
+    <div className="cm-sheet-backdrop" onClick={onClose}>
       <div
         ref={dialogRef}
-        className="canada-map-modal"
+        className="cm-sheet"
         role="dialog"
         aria-modal="true"
-        aria-label={`Project details: ${project.title}`}
-        style={{
-          background: "var(--bg-section-asphalt)",
-          border: "1px solid rgba(249,115,22,0.25)",
-          borderRadius: 20,
-          maxWidth: 880,
-          width: "100%",
-          maxHeight: "92vh",
-          overflow: "auto",
-          position: "relative",
-        }}
+        aria-labelledby="cm-sheet-title"
         onClick={(e) => e.stopPropagation()}
       >
-        <div
-          style={{
-            height: 3,
-            background: "linear-gradient(90deg, #F97316, #EAB308)",
-            borderRadius: "20px 20px 0 0",
-          }}
-        />
-
-        <button
-          ref={closeRef}
-          onClick={onClose}
-          style={{
-            position: "absolute",
-            top: 12,
-            right: 12,
-            background: "var(--ink-08)",
-            border: "1px solid var(--ink-12)",
-            borderRadius: "50%",
-            width: 44,
-            height: 44,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            cursor: "pointer",
-            color: "var(--text-muted)",
-            zIndex: 10,
-          }}
-          aria-label="Close"
-        >
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <path
-              d="M1 1l12 12M13 1L1 13"
-              stroke="currentColor"
-              strokeWidth={2}
-              strokeLinecap="round"
-            />
-          </svg>
-        </button>
-
-        <div style={{ padding: "24px 24px 28px" }}>
-          <div style={{ marginBottom: 18 }}>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-                marginBottom: 8,
-                flexWrap: "wrap",
-              }}
-            >
-              <span
-                style={{
-                  fontSize: 10,
-                  fontWeight: 700,
-                  letterSpacing: "0.15em",
-                  textTransform: "uppercase",
-                  color: "var(--accent-text-lg)",
-                  background: "rgba(249,115,22,0.12)",
-                  padding: "3px 10px",
-                  borderRadius: 6,
-                  border: "1px solid rgba(249,115,22,0.2)",
-                }}
-              >
-                {project.product}
-              </span>
-              <span
-                style={{
-                  fontSize: 10,
-                  fontWeight: 600,
-                  letterSpacing: "0.1em",
-                  textTransform: "uppercase",
-                  color: "var(--text-secondary)",
-                  background: "var(--ink-05)",
-                  padding: "3px 10px",
-                  borderRadius: 6,
-                }}
-              >
-                {project.application}
-              </span>
-            </div>
-            <h2
-              style={{
-                fontSize: "clamp(1.1rem, 3vw, 1.4rem)",
-                fontWeight: 800,
-                color: "var(--text-primary)",
-                margin: "0 0 4px",
-                letterSpacing: "-0.02em",
-                lineHeight: 1.2,
-              }}
-            >
-              {project.title}
-            </h2>
-            {/* Was a 📍 emoji, the only one in the section — it rendered at a
-                different weight and colour to everything around it. A drawn
-                pin matches the icon set the rest of the card uses. */}
-            <p style={{ fontSize: 13, color: "var(--text-muted)", margin: 0, display: "flex", alignItems: "center", gap: 6 }}>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }} aria-hidden="true">
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0Z" />
-                <circle cx="12" cy="10" r="3" />
-              </svg>
-              {project.city}, {project.province}
-              {project.year ? ` · ${project.year}` : ""}
-            </p>
-          </div>
-
-          {/* A pin with no photograph (Sep 2026) skips this block: no empty
-              frame, no tag, straight to the challenge and solution. */}
-          {project.images.length > 0 && (
-          <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 20 }}>
-            <div
-              style={{
-                position: "relative",
-                width: "100%",
-                borderRadius: 12,
-                overflow: "hidden",
-                aspectRatio: "16/9",
-                background: "var(--bg-dark)",
-              }}
-            >
-              {/* cover, not contain. A portrait photo in a 16/9 frame was being
-                  pillarboxed — two black columns either side of the picture,
-                  with the subject (a surface, on the ground) shrunk to fit a
-                  shape it was never shot for. Filling the frame crops the top
-                  and bottom instead, which on a pavement photograph is sky and
-                  foreground, and shows the work at nearly twice the size. The
-                  thumbnails below already do this. */}
-              <PhotoImage
-                src={project.images[imgIndex]}
-                alt={`${project.title}, photo ${imgIndex + 1}`}
-                fill
-                className="object-cover"
-                style={{ objectPosition: "center 55%" }}
-                sizes="(max-width: 880px) 100vw, 880px"
-              />
-              {project.imageIsRepresentative && (
-                <RepresentativeTag style={{ position: "absolute", top: 10, left: 10 }} />
-              )}
-            </div>
-            {project.imageIsRepresentative && (
-              <p style={{ fontSize: 11, color: "var(--text-secondary)", margin: 0, lineHeight: 1.5 }}>
-                Representative photo: HUB work in the same system and application.
-                This installation&apos;s own photography is on its way.
-              </p>
+        <div className="cm-sheet-bar">
+          <span className="cm-sheet-pos">{position}</span>
+          <span className="cm-sheet-nav">
+            {onPrev && (
+              <button type="button" className="cm-icon-btn" aria-label="Previous project" onClick={onPrev}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6" /></svg>
+              </button>
             )}
-            {project.images.length > 1 && (
-              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                {project.images.map((src, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setImgIndex(i)}
-                    style={{
-                      position: "relative",
-                      width: 68,
-                      height: 52,
-                      borderRadius: 8,
-                      overflow: "hidden",
-                      border:
-                        i === imgIndex
-                          ? "2px solid #F97316"
-                          : "2px solid rgba(255,255,255,0.1)",
-                      cursor: "pointer",
-                      padding: 0,
-                      flexShrink: 0,
-                    }}
-                    aria-label={`Photo ${i + 1}`}
-                  >
-                    <PhotoImage
-                      src={src}
-                      alt={`${project.title} photo ${i + 1}`}
-                      fill
-                      className="object-cover"
-                      sizes="68px"
-                    />
-                  </button>
-                ))}
-              </div>
+            {onNext && (
+              <button type="button" className="cm-icon-btn" aria-label="Next project" onClick={onNext}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6" /></svg>
+              </button>
             )}
-          </div>
-          )}
-
-          <div className="canada-map-modal-grid">
-            <div
-              style={{
-                background: "var(--ink-04)",
-                border: "1px solid var(--ink-08)",
-                borderRadius: 12,
-                padding: "16px 18px",
-              }}
-            >
-              <p
-                style={{
-                  fontSize: 10,
-                  fontWeight: 700,
-                  letterSpacing: "0.15em",
-                  textTransform: "uppercase",
-                  color: "var(--accent-text-lg)",
-                  margin: "0 0 8px",
-                }}
-              >
-                The challenge
-              </p>
-              <p style={{ fontSize: 13, color: "var(--text-body)", lineHeight: 1.65, margin: 0 }}>
-                {project.problem}
-              </p>
-            </div>
-            <div
-              style={{
-                background: "rgba(249,115,22,0.04)",
-                border: "1px solid rgba(249,115,22,0.15)",
-                borderRadius: 12,
-                padding: "16px 18px",
-              }}
-            >
-              <p
-                style={{
-                  fontSize: 10,
-                  fontWeight: 700,
-                  letterSpacing: "0.15em",
-                  textTransform: "uppercase",
-                  color: "var(--accent-text-lg)",
-                  margin: "0 0 8px",
-                }}
-              >
-                The solution
-              </p>
-              <p style={{ fontSize: 13, color: "var(--text-body)", lineHeight: 1.65, margin: 0 }}>
-                {project.solution}
-              </p>
-            </div>
-          </div>
-
-          <div style={{ marginTop: 22, display: "flex", gap: 12, flexWrap: "wrap" }}>
-            <a
-              href="/contact"
-              style={{
-                background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
-                color: "var(--on-accent)",
-                fontWeight: 700,
-                fontSize: 13,
-                padding: "13px 24px",
-                minHeight: 44,
-                borderRadius: 8,
-                textDecoration: "none",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 6,
-                boxShadow: "0 4px 16px rgba(249,115,22,0.35)",
-              }}
-            >
-              Request similar project →
-            </a>
-            {/* Present whenever the project has a write-up (most curated pins
-                do), and until now the modal gave no way to reach it — the connection
-                existed only as an image path nobody could follow. */}
-            {project.slug && (
-              <a
-                href={`/blog/${project.slug}`}
-                style={{
-                  background: "rgba(249,115,22,0.10)",
-                  color: "var(--accent-soft-text)",
-                  fontWeight: 700,
-                  fontSize: 13,
-                  padding: "13px 24px",
-                  minHeight: 44,
-                  borderRadius: 8,
-                  textDecoration: "none",
-                  border: "1px solid rgba(249,115,22,0.3)",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 6,
-                }}
-              >
-                Read the write-up →
-              </a>
-            )}
-            {/* Was href="/contact" — the same destination as the button beside
-                it, under a label promising the product pages. */}
-            <a
-              href={`/products/${productSlug(project.product)}`}
-              style={{
-                background: "transparent",
-                color: "var(--text-muted)",
-                fontWeight: 600,
-                fontSize: 13,
-                padding: "13px 24px",
-                minHeight: 44,
-                borderRadius: 8,
-                textDecoration: "none",
-                border: "1px solid var(--ink-12)",
-                display: "inline-flex",
-                alignItems: "center",
-              }}
-            >
-              About {project.product} →
-            </a>
-            {/* The way back to the map, by name. Without it the only exit from
-                a case study is dismissal, and the pin you came from is lost. */}
-            <button
-              type="button"
-              onClick={() => onShowOnMap(project)}
-              style={{
-                background: "transparent",
-                color: "var(--text-muted)",
-                fontWeight: 600,
-                fontSize: 13,
-                padding: "13px 24px",
-                minHeight: 44,
-                borderRadius: 8,
-                border: "1px solid var(--ink-12)",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 7,
-                cursor: "pointer",
-              }}
-            >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0Z" />
-                <circle cx="12" cy="10" r="3" />
-              </svg>
-              Show on map
+            <button ref={closeRef} type="button" className="cm-icon-btn" aria-label="Close" onClick={onClose}>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" strokeWidth={2} strokeLinecap="round" /></svg>
             </button>
-          </div>
+          </span>
         </div>
+        <ProjectDetail project={project} headingId="cm-sheet-title" photoSizes="100vw" priority />
       </div>
     </div>
-  );
-}
-
-// ── Filter chip (shared by province + product rows)
-function FilterChip({
-  active,
-  onClick,
-  children,
-  count,
-  title,
-}: {
-  active: boolean;
-  onClick: () => void;
-  children: React.ReactNode;
-  count?: number;
-  title?: string;
-}) {
-  return (
-    <button
-      type="button"
-      aria-pressed={active}
-      onClick={onClick}
-      title={title}
-      aria-label={title}
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        gap: 6,
-        padding: "6px 12px",
-        // 44px floor: these province chips are the map's primary control and
-        // sat at 34px, under the iOS minimum. Padding alone kept them short
-        // because the label is a single 11.5px line.
-        minHeight: 44,
-        borderRadius: 20,
-        border: active
-          ? "1px solid rgba(249,115,22,0.65)"
-          : "1px solid rgba(255,255,255,0.1)",
-        background: active ? "rgba(249,115,22,0.16)" : "rgba(255,255,255,0.03)",
-        color: active ? "#F5F0EB" : "#B7BDC8",
-        fontSize: 11.5,
-        fontWeight: 600,
-        cursor: "pointer",
-        whiteSpace: "nowrap",
-        flexShrink: 0,
-        transition: "background 0.15s ease, border-color 0.15s ease, color 0.15s ease",
-      }}
-    >
-      {children}
-      {count !== undefined && (
-        <span
-          style={{
-            fontSize: 10,
-            fontWeight: 700,
-            color: active ? "#F97316" : "#6B7280",
-            background: active ? "rgba(249,115,22,0.14)" : "rgba(255,255,255,0.06)",
-            borderRadius: 10,
-            padding: "1px 7px",
-          }}
-        >
-          {count}
-        </span>
-      )}
-    </button>
   );
 }
 
 // ── Main component
 export default function CanadaMap() {
   const mapRef = useRef<MapRef>(null);
-  const sectionRef = useRef<HTMLElement>(null);
-  const mapContainerRef = useRef<HTMLDivElement>(null);
-  const panelRef = useRef<HTMLDivElement>(null);
+  const frameRef = useRef<HTMLDivElement>(null);
+  const stripRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
 
+  const isDesktop = useMedia("(min-width: 1024px)");
+  const reducedMotion = useMedia("(prefers-reduced-motion: reduce)");
+
+  const [loaded, setLoaded] = useState(false);
+  const [styleFailed, setStyleFailed] = useState(false);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
-  const [selectedProject, setSelectedProject] = useState<MapProject | null>(null);
-  const [cursor, setCursor] = useState("grab");
-  const [popupProject, setPopupProject] = useState<MapProject | null>(null);
-  // Click-to-pin: when true, popup persists regardless of cursor location. Cleared by the
-  // close button on the card, by clicking outside the map, or by clicking another marker.
-  // Hover-driven popup behavior is fragile in MapLibre (cursor crosses a dead zone between
-  // marker and Popup DOM during transit). Click-to-pin makes the preview bulletproof.
-  const [popupPinned, setPopupPinned] = useState(false);
-  const [visibleProjects, setVisibleProjects] = useState<MapProject[]>(mapProjects);
-  /**
-   * The project a panel click flew to. Kept separately from selectedProject
-   * (the modal) because clicking the list now moves the camera instead of
-   * opening anything.
-   */
-  const [focusedId, setFocusedId] = useState<string | null>(null);
-  /**
-   * While true, map movement does not re-filter the list.
-   *
-   * This is the whole reason the panel click could not zoom before. The list
-   * is "projects in view", so flying to one project left exactly one project
-   * in view — the list you were reading collapsed to the single row you had
-   * just clicked, and the other nine vanished under your cursor. Freezing the
-   * list through OUR camera move keeps the set you were browsing intact; the
-   * moment you move the map yourself, it unfreezes and filters again.
-   */
-  const suppressListSync = useRef(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [productFilter, setProductFilter] = useState<string | null>(null);
-  const [appFilter, setAppFilter] = useState<string | null>(null);
-  const [provinceFocus, setProvinceFocus] = useState<string | null>(null);
-  const [viewMoved, setViewMoved] = useState(false);
-  /**
-   * The camera the map opened on, recorded on load and again whenever "Back
-   * to Canada" lands (the Canada frame depends on the map's size). "Moved"
-   * means a real departure from it. It used to be a fixed zoom band, 2.4 to
-   * 4.6, and a phone opens below 2.4, so every phone started out "moved":
-   * Back to Canada showing and All Canada unlit before anyone had touched it.
-   */
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [sheetId, setSheetId] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
+  const [product, setProduct] = useState<string | null>(null);
+  const [application, setApplication] = useState<string | null>(null);
+  const [province, setProvince] = useState<string | null>(null);
+  const [inView, setInView] = useState<MapProject[]>(mapProjects);
+  const [moved, setMoved] = useState(false);
+  const [touched, setTouched] = useState(false);
+  const [tour, setTour] = useState<{ ids: string[]; index: number; playing: boolean } | null>(null);
+  const [announce, setAnnounce] = useState("");
+
+  /** While true, camera moves we make do not re-filter the list. A move the visitor makes releases it. */
+  const freezeList = useRef(false);
+  /** The camera the map opened on; "moved" means a real departure from it. */
   const homeRef = useRef<{ lng: number; lat: number; zoom: number } | null>(null);
-  /** Set while a "Back to Canada" flight is in the air. */
-  const reframingRef = useRef(false);
-  const recordHome = useCallback((onlyIfFramed: boolean) => {
+  /** Set while the strip is being scrolled for the map, so the strip does not steer the map back. */
+  const stripByCode = useRef(false);
+  const stripTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const selected = useMemo(() => mapProjects.find((p) => p.id === selectedId) ?? null, [selectedId]);
+  const sheetProject = useMemo(() => mapProjects.find((p) => p.id === sheetId) ?? null, [sheetId]);
+
+  // ── What the pins show: the system and application filters
+  const filtered = useMemo(
+    () => mapProjects.filter((p) =>
+      (!product || p.product === product || (p.systems ?? []).includes(product)) &&
+      (!application || p.application === application)),
+    [product, application]
+  );
+
+  // ── What the list shows: a search looks everywhere; otherwise, what is in view
+  const query = search.trim().toLowerCase();
+  const listProjects = useMemo(() => {
+    if (query) return filtered.filter((p) => matches(p, query));
+    const ids = new Set(inView.map((p) => p.id));
+    return filtered.filter((p) => ids.has(p.id));
+  }, [query, filtered, inView]);
+
+  const geojson = useMemo<FeatureCollection<Point>>(() => ({
+    type: "FeatureCollection",
+    features: filtered.map((p) => ({
+      type: "Feature",
+      geometry: { type: "Point", coordinates: [p.lng, p.lat] },
+      properties: { id: p.id, title: p.title },
+    })),
+  }), [filtered]);
+
+  const padding = useCallback(
+    () => (isDesktop
+      ? { top: 64, bottom: 64, left: PANEL_W + 48, right: 64 }
+      : { top: 36, bottom: 36, left: 28, right: 28 }),
+    [isDesktop]
+  );
+
+  // ── The list follows the map
+  const syncInView = useCallback(() => {
     const map = mapRef.current?.getMap();
     if (!map) return;
-    if (onlyIfFramed) {
-      // Only a flight that actually landed on the Canada frame moves home;
-      // one cut short by a drag or another click does not.
-      const cam = map.cameraForBounds(CANADA_BOUNDS, FIT_OPTIONS);
-      if (!cam?.center || cam.zoom === undefined) return;
-      const aim = map.project(cam.center);
-      const mid = map.project(map.getCenter());
-      const zoom = Math.max(map.getMinZoom(), cam.zoom);
-      if (Math.abs(map.getZoom() - zoom) > 0.05 || Math.hypot(aim.x - mid.x, aim.y - mid.y) > 4) return;
+    const el = map.getContainer();
+    const left = isDesktop ? PANEL_W + 24 : 0;
+    const nw = map.unproject([left, 0]);
+    const se = map.unproject([el.clientWidth, el.clientHeight]);
+    if (!freezeList.current) {
+      setInView(mapProjects.filter((p) => p.lng >= nw.lng && p.lng <= se.lng && p.lat <= nw.lat && p.lat >= se.lat));
     }
+    const home = homeRef.current;
+    if (home) {
+      const a = map.project([home.lng, home.lat]);
+      const b = map.project(map.getCenter());
+      setMoved(Math.abs(map.getZoom() - home.zoom) > 0.3 || Math.hypot(a.x - b.x, a.y - b.y) > 60);
+    }
+  }, [isDesktop]);
+
+  const frameCanada = useCallback((duration = 1200) => {
+    const map = mapRef.current;
+    if (!map) return;
+    freezeList.current = false;
+    map.fitBounds(ALL_BOUNDS, { padding: padding(), duration: reducedMotion ? 0 : duration });
+  }, [padding, reducedMotion]);
+
+  // ── Moving the camera to a project
+  const flyTo = useCallback((p: MapProject, how: "tour" | "select" | "follow") => {
+    const map = mapRef.current;
+    if (!map) return;
+    freezeList.current = true;
+    const now = map.getZoom();
+    // An approximate pin stops at city scale: zooming to a street would claim a site.
+    const zoom = p.approximate
+      ? (how === "tour" ? 10.2 : Math.min(Math.max(now, how === "follow" ? 8.5 : 9.5), 10.2))
+      : how === "tour" ? 13 : Math.min(Math.max(now, how === "follow" ? 11.6 : 12.5), 16);
+    const options = { center: [p.lng, p.lat] as [number, number], zoom, padding: padding() };
+    if (reducedMotion) { map.jumpTo(options); return; }
+    // A short hop eases; a long one flies, climbing out and back in, so the
+    // map never smears a continent past at street scale.
+    const el = map.getContainer();
+    const a = map.project([p.lng, p.lat]);
+    const far = Math.hypot(a.x - el.clientWidth / 2, a.y - el.clientHeight / 2) > el.clientWidth * 1.5;
+    if (how === "follow" && !far) map.easeTo({ ...options, duration: 700 });
+    else map.flyTo({ ...options, duration: how === "tour" ? TOUR_FLIGHT_MS : far ? 1900 : 1300, curve: 1.45, essential: true });
+  }, [padding, reducedMotion]);
+
+  const select = useCallback((p: MapProject, how: "tour" | "select" | "follow" = "select") => {
+    setSelectedId(p.id);
+    setHoveredId(null);
+    setTouched(true);
+    setAnnounce(`${p.title}, ${p.city}, ${provinceName(p.province)}`);
+    flyTo(p, how);
+  }, [flyTo]);
+
+  const stopTour = useCallback(() => setTour(null), []);
+
+  const backToList = useCallback(() => {
+    setSelectedId(null);
+    stopTour();
+    requestAnimationFrame(() => listRef.current?.focus());
+  }, [stopTour]);
+
+  // ── The tour
+  const startTour = useCallback(() => {
+    let ids = TOUR_IDS.filter((id) => filtered.some((p) => p.id === id));
+    if (ids.length < 3) {
+      ids = [...filtered].filter((p) => p.images.length).sort((a, b) => a.lng - b.lng).map((p) => p.id);
+    }
+    if (!ids.length) return;
+    setSearch("");
+    setSheetId(null);
+    setTour({ ids, index: 0, playing: !reducedMotion });
+    const first = mapProjects.find((p) => p.id === ids[0]);
+    if (first) select(first, "tour");
+    if (!isDesktop) frameRef.current?.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
+  }, [filtered, reducedMotion, select, isDesktop]);
+
+  const tourRef = useRef(tour);
+  tourRef.current = tour;
+  const stepTour = useCallback((delta: number) => {
+    const t = tourRef.current;
+    if (!t) return;
+    const index = (t.index + delta + t.ids.length) % t.ids.length;
+    setTour({ ...t, index });
+    const p = mapProjects.find((x) => x.id === t.ids[index]);
+    if (p) select(p, "tour");
+  }, [select]);
+
+  useEffect(() => {
+    if (!tour?.playing) return;
+    const timer = setTimeout(() => stepTour(1), TOUR_STOP_MS);
+    return () => clearTimeout(timer);
+  }, [tour?.playing, tour?.index, stepTour]);
+
+  // ── Stepping through the list from a project
+  const position = useMemo(() => {
+    if (!selected) return null;
+    const ids = tour ? tour.ids : listProjects.map((p) => p.id);
+    const i = ids.indexOf(selected.id);
+    return i === -1 ? null : { i, n: ids.length, ids };
+  }, [selected, tour, listProjects]);
+
+  const stepList = useCallback((delta: number) => {
+    if (tour) { stepTour(delta); return; }
+    if (!position) return;
+    const id = position.ids[(position.i + delta + position.n) % position.n];
+    const p = mapProjects.find((x) => x.id === id);
+    if (p) select(p);
+  }, [tour, stepTour, position, select]);
+
+  // ── Map events
+  const onMapClick = useCallback(async (e: MapLayerMouseEvent) => {
+    setTouched(true);
+    const f = e.features?.[0];
+    if (!f) return;
+    const map = mapRef.current;
+    if (f.layer.id === "clusters" && map) {
+      const source = map.getSource("projects") as GeoJSONSource | undefined;
+      const clusterId = f.properties?.cluster_id as number;
+      if (!source) return;
+      try {
+        const zoom = await source.getClusterExpansionZoom(clusterId);
+        const [lng, lat] = (f.geometry as unknown as { coordinates: [number, number] }).coordinates;
+        map.easeTo({ center: [lng, lat], zoom: zoom + 0.4, padding: padding(), duration: reducedMotion ? 0 : 800 });
+      } catch { /* the cluster went away under the click */ }
+      return;
+    }
+    if (f.layer.id === "points") {
+      const p = mapProjects.find((x) => x.id === f.properties?.id);
+      if (!p) return;
+      stopTour();
+      if (isDesktop) {
+        select(p);
+      } else {
+        // On a phone a pin brings its card to the middle of the strip.
+        setSelectedId(p.id);
+        flyTo(p, "follow");
+        const card = stripRef.current?.querySelector<HTMLElement>(`[data-id="${p.id}"]`);
+        if (card) {
+          stripByCode.current = true;
+          card.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", inline: "center", block: "nearest" });
+          setTimeout(() => { stripByCode.current = false; }, 700);
+        }
+      }
+    }
+  }, [padding, reducedMotion, isDesktop, select, flyTo, stopTour]);
+
+  const onMouseMove = useCallback((e: MapLayerMouseEvent) => {
+    const f = e.features?.[0];
+    const id = f?.layer.id === "points" ? (f.properties?.id as string) : null;
+    setHoveredId((cur) => (cur === id ? cur : id));
+    const canvas = mapRef.current?.getCanvas();
+    if (canvas) canvas.style.cursor = f ? "pointer" : "";
+  }, []);
+
+  const onMoveStart = useCallback((e: ViewStateChangeEvent) => {
+    if ((e as { originalEvent?: unknown }).originalEvent) {
+      // The visitor is steering: the tour stops, and the list follows the map again.
+      setTouched(true);
+      freezeList.current = false;
+      setTour((t) => (t ? { ...t, playing: false } : t));
+    }
+  }, []);
+
+  const onLoad = useCallback(() => {
+    const map = mapRef.current?.getMap();
+    if (!map) return;
     const c = map.getCenter();
     homeRef.current = { lng: c.lng, lat: c.lat, zoom: map.getZoom() };
-  }, []);
-  const [styleFailed, setStyleFailed] = useState(false);
-  /**
-   * The map's own width, measured. The popup is sized from this rather than
-   * from the viewport, because the map is only part of the viewport — on a
-   * 390px phone the map box is 348px, and a popup that assumed the viewport
-   * would still overflow its container and clip its own close button.
-   */
-  const [mapWidth, setMapWidth] = useState(0);
+    setLoaded(true);
+    syncInView();
+    // The pins grow in (see POINTS). A second frame, so the transition runs.
+    requestAnimationFrame(() => map.setPaintProperty("points", "circle-radius", 6.5));
+  }, [syncInView]);
+
+  // The first frame depends on the panel, which depends on the breakpoint.
   useEffect(() => {
-    const el = mapContainerRef.current;
-    if (!el) return;
-    const ro = new ResizeObserver(([entry]) => {
-      setMapWidth(entry.contentRect.width);
-    });
-    ro.observe(el);
-    setMapWidth(el.getBoundingClientRect().width);
-    return () => ro.disconnect();
-  }, []);
-  // 240 is the designed width; below a ~330px map it steps down so the card
-  // plus its anchor offset always fit inside the frame.
-  const popupWidth = mapWidth > 0 ? Math.min(240, Math.max(180, mapWidth - 72)) : 240;
-  const isNarrow = mapWidth > 0 && mapWidth < 560;
-  // Popup hover bridge — grace timeout + popup-card hover keeps it alive.
-  const popupHoveredRef = useRef(false);
-  // Mirror of popupPinned for handlers that must not re-create on pin/unpin.
-  // Written SYNCHRONOUSLY by setPinned — an effect-based sync loses the race
-  // against the blur that fires in the same tick as the pinning click.
-  const popupPinnedRef = useRef(false);
-  const setPinned = useCallback((v: boolean) => {
-    popupPinnedRef.current = v;
-    setPopupPinned(v);
-  }, []);
-  const popupClearTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  // ── Product + application filters drive the pins themselves
-  const filteredProjects = useMemo(() => {
-    let base = mapProjects;
-    if (productFilter) base = base.filter((p) => p.product === productFilter);
-    if (appFilter) base = base.filter((p) => p.application === appFilter);
-    return base;
-  }, [productFilter, appFilter]);
-
-  const projectsGeoJSON = useMemo<FeatureCollection<Point>>(
-    () => ({
-      type: "FeatureCollection",
-      features: filteredProjects.map((p) => ({
-        type: "Feature",
-        geometry: { type: "Point", coordinates: [p.lng, p.lat] },
-        properties: {
-          id: p.id,
-          title: p.title,
-          city: p.city,
-          province: p.province,
-          product: p.product,
-          application: p.application,
-          excerpt: p.excerpt,
-          image: p.images[0],
-        },
-      })),
-    }),
-    [filteredProjects]
-  );
-
-  // ── GeoJSON for hover ring
-  const hoveredProject = useMemo(
-    () => (hoveredId ? mapProjects.find((p) => p.id === hoveredId) ?? null : null),
-    [hoveredId]
-  );
-
-  const hoveredGeoJSON = useMemo<FeatureCollection<Point>>(
-    () => ({
-      type: "FeatureCollection",
-      features: hoveredProject
-        ? [
-            {
-              type: "Feature",
-              geometry: {
-                type: "Point",
-                coordinates: [hoveredProject.lng, hoveredProject.lat],
-              },
-              properties: {},
-            },
-          ]
-        : [],
-    }),
-    [hoveredProject]
-  );
-
-  // ── Panel list: search wins, else viewport ∩ product filter
-  const displayedProjects = useMemo(() => {
-    const q = searchQuery.trim().toLowerCase();
-    const base = q
-      ? mapProjects.filter(
-          (p) =>
-            p.title.toLowerCase().includes(q) ||
-            p.city.toLowerCase().includes(q) ||
-            p.province.toLowerCase().includes(q) ||
-            p.product.toLowerCase().includes(q) ||
-            p.application.toLowerCase().includes(q)
-        )
-      : visibleProjects;
-    let out = productFilter ? base.filter((p) => p.product === productFilter) : base;
-    if (appFilter) out = out.filter((p) => p.application === appFilter);
-    return out;
-  }, [searchQuery, visibleProjects, productFilter, appFilter]);
-
-  // ── Update panel list based on map bounds
-  const updateVisibleProjects = useCallback(() => {
-    if (suppressListSync.current) return;
-    const map = mapRef.current?.getMap();
+    if (!loaded) return;
+    const map = mapRef.current;
     if (!map) return;
-    const bounds = map.getBounds();
-    if (!bounds) {
-      setVisibleProjects(mapProjects);
-      return;
-    }
-    const w = bounds.getWest();
-    const e = bounds.getEast();
-    const s = bounds.getSouth();
-    const n = bounds.getNorth();
-    setVisibleProjects(
-      mapProjects.filter((p) => p.lng >= w && p.lng <= e && p.lat >= s && p.lat <= n)
-    );
-    // "Back to Canada" appears once the view has really left the frame it
-    // opened on: zoomed by more than a quarter step, or panned more than
-    // 48px. Before that frame is recorded, nothing counts as moved.
-    const home = homeRef.current;
-    if (!home) return;
-    const at = map.project([home.lng, home.lat]);
-    const mid = map.project(map.getCenter());
-    setViewMoved(
-      Math.abs(map.getZoom() - home.zoom) > 0.25 || Math.hypot(at.x - mid.x, at.y - mid.y) > 48
-    );
-  }, []);
+    map.fitBounds(ALL_BOUNDS, { padding: padding(), duration: 0 });
+    const c = map.getCenter();
+    homeRef.current = { lng: c.lng, lat: c.lat, zoom: map.getZoom() };
+    syncInView();
+  }, [loaded, isDesktop, padding, syncInView]);
 
-  const resetView = useCallback(() => {
-    suppressListSync.current = false;
-    setFocusedId(null);
-    setProvinceFocus(null);
-    reframingRef.current = true;
-    mapRef.current?.fitBounds(CANADA_BOUNDS, { ...FIT_OPTIONS, duration: 1100 });
-  }, []);
-
-  // ── Province quick-zoom
-  const handleProvince = useCallback(
-    (prov: string | null) => {
-      if (prov === null) {
-        resetView();
-        return;
-      }
-      setProvinceFocus(prov);
-      const b = boundsFor(filteredProjects.filter((p) => p.province === prov));
-      if (b) {
-        mapRef.current?.fitBounds(b, {
-          padding: { top: 70, bottom: 90, left: 70, right: 70 },
-          maxZoom: 10.5,
-          duration: 1100,
-        });
-      }
-    },
-    [filteredProjects, resetView]
-  );
-
-  const handleAppFilter = useCallback((application: string | null) => {
-    setAppFilter(application);
-    setPopupProject(null);
-    setPinned(false);
-  }, [setPinned]);
-
-  const handleProductFilter = useCallback(
-    (product: string | null) => {
-      setProductFilter(product);
-      setPopupProject(null);
-      setPinned(false);
-      // Keep the current frame — filtering shouldn't yank the camera around.
-    },
-    []
-  );
-
-  // ── Map layer click handler
-  // maplibre-gl v3+ uses Promise (not callback) for getClusterExpansionZoom
-  const handleMapLayerClick = useCallback(
-    async (event: MapLayerMouseEvent) => {
-      const feature = event.features?.[0];
-      if (!feature) return;
-
-      if (feature.layer.id === "clusters") {
-        const clusterId = feature.properties?.cluster_id as number;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const source = mapRef.current?.getSource("projects") as any;
-        if (!source?.getClusterExpansionZoom) return;
-        try {
-          const zoom: number = await source.getClusterExpansionZoom(clusterId);
-          const coords = (feature.geometry as unknown as { coordinates: [number, number] }).coordinates;
-          mapRef.current?.flyTo({
-            center: coords,
-            zoom: zoom + 0.5,
-            duration: 900,
-            essential: true,
-          });
-        } catch {
-          // ignore
-        }
-      } else if (feature.layer.id === "unclustered-point") {
-        const id = feature.properties?.id as string;
-        const project = mapProjects.find((p) => p.id === id);
-        if (project) {
-          if (popupClearTimeoutRef.current) clearTimeout(popupClearTimeoutRef.current);
-          setHoveredId(id);
-
-          /**
-           * On a phone, a pin opens the case study. No popup.
-           *
-           * The popup is a ~290px card and the mobile map is ~438px tall. It
-           * does not fit alongside the things already living in that frame: it
-           * was clipped through the top edge when anchored above a pin —
-           * taking its own close button out of the container, which left no
-           * way to dismiss it at all — and once it was allowed to flip below,
-           * it landed under "Back to Canada" and the zoom controls instead.
-           * There is no corner of a 438px map where a 290px card does not
-           * collide with something.
-           *
-           * So it is not a layout problem to solve, it is a control that does
-           * not belong on touch. The popup exists to preview a pin under a
-           * hovering cursor, and there is no cursor here. The modal is the
-           * better version of it on a phone anyway — full width, readable,
-           * with a 44px close button, Escape, and a trapped focus ring. A tap
-           * goes straight there, which also makes pins and list cards behave
-           * identically instead of one of them opening a middleman.
-           */
-          if (isNarrow) {
-            setPopupProject(null);
-            setPinned(false);
-            setSelectedProject(project);
-            return;
-          }
-
-          // Desktop: marker click pins the preview. Clicking its body opens the
-          // case study. Pinning makes hover dismissal a non-issue — the card
-          // persists until it is closed explicitly.
-          setPopupProject(project);
-          setPinned(true);
-        }
-      }
-    },
-    [isNarrow, setPinned]
-  );
-
-  // ── Mouse move — hover on layers
-  // When a popup is PINNED, hover never replaces or clears it. Only marker-click
-  // and the close button toggle the pinned popup.
-  const handleMouseMove = useCallback(
-    (event: MapLayerMouseEvent) => {
-      const feature = event.features?.[0];
-      if (feature?.layer?.id === "unclustered-point") {
-        const id = feature.properties?.id as string;
-        setHoveredId(id);
-        setCursor("pointer");
-        if (!popupPinned) {
-          const project = mapProjects.find((p) => p.id === id) ?? null;
-          setPopupProject(project);
-        }
-      } else if (feature?.layer?.id === "clusters") {
-        setHoveredId(null);
-        setCursor("pointer");
-        if (!popupPinned) setPopupProject(null);
-      } else {
-        setHoveredId(null);
-        setCursor("grab");
-        // 450ms grace — generous window for cursor to transit marker → popup card.
-        if (popupClearTimeoutRef.current) clearTimeout(popupClearTimeoutRef.current);
-        popupClearTimeoutRef.current = setTimeout(() => {
-          // Read pin state through the ref: this timeout may have been
-          // scheduled BEFORE a click pinned the popup, and the closure's
-          // popupPinned would still say false.
-          if (!popupHoveredRef.current && !popupPinnedRef.current) setPopupProject(null);
-        }, 450);
-      }
-    },
-    [popupPinned]
-  );
-
-  const handleMouseLeave = useCallback(() => {
-    setHoveredId(null);
-    setCursor("grab");
-    // Same grace-period pattern so the cursor can transit from the map canvas
-    // edge into the popup card without it vanishing.
-    if (popupClearTimeoutRef.current) clearTimeout(popupClearTimeoutRef.current);
-    popupClearTimeoutRef.current = setTimeout(() => {
-      if (!popupHoveredRef.current && !popupPinnedRef.current) setPopupProject(null);
+  // A search frames what it found, once typing pauses.
+  useEffect(() => {
+    if (!query || !loaded) return;
+    const t = setTimeout(() => {
+      const b = boundsFor(filtered.filter((p) => matches(p, query)));
+      if (!b) return;
+      freezeList.current = true;
+      mapRef.current?.fitBounds(b, { padding: padding(), maxZoom: 11, duration: reducedMotion ? 0 : 1100 });
     }, 450);
-  }, [popupPinned]);
+    return () => clearTimeout(t);
+  }, [query, loaded, filtered, padding, reducedMotion]);
 
-  // Close pinned popup on click outside the map container.
+  // A new filter, search or province starts the list at the top.
   useEffect(() => {
-    if (!popupPinned) return;
-    function handleOutsideClick(e: MouseEvent) {
-      if (mapContainerRef.current && !mapContainerRef.current.contains(e.target as Node)) {
-        setPinned(false);
-        setPopupProject(null);
-        setHoveredId(null);
-      }
-    }
-    document.addEventListener("mousedown", handleOutsideClick);
-    return () => document.removeEventListener("mousedown", handleOutsideClick);
-  }, [popupPinned]);
+    listRef.current?.scrollTo({ top: 0 });
+    stripRef.current?.scrollTo({ left: 0 });
+  }, [product, application, query, province]);
 
-  // Escape closes the popup (the modal handles its own Escape).
+  // Filters and search end the tour; a filter that hides the open project closes it.
   useEffect(() => {
-    if (!popupProject) return;
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape" && !selectedProject) {
-        setPinned(false);
-        setPopupProject(null);
-        setHoveredId(null);
+    if (selectedId && !filtered.some((p) => p.id === selectedId)) setSelectedId(null);
+  }, [filtered, selectedId]);
+
+  // ── Province quick-jumps
+  const jumpTo = useCallback((code: string | null) => {
+    stopTour();
+    setSelectedId(null);
+    setProvince(code);
+    setTouched(true);
+    if (!code) { frameCanada(); return; }
+    const b = boundsFor(filtered.filter((p) => p.province === code));
+    if (!b) return;
+    freezeList.current = false;
+    mapRef.current?.fitBounds(b, { padding: padding(), maxZoom: 9.5, duration: reducedMotion ? 0 : 1300 });
+  }, [filtered, frameCanada, padding, reducedMotion, stopTour]);
+
+  const anyFilter = Boolean(product || application || query || province || moved);
+  const startOver = useCallback(() => {
+    setProduct(null);
+    setApplication(null);
+    setSearch("");
+    setProvince(null);
+    setSelectedId(null);
+    stopTour();
+    frameCanada();
+  }, [frameCanada, stopTour]);
+
+  // ── The phone strip steers the map
+  const onStripScroll = useCallback(() => {
+    if (stripByCode.current) return;
+    if (stripTimer.current) clearTimeout(stripTimer.current);
+    stripTimer.current = setTimeout(() => {
+      const strip = stripRef.current;
+      if (!strip) return;
+      const mid = strip.getBoundingClientRect().left + strip.clientWidth / 2;
+      let best: HTMLElement | null = null;
+      let bestD = Infinity;
+      strip.querySelectorAll<HTMLElement>("[data-id]").forEach((el) => {
+        const r = el.getBoundingClientRect();
+        const d = Math.abs(r.left + r.width / 2 - mid);
+        if (d < bestD) { bestD = d; best = el; }
+      });
+      const id = (best as HTMLElement | null)?.dataset.id;
+      const p = id ? mapProjects.find((x) => x.id === id) : null;
+      if (p && p.id !== selectedId) {
+        setTour((t) => (t ? { ...t, playing: false } : t));
+        setSelectedId(p.id);
+        flyTo(p, "follow");
       }
-    }
+    }, 140);
+  }, [flyTo, selectedId]);
+
+  // On a phone the tour moves the strip too.
+  useEffect(() => {
+    if (isDesktop || !tour || !selectedId) return;
+    const card = stripRef.current?.querySelector<HTMLElement>(`[data-id="${selectedId}"]`);
+    if (!card) return;
+    stripByCode.current = true;
+    card.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", inline: "center", block: "nearest" });
+    const t = setTimeout(() => { stripByCode.current = false; }, 800);
+    return () => clearTimeout(t);
+  }, [isDesktop, tour, selectedId, reducedMotion]);
+
+  // Escape closes an open project on a desktop.
+  useEffect(() => {
+    if (!isDesktop || !selectedId) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") backToList(); };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [popupProject, selectedProject]);
+  }, [isDesktop, selectedId, backToList]);
 
-  // ── Panel card interaction
-  const handlePanelHover = useCallback((id: string | null) => {
-    setHoveredId(id);
-    // Don't show hover popups from the panel — but never kill a PINNED one:
-    // the click that pins also re-renders this list, and the unmounting
-    // card's blur would otherwise clear the popup in the same breath.
-    if (!popupPinnedRef.current) setPopupProject(null);
-  }, []);
+  // Opening a project on a desktop takes focus to its heading.
+  useEffect(() => {
+    if (!isDesktop || !selectedId) return;
+    requestAnimationFrame(() => document.getElementById("cm-detail-title")?.focus({ preventScroll: true }));
+  }, [isDesktop, selectedId]);
 
-  /**
-   * Clicking a project card opens that project. It does not fly the camera.
-   *
-   * It used to do both: fly to zoom 13 and pin a popup. At zoom 13 the
-   * viewport is four streets wide, and this list is filtered by the viewport —
-   * so one click on one card collapsed the list of 59 projects to 1, and the
-   * strip a phone user was mid-swipe through collapsed from 23 to 1 under
-   * their thumb. The thing you clicked ate the thing you were browsing. That
-   * was the single worst moment in the section, on both breakpoints.
-   *
-   * A card carrying a photo, a product tag and an arrow promises to open the
-   * project. So it opens the project. The list is left exactly as it was, and
-   * the camera only ever moves when the visitor moves it — or asks, through
-   * "Show on map" inside the modal.
-   *
-   * The pin is highlighted so the eye can find it while the modal is open, and
-   * `panTo` (never `flyTo`, never a zoom change) brings it on screen if it is
-   * outside the current frame. Panning at constant zoom keeps every neighbour
-   * where it was, so the list under the map does not move either.
-   */
-  const handlePanelClick = useCallback((project: MapProject) => {
-    if (popupClearTimeoutRef.current) clearTimeout(popupClearTimeoutRef.current);
-    setHoveredId(project.id);
-
-    // On a phone the map is a 290px square above the list. Flying it to a
-    // single pin shows a visitor a patch of empty basemap and pushes the thing
-    // they tapped off screen, so touch keeps opening the project.
-    if (isNarrow) {
-      setPinned(false);
-      setPopupProject(null);
-      setSelectedProject(project);
-      return;
-    }
-
-    // Desktop: the list is a way of driving the map, so drive it. No modal —
-    // the card moves the camera and names the pin, and the modal stays behind
-    // the arrow and the pin itself.
-    setFocusedId(project.id);
-    suppressListSync.current = true;
-    setPopupProject(project);
-    setPinned(true);
-    mapRef.current?.flyTo({
-      center: [project.lng, project.lat],
-      zoom: 9,
-      duration: 900,
-      essential: true,
-    });
-  }, [isNarrow, setPinned]);
-
-  /**
-   * "Show on map", from inside the modal. The one path that is allowed to
-   * change zoom, because the visitor asked for it by name. Zoom 9 is a region,
-   * not a driveway: the pin is unmistakable and its neighbours are still on
-   * screen, so the list keeps a dozen entries rather than one.
-   */
-  const handleShowOnMap = useCallback(
-    (project: MapProject) => {
-      setSelectedProject(null);
-      setHoveredId(project.id);
-      // No preview card on a phone — see handleMapLayerClick. The highlight
-      // ring and the flight are the answer to "where is it"; tapping the pin
-      // brings this modal straight back.
-      setPopupProject(isNarrow ? null : project);
-      setPinned(!isNarrow);
-      mapRef.current?.flyTo({
-        center: [project.lng, project.lat],
-        zoom: 9,
-        duration: 900,
-        essential: true,
-      });
-      mapContainerRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+  const hoverFilter = useMemo(
+    () => ["all", ["!", ["has", "point_count"]], ["in", ["get", "id"], ["literal", [hoveredId ?? "__none__", selectedId ?? "__none__"]]]] as unknown as boolean,
+    [hoveredId, selectedId]
+  );
+  const hoverLabel = {
+    id: "hover-label",
+    type: "symbol" as const,
+    source: "projects",
+    filter: hoverFilter,
+    layout: {
+      "text-field": ["get", "title"],
+      "text-font": LABEL_FONT,
+      "text-size": 13,
+      "text-max-width": 16,
+      "text-variable-anchor": ["left", "right", "bottom", "top"],
+      "text-radial-offset": 1.25,
+      "text-justify": "auto" as const,
+      "text-allow-overlap": true,
+      "text-ignore-placement": true,
+    } as Record<string, unknown>,
+    paint: {
+      "text-color": "#FFFFFF",
+      "text-halo-color": "rgba(12,12,12,0.96)",
+      "text-halo-width": 2,
     },
-    [isNarrow, setPinned]
+  };
+  const hoverRing = {
+    id: "hover-ring",
+    type: "circle" as const,
+    source: "projects",
+    filter: hoverFilter,
+    paint: {
+      "circle-color": "rgba(0,0,0,0)",
+      "circle-radius": 13,
+      "circle-stroke-width": 2.5,
+      "circle-stroke-color": "#FDBA74",
+    },
+  };
+
+  const listTitle = query
+    ? `${listProjects.length} match${listProjects.length === 1 ? "" : "es"}`
+    : `${listProjects.length} in view`;
+
+  // ── Pieces shared by both layouts
+  const searchBox = (
+    <label className="cm-search">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7.5" />
+        <path d="m20.5 20.5-4.2-4.2" />
+      </svg>
+      <input
+        type="search"
+        value={search}
+        onChange={(e) => { setSearch(e.target.value); stopTour(); setSelectedId(null); }}
+        placeholder="Search a city, system or kind of work"
+        aria-label="Search projects"
+      />
+    </label>
+  );
+  const filters = (
+    <div className="cm-selects">
+      <select
+        value={product ?? ""}
+        onChange={(e) => { setProduct(e.target.value || null); stopTour(); }}
+        aria-label="Filter by system"
+        className={product ? "is-on" : undefined}
+      >
+        <option value="">All systems</option>
+        {PRODUCT_COUNTS.map(([name, n]) => <option key={name} value={name}>{name} ({n})</option>)}
+      </select>
+      <select
+        value={application ?? ""}
+        onChange={(e) => { setApplication(e.target.value || null); stopTour(); }}
+        aria-label="Filter by application"
+        className={application ? "is-on" : undefined}
+      >
+        <option value="">All applications</option>
+        {APPLICATION_COUNTS.map(([name, n]) => <option key={name} value={name}>{name} ({n})</option>)}
+      </select>
+    </div>
+  );
+  const provinceRow = (
+    <div className="cm-pills" role="group" aria-label="Jump to a province or territory">
+      <Chip active={!province && !moved} onClick={() => jumpTo(null)}>All</Chip>
+      {PROVINCE_COUNTS.map(([code, n]) => (
+        <Chip key={code} active={province === code} onClick={() => jumpTo(code)} label={`${provinceName(code)}, ${n} project${n === 1 ? "" : "s"}`}>
+          {code}
+        </Chip>
+      ))}
+    </div>
+  );
+  const emptyList = (
+    <div className="cm-empty">
+      <p>{query ? `Nothing matches "${search.trim()}".` : "No projects in this part of the map."}</p>
+      <button type="button" className="cm-btn cm-btn-ghost" onClick={startOver}>Start over</button>
+    </div>
   );
 
-  /**
-   * Closing the modal closes the modal. Nothing else.
-   *
-   * It used to also fitBounds back to the whole country, which meant opening a
-   * project in Victoria and closing it again threw you to a view of Canada —
-   * your filters still set, your place gone, with no undo. Leaving the camera
-   * alone is the whole fix: you come back to exactly where you were.
-   */
-  const handleCloseModal = useCallback(() => {
-    setSelectedProject(null);
-  }, []);
-
-  /**
-   * One explicit control that undoes everything, for the visitor who has
-   * filtered themselves into a corner and wants out.
-   *
-   * There used to be an invisible version of this: a document-level mousedown
-   * listener that silently wiped every filter and reset the camera whenever
-   * you clicked anywhere else on the page. Scroll down, tap a heading, and the
-   * work you had done in the section evaporated with nothing to say it had.
-   * State a visitor set should only be cleared by a control that says it will.
-   */
-  const anyFilterActive =
-    !!productFilter || !!appFilter || !!searchQuery.trim() || !!provinceFocus || viewMoved;
-
-  const clearEverything = useCallback(() => {
-    setProductFilter(null);
-    setAppFilter(null);
-    setSearchQuery("");
-    setPopupProject(null);
-    setPinned(false);
-    setHoveredId(null);
-    resetView();
-  }, [resetView, setPinned]);
-
-  const LAYOUT_HEIGHT = "clamp(360px, 68vh, 840px)";
-
+  const tourBar = tour && (
+    <div className="cm-tour" aria-label="Tour controls">
+      <span className="cm-tour-label">Tour · {tour.index + 1} of {tour.ids.length}</span>
+      <span className="cm-tour-buttons">
+        <button type="button" className="cm-icon-btn" aria-label="Previous stop" onClick={() => stepTour(-1)}>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6" /></svg>
+        </button>
+        <button type="button" className="cm-icon-btn" aria-label={tour.playing ? "Pause the tour" : "Play the tour"} onClick={() => setTour((t) => (t ? { ...t, playing: !t.playing } : t))}>
+          {tour.playing ? (
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1" /><rect x="14" y="5" width="4" height="14" rx="1" /></svg>
+          ) : (
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5.5v13a1 1 0 0 0 1.5.9l10.5-6.5a1 1 0 0 0 0-1.7L8.5 4.6A1 1 0 0 0 7 5.5Z" /></svg>
+          )}
+        </button>
+        <button type="button" className="cm-icon-btn" aria-label="Next stop" onClick={() => stepTour(1)}>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6" /></svg>
+        </button>
+        <button type="button" className="cm-icon-btn" aria-label="End the tour" onClick={backToList}>
+          <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" strokeWidth={2} strokeLinecap="round" /></svg>
+        </button>
+      </span>
+      <span className="cm-tour-track" aria-hidden="true">
+        {tour.playing && <span key={`${tour.index}`} className="cm-tour-fill" style={{ animationDuration: `${TOUR_STOP_MS}ms` }} />}
+      </span>
+    </div>
+  );
 
   return (
     <>
-      <style>{`
-        .canada-map-modal-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 14px;
-        }
-        /* Strip default MapLibre popup chrome */
-        .maplibregl-popup-content {
-          background: transparent !important;
-          border: none !important;
-          box-shadow: none !important;
-          padding: 0 !important;
-          border-radius: 0 !important;
-        }
-        .maplibregl-popup-tip { display: none !important; }
-        .maplibregl-popup { z-index: 10 !important; }
-        /* Cooperative-gesture overlay — maplibre's built-in "use two fingers /
-           Ctrl+scroll" teaching screen, restyled for the brand. */
-        .maplibregl-cooperative-gesture-screen {
-          background: rgba(8,13,22,0.78) !important;
-          backdrop-filter: blur(6px);
-          color: var(--text-primary) !important;
-          font-size: 13px !important;
-          font-weight: 600 !important;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          text-align: center;
-          padding: 0 24px;
-        }
-        /* Attribution — required by OSM/CARTO licensing; themed, not hidden. */
-        .maplibregl-ctrl-attrib {
-          background: rgba(8,13,22,0.6) !important;
-          backdrop-filter: blur(4px);
-          border-radius: 8px 0 0 0;
-        }
-        /* One light colour for the whole credit. The plain words between the
-           links ("contributors") took MapLibre's dark grey and all but vanished
-           on the dark map. */
-        .maplibregl-ctrl-attrib,
-        .maplibregl-ctrl-attrib-inner,
-        .maplibregl-ctrl-attrib a {
-          color: var(--ink-45) !important;
-          font-size: 10px;
-        }
-        /* Panel scrollbar */
-        .canada-map-panel-scroll::-webkit-scrollbar { width: 4px; }
-        .canada-map-panel-scroll::-webkit-scrollbar-track { background: transparent; }
-        .canada-map-panel-scroll::-webkit-scrollbar-thumb {
-          background: rgba(249,115,22,0.25);
-          border-radius: 4px;
-        }
-        /* Chip rows: always ONE line each — scroll, never wrap (Vernon: three
-           wrapped rows of pills buried the map). Scrollbar hidden; at desktop
-           widths everything fits anyway. */
-        .canada-map-chips {
-          display: flex;
-          gap: 8px;
-          flex-wrap: nowrap;
-          overflow-x: auto;
-          scrollbar-width: none;
-          -webkit-overflow-scrolling: touch;
-        }
-        .canada-map-chips::-webkit-scrollbar { display: none; }
-        /* Mobile strip — replaces the side panel below 900px */
-        .canada-map-strip { display: none; }
-        .canada-map-strip-scroll::-webkit-scrollbar { height: 4px; }
-        .canada-map-strip-scroll::-webkit-scrollbar-thumb {
-          background: rgba(249,115,22,0.25);
-          border-radius: 4px;
-        }
-        @media (max-width: 900px) {
-          .canada-map-panel { display: none !important; }
-          .canada-map-strip { display: block; }
-          .canada-map-layout { height: clamp(320px, 52vh, 560px) !important; }
-        }
-        @media (max-width: 640px) {
-          .canada-map-modal { border-radius: 14px !important; }
-          .canada-map-modal-grid { grid-template-columns: 1fr !important; }
-        }
-      `}</style>
-
-      <section
-        ref={sectionRef}
-        aria-label="Installations across Canada, interactive project map"
-        style={{ background: "var(--bg-dark)", paddingTop: "5rem", paddingBottom: "5rem" }}
-      >
-        {/* The standard section container (x = 112 to 1328 at 1440), like every
-            other section on the page. It was a 1340px box of its own. */}
+      <style>{CSS}</style>
+      <section className="cm-section" aria-labelledby="cm-heading">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-          {/* ── Header */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "flex-end",
-              justifyContent: "space-between",
-              flexWrap: "wrap",
-              gap: 16,
-              marginBottom: "1.5rem",
-            }}
-          >
+          <header className="cm-head">
             <div>
-              <p
-                style={{
-                  fontSize: 11,
-                  fontWeight: 700,
-                  letterSpacing: "0.2em",
-                  textTransform: "uppercase",
-                  color: "var(--accent-text-lg)",
-                  marginBottom: 10,
-                }}
-              >
-                Installations across Canada
-              </p>
-              <h2
-                style={{
-                  fontSize: "clamp(1.75rem, 3.5vw, 2.75rem)",
-                  fontWeight: 900,
-                  color: "var(--text-primary)",
-                  margin: "0 0 10px",
-                  lineHeight: 1.1,
-                  letterSpacing: "-0.03em",
-                }}
-              >
-                {/* Was "Coast to coast": no pin east of Québec has a project
-                    behind it yet, and the map should not promise a coast it
-                    does not show. */}
-                Real projects.{" "}
-                <span
-                  style={{
-                    background: "linear-gradient(90deg, #F97316, #EAB308)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  }}
-                >
-                  Real places.
-                </span>
+              <p className="cm-eyebrow">Installations across Canada</p>
+              <h2 id="cm-heading" className="cm-h2">
+                Real projects. <span className="cm-grad">Real places.</span>
               </h2>
-              <p
-                style={{
-                  fontSize: 15,
-                  color: "var(--text-muted)",
-                  maxWidth: 460,
-                  margin: 0,
-                  lineHeight: 1.6,
-                }}
-              >
-                {mapProjects.length} documented projects in {PROVINCE_NAMES}. Tap a
-                province to jump in, or filter by system.
+              <p className="cm-sub">
+                {mapProjects.length} documented projects. Every photo shows the job itself.
               </p>
             </div>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 10,
-                background: "rgba(249,115,22,0.08)",
-                border: "1px solid rgba(249,115,22,0.2)",
-                borderRadius: 12,
-                padding: "12px 20px",
-                flexShrink: 0,
-              }}
-            >
-              <div
-                style={{
-                  width: 9,
-                  height: 9,
-                  borderRadius: "50%",
-                  background: "#F97316",
-                  boxShadow: "0 0 8px rgba(249,115,22,0.85)",
-                }}
-              />
-              <span style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)" }}>
-                {mapProjects.length} projects mapped
-              </span>
+            <button type="button" className="cm-btn cm-btn-primary cm-tour-start" onClick={tour ? backToList : startTour}>
+              {tour ? "End the tour" : "Take the tour"}
+              {!tour && (
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5.5v13a1 1 0 0 0 1.5.9l10.5-6.5a1 1 0 0 0 0-1.7L8.5 4.6A1 1 0 0 0 7 5.5Z" /></svg>
+              )}
+            </button>
+          </header>
+
+          {!isDesktop && (
+            <div className="cm-mobile-controls">
+              {searchBox}
+              {filters}
+              {provinceRow}
             </div>
-          </div>
+          )}
 
-          {/* ── Province quick-zoom */}
-          <div className="canada-map-chips" style={{ marginBottom: 8 }} role="group" aria-label="Zoom to province">
-            <FilterChip active={provinceFocus === null && !viewMoved} onClick={() => handleProvince(null)}>
-              All Canada
-            </FilterChip>
-            {PROVINCE_COUNTS.map(([prov, count]) => (
-              <FilterChip
-                key={prov}
-                active={provinceFocus === prov}
-                onClick={() => handleProvince(prov)}
-                count={count}
-                title={PROVINCE_LABEL[prov] ?? prov}
-              >
-                {prov}
-              </FilterChip>
-            ))}
-          </div>
+          <div ref={frameRef} className="cm-frame">
+            <Map
+              ref={mapRef}
+              mapStyle={MAP_STYLE}
+              initialViewState={{ bounds: ALL_BOUNDS, fitBoundsOptions: { padding: 40 } }}
+              style={{ width: "100%", height: "100%" }}
+              minZoom={1.4}
+              maxZoom={17}
+              attributionControl={false}
+              dragRotate={false}
+              touchPitch={false}
+              pitchWithRotate={false}
+              cooperativeGestures
+              interactiveLayerIds={["clusters", "points"]}
+              onClick={onMapClick}
+              onMouseMove={onMouseMove}
+              onMouseLeave={() => setHoveredId(null)}
+              onMoveStart={onMoveStart}
+              onMoveEnd={syncInView}
+              onLoad={onLoad}
+              onError={(e) => { if (String(e?.error ?? "").includes("style")) setStyleFailed(true); }}
+            >
+              <NavigationControl position="bottom-right" showCompass={false} />
+              <AttributionControl compact position={isDesktop ? "bottom-right" : "bottom-left"} />
 
-          {/* ── Product filter */}
-          <div className="canada-map-chips" style={{ marginBottom: 12 }} role="group" aria-label="Filter by product system">
-            <FilterChip active={productFilter === null} onClick={() => handleProductFilter(null)}>
-              All systems
-            </FilterChip>
-            {PRODUCT_COUNTS.map(([product, count]) => (
-              <FilterChip
-                key={product}
-                active={productFilter === product}
-                onClick={() => handleProductFilter(productFilter === product ? null : product)}
-                count={count}
-              >
-                {product}
-              </FilterChip>
-            ))}
-            {/* The visible replacement for a document-level mousedown listener
-                that used to wipe all of this whenever you clicked anywhere
-                else on the page. One control, it says what it does, and it is
-                only here when there is something to undo. */}
-            {anyFilterActive && (
-              <button
-                type="button"
-                onClick={clearEverything}
-                style={{
-                  flexShrink: 0,
-                  marginLeft: 4,
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 6,
-                  minHeight: 44,
-                  padding: "0 16px",
-                  borderRadius: 999,
-                  border: "1px dashed rgba(249,115,22,0.45)",
-                  background: "transparent",
-                  color: "var(--accent-soft-text)",
-                  fontSize: 12.5,
-                  fontWeight: 700,
-                  cursor: "pointer",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                  <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" strokeWidth={2} strokeLinecap="round" />
+              <Source id="projects" type="geojson" data={geojson} cluster clusterMaxZoom={11} clusterRadius={46}>
+                <Layer {...CLUSTER_HALO} />
+                <Layer {...CLUSTERS} />
+                <Layer {...CLUSTER_COUNT} />
+                <Layer {...POINT_HALO} />
+                <Layer {...POINTS} />
+                <Layer {...hoverRing} />
+                <Layer {...hoverLabel} />
+              </Source>
+
+              {selected && (
+                <Marker longitude={selected.lng} latitude={selected.lat} anchor="bottom" style={{ zIndex: 5 }}>
+                  <button
+                    type="button"
+                    className="cm-bubble"
+                    aria-label={`${selected.title}: open`}
+                    onClick={() => (isDesktop ? document.getElementById("cm-detail-title")?.focus() : setSheetId(selected.id))}
+                  >
+                    <span className="cm-bubble-photo">
+                      {selected.images[0] ? (
+                        <Image loader={mapLoader} src={selected.images[0]} alt="" fill sizes="64px" style={{ objectFit: "cover" }} />
+                      ) : null}
+                    </span>
+                    <span className="cm-bubble-tip" aria-hidden="true" />
+                  </button>
+                </Marker>
+              )}
+            </Map>
+
+            {styleFailed && <p className="cm-note">The base map did not load. Pins and projects still work.</p>}
+
+            {moved && (
+              <button type="button" className="cm-back" onClick={() => { setProvince(null); frameCanada(); }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M3 12a9 9 0 1 0 3-6.7" />
+                  <path d="M3 4v5h5" />
                 </svg>
-                Start over
+                Back to Canada
               </button>
+            )}
+
+            {isDesktop && !touched && loaded && !selected && !tour && (
+              <p className="cm-hint" aria-hidden="true">Drag to explore · Ctrl + scroll to zoom · Click a pin</p>
+            )}
+
+            {/* ── The panel (desktop) */}
+            {isDesktop && (
+              <div className="cm-panel">
+                {selected ? (
+                  <div className="cm-panel-detail">
+                    <div className="cm-panel-top">
+                      <button type="button" className="cm-link-btn" onClick={backToList}>
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6" /></svg>
+                        All projects
+                      </button>
+                      {!tour && position && position.n > 1 && (
+                        <span className="cm-stepper">
+                          <span className="cm-stepper-pos">{position.i + 1} of {position.n}</span>
+                          <button type="button" className="cm-icon-btn" aria-label="Previous project" onClick={() => stepList(-1)}>
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6" /></svg>
+                          </button>
+                          <button type="button" className="cm-icon-btn" aria-label="Next project" onClick={() => stepList(1)}>
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6" /></svg>
+                          </button>
+                        </span>
+                      )}
+                    </div>
+                    {tourBar}
+                    <div className="cm-panel-scroll">
+                      <ProjectDetail project={selected} headingId="cm-detail-title" photoSizes="360px" />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="cm-panel-list">
+                    <div className="cm-panel-controls">
+                      {searchBox}
+                      {filters}
+                      {provinceRow}
+                    </div>
+                    <div className="cm-list-head">
+                      <span>{listTitle}</span>
+                      {anyFilter && <button type="button" className="cm-link-btn" onClick={startOver}>Start over</button>}
+                    </div>
+                    <div ref={listRef} className="cm-panel-scroll" tabIndex={-1} role="region" aria-label="Projects in view">
+                      {listProjects.length === 0 ? emptyList : (
+                        <ul className="cm-list">
+                          {listProjects.map((p) => (
+                            <li key={p.id}>
+                              <button
+                                type="button"
+                                className={hoveredId === p.id ? "cm-card is-hot" : "cm-card"}
+                                onMouseEnter={() => setHoveredId(p.id)}
+                                onMouseLeave={() => setHoveredId(null)}
+                                onFocus={() => setHoveredId(p.id)}
+                                onBlur={() => setHoveredId(null)}
+                                onClick={() => { stopTour(); select(p); }}
+                              >
+                                <Thumb project={p} size={{ w: 84, h: 64 }} />
+                                <span className="cm-card-text">
+                                  <span className="cm-card-title">{p.title}</span>
+                                  <span className="cm-card-place">{p.city}, {p.province}</span>
+                                  <span className="cm-card-system">{p.product}</span>
+                                </span>
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
             )}
           </div>
 
-          {/* ── Map + Panel */}
-          <div
-            className="canada-map-layout"
-            style={{
-              display: "flex",
-              gap: 12,
-              height: LAYOUT_HEIGHT,
-              alignItems: "stretch",
-            }}
-          >
-            {/* Map */}
-            <div
-              ref={mapContainerRef}
-              style={{
-                flex: "1 1 0",
-                minWidth: 0,
-                borderRadius: 20,
-                overflow: "hidden",
-                border: "1px solid rgba(249,115,22,0.15)",
-                boxShadow:
-                  "0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px var(--ink-04)",
-                position: "relative",
-              }}
-            >
-              <Map
-                ref={mapRef}
-                mapStyle={MAP_STYLE}
-                initialViewState={{
-                  bounds: CANADA_BOUNDS,
-                  fitBoundsOptions: FIT_OPTIONS,
-                }}
-                style={{ width: "100%", height: "100%" }}
-                minZoom={1.2}
-                maxZoom={18}
-                attributionControl={false}
-                dragRotate={false}
-                touchPitch={false}
-                cooperativeGestures
-                cursor={cursor}
-                interactiveLayerIds={["clusters", "unclustered-point"]}
-                onClick={handleMapLayerClick}
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
-                onMoveEnd={(e) => {
-                  // A drag, a scroll or a pinch carries an originalEvent; our
-                  // own flyTo does not. So the visitor moving the map is what
-                  // releases the frozen list — not the arrival of the flight
-                  // we started for them.
-                  if ((e as { originalEvent?: unknown }).originalEvent) {
-                    suppressListSync.current = false;
-                    setFocusedId(null);
-                    reframingRef.current = false;
-                  } else if (reframingRef.current) {
-                    reframingRef.current = false;
-                    recordHome(true);
-                  }
-                  updateVisibleProjects();
-                }}
-                onLoad={() => {
-                  recordHome(false);
-                  updateVisibleProjects();
-                }}
-                onError={(e) => {
-                  // A failed style fetch would otherwise leave a silent black
-                  // box. Pins still work without the basemap, but say so.
-                  if (String(e?.error ?? "").includes("style")) setStyleFailed(true);
-                }}
-              >
-                {/* The compass/pitch control is three stacked buttons tall.
-                    On a 348×437 phone map that is a meaningful share of the
-                    frame spent on a control nobody uses on a 2D basemap with
-                    rotation left at zero. Zoom only, below 560px. */}
-                <NavigationControl
-                  position="bottom-right"
-                  showCompass={!isNarrow}
-                  style={{ marginBottom: isNarrow ? 34 : 16, marginRight: isNarrow ? 12 : 16 }}
-                />
-                <AttributionControl compact position="bottom-left" />
-
-                {/* All projects — clustered; source data follows the product filter */}
-                <Source
-                  id="projects"
-                  type="geojson"
-                  data={projectsGeoJSON}
-                  cluster={true}
-                  clusterMaxZoom={11}
-                  clusterRadius={50}
-                >
-                  <Layer {...CLUSTER_LAYER} />
-                  <Layer {...CLUSTER_COUNT_LAYER} />
-                  <Layer {...POINT_LAYER} />
-                </Source>
-
-                {/* Hover highlight ring */}
-                <Source id="hovered" type="geojson" data={hoveredGeoJSON}>
-                  <Layer {...HOVERED_RING_LAYER} />
-                </Source>
-
-                {/* Project popup — agency-grade card with click-to-pin behavior.
-                    Marker click PINS the popup (popupPinned=true). Hover dismissal is
-                    disabled while pinned. Close button on the card or click-outside the
-                    map dismisses it. Card body click opens the full case-study modal. */}
-                {popupProject && !selectedProject && !isNarrow && (
-                  <Popup
-                    longitude={popupProject.lng}
-                    latitude={popupProject.lat}
-                    /* anchor was pinned to "bottom", which forbids MapLibre
-                       from flipping the card when there is no room above the
-                       pin. On a 390px phone the map is ~438px tall and this
-                       card is ~290px: a pin anywhere in the upper half pushed
-                       the card past the top edge of a container with
-                       overflow:hidden, and the close button in its top-right
-                       corner was the first thing clipped away. Letting
-                       MapLibre choose the anchor is the fix — it flips to
-                       "top" when the space is below. */
-                    offset={18}
-                    maxWidth={`${popupWidth}px`}
-                    closeButton={false}
-                    closeOnClick={false}
-                  >
-                    <div
-                      role="dialog"
-                      aria-label={`Project preview: ${popupProject.title}`}
-                      style={{
-                        position: "relative",
-                        // Was a flat 240px. Inside a 348px-wide map on a 390px
-                        // phone, a 240px card anchored to a pin near an edge
-                        // hung outside the container and was clipped — taking
-                        // its close button off-screen with it, which left no
-                        // way at all to dismiss the thing. Capped to the map's
-                        // own width so it can always be closed.
-                        width: popupWidth,
-                        maxWidth: "calc(100vw - 48px)",
-                        background: "var(--bg-primary)",
-                        border: `1px solid ${popupPinned ? "rgba(249,115,22,0.6)" : "rgba(249,115,22,0.32)"}`,
-                        borderRadius: 12,
-                        overflow: "hidden",
-                        boxShadow: popupPinned
-                          ? "0 14px 40px rgba(0,0,0,0.85), 0 0 0 1px rgba(249,115,22,0.2)"
-                          : "0 10px 32px rgba(0,0,0,0.78), 0 0 0 1px rgba(255,255,255,0.03)",
-                      }}
-                      onMouseEnter={() => {
-                        popupHoveredRef.current = true;
-                        if (popupClearTimeoutRef.current) clearTimeout(popupClearTimeoutRef.current);
-                      }}
-                      onMouseLeave={() => {
-                        popupHoveredRef.current = false;
-                        if (!popupPinned) {
-                          setPopupProject(null);
-                          setHoveredId(null);
-                        }
-                      }}
-                    >
-                      {/* Close button.
-                          Two changes. It was 28×28 — Apple and Google both put
-                          the floor at 44, and on a phone this is the control
-                          standing between a visitor and the rest of the page.
-                          And it only rendered while pinned: on a touch screen
-                          there is no hover, so the popup is ALWAYS pinned and
-                          the condition was noise — but any future path that
-                          opened it unpinned would have opened a card with no
-                          way out. It is always there now. */}
-                      <button
-                        type="button"
-                        aria-label="Close project preview"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setPinned(false);
-                          setPopupProject(null);
-                          setHoveredId(null);
-                        }}
-                        style={{
-                          position: "absolute",
-                          top: 6,
-                          right: 6,
-                          zIndex: 5,
-                          width: 44,
-                          height: 44,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          border: "none",
-                          background: "transparent",
-                          cursor: "pointer",
-                          color: "var(--text-primary)",
-                          padding: 0,
-                        }}
-                      >
-                        {/* The visible disc stays small; the tappable square
-                            around it is the full 44. */}
-                        <span
-                          style={{
-                            width: 30,
-                            height: 30,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            border: "1px solid var(--ink-22)",
-                            borderRadius: "50%",
-                            background: "rgba(15,22,32,0.9)",
-                            backdropFilter: "blur(4px)",
-                          }}
-                        >
-                          <svg width="11" height="11" viewBox="0 0 14 14" fill="none">
-                            <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" strokeWidth={1.9} strokeLinecap="round" />
-                          </svg>
-                        </span>
-                      </button>
-
-                      <button
-                        type="button"
-                        aria-label={`Open case study: ${popupProject.title}`}
-                        style={{
-                          all: "unset",
-                          display: "block",
-                          width: "100%",
-                          cursor: "pointer",
-                        }}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          const p = popupProject;
-                          setSelectedProject(p);
-                          setPinned(false);
-                          setPopupProject(null);
-                          setHoveredId(null);
-                        }}
-                      >
-                      {/* Image with gradient bottom for legibility. A pin with
-                          no photograph (Sep 2026) goes straight to the text. */}
-                      {popupProject.images[0] && (
-                      <div style={{ position: "relative", width: "100%", height: 110, overflow: "hidden" }}>
-                        <PhotoImage
-                          src={popupProject.images[0]}
-                          alt={popupProject.title}
-                          fill
-                          className="object-cover"
-                          sizes="240px"
-                        />
-                        <div
-                          style={{
-                            position: "absolute",
-                            inset: 0,
-                            background:
-                              "linear-gradient(to bottom, transparent 35%, rgba(15,22,32,0.55) 78%, rgba(15,22,32,0.95) 100%)",
-                          }}
-                        />
-                        {popupProject.imageIsRepresentative && (
-                          <RepresentativeTag style={{ position: "absolute", top: 8, left: 8 }} />
-                        )}
-                      </div>
-                      )}
-
-                      {/* Meta — agency-grade 4 lines. Without a photo the
-                          close button sits over this text, so it keeps clear. */}
-                      <div style={{ padding: popupProject.images[0] ? "11px 13px 13px" : "13px 50px 13px 13px" }}>
-                        {/* Line 1: product · application pills */}
-                        <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8, flexWrap: "wrap" }}>
-                          <span
-                            style={{
-                              fontSize: 11,
-                              fontWeight: 700,
-                              letterSpacing: "0.13em",
-                              textTransform: "uppercase",
-                              color: "var(--accent-text-lg)",
-                              background: "rgba(249,115,22,0.13)",
-                              padding: "2px 7px",
-                              borderRadius: 4,
-                              border: "1px solid rgba(249,115,22,0.22)",
-                            }}
-                          >
-                            {popupProject.product}
-                          </span>
-                          <span
-                            style={{
-                              fontSize: 11,
-                              fontWeight: 600,
-                              letterSpacing: "0.1em",
-                              textTransform: "uppercase",
-                              color: "var(--ink-45)",
-                            }}
-                          >
-                            {popupProject.application}
-                          </span>
-                        </div>
-
-                        {/* Line 2: project title */}
-                        <p
-                          style={{
-                            fontSize: 13,
-                            fontWeight: 700,
-                            color: "var(--text-primary)",
-                            lineHeight: 1.3,
-                            margin: "0 0 6px",
-                            letterSpacing: "-0.01em",
-                          }}
-                        >
-                          {popupProject.title}
-                        </p>
-
-                        {/* Line 3: location · year (year line hidden if undefined) */}
-                        <p
-                          style={{
-                            fontSize: 11,
-                            fontWeight: 500,
-                            color: "var(--ink-50)",
-                            margin: 0,
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 6,
-                          }}
-                        >
-                          <span>
-                            {popupProject.city}, {popupProject.province}
-                          </span>
-                          {popupProject.year && (
-                            <>
-                              <span style={{ color: "var(--ink-20)" }}>·</span>
-                              <span>{popupProject.year}</span>
-                            </>
-                          )}
-                        </p>
-
-                        {/* Line 4: CTA */}
-                        <p
-                          style={{
-                            fontSize: 10,
-                            fontWeight: 700,
-                            color: "var(--accent-text-lg)",
-                            margin: "9px 0 0",
-                            letterSpacing: "0.08em",
-                            textTransform: "uppercase",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 4,
-                          }}
-                        >
-                          {popupPinned ? "Open case study" : "Click to open"}
-                          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
-                          </svg>
-                        </p>
-                      </div>
-                      </button>
-                    </div>
-                  </Popup>
-                )}
-              </Map>
-
-              {/* Style-load fallback message */}
-              {styleFailed && (
-                <div
-                  style={{
-                    position: "absolute",
-                    top: 12,
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    background: "rgba(8,13,22,0.9)",
-                    border: "1px solid var(--ink-12)",
-                    borderRadius: 10,
-                    padding: "8px 16px",
-                    fontSize: 12,
-                    color: "#B7BDC8",
-                    zIndex: 20,
-                    pointerEvents: "none",
-                  }}
-                >
-                  Base map didn&apos;t load. Pins and projects still work.
-                </div>
-              )}
-
-              {/* Reset view — appears once zoomed into a region */}
-              {(viewMoved || provinceFocus !== null) && (
-                <button
-                  type="button"
-                  onClick={resetView}
-                  style={{
-                    position: "absolute",
-                    /* Top-left at every width (Sep 2026). On phones it sat at
-                       the bottom-left to dodge the preview popup, which put it
-                       on the CARTO/OpenStreetMap credit when that credit opens
-                       out to two lines. Phones no longer show a popup (a pin
-                       opens the case study), so the corner is free, and the
-                       credit, a licence condition, stays clear at 390 and 1440. */
-                    ...(isNarrow
-                      ? { top: 12, left: 12 }
-                      : { top: 14, left: 14 }),
-                    zIndex: 20,
-                    minHeight: 44,
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 7,
-                    background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
-                    border: "1px solid var(--ink-15)",
-                    borderRadius: 10,
-                    padding: "10px 16px",
-                    fontSize: 12.5,
-                    fontWeight: 800,
-                    color: "var(--on-accent)",
-                    cursor: "pointer",
-                    boxShadow: "0 6px 20px rgba(249,115,22,0.45)",
-                  }}
-                >
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text-primary)" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M3 12a9 9 0 1 0 3-6.7" />
-                    <path d="M3 4v5h5" />
-                  </svg>
-                  Back to Canada
-                </button>
-              )}
-
-              {/* Status pill — bottom centre, desktop only.
-                  On a phone it sat on the same line as the CARTO/OpenStreetMap
-                  attribution and the two rendered through each other into
-                  something unreadable. Attribution is a licence condition and
-                  cannot move; the pill is a hint and can. The chip rows above
-                  already carry the counts it was repeating. */}
-              {!isNarrow && (
-              <div
-                style={{
-                  position: "absolute",
-                  /* Measured on hubss.com (Sep 2026): the open credit is 238px
-                     wide and this pill about 418px, so below a ~940px map the
-                     two met (touching at 1280, overlapping at 1024). Narrower
-                     maps lift the pill above the credit's line. */
-                  bottom: mapWidth >= 940 ? 16 : 46,
-                  left: "50%",
-                  transform: "translateX(-50%)",
-                  background: "rgba(8,13,22,0.88)",
-                  backdropFilter: "blur(10px)",
-                  border: "1px solid var(--ink-08)",
-                  borderRadius: 24,
-                  padding: "6px 16px",
-                  pointerEvents: "none",
-                  whiteSpace: "nowrap",
-                  maxWidth: "88%",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                }}
-              >
-                <span style={{ fontSize: 11, color: "var(--text-secondary)", fontWeight: 500 }}>
-                  {hoveredId
-                    ? "Click to open project details"
-                    : productFilter
-                    ? `${filteredProjects.length} ${productFilter} installations · Tap pins for details`
-                    : "Drag anywhere · Ctrl + scroll or two fingers to zoom · Tap a pin for details"}
-                </span>
+          {/* ── The strip (phone and tablet) */}
+          {!isDesktop && (
+            <div className="cm-strip-wrap">
+              {tourBar}
+              <div className="cm-strip-head">
+                <span>{listTitle}</span>
+                {anyFilter && <button type="button" className="cm-link-btn" onClick={startOver}>Start over</button>}
               </div>
-              )}
-            </div>
-
-            {/* ── Right panel (desktop) */}
-            <div
-              className="canada-map-panel"
-              ref={panelRef}
-              style={{
-                width: 310,
-                flexShrink: 0,
-                borderRadius: 20,
-                border: "1px solid var(--border-color)",
-                background: "#111111",
-                display: "flex",
-                flexDirection: "column",
-                overflow: "hidden",
-              }}
-            >
-              {/* Panel header */}
-              <div
-                style={{
-                  padding: "14px 16px 12px",
-                  borderBottom: "1px solid var(--border-color)",
-                  flexShrink: 0,
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    marginBottom: 3,
-                  }}
-                >
-                  <p
-                    style={{
-                      fontSize: 10.5,
-                      fontWeight: 700,
-                      letterSpacing: "0.14em",
-                      textTransform: "uppercase",
-                      color: "var(--accent-text-lg)",
-                      margin: 0,
-                    }}
-                  >
-                    {searchQuery.trim() ? "Search results" : "Projects in view"}
-                  </p>
-                  <span
-                    style={{
-                      fontSize: 11,
-                      fontWeight: 700,
-                      color: "var(--text-primary)",
-                      background: "rgba(249,115,22,0.14)",
-                      padding: "2px 10px",
-                      borderRadius: 20,
-                    }}
-                  >
-                    {displayedProjects.length}
-                  </span>
-                </div>
-                <p
-                  style={{
-                    fontSize: 10.5,
-                    color: "var(--text-secondary)",
-                    margin: "0 0 10px",
-                    lineHeight: 1.4,
-                  }}
-                >
-                  {searchQuery.trim()
-                    ? `Searching all ${mapProjects.length} projects`
-                    : productFilter
-                    ? `${productFilter} only. Pan or zoom to filter further`
-                    : "Pan or zoom to filter"}
-                </p>
-
-                {/* Search input */}
-                <div
-                  style={{
-                    position: "relative",
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  {/* Search icon */}
-                  <svg
-                    width="13"
-                    height="13"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="var(--text-secondary)"
-                    strokeWidth={2.5}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    style={{
-                      position: "absolute",
-                      left: 10,
-                      flexShrink: 0,
-                      pointerEvents: "none",
-                    }}
-                  >
-                    <circle cx="11" cy="11" r="8" />
-                    <path d="m21 21-4.35-4.35" />
-                  </svg>
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="City, product, application…"
-                    aria-label="Search projects"
-                    style={{
-                      width: "100%",
-                      padding: "7px 30px 7px 30px",
-                      background: "var(--ink-05)",
-                      border: searchQuery.trim()
-                        ? "1px solid rgba(249,115,22,0.4)"
-                        : "1px solid rgba(255,255,255,0.1)",
-                      borderRadius: 9,
-                      color: "var(--text-primary)",
-                      fontSize: 12,
-                      outline: "none",
-                      transition: "border-color 0.15s ease",
-                    }}
-                    onFocus={(e) => {
-                      e.currentTarget.style.borderColor = "rgba(249,115,22,0.5)";
-                    }}
-                    onBlur={(e) => {
-                      if (!searchQuery.trim())
-                        e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)";
-                    }}
-                  />
-                  {/* Clear button */}
-                  {searchQuery && (
+              {listProjects.length === 0 ? emptyList : (
+                <div ref={stripRef} className="cm-strip" onScroll={onStripScroll} role="region" aria-label="Projects in view">
+                  {listProjects.map((p) => (
                     <button
-                      onClick={() => setSearchQuery("")}
-                      style={{
-                        position: "absolute",
-                        right: 8,
-                        background: "var(--ink-10)",
-                        border: "none",
-                        borderRadius: "50%",
-                        width: 16,
-                        height: 16,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        cursor: "pointer",
-                        padding: 0,
-                        color: "var(--text-muted)",
-                        flexShrink: 0,
-                      }}
-                      aria-label="Clear search"
+                      key={p.id}
+                      type="button"
+                      data-id={p.id}
+                      className={selectedId === p.id ? "cm-scard is-on" : "cm-scard"}
+                      onClick={() => { stopTour(); setSelectedId(p.id); setSheetId(p.id); }}
                     >
-                      <svg width="8" height="8" viewBox="0 0 12 12" fill="none">
-                        <path d="M1 1l10 10M11 1L1 11" stroke="currentColor" strokeWidth={2} strokeLinecap="round" />
-                      </svg>
+                      <span className="cm-scard-photo">
+                        {p.images[0] ? (
+                          <Image loader={mapLoader} src={p.images[0]} alt="" fill sizes="(max-width: 640px) 78vw, 320px" style={{ objectFit: "cover" }} />
+                        ) : null}
+                        <span className="cm-scard-system">{p.product}</span>
+                      </span>
+                      <span className="cm-scard-title">{p.title}</span>
+                      <span className="cm-scard-place">{p.city}, {provinceName(p.province)}</span>
                     </button>
-                  )}
-                </div>
-
-                {/* Application filter — second dimension, compact select */}
-                <select
-                  value={appFilter ?? ""}
-                  onChange={(e) => handleAppFilter(e.target.value || null)}
-                  aria-label="Filter by application" data-tap="44"
-                  style={{
-                    width: "100%",
-                    marginTop: 6,
-                    padding: "7px 10px",
-                    background: appFilter ? "rgba(249,115,22,0.1)" : "rgba(255,255,255,0.05)",
-                    border: appFilter
-                      ? "1px solid rgba(249,115,22,0.4)"
-                      : "1px solid rgba(255,255,255,0.1)",
-                    borderRadius: 9,
-                    color: appFilter ? "#FDBA74" : "#9CA3AF",
-                    fontSize: 12,
-                    outline: "none",
-                    cursor: "pointer",
-                    transition: "border-color 0.15s ease",
-                  }}
-                >
-                  <option value="">All applications</option>
-                  {APPLICATION_COUNTS.map(([app, count]) => (
-                    <option key={app} value={app}>
-                      {app} ({count})
-                    </option>
                   ))}
-                </select>
-              </div>
-
-              {/* Scrollable project list */}
-              <div
-                className="canada-map-panel-scroll"
-                style={{ flex: 1, overflowY: "auto", overflowX: "hidden" }}
-              >
-                {displayedProjects.length === 0 ? (
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      height: "100%",
-                      padding: 24,
-                      textAlign: "center",
-                    }}
-                  >
-                    {searchQuery.trim() ? (
-                      <>
-                        <p style={{ color: "#4B5563", fontSize: 13, margin: "0 0 12px" }}>
-                          No projects match &ldquo;{searchQuery}&rdquo;
-                        </p>
-                        <button
-                          onClick={() => setSearchQuery("")}
-                          style={{
-                            fontSize: 12,
-                            color: "var(--accent-text-lg)",
-                            background: "transparent",
-                            border: "1px solid rgba(249,115,22,0.3)",
-                            borderRadius: 8,
-                            padding: "6px 14px",
-                            cursor: "pointer",
-                          }}
-                        >
-                          Clear search
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <p style={{ color: "#4B5563", fontSize: 13, margin: "0 0 12px" }}>
-                          No projects in this area
-                          {productFilter ? ` for ${productFilter}` : ""}
-                        </p>
-                        <button
-                          onClick={resetView}
-                          style={{
-                            fontSize: 12,
-                            color: "var(--accent-text-lg)",
-                            background: "transparent",
-                            border: "1px solid rgba(249,115,22,0.3)",
-                            borderRadius: 8,
-                            padding: "6px 14px",
-                            cursor: "pointer",
-                          }}
-                        >
-                          Reset to Canada view
-                        </button>
-                      </>
-                    )}
-                  </div>
-                ) : (
-                  /* `selected` takes focusedId as well as the modal: on desktop a
-                     click flies the map instead of opening anything, so without
-                     it nothing would show which row you picked. */
-                  displayedProjects.map((project) => (
-                    <PanelCard
-                      key={project.id}
-                      project={project}
-                      hovered={hoveredId === project.id}
-                      selected={selectedProject?.id === project.id || focusedId === project.id}
-                      onHover={handlePanelHover}
-                      onClick={handlePanelClick}
-                    />
-                  ))
-                )}
-              </div>
-
-              {/* Panel footer */}
-              <div
-                style={{
-                  padding: "10px 16px",
-                  borderTop: "1px solid var(--ink-06)",
-                  flexShrink: 0,
-                }}
-              >
-                <a
-                  href="/contact"
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: 6,
-                    width: "100%",
-                    padding: "9px 0",
-                    borderRadius: 9,
-                    background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
-                    color: "var(--on-accent)",
-                    fontWeight: 700,
-                    fontSize: 12,
-                    textDecoration: "none",
-                    boxShadow: "0 4px 14px rgba(249,115,22,0.3)",
-                  }}
-                >
-                  Request a project like this
-                  <svg
-                    width="12"
-                    height="12"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={2.5}
-                    strokeLinecap="round"
-                  >
-                    <path d="M5 12h14M12 5l7 7-7 7" />
-                  </svg>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          {/* ── Mobile strip — the panel's job, phone-shaped */}
-          <div className="canada-map-strip" style={{ marginTop: 12 }}>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                marginBottom: 8,
-              }}
-            >
-              <p
-                style={{
-                  fontSize: 10.5,
-                  fontWeight: 700,
-                  letterSpacing: "0.14em",
-                  textTransform: "uppercase",
-                  color: "var(--accent-text-lg)",
-                  margin: 0,
-                }}
-              >
-                {searchQuery.trim() ? "Search results" : "Projects in view"}
-              </p>
-              <span
-                style={{
-                  fontSize: 11,
-                  fontWeight: 700,
-                  color: "var(--text-primary)",
-                  background: "rgba(249,115,22,0.14)",
-                  padding: "2px 10px",
-                  borderRadius: 20,
-                }}
-              >
-                {displayedProjects.length}
-              </span>
-            </div>
-
-            {/* Mobile search */}
-            <div style={{ position: "relative", display: "flex", alignItems: "center", marginBottom: 10 }}>
-              <svg
-                width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)"
-                strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round"
-                style={{ position: "absolute", left: 12, pointerEvents: "none" }}
-              >
-                <circle cx="11" cy="11" r="8" />
-                <path d="m21 21-4.35-4.35" />
-              </svg>
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search city, product, application…"
-                aria-label="Search projects"
-                style={{
-                  width: "100%",
-                  padding: "10px 34px",
-                  background: "var(--ink-05)",
-                  border: searchQuery.trim()
-                    ? "1px solid rgba(249,115,22,0.4)"
-                    : "1px solid rgba(255,255,255,0.1)",
-                  borderRadius: 10,
-                  color: "var(--text-primary)",
-                  fontSize: 13,
-                  outline: "none",
-                }}
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery("")}
-                  aria-label="Clear search"
-                  style={{
-                    position: "absolute",
-                    right: 10,
-                    background: "var(--ink-10)",
-                    border: "none",
-                    borderRadius: "50%",
-                    width: 20,
-                    height: 20,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    cursor: "pointer",
-                    padding: 0,
-                    color: "var(--text-muted)",
-                  }}
-                >
-                  <svg width="8" height="8" viewBox="0 0 12 12" fill="none">
-                    <path d="M1 1l10 10M11 1L1 11" stroke="currentColor" strokeWidth={2} strokeLinecap="round" />
-                  </svg>
-                </button>
+                </div>
               )}
             </div>
+          )}
 
-            {/* Mobile application filter */}
-            <select
-              value={appFilter ?? ""}
-              onChange={(e) => handleAppFilter(e.target.value || null)}
-              aria-label="Filter by application" data-tap="44"
-              style={{
-                width: "100%",
-                marginBottom: 10,
-                padding: "9px 12px",
-                background: appFilter ? "rgba(249,115,22,0.1)" : "rgba(255,255,255,0.05)",
-                border: appFilter
-                  ? "1px solid rgba(249,115,22,0.4)"
-                  : "1px solid rgba(255,255,255,0.1)",
-                borderRadius: 10,
-                color: appFilter ? "#FDBA74" : "#9CA3AF",
-                fontSize: 13,
-                outline: "none",
-              }}
-            >
-              <option value="">All applications</option>
-              {APPLICATION_COUNTS.map(([app, count]) => (
-                <option key={app} value={app}>
-                  {app} ({count})
-                </option>
-              ))}
-            </select>
-
-            {/* Horizontal snap cards */}
-            <div
-              className="canada-map-strip-scroll"
-              style={{
-                display: "flex",
-                gap: 10,
-                overflowX: "auto",
-                scrollSnapType: "x mandatory",
-                WebkitOverflowScrolling: "touch",
-                paddingBottom: 8,
-              }}
-            >
-              {displayedProjects.length === 0 ? (
-                <p style={{ color: "#4B5563", fontSize: 13, padding: "14px 4px" }}>
-                  No projects here{productFilter ? ` for ${productFilter}` : ""}.{" "}
-                  <button
-                    onClick={resetView}
-                    style={{
-                      color: "var(--accent-text-lg)",
-                      background: "none",
-                      border: "none",
-                      padding: 0,
-                      fontSize: 13,
-                      cursor: "pointer",
-                      textDecoration: "underline",
-                    }}
-                  >
-                    Reset the view
-                  </button>
-                </p>
-              ) : (
-                displayedProjects.map((project) => (
-                  <button
-                    key={project.id}
-                    type="button"
-                    onClick={() => handlePanelClick(project)}
-                    aria-label={`${project.title}, view on map`}
-                    style={{
-                      all: "unset",
-                      boxSizing: "border-box",
-                      scrollSnapAlign: "start",
-                      flexShrink: 0,
-                      width: 230,
-                      display: "flex",
-                      gap: 10,
-                      padding: 10,
-                      borderRadius: 12,
-                      cursor: "pointer",
-                      background:
-                        hoveredId === project.id
-                          ? "rgba(249,115,22,0.1)"
-                          : "rgba(255,255,255,0.03)",
-                      border:
-                        hoveredId === project.id
-                          ? "1px solid rgba(249,115,22,0.45)"
-                          : "1px solid var(--border-color)",
-                    }}
-                  >
-                    <span
-                      style={{
-                        width: 62,
-                        height: 48,
-                        borderRadius: 8,
-                        overflow: "hidden",
-                        flexShrink: 0,
-                        display: "block",
-                      }}
-                    >
-                      {project.images[0] ? (
-                        <PhotoImage
-                          src={project.images[0]}
-                          alt={`${project.title}, ${project.city}`}
-                          width={62}
-                          height={48}
-                          style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                        />
-                      ) : (
-                        <NoPhotoThumb />
-                      )}
-                    </span>
-                    <span style={{ minWidth: 0, display: "block" }}>
-                      <span
-                        style={{
-                          display: "block",
-                          fontSize: 11,
-                          fontWeight: 700,
-                          letterSpacing: "0.1em",
-                          textTransform: "uppercase",
-                          color: "var(--accent-text-lg)",
-                          marginBottom: 3,
-                        }}
-                      >
-                        {project.product}
-                      </span>
-                      <span
-                        style={{
-                          display: "-webkit-box",
-                          WebkitLineClamp: 2,
-                          WebkitBoxOrient: "vertical",
-                          overflow: "hidden",
-                          fontSize: 11.5,
-                          fontWeight: 600,
-                          color: "var(--text-body)",
-                          lineHeight: 1.3,
-                        }}
-                      >
-                        {project.title}
-                      </span>
-                      <span
-                        style={{
-                          display: "block",
-                          fontSize: 10,
-                          color: "var(--text-secondary)",
-                          marginTop: 3,
-                        }}
-                      >
-                        {project.city}, {project.province}
-                      </span>
-                    </span>
-                  </button>
-                ))
-              )}
-            </div>
-
-            {/* Mobile CTA */}
-            <a
-              href="/contact"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 6,
-                width: "100%",
-                marginTop: 6,
-                padding: "12px 0",
-                borderRadius: 10,
-                background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
-                color: "var(--on-accent)",
-                fontWeight: 700,
-                fontSize: 13,
-                textDecoration: "none",
-                boxShadow: "0 4px 14px rgba(249,115,22,0.3)",
-              }}
-            >
-              Request a project like this
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round">
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </a>
-          </div>
-
+          <p className="sr-only" aria-live="polite">{announce}</p>
         </div>
       </section>
 
-      {/* Project modal */}
-      {selectedProject && (
-        <ProjectModal
-          project={selectedProject}
-          onClose={handleCloseModal}
-          onShowOnMap={handleShowOnMap}
+      {sheetProject && !isDesktop && (
+        <Sheet
+          project={sheetProject}
+          onClose={() => setSheetId(null)}
+          position={position ? `${position.i + 1} of ${position.n}` : undefined}
+          onPrev={position && position.n > 1 ? () => {
+            const id = position.ids[(position.i - 1 + position.n) % position.n];
+            setSelectedId(id); setSheetId(id);
+            const p = mapProjects.find((x) => x.id === id); if (p) flyTo(p, "follow");
+          } : undefined}
+          onNext={position && position.n > 1 ? () => {
+            const id = position.ids[(position.i + 1) % position.n];
+            setSelectedId(id); setSheetId(id);
+            const p = mapProjects.find((x) => x.id === id); if (p) flyTo(p, "follow");
+          } : undefined}
         />
       )}
     </>
   );
 }
+
+// ── Styles. One block, every class prefixed cm- so nothing leaks.
+const CSS = `
+.cm-section { background: var(--bg-dark); padding: 5rem 0; }
+.cm-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 1.5rem; }
+.cm-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent-text-lg); margin: 0 0 10px; }
+.cm-h2 { font-size: clamp(1.75rem, 3.5vw, 2.75rem); font-weight: 900; color: var(--text-primary); margin: 0 0 10px; line-height: 1.08; letter-spacing: -0.03em; }
+.cm-grad { background: linear-gradient(90deg, #F97316, #EAB308); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.cm-sub { font-size: 15px; color: var(--text-muted); margin: 0; line-height: 1.6; max-width: 520px; }
+
+.cm-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 18px; border-radius: 10px; font-size: 13.5px; font-weight: 700; text-decoration: none; cursor: pointer; white-space: nowrap; transition: background .15s ease, border-color .15s ease, color .15s ease, transform .15s ease; }
+.cm-btn-primary { background: linear-gradient(135deg, #F97316 0%, #EA8C16 100%); color: var(--on-accent); border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 6px 22px rgba(249,115,22,0.32); }
+.cm-btn-primary:hover { transform: translateY(-1px); }
+.cm-btn-ghost { background: rgba(255,255,255,0.04); color: var(--text-primary); border: 1px solid rgba(255,255,255,0.14); }
+.cm-btn-ghost:hover { border-color: rgba(249,115,22,0.55); }
+.cm-link-btn { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 4px; background: none; border: 0; color: var(--accent-soft-text); font-size: 13px; font-weight: 700; cursor: pointer; }
+.cm-link-btn:hover { color: var(--text-primary); }
+.cm-icon-btn { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); cursor: pointer; }
+.cm-icon-btn:hover { border-color: rgba(249,115,22,0.55); }
+
+.cm-frame { position: relative; height: clamp(560px, 76vh, 860px); border-radius: 22px; overflow: hidden; border: 1px solid rgba(249,115,22,0.16); box-shadow: 0 30px 90px rgba(0,0,0,0.55); background: #0e0e0e; }
+@media (max-width: 1023px) { .cm-frame { height: clamp(360px, 56vh, 560px); border-radius: 18px; } }
+
+.cm-panel { position: absolute; z-index: 6; top: 14px; left: 14px; bottom: 14px; width: ${PANEL_W}px; display: flex; flex-direction: column; border-radius: 18px; overflow: hidden; background: rgba(13,14,16,0.9); -webkit-backdrop-filter: blur(16px) saturate(1.2); backdrop-filter: blur(16px) saturate(1.2); border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 18px 60px rgba(0,0,0,0.55); }
+.cm-panel-list, .cm-panel-detail { display: flex; flex-direction: column; min-height: 0; flex: 1; }
+.cm-panel-controls { padding: 14px 14px 10px; display: flex; flex-direction: column; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.cm-panel-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 12px 6px 10px; }
+.cm-panel-scroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; outline: none; }
+.cm-panel-scroll::-webkit-scrollbar { width: 5px; }
+.cm-panel-scroll::-webkit-scrollbar-thumb { background: rgba(249,115,22,0.3); border-radius: 5px; }
+.cm-list-head, .cm-strip-head { display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-text-lg); }
+.cm-strip-head { padding: 12px 2px 8px; }
+.cm-stepper { display: inline-flex; align-items: center; gap: 6px; }
+.cm-stepper-pos { font-size: 12px; color: var(--text-muted); margin-right: 4px; font-variant-numeric: tabular-nums; }
+
+.cm-search { position: relative; display: flex; align-items: center; color: var(--text-secondary); }
+.cm-search svg { position: absolute; left: 13px; pointer-events: none; }
+.cm-search input { width: 100%; min-height: 44px; padding: 0 14px 0 38px; border-radius: 11px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-size: 13.5px; outline: none; }
+.cm-search input::placeholder { color: var(--text-secondary); }
+.cm-search input:focus { border-color: rgba(249,115,22,0.6); }
+.cm-selects { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.cm-selects select { min-height: 44px; padding: 0 10px; border-radius: 11px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #C4C9D2; font-size: 13px; outline: none; cursor: pointer; min-width: 0; }
+.cm-selects select.is-on { border-color: rgba(249,115,22,0.55); color: #FDBA74; background: rgba(249,115,22,0.1); }
+.cm-selects select option { background: #151515; color: #F5F0EB; }
+.cm-pills { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.cm-pills::-webkit-scrollbar { display: none; }
+.cm-pill { display: inline-flex; align-items: center; justify-content: center; gap: 6px; flex: 1 0 auto; min-width: 44px; min-height: 44px; padding: 0 10px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); color: #B7BDC8; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+.cm-pill.is-on { border-color: rgba(249,115,22,0.65); background: rgba(249,115,22,0.16); color: #F5F0EB; }
+.cm-pill-count { font-size: 10.5px; color: #9CA3AF; background: rgba(255,255,255,0.07); border-radius: 9px; padding: 1px 6px; }
+.cm-pill.is-on .cm-pill-count { color: #FDBA74; background: rgba(249,115,22,0.16); }
+
+.cm-list { list-style: none; margin: 0; padding: 4px 8px 12px; }
+.cm-card { all: unset; box-sizing: border-box; display: flex; gap: 12px; width: 100%; padding: 8px; border-radius: 12px; cursor: pointer; transition: background .15s ease; }
+.cm-card:hover, .cm-card.is-hot { background: rgba(249,115,22,0.09); }
+.cm-card:focus-visible { outline: 2px solid #F97316; outline-offset: -2px; }
+.cm-thumb { position: relative; flex-shrink: 0; overflow: hidden; border-radius: 9px; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); }
+.cm-card-text { display: flex; flex-direction: column; justify-content: center; min-width: 0; gap: 2px; }
+.cm-card-title { font-size: 13.5px; font-weight: 700; color: #ECE7E1; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.cm-card-place { font-size: 12px; color: var(--text-muted); }
+.cm-card-system { font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-text-lg); }
+.cm-empty { padding: 28px 18px; text-align: center; color: var(--text-muted); font-size: 13.5px; }
+.cm-empty p { margin: 0 0 14px; }
+
+.cm-detail { display: flex; flex-direction: column; }
+.cm-photos { margin: 0 12px; border-radius: 14px; overflow: hidden; background: #111; }
+.cm-photo-rail { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; aspect-ratio: 16 / 11; }
+.cm-photo-rail::-webkit-scrollbar { display: none; }
+.cm-photo-slide { position: relative; flex: 0 0 100%; scroll-snap-align: start; }
+.cm-photo-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 0; background: rgba(10,10,10,0.62); color: #fff; cursor: pointer; opacity: 0; transition: opacity .2s ease; }
+.cm-photos:hover .cm-photo-arrow, .cm-photo-arrow:focus-visible { opacity: 1; }
+@media (hover: none) { .cm-photo-arrow { opacity: 1; } }
+.cm-photo-prev { left: 8px; } .cm-photo-next { right: 8px; }
+.cm-photo-dots { position: absolute; left: 0; right: 0; bottom: 8px; display: flex; justify-content: center; gap: 5px; pointer-events: none; }
+.cm-photo-dots span { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.45); }
+.cm-photo-dots span.is-on { background: #fff; width: 16px; border-radius: 3px; }
+.cm-detail-body { padding: 14px 18px 20px; }
+.cm-detail-meta { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 10px; }
+.cm-chip { font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 8px; border-radius: 6px; color: #FDBA74; background: rgba(249,115,22,0.12); }
+.cm-chip-lead { color: #1A0E05; background: linear-gradient(90deg, #F97316, #F59E0B); }
+.cm-chip-quiet { color: #B7BDC8; background: rgba(255,255,255,0.06); }
+.cm-detail-title { font-size: 21px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; color: var(--text-primary); margin: 0 0 6px; outline: none; }
+.cm-detail-place { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; font-size: 13px; color: var(--text-muted); margin: 0 0 12px; }
+.cm-approx { font-size: 11px; font-weight: 600; color: #B7BDC8; border: 1px dashed rgba(255,255,255,0.22); border-radius: 6px; padding: 1px 7px; }
+.cm-detail-text { font-size: 14px; line-height: 1.6; color: var(--text-body); margin: 0 0 16px; }
+.cm-detail-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.cm-detail-links { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 0; }
+.cm-detail-links a { display: inline-flex; align-items: center; min-height: 40px; font-size: 13px; font-weight: 700; color: var(--accent-soft-text); text-decoration: none; }
+.cm-detail-links a:hover { color: var(--text-primary); }
+.cm-brief { margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 6px; }
+.cm-brief summary { min-height: 40px; display: flex; align-items: center; gap: 8px; cursor: pointer; list-style: none; font-size: 13px; font-weight: 700; color: var(--text-muted); }
+.cm-brief summary::-webkit-details-marker { display: none; }
+.cm-brief summary::before { content: ""; width: 7px; height: 7px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(-45deg); transition: transform .2s ease; }
+.cm-brief[open] summary::before { transform: rotate(45deg); }
+.cm-brief p { font-size: 13px; line-height: 1.6; color: var(--text-body); margin: 0 0 10px; }
+.cm-brief .cm-brief-label { font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-text-lg); margin: 6px 0 4px; }
+
+.cm-tour { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 6px 10px; margin: 0 12px 10px; padding: 8px 8px 10px 12px; border-radius: 12px; background: rgba(249,115,22,0.08); border: 1px solid rgba(249,115,22,0.25); }
+.cm-tour-label { font-size: 12px; font-weight: 700; color: #F5F0EB; font-variant-numeric: tabular-nums; }
+.cm-tour-buttons { display: inline-flex; gap: 6px; }
+.cm-tour-track { grid-column: 1 / -1; height: 3px; border-radius: 3px; background: rgba(255,255,255,0.1); overflow: hidden; }
+.cm-tour-fill { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #F97316, #EAB308); animation-name: cm-fill; animation-timing-function: linear; animation-fill-mode: forwards; }
+@keyframes cm-fill { from { width: 0; } to { width: 100%; } }
+.cm-strip-wrap .cm-tour { margin: 12px 0 0; }
+
+.cm-back { position: absolute; z-index: 7; top: 14px; right: 14px; display: inline-flex; align-items: center; gap: 7px; min-height: 44px; padding: 0 16px; border-radius: 11px; border: 1px solid rgba(255,255,255,0.14); background: rgba(13,14,16,0.88); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); color: var(--text-primary); font-size: 13px; font-weight: 700; cursor: pointer; box-shadow: 0 8px 24px rgba(0,0,0,0.45); }
+.cm-back:hover { border-color: rgba(249,115,22,0.6); }
+.cm-hint { position: absolute; z-index: 5; left: calc(${PANEL_W}px + 28px + (100% - ${PANEL_W}px - 28px) / 2); bottom: 18px; transform: translateX(-50%); margin: 0; padding: 7px 16px; border-radius: 999px; background: rgba(13,14,16,0.82); border: 1px solid rgba(255,255,255,0.08); color: #B7BDC8; font-size: 12px; white-space: nowrap; pointer-events: none; animation: cm-hint 6s ease 1.2s both; }
+@keyframes cm-hint { 0% { opacity: 0; transform: translate(-50%, 8px); } 10% { opacity: 1; transform: translate(-50%, 0); } 85% { opacity: 1; } 100% { opacity: 0; } }
+.cm-note { position: absolute; z-index: 5; top: 14px; left: 50%; transform: translateX(-50%); margin: 0; padding: 8px 14px; border-radius: 10px; background: rgba(8,13,22,0.9); color: #B7BDC8; font-size: 12px; }
+
+.cm-bubble { all: unset; cursor: pointer; display: flex; flex-direction: column; align-items: center; filter: drop-shadow(0 10px 18px rgba(0,0,0,0.55)); animation: cm-rise .45s cubic-bezier(.2,.9,.3,1.3) both; }
+.cm-bubble-photo { position: relative; width: 64px; height: 64px; border-radius: 50%; overflow: hidden; border: 3px solid #F97316; background: #1a1a1a; box-shadow: 0 0 0 4px rgba(249,115,22,0.22); }
+.cm-bubble-photo::after { content: ""; position: absolute; inset: -3px; border-radius: 50%; border: 2px solid rgba(249,115,22,0.8); animation: cm-pulse 2.2s ease-out infinite; }
+.cm-bubble-tip { width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 10px solid #F97316; margin-top: -1px; }
+@keyframes cm-rise { from { opacity: 0; transform: translateY(10px) scale(.7); } to { opacity: 1; transform: none; } }
+@keyframes cm-pulse { from { transform: scale(1); opacity: .9; } to { transform: scale(1.55); opacity: 0; } }
+
+.cm-mobile-controls { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+.cm-strip { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 2px 2px 10px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.cm-strip::-webkit-scrollbar { display: none; }
+.cm-scard { all: unset; box-sizing: border-box; flex: 0 0 min(78vw, 320px); scroll-snap-align: center; display: flex; flex-direction: column; gap: 3px; padding: 8px 8px 12px; border-radius: 16px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); cursor: pointer; }
+.cm-scard.is-on { border-color: rgba(249,115,22,0.65); background: rgba(249,115,22,0.08); }
+.cm-scard:focus-visible { outline: 2px solid #F97316; outline-offset: 2px; }
+.cm-scard-photo { position: relative; display: block; aspect-ratio: 16 / 10; border-radius: 11px; overflow: hidden; background: #151515; margin-bottom: 7px; }
+.cm-scard-system { position: absolute; left: 8px; top: 8px; font-size: 10px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #1A0E05; background: linear-gradient(90deg, #F97316, #F59E0B); padding: 3px 7px; border-radius: 6px; }
+.cm-scard-title { font-size: 14.5px; font-weight: 800; color: var(--text-primary); line-height: 1.3; padding: 0 4px; }
+.cm-scard-place { font-size: 12.5px; color: var(--text-muted); padding: 0 4px; }
+
+.cm-sheet-backdrop { position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.78); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); display: flex; align-items: flex-end; justify-content: center; animation: cm-fade .2s ease both; }
+.cm-sheet { width: 100%; max-width: 640px; max-height: 92vh; overflow-y: auto; background: #121212; border-radius: 22px 22px 0 0; border-top: 1px solid rgba(249,115,22,0.3); padding-bottom: max(16px, env(safe-area-inset-bottom)); animation: cm-up .3s cubic-bezier(.2,.8,.2,1) both; }
+.cm-sheet-bar { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: rgba(18,18,18,0.94); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.cm-sheet-pos { font-size: 12px; color: var(--text-muted); padding-left: 6px; font-variant-numeric: tabular-nums; }
+.cm-sheet-nav { display: inline-flex; gap: 6px; }
+.cm-sheet .cm-icon-btn { width: 44px; height: 44px; }
+@keyframes cm-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes cm-up { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+.maplibregl-cooperative-gesture-screen { background: rgba(8,10,14,0.72) !important; -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); color: var(--text-primary) !important; font-size: 13px !important; font-weight: 600 !important; display: flex; align-items: center; justify-content: center; text-align: center; padding: 0 24px; }
+.maplibregl-ctrl-attrib { background: rgba(8,10,14,0.6) !important; }
+.maplibregl-ctrl-attrib, .maplibregl-ctrl-attrib-inner, .maplibregl-ctrl-attrib a { color: var(--ink-45) !important; font-size: 10px; }
+.maplibregl-ctrl-group { background: rgba(13,14,16,0.88) !important; border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 8px 24px rgba(0,0,0,0.45) !important; border-radius: 11px !important; overflow: hidden; }
+.maplibregl-ctrl-group button { width: 40px !important; height: 40px !important; }
+.maplibregl-ctrl-group button + button { border-top: 1px solid rgba(255,255,255,0.1) !important; }
+.maplibregl-ctrl-group .maplibregl-ctrl-icon { filter: invert(1) brightness(1.4); }
+.maplibregl-ctrl-bottom-right { margin: 0 6px 6px 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cm-bubble, .cm-sheet, .cm-sheet-backdrop, .cm-hint { animation: none; }
+  .cm-bubble-photo::after { animation: none; display: none; }
+  .cm-tour-fill { animation: none; width: 100%; }
+}
+`;

@@ -6,23 +6,9 @@ import dynamic from "next/dynamic";
 // lib/map-projects.ts would drag the whole dataset into the phone bundle.
 import mapCount from "@/lib/map-count.json";
 
-// The provinces with pins, west to east, as scripts/gen-map-blog.mjs wrote
-// them: "British Columbia, Ontario and Québec". The card said "coast to
-// coast" while the Atlantic pins had no project behind them.
-const PROVINCE_LABEL: Record<string, string> = {
-  BC: "British Columbia", AB: "Alberta", SK: "Saskatchewan", MB: "Manitoba",
-  ON: "Ontario", QC: "Québec", NB: "New Brunswick", NS: "Nova Scotia",
-  PE: "PEI", NL: "Newfoundland",
-};
-const provinceNames = (() => {
-  const names = ((mapCount as { provinces?: string[] }).provinces ?? []).map((p) => PROVINCE_LABEL[p] ?? p);
-  if (names.length <= 1) return names.join("");
-  return `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
-})();
-
 const CanadaMap = dynamic(() => import("@/components/sections/CanadaMap"), {
   ssr: false,
-  loading: () => <div style={{ height: 680, background: "var(--bg-dark)" }} />,
+  loading: () => <div style={{ height: "clamp(760px, 96vh, 1060px)", background: "var(--bg-dark)" }} />,
 });
 
 /**
@@ -91,7 +77,7 @@ export default function CanadaMapWrapper() {
   // Desktop, not yet near: reserve the space so nothing below it jumps when
   // the map arrives.
   if (isDesktop) {
-    return <div ref={sentinelRef} style={{ height: 680, background: "var(--bg-dark)" }} aria-hidden="true" />;
+    return <div ref={sentinelRef} style={{ height: "clamp(760px, 96vh, 1060px)", background: "var(--bg-dark)" }} aria-hidden="true" />;
   }
 
   return (
@@ -104,17 +90,14 @@ export default function CanadaMapWrapper() {
         <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-2" style={{ color: "var(--accent-text)" }}>
           Installations across Canada
         </p>
-        {/* This line used to read "84 projects, coast to coast." There were 59,
-            and the map's own header — forty pixels further down the same
-            scroll — said so. The number is now the length of the dataset, so
-            the two cannot disagree again. */}
+        {/* The number is the length of the dataset (lib/map-count.json, written
+            every build), never typed: this card once said "84 projects" while
+            the map's own header said 59. */}
         <p className="font-black leading-tight mb-2" style={{ color: "var(--text-primary)", fontSize: "1.5rem", letterSpacing: "-0.02em" }}>
-          {provinceNames
-            ? `${mapCount.count} projects in ${provinceNames}.`
-            : `${mapCount.count} projects on the map.`}
+          {mapCount.count} documented projects across Canada.
         </p>
         <p className="text-sm mb-5" style={{ color: "var(--ink-65)" }}>
-          Every pin is a real installation. Filter by system, browse by province.
+          Every pin is a real installation, shown in its own photos.
         </p>
         <span className="inline-flex items-center gap-2 text-sm font-bold" style={{ color: "var(--accent-text)" }}>
           Open the map

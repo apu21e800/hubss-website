@@ -88,18 +88,31 @@ hubss-website/
 - New project: add entry to /content/projects/project-name.mdx
 
 ### Putting a project on the homepage map
-Since 28 Sep 2026 the map shows only documented projects (Vern: "no fake
-locations"). A pin stays only when a published Insights post documents that
-job at that place; it sits at the site the post names (where the post names
-only a town or a corridor, the entry's comment says the pin is approximate);
-and every photo on it is of that installation. There are no stand-in or
-"Representative" pins any more. The audit removed 26 pins that rested on
-stand-ins with no post behind them. To add a job: publish its write-up first,
-then add the entry in `lib/map-projects.ts` with the post's own photos. A pin
-whose photo lives in `/public/images/blog/<slug>/` is that post's pin and
-gains a "Read the write-up" link (scripts/gen-map-blog.mjs). Studio has a
-"Projects (Map Pins)" list from the May 2026 migration, but the map does not
-read it yet; moving the map into Sanity is the way to let Doug add pins.
+Since 28 Sep 2026 the map shows only real, documented jobs (Vern: "no fake
+locations"); since 30 Sep 2026 it shows as many of them as can be placed
+(Vern: "more locations on the map the better"). A pin needs a real job at a
+real place, documented by a published Insights post OR by the Idea Book
+(Volume 5: its caption names the place and the system), and every photo on it
+is of that job. No stand-in or "Representative" pins; the 26 removed on 28 Sep
+stay removed. Where only the town is known, or the site was matched from the
+photograph, the entry is `approximate: true`: the card says so and the camera
+stops at city scale. Each entry's comment says what places it and how sure it
+is; where the book's caption and the evidence disagree, the evidence places
+the pin and the comment says so.
+
+To add a job: add the entry in `lib/map-projects.ts` with `post: "<slug>"`
+(its write-up) and/or `ideaBookPage`, and its photos as `cdn("<Sanity asset
+file>")` (a gallery or post copy, found by matching the photo) or
+`local("<name>")` for a file in /public/images/map (1600px, plus a 640px
+<name>-sm.jpg twin). Map photos never go through /_next/image
+(lib/map-photo.ts). The Idea Book photos, resized, are in
+D:\STUDIO-01\02-HUBSS\Claude outputs\map-photos_2026-09-30.
+
+The map component (components/sections/CanadaMap.tsx, rebuilt 30 Sep 2026)
+has no popups: a pin opens in the floating panel (desktop) or a sheet
+(phone), hovering labels the pin on the map, and "Take the tour" flies
+through the highlights (TOUR_IDS). Studio has a "Projects (Map Pins)" list
+from the May 2026 migration, but the map does not read it.
 
 The project count the page prints comes from `lib/map-count.json`, regenerated
 every build. Do not type a project count anywhere: the phone card used to say

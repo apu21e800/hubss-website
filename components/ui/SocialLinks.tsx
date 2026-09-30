@@ -21,10 +21,14 @@ interface SocialLinksProps {
 }
 
 export function SocialLinks({ size = 'md', className = '', iconClassName = '' }: SocialLinksProps) {
+  // The same order as the homepage's Follow buttons
+  // (components/sections/FollowButtons.tsx): Instagram first, where the work
+  // is posted, then LinkedIn, YouTube, Facebook, X. The footer used to lead
+  // with LinkedIn while the homepage led with Instagram (QA A23, 30 Sep 2026).
   const platforms = [
+    { key: 'instagram', label: 'Instagram' },
     { key: 'linkedin', label: 'LinkedIn' },
     { key: 'youtube', label: 'YouTube' },
-    { key: 'instagram', label: 'Instagram' },
     { key: 'facebook', label: 'Facebook' },
     { key: 'x', label: 'X' },
   ] as const;

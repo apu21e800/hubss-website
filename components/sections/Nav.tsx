@@ -752,7 +752,8 @@ function MobileFamily({
         type="button"
         onClick={onToggle}
         aria-expanded={open}
-        aria-controls={id}
+        // The members list is mounted only while open (QA F17, 30 Sep 2026).
+        aria-controls={open ? id : undefined}
         className="flex w-full items-center gap-3.5 px-1 py-3 text-left active:opacity-70 transition-opacity"
       >
         <GroupPicture label={label} compact />
@@ -1432,6 +1433,10 @@ export default function Nav() {
                 borderLeft: "1px solid var(--ink-12)",
                 height: 22,
               }}
+              // role="img": an aria-label on a plain span is ignored by
+              // assistive tech (QA F17, 30 Sep 2026); as an image the flag
+              // and its word read as one thing, "Canadian".
+              role="img"
               aria-label="Canadian"
             >
               <svg
@@ -1479,7 +1484,9 @@ export default function Nav() {
                 onClick={() => clickTrigger(panel)}
                 aria-expanded={openPanel === panel}
                 aria-haspopup="true"
-                aria-controls={PANEL_IDS[panel]}
+                // Only while the panel is mounted: closed, the id it named
+                // did not exist in the document (QA F17, 30 Sep 2026).
+                aria-controls={openPanel === panel ? PANEL_IDS[panel] : undefined}
                 className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[13px] font-medium whitespace-nowrap transition-colors hover:text-[var(--accent-text)] hover:bg-[var(--ink-05)]"
                 style={{ color: openPanel === panel ? "var(--accent-text-lg)" : "var(--ink-65)" }}
               >

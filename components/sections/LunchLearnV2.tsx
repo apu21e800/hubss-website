@@ -22,9 +22,10 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { track } from "@vercel/analytics";
 import { CHROME_MARKS } from "@/lib/chrome-images.mjs";
 import ChromeImg from "@/components/ui/ChromeImg";
-import { lunchLearnHref, readLunchLearnParams } from "@/lib/lunch-learn";
+import { lunchLearnHref, readLunchLearnParams, LL_TOPIC_MAX } from "@/lib/lunch-learn";
 
 export type LunchLearnVariant = "boardroom" | "ticket" | "proof" | "band";
 
@@ -67,7 +68,24 @@ const IMG = { src: "/images/products/streetbond/streetbond-112.jpg", alt: "Stree
 const MOOSE = { src: CHROME_MARKS.moose, alt: "Moose, the HUB Surface Systems site dog, in his hard hat and safety vest" };
 
 // ── Shared form brain ────────────────────────────────────
-function useLunchLearnForm(withFormat: boolean) {
+/**
+ * Pick a session topic from elsewhere on the page (the topic tiles on
+ * /lunch-learn). The form hook listens for this event, so the chip appears in
+ * the form the visitor is about to fill; the URL carries it too, so a refresh
+ * or a shared link keeps it.
+ */
+export const LL_TOPIC_EVENT = "hubss:ll-topic";
+export function setLunchLearnTopic(topic: string, from = "lunch-learn") {
+  const t = topic.trim().slice(0, LL_TOPIC_MAX);
+  if (!t) return;
+  window.dispatchEvent(new CustomEvent(LL_TOPIC_EVENT, { detail: { topic: t, from } }));
+  const q = new URLSearchParams(window.location.search);
+  q.set("topic", t);
+  q.set("from", from);
+  window.history.replaceState(null, "", `${window.location.pathname}?${q.toString()}#book`);
+}
+
+export function useLunchLearnForm(withFormat: boolean) {
   const [formData, setFormData] = useState<FormState>(EMPTY);
   const [format, setFormat] = useState<string>("Either");
   const [submitState, setSubmitState] = useState<SubmitState>({ status: "idle" });
@@ -80,6 +98,14 @@ function useLunchLearnForm(withFormat: boolean) {
     const p = readLunchLearnParams(window.location.search);
     setTopic(p.topic);
     setFrom(p.from);
+    const onTopic = (e: Event) => {
+      const d = (e as CustomEvent<{ topic: string; from?: string }>).detail;
+      if (!d?.topic) return;
+      setTopic(d.topic);
+      if (d.from) setFrom(d.from);
+    };
+    window.addEventListener(LL_TOPIC_EVENT, onTopic);
+    return () => window.removeEventListener(LL_TOPIC_EVENT, onTopic);
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,6 +134,15 @@ function useLunchLearnForm(withFormat: boolean) {
         message: "You're booked in. We'll be in touch within one business day to confirm your date and details.",
       });
       setFormData(EMPTY);
+      // The conversion. The old funnel form sent these; when the page moved to
+      // this form (22 Sep 2026) nothing did, so bookings stopped being counted.
+      window.gtag?.("event", "generate_lead", { event_category: "conversion", form_type: "lunch-learn" });
+      track("lunch_learn_submit", {
+        form_type: "lunch-learn",
+        format: withFormat ? format : "n/a",
+        topic: topic ?? "none",
+        from: from ?? "direct",
+      });
     } catch {
       setSubmitState({
         status: "error",
@@ -120,7 +155,7 @@ function useLunchLearnForm(withFormat: boolean) {
 }
 
 /** The topic the visitor arrived with, shown above the form so they can see it and drop it. */
-function TopicChip({ topic, onClear }: { topic: string; onClear: () => void }) {
+export function TopicChip({ topic, onClear }: { topic: string; onClear: () => void }) {
   return (
     <div className="flex items-center gap-2 rounded-lg px-3 py-2" style={{ background: "rgba(249,115,22,0.10)", border: "1px solid rgba(249,115,22,0.35)" }}>
       <span className="text-[11px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--accent-text)" }}>Topic</span>
@@ -144,12 +179,15 @@ const inputStyle: React.CSSProperties = {
   color: "var(--text-primary)",
 };
 
-function Field({ name, placeholder, type = "text", required = false, value, onChange }: {
+export function Field({ name, placeholder, type = "text", required = false, value, onChange, id, autoComplete }: {
   name: string; placeholder: string; type?: string; required?: boolean;
   value: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  id?: string; autoComplete?: string;
 }) {
   return (
     <input
+      id={id}
+      autoComplete={autoComplete}
       type={type}
       name={name}
       placeholder={placeholder + (required ? "" : " (optional)")}
@@ -163,7 +201,7 @@ function Field({ name, placeholder, type = "text", required = false, value, onCh
   );
 }
 
-function Honeypot({ value, onChange }: { value: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void }) {
+export function Honeypot({ value, onChange }: { value: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void }) {
   return (
     <input
       type="text"
@@ -178,7 +216,7 @@ function Honeypot({ value, onChange }: { value: string; onChange: (e: React.Chan
   );
 }
 
-function SuccessPanel({ message }: { message?: string }) {
+export function SuccessPanel({ message }: { message?: string }) {
   return (
     <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-10">
       <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4" style={{ background: "rgba(34,197,94,0.12)", border: "1px solid rgba(34,197,94,0.3)" }}>
@@ -192,7 +230,7 @@ function SuccessPanel({ message }: { message?: string }) {
   );
 }
 
-function ErrorNote({ message }: { message?: string }) {
+export function ErrorNote({ message }: { message?: string }) {
   return (
     <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="p-4 rounded-xl text-sm" style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.25)", color: "var(--err-text)" }}>
       {message}

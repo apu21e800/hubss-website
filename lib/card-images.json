@@ -1,4 +1,32 @@
 {
+  "chipfill": {
+    "base": "/images/cards/chipfill",
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "alt": "ChipFill poured from its bag into a pothole",
+    "hash": "3adfecc9b27b2284"
+  },
+  "aggrefill": {
+    "base": "/images/cards/aggrefill",
+    "widths": [
+      476
+    ],
+    "alt": "AggreFill poured from its bag into a pothole",
+    "hash": "496c6026c8948574"
+  },
+  "fast-patch": {
+    "base": "/images/cards/fast-patch",
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "alt": "A Fast Patch DPR kit laid out: bucket, component bags, gloves and instructions",
+    "hash": "f3aea881fd435ea6"
+  },
   "traffic-patterns-xd": {
     "base": "/images/cards/traffic-patterns-xd",
     "widths": [

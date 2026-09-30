@@ -195,10 +195,11 @@ function MenuLabel({ children, rule = true, className = "" }: { children: React.
 // ── Photographs and the ruled tile ───────────────────────────────────
 // A family's or group's picture is its CHROME_PANELS entry (lib/chrome-images.mjs),
 // keyed by the label the menu prints, so the baker and the menu read one list.
-// A family with no photo that meets the rules gets a ruled tile instead: the
-// hatching an engineer draws through asphalt or concrete cut in section, and
-// one fact about the family in type. That is Asphalt & Concrete Repair since
-// 28 Sep 2026 (its only photo carried a third party's copyright, QA pa#7).
+// A family with no photo gets a ruled tile instead: the hatching an engineer
+// draws through asphalt or concrete cut in section, and one fact about the
+// family in type. Asphalt & Concrete Repair had it from 28 Sep 2026 until
+// 30 Sep, when it got a CHROME_PANELS photo (Vern: "still missing an
+// image"); the tile stays as the fallback for any family without one.
 const TILE_LINES: Record<string, string> = {
   // lib/product-categories.ts intro: "... for asphalt and concrete, deployable year-round."
   "Asphalt & Concrete Repair": "For asphalt and concrete, year-round",
@@ -224,9 +225,9 @@ function RuledTile({ line, compact = false }: { line?: string; compact?: boolean
   );
 }
 
-// The drawer's small row picture for a family with no panel photo. Asphalt &
-// Concrete Repair (28 Sep 2026: on the phone the striped tile read as a
-// missing picture) shows AggreFill's product photo, aggrefill-02.jpg:
+// The drawer's small row picture for a family with no panel photo. Since
+// 30 Sep 2026 Asphalt & Concrete Repair has a panel photo (CHROME_PANELS), so
+// this entry is only its fallback. It was AggreFill's product photo, aggrefill-02.jpg:
 // the product's own hero on its page (lib/products.ts), with no supplier
 // packaging and no third-party credit in the file, unlike
 // fastpatch-repaired.jpg. At 96 x 48 its 476px source is plenty; the 2:1

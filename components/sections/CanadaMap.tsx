@@ -793,8 +793,11 @@ export default function CanadaMap() {
               <h2 id="cm-heading" className="cm-h2">
                 Real projects. <span className="cm-grad">Real places.</span>
               </h2>
+              {/* No count (docs/STYLE.md: no counts as a selling point; the
+                  company's number is the book's 1,000+). "3 of 78" in the
+                  panel is a count inside a control, which the guide allows. */}
               <p className="cm-sub">
-                {mapProjects.length} documented projects. Every photo shows the job itself.
+                Every pin is a documented installation, shown in its own photos.
               </p>
             </div>
             <button type="button" className="cm-btn cm-btn-primary cm-tour-start" onClick={tour ? backToList : startTour}>

@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 // Just the number, from its own generated file — importing it from
 // lib/map-projects.ts would drag the whole dataset into the phone bundle.
-import mapCount from "@/lib/map-count.json";
 
 const CanadaMap = dynamic(() => import("@/components/sections/CanadaMap"), {
   ssr: false,
@@ -90,14 +89,15 @@ export default function CanadaMapWrapper() {
         <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-2" style={{ color: "var(--accent-text)" }}>
           Installations across Canada
         </p>
-        {/* The number is the length of the dataset (lib/map-count.json, written
-            every build), never typed: this card once said "84 projects" while
-            the map's own header said 59. */}
+        {/* The map's own header, word for word, so the card and the map
+            never disagree (this card once said "84 projects" while the map's
+            header said 59). No count: docs/STYLE.md, no counts as a selling
+            point. lib/map-count.json is still written every build. */}
         <p className="font-black leading-tight mb-2" style={{ color: "var(--text-primary)", fontSize: "1.5rem", letterSpacing: "-0.02em" }}>
-          {mapCount.count} documented projects across Canada.
+          Real projects. Real places.
         </p>
         <p className="text-sm mb-5" style={{ color: "var(--ink-65)" }}>
-          Every pin is a real installation, shown in its own photos.
+          Every pin is a documented installation, shown in its own photos.
         </p>
         <span className="inline-flex items-center gap-2 text-sm font-bold" style={{ color: "var(--accent-text)" }}>
           Open the map

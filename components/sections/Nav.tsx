@@ -84,21 +84,28 @@ const PANEL_IDS: Record<Panel, string> = {
 // parking lots and commercial hardscape, so it sits with them. Two driveway
 // pages remain (private, residential) — merging them is Doug's call; if they
 // merge, add the redirect in next.config.ts.
+// Each group's note says where the work is, in plain words (30 Sep 2026: the
+// menu's pictures went, and a group name like "Commercial & Sustainability"
+// earns one line saying what it covers). Places, never claims.
 const APPLICATION_GROUPS = [
   {
     label: "Streets & Safety",
+    note: "Where people and traffic meet",
     slugs: ["crosswalks", "bike-lanes", "bus-lanes", "pedestrian-safety", "traffic-calming", "regulatory-markings"],
   },
   {
     label: "Parks & Public Spaces",
+    note: "Paths, plazas and places to play",
     slugs: ["parks-paths", "public-spaces", "playgrounds", "splash-pads", "public-art", "community-branding"],
   },
   {
     label: "Commercial & Sustainability",
+    note: "Lots, courts, airfields and cooler surfaces",
     slugs: ["parking-lots", "commercial-spaces", "sport-courts", "airports", "leed-urban-heat-island"],
   },
   {
     label: "Residential",
+    note: "Driveways and townhome communities",
     slugs: ["private-driveways", "residential-driveways", "townhomes"],
   },
 ];
@@ -180,14 +187,20 @@ function MegaShell({ children }: { children: React.ReactNode }) {
 
 const ACCENT = "var(--accent-text)";  // small-text accent (WCAG-safe on dark surfaces)
 
-// The letterspaced label every column and section opens with.
-function MenuLabel({ children, rule = true, className = "" }: { children: React.ReactNode; rule?: boolean; className?: string }) {
+// Every heading in the three panels sits on the same rule: a grey hairline
+// whose first few pixels are the brand gradient. One rule, not two (the
+// 30 Sep draft stacked a gradient dash over a separate hairline).
+const HAIRLINE = "1px solid var(--ink-10)";
+function RuleAccent() {
+  return <span aria-hidden="true" className="absolute -bottom-px left-0 block h-[2px] w-8" style={{ background: "var(--gradient-brand)" }} />;
+}
+
+// The letterspaced label the Insights panel's columns open with.
+function MenuLabel({ children }: { children: React.ReactNode }) {
   return (
-    <div
-      className={`text-[10.5px] font-bold tracking-[0.2em] uppercase ${rule ? "pb-3 mb-2" : ""} ${className}`}
-      style={{ color: ACCENT, borderBottom: rule ? "1px solid rgba(249,115,22,0.18)" : undefined }}
-    >
+    <div className="relative mb-2 pb-3 text-[10.5px] font-bold tracking-[0.2em] uppercase" style={{ color: ACCENT, borderBottom: HAIRLINE }}>
       {children}
+      <RuleAccent />
     </div>
   );
 }
@@ -302,19 +315,34 @@ function applicationGroup(group: (typeof APPLICATION_GROUPS)[number]): MenuItem[
   });
 }
 
-// ── Directory column: one family or group, its picture, label, names ──
+// ── Directory column: one family or group, its name, its note, its members ──
+// 30 Sep 2026 (Vern: "re-think the product dropdown, I'm not sure the images
+// are necessary, unless we have perfect images... don't over complicate...
+// DDB agency quality"): the photograph that opened each column went. The
+// family's or group's name now carries the column in the display face, over a
+// short gradient rule, and the members follow. One line of explanation per
+// level, never two: products carry their line each (PRODUCT_MENU_LINES), so a
+// family prints no note; application names describe themselves, so each group
+// prints one note instead. The phone drawer keeps its small row pictures
+// (GroupPicture, compact).
 // The rows hang 10px outside the column (-mx-2.5) so their text lines up
-// with the picture and the label while the hover fill still has room.
-// The four columns share three rows (subgrid): when a label wraps, as
-// "Commercial & Sustainability" does at 1024px, every label row grows with
-// it and the text sits on its rule, so the four lists still start level.
-function MenuColumn({ label, items }: { label: string; items: MenuItem[] }) {
+// with the name while the hover fill still has room. The four columns share
+// two rows (subgrid), so when a name or note wraps the four lists still
+// start level.
+function MenuColumn({ label, note, items }: { label: string; note?: string; items: MenuItem[] }) {
   return (
-    <div className="row-span-3 grid grid-rows-subgrid">
-      <div className="mb-4">
-        <GroupPicture label={label} />
+    <div className="row-span-2 grid grid-rows-subgrid">
+      <div className="relative pb-4 mb-3" style={{ borderBottom: HAIRLINE }}>
+        <div className="font-display text-[19px] font-bold leading-tight text-balance" style={{ color: "var(--text-primary)", letterSpacing: "-0.015em" }}>
+          {label}
+        </div>
+        {note && (
+          <div className="mt-1.5 text-[13px] leading-snug" style={{ color: "var(--ink-58)" }}>
+            {note}
+          </div>
+        )}
+        <RuleAccent />
       </div>
-      <MenuLabel className="flex items-end">{label}</MenuLabel>
       <ul>
         {items.map((it) => (
           <li key={it.href}>
@@ -326,7 +354,7 @@ function MenuColumn({ label, items }: { label: string; items: MenuItem[] }) {
               className={`group -mx-2.5 flex ${it.line ? "items-start" : "items-center"} justify-between gap-3 px-2.5 py-2 rounded-lg transition-colors hover:bg-[var(--ink-05)]`}
             >
               <span className="min-w-0">
-                <span className="block text-[14.5px] font-semibold leading-snug group-hover:text-[var(--accent-text)] transition-colors" style={{ color: "var(--text-primary)" }}>
+                <span className="block text-[15px] font-semibold leading-snug group-hover:text-[var(--accent-text)] transition-colors" style={{ color: "var(--text-primary)" }}>
                   {it.name}
                 </span>
                 {it.line && (
@@ -335,9 +363,9 @@ function MenuColumn({ label, items }: { label: string; items: MenuItem[] }) {
                   </span>
                 )}
               </span>
-              <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                className={`${it.line ? "mt-[5px]" : ""} opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0`} style={{ color: ACCENT }} aria-hidden="true">
-                <path d="M9 18l6-6-6-6" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
+              <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                className={`${it.line ? "mt-[5px]" : ""} -translate-x-1 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all flex-shrink-0`} style={{ color: ACCENT }} aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6" strokeWidth={2.25} strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </Link>
           </li>
@@ -345,6 +373,11 @@ function MenuColumn({ label, items }: { label: string; items: MenuItem[] }) {
       </ul>
     </div>
   );
+}
+
+/** The brand gradient as a hairline along the top of a panel (Doug likes the orange-to-yellow, used with restraint). */
+function PanelRule() {
+  return <div aria-hidden="true" className="h-[2px]" style={{ background: "linear-gradient(90deg, #F97316 0%, #EAB308 55%, transparent 100%)" }} />;
 }
 
 // ── Lunch & Learn: the one card per panel ────────────────────────────
@@ -399,19 +432,33 @@ function LunchLearnSlot({ topic }: { topic: string }) {
 }
 
 // ── Every panel's footer: the one "View all", and Lunch & Learn ──────
-function MenuFooter({ href, label, topic }: { href: string; label: string; topic: string }) {
+function MenuFooter({ href, label, topic, also }: { href: string; label: string; topic: string; also?: { href: string; label: string } }) {
   return (
-    <div className="mt-7 flex flex-wrap items-center justify-between gap-x-8 gap-y-4 pt-4" style={{ borderTop: "1px solid var(--ink-08)" }}>
-      <Link
-        href={href}
-        className="group -ml-3 inline-flex min-h-[44px] items-center gap-2 rounded-lg px-3 text-[13.5px] font-bold transition-colors hover:bg-[var(--ink-05)] hover:text-[var(--accent-text)]"
-        style={{ color: "var(--text-primary)" }}
-      >
-        {label}
-        <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" className="transition-transform group-hover:translate-x-0.5" aria-hidden="true">
-          <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </Link>
+    <div className="mt-8 flex flex-wrap items-center justify-between gap-x-8 gap-y-4 pt-4" style={{ borderTop: "1px solid var(--ink-08)" }}>
+      <div className="-ml-3 flex flex-wrap items-center">
+        <Link
+          href={href}
+          className="group inline-flex min-h-[44px] items-center gap-2 rounded-lg px-3 text-[13.5px] font-bold transition-colors hover:bg-[var(--ink-05)] hover:text-[var(--accent-text)]"
+          style={{ color: "var(--text-primary)" }}
+        >
+          {label}
+          <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" className="transition-transform group-hover:translate-x-0.5" aria-hidden="true">
+            <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </Link>
+        {also && (
+          <>
+            <span aria-hidden="true" className="mx-1 h-4 w-px" style={{ background: "var(--ink-15)" }} />
+            <Link
+              href={also.href}
+              className="inline-flex min-h-[44px] items-center rounded-lg px-3 text-[13.5px] font-semibold transition-colors hover:bg-[var(--ink-05)] hover:text-[var(--accent-text)]"
+              style={{ color: "var(--ink-75)" }}
+            >
+              {also.label}
+            </Link>
+          </>
+        )}
+      </div>
       <LunchLearnSlot topic={topic} />
     </div>
   );
@@ -420,30 +467,36 @@ function MenuFooter({ href, label, topic }: { href: string; label: string; topic
 // ── Products panel: four families, each with its products and lines ──
 function ProductsMegaMenu() {
   return (
-    <MegaShell>
-      <div className="grid grid-cols-4 gap-x-8 xl:gap-x-12">
-        {PRODUCT_CATEGORIES.map((cat) => (
-          <MenuColumn key={cat.label} label={cat.label} items={productFamily(cat)} />
-        ))}
-      </div>
-      {/* The topic is the whole range: which family a visitor last hovered
-          on the way down to this card says little about what they want. */}
-      <MenuFooter href="/products" label="View all products" topic="HUB systems" />
-    </MegaShell>
+    <>
+      <PanelRule />
+      <MegaShell>
+        <div className="grid grid-cols-4 gap-x-8 xl:gap-x-12">
+          {PRODUCT_CATEGORIES.map((cat) => (
+            <MenuColumn key={cat.label} label={cat.label} items={productFamily(cat)} />
+          ))}
+        </div>
+        {/* The topic is the whole range: which family a visitor last hovered
+            on the way down to this card says little about what they want. */}
+        <MenuFooter href="/products" label="View all products" also={{ href: "/resources", label: "Specification library" }} topic="HUB systems" />
+      </MegaShell>
+    </>
   );
 }
 
-// ── Applications panel: four groups, picture, label, names ───────────
+// ── Applications panel: four groups, name, note, members ───────────────
 function ApplicationsMegaMenu() {
   return (
-    <MegaShell>
-      <div className="grid grid-cols-4 gap-x-8 xl:gap-x-12">
-        {APPLICATION_GROUPS.map((group) => (
-          <MenuColumn key={group.label} label={group.label} items={applicationGroup(group)} />
-        ))}
-      </div>
-      <MenuFooter href="/applications" label="View all applications" topic="your application" />
-    </MegaShell>
+    <>
+      <PanelRule />
+      <MegaShell>
+        <div className="grid grid-cols-4 gap-x-8 xl:gap-x-12">
+          {APPLICATION_GROUPS.map((group) => (
+            <MenuColumn key={group.label} label={group.label} note={group.note} items={applicationGroup(group)} />
+          ))}
+        </div>
+        <MenuFooter href="/applications" label="View all applications" also={{ href: "/#map", label: "Projects on the map" }} topic="your application" />
+      </MegaShell>
+    </>
   );
 }
 
@@ -454,64 +507,26 @@ function InsightImg({ image, sizes, className, style }: { image: NavImage; sizes
   return <img src={image.src} srcSet={image.srcSet} sizes={sizes} alt="" loading="lazy" decoding="async" className={className} style={style} />;
 }
 
-// ── Insights panel: pictures first ────────────────────────────────────
-// Vern, 30 Sep 2026: "this mega menu is a bit of a mess, make it better more
-// editorial with great images" and "too much text, improve it". The 28 Sep
-// section front (a masthead and lede, kickers with dates and read times, the
-// cover story's deck, each section's line and count, a Lunch & Learn sentence)
-// is cut back to what a reader picks a story by: the photograph and the
-// headline. The cover story large, its headline set on the picture; the four
-// newest as picture cards with their section and headline; one band for the
-// three sections, All Insights, the Idea Book and a single Lunch & Learn link.
-// Titles, sections and photos still come from Sanity via lib/nav-insights.json,
-// and every photo is a Sanity CDN URL, never /_next/image.
+// ── Insights panel: a front page ──────────────────────────────────────
+// Vern, 30 Sep 2026: "it's supposed to have an editorial feel, text
+// effective, not text heavy. smart. editorial." The panel reads like the
+// front page of a good magazine: one lead story with its photograph, a column
+// of the latest headlines, and the sections with the one line that says what
+// each is for. Every word is a headline, a section, or a link: no dates, read
+// times or excerpts (those live on /blog), one photograph, one hairline of
+// the brand gradient. Titles, sections and the photo come from Sanity via
+// lib/nav-insights.json; the photo is a Sanity CDN URL, never /_next/image.
 //
 // Opening, closing, hover intent, the keyboard and the scrim behind the panel
 // are the shared ones in Nav().
-const HAIRLINE = "1px solid var(--ink-10)";
 
-// "Project · Sep 8, 2026 · 3 min read": the section in capitals, the rest
-// as it reads.
-function Kicker({ post, accent = false, className = "" }: { post: NavPost; accent?: boolean; className?: string }) {
-  const dot = <span aria-hidden="true" className="mx-2" style={{ color: "var(--ink-30)" }}>·</span>;
+/** The section a post lives in, as a kicker. */
+function Kicker({ post, accent = false }: { post: NavPost; accent?: boolean }) {
   return (
-    <span className={`flex flex-wrap items-baseline text-[12px] leading-none ${className}`} style={{ color: "var(--ink-50)" }}>
-      <span className="text-[10.5px] font-bold uppercase tracking-[0.2em]" style={{ color: accent ? ACCENT : "var(--ink-70)" }}>
-        {kindOf(post.type)}
-      </span>
-      {dot}
-      <span>{post.date}</span>
-      {post.readTime && (
-        <>
-          {dot}
-          <span>{post.readTime}</span>
-        </>
-      )}
+    <span className="block text-[10.5px] font-bold uppercase tracking-[0.2em]" style={{ color: accent ? ACCENT : "var(--ink-55)" }}>
+      {kindOf(post.type)}
     </span>
   );
-}
-
-/**
- * A post's photo at another size. The build writes each post's square thumb
- * (lib/nav-insights.json); the same Sanity URL at a different width and height
- * keeps the crop settings it carries, the post's focal point included.
- */
-function recrop(src: string, w: number, h: number): string {
-  try {
-    const u = new URL(src);
-    u.searchParams.set("w", String(w));
-    u.searchParams.set("h", String(h));
-    return u.toString();
-  } catch {
-    return src;
-  }
-}
-function cardImage(post: NavPost): NavImage {
-  const sizes: Array<[number, number]> = [[320, 200], [480, 300], [640, 400], [960, 600]];
-  return {
-    src: recrop(post.thumb.src, 640, 400),
-    srcSet: sizes.map(([w, h]) => `${recrop(post.thumb.src, w, h)} ${w}w`).join(", "),
-  };
 }
 
 function ArrowSmall() {
@@ -524,131 +539,122 @@ function ArrowSmall() {
 
 function InsightsMegaMenu() {
   const { cover, latest } = INSIGHTS;
-  const cards = latest.slice(0, 4);
+  const headlines = latest.slice(0, 5);
   const book = showIdeaBook() && ideaBookCover !== null;
   return (
-    <div className="max-h-[calc(100vh-72px)] overflow-y-auto overscroll-contain">
-      <div className="mx-auto max-w-7xl px-4 pt-7 pb-7 sm:px-6 lg:px-8 [@media(max-height:860px)]:pt-5 [@media(max-height:860px)]:pb-5">
-        <div className="grid grid-cols-12 gap-x-8 xl:gap-x-10">
-          {/* The cover story: the picture, and its headline on it. */}
-          {cover && (
-            <Link
-              href={`/blog/${cover.slug}`}
-              className="group relative col-span-6 block min-h-[360px] overflow-hidden rounded-xl"
-              style={{ background: "var(--ink-05)" }}
-            >
-              <InsightImg
-                image={cover.image}
-                sizes="(min-width: 1280px) 610px, 48vw"
-                className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-              />
-              <span
-                aria-hidden="true"
-                className="absolute inset-0"
-                style={{ background: "linear-gradient(to top, rgba(7,9,13,0.9) 0%, rgba(7,9,13,0.5) 36%, rgba(7,9,13,0) 64%)" }}
-              />
-              <span className="absolute inset-x-7 bottom-6">
-                <span className="block text-[10.5px] font-bold uppercase tracking-[0.22em]" style={{ color: ACCENT }}>
-                  {kindOf(cover.type)}
+    <>
+      <PanelRule />
+      <div className="max-h-[calc(100vh-72px)] overflow-y-auto overscroll-contain">
+        <div className="mx-auto max-w-7xl px-4 pt-7 pb-7 sm:px-6 lg:px-8 [@media(max-height:820px)]:pt-5 [@media(max-height:820px)]:pb-5">
+          <div className="grid grid-cols-12 gap-x-8 xl:gap-x-12">
+            {/* The lead: the one photograph, and its headline under it. */}
+            {cover && (
+              <Link href={`/blog/${cover.slug}`} className="group col-span-5 block">
+                <span className="relative block overflow-hidden rounded-xl" style={{ aspectRatio: "16 / 10", background: "var(--ink-05)" }}>
+                  <InsightImg
+                    image={cover.image}
+                    sizes="(min-width: 1280px) 470px, 38vw"
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                  />
+                </span>
+                <span className="mt-4 block">
+                  <Kicker post={cover} accent />
                 </span>
                 <span
-                  className="font-display mt-2.5 text-[30px] font-bold leading-[1.08] line-clamp-3 text-balance decoration-[rgba(249,115,22,0.8)] decoration-2 underline-offset-[6px] group-hover:underline"
-                  style={{ color: "#FFFFFF", letterSpacing: "-0.025em" }}
+                  className="font-display mt-2 block text-[24px] font-bold leading-[1.15] text-balance transition-colors group-hover:text-[var(--accent-text)]"
+                  style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}
                 >
                   {cover.title}
                 </span>
-              </span>
-            </Link>
-          )}
-
-          {/* The four newest: picture, section, headline. */}
-          <ul className={`${cover ? "col-span-6" : "col-span-12"} grid grid-cols-2 content-between gap-x-6 gap-y-6`}>
-            {cards.map((post) => (
-              <li key={post.slug}>
-                <Link href={`/blog/${post.slug}`} className="group block">
-                  <span className="relative block overflow-hidden rounded-lg" style={{ aspectRatio: "16 / 10", background: "var(--ink-05)" }}>
-                    <InsightImg
-                      image={cardImage(post)}
-                      sizes="(min-width: 1280px) 292px, 23vw"
-                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
-                    />
-                  </span>
-                  <span className="mt-3 block text-[10.5px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--ink-55)" }}>
-                    {kindOf(post.type)}
-                  </span>
-                  <span
-                    className="mt-1.5 text-[15.5px] font-semibold leading-snug line-clamp-2 text-pretty transition-colors group-hover:text-[var(--accent-text)]"
-                    style={{ color: "var(--text-primary)" }}
-                  >
-                    {post.title}
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-
-      {/* The band: where to go next, in words only where a word is the link. */}
-      <div style={{ borderTop: HAIRLINE, background: "var(--ink-02)" }}>
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-1.5 sm:px-6 lg:px-8">
-          <div className="-ml-3 flex items-center">
-            {NAV_SECTIONS.map((s) => (
-              <Link
-                key={s.key}
-                href={s.href}
-                className="inline-flex min-h-[44px] items-center rounded-lg px-3 text-[14px] font-semibold transition-colors hover:text-[var(--accent-text)]"
-                style={{ color: "var(--ink-75)" }}
-              >
-                {s.label}
-              </Link>
-            ))}
-            <span aria-hidden="true" className="mx-2 h-4 w-px" style={{ background: "var(--ink-15)" }} />
-            <Link
-              href="/blog"
-              className="group inline-flex min-h-[44px] items-center gap-2 rounded-lg px-3 text-[14px] font-bold transition-colors hover:text-[var(--accent-text)]"
-              style={{ color: "var(--text-primary)" }}
-            >
-              All Insights
-              <ArrowSmall />
-            </Link>
-          </div>
-          <div className="flex items-center gap-2">
-            {book && ideaBookCover && (
-              <Link
-                href={ideaBook.href}
-                className="group inline-flex min-h-[44px] items-center gap-3 rounded-lg px-3 text-[13.5px] font-semibold transition-colors hover:text-[var(--accent-text)]"
-                style={{ color: "var(--ink-75)" }}
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element -- the book's own raster, lib/catalogue.ts */}
-                <img
-                  src={ideaBookCover}
-                  srcSet={ideaBookCoverSet}
-                  sizes="36px"
-                  alt=""
-                  width={240}
-                  height={240}
-                  loading="lazy"
-                  decoding="async"
-                  className="h-9 w-9 flex-shrink-0 rounded-[2px] object-cover"
-                  style={{ border: "1px solid var(--ink-12)", boxShadow: "0 6px 14px -6px rgba(0,0,0,0.7)" }}
-                />
-                {ideaBook.title}
               </Link>
             )}
-            <Link
-              href={lunchLearnHref("HUB systems", "menu")}
-              className="group inline-flex min-h-[44px] items-center gap-2.5 rounded-lg px-3 text-[13.5px] font-bold whitespace-nowrap transition-colors hover:bg-[rgba(249,115,22,0.1)]"
-              style={{ color: ACCENT }}
-            >
-              <MooseAvatar size={28} />
-              Book a Lunch &amp; Learn
-              <ArrowSmall />
-            </Link>
+
+            {/* The latest headlines, set as a list. */}
+            <div className={cover ? "col-span-4" : "col-span-9"}>
+              <MenuLabel>Latest</MenuLabel>
+              <ul>
+                {headlines.map((post, i) => (
+                  <li key={post.slug} style={{ borderTop: i ? HAIRLINE : undefined }}>
+                    <Link href={`/blog/${post.slug}`} className="group -mx-2.5 block rounded-lg px-2.5 py-3 transition-colors hover:bg-[var(--ink-04)]">
+                      <Kicker post={post} />
+                      <span
+                        className="mt-1.5 block text-[15px] font-semibold leading-snug line-clamp-2 text-pretty transition-colors group-hover:text-[var(--accent-text)]"
+                        style={{ color: "var(--text-primary)" }}
+                      >
+                        {post.title}
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* The sections, what each is for, and the rest of the library. */}
+            <div className="col-span-3 flex flex-col">
+              <MenuLabel>Sections</MenuLabel>
+              <ul>
+                {NAV_SECTIONS.map((sec, i) => (
+                  <li key={sec.key} style={{ borderTop: i ? HAIRLINE : undefined }}>
+                    <Link href={sec.href} className="group -mx-2.5 block rounded-lg px-2.5 py-3 transition-colors hover:bg-[var(--ink-04)]">
+                      <span className="flex items-center justify-between gap-2 text-[15px] font-semibold transition-colors group-hover:text-[var(--accent-text)]" style={{ color: "var(--text-primary)" }}>
+                        {sec.label}
+                        <ArrowSmall />
+                      </span>
+                      {sec.blurb && (
+                        <span className="mt-1 block text-[12.5px] leading-snug text-pretty" style={{ color: "var(--ink-58)" }}>
+                          {sec.blurb}
+                        </span>
+                      )}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href="/blog"
+                className="group -ml-2.5 mt-2 inline-flex min-h-[44px] items-center gap-2 self-start rounded-lg px-2.5 text-[14px] font-bold transition-colors hover:text-[var(--accent-text)]"
+                style={{ color: "var(--text-primary)" }}
+              >
+                All Insights
+                <ArrowSmall />
+              </Link>
+              <div className="mt-auto flex flex-col gap-1 pt-4" style={{ borderTop: HAIRLINE }}>
+                {book && ideaBookCover && (
+                  <Link
+                    href={ideaBook.href}
+                    className="group -ml-2.5 inline-flex min-h-[44px] items-center gap-3 self-start rounded-lg px-2.5 text-[13.5px] font-semibold transition-colors hover:text-[var(--accent-text)]"
+                    style={{ color: "var(--ink-75)" }}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element -- the book's own raster, lib/catalogue.ts */}
+                    <img
+                      src={ideaBookCover}
+                      srcSet={ideaBookCoverSet}
+                      sizes="32px"
+                      alt=""
+                      width={240}
+                      height={240}
+                      loading="lazy"
+                      decoding="async"
+                      className="h-8 w-8 flex-shrink-0 rounded-[2px] object-cover"
+                      style={{ border: "1px solid var(--ink-12)", boxShadow: "0 6px 14px -6px rgba(0,0,0,0.7)" }}
+                    />
+                    {ideaBook.title}
+                  </Link>
+                )}
+                <Link
+                  href={lunchLearnHref("HUB systems", "menu")}
+                  className="group -ml-2.5 inline-flex min-h-[44px] items-center gap-2.5 self-start rounded-lg px-2.5 text-[13.5px] font-bold whitespace-nowrap transition-colors hover:bg-[rgba(249,115,22,0.1)]"
+                  style={{ color: ACCENT }}
+                >
+                  <MooseAvatar size={28} />
+                  Book a Lunch &amp; Learn
+                  <ArrowSmall />
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -816,7 +822,9 @@ function MobileCoverStory({ post, onClose }: { post: NavPost & { image: NavImage
           className="block aspect-[16/9] w-full object-cover"
         />
       </span>
-      <Kicker post={post} accent className="mt-3.5" />
+      <span className="mt-3.5 block">
+        <Kicker post={post} accent />
+      </span>
       <span
         className="font-display mt-2 block text-[19px] font-bold leading-[1.22] text-balance"
         style={{ color: "var(--text-primary)", letterSpacing: "-0.015em" }}
@@ -872,7 +880,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
   }, [isOpen]);
 
   // The cover story with its photograph, then the next two as rows; the
-  // desktop panel lists four.
+  // desktop panel lists five headlines.
   const mobileCover = INSIGHTS.cover;
   const posts = INSIGHTS.latest.slice(0, mobileCover ? 2 : 3);
   const book = showIdeaBook();
@@ -1380,8 +1388,12 @@ export default function Nav() {
               style={{ height: 34, width: "auto" }}
               unoptimized
             />
+            {/* Not between lg and xl: at 1024px the full bar measured 42px
+                wider than the window and clipped the Lunch & Learn button
+                (found 30 Sep 2026, live and local alike). Below lg the bar is
+                the phone's and has room; from xl the whole row fits. */}
             <span
-              className="hidden sm:inline-flex items-center gap-1.5 pl-3"
+              className="hidden sm:inline-flex lg:hidden xl:inline-flex items-center gap-1.5 pl-3"
               style={{
                 borderLeft: "1px solid var(--ink-12)",
                 height: 22,

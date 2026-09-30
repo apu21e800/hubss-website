@@ -21,10 +21,21 @@ import type { FeatureCollection, Point } from "geojson";
 const MAP_STYLE =
   "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json";
 
-const CANADA_BOUNDS: [[number, number], [number, number]] = [
-  [-133.5, 41.5], // SW: BC coast
-  [-52.0, 56.0],  // NE: Newfoundland
-];
+/**
+ * The frame the map opens on and "Back to Canada" returns to. Since 30 Sep
+ * 2026 it is the pins themselves, padded, not the whole country: every
+ * documented job is in southern BC, Ontario or Québec, and a frame that ran
+ * from the BC coast to Newfoundland and up past the tree line spent half the
+ * map on empty country and packed the pins into two blobs.
+ */
+const CANADA_BOUNDS: [[number, number], [number, number]] = (() => {
+  let w = Infinity, s = Infinity, e = -Infinity, n = -Infinity;
+  for (const p of mapProjects) {
+    w = Math.min(w, p.lng); e = Math.max(e, p.lng);
+    s = Math.min(s, p.lat); n = Math.max(n, p.lat);
+  }
+  return [[w - 3.5, s - 2.5], [e + 3.5, n + 2.5]];
+})();
 
 // There used to be a hard travel limit here (a box around Canada) so a
 // visitor could never wander off to another continent. Vern (26 Sep 2026):
@@ -133,6 +144,24 @@ const CLUSTER_LAYER = {
   },
 };
 
+// A soft halo under each cluster, so a cluster reads as a group of jobs rather
+// than a flat disc (30 Sep 2026).
+const CLUSTER_HALO_LAYER = {
+  id: "clusters-halo",
+  type: "circle" as const,
+  source: "projects",
+  filter: ["has", "point_count"] as unknown as boolean,
+  paint: {
+    "circle-color": "#F97316",
+    "circle-radius": [
+      "step",
+      ["get", "point_count"],
+      30, 5, 37, 15, 45,
+    ] as unknown as number,
+    "circle-opacity": 0.16,
+  },
+};
+
 const CLUSTER_COUNT_LAYER = {
   id: "cluster-count",
   type: "symbol" as const,
@@ -155,12 +184,78 @@ const POINT_LAYER = {
   filter: ["!", ["has", "point_count"]] as unknown as boolean,
   paint: {
     "circle-color": "#F97316",
-    "circle-radius": 7,
-    "circle-stroke-width": 2,
+    // 8 with a 2.5 white edge (was 7 and 2): a pin you can find and hit.
+    "circle-radius": 8,
+    "circle-stroke-width": 2.5,
     "circle-stroke-color": "#ffffff",
-    "circle-opacity": 0.95,
+    "circle-opacity": 1,
   },
 };
+
+/**
+ * An invisible 20px target over every pin (30 Sep 2026, Vern: "need to be able
+ * to interact with nodes better"). The drawn pin is 21px across; this makes
+ * hovering and clicking it forgiving without making it look bigger. It is the
+ * top interactive layer, so the handlers treat it exactly like the pin.
+ */
+const POINT_HIT_LAYER = {
+  id: "unclustered-hit",
+  type: "circle" as const,
+  source: "projects",
+  filter: ["!", ["has", "point_count"]] as unknown as boolean,
+  paint: {
+    "circle-radius": 20,
+    "circle-color": "#000000",
+    "circle-opacity": 0,
+  },
+};
+const PIN_LAYERS = new Set(["unclustered-point", "unclustered-hit"]);
+
+/** The hovered pin drawn again on top, bigger, so it lifts off the map. */
+const HOVERED_DOT_LAYER = {
+  id: "hovered-dot",
+  type: "circle" as const,
+  source: "hovered",
+  paint: {
+    "circle-color": "#F97316",
+    "circle-radius": 11,
+    "circle-stroke-width": 3,
+    "circle-stroke-color": "#ffffff",
+  },
+};
+
+/** A white ring round the hovered cluster, sized to it. */
+const HOVERED_CLUSTER_LAYER = {
+  id: "hovered-cluster-ring",
+  type: "circle" as const,
+  source: "hovered-cluster",
+  paint: {
+    "circle-color": "transparent",
+    "circle-opacity": 0,
+    "circle-radius": [
+      "step",
+      ["get", "count"],
+      27, 5, 33, 15, 40,
+    ] as unknown as number,
+    "circle-stroke-width": 3,
+    "circle-stroke-color": "#ffffff",
+    "circle-stroke-opacity": 0.95,
+  },
+};
+
+/** The drawn radius of a cluster of `count`, as CLUSTER_LAYER draws it. */
+function clusterRadius(count: number): number {
+  return count >= 15 ? 35 : count >= 5 ? 28 : 22;
+}
+
+/** "Vancouver, White Rock and Sechelt", "... and 4 more places". */
+function placesLine(places: string[]): string {
+  if (places.length === 0) return "";
+  if (places.length === 1) return places[0];
+  if (places.length <= 3) return `${places.slice(0, -1).join(", ")} and ${places[places.length - 1]}`;
+  const more = places.length - 3;
+  return `${places.slice(0, 3).join(", ")} and ${more} more ${more === 1 ? "place" : "places"}`;
+}
 
 const HOVERED_RING_LAYER = {
   id: "hovered-ring",
@@ -902,6 +997,19 @@ export default function CanadaMap() {
   const panelRef = useRef<HTMLDivElement>(null);
 
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  /**
+   * The cluster under the cursor (30 Sep 2026): a white ring round it and a
+   * card saying how many jobs it holds and where, so a cluster says what it is
+   * before it is clicked. `places` fills in once the cluster's leaves load.
+   */
+  const [hoveredCluster, setHoveredCluster] = useState<
+    { id: number; lng: number; lat: number; count: number; places: string[]; px: number; py: number } | null
+  >(null);
+  const hoveredClusterIdRef = useRef<number | null>(null);
+  const clearHoveredCluster = useCallback(() => {
+    hoveredClusterIdRef.current = null;
+    setHoveredCluster(null);
+  }, []);
   const [selectedProject, setSelectedProject] = useState<MapProject | null>(null);
   const [cursor, setCursor] = useState("grab");
   const [popupProject, setPopupProject] = useState<MapProject | null>(null);
@@ -1047,6 +1155,22 @@ export default function CanadaMap() {
     [hoveredProject]
   );
 
+  const hoveredClusterGeoJSON = useMemo<FeatureCollection<Point>>(
+    () => ({
+      type: "FeatureCollection",
+      features: hoveredCluster
+        ? [
+            {
+              type: "Feature",
+              geometry: { type: "Point", coordinates: [hoveredCluster.lng, hoveredCluster.lat] },
+              properties: { count: hoveredCluster.count },
+            },
+          ]
+        : [],
+    }),
+    [hoveredCluster]
+  );
+
   // ── Panel list: search wins, else viewport ∩ product filter
   const displayedProjects = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
@@ -1150,9 +1274,38 @@ export default function CanadaMap() {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const source = mapRef.current?.getSource("projects") as any;
         if (!source?.getClusterExpansionZoom) return;
+        clearHoveredCluster();
+        const coords = (feature.geometry as unknown as { coordinates: [number, number] }).coordinates;
+        /**
+         * Frame the cluster's own pins (30 Sep 2026). The expansion zoom
+         * alone is the smallest step that splits the cluster, so a click on
+         * "19" in BC landed on "18" around Vancouver and one pin in Kelowna:
+         * a click that seemed to do nothing. Fitting the leaves shows them.
+         */
+        try {
+          const leaves: { geometry?: { coordinates?: [number, number] } }[] =
+            await source.getClusterLeaves(clusterId, 500, 0);
+          let w = Infinity, s = Infinity, e = -Infinity, n = -Infinity;
+          for (const f of leaves) {
+            const c = f.geometry?.coordinates;
+            if (!c) continue;
+            w = Math.min(w, c[0]); e = Math.max(e, c[0]);
+            s = Math.min(s, c[1]); n = Math.max(n, c[1]);
+          }
+          if (Number.isFinite(w) && (e - w > 0.004 || n - s > 0.004)) {
+            mapRef.current?.fitBounds([[w, s], [e, n]], {
+              // More room at the foot, where the gesture hint sits.
+              padding: isNarrow ? { top: 48, bottom: 72, left: 40, right: 40 } : { top: 90, bottom: 130, left: 90, right: 90 },
+              maxZoom: 14,
+              duration: 900,
+            });
+            return;
+          }
+        } catch {
+          // fall through to the expansion zoom
+        }
         try {
           const zoom: number = await source.getClusterExpansionZoom(clusterId);
-          const coords = (feature.geometry as unknown as { coordinates: [number, number] }).coordinates;
           mapRef.current?.flyTo({
             center: coords,
             zoom: zoom + 0.5,
@@ -1162,7 +1315,7 @@ export default function CanadaMap() {
         } catch {
           // ignore
         }
-      } else if (feature.layer.id === "unclustered-point") {
+      } else if (PIN_LAYERS.has(feature.layer.id)) {
         const id = feature.properties?.id as string;
         const project = mapProjects.find((p) => p.id === id);
         if (project) {
@@ -1204,7 +1357,7 @@ export default function CanadaMap() {
         }
       }
     },
-    [isNarrow, setPinned]
+    [isNarrow, setPinned, clearHoveredCluster]
   );
 
   // ── Mouse move — hover on layers
@@ -1213,10 +1366,12 @@ export default function CanadaMap() {
   const handleMouseMove = useCallback(
     (event: MapLayerMouseEvent) => {
       const feature = event.features?.[0];
-      if (feature?.layer?.id === "unclustered-point") {
+      if (feature?.layer?.id && PIN_LAYERS.has(feature.layer.id)) {
         const id = feature.properties?.id as string;
+        clearHoveredCluster();
         setHoveredId(id);
         setCursor("pointer");
+        if (popupClearTimeoutRef.current) clearTimeout(popupClearTimeoutRef.current);
         if (!popupPinned) {
           const project = mapProjects.find((p) => p.id === id) ?? null;
           setPopupProject(project);
@@ -1225,7 +1380,32 @@ export default function CanadaMap() {
         setHoveredId(null);
         setCursor("pointer");
         if (!popupPinned) setPopupProject(null);
+        const clusterId = feature.properties?.cluster_id as number;
+        if (hoveredClusterIdRef.current !== clusterId) {
+          hoveredClusterIdRef.current = clusterId;
+          const [lng, lat] = (feature.geometry as unknown as { coordinates: [number, number] }).coordinates;
+          const count = Number(feature.properties?.point_count ?? 0);
+          setHoveredCluster({ id: clusterId, lng, lat, count, places: [], px: event.point.x, py: event.point.y });
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const source = mapRef.current?.getSource("projects") as any;
+          source
+            ?.getClusterLeaves?.(clusterId, 500, 0)
+            .then((leaves: { properties?: { city?: string } }[]) => {
+              if (hoveredClusterIdRef.current !== clusterId) return;
+              const tally: Record<string, number> = {};
+              for (const f of leaves) {
+                const c = f.properties?.city;
+                if (c) tally[c] = (tally[c] ?? 0) + 1;
+              }
+              const places = Object.entries(tally)
+                .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+                .map(([c]) => c);
+              setHoveredCluster((h) => (h && h.id === clusterId ? { ...h, places } : h));
+            })
+            .catch(() => {});
+        }
       } else {
+        clearHoveredCluster();
         setHoveredId(null);
         setCursor("grab");
         // 450ms grace — generous window for cursor to transit marker → popup card.
@@ -1238,10 +1418,11 @@ export default function CanadaMap() {
         }, 450);
       }
     },
-    [popupPinned]
+    [popupPinned, clearHoveredCluster]
   );
 
   const handleMouseLeave = useCallback(() => {
+    clearHoveredCluster();
     setHoveredId(null);
     setCursor("grab");
     // Same grace-period pattern so the cursor can transit from the map canvas
@@ -1250,7 +1431,7 @@ export default function CanadaMap() {
     popupClearTimeoutRef.current = setTimeout(() => {
       if (!popupHoveredRef.current && !popupPinnedRef.current) setPopupProject(null);
     }, 450);
-  }, [popupPinned]);
+  }, [clearHoveredCluster]);
 
   // Close pinned popup on click outside the map container.
   useEffect(() => {
@@ -1690,7 +1871,7 @@ export default function CanadaMap() {
                 touchPitch={false}
                 cooperativeGestures
                 cursor={cursor}
-                interactiveLayerIds={["clusters", "unclustered-point"]}
+                interactiveLayerIds={["clusters", "unclustered-point", "unclustered-hit"]}
                 onClick={handleMapLayerClick}
                 onMouseMove={handleMouseMove}
                 onMouseLeave={handleMouseLeave}
@@ -1739,15 +1920,71 @@ export default function CanadaMap() {
                   clusterMaxZoom={11}
                   clusterRadius={50}
                 >
+                  <Layer {...CLUSTER_HALO_LAYER} />
                   <Layer {...CLUSTER_LAYER} />
                   <Layer {...CLUSTER_COUNT_LAYER} />
                   <Layer {...POINT_LAYER} />
+                  <Layer {...POINT_HIT_LAYER} />
                 </Source>
 
-                {/* Hover highlight ring */}
+                {/* Hover: a white ring round the cluster under the cursor */}
+                <Source id="hovered-cluster" type="geojson" data={hoveredClusterGeoJSON}>
+                  <Layer {...HOVERED_CLUSTER_LAYER} />
+                </Source>
+
+                {/* Hover highlight: the ring, and the pin drawn again, bigger */}
                 <Source id="hovered" type="geojson" data={hoveredGeoJSON}>
                   <Layer {...HOVERED_RING_LAYER} />
+                  <Layer {...HOVERED_DOT_LAYER} />
                 </Source>
+
+                {/* What a cluster holds, before it is clicked. Mouse only: on a
+                    phone a tap goes straight to the zoom. pointer-events: none,
+                    so the card never steals the hover from the cluster. */}
+                {hoveredCluster && !isNarrow && !selectedProject && (
+                  <Popup
+                    longitude={hoveredCluster.lng}
+                    latitude={hoveredCluster.lat}
+                    /* The anchor is chosen here from where the cluster sits in
+                       the frame. MapLibre would choose one itself, but only
+                       when the card first opens, while it is still narrow; the
+                       places line arrives a moment later and widened it past
+                       the map's left edge. */
+                    anchor={
+                      `${hoveredCluster.py < 170 ? "top" : "bottom"}${
+                        hoveredCluster.px < 150 ? "-left" : hoveredCluster.px > mapWidth - 150 ? "-right" : ""
+                      }` as "top" | "bottom" | "top-left" | "top-right" | "bottom-left" | "bottom-right"
+                    }
+                    offset={clusterRadius(hoveredCluster.count) + 12}
+                    closeButton={false}
+                    closeOnClick={false}
+                    className="pointer-events-none"
+                    maxWidth="280px"
+                  >
+                    <div
+                      style={{
+                        background: "var(--bg-primary)",
+                        border: "1px solid rgba(249,115,22,0.45)",
+                        borderRadius: 10,
+                        padding: "10px 13px 11px",
+                        boxShadow: "0 10px 28px rgba(0,0,0,0.7)",
+                        minWidth: 170,
+                      }}
+                    >
+                      <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
+                        {hoveredCluster.count} projects
+                      </p>
+                      {hoveredCluster.places.length > 0 && (
+                        <p style={{ margin: "3px 0 0", fontSize: 12.5, lineHeight: 1.45, color: "var(--text-secondary)" }}>
+                          {placesLine(hoveredCluster.places)}
+                        </p>
+                      )}
+                      <p style={{ margin: "7px 0 0", fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--accent-text)" }}>
+                        Click to zoom in
+                      </p>
+                    </div>
+                  </Popup>
+                )}
 
                 {/* Project popup — agency-grade card with click-to-pin behavior.
                     Marker click PINS the popup (popupPinned=true). Hover dismissal is

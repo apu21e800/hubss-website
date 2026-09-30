@@ -72,6 +72,12 @@ const gallery = (file: string) => `https://cdn.sanity.io/images/9dbro2m1/product
 // went, with Vaughan's city-wide pin (one line in a guide, no site). Each pin sits at the
 // site the post names; where the post names only a town or a corridor, the comment says so.
 // No pin carries a stand-in photo any more, so `imageIsRepresentative` is unused.
+// Held back 30 Sep 2026 until they have a photo of their own (Vern: a missing
+// picture reads as a bug): GrandLinq ION in Waterloo (post:
+// safety-durability-transit-stations, whose photo covers two jobs and shows
+// neither) and More Awesome Now's "Alley Oops" laneway in downtown Vancouver
+// (post: laneway-project, whose photos are Toronto's Leslieville lane). Both
+// jobs are real and written up; each goes back on the map with one photo.
 const curatedProjects: MapProject[] = [
   // ── Ontario ─────────────────────────────────────────────────────────────────
   {
@@ -142,14 +148,16 @@ const curatedProjects: MapProject[] = [
       "TrafficPatternsXD preformed thermoplastic, installed by Multiseal: a durable, high-traction rainbow crossing that stands for the town's support of inclusion and the LGBTQ+ community.",
   },
   {
-    // The post names the Town of Georgina and no street: pin at the town. No year
-    // (2021 had no source), and the text is cut back to what the post says.
+    // The post names the Town of Georgina and no street: pin at the town's Civic
+    // Centre in Keswick, approximate (30 Sep 2026: it sat at the middle of the
+    // municipality, 8 km south in farmland). No year (2021 had no source), and
+    // the text is cut back to what the post says.
     id: "georgina-every-child-matters",
     title: "Every Child Matters Crosswalk",
     city: "Georgina",
     province: "ON",
-    lat: 44.2280,
-    lng: -79.4644,
+    lat: 44.2963,
+    lng: -79.4362,
     product: "TrafficPatterns",
     application: "Community Branding",
     images: [
@@ -186,13 +194,14 @@ const curatedProjects: MapProject[] = [
   },
   {
     // The post's own hero (bus-lanes-08). It names the East London Link corridor and
-    // no street, so the pin sits in east London, approximate.
+    // no street, so the pin sits on the corridor at King Street and Egerton Street,
+    // approximate (30 Sep 2026: it was a block south of the route).
     id: "london-east-brt",
     title: "East London Link · Bus Rapid Transit",
     city: "London",
     province: "ON",
-    lat: 42.9836,
-    lng: -81.2200,
+    lat: 42.9860,
+    lng: -81.2146,
     product: "MMAX",
     application: "Bus & Bike Lanes",
     images: [
@@ -230,13 +239,14 @@ const curatedProjects: MapProject[] = [
   },
   {
     // Emery Village is a neighbourhood; the post names no intersection, so the pin
-    // sits at Emery. 2020 is the year the post gives for the project.
+    // sits at its heart, Finch Avenue West and Weston Road, approximate (30 Sep
+    // 2026: it was 1 km south-east of it). 2020 is the year the post gives.
     id: "toronto-emery-village",
     title: "Emery Village BIA Crosswalk Restoration",
     city: "Toronto",
     province: "ON",
-    lat: 43.7441,
-    lng: -79.5342,
+    lat: 43.7518,
+    lng: -79.5422,
     product: "TrafficPatternsXD",
     application: "Crosswalks",
     year: "2020",
@@ -294,27 +304,6 @@ const curatedProjects: MapProject[] = [
       "The promenade's StreetPrint surface had reached the end of its life after more than twenty years of Lake Ontario winters, and the park is home to Canada's largest Rib Fest.",
     solution:
       "New asphalt, smooth and accessible for walking, cycling and wheelchairs, coated with 5,600 m² of StreetBond150 in Cobalt Blue, this time without the StreetPrint imprint.",
-  },
-  {
-    // The post's photo covers two jobs (GrandLinq in Waterloo and VIVA in York
-    // Region) and shows neither an ION train nor a named street, so it came off
-    // this pin on 28 Sep 2026. The post places the job in Waterloo.
-    id: "waterloo-grandlinq-lrt",
-    title: "GrandLinq ION LRT Platform Crossings",
-    city: "Waterloo",
-    province: "ON",
-    lat: 43.4668,
-    lng: -80.5164,
-    product: "TrafficPatternsXD",
-    application: "Crosswalks",
-    images: [],
-    post: "safety-durability-transit-stations",
-    excerpt:
-      "TrafficPatternsXD at LRT platform edges, pedestrian crossings and modal transition points across the ION corridor: high-traction, fade-resistant surfacing through Waterloo Region winters.",
-    problem:
-      "GrandLinq's ION LRT corridor needed platform-edge and crossing treatments that could take constant traffic, stay grippy through freeze-thaw and winter conditions, and go in without disrupting service.",
-    solution:
-      "TrafficPatternsXD in phased night-time applications across the ION corridor, with no service disruption. The crossings kept their contrast through freeze-thaw cycles and gave better traction in winter.",
   },
   {
     // "Cadillac Fairview, Kitchener" is CF Fairview Park (commercial-applications
@@ -433,27 +422,6 @@ const curatedProjects: MapProject[] = [
       "TrafficPatterns preformed thermoplastic carrying a design created by UBC and Musqueam together, installed by Square One.",
   },
   {
-    // Post: laneway-project (More Awesome Now, "Alley Oops", downtown Vancouver). Its
-    // hero is Toronto's Leslieville lane, and the stand-in that was here could not be
-    // tied to the lane, so the pin shows no photo. Downtown Vancouver, approximate.
-    id: "vancouver-laneways",
-    title: "More Awesome Now Laneway Revitalization",
-    city: "Vancouver",
-    province: "BC",
-    lat: 49.2845,
-    lng: -123.1098,
-    product: "StreetBond",
-    application: "Public Art",
-    images: [],
-    post: "laneway-project",
-    excerpt:
-      "More Awesome Now turned downtown Vancouver laneways into bright, playful public spaces with StreetBond 150 decorative coatings.",
-    problem:
-      "HCMA, the City of Vancouver and the Downtown Vancouver Business Improvement Association set out to turn downtown alleys from service corridors into bright, playful public spaces, while service vehicles kept using them.",
-    solution:
-      "StreetBond 150 decorative coatings in bold colour across the lane surface, shared by people on foot and service vehicles alike.",
-  },
-  {
     // Pin at Richmond-Brighouse Station on No. 3 Road.
     id: "richmond-brighouse",
     title: "Richmond Brighouse Station Crosswalk",
@@ -516,14 +484,14 @@ const curatedProjects: MapProject[] = [
   },
   {
     // The post gives 5500 Sunshine Coast Hwy, "at the southern entrance to the Town
-    // of Sechelt". That address could not be placed with confidence, so the pin sits
-    // in downtown Sechelt (Cowrie St and Wharf Ave), approximate.
+    // of Sechelt": that is Tsain-Ko Village, the shíshálh Nation's shopping centre
+    // on the highway (placed 30 Sep 2026; the pin had sat downtown, 700 m west).
     id: "sechelt-tsain-ko",
     title: "Tsain-Ko Cultural Crosswalk, Sechelt",
     city: "Sechelt",
     province: "BC",
-    lat: 49.4721,
-    lng: -123.7545,
+    lat: 49.4744,
+    lng: -123.7462,
     product: "TrafficPatterns",
     application: "Community Branding",
     images: [

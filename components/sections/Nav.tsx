@@ -493,10 +493,27 @@ function ApplicationsMegaMenu() {
 }
 
 // A Sanity CDN photo from lib/nav-insights.json: plain <img srcset>, sized at
-// build time, never /_next/image.
-function InsightImg({ image, sizes, className, style }: { image: NavImage; sizes: string; className?: string; style?: React.CSSProperties }) {
+// build time, never /_next/image. Lazy by default; the panel's cover asks
+// for eager.
+function InsightImg({ image, sizes, className, style, loading = "lazy", decoding = "async" }: { image: NavImage; sizes: string; className?: string; style?: React.CSSProperties; loading?: "lazy" | "eager"; decoding?: "async" | "sync" }) {
   // eslint-disable-next-line @next/next/no-img-element -- deliberate, see lib/chrome-images.mjs
-  return <img src={image.src} srcSet={image.srcSet} sizes={sizes} alt="" loading="lazy" decoding="async" className={className} style={style} />;
+  return <img src={image.src} srcSet={image.srcSet} sizes={sizes} alt="" loading={loading} decoding={decoding} className={className} style={style} />;
+}
+
+// The cover photograph, fetched before the panel opens (QA A7, 30 Sep 2026:
+// lazy-loaded inside a panel that mounts on open, it showed as a blank box
+// for about a second). Called when the pointer or keyboard first reaches the
+// bar's triggers, so by the time Insights opens the file is usually cached;
+// once per page, and only where there is a cover to fetch.
+const COVER_SIZES = "(min-width: 1280px) 470px, 36vw";
+let coverWarmed = false;
+function warmInsightsCover() {
+  if (coverWarmed || typeof window === "undefined" || !INSIGHTS.cover) return;
+  coverWarmed = true;
+  const img = new window.Image();
+  img.sizes = COVER_SIZES;
+  img.srcset = INSIGHTS.cover.image.srcSet;
+  img.src = INSIGHTS.cover.image.src;
 }
 
 // ── Insights panel: the section front ─────────────────────────────────
@@ -585,10 +602,21 @@ function InsightsMegaMenu() {
             {cover && (
               <div className="col-span-5 flex flex-col pr-8 xl:pr-10">
                 <Link prefetch={false} href={`/blog/${cover.slug}`} className="group flex flex-1 flex-col">
-                  <span className="relative block min-h-[180px] flex-1 overflow-hidden" style={{ background: "var(--ink-05)" }}>
+                  {/* Eager, and on a dark ground (QA A7, 30 Sep 2026): the
+                      photo used to lazy-load into a pale empty box after the
+                      panel opened. The ground is the card dark shading to the
+                      panel's own, so the frame reads as a photograph loading,
+                      never as a hole. */}
+                  <span
+                    className="relative block min-h-[180px] flex-1 overflow-hidden"
+                    style={{ background: "linear-gradient(160deg, var(--bg-card) 0%, var(--bg-deepest) 100%)" }}
+                  >
                     <InsightImg
                       image={cover.image}
-                      sizes="(min-width: 1280px) 470px, 36vw"
+                      sizes={COVER_SIZES}
+                      loading="eager"
+                      // sync: a cached file paints in the panel's first frame.
+                      decoding="sync"
                       className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
                     />
                   </span>
@@ -1521,7 +1549,13 @@ export default function Nav() {
               was at md, where the full bar measured 998px in a 768px window
               and pushed search, Resources and Lunch & Learn off the screen;
               a touch tablet is better served by the drawer anyway. */}
-          <div className="hidden lg:flex items-center gap-0.5">
+          <div
+            className="hidden lg:flex items-center gap-0.5"
+            // The first time the pointer or the keyboard reaches the links,
+            // fetch the Insights cover (warmInsightsCover above).
+            onMouseEnter={warmInsightsCover}
+            onFocus={warmInsightsCover}
+          >
 
             {/* Mega menu triggers: Products, Applications, Insights.
                 Deliberately no onFocus-opens-panel here (unlike the plain

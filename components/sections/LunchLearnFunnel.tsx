@@ -1,29 +1,44 @@
-"use client";
-
-import { useState, FormEvent } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
-import { track } from "@vercel/analytics";
-import { TRUSTED_BY } from "@/components/sections/TrustedByMarquee";
+/**
+ * LunchLearnFunnel: what sits under the boardroom card on /lunch-learn.
+ *
+ * Until 30 Sep 2026 this file was the whole page: a hero, a stats row, three
+ * numbered "What you walk away with" boxes, four persona cards with a chip
+ * each, a city marquee, an accordion of framer-motion FAQs and a second form,
+ * each in its own visual language. The boardroom card (LunchLearnV2) took
+ * over the top of the page in Aug 2026, and the hero and the form here were
+ * switched off with hideHero and hideForm but still shipped.
+ *
+ * Vern, 30 Sep 2026: "clean up the lunch and learn page too. it's a bit
+ * messy." The page is now the card, then two sections, then the footer:
+ *
+ *   1. Who it's for: an h2, one paragraph on what everyone leaves with (the
+ *      three "walk away with" points, which the card's ticks also carry),
+ *      and the four audiences as plain text blocks in a 2x2. No chips, no
+ *      numerals, no boxes.
+ *   2. Common questions: the same native <details> list the product pages
+ *      use (components/products/ProductFaq.tsx), so the answers are in the
+ *      HTML for crawlers and the page needs no client JavaScript for it.
+ *
+ * The city marquee is gone from this page: it named Ottawa, Calgary and
+ * Mississauga, which have no project on the map since the 28 Sep audit, and
+ * the page reads better without a third idiom between the audiences and the
+ * questions. The homepage keeps TrustedByMarquee, untouched.
+ *
+ * Both sections sit on data-surface="paper", as the reading under every
+ * product, application and Insights hero does (Round 3); the card above and
+ * the footer below close the page in the dark.
+ *
+ * Sanity (sanity/schemas/page.ts, group "Lunch & Learn") still holds the
+ * persona and FAQ arrays and the section headings: app/lunch-learn/page.tsx
+ * passes them through when the client has edited them in Studio, and the
+ * defaults below serve until then. A persona's `badge` is accepted and not
+ * shown, and the "What You Walk Away With" cards are no longer rendered
+ * anywhere; both Studio fields want retiring (not done here).
+ */
 
 export interface LunchLearnFunnelProps {
-  eyebrow?: string;
-  headingLine1?: string;
-  headingLine2?: string;
-  subheading?: string;
-  ctaLabel?: string;
-  formHeading?: string;
-  formSubheading?: string;
-  submitLabel?: string;
-  // Optional Sanity-sourced overrides for the mid-page sections. When unset,
-  // the component falls back to the const arrays defined just below.
-  whatYouGet?: { num: string; title: string; desc: string }[];
-  personas?: { title: string; desc: string; badge: string }[];
+  personas?: { title: string; desc: string; badge?: string }[];
   faqs?: { q: string; a: string }[];
-  /** Drop the hero when the page already leads with the boardroom card. */
-  hideHero?: boolean;
-  /** Drop the bottom form when the boardroom card already carries one. */
-  hideForm?: boolean;
   sectionHeadings?: {
     whatYouGetEyebrow?: string;
     whatYouGetHeading?: string;
@@ -34,62 +49,32 @@ export interface LunchLearnFunnelProps {
   };
 }
 
-interface FormState {
-  name: string;
-  email: string;
-  company: string;
-  city: string;
-  phone: string;
-}
-
-interface SubmitState {
-  status: "idle" | "loading" | "success" | "error";
-  message?: string;
-}
-
-const WHAT_YOU_GET = [
-  {
-    num: "01",
-    title: "Spec language ready for your RFP",
-    desc: "Pre-written specification language for thermoplastic crosswalks, MMA bus lanes, coloured bike lanes, and more. Copy it straight into your next tender document.",
-  },
-  {
-    num: "02",
-    title: "The lifecycle cost math",
-    // Opened "Lifecycle cost math, side by side.", its own title again.
-    desc: "Years of service from a HUB system, costed against repeated seasonal interventions over the life of the asphalt: the numbers your procurement team will ask for.",
-  },
-  {
-    num: "03",
-    title: "Samples, sheets, and an installer map",
-    desc: "Physical material samples, current technical data sheets, and the certified HUB applicator list for your region: everything a team needs to move from interest to tender.",
-  },
-];
-
 const PERSONAS = [
   {
     title: "Municipal engineers & planners",
     desc: "Crosswalks, transit corridors, and complete streets that meet Vision Zero and Complete Streets specifications, with accessibility-aware design. Real installation data from Canadian municipalities coast to coast.",
-    badge: "Vision Zero · Complete Streets",
   },
   {
     title: "Landscape architects & designers",
     desc: "12+ StreetPrint patterns, full StreetBond Pantone palette, and decorative surfaces engineered to outlast the design life of the asphalt beneath them. Snowplow-safe and engineering-approved.",
-    badge: "Public Art · Driveways",
   },
   {
     title: "Engineering & consulting firms",
     desc: "Lifecycle cost data, performance specs, and installation standards you can cite directly in tender documents, plus the certified HUB applicator contacts for your region.",
-    badge: "Spec support",
   },
   {
     title: "Contractors & applicators",
     desc: "Learn about the HUB certified applicator program: territory-protected bidding and direct manufacturer support through the certified program.",
-    badge: "Certified applicator program",
   },
 ];
 
-const FAQS = [
+/**
+ * The questions and answers, exported so app/lunch-learn/page.tsx builds its
+ * FAQPage schema from the list the visitor sees. The schema used to keep its
+ * own copy and had drifted ("Is the session in-person or virtual?" against
+ * "In-person or virtual?" on the page).
+ */
+export const LUNCH_LEARN_FAQS = [
   {
     q: "How long is the session?",
     a: "30–45 minutes of presentation, followed by open Q&A. We're respectful of your team's calendar and stick to the time we agree on.",
@@ -108,497 +93,79 @@ const FAQS = [
   },
 ];
 
-// The homepage's "Trusted by" list. This page kept its own copy, which had
-// grown four names the homepage never showed; one list now serves both.
-const TICKER = [...TRUSTED_BY, ...TRUSTED_BY];
+const h2Style: React.CSSProperties = {
+  fontSize: "clamp(1.6rem, 2.6vw, 2.1rem)",
+  lineHeight: 1.1,
+  letterSpacing: "-0.025em",
+  color: "var(--text-primary)",
+};
 
-const FORMATS = ["In-person", "Virtual", "Either"] as const;
-type SessionFormat = (typeof FORMATS)[number];
-
-export default function LunchLearnFunnel({
-  eyebrow      = "Lunch & Learn · In-person or virtual · Coast to coast",
-  headingLine1 = "Specify with confidence.",
-  headingLine2 = "Lunch is on us.",
-  subheading   = "A focused 45-minute session that gives your team the technical grounding to specify decorative pavement, thermoplastic crosswalks, and coloured coatings. Real Canadian case studies and spec language you can drop straight into your next RFP.",
-  ctaLabel     = "Book a session",
-  formHeading  = "Book your Lunch & Learn",
-  formSubheading = "Tell us who you are and where you are. We confirm date and details within one business day.",
-  submitLabel  = "Book the session →",
-  whatYouGet,
-  personas,
-  faqs,
-  sectionHeadings,
-  hideHero = false,
-  hideForm = false,
-}: LunchLearnFunnelProps = {}) {
-  const whatYouGetItems    = whatYouGet?.length ? whatYouGet : WHAT_YOU_GET;
-  const personaItems       = personas?.length   ? personas   : PERSONAS;
-  const faqItems           = faqs?.length       ? faqs       : FAQS;
-  const whatYouGetEyebrow  = sectionHeadings?.whatYouGetEyebrow ?? "What you walk away with";
-  const whatYouGetHeading  = sectionHeadings?.whatYouGetHeading ?? "A working session for your team.";
-  const personasEyebrow    = sectionHeadings?.personasEyebrow   ?? "Who it's built for";
-  const personasHeading    = sectionHeadings?.personasHeading   ?? "Your whole team, one session.";
-  const faqEyebrow         = sectionHeadings?.faqEyebrow        ?? "Common questions";
-  const faqHeading         = sectionHeadings?.faqHeading        ?? "Everything you need to know";
-  const [formData, setFormData] = useState<FormState>({
-    name: "", email: "", company: "", city: "", phone: "",
-  });
-  const [format, setFormat] = useState<SessionFormat>("Either");
-  const [hp, setHp] = useState("");
-  const [submitState, setSubmitState] = useState<SubmitState>({ status: "idle" });
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.currentTarget;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // Honeypot: bots that fill the hidden field get a silent "success".
-    if (hp) {
-      setSubmitState({ status: "success", message: "You're booked in. We'll be in touch within one business day to confirm your date and details." });
-      return;
-    }
-    setSubmitState({ status: "loading" });
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, format, formType: "lunch-learn" }),
-      });
-      if (!response.ok) throw new Error(`API error: ${response.statusText}`);
-      setSubmitState({ status: "success", message: "You're booked in. We'll be in touch within one business day to confirm your date and details." });
-      setFormData({ name: "", email: "", company: "", city: "", phone: "" });
-      window.gtag?.("event", "generate_lead", { event_category: "conversion", form_type: "lunch-learn" });
-      track("lunch_learn_submit", { form_type: "lunch-learn" });
-    } catch {
-      setSubmitState({ status: "error", message: "Something went wrong. Call us directly: 416-540-9287 (East) or 604-309-8212 (West)." });
-    }
-  };
+export default function LunchLearnFunnel({ personas, faqs, sectionHeadings }: LunchLearnFunnelProps = {}) {
+  const personaItems = personas?.length ? personas : PERSONAS;
+  const faqItems = faqs?.length ? faqs : LUNCH_LEARN_FAQS;
+  const personasEyebrow = sectionHeadings?.personasEyebrow ?? "Who it's for";
+  const personasHeading = sectionHeadings?.personasHeading ?? "Your whole team, one session.";
+  const faqHeading = sectionHeadings?.faqHeading ?? "Common questions";
 
   return (
-    <div style={{ background: "var(--bg-primary)" }}>
-
-      {/* ── HERO ────────────────────────────────────── */}
-      {/* Skipped when the page leads with the boardroom card. */}
-      {!hideHero && (
-      <section
-        className="relative overflow-hidden"
-        style={{ background: "var(--bg-deepest)", minHeight: "80vh" }}
-      >
-        <div className="absolute inset-0 pointer-events-none" style={{
-          background: "radial-gradient(ellipse at 12% 65%, rgba(249,115,22,0.18) 0%, transparent 55%)",
-        }} />
-        <div className="absolute inset-0 pointer-events-none" style={{
-          background: "radial-gradient(ellipse at 80% 20%, rgba(234,179,8,0.09) 0%, transparent 60%)",
-        }} />
-        <div className="absolute inset-0 pointer-events-none hidden lg:block" style={{
-          background: "radial-gradient(ellipse at 90% 70%, rgba(249,115,22,0.08) 0%, transparent 50%)",
-        }} />
-        <div className="absolute top-0 inset-x-0 h-px" style={{
-          background: "linear-gradient(90deg, transparent 0%, rgba(249,115,22,0.5) 50%, transparent 100%)",
-        }} />
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-0">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:items-end" style={{ minHeight: "calc(80vh - 7rem)" }}>
-
-            <motion.div
-              className="pb-12 lg:pb-20"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <p className="text-xs font-bold tracking-[0.22em] uppercase mb-5" style={{ color: "var(--accent-text)" }}>
-                {eyebrow}
-              </p>
-              <h1
-                className="font-black mb-6"
-                style={{
-                  fontSize: "clamp(2rem, 4.5vw, 3.75rem)",
-                  lineHeight: 1.0,
-                  letterSpacing: "-0.04em",
-                  color: "var(--text-primary)",
-                }}
-              >
-                {headingLine1}
-                <br />
-                <span style={{
-                  background: "linear-gradient(92deg, #F97316 0%, #EAB308 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}>
-                  {headingLine2}
-                </span>
-              </h1>
-              <p
-                className="text-base sm:text-lg leading-relaxed mb-8 max-w-xl"
-                style={{ color: "var(--ink-70)" }}
-              >
-                {subheading}
-              </p>
-
-              <div className="flex flex-wrap gap-5 mb-10">
-                {["27 years in Canada", "10 provinces", "Lunch included"].map((t) => (
-                  <div key={t} className="flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: "#f97316" }} />
-                    <span className="text-sm font-semibold" style={{ color: "var(--ink-60)" }}>{t}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="flex flex-col gap-3">
-                <a
-                  href="#book"
-                  className="inline-flex items-center justify-center gap-2 px-8 rounded-lg font-bold text-sm transition-all self-start hover:brightness-110 active:scale-[0.98]"
-                  style={{
-                    background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
-                    color: "var(--on-accent)",
-                    boxShadow: "0 6px 28px rgba(249,115,22,0.42)",
-                    minHeight: "48px",
-                  }}
-                >
-                  {ctaLabel}
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </a>
-                <div className="flex items-center gap-4 flex-wrap">
-                  <a href="tel:+14165409287" className="text-sm font-semibold inline-flex items-center transition-colors hover:text-[var(--accent-text)]" style={{ color: "var(--ink-45)", minHeight: 40 }}>
-                    East · 416-540-9287
-                  </a>
-                  <span style={{ color: "var(--ink-20)" }}>·</span>
-                  <a href="tel:+16043098212" className="text-sm font-semibold inline-flex items-center transition-colors hover:text-[var(--accent-text)]" style={{ color: "var(--ink-45)", minHeight: 40 }}>
-                    West · 604-309-8212
-                  </a>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              className="relative flex items-end justify-center lg:justify-end pb-12 lg:pb-20"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              style={{ height: "clamp(310px, 42vw, 530px)" }}
-            >
-              <Image
-                src="/images/lunch-learn/moose-final.png"
-                alt="Moose, the HUB Surface Systems site dog, in a hard hat and safety vest. Book a Lunch & Learn"
-                width={256}
-                height={290}
-                style={{
-                  width: "auto",
-                  height: "100%",
-                  objectFit: "contain",
-                  objectPosition: "bottom",
-                  filter: "drop-shadow(0 0 20px rgba(249,115,22,0.2))",
-                  mixBlendMode: "screen",
-                }}
-                priority
-              />
-            </motion.div>
-          </div>
-        </div>
-
-        <div className="absolute bottom-0 inset-x-0 h-16 pointer-events-none" style={{
-          background: "linear-gradient(to bottom, transparent, var(--bg-section-asphalt))",
-        }} />
-      </section>
-      )}
-
-      {/* A stats row stood here (45 min, No cost, Lunch included, 2 offices).
-          The boardroom card that leads /lunch-learn carries the same facts in
-          its 45 min and $0 chips, its lunch line and its two phone numbers,
-          so the page said each one twice. Removed; the card keeps them. */}
-
-      {/* ── WHAT YOU WALK AWAY WITH: the asphalt band starts here ──────── */}
-      <section className="py-20 lg:py-24" style={{ background: "var(--bg-section-asphalt)" }}>
+    <div data-surface="paper" style={{ background: "var(--bg-primary)" }}>
+      {/* ── Who it's for, and what they leave with ─────────────────── */}
+      <section aria-labelledby="ll-audience" className="py-20 lg:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-14 text-center">
-            <p className="text-xs font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "var(--accent-text)" }}>
-              {whatYouGetEyebrow}
-            </p>
-            <h2
-              className="font-black"
-              style={{
-                fontSize: "clamp(1.9rem, 3.5vw, 2.9rem)",
-                lineHeight: 1.05,
-                letterSpacing: "-0.03em",
-                color: "var(--text-primary)",
-              }}
-            >
-              {whatYouGetHeading}
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {whatYouGetItems.map((item, i) => (
-              <motion.div
-                key={item.title}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.08, duration: 0.4 }}
-                className="relative rounded-2xl p-8 flex flex-col gap-5"
-                style={{
-                  background: "var(--bg-card)",
-                  border: "1px solid var(--border-color)",
-                  boxShadow: "0 2px 20px rgba(0,0,0,0.2)",
-                }}
-              >
-                <div
-                  className="absolute top-0 left-0 right-0 h-0.5 rounded-t-2xl"
-                  style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }}
-                />
-                <span
-                  className="font-black leading-none select-none"
-                  style={{
-                    fontSize: "4.25rem",
-                    background: "linear-gradient(135deg, #F97316 0%, #EAB308 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                    opacity: 0.85,
-                  }}
-                >
-                  {item.num}
-                </span>
-                <div>
-                  <h3 className="font-bold text-lg mb-2 leading-snug" style={{ color: "var(--text-primary)" }}>
-                    {item.title}
-                  </h3>
-                  <p className="text-sm leading-relaxed" style={{ color: "var(--text-muted)" }}>
-                    {item.desc}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── PERFECT FOR — back to navy canvas ────────────────────── */}
-      <section className="py-20" style={{ background: "var(--bg-primary)" }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-12">
+          <div className="max-w-3xl mb-12 lg:mb-14">
             <p className="text-xs font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "var(--accent-text)" }}>
               {personasEyebrow}
             </p>
-            <h2
-              className="font-black"
-              style={{
-                fontSize: "clamp(1.9rem, 3.5vw, 2.9rem)",
-                lineHeight: 1.05,
-                letterSpacing: "-0.03em",
-                color: "var(--text-primary)",
-              }}
-            >
+            <h2 id="ll-audience" className="font-bold mb-5" style={h2Style}>
               {personasHeading}
             </h2>
+            {/* The three points of the old "What you walk away with" section,
+                in one sentence. The roles are the FAQ's own list. */}
+            <p className="text-[16px] leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+              Engineers, planners, landscape architects, project managers and procurement sit in the same
+              session. Everyone leaves with spec language ready for the next RFP, the lifecycle cost math,
+              physical samples, current data sheets and the certified applicator list for their region.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {personaItems.map((p, i) => (
-              <motion.div
-                key={p.title}
-                initial={{ opacity: 0, y: 12 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.06, duration: 0.35 }}
-                className="flex flex-col p-8 rounded-xl"
-                style={{
-                  background: "var(--bg-card-neutral)",
-                  border: "1px solid var(--border-color)",
-                }}
-              >
-                {/* Tag under the title below lg. Beside it, the no-wrap tag
-                    left the title a sliver of the card and squeezed it onto
-                    three lines on a phone. */}
-                <div className="flex flex-col items-start gap-2 mb-3 lg:flex-row lg:justify-between lg:gap-3">
-                  <p className="font-semibold text-base leading-snug" style={{ color: "var(--text-primary)", fontWeight: 500 }}>{p.title}</p>
-                  <span
-                    className="flex-shrink-0 rounded-full px-2.5 py-0.5 text-[10px] font-bold tracking-wide whitespace-nowrap"
-                    style={{
-                      background: "rgba(249,115,22,0.12)",
-                      color: "var(--accent-text)",
-                      border: "1px solid rgba(249,115,22,0.22)",
-                    }}
-                  >
-                    {p.badge}
-                  </span>
-                </div>
-                <p className="text-sm leading-relaxed" style={{ color: "var(--text-muted)" }}>{p.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CITY MARQUEE ─────────────────────────────────────── */}
-      <div style={{ background: "var(--bg-primary)", borderTop: "1px solid var(--ink-05)", borderBottom: "1px solid var(--ink-05)" }}>
-        <p className="text-center text-[10px] font-bold tracking-[0.2em] uppercase pt-8 pb-4" style={{ color: "var(--ink-50)" }}>
-          You&apos;ll find HUB systems on the ground with
-        </p>
-        <div
-          className="overflow-hidden pb-8"
-          style={{ maskImage: "linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%)" }}
-        >
-          <div className="flex gap-0 whitespace-nowrap" style={{ animation: "ll-marquee 40s linear infinite" }}>
-            {TICKER.map((name, i) => (
-              <span key={i} style={{ display: "inline-flex", alignItems: "center", flexShrink: 0 }}>
-                <span className="text-sm font-medium px-5" style={{ color: "var(--ink-55)", lineHeight: 1 }}>{name}</span>
-                <span aria-hidden="true" style={{ display: "block", width: 4, height: 4, borderRadius: "50%", background: "rgba(249,115,22,0.45)", flexShrink: 0 }} />
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ── FAQ — asphalt band ───────────────────────────────── */}
-      <section className="py-20 lg:py-24" style={{ background: "var(--bg-section-asphalt)" }}>
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-12 text-center">
-            <p className="text-xs font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "var(--accent-text)" }}>{faqEyebrow}</p>
-            <h2 className="font-black" style={{ fontSize: "clamp(1.9rem, 3.5vw, 2.9rem)", lineHeight: 1.05, letterSpacing: "-0.03em", color: "var(--text-primary)" }}>
-              {faqHeading}
-            </h2>
-          </div>
-          <div className="space-y-3">
-            {faqItems.map((faq, i) => (
-              <div key={faq.q} className="rounded-xl overflow-hidden" style={{ border: "1px solid var(--border-color)", background: openFaq === i ? "var(--bg-card)" : "var(--bg-card-neutral)" }}>
-                <button className="w-full text-left flex items-center justify-between gap-4 px-6 py-5" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
-                  <span className="font-semibold text-base" style={{ color: "var(--text-primary)" }}>{faq.q}</span>
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-transform duration-200" style={{ background: openFaq === i ? "rgba(249,115,22,0.2)" : "var(--border-color)", color: openFaq === i ? "var(--accent-text)" : "var(--text-muted)", transform: openFaq === i ? "rotate(45deg)" : "rotate(0deg)" }}>
-                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 5v14M5 12h14" /></svg>
-                  </span>
-                </button>
-                <AnimatePresence initial={false}>
-                  {openFaq === i && (
-                    <motion.div key="answer" initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.22 }} style={{ overflow: "hidden" }}>
-                      <p className="px-6 pb-6 text-sm leading-relaxed" style={{ color: "var(--text-muted)" }}>{faq.a}</p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 lg:gap-x-16 gap-y-8 lg:gap-y-10">
+            {personaItems.map((p) => (
+              <div key={p.title} className="pt-5" style={{ borderTop: "1px solid var(--border-color)" }}>
+                <h3 className="font-semibold text-[17px] leading-snug mb-2" style={{ color: "var(--text-primary)" }}>
+                  {p.title}
+                </h3>
+                <p className="text-[15px] leading-relaxed" style={{ color: "var(--text-secondary)", maxWidth: "58ch" }}>
+                  {p.desc}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── FORM ────────────────────────────────────────────── */}
-      {/* Skipped when the boardroom card above already carries a form —
-          two live forms on one page is two sets of inputs sharing one
-          piece of React state. */}
-      {!hideForm && (
-      <section id="book" className="py-20 lg:py-28 relative overflow-hidden" style={{ background: "var(--bg-deepest)" }}>
-        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 50% 50%, rgba(249,115,22,0.09) 0%, transparent 65%)" }} />
-        <div className="absolute top-0 inset-x-0 h-px" style={{ background: "linear-gradient(90deg, transparent 0%, rgba(249,115,22,0.4) 50%, transparent 100%)" }} />
-
-        <div className="relative z-10 max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <p className="text-xs font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "var(--accent-text)" }}>Book your session</p>
-            <h2 className="font-black mb-4" style={{ fontSize: "clamp(2rem, 4vw, 3.25rem)", lineHeight: 1.0, letterSpacing: "-0.035em", background: "linear-gradient(92deg, #F97316 0%, #EAB308 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
-              {formHeading}
-            </h2>
-            <p className="text-base" style={{ color: "var(--text-muted)" }}>{formSubheading}</p>
-          </div>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-8">
-            {["HUB responds within 24 hours", "No commitment required", "In-person, virtual, or hybrid"].map((item) => (
-              <div key={item} className="flex items-center gap-2">
-                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: "var(--accent-text-lg)" }}><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
-                <span className="text-sm" style={{ color: "var(--ink-55)" }}>{item}</span>
-              </div>
-            ))}
-          </div>
-
-          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.45 }} className="relative rounded-2xl p-8 sm:p-10" style={{ background: "var(--bg-card)", border: "1px solid rgba(249,115,22,0.25)", boxShadow: "0 0 0 1px rgba(249,115,22,0.06) inset, 0 20px 60px rgba(0,0,0,0.3)" }}>
-            <div className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
-
-            {submitState.status === "success" ? (
-              <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-8">
-                <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-5" style={{ background: "rgba(34,197,94,0.12)", border: "1px solid rgba(34,197,94,0.3)" }}>
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: "var(--ok-text)" }}><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
-                </div>
-                <h3 className="font-bold text-xl mb-3" style={{ color: "var(--text-primary)" }}>You&apos;re on the list.</h3>
-                <p className="text-sm leading-relaxed" style={{ color: "var(--ok-text)" }}>{submitState.message}</p>
-              </motion.div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {[
-                    { name: "name", placeholder: "Your name", type: "text", required: true },
-                    { name: "email", placeholder: "Email address", type: "email", required: true },
-                    { name: "company", placeholder: "Organization (optional)", type: "text", required: false },
-                    { name: "city", placeholder: "City (optional)", type: "text", required: false },
-                  ].map((field) => (
-                    <input key={field.name} type={field.type} name={field.name} placeholder={field.placeholder} aria-label={field.placeholder} value={formData[field.name as keyof FormState]} onChange={handleChange} required={field.required} className="px-4 py-3.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-orange-500/50 transition-all" style={{ background: "var(--fill-subtle)", border: "1px solid var(--ink-10)", color: "var(--text-primary)" }} />
-                  ))}
-                </div>
-                <input type="tel" name="phone" placeholder="Phone number (optional)" aria-label="Phone number (optional)" value={formData.phone} onChange={handleChange} className="w-full px-4 py-3.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-orange-500/50 transition-all" style={{ background: "var(--fill-subtle)", border: "1px solid var(--ink-10)", color: "var(--text-primary)" }} />
-
-                <div>
-                  <p className="text-xs font-semibold mb-2 tracking-wide uppercase" style={{ color: "var(--text-muted)" }}>Session format</p>
-                  <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Session format">
-                    {FORMATS.map((f) => (
-                      <button
-                        key={f}
-                        type="button"
-                        role="radio"
-                        aria-checked={format === f}
-                        onClick={() => setFormat(f)}
-                        className="rounded-xl text-sm font-semibold transition-all active:scale-[0.98]"
-                        style={format === f
-                          ? { background: "rgba(249,115,22,0.16)", border: "1px solid rgba(249,115,22,0.55)", color: "var(--accent-soft-text)", minHeight: 46 }
-                          : { background: "var(--ink-05)", border: "1px solid var(--ink-10)", color: "var(--text-muted)", minHeight: 46 }}
-                      >
-                        {f}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Honeypot — hidden from real users, tempting to bots */}
-                <input type="text" name="website" value={hp} onChange={(e) => setHp(e.currentTarget.value)} tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
-
-                <button type="submit" disabled={submitState.status === "loading"} className="w-full py-5 rounded-xl font-bold text-base transition-all disabled:opacity-50 hover:brightness-110 active:scale-[0.99]" style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "var(--on-accent)", boxShadow: "0 6px 24px rgba(249,115,22,0.38)" }}>
-                  {submitState.status === "loading" ? "Sending your request…" : submitLabel}
-                </button>
-                <p className="text-center text-xs" style={{ color: "var(--ink-35)" }}>No obligation, no invoice, lunch included. We&apos;ll reach out within 24 hours.</p>
-                {submitState.status === "error" && (
-                  <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="p-4 rounded-xl text-sm" style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.25)", color: "var(--err-text)" }}>
-                    {submitState.message}
-                  </motion.div>
-                )}
-              </form>
-            )}
-          </motion.div>
-
-          <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {[
-              { region: "Eastern Canada", name: "Doug Bain", phone: "416-540-9287", email: "doug.bain@hubss.com" },
-              { region: "Western Canada", name: "Cleve Stordy", phone: "604-309-8212", email: "cleve.stordy@hubss.com" },
-            ].map((office) => (
-              <div key={office.region} className="rounded-xl p-5 text-center" style={{ background: "var(--ink-025)", border: "1px solid var(--border-color)" }}>
-                <p className="text-[10px] font-bold tracking-[0.15em] uppercase mb-2" style={{ color: "var(--accent-text)" }}>{office.region}</p>
-                <p className="text-sm font-semibold mb-1" style={{ color: "var(--text-primary)" }}>{office.name}</p>
-                <a href={`tel:+1${office.phone.replace(/-/g, "")}`} className="text-xs flex items-center justify-center hover:text-[var(--accent-text)] transition-colors" style={{ minHeight: 44, color: "var(--text-muted)" }}>{office.phone}</a>
-                <a href={`mailto:${office.email}`} className="text-xs flex items-center justify-center hover:text-[var(--accent-text)] transition-colors" style={{ minHeight: 44, color: "var(--text-muted)" }}>{office.email}</a>
-              </div>
+      {/* ── Common questions: the product pages' <details> list ─────── */}
+      <section aria-labelledby="ll-faq" className="py-20 lg:py-24" style={{ background: "var(--bg-section-asphalt)" }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 id="ll-faq" className="font-bold mb-7" style={h2Style}>
+            {faqHeading}
+          </h2>
+          <div className="rounded-xl overflow-hidden" style={{ border: "1px solid var(--border-color)", background: "var(--bg-card-neutral)" }}>
+            {faqItems.map((f, i) => (
+              <details key={f.q} open={i === 0} className="group" style={{ borderTop: i === 0 ? "none" : "1px solid var(--border-color)" }}>
+                <summary className="flex items-baseline justify-between gap-4 cursor-pointer list-none px-5 py-4 sm:px-6" style={{ color: "var(--text-primary)" }}>
+                  <span className="font-semibold" style={{ fontSize: "0.98rem", lineHeight: 1.45 }}>{f.q}</span>
+                  <svg aria-hidden width="14" height="14" viewBox="0 0 14 14" className="flex-shrink-0 translate-y-[2px] transition-transform duration-200 group-open:rotate-45" style={{ color: "var(--accent-text-lg)" }}>
+                    <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                  </svg>
+                </summary>
+                <p className="px-5 pb-5 sm:px-6 leading-[1.75]" style={{ color: "var(--text-body)", fontSize: "0.95rem", maxWidth: "68ch" }}>
+                  {f.a}
+                </p>
+              </details>
             ))}
           </div>
         </div>
       </section>
-      )}
-
-      <style>{`
-        @keyframes ll-marquee {
-          0%   { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-      `}</style>
     </div>
   );
 }

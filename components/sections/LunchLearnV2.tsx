@@ -248,6 +248,11 @@ function MoreLink() {
  */
 function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boolean; titleAs?: "h1" | "h2" }) {
   const f = useLunchLearnForm(true);
+  // The form panel's heading sits one level under the card's: an h2 on
+  // /lunch-learn, where the card's title is the h1, so the page's headings
+  // run h1, h2, h2, h3 with no level skipped (QA, 30 Sep 2026). Same look:
+  // app/globals.css styles every heading level alike and the class sets the size.
+  const FormTitle = Title === "h1" ? "h2" : "h3";
   return (
     <section
       /* the brand's closing statement, not part of the reading */
@@ -359,7 +364,7 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
                 <div className="relative w-full rounded-2xl p-6 sm:p-7 self-center" style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--border-color)" }}>
                   {hideForm ? (
                     <div>
-                      <h3 className="font-bold text-lg mb-1" style={{ color: "var(--text-primary)" }}>Book your session</h3>
+                      <FormTitle className="font-bold text-lg mb-1" style={{ color: "var(--text-primary)" }}>Book your session</FormTitle>
                       <p className="text-[13px] mb-6" style={{ color: "var(--ink-55)" }}>
                         Pick a date and a format on the Lunch &amp; Learn page. Confirmed within one business day.
                       </p>
@@ -382,7 +387,7 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
                   ) : (
                     <form onSubmit={f.handleSubmit} className="space-y-3.5">
                       <div className="mb-5">
-                        <h3 className="font-bold text-lg mb-1" style={{ color: "var(--text-primary)" }}>Book your session</h3>
+                        <FormTitle className="font-bold text-lg mb-1" style={{ color: "var(--text-primary)" }}>Book your session</FormTitle>
                         <p className="text-[13px]" style={{ color: "var(--ink-55)" }}>Confirmed within one business day.</p>
                       </div>
                       {f.topic && <TopicChip topic={f.topic} onClear={f.clearTopic} />}

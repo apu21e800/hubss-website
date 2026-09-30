@@ -202,7 +202,10 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
               >
                 <Link
                   href={`/products/${product.slug}`}
-                  className="group relative flex flex-col w-full h-full rounded-2xl overflow-hidden transition-all duration-250"
+                  // focus-ring-inset (app/globals.css): the card clips
+                  // itself, so the keyboard ring is drawn inside it
+                  // (QA F7, 30 Sep 2026).
+                  className="focus-ring-inset group relative flex flex-col w-full h-full rounded-2xl overflow-hidden transition-all duration-250"
                   style={{
                     background: "var(--bg-card)",
                     border: "1px solid var(--ink-10)",

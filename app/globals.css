@@ -1075,6 +1075,32 @@ p {
   border-radius: 2px;
 }
 
+/* …drawn inside the element for a link that fills a clipped card. The
+   homepage's application cards clip their contents (overflow: hidden, a
+   12px radius) and the systems cards clip themselves, so the 2px ring with
+   its 2px offset fell outside the clip and was cut off (QA F7, 30 Sep
+   2026). The ring is a pseudo-element 3px inside the card's edge, following
+   its corners, and not an outline: Chrome paints an element's outline under
+   its absolutely positioned children, and these cards are a positioned
+   photo, scrim and caption, so an inset outline was simply covered. The
+   pseudo-element comes last in the card, so it paints on top. Its colour is
+   the site's ring colour on each surface (bright orange on dark, the darker
+   orange on paper). Unlayered, like the rule above it. */
+.focus-ring-inset {
+  position: relative;
+}
+.focus-ring-inset:focus-visible {
+  outline: none;
+}
+.focus-ring-inset:focus-visible::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 2px solid var(--accent-text-lg);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
 /* …with one exception: the command palette's own field.
 
    That input is focused programmatically the instant the overlay opens, so the

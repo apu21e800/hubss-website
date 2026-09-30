@@ -79,7 +79,10 @@ export default function ApplicationsGrid({ applications: appsProp }: Props = {})
               className="relative overflow-hidden group snap-start flex-shrink-0 w-[78vw] max-w-[320px] sm:w-auto sm:max-w-none sm:flex-shrink"
               style={{ borderRadius: "12px", aspectRatio: "4/3" }}
             >
-              <Link href={`/applications/${app.slug}`} className="block w-full h-full">
+              {/* focus-ring-inset (app/globals.css): the wrapper clips at
+                  12px, so the keyboard ring is drawn inside the card, over
+                  the photo (QA F7, 30 Sep 2026). */}
+              <Link href={`/applications/${app.slug}`} className="focus-ring-inset block w-full h-full rounded-[12px]">
                 <Image
                   src={applicationImages[app.slug] ? resolveImage(applicationImages[app.slug]).src : app.imageUrl}
                   alt={applicationImages[app.slug] ? resolveImage(applicationImages[app.slug]).alt : app.name}

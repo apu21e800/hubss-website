@@ -21,6 +21,7 @@ import { applicationCatalogueFor } from "@/lib/application-catalogue";
 import { buildMetadata } from "@/lib/seo";
 import { HERO_POSITION, heroColourClass } from "@/lib/hero-framing";
 import { lunchLearnHref } from "@/lib/lunch-learn";
+import type { SanityBlock } from "@/types/sanity";
 
 // Sanity is the CMS for this page's copy, so the page has to be allowed to go
 // and re-read it. Without a revalidate the route is prerendered once at build
@@ -175,6 +176,14 @@ export default async function ApplicationPage({ params }: Props) {
 
   // Hero framing follows the photo (lib/hero-framing.ts).
   const heroPosition = HERO_POSITION[hero.origin ?? hero.src] ?? "center 55%";
+
+  // "How it works" without the sentence the spread just said. Public Art's
+  // description opens with the spread's pull line word for word ("The street
+  // is one of the largest untapped canvases in any city."), so the page said
+  // it twice in one screen (QA B4, E19, 30 Sep 2026). Only a whole opening
+  // sentence that matches is dropped; Parking Lots and Townhomes extend the
+  // pull line with a colon and keep theirs.
+  const body = spread ? withoutRepeatedOpening(application.description, application.descriptionBlocks, [spread.statement, spread.title]) : { text: application.description, blocks: application.descriptionBlocks };
   // The application's name inside a sentence: "Designing for Parking Lots"
   // read as a heading pasted into prose (QA pa#33).
   const nameInSentence = inSentence(application.name);
@@ -255,11 +264,11 @@ export default async function ApplicationPage({ params }: Props) {
               <h2 className="text-2xl sm:text-3xl font-bold mb-5" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
                 How it works
               </h2>
-              {application.descriptionBlocks ? (
-                <RichText value={application.descriptionBlocks} />
+              {body.blocks ? (
+                <RichText value={body.blocks} />
               ) : (
                 <p className="mb-12 leading-[1.85]" style={{ color: "var(--text-body)", fontSize: "clamp(1rem, 1.8vw, 1.075rem)", maxWidth: "65ch" }}>
-                  {application.description}
+                  {body.text}
                 </p>
               )}
 
@@ -387,6 +396,35 @@ export default async function ApplicationPage({ params }: Props) {
       <Footer />
     </main>
   );
+}
+
+/**
+ * The description without an opening sentence the spread already printed.
+ * `said` are the spread's lines; a match is the whole first sentence, after
+ * case, punctuation and spacing are ignored. Works on the plain text and on
+ * the Studio rich text alike: in the blocks, the first span of the first
+ * block loses that prefix (and an emptied block goes), nothing else changes.
+ */
+function withoutRepeatedOpening(
+  text: string,
+  blocks: SanityBlock[] | undefined,
+  said: string[],
+): { text: string; blocks?: SanityBlock[] } {
+  const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+  const firstSentence = (s: string) => s.match(/^\s*[^.!?]+[.!?]+/)?.[0] ?? "";
+  const repeated = (s: string) => {
+    const first = firstSentence(s);
+    return first && said.some((line) => norm(line) === norm(first)) ? first : "";
+  };
+  const strip = (s: string) => s.slice(repeated(s).length).replace(/^\s+/, "");
+  if (!blocks?.length) return { text: strip(text) };
+  const [first, ...rest] = blocks;
+  const span = first.children?.[0];
+  if (!span?.text || !repeated(span.text)) return { text, blocks };
+  const trimmed = strip(span.text);
+  const children = trimmed ? [{ ...span, text: trimmed }, ...first.children.slice(1)] : first.children.slice(1);
+  const kept = children.some((c) => c.text.trim()) ? [{ ...first, children }, ...rest] : rest;
+  return { text: strip(text), blocks: kept.length ? kept : undefined };
 }
 
 /**

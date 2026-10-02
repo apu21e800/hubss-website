@@ -356,19 +356,17 @@ export default async function ProductPage({ params }: Props) {
                 the one position on the page where a specifier is still deciding
                 whether to keep reading. */}
             {catalogue ? (
-              <>
-                <ProductSpecCard entry={catalogue} productName={product.name} />
-                <h2 className="text-xl sm:text-2xl font-bold mb-4" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
-                  How it works
-                </h2>
-                {product.descriptionBlocks ? (
-                  <RichText value={product.descriptionBlocks} />
-                ) : (
-                  <p className="mb-12 leading-[1.85]" style={{ color: "var(--text-body)", fontSize: "clamp(1rem, 1.8vw, 1.075rem)", maxWidth: "65ch" }}>
-                    {product.description}
-                  </p>
-                )}
-              </>
+              /* The spread alone. Until 30 Sep 2026 a "How it works" paragraph
+                 followed it: `description` (Studio, synced from lib/products.ts),
+                 which was written from the same printed page as the spread's
+                 `description` (lib/product-catalogue.ts) and repeated its
+                 sentences one screen later on all ten pages (QA B4, E19:
+                 TrafficPatterns' aggregate sentence, StreetPrint's flush
+                 surface, PreMark's whole paragraph). The book's spread is the
+                 approved copy, so it stands and the paragraph does not. The
+                 field still feeds the Product JSON-LD, and the four products
+                 without a spread still show it below. */
+              <ProductSpecCard entry={catalogue} productName={product.name} />
             ) : (
               <>
                 {/* The same heading as the spread pages and the application

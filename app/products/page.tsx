@@ -155,7 +155,8 @@ const familyList = (() => {
 
 export const metadata = buildMetadata({
   title: "Decorative Pavement & Marking Systems",
-  description: `HUB's surface systems in four families: ${familyList}. Specs, spec sheets and certified installers, coast to coast.`,
+  // Under 155 characters since 30 Sep 2026 (QA E1 flagged 183).
+  description: `HUB surface systems: ${familyList}. Spec sheets and certified installers.`,
   slug: "products",
 });
 

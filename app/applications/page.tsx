@@ -16,7 +16,8 @@ export const revalidate = 3600;
 
 export const metadata = buildMetadata({
   title: "Pavement Marking Applications",
-  description: "Crosswalks, bus lanes, bike infrastructure, airports, public art, and community branding. Purpose-matched surface systems for Canadian municipal and commercial applications.",
+  // Under 155 characters since 30 Sep 2026 (QA E1 flagged 173).
+  description: "Crosswalks, bus lanes, bike lanes, airports, public art and community branding: HUB surface systems matched to Canadian municipal and commercial work.",
   slug: "applications",
 });
 

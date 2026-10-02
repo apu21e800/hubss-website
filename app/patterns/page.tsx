@@ -8,8 +8,9 @@ import { fieldTemplates, borderTemplates, patternSrc, type PatternTemplate } fro
 
 export const metadata: Metadata = buildMetadata({
   title: "StreetPrint Pattern Library · Stamping Templates",
+  // Under 155 characters since 30 Sep 2026 (QA E1 flagged 176).
   description:
-    "Sixteen dimensioned StreetPrint stamping templates: herringbone, offset brick, ashlar slate, cobble, tiles, and border courses. The patterns pressed into asphalt, as specified.",
+    "Sixteen dimensioned StreetPrint stamping templates: herringbone, offset brick, ashlar slate, cobble, tiles and border courses, as pressed into asphalt.",
   slug: "patterns",
 });
 

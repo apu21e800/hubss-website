@@ -1,10 +1,245 @@
 {
+  "_note": "Web copies of the print catalogue's booklet photos (the 34 PNGs in _archive/design-assets/catalog-print-build/assets/booklet). The plain \"<booklet file>\": \"<web url>\" entries are read by catalog-print-build/src/generate_plugin.py and must stay strings. \"_photos\" (2 Oct 2026) says, per web file, what the frame shows, the system and place a record states, and where the site uses it. A place or project name is only ever quoted from the record named in \"record\"; \"confidence\" is that record's. Copies from 2 Oct 2026 are JPEG q82, longest side 1600; the 2026 copies are 1800px q85.",
+  "aboriginal crosswalk 1.png": "/images/catalogue-assets/formline-crosswalk-black-white.jpg",
   "DecoMark community park 1.png": "/images/catalogue-assets/decomark-community-park-1.jpg",
+  "DecoMark community park 2 1.png": "/images/catalogue-assets/decomark-sheffield-park-path-coquitlam.jpg",
+  "duratherm1 1.png": "/images/catalogue-assets/duratherm-hexagon-entrance-drive.jpg",
+  "hubss-lunch-learn-qr.png": "/images/catalogue-assets/hubss-lunch-learn-qr.png",
   "Intergrated Rumble Bars (TrafficPatterns) 1.png": "/images/catalogue-assets/intergrated-rumble-bars-trafficpatterns-1.jpg",
+  "Intergrated Rumble Bars 2 (TrafficPatterns) 1.png": "/images/catalogue-assets/crosswalk-rumble-bars-woodbridge.jpg",
   "Intersection installation TPXD 1.png": "/images/catalogue-assets/intersection-installation-tpxd-1.jpg",
+  "Look listen live 1.png": "/images/catalogue-assets/decomark-look-listen-live-rail-crossing.jpg",
+  "native crosswalk 1.png": "/images/catalogue-assets/native-crosswalk-1.jpg",
+  "Splash Pad 1.png": "/images/catalogue-assets/splash-pad-park-aerial.jpg",
+  "StreetBond - path 1.png": "/images/catalogue-assets/streetbondsr-park-path-osoyoos.jpg",
+  "StreetBond - Vancouver sidewalk 1.png": "/images/catalogue-assets/streetbond-plaza-circles-vancouver.jpg",
+  "StreetBond on concrets and vertical surfaces 1.png": "/images/catalogue-assets/streetbond-geometric-plaza.jpg",
+  "StreetBond Splash Pad 1.png": "/images/catalogue-assets/streetbond-splash-pad-arches.jpg",
+  "StreetPrin Driveway 1.png": "/images/catalogue-assets/streetprint-driveway-autumn-leaves.jpg",
+  "StreetPrint - town home 1.png": "/images/catalogue-assets/streetprint-townhome-lane-new-westminster.jpg",
+  "StreetPrint - TrafficCalming, street skirt 1.png": "/images/catalogue-assets/streetprint-street-skirt-curb.jpg",
   "StreetPrint walkway 1.png": "/images/catalogue-assets/streetprint-walkway-1.jpg",
   "UBC Crosswalk 1.png": "/images/catalogue-assets/ubc-crosswalk-1.jpg",
   "Whiterock-Pier-Crosswalk-TrafficPatternsXD-1 1.png": "/images/catalogue-assets/whiterock-pier-crosswalk-trafficpatternsxd-1-1.jpg",
-  "native crosswalk 1.png": "/images/catalogue-assets/native-crosswalk-1.jpg",
-  "hubss-lunch-learn-qr.png": "/images/catalogue-assets/hubss-lunch-learn-qr.png"
+  "_photos": {
+    "ubc-crosswalk-1.jpg": {
+      "source": "UBC Crosswalk 1.png",
+      "shows": "Blue, green and gold Musqueam salmon crosswalk at the UBC letters, Vancouver",
+      "system": "TrafficPatterns",
+      "place": "UBC, Vancouver, British Columbia",
+      "confidence": "high",
+      "record": "Idea Book, Volume 5 (public/catalogue/2026-27), page 1 (cover) and 106 (\"UBC, British Columbia | TrafficPatterns\"); catalogue-2026-finish/IMAGE-MANIFEST.csv (the 116-page 2026 build), page 1, high",
+      "pages": [
+        1,
+        106
+      ],
+      "onSite": "homepage hero source (another worker, 2 Oct 2026); also crosswalks-26, traffic-patterns-58, blog/ubc-musqueam-crosswalk/featured.jpg"
+    },
+    "whiterock-pier-crosswalk-trafficpatternsxd-1-1.jpg": {
+      "source": "Whiterock-Pier-Crosswalk-TrafficPatternsXD-1 1.png",
+      "shows": "Red brick-pattern crosswalk with white edge lines at the pier, bollards and the sea behind",
+      "system": "TrafficPatternsXD",
+      "place": "White Rock pier, British Columbia",
+      "confidence": "high",
+      "record": "Insights post white-rock-pier-crosswalk (same crossing as its featured photo); the site's own card alt for the sibling frame traffic-patterns-xd-13; catalogue-2026-finish/IMAGE-MANIFEST.csv (the 116-page 2026 build), page 79, high. Not in the Volume 5 render (its White Rock page, 69, is the Johnston Road wave crosswalk)",
+      "pages": [],
+      "onSite": "Applications menu, Streets & Safety panel (2 Oct 2026); same frame as traffic-patterns-xd-139, crosswalks-120, commercial-spaces-78"
+    },
+    "native-crosswalk-1.jpg": {
+      "source": "native crosswalk 1.png",
+      "shows": "Crosswalk in an orange and black Indigenous design, a curb and the road beyond",
+      "system": "TrafficPatterns",
+      "place": "Whitehorse, Yukon",
+      "confidence": "high",
+      "record": "Idea Book, Volume 5 (public/catalogue/2026-27), page 113 (\"Whitehorse, Yukon | TrafficPatterns\"); catalogue-2026-finish/IMAGE-MANIFEST.csv (the 116-page 2026 build), page 81, medium",
+      "pages": [
+        113
+      ],
+      "onSite": "/products TrafficPatterns card (2 Oct 2026)"
+    },
+    "decomark-community-park-1.jpg": {
+      "source": "DecoMark community park 1.png",
+      "shows": "Tilted frame of the dotted path, a green utility box and new houses at Sheffield Park",
+      "system": "StreetBond (map pin coquitlam-sheffield-park; the booklet file name says DecoMark)",
+      "place": "Sheffield Park, Coquitlam, British Columbia",
+      "confidence": "medium",
+      "record": "Same park as the Volume 5 page 83 photo and the map pin; this frame itself is not in the Volume 5 render. catalogue-2026-finish/IMAGE-MANIFEST.csv (the 116-page 2026 build), page 100, medium (labelled \"Langley strata aerial\" there, which the page-83 caption contradicts)",
+      "pages": [],
+      "onSite": "nowhere (hosted for the 2026 print build only)"
+    },
+    "intergrated-rumble-bars-trafficpatterns-1.jpg": {
+      "source": "Intergrated Rumble Bars (TrafficPatterns) 1.png",
+      "shows": "Low, colour-cast close-up of a maroon brick-pattern crosswalk with white joints",
+      "system": "unconfirmed (the same frame is filed as premark-03 and traffic-patterns-27)",
+      "place": null,
+      "confidence": "medium",
+      "record": "catalogue-2026-finish/IMAGE-MANIFEST.csv (the 116-page 2026 build), page 101, medium (Thermo Design installer card); not in the Volume 5 render",
+      "pages": [],
+      "onSite": "gallery frames premark-03, traffic-patterns-27"
+    },
+    "intersection-installation-tpxd-1.jpg": {
+      "source": "Intersection installation TPXD 1.png",
+      "shows": "A crew heat-fusing a red and white thermoplastic crosswalk at an intersection (people are the subject)",
+      "system": "TrafficPatternsXD (file name)",
+      "place": null,
+      "confidence": "medium",
+      "record": "catalogue-2026-finish/IMAGE-MANIFEST.csv (the 116-page 2026 build), page 102, medium (Virtue Construction installer card); not in the Volume 5 render",
+      "pages": [],
+      "onSite": "nowhere"
+    },
+    "streetprint-walkway-1.jpg": {
+      "source": "StreetPrint walkway 1.png",
+      "shows": "Grey herringbone stamped walkway with black bollards in front of a brick building",
+      "system": "StreetPrint",
+      "place": null,
+      "confidence": "medium",
+      "record": "catalogue-2026-finish/IMAGE-MANIFEST.csv (the 116-page 2026 build), page 103, medium (ULS Landscaping installer card); the same place as streetprint-02 / townhomes-16, the Townhomes hero; not in the Volume 5 render",
+      "pages": [],
+      "onSite": "nowhere (the Townhomes hero is a wider frame of the same place)"
+    },
+    "crosswalk-rumble-bars-woodbridge.jpg": {
+      "source": "Intergrated Rumble Bars 2 (TrafficPatterns) 1.png",
+      "shows": "Red brick-pattern thermoplastic crosswalk with inlaid white bars on a road, a field and sky behind",
+      "system": "TrafficPatternsXD (the book; the booklet file name and the site's copy traffic-patterns-10 say TrafficPatterns)",
+      "place": "Woodbridge, Ontario",
+      "confidence": "high",
+      "record": "Idea Book, Volume 5 (public/catalogue/2026-27), page 117 (\"Woodbridge, Ontario | TrafficPatternsXD\")",
+      "pages": [
+        117
+      ],
+      "onSite": "Products menu, Preformed Thermoplastics panel (2 Oct 2026); same frame as traffic-patterns-10"
+    },
+    "streetbond-plaza-circles-vancouver.jpg": {
+      "source": "StreetBond - Vancouver sidewalk 1.png",
+      "shows": "Cream and teal circle inside pastel bands coated on an asphalt street plaza, storefronts far behind",
+      "system": "StreetBond",
+      "place": "Vancouver, British Columbia",
+      "confidence": "high",
+      "record": "Idea Book, Volume 5 (public/catalogue/2026-27), page 104 (\"Vancouver, British Columbia | StreetBond\")",
+      "pages": [
+        104
+      ],
+      "onSite": "Products menu, Coatings panel (2 Oct 2026)"
+    },
+    "streetprint-driveway-autumn-leaves.jpg": {
+      "source": "StreetPrin Driveway 1.png",
+      "shows": "Red herringbone StreetPrint driveway under fallen maple leaves beside a hedge",
+      "system": "StreetPrint",
+      "place": null,
+      "confidence": "high for the system, no place stated",
+      "record": "Idea Book, Volume 5 (public/catalogue/2026-27), page 21 (the StreetPrint spread's \"The result, pattern and colour simulating brick and stone\")",
+      "pages": [
+        21
+      ],
+      "onSite": "Products menu, Stamped Asphalt panel (2 Oct 2026)"
+    },
+    "streetbond-splash-pad-arches.jpg": {
+      "source": "StreetBond Splash Pad 1.png",
+      "shows": "Splash pad coated in two blues with white spray arches, houses behind",
+      "system": "StreetBond (file name)",
+      "place": null,
+      "confidence": "unconfirmed",
+      "record": "Booklet file name only; not in the Volume 5 render (its splash pad pages, 61 and 129, are other pads)",
+      "pages": [],
+      "onSite": "Applications menu, Parks & Public Spaces panel (2 Oct 2026)"
+    },
+    "duratherm-hexagon-entrance-drive.jpg": {
+      "source": "duratherm1 1.png",
+      "shows": "Black and white hexagon pattern inlaid on a commercial entrance drive, the building behind (portrait frame)",
+      "system": "DuraTherm (file name)",
+      "place": null,
+      "confidence": "medium",
+      "record": "Booklet file name; the same frame is commercial-spaces-04 and -85 on the site; not in the Volume 5 render (page 121's hexagons are another job)",
+      "pages": [],
+      "onSite": "Applications menu, Commercial & Sustainability panel (2 Oct 2026)"
+    },
+    "streetprint-townhome-lane-new-westminster.jpg": {
+      "source": "StreetPrint - town home 1.png",
+      "shows": "Wet dark-grey stamped asphalt lane between new townhomes, a white band at the curb",
+      "system": "StreetPrint (the spread's specify list and the file name)",
+      "place": "New Westminster, British Columbia",
+      "confidence": "high",
+      "record": "Idea Book, Volume 5 (public/catalogue/2026-27), page 80 (\"New Westminster, British Columbia\", on the Townhomes spread, pages 74 to 80)",
+      "pages": [
+        80
+      ],
+      "onSite": "Applications menu, Residential panel (2 Oct 2026); near the same frame as townhomes-21"
+    },
+    "streetprint-street-skirt-curb.jpg": {
+      "source": "StreetPrint - TrafficCalming, street skirt 1.png",
+      "shows": "Red herringbone stamped asphalt band curving along a concrete curb, cones at the far end",
+      "system": "StreetPrint (file name)",
+      "place": null,
+      "confidence": "unconfirmed",
+      "record": "Booklet file name only; not in the Volume 5 render",
+      "pages": [],
+      "onSite": "/products StreetPrint card (2 Oct 2026)"
+    },
+    "decomark-sheffield-park-path-coquitlam.jpg": {
+      "source": "DecoMark community park 2 1.png",
+      "shows": "Park path with white dots on black asphalt curving past concrete circles, a playground and planting",
+      "system": "StreetBond (map pin coquitlam-sheffield-park; the booklet file name says DecoMark)",
+      "place": "Sheffield Park, Coquitlam, British Columbia",
+      "confidence": "high",
+      "record": "Idea Book, Volume 5 (public/catalogue/2026-27), page 83 (\"Sheffield Park · Coquitlam, British Columbia\"); map pin coquitlam-sheffield-park",
+      "pages": [
+        83
+      ],
+      "onSite": "nowhere yet (recommended for the Parks & Paths hero in Studio, 2 Oct 2026)"
+    },
+    "splash-pad-park-aerial.jpg": {
+      "source": "Splash Pad 1.png",
+      "shows": "Blue and green splash pad with rings and a small fountain in a park, seen from above, cyclists tiny on the path",
+      "system": "unconfirmed (a coated splash pad; no record names the system)",
+      "place": null,
+      "confidence": "unconfirmed",
+      "record": "Booklet file name only (\"Splash Pad 2.png\" is a near-identical frame); not in the Volume 5 render",
+      "pages": [],
+      "onSite": "nowhere yet (recommended for the Splash Pads hero in Studio, 2 Oct 2026)"
+    },
+    "streetbond-geometric-plaza.jpg": {
+      "source": "StreetBond on concrets and vertical surfaces 1.png",
+      "shows": "Vivid geometric coating in red, yellow, blue, pink and black over a plaza and its low walls",
+      "system": "StreetBond (file name)",
+      "place": null,
+      "confidence": "unconfirmed",
+      "record": "Booklet file name only; not in the Volume 5 render",
+      "pages": [],
+      "onSite": "nowhere yet (an option for the Public Art hero in Studio, 2 Oct 2026)"
+    },
+    "formline-crosswalk-black-white.jpg": {
+      "source": "aboriginal crosswalk 1.png",
+      "shows": "Crosswalk artwork in black, white and blue formline, a bicycle symbol on the road beyond",
+      "system": "unconfirmed",
+      "place": null,
+      "confidence": "medium",
+      "record": "catalogue-2026-finish/IMAGE-MANIFEST.csv (the 116-page 2026 build), page 112, medium (source inferred); not in the Volume 5 render",
+      "pages": [],
+      "onSite": "nowhere yet (an option for the Public Art hero in Studio, 2 Oct 2026)"
+    },
+    "decomark-look-listen-live-rail-crossing.jpg": {
+      "source": "Look listen live 1.png",
+      "shows": "Yellow Look Listen Live .ca legend on the road at a railway crossing, a freight train passing",
+      "system": "DecoMark",
+      "place": null,
+      "confidence": "high for the system, no place stated (\"National program\")",
+      "record": "Idea Book, Volume 5 (public/catalogue/2026-27), page 112 (\"National program | DecoMark\"; the page prints the wider frame that is decomark-77 on the site)",
+      "pages": [
+        112
+      ],
+      "onSite": "nowhere yet (an option for the Regulatory Markings hero in Studio, 2 Oct 2026); the wider frame is decomark-77"
+    },
+    "streetbondsr-park-path-osoyoos.jpg": {
+      "source": "StreetBond - path 1.png",
+      "shows": "Peach StreetBondSR park path with yellow curb stops, lawn and a shelter behind, three years after coating",
+      "system": "StreetBondSR (the book; the booklet file name says StreetBond)",
+      "place": "Osoyoos, British Columbia",
+      "confidence": "high",
+      "record": "Idea Book, Volume 5 (public/catalogue/2026-27), page 100 to 101 (\"this Osoyoos park path\", \"AFTER 3 YEARS\")",
+      "pages": [
+        101
+      ],
+      "onSite": "nowhere yet; the StreetBondSR hero (streetbondsr-02) is a wider frame of the same path"
+    }
+  }
 }

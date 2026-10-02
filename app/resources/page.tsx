@@ -63,7 +63,10 @@ export default async function ResourcesPage() {
       <Nav />
 
       {/* ── Page Header ─────────────────────────────────────── */}
-      <div className="relative max-w-7xl mx-auto px-6 pt-32 pb-16">
+      {/* The standard container (px-4 sm:px-6 lg:px-8) and the standard
+          landing H1, 48px at 1440 (QA D11, 30 Sep 2026): the page sat at
+          x=104 while About, Gallery and Contact sat at x=112. */}
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16">
         <p
           className="text-xs font-semibold tracking-[0.2em] uppercase mb-3"
           style={{ color: "var(--accent-text-lg)" }}
@@ -71,8 +74,8 @@ export default async function ResourcesPage() {
           Resources
         </p>
         <h1
-          className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 leading-tight"
-          style={{ color: "var(--text-primary)" }}
+          className="font-bold mb-4 leading-tight"
+          style={{ color: "var(--text-primary)", fontSize: "clamp(2rem, 3.4vw, 3rem)" }}
         >
           Specification library
         </h1>
@@ -88,7 +91,7 @@ export default async function ResourcesPage() {
           actually come here for. Now it is one quiet row: the book, its name,
           and the two ways in. No page count (Doug, 25 Sep 2026). */}
       {showCatalogue() && catalogueCover && (
-        <div className="relative max-w-7xl mx-auto px-6 -mt-4 mb-12">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-4 mb-12">
           {/* On a phone the buttons take their own row, full width, so the
               text keeps the whole line. They used to share one row with it,
               which squeezed the text to three words a line and broke
@@ -165,7 +168,7 @@ export default async function ResourcesPage() {
           aria-hidden="true"
         />
 
-        <div className="max-w-7xl mx-auto px-6 py-16 pb-28 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 pb-28 relative">
           {/* Section label */}
           <div className="flex items-center gap-4 mb-10">
             <h2

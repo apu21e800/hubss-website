@@ -586,15 +586,21 @@ function ProjectModal({
         role="dialog"
         aria-modal="true"
         aria-label={`Project details: ${project.title}`}
+        /* Fits the viewport (QA A8, 30 Sep 2026: 828px tall at 900px, the
+           action row cut off and the close button scrolling away). The box
+           is a column of fixed height: the body scrolls inside it, the close
+           button and the action row stay put. */
         style={{
           background: "var(--bg-section-asphalt)",
           border: "1px solid rgba(249,115,22,0.25)",
           borderRadius: 20,
           maxWidth: 880,
           width: "100%",
-          maxHeight: "92vh",
-          overflow: "auto",
+          maxHeight: "calc(100vh - 48px)",
+          overflow: "hidden",
           position: "relative",
+          display: "flex",
+          flexDirection: "column",
         }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -637,7 +643,7 @@ function ProjectModal({
           </svg>
         </button>
 
-        <div style={{ padding: "24px 24px 28px" }}>
+        <div className="canada-map-panel-scroll" style={{ padding: "24px 24px 20px", flex: 1, minHeight: 0, overflowY: "auto" }}>
           <div style={{ marginBottom: 18 }}>
             <div
               style={{
@@ -714,6 +720,9 @@ function ProjectModal({
                 borderRadius: 12,
                 overflow: "hidden",
                 aspectRatio: "16/9",
+                // Capped so the text and the action row keep their room on a
+                // short screen (QA A8, 30 Sep 2026).
+                maxHeight: "42vh",
                 background: "var(--bg-dark)",
               }}
             >
@@ -787,12 +796,13 @@ function ProjectModal({
                 padding: "16px 18px",
               }}
             >
+              {/* Sentence case, as the site's own headings are, and the second
+                  says what HUB did rather than "the solution" (QA A14, 30 Sep
+                  2026; the labels were tracked uppercase). */}
               <p
                 style={{
-                  fontSize: 10,
+                  fontSize: 12,
                   fontWeight: 700,
-                  letterSpacing: "0.15em",
-                  textTransform: "uppercase",
                   color: "var(--accent-text-lg)",
                   margin: "0 0 8px",
                 }}
@@ -813,23 +823,32 @@ function ProjectModal({
             >
               <p
                 style={{
-                  fontSize: 10,
+                  fontSize: 12,
                   fontWeight: 700,
-                  letterSpacing: "0.15em",
-                  textTransform: "uppercase",
                   color: "var(--accent-text-lg)",
                   margin: "0 0 8px",
                 }}
               >
-                The solution
+                What HUB installed
               </p>
               <p style={{ fontSize: 13, color: "var(--text-body)", lineHeight: 1.65, margin: 0 }}>
                 {project.solution}
               </p>
             </div>
           </div>
+        </div>
 
-          <div style={{ marginTop: 22, display: "flex", gap: 12, flexWrap: "wrap" }}>
+        {/* The action row, outside the scrolling body so it is always in
+            reach (QA A8, 30 Sep 2026). */}
+        <div
+          style={{
+            flexShrink: 0,
+            padding: "14px 24px 20px",
+            borderTop: "1px solid var(--ink-08)",
+            background: "var(--bg-section-asphalt)",
+          }}
+        >
+          <div className="canada-map-modal-actions" style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
             <a
               href="/contact"
               style={{
@@ -1068,6 +1087,21 @@ export default function CanadaMap() {
     homeRef.current = { lng: c.lng, lat: c.lat, zoom: map.getZoom() };
   }, []);
   const [styleFailed, setStyleFailed] = useState(false);
+  /**
+   * Touch screens tap, pointer devices click (QA A15, 30 Sep 2026: the desktop
+   * copy said "Tap a province" and "Tap a pin"). From the hover media query,
+   * so a laptop says click and a tablet says tap whatever its width.
+   */
+  const [touch, setTouch] = useState(false);
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return;
+    const mq = window.matchMedia("(hover: none)");
+    const apply = () => setTouch(mq.matches);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
+  const tap = touch ? "Tap" : "Click";
   /**
    * The map's own width, measured. The popup is sized from this rather than
    * from the viewport, because the map is only part of the viewport — on a
@@ -1615,6 +1649,33 @@ export default function CanadaMap() {
           text-align: center;
           padding: 0 24px;
         }
+        /* Zoom and compass controls in the dark card colours with light
+           glyphs (QA A17, 30 Sep 2026): MapLibre's defaults are white boxes
+           with black icons, the only light-on-dark break on the map. The
+           glyphs are MapLibre's own SVGs, drawn dark, so they are inverted. */
+        .maplibregl-ctrl-group {
+          background: #1B1B1A !important;
+          border: 1px solid rgba(255,255,255,0.14);
+          box-shadow: 0 2px 10px rgba(0,0,0,0.45) !important;
+          border-radius: 8px;
+          overflow: hidden;
+        }
+        .maplibregl-ctrl-group button {
+          background-color: transparent !important;
+        }
+        .maplibregl-ctrl-group button + button {
+          border-top: 1px solid rgba(255,255,255,0.1) !important;
+        }
+        .maplibregl-ctrl-group button:hover,
+        .maplibregl-ctrl-group button:focus-visible {
+          background-color: rgba(255,255,255,0.09) !important;
+        }
+        .maplibregl-ctrl-group button:disabled .maplibregl-ctrl-icon {
+          opacity: 0.35;
+        }
+        .maplibregl-ctrl-group button .maplibregl-ctrl-icon {
+          filter: invert(1) brightness(0.92);
+        }
         /* Attribution — required by OSM/CARTO licensing; themed, not hidden. */
         .maplibregl-ctrl-attrib {
           background: rgba(8,13,22,0.6) !important;
@@ -1664,6 +1725,16 @@ export default function CanadaMap() {
         @media (max-width: 640px) {
           .canada-map-modal { border-radius: 14px !important; }
           .canada-map-modal-grid { grid-template-columns: 1fr !important; }
+          /* Two by two on a phone, so the fixed action row leaves the body
+             its room (30 Sep 2026). */
+          .canada-map-modal-actions { gap: 8px !important; }
+          .canada-map-modal-actions > * {
+            flex: 1 1 calc(50% - 4px);
+            justify-content: center;
+            padding-left: 12px !important;
+            padding-right: 12px !important;
+            text-align: center;
+          }
         }
       `}</style>
 
@@ -1734,7 +1805,7 @@ export default function CanadaMap() {
                   lineHeight: 1.6,
                 }}
               >
-                {mapProjects.length} documented projects in {PROVINCE_NAMES}. Tap a
+                {mapProjects.length} documented projects in {PROVINCE_NAMES}. {tap} a
                 province to jump in, or filter by system.
               </p>
             </div>
@@ -2331,8 +2402,8 @@ export default function CanadaMap() {
                   {hoveredId
                     ? "Click to open project details"
                     : productFilter
-                    ? `${filteredProjects.length} ${productFilter} installations · Tap pins for details`
-                    : "Drag anywhere · Ctrl + scroll or two fingers to zoom · Tap a pin for details"}
+                    ? `${filteredProjects.length} ${productFilter} installations · ${tap} a pin for details`
+                    : `Drag anywhere · Ctrl + scroll or two fingers to zoom · ${tap} a pin for details`}
                 </span>
               </div>
               )}
@@ -2379,7 +2450,11 @@ export default function CanadaMap() {
                       margin: 0,
                     }}
                   >
-                    {searchQuery.trim() ? "Search results" : "Projects in view"}
+                    {/* While a panel click holds the list through the flight
+                        (focusedId), the map shows one pin and the list still
+                        shows the set you were reading, so "in view" would be
+                        untrue (QA A18, 30 Sep 2026). */}
+                    {searchQuery.trim() ? "Search results" : focusedId ? "Projects" : "Projects in view"}
                   </p>
                   <span
                     style={{
@@ -2404,6 +2479,8 @@ export default function CanadaMap() {
                 >
                   {searchQuery.trim()
                     ? `Searching all ${mapProjects.length} projects`
+                    : focusedId
+                    ? "The list is held while you look. Pan or zoom to filter"
                     : productFilter
                     ? `${productFilter} only. Pan or zoom to filter further`
                     : "Pan or zoom to filter"}
@@ -2443,6 +2520,7 @@ export default function CanadaMap() {
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="City, product, application…"
                     aria-label="Search projects"
+                    spellCheck={false}
                     style={{
                       width: "100%",
                       padding: "7px 30px 7px 30px",
@@ -2695,6 +2773,7 @@ export default function CanadaMap() {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search city, product, application…"
                 aria-label="Search projects"
+                spellCheck={false}
                 style={{
                   width: "100%",
                   padding: "10px 34px",

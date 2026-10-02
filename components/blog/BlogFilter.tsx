@@ -15,6 +15,9 @@ interface Props {
   allProducts: string[];
 }
 
+/** Cards shown before the first "Load more": eight rows of three. */
+const PAGE = 24;
+
 /**
  * The section in the address. ?section=projects since 28 Sep 2026; links from
  * before then carry a stored type (?category=Case Study), which still lands
@@ -61,6 +64,11 @@ export default function BlogFilter({ posts, allProducts }: Props) {
   const [product, setProduct]   = useState(() => searchParams.get("product") ?? "all");
   const [section, setSection]   = useState<InsightsSectionKey | "all">(() => sectionFromParams(searchParams));
   const [sort, setSort]         = useState<"newest" | "oldest" | "az">(() => (searchParams.get("sort") as "newest" | "oldest" | "az") ?? "newest");
+  // The first PAGE cards, then "Load more" (QA D9, 30 Sep 2026: all 73 posts
+  // rendered on one 35,000px page). The same control as /resources; the
+  // count starts over whenever a filter changes.
+  const [visible, setVisible]   = useState(PAGE);
+  useEffect(() => { setVisible(PAGE); }, [search, product, section, sort]);
 
   const pushParams = useCallback(
     (overrides: Record<string, string>) => {
@@ -294,8 +302,9 @@ export default function BlogFilter({ posts, allProducts }: Props) {
 
       {/* ── Grid  */}
       {filtered.length > 0 ? (
+        <>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filtered.map((post, index) => (
+          {filtered.slice(0, visible).map((post, index) => (
             <motion.div
               key={post.slug}
               initial={{ opacity: 0, y: 16 }}
@@ -312,8 +321,21 @@ export default function BlogFilter({ posts, allProducts }: Props) {
           ))}
           {/* Fills the last row, if it has a gap, with the Lunch & Learn;
               with a system chosen, a session on that system. */}
-          <LunchLearnTile count={filtered.length} topic={product !== "all" ? product : undefined} />
+          <LunchLearnTile count={Math.min(visible, filtered.length)} topic={product !== "all" ? product : undefined} />
         </div>
+        {filtered.length > visible && (
+          <div className="text-center mt-10">
+            <button
+              type="button"
+              onClick={() => setVisible((v) => v + PAGE)}
+              className="px-8 py-3 rounded-lg text-sm font-medium transition-all duration-200 hover:text-[var(--accent-text-lg)] hover:border-[#F97316]/30"
+              style={{ background: "transparent", border: "1px solid var(--ink-12)", color: "var(--text-muted)", minHeight: 44 }}
+            >
+              Load more ({filtered.length - visible} remaining)
+            </button>
+          </div>
+        )}
+        </>
       ) : (
         <div className="text-center py-20">
           <p className="text-base font-semibold mb-2" style={{ color: "var(--text-primary)" }}>No posts match those filters</p>

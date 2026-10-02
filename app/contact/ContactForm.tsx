@@ -30,24 +30,44 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  // `website` is the honeypot. It used to be a loose, uncontrolled input and
+  // the submit body hardcoded `website: ""`, so the API's bot check never saw
+  // what a bot had typed into it (QA F8, 30 Sep 2026). Bound to state now
+  // and sent as typed.
   const [form, setForm] = useState({
-    name: "", company: "", email: "", phone: "", projectType: "", message: ""
+    name: "", company: "", email: "", phone: "", projectType: "", message: "", website: ""
   });
+
+  // Native validation scrolls the first invalid field into view, and the
+  // sticky header (72px) then covers it on a phone (QA D10, 30 Sep 2026).
+  // scroll-margin-top keeps the field, and the label above it, below the
+  // header. Every field also carries name/autocomplete so browsers and
+  // password managers can fill it (QA F9, F19).
+  const fieldStyle = {
+    background: "var(--bg-primary)",
+    border: "1px solid var(--border-subtle)",
+    color: "var(--text-primary)",
+    scrollMarginTop: 112,
+  } as const;
+  const AUTOCOMPLETE: Record<string, string> = {
+    name: "name", company: "organization", email: "email", phone: "tel",
+  };
 
   return (
     <main style={{ minHeight: "100vh", position: "relative" }}>
-      {/* Asphalt background */}
+      {/* Asphalt background. One pre-darkened WebP (QA F14, 30 Sep 2026):
+          the page downloaded the 495 KB homepage hero and laid an 88% black
+          overlay on it. /images/contact/backdrop.webp is the same photo at
+          1600 wide with that darkness baked in (26 KB), so the overlay went
+          with the download. */}
       <div
         className="fixed inset-0 -z-10"
         style={{
-          backgroundImage: "url('/images/hero/hero-1.jpg')",
+          backgroundColor: "#080808",
+          backgroundImage: "url('/images/contact/backdrop.webp')",
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
-      />
-      <div
-        className="fixed inset-0 -z-10"
-        style={{ background: "rgba(8,8,8,0.88)" }}
       />
       <Nav />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-16 sm:pb-24">
@@ -55,11 +75,13 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
           {/* Left */}
           <div className="pt-4">
             <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "var(--accent-text-lg)" }}>{eyebrow}</p>
+            {/* The standard landing H1, 48px at 1440, as Insights, Resources
+                and the rest (QA D11, 30 Sep 2026); this one was 56px. */}
             <h1
               className="font-black mb-8"
               style={{
                 color: "var(--text-primary)",
-                fontSize: "clamp(2rem, 4vw, 3.5rem)",
+                fontSize: "clamp(2rem, 3.4vw, 3rem)",
                 lineHeight: 1.0,
                 letterSpacing: "-0.03em",
               }}
@@ -117,7 +139,7 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
                       // A blank company is left out rather than sent as "",
                       // so the email drops its Company row and the subject
                       // line falls back instead of ending on "@ ".
-                      body: JSON.stringify({ ...form, company: form.company.trim() || undefined, formType: "contact", website: "" }),
+                      body: JSON.stringify({ ...form, company: form.company.trim() || undefined, formType: "contact", website: form.website }),
                     });
                     const data = await res.json();
                     if (!res.ok || data.error) {
@@ -151,13 +173,15 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
                       </label>
                       <input
                         id={`contact-${f.key}`}
+                        name={f.key}
+                        autoComplete={AUTOCOMPLETE[f.key]}
                         type={f.type}
                         required={!f.optional}
                         value={form[f.key as keyof typeof form]}
                         onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}
                         placeholder={f.placeholder}
                         className="w-full px-4 py-3 rounded-lg text-base outline-none focus:ring-1 focus:ring-orange-500 min-h-[48px]"
-                        style={{ background: "var(--bg-primary)", border: "1px solid var(--border-subtle)", color: "var(--text-primary)" }}
+                        style={fieldStyle}
                       />
                     </div>
                   ))}
@@ -170,13 +194,15 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
                     <label htmlFor={`contact-${f.key}`} className="block text-sm mb-2" style={{ color: "var(--text-body)" }}>{f.label}</label>
                     <input
                       id={`contact-${f.key}`}
+                      name={f.key}
+                      autoComplete={AUTOCOMPLETE[f.key]}
                       type={f.type}
                       required={f.key === "email"}
                       value={form[f.key as keyof typeof form]}
                       onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}
                       placeholder={f.placeholder}
                       className="w-full px-4 py-3 rounded-lg text-base outline-none focus:ring-1 focus:ring-orange-500 min-h-[48px]"
-                      style={{ background: "var(--bg-primary)", border: "1px solid var(--border-subtle)", color: "var(--text-primary)" }}
+                      style={fieldStyle}
                     />
                   </div>
                 ))}
@@ -184,13 +210,15 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
                   <label htmlFor="contact-projectType" className="block text-sm mb-2" style={{ color: "var(--text-body)" }}>Project type</label>
                   <select
                     id="contact-projectType"
+                    name="projectType"
+                    autoComplete="off"
                     value={form.projectType}
                     onChange={(e) => setForm({ ...form, projectType: e.target.value })}
                     className="w-full px-4 py-3 rounded-lg text-base outline-none focus:ring-1 focus:ring-orange-500 min-h-[48px]"
                     // Empty, it reads in the placeholder grey of the fields
                     // above (Chrome's: the text colour at half strength), not
                     // in white like a chosen value (QA, 28 Sep 2026).
-                    style={{ background: "var(--bg-primary)", border: "1px solid var(--border-subtle)", color: form.projectType ? "var(--text-primary)" : "color-mix(in srgb, var(--text-primary) 50%, transparent)" }}
+                    style={{ ...fieldStyle, color: form.projectType ? "var(--text-primary)" : "color-mix(in srgb, var(--text-primary) 50%, transparent)" }}
                   >
                     <option value="">Select project type...</option>
                     {projectTypes.map((t) => <option key={t} value={t} style={{ color: "var(--text-primary)" }}>{t}</option>)}
@@ -200,15 +228,18 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
                   <label htmlFor="contact-message" className="block text-sm mb-2" style={{ color: "var(--text-body)" }}>Message</label>
                   <textarea
                     id="contact-message"
+                    name="message"
+                    autoComplete="off"
                     rows={4}
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
                     placeholder="Tell us about your project..."
                     className="w-full px-4 py-3 rounded-lg text-base outline-none resize-none focus:ring-1 focus:ring-orange-500"
-                    style={{ background: "var(--bg-primary)", border: "1px solid var(--border-subtle)", color: "var(--text-primary)" }}
+                    style={fieldStyle}
                   />
                 </div>
-                {/* Honeypot — hidden from real users */}
+                {/* Honeypot, hidden from real users; its value travels with
+                    the submit (see the `website` note on the form state). */}
                 <input
                   type="text"
                   name="website"
@@ -216,6 +247,8 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
                   autoComplete="off"
                   className="hidden"
                   aria-hidden="true"
+                  value={form.website}
+                  onChange={(e) => setForm({ ...form, website: e.target.value })}
                 />
 
                 {error && (

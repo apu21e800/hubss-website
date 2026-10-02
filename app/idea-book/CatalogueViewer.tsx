@@ -787,6 +787,15 @@ export default function CatalogueViewer({
               Swipe or use <kbd style={kbd}>&larr;</kbd> <kbd style={kbd}>&rarr;</kbd> to turn &nbsp;·&nbsp; scroll or double-tap to zoom
             </p>
           </div>
+
+          {/* The phone's hint (QA D8, 30 Sep 2026): under sm the arrows are
+              off and the line above is desktop-only, so the reader opened on
+              the cover with no sign of how to turn it. */}
+          {!short && (
+            <p className="mt-2 text-center text-[11px] sm:hidden" style={{ color: "rgba(255,255,255,0.45)" }}>
+              Swipe to turn &nbsp;·&nbsp; double-tap to zoom
+            </p>
+          )}
         </div>
       </footer>
 

@@ -166,11 +166,13 @@ export default async function AboutPage() {
               {hero.eyebrow}
             </p>
           </div>
+          {/* The standard landing H1, 48px at 1440, as Insights, Resources
+              and the rest (QA D11, 30 Sep 2026); this one was 56px. */}
           <h1
             className="font-black mb-6 max-w-4xl"
             style={{
               color: "var(--text-primary)",
-              fontSize: "clamp(2rem, 4vw, 3.5rem)",
+              fontSize: "clamp(2rem, 3.4vw, 3rem)",
               lineHeight: 1.0,
               letterSpacing: "-0.03em",
             }}
@@ -238,14 +240,15 @@ export default async function AboutPage() {
                 <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, transparent 50%, rgba(13,17,23,0.7) 100%)" }} />
               </div>
               <h2 className="text-3xl font-bold mb-6" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>What the work is for</h2>
+              {/* A statement, not a quotation (QA D18, 30 Sep 2026): it was
+                  set in quotation marks and attributed to "HUB Surface
+                  Systems", the company quoting itself on its own page. The
+                  text is Sanity's (aboutMission); only the framing is here. */}
               <p
-                className="text-xl leading-relaxed mb-4"
+                className="text-xl leading-relaxed mb-8"
                 style={{ color: "var(--text-primary)", borderLeft: "3px solid #f97316", paddingLeft: "24px", fontWeight: 500 }}
               >
-                &ldquo;{missionQuote}&rdquo;
-              </p>
-              <p className="text-sm mb-8" style={{ color: "#5a5a5a", paddingLeft: "24px" }}>
-                HUB Surface Systems
+                {missionQuote}
               </p>
               <p className="text-base leading-relaxed" style={{ color: "var(--text-body)" }}>
                 {storyAside}

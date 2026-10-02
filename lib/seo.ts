@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 
 const BASE_URL = "https://hubss.com";
 const SITE_NAME = "HUB Surface Systems";
-const DEFAULT_OG_IMAGE = "/images/hero/hero-1.jpg";
+// 2 Oct 2026 (QA F12): the share card declares 1200x630, so the fallback is
+// the 1200x630 crop of the hero, not the 1632x1020 hero file itself.
+const DEFAULT_OG_IMAGE = "/images/og/default.jpg";
 
 // Keyword-rich title suffix for better SERP context
 const TITLE_SUFFIX = "HUB Surface Systems";

@@ -371,8 +371,12 @@ export default async function ProductPage({ params }: Props) {
               </>
             ) : (
               <>
-                <h2 className="text-2xl sm:text-3xl font-bold mb-5" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
-                  What {product.name} is
+                {/* The same heading as the spread pages and the application
+                    pages. "What AirMark is" and a sidebar "Specification" made
+                    the four products without a spread read as a second
+                    template (QA B2, C3, 30 Sep 2026). */}
+                <h2 className="text-xl sm:text-2xl font-bold mb-4" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
+                  How it works
                 </h2>
                 {product.descriptionBlocks ? (
                   <RichText value={product.descriptionBlocks} />
@@ -455,7 +459,7 @@ export default async function ProductPage({ params }: Props) {
                 <>
                   {/* Its own section, not an <h3> under Downloads. */}
                   <h2 className="font-bold text-lg mb-5" style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
-                    {catalogue ? "Specification details" : "Specification"}
+                    Specification details
                   </h2>
                   <dl className="space-y-3.5 mb-7">
                     {sideSpecs.map((spec) => (

@@ -302,34 +302,42 @@ export default async function ApplicationPage({ params }: Props) {
                 spread keep the systems here. The thumbnails went through
                 /_next/image, so the list is typographic now (QA pa#40). */}
             <aside className="min-w-0">
-              <div className="rounded-xl p-6 sm:p-7 lg:sticky lg:top-24 relative overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)", boxShadow: "0 1px 2px rgba(0,0,0,0.04)" }}>
+              {/* Two cards on the four pages without a spread, one on the
+                  sixteen with one: the systems list used to sit inside the
+                  pricing card with "Pricing and installers" folded in under
+                  it, so those four sidebars read as a different design
+                  (QA C25, 30 Sep 2026). The pricing card is now the same
+                  card everywhere; the systems get their own. */}
+              <div className="lg:sticky lg:top-24 space-y-4">
+              {!spread && relatedProductData.length > 0 && (
+                <div className="rounded-xl p-6 sm:p-7 relative overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)", boxShadow: "0 1px 2px rgba(0,0,0,0.04)" }}>
+                  <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
+                  <h2 className="font-bold text-lg mb-4" style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
+                    Systems for {nameInSentence}
+                  </h2>
+                  <ul>
+                    {relatedProductData.map((product, i) => (
+                      <li key={product.slug} style={{ borderTop: "1px solid var(--ink-06)", borderBottom: i === relatedProductData.length - 1 ? "1px solid var(--ink-06)" : undefined }}>
+                        <Link
+                          href={`/products/${product.slug}`}
+                          className="group flex items-center gap-3 py-3 transition-colors"
+                          style={{ minHeight: 52 }}
+                        >
+                          <span className="flex-1 min-w-0">
+                            <span className="block font-semibold text-sm transition-colors group-hover:text-[var(--accent-text)]" style={{ color: "var(--text-primary)" }}>{product.name}</span>
+                            <span className="block text-xs leading-snug mt-0.5" style={{ color: "var(--text-secondary)" }}>{product.shortDesc}</span>
+                          </span>
+                          <svg className="w-4 h-4 flex-shrink-0 transition-transform group-hover:translate-x-0.5" style={{ color: "var(--accent-text)" }} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              <div className="rounded-xl p-6 sm:p-7 relative overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)", boxShadow: "0 1px 2px rgba(0,0,0,0.04)" }}>
                 <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
-                {!spread && relatedProductData.length > 0 && (
-                  <>
-                    <h2 className="font-bold text-lg mb-4" style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
-                      Systems for {nameInSentence}
-                    </h2>
-                    <ul className="mb-7">
-                      {relatedProductData.map((product) => (
-                        <li key={product.slug} style={{ borderTop: "1px solid var(--ink-06)" }}>
-                          <Link
-                            href={`/products/${product.slug}`}
-                            className="group flex items-center gap-3 py-3 transition-colors"
-                            style={{ minHeight: 52 }}
-                          >
-                            <span className="flex-1 min-w-0">
-                              <span className="block font-semibold text-sm transition-colors group-hover:text-[var(--accent-text)]" style={{ color: "var(--text-primary)" }}>{product.name}</span>
-                              <span className="block text-xs leading-snug mt-0.5" style={{ color: "var(--text-secondary)" }}>{product.shortDesc}</span>
-                            </span>
-                            <svg className="w-4 h-4 flex-shrink-0 transition-transform group-hover:translate-x-0.5" style={{ color: "var(--accent-text)" }} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                            </svg>
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </>
-                )}
                 <h2 className="font-bold text-base mb-1.5" style={{ color: "var(--text-primary)" }}>
                   Pricing and installers
                 </h2>
@@ -350,6 +358,7 @@ export default async function ApplicationPage({ params }: Props) {
                   Send a project enquiry
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
                 </Link>
+              </div>
               </div>
             </aside>
           </div>

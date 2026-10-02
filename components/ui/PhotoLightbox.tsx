@@ -1,17 +1,17 @@
 "use client";
 
 /**
- * PhotoLightbox — the site's shared cinematic image viewer (Aug 2026).
+ * PhotoLightbox: the site's shared cinematic image viewer (Aug 2026).
  *
  * Replaces yet-another-react-lightbox in the product/application galleries.
  * Vernon: "there's a weird shadow across the header" (YARL's full-width
  * caption toolbar), "fix orange arrows left and right, same with the x".
  *
  * Design rules:
- *   • No full-width chrome bars — the photo owns the frame. The counter sits
+ *   • No full-width chrome bars: the photo owns the frame. The counter sits
  *     in a top-left pill; the caption sits under the photo, never on it.
  *   • Prev/Next/Close are solid 48px circular brand-orange buttons with
- *     white glyphs — visible, tappable, consistent.
+ *     white glyphs: visible, tappable, consistent.
  *   • Esc / ← / → keys, swipe on touch, backdrop click closes, body scroll
  *     locked while open, adjacent frames preloaded.
  *
@@ -186,7 +186,7 @@ export default function PhotoLightbox({
           if (Math.abs(dx) > 48) (dx > 0 ? prev() : next());
         }}
       >
-        {/* Counter — top-left pill, fixed white on the backdrop */}
+        {/* Counter: top-left pill, fixed white on the backdrop */}
         <div
           className="absolute top-4 left-4 sm:top-5 sm:left-5 z-10 px-3 py-1.5 rounded-full text-xs font-bold tracking-wide select-none tabular-nums"
           style={{ background: "rgba(255,255,255,0.1)", color: WHITE, border: "1px solid rgba(255,255,255,0.14)", backdropFilter: "blur(8px)" }}
@@ -194,7 +194,7 @@ export default function PhotoLightbox({
           {index + 1} <span style={{ color: WHITE_DIM }}>/ {photos.length}</span>
         </div>
 
-        {/* Close — orange circle, top-right; takes focus on open */}
+        {/* Close: orange circle, top-right; takes focus on open */}
         <button
           ref={closeRef}
           type="button"

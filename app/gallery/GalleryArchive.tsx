@@ -29,7 +29,7 @@ const CATEGORIES: { value: Category; label: string; count: (imgs: GalleryImage[]
 
 // Vernon (Aug 2026): break up how many images load at once. The archive was
 // rendering all photos in one 10,800px wall. Now: first PAGE, then +PAGE
-// as you approach the end — auto-load is right HERE (only the footer sits
+// as you approach the end: auto-load is right HERE (only the footer sits
 // below), while product/application galleries stay button-driven.
 const PAGE = 24;
 /** The first two rows at four across load eagerly (QA D7, 30 Sep 2026). */
@@ -128,7 +128,7 @@ export default function GalleryArchive({ images }: { images: GalleryImage[] }) {
                   color: isActive ? "var(--on-accent)" : "var(--text-muted)",
                   border: "1px solid",
                   borderColor: isActive ? "#F97316" : "var(--ink-10)",
-                  // 44px floor — these were 35px tall, and category filters are
+                  // 44px floor: these were 35px tall, and category filters are
                   // the first thing a phone user reaches for on this page.
                   minHeight: 44,
                 }}
@@ -148,7 +148,7 @@ export default function GalleryArchive({ images }: { images: GalleryImage[] }) {
           })}
         </div>
 
-        {/* Tile entrance — collapses under reduced motion */}
+        {/* Tile entrance: collapses under reduced motion */}
         <style>{`
           @keyframes archive-tile-in {
             from { opacity: 0; transform: translateY(10px); }
@@ -159,7 +159,7 @@ export default function GalleryArchive({ images }: { images: GalleryImage[] }) {
           }
         `}</style>
 
-        {/* Uniform app grid — stable pagination (new tiles append at the end,
+        {/* Uniform app grid: stable pagination (new tiles append at the end,
             nothing reflows), 2-up on phones like a native photo app */}
         <AnimatePresence mode="wait">
           <motion.div
@@ -208,7 +208,7 @@ export default function GalleryArchive({ images }: { images: GalleryImage[] }) {
                   />
                   {/* Hover overlay. Pinned dark: it is an 85% black scrim over
                       the photograph, so its caption needs light type no matter
-                      what the page around it is doing — and this page is paper
+                      what the page around it is doing: and this page is paper
                       now. "Click to expand" went on 30 Sep 2026 (QA D20): the
                       button's label says what it does. */}
                   <div
@@ -226,7 +226,7 @@ export default function GalleryArchive({ images }: { images: GalleryImage[] }) {
           </motion.div>
         </AnimatePresence>
 
-        {/* Load more — sentinel auto-loads as it approaches; button as backup */}
+        {/* Load more: sentinel auto-loads as it approaches; button as backup */}
         {hasMore && (
           <div ref={sentinelRef} className="mt-10 flex flex-col items-center gap-3">
             <p className="text-xs" style={{ color: "var(--text-secondary)" }} aria-live="polite">
@@ -252,13 +252,13 @@ export default function GalleryArchive({ images }: { images: GalleryImage[] }) {
 
       <Footer />
 
-      {/* Lightbox — shared cinematic viewer */}
+      {/* Lightbox: shared cinematic viewer */}
       <PhotoLightbox
         photos={filtered.map((img) => ({
           src: img.src,
           // Same descriptive string the tile carries. This used to be the bare
-          // label ("High-Visibility Crosswalk"), so the fullscreen view — the
-          // one a reader actually studies — was the least described surface
+          // label ("High-Visibility Crosswalk"), so the fullscreen view, the
+          // one a reader actually studies, was the least described surface
           // on the page.
           alt: `${img.alt}, ${img.location}, decorative pavement by HUB Surface Systems`,
           caption: `${img.alt} · ${img.location}`,

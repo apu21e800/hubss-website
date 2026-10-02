@@ -296,8 +296,45 @@ with `git checkout origin/main -- <path>`.
   Articles (/blog/articles). Stored Sanity types are unchanged; the old hub
   URLs and /projects/<slug> redirect (lib/field-notes-taxonomy.ts).
 - The Insights mega menu reads lib/nav-insights.json, written at build from
-  Sanity by scripts/gen-nav-insights.ts (the file lists the cover and the five
-  newest posts; the panel reads as many as it shows).
+  Sanity by scripts/gen-nav-insights.ts. Since 2 Oct 2026 (Vern: "insights
+  mega menu dropdown still feels busy, too much text maybe") the panel is
+  pictures first: the cover story (photo, section label, title), three section
+  tiles (Projects, Guides, Articles, each wearing the photo of its newest tall
+  enough post, `sections[].photo` in the JSON), "All Insights" and the foot row
+  (Idea Book, Lunch & Learn). No excerpts, dates, counts or "Latest" list. The
+  file still carries `latest` and the excerpts for other readers.
+
+## 2 Oct 2026 release: where the new things live
+- /llms.txt and /llms-full.txt are routes (app/llms.txt/route.ts,
+  app/llms-full.txt/route.ts, content in app/llms.txt/llms-content.ts), built
+  from the same merged products, applications and posts the pages use, so they
+  cannot go stale. public/llms.txt is gone. app/robots.ts names the AI crawlers
+  (all allowed) so intent is documented.
+- IndexNow: .github/workflows/indexnow.yml runs `npm run indexnow`
+  (scripts/indexnow-submit.mjs) six minutes after every push to main and tells
+  Bing which URLs changed; the key file is public/<key>.txt. Bing Webmaster
+  Tools verification is a one-time step in Vern's browser. Perplexity and
+  ChatGPT search lean on Bing's index, so this is what keeps them current.
+- Site search (components/sections/SearchOverlay.tsx): every row has a
+  thumbnail from public/images/search/thumbs (128 and 256 px WebPs baked by
+  scripts/gen-search-images.ts, hash-skipped; posts and map pins fetch from
+  Sanity at build only); under two characters the palette shows the 14 systems
+  as a photo grid. The matched-keyword chip is gone.
+- The print catalogue's photos (the Idea Book's print set, 34 PNGs, kept on
+  Vern's PC under _archive/design-assets/catalog-print-build/assets/booklet)
+  now feed the Products and Applications menu panels and two product cards;
+  the web copies are in public/images/catalogue-assets with their source and
+  caption confidence in _manifest.json (`_photos`). The hero photos on the
+  product and application pages come from Studio, so the catalogue photos for
+  those are a Studio job (list in the 2 Oct release record in the Claude
+  project).
+- Homepage hero: the three cuts in public/images/hero are re-cut from a
+  2540 px master (the UBC original with the approved HUB sign composite) by
+  scripts/hero-cuts.mjs; on windows 16:9 and wider HeroSlideshow shows the
+  whole photo against the right edge with the left fading to dark under the
+  headline (Vern: "zoomed out a bit to show more of the crosswalk"); 16:10 and
+  phones stay full-bleed. Studio's homepage hero copy is replaced with
+  `npm run photos:sync -- --only=homepage` on Vern's PC.
 - Copy syncs can emit a plan instead of writing:
   `npx tsx scripts/sync-products-to-sanity.ts --dry-run --emit=plan.json`
   (also sync-applications). The plan is applied on Vern's machine with

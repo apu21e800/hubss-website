@@ -381,7 +381,7 @@ function index(): SearchEntry[] {
 export function withColours(
   colours: { name: string; hex: string; product: string; href: string }[]
 ): SearchEntry[] {
-  return [
+  const all: SearchEntry[] = [
     ...index(),
     ...colours.map((c) => ({
       id: `colour-${c.name}`,
@@ -395,6 +395,10 @@ export function withColours(
       hex: c.hex,
     })),
   ];
+  // Normalise now, while the palette opens, so the first keystroke that
+  // searches is not the one that pays for it (see Normed below).
+  for (const e of all) normed(e);
+  return all;
 }
 
 // ── Scoring ───────────────────────────────────────────────────────────────────
@@ -461,12 +465,51 @@ interface TokenMatch {
 }
 const NONE: TokenMatch = { s: 0, lane: "body" };
 
+/**
+ * Each entry's fields, normalised once (2 Oct 2026).
+ *
+ * scoreToken used to run norm() over the title, subtitle, keywords and body of
+ * every entry, for every token, on every keystroke: 395 entries, a product's
+ * body a few kilobytes of description and specs. Nothing about an entry
+ * changes after the palette builds its index, so the work is now done once and
+ * kept. The thumbnails that answer Vern's "search function is a bit dull too"
+ * add pictures to every row; this pays for them, so typing is no slower.
+ */
+interface Normed {
+  title: string;
+  words: string[];
+  sub: string;
+  subWords: string[];
+  kw: string;
+  kwWords: string[];
+  body: string;
+  /** Title, subtitle and keywords together, for the whole-phrase bonus. */
+  phrase: string;
+}
+const NORMED = new WeakMap<SearchEntry, Normed>();
+function normed(e: SearchEntry): Normed {
+  let n = NORMED.get(e);
+  if (!n) {
+    const title = norm(e.title);
+    const sub = norm(e.subtitle);
+    const kw = norm(e.keywords);
+    n = {
+      title,
+      words: title.split(" "),
+      sub,
+      subWords: sub.split(" "),
+      kw,
+      kwWords: kw.split(" "),
+      body: norm(e.body),
+      phrase: norm(`${e.title} ${e.subtitle} ${e.keywords}`),
+    };
+    NORMED.set(e, n);
+  }
+  return n;
+}
+
 function scoreToken(token: string, e: SearchEntry): TokenMatch {
-  const title = norm(e.title);
-  const sub = norm(e.subtitle);
-  const kw = norm(e.keywords);
-  const body = norm(e.body);
-  const words = title.split(" ");
+  const { title, words, sub, subWords, kw, kwWords, body } = normed(e);
 
   if (title === token) return { s: 1000, lane: "title" };
   if (title.startsWith(token)) return { s: 620, lane: "title" };
@@ -478,13 +521,13 @@ function scoreToken(token: string, e: SearchEntry): TokenMatch {
   const s = slack(token);
   if (s > 0 && words.some((w) => w.length >= 4 && within(w, token, s))) return { s: 210, lane: "title" };
 
-  if (kw.split(" ").some((w) => w === token)) return { s: 190, lane: "keywords" };
+  if (kwWords.some((w) => w === token)) return { s: 190, lane: "keywords" };
   if (kw.includes(token)) return { s: 150, lane: "keywords" };
   // Domain vocabulary lives in the keyword lane, not in titles — "thermoplastic",
   // "retroreflective", "methacrylate". Those are exactly the words a visitor
   // mistypes, so the fuzzy pass has to reach them too.
-  if (s > 0 && kw.split(" ").some((w) => w.length >= 5 && within(w, token, s))) return { s: 130, lane: "keywords" };
-  if (sub.split(" ").some((w) => w === token)) return { s: 120, lane: "subtitle" };
+  if (s > 0 && kwWords.some((w) => w.length >= 5 && within(w, token, s))) return { s: 130, lane: "keywords" };
+  if (subWords.some((w) => w === token)) return { s: 120, lane: "subtitle" };
   if (sub.includes(token)) return { s: 90, lane: "subtitle" };
   if (body.includes(token)) return { s: 55, lane: "body" };
 
@@ -534,7 +577,7 @@ export function search(query: string, entries: SearchEntry[], limit = 400): Sear
     if (missed) continue;
 
     // The whole phrase appearing intact is the strongest signal there is.
-    if (tokens.length > 1 && norm(`${e.title} ${e.subtitle} ${e.keywords}`).includes(q)) total += 400;
+    if (tokens.length > 1 && normed(e).phrase.includes(q)) total += 400;
 
     hits.push({ ...e, score: total / tokens.length + e.boost, matched, where });
   }

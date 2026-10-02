@@ -366,6 +366,14 @@ export default function CanadaMap() {
     })),
   }), [filtered]);
 
+  // The camera's padding: the floating panel on the left and some air. Set
+  // on the map ONCE (map.setPadding, below), never passed to a camera call.
+  // Until 2 Oct 2026 every easeTo, flyTo and fitBounds carried it, and
+  // MapLibre keeps the padding an easeTo or flyTo gave it, so the next
+  // fitBounds added its own on top: after a visit to a pin, "Back to Canada"
+  // framed Canada in a frame padded twice on the left and the map landed on
+  // the Pacific (Vern: "clicking back to canada button does not always
+  // center the map on canada, shows too much of asia").
   const padding = useCallback(
     () => (isDesktop
       ? { top: 64, bottom: 64, left: PANEL_W + 48, right: 64 }
@@ -396,8 +404,8 @@ export default function CanadaMap() {
     const map = mapRef.current;
     if (!map) return;
     freezeList.current = false;
-    map.fitBounds(ALL_BOUNDS, { padding: padding(), duration: reducedMotion ? 0 : duration });
-  }, [padding, reducedMotion]);
+    map.fitBounds(ALL_BOUNDS, { duration: reducedMotion ? 0 : duration });
+  }, [reducedMotion]);
 
   // ── Moving the camera to a project
   const flyTo = useCallback((p: MapProject, how: "tour" | "select" | "follow") => {
@@ -409,7 +417,7 @@ export default function CanadaMap() {
     const zoom = p.approximate
       ? (how === "tour" ? 10.2 : Math.min(Math.max(now, how === "follow" ? 8.5 : 9.5), 10.2))
       : how === "tour" ? 13 : Math.min(Math.max(now, how === "follow" ? 11.6 : 12.5), 16);
-    const options = { center: [p.lng, p.lat] as [number, number], zoom, padding: padding() };
+    const options = { center: [p.lng, p.lat] as [number, number], zoom };
     if (reducedMotion) { map.jumpTo(options); return; }
     // A short hop eases; a long one flies, climbing out and back in, so the
     // map never smears a continent past at street scale.
@@ -418,7 +426,7 @@ export default function CanadaMap() {
     const far = Math.hypot(a.x - el.clientWidth / 2, a.y - el.clientHeight / 2) > el.clientWidth * 1.5;
     if (how === "follow" && !far) map.easeTo({ ...options, duration: 700 });
     else map.flyTo({ ...options, duration: how === "tour" ? TOUR_FLIGHT_MS : far ? 1900 : 1300, curve: 1.45, essential: true });
-  }, [padding, reducedMotion]);
+  }, [reducedMotion]);
 
   const select = useCallback((p: MapProject, how: "tour" | "select" | "follow" = "select") => {
     setSelectedId(p.id);
@@ -497,7 +505,7 @@ export default function CanadaMap() {
       try {
         const zoom = await source.getClusterExpansionZoom(clusterId);
         const [lng, lat] = (f.geometry as unknown as { coordinates: [number, number] }).coordinates;
-        map.easeTo({ center: [lng, lat], zoom: zoom + 0.4, padding: padding(), duration: reducedMotion ? 0 : 800 });
+        map.easeTo({ center: [lng, lat], zoom: zoom + 0.4, duration: reducedMotion ? 0 : 800 });
       } catch { /* the cluster went away under the click */ }
       return;
     }
@@ -554,7 +562,8 @@ export default function CanadaMap() {
     if (!loaded) return;
     const map = mapRef.current;
     if (!map) return;
-    map.fitBounds(ALL_BOUNDS, { padding: padding(), duration: 0 });
+    map.getMap().setPadding(padding());
+    map.fitBounds(ALL_BOUNDS, { duration: 0 });
     const c = map.getCenter();
     homeRef.current = { lng: c.lng, lat: c.lat, zoom: map.getZoom() };
     syncInView();
@@ -567,10 +576,10 @@ export default function CanadaMap() {
       const b = boundsFor(filtered.filter((p) => matches(p, query)));
       if (!b) return;
       freezeList.current = true;
-      mapRef.current?.fitBounds(b, { padding: padding(), maxZoom: 11, duration: reducedMotion ? 0 : 1100 });
+      mapRef.current?.fitBounds(b, { maxZoom: 11, duration: reducedMotion ? 0 : 1100 });
     }, 450);
     return () => clearTimeout(t);
-  }, [query, loaded, filtered, padding, reducedMotion]);
+  }, [query, loaded, filtered, reducedMotion]);
 
   // A new filter, search or province starts the list at the top.
   useEffect(() => {
@@ -593,8 +602,8 @@ export default function CanadaMap() {
     const b = boundsFor(filtered.filter((p) => p.province === code));
     if (!b) return;
     freezeList.current = false;
-    mapRef.current?.fitBounds(b, { padding: padding(), maxZoom: 9.5, duration: reducedMotion ? 0 : 1300 });
-  }, [filtered, frameCanada, padding, reducedMotion, stopTour]);
+    mapRef.current?.fitBounds(b, { maxZoom: 9.5, duration: reducedMotion ? 0 : 1300 });
+  }, [filtered, frameCanada, reducedMotion, stopTour]);
 
   const anyFilter = Boolean(product || application || query || province || moved);
   const startOver = useCallback(() => {
@@ -1057,9 +1066,12 @@ const CSS = `
 .cm-selects select { min-height: 44px; padding: 0 10px; border-radius: 11px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #C4C9D2; font-size: 13px; outline: none; cursor: pointer; min-width: 0; }
 .cm-selects select.is-on { border-color: rgba(249,115,22,0.55); color: #FDBA74; background: rgba(249,115,22,0.1); }
 .cm-selects select option { background: #151515; color: #F5F0EB; }
-.cm-pills { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
-.cm-pills::-webkit-scrollbar { display: none; }
-.cm-pill { display: inline-flex; align-items: center; justify-content: center; gap: 6px; flex: 1 0 auto; min-width: 44px; min-height: 44px; padding: 0 10px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); color: #B7BDC8; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+/* The row wraps (2 Oct 2026, Vern: "PE circle is cut off a bit"): it used to
+   scroll sideways with the scrollbar hidden, so the last chip sat half out
+   of view with nothing to say more followed. Seven chips fit one row at the
+   panel's width; more wrap onto a second. */
+.cm-pills { display: flex; flex-wrap: wrap; gap: 5px; }
+.cm-pill { display: inline-flex; align-items: center; justify-content: center; gap: 6px; flex: 0 0 auto; min-width: 42px; min-height: 44px; padding: 0 9px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); color: #B7BDC8; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; }
 .cm-pill.is-on { border-color: rgba(249,115,22,0.65); background: rgba(249,115,22,0.16); color: #F5F0EB; }
 .cm-pill-count { font-size: 10.5px; color: #9CA3AF; background: rgba(255,255,255,0.07); border-radius: 9px; padding: 1px 6px; }
 .cm-pill.is-on .cm-pill-count { color: #FDBA74; background: rgba(249,115,22,0.16); }

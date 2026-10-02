@@ -8,14 +8,21 @@ import { buildMetadata } from "@/lib/seo";
 // page both contradicted the noindex Next adds, and the canonical claimed a
 // /404 URL that doesn't exist. A missing page should name no canonical and ask
 // not to be indexed.
+//
+// 30 Sep 2026 (QA F21: "the 404 carries two robots metas and og:url
+// https://hubss.com/404"): Next writes its own `noindex` on every not-found
+// render, so a robots entry here printed a second one. robots is null (Next's
+// stands alone) and the share card names no URL, since /404 is not one.
+const notFoundMeta = buildMetadata({
+  title: "Page Not Found",
+  description: "The page you're looking for doesn't exist. Browse our products, applications, or get in touch.",
+  slug: "404",
+});
 export const metadata: Metadata = {
-  ...buildMetadata({
-    title: "Page Not Found",
-    description: "The page you're looking for doesn't exist. Browse our products, applications, or get in touch.",
-    slug: "404",
-  }),
+  ...notFoundMeta,
+  openGraph: { ...notFoundMeta.openGraph, url: undefined },
   alternates: { canonical: null },
-  robots: { index: false, follow: true },
+  robots: null,
 };
 
 export default function NotFound() {

@@ -144,11 +144,14 @@ export default async function AboutPage() {
               {hero.eyebrow}
             </p>
           </div>
+          {/* The standard landing H1, 48px at 1440, as Insights, Resources
+              and the rest (QA D11, 30 Sep 2026, re-applied 2 Oct 2026 on the
+              trimmed page); this one was 56px. */}
           <h1
             className="font-black mb-6 max-w-4xl"
             style={{
               color: "var(--text-primary)",
-              fontSize: "clamp(2rem, 4vw, 3.5rem)",
+              fontSize: "clamp(2rem, 3.4vw, 3rem)",
               lineHeight: 1.0,
               letterSpacing: "-0.03em",
             }}

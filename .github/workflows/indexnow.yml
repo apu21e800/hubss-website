@@ -28,7 +28,9 @@ permissions:
 jobs:
   submit:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    # Four minutes' wait, up to five more for a first deploy's key file
+    # (the script polls), then the submission itself.
+    timeout-minutes: 12
     steps:
       - name: Wait for the Vercel deploy
         run: sleep 240

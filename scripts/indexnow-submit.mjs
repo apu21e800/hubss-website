@@ -89,11 +89,20 @@ async function main() {
   const keyLocation = `https://${host}/${key}.txt`;
 
   // The search engine checks keyLocation before it acts on a request, so a
-  // submission before the key file is live is refused with a 403.
+  // submission before the key file is live is refused with a 403. On the
+  // first deploy that carries the key the build can outrun the workflow's
+  // wait (production builds took 2 min 48 s and 3 min 55 s in Sep 2026), so
+  // a real run checks every 30 seconds for up to five minutes.
   const keyCheckUrl = dryRun ? `${base}/${key}.txt` : keyLocation;
-  const served = await get(keyCheckUrl).then((t) => t.trim(), () => null);
-  console.log(`key file ${keyCheckUrl}: ${served === key ? "served, matches" : "NOT served or does not match"}`);
-  if (!dryRun && served !== key) throw new Error("the key file is not live yet: deploy first, then submit");
+  const keyServed = () => get(keyCheckUrl).then((t) => t.trim() === key, () => false);
+  let served = await keyServed();
+  for (let tries = 0; !dryRun && !served && tries < 10; tries++) {
+    console.log(`key file ${keyCheckUrl} not live yet, checking again in 30 s`);
+    await new Promise((r) => setTimeout(r, 30_000));
+    served = await keyServed();
+  }
+  console.log(`key file ${keyCheckUrl}: ${served ? "served, matches" : "NOT served or does not match"}`);
+  if (!dryRun && !served) throw new Error("the key file is not live: deploy it first, then submit");
 
   console.log(`${urlList.length} URLs from ${base}/sitemap.xml for host ${host}${dryRun ? " (dry run: nothing is sent)" : ""}`);
   let failed = false;

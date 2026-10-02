@@ -11,22 +11,22 @@ import { isSanityImage, sanitySized, sanitySrcSet } from "@/lib/photos";
 const FALLBACK_HERO = "/images/hero/hero-1.jpg";
 
 /**
- * How the photograph sits in the hero (lib/hero-framing.ts, HOME_HERO). By
- * default it covers the frame, as it always has. On windows 16:9 and wider,
- * the ones that get the wide cut, it is shown whole at the hero's height,
- * against the right edge, its left edge fading into the dark ground under
- * the headline: 2 Oct 2026, Vern: "main hero image, can it be zoomed out a
- * bit to show more of the crosswalk?" The rule uses the wide <source>'s own
- * media query, so the framing and the file always switch together; with no
- * wide file there is no wide rule.
+ * How the photograph sits in the hero (lib/hero-framing.ts, HOME_HERO). It
+ * covers the frame on every screen, as it always has. A window 16:9 or wider
+ * gets the looser 1.8:1 cut through the <picture> (2 Oct 2026, Vern: "main
+ * hero image, can it be zoomed out a bit to show more of the crosswalk?"),
+ * pinned to its top so the sign keeps its air and what the frame cannot hold
+ * is lost at the foot, under the buttons. An earlier version of this rule
+ * showed the whole photo inset against the right edge with its left side
+ * fading into the dark ground; Vern, 2 Oct: "this gradient on the left of the
+ * hero looks really bad, fix it!", so the fade is gone. The rule uses the wide
+ * <source>'s own media query, so the framing and the file switch together.
  */
 function heroImageCss(wideMedia?: string): string {
-  const w = HOME_HERO.wide;
-  const fade = `linear-gradient(to right, transparent 0, #000 ${w.feather}%)`;
   return `
     .home-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: ${HOME_HERO.position}; z-index: 1; }
     ${wideMedia ? `@media ${wideMedia} {
-      .home-hero-img { left: auto; width: clamp(${w.minWidth}%, calc(${w.heroHeight} * ${w.shape}), 100%); object-position: 50% 0%; -webkit-mask-image: ${fade}; mask-image: ${fade}; }
+      .home-hero-img { object-position: ${HOME_HERO.wide.position}; }
     }` : ""}
   `;
 }

@@ -134,11 +134,13 @@ export const HOME_HERO = {
     file: "/images/hero/hero-1-wide.jpg",
     /** The cut's width over its height (scripts/hero-cuts.mjs makes it 1.8:1). */
     shape: 1.8,
-    /** The hero's height on those screens, the sm:min-h of the section in HeroSlideshow.tsx. */
-    heroHeight: "88vh",
-    /** The narrowest the photo gets, in % of the window, on a very wide one (21:9); past that its foot is cropped. */
-    minWidth: 70,
-    /** How much of the photo's width, in %, fades into the dark ground on its left. */
-    feather: 22,
+    /**
+     * object-position of the wide cut. The cut starts just above the sign, so
+     * pinning its top keeps the sign whole with its air on every wide window;
+     * the frame being shorter than the cut, the crop falls at the foot, under
+     * the buttons (2 Oct 2026; the inset-and-fade version was dropped the same
+     * day, see HeroSlideshow.tsx).
+     */
+    position: "50% 0%",
   },
 } as const;

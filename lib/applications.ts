@@ -116,15 +116,11 @@ export const applications: Application[] = [
     // StreetBond out (pa#31): not in the spread's SPECIFY, and StreetBond's page never listed it.
     relatedProducts: ["decomark", "traffic-patterns-xd", "traffic-patterns", "streetprint", "duratherm"],
   },
-  {
-    name: "Private Driveways",
-    slug: "private-driveways",
-    shortDesc: "Stamped asphalt driveways: the look of stone pavers without the demolition or maintenance.",
-    imageUrl: "/images/applications/residential-driveways/residential-driveways-18.jpg",
-    gallery: gallery("residential-driveways", "residential-driveways", 44),
-    description: "Tearing out an existing driveway to install natural stone or concrete pavers is expensive, disruptive, and creates a raised edge profile that chips, shifts, and weeds. StreetPrint offers a better path: in-place stamped asphalt that works with the driveway already there, impressing cobblestone, brick, herringbone, or slate patterns directly into the surface, then sealing it with StreetBond UV-stable acrylic colour. The result is a rich decorative hardscape finish at a fraction of full paver installation cost, with a flush, snowplow-safe, weed-free surface that requires none of the maintenance that natural stone demands. For existing driveways showing their age, DuraShield maintenance coating protects the asphalt and extends surface life before cosmetic treatment.",
-    relatedProducts: ["streetprint", "streetbond", "durashield"],
-  },
+  // "Private Driveways" (slug private-driveways) came out on 30 Sep 2026 (QA C2,
+  // E18): it and Residential Driveways were the same printed spread (Idea Book
+  // page 76) with the same 44 photos. Residential Driveways below is the one
+  // page; next.config.ts redirects the old address to it. The Sanity document
+  // for private-driveways is now an orphan and can be deleted in Studio.
   {
     name: "Sport Courts",
     slug: "sport-courts",
@@ -194,8 +190,9 @@ export const applications: Application[] = [
     imageUrl: "/images/applications/residential-driveways/residential-driveways-18.jpg",
     gallery: gallery("residential-driveways", "residential-driveways", 44),
     description: "A beautifully finished driveway is one of the most visible improvements a homeowner can make, and one of the most cost-effective when done right. StreetPrint's in-place stamped asphalt process works directly on the existing driveway surface, impressing cobblestone, brick, herringbone, or slate patterns without tearing out and replacing the base. StreetBond UV-stable acrylic colour then seals the surface in the homeowner's choice of colour (warm buff tones, bold reds, classic charcoal) that holds its finish season after season without the chalking, fading, or cracking that standard driveway sealers deliver. No demolition, no concrete forms, no landscape damage from excavation. The finished result: a decorative hardscape that adds lasting curb appeal at a fraction of the cost of natural stone or interlocking paver installation.",
-    // StreetBond out (pa#31): the driveway spread specifies StreetPrint alone and StreetBond's page lists
-    // Private Driveways only. The copy above still names StreetBond as StreetPrint's own coating.
+    // StreetBond out (pa#31): the driveway spread specifies StreetPrint alone. (Until 30 Sep 2026 StreetBond's
+    // page listed the Private Driveways twin instead; that page is gone.) The copy above still names
+    // StreetBond as StreetPrint's own coating.
     relatedProducts: ["streetprint", "durashield"],
   },
   {

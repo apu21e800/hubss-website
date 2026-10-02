@@ -163,7 +163,9 @@ export const products: Product[] = [
     // Expanded per Vernon: bike lanes, bus lanes, crosswalks, parking lots, pedestrian plazas (public-spaces),
     // driveways, sports surfaces, playgrounds.
     // 28 Sep 2026 (pa#31): the four spreads that specify StreetBond and were missing here added.
-    relatedApplications: ["bike-lanes", "bus-lanes", "crosswalks", "parking-lots", "public-spaces", "private-driveways", "sport-courts", "playgrounds", "parks-paths", "splash-pads", "townhomes", "traffic-calming", "public-art"],
+    // 30 Sep 2026 (QA C2, E18): private-driveways out with its page; the driveway spread specifies
+    // StreetPrint alone and Residential Driveways does not list StreetBond back (RELATIONS above).
+    relatedApplications: ["bike-lanes", "bus-lanes", "crosswalks", "parking-lots", "public-spaces", "sport-courts", "playgrounds", "parks-paths", "splash-pads", "townhomes", "traffic-calming", "public-art"],
   },
   {
     name: "StreetPrint",
@@ -188,7 +190,10 @@ export const products: Product[] = [
     // Expanded per Vernon: crosswalks, driveways, plazas (public-spaces), parks/paths, townhomes,
     // heritage districts (community-branding), public art settings.
     // 28 Sep 2026 (pa#31): Parking Lots and Traffic Calming, whose spreads specify StreetPrint, added.
-    relatedApplications: ["crosswalks", "private-driveways", "residential-driveways", "public-spaces", "parks-paths", "townhomes", "community-branding", "public-art", "commercial-spaces", "parking-lots", "traffic-calming"],
+    // 30 Sep 2026 (QA C2, E18): "private-driveways" gone from this list and the four repair and
+    // DuraShield lists below that carried it beside "residential-driveways"; the two pages were one
+    // spread and are one page now.
+    relatedApplications: ["crosswalks", "residential-driveways", "public-spaces", "parks-paths", "townhomes", "community-branding", "public-art", "commercial-spaces", "parking-lots", "traffic-calming"],
   },
 
   // ── Specialty & Regulatory Group ───────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -311,7 +316,7 @@ export const products: Product[] = [
     // Expanded per Vernon: pedestrian areas, residential roadways, heat-island mitigation surfaces.
     // 28 Sep 2026 (pa#31): pedestrian-safety out (not in that spread's SPECIFY); Townhomes, whose spread
     // specifies DuraShield, added.
-    relatedApplications: ["parking-lots", "private-driveways", "residential-driveways", "parks-paths", "leed-urban-heat-island", "townhomes"],
+    relatedApplications: ["parking-lots", "residential-driveways", "parks-paths", "leed-urban-heat-island", "townhomes"],
   },
   {
     name: "AirMark",
@@ -404,7 +409,7 @@ export const products: Product[] = [
     // ChipFill/AggreFill/Fast Patch DPR — pothole + crack repair across all paved surfaces.
     // One-way on purpose (pa#31, 28 Sep 2026): no Idea Book spread specifies a repair product, so the
     // application pages do not list them back. See RELATIONS at the top of this file.
-    relatedApplications: ["parking-lots", "private-driveways", "residential-driveways", "parks-paths", "commercial-spaces", "townhomes"],
+    relatedApplications: ["parking-lots", "residential-driveways", "parks-paths", "commercial-spaces", "townhomes"],
   },
   {
     name: "AggreFill",
@@ -445,7 +450,7 @@ export const products: Product[] = [
       { label: "Cure", value: "Rapid set: minutes to reopen to traffic" },
       { label: "Weather", value: "Year-round, all-conditions deployment" },
     ],
-    relatedApplications: ["parking-lots", "private-driveways", "residential-driveways", "parks-paths", "commercial-spaces", "townhomes"],
+    relatedApplications: ["parking-lots", "residential-driveways", "parks-paths", "commercial-spaces", "townhomes"],
   },
   {
     name: "Fast Patch DPR",
@@ -481,7 +486,7 @@ export const products: Product[] = [
       { label: "Odour", value: "Odourless, suitable for indoor applications" },
       { label: "Resilience", value: "Excellent freeze-thaw resistance + impact absorption" },
     ],
-    relatedApplications: ["parking-lots", "private-driveways", "residential-driveways", "parks-paths", "commercial-spaces", "townhomes"],
+    relatedApplications: ["parking-lots", "residential-driveways", "parks-paths", "commercial-spaces", "townhomes"],
   },
 ];
 

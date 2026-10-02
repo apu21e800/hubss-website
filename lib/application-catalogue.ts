@@ -33,11 +33,11 @@
  * the SPECIFY notes is normalised to sentence case. Everything else is
  * verbatim, including the Canadian spellings.
  *
- * WHERE A SPREAD SERVES TWO PAGES: the catalogue runs one Private Driveways
- * spread and the site has both /private-driveways and /residential-driveways,
- * so both carry it. The site's Bus Lanes page carries the catalogue's
- * High-Traffic Corridors spread (p52) — the spread that covers transit
- * corridors — and says so in its own note below.
+ * WHERE A SPREAD'S NAME DIFFERS FROM THE PAGE'S: the catalogue's Private
+ * Driveways spread is the site's Residential Driveways page (one page since
+ * 30 Sep 2026; it used to be listed twice). The site's Bus Lanes page carries
+ * the catalogue's High-Traffic Corridors spread (p52), the spread that covers
+ * transit corridors, and says so in its own note below.
  */
 
 export interface ApplicationSpecify {
@@ -221,15 +221,8 @@ export const APPLICATION_CATALOGUE: Record<string, ApplicationCatalogueEntry> = 
     page: 74,
   },
 
-  "private-driveways": {
-    title: "Stone-paver looks, without demolition.",
-    statement: "Most driveways fail on appearance long before they fail on structure.",
-    body: "Stamped asphalt can transform new or existing asphalt into the look of cobble, brick, herringbone or slate. Pick a pattern, pick a colour and enjoy years of maintenance-free performance.",
-    specify: [{ slug: "streetprint", note: "Stamped and coloured asphalt" }],
-    page: 76,
-  },
-
-  // One printed spread, two pages on the site.
+  // The book's Private Driveways spread. Until 30 Sep 2026 it was listed twice,
+  // for /private-driveways as well; that page merged into this one (QA C2, E18).
   "residential-driveways": {
     title: "Stone-paver looks, without demolition.",
     statement: "Most driveways fail on appearance long before they fail on structure.",

@@ -108,12 +108,21 @@ async function getTiles(): Promise<Tile[]> {
 // Grid placement per slot. Phones: the lead across both columns, then a 2 x 2.
 // md: the same, wider. lg: twelve columns, two rows; the lead takes seven
 // columns and both rows, and the four around it alternate wide and narrow.
+//
+// The `sizes` are wider than the tiles (QA A5 and F4, 30 Sep 2026). Every
+// photo is landscape (4:3 to 1.9:1) and every tile from lg up is squarer or
+// taller than it (a 193 x 272 column, a 295 x 272 tile), so object-cover
+// scales the file to the tile's HEIGHT and the width it needs is the height
+// times the photo's aspect: about 410px for the narrow column at 1440, not
+// the 194px it was asking for, which came back as a 256px file stretched
+// 1.6x (3x on a 2x screen). Each slot now asks for roughly double: the
+// tallest tile height times the widest photo, at each breakpoint.
 const SLOT = [
-  { cls: "col-span-2 aspect-[4/3] md:aspect-[16/9] lg:aspect-auto lg:col-span-7 lg:row-span-2", sizes: "(min-width: 1280px) 704px, (min-width: 1024px) 56vw, 100vw", lead: true },
-  { cls: "aspect-square md:aspect-[4/3] lg:aspect-auto lg:col-span-3", sizes: "(min-width: 1280px) 296px, (min-width: 1024px) 24vw, 50vw", lead: false },
-  { cls: "aspect-square md:aspect-[4/3] lg:aspect-auto lg:col-span-2", sizes: "(min-width: 1280px) 194px, (min-width: 1024px) 16vw, 50vw", lead: false },
-  { cls: "aspect-square md:aspect-[4/3] lg:aspect-auto lg:col-span-2", sizes: "(min-width: 1280px) 194px, (min-width: 1024px) 16vw, 50vw", lead: false },
-  { cls: "aspect-square md:aspect-[4/3] lg:aspect-auto lg:col-span-3", sizes: "(min-width: 1280px) 296px, (min-width: 1024px) 24vw, 50vw", lead: false },
+  { cls: "col-span-2 aspect-[4/3] md:aspect-[16/9] lg:aspect-auto lg:col-span-7 lg:row-span-2", sizes: "(min-width: 1280px) 900px, (min-width: 1024px) 72vw, 100vw", lead: true },
+  { cls: "aspect-square md:aspect-[4/3] lg:aspect-auto lg:col-span-3", sizes: "(min-width: 1280px) 600px, (min-width: 1024px) 48vw, 100vw", lead: false },
+  { cls: "aspect-square md:aspect-[4/3] lg:aspect-auto lg:col-span-2", sizes: "(min-width: 1280px) 420px, (min-width: 1024px) 32vw, 100vw", lead: false },
+  { cls: "aspect-square md:aspect-[4/3] lg:aspect-auto lg:col-span-2", sizes: "(min-width: 1280px) 420px, (min-width: 1024px) 32vw, 100vw", lead: false },
+  { cls: "aspect-square md:aspect-[4/3] lg:aspect-auto lg:col-span-3", sizes: "(min-width: 1280px) 600px, (min-width: 1024px) 48vw, 100vw", lead: false },
 ] as const;
 
 // Fewer than five tiles (a pin removed, a post unpublished) would leave holes

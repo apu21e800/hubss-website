@@ -100,7 +100,12 @@ export default function ApplicationsGrid({ applications: appsProp }: Props = {})
                   // Subject-foreground bias: pavement surface usually sits in the lower 2/3 of source frames.
                   className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
                   style={{ objectPosition: APP_POSITION[app.slug] ?? "center 60%" }}
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  // The card as it measures (QA F4, 30 Sep 2026): 304px in
+                  // the phone swipe row (78vw, max 320), 354px in the two
+                  // column grid at 768, 312 to 397px in the three column grid
+                  // from 1024, 397px at the 1280px container. "100vw" had a
+                  // 304px card fetching a 1200px file on a 3x phone.
+                  sizes="(max-width: 639px) 80vw, (max-width: 1023px) 46vw, (max-width: 1279px) 31vw, 400px"
                 />
 
                 {/* Bottom scrim for text legibility — image stays visible above.

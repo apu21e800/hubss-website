@@ -24,7 +24,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CHROME_MARKS } from "@/lib/chrome-images.mjs";
 import ChromeImg from "@/components/ui/ChromeImg";
-import { lunchLearnHref, readLunchLearnParams } from "@/lib/lunch-learn";
+import { lunchLearnHref, readLunchLearnParams, LL_TOPIC_MAX } from "@/lib/lunch-learn";
 
 export type LunchLearnVariant = "boardroom" | "ticket" | "proof" | "band";
 
@@ -68,6 +68,25 @@ const IMG = { src: "/images/products/streetbond/streetbond-112.jpg", alt: "Stree
 const MOOSE = { src: CHROME_MARKS.moose, alt: "Moose, the HUB Surface Systems site dog, in his hard hat and safety vest" };
 
 // ── Shared form brain ────────────────────────────────────
+/**
+ * Pick a session topic from elsewhere on the page (the topic tiles on
+ * /lunch-learn, components/sections/LunchLearnTopics.tsx). The form hook
+ * listens for this event, so the chip appears in the form the visitor is
+ * about to fill; the URL carries it too, so a refresh or a shared link keeps
+ * it. Ported 2 Oct 2026 from session B's Lunch & Learn page (the tiles'
+ * "Book this topic" prefills the form's topic chip).
+ */
+export const LL_TOPIC_EVENT = "hubss:ll-topic";
+export function setLunchLearnTopic(topic: string, from = "lunch-learn") {
+  const t = topic.trim().slice(0, LL_TOPIC_MAX);
+  if (!t) return;
+  window.dispatchEvent(new CustomEvent(LL_TOPIC_EVENT, { detail: { topic: t, from } }));
+  const q = new URLSearchParams(window.location.search);
+  q.set("topic", t);
+  q.set("from", from);
+  window.history.replaceState(null, "", `${window.location.pathname}?${q.toString()}#book`);
+}
+
 function useLunchLearnForm(withFormat: boolean) {
   const [formData, setFormData] = useState<FormState>(EMPTY);
   const [format, setFormat] = useState<string>("Either");
@@ -81,6 +100,15 @@ function useLunchLearnForm(withFormat: boolean) {
     const p = readLunchLearnParams(window.location.search);
     setTopic(p.topic);
     setFrom(p.from);
+    // A topic picked on the page after load (setLunchLearnTopic above).
+    const onTopic = (e: Event) => {
+      const d = (e as CustomEvent<{ topic: string; from?: string }>).detail;
+      if (!d?.topic) return;
+      setTopic(d.topic);
+      if (d.from) setFrom(d.from);
+    };
+    window.addEventListener(LL_TOPIC_EVENT, onTopic);
+    return () => window.removeEventListener(LL_TOPIC_EVENT, onTopic);
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

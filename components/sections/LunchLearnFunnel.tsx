@@ -11,10 +11,13 @@
  * Vern, 30 Sep 2026: "clean up the lunch and learn page too. it's a bit
  * messy." The page is now the card, then two sections, then the footer:
  *
- *   1. Who it's for: an h2, one paragraph on what everyone leaves with (the
- *      three "walk away with" points, which the card's ticks also carry),
- *      and the four audiences as plain text blocks in a 2x2. No chips, no
- *      numerals, no boxes.
+ *   1. Session topics (2 Oct 2026, ported from session B's page in place of
+ *      the "Your whole team, one session" audience block that stood here for
+ *      two days): six photo tiles, one per kind of work, each with a "Book
+ *      this topic" that puts the topic into the form's chip and scrolls up
+ *      to it (components/sections/LunchLearnTopics.tsx). What everyone
+ *      leaves with is the card's ticks; who should be in the room is the
+ *      FAQ's own answer.
  *   2. Common questions: the same native <details> list the product pages
  *      use (components/products/ProductFaq.tsx), so the answers are in the
  *      HTML for crawlers and the page needs no client JavaScript for it.
@@ -28,45 +31,20 @@
  * product, application and Insights hero does (Round 3); the card above and
  * the footer below close the page in the dark.
  *
- * Sanity (sanity/schemas/page.ts, group "Lunch & Learn") still holds the
- * persona and FAQ arrays and the section headings: app/lunch-learn/page.tsx
- * passes them through when the client has edited them in Studio, and the
- * defaults below serve until then. A persona's `badge` is accepted and not
- * shown, and the "What You Walk Away With" cards are no longer rendered
- * anywhere; both Studio fields want retiring (not done here).
+ * Sanity (sanity/schemas/page.ts, group "Lunch & Learn") still holds the FAQ
+ * array and the section headings: app/lunch-learn/page.tsx passes the
+ * questions and the FAQ heading through when the client has edited them in
+ * Studio, and the defaults below serve until then. The persona array, the
+ * "What You Walk Away With" cards, the other headings and the hero fields
+ * are read by nothing since 2 Oct 2026 and are hidden in Studio.
  */
 
-export interface LunchLearnFunnelProps {
-  personas?: { title: string; desc: string; badge?: string }[];
-  faqs?: { q: string; a: string }[];
-  sectionHeadings?: {
-    whatYouGetEyebrow?: string;
-    whatYouGetHeading?: string;
-    personasEyebrow?: string;
-    personasHeading?: string;
-    faqEyebrow?: string;
-    faqHeading?: string;
-  };
-}
+import LunchLearnTopics from "@/components/sections/LunchLearnTopics";
 
-const PERSONAS = [
-  {
-    title: "Municipal engineers & planners",
-    desc: "Crosswalks, transit corridors, and complete streets that meet Vision Zero and Complete Streets specifications, with accessibility-aware design. Real installation data from Canadian municipalities coast to coast.",
-  },
-  {
-    title: "Landscape architects & designers",
-    desc: "12+ StreetPrint patterns, full StreetBond Pantone palette, and decorative surfaces engineered to outlast the design life of the asphalt beneath them. Snowplow-safe and engineering-approved.",
-  },
-  {
-    title: "Engineering & consulting firms",
-    desc: "Lifecycle cost data, performance specs, and installation standards you can cite directly in tender documents, plus the certified HUB applicator contacts for your region.",
-  },
-  {
-    title: "Contractors & applicators",
-    desc: "Learn about the HUB certified applicator program: territory-protected bidding and direct manufacturer support through the certified program.",
-  },
-];
+export interface LunchLearnFunnelProps {
+  faqs?: { q: string; a: string }[];
+  sectionHeadings?: { faqHeading?: string };
+}
 
 /**
  * The questions and answers, exported so app/lunch-learn/page.tsx builds its
@@ -100,46 +78,29 @@ const h2Style: React.CSSProperties = {
   color: "var(--text-primary)",
 };
 
-export default function LunchLearnFunnel({ personas, faqs, sectionHeadings }: LunchLearnFunnelProps = {}) {
-  const personaItems = personas?.length ? personas : PERSONAS;
+export default function LunchLearnFunnel({ faqs, sectionHeadings }: LunchLearnFunnelProps = {}) {
   const faqItems = faqs?.length ? faqs : LUNCH_LEARN_FAQS;
-  const personasEyebrow = sectionHeadings?.personasEyebrow ?? "Who it's for";
-  const personasHeading = sectionHeadings?.personasHeading ?? "Your whole team, one session.";
   const faqHeading = sectionHeadings?.faqHeading ?? "Common questions";
 
   return (
     <div data-surface="paper" style={{ background: "var(--bg-primary)" }}>
-      {/* ── Who it's for, and what they leave with ─────────────────── */}
-      <section aria-labelledby="ll-audience" className="py-20 lg:py-24">
+      {/* ── Session topics: pick the work, and the form takes the topic ── */}
+      <section aria-labelledby="ll-topics" className="py-20 lg:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mb-12 lg:mb-14">
-            <p className="text-xs font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "var(--accent-text)" }}>
-              {personasEyebrow}
-            </p>
-            <h2 id="ll-audience" className="font-bold mb-5" style={h2Style}>
-              {personasHeading}
-            </h2>
-            {/* The three points of the old "What you walk away with" section,
-                in one sentence. The roles are the FAQ's own list. */}
-            <p className="text-[16px] leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-              Engineers, planners, landscape architects, project managers and procurement sit in the same
-              session. Everyone leaves with spec language ready for the next RFP, the lifecycle cost math,
-              physical samples, current data sheets and the certified applicator list for their region.
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-12 gap-y-4 items-end mb-10 lg:mb-12">
+            <div className="lg:col-span-7">
+              <p className="text-xs font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "var(--accent-text)" }}>
+                Session topics
+              </p>
+              <h2 id="ll-topics" className="font-bold" style={h2Style}>
+                Pick the work you&apos;re planning.
+              </h2>
+            </div>
+            <p className="lg:col-span-5 text-[16px] leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+              Pick one and we build the session around it. Or leave it open and we cover the range.
             </p>
           </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 lg:gap-x-16 gap-y-8 lg:gap-y-10">
-            {personaItems.map((p) => (
-              <div key={p.title} className="pt-5" style={{ borderTop: "1px solid var(--border-color)" }}>
-                <h3 className="font-semibold text-[17px] leading-snug mb-2" style={{ color: "var(--text-primary)" }}>
-                  {p.title}
-                </h3>
-                <p className="text-[15px] leading-relaxed" style={{ color: "var(--text-secondary)", maxWidth: "58ch" }}>
-                  {p.desc}
-                </p>
-              </div>
-            ))}
-          </div>
+          <LunchLearnTopics />
         </div>
       </section>
 

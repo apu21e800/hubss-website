@@ -51,16 +51,24 @@ export default async function LunchLearnPage() {
   // was hidden. The Sanity fields are still in the schema; wiring them into
   // the shared card would change the homepage too, so it is not done here
   // (30 Sep 2026).
-  const STALE_PERSONA_TITLES = ["Municipal Engineers & Planners", "Landscape Architects & Designers", "Engineering & Consulting Firms", "Contractors & Applicators"];
+  //
+  // 2 Oct 2026: the page reads only the FAQ list and the FAQ heading now. The
+  // persona cards made way for the session topic tiles (code, in
+  // LunchLearnTopics.tsx), and the "What You Walk Away With" cards have not
+  // been rendered since 30 Sep; both fields are hidden in Studio, and
+  // `npm run sync:pages` writes only what this page reads.
   const STALE_FAQ_QS = ["How long is the session?", "Is this actually free?", "Do we get continuing education credits?", "In-person or virtual?"];
   function freshArray<T extends Record<string, unknown>>(arr: T[] | undefined, key: string, staleVals: string[]): T[] | undefined {
     if (!arr?.length) return undefined;
     const untouched = arr.every((item) => staleVals.includes(String(item[key] ?? "")));
     return untouched ? undefined : arr;
   }
-  function freshHeadings(h: { whatYouGetHeading?: string } | undefined) {
-    if (!h) return undefined;
-    return h.whatYouGetHeading === "Not a Sales Pitch. An Education." ? undefined : h;
+  // Keyed on the one heading the page reads (it was keyed on the seed's
+  // "What You Get" heading, which the sync no longer writes, so an edited
+  // FAQ heading could never have reached the page).
+  function freshHeadings(h: { faqHeading?: string } | undefined) {
+    if (!h?.faqHeading) return undefined;
+    return h.faqHeading === "Everything You Need to Know" ? undefined : { faqHeading: h.faqHeading };
   }
   const faqs = freshArray(sanityPage?.lunchLearnFaqs, "q", STALE_FAQ_QS) ?? LUNCH_LEARN_FAQS;
 
@@ -101,10 +109,10 @@ export default async function LunchLearnPage() {
       </div>
 
       {/* Two sections under the card since 30 Sep 2026 (Vern: "clean up the
-          lunch and learn page too. it's a bit messy"): who it's for, and the
-          common questions. See the note in LunchLearnFunnel.tsx. */}
+          lunch and learn page too. it's a bit messy"): the session topics
+          (since 2 Oct 2026; the audiences before that), and the common
+          questions. See the note in LunchLearnFunnel.tsx. */}
       <LunchLearnFunnel
-        personas={freshArray(sanityPage?.lunchLearnPersonas, "title", STALE_PERSONA_TITLES)}
         faqs={faqs}
         sectionHeadings={freshHeadings(sanityPage?.lunchLearnSectionHeadings)}
       />

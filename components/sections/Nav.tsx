@@ -158,14 +158,22 @@ const APPLICATION_GROUPS = [
 // Since 28 Sep 2026 each post also carries its excerpt (the cover story's
 // deck) and its read time as the post page prints it, and the file carries
 // the three sections with their one line (lib/field-notes-taxonomy.ts) and
-// the number of posts each lists. Optional here so a copy written before
-// that still renders.
+// the number of posts each lists. Since 2 Oct 2026 each section also carries
+// one of its own posts' photos (`photo`: the panel's 2:3 tile and the
+// drawer's 2:1 row). All optional here so a copy written before still
+// renders. The panel reads the cover's photo, type and title and the
+// sections' names and photos; the rest of the file is not printed any more
+// (Vern, 2 Oct 2026: "insights mega menu dropdown still feels busy, too much
+// text maybe").
 interface NavImage { src: string; srcSet: string }
 interface NavPost {
   slug: string; title: string; type: string; publishedAt: string; date: string;
   excerpt?: string; readTime?: string; thumb: NavImage;
 }
-interface NavSection { key: string; label: string; href: string; blurb: string; count: number }
+interface NavSection {
+  key: string; label: string; href: string; blurb: string; count: number;
+  photo?: { post: string; tile: NavImage; row: NavImage };
+}
 interface NavInsights {
   cover: (NavPost & { image: NavImage }) | null;
   latest: NavPost[];
@@ -195,12 +203,13 @@ const NAV_SECTIONS: NavSection[] = INSIGHTS.sections?.length
   ? INSIGHTS.sections
   : INSIGHT_SECTIONS.map((s) => ({ key: s.href, label: s.label, href: s.href, blurb: "", count: 0 }));
 
-// The Idea Book, as a publication in the Insights panel and the drawer: its
-// cover, its name, one line, a link to the reader. It sits there as the thing
-// it is, next to the articles, never as a promotion (Doug, 25 Sep: no
-// catalogue buttons in the menus). Hidden with the other Idea Book surfaces
-// when NEXT_PUBLIC_SHOW_CATALOGUE is off (lib/feature-flags.ts).
-const IDEA_BOOK_LINE = "Every system and every application, in one book.";
+// The Idea Book, as a publication in the Insights panel's foot row: its
+// cover and its name, a link to the reader. It sits there as the thing it
+// is, next to the articles, never as a promotion (Doug, 25 Sep: no catalogue
+// buttons in the menus). Hidden with the other Idea Book surfaces when
+// NEXT_PUBLIC_SHOW_CATALOGUE is off (lib/feature-flags.ts). Its one line
+// ("Every system and every application, in one book.") went on 2 Oct 2026
+// with the rest of the panel's sentences.
 const ideaBookCover = catalogue.coverThumb ?? null;
 // The 240px thumbnail, and the 800px first page for a 2x screen (the page the
 // homepage band shows); plain files under /catalogue, never /_next/image.
@@ -445,7 +454,9 @@ function LunchLearnSlot({ topic }: { topic: string }) {
 }
 
 // ── Every panel's footer: the one "View all", and Lunch & Learn ──────
-function MenuFooter({ href, label, topic }: { href: string; label: string; topic: string }) {
+// `children` (2 Oct 2026): what Insights puts between the two, the Idea Book
+// slot. Products and Applications pass nothing and render as before.
+function MenuFooter({ href, label, topic, children }: { href: string; label: string; topic: string; children?: React.ReactNode }) {
   return (
     <div className="mt-7 flex flex-wrap items-center justify-between gap-x-8 gap-y-4 pt-4" style={{ borderTop: "1px solid var(--ink-08)" }}>
       <Link prefetch={false}
@@ -458,6 +469,7 @@ function MenuFooter({ href, label, topic }: { href: string; label: string; topic
           <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </Link>
+      {children}
       <LunchLearnSlot topic={topic} />
     </div>
   );
@@ -501,278 +513,179 @@ function InsightImg({ image, sizes, className, style, loading = "lazy", decoding
   return <img src={image.src} srcSet={image.srcSet} sizes={sizes} alt="" loading={loading} decoding={decoding} className={className} style={style} />;
 }
 
-// The cover photograph, fetched before the panel opens (QA A7, 30 Sep 2026:
-// lazy-loaded inside a panel that mounts on open, it showed as a blank box
-// for about a second). Called when the pointer or keyboard first reaches the
-// bar's triggers, so by the time Insights opens the file is usually cached;
-// once per page, and only where there is a cover to fetch.
+// The panel's photographs, fetched before it opens (QA A7, 30 Sep 2026:
+// lazy-loaded inside a panel that mounts on open, the cover showed as a
+// blank box for about a second). Called when the pointer or keyboard first
+// reaches the bar's triggers, so by the time Insights opens the files are
+// usually cached; once per page. Since 2 Oct 2026 the three section tiles
+// are warmed with the cover: they are most of what the panel shows.
 const COVER_SIZES = "(min-width: 1280px) 470px, 36vw";
+// A tile is one of five columns: about 218px at 1280 and up, 17vw at 1024.
+const TILE_SIZES = "(min-width: 1280px) 218px, 17vw";
 let coverWarmed = false;
 function warmInsightsCover() {
-  if (coverWarmed || typeof window === "undefined" || !INSIGHTS.cover) return;
+  if (coverWarmed || typeof window === "undefined") return;
   coverWarmed = true;
-  const img = new window.Image();
-  img.sizes = COVER_SIZES;
-  img.srcset = INSIGHTS.cover.image.srcSet;
-  img.src = INSIGHTS.cover.image.src;
+  const warm = (image: NavImage, sizes: string) => {
+    const img = new window.Image();
+    img.sizes = sizes;
+    img.srcset = image.srcSet;
+    img.src = image.src;
+  };
+  if (INSIGHTS.cover) warm(INSIGHTS.cover.image, COVER_SIZES);
+  for (const s of NAV_SECTIONS) if (s.photo) warm(s.photo.tile, TILE_SIZES);
 }
 
-// ── Insights panel: the section front ─────────────────────────────────
-// Products and Applications are directories; Insights is laid out like the
-// section front of a magazine (Vern, 28 Sep 2026: "needs to look more pro
-// editorial"). A masthead; the cover story large, with its kicker (section,
-// date, read time), headline and deck; the latest pieces as a ruled list;
-// the three sections as big type with their line and their count; the Idea
-// Book on the shelf as the printed publication it is; and one quiet band for
-// "All Insights" and Lunch & Learn. Column rules and hairlines instead of
-// cards, one photograph, orange only where it means something (the cover's
-// section, a hover). Every word sits on a photo-free ground, and every title,
-// date, count and line comes from Sanity or the taxonomy via
-// lib/nav-insights.json.
-//
-// It is taller than its siblings, about two thirds of the screen, and the
-// page behind it is dimmed and softened further (the scrim below), so
-// nothing on the page competes with it. Opening, closing, hover intent and
-// the keyboard are the shared ones in Nav().
-const HAIRLINE = "1px solid var(--ink-10)";
-const RULE = "1px solid var(--ink-16)";
-
-// The small letterspaced label a column opens with, over its hairline.
-function FrontLabel({ children }: { children: React.ReactNode }) {
-  return (
-    <div
-      className="pb-2.5 text-[10.5px] font-bold uppercase tracking-[0.22em]"
-      style={{ color: "var(--ink-50)", borderBottom: RULE }}
-    >
-      {children}
-    </div>
-  );
-}
-
-// "Project · Sep 8, 2026 · 3 min read": the section in capitals, the rest
-// as it reads.
-function Kicker({ post, accent = false, className = "" }: { post: NavPost; accent?: boolean; className?: string }) {
-  const dot = <span aria-hidden="true" className="mx-2" style={{ color: "var(--ink-30)" }}>·</span>;
-  return (
-    <span className={`flex flex-wrap items-baseline text-[12px] leading-none ${className}`} style={{ color: "var(--ink-50)" }}>
-      <span className="text-[10.5px] font-bold uppercase tracking-[0.2em]" style={{ color: accent ? ACCENT : "var(--ink-70)" }}>
-        {kindOf(post.type)}
-      </span>
-      {dot}
-      <span>{post.date}</span>
-      {post.readTime && (
-        <>
-          {dot}
-          <span>{post.readTime}</span>
-        </>
-      )}
-    </span>
-  );
-}
+// ── Insights panel: pictures first ────────────────────────────────────
+// Rebuilt 2 Oct 2026 (Vern: "insights mega menu dropdown still feels busy,
+// too much text maybe"). The section front of 28 Sep carried a masthead, the
+// cover story with its deck, a ruled list of five more posts with dates and
+// read times, the three sections with their lines and counts, and the Idea
+// Book with a line: about 190 words. Now it is the same shell as its two
+// siblings (MegaShell, MenuFooter) holding four photographs: the featured
+// post on the left (its photo, its section, its title) and the three
+// sections as photo tiles with their names over them, each tile wearing a
+// photo from one of its own posts (lib/nav-insights.json, `photo`). The
+// foot row is the siblings': "All Insights", the Idea Book, Lunch & Learn.
+// No dates, no counts, no sentences; everything that was text-only now
+// either has a picture or is gone. Opening, closing, hover intent and the
+// keyboard are the shared ones in Nav().
 
 // Headline links underline on hover, in the brand orange, the way a
 // newspaper's do; colour alone was the widget's convention.
 const HEADLINE_HOVER =
   "decoration-[rgba(249,115,22,0.7)] decoration-2 underline-offset-[5px] group-hover:underline group-focus-visible:underline";
 
-function InsightsMegaMenu() {
-  const { cover, latest } = INSIGHTS;
-  const book = showIdeaBook() && ideaBookCover !== null;
-  const total = INSIGHTS.total ?? 0;
+// The ground under a photograph while it loads (QA A7, 30 Sep 2026): the
+// card dark shading to the panel's own, so the frame reads as a photograph
+// loading, never as a hole.
+const PHOTO_GROUND = "linear-gradient(160deg, var(--bg-card) 0%, var(--bg-deepest) 100%)";
+
+// One section as a tile: its photo, and its name set over the foot of it on
+// a dark gradient. The tile is as tall as the featured column beside it
+// (the grid row stretches it), so the 2:3 crop from the CDN is covered, not
+// letterboxed. A section with no photo gets the ruled tile's hatching.
+function SectionTile({ section: s }: { section: NavSection }) {
   return (
-    <div className="max-h-[calc(100vh-72px)] overflow-y-auto overscroll-contain">
-      {/* About two thirds of the screen: 612px of a 900px one, 560px of 800. */}
-      <div className="flex flex-col" style={{ minHeight: "clamp(560px, 68vh, 720px)" }}>
-        <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-4 sm:px-6 lg:px-8">
-          {/* Masthead: the name and the library's own lede (from /blog). */}
-          <div className="flex items-baseline gap-5 pt-6 pb-4 [@media(max-height:860px)]:pt-5" style={{ borderBottom: RULE }}>
-            <div
-              className="font-display text-[34px] font-black leading-none"
-              style={{ color: "var(--text-primary)", letterSpacing: "-0.035em" }}
+    <Link prefetch={false}
+      href={s.href}
+      className="group relative block min-h-[300px] overflow-hidden rounded-xl"
+      style={{ background: s.photo ? PHOTO_GROUND : `${HATCH}, var(--bg-card)`, border: "1px solid var(--ink-10)" }}
+    >
+      {s.photo && (
+        <InsightImg
+          image={s.photo.tile}
+          sizes={TILE_SIZES}
+          loading="eager"
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+        />
+      )}
+      <span
+        aria-hidden="true"
+        className="absolute inset-x-0 bottom-0 h-3/5"
+        style={{ background: "linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.45) 45%, rgba(0,0,0,0) 100%)" }}
+      />
+      <span className="absolute left-4 right-4 bottom-4 block">
+        <span aria-hidden="true" className="mb-2.5 block h-[3px] w-7 rounded-full" style={{ background: "#F97316" }} />
+        <span
+          className="font-display block text-[22px] font-bold leading-none text-white transition-colors group-hover:text-[var(--accent-text)]"
+          style={{ letterSpacing: "-0.02em" }}
+        >
+          {s.label}
+        </span>
+      </span>
+    </Link>
+  );
+}
+
+// The Idea Book in the foot row: its cover and its name, one line, the
+// reader's link. The same chrome as the Lunch & Learn slot beside it.
+function IdeaBookSlot() {
+  if (!ideaBookCover) return null;
+  return (
+    <Link prefetch={false}
+      href={ideaBook.href}
+      className="group ml-auto flex items-center gap-3 rounded-xl py-2.5 pl-3 pr-3.5 transition-colors hover:bg-[var(--ink-05)]"
+      style={{ background: "var(--ink-03)", border: "1px solid var(--ink-08)" }}
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element -- the book's own raster, lib/catalogue.ts */}
+      <img
+        src={ideaBookCover}
+        srcSet={ideaBookCoverSet}
+        sizes="38px"
+        alt=""
+        width={240}
+        height={240}
+        loading="lazy"
+        decoding="async"
+        className="h-[38px] w-[38px] flex-shrink-0 rounded-[2px] object-cover transition-transform duration-300 group-hover:-translate-y-0.5"
+        style={{ border: "1px solid var(--ink-12)", boxShadow: "0 8px 16px -6px rgba(0,0,0,0.7)" }}
+      />
+      <span className="text-[13px] font-bold leading-tight whitespace-nowrap transition-colors group-hover:text-[var(--accent-text)]" style={{ color: "var(--text-primary)" }}>
+        {ideaBook.title}
+      </span>
+      <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" className="flex-shrink-0 transition-transform group-hover:translate-x-0.5" style={{ color: ACCENT }} aria-hidden="true">
+        <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.25} strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </Link>
+  );
+}
+
+function InsightsMegaMenu() {
+  const { cover } = INSIGHTS;
+  const book = showIdeaBook();
+  return (
+    <MegaShell>
+      {/* Five columns: the featured post takes two, each section one. With
+          no cover story (no post photo qualified and the fallback pick is
+          not live), the three tiles share the width. */}
+      <div className={`grid gap-x-8 ${cover ? "grid-cols-5" : "grid-cols-3"}`}>
+        {cover && (
+          <Link prefetch={false} href={`/blog/${cover.slug}`} className="group col-span-2 flex flex-col">
+            <span
+              className="relative block aspect-[16/9] w-full overflow-hidden rounded-xl"
+              style={{ background: PHOTO_GROUND, border: "1px solid var(--ink-10)" }}
             >
-              Insights
-            </div>
-            <div className="text-[14px]" style={{ color: "var(--ink-55)" }}>
-              Decorative pavement in Canada, documented.
-            </div>
-          </div>
-
-          <div className="grid flex-1 grid-cols-12 pt-6 pb-6 [@media(max-height:860px)]:pt-5 [@media(max-height:860px)]:pb-5">
-            {/* The cover story: the photograph takes whatever height the
-                column has, so the panel keeps its proportion on any screen. */}
-            {cover && (
-              <div className="col-span-5 flex flex-col pr-8 xl:pr-10">
-                <Link prefetch={false} href={`/blog/${cover.slug}`} className="group flex flex-1 flex-col">
-                  {/* Eager, and on a dark ground (QA A7, 30 Sep 2026): the
-                      photo used to lazy-load into a pale empty box after the
-                      panel opened. The ground is the card dark shading to the
-                      panel's own, so the frame reads as a photograph loading,
-                      never as a hole. */}
-                  <span
-                    className="relative block min-h-[180px] flex-1 overflow-hidden"
-                    style={{ background: "linear-gradient(160deg, var(--bg-card) 0%, var(--bg-deepest) 100%)" }}
-                  >
-                    <InsightImg
-                      image={cover.image}
-                      sizes={COVER_SIZES}
-                      loading="eager"
-                      // sync: a cached file paints in the panel's first frame.
-                      decoding="sync"
-                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
-                    />
-                  </span>
-                  <Kicker post={cover} accent className="mt-5" />
-                  <span
-                    className={`font-display mt-3 block text-[29px] font-bold leading-[1.1] text-balance ${HEADLINE_HOVER}`}
-                    style={{ color: "var(--text-primary)", letterSpacing: "-0.025em" }}
-                  >
-                    {cover.title}
-                  </span>
-                  {cover.excerpt && (
-                    <span className="mt-2.5 text-[15px] leading-[1.5] line-clamp-3 text-pretty" style={{ color: "var(--ink-62)" }}>
-                      {cover.excerpt}
-                    </span>
-                  )}
-                </Link>
-              </div>
-            )}
-
-            {/* The latest, newest first, ruled like a contents list. */}
-            <div className={`${cover ? "col-span-4" : "col-span-9"} flex flex-col px-8 xl:px-10`} style={{ borderLeft: HAIRLINE }}>
-              <FrontLabel>Latest</FrontLabel>
-              <ul className="flex flex-1 flex-col">
-                {latest.map((post, i) => (
-                  <li key={post.slug} className="flex flex-1 flex-col" style={{ borderTop: i > 0 ? HAIRLINE : undefined }}>
-                    <Link prefetch={false} href={`/blog/${post.slug}`} className="group block flex-1 py-3">
-                      <Kicker post={post} />
-                      <span
-                        className={`mt-1.5 text-[16px] font-semibold leading-[1.3] line-clamp-3 text-pretty ${HEADLINE_HOVER}`}
-                        style={{ color: "var(--text-primary)" }}
-                      >
-                        {post.title}
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* The sections, then the Idea Book on the shelf. */}
-            <div className="col-span-3 flex flex-col pl-8 xl:pl-10" style={{ borderLeft: HAIRLINE }}>
-              <FrontLabel>Sections</FrontLabel>
-              <ul>
-                {NAV_SECTIONS.map((s, i) => (
-                  <li key={s.key} style={{ borderTop: i > 0 ? HAIRLINE : undefined }}>
-                    <Link prefetch={false} href={s.href} className="group block py-2.5">
-                      <span className="flex items-baseline justify-between gap-3">
-                        <span
-                          className="font-display text-[23px] font-bold leading-none transition-colors group-hover:text-[var(--accent-text)]"
-                          style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}
-                        >
-                          {s.label}
-                        </span>
-                        {s.count > 0 && (
-                          <span className="text-[12px] tabular-nums whitespace-nowrap" style={{ color: "var(--ink-50)" }}>
-                            {s.count} {s.count === 1 ? "post" : "posts"}
-                          </span>
-                        )}
-                      </span>
-                      {s.blurb && (
-                        <span className="mt-1.5 block text-[12.5px] leading-snug text-pretty" style={{ color: "var(--ink-58)" }}>
-                          {s.blurb}
-                        </span>
-                      )}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-
-              {book && ideaBookCover && (
-                <Link prefetch={false} href={ideaBook.href} className="group mt-auto flex items-center gap-4 pt-4" style={{ borderTop: HAIRLINE }}>
-                  {/* eslint-disable-next-line @next/next/no-img-element -- the book's own raster, lib/catalogue.ts */}
-                  <img
-                    src={ideaBookCover}
-                    srcSet={ideaBookCoverSet}
-                    sizes="(min-height: 880px) 104px, 80px"
-                    alt=""
-                    width={240}
-                    height={240}
-                    loading="lazy"
-                    decoding="async"
-                    className="h-20 w-20 flex-shrink-0 rounded-[2px] object-cover transition-transform duration-300 group-hover:-translate-y-1 [@media(min-height:880px)]:h-[104px] [@media(min-height:880px)]:w-[104px]"
-                    style={{
-                      border: "1px solid var(--ink-12)",
-                      boxShadow: "0 22px 40px -12px rgba(0,0,0,0.75), 0 8px 16px -6px rgba(0,0,0,0.5)",
-                    }}
-                  />
-                  <span className="min-w-0">
-                    <span className="block text-[10.5px] font-bold uppercase tracking-[0.22em]" style={{ color: "var(--ink-50)" }}>In print</span>
-                    <span className="mt-1.5 block text-[14px] font-bold leading-snug" style={{ color: "var(--text-primary)" }}>{ideaBook.title}</span>
-                    {/* From xl: under it the column is too narrow for the line
-                        and its arrow, and the title is already the link. */}
-                    <span className="mt-1.5 hidden items-center gap-1.5 text-[12.5px] font-semibold whitespace-nowrap transition-colors group-hover:text-[var(--accent-text)] xl:inline-flex" style={{ color: "var(--ink-70)" }}>
-                      Open the {ideaBook.short}
-                      <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24" className="transition-transform group-hover:translate-x-0.5" aria-hidden="true">
-                        <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.25} strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </span>
-                  </span>
-                </Link>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* The quiet band: everything, and the one offer. */}
-        <div className="flex-shrink-0" style={{ borderTop: HAIRLINE, background: "var(--ink-02)" }}>
-          <div className="mx-auto flex max-w-7xl items-center justify-between gap-8 px-4 py-2 sm:px-6 lg:px-8 [@media(max-height:860px)]:py-1">
-            <Link prefetch={false}
-              href="/blog"
-              className="group -ml-3 inline-flex min-h-[44px] items-center gap-2 rounded-lg px-3 text-[13.5px] font-bold transition-colors hover:text-[var(--accent-text)]"
-              style={{ color: "var(--text-primary)" }}
+              {/* Eager, and decoded in step, so a warmed file paints in the
+                  panel's first frame (warmInsightsCover). */}
+              <InsightImg
+                image={cover.image}
+                sizes={COVER_SIZES}
+                loading="eager"
+                decoding="sync"
+                className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+              />
+            </span>
+            {/* The section it lives in, and the title: nothing else. */}
+            <span className="mt-4 block text-[10.5px] font-bold uppercase tracking-[0.2em]" style={{ color: ACCENT }}>
+              {kindOf(cover.type)}
+            </span>
+            <span
+              className={`font-display mt-2 block text-[24px] font-bold leading-[1.15] line-clamp-2 text-balance ${HEADLINE_HOVER}`}
+              style={{ color: "var(--text-primary)", letterSpacing: "-0.025em" }}
             >
-              All Insights
-              {total > 0 && (
-                <span className="font-medium" style={{ color: "var(--ink-50)" }}>
-                  <span aria-hidden="true" className="mr-2" style={{ color: "var(--ink-30)" }}>·</span>
-                  {total} posts
-                </span>
-              )}
-              <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" className="transition-transform group-hover:translate-x-0.5" aria-hidden="true">
-                <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </Link>
-            <div className="flex items-center gap-3">
-              <MooseAvatar size={30} />
-              <span className="text-[13px] leading-snug" style={{ color: "var(--ink-60)" }}>
-                <span className="font-bold" style={{ color: "var(--text-primary)" }}>Lunch &amp; Learn</span>
-                <span aria-hidden="true" className="mx-2" style={{ color: "var(--ink-30)" }}>·</span>
-                {LL_LINE}
-              </span>
-              <Link prefetch={false}
-                href={lunchLearnHref("HUB systems", "menu")}
-                className="ml-1 inline-flex min-h-[44px] items-center gap-1.5 rounded-lg px-3 text-[13px] font-bold whitespace-nowrap transition-colors hover:bg-[rgba(249,115,22,0.1)]"
-                style={{ color: ACCENT }}
-              >
-                Book a session
-                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.25} strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </Link>
-            </div>
-          </div>
-        </div>
+              {cover.title}
+            </span>
+          </Link>
+        )}
+        {NAV_SECTIONS.map((s) => (
+          <SectionTile key={s.key} section={s} />
+        ))}
       </div>
-    </div>
+      <MenuFooter href="/blog" label="All Insights" topic="HUB systems">
+        {book && <IdeaBookSlot />}
+      </MenuFooter>
+    </MegaShell>
   );
 }
 
 // ── Mobile overlay ───────────────────────────────────────────────────
 // The phone's site map, the desktop panels adapted: each family or group is a
 // row with its photograph that drops its members open (products with their
-// one line), then Insights with its newest pieces and the Idea Book, then the
-// rest. Lunch & Learn and the two offices stay pinned to the bottom. Every
-// link and button is at least 44px tall (QA pa#38: the office numbers were 20).
+// one line), then Insights as its three sections, each a row with its
+// picture, then the rest. Lunch & Learn and the two offices stay pinned to
+// the bottom. Every link and button is at least 44px tall (QA pa#38: the
+// office numbers were 20).
 
 // Stagger variants — used on the content wrapper so child sections animate in sequence
 const menuContainerVariants: Variants = {
@@ -899,53 +812,37 @@ function MobileViewAll({ href, label, onClose, current }: { href: string; label:
   );
 }
 
-// A row in the drawer's Insights section: thumbnail, kind, title.
-function MobilePostRow({ post, onClose }: { post: NavPost; onClose: () => void }) {
+// A row in the drawer's Insights section (2 Oct 2026): one section, its
+// picture at the size the family rows use, its name, a chevron. Until then
+// the drawer opened Insights with the cover story, two post rows, the three
+// sections as chips and the Idea Book; now it is the three rows and "All"
+// (Vern: the Insights menu "still feels busy, too much text maybe").
+function MobileSectionRow({ section: s, pathname, onClose }: { section: NavSection; pathname: string; onClose: () => void }) {
+  const current = pathname === s.href;
   return (
     <Link prefetch={false}
-      href={`/blog/${post.slug}`}
+      href={s.href}
       onClick={onClose}
+      aria-current={currentPage(pathname, s.href)}
       className="flex items-center gap-3.5 px-1 py-3 active:opacity-70 transition-opacity"
       style={{ borderBottom: "1px solid var(--ink-05)" }}
     >
-      <InsightImg
-        image={post.thumb}
-        sizes="56px"
-        className="h-14 w-14 flex-shrink-0 rounded-lg object-cover"
-        style={{ border: "1px solid var(--ink-10)" }}
-      />
-      <span className="min-w-0 flex-1">
-        <span className="block text-[10px] font-bold tracking-[0.18em] uppercase" style={{ color: "var(--accent-text-lg)" }}>{kindOf(post.type)}</span>
-        <span className="mt-1 block text-[14.5px] font-medium leading-snug line-clamp-2" style={{ color: "var(--text-primary)" }}>{post.title}</span>
-      </span>
-    </Link>
-  );
-}
-
-// The drawer's Insights opens with the cover story, as the desktop panel
-// does: its photograph the width of the drawer, its kicker and headline.
-function MobileCoverStory({ post, onClose }: { post: NavPost & { image: NavImage }; onClose: () => void }) {
-  return (
-    <Link prefetch={false}
-      href={`/blog/${post.slug}`}
-      onClick={onClose}
-      className="block px-1 pt-2 pb-4 active:opacity-70 transition-opacity"
-      style={{ borderBottom: "1px solid var(--ink-05)" }}
-    >
-      <span className="block overflow-hidden rounded-lg" style={{ border: "1px solid var(--ink-10)" }}>
+      {s.photo ? (
         <InsightImg
-          image={post.image}
-          sizes="(min-width: 672px) 640px, calc(100vw - 40px)"
-          className="block aspect-[16/9] w-full object-cover"
+          image={s.photo.row}
+          sizes="96px"
+          className="h-12 w-24 flex-shrink-0 rounded-lg object-cover"
+          style={{ border: "1px solid var(--ink-10)" }}
         />
+      ) : (
+        <RuledTile compact />
+      )}
+      <span className="min-w-0 flex-1 text-[15px] font-semibold leading-tight" style={{ color: current ? "var(--text-primary)" : "var(--ink-85)" }}>
+        <NavLabel active={current}>{s.label}</NavLabel>
       </span>
-      <Kicker post={post} accent className="mt-3.5" />
-      <span
-        className="font-display mt-2 block text-[19px] font-bold leading-[1.22] text-balance"
-        style={{ color: "var(--text-primary)", letterSpacing: "-0.015em" }}
-      >
-        {post.title}
-      </span>
+      <svg className="w-4 h-4 flex-shrink-0" style={{ color: "var(--ink-30)" }} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 18l6-6-6-6" />
+      </svg>
     </Link>
   );
 }
@@ -994,11 +891,6 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
     };
   }, [isOpen]);
 
-  // The cover story with its photograph, then the next two as rows; the
-  // desktop panel lists four.
-  const mobileCover = INSIGHTS.cover;
-  const posts = INSIGHTS.latest.slice(0, mobileCover ? 2 : 3);
-  const book = showIdeaBook();
   // The session topic follows the family or group the visitor has open.
   const llTopic = openFamily ?? "HUB systems";
   // The current section, marked as the bar marks it (QA A4, 30 Sep 2026).
@@ -1133,53 +1025,12 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                 ))}
               </motion.div>
 
-              {/* ── Insights ──────────────────────────────────────── */}
+              {/* ── Insights: the three sections, and "All" ───────── */}
               <motion.div variants={menuSectionVariants} className="mt-2">
                 <MobileSectionHead label="Insights" href="/blog" active={section === "insights"} pathname={pathname} onClose={onClose} />
-                {mobileCover && <MobileCoverStory post={mobileCover} onClose={onClose} />}
-                {posts.map((post) => (
-                  <MobilePostRow key={post.slug} post={post} onClose={onClose} />
+                {NAV_SECTIONS.map((s) => (
+                  <MobileSectionRow key={s.key} section={s} pathname={pathname} onClose={onClose} />
                 ))}
-                <div className="flex flex-wrap gap-2 px-1 pt-4 pb-1" role="group" aria-label="Insights by type">
-                  {INSIGHT_SECTIONS.map((s) => (
-                    <Link prefetch={false}
-                      key={s.href}
-                      href={s.href}
-                      onClick={onClose}
-                      className="inline-flex min-h-[44px] items-center rounded-full px-4 text-[14px] font-semibold active:opacity-60 transition-opacity"
-                      style={{ color: "var(--ink-80)", border: "1px solid var(--ink-15)" }}
-                    >
-                      {s.label}
-                    </Link>
-                  ))}
-                </div>
-                {book && ideaBookCover && (
-                  <Link prefetch={false}
-                    href={ideaBook.href}
-                    onClick={onClose}
-                    className="mt-3 flex items-center gap-3.5 px-1 py-3 active:opacity-70 transition-opacity"
-                    style={{ borderTop: "1px solid var(--ink-05)", borderBottom: "1px solid var(--ink-05)" }}
-                  >
-                    {/* eslint-disable-next-line @next/next/no-img-element -- the book's own raster, lib/catalogue.ts */}
-                    <img
-                      src={ideaBookCover}
-                      alt=""
-                      width={240}
-                      height={240}
-                      loading="lazy"
-                      decoding="async"
-                      className="h-14 w-14 flex-shrink-0 rounded-[3px] object-cover"
-                      style={{ border: "1px solid var(--ink-12)", boxShadow: "0 8px 18px rgba(0,0,0,0.45)" }}
-                    />
-                    <span className="min-w-0 flex-1">
-                      <span className="block text-[14.5px] font-semibold leading-snug" style={{ color: "var(--text-primary)" }}>{ideaBook.title}</span>
-                      <span className="mt-0.5 block text-[12.5px] leading-snug" style={{ color: "var(--ink-50)" }}>{IDEA_BOOK_LINE}</span>
-                    </span>
-                    <svg className="w-4 h-4 flex-shrink-0" style={{ color: "var(--ink-30)" }} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 18l6-6-6-6" />
-                    </svg>
-                  </Link>
-                )}
               </motion.div>
 
               {/* ── Everything else, as a plain list ──────────────── */}

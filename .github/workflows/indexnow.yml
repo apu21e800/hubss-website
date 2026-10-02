@@ -1,0 +1,45 @@
+# Tells IndexNow (Bing, and the engines that share it) that the site changed.
+#
+# 2 Oct 2026. Vern: "when I search Perplexity for key words like stamped
+# asphalt, I get zero results for hubss. we should fix that too, be searchable
+# on all LLM models." ChatGPT search and Perplexity lean on Bing's index, and
+# IndexNow asks Bing to recrawl now. Vercel deploys main on every push, so the
+# job waits four minutes for the deploy, then submits every URL in the live
+# sitemap (scripts/indexnow-submit.mjs, Node built-ins only, so no npm ci).
+# A push that lands while a run is still waiting replaces it, so a burst of
+# pushes sends one submission.
+name: indexnow
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "**/*.md"
+      - "docs/**"
+  workflow_dispatch:
+
+concurrency:
+  group: indexnow
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    # Four minutes' wait, up to five more for a first deploy's key file
+    # (the script polls), then the submission itself.
+    timeout-minutes: 12
+    steps:
+      - name: Wait for the Vercel deploy
+        run: sleep 240
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Submit the sitemap to IndexNow
+        run: node scripts/indexnow-submit.mjs

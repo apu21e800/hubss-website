@@ -126,9 +126,10 @@ function NavLabel({ children, active, rule = "#F97316" }: { children: React.Reac
 // Four groups a specifier would recognise, each named for the place, not the
 // buyer. The old fourth group, "Residential & Sustainability", put LEED &
 // Urban Heat Island next to driveways; the heat-island credit is earned on
-// parking lots and commercial hardscape, so it sits with them. Two driveway
-// pages remain (private, residential) — merging them is Doug's call; if they
-// merge, add the redirect in next.config.ts.
+// parking lots and commercial hardscape, so it sits with them. Residential
+// lists one driveways page (30 Sep 2026): /applications/private-driveways
+// is being merged into /applications/residential-driveways with a redirect,
+// so the menu stopped naming it.
 const APPLICATION_GROUPS = [
   {
     label: "Streets & Safety",
@@ -144,7 +145,7 @@ const APPLICATION_GROUPS = [
   },
   {
     label: "Residential",
-    slugs: ["private-driveways", "residential-driveways", "townhomes"],
+    slugs: ["residential-driveways", "townhomes"],
   },
 ];
 

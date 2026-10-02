@@ -159,7 +159,7 @@ export default function ApplicationsGrid({ applications: source }: Props) {
                   sizes="(max-width: 639px) 80vw, (max-width: 1023px) 46vw, (max-width: 1279px) 31vw, 400px"
                 />
 
-                {/* Bottom scrim for text legibility — image stays visible above.
+                {/* Bottom scrim for text legibility; the image stays visible above.
                     Taller on a phone (58%), where the caption runs to three
                     lines (QA A10, 30 Sep 2026) and the title sat on bare photo. */}
                 <div

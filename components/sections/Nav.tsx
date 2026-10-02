@@ -1656,7 +1656,7 @@ export default function Nav() {
               </svg>
             </button>
 
-            {/* Resources — ghost. .btn-ghost (app/globals.css) owns the border,
+            {/* Resources, the ghost button. .btn-ghost (app/globals.css) owns the border,
                 colour, hover and focus ring: the inline border it had beat
                 the hover class, so the button never changed under the
                 pointer (QA A3, C11, 30 Sep 2026). */}
@@ -1667,7 +1667,7 @@ export default function Nav() {
               <NavLabel active={section === "resources"}>Resources</NavLabel>
             </a>
 
-            {/* Lunch & Learn — gradient, .btn-accent for its hover and ring.
+            {/* Lunch & Learn, the gradient button; .btn-accent for its hover and ring.
                 On /lunch-learn it is marked like the rest of the bar, with
                 the rule in its own text colour (QA A4, 30 Sep 2026). */}
             <a href="/lunch-learn"

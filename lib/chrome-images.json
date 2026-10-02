@@ -11,17 +11,21 @@
     "src": "/images/lunch-learn/moose.png",
     "hash": "60f252ffbffab3bf"
   },
-  "panel/catalogue-assets_crosswalk-rumble-bars-woodbridge": {
-    "src": "/images/catalogue-assets/crosswalk-rumble-bars-woodbridge.jpg",
-    "hash": "c6b9bbde989dcd3a"
+  "panel/applications_sport-courts_sport-courts-24": {
+    "src": "/images/applications/sport-courts/sport-courts-24.jpg",
+    "hash": "a7350237e773fdbe"
   },
-  "panel/catalogue-assets_duratherm-hexagon-entrance-drive": {
-    "src": "/images/catalogue-assets/duratherm-hexagon-entrance-drive.jpg",
-    "hash": "b53343ac737434c2"
+  "panel/catalogue-assets_decomark-look-listen-live-rail-crossing": {
+    "src": "/images/catalogue-assets/decomark-look-listen-live-rail-crossing.jpg",
+    "hash": "4e97c3d2071c0213"
   },
-  "panel/catalogue-assets_streetbond-plaza-circles-vancouver": {
-    "src": "/images/catalogue-assets/streetbond-plaza-circles-vancouver.jpg",
-    "hash": "cabb6831d6a44ffc"
+  "panel/catalogue-assets_native-crosswalk-1": {
+    "src": "/images/catalogue-assets/native-crosswalk-1.jpg",
+    "hash": "3b19be83ee16c9ec"
+  },
+  "panel/catalogue-assets_streetbond-geometric-plaza": {
+    "src": "/images/catalogue-assets/streetbond-geometric-plaza.jpg",
+    "hash": "e8c2eced5a58c22c"
   },
   "panel/catalogue-assets_streetbond-splash-pad-arches": {
     "src": "/images/catalogue-assets/streetbond-splash-pad-arches.jpg",
@@ -31,13 +35,9 @@
     "src": "/images/catalogue-assets/streetprint-driveway-autumn-leaves.jpg",
     "hash": "cb85546c863a3b50"
   },
-  "panel/catalogue-assets_streetprint-townhome-lane-new-westminster": {
-    "src": "/images/catalogue-assets/streetprint-townhome-lane-new-westminster.jpg",
-    "hash": "10193c37f901086c"
-  },
-  "panel/catalogue-assets_whiterock-pier-crosswalk-trafficpatternsxd-1-1": {
-    "src": "/images/catalogue-assets/whiterock-pier-crosswalk-trafficpatternsxd-1-1.jpg",
-    "hash": "10e6570eec5ae5ef"
+  "panel/catalogue-assets_streetprint-red-herringbone-street": {
+    "src": "/images/catalogue-assets/streetprint-red-herringbone-street.jpg",
+    "hash": "3778f57a14d602e9"
   },
   "panel/products_chipfill_chipfill-application": {
     "src": "/images/products/chipfill/chipfill-application.jpg",

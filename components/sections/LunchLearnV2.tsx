@@ -22,6 +22,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { track } from "@vercel/analytics";
 import { CHROME_MARKS } from "@/lib/chrome-images.mjs";
 import ChromeImg from "@/components/ui/ChromeImg";
 import { lunchLearnHref, readLunchLearnParams, LL_TOPIC_MAX } from "@/lib/lunch-learn";
@@ -137,6 +138,17 @@ function useLunchLearnForm(withFormat: boolean) {
         message: "You're booked in. We'll be in touch within one business day to confirm your date and details.",
       });
       setFormData(EMPTY);
+      // The conversion, as app/contact/ContactForm.tsx counts its own. The
+      // old funnel form sent these; when the page moved to this form
+      // (22 Sep 2026) nothing did, so bookings stopped being counted
+      // (session B's finding, ported 2 Oct 2026).
+      window.gtag?.("event", "generate_lead", { event_category: "conversion", form_type: "lunch-learn" });
+      track("lunch_learn_submit", {
+        form_type: "lunch-learn",
+        format: withFormat ? format : "n/a",
+        topic: topic ?? "none",
+        from: from ?? "direct",
+      });
     } catch {
       setSubmitState({
         status: "error",

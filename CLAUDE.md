@@ -249,6 +249,10 @@ with `git checkout origin/main -- <path>`.
   the page reads (lunchLearnFaqs, the FAQ heading); the other Lunch & Learn
   fields in sanity/schemas/page.ts are hidden and read by nothing. No CE
   credit claims, ever. No stat chips or counts on the page.
+- The booking form (useLunchLearnForm in LunchLearnV2.tsx, shared with the
+  homepage card) sends generate_lead to GA and lunch_learn_submit to Vercel
+  Analytics on success, as the contact form does. From 22 Sep to 2 Oct 2026
+  nothing did: the page had moved to a form without them.
 
 ## Menus and Insights, editorial (30 Sep 2026)
 - The Products and Applications panels keep their photographs: at the 2 Oct

@@ -85,6 +85,11 @@ const ROW_ASPECT = 2;
 const COVER_MIN_WIDTH = 1200;
 // Square thumbnail: 64px on screen, 1x to 3x.
 const THUMB_WIDTHS = [64, 128, 192];
+// The panel's stacked rows (2 Oct 2026, Vern: "just 4 most recent blog
+// articles ... 3 articles stack to the right"): a 3:2 picture, 1x to 3x of
+// 168px.
+const CARD_WIDTHS = [168, 336, 504];
+const CARD_ASPECT = 3 / 2;
 // Cover: 16:9, about 490px wide on a 1440 screen, 1x to 2x and a bit. Wider
 // than 3:2 so the panel fits a 1366x768 laptop without scrolling.
 const COVER_WIDTHS = [640, 960, 1280];
@@ -132,6 +137,8 @@ export interface NavPost {
   /** As the post page prints it: "6 min read". */
   readTime: string;
   thumb: NavImage;
+  /** The 3:2 picture of the panel's stacked rows (absent on a copy written before 2 Oct 2026). */
+  card?: NavImage;
 }
 export interface NavSection {
   key: string;
@@ -290,6 +297,7 @@ async function main() {
         excerpt: (r.excerpt ?? "").trim(),
         readTime: readTimeOf(r),
         thumb: sized(frame, THUMB_WIDTHS, 1),
+        card: sized(frame, CARD_WIDTHS, CARD_ASPECT),
       },
     });
   }

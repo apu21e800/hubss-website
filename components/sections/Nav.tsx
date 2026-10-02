@@ -169,6 +169,8 @@ interface NavImage { src: string; srcSet: string }
 interface NavPost {
   slug: string; title: string; type: string; publishedAt: string; date: string;
   excerpt?: string; readTime?: string; thumb: NavImage;
+  /** The panel's 3:2 row picture (since 2 Oct 2026; a copy without it falls back to `thumb`). */
+  card?: NavImage;
 }
 interface NavSection {
   key: string; label: string; href: string; blurb: string; count: number;
@@ -517,11 +519,13 @@ function InsightImg({ image, sizes, className, style, loading = "lazy", decoding
 // lazy-loaded inside a panel that mounts on open, the cover showed as a
 // blank box for about a second). Called when the pointer or keyboard first
 // reaches the bar's triggers, so by the time Insights opens the files are
-// usually cached; once per page. Since 2 Oct 2026 the three section tiles
-// are warmed with the cover: they are most of what the panel shows.
+// usually cached; once per page. Since 2 Oct 2026 the three stacked rows
+// are warmed with the cover: together they are the whole panel.
 const COVER_SIZES = "(min-width: 1280px) 470px, 36vw";
-// A tile is one of five columns: about 218px at 1280 and up, 17vw at 1024.
-const TILE_SIZES = "(min-width: 1280px) 218px, 17vw";
+// A stacked row's picture: 168px wide from 1280 up, a little less at 1024.
+const CARD_SIZES = "(min-width: 1280px) 168px, 13vw";
+/** How many posts stack beside the cover: with it, the four newest. */
+const STACKED = 3;
 let coverWarmed = false;
 function warmInsightsCover() {
   if (coverWarmed || typeof window === "undefined") return;
@@ -533,23 +537,23 @@ function warmInsightsCover() {
     img.src = image.src;
   };
   if (INSIGHTS.cover) warm(INSIGHTS.cover.image, COVER_SIZES);
-  for (const s of NAV_SECTIONS) if (s.photo) warm(s.photo.tile, TILE_SIZES);
+  for (const p of INSIGHTS.latest.slice(0, STACKED)) warm(p.card ?? p.thumb, CARD_SIZES);
 }
 
-// ── Insights panel: pictures first ────────────────────────────────────
+// ── Insights panel: the four newest posts ─────────────────────────────
 // Rebuilt 2 Oct 2026 (Vern: "insights mega menu dropdown still feels busy,
-// too much text maybe"). The section front of 28 Sep carried a masthead, the
-// cover story with its deck, a ruled list of five more posts with dates and
-// read times, the three sections with their lines and counts, and the Idea
-// Book with a line: about 190 words. Now it is the same shell as its two
-// siblings (MegaShell, MenuFooter) holding four photographs: the featured
-// post on the left (its photo, its section, its title) and the three
-// sections as photo tiles with their names over them, each tile wearing a
-// photo from one of its own posts (lib/nav-insights.json, `photo`). The
-// foot row is the siblings': "All Insights", the Idea Book, Lunch & Learn.
-// No dates, no counts, no sentences; everything that was text-only now
-// either has a picture or is gone. Opening, closing, hover intent and the
-// keyboard are the shared ones in Nav().
+// too much text maybe", then "just make 3 articles stack to the right of
+// geary works not a fan of vertical cards, just 4 most recent blog articles,
+// that update live, including the large one on the left"). The panel is the
+// same shell as its two siblings (MegaShell, MenuFooter) holding the four
+// newest posts: the cover story on the left (its photo, its section, its
+// title) and the next three stacked on the right as rows, each a 3:2 picture
+// with its section and title. The foot row is the siblings': "All Insights",
+// the Idea Book, Lunch & Learn. No dates, no counts, no sentences. "Live":
+// lib/nav-insights.json is written from Sanity at every build, and
+// publishing a post in Studio triggers a build, so a new post is in the menu
+// about five minutes after Publish. The three sections keep their rows in
+// the phone drawer, where a map matters more than a feed.
 
 // Headline links underline on hover, in the brand orange, the way a
 // newspaper's do; colour alone was the widget's convention.
@@ -561,37 +565,35 @@ const HEADLINE_HOVER =
 // loading, never as a hole.
 const PHOTO_GROUND = "linear-gradient(160deg, var(--bg-card) 0%, var(--bg-deepest) 100%)";
 
-// One section as a tile: its photo, and its name set over the foot of it on
-// a dark gradient. The tile is as tall as the featured column beside it
-// (the grid row stretches it), so the 2:3 crop from the CDN is covered, not
-// letterboxed. A section with no photo gets the ruled tile's hatching.
-function SectionTile({ section: s }: { section: NavSection }) {
+// One of the stacked posts: its 3:2 picture on the left, its section and
+// its title beside it. Rows after the first carry a hairline above them.
+function LatestRow({ post, first }: { post: NavPost; first: boolean }) {
   return (
     <Link prefetch={false}
-      href={s.href}
-      className="group relative block min-h-[300px] overflow-hidden rounded-xl"
-      style={{ background: s.photo ? PHOTO_GROUND : `${HATCH}, var(--bg-card)`, border: "1px solid var(--ink-10)" }}
+      href={`/blog/${post.slug}`}
+      className={`group flex items-center gap-4 py-3 ${first ? "" : "border-t"}`}
+      style={{ borderColor: "var(--ink-08)" }}
     >
-      {s.photo && (
+      <span
+        className="relative block w-[168px] flex-shrink-0 overflow-hidden rounded-lg"
+        style={{ aspectRatio: "3 / 2", background: PHOTO_GROUND, border: "1px solid var(--ink-10)" }}
+      >
         <InsightImg
-          image={s.photo.tile}
-          sizes={TILE_SIZES}
+          image={post.card ?? post.thumb}
+          sizes={CARD_SIZES}
           loading="eager"
           className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
         />
-      )}
-      <span
-        aria-hidden="true"
-        className="absolute inset-x-0 bottom-0 h-3/5"
-        style={{ background: "linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.45) 45%, rgba(0,0,0,0) 100%)" }}
-      />
-      <span className="absolute left-4 right-4 bottom-4 block">
-        <span aria-hidden="true" className="mb-2.5 block h-[3px] w-7 rounded-full" style={{ background: "#F97316" }} />
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="block text-[10.5px] font-bold uppercase tracking-[0.2em]" style={{ color: ACCENT }}>
+          {kindOf(post.type)}
+        </span>
         <span
-          className="font-display block text-[22px] font-bold leading-none text-white transition-colors group-hover:text-[var(--accent-text)]"
-          style={{ letterSpacing: "-0.02em" }}
+          className={`font-display mt-1.5 block text-[17px] font-bold leading-[1.2] line-clamp-2 ${HEADLINE_HOVER}`}
+          style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}
         >
-          {s.label}
+          {post.title}
         </span>
       </span>
     </Link>
@@ -633,13 +635,14 @@ function IdeaBookSlot() {
 
 function InsightsMegaMenu() {
   const { cover } = INSIGHTS;
+  const stacked = INSIGHTS.latest.slice(0, STACKED);
   const book = showIdeaBook();
   return (
     <MegaShell>
-      {/* Five columns: the featured post takes two, each section one. With
-          no cover story (no post photo qualified and the fallback pick is
-          not live), the three tiles share the width. */}
-      <div className={`grid gap-x-8 ${cover ? "grid-cols-5" : "grid-cols-3"}`}>
+      {/* Five columns: the cover story takes two, the stack of three the
+          rest. With no cover story (no post photo qualified and the
+          fallback pick is not live), the stack takes the width. */}
+      <div className={`grid gap-x-10 ${cover ? "grid-cols-5" : "grid-cols-1"}`}>
         {cover && (
           <Link prefetch={false} href={`/blog/${cover.slug}`} className="group col-span-2 flex flex-col">
             <span
@@ -668,9 +671,11 @@ function InsightsMegaMenu() {
             </span>
           </Link>
         )}
-        {NAV_SECTIONS.map((s) => (
-          <SectionTile key={s.key} section={s} />
-        ))}
+        <div className={`flex flex-col justify-center ${cover ? "col-span-3" : ""}`}>
+          {stacked.map((p, i) => (
+            <LatestRow key={p.slug} post={p} first={i === 0} />
+          ))}
+        </div>
       </div>
       <MenuFooter href="/blog" label="All Insights" topic="HUB systems">
         {book && <IdeaBookSlot />}

@@ -6,7 +6,11 @@ import LunchLearn from "@/components/sections/LunchLearn";
 import JsonLd from "@/components/ui/JsonLd";
 import BlogCard from "@/components/blog/BlogCard";
 import LunchLearnTile from "@/components/blog/LunchLearnTile";
+import LoadMoreGrid from "@/components/blog/LoadMoreGrid";
 import { getAllPosts } from "@/lib/blog";
+
+/** Cards a section lists in full; past this, a "Load more" takes the rest. */
+const SECTION_PAGE = 40;
 import { INSIGHTS_SECTIONS, sectionFor, type InsightsSection } from "@/lib/field-notes-taxonomy";
 import { clipExcerpt, focalObjectPosition } from "@/lib/blog-taxonomy";
 
@@ -205,14 +209,21 @@ export default async function TypeHub({ section }: { section: InsightsSection })
         </div>
       )}
 
+      {/* The whole section, as it always was, up to forty posts after the
+          lead; past that, the first forty and a "Load more" (QA D9, 30 Sep
+          2026). Projects stands at 38 today. */}
       {rest.length > 0 && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-16">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {rest.map((post) => (
-              <BlogCard key={post.slug} post={post} />
-            ))}
-            <LunchLearnTile count={rest.length} />
-          </div>
+          {rest.length > SECTION_PAGE ? (
+            <LoadMoreGrid posts={rest} pageSize={SECTION_PAGE} />
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {rest.map((post) => (
+                <BlogCard key={post.slug} post={post} />
+              ))}
+              <LunchLearnTile count={rest.length} />
+            </div>
+          )}
         </div>
       )}
 

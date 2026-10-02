@@ -134,8 +134,9 @@ const curatedProjects: MapProject[] = [
   },
   {
     // The post gives 5500 Sunshine Coast Hwy, "at the southern entrance to the Town
-    // of Sechelt". That address could not be placed with confidence, so the pin sits
-    // in downtown Sechelt (Cowrie St and Wharf Ave), approximate.
+    // of Sechelt": that is Tsain-Ko Village, the shíshálh Nation's shopping centre on
+    // the highway, so the pin sits there (placed 30 Sep 2026, carried into this
+    // dataset 2 Oct 2026; it had sat downtown, 700 m west).
     // 30 Sep 2026: second photo, Idea Book p.124 ("Sunshine Coast, British Columbia |
     // TrafficPatterns"), the same crossing. The book's text on that page describes the
     // pictograph crosswalk; flagged for Doug.
@@ -143,8 +144,8 @@ const curatedProjects: MapProject[] = [
     title: "Tsain-Ko Centre crosswalk",
     city: "Sechelt",
     province: "BC",
-    lat: 49.4721,
-    lng: -123.7545,
+    lat: 49.4744,
+    lng: -123.7462,
     product: "TrafficPatterns",
     application: "Community Branding",
     approximate: true,
@@ -922,15 +923,17 @@ const curatedProjects: MapProject[] = [
   // ── Ontario ─────────────────────────────────────────────────────────────────────
   {
     // The post's own hero (bus-lanes-08). It names the East London Link corridor and
-    // no street, so the pin sits in east London, approximate.
+    // no street, so the pin sits on the corridor at King Street and Egerton Street,
+    // approximate (placed 30 Sep 2026, carried into this dataset 2 Oct 2026; it was
+    // a block south of the route).
     // 30 Sep 2026: photos from Idea Book pp.32, 87 and 93, each captioned "London, Ontario
     // | MMAX"; p.90 is the corridor photo already here.
     id: "london-east-brt",
     title: "East London Link rapid transit",
     city: "London",
     province: "ON",
-    lat: 42.9836,
-    lng: -81.2200,
+    lat: 42.9860,
+    lng: -81.2146,
     product: "MMAX",
     systems: ["TrafficPatternsXD"],
     application: "Bus Lanes",
@@ -1331,13 +1334,15 @@ const curatedProjects: MapProject[] = [
   },
   {
     // Emery Village is a neighbourhood; the post names no intersection, so the pin
-    // sits at Emery. 2020 is the year the post gives for the project.
+    // sits at its heart, Finch Avenue West and Weston Road, approximate (placed
+    // 30 Sep 2026, carried into this dataset 2 Oct 2026; it was 1 km south-east of
+    // it). 2020 is the year the post gives for the project.
     id: "toronto-emery-village",
     title: "Emery Village crosswalks",
     city: "Toronto",
     province: "ON",
-    lat: 43.7441,
-    lng: -79.5342,
+    lat: 43.7518,
+    lng: -79.5422,
     product: "TrafficPatternsXD",
     application: "Crosswalks",
     year: "2020",
@@ -1354,14 +1359,17 @@ const curatedProjects: MapProject[] = [
       "TrafficPatternsXD across 440 m² of crossings, installed by Multiseal, replicating the Emery Blue colour and the paver grid with less traffic disruption than relaying pavers or demolishing the concrete base.",
   },
   {
-    // The post names the Town of Georgina and no street: pin at the town. No year
-    // (2021 had no source), and the text is cut back to what the post says.
+    // The post names the Town of Georgina and no street: pin at the town's Civic
+    // Centre in Keswick, approximate (placed 30 Sep 2026, carried into this dataset
+    // 2 Oct 2026; it had sat at the middle of the municipality, 8 km south in
+    // farmland). No year (2021 had no source), and the text is cut back to what
+    // the post says.
     id: "georgina-every-child-matters",
     title: "Every Child Matters crosswalk",
     city: "Georgina",
     province: "ON",
-    lat: 44.2280,
-    lng: -79.4644,
+    lat: 44.2963,
+    lng: -79.4362,
     product: "TrafficPatterns",
     application: "Community Branding",
     approximate: true,

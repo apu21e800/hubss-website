@@ -19,7 +19,7 @@ import { applicationImages, resolveImage } from "@/lib/featured-images";
 import ApplicationSpread from "@/components/applications/ApplicationSpread";
 import { applicationCatalogueFor } from "@/lib/application-catalogue";
 import { buildMetadata } from "@/lib/seo";
-import { HERO_POSITION, heroColourClass } from "@/lib/hero-framing";
+import { HERO_POSITION, heroColourClass, heroPhoneZoom } from "@/lib/hero-framing";
 import { lunchLearnHref } from "@/lib/lunch-learn";
 import type { SanityBlock } from "@/types/sanity";
 
@@ -182,6 +182,16 @@ export default async function ApplicationPage({ params }: Props) {
 
   // Hero framing follows the photo (lib/hero-framing.ts).
   const heroPosition = HERO_POSITION[hero.origin ?? hero.src] ?? "center 55%";
+  // On phones a 4:3 hero shows its whole height, sky and all, with the paving
+  // under the title (QA C4). Four photos are scaled up there around a point
+  // near the surface (lib/hero-framing.ts, HERO_PHONE_ZOOM); the CSS variables
+  // feed the max-sm: classes on the image, and 1 means no change.
+  const zoom = heroPhoneZoom(hero);
+  const heroStyle = {
+    objectPosition: heroPosition,
+    "--hero-zoom": zoom?.scale ?? 1,
+    "--hero-origin": zoom?.origin ?? "50% 50%",
+  } as React.CSSProperties;
 
   // "How it works" without the sentence the spread just said. Public Art's
   // description opens with the spread's pull line word for word ("The street
@@ -211,8 +221,8 @@ export default async function ApplicationPage({ params }: Props) {
           src={hero.src}
           alt={hero.alt}
           fill
-          className={`object-cover ${heroColourClass(hero)}`}
-          style={{ objectPosition: heroPosition }}
+          className={`object-cover ${heroColourClass(hero)} max-sm:scale-(--hero-zoom) max-sm:origin-(--hero-origin)`}
+          style={heroStyle}
           priority
           sizes="100vw"
         />

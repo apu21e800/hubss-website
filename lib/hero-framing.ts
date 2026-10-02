@@ -126,7 +126,7 @@ export const HOME_HERO = {
    * B was cut off at 768 x 1024, 28 Sep 2026); it changes nothing on a
    * landscape screen, where the photo is as wide as the frame. Down, 42%
    * gives the sign a little air under the nav where the frame is wider than
-   * the photo: rows 151-1548 of the master at 1440 x 900 (scripts/hero-cuts.mjs).
+   * the photo: rows 141-1538 of the master at 1440 x 900 (scripts/hero-cuts.mjs).
    */
   position: "69% 42%",
   /** The framing for windows 16:9 and wider. Applied with the wide <source>'s own media query. */

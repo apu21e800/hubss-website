@@ -29,7 +29,7 @@
  * they exist; the 16:10 file is the one to push to Studio with
  * `npm run photos:sync -- --only=homepage`.
  *
- * Usage:  node scripts/hero-cuts.mjs <master.png|jpg> [--focus=0.598,0.269] [--place=0.5,0.278] [--grade=photo|pop|generated|none] [--out=dir]
+ * Usage:  node scripts/hero-cuts.mjs <master.png|jpg> [--focus=0.598,0.269] [--place=0.5,0.284] [--grade=photo|pop|generated|none] [--out=dir]
  * --focus is where the sign's centre sits in the master, as fractions of its
  * width and height; the default is the 2 Oct 2026 master's (the sign spans
  * x 1102-1935 and y 230-795 there, plinth included). --place is where that
@@ -55,7 +55,7 @@ if (!masterArg) {
 const focusFlag = flags.find((f) => f.startsWith("--focus="));
 const [fx, fy] = focusFlag ? focusFlag.slice(8).split(",").map(Number) : [0.598, 0.269];
 const placeFlag = flags.find((f) => f.startsWith("--place="));
-const [px, py] = placeFlag ? placeFlag.slice(8).split(",").map(Number) : [0.5, 0.278];
+const [px, py] = placeFlag ? placeFlag.slice(8).split(",").map(Number) : [0.5, 0.284];
 const outFlag = flags.find((f) => f.startsWith("--out="));
 
 const OUT = outFlag ? path.resolve(outFlag.slice(6)) : path.join(process.cwd(), "public", "images", "hero");
@@ -65,11 +65,13 @@ const OUT = outFlag ? path.resolve(outFlag.slice(6)) : path.join(process.cwd(), 
 // replaces (505, 391 and 245 KB); the full-size master has more detail per
 // pixel than the 1632 px one did, so the same quality costs more bytes.
 const CUTS = [
-  // 16:10, as wide as the photo, top edge at row 71. HeroSlideshow.tsx frames
-  // this file at "69% 42%", which at 1440 x 900 shows rows 151-1548: the sign
-  // with a little air above it, the salmon down to the bottom of the frame.
-  // That is the window the old cut gave there (141-1532), so Studio's copy
-  // frames the same before and after it is replaced; the new file is sharper.
+  // 16:10, as wide as the photo, top edge at row 61, where the 28 Sep cut's
+  // was. HeroSlideshow.tsx frames this file at "69% 42%", which at 1440 x 900
+  // shows rows 141-1538: the sign with a little air above it, the salmon down
+  // to the bottom of the frame. At that shape the frame is the limit, not the
+  // file, so this is the window the old cut gave too, and Studio's copy frames
+  // the same at every size before and after it is replaced; the new file is
+  // sharper.
   { file: "hero-1.jpg", aspect: 16 / 10, width: 1920, quality: 76 },
   // Windows 16:9 and wider (Vern's screenshot, about 1625 x 720). This cut was
   // 2:1 from row 140 and the frame cropped it further, so the sign filled the

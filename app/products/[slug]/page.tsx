@@ -15,7 +15,7 @@ import { galleryFor, altFor } from "@/lib/asset-scan";
 import GalleryGrid, { type GalleryImage } from "@/components/ui/GalleryGrid";
 import JsonLd from "@/components/ui/JsonLd";
 import RichText from "@/components/ui/RichText";
-import { photoObject, seoCaption } from "@/lib/image-seo";
+import { photoObject, seoCaption, honestPhoto, HUB_ORGANIZATION } from "@/lib/image-seo";
 import { isSanityImage, sanityOgImage, type Photo } from "@/lib/photos";
 import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
@@ -23,7 +23,7 @@ import { productImages, resolveImage } from "@/lib/featured-images";
 import { buildMetadata } from "@/lib/seo";
 import { getProductFamily } from "@/lib/product-taxonomy";
 import { catalogueFor } from "@/lib/product-catalogue";
-import ProductSpecCard from "@/components/products/ProductSpecCard";
+import ProductSpecCard, { fixPrint } from "@/components/products/ProductSpecCard";
 import ProductFaq from "@/components/products/ProductFaq";
 import { faqsFor } from "@/lib/product-faqs";
 import { getMergedProduct } from "@/lib/products.server";
@@ -60,10 +60,40 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const heroSrc = product.heroPhoto?.src ?? featuredImg?.src ?? product.imageUrl;
   return buildMetadata({
     title: product.seoTitle || product.name,
-    description: product.seoDescription || (product.shortDesc + " " + product.description.slice(0, 120) + "…"),
+    // The SEO description from Studio (or the code's) when it fits in whole
+    // sentences, else the product's own one-liner: at most 155 characters,
+    // never cut mid-word. Until 30 Sep 2026 the fallback was the one-liner
+    // plus the first 120 characters of the body, cut mid-word and ending in
+    // "…" (QA E1, on 22 pages).
+    description: metaDescription(product.seoDescription, product.shortDesc),
     slug: `products/${product.slug}`,
     image: isSanityImage(heroSrc) ? sanityOgImage(heroSrc) : heroSrc,
   });
+}
+
+/**
+ * A meta description of whole sentences, at most `max` characters: the SEO
+ * field when it fits, or cut back to the last sentence end that fits; when
+ * its one sentence runs past the limit (seven of the ported product
+ * descriptions do), the page's one-liner stands in, by the same rule. Never mid-word, never
+ * "…" (Google adds its own). The same helper lives in
+ * app/applications/[slug]/page.tsx: a page file cannot export it, and
+ * lib/seo.ts belongs to another worker tonight (30 Sep 2026).
+ */
+function metaDescription(seo: string | undefined, oneLiner: string, max = 155): string {
+  for (const text of [seo, oneLiner]) {
+    const clean = (text ?? "").replace(/\s+/g, " ").trim();
+    if (!clean) continue;
+    if (clean.length <= max) return clean;
+    const head = clean.slice(0, max + 1);
+    const end = Math.max(head.lastIndexOf(". "), head.lastIndexOf("! "), head.lastIndexOf("? "));
+    if (end >= 40) return clean.slice(0, end + 1);
+  }
+  // Both run past the limit in one sentence (none does today): the one-liner
+  // to its last whole word, with a full stop.
+  const clean = oneLiner.replace(/\s+/g, " ").trim();
+  const cut = clean.slice(0, max).lastIndexOf(" ");
+  return clean.slice(0, cut > 0 ? cut : max).replace(/[,;:\s]+$/, "") + ".";
 }
 
 export default async function ProductPage({ params }: Props) {
@@ -100,20 +130,21 @@ export default async function ProductPage({ params }: Props) {
   // imageUrl meant every product with a distinct featured image (seven of
   // eleven) repeated its banner photo inside "The work" while the imageUrl
   // photo, shown nowhere, was silently dropped from the gallery.
-  const hero: Photo = product.heroPhoto ?? {
+  //
+  // honestPhoto (lib/image-seo.ts, 30 Sep 2026, QA E10): the photo sync wrote
+  // the old templates' invented settings into Studio ("at a civic plaza",
+  // "150 mil ..."), so the Sanity alt and caption are replaced at render by
+  // what the photo's folder proves; a line a person wrote in Studio stays.
+  const hero: Photo = honestPhoto(product.heroPhoto ?? {
     src: featuredImg?.src ?? product.imageUrl,
-    alt: featuredImg?.alt ?? `${product.name}: ${product.shortDesc}`,
-  };
-  const galleryPhotos: Photo[] = product.galleryPhotos ?? (() => {
+    alt: featuredImg?.alt ?? product.name,
+  });
+  const galleryPhotos: Photo[] = product.galleryPhotos?.map(honestPhoto) ?? (() => {
     const bannerSrc = featuredImg?.src ?? product.imageUrl;
     const fromFolder = galleryFor(bannerSrc, product.gallery, `images/products/${product.slug}`);
     return (fromFolder.length > 0 ? fromFolder : [bannerSrc]).map((src) => ({
       src,
-      alt: altFor(src, `${product.name} decorative pavement by HUB Surface Systems`),
-      // A caption that repeats the alt word for word is wasted surface. This one
-      // is written for a reader looking at the photo in the lightbox — and
-      // visible text beside an image is weighted more heavily by Google Images
-      // and by AI crawlers than the alt attribute is.
+      alt: altFor(src, product.name),
       caption: seoCaption(src) ?? altFor(src, product.name),
     }));
   })();
@@ -142,9 +173,11 @@ export default async function ProductPage({ params }: Props) {
     // nodes each photo arrives with the words that describe it and the licence
     // terms that make it eligible for the Licensable badge in Google Images.
     // First entry is the hero, which is what a rich result will show.
+    // creatorRef: the Organization is the `manufacturer` node below, once,
+    // and each photo points at its @id (30 Sep 2026).
     image: [
-      photoObject(hero, { representativeOfPage: true }),
-      ...galleryPhotos.slice(1, 12).map((p) => photoObject(p)),
+      photoObject(hero, { representativeOfPage: true, creatorRef: true }),
+      ...galleryPhotos.slice(1, 12).map((p) => photoObject(p, { creatorRef: true })),
     ],
     manufacturer: {
       "@type": "Organization",
@@ -163,7 +196,7 @@ export default async function ProductPage({ params }: Props) {
           additionalProperty: catalogue.specs.map((s) => ({
             "@type": "PropertyValue",
             name: s.label,
-            value: s.value,
+            value: fixPrint(s.value), // the same print fixes the spread shows (30 Sep 2026)
           })),
         }
       : {}),
@@ -202,14 +235,20 @@ export default async function ProductPage({ params }: Props) {
     "@context": "https://schema.org",
     "@type": "ImageGallery",
     "@id": `https://hubss.com/products/${product.slug}#gallery`,
-    name: `${product.name} installation photographs`,
-    description: `Field photography of ${product.name} installations by HUB Surface Systems across Canada.`,
+    // Named for what it is (QA E10, 30 Sep 2026): it said "Field photography
+    // of X installations by HUB Surface Systems across Canada", which the
+    // repair products' product shots and the US photos made untrue. The
+    // Organization is one node here, `creator`, and the forty photos point at
+    // its @id: the StreetPrint script carried 52 copies of it.
+    name: `${product.name} photographs`,
+    description: `The photographs on the ${product.name} page.`,
     url: `https://hubss.com/products/${product.slug}`,
     isPartOf: { "@id": `https://hubss.com/products/${product.slug}` },
+    creator: HUB_ORGANIZATION,
     numberOfItems: gallery.length,
     associatedMedia: galleryPhotos
       .slice(0, 40)
-      .map((p) => photoObject({ ...p, caption: p.caption ?? p.alt }, { ownText: true })),
+      .map((p) => photoObject({ ...p, caption: p.caption ?? p.alt }, { ownText: true, creatorRef: true })),
   } : null;
 
   const breadcrumbSchema = {
@@ -225,6 +264,9 @@ export default async function ProductPage({ params }: Props) {
   // Hero framing follows the photo, not the page (lib/hero-framing.ts): a
   // Sanity hero records the /public path it came from as `origin`.
   const heroPosition = HERO_POSITION[hero.origin ?? hero.src] ?? product.heroPosition ?? "center 62%";
+  // A photo under 1000 px wide cannot fill a 1440 px banner (QA B1); the band
+  // becomes a dark panel below. Only a Studio photo carries its width.
+  const heroTooSmall = typeof hero.width === "number" && hero.width < 1000;
 
   // The spread (ProductSpecCard) prints the book's four headline specs; the
   // sidebar used to print the same four again beside them in other words
@@ -233,12 +275,6 @@ export default async function ProductPage({ params }: Props) {
   const norm = (v: string) => v.toLowerCase().replace(/[^a-z0-9]/g, "");
   const inSpread = new Set((catalogue?.specs ?? []).map((sp) => norm(sp.label)));
   const sideSpecs = product.specs.filter((sp) => !inSpread.has(norm(sp.label)));
-
-  // "Where X goes": the count decides the column count, so no card sits alone
-  // on its last row (QA pa#25). Every card is the same width; a short last row
-  // stays left-aligned instead of stretching (QA, 28 Sep 2026: StreetBond's
-  // 5+5+3 and AirMark's two 598 px cards).
-  const appCols = bestColumns(relatedAppData.length);
 
   return (
     <main style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
@@ -252,17 +288,33 @@ export default async function ProductPage({ params }: Props) {
           and muted". The scrims now darken only where the type sits (the foot
           and the left edge), and the photo gets a light colour lift. */}
       <div data-hero className="relative overflow-hidden" style={{ height: "clamp(360px, 52vh, 560px)" }}>
-        <PhotoImage
-          src={hero.src}
-          alt={hero.alt}
-          fill
-          className={`object-cover ${heroColourClass(hero)}`}
-          style={{ objectPosition: heroPosition }}
-          priority
-          sizes="100vw"
-        />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(8,13,22,0.12) 0%, rgba(8,13,22,0.04) 38%, rgba(8,13,22,0.34) 64%, rgba(8,13,22,0.82) 100%)" }} />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgba(8,13,22,0.46) 0%, rgba(8,13,22,0.16) 40%, transparent 62%)" }} />
+        {heroTooSmall ? (
+          /* A dark panel instead of the photo: the hatching an engineer draws
+             through a section (the Products menu's ruled tile) over the dark
+             ground, with the name on it. ChipFill's Studio hero is a 640 px
+             file and AggreFill's 476 px, and at 1440 wide both were a blur
+             (QA B1, 30 Sep 2026). The width comes from the Studio photo
+             record; a /public fallback carries none and is shown as before. */
+          <div
+            className="absolute inset-0"
+            style={{ background: `${HATCH}, linear-gradient(180deg, #1c1c1f 0%, var(--bg-dark) 100%)` }}
+            aria-hidden="true"
+          />
+        ) : (
+          <>
+            <PhotoImage
+              src={hero.src}
+              alt={hero.alt}
+              fill
+              className={`object-cover ${heroColourClass(hero)}`}
+              style={{ objectPosition: heroPosition }}
+              priority
+              sizes="100vw"
+            />
+            <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(8,13,22,0.12) 0%, rgba(8,13,22,0.04) 38%, rgba(8,13,22,0.34) 64%, rgba(8,13,22,0.82) 100%)" }} />
+            <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgba(8,13,22,0.46) 0%, rgba(8,13,22,0.16) 40%, transparent 62%)" }} />
+          </>
+        )}
         <div className="absolute inset-0 flex items-end">
           <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-14">
             {/* The label was orange on the photo and measured 2 to 3:1 on red,
@@ -326,23 +378,25 @@ export default async function ProductPage({ params }: Props) {
                 the one position on the page where a specifier is still deciding
                 whether to keep reading. */}
             {catalogue ? (
-              <>
-                <ProductSpecCard entry={catalogue} productName={product.name} />
-                <h2 className="text-xl sm:text-2xl font-bold mb-4" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
-                  How it works
-                </h2>
-                {product.descriptionBlocks ? (
-                  <RichText value={product.descriptionBlocks} />
-                ) : (
-                  <p className="mb-12 leading-[1.85]" style={{ color: "var(--text-body)", fontSize: "clamp(1rem, 1.8vw, 1.075rem)", maxWidth: "65ch" }}>
-                    {product.description}
-                  </p>
-                )}
-              </>
+              /* The spread alone. Until 30 Sep 2026 a "How it works" paragraph
+                 followed it: `description` (Studio, synced from lib/products.ts),
+                 which was written from the same printed page as the spread's
+                 `description` (lib/product-catalogue.ts) and repeated its
+                 sentences one screen later on all ten pages (QA B4, E19:
+                 TrafficPatterns' aggregate sentence, StreetPrint's flush
+                 surface, PreMark's whole paragraph). The book's spread is the
+                 approved copy, so it stands and the paragraph does not. The
+                 field still feeds the Product JSON-LD, and the four products
+                 without a spread still show it below. */
+              <ProductSpecCard entry={catalogue} productName={product.name} />
             ) : (
               <>
-                <h2 className="text-2xl sm:text-3xl font-bold mb-5" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
-                  What {product.name} is
+                {/* The same heading as the spread pages and the application
+                    pages. "What AirMark is" and a sidebar "Specification" made
+                    the four products without a spread read as a second
+                    template (QA B2, C3, 30 Sep 2026). */}
+                <h2 className="text-xl sm:text-2xl font-bold mb-4" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
+                  How it works
                 </h2>
                 {product.descriptionBlocks ? (
                   <RichText value={product.descriptionBlocks} />
@@ -425,14 +479,16 @@ export default async function ProductPage({ params }: Props) {
                 <>
                   {/* Its own section, not an <h3> under Downloads. */}
                   <h2 className="font-bold text-lg mb-5" style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
-                    {catalogue ? "Specification details" : "Specification"}
+                    Specification details
                   </h2>
                   <dl className="space-y-3.5 mb-7">
                     {sideSpecs.map((spec) => (
                       <div key={spec.label} className="flex justify-between gap-4 text-sm" style={{ borderBottom: "1px solid var(--ink-06)", paddingBottom: "12px" }}>
                         <dt style={{ color: "var(--text-muted)" }}>{spec.label}</dt>
                         <dd className="font-semibold text-right max-w-[62%]" style={{ color: "var(--text-primary)" }}>
-                          {spec.value}
+                          {/* fixPrint: Studio holds StreetPrint's "Yes: flush surface" row; the
+                              punctuation is corrected at render until the sync runs (QA B23). */}
+                          {fixPrint(spec.value)}
                         </dd>
                       </div>
                     ))}
@@ -549,7 +605,12 @@ export default async function ProductPage({ params }: Props) {
               </Link>
             </div>
 
-            <div className={`grid grid-cols-2 gap-3 sm:gap-4 ${APP_COLS[appCols]}`}>
+            {/* One grid on every product page: four across from lg, two
+                below, every card the same size and the same 15 px name. The
+                count used to pick 3, 4 or 5 columns, so StreetBond's cards
+                were small and DecoMark's large for the same section (QA B8,
+                30 Sep 2026). A short last row stays left-aligned. */}
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
               {relatedAppData.map((app) => {
                 const photo: Photo | null = app.heroPhoto ?? null;
                 return (
@@ -571,7 +632,7 @@ export default async function ProductPage({ params }: Props) {
                         fill
                         style={{ objectPosition: "center 60%" }}
                         className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-                        sizes={APP_SIZES[appCols]}
+                        sizes={APP_SIZES}
                       />
                       <div
                         className="absolute inset-0"
@@ -608,33 +669,13 @@ export default async function ProductPage({ params }: Props) {
   );
 }
 
-/**
- * Columns from lg up for a grid of `n` cards that leaves no card alone on its
- * last row: whichever of 4, 3 or 5 divides the list, else the one whose last
- * row is fullest. One or two cards get four columns: the standard card size,
- * left-aligned, not stretched across the row.
- */
-function bestColumns(n: number): 3 | 4 | 5 {
-  const options: (3 | 4 | 5)[] = [4, 3, 5];
-  const exact = options.find((c) => n % c === 0);
-  if (exact) return exact;
-  return options.reduce((best, c) => (n % c > n % best ? c : best), 4 as 3 | 4 | 5);
-}
-
-/** Two across on phones and tablets, `cols` across from lg. */
-const APP_COLS: Record<3 | 4 | 5, string> = {
-  3: "lg:grid-cols-3",
-  4: "lg:grid-cols-4",
-  5: "lg:grid-cols-5",
-};
+/** The ruled-section hatching the Products menu's tile draws (components/sections/Nav.tsx). */
+const HATCH = "repeating-linear-gradient(-45deg, var(--ink-08) 0 1px, transparent 1px 9px)";
 
 /**
- * The card's real width per column count (max-w-7xl less px-8 is 1216 px;
- * gaps 12 px on phones, 16 px from sm), so the browser picks a source at
- * least as wide as the card. "25vw" handed a 598 px card a 384 px image.
+ * The card's real width in the four-column grid (max-w-7xl less px-8 is
+ * 1216 px; gaps 12 px on phones, 16 px from sm), so the browser picks a
+ * source at least as wide as the card. "25vw" handed a 598 px card a 384 px
+ * image.
  */
-const APP_SIZES: Record<3 | 4 | 5, string> = {
-  3: "(min-width: 1280px) 395px, (min-width: 1024px) calc((100vw - 96px) / 3), (min-width: 640px) calc(50vw - 32px), calc(50vw - 22px)",
-  4: "(min-width: 1280px) 292px, (min-width: 1024px) calc((100vw - 112px) / 4), (min-width: 640px) calc(50vw - 32px), calc(50vw - 22px)",
-  5: "(min-width: 1280px) 231px, (min-width: 1024px) calc((100vw - 128px) / 5), (min-width: 640px) calc(50vw - 32px), calc(50vw - 22px)",
-};
+const APP_SIZES = "(min-width: 1280px) 292px, (min-width: 1024px) calc((100vw - 112px) / 4), (min-width: 640px) calc(50vw - 32px), calc(50vw - 22px)";

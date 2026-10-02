@@ -16,7 +16,8 @@ export const revalidate = 3600;
 
 export const metadata = buildMetadata({
   title: "Pavement Marking Applications",
-  description: "Crosswalks, bus lanes, bike infrastructure, airports, public art, and community branding. Purpose-matched surface systems for Canadian municipal and commercial applications.",
+  // Under 155 characters since 30 Sep 2026 (QA E1 flagged 173).
+  description: "Crosswalks, bus lanes, bike lanes, airports, public art and community branding: HUB surface systems matched to Canadian municipal and commercial work.",
   slug: "applications",
 });
 
@@ -90,9 +91,14 @@ export default async function ApplicationsPage() {
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: "rgba(249,115,22,0.16)" }} />
               <div className="absolute bottom-0 left-0 right-0 p-5">
                 <h2 className="font-bold text-lg mb-1 leading-tight" style={{ color: "var(--text-primary)", textShadow: "0 1px 2px rgba(0,0,0,0.45)" }}>{app.name}</h2>
+                {/* Two lines, always two lines tall, so the names across a
+                    row sit at one height whatever the line under them runs to
+                    (QA C14: they stepped up and down with the description).
+                    13.5 px, up from 12.5, which was under the 13 px floor on
+                    phones (QA C22). 30 Sep 2026. */}
                 <p
-                  className="text-[12.5px] leading-snug"
-                  style={{ color: "var(--text-body)", textShadow: "0 1px 2px rgba(0,0,0,0.5)" }}
+                  className="text-[13.5px] leading-snug line-clamp-2"
+                  style={{ color: "var(--text-body)", textShadow: "0 1px 2px rgba(0,0,0,0.5)", minHeight: "calc(2 * 1.375em)" }}
                 >
                   {app.shortDesc}
                 </p>

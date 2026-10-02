@@ -23,7 +23,11 @@ function DocRow({
   const labelText = doc.lang
     ? `${doc.label} (${doc.lang.toUpperCase()})`
     : doc.label;
-  const showBadge = labelText.toLowerCase() !== typeLabel.toLowerCase();
+  // The type chip is on every row since 30 Sep 2026. It used to show only
+  // when the name differed from the type, so a five-row list had chips on
+  // one or two rows and the column read as arbitrary (QA B14: "Brochure" with
+  // no chip beside "Brochure (FR)" with one).
+  const showBadge = true;
 
   return (
     <div

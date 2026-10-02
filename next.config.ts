@@ -189,12 +189,17 @@ const nextConfig: NextConfig = {
       { source: "/community-branding", destination: "/applications/community-branding", permanent: true },
       { source: "/regulatory-markings", destination: "/applications/regulatory-markings", permanent: true },
       { source: "/air-ports", destination: "/applications/airports", permanent: true },
-      { source: "/residential-driveways", destination: "/applications/private-driveways", permanent: true },
-      { source: "/private-driveways", destination: "/applications/private-driveways", permanent: true },
+      // One driveway page since 30 Sep 2026 (QA C2, E18: /private-driveways
+      // and /residential-driveways were the same printed spread, page 76).
+      // Residential Driveways stays, with the homeowner callout; everything
+      // that pointed at Private Driveways lands there, the old page included.
+      { source: "/residential-driveways", destination: "/applications/residential-driveways", permanent: true },
+      { source: "/private-driveways", destination: "/applications/residential-driveways", permanent: true },
+      { source: "/applications/private-driveways", destination: "/applications/residential-driveways", permanent: true },
       { source: "/townhomes", destination: "/applications/townhomes", permanent: true },
       { source: "/leed-urban-heat-island", destination: "/applications/leed-urban-heat-island", permanent: true },
       { source: "/splash-pads", destination: "/applications/splash-pads", permanent: true },
-      { source: "/applications/driveways", destination: "/applications/private-driveways", permanent: true },
+      { source: "/applications/driveways", destination: "/applications/residential-driveways", permanent: true },
       // Public Art now has its own dedicated page — no redirect needed
       // { source: "/applications/public-art", destination: "/applications/community-branding", permanent: true },
       // Public Spaces now has its own page in applications.ts — redirect removed
@@ -310,7 +315,10 @@ const nextConfig: NextConfig = {
       { source: "/imprinted-asphalt-crosswalks-for-york-transit-corridor", destination: "/blog/multimodal-connectivity-york-region", permanent: true }, // the stub it used to land on is archived (QA rest#9)
       { source: "/residential-decorative-paving", destination: "/applications/townhomes", permanent: true }, // decorative paving for townhouse developers
       { source: "/laneway-revitalization", destination: "/blog/laneway-project", permanent: true }, // More Awesome Now laneways, which this post covers
-      { source: "/residential-decorative-driveways", destination: "/applications/private-driveways", permanent: true }, // StreetPrint driveway, Burnaby; matches /residential-driveways
+      { source: "/residential-decorative-driveways", destination: "/applications/residential-driveways", permanent: true }, // StreetPrint driveway, Burnaby; matches /residential-driveways
+      // Google still lists this old post address and it answered 404 (30 Sep 2026). No Insights post covers a hospital
+      // stamped-asphalt job (lib/blog-index.json: BC Children's Hospital is StreetBond and DecoMark), so the product page.
+      { source: "/stamped-asphalt-at-vancouver-general-hospital", destination: "/products/streetprint", permanent: true },
       { source: "/decorative-paving-for-playgrounds", destination: "/applications/playgrounds", permanent: true }, // StreetBond schoolyards, Dufferin-Peel Catholic board
       { source: "/parking-lot-wayfinding", destination: "/applications/parking-lots", permanent: true }, // DecoMark drive-through wayfinding
       { source: "/durable-coatings-for-asphalt", destination: "/applications/leed-urban-heat-island", permanent: true }, // StreetBondSR solar reflective coating, Toronto, after 7 years
@@ -350,7 +358,7 @@ const nextConfig: NextConfig = {
       // Legacy /solutions/ tree — two referring domains still point here.
       // Destination matches the existing /projects/category/driveways mapping
       // so both legacy shapes land on the same page.
-      { source: "/solutions/decorative-stamped-driveways", destination: "/applications/private-driveways", permanent: true },
+      { source: "/solutions/decorative-stamped-driveways", destination: "/applications/residential-driveways", permanent: true },
 
       // Legacy category-prefixed permalink: /%category%/%postname%/.
       // Guarded by BLOG_SLUGS so it only fires when the post really exists —
@@ -391,7 +399,7 @@ const nextConfig: NextConfig = {
       { source: "/parks-paths-gallery", destination: "/applications/parks-paths", permanent: true },
       { source: "/community-branding-gallery", destination: "/applications/community-branding", permanent: true },
       { source: "/townhomes-gallery", destination: "/applications/townhomes", permanent: true },
-      { source: "/driveways-gallery", destination: "/applications/private-driveways", permanent: true },
+      { source: "/driveways-gallery", destination: "/applications/residential-driveways", permanent: true },
       { source: "/public-art-gallery", destination: "/applications/public-art", permanent: true },
       { source: "/regulatory-safety-markings-gallery", destination: "/applications/regulatory-markings", permanent: true },
       { source: "/streetscapes-gallery", destination: "/blog/projects", permanent: true },
@@ -476,7 +484,7 @@ const nextConfig: NextConfig = {
       { source: "/projects/category/parking-lots/:path*", destination: "/applications/parking-lots", permanent: true },
       { source: "/projects/category/bike-lanes/:path*", destination: "/applications/bike-lanes", permanent: true },
       { source: "/projects/category/bus-lanes/:path*", destination: "/applications/bus-lanes", permanent: true },
-      { source: "/projects/category/driveways/:path*", destination: "/applications/private-driveways", permanent: true },
+      { source: "/projects/category/driveways/:path*", destination: "/applications/residential-driveways", permanent: true },
       // WordPress date archives → gallery
       { source: "/projects/:year(\\d{4})/:path*", destination: "/gallery", permanent: true },
       // Any remaining /projects/category/... → the Projects archive.

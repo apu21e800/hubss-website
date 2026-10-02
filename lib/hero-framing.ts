@@ -55,6 +55,30 @@ export const HERO_POSITION: Record<string, string> = {
 };
 
 /**
+ * Phone zoom, per photo (QA C4, 30 Sep 2026). On a 390 px phone the banner is
+ * about 0.9:1 and a 4:3 photo shows its WHOLE height, sky included, with the
+ * paving under the title: object-position cannot lift it, because nothing is
+ * cropped vertically (the first value, the horizontal one, is all that moves
+ * there). So on phones (under 640 px) these photos are scaled up around a
+ * point near the surface, which pushes the sky out of the top. `origin` is a
+ * CSS transform-origin; keep its y at or under 1 - 0.5/scale (75% at 2, 66% at 1.5,
+ * 61% at 1.3), or the bottom of the photo lifts off the band. From sm up the
+ * values are not applied. The application template reads this through
+ * heroPhoneZoom().
+ */
+export const HERO_PHONE_ZOOM: Record<string, { scale: number; origin: string }> = {
+  "/images/applications/public-art/public-art-01.jpg": { scale: 2, origin: "50% 75%" }, // the medallion up from under the title, the clouds and the lamp post out
+  "/images/applications/traffic-calming/traffic-calming-58.jpg": { scale: 2, origin: "50% 75%" }, // the roundabout apron and its chevron sign; the sky was the top half
+  "/images/applications/commercial-spaces/commercial-spaces-75.jpg": { scale: 1.5, origin: "50% 66%" }, // the brick crossing; the poles and sky out
+  "/images/applications/commercial-spaces/commercial-spaces-55.jpg": { scale: 1.3, origin: "50% 61%" }, // Public Spaces: the promenade, the bird sculpture kept
+};
+
+/** The phone zoom for a hero photo, or undefined for the photos that need none. */
+export function heroPhoneZoom(photo: { src: string; origin?: string }): { scale: number; origin: string } | undefined {
+  return HERO_PHONE_ZOOM[photo.origin ?? photo.src];
+}
+
+/**
  * Hero colour, per photo. Every photo hero gets the site-wide `hero-pop` lift
  * (app/globals.css, HERO COLOUR). A few photos were already vivid and the lift
  * pushed them over (QA, 28 Sep 2026): StreetPrint's lawn went neon green and

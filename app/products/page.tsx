@@ -76,7 +76,18 @@ const INDEX_LINE_FIXES: Record<string, [from: string, to: string]> = {
   // Page 8 prints "Industry leading MMA…". A compound before a noun takes a
   // hyphen (docs/STYLE.md). QA pa#35, 28 Sep 2026; proposed to Doug for print.
   mmax: ["Industry leading", "Industry-leading"],
+  // Page 8 prints "heat fused and stamped"; the TrafficPatterns and DecoMark
+  // lines beside it print "heat-fused" (QA B29, 30 Sep 2026).
+  "traffic-patterns-xd": ["heat fused", "heat-fused"],
 };
+
+/**
+ * Every card line ends in a full stop. Page 8 sets six of its ten lines
+ * without one, and on the web the cards sat side by side with and without
+ * (QA B29, 30 Sep 2026). Added at render, so the book's line stays verbatim
+ * in lib/product-catalogue.ts.
+ */
+const withFullStop = (line: string) => (/[.!?]$/.test(line.trim()) ? line.trim() : `${line.trim()}.`);
 
 /**
  * Systems the book does not cover. `line` is a sentence already in that
@@ -111,7 +122,7 @@ function cardFor(product: Product): Card {
     return {
       slug: product.slug,
       name: product.name,
-      line: fix ? bookLine.replace(fix[0], fix[1]) : bookLine,
+      line: withFullStop(fix ? bookLine.replace(fix[0], fix[1]) : bookLine),
       facts: pick(book.specs, BOOK_FACTS[product.slug] ?? []),
       image: CARD_IMAGES[product.slug],
     };
@@ -120,7 +131,7 @@ function cardFor(product: Product): Card {
   return {
     slug: product.slug,
     name: product.name,
-    line: site?.line ?? product.shortDesc,
+    line: withFullStop(site?.line ?? product.shortDesc),
     facts: pick(product.specs, site?.facts ?? []),
     image: CARD_IMAGES[product.slug],
   };
@@ -144,7 +155,8 @@ const familyList = (() => {
 
 export const metadata = buildMetadata({
   title: "Decorative Pavement & Marking Systems",
-  description: `HUB's surface systems in four families: ${familyList}. Specs, spec sheets and certified installers, coast to coast.`,
+  // Under 155 characters since 30 Sep 2026 (QA E1 flagged 183).
+  description: `HUB surface systems: ${familyList}. Spec sheets and certified installers.`,
   slug: "products",
 });
 

@@ -60,8 +60,8 @@ function gallery(slug: string, dir: string, count: number, ext: string = "jpg", 
 // for DuraTherm, "our production facility" for DecoMark, coverage and dry-time figures, SCAQMD, LEED v4).
 // Earlier descriptions were rewritten from the authoritative old hubss.com product pages and the StreetBond
 // manufacturer canonical source. Doug's specific edits are preserved verbatim where they corrected facts
-// (DuraShield = coating not penetrating, AirMark non-runway, PreMark 125mil standard, MMAX +3°C and rising,
-// TrafficPatterns 125mil, StreetBond legacy HUBSS voice). Related-applications audited against Vernon's
+// (DuraShield = coating not penetrating, AirMark non-runway, PreMark 125 mil standard, MMAX +3°C and rising,
+// TrafficPatterns 125 mil, StreetBond legacy HUBSS voice). Related-applications audited against Vernon's
 // authoritative mapping — Bike Lanes is MMAX + PreMark only, etc.
 //
 // RELATIONS (28 Sep 2026, QA pa#31): relatedApplications here and relatedProducts in lib/applications.ts
@@ -163,7 +163,9 @@ export const products: Product[] = [
     // Expanded per Vernon: bike lanes, bus lanes, crosswalks, parking lots, pedestrian plazas (public-spaces),
     // driveways, sports surfaces, playgrounds.
     // 28 Sep 2026 (pa#31): the four spreads that specify StreetBond and were missing here added.
-    relatedApplications: ["bike-lanes", "bus-lanes", "crosswalks", "parking-lots", "public-spaces", "private-driveways", "sport-courts", "playgrounds", "parks-paths", "splash-pads", "townhomes", "traffic-calming", "public-art"],
+    // 30 Sep 2026 (QA C2, E18): private-driveways out with its page; the driveway spread specifies
+    // StreetPrint alone and Residential Driveways does not list StreetBond back (RELATIONS above).
+    relatedApplications: ["bike-lanes", "bus-lanes", "crosswalks", "parking-lots", "public-spaces", "sport-courts", "playgrounds", "parks-paths", "splash-pads", "townhomes", "traffic-calming", "public-art"],
   },
   {
     name: "StreetPrint",
@@ -183,12 +185,17 @@ export const products: Product[] = [
       { label: "Patterns", value: "Standard and custom options" },
       { label: "Base", value: "New or existing asphalt" },
       { label: "Service life", value: "10–20 years" },
-      { label: "Snowplow safe", value: "Yes: flush surface, nothing to catch" },
+      // "Yes: flush surface" printed a double colon after the label (QA B23, 30 Sep 2026). Sanity
+      // overrides specs: sync after changing them.
+      { label: "Snowplow safe", value: "Yes, flush surface, nothing to catch" },
     ],
     // Expanded per Vernon: crosswalks, driveways, plazas (public-spaces), parks/paths, townhomes,
     // heritage districts (community-branding), public art settings.
     // 28 Sep 2026 (pa#31): Parking Lots and Traffic Calming, whose spreads specify StreetPrint, added.
-    relatedApplications: ["crosswalks", "private-driveways", "residential-driveways", "public-spaces", "parks-paths", "townhomes", "community-branding", "public-art", "commercial-spaces", "parking-lots", "traffic-calming"],
+    // 30 Sep 2026 (QA C2, E18): "private-driveways" gone from this list and the four repair and
+    // DuraShield lists below that carried it beside "residential-driveways"; the two pages were one
+    // spread and are one page now.
+    relatedApplications: ["crosswalks", "residential-driveways", "public-spaces", "parks-paths", "townhomes", "community-branding", "public-art", "commercial-spaces", "parking-lots", "traffic-calming"],
   },
 
   // ── Specialty & Regulatory Group ───────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -286,7 +293,7 @@ export const products: Product[] = [
     specs: [
       { label: "Install", value: "Inlaid into a stamped surface" },
       { label: "Profile", value: "Zero: flush with the road" },
-      { label: "Snowplow safe", value: "Yes: no shear risk" },
+      { label: "Snowplow safe", value: "Yes, no shear risk" }, // as the spread prints it; the colon went 30 Sep 2026 (QA B23)
       { label: "Bond", value: "Heat-fused to asphalt substrate" },
     ],
     // Expanded per Vernon: streetscape inlays (community-branding), heritage districts, pedestrian plazas (public-spaces).
@@ -311,7 +318,7 @@ export const products: Product[] = [
     // Expanded per Vernon: pedestrian areas, residential roadways, heat-island mitigation surfaces.
     // 28 Sep 2026 (pa#31): pedestrian-safety out (not in that spread's SPECIFY); Townhomes, whose spread
     // specifies DuraShield, added.
-    relatedApplications: ["parking-lots", "private-driveways", "residential-driveways", "parks-paths", "leed-urban-heat-island", "townhomes"],
+    relatedApplications: ["parking-lots", "residential-driveways", "parks-paths", "leed-urban-heat-island", "townhomes"],
   },
   {
     name: "AirMark",
@@ -404,7 +411,7 @@ export const products: Product[] = [
     // ChipFill/AggreFill/Fast Patch DPR — pothole + crack repair across all paved surfaces.
     // One-way on purpose (pa#31, 28 Sep 2026): no Idea Book spread specifies a repair product, so the
     // application pages do not list them back. See RELATIONS at the top of this file.
-    relatedApplications: ["parking-lots", "private-driveways", "residential-driveways", "parks-paths", "commercial-spaces", "townhomes"],
+    relatedApplications: ["parking-lots", "residential-driveways", "parks-paths", "commercial-spaces", "townhomes"],
   },
   {
     name: "AggreFill",
@@ -445,7 +452,7 @@ export const products: Product[] = [
       { label: "Cure", value: "Rapid set: minutes to reopen to traffic" },
       { label: "Weather", value: "Year-round, all-conditions deployment" },
     ],
-    relatedApplications: ["parking-lots", "private-driveways", "residential-driveways", "parks-paths", "commercial-spaces", "townhomes"],
+    relatedApplications: ["parking-lots", "residential-driveways", "parks-paths", "commercial-spaces", "townhomes"],
   },
   {
     name: "Fast Patch DPR",
@@ -481,7 +488,7 @@ export const products: Product[] = [
       { label: "Odour", value: "Odourless, suitable for indoor applications" },
       { label: "Resilience", value: "Excellent freeze-thaw resistance + impact absorption" },
     ],
-    relatedApplications: ["parking-lots", "private-driveways", "residential-driveways", "parks-paths", "commercial-spaces", "townhomes"],
+    relatedApplications: ["parking-lots", "residential-driveways", "parks-paths", "commercial-spaces", "townhomes"],
   },
 ];
 

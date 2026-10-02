@@ -101,7 +101,7 @@ export default async function BlogPage() {
               fontSize: "clamp(2rem, 3.4vw, 3rem)",
               lineHeight: 1.02,
               letterSpacing: "-0.035em",
-              maxWidth: "18ch",
+              maxWidth: "24ch",
             }}
           >
             Insights from the front lines of Canadian pavement

@@ -34,42 +34,19 @@
  * Sanity (sanity/schemas/page.ts, group "Lunch & Learn") still holds the FAQ
  * array and the section headings: app/lunch-learn/page.tsx passes the
  * questions and the FAQ heading through when the client has edited them in
- * Studio, and the defaults below serve until then. The persona array, the
+ * Studio, and the defaults in lib/lunch-learn-content.ts (which the sync
+ * script also pushes into Studio) serve until then. The persona array, the
  * "What You Walk Away With" cards, the other headings and the hero fields
  * are read by nothing since 2 Oct 2026 and are hidden in Studio.
  */
 
 import LunchLearnTopics from "@/components/sections/LunchLearnTopics";
+import { LUNCH_LEARN_FAQS, LUNCH_LEARN_FAQ_HEADING } from "@/lib/lunch-learn-content";
 
 export interface LunchLearnFunnelProps {
   faqs?: { q: string; a: string }[];
   sectionHeadings?: { faqHeading?: string };
 }
-
-/**
- * The questions and answers, exported so app/lunch-learn/page.tsx builds its
- * FAQPage schema from the list the visitor sees. The schema used to keep its
- * own copy and had drifted ("Is the session in-person or virtual?" against
- * "In-person or virtual?" on the page).
- */
-export const LUNCH_LEARN_FAQS = [
-  {
-    q: "How long is the session?",
-    a: "30–45 minutes of presentation, followed by open Q&A. We're respectful of your team's calendar and stick to the time we agree on.",
-  },
-  {
-    q: "What does it cost?",
-    a: "Nothing. Sessions are how we introduce our systems to the people who specify them: no invoice, no minimum order, and no follow-up pressure.",
-  },
-  {
-    q: "Who should be in the room?",
-    a: "Engineers, planners, landscape architects, project managers, procurement: anyone who touches the surface spec. Sessions are built for mixed teams, and there's no cap on seats.",
-  },
-  {
-    q: "In-person or virtual?",
-    a: "Both. In-person sessions are available coast to coast through our certified applicator network. Virtual sessions use Zoom or Teams. We mail sample kits before we connect.",
-  },
-];
 
 const h2Style: React.CSSProperties = {
   fontSize: "clamp(1.6rem, 2.6vw, 2.1rem)",
@@ -80,7 +57,7 @@ const h2Style: React.CSSProperties = {
 
 export default function LunchLearnFunnel({ faqs, sectionHeadings }: LunchLearnFunnelProps = {}) {
   const faqItems = faqs?.length ? faqs : LUNCH_LEARN_FAQS;
-  const faqHeading = sectionHeadings?.faqHeading ?? "Common questions";
+  const faqHeading = sectionHeadings?.faqHeading ?? LUNCH_LEARN_FAQ_HEADING;
 
   return (
     <div data-surface="paper" style={{ background: "var(--bg-primary)" }}>

@@ -278,12 +278,21 @@ export default defineType({
 
     // ── Lunch & Learn page fields ───────────────────────────────────────────
 
+    // 2 Oct 2026: /lunch-learn (app/lunch-learn/page.tsx) reads two fields from
+    // this group, lunchLearnFaqs and lunchLearnSectionHeadings.faqHeading, and
+    // `npm run sync:pages` writes those two. The rest is hidden in Studio and
+    // kept, as the trimmed About fields are: the hero (not read since Aug 2026,
+    // when the boardroom card took the top of the page), the "What You Walk
+    // Away With" cards (not rendered since 30 Sep 2026), the persona cards
+    // (made way for the session topic tiles, which are code) and the five
+    // other headings.
     defineField({
       name: "lunchLearnHero",
       title: "Lunch & Learn · Hero",
       type: "object",
       group: "lunchLearn",
-      description: "The hero section on the Lunch & Learn landing page.",
+      description: "Not read since Aug 2026: the top of /lunch-learn is the booking card, whose copy is code. Kept, hidden, in case it comes back.",
+      hidden: true,
       fields: [
         defineField({
           name: "eyebrow",
@@ -350,7 +359,8 @@ export default defineType({
       title: "Lunch & Learn · 'What You Walk Away With' cards",
       type: "array",
       group: "lunchLearn",
-      description: "Three numbered cards in the 'What You Walk Away With' section.",
+      description: "Not shown on /lunch-learn since 30 Sep 2026 (the page was cleaned up). Kept, hidden, in case it comes back.",
+      hidden: true,
       of: [{
         type: "object",
         fields: [
@@ -366,7 +376,8 @@ export default defineType({
       title: "Lunch & Learn · Persona cards",
       type: "array",
       group: "lunchLearn",
-      description: "The 'Perfect For' / 'Who It's Built For' audience cards (title + desc + badge).",
+      description: "Not shown on /lunch-learn since 2 Oct 2026: the session topic tiles stand where the audience cards did. Kept, hidden, in case it comes back.",
+      hidden: true,
       of: [{
         type: "object",
         fields: [
@@ -379,10 +390,10 @@ export default defineType({
     }),
     defineField({
       name: "lunchLearnFaqs",
-      title: "Lunch & Learn · FAQ accordion items",
+      title: "Lunch & Learn · Common questions",
       type: "array",
       group: "lunchLearn",
-      description: "Frequently-asked questions shown in the FAQ accordion.",
+      description: "The questions and answers under the booking card on /lunch-learn. The page's FAQ schema is built from this list, so Google reads what a visitor reads. No CE credit claims: HUB does not offer them.",
       of: [{
         type: "object",
         fields: [
@@ -394,17 +405,17 @@ export default defineType({
     }),
     defineField({
       name: "lunchLearnSectionHeadings",
-      title: "Lunch & Learn · Section eyebrows and headings",
+      title: "Lunch & Learn · Section headings",
       type: "object",
       group: "lunchLearn",
-      description: "Short marketing eyebrows + headings for the three mid-page sections.",
+      description: "Only the questions' heading is shown (since 2 Oct 2026); the other five are kept, hidden.",
       fields: [
-        defineField({ name: "whatYouGetEyebrow", type: "string", title: "What You Get · eyebrow", validation: (r) => headingStyle(r) }),
-        defineField({ name: "whatYouGetHeading", type: "string", title: "What You Get · heading", validation: (r) => headingStyle(r) }),
-        defineField({ name: "personasEyebrow",   type: "string", title: "Personas · eyebrow", validation: (r) => headingStyle(r) }),
-        defineField({ name: "personasHeading",   type: "string", title: "Personas · heading", validation: (r) => headingStyle(r) }),
-        defineField({ name: "faqEyebrow",        type: "string", title: "FAQ · eyebrow", validation: (r) => headingStyle(r) }),
-        defineField({ name: "faqHeading",        type: "string", title: "FAQ · heading", validation: (r) => headingStyle(r) }),
+        defineField({ name: "whatYouGetEyebrow", type: "string", title: "What You Get · eyebrow", hidden: true, validation: (r) => headingStyle(r) }),
+        defineField({ name: "whatYouGetHeading", type: "string", title: "What You Get · heading", hidden: true, validation: (r) => headingStyle(r) }),
+        defineField({ name: "personasEyebrow",   type: "string", title: "Personas · eyebrow", hidden: true, validation: (r) => headingStyle(r) }),
+        defineField({ name: "personasHeading",   type: "string", title: "Personas · heading", hidden: true, validation: (r) => headingStyle(r) }),
+        defineField({ name: "faqEyebrow",        type: "string", title: "FAQ · eyebrow", hidden: true, validation: (r) => headingStyle(r) }),
+        defineField({ name: "faqHeading",        type: "string", title: "Common questions · heading", description: "The heading over the questions on /lunch-learn.", validation: (r) => headingStyle(r) }),
       ],
     }),
 

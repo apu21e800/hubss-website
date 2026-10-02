@@ -1,10 +1,11 @@
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
-import LunchLearnFunnel, { LUNCH_LEARN_FAQS } from "@/components/sections/LunchLearnFunnel";
+import LunchLearnFunnel from "@/components/sections/LunchLearnFunnel";
 import LunchLearn from "@/components/sections/LunchLearn";
 import JsonLd from "@/components/ui/JsonLd";
 import { buildMetadata } from "@/lib/seo";
 import { getSanityPageContent } from "@/lib/sanity.queries";
+import { LUNCH_LEARN_FAQS } from "@/lib/lunch-learn-content";
 
 export const metadata = buildMetadata({
   title: "Lunch & Learn · Free Spec Session for Engineers & Planners",

@@ -4,8 +4,7 @@
  * Pushes the page copy in the code into Sanity's page docs, idempotently:
  *   - homepage, about, contact: the hero text
  *   - about: story, whyHub, partners intro (lib/about-content.ts)
- *   - lunch-learn: whatYouGet, personas, faqs (lib/lunch-learn-content.ts),
- *     section headings
+ *   - lunch-learn: the questions and the FAQ heading (lib/lunch-learn-content.ts)
  *
  * 30 Sep 2026: About and Lunch & Learn copy is imported from the lib files the
  * pages read, instead of being held here a second time. The Lunch & Learn part
@@ -14,6 +13,14 @@
  * About fields the page no longer shows (mission, story aside, values, partner
  * paragraphs) are left as they are in Sanity: never read, hidden in Studio.
  *
+ * 2 Oct 2026: the Lunch & Learn part writes only what the shipped page reads
+ * (app/lunch-learn/page.tsx: lunchLearnFaqs and
+ * lunchLearnSectionHeadings.faqHeading). The persona cards, the "What You Walk
+ * Away With" cards and the other headings are not rendered any more and are
+ * left as they are in Sanity, hidden in Studio like the About leftovers. The
+ * heading is set by path, so the five unused headings beside it are not
+ * touched.
+ *
  * Hero text was added on 24 Sep 2026. Before that the heroes were left alone
  * ("already populated in a prior migration"), so when the code's About hero was
  * corrected from "For over thirty years" to "Since 1999" on 7 Sep, the live
@@ -21,9 +28,9 @@
  * Hero fields are set by path (homepageHero.tagline, ...), so the hero image
  * stored beside them is never touched.
  *
- * Before any write, every string this script would send for the homepage,
- * about and contact pages is checked against the page component it copies. If
- * a component has changed and this file has not, the script stops and names
+ * Before any write, every string this script would send for the homepage and
+ * contact heroes is checked against the page component it copies. If a
+ * component has changed and this file has not, the script stops and names
  * the string instead of writing stale copy over the live page.
  *
  * Usage:
@@ -37,7 +44,7 @@ import { readFileSync } from "fs";
 import { fileURLToPath } from "url";
 import { config as loadDotenv } from "dotenv";
 import { ABOUT_HERO, ABOUT_STORY, ABOUT_WHY_HUB, ABOUT_PARTNERS_INTRO } from "../lib/about-content";
-import { LL_WHAT_YOU_GET, LL_PERSONAS, LL_FAQS } from "../lib/lunch-learn-content";
+import { LUNCH_LEARN_FAQS, LUNCH_LEARN_FAQ_HEADING } from "../lib/lunch-learn-content";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -95,18 +102,6 @@ const CONTACT_HERO_TEXT: Record<string, string> = {
   "contactHero.subheading": "Tell us about your community, your timeline, and your vision. We'll tell you which surface system brings it to life.",
 };
 
-// ─── Lunch & Learn section headings ──────────────────────────────────────────
-// Verbatim copies of the defaults in app/lunch-learn/page.tsx (checked against
-// it before any write). The items come from lib/lunch-learn-content.ts.
-const LL_SECTION_HEADINGS = {
-  whatYouGetEyebrow: "What you walk away with",
-  whatYouGetHeading: "A working session for your team.",
-  personasEyebrow:   "Who it's built for",
-  personasHeading:   "Your whole team, one session.",
-  faqEyebrow:        "Common questions",
-  faqHeading:        "Everything you need to know",
-};
-
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function arrayWithKeys<T extends object>(items: T[], prefix: string): (T & { _key: string })[] {
@@ -152,10 +147,9 @@ function stringsIn(value: unknown): string[] {
 
 /**
  * Stop before writing if a string this script would send is no longer in the
- * component it was copied from. The About copy and the Lunch & Learn items are
- * imported from the files the pages read, so they cannot drift and are not
- * checked; the hero text of the homepage and Contact, and the Lunch & Learn
- * headings, are copies and are.
+ * component it was copied from. The About and Lunch & Learn copy is imported
+ * from the files the pages read, so it cannot drift and is not checked; the
+ * hero text of the homepage and Contact is a copy and is.
  */
 function assertStillInSource(file: string, desired: Record<string, unknown>): string[] {
   const source = readFileSync(path.join(ROOT, file), "utf8");
@@ -212,7 +206,6 @@ async function main() {
   const drift = [
     ...assertStillInSource("app/page.tsx", homeDesired),
     ...assertStillInSource("app/contact/page.tsx", contactDesired),
-    ...assertStillInSource("app/lunch-learn/page.tsx", LL_SECTION_HEADINGS),
   ];
   if (drift.length) {
     console.error("\nSTOPPED, nothing written. This script's copy of the page text is out of date:");
@@ -226,12 +219,10 @@ async function main() {
     changed += result.changed; skipped += result.skipped; missing += result.missing;
   }
 
-  // Lunch & Learn page
+  // Lunch & Learn page: the two fields the page reads, nothing else.
   const llDesired = {
-    lunchLearnWhatYouGet: arrayWithKeys(LL_WHAT_YOU_GET, "w"),
-    lunchLearnPersonas:   arrayWithKeys(LL_PERSONAS,     "p"),
-    lunchLearnFaqs:       arrayWithKeys(LL_FAQS,         "f"),
-    lunchLearnSectionHeadings: LL_SECTION_HEADINGS,
+    lunchLearnFaqs: arrayWithKeys(LUNCH_LEARN_FAQS, "f"),
+    "lunchLearnSectionHeadings.faqHeading": LUNCH_LEARN_FAQ_HEADING,
   };
   const llResult = await patchPage("lunch-learn", llDesired);
   changed += llResult.changed; skipped += llResult.skipped; missing += llResult.missing;

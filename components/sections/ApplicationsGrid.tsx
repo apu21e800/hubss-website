@@ -1,10 +1,54 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { applications as libApplications, type Application } from "@/lib/applications";
+import type { Application } from "@/lib/applications";
 import { applicationImages, resolveImage } from "@/lib/featured-images";
+
+// What a card renders, and all the page sends (QA F3, 30 Sep 2026; see the
+// same note in ProductsGrid.tsx). app/page.tsx maps the merged records to
+// these four fields.
+export type ApplicationCard = Pick<Application, "slug" | "name" | "shortDesc" | "imageUrl">;
+
+// The cards' entrance, done so the server markup is visible (QA F6, 30 Sep
+// 2026). With framer's initial={{ opacity: 0 }} the nine cards were
+// server-rendered invisible and stayed blank until hydration, and with
+// JavaScript off they never appeared. Now they render visible; after mount
+// one IntersectionObserver looks at each card once: a card already on
+// screen stays as it is, a card below the fold is hidden (instantly, out of
+// sight) and fades up when it scrolls in. Reduced motion, or no observer:
+// nothing ever hides.
+type Reveal = "hidden" | "shown";
+function useReveal(reduce: boolean | null) {
+  const [reveal, setReveal] = useState<Record<string, Reveal>>({});
+  const cards = useRef<Record<string, HTMLDivElement | null>>({});
+  useEffect(() => {
+    if (reduce || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        setReveal((prev) => {
+          const next = { ...prev };
+          for (const e of entries) {
+            const slug = (e.target as HTMLElement).dataset.slug ?? "";
+            if (e.isIntersecting) {
+              next[slug] = "shown";
+              io.unobserve(e.target);
+            } else if (!next[slug]) {
+              next[slug] = "hidden";
+            }
+          }
+          return next;
+        });
+      },
+      { threshold: 0.1 },
+    );
+    for (const el of Object.values(cards.current)) if (el) io.observe(el);
+    return () => io.disconnect();
+  }, [reduce]);
+  return { reveal, cards };
+}
 
 // Per-card object-position overrides for portrait images where the subject isn't centered
 const APP_POSITION: Record<string, string> = {
@@ -23,13 +67,14 @@ const FEATURED_SLUGS = [
   "townhomes",
 ];
 
-type Props = { applications?: Application[] };
+type Props = { applications: ApplicationCard[] };
 
-export default function ApplicationsGrid({ applications: appsProp }: Props = {}) {
-  const source = appsProp ?? libApplications;
+export default function ApplicationsGrid({ applications: source }: Props) {
   const featured = FEATURED_SLUGS.map(
     (slug) => source.find((a) => a.slug === slug)
-  ).filter(Boolean) as Application[];
+  ).filter(Boolean) as ApplicationCard[];
+  const reduce = useReducedMotion();
+  const { reveal, cards } = useReveal(reduce);
 
   return (
     <section
@@ -66,20 +111,32 @@ export default function ApplicationsGrid({ applications: appsProp }: Props = {})
         {/* MOBILE DIET — same treatment as ProductsGrid: swipe row on phones
             (this section was 3,094px of stacked cards), untouched grid from
             sm up. */}
-        <div className="flex overflow-x-auto snap-x snap-mandatory gap-3 -mx-4 px-4 pb-3 mb-10
+        {/* scroll-px-4 (QA A9, 30 Sep 2026): as in ProductsGrid, the snap
+            points sit 16px in, so the first card meets the text gutter and
+            the last keeps room at the end. */}
+        <div className="flex overflow-x-auto snap-x snap-mandatory scroll-px-4 gap-3 -mx-4 px-4 pb-3 mb-10
                         sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:overflow-visible sm:mx-0 sm:px-0 sm:pb-0"
              style={{ scrollbarWidth: "none" }}>
-          {featured.map((app, i) => (
+          {featured.map((app, i) => {
+            const hidden = reveal[app.slug] === "hidden";
+            return (
             <motion.div
               key={app.slug}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.1 }}
-              transition={{ duration: 0.4, delay: i * 0.05 }}
+              ref={(el) => { cards.current[app.slug] = el; }}
+              data-slug={app.slug}
+              // initial={false}: the server markup is the visible state
+              // (useReveal above). Hiding is instant and off screen; the
+              // fade up keeps the old timing and stagger.
+              initial={false}
+              animate={hidden ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
+              transition={hidden ? { duration: 0 } : { duration: 0.4, delay: i * 0.05 }}
               className="relative overflow-hidden group snap-start flex-shrink-0 w-[78vw] max-w-[320px] sm:w-auto sm:max-w-none sm:flex-shrink"
               style={{ borderRadius: "12px", aspectRatio: "4/3" }}
             >
-              <Link href={`/applications/${app.slug}`} className="block w-full h-full">
+              {/* focus-ring-inset (app/globals.css): the wrapper clips at
+                  12px, so the keyboard ring is drawn inside the card, over
+                  the photo (QA F7, 30 Sep 2026). */}
+              <Link href={`/applications/${app.slug}`} className="focus-ring-inset block w-full h-full rounded-[12px]">
                 <Image
                   src={applicationImages[app.slug] ? resolveImage(applicationImages[app.slug]).src : app.imageUrl}
                   alt={applicationImages[app.slug] ? resolveImage(applicationImages[app.slug]).alt : app.name}
@@ -94,14 +151,20 @@ export default function ApplicationsGrid({ applications: appsProp }: Props = {})
                   // Subject-foreground bias: pavement surface usually sits in the lower 2/3 of source frames.
                   className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
                   style={{ objectPosition: APP_POSITION[app.slug] ?? "center 60%" }}
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  // The card as it measures (QA F4, 30 Sep 2026): 304px in
+                  // the phone swipe row (78vw, max 320), 354px in the two
+                  // column grid at 768, 312 to 397px in the three column grid
+                  // from 1024, 397px at the 1280px container. "100vw" had a
+                  // 304px card fetching a 1200px file on a 3x phone.
+                  sizes="(max-width: 639px) 80vw, (max-width: 1023px) 46vw, (max-width: 1279px) 31vw, 400px"
                 />
 
-                {/* Bottom 40% scrim for text legibility — image stays visible above */}
+                {/* Bottom scrim for text legibility; the image stays visible above.
+                    Taller on a phone (58%), where the caption runs to three
+                    lines (QA A10, 30 Sep 2026) and the title sat on bare photo. */}
                 <div
-                  className="absolute inset-x-0 bottom-0"
+                  className="absolute inset-x-0 bottom-0 h-[58%] sm:h-[44%]"
                   style={{
-                    height: "44%",
                     background: "linear-gradient(to top, rgba(7,11,18,0.92) 0%, rgba(7,11,18,0.65) 55%, rgba(7,11,18,0) 100%)",
                   }}
                 />
@@ -116,23 +179,32 @@ export default function ApplicationsGrid({ applications: appsProp }: Props = {})
                   <h3 className="font-bold text-base group-hover:text-[var(--accent-text)] transition-colors" style={{ color: "var(--text-primary)" }}>
                     {app.name}
                   </h3>
-                  <p className="text-sm text-[var(--ink-60)] mt-0.5 line-clamp-2">
+                  {/* Three lines on a phone, two from sm (QA A10, 30 Sep
+                      2026): at 304px wide, seven of the nine lines of copy
+                      were cut mid-sentence with an ellipsis at two lines. */}
+                  <p className="text-sm text-[var(--ink-60)] mt-0.5 line-clamp-3 sm:line-clamp-2">
                     {app.shortDesc}
                   </p>
                 </div>
               </Link>
             </motion.div>
-          ))}
+            );
+          })}
         </div>
 
-        {/* View All CTA */}
+        {/* The section's one link to the index. "All applications", the
+            same classes as "All systems" in ProductsGrid.tsx (QA A11, 30 Sep
+            2026); .btn-ghost (app/globals.css) gives it its border, hover and
+            focus ring. prefetch={false} (QA F5): the nine cards prefetch
+            their own pages already. */}
         <div className="flex justify-center mt-4">
           <Link
             href="/applications"
-            className="inline-flex items-center gap-2 border border-[var(--ink-20)] hover:border-orange-500/60 text-[var(--text-primary)] font-semibold px-7 py-3.5 rounded-lg transition-all duration-200 hover:bg-[var(--ink-04)] text-sm"
+            prefetch={false}
+            className="btn-ghost inline-flex items-center gap-2 rounded-lg px-7 py-3.5 text-sm font-semibold"
           >
-            View all applications
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            All applications
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </Link>

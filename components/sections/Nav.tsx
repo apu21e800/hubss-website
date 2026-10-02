@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence, MotionConfig, useReducedMotion, type Variants } from "framer-motion";
 import { products } from "@/lib/products";
 import { catalogue, catalogueReady, cataloguePageUrl, ideaBook } from "@/lib/catalogue";
@@ -40,6 +41,11 @@ import navInsights from "@/lib/nav-insights.json";
  */
 const SearchOverlay = dynamic(() => import("@/components/sections/SearchOverlay"), { ssr: false });
 
+// Every Link inside the three panels and the phone drawer carries
+// prefetch={false} (QA F5, 30 Sep 2026): the nav is on every page, and an
+// open panel or drawer prefetched forty-odd routes' payloads at once. The
+// bar's own links (About, Contact) keep the default prefetch.
+
 // ── Nav link config ────────────────────────────────────────────
 // Insights has its panel back (Vern, 28 Sep 2026: "it had an editorial feel
 // to it, that part was working, just needed improvement"). What Doug objected
@@ -57,6 +63,45 @@ const PANEL_IDS: Record<Panel, string> = {
   applications: "applications-mega-menu",
   insights: "insights-mega-menu",
 };
+
+// ── Where the visitor is ──────────────────────────────────────────────
+// The bar and the drawer mark the current section (QA A4, B10, C8, D12,
+// 30 Sep 2026: nothing in the header said which page was open). Products
+// covers the product pages and the pattern gallery; Insights covers /blog.
+type NavKey = Panel | "about" | "contact" | "lunch-learn" | "resources" | "gallery";
+const NAV_ROOT: Record<NavKey, string> = {
+  products: "/products",
+  applications: "/applications",
+  insights: "/blog",
+  about: "/about",
+  contact: "/contact",
+  "lunch-learn": "/lunch-learn",
+  resources: "/resources",
+  gallery: "/gallery",
+};
+function navSection(pathname: string): NavKey | null {
+  if (pathname.startsWith("/patterns")) return "products";
+  for (const key of Object.keys(NAV_ROOT) as NavKey[]) {
+    const root = NAV_ROOT[key];
+    if (pathname === root || pathname.startsWith(root + "/")) return key;
+  }
+  return null;
+}
+// aria-current="page" only on the item that IS the open page; a section's
+// trigger on one of its inner pages is marked visually, not as the page.
+const currentPage = (pathname: string, href: string) => (pathname === href ? ("page" as const) : undefined);
+
+// The mark itself: the label at --text-primary (set by the caller) with a
+// 2px rule under it in the brand orange, or in the button's own text colour
+// on the orange Lunch & Learn button, where orange on orange would vanish.
+function NavLabel({ children, active, rule = "#F97316" }: { children: React.ReactNode; active: boolean; rule?: string }) {
+  return (
+    <span className="relative inline-block">
+      {children}
+      {active && <span aria-hidden="true" className="absolute inset-x-0 -bottom-1 h-0.5 rounded-full" style={{ background: rule }} />}
+    </span>
+  );
+}
 
 // The search palette's data lives in lib/search.ts. A stale copy of it used
 // to sit here, unread, and was the last place on the site still calling the
@@ -81,9 +126,10 @@ const PANEL_IDS: Record<Panel, string> = {
 // Four groups a specifier would recognise, each named for the place, not the
 // buyer. The old fourth group, "Residential & Sustainability", put LEED &
 // Urban Heat Island next to driveways; the heat-island credit is earned on
-// parking lots and commercial hardscape, so it sits with them. Two driveway
-// pages remain (private, residential) — merging them is Doug's call; if they
-// merge, add the redirect in next.config.ts.
+// parking lots and commercial hardscape, so it sits with them. Residential
+// lists one driveways page (30 Sep 2026): /applications/private-driveways
+// is being merged into /applications/residential-driveways with a redirect,
+// so the menu stopped naming it.
 const APPLICATION_GROUPS = [
   {
     label: "Streets & Safety",
@@ -99,7 +145,7 @@ const APPLICATION_GROUPS = [
   },
   {
     label: "Residential",
-    slugs: ["private-driveways", "residential-driveways", "townhomes"],
+    slugs: ["residential-driveways", "townhomes"],
   },
 ];
 
@@ -318,7 +364,7 @@ function MenuColumn({ label, items }: { label: string; items: MenuItem[] }) {
       <ul>
         {items.map((it) => (
           <li key={it.href}>
-            <Link
+            <Link prefetch={false}
               href={it.href}
               // data-tap: a 44px floor on touch screens (app/globals.css), for
               // the tablets wide enough to get these panels.
@@ -384,7 +430,7 @@ function LunchLearnSlot({ topic }: { topic: string }) {
         <div className="text-[13px] font-bold leading-tight" style={{ color: "var(--text-primary)" }}>Lunch &amp; Learn</div>
         <div className="mt-0.5 text-[12px] leading-snug" style={{ color: "var(--ink-60)" }}>{LL_LINE}</div>
       </div>
-      <Link
+      <Link prefetch={false}
         href={lunchLearnHref(topic, "menu")}
         className="ml-2 inline-flex min-h-[44px] flex-shrink-0 items-center gap-2 rounded-lg px-4 text-[13px] font-bold whitespace-nowrap transition-colors hover:bg-[rgba(249,115,22,0.12)]"
         style={{ color: ACCENT, border: "1px solid rgba(249,115,22,0.45)" }}
@@ -402,7 +448,7 @@ function LunchLearnSlot({ topic }: { topic: string }) {
 function MenuFooter({ href, label, topic }: { href: string; label: string; topic: string }) {
   return (
     <div className="mt-7 flex flex-wrap items-center justify-between gap-x-8 gap-y-4 pt-4" style={{ borderTop: "1px solid var(--ink-08)" }}>
-      <Link
+      <Link prefetch={false}
         href={href}
         className="group -ml-3 inline-flex min-h-[44px] items-center gap-2 rounded-lg px-3 text-[13.5px] font-bold transition-colors hover:bg-[var(--ink-05)] hover:text-[var(--accent-text)]"
         style={{ color: "var(--text-primary)" }}
@@ -448,10 +494,27 @@ function ApplicationsMegaMenu() {
 }
 
 // A Sanity CDN photo from lib/nav-insights.json: plain <img srcset>, sized at
-// build time, never /_next/image.
-function InsightImg({ image, sizes, className, style }: { image: NavImage; sizes: string; className?: string; style?: React.CSSProperties }) {
+// build time, never /_next/image. Lazy by default; the panel's cover asks
+// for eager.
+function InsightImg({ image, sizes, className, style, loading = "lazy", decoding = "async" }: { image: NavImage; sizes: string; className?: string; style?: React.CSSProperties; loading?: "lazy" | "eager"; decoding?: "async" | "sync" }) {
   // eslint-disable-next-line @next/next/no-img-element -- deliberate, see lib/chrome-images.mjs
-  return <img src={image.src} srcSet={image.srcSet} sizes={sizes} alt="" loading="lazy" decoding="async" className={className} style={style} />;
+  return <img src={image.src} srcSet={image.srcSet} sizes={sizes} alt="" loading={loading} decoding={decoding} className={className} style={style} />;
+}
+
+// The cover photograph, fetched before the panel opens (QA A7, 30 Sep 2026:
+// lazy-loaded inside a panel that mounts on open, it showed as a blank box
+// for about a second). Called when the pointer or keyboard first reaches the
+// bar's triggers, so by the time Insights opens the file is usually cached;
+// once per page, and only where there is a cover to fetch.
+const COVER_SIZES = "(min-width: 1280px) 470px, 36vw";
+let coverWarmed = false;
+function warmInsightsCover() {
+  if (coverWarmed || typeof window === "undefined" || !INSIGHTS.cover) return;
+  coverWarmed = true;
+  const img = new window.Image();
+  img.sizes = COVER_SIZES;
+  img.srcset = INSIGHTS.cover.image.srcSet;
+  img.src = INSIGHTS.cover.image.src;
 }
 
 // ── Insights panel: the section front ─────────────────────────────────
@@ -539,11 +602,22 @@ function InsightsMegaMenu() {
                 column has, so the panel keeps its proportion on any screen. */}
             {cover && (
               <div className="col-span-5 flex flex-col pr-8 xl:pr-10">
-                <Link href={`/blog/${cover.slug}`} className="group flex flex-1 flex-col">
-                  <span className="relative block min-h-[180px] flex-1 overflow-hidden" style={{ background: "var(--ink-05)" }}>
+                <Link prefetch={false} href={`/blog/${cover.slug}`} className="group flex flex-1 flex-col">
+                  {/* Eager, and on a dark ground (QA A7, 30 Sep 2026): the
+                      photo used to lazy-load into a pale empty box after the
+                      panel opened. The ground is the card dark shading to the
+                      panel's own, so the frame reads as a photograph loading,
+                      never as a hole. */}
+                  <span
+                    className="relative block min-h-[180px] flex-1 overflow-hidden"
+                    style={{ background: "linear-gradient(160deg, var(--bg-card) 0%, var(--bg-deepest) 100%)" }}
+                  >
                     <InsightImg
                       image={cover.image}
-                      sizes="(min-width: 1280px) 470px, 36vw"
+                      sizes={COVER_SIZES}
+                      loading="eager"
+                      // sync: a cached file paints in the panel's first frame.
+                      decoding="sync"
                       className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
                     />
                   </span>
@@ -569,7 +643,7 @@ function InsightsMegaMenu() {
               <ul className="flex flex-1 flex-col">
                 {latest.map((post, i) => (
                   <li key={post.slug} className="flex flex-1 flex-col" style={{ borderTop: i > 0 ? HAIRLINE : undefined }}>
-                    <Link href={`/blog/${post.slug}`} className="group block flex-1 py-3">
+                    <Link prefetch={false} href={`/blog/${post.slug}`} className="group block flex-1 py-3">
                       <Kicker post={post} />
                       <span
                         className={`mt-1.5 text-[16px] font-semibold leading-[1.3] line-clamp-3 text-pretty ${HEADLINE_HOVER}`}
@@ -589,7 +663,7 @@ function InsightsMegaMenu() {
               <ul>
                 {NAV_SECTIONS.map((s, i) => (
                   <li key={s.key} style={{ borderTop: i > 0 ? HAIRLINE : undefined }}>
-                    <Link href={s.href} className="group block py-2.5">
+                    <Link prefetch={false} href={s.href} className="group block py-2.5">
                       <span className="flex items-baseline justify-between gap-3">
                         <span
                           className="font-display text-[23px] font-bold leading-none transition-colors group-hover:text-[var(--accent-text)]"
@@ -614,7 +688,7 @@ function InsightsMegaMenu() {
               </ul>
 
               {book && ideaBookCover && (
-                <Link href={ideaBook.href} className="group mt-auto flex items-center gap-4 pt-4" style={{ borderTop: HAIRLINE }}>
+                <Link prefetch={false} href={ideaBook.href} className="group mt-auto flex items-center gap-4 pt-4" style={{ borderTop: HAIRLINE }}>
                   {/* eslint-disable-next-line @next/next/no-img-element -- the book's own raster, lib/catalogue.ts */}
                   <img
                     src={ideaBookCover}
@@ -652,7 +726,7 @@ function InsightsMegaMenu() {
         {/* The quiet band: everything, and the one offer. */}
         <div className="flex-shrink-0" style={{ borderTop: HAIRLINE, background: "var(--ink-02)" }}>
           <div className="mx-auto flex max-w-7xl items-center justify-between gap-8 px-4 py-2 sm:px-6 lg:px-8 [@media(max-height:860px)]:py-1">
-            <Link
+            <Link prefetch={false}
               href="/blog"
               className="group -ml-3 inline-flex min-h-[44px] items-center gap-2 rounded-lg px-3 text-[13.5px] font-bold transition-colors hover:text-[var(--accent-text)]"
               style={{ color: "var(--text-primary)" }}
@@ -675,7 +749,7 @@ function InsightsMegaMenu() {
                 <span aria-hidden="true" className="mx-2" style={{ color: "var(--ink-30)" }}>·</span>
                 {LL_LINE}
               </span>
-              <Link
+              <Link prefetch={false}
                 href={lunchLearnHref("HUB systems", "menu")}
                 className="ml-1 inline-flex min-h-[44px] items-center gap-1.5 rounded-lg px-3 text-[13px] font-bold whitespace-nowrap transition-colors hover:bg-[rgba(249,115,22,0.1)]"
                 style={{ color: ACCENT }}
@@ -710,17 +784,19 @@ const menuSectionVariants: Variants = {
   show: { opacity: 1, y: 0, transition: { duration: 0.32, ease: [0.22, 1, 0.36, 1] } },
 };
 
-// Section header: the orange label and its 44px "All" link on one line
-function MobileSectionHead({ label, href, onClose }: { label: string; href: string; onClose: () => void }) {
+// Section header: the orange label and its 44px "All" link on one line.
+// The current section's label is in --text-primary with the orange rule
+// under it, the bar's own mark (QA A4, B10, C8, D12, 30 Sep 2026).
+function MobileSectionHead({ label, href, active, pathname, onClose }: { label: string; href: string; active: boolean; pathname: string; onClose: () => void }) {
   return (
     <div className="flex items-center justify-between pt-5 pb-1">
       <div
         className="px-1 text-[10px] font-bold tracking-[0.22em] uppercase select-none"
-        style={{ color: "var(--accent-text-lg)" }}
+        style={{ color: active ? "var(--text-primary)" : "var(--accent-text-lg)" }}
       >
-        {label}
+        <NavLabel active={active}>{label}</NavLabel>
       </div>
-      <MobileViewAll href={href} label="All" onClose={onClose} />
+      <MobileViewAll href={href} label="All" onClose={onClose} current={currentPage(pathname, href)} />
     </div>
   );
 }
@@ -730,12 +806,13 @@ function MobileSectionHead({ label, href, onClose }: { label: string; href: stri
 // default, so the drawer is eight rows of pictures instead of thirty-two
 // names (Vern, 26 Sep 2026: the plain list was "the other extreme").
 function MobileFamily({
-  label, note, items, open, onToggle, onClose,
+  label, note, items, open, pathname, onToggle, onClose,
 }: {
   label: string;
   note?: string;
   items: MenuItem[];
   open: boolean;
+  pathname: string;
   onToggle: () => void;
   onClose: () => void;
 }) {
@@ -747,7 +824,8 @@ function MobileFamily({
         type="button"
         onClick={onToggle}
         aria-expanded={open}
-        aria-controls={id}
+        // The members list is mounted only while open (QA F17, 30 Sep 2026).
+        aria-controls={open ? id : undefined}
         className="flex w-full items-center gap-3.5 px-1 py-3 text-left active:opacity-70 transition-opacity"
       >
         <GroupPicture label={label} compact />
@@ -777,13 +855,16 @@ function MobileFamily({
             <ul className="pb-2 pl-[110px]">
               {items.map((it) => (
                 <li key={it.href}>
-                  <Link
+                  <Link prefetch={false}
                     href={it.href}
                     onClick={onClose}
+                    aria-current={currentPage(pathname, it.href)}
                     className="flex min-h-[48px] items-center justify-between gap-4 py-2 pr-1 active:opacity-60 transition-opacity"
                   >
                     <span className="min-w-0">
-                      <span className="block text-[15px] leading-tight" style={{ color: "var(--ink-85)" }}>{it.name}</span>
+                      <span className="block text-[15px] leading-tight" style={{ color: pathname === it.href ? "var(--text-primary)" : "var(--ink-85)" }}>
+                        <NavLabel active={pathname === it.href}>{it.name}</NavLabel>
+                      </span>
                       {it.line && <span className="mt-1 block text-[12.5px] leading-snug text-pretty" style={{ color: "var(--ink-50)" }}>{it.line}</span>}
                     </span>
                     <svg className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "var(--ink-20)" }} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -801,11 +882,12 @@ function MobileFamily({
 }
 
 // "All →" beside a drawer section's label, 44px tall
-function MobileViewAll({ href, label, onClose }: { href: string; label: string; onClose: () => void }) {
+function MobileViewAll({ href, label, onClose, current }: { href: string; label: string; onClose: () => void; current?: "page" }) {
   return (
-    <Link
+    <Link prefetch={false}
       href={href}
       onClick={onClose}
+      aria-current={current}
       className="inline-flex min-h-[44px] items-center gap-2 px-1 text-[13px] font-bold active:opacity-60 transition-opacity"
       style={{ color: "var(--accent-text-lg)" }}
     >
@@ -820,7 +902,7 @@ function MobileViewAll({ href, label, onClose }: { href: string; label: string; 
 // A row in the drawer's Insights section: thumbnail, kind, title.
 function MobilePostRow({ post, onClose }: { post: NavPost; onClose: () => void }) {
   return (
-    <Link
+    <Link prefetch={false}
       href={`/blog/${post.slug}`}
       onClick={onClose}
       className="flex items-center gap-3.5 px-1 py-3 active:opacity-70 transition-opacity"
@@ -844,7 +926,7 @@ function MobilePostRow({ post, onClose }: { post: NavPost; onClose: () => void }
 // does: its photograph the width of the drawer, its kicker and headline.
 function MobileCoverStory({ post, onClose }: { post: NavPost & { image: NavImage }; onClose: () => void }) {
   return (
-    <Link
+    <Link prefetch={false}
       href={`/blog/${post.slug}`}
       onClick={onClose}
       className="block px-1 pt-2 pb-4 active:opacity-70 transition-opacity"
@@ -919,6 +1001,9 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
   const book = showIdeaBook();
   // The session topic follows the family or group the visitor has open.
   const llTopic = openFamily ?? "HUB systems";
+  // The current section, marked as the bar marks it (QA A4, 30 Sep 2026).
+  const pathname = usePathname() ?? "";
+  const section = navSection(pathname);
 
   return (
     <AnimatePresence>
@@ -1017,7 +1102,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
 
               {/* ── Products ──────────────────────────────────────── */}
               <motion.div variants={menuSectionVariants}>
-                <MobileSectionHead label="Products" href="/products" onClose={onClose} />
+                <MobileSectionHead label="Products" href="/products" active={section === "products"} pathname={pathname} onClose={onClose} />
                 {PRODUCT_CATEGORIES.map((cat) => (
                   <MobileFamily
                     key={cat.label}
@@ -1025,6 +1110,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                     note={cat.menuNote}
                     items={productFamily(cat)}
                     open={openFamily === cat.label}
+                    pathname={pathname}
                     onToggle={() => setOpenFamily(openFamily === cat.label ? null : cat.label)}
                     onClose={onClose}
                   />
@@ -1033,13 +1119,14 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
 
               {/* ── Applications ──────────────────────────────────── */}
               <motion.div variants={menuSectionVariants} className="mt-2">
-                <MobileSectionHead label="Applications" href="/applications" onClose={onClose} />
+                <MobileSectionHead label="Applications" href="/applications" active={section === "applications"} pathname={pathname} onClose={onClose} />
                 {APPLICATION_GROUPS.map((group) => (
                   <MobileFamily
                     key={group.label}
                     label={group.label}
                     items={applicationGroup(group)}
                     open={openFamily === group.label}
+                    pathname={pathname}
                     onToggle={() => setOpenFamily(openFamily === group.label ? null : group.label)}
                     onClose={onClose}
                   />
@@ -1048,14 +1135,14 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
 
               {/* ── Insights ──────────────────────────────────────── */}
               <motion.div variants={menuSectionVariants} className="mt-2">
-                <MobileSectionHead label="Insights" href="/blog" onClose={onClose} />
+                <MobileSectionHead label="Insights" href="/blog" active={section === "insights"} pathname={pathname} onClose={onClose} />
                 {mobileCover && <MobileCoverStory post={mobileCover} onClose={onClose} />}
                 {posts.map((post) => (
                   <MobilePostRow key={post.slug} post={post} onClose={onClose} />
                 ))}
                 <div className="flex flex-wrap gap-2 px-1 pt-4 pb-1" role="group" aria-label="Insights by type">
                   {INSIGHT_SECTIONS.map((s) => (
-                    <Link
+                    <Link prefetch={false}
                       key={s.href}
                       href={s.href}
                       onClick={onClose}
@@ -1067,7 +1154,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                   ))}
                 </div>
                 {book && ideaBookCover && (
-                  <Link
+                  <Link prefetch={false}
                     href={ideaBook.href}
                     onClick={onClose}
                     className="mt-3 flex items-center gap-3.5 px-1 py-3 active:opacity-70 transition-opacity"
@@ -1103,17 +1190,18 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                   { label: "About", href: "/about" },
                   { label: "Contact", href: "/contact" },
                 ].map((link) => (
-                  <Link
+                  <Link prefetch={false}
                     key={link.href}
                     href={link.href}
                     onClick={onClose}
+                    aria-current={currentPage(pathname, link.href)}
                     className="flex items-center justify-between py-4 px-1 text-[16px] font-[500] active:opacity-60 transition-opacity"
                     style={{
-                      color: "var(--ink-70)",
+                      color: section && NAV_ROOT[section] === link.href ? "var(--text-primary)" : "var(--ink-70)",
                       borderBottom: "1px solid var(--ink-05)",
                     }}
                   >
-                    {link.label}
+                    <NavLabel active={!!section && NAV_ROOT[section] === link.href}>{link.label}</NavLabel>
                     <svg className="w-4 h-4" style={{ color: "var(--ink-20)" }} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 18l6-6-6-6" />
                     </svg>
@@ -1168,7 +1256,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                 <div className="text-[14px] font-bold leading-tight" style={{ color: "var(--text-primary)" }}>Lunch &amp; Learn</div>
                 <div className="mt-0.5 text-[12px] leading-snug" style={{ color: "var(--ink-60)" }}>{LL_LINE}</div>
               </div>
-              <Link
+              <Link prefetch={false}
                 href={lunchLearnHref(llTopic, "menu")}
                 onClick={onClose}
                 aria-label="Book a Lunch & Learn"
@@ -1375,6 +1463,10 @@ export default function Nav() {
     { panel: "insights", label: "Insights" },
   ];
 
+  // The current section, for the bar and the drawer (navSection above).
+  const pathname = usePathname() ?? "";
+  const section = navSection(pathname);
+
   return (
     // reducedMotion="user": with the system setting on, the panels, the
     // drawer and its sections appear without sliding (opacity only).
@@ -1427,6 +1519,10 @@ export default function Nav() {
                 borderLeft: "1px solid var(--ink-12)",
                 height: 22,
               }}
+              // role="img": an aria-label on a plain span is ignored by
+              // assistive tech (QA F17, 30 Sep 2026); as an image the flag
+              // and its word read as one thing, "Canadian".
+              role="img"
               aria-label="Canadian"
             >
               <svg
@@ -1454,7 +1550,13 @@ export default function Nav() {
               was at md, where the full bar measured 998px in a 768px window
               and pushed search, Resources and Lunch & Learn off the screen;
               a touch tablet is better served by the drawer anyway. */}
-          <div className="hidden lg:flex items-center gap-0.5">
+          <div
+            className="hidden lg:flex items-center gap-0.5"
+            // The first time the pointer or the keyboard reaches the links,
+            // fetch the Insights cover (warmInsightsCover above).
+            onMouseEnter={warmInsightsCover}
+            onFocus={warmInsightsCover}
+          >
 
             {/* Mega menu triggers: Products, Applications, Insights.
                 Deliberately no onFocus-opens-panel here (unlike the plain
@@ -1474,11 +1576,14 @@ export default function Nav() {
                 onClick={() => clickTrigger(panel)}
                 aria-expanded={openPanel === panel}
                 aria-haspopup="true"
-                aria-controls={PANEL_IDS[panel]}
+                // Only while the panel is mounted: closed, the id it named
+                // did not exist in the document (QA F17, 30 Sep 2026).
+                aria-controls={openPanel === panel ? PANEL_IDS[panel] : undefined}
+                aria-current={currentPage(pathname, NAV_ROOT[panel])}
                 className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[13px] font-medium whitespace-nowrap transition-colors hover:text-[var(--accent-text)] hover:bg-[var(--ink-05)]"
-                style={{ color: openPanel === panel ? "var(--accent-text-lg)" : "var(--ink-65)" }}
+                style={{ color: openPanel === panel ? "var(--accent-text-lg)" : section === panel ? "var(--text-primary)" : "var(--ink-65)" }}
               >
-                {label}
+                <NavLabel active={section === panel}>{label}</NavLabel>
                 <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"
                   style={{ opacity: 0.5, transform: openPanel === panel ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -1496,9 +1601,10 @@ export default function Nav() {
                 // label is a single object; it should shrink the row, never
                 // wrap inside it.
                 className="px-2.5 py-1.5 rounded-lg text-[13px] font-medium whitespace-nowrap transition-colors hover:text-[var(--accent-text)] hover:bg-[var(--ink-05)]"
-                style={{ color: "var(--ink-65)" }}
+                style={{ color: section && NAV_ROOT[section] === link.href ? "var(--text-primary)" : "var(--ink-65)" }}
+                aria-current={currentPage(pathname, link.href)}
               >
-                {link.label}
+                <NavLabel active={!!section && NAV_ROOT[section] === link.href}>{link.label}</NavLabel>
               </Link>
             ))}
           </div>
@@ -1550,20 +1656,26 @@ export default function Nav() {
               </svg>
             </button>
 
-            {/* Resources — ghost */}
+            {/* Resources, the ghost button. .btn-ghost (app/globals.css) owns the border,
+                colour, hover and focus ring: the inline border it had beat
+                the hover class, so the button never changed under the
+                pointer (QA A3, C11, 30 Sep 2026). */}
             <a href="/resources"
-              className="px-3 py-1.5 rounded-lg text-[13px] font-semibold transition-all hover:border-orange-500/50 hover:text-[var(--accent-text)]"
-              style={{ border: "1px solid var(--ink-20)", color: "var(--ink-75)" }}
+              className="btn-ghost px-3 py-1.5 rounded-lg text-[13px] font-semibold"
+              aria-current={currentPage(pathname, "/resources")}
             >
-              Resources
+              <NavLabel active={section === "resources"}>Resources</NavLabel>
             </a>
 
-            {/* Lunch & Learn — gradient */}
+            {/* Lunch & Learn, the gradient button; .btn-accent for its hover and ring.
+                On /lunch-learn it is marked like the rest of the bar, with
+                the rule in its own text colour (QA A4, 30 Sep 2026). */}
             <a href="/lunch-learn"
-              className="px-3 py-1.5 rounded-lg text-[13px] font-bold whitespace-nowrap"
+              className="btn-accent px-3 py-1.5 rounded-lg text-[13px] font-bold whitespace-nowrap"
               style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "var(--on-accent)" }}
+              aria-current={currentPage(pathname, "/lunch-learn")}
             >
-              Lunch &amp; Learn
+              <NavLabel active={section === "lunch-learn"} rule="var(--on-accent)">Lunch &amp; Learn</NavLabel>
             </a>
           </div>
 

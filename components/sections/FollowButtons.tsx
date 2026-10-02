@@ -52,18 +52,18 @@ export default function FollowButtons() {
       <ul className="grid grid-cols-5 gap-2 md:flex md:flex-wrap md:gap-2.5">
         {CHANNELS.map((ch) => (
           <li key={ch.key} className="min-w-0">
+            {/* .btn-ghost (app/globals.css) owns the border, colour, hover
+                and focus ring (QA A3/C11, 30 Sep 2026): the inline colour and
+                border it had beat its hover classes, so nothing changed under
+                the pointer. The resting card fill is a class for the same
+                reason. */}
             <a
               href={SOCIAL_LINKS[ch.key]}
               target="_blank"
               rel="noopener noreferrer"
               aria-label={ch.label}
               title={ch.key === "instagram" ? INSTAGRAM_HANDLE : undefined}
-              className="flex h-16 w-full flex-col items-center justify-center gap-1.5 rounded-lg border px-1 text-[11px] font-semibold transition-colors duration-200 hover:border-[var(--accent)] hover:text-[var(--accent-text)] md:h-11 md:w-auto md:flex-row md:gap-2 md:px-4 md:text-sm"
-              style={{
-                color: "var(--text-primary)",
-                borderColor: "var(--border-color)",
-                background: "var(--bg-card)",
-              }}
+              className="btn-ghost flex h-16 w-full flex-col items-center justify-center gap-1.5 rounded-lg bg-[var(--bg-card)] px-1 text-[11px] font-semibold md:h-11 md:w-auto md:flex-row md:gap-2 md:px-4 md:text-sm"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="flex-shrink-0">
                 <path d={ch.path} />

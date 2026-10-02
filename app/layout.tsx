@@ -22,13 +22,27 @@ const THEME_INIT = `(function(){try{var q=location.search,m=/[?&]theme=(dark|mix
 const geist = Geist({ variable: "--font-geist", subsets: ["latin"] });
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"], weight: ["300","400","500","600","700"] });
 
+// The site's default title and description, 30 Sep 2026 (QA A1, E2, E4): the
+// banned word "solutions" is out of the title, and the description is one
+// factual line with no superlative in place of "Canadian leader in ...". The
+// homepage sets its own in app/page.tsx with the same words (a layout file
+// exports only what Next expects, so the string is repeated there).
+const SITE_TITLE = "Decorative Pavement & Road Marking Systems | HUB Surface Systems";
+const SITE_DESCRIPTION =
+  "Stamped asphalt, preformed thermoplastic markings and pavement coatings for Canadian municipalities, specifiers and contractors. Canadian-owned since 1999.";
+// The share image, 30 Sep 2026 (QA F12): a real 1200 x 630 crop of the hero
+// (public/images/og/default.jpg) in place of the 1632 x 1020 hero file that
+// was declared as 1200 x 630. lib/seo.ts still names the hero file for the
+// other pages (DEFAULT_OG_IMAGE); point it here too.
+const OG_IMAGE = { url: "/images/og/default.jpg", width: 1200, height: 630, alt: "The UBC Musqueam crosswalk in Vancouver: Coast Salish artwork in coloured pavement by HUB Surface Systems" };
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://hubss.com"),
   title: {
     template: "%s | HUB Surface Systems",
-    default: "HUB Surface Systems | Decorative Hardscape & Pavement Solutions",
+    default: SITE_TITLE,
   },
-  description: "Canadian leader in decorative pavement and traffic safety solutions. Stamped asphalt, thermoplastic markings, and specialty coatings for municipalities and developers across Canada.",
+  description: SITE_DESCRIPTION,
   keywords: [
     "decorative pavement Canada",
     "preformed thermoplastic crosswalks",
@@ -44,18 +58,18 @@ export const metadata: Metadata = {
     "pavement marking contractor Canada",
   ],
   openGraph: {
-    title: "HUB Surface Systems | Decorative Hardscape & Pavement Solutions",
-    description: "Canadian leader in decorative pavement and traffic safety solutions. Stamped asphalt, thermoplastic markings, and specialty coatings for municipalities and developers across Canada.",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
     url: "https://hubss.com",
     siteName: "HUB Surface Systems",
-    images: [{ url: "/images/hero/hero-1.jpg", width: 1200, height: 630, alt: "HUB Surface Systems · Decorative Pavement Solutions" }],
+    images: [OG_IMAGE],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "HUB Surface Systems | Decorative Hardscape & Pavement Solutions",
-    description: "Canadian leader in decorative pavement and traffic safety solutions. Stamped asphalt, thermoplastic markings, and specialty coatings for municipalities and developers across Canada.",
-    images: ["/images/hero/hero-1.jpg"],
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: [OG_IMAGE],
   },
   alternates: {
     canonical: "https://hubss.com",
@@ -91,6 +105,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             connection here shaves the first paint of the section. */}
         <link rel="preconnect" href="https://basemaps.cartocdn.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://basemaps.cartocdn.com" />
+        {/* Sanity's image CDN serves the product, application and Insights
+            photos on nearly every page (lib/photos.ts); warming it too saves
+            the TLS handshake before the first card photo (QA F13, 30 Sep 2026). */}
+        <link rel="preconnect" href="https://cdn.sanity.io" crossOrigin="anonymous" />
         {children}
         {/* The scroll-up sticky bar (components/StickyBar.tsx) is off since
             25 Sep 2026: with the header's Lunch & Learn button and the band at

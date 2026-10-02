@@ -651,6 +651,53 @@ p {
 }
 
 
+/* ─── Button states: .btn-accent and .btn-ghost (30 Sep 2026) ─────────────
+   QA A3 and C11: the nav's Resources and Lunch & Learn, the hero's two
+   buttons and the Follow buttons had no hover, because their border, colour
+   and shadow were inline styles and an inline style beats any hover class.
+   These two classes own those properties instead. Unlayered, so they win
+   over Tailwind's utilities; each element keeps its own size, radius, type
+   and (for .btn-accent) its own gradient.
+
+   .btn-accent: the orange button. It keeps its gradient and text colour
+   inline; its resting shadow, if any, is --btn-shadow on the element (never
+   an inline box-shadow); hover brightens the fill a little and adds a glow
+   over that shadow. .btn-ghost: the outlined button. Rest: a 1px ink-20
+   border, text-primary; hover: a faint fill and a stronger border; an
+   element using it sets no border, colour or background inline (a resting
+   background goes in a class, e.g. bg-[var(--bg-card)]). Both get the site's
+   focus ring, offset so it clears the border, and a 150ms transition. */
+.btn-accent,
+.btn-ghost {
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    box-shadow 150ms ease,
+    filter 150ms ease,
+    color 150ms ease;
+}
+.btn-accent {
+  box-shadow: var(--btn-shadow, 0 0 #0000);
+}
+.btn-accent:hover {
+  filter: brightness(1.08);
+  box-shadow: var(--btn-shadow, 0 0 #0000), 0 8px 28px rgba(249, 115, 22, 0.38);
+}
+.btn-ghost {
+  border: 1px solid var(--ink-20);
+  color: var(--text-primary);
+}
+.btn-ghost:hover {
+  background-color: var(--ink-06);
+  border-color: var(--ink-30);
+}
+.btn-accent:focus-visible,
+.btn-ghost:focus-visible {
+  outline: 2px solid var(--accent-text-lg);
+  outline-offset: 3px;
+  border-radius: inherit;
+}
+
 /* ─── yet-another-react-lightbox theming ───────────── */
 .yarl__root {
   --yarl__color_backdrop:              rgba(8, 8, 8, 0.97);
@@ -1026,6 +1073,32 @@ p {
   outline: 2px solid rgba(249, 115, 22, 0.8);
   outline-offset: 2px;
   border-radius: 2px;
+}
+
+/* …drawn inside the element for a link that fills a clipped card. The
+   homepage's application cards clip their contents (overflow: hidden, a
+   12px radius) and the systems cards clip themselves, so the 2px ring with
+   its 2px offset fell outside the clip and was cut off (QA F7, 30 Sep
+   2026). The ring is a pseudo-element 3px inside the card's edge, following
+   its corners, and not an outline: Chrome paints an element's outline under
+   its absolutely positioned children, and these cards are a positioned
+   photo, scrim and caption, so an inset outline was simply covered. The
+   pseudo-element comes last in the card, so it paints on top. Its colour is
+   the site's ring colour on each surface (bright orange on dark, the darker
+   orange on paper). Unlayered, like the rule above it. */
+.focus-ring-inset {
+  position: relative;
+}
+.focus-ring-inset:focus-visible {
+  outline: none;
+}
+.focus-ring-inset:focus-visible::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 2px solid var(--accent-text-lg);
+  border-radius: inherit;
+  pointer-events: none;
 }
 
 /* …with one exception: the command palette's own field.

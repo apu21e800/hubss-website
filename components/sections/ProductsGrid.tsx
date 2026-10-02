@@ -3,8 +3,18 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { products as libProducts, type Product } from "@/lib/products";
+import type { Product } from "@/lib/products";
 import { productImages, resolveImage } from "@/lib/featured-images";
+
+// What a card renders, and all the page sends (QA F3, 30 Sep 2026): the
+// homepage used to pass the whole merged product records, galleries of
+// hundreds of photos, Portable Text and SEO included, into this client
+// component, and every byte of it was serialised into the HTML (1.05 MB).
+// app/page.tsx maps the records to these fields.
+export type ProductCard = Pick<Product, "slug" | "name" | "imageUrl"> & {
+  /** The Sanity homepage blurb, when set; PRODUCT_WHAT is the fallback. */
+  homepageBlurb?: string;
+};
 
 // Plain-English: what it does and who uses it
 // Used as the fallback when Sanity has not set `homepageBlurb` on a product.
@@ -86,18 +96,15 @@ const FEATURED_SLUGS = [
 // match the product pages and a slug change can't leave a dead link.
 const ALSO_AVAILABLE_SLUGS = ["premark", "durashield", "duratherm", "airmark"];
 
-type Props = {
-  products?: (Product & { homepageBlurb?: string })[];
-};
+type Props = { products: ProductCard[] };
 
-export default function ProductsGrid({ products: productsProp }: Props = {}) {
-  const source = productsProp ?? libProducts;
+export default function ProductsGrid({ products: source }: Props) {
   const featured = FEATURED_SLUGS.map((slug) =>
     source.find((p) => p.slug === slug)
-  ).filter(Boolean) as (Product & { homepageBlurb?: string })[];
+  ).filter(Boolean) as ProductCard[];
   const alsoAvailable = ALSO_AVAILABLE_SLUGS.map((slug) =>
     source.find((p) => p.slug === slug)
-  ).filter(Boolean) as Product[];
+  ).filter(Boolean) as ProductCard[];
 
   return (
     <section
@@ -143,15 +150,20 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
                 surface.
               </p>
             </div>
-            {/* data-tap: this pill measured 42px; the touch floor is 44. */}
+            {/* The section's one link to the index (QA A11, 30 Sep 2026: it
+                had this pill above and "View all systems" below). Same
+                classes as "All applications" in ApplicationsGrid.tsx, so the
+                two sections' index buttons look the same; .btn-ghost
+                (app/globals.css) gives it its border, hover and focus ring.
+                prefetch={false} (QA F5): the six cards already prefetch their
+                pages; the index and the "Also available" names need not. */}
             <Link
               href="/products"
-              data-tap="44"
-              className="flex-shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold border transition-all duration-200 hover:text-[var(--text-primary)] hover:border-orange-500/50"
-              style={{ color: "var(--text-secondary)", borderColor: "var(--ink-12)" }}
+              prefetch={false}
+              className="btn-ghost flex-shrink-0 inline-flex items-center gap-2 rounded-lg px-7 py-3.5 text-sm font-semibold"
             >
               All systems
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
             </Link>
@@ -171,7 +183,11 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
             no fixed height counts as auto and switches the stretch off. From
             sm up the grid rows give h-full a real height, and auto-rows-fr
             makes every row as tall as the tallest, so the two rows match too. */}
-        <div className="flex items-stretch overflow-x-auto snap-x snap-mandatory gap-4 -mx-4 px-4 pb-3
+        {/* scroll-px-4 (QA A9, 30 Sep 2026): the snap points sit 16px in
+            from the row's edges, so the first card lines up with the text
+            gutter instead of the screen edge (mandatory snapping had pulled
+            it to x=0) and the last card keeps 16px of room at the end. */}
+        <div className="flex items-stretch overflow-x-auto snap-x snap-mandatory scroll-px-4 gap-4 -mx-4 px-4 pb-3
                         sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:auto-rows-fr sm:overflow-visible sm:mx-0 sm:px-0 sm:pb-0"
              style={{ scrollbarWidth: "none" }}>
           {featured.map((product, i) => {
@@ -197,7 +213,10 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
               >
                 <Link
                   href={`/products/${product.slug}`}
-                  className="group relative flex flex-col w-full h-full rounded-2xl overflow-hidden transition-all duration-250"
+                  // focus-ring-inset (app/globals.css): the card clips
+                  // itself, so the keyboard ring is drawn inside it
+                  // (QA F7, 30 Sep 2026).
+                  className="focus-ring-inset group relative flex flex-col w-full h-full rounded-2xl overflow-hidden transition-all duration-250"
                   style={{
                     background: "var(--bg-card)",
                     border: "1px solid var(--ink-10)",
@@ -301,14 +320,16 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
           })}
         </div>
 
-        {/* Footer row */}
+        {/* Footer row: the four other systems. "View all systems" went from
+            here on 30 Sep 2026 (QA A11): the section opens with "All systems"
+            already, and one index link per section is enough. */}
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4">
           {/* The four names were plain text; each now opens its product page.
               data-tap gives every link the 44px floor on touch screens only
               (globals.css), so the desktop line stays compact. On a phone the
               label takes its own row and the four names fit on the next. */}
           <p
-            className="order-2 sm:order-1 flex flex-wrap items-center justify-center sm:justify-start gap-x-1 text-[13px]"
+            className="flex flex-wrap items-center justify-center sm:justify-start gap-x-1 text-[13px]"
             style={{ color: "var(--ink-50)" }}
           >
             <span className="basis-full sm:basis-auto text-center">Also available:</span>
@@ -317,6 +338,7 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
                 {i > 0 && <span aria-hidden="true">·</span>}
                 <Link
                   href={`/products/${p.slug}`}
+                  prefetch={false}
                   data-tap="44"
                   className="inline-flex items-center justify-center px-1 text-[var(--text-secondary)] underline decoration-[color:var(--ink-30)] underline-offset-4 transition-colors hover:text-[var(--accent-text)] hover:decoration-current"
                 >
@@ -325,13 +347,6 @@ export default function ProductsGrid({ products: productsProp }: Props = {}) {
               </span>
             ))}
           </p>
-          <Link
-            href="/products"
-            className="order-1 sm:order-2 inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold border transition-all duration-200 hover:text-[var(--text-primary)] hover:border-orange-500/50"
-            style={{ color: "var(--text-secondary)", borderColor: "var(--ink-12)" }}
-          >
-            View all systems
-          </Link>
         </div>
       </div>
     </section>

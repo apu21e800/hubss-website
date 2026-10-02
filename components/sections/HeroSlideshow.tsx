@@ -31,9 +31,11 @@ export default function HeroSlideshow({
   heading    = "The World Is",
   subheading = "Your Canvas.",
   tagline    = "Let's build your signature space.",
-  cta1Label  = "See the Work",
-  cta1Href   = "#field-notes",
-  cta2Label  = "See the Systems",
+  // The same defaults as app/page.tsx (30 Sep 2026, QA A2/E34: the work is
+  // the map, and sentence case).
+  cta1Label  = "See the work",
+  cta1Href   = "#map",
+  cta2Label  = "See the systems",
   cta2Href   = "#systems",
   heroImageSrc,
   heroImageAlt,
@@ -235,14 +237,19 @@ export default function HeroSlideshow({
             </h2>
 
             {/* CTAs — min-h 44px ensures tap targets meet iOS guidelines */}
+            {/* Hover and focus come from .btn-accent and .btn-ghost
+                (app/globals.css, QA A3/C11, 30 Sep 2026): the orange button
+                brightens and glows, the outlined one fills faintly. The
+                orange one's resting shadow is --btn-shadow, which the hover
+                builds on; as an inline box-shadow it beat the hover. */}
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
                 href={cta1Href}
-                className="inline-flex items-center justify-center gap-2 px-7 rounded-lg font-semibold text-sm transition-all"
+                className="btn-accent inline-flex items-center justify-center gap-2 px-7 rounded-lg font-semibold text-sm"
                 style={{
                   background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
                   color: "var(--on-accent)",
-                  boxShadow: "0 6px 28px rgba(249,115,22,0.42)",
+                  ["--btn-shadow" as string]: "0 6px 28px rgba(249,115,22,0.42)",
                   minHeight: "44px",
                 }}
               >
@@ -253,12 +260,8 @@ export default function HeroSlideshow({
               </Link>
               <Link
                 href={cta2Href}
-                className="inline-flex items-center justify-center gap-2 px-7 rounded-lg font-semibold text-sm border transition-all hover:bg-[var(--ink-06)]"
-                style={{
-                  borderColor: "var(--ink-30)",
-                  color: "var(--ink-80)",
-                  minHeight: "44px",
-                }}
+                className="btn-ghost inline-flex items-center justify-center gap-2 px-7 rounded-lg font-semibold text-sm"
+                style={{ minHeight: "44px" }}
               >
                 {cta2Label}
               </Link>

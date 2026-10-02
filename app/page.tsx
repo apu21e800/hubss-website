@@ -4,8 +4,8 @@ import HeroSlideshow from "@/components/sections/HeroSlideshow";
 // WhyHubss stats/claims block removed per Doug; TrustedByMarquee restored as standalone social proof.
 import TrustedByMarquee from "@/components/sections/TrustedByMarquee";
 import PersonaEntryPoints from "@/components/sections/PersonaEntryPoints";
-import ProductsGrid from "@/components/sections/ProductsGrid";
-import ApplicationsGrid from "@/components/sections/ApplicationsGrid";
+import ProductsGrid, { type ProductCard } from "@/components/sections/ProductsGrid";
+import ApplicationsGrid, { type ApplicationCard } from "@/components/sections/ApplicationsGrid";
 import IdeaBookBand from "@/components/sections/IdeaBookBand";
 import FeaturedBlogPost from "@/components/sections/FeaturedBlogPost";
 import InstagramStrip from "@/components/sections/InstagramStrip";
@@ -21,10 +21,18 @@ import { getMergedApplications } from "@/lib/applications.server";
 import { getMergedProducts } from "@/lib/products.server";
 import { SOCIAL_LINKS } from "@/lib/social-links";
 
+// 30 Sep 2026 (QA A1, E2, E4): "Systems", not the banned "Solutions", in the
+// title; one factual description with no "leader" (the same line as the site
+// default in app/layout.tsx); and the share image is the real 1200 x 630 crop
+// (QA F12), not the 1632 x 1020 hero file declared as 1200 x 630.
+const HOME_DESCRIPTION =
+  "Stamped asphalt, preformed thermoplastic markings and pavement coatings for Canadian municipalities, specifiers and contractors. Canadian-owned since 1999.";
+
 export const metadata: Metadata = buildMetadata({
-  title: "Decorative Pavement & Road Marking Solutions",
-  description: "Canada's leader in decorative stamped asphalt, thermoplastic road markings, and coloured pavement systems. Serving municipalities, developers, and contractors coast to coast since 1999.",
+  title: "Decorative Pavement & Road Marking Systems",
+  description: HOME_DESCRIPTION,
   slug: "",
+  image: "/images/og/default.jpg",
 });
 
 const organizationSchema = {
@@ -35,8 +43,7 @@ const organizationSchema = {
   url: "https://hubss.com",
   logo: "https://hubss.com/images/hub-official-logo.svg",
   foundingDate: "1999",
-  description:
-    "Canadian leader in decorative pavement and traffic safety solutions. Stamped asphalt, thermoplastic markings, and specialty coatings for municipalities and developers across Canada.",
+  description: HOME_DESCRIPTION,
   // One source with the footer and the Follow the Work strip. This list used
   // to be typed by hand and pointed Google at an Instagram account HUB does
   // not own, and it left out X.
@@ -105,15 +112,30 @@ export default async function Home() {
     getMergedApplications(),
     getMergedProducts(),
   ]);
+  // Only what the two grids render (QA F3, 30 Sep 2026). Passed whole, the
+  // merged records carried every gallery photo, the Portable Text and the
+  // SEO fields of 17 products and 20 applications into the client
+  // components' props, and so into the HTML: 1.05 MB for the homepage.
+  const productCards: ProductCard[] = mergedProducts.map(({ slug, name, imageUrl, homepageBlurb }) => ({
+    slug, name, imageUrl, homepageBlurb,
+  }));
+  const applicationCards: ApplicationCard[] = mergedApplications.map(({ slug, name, shortDesc, imageUrl }) => ({
+    slug, name, shortDesc, imageUrl,
+  }));
   const heroPhoto = toPhoto(sanityPage?.homepageHeroImage, "");
   const hero = {
     eyebrow:    sanityPage?.homepageHero?.eyebrow    ?? "Redefining Hardscapes · Since 1999",
     heading:    sanityPage?.homepageHero?.heading    ?? "The World Is",
     subheading: sanityPage?.homepageHero?.subheading ?? "Your Canvas.",
     tagline:    sanityPage?.homepageHero?.tagline    ?? "Let’s build your signature space.",
-    cta1Label:  sanityPage?.homepageHero?.cta1Label  ?? "See the Work",
-    cta1Href:   sanityPage?.homepageHero?.cta1Href   ?? "#field-notes",
-    cta2Label:  sanityPage?.homepageHero?.cta2Label  ?? "See the Systems",
+    // 30 Sep 2026 (QA A2, E34): "See the work" goes to the map of documented
+    // projects (#map), not to the Insights section (#field-notes); both
+    // labels in sentence case. Sanity holds these four fields too
+    // (scripts/sync-pages-to-sanity.ts, HOME_HERO_TEXT), so the live site
+    // changes when that sync runs.
+    cta1Label:  sanityPage?.homepageHero?.cta1Label  ?? "See the work",
+    cta1Href:   sanityPage?.homepageHero?.cta1Href   ?? "#map",
+    cta2Label:  sanityPage?.homepageHero?.cta2Label  ?? "See the systems",
     cta2Href:   sanityPage?.homepageHero?.cta2Href   ?? "#systems",
     // Hero slide 1 in Studio; /images/hero/hero-1.jpg when it's empty.
     heroImageSrc: heroPhoto?.src,
@@ -132,9 +154,9 @@ export default async function Home() {
       <TrustedByMarquee />
       <PersonaEntryPoints />
       {/* slate → dark */}
-      <ProductsGrid products={mergedProducts} />
+      <ProductsGrid products={productCards} />
       {/* dark → slate */}
-      <ApplicationsGrid applications={mergedApplications} />
+      <ApplicationsGrid applications={applicationCards} />
       {/* The Idea Book's one homepage call to action (Doug, 25 Sep 2026):
           after the applications, before the reading. */}
       <IdeaBookBand />

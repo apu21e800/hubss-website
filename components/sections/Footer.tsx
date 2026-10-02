@@ -44,6 +44,10 @@ const companyLinks = [
 // phone. 44 px rows below 640 px wide, and on any touch screen through
 // data-tap="44"; a mouse keeps the compact list (see the data-tap note in
 // app/globals.css on why the desktop footer is not padded).
+// Every Link below carries prefetch={false} (QA F5, 30 Sep 2026): the footer
+// is on every page, and its thirty-odd links prefetched thirty routes' RSC
+// payloads the moment a visitor scrolled to the bottom. A click still
+// navigates instantly enough; nothing here is a primary path.
 const footerLink =
   "text-sm flex items-center min-h-11 sm:min-h-0 transition-colors hover:text-[var(--accent-text-lg)] underline-offset-4 hover:underline";
 const officeLink =
@@ -58,11 +62,6 @@ export default function Footer() {
       /* always dark */
       data-surface="dark" className="asphalt-noise" style={{ background: "var(--bg-dark)", position: "relative" }}>
 
-      {/* Wheel watermark — subtle background accent */}
-      <div style={{ position: "absolute", bottom: "24px", right: "32px", opacity: 0.04, pointerEvents: "none", zIndex: 0 }}>
-        <ChromeImg family="wheel" src={CHROME_MARKS.wheel} alt="" width={180} height={180} sizes="180px" aria-hidden="true" />
-      </div>
-
       {/* Full-width gradient divider */}
       <div
         style={{
@@ -76,7 +75,21 @@ export default function Footer() {
             offices. At lg the company links stack over the offices in the
             fourth column; below lg it is two columns, the lists side by side,
             so the taller phone rows do not double the footer's length. */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-[1.3fr_1fr_1fr_1fr_1.15fr] gap-x-6 sm:gap-x-10 lg:gap-x-12 gap-y-10 lg:gap-y-12">
+        <div className="relative grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-[1.3fr_1fr_1fr_1fr_1.15fr] gap-x-6 sm:gap-x-10 lg:gap-x-12 gap-y-10 lg:gap-y-12">
+
+          {/* Wheel watermark, inside the grid (QA A24, D16, 30 Sep 2026). It
+              used to hang off the footer's own corner, past the page grid
+              and under "Terms of use" at 1440 and behind the copyright line
+              on a phone. Now it sits in the grid's bottom right corner, the
+              empty room under the offices in the five-column layout, and is
+              off below xl, where the fourth column runs to the bottom. */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute bottom-0 right-0 hidden xl:block"
+            style={{ opacity: 0.04, zIndex: 0 }}
+          >
+            <ChromeImg family="wheel" src={CHROME_MARKS.wheel} alt="" width={150} height={150} sizes="150px" />
+          </div>
 
           {/* Brand */}
           <div className="col-span-2 lg:col-span-1">
@@ -103,9 +116,17 @@ export default function Footer() {
               Pedestrian safety, traffic calming, civic identity.
             </p>
 
-            <p className="text-[11px] mb-5 flex items-center gap-2 flex-wrap" style={{ color: "var(--text-muted)", lineHeight: 1.5 }}>
+            {/* Three deliberate lines (QA A22, 30 Sep 2026): the badge, then
+                "Owned and operated", then "Coast to coast · Since 1999". As
+                one wrapping flex line the column broke it into "Owned and
+                operated · Coast to coast / · Since 1999", a dot at a line's
+                start. Blocks never leave a dot at either end. */}
+            <p className="text-[11px] mb-5" style={{ color: "var(--text-muted)", lineHeight: 1.5 }}>
               <span
-                className="inline-flex items-center gap-1.5"
+                className="mb-1 inline-flex items-center gap-1.5"
+                // role="img": an aria-label on a plain span is ignored
+                // (QA F17, 30 Sep 2026); the same fix as the nav's flag.
+                role="img"
                 aria-label="Canadian"
               >
                 <svg
@@ -123,15 +144,8 @@ export default function Footer() {
                   Canadian
                 </span>
               </span>
-              {/* No divider after "Canadian", and each phrase kept whole: in the
-                  narrow column the line wrapped and left a bar or a dot
-                  hanging at the end of a line (QA, 28 Sep 2026). A wrap now
-                  falls before a dot, never after one. */}
-              <span>
-                <span className="whitespace-nowrap">Owned and operated</span>{" "}
-                <span className="whitespace-nowrap">· Coast to coast</span>{" "}
-                <span className="whitespace-nowrap">· Since 1999</span>
-              </span>
+              <span className="block">Owned and operated</span>
+              <span className="block whitespace-nowrap">Coast to coast · Since 1999</span>
             </p>
 
             <SocialLinks className="mt-1" />
@@ -146,6 +160,7 @@ export default function Footer() {
               {products.filter((p) => !p.comingSoon && !p.hideFromFooter).map((p) => (
                 <li key={p.slug}>
                   <Link
+                    prefetch={false}
                     href={`/products/${p.slug}`}
                     className={footerLink}
                     data-tap="44"
@@ -165,6 +180,7 @@ export default function Footer() {
               {footerApplications.map((a) => (
                 <li key={a.href}>
                   <Link
+                    prefetch={false}
                     href={a.href}
                     className={footerLink}
                     data-tap="44"
@@ -188,6 +204,7 @@ export default function Footer() {
                 {companyLinks.map((l) => (
                   <li key={l.href}>
                     <Link
+                      prefetch={false}
                       href={l.href}
                       className={footerLink}
                       data-tap="44"
@@ -254,10 +271,10 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} HUB Surface Systems. All rights reserved.
           </p>
           <div className="flex gap-6">
-            <Link href="/privacy" className={legalLink} data-tap="44" style={{ color: "var(--text-muted)", paddingTop: 2, paddingBottom: 2 }}>
+            <Link prefetch={false} href="/privacy" className={legalLink} data-tap="44" style={{ color: "var(--text-muted)", paddingTop: 2, paddingBottom: 2 }}>
               Privacy policy
             </Link>
-            <Link href="/terms" className={legalLink} data-tap="44" style={{ color: "var(--text-muted)", paddingTop: 2, paddingBottom: 2 }}>
+            <Link prefetch={false} href="/terms" className={legalLink} data-tap="44" style={{ color: "var(--text-muted)", paddingTop: 2, paddingBottom: 2 }}>
               Terms of use
             </Link>
           </div>

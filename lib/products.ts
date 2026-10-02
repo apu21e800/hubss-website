@@ -60,8 +60,8 @@ function gallery(slug: string, dir: string, count: number, ext: string = "jpg", 
 // for DuraTherm, "our production facility" for DecoMark, coverage and dry-time figures, SCAQMD, LEED v4).
 // Earlier descriptions were rewritten from the authoritative old hubss.com product pages and the StreetBond
 // manufacturer canonical source. Doug's specific edits are preserved verbatim where they corrected facts
-// (DuraShield = coating not penetrating, AirMark non-runway, PreMark 125mil standard, MMAX +3°C and rising,
-// TrafficPatterns 125mil, StreetBond legacy HUBSS voice). Related-applications audited against Vernon's
+// (DuraShield = coating not penetrating, AirMark non-runway, PreMark 125 mil standard, MMAX +3°C and rising,
+// TrafficPatterns 125 mil, StreetBond legacy HUBSS voice). Related-applications audited against Vernon's
 // authoritative mapping — Bike Lanes is MMAX + PreMark only, etc.
 //
 // RELATIONS (28 Sep 2026, QA pa#31): relatedApplications here and relatedProducts in lib/applications.ts
@@ -185,7 +185,9 @@ export const products: Product[] = [
       { label: "Patterns", value: "Standard and custom options" },
       { label: "Base", value: "New or existing asphalt" },
       { label: "Service life", value: "10–20 years" },
-      { label: "Snowplow safe", value: "Yes: flush surface, nothing to catch" },
+      // "Yes: flush surface" printed a double colon after the label (QA B23, 30 Sep 2026). Sanity
+      // overrides specs: sync after changing them.
+      { label: "Snowplow safe", value: "Yes, flush surface, nothing to catch" },
     ],
     // Expanded per Vernon: crosswalks, driveways, plazas (public-spaces), parks/paths, townhomes,
     // heritage districts (community-branding), public art settings.
@@ -291,7 +293,7 @@ export const products: Product[] = [
     specs: [
       { label: "Install", value: "Inlaid into a stamped surface" },
       { label: "Profile", value: "Zero: flush with the road" },
-      { label: "Snowplow safe", value: "Yes: no shear risk" },
+      { label: "Snowplow safe", value: "Yes, no shear risk" }, // as the spread prints it; the colon went 30 Sep 2026 (QA B23)
       { label: "Bond", value: "Heat-fused to asphalt substrate" },
     ],
     // Expanded per Vernon: streetscape inlays (community-branding), heritage districts, pedestrian plazas (public-spaces).

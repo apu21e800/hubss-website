@@ -23,7 +23,7 @@ import { productImages, resolveImage } from "@/lib/featured-images";
 import { buildMetadata } from "@/lib/seo";
 import { getProductFamily } from "@/lib/product-taxonomy";
 import { catalogueFor } from "@/lib/product-catalogue";
-import ProductSpecCard from "@/components/products/ProductSpecCard";
+import ProductSpecCard, { fixPrint } from "@/components/products/ProductSpecCard";
 import ProductFaq from "@/components/products/ProductFaq";
 import { faqsFor } from "@/lib/product-faqs";
 import { getMergedProduct } from "@/lib/products.server";
@@ -193,7 +193,7 @@ export default async function ProductPage({ params }: Props) {
           additionalProperty: catalogue.specs.map((s) => ({
             "@type": "PropertyValue",
             name: s.label,
-            value: s.value,
+            value: fixPrint(s.value), // the same print fixes the spread shows (30 Sep 2026)
           })),
         }
       : {}),
@@ -462,7 +462,9 @@ export default async function ProductPage({ params }: Props) {
                       <div key={spec.label} className="flex justify-between gap-4 text-sm" style={{ borderBottom: "1px solid var(--ink-06)", paddingBottom: "12px" }}>
                         <dt style={{ color: "var(--text-muted)" }}>{spec.label}</dt>
                         <dd className="font-semibold text-right max-w-[62%]" style={{ color: "var(--text-primary)" }}>
-                          {spec.value}
+                          {/* fixPrint: Studio holds StreetPrint's "Yes: flush surface" row; the
+                              punctuation is corrected at render until the sync runs (QA B23). */}
+                          {fixPrint(spec.value)}
                         </dd>
                       </div>
                     ))}

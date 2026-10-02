@@ -55,18 +55,19 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
 
   return (
     <main style={{ minHeight: "100vh", position: "relative" }}>
-      {/* Asphalt background */}
+      {/* Asphalt background. One pre-darkened WebP (QA F14, 30 Sep 2026):
+          the page downloaded the 495 KB homepage hero and laid an 88% black
+          overlay on it. /images/contact/backdrop.webp is the same photo at
+          1600 wide with that darkness baked in (26 KB), so the overlay went
+          with the download. */}
       <div
         className="fixed inset-0 -z-10"
         style={{
-          backgroundImage: "url('/images/hero/hero-1.jpg')",
+          backgroundColor: "#080808",
+          backgroundImage: "url('/images/contact/backdrop.webp')",
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
-      />
-      <div
-        className="fixed inset-0 -z-10"
-        style={{ background: "rgba(8,8,8,0.88)" }}
       />
       <Nav />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-16 sm:pb-24">

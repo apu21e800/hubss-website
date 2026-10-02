@@ -428,7 +428,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
             aria-autocomplete="list"
             aria-label="Search the site"
             aria-controls="search-results"
-            placeholder="Search systems, applications, specs, insights…"
+            placeholder="Search systems, specs, insights"
             className="flex-1 bg-transparent outline-none"
             style={{
               color: "var(--text-primary)",

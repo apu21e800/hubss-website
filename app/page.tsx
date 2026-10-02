@@ -24,7 +24,7 @@ import { SOCIAL_LINKS } from "@/lib/social-links";
 // 30 Sep 2026 (QA A1, E2, E4): "Systems", not the banned "Solutions", in the
 // title; one factual description with no "leader" (the same line as the site
 // default in app/layout.tsx); and the share image is the real 1200 x 630 crop
-// (QA F12), not the 1632 x 1020 hero file declared as 1200 x 630.
+// (QA F12), not the 1920 x 1200 hero file declared as 1200 x 630.
 const HOME_DESCRIPTION =
   "Stamped asphalt, preformed thermoplastic markings and pavement coatings for Canadian municipalities, specifiers and contractors. Canadian-owned since 1999.";
 
@@ -99,7 +99,7 @@ const organizationSchema = {
  * rasters) into the page's function, which failed the deploy of `ddff97b`.
  */
 const HERO_SOURCES = [
-  // A wide, short window (a laptop, a 21:9 monitor): a 2:1 frame.
+  // A wide, short window (a laptop, a 21:9 monitor): a 1.8:1 frame (2 Oct 2026 re-cut).
   { file: "/images/hero/hero-1-wide.jpg", media: "(min-aspect-ratio: 16/9) and (min-width: 768px)" },
   // A phone: the whole scene as a 4:3 picture above the headline
   // (HeroSlideshow.tsx lays the hero out that way below the sm breakpoint).

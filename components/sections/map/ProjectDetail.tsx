@@ -167,7 +167,7 @@ export default function ProjectDetail({
             )}
             {project.solution && (
               <>
-                <p className="cm-brief-label">Solution</p>
+                <p className="cm-brief-label">What HUB installed</p>
                 <p>{project.solution}</p>
               </>
             )}

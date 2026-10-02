@@ -31,7 +31,7 @@ const SITE_TITLE = "Decorative Pavement & Road Marking Systems | HUB Surface Sys
 const SITE_DESCRIPTION =
   "Stamped asphalt, preformed thermoplastic markings and pavement coatings for Canadian municipalities, specifiers and contractors. Canadian-owned since 1999.";
 // The share image, 30 Sep 2026 (QA F12): a real 1200 x 630 crop of the hero
-// (public/images/og/default.jpg) in place of the 1632 x 1020 hero file that
+// (public/images/og/default.jpg) in place of the 1920 x 1200 hero file that
 // was declared as 1200 x 630. lib/seo.ts still names the hero file for the
 // other pages (DEFAULT_OG_IMAGE); point it here too.
 const OG_IMAGE = { url: "/images/og/default.jpg", width: 1200, height: 630, alt: "The UBC Musqueam crosswalk in Vancouver: Coast Salish artwork in coloured pavement by HUB Surface Systems" };

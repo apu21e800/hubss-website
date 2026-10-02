@@ -264,6 +264,9 @@ export default async function ProductPage({ params }: Props) {
   // Hero framing follows the photo, not the page (lib/hero-framing.ts): a
   // Sanity hero records the /public path it came from as `origin`.
   const heroPosition = HERO_POSITION[hero.origin ?? hero.src] ?? product.heroPosition ?? "center 62%";
+  // A photo under 1000 px wide cannot fill a 1440 px banner (QA B1); the band
+  // becomes a dark panel below. Only a Studio photo carries its width.
+  const heroTooSmall = typeof hero.width === "number" && hero.width < 1000;
 
   // The spread (ProductSpecCard) prints the book's four headline specs; the
   // sidebar used to print the same four again beside them in other words
@@ -285,17 +288,33 @@ export default async function ProductPage({ params }: Props) {
           and muted". The scrims now darken only where the type sits (the foot
           and the left edge), and the photo gets a light colour lift. */}
       <div data-hero className="relative overflow-hidden" style={{ height: "clamp(360px, 52vh, 560px)" }}>
-        <PhotoImage
-          src={hero.src}
-          alt={hero.alt}
-          fill
-          className={`object-cover ${heroColourClass(hero)}`}
-          style={{ objectPosition: heroPosition }}
-          priority
-          sizes="100vw"
-        />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(8,13,22,0.12) 0%, rgba(8,13,22,0.04) 38%, rgba(8,13,22,0.34) 64%, rgba(8,13,22,0.82) 100%)" }} />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgba(8,13,22,0.46) 0%, rgba(8,13,22,0.16) 40%, transparent 62%)" }} />
+        {heroTooSmall ? (
+          /* A dark panel instead of the photo: the hatching an engineer draws
+             through a section (the Products menu's ruled tile) over the dark
+             ground, with the name on it. ChipFill's Studio hero is a 640 px
+             file and AggreFill's 476 px, and at 1440 wide both were a blur
+             (QA B1, 30 Sep 2026). The width comes from the Studio photo
+             record; a /public fallback carries none and is shown as before. */
+          <div
+            className="absolute inset-0"
+            style={{ background: `${HATCH}, linear-gradient(180deg, #1c1c1f 0%, var(--bg-dark) 100%)` }}
+            aria-hidden="true"
+          />
+        ) : (
+          <>
+            <PhotoImage
+              src={hero.src}
+              alt={hero.alt}
+              fill
+              className={`object-cover ${heroColourClass(hero)}`}
+              style={{ objectPosition: heroPosition }}
+              priority
+              sizes="100vw"
+            />
+            <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(8,13,22,0.12) 0%, rgba(8,13,22,0.04) 38%, rgba(8,13,22,0.34) 64%, rgba(8,13,22,0.82) 100%)" }} />
+            <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgba(8,13,22,0.46) 0%, rgba(8,13,22,0.16) 40%, transparent 62%)" }} />
+          </>
+        )}
         <div className="absolute inset-0 flex items-end">
           <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-14">
             {/* The label was orange on the photo and measured 2 to 3:1 on red,
@@ -649,6 +668,9 @@ export default async function ProductPage({ params }: Props) {
     </main>
   );
 }
+
+/** The ruled-section hatching the Products menu's tile draws (components/sections/Nav.tsx). */
+const HATCH = "repeating-linear-gradient(-45deg, var(--ink-08) 0 1px, transparent 1px 9px)";
 
 /**
  * The card's real width in the four-column grid (max-w-7xl less px-8 is

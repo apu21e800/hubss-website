@@ -92,7 +92,7 @@ export default async function TypeHub({ section }: { section: InsightsSection })
       <JsonLd data={breadcrumbSchema} />
       <Nav />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-20 sm:pt-28 pb-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-28 pb-10">
         <nav aria-label="Breadcrumb" className="mb-1 flex items-center gap-2 text-xs font-semibold tracking-[0.2em] uppercase">
           <Link href="/blog" className="inline-flex items-center transition-colors hover:text-[var(--accent-text)]" style={{ color: "var(--accent-text-lg)", minHeight: 44 }}>
             Insights
@@ -101,12 +101,15 @@ export default async function TypeHub({ section }: { section: InsightsSection })
           <span style={{ color: "var(--text-secondary)" }}>{section.plural}</span>
         </nav>
 
+        {/* The standard landing H1 (48px at 1440) on the standard container
+            (lg:px-8), as /blog and the other landing pages (QA D11, 30 Sep
+            2026, re-applied 2 Oct 2026 on the editorial layout). */}
         <header className="mb-8 grid gap-y-3 lg:grid-cols-12 lg:items-end lg:gap-x-12">
           <h1
             className="font-display font-black lg:col-span-7"
             style={{
               color: "var(--text-primary)",
-              fontSize: "clamp(2rem, 1.2rem + 2.6vw, 3.4rem)",
+              fontSize: "clamp(2rem, 3.4vw, 3rem)",
               lineHeight: 1.02,
               letterSpacing: "-0.035em",
             }}
@@ -149,13 +152,13 @@ export default async function TypeHub({ section }: { section: InsightsSection })
       {/* The lead story: the newest in the section with a photograph big
           enough to carry it, beside its headline and deck. */}
       {lead && (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-16 sm:pb-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 sm:pb-20">
           <StoryLead post={lead} />
         </div>
       )}
 
       {rest.length > 0 && (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
           <RuleLabel as="h2" className="mb-8">
             {`More ${section.plural.toLowerCase()}`}
           </RuleLabel>
@@ -169,7 +172,7 @@ export default async function TypeHub({ section }: { section: InsightsSection })
       )}
 
       {posts.length === 0 && (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-24 text-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24 text-center">
           <p style={{ color: "var(--text-secondary)" }}>Nothing filed under {section.plural} yet.</p>
         </div>
       )}
@@ -178,7 +181,7 @@ export default async function TypeHub({ section }: { section: InsightsSection })
           a name and its line on a hairline, no boxes. */}
       {others.length > 0 && (
         <div style={{ background: "var(--bg-section-asphalt)", borderTop: "1px solid var(--border-color)" }}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-14">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
             <RuleLabel className="mb-2">Also in Insights</RuleLabel>
             <div className="grid grid-cols-1 sm:grid-cols-2 sm:gap-x-8 lg:gap-x-12">
               {others.map((s) => (

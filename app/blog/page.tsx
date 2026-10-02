@@ -86,7 +86,11 @@ export default async function BlogPage() {
           Learn band, which keeps the shell (Vern, 21 Sep). 30 Sep 2026: and
           now it is laid out like one. A masthead, a front page (the lead
           story at editorial size, then the next four), then the library. */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-24 sm:pt-32 pb-16 sm:pb-24">
+      {/* The standard container (lg:px-8) and the standard landing H1, 48px at
+          1440 (QA D11, 30 Sep 2026, re-applied 2 Oct 2026 on the editorial
+          front page): this page sat at x=104 with a 44px H1 while About,
+          Gallery and Contact sat at x=112 with 56px. */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-16 sm:pb-24">
         {/* Masthead: the title, and its one line beside it from lg. The
             "Insights" eyebrow over it went: the title already says it. */}
         <header className="mb-10 grid gap-y-4 sm:mb-12 lg:grid-cols-12 lg:items-end lg:gap-x-12">
@@ -94,7 +98,7 @@ export default async function BlogPage() {
             className="font-display font-black text-balance lg:col-span-8"
             style={{
               color: "var(--text-primary)",
-              fontSize: "clamp(2rem, 1.2rem + 2.6vw, 3.4rem)",
+              fontSize: "clamp(2rem, 3.4vw, 3rem)",
               lineHeight: 1.02,
               letterSpacing: "-0.035em",
               maxWidth: "18ch",

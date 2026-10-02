@@ -158,8 +158,8 @@ Sanity OVERRIDES the code for: product and application name, shortDesc,
 description and SEO title/description, plus product eyebrow, specs and homepage
 blurb (on the product pages, the application pages, /applications and the
 homepage), and the hero and About text on /, /about and /contact. On /lunch-learn
-only the mid-page sections come from Sanity (what you walk away with, who it's
-for, the questions, their headings); its top is code (see below).
+only the questions and their heading come from Sanity (since 2 Oct 2026); the
+rest of the page is code (see below).
 Editing the lib file or a page's fallback alone changes nothing there until the
 sync runs. Products go through one merge (lib/products.server.ts), applications
 through another, both on the rule in lib/cms-merge.ts: a blank Sanity field
@@ -232,34 +232,30 @@ Never `git reset --hard` in this repo. Banner-dash drift in comment blocks is
 known-benign — prove it with `tr -d '─═━'` + `cmp`, then recover a single file
 with `git checkout origin/main -- <path>`.
 
-## Lunch & Learn page (30 Sep 2026)
-- /lunch-learn is components/sections/LunchLearnPage.tsx (Vern: "optimize the
-  L&L page, it needs work"): a dark top with the pitch and the form side by
-  side (on a phone the form follows the headline), topic tiles that put a
-  topic into the form, then on paper what you walk away with, who it's for,
-  the trusted-by band and the questions, and a dark close with both offices.
-  LunchLearnFunnel.tsx is no longer rendered anywhere.
-- #book is the form itself. The page's h1 and form never fade in from
-  opacity 0: they are the first thing a visitor came for.
-- The copy defaults, the FAQPage schema and the topic tiles share one source:
-  lib/lunch-learn-content.ts. The schema is built from the questions the page
-  prints, so they can't drift. No CE credit claims, ever.
-- The booking form (useLunchLearnForm in LunchLearnV2.tsx, shared with the
-  homepage card) sends generate_lead to GA and lunch_learn_submit to Vercel
-  Analytics on success. From 22 to 30 Sep nothing did: the page had moved to
-  a form without them.
+## Lunch & Learn page (30 Sep and 2 Oct 2026)
+- /lunch-learn is app/lunch-learn/page.tsx: the boardroom card (LunchLearn ->
+  LunchLearnV2, whose title is the page's h1; #book is the card), then
+  LunchLearnFunnel.tsx: the session topic tiles and the common questions, then
+  the footer (Vern, 30 Sep: "clean up the lunch and learn page too. it's a
+  bit messy"). Two sessions rebuilt the page in parallel on 30 Sep; at the
+  2 Oct merge session A's page was kept and one thing was ported from session
+  B's: the topic tiles.
+- The tiles (components/sections/LunchLearnTopics.tsx) are six kinds of work
+  with the applications' hero photos; "Book this topic" puts the topic into the
+  form's chip (setLunchLearnTopic in LunchLearnV2.tsx, the same strings the
+  application pages send) and scrolls to the form.
+- The questions, the FAQPage schema and `npm run sync:pages` share one source,
+  lib/lunch-learn-content.ts, so they can't drift. The sync writes only what
+  the page reads (lunchLearnFaqs, the FAQ heading); the other Lunch & Learn
+  fields in sanity/schemas/page.ts are hidden and read by nothing. No CE
+  credit claims, ever. No stat chips or counts on the page.
 
 ## Menus and Insights, editorial (30 Sep 2026)
-- Products and Applications panels are typographic, no photographs (Vern:
-  "not sure the images are necessary, unless we have perfect images... DDB
-  agency quality"). Each column is its name in the display face on one
-  hairline whose first 32px are --gradient-brand (RuleAccent in Nav.tsx;
-  components/blog/RuleLabel.tsx is the same rule for pages). One line of
-  explanation per level: products carry PRODUCT_MENU_LINES, application
-  groups carry a note, product families print none. The phone drawer keeps
-  its small row pictures.
-- The bar's Canadian badge shows below lg and from xl only: at 1024px the full
-  row was 42px wider than the window and clipped the Lunch & Learn button.
+- The Products and Applications panels keep their photographs: at the 2 Oct
+  merge session A's Nav.tsx (photo menus, active state, prefetch, ARIA) was
+  kept whole and session B's typographic panels were not taken.
+  components/blog/RuleLabel.tsx is the rule-with-a-brand-accent label the
+  Insights pages use.
 - Every listed post is components/blog/BlogCard.tsx: a photograph, one kicker
   (section and date) and the headline; a row on a phone. StoryLead is the lead
   story (photo beside headline and deck) and pickLead chooses it (newest post
@@ -296,12 +292,8 @@ with `git checkout origin/main -- <path>`.
   Articles (/blog/articles). Stored Sanity types are unchanged; the old hub
   URLs and /projects/<slug> redirect (lib/field-notes-taxonomy.ts).
 - The Insights mega menu reads lib/nav-insights.json, written at build from
-  Sanity by scripts/gen-nav-insights.ts. Since 30 Sep 2026 it is a front page
-  (Vern: "editorial feel, text effective, not text heavy. smart"): the lead
-  story with its one photograph and headline, the five latest headlines
-  (kicker and headline), the three sections with their one line, then All
-  Insights, the Idea Book and Book a Lunch & Learn. No dates, read times,
-  excerpts or counts in the panel; they live on /blog.
+  Sanity by scripts/gen-nav-insights.ts (the file lists the cover and the five
+  newest posts; the panel reads as many as it shows).
 - Copy syncs can emit a plan instead of writing:
   `npx tsx scripts/sync-products-to-sanity.ts --dry-run --emit=plan.json`
   (also sync-applications). The plan is applied on Vern's machine with

@@ -85,12 +85,16 @@ function TemplateCard({ t, wide = false }: { t: PatternTemplate; wide?: boolean 
       style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--ink-08)" }}
     >
       <div className="p-4 sm:p-5">
+        {/* pattern-sheet: the drawings are white line-art for the dark
+            ground; on the paper surface below the hero the class prints
+            them in charcoal, as the StreetPrint page already did, so the
+            dimensions read (QA B27, B28, 30 Sep 2026). */}
         <Image
           src={patternSrc(t)}
           alt={`${t.name}, StreetPrint stamping template, dimensioned drawing`}
           width={1600}
           height={1238}
-          className="w-full h-auto"
+          className="w-full h-auto pattern-sheet"
           sizes={wide ? "(max-width: 768px) 100vw, 50vw" : "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"}
         />
       </div>
@@ -142,6 +146,10 @@ export default function PatternsPage() {
         </div>
       </section>
 
+      {/* Under the dark hero the library sits on paper, as the product and
+          application pages do (QA B27: white lines on near-black cards here,
+          charcoal on paper on the StreetPrint page, for the same drawings). */}
+      <div data-surface="paper">
       {/* ── Field templates ─────────────────────────────────── */}
       <section className="py-16" style={{ background: "var(--bg-primary)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -203,6 +211,7 @@ export default function PatternsPage() {
           </div>
         </div>
       </section>
+      </div>
 
       <Footer />
     </main>

@@ -238,14 +238,15 @@ export default async function AboutPage() {
                 <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, transparent 50%, rgba(13,17,23,0.7) 100%)" }} />
               </div>
               <h2 className="text-3xl font-bold mb-6" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>What the work is for</h2>
+              {/* A statement, not a quotation (QA D18, 30 Sep 2026): it was
+                  set in quotation marks and attributed to "HUB Surface
+                  Systems", the company quoting itself on its own page. The
+                  text is Sanity's (aboutMission); only the framing is here. */}
               <p
-                className="text-xl leading-relaxed mb-4"
+                className="text-xl leading-relaxed mb-8"
                 style={{ color: "var(--text-primary)", borderLeft: "3px solid #f97316", paddingLeft: "24px", fontWeight: 500 }}
               >
-                &ldquo;{missionQuote}&rdquo;
-              </p>
-              <p className="text-sm mb-8" style={{ color: "#5a5a5a", paddingLeft: "24px" }}>
-                HUB Surface Systems
+                {missionQuote}
               </p>
               <p className="text-base leading-relaxed" style={{ color: "var(--text-body)" }}>
                 {storyAside}

@@ -100,3 +100,45 @@ export const HERO_POP_LITE: ReadonlySet<string> = new Set([
 export function heroColourClass(photo: { src: string; origin?: string }): "hero-pop" | "hero-pop-lite" {
   return HERO_POP_LITE.has(photo.origin ?? photo.src) ? "hero-pop-lite" : "hero-pop";
 }
+
+/**
+ * The homepage hero (components/sections/HeroSlideshow.tsx), 2 Oct 2026.
+ *
+ * Vern: "main hero image, can it be zoomed out a bit to show more of the
+ * crosswalk?" His screen was a wide window (about 1625 x 720), where the
+ * hero is about 2.3 to 2.6 times as wide as it is tall. The photograph is
+ * 4:3 and has nothing at its sides beyond what the frame already shows, so a
+ * full-width picture in a frame that wide can only show more crosswalk by
+ * cutting off the sign. Instead, on windows 16:9 and wider (the ones that get
+ * hero-1-wide.jpg, app/page.tsx), the photo is shown whole at the hero's
+ * height: the sign with a little air above it and the salmon down through
+ * its scales. It sits against the right edge and its left edge fades into
+ * the hero's dark ground, where the headline is. That is the trade: on those
+ * windows the photograph no longer runs to the left edge (about an eighth of
+ * the width on a 16:9 screen, up to `minWidth` on wider ones). Screens
+ * narrower than 16:9 (1440 x 900, tablets) and phones keep the full-bleed
+ * framing.
+ */
+export const HOME_HERO = {
+  /**
+   * object-position of the default photo, Studio's 16:10 cut (hero-1.jpg).
+   * Across, 69% keeps the whole sign in a portrait tablet's frame (at 50% the
+   * B was cut off at 768 x 1024, 28 Sep 2026); it changes nothing on a
+   * landscape screen, where the photo is as wide as the frame. Down, 42%
+   * gives the sign a little air under the nav where the frame is wider than
+   * the photo: rows 141-1538 of the master at 1440 x 900 (scripts/hero-cuts.mjs).
+   */
+  position: "69% 42%",
+  /** The framing for windows 16:9 and wider. Applied with the wide <source>'s own media query. */
+  wide: {
+    file: "/images/hero/hero-1-wide.jpg",
+    /** The cut's width over its height (scripts/hero-cuts.mjs makes it 1.8:1). */
+    shape: 1.8,
+    /** The hero's height on those screens, the sm:min-h of the section in HeroSlideshow.tsx. */
+    heroHeight: "88vh",
+    /** The narrowest the photo gets, in % of the window, on a very wide one (21:9); past that its foot is cropped. */
+    minWidth: 70,
+    /** How much of the photo's width, in %, fades into the dark ground on its left. */
+    feather: 22,
+  },
+} as const;

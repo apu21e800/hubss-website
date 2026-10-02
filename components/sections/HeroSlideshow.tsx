@@ -5,9 +5,31 @@ import Link from "next/link";
 // fetchPriority="high" ensures the browser's HTML preload scanner picks this up first.
 // || instead of ?? guards against empty-string heroImageSrc from Sanity.
 import { heroAlt } from "@/lib/image-seo";
+import { HOME_HERO } from "@/lib/hero-framing";
 import { isSanityImage, sanitySized, sanitySrcSet } from "@/lib/photos";
 
 const FALLBACK_HERO = "/images/hero/hero-1.jpg";
+
+/**
+ * How the photograph sits in the hero (lib/hero-framing.ts, HOME_HERO). By
+ * default it covers the frame, as it always has. On windows 16:9 and wider,
+ * the ones that get the wide cut, it is shown whole at the hero's height,
+ * against the right edge, its left edge fading into the dark ground under
+ * the headline: 2 Oct 2026, Vern: "main hero image, can it be zoomed out a
+ * bit to show more of the crosswalk?" The rule uses the wide <source>'s own
+ * media query, so the framing and the file always switch together; with no
+ * wide file there is no wide rule.
+ */
+function heroImageCss(wideMedia?: string): string {
+  const w = HOME_HERO.wide;
+  const fade = `linear-gradient(to right, transparent 0, #000 ${w.feather}%)`;
+  return `
+    .home-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: ${HOME_HERO.position}; z-index: 1; }
+    ${wideMedia ? `@media ${wideMedia} {
+      .home-hero-img { left: auto; width: clamp(${w.minWidth}%, calc(${w.heroHeight} * ${w.shape}), 100%); object-position: 50% 0%; -webkit-mask-image: ${fade}; mask-image: ${fade}; }
+    }` : ""}
+  `;
+}
 
 interface HeroSlideshowProps {
   eyebrow?: string;
@@ -45,6 +67,7 @@ export default function HeroSlideshow({
   // A Sanity photo is sized by Sanity's CDN (lib/photos.ts): a phone gets an
   // 828px WebP instead of the full-size original.
   const fromSanity = isSanityImage(src);
+  const wideSource = heroSources.find((v) => v.file === HOME_HERO.wide.file);
 
   return (
     <section
@@ -83,31 +106,16 @@ export default function HeroSlideshow({
           fetchPriority="high"
           // The file is graded when it is cut; this adds the site's lighter
           // hero colour on top (app/globals.css, HERO COLOUR).
-          className="hero-pop-lite"
-          style={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            // The HUB sign is the photograph's subject. Since 26 Sep 2026 the
-            // files are cut from a master with the sign in the middle of
-            // every framing (scripts/hero-cuts.mjs), so a centred crop keeps
-            // it in the middle at every size; a phone gets the 9:16 cut and
-            // a wide window the 2:1 cut through the <picture> above. (The
-            // earlier single landscape file needed 65% across and 0% down to
-            // keep the sign whole; that photograph is gone.)
-            // 28 Sep 2026: across, 69% keeps the whole sign in a portrait
-            // tablet's frame (at 50% the B was cut off at 768 x 1024); it
-            // changes nothing on a landscape screen, where the photo is as
-            // wide as the frame. Down, 42% gives the sign a little more air
-            // under the nav where the frame is wider than the photo (16:10
-            // photo in a 1.8:1 frame at 1440 x 900).
-            objectPosition: "69% 42%",
-            zIndex: 1,
-          }}
+          // Position and size come from .home-hero-img (heroImageCss above): the
+          // HUB sign is the subject and every cut keeps it whole with a
+          // little air above it (scripts/hero-cuts.mjs); a phone gets the 5:4
+          // cut and a window 16:9 or wider the 1.8:1 cut through this
+          // <picture>. The default's object-position and the reasons for it
+          // are HOME_HERO.position in lib/hero-framing.ts.
+          className="hero-pop-lite home-hero-img"
         />
       </picture>
+      <style>{heroImageCss(wideSource?.media)}</style>
 
       {/* ── Gradients — lightened per Doug review for brighter hero ───── */}
       {/* On a phone the picture is lighter (the type is not on it) and only

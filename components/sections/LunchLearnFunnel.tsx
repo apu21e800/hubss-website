@@ -24,7 +24,7 @@
  *
  * The city marquee is gone from this page: it named Ottawa, Calgary and
  * Mississauga, which have no project on the map since the 28 Sep audit, and
- * the page reads better without a third idiom between the audiences and the
+ * the page reads better without a third idiom between the topics and the
  * questions. The homepage keeps TrustedByMarquee, untouched.
  *
  * Both sections sit on data-surface="paper", as the reading under every

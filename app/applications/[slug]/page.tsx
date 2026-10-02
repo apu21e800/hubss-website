@@ -9,7 +9,7 @@ import GalleryGrid, { type GalleryImage } from "@/components/ui/GalleryGrid";
 import { galleryFor, altFor } from "@/lib/asset-scan";
 import ResidentialDriveways from "@/components/sections/ResidentialDriveways";
 import JsonLd from "@/components/ui/JsonLd";
-import { photoObject, seoCaption } from "@/lib/image-seo";
+import { photoObject, seoCaption, honestPhoto, HUB_ORGANIZATION } from "@/lib/image-seo";
 import { isSanityImage, sanityOgImage, type Photo } from "@/lib/photos";
 import { applications } from "@/lib/applications";
 import { getMergedApplication } from "@/lib/applications.server";
@@ -114,15 +114,17 @@ export default async function ApplicationPage({ params }: Props) {
   // writes (scripts/lib/photo-plan.ts), the homepage card and the sitemap.
   const featured = applicationImages[application.slug] ? resolveImage(applicationImages[application.slug]) : null;
   const bannerSrc = featured?.src ?? application.imageUrl;
-  const hero: Photo = application.heroPhoto ?? { src: bannerSrc, alt: featured?.alt ?? application.name };
-  const galleryPhotos: Photo[] = application.galleryPhotos ?? (() => {
+  //
+  // honestPhoto (lib/image-seo.ts, 30 Sep 2026, QA E10): the photo sync wrote
+  // the old templates' invented settings into Studio ("at a botanical garden
+  // path"), so the Sanity alt and caption are replaced at render by what the
+  // photo's folder proves; a line a person wrote in Studio stays.
+  const hero: Photo = honestPhoto(application.heroPhoto ?? { src: bannerSrc, alt: featured?.alt ?? application.name });
+  const galleryPhotos: Photo[] = application.galleryPhotos?.map(honestPhoto) ?? (() => {
     const fromFolder = galleryFor(bannerSrc, application.gallery, `images/applications/${application.slug}`);
     return (fromFolder.length > 0 ? fromFolder : [bannerSrc]).map((src) => ({
       src,
-      alt: altFor(src, `${application.name} surface systems by HUB, Canadian installation`),
-      // Written for a reader looking at the photo, not a copy of the alt. Visible
-      // text beside an image outweighs the alt attribute for Google Images and
-      // for the AI crawlers.
+      alt: altFor(src, application.name),
       caption: seoCaption(src) ?? altFor(src, application.name),
     }));
   })();
@@ -137,15 +139,16 @@ export default async function ApplicationPage({ params }: Props) {
     "@type": "Service",
     name: application.name,
     description: application.description,
-    provider: { "@type": "Organization", name: "HUB Surface Systems" },
+    // The Organization once, with its @id; the photos point at it (30 Sep 2026).
+    provider: HUB_ORGANIZATION,
     url: `https://hubss.com/applications/${application.slug}`,
-    // ImageObject nodes rather than a bare URL — see the note on the product
+    // ImageObject nodes rather than a bare URL: see the note on the product
     // page. A URL string is eligible for a rich result and nothing else; these
     // carry the caption, credit, keywords, and licence that make the photo
     // competitive in Google Images.
     image: [
-      photoObject(hero, { representativeOfPage: true }),
-      ...galleryPhotos.slice(1, 12).map((p) => photoObject(p)),
+      photoObject(hero, { representativeOfPage: true, creatorRef: true }),
+      ...galleryPhotos.slice(1, 12).map((p) => photoObject(p, { creatorRef: true })),
     ],
   };
 
@@ -154,14 +157,17 @@ export default async function ApplicationPage({ params }: Props) {
     "@context": "https://schema.org",
     "@type": "ImageGallery",
     "@id": `https://hubss.com/applications/${application.slug}#gallery`,
-    name: `${application.name} installation photographs`,
-    description: `Field photography of ${application.name.toLowerCase()} installed by HUB Surface Systems across Canada.`,
+    // Named for what it is (QA E10, 30 Sep 2026); the Organization is one
+    // node, `creator`, and the photos point at its @id.
+    name: `${application.name} photographs`,
+    description: `The photographs on the ${application.name} page.`,
     url: `https://hubss.com/applications/${application.slug}`,
     isPartOf: { "@id": `https://hubss.com/applications/${application.slug}` },
+    creator: HUB_ORGANIZATION,
     numberOfItems: gallery.length,
     associatedMedia: galleryPhotos
       .slice(0, 40)
-      .map((p) => photoObject({ ...p, caption: p.caption ?? p.alt }, { ownText: true })),
+      .map((p) => photoObject({ ...p, caption: p.caption ?? p.alt }, { ownText: true, creatorRef: true })),
   } : null;
 
   const breadcrumbSchema = {

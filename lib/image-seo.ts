@@ -1,460 +1,87 @@
 /**
- * Image SEO — the alt text, captions, and ImageObject schema for every photo
+ * Image SEO: the alt text, captions, and ImageObject schema for every photo
  * on the site.
  *
- * WHY THIS EXISTS: the site ships ~1,590 gallery photographs. Until now every
- * one of them carried alt text of the shape "<page context> — installation
- * photo 45". That is accessible, but it is worthless for search: 121 photos in
- * /applications/crosswalks all read as near-identical strings, none of them
- * containing a phrase a human being would ever type into a search box. Google
- * Images ranks on the words around and inside an image — alt text, caption,
- * filename, nearby copy, and structured data — so a gallery of 121 photos
- * described 121 times the same way competes for nothing.
+ * WHAT A CAPTION MAY SAY (rewritten 30 Sep 2026, QA E10): only what the
+ * photo record proves. A photo in a product folder is that product, so the
+ * line is the product and its family word ("StreetPrint stamped asphalt");
+ * a photo in an application folder is that application ("Decorative
+ * crosswalk"). A place follows only when the record names one (PLACES and
+ * FILE_PLACES below: the client's own captions in the 2026 Idea Book file
+ * and the Insights posts). Nothing else: no setting, no spec figure, no "by
+ * HUB Surface Systems".
  *
- * WHAT THIS DOES: composes alt text from what we can TRUTHFULLY say about a
- * folder — the application or product the folder IS, the material HUB actually
- * uses for that work, the purpose it serves, and the settings those photos are
- * genuinely drawn from — and rotates the composition so a large gallery reads
- * as many distinct, specific descriptions instead of one repeated string.
+ * Until tonight six sentence templates rotated settings the photos could not
+ * prove ("a botanical garden path", "a grocery anchor site", "a Vision Zero
+ * treatment area", "a multi-level parking deck approach") and spec figures
+ * inside alts, defaulting the place to "Canada", and the photo sync wrote
+ * those lines into Studio. `looksGenerated` recognises that output so the
+ * pages can replace it at render (`honestPhoto`); a line a person wrote in
+ * Studio is left alone.
  *
- * TRUTHFULNESS RULES (these are not style preferences — the client's
- * credibility rides on them):
- *
- *   1. Never name a city we cannot verify. The folder tells us the WHAT, not
- *      the WHERE. Location defaults to Canada, which is true of all of it.
- *      Specific places appear only via `placeFor()`, which reads a curated map
- *      of folders whose provenance is documented.
- *   2. Never name a product in an APPLICATION folder. /applications/crosswalks
- *      contains crosswalks; which HUB system is under any given one is not
- *      knowable from the folder. Product names are asserted only inside
- *      /images/products/<slug>, where the folder is the claim.
- *   3. `material` describes the class of system HUB specifies for that work,
- *      phrased so it stays true across the folder ("preformed thermoplastic
- *      and coloured pavement coatings"), never as a claim about one photo.
- *   4. No keyword stuffing. Google treats repeated keyword padding as a spam
- *      signal; every string here has to read like a caption a person wrote.
- *
- * Safe to import anywhere. Pure data + string functions, no side effects.
+ * The function signatures are unchanged, so no caller changes. Safe to import
+ * anywhere: pure data and string functions, no side effects.
  */
 
 export interface ImageSubject {
-  /** The noun phrase a person actually types into a search box. Leads the alt. */
-  keyword: string;
-  /** Collection form, for gallery-level names and schema. */
+  /** The line a photo in this folder may carry: the system or the application, nothing more. */
+  label: string;
+  /** Collection form, for gallery-level names. */
   plural: string;
-  /** The class of system HUB specifies here — true across the whole folder. */
-  material: string;
-  /** What the installation is FOR. Carries the search intent. */
-  purpose: string;
-  /** Settings these photos are genuinely drawn from. Rotated for variety. */
-  settings: string[];
-  /** Secondary phrases this folder legitimately serves, for schema keywords. */
-  also?: string[];
 }
 
-const CANADA = "Canada";
-
 // ── Application folders ───────────────────────────────────────────────────────
-// The folder is the application. Products are deliberately NOT named here.
+// The folder is the application. Products are deliberately NOT named here:
+// /images/applications/crosswalks contains crosswalks; which HUB system is
+// under any given one is not knowable from the folder.
 const APPLICATION_SUBJECTS: Record<string, ImageSubject> = {
-  crosswalks: {
-    keyword: "decorative crosswalk",
-    plural: "decorative crosswalks",
-    material: "preformed thermoplastic pavement marking",
-    purpose: "high-visibility pedestrian crossing",
-    settings: [
-      "a municipal intersection",
-      "a downtown main street",
-      "a school zone",
-      "a signalized urban intersection",
-      "a commercial district",
-      "a residential collector road",
-    ],
-    also: ["thermoplastic crosswalk", "coloured crosswalk", "stamped asphalt crosswalk", "crosswalk marking"],
-  },
-  "bike-lanes": {
-    keyword: "coloured bike lane",
-    plural: "coloured bike lanes",
-    material: "UV-stable coloured pavement coating",
-    purpose: "protected cycling infrastructure",
-    settings: [
-      "a protected cycle track",
-      "an intersection conflict zone",
-      "a downtown bike corridor",
-      "a multi-use path approach",
-      "a separated bike lane",
-    ],
-    also: ["green bike lane", "bike lane marking", "cycle track surfacing", "bicycle pavement marking"],
-  },
-  "bus-lanes": {
-    keyword: "bus lane marking",
-    plural: "bus lane markings",
-    material: "MMA resin and reinforced thermoplastic",
-    purpose: "transit priority corridor",
-    settings: [
-      "a BRT corridor",
-      "a red transit priority lane",
-      "a bus stop approach",
-      "a transit signal priority intersection",
-      "an urban busway",
-    ],
-    also: ["red bus lane", "transit lane marking", "BRT pavement marking", "bus priority lane"],
-  },
-  "traffic-calming": {
-    keyword: "traffic calming surface treatment",
-    plural: "traffic calming surface treatments",
-    material: "stamped asphalt and coloured pavement coating",
-    purpose: "speed reduction and pedestrian priority",
-    settings: [
-      "a raised intersection",
-      "a neighbourhood gateway",
-      "a pedestrian priority zone",
-      "a Complete Streets corridor",
-      "a Vision Zero treatment area",
-      "a village centre main street",
-    ],
-    also: ["stamped asphalt intersection", "pattern paving", "Vision Zero surface", "Complete Streets paving"],
-  },
-  "pedestrian-safety": {
-    keyword: "pedestrian safety pavement marking",
-    plural: "pedestrian safety pavement markings",
-    material: "retroreflective preformed thermoplastic",
-    purpose: "pedestrian visibility and conflict-zone marking",
-    settings: [
-      "a school zone",
-      "a signalized crossing",
-      "a transit stop approach",
-      "a mid-block crossing",
-      "a hospital campus entrance",
-    ],
-    also: ["high-visibility crosswalk", "school zone marking", "pedestrian crossing marking"],
-  },
-  "parking-lots": {
-    keyword: "parking lot line marking",
-    plural: "parking lot line markings",
-    material: "durable pavement coating and preformed marking",
-    purpose: "stall layout and accessible parking",
-    settings: [
-      "a retail parking lot",
-      "a commercial plaza",
-      "an office campus lot",
-      "a grocery anchor site",
-      "a multi-level parking deck approach",
-    ],
-    also: ["parking stall marking", "accessible parking marking", "parking lot striping", "asphalt line painting"],
-  },
-  "parks-paths": {
-    keyword: "decorative pathway paving",
-    plural: "decorative pathway paving",
-    material: "stamped asphalt and coloured surface coating",
-    purpose: "park pathways and public greenspace",
-    settings: [
-      "a municipal park",
-      "a waterfront promenade",
-      "a multi-use trail",
-      "a greenway connection",
-      "a park entry plaza",
-      "a botanical garden path",
-    ],
-    also: ["stamped asphalt path", "park pathway surfacing", "trail paving", "greenway surfacing"],
-  },
-  playgrounds: {
-    keyword: "playground surface graphics",
-    plural: "playground surface graphics",
-    material: "coloured pavement coating and preformed play graphics",
-    purpose: "play surfaces and schoolyard games",
-    settings: [
-      "a schoolyard",
-      "a community playground",
-      "an elementary school play area",
-      "a park play zone",
-      "a daycare courtyard",
-    ],
-    also: ["schoolyard games marking", "play area surfacing", "hopscotch pavement marking", "asphalt playground art"],
-  },
-  "splash-pads": {
-    keyword: "splash pad surfacing",
-    plural: "splash pad surfacing",
-    material: "slip-resistant coloured surface coating",
-    purpose: "wet play surfaces with slip resistance",
-    settings: [
-      "a municipal splash pad",
-      "a community water play area",
-      "a park spray pad",
-      "a recreation centre wet deck",
-    ],
-    also: ["water play surfacing", "spray pad coating", "slip-resistant pool deck coating"],
-  },
-  "sport-courts": {
-    keyword: "sport court surfacing",
-    plural: "sport court surfacing",
-    material: "coloured acrylic sport surface coating",
-    purpose: "court colour, line marking, and play surface",
-    settings: [
-      "a municipal tennis court",
-      "a school basketball court",
-      "a community pickleball court",
-      "a multi-sport pad",
-    ],
-    also: ["tennis court coating", "basketball court surfacing", "pickleball court paint", "court line marking"],
-  },
-  "public-art": {
-    keyword: "pavement public art",
-    plural: "pavement public art",
-    material: "coloured pavement coating and custom preformed graphics",
-    purpose: "civic art and community identity in the ground plane",
-    settings: [
-      "a civic plaza",
-      "a downtown intersection",
-      "a community gathering space",
-      "a cultural district street",
-      "a public square",
-    ],
-    also: ["street mural", "asphalt art", "rainbow crosswalk", "cultural pavement design", "ground mural"],
-  },
-  "community-branding": {
-    keyword: "community branding pavement graphics",
-    plural: "community branding pavement graphics",
-    material: "custom-colour pavement coating and preformed graphics",
-    purpose: "neighbourhood identity and placemaking",
-    settings: [
-      "a BIA main street",
-      "a neighbourhood gateway",
-      "a town centre plaza",
-      "a downtown streetscape",
-      "a festival street",
-    ],
-    also: ["placemaking pavement", "branded crosswalk", "town identity paving", "logo pavement marking"],
-  },
-  "public-spaces": {
-    keyword: "decorative plaza paving",
-    plural: "decorative plaza paving",
-    material: "stamped asphalt and coloured pavement coating",
-    purpose: "plazas and civic gathering space",
-    settings: [
-      "a civic plaza",
-      "a pedestrian-only street",
-      "a transit plaza",
-      "a market square",
-      "a campus quad",
-    ],
-    also: ["plaza surfacing", "pedestrian street paving", "pattern paving", "civic space paving"],
-  },
-  "commercial-spaces": {
-    keyword: "commercial pavement design",
-    plural: "commercial pavement design",
-    material: "stamped asphalt and durable coloured coating",
-    purpose: "retail entrances and commercial site identity",
-    settings: [
-      "a retail plaza entrance",
-      "a shopping centre drive aisle",
-      "a hotel forecourt",
-      "a corporate campus entry",
-      "a restaurant patio approach",
-    ],
-    also: ["retail paving", "commercial stamped asphalt", "shopping centre paving", "corporate campus paving"],
-  },
-  "regulatory-markings": {
-    keyword: "regulatory pavement marking",
-    plural: "regulatory pavement markings",
-    material: "retroreflective preformed thermoplastic",
-    purpose: "symbols, arrows, and compliance legends",
-    settings: [
-      "a municipal roadway",
-      "a parking facility",
-      "an intersection approach",
-      "an industrial site road",
-      "a campus service road",
-    ],
-    also: ["preformed thermoplastic symbols", "pavement legends", "accessibility symbol marking", "road arrow marking"],
-  },
-  "private-driveways": {
-    keyword: "stamped asphalt driveway",
-    plural: "stamped asphalt driveways",
-    material: "stamped asphalt with colour-sealed surface coating",
-    purpose: "driveway surfacing with a paver appearance",
-    settings: [
-      "a private residence",
-      "an estate entrance",
-      "a rural property driveway",
-      "a laneway approach",
-    ],
-    also: ["stamped blacktop driveway", "decorative driveway", "asphalt driveway paving", "stamped asphalt vs pavers"],
-  },
-  "residential-driveways": {
-    keyword: "stamped asphalt driveway",
-    plural: "stamped asphalt driveways",
-    material: "stamped asphalt with colour-sealed surface coating",
-    purpose: "driveway surfacing with a paver appearance",
-    settings: [
-      "a suburban home",
-      "a residential street frontage",
-      "a new-build subdivision",
-      "a heritage neighbourhood property",
-    ],
-    also: ["stamped blacktop", "decorative residential paving", "driveway resurfacing", "stamped asphalt pattern"],
-  },
-  townhomes: {
-    keyword: "townhome community paving",
-    plural: "townhome community paving",
-    material: "stamped asphalt and coloured pavement coating",
-    purpose: "shared drive aisles and common areas",
-    settings: [
-      "a townhome development",
-      "a condominium drive aisle",
-      "a strata common entrance",
-      "a multi-family courtyard",
-    ],
-    also: ["condo paving", "strata drive aisle", "multi-family stamped asphalt", "shared driveway paving"],
-  },
-  airports: {
-    keyword: "airport pavement marking",
-    plural: "airport pavement markings",
-    material: "preformed thermoplastic airfield marking",
-    purpose: "apron and airside service area marking",
-    settings: [
-      "an airport apron",
-      "an airside service road",
-      "a terminal forecourt",
-      "a ground support equipment area",
-    ],
-    also: ["airfield marking", "apron marking", "airside pavement marking"],
-  },
-  "leed-urban-heat-island": {
-    keyword: "solar-reflective pavement coating",
-    plural: "solar-reflective pavement coatings",
-    material: "solar-reflective, low-VOC surface coating",
-    purpose: "urban heat island mitigation and LEED credit",
-    settings: ["a plaza surface", "an urban pathway"],
-    also: ["LEED heat island reduction", "cool pavement", "SRI pavement coating", "reflective asphalt coating"],
-  },
+  crosswalks: { label: "Decorative crosswalk", plural: "decorative crosswalks" },
+  "bike-lanes": { label: "Coloured bike lane", plural: "coloured bike lanes" },
+  "bus-lanes": { label: "Bus lane marking", plural: "bus lane markings" },
+  "traffic-calming": { label: "Traffic calming surface treatment", plural: "traffic calming surface treatments" },
+  "pedestrian-safety": { label: "Pedestrian crossing marking", plural: "pedestrian crossing markings" },
+  "parking-lots": { label: "Parking lot surface", plural: "parking lot surfaces" },
+  "parks-paths": { label: "Park path surface", plural: "park path surfaces" },
+  playgrounds: { label: "Playground surface graphics", plural: "playground surface graphics" },
+  "splash-pads": { label: "Splash pad surface", plural: "splash pad surfaces" },
+  "sport-courts": { label: "Sport court surface", plural: "sport court surfaces" },
+  "public-art": { label: "Pavement public art", plural: "pavement public art" },
+  "community-branding": { label: "Community branding pavement graphics", plural: "community branding pavement graphics" },
+  "public-spaces": { label: "Decorative plaza paving", plural: "decorative plaza paving" },
+  "commercial-spaces": { label: "Commercial site paving", plural: "commercial site paving" },
+  "regulatory-markings": { label: "Regulatory pavement marking", plural: "regulatory pavement markings" },
+  // The folder keeps the old page's name; /applications/private-driveways merged into Residential Driveways on 30 Sep 2026.
+  "private-driveways": { label: "Stamped asphalt driveway", plural: "stamped asphalt driveways" },
+  "residential-driveways": { label: "Stamped asphalt driveway", plural: "stamped asphalt driveways" },
+  townhomes: { label: "Townhome development paving", plural: "townhome development paving" },
+  airports: { label: "Airfield pavement marking", plural: "airfield pavement markings" },
+  "leed-urban-heat-island": { label: "Solar-reflective pavement coating", plural: "solar-reflective pavement coatings" },
 };
 
 // ── Product folders ───────────────────────────────────────────────────────────
-// Here the folder IS the product, so naming the product is a documented claim.
+// Here the folder IS the product, so naming it is a documented claim. The
+// family word after the name is the Idea Book's own (lib/product-catalogue.ts
+// titles: "Stamped asphalt.", "Inlaid thermoplastic.", "Road marking symbols.").
 const PRODUCT_SUBJECTS: Record<string, ImageSubject> = {
-  "traffic-patterns-xd": {
-    // Preformed thermoplastic, never "stamped asphalt" (QA, 27 Sep 2026: 112
-    // captions called it stamped asphalt, then named the material correctly).
-    keyword: "TrafficPatternsXD preformed thermoplastic",
-    plural: "TrafficPatternsXD installations",
-    material: "150 mil aggregate-reinforced preformed thermoplastic",
-    purpose: "high-traffic decorative pavement with skid resistance",
-    settings: ["a municipal intersection", "a BRT corridor", "a civic plaza", "a high-volume crosswalk", "a transit station zone"],
-    also: ["aggregate reinforced thermoplastic", "heavy duty pavement marking", "decorative thermoplastic crosswalk"],
-  },
-  "traffic-patterns": {
-    keyword: "TrafficPatterns thermoplastic pavement marking",
-    plural: "TrafficPatterns installations",
-    material: "125 mil preformed thermoplastic",
-    purpose: "decorative, durable pattern paving",
-    settings: ["a crosswalk", "an intersection treatment", "a pedestrian plaza", "a main street corridor"],
-    also: ["preformed thermoplastic", "pattern paving", "decorative pavement marking"],
-  },
-  streetbond: {
-    keyword: "StreetBond pavement coating",
-    plural: "StreetBond installations",
-    material: "UV-stable acrylic pavement coating",
-    purpose: "long-life colour on asphalt and concrete",
-    settings: ["a coloured crosswalk", "a bike lane", "a plaza surface", "a playground", "a sport court", "a transit lane"],
-    also: ["coloured pavement coating", "asphalt paint", "bike lane green coating"],
-  },
-  streetbondsr: {
-    keyword: "StreetBondSR solar-reflective coating",
-    plural: "StreetBondSR installations",
-    material: "solar-reflective, low-VOC acrylic pavement coating",
-    purpose: "cooler surfaces that can contribute to LEED heat-island credits",
-    settings: ["a plaza", "a pedestrian pathway", "a courtyard surface"],
-    also: ["cool pavement coating", "SRI coating", "LEED heat island reduction", "urban heat island mitigation"],
-  },
-  streetprint: {
-    keyword: "StreetPrint stamped asphalt",
-    plural: "StreetPrint installations",
-    material: "heat-imprinted stamped asphalt with colour coating",
-    purpose: "brick and cobblestone appearance in asphalt",
-    settings: ["a driveway", "a plaza", "a crosswalk", "a park pathway", "a commercial entrance", "a village main street"],
-    also: ["stamped blacktop", "imprinted asphalt", "brick pattern asphalt", "cobblestone asphalt"],
-  },
-  decomark: {
-    keyword: "DecoMark decorative pavement graphics",
-    plural: "DecoMark installations",
-    material: "custom preformed thermoplastic graphics",
-    purpose: "logos, art, and custom pavement design",
-    settings: ["a rainbow crosswalk", "a civic plaza", "a schoolyard", "a branded intersection", "a cultural art crossing"],
-    also: ["custom pavement graphics", "logo pavement marking", "asphalt art", "rainbow crosswalk thermoplastic"],
-  },
-  mmax: {
-    keyword: "MMAX MMA resin pavement system",
-    plural: "MMAX installations",
-    material: "methyl methacrylate (MMA) resin surfacing",
-    purpose: "fast-cure coloured surfacing for overnight installation",
-    settings: ["a bus lane", "a bike lane", "a transit corridor", "a cold-weather installation"],
-    also: ["MMA pavement coating", "fast cure road surfacing", "methyl methacrylate resin", "overnight lane marking"],
-  },
-  // Inlaid thermoplastic, flush with the road (the Idea Book: "Inlaid
-  // thermoplastic. Zero profile above grade."); it was captioned as imprinted
-  // asphalt until 27 Sep 2026.
-  duratherm: {
-    keyword: "DuraTherm inlaid thermoplastic",
-    plural: "DuraTherm installations",
-    material: "preformed thermoplastic inlaid flush with the asphalt",
-    purpose: "flush, plow-safe decorative markings",
-    settings: ["a pathway", "a crosswalk", "a courtyard", "a streetscape treatment"],
-    also: ["inlaid thermoplastic", "flush pavement marking", "plow-safe decorative crosswalk"],
-  },
-  durashield: {
-    keyword: "DuraShield asphalt coating",
-    plural: "DuraShield installations",
-    material: "protective asphalt surface coating",
-    purpose: "surface protection and rejuvenation",
-    settings: ["a parking lot", "a driveway", "an access road", "a commercial site"],
-    also: ["asphalt sealer", "pavement protection coating", "asphalt rejuvenation"],
-  },
-  premark: {
-    keyword: "PreMark preformed thermoplastic",
-    plural: "PreMark installations",
-    material: "125 mil preformed thermoplastic symbols and legends",
-    purpose: "retroreflective symbols, arrows, and legends",
-    settings: ["a roadway", "a bike lane", "a parking facility", "an intersection"],
-    also: ["thermoplastic symbols", "preformed road markings", "pavement legends", "bike symbol marking"],
-  },
-  airmark: {
-    keyword: "AirMark airfield pavement marking",
-    plural: "AirMark installations",
-    material: "preformed thermoplastic airfield marking",
-    purpose: "airport apron and service area marking",
-    settings: ["an airport apron", "an airside road", "a ground service area"],
-    also: ["airfield marking", "apron pavement marking", "airport thermoplastic"],
-  },
-  chipfill: {
-    keyword: "ChipFill pavement repair",
-    plural: "ChipFill applications",
-    material: "aggregate-based pavement repair compound",
-    purpose: "crack and chip repair in asphalt",
-    settings: ["a roadway repair", "a parking lot repair", "a pavement patch"],
-    also: ["asphalt crack repair", "pothole repair compound", "pavement patching material"],
-  },
-  aggrefill: {
-    keyword: "AggreFill pavement repair aggregate",
-    plural: "AggreFill applications",
-    material: "aggregate fill for pavement repair",
-    purpose: "pavement repair and surface restoration",
-    settings: ["a roadway repair", "a pavement restoration"],
-    also: ["asphalt repair aggregate", "pavement patch fill"],
-  },
-  "fast-patch": {
-    keyword: "Fast Patch asphalt repair",
-    plural: "Fast Patch applications",
-    material: "rapid-set asphalt repair material",
-    purpose: "fast pothole and surface repair",
-    settings: ["a pothole repair", "a roadway patch", "a parking lot repair"],
-    also: ["rapid asphalt repair", "pothole patching", "cold patch asphalt"],
-  },
+  "traffic-patterns-xd": { label: "TrafficPatternsXD preformed thermoplastic", plural: "TrafficPatternsXD installations" },
+  "traffic-patterns": { label: "TrafficPatterns preformed thermoplastic", plural: "TrafficPatterns installations" },
+  streetbond: { label: "StreetBond coating", plural: "StreetBond installations" },
+  streetbondsr: { label: "StreetBondSR solar reflective coating", plural: "StreetBondSR installations" },
+  streetprint: { label: "StreetPrint stamped asphalt", plural: "StreetPrint installations" },
+  decomark: { label: "DecoMark custom graphics", plural: "DecoMark installations" },
+  mmax: { label: "MMAX MMA area markings", plural: "MMAX installations" },
+  duratherm: { label: "DuraTherm inlaid thermoplastic", plural: "DuraTherm installations" },
+  durashield: { label: "DuraShield pavement maintenance coating", plural: "DuraShield installations" },
+  premark: { label: "PreMark road marking symbols", plural: "PreMark installations" },
+  airmark: { label: "AirMark airfield markings", plural: "AirMark installations" },
+  chipfill: { label: "ChipFill pothole repair", plural: "ChipFill photographs" },
+  aggrefill: { label: "AggreFill pothole repair", plural: "AggreFill photographs" },
+  "fast-patch": { label: "Fast Patch DPR pavement repair", plural: "Fast Patch DPR photographs" },
 };
 
 /**
  * Folders whose provenance is documented well enough to name a place. Anything
- * absent falls back to "Canada" — which is true of every photo in the library.
+ * absent gets no place at all (until 30 Sep 2026 it got "Canada").
  * Add to this map ONLY when the project record or blog post confirms the site.
  */
 const PLACES: Record<string, string> = {
@@ -475,7 +102,7 @@ const PLACES: Record<string, string> = {
 };
 
 /**
- * Per-file places — photographs whose location the client captioned in the
+ * Per-file places: photographs whose location the client captioned in the
  * 2026 catalogue (Figma frame titles, Sep 2026). A file entry wins over its
  * folder; everything else stays on the folder rule above.
  */
@@ -503,12 +130,12 @@ const FILE_PLACES: Record<string, string> = {
  * Hero photography.
  *
  * The homepage hero shipped as `alt="" aria-hidden="true"`. As an accessibility
- * decision that is defensible — the H1 sits on top of it and carries the
+ * decision that is defensible, the H1 sits on top of it and carries the
  * meaning. As an SEO decision it was costly: this is the single image Google
  * associates with hubss.com, it is the first entry in the sitemap, it is the
  * Open Graph image, and it was declaring itself to be decoration.
  *
- * It is not decoration. It is the UBC Musqueam crosswalk — a documented HUB
+ * It is not decoration. It is the UBC Musqueam crosswalk, a documented HUB
  * installation, with its own field note. Naming it costs nothing and describes
  * the photograph rather than repeating the headline, so a screen reader hears
  * the picture and the H1 as two different things instead of the same thing
@@ -520,10 +147,7 @@ const HERO_ALT: Record<string, string> = {
 };
 
 export function heroAlt(src: string): string {
-  return (
-    HERO_ALT[src.split("?")[0]] ??
-    seoAlt(src, "Decorative pavement installation by HUB Surface Systems in Canada")
-  );
+  return HERO_ALT[src.split("?")[0]] ?? seoAlt(src, "Decorative pavement");
 }
 
 /** "/images/products/streetbond/streetbond-04.jpg" -> "images/products/streetbond" */
@@ -537,13 +161,6 @@ function leafOf(folder: string): string {
   return folder.slice(folder.lastIndexOf("/") + 1);
 }
 
-/** Stable per-image index so the same file always gets the same description. */
-function hashIndex(src: string): number {
-  let h = 0;
-  for (let i = 0; i < src.length; i++) h = (h * 31 + src.charCodeAt(i)) >>> 0;
-  return h;
-}
-
 export function subjectFor(src: string): ImageSubject | null {
   const folder = folderOf(src);
   const leaf = leafOf(folder);
@@ -552,68 +169,120 @@ export function subjectFor(src: string): ImageSubject | null {
   return null;
 }
 
+/** The documented place for a photo, or "" when there is none. */
 export function placeFor(src: string): string {
-  return FILE_PLACES[src.split("?")[0]] ?? PLACES[folderOf(src)] ?? CANADA;
+  return FILE_PLACES[src.split("?")[0]] ?? PLACES[folderOf(src)] ?? "";
 }
 
-const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
-
-/**
- * Six frames, rotated against the folder's settings list. A 121-photo gallery
- * gets ~36 distinct descriptions instead of 121 copies of one — enough variety
- * that each photo competes on its own terms, without drifting into invention.
- *
- * Two constraints when editing these. Keep every frame under ~125 characters,
- * because past that Google truncates and the tail stops counting; and never
- * write `a ${s.keyword}`, because several keywords are mass or plural nouns
- * ("playground surface graphics", "decorative pathway paving") and the article
- * makes them ungrammatical.
- */
-const FRAMES: ((s: ImageSubject, setting: string, place: string) => string)[] = [
-  (s, setting, place) => `${cap(s.keyword)} at ${setting} in ${place}, installed by HUB Surface Systems`,
-  (s, setting, place) => `${cap(s.keyword)} in ${s.material} at ${setting}, ${place}`,
-  (s, setting) => `HUB Surface Systems ${s.keyword}: ${s.purpose} at ${setting}`,
-  (s, setting, place) => `${cap(s.keyword)} installation in ${place}: ${s.purpose} at ${setting}`,
-  (s, setting) => `${cap(s.keyword)} specified for ${s.purpose} at ${setting}`,
-  (s, setting, place) => `Canadian ${s.keyword} project by HUB Surface Systems at ${setting} in ${place}`,
-];
-
-/**
- * Descriptive, keyword-led alt text for a gallery image.
- *
- * Falls back to `fallbackContext` (the old page-context string) whenever the
- * folder is not one we have a documented subject for — blog featured images,
- * hero art, one-off assets. Better a generic true sentence than a specific
- * invented one.
- */
-export function seoAlt(src: string, fallbackContext: string): string {
-  const subject = subjectFor(src);
-  if (!subject) return fallbackContext;
-  const place = placeFor(src);
-  const h = hashIndex(src);
-  const setting = subject.settings[h % subject.settings.length];
-  const frame = FRAMES[Math.floor(h / subject.settings.length) % FRAMES.length];
-  return frame(subject, setting, place);
-}
-
-/**
- * Short visible caption — the text under a photo in the lightbox. Visible text
- * next to an image is weighted more heavily than alt text by both Google Images
- * and the AI crawlers, so this is not decoration.
- */
-export function seoCaption(src: string): string | undefined {
+/** "StreetPrint stamped asphalt" or "StreetPrint stamped asphalt, Kitchener, ON". */
+function honestLine(src: string): string | undefined {
   const subject = subjectFor(src);
   if (!subject) return undefined;
   const place = placeFor(src);
-  const setting = subject.settings[hashIndex(src) % subject.settings.length];
-  return `${cap(subject.keyword)} at ${setting}, ${place}. ${cap(subject.material)}.`;
+  return place ? `${subject.label}, ${place}` : subject.label;
 }
 
-/** Search phrases a folder legitimately serves, for schema `keywords`. */
+/**
+ * Alt text for a gallery image: the folder's subject and, where documented,
+ * the place. Falls back to `fallbackContext` (the page-context string)
+ * whenever the folder is not one with a subject: blog featured images, hero
+ * art, one-off assets. A generic true line beats a specific invented one.
+ */
+export function seoAlt(src: string, fallbackContext: string): string {
+  return honestLine(src) ?? fallbackContext;
+}
+
+/**
+ * The visible caption under a photo in the lightbox: the same line as the
+ * alt, because nothing more is known about the photo than its folder and,
+ * sometimes, its place. Undefined when the folder has no subject, so the
+ * caller's own fallback applies.
+ */
+export function seoCaption(src: string): string | undefined {
+  return honestLine(src);
+}
+
+/** The one phrase a folder's photos can honestly carry, for schema `keywords`. */
 export function seoKeywords(src: string): string[] {
   const subject = subjectFor(src);
-  if (!subject) return [];
-  return [subject.keyword, ...(subject.also ?? [])];
+  return subject ? [subject.label] : [];
+}
+
+// ── Recognising the old templates ─────────────────────────────────────────────
+// Every line the six retired templates wrote, alt or caption, opened on one of
+// these keywords and placed it "at" one of the settings below. Both together
+// are the fingerprint: a hand-written hero alt can say "at an intersection",
+// and the bike lanes and bus lanes heroes do, but not with "coloured bike
+// lane" or "bus lane marking" in the same breath. Kept only for
+// `looksGenerated`; nothing composes from these lists any more.
+const RETIRED_KEYWORDS = [
+  "decorative crosswalk", "coloured bike lane", "bus lane marking", "traffic calming surface treatment", "pedestrian safety pavement marking",
+  "parking lot line marking", "decorative pathway paving", "playground surface graphics", "splash pad surfacing", "sport court surfacing",
+  "pavement public art", "community branding pavement graphics", "decorative plaza paving", "commercial pavement design", "regulatory pavement marking",
+  "stamped asphalt driveway", "townhome community paving", "airport pavement marking", "solar-reflective pavement coating",
+  "TrafficPatternsXD preformed thermoplastic", "TrafficPatterns thermoplastic pavement marking", "StreetBond pavement coating", "StreetBondSR solar-reflective coating",
+  "StreetPrint stamped asphalt", "DecoMark decorative pavement graphics", "MMAX MMA resin pavement system", "DuraTherm inlaid thermoplastic",
+  "DuraShield asphalt coating", "PreMark preformed thermoplastic", "AirMark airfield pavement marking", "ChipFill pavement repair",
+  "AggreFill pavement repair aggregate", "Fast Patch asphalt repair",
+].map((k) => k.toLowerCase());
+const RETIRED_SETTINGS = [
+  "a municipal intersection", "a downtown main street", "a school zone", "a signalized urban intersection", "a commercial district", "a residential collector road",
+  "a protected cycle track", "an intersection conflict zone", "a downtown bike corridor", "a multi-use path approach", "a separated bike lane",
+  "a BRT corridor", "a red transit priority lane", "a bus stop approach", "a transit signal priority intersection", "an urban busway",
+  "a raised intersection", "a neighbourhood gateway", "a pedestrian priority zone", "a Complete Streets corridor", "a Vision Zero treatment area", "a village centre main street",
+  "a signalized crossing", "a transit stop approach", "a mid-block crossing", "a hospital campus entrance",
+  "a retail parking lot", "a commercial plaza", "an office campus lot", "a grocery anchor site", "a multi-level parking deck approach",
+  "a municipal park", "a waterfront promenade", "a multi-use trail", "a greenway connection", "a park entry plaza", "a botanical garden path",
+  "a schoolyard", "a community playground", "an elementary school play area", "a park play zone", "a daycare courtyard",
+  "a municipal splash pad", "a community water play area", "a park spray pad", "a recreation centre wet deck",
+  "a municipal tennis court", "a school basketball court", "a community pickleball court", "a multi-sport pad",
+  "a civic plaza", "a downtown intersection", "a community gathering space", "a cultural district street", "a public square",
+  "a BIA main street", "a town centre plaza", "a downtown streetscape", "a festival street",
+  "a pedestrian-only street", "a transit plaza", "a market square", "a campus quad",
+  "a retail plaza entrance", "a shopping centre drive aisle", "a hotel forecourt", "a corporate campus entry", "a restaurant patio approach",
+  "a municipal roadway", "a parking facility", "an intersection approach", "an industrial site road", "a campus service road",
+  "a private residence", "an estate entrance", "a rural property driveway", "a laneway approach",
+  "a suburban home", "a residential street frontage", "a new-build subdivision", "a heritage neighbourhood property",
+  "a townhome development", "a condominium drive aisle", "a strata common entrance", "a multi-family courtyard",
+  "an airport apron", "an airside service road", "a terminal forecourt", "a ground support equipment area",
+  "a plaza surface", "an urban pathway",
+  "a high-volume crosswalk", "a transit station zone",
+  "a crosswalk", "an intersection treatment", "a pedestrian plaza", "a main street corridor",
+  "a coloured crosswalk", "a bike lane", "a playground", "a sport court", "a transit lane",
+  "a plaza", "a pedestrian pathway", "a courtyard surface",
+  "a driveway", "a park pathway", "a commercial entrance", "a village main street",
+  "a rainbow crosswalk", "a branded intersection", "a cultural art crossing",
+  "a bus lane", "a transit corridor", "a cold-weather installation",
+  "a pathway", "a courtyard", "a streetscape treatment",
+  "a parking lot", "an access road", "a commercial site",
+  "a roadway", "an intersection",
+  "an airside road", "a ground service area",
+  "a roadway repair", "a parking lot repair", "a pavement patch",
+  "a pavement restoration",
+  "a pothole repair", "a roadway patch",
+];
+
+/**
+ * True when a line was written by the retired templates (see the file note),
+ * so a page can replace it; false for anything a person wrote in Studio.
+ */
+export function looksGenerated(text: string | undefined | null): boolean {
+  if (!text) return false;
+  const lower = text.toLowerCase();
+  return RETIRED_KEYWORDS.some((k) => lower.includes(k)) && RETIRED_SETTINGS.some((setting) => text.includes(` at ${setting}`));
+}
+
+/**
+ * A photo with honest alt and caption: a line the retired templates wrote
+ * into Studio is replaced by what the photo's folder proves (through
+ * `origin`, the /public path the photo came from); a line a person wrote
+ * stays. Width, height, src and origin pass through untouched.
+ */
+export function honestPhoto<P extends { src: string; alt: string; caption?: string; origin?: string }>(p: P): P {
+  const key = p.origin ?? p.src;
+  const alt = looksGenerated(p.alt) ? seoAlt(key, p.alt) : p.alt;
+  const caption = looksGenerated(p.caption) ? seoCaption(key) : p.caption;
+  return { ...p, alt, caption };
 }
 
 // ── Structured data ───────────────────────────────────────────────────────────
@@ -621,8 +290,12 @@ export function seoKeywords(src: string): string[] {
 const SITE = "https://hubss.com";
 const YEAR = 2026;
 
+/** The Organization node's @id, the one app/page.tsx and the product pages use. */
+export const HUB_ORGANIZATION_ID = `${SITE}/#organization`;
+
 export const HUB_ORGANIZATION = {
   "@type": "Organization",
+  "@id": HUB_ORGANIZATION_ID,
   name: "HUB Surface Systems",
   url: SITE,
 } as const;
@@ -634,7 +307,11 @@ export const HUB_ORGANIZATION = {
  * copyrightNotice / license; the Licensable badge additionally requires
  * `license`. We can supply all of them honestly: hubss.com/terms §3
  * ("Intellectual Property") is a real page governing image use, and /contact is
- * where a licence is actually obtained — so neither URL is a fabrication.
+ * where a licence is actually obtained, so neither URL is a fabrication.
+ *
+ * `creatorRef`: reference the Organization by @id instead of embedding it,
+ * for a page that emits the node once (the product pages, 30 Sep 2026: the
+ * StreetPrint gallery script carried 52 copies of it).
  *
  * See https://developers.google.com/search/docs/appearance/structured-data/image-license-metadata
  */
@@ -652,11 +329,12 @@ export function imageObject(
      * and keeps exactly the alt, caption and keywords it had before.
      */
     seoSrc?: string;
+    creatorRef?: boolean;
   }
 ) {
   const abs = src.startsWith("http") ? src : `${SITE}${src.startsWith("/") ? "" : "/"}${src}`;
   const seo = opts?.seoSrc ?? src;
-  const alt = opts?.alt ?? seoAlt(seo, "Decorative pavement installation by HUB Surface Systems");
+  const alt = opts?.alt ?? seoAlt(seo, "Decorative pavement");
   const caption = opts?.caption ?? seoCaption(seo);
   const keywords = seoKeywords(seo);
 
@@ -667,7 +345,7 @@ export function imageObject(
     name: alt,
     description: caption ?? alt,
     ...(keywords.length ? { keywords: keywords.join(", ") } : {}),
-    creator: HUB_ORGANIZATION,
+    creator: opts?.creatorRef ? { "@id": HUB_ORGANIZATION_ID } : HUB_ORGANIZATION,
     creditText: "HUB Surface Systems",
     copyrightNotice: `© ${YEAR} HUB Surface Systems`,
     license: `${SITE}/terms`,
@@ -682,11 +360,11 @@ export function imageObject(
  * imageObject for a Photo (lib/photos.ts). A photo migrated from /public keeps
  * the SEO text of its original path; a photo added in Studio uses its own alt
  * and caption. `ownText` forces the photo's own alt and caption, as the gallery
- * schema always did.
+ * schema always did. `creatorRef` as in imageObject.
  */
 export function photoObject(
   p: { src: string; alt: string; caption?: string; origin?: string; width?: number; height?: number },
-  opts?: { representativeOfPage?: boolean; ownText?: boolean }
+  opts?: { representativeOfPage?: boolean; ownText?: boolean; creatorRef?: boolean }
 ) {
   const own = opts?.ownText || (!p.origin && /^https?:\/\//.test(p.src));
   return imageObject(p.src, {
@@ -695,6 +373,7 @@ export function photoObject(
     ...(p.width ? { width: p.width } : {}),
     ...(p.height ? { height: p.height } : {}),
     ...(opts?.representativeOfPage ? { representativeOfPage: true } : {}),
+    ...(opts?.creatorRef ? { creatorRef: true } : {}),
   });
 }
 

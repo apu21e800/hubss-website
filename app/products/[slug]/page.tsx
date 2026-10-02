@@ -15,7 +15,7 @@ import { galleryFor, altFor } from "@/lib/asset-scan";
 import GalleryGrid, { type GalleryImage } from "@/components/ui/GalleryGrid";
 import JsonLd from "@/components/ui/JsonLd";
 import RichText from "@/components/ui/RichText";
-import { photoObject, seoCaption } from "@/lib/image-seo";
+import { photoObject, seoCaption, honestPhoto, HUB_ORGANIZATION } from "@/lib/image-seo";
 import { isSanityImage, sanityOgImage, type Photo } from "@/lib/photos";
 import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
@@ -130,20 +130,21 @@ export default async function ProductPage({ params }: Props) {
   // imageUrl meant every product with a distinct featured image (seven of
   // eleven) repeated its banner photo inside "The work" while the imageUrl
   // photo, shown nowhere, was silently dropped from the gallery.
-  const hero: Photo = product.heroPhoto ?? {
+  //
+  // honestPhoto (lib/image-seo.ts, 30 Sep 2026, QA E10): the photo sync wrote
+  // the old templates' invented settings into Studio ("at a civic plaza",
+  // "150 mil ..."), so the Sanity alt and caption are replaced at render by
+  // what the photo's folder proves; a line a person wrote in Studio stays.
+  const hero: Photo = honestPhoto(product.heroPhoto ?? {
     src: featuredImg?.src ?? product.imageUrl,
-    alt: featuredImg?.alt ?? `${product.name}: ${product.shortDesc}`,
-  };
-  const galleryPhotos: Photo[] = product.galleryPhotos ?? (() => {
+    alt: featuredImg?.alt ?? product.name,
+  });
+  const galleryPhotos: Photo[] = product.galleryPhotos?.map(honestPhoto) ?? (() => {
     const bannerSrc = featuredImg?.src ?? product.imageUrl;
     const fromFolder = galleryFor(bannerSrc, product.gallery, `images/products/${product.slug}`);
     return (fromFolder.length > 0 ? fromFolder : [bannerSrc]).map((src) => ({
       src,
-      alt: altFor(src, `${product.name} decorative pavement by HUB Surface Systems`),
-      // A caption that repeats the alt word for word is wasted surface. This one
-      // is written for a reader looking at the photo in the lightbox — and
-      // visible text beside an image is weighted more heavily by Google Images
-      // and by AI crawlers than the alt attribute is.
+      alt: altFor(src, product.name),
       caption: seoCaption(src) ?? altFor(src, product.name),
     }));
   })();
@@ -172,9 +173,11 @@ export default async function ProductPage({ params }: Props) {
     // nodes each photo arrives with the words that describe it and the licence
     // terms that make it eligible for the Licensable badge in Google Images.
     // First entry is the hero, which is what a rich result will show.
+    // creatorRef: the Organization is the `manufacturer` node below, once,
+    // and each photo points at its @id (30 Sep 2026).
     image: [
-      photoObject(hero, { representativeOfPage: true }),
-      ...galleryPhotos.slice(1, 12).map((p) => photoObject(p)),
+      photoObject(hero, { representativeOfPage: true, creatorRef: true }),
+      ...galleryPhotos.slice(1, 12).map((p) => photoObject(p, { creatorRef: true })),
     ],
     manufacturer: {
       "@type": "Organization",
@@ -232,14 +235,20 @@ export default async function ProductPage({ params }: Props) {
     "@context": "https://schema.org",
     "@type": "ImageGallery",
     "@id": `https://hubss.com/products/${product.slug}#gallery`,
-    name: `${product.name} installation photographs`,
-    description: `Field photography of ${product.name} installations by HUB Surface Systems across Canada.`,
+    // Named for what it is (QA E10, 30 Sep 2026): it said "Field photography
+    // of X installations by HUB Surface Systems across Canada", which the
+    // repair products' product shots and the US photos made untrue. The
+    // Organization is one node here, `creator`, and the forty photos point at
+    // its @id: the StreetPrint script carried 52 copies of it.
+    name: `${product.name} photographs`,
+    description: `The photographs on the ${product.name} page.`,
     url: `https://hubss.com/products/${product.slug}`,
     isPartOf: { "@id": `https://hubss.com/products/${product.slug}` },
+    creator: HUB_ORGANIZATION,
     numberOfItems: gallery.length,
     associatedMedia: galleryPhotos
       .slice(0, 40)
-      .map((p) => photoObject({ ...p, caption: p.caption ?? p.alt }, { ownText: true })),
+      .map((p) => photoObject({ ...p, caption: p.caption ?? p.alt }, { ownText: true, creatorRef: true })),
   } : null;
 
   const breadcrumbSchema = {

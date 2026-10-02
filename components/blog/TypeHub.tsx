@@ -87,7 +87,7 @@ export default async function TypeHub({ section }: { section: InsightsSection })
       <JsonLd data={breadcrumbSchema} />
       <Nav />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-20 sm:pt-28 pb-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-28 pb-8">
         <nav aria-label="Breadcrumb" className="mb-2 flex items-center gap-2 text-xs font-semibold tracking-[0.2em] uppercase">
           <Link href="/blog" className="inline-flex items-center transition-colors hover:text-[var(--accent-text)]" style={{ color: "var(--accent-text-lg)", minHeight: 44 }}>
             Insights
@@ -96,12 +96,14 @@ export default async function TypeHub({ section }: { section: InsightsSection })
           <span style={{ color: "var(--text-secondary)" }}>{section.plural}</span>
         </nav>
 
+        {/* The standard landing H1 (48px at 1440) on the standard container,
+            as /blog and the other landing pages (QA D11, 30 Sep 2026). */}
         <div className="max-w-3xl mb-7">
           <h1
             className="font-black mb-3"
             style={{
               color: "var(--text-primary)",
-              fontSize: "clamp(1.85rem, 3.2vw, 2.75rem)",
+              fontSize: "clamp(2rem, 3.4vw, 3rem)",
               lineHeight: 1.05,
               letterSpacing: "-0.03em",
             }}
@@ -150,7 +152,7 @@ export default async function TypeHub({ section }: { section: InsightsSection })
       {/* Lead article: the newest in the section, given editorial weight. A
           photograph with type over it, so it keeps the dark tokens. */}
       {lead && (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-4">
           <Link
             href={`/blog/${lead.slug}`}
             data-surface="dark"
@@ -204,7 +206,7 @@ export default async function TypeHub({ section }: { section: InsightsSection })
       )}
 
       {rest.length > 0 && (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-4 pb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-16">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {rest.map((post) => (
               <BlogCard key={post.slug} post={post} />
@@ -215,7 +217,7 @@ export default async function TypeHub({ section }: { section: InsightsSection })
       )}
 
       {posts.length === 0 && (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-24 text-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24 text-center">
           <p style={{ color: "var(--text-secondary)" }}>Nothing filed under {section.plural} yet.</p>
         </div>
       )}
@@ -223,7 +225,7 @@ export default async function TypeHub({ section }: { section: InsightsSection })
       {/* The other sections, for the reader who reached the end of this one. */}
       {others.length > 0 && (
         <div style={{ background: "var(--bg-section-asphalt)", borderTop: "1px solid var(--border-color)" }}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <p className="text-[11px] font-bold tracking-[0.2em] uppercase mb-5" style={{ color: "var(--accent-text)" }}>
               Also in Insights
             </p>

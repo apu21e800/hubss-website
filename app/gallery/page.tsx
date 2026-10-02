@@ -222,11 +222,13 @@ export default function GalleryPage() {
           <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-3" style={{ color: "var(--accent-text-lg)" }}>
             Photo archive
           </p>
+          {/* The standard landing H1, 48px at 1440, as Insights, Resources
+              and the rest (QA D11, 30 Sep 2026); this one was 56px. */}
           <h1
             className="font-black mb-4"
             style={{
               color: "var(--text-primary)",
-              fontSize: "clamp(2rem, 4vw, 3.5rem)",
+              fontSize: "clamp(2rem, 3.4vw, 3rem)",
               lineHeight: 1.0,
               letterSpacing: "-0.03em",
             }}

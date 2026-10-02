@@ -76,7 +76,10 @@ export default async function BlogPage() {
 
       {/* Insights reads as a magazine — paper all the way down to the Lunch &
               Learn band, which keeps the shell (Vern, 21 Sep). */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-24 sm:pt-32 pb-16 sm:pb-24">
+      {/* The standard container (lg:px-8) and the standard landing H1, 48px at
+          1440 (QA D11, 30 Sep 2026): this page sat at x=104 with a 44px H1
+          while About, Gallery and Contact sat at x=112 with 56px. */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-16 sm:pb-24">
         {/* Header — deliberately compact. The library is 67 pieces deep and the
             job of this page is to get a reader into one of them, so the masthead
             gives up height to let the first row of cards reach the fold. */}
@@ -88,10 +91,10 @@ export default async function BlogPage() {
             className="font-black mb-3"
             style={{
               color: "var(--text-primary)",
-              fontSize: "clamp(1.85rem, 3.2vw, 2.75rem)",
+              fontSize: "clamp(2rem, 3.4vw, 3rem)",
               lineHeight: 1.05,
               letterSpacing: "-0.03em",
-              maxWidth: "20ch",
+              maxWidth: "24ch",
             }}
           >
             Insights from the front lines of Canadian pavement

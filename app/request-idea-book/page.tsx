@@ -18,13 +18,16 @@ export default function RequestIdeaBookPage() {
     <main className="min-h-screen" data-surface="paper">
       <Nav />
 
-      <section className="mx-auto max-w-6xl px-6 pt-32 pb-20">
-        <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-16">
+      {/* The standard container and the standard landing H1, 48px at 1440
+          (QA D11, 30 Sep 2026); the form column is held to 760px so the
+          wider container does not stretch the fields. */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-32 pb-20">
+        <div className="grid gap-12 lg:grid-cols-[minmax(0,760px)_340px] lg:justify-between lg:gap-16">
           <div>
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: "var(--accent-text)" }}>
               {ideaBook.short} · {ideaBook.volume}
             </p>
-            <h1 className="mb-4 text-3xl font-bold leading-tight sm:text-4xl md:text-5xl" style={{ color: "var(--text-primary)" }}>
+            <h1 className="mb-4 font-bold leading-tight" style={{ color: "var(--text-primary)", fontSize: "clamp(2rem, 3.4vw, 3rem)" }}>
               Request a printed {ideaBook.short}
             </h1>
             <p className="mb-8 max-w-xl text-base" style={{ color: "var(--text-secondary)" }}>

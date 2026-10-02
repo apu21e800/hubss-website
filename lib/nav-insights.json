@@ -89,21 +89,54 @@
    "label": "Projects",
    "href": "/blog/projects",
    "blurb": "Canadian installations, written up, with the system used on each.",
-   "count": 38
+   "count": 38,
+   "photo": {
+    "post": "london-east-link-brt",
+    "tile": {
+     "src": "https://cdn.sanity.io/images/9dbro2m1/production/217e5873e43b99d6b4689bdf8ddc53c0da4c7d8b-2400x1800.jpg?w=480&h=720&fit=crop&auto=format",
+     "srcSet": "https://cdn.sanity.io/images/9dbro2m1/production/217e5873e43b99d6b4689bdf8ddc53c0da4c7d8b-2400x1800.jpg?w=240&h=360&fit=crop&auto=format 240w, https://cdn.sanity.io/images/9dbro2m1/production/217e5873e43b99d6b4689bdf8ddc53c0da4c7d8b-2400x1800.jpg?w=480&h=720&fit=crop&auto=format 480w, https://cdn.sanity.io/images/9dbro2m1/production/217e5873e43b99d6b4689bdf8ddc53c0da4c7d8b-2400x1800.jpg?w=720&h=1080&fit=crop&auto=format 720w"
+    },
+    "row": {
+     "src": "https://cdn.sanity.io/images/9dbro2m1/production/217e5873e43b99d6b4689bdf8ddc53c0da4c7d8b-2400x1800.jpg?w=192&h=96&fit=crop&auto=format",
+     "srcSet": "https://cdn.sanity.io/images/9dbro2m1/production/217e5873e43b99d6b4689bdf8ddc53c0da4c7d8b-2400x1800.jpg?w=96&h=48&fit=crop&auto=format 96w, https://cdn.sanity.io/images/9dbro2m1/production/217e5873e43b99d6b4689bdf8ddc53c0da4c7d8b-2400x1800.jpg?w=192&h=96&fit=crop&auto=format 192w, https://cdn.sanity.io/images/9dbro2m1/production/217e5873e43b99d6b4689bdf8ddc53c0da4c7d8b-2400x1800.jpg?w=288&h=144&fit=crop&auto=format 288w"
+    }
+   }
   },
   {
    "key": "guides",
    "label": "Guides",
    "href": "/blog/guides",
    "blurb": "How to choose, specify and defend a surface decision.",
-   "count": 27
+   "count": 27,
+   "photo": {
+    "post": "snowplow-safe-decorative-pavement",
+    "tile": {
+     "src": "https://cdn.sanity.io/images/9dbro2m1/production/a06cb995d5ca80d38e15c68e8695e4a03e526f0c-1800x2400.jpg?w=480&h=720&fit=crop&auto=format",
+     "srcSet": "https://cdn.sanity.io/images/9dbro2m1/production/a06cb995d5ca80d38e15c68e8695e4a03e526f0c-1800x2400.jpg?w=240&h=360&fit=crop&auto=format 240w, https://cdn.sanity.io/images/9dbro2m1/production/a06cb995d5ca80d38e15c68e8695e4a03e526f0c-1800x2400.jpg?w=480&h=720&fit=crop&auto=format 480w, https://cdn.sanity.io/images/9dbro2m1/production/a06cb995d5ca80d38e15c68e8695e4a03e526f0c-1800x2400.jpg?w=720&h=1080&fit=crop&auto=format 720w"
+    },
+    "row": {
+     "src": "https://cdn.sanity.io/images/9dbro2m1/production/a06cb995d5ca80d38e15c68e8695e4a03e526f0c-1800x2400.jpg?w=192&h=96&fit=crop&auto=format",
+     "srcSet": "https://cdn.sanity.io/images/9dbro2m1/production/a06cb995d5ca80d38e15c68e8695e4a03e526f0c-1800x2400.jpg?w=96&h=48&fit=crop&auto=format 96w, https://cdn.sanity.io/images/9dbro2m1/production/a06cb995d5ca80d38e15c68e8695e4a03e526f0c-1800x2400.jpg?w=192&h=96&fit=crop&auto=format 192w, https://cdn.sanity.io/images/9dbro2m1/production/a06cb995d5ca80d38e15c68e8695e4a03e526f0c-1800x2400.jpg?w=288&h=144&fit=crop&auto=format 288w"
+    }
+   }
   },
   {
    "key": "articles",
    "label": "Articles",
    "href": "/blog/articles",
    "blurb": "Industry notes, product context and what we are seeing on the road.",
-   "count": 8
+   "count": 8,
+   "photo": {
+    "post": "hub-certified-installer-network",
+    "tile": {
+     "src": "https://cdn.sanity.io/images/9dbro2m1/production/d9ee32e490cf1880569cdf6fbd654041227dc76e-2400x1800.jpg?w=480&h=720&fit=crop&auto=format",
+     "srcSet": "https://cdn.sanity.io/images/9dbro2m1/production/d9ee32e490cf1880569cdf6fbd654041227dc76e-2400x1800.jpg?w=240&h=360&fit=crop&auto=format 240w, https://cdn.sanity.io/images/9dbro2m1/production/d9ee32e490cf1880569cdf6fbd654041227dc76e-2400x1800.jpg?w=480&h=720&fit=crop&auto=format 480w, https://cdn.sanity.io/images/9dbro2m1/production/d9ee32e490cf1880569cdf6fbd654041227dc76e-2400x1800.jpg?w=720&h=1080&fit=crop&auto=format 720w"
+    },
+    "row": {
+     "src": "https://cdn.sanity.io/images/9dbro2m1/production/d9ee32e490cf1880569cdf6fbd654041227dc76e-2400x1800.jpg?w=192&h=96&fit=crop&auto=format",
+     "srcSet": "https://cdn.sanity.io/images/9dbro2m1/production/d9ee32e490cf1880569cdf6fbd654041227dc76e-2400x1800.jpg?w=96&h=48&fit=crop&auto=format 96w, https://cdn.sanity.io/images/9dbro2m1/production/d9ee32e490cf1880569cdf6fbd654041227dc76e-2400x1800.jpg?w=192&h=96&fit=crop&auto=format 192w, https://cdn.sanity.io/images/9dbro2m1/production/d9ee32e490cf1880569cdf6fbd654041227dc76e-2400x1800.jpg?w=288&h=144&fit=crop&auto=format 288w"
+    }
+   }
   }
  ],
  "total": 73

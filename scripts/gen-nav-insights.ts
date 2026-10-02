@@ -20,6 +20,18 @@
  * lists: every live post, grouped by the section its type belongs to, as
  * getPostsBySection() in lib/blog.ts counts them. Nothing is typed by hand.
  *
+ * SECTION PICTURES (2 Oct 2026, Vern: the Insights menu "still feels busy,
+ * too much text maybe"): the panel now shows each section as a photo tile
+ * with its name over it, and the drawer as a row with a small picture, so
+ * each section carries one of its own posts' photos (`photo`): the newest
+ * live post filed in that section, other than the cover story, whose photo
+ * is tall enough for the tile; failing that, the newest with any photo;
+ * failing that, no `photo`, and the menu draws its ruled tile. `tile` is 2:3
+ * (about 218 x 350px on a 1440 screen), `row` 2:1 (96 x 48 in the drawer).
+ * The panel no longer prints the lines, the counts, the dates or the latest
+ * list; they are still written so the file's shape does not change under a
+ * copy that reads them.
+ *
  * The menu imports the file: no request at runtime, and nothing reads /public.
  *
  * COVER STORY: the newest post whose photo is landscape and at least 1200px
@@ -56,9 +68,19 @@ const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production";
 const OUT = path.join(ROOT, "lib", "nav-insights.json");
 const BLOG_INDEX = path.join(ROOT, "lib", "blog-index.json");
 
-// How many posts follow the cover story. The desktop panel lists five, the
-// phone drawer the cover and two more.
+// How many posts follow the cover story in the file. Until 2 Oct 2026 the
+// desktop panel listed five and the phone drawer the cover and two more;
+// neither lists posts now (the section pictures above), so this is the
+// file's shape, not what the menu shows.
 const LATEST = 5;
+// Section pictures: the tile 2:3 at 1x to 3x of 240px, the drawer row 2:1 at
+// 1x to 3x of 96px. A tile's source must be at least TILE_MIN_HEIGHT tall
+// (and 2/3 of that wide), so the 2x rung is a real 480 x 720.
+const TILE_WIDTHS = [240, 480, 720];
+const TILE_ASPECT = 2 / 3;
+const TILE_MIN_HEIGHT = 720;
+const ROW_WIDTHS = [96, 192, 288];
+const ROW_ASPECT = 2;
 // The cover's photo must be at least this wide (and wider than tall).
 const COVER_MIN_WIDTH = 1200;
 // Square thumbnail: 64px on screen, 1x to 3x.
@@ -120,6 +142,12 @@ export interface NavSection {
   blurb: string;
   /** The posts its page lists. */
   count: number;
+  /**
+   * One of the section's own posts' photos (2 Oct 2026): `post` is its slug,
+   * `tile` the panel's 2:3 tile, `row` the drawer's 2:1 row picture. Absent
+   * when no live post in the section has a photo.
+   */
+  photo?: { post: string; tile: NavImage; row: NavImage };
 }
 export interface NavInsights {
   cover: (NavPost & { image: NavImage }) | null;
@@ -318,12 +346,32 @@ async function main() {
     const key = sectionFor(typeOf(r, slug, r.title.trim())).key;
     counts.set(key, (counts.get(key) ?? 0) + 1);
   }
+  // Each section's picture: the newest post filed there (not the cover
+  // story) whose photo fills the tile's 2x rung and keeps at least half of
+  // itself inside the 2:3 crop (a 1920 x 818 banner would show as a 545px
+  // slice of itself), else the newest tall enough, else the newest with any
+  // photo, else none. `posts` is newest first, so the first match is it.
+  const tall = (f: Framing) => f.height >= TILE_MIN_HEIGHT && f.width >= TILE_MIN_HEIGHT * TILE_ASPECT;
+  const kept = (f: Framing) =>
+    (Math.min(f.width, f.height * TILE_ASPECT) * Math.min(f.height, f.width / TILE_ASPECT)) / (f.width * f.height);
+  const sectionPhoto = (key: string): NavSection["photo"] => {
+    const own = posts.filter(({ post }, i) => i !== coverIndex && sectionFor(post.type).key === key);
+    const pick =
+      own.find(({ frame }) => tall(frame) && kept(frame) >= 0.5) ?? own.find(({ frame }) => tall(frame)) ?? own[0];
+    if (!pick) return undefined;
+    return {
+      post: pick.post.slug,
+      tile: sized(pick.frame, TILE_WIDTHS, TILE_ASPECT),
+      row: sized(pick.frame, ROW_WIDTHS, ROW_ASPECT),
+    };
+  };
   const sections: NavSection[] = INSIGHTS_SECTIONS.map((s) => ({
     key: s.key,
     label: s.plural,
     href: `/blog/${s.slug}`,
     blurb: s.blurb,
     count: counts.get(s.key) ?? 0,
+    photo: sectionPhoto(s.key),
   }));
 
   const out: NavInsights = {
@@ -337,7 +385,7 @@ async function main() {
   const current = fs.existsSync(OUT) ? fs.readFileSync(OUT, "utf8") : "";
   if (next !== current) fs.writeFileSync(OUT, next);
   console.log(
-    `  ✓ lib/nav-insights.json: cover "${cover?.slug ?? "none"}", then ${out.latest.map((p) => p.slug).join(", ")}; ${sections.map((s) => `${s.label} ${s.count}`).join(", ")}${next === current ? " (unchanged)" : ""}`
+    `  ✓ lib/nav-insights.json: cover "${cover?.slug ?? "none"}", then ${out.latest.map((p) => p.slug).join(", ")}; ${sections.map((s) => `${s.label} ${s.count} (photo: ${s.photo?.post ?? "none"})`).join(", ")}${next === current ? " (unchanged)" : ""}`
   );
 }
 

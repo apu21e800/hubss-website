@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useMemo, useCallback, type CSSProperties, 
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { familiesFor } from "@/lib/colours";
+import { PRODUCT_CATEGORIES } from "@/lib/product-categories";
 import { withColours, search, groupHits, thumbSrc, thumbSrcSet, type SearchEntry, type SearchHit } from "@/lib/search";
 
 /**
@@ -53,20 +54,10 @@ import { withColours, search, groupHits, thumbSrc, thumbSrcSet, type SearchEntry
  * sheet's first page, the template, the colour itself. They are baked at
  * build (lib/search.ts, scripts/gen-search-images.ts), so typing never waits
  * on Sanity or /_next/image; a row with no picture shows the HUB wheel on the
- * card colour. The grey chip that repeated the typed letters ("se") back at
- * the end of a row is gone.
+ * card colour. The start screen is the fourteen systems as a picture grid in
+ * place of a list of links and suggestion chips, and the grey chip that
+ * repeated the typed letters ("se") back at the end of a row is gone.
  */
-
-const QUICK: { label: string; href: string; hint: string }[] = [
-  { label: "All systems", href: "/products", hint: "14 products" },
-  { label: "All applications", href: "/applications", hint: "20 uses" },
-  { label: "Photo archive", href: "/gallery", hint: "Installations" },
-  { label: "Specification library", href: "/resources", hint: "Spec sheets" },
-  // No count in the hint: it said "67 pieces" against a 74-post library, and
-  // Doug asked for fewer numbers on the site anyway.
-  { label: "Insights", href: "/blog", hint: "Projects, guides and articles" },
-  { label: "Lunch & Learn", href: "/lunch-learn", hint: "Book a session" },
-];
 
 // "Vancouver" earns its place by teaching the one thing nobody would guess:
 // the index knows where the work is. Fifty-nine installations across ten
@@ -298,11 +289,26 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
   /** Flat order matches what the eye sees, so ↑↓ walks the rendered list. */
   const flat = useMemo(() => groups.flatMap((g) => g.hits), [groups]);
 
-  const showResults = query.trim().length >= 2;
-  /** What ↑↓ and Enter act on. */
-  const options: SearchEntry[] = showResults ? flat : [];
+  /**
+   * The start screen (2 Oct 2026): the fourteen systems, family by family in
+   * the Products menu's order, so the palette is useful before a key is
+   * pressed. Any system missing from the menu's families still gets a tile.
+   */
+  const systems = useMemo(() => {
+    const all = entries.filter((e) => e.type === "Product");
+    const bySlug = new Map(all.map((e) => [e.href.replace(/^\/products\//, ""), e]));
+    const ordered = PRODUCT_CATEGORIES.flatMap((c) => c.slugs)
+      .map((slug) => bySlug.get(slug))
+      .filter((e): e is SearchEntry => !!e);
+    return [...ordered, ...all.filter((e) => !ordered.includes(e))];
+  }, [entries]);
 
-  // Results start on their first row, as before.
+  const showResults = query.trim().length >= 2;
+  /** What ↑↓ and Enter act on: the results, or the start screen's systems. */
+  const options: SearchEntry[] = showResults ? flat : systems;
+
+  // Results start on their first row, as before. The start screen starts with
+  // nothing chosen, so Enter in an empty box never opens a product by surprise.
   const active = chosen.edit === typed.edit ? chosen.i : showResults ? 0 : -1;
   const setActive = useCallback((i: number) => setChosen({ edit: typed.edit, i }), [typed.edit]);
   useEffect(() => { inputRef.current?.focus(); }, []);
@@ -363,8 +369,8 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
       ?.scrollIntoView({ block: "nearest" });
   }, [active]);
 
-  /** A listbox is on screen: results. Not when nothing matched. */
-  const hasList = showResults && flat.length > 0;
+  /** A listbox is on screen: the start grid, or results. Not when nothing matched. */
+  const hasList = showResults ? flat.length > 0 : systems.length > 0;
   let index = -1;
 
   return (
@@ -379,7 +385,10 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
         role="dialog" aria-modal="true" aria-label="Site search"
         initial={{ opacity: 0, scale: 0.98, y: -10 }} animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.98, y: -10 }} transition={{ duration: 0.16 }}
-        className="w-full max-w-2xl rounded-2xl overflow-hidden"
+        // 768px, was 672 (2 Oct 2026): the start grid fits the fourteen
+        // systems seven across only at this width, with "TrafficPatternsXD"
+        // whole under its picture, and the rows give their pictures 70px.
+        className="w-full max-w-3xl rounded-2xl overflow-hidden"
         style={{
           background: "var(--bg-card-neutral)",
           border: "1px solid var(--border-color)",
@@ -477,43 +486,75 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
         {/* Results */}
         <div>
           {!showResults && (
-            <div className="p-4">
-              <p className="text-[11px] font-bold uppercase tracking-[0.16em] mb-2.5" style={{ color: "var(--text-faint)" }}>Jump to</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 mb-5">
-                {QUICK.map((item) => (
-                  <button
-                    key={item.href} onClick={() => go(item.href)}
-                    className="group flex items-center justify-between gap-2 px-3 rounded-lg text-left hover:bg-[var(--ink-06)] transition-colors"
-                    style={{ minHeight: 44 }}
-                  >
-                    <span className="text-sm font-semibold flex items-center gap-2" style={{ color: "var(--text-body)" }}>
-                      {/* A two-pixel mark that appears under the cursor. The
-                          jump links are destinations; the mark says which one
-                          you are pointing at, in the site's own paint. */}
+            // The start screen (2 Oct 2026, QA: "a calmer start ... so the
+            // modal is useful at once"). It was six text links with counts in
+            // their hints and seven suggestion chips: thirteen things, none of
+            // them a picture. Now it is the fourteen systems, the thing most
+            // visitors came for, as one grid of photographs. The chips live on
+            // in the no-results state, where a suggestion is actually needed.
+            <div className="px-2.5 sm:px-3 pt-3.5 pb-3">
+              <div className="flex items-center justify-between pl-2.5 pr-1 mb-2">
+                <p className="text-[10px] font-bold uppercase tracking-[0.18em]" style={{ color: LABEL }}>
+                  <span
+                    aria-hidden="true"
+                    className="inline-block align-middle"
+                    style={{ width: 4, height: 4, borderRadius: "50%", background: "currentColor", marginRight: 9, marginBottom: 2, opacity: 0.7 }}
+                  />
+                  Systems
+                </p>
+                <button
+                  onClick={() => go("/products")}
+                  className="text-[11px] font-semibold px-2 py-1.5 rounded-md transition-colors hover:bg-[var(--ink-06)] hover:text-[var(--text-primary)]"
+                  style={{ color: "var(--text-faint)" }}
+                >
+                  All systems
+                </button>
+              </div>
+              {/* Seven across in the 768px panel (98px tiles, so the longest
+                  name, "TrafficPatternsXD", 94px at 11px, sits whole under its
+                  picture), three across on a phone. The 4px padding leaves room
+                  for the chosen tile's raised edge inside the scroll box. */}
+              <div
+                id="search-results" ref={listRef} role="listbox" aria-label="Systems"
+                className="grid gap-x-2 gap-y-3.5 p-1 max-h-[62vh] overflow-y-auto"
+                style={{ gridTemplateColumns: "repeat(auto-fill, minmax(94px, 1fr))" }}
+              >
+                {systems.map((p, i) => {
+                  const isActive = i === active;
+                  return (
+                    <button
+                      key={p.id}
+                      role="option"
+                      aria-selected={isActive}
+                      data-active={isActive}
+                      onMouseEnter={() => setActive(i)}
+                      onClick={() => go(p.href)}
+                      className="flex flex-col items-stretch gap-1.5 text-left transition-colors"
+                      // Raised like an active row, by a 4px edge drawn outside
+                      // the tile so the caption keeps the full width.
+                      style={{
+                        borderRadius: 13,
+                        background: isActive ? "var(--bg-card-surface)" : "transparent",
+                        boxShadow: isActive ? "0 0 0 4px var(--bg-card-surface)" : "none",
+                      }}
+                    >
+                      <Thumb entry={p} variant="tile" />
+                      <span
+                        className="block text-center text-[11px] font-semibold whitespace-nowrap overflow-hidden text-ellipsis"
+                        style={{ color: isActive ? "var(--text-primary)" : "var(--text-body)", letterSpacing: "-0.005em" }}
+                      >
+                        {p.title}
+                      </span>
+                      {/* Accent 3 again: the two-pixel mark under the one tile
+                          Enter will open, in the site's own paint. */}
                       <span
                         aria-hidden="true"
-                        className="opacity-0 group-hover:opacity-100 transition-opacity"
-                        style={{ width: 3, height: 14, background: "#F97316", borderRadius: 2 }}
+                        className="block mx-auto"
+                        style={{ width: 16, height: 2, borderRadius: 2, marginTop: -2, background: "#F97316", opacity: isActive ? 1 : 0 }}
                       />
-                      {item.label}
-                    </span>
-                    <span className="text-[11px]" style={{ color: "var(--text-faint)" }}>{item.hint}</span>
-                  </button>
-                ))}
-              </div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.16em] mb-2.5" style={{ color: "var(--text-faint)" }}>Try</p>
-              <div className="flex flex-wrap gap-1.5">
-                {TRY.map((t) => (
-                  <button
-                    key={t} onClick={() => { setQuery(t); inputRef.current?.focus(); }}
-                    // Suggestion chips warm on hover — the one place in the
-                    // empty state where the visitor has expressed intent.
-                    className="text-xs font-medium px-3 py-2 rounded-full transition-colors hover:bg-[var(--ink-06)] hover:border-orange-500/45 hover:text-[var(--text-primary)]"
-                    style={{ background: "var(--fill-subtle)", color: "var(--text-secondary)", border: "1px solid var(--border-color)" }}
-                  >
-                    {t}
-                  </button>
-                ))}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}

@@ -63,6 +63,21 @@ const FULL_BLEED_MIN_WIDTH = 1200;
 const MEASURE: CSSProperties = { maxWidth: "70ch", fontSize: "clamp(1rem, 0.96rem + 0.2vw, 1.0625rem)" };
 
 /**
+ * The hero photograph's alt: Studio's alt for the featured image when it says
+ * something the title does not, else the title (QA D21, 30 Sep 2026: "the
+ * hero img alt is the post title"). Checked against Sanity on 30 Sep 2026: 73
+ * of 74 posts carry the title itself as the image's alt (the import copied it
+ * across), so on those the two are the same string either way. A real
+ * description of the photo is typed into the featured image's alt in Studio;
+ * nothing here invents one.
+ */
+function heroAlt(post: Post): string {
+  const alt = post.featuredImageAlt?.trim();
+  const title = post.title.trim();
+  return alt && alt.toLowerCase() !== title.toLowerCase() ? alt : title;
+}
+
+/**
  * The section label, title and meta line, the same over either hero.
  *
  * The label sits directly over the title (28 Sep 2026). At the top of the
@@ -303,7 +318,7 @@ export default async function BlogPostPage({ params }: Props) {
                   .map((w) => `${sanitySized(hero!, w)} ${w}w`)
                   .join(", ")}
                 sizes={`(max-width: 1023px) min(calc(100vw - 48px), ${insetW}px), ${insetW}px`}
-                alt={post.featuredImageAlt ?? post.title}
+                alt={heroAlt(post)}
                 width={heroW}
                 height={heroH}
                 fetchPriority="high"
@@ -325,7 +340,7 @@ export default async function BlogPostPage({ params }: Props) {
             <div className="absolute inset-0" style={{ containerType: "size" }}>
               <PhotoImage
                 src={hero}
-                alt={post.featuredImageAlt ?? post.title}
+                alt={heroAlt(post)}
                 fill
                 className="object-cover hero-pop"
                 style={focus ? { objectPosition: focus } : undefined}

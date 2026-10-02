@@ -3,8 +3,18 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { products as libProducts, type Product } from "@/lib/products";
+import type { Product } from "@/lib/products";
 import { productImages, resolveImage } from "@/lib/featured-images";
+
+// What a card renders, and all the page sends (QA F3, 30 Sep 2026): the
+// homepage used to pass the whole merged product records, galleries of
+// hundreds of photos, Portable Text and SEO included, into this client
+// component, and every byte of it was serialised into the HTML (1.05 MB).
+// app/page.tsx maps the records to these fields.
+export type ProductCard = Pick<Product, "slug" | "name" | "imageUrl"> & {
+  /** The Sanity homepage blurb, when set; PRODUCT_WHAT is the fallback. */
+  homepageBlurb?: string;
+};
 
 // Plain-English: what it does and who uses it
 // Used as the fallback when Sanity has not set `homepageBlurb` on a product.
@@ -86,18 +96,15 @@ const FEATURED_SLUGS = [
 // match the product pages and a slug change can't leave a dead link.
 const ALSO_AVAILABLE_SLUGS = ["premark", "durashield", "duratherm", "airmark"];
 
-type Props = {
-  products?: (Product & { homepageBlurb?: string })[];
-};
+type Props = { products: ProductCard[] };
 
-export default function ProductsGrid({ products: productsProp }: Props = {}) {
-  const source = productsProp ?? libProducts;
+export default function ProductsGrid({ products: source }: Props) {
   const featured = FEATURED_SLUGS.map((slug) =>
     source.find((p) => p.slug === slug)
-  ).filter(Boolean) as (Product & { homepageBlurb?: string })[];
+  ).filter(Boolean) as ProductCard[];
   const alsoAvailable = ALSO_AVAILABLE_SLUGS.map((slug) =>
     source.find((p) => p.slug === slug)
-  ).filter(Boolean) as Product[];
+  ).filter(Boolean) as ProductCard[];
 
   return (
     <section

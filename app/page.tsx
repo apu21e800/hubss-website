@@ -4,8 +4,8 @@ import HeroSlideshow from "@/components/sections/HeroSlideshow";
 // WhyHubss stats/claims block removed per Doug; TrustedByMarquee restored as standalone social proof.
 import TrustedByMarquee from "@/components/sections/TrustedByMarquee";
 import PersonaEntryPoints from "@/components/sections/PersonaEntryPoints";
-import ProductsGrid from "@/components/sections/ProductsGrid";
-import ApplicationsGrid from "@/components/sections/ApplicationsGrid";
+import ProductsGrid, { type ProductCard } from "@/components/sections/ProductsGrid";
+import ApplicationsGrid, { type ApplicationCard } from "@/components/sections/ApplicationsGrid";
 import IdeaBookBand from "@/components/sections/IdeaBookBand";
 import FeaturedBlogPost from "@/components/sections/FeaturedBlogPost";
 import InstagramStrip from "@/components/sections/InstagramStrip";
@@ -112,6 +112,16 @@ export default async function Home() {
     getMergedApplications(),
     getMergedProducts(),
   ]);
+  // Only what the two grids render (QA F3, 30 Sep 2026). Passed whole, the
+  // merged records carried every gallery photo, the Portable Text and the
+  // SEO fields of 17 products and 20 applications into the client
+  // components' props, and so into the HTML: 1.05 MB for the homepage.
+  const productCards: ProductCard[] = mergedProducts.map(({ slug, name, imageUrl, homepageBlurb }) => ({
+    slug, name, imageUrl, homepageBlurb,
+  }));
+  const applicationCards: ApplicationCard[] = mergedApplications.map(({ slug, name, shortDesc, imageUrl }) => ({
+    slug, name, shortDesc, imageUrl,
+  }));
   const heroPhoto = toPhoto(sanityPage?.homepageHeroImage, "");
   const hero = {
     eyebrow:    sanityPage?.homepageHero?.eyebrow    ?? "Redefining Hardscapes · Since 1999",
@@ -144,9 +154,9 @@ export default async function Home() {
       <TrustedByMarquee />
       <PersonaEntryPoints />
       {/* slate → dark */}
-      <ProductsGrid products={mergedProducts} />
+      <ProductsGrid products={productCards} />
       {/* dark → slate */}
-      <ApplicationsGrid applications={mergedApplications} />
+      <ApplicationsGrid applications={applicationCards} />
       {/* The Idea Book's one homepage call to action (Doug, 25 Sep 2026):
           after the applications, before the reading. */}
       <IdeaBookBand />

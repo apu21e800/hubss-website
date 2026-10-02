@@ -4,8 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { applications as libApplications, type Application } from "@/lib/applications";
+import type { Application } from "@/lib/applications";
 import { applicationImages, resolveImage } from "@/lib/featured-images";
+
+// What a card renders, and all the page sends (QA F3, 30 Sep 2026; see the
+// same note in ProductsGrid.tsx). app/page.tsx maps the merged records to
+// these four fields.
+export type ApplicationCard = Pick<Application, "slug" | "name" | "shortDesc" | "imageUrl">;
 
 // The cards' entrance, done so the server markup is visible (QA F6, 30 Sep
 // 2026). With framer's initial={{ opacity: 0 }} the nine cards were
@@ -62,13 +67,12 @@ const FEATURED_SLUGS = [
   "townhomes",
 ];
 
-type Props = { applications?: Application[] };
+type Props = { applications: ApplicationCard[] };
 
-export default function ApplicationsGrid({ applications: appsProp }: Props = {}) {
-  const source = appsProp ?? libApplications;
+export default function ApplicationsGrid({ applications: source }: Props) {
   const featured = FEATURED_SLUGS.map(
     (slug) => source.find((a) => a.slug === slug)
-  ).filter(Boolean) as Application[];
+  ).filter(Boolean) as ApplicationCard[];
   const reduce = useReducedMotion();
   const { reveal, cards } = useReveal(reduce);
 

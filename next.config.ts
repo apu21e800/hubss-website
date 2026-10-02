@@ -307,6 +307,9 @@ const nextConfig: NextConfig = {
       { source: "/residential-decorative-paving", destination: "/applications/townhomes", permanent: true }, // decorative paving for townhouse developers
       { source: "/laneway-revitalization", destination: "/blog/laneway-project", permanent: true }, // More Awesome Now laneways, which this post covers
       { source: "/residential-decorative-driveways", destination: "/applications/residential-driveways", permanent: true }, // StreetPrint driveway, Burnaby; matches /residential-driveways
+      // Google still lists this old post address and it answered 404 (30 Sep 2026). No Insights post covers a hospital
+      // stamped-asphalt job (lib/blog-index.json: BC Children's Hospital is StreetBond and DecoMark), so the product page.
+      { source: "/stamped-asphalt-at-vancouver-general-hospital", destination: "/products/streetprint", permanent: true },
       { source: "/decorative-paving-for-playgrounds", destination: "/applications/playgrounds", permanent: true }, // StreetBond schoolyards, Dufferin-Peel Catholic board
       { source: "/parking-lot-wayfinding", destination: "/applications/parking-lots", permanent: true }, // DecoMark drive-through wayfinding
       { source: "/durable-coatings-for-asphalt", destination: "/applications/leed-urban-heat-island", permanent: true }, // StreetBondSR solar reflective coating, Toronto, after 7 years

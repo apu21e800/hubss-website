@@ -9,6 +9,15 @@ const productHref = (name: string): string | null => {
 };
 
 /**
+ * Names the printed cross-sell strip carries that are not what its heading
+ * says. PreMark's strip is headed "Surface repair and maintenance" and lists
+ * AirMark, an airfield marking, beside the three repair products (QA B16,
+ * E26, 30 Sep 2026). The book's words stay as printed in
+ * lib/product-catalogue.ts; the web strip just leaves AirMark out.
+ */
+const NOT_UNDER_THIS_HEADING = new Set(["AirMark"]);
+
+/**
  * The catalogue's product spread, rendered for the web.
  *
  * WHAT THIS REPLACES: the product page opened its body with an `<h2>About
@@ -129,7 +138,7 @@ export default function ProductSpecCard({
               and go looking. The words are the book's and stay as printed.
               44 px rows on phones, natural height with a mouse. */}
           <ul className="flex flex-wrap items-center text-sm font-medium" style={{ color: "var(--text-body)" }}>
-            {entry.alsoNeed.items.map((name, i) => {
+            {entry.alsoNeed.items.filter((name) => !NOT_UNDER_THIS_HEADING.has(name)).map((name, i) => {
               const href = productHref(name);
               return (
                 <li key={name} className="flex items-center">

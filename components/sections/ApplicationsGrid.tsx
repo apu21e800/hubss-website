@@ -1,10 +1,49 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { applications as libApplications, type Application } from "@/lib/applications";
 import { applicationImages, resolveImage } from "@/lib/featured-images";
+
+// The cards' entrance, done so the server markup is visible (QA F6, 30 Sep
+// 2026). With framer's initial={{ opacity: 0 }} the nine cards were
+// server-rendered invisible and stayed blank until hydration, and with
+// JavaScript off they never appeared. Now they render visible; after mount
+// one IntersectionObserver looks at each card once: a card already on
+// screen stays as it is, a card below the fold is hidden (instantly, out of
+// sight) and fades up when it scrolls in. Reduced motion, or no observer:
+// nothing ever hides.
+type Reveal = "hidden" | "shown";
+function useReveal(reduce: boolean | null) {
+  const [reveal, setReveal] = useState<Record<string, Reveal>>({});
+  const cards = useRef<Record<string, HTMLDivElement | null>>({});
+  useEffect(() => {
+    if (reduce || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        setReveal((prev) => {
+          const next = { ...prev };
+          for (const e of entries) {
+            const slug = (e.target as HTMLElement).dataset.slug ?? "";
+            if (e.isIntersecting) {
+              next[slug] = "shown";
+              io.unobserve(e.target);
+            } else if (!next[slug]) {
+              next[slug] = "hidden";
+            }
+          }
+          return next;
+        });
+      },
+      { threshold: 0.1 },
+    );
+    for (const el of Object.values(cards.current)) if (el) io.observe(el);
+    return () => io.disconnect();
+  }, [reduce]);
+  return { reveal, cards };
+}
 
 // Per-card object-position overrides for portrait images where the subject isn't centered
 const APP_POSITION: Record<string, string> = {
@@ -30,6 +69,8 @@ export default function ApplicationsGrid({ applications: appsProp }: Props = {})
   const featured = FEATURED_SLUGS.map(
     (slug) => source.find((a) => a.slug === slug)
   ).filter(Boolean) as Application[];
+  const reduce = useReducedMotion();
+  const { reveal, cards } = useReveal(reduce);
 
   return (
     <section
@@ -72,13 +113,19 @@ export default function ApplicationsGrid({ applications: appsProp }: Props = {})
         <div className="flex overflow-x-auto snap-x snap-mandatory scroll-px-4 gap-3 -mx-4 px-4 pb-3 mb-10
                         sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:overflow-visible sm:mx-0 sm:px-0 sm:pb-0"
              style={{ scrollbarWidth: "none" }}>
-          {featured.map((app, i) => (
+          {featured.map((app, i) => {
+            const hidden = reveal[app.slug] === "hidden";
+            return (
             <motion.div
               key={app.slug}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.1 }}
-              transition={{ duration: 0.4, delay: i * 0.05 }}
+              ref={(el) => { cards.current[app.slug] = el; }}
+              data-slug={app.slug}
+              // initial={false}: the server markup is the visible state
+              // (useReveal above). Hiding is instant and off screen; the
+              // fade up keeps the old timing and stagger.
+              initial={false}
+              animate={hidden ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
+              transition={hidden ? { duration: 0 } : { duration: 0.4, delay: i * 0.05 }}
               className="relative overflow-hidden group snap-start flex-shrink-0 w-[78vw] max-w-[320px] sm:w-auto sm:max-w-none sm:flex-shrink"
               style={{ borderRadius: "12px", aspectRatio: "4/3" }}
             >
@@ -137,7 +184,8 @@ export default function ApplicationsGrid({ applications: appsProp }: Props = {})
                 </div>
               </Link>
             </motion.div>
-          ))}
+            );
+          })}
         </div>
 
         {/* The section's one link to the index. "All applications", the

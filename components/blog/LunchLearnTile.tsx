@@ -36,29 +36,30 @@ export default function LunchLearnTile({
 
   const visibility = [
     "hidden",
-    smGap ? "sm:flex" : "sm:hidden",
-    lgSpan === 0 ? "lg:hidden" : lgSpan === 2 ? "lg:flex lg:col-span-2 lg:flex-row" : "lg:flex lg:col-span-1 lg:flex-col",
+    smGap ? "sm:block" : "sm:hidden",
+    lgSpan === 0 ? "lg:hidden" : lgSpan === 2 ? "lg:grid lg:col-span-2 lg:grid-cols-2 lg:items-start lg:gap-8" : "lg:block lg:col-span-1",
   ].join(" ");
   const wide = lgSpan === 2;
 
+  // 30 Sep 2026: drawn like the editorial cards around it (BlogCard): a
+  // picture, a kicker, a headline and one line, no box. The picture is the
+  // same 3:2 frame, Moose on charcoal, so the row still reads as one row.
   return (
     <Link
       href={lunchLearnHref(topic, from)}
       aria-label={topic ? `Book a Lunch & Learn on ${topic}` : "Book a Lunch & Learn"}
-      className={`group ${visibility} h-full flex-col overflow-hidden rounded-xl border border-[var(--border-color)] transition-all duration-300 hover:-translate-y-1 hover:border-orange-500/40 hover:shadow-[0_8px_28px_rgba(249,115,22,0.14)]`}
-      style={{ background: "var(--bg-card)" }}
+      className={`group ${visibility}`}
     >
-      {/* The picture slot of a card: Moose on charcoal, dark in every theme. */}
-      <div
+      <span
         data-surface="dark"
-        className={`relative flex-shrink-0 overflow-hidden h-52 ${wide ? "lg:h-auto lg:w-[42%]" : ""}`}
+        className="relative block aspect-[3/2] overflow-hidden rounded-xl"
         style={{
           background:
             "radial-gradient(120% 90% at 50% 110%, rgba(249,115,22,0.38) 0%, rgba(249,115,22,0.08) 45%, transparent 70%), var(--bg-card)",
         }}
         aria-hidden="true"
       >
-        <div className="absolute inset-x-0 top-0 h-[3px]" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
+        <span className="absolute inset-x-0 top-0 block h-[3px]" style={{ background: "var(--gradient-brand)" }} />
         <ChromeImg
           family="moose"
           src={CHROME_MARKS.moose}
@@ -67,32 +68,34 @@ export default function LunchLearnTile({
           height={322}
           sizes="176px"
           className="absolute bottom-0 left-1/2 w-auto transition-transform duration-500 group-hover:scale-[1.03]"
-          style={{ height: "86%", maxWidth: "none", transform: "translateX(-50%)", transformOrigin: "50% 100%", filter: "drop-shadow(0 6px 14px rgba(0,0,0,0.45))" }}
+          style={{ height: "82%", maxWidth: "none", transform: "translateX(-50%)", transformOrigin: "50% 100%", filter: "drop-shadow(0 6px 14px rgba(0,0,0,0.45))" }}
         />
-      </div>
+      </span>
 
-      <div className={`p-5 flex flex-col flex-1 ${wide ? "lg:p-8 lg:justify-center" : ""}`}>
-        <span
-          className="self-start text-[11px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wider mb-2.5"
-          style={{ background: "rgba(249,115,22,0.14)", color: "var(--accent-text)", border: "1px solid rgba(249,115,22,0.35)" }}
-        >
+      {/* Wide, the picture's top lines up with the photographs beside it and
+          the words sit in the middle of the picture's height. */}
+      <span className={`block ${wide ? "mt-4 lg:mt-0 lg:self-center" : "mt-4"}`}>
+        <span className="block text-[10.5px] font-bold uppercase tracking-[0.18em]" style={{ color: "var(--accent-text)" }}>
           Lunch &amp; Learn
         </span>
-        <h3
-          className={`font-bold leading-snug mb-2 ${wide ? "text-[15px] lg:text-[22px] lg:mb-3" : "text-[15px]"}`}
+        <span
+          className={`font-display mt-2 block font-bold text-balance transition-colors duration-200 group-hover:text-[var(--accent-text)] ${wide ? "text-[19px] lg:text-[26px] lg:leading-[1.12]" : "text-[19px] leading-[1.24]"}`}
           style={{ color: "var(--text-primary)", letterSpacing: "-0.015em" }}
         >
           {topic ? `Bring ${topic} to your team` : "Bring HUB to your team"}
-        </h3>
+        </span>
         {/* Worded apart from the Lunch & Learn band that closes the page,
             which on /blog comes straight after this card. */}
-        <p className={`text-[13px] leading-relaxed mb-4 ${wide ? "flex-1 lg:flex-none lg:text-[14px] lg:mb-5" : "flex-1"}`} style={{ color: "var(--text-secondary)", maxWidth: "46ch" }}>
-          We bring physical samples, the technical data sheets and the certified installer list for your region: 45 minutes, in your office or online, and lunch is on us.
-        </p>
-        <span className={`text-xs font-semibold flex items-center gap-1 ${wide ? "mt-auto lg:mt-0 lg:text-[13px]" : "mt-auto"}`} style={{ color: "var(--accent-text-lg)" }}>
-          Book a Lunch &amp; Learn &rarr;
+        <span className="mt-2 block text-[14px] leading-relaxed" style={{ color: "var(--text-secondary)", maxWidth: "40ch" }}>
+          Samples, data sheets and your region&rsquo;s certified installers, in your office or online. Lunch is on us.
         </span>
-      </div>
+        <span className="mt-3 inline-flex items-center gap-1.5 text-[13px] font-bold" style={{ color: "var(--accent-text-lg)" }}>
+          Book a session
+          <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" className="transition-transform group-hover:translate-x-0.5" aria-hidden="true">
+            <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </span>
+      </span>
     </Link>
   );
 }

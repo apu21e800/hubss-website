@@ -56,9 +56,9 @@ const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production";
 const OUT = path.join(ROOT, "lib", "nav-insights.json");
 const BLOG_INDEX = path.join(ROOT, "lib", "blog-index.json");
 
-// How many posts follow the cover story. The desktop panel shows four, the
+// How many posts follow the cover story. The desktop panel lists five, the
 // phone drawer the cover and two more.
-const LATEST = 4;
+const LATEST = 5;
 // The cover's photo must be at least this wide (and wider than tall).
 const COVER_MIN_WIDTH = 1200;
 // Square thumbnail: 64px on screen, 1x to 3x.

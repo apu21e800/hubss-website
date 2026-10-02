@@ -88,18 +88,31 @@ hubss-website/
 - New project: add entry to /content/projects/project-name.mdx
 
 ### Putting a project on the homepage map
-Since 28 Sep 2026 the map shows only documented projects (Vern: "no fake
-locations"). A pin stays only when a published Insights post documents that
-job at that place; it sits at the site the post names (where the post names
-only a town or a corridor, the entry's comment says the pin is approximate);
-and every photo on it is of that installation. There are no stand-in or
-"Representative" pins any more. The audit removed 26 pins that rested on
-stand-ins with no post behind them. To add a job: publish its write-up first,
-then add the entry in `lib/map-projects.ts` with the post's own photos. A pin
-whose photo lives in `/public/images/blog/<slug>/` is that post's pin and
-gains a "Read the write-up" link (scripts/gen-map-blog.mjs). Studio has a
-"Projects (Map Pins)" list from the May 2026 migration, but the map does not
-read it yet; moving the map into Sanity is the way to let Doug add pins.
+Since 28 Sep 2026 the map shows only real, documented jobs (Vern: "no fake
+locations"); since 30 Sep 2026 it shows as many of them as can be placed
+(Vern: "more locations on the map the better"). A pin needs a real job at a
+real place, documented by a published Insights post OR by the Idea Book
+(Volume 5: its caption names the place and the system), and every photo on it
+is of that job. No stand-in or "Representative" pins; the 26 removed on 28 Sep
+stay removed. Where only the town is known, or the site was matched from the
+photograph, the entry is `approximate: true`: the card says so and the camera
+stops at city scale. Each entry's comment says what places it and how sure it
+is; where the book's caption and the evidence disagree, the evidence places
+the pin and the comment says so.
+
+To add a job: add the entry in `lib/map-projects.ts` with `post: "<slug>"`
+(its write-up) and/or `ideaBookPage`, and its photos as `cdn("<Sanity asset
+file>")` (a gallery or post copy, found by matching the photo) or
+`local("<name>")` for a file in /public/images/map (1600px, plus a 640px
+<name>-sm.jpg twin). Map photos never go through /_next/image
+(lib/map-photo.ts). The Idea Book photos, resized, are in
+D:\STUDIO-01\02-HUBSS\Claude outputs\map-photos_2026-09-30.
+
+The map component (components/sections/CanadaMap.tsx, rebuilt 30 Sep 2026)
+has no popups: a pin opens in the floating panel (desktop) or a sheet
+(phone), hovering labels the pin on the map, and "Take the tour" flies
+through the highlights (TOUR_IDS). Studio has a "Projects (Map Pins)" list
+from the May 2026 migration, but the map does not read it.
 
 The project count the page prints comes from `lib/map-count.json`, regenerated
 every build. Do not type a project count anywhere: the phone card used to say
@@ -144,7 +157,9 @@ BEFORE changing product, application or page copy, read docs/SANITY-COPY-SYNC.md
 Sanity OVERRIDES the code for: product and application name, shortDesc,
 description and SEO title/description, plus product eyebrow, specs and homepage
 blurb (on the product pages, the application pages, /applications and the
-homepage), and the hero and About text on /, /about, /contact and /lunch-learn.
+homepage), and the hero and About text on /, /about and /contact. On /lunch-learn
+only the mid-page sections come from Sanity (what you walk away with, who it's
+for, the questions, their headings); its top is code (see below).
 Editing the lib file or a page's fallback alone changes nothing there until the
 sync runs. Products go through one merge (lib/products.server.ts), applications
 through another, both on the rule in lib/cms-merge.ts: a blank Sanity field
@@ -217,6 +232,52 @@ Never `git reset --hard` in this repo. Banner-dash drift in comment blocks is
 known-benign — prove it with `tr -d '─═━'` + `cmp`, then recover a single file
 with `git checkout origin/main -- <path>`.
 
+## Lunch & Learn page (30 Sep 2026)
+- /lunch-learn is components/sections/LunchLearnPage.tsx (Vern: "optimize the
+  L&L page, it needs work"): a dark top with the pitch and the form side by
+  side (on a phone the form follows the headline), topic tiles that put a
+  topic into the form, then on paper what you walk away with, who it's for,
+  the trusted-by band and the questions, and a dark close with both offices.
+  LunchLearnFunnel.tsx is no longer rendered anywhere.
+- #book is the form itself. The page's h1 and form never fade in from
+  opacity 0: they are the first thing a visitor came for.
+- The copy defaults, the FAQPage schema and the topic tiles share one source:
+  lib/lunch-learn-content.ts. The schema is built from the questions the page
+  prints, so they can't drift. No CE credit claims, ever.
+- The booking form (useLunchLearnForm in LunchLearnV2.tsx, shared with the
+  homepage card) sends generate_lead to GA and lunch_learn_submit to Vercel
+  Analytics on success. From 22 to 30 Sep nothing did: the page had moved to
+  a form without them.
+
+## Menus and Insights, editorial (30 Sep 2026)
+- Products and Applications panels are typographic, no photographs (Vern:
+  "not sure the images are necessary, unless we have perfect images... DDB
+  agency quality"). Each column is its name in the display face on one
+  hairline whose first 32px are --gradient-brand (RuleAccent in Nav.tsx;
+  components/blog/RuleLabel.tsx is the same rule for pages). One line of
+  explanation per level: products carry PRODUCT_MENU_LINES, application
+  groups carry a note, product families print none. The phone drawer keeps
+  its small row pictures.
+- The bar's Canadian badge shows below lg and from xl only: at 1024px the full
+  row was 42px wider than the window and clipped the Lunch & Learn button.
+- Every listed post is components/blog/BlogCard.tsx: a photograph, one kicker
+  (section and date) and the headline; a row on a phone. StoryLead is the lead
+  story (photo beside headline and deck) and pickLead chooses it (newest post
+  with a photo at least 1600 x 1000). /blog is a masthead, a server-rendered
+  front page (lead plus the next four), then BlogFilter's library: section
+  tabs, search, system, sort, twelve at a time with Show more; unfiltered it
+  starts after the front page. The section pages (TypeHub) use the same parts.
+  No excerpts except the lead's deck, no "Read post", no read times on cards.
+- A post has one Lunch & Learn card beside the article and the band before the
+  footer. PostConversion's block is not rendered any more (postFocus and
+  PRODUCT_SLUGS still live in that file). The standfirst is the excerpt, set
+  upright and larger than the body.
+- Headings: app/globals.css gives every h1-h6 its family, weight (800),
+  tracking (-0.025em) and leading (1.15) as unlayered CSS, which beats
+  Tailwind's utilities. Set those inline on a heading, or use a span.
+- The map's headings carry no count (docs/STYLE.md). "3 of 78" in the project
+  panel is a count inside a control, which the guide allows.
+
 ## Round 3 (28 Sep 2026): what later work must keep
 - Light reading under dark heroes: product, application and Insights pages keep
   the dark photo hero, and everything under it sits on `data-surface="paper"`
@@ -235,16 +296,29 @@ with `git checkout origin/main -- <path>`.
   Articles (/blog/articles). Stored Sanity types are unchanged; the old hub
   URLs and /projects/<slug> redirect (lib/field-notes-taxonomy.ts).
 - The Insights mega menu reads lib/nav-insights.json, written at build from
-  Sanity by scripts/gen-nav-insights.ts.
+  Sanity by scripts/gen-nav-insights.ts. Since 30 Sep 2026 it is a front page
+  (Vern: "editorial feel, text effective, not text heavy. smart"): the lead
+  story with its one photograph and headline, the five latest headlines
+  (kicker and headline), the three sections with their one line, then All
+  Insights, the Idea Book and Book a Lunch & Learn. No dates, read times,
+  excerpts or counts in the panel; they live on /blog.
 - Copy syncs can emit a plan instead of writing:
   `npx tsx scripts/sync-products-to-sanity.ts --dry-run --emit=plan.json`
   (also sync-applications). The plan is applied on Vern's machine with
   .sanity-work/sanity_apply_v2.py (dry run, backup, ifRevisionID per document).
-- The favicon is the HUB wheel on a white disc (app/icon.png, app/favicon.ico,
-  app/apple-icon.png), made from
-  public/images/assets/logos/hubss-logos/HUB-wheel_official-orange-transparent.png.
-  Never knock the white out: the white is the H's and the ring round the wheel,
-  and without it the mark reads as orange blobs on a dark tab (Vern, 28 Sep).
+- The favicon (app/icon.png, app/favicon.ico) is the wheel exactly as the
+  header logo draws it: orange disc, white H's, nothing outside the disc.
+  Vern, 30 Sep: "there's still a weird white line around the icon", so the
+  white ring added on 28 Sep is gone. The H's stay white: knock them out and
+  the mark reads as orange blobs on a dark tab (Vern, 28 Sep). Made from
+  public/images/assets/logos/hubss-logos/HUB-wheel_official-orange-transparent.png
+  with the H's filled white inside the fitted circle and the disc edge drawn
+  once, so no white can show round the rim. app/apple-icon.png is still the
+  wheel on a white tile (iOS turns transparency black).
+- The header logo (public/images/hub-official-logo.svg) wraps
+  hubss-logo-white-large.png, whose H's are already white. Never put a white
+  circle behind the wheel to fill the H's: the old file did, and the two edges
+  together left a hairline of white round the wheel.
 - Homepage hero: the room under the buttons is `.hero-copy` in app/globals.css
   (about 11% of the screen's height; smaller under 820 px tall, where the lift
   would put the headline into the HUB sign).

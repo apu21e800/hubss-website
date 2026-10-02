@@ -2,9 +2,17 @@
  * scripts/sync-pages-to-sanity.ts
  *
  * Pushes the page copy in the code into Sanity's page docs, idempotently:
- *   - homepage, about, contact: the hero text (and the about mission line)
- *   - about: story, values, whyHub, partners
- *   - lunch-learn: whatYouGet, personas, faqs, section headings
+ *   - homepage, about, contact: the hero text
+ *   - about: story, whyHub, partners intro (lib/about-content.ts)
+ *   - lunch-learn: whatYouGet, personas, faqs (lib/lunch-learn-content.ts),
+ *     section headings
+ *
+ * 30 Sep 2026: About and Lunch & Learn copy is imported from the lib files the
+ * pages read, instead of being held here a second time. The Lunch & Learn part
+ * used to push the launch-era seed back into Sanity, CE credit claims and all
+ * (the page ignored it through its shim, but the claim sat in Studio). The
+ * About fields the page no longer shows (mission, story aside, values, partner
+ * paragraphs) are left as they are in Sanity: never read, hidden in Studio.
  *
  * Hero text was added on 24 Sep 2026. Before that the heroes were left alone
  * ("already populated in a prior migration"), so when the code's About hero was
@@ -28,6 +36,8 @@ import path from "path";
 import { readFileSync } from "fs";
 import { fileURLToPath } from "url";
 import { config as loadDotenv } from "dotenv";
+import { ABOUT_HERO, ABOUT_STORY, ABOUT_WHY_HUB, ABOUT_PARTNERS_INTRO } from "../lib/about-content";
+import { LL_WHAT_YOU_GET, LL_PERSONAS, LL_FAQS } from "../lib/lunch-learn-content";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -74,10 +84,9 @@ const HOME_HERO_TEXT: Record<string, string> = {
 };
 
 const ABOUT_HERO_TEXT: Record<string, string> = {
-  "aboutHero.eyebrow":    "Canadian-operated since 1999 · All 10 provinces",
-  "aboutHero.heading":    "The people who made your city look like your city.",
-  "aboutHero.subheading": "Since 1999, HUB Surface Systems, a proudly Canadian company, has been connecting communities coast to coast with pavement technologies that carry identity as well as traffic.",
-  aboutMission:           "Every surface tells a story. We give communities the language to write it.",
+  "aboutHero.eyebrow":    ABOUT_HERO.eyebrow,
+  "aboutHero.heading":    ABOUT_HERO.heading,
+  "aboutHero.subheading": ABOUT_HERO.subheading,
 };
 
 const CONTACT_HERO_TEXT: Record<string, string> = {
@@ -86,96 +95,21 @@ const CONTACT_HERO_TEXT: Record<string, string> = {
   "contactHero.subheading": "Tell us about your community, your timeline, and your vision. We'll tell you which surface system brings it to life.",
 };
 
-// ─── About page baseline ────────────────────────────────────────────────────
-// Verbatim copies of the hardcoded values in app/about/page.tsx.
-
-// KEEP IN STEP WITH app/about/page.tsx. This script holds its own copy of the
-// about-page text and is what actually reaches Sanity; the constants in the
-// page component are only the fallback for when Sanity has no value. Editing
-// one without the other is how the live page and the code drift apart.
-//
-// Sep 2026 corrections: "mid-1990s" and "over thirty years" contradicted the
-// "Since 1999" printed across the rest of the site, and "Indigenous art
-// installations on BC ferries" is a claim no HUB document supports — the
-// documented Indigenous work is UBC, Sechelt, Granville Street, Burnaby and
-// London.
-const ABOUT_STORY: string[] = [
-  "HUB Surface Systems was founded on a simple belief: streets don't have to be grey. For decades, Canadian cities treated pavement as pure utility, functional and forgettable. We saw an opportunity to change that, and built the company around StreetPrint decorative stamped asphalt: the original stamped asphalt system, a Canadian invention installed here since 1992.",
-  "Since 1999 we have grown the portfolio to address every surface challenge a Canadian municipality might face: high-traffic transit corridors in York Region and London, decorative community crosswalks at UBC, Indigenous recognition artwork in Sechelt, Vancouver and Burnaby.",
-  "Today, HUB operates from two regional offices (East in Milton, Ontario, and West in Ladysmith, British Columbia), backed by a network of certified applicators trained and authorized by HUB to install each system to spec. That credentialed installer program is what turns a quality product into a quality outcome.",
-];
-
-const ABOUT_STORY_ASIDE =
-  "York Region, the City of Toronto, the City of Vancouver, UBC, the City of Sechelt. When you walk through a Canadian city and feel something, when a crosswalk catches your eye, when a plaza feels like it belongs, there's a chance we were there. That's what a thousand projects look like on the ground.";
-
-const ABOUT_VALUES: { heading: string; body: string }[] = [
-  {
-    heading: "What we build",
-    body: "Decorative crosswalks, civic plazas, community murals, transit lanes, private driveways, and parks. Surfaces that carry meaning, from high-visibility school zones in Milton to Indigenous art installations in Sechelt.",
-  },
-  {
-    heading: "Who we build for",
-    body: "Municipalities, landscape architects, urban planners, developers, and certified contractors across every Canadian province. If it's a surface that people walk, drive, or gather on, we have a system for it.",
-  },
-  {
-    heading: "Why it matters",
-    body: "Beautiful streets make walkable cities. Legible surfaces slow cars. Identity-rich public spaces build community. This is the civic layer that tells a city it's worth caring about.",
-  },
-];
-
-// Matches DIFFERENTIATORS_FALLBACK in app/about/page.tsx since 28 Sep 2026
-// (QA rest#18): one service-life card, no internal note, no unsourced claims.
-const ABOUT_WHY_HUB: { title: string; desc: string }[] = [
-  { title: "Flexibility vs concrete",          desc: "Asphalt-based systems flex with Canada's freeze-thaw cycles." },
-  { title: "Vision Zero aligned",              desc: "HUB's marking systems support Vision Zero frameworks, from retroreflective crosswalk markings to high-contrast bike lane systems." },
-  { title: "High-visibility by design",        desc: "Tactile and high-contrast marking systems engineered for pedestrian safety and legibility in every lighting condition and season." },
-  { title: "Service life, by system",          desc: "StreetPrint 10–20 years, TrafficPatternsXD 10+, TrafficPatterns 8+, StreetBond 8+, PreMark 6–8. Quoted per system, because they do not wear the same." },
-  { title: "Built for winter maintenance",     desc: "StreetPrint and DuraTherm sit flush with the road, with nothing for a plow blade to catch, and preformed thermoplastic holds its skid resistance and colour through snowplow cycles and de-icing seasons." },
-];
-
-const ABOUT_PARTNERS_INTRO =
-  "HUB is an authorized distributor and applicator partner for the manufacturers behind our core product systems, giving clients access to the broadest decorative pavement portfolio in Canada, with direct manufacturer technical support and specification backup.";
-
-const ABOUT_PARTNERS: { key: string; desc: string }[] = [
-  { key: "gaf",          desc: "GAF is the manufacturer behind HUB's coloured pavement coating systems: StreetBond, StreetBondSR (solar reflective), DuraShield, and MMAX. Their coatings technology has been the foundation of thousands of decorative surface installations across Canada." },
-  { key: "ennis-flint",  desc: "Ennis-Flint (a PPG company) is the manufacturer behind HUB's full thermoplastics range, including TrafficPatterns, TrafficPatternsXD, PreMark, AirMark, DuraTherm, and DecoMark. Their preformed thermoplastic systems are the gold standard for high-durability pavement markings across Canada." },
-];
-
-// ─── Lunch & Learn page baseline ───────────────────────────────────────────
-// Verbatim copies of the hardcoded values in components/sections/LunchLearnFunnel.tsx.
-
-const LL_WHAT_YOU_GET = [
-  { num: "01", title: "Spec Language Ready for Your RFP", desc: "Pre-written specification language for thermoplastic crosswalks, MMA bus lanes, coloured bike lanes, and more. Copy it straight into your next tender document." },
-  { num: "02", title: "The Lifecycle Cost Math",          desc: "Lifecycle cost math, side by side. How HUB systems deliver years of high-performance service versus repeated seasonal interventions. The numbers usually surprise people." },
-  { num: "03", title: "Lunch Included. No Catch.",        desc: "In-person sessions include catered lunch for your team. Virtual sessions come with a $25 lunch voucher delivered before we connect." },
-];
-
-const LL_PERSONAS = [
-  { title: "Municipal Engineers & Planners",     desc: "Crosswalks, transit corridors, and complete streets that meet Vision Zero and Complete Streets specifications, with accessibility-aware design. Real installation data from Canadian municipalities coast to coast.", badge: "Vision Zero · Complete Streets" },
-  { title: "Landscape Architects & Designers",   desc: "12+ StreetPrint patterns, full StreetBond Pantone palette, and decorative surfaces engineered to outlast the design life of the asphalt beneath them. Snowplow-safe. Engineering-approved.", badge: "Public Art · Driveways" },
-  { title: "Engineering & Consulting Firms",     desc: "CE credits available. Walk away with real spec sheets, sample materials, and a list of certified HUB installers in your region.", badge: "CE Credits" },
-  { title: "Contractors & Applicators",          desc: "Learn about the HUB certified applicator program: territory rights and the chance to bid on jobs your competitors can't touch.", badge: "Certified Applicator Program" },
-];
-
-const LL_FAQS = [
-  { q: "How long is the session?",                       a: "30–45 minutes of presentation, followed by open Q&A. We're respectful of your team's calendar and stick to the time we agree on." },
-  { q: "Is this actually free?",                         a: "100% free. No invoice, no minimum order attached, and we won't badger you afterward. We just want you to know what you're specifying. The rest follows naturally." },
-  { q: "Do we get continuing education credits?",        a: "Yes. HUB Lunch & Learn sessions count toward AIBC, RAIC, and PEO continuing professional development requirements. We provide the documentation." },
-  { q: "In-person or virtual?",                          a: "Both. In-person sessions are available coast to coast through our certified applicator network. Virtual sessions use Zoom or Teams, and we mail sample kits before we connect." },
-];
-
+// ─── Lunch & Learn section headings ──────────────────────────────────────────
+// Verbatim copies of the defaults in app/lunch-learn/page.tsx (checked against
+// it before any write). The items come from lib/lunch-learn-content.ts.
 const LL_SECTION_HEADINGS = {
-  whatYouGetEyebrow: "What You Walk Away With",
-  whatYouGetHeading: "Not a Sales Pitch. An Education.",
-  personasEyebrow:   "Who It's Built For",
-  personasHeading:   "Your Whole Team. One Session.",
-  faqEyebrow:        "Common Questions",
-  faqHeading:        "Everything You Need to Know",
+  whatYouGetEyebrow: "What you walk away with",
+  whatYouGetHeading: "A working session for your team.",
+  personasEyebrow:   "Who it's built for",
+  personasHeading:   "Your whole team, one session.",
+  faqEyebrow:        "Common questions",
+  faqHeading:        "Everything you need to know",
 };
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-function arrayWithKeys<T extends Record<string, unknown>>(items: T[], prefix: string): (T & { _key: string })[] {
+function arrayWithKeys<T extends object>(items: T[], prefix: string): (T & { _key: string })[] {
   return items.map((item, i) => ({ ...item, _key: `${prefix}_${i}` }));
 }
 
@@ -218,9 +152,10 @@ function stringsIn(value: unknown): string[] {
 
 /**
  * Stop before writing if a string this script would send is no longer in the
- * component it was copied from. Lunch & Learn is not checked: its copy was
- * rewritten in the component, and app/lunch-learn/page.tsx deliberately
- * ignores the seeded strings this script still holds.
+ * component it was copied from. The About copy and the Lunch & Learn items are
+ * imported from the files the pages read, so they cannot drift and are not
+ * checked; the hero text of the homepage and Contact, and the Lunch & Learn
+ * headings, are copies and are.
  */
 function assertStillInSource(file: string, desired: Record<string, unknown>): string[] {
   const source = readFileSync(path.join(ROOT, file), "utf8");
@@ -270,17 +205,14 @@ async function main() {
   const aboutDesired = {
     ...ABOUT_HERO_TEXT,
     aboutStory: ABOUT_STORY,
-    aboutStoryAside: ABOUT_STORY_ASIDE,
-    aboutValues: arrayWithKeys(ABOUT_VALUES, "v"),
     aboutWhyHub: arrayWithKeys(ABOUT_WHY_HUB, "w"),
     aboutPartnersIntro: ABOUT_PARTNERS_INTRO,
-    aboutPartners: arrayWithKeys(ABOUT_PARTNERS, "p"),
   };
 
   const drift = [
     ...assertStillInSource("app/page.tsx", homeDesired),
-    ...assertStillInSource("app/about/page.tsx", aboutDesired),
     ...assertStillInSource("app/contact/page.tsx", contactDesired),
+    ...assertStillInSource("app/lunch-learn/page.tsx", LL_SECTION_HEADINGS),
   ];
   if (drift.length) {
     console.error("\nSTOPPED, nothing written. This script's copy of the page text is out of date:");

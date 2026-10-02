@@ -68,6 +68,19 @@
     "src": "https://cdn.sanity.io/images/9dbro2m1/production/a06cb995d5ca80d38e15c68e8695e4a03e526f0c-1800x2400.jpg?w=128&h=128&fit=crop&auto=format",
     "srcSet": "https://cdn.sanity.io/images/9dbro2m1/production/a06cb995d5ca80d38e15c68e8695e4a03e526f0c-1800x2400.jpg?w=64&h=64&fit=crop&auto=format 64w, https://cdn.sanity.io/images/9dbro2m1/production/a06cb995d5ca80d38e15c68e8695e4a03e526f0c-1800x2400.jpg?w=128&h=128&fit=crop&auto=format 128w, https://cdn.sanity.io/images/9dbro2m1/production/a06cb995d5ca80d38e15c68e8695e4a03e526f0c-1800x2400.jpg?w=192&h=192&fit=crop&auto=format 192w"
    }
+  },
+  {
+   "slug": "thermoplastic-colour-selection",
+   "title": "Choosing Colour: The Thermoplastic, Coating and MMA Palettes",
+   "type": "Guide",
+   "publishedAt": "2026-09-08T11:55:00.000Z",
+   "date": "Sep 8, 2026",
+   "excerpt": "Thirty-seven preformed thermoplastic colours, sixty-three coating colours, twenty-three MMA colours, and Pantone matching on top. How to narrow that down for a real specification.",
+   "readTime": "7 min read",
+   "thumb": {
+    "src": "https://cdn.sanity.io/images/9dbro2m1/production/160c5daf2482b37a41234bde5efb39732cdfabd4-2400x1800.jpg?w=128&h=128&fit=crop&auto=format",
+    "srcSet": "https://cdn.sanity.io/images/9dbro2m1/production/160c5daf2482b37a41234bde5efb39732cdfabd4-2400x1800.jpg?w=64&h=64&fit=crop&auto=format 64w, https://cdn.sanity.io/images/9dbro2m1/production/160c5daf2482b37a41234bde5efb39732cdfabd4-2400x1800.jpg?w=128&h=128&fit=crop&auto=format 128w, https://cdn.sanity.io/images/9dbro2m1/production/160c5daf2482b37a41234bde5efb39732cdfabd4-2400x1800.jpg?w=192&h=192&fit=crop&auto=format 192w"
+   }
   }
  ],
  "sections": [

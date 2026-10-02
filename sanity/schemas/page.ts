@@ -151,7 +151,7 @@ export default defineType({
           type: "text",
           title: "Hero subheading",
           rows: 3,
-          description: "Paragraph below the heading: 2–3 sentences about HUB's story or mission.",
+          description: "One sentence below the heading, 20 words at most (since 30 Sep 2026 the About page keeps its words few).",
           validation: (r) => [r.max(400).warning("Keep the subheading under 400 characters"), copyStyle(r)],
         }),
         richImageField("heroImage", "Hero background photo (behind the About page title)"),
@@ -163,7 +163,8 @@ export default defineType({
       title: "About · Mission quote",
       type: "string",
       group: "about",
-      description: 'The pull-quote displayed in the Our Story section (e.g. "Every surface tells a story. We give communities the language to write it.").',
+      description: "Not shown on the About page since 30 Sep 2026 (the page was trimmed). Kept, hidden, in case it comes back.",
+      hidden: true,
       validation: (r) => [r.max(200).warning("Mission quote should be under 200 characters"), copyStyle(r)],
     }),
     defineField({
@@ -171,7 +172,7 @@ export default defineType({
       title: "About · Our Story paragraphs",
       type: "array",
       group: "about",
-      description: "The 3-paragraph 'Our Story' body in the left column of the Story section.",
+      description: "'How we got here': two short paragraphs beside the four project photos. Keep each under 40 words.",
       of: [defineArrayMember({ type: "text", rows: 4, validation: (r) => copyStyle(r) })],
     }),
     defineField({
@@ -180,7 +181,8 @@ export default defineType({
       type: "text",
       rows: 3,
       group: "about",
-      description: "The short paragraph below the mission quote (e.g. 'York Region. City of Toronto. City of Vancouver. UBC. ...').",
+      description: "Not shown on the About page since 30 Sep 2026 (the page was trimmed). Kept, hidden, in case it comes back.",
+      hidden: true,
       validation: (r) => copyStyle(r),
     }),
     defineField({
@@ -188,7 +190,8 @@ export default defineType({
       title: "About · Values cards",
       type: "array",
       group: "about",
-      description: "The three 'What We Stand For' cards (heading + body).",
+      description: "Not shown on the About page since 30 Sep 2026 (the page was trimmed). Kept, hidden, in case it comes back.",
+      hidden: true,
       of: [{
         type: "object",
         fields: [
@@ -203,7 +206,7 @@ export default defineType({
       title: "About · Why HUB differentiators",
       type: "array",
       group: "about",
-      description: "The 'Why HUB' grid cards (title + description). Six entries by default.",
+      description: "The 'Why HUB' cards: a short title and one sentence each. Three by default.",
       of: [{
         type: "object",
         fields: [
@@ -219,7 +222,7 @@ export default defineType({
       type: "text",
       rows: 4,
       group: "about",
-      description: "The intro paragraph below the 'Backed by Industry Leaders' heading.",
+      description: "One sentence below the 'Who stands behind the systems' heading.",
       validation: (r) => copyStyle(r),
     }),
     defineField({
@@ -227,7 +230,8 @@ export default defineType({
       title: "About · Manufacturer Partner descriptions",
       type: "array",
       group: "about",
-      description: "Per-partner description text. Keep partner keys ('gaf', 'ennis-flint') stable: the matching logo/products array stays in code.",
+      description: "Not shown on the About page since 30 Sep 2026: the partner cards show the logo and the systems only. Kept, hidden, in case it comes back.",
+      hidden: true,
       of: [{
         type: "object",
         fields: [

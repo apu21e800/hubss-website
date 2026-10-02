@@ -2,9 +2,10 @@
  * Generates lib/map-blog-projects.json and lib/map-count.json.
  *
  * The homepage map's pins are the curated entries in lib/map-projects.ts. A
- * curated pin whose photo lives in a post's folder (/images/blog/<slug>/…) is
- * that post's pin, and gains a "Read the write-up" link: this script finds
- * those links and counts the pins.
+ * pin names its write-up with `post: "<slug>"` (since 30 Sep 2026; before
+ * that the link was read out of a /images/blog/<slug>/ photo path, and the
+ * photos now come from Sanity's CDN). This script lists those links, warns
+ * about any whose post is not published, and counts the pins.
  *
  * Since Sep 2026 the blog lives in Sanity, so a post only gets its link if it
  * is published: lib/blog-index.json (written just before this, by
@@ -30,17 +31,10 @@ const CURATED = path.join(ROOT, "lib", "map-projects.ts");
 const OUT = path.join(ROOT, "lib", "map-blog-projects.json");
 const COUNT_OUT = path.join(ROOT, "lib", "map-count.json");
 
-/**
- * Which slugs already have a curated pin.
- *
- * Read out of the image paths, which is how the link was expressed before this
- * script existed: a curated entry pointing at /images/blog/<slug>/… is that
- * post's pin. No edit to the curated file is needed for the link to work, and
- * none was made — the existing convention is simply now machine-readable.
- */
+/** Which posts have a curated pin: every `post: "<slug>"` in the dataset. */
 function curatedSlugs(src) {
   const slugs = new Set();
-  for (const m of src.matchAll(/"\/images\/blog\/([^/"]+)\//g)) slugs.add(m[1]);
+  for (const m of src.matchAll(/^ {4}post: "([^"]+)"/gm)) slugs.add(m[1]);
   return slugs;
 }
 
@@ -80,7 +74,7 @@ function curatedCount(src) {
  * dataset (see the note on COUNT_OUT below). It said "coast to coast" when
  * the Atlantic pins had no project behind them; now it says what the pins say.
  */
-const PROVINCE_ORDER = ["BC", "AB", "SK", "MB", "ON", "QC", "NB", "NS", "PE", "NL"];
+const PROVINCE_ORDER = ["YT", "NT", "NU", "BC", "AB", "SK", "MB", "ON", "QC", "NB", "NS", "PE", "NL"];
 function curatedProvinces(src) {
   const body = src.slice(src.indexOf("const curatedProjects: MapProject[] = ["));
   const found = new Set([...body.matchAll(/^ {4}province: "([A-Z]{2})"/gm)].map((m) => m[1]));

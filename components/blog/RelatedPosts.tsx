@@ -1,5 +1,6 @@
 import type { PostMeta } from "@/lib/blog";
 import BlogCard from "./BlogCard";
+import RuleLabel from "./RuleLabel";
 
 interface RelatedPostsProps {
   posts: PostMeta[];
@@ -26,12 +27,12 @@ export default function RelatedPosts({
 
   return (
     <section aria-labelledby="continue-reading">
-      <h2 id="continue-reading" className="font-bold mb-6" style={{ color: "var(--text-primary)", fontSize: "clamp(1.35rem, 2vw, 1.6rem)", letterSpacing: "-0.02em" }}>
+      <RuleLabel as="h2" id="continue-reading" className="mb-8">
         Continue reading
-      </h2>
+      </RuleLabel>
       {/* Rows are always full: three across from lg; two across below it,
           where a third card would sit alone, so it waits for lg. */}
-      <div className={`grid grid-cols-1 sm:grid-cols-2 gap-4 ${related.length === 3 ? "lg:grid-cols-3" : ""}`}>
+      <div className={`grid grid-cols-1 gap-x-6 gap-y-7 sm:grid-cols-2 sm:gap-y-10 lg:gap-x-8 ${related.length === 3 ? "lg:grid-cols-3" : ""}`}>
         {related.map((post, i) => (
           <div key={post.slug} className={i === 2 ? "sm:hidden lg:block" : undefined}>
             <BlogCard post={post} />

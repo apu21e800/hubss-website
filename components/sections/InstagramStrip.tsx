@@ -39,7 +39,7 @@ import { mapProjects } from "@/lib/map-projects";
 import { isSanityImage } from "@/lib/photos";
 import { SOCIAL_LINKS } from "@/lib/social-links";
 
-interface Pick {
+export interface Pick {
   /** A map pin id in lib/map-projects.ts: the photo, place and write-up. */
   pin: string;
   /** The pin's title, shortened for a caption. */
@@ -67,7 +67,7 @@ const PICKS: Pick[] = [
   { pin: "toronto-ttc-bus-corridors", site: "TTC bus priority corridor", systems: ["MMAX"], position: "50% 65%" },
 ];
 
-interface Tile {
+export interface Tile {
   key: string;
   src: string;
   alt: string;
@@ -79,11 +79,16 @@ interface Tile {
   position: string;
 }
 
-async function getTiles(): Promise<Tile[]> {
+/**
+ * The tiles for a list of picks: photo, place, systems and link, all read from
+ * the map pin and its write-up. Also used by /about (30 Sep 2026) with its own
+ * picks, so the two pages caption their photos by the same rules.
+ */
+export async function getProjectTiles(picks: Pick[] = PICKS): Promise<Tile[]> {
   const posts = await getAllPosts();
   const bySlug = new Map(posts.map((p) => [p.slug, p]));
   const tiles: Tile[] = [];
-  for (const pick of PICKS) {
+  for (const pick of picks) {
     const pin = mapProjects.find((p) => p.id === pick.pin);
     const photo = pin?.images[0];
     if (!pin || !photo || pin.imageIsRepresentative) continue;
@@ -129,7 +134,7 @@ const SLOT = [
 // in the mosaic, so the tiles fall back to an even grid.
 const EVEN = { cls: "aspect-[4/3]", sizes: "(min-width: 1024px) 400px, 50vw", lead: false } as const;
 
-function TileLink({ tile, slot }: { tile: Tile; slot: { cls: string; sizes: string; lead: boolean } }) {
+export function TileLink({ tile, slot }: { tile: Tile; slot: { cls: string; sizes: string; lead: boolean } }) {
   const label = `${tile.place}. ${tile.systems}. ${tile.external ? "HUB on Instagram (opens in a new tab)" : "Read the write-up"}`;
   const inner = (
     <>
@@ -195,7 +200,7 @@ function TileLink({ tile, slot }: { tile: Tile; slot: { cls: string; sizes: stri
 }
 
 export default async function InstagramStrip() {
-  const tiles = await getTiles();
+  const tiles = await getProjectTiles();
   const mosaic = tiles.length === SLOT.length;
 
   return (

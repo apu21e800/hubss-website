@@ -187,6 +187,9 @@ export default async function ApplicationPage({ params }: Props) {
   // The application's name inside a sentence: "Designing for Parking Lots"
   // read as a heading pasted into prose (QA pa#33).
   const nameInSentence = inSentence(application.name);
+  // The ask and the session topic, hand-written where the template reads
+  // wrong: "Planning airports?", "Planning LEED & urban heat island?" (QA C6).
+  const ask = ASKS[application.slug] ?? { prompt: `Planning ${nameInSentence}?`, topic: nameInSentence };
 
   return (
     <main style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
@@ -284,14 +287,14 @@ export default async function ApplicationPage({ params }: Props) {
                 <div className="absolute left-0 top-0 bottom-0 w-1 rounded-l-xl" style={{ background: "linear-gradient(180deg, #F97316, #EAB308)" }} />
                 <div className="relative pl-3">
                   <p className="font-bold text-lg leading-snug" style={{ color: "var(--text-primary)" }}>
-                    Planning {nameInSentence}?
+                    {ask.prompt}
                   </p>
                   <p className="text-sm mt-1 max-w-md" style={{ color: "var(--text-secondary)" }}>
                     A free Lunch &amp; Learn takes your team through the systems for this work, with samples on the table.
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-3 relative flex-shrink-0">
-                  <Link href={lunchLearnHref(nameInSentence, "application")}
+                  <Link href={lunchLearnHref(ask.topic, "application")}
                     className="px-5 rounded-lg text-sm font-bold transition-[filter] hover:brightness-110 inline-flex items-center"
                     style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "var(--on-accent)", boxShadow: "0 4px 16px rgba(249,115,22,0.28)", minHeight: "44px" }}>
                     Book a Lunch &amp; Learn
@@ -392,11 +395,27 @@ export default async function ApplicationPage({ params }: Props) {
       {/* Feature callout: residential driveways page only */}
       {slug === "residential-driveways" && <ResidentialDriveways />}
       </div>
-      <LunchLearn compact topic={nameInSentence} from="application" />
+      <LunchLearn compact topic={ask.topic} from="application" />
       <Footer />
     </main>
   );
 }
+
+/**
+ * The "Planning X?" line of the ask bar, and the session topic the Lunch &
+ * Learn band and the booking link carry ("A free working session on X for
+ * your team", the chip on the form, the request email), where the name
+ * dropped into the template read wrong (QA C6, 30 Sep 2026): "Planning
+ * airports?", "Planning LEED & urban heat island?", "Planning townhomes?".
+ * The other fifteen pages keep the template.
+ */
+const ASKS: Record<string, { prompt: string; topic: string }> = {
+  airports: { prompt: "Planning an airfield re-marking?", topic: "airfield re-marking" },
+  "pedestrian-safety": { prompt: "Planning a pedestrian safety upgrade?", topic: "pedestrian safety upgrades" },
+  "leed-urban-heat-island": { prompt: "Working toward LEED v5 credits?", topic: "LEED v5 credits" },
+  townhomes: { prompt: "Planning a townhome development?", topic: "townhome developments" },
+  "commercial-spaces": { prompt: "Planning a commercial entry or plaza?", topic: "commercial entries and plazas" },
+};
 
 /**
  * The description without an opening sentence the spread already printed.

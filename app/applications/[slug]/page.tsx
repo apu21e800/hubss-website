@@ -59,10 +59,38 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const heroSrc = application.heroPhoto?.src ?? featured?.src ?? application.imageUrl;
   return buildMetadata({
     title: application.seoTitle ?? application.name,
-    description: application.seoDescription ?? (application.shortDesc + " " + application.description.slice(0, 120) + "…"),
+    // The SEO description from Studio (or the code's) when it fits in whole
+    // sentences, else the application's own one-liner: at most 155 characters,
+    // never cut mid-word. Until 30 Sep 2026 the fallback was the one-liner
+    // plus the first 120 characters of the body, cut mid-word and ending in
+    // "…" (QA E1, on 22 pages).
+    description: metaDescription(application.seoDescription, application.shortDesc),
     slug: `applications/${application.slug}`,
     image: isSanityImage(heroSrc) ? sanityOgImage(heroSrc) : heroSrc,
   });
+}
+
+/**
+ * A meta description of whole sentences, at most `max` characters: the SEO
+ * field when it fits, or cut back to the last sentence end that fits; when
+ * its one sentence runs past the limit, the page's one-liner stands in, by
+ * the same rule. Never mid-word, never "…". Twin of the helper in
+ * app/products/[slug]/page.tsx (a page file cannot export it; 30 Sep 2026).
+ */
+function metaDescription(seo: string | undefined, oneLiner: string, max = 155): string {
+  for (const text of [seo, oneLiner]) {
+    const clean = (text ?? "").replace(/\s+/g, " ").trim();
+    if (!clean) continue;
+    if (clean.length <= max) return clean;
+    const head = clean.slice(0, max + 1);
+    const end = Math.max(head.lastIndexOf(". "), head.lastIndexOf("! "), head.lastIndexOf("? "));
+    if (end >= 40) return clean.slice(0, end + 1);
+  }
+  // Both run past the limit in one sentence (none does today): the one-liner
+  // to its last whole word, with a full stop.
+  const clean = oneLiner.replace(/\s+/g, " ").trim();
+  const cut = clean.slice(0, max).lastIndexOf(" ");
+  return clean.slice(0, cut > 0 ? cut : max).replace(/[,;:\s]+$/, "") + ".";
 }
 
 export default async function ApplicationPage({ params }: Props) {

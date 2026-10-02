@@ -60,10 +60,40 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const heroSrc = product.heroPhoto?.src ?? featuredImg?.src ?? product.imageUrl;
   return buildMetadata({
     title: product.seoTitle || product.name,
-    description: product.seoDescription || (product.shortDesc + " " + product.description.slice(0, 120) + "…"),
+    // The SEO description from Studio (or the code's) when it fits in whole
+    // sentences, else the product's own one-liner: at most 155 characters,
+    // never cut mid-word. Until 30 Sep 2026 the fallback was the one-liner
+    // plus the first 120 characters of the body, cut mid-word and ending in
+    // "…" (QA E1, on 22 pages).
+    description: metaDescription(product.seoDescription, product.shortDesc),
     slug: `products/${product.slug}`,
     image: isSanityImage(heroSrc) ? sanityOgImage(heroSrc) : heroSrc,
   });
+}
+
+/**
+ * A meta description of whole sentences, at most `max` characters: the SEO
+ * field when it fits, or cut back to the last sentence end that fits; when
+ * its one sentence runs past the limit (seven of the ported product
+ * descriptions do), the page's one-liner stands in, by the same rule. Never mid-word, never
+ * "…" (Google adds its own). The same helper lives in
+ * app/applications/[slug]/page.tsx: a page file cannot export it, and
+ * lib/seo.ts belongs to another worker tonight (30 Sep 2026).
+ */
+function metaDescription(seo: string | undefined, oneLiner: string, max = 155): string {
+  for (const text of [seo, oneLiner]) {
+    const clean = (text ?? "").replace(/\s+/g, " ").trim();
+    if (!clean) continue;
+    if (clean.length <= max) return clean;
+    const head = clean.slice(0, max + 1);
+    const end = Math.max(head.lastIndexOf(". "), head.lastIndexOf("! "), head.lastIndexOf("? "));
+    if (end >= 40) return clean.slice(0, end + 1);
+  }
+  // Both run past the limit in one sentence (none does today): the one-liner
+  // to its last whole word, with a full stop.
+  const clean = oneLiner.replace(/\s+/g, " ").trim();
+  const cut = clean.slice(0, max).lastIndexOf(" ");
+  return clean.slice(0, cut > 0 ? cut : max).replace(/[,;:\s]+$/, "") + ".";
 }
 
 export default async function ProductPage({ params }: Props) {

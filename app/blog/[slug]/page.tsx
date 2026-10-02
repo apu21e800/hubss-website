@@ -54,13 +54,18 @@ export async function generateStaticParams() {
 const FULL_BLEED_MIN_WIDTH = 1200;
 
 /**
- * The reading column: 17 px type on a desktop (16 on a phone) and a 70
- * character measure. Everything that lines up with the article (the share
- * row, the Lunch & Learn card below lg, the systems rail and the conversion
- * block) takes the same pair, since `ch` is measured in the element's own
- * font size.
+ * The reading column: 17 px type on a desktop (16 on a phone) and a measure
+ * of about 70 characters. Everything that lines up with the article (the
+ * share row, the Lunch & Learn card below lg, the systems rail and the
+ * conversion block) takes the same pair, since `ch` is measured in the
+ * element's own font size.
+ *
+ * 56ch, not 70ch (QA D24, 30 Sep 2026: "the body runs about 85–90 characters
+ * per line at 1440"). `ch` is the width of Inter's zero, 10.7 px at 17 px,
+ * and running text averages 8.3 px a character, so 70ch (751 px) set 90
+ * characters a line. 56ch is 601 px, about 72 characters a line.
  */
-const MEASURE: CSSProperties = { maxWidth: "70ch", fontSize: "clamp(1rem, 0.96rem + 0.2vw, 1.0625rem)" };
+const MEASURE: CSSProperties = { maxWidth: "56ch", fontSize: "clamp(1rem, 0.96rem + 0.2vw, 1.0625rem)" };
 
 /**
  * The hero photograph's alt: Studio's alt for the featured image when it says
@@ -376,7 +381,9 @@ export default async function BlogPostPage({ params }: Props) {
       <div style={{ height: 2, background: "linear-gradient(90deg, #F97316 0%, #EAB308 50%, transparent 100%)" }} />
 
       {/* ── Article + sidebar ───────────────────── */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-10 lg:grid lg:gap-16" style={{ gridTemplateColumns: "minmax(0, 1fr) 320px" }}>
+      {/* The sidebar column takes some of the room the shorter measure gives
+          back: 360 px, from 320 (QA D24, 30 Sep 2026). */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-10 lg:grid lg:gap-16" style={{ gridTemplateColumns: "minmax(0, 1fr) 360px" }}>
         {/* A container, so a wide table (PostBody) can take the column's full
             width (100cqw) past the text's measure before it has to scroll. */}
         <div className="min-w-0" style={{ containerType: "inline-size" }}>

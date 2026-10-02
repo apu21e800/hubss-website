@@ -264,12 +264,6 @@ export default async function ProductPage({ params }: Props) {
   const inSpread = new Set((catalogue?.specs ?? []).map((sp) => norm(sp.label)));
   const sideSpecs = product.specs.filter((sp) => !inSpread.has(norm(sp.label)));
 
-  // "Where X goes": the count decides the column count, so no card sits alone
-  // on its last row (QA pa#25). Every card is the same width; a short last row
-  // stays left-aligned instead of stretching (QA, 28 Sep 2026: StreetBond's
-  // 5+5+3 and AirMark's two 598 px cards).
-  const appCols = bestColumns(relatedAppData.length);
-
   return (
     <main style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
       <JsonLd data={productSchema} />
@@ -583,7 +577,12 @@ export default async function ProductPage({ params }: Props) {
               </Link>
             </div>
 
-            <div className={`grid grid-cols-2 gap-3 sm:gap-4 ${APP_COLS[appCols]}`}>
+            {/* One grid on every product page: four across from lg, two
+                below, every card the same size and the same 15 px name. The
+                count used to pick 3, 4 or 5 columns, so StreetBond's cards
+                were small and DecoMark's large for the same section (QA B8,
+                30 Sep 2026). A short last row stays left-aligned. */}
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
               {relatedAppData.map((app) => {
                 const photo: Photo | null = app.heroPhoto ?? null;
                 return (
@@ -605,7 +604,7 @@ export default async function ProductPage({ params }: Props) {
                         fill
                         style={{ objectPosition: "center 60%" }}
                         className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-                        sizes={APP_SIZES[appCols]}
+                        sizes={APP_SIZES}
                       />
                       <div
                         className="absolute inset-0"
@@ -643,32 +642,9 @@ export default async function ProductPage({ params }: Props) {
 }
 
 /**
- * Columns from lg up for a grid of `n` cards that leaves no card alone on its
- * last row: whichever of 4, 3 or 5 divides the list, else the one whose last
- * row is fullest. One or two cards get four columns: the standard card size,
- * left-aligned, not stretched across the row.
+ * The card's real width in the four-column grid (max-w-7xl less px-8 is
+ * 1216 px; gaps 12 px on phones, 16 px from sm), so the browser picks a
+ * source at least as wide as the card. "25vw" handed a 598 px card a 384 px
+ * image.
  */
-function bestColumns(n: number): 3 | 4 | 5 {
-  const options: (3 | 4 | 5)[] = [4, 3, 5];
-  const exact = options.find((c) => n % c === 0);
-  if (exact) return exact;
-  return options.reduce((best, c) => (n % c > n % best ? c : best), 4 as 3 | 4 | 5);
-}
-
-/** Two across on phones and tablets, `cols` across from lg. */
-const APP_COLS: Record<3 | 4 | 5, string> = {
-  3: "lg:grid-cols-3",
-  4: "lg:grid-cols-4",
-  5: "lg:grid-cols-5",
-};
-
-/**
- * The card's real width per column count (max-w-7xl less px-8 is 1216 px;
- * gaps 12 px on phones, 16 px from sm), so the browser picks a source at
- * least as wide as the card. "25vw" handed a 598 px card a 384 px image.
- */
-const APP_SIZES: Record<3 | 4 | 5, string> = {
-  3: "(min-width: 1280px) 395px, (min-width: 1024px) calc((100vw - 96px) / 3), (min-width: 640px) calc(50vw - 32px), calc(50vw - 22px)",
-  4: "(min-width: 1280px) 292px, (min-width: 1024px) calc((100vw - 112px) / 4), (min-width: 640px) calc(50vw - 32px), calc(50vw - 22px)",
-  5: "(min-width: 1280px) 231px, (min-width: 1024px) calc((100vw - 128px) / 5), (min-width: 640px) calc(50vw - 32px), calc(50vw - 22px)",
-};
+const APP_SIZES = "(min-width: 1280px) 292px, (min-width: 1024px) calc((100vw - 112px) / 4), (min-width: 640px) calc(50vw - 32px), calc(50vw - 22px)";

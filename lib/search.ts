@@ -53,8 +53,8 @@
 import { products } from "./products";
 import { applications } from "./applications";
 import { resourceDocuments } from "./resource-documents";
-import { ideaBook } from "./catalogue";
-import { PATTERN_TEMPLATES } from "./pattern-templates";
+import { catalogue, ideaBook } from "./catalogue";
+import { PATTERN_TEMPLATES, patternSrc } from "./pattern-templates";
 import { PRODUCT_KEYWORDS, APPLICATION_KEYWORDS } from "./search-keywords";
 import { PRODUCT_CATALOGUE } from "./product-catalogue";
 import { mapProjects } from "./map-projects";
@@ -96,7 +96,81 @@ export interface SearchEntry {
   badge?: string;
   /** True when the href is a file rather than a route, so the click is a download. */
   isFile?: boolean;
+  /**
+   * The baked square thumbnail, as a base path: `${thumb}-128.webp` and
+   * `${thumb}-256.webp` (thumbBase below). Absent where there is no picture
+   * to show; the row then shows the wheel tile.
+   */
+  thumb?: string;
 }
+
+// ── Thumbnails ────────────────────────────────────────────────────────────────
+/**
+ * 2 Oct 2026, Vern: "search function is a bit dull too, could add image
+ * thumbnails or something?!"
+ *
+ * Every row with a picture gets a square thumbnail that
+ * scripts/gen-search-images.ts bakes at build into
+ * /images/search/thumbs/<kind>/<id>-<size>.webp: the product card photo, the
+ * application hero, the post's featured image, the project's first photo, a
+ * spec sheet's first page, the stamping template. Not /_next/image (the
+ * optimisation allowance ran out in Aug 2026) and nothing from Sanity while
+ * someone types: post and project photos are fetched once, at build.
+ *
+ * The path is worked out, not looked up. The index below says which entries
+ * have a picture and the generator bakes exactly those (it imports this
+ * function), so the palette carries no manifest in its bundle. A file that is
+ * missing anyway (a photo that would not decode, a dev server that never ran
+ * the generator) fails to load and its row keeps the wheel tile.
+ */
+export const THUMB_ROOT = "/images/search/thumbs";
+/** 128 covers a 56px row at 2x; 256 covers the start grid's ~100px tiles at 2x. */
+export const THUMB_SIZES = [128, 256] as const;
+export type ThumbKind = "product" | "application" | "post" | "project" | "document" | "pattern" | "page";
+
+/** A file-safe name: "/docs/StreetBond/StreetBond%20Pro%20220%20%5BMMA%5D/x.pdf" -> "streetbond-streetbond-pro-220-mma-x". */
+function thumbName(id: string): string {
+  let s = id;
+  try {
+    s = decodeURIComponent(id);
+  } catch {
+    // a stray % in a name; use it as written
+  }
+  return s
+    .replace(/^\/(docs|resources)\//, "")
+    .replace(/\.[a-z0-9]+$/i, "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+export function thumbBase(kind: ThumbKind, id: string): string {
+  return `${THUMB_ROOT}/${kind}/${thumbName(id)}`;
+}
+
+/** The smaller copy, for `src`. */
+export const thumbSrc = (base: string) => `${base}-${THUMB_SIZES[0]}.webp`;
+/** Both copies, for `srcSet`. */
+export const thumbSrcSet = (base: string) => THUMB_SIZES.map((w) => `${base}-${w}.webp ${w}w`).join(", ");
+
+/**
+ * A spec sheet has a picture when scripts/gen-pdf-previews.py rendered its
+ * first page, and that script walks /public/docs. The flyers in
+ * /public/resources have no rendered page, so they keep the wheel.
+ */
+export const documentHasThumb = (fileUrl: string) => fileUrl.startsWith("/docs/") && /\.pdf($|\?)/i.test(fileUrl);
+
+/**
+ * The two static pages with a picture that is unmistakably theirs: the Idea
+ * Book's cover and a stamping template. "All systems", "Contact" and the rest
+ * are sections of the site, and the HUB wheel is the honest picture for them.
+ */
+export const PAGE_THUMBS: Record<string, { src: string; treat: "photo" | "pattern" }> = {
+  ...(catalogue.dir ? { "p-idea-book": { src: `${catalogue.dir}/p001-800.webp`, treat: "photo" as const } } : {}),
+  "p-patterns": { src: patternSrc(PATTERN_TEMPLATES[0]), treat: "pattern" },
+};
 
 export interface SearchHit extends SearchEntry {
   score: number;
@@ -181,6 +255,8 @@ function buildIndex(): SearchEntry[] {
         ...(cat ? [cat.description, ...cat.specs.map((s) => `${s.label} ${s.value}`)] : []),
       ].join(" "),
       boost: 30,
+      // The /products card photo (lib/product-card-images.mjs), cropped square.
+      thumb: thumbBase("product", p.slug),
     });
   }
 
@@ -194,6 +270,8 @@ function buildIndex(): SearchEntry[] {
       keywords: (APPLICATION_KEYWORDS[a.slug] ?? []).join(" "),
       body: a.description,
       boost: 28,
+      // The photo the /applications card falls back to (lib/featured-images.ts).
+      thumb: thumbBase("application", a.slug),
     });
   }
 
@@ -215,6 +293,9 @@ function buildIndex(): SearchEntry[] {
       keywords: [b.type, sectionFor(b.type).singular, ...b.keywords].join(" "),
       body: b.excerpt,
       boost: 0,
+      // The featured image from Sanity, baked at build. Every live post had
+      // one on 2 Oct 2026; a post without one would show the wheel.
+      thumb: thumbBase("post", b.slug),
     });
   }
 
@@ -240,6 +321,8 @@ function buildIndex(): SearchEntry[] {
       body: `${p.excerpt} ${p.product} ${p.application}`,
       boost: 20,
       badge: p.province,
+      // The pin's first photo, which is of this job (lib/map-projects.ts).
+      thumb: p.images.length ? thumbBase("project", p.id) : undefined,
     });
   }
 
@@ -262,6 +345,8 @@ function buildIndex(): SearchEntry[] {
       boost: 8,
       badge: isPdf ? "PDF" : undefined,
       isFile: isPdf,
+      // The sheet's own first page (lib/pdf-previews.json).
+      thumb: documentHasThumb(d.fileUrl) ? thumbBase("document", d.fileUrl) : undefined,
     });
   }
 
@@ -277,10 +362,11 @@ function buildIndex(): SearchEntry[] {
       keywords: "pattern template stamp streetprint stamped asphalt border",
       body: "",
       boost: 4,
+      thumb: thumbBase("pattern", t.slug),
     });
   }
 
-  for (const p of PAGES) out.push({ ...p, boost: 40 });
+  for (const p of PAGES) out.push({ ...p, boost: 40, thumb: PAGE_THUMBS[p.id] ? thumbBase("page", p.id) : undefined });
 
   return out;
 }
@@ -295,7 +381,7 @@ function index(): SearchEntry[] {
 export function withColours(
   colours: { name: string; hex: string; product: string; href: string }[]
 ): SearchEntry[] {
-  return [
+  const all: SearchEntry[] = [
     ...index(),
     ...colours.map((c) => ({
       id: `colour-${c.name}`,
@@ -309,6 +395,10 @@ export function withColours(
       hex: c.hex,
     })),
   ];
+  // Normalise now, while the palette opens, so the first keystroke that
+  // searches is not the one that pays for it (see Normed below).
+  for (const e of all) normed(e);
+  return all;
 }
 
 // ── Scoring ───────────────────────────────────────────────────────────────────
@@ -375,12 +465,51 @@ interface TokenMatch {
 }
 const NONE: TokenMatch = { s: 0, lane: "body" };
 
+/**
+ * Each entry's fields, normalised once (2 Oct 2026).
+ *
+ * scoreToken used to run norm() over the title, subtitle, keywords and body of
+ * every entry, for every token, on every keystroke: 395 entries, a product's
+ * body a few kilobytes of description and specs. Nothing about an entry
+ * changes after the palette builds its index, so the work is now done once and
+ * kept. The thumbnails that answer Vern's "search function is a bit dull too"
+ * add pictures to every row; this pays for them, so typing is no slower.
+ */
+interface Normed {
+  title: string;
+  words: string[];
+  sub: string;
+  subWords: string[];
+  kw: string;
+  kwWords: string[];
+  body: string;
+  /** Title, subtitle and keywords together, for the whole-phrase bonus. */
+  phrase: string;
+}
+const NORMED = new WeakMap<SearchEntry, Normed>();
+function normed(e: SearchEntry): Normed {
+  let n = NORMED.get(e);
+  if (!n) {
+    const title = norm(e.title);
+    const sub = norm(e.subtitle);
+    const kw = norm(e.keywords);
+    n = {
+      title,
+      words: title.split(" "),
+      sub,
+      subWords: sub.split(" "),
+      kw,
+      kwWords: kw.split(" "),
+      body: norm(e.body),
+      phrase: norm(`${e.title} ${e.subtitle} ${e.keywords}`),
+    };
+    NORMED.set(e, n);
+  }
+  return n;
+}
+
 function scoreToken(token: string, e: SearchEntry): TokenMatch {
-  const title = norm(e.title);
-  const sub = norm(e.subtitle);
-  const kw = norm(e.keywords);
-  const body = norm(e.body);
-  const words = title.split(" ");
+  const { title, words, sub, subWords, kw, kwWords, body } = normed(e);
 
   if (title === token) return { s: 1000, lane: "title" };
   if (title.startsWith(token)) return { s: 620, lane: "title" };
@@ -392,13 +521,13 @@ function scoreToken(token: string, e: SearchEntry): TokenMatch {
   const s = slack(token);
   if (s > 0 && words.some((w) => w.length >= 4 && within(w, token, s))) return { s: 210, lane: "title" };
 
-  if (kw.split(" ").some((w) => w === token)) return { s: 190, lane: "keywords" };
+  if (kwWords.some((w) => w === token)) return { s: 190, lane: "keywords" };
   if (kw.includes(token)) return { s: 150, lane: "keywords" };
   // Domain vocabulary lives in the keyword lane, not in titles — "thermoplastic",
   // "retroreflective", "methacrylate". Those are exactly the words a visitor
   // mistypes, so the fuzzy pass has to reach them too.
-  if (s > 0 && kw.split(" ").some((w) => w.length >= 5 && within(w, token, s))) return { s: 130, lane: "keywords" };
-  if (sub.split(" ").some((w) => w === token)) return { s: 120, lane: "subtitle" };
+  if (s > 0 && kwWords.some((w) => w.length >= 5 && within(w, token, s))) return { s: 130, lane: "keywords" };
+  if (subWords.some((w) => w === token)) return { s: 120, lane: "subtitle" };
   if (sub.includes(token)) return { s: 90, lane: "subtitle" };
   if (body.includes(token)) return { s: 55, lane: "body" };
 
@@ -448,7 +577,7 @@ export function search(query: string, entries: SearchEntry[], limit = 400): Sear
     if (missed) continue;
 
     // The whole phrase appearing intact is the strongest signal there is.
-    if (tokens.length > 1 && norm(`${e.title} ${e.subtitle} ${e.keywords}`).includes(q)) total += 400;
+    if (tokens.length > 1 && normed(e).phrase.includes(q)) total += 400;
 
     hits.push({ ...e, score: total / tokens.length + e.boost, matched, where });
   }

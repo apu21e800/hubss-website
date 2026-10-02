@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useRef, useEffect, useMemo, useCallback } from "react";
+import { useState, useRef, useEffect, useMemo, useCallback, type CSSProperties, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { familiesFor } from "@/lib/colours";
-import { withColours, search, groupHits, type SearchHit } from "@/lib/search";
+import { PRODUCT_CATEGORIES } from "@/lib/product-categories";
+import { withColours, search, groupHits, thumbSrc, thumbSrcSet, type SearchEntry, type SearchHit } from "@/lib/search";
 
 /**
  * Site search.
@@ -46,18 +47,17 @@ import { withColours, search, groupHits, type SearchHit } from "@/lib/search";
  * that is merely tinted with it. The earlier draft had seven decorative hues;
  * the draft after that had none at all, which was correct about the noise and
  * wrong about the craft.
+ *
+ * PICTURES (2 Oct 2026). Vern: "search function is a bit dull too, could add
+ * image thumbnails or something?!" Every row now leads with a square picture
+ * of what it opens: the system, the application, the post, the job, the
+ * sheet's first page, the template, the colour itself. They are baked at
+ * build (lib/search.ts, scripts/gen-search-images.ts), so typing never waits
+ * on Sanity or /_next/image; a row with no picture shows the HUB wheel on the
+ * card colour. The start screen is the fourteen systems as a picture grid in
+ * place of a list of links and suggestion chips, and the grey chip that
+ * repeated the typed letters ("se") back at the end of a row is gone.
  */
-
-const QUICK: { label: string; href: string; hint: string }[] = [
-  { label: "All systems", href: "/products", hint: "14 products" },
-  { label: "All applications", href: "/applications", hint: "20 uses" },
-  { label: "Photo archive", href: "/gallery", hint: "Installations" },
-  { label: "Specification library", href: "/resources", hint: "Spec sheets" },
-  // No count in the hint: it said "67 pieces" against a 74-post library, and
-  // Doug asked for fewer numbers on the site anyway.
-  { label: "Insights", href: "/blog", hint: "Projects, guides and articles" },
-  { label: "Lunch & Learn", href: "/lunch-learn", hint: "Book a session" },
-];
 
 // "Vancouver" earns its place by teaching the one thing nobody would guess:
 // the index knows where the work is. Fifty-nine installations across ten
@@ -79,32 +79,186 @@ const TRY = ["stamped asphalt", "rainbow crosswalk", "150 mil", "Vancouver", "LE
  */
 const LABEL = "var(--text-faint)";
 
-/** Wraps the matched run in <mark> without letting query text become markup. */
-function Highlight({ text, term }: { text: string; term: string }) {
-  if (!term || term.length < 2) return <>{text}</>;
-  const i = text.toLowerCase().indexOf(term.toLowerCase());
-  if (i === -1) return <>{text}</>;
+/**
+ * One line that ends on a whole word (2 Oct 2026, QA: at 390 the line stopped
+ * mid-word, "Polymer-blend repair for potholes, spalls, and utility c…").
+ *
+ * `truncate` cuts wherever the box ends, and a one-line clamp is no better:
+ * Chrome still shortens the last word to make room for its ellipsis ("Heat
+ * fus…", "spalls, an…"). An ellipsis never splits an atomic inline, though,
+ * so each word is set as an inline-block and the line ends on the last word
+ * that fits, at every width: "Heat fused …". The spaces stay real text, so
+ * the words still read as words to a screen reader and on copy.
+ *
+ * The words are written as one escaped HTML string per line, not as React
+ * elements. Measured on the dev server, a React element per word added about
+ * 25ms to the keystroke that first shows results (36 rows, two lines each);
+ * the string costs about what plain text did. Every character of the text is
+ * escaped, and the query only decides where the <mark> goes: it never becomes
+ * markup.
+ */
+const ONE_LINE: CSSProperties = { display: "block", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" };
+/**
+ * Past this, no row is wide enough to show more of a line (at most about 120
+ * characters of a subtitle fit the 768px panel), so the rest is not set. A
+ * line cut here ends in its own ellipsis, so it never looks complete.
+ */
+const LINE_CHARS = 140;
+
+const escapeHtml = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
+/**
+ * Weight and brightness, not a highlighter. An orange block behind every match
+ * turned a list of eighteen results into a field of orange rectangles: the
+ * marks competed with each other and with the selected row, so nothing read as
+ * primary. Lifting the matched run to full brightness and semibold does the
+ * same job and disappears when you are not looking for it.
+ */
+const MARK = '<mark style="background:transparent;color:var(--text-primary);font-weight:650">';
+
+/** One line's words as inline-blocks, the first occurrence of `term` marked. */
+function wordsHtml(text: string, term: string): string {
+  const shown = text.length > LINE_CHARS ? text.slice(0, text.lastIndexOf(" ", LINE_CHARS) + 1 || LINE_CHARS) : text;
+  const at = term && term.length >= 2 ? shown.toLowerCase().indexOf(term.toLowerCase()) : -1;
+  let html = "";
+  let pos = 0;
+  for (const part of shown.split(/(\s+)/)) {
+    const start = pos;
+    pos += part.length;
+    if (!part) continue;
+    if (/^\s+$/.test(part)) {
+      html += " ";
+      continue;
+    }
+    // A query token has no spaces, so a match always sits inside one word.
+    if (at >= start && at < pos) {
+      const a = at - start;
+      const b = a + term.length;
+      html += `<span class="inline-block">${escapeHtml(part.slice(0, a))}${MARK}${escapeHtml(part.slice(a, b))}</mark>${escapeHtml(part.slice(b))}</span>`;
+    } else {
+      html += `<span class="inline-block">${escapeHtml(part)}</span>`;
+    }
+  }
+  return shown.length < text.length ? `${html}<span class="inline-block">…</span>` : html;
+}
+
+function WordLine({ text, term, className, style, after }: {
+  text: string;
+  term: string;
+  className?: string;
+  style?: CSSProperties;
+  after?: ReactNode;
+}) {
+  const html = useMemo(() => wordsHtml(text, term), [text, term]);
   return (
-    <>
-      {text.slice(0, i)}
-      {/* Weight and brightness, not a highlighter. An orange block behind
-          every match turned a list of eighteen results into a field of orange
-          rectangles — the marks competed with each other and with the selected
-          row, so nothing read as primary. Lifting the matched run to full
-          brightness and semibold does the same job and disappears when you are
-          not looking for it. */}
-      <mark style={{ background: "transparent", color: "var(--text-primary)", fontWeight: 650 }}>
-        {text.slice(i, i + term.length)}
-      </mark>
-      {text.slice(i + term.length)}
-    </>
+    <span className={className} style={{ ...ONE_LINE, ...style }}>
+      {/* Escaped text only: see wordsHtml and escapeHtml above. */}
+      <span dangerouslySetInnerHTML={{ __html: html }} />
+      {after}
+    </span>
+  );
+}
+
+/** The committed 180px wheel, shown grey and faint as the "no picture" tile. */
+const WHEEL = "/images/chrome/wheel/hub-wheel-orange-180.webp";
+
+/**
+ * Thumbnails already shown once. The next keystroke re-renders most rows; a
+ * picture that has loaded before appears at once instead of fading in again.
+ */
+const SHOWN = new Set<string>();
+
+/**
+ * The square at the front of a row or a start-grid tile.
+ *
+ * The tile is the card colour from the first frame, so the row is laid out
+ * before its picture arrives and nothing shifts. The baked thumbnail fades in
+ * over it; with no thumbnail, or one that fails to load, the tile shows the
+ * HUB wheel instead: grey and faint, because the orange is reserved for what
+ * the visitor is doing. A colourant's tile is the colour itself.
+ */
+function Thumb({ entry, variant }: { entry: SearchEntry; variant: "row" | "tile" }) {
+  const base = entry.hex ? undefined : entry.thumb;
+  const [state, setState] = useState<"loading" | "shown" | "none">(
+    !base ? "none" : SHOWN.has(base) ? "shown" : "loading",
+  );
+  return (
+    <span
+      aria-hidden="true"
+      className={
+        variant === "row"
+          ? "relative block flex-shrink-0 overflow-hidden w-12 h-12 sm:w-14 sm:h-14"
+          : "relative block w-full overflow-hidden"
+      }
+      style={{
+        aspectRatio: "1 / 1",
+        borderRadius: variant === "row" ? 9 : 11,
+        background: entry.hex ?? "var(--bg-card)",
+      }}
+    >
+      {state === "none" && !entry.hex && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={WHEEL}
+          alt=""
+          width={180}
+          height={180}
+          style={{ position: "absolute", left: "27%", top: "27%", width: "46%", height: "46%", filter: "grayscale(1)", opacity: 0.32 }}
+        />
+      )}
+      {base && state !== "none" && (
+        // A plain <img> from /public: never /_next/image (allowance spent, Aug 2026).
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={thumbSrc(base)}
+          srcSet={thumbSrcSet(base)}
+          sizes={variant === "row" ? "(min-width: 640px) 56px, 48px" : "(min-width: 640px) 100px, 110px"}
+          alt=""
+          width={128}
+          height={128}
+          // Lazy, though every row is near the screen: the browser then starts
+          // the fetches after it has laid the rows out, so the keystroke that
+          // shows results paints first and the pictures follow.
+          loading="lazy"
+          decoding="async"
+          onLoad={() => {
+            SHOWN.add(base);
+            setState("shown");
+          }}
+          onError={() => setState("none")}
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            opacity: state === "shown" ? 1 : 0,
+            // Runs only on the change from 0: a picture mounted as "shown" just appears.
+            transition: "opacity 140ms ease",
+          }}
+        />
+      )}
+      {/* The hairline sits above the picture, so a pale photo or a white spec
+          sheet still has an edge on the light theme. */}
+      <span className="absolute inset-0 pointer-events-none" style={{ borderRadius: "inherit", boxShadow: "inset 0 0 0 1px var(--ink-10)" }} />
+    </span>
   );
 }
 
 export default function SearchOverlay({ onClose }: { onClose: () => void }) {
   const router = useRouter();
-  const [query, setQuery] = useState("");
-  const [active, setActive] = useState(0);
+  /** The query, and how many times it has been edited (see `chosen`). */
+  const [typed, setTyped] = useState({ text: "", edit: 0 });
+  const query = typed.text;
+  const setQuery = useCallback((text: string) => setTyped((t) => ({ text, edit: t.edit + 1 })), []);
+  /**
+   * The chosen row, remembered with the edit it was chosen during. Every edit
+   * starts from its default again, as it always has, but without an effect:
+   * an effect that reset the index ran after the commit and, on a keystroke,
+   * rendered every row a second time before the frame was painted (measured
+   * 2 Oct 2026).
+   */
+  const [chosen, setChosen] = useState<{ edit: number; i: number }>({ edit: 0, i: -1 });
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -135,7 +289,28 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
   /** Flat order matches what the eye sees, so ↑↓ walks the rendered list. */
   const flat = useMemo(() => groups.flatMap((g) => g.hits), [groups]);
 
-  useEffect(() => setActive(0), [query]);
+  /**
+   * The start screen (2 Oct 2026): the fourteen systems, family by family in
+   * the Products menu's order, so the palette is useful before a key is
+   * pressed. Any system missing from the menu's families still gets a tile.
+   */
+  const systems = useMemo(() => {
+    const all = entries.filter((e) => e.type === "Product");
+    const bySlug = new Map(all.map((e) => [e.href.replace(/^\/products\//, ""), e]));
+    const ordered = PRODUCT_CATEGORIES.flatMap((c) => c.slugs)
+      .map((slug) => bySlug.get(slug))
+      .filter((e): e is SearchEntry => !!e);
+    return [...ordered, ...all.filter((e) => !ordered.includes(e))];
+  }, [entries]);
+
+  const showResults = query.trim().length >= 2;
+  /** What ↑↓ and Enter act on: the results, or the start screen's systems. */
+  const options: SearchEntry[] = showResults ? flat : systems;
+
+  // Results start on their first row, as before. The start screen starts with
+  // nothing chosen, so Enter in an empty box never opens a product by surprise.
+  const active = chosen.edit === typed.edit ? chosen.i : showResults ? 0 : -1;
+  const setActive = useCallback((i: number) => setChosen({ edit: typed.edit, i }), [typed.edit]);
   useEffect(() => { inputRef.current?.focus(); }, []);
 
   const go = useCallback(
@@ -161,14 +336,16 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") { e.preventDefault(); onClose(); return; }
+      const n = options.length;
       if (e.key === "ArrowDown" || (e.key === "n" && e.ctrlKey)) {
-        e.preventDefault(); setActive((i) => (flat.length ? (i + 1) % flat.length : 0)); return;
+        e.preventDefault(); setActive(n ? (active + 1) % n : 0); return;
       }
       if (e.key === "ArrowUp" || (e.key === "p" && e.ctrlKey)) {
-        e.preventDefault(); setActive((i) => (flat.length ? (i - 1 + flat.length) % flat.length : 0)); return;
+        // From "nothing chosen" (-1), up goes to the last item, as it does from the first.
+        e.preventDefault(); setActive(n ? (active <= 0 ? n - 1 : active - 1) : 0); return;
       }
       if (e.key === "Enter") {
-        const target = flat[active];
+        const target = options[active];
         if (target) { e.preventDefault(); go(target.href, target.isFile); }
         return;
       }
@@ -184,7 +361,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [flat, active, go, onClose]);
+  }, [options, active, setActive, go, onClose]);
 
   // Keep the active row on screen when arrowing past the fold.
   useEffect(() => {
@@ -192,7 +369,8 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
       ?.scrollIntoView({ block: "nearest" });
   }, [active]);
 
-  const showResults = query.trim().length >= 2;
+  /** A listbox is on screen: the start grid, or results. Not when nothing matched. */
+  const hasList = showResults ? flat.length > 0 : systems.length > 0;
   let index = -1;
 
   return (
@@ -207,7 +385,10 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
         role="dialog" aria-modal="true" aria-label="Site search"
         initial={{ opacity: 0, scale: 0.98, y: -10 }} animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.98, y: -10 }} transition={{ duration: 0.16 }}
-        className="w-full max-w-2xl rounded-2xl overflow-hidden"
+        // 768px, was 672 (2 Oct 2026): the start grid fits the fourteen
+        // systems seven across only at this width, with "TrafficPatternsXD"
+        // whole under its picture, and the rows give their pictures 70px.
+        className="w-full max-w-3xl rounded-2xl overflow-hidden"
         style={{
           background: "var(--bg-card-neutral)",
           border: "1px solid var(--border-color)",
@@ -243,7 +424,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
             ref={inputRef} type="text" value={query} onChange={(e) => setQuery(e.target.value)}
             data-palette-input
             role="combobox"
-            aria-expanded={showResults}
+            aria-expanded={hasList}
             aria-autocomplete="list"
             aria-label="Search the site"
             aria-controls="search-results"
@@ -305,43 +486,75 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
         {/* Results */}
         <div>
           {!showResults && (
-            <div className="p-4">
-              <p className="text-[11px] font-bold uppercase tracking-[0.16em] mb-2.5" style={{ color: "var(--text-faint)" }}>Jump to</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 mb-5">
-                {QUICK.map((item) => (
-                  <button
-                    key={item.href} onClick={() => go(item.href)}
-                    className="group flex items-center justify-between gap-2 px-3 rounded-lg text-left hover:bg-[var(--ink-06)] transition-colors"
-                    style={{ minHeight: 44 }}
-                  >
-                    <span className="text-sm font-semibold flex items-center gap-2" style={{ color: "var(--text-body)" }}>
-                      {/* A two-pixel mark that appears under the cursor. The
-                          jump links are destinations; the mark says which one
-                          you are pointing at, in the site's own paint. */}
+            // The start screen (2 Oct 2026, QA: "a calmer start ... so the
+            // modal is useful at once"). It was six text links with counts in
+            // their hints and seven suggestion chips: thirteen things, none of
+            // them a picture. Now it is the fourteen systems, the thing most
+            // visitors came for, as one grid of photographs. The chips live on
+            // in the no-results state, where a suggestion is actually needed.
+            <div className="px-2.5 sm:px-3 pt-3.5 pb-3">
+              <div className="flex items-center justify-between pl-2.5 pr-1 mb-2">
+                <p className="text-[10px] font-bold uppercase tracking-[0.18em]" style={{ color: LABEL }}>
+                  <span
+                    aria-hidden="true"
+                    className="inline-block align-middle"
+                    style={{ width: 4, height: 4, borderRadius: "50%", background: "currentColor", marginRight: 9, marginBottom: 2, opacity: 0.7 }}
+                  />
+                  Systems
+                </p>
+                <button
+                  onClick={() => go("/products")}
+                  className="text-[11px] font-semibold px-2 py-1.5 rounded-md transition-colors hover:bg-[var(--ink-06)] hover:text-[var(--text-primary)]"
+                  style={{ color: "var(--text-faint)" }}
+                >
+                  All systems
+                </button>
+              </div>
+              {/* Seven across in the 768px panel (98px tiles, so the longest
+                  name, "TrafficPatternsXD", 94px at 11px, sits whole under its
+                  picture), three across on a phone. The 4px padding leaves room
+                  for the chosen tile's raised edge inside the scroll box. */}
+              <div
+                id="search-results" ref={listRef} role="listbox" aria-label="Systems"
+                className="grid gap-x-2 gap-y-3.5 p-1 max-h-[62vh] overflow-y-auto"
+                style={{ gridTemplateColumns: "repeat(auto-fill, minmax(94px, 1fr))" }}
+              >
+                {systems.map((p, i) => {
+                  const isActive = i === active;
+                  return (
+                    <button
+                      key={p.id}
+                      role="option"
+                      aria-selected={isActive}
+                      data-active={isActive}
+                      onMouseEnter={() => setActive(i)}
+                      onClick={() => go(p.href)}
+                      className="flex flex-col items-stretch gap-1.5 text-left transition-colors"
+                      // Raised like an active row, by a 4px edge drawn outside
+                      // the tile so the caption keeps the full width.
+                      style={{
+                        borderRadius: 13,
+                        background: isActive ? "var(--bg-card-surface)" : "transparent",
+                        boxShadow: isActive ? "0 0 0 4px var(--bg-card-surface)" : "none",
+                      }}
+                    >
+                      <Thumb entry={p} variant="tile" />
+                      <span
+                        className="block text-center text-[11px] font-semibold whitespace-nowrap overflow-hidden text-ellipsis"
+                        style={{ color: isActive ? "var(--text-primary)" : "var(--text-body)", letterSpacing: "-0.005em" }}
+                      >
+                        {p.title}
+                      </span>
+                      {/* Accent 3 again: the two-pixel mark under the one tile
+                          Enter will open, in the site's own paint. */}
                       <span
                         aria-hidden="true"
-                        className="opacity-0 group-hover:opacity-100 transition-opacity"
-                        style={{ width: 3, height: 14, background: "#F97316", borderRadius: 2 }}
+                        className="block mx-auto"
+                        style={{ width: 16, height: 2, borderRadius: 2, marginTop: -2, background: "#F97316", opacity: isActive ? 1 : 0 }}
                       />
-                      {item.label}
-                    </span>
-                    <span className="text-[11px]" style={{ color: "var(--text-faint)" }}>{item.hint}</span>
-                  </button>
-                ))}
-              </div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.16em] mb-2.5" style={{ color: "var(--text-faint)" }}>Try</p>
-              <div className="flex flex-wrap gap-1.5">
-                {TRY.map((t) => (
-                  <button
-                    key={t} onClick={() => { setQuery(t); inputRef.current?.focus(); }}
-                    // Suggestion chips warm on hover — the one place in the
-                    // empty state where the visitor has expressed intent.
-                    className="text-xs font-medium px-3 py-2 rounded-full transition-colors hover:bg-[var(--ink-06)] hover:border-orange-500/45 hover:text-[var(--text-primary)]"
-                    style={{ background: "var(--fill-subtle)", color: "var(--text-secondary)", border: "1px solid var(--border-color)" }}
-                  >
-                    {t}
-                  </button>
-                ))}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -352,7 +565,9 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                 <div key={group.type}>
                   <p
                     className="text-[10px] font-bold uppercase tracking-[0.18em] px-5 pt-4 pb-2 sticky top-0"
-                    style={{ color: LABEL, background: "var(--bg-card-neutral)" }}
+                    // zIndex: each row's content-visibility makes it a stacking
+                    // context, which would otherwise paint over the stuck heading.
+                    style={{ color: LABEL, background: "var(--bg-card-neutral)", zIndex: 1 }}
                   >
                     {/* Dot · label · count — the contents-page row from the
                         catalogue, at UI scale. Structural, so the dot is
@@ -373,10 +588,6 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                     index += 1;
                     const isActive = index === active;
                     const myIndex = index;
-                    // The strongest token landed somewhere the row does not
-                    // show — a keyword or a body field. Nothing will be marked
-                    // in either line, so the row states its own reason.
-                    const hiddenMatch = h.where === "keywords" || h.where === "body";
                     return (
                       <button
                         key={h.id}
@@ -385,7 +596,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                         data-active={isActive}
                         onMouseEnter={() => setActive(myIndex)}
                         onClick={() => go(h.href, h.isFile)}
-                        className="w-full text-left px-3 py-2.5 flex items-center gap-3 rounded-lg transition-colors"
+                        className="w-full text-left p-2 flex items-center gap-3 sm:gap-3.5 rounded-2xl transition-colors"
                         // Selection is elevation, not colour. The orange left
                         // rule read as a status marker — the kind of thing that
                         // means "unread" or "error" — when all it means is
@@ -393,29 +604,35 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                         // says that with a raised, inset, rounded surface and
                         // nothing else; the row lifts off the panel and the eye
                         // finds it without being flagged down.
-                        style={{ background: isActive ? "var(--bg-card-surface)" : "transparent" }}
+                        style={{
+                          background: isActive ? "var(--bg-card-surface)" : "transparent",
+                          // Rows below the list's fold skip layout and paint
+                          // until scrolled to (2 Oct 2026: the keystroke that
+                          // shows results lays out the eight you can see, not
+                          // thirty-six). 72px is a row's height, 64px on a phone.
+                          contentVisibility: "auto",
+                          containIntrinsicSize: "auto 72px",
+                        }}
                       >
-                        {h.hex ? (
-                          // A colourant result should show the colour at a size
-                          // you can actually judge, with its hex, because that
-                          // is the whole reason someone searched for it.
-                          <span className="flex-shrink-0 rounded" style={{ width: 26, height: 26, background: h.hex, border: "1px solid var(--ink-22)" }} />
-                        ) : (
-                          // No bullet. Every row carried a neutral dot that
-                          // marked nothing — with a dot now leading each group
-                          // label it was dot soup, and the title is a stronger
-                          // left edge than a 5px circle ever was.
-                          null
-                        )}
+                        {/* The picture: 56px, 48px on a phone. A colourant's
+                            tile is the colour itself, big enough to judge,
+                            with its hex beside the name. */}
+                        <Thumb entry={h} variant="row" />
                         <span className="min-w-0 flex-1">
-                          <span className="block text-sm font-semibold truncate" style={{ color: isActive ? "var(--text-primary)" : "var(--text-body)" }}>
-                            <Highlight text={h.title} term={h.matched} />
-                          </span>
+                          <WordLine
+                            text={h.title}
+                            term={h.matched}
+                            className="text-sm font-semibold"
+                            style={{ color: isActive ? "var(--text-primary)" : "var(--text-body)" }}
+                          />
                           {h.subtitle && (
-                            <span className="block text-xs truncate" style={{ color: "var(--text-faint)" }}>
-                              <Highlight text={h.subtitle} term={h.matched} />
-                              {h.hex && <span style={{ fontFamily: "monospace", marginLeft: 8 }}>{h.hex.toUpperCase()}</span>}
-                            </span>
+                            <WordLine
+                              text={h.subtitle}
+                              term={h.matched}
+                              className="text-xs mt-0.5"
+                              style={{ color: "var(--text-faint)" }}
+                              after={h.hex && <span className="inline-block" style={{ fontFamily: "monospace", marginLeft: 8 }}>{h.hex.toUpperCase()}</span>}
+                            />
                           )}
                         </span>
                         {/* The trailing slot. One per row, never two.
@@ -425,16 +642,16 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                             new tab, so it says PDF with a download arrow rather
                             than promising to "open" something in place.
 
-                            Inactive row: the reason, if the row needs one.
-                            Searching "streetbond" returned Townhomes, Bike
-                            Lanes and Splash Pads with nothing marked in either
-                            line, because they matched in the keyword lane —
-                            correct, and indistinguishable from a bug. Naming
-                            the term that landed turns five confusing rows into
-                            five obviously-deliberate ones.
-
-                            Otherwise the badge: a province on a project, PDF on
-                            a download. Both answer "what am I about to get". */}
+                            Inactive row: the badge, a province on a project or
+                            PDF on a download. Both answer "what am I about to
+                            get". Until 2 Oct 2026 a row that matched in its
+                            keywords printed the matched term here in a grey
+                            chip; for a short query that was just the query
+                            again ("se", "se", "se" down the list in Vern's
+                            screenshot). The group heading already says what
+                            kind of thing each row is, and the picture now says
+                            which one, so the chip went rather than becoming a
+                            type label. */}
                         {isActive ? (
                           // Accent 3: the one row Enter will act on. This is the
                           // palette's actual next action, so it is the one
@@ -466,14 +683,6 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                               </svg>
                             )}
                             <span className="text-[10px] font-bold uppercase tracking-[0.1em]">{h.isFile ? "PDF" : "Open"}</span>
-                          </span>
-                        ) : hiddenMatch ? (
-                          <span
-                            className="flex-shrink-0 inline-flex items-center rounded text-[10px] font-semibold px-1.5"
-                            style={{ height: 20, color: "var(--text-faint)", background: "var(--fill-subtle)", border: "1px solid var(--border-color)", maxWidth: 132 }}
-                            title={`Matched “${h.matched}”`}
-                          >
-                            <span className="truncate">{h.matched}</span>
                           </span>
                         ) : h.badge ? (
                           <span

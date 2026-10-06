@@ -26,9 +26,11 @@ type Block = string | string[];
 // ever switched on. The old list's "data processed in North America" and
 // "anonymized ... IP anonymization enabled" were dropped: nothing in the repo
 // configures or documents either. 6 Oct 2026: the forms gained Vercel BotID
-// (part of the Vercel line) and a spam screen that sends the message, name,
-// company and email domain to Anthropic's Claude (lib/form-screen.ts), never
-// the phone number, full email or mailing address. Hence the new line.
+// (part of the Vercel line) and a spam screen that sends the name, company,
+// email domain, project fields and the message, with phone numbers and email
+// addresses replaced, to Anthropic's Claude (lib/form-screen.ts). Never the
+// phone field, the full email or the mailing address (an Idea Book request's
+// city included). Hence the new line.
 const sections: { heading: string; blocks: Block[] }[] = [
   {
     heading: "1. Information we collect",
@@ -74,7 +76,7 @@ const sections: { heading: string; blocks: Block[] }[] = [
       [
         "Email delivery: Resend (sends the forms on this site to our inbox)",
         "Hosting: Vercel (hosts the site and checks that our forms are sent from a real browser; Vercel Web Analytics and Speed Insights measure page visits and loading speed)",
-        "Spam screening: Anthropic (reads what you send through our forms, without your phone number, full email address or mailing address, to keep spam out of our inbox)",
+        "Spam screening: Anthropic (reads what you send through our forms, with phone numbers and email addresses taken out and never your mailing address, to keep spam out of our inbox)",
         "Analytics: Google Analytics (pages visited, time on site, browser type, and referring URL)",
         "Content: Sanity (stores the site's text and serves its photographs)",
         "Maps: CARTO (supplies the map on the homepage)",

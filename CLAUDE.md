@@ -47,8 +47,8 @@ Markings, Parks & Paths, Community Branding, Town Homes, Parking Lots, Airports.
 Copy .env.local.example → .env.local and fill in:
 - RESEND_API_KEY — from resend.com (required for forms to send)
 - CONTACT_EMAIL — receiving address (defaults to info@hubss.com)
-- FORM_SCREENED_EMAIL — where the forms' spam screen sends what it holds
-  back (defaults to cleve.stordy@hubss.com; `none` drops it, log line only)
+- FORM_SCREENED_EMAIL — where the forms send what they hold back from
+  info@hubss.com (defaults to cleve.stordy@hubss.com). Nothing is dropped.
 - ANTHROPIC_API_KEY — the Insights drafter and the forms' spam screen
 
 ## Project Structure
@@ -236,22 +236,29 @@ known-benign — prove it with `tr -d '─═━'` + `cmp`, then recover a singl
 with `git checkout origin/main -- <path>`.
 
 ## Forms and spam (6 Oct 2026)
-Every form (contact, Lunch & Learn, printed Idea Book) posts to /api/contact.
-Doug was getting SEO pitches and phishing through it, so the route now runs,
-in order: Vercel BotID (instrumentation-client.ts protects POST /api/contact;
-checkBotId() refuses a script with a 403 and a "please email us" message),
-field checks (strings only, real lengths), the honeypot, then the spam screen
-in lib/form-screen.ts: Claude Haiku reads the submission (never the phone,
-full email or mailing address) and calls it genuine or spam. Genuine goes to
-info@hubss.com as before. Spam goes to FORM_SCREENED_EMAIL with "[Screened]"
-in the subject and a banner saying why; the visitor sees "sent" either way.
-If the model can't answer, two rules decide (an outside link, a pitch phrase)
-and everything else is delivered. Every submission logs one line,
-`[contact] {"form","outcome","by","reason"}`, with no personal details.
-`npm run test:forms` tests the rules; the prompt (SCREEN_SYSTEM) scored 25 of
-25 on real and typical submissions on 6 Oct 2026. Keep the prompt's last
-line: when unsure, genuine. /api/ai-chat answers 404: it was an open Claude
-Opus endpoint on HUB's key that nothing on the site used.
+Every form (contact, Lunch & Learn, printed Idea Book) posts to /api/contact
+through lib/post-form.ts. Doug was getting SEO pitches and phishing through
+it. The rule since: a real visitor's message is never refused or dropped;
+anything doubtful goes to FORM_SCREENED_EMAIL instead of info@hubss.com,
+marked "[Screened]" with a banner saying why, and the visitor sees "sent".
+- Vercel BotID: instrumentation-client.ts adds proof to the forms' requests;
+  the route asks BotID about it (2.5 s limit). Only a request with no proof
+  and no Origin from this site gets a 403 (a script). Doubted browsers, a
+  filled honeypot and spam are held, not refused.
+- lib/post-form.ts: if BotID's script can't load (content blockers, strict
+  office networks), the form sends again without it after an error or 15 s,
+  and the route screens it ("unchecked").
+- lib/form-screen.ts: Claude Haiku reads the submission (phone numbers and
+  email addresses redacted, never the mailing address) and calls it genuine
+  or spam. If it can't answer, narrow rules decide (an outside link that
+  isn't .ca/.gov/.edu or the sender's own site, a pitch phrase) and log an
+  error. `npm run test:forms` tests them, including the wordings a review
+  caught; the prompt (SCREEN_SYSTEM) scored 25 of 25 on 6 Oct 2026. Keep its
+  last line: when unsure, genuine.
+- One log line per request, `[contact] {"form","outcome","gate","by","reason"}`,
+  no personal details.
+/api/ai-chat answers 404: it was an open Claude Opus endpoint on HUB's key
+that nothing on the site used.
 
 ## Lunch & Learn page (30 Sep and 2 Oct 2026)
 - /lunch-learn is app/lunch-learn/page.tsx: the boardroom card (LunchLearn ->

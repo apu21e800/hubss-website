@@ -14,6 +14,7 @@
  */
 
 import { useState } from "react";
+import { postForm } from "@/lib/post-form";
 
 const PROVINCES = [
   "AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT",
@@ -39,20 +40,18 @@ export default function PrintedCopyForm({ compact = false }: { compact?: boolean
     setStatus("sending");
     setError("");
     try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          formType: "catalogue-print",
-          name: get("name"),
-          company: get("company"),
-          email: get("email"),
-          phone: get("phone"),
-          city,
-          address: [street, `${city} ${province} ${postal}`.trim()].filter(Boolean).join("\n"),
-          message: get("message"),
-          website: get("website"),
-        }),
+      // postForm: the spam check, with a way round it for browsers that
+      // block it (lib/post-form.ts).
+      const res = await postForm({
+        formType: "catalogue-print",
+        name: get("name"),
+        company: get("company"),
+        email: get("email"),
+        phone: get("phone"),
+        city,
+        address: [street, `${city} ${province} ${postal}`.trim()].filter(Boolean).join("\n"),
+        message: get("message"),
+        website: get("website"),
       });
       if (!res.ok) {
         const body = (await res.json().catch(() => ({}))) as { error?: string };

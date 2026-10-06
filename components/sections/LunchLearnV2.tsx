@@ -26,6 +26,7 @@ import { track } from "@vercel/analytics";
 import { CHROME_MARKS } from "@/lib/chrome-images.mjs";
 import ChromeImg from "@/components/ui/ChromeImg";
 import { lunchLearnHref, readLunchLearnParams, LL_TOPIC_MAX } from "@/lib/lunch-learn";
+import { postForm } from "@/lib/post-form";
 
 export type LunchLearnVariant = "boardroom" | "ticket" | "proof" | "band";
 
@@ -121,16 +122,14 @@ function useLunchLearnForm(withFormat: boolean) {
     e.preventDefault();
     setSubmitState({ status: "loading" });
     try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...formData,
-          ...(withFormat ? { format } : {}),
-          ...(topic ? { topic } : {}),
-          ...(from ? { from } : {}),
-          formType: "lunch-learn",
-        }),
+      // postForm: the spam check, with a way round it for browsers that
+      // block it (lib/post-form.ts).
+      const response = await postForm({
+        ...formData,
+        ...(withFormat ? { format } : {}),
+        ...(topic ? { topic } : {}),
+        ...(from ? { from } : {}),
+        formType: "lunch-learn",
       });
       if (!response.ok) throw new Error(`API error: ${response.statusText}`);
       setSubmitState({

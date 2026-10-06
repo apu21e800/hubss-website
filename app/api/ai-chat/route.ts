@@ -1,54 +1,15 @@
-import Anthropic from '@anthropic-ai/sdk';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
-export async function POST(request: NextRequest) {
-  if (!process.env.ANTHROPIC_API_KEY) {
-    return NextResponse.json(
-      { error: 'AI chat is not configured.' },
-      { status: 503 }
-    );
-  }
-
-  const { message } = await request.json();
-
-  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-
-  const encoder = new TextEncoder();
-  const stream = new ReadableStream({
-    async start(controller) {
-      try {
-        const aiStream = client.messages.stream({
-          model: 'claude-opus-4-6',
-          max_tokens: 1024,
-          system: `You are a helpful assistant for HUBSS, a pavement marking company.
-Help customers with questions about:
-- Pavement marking services
-- StreetPrint decorative surfaces
-- Parking lot striping
-- Safety solutions
-Be professional, friendly, and knowledgeable about pavement marking.`,
-          messages: [{ role: 'user', content: message }],
-        });
-
-        for await (const chunk of aiStream) {
-          if (chunk.type === 'content_block_delta' && chunk.delta.type === 'text_delta') {
-            const data = JSON.stringify({ type: 'text', content: chunk.delta.text });
-            controller.enqueue(encoder.encode(`data: ${data}\n\n`));
-          }
-        }
-
-        controller.close();
-      } catch (error) {
-        controller.error(error);
-      }
-    },
-  });
-
-  return new Response(stream, {
-    headers: {
-      'Content-Type': 'text/event-stream',
-      'Cache-Control': 'no-cache',
-      'Connection': 'keep-alive',
-    },
-  });
+/**
+ * Closed 6 Oct 2026. This route streamed Claude Opus to anyone who posted
+ * {"message": "..."} to it, billed to HUB's Anthropic key (the one the
+ * Insights drafter uses), with no check on who was asking. Nothing on the site
+ * calls it: components/ai/ChatAssistant.tsx, its only caller, is rendered by
+ * no page. Found while closing the contact form to spam bots.
+ *
+ * The old handler is in git history (before this commit) if a chat assistant
+ * is ever wanted; it would need BotID and a budget before going back up.
+ */
+export function POST() {
+  return NextResponse.json({ error: "Not found." }, { status: 404 });
 }

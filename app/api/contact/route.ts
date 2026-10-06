@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+import { checkBotId } from "botid/server";
+import { screenSubmission, type ScreenVerdict } from "@/lib/form-screen";
 
 const TO_EMAIL = process.env.CONTACT_EMAIL ?? "info@hubss.com";
 // Printed-catalogue requests are fulfilment, not enquiries: Doug wants to see
@@ -7,6 +9,23 @@ const TO_EMAIL = process.env.CONTACT_EMAIL ?? "info@hubss.com";
 // rule; setting CATALOGUE_EMAIL later moves them to their own inbox with no
 // code change.
 const CATALOGUE_TO_EMAIL = process.env.CATALOGUE_EMAIL ?? TO_EMAIL;
+// Where the spam screen (lib/form-screen.ts) sends what it holds back from
+// Doug: Vern's inbox, so a wrong call can be forwarded on. Set
+// FORM_SCREENED_EMAIL=none to drop screened mail and keep only the log line,
+// once a few weeks of it show the screen makes no wrong calls.
+const SCREENED_TO_EMAIL = process.env.FORM_SCREENED_EMAIL ?? "cleve.stordy@hubss.com";
+
+const FORM_TYPES = ["contact", "lunch-learn", "newsletter", "catalogue-print"] as const;
+type FormType = (typeof FORM_TYPES)[number];
+
+/** The longest a real visitor plausibly types into each field. Anything longer is refused, not cut. */
+const MAX_LEN: Record<string, number> = {
+  name: 120, email: 254, company: 160, city: 120, phone: 40, address: 400,
+  projectType: 120, format: 40, topic: 120, from: 60, message: 10000, website: 400,
+};
+
+const UNVERIFIED =
+  "Sorry, we couldn't send that. Please email info@hubss.com or call 416-540-9287 (East) or 604-309-8212 (West).";
 
 /**
  * Everything below is interpolated into an HTML email. Unescaped, a stray "<"
@@ -22,7 +41,7 @@ function esc(v: string): string {
 }
 
 interface ContactPayload {
-  formType: "contact" | "lunch-learn" | "newsletter" | "catalogue-print";
+  formType: FormType;
   name?: string;
   email?: string;
   company?: string;
@@ -37,7 +56,7 @@ interface ContactPayload {
   website?: string; // honeypot
 }
 
-function buildEmailHtml(data: ContactPayload): string {
+function buildEmailHtml(data: ContactPayload, screened?: ScreenVerdict): string {
   // City is folded into the address block for catalogue requests, so printing
   // it twice would just look like a mistake on a shipping label.
   const showCity = Boolean(data.city) && data.formType !== "catalogue-print";
@@ -57,9 +76,20 @@ function buildEmailHtml(data: ContactPayload): string {
     .filter(Boolean)
     .join("\n");
 
+  // A screened message says so first, and why, so a wrong call is easy to
+  // spot and forward. Links in it are left as text: never click them.
+  const banner = screened
+    ? `<div style="background:#fff7ed;border:1px solid #fdba74;border-radius:6px;padding:12px 14px;margin:0 0 20px;font-size:13px;line-height:1.6;color:#7c2d12">
+        <strong>Held back from ${esc(TO_EMAIL)} by the spam screen.</strong><br>
+        Reason (${screened.by === "model" ? "Claude" : "rules"}): ${esc(screened.reason || "none given")}.<br>
+        If this is a real enquiry, forward it to ${esc(TO_EMAIL)}. Don't open links in a message like this.
+      </div>`
+    : "";
+
   return `
     <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px">
       <div style="background:#f97316;height:4px;margin-bottom:24px;border-radius:2px"></div>
+      ${banner}
       <h2 style="margin:0 0 16px;color:#1a1a1a">
         ${
           data.formType === "lunch-learn"
@@ -101,32 +131,110 @@ function buildSubjectLine(data: ContactPayload): string {
   return `Contact Form: ${who}`;
 }
 
+/**
+ * Only known fields, only strings, only real lengths. A form sends strings;
+ * anything else (numbers, objects, a 2 MB message) is a script, and used to
+ * reach the HTML builder, where a non-string threw and Doug got nothing.
+ */
+function readPayload(raw: unknown): ContactPayload | { error: string } {
+  if (!raw || typeof raw !== "object") return { error: "Missing required fields." };
+  const src = raw as Record<string, unknown>;
+  const out: Record<string, string> = {};
+  for (const key of Object.keys(MAX_LEN)) {
+    const v = src[key];
+    if (v === undefined || v === null || v === "") continue;
+    if (typeof v !== "string") return { error: "Missing required fields." };
+    if (v.length > MAX_LEN[key]) {
+      return key === "message"
+        ? { error: "That message is too long for the form. Please email it to info@hubss.com." }
+        : { error: "One of the fields is too long. Please shorten it and try again." };
+    }
+    out[key] = v;
+  }
+  const formType = src.formType;
+  if (typeof formType !== "string" || !(FORM_TYPES as readonly string[]).includes(formType) || !out.email) {
+    return { error: "Missing required fields." };
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(out.email.trim())) {
+    return { error: "Please check your email address." };
+  }
+  return { ...out, formType: formType as FormType };
+}
+
+/** One line per submission, no names, addresses or messages: what happened and why. */
+function logOutcome(form: string, outcome: string, by: string, reason = "") {
+  console.info(`[contact] ${JSON.stringify({ form, outcome, by, reason: reason.slice(0, 160) })}`);
+}
+
 export async function POST(req: NextRequest) {
   try {
-    const body = (await req.json()) as ContactPayload;
+    // 1. Was it sent from a real browser on this site? BotID answers from the
+    //    request's headers alone, so a script is turned away before its body
+    //    is read. instrumentation-client.ts adds the proof to every form's
+    //    request. If the check itself fails (a Vercel outage), carry on to
+    //    the screen rather than refuse a visitor who may be real.
+    try {
+      const verification = await checkBotId();
+      if (verification.isBot) {
+        logOutcome("unknown", "blocked", "botid");
+        return NextResponse.json({ error: UNVERIFIED }, { status: 403 });
+      }
+    } catch (err) {
+      console.error("[contact] BotID check failed; screening instead:", err instanceof Error ? err.message : err);
+    }
 
-    // Honeypot: if the hidden "website" field is filled, silently succeed
+    if (Number(req.headers.get("content-length") ?? 0) > 64_000) {
+      return NextResponse.json({ error: "That message is too long for the form. Please email it to info@hubss.com." }, { status: 413 });
+    }
+
+    const parsed = readPayload(await req.json().catch(() => null));
+    if ("error" in parsed) {
+      return NextResponse.json({ error: parsed.error }, { status: 400 });
+    }
+    const body = parsed;
+
+    // 2. Honeypot: if the hidden "website" field is filled, silently succeed
     if (body.website) {
+      logOutcome(body.formType, "dropped", "honeypot");
       return NextResponse.json({ success: true });
     }
 
-    // Basic validation
-    if (!body.email || !body.formType) {
-      return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
-    }
+    // 3. Read it before Doug does (lib/form-screen.ts). Spam goes to the
+    //    screened inbox with a banner saying why; the visitor sees the same
+    //    "sent" either way, so a spammer learns nothing.
+    const verdict = await screenSubmission({
+      formType: body.formType,
+      name: body.name,
+      company: body.company,
+      email: body.email,
+      city: body.city,
+      projectType: body.projectType,
+      format: body.format,
+      topic: body.topic,
+      hasPhone: Boolean(body.phone?.trim()),
+      hasAddress: Boolean(body.address?.trim()),
+      message: body.message,
+    });
+    const screened = verdict.verdict === "spam";
 
     if (!process.env.RESEND_API_KEY) {
-      // Dev fallback: silently succeed when no key is configured
+      // Dev fallback: no key, no mail. The log line still shows the verdict.
+      logOutcome(body.formType, screened ? "screened-not-sent" : "delivered-not-sent", verdict.by, verdict.reason);
+      return NextResponse.json({ success: true });
+    }
+
+    if (screened && /^(none|off|drop)$/i.test(SCREENED_TO_EMAIL.trim())) {
+      logOutcome(body.formType, "screened-dropped", verdict.by, verdict.reason);
       return NextResponse.json({ success: true });
     }
 
     const resend = new Resend(process.env.RESEND_API_KEY);
     const { error } = await resend.emails.send({
       from: "HUB Surface Systems <noreply@hubss.com>",
-      to: [body.formType === "catalogue-print" ? CATALOGUE_TO_EMAIL : TO_EMAIL],
+      to: [screened ? SCREENED_TO_EMAIL : body.formType === "catalogue-print" ? CATALOGUE_TO_EMAIL : TO_EMAIL],
       replyTo: body.email,
-      subject: buildSubjectLine(body),
-      html: buildEmailHtml(body),
+      subject: `${screened ? "[Screened] " : ""}${buildSubjectLine(body)}`,
+      html: buildEmailHtml(body, screened ? verdict : undefined),
     });
 
     if (error) {
@@ -134,6 +242,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Failed to send message. Please try again." }, { status: 500 });
     }
 
+    logOutcome(body.formType, screened ? "screened" : "delivered", verdict.by, verdict.reason);
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("[contact API] Unexpected error:", err);

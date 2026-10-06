@@ -47,6 +47,9 @@ Markings, Parks & Paths, Community Branding, Town Homes, Parking Lots, Airports.
 Copy .env.local.example → .env.local and fill in:
 - RESEND_API_KEY — from resend.com (required for forms to send)
 - CONTACT_EMAIL — receiving address (defaults to info@hubss.com)
+- FORM_SCREENED_EMAIL — where the forms' spam screen sends what it holds
+  back (defaults to cleve.stordy@hubss.com; `none` drops it, log line only)
+- ANTHROPIC_API_KEY — the Insights drafter and the forms' spam screen
 
 ## Project Structure
 hubss-website/
@@ -231,6 +234,24 @@ lost to stale .next builds this caused. Always write it as
 Never `git reset --hard` in this repo. Banner-dash drift in comment blocks is
 known-benign — prove it with `tr -d '─═━'` + `cmp`, then recover a single file
 with `git checkout origin/main -- <path>`.
+
+## Forms and spam (6 Oct 2026)
+Every form (contact, Lunch & Learn, printed Idea Book) posts to /api/contact.
+Doug was getting SEO pitches and phishing through it, so the route now runs,
+in order: Vercel BotID (instrumentation-client.ts protects POST /api/contact;
+checkBotId() refuses a script with a 403 and a "please email us" message),
+field checks (strings only, real lengths), the honeypot, then the spam screen
+in lib/form-screen.ts: Claude Haiku reads the submission (never the phone,
+full email or mailing address) and calls it genuine or spam. Genuine goes to
+info@hubss.com as before. Spam goes to FORM_SCREENED_EMAIL with "[Screened]"
+in the subject and a banner saying why; the visitor sees "sent" either way.
+If the model can't answer, two rules decide (an outside link, a pitch phrase)
+and everything else is delivered. Every submission logs one line,
+`[contact] {"form","outcome","by","reason"}`, with no personal details.
+`npm run test:forms` tests the rules; the prompt (SCREEN_SYSTEM) scored 25 of
+25 on real and typical submissions on 6 Oct 2026. Keep the prompt's last
+line: when unsure, genuine. /api/ai-chat answers 404: it was an open Claude
+Opus endpoint on HUB's key that nothing on the site used.
 
 ## Lunch & Learn page (30 Sep and 2 Oct 2026)
 - /lunch-learn is app/lunch-learn/page.tsx: the boardroom card (LunchLearn ->

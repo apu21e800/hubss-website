@@ -53,7 +53,9 @@ appear together; no card ever links to a page that doesn't exist yet.
 Studio's **Insights plan** is the list of posts HUB wants written. Every
 Tuesday at 13:00 UTC (9:00 in Toronto) the drafter
 (`app/api/cron/draft-field-note`, scheduled in `vercel.json`) takes the plan
-item marked **Ready** with the highest priority and:
+item marked **Ready** with the highest priority, or, when none is Ready (since
+7 Oct 2026), the top **Idea**, so nobody has to mark one Ready each week; the
+email says how many items are left and asks for more under three. It then:
 
 1. collects the facts it may use: the Idea Book pages of the item's systems and
    applications, the company lines the site already prints, and the item's
@@ -61,13 +63,15 @@ item marked **Ready** with the highest priority and:
 2. has Claude write the post from those facts only, then has Claude check the
    draft against the same facts (`lib/field-note-drafter.ts`);
 3. saves it in Insights as an **unpublished draft**, with a stand-in
-   photo from the first system's page and the fact check in "Notes for the
-   editor";
+   photo (the first application's hero, else the first system's: a parking
+   lot post gets a parking lot) and the fact check in "Notes for the editor";
 4. marks the plan item Drafted and emails `BLOG_DRAFT_NOTIFY`.
 
 It never publishes. A draft's id starts with `drafts.`, which the site can't
-read. Someone opens it in Studio, checks the notes, edits, sets the date and
-presses Publish; the rebuild puts it live about five minutes later.
+read. Someone opens it in Studio, checks the notes, edits and presses Publish;
+the rebuild puts it live about five minutes later. The first Publish dates the
+article that moment (sanity.config.ts, `datedPublish`) unless its date is in
+the future, so a draft that waited a week doesn't go out a week old.
 
 - **Run it now:** Vercel → hubss-website → Settings → Cron Jobs → Run.
 - **A particular item:** `/api/cron/draft-field-note?idea=<its id>`, with the

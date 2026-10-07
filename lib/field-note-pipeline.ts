@@ -9,6 +9,11 @@
  * "drafts.", which Sanity keeps out of the published dataset, so the site
  * (which reads published documents only, lib/sanity.client.ts) can't show it.
  * A person opens it in Studio, checks the notes, edits, and presses Publish.
+ *
+ * Which plan item (7 Oct 2026): the top item marked Ready; when none is, the
+ * top Idea. So the plan no longer needs someone to mark one Ready every
+ * Monday: Ready now means "this one next". The email says when the plan is
+ * running low.
  */
 
 import { Resend } from "resend";
@@ -34,7 +39,10 @@ export interface Idea {
 
 export type PipelineResult =
   | { drafted: false; reason: string }
-  | { drafted: true; idea: string; slug: string; title: string; factCheck: FactCheck["verdict"]; toCheck: number; style: { flagged: number; left: number }; notified: string[] };
+  | { drafted: true; idea: string; picked: "ready" | "next idea" | "asked for"; slug: string; title: string; factCheck: FactCheck["verdict"]; toCheck: number; style: { flagged: number; left: number }; ideasLeft: number; notified: string[] };
+
+/** Below this many items left (Ideas and Ready), the email asks for more. */
+const PLAN_LOW = 3;
 
 const LINKED = `{ _id, name, "slug": slug.current, "hero": heroImage{ "asset": asset._ref, alt } }`;
 const IDEA = `{ _id, title, status, searchPhrase, type, brief, "systems": systems[]->${LINKED}, "applications": applications[]->${LINKED} }`;
@@ -47,13 +55,15 @@ export async function draftNextFieldNote(opts: { ideaId?: string } = {}): Promis
   const client = sanityWriteClient();
 
   // A plan item is edited live (no draft/publish), so its _id has no "drafts." prefix.
+  // Ready items first, then Ideas; within each, priority then age.
   const idea = await client.fetch<Idea | null>(
     opts.ideaId
       ? `*[_type == "storyIdea" && _id == $id][0]${IDEA}`
-      : `*[_type == "storyIdea" && status == "ready" && !(_id in path("drafts.**"))] | order(coalesce(priority, 2) asc, _createdAt asc)[0]${IDEA}`,
+      : `*[_type == "storyIdea" && status in ["ready", "idea"] && !(_id in path("drafts.**"))] | order(select(status == "ready" => 0, 1) asc, coalesce(priority, 2) asc, _createdAt asc)[0]${IDEA}`,
     { id: opts.ideaId ?? "" }
   );
-  if (!idea) return { drafted: false, reason: opts.ideaId ? `no plan item ${opts.ideaId}` : "no plan item is marked Ready" };
+  if (!idea) return { drafted: false, reason: opts.ideaId ? `no plan item ${opts.ideaId}` : "the Insights plan has no Ready items or Ideas left" };
+  const picked = opts.ideaId ? "asked for" : idea.status === "ready" ? "ready" : "next idea";
 
   const systems = (idea.systems ?? []).filter((s): s is Linked => !!s?.slug);
   const apps = (idea.applications ?? []).filter((a): a is Linked => !!a?.slug);
@@ -75,12 +85,20 @@ export async function draftNextFieldNote(opts: { ideaId?: string } = {}): Promis
   await client.patch(idea._id).set({ status: "drafted", draftSlug: slug, draftedAt: new Date().toISOString() }).commit();
   console.log(`[field-notes] drafted "${doc.title}" as ${doc._id} from ${idea._id}; fact check: ${check.verdict} (${check.unsupported.length}); style: ${style.left.length} of ${style.flagged} left${style.error ? ` (rewrite failed: ${style.error})` : ""}`);
 
-  const notified = await notify(doc.title, doc.excerpt, `blogpost-${slug}`, check, style);
-  return { drafted: true, idea: idea._id, slug, title: doc.title, factCheck: check.verdict, toCheck: check.unsupported.length, style: { flagged: style.flagged, left: style.left.length }, notified };
+  const ideasLeft = await client.fetch<number>(`count(*[_type == "storyIdea" && status in ["ready", "idea"] && !(_id in path("drafts.**"))])`);
+  const notified = await notify(doc.title, doc.excerpt, `blogpost-${slug}`, check, style, { picked, ideaTitle: idea.title, ideasLeft });
+  return { drafted: true, idea: idea._id, picked, slug, title: doc.title, factCheck: check.verdict, toCheck: check.unsupported.length, style: { flagged: style.flagged, left: style.left.length }, ideasLeft, notified };
 }
 
 /** One email to BLOG_DRAFT_NOTIFY (comma-separated), through Resend. */
-async function notify(title: string, excerpt: string, docId: string, check: FactCheck, style: StylePass): Promise<string[]> {
+async function notify(
+  title: string,
+  excerpt: string,
+  docId: string,
+  check: FactCheck,
+  style: StylePass,
+  plan: { picked: "ready" | "next idea" | "asked for"; ideaTitle: string; ideasLeft: number }
+): Promise<string[]> {
   const to = (process.env.BLOG_DRAFT_NOTIFY ?? "").split(",").map((s) => s.trim()).filter(Boolean);
   if (!to.length || !process.env.RESEND_API_KEY) {
     console.warn("[field-notes] no email sent: BLOG_DRAFT_NOTIFY or RESEND_API_KEY is not set");
@@ -92,6 +110,13 @@ async function notify(title: string, excerpt: string, docId: string, check: Fact
     "",
     title,
     excerpt,
+    "",
+    plan.picked === "next idea"
+      ? `From the plan: "${plan.ideaTitle}" (the next Idea; nothing was marked Ready).`
+      : `From the plan: "${plan.ideaTitle}".`,
+    plan.ideasLeft < PLAN_LOW
+      ? `The plan is running low: ${plan.ideasLeft} item${plan.ideasLeft === 1 ? "" : "s"} left. Add a few in Studio → Insights plan.`
+      : `${plan.ideasLeft} items left in the plan.`,
     "",
     check.unsupported.length
       ? `Fact check: ${check.unsupported.length} statement(s) to check before publishing. They're listed in the draft's "Notes for the editor".`
@@ -127,7 +152,11 @@ export function buildDraftDocument(idea: Idea, draft: Draft, check: FactCheck, s
   const { blocks } = markdownToPortableText(draft.body, "k");
   const body = blocks.filter((b) => b._type !== "image");
 
-  const photoFrom = [...systems, ...apps].find((x) => x.hero?.asset);
+  // The stand-in photo: the application's hero first, then the system's. A
+  // post about parking lots gets a parking lot, not the product's best-known
+  // shot of something else (7 Oct 2026: the line-painting draft came with a
+  // bike path).
+  const photoFrom = [...apps, ...systems].find((x) => x.hero?.asset);
   const types = new Set<string>(FIELD_NOTE_TYPES.map((t) => t.label));
   const phrases = [...new Set([idea.searchPhrase, ...draft.searchPhrases].map((p) => p?.trim()).filter((p): p is string => !!p))];
   const today = new Date().toISOString().slice(0, 10);
@@ -148,7 +177,7 @@ export function buildDraftDocument(idea: Idea, draft: Draft, check: FactCheck, s
     "BASED ON:",
     ...draft.factsUsed.map((f) => `- ${f}`),
     "",
-    "Before publishing: set the Publish date, read it through, and delete these notes if you like (they're never shown on the site).",
+    "Before publishing: read it through, and delete these notes if you like (they're never shown on the site). The first Publish dates the article that day.",
   ].join("\n");
 
   return {

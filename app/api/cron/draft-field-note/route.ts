@@ -5,7 +5,8 @@
  * To run it now: Vercel → hubss-website → Settings → Cron Jobs → Run. To draft
  * one particular plan item: add ?idea=<its document id>.
  *
- * It takes the top "Ready" item in Studio's Field Notes plan, has Claude write
+ * It takes the top "Ready" item in Studio's Insights plan (the top Idea when
+ * none is Ready, since 7 Oct 2026), has Claude write
  * a draft, rewrite any sentence that breaks the house style (lib/style-lint.ts)
  * and fact-check it, saves it as an UNPUBLISHED Blog / Field Notes draft with
  * both checks in its notes, and emails BLOG_DRAFT_NOTIFY. See

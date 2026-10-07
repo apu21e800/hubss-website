@@ -1,3 +1,4 @@
+import { getSiteSettings } from "@/lib/sanity.queries";
 import type { Metadata } from "next";
 import Link from "next/link";
 import Nav from "@/components/sections/Nav";
@@ -25,7 +26,9 @@ export const metadata: Metadata = {
   robots: null,
 };
 
-export default function NotFound() {
+export default async function NotFound() {
+  // The two offices, from Studio's Site Settings (lib/site-settings.ts).
+  const { offices } = await getSiteSettings();
   return (
     <main style={{ background: "var(--bg-deepest)", minHeight: "100vh" }}>
       <Nav />
@@ -139,9 +142,9 @@ export default function NotFound() {
               below it. Wrapped, the West line kept a trailing dot (QA, 28 Sep
               2026). */}
           <div className="flex flex-col items-center gap-1.5 md:flex-row md:justify-center md:gap-6" style={{ fontSize: 13, color: "var(--text-secondary)" }}>
-            <span>West Office · Cleve Stordy · 604-309-8212</span>
+            <span>West Office · {offices.west.name} · {offices.west.phone}</span>
             <span className="hidden md:inline" aria-hidden="true" style={{ color: "var(--ink-15)" }}>·</span>
-            <span>East Office · Doug Bain · 416-540-9287</span>
+            <span>East Office · {offices.east.name} · {offices.east.phone}</span>
           </div>
         </div>
       </section>

@@ -6,7 +6,7 @@ import Link from "next/link";
 import { getMergedApplications } from "@/lib/applications.server";
 import { buildMetadata } from "@/lib/seo";
 import { applicationImages, resolveImage } from "@/lib/featured-images";
-import { HERO_POSITION } from "@/lib/hero-framing";
+import { heroObjectPosition } from "@/lib/hero-framing";
 
 // Sanity is the CMS for this page's copy, so the page has to be allowed to go
 // and re-read it. Without a revalidate the route is prerendered once at build
@@ -79,7 +79,7 @@ export default async function ApplicationsPage() {
                 // through the optimiser that ran out in Aug 2026.
                 unoptimized={!photo.src.startsWith("https://")}
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
-                style={{ objectPosition: HERO_POSITION[photo.origin ?? photo.src] ?? "center" }}
+                style={{ objectPosition: heroObjectPosition(photo, "center") }}
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
               />
               {/* A bottom-weighted scrim: the photograph reads at the top,

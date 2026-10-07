@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { catalogue, catalogueReady, cataloguePageUrl, ideaBook } from "@/lib/catalogue";
 import { showCatalogue } from "@/lib/feature-flags";
+import { HOMEPAGE_COPY, type HomepageCopy } from "@/lib/homepage-copy";
 
 /**
  * The Idea Book's one callout on the homepage: a strip, not a section.
@@ -17,7 +18,7 @@ import { showCatalogue } from "@/lib/feature-flags";
  * through /_next/image (lib/catalogue.ts); the 800px page is about 70 KB and
  * shows at 64px, so it is lazy and needs no srcset.
  */
-export default function IdeaBookBand() {
+export default function IdeaBookBand({ copy = HOMEPAGE_COPY.ideaBook }: { copy?: HomepageCopy["ideaBook"] }) {
   if (!showCatalogue() || !catalogueReady) return null;
   const coverWidth = catalogue.widths[0];
   const href = `${ideaBook.href}?utm_source=home&utm_medium=callout&utm_campaign=idea-book`;
@@ -52,10 +53,10 @@ export default function IdeaBookBand() {
               className="mt-1 text-[15px] font-bold leading-snug sm:text-[17px]"
               style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}
             >
-              Every system and every application, in one book.
+              {copy.heading}
             </p>
             <p className="mt-0.5 hidden text-[12px] sm:block" style={{ color: "var(--text-secondary)" }}>
-              Read it here, save it to your phone, or have the printed copy mailed.
+              {copy.intro}
             </p>
           </div>
           <span

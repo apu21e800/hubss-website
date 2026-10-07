@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import Nav from "@/components/sections/Nav";
-import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
 import { SocialLinks } from "@/components/ui/SocialLinks";
+import { useSiteSettings } from "@/components/SiteSettingsProvider";
+import { mailtoHref, telHref } from "@/lib/site-settings";
 import { track } from "@vercel/analytics";
 import { postForm } from "@/lib/post-form";
 
@@ -22,12 +23,14 @@ const projectTypes = [
 ];
 
 interface ContactFormProps {
+  footer: React.ReactNode;
   eyebrow: string;
   heading: string;
   subheading: string;
 }
 
-export default function ContactForm({ eyebrow, heading, subheading }: ContactFormProps) {
+export default function ContactForm({ eyebrow, heading, subheading, footer }: ContactFormProps) {
+  const { offices } = useSiteSettings();
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -93,15 +96,16 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
               {subheading}
             </p>
             <div className="space-y-8">
+              {/* The offices from Studio's Site Settings (lib/site-settings.ts). */}
               {[
-                { region: "West Office", city: "Ladysmith, British Columbia", email: "cleve.stordy@hubss.com", phone: "604-309-8212" },
-                { region: "East Office", city: "Milton, Ontario", email: "doug.bain@hubss.com", phone: "416-540-9287" },
+                { region: "West Office", ...offices.west },
+                { region: "East Office", ...offices.east },
               ].map((office) => (
                 <div key={office.region}>
                   <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "var(--accent-text-lg)" }}>{office.region}</p>
-                  <p className="text-sm font-medium mb-2" style={{ color: "var(--text-primary)" }}>{office.city}</p>
-                  <a href={`mailto:${office.email}`} className="text-sm flex items-center transition-colors hover:text-[var(--accent-text-lg)]" style={{ color: "var(--text-body)", minHeight: 44 }}>{office.email}</a>
-                  <a href={`tel:${office.phone.replace(/-/g, "")}`} className="text-sm flex items-center transition-colors hover:text-[var(--accent-text-lg)]" style={{ color: "var(--text-body)", minHeight: 44 }}>{office.phone}</a>
+                  <p className="text-sm font-medium mb-2" style={{ color: "var(--text-primary)" }}>{office.place}</p>
+                  <a href={mailtoHref(office.email)} className="text-sm flex items-center transition-colors hover:text-[var(--accent-text-lg)]" style={{ color: "var(--text-body)", minHeight: 44 }}>{office.email}</a>
+                  <a href={telHref(office.phone)} className="text-sm flex items-center transition-colors hover:text-[var(--accent-text-lg)]" style={{ color: "var(--text-body)", minHeight: 44 }}>{office.phone}</a>
                 </div>
               ))}
 
@@ -271,7 +275,9 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
           above this. Two forms on one page is two requests, or one request
           twice, and the visitor cannot tell which. */}
       <LunchLearn compact />
-      <Footer />
+      {/* The footer is rendered on the server and passed in: it reads Studio's
+          Site Settings, which a client component can't (lib/site-settings.ts). */}
+      {footer}
     </main>
   );
 }

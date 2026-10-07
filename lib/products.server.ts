@@ -37,6 +37,8 @@ type SanityProductProjected = Omit<SanityProduct, "slug" | "heroImage" | "galler
 };
 
 export type MergedProduct = Product & {
+  /** The Studio document's id, for "Edit on the page" (lib/sanity.preview.ts, editAttr). */
+  sanityId?: string;
   homepageBlurb?: string;
   /** The Sanity description as rich text, when Sanity has one. `description`
    *  stays plain text for JSON-LD and meta tags; the page renders these blocks. */
@@ -56,6 +58,7 @@ function merge(code: Product, sanity: SanityProductProjected | null | undefined)
   const sanityGallery = toPhotos(sanity.gallery, `${code.name} decorative pavement by HUB Surface Systems`);
   return {
     ...code,
+    sanityId: sanity._id,
     name: cmsText(sanity.name, code.name),
     eyebrow: cmsText(sanity.eyebrow, code.eyebrow),
     shortDesc: cmsText(sanity.shortDesc, code.shortDesc),

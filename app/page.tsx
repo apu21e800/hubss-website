@@ -15,11 +15,13 @@ import JsonLd from "@/components/ui/JsonLd";
 import { buildMetadata } from "@/lib/seo";
 import CanadaMapWrapper from "@/components/sections/CanadaMapWrapper";
 import { SITE_FLAGS } from "@/lib/site-flags";
-import { getSanityPageContent } from "@/lib/sanity.queries";
-import { toPhoto } from "@/lib/photos";
+import { getSanityPageContent, getSiteSettings } from "@/lib/sanity.queries";
+import { hotspotPosition, isSanityImage, sanityCrop, toPhoto } from "@/lib/photos";
+import { editAttr, isPreview } from "@/lib/sanity.preview";
 import { getMergedApplications } from "@/lib/applications.server";
 import { getMergedProducts } from "@/lib/products.server";
-import { SOCIAL_LINKS } from "@/lib/social-links";
+import { city, schemaPhone, type SiteSettings } from "@/lib/site-settings";
+import { mergeHomepageCopy } from "@/lib/homepage-copy";
 
 // 30 Sep 2026 (QA A1, E2, E4): "Systems", not the banned "Solutions", in the
 // title; one factual description with no "leader" (the same line as the site
@@ -35,7 +37,9 @@ export const metadata: Metadata = buildMetadata({
   image: "/images/og/default.jpg",
 });
 
-const organizationSchema = {
+// The offices and the social accounts come from Studio's Site Settings
+// (lib/site-settings.ts), the same values the footer prints.
+const organizationSchema = ({ offices, social }: SiteSettings) => ({
   "@context": "https://schema.org",
   "@type": "Organization",
   "@id": "https://hubss.com/#organization",
@@ -47,7 +51,7 @@ const organizationSchema = {
   // One source with the footer and the Follow the Work strip. This list used
   // to be typed by hand and pointed Google at an Instagram account HUB does
   // not own, and it left out X.
-  sameAs: Object.values(SOCIAL_LINKS),
+  sameAs: Object.values(social),
   subOrganization: [
     {
       "@type": "LocalBusiness",
@@ -55,11 +59,11 @@ const organizationSchema = {
       name: "HUB Surface Systems · West Office",
       image: "https://hubss.com/images/hero/hero-1.jpg",
       url: "https://hubss.com/contact",
-      telephone: "+1-604-309-8212",
-      email: "cleve.stordy@hubss.com",
+      telephone: schemaPhone(offices.west.phone),
+      email: offices.west.email,
       address: {
         "@type": "PostalAddress",
-        addressLocality: "Ladysmith",
+        addressLocality: city(offices.west),
         addressRegion: "BC",
         addressCountry: "CA",
       },
@@ -72,11 +76,11 @@ const organizationSchema = {
       name: "HUB Surface Systems · East Office",
       image: "https://hubss.com/images/hero/hero-1.jpg",
       url: "https://hubss.com/contact",
-      telephone: "+1-416-540-9287",
-      email: "doug.bain@hubss.com",
+      telephone: schemaPhone(offices.east.phone),
+      email: offices.east.email,
       address: {
         "@type": "PostalAddress",
-        addressLocality: "Milton",
+        addressLocality: city(offices.east),
         addressRegion: "ON",
         addressCountry: "CA",
       },
@@ -84,7 +88,7 @@ const organizationSchema = {
       priceRange: "$$",
     },
   ],
-};
+});
 
 /**
  * The hero, art-directed. The Studio photograph is the default; a wide
@@ -98,16 +102,29 @@ const organizationSchema = {
  * Vercel's file tracing then packed the whole /public folder (2.84 GB of
  * rasters) into the page's function, which failed the deploy of `ddff97b`.
  */
-const HERO_SOURCES = [
+const WIDE_MEDIA = "(min-aspect-ratio: 16/9) and (min-width: 768px)";
+const PHONE_MEDIA = "(max-width: 639px)";
+const HERO_SOURCES: { file: string; media: string; kind: "wide" | "phone" }[] = [
   // A wide, short window (a laptop, a 21:9 monitor): a 1.8:1 frame (2 Oct 2026 re-cut).
-  { file: "/images/hero/hero-1-wide.jpg", media: "(min-aspect-ratio: 16/9) and (min-width: 768px)" },
+  { file: "/images/hero/hero-1-wide.jpg", media: WIDE_MEDIA, kind: "wide" },
   // A phone: the whole scene as a 4:3 picture above the headline
   // (HeroSlideshow.tsx lays the hero out that way below the sm breakpoint).
-  { file: "/images/hero/hero-1-mobile.jpg", media: "(max-width: 639px)" },
+  { file: "/images/hero/hero-1-mobile.jpg", media: PHONE_MEDIA, kind: "phone" },
 ];
 
+/**
+ * The photo those hand-made cuts were made from, as Studio records it
+ * (asset->source.url). While Studio holds it, the cuts above are used. When
+ * Doug puts another photo in Studio, the wide-screen and phone cuts are made
+ * from HIS photo by Sanity's image CDN, around the focal point he sets on it
+ * (lib/photos.ts, sanityCrop). Until 7 Oct 2026 the hand-made cuts were used
+ * whatever Studio held, so a new hero showed only on 16:10 screens and
+ * tablets, and every phone and laptop kept the old photo.
+ */
+const DEFAULT_HERO_ORIGIN = "/images/hero/hero-1.jpg";
+
 export default async function Home() {
-  const sanityPage = await getSanityPageContent("homepage");
+  const [sanityPage, settings] = await Promise.all([getSanityPageContent("homepage"), getSiteSettings()]);
   const [mergedApplications, mergedProducts] = await Promise.all([
     getMergedApplications(),
     getMergedProducts(),
@@ -122,7 +139,17 @@ export default async function Home() {
   const applicationCards: ApplicationCard[] = mergedApplications.map(({ slug, name, shortDesc, imageUrl }) => ({
     slug, name, shortDesc, imageUrl,
   }));
+  // The words of every section below the hero, Studio over the code
+  // (lib/homepage-copy.ts).
+  const copy = mergeHomepageCopy(sanityPage?.homepageSections);
   const heroPhoto = toPhoto(sanityPage?.homepageHeroImage, "");
+  const studioHero = heroPhoto && heroPhoto.origin !== DEFAULT_HERO_ORIGIN && isSanityImage(heroPhoto.src) ? heroPhoto : null;
+  const heroSources = studioHero
+    ? [
+        { file: sanityCrop(studioHero.src, 2400, 1333, studioHero.hotspot), media: WIDE_MEDIA, kind: "wide" as const },
+        { file: sanityCrop(studioHero.src, 1200, 960, studioHero.hotspot), media: PHONE_MEDIA, kind: "phone" as const },
+      ]
+    : HERO_SOURCES;
   const hero = {
     eyebrow:    sanityPage?.homepageHero?.eyebrow    ?? "Redefining Hardscapes · Since 1999",
     heading:    sanityPage?.homepageHero?.heading    ?? "The World Is",
@@ -140,7 +167,13 @@ export default async function Home() {
     // Hero slide 1 in Studio; /images/hero/hero-1.jpg when it's empty.
     heroImageSrc: heroPhoto?.src,
     heroImageAlt: heroPhoto?.alt,
-    heroSources: HERO_SOURCES,
+    heroSources,
+    // A Studio photo frames around its focal point; its wide cut is already
+    // centred on it. The default photo keeps HOME_HERO's hand-picked framing.
+    position: studioHero ? hotspotPosition(studioHero) ?? "50% 50%" : undefined,
+    widePosition: studioHero ? "50% 50%" : undefined,
+    // While previewing in Studio, clicking the photo opens its field.
+    editAttribute: (await isPreview()) ? editAttr({ id: sanityPage?._id ?? "page-homepage", type: "page" }, "homepageHero.heroImage1") : undefined,
   };
 
   return (
@@ -148,22 +181,22 @@ export default async function Home() {
       {/* Page-load sweep */}
       <div className="page-sweep" />
 
-      <JsonLd data={organizationSchema} />
+      <JsonLd data={organizationSchema(settings)} />
       <Nav />
       <HeroSlideshow {...hero} />
       <TrustedByMarquee />
-      <PersonaEntryPoints />
+      <PersonaEntryPoints cards={copy.audiences} />
       {/* slate → dark */}
-      <ProductsGrid products={productCards} />
+      <ProductsGrid products={productCards} copy={copy.systems} />
       {/* dark → slate */}
-      <ApplicationsGrid applications={applicationCards} />
+      <ApplicationsGrid applications={applicationCards} copy={copy.applications} />
       {/* The Idea Book's one homepage call to action (Doug, 25 Sep 2026):
           after the applications, before the reading. */}
-      <IdeaBookBand />
+      <IdeaBookBand copy={copy.ideaBook} />
       {/* Featured article — Insights */}
-      <FeaturedBlogPost />
+      <FeaturedBlogPost copy={copy.insights} />
       {/* off-white → slate (lunch learn) */}
-      <InstagramStrip />
+      <InstagramStrip copy={copy.onTheGround} />
       {/* Canada map — controlled by SITE_FLAGS.showMap in lib/site-flags.ts.
           #map is a real anchor: a search for one of the mapped places sends
           the visitor here. Since 28 Sep 2026 every pin has a published write-up

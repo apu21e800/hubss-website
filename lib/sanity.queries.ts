@@ -15,9 +15,12 @@
 
 import { unstable_cache } from "next/cache";
 import { client } from "@/lib/sanity.client";
+import { isPreview, previewFetch } from "@/lib/sanity.preview";
 import type { SanityProduct, SanityApplication } from "@/types/sanity";
 import type { ResourceDocument } from "@/lib/resource-documents";
 import type { SanityPhotoProjected } from "@/lib/photos";
+import { mergeSiteSettings, type SanitySiteSettings, type SiteSettings } from "@/lib/site-settings";
+import type { SanityHomepageSections } from "@/lib/homepage-copy";
 
 /**
  * Every Sanity read goes through here. On failure it logs and throws:
@@ -27,7 +30,23 @@ import type { SanityPhotoProjected } from "@/lib/photos";
  *    good page;
  *  - unstable_cache never stores a failure, so the next request tries again.
  */
-export async function sanityFetch<T>(label: string, query: string, params: Record<string, unknown> = {}): Promise<T> {
+export async function sanityFetch<T>(
+  label: string,
+  query: string,
+  params: Record<string, unknown> = {},
+  options: { preview?: boolean } = {}
+): Promise<T> {
+  // Studio's "Edit on the page" (lib/sanity.preview.ts): drafts, with the
+  // markers the click-to-edit overlay reads. Next doesn't cache draft-mode
+  // reads, so nothing here reaches a visitor. If the draft read fails, the
+  // preview shows the published text rather than an error page.
+  if (options.preview !== false && (await isPreview())) {
+    try {
+      return await previewFetch<T>(query, params);
+    } catch (err) {
+      console.error(`[sanity] preview read "${label}" failed, showing published: ${err instanceof Error ? err.message : String(err)}`);
+    }
+  }
   try {
     return await client.fetch<T>(query, params);
   } catch (err) {
@@ -41,7 +60,11 @@ export async function sanityFetch<T>(label: string, query: string, params: Recor
 // deploys, so changing it makes every entry refetch from Sanity on the next
 // deploy. It was bumped on 24 Sep 2026 while chasing a stale /products/mmax
 // subtitle; the real cause was a Studio draft (see lib/sanity.client.ts).
-export const CACHE_VERSION = "2026-09-24";
+//
+// Bumped on 7 Oct 2026: the photo projection gained `hotspot` and `_key`
+// (Studio's focal point frames the heroes; "Edit on the page" points at one
+// gallery photo), and cached entries from before would lack both.
+export const CACHE_VERSION = "2026-10-07";
 
 // ── Products ──────────────────────────────────────────────────────────
 
@@ -53,6 +76,14 @@ export const CACHE_VERSION = "2026-09-24";
 // heroImage and gallery come with their CDN URL, pixel size and alt/caption,
 // plus the /public path each photo was migrated from (asset->source.url), which
 // lib/image-seo.ts needs for SEO keywords. See lib/photos.ts.
+/**
+ * One image field as lib/photos.ts reads it: CDN URL, pixel size, alt and
+ * caption, the focal point Doug sets in Studio (hotspot: it frames the heroes,
+ * lib/hero-framing.ts) and the /public path the photo was migrated from.
+ * `_key` lets "Edit on the page" point at one photo in a gallery.
+ */
+export const PHOTO_PROJECTION = `{ _key, alt, caption, hotspot, "url": asset->url, "width": asset->metadata.dimensions.width, "height": asset->metadata.dimensions.height, "origin": select(originAsset == asset._ref => origin, asset->source.url) }`;
+
 const PRODUCT_FIELDS = `
   _id,
   _type,
@@ -63,8 +94,8 @@ const PRODUCT_FIELDS = `
   description,
   homepageBlurb,
   heroPosition,
-  heroImage{ alt, caption, "url": asset->url, "width": asset->metadata.dimensions.width, "height": asset->metadata.dimensions.height, "origin": select(originAsset == asset._ref => origin, asset->source.url) },
-  gallery[]{ alt, caption, "url": asset->url, "width": asset->metadata.dimensions.width, "height": asset->metadata.dimensions.height, "origin": select(originAsset == asset._ref => origin, asset->source.url) },
+  heroImage${PHOTO_PROJECTION},
+  gallery[]${PHOTO_PROJECTION},
   specs,
   seo
 `;
@@ -103,8 +134,8 @@ const APPLICATION_FIELDS = `
   "slug": slug.current,
   shortDesc,
   description,
-  heroImage{ alt, caption, "url": asset->url, "width": asset->metadata.dimensions.width, "height": asset->metadata.dimensions.height, "origin": select(originAsset == asset._ref => origin, asset->source.url) },
-  gallery[]{ alt, caption, "url": asset->url, "width": asset->metadata.dimensions.width, "height": asset->metadata.dimensions.height, "origin": select(originAsset == asset._ref => origin, asset->source.url) },
+  heroImage${PHOTO_PROJECTION},
+  gallery[]${PHOTO_PROJECTION},
   seo
 `;
 
@@ -149,6 +180,8 @@ export interface SanityPageContent {
     cta2Label?: string;
     cta2Href?: string;
   };
+  // The homepage's section copy (lib/homepage-copy.ts)
+  homepageSections?: SanityHomepageSections | null;
   // Resolved hero photos (projected in getSanityPageContent)
   homepageHeroImage?: SanityPhotoProjected | null;
   aboutHeroImage?: SanityPhotoProjected | null;
@@ -214,8 +247,8 @@ export const getSanityPageContent = unstable_cache(
       // in the schema but aren't shown yet.
       `*[_type == "page" && slug.current == $slug][0]{
         ...,
-        "homepageHeroImage": homepageHero.heroImage1{ alt, caption, "url": asset->url, "width": asset->metadata.dimensions.width, "height": asset->metadata.dimensions.height, "origin": select(originAsset == asset._ref => origin, asset->source.url) },
-        "aboutHeroImage": aboutHero.heroImage{ alt, caption, "url": asset->url, "width": asset->metadata.dimensions.width, "height": asset->metadata.dimensions.height, "origin": select(originAsset == asset._ref => origin, asset->source.url) }
+        "homepageHeroImage": homepageHero.heroImage1${PHOTO_PROJECTION},
+        "aboutHeroImage": aboutHero.heroImage${PHOTO_PROJECTION}
       }`,
       { slug }
     ),
@@ -247,7 +280,11 @@ export const getResourceDocuments = unstable_cache(
            "type": coalesce(docType, type, "Other"),
            "applications": coalesce(applications, [])
          }
-       }`
+       }`,
+      {},
+      // The Resources page filters and sorts on these strings; it stays on the
+      // published copy even in Studio's preview.
+      { preview: false }
     );
     if (!result?.resourceDocuments?.length) return null;
     // Belt and braces: a document added in Studio tomorrow with the field left
@@ -261,6 +298,25 @@ export const getResourceDocuments = unstable_cache(
     }));
   },
   ["resource-documents"],
+  { tags: ["siteSettings"], revalidate: 3600 }
+);
+
+// ── Site Settings (offices, social accounts, footer line) ─────────────────
+
+/**
+ * The offices, the social accounts and the footer line, Studio over the code
+ * (lib/site-settings.ts). Never null: with nothing in Studio it is the code's
+ * copy. Throws if Sanity fails, like every read here.
+ */
+export const getSiteSettings = unstable_cache(
+  async (): Promise<SiteSettings> => {
+    const raw = await sanityFetch<SanitySiteSettings | null>(
+      "site settings",
+      `*[_type == "siteSettings"][0]{ _id, offices, social, footerTagline }`
+    );
+    return mergeSiteSettings(raw);
+  },
+  [`site-settings:${CACHE_VERSION}`],
   { tags: ["siteSettings"], revalidate: 3600 }
 );
 

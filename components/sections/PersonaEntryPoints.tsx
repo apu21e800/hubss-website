@@ -1,26 +1,18 @@
+import { HOMEPAGE_COPY, type AudienceCard } from "@/lib/homepage-copy";
 import Link from "next/link";
 
-const PERSONAS = [
-  {
-    label: "Municipalities",
-    desc: "Crosswalks, transit corridors and plazas: Vision Zero aligned, accessible, installed by certified crews coast to coast.",
-    href: "/applications",
-  },
-  {
-    label: "Designers & specifiers",
-    desc: "Stamped patterns, PMS-matched colour and snowplow-safe systems, with spec sheets and spec language for the tender.",
-    href: "/products",
-  },
-  {
-    label: "Contractors",
-    desc: "HUB certifies, trains and supports its installer network across Canada.",
-    // The card is about certification, so it opens the post about the
-    // installer network rather than the contact form (QA rest#8, 27 Sep 2026).
-    href: "/blog/hub-certified-installer-network",
-  },
+// The three cards' links, left to right. Their words (who each card is for
+// and its line) are in Studio since 7 Oct 2026: lib/homepage-copy.ts.
+const HREFS = [
+  "/applications",
+  "/products",
+  // The card is about certification, so it opens the post about the
+  // installer network rather than the contact form (QA rest#8, 27 Sep 2026).
+  "/blog/hub-certified-installer-network",
 ];
 
-export default function PersonaEntryPoints() {
+export default function PersonaEntryPoints({ cards = HOMEPAGE_COPY.audiences }: { cards?: AudienceCard[] }) {
+  const PERSONAS = cards.slice(0, HREFS.length).map((card, i) => ({ ...card, href: HREFS[i] }));
   return (
     <section
       /* a choice to read through */

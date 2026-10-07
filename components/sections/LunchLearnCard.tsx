@@ -15,8 +15,10 @@ import Link from "next/link";
 import ChromeImg from "@/components/ui/ChromeImg";
 import { CHROME_MARKS } from "@/lib/chrome-images.mjs";
 import { lunchLearnHref } from "@/lib/lunch-learn";
+import { getSiteSettings } from "@/lib/sanity.queries";
+import { telHref } from "@/lib/site-settings";
 
-export default function LunchLearnCard({
+export default async function LunchLearnCard({
   topic,
   from,
   layout = "card",
@@ -31,6 +33,8 @@ export default function LunchLearnCard({
   heading?: string;
   body?: string;
 }) {
+  // The office phones, from Studio's Site Settings (lib/site-settings.ts).
+  const { offices } = await getSiteSettings();
   const title = heading ?? (topic ? `Bring ${topic} to your team` : "Bring HUB to your team");
   const line =
     body ??
@@ -91,8 +95,8 @@ export default function LunchLearnCard({
           {row ? (
             <p className="flex flex-wrap gap-x-3 text-[12px]" style={{ color: "var(--text-muted)" }}>
               <span>Or call</span>
-              <a href="tel:+14165409287" className="whitespace-nowrap font-semibold underline-offset-2 hover:underline" style={{ color: "var(--text-secondary)" }}>East 416-540-9287</a>
-              <a href="tel:+16043098212" className="whitespace-nowrap font-semibold underline-offset-2 hover:underline" style={{ color: "var(--text-secondary)" }}>West 604-309-8212</a>
+              <a href={telHref(offices.east.phone)} className="whitespace-nowrap font-semibold underline-offset-2 hover:underline" style={{ color: "var(--text-secondary)" }}>East {offices.east.phone}</a>
+              <a href={telHref(offices.west.phone)} className="whitespace-nowrap font-semibold underline-offset-2 hover:underline" style={{ color: "var(--text-secondary)" }}>West {offices.west.phone}</a>
             </p>
           ) : (
             // In a sidebar the three pieces wrapped as "Or call East · …" over
@@ -101,8 +105,8 @@ export default function LunchLearnCard({
             <p className="flex gap-x-3 text-[12px]" style={{ color: "var(--text-muted)" }}>
               <span className="flex-shrink-0">Or call</span>
               <span className="flex flex-col">
-                <a href="tel:+14165409287" className="whitespace-nowrap font-semibold underline-offset-2 hover:underline" style={{ color: "var(--text-secondary)" }}>East 416-540-9287</a>
-                <a href="tel:+16043098212" className="whitespace-nowrap font-semibold underline-offset-2 hover:underline" style={{ color: "var(--text-secondary)" }}>West 604-309-8212</a>
+                <a href={telHref(offices.east.phone)} className="whitespace-nowrap font-semibold underline-offset-2 hover:underline" style={{ color: "var(--text-secondary)" }}>East {offices.east.phone}</a>
+                <a href={telHref(offices.west.phone)} className="whitespace-nowrap font-semibold underline-offset-2 hover:underline" style={{ color: "var(--text-secondary)" }}>West {offices.west.phone}</a>
               </span>
             </p>
           )}

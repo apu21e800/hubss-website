@@ -27,16 +27,73 @@ export interface Photo {
    * a CDN URL has no folder, so this is what it reads instead.
    */
   origin?: string;
+  /**
+   * The focal point Doug set in Studio (the crosshair on the image), 0 to 1
+   * from the left and the top. Absent until someone sets one. It frames the
+   * heroes (lib/hero-framing.ts, heroObjectPosition) and the homepage hero's
+   * wide and phone cuts.
+   */
+  hotspot?: Hotspot;
+  /** The photo's _key in a Studio gallery, for "Edit on the page". */
+  key?: string;
+}
+
+export interface Hotspot {
+  x: number;
+  y: number;
 }
 
 /** One image field, as the GROQ projections in lib/sanity.queries.ts return it. */
 export interface SanityPhotoProjected {
+  _key?: string | null;
   alt?: string | null;
   caption?: string | null;
   url?: string | null;
   width?: number | null;
   height?: number | null;
   origin?: string | null;
+  hotspot?: { x?: number | null; y?: number | null; width?: number | null; height?: number | null } | null;
+}
+
+/**
+ * The hotspot, when an editor has actually moved it. Sanity can store the
+ * untouched default (the middle of the photo), and treating that as a choice
+ * would override the framing chosen for each hero by hand.
+ */
+function hotspotOf(img: SanityPhotoProjected | null | undefined): Hotspot | undefined {
+  const x = img?.hotspot?.x;
+  const y = img?.hotspot?.y;
+  if (typeof x !== "number" || typeof y !== "number" || !Number.isFinite(x) || !Number.isFinite(y)) return undefined;
+  if (Math.abs(x - 0.5) < 0.005 && Math.abs(y - 0.5) < 0.005) return undefined;
+  return { x: Math.min(1, Math.max(0, x)), y: Math.min(1, Math.max(0, y)) };
+}
+
+/** A CSS object-position for a photo's hotspot, or undefined without one. */
+export function hotspotPosition(photo: { hotspot?: Hotspot } | null | undefined): string | undefined {
+  const h = photo?.hotspot;
+  if (!h) return undefined;
+  const pct = (n: number) => `${Math.round(n * 1000) / 10}%`;
+  return `${pct(h.x)} ${pct(h.y)}`;
+}
+
+/**
+ * A Sanity photo cut to an exact size around its focal point (the hotspot, or
+ * the middle), as a JPEG-or-better URL. The homepage hero uses it to make its
+ * wide-screen and phone cuts from whatever photo Studio holds.
+ */
+export function sanityCrop(src: string, width: number, height: number, hotspot?: Hotspot, quality = 80): string {
+  const url = new URL(src);
+  url.searchParams.set("w", String(width));
+  url.searchParams.set("h", String(height));
+  url.searchParams.set("fit", "crop");
+  if (hotspot) {
+    url.searchParams.set("crop", "focalpoint");
+    url.searchParams.set("fp-x", hotspot.x.toFixed(3));
+    url.searchParams.set("fp-y", hotspot.y.toFixed(3));
+  }
+  url.searchParams.set("q", String(quality));
+  url.searchParams.set("auto", "format");
+  return url.toString();
 }
 
 /** Where Sanity serves image assets from. */
@@ -108,6 +165,8 @@ export function toPhoto(img: SanityPhotoProjected | null | undefined, fallbackAl
     width: img?.width ?? undefined,
     height: img?.height ?? undefined,
     origin: img?.origin?.trim() || undefined,
+    hotspot: hotspotOf(img),
+    key: img?._key?.trim() || undefined,
   };
 }
 

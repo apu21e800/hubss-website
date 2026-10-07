@@ -16,6 +16,7 @@
  * Format: https://llmstxt.org (an H1, a summary blockquote, details, then H2
  * sections of link lists; "Optional" marks what can be skipped).
  */
+import { getSiteSettings } from "@/lib/sanity.queries";
 import { getMergedProducts, type MergedProduct } from "@/lib/products.server";
 import { getMergedApplications, type MergedApplication } from "@/lib/applications.server";
 import { getAllPosts } from "@/lib/blog";
@@ -37,11 +38,8 @@ const line = (s: string) => clean(s).replace(/\s+/g, " ");
 const SUMMARY =
   "Stamped asphalt, preformed thermoplastic pavement markings, pavement coatings and asphalt and concrete repair for Canadian municipalities, specifiers and contractors. Canadian-owned since 1999.";
 
-// As the footer prints them (components/sections/Footer.tsx).
-const OFFICES = [
-  { name: "West office", place: "Ladysmith, British Columbia", email: "cleve.stordy@hubss.com", phone: "604-309-8212" },
-  { name: "East office", place: "Milton, Ontario", email: "doug.bain@hubss.com", phone: "416-540-9287" },
-];
+// As the footer prints them: Studio's Site Settings (lib/site-settings.ts).
+type OfficeLine = { name: string; place: string; email: string; phone: string };
 
 type Data = {
   products: MergedProduct[];
@@ -51,10 +49,15 @@ type Data = {
   /** Products in the families' order (lib/product-categories.ts); any product in no family last. */
   ordered: MergedProduct[];
   familyOf: Map<string, string>;
+  offices: OfficeLine[];
 };
 
 async function load(): Promise<Data> {
-  const [products, applications] = await Promise.all([getMergedProducts(), getMergedApplications()]);
+  const [products, applications, settings] = await Promise.all([getMergedProducts(), getMergedApplications(), getSiteSettings()]);
+  const offices: OfficeLine[] = [
+    { name: "West office", place: settings.offices.west.place, email: settings.offices.west.email, phone: settings.offices.west.phone },
+    { name: "East office", place: settings.offices.east.place, email: settings.offices.east.email, phone: settings.offices.east.phone },
+  ];
   const live = products.filter((p) => !p.comingSoon);
   const productBySlug = new Map(live.map((p) => [p.slug, p]));
   const applicationBySlug = new Map(applications.map((a) => [a.slug, a]));
@@ -64,7 +67,7 @@ async function load(): Promise<Data> {
     .map((slug) => productBySlug.get(slug))
     .filter((p): p is MergedProduct => Boolean(p));
   const ordered = [...inFamilies, ...live.filter((p) => !familyOf.has(p.slug))];
-  return { products: live, applications, productBySlug, applicationBySlug, ordered, familyOf };
+  return { products: live, applications, productBySlug, applicationBySlug, ordered, familyOf, offices };
 }
 
 /** The H1, the summary and the plain-words key to the product names. */
@@ -78,7 +81,7 @@ function head(d: Data): string[] {
     "",
     `> ${SUMMARY}`,
     "",
-    `Two offices: the ${OFFICES[0].name} in ${OFFICES[0].place}, and the ${OFFICES[1].name} in ${OFFICES[1].place}, working coast to coast. Installation is by certified HUB applicators.`,
+    `Two offices: the ${d.offices[0].name} in ${d.offices[0].place}, and the ${d.offices[1].name} in ${d.offices[1].place}, working coast to coast. Installation is by certified HUB applicators.`,
     "",
     "HUB's systems go by their own names. What each family is, and which systems are in it:",
     "",
@@ -86,7 +89,7 @@ function head(d: Data): string[] {
   ];
 }
 
-function tail(): string[] {
+function tail(d: Data): string[] {
   const resources = [
     `- [Resources](${url("/resources")}): Technical data sheets, spec sheets, brochures, safety guides and installation resources for every HUB product.`,
     ...(catalogueReady
@@ -112,7 +115,7 @@ function tail(): string[] {
     "## Contact",
     "",
     `- [Contact](${url("/contact")}): The contact form and both offices.`,
-    ...OFFICES.map((o) => `- [${o.name}](${url("/contact")}): ${o.place}. ${o.phone}, ${o.email}`),
+    ...d.offices.map((o) => `- [${o.name}](${url("/contact")}): ${o.place}. ${o.phone}, ${o.email}`),
     `- [About](${url("/about")}): The company, Canadian-owned since 1999, and its two regional offices.`,
   ];
 }
@@ -131,7 +134,7 @@ export async function buildLlmsTxt(): Promise<string> {
     "",
     ...d.applications.map((a) => `- [${a.name}](${url(`/applications/${a.slug}`)}): ${line(a.shortDesc)}`),
     "",
-    ...tail(),
+    ...tail(d),
     "",
     "## Optional",
     "",
@@ -191,7 +194,7 @@ export async function buildLlmsFullTxt(): Promise<string> {
     "",
     ...posts.map((p) => `- [${line(p.title)}](${url(`/blog/${p.slug}`)}): ${sectionFor(p.category).singular}, ${p.date}. ${line(p.excerpt)}`),
     "",
-    ...tail(),
+    ...tail(d),
     "",
   ].join("\n");
 }

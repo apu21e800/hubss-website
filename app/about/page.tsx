@@ -4,8 +4,11 @@ import LunchLearn from "@/components/sections/LunchLearn";
 import { buildMetadata } from "@/lib/seo";
 import Image from "next/image";
 import Link from "next/link";
-import { getSanityPageContent } from "@/lib/sanity.queries";
-import { toPhoto } from "@/lib/photos";
+import { getSanityPageContent, getSiteSettings } from "@/lib/sanity.queries";
+import { hotspotPosition, toPhoto } from "@/lib/photos";
+import { editAttr, isPreview } from "@/lib/sanity.preview";
+import { mailtoHref, telHref } from "@/lib/site-settings";
+import { stegaClean } from "next-sanity";
 import PhotoImage from "@/components/ui/PhotoImage";
 import { getProjectTiles, TileLink, type Pick } from "@/components/sections/InstagramStrip";
 import { ABOUT_HERO, ABOUT_STORY, ABOUT_WHY_HUB, ABOUT_PARTNERS_INTRO, ABOUT_SEED } from "@/lib/about-content";
@@ -52,12 +55,16 @@ const STORY_PICKS: Pick[] = [
 const STORY_SLOT = { cls: "", sizes: "(min-width: 1280px) 340px, (min-width: 1024px) 28vw, 50vw", lead: false } as const;
 
 /** Sanity's text unless it is still the pre-trim seed (or blank). */
+// stegaClean: in Studio's preview every Sanity string carries invisible
+// markers (lib/sanity.preview.ts), so the comparisons with the seed text below
+// compare the words without them; otherwise the preview would show the old
+// seed text where the live page shows the code's.
 function fresh(sanity: string | undefined, seed: string): string | undefined {
-  return sanity && sanity !== seed ? sanity : undefined;
+  return sanity && stegaClean(sanity) !== seed ? sanity : undefined;
 }
 
 export default async function AboutPage() {
-  const sanityPage = await getSanityPageContent("about");
+  const [sanityPage, { offices }] = await Promise.all([getSanityPageContent("about"), getSiteSettings()]);
   const hero = {
     eyebrow:    sanityPage?.aboutHero?.eyebrow ?? ABOUT_HERO.eyebrow,
     heading:    sanityPage?.aboutHero?.heading ?? ABOUT_HERO.heading,
@@ -69,12 +76,15 @@ export default async function AboutPage() {
     alt: "HUB Surface Systems, decorative pavement across Canada",
   };
 
+  // While previewing in Studio, clicking the hero photo opens its field.
+  const heroEdit = (await isPreview()) ? editAttr({ id: sanityPage?._id ?? "page-about", type: "page" }, "aboutHero.heroImage") : undefined;
+
   const sanityStory = sanityPage?.aboutStory;
-  const storyIsSeed = sanityStory?.length === ABOUT_SEED.story.length && sanityStory.every((p, i) => p === ABOUT_SEED.story[i]);
+  const storyIsSeed = sanityStory?.length === ABOUT_SEED.story.length && sanityStory.every((p, i) => stegaClean(p) === ABOUT_SEED.story[i]);
   const storyParagraphs = sanityStory?.length && !storyIsSeed ? sanityStory : ABOUT_STORY;
 
   const sanityWhy = sanityPage?.aboutWhyHub;
-  const whyIsSeed = sanityWhy?.length === ABOUT_SEED.whyHubTitles.length && sanityWhy.every((d, i) => d.title === ABOUT_SEED.whyHubTitles[i]);
+  const whyIsSeed = sanityWhy?.length === ABOUT_SEED.whyHubTitles.length && sanityWhy.every((d, i) => stegaClean(d.title) === ABOUT_SEED.whyHubTitles[i]);
   const differentiators = sanityWhy?.length && !whyIsSeed ? sanityWhy : ABOUT_WHY_HUB;
 
   const partnersIntro = fresh(sanityPage?.aboutPartnersIntro, ABOUT_SEED.partnersIntro) ?? ABOUT_PARTNERS_INTRO;
@@ -95,12 +105,14 @@ export default async function AboutPage() {
       <Nav />
 
       {/* ── Hero ──────────────────────────────── */}
-      <div data-hero className="relative overflow-hidden min-h-[500px]" style={{ background: "var(--bg-dark)" }}>
+      <div data-hero data-sanity={heroEdit} className="relative overflow-hidden min-h-[500px]" style={{ background: "var(--bg-dark)" }}>
         <PhotoImage
           src={aboutHeroPhoto.src}
           alt={aboutHeroPhoto.alt}
           fill
           className="object-cover object-center hero-pop"
+          // Studio's focal point, when Doug has set one (lib/photos.ts).
+          style={{ objectPosition: hotspotPosition(aboutHeroPhoto) }}
           priority
           sizes="100vw"
         />
@@ -253,9 +265,11 @@ export default async function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold mb-10" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>Talk to the office nearest you.</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Towns, names, emails and phones from Studio's Site Settings
+                (lib/site-settings.ts); the regions and provinces stay here. */}
             {[
-              { region: "West office", city: "Ladysmith, British Columbia", contact: "Cleve Stordy", email: "cleve.stordy@hubss.com", phone: "604-309-8212", provinces: ["BC", "AB", "SK", "NT", "YT", "NU"] },
-              { region: "East office", city: "Milton, Ontario", contact: "Doug Bain", email: "doug.bain@hubss.com", phone: "416-540-9287", provinces: ["ON", "QC", "NS", "NB", "PE", "NL", "MB"] },
+              { region: "West office", city: offices.west.place, contact: offices.west.name, email: offices.west.email, phone: offices.west.phone, provinces: ["BC", "AB", "SK", "NT", "YT", "NU"] },
+              { region: "East office", city: offices.east.place, contact: offices.east.name, email: offices.east.email, phone: offices.east.phone, provinces: ["ON", "QC", "NS", "NB", "PE", "NL", "MB"] },
             ].map((office) => (
               <div key={office.region} className="p-8 rounded-xl relative overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}>
                 <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "#f97316" }} />
@@ -267,8 +281,8 @@ export default async function AboutPage() {
                     <span key={prov} className="text-xs font-bold px-2 py-0.5 rounded" style={{ background: "rgba(249,115,22,0.10)", color: "var(--accent-text-lg)", border: "1px solid rgba(249,115,22,0.20)" }}>{prov}</span>
                   ))}
                 </div>
-                <a href={`mailto:${office.email}`} className="text-sm flex items-center transition-colors hover:text-[var(--accent-text-lg)]" style={{ color: "var(--text-body)", minHeight: 40 }}>{office.email}</a>
-                <a href={`tel:${office.phone.replace(/-/g, "")}`} className="text-sm flex items-center transition-colors hover:text-[var(--accent-text-lg)]" style={{ color: "var(--text-body)", minHeight: 40 }}>{office.phone}</a>
+                <a href={mailtoHref(office.email)} className="text-sm flex items-center transition-colors hover:text-[var(--accent-text-lg)]" style={{ color: "var(--text-body)", minHeight: 40 }}>{office.email}</a>
+                <a href={telHref(office.phone)} className="text-sm flex items-center transition-colors hover:text-[var(--accent-text-lg)]" style={{ color: "var(--text-body)", minHeight: 40 }}>{office.phone}</a>
               </div>
             ))}
           </div>

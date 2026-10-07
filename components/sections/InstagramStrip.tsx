@@ -37,7 +37,8 @@ import FollowButtons from "@/components/sections/FollowButtons";
 import { getAllPosts } from "@/lib/blog";
 import { mapProjects } from "@/lib/map-projects";
 import { isSanityImage } from "@/lib/photos";
-import { SOCIAL_LINKS } from "@/lib/social-links";
+import { getSiteSettings } from "@/lib/sanity.queries";
+import { HOMEPAGE_COPY, type SectionCopy } from "@/lib/homepage-copy";
 
 export interface Pick {
   /** A map pin id in lib/map-projects.ts: the photo, place and write-up. */
@@ -85,7 +86,7 @@ export interface Tile {
  * picks, so the two pages caption their photos by the same rules.
  */
 export async function getProjectTiles(picks: Pick[] = PICKS): Promise<Tile[]> {
-  const posts = await getAllPosts();
+  const [posts, { social }] = await Promise.all([getAllPosts(), getSiteSettings()]);
   const bySlug = new Map(posts.map((p) => [p.slug, p]));
   const tiles: Tile[] = [];
   for (const pick of picks) {
@@ -102,7 +103,7 @@ export async function getProjectTiles(picks: Pick[] = PICKS): Promise<Tile[]> {
       alt: `${pin.title}, ${pin.city}, ${pin.province}`,
       place: `${pick.site}, ${pin.city}, ${pin.province}`,
       systems: (systems.length ? systems : [pin.product]).join(" and "),
-      href: post ? `/blog/${post.slug}` : SOCIAL_LINKS.instagram,
+      href: post ? `/blog/${post.slug}` : social.instagram,
       external: !post,
       position: pick.position,
     });
@@ -199,8 +200,9 @@ export function TileLink({ tile, slot }: { tile: Tile; slot: { cls: string; size
   );
 }
 
-export default async function InstagramStrip() {
-  const tiles = await getProjectTiles();
+/** `copy`: the section's eyebrow, heading and intro from Studio (lib/homepage-copy.ts). */
+export default async function InstagramStrip({ copy = HOMEPAGE_COPY.onTheGround }: { copy?: SectionCopy } = {}) {
+  const [tiles, { social }] = await Promise.all([getProjectTiles(), getSiteSettings()]);
   const mosaic = tiles.length === SLOT.length;
 
   return (
@@ -214,7 +216,7 @@ export default async function InstagramStrip() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-10 md:mb-12">
           <p className="gradient-text text-xs font-semibold tracking-[0.2em] uppercase mb-3">
-            On the ground
+            {copy.eyebrow}
           </p>
           <h2
             id="follow-heading"
@@ -226,10 +228,11 @@ export default async function InstagramStrip() {
               letterSpacing: "-0.03em",
             }}
           >
-            Follow the work.
+            {copy.heading}
+            {copy.headingAccent && <> {copy.headingAccent}</>}
           </h2>
           <p className="text-base mt-2 max-w-xl" style={{ color: "var(--text-secondary)" }}>
-            Projects across Canada, documented as they happen.
+            {copy.intro}
           </p>
         </div>
 
@@ -253,7 +256,7 @@ export default async function InstagramStrip() {
         )}
 
         <div className="mt-8 md:mt-10">
-          <FollowButtons />
+          <FollowButtons social={social} />
         </div>
       </div>
     </section>

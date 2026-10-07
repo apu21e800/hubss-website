@@ -31,6 +31,8 @@ type SanityAppProjected = Omit<SanityApplication, "slug" | "heroImage" | "galler
 };
 
 export type MergedApplication = Application & {
+  /** The Studio document's id, for "Edit on the page" (lib/sanity.preview.ts, editAttr). */
+  sanityId?: string;
   /** The Sanity description as rich text, when Sanity has one. `description`
    *  stays plain text for JSON-LD and meta tags; the page renders these blocks. */
   descriptionBlocks?: SanityBlock[];
@@ -46,6 +48,7 @@ function merge(code: Application, sanityApp: SanityAppProjected | null | undefin
   const sanityGallery = toPhotos(sanityApp.gallery, `${code.name} surface systems by HUB, Canadian installation`);
   return {
     ...code,
+    sanityId: sanityApp._id,
     name: cmsText(sanityApp.name, code.name),
     shortDesc: cmsText(sanityApp.shortDesc, code.shortDesc),
     description: cmsText(sanityDescription, code.description),

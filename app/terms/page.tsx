@@ -1,3 +1,5 @@
+import { getSiteSettings } from "@/lib/sanity.queries";
+import type { SiteSettings } from "@/lib/site-settings";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import { buildMetadata } from "@/lib/seo";
@@ -15,7 +17,9 @@ export const metadata = buildMetadata({
 // the "Last updated" date stands.
 type Block = string | string[];
 
-const sections: { heading: string; blocks: Block[] }[] = [
+// The contact lines carry the offices from Studio's Site Settings
+// (lib/site-settings.ts), so they match the footer.
+const buildSections = (offices: SiteSettings["offices"]): { heading: string; blocks: Block[] }[] => [
   {
     heading: "1. Acceptance of terms",
     blocks: [
@@ -81,13 +85,15 @@ const sections: { heading: string; blocks: Block[] }[] = [
     blocks: [
       "Questions about these Terms of Use may be directed to:",
       "HUB Surface Systems",
-      "East office · Milton, Ontario\ndoug.bain@hubss.com · 416-540-9287",
-      "West office · Ladysmith, British Columbia\ncleve.stordy@hubss.com · 604-309-8212",
+      `East office · ${offices.east.place}\n${offices.east.email} · ${offices.east.phone}`,
+      `West office · ${offices.west.place}\n${offices.west.email} · ${offices.west.phone}`,
     ],
   },
 ];
 
-export default function TermsPage() {
+export default async function TermsPage() {
+  const { offices } = await getSiteSettings();
+  const sections = buildSections(offices);
   return (
     <main style={{ background: "var(--bg-section-asphalt)", minHeight: "100vh" }}>
       <Nav />

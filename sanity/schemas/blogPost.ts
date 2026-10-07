@@ -72,7 +72,7 @@ export default defineType({
       title: "Publish date",
       type: "datetime",
       group: "content",
-      description: "The date printed on the post and used to sort Insights, newest first. Pressing Publish is what puts a post on the site; a date in the future does not hold it back.",
+      description: "The date printed on the post and used to sort Insights, newest first. The first Publish sets it to that moment (unless it's a future date), so a draft that waited a week still goes out dated today. Change it after publishing if the article needs another date. A date in the future does not hold a post back.",
       options: { timeStep: 60 },
       validation: (r) => r.required().error("Publish date is required"),
     }),

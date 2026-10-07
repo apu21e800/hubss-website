@@ -33,6 +33,16 @@
  * component has changed and this file has not, the script stops and names
  * the string instead of writing stale copy over the live page.
  *
+ * 7 Oct 2026: two more things, both FILL-ONLY. They put the site's current
+ * words into blank Studio fields and never overwrite a field Studio already
+ * has, because these are the fields Doug edits from now on:
+ *   - homepage: the section copy below the hero (lib/homepage-copy.ts);
+ *   - Site Settings: the offices' towns, names, emails and phones, the social
+ *     accounts and the footer line (lib/site-settings.ts). Three values Studio
+ *     held from the May migration are known to be wrong (an Instagram account
+ *     HUB doesn't own, a YouTube handle that 404s, the pre-QA footer line,
+ *     LEGACY_SETTINGS) and are replaced; the site already ignores them.
+ *
  * Usage:
  *   npx tsx scripts/sync-pages-to-sanity.ts            # apply
  *   npx tsx scripts/sync-pages-to-sanity.ts --dry-run  # report only
@@ -45,6 +55,8 @@ import { fileURLToPath } from "url";
 import { config as loadDotenv } from "dotenv";
 import { ABOUT_HERO, ABOUT_STORY, ABOUT_WHY_HUB, ABOUT_PARTNERS_INTRO } from "../lib/about-content";
 import { LUNCH_LEARN_FAQS, LUNCH_LEARN_FAQ_HEADING } from "../lib/lunch-learn-content";
+import { HOMEPAGE_COPY } from "../lib/homepage-copy";
+import { DEFAULT_SITE_SETTINGS, LEGACY_SETTINGS } from "../lib/site-settings";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -189,6 +201,82 @@ async function patchPage(slug: string, desired: Record<string, unknown>) {
   return { changed: 1, skipped: 0, missing: 0 };
 }
 
+const blank = (v: unknown) => v === undefined || v === null || (typeof v === "string" && v.trim() === "") || (Array.isArray(v) && v.length === 0);
+
+/**
+ * Fill-only: sets each path whose Studio value is blank, or is one of the
+ * known-wrong legacy values listed for it; leaves every other value alone and
+ * says so. For the fields Doug edits, so a sync can never undo his work.
+ */
+async function fillBlanks(label: string, query: string, desired: Record<string, unknown>, legacy: Record<string, readonly string[]> = {}) {
+  const remote = await client.fetch<Record<string, unknown> | null>(query);
+  if (!remote) {
+    console.log(`  ? ${label}: no Sanity document — skipping`);
+    return { changed: 0, skipped: 0, missing: 1 };
+  }
+  const set: Record<string, unknown> = {};
+  const kept: string[] = [];
+  for (const [field, value] of Object.entries(desired)) {
+    const current = atPath(remote, field);
+    const isLegacy = typeof current === "string" && (legacy[field] ?? []).includes(current.trim());
+    if (blank(current) || isLegacy) set[field] = value;
+    else if (!jsonEqual(current, value)) kept.push(field);
+  }
+  if (!Object.keys(set).length) {
+    console.log(`  ✓ ${label} — nothing blank to fill${kept.length ? ` (Studio's own text kept: ${kept.join(", ")})` : ""}`);
+    return { changed: 0, skipped: 1, missing: 0 };
+  }
+  console.log(`  ✏  ${label} (fill-only)`);
+  for (const f of Object.keys(set)) console.log(`      ${f}: ${blank(atPath(remote, f)) ? "<blank → filled>" : "<legacy value → replaced>"}`);
+  if (kept.length) console.log(`      kept Studio's own text: ${kept.join(", ")}`);
+  if (!DRY_RUN) {
+    // Create the objects a new path sits in (homepageSections, then
+    // homepageSections.systems, ...), shallowest first, without touching any
+    // that exist.
+    const parents = [...new Set(Object.keys(set).flatMap((f) => f.split(".").slice(0, -1).map((_, i, a) => a.slice(0, i + 1).join("."))))]
+      .sort((a, b) => a.split(".").length - b.split(".").length);
+    let patch = client.patch(String(remote._id));
+    for (const parent of parents) patch = patch.setIfMissing({ [parent]: {} });
+    await patch.set(set).commit({ autoGenerateArrayKeys: false });
+  }
+  return { changed: 1, skipped: 0, missing: 0 };
+}
+
+/** The homepage section copy, as paths into the page doc. */
+function homepageSectionPaths(): Record<string, unknown> {
+  const c = HOMEPAGE_COPY;
+  const out: Record<string, unknown> = {
+    "homepageSections.audiences": c.audiences.map((a, i) => ({ _key: `aud_${i}`, _type: "audience", label: a.label, desc: a.desc })),
+    "homepageSections.ideaBook.heading": c.ideaBook.heading,
+    "homepageSections.ideaBook.intro": c.ideaBook.intro,
+  };
+  for (const key of ["systems", "applications", "insights", "onTheGround"] as const) {
+    for (const field of ["eyebrow", "heading", "headingAccent", "intro"] as const) {
+      const value = c[key][field];
+      if (value) out[`homepageSections.${key}.${field}`] = value;
+    }
+  }
+  return out;
+}
+
+/** Site Settings as paths, and the legacy values that may be replaced. */
+function siteSettingsPaths(): { desired: Record<string, unknown>; legacy: Record<string, readonly string[]> } {
+  const d = DEFAULT_SITE_SETTINGS;
+  const desired: Record<string, unknown> = { footerTagline: d.footerTagline };
+  for (const key of ["west", "east"] as const) {
+    for (const field of ["place", "name", "email", "phone"] as const) desired[`offices.${key}.${field}`] = d.offices[key][field];
+  }
+  for (const [k, v] of Object.entries(d.social)) desired[`social.${k}`] = v;
+  return {
+    desired,
+    legacy: {
+      "social.instagram": LEGACY_SETTINGS.instagram,
+      "social.youtube": LEGACY_SETTINGS.youtube,
+      footerTagline: LEGACY_SETTINGS.footerTagline,
+    },
+  };
+}
+
 async function main() {
   console.log(`Sync page copy → Sanity${DRY_RUN ? " (DRY RUN)" : ""}`);
 
@@ -226,6 +314,22 @@ async function main() {
   };
   const llResult = await patchPage("lunch-learn", llDesired);
   changed += llResult.changed; skipped += llResult.skipped; missing += llResult.missing;
+
+  // Homepage sections and Site Settings: fill-only (see the header).
+  const sectionsResult = await fillBlanks(
+    "homepage sections",
+    `*[_type == "page" && slug.current == "homepage"][0]`,
+    homepageSectionPaths(),
+  );
+  changed += sectionsResult.changed; skipped += sectionsResult.skipped; missing += sectionsResult.missing;
+  const settings = siteSettingsPaths();
+  const settingsResult = await fillBlanks(
+    "site settings",
+    `*[_type == "siteSettings" && _id == "siteSettings"][0]`,
+    settings.desired,
+    settings.legacy,
+  );
+  changed += settingsResult.changed; skipped += settingsResult.skipped; missing += settingsResult.missing;
 
   console.log(`\nDone. ${changed} updated, ${skipped} already in sync, ${missing} missing in Sanity.`);
   if (DRY_RUN) console.log("(dry run — no writes made)");

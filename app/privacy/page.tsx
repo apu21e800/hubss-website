@@ -1,3 +1,5 @@
+import { getSiteSettings } from "@/lib/sanity.queries";
+import type { SiteSettings } from "@/lib/site-settings";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import { buildMetadata } from "@/lib/seo";
@@ -31,7 +33,9 @@ type Block = string | string[];
 // addresses replaced, to Anthropic's Claude (lib/form-screen.ts). Never the
 // phone field, the full email or the mailing address (an Idea Book request's
 // city included). Hence the new line.
-const sections: { heading: string; blocks: Block[] }[] = [
+// The contact lines carry the offices from Studio's Site Settings
+// (lib/site-settings.ts), so they match the footer.
+const buildSections = (offices: SiteSettings["offices"]): { heading: string; blocks: Block[] }[] => [
   {
     heading: "1. Information we collect",
     blocks: [
@@ -121,13 +125,15 @@ const sections: { heading: string; blocks: Block[] }[] = [
     blocks: [
       "For privacy-related inquiries, contact:",
       "HUB Surface Systems",
-      "East office · Milton, Ontario\ndoug.bain@hubss.com · 416-540-9287",
-      "West office · Ladysmith, British Columbia\ncleve.stordy@hubss.com · 604-309-8212",
+      `East office · ${offices.east.place}\n${offices.east.email} · ${offices.east.phone}`,
+      `West office · ${offices.west.place}\n${offices.west.email} · ${offices.west.phone}`,
     ],
   },
 ];
 
-export default function PrivacyPage() {
+export default async function PrivacyPage() {
+  const { offices } = await getSiteSettings();
+  const sections = buildSections(offices);
   return (
     <main style={{ background: "var(--bg-section-asphalt)", minHeight: "100vh" }}>
       <Nav />

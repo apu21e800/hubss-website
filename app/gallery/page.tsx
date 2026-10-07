@@ -2,6 +2,7 @@ import JsonLd from "@/components/ui/JsonLd";
 import { imageObject } from "@/lib/image-seo";
 import { mapProjects } from "@/lib/map-projects";
 import GalleryArchive, { type GalleryImage } from "./GalleryArchive";
+import Footer from "@/components/sections/Footer";
 
 /**
  * The photo archive. A server page since 30 Sep 2026: it builds the list,
@@ -192,7 +193,7 @@ export default function GalleryPage() {
     <>
       <JsonLd data={gallerySchema} />
       <JsonLd data={breadcrumbSchema} />
-      <GalleryArchive images={images} />
+      <GalleryArchive images={images} footer={<Footer />} />
     </>
   );
 }

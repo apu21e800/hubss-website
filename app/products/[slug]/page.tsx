@@ -28,7 +28,10 @@ import ProductFaq from "@/components/products/ProductFaq";
 import { faqsFor } from "@/lib/product-faqs";
 import { getMergedProduct } from "@/lib/products.server";
 import { getMergedApplications, type MergedApplication } from "@/lib/applications.server";
-import { HERO_POSITION, heroColourClass } from "@/lib/hero-framing";
+import { heroObjectPosition, heroColourClass } from "@/lib/hero-framing";
+import { editAttr, isPreview } from "@/lib/sanity.preview";
+import { getSiteSettings } from "@/lib/sanity.queries";
+import { telHref } from "@/lib/site-settings";
 import { lunchLearnHref } from "@/lib/lunch-learn";
 
 export const revalidate = 3600;
@@ -107,6 +110,14 @@ export default async function ProductPage({ params }: Props) {
   const product = await getMergedProduct(slug);
 
   if (!product || product.comingSoon) notFound();
+
+  // Studio's "Edit on the page" (lib/sanity.preview.ts): while previewing, the
+  // hero banner names its Studio field, so clicking the photo opens it.
+  const preview = await isPreview();
+  // The two offices' phones in the "Pricing and installers" card, from Studio's Site Settings.
+  const { offices } = await getSiteSettings();
+  const heroEdit = preview ? editAttr({ id: product.sanityId, type: "product" }, "heroImage") : undefined;
+  const galleryEdit = preview ? editAttr({ id: product.sanityId, type: "product" }, "gallery") : undefined;
 
   // Catalogue editorial for this product, where the print book covers it.
   const catalogue = catalogueFor(slug);
@@ -263,7 +274,8 @@ export default async function ProductPage({ params }: Props) {
 
   // Hero framing follows the photo, not the page (lib/hero-framing.ts): a
   // Sanity hero records the /public path it came from as `origin`.
-  const heroPosition = HERO_POSITION[hero.origin ?? hero.src] ?? product.heroPosition ?? "center 62%";
+  // Studio's focal point (hotspot) comes first: heroObjectPosition.
+  const heroPosition = heroObjectPosition(hero, product.heroPosition ?? "center 62%");
   // A photo under 1000 px wide cannot fill a 1440 px banner (QA B1); the band
   // becomes a dark panel below. Only a Studio photo carries its width.
   const heroTooSmall = typeof hero.width === "number" && hero.width < 1000;
@@ -287,7 +299,7 @@ export default async function ProductPage({ params }: Props) {
       {/* Hero banner. Vern, 27 Sep 2026: the product heroes were "quite dark
           and muted". The scrims now darken only where the type sits (the foot
           and the left edge), and the photo gets a light colour lift. */}
-      <div data-hero className="relative overflow-hidden" style={{ height: "clamp(360px, 52vh, 560px)" }}>
+      <div data-hero data-sanity={heroEdit} className="relative overflow-hidden" style={{ height: "clamp(360px, 52vh, 560px)" }}>
         {heroTooSmall ? (
           /* A dark panel instead of the photo: the hatching an engineer draws
              through a section (the Products menu's ruled tile) over the dark
@@ -502,13 +514,13 @@ export default async function ProductPage({ params }: Props) {
                 Your regional office prices the project and puts you in touch with a certified {product.name} installer.
               </p>
               <div className="grid grid-cols-2 gap-2 mb-3">
-                <a href="tel:+14165409287" className="rounded-lg px-3 py-2 transition-colors hover:bg-[var(--ink-04)]" style={{ border: "1px solid var(--border-color)", minHeight: 44 }}>
+                <a href={telHref(offices.east.phone)} className="rounded-lg px-3 py-2 transition-colors hover:bg-[var(--ink-04)]" style={{ border: "1px solid var(--border-color)", minHeight: 44 }}>
                   <span className="block text-[10.5px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>East</span>
-                  <span className="block text-[13.5px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>416-540-9287</span>
+                  <span className="block text-[13.5px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{offices.east.phone}</span>
                 </a>
-                <a href="tel:+16043098212" className="rounded-lg px-3 py-2 transition-colors hover:bg-[var(--ink-04)]" style={{ border: "1px solid var(--border-color)", minHeight: 44 }}>
+                <a href={telHref(offices.west.phone)} className="rounded-lg px-3 py-2 transition-colors hover:bg-[var(--ink-04)]" style={{ border: "1px solid var(--border-color)", minHeight: 44 }}>
                   <span className="block text-[10.5px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>West</span>
-                  <span className="block text-[13.5px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>604-309-8212</span>
+                  <span className="block text-[13.5px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{offices.west.phone}</span>
                 </a>
               </div>
               <Link href="/contact" className="inline-flex items-center gap-1.5 text-[13.5px] font-semibold hover:underline underline-offset-2" style={{ color: "var(--accent-text)", minHeight: 44 }}>
@@ -534,7 +546,11 @@ export default async function ProductPage({ params }: Props) {
             <p className="mb-6 text-sm" style={{ color: "var(--text-secondary)" }}>
               HUB installations, photographed on site.
             </p>
-            <GalleryGrid images={gallery} />
+            {/* While previewing, the whole gallery opens its Studio field (add,
+                remove, reorder, caption): lib/sanity.preview.ts. */}
+            <div data-sanity={galleryEdit}>
+              <GalleryGrid images={gallery} />
+            </div>
           </div>
         </section>
 

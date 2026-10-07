@@ -1,13 +1,17 @@
-import { getSanityPageContent } from "@/lib/sanity.queries";
+import { getSanityPageContent, getSiteSettings } from "@/lib/sanity.queries";
+import { city, schemaPhone, type SiteSettings } from "@/lib/site-settings";
 import JsonLd from "@/components/ui/JsonLd";
 import ContactForm from "./ContactForm";
+import Footer from "@/components/sections/Footer";
 
 // LocalBusiness pair — Western + Eastern offices, each with hours,
 // service area, and contactPoint. References the home-page Organization
 // (@id) so the entity graph stays clean rather than duplicating the
 // parent. Surfaces both offices to Google's Local Pack and helps regional
 // "decorative pavement near me" intent.
-const contactSchema = {
+// The phones, emails and towns come from Studio's Site Settings
+// (lib/site-settings.ts), the same values the page prints.
+const contactSchema = ({ offices }: SiteSettings) => ({
   "@context": "https://schema.org",
   "@graph": [
     {
@@ -19,11 +23,11 @@ const contactSchema = {
       parentOrganization: { "@id": "https://hubss.com/#organization" },
       url: "https://hubss.com/contact",
       image: "https://hubss.com/images/hero/hero-1.jpg",
-      telephone: "+1-604-309-8212",
-      email: "cleve.stordy@hubss.com",
+      telephone: schemaPhone(offices.west.phone),
+      email: offices.west.email,
       address: {
         "@type": "PostalAddress",
-        addressLocality: "Ladysmith",
+        addressLocality: city(offices.west),
         addressRegion: "BC",
         addressCountry: "CA",
       },
@@ -45,8 +49,8 @@ const contactSchema = {
       contactPoint: {
         "@type": "ContactPoint",
         contactType: "Sales · Western Canada",
-        telephone: "+1-604-309-8212",
-        email: "cleve.stordy@hubss.com",
+        telephone: schemaPhone(offices.west.phone),
+        email: offices.west.email,
         areaServed: "CA",
         availableLanguage: ["English"],
       },
@@ -60,11 +64,11 @@ const contactSchema = {
       parentOrganization: { "@id": "https://hubss.com/#organization" },
       url: "https://hubss.com/contact",
       image: "https://hubss.com/images/hero/hero-1.jpg",
-      telephone: "+1-416-540-9287",
-      email: "doug.bain@hubss.com",
+      telephone: schemaPhone(offices.east.phone),
+      email: offices.east.email,
       address: {
         "@type": "PostalAddress",
-        addressLocality: "Milton",
+        addressLocality: city(offices.east),
         addressRegion: "ON",
         addressCountry: "CA",
       },
@@ -87,17 +91,17 @@ const contactSchema = {
       contactPoint: {
         "@type": "ContactPoint",
         contactType: "Sales · Eastern Canada",
-        telephone: "+1-416-540-9287",
-        email: "doug.bain@hubss.com",
+        telephone: schemaPhone(offices.east.phone),
+        email: offices.east.email,
         areaServed: "CA",
         availableLanguage: ["English"],
       },
     },
   ],
-};
+});
 
 export default async function ContactPage() {
-  const sanityPage = await getSanityPageContent("contact");
+  const [sanityPage, settings] = await Promise.all([getSanityPageContent("contact"), getSiteSettings()]);
   const hero = {
     eyebrow:    sanityPage?.contactHero?.eyebrow    ?? "Get in touch",
     heading:    sanityPage?.contactHero?.heading    ?? "Start a project",
@@ -106,8 +110,8 @@ export default async function ContactPage() {
 
   return (
     <>
-      <JsonLd data={contactSchema} />
-      <ContactForm {...hero} />
+      <JsonLd data={contactSchema(settings)} />
+      <ContactForm {...hero} footer={<Footer />} />
     </>
   );
 }

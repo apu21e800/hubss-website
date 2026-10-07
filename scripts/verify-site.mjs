@@ -261,7 +261,9 @@ async function checkSanityContract() {
     // Top-level fields only. A nested projection like heroImage{ alt, "url":
     // asset->url } names fields of the image, not of the document, so it is
     // dropped before splitting, and gallery[] is checked as gallery.
-    let body = m[1];
+    // A shared projection interpolated into the block (heroImage${PHOTO_PROJECTION},
+    // 7 Oct 2026) is a nested projection too, so it goes the same way.
+    let body = m[1].replace(/\$\{[^{}]*\}/g, "");
     for (let prev = null; prev !== body; ) { prev = body; body = body.replace(/\{[^{}]*\}/g, ""); }
     return body.split(",").map((l) => l.trim())
       .filter((l) => l && !l.startsWith("_") && !/^"/.test(l))

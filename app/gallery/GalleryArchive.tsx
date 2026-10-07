@@ -3,7 +3,6 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Nav from "@/components/sections/Nav";
-import Footer from "@/components/sections/Footer";
 import PhotoImage from "@/components/ui/PhotoImage";
 import PhotoLightbox from "@/components/ui/PhotoLightbox";
 
@@ -41,7 +40,7 @@ const EAGER = 8;
  * app/gallery/page.tsx (30 Sep 2026), so the map data never ships to the
  * browser for this page.
  */
-export default function GalleryArchive({ images }: { images: GalleryImage[] }) {
+export default function GalleryArchive({ images, footer }: { images: GalleryImage[]; footer: React.ReactNode }) {
   const [active, setActive] = useState<Category>("all");
   const [lightbox, setLightbox] = useState<number | null>(null);
   const [visible, setVisible] = useState(PAGE);
@@ -250,7 +249,9 @@ export default function GalleryArchive({ images }: { images: GalleryImage[] }) {
         )}
       </div>
 
-      <Footer />
+      {/* The footer is rendered on the server and passed in: it reads Studio's
+          Site Settings, which a client component can't (lib/site-settings.ts). */}
+      {footer}
 
       {/* Lightbox: shared cinematic viewer */}
       <PhotoLightbox

@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import type { Application } from "@/lib/applications";
+import { HOMEPAGE_COPY, type SectionCopy } from "@/lib/homepage-copy";
 import { applicationImages, resolveImage } from "@/lib/featured-images";
 
 // What a card renders, and all the page sends (QA F3, 30 Sep 2026; see the
@@ -67,9 +68,10 @@ const FEATURED_SLUGS = [
   "townhomes",
 ];
 
-type Props = { applications: ApplicationCard[] };
+/** `copy`: the section's eyebrow, heading and intro from Studio (lib/homepage-copy.ts). */
+type Props = { applications: ApplicationCard[]; copy?: SectionCopy };
 
-export default function ApplicationsGrid({ applications: source }: Props) {
+export default function ApplicationsGrid({ applications: source, copy = HOMEPAGE_COPY.applications }: Props) {
   const featured = FEATURED_SLUGS.map(
     (slug) => source.find((a) => a.slug === slug)
   ).filter(Boolean) as ApplicationCard[];
@@ -83,7 +85,7 @@ export default function ApplicationsGrid({ applications: source }: Props) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-16">
           <p className="grad-text text-xs font-semibold tracking-[0.2em] uppercase mb-3">
-            Applications
+            {copy.eyebrow}
           </p>
           <h2
             className="font-black mb-4"
@@ -95,16 +97,21 @@ export default function ApplicationsGrid({ applications: source }: Props) {
               textWrap: "balance",
             }}
           >
-            Every surface,{" "}
-            <span style={{
-              background: "linear-gradient(90deg, #F97316 0%, #EAB308 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}>a statement.</span>
+            {copy.heading}
+            {copy.headingAccent && (
+              <>
+                {" "}
+                <span style={{
+                  background: "linear-gradient(90deg, #F97316 0%, #EAB308 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}>{copy.headingAccent}</span>
+              </>
+            )}
           </h2>
           <p className="text-base sm:text-lg max-w-2xl leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-            Crosswalks, bike lanes, civic art, driveways: wherever people move, gather, or stop, the surface underneath is doing work.
+            {copy.intro}
           </p>
         </div>
 

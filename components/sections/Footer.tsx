@@ -4,6 +4,8 @@ import { applications } from "@/lib/applications";
 import { ideaBook } from "@/lib/catalogue";
 import { CHROME_MARKS } from "@/lib/chrome-images.mjs";
 import { SocialLinks } from "@/components/ui/SocialLinks";
+import { getSiteSettings } from "@/lib/sanity.queries";
+import { mailtoHref, telHref } from "@/lib/site-settings";
 // The footer is on every page; its two marks are baked at build time and
 // served static rather than transformed by /_next/image on every visit.
 import ChromeImg from "@/components/ui/ChromeImg";
@@ -56,7 +58,10 @@ const legalLink =
   "text-xs inline-flex items-center min-h-11 sm:min-h-0 transition-colors hover:text-[var(--text-primary)] underline-offset-4 hover:underline";
 
 
-export default function Footer() {
+export default async function Footer() {
+  // The offices and the line under the logo, from Studio's Site Settings
+  // (lib/site-settings.ts); the code's copy when Studio's is blank.
+  const { offices, footerTagline } = await getSiteSettings();
   return (
     <footer
       /* always dark */
@@ -113,7 +118,7 @@ export default function Footer() {
               className="font-light tracking-wide mb-3"
               style={{ color: "var(--text-primary)", fontSize: "0.9375rem", lineHeight: 1.45 }}
             >
-              Pedestrian safety, traffic calming, civic identity.
+              {footerTagline}
             </p>
 
             {/* Three deliberate lines (QA A22, 30 Sep 2026): the badge, then
@@ -231,12 +236,12 @@ export default function Footer() {
                   <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "var(--accent-text-lg)" }}>
                     West office
                   </p>
-                  <p className="text-sm mb-1" style={{ color: "var(--text-primary)" }}>Ladysmith, British Columbia</p>
-                  <a href="mailto:cleve.stordy@hubss.com" className={`${officeLink} underline-offset-4 hover:underline`} data-tap="44" style={{ color: "var(--text-secondary)", paddingTop: 2, paddingBottom: 2 }}>
-                    cleve.stordy@hubss.com
+                  <p className="text-sm mb-1" style={{ color: "var(--text-primary)" }}>{offices.west.place}</p>
+                  <a href={mailtoHref(offices.west.email)} className={`${officeLink} underline-offset-4 hover:underline`} data-tap="44" style={{ color: "var(--text-secondary)", paddingTop: 2, paddingBottom: 2 }}>
+                    {offices.west.email}
                   </a>
-                  <a href="tel:6043098212" className={officeLink} data-tap="44" style={{ color: "var(--text-secondary)", paddingTop: 2, paddingBottom: 2 }}>
-                    604-309-8212
+                  <a href={telHref(offices.west.phone)} className={officeLink} data-tap="44" style={{ color: "var(--text-secondary)", paddingTop: 2, paddingBottom: 2 }}>
+                    {offices.west.phone}
                   </a>
                 </div>
 
@@ -249,12 +254,12 @@ export default function Footer() {
                   <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "var(--accent-text-lg)" }}>
                     East office
                   </p>
-                  <p className="text-sm mb-1" style={{ color: "var(--text-primary)" }}>Milton, Ontario</p>
-                  <a href="mailto:doug.bain@hubss.com" className={`${officeLink} underline-offset-4 hover:underline`} data-tap="44" style={{ color: "var(--text-secondary)", paddingTop: 2, paddingBottom: 2 }}>
-                    doug.bain@hubss.com
+                  <p className="text-sm mb-1" style={{ color: "var(--text-primary)" }}>{offices.east.place}</p>
+                  <a href={mailtoHref(offices.east.email)} className={`${officeLink} underline-offset-4 hover:underline`} data-tap="44" style={{ color: "var(--text-secondary)", paddingTop: 2, paddingBottom: 2 }}>
+                    {offices.east.email}
                   </a>
-                  <a href="tel:4165409287" className={officeLink} data-tap="44" style={{ color: "var(--text-secondary)", paddingTop: 2, paddingBottom: 2 }}>
-                    416-540-9287
+                  <a href={telHref(offices.east.phone)} className={officeLink} data-tap="44" style={{ color: "var(--text-secondary)", paddingTop: 2, paddingBottom: 2 }}>
+                    {offices.east.phone}
                   </a>
                 </div>
 

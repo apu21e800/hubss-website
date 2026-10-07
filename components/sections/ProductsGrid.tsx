@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import type { Product } from "@/lib/products";
+import { HOMEPAGE_COPY, type SectionCopy } from "@/lib/homepage-copy";
 import { productImages, resolveImage } from "@/lib/featured-images";
 
 // What a card renders, and all the page sends (QA F3, 30 Sep 2026): the
@@ -96,9 +97,10 @@ const FEATURED_SLUGS = [
 // match the product pages and a slug change can't leave a dead link.
 const ALSO_AVAILABLE_SLUGS = ["premark", "durashield", "duratherm", "airmark"];
 
-type Props = { products: ProductCard[] };
+/** `copy`: the section's eyebrow, heading and intro from Studio (lib/homepage-copy.ts). */
+type Props = { products: ProductCard[]; copy?: SectionCopy };
 
-export default function ProductsGrid({ products: source }: Props) {
+export default function ProductsGrid({ products: source, copy = HOMEPAGE_COPY.systems }: Props) {
   const featured = FEATURED_SLUGS.map((slug) =>
     source.find((p) => p.slug === slug)
   ).filter(Boolean) as ProductCard[];
@@ -119,7 +121,7 @@ export default function ProductsGrid({ products: source }: Props) {
         {/* Section header */}
         <div className="mb-14 md:mb-16">
           <p className="gradient-text text-xs tracking-[0.15em] font-semibold uppercase mb-3">
-            The systems
+            {copy.eyebrow}
           </p>
           <div className="flex items-end justify-between gap-6 flex-wrap">
             <div>
@@ -138,16 +140,19 @@ export default function ProductsGrid({ products: source }: Props) {
                     (docs/COPY-FOR-DOUG.md §2). Each phrase is an inline-block,
                     so a phone breaks the line between them and never mid-phrase
                     (balance alone gave "Six systems. Six / different jobs."). */}
-                <span className="inline-block">Six systems,</span>{" "}
-                <span className="inline-block">six different jobs.</span>
+                <span className="inline-block">{copy.heading}</span>
+                {copy.headingAccent && (
+                  <>
+                    {" "}
+                    <span className="inline-block">{copy.headingAccent}</span>
+                  </>
+                )}
               </h2>
               <p
                 className="text-base font-light max-w-lg leading-relaxed"
                 style={{ color: "var(--text-secondary)" }}
               >
-                Stamped asphalt, preformed thermoplastic and coatings, chosen by what
-                the surface has to take. Turning asphalt and concrete into your signature
-                surface.
+                {copy.intro}
               </p>
             </div>
             {/* The section's one link to the index (QA A11, 30 Sep 2026: it

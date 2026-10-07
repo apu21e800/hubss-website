@@ -106,7 +106,11 @@ const nextConfig: NextConfig = {
   },
   // Sanity Studio uses rxjs + CommonJS internals that Turbopack can't bundle.
   // Marking them external lets Node handle them at runtime instead.
-  serverExternalPackages: ["sanity", "@sanity/client", "next-sanity", "@sanity/vision"],
+  // next-sanity is bundled (7 Oct 2026): its draft-mode and visual-editing
+  // entries import "next/headers" and "next/dynamic", which Node's ESM loader
+  // can't resolve from an external package ("Did you mean next/headers.js?"),
+  // and Studio's "Edit on the page" needs both (lib/sanity.preview.ts).
+  serverExternalPackages: ["sanity", "@sanity/client", "@sanity/vision"],
   async headers() {
     return [
       {

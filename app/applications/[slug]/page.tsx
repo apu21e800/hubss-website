@@ -19,7 +19,10 @@ import { applicationImages, resolveImage } from "@/lib/featured-images";
 import ApplicationSpread from "@/components/applications/ApplicationSpread";
 import { applicationCatalogueFor } from "@/lib/application-catalogue";
 import { buildMetadata } from "@/lib/seo";
-import { HERO_POSITION, heroColourClass, heroPhoneZoom } from "@/lib/hero-framing";
+import { heroObjectPosition, heroColourClass, heroPhoneZoom } from "@/lib/hero-framing";
+import { editAttr, isPreview } from "@/lib/sanity.preview";
+import { getSiteSettings } from "@/lib/sanity.queries";
+import { telHref } from "@/lib/site-settings";
 import { lunchLearnHref } from "@/lib/lunch-learn";
 import type { SanityBlock } from "@/types/sanity";
 
@@ -98,6 +101,14 @@ export default async function ApplicationPage({ params }: Props) {
   const { slug } = await params;
   const application = await getMergedApplication(slug);
   if (!application) notFound();
+
+  // Studio's "Edit on the page" (lib/sanity.preview.ts): while previewing, the
+  // hero banner names its Studio field, so clicking the photo opens it.
+  const preview = await isPreview();
+  // The two offices' phones in the "Pricing and installers" card, from Studio's Site Settings.
+  const { offices } = await getSiteSettings();
+  const heroEdit = preview ? editAttr({ id: application.sanityId, type: "application" }, "heroImage") : undefined;
+  const galleryEdit = preview ? editAttr({ id: application.sanityId, type: "application" }, "gallery") : undefined;
 
   const spread = applicationCatalogueFor(application.slug);
 
@@ -181,7 +192,7 @@ export default async function ApplicationPage({ params }: Props) {
   };
 
   // Hero framing follows the photo (lib/hero-framing.ts).
-  const heroPosition = HERO_POSITION[hero.origin ?? hero.src] ?? "center 55%";
+  const heroPosition = heroObjectPosition(hero, "center 55%");
   // On phones a 4:3 hero shows its whole height, sky and all, with the paving
   // under the title (QA C4). Four photos are scaled up there around a point
   // near the surface (lib/hero-framing.ts, HERO_PHONE_ZOOM); the CSS variables
@@ -216,7 +227,7 @@ export default async function ApplicationPage({ params }: Props) {
 
       {/* Hero banner: darkened only where the type sits, with a light colour
           lift (Vern, 27 Sep 2026: "hero images... quite dark and muted"). */}
-      <div data-hero className="relative overflow-hidden" style={{ height: "clamp(360px, 52vh, 560px)" }}>
+      <div data-hero data-sanity={heroEdit} className="relative overflow-hidden" style={{ height: "clamp(360px, 52vh, 560px)" }}>
         <PhotoImage
           src={hero.src}
           alt={hero.alt}
@@ -373,13 +384,13 @@ export default async function ApplicationPage({ params }: Props) {
                   Your regional office prices the project, matches the system to the site and puts you in touch with a certified installer.
                 </p>
                 <div className="grid grid-cols-2 gap-2 mb-3">
-                  <a href="tel:+14165409287" className="rounded-lg px-3 py-2 transition-colors hover:bg-[var(--ink-04)]" style={{ border: "1px solid var(--border-color)", minHeight: 44 }}>
+                  <a href={telHref(offices.east.phone)} className="rounded-lg px-3 py-2 transition-colors hover:bg-[var(--ink-04)]" style={{ border: "1px solid var(--border-color)", minHeight: 44 }}>
                     <span className="block text-[10.5px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>East</span>
-                    <span className="block text-[13.5px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>416-540-9287</span>
+                    <span className="block text-[13.5px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{offices.east.phone}</span>
                   </a>
-                  <a href="tel:+16043098212" className="rounded-lg px-3 py-2 transition-colors hover:bg-[var(--ink-04)]" style={{ border: "1px solid var(--border-color)", minHeight: 44 }}>
+                  <a href={telHref(offices.west.phone)} className="rounded-lg px-3 py-2 transition-colors hover:bg-[var(--ink-04)]" style={{ border: "1px solid var(--border-color)", minHeight: 44 }}>
                     <span className="block text-[10.5px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>West</span>
-                    <span className="block text-[13.5px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>604-309-8212</span>
+                    <span className="block text-[13.5px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{offices.west.phone}</span>
                   </a>
                 </div>
                 <Link href="/contact" className="inline-flex items-center gap-1.5 text-[13.5px] font-semibold hover:underline underline-offset-2" style={{ color: "var(--accent-text)", minHeight: 44 }}>
@@ -404,7 +415,11 @@ export default async function ApplicationPage({ params }: Props) {
           <p className="mb-6 text-sm" style={{ color: "var(--text-secondary)" }}>
             HUB installations, photographed on site.
           </p>
-          <GalleryGrid images={gallery} />
+          {/* While previewing, the whole gallery opens its Studio field (add,
+              remove, reorder, caption): lib/sanity.preview.ts. */}
+          <div data-sanity={galleryEdit}>
+            <GalleryGrid images={gallery} />
+          </div>
         </div>
       </section>
 

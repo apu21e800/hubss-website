@@ -1,5 +1,7 @@
 "use client";
 
+import { useSiteSettings } from "@/components/SiteSettingsProvider";
+import { telHref } from "@/lib/site-settings";
 import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -854,6 +856,7 @@ function MobileSectionRow({ section: s, pathname, onClose }: { section: NavSecti
 
 // ── Premium full-screen mobile menu ─────────────────────────────────────
 function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onClose: () => void; onSearchOpen: () => void }) {
+  const { offices } = useSiteSettings();
   const overlayRef = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
   // Which family or group is dropped open; one at a time, none on open.
@@ -1080,9 +1083,10 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
           >
             {/* Regional phones: 44px tall targets (QA pa#38: they were 20). */}
             <div className="flex items-center justify-center max-w-2xl mx-auto">
+              {/* The phones from Studio's Site Settings (lib/site-settings.ts). */}
               {[
-                { label: "West · 604-309-8212", href: "tel:+16043098212" },
-                { label: "East · 416-540-9287", href: "tel:+14165409287" },
+                { label: `West · ${offices.west.phone}`, href: telHref(offices.west.phone) },
+                { label: `East · ${offices.east.phone}`, href: telHref(offices.east.phone) },
               ].map((office, i) => (
                 <span key={office.href} className="flex items-center">
                   {i > 0 && <span aria-hidden="true" className="mx-1" style={{ width: 1, height: 14, background: "var(--ink-12)" }} />}

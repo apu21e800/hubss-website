@@ -22,11 +22,11 @@ const FALLBACK_HERO = "/images/hero/hero-1.jpg";
  * hero looks really bad, fix it!", so the fade is gone. The rule uses the wide
  * <source>'s own media query, so the framing and the file switch together.
  */
-function heroImageCss(wideMedia?: string): string {
+function heroImageCss(wideMedia?: string, position: string = HOME_HERO.position, widePosition: string = HOME_HERO.wide.position): string {
   return `
-    .home-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: ${HOME_HERO.position}; z-index: 1; }
+    .home-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: ${position}; z-index: 1; }
     ${wideMedia ? `@media ${wideMedia} {
-      .home-hero-img { object-position: ${HOME_HERO.wide.position}; }
+      .home-hero-img { object-position: ${widePosition}; }
     }` : ""}
   `;
 }
@@ -44,8 +44,21 @@ interface HeroSlideshowProps {
   heroImageSrc?: string;
   /** Alt text from Studio for that image. */
   heroImageAlt?: string;
-  /** Art-directed framings of the same photograph, by media query (app/page.tsx). */
-  heroSources?: { file: string; media: string }[];
+  /**
+   * Art-directed framings of the same photograph, by media query (app/page.tsx).
+   * `kind: "wide"` marks the cut for windows 16:9 and wider, whose framing
+   * switches with it.
+   */
+  heroSources?: { file: string; media: string; kind?: "wide" | "phone" }[];
+  /**
+   * object-position of the photo, and of the wide cut. Default: the framing
+   * chosen by hand for the default photo (HOME_HERO). A photo swapped in Studio
+   * passes its own (its focal point, app/page.tsx).
+   */
+  position?: string;
+  widePosition?: string;
+  /** While previewing in Studio: the attribute that makes the photo clickable (lib/sanity.preview.ts). */
+  editAttribute?: string;
 }
 
 export default function HeroSlideshow({
@@ -62,18 +75,22 @@ export default function HeroSlideshow({
   heroImageSrc,
   heroImageAlt,
   heroSources = [],
+  position,
+  widePosition,
+  editAttribute,
 }: HeroSlideshowProps = {}) {
   const src = heroImageSrc || FALLBACK_HERO;
   // A Sanity photo is sized by Sanity's CDN (lib/photos.ts): a phone gets an
   // 828px WebP instead of the full-size original.
   const fromSanity = isSanityImage(src);
-  const wideSource = heroSources.find((v) => v.file === HOME_HERO.wide.file);
+  const wideSource = heroSources.find((v) => v.kind === "wide" || v.file === HOME_HERO.wide.file);
 
   return (
     <section
       /* full-bleed photography with overlaid type — dark in every theme */
       data-surface="dark"
       data-hero
+      data-sanity={editAttribute}
       className="relative w-full overflow-hidden sm:min-h-[88vh]"
       style={{ background: "var(--bg-dark)" }}
       aria-label="Hero"
@@ -115,7 +132,7 @@ export default function HeroSlideshow({
           className="hero-pop-lite home-hero-img"
         />
       </picture>
-      <style>{heroImageCss(wideSource?.media)}</style>
+      <style>{heroImageCss(wideSource?.media, position, widePosition)}</style>
 
       {/* ── Gradients — lightened per Doug review for brighter hero ───── */}
       {/* On a phone the picture is lighter (the type is not on it) and only

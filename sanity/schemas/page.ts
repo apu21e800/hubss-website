@@ -2,6 +2,29 @@ import { defineArrayMember, defineField, defineType } from "sanity";
 import { HomeIcon } from "@sanity/icons";
 import { copyStyle, headingStyle, richImageField } from "./_shared";
 
+/** One homepage section's eyebrow, two-part heading and intro (lib/homepage-copy.ts). */
+function sectionCopy(name: string, title: string, what: string) {
+  return defineField({
+    name,
+    title: `${title} section`,
+    type: "object",
+    description: what,
+    options: { collapsible: true, collapsed: true },
+    fields: [
+      defineField({ name: "eyebrow", type: "string", title: "Eyebrow (small label above the heading)", validation: (r) => headingStyle(r) }),
+      defineField({ name: "heading", type: "string", title: "Heading, first part", validation: (r) => headingStyle(r) }),
+      defineField({
+        name: "headingAccent",
+        type: "string",
+        title: "Heading, second part",
+        description: "Leave blank for a one-part heading. When you change the first part, this one is used exactly as it is here.",
+        validation: (r) => headingStyle(r),
+      }),
+      defineField({ name: "intro", type: "text", rows: 2, title: "Intro line", validation: (r) => copyStyle(r) }),
+    ],
+  });
+}
+
 /**
  * Page schema — structured fields per page type.
  * Each field maps 1:1 to visible copy on the page so editors know exactly what they're changing.
@@ -120,6 +143,52 @@ export default defineType({
         richImageField("heroImage1", "Hero photo (shown on the homepage)"),
         richImageField("heroImage2", "Hero slide 2 (not shown on the site yet)"),
         richImageField("heroImage3", "Hero slide 3 (not shown on the site yet)"),
+      ],
+    }),
+
+    // The section copy below the hero (lib/homepage-copy.ts), 7 Oct 2026.
+    defineField({
+      name: "homepageSections",
+      title: "Homepage · Sections",
+      type: "object",
+      group: "homepage",
+      description:
+        "The words on each section of the homepage, top to bottom. A blank field shows the site's own wording. Tip: open Edit on the page and click any of these lines on the homepage itself.",
+      options: { collapsible: true, collapsed: false },
+      fields: [
+        defineField({
+          name: "audiences",
+          title: "The three cards under the hero",
+          type: "array",
+          description: "Municipalities, Designers & specifiers, Contractors: in that order. Each card keeps its link.",
+          validation: (r) => r.max(3).error("Three cards: one for each link"),
+          of: [
+            defineArrayMember({
+              type: "object",
+              name: "audience",
+              fields: [
+                defineField({ name: "label", type: "string", title: "Who it's for", validation: (r) => headingStyle(r) }),
+                defineField({ name: "desc", type: "text", rows: 3, title: "One line", validation: (r) => copyStyle(r) }),
+              ],
+              preview: { select: { title: "label", subtitle: "desc" } },
+            }),
+          ],
+        }),
+        sectionCopy("systems", "The systems", "The six product cards."),
+        sectionCopy("applications", "Applications", "The photo grid of applications. The second part of the heading is set in the orange gradient."),
+        defineField({
+          name: "ideaBook",
+          title: "Idea Book callout",
+          type: "object",
+          description: "The one-row strip with the book's cover. The book's name above it stays as it is.",
+          options: { collapsible: true, collapsed: true },
+          fields: [
+            defineField({ name: "heading", type: "string", title: "Line", validation: (r) => copyStyle(r) }),
+            defineField({ name: "intro", type: "string", title: "Line under it (wide screens)", validation: (r) => copyStyle(r) }),
+          ],
+        }),
+        sectionCopy("insights", "Insights", "The newest articles."),
+        sectionCopy("onTheGround", "On the ground", "The project photos and the follow buttons."),
       ],
     }),
 

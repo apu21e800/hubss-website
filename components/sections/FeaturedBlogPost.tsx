@@ -2,6 +2,7 @@ import Link from "next/link";
 import PhotoImage from "@/components/ui/PhotoImage";
 import { getAllPosts } from "@/lib/blog";
 import { badgeFor } from "@/lib/field-notes-taxonomy";
+import { HOMEPAGE_COPY, type SectionCopy } from "@/lib/homepage-copy";
 
 // Fallback images from confirmed project paths in lib/projects.ts
 const FALLBACK_IMAGES = [
@@ -10,7 +11,8 @@ const FALLBACK_IMAGES = [
   "/images/applications/commercial-spaces/commercial-spaces-01.jpg",
 ];
 
-export default async function FeaturedBlogPost() {
+/** `copy`: the section's eyebrow, heading and intro from Studio (lib/homepage-copy.ts). */
+export default async function FeaturedBlogPost({ copy = HOMEPAGE_COPY.insights }: { copy?: SectionCopy } = {}) {
   const posts = await getAllPosts();
 
   // Pin the residential driveways post as hero; fall back to most recent
@@ -43,7 +45,7 @@ export default async function FeaturedBlogPost() {
         <div className="flex items-end justify-between mb-14">
           <div>
             <p className="gradient-text text-xs font-semibold tracking-[0.2em] uppercase mb-3">
-              Insights
+              {copy.eyebrow}
             </p>
             <h2
               className="font-black"
@@ -60,14 +62,19 @@ export default async function FeaturedBlogPost() {
                   phone breaks the line between them and never mid-phrase
                   (the old one wrapped as "How it goes in. And / how it holds
                   up."). From sm up it fits on one line. */}
-              <span className="inline-block">How it goes in</span>{" "}
-              <span className="inline-block">and how it holds up.</span>
+              <span className="inline-block">{copy.heading}</span>
+              {copy.headingAccent && (
+                <>
+                  {" "}
+                  <span className="inline-block">{copy.headingAccent}</span>
+                </>
+              )}
             </h2>
             <p
               className="text-base mt-2 max-w-xl"
               style={{ color: "var(--text-secondary)" }}
             >
-              Installation guides, project write-ups, and the specification detail behind them.
+              {copy.intro}
             </p>
           </div>
           {/* "All Insights", as the phone button below says: it opens the whole

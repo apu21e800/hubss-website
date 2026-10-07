@@ -15,13 +15,14 @@
  * underneath it linked to the underscored account. Every Instagram link on the
  * site, and the homepage Organization schema, now reads from this one line.
  */
-export const SOCIAL_LINKS = {
-  linkedin:  'https://www.linkedin.com/company/hub-surface-systems',
-  youtube:   'https://www.youtube.com/@hubsurfacesystems8112',
-  facebook:  'https://www.facebook.com/hubsurfacesystems',
-  instagram: 'https://www.instagram.com/hub_surface_systems/',
-  x:         'https://x.com/HUB_SS',
-} as const;
+//
+// Since 7 Oct 2026 these are the code's copy of Studio's Site Settings
+// (lib/site-settings.ts, DEFAULT_SITE_SETTINGS), which the site reads through
+// getSiteSettings() and useSiteSettings(). This name stays for anything that
+// needs the code's copy without Studio.
+import { DEFAULT_SITE_SETTINGS } from './site-settings';
+
+export const SOCIAL_LINKS = DEFAULT_SITE_SETTINGS.social;
 
 /** The Instagram handle as people type it, derived so it can never drift from the URL. */
 export const INSTAGRAM_HANDLE =

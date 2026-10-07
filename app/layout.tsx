@@ -9,6 +9,11 @@ import { VercelToolbar } from "@vercel/toolbar/next";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Suspense } from "react";
+import { draftMode } from "next/headers";
+import PreviewTools from "@/components/PreviewTools";
+import { SiteSettingsProvider } from "@/components/SiteSettingsProvider";
+import { getSiteSettings } from "@/lib/sanity.queries";
 
 // Runs before first paint. Order: ?theme= in the URL (persisted, so a link
 // sticks as the reader navigates) → localStorage → the server's own
@@ -80,7 +85,14 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  // Studio's "Edit on the page" (lib/sanity.preview.ts). False on every
+  // statically built page and for every visitor; true only in a browser that
+  // came through /api/draft-mode/enable from Studio.
+  const preview = (await draftMode()).isEnabled;
+  // The offices, social accounts and footer line from Studio, for the client
+  // components that print them (components/SiteSettingsProvider.tsx).
+  const settings = await getSiteSettings();
   return (
     // suppressHydrationWarning: the theme bootstrap below sets data-theme on
     // <html> before React hydrates, and that attribute is not in the server
@@ -109,16 +121,28 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             photos on nearly every page (lib/photos.ts); warming it too saves
             the TLS handshake before the first card photo (QA F13, 30 Sep 2026). */}
         <link rel="preconnect" href="https://cdn.sanity.io" crossOrigin="anonymous" />
-        {children}
+        <SiteSettingsProvider settings={settings}>{children}</SiteSettingsProvider>
         {/* The scroll-up sticky bar (components/StickyBar.tsx) is off since
             25 Sep 2026: with the header's Lunch & Learn button and the band at
             the foot of every page it was the same ask a third time. */}
-        <CrispChat />
-        {process.env.VERCEL_ENV !== "production" && <VercelToolbar />}
-        <Analytics />
-        <SpeedInsights />
-        <GoogleAnalytics gaId="G-7YSFCGRL5E" />
-        <AnalyticsEvents />
+        {preview ? (
+          <>
+            {/* The click-to-edit outlines and live refresh while Doug edits
+                in Studio. No chat, no analytics: a preview isn't a visit. */}
+            <Suspense fallback={null}>
+              <PreviewTools />
+            </Suspense>
+          </>
+        ) : (
+          <>
+            <CrispChat />
+            {process.env.VERCEL_ENV !== "production" && <VercelToolbar />}
+            <Analytics />
+            <SpeedInsights />
+            <GoogleAnalytics gaId="G-7YSFCGRL5E" />
+            <AnalyticsEvents />
+          </>
+        )}
       </body>
     </html>
   );

@@ -11,9 +11,13 @@
  * Keys are the photo's /public path, which is also what a Sanity photo records as its
  * `origin` (lib/photos.ts), so the value follows the photo rather than the page. The
  * templates read HERO_POSITION[photo origin] first, then the older per-product
- * `heroPosition` in lib/products.ts, then their default. A photo swapped in Studio has no
- * entry and falls back the same way; add a line here when you choose a new hero.
+ * `heroPosition` in lib/products.ts, then their default. Since 7 Oct 2026 a focal point
+ * set on the photo in Studio (the crosshair, its "hotspot") beats all of these
+ * (heroObjectPosition below), so a hero swapped in Studio frames itself as soon as Doug
+ * marks its subject. A line here is still how a photo gets a framing without one.
  */
+import { hotspotPosition, type Hotspot } from "@/lib/photos";
+
 export const HERO_POSITION: Record<string, string> = {
   // ── Products ────────────────────────────────────────────────────────────────
   "/images/products/traffic-patterns/traffic-patterns-87.jpg": "60% 0%", // veterans' heads and the maple leaf
@@ -53,6 +57,17 @@ export const HERO_POSITION: Record<string, string> = {
   "/images/applications/public-art/public-art-01.jpg": "50% 88%", // the artwork; at 70% a storefront's "CANNABIS" sign read in the top left at 1440 (28 Sep QA)
   "/images/applications/bike-lanes/bike-lanes-12.jpg": "85% 62%", // Regulatory Markings: ONLY BUS legend and bike lane
 };
+
+/**
+ * Where a hero photo sits in its banner, in order: the focal point Doug set
+ * on the photo in Studio (its hotspot), then the hand-picked value above for
+ * that photo, then the page's default. So a photo swapped in Studio frames
+ * itself once someone marks its subject, with no code change; the photos
+ * framed by hand keep their framing until someone moves their hotspot.
+ */
+export function heroObjectPosition(photo: { src: string; origin?: string; hotspot?: Hotspot }, fallback: string): string {
+  return hotspotPosition(photo) ?? HERO_POSITION[photo.origin ?? photo.src] ?? fallback;
+}
 
 /**
  * Phone zoom, per photo (QA C4, 30 Sep 2026). On a 390 px phone the banner is

@@ -17,6 +17,8 @@
  *                 underneath. Boldest, most editorial.
  */
 
+import { useSiteSettings } from "@/components/SiteSettingsProvider";
+import { telHref } from "@/lib/site-settings";
 import { useEffect, useId, useState, FormEvent } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -90,6 +92,8 @@ export function setLunchLearnTopic(topic: string, from = "lunch-learn") {
 }
 
 function useLunchLearnForm(withFormat: boolean) {
+  // The office phones for the error message, from Studio's Site Settings.
+  const { offices } = useSiteSettings();
   const [formData, setFormData] = useState<FormState>(EMPTY);
   const [format, setFormat] = useState<string>("Either");
   const [submitState, setSubmitState] = useState<SubmitState>({ status: "idle" });
@@ -151,7 +155,7 @@ function useLunchLearnForm(withFormat: boolean) {
     } catch {
       setSubmitState({
         status: "error",
-        message: "Something went wrong. Call us directly: 416-540-9287 (East) or 604-309-8212 (West).",
+        message: `Something went wrong. Call us directly: ${offices.east.phone} (East) or ${offices.west.phone} (West).`,
       });
     }
   };
@@ -286,6 +290,7 @@ function MoreLink() {
  * replaced by the single button it was competing with.
  */
 function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boolean; titleAs?: "h1" | "h2" }) {
+  const { offices } = useSiteSettings();
   const f = useLunchLearnForm(true);
   // The form panel's heading sits one level under the card's: an h2 on
   // /lunch-learn, where the card's title is the h1, so the page's headings
@@ -390,9 +395,9 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
                   <p className="text-[13px] font-semibold flex items-start gap-x-1.5" style={{ color: "var(--ink-45)" }}>
                     <span data-tap="44" className="inline-flex items-center flex-shrink-0">Or call:</span>
                     <span className="flex flex-col sm:flex-row sm:items-center sm:gap-x-1.5">
-                      <a href="tel:+14165409287" data-tap="44" className="inline-flex items-center whitespace-nowrap hover:text-[var(--accent-text)] transition-colors">East 416-540-9287</a>
+                      <a href={telHref(offices.east.phone)} data-tap="44" className="inline-flex items-center whitespace-nowrap hover:text-[var(--accent-text)] transition-colors">East {offices.east.phone}</a>
                       <span aria-hidden="true" className="hidden sm:inline">·</span>
-                      <a href="tel:+16043098212" data-tap="44" className="inline-flex items-center whitespace-nowrap hover:text-[var(--accent-text)] transition-colors">West 604-309-8212</a>
+                      <a href={telHref(offices.west.phone)} data-tap="44" className="inline-flex items-center whitespace-nowrap hover:text-[var(--accent-text)] transition-colors">West {offices.west.phone}</a>
                     </span>
                   </p>
                 </div>

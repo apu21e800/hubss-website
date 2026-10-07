@@ -23,7 +23,7 @@ export default defineType({
       title: "Regional offices",
       type: "object",
       group: "offices",
-      description: "Contact details for both HUB offices, shown on the Contact page and in the footer.",
+      description: "Both HUB offices. Since 7 Oct 2026 these are the details the whole site prints: the footer, Contact, About, every product and application page, the Lunch & Learn card, the phone menu, the 404 page and the legal pages. Change a number here and it changes everywhere about five seconds after Publish. A blank field shows the site's own copy.",
       fields: [
         defineField({
           name: "east",
@@ -31,6 +31,12 @@ export default defineType({
           type: "object",
           description: "Eastern Canada contact: Doug Bain covers Ontario and east.",
           fields: [
+            defineField({
+              name: "place",
+              type: "string",
+              title: "Town and province",
+              description: 'As the site prints it, e.g. "Milton, Ontario".',
+            }),
             defineField({
               name: "name",
               type: "string",
@@ -71,6 +77,12 @@ export default defineType({
           type: "object",
           description: "Western Canada contact: Cleve Stordy covers BC and west.",
           fields: [
+            defineField({
+              name: "place",
+              type: "string",
+              title: "Town and province",
+              description: 'As the site prints it, e.g. "Ladysmith, British Columbia".',
+            }),
             defineField({
               name: "name",
               type: "string",
@@ -114,7 +126,7 @@ export default defineType({
       title: "Social media links",
       type: "object",
       group: "social",
-      description: "Full URLs for HUB's social media profiles, shown in the footer and contact page.",
+      description: "Full addresses of HUB's accounts: the icons in the footer and on Contact, the Follow buttons on the homepage, and what search engines are told. A blank field shows the site's own copy.",
       fields: [
         defineField({
           name: "instagram",
@@ -156,7 +168,7 @@ export default defineType({
       type: "text",
       rows: 2,
       group: "branding",
-      description: "Short tagline shown in the site footer below the HUB logo (e.g. 'Redefining hardscapes across Canada.').",
+      description: "The line under the HUB logo in the footer, on every page.",
       validation: (r) => r.max(120).warning("Footer tagline should be under 120 characters"),
     }),
     defineField({
@@ -164,13 +176,18 @@ export default defineType({
       title: "Founded year",
       type: "number",
       group: "branding",
-      description: "The year HUB Surface Systems was founded. Currently: 1999. Used in the footer copyright and 'years of experience' counter.",
+      description: "Not shown on the site: \"Since 1999\" is part of the site's own wording.",
+      hidden: true,
       validation: (r) =>
         r
           .min(1900)
           .max(new Date().getFullYear())
           .error("Enter a valid 4-digit year"),
     }),
+
+    // From the May 2026 migration; nothing reads it. Declared (hidden) so
+    // Studio doesn't flag Site Settings with an "unknown field" warning.
+    defineField({ name: "mascotImage", title: "Mascot image", type: "image", group: "branding", hidden: true }),
 
     // ── Resources ────────────────────────────────────────────────────────────
     defineField({

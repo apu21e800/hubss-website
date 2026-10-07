@@ -24,6 +24,7 @@
  */
 
 import { unstable_cache } from "next/cache";
+import { stegaClean } from "@sanity/client/stega";
 import { sanityFetch, CACHE_VERSION } from "@/lib/sanity.queries";
 import blogIndex from "@/lib/blog-index.json";
 import { FIELD_NOTE_TYPES, SECTION_BY_KEY, isArchivedPost, type FieldNoteType, type InsightsSectionKey } from "@/lib/field-notes-taxonomy";
@@ -160,8 +161,11 @@ export interface RawPost {
   alts?: (string | null)[] | null;
 }
 
+// Lists the site matches on (system names, applications, keywords, tags):
+// cleaned of the invisible markers Studio's preview adds (lib/sanity.preview.ts),
+// so a lookup by name works the same in the preview as on the live site.
 const strings = (xs: (string | null | undefined)[] | null | undefined): string[] =>
-  (xs ?? []).map((x) => (typeof x === "string" ? x.trim() : "")).filter(Boolean);
+  (xs ?? []).map((x) => (typeof x === "string" ? stegaClean(x).trim() : "")).filter(Boolean);
 
 const TORONTO_DAY = new Intl.DateTimeFormat("en-CA", {
   timeZone: "America/Toronto",

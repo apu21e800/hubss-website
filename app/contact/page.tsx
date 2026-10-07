@@ -1,5 +1,5 @@
 import { getSanityPageContent, getSiteSettings } from "@/lib/sanity.queries";
-import { city, schemaPhone, type SiteSettings } from "@/lib/site-settings";
+import { city, provinceCode, schemaPhone, type SiteSettings } from "@/lib/site-settings";
 import JsonLd from "@/components/ui/JsonLd";
 import ContactForm from "./ContactForm";
 import Footer from "@/components/sections/Footer";
@@ -28,7 +28,7 @@ const contactSchema = ({ offices }: SiteSettings) => ({
       address: {
         "@type": "PostalAddress",
         addressLocality: city(offices.west),
-        addressRegion: "BC",
+        addressRegion: provinceCode(offices.west, "BC"),
         addressCountry: "CA",
       },
       areaServed: [
@@ -69,7 +69,7 @@ const contactSchema = ({ offices }: SiteSettings) => ({
       address: {
         "@type": "PostalAddress",
         addressLocality: city(offices.east),
-        addressRegion: "ON",
+        addressRegion: provinceCode(offices.east, "ON"),
         addressCountry: "CA",
       },
       areaServed: [

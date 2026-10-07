@@ -13,12 +13,13 @@ and then it is, about five seconds later. Click links on the page to go to
 another page, the way you would on the site.
 
 What you can change this way: the homepage (hero words and photo, every
-section's heading and intro, the three cards under the hero), product and
-application pages (names, descriptions, specs, hero photo, gallery), About,
-Contact, the Lunch & Learn questions, any article, and, in **Site Settings**,
-both offices' towns, names, emails and phones, the social accounts and the
-line under the logo in the footer. A phone number changed in Site Settings
-changes everywhere it appears on the site.
+section's heading and intro, the three cards under the hero), About, Contact,
+the Lunch & Learn questions, any article, the hero photo and gallery of every
+product and application page, and, in **Site Settings**, both offices' towns,
+names, emails and phones, the social accounts and the line under the logo in
+the footer. A phone number changed in Site Settings changes everywhere it
+appears on the site. The words on product and application pages can be
+clicked too, but they are the Idea Book's approved copy: see 7.
 
 **Photos and their framing.** Click a hero photo and choose another from the
 media library or upload one. Then press the crosshair (the hotspot tool) on

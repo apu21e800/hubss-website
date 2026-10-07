@@ -37,7 +37,13 @@ copied each page's photos, order, alt text and captions into Sanity on
 24 Sep 2026 (`scripts/sync-photos-to-sanity.ts`); `npm run photos:check`
 compares Sanity with the folders. Don't re-run the sync without a reason: it
 makes Sanity match the folders again, which would undo gallery edits made in
-Studio.
+Studio. Since 7 Oct 2026 a write needs `--only=<slug>` (or an explicit
+`--all`), so it can't happen by accident.
+
+A hero's framing on the page follows the focal point set on it in Studio (the
+crosshair, "hotspot"): lib/hero-framing.ts, `heroObjectPosition`. The
+homepage hero's wide-screen and phone cuts are made from the Studio photo
+whenever it isn't the default master (app/page.tsx).
 
 ---
 

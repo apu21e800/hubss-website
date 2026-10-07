@@ -43,9 +43,18 @@
  *     HUB doesn't own, a YouTube handle that 404s, the pre-QA footer line,
  *     LEGACY_SETTINGS) and are replaced; the site already ignores them.
  *
+ * 7 Oct 2026, later the same day: the heroes, the About text and the Lunch &
+ * Learn questions are fill-only too. They became clickable in Studio's Edit on
+ * the page and Doug's to change, and the old "make Studio match the code"
+ * write would have put the code's line back over his the next time anyone ran
+ * this. To push the code's copy over Studio's on purpose (a correction Doug
+ * has agreed), add --overwrite: it applies to those page fields only, never to
+ * the homepage sections or Site Settings, and prints what it replaces.
+ *
  * Usage:
- *   npx tsx scripts/sync-pages-to-sanity.ts            # apply
- *   npx tsx scripts/sync-pages-to-sanity.ts --dry-run  # report only
+ *   npx tsx scripts/sync-pages-to-sanity.ts                # fill blanks
+ *   npx tsx scripts/sync-pages-to-sanity.ts --dry-run      # report only
+ *   npx tsx scripts/sync-pages-to-sanity.ts --overwrite    # page text: code over Studio
  */
 
 import { createClient } from "@sanity/client";
@@ -65,6 +74,7 @@ const ROOT = path.resolve(__dirname, "..");
 loadDotenv({ path: path.join(ROOT, ".env.local") });
 
 const DRY_RUN = process.argv.includes("--dry-run");
+const OVERWRITE = process.argv.includes("--overwrite");
 
 const token = process.env.SANITY_API_WRITE_TOKEN;
 if (!token && !DRY_RUN) {
@@ -115,6 +125,9 @@ const CONTACT_HERO_TEXT: Record<string, string> = {
 };
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
+
+/** Nothing there: missing, null, blank text or an empty list. */
+const blank = (v: unknown) => v === undefined || v === null || (typeof v === "string" && v.trim() === "") || (Array.isArray(v) && v.length === 0);
 
 function arrayWithKeys<T extends object>(items: T[], prefix: string): (T & { _key: string })[] {
   return items.map((item, i) => ({ ...item, _key: `${prefix}_${i}` }));
@@ -192,16 +205,25 @@ async function patchPage(slug: string, desired: Record<string, unknown>) {
     return { changed: 0, skipped: 1, missing: 0 };
   }
 
-  console.log(`  ✏  ${slug}`);
-  for (const d of diffs) console.log(`      ${d}: <changed>`);
+  // Fill-only unless --overwrite: a field Studio already has is Doug's.
+  const write = OVERWRITE ? diffs : diffs.filter((f) => blank(atPath(remote, f)));
+  const kept = diffs.filter((f) => !write.includes(f));
+  if (!write.length) {
+    console.log(`  ✓ ${slug} — nothing blank to fill (Studio's own text kept: ${kept.join(", ")}; --overwrite replaces it)`);
+    return { changed: 0, skipped: 1, missing: 0 };
+  }
+
+  console.log(`  ✏  ${slug}${OVERWRITE ? " (OVERWRITE: code over Studio)" : " (fill-only)"}`);
+  for (const d of write) console.log(`      ${d}: ${blank(atPath(remote, d)) ? "<blank → filled>" : "<Studio's text → replaced by the code's>"}`);
+  if (kept.length) console.log(`      kept Studio's own text: ${kept.join(", ")}`);
 
   if (!DRY_RUN) {
-    await client.patch(remote._id).set(desired).commit({ autoGenerateArrayKeys: false });
+    const set = Object.fromEntries(write.map((f) => [f, desired[f]]));
+    await client.patch(remote._id).set(set).commit({ autoGenerateArrayKeys: false });
   }
   return { changed: 1, skipped: 0, missing: 0 };
 }
 
-const blank = (v: unknown) => v === undefined || v === null || (typeof v === "string" && v.trim() === "") || (Array.isArray(v) && v.length === 0);
 
 /**
  * Fill-only: sets each path whose Studio value is blank, or is one of the

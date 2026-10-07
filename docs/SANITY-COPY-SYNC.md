@@ -23,7 +23,14 @@ It now uses the same merge as the homepage, so the table below is true.
 
 `npm run sync:pages` treats both as **fill-only**: it writes the code's words
 into blank Studio fields and never overwrites a field Studio already has, so a
-sync can't undo Doug's edits. The one exception is three values known to be
+sync can't undo Doug's edits. The same now goes for the page text it always
+synced (the heroes, the About text, the Lunch & Learn questions): Doug can
+click and change those too. To push the code's copy over Studio's on purpose,
+`--overwrite` (page text only; it prints each field it replaces).
+
+Photos likewise: `npm run photos:sync` refuses a write without `--only=<slug>`
+(or an explicit `--all`), because a full run puts the /public folders back
+over every hero and gallery Doug has changed in Studio. The one exception is three values known to be
 wrong from the May migration (an Instagram account HUB doesn't own, a YouTube
 handle that 404s, the pre-QA footer line: `LEGACY_SETTINGS`), which it
 replaces; the site ignores them anyway. So for these, **Studio is the source**:

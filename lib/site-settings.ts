@@ -147,5 +147,18 @@ export function instagramHandle(url: string): string {
 
 /** The city alone, for short lines: "Ladysmith". */
 export function city(office: Office): string {
-  return office.place.split(",")[0].trim();
+  return stegaClean(office.place).split(",")[0].trim();
+}
+
+const PROVINCE_CODES: Record<string, string> = {
+  "british columbia": "BC", alberta: "AB", saskatchewan: "SK", manitoba: "MB", ontario: "ON",
+  quebec: "QC", "québec": "QC", "new brunswick": "NB", "nova scotia": "NS",
+  "prince edward island": "PE", "newfoundland and labrador": "NL", yukon: "YT",
+  "northwest territories": "NT", nunavut: "NU",
+};
+
+/** The province's postal code for structured data, from the town line: "BC". */
+export function provinceCode(office: Office, fallback: string): string {
+  const prov = stegaClean(office.place).split(",")[1]?.trim().toLowerCase() ?? "";
+  return PROVINCE_CODES[prov] ?? (/^[a-z]{2}$/.test(prov) ? prov.toUpperCase() : fallback);
 }

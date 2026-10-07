@@ -18,12 +18,16 @@
  * see the comment at the top of app/products/page.tsx.
  */
 
+import { stegaClean } from "@sanity/client/stega";
+
 /** Sanity's text when it has any, else the code's. Sanity's text is trimmed. */
 export function cmsText(sanity: string | null | undefined, code: string): string;
 export function cmsText(sanity: string | null | undefined, code: string | undefined): string | undefined;
 export function cmsText(sanity: string | null | undefined, code: string | undefined): string | undefined {
   const value = typeof sanity === "string" ? sanity.trim() : "";
-  return value || code;
+  // Blank is judged without the invisible markers Studio's preview adds
+  // (lib/sanity.preview.ts): a cleared field must fall back there too.
+  return stegaClean(value).trim() ? value : code;
 }
 
 /** Sanity's list when it has at least one entry, else the code's. */

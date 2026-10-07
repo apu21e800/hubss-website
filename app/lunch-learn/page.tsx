@@ -1,3 +1,4 @@
+import { stegaClean } from "@sanity/client/stega";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import LunchLearnFunnel from "@/components/sections/LunchLearnFunnel";
@@ -61,7 +62,8 @@ export default async function LunchLearnPage() {
   const STALE_FAQ_QS = ["How long is the session?", "Is this actually free?", "Do we get continuing education credits?", "In-person or virtual?"];
   function freshArray<T extends Record<string, unknown>>(arr: T[] | undefined, key: string, staleVals: string[]): T[] | undefined {
     if (!arr?.length) return undefined;
-    const untouched = arr.every((item) => staleVals.includes(String(item[key] ?? "")));
+    // stegaClean: Studio's preview marks every string (lib/sanity.preview.ts).
+    const untouched = arr.every((item) => staleVals.includes(stegaClean(String(item[key] ?? ""))));
     return untouched ? undefined : arr;
   }
   // Keyed on the one heading the page reads (it was keyed on the seed's
@@ -69,7 +71,7 @@ export default async function LunchLearnPage() {
   // FAQ heading could never have reached the page).
   function freshHeadings(h: { faqHeading?: string } | undefined) {
     if (!h?.faqHeading) return undefined;
-    return h.faqHeading === "Everything You Need to Know" ? undefined : { faqHeading: h.faqHeading };
+    return stegaClean(h.faqHeading) === "Everything You Need to Know" ? undefined : { faqHeading: h.faqHeading };
   }
   const faqs = freshArray(sanityPage?.lunchLearnFaqs, "q", STALE_FAQ_QS) ?? LUNCH_LEARN_FAQS;
 

@@ -20,7 +20,7 @@ import { hotspotPosition, isSanityImage, sanityCrop, toPhoto } from "@/lib/photo
 import { editAttr, isPreview } from "@/lib/sanity.preview";
 import { getMergedApplications } from "@/lib/applications.server";
 import { getMergedProducts } from "@/lib/products.server";
-import { city, schemaPhone, type SiteSettings } from "@/lib/site-settings";
+import { city, provinceCode, schemaPhone, type SiteSettings } from "@/lib/site-settings";
 import { mergeHomepageCopy } from "@/lib/homepage-copy";
 
 // 30 Sep 2026 (QA A1, E2, E4): "Systems", not the banned "Solutions", in the
@@ -64,7 +64,7 @@ const organizationSchema = ({ offices, social }: SiteSettings) => ({
       address: {
         "@type": "PostalAddress",
         addressLocality: city(offices.west),
-        addressRegion: "BC",
+        addressRegion: provinceCode(offices.west, "BC"),
         addressCountry: "CA",
       },
       areaServed: ["BC", "AB", "SK", "NT", "YT", "NU"],
@@ -81,7 +81,7 @@ const organizationSchema = ({ offices, social }: SiteSettings) => ({
       address: {
         "@type": "PostalAddress",
         addressLocality: city(offices.east),
-        addressRegion: "ON",
+        addressRegion: provinceCode(offices.east, "ON"),
         addressCountry: "CA",
       },
       areaServed: ["ON", "QC", "NS", "NB", "PE", "NL", "MB"],

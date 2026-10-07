@@ -18,7 +18,7 @@
  * USAGE (from the repo root)
  *   npm run photos:dry                               # the plan, and what would be uploaded
  *   npm run photos:sync -- --only=mmax --backup=<f>  # one document first
- *   npm run photos:sync -- --backup=<file.json>      # everything
+ *   npm run photos:sync -- --all --backup=<file.json>  # everything (replaces Doug's Studio photo edits)
  *   npm run photos:check                             # Sanity vs the plan; exits 1 on any difference
  *
  * A write needs SANITY_API_WRITE_TOKEN in .env.local, and --backup: the current
@@ -44,6 +44,13 @@ const BACKUP = flag("backup");
 
 const token = process.env.SANITY_API_WRITE_TOKEN;
 if (!DRY && !CHECK) {
+  // Since 7 Oct 2026 Doug changes heroes and galleries in Studio (Edit on the
+  // page). A run over everything would put the folders back over his choices,
+  // so it has to be asked for by name.
+  if (!ONLY && !args.includes("--all")) {
+    console.error("ERROR: a write without --only=<slug> replaces every hero and gallery, including any Doug has changed in Studio.\n       Use --only=<slug> for the documents you mean, or add --all if you really mean all of them.");
+    process.exit(1);
+  }
   if (!token) { console.error("ERROR: SANITY_API_WRITE_TOKEN is missing from .env.local."); process.exit(1); }
   if (!BACKUP) { console.error("ERROR: a write needs --backup=<file.json> (the current photos are saved there first)."); process.exit(1); }
 }

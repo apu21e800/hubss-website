@@ -296,6 +296,12 @@ changes on the fly to core text and images".
   ssr: false); it always failed on the server first (React #419).
 - Homepage section copy: lib/homepage-copy.ts (page-homepage.homepageSections).
   A heading is `heading` + `headingAccent` and they travel together.
+- `npm run sync:pages` is fill-only for everything it writes now (page text,
+  sections, Site Settings): Studio's text is Doug's. `--overwrite` pushes the
+  code's page text over Studio's on purpose. `npm run photos:sync` needs
+  `--only=<slug>` (or `--all`) to write. Products and applications are still
+  code-first: the Idea Book is their source and `sync:products` /
+  `sync:applications` overwrite as before.
 - Site Settings: lib/site-settings.ts, `getSiteSettings()` on the server,
   `useSiteSettings()` in client components (components/SiteSettingsProvider.tsx,
   fed by app/layout.tsx). Never type an office phone, email or town again:

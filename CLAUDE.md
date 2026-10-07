@@ -31,7 +31,7 @@ Markings, Parks & Paths, Community Branding, Town Homes, Parking Lots, Airports.
   "20-year durability" claim — do not reintroduce one.
 
 ## Tech Stack
-- Next.js 16.1.6 (App Router, Turbopack)
+- Next.js 16.4.0 (App Router, Turbopack); 16.1.6 until the 7 Oct 2026 security patch
 - Tailwind CSS 4
 - TypeScript (strict)
 - Blog posts in Sanity Studio, rendered by components/blog/PostBody.tsx

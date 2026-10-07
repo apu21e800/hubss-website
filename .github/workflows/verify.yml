@@ -43,6 +43,11 @@ jobs:
       - name: Typecheck
         run: npx tsc --noEmit
 
+      # The forms' spam rules (lib/form-screen.ts): a change that starts
+      # holding back real enquiries fails here. No network, a second or two.
+      - name: Form screen tests
+        run: npm run test:forms
+
       # The fast checks: routes, links, assets, gallery distinctness, and the
       # CMS field contract. No browser, so this is the one that gates merges.
       - name: Verify

@@ -6,6 +6,7 @@ import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
 import { SocialLinks } from "@/components/ui/SocialLinks";
 import { track } from "@vercel/analytics";
+import { postForm } from "@/lib/post-form";
 
 // Note: metadata must be in a server component — defined in layout or a parallel route.
 // Page-level metadata for client components requires moving meta to a parent layout.
@@ -133,14 +134,12 @@ export default function ContactForm({ eyebrow, heading, subheading }: ContactFor
                   setLoading(true);
                   setError("");
                   try {
-                    const res = await fetch("/api/contact", {
-                      method: "POST",
-                      headers: { "Content-Type": "application/json" },
-                      // A blank company is left out rather than sent as "",
-                      // so the email drops its Company row and the subject
-                      // line falls back instead of ending on "@ ".
-                      body: JSON.stringify({ ...form, company: form.company.trim() || undefined, formType: "contact", website: form.website }),
-                    });
+                    // A blank company is left out rather than sent as "",
+                    // so the email drops its Company row and the subject
+                    // line falls back instead of ending on "@ ".
+                    // postForm: the spam check, with a way round it for
+                    // browsers that block it (lib/post-form.ts).
+                    const res = await postForm({ ...form, company: form.company.trim() || undefined, formType: "contact", website: form.website });
                     const data = await res.json();
                     if (!res.ok || data.error) {
                       setError(data.error ?? "Something went wrong. Please try again.");

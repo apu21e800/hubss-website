@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { withBotId } from "botid/next/config";
 import fs from "fs";
 import path from "path";
 import { projects } from "./lib/projects";
@@ -609,4 +610,8 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// withBotId adds the two rewrites Vercel BotID's browser check is served
+// through (same origin, so ad blockers leave it alone) and their frame headers.
+// The forms' protection itself is instrumentation-client.ts plus checkBotId()
+// in app/api/contact/route.ts (6 Oct 2026, lib/form-screen.ts).
+export default withBotId(nextConfig);

@@ -25,7 +25,12 @@ type Block = string | string[];
 // live build does not set it, so Crisp is not listed; add it here if it is
 // ever switched on. The old list's "data processed in North America" and
 // "anonymized ... IP anonymization enabled" were dropped: nothing in the repo
-// configures or documents either.
+// configures or documents either. 6 Oct 2026: the forms gained Vercel BotID
+// (part of the Vercel line) and a spam screen that sends the name, company,
+// email domain, project fields and the message, with phone numbers and email
+// addresses replaced, to Anthropic's Claude (lib/form-screen.ts). Never the
+// phone field, the full email or the mailing address (an Idea Book request's
+// city included). Hence the new line.
 const sections: { heading: string; blocks: Block[] }[] = [
   {
     heading: "1. Information we collect",
@@ -70,7 +75,8 @@ const sections: { heading: string; blocks: Block[] }[] = [
       "We use the following third-party services that may process your data:",
       [
         "Email delivery: Resend (sends the forms on this site to our inbox)",
-        "Hosting: Vercel (hosts the site; Vercel Web Analytics and Speed Insights measure page visits and loading speed)",
+        "Hosting: Vercel (hosts the site and checks that our forms are sent from a real browser; Vercel Web Analytics and Speed Insights measure page visits and loading speed)",
+        "Spam screening: Anthropic (reads what you send through our forms, with phone numbers and email addresses taken out and never your mailing address, to keep spam out of our inbox)",
         "Analytics: Google Analytics (pages visited, time on site, browser type, and referring URL)",
         "Content: Sanity (stores the site's text and serves its photographs)",
         "Maps: CARTO (supplies the map on the homepage)",
@@ -133,7 +139,7 @@ export default function PrivacyPage() {
           Privacy policy
         </h1>
         <p className="text-sm mb-12" style={{ color: "var(--text-muted)" }}>
-          Last updated: Sep 27, 2026
+          Last updated: Oct 6, 2026
         </p>
 
         <p className="text-base leading-relaxed mb-12" style={{ color: "var(--text-muted)" }}>

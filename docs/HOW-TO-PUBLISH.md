@@ -3,6 +3,32 @@
 For Doug. One page. Everything below happens in Studio, at **hubss.com/studio**
 (sign in with Google; Vern sends the invitation the first time).
 
+## 0. Edit on the page (the quickest way)
+
+At the top of Studio, open **Edit on the page**. The website appears inside
+Studio. Move the pointer over it: anything you can change gets an outline.
+Click it and its field opens beside the page; type, and the page shows the
+change straight away. Nothing is on the live site until you press **Publish**,
+and then it is, about five seconds later. Click links on the page to go to
+another page, the way you would on the site.
+
+What you can change this way: the homepage (hero words and photo, every
+section's heading and intro, the three cards under the hero), product and
+application pages (names, descriptions, specs, hero photo, gallery), About,
+Contact, the Lunch & Learn questions, any article, and, in **Site Settings**,
+both offices' towns, names, emails and phones, the social accounts and the
+line under the logo in the footer. A phone number changed in Site Settings
+changes everywhere it appears on the site.
+
+**Photos and their framing.** Click a hero photo and choose another from the
+media library or upload one. Then press the crosshair (the hotspot tool) on
+the photo and drag it onto the subject: the crosswalk, the logo, the people.
+Phones and wide screens crop around that point.
+
+If your browser later shows the site with a small dark bar at the bottom
+saying **Previewing unpublished changes**, that's Studio's preview still on in
+that browser. Press **Exit preview**; nobody else ever sees it.
+
 ## 1. Fix something on a live article
 
 Open **Insights**, click the article, change the words, press **Publish**
@@ -17,8 +43,9 @@ overnight.
 - **Title:** under 70 characters if you can.
 - **Type:** Case Study, Project Profile, Guide, White Paper or Article. It
   sets the badge and which Insights hub the piece appears in.
-- **Publish date:** the date printed on the article. Publishing is what puts
-  it on the site; a future date does not hold it back.
+- **Publish date:** the date printed on the article. The first Publish sets
+  it to that moment, so you can leave it; change it after publishing if the
+  article needs another date. A future date does not hold it back.
 - **Excerpt:** two or three sentences. It is the card text, the italic lead-in
   and what Google shows.
 - **Body:** use **Heading 2** for each section (they become the "On this page"
@@ -44,13 +71,16 @@ Oakville, Ontario". It is what screen readers say and what Google reads.
 ## 4. The plan, and the Tuesday drafts
 
 **Insights plan** is the list of articles we want written. Each idea has a
-working title, a target search phrase and a brief. Set one to **Ready**.
+working title, a target search phrase and a brief. You don't have to do
+anything to it each week: the drafter takes the next idea by itself. Set one
+to **Ready** only when you want that one next.
 
 Every Tuesday morning (13:00 UTC, 9 a.m. in Toronto during summer time) the
-drafter takes the Ready idea with the highest priority and writes a draft.
-You get an email. The draft is in Insights, unpublished, with a fact check and
-a style check in **Notes for the editor**. Read the notes, check every sentence
-it flagged, edit as you would any draft, set the date and press Publish.
+drafter takes the Ready idea with the highest priority, or, when none is
+Ready, the next Idea, and writes a draft. You get an email; it also says when
+the plan is running low. The draft is in Insights, unpublished, with a fact
+check and a style check in **Notes for the editor**. Read the notes, check
+every sentence it flagged, edit as you would any draft and press Publish.
 Nothing reaches the site until you do.
 
 To have it write up a real project, put the facts in the brief: where, when,
@@ -63,7 +93,8 @@ Idea Book tell it.
   draft against those facts and list anything it couldn't back up; email you.
 - **Doesn't:** publish; invent projects, clients, numbers or quotes (if it
   needs a fact it doesn't have, it writes around it); choose photos (it puts
-  in the system page's hero as a stand-in, so swap in the real one).
+  in the application's or the system's hero as a stand-in, so swap in the
+  real one when the article is about a particular job).
 
 ## 6. After you publish
 

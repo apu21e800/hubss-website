@@ -84,9 +84,15 @@ hubss-website/
 - New article: Studio → Insights → create, then Publish. It is live
   about five minutes later (the site rebuilds to add the page); edits to live
   posts show within seconds. docs/BLOG-IN-SANITY.md
-- Article ideas: Studio → Insights plan. Mark one Ready and the Tuesday AI
-  drafter writes it up as an unpublished draft for review (never publishes).
-- Swap hero image: replace /public/images/hero.jpg
+- Article ideas: Studio → Insights plan. The Tuesday AI drafter takes the top
+  Ready item, or the top Idea when none is Ready, and writes it up as an
+  unpublished draft for review (never publishes).
+- Change any text or photo the site takes from Studio: Studio → Edit on the
+  page, click it (see "Edit on the page" below).
+- Swap a hero photo: Studio → Edit on the page → click the photo, pick or
+  upload one, then set its focal point with the crosshair (hotspot). The
+  homepage hero's phone and wide-screen cuts and the product and application
+  banners crop around it.
 - Add PDF spec sheet: drop in /public/docs/, update link in products page
 - New project: add entry to /content/projects/project-name.mdx
 
@@ -162,7 +168,10 @@ description and SEO title/description, plus product eyebrow, specs and homepage
 blurb (on the product pages, the application pages, /applications and the
 homepage), and the hero and About text on /, /about and /contact. On /lunch-learn
 only the questions and their heading come from Sanity (since 2 Oct 2026); the
-rest of the page is code (see below).
+rest of the page is code (see below). Since 7 Oct 2026 also the homepage
+section copy and Site Settings (offices, social accounts, footer line), and
+for those two Studio is the source: the sync only fills blanks
+(docs/SANITY-COPY-SYNC.md).
 Editing the lib file or a page's fallback alone changes nothing there until the
 sync runs. Products go through one merge (lib/products.server.ts), applications
 through another, both on the rule in lib/cms-merge.ts: a blank Sanity field
@@ -259,6 +268,46 @@ marked "[Screened]" with a banner saying why, and the visitor sees "sent".
   no personal details.
 /api/ai-chat answers 404: it was an open Claude Opus endpoint on HUB's key
 that nothing on the site used.
+
+## Edit on the page, and what Doug owns in Studio (7 Oct 2026)
+Vern, 7 Oct: "making sure that the CMS is premium, so clients can make
+changes on the fly to core text and images".
+- Studio has two tools: Content (the lists) and **Edit on the page**
+  (Sanity's Presentation tool, sanity.config.ts): the site in a frame, every
+  Studio-fed text and hero photo outlined; click to open the field, the page
+  updates as you type, Publish puts it live (the webhook, about 5 s). Each
+  document also lists where it's used ("locations").
+- How: /api/draft-mode/enable checks Studio's one-time secret and turns on
+  Next's draft mode for that browser. lib/sanity.queries.ts `sanityFetch`
+  then reads drafts through lib/sanity.preview.ts, with stega markers on the
+  text fields in STEGA_FIELDS (never slugs, links, phones, emails, alt text:
+  the markers would break them). unstable_cache neither reads nor writes in
+  draft mode, so drafts can't reach visitors. app/layout.tsx renders
+  components/PreviewTools.tsx (outlines, live refresh, an "Exit preview" pill
+  outside Studio's frame) only in draft mode, and drops chat and analytics
+  there. Photos are clickable through `editAttr` (data-sanity) on the hero
+  banners and galleries. Compare Studio strings with code strings through
+  `stegaClean` (app/about/page.tsx's seed checks do).
+- The preview reads with SANITY_API_READ_TOKEN if set, else
+  SANITY_API_WRITE_TOKEN (server-side only).
+- next-sanity is no longer in serverExternalPackages: externalised, its
+  draft-mode and visual-editing entries can't import next/headers and
+  next/dynamic. Studio's page renders in the browser only (next/dynamic,
+  ssr: false); it always failed on the server first (React #419).
+- Homepage section copy: lib/homepage-copy.ts (page-homepage.homepageSections).
+  A heading is `heading` + `headingAccent` and they travel together.
+- Site Settings: lib/site-settings.ts, `getSiteSettings()` on the server,
+  `useSiteSettings()` in client components (components/SiteSettingsProvider.tsx,
+  fed by app/layout.tsx). Never type an office phone, email or town again:
+  read it from there. Footer is an async server component now, so a client
+  component that shows the footer takes it as a prop (`footer={<Footer />}`:
+  app/contact, app/gallery).
+- Heroes follow Studio: `heroObjectPosition` (lib/hero-framing.ts) puts a
+  Studio hotspot ahead of HERO_POSITION; the homepage makes its wide and
+  phone cuts from the Studio photo with Sanity's CDN (sanityCrop) whenever the
+  photo isn't the default master (DEFAULT_HERO_ORIGIN in app/page.tsx).
+- Insights: the first Publish of an article dates it that moment
+  (sanity.config.ts, datedPublish).
 
 ## Lunch & Learn page (30 Sep and 2 Oct 2026)
 - /lunch-learn is app/lunch-learn/page.tsx: the boardroom card (LunchLearn ->

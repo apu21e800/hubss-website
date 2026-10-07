@@ -10,6 +10,28 @@ page. It did not: from `18e25e1` (May 2026) until 24 Sep, `/products/[slug]`
 had its own inline merge that took `shortDesc` from Sanity and nothing else.
 It now uses the same merge as the homepage, so the table below is true.
 
+**7 Oct 2026, two additions, both edited by Doug from now on:**
+
+- **Homepage sections** (`page-homepage.homepageSections`, lib/homepage-copy.ts):
+  the three cards under the hero and each section's eyebrow, heading and intro.
+- **Site Settings** (lib/site-settings.ts): both offices' towns, names, emails
+  and phones, the social accounts and the footer line, read by every place
+  that prints them (the footer, Contact, About, product and application pages,
+  the Lunch & Learn card, the phone menu, 404, terms, privacy, llms.txt, the
+  search-engine data). Server code: `getSiteSettings()`; client components:
+  `useSiteSettings()`.
+
+`npm run sync:pages` treats both as **fill-only**: it writes the code's words
+into blank Studio fields and never overwrites a field Studio already has, so a
+sync can't undo Doug's edits. The one exception is three values known to be
+wrong from the May migration (an Instagram account HUB doesn't own, a YouTube
+handle that 404s, the pre-QA footer line: `LEGACY_SETTINGS`), which it
+replaces; the site ignores them anyway. So for these, **Studio is the source**:
+to change a line, change it in Studio, not in the lib file.
+
+Studio's **Edit on the page** (lib/sanity.preview.ts) shows unpublished edits
+on the page itself while Doug types; Publish still decides what's live.
+
 ---
 
 ## What's going on

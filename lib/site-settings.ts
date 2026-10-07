@@ -142,7 +142,14 @@ export function mailtoHref(email: string): string {
 
 /** The Instagram handle as people type it: "@hub_surface_systems". */
 export function instagramHandle(url: string): string {
-  return "@" + stegaClean(url).replace(/\/+$/, "").split("/").pop();
+  // The first path segment, so a link copied from Instagram's Share button
+  // (".../hub_surface_systems/?igsh=...") still gives "@hub_surface_systems".
+  try {
+    const seg = new URL(stegaClean(url).trim()).pathname.split("/").filter(Boolean)[0];
+    return seg ? `@${seg}` : "";
+  } catch {
+    return "";
+  }
 }
 
 /** The city alone, for short lines: "Ladysmith". */

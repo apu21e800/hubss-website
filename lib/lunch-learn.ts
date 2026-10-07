@@ -12,12 +12,17 @@
  * Pure strings: safe in server and client components.
  */
 
+import { stegaClean } from "@sanity/client/stega";
+
 /** Longest topic the form accepts from a URL; anything longer is not a topic. */
 export const LL_TOPIC_MAX = 80;
 
 export function lunchLearnHref(topic?: string, from?: string): string {
   const q = new URLSearchParams();
-  if (topic) q.set("topic", topic);
+  // A product or application name read in Studio's preview carries invisible
+  // edit markers (about 900 characters), which put the topic over
+  // LL_TOPIC_MAX and the form dropped it. The link takes the plain name.
+  if (topic) q.set("topic", stegaClean(topic));
   if (from) q.set("from", from);
   const s = q.toString();
   return `/lunch-learn${s ? `?${s}` : ""}#book`;

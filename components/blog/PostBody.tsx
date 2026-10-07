@@ -37,6 +37,7 @@
  */
 
 import { Fragment, type ReactNode } from "react";
+import { stegaClean } from "@sanity/client/stega";
 import { isSanityImage, sanitySized } from "@/lib/photos";
 import { lunchLearnHref } from "@/lib/lunch-learn";
 
@@ -225,8 +226,10 @@ function renderQuote(run: PostTextBlock[], ctx: Ctx): ReactNode {
       }}
     >
       {curled.map((b, i) => {
-        const text = blockText(b).trim();
-        const prev = i > 0 ? blockText(curled[i - 1]).trim() : "";
+        // Cleaned for the test only: in Studio's preview the text carries
+        // invisible edit markers after the closing quote mark.
+        const text = stegaClean(blockText(b)).trim();
+        const prev = i > 0 ? stegaClean(blockText(curled[i - 1])).trim() : "";
         const isSpeaker = i > 0 && /”[.,]?$/.test(prev) && !/^[“‘]/.test(text) && text.length <= 140;
         return isSpeaker ? (
           <footer
@@ -264,7 +267,7 @@ function linkRow(b: PostTextBlock): { key: string; text: string; def: PostMarkDe
       // Neighbouring spans of one link (a bold word inside it) are one button.
       if (last && last.def._key === def._key) last.text += c.text ?? "";
       else links.push({ key: `${b._key}-${links.length}`, text: c.text ?? "", def });
-    } else if (!/^[\s·|]*$/.test(c.text ?? "")) {
+    } else if (!/^[\s·|]*$/.test(stegaClean(c.text ?? ""))) {
       return null;
     }
   }

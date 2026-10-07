@@ -12,13 +12,19 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   // Back to the page the visitor was on, and only ever on this site: the
   // address is resolved against our own origin and anything that lands on
   // another host ("//x.com", "/\x.com", a tab after the slash) goes home.
+  // The checked path is set on a URL that already carries our origin, never
+  // parsed again: "/.//x.com" resolves to the path "//x.com", which passed
+  // the check and then, re-parsed as an address, sent the visitor to x.com.
   const origin = request.nextUrl.origin;
-  let to = "/";
+  const out = new URL("/", origin);
   try {
     const dest = new URL(request.nextUrl.searchParams.get("to") ?? "/", origin);
-    if (dest.origin === origin) to = dest.pathname + dest.search;
+    if (dest.origin === origin) {
+      out.pathname = dest.pathname.replace(/^\/+/, "/");
+      out.search = dest.search;
+    }
   } catch {
     // Not a parseable address: home.
   }
-  return NextResponse.redirect(new URL(to, origin));
+  return NextResponse.redirect(out);
 }

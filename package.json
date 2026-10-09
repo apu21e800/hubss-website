@@ -23,6 +23,7 @@
     "check:copy": "node scripts/check-copy.mjs",
     "test:copy": "tsx scripts/check-copy.mjs --test",
     "test:forms": "tsx scripts/test-form-screen.ts",
+    "test:social": "tsx scripts/test-social-outcome.ts",
     "sync:products": "tsx scripts/sync-products-to-sanity.ts",
     "sync:products:dry": "tsx scripts/sync-products-to-sanity.ts --dry-run",
     "sync:applications": "tsx scripts/sync-applications-to-sanity.ts",

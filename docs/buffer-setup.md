@@ -34,23 +34,72 @@ A post without a featured photo gets no Instagram draft (Instagram needs one).
 
 ## Setup (Vern, once)
 
-1. **Buffer account** at buffer.com, in HUB's name. Plan: **Team** if Doug
-   approves posts too (approval workflows are Team-only; $10 per channel per
-   month billed yearly), otherwise **Essentials** ($5 per channel).
-2. **Connect the channels** in Buffer: the HUB LinkedIn page (you need to be an
-   admin of the page), the Facebook page with the Instagram professional
-   account linked to it (@hub_surface_systems; confirm HUB controls it), and X.
-3. **API key:** publish.buffer.com/settings/api → create a key. Don't paste it
-   into chat: Claude Code puts it in Vercel as `BUFFER_API_KEY` (Production).
-4. That's it: the next daily run picks up any new post. To try it at once:
-   Vercel → hubss-website → Settings → Cron Jobs → social-drafts → Run.
+Buffer's facts below were checked against Buffer's own pages on 9 Oct 2026.
+
+1. **Buffer account** at buffer.com, signed up by Vern with his hubss.com
+   address. Only the account's owner can make an API key.
+   **Plan: start on Free.** The API is on every plan, Free included (one key),
+   with up to 3 channels and unlimited drafts, so the whole pipeline runs at
+   $0. Upgrade when there's a reason: **Essentials** (billed per channel) for a
+   fourth channel such as X, **Team** for approval workflows and a login for
+   Doug.
+2. **Connect the channels** in Buffer: the HUB LinkedIn page (Vern must be an
+   admin of the page), the Facebook page, and the Instagram professional
+   account (@hub_surface_systems). On Free those three are the limit; X and
+   YouTube come with an upgrade.
+3. **API key:** publish.buffer.com/settings/api → Personal Access → New Key.
+   Name it "hubss.com social drafts", leave the permissions as they are, and
+   set the expiry to **1 year**, the longest Buffer offers (the default is
+   30 days). Buffer shows the key once. Don't paste it into chat: it goes into
+   Vercel as `BUFFER_API_KEY` (Production, sensitive) through Vercel's form,
+   then a redeploy.
+4. That's it: the next daily run picks up any new post. To try it at once
+   (with Vern's yes): Vercel → hubss-website → Settings → Cron Jobs →
+   social-drafts → Run.
+5. **Every year:** the key expires. When it does, the job emails the editors
+   (below); make a new key the same way and replace it in Vercel. A calendar
+   reminder a couple of weeks before the expiry date saves the missed day.
+
+## When something goes wrong (since 9 Oct 2026)
+
+Nothing fails silently, no article is drafted twice, and no article is used
+up by a bad run (`lib/social-outcome.ts` and `lib/social-pipeline.ts`, tested
+by `npm run test:social`). Every case below emails the editors with the
+reason and what to do:
+
+- **The run stops** (Buffer refuses the key, no channel the job can draft
+  for, a setting missing in Vercel, Anthropic or Sanity refusing their key, or
+  BUFFER_API_KEY gone after the job has run before): "Social drafts didn't
+  run". It repeats each day until fixed; the articles wait and are drafted on
+  the first good run.
+- **Every channel refused an article** (or every one is disconnected): no
+  drafts, "Social drafts not made yet", and the next daily run writes that
+  article again, for up to 14 days from its first failed try (a hidden
+  `socialRetry-<slug>` document keeps the date). It waits behind articles not
+  tried yet, so it can't hold up new ones. After 14 days, "Social drafts given
+  up": make the posts by hand if you still want them.
+- **Some channels drafted, some refused:** the article is done, and the email
+  lists what was skipped and why. Make the missing post by hand in Buffer from
+  one of the others.
+- **No channel could ever take it** (Instagram only, and the article has no
+  photo): "No social drafts for", and the article is done.
+
+How "never twice" works: before anything goes to Buffer, the job creates the
+article's log in Sanity, and Sanity refuses a second one with the same id. A
+second run at the same moment skips the article, and a log Sanity won't take
+stops the run before Buffer gets anything. When nothing could be drafted, the
+job deletes that log again so the article comes back the next day. Every
+Buffer and Sanity call gives up after 20 seconds, and the job starts no
+article after two minutes, so it always finishes, and reports, inside
+Vercel's five-minute limit.
 
 ## Checking what happened
 
 - The email lists what was drafted and anything skipped, with the reason.
-- In Sanity, each post that got drafts has a `socialLog-<slug>` document (not
-  shown in Studio's lists) with the Buffer post ids. Deleting it makes the next
-  run draft that post again.
+- Studio → Social drafts (read only): one entry per article that got drafts
+  (`socialLog-<slug>`), with the channels, the Buffer post ids, anything
+  skipped and the style check. Deleting one (from Vern's PC) makes the next
+  run draft that article again.
 - Vercel → Logs, filter `[social]`.
 
 The old `/admin/social` composer and its `content/social-queue` files were

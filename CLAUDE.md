@@ -1,5 +1,28 @@
 # HUBSS.com — Project Intelligence File
 
+## How we ship (Vern, 6 Oct 2026: for all work)
+The form-spam fix on 6 Oct was 2 hours of work and 8½ hours from Doug's
+complaint to live. Every lost hour was process, not code. So, on every job:
+- First reply: one line on what you'll do and what done means (live, checked,
+  Vern told). If it will go live, ask Vern's OK to ship once, now. With it,
+  merge and deploy yourself the moment the checks pass.
+- A client hurting now (spam, a broken page, a wrong price): a small, safe
+  stopgap live within the hour, then the full fix behind it.
+- Test against the real examples. Never probe production in a way that can
+  send mail, post or publish: use a request the live code rejects (`{}` to
+  /api/contact) or a preview. (6 Oct: a careless probe mailed Doug "Contact
+  Form: x".)
+- One independent review for anything touching customers, money or mail,
+  capped at 30 minutes, asking one question: can a real customer be hurt or
+  lost? If it runs long, ship the stopgap and keep reviewing.
+- Check it on the live site yourself. Never write "done" or "ready" for
+  something that isn't live; if it waits on Vern, the first line says "Not
+  live until you ...".
+- Report once, phone length: what changed, the proof, the one next step, and
+  any note for the client ready to send.
+- Past twice the estimate: stop and tell Vern why. Afterwards, three lines on
+  what to change here.
+
 ## Client
 HUB Surface Systems — Canadian leader in decorative and functional pavement
 solutions. Canadian-owned since 1999; the 2027 catalogue says "27 years ·
@@ -268,6 +291,14 @@ marked "[Screened]" with a banner saying why, and the visitor sees "sent".
   no personal details.
 /api/ai-chat answers 404: it was an open Claude Opus endpoint on HUB's key
 that nothing on the site used.
+- Vercel Firewall rule "Forms send only from hubss.com" (8 Oct 2026): a
+  request to /api/contact on any host but hubss.com is denied (403,
+  `x-vercel-mitigated: deny`). Old previews and past builds still carry the
+  pre-6 Oct form with no filter, and Resend is in the Preview env; this rule
+  is what stops them mailing info@. So a preview can't send the form: test
+  form changes locally with stand-ins, or pause the rule (Vercel, Firewall,
+  Rules) for the test. The Vercel connector can't change the firewall (404)
+  or project settings (403); Vern does it in the dashboard.
 
 ## Edit on the page, and what Doug owns in Studio (7 Oct 2026)
 Vern, 7 Oct: "making sure that the CMS is premium, so clients can make

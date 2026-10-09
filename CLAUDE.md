@@ -291,6 +291,14 @@ marked "[Screened]" with a banner saying why, and the visitor sees "sent".
   no personal details.
 /api/ai-chat answers 404: it was an open Claude Opus endpoint on HUB's key
 that nothing on the site used.
+- Vercel Firewall rule "Forms send only from hubss.com" (8 Oct 2026): a
+  request to /api/contact on any host but hubss.com is denied (403,
+  `x-vercel-mitigated: deny`). Old previews and past builds still carry the
+  pre-6 Oct form with no filter, and Resend is in the Preview env; this rule
+  is what stops them mailing info@. So a preview can't send the form: test
+  form changes locally with stand-ins, or pause the rule (Vercel, Firewall,
+  Rules) for the test. The Vercel connector can't change the firewall (404)
+  or project settings (403); Vern does it in the dashboard.
 
 ## Edit on the page, and what Doug owns in Studio (7 Oct 2026)
 Vern, 7 Oct: "making sure that the CMS is premium, so clients can make

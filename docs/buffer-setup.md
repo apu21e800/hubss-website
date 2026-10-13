@@ -37,7 +37,8 @@ A post without a featured photo gets no Instagram draft (Instagram needs one).
 Buffer's facts below were checked against Buffer's own pages on 9 Oct 2026.
 
 1. **Buffer account** at buffer.com, signed up by Vern with his hubss.com
-   address. Only the account's owner can make an API key.
+   address (done 13 Oct 2026: vernon@hubss.com, Free plan). Only the
+   account's owner can make an API key.
    **Plan: start on Free.** The API is on every plan, Free included (one key),
    with up to 3 channels and unlimited drafts, so the whole pipeline runs at
    $0. Upgrade when there's a reason: **Essentials** (billed per channel) for a
@@ -59,6 +60,17 @@ Buffer's facts below were checked against Buffer's own pages on 9 Oct 2026.
 5. **Every year:** the key expires. When it does, the job emails the editors
    (below); make a new key the same way and replace it in Vercel. A calendar
    reminder a couple of weeks before the expiry date saves the missed day.
+
+## Whose account (the agency recommendation, 13 Oct 2026)
+
+HUB's. The login is a hubss.com address, and HUB pays when there is a bill;
+21e8 runs it. If HUB would rather not have another vendor bill, 21e8 can pay
+and invoice it at cost, but the account stays HUB's, so nothing has to move
+if that ever changes.
+
+Keep this Buffer HUB-only. The API key reaches every channel on the login and
+the job drafts into all of them, so a Square One or EasyMenus channel
+connected here would get HUB's posts. Other clients get their own Buffer.
 
 ## When something goes wrong (since 9 Oct 2026)
 

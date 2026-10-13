@@ -1,7 +1,10 @@
 /** Shared destinations for the reader's chrome, so the two routes agree. */
 export const EXIT_HREF = "/resources";
-export const REQUEST_HREF = "/request-idea-book?utm_source=idea-book&utm_medium=reader&utm_campaign=printed_copy";
-export const LUNCH_LEARN_HREF = "/lunch-learn?utm_source=idea-book&utm_medium=reader&utm_campaign=web";
+// No UTM tags on internal links: they overwrite the visitor's real source in
+// GA4. Clicks into these pages are reported as cta_click instead
+// (components/AnalyticsEvents.tsx).
+export const REQUEST_HREF = "/request-idea-book";
+export const LUNCH_LEARN_HREF = "/lunch-learn";
 
 /**
  * Close the Idea Book: back to the page the reader came from when that page

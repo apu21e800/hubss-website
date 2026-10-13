@@ -21,7 +21,7 @@ import { HOMEPAGE_COPY, type HomepageCopy } from "@/lib/homepage-copy";
 export default function IdeaBookBand({ copy = HOMEPAGE_COPY.ideaBook }: { copy?: HomepageCopy["ideaBook"] }) {
   if (!showCatalogue() || !catalogueReady) return null;
   const coverWidth = catalogue.widths[0];
-  const href = `${ideaBook.href}?utm_source=home&utm_medium=callout&utm_campaign=idea-book`;
+  const href = ideaBook.href; // no UTM tags on internal links, see components/AnalyticsEvents.tsx
 
   return (
     <section

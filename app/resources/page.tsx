@@ -120,14 +120,14 @@ export default async function ResourcesPage() {
             </div>
             <div className="flex w-full items-center gap-2 sm:w-auto">
               <a
-                href={`${ideaBook.href}?utm_source=resources&utm_medium=library_row&utm_campaign=idea-book`}
+                href={ideaBook.href}
                 className="flex-1 whitespace-nowrap rounded-lg px-3 py-2 text-center text-xs font-semibold transition-colors sm:flex-none"
                 style={{ color: "var(--accent-text)", border: "1px solid rgba(249,115,22,0.32)", background: "rgba(249,115,22,0.08)" }}
               >
                 Read it
               </a>
               <a
-                href={`${ideaBook.requestHref}?utm_source=resources&utm_medium=library_row&utm_campaign=printed_copy`}
+                href={ideaBook.requestHref}
                 className="flex-1 whitespace-nowrap rounded-lg px-3 py-2 text-center text-xs font-semibold transition-colors sm:flex-none"
                 style={{ color: "var(--text-secondary)", border: "1px solid var(--border-color)" }}
               >

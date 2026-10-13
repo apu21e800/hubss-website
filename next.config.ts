@@ -329,6 +329,23 @@ const nextConfig: NextConfig = {
       { source: "/durable-coatings-for-asphalt", destination: "/applications/leed-urban-heat-island", permanent: true }, // StreetBondSR solar reflective coating, Toronto, after 7 years
       { source: "/stamped-asphalt-decorative-crosswalks", destination: "/applications/crosswalks", permanent: true }, // TrafficPatternsXD crosswalks, Montréal, 2013
       { source: "/enhanced-parking-lot-surfaces", destination: "/applications/parking-lots", permanent: true }, // TrafficPatternsXD at a Home Depot storefront
+      // More bare WordPress addresses Google still crawls and got 404s for
+      // (Search Console, Pages > Not found, Oct 2026). The first eight already
+      // had a /projects/ twin further down; the bare form goes to the same page.
+      { source: "/decorative-greenway-for-spirit-trail", destination: "/blog/spirit-trail-wayfinding-vancouver", permanent: true },
+      { source: "/community-branding-for-asphalt-and-concrete", destination: "/applications/community-branding", permanent: true },
+      { source: "/complete-streets-intersections", destination: "/blog/complete-streets-new-westminster", permanent: true },
+      { source: "/decorative-asphalt-pedestrian-plaza", destination: "/blog/terry-fox-plaza-coquitlam", permanent: true },
+      { source: "/high-visibility-decorative-crosswalks", destination: "/blog/pedestrian-safety-solutions", permanent: true },
+      { source: "/extreme-pavement-surfacing-with-trafficpatternsxd", destination: "/blog/trafficpatternsxd-urban-design", permanent: true },
+      { source: "/decorative-paving-for-parks-and-paths", destination: "/applications/parks-paths", permanent: true },
+      { source: "/attractive-waterpark-pavement-surfaces", destination: "/blog/durable-coatings-waterparks", permanent: true },
+      { source: "/streetprint-genuine-stamped-asphalt-performance-profiles", destination: "/products/streetprint", permanent: true },
+      { source: "/promenades-in-public-spaces", destination: "/applications/public-spaces", permanent: true },
+      { source: "/solutions/parking-lot-surfaces", destination: "/applications/parking-lots", permanent: true }, // matches /parking-lot-surfaces.php
+      { source: "/products/streetbond-coatings-asphalt-concrete/:path*", destination: "/products/streetbond", permanent: true },
+      { source: "/applications/bike-bus-lanes", destination: "/applications/bike-lanes", permanent: true }, // matches /bike-bus-lanes
+      { source: "/applications/streetscapes", destination: "/applications/traffic-calming", permanent: true }, // the old traffic-calming-streetscapes category
       // Footer/nav link variants
       { source: "/traffic-patterns", destination: "/products/traffic-patterns", permanent: true },
       // Other pages
@@ -382,6 +399,31 @@ const nextConfig: NextConfig = {
       { source: `/streetbond/:slug(${BLOG_SLUGS.join("|")})`, destination: "/blog/:slug", permanent: true },
       { source: "/stamped-asphalt/:path*", destination: "/products/streetprint", permanent: true },
       { source: "/streetbond/:path*", destination: "/products/streetbond", permanent: true },
+      // Five more prefixes from the same /%category%/%postname%/ scheme.
+      // Google re-crawled 13 of these on 7-9 Oct 2026 and got 404s, the
+      // Squamish Nation, UBC Musqueam and Granville First Nations crosswalks
+      // among them. Known addresses go straight to where their bare twin lands
+      // (no second hop), then live post slugs (same BLOG_SLUGS guard), then one
+      // fallback hub per prefix, so nothing under these prefixes can 404.
+      { source: "/traffic-patterns/west-vancouver-rainbow-crosswalk", destination: "/applications/crosswalks", permanent: true },
+      { source: "/traffic-patterns/asphalt-coatings-for-playgrounds", destination: "/blog/playgrounds-recreation", permanent: true },
+      { source: "/traffic-patterns/decorative-asphalt-for-high-traffic-areas", destination: "/blog/decorative-asphalt-high-traffic", permanent: true },
+      { source: "/community-branding/squamish-nation-rainbow-crosswalk", destination: "/applications/crosswalks", permanent: true },
+      { source: "/community-branding/first-nations-decorative-crosswalk-design-granville-street", destination: "/applications/crosswalks", permanent: true },
+      { source: "/parks-plazas-pathways/decorative-greenway-for-spirit-trail", destination: "/blog/spirit-trail-wayfinding-vancouver", permanent: true },
+      { source: "/uncategorized/educational-facilities-case-study", destination: "/blog/educational-facilities", permanent: true },
+      { source: "/uncategorized/municipalities-case-studies", destination: "/blog/municipalities-case-study", permanent: true },
+      { source: "/case-studies/municipalities-case-studies", destination: "/blog/municipalities-case-study", permanent: true },
+      { source: `/traffic-patterns/:slug(${BLOG_SLUGS.join("|")})`, destination: "/blog/:slug", permanent: true },
+      { source: `/community-branding/:slug(${BLOG_SLUGS.join("|")})`, destination: "/blog/:slug", permanent: true },
+      { source: `/parks-plazas-pathways/:slug(${BLOG_SLUGS.join("|")})`, destination: "/blog/:slug", permanent: true },
+      { source: `/uncategorized/:slug(${BLOG_SLUGS.join("|")})`, destination: "/blog/:slug", permanent: true },
+      { source: `/case-studies/:slug(${BLOG_SLUGS.join("|")})`, destination: "/blog/:slug", permanent: true },
+      { source: "/traffic-patterns/:path*", destination: "/products/traffic-patterns", permanent: true },
+      { source: "/community-branding/:path*", destination: "/applications/community-branding", permanent: true },
+      { source: "/parks-plazas-pathways/:path*", destination: "/applications/parks-paths", permanent: true },
+      { source: "/uncategorized/:path*", destination: "/blog/projects", permanent: true },
+      { source: "/case-studies/:path*", destination: "/blog/projects", permanent: true },
 
       // Legal pages
       { source: "/terms-conditions", destination: "/terms", permanent: true },

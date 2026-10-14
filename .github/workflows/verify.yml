@@ -54,6 +54,11 @@ jobs:
       - name: Social and planner tests
         run: npm run test:social && npm run test:planner
 
+      # The Idea Book edition covers every printed page exactly once and every
+      # leaf's links resolve (lib/idea-book-edition.ts).
+      - name: Idea Book edition test
+        run: npm run test:idea-book
+
       # The fast checks: routes, links, assets, gallery distinctness, and the
       # CMS field contract. No browser, so this is the one that gates merges.
       - name: Verify

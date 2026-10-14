@@ -18,8 +18,8 @@ export const dynamicParams = false;
 
 export function generateStaticParams() {
   if (!catalogueReady) return [];
-  // Page one lives at /idea-book; a duplicate route for it would split the
-  // signal between two URLs for the same content.
+  // Page one lives at /idea-book/pages; a duplicate route for it would split
+  // the signal between two URLs for the same content.
   return cataloguePages.slice(1).map((p) => ({ page: String(p.n) }));
 }
 

@@ -73,8 +73,10 @@ export const ideaBook = {
   title: "The HUB Idea Book · Volume 5",
   /** The printed volume, as the cover says it. */
   volume: "Volume 5",
-  /** The reader's route. */
+  /** The book's route: the digital edition (app/idea-book/page.tsx, since 14 Oct 2026). */
   href: "/idea-book",
+  /** The page-by-page reader of the printed book, open at page one; /idea-book/<n> for any other page. */
+  pagesHref: "/idea-book/pages",
   /** The printed-copy form's route. */
   requestHref: "/request-idea-book",
   /**

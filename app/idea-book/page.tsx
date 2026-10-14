@@ -1,33 +1,38 @@
 /**
- * /idea-book - the reader, open at page one.
+ * /idea-book - the Idea Book, Volume 5, as a digital edition (14 Oct 2026).
  *
- * Statically prerendered. The manifest is an import, not a filesystem read, so
- * nothing here is traced into a serverless function and nothing has to be
- * dynamic. /idea-book/[page] serves every other page off the same component.
+ * Vern: "a mobile / virtual desktop version of the idea book that's not just
+ * a square PDF ... same content in booklet, better display for mobile and
+ * desktop". One leaf per printed spread (lib/idea-book-edition.ts), laid out
+ * for the screen it is read on (components/idea-book/Leaves.tsx), with the
+ * book's chrome around it (components/idea-book/EditionShell.tsx). Every leaf
+ * links to its pages as printed, in the page-by-page reader at
+ * /idea-book/pages and /idea-book/<n>.
+ *
+ * Statically prerendered: every word of the book is in the HTML. The offices
+ * on the last leaf come from Studio's Site Settings, like everywhere else.
  */
 import { notFound } from "next/navigation";
-import CatalogueViewer from "./CatalogueViewer";
+import "./edition.css";
+import EditionShell, { type ContentsEntry } from "@/components/idea-book/EditionShell";
+import { LeafView } from "@/components/idea-book/Leaves";
 import CatalogueEmpty from "./CatalogueEmpty";
-import { catalogue, catalogueReady } from "@/lib/catalogue";
-import { cataloguePages } from "@/lib/catalogue-pages";
+import { catalogueReady, ideaBook } from "@/lib/catalogue";
 import { showCatalogue } from "@/lib/feature-flags";
-import { EXIT_HREF, LUNCH_LEARN_HREF, REQUEST_HREF } from "./links";
+import { LEAVES, SECTIONS, leafTitle, pageLabel } from "@/lib/idea-book-edition";
+import { getSiteSettings } from "@/lib/sanity.queries";
 
-export default function CataloguePage() {
+export default async function IdeaBookEdition() {
   if (!showCatalogue()) notFound();
   if (!catalogueReady) return <CatalogueEmpty />;
+  const settings = await getSiteSettings();
+  const contents: ContentsEntry[] = LEAVES.map((leaf) => ({ id: leaf.id, title: leafTitle(leaf), pages: pageLabel(leaf), section: leaf.section }));
 
   return (
-    <CatalogueViewer
-      pages={cataloguePages}
-      widths={catalogue.widths}
-      aspect={catalogue.aspect}
-      edition={catalogue.edition ?? ""}
-      start={1}
-      download={catalogue.download}
-      exitHref={EXIT_HREF}
-      requestHref={REQUEST_HREF}
-      lunchLearnHref={LUNCH_LEARN_HREF}
-    />
+    <EditionShell title={ideaBook.title} volume={ideaBook.volume} contents={contents} sections={SECTIONS} printedHref={ideaBook.href} total={LEAVES.length}>
+      {LEAVES.map((leaf, i) => (
+        <LeafView key={leaf.id} leaf={leaf} index={i} settings={settings} priority={i === 0} />
+      ))}
+    </EditionShell>
   );
 }

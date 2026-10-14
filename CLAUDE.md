@@ -145,16 +145,48 @@ Vercel — connected to GitHub, auto-deploys on push to main
 ## Names (Doug's round, 25 Sep 2026)
 - The printed book is the **Idea Book** on the site ("The HUB Idea Book ·
   Volume 5"), never "catalogue", and no page count is printed anywhere. The
-  reader is /idea-book, the form /request-idea-book; the old /catalogue URLs
-  redirect. One source for the name: `ideaBook` in lib/catalogue.ts. Code
-  identifiers (lib/catalogue.ts, showCatalogue, /public/catalogue) keep the
-  old word on purpose.
+  book's home is /idea-book (the digital edition, below), the printed reader
+  /idea-book/pages and /idea-book/<n>, the form /request-idea-book; the old
+  /catalogue URLs redirect. One source for the name: `ideaBook` in
+  lib/catalogue.ts. Code identifiers (lib/catalogue.ts, showCatalogue,
+  /public/catalogue) keep the old word on purpose.
 - The blog is **Insights** (was Field Notes). Labels only: /blog URLs, the
   Sanity types (blogPost, storyIdea), the cron routes and env names are
   unchanged. The "Blog" post type prints as "Article" (lib/field-notes-taxonomy.ts,
   `badge`); its stored value stays "Blog".
 - The repair family is **Asphalt & Concrete Repair** (lib/product-categories.ts,
   lib/product-taxonomy.ts, the three product eyebrows in lib/products.ts).
+
+## The Idea Book edition (14 Oct 2026)
+Vern: "a mobile / virtual desktop version of the idea book that's not just a
+square PDF ... same content in booklet, better display for mobile and desktop
+experience. Doug's dream." /idea-book is that edition: one leaf per printed
+spread, 75 leaves for the 144 pages, laid out for the screen (a phone stacks,
+a laptop puts the photograph beside the page). Reading is scrolling: leaves
+snap into place, a swipe is a page turn, ← and → turn leaves, C opens the
+contents, every leaf has its own address (#streetbond) and links to its pages
+as printed.
+- lib/idea-book-edition.ts is the book: `LEAVES`, typed by kind (cover,
+  welcome, divider, system, colours, steps, templates, application,
+  statement, projects, then-now, installer, partner, closing, lunch, back).
+  The words are the transcriptions (lib/product-catalogue.ts,
+  lib/application-catalogue.ts) and the PDF's text layer, em dashes written
+  out; the systems' specs come from lib/products.ts. A `Photo` is a printed
+  page and the band of it that is the photograph (`top`/`bottom` as fractions
+  of the page's height), so the photographs are the page renders in
+  public/catalogue, shifted, never re-cut; `SITE_PAGE_CAPTION` (0.92) stops
+  above the captions the renders carry.
+- components/idea-book/Leaves.tsx lays each kind out, PagePhoto.tsx shows a
+  band (`fit` widens a frame around the photo's focus, for a pair at one
+  shape), EditionShell.tsx is the chrome (client: bar, progress, contents
+  drawer, keys, the hash following the leaf in view). app/idea-book/edition.css
+  is the book's own language: paper, #1f1f1f ink, the orange rule, Inter,
+  fixed whatever the site theme.
+- `npm run test:idea-book` (CI too): every page in exactly one leaf, every
+  link resolves, no em dash. The verify pass runs axe and the phone image
+  budget on /idea-book.
+- The printed caption on page 57 says London, Ontario; the map's evidence for
+  that job is Kitchener. The edition prints the book's caption; Doug to say.
 
 ## Copy source of truth
 The 2027 print catalogue — the Idea Book, Volume 5 — (Figma file

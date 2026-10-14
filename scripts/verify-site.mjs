@@ -398,7 +398,9 @@ async function checkFollowTheWorkDistinct() {
 // blog photos were referenced with markdown syntax — which compiles to a plain
 // <img> and never touches next/image. Two were untouched 3024x4032 camera files.
 async function checkImageWeight(routes, chromium) {
-  const sample = ["/", "/blog", "/resources", "/contact", "/products/streetbond", "/applications/crosswalks"]
+  // /idea-book: the edition lazy-loads its photographs; a phone must not be
+  // handed the whole book up front (75 leaves, 1400px renders).
+  const sample = ["/", "/blog", "/resources", "/contact", "/products/streetbond", "/applications/crosswalks", "/idea-book"]
     .filter((r) => routes.includes(r) || r === "/");
   const B = await chromium.launch(launchOpts());
   const over = [];
@@ -426,7 +428,7 @@ async function checkImageWeight(routes, chromium) {
 // name. This site sells AODA compliance to municipalities; failing WCAG on its
 // own forms is a credibility problem, not just a technical one.
 async function checkA11y(chromium, AxeBuilder) {
-  const sample = ["/", "/products/streetbond", "/resources", "/contact", "/blog", "/lunch-learn"];
+  const sample = ["/", "/products/streetbond", "/resources", "/contact", "/blog", "/lunch-learn", "/idea-book"];
   const B = await chromium.launch(launchOpts());
   const bad = [];
   for (const r of sample) {

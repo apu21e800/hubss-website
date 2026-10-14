@@ -25,6 +25,7 @@
     "test:forms": "tsx scripts/test-form-screen.ts",
     "test:social": "tsx scripts/test-social-outcome.ts && tsx scripts/test-social-library.ts",
     "test:planner": "tsx scripts/test-insights-planner.ts",
+    "test:idea-book": "tsx scripts/test-idea-book.ts",
     "sync:products": "tsx scripts/sync-products-to-sanity.ts",
     "sync:products:dry": "tsx scripts/sync-products-to-sanity.ts --dry-run",
     "sync:applications": "tsx scripts/sync-applications-to-sanity.ts",

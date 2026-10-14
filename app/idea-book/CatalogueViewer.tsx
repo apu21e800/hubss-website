@@ -182,7 +182,7 @@ export default function CatalogueViewer({
       setView({ s: 1, x: 0, y: 0 });
       const first = views[n]?.[0] ?? 1;
       if (typeof window !== "undefined") {
-        const url = first === 1 ? ideaBook.href : `${ideaBook.href}/${first}`;
+        const url = first === 1 ? ideaBook.pagesHref : `${ideaBook.href}/${first}`;
         window.history.replaceState(null, "", url + window.location.search);
       }
     },

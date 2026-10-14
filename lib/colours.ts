@@ -301,6 +301,11 @@ export function familiesFor(slug: string): ColourFamily[] {
   return PRODUCT_COLOURS[slug] ?? [];
 }
 
+/** A family by its key, for the Idea Book edition's colour pages (lib/idea-book-edition.ts). */
+export function colourFamily(key: string): ColourFamily | undefined {
+  return Object.values(PRODUCT_COLOURS).flat().find((f) => f.key === key);
+}
+
 export function colourSectionFor(slug: string): ColourSectionMeta | null {
   return SECTION_META[slug] ?? null;
 }

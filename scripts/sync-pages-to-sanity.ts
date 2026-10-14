@@ -108,8 +108,9 @@ const HOME_HERO_TEXT: Record<string, string> = {
   // and the labels are sentence case, as in app/page.tsx.
   "homepageHero.cta1Label":  "See the work",
   "homepageHero.cta1Href":   "#map",
-  "homepageHero.cta2Label":  "See the systems",
-  "homepageHero.cta2Href":   "#systems",
+  // 14 Oct 2026: the second button opens the Product Book; its link is the
+  // book's own (app/page.tsx), so only its words live in Studio.
+  "homepageHero.cta2Label":  "Open the Product Book",
 };
 
 const ABOUT_HERO_TEXT: Record<string, string> = {

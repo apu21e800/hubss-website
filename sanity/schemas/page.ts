@@ -130,15 +130,18 @@ export default defineType({
         defineField({
           name: "cta2Label",
           type: "string",
-          title: "Secondary CTA label",
-          description: 'Text on the secondary button (e.g. "See the Systems").',
+          title: "Product Book button",
+          description: 'Words on the second button, which opens the Product Book (e.g. "Open the Product Book"). Empty: "Open the Product Book".',
           validation: (r) => headingStyle(r),
         }),
         defineField({
           name: "cta2Href",
           type: "string",
           title: "Secondary CTA link",
-          description: 'URL or anchor the secondary button points to (e.g. "#systems" or "/products").',
+          // Since 14 Oct 2026 the second button is the Product Book's, and
+          // its link is the book's own address (app/page.tsx).
+          hidden: true,
+          description: "Not used: the second button always opens the Product Book.",
         }),
         richImageField("heroImage1", "Hero photo (shown on the homepage)"),
         richImageField("heroImage2", "Hero slide 2 (not shown on the site yet)"),

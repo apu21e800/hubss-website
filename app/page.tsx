@@ -22,6 +22,8 @@ import { getMergedApplications } from "@/lib/applications.server";
 import { getMergedProducts } from "@/lib/products.server";
 import { city, provinceCode, schemaPhone, type SiteSettings } from "@/lib/site-settings";
 import { mergeHomepageCopy } from "@/lib/homepage-copy";
+import { catalogue, catalogueReady, cataloguePageUrl, ideaBook } from "@/lib/catalogue";
+import { showCatalogue } from "@/lib/feature-flags";
 
 // 30 Sep 2026 (QA A1, E2, E4): "Systems", not the banned "Solutions", in the
 // title; one factual description with no "leader" (the same line as the site
@@ -174,6 +176,20 @@ export default async function Home() {
     widePosition: studioHero ? "50% 50%" : undefined,
     // While previewing in Studio, clicking the photo opens its field.
     editAttribute: (await isPreview()) ? editAttr({ id: sanityPage?._id ?? "page-homepage", type: "page" }, "homepageHero.heroImage1") : undefined,
+    // The Idea Book card in the hero's lower right (Doug, 14 Oct 2026: "a
+    // clean CTA to the booklet"). Its line is the Idea Book band's heading,
+    // so one Studio field words both. Off with the book (showCatalogue).
+    ideaBookCard:
+      showCatalogue() && catalogueReady
+        ? {
+            href: ideaBook.href,
+            title: ideaBook.title,
+            line: copy.ideaBook.heading,
+            short: ideaBook.short,
+            cover: catalogue.coverThumb ?? cataloguePageUrl(1, catalogue.widths[0]),
+            coverAlt: `${ideaBook.title} cover`,
+          }
+        : undefined,
   };
 
   return (

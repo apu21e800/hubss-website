@@ -7,6 +7,8 @@ import Link from "next/link";
 import { heroAlt } from "@/lib/image-seo";
 import { HOME_HERO } from "@/lib/hero-framing";
 import { isSanityImage, sanitySized, sanitySrcSet } from "@/lib/photos";
+import IdeaBookHeroCard, { type IdeaBookHeroCardProps } from "@/components/sections/IdeaBookHeroCard";
+import { CLOSED_SCRIPT } from "@/lib/idea-book-card";
 
 const FALLBACK_HERO = "/images/hero/hero-1.jpg";
 
@@ -59,6 +61,8 @@ interface HeroSlideshowProps {
   widePosition?: string;
   /** While previewing in Studio: the attribute that makes the photo clickable (lib/sanity.preview.ts). */
   editAttribute?: string;
+  /** The Idea Book card in the lower right (Doug, 14 Oct 2026); none when the book is switched off. */
+  ideaBookCard?: IdeaBookHeroCardProps;
 }
 
 export default function HeroSlideshow({
@@ -78,6 +82,7 @@ export default function HeroSlideshow({
   position,
   widePosition,
   editAttribute,
+  ideaBookCard,
 }: HeroSlideshowProps = {}) {
   const src = heroImageSrc || FALLBACK_HERO;
   // A Sanity photo is sized by Sanity's CDN (lib/photos.ts): a phone gets an
@@ -201,8 +206,10 @@ export default function HeroSlideshow({
         className="hero-copy relative -mt-8 pb-10 pt-0 sm:absolute sm:inset-0 sm:mt-0 sm:flex sm:items-end sm:pt-16"
         style={{ zIndex: 10 }}
       >
-        <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl">
+        {/* From lg the Idea Book card sits at the right of this row, its foot
+            level with the buttons'; below lg it follows the buttons. */}
+        <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 lg:flex lg:items-end lg:justify-between lg:gap-10">
+          <div className="max-w-3xl lg:min-w-0">
 
             {/* Eyebrow — #FDBA74 (orange-300) reads clearly over the hero photo; shadow adds contrast */}
             {/* One line on a phone too: at 0.22em tracking the eyebrow wrapped
@@ -293,6 +300,14 @@ export default function HeroSlideshow({
             </div>
 
           </div>
+          {ideaBookCard && (
+            <>
+              {/* Runs as the page is parsed, before the card: hides it for a
+                  visitor who closed it (lib/idea-book-card.ts). */}
+              <script dangerouslySetInnerHTML={{ __html: CLOSED_SCRIPT }} />
+              <IdeaBookHeroCard {...ideaBookCard} />
+            </>
+          )}
         </div>
       </div>
     </section>

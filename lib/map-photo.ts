@@ -4,7 +4,7 @@
  * Map photos live in two places, and neither may reach /_next/image (the
  * optimiser allowance ran out on 27 Aug 2026; see next.config.ts):
  *   - Sanity's CDN, which resizes on request: the usual Sanity loader.
- *   - /public/images/map, for the Idea Book photos Sanity does not hold. Each
+ *   - /public/images/map, for the Product Book photos Sanity does not hold. Each
  *     has a 640px twin named <name>-sm.jpg, served for small slots.
  * Anything else is returned as it is.
  */

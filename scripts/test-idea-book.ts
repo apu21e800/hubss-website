@@ -1,5 +1,5 @@
 /**
- * Tests for the Idea Book edition's data (lib/idea-book-edition.ts):
+ * Tests for the Product Book edition's data (lib/idea-book-edition.ts):
  * `npm run test:idea-book`. No network.
  *
  * What they protect: the edition covers the printed book once, every leaf

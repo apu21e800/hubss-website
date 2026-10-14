@@ -13,7 +13,7 @@ type TabType = (typeof TABS)[number];
 
 // Display-order for type chips: most-relevant types first, then alphabetical.
 const TYPE_PRIORITY = [
-  "Idea Book",
+  "Product Book",
   "Flyer",
   "Spec Sheet",
   "Data Sheet",
@@ -41,7 +41,7 @@ const TYPE_BUCKETS: { label: string; types: string[] }[] = [
   { label: "Spec sheets", types: ["Spec Sheet"] },
   { label: "Data sheets", types: ["Data Sheet", "Safety Data Sheet"] },
   { label: "Guides & manuals", types: ["Colour Guide", "Design Manual", "Installation Guide", "Guide", "FAQ"] },
-  { label: "Brochures & flyers", types: ["Brochure", "Flyer", "Idea Book", "Catalogue"] },
+  { label: "Brochures & flyers", types: ["Brochure", "Flyer", "Product Book", "Catalogue"] },
   { label: "Other", types: ["Certificate", "Other"] },
 ];
 const BUCKET_BY_TYPE: Record<string, string> = {};
@@ -213,7 +213,7 @@ function DocCard({
                 (e.currentTarget as HTMLAnchorElement).style.background = "var(--border-color)";
                 (e.currentTarget as HTMLAnchorElement).style.color = "var(--text-muted)";
               }}
-              title="Open the Idea Book in the reader"
+              title="Open the Product Book in the reader"
             >
               <Eye className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Open reader</span>
@@ -293,7 +293,7 @@ function DocCard({
                 (e.currentTarget as HTMLAnchorElement).style.background = "rgba(249,115,22,0.10)";
                 (e.currentTarget as HTMLAnchorElement).style.color = "var(--accent-text-lg)";
               }}
-              title="Open the Idea Book"
+              title="Open the Product Book"
               aria-label={`Open ${doc.title}`}
             >
               <Eye className="w-3.5 h-3.5" />

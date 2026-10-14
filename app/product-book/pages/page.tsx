@@ -1,10 +1,10 @@
 /**
- * /idea-book/pages - the printed book, page by page, open at page one.
+ * /product-book/pages - the printed book, page by page, open at page one.
  *
- * The book's own home, /idea-book, is the digital edition since 14 Oct 2026
- * (app/idea-book/page.tsx). This is the reader of the page renders, the book
+ * The book's own home, /product-book, is the digital edition since 14 Oct 2026
+ * (app/product-book/page.tsx). This is the reader of the page renders, the book
  * as printed, for anyone who wants it that way and for the edition's "Printed
- * pages" links; /idea-book/[page] serves every other page off the same
+ * pages" links; /product-book/[page] serves every other page off the same
  * component. Statically prerendered; the manifest is an import, not a
  * filesystem read.
  */

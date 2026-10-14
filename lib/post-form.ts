@@ -1,5 +1,5 @@
 /**
- * How every form on the site sends (contact, Lunch & Learn, printed Idea
+ * How every form on the site sends (contact, Lunch & Learn, printed Product
  * Book). Browser code only.
  *
  * Normally through Vercel BotID: instrumentation-client.ts wraps fetch so a

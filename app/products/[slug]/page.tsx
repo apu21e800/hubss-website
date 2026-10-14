@@ -357,7 +357,7 @@ export default async function ProductPage({ params }: Props) {
               style={{ width: 56, height: 3, background: "#f97316", borderRadius: 2 }}
               aria-hidden="true"
             />
-            {/* Where the Idea Book spread follows, it opens with this same line
+            {/* Where the Product Book spread follows, it opens with this same line
                 in the book's words, so the hero no longer says it first (QA
                 pa#20: StreetPrint said "stamped asphalt" three times in two
                 screens). Products without a spread keep their line here. */}

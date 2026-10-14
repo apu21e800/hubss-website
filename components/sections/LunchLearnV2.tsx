@@ -188,11 +188,11 @@ const inputStyle: React.CSSProperties = {
   color: "var(--text-primary)",
 };
 
-// A visible label above each field, in the style of the Idea Book request
+// A visible label above each field, in the style of the Product Book request
 // form (components/catalogue/PrintedCopyForm.tsx), since 30 Sep 2026. The
 // fields were placeholder-only, so the label vanished the moment someone
 // typed, and the site's three forms ran three label systems (QA A19, F19,
-// D10; the Idea Book form was named as the model). autoComplete lets a
+// D10; the Product Book form was named as the model). autoComplete lets a
 // browser fill the five fields in one go.
 const labelClass = "block text-[11px] font-semibold uppercase tracking-[0.16em] mb-1.5";
 const labelStyle: React.CSSProperties = { color: "var(--text-muted)" };

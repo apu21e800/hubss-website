@@ -9,12 +9,12 @@
  * you."). A new field post takes the library's turn (libraryDue):
  *
  *  - a documented job from the homepage map (lib/map-projects.ts): real place,
- *    real system, photos of that job, linked to its write-up, its Idea Book
+ *    real system, photos of that job, linked to its write-up, its Product Book
  *    page or its system;
- *  - a system from the Idea Book (lib/product-catalogue.ts), Doug-approved copy;
- *  - an application from the Idea Book (lib/application-catalogue.ts).
+ *  - a system from the Product Book (lib/product-catalogue.ts), Doug-approved copy;
+ *  - an application from the Product Book (lib/application-catalogue.ts).
  *
- * Jobs and Idea Book spreads take turns (job, system, job, application, ...).
+ * Jobs and Product Book spreads take turns (job, system, job, application, ...).
  * A job whose write-up already went out as an article is skipped, so nothing
  * is posted twice. Everything is drafts in Buffer, approved by a person.
  *
@@ -80,12 +80,12 @@ function projectItem(p: MapProject): LibraryItem | null {
     p.excerpt,
     p.problem ? `The brief: ${p.problem}` : "",
     p.solution ? `What went down: ${p.solution}` : "",
-    about ? `About ${p.product}, from the HUB Idea Book: ${about}` : "",
+    about ? `About ${p.product}, from the HUB Product Book: ${about}` : "",
   ].filter(Boolean).join("\n");
   const [path, linkTo] = p.slug
     ? [`/blog/${p.slug}`, "the article about this job on hubss.com"]
     : p.ideaBookPage
-      ? [`/idea-book/${p.ideaBookPage}`, "this job's page in the HUB Idea Book on hubss.com"]
+      ? [`/product-book/${p.ideaBookPage}`, "this job's page in the HUB Product Book on hubss.com"]
       : product
         ? [`/products/${product.slug}`, `the ${p.product} page on hubss.com`]
         : ["/", "hubss.com"];
@@ -111,7 +111,7 @@ function systemItems(): LibraryItem[] {
     return [{
       key: `lib:system:${product.slug}`,
       title: product.name,
-      type: "A system from the HUB Idea Book",
+      type: "A system from the HUB Product Book",
       excerpt: entry.subhead,
       text: [
         `System: ${product.name}.`,
@@ -144,7 +144,7 @@ function applicationItems(): LibraryItem[] {
     return [{
       key: `lib:application:${app.slug}`,
       title: app.name,
-      type: "An application from the HUB Idea Book",
+      type: "An application from the HUB Product Book",
       excerpt: entry.statement,
       text: [
         `Application: ${app.name}.`,
@@ -163,11 +163,11 @@ function applicationItems(): LibraryItem[] {
 }
 
 /**
- * Every library item, in posting order: jobs and Idea Book spreads take turns
+ * Every library item, in posting order: jobs and Product Book spreads take turns
  * (job, system, job, application, ...). The map tour's jobs come first, in
  * tour order (TOUR_IDS: the strongest photographs, coast to coast), then jobs
  * with a write-up (the richest facts and a page to read), then jobs shown in
- * the Idea Book, then the rest, each group in the map's order. When one kind
+ * the Product Book, then the rest, each group in the map's order. When one kind
  * runs out the others carry on.
  */
 export function libraryQueue(projects: readonly MapProject[] = mapProjects): LibraryItem[] {

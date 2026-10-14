@@ -178,7 +178,7 @@ export default defineType({
         sectionCopy("applications", "Applications", "The photo grid of applications. The second part of the heading is set in the orange gradient."),
         defineField({
           name: "ideaBook",
-          title: "Idea Book callout",
+          title: "Product Book callout",
           type: "object",
           description: "The one-row strip with the book's cover. The book's name above it stays as it is.",
           options: { collapsible: true, collapsed: true },

@@ -14,7 +14,7 @@
  *     From the field: photos of a finished job, the place, the system, a line
  *     of facts) gets posts linked to the system's page. One a day.
  *  3. From the library (since 14 Oct 2026): once a week, a documented job
- *     from the homepage map or a system or application spread from the Idea
+ *     from the homepage map or a system or application spread from the Product
  *     Book (lib/social-library.ts), so the queue doesn't run dry between
  *     articles. Since 14 Oct a new field post takes the week's turn, so
  *     Doug's photos go first; with two articles a week that is three posts a
@@ -167,7 +167,7 @@ function fieldItem(doc: FieldDoc): SocialItem | null {
         `System: ${system.name}.`,
         doc.application ? `Application: ${doc.application}.` : "",
         `What the crew says: ${doc.note}`,
-        about ? `About ${system.name}, from the HUB Idea Book: ${about}` : "",
+        about ? `About ${system.name}, from the HUB Product Book: ${about}` : "",
       ].filter(Boolean).join("\n"),
       linkTo: `the ${system.name} page on hubss.com`,
     },
@@ -481,7 +481,7 @@ async function emailEditors(subject: string, text: string): Promise<void> {
 /** How an email names what the drafts are for. */
 export function describe(r: Pick<SocialResult, "stream" | "title">): string {
   if (r.stream === "From the field") return `the field post "${r.title}"`;
-  if (r.stream === "From the library") return `"${r.title}" from HUB's library (a documented job or an Idea Book spread)`;
+  if (r.stream === "From the library") return `"${r.title}" from HUB's library (a documented job or an Product Book spread)`;
   return `the new Insights article "${r.title}"`;
 }
 

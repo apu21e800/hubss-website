@@ -1,5 +1,5 @@
 /**
- * The HUB Idea Book, Volume 5, as a digital edition (14 Oct 2026).
+ * The HUB Product Book, Volume 5, as a digital edition (14 Oct 2026).
  *
  * Vern: "a mobile / virtual desktop version of the idea book that's not just
  * a square PDF ... same content in booklet, better display for mobile and
@@ -20,9 +20,9 @@
  * lib/idea-book-print.ts.)
  *
  * Every leaf names its printed pages, so the reader can open the spread as
- * printed (/idea-book/<page>, the page-by-page reader) at any point.
+ * printed (/product-book/<page>, the page-by-page reader) at any point.
  *
- * Pure data; the page is app/idea-book/page.tsx. `npm run test:idea-book`
+ * Pure data; the page is app/product-book/page.tsx. `npm run test:idea-book`
  * checks every reference and every page number.
  */
 
@@ -61,7 +61,7 @@ export interface SpecifyLine {
 }
 
 interface Base {
-  /** The hash the leaf answers to: /idea-book#streetbond. */
+  /** The hash the leaf answers to: /product-book#streetbond. */
   id: string;
   /** The printed pages the leaf comes from, in order. */
   pages: number[];
@@ -136,7 +136,7 @@ const CONTENTS = [
 ].map((c) => ({ ...c, name: productName(c.slug) }));
 
 export const LEAVES: Leaf[] = [
-  { kind: "cover", id: "cover", section: "front", pages: [1], photo: { page: 1, alt: "The HUB Idea Book cover: a Musqueam crosswalk in front of the HUB sign at UBC", focus: "50% 45%" } },
+  { kind: "cover", id: "cover", section: "front", pages: [1], photo: { page: 1, alt: "The HUB Product Book cover: a Musqueam crosswalk in front of the HUB sign at UBC", focus: "50% 45%" } },
   {
     kind: "welcome", id: "welcome", section: "front", pages: [2, 3, 4, 5, 6, 7],
     heading: "Asphalt and concrete are the canvas.",
@@ -498,21 +498,21 @@ export const LEAVES: Leaf[] = [
     points: ["Tailored to your team's interests", "Continuing-education content", "In person across Canada, or virtual."],
     contactsEyebrow: "Two offices. One network. One country.", contactsTitle: "Speak with HUB.", contactsLine: "Every project starts with a conversation",
   },
-  { kind: "back", id: "back-cover", section: "back", pages: [144], photo: { page: 144, bottom: 1, focus: "50% 40%", alt: "A family on a blue TrafficPatternsXD crosswalk, the back cover of the Idea Book" } },
+  { kind: "back", id: "back-cover", section: "back", pages: [144], photo: { page: 144, bottom: 1, focus: "50% 40%", alt: "A family on a blue TrafficPatternsXD crosswalk, the back cover of the Product Book" } },
 ];
 
 /** The printed spread's words, for a leaf written out by hand (a photograph the table cannot describe). */
 function printedApplication(slug: string) {
   const entry = PRINT_APPLICATIONS[slug];
-  if (!entry) throw new Error(`Idea Book edition: no printed spread for ${slug}`);
+  if (!entry) throw new Error(`Product Book edition: no printed spread for ${slug}`);
   return { title: entry.title, subhead: entry.statement, body: entry.body, specify: entry.specify.map((s) => sys(s.slug, s.note)), caption: entry.caption };
 }
 
 function applicationLeaf(slug: string, page: number, eyebrow: string, number: number, alt: string, mapId?: string): Leaf {
   const entry = PRINT_APPLICATIONS[slug];
   const app = applications.find((a) => a.slug === slug);
-  if (!entry || !app) throw new Error(`Idea Book edition: no printed spread for ${slug}`);
-  if (entry.page !== page) throw new Error(`Idea Book edition: ${slug} is printed on page ${entry.page}, not ${page}`);
+  if (!entry || !app) throw new Error(`Product Book edition: no printed spread for ${slug}`);
+  if (entry.page !== page) throw new Error(`Product Book edition: ${slug} is printed on page ${entry.page}, not ${page}`);
   // The caption is the book's own, printed on the photograph; the map pin only
   // supplies the link (its city can differ from the caption: York Region for
   // Vaughan, North Cowichan for the Cowichan Valley).
@@ -565,6 +565,6 @@ export function pageLabel(leaf: Leaf): string {
 export function systemEntry(slug: string) {
   const entry = PRINT_SYSTEMS[slug];
   const product = products.find((p) => p.slug === slug);
-  if (!entry || !product) throw new Error(`Idea Book edition: no printed page for ${slug}`);
+  if (!entry || !product) throw new Error(`Product Book edition: no printed page for ${slug}`);
   return { entry, product };
 }

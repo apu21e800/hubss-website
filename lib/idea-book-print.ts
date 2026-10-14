@@ -1,5 +1,5 @@
 /**
- * The Idea Book's system and application pages, as printed.
+ * The Product Book's system and application pages, as printed.
  *
  * WHY A SECOND TRANSCRIPTION. lib/product-catalogue.ts and
  * lib/application-catalogue.ts were taken from the Figma master ("Catalogue

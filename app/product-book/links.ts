@@ -3,11 +3,11 @@ export const EXIT_HREF = "/resources";
 // No UTM tags on internal links: they overwrite the visitor's real source in
 // GA4. Clicks into these pages are reported as cta_click instead
 // (components/AnalyticsEvents.tsx).
-export const REQUEST_HREF = "/request-idea-book";
+export const REQUEST_HREF = "/request-product-book";
 export const LUNCH_LEARN_HREF = "/lunch-learn";
 
 /**
- * Close the Idea Book: back to the page the reader came from when that page
+ * Close the Product Book: back to the page the reader came from when that page
  * is on this site, otherwise to `fallback` (EXIT_HREF). QA, Sep 2026: Close
  * always went to /resources, even from the homepage.
  *
@@ -22,7 +22,7 @@ export const LUNCH_LEARN_HREF = "/lunch-learn";
  */
 export function leaveIdeaBook(fallback: string = EXIT_HREF): void {
   const here = window.location.origin;
-  const insideBook = (u: URL) => u.origin === here && u.pathname.startsWith("/idea-book");
+  const insideBook = (u: URL) => u.origin === here && u.pathname.startsWith("/product-book");
   let fromSite = false;
   try {
     const nav = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;

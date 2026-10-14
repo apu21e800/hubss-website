@@ -2,7 +2,7 @@
  * Site Settings: HUB's two offices, the social accounts and the footer line,
  * editable in Studio (Site Settings) since 7 Oct 2026 and the same everywhere
  * they appear: the footer, Contact, About, the product and application
- * pages, the Lunch & Learn card, the Idea Book reader, the 404 page, the
+ * pages, the Lunch & Learn card, the Product Book reader, the 404 page, the
  * terms and privacy pages, llms.txt and the search-engine data.
  *
  * Until then the Studio fields existed and did nothing, while the numbers

@@ -21,7 +21,7 @@ import navInsights from "@/lib/nav-insights.json";
 // Nothing the menus draw goes through /_next/image. Family and group photos
 // and Moose are ChromeImg (baked at build time); Insights photos are Sanity
 // CDN addresses (or, for the fallback cover, baked chrome files) written at
-// build time into lib/nav-insights.json; the Idea Book cover is the book's own
+// build time into lib/nav-insights.json; the Product Book cover is the book's own
 // raster. The two header logos are SVGs on next/image marked `unoptimized`.
 
 /**
@@ -116,13 +116,13 @@ function NavLabel({ children, active, rule = "#F97316" }: { children: React.Reac
 // MENU PRINCIPLES (Doug's round, 25 Sep 2026; balanced 26 and 28 Sep): show
 // where you can go, grouped clearly, names first. Each family or group opens
 // with one photograph; each product name carries one short line saying what
-// it is (PRODUCT_MENU_LINES, the Idea Book's own words), because "MMAX" tells
+// it is (PRODUCT_MENU_LINES, the Product Book's own words), because "MMAX" tells
 // a specifier nothing and a panel of bare names read as a directory listing
 // (Vern, 28 Sep: "we stripped the last version a bit too much"). Application
 // names describe themselves and carry no line. Every panel ends the same way:
 // one "View all" and one quiet Lunch & Learn card, in the same place each time
 // (Vern, 28 Sep: add the Lunch & Learn button back to both directories). Same
-// family names as /products, the product pages and the Idea Book.
+// family names as /products, the product pages and the Product Book.
 
 // ── Application groupings ─────────────────────────────────────────────
 // Four groups a specifier would recognise, each named for the place, not the
@@ -207,10 +207,10 @@ const NAV_SECTIONS: NavSection[] = INSIGHTS.sections?.length
   ? INSIGHTS.sections
   : INSIGHT_SECTIONS.map((s) => ({ key: s.href, label: s.label, href: s.href, blurb: "", count: 0 }));
 
-// The Idea Book, as a publication in the Insights panel's foot row: its
+// The Product Book, as a publication in the Insights panel's foot row: its
 // cover and its name, a link to the reader. It sits there as the thing it
 // is, next to the articles, never as a promotion (Doug, 25 Sep: no catalogue
-// buttons in the menus). Hidden with the other Idea Book surfaces when
+// buttons in the menus). Hidden with the other Product Book surfaces when
 // NEXT_PUBLIC_SHOW_CATALOGUE is off (lib/feature-flags.ts). Its one line
 // ("Every system and every application, in one book.") went on 2 Oct 2026
 // with the rest of the panel's sentences.
@@ -458,7 +458,7 @@ function LunchLearnSlot({ topic }: { topic: string }) {
 }
 
 // ── Every panel's footer: the one "View all", and Lunch & Learn ──────
-// `children` (2 Oct 2026): what Insights puts between the two, the Idea Book
+// `children` (2 Oct 2026): what Insights puts between the two, the Product Book
 // slot. Products and Applications pass nothing and render as before.
 function MenuFooter({ href, label, topic, children }: { href: string; label: string; topic: string; children?: React.ReactNode }) {
   return (
@@ -551,7 +551,7 @@ function warmInsightsCover() {
 // newest posts: the cover story on the left (its photo, its section, its
 // title) and the next three stacked on the right as rows, each a 3:2 picture
 // with its section and title. The foot row is the siblings': "All Insights",
-// the Idea Book, Lunch & Learn. No dates, no counts, no sentences. "Live":
+// the Product Book, Lunch & Learn. No dates, no counts, no sentences. "Live":
 // lib/nav-insights.json is written from Sanity at every build, and
 // publishing a post in Studio triggers a build, so a new post is in the menu
 // about five minutes after Publish. The three sections keep their rows in
@@ -602,7 +602,7 @@ function LatestRow({ post, first }: { post: NavPost; first: boolean }) {
   );
 }
 
-// The Idea Book in the foot row: its cover and its name, one line, the
+// The Product Book in the foot row: its cover and its name, one line, the
 // reader's link. The same chrome as the Lunch & Learn slot beside it.
 function IdeaBookSlot() {
   if (!ideaBookCover) return null;
@@ -822,7 +822,7 @@ function MobileViewAll({ href, label, onClose, current }: { href: string; label:
 // A row in the drawer's Insights section (2 Oct 2026): one section, its
 // picture at the size the family rows use, its name, a chevron. Until then
 // the drawer opened Insights with the cover story, two post rows, the three
-// sections as chips and the Idea Book; now it is the three rows and "All"
+// sections as chips and the Product Book; now it is the three rows and "All"
 // (Vern: the Insights menu "still feels busy, too much text maybe").
 function MobileSectionRow({ section: s, pathname, onClose }: { section: NavSection; pathname: string; onClose: () => void }) {
   const current = pathname === s.href;

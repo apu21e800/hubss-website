@@ -8,7 +8,7 @@ import { catalogue, catalogueReady, cataloguePageUrl, ideaBook } from "@/lib/cat
 export const metadata = buildMetadata({
   title: `Request a Printed ${ideaBook.short}`,
   description: `Have ${ideaBook.title} mailed to your office: every HUB Surface Systems decorative pavement system, application and specification, in the book our specifiers keep on the shelf.`,
-  slug: "request-idea-book",
+  slug: "request-product-book",
 });
 
 export default function RequestIdeaBookPage() {

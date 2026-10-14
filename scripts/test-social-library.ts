@@ -3,7 +3,7 @@
  * (lib/social-library.ts): part of `npm run test:social`. No network.
  *
  * What they protect: the library posts come from checked material only
- * (documented map jobs with photos, Idea Book spreads), never repeat, never
+ * (documented map jobs with photos, Product Book spreads), never repeat, never
  * re-post a job whose article already went out, link to a real page with a
  * public photo, and go out once a week, giving way to a new field post; and
  * every log id is one Sanity accepts.
@@ -31,7 +31,7 @@ check("has documented jobs, systems and applications", () => {
   for (const k of ["project", "system", "application"]) assert.ok(queue.some((i) => kind(i.key) === k), `no ${k} items`);
 });
 check("every key is unique", () => assert.equal(new Set(queue.map((i) => i.key)).size, queue.length));
-check("jobs and Idea Book spreads take turns: job, system, job, application", () =>
+check("jobs and Product Book spreads take turns: job, system, job, application", () =>
   assert.deepEqual(queue.slice(0, 4).map((i) => kind(i.key)), ["project", "system", "project", "application"]));
 check("the map tour's jobs come first, in tour order", () => {
   const tourWithPhotos = TOUR_IDS.filter((id) => mapProjects.find((p) => p.id === id)?.images.length);
@@ -48,7 +48,7 @@ check("only jobs with photos are in it", () => {
   assert.equal(queue.filter((i) => kind(i.key) === "project").length, withPhotos);
 });
 check("every item links to a page on the site", () => {
-  for (const i of queue) assert.match(i.path, /^\/(blog|idea-book|products|applications)\/[a-z0-9-]+$/, i.key);
+  for (const i of queue) assert.match(i.path, /^\/(blog|product-book|products|applications)\/[a-z0-9-]+$/, i.key);
 });
 check("every photo is a public address (Sanity's CDN or hubss.com)", () => {
   for (const i of queue) if (i.image) assert.match(i.image, /^https:\/\/(cdn\.sanity\.io|hubss\.com)\//, i.key);

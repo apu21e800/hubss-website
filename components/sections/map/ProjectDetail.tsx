@@ -113,7 +113,7 @@ export default function ProjectDetail({
 }) {
   const systems = [project.product, ...(project.systems ?? [])];
   const readHref = project.slug ? `/blog/${project.slug}` : null;
-  const bookHref = project.ideaBookPage ? `/idea-book/${project.ideaBookPage}` : null;
+  const bookHref = project.ideaBookPage ? `/product-book/${project.ideaBookPage}` : null;
   const hasBrief = Boolean(project.problem || project.solution);
 
   return (
@@ -144,14 +144,14 @@ export default function ProjectDetail({
         {(readHref || bookHref) && (
           <div className="cm-detail-actions">
             <a className="cm-btn cm-btn-primary" href={readHref ?? bookHref ?? "#"}>
-              {readHref ? "Read the write-up" : "See it in the Idea Book"}
+              {readHref ? "Read the write-up" : "See it in the Product Book"}
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
             </a>
           </div>
         )}
 
         <p className="cm-detail-links">
-          {readHref && bookHref && <a href={bookHref}>Idea Book, page {project.ideaBookPage}</a>}
+          {readHref && bookHref && <a href={bookHref}>Product Book, page {project.ideaBookPage}</a>}
           <a href={productHref(project.product)}>About {project.product}</a>
           <a href="/contact">Plan a project like this</a>
         </p>

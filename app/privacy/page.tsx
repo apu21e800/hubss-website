@@ -17,7 +17,7 @@ export const metadata = buildMetadata({
 // 2026); they are real <ul> lists now.
 type Block = string | string[];
 
-// Sep 2026 review. Mailing addresses are listed because /request-idea-book
+// Sep 2026 review. Mailing addresses are listed because /request-product-book
 // asks for one. The third-party services are the ones the code calls, checked
 // against it on 27 Sep 2026: Resend (app/api/contact/route.ts), Vercel hosting
 // with Vercel Web Analytics and Speed Insights, Google Analytics (both in
@@ -31,7 +31,7 @@ type Block = string | string[];
 // (part of the Vercel line) and a spam screen that sends the name, company,
 // email domain, project fields and the message, with phone numbers and email
 // addresses replaced, to Anthropic's Claude (lib/form-screen.ts). Never the
-// phone field, the full email or the mailing address (an Idea Book request's
+// phone field, the full email or the mailing address (an Product Book request's
 // city included). Hence the new line.
 // The contact lines carry the offices from Studio's Site Settings
 // (lib/site-settings.ts), so they match the footer.
@@ -42,7 +42,7 @@ const buildSections = (offices: SiteSettings["offices"]): { heading: string; blo
       "When you use hubss.com or submit an inquiry, we may collect the following personal information:",
       [
         "Contact details: name, email address, phone number, company name, and job title",
-        "Mailing address: the address you give us when you request a printed Idea Book",
+        "Mailing address: the address you give us when you request a printed Product Book",
         "Project information: location, project type, and details you provide in form submissions",
         "Usage data: pages visited, time on site, browser type, and referring URL (collected via cookies and analytics tools)",
         "Communications: records of email correspondence or form submissions",
@@ -57,7 +57,7 @@ const buildSections = (offices: SiteSettings["offices"]): { heading: string; blo
       [
         "Respond to your inquiries and project requests",
         "Send requested product information, spec sheets, or follow-up materials",
-        "Mail the printed Idea Book to the address you give us",
+        "Mail the printed Product Book to the address you give us",
         "Schedule and confirm Lunch & Learn sessions",
         "Improve our website and service offerings",
         "Send relevant updates or product announcements (only with your consent)",

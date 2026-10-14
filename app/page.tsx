@@ -190,7 +190,7 @@ export default async function Home() {
       <ProductsGrid products={productCards} copy={copy.systems} />
       {/* dark → slate */}
       <ApplicationsGrid applications={applicationCards} copy={copy.applications} />
-      {/* The Idea Book's one homepage call to action (Doug, 25 Sep 2026):
+      {/* The Product Book's one homepage call to action (Doug, 25 Sep 2026):
           after the applications, before the reading. */}
       <IdeaBookBand copy={copy.ideaBook} />
       {/* Featured article — Insights */}

@@ -3,7 +3,7 @@
 /**
  * Request a printed catalogue.
  *
- * Used twice from one definition: as the body of /request-idea-book, and as an
+ * Used twice from one definition: as the body of /request-product-book, and as an
  * overlay inside the reader so nobody has to leave page 78 to ask for the book.
  *
  * Submissions go to /api/contact with formType "catalogue-print", which gives
@@ -196,7 +196,7 @@ export default function PrintedCopyForm({ compact = false }: { compact?: boolean
       {/* Was "to follow up once - nothing else": a typed dash standing in for
           an em dash (QA, 27 Sep 2026). Same promise, plainly. */}
       <p className="text-xs" style={{ color: "var(--text-hint)" }}>
-        Canadian addresses only. We use this only to mail the Idea Book and to follow up once.
+        Canadian addresses only. We use this only to mail the Product Book and to follow up once.
       </p>
     </form>
   );

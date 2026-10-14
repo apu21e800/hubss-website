@@ -40,7 +40,7 @@ export interface MapProject {
   imageIsRepresentative?: boolean;
   /** The Insights post that documents the job. Becomes `slug` when that post is published. */
   post?: string;
-  /** The Idea Book (Volume 5) page that shows the job: /idea-book/<page>. */
+  /** The Product Book (Volume 5) page that shows the job: /product-book/<page>. */
   ideaBookPage?: number;
   excerpt: string;
   problem?: string;
@@ -58,19 +58,19 @@ const local = (name: string) => `/images/map/${name}.jpg`;
 // geographical locations, lots of accurate images ... no fake locations", then "more locations
 // on the map the better" and "add real images and locations ... you should have enough metadata
 // and images". A pin needs a real job at a real place, documented by a published Insights post
-// or by the Idea Book (Volume 5, Doug-approved; its caption names the place and the system), and
-// every photo on it is of that job. The Idea Book pins came from its captions and page text,
+// or by the Product Book (Volume 5, Doug-approved; its caption names the place and the system), and
+// every photo on it is of that job. The Product Book pins came from its captions and page text,
 // placed by research on 30 Sep 2026 (municipal pages, news, installers' project pages, imagery);
 // each comment says what places the pin and how sure it is. Where only the town is known, or the
 // site was matched from the photograph, the pin is `approximate`. Where the book's caption and
 // the evidence disagree, the evidence places the pin and the comment says so (flagged for Doug).
 // The 26 stand-in pins removed on 28 Sep 2026 stay removed. Photos come from Sanity's CDN (the
-// Idea Book photos all have gallery copies there, matched by perceptual hash) or, for the twelve
+// Product Book photos all have gallery copies there, matched by perceptual hash) or, for the twelve
 // that do not, from /public/images/map.
 const curatedProjects: MapProject[] = [
   // ── Yukon ───────────────────────────────────────────────────────────────────────
   {
-    // Idea Book p.113: "Acknowledgement, cast in pavement. Whitehorse, Yukon |
+    // Product Book p.113: "Acknowledgement, cast in pavement. Whitehorse, Yukon |
     // TrafficPatterns". The Cultural Centre is in the photo; CBC places the crosswalks at
     // Front and Black Streets.
     id: "whitehorse-kwanlin-dun",
@@ -82,7 +82,7 @@ const curatedProjects: MapProject[] = [
     product: "TrafficPatterns",
     application: "Community Branding",
     images: [
-      cdn("f07ab2a9d2f944b128d54084fa1623b78736a0c6-1184x864.jpg"), // applications/public-art/public-art-04 (Idea Book p.113)
+      cdn("f07ab2a9d2f944b128d54084fa1623b78736a0c6-1184x864.jpg"), // applications/public-art/public-art-04 (Product Book p.113)
     ],
     ideaBookPage: 113,
     excerpt:
@@ -90,7 +90,7 @@ const curatedProjects: MapProject[] = [
   },
   // ── British Columbia ────────────────────────────────────────────────────────────
   {
-    // Idea Book p.126: "Community colours. Nanaimo, British Columbia | TrafficPatterns".
+    // Product Book p.126: "Community colours. Nanaimo, British Columbia | TrafficPatterns".
     // The Nanaimo Bulletin places it at Commercial and Bastion (June 2025). Square One
     // lists it as TrafficPatternsXD: the book is followed, and the difference is flagged
     // for Doug.
@@ -104,7 +104,7 @@ const curatedProjects: MapProject[] = [
     application: "Community Branding",
     year: "2025",
     images: [
-      local("nanaimo-pride-intersection"), // Idea Book p.126
+      local("nanaimo-pride-intersection"), // Product Book p.126
     ],
     ideaBookPage: 126,
     excerpt:
@@ -137,7 +137,7 @@ const curatedProjects: MapProject[] = [
     // of Sechelt": that is Tsain-Ko Village, the shíshálh Nation's shopping centre on
     // the highway, so the pin sits there (placed 30 Sep 2026, carried into this
     // dataset 2 Oct 2026; it had sat downtown, 700 m west).
-    // 30 Sep 2026: second photo, Idea Book p.124 ("Sunshine Coast, British Columbia |
+    // 30 Sep 2026: second photo, Product Book p.124 ("Sunshine Coast, British Columbia |
     // TrafficPatterns"), the same crossing. The book's text on that page describes the
     // pictograph crosswalk; flagged for Doug.
     id: "sechelt-tsain-ko",
@@ -151,7 +151,7 @@ const curatedProjects: MapProject[] = [
     approximate: true,
     images: [
       cdn("2ced76be80c010052d202d5ae9954ce26df3ba60-1200x900.jpg"), // blog/tsain-ko-crosswalk-sechelt/featured.jpg
-      cdn("2989afe3691e1fa7e7959fd44f3766b5148cab85-1184x864.jpg"), // applications/public-art/public-art-05 (Idea Book p.124)
+      cdn("2989afe3691e1fa7e7959fd44f3766b5148cab85-1184x864.jpg"), // applications/public-art/public-art-05 (Product Book p.124)
     ],
     post: "tsain-ko-crosswalk-sechelt",
     ideaBookPage: 124,
@@ -163,7 +163,7 @@ const curatedProjects: MapProject[] = [
       "TrafficPatterns preformed thermoplastic carrying an Indigenous motif, designed to draw attention to the crossing. Installed by Square One Paving.",
   },
   {
-    // Idea Book p.55: "Cowichan Valley, British Columbia" (file: roundabout median,
+    // Product Book p.55: "Cowichan Valley, British Columbia" (file: roundabout median,
     // StreetPrint). Matched from imagery, not a source, to the Bell McKinnon Rd and Herd Rd
     // roundabout: approximate.
     id: "cowichan-roundabout",
@@ -176,7 +176,7 @@ const curatedProjects: MapProject[] = [
     application: "Traffic Calming",
     approximate: true,
     images: [
-      cdn("e3f43c69a926c36fafd00a8045e7e3796d55acce-1184x864.jpg"), // applications/traffic-calming/traffic-calming-57 (Idea Book p.55)
+      cdn("e3f43c69a926c36fafd00a8045e7e3796d55acce-1184x864.jpg"), // applications/traffic-calming/traffic-calming-57 (Product Book p.55)
     ],
     ideaBookPage: 55,
     excerpt:
@@ -207,7 +207,7 @@ const curatedProjects: MapProject[] = [
   },
   {
     // Post: decorative-paving-solutions ("Vic High, Victoria, BC... DecoMark +
-    // StreetBond... May 2024"). Idea Book p.30 (DecoMark) and p.128 ("First Nations
+    // StreetBond... May 2024"). Product Book p.30 (DecoMark) and p.128 ("First Nations
     // Reconciliation. Victoria... StreetPrint, DecoMark & StreetBond"), both at Vic High,
     // 1260 Grant St.
     id: "victoria-high-school",
@@ -221,8 +221,8 @@ const curatedProjects: MapProject[] = [
     application: "Community Branding",
     year: "2024",
     images: [
-      cdn("572a2f47001ab35bc0808df525f7dd49c81ec195-1800x2400.jpg"), // the whorl (Idea Book p.30)
-      cdn("5d7c9961b8ca1deed12a0ec015bdac916b5aed3e-2400x1800.jpg"), // the canoe run (Idea Book p.128)
+      cdn("572a2f47001ab35bc0808df525f7dd49c81ec195-1800x2400.jpg"), // the whorl (Product Book p.30)
+      cdn("5d7c9961b8ca1deed12a0ec015bdac916b5aed3e-2400x1800.jpg"), // the canoe run (Product Book p.128)
     ],
     post: "decorative-paving-solutions",
     ideaBookPage: 30,
@@ -280,7 +280,7 @@ const curatedProjects: MapProject[] = [
       "TrafficPatterns preformed thermoplastic carrying a design created by UBC and Musqueam together, installed by Square One.",
   },
   {
-    // Idea Book p.121: "Catholic Diocese of Vancouver | DuraTherm". The school sign is in
+    // Product Book p.121: "Catholic Diocese of Vancouver | DuraTherm". The school sign is in
     // the photo: 3745 W 28th Ave, Dunbar.
     id: "vancouver-immaculate-conception",
     title: "Immaculate Conception School",
@@ -291,7 +291,7 @@ const curatedProjects: MapProject[] = [
     product: "DuraTherm",
     application: "Public Spaces",
     images: [
-      local("vancouver-immaculate-conception"), // Idea Book p.121
+      local("vancouver-immaculate-conception"), // Product Book p.121
     ],
     ideaBookPage: 121,
     excerpt:
@@ -299,7 +299,7 @@ const curatedProjects: MapProject[] = [
   },
   {
     // Pin at Richmond-Brighouse Station on No. 3 Road.
-    // 30 Sep 2026: photos from Idea Book p.7 and p.99 ("Pedestrian channelization.
+    // 30 Sep 2026: photos from Product Book p.7 and p.99 ("Pedestrian channelization.
     // Richmond, British Columbia | TrafficPatternsXD", at No. 3 Rd and Cook Rd, beside the
     // station).
     id: "richmond-brighouse",
@@ -312,8 +312,8 @@ const curatedProjects: MapProject[] = [
     application: "Crosswalks",
     images: [
       cdn("62261a74578960854593507a0ec08d02cf1e81b5-1200x900.jpg"), // blog/richmond-brighouse-crosswalk/featured.jpeg
-      local("richmond-brighouse-station"), // Idea Book p.7 (file: Richmond Brighouse crosswalk)
-      cdn("a92aa594f8e41dd9951c0567f349d413e24ac260-2200x1238.jpg"), // products/traffic-patterns-xd/traffic-patterns-xd-136 (Idea Book p.99)
+      local("richmond-brighouse-station"), // Product Book p.7 (file: Richmond Brighouse crosswalk)
+      cdn("a92aa594f8e41dd9951c0567f349d413e24ac260-2200x1238.jpg"), // products/traffic-patterns-xd/traffic-patterns-xd-136 (Product Book p.99)
     ],
     post: "richmond-brighouse-crosswalk",
     ideaBookPage: 7,
@@ -325,7 +325,7 @@ const curatedProjects: MapProject[] = [
       "TrafficPatternsXD, aggregate-reinforced preformed thermoplastic set into the asphalt: colour-stable and skid-resistant, with the look of brick or paving stone and none of the upkeep of loose pavers.",
   },
   {
-    // Idea Book p.130: "The first thing a customer walks on. Granville Island, Vancouver |
+    // Product Book p.130: "The first thing a customer walks on. Granville Island, Vancouver |
     // TrafficPatternsXD". Square One published the same photo of its crossing at Granville
     // Island Brewing, 1441 Cartwright St.
     id: "vancouver-granville-island",
@@ -337,7 +337,7 @@ const curatedProjects: MapProject[] = [
     product: "TrafficPatternsXD",
     application: "Commercial Spaces",
     images: [
-      cdn("fd5b0461832d32634e8ee7ca5d7bfa9c7779b10c-2400x1800.jpg"), // products/traffic-patterns-xd/traffic-patterns-xd-45 (Idea Book p.130)
+      cdn("fd5b0461832d32634e8ee7ca5d7bfa9c7779b10c-2400x1800.jpg"), // products/traffic-patterns-xd/traffic-patterns-xd-45 (Product Book p.130)
     ],
     ideaBookPage: 130,
     excerpt:
@@ -345,7 +345,7 @@ const curatedProjects: MapProject[] = [
   },
   {
     // Pin at the hospital, 4480 Oak Street (it was 1 km west of it).
-    // 30 Sep 2026: second photo, Idea Book pp.94–95 ("StreetBond | DecoMark").
+    // 30 Sep 2026: second photo, Product Book pp.94–95 ("StreetBond | DecoMark").
     id: "bc-childrens-hospital",
     title: "BC Children's Hospital labyrinth",
     city: "Vancouver",
@@ -357,7 +357,7 @@ const curatedProjects: MapProject[] = [
     application: "Parks & Paths",
     images: [
       cdn("c5ca6ae81e7e8da1698a9c6e2fe5bfe2f25046c6-1600x1200.jpg"), // blog/bc-childrens-hospital-labyrinth/featured.jpg
-      cdn("44401860b10a412b05dd329a1e1ae60ff120e597-2400x1800.jpg"), // applications/parks-paths/parks-paths-144 (Idea Book p.94)
+      cdn("44401860b10a412b05dd329a1e1ae60ff120e597-2400x1800.jpg"), // applications/parks-paths/parks-paths-144 (Product Book p.94)
     ],
     post: "bc-childrens-hospital-labyrinth",
     ideaBookPage: 95,
@@ -369,7 +369,7 @@ const curatedProjects: MapProject[] = [
       "StreetBond on new acid-etched concrete, including a labyrinth on the deck of one level, and DecoMark icons applied to concrete and to precast tiles fitted off-site before they were lifted into place. Installed by Square One Paving.",
   },
   {
-    // Idea Book p.104: "Neighbourhood colour. Vancouver, British Columbia | StreetBond"
+    // Product Book p.104: "Neighbourhood colour. Vancouver, British Columbia | StreetBond"
     // (file: 18th and Cambie). The City's Cambie-18th plaza, W 18th Ave just west of
     // Cambie.
     id: "vancouver-cambie-18th",
@@ -381,7 +381,7 @@ const curatedProjects: MapProject[] = [
     product: "StreetBond",
     application: "Public Spaces",
     images: [
-      cdn("676b984d77cbadce24a6768cf9a44a57e8c259c7-2400x1800.jpg"), // applications/parks-paths (Idea Book p.104)
+      cdn("676b984d77cbadce24a6768cf9a44a57e8c259c7-2400x1800.jpg"), // applications/parks-paths (Product Book p.104)
     ],
     ideaBookPage: 104,
     excerpt:
@@ -410,7 +410,7 @@ const curatedProjects: MapProject[] = [
       "StreetBond 150 decorative coatings in bold colour across the lane surface, shared by people on foot and service vehicles alike.",
   },
   {
-    // Post: parc-riviera-streetbond-walkway. Idea Book p.75: "Richmond, British Columbia"
+    // Post: parc-riviera-streetbond-walkway. Product Book p.75: "Richmond, British Columbia"
     // (Townhomes spread). Parc Riviera Mews, 10199 River Dr.
     id: "richmond-parc-riviera",
     title: "Parc Riviera Mews walkway",
@@ -421,7 +421,7 @@ const curatedProjects: MapProject[] = [
     product: "StreetBond",
     application: "Townhomes",
     images: [
-      cdn("6fea36490f1b5d527929469cdb3e02718f8a1966-1800x2400.jpg"), // applications/townhomes/townhomes-20 (Idea Book p.75)
+      cdn("6fea36490f1b5d527929469cdb3e02718f8a1966-1800x2400.jpg"), // applications/townhomes/townhomes-20 (Product Book p.75)
       cdn("d5fec79770aac9339f16507dcaf2489cb285bb60-1200x900.jpg"), // the write-up's hero
     ],
     post: "parc-riviera-streetbond-walkway",
@@ -479,7 +479,7 @@ const curatedProjects: MapProject[] = [
       "TrafficPatterns preformed thermoplastic crosswalks at East 1st Avenue, East 4th Avenue and Charles Street, with DecoMark graphics, installed by Square One in time for Italian Day on The Drive.",
   },
   {
-    // Idea Book p.38, the PreMark page: "City of Delta, British Columbia". The building is
+    // Product Book p.38, the PreMark page: "City of Delta, British Columbia". The building is
     // the Delta Hotels by Marriott at Cascades Casino Delta, 6005 Highway 17A, under
     // construction.
     id: "delta-cascades-casino",
@@ -491,14 +491,14 @@ const curatedProjects: MapProject[] = [
     product: "PreMark",
     application: "Crosswalks",
     images: [
-      cdn("45eeb1538a81716f5dd63fc3c92fe5c3a01ef77f-1200x900.jpg"), // products/premark/premark-01 (Idea Book p.38)
+      cdn("45eeb1538a81716f5dd63fc3c92fe5c3a01ef77f-1200x900.jpg"), // products/premark/premark-01 (Product Book p.38)
     ],
     ideaBookPage: 38,
     excerpt:
       "PreMark crosswalk markings on the access road to the new hotel at Cascades Casino Delta.",
   },
   {
-    // Idea Book p.118: "Burnaby, British Columbia | StreetBond". The park is not
+    // Product Book p.118: "Burnaby, British Columbia | StreetBond". The park is not
     // identified: pin at city hall, approximate.
     id: "burnaby-basketball-court",
     title: "Basketball court",
@@ -510,14 +510,14 @@ const curatedProjects: MapProject[] = [
     application: "Sport Courts",
     approximate: true,
     images: [
-      local("burnaby-basketball-court"), // Idea Book p.118
+      local("burnaby-basketball-court"), // Product Book p.118
     ],
     ideaBookPage: 118,
     excerpt:
       "A basketball court in StreetBond with a flower at centre court, in Burnaby.",
   },
   {
-    // Idea Book p.80: "New Westminster, British Columbia" (file: Oxford townhomes). Oxford
+    // Product Book p.80: "New Westminster, British Columbia" (file: Oxford townhomes). Oxford
     // Townhomes, 728 Ewen Ave, Queensborough; Square One records StreetPrint and StreetBond
     // on its laneways.
     id: "new-westminster-oxford",
@@ -530,7 +530,7 @@ const curatedProjects: MapProject[] = [
     systems: ["StreetBond"],
     application: "Townhomes",
     images: [
-      cdn("9cb38dd6928271deee36b97e05901703b5e1dfdb-1800x2400.jpg"), // applications/townhomes/townhomes-21 (Idea Book p.80)
+      cdn("9cb38dd6928271deee36b97e05901703b5e1dfdb-1800x2400.jpg"), // applications/townhomes/townhomes-21 (Product Book p.80)
     ],
     ideaBookPage: 80,
     excerpt:
@@ -560,7 +560,7 @@ const curatedProjects: MapProject[] = [
       "Contrasting grey bands in TrafficPatterns preformed thermoplastic on the roadway and StreetBond150 coating on the concrete sidewalks, installed by Square One Paving.",
   },
   {
-    // Idea Book p.129: "Waterpark surface coating... Bear Creek Park, Surrey, British
+    // Product Book p.129: "Waterpark surface coating... Bear Creek Park, Surrey, British
     // Columbia | StreetBond". OpenStreetMap maps the splash pad here.
     id: "surrey-bear-creek-spray-park",
     title: "Bear Creek Park spray park",
@@ -571,7 +571,7 @@ const curatedProjects: MapProject[] = [
     product: "StreetBond",
     application: "Splash Pads",
     images: [
-      cdn("adc864c3b43a4cb05e0397f1406ca14610d74d22-2400x1800.jpg"), // applications/splash-pads/splash-pads-26 (Idea Book p.129)
+      cdn("adc864c3b43a4cb05e0397f1406ca14610d74d22-2400x1800.jpg"), // applications/splash-pads/splash-pads-26 (Product Book p.129)
     ],
     ideaBookPage: 129,
     excerpt:
@@ -666,7 +666,7 @@ const curatedProjects: MapProject[] = [
       "StreetBond150 coatings for the plaza map, bonded permanently to the asphalt, with DecoMark thermoplastic for the wayfinding and surface markings.",
   },
   {
-    // Idea Book pp.82–83: "Sheffield Park · Coquitlam, British Columbia". 3510 Sheffield
+    // Product Book pp.82–83: "Sheffield Park · Coquitlam, British Columbia". 3510 Sheffield
     // Ave.
     id: "coquitlam-sheffield-park",
     title: "Sheffield Park",
@@ -677,7 +677,7 @@ const curatedProjects: MapProject[] = [
     product: "StreetBond",
     application: "Parks & Paths",
     images: [
-      local("coquitlam-sheffield-park"), // Idea Book p.83
+      local("coquitlam-sheffield-park"), // Product Book p.83
     ],
     ideaBookPage: 83,
     excerpt:
@@ -708,7 +708,7 @@ const curatedProjects: MapProject[] = [
       "StreetPrint genuine stamped asphalt for the design, with StreetBond coating bonded permanently to the asphalt for a lasting, low-maintenance finish that protects the pavement.",
   },
   {
-    // Idea Book p.133 (Square One Paving, HUB Master Installer, British Columbia). Square
+    // Product Book p.133 (Square One Paving, HUB Master Installer, British Columbia). Square
     // One's project page: "Circle of Life" in StreetBond, custom-mixed colours, on the
     // plaza by the stadium, 7888 200 St.
     id: "langley-events-centre",
@@ -720,7 +720,7 @@ const curatedProjects: MapProject[] = [
     product: "StreetBond",
     application: "Public Art",
     images: [
-      local("langley-events-centre"), // Idea Book p.133
+      local("langley-events-centre"), // Product Book p.133
     ],
     ideaBookPage: 133,
     excerpt:
@@ -776,7 +776,7 @@ const curatedProjects: MapProject[] = [
       "DecoMark decals applied to the asphalt sidewalks: surface applied, skid and slip resistant, UV-stable, and engineered to last 6 to 8 times longer than paint.",
   },
   {
-    // Idea Book p.108: "The playground is the canvas. Maple Ridge, British Columbia |
+    // Product Book p.108: "The playground is the canvas. Maple Ridge, British Columbia |
     // StreetBond". The City's new spray park at Maple Ridge Park (232 St and 132 Ave), July
     // 2025.
     id: "maple-ridge-spray-park",
@@ -789,14 +789,14 @@ const curatedProjects: MapProject[] = [
     application: "Splash Pads",
     year: "2025",
     images: [
-      cdn("9a5a84c2eb4f12a3b52e11ffb909c167e300ea91-1966x1299.jpg"), // applications/splash-pads/splash-pads-10 (Idea Book p.108)
+      cdn("9a5a84c2eb4f12a3b52e11ffb909c167e300ea91-1966x1299.jpg"), // applications/splash-pads/splash-pads-10 (Product Book p.108)
     ],
     ideaBookPage: 108,
     excerpt:
       "Blue and orange StreetBond fields and a salmon graphic on the Maple Ridge Park spray park, opened in July 2025.",
   },
   {
-    // Idea Book p.114: "First Nations Land Recognition... Fort Langley, British Columbia |
+    // Product Book p.114: "First Nations Land Recognition... Fort Langley, British Columbia |
     // DecoMark". Matched from the photo, not a source, to the steps by salishan Place:
     // approximate.
     id: "fort-langley-land-recognition",
@@ -809,14 +809,14 @@ const curatedProjects: MapProject[] = [
     application: "Community Branding",
     approximate: true,
     images: [
-      cdn("1b2cb6050840a10057e1585cf83bf07013c07e0f-1800x2400.jpg"), // products/traffic-patterns/traffic-patterns-42 (Idea Book p.114)
+      cdn("1b2cb6050840a10057e1585cf83bf07013c07e0f-1800x2400.jpg"), // products/traffic-patterns/traffic-patterns-42 (Product Book p.114)
     ],
     ideaBookPage: 114,
     excerpt:
       "A First Nations land recognition, cast in DecoMark and set into the ground in Fort Langley.",
   },
   {
-    // Idea Book p.132: "Maple Ridge, British Columbia". The Kanaka Springs community sign
+    // Product Book p.132: "Maple Ridge, British Columbia". The Kanaka Springs community sign
     // is behind the roundabout, on 112 Ave at Bosonworth Ave. The traffic calming page
     // shows the same photo as a stamped apron.
     id: "maple-ridge-kanaka-springs",
@@ -828,14 +828,14 @@ const curatedProjects: MapProject[] = [
     product: "StreetPrint",
     application: "Traffic Calming",
     images: [
-      cdn("0b5c599579465f38fde5f75adbbc74fd343af683-2400x1800.jpg"), // applications/traffic-calming/traffic-calming-58 (Idea Book p.132)
+      cdn("0b5c599579465f38fde5f75adbbc74fd343af683-2400x1800.jpg"), // applications/traffic-calming/traffic-calming-58 (Product Book p.132)
     ],
     ideaBookPage: 132,
     excerpt:
       "A red herringbone StreetPrint apron on the roundabout at Kanaka Springs in Maple Ridge.",
   },
   {
-    // Idea Book p.137: "Commercial hardscapes... Mission, British Columbia | StreetPrint".
+    // Product Book p.137: "Commercial hardscapes... Mission, British Columbia | StreetPrint".
     // Square One's April 2025 job; the building is not named: pin at city hall,
     // approximate.
     id: "mission-herringbone-bays",
@@ -850,7 +850,7 @@ const curatedProjects: MapProject[] = [
     year: "2025",
     approximate: true,
     images: [
-      cdn("69d1d4f3f739adab42e181181b1fd6f21124c143-2400x1800.jpg"), // applications/commercial-spaces/commercial-spaces-68 (Idea Book p.137)
+      cdn("69d1d4f3f739adab42e181181b1fd6f21124c143-2400x1800.jpg"), // applications/commercial-spaces/commercial-spaces-68 (Product Book p.137)
     ],
     ideaBookPage: 137,
     excerpt:
@@ -879,7 +879,7 @@ const curatedProjects: MapProject[] = [
       "TrafficPatternsXD, aggregate-reinforced thermoplastic imprinted into the asphalt, from the city's first crosswalk to more than 80 across the core, with more planned.",
   },
   {
-    // Idea Book p.85: "Kelowna, BC" (StreetBond by GAF page). Square One lists a StreetBond
+    // Product Book p.85: "Kelowna, BC" (StreetBond by GAF page). Square One lists a StreetBond
     // job at Green Square Vert, Troika's development at 3626 Mission Springs Dr;
     // decorative-paving-solutions calls Green Square a public plaza, which it is not, so
     // that post is not linked.
@@ -892,14 +892,14 @@ const curatedProjects: MapProject[] = [
     product: "StreetBond",
     application: "Townhomes",
     images: [
-      cdn("22dcbb9a51dd08aed93625aef34b713118034c98-2000x1500.jpg"), // applications/parks-paths (Idea Book p.85)
+      cdn("22dcbb9a51dd08aed93625aef34b713118034c98-2000x1500.jpg"), // applications/parks-paths (Product Book p.85)
     ],
     ideaBookPage: 85,
     excerpt:
       "A winding StreetBond path in bright bands through the courtyard at Green Square in Kelowna's Lower Mission.",
   },
   {
-    // Post: streetbondsr-solar-reflective-coatings. Idea Book pp.100–101. Square One's
+    // Post: streetbondsr-solar-reflective-coatings. Product Book pp.100–101. Square One's
     // StreetBondSR path (May 2023) at Jack Shaw Gardens, 89th St and Kingfisher Dr.
     id: "osoyoos-jack-shaw-gardens",
     title: "Jack Shaw Gardens path",
@@ -911,8 +911,8 @@ const curatedProjects: MapProject[] = [
     application: "Parks & Paths",
     year: "2023",
     images: [
-      cdn("8e7fa9ea6509baecccf61813714ec97f77ceaf3b-2400x1800.jpg"), // products/streetbondsr (Idea Book p.100)
-      cdn("27dd4e6d74358a282fa2aee66a2cfa105b53ccc3-2400x1800.jpg"), // after three years (Idea Book p.101)
+      cdn("8e7fa9ea6509baecccf61813714ec97f77ceaf3b-2400x1800.jpg"), // products/streetbondsr (Product Book p.100)
+      cdn("27dd4e6d74358a282fa2aee66a2cfa105b53ccc3-2400x1800.jpg"), // after three years (Product Book p.101)
     ],
     post: "streetbondsr-solar-reflective-coatings",
     ideaBookPage: 100,
@@ -926,7 +926,7 @@ const curatedProjects: MapProject[] = [
     // no street, so the pin sits on the corridor at King Street and Egerton Street,
     // approximate (placed 30 Sep 2026, carried into this dataset 2 Oct 2026; it was
     // a block south of the route).
-    // 30 Sep 2026: photos from Idea Book pp.32, 87 and 93, each captioned "London, Ontario
+    // 30 Sep 2026: photos from Product Book pp.32, 87 and 93, each captioned "London, Ontario
     // | MMAX"; p.90 is the corridor photo already here.
     id: "london-east-brt",
     title: "East London Link rapid transit",
@@ -940,9 +940,9 @@ const curatedProjects: MapProject[] = [
     approximate: true,
     images: [
       cdn("217e5873e43b99d6b4689bdf8ddc53c0da4c7d8b-2400x1800.jpg"), // applications/bus-lanes/bus-lanes-08.jpg
-      cdn("80861000deca287ab75d646d2ea1635c7faa61e4-2400x1800.jpg"), // applications/bus-lanes/bus-lanes-37 (Idea Book p.32)
-      cdn("7d39f59f4471eb792ed12454463c26e9ce469c8a-2400x1800.jpg"), // applications/bus-lanes/bus-lanes-22 (Idea Book p.87)
-      cdn("4ab6237532fc8dd0ba1e2a37a765de7932b3ef86-2400x1800.jpg"), // products/mmax/mmax-32 (Idea Book p.93)
+      cdn("80861000deca287ab75d646d2ea1635c7faa61e4-2400x1800.jpg"), // applications/bus-lanes/bus-lanes-37 (Product Book p.32)
+      cdn("7d39f59f4471eb792ed12454463c26e9ce469c8a-2400x1800.jpg"), // applications/bus-lanes/bus-lanes-22 (Product Book p.87)
+      cdn("4ab6237532fc8dd0ba1e2a37a765de7932b3ef86-2400x1800.jpg"), // products/mmax/mmax-32 (Product Book p.93)
     ],
     post: "london-east-link-brt",
     ideaBookPage: 90,
@@ -954,7 +954,7 @@ const curatedProjects: MapProject[] = [
       "TrafficPatternsXD, 150 mil aggregate-reinforced thermoplastic, at the crossings. Red MMAX methyl methacrylate on the lanes, traffic-ready in 45 to 60 minutes, so a lane carries buses again the same shift.",
   },
   {
-    // Idea Book p.96: "Streetscapes... StreetPrint project in the Woodstock downtown
+    // Product Book p.96: "Streetscapes... StreetPrint project in the Woodstock downtown
     // revitalization. Woodstock, Ontario | StreetPrint". City Hall is across the street in
     // the photo: pin on Dundas St at City Hall.
     id: "woodstock-dundas-street",
@@ -966,7 +966,7 @@ const curatedProjects: MapProject[] = [
     product: "StreetPrint",
     application: "Public Spaces",
     images: [
-      cdn("cce74ceb9fe8b2ffbc6a127275eb666599525db1-2400x1800.jpg"), // products/streetprint/streetprint-63 (Idea Book p.96)
+      cdn("cce74ceb9fe8b2ffbc6a127275eb666599525db1-2400x1800.jpg"), // products/streetprint/streetprint-63 (Product Book p.96)
     ],
     ideaBookPage: 96,
     excerpt:
@@ -976,7 +976,7 @@ const curatedProjects: MapProject[] = [
     // The post's photo covers two jobs (GrandLinq in Waterloo and VIVA in York
     // Region) and shows neither an ION train nor a named street, so it came off
     // this pin on 28 Sep 2026. The post places the job in Waterloo.
-    // 30 Sep 2026: a photo again, Idea Book p.63 ("Kitchener, Ontario", the Pedestrian
+    // 30 Sep 2026: a photo again, Product Book p.63 ("Kitchener, Ontario", the Pedestrian
     // Safety spread): a crossing on Charles St with the ION wires overhead, on the corridor
     // this post covers.
     id: "waterloo-grandlinq-lrt",
@@ -989,7 +989,7 @@ const curatedProjects: MapProject[] = [
     application: "Crosswalks",
     approximate: true,
     images: [
-      cdn("b9f29ffae182c208e483d6fd0ad71fd5d5e855a8-2400x1800.jpg"), // applications/crosswalks/crosswalks-123 (Idea Book p.63)
+      cdn("b9f29ffae182c208e483d6fd0ad71fd5d5e855a8-2400x1800.jpg"), // applications/crosswalks/crosswalks-123 (Product Book p.63)
     ],
     post: "safety-durability-transit-stations",
     ideaBookPage: 63,
@@ -1001,7 +1001,7 @@ const curatedProjects: MapProject[] = [
       "TrafficPatternsXD in phased night-time applications across the ION corridor, with no service disruption. The crossings kept their contrast through freeze-thaw cycles and gave better traction in winter.",
   },
   {
-    // Idea Book p.57 captions this photo "London, Ontario". CBC's photos of Kitchener's
+    // Product Book p.57 captions this photo "London, Ontario". CBC's photos of Kitchener's
     // Victoria Park crossing (unveiled 16 Sep 2022) show the same design, speed sign and
     // overhead sign, so the pin is in Kitchener. Flagged for Doug. Product from the facing
     // Creative Design spread (p.56: TrafficPatterns, custom designs).
@@ -1015,14 +1015,14 @@ const curatedProjects: MapProject[] = [
     application: "Community Branding",
     year: "2022",
     images: [
-      cdn("7eb436ffcc1df43c83a445ce82f62b5d3767b4f9-1184x864.jpg"), // applications/parks-paths (Idea Book p.57)
+      cdn("7eb436ffcc1df43c83a445ce82f62b5d3767b4f9-1184x864.jpg"), // applications/parks-paths (Product Book p.57)
     ],
     ideaBookPage: 57,
     excerpt:
       "An Every Child Matters crosswalk at Water Street and Jubilee Drive by Victoria Park, unveiled in September 2022.",
   },
   {
-    // Idea Book p.107: "Intersection art. Kings and Queens... Kitchener, Ontario |
+    // Product Book p.107: "Intersection art. Kings and Queens... Kitchener, Ontario |
     // TrafficPatterns". CTV (2019) describes crowns for King and Queen Streets at this
     // intersection.
     id: "kitchener-kings-queens",
@@ -1034,7 +1034,7 @@ const curatedProjects: MapProject[] = [
     product: "TrafficPatterns",
     application: "Public Art",
     images: [
-      local("kitchener-kings-queens"), // Idea Book p.107
+      local("kitchener-kings-queens"), // Product Book p.107
     ],
     ideaBookPage: 107,
     excerpt:
@@ -1043,7 +1043,7 @@ const curatedProjects: MapProject[] = [
   {
     // Post table: "East Ave entrance to the Kitchener Memorial Auditorium". Pin at the
     // Aud. Second photo: traffic-patterns-87, the same "Lest We Forget" crossing.
-    // 30 Sep 2026: third photo, Idea Book p.115 ("Kitchener, Ontario | TrafficPatterns").
+    // 30 Sep 2026: third photo, Product Book p.115 ("Kitchener, Ontario | TrafficPatterns").
     id: "kitchener-veterans",
     title: "Veterans memorial crosswalk",
     city: "Kitchener",
@@ -1055,7 +1055,7 @@ const curatedProjects: MapProject[] = [
     images: [
       cdn("193d70465f16da220961b5aaebb28fb5d287c9b2-640x480.jpg"), // blog/veterans-crosswalk-kitchener/featured.jpeg
       cdn("f087d863ecf32b94df3db6baab1e4922e0f45fc4-2400x1800.jpg"), // products/traffic-patterns/traffic-patterns-87.jpg
-      cdn("a256098ee9641fa08337f019db181b5d9c391cc9-2400x1800.jpg"), // applications/crosswalks/crosswalks-115 (Idea Book p.115)
+      cdn("a256098ee9641fa08337f019db181b5d9c391cc9-2400x1800.jpg"), // applications/crosswalks/crosswalks-115 (Product Book p.115)
     ],
     post: "veterans-crosswalk-kitchener",
     ideaBookPage: 115,
@@ -1114,7 +1114,7 @@ const curatedProjects: MapProject[] = [
       "TrafficPatternsXD preformed thermoplastic, installed by Multiseal: a durable, high-traction rainbow crossing that stands for the town's support of inclusion and the LGBTQ+ community.",
   },
   {
-    // Idea Book p.84 ("Collingwood, ON", on the StreetBond by GAF page). The Town lists
+    // Product Book p.84 ("Collingwood, ON", on the StreetBond by GAF page). The Town lists
     // Awen' Waterplay at Harbourview Park, 1 Cedar St, opened August 2023.
     id: "collingwood-awen-waterplay",
     title: "Awen' Waterplay Area",
@@ -1126,14 +1126,14 @@ const curatedProjects: MapProject[] = [
     application: "Splash Pads",
     year: "2023",
     images: [
-      cdn("431881e193da37224dcdcb86ef09ed674922389e-2400x1800.jpg"), // applications/splash-pads/splash-pads-25 (Idea Book p.84)
+      cdn("431881e193da37224dcdcb86ef09ed674922389e-2400x1800.jpg"), // applications/splash-pads/splash-pads-25 (Product Book p.84)
     ],
     ideaBookPage: 84,
     excerpt:
       "StreetBond circles in blue and green on the Awen' Waterplay Area at Harbourview Park, which opened in 2023.",
   },
   {
-    // Idea Book p.59: "Hamilton, Ontario", on the Play Surfaces spread (StreetBond,
+    // Product Book p.59: "Hamilton, Ontario", on the Play Surfaces spread (StreetBond,
     // DecoMark, StreetBondSR). The park is not identified: pin at city hall.
     id: "hamilton-play-pad",
     title: "Compass play pad",
@@ -1145,7 +1145,7 @@ const curatedProjects: MapProject[] = [
     application: "Playgrounds",
     approximate: true,
     images: [
-      cdn("149b51528ec8f529600246cae5f6c13683231cf6-2016x1512.jpg"), // applications/playgrounds (Idea Book p.59)
+      cdn("149b51528ec8f529600246cae5f6c13683231cf6-2016x1512.jpg"), // applications/playgrounds (Product Book p.59)
     ],
     ideaBookPage: 59,
     excerpt:
@@ -1154,7 +1154,7 @@ const curatedProjects: MapProject[] = [
   {
     // New 28 Sep 2026. Post: toronto-premium-outlets-14-years. Its photo shows the
     // Toronto Premium Outlets sign over the crossing. Pin at the centre, Halton Hills.
-    // 30 Sep 2026: Idea Book p.86 ("14-year-old entrance feature... Halton Hills, Ontario |
+    // 30 Sep 2026: Product Book p.86 ("14-year-old entrance feature... Halton Hills, Ontario |
     // TrafficPatternsXD") leads; the photo that was here is the book's p.79, captioned
     // StreetPrint, so StreetPrint is listed too.
     id: "halton-hills-toronto-premium-outlets",
@@ -1167,8 +1167,8 @@ const curatedProjects: MapProject[] = [
     systems: ["StreetPrint"],
     application: "Parking Lots",
     images: [
-      cdn("9758e5594656e1b185ef5c1bb15c0bef25a3eebb-1600x1200.jpg"), // the 14-year-old entrance crossing (Idea Book p.86)
-      cdn("071d81ad81371de61a084911100748616f057ad3-2400x1800.jpg"), // applications/parking-lots/parking-lots-60 (Idea Book p.79, StreetPrint)
+      cdn("9758e5594656e1b185ef5c1bb15c0bef25a3eebb-1600x1200.jpg"), // the 14-year-old entrance crossing (Product Book p.86)
+      cdn("071d81ad81371de61a084911100748616f057ad3-2400x1800.jpg"), // applications/parking-lots/parking-lots-60 (Product Book p.79, StreetPrint)
     ],
     post: "toronto-premium-outlets-14-years",
     ideaBookPage: 86,
@@ -1204,7 +1204,7 @@ const curatedProjects: MapProject[] = [
       "New asphalt, smooth and accessible for walking, cycling and wheelchairs, coated with 5,600 m² of StreetBond150 in Cobalt Blue, this time without the StreetPrint imprint.",
   },
   {
-    // Idea Book p.73: "Year 1 / Year 10. Oakville, Ontario | TrafficPatternsXD". Both
+    // Product Book p.73: "Year 1 / Year 10. Oakville, Ontario | TrafficPatternsXD". Both
     // photos show a grocery store; Oakville has two of that chain and the suburban one at
     // Dundas St W fits the Year 1 photo best, so the pin is approximate.
     id: "oakville-ten-years",
@@ -1217,7 +1217,7 @@ const curatedProjects: MapProject[] = [
     application: "Crosswalks",
     approximate: true,
     images: [
-      cdn("3bd039ce6399936fd57b8aca745a765f12ca0445-1280x960.jpg"), // products/traffic-patterns-xd/traffic-patterns-xd-120, year 1 (Idea Book p.73)
+      cdn("3bd039ce6399936fd57b8aca745a765f12ca0445-1280x960.jpg"), // products/traffic-patterns-xd/traffic-patterns-xd-120, year 1 (Product Book p.73)
       cdn("b7e86508809e258c0cd9a59ce7ae568989571d59-1280x960.jpg"), // products/traffic-patterns-xd/traffic-patterns-xd-119, year 10
     ],
     ideaBookPage: 73,
@@ -1225,7 +1225,7 @@ const curatedProjects: MapProject[] = [
       "The same TrafficPatternsXD crosswalk in its first year and its tenth, at a grocery store in Oakville.",
   },
   {
-    // Idea Book p.47: "Brampton, Ontario". The canopy sign behind reads Brampton Transit,
+    // Product Book p.47: "Brampton, Ontario". The canopy sign behind reads Brampton Transit,
     // Bramalea T[erminal]. Pin at Peel Centre Dr and Central Park Dr.
     id: "brampton-bramalea-terminal",
     title: "Bramalea Terminal crosswalk",
@@ -1236,7 +1236,7 @@ const curatedProjects: MapProject[] = [
     product: "TrafficPatternsXD",
     application: "Crosswalks",
     images: [
-      cdn("36497374754a6f6c1668e66b8f8c143c0411fd67-2400x1800.jpg"), // products/traffic-patterns-xd/traffic-patterns-xd-70 (Idea Book p.47)
+      cdn("36497374754a6f6c1668e66b8f8c143c0411fd67-2400x1800.jpg"), // products/traffic-patterns-xd/traffic-patterns-xd-70 (Product Book p.47)
     ],
     ideaBookPage: 47,
     excerpt:
@@ -1268,7 +1268,7 @@ const curatedProjects: MapProject[] = [
       "TrafficPatternsXD, an aggregate-reinforced preformed thermoplastic, with StreetBond 150 coloured coating, which bonds permanently to asphalt and concrete and resists fuel, engine oil and de-icing agents.",
   },
   {
-    // Idea Book p.12, the TrafficPatternsXD page: "Kleinburg, Ontario". The street is a new
+    // Product Book p.12, the TrafficPatternsXD page: "Kleinburg, Ontario". The street is a new
     // subdivision, not identified: pin at the village.
     id: "kleinburg-crosswalk",
     title: "Kleinburg crosswalk",
@@ -1280,7 +1280,7 @@ const curatedProjects: MapProject[] = [
     application: "Crosswalks",
     approximate: true,
     images: [
-      cdn("45923d5f5766871a7d252b0415f656d9850642c6-2400x1800.jpg"), // applications/crosswalks (Idea Book p.12)
+      cdn("45923d5f5766871a7d252b0415f656d9850642c6-2400x1800.jpg"), // applications/crosswalks (Product Book p.12)
     ],
     ideaBookPage: 12,
     excerpt:
@@ -1288,7 +1288,7 @@ const curatedProjects: MapProject[] = [
   },
   {
     // Pin on Woodbridge Avenue, in the Woodbridge heritage district the post names.
-    // 30 Sep 2026: photos from Idea Book p.40 ("Woodbridge, Ontario") and p.117. The first
+    // 30 Sep 2026: photos from Product Book p.40 ("Woodbridge, Ontario") and p.117. The first
     // photo is also the book's p.98 ("York Region").
     id: "vaughan-woodbridge-heritage",
     title: "Woodbridge Avenue heritage crosswalks",
@@ -1300,8 +1300,8 @@ const curatedProjects: MapProject[] = [
     application: "Crosswalks",
     images: [
       cdn("e22ca56a2e410271739753278bd4957635e31321-1200x900.jpg"), // blog/trafficpatternsxd-urban-design/featured.jpg
-      cdn("c48c9a5d9252afef9e5dde62e2ed4c135ea994a6-2400x1800.jpg"), // applications/crosswalks/crosswalks-118 (Idea Book p.40)
-      cdn("5f2e91e7833e468e0d8720bda9e3a67bcc30f11e-1200x750.jpg"), // Idea Book p.117, "Woodbridge, Ontario | TrafficPatternsXD"
+      cdn("c48c9a5d9252afef9e5dde62e2ed4c135ea994a6-2400x1800.jpg"), // applications/crosswalks/crosswalks-118 (Product Book p.40)
+      cdn("5f2e91e7833e468e0d8720bda9e3a67bcc30f11e-1200x750.jpg"), // Product Book p.117, "Woodbridge, Ontario | TrafficPatternsXD"
     ],
     post: "trafficpatternsxd-urban-design",
     ideaBookPage: 117,
@@ -1313,7 +1313,7 @@ const curatedProjects: MapProject[] = [
       "TrafficPatternsXD in a brick pattern, flush with the road surface, chosen by the City for all pedestrian crosswalks at intersections on the project. Installed by Thermo Design.",
   },
   {
-    // Idea Book p.109: "Retail. First impressions. Like the Audi brand, crisp, clean
+    // Product Book p.109: "Retail. First impressions. Like the Audi brand, crisp, clean
     // lines... as you arrive at the dealership. Vaughan, Ontario | TrafficPatternsXD". Audi
     // Vaughan's new store is at 131 Four Valley Dr (the photo shows a new building; not
     // matched against imagery).
@@ -1326,7 +1326,7 @@ const curatedProjects: MapProject[] = [
     product: "TrafficPatternsXD",
     application: "Commercial Spaces",
     images: [
-      local("vaughan-audi"), // Idea Book p.109
+      local("vaughan-audi"), // Product Book p.109
     ],
     ideaBookPage: 109,
     excerpt:
@@ -1385,7 +1385,7 @@ const curatedProjects: MapProject[] = [
       "TrafficPatterns preformed thermoplastic in a custom design: surface applied, virtually maintenance-free, and a cost-effective alternative to brick pavers.",
   },
   {
-    // Idea Book p.125: "Community centres. Using TrafficPatternsXD in a bold colour scheme
+    // Product Book p.125: "Community centres. Using TrafficPatternsXD in a bold colour scheme
     // highlights the location of the new community centre... East Gwillimbury". The pylon
     // beside the crossing reads Health and Active Living Plaza (160 Jim Mortson Dr).
     id: "east-gwillimbury-halp",
@@ -1397,14 +1397,14 @@ const curatedProjects: MapProject[] = [
     product: "TrafficPatternsXD",
     application: "Parks & Paths",
     images: [
-      cdn("23a48c76133f301222e96691dde208a70880f5b5-1800x2400.jpg"), // applications/parks-paths/parks-paths-146 (Idea Book p.125)
+      cdn("23a48c76133f301222e96691dde208a70880f5b5-1800x2400.jpg"), // applications/parks-paths/parks-paths-146 (Product Book p.125)
     ],
     ideaBookPage: 125,
     excerpt:
       "TrafficPatternsXD in a bold colour scheme marks the way into East Gwillimbury's new community centre.",
   },
   {
-    // Post: geary-works-toronto-park-walkway. Idea Book p.97: "Toronto, Ontario |
+    // Post: geary-works-toronto-park-walkway. Product Book p.97: "Toronto, Ontario |
     // DecoMark". The City's Geary Avenue Park expansion (hydro corridor between Delaware
     // and Westmoreland) has the Green Line path with these markings.
     id: "toronto-geary-avenue-park",
@@ -1416,7 +1416,7 @@ const curatedProjects: MapProject[] = [
     product: "DecoMark",
     application: "Parks & Paths",
     images: [
-      cdn("06cd4e8b7cfd065a0f3248fe06e3b0c3f9ae87f8-2400x1800.jpg"), // applications/community-branding/community-branding-17 (Idea Book p.97)
+      cdn("06cd4e8b7cfd065a0f3248fe06e3b0c3f9ae87f8-2400x1800.jpg"), // applications/community-branding/community-branding-17 (Product Book p.97)
     ],
     post: "geary-works-toronto-park-walkway",
     ideaBookPage: 97,
@@ -1424,7 +1424,7 @@ const curatedProjects: MapProject[] = [
       "DecoMark graphics in the path at Geary Avenue Park, with the Geary Works name and its gear motif reading straight off the pavement.",
   },
   {
-    // Idea Book p.91: "Toronto's city streets... continues to perform 11 years later.
+    // Product Book p.91: "Toronto's city streets... continues to perform 11 years later.
     // Toronto, Ontario | TrafficPatternsXD". The Rogers Centre is ahead in the photo
     // (Railway Lands, likely Bremner Blvd): approximate.
     id: "toronto-railway-lands",
@@ -1437,14 +1437,14 @@ const curatedProjects: MapProject[] = [
     application: "Crosswalks",
     approximate: true,
     images: [
-      cdn("b5687a89f85ef25f85cb9b063d1b1d94efbf7d06-1200x778.jpg"), // products/traffic-patterns-xd/traffic-patterns-xd-133 (Idea Book p.91)
+      cdn("b5687a89f85ef25f85cb9b063d1b1d94efbf7d06-1200x778.jpg"), // products/traffic-patterns-xd/traffic-patterns-xd-133 (Product Book p.91)
     ],
     ideaBookPage: 91,
     excerpt:
       "TrafficPatternsXD crosswalks on downtown Toronto streets, still performing 11 years after they went in.",
   },
   {
-    // Idea Book p.28, the StreetBondSR page: "Toronto, Ontario". The site is not
+    // Product Book p.28, the StreetBondSR page: "Toronto, Ontario". The site is not
     // identified: pin near city hall, approximate.
     id: "toronto-fleet-lot",
     title: "Solar-reflective fleet lot",
@@ -1456,7 +1456,7 @@ const curatedProjects: MapProject[] = [
     application: "Parking Lots",
     approximate: true,
     images: [
-      cdn("8730cab06de5688b6e6828e45f433ccbabb6b3c7-1280x960.jpg"), // applications/commercial-spaces (Idea Book p.28)
+      cdn("8730cab06de5688b6e6828e45f433ccbabb6b3c7-1280x960.jpg"), // applications/commercial-spaces (Product Book p.28)
     ],
     ideaBookPage: 28,
     excerpt:
@@ -1486,7 +1486,7 @@ const curatedProjects: MapProject[] = [
       "MMAX MMA surfacing in red, fast-curing so it went down in overnight installations, with a high-friction surface for operators in all conditions.",
   },
   {
-    // Idea Book p.34, the DuraTherm page: "Toronto, Ontario". The street is not identified:
+    // Product Book p.34, the DuraTherm page: "Toronto, Ontario". The street is not identified:
     // approximate.
     id: "toronto-traffic-calming-markings",
     title: "Traffic calming markings",
@@ -1498,14 +1498,14 @@ const curatedProjects: MapProject[] = [
     application: "Traffic Calming",
     approximate: true,
     images: [
-      cdn("8a3bc196f60cb2d0acd42d9a389654c709f5aa0a-2400x1800.jpg"), // products/duratherm/duratherm-37 (Idea Book p.34)
+      cdn("8a3bc196f60cb2d0acd42d9a389654c709f5aa0a-2400x1800.jpg"), // products/duratherm/duratherm-37 (Product Book p.34)
     ],
     ideaBookPage: 34,
     excerpt:
       "DuraTherm traffic calming markings on a residential street in Toronto, inlaid flush with the asphalt.",
   },
   {
-    // Idea Book p.88: "Toronto, Ontario | TrafficPatternsXD". The site is not identified:
+    // Product Book p.88: "Toronto, Ontario | TrafficPatternsXD". The site is not identified:
     // approximate.
     id: "toronto-lot-crossing",
     title: "Parking lot crossing",
@@ -1517,7 +1517,7 @@ const curatedProjects: MapProject[] = [
     application: "Parking Lots",
     approximate: true,
     images: [
-      cdn("0e688868164667090ff2ef5a09ccb57bf0770b12-2400x1800.jpg"), // applications/crosswalks (Idea Book p.88)
+      cdn("0e688868164667090ff2ef5a09ccb57bf0770b12-2400x1800.jpg"), // applications/crosswalks (Product Book p.88)
     ],
     ideaBookPage: 88,
     excerpt:
@@ -1528,7 +1528,7 @@ const curatedProjects: MapProject[] = [
     // Rapidway). The photo is the VIVA rapidway (station canopy, VIVA banner), from
     // imprinted-asphalt-york-transit, the archived profile of the same job. Place: on
     // Highway 7 in Markham, approximate; the post names the corridor, not one crossing.
-    // 30 Sep 2026: second photo, Idea Book p.53, captioned Vaughan: the crossing at
+    // 30 Sep 2026: second photo, Product Book p.53, captioned Vaughan: the crossing at
     // Valleymede Dr on the Highway 7 rapidway (the street signs and the Shell station place
     // it in Richmond Hill).
     id: "york-region-viva",
@@ -1542,7 +1542,7 @@ const curatedProjects: MapProject[] = [
     approximate: true,
     images: [
       cdn("b08c6ee60dd0e60393f73078aa9fd47e7fcda392-1200x900.jpg"), // blog/imprinted-asphalt-york-transit/featured.jpg
-      cdn("4fd7f6cd4287218afc39d6529b4a3de805e432eb-2400x1800.jpg"), // applications/bus-lanes/bus-lanes-41 (Idea Book p.53)
+      cdn("4fd7f6cd4287218afc39d6529b4a3de805e432eb-2400x1800.jpg"), // applications/bus-lanes/bus-lanes-41 (Product Book p.53)
     ],
     post: "multimodal-connectivity-york-region",
     ideaBookPage: 53,
@@ -1580,7 +1580,7 @@ const curatedProjects: MapProject[] = [
 
   // ── Québec ──────────────────────────────────────────────────────────────────────
   {
-    // Idea Book p.120: "Saint-Lin-Laurentides, Québec | StreetBond". The building matches
+    // Product Book p.120: "Saint-Lin-Laurentides, Québec | StreetBond". The building matches
     // the new primary school on Rue Saint-Isidore (401); the address is not mapped, so the
     // pin is approximate.
     id: "saint-lin-school-walkway",
@@ -1593,14 +1593,14 @@ const curatedProjects: MapProject[] = [
     application: "Parks & Paths",
     approximate: true,
     images: [
-      local("saint-lin-school-walkway"), // Idea Book p.120
+      local("saint-lin-school-walkway"), // Product Book p.120
     ],
     ideaBookPage: 120,
     excerpt:
       "An orange and sand StreetBond walkway leading to a new primary school in Saint-Lin–Laurentides.",
   },
   {
-    // Idea Book p.131: "Long lasting parking lanes... Verdun, Québec | TrafficPatternsXD".
+    // Product Book p.131: "Long lasting parking lanes... Verdun, Québec | TrafficPatternsXD".
     // The street is not identified: pin at the borough hall, approximate.
     id: "verdun-parking-lanes",
     title: "Paver-pattern parking lane",
@@ -1612,14 +1612,14 @@ const curatedProjects: MapProject[] = [
     application: "Traffic Calming",
     approximate: true,
     images: [
-      cdn("02ae81c199eb25441a4f4786353255f2c47cb1d5-1184x864.jpg"), // products/traffic-patterns-xd/traffic-patterns-xd-144 (Idea Book p.131)
+      cdn("02ae81c199eb25441a4f4786353255f2c47cb1d5-1184x864.jpg"), // products/traffic-patterns-xd/traffic-patterns-xd-144 (Product Book p.131)
     ],
     ideaBookPage: 131,
     excerpt:
       "A paver-pattern parking lane in TrafficPatternsXD that takes turning tires, delivery trucks and plow blades without shifting like real pavers.",
   },
   {
-    // Idea Book p.116: "Flush medians become part of the road... Verdun, Québec |
+    // Product Book p.116: "Flush medians become part of the road... Verdun, Québec |
     // TrafficPatternsXD". The corner signs in the photo read Rue Gilberte-Dubé and Rue
     // Jacques-Lauzon (Île-des-Sœurs).
     id: "verdun-flush-medians",
@@ -1631,14 +1631,14 @@ const curatedProjects: MapProject[] = [
     product: "TrafficPatternsXD",
     application: "Traffic Calming",
     images: [
-      cdn("6d342d0b6a69e5d5c9b215cd3319a6bdc54170ab-2400x1800.jpg"), // applications/traffic-calming/traffic-calming-07 (Idea Book p.116)
+      cdn("6d342d0b6a69e5d5c9b215cd3319a6bdc54170ab-2400x1800.jpg"), // applications/traffic-calming/traffic-calming-07 (Product Book p.116)
     ],
     ideaBookPage: 116,
     excerpt:
       "Flush medians in TrafficPatternsXD that narrow the road and slow cars on the existing asphalt, with nothing for a plow to catch.",
   },
   {
-    // Idea Book p.127: "School crosswalks should be seen... TrafficPatterns and
+    // Product Book p.127: "School crosswalks should be seen... TrafficPatterns and
     // StreetBond... Montréal, Québec | TrafficPatterns". The school is not identified (a
     // street sign reads Glen, which may put it in Rosemère): approximate.
     id: "montreal-school-crosswalk",
@@ -1652,7 +1652,7 @@ const curatedProjects: MapProject[] = [
     application: "Traffic Calming",
     approximate: true,
     images: [
-      cdn("3e56133bab2d5fc879e93432fa32f61f2060aabf-768x1024.jpg"), // applications/public-spaces (Idea Book p.127)
+      cdn("3e56133bab2d5fc879e93432fa32f61f2060aabf-768x1024.jpg"), // applications/public-spaces (Product Book p.127)
     ],
     ideaBookPage: 127,
     excerpt:
@@ -1682,7 +1682,7 @@ const curatedProjects: MapProject[] = [
       "StreetBond150 applied over the concrete to draw the bold flowing lines at the centre of the promenade's landscape design. The coating bonds permanently to concrete.",
   },
   {
-    // Idea Book p.49, the Sport Courts spread: "Montréal, Québec". The site is not
+    // Product Book p.49, the Sport Courts spread: "Montréal, Québec". The site is not
     // identified: approximate.
     id: "montreal-basketball-court",
     title: "Basketball court",
@@ -1694,14 +1694,14 @@ const curatedProjects: MapProject[] = [
     application: "Sport Courts",
     approximate: true,
     images: [
-      local("montreal-basketball-court"), // Idea Book p.49
+      local("montreal-basketball-court"), // Product Book p.49
     ],
     ideaBookPage: 49,
     excerpt:
       "A basketball court in StreetBond blue and yellow in Montréal.",
   },
   {
-    // Idea Book p.61: "Saint-Antoine-sur-Richelieu, Québec", on the Splash Pads spread
+    // Product Book p.61: "Saint-Antoine-sur-Richelieu, Québec", on the Splash Pads spread
     // (StreetBond, StreetBondSR). The municipality's only jeux d'eau are at the Centre
     // communautaire, 1060 rue du Moulin-Payet.
     id: "saint-antoine-splash-pad",
@@ -1713,14 +1713,14 @@ const curatedProjects: MapProject[] = [
     product: "StreetBond",
     application: "Splash Pads",
     images: [
-      local("saint-antoine-splash-pad"), // Idea Book p.61
+      local("saint-antoine-splash-pad"), // Product Book p.61
     ],
     ideaBookPage: 61,
     excerpt:
       "StreetBond colour on the splash pad at the community centre in Saint-Antoine-sur-Richelieu.",
   },
   {
-    // Idea Book p.102: "Observatory. Lit by starlight... A white StreetBondSR surface
+    // Product Book p.102: "Observatory. Lit by starlight... A white StreetBondSR surface
     // reflects what little light there is. Mont-Mégantic, Québec | StreetBondSR". Pin at
     // the public observatory terrace on the summit.
     id: "mont-megantic-observatory",
@@ -1732,7 +1732,7 @@ const curatedProjects: MapProject[] = [
     product: "StreetBondSR",
     application: "Public Spaces",
     images: [
-      local("mont-megantic-observatory"), // Idea Book p.102
+      local("mont-megantic-observatory"), // Product Book p.102
     ],
     ideaBookPage: 102,
     excerpt:
@@ -1741,7 +1741,7 @@ const curatedProjects: MapProject[] = [
 
   // ── New Brunswick ───────────────────────────────────────────────────────────────
   {
-    // Idea Book p.24, the StreetBond page: "Saint John, New Brunswick | Harbour Passage".
+    // Product Book p.24, the StreetBond page: "Saint John, New Brunswick | Harbour Passage".
     // The poles across the water are the new Fundy Quay extension; the building is the
     // Hilton at Market Square.
     id: "saint-john-harbour-passage",
@@ -1753,7 +1753,7 @@ const curatedProjects: MapProject[] = [
     product: "StreetBond",
     application: "Parks & Paths",
     images: [
-      cdn("a5ab22bbcc6abda065bd71f2f3052193847353d9-1215x911.jpg"), // applications/commercial-spaces (Idea Book p.24)
+      cdn("a5ab22bbcc6abda065bd71f2f3052193847353d9-1215x911.jpg"), // applications/commercial-spaces (Product Book p.24)
     ],
     ideaBookPage: 24,
     excerpt:
@@ -1762,7 +1762,7 @@ const curatedProjects: MapProject[] = [
 
   // ── Prince Edward Island ────────────────────────────────────────────────────────
   {
-    // Idea Book pp.134–135: "Charlottetown, PEI: the cruise ship terminal walkway, stamped
+    // Product Book pp.134–135: "Charlottetown, PEI: the cruise ship terminal walkway, stamped
     // in a herringbone basket-weave and sealed with StreetBond". Pin on the boardwalk
     // between the cruise berth and the marina.
     id: "charlottetown-cruise-terminal",
@@ -1775,7 +1775,7 @@ const curatedProjects: MapProject[] = [
     systems: ["StreetBond"],
     application: "Public Spaces",
     images: [
-      cdn("ad11a0a01590f3d3c37ace7e2c30bc4bc1b66b30-1280x349.jpg"), // applications/public-spaces (Idea Book p.134)
+      cdn("ad11a0a01590f3d3c37ace7e2c30bc4bc1b66b30-1280x349.jpg"), // applications/public-spaces (Product Book p.134)
     ],
     ideaBookPage: 134,
     excerpt:

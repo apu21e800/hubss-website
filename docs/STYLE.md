@@ -1,7 +1,7 @@
 # House style: hubss.com
 
 One page. For everyone who writes a word that reaches the site: the pages, the
-Idea Book transcriptions, Studio, the AI drafter and social prompts
+Product Book transcriptions, Studio, the AI drafter and social prompts
 (`lib/field-note-drafter.ts`, `lib/social-drafter.ts`), and the emails the
 site sends. Written for Doug's round, 25 Sep 2026: an English reader notices
 inconsistency before anything else.
@@ -45,8 +45,8 @@ The test: read it aloud. If a person on the phone would not say it, cut it.
 
 - Canadian English: colour, centre, metre, kilometre, curb, aluminum,
   program, catalogue (the word, when it ever needs writing; the book is the
-  Idea Book), licence (noun) / license (verb).
-- Sentence case for headings, buttons, labels and eyebrows: "Open the Idea
+  Product Book), licence (noun) / license (verb).
+- Sentence case for headings, buttons, labels and eyebrows: "Open the Product
   Book", "Where MMAX goes", "Specification library". Capitals only for proper
   nouns and product names. The CSS may set an eyebrow in small caps; the
   source text is still sentence case.
@@ -65,7 +65,7 @@ The test: read it aloud. If a person on the phone would not say it, cut it.
   the book: Preformed Thermoplastics, Coatings, Stamped Asphalt, Asphalt &
   Concrete Repair.
 - Sections: Insights (the library, filed under Projects, Guides and Articles;
-  each piece is a project, a guide or an article), the Idea Book ("The HUB Idea
+  each piece is a project, a guide or an article), the Product Book ("The HUB Product
   Book · Volume 5" in full), Resources (the specification library),
   Lunch & Learn.
 - Places: city and province, province spelled out in prose: Milton,
@@ -92,7 +92,7 @@ The test: read it aloud. If a person on the phone would not say it, cut it.
 - No em dashes (see Machine tells). En dash, no spaces, for spans: 10–20
   years, 2026–27. Hyphen for compounds: freeze-thaw, heat-activated,
   snowplow-safe.
-- Middle dot to join a label and its qualifier: "Idea Book · Volume 5",
+- Middle dot to join a label and its qualifier: "Product Book · Volume 5",
   "West · 604-309-8212".
 - Dates as the site prints them: Sep 25, 2026.
 - One space after a full stop. Straight quotes in code, curly on the page.
@@ -108,14 +108,14 @@ CPD credit claims).
 ## Structure
 
 - One primary call to action per surface, and the verb says what happens:
-  "Book a Lunch & Learn", "Open the Idea Book", "View all products", "Request
+  "Book a Lunch & Learn", "Open the Product Book", "View all products", "Request
   a copy". Never "Explore", "Discover", "Learn more".
 - An eyebrow only when it adds a fact the heading doesn't (the family above a
   product name). Never the heading again in other words.
 - A descriptor under a name only where the name is opaque and the descriptor
   earns its place. A menu carries names plus, at most, one short line under
   each name, and nothing more: in the Products menu that line is the
-  product's descriptor, taken from the Idea Book or the product's own line.
+  product's descriptor, taken from the Product Book or the product's own line.
 - The approved book copy (lib/product-catalogue.ts, lib/application-catalogue.ts,
   and the Sanity fields synced from them) is Doug's. Propose edits to him;
   don't cut it.

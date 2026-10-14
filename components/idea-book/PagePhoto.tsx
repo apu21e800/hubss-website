@@ -2,7 +2,7 @@ import { catalogue, cataloguePageSrcSet, cataloguePageUrl } from "@/lib/catalogu
 import type { Photo } from "@/lib/idea-book-edition";
 
 /**
- * A photograph from the printed Idea Book, shown by the region of its page
+ * A photograph from the printed Product Book, shown by the region of its page
  * that is the photo (lib/idea-book-edition.ts, `Photo`): the page's own
  * render, the part above its printed caption or beside its printed text.
  *

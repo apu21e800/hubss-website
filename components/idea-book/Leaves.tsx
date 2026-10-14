@@ -7,13 +7,13 @@ import { mapProjects } from "@/lib/map-projects";
 import type { SiteSettings } from "@/lib/site-settings";
 
 /**
- * One leaf of the Idea Book edition (lib/idea-book-edition.ts): a printed
+ * One leaf of the Product Book edition (lib/idea-book-edition.ts): a printed
  * spread, laid out for the screen. The book's own forms are kept: the dark
  * header band on a system page with its orange rule, the orange dot before
  * an eyebrow, the "Place, Province | System" caption, the spec pairs, the
  * SPECIFY strip, the uses strip in tracked capitals, and the page number.
  *
- * Server component: the markup is static. Styles are app/idea-book/edition.css.
+ * Server component: the markup is static. Styles are app/product-book/edition.css.
  */
 
 const PageLink = ({ leaf, children }: { leaf: Leaf; children?: React.ReactNode }) => (
@@ -107,7 +107,7 @@ export function LeafView({ leaf, index, settings, priority }: { leaf: Leaf; inde
           </div>
           <div className="ib-cover-text">
             <p className="ib-eyebrow">Decorative pavement solutions · {ideaBook.volume}</p>
-            <h1 className="ib-h1">The HUB Idea Book</h1>
+            <h1 className="ib-h1">The HUB Product Book</h1>
             <p className="ib-lede">Every system and every application HUB installs across Canada: what it is, where it goes, and the work it has done. Read it here, on any screen, or open any page as printed.</p>
             <div className="ib-cover-actions">
               <a href="#welcome" className="ib-btn">Start reading</a>

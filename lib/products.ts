@@ -66,7 +66,7 @@ function gallery(slug: string, dir: string, count: number, ext: string = "jpg", 
 //
 // RELATIONS (28 Sep 2026, QA pa#31): relatedApplications here and relatedProducts in lib/applications.ts
 // must mirror each other, or "Where X goes" and "Systems for Y" contradict each other. The authority is
-// the Idea Book SPECIFY lists (lib/application-catalogue.ts): every pair the book names is listed on both
+// the Product Book SPECIFY lists (lib/application-catalogue.ts): every pair the book names is listed on both
 // sides. A pair the book does not name stays only where both sides already listed it, or where the
 // product's own spread (`uses` in lib/product-catalogue.ts) names the application. The one exception is
 // the three repair products, which point one way: repair suits any asphalt, and no application page
@@ -409,7 +409,7 @@ export const products: Product[] = [
       { label: "Use case", value: "Smaller potholes, cracks, joints, surface defects" },
     ],
     // ChipFill/AggreFill/Fast Patch DPR — pothole + crack repair across all paved surfaces.
-    // One-way on purpose (pa#31, 28 Sep 2026): no Idea Book spread specifies a repair product, so the
+    // One-way on purpose (pa#31, 28 Sep 2026): no Product Book spread specifies a repair product, so the
     // application pages do not list them back. See RELATIONS at the top of this file.
     relatedApplications: ["parking-lots", "residential-driveways", "parks-paths", "commercial-spaces", "townhomes"],
   },

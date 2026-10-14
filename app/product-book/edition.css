@@ -1,5 +1,5 @@
 /*
- * The Idea Book edition (app/idea-book/page.tsx, components/idea-book/*).
+ * The Product Book edition (app/product-book/page.tsx, components/idea-book/*).
  *
  * The book's own language, measured from the printed pages: white paper,
  * #1f1f1f ink and header bands, the orange rule, mid-grey running text,
@@ -127,7 +127,7 @@
 .ib-caption-row .ib-more { margin-top: 10px; }
 
 /* ── Cover and back ─────────────────────────────────────────────────────── */
-.ib-cover, .ib-back { background: var(--ib-dark); color: var(--ib-dark-text); border-bottom: 0; }
+.ib-cover, .ib-back { background: var(--ib-dark); color: var(--ib-dark-text); border-bottom: 0; row-gap: 24px; }
 .ib-cover > *, .ib-back > * { display: grid; gap: 28px; align-items: center; }
 .ib-cover-art, .ib-back-art { max-width: 640px; width: 100%; margin-inline: auto; }
 .ib-cover .ib-photo, .ib-back .ib-photo { border-radius: 6px; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.08); }

@@ -58,7 +58,7 @@ item marked **Ready** with the highest priority, or, when none is Ready (since
 7 Oct 2026), the top **Idea**, so nobody has to mark one Ready each week; the
 email says how many items are left and which one is next. It then:
 
-1. collects the facts it may use: the Idea Book pages of the item's systems and
+1. collects the facts it may use: the Product Book pages of the item's systems and
    applications, the company lines the site already prints, and the item's
    brief (`lib/field-note-facts.ts`);
 2. has Claude write the post from those facts only, then has Claude check the
@@ -72,7 +72,7 @@ Two a week use the plan up, so after the email the run keeps it stocked
 (`lib/insights-planner.ts`, since 14 Oct 2026): when fewer than six Ideas and
 Ready items are left, Claude proposes new ones and they go in at the bottom as
 Ideas (priority 3), back up to ten. Two kinds, both from checked material
-only: **guides** (a question specifiers search for, answered from the Idea
+only: **guides** (a question specifiers search for, answered from the Product
 Book pages of the systems named; the brief is neutral questions only, filed
 apart from the facts under "Questions to answer (not facts):", so neither the
 writer nor the fact check takes them as support) and **project roundups**
@@ -92,7 +92,7 @@ the future, so a draft that waited a week doesn't go out a week old.
 - **Run it now:** Vercel → hubss-website → Settings → Cron Jobs → Run.
 - **A particular item:** `/api/cron/draft-field-note?idea=<its id>`, with the
   `Authorization: Bearer $CRON_SECRET` header.
-- **Real projects:** the drafter only knows what the Idea Book and the brief
+- **Real projects:** the drafter only knows what the Product Book and the brief
   tell it. To write up an install, put the facts in the brief: where, when,
   which system, what the client needed.
 - **Settings (Vercel, Production):** `CRON_SECRET`, `ANTHROPIC_API_KEY`,

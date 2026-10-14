@@ -30,7 +30,7 @@
  * and two real installations from the homepage map that have no write-up yet
  * (York Region VIVA, Kelowna's crosswalk network). Their briefs say what Doug
  * has to add before marking them Ready; the drafter only knows what the brief
- * and the Idea Book tell it. Skipped: "pavement markings" (260/mo) competes
+ * and the Product Book tell it. Skipped: "pavement markings" (260/mo) competes
  * with the thermoplastic-pavement-markings post; "parking lot painting"
  * (590/mo) with the line-painting item above; "driveway coating" (70/mo,
  * KD 35) is the sealing item under another name.
@@ -151,7 +151,7 @@ const SEEDS: Seed[] = [
     type: "Guide",
     systems: ["mmax", "premark"],
     applications: ["bike-lanes", "regulatory-markings"],
-    brief: "A bike box is the coloured advance stop area for cyclists at a signalized intersection. Explain plainly what it does for a cyclist and a driver, then how the coloured surface is built to last: MMAX for the green area and PreMark for the pre-cut bike symbol, exactly as the Idea Book's bike-lane spread specifies (page 50), with the open-to-traffic time and the colour facts from the book. Audience: municipal engineers and active-transportation planners. No collision statistics, no claims about other cities' programs.",
+    brief: "A bike box is the coloured advance stop area for cyclists at a signalized intersection. Explain plainly what it does for a cyclist and a driver, then how the coloured surface is built to last: MMAX for the green area and PreMark for the pre-cut bike symbol, exactly as the Product Book's bike-lane spread specifies (page 50), with the open-to-traffic time and the colour facts from the book. Audience: municipal engineers and active-transportation planners. No collision statistics, no claims about other cities' programs.",
   },
   {
     key: "traffic-calming-measures",
@@ -162,7 +162,7 @@ const SEEDS: Seed[] = [
     type: "Guide",
     systems: ["streetprint", "streetbond", "traffic-patterns-xd"],
     applications: ["traffic-calming", "crosswalks"],
-    brief: "Cover the usual measures a municipality weighs (speed tables, raised crossings, curb extensions, narrowed lanes, gateway treatments) in plain words, then show where the surface does the work: the Idea Book's traffic-calming spread (page 54): StreetPrint for traffic calming device treatments, StreetBond for sidewalks, pathways and plazas, TrafficPatternsXD for durable road surface treatments. Use 'speed table' naturally as a second phrase. Link the raised-crosswalk post if it exists by then. No speed-reduction percentages.",
+    brief: "Cover the usual measures a municipality weighs (speed tables, raised crossings, curb extensions, narrowed lanes, gateway treatments) in plain words, then show where the surface does the work: the Product Book's traffic-calming spread (page 54): StreetPrint for traffic calming device treatments, StreetBond for sidewalks, pathways and plazas, TrafficPatternsXD for durable road surface treatments. Use 'speed table' naturally as a second phrase. Link the raised-crosswalk post if it exists by then. No speed-reduction percentages.",
   },
   {
     key: "asphalt-driveway-resurfacing",
@@ -184,7 +184,7 @@ const SEEDS: Seed[] = [
     type: "Case Study",
     systems: ["mmax"],
     applications: ["bus-lanes"],
-    brief: "REAL PROJECT. Needs Doug before it is marked Ready: the year, what York Region needed, what was specified and why (MMAX, per the map pin), how the lanes were installed and how they have held up, and a photo of this installation. The drafter writes only what this brief and the Idea Book say; it must not invent the client's requirements or results. Audience: transit agencies and municipal engineers.",
+    brief: "REAL PROJECT. Needs Doug before it is marked Ready: the year, what York Region needed, what was specified and why (MMAX, per the map pin), how the lanes were installed and how they have held up, and a photo of this installation. The drafter writes only what this brief and the Product Book say; it must not invent the client's requirements or results. Audience: transit agencies and municipal engineers.",
   },
   {
     key: "kelowna-crosswalk-network",
@@ -195,7 +195,7 @@ const SEEDS: Seed[] = [
     type: "Case Study",
     systems: ["traffic-patterns-xd"],
     applications: ["crosswalks"],
-    brief: "REAL PROJECT. Needs Doug before it is marked Ready: the years, how many crossings and where, what the City needed, why TrafficPatternsXD was specified (per the map pin), and a photo of the installation. The drafter writes only what this brief and the Idea Book say. Audience: municipal engineers in mid-sized cities.",
+    brief: "REAL PROJECT. Needs Doug before it is marked Ready: the years, how many crossings and where, what the City needed, why TrafficPatternsXD was specified (per the map pin), and a photo of the installation. The drafter writes only what this brief and the Product Book say. Audience: municipal engineers in mid-sized cities.",
   },
 ];
 

@@ -45,7 +45,7 @@ export default async function ResourcesPage() {
       : resourceDocuments,
   );
 
-  // The Idea Book row is gated on the same flag as the /idea-book route it
+  // The Product Book row is gated on the same flag as the /product-book route it
   // links to, so it never dead-links.
   const docs = showCatalogue()
     ? merged
@@ -85,7 +85,7 @@ export default async function ResourcesPage() {
         </p>
       </div>
 
-      {/* The Idea Book, present but not shouting.
+      {/* The Product Book, present but not shouting.
           It was a full-width panel with a 150px cover and its own h2 — louder
           than the Specification Library it sits above, which is what people
           actually come here for. Now it is one quiet row: the book, its name,

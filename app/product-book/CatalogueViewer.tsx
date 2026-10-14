@@ -500,7 +500,7 @@ export default function CatalogueViewer({
     try {
       await navigator.share({
         title: ideaBook.title,
-        text: "Decorative Pavement Solutions, the HUB Surface Systems Idea Book.",
+        text: "Decorative Pavement Solutions, the HUB Surface Systems Product Book.",
         url,
       });
     } catch {
@@ -634,7 +634,7 @@ export default function CatalogueViewer({
             // the bar and the icon stay where they were.
             className="-my-[7px] inline-flex min-h-[44px] min-w-[44px] flex-shrink-0 items-center justify-center gap-2 rounded-full px-2.5 py-2 text-[11px] font-semibold uppercase tracking-[0.16em] transition-colors hover:bg-white/10 max-sm:-mx-[5px]"
             style={{ color: "rgba(255,255,255,0.78)" }}
-            aria-label="Close the Idea Book"
+            aria-label="Close the Product Book"
           >
             <CloseIcon />
             <span className="hidden sm:inline">Close</span>
@@ -810,7 +810,7 @@ export default function CatalogueViewer({
           <div
             role="dialog"
             aria-modal="true"
-            aria-label="Request a printed copy of the Idea Book"
+            aria-label="Request a printed copy of the Product Book"
             className="mx-auto my-8 w-[min(680px,calc(100vw-2rem))] rounded-2xl p-6 sm:p-8"
             style={{ background: "var(--bg-primary)", border: "1px solid var(--border-color)" }}
           >

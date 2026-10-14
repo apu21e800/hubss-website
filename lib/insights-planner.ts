@@ -9,7 +9,7 @@
  * next one.
  *
  * Two kinds, both written only from what HUB has already checked:
- *  - Guides: what a specifier searches for, answered from the Idea Book pages
+ *  - Guides: what a specifier searches for, answered from the Product Book pages
  *    of the systems named (the drafter reads them, lib/field-note-facts.ts).
  *    The brief is questions only, under QUESTIONS_BRIEF, which factsBlock
  *    files apart from the facts: the writer and the fact check are told the
@@ -178,7 +178,7 @@ const ref = (prefix: "product" | "application", slug: string): Ref => ({ _type: 
 const LOADED = /\b(why (does|do|did|is|are|was|were|has|have|can)|only|best|worst|most|least|better|worse|cheaper|cheapest|longer|longest|faster|fastest|stronger|strongest|safer|safest|outlasts?|outlasting|superior|unique|guaranteed?|always|never|proven)\b/i;
 
 /** Names a guide may use: HUB's systems and a few general terms that aren't about any client or place. */
-const NAMES = [...products.map((p) => p.name), "HUB", "Idea Book", "Canada", "Canadian", "AODA", "LEED", "Vision Zero", "Complete Streets"]
+const NAMES = [...products.map((p) => p.name), "HUB", "Product Book", "Canada", "Canadian", "AODA", "LEED", "Vision Zero", "Complete Streets"]
   .sort((a, b) => b.length - a.length);
 
 /** True when every capitalised word after the first is one of NAMES: no place, client or agency. */
@@ -200,7 +200,7 @@ function jobLine(j: PlannerJob): string {
     j.year ? `Installed: ${j.year}.` : "",
     // As written: only an em dash, which the house style never prints, becomes a comma.
     j.excerpt.replace(/\s*—\s*/g, ", "),
-    j.ideaBookPage ? `(Shown in the HUB Idea Book, page ${j.ideaBookPage}.)` : "",
+    j.ideaBookPage ? `(Shown in the HUB Product Book, page ${j.ideaBookPage}.)` : "",
   ].filter(Boolean).join(" ");
 }
 
@@ -251,7 +251,7 @@ export function vetIdeas(
         brief: [
           "Documented HUB jobs to feature, a short section each. These records are everything known about them: use them as written and add nothing about these jobs.",
           ...picked.map(jobLine),
-          "Then tell the reader what to know before specifying the same work for their own site, from the Idea Book pages.",
+          "Then tell the reader what to know before specifying the same work for their own site, from the Product Book pages.",
         ].join("\n"),
       };
       for (const j of picked) used.add(j.id);
@@ -260,7 +260,7 @@ export function vetIdeas(
       const systems = [...new Set(r.systems ?? [])].filter((s) => PRODUCT_CATALOGUE[s]).slice(0, 3);
       const apps = [...new Set(r.applications ?? [])].filter((s) => APPLICATION_CATALOGUE[s]).slice(0, 3);
       const questions = (r.questions ?? []).map(tidy).filter(goodQuestion).slice(0, 6);
-      if (!systems.length) { drop("no HUB system from the Idea Book"); continue; }
+      if (!systems.length) { drop("no HUB system from the Product Book"); continue; }
       if (questions.length < 2) { drop("fewer than two questions that name and assume nothing"); continue; }
       doc = {
         _id, _type: "storyIdea", title, status: "idea", priority: 3, searchPhrase, type: "Guide",
@@ -306,7 +306,7 @@ const PROPOSE: Anthropic.Tool = {
 const SYSTEM = `You plan Insights articles for HUB Surface Systems (hubss.com), a Canadian company that supplies and installs decorative and functional pavement systems. The readers specify, approve and pay for pavement in Canada: municipal engineers, planners, landscape architects, transit agencies, developers and property managers. The articles are found through search and bring them to HUB's spec sheets and Lunch & Learn sessions.
 
 Propose articles of two kinds:
-- guide: a question these readers type into Google, answered from the Idea Book pages of one to three HUB systems (SYSTEMS). Comparisons, choosing between options, how to specify, how long it lasts and how to look after it. Give three to six neutral questions the article answers. A question names no place, client, agency or brand other than HUB's systems, holds no figures, and doesn't assume its answer: "How does an inlaid crosswalk hold up to plows?", never "Why does TrafficPatterns outlast paint?" or "What makes X the only...".
+- guide: a question these readers type into Google, answered from the Product Book pages of one to three HUB systems (SYSTEMS). Comparisons, choosing between options, how to specify, how long it lasts and how to look after it. Give three to six neutral questions the article answers. A question names no place, client, agency or brand other than HUB's systems, holds no figures, and doesn't assume its answer: "How does an inlaid crosswalk hold up to plows?", never "Why does TrafficPatterns outlast paint?" or "What makes X the only...".
 - roundup: three to six documented jobs from JOBS that share one theme a reader would search for (one application, one system, one kind of place or one region). Use only JOBS ids, and each job in one roundup at most.
 
 Rules:
@@ -332,7 +332,7 @@ export async function proposeIdeas(ctx: { existing: readonly Existing[]; jobs: r
     "SYSTEMS (slug: name. what it is. where it goes):",
     ...systems,
     "",
-    "APPLICATIONS (slug: name. the Idea Book's line):",
+    "APPLICATIONS (slug: name. the Product Book's line):",
     ...apps,
     "",
     "JOBS (documented, with no article or roundup yet; id | job | place | system | application | year):",

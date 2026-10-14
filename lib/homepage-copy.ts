@@ -38,7 +38,7 @@ export interface HomepageCopy {
   audiences: AudienceCard[];
   systems: SectionCopy;
   applications: SectionCopy;
-  /** The one-row Idea Book callout: the line and the line under it (the book's name stays lib/catalogue.ts). */
+  /** The one-row Product Book callout: the line and the line under it (the book's name stays lib/catalogue.ts). */
   ideaBook: Pick<SectionCopy, "heading" | "intro">;
   insights: SectionCopy;
   onTheGround: SectionCopy;

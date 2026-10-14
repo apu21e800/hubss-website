@@ -18,7 +18,7 @@ from three sources, in this order, and every draft waits for approval:
 |---|---|---|---|---|
 | Articles | a newly published Insights article | up to 2 a day, the day after Publish | the article | `insights` |
 | From the field | a published Studio **Field post** (`sanity/schemas/fieldPost.ts`): photos of a finished job, where, the system, a line of facts | 1 a day | the system's page | `field` |
-| From the library | one thing HUB has already published and checked (`lib/social-library.ts`): a documented job from the homepage map (the tour's jobs first), or a system or application spread from the Idea Book, taking turns | 1 a week, Mondays (the very first one at once); a new field post takes the week's turn | the job's article, its Idea Book page, or the system or application page | `library` |
+| From the library | one thing HUB has already published and checked (`lib/social-library.ts`): a documented job from the homepage map (the tour's jobs first), or a system or application spread from the Product Book, taking turns | 1 a week, Mondays (the very first one at once); a new field post takes the week's turn | the job's article, its Product Book page, or the system or application page | `library` |
 
 - The posts say only what their source says (lib/social-drafter.ts
   `SocialSource`); field and library posts never say "read the article" unless

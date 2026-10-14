@@ -15,7 +15,7 @@ import { PATTERN_TEMPLATES, patternSrc } from "@/lib/pattern-templates";
  * sheets, one line of copy, one arrow.
  *
  * WHOSE TEMPLATES (QA, 27 Sep 2026): the library at /patterns is StreetPrint's
- * (Idea Book pp. 21–24). The band used to read "16 dimensioned stamping
+ * (Product Book pp. 21–24). The band used to read "16 dimensioned stamping
  * templates" on a coating page and a thermoplastic page, as if they were that
  * product's own. It now says what it links to: StreetPrint's stamping
  * templates. The book says StreetPrint patterns are "coloured and sealed with

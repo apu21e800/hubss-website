@@ -51,7 +51,7 @@ export const PRODUCT_NAMES = [
 export const PROPER_NAMES: readonly string[] = [
   ...PRODUCT_NAMES,
   // HUB, its sections and families
-  "HUB Surface Systems", "HUB", "Idea Book", "Insights", "Lunch & Learn", "Resources",
+  "HUB Surface Systems", "HUB", "Product Book", "Insights", "Lunch & Learn", "Resources",
   "Preformed Thermoplastics", "Stamped Asphalt", "Asphalt & Concrete Repair", "Coatings",
   "Bus & Bike Lanes", "Parks & Paths", "Ennis-Flint", "Integrated Paving Concepts",
   // programs, standards, days
@@ -101,7 +101,7 @@ export type StyleRule =
   | "button"
   | "exclamation"
   | "emoji"
-  | "idea-book"
+  | "product-book"
   | "insights"
   | "title-case";
 
@@ -323,7 +323,7 @@ const CHECKS: Check[] = [
     // A button or link label that says "Discover", "Explore" or "Learn more".
     rule: "button",
     re: /^\s*(?:discover|explore|learn\s+more)\b(?:\s+\S+){0,3}\s*$/iu,
-    hit: `Button words: say what happens, like “Book a Lunch & Learn” or “Open the Idea Book”.`,
+    hit: `Button words: say what happens, like “Book a Lunch & Learn” or “Open the Product Book”.`,
   },
   {
     rule: "exclamation",
@@ -339,9 +339,10 @@ const CHECKS: Check[] = [
   // ── names ─────────────────────────────────────────────────────────────────
   {
     // The printed book, not the word: "a catalogue of four patterns" is fine.
-    rule: "idea-book",
-    re: /\b(?:the|our|this|its|their|your|HUB['’]s|HUB)\s+(?:(?:new|latest|current|full|print|printed|product|annual|20\d\d(?:[\u2013-]\d\d)?)\s+)?catalog(?:ue)?s?\b/giu,
-    hit: `The printed book is the Idea Book: say “the Idea Book”, not “the catalogue”.`,
+    // Its old name too: the Idea Book became the Product Book on 14 Oct 2026.
+    rule: "product-book",
+    re: /\b(?:the|our|this|its|their|your|HUB['’]s|HUB)\s+(?:(?:new|latest|current|full|print|printed|product|annual|20\d\d(?:[\u2013-]\d\d)?)\s+)?catalog(?:ue)?s?\b|\bIdea\s+Book\b/giu,
+    hit: `The printed book is the Product Book: say “the Product Book”, not “the catalogue” or “the Idea Book”.`,
   },
   {
     rule: "insights",
@@ -462,7 +463,7 @@ export function lintHeading(text: string): StyleIssue[] {
   const coreOf = (w: string) => w.replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, "").replace(/['’]s$/u, "");
   raw.forEach((w) => cores.push(coreOf(w)));
 
-  // Listed names of more than one word ("Idea Book", "Lunch & Learn", "King Street" is below).
+  // Listed names of more than one word ("Product Book", "Lunch & Learn", "King Street" is below).
   for (const words of PROPER_MULTI) {
     for (let i = 0; i + words.length <= raw.length; i++) {
       let ok = true;

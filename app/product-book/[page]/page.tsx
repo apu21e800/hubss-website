@@ -1,5 +1,5 @@
 /**
- * /idea-book/12 - a real, shareable, prerendered route per page.
+ * /product-book/12 - a real, shareable, prerendered route per page.
  *
  * All 144 are generated at build time, so a shared link opens on the right page
  * with no client round-trip and no flash of page one. Turning pages inside the
@@ -18,7 +18,7 @@ export const dynamicParams = false;
 
 export function generateStaticParams() {
   if (!catalogueReady) return [];
-  // Page one lives at /idea-book/pages; a duplicate route for it would split
+  // Page one lives at /product-book/pages; a duplicate route for it would split
   // the signal between two URLs for the same content.
   return cataloguePages.slice(1).map((p) => ({ page: String(p.n) }));
 }

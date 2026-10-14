@@ -7,7 +7,7 @@
  * line is the product and its family word ("StreetPrint stamped asphalt");
  * a photo in an application folder is that application ("Decorative
  * crosswalk"). A place follows only when the record names one (PLACES and
- * FILE_PLACES below: the client's own captions in the 2026 Idea Book file
+ * FILE_PLACES below: the client's own captions in the 2026 Product Book file
  * and the Insights posts). Nothing else: no setting, no spec figure, no "by
  * HUB Surface Systems".
  *
@@ -60,7 +60,7 @@ const APPLICATION_SUBJECTS: Record<string, ImageSubject> = {
 
 // ── Product folders ───────────────────────────────────────────────────────────
 // Here the folder IS the product, so naming it is a documented claim. The
-// family word after the name is the Idea Book's own (lib/product-catalogue.ts
+// family word after the name is the Product Book's own (lib/product-catalogue.ts
 // titles: "Stamped asphalt.", "Inlaid thermoplastic.", "Road marking symbols.").
 const PRODUCT_SUBJECTS: Record<string, ImageSubject> = {
   "traffic-patterns-xd": { label: "TrafficPatternsXD preformed thermoplastic", plural: "TrafficPatternsXD installations" },

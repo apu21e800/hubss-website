@@ -20,7 +20,7 @@ function gallery(slug: string, dir: string, count: number, ext: string = "jpg", 
   });
 }
 
-// relatedProducts mirrors relatedApplications in lib/products.ts, with the Idea Book SPECIFY lists
+// relatedProducts mirrors relatedApplications in lib/products.ts, with the Product Book SPECIFY lists
 // (lib/application-catalogue.ts) as the authority: see RELATIONS at the top of lib/products.ts. Where a
 // system came off a page on 28 Sep 2026 (QA pa#31), the "How it works" copy stopped naming it too.
 export const applications: Application[] = [
@@ -110,14 +110,14 @@ export const applications: Application[] = [
     shortDesc: "Neighbourhood identity, cultural art, and civic pride, embedded permanently in the street.",
     imageUrl: "/images/blog/white-rock-langley-trafficpatterns/featured.jpg",
     gallery: gallery("community-branding", "community-branding", 14),
-    // Rewritten plainly, 28 Sep 2026 (QA pa#34): the opener repeated the Idea Book's pull line above it,
+    // Rewritten plainly, 28 Sep 2026 (QA pa#34): the opener repeated the Product Book's pull line above it,
     // and the close was a slogan. DecoMark is heat-fused to the surface (its own page), not embedded.
     description: "Community branding puts a neighbourhood's culture, history and identity into the surface of its streets. DecoMark heat-fuses custom graphics to asphalt and concrete: First Nations cultural artwork made in reconciliation partnerships, BIA wayfinding and business district branding, neighbourhood crests and names, Pride crossings and heritage commemorations. Bowen Island's community art path and the UBC Musqueam cultural crosswalk are examples of HUB's work.",
     // StreetBond out (pa#31): not in the spread's SPECIFY, and StreetBond's page never listed it.
     relatedProducts: ["decomark", "traffic-patterns-xd", "traffic-patterns", "streetprint", "duratherm"],
   },
   // "Private Driveways" (slug private-driveways) came out on 30 Sep 2026 (QA C2,
-  // E18): it and Residential Driveways were the same printed spread (Idea Book
+  // E18): it and Residential Driveways were the same printed spread (Product Book
   // page 76) with the same 44 photos. Residential Driveways below is the one
   // page; next.config.ts redirects the old address to it. The Sanity document
   // for private-driveways is now an orphan and can be deleted in Studio.
@@ -204,7 +204,7 @@ export const applications: Application[] = [
       const ext = [41, 112, 115].includes(n) ? "png" : "jpg";
       return `/images/applications/crosswalks/crosswalks-${String(n).padStart(2,"0")}.${ext}`;
     }),
-    // Rewritten plainly, 28 Sep 2026 (QA pa#34): the opener repeated the Idea Book's pull line above it and
+    // Rewritten plainly, 28 Sep 2026 (QA pa#34): the opener repeated the Product Book's pull line above it and
     // the close had no verb. TrafficPatterns and TrafficPatternsXD are "high-contrast", the spread's own
     // word for them; the product pages dropped their glass-bead claims in Sep. StreetBond came off this
     // page (pa#31), so its mention went too.
@@ -243,7 +243,7 @@ export const applications: Application[] = [
     seoTitle: "LEED & Urban Heat Island · Cool Pavement Coatings",
     seoDescription: "Creating cooler, more sustainable urban spaces: high-SRI StreetBond coatings reduce pavement surface temperature and support LEED Heat Island Reduction credits.",
     // "Earn LEED credits" softened to "can contribute", 28 Sep 2026 (QA pa#12), as the StreetBondSR page and
-    // the Idea Book say it. Only the claim changed: replacing the whole line is proposed to Doug in
+    // the Product Book say it. Only the claim changed: replacing the whole line is proposed to Doug in
     // docs/COPY-FOR-DOUG.md §3 and still waits on him.
     shortDesc: "Solar reflective pavement coatings that reduce the urban heat island effect and can contribute to LEED v5 credits.",
     imageUrl: "/images/applications/leed-urban-heat-island/leed-urban-heat-island-01.jpg",

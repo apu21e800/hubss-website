@@ -6,7 +6,7 @@ counts and chrome. What's left is copy, and the product and application
 copy is yours, so nothing below has been changed. Each line shows what the
 site says now and what we propose. Tick, change or strike; we apply.
 
-The rule behind every proposal: where the Idea Book already has a line for
+The rule behind every proposal: where the Product Book already has a line for
 it, the site uses the book's line. Shorter, already approved, and the same
 words in print and on screen.
 
@@ -17,7 +17,7 @@ words in print and on screen.
 | Eyebrow: Redefining Hardscapes · Since 1999 | HUB Surface Systems · Since 1999 |
 | Heading: The World Is / Your Canvas. | Decorative pavement solutions, coast to coast. |
 | Line: Let's build your signature space. | (none) |
-| Buttons: See the Work · See the Systems | See the systems · Open the Idea Book |
+| Buttons: See the Work · See the Systems | See the systems · Open the Product Book |
 
 Why: the heading is the book's own cover line. Nothing on the page has to
 shout to be read first; the photograph does that.

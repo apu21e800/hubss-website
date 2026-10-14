@@ -10,10 +10,10 @@ declare global {
 
 // The pages where enquiries happen. A click into one of them from elsewhere on
 // the site is reported as cta_click, with the page it came from and the link's
-// words. This replaces the UTM tags the Idea Book links used to carry: UTMs on
+// words. This replaces the UTM tags the Product Book links used to carry: UTMs on
 // internal links overwrite the visitor's real source in GA4 (Google, ChatGPT,
 // the print ad) with our own page names, so a lead lost its origin (Oct 2026).
-const LEAD_PATHS = ["/contact", "/lunch-learn", "/request-idea-book", "/idea-book"];
+const LEAD_PATHS = ["/contact", "/lunch-learn", "/request-product-book", "/product-book"];
 
 function isLeadPath(path: string): boolean {
   return LEAD_PATHS.some((p) => path === p || path.startsWith(`${p}/`));
@@ -46,8 +46,8 @@ export default function AnalyticsEvents() {
         const to = sameSitePath(href);
         const from = window.location.pathname;
         if (!to || !isLeadPath(to) || to === from) return;
-        // Turning pages inside the Idea Book is reading, not a call to action.
-        if (from.startsWith("/idea-book") && to.startsWith("/idea-book")) return;
+        // Turning pages inside the Product Book is reading, not a call to action.
+        if (from.startsWith("/product-book") && to.startsWith("/product-book")) return;
         const text = (anchor.textContent ?? "").replace(/\s+/g, " ").trim().slice(0, 80);
         window.gtag?.("event", "cta_click", { event_category: "engagement", cta_from: from, cta_to: to, cta_text: text });
         track("cta_click", { from, to });

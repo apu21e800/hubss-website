@@ -4,7 +4,7 @@
  *
  * Until 28 Sep 2026 this route was a hand-built page outside the template
  * (QA pa#5): its hero was a plain brick street repeated as the first gallery
- * photo, it ignored the Idea Book spread and Studio, used its own labels and
+ * photo, it ignored the Product Book spread and Studio, used its own labels and
  * button styles, and listed "featured projects" with no photos or links, one
  * of them with no record anywhere in the repo. The old page is in git history
  * (commit 08d4b65 and earlier).

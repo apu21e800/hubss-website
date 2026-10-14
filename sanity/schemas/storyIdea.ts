@@ -82,7 +82,7 @@ export default defineType({
       name: "systems",
       title: "Systems",
       type: "array",
-      description: "The HUB systems the post is about. The drafter reads their Idea Book pages, and the first one's photo becomes the draft's stand-in photo.",
+      description: "The HUB systems the post is about. The drafter reads their Product Book pages, and the first one's photo becomes the draft's stand-in photo.",
       of: [{ type: "reference", to: [{ type: "product" }] }],
     }),
     defineField({

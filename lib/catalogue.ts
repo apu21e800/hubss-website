@@ -1,5 +1,5 @@
 /**
- * The Idea Book's identity: edition, page count, download, page URLs.
+ * The Product Book's identity: edition, page count, download, page URLs.
  * (Known in the code as the catalogue; see `ideaBook` below for the name the
  * site prints.)
  *
@@ -54,9 +54,10 @@ export const catalogueTotal = typeof raw.total === "number" ? raw.total : 0;
 /**
  * What the book is called on the site, in one place.
  *
- * Doug's word (25 Sep 2026) is "Idea Book", and it is what the book itself
- * says: its cover reads "HUB Surface Systems · Decorative Pavement Solutions ·
- * Volume 5" and never "catalogue". Every user-facing surface - the reader, the
+ * Doug's word: "Idea Book" from 25 Sep 2026, "Product Book" since 14 Oct 2026
+ * ("change the name of the Idea Book to Product Book"). Never "catalogue":
+ * the book's cover reads "HUB Surface Systems · Decorative Pavement Solutions
+ * · Volume 5". Every user-facing surface - the reader, the
  * request page, the Resources row, the homepage band, search, metadata - takes
  * its name from here so the word cannot drift again. Code identifiers keep the
  * old name on purpose; renaming files and flags buys nothing a visitor sees.
@@ -67,24 +68,24 @@ export const catalogueTotal = typeof raw.total === "number" ? raw.total : 0;
  * for none anywhere.
  */
 export const ideaBook = {
-  /** Short form, for buttons and links: "Idea Book". */
-  short: "Idea Book",
-  /** Full title, for headings and metadata: "The HUB Idea Book · Volume 5". */
-  title: "The HUB Idea Book · Volume 5",
+  /** Short form, for buttons and links: "Product Book". */
+  short: "Product Book",
+  /** Full title, for headings and metadata: "The HUB Product Book · Volume 5". */
+  title: "The HUB Product Book · Volume 5",
   /** The printed volume, as the cover says it. */
   volume: "Volume 5",
-  /** The book's route: the digital edition (app/idea-book/page.tsx, since 14 Oct 2026). */
-  href: "/idea-book",
-  /** The page-by-page reader of the printed book, open at page one; /idea-book/<n> for any other page. */
-  pagesHref: "/idea-book/pages",
+  /** The book's route: the digital edition (app/product-book/page.tsx, since 14 Oct 2026). */
+  href: "/product-book",
+  /** The page-by-page reader of the printed book, open at page one; /product-book/<n> for any other page. */
+  pagesHref: "/product-book/pages",
   /** The printed-copy form's route. */
-  requestHref: "/request-idea-book",
+  requestHref: "/request-product-book",
   /**
    * The name the PDF saves under. The file on disk keeps its old name (moving
    * 15 MB through the bundle pipeline buys nothing), so the download link
    * renames it on the way out.
    */
-  fileName: `HUB-Idea-Book-${raw.edition ?? "edition"}.pdf`,
+  fileName: `HUB-Product-Book-${raw.edition ?? "edition"}.pdf`,
 } as const;
 
 /** Has anything been rendered? Gates the reader's empty state. */

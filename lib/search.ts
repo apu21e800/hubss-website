@@ -163,7 +163,7 @@ export const thumbSrcSet = (base: string) => THUMB_SIZES.map((w) => `${base}-${w
 export const documentHasThumb = (fileUrl: string) => fileUrl.startsWith("/docs/") && /\.pdf($|\?)/i.test(fileUrl);
 
 /**
- * The two static pages with a picture that is unmistakably theirs: the Idea
+ * The two static pages with a picture that is unmistakably theirs: the Product
  * Book's cover and a stamping template. "All systems", "Contact" and the rest
  * are sections of the site, and the HUB wheel is the honest picture for them.
  */
@@ -209,7 +209,7 @@ const PAGES: Omit<SearchEntry, "boost">[] = [
   { id: "p-products", type: "Page", title: "All systems", subtitle: "Every HUB product, grouped by family", href: "/products", keywords: "products range catalogue systems materials", body: "" },
   // The book, by the name Doug gave it. "catalogue" stays in the keywords so
   // anyone who knew it by the old name still lands on it.
-  { id: "p-idea-book", type: "Page", title: ideaBook.title, subtitle: "Every system and application, read in your browser", href: ideaBook.href, keywords: "idea book catalogue brochure volume 5 book read flipbook printed copy", body: "" },
+  { id: "p-idea-book", type: "Page", title: ideaBook.title, subtitle: "Every system and application, read in your browser", href: ideaBook.href, keywords: "product book idea book catalogue brochure lookbook volume 5 book read flipbook printed copy", body: "" },
   { id: "p-apps", type: "Page", title: "All applications", subtitle: "Where HUB systems are specified", href: "/applications", keywords: "applications uses where sectors", body: "" },
   { id: "p-gallery", type: "Page", title: "Photo archive", subtitle: "Documented installations across Canada", href: "/gallery", keywords: "gallery photos images archive installations portfolio work", body: "" },
   // Insights and its three sections (28 Sep 2026: five types became Projects,
@@ -330,7 +330,7 @@ function buildIndex(): SearchEntry[] {
     // The href was /resources for every document — search found the right
     // sheet, then dropped you on a library of eighty-two to find it again.
     // fileUrl has been on the record all along.
-    // The Idea Book has its own Page entry above; listing its document row
+    // The Product Book has its own Page entry above; listing its document row
     // too would show the same book twice for "idea book".
     if (d.documentType === "catalogue") continue;
     const isPdf = /\.pdf($|\?)/i.test(d.fileUrl);

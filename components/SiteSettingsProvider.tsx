@@ -5,7 +5,7 @@ import { DEFAULT_SITE_SETTINGS, type SiteSettings } from "@/lib/site-settings";
 
 /**
  * Site Settings for client components (the contact form, the Lunch & Learn
- * card, the Idea Book reader, the social icons). app/layout.tsx reads them
+ * card, the Product Book reader, the social icons). app/layout.tsx reads them
  * once per page from Studio (getSiteSettings) and hands them down here, so a
  * phone number changed in Studio changes everywhere at once. Server
  * components call getSiteSettings() themselves.

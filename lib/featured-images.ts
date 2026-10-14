@@ -30,7 +30,7 @@ export const productImages: Record<string, ImageConfig> = {
   // Kept (QA: good). decomark-56 is another shot of this medallion; the same file is also
   // traffic-patterns-22 and -62, so Doug should confirm which system it is.
   'decomark':            { featured: '/images/applications/parks-paths/parks-paths-70.jpg',                      fallback: '/images/products/decomark/decomark-01.jpg',                       alt: 'DecoMark preformed thermoplastic public art: circular Indigenous medallion artwork fused into a concrete plaza at a building entrance' },
-  // The Idea Book photo (duratherm-01, a 1280px crop) at its full 3264px: traffic-calming-03 is the same frame.
+  // The Product Book photo (duratherm-01, a 1280px crop) at its full 3264px: traffic-calming-03 is the same frame.
   'duratherm':           { featured: '/images/applications/traffic-calming/traffic-calming-03.jpg',     fallback: '/images/products/duratherm/duratherm-01.jpg',                     alt: 'DuraTherm crosswalk inlaid flush in the asphalt, its yellow lines forming a random brick pattern, in front of a glass-fronted building' },
   // Was premark-01 (a worksite with cones and a dumpster). Nothing in the PreMark folder reaches
   // 1600px (the largest is 1334), so this is a same-subject photo from parks-paths; the alt does
@@ -38,9 +38,9 @@ export const productImages: Record<string, ImageConfig> = {
   'premark':             { featured: '/images/applications/parks-paths/parks-paths-17.jpg',            fallback: '/images/products/premark/premark-04.jpg',                         alt: 'White bicycle symbol on a shared path beside a blue walking lane marked with a white pedestrian symbol' },
   // Was airmark-01, which is also the Airports hero's photo (airports-08).
   'airmark':             { featured: '/images/products/airmark/airmark-04.jpg',                         fallback: '/images/products/airmark/airmark-01.jpg',                         alt: 'AirMark yellow holding-position lines and a red runway designation marking on an airfield, the control tower and a hangar behind' },
-  // Was parking-lots-04 (a grey lot under a grey building). durashield-11 is the Idea Book photo.
+  // Was parking-lots-04 (a grey lot under a grey building). durashield-11 is the Product Book photo.
   'durashield':          { featured: '/images/products/durashield/durashield-11.jpg',                   fallback: '/images/products/durashield/durashield-01.jpg',                   alt: 'Fresh DuraShield maintenance coating on a residential driveway running from the street to a carport, evergreen shrubs along one side' },
-  // Was streetbond-03 (an empty grey field at 1440). streetbondsr-02 is the Idea Book photo.
+  // Was streetbond-03 (an empty grey field at 1440). streetbondsr-02 is the Product Book photo.
   'streetbondsr':        { featured: '/images/products/streetbondsr/streetbondsr-02.jpg',               fallback: '/images/products/streetbondsr/streetbondsr-01.png',               alt: 'Peach-coloured StreetBondSR solar-reflective coating on a park path branching across a lawn, picnic shelters and a spray park behind' },
   // The repair family keeps its photos: nothing on disk qualifies. ChipFill and AggreFill have
   // nothing over 1400px and their larger shots carry supplier bags; Fast Patch's only other

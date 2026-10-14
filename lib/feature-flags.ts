@@ -23,7 +23,7 @@ function parseFlag(raw: string | undefined): boolean | null {
 }
 
 /**
- * Idea Book surfaces (the /idea-book reader, the Resources row, the homepage
+ * Product Book surfaces (the /product-book reader, the Resources row, the homepage
  * band, the /products link) gated behind a single flag. The flag keeps its
  * old name: it is an env var, and renaming it would silently re-enable
  * nothing and disable everything.

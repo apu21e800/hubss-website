@@ -98,7 +98,7 @@ export const PRODUCT_CATEGORIES: ProductCategory[] = [
  * drawer (Vern, 28 Sep 2026: "the Products mega menu should have a short
  * descriptor under each product; we stripped the last version a bit too
  * much"). A brand name like MMAX tells a specifier nothing on its own; one
- * plain line says what it is. Every line is the printed Idea Book's own words
+ * plain line says what it is. Every line is the printed Product Book's own words
  * (lib/product-catalogue.ts: the spread's title or subhead, or the book's
  * systems index, SYSTEMS_INDEX) or, for the four systems the book does not
  * cover, the product's shortDesc in lib/products.ts, shortened and never

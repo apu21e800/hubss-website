@@ -1,5 +1,5 @@
 /**
- * /idea-book - the Idea Book, Volume 5, as a digital edition (14 Oct 2026).
+ * /product-book - the Product Book, Volume 5, as a digital edition (14 Oct 2026).
  *
  * Vern: "a mobile / virtual desktop version of the idea book that's not just
  * a square PDF ... same content in booklet, better display for mobile and
@@ -7,7 +7,7 @@
  * for the screen it is read on (components/idea-book/Leaves.tsx), with the
  * book's chrome around it (components/idea-book/EditionShell.tsx). Every leaf
  * links to its pages as printed, in the page-by-page reader at
- * /idea-book/pages and /idea-book/<n>.
+ * /product-book/pages and /product-book/<n>.
  *
  * Statically prerendered: every word of the book is in the HTML. The offices
  * on the last leaf come from Studio's Site Settings, like everywhere else.

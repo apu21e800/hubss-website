@@ -4,9 +4,9 @@ import { showCatalogue } from "@/lib/feature-flags";
 import { HOMEPAGE_COPY, type HomepageCopy } from "@/lib/homepage-copy";
 
 /**
- * The Idea Book's one callout on the homepage: a strip, not a section.
+ * The Product Book's one callout on the homepage: a strip, not a section.
  *
- * Doug (25 Sep 2026): no Idea Book promotion in the menus, one call to action
+ * Doug (25 Sep 2026): no Product Book promotion in the menus, one call to action
  * on the homepage, where it makes the most sense. Doug again (26 Sep): "a
  * smart booklet callout, weaved in well, not a big section devoted to it".
  * So the band of 26 Sep (cover, headline, button, four spreads) became this:

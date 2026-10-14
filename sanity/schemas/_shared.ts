@@ -11,7 +11,7 @@ import { describeIssue, lintCopy, lintHeading, type StyleIssue } from "../../lib
 // ── House style warnings ────────────────────────────────────────────────────
 // A yellow warning under any field whose words break the house style: an em
 // dash, a machine tell ("not just X", "seamless", "Fast. Durable. Proven."),
-// "catalogue" for the Idea Book, "Field Notes" for Insights, Title Case in a
+// "catalogue" for the Product Book, "Field Notes" for Insights, Title Case in a
 // heading. Warnings only, never errors: Doug can always publish, and the
 // warning says what to do. The rules live in lib/style-lint.ts, shared with
 // the AI drafters; docs/HOW-TO-PUBLISH.md explains each one to Doug.

@@ -60,6 +60,13 @@ const PLAIN_LINKS = [
 ];
 
 type Panel = "products" | "applications" | "insights";
+
+// Resources: the spec sheets, data sheets and guides. A button in the bar
+// until 14 Oct 2026; since then (Doug: "Remove 'Resources' button on main
+// nav, add to products dropdown") an entry in the Products menu, on a laptop
+// in the panel's foot row and on a phone as a row under the families. The
+// line is the Resources page's own description, shortened.
+const RESOURCES = { href: "/resources", label: "Resources", line: "Spec sheets, data sheets and guides" } as const;
 const PANEL_IDS: Record<Panel, string> = {
   products: "products-mega-menu",
   applications: "applications-mega-menu",
@@ -69,8 +76,9 @@ const PANEL_IDS: Record<Panel, string> = {
 // ── Where the visitor is ──────────────────────────────────────────────
 // The bar and the drawer mark the current section (QA A4, B10, C8, D12,
 // 30 Sep 2026: nothing in the header said which page was open). Products
-// covers the product pages and the pattern gallery; Insights covers /blog.
-type NavKey = Panel | "about" | "contact" | "lunch-learn" | "resources" | "gallery";
+// covers the product pages, the pattern gallery and, since 14 Oct 2026,
+// Resources (Doug: out of the bar, into the Products menu); Insights covers /blog.
+type NavKey = Panel | "about" | "contact" | "lunch-learn" | "gallery";
 const NAV_ROOT: Record<NavKey, string> = {
   products: "/products",
   applications: "/applications",
@@ -78,11 +86,10 @@ const NAV_ROOT: Record<NavKey, string> = {
   about: "/about",
   contact: "/contact",
   "lunch-learn": "/lunch-learn",
-  resources: "/resources",
   gallery: "/gallery",
 };
 function navSection(pathname: string): NavKey | null {
-  if (pathname.startsWith("/patterns")) return "products";
+  if (pathname.startsWith("/patterns") || pathname === RESOURCES.href) return "products";
   for (const key of Object.keys(NAV_ROOT) as NavKey[]) {
     const root = NAV_ROOT[key];
     if (pathname === root || pathname.startsWith(root + "/")) return key;
@@ -479,6 +486,34 @@ function MenuFooter({ href, label, topic, children }: { href: string; label: str
   );
 }
 
+// Resources in the Products panel's foot row: a document mark, the name and
+// its line. The same chrome as the Lunch & Learn slot beside it.
+function ResourcesSlot() {
+  return (
+    <Link prefetch={false}
+      href={RESOURCES.href}
+      className="group ml-auto flex items-center gap-3 rounded-xl py-2.5 pl-3 pr-3.5 transition-colors hover:bg-[var(--ink-05)]"
+      style={{ background: "var(--ink-03)", border: "1px solid var(--ink-08)" }}
+    >
+      <span className="grid h-[38px] w-[38px] flex-shrink-0 place-items-center rounded-lg" style={{ background: "var(--bg-card)", border: "1px solid var(--ink-10)", color: ACCENT }} aria-hidden="true">
+        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" strokeWidth={1.75} strokeLinejoin="round" />
+          <path d="M14 3v5h5M9 13h6M9 17h4" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </span>
+      <span className="min-w-0">
+        <span className="block text-[13px] font-bold leading-tight whitespace-nowrap transition-colors group-hover:text-[var(--accent-text)]" style={{ color: "var(--text-primary)" }}>
+          {RESOURCES.label}
+        </span>
+        <span className="mt-0.5 block text-[12px] leading-snug whitespace-nowrap" style={{ color: "var(--ink-60)" }}>{RESOURCES.line}</span>
+      </span>
+      <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" className="flex-shrink-0 transition-transform group-hover:translate-x-0.5" style={{ color: ACCENT }} aria-hidden="true">
+        <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.25} strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </Link>
+  );
+}
+
 // ── Products panel: four families, each with its products and lines ──
 function ProductsMegaMenu() {
   return (
@@ -490,7 +525,9 @@ function ProductsMegaMenu() {
       </div>
       {/* The topic is the whole range: which family a visitor last hovered
           on the way down to this card says little about what they want. */}
-      <MenuFooter href="/products" label="View all products" topic="HUB systems" />
+      <MenuFooter href="/products" label="View all products" topic="HUB systems">
+        <ResourcesSlot />
+      </MenuFooter>
     </MegaShell>
   );
 }
@@ -854,6 +891,37 @@ function MobileSectionRow({ section: s, pathname, onClose }: { section: NavSecti
   );
 }
 
+// Resources in the drawer's Products section (14 Oct 2026): a row like the
+// families', with a document mark for its picture, its name and its line.
+function MobileResourcesRow({ pathname, onClose }: { pathname: string; onClose: () => void }) {
+  const current = pathname === RESOURCES.href;
+  return (
+    <Link prefetch={false}
+      href={RESOURCES.href}
+      onClick={onClose}
+      aria-current={currentPage(pathname, RESOURCES.href)}
+      className="flex items-center gap-3.5 px-1 py-3 active:opacity-70 transition-opacity"
+      style={{ borderBottom: "1px solid var(--ink-05)" }}
+    >
+      <span className="grid h-12 w-24 flex-shrink-0 place-items-center rounded-lg" style={{ background: `${HATCH}, var(--bg-card)`, border: "1px solid var(--ink-10)", color: ACCENT }} aria-hidden="true">
+        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" strokeWidth={1.75} strokeLinejoin="round" />
+          <path d="M14 3v5h5M9 13h6M9 17h4" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="block text-[15px] font-semibold leading-tight" style={{ color: "var(--text-primary)" }}>
+          <NavLabel active={current}>{RESOURCES.label}</NavLabel>
+        </span>
+        <span className="mt-0.5 block text-[12px] leading-snug" style={{ color: "var(--ink-50)" }}>{RESOURCES.line}</span>
+      </span>
+      <svg className="w-4 h-4 flex-shrink-0" style={{ color: "var(--ink-30)" }} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 18l6-6-6-6" />
+      </svg>
+    </Link>
+  );
+}
+
 // ── Premium full-screen mobile menu ─────────────────────────────────────
 function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onClose: () => void; onSearchOpen: () => void }) {
   const { offices } = useSiteSettings();
@@ -1015,6 +1083,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                     onClose={onClose}
                   />
                 ))}
+                <MobileResourcesRow pathname={pathname} onClose={onClose} />
               </motion.div>
 
               {/* ── Applications ──────────────────────────────────── */}
@@ -1044,7 +1113,6 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
               {/* ── Everything else, as a plain list ──────────────── */}
               <motion.div variants={menuSectionVariants} className="mt-8 pt-2" style={{ borderTop: "1px solid var(--border-color)" }}>
                 {[
-                  { label: "Resources", href: "/resources" },
                   { label: "Gallery", href: "/gallery" },
                   { label: "About", href: "/about" },
                   { label: "Contact", href: "/contact" },
@@ -1516,16 +1584,8 @@ export default function Nav() {
               </svg>
             </button>
 
-            {/* Resources, the ghost button. .btn-ghost (app/globals.css) owns the border,
-                colour, hover and focus ring: the inline border it had beat
-                the hover class, so the button never changed under the
-                pointer (QA A3, C11, 30 Sep 2026). */}
-            <a href="/resources"
-              className="btn-ghost px-3 py-1.5 rounded-lg text-[13px] font-semibold"
-              aria-current={currentPage(pathname, "/resources")}
-            >
-              <NavLabel active={section === "resources"}>Resources</NavLabel>
-            </a>
+            {/* Resources was a ghost button here until 14 Oct 2026; it is in
+                the Products menu now (RESOURCES above). */}
 
             {/* Lunch & Learn, the gradient button; .btn-accent for its hover and ring.
                 On /lunch-learn it is marked like the rest of the bar, with

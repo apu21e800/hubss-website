@@ -1781,6 +1781,54 @@ const curatedProjects: MapProject[] = [
     excerpt:
       "The cruise ship terminal walkway on the Charlottetown waterfront, stamped in a herringbone basket-weave and sealed with StreetBond for pedestrians, rolling luggage and salt air.",
   },
+  {
+    // Documented by the 14 Oct 2026 post and Vern's photos of the finished marking.
+    // Pin at 407 Elgin Street, Brantford (the village's address; OpenStreetMap's
+    // address point); the marking is at the village's railway crossing on that site.
+    id: "brantford-safety-village-look-listen-live",
+    title: "Look Listen Live rail safety marking",
+    city: "Brantford",
+    province: "ON",
+    lat: 43.1519,
+    lng: -80.2275,
+    product: "DecoMark",
+    application: "Pedestrian Safety",
+    images: [
+      cdn("ee15b49c5e06f7fbbf09aa2b131138d16bc64c63-1280x960.jpg"), // Vern, 14 Oct 2026: the marking, the crossing signal and the HUB truck
+      cdn("75fcea67cfed876cf82aa72b2aedeb2d02cd16b7-960x1280.jpg"), // the marking beside the signal case marked "Donated by CN"
+      cdn("4e948b897a39c2bdf14cb447e4a5653fe96f86c4-960x1280.jpg"), // the marking and the crossing, looking toward the village
+    ],
+    post: "look-listen-live-rail-safety-marking-brantford",
+    excerpt:
+      "Operation Lifesaver Canada's Look Listen Live rail safety symbol in DecoMark, set into the sidewalk at the working railway crossing of the Children's Safety Village of Brant.",
+  },
+];
+
+/**
+ * The tour's stops, west to east: the jobs with the strongest photographs,
+ * one or two per region. Filters narrow it; a filtered map with fewer than
+ * three of these tours every project in view that has a photo instead.
+ * The social library stream (lib/social-library.ts) posts these jobs first.
+ * Lives here, not in components/sections/CanadaMap.tsx, so server code can
+ * read it: a client component's exports are references on the server.
+ */
+export const TOUR_IDS: readonly string[] = [
+  "whitehorse-kwanlin-dun",
+  "victoria-high-school",
+  "ubc-musqueam",
+  "vancouver-commercial-drive",
+  "langley-events-centre",
+  "maple-ridge-spray-park",
+  "osoyoos-jack-shaw-gardens",
+  "kelowna-green-square",
+  "kitchener-veterans",
+  "toronto-leslieville-laneway",
+  "halton-hills-toronto-premium-outlets",
+  "vaughan-woodbridge-heritage",
+  "montreal-guido-nincheri",
+  "mont-megantic-observatory",
+  "saint-john-harbour-passage",
+  "charlottetown-cruise-terminal",
 ];
 
 /**

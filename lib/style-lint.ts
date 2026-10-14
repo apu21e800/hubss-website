@@ -57,6 +57,8 @@ export const PROPER_NAMES: readonly string[] = [
   // programs, standards, days
   "Vision Zero", "Complete Streets", "Every Child Matters", "Truth and Reconciliation",
   "Pride", "Canada Day", "Remembrance Day", "Earth Day",
+  // rail safety (the Look Listen Live post, 14 Oct 2026)
+  "Look Listen Live", "Operation Lifesaver", "CN", "Children's Safety Village of Brant",
   // peoples
   "Indigenous", "First Nations", "First Nation", "Métis", "Inuit", "Coast Salish", "Musqueam",
   "Squamish Nation", "Anishinaabe", "Haudenosaunee",
@@ -71,6 +73,7 @@ export const PROPER_NAMES: readonly string[] = [
   // cities (the homepage map's, and the big ones)
   "Toronto", "Vancouver", "Montreal", "Montréal", "Ottawa", "Calgary", "Edmonton", "Winnipeg",
   "Halifax", "Victoria", "Quebec City", "Québec City", "Hamilton", "Kitchener", "Waterloo", "London",
+  "Brantford", "Brant",
   "Windsor", "Mississauga", "Brampton", "Markham", "Vaughan", "Richmond Hill", "Oakville", "Burlington",
   "Milton", "Oshawa", "Whitby", "Ajax", "Pickering", "Barrie", "Guelph", "Kingston", "Collingwood",
   "Georgina", "St. Catharines", "Sudbury", "Thunder Bay", "Surrey", "Burnaby", "Richmond", "Coquitlam",

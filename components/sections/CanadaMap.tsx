@@ -45,7 +45,7 @@ import type { GeoJSONSource } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import Image from "next/image";
 import type { FeatureCollection, Point } from "geojson";
-import { mapProjects, type MapProject } from "@/lib/map-projects";
+import { mapProjects, TOUR_IDS, type MapProject } from "@/lib/map-projects";
 import { mapLoader } from "@/lib/map-photo";
 import ProjectDetail, { provinceName } from "@/components/sections/map/ProjectDetail";
 
@@ -61,30 +61,6 @@ const PANEL_W = 368;
 /** One tour stop: the flight, then time to look. */
 const TOUR_FLIGHT_MS = 2600;
 const TOUR_STOP_MS = 8200;
-
-/**
- * The tour's stops, west to east: the jobs with the strongest photographs,
- * one or two per region. Filters narrow it; a filtered map with fewer than
- * three of these tours every project in view that has a photo instead.
- */
-const TOUR_IDS = [
-  "whitehorse-kwanlin-dun",
-  "victoria-high-school",
-  "ubc-musqueam",
-  "vancouver-commercial-drive",
-  "langley-events-centre",
-  "maple-ridge-spray-park",
-  "osoyoos-jack-shaw-gardens",
-  "kelowna-green-square",
-  "kitchener-veterans",
-  "toronto-leslieville-laneway",
-  "halton-hills-toronto-premium-outlets",
-  "vaughan-woodbridge-heritage",
-  "montreal-guido-nincheri",
-  "mont-megantic-observatory",
-  "saint-john-harbour-passage",
-  "charlottetown-cruise-terminal",
-];
 
 const PROVINCE_ORDER = ["YT", "NT", "NU", "BC", "AB", "SK", "MB", "ON", "QC", "NB", "NS", "PE", "NL"];
 

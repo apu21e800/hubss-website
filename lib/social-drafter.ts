@@ -65,13 +65,55 @@ const TOOL: Anthropic.Tool = {
   },
 };
 
-export async function writeSocialCopy(article: { title: string; excerpt: string; text: string; type: string }, links: Record<keyof SocialCopy, string>): Promise<SocialCopy> {
+/**
+ * What the posts are written from. An Insights article is the original case;
+ * since 14 Oct 2026 also a field post (photos a crew took of a finished job,
+ * Studio → From the field) and a library item (a documented job from the
+ * homepage map, or a system or application spread from the Idea Book). For
+ * those two, SYSTEM's word "article" means this source, and `linkTo` says
+ * what the link opens, so the ask fits the page.
+ */
+export interface SocialSource {
+  kind?: "article" | "field" | "library";
+  title: string;
+  /** For an article, its Insights type; for the others, a short label ("A documented HUB job"). */
+  type: string;
+  excerpt: string;
+  text: string;
+  /** What the link opens, when it isn't the article itself: "the DecoMark page on hubss.com". */
+  linkTo?: string;
+}
+
+/** The framing for sources that aren't new articles: facts stay the source's own, and the ask fits the link. */
+function framing(source: SocialSource): string[] {
+  const link = source.linkTo ?? "a page on hubss.com";
+  if (source.kind === "field") {
+    return [
+      "SOURCE: a FIELD REPORT, a finished HUB installation photographed by HUB's crew. Treat it as \"the article\" in your rules: say only what it says, and add nothing about the client, the date or the scale that it doesn't give.",
+      `The link opens ${link}, not an article: invite them to see the system and book a Lunch & Learn. Never write "read the article".`,
+      "Lead with the job itself: where it is and what went down. The photo carries the post.",
+    ];
+  }
+  if (source.kind === "library") {
+    return [
+      "SOURCE: from HUB's LIBRARY, an earlier documented job or a spread from the HUB Idea Book. Treat it as \"the article\" in your rules: say only what it says.",
+      "It is not news: never call it new, recent, just finished or this week's.",
+      `The link opens ${link}${/article|insights/i.test(link) ? "" : ", not an article: invite them to see it and book a Lunch & Learn, and never write \"read the article\""}.`,
+    ];
+  }
+  return [];
+}
+
+export async function writeSocialCopy(source: SocialSource, links: Record<keyof SocialCopy, string>): Promise<SocialCopy> {
   const client = new Anthropic();
+  const head = source.kind && source.kind !== "article" ? `${source.type.toUpperCase()}: ${source.title}` : `ARTICLE (${source.type}): ${source.title}`;
   const user = [
-    `ARTICLE (${article.type}): ${article.title}`,
-    article.excerpt,
+    ...framing(source),
+    ...(framing(source).length ? [""] : []),
+    head,
+    source.excerpt,
     "",
-    article.text.slice(0, 9000),
+    source.text.slice(0, 9000),
     "",
     "LINKS (use exactly these, one per channel; none for instagram):",
     ...Object.entries(links).filter(([k]) => k !== "instagram").map(([k, v]) => `- ${k}: ${v}`),

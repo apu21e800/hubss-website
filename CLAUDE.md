@@ -269,6 +269,28 @@ marked "[Screened]" with a banner saying why, and the visitor sees "sent".
 /api/ai-chat answers 404: it was an open Claude Opus endpoint on HUB's key
 that nothing on the site used.
 
+## Social: three streams into Buffer (9 and 14 Oct 2026)
+Vern, 14 Oct: "automate as much as the social media as possible ... I don't
+want to write the blogs and do the social media". The daily cron
+(app/api/cron/social-drafts, 14:00 UTC) drafts posts into Buffer from three
+streams; a person approves every one in Buffer (docs/buffer-setup.md):
+- Articles: each newly published Insights post (lib/social-pipeline.ts).
+- From the field: a published Studio Field post (sanity/schemas/fieldPost.ts,
+  Studio → From the field): job photos, place, system, one line of facts.
+  Linked to the system's page. One a day.
+- From the library: once a week (Mondays), a documented map job (TOUR_IDS
+  first, in lib/map-projects.ts) or an Idea Book system or application spread
+  (lib/social-library.ts). Skips a job whose article already had posts.
+- The writer (lib/social-drafter.ts, `SocialSource`) says only what the
+  source says. Claim-first logs (`socialLog-<key>`, keys are the article slug,
+  `field:<id>` or `lib:<kind>:<id>`; `idFor` makes them Sanity-safe), retries
+  for 14 days from the first failure (`socialRetry-<key>`), and failure emails
+  that name the right key (lib/social-outcome.ts). `npm run test:social`.
+- The Buffer login (vernon@hubss.com) is HUB's and HUB-only: the API key
+  reaches every channel on it and the job drafts into all of them.
+- Vercel crons stay at two (the Tuesday drafter, this job): the library runs
+  inside the daily job rather than as a third cron.
+
 ## Edit on the page, and what Doug owns in Studio (7 Oct 2026)
 Vern, 7 Oct: "making sure that the CMS is premium, so clients can make
 changes on the fly to core text and images".

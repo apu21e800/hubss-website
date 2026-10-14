@@ -5,6 +5,7 @@
  *   📄 Website Pages  → singletons per page (no confusing "create new" list)
  *   📦 Products & Applications
  *   ✍️  Blog / Field Notes
+ *   📷  From the field (job photos that become social posts)
  *   📣  Social drafts (read only: what went to Buffer, and its style check)
  *   📍  Projects (Map Pins)
  *   ⚙️  Site Settings (singleton)
@@ -104,6 +105,18 @@ export const structure: StructureResolver = (S) =>
           S.documentTypeList("blogPost")
             .title("Insights")
             .defaultOrdering([{ field: "publishedAt", direction: "desc" }])
+        ),
+
+      // ── From the field ───────────────────────────────────────────────────────
+      // Photos of a finished job with a line of facts (sanity/schemas/fieldPost.ts).
+      // Publishing one has the next daily social run draft posts from it in Buffer.
+      S.listItem()
+        .title("From the field")
+        .icon(ImagesIcon)
+        .child(
+          S.documentTypeList("fieldPost")
+            .title("From the field")
+            .defaultOrdering([{ field: "date", direction: "desc" }])
         ),
 
       // ── Social drafts ────────────────────────────────────────────────────────

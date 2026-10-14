@@ -2,7 +2,8 @@ import { defineArrayMember, defineField, defineType } from "sanity";
 import { ShareIcon } from "@sanity/icons";
 
 /**
- * What the daily social drafter did for one Insights article
+ * What the daily social drafter did for one Insights article, field post or
+ * library item
  * (lib/social-pipeline.ts, run by app/api/cron/social-drafts): the drafts it
  * left in Buffer, the channels it skipped, and the style check on the copy.
  *
@@ -20,7 +21,13 @@ export default defineType({
   readOnly: true,
 
   fields: [
-    defineField({ name: "title", title: "Article", type: "string" }),
+    defineField({ name: "title", title: "Drafted from", type: "string" }),
+    defineField({
+      name: "source",
+      title: "Stream",
+      type: "string",
+      description: "Article (a new Insights article), From the field (a field post) or From the library (a documented job or an Idea Book spread).",
+    }),
     defineField({
       name: "styleCheck",
       title: "Style check",
@@ -28,7 +35,7 @@ export default defineType({
       rows: 6,
       description: "Sentences in the Buffer drafts that still have an em dash or another machine tell after the drafter's own rewrite. Fix them in Buffer before you approve the posts.",
     }),
-    defineField({ name: "slug", title: "Article address", type: "string", description: "The article is at hubss.com/blog/ followed by this." }),
+    defineField({ name: "slug", title: "Key", type: "string", description: "For an article, its address: hubss.com/blog/ followed by this. For a field post, field: and its id; for a library post, lib: and what it was." }),
     defineField({ name: "createdAt", title: "Drafted", type: "datetime" }),
     defineField({
       name: "drafts",
@@ -71,10 +78,11 @@ export default defineType({
   orderings: [{ title: "Newest first", name: "createdDesc", by: [{ field: "createdAt", direction: "desc" }] }],
 
   preview: {
-    select: { title: "title", createdAt: "createdAt", styleCheck: "styleCheck" },
-    prepare: ({ title, createdAt, styleCheck }) => ({
+    select: { title: "title", createdAt: "createdAt", styleCheck: "styleCheck", source: "source" },
+    prepare: ({ title, createdAt, styleCheck, source }) => ({
       title,
       subtitle: [
+        source && source !== "Article" ? source : null,
         createdAt ? new Date(createdAt).toLocaleDateString("en-CA") : null,
         // styleReport (lib/field-note-drafter.ts) starts a clean check with these words.
         typeof styleCheck === "string" ? (/^STYLE CHECK: clean/.test(styleCheck) ? "Style check clean" : "Style check: sentences to fix") : null,

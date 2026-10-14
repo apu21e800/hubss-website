@@ -6,6 +6,7 @@ import project      from "./project";
 import siteSettings from "./siteSettings";
 import storyIdea    from "./storyIdea";
 import socialLog    from "./socialLog";
+import fieldPost    from "./fieldPost";
 
 export const schemaTypes = [
   page,
@@ -16,4 +17,5 @@ export const schemaTypes = [
   siteSettings,
   storyIdea,
   socialLog,
+  fieldPost,
 ];

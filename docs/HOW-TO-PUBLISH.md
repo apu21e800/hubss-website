@@ -105,6 +105,23 @@ posted until someone approves and schedules it in Buffer. The email, and
 **Social drafts** in Studio, list any line in them that still breaks the
 house style (see 8): fix it in Buffer before you approve.
 
+In Buffer: open a channel's **Drafts**, read the post and check the photo,
+then **Add to Queue**. Buffer posts it at the next slot of that channel's
+schedule (Tuesdays and Thursdays, 11 am Eastern). A draft you don't want:
+delete it in Buffer; nothing else needs doing.
+
+Two more kinds of draft arrive the same way (docs/buffer-setup.md):
+
+- **From the field.** When a job is finished, take 3 to 5 photos on your
+  phone. In Studio, **From the field** → **+**: add the photos (best one
+  first, alt text on each), where it is ("Brantford, Ontario"), the system, and
+  one or two sentences of facts. Publish. The next morning the posts are in
+  Buffer, written from those facts and nothing else, linked to the system's
+  page.
+- **From the library.** Every Monday morning, posts about one thing HUB has
+  already published: a job from the homepage map, or a system or application
+  from the Idea Book. Approve them like the others.
+
 ## 7. Product and application pages
 
 These are the Idea Book's approved copy. Studio can edit them, but the printed

@@ -102,7 +102,7 @@ hubss-website/
 Since 28 Sep 2026 the map shows only real, documented jobs (Vern: "no fake
 locations"); since 30 Sep 2026 it shows as many of them as can be placed
 (Vern: "more locations on the map the better"). A pin needs a real job at a
-real place, documented by a published Insights post OR by the Idea Book
+real place, documented by a published Insights post OR by the Product Book
 (Volume 5: its caption names the place and the system), and every photo on it
 is of that job. No stand-in or "Representative" pins; the 26 removed on 28 Sep
 stay removed. Where only the town is known, or the site was matched from the
@@ -116,7 +116,7 @@ To add a job: add the entry in `lib/map-projects.ts` with `post: "<slug>"`
 file>")` (a gallery or post copy, found by matching the photo) or
 `local("<name>")` for a file in /public/images/map (1600px, plus a 640px
 <name>-sm.jpg twin). Map photos never go through /_next/image
-(lib/map-photo.ts). The Idea Book photos, resized, are in
+(lib/map-photo.ts). The Product Book photos, resized, are in
 D:\STUDIO-01\02-HUBSS\Claude outputs\map-photos_2026-09-30.
 
 The map component (components/sections/CanadaMap.tsx, rebuilt 30 Sep 2026)
@@ -142,14 +142,19 @@ npm run start   # run production locally
 ## Deploy
 Vercel — connected to GitHub, auto-deploys on push to main
 
-## Names (Doug's round, 25 Sep 2026)
-- The printed book is the **Idea Book** on the site ("The HUB Idea Book ·
-  Volume 5"), never "catalogue", and no page count is printed anywhere. The
-  book's home is /idea-book (the digital edition, below), the printed reader
-  /idea-book/pages and /idea-book/<n>, the form /request-idea-book; the old
-  /catalogue URLs redirect. One source for the name: `ideaBook` in
-  lib/catalogue.ts. Code identifiers (lib/catalogue.ts, showCatalogue,
-  /public/catalogue) keep the old word on purpose.
+## Names (Doug's rounds, 25 Sep and 14 Oct 2026)
+- The printed book is the **Product Book** on the site ("The HUB Product Book ·
+  Volume 5"): "catalogue" until 25 Sep 2026, the "Idea Book" until 14 Oct
+  (Doug: "change the name of the Idea Book to Product Book"). Never
+  "catalogue" or "Idea Book" now (Studio warns on both, lib/style-lint.ts),
+  and no page count is printed anywhere. The book's home is /product-book
+  (the digital edition, below), the printed reader /product-book/pages and
+  /product-book/<n>, the form /request-product-book; every /catalogue and
+  /idea-book address 308s straight to its new one (next.config.ts). One
+  source for the name: `ideaBook` in lib/catalogue.ts. Code identifiers
+  (`ideaBook`, lib/idea-book-*.ts, components/idea-book, IdeaBookBand,
+  showCatalogue, /public/catalogue, `test:idea-book`) keep the old words on
+  purpose.
 - The blog is **Insights** (was Field Notes). Labels only: /blog URLs, the
   Sanity types (blogPost, storyIdea), the cron routes and env names are
   unchanged. The "Blog" post type prints as "Article" (lib/field-notes-taxonomy.ts,
@@ -157,10 +162,22 @@ Vercel — connected to GitHub, auto-deploys on push to main
 - The repair family is **Asphalt & Concrete Repair** (lib/product-categories.ts,
   lib/product-taxonomy.ts, the three product eyebrows in lib/products.ts).
 
-## The Idea Book edition (14 Oct 2026)
+## Doug's homepage round (14 Oct 2026)
+- The hero's second button opens the Product Book (app/page.tsx,
+  `productBookButton`): the link is the book's own address; the words are
+  Studio's field "Product Book button" (cta2Label), except that the old
+  "See the systems" counts as empty ("Open the Product Book"). cta2Href is
+  hidden in Studio and not read. With the book off it is the systems button.
+- The Product Book card that sat in the hero's corner on 14 Oct was taken
+  out the same day (a revert of 2bd0a4f); the homepage band stays.
+- Resources is no longer a button in the bar: it is in the Products menu
+  (Nav.tsx `RESOURCES`): the panel's foot row on a laptop, a row under the
+  families on a phone; /resources marks Products as the current section.
+
+## The Product Book edition (14 Oct 2026)
 Vern: "a mobile / virtual desktop version of the idea book that's not just a
 square PDF ... same content in booklet, better display for mobile and desktop
-experience. Doug's dream." /idea-book is that edition: one leaf per printed
+experience. Doug's dream." /product-book is that edition: one leaf per printed
 spread, 75 leaves for the 144 pages, laid out for the screen (a phone stacks,
 a laptop puts the photograph beside the page). Reading is scrolling: leaves
 snap into place, a swipe is a page turn, ← and → turn leaves, C opens the
@@ -186,17 +203,17 @@ as printed.
 - components/idea-book/Leaves.tsx lays each kind out, PagePhoto.tsx shows a
   band (`fit` widens a frame around the photo's focus, for a pair at one
   shape), EditionShell.tsx is the chrome (client: bar, progress, contents
-  drawer, keys, the hash following the leaf in view). app/idea-book/edition.css
+  drawer, keys, the hash following the leaf in view). app/product-book/edition.css
   is the book's own language: paper, #1f1f1f ink, the orange rule, Inter,
   fixed whatever the site theme.
 - `npm run test:idea-book` (CI too): every page in exactly one leaf, every
   link resolves, no em dash. The verify pass runs axe and the phone image
-  budget on /idea-book.
+  budget on /product-book.
 - The printed caption on page 57 says London, Ontario; the map's evidence for
   that job is Kitchener. The edition prints the book's caption; Doug to say.
 
 ## Copy source of truth
-The 2027 print catalogue — the Idea Book, Volume 5 — (Figma file
+The 2027 print catalogue — the Product Book, Volume 5 — (Figma file
 GGxfcnIv3MozUSa8R7KtT9, page "Catalogue 2027") is the approved copy. Doug has signed off on the printed
 page; where the site and the book disagree, the book wins. It is transcribed
 into lib/product-catalogue.ts (product spreads) and lib/application-catalogue.ts
@@ -264,7 +281,7 @@ folder or C:\Users\cleve\Downloads (move it here if needed), then:
 DEPLOY TRAP, learned 26 Sep 2026: never read /public with fs at runtime
 (existsSync, readdirSync, path.join(process.cwd(), "public", ...)) from a
 page or component. Vercel's file tracing then packs the whole /public
-folder, 2.84 GB of Idea Book rasters included, into that page's function
+folder, 2.84 GB of Product Book rasters included, into that page's function
 and the deploy fails ("exceeds the maximum uncompressed size limit of
 250mb"). List files by hand or generate a JSON at build time (the
 scripts/gen-*.mjs pattern) and import that.
@@ -286,7 +303,7 @@ known-benign — prove it with `tr -d '─═━'` + `cmp`, then recover a singl
 with `git checkout origin/main -- <path>`.
 
 ## Forms and spam (6 Oct 2026)
-Every form (contact, Lunch & Learn, printed Idea Book) posts to /api/contact
+Every form (contact, Lunch & Learn, printed Product Book) posts to /api/contact
 through lib/post-form.ts. Doug was getting SEO pitches and phishing through
 it. The rule since: a real visitor's message is never refused or dropped;
 anything doubtful goes to FORM_SCREENED_EMAIL instead of info@hubss.com,
@@ -320,7 +337,7 @@ streams; a person approves every one in Buffer (docs/buffer-setup.md):
   Studio → From the field): job photos, place, system, one line of facts.
   Linked to the system's page. One a day.
 - From the library: once a week (Mondays), a documented map job (TOUR_IDS
-  first, in lib/map-projects.ts) or an Idea Book system or application spread
+  first, in lib/map-projects.ts) or an Product Book system or application spread
   (lib/social-library.ts). Skips a job whose article already had posts. A new
   field post takes the week's turn (libraryDue).
 - Cadence (14 Oct 2026, Vern: "a blog or two a week"): two articles a week
@@ -373,7 +390,7 @@ changes on the fly to core text and images".
   sections, Site Settings): Studio's text is Doug's. `--overwrite` pushes the
   code's page text over Studio's on purpose. `npm run photos:sync` needs
   `--only=<slug>` (or `--all`) to write. Products and applications are still
-  code-first: the Idea Book is their source and `sync:products` /
+  code-first: the Product Book is their source and `sync:products` /
   `sync:applications` overwrite as before.
 - Site Settings: lib/site-settings.ts, `getSiteSettings()` on the server,
   `useSiteSettings()` in client components (components/SiteSettingsProvider.tsx,
@@ -457,7 +474,7 @@ changes on the fly to core text and images".
   pictures first: the cover story (photo, section label, title), three section
   tiles (Projects, Guides, Articles, each wearing the photo of its newest tall
   enough post, `sections[].photo` in the JSON), "All Insights" and the foot row
-  (Idea Book, Lunch & Learn). No excerpts, dates, counts or "Latest" list. The
+  (Product Book, Lunch & Learn). No excerpts, dates, counts or "Latest" list. The
   file still carries `latest` and the excerpts for other readers.
 
 ## 2 Oct 2026 release: where the new things live
@@ -476,7 +493,7 @@ changes on the fly to core text and images".
   scripts/gen-search-images.ts, hash-skipped; posts and map pins fetch from
   Sanity at build only); under two characters the palette shows the 14 systems
   as a photo grid. The matched-keyword chip is gone.
-- The print catalogue's photos (the Idea Book's print set, 34 PNGs, kept on
+- The print catalogue's photos (the Product Book's print set, 34 PNGs, kept on
   Vern's PC under _archive/design-assets/catalog-print-build/assets/booklet)
   now feed the Products and Applications menu panels and two product cards;
   the web copies are in public/images/catalogue-assets with their source and

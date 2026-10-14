@@ -48,10 +48,11 @@ appear together; no card ever links to a page that doesn't exist yet.
   any other HUB system named in the text is added after them automatically.
 - **Read time**: leave blank; the site works it out at 225 words a minute.
 
-## AI drafts (every Tuesday)
+## AI drafts (every Tuesday and Thursday)
 
 Studio's **Insights plan** is the list of posts HUB wants written. Every
-Tuesday at 13:00 UTC (9:00 in Toronto) the drafter
+Tuesday and Thursday (Thursdays since 14 Oct 2026, Vern: "a blog or two a
+week") at 13:00 UTC (9:00 in Toronto in summer time) the drafter
 (`app/api/cron/draft-field-note`, scheduled in `vercel.json`) takes the plan
 item marked **Ready** with the highest priority, or, when none is Ready (since
 7 Oct 2026), the top **Idea**, so nobody has to mark one Ready each week; the
@@ -66,6 +67,18 @@ email says how many items are left and asks for more under three. It then:
    photo (the first application's hero, else the first system's: a parking
    lot post gets a parking lot) and the fact check in "Notes for the editor";
 4. marks the plan item Drafted and emails `BLOG_DRAFT_NOTIFY`.
+
+Two a week use the plan up, so after the email the run keeps it stocked
+(`lib/insights-planner.ts`, since 14 Oct 2026): when fewer than six Ideas and
+Ready items are left, Claude proposes new ones and they go in at the bottom as
+Ideas (priority 3), back up to ten. Two kinds, both from checked material
+only: **guides** (a question specifiers search for, answered from the Idea
+Book pages of the systems named; the brief is questions only, so the drafter is
+never handed a claim) and **project roundups** (three to six documented map
+jobs with no article of their own, on one theme; the brief is their records,
+word for word, built in code). Nothing repeats an article or plan item. Edit,
+reorder or set any of them to "Not doing" before its turn; the email names the
+next one. `npm run test:planner`.
 
 It never publishes. A draft's id starts with `drafts.`, which the site can't
 read. Someone opens it in Studio, checks the notes, edits and presses Publish;

@@ -84,9 +84,11 @@ hubss-website/
 - New article: Studio → Insights → create, then Publish. It is live
   about five minutes later (the site rebuilds to add the page); edits to live
   posts show within seconds. docs/BLOG-IN-SANITY.md
-- Article ideas: Studio → Insights plan. The Tuesday AI drafter takes the top
-  Ready item, or the top Idea when none is Ready, and writes it up as an
-  unpublished draft for review (never publishes).
+- Article ideas: Studio → Insights plan. The AI drafter (Tuesdays and
+  Thursdays since 14 Oct 2026) takes the top Ready item, or the top Idea when
+  none is Ready, and writes it up as an unpublished draft for review (never
+  publishes). When the plan gets low it adds Ideas itself
+  (lib/insights-planner.ts).
 - Change any text or photo the site takes from Studio: Studio → Edit on the
   page, click it (see "Edit on the page" below).
 - Swap a hero photo: Studio → Edit on the page → click the photo, pick or
@@ -280,7 +282,14 @@ streams; a person approves every one in Buffer (docs/buffer-setup.md):
   Linked to the system's page. One a day.
 - From the library: once a week (Mondays), a documented map job (TOUR_IDS
   first, in lib/map-projects.ts) or an Idea Book system or application spread
-  (lib/social-library.ts). Skips a job whose article already had posts.
+  (lib/social-library.ts). Skips a job whose article already had posts. A new
+  field post takes the week's turn (libraryDue).
+- Cadence (14 Oct 2026, Vern: "a blog or two a week"): two articles a week
+  (the drafter runs Tuesdays and Thursdays) plus one job post makes three
+  posts a week on each channel; Buffer's slots are Tue, Wed, Thu 11:00 Toronto.
+- The plan never runs dry: lib/insights-planner.ts adds Ideas when fewer than
+  six are left (guides whose brief is questions only; roundups of documented
+  map jobs whose brief is their records, built in code). `npm run test:planner`.
 - The writer (lib/social-drafter.ts, `SocialSource`) says only what the
   source says. Claim-first logs (`socialLog-<key>`, keys are the article slug,
   `field:<id>` or `lib:<kind>:<id>`; `idFor` makes them Sanity-safe), retries
@@ -288,8 +297,9 @@ streams; a person approves every one in Buffer (docs/buffer-setup.md):
   that name the right key (lib/social-outcome.ts). `npm run test:social`.
 - The Buffer login (vernon@hubss.com) is HUB's and HUB-only: the API key
   reaches every channel on it and the job drafts into all of them.
-- Vercel crons stay at two (the Tuesday drafter, this job): the library runs
-  inside the daily job rather than as a third cron.
+- Vercel crons stay at two (the drafter, this job): the library runs inside
+  the daily job rather than as a third cron, and the planner inside the
+  drafter.
 
 ## Edit on the page, and what Doug owns in Studio (7 Oct 2026)
 Vern, 7 Oct: "making sure that the CMS is premium, so clients can make

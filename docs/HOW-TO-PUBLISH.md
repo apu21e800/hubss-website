@@ -69,17 +69,20 @@ text: one plain sentence saying what is in the picture, with the place and the
 system if you know them: "TrafficPatternsXD crosswalk in a brick pattern,
 Oakville, Ontario". It is what screen readers say and what Google reads.
 
-## 4. The plan, and the Tuesday drafts
+## 4. The plan, and the Tuesday and Thursday drafts
 
 **Insights plan** is the list of articles we want written. Each idea has a
 working title, a target search phrase and a brief. You don't have to do
-anything to it each week: the drafter takes the next idea by itself. Set one
-to **Ready** only when you want that one next.
+anything to it each week: the drafter takes the next idea by itself, and when
+the plan gets low it adds new ideas at the bottom by itself (guides answered
+from the Idea Book, and roundups of documented jobs). Set one to **Ready**
+only when you want that one next; set one to **Not doing** if you don't want
+it.
 
-Every Tuesday morning (13:00 UTC, 9 a.m. in Toronto during summer time) the
-drafter takes the Ready idea with the highest priority, or, when none is
-Ready, the next Idea, and writes a draft. You get an email; it also says when
-the plan is running low. The draft is in Insights, unpublished, with a fact
+Every Tuesday and Thursday morning (13:00 UTC, 9 a.m. in Toronto during summer
+time) the drafter takes the Ready idea with the highest priority, or, when
+none is Ready, the next Idea, and writes a draft. You get an email; it says
+which idea is next. The draft is in Insights, unpublished, with a fact
 check and a style check in **Notes for the editor**. Read the notes, check
 every sentence it flagged, edit as you would any draft and press Publish.
 Nothing reaches the site until you do.
@@ -107,7 +110,7 @@ house style (see 8): fix it in Buffer before you approve.
 
 In Buffer: open a channel's **Drafts**, read the post and check the photo,
 then **Add to Queue**. Buffer posts it at the next slot of that channel's
-schedule (Tuesdays and Thursdays, 11 am Eastern). A draft you don't want:
+schedule (Tuesdays, Wednesdays and Thursdays, 11 am Eastern). A draft you don't want:
 delete it in Buffer; nothing else needs doing.
 
 Two more kinds of draft arrive the same way (docs/buffer-setup.md):
@@ -120,7 +123,8 @@ Two more kinds of draft arrive the same way (docs/buffer-setup.md):
   page.
 - **From the library.** Every Monday morning, posts about one thing HUB has
   already published: a job from the homepage map, or a system or application
-  from the Idea Book. Approve them like the others.
+  from the Idea Book. Approve them like the others. A week with a new field
+  post skips it: your own photos go first.
 
 ## 7. Product and application pages
 
@@ -164,7 +168,7 @@ so a warning there is a suggestion: send Vern the change (see 7). If a warning
 is simply wrong (a name it doesn't know, read as Title Case), publish anyway
 and tell Vern; he can teach it the name.
 
-The Tuesday drafts and the social drafts go through the same check before you
+The article drafts and the social drafts go through the same check before you
 see them: the drafter rewrites any sentence that breaks these rules and lists
 whatever it couldn't fix in its notes.
 

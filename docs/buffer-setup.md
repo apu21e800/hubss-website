@@ -18,7 +18,7 @@ from three sources, in this order, and every draft waits for approval:
 |---|---|---|---|---|
 | Articles | a newly published Insights article | up to 2 a day, the day after Publish | the article | `insights` |
 | From the field | a published Studio **Field post** (`sanity/schemas/fieldPost.ts`): photos of a finished job, where, the system, a line of facts | 1 a day | the system's page | `field` |
-| From the library | one thing HUB has already published and checked (`lib/social-library.ts`): a documented job from the homepage map (the tour's jobs first), or a system or application spread from the Idea Book, taking turns | 1 a week, Mondays (the very first one at once) | the job's article, its Idea Book page, or the system or application page | `library` |
+| From the library | one thing HUB has already published and checked (`lib/social-library.ts`): a documented job from the homepage map (the tour's jobs first), or a system or application spread from the Idea Book, taking turns | 1 a week, Mondays (the very first one at once); a new field post takes the week's turn | the job's article, its Idea Book page, or the system or application page | `library` |
 
 - The posts say only what their source says (lib/social-drafter.ts
   `SocialSource`); field and library posts never say "read the article" unless
@@ -26,6 +26,9 @@ from three sources, in this order, and every draft waits for approval:
 - A map job whose article already had its own social posts is skipped by the
   library, so nothing goes out twice. About 100 library items: two years at
   one a week.
+- Three posts a week on each channel (14 Oct 2026): the two articles (the
+  drafter writes on Tuesdays and Thursdays) and one job post, Doug's field
+  post when there is a new one, else the library's.
 - A draft nobody wants: delete it in Buffer. Its log stays, so it isn't
   drafted again.
 - Field posts aren't on the website yet; their photos live in Studio and the
@@ -35,8 +38,9 @@ from three sources, in this order, and every draft waits for approval:
 
 ## Buffer's posting schedule
 
-Each channel's schedule (Buffer → the channel → ⚙️) is Tuesdays and Thursdays
-at 11:00 AM, timezone Toronto (Vern, 14 Oct 2026). "Add to Queue" puts an
+Each channel's schedule (Buffer → the channel → ⚙️) is Tuesdays, Wednesdays
+and Thursdays at 11:00 AM, timezone Toronto (Tuesdays and Thursdays set by
+Vern on 14 Oct 2026; Wednesday added for three posts a week). "Add to Queue" puts an
 approved draft in the next free slot; a channel with no times can't queue.
 
 Every link carries UTM tags (`utm_source` = network, `utm_medium=social`,

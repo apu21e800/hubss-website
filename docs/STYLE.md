@@ -133,7 +133,7 @@ The rules above that a machine can see are code, in one place:
   captions; the brief of an Insights plan item (the drafter copies its
   wording). A warning never blocks Publish. docs/HOW-TO-PUBLISH.md (section 8)
   tells Doug what each one means.
-- **The AI drafters** (the Tuesday Insights draft and the social posts) lint
+- **The AI drafters** (the Insights drafts, Tuesdays and Thursdays, and the social posts) lint
   what Claude wrote, make one call asking it to rewrite only the flagged
   sentences with every fact kept, and lint again. A rewrite that loses a
   number, a link or a product name is thrown away. What still fails is listed

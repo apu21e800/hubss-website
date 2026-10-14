@@ -16,7 +16,9 @@
  *  3. From the library (since 14 Oct 2026): once a week, a documented job
  *     from the homepage map or a system or application spread from the Idea
  *     Book (lib/social-library.ts), so the queue doesn't run dry between
- *     articles.
+ *     articles. Since 14 Oct a new field post takes the week's turn, so
+ *     Doug's photos go first; with two articles a week that is three posts a
+ *     week on each channel.
  *
  * Every link carries UTM tags (utm_source = the network, utm_medium=social,
  * utm_campaign = insights, field or library, utm_content = what it was), so
@@ -207,7 +209,7 @@ async function libraryItem(lib: LibraryItem): Promise<SocialItem> {
 export async function draftSocialForNewPosts(now = new Date()): Promise<{ posts: SocialResult[]; waiting: number }> {
   const started = Date.now();
   const client = sanityWriteClient().withConfig({ timeout: SANITY_TIMEOUT_MS });
-  const [loggedSlugs, retries, fieldDocs, lastLibraryAt] = await Promise.all([
+  const [loggedSlugs, retries, fieldDocs, lastJobPostAt] = await Promise.all([
     client.fetch<string[]>(`*[_type == "socialLog"].slug`),
     client.fetch<{ slug: string; firstFailedAt: string }[]>(`*[_type == "socialRetry"]{ slug, firstFailedAt }`),
     client.fetch<FieldDoc[]>(
@@ -220,7 +222,10 @@ export async function draftSocialForNewPosts(now = new Date()): Promise<{ posts:
         "hotspot": photos[0].hotspot{ x, y }
       }`
     ),
-    client.fetch<string | null>(`*[_type == "socialLog" && string::startsWith(slug, "lib:")] | order(createdAt desc)[0].createdAt`),
+    // The newest job post (library or field) that reached Buffer: one a week (libraryDue).
+    client.fetch<string | null>(
+      `*[_type == "socialLog" && (string::startsWith(slug, "lib:") || string::startsWith(slug, "field:")) && count(drafts) > 0] | order(createdAt desc)[0].createdAt`
+    ),
   ]);
   const logged = new Set<string>(loggedSlugs);
   // When each item that keeps failing first failed.
@@ -246,7 +251,10 @@ export async function draftSocialForNewPosts(now = new Date()): Promise<{ posts:
   );
   // An article drafted today counts as posted: the library mustn't pick its job too.
   const posted = new Set([...logged, ...articles.map((p) => p.slug)]);
-  const library = libraryDue(now, lastLibraryAt ?? undefined) ? nextLibraryItem(libraryQueue(), posted) : undefined;
+  // A field post not tried before takes the week's turn; one that keeps
+  // failing doesn't, so it can't hold the library up for its 14 days of retries.
+  const fieldPostToday = fields.some((f) => !failing.has(f.key));
+  const library = libraryDue(now, lastJobPostAt ?? undefined, fieldPostToday) ? nextLibraryItem(libraryQueue(), posted) : undefined;
   if (!articles.length && !fields.length && !library) return { posts: [], waiting: 0 };
 
   const channels = await bufferChannels();

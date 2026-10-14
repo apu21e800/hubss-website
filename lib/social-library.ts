@@ -3,7 +3,10 @@
  * as possible ... I don't want to write the blogs and do the social media").
  * Once a week the daily social job (lib/social-pipeline.ts) drafts posts from
  * one thing HUB has already published and checked, so the Buffer queue never
- * runs dry between new articles:
+ * runs dry between new articles. With the two articles a week that makes three
+ * posts a week on each channel, Tuesday, Wednesday and Thursday (the agency's
+ * call, 14 Oct 2026; Vern: "a blog or two a week", "Get me on track. I trust
+ * you."). A new field post takes the library's turn (libraryDue):
  *
  *  - a documented job from the homepage map (lib/map-projects.ts): real place,
  *    real system, photos of that job, linked to its write-up, its Idea Book
@@ -50,7 +53,7 @@ export interface LibraryItem {
   hero?: { type: "product" | "application"; slug: string };
 }
 
-const PROVINCES: Record<string, string> = {
+export const PROVINCES: Record<string, string> = {
   BC: "British Columbia", AB: "Alberta", SK: "Saskatchewan", MB: "Manitoba", ON: "Ontario",
   QC: "Quebec", NB: "New Brunswick", NS: "Nova Scotia", PE: "Prince Edward Island",
   NL: "Newfoundland and Labrador", YT: "Yukon", NT: "Northwest Territories", NU: "Nunavut",
@@ -205,15 +208,19 @@ export function weekStart(now: Date): Date {
 }
 
 /**
- * Whether today's run should draft a library post: when none has been drafted
- * yet this week (weeks start Monday 00:00 UTC), so it lands with the Monday
- * run and a missed Monday catches up later that week without moving the next
- * one off Monday. At once when there has never been one, so the stream can be
- * seen working the day it ships.
+ * Whether today's run should draft a library post: when this week (from
+ * Monday 00:00 UTC) has had no job post yet (`lastJobPostAt`: the newest
+ * library or field post that reached Buffer) and no new field post is about
+ * to take the week's turn (`fieldPostToday`). So the library lands with the
+ * Monday run, a missed Monday catches up later that week without moving the
+ * next one off Monday, and Doug's photos go ahead of the library. At once when
+ * there has never been one, so the stream can be seen working the day it
+ * ships.
  */
-export function libraryDue(now: Date, lastAt: string | undefined): boolean {
-  if (!lastAt) return true;
-  const t = Date.parse(lastAt);
+export function libraryDue(now: Date, lastJobPostAt: string | undefined, fieldPostToday = false): boolean {
+  if (fieldPostToday) return false;
+  if (!lastJobPostAt) return true;
+  const t = Date.parse(lastJobPostAt);
   if (Number.isNaN(t)) return true;
   return t < weekStart(now).getTime();
 }

@@ -2,8 +2,13 @@
  * The Field Notes pipeline: plan item → AI draft → style pass → fact check →
  * unpublished draft in Studio → an email to the editors.
  *
- * Run by app/api/cron/draft-field-note every Tuesday morning (vercel.json),
+ * Run by app/api/cron/draft-field-note every Tuesday and Thursday morning
+ * (vercel.json; Thursdays since 14 Oct 2026, Vern: "a blog or two a week"),
  * and on demand from Vercel → Settings → Cron Jobs → Run.
+ *
+ * Two a week use the plan up, so the run keeps it stocked
+ * (lib/insights-planner.ts): when fewer than PLAN_MIN items are left it adds
+ * new Ideas at the bottom, after the email has gone, if there's time left.
  *
  * What it will never do: publish. It writes a document whose id starts with
  * "drafts.", which Sanity keeps out of the published dataset, so the site
@@ -24,6 +29,7 @@ import { writeDraft, checkDraft, polishDraft, styleReport, type Draft, type Fact
 import { getAllPosts } from "@/lib/blog";
 import { inferCategory } from "@/lib/blog-taxonomy";
 import { FIELD_NOTE_TYPES } from "@/lib/field-notes-taxonomy";
+import { topUpPlan } from "@/lib/insights-planner";
 
 export interface Linked { _id: string; name: string; slug: string; hero?: { asset?: string | null; alt?: string | null } | null }
 export interface Idea {
@@ -43,6 +49,18 @@ export type PipelineResult =
 
 /** Below this many items left (Ideas and Ready), the email asks for more. */
 const PLAN_LOW = 3;
+/** The plan is topped up only when this little of the route's 300 s has gone (the planner gives up after 80 s). */
+const TOP_UP_BEFORE_MS = 200_000;
+
+/** Adds Ideas when the plan is low; a failure is logged, never thrown, so it can't cost a draft or its email. */
+async function keepPlanStocked(client: ReturnType<typeof sanityWriteClient>): Promise<string[]> {
+  try {
+    return (await topUpPlan(client, await getAllPosts()))?.added ?? [];
+  } catch (err) {
+    console.error(`[planner] couldn't top up the plan: ${err instanceof Error ? err.message : String(err)}`);
+    return [];
+  }
+}
 
 const LINKED = `{ _id, name, "slug": slug.current, "hero": heroImage{ "asset": asset._ref, alt } }`;
 const IDEA = `{ _id, title, status, searchPhrase, type, brief, "systems": systems[]->${LINKED}, "applications": applications[]->${LINKED} }`;
@@ -52,16 +70,21 @@ function cleanSlug(s: string): string {
 }
 
 export async function draftNextFieldNote(opts: { ideaId?: string } = {}): Promise<PipelineResult> {
+  const started = Date.now();
   const client = sanityWriteClient();
 
   // A plan item is edited live (no draft/publish), so its _id has no "drafts." prefix.
   // Ready items first, then Ideas; within each, priority then age.
-  const idea = await client.fetch<Idea | null>(
-    opts.ideaId
-      ? `*[_type == "storyIdea" && _id == $id][0]${IDEA}`
-      : `*[_type == "storyIdea" && status in ["ready", "idea"] && !(_id in path("drafts.**"))] | order(select(status == "ready" => 0, 1) asc, coalesce(priority, 2) asc, _createdAt asc)[0]${IDEA}`,
-    { id: opts.ideaId ?? "" }
-  );
+  const pick = () =>
+    client.fetch<Idea | null>(
+      opts.ideaId
+        ? `*[_type == "storyIdea" && _id == $id][0]${IDEA}`
+        : `*[_type == "storyIdea" && status in ["ready", "idea"] && !(_id in path("drafts.**"))] | order(select(status == "ready" => 0, 1) asc, coalesce(priority, 2) asc, _createdAt asc)[0]${IDEA}`,
+      { id: opts.ideaId ?? "" }
+    );
+  let idea = await pick();
+  // An empty plan (the top-ups failed for a while): fill it, then draft from it.
+  if (!idea && !opts.ideaId && (await keepPlanStocked(client)).length) idea = await pick();
   if (!idea) return { drafted: false, reason: opts.ideaId ? `no plan item ${opts.ideaId}` : "the Insights plan has no Ready items or Ideas left" };
   const picked = opts.ideaId ? "asked for" : idea.status === "ready" ? "ready" : "next idea";
 
@@ -85,8 +108,14 @@ export async function draftNextFieldNote(opts: { ideaId?: string } = {}): Promis
   await client.patch(idea._id).set({ status: "drafted", draftSlug: slug, draftedAt: new Date().toISOString() }).commit();
   console.log(`[field-notes] drafted "${doc.title}" as ${doc._id} from ${idea._id}; fact check: ${check.verdict} (${check.unsupported.length}); style: ${style.left.length} of ${style.flagged} left${style.error ? ` (rewrite failed: ${style.error})` : ""}`);
 
-  const ideasLeft = await client.fetch<number>(`count(*[_type == "storyIdea" && status in ["ready", "idea"] && !(_id in path("drafts.**"))])`);
-  const notified = await notify(doc.title, doc.excerpt, `blogpost-${slug}`, check, style, { picked, ideaTitle: idea.title, ideasLeft });
+  const { ideasLeft, next } = await client.fetch<{ ideasLeft: number; next: string | null }>(`{
+    "ideasLeft": count(*[_type == "storyIdea" && status in ["ready", "idea"] && !(_id in path("drafts.**"))]),
+    "next": *[_type == "storyIdea" && status in ["ready", "idea"] && !(_id in path("drafts.**"))] | order(select(status == "ready" => 0, 1) asc, coalesce(priority, 2) asc, _createdAt asc)[0].title
+  }`);
+  const notified = await notify(doc.title, doc.excerpt, `blogpost-${slug}`, check, style, { picked, ideaTitle: idea.title, ideasLeft, next });
+  // After the email, so a slow planner can't cost it.
+  if (Date.now() - started < TOP_UP_BEFORE_MS) await keepPlanStocked(client);
+  else console.log("[planner] no time left this run; the next run tops the plan up");
   return { drafted: true, idea: idea._id, picked, slug, title: doc.title, factCheck: check.verdict, toCheck: check.unsupported.length, style: { flagged: style.flagged, left: style.left.length }, ideasLeft, notified };
 }
 
@@ -97,7 +126,7 @@ async function notify(
   docId: string,
   check: FactCheck,
   style: StylePass,
-  plan: { picked: "ready" | "next idea" | "asked for"; ideaTitle: string; ideasLeft: number }
+  plan: { picked: "ready" | "next idea" | "asked for"; ideaTitle: string; ideasLeft: number; next?: string | null }
 ): Promise<string[]> {
   const to = (process.env.BLOG_DRAFT_NOTIFY ?? "").split(",").map((s) => s.trim()).filter(Boolean);
   if (!to.length || !process.env.RESEND_API_KEY) {
@@ -115,8 +144,9 @@ async function notify(
       ? `From the plan: "${plan.ideaTitle}" (the next Idea; nothing was marked Ready).`
       : `From the plan: "${plan.ideaTitle}".`,
     plan.ideasLeft < PLAN_LOW
-      ? `The plan is running low: ${plan.ideasLeft} item${plan.ideasLeft === 1 ? "" : "s"} left. Add a few in Studio → Insights plan.`
+      ? `The plan is running low: ${plan.ideasLeft} item${plan.ideasLeft === 1 ? "" : "s"} left. New ideas are added by themselves when it gets low; you can add your own in Studio → Insights plan.`
       : `${plan.ideasLeft} items left in the plan.`,
+    ...(plan.next ? [`Next up: "${plan.next}". To change it, reorder or edit the plan in Studio.`] : []),
     "",
     check.unsupported.length
       ? `Fact check: ${check.unsupported.length} statement(s) to check before publishing. They're listed in the draft's "Notes for the editor".`

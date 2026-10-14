@@ -1,5 +1,5 @@
 /**
- * GET /api/cron/draft-field-note — the Tuesday Field Notes drafter.
+ * GET /api/cron/draft-field-note: the Insights drafter, Tuesdays and Thursdays.
  *
  * Vercel Cron calls it (vercel.json) with `Authorization: Bearer $CRON_SECRET`.
  * To run it now: Vercel → hubss-website → Settings → Cron Jobs → Run. To draft
@@ -19,7 +19,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { draftNextFieldNote } from "@/lib/field-note-pipeline";
 
-// Three Claude calls: writing (about a minute), a short style rewrite, and checking.
+// Three Claude calls: writing (about a minute), a short style rewrite, and
+// checking; then, when the plan is low and there's time, the planner's
+// (lib/insights-planner.ts, which gives up after 80 s).
 export const maxDuration = 300;
 export const dynamic = "force-dynamic";
 

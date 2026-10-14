@@ -85,7 +85,9 @@ export const structure: StructureResolver = (S) =>
       S.divider(),
 
       // ── Insights plan ────────────────────────────────────────────────────────
-      // What to write next. The Tuesday drafter takes the top "Ready" item.
+      // What to write next. The drafter (Tuesdays and Thursdays) takes the top
+      // "Ready" item, else the top Idea, and tops the plan up when it's low
+      // (lib/insights-planner.ts).
       // ("Field Notes" until 25 Sep 2026; the document types keep their names.)
       S.listItem()
         .title("Insights plan")

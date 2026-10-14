@@ -6,8 +6,9 @@ import { copyStyle } from "./_shared";
 /**
  * The Field Notes plan: the list of posts HUB wants written.
  *
- * Every Tuesday morning (vercel.json) the AI drafter takes the item marked
- * "Ready" with the highest priority, writes a first draft, and saves it in
+ * Every Tuesday and Thursday morning (vercel.json) the AI drafter takes the
+ * item marked "Ready" with the highest priority (else the top Idea), writes a
+ * first draft, and saves it in
  * Blog / Field Notes as an UNPUBLISHED draft (app/api/cron/draft-field-note).
  * Nothing it writes reaches hubss.com until Vern or Doug reviews it and presses
  * Publish. Facts come only from the HUB catalogue and from the brief below.
@@ -44,7 +45,7 @@ export default defineType({
         ],
         layout: "radio",
       },
-      description: "Set it to Ready and the drafter picks it up on Tuesday morning. It sets Drafted itself.",
+      description: "Set it to Ready and the drafter picks it up next (Tuesday and Thursday mornings). It sets Drafted itself. New Ideas are added at the bottom by themselves when the plan gets low; set one to Not doing to skip it.",
       validation: (r) => r.required(),
     }),
     defineField({

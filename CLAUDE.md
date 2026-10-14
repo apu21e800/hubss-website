@@ -288,8 +288,10 @@ streams; a person approves every one in Buffer (docs/buffer-setup.md):
   (the drafter runs Tuesdays and Thursdays) plus one job post makes three
   posts a week on each channel; Buffer's slots are Tue, Wed, Thu 11:00 Toronto.
 - The plan never runs dry: lib/insights-planner.ts adds Ideas when fewer than
-  six are left (guides whose brief is questions only; roundups of documented
-  map jobs whose brief is their records, built in code). `npm run test:planner`.
+  six are left: guides whose brief is neutral questions under QUESTIONS_BRIEF,
+  which factsBlock (lib/field-note-facts.ts) files apart from the facts, and
+  roundups of documented map jobs (each job in one roundup only) whose brief is
+  their records, built in code. `npm run test:planner`.
 - The writer (lib/social-drafter.ts, `SocialSource`) says only what the
   source says. Claim-first logs (`socialLog-<key>`, keys are the article slug,
   `field:<id>` or `lib:<kind>:<id>`; `idFor` makes them Sanity-safe), retries

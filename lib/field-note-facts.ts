@@ -79,6 +79,14 @@ export function relatedPostLines(posts: PostMeta[], systemNames: string[], limit
     .map(({ p }) => `- "${p.title}" ${SITE}/blog/${p.slug}: ${p.excerpt}`);
 }
 
+/**
+ * The first line of a guide's brief written by the planner (lib/insights-planner.ts):
+ * what follows are questions to answer, never facts, so factsBlock files them
+ * apart from the editor's brief and both the writer and the fact check are
+ * told they support nothing.
+ */
+export const QUESTIONS_BRIEF = "Questions to answer (not facts):";
+
 /** The whole FACTS block for one plan item. */
 export function factsBlock(opts: { productSlugs: string[]; applicationSlugs: string[]; brief?: string | null }): string {
   const sections = [
@@ -89,6 +97,14 @@ export function factsBlock(opts: { productSlugs: string[]; applicationSlugs: str
   if (prods.length) sections.push("## Systems (from the approved 2026-27 Idea Book and the website)", prods.join("\n\n"));
   const apps = opts.applicationSlugs.map(applicationFacts).filter(Boolean) as string[];
   if (apps.length) sections.push("## Applications (from the approved Idea Book and the website)", apps.join("\n\n"));
-  if (opts.brief?.trim()) sections.push("## From HUB's editor (the brief; treat as true)", opts.brief.trim());
+  const brief = opts.brief?.trim();
+  if (brief?.startsWith(QUESTIONS_BRIEF)) {
+    sections.push(
+      "## Questions the article should answer (from the planner: these are NOT facts and support no statement; answer them only from the sections above)",
+      brief.slice(QUESTIONS_BRIEF.length).trim()
+    );
+  } else if (brief) {
+    sections.push("## From HUB's editor (the brief; treat as true)", brief);
+  }
   return sections.join("\n\n");
 }

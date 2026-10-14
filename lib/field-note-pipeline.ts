@@ -8,7 +8,8 @@
  *
  * Two a week use the plan up, so the run keeps it stocked
  * (lib/insights-planner.ts): when fewer than PLAN_MIN items are left it adds
- * new Ideas at the bottom, after the email has gone, if there's time left.
+ * new Ideas at the bottom, after the email has gone, if there's time left. A
+ * run that finds the plan empty only fills it; the next run drafts.
  *
  * What it will never do: publish. It writes a document whose id starts with
  * "drafts.", which Sanity keeps out of the published dataset, so the site
@@ -82,10 +83,20 @@ export async function draftNextFieldNote(opts: { ideaId?: string } = {}): Promis
         : `*[_type == "storyIdea" && status in ["ready", "idea"] && !(_id in path("drafts.**"))] | order(select(status == "ready" => 0, 1) asc, coalesce(priority, 2) asc, _createdAt asc)[0]${IDEA}`,
       { id: opts.ideaId ?? "" }
     );
-  let idea = await pick();
-  // An empty plan (the top-ups failed for a while): fill it, then draft from it.
-  if (!idea && !opts.ideaId && (await keepPlanStocked(client)).length) idea = await pick();
-  if (!idea) return { drafted: false, reason: opts.ideaId ? `no plan item ${opts.ideaId}` : "the Insights plan has no Ready items or Ideas left" };
+  const idea = await pick();
+  if (!idea && !opts.ideaId) {
+    // An empty plan (the top-ups failed for a while): fill it and stop, so
+    // the new ideas sit in Studio for a person to look at before the next run
+    // drafts one, and the planner's time can't cost a draft its email.
+    const added = await keepPlanStocked(client);
+    return {
+      drafted: false,
+      reason: added.length
+        ? `the Insights plan was empty; added ${added.length} idea${added.length === 1 ? "" : "s"}, and the next run drafts the first`
+        : "the Insights plan has no Ready items or Ideas left",
+    };
+  }
+  if (!idea) return { drafted: false, reason: `no plan item ${opts.ideaId}` };
   const picked = opts.ideaId ? "asked for" : idea.status === "ready" ? "ready" : "next idea";
 
   const systems = (idea.systems ?? []).filter((s): s is Linked => !!s?.slug);

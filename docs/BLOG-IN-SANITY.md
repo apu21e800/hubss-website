@@ -56,7 +56,7 @@ week") at 13:00 UTC (9:00 in Toronto in summer time) the drafter
 (`app/api/cron/draft-field-note`, scheduled in `vercel.json`) takes the plan
 item marked **Ready** with the highest priority, or, when none is Ready (since
 7 Oct 2026), the top **Idea**, so nobody has to mark one Ready each week; the
-email says how many items are left and asks for more under three. It then:
+email says how many items are left and which one is next. It then:
 
 1. collects the facts it may use: the Idea Book pages of the item's systems and
    applications, the company lines the site already prints, and the item's
@@ -73,12 +73,15 @@ Two a week use the plan up, so after the email the run keeps it stocked
 Ready items are left, Claude proposes new ones and they go in at the bottom as
 Ideas (priority 3), back up to ten. Two kinds, both from checked material
 only: **guides** (a question specifiers search for, answered from the Idea
-Book pages of the systems named; the brief is questions only, so the drafter is
-never handed a claim) and **project roundups** (three to six documented map
-jobs with no article of their own, on one theme; the brief is their records,
-word for word, built in code). Nothing repeats an article or plan item. Edit,
-reorder or set any of them to "Not doing" before its turn; the email names the
-next one. `npm run test:planner`.
+Book pages of the systems named; the brief is neutral questions only, filed
+apart from the facts under "Questions to answer (not facts):", so neither the
+writer nor the fact check takes them as support) and **project roundups**
+(three to six documented map jobs with no article of their own and in no other
+plan item, on one theme; the brief is their records, as written, built in
+code). Ideas that repeat an article's or a plan item's title or search phrase
+are dropped. Edit, reorder or set any of them to "Not doing" before its turn;
+the email names the next one. A run that finds the plan empty only fills it.
+`npm run test:planner`.
 
 It never publishes. A draft's id starts with `drafts.`, which the site can't
 read. Someone opens it in Studio, checks the notes, edits and presses Publish;

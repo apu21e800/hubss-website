@@ -222,9 +222,11 @@ export async function draftSocialForNewPosts(now = new Date()): Promise<{ posts:
         "hotspot": photos[0].hotspot{ x, y }
       }`
     ),
-    // The newest job post (library or field) that reached Buffer: one a week (libraryDue).
+    // The newest job post (library or field): one a week (libraryDue). A log
+    // settled with nothing in Buffer (every channel skipped) doesn't count; one
+    // whose drafts couldn't be written onto it still does.
     client.fetch<string | null>(
-      `*[_type == "socialLog" && (string::startsWith(slug, "lib:") || string::startsWith(slug, "field:")) && count(drafts) > 0] | order(createdAt desc)[0].createdAt`
+      `*[_type == "socialLog" && (string::startsWith(slug, "lib:") || string::startsWith(slug, "field:")) && !(count(drafts) == 0 && count(skipped) > 0)] | order(createdAt desc)[0].createdAt`
     ),
   ]);
   const logged = new Set<string>(loggedSlugs);

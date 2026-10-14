@@ -11,11 +11,15 @@
  * Two kinds, both written only from what HUB has already checked:
  *  - Guides: what a specifier searches for, answered from the Idea Book pages
  *    of the systems named (the drafter reads them, lib/field-note-facts.ts).
- *    The brief is a list of questions and holds no facts, so the drafter,
- *    which treats a brief as true, is never handed a claim.
+ *    The brief is questions only, under QUESTIONS_BRIEF, which factsBlock
+ *    files apart from the facts: the writer and the fact check are told the
+ *    questions support nothing. vetIdeas also drops a question that names a
+ *    place, client or anything but HUB's systems, or that assumes its own
+ *    answer ("why does X outlast", "the only", "best").
  *  - Project roundups: three to six documented jobs from the homepage map
- *    that have no article of their own, on one theme. Their brief is built
- *    here from the jobs' records, word for word, never by the model.
+ *    that have no article of their own and aren't in another roundup, on one
+ *    theme. Their brief is built here from the jobs' records, as written,
+ *    never by the model.
  *
  * vetIdeas is pure: `npm run test:planner`.
  */
@@ -28,6 +32,7 @@ import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
 import { mapProjects, type MapProject } from "@/lib/map-projects";
 import { PROVINCES } from "@/lib/social-library";
+import { QUESTIONS_BRIEF } from "@/lib/field-note-facts";
 
 /** Top up when fewer than this many Ideas and Ready items are left: three weeks at two a week. */
 export const PLAN_MIN = 6;
@@ -65,10 +70,11 @@ export interface PlanDoc {
   brief: string;
 }
 
-/** Something already written or planned: its title and the phrases it chases. */
+/** Something already written or planned: its title, the phrases it chases and, for a plan item, its brief. */
 export interface Existing {
   title: string;
   phrases: string[];
+  brief?: string;
 }
 
 /** A documented job a roundup may feature. */
@@ -108,17 +114,32 @@ export function roundupJobs(projects: readonly MapProject[] = mapProjects): Plan
   });
 }
 
+/** How a job opens its line in a roundup's brief; also how a used job is recognised. */
+const jobKey = (j: PlannerJob) => `- ${j.title}, ${j.place}.`;
+
+/** Jobs already featured in a plan item's brief (a roundup planned, drafted or published). */
+export function usedJobIds(jobs: readonly PlannerJob[], existing: readonly Existing[]): Set<string> {
+  const briefs = existing.map((e) => e.brief).filter((b): b is string => !!b);
+  return new Set(jobs.filter((j) => briefs.some((b) => b.includes(jobKey(j)))).map((j) => j.id));
+}
+
 const STOP = new Set([
   "a", "an", "the", "and", "or", "for", "of", "to", "in", "on", "at", "with", "vs", "versus", "what", "how", "why", "when",
   "your", "you", "is", "are", "it", "its", "that", "this", "from", "by", "as", "be", "do", "does", "can", "which", "who",
   "into", "than", "more", "most", "about", "without", "between", "one", "time", "way",
 ]);
-const stem = (w: string) => (w.length > 4 ? w.replace(/(ings|ing|es|s)$/, "") : w);
+
+/** A rough stem, so lane and lanes, marking and markings, surface and surfaces meet. */
+function stem(w: string): string {
+  if (w.length > 5) w = w.replace(/ings?$/, "");
+  if (w.length > 3 && /[^s]s$/.test(w)) w = w.slice(0, -1);
+  return w;
+}
 
 /** The content words of a title or phrase, roughly stemmed. */
 export function words(s: string): Set<string> {
   return new Set(
-    s.toLowerCase().normalize("NFKD").replace(/[^a-z0-9 ]+/g, " ").split(/\s+/)
+    s.toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9 ]+/g, " ").split(/\s+/)
       .filter((w) => w.length > 2 && !STOP.has(w))
       .map(stem)
   );
@@ -144,7 +165,7 @@ export function repeats(idea: { title: string; searchPhrase: string }, existing:
   return undefined;
 }
 
-/** No em dashes (house style); spaces tidied. */
+/** No em or en dash as a dash (house style); spaces tidied. For the model's words only. */
 const tidy = (s: string) => s.replace(/\s*[—–]\s*/g, ", ").replace(/\s+/g, " ").trim();
 
 function cleanSlug(s: string): string {
@@ -153,16 +174,32 @@ function cleanSlug(s: string): string {
 
 const ref = (prefix: "product" | "application", slug: string): Ref => ({ _type: "reference", _ref: `${prefix}-${slug}`, _key: slug });
 
-/** A question the brief may carry: a real question, with no figures to treat as fact. */
-const goodQuestion = (q: string) => q.length >= 12 && q.length <= 200 && q.endsWith("?") && !/\d/.test(q);
+/** Words that make a question assume its answer, or a title make a claim. */
+const LOADED = /\b(why (does|do|did|is|are|was|were|has|have|can)|only|best|worst|most|least|better|worse|cheaper|cheapest|longer|longest|faster|fastest|stronger|strongest|safer|safest|outlasts?|outlasting|superior|unique|guaranteed?|always|never|proven)\b/i;
+
+/** Names a guide may use: HUB's systems and a few general terms that aren't about any client or place. */
+const NAMES = [...products.map((p) => p.name), "HUB", "Idea Book", "Canada", "Canadian", "AODA", "LEED", "Vision Zero", "Complete Streets"]
+  .sort((a, b) => b.length - a.length);
+
+/** True when every capitalised word after the first is one of NAMES: no place, client or agency. */
+export function namesOnlyKnown(s: string): boolean {
+  let rest = s;
+  for (const n of NAMES) rest = rest.split(n).join(" ");
+  return !rest.trim().split(/\s+/).slice(1).some((w) => /^[A-Z]/.test(w) && w !== "I");
+}
+
+/** A question a guide's brief may carry: a real question that names nothing and assumes nothing. */
+export const goodQuestion = (q: string) =>
+  q.length >= 12 && q.length <= 200 && q.endsWith("?") && !/\d/.test(q) && !LOADED.test(q) && namesOnlyKnown(q);
 
 function jobLine(j: PlannerJob): string {
   return [
-    `- ${j.title}, ${j.place}.`,
+    `${jobKey(j)}`,
     `System: ${j.system}.`,
     `Application: ${j.application}.`,
     j.year ? `Installed: ${j.year}.` : "",
-    tidy(j.excerpt),
+    // As written: only an em dash, which the house style never prints, becomes a comma.
+    j.excerpt.replace(/\s*—\s*/g, ", "),
     j.ideaBookPage ? `(Shown in the HUB Idea Book, page ${j.ideaBookPage}.)` : "",
   ].filter(Boolean).join(" ");
 }
@@ -170,14 +207,16 @@ function jobLine(j: PlannerJob): string {
 /**
  * The model's ideas, checked and turned into plan items: known systems and
  * applications only, no repeat of an article or plan item (or of each other),
- * guides with at least two real questions, roundups with three to six known
- * jobs. At most `max`, in the order proposed.
+ * guides with at least two questions that pass goodQuestion and a title that
+ * claims nothing, roundups with three to six known jobs that no other plan
+ * item features. At most `max`, in the order proposed.
  */
 export function vetIdeas(
   raw: readonly RawIdea[],
   ctx: { existing: readonly Existing[]; jobs: readonly PlannerJob[]; max: number }
 ): { docs: PlanDoc[]; dropped: { title: string; why: string }[] } {
   const jobs = new Map(ctx.jobs.map((j) => [j.id, j]));
+  const used = usedJobIds(ctx.jobs, ctx.existing);
   const seen: Existing[] = [...ctx.existing];
   const ids = new Set<string>();
   const docs: PlanDoc[] = [];
@@ -189,6 +228,8 @@ export function vetIdeas(
     const searchPhrase = tidy(r.searchPhrase ?? "").toLowerCase().slice(0, 80);
     const drop = (why: string) => dropped.push({ title: title || "(untitled)", why });
     if (!title || !searchPhrase) { drop("no title or search phrase"); continue; }
+    if (/\d/.test(title) || /\d/.test(searchPhrase)) { drop("a figure in the title or search phrase"); continue; }
+    if (LOADED.test(title)) { drop("the title makes a claim"); continue; }
     const same = repeats({ title, searchPhrase }, seen);
     if (same) { drop(`too close to "${same}"`); continue; }
     const _id = `storyIdea-auto-${cleanSlug(title)}`;
@@ -196,8 +237,11 @@ export function vetIdeas(
 
     let doc: PlanDoc;
     if (r.kind === "roundup") {
-      const picked = [...new Set(r.jobIds ?? [])].map((id) => jobs.get(id)).filter((j): j is PlannerJob => !!j).slice(0, 6);
-      if (picked.length < 3) { drop("a roundup needs three documented jobs"); continue; }
+      const picked = [...new Set(r.jobIds ?? [])]
+        .map((id) => jobs.get(id))
+        .filter((j): j is PlannerJob => !!j && !used.has(j.id))
+        .slice(0, 6);
+      if (picked.length < 3) { drop("a roundup needs three documented jobs no other plan item features"); continue; }
       const systemSlugs = [...new Set(picked.map((j) => j.systemSlug))];
       const appSlugs = [...new Set(picked.map((j) => j.applicationSlug).filter((s): s is string => !!s))];
       doc = {
@@ -210,21 +254,23 @@ export function vetIdeas(
           "Then tell the reader what to know before specifying the same work for their own site, from the Idea Book pages.",
         ].join("\n"),
       };
+      for (const j of picked) used.add(j.id);
     } else {
+      if (!namesOnlyKnown(title)) { drop("the title names a place, client or agency"); continue; }
       const systems = [...new Set(r.systems ?? [])].filter((s) => PRODUCT_CATALOGUE[s]).slice(0, 3);
       const apps = [...new Set(r.applications ?? [])].filter((s) => APPLICATION_CATALOGUE[s]).slice(0, 3);
       const questions = (r.questions ?? []).map(tidy).filter(goodQuestion).slice(0, 6);
       if (!systems.length) { drop("no HUB system from the Idea Book"); continue; }
-      if (questions.length < 2) { drop("fewer than two questions to answer"); continue; }
+      if (questions.length < 2) { drop("fewer than two questions that name and assume nothing"); continue; }
       doc = {
         _id, _type: "storyIdea", title, status: "idea", priority: 3, searchPhrase, type: "Guide",
         systems: systems.map((s) => ref("product", s)),
         applications: apps.map((s) => ref("application", s)),
-        brief: ["Answer these questions for a specifier, from the Idea Book pages of the systems named:", ...questions.map((q) => `- ${q}`)].join("\n"),
+        brief: [QUESTIONS_BRIEF, ...questions.map((q) => `- ${q}`)].join("\n"),
       };
     }
     ids.add(_id);
-    seen.push({ title, phrases: [searchPhrase] });
+    seen.push({ title, phrases: [searchPhrase], brief: doc.brief });
     docs.push(doc);
   }
   return { docs, dropped };
@@ -242,11 +288,11 @@ const PROPOSE: Anthropic.Tool = {
           type: "object",
           properties: {
             kind: { type: "string", enum: ["guide", "roundup"] },
-            title: { type: "string", description: "Working title, sentence case, no em dash." },
+            title: { type: "string", description: "Working title, sentence case, no em dash, no figures, no claim." },
             searchPhrase: { type: "string", description: "What the reader types into Google, two to five words, lower case." },
             systems: { type: "array", items: { type: "string" }, description: "Guides: one to three SYSTEMS slugs." },
             applications: { type: "array", items: { type: "string" }, description: "Guides: zero to three APPLICATIONS slugs." },
-            questions: { type: "array", items: { type: "string" }, description: "Guides: three to six questions the article answers. Questions only: no facts, figures, places or claims." },
+            questions: { type: "array", items: { type: "string" }, description: "Guides: three to six neutral questions the article answers." },
             jobIds: { type: "array", items: { type: "string" }, description: "Roundups: three to six JOBS ids that share the theme." },
           },
           required: ["kind", "title", "searchPhrase"],
@@ -260,13 +306,13 @@ const PROPOSE: Anthropic.Tool = {
 const SYSTEM = `You plan Insights articles for HUB Surface Systems (hubss.com), a Canadian company that supplies and installs decorative and functional pavement systems. The readers specify, approve and pay for pavement in Canada: municipal engineers, planners, landscape architects, transit agencies, developers and property managers. The articles are found through search and bring them to HUB's spec sheets and Lunch & Learn sessions.
 
 Propose articles of two kinds:
-- guide: a question these readers type into Google, answered from the Idea Book pages of one to three HUB systems (SYSTEMS). Comparisons, choosing between options, how to specify, how long it lasts and how to look after it. Give three to six questions the article answers. Questions only: no facts, figures, places, clients or claims in them, since the writer treats the plan as true.
-- roundup: three to six documented jobs from JOBS that share one theme a reader would search for (one application, one system, one kind of place or one region). Use only JOBS ids.
+- guide: a question these readers type into Google, answered from the Idea Book pages of one to three HUB systems (SYSTEMS). Comparisons, choosing between options, how to specify, how long it lasts and how to look after it. Give three to six neutral questions the article answers. A question names no place, client, agency or brand other than HUB's systems, holds no figures, and doesn't assume its answer: "How does an inlaid crosswalk hold up to plows?", never "Why does TrafficPatterns outlast paint?" or "What makes X the only...".
+- roundup: three to six documented jobs from JOBS that share one theme a reader would search for (one application, one system, one kind of place or one region). Use only JOBS ids, and each job in one roundup at most.
 
 Rules:
 - Nothing that EXISTING already covers: the same question or search intent counts as covered, whatever the words.
 - Search phrases are what a real person types: plain, two to five words, lower case, no brand names unless people search the brand.
-- Working titles in sentence case and Canadian English, no em dash, no exclamation mark, no hype.
+- Working titles in sentence case and Canadian English, no em dash, no figures, no exclamation mark, no hype, no claim (best, only, longest).
 - About half guides and half roundups, if JOBS allow.`;
 
 /** Asks Claude for ideas. Throws when Claude can't be reached; the caller logs it. */
@@ -289,7 +335,7 @@ export async function proposeIdeas(ctx: { existing: readonly Existing[]; jobs: r
     "APPLICATIONS (slug: name. the Idea Book's line):",
     ...apps,
     "",
-    "JOBS (documented, with no article yet; id | job | place | system | application | year):",
+    "JOBS (documented, with no article or roundup yet; id | job | place | system | application | year):",
     ...ctx.jobs.map((j) => `- ${j.id} | ${j.title} | ${j.place} | ${j.system} | ${j.application} | ${j.year ?? ""}`),
     "",
     "EXISTING (articles and plan items; don't repeat them):",
@@ -309,29 +355,44 @@ export async function proposeIdeas(ctx: { existing: readonly Existing[]; jobs: r
   return Array.isArray(ideas) ? (ideas as RawIdea[]) : [];
 }
 
+const isConflict = (err: unknown) => (err as { statusCode?: number })?.statusCode === 409;
+
 /**
  * Tops the plan up when it's low. Returns what it added (titles), or null when
- * the plan didn't need it. Each item is created only if its id is new, so a
- * second run at the same moment adds nothing twice.
+ * the plan didn't need it. An item whose id (from its title) is already taken
+ * is skipped, so the same title is never added twice. The cron never runs two
+ * of these at once; a run by hand at the same moment could add a second batch,
+ * which anyone can set to "Not doing".
  */
 export async function topUpPlan(
   client: SanityClient,
   posts: readonly { title: string; keywords?: string[] }[]
 ): Promise<{ added: string[]; dropped: { title: string; why: string }[] } | null> {
-  const plan = await client.fetch<{ title?: string; status?: string; searchPhrase?: string }[]>(
-    `*[_type == "storyIdea" && !(_id in path("drafts.**"))]{ title, status, searchPhrase }`
+  const plan = await client.fetch<{ title?: string; status?: string; searchPhrase?: string; brief?: string }[]>(
+    `*[_type == "storyIdea" && !(_id in path("drafts.**"))]{ title, status, searchPhrase, brief }`
   );
   const left = plan.filter((p) => p.status === "idea" || p.status === "ready").length;
   if (left >= PLAN_MIN) return null;
   const max = PLAN_FILL - left;
   const existing: Existing[] = [
     ...posts.map((p) => ({ title: p.title, phrases: p.keywords ?? [] })),
-    ...plan.filter((p) => p.title).map((p) => ({ title: p.title!, phrases: p.searchPhrase ? [p.searchPhrase] : [] })),
+    ...plan.filter((p) => p.title).map((p) => ({ title: p.title!, phrases: p.searchPhrase ? [p.searchPhrase] : [], brief: p.brief })),
   ];
-  const jobs = roundupJobs();
+  const all = roundupJobs();
+  const used = usedJobIds(all, existing);
+  const jobs = all.filter((j) => !used.has(j.id));
   const raw = await proposeIdeas({ existing, jobs, count: max + 2 });
-  const { docs, dropped } = vetIdeas(raw, { existing, jobs, max });
-  for (const doc of docs) await client.createIfNotExists(doc);
-  console.log(`[planner] ${left} left; added ${docs.length}: ${docs.map((d) => `"${d.title}"`).join(", ") || "none"}${dropped.length ? `; dropped ${dropped.map((d) => `"${d.title}" (${d.why})`).join(", ")}` : ""}`);
-  return { added: docs.map((d) => d.title), dropped };
+  const { docs, dropped } = vetIdeas(raw, { existing, jobs: all, max });
+  const added: string[] = [];
+  for (const doc of docs) {
+    try {
+      await client.create(doc);
+      added.push(doc.title);
+    } catch (err) {
+      if (!isConflict(err)) throw err;
+      dropped.push({ title: doc.title, why: "already in the plan under that title" });
+    }
+  }
+  console.log(`[planner] ${left} left; added ${added.length}: ${added.map((t) => `"${t}"`).join(", ") || "none"}${dropped.length ? `; dropped ${dropped.map((d) => `"${d.title}" (${d.why})`).join(", ")}` : ""}`);
+  return { added, dropped };
 }

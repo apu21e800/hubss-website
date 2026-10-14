@@ -12,7 +12,8 @@ import assert from "node:assert/strict";
 import { mapProjects } from "../lib/map-projects";
 import { PRODUCT_CATALOGUE } from "../lib/product-catalogue";
 import { applications } from "../lib/applications";
-import { repeats, roundupJobs, vetIdeas, words, type Existing, type RawIdea } from "../lib/insights-planner";
+import { goodQuestion, repeats, roundupJobs, vetIdeas, words, type Existing, type RawIdea } from "../lib/insights-planner";
+import { factsBlock, QUESTIONS_BRIEF } from "../lib/field-note-facts";
 
 let failures = 0;
 function check(name: string, fn: () => void) {
@@ -73,8 +74,32 @@ check("a good guide becomes a plan Idea at the bottom of the plan", () => {
 });
 check("its brief is the questions, and nothing the drafter could take as fact", () => {
   const { docs } = vet([guide({ questions: ["Paint lasts 1 year, so why use it?", "Thermoplastic is the best choice.", "What does a plow do to paint?", "How is an inlaid crosswalk specified?"] })]);
-  const lines = docs[0].brief.split("\n").slice(1);
+  const [first, ...lines] = docs[0].brief.split("\n");
+  assert.equal(first, QUESTIONS_BRIEF);
   assert.deepEqual(lines, ["- What does a plow do to paint?", "- How is an inlaid crosswalk specified?"]);
+});
+check("a question that names a place or client, or assumes its answer, is dropped", () => {
+  for (const q of [
+    "Why did York Region choose TrafficPatterns for its Viva rapidway crossings?",
+    "Why does TrafficPatternsXD outlast paint on Toronto's busiest crosswalks?",
+    "What makes TrafficPatternsXD the only crosswalk system that survives a snowplow?",
+    "How did the City of Kelowna specify its crosswalks?",
+    "Which system is best for a school zone?",
+  ]) assert.equal(goodQuestion(q), false, q);
+  for (const q of [
+    "How does an inlaid thermoplastic crosswalk hold up to plows?",
+    "What should a TrafficPatternsXD specification cover in Canada?",
+    "How does AODA guidance shape a crosswalk's contrast?",
+  ]) assert.equal(goodQuestion(q), true, q);
+});
+check("the drafter and the fact check get the questions apart from the facts", () => {
+  const { docs } = vet([guide()]);
+  const facts = factsBlock({ productSlugs: ["traffic-patterns"], applicationSlugs: [], brief: docs[0].brief });
+  assert.match(facts, /NOT facts and support no statement/);
+  assert.doesNotMatch(facts, /treat as true/);
+  assert.ok(!facts.includes(QUESTIONS_BRIEF), "the marker line itself isn't repeated");
+  const editor = factsBlock({ productSlugs: [], applicationSlugs: [], brief: "Installed in Milton, Ontario in 2024." });
+  assert.match(editor, /the brief; treat as true/);
 });
 check("fewer than two good questions: dropped", () => {
   const { docs, dropped } = vet([guide({ questions: ["What does a plow do to paint?", "It lasts 10 years."] })]);
@@ -99,6 +124,14 @@ check("a roundup only names the site's own systems and applications", () => {
   }
 });
 
+check("a title with a figure, a claim, or (for a guide) a place: dropped", () => {
+  assert.equal(vet([guide({ title: "Five crosswalk surfaces compared", searchPhrase: "crosswalk surfaces" })]).docs.length, 1);
+  assert.equal(vet([guide({ title: "The 5 crosswalk surfaces compared" })]).docs.length, 0);
+  assert.equal(vet([guide({ title: "Why thermoplastic outlasts paint" })]).docs.length, 0);
+  assert.equal(vet([guide({ title: "The best crosswalk surface for winter" })]).docs.length, 0);
+  assert.equal(vet([guide({ title: "Crosswalk surfaces for Toronto winters" })]).docs.length, 0);
+});
+
 console.log("Roundups");
 const three = jobs.filter((j) => j.application === "Community Branding").slice(0, 3);
 check("there are enough jobs to group", () => assert.equal(three.length, 3));
@@ -120,6 +153,23 @@ check("a job that isn't documented, or already has an article, is left out", () 
   const { docs, dropped } = vet([{ kind: "roundup", title: "Three crosswalks", searchPhrase: "crosswalk examples", jobIds: [three[0].id, three[1].id, withPost.id, "made-up-job"] }]);
   assert.equal(docs.length, 0);
   assert.match(dropped[0].why, /three documented jobs/);
+});
+check("every job's record goes into a brief as written", () => {
+  for (let i = 0; i + 3 <= jobs.length; i += 3) {
+    const group = jobs.slice(i, i + 3);
+    const { docs } = vetIdeas([{ kind: "roundup", title: `Roundup ${String.fromCharCode(97 + i / 3)} of documented jobs`, searchPhrase: `roundup ${String.fromCharCode(97 + i / 3)}`, jobIds: group.map((j) => j.id) }], { existing: [], jobs, max: 1 });
+    for (const j of group) assert.ok(docs[0]?.brief.includes(j.excerpt), `${j.id}: ${j.excerpt}`);
+  }
+});
+check("a job already in another roundup isn't featured again", () => {
+  const first = vet([{ kind: "roundup", title: "Community crosswalks that tell a town's story", searchPhrase: "community crosswalk art", jobIds: three.map((j) => j.id) }]).docs[0];
+  const again = vetIdeas([{ kind: "roundup", title: "Crosswalk art by the water", searchPhrase: "waterfront crosswalk art", jobIds: three.map((j) => j.id) }], { existing: [...existing, { title: first.title, phrases: [first.searchPhrase], brief: first.brief }], jobs, max: 5 });
+  assert.equal(again.docs.length, 0);
+  const sameBatch = vet([
+    { kind: "roundup", title: "Community crosswalks that tell a town's story", searchPhrase: "community crosswalk art", jobIds: three.map((j) => j.id) },
+    { kind: "roundup", title: "Crosswalk art by the water", searchPhrase: "waterfront crosswalk art", jobIds: three.map((j) => j.id) },
+  ]);
+  assert.equal(sameBatch.docs.length, 1);
 });
 check("six jobs at most", () => {
   const many = jobs.slice(0, 9).map((j) => j.id);
@@ -144,8 +194,15 @@ check("two of the new ideas can't repeat each other", () => {
   assert.equal(docs.length, 1);
   assert.equal(dropped.length, 1);
 });
-check("words ignores case, punctuation and small words", () => {
+check("words ignores case, punctuation, accents, plurals and small words", () => {
   assert.deepEqual([...words("The Crosswalks, and the PLOW!")].sort(), ["crosswalk", "plow"]);
+  assert.deepEqual([...words("coloured bike lanes")], [...words("coloured bike lane")]);
+  assert.deepEqual([...words("transit station surfaces")], [...words("transit station surface")]);
+  assert.deepEqual([...words("pavement markings")], [...words("pavement marking")]);
+  assert.deepEqual([...words("Montréal")], ["montreal"]);
+});
+check("a plural of an article's search phrase counts as the same", () => {
+  assert.ok(repeats({ title: "Coloured lanes for cyclists", searchPhrase: "coloured bike lanes" }, [{ title: "Coloured bike lanes that stay coloured", phrases: ["coloured bike lane"] }]));
 });
 
 console.log("House style and limits");

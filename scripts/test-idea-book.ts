@@ -10,7 +10,9 @@ import assert from "node:assert/strict";
 import { LEAVES, leafTitle, pageLabel, systemEntry, type Leaf, type Photo } from "../lib/idea-book-edition";
 import { catalogueTotal } from "../lib/catalogue";
 import { mapProjects } from "../lib/map-projects";
-import { APPLICATION_CATALOGUE } from "../lib/application-catalogue";
+import { PRINT_APPLICATIONS, PRINT_SYSTEMS } from "../lib/idea-book-print";
+import { applications } from "../lib/applications";
+import { products } from "../lib/products";
 import { colourFamily } from "../lib/colours";
 import blogIndex from "../lib/blog-index.json";
 
@@ -81,11 +83,41 @@ check("every photo is a region of a page of the book", () => {
     assert.ok(ph.alt.length > 10, `${leaf.id}: alt for page ${ph.page}`);
   }
 });
-check("every system leaf has its catalogue page", () => {
-  for (const leaf of LEAVES) if (leaf.kind === "system") assert.ok(systemEntry(leaf.slug).entry.page, leaf.slug);
+check("every system leaf shows its printed page, and the page is one of the leaf's", () => {
+  for (const leaf of LEAVES) if (leaf.kind === "system") {
+    const { entry } = systemEntry(leaf.slug);
+    assert.ok(leaf.pages.includes(entry.page), `${leaf.slug}: printed on ${entry.page}, leaf has ${leaf.pages}`);
+    assert.equal(entry.specs.length, 4, `${leaf.slug}: four specs`);
+    assert.ok(entry.uses.length >= 3, `${leaf.slug}: uses strip`);
+  }
 });
-check("every application with a slug has its Idea Book spread", () => {
-  for (const leaf of LEAVES) if (leaf.kind === "application" && leaf.slug) assert.ok(APPLICATION_CATALOGUE[leaf.slug], leaf.slug);
+check("every printed system and application is a product or application page the site has", () => {
+  for (const slug of Object.keys(PRINT_SYSTEMS)) assert.ok(products.some((p) => p.slug === slug), slug);
+  const leafIds = new Set(LEAVES.map((l) => l.id));
+  for (const [slug, e] of Object.entries(PRINT_APPLICATIONS)) {
+    // A spread the site has no page for (Creative design) is keyed by its leaf.
+    assert.ok(applications.some((a) => a.slug === slug) || leafIds.has(slug), slug);
+    for (const line of e.specify) assert.ok(products.some((p) => p.slug === line.slug), `${slug}: specify ${line.slug}`);
+  }
+});
+check("every printed application spread is one leaf, on its printed page", () => {
+  const used = new Map<string, number>();
+  for (const leaf of LEAVES) {
+    const slug = leaf.kind === "application" ? leaf.slug ?? leaf.id : leaf.kind === "then-now" ? leaf.id : undefined;
+    if (!slug || !PRINT_APPLICATIONS[slug]) continue;
+    assert.equal(PRINT_APPLICATIONS[slug].page, leaf.pages[0], `${slug}: printed on ${PRINT_APPLICATIONS[slug].page}, leaf starts at ${leaf.pages[0]}`);
+    used.set(slug, (used.get(slug) ?? 0) + 1);
+  }
+  for (const slug of Object.keys(PRINT_APPLICATIONS)) assert.equal(used.get(slug), 1, `${slug} is in ${used.get(slug) ?? 0} leaves`);
+});
+check("the printed specify lines reach the leaves, with their captions", () => {
+  const crosswalks = LEAVES.find((l) => l.kind === "application" && l.slug === "crosswalks");
+  assert.ok(crosswalks && crosswalks.kind === "application");
+  assert.deepEqual(crosswalks.specify.map((s) => s.name), ["TrafficPatternsXD", "TrafficPatterns", "DecoMark"]);
+  assert.deepEqual(crosswalks.caption, { place: "Brampton, Ontario" });
+  const busLanes = LEAVES.find((l) => l.kind === "application" && l.slug === "bus-lanes");
+  assert.ok(busLanes && busLanes.kind === "application");
+  assert.equal(busLanes.caption?.place, "Vaughan, Ontario", "the book's caption, not the map pin's city");
 });
 check("every job named is on the homepage map", () => {
   for (const leaf of LEAVES) {
@@ -112,6 +144,8 @@ check("the ten systems are in the contents, in the book's order", () => {
 console.log("House style");
 check("no em dash anywhere in the edition", () => {
   for (const leaf of LEAVES) for (const s of strings(leaf)) assert.ok(!s.includes("—"), `${leaf.id}: "${s.slice(0, 60)}"`);
+  for (const s of strings(PRINT_SYSTEMS)) assert.ok(!s.includes("—"), `print: "${s.slice(0, 60)}"`);
+  for (const s of strings(PRINT_APPLICATIONS)) assert.ok(!s.includes("—"), `print: "${s.slice(0, 60)}"`);
 });
 check("every leaf has a title for the contents", () => {
   for (const leaf of LEAVES) assert.ok(leafTitle(leaf).length > 1, leaf.id);

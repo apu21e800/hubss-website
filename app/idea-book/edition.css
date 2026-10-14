@@ -68,9 +68,11 @@
 .ib-scroll { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; scroll-snap-type: y proximity; overscroll-behavior-y: contain; -webkit-overflow-scrolling: touch; }
 .ib-leaf { scroll-snap-align: start; scroll-margin-top: 0; min-height: var(--ib-leaf-h); box-sizing: border-box; display: grid; align-content: center; padding: clamp(24px, 4vh, 48px) var(--ib-gutter); border-bottom: 1px solid var(--ib-line); position: relative; }
 .ib-leaf > * { max-width: 1360px; width: 100%; margin-inline: auto; }
+/* A leaf arrives as it scrolls into view. Only once scripts run (.ib-live):
+   with them off, or before they load, every leaf is simply there. */
 @media (prefers-reduced-motion: no-preference) {
-  .ib-leaf .ib-photo, .ib-leaf .ib-h1, .ib-leaf .ib-h0 { opacity: 0; transform: translateY(10px); transition: opacity 0.6s ease, transform 0.6s ease; }
-  .ib-leaf.ib-in .ib-photo, .ib-leaf.ib-in .ib-h1, .ib-leaf.ib-in .ib-h0 { opacity: 1; transform: none; }
+  .ib-live .ib-leaf:not(.ib-in) .ib-photo, .ib-live .ib-leaf:not(.ib-in) .ib-h1, .ib-live .ib-leaf:not(.ib-in) .ib-h0 { opacity: 0; transform: translateY(10px); }
+  .ib-leaf .ib-photo, .ib-leaf .ib-h1, .ib-leaf .ib-h0 { transition: opacity 0.6s ease, transform 0.6s ease; }
 }
 
 /* The floating turn buttons: a laptop's affordance; a phone swipes. */
@@ -79,7 +81,10 @@
 .ib-turn button:hover:not(:disabled) { background: rgba(255, 255, 255, 0.12); }
 .ib-turn button:disabled { opacity: 0.3; cursor: default; }
 .ib-turn-n { font-size: 12px; font-weight: 600; letter-spacing: 0.04em; padding: 0 6px; font-variant-numeric: tabular-nums; }
-@media (min-width: 1024px) and (hover: hover) { .ib-turn { display: inline-flex; } }
+@media (min-width: 1024px) and (hover: hover) {
+  .ib-turn { display: inline-flex; }
+  .ib-leaf { padding-bottom: max(clamp(24px, 4vh, 48px), 76px); }
+}
 
 /* ── Type ───────────────────────────────────────────────────────────────── */
 .ib h1, .ib h2, .ib h3, .ib .ib-h0, .ib .ib-h1, .ib .ib-h2, .ib .ib-h3 { font-family: var(--ib-font); font-weight: 800; letter-spacing: -0.025em; line-height: 1.1; margin: 0; color: inherit; text-wrap: balance; }
@@ -158,13 +163,16 @@
 }
 
 /* ── Dividers ───────────────────────────────────────────────────────────── */
-.ib-divider { padding: 0; gap: 0; }
+.ib-divider { padding: 0; gap: 0; background: var(--ib-dark); color: var(--ib-dark-text); border-bottom: 0; }
 .ib-divider > * { max-width: none; }
 .ib-divider-photo { position: relative; }
 .ib-divider-photo .ib-photo { border-radius: 0; }
 .ib-divider-word { position: absolute; left: var(--ib-gutter); bottom: clamp(20px, 5vh, 56px); color: #fff; display: grid; gap: 14px; }
 .ib-divider-word .ib-h0 { text-shadow: 0 2px 24px rgba(0, 0, 0, 0.55); }
 .ib-divider-photo .ib-caption { position: absolute; right: var(--ib-gutter); bottom: 14px; margin: 0; color: rgba(255, 255, 255, 0.9); text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6); }
+.ib-divider-foot { display: flex; justify-content: flex-end; padding: 10px var(--ib-gutter); }
+.ib-divider-foot .ib-pagelink { color: var(--ib-dark-muted); }
+.ib-divider-foot .ib-pagelink:hover { color: #fff; }
 .ib-contents-page { background: var(--ib-dark); color: var(--ib-dark-text); padding: clamp(28px, 5vh, 56px) var(--ib-gutter); }
 .ib-contents-page .ib-eyebrow { color: var(--ib-dark-muted); }
 .ib-contents-page .ib-pagelink { color: var(--ib-dark-muted); margin-top: 20px; }
@@ -191,17 +199,23 @@
 .ib-specs { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 24px; margin: 26px 0 0; padding-top: 22px; border-top: 1px solid var(--ib-line); }
 .ib-specs dt { font-size: 10.5px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ib-text); }
 .ib-specs dd { margin: 4px 0 0; font-size: 14px; font-weight: 700; color: var(--ib-ink); }
-.ib-also { margin: 18px 0 0; font-size: 13px; color: var(--ib-text); }
-.ib-also .ib-label { display: inline; margin-right: 6px; }
+.ib-chips { display: grid; grid-template-columns: auto 1fr; gap: 14px 28px; margin: 22px 0 0; align-items: start; }
+.ib-chip-row { display: contents; }
+.ib-chips ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px; }
+.ib-chips li { width: 22px; height: 18px; border-radius: 2px; }
+.ib-chips .ib-label { padding-top: 2px; }
 .ib-uses { margin: auto 0 0; padding-top: 22px; border-top: 1px solid var(--ib-line); text-align: center; font-size: 10.5px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ib-text); }
 .ib-page-body .ib-page-foot { justify-content: space-between; }
 @media (min-width: 1024px) {
   .ib-system, .ib-templates { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 24px; align-items: stretch; }
   .ib-system > *, .ib-templates > * { margin-inline: 0; }
-  .ib-system .ib-photo-col .ib-photo, .ib-templates .ib-photo-col .ib-photo { height: 100%; aspect-ratio: auto !important; min-height: 520px; }
-  .ib-system .ib-photo-col .ib-photo img, .ib-templates .ib-photo-col .ib-photo img { position: absolute; inset: 0; height: 100%; object-fit: cover; transform: none !important; }
-  .ib-system .ib-photo-col, .ib-templates .ib-photo-col { display: flex; flex-direction: column; }
+  .ib-system .ib-photo-col .ib-photo { height: 100%; aspect-ratio: auto !important; min-height: 520px; }
+  .ib-system .ib-photo-col .ib-photo img { position: absolute; inset: 0; height: 100%; object-fit: cover; transform: none !important; }
+  .ib-system .ib-photo-col { display: flex; flex-direction: column; }
   .ib-system .ib-photo-col .ib-caption { flex: none; }
+  /* The templates page is a drawing with its heading printed above it: the band, not the page, beside the list. */
+  .ib-templates { align-items: center; }
+  .ib-templates .ib-photo-col .ib-photo { background: var(--ib-dark); }
 }
 
 /* ── Colour pages ───────────────────────────────────────────────────────── */

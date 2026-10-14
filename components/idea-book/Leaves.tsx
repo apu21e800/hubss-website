@@ -17,7 +17,7 @@ import type { SiteSettings } from "@/lib/site-settings";
  */
 
 const PageLink = ({ leaf, children }: { leaf: Leaf; children?: React.ReactNode }) => (
-  <Link href={`${ideaBook.href}/${leaf.pages[0]}`} className="ib-pagelink" title="Open these pages as printed">
+  <Link href={leaf.pages[0] === 1 ? ideaBook.pagesHref : `${ideaBook.href}/${leaf.pages[0]}`} className="ib-pagelink" title="Open these pages as printed">
     {children ?? <>Printed {leaf.pages.length > 1 ? "pages" : "page"} {pageLabel(leaf)}</>}
   </Link>
 );
@@ -94,7 +94,9 @@ function Swatches({ family }: { family: ColourFamily }) {
 }
 
 export function LeafView({ leaf, index, settings, priority }: { leaf: Leaf; index: number; settings: SiteSettings; priority: boolean }) {
-  const common = { id: leaf.id, "data-leaf": index, "data-pages": pageLabel(leaf), "data-title": leafTitle(leaf), className: `ib-leaf ib-${leaf.kind}` };
+  // The first leaf is "in" from the server: it is on screen before scripts run,
+  // so it never fades (edition.css keys the entrance on .ib-in).
+  const common = { id: leaf.id, "data-leaf": index, "data-pages": pageLabel(leaf), "data-title": leafTitle(leaf), className: `ib-leaf ib-${leaf.kind}${index === 0 ? " ib-in" : ""}` };
 
   switch (leaf.kind) {
     case "cover":
@@ -179,6 +181,11 @@ export function LeafView({ leaf, index, settings, priority }: { leaf: Leaf; inde
               <PageLink leaf={leaf} />
             </div>
           )}
+          {!leaf.contents && (
+            <div className="ib-divider-foot">
+              <PageLink leaf={leaf} />
+            </div>
+          )}
         </section>
       );
 
@@ -207,10 +214,23 @@ export function LeafView({ leaf, index, settings, priority }: { leaf: Leaf; inde
                   </div>
                 ))}
               </dl>
-              {entry.alsoNeed && (
-                <p className="ib-also">
-                  <span className="ib-label">{entry.alsoNeed.heading}</span> {entry.alsoNeed.items.join(" · ")}
-                </p>
+              {entry.families && (
+                <div className="ib-chips">
+                  {entry.families.map((key) => {
+                    const family = colourFamily(key);
+                    if (!family) return null;
+                    return (
+                      <div key={key} className="ib-chip-row">
+                        <p className="ib-label">{family.name}</p>
+                        <ul aria-label={`${family.name}: ${family.colours.map((c) => c.name).join(", ")}`}>
+                          {family.colours.map((c) => (
+                            <li key={c.name} className={c.keyline ? "ib-swatch-keyline" : undefined} style={{ background: c.hex }} title={c.name} />
+                          ))}
+                        </ul>
+                      </div>
+                    );
+                  })}
+                </div>
               )}
               <p className="ib-uses">{entry.uses.join(" · ")}</p>
               <div className="ib-page-foot">

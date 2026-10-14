@@ -169,13 +169,20 @@ as printed.
 - lib/idea-book-edition.ts is the book: `LEAVES`, typed by kind (cover,
   welcome, divider, system, colours, steps, templates, application,
   statement, projects, then-now, installer, partner, closing, lunch, back).
-  The words are the transcriptions (lib/product-catalogue.ts,
-  lib/application-catalogue.ts) and the PDF's text layer, em dashes written
-  out; the systems' specs come from lib/products.ts. A `Photo` is a printed
-  page and the band of it that is the photograph (`top`/`bottom` as fractions
-  of the page's height), so the photographs are the page renders in
-  public/catalogue, shifted, never re-cut; `SITE_PAGE_CAPTION` (0.92) stops
-  above the captions the renders carry.
+  The words are the printed page's, from the PDF's text layer (the system
+  and application spreads in lib/idea-book-print.ts, the rest in the leaves),
+  em dashes written out. NOT lib/product-catalogue.ts or
+  lib/application-catalogue.ts: those were transcribed from the Figma master
+  on 7 Sep 2026 and the book went to press with different wording on most
+  system and application pages (subheads, bodies, SPECIFY notes, uses
+  strips). The site's product and application pages still carry the Figma
+  wording; Doug to say which is current (list in the 14 Oct release record).
+  A `Photo` is a printed page and the band of it that is the photograph
+  (`top`/`bottom` as fractions of the page's height), so the photographs are
+  the page renders in public/catalogue, shifted, never re-cut;
+  `SITE_PAGE_CAPTION` (0.92) stops above the captions the renders carry.
+  Captions are the book's own: where the book prints none, the leaf has none
+  (the map pin's city can differ: York Region for Vaughan).
 - components/idea-book/Leaves.tsx lays each kind out, PagePhoto.tsx shows a
   band (`fit` widens a frame around the photo's focus, for a pair at one
   shape), EditionShell.tsx is the chrome (client: bar, progress, contents

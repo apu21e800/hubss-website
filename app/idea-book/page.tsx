@@ -29,7 +29,7 @@ export default async function IdeaBookEdition() {
   const contents: ContentsEntry[] = LEAVES.map((leaf) => ({ id: leaf.id, title: leafTitle(leaf), pages: pageLabel(leaf), section: leaf.section }));
 
   return (
-    <EditionShell title={ideaBook.title} volume={ideaBook.volume} contents={contents} sections={SECTIONS} printedHref={ideaBook.href} total={LEAVES.length}>
+    <EditionShell title={ideaBook.title} volume={ideaBook.volume} contents={contents} sections={SECTIONS} printedHref={ideaBook.href} pagesHref={ideaBook.pagesHref} total={LEAVES.length}>
       {LEAVES.map((leaf, i) => (
         <LeafView key={leaf.id} leaf={leaf} index={i} settings={settings} priority={i === 0} />
       ))}

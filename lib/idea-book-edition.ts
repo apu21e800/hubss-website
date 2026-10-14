@@ -11,11 +11,13 @@
  * edition is not the pages: it is the book's content, one "leaf" per printed
  * spread, laid out for the screen it is read on. The photographs are the
  * book's own page renders (public/catalogue/<edition>/, lib/catalogue.ts),
- * shown by the region that holds the photo; the words are the book's, from
- * the same transcription the product and application pages are built from
- * (lib/product-catalogue.ts, lib/application-catalogue.ts) and from the
- * book's text layer for the rest, with em dashes written out (docs/STYLE.md).
- * Nothing here is new copy: Doug signed off on the printed page.
+ * shown by the region that holds the photo; the words are the printed page's,
+ * from the book's text layer (the system and application spreads in
+ * lib/idea-book-print.ts, the rest here), with em dashes written out
+ * (docs/STYLE.md). Nothing here is new copy: Doug signed off on the printed
+ * page. (The product and application pages are built from an earlier
+ * transcription of the Figma master, which went to press with edits; see
+ * lib/idea-book-print.ts.)
  *
  * Every leaf names its printed pages, so the reader can open the spread as
  * printed (/idea-book/<page>, the page-by-page reader) at any point.
@@ -24,8 +26,7 @@
  * checks every reference and every page number.
  */
 
-import { PRODUCT_CATALOGUE } from "@/lib/product-catalogue";
-import { APPLICATION_CATALOGUE } from "@/lib/application-catalogue";
+import { PRINT_APPLICATIONS, PRINT_SYSTEMS } from "@/lib/idea-book-print";
 import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
 import { mapProjects } from "@/lib/map-projects";
@@ -78,7 +79,7 @@ export type Leaf =
   | (Base & { kind: "application"; slug?: string; eyebrow: string; title: string; subhead: string; body: string; specify: SpecifyLine[]; number: number; photo: Photo; caption?: Caption; mapId?: string })
   | (Base & { kind: "statement"; eyebrow?: string; title: string; body?: string; photo: Photo; caption?: Caption; mapId?: string; post?: string })
   | (Base & { kind: "projects"; items: ProjectCard[] })
-  | (Base & { kind: "then-now"; eyebrow: string; title: string; subhead: string; body: string; before: Photo; after: Photo; labels: [string, string]; caption: Caption; specify: SpecifyLine[]; number: number; mapId?: string })
+  | (Base & { kind: "then-now"; eyebrow: string; title: string; subhead: string; body: string; before: Photo; after: Photo; labels: [string, string]; caption?: Caption; specify: SpecifyLine[]; number: number; mapId?: string })
   | (Base & { kind: "installer"; region: string; title: string; body: string; phone: string; web: string; photo: Photo; caption?: Caption })
   | (Base & { kind: "partner"; photos: (Photo & { caption: Caption })[]; title: string; subtitle: string; body: string })
   | (Base & { kind: "closing"; title: string; accent: string; stats: string; line: string; communitiesTitle: string; communitiesLine: string; communities: string[] })
@@ -133,19 +134,6 @@ const CONTENTS = [
   { slug: "durashield", page: 37, line: "Maintenance coating for asphalt." },
   { slug: "premark", page: 39, line: "Pre-cut, heat-applied thermoplastic markings." },
 ].map((c) => ({ ...c, name: productName(c.slug) }));
-
-/** The book's own captions on the application photos that are not on the map. */
-const CAPTIONS: Record<number, Caption> = {
-  51: { place: "Bike lanes" },
-  65: { place: "Montréal, Québec", system: "StreetBond" },
-  67: { place: "Toronto, Ontario", system: "artwork by Fauxreel" },
-  77: { place: "Residential driveway, British Columbia" },
-};
-
-const PROVINCE_NAMES: Record<string, string> = {
-  BC: "British Columbia", AB: "Alberta", SK: "Saskatchewan", MB: "Manitoba", ON: "Ontario", QC: "Québec",
-  NB: "New Brunswick", NS: "Nova Scotia", PE: "Prince Edward Island", NL: "Newfoundland and Labrador", YT: "Yukon", NT: "Northwest Territories", NU: "Nunavut",
-};
 
 export const LEAVES: Leaf[] = [
   { kind: "cover", id: "cover", section: "front", pages: [1], photo: { page: 1, alt: "The HUB Idea Book cover: a Musqueam crosswalk in front of the HUB sign at UBC", focus: "50% 45%" } },
@@ -207,7 +195,7 @@ export const LEAVES: Leaf[] = [
   {
     kind: "templates", id: "stamping-templates", section: "systems", pages: [22, 23],
     title: "Stamping templates.", subtitle: "Precision made templates for stamping decorative patterns into hot asphalt. Custom designs available.",
-    photo: { page: 22, top: 0.13, bottom: 0.95, focus: "50% 50%", alt: "A herringbone stamping template drawn with its dimensions" },
+    photo: { page: 22, top: 0.4, bottom: 0.92, focus: "50% 50%", alt: "A herringbone stamping template drawn with its dimensions" },
     groups: [
       { title: "Field templates", items: ["Ashlar Slate", "British Cobble", "Offset Brick", "Random Slate", "Herringbone", "Diagonal Herringbone", "Thompson Stone", "Random Cobble", "Texas Cobble", "Tile Sets 6\", 8\", 12\"", "Eurofan", "Scallop"] },
       { title: "Border templates", items: ["Stacked Brick", "Texas Cobble", "Soldier Course", "Tile options"] },
@@ -232,7 +220,7 @@ export const LEAVES: Leaf[] = [
     kind: "installer", id: "virtue-construction", section: "systems", pages: [40, 41],
     region: "HUB certified installer · Saskatchewan", title: "Saskatchewan winters. Saskatchewan crews.", body: "COR certified. Installing since 2009.",
     phone: "306.251.0177", web: "www.virtueconstruction.ca",
-    photo: half(41, "A red TrafficPatternsXD crosswalk being installed on a main street in Biggar, Saskatchewan", INSTALLER_PHOTO), caption: { place: "Biggar, Saskatchewan" },
+    photo: half(41, "A red TrafficPatternsXD crosswalk being installed on a small-town main street", INSTALLER_PHOTO),
   },
   {
     kind: "statement", id: "designed-for-the-city", section: "systems", pages: [42, 43],
@@ -253,11 +241,8 @@ export const LEAVES: Leaf[] = [
   ] as const).map(([slug, page, eyebrow, number, mapId, alt]) => applicationLeaf(slug, page, eyebrow, number, alt, mapId)),
   {
     kind: "application", id: "creative-design", section: "applications", pages: [56, 57],
-    eyebrow: "Creative design", title: "Seen from the sidewalk as well as the driver's seat.",
-    subhead: "An Indigenous-designed crossing: intricate line work that reads as art up close and as high-visibility contrast for drivers.",
-    body: "Preformed thermoplastic can reproduce artwork while holding the contrast, grip and visibility a crossing is designed for.",
-    specify: [sys("traffic-patterns", "125 mil preformed, custom designs"), sys("decomark", "125 mil preformed custom graphics")],
-    number: 6, photo: full(57, "The Every Child Matters crosswalk in TrafficPatterns", "50% 60%"), caption: { place: "London, Ontario" }, mapId: "kitchener-every-child-matters",
+    eyebrow: "Creative design", ...printedApplication("creative-design"),
+    number: 6, photo: full(57, "The Every Child Matters crosswalk in TrafficPatterns", "50% 60%"), mapId: "kitchener-every-child-matters",
   },
   ...([
     ["playgrounds", 58, "Play surfaces", 7, "hamilton-play-pad", "A blue StreetBond compass play pad in Hamilton, Ontario"],
@@ -269,22 +254,15 @@ export const LEAVES: Leaf[] = [
   ] as const).map(([slug, page, eyebrow, number, mapId, alt]) => applicationLeaf(slug, page, eyebrow, number, alt, mapId)),
   {
     kind: "application", id: "durability", section: "applications", pages: [70, 71],
-    eyebrow: "Durability", title: "Tough.",
-    subhead: "The \"secret sauce\" is in the aggregate. Using materials that reach 8-9 on the Mohs scale provides one of the toughest wearing surfaces you can use.",
-    body: "TrafficPatterns fuses 125 mil of preformed thermoplastic into the road. TrafficPatternsXD steps up to a 150 mil aggregate-reinforced build for the hardest-working surfaces: intersections, transit corridors, loading aprons.",
-    specify: [sys("traffic-patterns", "125 mil, aggregate-reinforced"), sys("traffic-patterns-xd", "150 mil, aggregate-reinforced")],
-    number: 13, photo: full(71, "TrafficPatternsXD pavers up close, Markham, Ontario", "50% 55%"), caption: { place: "Markham, Ontario" },
+    eyebrow: "Durability", ...printedApplication("durability"),
+    number: 13, photo: full(71, "TrafficPatternsXD pavers up close, Markham, Ontario", "50% 55%"),
   },
   {
     kind: "then-now", id: "commercial-spaces", section: "applications", pages: [72, 73],
-    eyebrow: "Commercial spaces", title: "Premium materials for commercial parking lots.",
-    subhead: "Complementing urban design elements with performance-based solutions. TrafficPatternsXD performs year after year.",
-    body: "After 10 years of constant use, these crossings have provided a safe and durable path for pedestrians.",
+    eyebrow: "Commercial spaces", ...printedApplication("commercial-spaces"),
     before: { page: 73, top: 0, bottom: 0.355, focus: "50% 50%", alt: "The Oakville crossing in its first year" },
     after: { page: 73, top: 0.405, bottom: 0.81, focus: "50% 50%", alt: "The same crossing ten years on, in winter" },
     labels: ["Year 1", "Year 10"],
-    caption: { place: "Oakville, Ontario", system: "TrafficPatternsXD" },
-    specify: [sys("traffic-patterns-xd", "pedestrian channelization; the look of pavers, stones and cobbles")],
     number: 14, mapId: "oakville-ten-years",
   },
   ...([
@@ -379,7 +357,7 @@ export const LEAVES: Leaf[] = [
   },
   {
     kind: "installer", id: "thermo-design", section: "projects", pages: [103],
-    region: "HUB master installer · Québec", title: "20 ans d'innovation au Québec", body: "Institutionnel | transport | commercial | municipal | passages pour piétons.",
+    region: "HUB master installer · Québec", title: "20 ans d'innovation au Québec", body: "institutionnel | transport | commercial | municipal | passages pour piétons",
     phone: "450.698.0000", web: "www.thermo-design.ca",
     photo: half(103, "A peach and blue StreetBond court with a bus passing, Québec", INSTALLER_PHOTO),
   },
@@ -481,7 +459,7 @@ export const LEAVES: Leaf[] = [
     kind: "installer", id: "square-one", section: "projects", pages: [133],
     region: "HUB master installer · British Columbia", title: "From city streets to community landmarks.", body: "Turning ordinary asphalt and concrete surfaces into vibrant, enduring public spaces throughout British Columbia.",
     phone: "604.612.6209", web: "www.squareonepaving.com",
-    photo: half(133, "The Circle of Life design at the Langley Events Centre, Langley, British Columbia", 0.555), caption: { place: "Langley, British Columbia" },
+    photo: half(133, "A circular Indigenous design in colour on a plaza, with a running track behind", 0.555),
   },
   {
     kind: "statement", id: "charlottetown", section: "projects", pages: [134, 135],
@@ -523,17 +501,26 @@ export const LEAVES: Leaf[] = [
   { kind: "back", id: "back-cover", section: "back", pages: [144], photo: { page: 144, bottom: 1, focus: "50% 40%", alt: "A family on a blue TrafficPatternsXD crosswalk, the back cover of the Idea Book" } },
 ];
 
+/** The printed spread's words, for a leaf written out by hand (a photograph the table cannot describe). */
+function printedApplication(slug: string) {
+  const entry = PRINT_APPLICATIONS[slug];
+  if (!entry) throw new Error(`Idea Book edition: no printed spread for ${slug}`);
+  return { title: entry.title, subhead: entry.statement, body: entry.body, specify: entry.specify.map((s) => sys(s.slug, s.note)), caption: entry.caption };
+}
+
 function applicationLeaf(slug: string, page: number, eyebrow: string, number: number, alt: string, mapId?: string): Leaf {
-  const entry = APPLICATION_CATALOGUE[slug];
+  const entry = PRINT_APPLICATIONS[slug];
   const app = applications.find((a) => a.slug === slug);
-  if (!entry || !app) throw new Error(`Idea Book edition: no catalogue spread for ${slug}`);
-  const map = mapId ? mapProjects.find((p) => p.id === mapId) : undefined;
-  const caption: Caption | undefined = map ? { place: `${map.city}, ${PROVINCE_NAMES[map.province] ?? map.province}` } : CAPTIONS[page];
+  if (!entry || !app) throw new Error(`Idea Book edition: no printed spread for ${slug}`);
+  if (entry.page !== page) throw new Error(`Idea Book edition: ${slug} is printed on page ${entry.page}, not ${page}`);
+  // The caption is the book's own, printed on the photograph; the map pin only
+  // supplies the link (its city can differ from the caption: York Region for
+  // Vaughan, North Cowichan for the Cowichan Valley).
   return {
     kind: "application", id: slug, section: "applications", pages: [page, page + 1],
-    slug, eyebrow, title: entry.title.trim(), subhead: entry.statement, body: entry.body,
+    slug, eyebrow, title: entry.title, subhead: entry.statement, body: entry.body,
     specify: entry.specify.map((s) => sys(s.slug, s.note)),
-    number, photo: full(page + 1, alt, "50% 55%"), caption, mapId,
+    number, photo: full(page + 1, alt, "50% 55%"), caption: entry.caption, mapId,
   };
 }
 
@@ -576,8 +563,8 @@ export function pageLabel(leaf: Leaf): string {
 
 /** The product entry a system leaf shows. */
 export function systemEntry(slug: string) {
-  const entry = PRODUCT_CATALOGUE[slug];
+  const entry = PRINT_SYSTEMS[slug];
   const product = products.find((p) => p.slug === slug);
-  if (!entry || !product) throw new Error(`Idea Book edition: no catalogue page for ${slug}`);
+  if (!entry || !product) throw new Error(`Idea Book edition: no printed page for ${slug}`);
   return { entry, product };
 }

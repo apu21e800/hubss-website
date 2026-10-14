@@ -156,12 +156,14 @@ const nextConfig: NextConfig = {
       // /request-catalogue to /request-idea-book. Every old address answers
       // 308 to the new one, so shared links and Google's index carry over.
       //
-      // Page one lives at /idea-book, not /idea-book/1 — the reader
-      // deliberately builds no route for it (see app/idea-book/[page]/page.tsx)
-      // and writes /idea-book into the address bar when you turn back to it.
-      // But "page 1" is the URL people type and share, so it lands on the book.
-      { source: "/catalogue/1", destination: "/idea-book", permanent: true },
-      { source: "/idea-book/1", destination: "/idea-book", permanent: true },
+      // Page one of the printed reader lives at /idea-book/pages, not
+      // /idea-book/1 — the reader deliberately builds no route for it (see
+      // app/idea-book/[page]/page.tsx) and writes /idea-book/pages into the
+      // address bar when you turn back to it. But "page 1" is the URL people
+      // type and share, so it lands on the printed book, open at the cover.
+      // /idea-book itself is the digital edition (14 Oct 2026).
+      { source: "/catalogue/1", destination: "/idea-book/pages", permanent: true },
+      { source: "/idea-book/1", destination: "/idea-book/pages", permanent: true },
       { source: "/catalogue", destination: "/idea-book", permanent: true },
       // Only page numbers. The rendered pages and the PDF still live under
       // /catalogue/2026-27/… and /catalogue/HUBSS-Catalogue-2026-27.pdf (moving

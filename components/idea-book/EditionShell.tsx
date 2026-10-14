@@ -31,6 +31,7 @@ export default function EditionShell({
   contents,
   sections,
   printedHref,
+  pagesHref,
   total,
   children,
 }: {
@@ -38,13 +39,18 @@ export default function EditionShell({
   volume: string;
   contents: ContentsEntry[];
   sections: { key: string; title: string }[];
-  /** The page-by-page reader, so a page number opens the spread as printed. */
+  /** The page-by-page reader, so a page number opens the spread as printed... */
   printedHref: string;
+  /** ...and its own address for page one, which has no /1 route. */
+  pagesHref: string;
   total: number;
   children: React.ReactNode;
 }) {
   const [current, setCurrent] = useState(0);
   const [open, setOpen] = useState(false);
+  // Scripts are running: the leaves may fade in as they arrive (edition.css
+  // keys the entrance on this, so a reader with scripts off sees every leaf).
+  const [live, setLive] = useState(false);
   const scroller = useRef<HTMLElement>(null);
   const dialog = useRef<HTMLDialogElement>(null);
 
@@ -87,12 +93,15 @@ export default function EditionShell({
     return () => io.disconnect();
   }, [leaves]);
 
-  // Arriving with #leaf: scroll there once the leaves have their height.
+  // Arriving with #leaf: scroll there once the leaves have their height. Then
+  // the book has the keyboard: Page Down, Space and the arrows scroll it
+  // without a click first (the document itself does not scroll).
   useEffect(() => {
     const id = window.location.hash.slice(1);
-    if (!id) return;
-    const el = document.getElementById(id);
+    const el = id ? document.getElementById(id) : null;
     if (el && el.classList.contains("ib-leaf")) el.scrollIntoView({ block: "start" });
+    scroller.current?.focus({ preventScroll: true });
+    setLive(true);
   }, []);
 
   useEffect(() => {
@@ -110,6 +119,19 @@ export default function EditionShell({
       else if (e.key === "End") { e.preventDefault(); goTo(total - 1); }
       else if (e.key === "Escape") { e.preventDefault(); leaveIdeaBook(); }
       else if (e.key.toLowerCase() === "c") { setOpen(true); }
+      else if (!scroller.current?.contains(t)) {
+        // Focus is on the bar (after a button, say): scroll the book anyway.
+        const root = scroller.current;
+        if (!root) return;
+        const page = root.clientHeight * 0.85;
+        const by =
+          e.key === "ArrowDown" ? 80 : e.key === "ArrowUp" ? -80
+          : e.key === "PageDown" || (e.key === " " && !e.shiftKey) ? page
+          : e.key === "PageUp" || (e.key === " " && e.shiftKey) ? -page : 0;
+        if (!by) return;
+        e.preventDefault();
+        root.scrollBy({ top: by, behavior: prefersReducedMotion() ? "auto" : "smooth" });
+      }
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -126,7 +148,7 @@ export default function EditionShell({
   const progress = total > 1 ? (current / (total - 1)) * 100 : 0;
 
   return (
-    <div className="ib" data-surface="paper">
+    <div className={`ib${live ? " ib-live" : ""}`} data-surface="paper">
       <header className="ib-bar">
         <div className="ib-bar-inner">
           <Link href="/" className="ib-bar-brand" aria-label="HUB Surface Systems, home">
@@ -142,7 +164,7 @@ export default function EditionShell({
               Contents
             </button>
             {here && (
-              <Link href={`${printedHref}/${here.pages.split("–")[0]}`} className="ib-bar-btn ib-bar-pages" title="Open these pages as printed">
+              <Link href={printedPageHref(printedHref, pagesHref, here.pages)} className="ib-bar-btn ib-bar-pages" title="Open these pages as printed">
                 <span className="ib-bar-pages-label">{"Printed"}</span>{here.pages}
               </Link>
             )}
@@ -156,7 +178,7 @@ export default function EditionShell({
         </div>
       </header>
 
-      <main className="ib-scroll" ref={scroller}>
+      <main className="ib-scroll" ref={scroller} tabIndex={-1}>
         {children}
       </main>
 
@@ -211,6 +233,12 @@ export default function EditionShell({
       </dialog>
     </div>
   );
+}
+
+/** The printed reader's address for a spread: page one is the reader's own home, not /1. */
+function printedPageHref(printedHref: string, pagesHref: string, pages: string): string {
+  const first = pages.split("–")[0];
+  return first === "1" ? pagesHref : `${printedHref}/${first}`;
 }
 
 function prefersReducedMotion(): boolean {

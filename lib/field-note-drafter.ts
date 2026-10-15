@@ -50,11 +50,20 @@ THE FACTS RULE, which beats everything else:
 - Every statement about HUB, its systems, specifications, numbers (thickness, service life, skid resistance, cure or open-to-traffic times, years, counts), standards, places, projects and clients must come from the FACTS you are given. If the FACTS don't say it, don't write it.
 - Never invent projects, clients, cities, quotes, testimonials, prices, awards, statistics or survey results. Don't name a city, agency or client unless the FACTS name it.
 - General context that isn't about HUB (what Vision Zero or Complete Streets are, why contrast helps pedestrians, what freeze-thaw does to paint) is fine in plain words, without numbers.
+- A figure that isn't about HUB may come only from the OUTSIDE EVIDENCE in the FACTS. Quote it as written, say who did the study and how big it was, give its limits in the same paragraph, and link the source once. A finding applies only to what was measured: high-visibility crosswalk findings are about bar, continental and ladder markings, never a decorative design; a study of one coating says nothing about another.
 - If the topic needs a fact you don't have, write around it honestly ("ask HUB for the specification for your site") rather than guessing.
 
 SHAPE: 900 to 1,300 words of markdown. Open with one or two short paragraphs, no heading, that name the problem the reader has. Then four to six sections with "## " headings a reader can scan, and "### " inside a section if it helps. Use a bullet or numbered list where it helps (specification checklists, steps), and a small markdown table when you compare options. No "# " title line, no images, no HTML. End with a short section on how to specify it or take the next step: HUB's spec sheets and Lunch & Learn sessions, from the FACTS, without a hard sell.
 
-LINKS: link the first mention of each HUB system to its page, and link one to three of the RELATED POSTS where they genuinely help, with the URLs given. No other links.
+ATTENTION (Vern, 15 Oct 2026: articles that capture real attention). What makes a busy specifier stop and read, from research on B2B buyers and on headline tests:
+- The headline names the thing and the place or the problem in plain words: what changed, where, for whom. A time span or a figure only when the FACTS give it. Plain words beat clever ones; no question as a headline, no praise word.
+- The first sentence puts the reader somewhere concrete: what a person standing there sees, or the decision on their desk. The second says why it matters to them.
+- Proof before explanation: open a section with the documented job, the then-and-now, the years in service or the outside evidence, then explain it.
+- Give the reader something to keep: a short specification checklist, a comparison table, or the questions to put to a supplier.
+- Community and memorial work (a Nation's design, a Legion's crosswalk, a business association's logo): name the partner only as the FACTS name them, in their spelling, and give the meaning only as they state it.
+- A contested topic (removals, vandalism, a council vote) gets plain facts with no adjectives, then the reader's practical question: approval, repair or upkeep.
+
+LINKS: link the first mention of each HUB system to its page, link one to three of the RELATED POSTS where they genuinely help, and link the source of each piece of OUTSIDE EVIDENCE you use, once, with the URLs given. No other links.
 
 SEARCH: use the target search phrase naturally in the title, in the first paragraph and in one heading. Don't stuff it.
 
@@ -151,7 +160,7 @@ export async function writeDraft(brief: DraftBrief, facts: string, relatedPosts:
 
 export async function checkDraft(draft: Draft, facts: string): Promise<FactCheck> {
   const client = new Anthropic();
-  const system = `You fact-check Insights articles for HUB Surface Systems before a human editor publishes them. You are strict and literal. You compare the DRAFT with the FACTS and list every statement in the draft about HUB, its systems, specifications, numbers, standards, places, projects or clients that the FACTS do not support, including numbers that differ, capabilities the FACTS don't claim, and any named city, agency, project or client not in the FACTS. General context that isn't about HUB and has no numbers (what Vision Zero is, why contrast helps) is fine; don't list it. Links are fine. If everything is supported, the verdict is "clean" and the list is empty.`;
+  const system = `You fact-check Insights articles for HUB Surface Systems before a human editor publishes them. You are strict and literal. You compare the DRAFT with the FACTS and list every statement in the draft about HUB, its systems, specifications, numbers, standards, places, projects or clients that the FACTS do not support, including numbers that differ, capabilities the FACTS don't claim, and any named city, agency, project or client not in the FACTS. General context that isn't about HUB and has no numbers (what Vision Zero is, why contrast helps) is fine; don't list it. A figure from the FACTS' outside evidence is supported only when it is quoted as written, the same paragraph gives that study's limits, and it is applied only to what the study measured (a crosswalk-visibility finding used for a decorative design, or a study of one coating used for another, is unsupported): list any that fall short. Links are fine. If everything is supported, the verdict is "clean" and the list is empty.`;
   const user = `FACTS:\n${facts}\n\nDRAFT:\n# ${draft.title}\n\n${draft.excerpt}\n\n${draft.body}\n\nReport with the report tool.`;
   const result = await toolCall<FactCheck>(client, system, user, REPORT, 3000);
   return { verdict: result.unsupported?.length ? "needs edits" : "clean", unsupported: result.unsupported ?? [] };

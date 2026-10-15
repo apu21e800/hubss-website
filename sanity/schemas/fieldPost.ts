@@ -4,7 +4,8 @@ import { copyStyle, galleryImageItem } from "./_shared";
 
 /**
  * A field post: photos of a finished job, straight from a phone, with the
- * place, the system and a line of facts. Studio → From the field.
+ * place, the system and a line of facts. Studio → Job photos for social
+ * ("From the field" until 15 Oct 2026).
  *
  * Publishing one is all it takes: the next daily social run (14:00 UTC,
  * lib/social-pipeline.ts) writes a post per channel from it and leaves them as
@@ -16,7 +17,8 @@ import { copyStyle, galleryImageItem } from "./_shared";
  */
 export default defineType({
   name: "fieldPost",
-  title: "Field post",
+  title: "Job photos",
+  description: "Photos of a finished job. Publish it and the next morning's social run writes posts from it as drafts in Buffer, for approval there. Not shown on the website.",
   type: "document",
   icon: ImagesIcon,
 

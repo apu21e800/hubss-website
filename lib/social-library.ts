@@ -22,6 +22,7 @@
  */
 
 import { mapProjects, TOUR_IDS, type MapProject } from "@/lib/map-projects";
+import { momentsWithin } from "@/lib/insights-calendar";
 import { PRODUCT_CATALOGUE } from "@/lib/product-catalogue";
 import { APPLICATION_CATALOGUE } from "@/lib/application-catalogue";
 import { products } from "@/lib/products";
@@ -198,6 +199,22 @@ export function libraryQueue(projects: readonly MapProject[] = mapProjects): Lib
  */
 export function nextLibraryItem(queue: readonly LibraryItem[], logged: ReadonlySet<string>): LibraryItem | undefined {
   return queue.find((item) => !logged.has(item.key) && !(item.post && logged.has(item.post)));
+}
+
+/**
+ * The week's library post: in the seven days before a moment with a library
+ * job (lib/insights-calendar.ts: Kitchener's veterans crosswalk before
+ * Remembrance Day), that job, if it hasn't been posted and its article hasn't
+ * had posts of its own; otherwise the queue's next (nextLibraryItem). The
+ * queue carries on where it was the week after.
+ */
+export function libraryPick(queue: readonly LibraryItem[], logged: ReadonlySet<string>, now: Date): LibraryItem | undefined {
+  for (const m of momentsWithin(now, 0, 7)) {
+    if (!m.libraryJob) continue;
+    const item = queue.find((i) => i.key === `lib:project:${m.libraryJob}`);
+    if (item && !logged.has(item.key) && !(item.post && logged.has(item.post))) return item;
+  }
+  return nextLibraryItem(queue, logged);
 }
 
 /** Monday 00:00 UTC of the week `now` is in. */

@@ -17,7 +17,7 @@ from three sources, in this order, and every draft waits for approval:
 | Stream | What it drafts from | How often | Links to | `utm_campaign` |
 |---|---|---|---|---|
 | Articles | a newly published Insights article | up to 2 a day, the day after Publish | the article | `insights` |
-| From the field | a published Studio **Field post** (`sanity/schemas/fieldPost.ts`): photos of a finished job, where, the system, a line of facts | 1 a day | the system's page | `field` |
+| From the field | a published Studio **Job photos** post (Studio → Job photos for social; `sanity/schemas/fieldPost.ts`): photos of a finished job, where, the system, a line of facts | 1 a day | the system's page | `field` |
 | From the library | one thing HUB has already published and checked (`lib/social-library.ts`): a documented job from the homepage map (the tour's jobs first), or a system or application spread from the Product Book, taking turns | 1 a week, Mondays (the very first one at once); a new field post takes the week's turn | the job's article, its Product Book page, or the system or application page | `library` |
 
 - The posts say only what their source says (lib/social-drafter.ts
@@ -143,7 +143,7 @@ Vercel's five-minute limit.
 ## Checking what happened
 
 - The email lists what was drafted and anything skipped, with the reason.
-- Studio → Social drafts (read only): one entry per article that got drafts
+- Studio → Sent to Buffer (read only; "Social drafts" until 15 Oct 2026): one entry per article that got drafts
   (`socialLog-<slug>`), with the channels, the Buffer post ids, anything
   skipped and the style check. Deleting one (from Vern's PC) makes the next
   run draft that article again.

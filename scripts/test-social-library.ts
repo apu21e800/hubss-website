@@ -10,7 +10,7 @@
  */
 import assert from "node:assert/strict";
 import { mapProjects, TOUR_IDS } from "../lib/map-projects";
-import { idFor, imageFor, libraryDue, libraryQueue, nextLibraryItem, SITE, weekStart } from "../lib/social-library";
+import { idFor, imageFor, libraryDue, libraryPick, libraryQueue, nextLibraryItem, SITE, weekStart } from "../lib/social-library";
 
 let failures = 0;
 function check(name: string, fn: () => void) {
@@ -149,6 +149,23 @@ check("a photo on hubss.com goes as it is", () => assert.equal(imageFor(`${SITE}
 check("anything else isn't sent", () => {
   assert.equal(imageFor("/images/map/x.jpg", "landscape"), undefined);
   assert.equal(imageFor("https://example.com/x.jpg", "landscape"), undefined);
+});
+
+console.log("\nA moment's job takes the week (lib/insights-calendar.ts)");
+const veterans = "lib:project:kitchener-veterans";
+check("Kitchener's veterans crosswalk is in the queue", () => assert.ok(queue.some((i) => i.key === veterans)));
+check("the Monday before Remembrance Day, it takes the week's turn", () => {
+  assert.equal(libraryPick(queue, new Set(), new Date("2026-11-09T14:00:00Z"))?.key, veterans);
+});
+check("other weeks, the queue's next", () => {
+  assert.equal(libraryPick(queue, new Set(), new Date("2026-10-19T14:00:00Z"))?.key, nextLibraryItem(queue, new Set())?.key);
+  assert.equal(libraryPick(queue, new Set(), new Date("2026-11-12T14:00:00Z"))?.key, nextLibraryItem(queue, new Set())?.key);
+});
+check("not if it, or its article, has already been posted", () => {
+  const monday = new Date("2026-11-09T14:00:00Z");
+  assert.notEqual(libraryPick(queue, new Set([veterans]), monday)?.key, veterans);
+  const post = queue.find((i) => i.key === veterans)?.post;
+  if (post) assert.notEqual(libraryPick(queue, new Set([post]), monday)?.key, veterans);
 });
 
 console.log("\nThe first six library posts, in order:");

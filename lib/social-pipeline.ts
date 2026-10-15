@@ -57,7 +57,7 @@ import { isSanityImage } from "@/lib/photos";
 import { PRODUCT_CATALOGUE } from "@/lib/product-catalogue";
 import { getMergedProduct } from "@/lib/products.server";
 import { getMergedApplication } from "@/lib/applications.server";
-import { absolute, idFor, imageFor, libraryDue, libraryQueue, nextLibraryItem, SITE, type LibraryItem } from "@/lib/social-library";
+import { absolute, idFor, imageFor, libraryDue, libraryPick, libraryQueue, SITE, type LibraryItem } from "@/lib/social-library";
 import {
   daysSince,
   decideOutcome,
@@ -256,7 +256,7 @@ export async function draftSocialForNewPosts(now = new Date()): Promise<{ posts:
   // A field post not tried before takes the week's turn; one that keeps
   // failing doesn't, so it can't hold the library up for its 14 days of retries.
   const fieldPostToday = fields.some((f) => !failing.has(f.key));
-  const library = libraryDue(now, lastJobPostAt ?? undefined, fieldPostToday) ? nextLibraryItem(libraryQueue(), posted) : undefined;
+  const library = libraryDue(now, lastJobPostAt ?? undefined, fieldPostToday) ? libraryPick(libraryQueue(), posted, now) : undefined;
   if (!articles.length && !fields.length && !library) return { posts: [], waiting: 0 };
 
   const channels = await bufferChannels();
@@ -403,7 +403,7 @@ async function draftItem(
       await client.delete(logId);
       console.warn(`[social] ${item.key}: nothing drafted, the next run tries again. ${reasons}`);
     } catch (err) {
-      result.recordProblem = `Its record under Social drafts in Studio couldn't be cleared (${errorText(err)}), so the job won't try this again by itself.`;
+      result.recordProblem = `Its record under Sent to Buffer in Studio couldn't be cleared (${errorText(err)}), so the job won't try this again by itself.`;
       console.error(`[social] ${item.key}: nothing drafted, and the claim couldn't be dropped: ${errorText(err)}. ${reasons}`);
     }
     // The first failure starts the GIVE_UP_DAYS clock. If this write fails,
@@ -431,7 +431,7 @@ async function draftItem(
         })
         .commit();
     } catch (err) {
-      result.recordProblem = `Studio's record of this under Social drafts couldn't be filled in (${errorText(err)}). Nothing is lost: the drafts are in Buffer, and it won't be drafted again.`;
+      result.recordProblem = `Studio's record of this under Sent to Buffer couldn't be filled in (${errorText(err)}). Nothing is lost: the drafts are in Buffer, and it won't be drafted again.`;
       console.error(`[social] ${item.key}: the log couldn't be filled in: ${errorText(err)}`);
     }
     console.log(`[social] ${item.key}: ${result.outcome}, ${result.drafted.length} Buffer draft(s), ${result.skipped.length} skipped${reasons ? ` (${reasons})` : ""}; style: ${style.left.length} of ${style.flagged} left${style.error ? ` (rewrite failed: ${style.error})` : ""}`);
@@ -480,7 +480,7 @@ async function emailEditors(subject: string, text: string): Promise<void> {
 
 /** How an email names what the drafts are for. */
 export function describe(r: Pick<SocialResult, "stream" | "title">): string {
-  if (r.stream === "From the field") return `the field post "${r.title}"`;
+  if (r.stream === "From the field") return `the job photos post "${r.title}"`;
   if (r.stream === "From the library") return `"${r.title}" from HUB's library (a documented job or a Product Book spread)`;
   return `the new Insights article "${r.title}"`;
 }

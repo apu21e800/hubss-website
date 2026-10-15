@@ -15,7 +15,8 @@ import { ShareIcon } from "@sanity/icons";
  */
 export default defineType({
   name: "socialLog",
-  title: "Social drafts",
+  // "Sent to Buffer" in Studio since 15 Oct 2026 ("Social drafts" before).
+  title: "Sent to Buffer",
   type: "document",
   icon: ShareIcon,
   readOnly: true,
@@ -26,7 +27,7 @@ export default defineType({
       name: "source",
       title: "Stream",
       type: "string",
-      description: "Article (a new Insights article), From the field (a field post) or From the library (a documented job or a Product Book spread).",
+      description: "Article (a new blog post), From the field (a Job photos post) or From the library (a documented job or a Product Book spread).",
     }),
     defineField({
       name: "styleCheck",

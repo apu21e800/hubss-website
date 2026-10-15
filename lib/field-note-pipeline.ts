@@ -92,8 +92,8 @@ export async function draftNextFieldNote(opts: { ideaId?: string } = {}): Promis
     return {
       drafted: false,
       reason: added.length
-        ? `the Insights plan was empty; added ${added.length} idea${added.length === 1 ? "" : "s"}, and the next run drafts the first`
-        : "the Insights plan has no Ready items or Ideas left",
+        ? `Blog ideas was empty; added ${added.length} idea${added.length === 1 ? "" : "s"}, and the next run drafts the first`
+        : "Blog ideas has no Ready items or Ideas left",
     };
   }
   if (!idea) return { drafted: false, reason: `no plan item ${opts.ideaId}` };
@@ -146,7 +146,7 @@ async function notify(
   }
   const link = `https://hubss.com/studio/intent/edit/id=${docId};type=blogPost`;
   const text = [
-    "A new Insights draft is waiting in Studio. Nothing is on hubss.com until you publish it.",
+    "A new blog draft is waiting in Studio → Blog posts. Nothing is on hubss.com until you read it and press Publish.",
     "",
     title,
     excerpt,
@@ -155,7 +155,7 @@ async function notify(
       ? `From the plan: "${plan.ideaTitle}" (the next Idea; nothing was marked Ready).`
       : `From the plan: "${plan.ideaTitle}".`,
     plan.ideasLeft < PLAN_LOW
-      ? `The plan is running low: ${plan.ideasLeft} item${plan.ideasLeft === 1 ? "" : "s"} left. New ideas are added by themselves when it gets low; you can add your own in Studio → Insights plan.`
+      ? `The plan is running low: ${plan.ideasLeft} item${plan.ideasLeft === 1 ? "" : "s"} left. New ideas are added by themselves when it gets low; you can add your own in Studio → Blog ideas.`
       : `${plan.ideasLeft} items left in the plan.`,
     ...(plan.next ? [`Next up: "${plan.next}". To change it, reorder or edit the plan in Studio.`] : []),
     "",
@@ -171,7 +171,7 @@ async function notify(
   const { error } = await new Resend(process.env.RESEND_API_KEY).emails.send({
     from: "HUB Surface Systems <noreply@hubss.com>",
     to,
-    subject: `Insights draft ready: ${title}`,
+    subject: `Blog draft ready to review: ${title}`,
     text,
   });
   if (error) {

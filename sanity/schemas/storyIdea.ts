@@ -4,18 +4,19 @@ import { FIELD_NOTE_TYPES } from "../../lib/field-notes-taxonomy";
 import { copyStyle } from "./_shared";
 
 /**
- * The Field Notes plan: the list of posts HUB wants written.
+ * Blog ideas (Studio label since 15 Oct 2026; "Insights plan" before that,
+ * "Field Notes plan" before 25 Sep): the list of posts HUB wants written.
  *
  * Every Tuesday and Thursday morning (vercel.json) the AI drafter takes the
  * item marked "Ready" with the highest priority (else the top Idea), writes a
  * first draft, and saves it in
- * Blog / Field Notes as an UNPUBLISHED draft (app/api/cron/draft-field-note).
+ * Blog posts as an UNPUBLISHED draft (app/api/cron/draft-field-note).
  * Nothing it writes reaches hubss.com until Vern or Doug reviews it and presses
  * Publish. Facts come only from the HUB catalogue and from the brief below.
  */
 export default defineType({
   name: "storyIdea",
-  title: "Insights plan",
+  title: "Blog idea",
   type: "document",
   icon: BulbOutlineIcon,
   // A plan item has no draft/publish step: a change (say, to Ready) counts the
@@ -39,7 +40,7 @@ export default defineType({
         list: [
           { title: "Idea: not ready to draft", value: "idea" },
           { title: "Ready: draft it next", value: "ready" },
-          { title: "Drafted: waiting in Insights", value: "drafted" },
+          { title: "Drafted: waiting in Blog posts for a read and Publish", value: "drafted" },
           { title: "Published", value: "published" },
           { title: "Not doing it", value: "dropped" },
         ],

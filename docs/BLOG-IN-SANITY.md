@@ -50,7 +50,7 @@ appear together; no card ever links to a page that doesn't exist yet.
 
 ## AI drafts (every Tuesday and Thursday)
 
-Studio's **Insights plan** is the list of posts HUB wants written. Every
+Studio's **Blog ideas** ("Insights plan" until 15 Oct 2026) is the list of posts HUB wants written. Every
 Tuesday and Thursday (Thursdays since 14 Oct 2026, Vern: "a blog or two a
 week") at 13:00 UTC (9:00 in Toronto in summer time) the drafter
 (`app/api/cron/draft-field-note`, scheduled in `vercel.json`) takes the plan

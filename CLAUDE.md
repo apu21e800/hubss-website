@@ -81,10 +81,10 @@ hubss-website/
 5. Contact — form + both office locations
 
 ## Adding Content (no developer needed)
-- New article: Studio → Insights → create, then Publish. It is live
+- New article: Studio → Blog posts → create, then Publish. It is live
   about five minutes later (the site rebuilds to add the page); edits to live
   posts show within seconds. docs/BLOG-IN-SANITY.md
-- Article ideas: Studio → Insights plan. The AI drafter (Tuesdays and
+- Article ideas: Studio → Blog ideas. The AI drafter (Tuesdays and
   Thursdays since 14 Oct 2026) takes the top Ready item, or the top Idea when
   none is Ready, and writes it up as an unpublished draft for review (never
   publishes). When the plan gets low it adds Ideas itself
@@ -159,6 +159,15 @@ Vercel — connected to GitHub, auto-deploys on push to main
   Sanity types (blogPost, storyIdea), the cron routes and env names are
   unchanged. The "Blog" post type prints as "Article" (lib/field-notes-taxonomy.ts,
   `badge`); its stored value stays "Blog".
+- Studio says it in plain words (15 Oct 2026; Vern: "what does not live mean?
+  ... maybe better to just call it blog"): **Blog posts** (blogPost; the site
+  still calls the blog Insights), **Blog ideas** (storyIdea, was "Insights
+  plan"), **Job photos for social** (fieldPost, was "From the field"; the
+  stream keeps that name in logs), **Sent to Buffer** (socialLog, read only).
+  The old "Projects (Map Pins)" list is off the sidebar and the Create menu
+  (the map reads lib/map-projects.ts; its documents are kept). The global
+  Create menu offers only hand-made types (NOT_CREATED_BY_HAND in
+  sanity.config.ts). The lists keep their old ids, so saved links still work.
 - The repair family is **Asphalt & Concrete Repair** (lib/product-categories.ts,
   lib/product-taxonomy.ts, the three product eyebrows in lib/products.ts).
 
@@ -368,8 +377,8 @@ want to write the blogs and do the social media". The daily cron
 (app/api/cron/social-drafts, 14:00 UTC) drafts posts into Buffer from three
 streams; a person approves every one in Buffer (docs/buffer-setup.md):
 - Articles: each newly published Insights post (lib/social-pipeline.ts).
-- From the field: a published Studio Field post (sanity/schemas/fieldPost.ts,
-  Studio → From the field): job photos, place, system, one line of facts.
+- From the field: a published Studio field post (sanity/schemas/fieldPost.ts,
+  Studio → Job photos for social): job photos, place, system, one line of facts.
   Linked to the system's page. One a day.
 - From the library: once a week (Mondays), a documented map job (TOUR_IDS
   first, in lib/map-projects.ts) or a Product Book system or application spread
@@ -393,6 +402,36 @@ streams; a person approves every one in Buffer (docs/buffer-setup.md):
 - Vercel crons stay at two (the drafter, this job): the library runs inside
   the daily job rather than as a third cron, and the planner inside the
   drafter.
+
+## Articles that earn attention, on time (15 Oct 2026)
+Vern: "writing smart blog posts that will capture real attention ... pair
+with an automated blog plan. we need to keep the blogs and social media
+pipeline full." Two research passes (B2B buyers, LinkedIn, local news,
+headline tests, AI search) became three things in code:
+- The writer's ATTENTION rules (lib/field-note-drafter.ts, VOICE): a plain,
+  concrete headline (no question, no praise); a first sentence that puts the
+  reader somewhere real; proof before explanation; something to keep (a
+  checklist, a table); partners named only as the facts name them; contested
+  topics told plainly.
+- Outside evidence (lib/insights-evidence.ts): five published studies, each
+  read against its source, with who did it, its limits and a link (FHWA
+  high-visibility crosswalks, SFMTA red lanes, the Bloomberg asphalt art
+  study (weak), Phoenix and Pacoima cool pavement). factsBlock adds the ones
+  that share a system or application; they are the ONLY figures not about HUB
+  an article may use, always with their limits in the same paragraph (the
+  fact check lists any without). Add a study only after reading the source.
+- The calendar (lib/insights-calendar.ts): the clocks going back, Remembrance
+  Day, plow season, budget and tender season, June community crosswalks,
+  Earth Day, back to school, and the two days for First Nations partners.
+  From 14 to 70 days ahead the planner proposes one article per moment, even
+  when the plan isn't low, at priority 1 with "Timely: for <moment>, <date>"
+  in its brief (that line is how a moment counts as planned). In the week
+  before a moment with a `libraryJob`, that job takes the weekly library post
+  (libraryPick in lib/social-library.ts: Kitchener's veterans crosswalk before
+  Remembrance Day). `npm run test:planner`, `npm run test:social`.
+- Not done, by choice: Semrush (Search Console and Bing are enough at this
+  traffic; a one-month subscription only for a competitor audit), and more
+  llms.txt or schema work aimed at AI answers (no evidence it helps).
 
 ## Edit on the page, and what Doug owns in Studio (7 Oct 2026)
 Vern, 7 Oct: "making sure that the CMS is premium, so clients can make

@@ -14,6 +14,8 @@ import { PRODUCT_CATALOGUE } from "../lib/product-catalogue";
 import { applications } from "../lib/applications";
 import { goodQuestion, repeats, roundupJobs, vetIdeas, words, type Existing, type RawIdea } from "../lib/insights-planner";
 import { factsBlock, QUESTIONS_BRIEF } from "../lib/field-note-facts";
+import { dateIn, MOMENTS, momentKey, momentPlanned, momentsWithin, nextDate } from "../lib/insights-calendar";
+import { EVIDENCE, evidenceFor } from "../lib/insights-evidence";
 
 let failures = 0;
 function check(name: string, fn: () => void) {
@@ -216,6 +218,108 @@ check("no more than it was asked for", () => {
 });
 check("no title or no search phrase: dropped", () => {
   assert.equal(vet([guide({ title: "" }), guide({ searchPhrase: " " })]).docs.length, 0);
+});
+
+console.log("\nThe calendar (lib/insights-calendar.ts)");
+const OCT15 = new Date("2026-10-15T14:00:00Z");
+const moment = (id: string) => {
+  const m = MOMENTS.find((x) => x.id === id);
+  if (!m) throw new Error(`no moment ${id}`);
+  return m;
+};
+const day = (d: Date) => d.toISOString().slice(0, 10);
+check("the clocks go back on the first Sunday of November", () => {
+  assert.equal(day(nextDate(moment("clocks-back"), OCT15)), "2026-11-01");
+  assert.equal(day(dateIn(moment("clocks-back").when, 2027)), "2027-11-07");
+});
+check("a date that has passed this year is next year's", () => {
+  assert.equal(day(nextDate(moment("earth-day"), OCT15)), "2027-04-22");
+  assert.equal(day(nextDate(moment("remembrance-day"), new Date("2026-11-11T20:00:00Z"))), "2026-11-11");
+  assert.equal(day(nextDate(moment("remembrance-day"), new Date("2026-11-12T01:00:00Z"))), "2027-11-11");
+});
+check("from 15 Oct 2026 the moments due an article are the clocks, Remembrance Day and plow season", () => {
+  assert.deepEqual(momentsWithin(OCT15, 14, 70).map((m) => m.id), ["clocks-back", "remembrance-day", "plow-season"]);
+});
+check("every moment names known systems and applications, and a library job that is on the map", () => {
+  for (const m of MOMENTS) {
+    assert.ok(m.systems.length, `${m.id}: no system`);
+    for (const s of m.systems) assert.ok(PRODUCT_CATALOGUE[s], `${m.id}: ${s}`);
+    for (const a of m.applications) assert.ok(applications.some((x) => x.slug === a), `${m.id}: ${a}`);
+    if (m.libraryJob) assert.ok(mapProjects.some((p) => p.id === m.libraryJob), `${m.id}: ${m.libraryJob}`);
+    assert.ok(!/[\u2014]/.test(m.angle + m.name), `${m.id}: an em dash`);
+  }
+});
+
+console.log("\nArticles timed for a moment");
+const due = momentsWithin(OCT15, 14, 70);
+const vetT = (raw: RawIdea[], over: Partial<Parameters<typeof vetIdeas>[1]> = {}) =>
+  vetIdeas(raw, { existing, jobs, max: 10, moments: due, now: OCT15, ...over });
+const memorial = guide({ title: "Memorial crosswalks before Remembrance Day", searchPhrase: "memorial crosswalk", moment: "remembrance-day", systems: ["traffic-patterns"], applications: ["community-branding"] });
+check("go in at priority 1, with the moment's line after the questions", () => {
+  const { docs, dropped } = vetT([memorial]);
+  assert.equal(docs.length, 1, JSON.stringify(dropped));
+  assert.equal(docs[0].priority, 1);
+  assert.ok(docs[0].brief.startsWith(QUESTIONS_BRIEF), "a guide's brief still starts with its questions");
+  const rd = moment("remembrance-day");
+  assert.ok(docs[0].brief.includes(momentKey(rd, nextDate(rd, OCT15))));
+  assert.ok(momentPlanned(rd, OCT15, [docs[0].brief]), "the next run sees it planned");
+  assert.ok(!momentPlanned(rd, new Date("2027-10-01T00:00:00Z"), [docs[0].brief]), "next year's date is a new moment");
+});
+check("a roundup can be timed too, and its moment line is never filed as a fact", () => {
+  const ids = jobs.slice(0, 3).map((j) => j.id);
+  const { docs } = vetT([{ kind: "roundup", title: "Crossings that came through the winter", searchPhrase: "crosswalk winter durability", jobIds: ids, moment: "plow-season" }]);
+  assert.equal(docs.length, 1);
+  assert.equal(docs[0].priority, 1);
+  const line = docs[0].brief.split("\n").pop()!;
+  assert.ok(line.startsWith("Timely: for the start of plow season"));
+  const facts = factsBlock({ productSlugs: ["traffic-patterns-xd"], applicationSlugs: [], brief: docs[0].brief });
+  const [asTrue, timing] = [facts.split("## From HUB's editor")[1]?.split("## Timing")[0] ?? "", facts.split("## Timing")[1] ?? ""];
+  assert.ok(!asTrue.includes("Timely:"), "not in the brief treated as true");
+  assert.ok(timing.includes(line), "filed under Timing");
+});
+check("an ordinary idea stays at priority 3, with no moment line", () => {
+  const { docs } = vetT([guide()]);
+  assert.equal(docs[0].priority, 3);
+  assert.ok(!docs[0].brief.includes("Timely:"));
+});
+check("a second idea for the same moment, or one for a moment not due, is an ordinary idea", () => {
+  const { docs } = vetT([
+    memorial,
+    guide({ title: "Commemorative crosswalks with veterans groups", searchPhrase: "commemorative crosswalk", moment: "remembrance-day" }),
+    guide({ title: "Cooler playground surfaces in summer", searchPhrase: "cool playground surface", moment: "earth-day", systems: ["streetbondsr"] }),
+  ]);
+  assert.deepEqual(docs.map((d) => d.priority), [1, 3, 3]);
+});
+check("when the plan isn't low, only articles for a due moment go in", () => {
+  const { docs, dropped } = vetT([guide(), memorial], { onlyMoments: true });
+  assert.deepEqual(docs.map((d) => d.title), ["Memorial crosswalks before Remembrance Day"]);
+  assert.equal(dropped.length, 1);
+});
+check("the cap never cuts an article for a due moment", () => {
+  const { docs } = vetT([guide(), guide({ title: "How long an inlaid crosswalk lasts", searchPhrase: "inlaid crosswalk lifespan" }), memorial], { max: 1 });
+  assert.deepEqual(docs.map((d) => d.title), ["Memorial crosswalks before Remembrance Day"]);
+});
+
+console.log("\nOutside evidence (lib/insights-evidence.ts)");
+check("every study has a source, its limits, and tags HUB has pages for", () => {
+  for (const e of EVIDENCE) {
+    assert.match(e.source.url, /^https:\/\//, e.id);
+    assert.ok(e.limits.length > 40, `${e.id}: limits`);
+    for (const s of e.systems) assert.ok(PRODUCT_CATALOGUE[s], `${e.id}: ${s}`);
+    for (const a of e.applications) assert.ok(applications.some((x) => x.slug === a), `${e.id}: ${a}`);
+    assert.ok(!/[\u2014]/.test(e.finding + e.limits + e.who), `${e.id}: an em dash`);
+  }
+});
+check("a bus-lane article gets the San Francisco red-lane study, a driveway article none", () => {
+  assert.ok(evidenceFor(["mmax"], ["bus-lanes"]).some((e) => e.id === "sfmta-red-transit-lanes"));
+  assert.equal(evidenceFor(["chipfill"], ["residential-driveways"]).length, 0);
+});
+check("the writer's facts carry the study with its limits and source, only when it applies", () => {
+  const f = factsBlock({ productSlugs: ["mmax"], applicationSlugs: ["bus-lanes"] });
+  assert.ok(f.includes("## Outside evidence"));
+  assert.ok(f.includes("Limits (give these with the finding)"));
+  assert.ok(f.includes("https://dot.ca.gov/"));
+  assert.ok(!factsBlock({ productSlugs: ["chipfill"], applicationSlugs: ["residential-driveways"] }).includes("## Outside evidence"));
 });
 
 if (failures) {

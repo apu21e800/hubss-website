@@ -16,7 +16,8 @@ import { bodyStyle, copyStyle, headingStyle } from "./_shared";
  */
 export default defineType({
   name: "blogPost",
-  title: "Insights article",
+  // "Blog post" in Studio (15 Oct 2026); the site calls the blog Insights.
+  title: "Blog post",
   type: "document",
   icon: EditIcon,
 

@@ -137,6 +137,10 @@ function datedPublish(original: DocumentActionComponent): DocumentActionComponen
 const StudioLogo = () =>
   createElement("img", { src: "/icon.png", alt: "", style: { width: "100%", height: "100%", borderRadius: "50%" } });
 
+
+/** Document types left out of the global Create menu (newDocumentOptions below). */
+const NOT_CREATED_BY_HAND = new Set(["page", "siteSettings", "socialLog", "project"]);
+
 export default defineConfig({
   name:     "hubss-studio",
   title:    "HUB Surface Systems",
@@ -168,6 +172,12 @@ export default defineConfig({
   },
 
   document: {
+    // Studio's global Create menu offers only what an editor makes by hand
+    // (15 Oct 2026). Pages and Site Settings are one of each, "Sent to
+    // Buffer" is written by the social job, and the old map pins aren't read
+    // by the site.
+    newDocumentOptions: (prev, { creationContext }) =>
+      creationContext.type === "global" ? prev.filter((t) => !NOT_CREATED_BY_HAND.has(t.templateId)) : prev,
     actions: (prev, context) =>
       context.schemaType === "blogPost"
         ? prev.map((action) => (action.action === "publish" ? datedPublish(action) : action))

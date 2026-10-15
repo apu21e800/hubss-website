@@ -71,7 +71,8 @@ Oakville, Ontario". It is what screen readers say and what Google reads.
 
 ## 4. The plan, and the Tuesday and Thursday drafts
 
-**Insights plan** is the list of articles we want written. Each idea has a
+**Blog ideas** (Studio's name since 15 Oct 2026; "Insights plan" before) is
+the list of articles we want written. Each idea has a
 working title, a target search phrase and a brief. You don't have to do
 anything to it each week: the drafter takes the next idea by itself, and when
 the plan gets low it adds new ideas at the bottom by itself (guides answered
@@ -82,7 +83,7 @@ it.
 Every Tuesday and Thursday morning (13:00 UTC, 9 a.m. in Toronto during summer
 time) the drafter takes the Ready idea with the highest priority, or, when
 none is Ready, the next Idea, and writes a draft. You get an email; it says
-which idea is next. The draft is in Insights, unpublished, with a fact
+which idea is next. The draft is in **Blog posts**, unpublished, with a fact
 check and a style check in **Notes for the editor**. Read the notes, check
 every sentence it flagged, edit as you would any draft and press Publish.
 Nothing reaches the site until you do.
@@ -105,7 +106,7 @@ Product Book tell it.
 The day after an article goes live, draft social posts for it appear in
 Buffer, one per channel, each with the photo and a tracked link. Nothing is
 posted until someone approves and schedules it in Buffer. The email, and
-**Social drafts** in Studio, list any line in them that still breaks the
+**Sent to Buffer** in Studio, list any line in them that still breaks the
 house style (see 8): fix it in Buffer before you approve.
 
 In Buffer: open a channel's **Drafts**, read the post and check the photo,
@@ -115,8 +116,9 @@ delete it in Buffer; nothing else needs doing.
 
 Two more kinds of draft arrive the same way (docs/buffer-setup.md):
 
-- **From the field.** When a job is finished, take 3 to 5 photos on your
-  phone. In Studio, **From the field** → **+**: add the photos (best one
+- **Job photos for social** (was "From the field"). When a job is finished,
+  take 3 to 5 photos on your phone. In Studio, **Job photos for social** →
+  **+**: add the photos (best one
   first, alt text on each), where it is ("Brantford, Ontario"), the system, and
   one or two sentences of facts. Publish. The next morning the posts are in
   Buffer, written from those facts and nothing else, linked to the system's

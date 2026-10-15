@@ -2,10 +2,15 @@ import { defineField, defineType } from "sanity";
 import { PinIcon } from "@sanity/icons";
 import { richImageField } from "./_shared";
 
-/** Matches lib/map-projects.ts shape — 59 map pins */
+/**
+ * The May 2026 migration's copy of the map pins (lib/map-projects.ts shape).
+ * The site never read it: the homepage map is built from lib/map-projects.ts.
+ * Off Studio's sidebar and Create menu since 15 Oct 2026 (sanity/structure.ts,
+ * sanity.config.ts); the documents are kept.
+ */
 export default defineType({
   name: "project",
-  title: "Project (Map Pin)",
+  title: "Old map pin (not used by the site)",
   type: "document",
   icon: PinIcon,
 

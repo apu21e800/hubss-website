@@ -15,6 +15,8 @@ import { applications } from "@/lib/applications";
 import { PRODUCT_CATALOGUE, SYSTEMS_INDEX } from "@/lib/product-catalogue";
 import { APPLICATION_CATALOGUE } from "@/lib/application-catalogue";
 import type { PostMeta } from "@/lib/blog";
+import { evidenceFor, evidenceLines } from "@/lib/insights-evidence";
+import { TIMELY } from "@/lib/insights-calendar";
 
 const SITE = "https://hubss.com";
 
@@ -97,14 +99,32 @@ export function factsBlock(opts: { productSlugs: string[]; applicationSlugs: str
   if (prods.length) sections.push("## Systems (from the approved 2026-27 Product Book and the website)", prods.join("\n\n"));
   const apps = opts.applicationSlugs.map(applicationFacts).filter(Boolean) as string[];
   if (apps.length) sections.push("## Applications (from the approved Product Book and the website)", apps.join("\n\n"));
-  const brief = opts.brief?.trim();
-  if (brief?.startsWith(QUESTIONS_BRIEF)) {
+  // Published studies on the same systems or applications (lib/insights-evidence.ts):
+  // the only figures not about HUB that the article may use.
+  const evidence = evidenceFor(opts.productSlugs, opts.applicationSlugs);
+  if (evidence.length) {
+    sections.push(
+      "## Outside evidence (published studies, checked against their sources: use only these, as written; say who did it and how big it was, give its limits in the same paragraph, and link the source once)",
+      evidence.map(evidenceLines).join("\n\n")
+    );
+  }
+  // A moment's line (lib/insights-calendar.ts, momentLine) is the planner's
+  // note on why now and from what angle: filed on its own, so neither the
+  // writer nor the fact check takes its words as facts, even in a roundup's
+  // brief, which is otherwise treated as true.
+  const lines = (opts.brief ?? "").split("\n");
+  const timing = lines.filter((l) => l.trim().startsWith(TIMELY)).map((l) => l.trim());
+  const brief = lines.filter((l) => !l.trim().startsWith(TIMELY)).join("\n").trim();
+  if (brief.startsWith(QUESTIONS_BRIEF)) {
     sections.push(
       "## Questions the article should answer (from the planner: these are NOT facts and support no statement; answer them only from the sections above)",
       brief.slice(QUESTIONS_BRIEF.length).trim()
     );
   } else if (brief) {
     sections.push("## From HUB's editor (the brief; treat as true)", brief);
+  }
+  if (timing.length) {
+    sections.push("## Timing (the planner's note: why this article now, and the angle to take; it supports no statement)", timing.join("\n"));
   }
   return sections.join("\n\n");
 }

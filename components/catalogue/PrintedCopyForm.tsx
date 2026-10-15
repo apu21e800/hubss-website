@@ -14,6 +14,7 @@
  */
 
 import { useState } from "react";
+import { track } from "@vercel/analytics";
 import { postForm } from "@/lib/post-form";
 
 const PROVINCES = [
@@ -59,6 +60,10 @@ export default function PrintedCopyForm({ compact = false }: { compact?: boolean
       }
       setStatus("sent");
       form.reset();
+      // A request for the printed book is a lead, like the contact and Lunch &
+      // Learn forms (until 15 Oct 2026 it was the one form GA never heard of).
+      window.gtag?.("event", "generate_lead", { event_category: "conversion", form_type: "product-book-print" });
+      track("product_book_request", { form_type: "product-book-print" });
     } catch (err) {
       setStatus("error");
       setError(err instanceof Error ? err.message : "Something went wrong.");

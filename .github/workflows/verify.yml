@@ -59,6 +59,11 @@ jobs:
       - name: Product Book edition test
         run: npm run test:idea-book
 
+      # Google Analytics loads for people, never for a browser driven by a
+      # program, and never skips a person (lib/automated-browser.ts).
+      - name: Analytics gate test
+        run: npm run test:analytics
+
       # The fast checks: routes, links, assets, gallery distinctness, and the
       # CMS field contract. No browser, so this is the one that gates merges.
       - name: Verify

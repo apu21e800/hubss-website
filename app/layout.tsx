@@ -6,7 +6,7 @@ import CrispChat from "@/components/CrispChat";
 import AnalyticsEvents from "@/components/AnalyticsEvents";
 // VercelToolbar — only on staging/preview, never on production
 import { VercelToolbar } from "@vercel/toolbar/next";
-import { GoogleAnalytics } from "@next/third-parties/google";
+import HumanAnalytics from "@/components/HumanAnalytics";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Suspense } from "react";
@@ -139,7 +139,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             {process.env.VERCEL_ENV !== "production" && <VercelToolbar />}
             <Analytics />
             <SpeedInsights />
-            <GoogleAnalytics gaId="G-7YSFCGRL5E" />
+            {/* Google Analytics for people: not for browsers driven by a
+                program (components/HumanAnalytics.tsx, 15 Oct 2026). */}
+            <HumanAnalytics gaId="G-7YSFCGRL5E" />
             <AnalyticsEvents />
           </>
         )}

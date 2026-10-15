@@ -31,7 +31,7 @@ type Block = string | string[];
 // (part of the Vercel line) and a spam screen that sends the name, company,
 // email domain, project fields and the message, with phone numbers and email
 // addresses replaced, to Anthropic's Claude (lib/form-screen.ts). Never the
-// phone field, the full email or the mailing address (an Product Book request's
+// phone field, the full email or the mailing address (a Product Book request's
 // city included). Hence the new line.
 // The contact lines carry the offices from Studio's Site Settings
 // (lib/site-settings.ts), so they match the footer.

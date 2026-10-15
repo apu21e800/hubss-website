@@ -58,7 +58,7 @@ const GENUINE: [string, ScreenInput][] = [
   ["a French enquiry", contact("Bonjour, nous aimerions recevoir de la documentation sur StreetPrint pour un projet municipal à Gatineau.")],
   ["a contractor who wants to install", contact("We are a paving contractor in Saskatoon and want to become a certified StreetPrint installer. Who do we talk to?")],
   ["a Lunch & Learn booking with no message", { formType: "lunch-learn", name: "A. Planner", company: "WSP", email: "a.planner@example.com", topic: "Crosswalks", format: "In-person" }],
-  ["an Product Book request", { formType: "catalogue-print", name: "L. Architect", company: "PFS Studio", email: "la@example.com", hasAddress: true }],
+  ["a Product Book request", { formType: "catalogue-print", name: "L. Architect", company: "PFS Studio", email: "la@example.com", hasAddress: true }],
   ["a reply about our own site's photo", contact("The photo of the Granville crosswalk on your site, is that TrafficPatternsXD? We want the same for Main St.")],
   ["'I came across your website' and a quote", contact("I came across your website and would like a quote for StreetPrint.")],
   ["'I was looking at your website' and pricing", contact("I was looking at your website and we need pricing for 4 crosswalks.")],
@@ -96,7 +96,7 @@ check("the model sees the email's domain only, and no phone or address", () => {
   });
   assert.ok(text.includes("Email domain: example.com"), text);
   assert.ok(!text.includes("private.person"), "full email leaked");
-  assert.ok(!text.includes("Vancouver"), "an Product Book city is part of the mailing address");
+  assert.ok(!text.includes("Vancouver"), "a Product Book city is part of the mailing address");
   assert.ok(text.includes("Phone number given: yes"), text);
   assert.ok(text.includes("Mailing address given: yes"), text);
 });

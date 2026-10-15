@@ -106,13 +106,13 @@ check("fewer than two good questions: dropped", () => {
   assert.equal(docs.length, 0);
   assert.match(dropped[0].why, /questions/);
 });
-check("a system without an Product Book page, or made up, is left out", () => {
+check("a system without a Product Book page, or made up, is left out", () => {
   const { docs } = vet([guide({ systems: ["traffic-patterns", "airmark", "magic-paint"] })]);
   assert.deepEqual(docs[0].systems.map((s) => s._ref), ["product-traffic-patterns"]);
   const none = vet([guide({ systems: ["magic-paint"] })]);
   assert.equal(none.docs.length, 0);
 });
-check("an application without an Product Book spread is left out", () => {
+check("an application without a Product Book spread is left out", () => {
   const { docs } = vet([guide({ applications: ["crosswalks", "moon-bases"] })]);
   assert.deepEqual(docs[0].applications.map((a) => a._ref), ["application-crosswalks"]);
 });
@@ -120,7 +120,7 @@ check("a roundup only names the site's own systems and applications", () => {
   const appSlugs = new Set(applications.map((a) => a.slug));
   for (const j of jobs) {
     if (j.applicationSlug) assert.ok(appSlugs.has(j.applicationSlug), j.applicationSlug);
-    assert.ok(PRODUCT_CATALOGUE[j.systemSlug], `${j.id}: ${j.systemSlug} has an Product Book page`);
+    assert.ok(PRODUCT_CATALOGUE[j.systemSlug], `${j.id}: ${j.systemSlug} has a Product Book page`);
   }
 });
 

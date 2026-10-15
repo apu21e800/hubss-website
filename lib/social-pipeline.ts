@@ -481,7 +481,7 @@ async function emailEditors(subject: string, text: string): Promise<void> {
 /** How an email names what the drafts are for. */
 export function describe(r: Pick<SocialResult, "stream" | "title">): string {
   if (r.stream === "From the field") return `the field post "${r.title}"`;
-  if (r.stream === "From the library") return `"${r.title}" from HUB's library (a documented job or an Product Book spread)`;
+  if (r.stream === "From the library") return `"${r.title}" from HUB's library (a documented job or a Product Book spread)`;
   return `the new Insights article "${r.title}"`;
 }
 

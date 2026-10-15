@@ -174,6 +174,29 @@ Vercel — connected to GitHub, auto-deploys on push to main
   (Nav.tsx `RESOURCES`): the panel's foot row on a laptop, a row under the
   families on a phone; /resources marks Products as the current section.
 
+## Analytics: people, not programs (15 Oct 2026)
+Doug saw "high traffic from Singapore" and a drop from 17 Sep in GA4. What
+the data showed (GA4 and Search Console, 17 Sep to 14 Oct vs the 28 days
+before): the "drop" was 484 fake sessions from Seychelles via trafficheap.cc
+(a fake-traffic service) in the earlier period, gone after 16 Sep; Singapore
+(386 users) and China are automated visits (0 s, about 2% engaged, no key
+events); real visitors rose (Canada +24% users, +23.5% engaged sessions).
+Google search: clicks -19%, impressions -20%, average position 11.1 to 7.9;
+the same autumn dip as 2025 (impressions -24%); year on year impressions are
+about 40% below the WordPress site's.
+- components/HumanAnalytics.tsx: GA4 loads only when lib/automated-browser.ts
+  sees no automation signal (navigator.webdriver, headless or crawler user
+  agents, no languages, a zero-size window). A person never trips one;
+  `npm run test:analytics`. Our own headless QA is no longer counted either.
+- The printed Product Book request now sends generate_lead (form_type
+  product-book-print), like the contact and Lunch & Learn forms.
+- lib/legacy-doc-redirects.ts: old WordPress spec-sheet PDFs go to the same
+  PDF in /public/docs (by name for every current PDF, by hand for renamed
+  ones), not to /resources; `npm run test:redirects`.
+- Not done (Vern's dashboard): Vercel Firewall Bot Protection is Off. Turning
+  it On would challenge non-browser clients, including the Sanity webhook
+  (/api/revalidate): it needs a bypass for /api first; Log mode first.
+
 ## The Product Book edition (14 Oct 2026)
 Vern: "a mobile / virtual desktop version of the idea book that's not just a
 square PDF ... same content in booklet, better display for mobile and desktop
@@ -337,7 +360,7 @@ streams; a person approves every one in Buffer (docs/buffer-setup.md):
   Studio → From the field): job photos, place, system, one line of facts.
   Linked to the system's page. One a day.
 - From the library: once a week (Mondays), a documented map job (TOUR_IDS
-  first, in lib/map-projects.ts) or an Product Book system or application spread
+  first, in lib/map-projects.ts) or a Product Book system or application spread
   (lib/social-library.ts). Skips a job whose article already had posts. A new
   field post takes the week's turn (libraryDue).
 - Cadence (14 Oct 2026, Vern: "a blog or two a week"): two articles a week

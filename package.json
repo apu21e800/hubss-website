@@ -27,6 +27,7 @@
     "test:planner": "tsx scripts/test-insights-planner.ts",
     "test:idea-book": "tsx scripts/test-idea-book.ts",
     "test:analytics": "tsx scripts/test-automated-browser.ts",
+    "test:redirects": "tsx scripts/test-legacy-docs.ts",
     "sync:products": "tsx scripts/sync-products-to-sanity.ts",
     "sync:products:dry": "tsx scripts/sync-products-to-sanity.ts --dry-run",
     "sync:applications": "tsx scripts/sync-applications-to-sanity.ts",

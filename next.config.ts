@@ -4,6 +4,7 @@ import fs from "fs";
 import path from "path";
 import { projects } from "./lib/projects";
 import { ARCHIVED_POSTS, retiredProjectHref } from "./lib/field-notes-taxonomy";
+import { legacyDocRedirects } from "./lib/legacy-doc-redirects";
 
 // The 9 real, currently-built project pages. Derived from lib/projects.ts so
 // adding a project can never silently re-break the redirect below.
@@ -524,6 +525,10 @@ const nextConfig: NextConfig = {
       { source: "/projects/high-visibility-decorative-crosswalks", destination: "/blog/pedestrian-safety-solutions", permanent: true },
       { source: "/projects/community-branding-and-crosswalks-in-canada", destination: "/blog/community-branding-case-study", permanent: true },
 
+      // Old spec-sheet PDFs go to the same sheet on today's site when it is
+      // here (15 Oct 2026, lib/legacy-doc-redirects.ts): before the two
+      // catch-alls that send the rest to the resources hub.
+      ...legacyDocRedirects(),
       // Legacy spec-sheet PDFs — safety-net redirect to resources hub
       { source: "/assets/specification-documents/:path*", destination: "/resources", permanent: true },
 

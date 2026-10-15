@@ -64,6 +64,10 @@ jobs:
       - name: Analytics gate test
         run: npm run test:analytics
 
+      # Old spec-sheet addresses land on today's PDF (lib/legacy-doc-redirects.ts).
+      - name: Spec-sheet redirects test
+        run: npm run test:redirects
+
       # The fast checks: routes, links, assets, gallery distinctness, and the
       # CMS field contract. No browser, so this is the one that gates merges.
       - name: Verify

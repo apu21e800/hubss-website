@@ -2,7 +2,7 @@ import Link from "next/link";
 import PagePhoto, { photoBand } from "@/components/idea-book/PagePhoto";
 import { ideaBook } from "@/lib/catalogue";
 import { colourFamily, type ColourFamily } from "@/lib/colours";
-import { leafTitle, pageLabel, systemEntry, type Caption, type Leaf, type ProjectCard, type SpecifyLine } from "@/lib/idea-book-edition";
+import { leafTitle, pageLabel, systemEntry, type Caption, type Leaf, type Photo, type ProjectCard, type SpecifyLine } from "@/lib/idea-book-edition";
 import { mapProjects } from "@/lib/map-projects";
 import type { SiteSettings } from "@/lib/site-settings";
 
@@ -23,6 +23,9 @@ const PageLink = ({ leaf, children }: { leaf: Leaf; children?: React.ReactNode }
 );
 
 const Eyebrow = ({ children }: { children: React.ReactNode }) => <p className="ib-eyebrow">{children}</p>;
+
+/** A photograph's shape as --ib-ratio on the box that holds it with its caption: edition.css caps that box's width so the spread fits the screen. */
+const ratioOf = (photo: Photo, fit?: number) => ({ "--ib-ratio": String(photoBand(photo, fit).ratio) }) as React.CSSProperties;
 
 function CaptionLine({ caption }: { caption?: Caption }) {
   if (!caption) return null;
@@ -60,7 +63,7 @@ function jobHref(card: { post?: string; mapId?: string }): { href: string; label
 function Project({ card, sizes }: { card: ProjectCard; sizes?: string }) {
   const link = jobHref(card);
   return (
-    <article className="ib-project">
+    <article className="ib-project" style={ratioOf(card.photo)}>
       <div className="ib-project-photo">
         <PagePhoto photo={card.photo} sizes={sizes} />
         {card.badge && <span className="ib-badge">{card.badge}</span>}
@@ -285,7 +288,7 @@ export function LeafView({ leaf, index, settings, priority }: { leaf: Leaf; inde
               <PageLink leaf={leaf} />
             </div>
           </div>
-          <div className="ib-photo-col">
+          <div className="ib-photo-col" style={ratioOf(leaf.photo)}>
             <PagePhoto photo={leaf.photo} />
             <p className="ib-caption">
               <span className="ib-dot" />
@@ -345,7 +348,7 @@ export function LeafView({ leaf, index, settings, priority }: { leaf: Leaf; inde
               <PageLink leaf={leaf} />
             </div>
           </div>
-          <div className="ib-photo-col">
+          <div className="ib-photo-col" style={ratioOf(leaf.photo)}>
             <PagePhoto photo={leaf.photo} />
             <div className="ib-caption-row">
               <CaptionLine caption={leaf.caption} />
@@ -374,7 +377,7 @@ export function LeafView({ leaf, index, settings, priority }: { leaf: Leaf; inde
               <PageLink leaf={leaf} />
             </div>
           </div>
-          <div className="ib-pair">
+          <div className="ib-pair" style={ratioOf(leaf.before, fit)}>
             <figure className="ib-then-now-item">
               <PagePhoto photo={leaf.before} fit={fit} />
               <figcaption className="ib-label">{leaf.labels[0]}</figcaption>
@@ -427,7 +430,7 @@ export function LeafView({ leaf, index, settings, priority }: { leaf: Leaf; inde
     case "installer":
       return (
         <section {...common} aria-label={leaf.title}>
-          <div className="ib-photo-col">
+          <div className="ib-photo-col" style={ratioOf(leaf.photo)}>
             <PagePhoto photo={leaf.photo} />
             <CaptionLine caption={leaf.caption} />
           </div>

@@ -234,6 +234,18 @@ as printed.
   budget on /product-book.
 - The printed caption on page 57 says London, Ontario; the map's evidence for
   that job is Kitchener. The edition prints the book's caption; Doug to say.
+- A spread fits the screen (15 Oct 2026). At 1536x730 (a 1920x1080 laptop at
+  125%) 54 of 75 leaves ran taller than the screen, captions under the fold
+  and under the turn buttons. `--ib-photo-max-h` is the leaf's height less
+  its real padding (`--ib-pad-y` above, `--ib-pad-end` below: 76px on a
+  laptop, where the buttons float); layouts cap a photo's WIDTH from it with
+  `--ib-ratio`, set on the box that holds the photo with its caption
+  (`ratioOf` in Leaves.tsx), so a photo keeps its shape and its caption lines
+  up under it. Under 820px tall the page cards draw in their spacing; under
+  840px a two-job spread is two rows, photo beside words. Only the welcome,
+  the systems contents and the two colour pages scroll, by design, at
+  1920x950, 1536x730, 1440x790 and 1440x900. Measure any layout change at
+  those sizes (each leaf's height against `.ib-scroll`'s), not only 1440x900.
 
 ## Copy source of truth
 The 2027 print catalogue — the Product Book, Volume 5 — (Figma file

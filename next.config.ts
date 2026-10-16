@@ -314,6 +314,14 @@ const nextConfig: NextConfig = {
       { source: "/rainbow-crosswalk-sechelt", destination: "/applications/crosswalks", permanent: true }, // TrafficPatterns rainbow crosswalk, Cowrie St
       { source: "/white-rock-stamped-asphalt-pathway", destination: "/applications/parks-paths", permanent: true }, // StreetPrint pathway at the White Rock Pier
       { source: "/checkerboard-decorative-asphalt-crosswalk", destination: "/applications/crosswalks", permanent: true }, // TrafficPatterns checkerboard crosswalk, Coquitlam
+      // Four old addresses that still answered 404 on 16 Oct 2026; Search Console
+      // showed each earning clicks or impressions on the old site.
+      { source: "/pride-inspired-rainbow-crosswalk", destination: "/applications/crosswalks", permanent: true }, // a rainbow crosswalk, like the three above
+      { source: "/solar-reflective-asphalt-surfaces", destination: "/products/streetbondsr", permanent: true }, // the solar-reflective coating's page
+      { source: "/category/trafficpatterns-xd", destination: "/products/traffic-patterns-xd", permanent: true },
+      // c̓əsqənelə Elementary's asphalt labyrinth: a school-ground job. The
+      // address arrives percent-encoded (browsers encode the letters c̓ and ə).
+      { source: "/c%CC%93%C9%99sq%C9%99nel%C9%99-elementary-school-asphalt-labyrinth", destination: "/applications/playgrounds", permanent: true },
       { source: "/first-nations-decorative-crosswalk-design-granville-street", destination: "/applications/crosswalks", permanent: true }, // Musqueam artist's crosswalk, TrafficPatterns
       { source: "/lickman-interchange-decorative-asphalt-roundabout", destination: "/applications/traffic-calming", permanent: true }, // StreetPrint roundabout, Lickman Interchange
       { source: "/stamped-asphalt-streetscapes-viva-next", destination: "/blog/multimodal-connectivity-york-region", permanent: true }, // TrafficPatternsXD on the VIVA Hwy 7 rapidway, which this post covers
@@ -434,6 +442,18 @@ const nextConfig: NextConfig = {
       { source: "/parks-plazas-pathways/:path*", destination: "/applications/parks-paths", permanent: true },
       { source: "/uncategorized/:path*", destination: "/blog/projects", permanent: true },
       { source: "/case-studies/:path*", destination: "/blog/projects", permanent: true },
+      // Two more prefixes, found 16 Oct 2026 by following every address in
+      // /sitemap-legacy.xml to its end: five old addresses that earned clicks
+      // lost their trailing slash and then 404'd. Same order as above.
+      { source: "/featured-projects/first-nations-decorative-crosswalk-design-granville-street", destination: "/applications/crosswalks", permanent: true },
+      { source: "/featured-projects/residential-decorative-driveways", destination: "/applications/residential-driveways", permanent: true },
+      { source: "/featured-projects/community-branding-horizontal-wayfinding-for-vancouvers-spirit-trail", destination: "/blog/spirit-trail-wayfinding-vancouver", permanent: true },
+      { source: "/featured-projects/white-rock-stamped-asphalt-pathway", destination: "/applications/parks-paths", permanent: true },
+      { source: "/decorative-stamped-driveways/decorative-asphalt-crosswalks", destination: "/blog/decorative-asphalt-crosswalks", permanent: true },
+      { source: `/featured-projects/:slug(${BLOG_SLUGS.join("|")})`, destination: "/blog/:slug", permanent: true },
+      { source: `/decorative-stamped-driveways/:slug(${BLOG_SLUGS.join("|")})`, destination: "/blog/:slug", permanent: true },
+      { source: "/featured-projects/:path*", destination: "/blog/projects", permanent: true },
+      { source: "/decorative-stamped-driveways/:path*", destination: "/applications/residential-driveways", permanent: true },
 
       // Legal pages
       { source: "/terms-conditions", destination: "/terms", permanent: true },

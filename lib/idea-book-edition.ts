@@ -195,7 +195,9 @@ export const LEAVES: Leaf[] = [
   {
     kind: "templates", id: "stamping-templates", section: "systems", pages: [22, 23],
     title: "Stamping templates.", subtitle: "Precision made templates for stamping decorative patterns into hot asphalt. Custom designs available.",
-    photo: { page: 22, top: 0.4, bottom: 0.92, focus: "50% 50%", alt: "A herringbone stamping template drawn with its dimensions" },
+    // The drawing runs 0.426 to 0.858 of the page; the band keeps a little
+    // asphalt above and below it for the laptop layout's fade (edition.css).
+    photo: { page: 22, top: 0.375, bottom: 0.915, focus: "50% 50%", alt: "A herringbone stamping template drawn with its dimensions" },
     groups: [
       { title: "Field templates", items: ["Ashlar Slate", "British Cobble", "Offset Brick", "Random Slate", "Herringbone", "Diagonal Herringbone", "Thompson Stone", "Random Cobble", "Texas Cobble", "Tile Sets 6\", 8\", 12\"", "Eurofan", "Scallop"] },
       { title: "Border templates", items: ["Stacked Brick", "Texas Cobble", "Soldier Course", "Tile options"] },

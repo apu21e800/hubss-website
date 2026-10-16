@@ -51,6 +51,7 @@ export const KNOWN: Record<string, string> = {
   // StreetBond colour cards: today's is the 2026 card.
   "/wp-content/uploads/2023/03/StreetBond-Colour-Guide.pdf": "/docs/StreetBond/StreetBond/StreetBond-Colour-Card-2026.pdf",
   "/assets/specification-documents/StreetBond-SR/StreetBond-Colour-Card_10-16.pdf": "/docs/StreetBond/StreetBond/StreetBond-Colour-Card-2026.pdf",
+  "/assets/specification-documents/StreetBond/StreetBond-Colour-Card_10-16_for-Web.pdf": "/docs/StreetBond/StreetBond/StreetBond-Colour-Card-2026.pdf",
   // StreetBond over concrete.
   "/wp-content/uploads/2023/03/StreetBond-concrete-application-specifications.pdf": "/docs/StreetBond/StreetBond 150/StreetBond-SB150-Over-Concrete-Specification.pdf",
   "/assets/specification-documents/StreetBond/StreetBond_concrete_application_specifications.pdf": "/docs/StreetBond/StreetBond 150/StreetBond-SB150-Over-Concrete-Specification.pdf",
@@ -66,6 +67,30 @@ export const KNOWN: Record<string, string> = {
   "/wp-content/uploads/2023/03/Duratherm-Custom-Design-Guidelines.pdf": "/docs/duratherm/duratherm-custom-design-guidelines.pdf",
   "/wp-content/uploads/2023/03/DecoMark-Application-Instructions.pdf": "/docs/decomark/decomark-application-instructions.pdf",
   "/wp-content/uploads/2023/03/DecoMark-Custom-Design-Guidelines.pdf": "/docs/decomark/decomark-custom-design-guidelines.pdf",
+};
+
+/**
+ * Old sheets with no copy here, but whose system is plain from the name: they
+ * go to that system's page (its documents are listed there) rather than to
+ * the whole library (16 Oct 2026). Google treats many old addresses sent to
+ * one general page as missing pages; the system's page is the nearest
+ * answer. Listed after the by-name rules, so a file added to /public/docs
+ * under the old name (the StreetBond safety data sheets, when HUB sends
+ * current ones) takes over by itself. The rest (CemBase, the sealer
+ * concentrate, an unnamed colour guide) still go to /resources.
+ */
+export const TO_PAGE: Record<string, string> = {
+  "/wp-content/uploads/2023/03/SDS-StreetBond-SB150-Pavement-Coating-Part-A.pdf": "/products/streetbond",
+  "/wp-content/uploads/2023/03/SDS-StreetBond-SB150-Pavement-Coating-Part-B.pdf": "/products/streetbond",
+  "/wp-content/uploads/2023/03/SDS-StreetBond-Colorant-AQUA.pdf": "/products/streetbond",
+  "/wp-content/uploads/2023/03/StreetBond-SB150-Flat-Surface-Specification.pdf": "/products/streetbond",
+  "/wp-content/uploads/2023/03/StreetBond-SB120-Flat-Surface-Specification.pdf": "/products/streetbond",
+  "/wp-content/uploads/2023/07/StreetBond-Acrylic-Textured-White-Line-Paint-TDS-COMSB029-Data-Sheet.pdf": "/products/streetbond",
+  "/wp-content/uploads/2023/08/TS008_MMAX_220204.pdf": "/products/mmax",
+  "/wp-content/uploads/2023/08/TS007_AirMark_220204.pdf": "/products/airmark",
+  "/assets/specification-documents/AirMark/AirMark-Standard-Items.pdf": "/products/airmark",
+  "/wp-content/uploads/2023/03/StreetPrint-Cutom-Stamping-Template-Guidlines.pdf": "/products/streetprint",
+  "/assets/specification-documents/StreetPrint/StreetBond_StreetPrint_Colour_Card_10-16.pdf": "/products/streetprint",
 };
 
 /** A path for a redirect's destination: spaces and brackets encoded, like a link to the file. */
@@ -93,6 +118,13 @@ export function legacyDocRedirects(): Redirect[] {
     for (const variant of [name, `${stem}-1.pdf`, `${stem}-2.pdf`]) {
       add(`/wp-content/uploads/:year(\\d{4})/:month(\\d{2})/${literal(variant)}`, doc);
     }
+  }
+  // Last: a by-name rule above wins for any file that exists here.
+  for (const [from, page] of Object.entries(TO_PAGE)) {
+    const source = literal(from);
+    if (seen.has(source)) continue;
+    seen.add(source);
+    out.push({ source, destination: page, permanent: true });
   }
   return out;
 }

@@ -527,6 +527,36 @@ async function checkUnknownSlugs404() {
   record("unknown slugs return 404", bad.length === 0, `${probes.length} dynamic routes probed`, bad);
 }
 
+// ── 9b. every old address Google is given lands on a page ────────────────────
+// EARNED BY: /sitemap-legacy.xml (16 Oct 2026) hands Google the old WordPress
+// addresses that earned clicks, so it re-reads where each one went. Followed
+// to the end, five of them lost their trailing slash and then 404'd. An old
+// address that is itself a live page does not belong in that list either.
+async function checkLegacyAddressesLand() {
+  const xml = await (await fetch(BASE + "/sitemap-legacy.xml")).text();
+  const paths = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)]
+    .map((m) => m[1].replace(/&amp;/g, "&").replace(/^https?:\/\/[^/]+/, ""));
+  const bad = [];
+  let most = 0;
+  for (const p of paths) {
+    let url = BASE + p, hops = 0, status = 0;
+    for (; hops <= 4; hops++) {
+      try {
+        const r = await fetch(url, { method: "HEAD", redirect: "manual", signal: AbortSignal.timeout(20000) });
+        status = r.status;
+        const to = r.headers.get("location");
+        if (status >= 300 && status < 400 && to) { url = new URL(to, url).href; continue; }
+      } catch { status = 0; }
+      break;
+    }
+    most = Math.max(most, hops);
+    if (status !== 200) bad.push(`${status || "ERR"}  ${p}  (after ${hops} redirect${hops === 1 ? "" : "s"})`);
+    else if (hops === 0) bad.push(`200  ${p}  (a live page, not an old address)`);
+  }
+  record("old addresses land on a page", paths.length > 0 && bad.length === 0,
+    `${paths.length} in /sitemap-legacy.xml, ${most} redirects at most`, bad);
+}
+
 // ── 10. Product markup only where a product is described ─────────────────────
 // EARNED BY: 67 invalid Product snippets in Search Console (Sep 2026), 53 of
 // them blog posts that typed every product they mentioned as a schema.org
@@ -601,6 +631,7 @@ async function checkNoEmDashes(routes) {
     checkNoUndefined();
     checkBlogRedirectTargets();
     await checkUnknownSlugs404();
+    await checkLegacyAddressesLand();
     checkProductMarkup();
     await checkNoEmDashes(routes);
     try { await checkSanityContract(); }

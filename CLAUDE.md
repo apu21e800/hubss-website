@@ -84,6 +84,11 @@ hubss-website/
 - New article: Studio → Blog posts → create, then Publish. It is live
   about five minutes later (the site rebuilds to add the page); edits to live
   posts show within seconds. docs/BLOG-IN-SANITY.md
+- A post written by hand (markdown with front matter in content/drafts/):
+  `npx tsx scripts/draft-blog-post.ts content/drafts/<file>.md` on Vern's PC
+  saves it as an unpublished draft with its cover (--dry-run first: it runs
+  the house-style check and writes nothing). First one: the Product Book's
+  launch post (16 Oct 2026).
 - Article ideas: Studio → Blog ideas. The AI drafter (Tuesdays and
   Thursdays since 14 Oct 2026) takes the top Ready item, or the top Idea when
   none is Ready, and writes it up as an unpublished draft for review (never
@@ -201,7 +206,18 @@ about 40% below the WordPress site's.
   product-book-print), like the contact and Lunch & Learn forms.
 - lib/legacy-doc-redirects.ts: old WordPress spec-sheet PDFs go to the same
   PDF in /public/docs (by name for every current PDF, by hand for renamed
-  ones), not to /resources; `npm run test:redirects`.
+  ones), not to /resources; `npm run test:redirects`. Since 16 Oct an old
+  sheet with no copy here but a plain system (the StreetBond safety data
+  sheets, the TS007/TS008 sheets) goes to that system's page (TO_PAGE, after
+  the file rules, so adding the file later takes over).
+- /sitemap-legacy.xml (16 Oct 2026; app/sitemap-legacy.xml/route.ts, list in
+  lib/legacy-addresses.json): the 219 old addresses Search Console showed
+  earning traffic, all redirecting, for Search Console and Bing to re-read.
+  Not linked from /sitemap.xml or robots.txt. Remove in April 2027. The four
+  old pages still 404ing on 16 Oct got redirects in next.config.ts, and so
+  did five under /featured-projects/ and /decorative-stamped-driveways/ that
+  404'd once their trailing slash came off. `npm run verify` follows every
+  address in the list to its end ("old addresses land on a page").
 - Not done (Vern's dashboard): Vercel Firewall Bot Protection is Off. Turning
   it On would challenge non-browser clients, including the Sanity webhook
   (/api/revalidate): it needs a bypass for /api first; Log mode first.
@@ -211,10 +227,11 @@ Vern: "a mobile / virtual desktop version of the idea book that's not just a
 square PDF ... same content in booklet, better display for mobile and desktop
 experience. Doug's dream." /product-book is that edition: one leaf per printed
 spread, 75 leaves for the 144 pages, laid out for the screen (a phone stacks,
-a laptop puts the photograph beside the page). Reading is scrolling: leaves
-snap into place, a swipe is a page turn, ← and → turn leaves, C opens the
-contents, every leaf has its own address (#streetbond) and links to its pages
-as printed.
+a laptop puts the photograph beside the page). Reading is plain scrolling
+(no snapping since 16 Oct 2026: Vern found it jumpy), ← and → turn leaves, C
+opens the contents, every leaf has its own address (#streetbond) and links to
+its pages as printed. The leaf in view is the one covering most of the
+screen, and a leaf's photo and heading arrive once 120px of it shows.
 - lib/idea-book-edition.ts is the book: `LEAVES`, typed by kind (cover,
   welcome, divider, system, colours, steps, templates, application,
   statement, projects, then-now, installer, partner, closing, lunch, back).

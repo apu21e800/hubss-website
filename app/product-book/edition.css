@@ -7,8 +7,11 @@
  * Fixed, whatever the site theme: a book keeps its paper.
  *
  * Desktop: a leaf is the spread, photo beside page, inside a 1360px column.
- * Phone: the same leaf stacked, photo first, full width. Each leaf snaps
- * gently into view (proximity: a leaf taller than the screen still scrolls).
+ * Phone: the same leaf stacked, photo first, full width. Reading is plain
+ * scrolling: until 16 Oct 2026 each leaf snapped into place (scroll-snap
+ * proximity), and Vern found it jumpy ("the scroll functions seem jumpy"):
+ * a trackpad's glide ended on a snap the reader hadn't asked for. The arrows,
+ * the turn buttons and Contents still land a leaf exactly at the top.
  */
 
 .ib {
@@ -71,8 +74,8 @@
 }
 
 /* ── Reading ────────────────────────────────────────────────────────────── */
-.ib-scroll { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; scroll-snap-type: y proximity; overscroll-behavior-y: contain; -webkit-overflow-scrolling: touch; }
-.ib-leaf { scroll-snap-align: start; scroll-margin-top: 0; min-height: var(--ib-leaf-h); box-sizing: border-box; display: grid; align-content: center; padding: var(--ib-pad-y) var(--ib-gutter) var(--ib-pad-end); border-bottom: 1px solid var(--ib-line); position: relative; }
+.ib-scroll { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior-y: contain; -webkit-overflow-scrolling: touch; }
+.ib-leaf { scroll-margin-top: 0; min-height: var(--ib-leaf-h); box-sizing: border-box; display: grid; align-content: center; padding: var(--ib-pad-y) var(--ib-gutter) var(--ib-pad-end); border-bottom: 1px solid var(--ib-line); position: relative; }
 .ib-leaf > * { max-width: 1360px; width: 100%; margin-inline: auto; }
 /* A leaf arrives as it scrolls into view. Only once scripts run (.ib-live):
    with them off, or before they load, every leaf is simply there. */
@@ -160,7 +163,8 @@
 .ib-point-n { font-size: 11px; font-weight: 800; color: var(--ib-orange); line-height: 1.6; }
 .ib-points strong { display: block; font-size: 15px; font-weight: 700; }
 .ib-points p { margin: 3px 0 0; font-size: 13.5px; line-height: 1.5; color: var(--ib-text); }
-.ib-welcome-photos { display: grid; gap: 14px; }
+/* align-items: start: a grid row stretched the shorter photo's box, and its line and caption fell below the photograph onto the paper (Vern, 16 Oct 2026). The pair also shares one shape (Leaves.tsx, fit). */
+.ib-welcome-photos { display: grid; gap: 14px; align-items: start; }
 .ib-welcome-photo { position: relative; }
 .ib-photo-line { position: absolute; left: 16px; bottom: 36px; margin: 0; max-width: 60%; color: #fff; font-size: clamp(1.1rem, 1.6vw, 1.35rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; text-shadow: 0 2px 14px rgba(0, 0, 0, 0.55); }
 .ib-welcome-photo .ib-caption { position: absolute; left: 16px; bottom: 12px; margin: 0; color: rgba(255, 255, 255, 0.9); text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6); }
@@ -222,9 +226,18 @@
   .ib-system .ib-photo-col .ib-photo img { position: absolute; inset: 0; height: 100%; object-fit: cover; transform: none !important; }
   .ib-system .ib-photo-col { display: flex; flex-direction: column; }
   .ib-system .ib-photo-col .ib-caption { flex: none; }
-  /* The templates page is a drawing with its heading printed above it: the band, not the page, beside the list. */
-  .ib-templates { align-items: center; }
-  .ib-templates .ib-photo-col .ib-photo { background: var(--ib-dark); }
+  /* The templates drawing is printed on a dark page (22) beside the list (23).
+     Here the photo column is that dark page, as tall as the card, with the
+     drawing level in it and its asphalt fading into the page above and
+     below. A bare drawing beside the card floated in white space, centred
+     or at the top (Vern, 16 Oct 2026). The colour is the asphalt's own. */
+  .ib-templates .ib-photo-col { display: flex; align-items: center; background: #1b1c20; border-radius: 6px; overflow: hidden; }
+  .ib-templates .ib-photo-col .ib-photo {
+    border-radius: 0;
+    background: #1b1c20;
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, #000 8%, #000 92%, transparent);
+  }
 }
 /* A laptop's shorter screen: the page card draws in its spacing so the
    spread still sits on one screen. Nothing is dropped. */
@@ -268,17 +281,19 @@
 
 /* ── Templates ──────────────────────────────────────────────────────────── */
 .ib-photo-dark .ib-photo { background: var(--ib-dark); }
-.ib-template-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 24px; margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--ib-line); }
-.ib-template-groups > div:first-child { grid-row: span 2; }
+/* The groups stack (field, border, custom), each list flowing into as many
+   columns as fit. Until 16 Oct 2026 the field list ran down one column with
+   the border list beside it, and "Custom" floated halfway down the second
+   column (Vern: "looks strange floating there"). */
+.ib-template-groups { display: grid; grid-template-columns: 1fr; gap: 18px; margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--ib-line); }
+.ib-template-groups .ib-dotlist { grid-template-columns: repeat(auto-fill, minmax(min(100%, 168px), 1fr)); column-gap: 16px; }
+/* A group of one ("Custom templates available on request") takes the full
+   line, not one narrow column it wrapped in. */
+.ib-template-groups .ib-dotlist li:only-child { grid-column: 1 / -1; }
 .ib-dotlist { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 7px; }
 .ib-dotlist li { display: flex; gap: 10px; align-items: baseline; font-size: 13.5px; font-weight: 700; }
 .ib-dotlist li::before { content: ""; width: 6px; height: 6px; border-radius: 999px; background: var(--ib-orange); flex: none; position: relative; top: -2px; }
 .ib-dotlist-light li { font-weight: 600; font-size: 15px; }
-@media (min-width: 1280px) {
-  /* Twelve field templates in two columns beside the border templates: the list no longer outruns the screen. */
-  .ib-template-groups { grid-template-columns: 2fr 1fr; }
-  .ib-template-groups > div:first-child .ib-dotlist { grid-template-columns: 1fr 1fr; column-gap: 16px; }
-}
 
 /* ── Applications ───────────────────────────────────────────────────────── */
 .ib-application, .ib-then-now { gap: 24px; }

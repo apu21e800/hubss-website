@@ -120,7 +120,8 @@ export function LeafView({ leaf, index, settings, priority }: { leaf: Leaf; inde
         </section>
       );
 
-    case "welcome":
+    case "welcome": {
+      const welcomeFit = Math.max(...leaf.photos.slice(1).map((p) => photoBand(p).ratio), 0) || undefined;
       return (
         <section {...common} aria-label={leaf.heading}>
           <div className="ib-welcome-text">
@@ -145,9 +146,10 @@ export function LeafView({ leaf, index, settings, priority }: { leaf: Leaf; inde
             <PageLink leaf={leaf} />
           </div>
           <div className="ib-welcome-photos">
-            {leaf.photos.map((p) => (
+            {leaf.photos.map((p, i) => (
               <div key={p.page} className="ib-welcome-photo">
-                <PagePhoto photo={p} sizes="(max-width: 1023px) 100vw, 40vw" />
+                {/* The first leads, full width; the rest share the wider one's shape, so a pair sits level. */}
+                <PagePhoto photo={p} fit={i > 0 ? welcomeFit : undefined} sizes="(max-width: 1023px) 100vw, 40vw" />
                 {p.line && <p className="ib-photo-line">{p.line}</p>}
                 <CaptionLine caption={p.caption} />
               </div>
@@ -155,6 +157,7 @@ export function LeafView({ leaf, index, settings, priority }: { leaf: Leaf; inde
           </div>
         </section>
       );
+    }
 
     case "divider":
       return (

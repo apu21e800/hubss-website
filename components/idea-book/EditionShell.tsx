@@ -13,9 +13,8 @@ import { leaveIdeaBook } from "@/app/product-book/links";
  * The leaves themselves are server-rendered children, so the book's text is
  * in the HTML for a reader with scripts off and for search.
  *
- * Reading is scrolling: each leaf snaps gently into place (scroll-snap
- * proximity, so a leaf taller than the screen still scrolls through), a swipe
- * on a phone is a page turn, ← and → turn leaves on a keyboard.
+ * Reading is plain scrolling (no snapping since 16 Oct 2026: it felt jumpy);
+ * ← and →, the turn buttons and Contents land a leaf exactly at the top.
  */
 
 export interface ContentsEntry {
@@ -65,19 +64,33 @@ export default function EditionShell({
     [leaves]
   );
 
-  // Which leaf is in view: the one covering the most of the screen. Writes the
-  // address (replaceState: no history entry per leaf) and the progress.
+  // Which leaf is in view: the one covering the most of the SCREEN (its
+  // visible height over the scroller's), not the one with the largest share
+  // of itself visible. By share, a short leaf peeping in beat a tall one
+  // filling the screen, and the bar's title and progress flickered as the
+  // reader scrolled (Vern, 16 Oct 2026: "the scroll functions seem jumpy").
+  // Writes the address (replaceState: no history entry per leaf) and the
+  // progress.
+  //
+  // A leaf's photograph and heading arrive as soon as a fair slice of it is
+  // on screen (ENTER_PX), not when it becomes the leaf in view: they used to
+  // stay blank until then and appear all at once, mid-scroll.
   useEffect(() => {
     const root = scroller.current;
     if (!root) return;
     const all = leaves();
-    const ratios = new Map<Element, number>();
+    const ENTER_PX = 120;
+    const cover = new Map<Element, number>();
     const io = new IntersectionObserver(
       (entries) => {
-        for (const e of entries) ratios.set(e.target, e.intersectionRatio);
+        for (const e of entries) {
+          const seen = e.isIntersecting ? e.intersectionRect.height : 0;
+          cover.set(e.target, seen);
+          if (seen >= Math.min(ENTER_PX, e.boundingClientRect.height * 0.5)) e.target.classList.add("ib-in");
+        }
         let best: Element | null = null;
-        let bestRatio = 0;
-        for (const [el, r] of ratios) if (r > bestRatio) { best = el; bestRatio = r; }
+        let most = 0;
+        for (const [el, px] of cover) if (px > most) { best = el; most = px; }
         if (!best) return;
         const index = Number((best as HTMLElement).dataset.leaf ?? 0);
         setCurrent(index);
@@ -85,9 +98,9 @@ export default function EditionShell({
         if (id && window.location.hash !== `#${id}`) {
           window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}${index === 0 ? "" : `#${id}`}`);
         }
-        best.classList.add("ib-in");
       },
-      { root, threshold: [0, 0.25, 0.5, 0.75, 1] }
+      // Fine steps, so the visible heights stay current while scrolling.
+      { root, threshold: Array.from({ length: 21 }, (_, i) => i / 20) }
     );
     all.forEach((el) => io.observe(el));
     return () => io.disconnect();

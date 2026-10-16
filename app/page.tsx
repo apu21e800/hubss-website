@@ -126,15 +126,17 @@ const HERO_SOURCES: { file: string; media: string; kind: "wide" | "phone" }[] = 
 const DEFAULT_HERO_ORIGIN = "/images/hero/hero-1.jpg";
 
 /**
- * The Product Book in the hero: its own callout under the two buttons, with
- * the cover (components/sections/HeroSlideshow.tsx, .hero-book).
+ * The Product Book in the hero: a callout with the cover beside the orange
+ * button, in place of the outlined second button
+ * (components/sections/HeroSlideshow.tsx, .hero-book).
  *
  * Doug, 16 Oct 2026: the outline "Open the Product Book" button "is not
- * enough". Vern: "If we loose the ghost button we should put the old button
- * back", so the second button is "See the systems" again, Studio's words and
- * link as before 14 Oct. From 14 to 16 Oct the second button opened the book
- * (and on 14 Oct a dismissible card sat in the hero's corner, which Doug took
- * out). With the book switched off (showCatalogue) there is no callout.
+ * enough". The callout first sat under both buttons, with "See the systems"
+ * back as the second; Vern, the same day: drop that outlined button and put
+ * the callout beside "See the work". With the book switched off
+ * (showCatalogue) there is no callout and the second button, Studio's
+ * "See the systems", returns. From 14 to 16 Oct the second button opened the
+ * book (and on 14 Oct a card sat in the hero's corner, which Doug took out).
  */
 function heroBook() {
   if (!showCatalogue() || !catalogueReady || !catalogue.coverThumb) return undefined;

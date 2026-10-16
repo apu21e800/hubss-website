@@ -41,8 +41,9 @@ interface HeroSlideshowProps {
   cta2Label?: string;
   cta2Href?: string;
   /**
-   * The Product Book's callout under the buttons (app/page.tsx, heroBook):
-   * the cover, the book's name and a line. Absent with the book switched off.
+   * The Product Book's callout beside the orange button, in place of the
+   * second button (app/page.tsx, heroBook): the cover, the book's name and a
+   * line. Absent with the book switched off, and the second button returns.
    */
   book?: { href: string; cover: string; kicker: string; line: string };
   /** Sanity-supplied hero image URL. Falls back to local /public/images/hero/hero-1.jpg. */
@@ -289,35 +290,36 @@ export default function HeroSlideshow({
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </Link>
-              <Link
-                href={cta2Href}
-                className="btn-ghost inline-flex items-center justify-center gap-2 px-7 rounded-lg font-semibold text-sm"
-                style={{ minHeight: "44px" }}
-              >
-                {cta2Label}
-              </Link>
-            </div>
-
-            {/* The Product Book (Doug, 16 Oct 2026: a button "is not enough").
-                The cover does what a third button can't: it's a picture of
-                the thing. It sits with the headline and buttons, part of the
-                hero's message, not a card in the corner (the 14 Oct card he
-                took out). .hero-book in app/globals.css. */}
-            {book && (
-              <Link href={book.href} className="hero-book">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={book.cover} alt="" width={48} height={48} decoding="async" />
-                <span className="min-w-0">
-                  <span className="hero-book-kicker">{book.kicker}</span>
-                  <span className="hero-book-line">
-                    {book.line}
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
+              {/* The Product Book beside the orange button, in place of the
+                  outlined "See the systems" (Vern, 16 Oct 2026). Doug: an
+                  outlined "Open the Product Book" button "is not enough"; the
+                  cover does what a button can't, it's a picture of the thing.
+                  The outlined button is back only with the book switched off.
+                  .hero-book in app/globals.css. */}
+              {book ? (
+                <Link href={book.href} className="hero-book">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={book.cover} alt="" width={44} height={44} decoding="async" />
+                  <span className="min-w-0">
+                    <span className="hero-book-kicker">{book.kicker}</span>
+                    <span className="hero-book-line">
+                      {book.line}
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </span>
                   </span>
-                </span>
-              </Link>
-            )}
+                </Link>
+              ) : (
+                <Link
+                  href={cta2Href}
+                  className="btn-ghost inline-flex items-center justify-center gap-2 px-7 rounded-lg font-semibold text-sm"
+                  style={{ minHeight: "44px" }}
+                >
+                  {cta2Label}
+                </Link>
+              )}
+            </div>
 
           </div>
         </div>

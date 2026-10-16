@@ -131,9 +131,9 @@ export default defineType({
           name: "cta2Label",
           type: "string",
           title: "Secondary CTA label",
-          // The Product Book has its own callout under the buttons since 16
-          // Oct 2026 (app/page.tsx, heroBook); this button is the systems' again.
-          description: 'Text on the secondary button (e.g. "See the systems").',
+          // Since 16 Oct 2026 the Product Book's callout takes this button's
+          // place while the book is on (app/page.tsx, heroBook).
+          description: 'Text on the secondary button (e.g. "See the systems"). Shown only while the Product Book is switched off: its callout takes this place.',
           validation: (r) => headingStyle(r),
         }),
         defineField({

@@ -177,14 +177,17 @@ Vercel — connected to GitHub, auto-deploys on push to main
   lib/product-taxonomy.ts, the three product eyebrows in lib/products.ts).
 
 ## Doug's homepage round (14 and 16 Oct 2026)
-- The Product Book has its own callout in the hero, under the two buttons:
-  the cover, "The HUB Product Book", "Read it online →" (app/page.tsx
-  `heroBook`, HeroSlideshow `book`, .hero-book in globals.css). Doug, 16 Oct:
-  the outline "Open the Product Book" button "is not enough". With the book
-  off (showCatalogue) there is no callout.
-- So the second button is "See the systems" → #systems again, Studio's
-  Secondary CTA label and link as before. From 14 to 16 Oct it opened the
-  Product Book (`productBookButton`, gone).
+- The Product Book's callout sits beside the orange "See the work" button,
+  in place of the outlined second button: the cover, "The HUB Product Book",
+  "Read it online →" (app/page.tsx `heroBook`, HeroSlideshow `book`,
+  .hero-book in globals.css). Doug, 16 Oct: the outline "Open the Product
+  Book" button "is not enough"; Vern, the same day, after a version with the
+  callout under both buttons: "drop the ghost button again and put the
+  booklet callout to the right of the orange 'see the work' button".
+- With the book off (showCatalogue) there is no callout and the second
+  button returns: Studio's Secondary CTA label and link ("See the systems" →
+  #systems). From 14 to 16 Oct it opened the Product Book
+  (`productBookButton`, gone).
 - The Product Book card that sat in the hero's corner on 14 Oct was taken
   out the same day (a revert of 2bd0a4f); the homepage band stays.
 - Resources is no longer a button in the bar: it is in the Products menu

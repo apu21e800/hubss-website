@@ -40,6 +40,11 @@ interface HeroSlideshowProps {
   cta1Href?: string;
   cta2Label?: string;
   cta2Href?: string;
+  /**
+   * The Product Book's callout under the buttons (app/page.tsx, heroBook):
+   * the cover, the book's name and a line. Absent with the book switched off.
+   */
+  book?: { href: string; cover: string; kicker: string; line: string };
   /** Sanity-supplied hero image URL. Falls back to local /public/images/hero/hero-1.jpg. */
   heroImageSrc?: string;
   /** Alt text from Studio for that image. */
@@ -72,6 +77,7 @@ export default function HeroSlideshow({
   cta1Href   = "#map",
   cta2Label  = "See the systems",
   cta2Href   = "#systems",
+  book,
   heroImageSrc,
   heroImageAlt,
   heroSources = [],
@@ -291,6 +297,27 @@ export default function HeroSlideshow({
                 {cta2Label}
               </Link>
             </div>
+
+            {/* The Product Book (Doug, 16 Oct 2026: a button "is not enough").
+                The cover does what a third button can't: it's a picture of
+                the thing. It sits with the headline and buttons, part of the
+                hero's message, not a card in the corner (the 14 Oct card he
+                took out). .hero-book in app/globals.css. */}
+            {book && (
+              <Link href={book.href} className="hero-book">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={book.cover} alt="" width={48} height={48} decoding="async" />
+                <span className="min-w-0">
+                  <span className="hero-book-kicker">{book.kicker}</span>
+                  <span className="hero-book-line">
+                    {book.line}
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </span>
+                </span>
+              </Link>
+            )}
 
           </div>
         </div>

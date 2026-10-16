@@ -176,12 +176,15 @@ Vercel — connected to GitHub, auto-deploys on push to main
 - The repair family is **Asphalt & Concrete Repair** (lib/product-categories.ts,
   lib/product-taxonomy.ts, the three product eyebrows in lib/products.ts).
 
-## Doug's homepage round (14 Oct 2026)
-- The hero's second button opens the Product Book (app/page.tsx,
-  `productBookButton`): the link is the book's own address; the words are
-  Studio's field "Product Book button" (cta2Label), except that the old
-  "See the systems" counts as empty ("Open the Product Book"). cta2Href is
-  hidden in Studio and not read. With the book off it is the systems button.
+## Doug's homepage round (14 and 16 Oct 2026)
+- The Product Book has its own callout in the hero, under the two buttons:
+  the cover, "The HUB Product Book", "Read it online →" (app/page.tsx
+  `heroBook`, HeroSlideshow `book`, .hero-book in globals.css). Doug, 16 Oct:
+  the outline "Open the Product Book" button "is not enough". With the book
+  off (showCatalogue) there is no callout.
+- So the second button is "See the systems" → #systems again, Studio's
+  Secondary CTA label and link as before. From 14 to 16 Oct it opened the
+  Product Book (`productBookButton`, gone).
 - The Product Book card that sat in the hero's corner on 14 Oct was taken
   out the same day (a revert of 2bd0a4f); the homepage band stays.
 - Resources is no longer a button in the bar: it is in the Products menu

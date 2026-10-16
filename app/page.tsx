@@ -22,9 +22,8 @@ import { getMergedApplications } from "@/lib/applications.server";
 import { getMergedProducts } from "@/lib/products.server";
 import { city, provinceCode, schemaPhone, type SiteSettings } from "@/lib/site-settings";
 import { mergeHomepageCopy } from "@/lib/homepage-copy";
-import { catalogueReady, ideaBook } from "@/lib/catalogue";
+import { catalogue, catalogueReady, ideaBook } from "@/lib/catalogue";
 import { showCatalogue } from "@/lib/feature-flags";
-import { stegaClean } from "next-sanity";
 
 // 30 Sep 2026 (QA A1, E2, E4): "Systems", not the banned "Solutions", in the
 // title; one factual description with no "leader" (the same line as the site
@@ -127,21 +126,19 @@ const HERO_SOURCES: { file: string; media: string; kind: "wide" | "phone" }[] = 
 const DEFAULT_HERO_ORIGIN = "/images/hero/hero-1.jpg";
 
 /**
- * The hero's second button opens the Product Book (Doug, 14 Oct 2026: "Put
- * the Product Book CTA in place of 'See the systems'"; it replaced the card
- * that sat in the hero's corner that morning). The link is the book's own
- * (lib/catalogue.ts), so it follows the book's address. The words are
- * Studio's, unless Studio still holds the button's old words from before 14
- * Oct ("See the systems"), which would now sit on the wrong button. With the
- * book switched off (showCatalogue) it is the systems button again.
+ * The Product Book in the hero: its own callout under the two buttons, with
+ * the cover (components/sections/HeroSlideshow.tsx, .hero-book).
+ *
+ * Doug, 16 Oct 2026: the outline "Open the Product Book" button "is not
+ * enough". Vern: "If we loose the ghost button we should put the old button
+ * back", so the second button is "See the systems" again, Studio's words and
+ * link as before 14 Oct. From 14 to 16 Oct the second button opened the book
+ * (and on 14 Oct a dismissible card sat in the hero's corner, which Doug took
+ * out). With the book switched off (showCatalogue) there is no callout.
  */
-const OLD_CTA2 = "See the systems";
-function productBookButton(studioLabel?: string, studioHref?: string) {
-  if (!showCatalogue() || !catalogueReady) {
-    return { cta2Label: studioLabel ?? OLD_CTA2, cta2Href: studioHref ?? "#systems" };
-  }
-  const label = studioLabel && stegaClean(studioLabel).trim() !== OLD_CTA2 ? studioLabel : `Open the ${ideaBook.short}`;
-  return { cta2Label: label, cta2Href: ideaBook.href };
+function heroBook() {
+  if (!showCatalogue() || !catalogueReady || !catalogue.coverThumb) return undefined;
+  return { href: ideaBook.href, cover: catalogue.coverThumb, kicker: ideaBook.title, line: "Read it online" };
 }
 
 export default async function Home() {
@@ -183,7 +180,9 @@ export default async function Home() {
     // changes when that sync runs.
     cta1Label:  sanityPage?.homepageHero?.cta1Label  ?? "See the work",
     cta1Href:   sanityPage?.homepageHero?.cta1Href   ?? "#map",
-    ...productBookButton(sanityPage?.homepageHero?.cta2Label, sanityPage?.homepageHero?.cta2Href),
+    cta2Label:  sanityPage?.homepageHero?.cta2Label  ?? "See the systems",
+    cta2Href:   sanityPage?.homepageHero?.cta2Href   ?? "#systems",
+    book: heroBook(),
     // Hero slide 1 in Studio; /images/hero/hero-1.jpg when it's empty.
     heroImageSrc: heroPhoto?.src,
     heroImageAlt: heroPhoto?.alt,

@@ -95,7 +95,10 @@ const FEATURED_SLUGS = [
 // Named under the grid, each linked to its page. Slugs as in lib/products.ts;
 // the names come from the same merged list as the cards, so they always
 // match the product pages and a slug change can't leave a dead link.
-const ALSO_AVAILABLE_SLUGS = ["premark", "durashield", "duratherm", "airmark"];
+// With the six cards these are the Product Book's ten systems, which the
+// heading counts ("Ten systems", 16 Oct 2026): StreetBondSR in place of
+// AirMark, which the book doesn't count among them.
+const ALSO_AVAILABLE_SLUGS = ["premark", "durashield", "duratherm", "streetbondsr"];
 
 /** `copy`: the section's eyebrow, heading and intro from Studio (lib/homepage-copy.ts). */
 type Props = { products: ProductCard[]; copy?: SectionCopy };

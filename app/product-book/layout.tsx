@@ -22,7 +22,7 @@ export function generateMetadata(): Metadata {
   const edition = catalogue.edition ?? "";
   // No page count here, by Doug's ask (25 Sep 2026): the book is named, not
   // measured. (The old copy said "116 pages" for a 144-page book anyway.)
-  const description = `Read ${ideaBook.title} in your browser: HUB Surface Systems' decorative pavement systems, applications and specifications for Canadian municipalities, developers and contractors. ${edition} edition.`;
+  const description = `Read ${ideaBook.title} online: HUB Surface Systems' decorative pavement systems, applications and specifications. ${edition} edition.`;
   return {
     // `absolute`, not a bare string: the root layout defines a
     // "%s | HUB Surface Systems" template, and a layout title goes through it.

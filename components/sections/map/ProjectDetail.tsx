@@ -112,8 +112,12 @@ export default function ProjectDetail({
   priority?: boolean;
 }) {
   const systems = [project.product, ...(project.systems ?? [])];
+  // The card leads to projects, never the Product Book (Vern, 16 Oct 2026:
+  // "map should go to projects, not the booklet"): the job's own write-up,
+  // or, for the 40 jobs with none yet, the Projects section. Until then a job
+  // without a write-up said "See it in the Product Book" and opened its
+  // printed page, and one with both linked the page as well.
   const readHref = project.slug ? `/blog/${project.slug}` : null;
-  const bookHref = project.ideaBookPage ? `/product-book/${project.ideaBookPage}` : null;
   const hasBrief = Boolean(project.problem || project.solution);
 
   return (
@@ -141,17 +145,15 @@ export default function ProjectDetail({
 
         <p className="cm-detail-text">{project.excerpt}</p>
 
-        {(readHref || bookHref) && (
-          <div className="cm-detail-actions">
-            <a className="cm-btn cm-btn-primary" href={readHref ?? bookHref ?? "#"}>
-              {readHref ? "Read the write-up" : "See it in the Product Book"}
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
-            </a>
-          </div>
-        )}
+        <div className="cm-detail-actions">
+          <a className="cm-btn cm-btn-primary" href={readHref ?? "/blog/projects"}>
+            {readHref ? "Read the write-up" : "More projects"}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          </a>
+        </div>
 
         <p className="cm-detail-links">
-          {readHref && bookHref && <a href={bookHref}>Product Book, page {project.ideaBookPage}</a>}
+          {readHref && <a href="/blog/projects">More projects</a>}
           <a href={productHref(project.product)}>About {project.product}</a>
           <a href="/contact">Plan a project like this</a>
         </p>

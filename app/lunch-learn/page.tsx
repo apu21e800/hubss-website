@@ -10,7 +10,7 @@ import { LUNCH_LEARN_FAQS } from "@/lib/lunch-learn-content";
 
 export const metadata = buildMetadata({
   title: "Lunch & Learn · Free Spec Session for Engineers & Planners",
-  description: "Book a free Lunch & Learn with HUB Surface Systems. We bring lunch, material samples, and 27 years of decorative pavement expertise to your office, in person or virtual, coast to coast.",
+  description: "Book a free Lunch & Learn with HUB Surface Systems: lunch, material samples and 27 years of decorative pavement expertise, in person or virtual.",
   slug: "lunch-learn",
 });
 

@@ -57,6 +57,20 @@ const ALL_BOUNDS: [[number, number], [number, number]] = [
   [-137.5, 41.6],
   [-52.5, 61.6],
 ];
+/**
+ * A phone frames the pins themselves, edge to edge (16 Oct 2026, QA sweep;
+ * Vern: "ya"). A portrait frame fits the country by its width, so the room
+ * ALL_BOUNDS keeps east of Charlottetown only shrank the pins: the map opened
+ * on the whole continent. Desktop keeps ALL_BOUNDS, tuned for "Back to Canada".
+ */
+const PHONE_BOUNDS: [[number, number], [number, number]] = (() => {
+  let w = Infinity, s = Infinity, e = -Infinity, n = -Infinity;
+  for (const p of mapProjects) {
+    w = Math.min(w, p.lng); e = Math.max(e, p.lng);
+    s = Math.min(s, p.lat); n = Math.max(n, p.lat);
+  }
+  return [[w - 1.2, s - 0.8], [e + 1.2, n + 0.8]];
+})();
 const PANEL_W = 368;
 /** One tour stop: the flight, then time to look. */
 const TOUR_FLIGHT_MS = 2600;
@@ -376,12 +390,13 @@ export default function CanadaMap() {
     }
   }, [isDesktop]);
 
+  const homeBounds = isDesktop ? ALL_BOUNDS : PHONE_BOUNDS;
   const frameCanada = useCallback((duration = 1200) => {
     const map = mapRef.current;
     if (!map) return;
     freezeList.current = false;
-    map.fitBounds(ALL_BOUNDS, { duration: reducedMotion ? 0 : duration });
-  }, [reducedMotion]);
+    map.fitBounds(homeBounds, { duration: reducedMotion ? 0 : duration });
+  }, [reducedMotion, homeBounds]);
 
   // ── Moving the camera to a project
   const flyTo = useCallback((p: MapProject, how: "tour" | "select" | "follow") => {
@@ -539,11 +554,11 @@ export default function CanadaMap() {
     const map = mapRef.current;
     if (!map) return;
     map.getMap().setPadding(padding());
-    map.fitBounds(ALL_BOUNDS, { duration: 0 });
+    map.fitBounds(homeBounds, { duration: 0 });
     const c = map.getCenter();
     homeRef.current = { lng: c.lng, lat: c.lat, zoom: map.getZoom() };
     syncInView();
-  }, [loaded, isDesktop, padding, syncInView]);
+  }, [loaded, isDesktop, padding, syncInView, homeBounds]);
 
   // A search frames what it found, once typing pauses.
   useEffect(() => {
@@ -805,7 +820,7 @@ export default function CanadaMap() {
             <Map
               ref={mapRef}
               mapStyle={MAP_STYLE}
-              initialViewState={{ bounds: ALL_BOUNDS, fitBoundsOptions: { padding: 40 } }}
+              initialViewState={{ bounds: homeBounds, fitBoundsOptions: { padding: 40 } }}
               style={{ width: "100%", height: "100%" }}
               minZoom={1.4}
               maxZoom={17}

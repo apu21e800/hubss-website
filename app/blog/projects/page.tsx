@@ -12,7 +12,7 @@ const SECTION = SECTION_BY_KEY.projects;
 export const metadata: Metadata = buildMetadata({
   title: "Projects · Decorative Pavement Installations Across Canada",
   description:
-    "HUB Surface Systems installations written up: decorative crosswalks, transit lanes, plazas, pathways and branded surfaces, with the system used on each. The case studies add the brief, the specification and the installation.",
+    "HUB Surface Systems installations written up: decorative crosswalks, transit lanes, plazas, pathways and branded surfaces, with the system used on each.",
   slug: "blog/projects",
 });
 

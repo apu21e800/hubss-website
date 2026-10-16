@@ -21,7 +21,7 @@ export const revalidate = 3600;
 export const metadata: Metadata = buildMetadata({
   title: "Specification Library & Technical Resources",
   description:
-    "Technical data sheets, spec sheets, brochures, safety guides, and installation resources for every HUB Surface Systems decorative pavement product. Download free for any project.",
+    "Spec sheets, data sheets, brochures, safety guides and installation resources for every HUB Surface Systems product. Free to download for any project.",
   slug: "resources",
 });
 

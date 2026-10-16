@@ -20,7 +20,7 @@ import { EXIT_HREF, LUNCH_LEARN_HREF, REQUEST_HREF } from "../links";
 export function generateMetadata(): Metadata {
   if (!showCatalogue() || !catalogueReady) return { robots: { index: false, follow: false } };
   const big = catalogue.widths[catalogue.widths.length - 1];
-  const description = `${ideaBook.title} page by page, as printed: every spread of HUB Surface Systems' decorative pavement systems and applications, with the PDF to download.`;
+  const description = `${ideaBook.title} page by page, as printed: every spread of HUB Surface Systems' systems and applications, with the PDF to download.`;
   return {
     title: { absolute: `${ideaBook.title}, as printed | HUB Surface Systems` },
     description,

@@ -61,8 +61,10 @@ export const HOMEPAGE_COPY: HomepageCopy = {
   ],
   systems: {
     eyebrow: "The systems",
-    heading: "Six systems,",
-    headingAccent: "six different jobs.",
+    // Ten, as the Product Book counts them (Vern, 16 Oct 2026: "yes 10
+    // systems"): the six cards and the four named under them.
+    heading: "Ten systems,",
+    headingAccent: "ten different jobs.",
     intro:
       "Stamped asphalt, preformed thermoplastic and coatings, chosen by what the surface has to take. Turning asphalt and concrete into your signature surface.",
   },

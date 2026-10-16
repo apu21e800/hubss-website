@@ -7,7 +7,7 @@ import { buildMetadata } from "@/lib/seo";
 export const metadata = buildMetadata({
   title: "Privacy Policy",
   description:
-    "How HUB Surface Systems collects, uses, and protects your personal information under PIPEDA, Canada's Personal Information Protection and Electronic Documents Act.",
+    "How HUB Surface Systems collects, uses and protects your personal information under PIPEDA, Canada's federal private-sector privacy law.",
   slug: "privacy",
 });
 

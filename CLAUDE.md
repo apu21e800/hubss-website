@@ -194,6 +194,36 @@ Vercel — connected to GitHub, auto-deploys on push to main
   (Nav.tsx `RESOURCES`): the panel's foot row on a laptop, a row under the
   families on a phone; /resources marks Products as the current section.
 
+## Site QA sweep (16 Oct 2026)
+Two agents swept a local production build (every sitemap route at 1440 and
+390, then the main pages by eye; never hubss.com, never a form submit). No
+page errors, broken images or sideways scroll. Fixed in 4cc2994: Lunch &
+Learn topic tap on a phone, lightbox preloads, search aria-activedescendant,
+footer h2s, Product Book jumps (`primeLeaf`), separator dots
+(lib/separators.ts), /applications three-line descriptions, tap targets.
+Then, on Vern's answers:
+- "Ten systems, ten different jobs." on the homepage, as the Product Book
+  counts them (Vern: "yes 10 systems"): the six cards plus PreMark,
+  DuraShield, DuraTherm and StreetBondSR named under them (AirMark, not one
+  of the book's ten, left that line). Studio holds the heading: the clean-up
+  script below writes it; lib/homepage-copy.ts is the fallback.
+- The homepage map's project cards lead to projects, never the Product Book
+  (Vern: "map should go to projects, not the booklet"): the write-up, or
+  "More projects" (/blog/projects) for the 40 jobs without one
+  (components/sections/map/ProjectDetail.tsx). A phone frames the pins
+  themselves (PHONE_BOUNDS in CanadaMap.tsx); desktop keeps ALL_BOUNDS.
+- Page descriptions over 160 characters were shortened in code (gallery,
+  resources, contact, Lunch & Learn, privacy, the Product Book's three
+  pages, the Projects and Guides hubs).
+- scripts/studio-cleanup-2026-10-16.ts (Vern's PC; dry run by default,
+  `--apply` writes): the Ten heading, three homepage blurb typos, and
+  search titles and descriptions for 61 posts (Studio's "Search result
+  overrides", only where empty). It never overwrites a value edited since.
+- Left as they are: the seven posts dated 8 Sep 2026 (written for the new
+  site that day), `?theme=` review links sticking, /product-book/<n> pages
+  indexable, the StreetPrint hero's 2px white edge (in the file itself; a
+  Studio crop does not reach the hero URL).
+
 ## Analytics: people, not programs (15 Oct 2026)
 Doug saw "high traffic from Singapore" and a drop from 17 Sep in GA4. What
 the data showed (GA4 and Search Console, 17 Sep to 14 Oct vs the 28 days

@@ -158,9 +158,10 @@ export default async function Footer() {
             {/* Earlier per-line flag removed — consolidated into the "Canadian | Owned and operated" treatment above for visual consistency with the nav + about page. */}
           </div>
 
-          {/* Products */}
+          {/* Products. The column headings are h2 (QA sweep, 16 Oct 2026): as h4,
+              every page's outline jumped from its last h2 to h4. Same look. */}
           <div>
-            <h4 className="font-semibold text-sm mb-3.5" style={{ color: "var(--text-primary)" }}>Products</h4>
+            <h2 className="font-semibold text-sm mb-3.5" style={{ color: "var(--text-primary)" }}>Products</h2>
             <ul className="space-y-0.5">
               {products.filter((p) => !p.comingSoon && !p.hideFromFooter).map((p) => (
                 <li key={p.slug}>
@@ -180,7 +181,7 @@ export default async function Footer() {
 
           {/* Applications */}
           <div>
-            <h4 className="font-semibold text-sm mb-3.5" style={{ color: "var(--text-primary)" }}>Applications</h4>
+            <h2 className="font-semibold text-sm mb-3.5" style={{ color: "var(--text-primary)" }}>Applications</h2>
             <ul className="space-y-0.5">
               {footerApplications.map((a) => (
                 <li key={a.href}>
@@ -204,7 +205,7 @@ export default async function Footer() {
 
             {/* Company */}
             <div>
-              <h4 className="font-semibold text-sm mb-3.5" style={{ color: "var(--text-primary)" }}>Company</h4>
+              <h2 className="font-semibold text-sm mb-3.5" style={{ color: "var(--text-primary)" }}>Company</h2>
               <ul className="space-y-0.5">
                 {companyLinks.map((l) => (
                   <li key={l.href}>
@@ -224,7 +225,7 @@ export default async function Footer() {
 
             {/* Offices */}
             <div>
-              <h4 className="font-semibold text-sm mb-3.5" style={{ color: "var(--text-primary)" }}>Offices</h4>
+              <h2 className="font-semibold text-sm mb-3.5" style={{ color: "var(--text-primary)" }}>Offices</h2>
               <div className="space-y-6">
 
                 {/* West */}

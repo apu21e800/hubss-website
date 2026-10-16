@@ -94,9 +94,13 @@ interface PreviewState {
 function DocCard({
   doc,
   onPreview,
+  inGroup = false,
 }: {
   doc: ResourceDocument;
   onPreview: (state: PreviewState) => void;
+  /** Listed under its product's own heading ("By product"): the row leaves
+   *  out the product's name, which the heading already says (QA sweep, 16 Oct 2026). */
+  inGroup?: boolean;
 }) {
   const isFlyer = doc.documentType === "flyer";
   const isCatalogue = doc.documentType === "catalogue";
@@ -167,11 +171,11 @@ function DocCard({
           {doc.title}
         </h3>
         <p className="text-[11.5px] mt-0.5 truncate sm:hidden" style={{ color: "var(--text-secondary)" }}>
-          {doc.productName} · {doc.fileSize} · {doc.updatedDate}
+          {inGroup ? null : <>{doc.productName} · </>}{doc.fileSize} · {doc.updatedDate}
         </p>
       </div>
 
-      {productLink ? (
+      {inGroup ? null : productLink ? (
         <Link
           href={productLink}
           onClick={stop}
@@ -743,6 +747,7 @@ export default function ResourcesClient({
                             key={doc.id}
                             doc={doc}
                             onPreview={setPreview}
+                            inGroup
                           />
                         ))}
                       </div>

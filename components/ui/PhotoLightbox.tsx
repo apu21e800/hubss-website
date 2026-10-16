@@ -255,10 +255,13 @@ export default function PhotoLightbox({
           </button>
         )}
 
-        {/* Adjacent-frame preload (hidden) */}
+        {/* Adjacent-frame preload (hidden), at the frame's own sizes and
+            quality so it fetches the very file the frame will ask for. At
+            sizes="16px" it fetched a 128px copy and the next photo still
+            loaded from scratch (QA sweep, 16 Oct 2026). */}
         <div aria-hidden="true" style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", opacity: 0, pointerEvents: "none" }}>
           {preload.map((p) => (
-            <PhotoImage key={p.src} src={p.src} alt="" width={16} height={16} sizes="16px" />
+            <PhotoImage key={p.src} src={p.src} alt="" fill sizes="92vw" quality={85} loading="eager" />
           ))}
         </div>
       </motion.div>

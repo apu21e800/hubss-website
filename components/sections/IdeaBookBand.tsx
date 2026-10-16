@@ -2,6 +2,7 @@ import Link from "next/link";
 import { catalogue, catalogueReady, cataloguePageUrl, ideaBook } from "@/lib/catalogue";
 import { showCatalogue } from "@/lib/feature-flags";
 import { HOMEPAGE_COPY, type HomepageCopy } from "@/lib/homepage-copy";
+import { DOT } from "@/lib/separators";
 
 /**
  * The Product Book's one callout on the homepage: a strip, not a section.
@@ -47,7 +48,10 @@ export default function IdeaBookBand({ copy = HOMEPAGE_COPY.ideaBook }: { copy?:
           />
           <div className="min-w-0 flex-1">
             <p className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--accent-text-lg)" }}>
-              {ideaBook.title}
+              {/* The volume only from sm up: on a phone the title wrapped as
+                  "THE HUB PRODUCT BOOK ·" over "VOLUME 5" (QA sweep, 16 Oct 2026). */}
+              {ideaBook.title.replace(/ · .*$/, "")}
+              <span className="hidden sm:inline">{DOT}{ideaBook.volume}</span>
             </p>
             <p
               className="mt-1 text-[15px] font-bold leading-snug sm:text-[17px]"

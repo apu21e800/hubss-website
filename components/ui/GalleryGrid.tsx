@@ -135,9 +135,13 @@ export default function GalleryGrid({ images }: { images: GalleryImage[] }) {
             Showing {displayed.length} of {images.length}
           </p>
           <div className="flex items-center gap-2">
+            {/* On a phone only one button, "Load N more", unless the next
+                press is the rest anyway: "Show all 108" beside it was two
+                choices for one job, and 108 photos at once is a lot on a
+                phone (QA sweep, 16 Oct 2026). */}
             <button
               onClick={() => setVisible(images.length)}
-              className="px-4 py-2.5 min-h-11 rounded-lg text-sm font-semibold transition-colors hover:bg-[var(--ink-10)] active:scale-[0.97]"
+              className={`${nextIsAll ? "" : "max-sm:hidden "}px-4 py-2.5 min-h-11 rounded-lg text-sm font-semibold transition-colors hover:bg-[var(--ink-10)] active:scale-[0.97]`}
               style={{ background: "var(--bg-card-neutral)", color: "var(--text-body)", border: "1px solid var(--ink-10)" }}
             >
               Show all {images.length}

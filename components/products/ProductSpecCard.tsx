@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { CatalogueEntry } from "@/lib/product-catalogue";
 import { products } from "@/lib/products";
+import { dotted } from "@/lib/separators";
 
 /** The product page a cross-sell name points to, when the name is a product. */
 const productHref = (name: string): string | null => {
@@ -135,7 +136,7 @@ export default function ProductSpecCard({
         style={{ color: "var(--text-faint)", letterSpacing: "0.16em" }}
       >
         <span className="sr-only">{productName} is specified for: </span>
-        {entry.uses.join("  ·  ")}
+        {dotted(entry.uses)}
       </p>
 
       {/* Cross-sell, where the printed page carries one. */}

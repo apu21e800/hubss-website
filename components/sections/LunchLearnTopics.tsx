@@ -71,11 +71,21 @@ export const LL_TOPICS: LunchLearnTopic[] = [
   },
 ];
 
-/** Scroll to the form and put the cursor in its first field, gently unless the visitor asked for no motion. */
+/**
+ * Scroll to the form itself (its title, the topic chip, the first fields) and
+ * put the cursor in its first field, gently unless the visitor asked for no
+ * motion. Not to #book's top: on a phone the card's pitch fills the first
+ * screen and the form sits under it, so a tapped topic showed no form and no
+ * chip (QA sweep, 16 Oct 2026). Clear of the header when it stays on screen.
+ */
 function goToForm() {
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const book = document.getElementById("book");
-  book?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+  const target = book?.querySelector("form") ?? book;
+  if (!target) return;
+  const header = document.querySelector("header");
+  const covered = header && /fixed|sticky/.test(getComputedStyle(header).position) ? header.getBoundingClientRect().height : 0;
+  window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - covered - 16, behavior: reduce ? "auto" : "smooth" });
   window.setTimeout(() => {
     book?.querySelector<HTMLInputElement>('input[name="name"]')?.focus({ preventScroll: true });
   }, reduce ? 0 : 500);

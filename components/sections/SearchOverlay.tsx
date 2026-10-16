@@ -422,6 +422,9 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
             aria-autocomplete="list"
             aria-label="Search the site"
             aria-controls="search-results"
+            // The row ↑↓ has reached, for a screen reader: without it the
+            // choice was only visual (QA sweep, 16 Oct 2026).
+            aria-activedescendant={hasList && active >= 0 && active < options.length ? `search-opt-${active}` : undefined}
             placeholder="Search systems, specs, insights"
             className="flex-1 bg-transparent outline-none"
             style={{
@@ -556,6 +559,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                     return (
                       <button
                         key={h.id}
+                        id={`search-opt-${myIndex}`}
                         role="option"
                         aria-selected={isActive}
                         data-active={isActive}

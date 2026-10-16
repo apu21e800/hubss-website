@@ -7,6 +7,7 @@ import Link from "next/link";
 import { heroAlt } from "@/lib/image-seo";
 import { HOME_HERO } from "@/lib/hero-framing";
 import { isSanityImage, sanitySized, sanitySrcSet } from "@/lib/photos";
+import { keepDots } from "@/lib/separators";
 
 const FALLBACK_HERO = "/images/hero/hero-1.jpg";
 
@@ -218,12 +219,14 @@ export default function HeroSlideshow({
               className="text-[11px] tracking-[0.16em] sm:text-sm sm:tracking-[0.22em] font-bold uppercase mb-3"
               style={{
                 color: "var(--accent-soft-text)",
-                // A tight shadow for the letter edges, a soft one for the
-                // ground: it reads over sunlit pavement as well as shadow.
-                textShadow: "0 1px 2px rgba(0,0,0,0.65), 0 1px 12px rgba(0,0,0,0.75)",
+                // A tight shadow for the letter edges and two soft ones for
+                // the ground: it reads over sunlit pavement as well as shadow.
+                // The third since 16 Oct 2026 (QA sweep: about 2:1 where the
+                // line crossed the bright curb at 1440 and 1024).
+                textShadow: "0 1px 2px rgba(0,0,0,0.7), 0 0 12px rgba(0,0,0,0.8), 0 0 26px rgba(0,0,0,0.6)",
               }}
             >
-              {eyebrow}
+              {keepDots(eyebrow)}
             </p>
 
             {/* H1 — clamp raised: 5vw→7vw, 4.5rem→5.75rem cap for more presence on desktop */}

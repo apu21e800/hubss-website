@@ -5,6 +5,7 @@ import { colourFamily, type ColourFamily } from "@/lib/colours";
 import { leafTitle, pageLabel, systemEntry, type Caption, type Leaf, type Photo, type ProjectCard, type SpecifyLine } from "@/lib/idea-book-edition";
 import { mapProjects } from "@/lib/map-projects";
 import type { SiteSettings } from "@/lib/site-settings";
+import { dotted } from "@/lib/separators";
 
 /**
  * One leaf of the Product Book edition (lib/idea-book-edition.ts): a printed
@@ -238,7 +239,7 @@ export function LeafView({ leaf, index, settings, priority }: { leaf: Leaf; inde
                   })}
                 </div>
               )}
-              <p className="ib-uses">{entry.uses.join(" · ")}</p>
+              <p className="ib-uses">{dotted(entry.uses)}</p>
               <div className="ib-page-foot">
                 <Link href={`/products/${product.slug}`} className="ib-more">The {product.name} page →</Link>
                 <PageLink leaf={leaf} />
@@ -325,7 +326,7 @@ export function LeafView({ leaf, index, settings, priority }: { leaf: Leaf; inde
                   </div>
                 ))}
               </div>
-              <p className="ib-uses">{leaf.uses.join(" · ")}</p>
+              <p className="ib-uses">{dotted(leaf.uses)}</p>
               <div className="ib-page-foot">
                 <Link href="/products/streetprint" className="ib-more">The StreetPrint page →</Link>
                 <PageLink leaf={leaf} />

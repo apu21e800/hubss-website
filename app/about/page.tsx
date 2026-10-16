@@ -12,6 +12,7 @@ import { stegaClean } from "next-sanity";
 import PhotoImage from "@/components/ui/PhotoImage";
 import { getProjectTiles, TileLink, type Pick } from "@/components/sections/InstagramStrip";
 import { ABOUT_HERO, ABOUT_STORY, ABOUT_WHY_HUB, ABOUT_PARTNERS_INTRO, ABOUT_SEED } from "@/lib/about-content";
+import { keepDots } from "@/lib/separators";
 
 // Sanity is the CMS for this page's copy, so the page has to be allowed to go
 // and re-read it. Without a revalidate the route is prerendered once at build
@@ -66,7 +67,7 @@ function fresh(sanity: string | undefined, seed: string): string | undefined {
 export default async function AboutPage() {
   const [sanityPage, { offices }] = await Promise.all([getSanityPageContent("about"), getSiteSettings()]);
   const hero = {
-    eyebrow:    sanityPage?.aboutHero?.eyebrow ?? ABOUT_HERO.eyebrow,
+    eyebrow:    keepDots(sanityPage?.aboutHero?.eyebrow ?? ABOUT_HERO.eyebrow),
     heading:    sanityPage?.aboutHero?.heading ?? ABOUT_HERO.heading,
     subheading: fresh(sanityPage?.aboutHero?.subheading, ABOUT_SEED.subheading) ?? ABOUT_HERO.subheading,
   };

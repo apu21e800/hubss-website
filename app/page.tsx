@@ -24,6 +24,7 @@ import { city, provinceCode, schemaPhone, type SiteSettings } from "@/lib/site-s
 import { mergeHomepageCopy } from "@/lib/homepage-copy";
 import { catalogue, catalogueReady, ideaBook } from "@/lib/catalogue";
 import { showCatalogue } from "@/lib/feature-flags";
+import { keepDots } from "@/lib/separators";
 
 // 30 Sep 2026 (QA A1, E2, E4): "Systems", not the banned "Solutions", in the
 // title; one factual description with no "leader" (the same line as the site
@@ -140,7 +141,7 @@ const DEFAULT_HERO_ORIGIN = "/images/hero/hero-1.jpg";
  */
 function heroBook() {
   if (!showCatalogue() || !catalogueReady || !catalogue.coverThumb) return undefined;
-  return { href: ideaBook.href, cover: catalogue.coverThumb, kicker: ideaBook.title, line: "Read it online" };
+  return { href: ideaBook.href, cover: catalogue.coverThumb, kicker: keepDots(ideaBook.title), line: "Read it online" };
 }
 
 export default async function Home() {

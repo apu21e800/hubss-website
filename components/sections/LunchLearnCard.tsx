@@ -93,20 +93,25 @@ export default async function LunchLearnCard({
             </svg>
           </Link>
           {row ? (
-            <p className="flex flex-wrap gap-x-3 text-[12px]" style={{ color: "var(--text-muted)" }}>
-              <span>Or call</span>
-              <a href={telHref(offices.east.phone)} className="whitespace-nowrap font-semibold underline-offset-2 hover:underline" style={{ color: "var(--text-secondary)" }}>East {offices.east.phone}</a>
-              <a href={telHref(offices.west.phone)} className="whitespace-nowrap font-semibold underline-offset-2 hover:underline" style={{ color: "var(--text-secondary)" }}>West {offices.west.phone}</a>
+            // Each number is a 30 px tall tap target (it was 20: QA sweep, 16
+            // Oct 2026), and the two wrap as a pair, so on a phone West lines
+            // up under East, not under "Or call".
+            <p className="flex gap-x-3 text-[12px]" style={{ color: "var(--text-muted)" }}>
+              <span className="flex-shrink-0 py-1.5">Or call</span>
+              <span className="flex flex-wrap gap-x-3">
+                <a href={telHref(offices.east.phone)} className="inline-block py-1.5 whitespace-nowrap font-semibold underline-offset-2 hover:underline" style={{ color: "var(--text-secondary)" }}>East {offices.east.phone}</a>
+                <a href={telHref(offices.west.phone)} className="inline-block py-1.5 whitespace-nowrap font-semibold underline-offset-2 hover:underline" style={{ color: "var(--text-secondary)" }}>West {offices.west.phone}</a>
+              </span>
             </p>
           ) : (
             // In a sidebar the three pieces wrapped as "Or call East · …" over
             // "West · …", the second number under "Or call" (QA, 28 Sep 2026).
             // The two numbers stack in their own column, so East and West line up.
             <p className="flex gap-x-3 text-[12px]" style={{ color: "var(--text-muted)" }}>
-              <span className="flex-shrink-0">Or call</span>
+              <span className="flex-shrink-0 py-1">Or call</span>
               <span className="flex flex-col">
-                <a href={telHref(offices.east.phone)} className="whitespace-nowrap font-semibold underline-offset-2 hover:underline" style={{ color: "var(--text-secondary)" }}>East {offices.east.phone}</a>
-                <a href={telHref(offices.west.phone)} className="whitespace-nowrap font-semibold underline-offset-2 hover:underline" style={{ color: "var(--text-secondary)" }}>West {offices.west.phone}</a>
+                <a href={telHref(offices.east.phone)} className="inline-block py-1 whitespace-nowrap font-semibold underline-offset-2 hover:underline" style={{ color: "var(--text-secondary)" }}>East {offices.east.phone}</a>
+                <a href={telHref(offices.west.phone)} className="inline-block py-1 whitespace-nowrap font-semibold underline-offset-2 hover:underline" style={{ color: "var(--text-secondary)" }}>West {offices.west.phone}</a>
               </span>
             </p>
           )}

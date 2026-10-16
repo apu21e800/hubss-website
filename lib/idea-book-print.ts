@@ -336,7 +336,8 @@ export const PRINT_APPLICATIONS: Record<string, PrintApplication> = {
   },
   durability: {
     title: "Tough.",
-    statement: "The \"secret sauce\" is in the aggregate. Using materials that reach 8-9 on the Mohs scale, provides one of the toughest wearing surfaces you can use.",
+    // Typeset 16 Oct 2026 (curly quotes, an en dash for the range); the words are the printed page's.
+    statement: "The “secret sauce” is in the aggregate. Using materials that reach 8–9 on the Mohs scale, provides one of the toughest wearing surfaces you can use.",
     body: "TrafficPatterns fuses 125 mil of preformed thermoplastic into the road. TrafficPatternsXD steps up to a 150 mil aggregate-reinforced build for the hardest-working surfaces: intersections, transit corridors, loading aprons.",
     specify: [
       { slug: "traffic-patterns", note: "125 mil, aggregate-reinforced" },

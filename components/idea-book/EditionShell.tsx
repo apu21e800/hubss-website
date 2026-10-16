@@ -59,6 +59,7 @@ export default function EditionShell({
     (index: number) => {
       const all = leaves();
       const target = all[Math.max(0, Math.min(all.length - 1, index))];
+      primeLeaf(target);
       target?.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "start" });
     },
     [leaves]
@@ -112,7 +113,7 @@ export default function EditionShell({
   useEffect(() => {
     const id = window.location.hash.slice(1);
     const el = id ? document.getElementById(id) : null;
-    if (el && el.classList.contains("ib-leaf")) el.scrollIntoView({ block: "start" });
+    if (el && el.classList.contains("ib-leaf")) { primeLeaf(el); el.scrollIntoView({ block: "start" }); }
     scroller.current?.focus({ preventScroll: true });
     setLive(true);
   }, []);
@@ -229,6 +230,7 @@ export default function EditionShell({
                           e.preventDefault();
                           setOpen(false);
                           const el = document.getElementById(c.id);
+                          primeLeaf(el);
                           el?.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "start" });
                         }}
                       >
@@ -252,6 +254,18 @@ export default function EditionShell({
 function printedPageHref(printedHref: string, pagesHref: string, pages: string): string {
   const first = pages.split("–")[0];
   return first === "1" ? pagesHref : `${printedHref}/${first}`;
+}
+
+/**
+ * A jump (Contents, the turn buttons, ← and →) loads the target leaf's photos
+ * now, not when lazy loading notices them mid-glide, and lets them show at
+ * once. A jump used to land on an empty grey frame for a second or more
+ * (QA sweep, 16 Oct 2026).
+ */
+function primeLeaf(leaf: Element | null | undefined) {
+  if (!leaf) return;
+  leaf.querySelectorAll<HTMLImageElement>('img[loading="lazy"]').forEach((img) => { img.loading = "eager"; });
+  leaf.classList.add("ib-in");
 }
 
 function prefersReducedMotion(): boolean {

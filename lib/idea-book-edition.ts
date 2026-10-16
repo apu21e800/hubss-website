@@ -159,10 +159,10 @@ export const LEAVES: Leaf[] = [
   {
     kind: "divider", id: "systems", section: "systems", pages: [8, 9],
     title: "Ten systems", subtitle: "Our systems, how they work, and where to find them.",
-    photo: { page: 9, bottom: 0.74, focus: "50% 55%", alt: "A transit crosswalk in TrafficPatternsXD beside a bus lane" },
+    photo: { page: 9, bottom: 0.74, focus: "50% 85%", alt: "A transit crosswalk in TrafficPatternsXD beside a bus lane" },
     contents: CONTENTS,
   },
-  { kind: "system", id: "traffic-patterns", section: "systems", pages: [10, 11], slug: "traffic-patterns", photo: full(10, "A veterans memorial crosswalk in TrafficPatterns, Kitchener, Ontario", "50% 55%"), caption: { place: "Kitchener, Ontario" } },
+  { kind: "system", id: "traffic-patterns", section: "systems", pages: [10, 11], slug: "traffic-patterns", photo: full(10, "A veterans memorial crosswalk in TrafficPatterns, Kitchener, Ontario", "50% 0%"), caption: { place: "Kitchener, Ontario" } },
   { kind: "system", id: "traffic-patterns-xd", section: "systems", pages: [12, 13], slug: "traffic-patterns-xd", photo: full(12, "A brick-pattern TrafficPatternsXD crosswalk in Kleinburg, Ontario", "50% 60%"), caption: { place: "Kleinburg, Ontario" } },
   {
     kind: "colours", id: "thermoplastic-colours", section: "systems", pages: [14, 15],
@@ -180,7 +180,7 @@ export const LEAVES: Leaf[] = [
     photo: { page: 17, top: 0.084, bottom: SITE_PAGE_CAPTION, focus: "50% 50%", alt: "Stamped TrafficPatternsXD, the pattern and colour part of the surface" },
     result: "The result: pattern and colour become part of the surface.",
   },
-  { kind: "system", id: "streetprint", section: "systems", pages: [18, 19], slug: "streetprint", photo: full(18, "A StreetPrint cobble driveway at a gated entrance", "50% 60%"), caption: { place: "Residential driveway" } },
+  { kind: "system", id: "streetprint", section: "systems", pages: [18, 19], slug: "streetprint", photo: full(18, "A StreetPrint cobble driveway at a gated entrance", "50% 30%"), caption: { place: "Residential driveway" } },
   {
     kind: "steps", id: "reheat-stamp-coat", section: "systems", pages: [20, 21], system: "StreetPrint", slug: "streetprint",
     title: "Reheat. Stamp. Coat.", subtitle: "How genuine stamped asphalt is installed.",
@@ -195,9 +195,7 @@ export const LEAVES: Leaf[] = [
   {
     kind: "templates", id: "stamping-templates", section: "systems", pages: [22, 23],
     title: "Stamping templates.", subtitle: "Precision made templates for stamping decorative patterns into hot asphalt. Custom designs available.",
-    // The drawing runs 0.426 to 0.858 of the page; the band keeps a little
-    // asphalt above and below it for the laptop layout's fade (edition.css).
-    photo: { page: 22, top: 0.375, bottom: 0.915, focus: "50% 50%", alt: "A herringbone stamping template drawn with its dimensions" },
+    photo: { page: 22, top: 0.4, bottom: 0.92, focus: "50% 50%", alt: "A herringbone stamping template drawn with its dimensions" },
     groups: [
       { title: "Field templates", items: ["Ashlar Slate", "British Cobble", "Offset Brick", "Random Slate", "Herringbone", "Diagonal Herringbone", "Thompson Stone", "Random Cobble", "Texas Cobble", "Tile Sets 6\", 8\", 12\"", "Eurofan", "Scallop"] },
       { title: "Border templates", items: ["Stacked Brick", "Texas Cobble", "Soldier Course", "Tile options"] },
@@ -212,7 +210,7 @@ export const LEAVES: Leaf[] = [
     families: ["ema-2026", "durashield"],
     extra: "Twelve SR colours carry a solar reflectance of 0.33 or higher and can contribute to LEED heat-island reduction credits. Reflectance ASTM C1549, emittance ASTM C1371, SRI ASTM E1980. Swatches are indicative: specify by name and request a physical sample for colour approval.",
   },
-  { kind: "system", id: "streetbondsr", section: "systems", pages: [28, 29], slug: "streetbondsr", photo: full(28, "A fleet lot in a solar-reflective StreetBondSR coating, Toronto, Ontario", "50% 60%"), caption: { place: "Toronto, Ontario" } },
+  { kind: "system", id: "streetbondsr", section: "systems", pages: [28, 29], slug: "streetbondsr", photo: full(28, "A fleet lot in a solar-reflective StreetBondSR coating, Toronto, Ontario", "50% 0%"), caption: { place: "Toronto, Ontario" } },
   { kind: "system", id: "decomark", section: "systems", pages: [30, 31], slug: "decomark", photo: full(30, "A DecoMark Indigenous design at Victoria High School, Victoria, British Columbia", "50% 60%"), caption: { place: "Victoria, British Columbia" } },
   { kind: "system", id: "mmax", section: "systems", pages: [32, 33], slug: "mmax", photo: full(32, "A red MMAX bus lane in London, Ontario", "50% 55%"), caption: { place: "London, Ontario" } },
   { kind: "system", id: "duratherm", section: "systems", pages: [34, 35], slug: "duratherm", photo: full(34, "DuraTherm inlaid markings on a traffic-calmed street in Toronto, Ontario", "50% 55%"), caption: { place: "Toronto, Ontario" } },
@@ -232,7 +230,7 @@ export const LEAVES: Leaf[] = [
   {
     kind: "divider", id: "applications", section: "applications", pages: [44, 45],
     title: "Applications",
-    photo: full(44, "A HUB crew installing a blue and green StreetBond design", "50% 55%"),
+    photo: full(44, "A HUB crew installing a blue and green StreetBond design", "50% 28%"),
   },
   ...([
     ["crosswalks", 46, "Crosswalks", 1, "brampton-bramalea-terminal", "A TrafficPatternsXD crosswalk at Bramalea Terminal, Brampton, Ontario"],
@@ -275,7 +273,7 @@ export const LEAVES: Leaf[] = [
   {
     kind: "divider", id: "projects", section: "projects", pages: [80, 81],
     title: "Projects",
-    photo: full(80, "StreetPrint laneways at the Oxford Townhomes, New Westminster, British Columbia", "50% 55%"), caption: { place: "New Westminster, British Columbia" },
+    photo: full(80, "StreetPrint laneways at the Oxford Townhomes, New Westminster, British Columbia", "50% 50%"), caption: { place: "New Westminster, British Columbia" },
   },
   {
     kind: "statement", id: "coast-to-coast", section: "projects", pages: [82, 83],
@@ -354,7 +352,7 @@ export const LEAVES: Leaf[] = [
   },
   {
     kind: "projects", id: "mont-megantic", section: "projects", pages: [102], items: [
-      project({ page: 102, photo: half(102, "The white StreetBondSR plaza between the domes of the Mont-Mégantic observatory", 0.572), eyebrow: "Observatory", title: "Lit by starlight.", body: "Inside the world's first International Dark Sky Reserve, outdoor lighting is kept to a bare minimum. A white StreetBondSR surface reflects what little light there is, so the summit's paths and plazas can be seen by starlight.", caption: { place: "Mont-Mégantic, Québec", system: "StreetBondSR" }, mapId: "mont-megantic-observatory" }),
+      project({ page: 102, photo: half(102, "The white StreetBondSR plaza between the domes of the Mont-Mégantic observatory", 0.558), eyebrow: "Observatory", title: "Lit by starlight.", body: "Inside the world's first International Dark Sky Reserve, outdoor lighting is kept to a bare minimum. A white StreetBondSR surface reflects what little light there is, so the summit's paths and plazas can be seen by starlight.", caption: { place: "Mont-Mégantic, Québec", system: "StreetBondSR" }, mapId: "mont-megantic-observatory" }),
     ],
   },
   {
@@ -426,7 +424,8 @@ export const LEAVES: Leaf[] = [
     kind: "statement", id: "colour-that-knows", section: "projects", pages: [122, 123],
     title: "Colour that knows when to be quiet.",
     body: "Inside a heritage industrial hall, the lot is coated in a slate coloured coating that complements the brick and steel. StreetBond transforms older pavement to give it new life.",
-    photo: full(123, "A slate-grey StreetBond parking lot inside a heritage industrial hall", "50% 50%"), caption: { place: "StreetBond" },
+    // The whole page: its foot is the StreetBond logo, not a caption (bottom 0.92 cut it in half).
+    photo: { page: 123, focus: "50% 50%", alt: "A slate-grey StreetBond parking lot inside a heritage industrial hall" }, caption: { place: "StreetBond" },
   },
   {
     kind: "projects", id: "sechelt-east-gwillimbury", section: "projects", pages: [124, 125], items: [

@@ -30,30 +30,43 @@ export default function PagePhoto({
   fit?: number;
 }) {
   const band = photoBand(photo, fit);
+  const own = photoBand(photo);
+  const [fx, fy] = focusXY(photo.focus);
   return (
     <figure
       className={`ib-photo ${className}`}
       // --ib-ratio lets a layout cap the photo's height and keep its shape
-      // (width: calc(<height> * var(--ib-ratio)) in edition.css).
-      style={{ aspectRatio: String(band.ratio), "--ib-ratio": String(band.ratio) } as React.CSSProperties}
+      // (width: calc(<height> * var(--ib-ratio)) in edition.css). The rest let
+      // a layout fill a frame of another shape with the photo's own band
+      // (.ib-band): its shape, where it starts on the page, and the focus.
+      style={{
+        aspectRatio: String(band.ratio),
+        "--ib-ratio": String(band.ratio),
+        "--ib-band": String(own.ratio),
+        "--ib-t": String(own.top),
+        "--ib-fx": String(fx),
+        "--ib-fy": String(fy),
+      } as React.CSSProperties}
     >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={cataloguePageUrl(photo.page, catalogue.widths[1] ?? catalogue.widths[0])}
-        srcSet={cataloguePageSrcSet(photo.page)}
-        sizes={sizes}
-        alt={photo.alt}
-        width={catalogue.widths[0]}
-        height={Math.round(catalogue.widths[0] / catalogue.aspect)}
-        loading={priority ? "eager" : "lazy"}
-        decoding="async"
-        fetchPriority={priority ? "high" : undefined}
-        style={{
-          transform: band.top ? `translateY(-${(band.top * 100).toFixed(3)}%)` : undefined,
-          // Only read where a layout makes the photo fill its column (object-fit: cover).
-          objectPosition: photo.focus,
-        }}
-      />
+      {/* The band: a plain block here; where a layout fills a frame of
+          another shape, a box of the band's own shape that covers the frame
+          and sits at the focus, so only the photograph ever shows, never the
+          printed caption or heading around it (edition.css). */}
+      <span className="ib-band">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={cataloguePageUrl(photo.page, catalogue.widths[1] ?? catalogue.widths[0])}
+          srcSet={cataloguePageSrcSet(photo.page)}
+          sizes={sizes}
+          alt={photo.alt}
+          width={catalogue.widths[0]}
+          height={Math.round(catalogue.widths[0] / catalogue.aspect)}
+          loading={priority ? "eager" : "lazy"}
+          decoding="async"
+          fetchPriority={priority ? "high" : undefined}
+          style={{ transform: band.top ? `translateY(-${(band.top * 100).toFixed(3)}%)` : undefined }}
+        />
+      </span>
     </figure>
   );
 }
@@ -73,7 +86,15 @@ export function photoBand(photo: Photo, fit?: number): { top: number; ratio: num
 
 /** "50% 60%" → 0.6: the vertical part of a focus, as a fraction. */
 function focusFraction(focus?: string): number {
-  const y = focus?.trim().split(/\s+/)[1];
-  const n = y ? Number.parseFloat(y) : NaN;
-  return Number.isFinite(n) ? Math.min(1, Math.max(0, n / 100)) : 0.5;
+  return focusXY(focus)[1];
+}
+
+/** "30% 60%" → [0.3, 0.6]: a focus as fractions across and down (0.5 when unset). */
+function focusXY(focus?: string): [number, number] {
+  const parts = focus?.trim().split(/\s+/) ?? [];
+  const frac = (s?: string) => {
+    const n = s ? Number.parseFloat(s) : NaN;
+    return Number.isFinite(n) ? Math.min(1, Math.max(0, n / 100)) : 0.5;
+  };
+  return [frac(parts[0]), frac(parts[1])];
 }

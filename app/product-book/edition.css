@@ -75,7 +75,11 @@
 
 /* ── Reading ────────────────────────────────────────────────────────────── */
 .ib-scroll { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior-y: contain; -webkit-overflow-scrolling: touch; }
-.ib-leaf { scroll-margin-top: 0; min-height: var(--ib-leaf-h); box-sizing: border-box; display: grid; align-content: center; padding: var(--ib-pad-y) var(--ib-gutter) var(--ib-pad-end); border-bottom: 1px solid var(--ib-line); position: relative; }
+/* The spread stays inside 1360px on a wide screen: the side padding grows,
+   not the columns. Until 16 Oct 2026 only each child was capped, so a
+   two-column spread ran the full width of a big monitor and its photo became
+   a letterbox strip (1220 x 520 on a 2560px screen). */
+.ib-leaf { scroll-margin-top: 0; min-height: var(--ib-leaf-h); box-sizing: border-box; display: grid; align-content: center; padding: var(--ib-pad-y) max(var(--ib-gutter), calc((100% - 1360px) / 2)) var(--ib-pad-end); border-bottom: 1px solid var(--ib-line); position: relative; }
 .ib-leaf > * { max-width: 1360px; width: 100%; margin-inline: auto; }
 /* A leaf arrives as it scrolls into view. Only once scripts run (.ib-live):
    with them off, or before they load, every leaf is simply there. */
@@ -133,6 +137,7 @@
 /* ── Photos ─────────────────────────────────────────────────────────────── */
 .ib-photo { margin: 0; overflow: hidden; background: #e9e7e2; position: relative; width: 100%; border-radius: 4px; }
 .ib-photo img { display: block; width: 100%; height: auto; }
+.ib-band { display: block; }
 .ib-photo-col { min-width: 0; }
 .ib-caption-row { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 18px; }
 .ib-caption-row .ib-more { margin-top: 10px; }
@@ -198,8 +203,27 @@
 @media (min-width: 1024px) {
   .ib-divider { grid-template-columns: 1fr; }
   .ib-divider-photo .ib-photo { max-height: 70vh; }
-  .ib-divider-photo .ib-photo img { object-fit: cover; height: 100%; }
   .ib-contents-list { grid-template-columns: 1fr 1fr; column-gap: 48px; }
+
+  /* A photograph filling a frame of another shape (a divider's band capped at
+     70vh, a system's column as tall as its page): the band, a box of the
+     photo's own shape, covers the frame (its min sizes carry through its
+     aspect ratio) and sits at the focus. Until 16 Oct 2026 these used
+     object-fit: cover on the whole page, so on some screens the printed
+     caption showed, cut, at the foot ("Saint John, New Brunswick | Harbo..."),
+     and heads at the top were cut. PagePhoto sets --ib-band, --ib-t, --ib-fx
+     and --ib-fy. */
+  .ib-divider-photo .ib-band, .ib-system .ib-photo-col .ib-band {
+    position: absolute;
+    overflow: hidden;
+    aspect-ratio: var(--ib-band);
+    min-width: 100%;
+    min-height: 100%;
+    left: calc(var(--ib-fx) * 100%);
+    top: calc(var(--ib-fy) * 100%);
+    transform: translate(calc(var(--ib-fx) * -100%), calc(var(--ib-fy) * -100%));
+  }
+  .ib-divider-photo .ib-band img, .ib-system .ib-photo-col .ib-band img { transform: translateY(calc(var(--ib-t) * -100%)) !important; }
 }
 
 /* ── A system: photo beside the page with its dark header ──────────────── */
@@ -223,21 +247,13 @@
   .ib-system, .ib-templates { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 24px; align-items: stretch; }
   .ib-system > *, .ib-templates > * { margin-inline: 0; }
   .ib-system .ib-photo-col .ib-photo { height: 100%; aspect-ratio: auto !important; min-height: min(520px, calc(var(--ib-photo-max-h) - 32px)); }
-  .ib-system .ib-photo-col .ib-photo img { position: absolute; inset: 0; height: 100%; object-fit: cover; transform: none !important; }
   .ib-system .ib-photo-col { display: flex; flex-direction: column; }
   .ib-system .ib-photo-col .ib-caption { flex: none; }
-  /* The templates drawing is printed on a dark page (22) beside the list (23).
-     Here the photo column is that dark page, as tall as the card, with the
-     drawing level in it and its asphalt fading into the page above and
-     below. A bare drawing beside the card floated in white space, centred
-     or at the top (Vern, 16 Oct 2026). The colour is the asphalt's own. */
-  .ib-templates .ib-photo-col { display: flex; align-items: center; background: #1b1c20; border-radius: 6px; overflow: hidden; }
-  .ib-templates .ib-photo-col .ib-photo {
-    border-radius: 0;
-    background: #1b1c20;
-    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 8%, #000 92%, transparent);
-    mask-image: linear-gradient(to bottom, transparent, #000 8%, #000 92%, transparent);
-  }
+  /* The templates drawing at the top of its column, level with the card's
+     dark header (Vern, 16 Oct 2026). Centred in the column it floated; on a
+     dark panel as tall as the card, its asphalt fading in, it looked odd. */
+  .ib-templates { align-items: start; }
+  .ib-templates .ib-photo-col .ib-photo { background: var(--ib-dark); }
 }
 /* A laptop's shorter screen: the page card draws in its spacing so the
    spread still sits on one screen. Nothing is dropped. */

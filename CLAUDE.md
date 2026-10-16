@@ -258,6 +258,15 @@ screen, and a leaf's photo and heading arrive once 120px of it shows.
   drawer, keys, the hash following the leaf in view). app/product-book/edition.css
   is the book's own language: paper, #1f1f1f ink, the orange rule, Inter,
   fixed whatever the site theme.
+- Where a layout fills a frame of another shape (a system's photo column, a
+  divider's band on a laptop), PagePhoto's `.ib-band` box covers the frame at
+  the photo's own shape and sits at its `focus` (fractions of the band, not
+  the page), so a printed caption or heading never shows. Until 16 Oct 2026
+  that was object-fit: cover on the whole page: captions showed, cut, on
+  1024 to 1280px screens, and heads were cut. Same day: a spread stays inside
+  1360px on a big monitor (the leaf's side padding grows), page 123 shows its
+  StreetBond logo whole, page 102 lost a white strip. Check framing with a
+  screenshot of every `.ib-photo` at 1024, 1440, 1920 and phone width.
 - `npm run test:idea-book` (CI too): every page in exactly one leaf, every
   link resolves, no em dash. The verify pass runs axe and the phone image
   budget on /product-book.

@@ -18,8 +18,9 @@ export const dynamicParams = false;
 
 export function generateStaticParams() {
   if (!catalogueReady) return [];
-  // Page one lives at /product-book/pages; a duplicate route for it would split
-  // the signal between two URLs for the same content.
+  // Page one lives at /product-book itself; a duplicate route for it would
+  // split the signal between two URLs for the same content (/product-book/1
+  // redirects there, next.config.ts).
   return cataloguePages.slice(1).map((p) => ({ page: String(p.n) }));
 }
 

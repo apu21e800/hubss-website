@@ -884,7 +884,7 @@ export const resourceDocuments: ResourceDocument[] = [
   {
     id: 'catalogue-2026',
     title: ideaBook.title,
-    type: 'Product Book',
+    type: 'Product Portfolio Book',
     product: 'all',
     productName: 'Full Line',
     applications: [],

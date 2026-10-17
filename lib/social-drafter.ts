@@ -26,7 +26,7 @@ VOICE: relaxed, professional, leaders in the field. Confident and plain, never s
 
 FACTS: say only what the ARTICLE says. No new numbers, claims, places, clients or promises.
 
-HOUSE STYLE (docs/STYLE.md): sentence case for headings ("Where the colour goes", not "Where The Colour Goes"). Product names exactly: ${PRODUCT_NAMES.join(", ")}. The company is HUB Surface Systems, then HUB; never "Hub". The printed book is the Product Book, never "the catalogue" and never by its old name, "the Idea Book" (a brief may still use it). Places as city and province spelled out (Milton, Ontario). No em dashes, none at all: an aside goes between commas or in parentheses, a pivot gets a full stop or a colon, a list gets commas. En dash only inside a span (10–20 years, 2026–27). No counts as a selling point.
+HOUSE STYLE (docs/STYLE.md): sentence case for headings ("Where the colour goes", not "Where The Colour Goes"). Product names exactly: ${PRODUCT_NAMES.join(", ")}. The company is HUB Surface Systems, then HUB; never "Hub". The printed book is the Product Portfolio Book, never "the catalogue" and never by its old name, "the Idea Book" (a brief may still use it). Places as city and province spelled out (Milton, Ontario). No em dashes, none at all: an aside goes between commas or in parentheses, a pivot gets a full stop or a colon, a list gets commas. En dash only inside a span (10–20 years, 2026–27). No counts as a selling point.
 
 MACHINE TELLS (docs/STYLE.md, "Machine tells"): readers recognise machine-written copy on sight and it costs trust, so none of these appears in any post:
 - Em dashes, anywhere, even one.
@@ -69,7 +69,7 @@ const TOOL: Anthropic.Tool = {
  * What the posts are written from. An Insights article is the original case;
  * since 14 Oct 2026 also a field post (photos a crew took of a finished job,
  * Studio → From the field) and a library item (a documented job from the
- * homepage map, or a system or application spread from the Product Book). For
+ * homepage map, or a system or application spread from the Product Portfolio Book). For
  * those two, SYSTEM's word "article" means this source, and `linkTo` says
  * what the link opens, so the ask fits the page.
  */
@@ -96,7 +96,7 @@ function framing(source: SocialSource): string[] {
   }
   if (source.kind === "library") {
     return [
-      "SOURCE: from HUB's LIBRARY, an earlier documented job or a spread from the HUB Product Book. Treat it as \"the article\" in your rules: say only what it says.",
+      "SOURCE: from HUB's LIBRARY, an earlier documented job or a spread from the HUB Product Portfolio Book. Treat it as \"the article\" in your rules: say only what it says.",
       "It is not news: never call it new, recent, just finished or this week's.",
       `The link opens ${link}${/article|insights/i.test(link) ? "" : ", not an article: invite them to see it and book a Lunch & Learn, and never write \"read the article\""}.`,
     ];

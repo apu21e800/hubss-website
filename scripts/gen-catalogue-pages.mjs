@@ -209,9 +209,10 @@ function unspace(line) {
 
 /** The most useful line of real text on a page, used as alt text. */
 async function pageAlt(pdf, n, total) {
-  // "Product Book" is the book's name on the site (lib/catalogue.ts, ideaBook);
-  // no "of N": Doug asked for no page counts anywhere (25 Sep 2026).
-  const generic = `HUB Product Book, page ${n}`;
+  // "Product Portfolio Book" is the book's name on the site (lib/catalogue.ts,
+  // ideaBook; Doug's name since 17 Oct 2026); no "of N": Doug asked for no
+  // page counts anywhere (25 Sep 2026).
+  const generic = `HUB Product Portfolio Book, page ${n}`;
   const r = await run("pdftotext", ["-f", String(n), "-l", String(n), "-nopgbrk", pdf, "-"]);
   if (r.code !== 0) return generic;
   // A text layer is not always text. Page 23 of this edition reports its
@@ -248,7 +249,7 @@ async function pageAlt(pdf, n, total) {
   // The book sets asides with em dashes; the site uses none (docs/STYLE.md,
   // and `npm run verify` fails on one in an alt attribute).
   head = head.replace(/\s*\u2014\s*/g, ", ");
-  return `${head} (Product Book, page ${n})`;
+  return `${head} (Product Portfolio Book, page ${n})`;
 }
 
 async function renderPage(pdf, n, dpi, outDir, tmpDir) {
@@ -384,7 +385,7 @@ async function main() {
   for (let n = 1; n <= total; n++) {
     pages.push({ n, alt: await pageAlt(pdf, n, total) });
   }
-  const withText = pages.filter((p) => !/^HUB Product Book, page/.test(p.alt)).length;
+  const withText = pages.filter((p) => !/^HUB Product (?:Portfolio )?Book, page/.test(p.alt)).length;
   log(`  ${withText}/${total} pages carry a text layer`);
 
   // The download is the printer's own web-optimised export when it is sitting

@@ -398,8 +398,8 @@ async function checkFollowTheWorkDistinct() {
 // blog photos were referenced with markdown syntax — which compiles to a plain
 // <img> and never touches next/image. Two were untouched 3024x4032 camera files.
 async function checkImageWeight(routes, chromium) {
-  // /product-book: the edition lazy-loads its photographs; a phone must not be
-  // handed the whole book up front (75 leaves, 1400px renders).
+  // /product-book: the reader mounts three pages at a time at the phone's
+  // 800px size; a phone must not be handed the whole book up front.
   const sample = ["/", "/blog", "/resources", "/contact", "/products/streetbond", "/applications/crosswalks", "/product-book"]
     .filter((r) => routes.includes(r) || r === "/");
   const B = await chromium.launch(launchOpts());

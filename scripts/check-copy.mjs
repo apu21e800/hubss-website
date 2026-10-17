@@ -145,13 +145,13 @@ async function selfTest() {
 
   // Copy that must pass untouched: the neighbours of each rule.
   const GOOD = [
-    `StreetPrint lasts 10${EN}20 years; the 2026${EN}27 Product Book lists it.`,
+    `StreetPrint lasts 10${EN}20 years; the 2026${EN}27 Product Portfolio Book lists it.`,
     "Landscape architects specify StreetBond for park paths.",
     "MMAX comes in 8 standard and 15 premium colours.",
     "DecoMark is available in standard and premium options.",
     "The crossings at Toronto Premium Outlets have been in service for fourteen years.",
     "Choose from a catalogue of four patterns, or design your own.",
-    "The HUB Product Book · Volume 5 has every system.",
+    "The Product Portfolio Book · Volume 5 has every system.",
     "Apply above -10°C and keep traffic off for 45 minutes.",
     "It is installed as a seamless, flexible asphalt surface with no joints for weeds.",
     "Seamless: zero joints",
@@ -167,7 +167,7 @@ async function selfTest() {
     "- First item\n- Second item",
     "A snowplow-safe, heat-activated repair that stays flush.",
     "Book a Lunch & Learn",
-    "Open the Product Book",
+    "Open the Product Portfolio Book",
   ];
   for (const g of GOOD) expect(`good copy flagged: ${g}`, lintCopy(g).length === 0, rulesOf(lintCopy(g)));
 
@@ -222,6 +222,7 @@ async function selfTest() {
     ["product-book", "Every system is in the catalogue."],
     ["product-book", "See HUB's 2027 catalogue for the colours."],
     ["product-book", "Every system is in the HUB Idea Book."],
+    ["product-book", "Every system is in the HUB Product Book."],
     ["insights", "Read more Field Notes on hubss.com."],
   ];
   for (const [rule, text] of BAD) {
@@ -240,7 +241,7 @@ async function selfTest() {
   // Headings.
   const GOOD_HEADINGS = [
     "Where the colour goes",
-    "Open the Product Book",
+    "Open the Product Portfolio Book",
     "Book a Lunch & Learn",
     "Why York Region chose TrafficPatternsXD",
     "StreetBond vs. MMAX",

@@ -133,7 +133,7 @@ export default defineType({
           title: "Secondary CTA label",
           // Since 16 Oct 2026 the Product Book's callout takes this button's
           // place while the book is on (app/page.tsx, heroBook).
-          description: 'Text on the secondary button (e.g. "See the systems"). Shown only while the Product Book is switched off: its callout takes this place.',
+          description: 'Text on the secondary button (e.g. "See the systems"). Shown only while the Product Portfolio Book is switched off: its callout takes this place.',
           validation: (r) => headingStyle(r),
         }),
         defineField({
@@ -180,7 +180,7 @@ export default defineType({
         sectionCopy("applications", "Applications", "The photo grid of applications. The second part of the heading is set in the orange gradient."),
         defineField({
           name: "ideaBook",
-          title: "Product Book callout",
+          title: "Product Portfolio Book callout",
           type: "object",
           description: "The one-row strip with the book's cover. The book's name above it stays as it is.",
           options: { collapsible: true, collapsed: true },

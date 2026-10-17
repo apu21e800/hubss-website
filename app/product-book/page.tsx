@@ -1,38 +1,39 @@
 /**
- * /product-book - the Product Book, Volume 5, as a digital edition (14 Oct 2026).
+ * /product-book - the Product Portfolio Book, Volume 5: the printed book, page
+ * by page, open at page one, with a page turn.
  *
- * Vern: "a mobile / virtual desktop version of the idea book that's not just
- * a square PDF ... same content in booklet, better display for mobile and
- * desktop". One leaf per printed spread (lib/idea-book-edition.ts), laid out
- * for the screen it is read on (components/idea-book/Leaves.tsx), with the
- * book's chrome around it (components/idea-book/EditionShell.tsx). Every leaf
- * links to its pages as printed, in the page-by-page reader at
- * /product-book/pages and /product-book/<n>.
- *
- * Statically prerendered: every word of the book is in the HTML. The offices
- * on the last leaf come from Studio's Site Settings, like everywhere else.
+ * The book's home. From 14 to 17 Oct 2026 this address served a long-scroll
+ * digital edition and the printed reader sat at /product-book/pages; Doug
+ * (17 Oct) "likes the virtual print version better, so let's revert to
+ * that", so the reader is back here, the edition is parked unlisted at
+ * /product-book/edition, and /product-book/pages redirects here
+ * (next.config.ts). /product-book/[page] serves every other page off the same
+ * component. Statically prerendered; the manifest is an import, not a
+ * filesystem read. Metadata is the segment layout's (app/product-book/layout.tsx).
  */
 import { notFound } from "next/navigation";
-import "./edition.css";
-import EditionShell, { type ContentsEntry } from "@/components/idea-book/EditionShell";
-import { LeafView } from "@/components/idea-book/Leaves";
+import CatalogueViewer from "./CatalogueViewer";
 import CatalogueEmpty from "./CatalogueEmpty";
-import { catalogueReady, ideaBook } from "@/lib/catalogue";
+import { catalogue, catalogueReady } from "@/lib/catalogue";
+import { cataloguePages } from "@/lib/catalogue-pages";
 import { showCatalogue } from "@/lib/feature-flags";
-import { LEAVES, SECTIONS, leafTitle, pageLabel } from "@/lib/idea-book-edition";
-import { getSiteSettings } from "@/lib/sanity.queries";
+import { EXIT_HREF, LUNCH_LEARN_HREF, REQUEST_HREF } from "./links";
 
-export default async function IdeaBookEdition() {
+export default function CatalogueReader() {
   if (!showCatalogue()) notFound();
   if (!catalogueReady) return <CatalogueEmpty />;
-  const settings = await getSiteSettings();
-  const contents: ContentsEntry[] = LEAVES.map((leaf) => ({ id: leaf.id, title: leafTitle(leaf), pages: pageLabel(leaf), section: leaf.section }));
 
   return (
-    <EditionShell title={ideaBook.title} volume={ideaBook.volume} contents={contents} sections={SECTIONS} printedHref={ideaBook.href} pagesHref={ideaBook.pagesHref} total={LEAVES.length}>
-      {LEAVES.map((leaf, i) => (
-        <LeafView key={leaf.id} leaf={leaf} index={i} settings={settings} priority={i === 0} />
-      ))}
-    </EditionShell>
+    <CatalogueViewer
+      pages={cataloguePages}
+      widths={catalogue.widths}
+      aspect={catalogue.aspect}
+      edition={catalogue.edition ?? ""}
+      start={1}
+      download={catalogue.download}
+      exitHref={EXIT_HREF}
+      requestHref={REQUEST_HREF}
+      lunchLearnHref={LUNCH_LEARN_HREF}
+    />
   );
 }

@@ -76,7 +76,6 @@ export function buildSitemap(photos?: PhotoSources, posts: PostMeta[] = []): Met
     ...(catalogueReady
       ? [
           { url: `${BASE_URL}${ideaBook.href}`, lastModified: new Date(), changeFrequency: "yearly" as const, priority: 0.7 },
-          { url: `${BASE_URL}${ideaBook.pagesHref}`, lastModified: new Date(), changeFrequency: "yearly" as const, priority: 0.4 },
         ]
       : []),
     { url: `${BASE_URL}${ideaBook.requestHref}`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.5 },

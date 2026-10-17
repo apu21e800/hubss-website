@@ -18,7 +18,7 @@ import { dotted } from "@/lib/separators";
  */
 
 const PageLink = ({ leaf, children }: { leaf: Leaf; children?: React.ReactNode }) => (
-  <Link href={leaf.pages[0] === 1 ? ideaBook.pagesHref : `${ideaBook.href}/${leaf.pages[0]}`} className="ib-pagelink" title="Open these pages as printed">
+  <Link href={leaf.pages[0] === 1 ? ideaBook.href : `${ideaBook.href}/${leaf.pages[0]}`} className="ib-pagelink" title="Open these pages as printed">
     {children ?? <>Printed {leaf.pages.length > 1 ? "pages" : "page"} {pageLabel(leaf)}</>}
   </Link>
 );
@@ -111,11 +111,11 @@ export function LeafView({ leaf, index, settings, priority }: { leaf: Leaf; inde
           </div>
           <div className="ib-cover-text">
             <p className="ib-eyebrow">Decorative pavement solutions · {ideaBook.volume}</p>
-            <h1 className="ib-h1">The HUB Product Book</h1>
+            <h1 className="ib-h1">{ideaBook.short}</h1>
             <p className="ib-lede">Every system and every application HUB installs across Canada: what it is, where it goes, and the work it has done. Read it here, on any screen, or open any page as printed.</p>
             <div className="ib-cover-actions">
               <a href="#welcome" className="ib-btn">Start reading</a>
-              <Link href={ideaBook.pagesHref} className="ib-btn ib-btn-ghost">The printed book</Link>
+              <Link href={ideaBook.href} className="ib-btn ib-btn-ghost">The printed book</Link>
             </div>
           </div>
         </section>
@@ -544,7 +544,7 @@ export function LeafView({ leaf, index, settings, priority }: { leaf: Leaf; inde
             <p className="ib-fine">© 2026 HUB Surface Systems · Coast to Coast</p>
             <div className="ib-cover-actions">
               <a href="#cover" className="ib-btn ib-btn-ghost">Back to the cover</a>
-              <Link href={ideaBook.pagesHref} className="ib-btn ib-btn-ghost">The printed book</Link>
+              <Link href={ideaBook.href} className="ib-btn ib-btn-ghost">The printed book</Link>
             </div>
           </div>
         </section>

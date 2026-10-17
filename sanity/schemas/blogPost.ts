@@ -226,7 +226,7 @@ export default defineType({
       type: "text",
       rows: 6,
       group: "content",
-      description: "Never shown on the site. The AI drafter lists here what it based the draft on and any sentence its fact check couldn't match to the HUB Product Book: check those before you publish.",
+      description: "Never shown on the site. The AI drafter lists here what it based the draft on and any sentence its fact check couldn't match to the HUB Product Portfolio Book: check those before you publish.",
     }),
     defineField({
       name: "readTime",

@@ -19,7 +19,7 @@ product and application page, and, in **Site Settings**, both offices' towns,
 names, emails and phones, the social accounts and the line under the logo in
 the footer. A phone number changed in Site Settings changes everywhere it
 appears on the site. The words on product and application pages can be
-clicked too, but they are the Product Book's approved copy: see 7.
+clicked too, but they are the Product Portfolio Book's approved copy: see 7.
 
 **Photos and their framing.** Click a hero photo and choose another from the
 media library or upload one. Then press the crosshair (the hotspot tool) on
@@ -76,7 +76,7 @@ the list of articles we want written. Each idea has a
 working title, a target search phrase and a brief. You don't have to do
 anything to it each week: the drafter takes the next idea by itself, and when
 the plan gets low it adds new ideas at the bottom by itself (guides answered
-from the Product Book, and roundups of documented jobs). Set one to **Ready**
+from the Product Portfolio Book, and roundups of documented jobs). Set one to **Ready**
 only when you want that one next; set one to **Not doing** if you don't want
 it.
 
@@ -90,11 +90,11 @@ Nothing reaches the site until you do.
 
 To have it write up a real project, put the facts in the brief: where, when,
 which system, what the client needed. It only knows what the brief and the
-Product Book tell it.
+Product Portfolio Book tell it.
 
 ## 5. What the drafter does and doesn't do
 
-- **Does:** write from the Product Book, the website and the brief; check its own
+- **Does:** write from the Product Portfolio Book, the website and the brief; check its own
   draft against those facts and list anything it couldn't back up; email you.
 - **Doesn't:** publish; invent projects, clients, numbers or quotes (if it
   needs a fact it doesn't have, it writes around it); choose photos (it puts
@@ -125,12 +125,12 @@ Two more kinds of draft arrive the same way (docs/buffer-setup.md):
   page.
 - **From the library.** Every Monday morning, posts about one thing HUB has
   already published: a job from the homepage map, or a system or application
-  from the Product Book. Approve them like the others. A week with a new field
+  from the Product Portfolio Book. Approve them like the others. A week with a new field
   post skips it: your own photos go first.
 
 ## 7. Product and application pages
 
-These are the Product Book's approved copy. Studio can edit them, but the printed
+These are the Product Portfolio Book's approved copy. Studio can edit them, but the printed
 book wins: send Vern the change and he'll put it through so the site and the
 book stay the same.
 
@@ -158,14 +158,14 @@ means:
 - **Exclamation marks and emoji**: take them out.
 - **"Learn more", "Explore" or "Discover" on a button**: say what happens,
   like "Book a Lunch & Learn".
-- **"Catalogue"**: the printed book is the Product Book.
+- **"Catalogue"**, **"Idea Book"**, **"Product Book"**: the printed book is the Product Portfolio Book (Doug's name, 17 Oct 2026).
 - **"Field Notes"**: the blog is called Insights.
 - **Title Case** (Every Word With A Capital): headings, buttons and labels
   take a capital on the first word and on names only: "Where the colour goes".
   The older articles' titles are yours to decide; the warning only points
   them out.
 
-On a product or application page the words are the Product Book's approved copy,
+On a product or application page the words are the Product Portfolio Book's approved copy,
 so a warning there is a suggestion: send Vern the change (see 7). If a warning
 is simply wrong (a name it doesn't know, read as Title Case), publish anyway
 and tell Vern; he can teach it the name.

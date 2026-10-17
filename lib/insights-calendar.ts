@@ -39,7 +39,7 @@ export interface Moment {
 export const MOMENTS: readonly Moment[] = [
   {
     id: "clocks-back", name: "the clocks going back", when: { month: 11, weekday: 0, nth: 1 },
-    angle: "Evenings get dark early and pedestrians are harder to see: what makes a crossing easy to see, from the published evidence and the Product Book.",
+    angle: "Evenings get dark early and pedestrians are harder to see: what makes a crossing easy to see, from the published evidence and the Product Portfolio Book.",
     systems: ["premark", "traffic-patterns"], applications: ["crosswalks", "pedestrian-safety"],
   },
   {
@@ -49,17 +49,17 @@ export const MOMENTS: readonly Moment[] = [
   },
   {
     id: "plow-season", name: "the start of plow season", when: { month: 12, day: 1 },
-    angle: "What a marking needs to come through plows, salt and freeze-thaw, shown by the Product Book's then-and-now photographs.",
+    angle: "What a marking needs to come through plows, salt and freeze-thaw, shown by the Product Portfolio Book's then-and-now photographs.",
     systems: ["traffic-patterns-xd", "premark"], applications: ["commercial-spaces", "crosswalks"],
   },
   {
     id: "budget-season", name: "municipal budget season", when: { month: 1, day: 15 },
-    angle: "Repainting against a marking that lasts: what to weigh before the capital budget is set, from the Product Book's service life for each system.",
+    angle: "Repainting against a marking that lasts: what to weigh before the capital budget is set, from the Product Portfolio Book's service life for each system.",
     systems: ["premark", "mmax", "traffic-patterns"], applications: ["crosswalks", "bus-lanes"],
   },
   {
     id: "tender-season", name: "tender season", when: { month: 2, day: 15 },
-    angle: "Writing the specification for decorative or coloured pavement: a checklist for the tender, from the Product Book.",
+    angle: "Writing the specification for decorative or coloured pavement: a checklist for the tender, from the Product Portfolio Book.",
     systems: ["traffic-patterns-xd", "streetprint", "mmax"], applications: ["crosswalks", "bus-lanes"],
   },
   {
@@ -79,7 +79,7 @@ export const MOMENTS: readonly Moment[] = [
   },
   {
     id: "back-to-school", name: "back to school", when: { month: 9, day: 2 },
-    angle: "School zones and school grounds: markings children and drivers can read, from the Product Book.",
+    angle: "School zones and school grounds: markings children and drivers can read, from the Product Portfolio Book.",
     systems: ["premark", "traffic-patterns"], applications: ["pedestrian-safety", "playgrounds"], libraryJob: "victoria-high-school",
   },
   {

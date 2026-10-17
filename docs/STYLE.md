@@ -45,9 +45,9 @@ The test: read it aloud. If a person on the phone would not say it, cut it.
 
 - Canadian English: colour, centre, metre, kilometre, curb, aluminum,
   program, catalogue (the word, when it ever needs writing; the book is the
-  Product Book), licence (noun) / license (verb).
+  Product Portfolio Book), licence (noun) / license (verb).
 - Sentence case for headings, buttons, labels and eyebrows: "Open the Product
-  Book", "Where MMAX goes", "Specification library". Capitals only for proper
+  Portfolio Book", "Where MMAX goes", "Specification library". Capitals only for proper
   nouns and product names. The CSS may set an eyebrow in small caps; the
   source text is still sentence case.
 - No exclamation marks. No questions as headings. No "actually", "just".
@@ -65,9 +65,9 @@ The test: read it aloud. If a person on the phone would not say it, cut it.
   the book: Preformed Thermoplastics, Coatings, Stamped Asphalt, Asphalt &
   Concrete Repair.
 - Sections: Insights (the library, filed under Projects, Guides and Articles;
-  each piece is a project, a guide or an article), the Product Book ("The HUB Product
-  Book · Volume 5" in full), Resources (the specification library),
-  Lunch & Learn.
+  each piece is a project, a guide or an article), the Product Portfolio Book
+  ("Product Portfolio Book · Volume 5" in full; Doug's name, 17 Oct 2026),
+  Resources (the specification library), Lunch & Learn.
 - Places: city and province, province spelled out in prose: Milton,
   Ontario; Ladysmith, British Columbia. Abbreviate (ON, BC) only in an
   address block or a table.
@@ -92,8 +92,8 @@ The test: read it aloud. If a person on the phone would not say it, cut it.
 - No em dashes (see Machine tells). En dash, no spaces, for spans: 10–20
   years, 2026–27. Hyphen for compounds: freeze-thaw, heat-activated,
   snowplow-safe.
-- Middle dot to join a label and its qualifier: "Product Book · Volume 5",
-  "West · 604-309-8212".
+- Middle dot to join a label and its qualifier: "Product Portfolio Book ·
+  Volume 5", "West · 604-309-8212".
 - Dates as the site prints them: Sep 25, 2026.
 - One space after a full stop. Straight quotes in code, curly on the page.
 
@@ -108,14 +108,15 @@ CPD credit claims).
 ## Structure
 
 - One primary call to action per surface, and the verb says what happens:
-  "Book a Lunch & Learn", "Open the Product Book", "View all products", "Request
-  a copy". Never "Explore", "Discover", "Learn more".
+  "Book a Lunch & Learn", "Open the Product Portfolio Book", "View all
+  products", "Request a copy". Never "Explore", "Discover", "Learn more".
 - An eyebrow only when it adds a fact the heading doesn't (the family above a
   product name). Never the heading again in other words.
 - A descriptor under a name only where the name is opaque and the descriptor
   earns its place. A menu carries names plus, at most, one short line under
   each name, and nothing more: in the Products menu that line is the
-  product's descriptor, taken from the Product Book or the product's own line.
+  product's descriptor, taken from the Product Portfolio Book or the
+  product's own line.
 - The approved book copy (lib/product-catalogue.ts, lib/application-catalogue.ts,
   and the Sanity fields synced from them) is Doug's. Propose edits to him;
   don't cut it.
@@ -156,7 +157,7 @@ What the lint flags, and what it deliberately leaves alone:
 | Stock phrases | "Whether you're", "In today's", "In a world where", "Here's the thing", "dive in", "Think of it as", "worth noting" | |
 | Buttons | a label of four words or fewer that starts "Learn more", "Explore" or "Discover" | the same words inside a longer sentence |
 | Punctuation | exclamation marks, emoji (social posts on Facebook and Instagram may keep one) | |
-| Names | "the catalogue" (and "our", "HUB's", "the 2027" catalogue) for the book; "Field Notes" | "a catalogue of four patterns", "Template Catalog" |
+| Names | "the catalogue" (and "our", "HUB's", "the 2027" catalogue), "Idea Book" and "Product Book" for the book; "Field Notes" | "a catalogue of four patterns", "Template Catalog", "Product Portfolio Book" |
 | Title Case (headings, titles, eyebrows, buttons) | three or more capitalised words that aren't names | product names, HUB's names, places, acronyms, street names; a single run of capitals after a lowercase word, read as a name ("at Toronto Premium Outlets") |
 
 Changing a rule: edit `lib/style-lint.ts`, add a good and a bad sample to

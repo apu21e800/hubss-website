@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { leaveIdeaBook } from "@/app/product-book/links";
+import { ideaBook } from "@/lib/catalogue";
 
 /**
  * The chrome around the Product Book edition (components/idea-book/Leaves.tsx):
@@ -30,7 +31,6 @@ export default function EditionShell({
   contents,
   sections,
   printedHref,
-  pagesHref,
   total,
   children,
 }: {
@@ -38,10 +38,8 @@ export default function EditionShell({
   volume: string;
   contents: ContentsEntry[];
   sections: { key: string; title: string }[];
-  /** The page-by-page reader, so a page number opens the spread as printed... */
+  /** The page-by-page reader (the book's home), so a page number opens the spread as printed; page one is its own address. */
   printedHref: string;
-  /** ...and its own address for page one, which has no /1 route. */
-  pagesHref: string;
   total: number;
   children: React.ReactNode;
 }) {
@@ -178,11 +176,11 @@ export default function EditionShell({
               Contents
             </button>
             {here && (
-              <Link href={printedPageHref(printedHref, pagesHref, here.pages)} className="ib-bar-btn ib-bar-pages" title="Open these pages as printed">
+              <Link href={printedPageHref(printedHref, here.pages)} className="ib-bar-btn ib-bar-pages" title="Open these pages as printed">
                 <span className="ib-bar-pages-label">{"Printed"}</span>{here.pages}
               </Link>
             )}
-            <button type="button" className="ib-bar-close" onClick={() => leaveIdeaBook()} aria-label="Close the Product Book">
+            <button type="button" className="ib-bar-close" onClick={() => leaveIdeaBook()} aria-label={`Close the ${ideaBook.short}`}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
             </button>
           </div>
@@ -251,9 +249,9 @@ export default function EditionShell({
 }
 
 /** The printed reader's address for a spread: page one is the reader's own home, not /1. */
-function printedPageHref(printedHref: string, pagesHref: string, pages: string): string {
+function printedPageHref(printedHref: string, pages: string): string {
   const first = pages.split("–")[0];
-  return first === "1" ? pagesHref : `${printedHref}/${first}`;
+  return first === "1" ? printedHref : `${printedHref}/${first}`;
 }
 
 /**

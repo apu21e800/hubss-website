@@ -1,16 +1,16 @@
 ---
-title: The HUB Product Book now reads on any screen
-slug: hub-product-book-online
+title: The HUB Product Portfolio Book, open on any screen
+slug: product-portfolio-book-online
 category: Blog
-excerpt: Volume 5 of the HUB Product Book is online at hubss.com/product-book, laid out for a phone or a laptop, with every printed page a tap away.
-keywords: ["hub product book", "hub surface systems product book", "decorative pavement systems", "thermoplastic crosswalk systems", "stamped asphalt systems"]
+excerpt: Volume 5 of the HUB Product Portfolio Book is online at hubss.com/product-book, the printed book page by page, with a page turn, a link for every page and the PDF to download.
+keywords: ["hub product portfolio book", "hub surface systems product book", "decorative pavement systems", "thermoplastic crosswalk systems", "stamped asphalt systems"]
 cover: public/catalogue/2026-27/p001-2000.webp
-coverAlt: The HUB Product Book, Volume 5, cover. A Musqueam crosswalk in front of the HUB sign at UBC.
+coverAlt: The HUB Product Portfolio Book, Volume 5, cover. A Musqueam crosswalk in front of the HUB sign at UBC.
 ---
 
-The HUB Product Book has always been a printed book, on a planner's desk and in the binder that goes to council. Volume 5 is now online too, at [hubss.com/product-book](/product-book), laid out for whatever screen you have with you.
+The HUB Product Portfolio Book is the printed book on a planner's desk and in the binder that goes to council. Volume 5 is now online too, at [hubss.com/product-book](/product-book), as the book itself: the printed pages, turned one spread at a time.
 
-It is the same book. The words are the printed pages' words, and the photographs are the printed photographs. What changes is the layout: on a phone each spread stacks with the photograph first, and on a laptop the photograph sits beside the page.
+It is the same book. The words are the printed pages' words and the photographs are the printed photographs. On a laptop you read it in spreads, as it is bound; on a phone, one page at a time. Drag a page to turn it, or use the arrow keys.
 
 ## What's in it
 
@@ -20,14 +20,14 @@ Then the applications, each with the systems the book specifies for it: crosswal
 
 ## How it reads
 
-- Scroll or swipe through it like any page. On a laptop, the arrow keys turn to the next spread or the one before.
-- The Contents button lists every spread, so you can go straight to StreetBond or to parking lots.
-- Every spread has its own address. Send a colleague the TrafficPatternsXD spread and the link opens right on it.
-- Every spread links to its pages as printed, if you want the original layout.
+- Drag a page, swipe, or use the arrow keys to turn. Double-tap or scroll to zoom into a caption or a specification.
+- Every page has its own address. Send a colleague page 47 and the link opens on page 47.
+- The slider along the bottom runs through the whole book, and "Go to" takes a page number.
+- The PDF is there to download, for the plane or the binder.
 
 ## For design teams
 
-The book is a quick way to put the right system in front of a design team: share the spread, then follow its link to the system's page, where the [spec sheets](/resources) are. If your team would rather go through it together, HUB runs free [Lunch & Learn sessions](/lunch-learn) for design and engineering teams.
+The book is a quick way to put the right system in front of a design team: send the page, then follow it to the system's page on the site, where the [spec sheets](/resources) are. If your team would rather go through it together, HUB runs free [Lunch & Learn sessions](/lunch-learn) for design and engineering teams.
 
 ## The printed copy
 

@@ -54,7 +54,7 @@ function DocRow({
       {/* Type badge — desktop only */}
       {showBadge && (
         <span
-          className="flex-shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded border hidden sm:inline"
+          className="flex-shrink-0 text-[11px] font-semibold px-2 py-0.5 rounded border hidden sm:inline"
           style={{ background: "rgba(249,115,22,0.08)", color: "var(--accent-text-lg)", borderColor: "rgba(249,115,22,0.18)" }}
         >
           {typeLabel}

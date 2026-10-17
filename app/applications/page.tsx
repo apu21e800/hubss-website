@@ -99,7 +99,7 @@ export default async function ApplicationsPage() {
                     unfinished (QA sweep). 13.5 px, up from 12.5, which was
                     under the 13 px floor on phones (QA C22, 30 Sep 2026). */}
                 <p
-                  className="text-[13.5px] leading-snug line-clamp-3"
+                  className="text-[15px] leading-snug line-clamp-3"
                   style={{ color: "var(--text-body)", textShadow: "0 1px 2px rgba(0,0,0,0.5)", minHeight: "calc(3 * 1.375em)" }}
                 >
                   {app.shortDesc}

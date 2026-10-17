@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ApplicationCatalogueEntry } from "@/lib/application-catalogue";
 import { products } from "@/lib/products";
+import { plainNote } from "@/lib/plain-specs";
 
 /**
  * The catalogue's application spread, rendered for the web.
@@ -62,7 +63,7 @@ export default function ApplicationSpread({
         className="mb-9 leading-[1.8]"
         style={{
           color: "var(--text-body)",
-          fontSize: "clamp(1rem, 1.7vw, 1.0625rem)",
+          fontSize: "clamp(1.0625rem, 1.8vw, 1.125rem)",
           maxWidth: "62ch",
         }}
       >
@@ -72,7 +73,7 @@ export default function ApplicationSpread({
       {/* Specify — the catalogue's own product selection for this work. */}
       <div style={{ borderTop: "1px solid var(--border-color)" }}>
         <h3
-          className="text-[11px] font-bold uppercase pt-7 pb-4"
+          className="text-[12px] font-bold uppercase pt-7 pb-4"
           style={{ color: "var(--accent-text-lg)", letterSpacing: "0.18em" }}
         >
           Specify
@@ -93,9 +94,9 @@ export default function ApplicationSpread({
                 </span>
                 <span
                   className="leading-snug"
-                  style={{ color: "var(--text-secondary)", fontSize: "0.95rem" }}
+                  style={{ color: "var(--text-secondary)", fontSize: "1rem" }}
                 >
-                  {s.note}
+                  {plainNote(s.note)}
                 </span>
               </Link>
             </li>

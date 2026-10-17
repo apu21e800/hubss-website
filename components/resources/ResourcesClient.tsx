@@ -164,13 +164,13 @@ function DocCard({
       )}
 
       <div className="flex-1 min-w-0">
-        <p className="text-[10px] font-bold tracking-[0.16em] uppercase mb-0.5" style={{ color: "var(--accent-text)" }}>
+        <p className="text-[11px] font-bold tracking-[0.16em] uppercase mb-0.5" style={{ color: "var(--accent-text)" }}>
           {doc.type}
         </p>
-        <h3 className="text-[14.5px] font-semibold leading-snug truncate transition-colors group-hover:text-[var(--accent-text)]" style={{ color: "var(--text-primary)" }}>
+        <h3 className="text-[15.5px] font-semibold leading-snug truncate transition-colors group-hover:text-[var(--accent-text)]" style={{ color: "var(--text-primary)" }}>
           {doc.title}
         </h3>
-        <p className="text-[11.5px] mt-0.5 truncate sm:hidden" style={{ color: "var(--text-secondary)" }}>
+        <p className="text-[12.5px] mt-0.5 truncate sm:hidden" style={{ color: "var(--text-secondary)" }}>
           {inGroup ? null : <>{doc.productName} · </>}{doc.fileSize} · {doc.updatedDate}
         </p>
       </div>
@@ -650,7 +650,7 @@ export default function ResourcesClient({
             >
               <span>{opt.value}</span>
               <span
-                className="inline-flex items-center justify-center text-[10px] font-bold rounded-full min-w-[20px] px-1.5 py-0.5"
+                className="inline-flex items-center justify-center text-[11px] font-bold rounded-full min-w-[20px] px-1.5 py-0.5"
                 style={{
                   background: active ? "var(--ink-20)" : "var(--ink-05)",
                   color: active ? "var(--text-primary)" : "var(--text-muted)",

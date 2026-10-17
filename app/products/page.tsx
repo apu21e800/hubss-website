@@ -194,7 +194,7 @@ function Facts({ facts }: { facts: Fact[] }) {
     <dl className="mt-5 grid gap-3 border-t pt-4" style={{ borderColor: "var(--ink-08)" }}>
       {facts.map((f) => (
         <div key={f.label}>
-          <dt className="text-[11px] font-semibold uppercase tracking-[0.14em]" style={{ color: "var(--text-faint)" }}>
+          <dt className="text-[12px] font-semibold uppercase tracking-[0.14em]" style={{ color: "var(--text-faint)" }}>
             {f.label}
           </dt>
           <dd className="mt-1 text-sm font-semibold" style={{ color: "var(--text-primary)" }}>

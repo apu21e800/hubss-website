@@ -170,6 +170,25 @@ const POINT_HALO = {
     "circle-radius": 15,
   },
 };
+/**
+ * The hit area of a pin: an invisible circle three times the pin's size, so
+ * a pin is hit with a finger or a quick mouse (17 Oct 2026, Vern: "hard to
+ * click the map icons"). It sits above the pins and carries the same
+ * feature, so the click and hover handlers treat it as the pin.
+ */
+const POINT_HIT = {
+  id: "point-hit",
+  type: "circle" as const,
+  source: "projects",
+  filter: ["!", ["has", "point_count"]] as unknown as boolean,
+  paint: {
+    "circle-color": "#F97316",
+    "circle-opacity": 0,
+    "circle-radius": 20,
+    "circle-stroke-width": 0,
+  },
+};
+const PIN_LAYERS = new Set(["points", "point-hit"]);
 const POINTS = {
   id: "points",
   type: "circle" as const,
@@ -181,7 +200,7 @@ const POINTS = {
     // the pins arrive rather than sit there.
     "circle-radius": 0,
     "circle-radius-transition": { duration: 700, delay: 150 },
-    "circle-stroke-width": 2,
+    "circle-stroke-width": 2.5,
     "circle-stroke-color": "#FFFFFF",
   },
 };
@@ -192,7 +211,7 @@ function Thumb({ project, size }: { project: MapProject; size: { w: number; h: n
   return (
     <span className="cm-thumb" style={{ width: size.w, height: size.h }}>
       {src ? (
-        <Image loader={mapLoader} src={src} alt="" fill sizes={`${size.w}px`} style={{ objectFit: "cover" }} />
+        <Image loader={mapLoader} src={src} alt="" fill sizes={`${size.w * 2}px`} style={{ objectFit: "cover" }} />
       ) : (
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0Z" />
@@ -500,7 +519,7 @@ export default function CanadaMap() {
       } catch { /* the cluster went away under the click */ }
       return;
     }
-    if (f.layer.id === "points") {
+    if (PIN_LAYERS.has(f.layer.id)) {
       const p = mapProjects.find((x) => x.id === f.properties?.id);
       if (!p) return;
       stopTour();
@@ -522,7 +541,7 @@ export default function CanadaMap() {
 
   const onMouseMove = useCallback((e: MapLayerMouseEvent) => {
     const f = e.features?.[0];
-    const id = f?.layer.id === "points" ? (f.properties?.id as string) : null;
+    const id = f && PIN_LAYERS.has(f.layer.id) ? (f.properties?.id as string) : null;
     setHoveredId((cur) => (cur === id ? cur : id));
     const canvas = mapRef.current?.getCanvas();
     if (canvas) canvas.style.cursor = f ? "pointer" : "";
@@ -545,7 +564,7 @@ export default function CanadaMap() {
     setLoaded(true);
     syncInView();
     // The pins grow in (see POINTS). A second frame, so the transition runs.
-    requestAnimationFrame(() => map.setPaintProperty("points", "circle-radius", 6.5));
+    requestAnimationFrame(() => map.setPaintProperty("points", "circle-radius", 8.5));
   }, [syncInView]);
 
   // The first frame depends on the panel, which depends on the breakpoint.
@@ -829,7 +848,7 @@ export default function CanadaMap() {
               touchPitch={false}
               pitchWithRotate={false}
               cooperativeGestures
-              interactiveLayerIds={["clusters", "points"]}
+              interactiveLayerIds={["clusters", "point-hit", "points"]}
               onClick={onMapClick}
               onMouseMove={onMouseMove}
               onMouseLeave={() => setHoveredId(null)}
@@ -847,6 +866,7 @@ export default function CanadaMap() {
                 <Layer {...CLUSTER_COUNT} />
                 <Layer {...POINT_HALO} />
                 <Layer {...POINTS} />
+                <Layer {...POINT_HIT} />
                 <Layer {...hoverRing} />
                 <Layer {...hoverLabel} />
               </Source>
@@ -861,7 +881,7 @@ export default function CanadaMap() {
                   >
                     <span className="cm-bubble-photo">
                       {selected.images[0] ? (
-                        <Image loader={mapLoader} src={selected.images[0]} alt="" fill sizes="64px" style={{ objectFit: "cover" }} />
+                        <Image loader={mapLoader} src={selected.images[0]} alt="" fill sizes="128px" style={{ objectFit: "cover" }} />
                       ) : null}
                     </span>
                     <span className="cm-bubble-tip" aria-hidden="true" />
@@ -910,7 +930,11 @@ export default function CanadaMap() {
                     </div>
                     {tourBar}
                     <div className="cm-panel-scroll">
-                      <ProjectDetail project={selected} headingId="cm-detail-title" photoSizes="360px" />
+                      {/* 600px for a 342px box: the panel photo is the one a visitor judges
+                  the job by, and at 1x it picked a 384px file that looked soft
+                  (17 Oct 2026). 600 makes next/image ask for 640 at 1x, 828 at
+                  1.25x and 1200 at 2x: close to twice the box every time. */}
+              <ProjectDetail project={selected} headingId="cm-detail-title" photoSizes="(min-width: 1024px) 600px, 100vw" />
                     </div>
                   </div>
                 ) : (
@@ -976,7 +1000,7 @@ export default function CanadaMap() {
                     >
                       <span className="cm-scard-photo">
                         {p.images[0] ? (
-                          <Image loader={mapLoader} src={p.images[0]} alt="" fill sizes="(max-width: 640px) 78vw, 320px" style={{ objectFit: "cover" }} />
+                          <Image loader={mapLoader} src={p.images[0]} alt="" fill sizes="(max-width: 640px) 100vw, 640px" style={{ objectFit: "cover" }} />
                         ) : null}
                         <span className="cm-scard-system">{p.product}</span>
                       </span>
@@ -1017,6 +1041,7 @@ export default function CanadaMap() {
 // ── Styles. One block, every class prefixed cm- so nothing leaks.
 const CSS = `
 .cm-section { background: var(--bg-dark); padding: 5rem 0; }
+@media (min-width: 1024px) { .cm-section { min-height: calc(clamp(560px, 76vh, 860px) + 294px); } }
 .cm-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 1.5rem; }
 .cm-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent-text-lg); margin: 0 0 10px; }
 .cm-h2 { font-size: clamp(1.75rem, 3.5vw, 2.75rem); font-weight: 900; color: var(--text-primary); margin: 0 0 10px; line-height: 1.08; letter-spacing: -0.03em; }

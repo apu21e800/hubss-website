@@ -216,7 +216,7 @@ export default function HeroSlideshow({
             {/* One line on a phone too: at 0.22em tracking the eyebrow wrapped
                 and pushed the headline up into the sign. */}
             <p
-              className="text-[11px] tracking-[0.16em] sm:text-sm sm:tracking-[0.22em] font-bold uppercase mb-3"
+              className="text-[12px] tracking-[0.16em] sm:text-sm sm:tracking-[0.22em] font-bold uppercase mb-3"
               style={{
                 color: "var(--accent-soft-text)",
                 // A tight shadow for the letter edges and two soft ones for

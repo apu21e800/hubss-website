@@ -251,7 +251,7 @@ export default async function ApplicationPage({ params }: Props) {
             {/* Cream, not orange: the orange label measured 2 to 3:1 over the
                 photos (QA pa#13). */}
             <p
-              className="text-[11px] sm:text-xs font-bold tracking-[0.2em] uppercase mb-3"
+              className="text-[12px] sm:text-xs font-bold tracking-[0.2em] uppercase mb-3"
               style={{ color: "rgba(245,240,235,0.92)", textShadow: "0 1px 10px rgba(0,0,0,0.6)" }}
             >
               HUB application
@@ -297,7 +297,7 @@ export default async function ApplicationPage({ params }: Props) {
               {body.blocks ? (
                 <RichText value={body.blocks} />
               ) : (
-                <p className="mb-12 leading-[1.85]" style={{ color: "var(--text-body)", fontSize: "clamp(1rem, 1.8vw, 1.075rem)", maxWidth: "65ch" }}>
+                <p className="mb-12 leading-[1.85]" style={{ color: "var(--text-body)", fontSize: "clamp(1.0625rem, 1.9vw, 1.125rem)", maxWidth: "65ch" }}>
                   {body.text}
                 </p>
               )}
@@ -380,20 +380,20 @@ export default async function ApplicationPage({ params }: Props) {
                 <h2 className="font-bold text-base mb-1.5" style={{ color: "var(--text-primary)" }}>
                   Pricing and installers
                 </h2>
-                <p className="text-[13.5px] leading-relaxed mb-4" style={{ color: "var(--text-secondary)" }}>
+                <p className="text-[15px] leading-relaxed mb-4" style={{ color: "var(--text-secondary)" }}>
                   Your regional office prices the project, matches the system to the site and puts you in touch with a certified installer.
                 </p>
                 <div className="grid grid-cols-2 gap-2 mb-3">
                   <a href={telHref(offices.east.phone)} className="rounded-lg px-3 py-2 transition-colors hover:bg-[var(--ink-04)]" style={{ border: "1px solid var(--border-color)", minHeight: 44 }}>
-                    <span className="block text-[10.5px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>East</span>
-                    <span className="block text-[13.5px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{offices.east.phone}</span>
+                    <span className="block text-[11.5px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>East</span>
+                    <span className="block text-[15px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{offices.east.phone}</span>
                   </a>
                   <a href={telHref(offices.west.phone)} className="rounded-lg px-3 py-2 transition-colors hover:bg-[var(--ink-04)]" style={{ border: "1px solid var(--border-color)", minHeight: 44 }}>
-                    <span className="block text-[10.5px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>West</span>
-                    <span className="block text-[13.5px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{offices.west.phone}</span>
+                    <span className="block text-[11.5px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>West</span>
+                    <span className="block text-[15px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{offices.west.phone}</span>
                   </a>
                 </div>
-                <Link href="/contact" className="inline-flex items-center gap-1.5 text-[13.5px] font-semibold hover:underline underline-offset-2" style={{ color: "var(--accent-text)", minHeight: 44 }}>
+                <Link href="/contact" className="inline-flex items-center gap-1.5 text-[15px] font-semibold hover:underline underline-offset-2" style={{ color: "var(--accent-text)", minHeight: 44 }}>
                   Send a project enquiry
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
                 </Link>

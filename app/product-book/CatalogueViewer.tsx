@@ -854,7 +854,7 @@ export default function CatalogueViewer({
             // negative margins give back the extra 14 px of height (and on a
             // phone, where the word is hidden, the extra 10 px of width), so
             // the bar and the icon stay where they were.
-            className="-my-[7px] inline-flex min-h-[44px] min-w-[44px] flex-shrink-0 items-center justify-center gap-2 rounded-full px-2.5 py-2 text-[11px] font-semibold uppercase tracking-[0.16em] transition-colors hover:bg-white/10 max-sm:-mx-[5px]"
+            className="-my-[7px] inline-flex min-h-[44px] min-w-[44px] flex-shrink-0 items-center justify-center gap-2 rounded-full px-2.5 py-2 text-[12px] font-semibold uppercase tracking-[0.16em] transition-colors hover:bg-white/10 max-sm:-mx-[5px]"
             style={{ color: "rgba(255,255,255,0.78)" }}
             aria-label={`Close the ${ideaBook.short}`}
           >
@@ -868,12 +868,12 @@ export default function CatalogueViewer({
                 heading rule in app/globals.css is unlayered, so it would beat
                 the utility classes on font, weight, tracking and leading. */}
             <h1
-              className="truncate text-[10px] font-bold uppercase tracking-[0.22em]"
+              className="truncate text-[11px] font-bold uppercase tracking-[0.22em]"
               style={{ color: "#fb923c", fontFamily: "inherit", fontWeight: 700, letterSpacing: "0.22em", lineHeight: "inherit", textWrap: "pretty" }}
             >
               {ideaBook.short} · {ideaBook.volume}
             </h1>
-            <p className="truncate text-[11px] tabular-nums" style={{ color: "rgba(255,255,255,0.58)" }} aria-live="polite">
+            <p className="truncate text-[12px] tabular-nums" style={{ color: "rgba(255,255,255,0.58)" }} aria-live="polite">
               {label}
             </p>
           </div>
@@ -938,7 +938,7 @@ export default function CatalogueViewer({
           }}
         >
           <div className="flex items-center gap-3">
-            <span className="hidden w-8 flex-shrink-0 text-right text-[11px] tabular-nums sm:block" style={{ color: "rgba(255,255,255,0.40)" }}>
+            <span className="hidden w-8 flex-shrink-0 text-right text-[12px] tabular-nums sm:block" style={{ color: "rgba(255,255,255,0.40)" }}>
               1
             </span>
             <input
@@ -950,7 +950,7 @@ export default function CatalogueViewer({
               aria-label={`Jump to a page. Currently ${label}.`}
               className="catalogue-scrub min-w-0 flex-1"
             />
-            <span className="hidden w-8 flex-shrink-0 text-[11px] tabular-nums sm:block" style={{ color: "rgba(255,255,255,0.40)" }}>
+            <span className="hidden w-8 flex-shrink-0 text-[12px] tabular-nums sm:block" style={{ color: "rgba(255,255,255,0.40)" }}>
               {total}
             </span>
             {/* On a phone on its side the controls share one row with the
@@ -967,7 +967,7 @@ export default function CatalogueViewer({
               </div>
             )}
             <form onSubmit={submitJump} className={`${short ? "hidden" : "hidden md:flex"} flex-shrink-0 items-center gap-2`}>
-              <label htmlFor="catalogue-jump" className="text-[10px] font-semibold uppercase tracking-[0.14em]" style={{ color: "rgba(255,255,255,0.42)" }}>
+              <label htmlFor="catalogue-jump" className="text-[11px] font-semibold uppercase tracking-[0.14em]" style={{ color: "rgba(255,255,255,0.42)" }}>
                 Go to
               </label>
               <input
@@ -978,7 +978,7 @@ export default function CatalogueViewer({
                 value={jump}
                 onChange={(e) => setJump(e.target.value)}
                 placeholder={String(shown[0])}
-                className="w-14 rounded-lg px-2 py-1.5 text-center text-[13px] tabular-nums outline-none"
+                className="w-14 rounded-lg px-2 py-1.5 text-center text-[14.5px] tabular-nums outline-none"
                 style={{ background: "rgba(255,255,255,0.08)", color: "#fff", border: "1px solid rgba(255,255,255,0.14)" }}
               />
             </form>
@@ -1000,12 +1000,12 @@ export default function CatalogueViewer({
                 orange buttons on one screen means neither is the primary. */}
             <Link
               href={lunchLearnHref}
-              className="inline-flex flex-1 items-center justify-center rounded-xl px-4 py-2.5 text-[13px] font-semibold transition-colors sm:flex-none"
+              className="inline-flex flex-1 items-center justify-center rounded-xl px-4 py-2.5 text-[14.5px] font-semibold transition-colors sm:flex-none"
               style={{ color: "#fdba74", border: "1px solid rgba(249,115,22,0.42)", background: "rgba(249,115,22,0.10)" }}
             >
               Book a free Lunch &amp; Learn
             </Link>
-            <p className="hidden text-[11px] sm:block" style={{ color: "rgba(255,255,255,0.38)" }}>
+            <p className="hidden text-[12px] sm:block" style={{ color: "rgba(255,255,255,0.38)" }}>
               Drag a page or use <kbd style={kbd}>&larr;</kbd> <kbd style={kbd}>&rarr;</kbd> to turn &nbsp;·&nbsp; scroll or double-tap to zoom
             </p>
           </div>
@@ -1014,7 +1014,7 @@ export default function CatalogueViewer({
               off and the line above is desktop-only, so the reader opened on
               the cover with no sign of how to turn it. */}
           {!short && (
-            <p className="mt-2 text-center text-[11px] sm:hidden" style={{ color: "rgba(255,255,255,0.45)" }}>
+            <p className="mt-2 text-center text-[12px] sm:hidden" style={{ color: "rgba(255,255,255,0.45)" }}>
               Drag a page to turn &nbsp;·&nbsp; double-tap to zoom
             </p>
           )}
@@ -1038,7 +1038,7 @@ export default function CatalogueViewer({
           >
             <div className="mb-5 flex items-start justify-between gap-4">
               <div>
-                <p className="text-[11px] font-bold uppercase tracking-[0.22em]" style={{ color: "var(--accent-text)" }}>
+                <p className="text-[12px] font-bold uppercase tracking-[0.22em]" style={{ color: "var(--accent-text)" }}>
                   {ideaBook.short} · {ideaBook.volume} · {edition}
                 </p>
                 <h2 className="mt-1.5 text-xl font-bold sm:text-2xl" style={{ color: "var(--text-primary)" }}>
@@ -1229,11 +1229,11 @@ function Actions({
 
 /** The one action this page is actually for. */
 const btnPrimary =
-  "inline-flex items-center gap-1.5 rounded-xl px-3 py-2.5 text-[12px] font-semibold transition-colors " +
+  "inline-flex items-center gap-1.5 rounded-xl px-3 py-2.5 text-[13px] font-semibold transition-colors " +
   "bg-[#F97316] text-white hover:bg-[#ea6d12] shadow-[0_2px_10px_rgba(249,115,22,0.35)]";
 /** Everything else. */
 const btnGhost =
-  "inline-flex items-center gap-1.5 rounded-xl px-3 py-2.5 text-[12px] font-semibold transition-colors " +
+  "inline-flex items-center gap-1.5 rounded-xl px-3 py-2.5 text-[13px] font-semibold transition-colors " +
   "bg-white/10 text-white hover:bg-white/20 border border-white/15";
 const kbd = {
   display: "inline-block",

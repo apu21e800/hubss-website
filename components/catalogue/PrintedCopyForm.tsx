@@ -91,7 +91,7 @@ export default function PrintedCopyForm({ compact = false }: { compact?: boolean
     color: "var(--text-primary)",
     border: "1px solid var(--border-color)",
   } as const;
-  const label = "block text-[11px] font-semibold uppercase tracking-[0.16em] mb-1.5";
+  const label = "block text-[12px] font-semibold uppercase tracking-[0.16em] mb-1.5";
   const labelStyle = { color: "var(--text-muted)" } as const;
 
   return (
@@ -192,7 +192,7 @@ export default function PrintedCopyForm({ compact = false }: { compact?: boolean
       <button
         type="submit"
         disabled={status === "sending"}
-        className="w-full rounded-full px-6 py-3.5 text-[14px] font-semibold text-white transition-colors disabled:opacity-60 sm:w-auto"
+        className="w-full rounded-full px-6 py-3.5 text-[15px] font-semibold text-white transition-colors disabled:opacity-60 sm:w-auto"
         style={{ background: "#F97316", boxShadow: "0 4px 16px rgba(249,115,22,0.28)" }}
       >
         {status === "sending" ? "Sending..." : "Request a printed copy"}

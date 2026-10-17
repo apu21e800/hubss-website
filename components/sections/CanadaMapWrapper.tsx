@@ -5,9 +5,20 @@ import dynamic from "next/dynamic";
 // Just the number, from its own generated file — importing it from
 // lib/map-projects.ts would drag the whole dataset into the phone bundle.
 
+/**
+ * The space the map takes once mounted, measured on 17 Oct 2026: the frame
+ * (.cm-frame, clamp(560px, 76vh, 860px)) plus 294px of heading and padding,
+ * at 1280, 1440, 1536 and 1920 wide. The placeholders below are this exact
+ * height, and CanadaMap's section has it as a min-height, so the page never
+ * grows or shrinks when the map arrives. Until then the placeholder was
+ * clamp(760px, 96vh, 1060px), about 100px short: a visitor who clicked
+ * "See the work" landed on the map and watched the page jump under them.
+ */
+export const MAP_SECTION_HEIGHT = "calc(clamp(560px, 76vh, 860px) + 294px)";
+
 const CanadaMap = dynamic(() => import("@/components/sections/CanadaMap"), {
   ssr: false,
-  loading: () => <div style={{ height: "clamp(760px, 96vh, 1060px)", background: "var(--bg-dark)" }} />,
+  loading: () => <div style={{ height: MAP_SECTION_HEIGHT, background: "var(--bg-dark)" }} />,
 });
 
 /**
@@ -76,7 +87,7 @@ export default function CanadaMapWrapper() {
   // Desktop, not yet near: reserve the space so nothing below it jumps when
   // the map arrives.
   if (isDesktop) {
-    return <div ref={sentinelRef} style={{ height: "clamp(760px, 96vh, 1060px)", background: "var(--bg-dark)" }} aria-hidden="true" />;
+    return <div ref={sentinelRef} style={{ height: MAP_SECTION_HEIGHT, background: "var(--bg-dark)" }} aria-hidden="true" />;
   }
 
   return (
@@ -86,7 +97,7 @@ export default function CanadaMapWrapper() {
         className="group w-full rounded-2xl px-6 py-10 text-left transition-colors hover:bg-[var(--ink-05)]"
         style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--border-color)" }}
       >
-        <p className="text-[10px] font-bold tracking-[0.22em] uppercase mb-2" style={{ color: "var(--accent-text)" }}>
+        <p className="text-[11px] font-bold tracking-[0.22em] uppercase mb-2" style={{ color: "var(--accent-text)" }}>
           Installations across Canada
         </p>
         {/* The map's own header, word for word, so the card and the map

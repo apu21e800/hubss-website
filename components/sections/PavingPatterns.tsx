@@ -60,7 +60,7 @@ export default function PavingPatterns() {
               />
             </div>
             <div className="px-4 pb-3.5 pt-2.5" style={{ borderTop: "1px solid var(--border-color)" }}>
-              <p className="font-semibold text-[13px]" style={{ color: "var(--text-primary)" }}>{t.name}</p>
+              <p className="font-semibold text-[14.5px]" style={{ color: "var(--text-primary)" }}>{t.name}</p>
             </div>
           </Link>
         ))}

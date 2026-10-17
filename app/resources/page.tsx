@@ -110,7 +110,7 @@ export default async function ResourcesPage() {
                 style={{ border: "1px solid var(--ink-12)" }}
               />
               <div className="min-w-0">
-                <p className="whitespace-nowrap text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--text-muted)" }}>
+                <p className="whitespace-nowrap text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--text-muted)" }}>
                   {catalogueLabel} edition
                 </p>
                 <p className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>

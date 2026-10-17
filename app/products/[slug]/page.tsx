@@ -24,6 +24,7 @@ import { buildMetadata } from "@/lib/seo";
 import { getProductFamily } from "@/lib/product-taxonomy";
 import { catalogueFor } from "@/lib/product-catalogue";
 import ProductSpecCard, { fixPrint } from "@/components/products/ProductSpecCard";
+import { plainSpec } from "@/lib/plain-specs";
 import ProductFaq from "@/components/products/ProductFaq";
 import { faqsFor } from "@/lib/product-faqs";
 import { getMergedProduct } from "@/lib/products.server";
@@ -333,7 +334,7 @@ export default async function ProductPage({ params }: Props) {
                 orange and grey heroes (QA pa#13). Cream on the scrim reads on
                 all of them; the orange stays in the dash under the name. */}
             <p
-              className="text-[11px] sm:text-xs font-bold tracking-[0.2em] uppercase mb-3"
+              className="text-[12px] sm:text-xs font-bold tracking-[0.2em] uppercase mb-3"
               style={{ color: "rgba(245,240,235,0.92)", textShadow: "0 1px 10px rgba(0,0,0,0.6)" }}
             >
               {product.eyebrow ?? getProductFamily(product.slug)}
@@ -413,7 +414,7 @@ export default async function ProductPage({ params }: Props) {
                 {product.descriptionBlocks ? (
                   <RichText value={product.descriptionBlocks} />
                 ) : (
-                  <p className="mb-12 leading-[1.85]" style={{ color: "var(--text-body)", fontSize: "clamp(1rem, 1.8vw, 1.075rem)", maxWidth: "65ch" }}>
+                  <p className="mb-12 leading-[1.85]" style={{ color: "var(--text-body)", fontSize: "clamp(1.0625rem, 1.9vw, 1.125rem)", maxWidth: "65ch" }}>
                     {product.description}
                   </p>
                 )}
@@ -487,46 +488,50 @@ export default async function ProductPage({ params }: Props) {
           <aside className="min-w-0">
             <div className="rounded-xl p-6 sm:p-7 lg:sticky lg:top-24 relative overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)", boxShadow: "0 1px 2px rgba(0,0,0,0.04)" }}>
               <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
+              <h2 className="font-bold text-lg mb-1.5" style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
+                Price a project
+              </h2>
+              <p className="text-[15px] leading-relaxed mb-4" style={{ color: "var(--text-secondary)" }}>
+                Your regional office prices it and puts you in touch with a certified {product.name} installer.
+              </p>
+              <div className="grid grid-cols-2 gap-2 mb-3">
+                <a href={telHref(offices.east.phone)} className="rounded-lg px-3 py-2 transition-colors hover:bg-[var(--ink-04)]" style={{ border: "1px solid var(--border-color)", minHeight: 44 }}>
+                  <span className="block text-[11.5px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>East</span>
+                  <span className="block text-[15px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{offices.east.phone}</span>
+                </a>
+                <a href={telHref(offices.west.phone)} className="rounded-lg px-3 py-2 transition-colors hover:bg-[var(--ink-04)]" style={{ border: "1px solid var(--border-color)", minHeight: 44 }}>
+                  <span className="block text-[11.5px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>West</span>
+                  <span className="block text-[15px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{offices.west.phone}</span>
+                </a>
+              </div>
+              <Link href="/contact" className="inline-flex items-center gap-1.5 text-[15px] font-semibold hover:underline underline-offset-2" style={{ color: "var(--accent-text)", minHeight: 44 }}>
+                Send a project enquiry
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+              </Link>
               {sideSpecs.length > 0 && (
                 <>
                   {/* Its own section, not an <h3> under Downloads. */}
-                  <h2 className="font-bold text-lg mb-5" style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
-                    Specification details
+                  {/* After the way to a price (17 Oct 2026, Vern: "imagine you are a
+                      city specifier or architect ... make it clean, don't overwhelm
+                      the buyer"): the sidebar leads with the people and the ask, and
+                      the leftover rows follow as "More details". */}
+                  <h2 className="font-bold text-base mt-8 mb-4" style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
+                    More details
                   </h2>
-                  <dl className="space-y-3.5 mb-7">
+                  <dl className="space-y-3.5">
                     {sideSpecs.map((spec) => (
                       <div key={spec.label} className="flex justify-between gap-4 text-sm" style={{ borderBottom: "1px solid var(--ink-06)", paddingBottom: "12px" }}>
                         <dt style={{ color: "var(--text-muted)" }}>{spec.label}</dt>
                         <dd className="font-semibold text-right max-w-[62%]" style={{ color: "var(--text-primary)" }}>
                           {/* fixPrint: Studio holds StreetPrint's "Yes: flush surface" row; the
                               punctuation is corrected at render until the sync runs (QA B23). */}
-                          {fixPrint(spec.value)}
+                          {plainSpec(fixPrint(spec.value))}
                         </dd>
                       </div>
                     ))}
                   </dl>
                 </>
               )}
-              <h2 className="font-bold text-base mb-1.5" style={{ color: "var(--text-primary)" }}>
-                Pricing and installers
-              </h2>
-              <p className="text-[13.5px] leading-relaxed mb-4" style={{ color: "var(--text-secondary)" }}>
-                Your regional office prices the project and puts you in touch with a certified {product.name} installer.
-              </p>
-              <div className="grid grid-cols-2 gap-2 mb-3">
-                <a href={telHref(offices.east.phone)} className="rounded-lg px-3 py-2 transition-colors hover:bg-[var(--ink-04)]" style={{ border: "1px solid var(--border-color)", minHeight: 44 }}>
-                  <span className="block text-[10.5px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>East</span>
-                  <span className="block text-[13.5px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{offices.east.phone}</span>
-                </a>
-                <a href={telHref(offices.west.phone)} className="rounded-lg px-3 py-2 transition-colors hover:bg-[var(--ink-04)]" style={{ border: "1px solid var(--border-color)", minHeight: 44 }}>
-                  <span className="block text-[10.5px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>West</span>
-                  <span className="block text-[13.5px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{offices.west.phone}</span>
-                </a>
-              </div>
-              <Link href="/contact" className="inline-flex items-center gap-1.5 text-[13.5px] font-semibold hover:underline underline-offset-2" style={{ color: "var(--accent-text)", minHeight: 44 }}>
-                Send a project enquiry
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
-              </Link>
             </div>
           </aside>
         </div>
@@ -574,7 +579,7 @@ export default async function ProductPage({ params }: Props) {
                 style={{ border: "1px solid var(--border-color)", background: "var(--bg-card)" }}
               >
                 <div className="flex-1 min-w-0">
-                  <p className="text-[11px] font-bold uppercase tracking-[0.18em] mb-2" style={{ color: "var(--accent-text)" }}>
+                  <p className="text-[12px] font-bold uppercase tracking-[0.18em] mb-2" style={{ color: "var(--accent-text)" }}>
                     LEED v5
                   </p>
                   <h3 className="text-2xl font-bold" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>

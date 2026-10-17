@@ -237,7 +237,7 @@ export default function ProductsGrid({ products: source, copy = HOMEPAGE_COPY.sy
 
                     {/* Description */}
                     <p
-                      className="text-[13px] leading-relaxed flex-1 mb-4"
+                      className="text-[14.5px] leading-relaxed flex-1 mb-4"
                       style={{ color: "var(--text-secondary)" }}
                     >
                       {what}
@@ -249,7 +249,7 @@ export default function ProductsGrid({ products: source, copy = HOMEPAGE_COPY.sy
                         {apps.slice(0, 3).map((app) => (
                           <span
                             key={app}
-                            className="text-[10px] font-semibold px-2 py-0.5 rounded-full tracking-wide"
+                            className="text-[11px] font-semibold px-2 py-0.5 rounded-full tracking-wide"
                             style={{
                               background: "var(--fill-subtle)",
                               color: "var(--ink-55)",
@@ -260,7 +260,7 @@ export default function ProductsGrid({ products: source, copy = HOMEPAGE_COPY.sy
                         ))}
                       </div>
                       <span
-                        className="flex-shrink-0 text-[11px] font-semibold transition-all duration-200 group-hover:translate-x-1"
+                        className="flex-shrink-0 text-[12px] font-semibold transition-all duration-200 group-hover:translate-x-1"
                         style={{ color: "rgba(249,115,22,0.92)" }}
                       >
                         Specs →
@@ -292,7 +292,7 @@ export default function ProductsGrid({ products: source, copy = HOMEPAGE_COPY.sy
               (globals.css), so the desktop line stays compact. On a phone the
               label takes its own row and the four names fit on the next. */}
           <p
-            className="flex flex-wrap items-center justify-center sm:justify-start gap-x-1 text-[13px]"
+            className="flex flex-wrap items-center justify-center sm:justify-start gap-x-1 text-[14.5px]"
             style={{ color: "var(--ink-50)" }}
           >
             <span className="basis-full sm:basis-auto text-center">Also available:</span>

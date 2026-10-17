@@ -284,14 +284,14 @@ export default function Flipbook({ pages, alt: altText = [], downloadHref }: Pro
       >
         <Link
           href="/"
-          className="pointer-events-auto inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.2em]
+          className="pointer-events-auto inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.2em]
                      text-[var(--ink-80)] hover:text-[var(--text-primary)]"
         >
           <span aria-hidden>←</span> Hubss.com
         </Link>
         <div className="pointer-events-none text-center">
-          <p className="text-[10px] uppercase tracking-[0.25em] text-[var(--accent-text)]">Catalogue 2026</p>
-          <p className="text-[11px] text-[var(--ink-70)] tabular-nums">
+          <p className="text-[11px] uppercase tracking-[0.25em] text-[var(--accent-text)]">Catalogue 2026</p>
+          <p className="text-[12px] text-[var(--ink-70)] tabular-nums">
             {idx + 1} / {total}
           </p>
         </div>
@@ -301,7 +301,7 @@ export default function Flipbook({ pages, alt: altText = [], downloadHref }: Pro
               href={downloadHref}
               download
               className="inline-flex items-center gap-1.5 rounded-full
-                         border border-[var(--ink-15)] bg-[var(--ink-10)] px-3 py-1.5 text-[11px] uppercase
+                         border border-[var(--ink-15)] bg-[var(--ink-10)] px-3 py-1.5 text-[12px] uppercase
                          tracking-[0.18em] text-[var(--text-primary)] hover:bg-[var(--ink-20)]"
               aria-label="Download the catalogue as a PDF"
             >
@@ -313,7 +313,7 @@ export default function Flipbook({ pages, alt: altText = [], downloadHref }: Pro
               type="button"
               onClick={onShare}
               className="inline-flex items-center gap-1.5 rounded-full
-                         border border-[var(--ink-15)] bg-[var(--ink-10)] px-3 py-1.5 text-[11px] uppercase
+                         border border-[var(--ink-15)] bg-[var(--ink-10)] px-3 py-1.5 text-[12px] uppercase
                          tracking-[0.18em] text-[var(--text-primary)] hover:bg-[var(--ink-20)]"
               aria-label="Share this catalogue"
             >
@@ -344,7 +344,7 @@ export default function Flipbook({ pages, alt: altText = [], downloadHref }: Pro
         <div className="flex items-center justify-start gap-3">
           <Link
             href={LUNCH_LEARN_HREF}
-            className="rounded-full bg-[#F97316] px-6 py-3.5 text-left text-[13px] font-semibold
+            className="rounded-full bg-[#F97316] px-6 py-3.5 text-left text-[14.5px] font-semibold
                        text-white shadow-[0_4px_16px_rgba(249,115,22,0.32)]
                        hover:bg-[#ea6d12] active:translate-y-px"
           >

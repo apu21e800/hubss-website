@@ -126,7 +126,7 @@ export default async function Footer() {
                 one wrapping flex line the column broke it into "Owned and
                 operated · Coast to coast / · Since 1999", a dot at a line's
                 start. Blocks never leave a dot at either end. */}
-            <p className="text-[11px] mb-5" style={{ color: "var(--text-muted)", lineHeight: 1.5 }}>
+            <p className="text-[12px] mb-5" style={{ color: "var(--text-muted)", lineHeight: 1.5 }}>
               <span
                 className="mb-1 inline-flex items-center gap-1.5"
                 // role="img": an aria-label on a plain span is ignored
@@ -145,7 +145,7 @@ export default async function Footer() {
                   <path fill="#f00" d="m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z" />
                   <path fill="var(--text-primary)" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z" />
                 </svg>
-                <span className="text-[10px] font-bold tracking-[0.18em] uppercase" style={{ color: "var(--ink-55)", lineHeight: 1 }}>
+                <span className="text-[11px] font-bold tracking-[0.18em] uppercase" style={{ color: "var(--ink-55)", lineHeight: 1 }}>
                   Canadian
                 </span>
               </span>

@@ -125,10 +125,10 @@ export default function WhyHubss() {
               <span className="text-3xl sm:text-4xl font-black tracking-tight leading-none" style={{ color: "var(--accent-text-lg)" }}>
                 {s.num}
               </span>
-              <span className="text-[11px] font-bold tracking-wider uppercase mt-1" style={{ color: "var(--text-primary)" }}>
+              <span className="text-[12px] font-bold tracking-wider uppercase mt-1" style={{ color: "var(--text-primary)" }}>
                 {s.label}
               </span>
-              <span className="text-[10px] leading-snug" style={{ color: "var(--text-muted)" }}>
+              <span className="text-[11px] leading-snug" style={{ color: "var(--text-muted)" }}>
                 {s.sub}
               </span>
             </motion.div>
@@ -146,7 +146,7 @@ export default function WhyHubss() {
               style={{ borderBottom: "1px solid var(--border-color)" }}
             >
               <div className="flex items-center gap-3">
-                <span className="text-[10px] font-bold tabular-nums" style={{ color: "rgba(249,115,22,0.4)" }}>
+                <span className="text-[11px] font-bold tabular-nums" style={{ color: "rgba(249,115,22,0.4)" }}>
                   {p.num}
                 </span>
                 <h3 className="font-semibold text-sm" style={{ color: "var(--text-primary)" }}>
@@ -193,7 +193,7 @@ export default function WhyHubss() {
           </a>
         </motion.div>
 
-        <p className="text-[10px] font-bold tracking-[0.2em] uppercase mt-10 mb-5" style={{ color: "var(--ink-18)" }}>
+        <p className="text-[11px] font-bold tracking-[0.2em] uppercase mt-10 mb-5" style={{ color: "var(--ink-18)" }}>
           Trusted by
         </p>
       </div>

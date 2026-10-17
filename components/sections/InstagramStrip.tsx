@@ -161,10 +161,10 @@ export function TileLink({ tile, slot }: { tile: Tile; slot: { cls: string; size
           textShadow: "0 1px 2px rgba(0,0,0,0.5)",
         }}
       >
-        <span className={`font-semibold leading-snug text-white ${slot.lead ? "text-base sm:text-xl" : "text-[13px] sm:text-[15px]"}`}>
+        <span className={`font-semibold leading-snug text-white ${slot.lead ? "text-base sm:text-xl" : "text-[14.5px] sm:text-[15px]"}`}>
           {tile.place}
         </span>
-        <span className={`leading-snug ${slot.lead ? "text-[13px] sm:text-sm" : "text-[11.5px] sm:text-[13px]"}`} style={{ color: "rgba(255,255,255,0.85)" }}>
+        <span className={`leading-snug ${slot.lead ? "text-[14.5px] sm:text-sm" : "text-[12.5px] sm:text-[14.5px]"}`} style={{ color: "rgba(255,255,255,0.85)" }}>
           {tile.systems}
         </span>
       </span>

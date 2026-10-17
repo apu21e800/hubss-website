@@ -259,7 +259,7 @@ function GalleryTile({
           className="absolute bottom-0 inset-x-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out px-4 py-3 pointer-events-none"
           style={{ background: "rgba(8,8,8,0.88)", backdropFilter: "blur(8px)" }}
         >
-          <p className="text-[11px] leading-snug truncate" style={{ color: "var(--text-muted)" }}>
+          <p className="text-[12px] leading-snug truncate" style={{ color: "var(--text-muted)" }}>
             {img.caption}
           </p>
         </div>

@@ -44,7 +44,7 @@ export default function TrustedByMarquee() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <p
-          className="text-[10px] font-bold tracking-[0.22em] uppercase text-center"
+          className="text-[11px] font-bold tracking-[0.22em] uppercase text-center"
           style={{ color: "var(--ink-50)" }}
         >
           Trusted by

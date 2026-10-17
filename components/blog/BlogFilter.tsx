@@ -166,7 +166,7 @@ export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Prop
     >
       {label}
       {count !== undefined && (
-        <span className="hidden text-[11px] font-semibold tabular-nums sm:inline" style={{ color: "var(--text-muted)" }}>
+        <span className="hidden text-[12px] font-semibold tabular-nums sm:inline" style={{ color: "var(--text-muted)" }}>
           {count}
         </span>
       )}
@@ -194,7 +194,7 @@ export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Prop
             family, weight and tracking over Tailwind's utilities. */}
         <h2
           id="library-heading"
-          className="mb-1 text-[10.5px] uppercase"
+          className="mb-1 text-[11.5px] uppercase"
           style={{ color: "var(--accent-text)", fontFamily: "inherit", fontWeight: 700, letterSpacing: "0.2em", lineHeight: 1.5 }}
         >
           Browse Insights
@@ -346,7 +346,7 @@ export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Prop
               <button
                 type="button"
                 onClick={() => setVisible((v) => v + PAGE)}
-                className="group inline-flex min-h-[48px] items-center gap-2 rounded-full px-6 text-[14px] font-bold transition-colors hover:border-orange-500/50 hover:text-[var(--accent-text)]"
+                className="group inline-flex min-h-[48px] items-center gap-2 rounded-full px-6 text-[15px] font-bold transition-colors hover:border-orange-500/50 hover:text-[var(--accent-text)]"
                 style={{ color: "var(--text-primary)", border: "1px solid var(--ink-15)", background: "var(--bg-card)" }}
               >
                 Show more

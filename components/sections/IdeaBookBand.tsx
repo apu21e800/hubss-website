@@ -47,7 +47,7 @@ export default function IdeaBookBand({ copy = HOMEPAGE_COPY.ideaBook }: { copy?:
             style={{ border: "1px solid var(--ink-12)", boxShadow: "0 10px 24px rgba(0,0,0,0.28)" }}
           />
           <div className="min-w-0 flex-1">
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--accent-text-lg)" }}>
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--accent-text-lg)" }}>
               {/* The volume only from sm up: on a phone the title wrapped as
                   "THE HUB PRODUCT BOOK ·" over "VOLUME 5" (QA sweep, 16 Oct 2026). */}
               {ideaBook.title.replace(/ · .*$/, "")}
@@ -59,12 +59,12 @@ export default function IdeaBookBand({ copy = HOMEPAGE_COPY.ideaBook }: { copy?:
             >
               {copy.heading}
             </p>
-            <p className="mt-0.5 hidden text-[12px] sm:block" style={{ color: "var(--text-secondary)" }}>
+            <p className="mt-0.5 hidden text-[13px] sm:block" style={{ color: "var(--text-secondary)" }}>
               {copy.intro}
             </p>
           </div>
           <span
-            className="inline-flex flex-shrink-0 items-center gap-1.5 text-[13px] font-bold transition-transform group-hover:translate-x-0.5"
+            className="inline-flex flex-shrink-0 items-center gap-1.5 text-[14.5px] font-bold transition-transform group-hover:translate-x-0.5"
             style={{ color: "var(--accent-text)" }}
           >
             <span className="hidden sm:inline">Open the {ideaBook.short}</span>

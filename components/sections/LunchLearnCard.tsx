@@ -63,7 +63,7 @@ export default async function LunchLearnCard({
             />
           </span>
           <div className="min-w-0">
-            <p className="text-[10.5px] font-bold uppercase tracking-[0.18em]" style={{ color: "var(--accent-text)" }}>
+            <p className="text-[11.5px] font-bold uppercase tracking-[0.18em]" style={{ color: "var(--accent-text)" }}>
               Lunch &amp; Learn
             </p>
             <p className="text-[15px] font-bold leading-snug" style={{ color: "var(--text-primary)" }}>
@@ -72,19 +72,19 @@ export default async function LunchLearnCard({
           </div>
         </div>
         {!row && (
-          <p className="mb-4 text-[13px] leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+          <p className="mb-4 text-[14.5px] leading-relaxed" style={{ color: "var(--text-secondary)" }}>
             {line}
           </p>
         )}
         <div className={row ? "flex flex-col gap-2 sm:items-end" : "flex flex-col gap-2"}>
           {row && (
-            <p className="text-[13px] leading-relaxed sm:hidden" style={{ color: "var(--text-secondary)" }}>
+            <p className="text-[14.5px] leading-relaxed sm:hidden" style={{ color: "var(--text-secondary)" }}>
               {line}
             </p>
           )}
           <Link
             href={lunchLearnHref(topic, from)}
-            className="inline-flex items-center justify-center gap-2 rounded-lg px-4 text-[14px] font-bold transition-[filter] hover:brightness-110"
+            className="inline-flex items-center justify-center gap-2 rounded-lg px-4 text-[15px] font-bold transition-[filter] hover:brightness-110"
             style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "var(--on-accent)", minHeight: 44 }}
           >
             Book a Lunch &amp; Learn
@@ -96,7 +96,7 @@ export default async function LunchLearnCard({
             // Each number is a 30 px tall tap target (it was 20: QA sweep, 16
             // Oct 2026), and the two wrap as a pair, so on a phone West lines
             // up under East, not under "Or call".
-            <p className="flex gap-x-3 text-[12px]" style={{ color: "var(--text-muted)" }}>
+            <p className="flex gap-x-3 text-[13px]" style={{ color: "var(--text-muted)" }}>
               <span className="flex-shrink-0 py-1.5">Or call</span>
               <span className="flex flex-wrap gap-x-3">
                 <a href={telHref(offices.east.phone)} className="inline-block py-1.5 whitespace-nowrap font-semibold underline-offset-2 hover:underline" style={{ color: "var(--text-secondary)" }}>East {offices.east.phone}</a>
@@ -107,7 +107,7 @@ export default async function LunchLearnCard({
             // In a sidebar the three pieces wrapped as "Or call East · …" over
             // "West · …", the second number under "Or call" (QA, 28 Sep 2026).
             // The two numbers stack in their own column, so East and West line up.
-            <p className="flex gap-x-3 text-[12px]" style={{ color: "var(--text-muted)" }}>
+            <p className="flex gap-x-3 text-[13px]" style={{ color: "var(--text-muted)" }}>
               <span className="flex-shrink-0 py-1">Or call</span>
               <span className="flex flex-col">
                 <a href={telHref(offices.east.phone)} className="inline-block py-1 whitespace-nowrap font-semibold underline-offset-2 hover:underline" style={{ color: "var(--text-secondary)" }}>East {offices.east.phone}</a>

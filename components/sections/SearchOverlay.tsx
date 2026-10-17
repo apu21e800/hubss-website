@@ -477,7 +477,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
               Hidden on phones: at 390px it pushed past the panel edge, and a
               touch user has no ESC key to press anyway. */}
           <span className="hidden sm:block flex-shrink-0" aria-hidden="true" style={{ width: 1, height: 18, background: "var(--border-color)" }} />
-          <kbd className="hidden sm:block flex-shrink-0 px-2 py-0.5 rounded text-[11px] font-mono" style={{ background: "var(--fill-subtle)", color: "var(--text-faint)", border: "1px solid var(--border-color)" }}>ESC</kbd>
+          <kbd className="hidden sm:block flex-shrink-0 px-2 py-0.5 rounded text-[12px] font-mono" style={{ background: "var(--fill-subtle)", color: "var(--text-faint)", border: "1px solid var(--border-color)" }}>ESC</kbd>
         </div>
 
         {/* Results */}
@@ -489,7 +489,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
             // function, the rest of it is fine." So the rows keep their
             // thumbnails and the start screen is the quiet list again.
             <div className="p-4">
-              <p className="text-[11px] font-bold uppercase tracking-[0.16em] mb-2.5" style={{ color: "var(--text-faint)" }}>Jump to</p>
+              <p className="text-[12px] font-bold uppercase tracking-[0.16em] mb-2.5" style={{ color: "var(--text-faint)" }}>Jump to</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 mb-5">
                 {QUICK.map((item) => (
                   <button
@@ -508,11 +508,11 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                       />
                       {item.label}
                     </span>
-                    <span className="text-[11px]" style={{ color: "var(--text-faint)" }}>{item.hint}</span>
+                    <span className="text-[12px]" style={{ color: "var(--text-faint)" }}>{item.hint}</span>
                   </button>
                 ))}
               </div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.16em] mb-2.5" style={{ color: "var(--text-faint)" }}>Try</p>
+              <p className="text-[12px] font-bold uppercase tracking-[0.16em] mb-2.5" style={{ color: "var(--text-faint)" }}>Try</p>
               <div className="flex flex-wrap gap-1.5">
                 {TRY.map((t) => (
                   <button
@@ -532,7 +532,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
               {groups.map((group) => (
                 <div key={group.type}>
                   <p
-                    className="text-[10px] font-bold uppercase tracking-[0.18em] px-5 pt-4 pb-2 sticky top-0"
+                    className="text-[11px] font-bold uppercase tracking-[0.18em] px-5 pt-4 pb-2 sticky top-0"
                     // zIndex: each row's content-visibility makes it a stacking
                     // context, which would otherwise paint over the stuck heading.
                     style={{ color: LABEL, background: "var(--bg-card-neutral)", zIndex: 1 }}
@@ -651,11 +651,11 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                                 <path d="M9 10l-4 4 4 4" />
                               </svg>
                             )}
-                            <span className="text-[10px] font-bold uppercase tracking-[0.1em]">{h.isFile ? "PDF" : "Open"}</span>
+                            <span className="text-[11px] font-bold uppercase tracking-[0.1em]">{h.isFile ? "PDF" : "Open"}</span>
                           </span>
                         ) : h.badge ? (
                           <span
-                            className="flex-shrink-0 text-[10px] font-semibold tabular-nums"
+                            className="flex-shrink-0 text-[11px] font-semibold tabular-nums"
                             style={{ color: "var(--text-faint)", letterSpacing: "0.06em" }}
                           >
                             {h.badge}
@@ -695,7 +695,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
           {/* Footer — states the keys, because a palette nobody knows is
               keyboard-driven is a palette nobody drives with the keyboard. */}
           <div
-            className="px-4 py-2.5 flex items-center justify-between text-[11px]"
+            className="px-4 py-2.5 flex items-center justify-between text-[12px]"
             style={{ borderTop: "1px solid var(--border-color)", color: "var(--text-faint)" }}
           >
             <span className="hidden sm:flex items-center gap-3">

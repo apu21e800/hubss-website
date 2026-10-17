@@ -74,7 +74,7 @@ export const applications: Application[] = [
     shortDesc: "Red bus lanes and transit corridor surfaces in MMA and aggregate-reinforced thermoplastic, built for concentrated loads.",
     imageUrl: "/images/applications/bus-lanes/bus-lanes-01.jpg",
     gallery: gallery("bus-lanes", "bus-lanes", 40, "jpg", [37, 38, 39, 40]),
-    description: "Bus lanes and transit corridors concentrate wear: the same wheel paths, thousands of times a day, with braking and turning at every stop. MMAX methyl methacrylate (MMA) area marking gives the red lane: a two-part resin with hard aggregate that cures traffic-ready in 45 to 60 minutes, so a corridor is marked in one overnight closure. TrafficPatternsXD, aggregate-reinforced preformed thermoplastic at 150 mil, is heated and stamped into the asphalt at crossings and bus stops, where it holds under concentrated loads and keeps its skid resistance (60 BPN, ASTM E303). HUB specifies both for bus rapid transit (BRT) corridors and bus priority lanes.",
+    description: "Bus lanes and transit corridors concentrate wear: the same wheel paths, thousands of times a day, with braking and turning at every stop. MMAX methyl methacrylate (MMA) area marking gives the red lane: a two-part resin with hard aggregate that cures traffic-ready in 45 to 60 minutes, so a corridor is marked in one overnight closure. TrafficPatternsXD, aggregate-reinforced preformed thermoplastic at 150 mil, is heated and stamped into the asphalt at crossings and bus stops, where it holds under concentrated loads and keeps its grip. HUB specifies both for bus rapid transit (BRT) corridors and bus priority lanes.",
     // PreMark out (pa#31): not in the spread's SPECIFY, and PreMark's page never listed bus lanes.
     relatedProducts: ["traffic-patterns-xd", "mmax", "duratherm", "streetbond"],
   },
@@ -155,7 +155,7 @@ export const applications: Application[] = [
     shortDesc: "Vivid, slip-resistant splash pad coatings designed for constant water exposure.",
     imageUrl: "/images/applications/splash-pads/splash-pads-01.jpg",
     gallery: gallery("splash-pads", "splash-pads", 19, "jpg", [11]),
-    description: "A splash pad surface is wet all day, treated with chemicals, and walked on barefoot by children, so slip resistance in the wet is the first requirement. StreetBond pavement coating is applied to the prepared concrete in a textured, slip-resistant build, in the vivid colours that make the pad a destination, with UV-stable pigments that hold through a season of sun and chemical splash. StreetBondSR colours, with a solar reflectance of 0.33 or higher, reflect the sun so the surface stays cooler on bare feet. The coating moves with the concrete rather than cracking, and a worn pad is recoated between seasons.",
+    description: "A splash pad surface is wet all day, treated with chemicals, and walked on barefoot by children, so slip resistance in the wet is the first requirement. StreetBond pavement coating is applied to the prepared concrete in a textured, slip-resistant build, in the vivid colours that make the pad a destination, with UV-stable pigments that hold through a season of sun and chemical splash. StreetBondSR colours reflect a third of the sun's energy or more, so the surface stays cooler on bare feet. The coating moves with the concrete rather than cracking, and a worn pad is recoated between seasons.",
     // DecoMark and DuraShield out (pa#31): the spread specifies StreetBond and StreetBondSR only.
     relatedProducts: ["streetbond", "streetbondsr"],
   },
@@ -259,7 +259,7 @@ export const applications: Application[] = [
     name: "LEED & Urban Heat Island",
     slug: "leed-urban-heat-island",
     seoTitle: "LEED and heat island: solar reflective coatings",
-    seoDescription: "StreetBondSR solar reflective coatings lower pavement surface temperature and can contribute to the LEED v5 heat island reduction credit (non-roof).",
+    seoDescription: "StreetBondSR solar reflective coatings lower the pavement's surface temperature and can count toward the LEED v5 heat island credit.",
     // "Earn LEED credits" softened to "can contribute", 28 Sep 2026 (QA pa#12), as the StreetBondSR page and
     // the Product Book say it. Only the claim changed: replacing the whole line is proposed to Doug in
     // docs/COPY-FOR-DOUG.md §3 and still waits on him.
@@ -268,7 +268,7 @@ export const applications: Application[] = [
     gallery: gallery("leed-urban-heat-island", "leed-urban-heat-island", 2),
     // Rewritten plainly (pa#34): no verbless closing line. Solar reflectance and the credit are worded as on
     // the StreetBondSR page, which follows the book ("SR 0.33 or higher", "can contribute").
-    description: "Dark asphalt absorbs most of the sun's energy and adds to the urban heat island effect, the measurable temperature difference between a city and the rural areas around it. The extra heat raises air-conditioning demand and makes summer heat events more dangerous for vulnerable people. StreetBondSR is a solar-reflective coating that lowers pavement surface temperature. Its colours with an initial solar reflectance of 0.33 or higher can contribute to the LEED v5 Sustainable Sites credit for urban heat island reduction (non-roof).",
+    description: "Dark asphalt absorbs most of the sun's energy and adds to the urban heat island effect, the measurable temperature difference between a city and the rural areas around it. The extra heat raises air-conditioning demand and makes summer heat events more dangerous for vulnerable people. StreetBondSR is a solar-reflective coating that lowers pavement surface temperature. Its lighter colours reflect a third of the sun's energy or more, which can count toward the LEED v5 credit for reducing the urban heat island.",
     // StreetBond out (pa#31): no spread covers this page and StreetBond's page never listed it.
     relatedProducts: ["streetbondsr", "durashield"],
   },

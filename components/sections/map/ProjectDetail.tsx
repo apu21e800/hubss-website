@@ -75,6 +75,10 @@ function Photos({ project, sizes, priority }: { project: MapProject; sizes: stri
               alt={i === 0 ? `${project.title}, ${project.city}` : `${project.title}, photo ${i + 1}`}
               fill
               sizes={sizes}
+              // 82, not the site's 75: these are the photographs a visitor
+              // judges a job by, shown large in the panel and the sheet
+              // (17 Oct 2026, Vern: "the interactive map images are blurry").
+              quality={82}
               priority={priority && i === 0}
               style={{ objectFit: "cover" }}
             />

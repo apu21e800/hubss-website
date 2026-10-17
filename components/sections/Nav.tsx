@@ -250,7 +250,7 @@ const ACCENT = "var(--accent-text)";  // small-text accent (WCAG-safe on dark su
 function MenuLabel({ children, rule = true, className = "" }: { children: React.ReactNode; rule?: boolean; className?: string }) {
   return (
     <div
-      className={`text-[10.5px] font-bold tracking-[0.2em] uppercase ${rule ? "pb-3 mb-2" : ""} ${className}`}
+      className={`text-[11.5px] font-bold tracking-[0.2em] uppercase ${rule ? "pb-3 mb-2" : ""} ${className}`}
       style={{ color: ACCENT, borderBottom: rule ? "1px solid rgba(249,115,22,0.18)" : undefined }}
     >
       {children}
@@ -392,11 +392,11 @@ function MenuColumn({ label, items }: { label: string; items: MenuItem[] }) {
               className={`group -mx-2.5 flex ${it.line ? "items-start" : "items-center"} justify-between gap-3 px-2.5 py-2 rounded-lg transition-colors hover:bg-[var(--ink-05)]`}
             >
               <span className="min-w-0">
-                <span className="block text-[14.5px] font-semibold leading-snug group-hover:text-[var(--accent-text)] transition-colors" style={{ color: "var(--text-primary)" }}>
+                <span className="block text-[15.5px] font-semibold leading-snug group-hover:text-[var(--accent-text)] transition-colors" style={{ color: "var(--text-primary)" }}>
                   {it.name}
                 </span>
                 {it.line && (
-                  <span className="mt-0.5 block text-[12.5px] leading-snug text-pretty" style={{ color: "var(--ink-58)" }}>
+                  <span className="mt-0.5 block text-[13.5px] leading-snug text-pretty" style={{ color: "var(--ink-58)" }}>
                     {it.line}
                   </span>
                 )}
@@ -447,12 +447,12 @@ function LunchLearnSlot({ topic }: { topic: string }) {
     >
       <MooseAvatar size={38} />
       <div className="min-w-0">
-        <div className="text-[13px] font-bold leading-tight" style={{ color: "var(--text-primary)" }}>Lunch &amp; Learn</div>
-        <div className="mt-0.5 text-[12px] leading-snug" style={{ color: "var(--ink-60)" }}>{LL_LINE}</div>
+        <div className="text-[14.5px] font-bold leading-tight" style={{ color: "var(--text-primary)" }}>Lunch &amp; Learn</div>
+        <div className="mt-0.5 text-[13px] leading-snug" style={{ color: "var(--ink-60)" }}>{LL_LINE}</div>
       </div>
       <Link prefetch={false}
         href={lunchLearnHref(topic, "menu")}
-        className="ml-2 inline-flex min-h-[44px] flex-shrink-0 items-center gap-2 rounded-lg px-4 text-[13px] font-bold whitespace-nowrap transition-colors hover:bg-[rgba(249,115,22,0.12)]"
+        className="ml-2 inline-flex min-h-[44px] flex-shrink-0 items-center gap-2 rounded-lg px-4 text-[14.5px] font-bold whitespace-nowrap transition-colors hover:bg-[rgba(249,115,22,0.12)]"
         style={{ color: ACCENT, border: "1px solid rgba(249,115,22,0.45)" }}
       >
         Book a session
@@ -472,7 +472,7 @@ function MenuFooter({ href, label, topic, children }: { href: string; label: str
     <div className="mt-7 flex flex-wrap items-center justify-between gap-x-8 gap-y-4 pt-4" style={{ borderTop: "1px solid var(--ink-08)" }}>
       <Link prefetch={false}
         href={href}
-        className="group -ml-3 inline-flex min-h-[44px] items-center gap-2 rounded-lg px-3 text-[13.5px] font-bold transition-colors hover:bg-[var(--ink-05)] hover:text-[var(--accent-text)]"
+        className="group -ml-3 inline-flex min-h-[44px] items-center gap-2 rounded-lg px-3 text-[15px] font-bold transition-colors hover:bg-[var(--ink-05)] hover:text-[var(--accent-text)]"
         style={{ color: "var(--text-primary)" }}
       >
         {label}
@@ -502,10 +502,10 @@ function ResourcesSlot() {
         </svg>
       </span>
       <span className="min-w-0">
-        <span className="block text-[13px] font-bold leading-tight whitespace-nowrap transition-colors group-hover:text-[var(--accent-text)]" style={{ color: "var(--text-primary)" }}>
+        <span className="block text-[14.5px] font-bold leading-tight whitespace-nowrap transition-colors group-hover:text-[var(--accent-text)]" style={{ color: "var(--text-primary)" }}>
           {RESOURCES.label}
         </span>
-        <span className="mt-0.5 block text-[12px] leading-snug whitespace-nowrap" style={{ color: "var(--ink-60)" }}>{RESOURCES.line}</span>
+        <span className="mt-0.5 block text-[13px] leading-snug whitespace-nowrap" style={{ color: "var(--ink-60)" }}>{RESOURCES.line}</span>
       </span>
       <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" className="flex-shrink-0 transition-transform group-hover:translate-x-0.5" style={{ color: ACCENT }} aria-hidden="true">
         <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.25} strokeLinecap="round" strokeLinejoin="round" />
@@ -625,7 +625,7 @@ function LatestRow({ post, first }: { post: NavPost; first: boolean }) {
         />
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block text-[10.5px] font-bold uppercase tracking-[0.2em]" style={{ color: ACCENT }}>
+        <span className="block text-[11.5px] font-bold uppercase tracking-[0.2em]" style={{ color: ACCENT }}>
           {kindOf(post.type)}
         </span>
         <span
@@ -662,7 +662,7 @@ function IdeaBookSlot() {
         className="h-[38px] w-[38px] flex-shrink-0 rounded-[2px] object-cover transition-transform duration-300 group-hover:-translate-y-0.5"
         style={{ border: "1px solid var(--ink-12)", boxShadow: "0 8px 16px -6px rgba(0,0,0,0.7)" }}
       />
-      <span className="text-[13px] font-bold leading-tight whitespace-nowrap transition-colors group-hover:text-[var(--accent-text)]" style={{ color: "var(--text-primary)" }}>
+      <span className="text-[14.5px] font-bold leading-tight whitespace-nowrap transition-colors group-hover:text-[var(--accent-text)]" style={{ color: "var(--text-primary)" }}>
         {ideaBook.title}
       </span>
       <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" className="flex-shrink-0 transition-transform group-hover:translate-x-0.5" style={{ color: ACCENT }} aria-hidden="true">
@@ -699,7 +699,7 @@ function InsightsMegaMenu() {
               />
             </span>
             {/* The section it lives in, and the title: nothing else. */}
-            <span className="mt-4 block text-[10.5px] font-bold uppercase tracking-[0.2em]" style={{ color: ACCENT }}>
+            <span className="mt-4 block text-[11.5px] font-bold uppercase tracking-[0.2em]" style={{ color: ACCENT }}>
               {kindOf(cover.type)}
             </span>
             <span
@@ -748,7 +748,7 @@ function MobileSectionHead({ label, href, active, pathname, onClose }: { label: 
   return (
     <div className="flex items-center justify-between pt-5 pb-1">
       <div
-        className="px-1 text-[10px] font-bold tracking-[0.22em] uppercase select-none"
+        className="px-1 text-[11px] font-bold tracking-[0.22em] uppercase select-none"
         style={{ color: active ? "var(--text-primary)" : "var(--accent-text-lg)" }}
       >
         <NavLabel active={active}>{label}</NavLabel>
@@ -788,7 +788,7 @@ function MobileFamily({
         <GroupPicture label={label} compact />
         <span className="min-w-0 flex-1">
           <span className="block text-[15px] font-semibold leading-tight" style={{ color: "var(--text-primary)" }}>{label}</span>
-          {note && <span className="mt-0.5 block text-[12px] leading-snug" style={{ color: "var(--ink-50)" }}>{note}</span>}
+          {note && <span className="mt-0.5 block text-[13px] leading-snug" style={{ color: "var(--ink-50)" }}>{note}</span>}
         </span>
         <svg
           className="w-4 h-4 flex-shrink-0 transition-transform duration-200"
@@ -822,7 +822,7 @@ function MobileFamily({
                       <span className="block text-[15px] leading-tight" style={{ color: pathname === it.href ? "var(--text-primary)" : "var(--ink-85)" }}>
                         <NavLabel active={pathname === it.href}>{it.name}</NavLabel>
                       </span>
-                      {it.line && <span className="mt-1 block text-[12.5px] leading-snug text-pretty" style={{ color: "var(--ink-50)" }}>{it.line}</span>}
+                      {it.line && <span className="mt-1 block text-[13.5px] leading-snug text-pretty" style={{ color: "var(--ink-50)" }}>{it.line}</span>}
                     </span>
                     <svg className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "var(--ink-20)" }} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 18l6-6-6-6" />
@@ -845,7 +845,7 @@ function MobileViewAll({ href, label, onClose, current }: { href: string; label:
       href={href}
       onClick={onClose}
       aria-current={current}
-      className="inline-flex min-h-[44px] items-center gap-2 px-1 text-[13px] font-bold active:opacity-60 transition-opacity"
+      className="inline-flex min-h-[44px] items-center gap-2 px-1 text-[14.5px] font-bold active:opacity-60 transition-opacity"
       style={{ color: "var(--accent-text-lg)" }}
     >
       {label}
@@ -913,7 +913,7 @@ function MobileResourcesRow({ pathname, onClose }: { pathname: string; onClose: 
         <span className="block text-[15px] font-semibold leading-tight" style={{ color: "var(--text-primary)" }}>
           <NavLabel active={current}>{RESOURCES.label}</NavLabel>
         </span>
-        <span className="mt-0.5 block text-[12px] leading-snug" style={{ color: "var(--ink-50)" }}>{RESOURCES.line}</span>
+        <span className="mt-0.5 block text-[13px] leading-snug" style={{ color: "var(--ink-50)" }}>{RESOURCES.line}</span>
       </span>
       <svg className="w-4 h-4 flex-shrink-0" style={{ color: "var(--ink-30)" }} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 18l6-6-6-6" />
@@ -1160,7 +1160,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                   {i > 0 && <span aria-hidden="true" className="mx-1" style={{ width: 1, height: 14, background: "var(--ink-12)" }} />}
                   <a
                     href={office.href}
-                    className="inline-flex min-h-[44px] items-center gap-1.5 px-3 text-[12.5px] font-semibold active:opacity-60 transition-opacity"
+                    className="inline-flex min-h-[44px] items-center gap-1.5 px-3 text-[13.5px] font-semibold active:opacity-60 transition-opacity"
                     style={{ color: "var(--ink-60)" }}
                   >
                     <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: "var(--accent-text-lg)" }} aria-hidden="true">
@@ -1181,14 +1181,14 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
             >
               <MooseAvatar size={40} />
               <div className="min-w-0 flex-1">
-                <div className="text-[14px] font-bold leading-tight" style={{ color: "var(--text-primary)" }}>Lunch &amp; Learn</div>
-                <div className="mt-0.5 text-[12px] leading-snug" style={{ color: "var(--ink-60)" }}>{LL_LINE}</div>
+                <div className="text-[15px] font-bold leading-tight" style={{ color: "var(--text-primary)" }}>Lunch &amp; Learn</div>
+                <div className="mt-0.5 text-[13px] leading-snug" style={{ color: "var(--ink-60)" }}>{LL_LINE}</div>
               </div>
               <Link prefetch={false}
                 href={lunchLearnHref(llTopic, "menu")}
                 onClick={onClose}
                 aria-label="Book a Lunch & Learn"
-                className="inline-flex min-h-[44px] flex-shrink-0 items-center gap-1.5 rounded-xl px-4 text-[14px] font-bold active:scale-[0.97] active:opacity-90 transition-[transform,opacity] duration-100"
+                className="inline-flex min-h-[44px] flex-shrink-0 items-center gap-1.5 rounded-xl px-4 text-[15px] font-bold active:scale-[0.97] active:opacity-90 transition-[transform,opacity] duration-100"
                 style={{
                   background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
                   color: "var(--on-accent)",
@@ -1465,7 +1465,7 @@ export default function Nav() {
                 <path fill="var(--text-primary)" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z" />
               </svg>
               <span
-                className="text-[10px] font-bold tracking-[0.18em] uppercase"
+                className="text-[11px] font-bold tracking-[0.18em] uppercase"
                 style={{ color: "var(--ink-55)", lineHeight: 1 }}
               >
                 Canadian
@@ -1508,8 +1508,8 @@ export default function Nav() {
                 // did not exist in the document (QA F17, 30 Sep 2026).
                 aria-controls={openPanel === panel ? PANEL_IDS[panel] : undefined}
                 aria-current={currentPage(pathname, NAV_ROOT[panel])}
-                className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[13px] font-medium whitespace-nowrap transition-colors hover:text-[var(--accent-text)] hover:bg-[var(--ink-05)]"
-                style={{ color: openPanel === panel ? "var(--accent-text-lg)" : section === panel ? "var(--text-primary)" : "var(--ink-65)" }}
+                className="flex items-center gap-1 px-3 py-2 rounded-lg text-[15.5px] font-medium whitespace-nowrap transition-colors hover:text-[var(--accent-text)] hover:bg-[var(--ink-05)]"
+                style={{ color: openPanel === panel ? "var(--accent-text-lg)" : section === panel ? "var(--text-primary)" : "var(--ink-85)" }}
               >
                 <NavLabel active={section === panel}>{label}</NavLabel>
                 <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"
@@ -1528,8 +1528,8 @@ export default function Nav() {
                 // lines and pushed the whole nav row out of alignment. A nav
                 // label is a single object; it should shrink the row, never
                 // wrap inside it.
-                className="px-2.5 py-1.5 rounded-lg text-[13px] font-medium whitespace-nowrap transition-colors hover:text-[var(--accent-text)] hover:bg-[var(--ink-05)]"
-                style={{ color: section && NAV_ROOT[section] === link.href ? "var(--text-primary)" : "var(--ink-65)" }}
+                className="px-3 py-2 rounded-lg text-[15.5px] font-medium whitespace-nowrap transition-colors hover:text-[var(--accent-text)] hover:bg-[var(--ink-05)]"
+                style={{ color: section && NAV_ROOT[section] === link.href ? "var(--text-primary)" : "var(--ink-85)" }}
                 aria-current={currentPage(pathname, link.href)}
               >
                 <NavLabel active={!!section && NAV_ROOT[section] === link.href}>{link.label}</NavLabel>
@@ -1591,7 +1591,7 @@ export default function Nav() {
                 On /lunch-learn it is marked like the rest of the bar, with
                 the rule in its own text colour (QA A4, 30 Sep 2026). */}
             <a href="/lunch-learn"
-              className="btn-accent px-3 py-1.5 rounded-lg text-[13px] font-bold whitespace-nowrap"
+              className="btn-accent px-4 py-2 rounded-lg text-[15px] font-bold whitespace-nowrap"
               style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "var(--on-accent)" }}
               aria-current={currentPage(pathname, "/lunch-learn")}
             >

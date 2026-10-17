@@ -118,7 +118,7 @@ export default function LunchLearnTopics({ topics = LL_TOPICS }: { topics?: Lunc
             <span aria-hidden="true" className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(12,12,12,0.86) 0%, rgba(12,12,12,0.34) 42%, rgba(12,12,12,0) 68%)" }} />
             <span className="absolute inset-x-3 bottom-3 sm:inset-x-5 sm:bottom-4 flex items-end justify-between gap-3">
               <span className="font-bold text-[15px] sm:text-[19px] leading-tight" style={{ color: "#FFFFFF" }}>{t.label}</span>
-              <span className="hidden sm:inline-flex flex-shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-bold transition-colors group-hover:bg-[#F97316]" style={{ color: "#FFFFFF", background: "rgba(255,255,255,0.14)", border: "1px solid rgba(255,255,255,0.28)" }}>
+              <span className="hidden sm:inline-flex flex-shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-[13px] font-bold transition-colors group-hover:bg-[#F97316]" style={{ color: "#FFFFFF", background: "rgba(255,255,255,0.14)", border: "1px solid rgba(255,255,255,0.28)" }}>
                 Book this topic
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M5 12h14" /><path d="M13 6l6 6-6 6" />

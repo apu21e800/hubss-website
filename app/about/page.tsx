@@ -319,7 +319,7 @@ export default async function AboutPage() {
                     </h3>
                     <div className="flex flex-wrap gap-1.5 mt-2.5">
                       {partner.products.map((p) => (
-                        <span key={p} className="text-[11px] font-semibold px-2 py-0.5 rounded-full" style={{ background: `${partner.accent}18`, color: partner.accent, border: `1px solid ${partner.accent}30` }}>{p}</span>
+                        <span key={p} className="text-[12px] font-semibold px-2 py-0.5 rounded-full" style={{ background: `${partner.accent}18`, color: partner.accent, border: `1px solid ${partner.accent}30` }}>{p}</span>
                       ))}
                     </div>
                   </div>

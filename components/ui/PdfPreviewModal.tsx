@@ -156,7 +156,7 @@ export default function PdfPreviewModal({
           <div className="flex-1 min-w-0">
             {productLabel && (
               <p
-                className="text-[10px] font-bold tracking-[0.2em] uppercase mb-0.5"
+                className="text-[11px] font-bold tracking-[0.2em] uppercase mb-0.5"
                 style={{ color: "var(--accent-text-lg)" }}
               >
                 {productLabel}
@@ -173,7 +173,7 @@ export default function PdfPreviewModal({
           {/* Type badge */}
           {typeLabel && (
             <span
-              className="hidden sm:inline text-[10px] font-semibold px-2 py-1 rounded flex-shrink-0"
+              className="hidden sm:inline text-[11px] font-semibold px-2 py-1 rounded flex-shrink-0"
               style={{
                 background: "rgba(249,115,22,0.10)",
                 color: "var(--accent-text-lg)",

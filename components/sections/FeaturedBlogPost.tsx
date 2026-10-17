@@ -224,7 +224,7 @@ export default async function FeaturedBlogPost({ copy = HOMEPAGE_COPY.insights }
                   {/* Content */}
                   <div className="flex flex-col p-6 flex-1">
                     <span
-                      className="text-[10px] font-bold tracking-widest uppercase mb-3"
+                      className="text-[11px] font-bold tracking-widest uppercase mb-3"
                       style={{ color: "var(--accent-text-lg)" }}
                     >
                       {badgeFor(post.category)}

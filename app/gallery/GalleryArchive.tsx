@@ -134,7 +134,7 @@ export default function GalleryArchive({ images, footer }: { images: GalleryImag
               >
                 {cat.label}
                 <span
-                  className="text-[10px] font-mono px-1.5 py-0.5 rounded-full"
+                  className="text-[11px] font-mono px-1.5 py-0.5 rounded-full"
                   style={{
                     background: isActive ? "var(--ink-20)" : "var(--border-color)",
                     color: isActive ? "var(--text-primary)" : "var(--ink-40)",

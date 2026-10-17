@@ -137,7 +137,7 @@ export default async function TypeHub({ section }: { section: InsightsSection })
               >
                 {t.label}
                 {/* From sm up, as on /blog: on a phone the four fit without them. */}
-                <span className="hidden text-[11px] font-semibold tabular-nums sm:inline" style={{ color: "var(--text-muted)" }}>
+                <span className="hidden text-[12px] font-semibold tabular-nums sm:inline" style={{ color: "var(--text-muted)" }}>
                   {t.count}
                 </span>
                 {active && (
@@ -198,7 +198,7 @@ export default async function TypeHub({ section }: { section: InsightsSection })
                     >
                       {s.plural}
                     </span>
-                    <span className="mt-1 block text-[14px] leading-snug" style={{ color: "var(--text-secondary)" }}>
+                    <span className="mt-1 block text-[15px] leading-snug" style={{ color: "var(--text-secondary)" }}>
                       {s.blurb}
                     </span>
                   </span>

@@ -356,7 +356,10 @@ table) and the claims that need a source. The AI writers read the same rules
 (lib/glossary.ts), Studio warns on the words to avoid (lib/style-lint.ts,
 rule `glossary`), `npm run test:copy` checks the lint. The review that
 produced it, line by line for Doug, is in the Claude project
-(claude/HUBSS-copy-review-2026-10-17.md).
+(claude/HUBSS-copy-review-2026-10-17.md). The Studio fixes it asks for are
+scripts/studio-copy-2026-10-17.ts (Vern's PC; dry run by default, `--apply`
+writes, `--only=claims|products|chrome` ships one group; every change names
+the exact text it replaces and is skipped when Studio no longer holds it).
 
 ## Copy source of truth
 The 2027 print catalogue — the Product Book, Volume 5 — (Figma file

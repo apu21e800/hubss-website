@@ -54,6 +54,15 @@ export async function generateStaticParams() {
 
 type Props = { params: Promise<{ slug: string }> };
 
+/**
+ * Widths of the code's own hero photos that may stand in for a Studio hero
+ * that is too small to fill the banner (see `hero` below). Measured on
+ * 17 Oct 2026; add a line when a bigger photo lands in /public.
+ */
+const CODE_HERO_WIDTHS: Record<string, number> = {
+  "/images/products/chipfill/chipfill-application.jpg": 1200,
+};
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   // The same merged product the page renders, so <title> and the meta
@@ -147,10 +156,20 @@ export default async function ProductPage({ params }: Props) {
   // the old templates' invented settings into Studio ("at a civic plaza",
   // "150 mil ..."), so the Sanity alt and caption are replaced at render by
   // what the photo's folder proves; a line a person wrote in Studio stays.
-  const hero: Photo = honestPhoto(product.heroPhoto ?? {
-    src: featuredImg?.src ?? product.imageUrl,
-    alt: featuredImg?.alt ?? product.name,
-  });
+  // A Studio hero under 1000px wide is passed over for the code's photo when
+  // the code has one at least that wide (17 Oct 2026, Vern: "make sure
+  // images are clear and well positioned including all hero images"):
+  // ChipFill's Studio hero is a 640px file, and chipfill-application.jpg
+  // (1200px, the chips poured into the hole) is the photograph of what the
+  // product is. With no large photo anywhere (AggreFill) the hatched panel
+  // below stays, which is honest until one is taken.
+  const codeHero = { src: featuredImg?.src ?? product.imageUrl, alt: featuredImg?.alt ?? product.name };
+  const studioHero = product.heroPhoto;
+  const studioTooSmall = typeof studioHero?.width === "number" && studioHero.width < 1000;
+  const codeHeroWidth = CODE_HERO_WIDTHS[codeHero.src];
+  const hero: Photo = honestPhoto(
+    studioHero && !(studioTooSmall && codeHeroWidth && codeHeroWidth >= 1000) ? studioHero : codeHero,
+  );
   const galleryPhotos: Photo[] = product.galleryPhotos?.map(honestPhoto) ?? (() => {
     const bannerSrc = featuredImg?.src ?? product.imageUrl;
     const fromFolder = galleryFor(bannerSrc, product.gallery, `images/products/${product.slug}`);

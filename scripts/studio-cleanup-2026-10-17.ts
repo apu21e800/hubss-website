@@ -18,6 +18,11 @@
  *  2. The hero's second-button label, where Studio still holds the 14 Oct
  *     wording "Open the Product Book": it prints only while the book is
  *     switched off, but the old name should not sit in Studio either.
+ *  3. The homepage blog section's eyebrow, "Insights" to "Projects" (Vern,
+ *     17 Oct, evening: "instead of insights call them Projects... !!! see
+ *     top nav"). The site already prints "Projects" over that section
+ *     while Studio holds "Insights" (components/sections/FeaturedBlogPost.tsx);
+ *     this makes Studio say what the page says.
  *
  * A document with an unpublished draft gets the same change in the draft,
  * so publishing the draft later does not undo it. Every write checks the
@@ -65,6 +70,13 @@ const CTA = {
   to: "Open the Product Portfolio Book",
 };
 
+// ── 3. The homepage blog section's eyebrow: the blog's name
+const EYEBROW = {
+  id: "page-homepage",
+  from: "Insights",
+  to: "Projects",
+};
+
 type Change = { id: string; rev: string; label: string; set: Record<string, string> };
 const changes: Change[] = [];
 const skipped: string[] = [];
@@ -106,6 +118,19 @@ async function main() {
         changes.push({ id: d._id, rev: d._rev, label: "homepage second button label", set: { "homepageHero.cta2Label": CTA.to } });
       } else if (now && now !== CTA.to && /\bProduct Book\b/.test(now)) {
         skipped.push(`${d._id}: second button label is "${now}", left as it is (change it in Studio)`);
+      }
+    }
+  }
+
+  // 3. Blog section eyebrow
+  {
+    const docs = await withDraft<{ _id: string; _rev: string; eyebrow?: string }>(EYEBROW.id, "{_id, _rev, \"eyebrow\": homepageSections.insights.eyebrow}");
+    for (const d of docs) {
+      const now = d.eyebrow ?? "";
+      if (now === EYEBROW.from) {
+        changes.push({ id: d._id, rev: d._rev, label: "homepage blog section eyebrow", set: { "homepageSections.insights.eyebrow": EYEBROW.to } });
+      } else if (now !== EYEBROW.to) {
+        skipped.push(`${d._id}: blog section eyebrow is "${now}", left as it is`);
       }
     }
   }

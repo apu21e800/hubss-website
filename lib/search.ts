@@ -59,7 +59,7 @@ import { PRODUCT_KEYWORDS, APPLICATION_KEYWORDS } from "./search-keywords";
 import { PRODUCT_CATALOGUE } from "./product-catalogue";
 import { mapProjects } from "./map-projects";
 import blogIndex from "./blog-index.json";
-import { ARCHIVED_POSTS, SECTION_BY_KEY, isArchivedPost, sectionFor } from "./field-notes-taxonomy";
+import { ARCHIVED_POSTS, BLOG_NAME, SECTION_BY_KEY, isArchivedPost, sectionFor } from "./field-notes-taxonomy";
 
 export type SearchType =
   | "Product"
@@ -215,7 +215,7 @@ const PAGES: Omit<SearchEntry, "boost">[] = [
   // Insights and its three sections (28 Sep 2026: five types became Projects,
   // Guides and Articles, lib/field-notes-taxonomy.ts). The old type names stay
   // in the keywords, so "case study" or "white paper" still lands somewhere.
-  { id: "p-blog", type: "Page", title: "Insights", subtitle: "Projects, guides and articles on Canadian pavement", href: "/blog", keywords: "blog articles posts library research writing notes field notes insights", body: "" },
+  { id: "p-blog", type: "Page", title: BLOG_NAME, subtitle: "Projects, guides and articles on Canadian pavement", href: "/blog", keywords: "blog articles posts library research writing notes field notes insights projects", body: "" },
   { id: "p-projects", type: "Page", title: "Projects", subtitle: SECTION_BY_KEY.projects.blurb, href: `/blog/${SECTION_BY_KEY.projects.slug}`, keywords: "projects case studies case study project profiles installations portfolio outcomes evidence", body: "" },
   { id: "p-guides", type: "Page", title: "Guides", subtitle: SECTION_BY_KEY.guides.blurb, href: `/blog/${SECTION_BY_KEY.guides.slug}`, keywords: "guides how to specify comparison decision white papers white paper technical research engineering", body: "" },
   { id: "p-articles", type: "Page", title: "Articles", subtitle: SECTION_BY_KEY.articles.blurb, href: `/blog/${SECTION_BY_KEY.articles.slug}`, keywords: "articles industry notes news blog", body: "" },

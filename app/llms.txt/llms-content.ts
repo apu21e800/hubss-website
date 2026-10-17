@@ -103,9 +103,9 @@ function tail(d: Data): string[] {
     `- [Gallery](${url("/gallery")}): Photographs of decorative pavement across Canada: crosswalks, transit lanes, parks and paths, playgrounds and community branding.`,
   ];
   return [
-    "## Insights",
+    "## Projects",
     "",
-    `- [Insights](${url("/blog")}): Projects, guides and articles on Canadian decorative pavement.`,
+    `- [Projects](${url("/blog")}): Projects, guides and articles on Canadian decorative pavement.`,
     ...INSIGHTS_SECTIONS.map((s) => `- [${s.plural}](${url(`/blog/${s.slug}`)}): ${line(s.blurb)}`),
     "",
     "## Resources",
@@ -138,7 +138,7 @@ export async function buildLlmsTxt(): Promise<string> {
     "",
     "## Optional",
     "",
-    `- [Full text](${url("/llms-full.txt")}): Every product and application page's description and specifications, the StreetPrint questions and answers, and every Insights post.`,
+    `- [Full text](${url("/llms-full.txt")}): Every product and application page's description and specifications, the StreetPrint questions and answers, and every post.`,
     "",
   ].join("\n");
 }
@@ -190,7 +190,7 @@ export async function buildLlmsFullTxt(): Promise<string> {
     "## Applications",
     "",
     ...d.applications.flatMap(application),
-    "## Insights posts",
+    "## Posts",
     "",
     ...posts.map((p) => `- [${line(p.title)}](${url(`/blog/${p.slug}`)}): ${sectionFor(p.category).singular}, ${p.date}. ${line(p.excerpt)}`),
     "",

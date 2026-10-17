@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BLOG_NAME } from "@/lib/field-notes-taxonomy";
 import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
 import { ideaBook } from "@/lib/catalogue";
@@ -35,7 +36,7 @@ const footerApplications = FOOTER_APPLICATION_SLUGS.flatMap((slug) => {
 const companyLinks = [
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
-  { label: "Insights", href: "/blog" },
+  { label: BLOG_NAME, href: "/blog" },
   { label: "Resources", href: "/resources" },
   { label: ideaBook.short, href: ideaBook.href },
   { label: "Gallery", href: "/gallery" },

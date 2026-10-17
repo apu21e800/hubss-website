@@ -18,6 +18,7 @@ import ThemeToggle from "@/components/ui/ThemeToggle";
 import ChromeImg from "@/components/ui/ChromeImg";
 import { CHROME_MARKS, CHROME_PANELS } from "@/lib/chrome-images.mjs";
 import navInsights from "@/lib/nav-insights.json";
+import { BLOG_NAME } from "@/lib/field-notes-taxonomy";
 // Nothing the menus draw goes through /_next/image. Family and group photos
 // and Moose are ChromeImg (baked at build time); Insights photos are Sanity
 // CDN addresses (or, for the fallback cover, baked chrome files) written at
@@ -716,7 +717,7 @@ function InsightsMegaMenu() {
           ))}
         </div>
       </div>
-      <MenuFooter href="/blog" label="All Insights" topic="HUB systems">
+      <MenuFooter href="/blog" label={`All ${BLOG_NAME.toLowerCase()}`} topic="HUB systems">
         {book && <IdeaBookSlot />}
       </MenuFooter>
     </MegaShell>
@@ -1104,7 +1105,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
 
               {/* ── Insights: the three sections, and "All" ───────── */}
               <motion.div variants={menuSectionVariants} className="mt-2">
-                <MobileSectionHead label="Insights" href="/blog" active={section === "insights"} pathname={pathname} onClose={onClose} />
+                <MobileSectionHead label={BLOG_NAME} href="/blog" active={section === "insights"} pathname={pathname} onClose={onClose} />
                 {NAV_SECTIONS.map((s) => (
                   <MobileSectionRow key={s.key} section={s} pathname={pathname} onClose={onClose} />
                 ))}
@@ -1388,7 +1389,7 @@ export default function Nav() {
   const triggers: { panel: Panel; label: string }[] = [
     { panel: "products", label: "Products" },
     { panel: "applications", label: "Applications" },
-    { panel: "insights", label: "Insights" },
+    { panel: "insights", label: BLOG_NAME },
   ];
 
   // The current section, for the bar and the drawer (navSection above).

@@ -8,13 +8,13 @@ import BlogCard, { StoryLead, pickLead } from "@/components/blog/BlogCard";
 import RuleLabel from "@/components/blog/RuleLabel";
 import JsonLd from "@/components/ui/JsonLd";
 import { getAllPosts } from "@/lib/blog";
-import { INSIGHTS_SECTIONS } from "@/lib/field-notes-taxonomy";
+import { BLOG_NAME, INSIGHTS_SECTIONS } from "@/lib/field-notes-taxonomy";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Insights · Projects, Guides & Articles on Canadian Pavement",
+  title: `${BLOG_NAME} · Decorative Pavement Across Canada, Documented`,
   description:
-    "Canadian decorative pavement, documented: installations written up, specification guides and articles on crosswalks, transit lanes and stamped asphalt.",
+    "Decorative pavement projects across Canada, written up with the system on each, plus specification guides and articles on crosswalks, transit lanes and stamped asphalt.",
   slug: "blog",
 });
 
@@ -50,7 +50,7 @@ export default async function BlogPage() {
     "@context": "https://schema.org",
     "@type": "Blog",
     "@id": "https://hubss.com/blog#blog",
-    name: "HUB Surface Systems Insights",
+    name: `HUB Surface Systems ${BLOG_NAME}`,
     description:
       "Projects, specification guides and articles on decorative pavement, thermoplastic markings and coloured coatings in Canada.",
     url: "https://hubss.com/blog",
@@ -72,7 +72,7 @@ export default async function BlogPage() {
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: "https://hubss.com" },
-      { "@type": "ListItem", position: 2, name: "Insights", item: "https://hubss.com/blog" },
+      { "@type": "ListItem", position: 2, name: BLOG_NAME, item: "https://hubss.com/blog" },
     ],
   };
 
@@ -91,8 +91,9 @@ export default async function BlogPage() {
           front page): this page sat at x=104 with a 44px H1 while About,
           Gallery and Contact sat at x=112 with 56px. */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-16 sm:pb-24">
-        {/* Masthead: the title, and its one line beside it from lg. The
-            "Insights" eyebrow over it went: the title already says it. */}
+        {/* Masthead: the title, and its one line beside it from lg. No
+            eyebrow over it: the title already says it. Since 17 Oct 2026 the
+            page is Projects (BLOG_NAME): the work first, the reading beside it. */}
         <header className="mb-10 grid gap-y-4 sm:mb-12 lg:grid-cols-12 lg:items-end lg:gap-x-12">
           <h1
             className="font-display font-black text-balance lg:col-span-8"
@@ -104,11 +105,11 @@ export default async function BlogPage() {
               maxWidth: "24ch",
             }}
           >
-            Insights from the front lines of Canadian pavement
+            Projects across Canada, documented
           </h1>
           <p className="text-base leading-relaxed lg:col-span-4 lg:pb-1.5" style={{ color: "var(--text-secondary)", maxWidth: "44ch" }}>
-            Decorative pavement in Canada, documented: the projects, the specifications
-            and the service life behind them.
+            Where each job is, which system went down and how it holds up. With the
+            guides and articles for the people who specify the next one.
           </p>
         </header>
 
@@ -124,7 +125,7 @@ export default async function BlogPage() {
         {/* ── Front page. Server-rendered, so the lead photograph is in the
             first HTML and is the page's largest paint. */}
         {lead && (
-          <section aria-label="Latest from Insights" className="mb-16 sm:mb-24">
+          <section aria-label={`Latest ${BLOG_NAME.toLowerCase()}`} className="mb-16 sm:mb-24">
             <StoryLead post={lead} />
             {latest.length > 0 && (
               <>

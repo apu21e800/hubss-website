@@ -85,7 +85,7 @@ export const HOMEPAGE_COPY: HomepageCopy = {
     intro: "Read it here, save it to your phone, or have the printed copy mailed.",
   },
   insights: {
-    eyebrow: "Insights",
+    eyebrow: "Projects",
     heading: "How it goes in",
     headingAccent: "and how it holds up.",
     intro: "Installation guides, project write-ups, and the specification detail behind them.",

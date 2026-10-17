@@ -8,7 +8,7 @@ import LunchLearn from "@/components/sections/LunchLearn";
 import LunchLearnCard from "@/components/sections/LunchLearnCard";
 import JsonLd from "@/components/ui/JsonLd";
 import { LIVE_POSTS, getPost, getRelatedPosts, type Post } from "@/lib/blog";
-import { TYPE_BY_LABEL, sectionFor, type InsightsSection } from "@/lib/field-notes-taxonomy";
+import { BLOG_NAME, TYPE_BY_LABEL, sectionFor, type InsightsSection } from "@/lib/field-notes-taxonomy";
 import { PRODUCT_SLUGS, postFocus } from "@/components/blog/PostConversion";
 import SystemsInPost from "@/components/blog/SystemsInPost";
 import { buildMetadata } from "@/lib/seo";
@@ -243,7 +243,7 @@ export default async function BlogPostPage({ params }: Props) {
       name: "HUB Surface Systems",
       logo: { "@type": "ImageObject", url: "https://hubss.com/images/hub-official-logo.svg" },
     },
-    isPartOf: { "@type": "Blog", "@id": "https://hubss.com/blog#blog", name: "HUB Surface Systems Insights" },
+    isPartOf: { "@type": "Blog", "@id": "https://hubss.com/blog#blog", name: `HUB Surface Systems ${BLOG_NAME}` },
     mainEntityOfPage: { "@type": "WebPage", "@id": postUrl },
     url: postUrl,
     image: post.featuredImage
@@ -252,16 +252,18 @@ export default async function BlogPostPage({ params }: Props) {
   };
 
   // Breadcrumb passes through the section, so the trail matches the site's
-  // real shape and each section accumulates internal link equity.
+  // real shape and each section accumulates internal link equity. The blog
+  // and its first section are both Projects now (17 Oct 2026), so a project
+  // post's trail names it once.
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: "https://hubss.com" },
-      { "@type": "ListItem", position: 2, name: "Insights", item: "https://hubss.com/blog" },
-      { "@type": "ListItem", position: 3, name: section.plural, item: `https://hubss.com/blog/${section.slug}` },
-      { "@type": "ListItem", position: 4, name: post.title, item: postUrl },
-    ],
+      { name: "Home", item: "https://hubss.com" },
+      { name: BLOG_NAME, item: "https://hubss.com/blog" },
+      ...(section.plural === BLOG_NAME ? [] : [{ name: section.plural, item: `https://hubss.com/blog/${section.slug}` }]),
+      { name: post.title, item: postUrl },
+    ].map((c, i) => ({ "@type": "ListItem", position: i + 1, ...c })),
   };
 
   const hero = post.featuredImage;

@@ -161,13 +161,24 @@ Vercel — connected to GitHub, auto-deploys on push to main
   (`ideaBook`, lib/idea-book-*.ts, components/idea-book, IdeaBookBand,
   showCatalogue, /public/catalogue, `test:idea-book`, /product-book) keep
   the old words on purpose: labels change, URLs stay.
-- The blog is **Insights** (was Field Notes). Labels only: /blog URLs, the
+- The blog is **Projects** since 17 Oct 2026 (Vern: "instead of insights
+  call them Projects... !!! see top nav"); it was Insights from 25 Sep and
+  Field Notes before that. One source for the name: `BLOG_NAME` in
+  lib/field-notes-taxonomy.ts (the bar, the drawer, the footer, search, the
+  /blog masthead, breadcrumbs and llms.txt read it). Labels only: /blog URLs,
+  the section slugs (/blog/projects, /blog/guides, /blog/articles), the
   Sanity types (blogPost, storyIdea), the cron routes and env names are
-  unchanged. The "Blog" post type prints as "Article" (lib/field-notes-taxonomy.ts,
-  `badge`); its stored value stays "Blog".
+  unchanged, and so are the code names (InsightsMegaMenu, nav-insights.json,
+  the `insights` panel). The blog and its first section are both called
+  Projects: a project post's breadcrumb names it once, and /blog/projects
+  shows "All projects" above its H1 instead of a duplicate crumb. The "Blog"
+  post type prints as "Article" (lib/field-notes-taxonomy.ts, `badge`); its
+  stored value stays "Blog". Studio's homepage eyebrow for the section is
+  rewritten at render until scripts/studio-cleanup-2026-10-17.ts (change 3)
+  runs on Vern's PC.
 - Studio says it in plain words (15 Oct 2026; Vern: "what does not live mean?
   ... maybe better to just call it blog"): **Blog posts** (blogPost; the site
-  still calls the blog Insights), **Blog ideas** (storyIdea, was "Insights
+  calls the blog Projects), **Blog ideas** (storyIdea, was "Insights
   plan"), **Job photos for social** (fieldPost, was "From the field"; the
   stream keeps that name in logs), **Sent to Buffer** (socialLog, read only).
   The old "Projects (Map Pins)" list is off the sidebar and the Create menu

@@ -197,7 +197,7 @@ export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Prop
           className="mb-1 text-[11.5px] uppercase"
           style={{ color: "var(--accent-text)", fontFamily: "inherit", fontWeight: 700, letterSpacing: "0.2em", lineHeight: 1.5 }}
         >
-          Browse Insights
+          Browse projects, guides and articles
         </h2>
 
         {/* ── Sections, then search · system · sort, on one hairline  */}
@@ -229,8 +229,8 @@ export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Prop
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: "var(--text-hint)" }} />
               <input
                 type="text"
-                placeholder="Search Insights…"
-                aria-label="Search Insights"
+                placeholder="Search…"
+                aria-label="Search projects, guides and articles"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full pl-9 pr-11 rounded-lg text-sm"
@@ -270,7 +270,7 @@ export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Prop
               <select
                 value={sort}
                 onChange={(e) => { setSort(e.target.value as typeof sort); pushParams({ sort: e.target.value }); }}
-                aria-label="Sort Insights"
+                aria-label="Sort"
                 className="appearance-none pl-3 pr-8 rounded-lg text-sm cursor-pointer w-full"
                 style={selectStyle}
               >

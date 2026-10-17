@@ -411,8 +411,12 @@ export const products: Product[] = [
     // pothole hero (the problem ChipFill solves), zero branding in frame.
     // Gallery rebuilt to clean-only shots. Bank still thin — proper
     // finished-repair photography would be the right long-term fix.
-    imageUrl: "/images/products/chipfill/chipfill-road-repair.webp",
-    heroPosition: "center 60%",
+    // 17 Oct 2026: chipfill-application.jpg (1200px, the chips poured into
+    // the hole, the bag at the edge) replaces the 640px pothole render that
+    // could not fill a banner; the product page shows it over Studio's
+    // small hero (CODE_HERO_WIDTHS in app/products/[slug]/page.tsx).
+    imageUrl: "/images/products/chipfill/chipfill-application.jpg",
+    heroPosition: "center 62%",
     brandLogo: {
       src: "/images/products/chipfill/chipfill-logo.svg",
       alt: "ChipFill by HUB Surface Systems",

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BLOG_NAME } from "@/lib/field-notes-taxonomy";
 import PhotoImage from "@/components/ui/PhotoImage";
 import { getAllPosts } from "@/lib/blog";
 import { badgeFor } from "@/lib/field-notes-taxonomy";
@@ -45,7 +46,11 @@ export default async function FeaturedBlogPost({ copy = HOMEPAGE_COPY.insights }
         <div className="flex items-end justify-between mb-14">
           <div>
             <p className="gradient-text text-xs font-semibold tracking-[0.2em] uppercase mb-3">
-              {copy.eyebrow}
+              {/* Studio still holds the eyebrow the section had until 17 Oct
+                  2026 ("Insights"); it prints as the blog's name now (Vern:
+                  "instead of insights call them Projects"). Any other word
+                  Doug types wins. */}
+              {copy.eyebrow.trim() === "Insights" ? BLOG_NAME : copy.eyebrow}
             </p>
             <h2
               className="font-black"
@@ -77,9 +82,9 @@ export default async function FeaturedBlogPost({ copy = HOMEPAGE_COPY.insights }
               {copy.intro}
             </p>
           </div>
-          {/* "All Insights", as the phone button below says: it opens the whole
-              library, and "Articles" is also the name of one of its filters.
-              data-tap lifts it from 42px to the 44px touch floor on tablets. */}
+          {/* "All projects", as the phone button below says: it opens the whole
+              library (projects, guides and articles). data-tap lifts it from
+              42px to the 44px touch floor on tablets. */}
           <Link
             href="/blog"
             data-tap="44"
@@ -89,7 +94,7 @@ export default async function FeaturedBlogPost({ copy = HOMEPAGE_COPY.insights }
               color: "var(--text-secondary)",
             }}
           >
-            All Insights
+            All {BLOG_NAME.toLowerCase()}
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
@@ -253,7 +258,7 @@ export default async function FeaturedBlogPost({ copy = HOMEPAGE_COPY.insights }
             className="text-sm font-semibold px-6 py-3 rounded-lg inline-block border transition-all hover:border-orange-500/40 hover:text-[var(--text-primary)]"
             style={{ borderColor: "var(--border-color)", color: "var(--text-secondary)" }}
           >
-            All Insights
+            All {BLOG_NAME.toLowerCase()}
           </Link>
         </div>
 

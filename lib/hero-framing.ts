@@ -31,7 +31,7 @@ export const HERO_POSITION: Record<string, string> = {
   "/images/products/airmark/airmark-04.jpg": "12% 28%", // control tower, hangar and holding lines
   "/images/products/durashield/durashield-11.jpg": "75% 92%", // the driveway; keeps the car's plate and the house number out
   "/images/products/streetbondsr/streetbondsr-02.jpg": "45% 70%", // the path junction; shelters show on a phone
-  "/images/products/chipfill/chipfill-road-repair.webp": "50% 60%",
+  "/images/products/chipfill/chipfill-application.jpg": "50% 62%",
   "/images/products/aggrefill/aggrefill-02.jpg": "50% 50%",
   "/images/products/fast-patch/fastpatch-repaired.jpg": "50% 50%",
 

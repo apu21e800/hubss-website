@@ -82,6 +82,7 @@ export function hotspotPosition(photo: { hotspot?: Hotspot } | null | undefined)
  * wide-screen and phone cuts from whatever photo Studio holds.
  */
 export function sanityCrop(src: string, width: number, height: number, hotspot?: Hotspot, quality = 80): string {
+  if (sanityTurn(src)) return sanityLoader({ src, width, quality });
   const url = new URL(src);
   url.searchParams.set("w", String(width));
   url.searchParams.set("h", String(height));
@@ -103,13 +104,66 @@ export const isSanityImage = (src: string | undefined | null): boolean =>
   typeof src === "string" && src.startsWith(SANITY_CDN);
 
 /**
+ * Photos Studio holds on their side, turned upright at the CDN.
+ *
+ * Vern, 17 Oct 2026, on /applications/splash-pads: "fix sideways images ...
+ * site wide. this is not acceptable." Seven photographs were saved with their
+ * pixels turned and no orientation tag (the camera's was stripped somewhere
+ * before the files reached /public), so every copy was sideways: the folder,
+ * the Sanity asset the photo sync uploaded from it, every size the CDN cut.
+ * The files in /public are turned upright in the repo; the Sanity copies are
+ * turned here, by asset, with the CDN's `or` (90 is clockwise, as the
+ * `rotated-sheet` check showed), because re-uploading would mean the photo
+ * sync, and Studio's galleries have moved on since it last ran (Doug has
+ * added photos and the alt text differs): a run would put the folders back
+ * over his edits. If one of these is replaced in Studio, its new asset has a
+ * new name and the entry here simply stops matching.
+ *
+ * The CDN applies `w`/`h` to the photo BEFORE turning it, so a turned
+ * photo's width is asked for as `h` (checked 17 Oct 2026: or=90&h=600 on a
+ * 2400x1800 gives 600x800; or=90&w=600 gives 450x600).
+ */
+const TURNED: Record<string, 90 | 270> = {
+  "20a1b10d182d393b96800eb4b44743690bdf39f8-2400x1800.jpg": 90, // splash-pads-09
+  "1daaf19879724eb05f525bfc9d04351b6af5f06f-2400x1800.jpg": 90, // parks-paths-99 ("Where does rainwater go?")
+  "34108e645a4d31169a5f6bb3ea06d1152a3746d3-2400x1800.jpg": 90, // parks-paths-127
+  "8a3ba33c81bcdc3b2b97446a1a290af3c74c524d-2400x1800.jpg": 90, // parks-paths-130
+  "d6f51082dd91fe7271248abd12b6101771e7fe1d-2400x1800.jpg": 90, // parks-paths-92
+  "564e4ecd6759387d6282e539085ba26a4ac39b1e-2400x1350.jpg": 90, // traffic-patterns-xd-19
+  "f615365455ea7ca976f9433a2f98f65ee0112feb-1280x720.jpg": 270, // Waterloo Park from the air (decomark-17, traffic-patterns-03, crosswalks-31)
+};
+
+/** How far a Sanity photo is turned at the CDN: 0 for almost every photo. */
+export function sanityTurn(src: string | undefined | null): 0 | 90 | 270 {
+  if (!isSanityImage(src)) return 0;
+  const name = (src as string).split("?")[0].split("/").pop() ?? "";
+  return TURNED[name] ?? 0;
+}
+
+/**
+ * Sets the width a Sanity photo is served at. A turned photo's width is asked
+ * for as `h`, because the CDN scales before it turns. Only `fit=max` sizing
+ * is predictable with a turn (a `fit=crop` with `or` came back in odd sizes),
+ * so the crops below serve a turned photo whole instead of cut.
+ */
+function sized(url: URL, width: number): void {
+  const turn = sanityTurn(url.toString());
+  if (turn) {
+    url.searchParams.set("or", String(turn));
+    url.searchParams.set("h", String(width));
+  } else {
+    url.searchParams.set("w", String(width));
+  }
+}
+
+/**
  * next/image loader for Sanity's CDN. Pass it (through components/ui/PhotoImage)
  * for any src that isSanityImage: next/image then builds its srcset from these
  * URLs and never calls /_next/image.
  */
 export function sanityLoader({ src, width, quality }: { src: string; width: number; quality?: number }): string {
   const url = new URL(src);
-  url.searchParams.set("w", String(width));
+  sized(url, width);
   url.searchParams.set("q", String(quality ?? 75));
   url.searchParams.set("auto", "format");
   url.searchParams.set("fit", "max");
@@ -126,6 +180,7 @@ export function sanitySized(src: string, width: number, quality = 80): string {
  * auto-format because some social crawlers still mishandle WebP.
  */
 export function sanityOgImage(src: string): string {
+  if (sanityTurn(src)) return sanityLoader({ src, width: 1200, quality: 80 }).replace("auto=format", "fm=jpg");
   const url = new URL(src);
   url.searchParams.set("w", "1200");
   url.searchParams.set("h", "630");
@@ -142,7 +197,7 @@ export function sanityOgImage(src: string): string {
  */
 export function sanitySearchImage(src: string): string {
   const url = new URL(src);
-  url.searchParams.set("w", "1200");
+  sized(url, 1200);
   url.searchParams.set("q", "80");
   url.searchParams.set("fm", "webp");
   url.searchParams.set("fit", "max");
@@ -158,12 +213,14 @@ export function sanitySrcSet(src: string, widths = [828, 1200, 1920, 2400], qual
 export function toPhoto(img: SanityPhotoProjected | null | undefined, fallbackAlt: string): Photo | null {
   const src = img?.url?.trim();
   if (!src) return null;
+  // A turned photo is as tall as Studio says it is wide.
+  const turned = sanityTurn(src) !== 0;
   return {
     src,
     alt: img?.alt?.trim() || fallbackAlt,
     caption: img?.caption?.trim() || undefined,
-    width: img?.width ?? undefined,
-    height: img?.height ?? undefined,
+    width: (turned ? img?.height : img?.width) ?? undefined,
+    height: (turned ? img?.width : img?.height) ?? undefined,
     origin: img?.origin?.trim() || undefined,
     hotspot: hotspotOf(img),
     key: img?._key?.trim() || undefined,

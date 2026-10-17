@@ -161,10 +161,10 @@ export function TileLink({ tile, slot }: { tile: Tile; slot: { cls: string; size
           textShadow: "0 1px 2px rgba(0,0,0,0.5)",
         }}
       >
-        <span className={`font-semibold leading-snug text-white ${slot.lead ? "text-base sm:text-xl" : "text-[13px] sm:text-[15px]"}`}>
+        <span className={`font-semibold leading-snug text-white ${slot.lead ? "text-base sm:text-xl" : "text-[14.5px] sm:text-[15px]"}`}>
           {tile.place}
         </span>
-        <span className={`leading-snug ${slot.lead ? "text-[13px] sm:text-sm" : "text-[11.5px] sm:text-[13px]"}`} style={{ color: "rgba(255,255,255,0.85)" }}>
+        <span className={`leading-snug ${slot.lead ? "text-[14.5px] sm:text-sm" : "text-[12.5px] sm:text-[14.5px]"}`} style={{ color: "rgba(255,255,255,0.85)" }}>
           {tile.systems}
         </span>
       </span>
@@ -210,28 +210,19 @@ export default async function InstagramStrip({ copy = HOMEPAGE_COPY.onTheGround 
       id="follow"
       aria-labelledby="follow-heading"
       data-surface="paper"
-      className="py-24 lg:py-28"
+      className="section-padding"
       style={{ background: "var(--bg-primary)", borderTop: "1px solid var(--ink-05)" }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-10 md:mb-12">
-          <p className="gradient-text text-xs font-semibold tracking-[0.2em] uppercase mb-3">
+        <div className="mb-14 md:mb-16">
+          <p className="eyebrow mb-3">
             {copy.eyebrow}
           </p>
-          <h2
-            id="follow-heading"
-            className="font-black"
-            style={{
-              color: "var(--text-primary)",
-              fontSize: "clamp(2rem, 3.5vw, 3.2rem)",
-              lineHeight: 1.08,
-              letterSpacing: "-0.03em",
-            }}
-          >
+          <h2 id="follow-heading" className="h2-section mb-3" style={{ color: "var(--text-primary)" }}>
             {copy.heading}
             {copy.headingAccent && <> {copy.headingAccent}</>}
           </h2>
-          <p className="text-base mt-2 max-w-xl" style={{ color: "var(--text-secondary)" }}>
+          <p className="text-base font-light max-w-lg leading-relaxed" style={{ color: "var(--text-secondary)" }}>
             {copy.intro}
           </p>
         </div>

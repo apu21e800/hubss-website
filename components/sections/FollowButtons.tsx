@@ -65,7 +65,7 @@ export default function FollowButtons({ social }: { social: SocialAccounts }) {
               rel="noopener noreferrer"
               aria-label={ch.key === "instagram" ? `${ch.label}${handle ? `, ${handle}` : ""} (opens in a new tab)` : ch.label}
               title={ch.key === "instagram" && handle ? handle : undefined}
-              className="btn-ghost flex h-16 w-full flex-col items-center justify-center gap-1.5 rounded-lg bg-[var(--bg-card)] px-1 text-[11px] font-semibold md:h-11 md:w-auto md:flex-row md:gap-2 md:px-4 md:text-sm"
+              className="btn-ghost flex h-16 w-full flex-col items-center justify-center gap-1.5 rounded-lg bg-[var(--bg-card)] px-1 text-[12px] font-semibold md:h-11 md:w-auto md:flex-row md:gap-2 md:px-4 md:text-sm"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="flex-shrink-0">
                 <path d={ch.path} />

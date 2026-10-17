@@ -62,7 +62,7 @@ export default function StickyBar() {
         }}
       >
         {/* Brand caption — desktop only */}
-        <p className="hidden lg:block flex-1 text-[10px] uppercase tracking-[0.22em] font-semibold" style={{ color: "var(--ink-25)" }}>
+        <p className="hidden lg:block flex-1 text-[11px] uppercase tracking-[0.22em] font-semibold" style={{ color: "var(--ink-25)" }}>
           Canada&#39;s Decorative Pavement Specialists · Since 1999
         </p>
 
@@ -76,7 +76,7 @@ export default function StickyBar() {
             // (axe: aria-hidden-focus). tabIndex={-1} pulls it out of the tab
             // order to match what's actually on screen.
             tabIndex={visible ? undefined : -1}
-            className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 border text-[var(--text-primary)] px-5 text-[12px] font-bold tracking-[0.04em] transition-all whitespace-nowrap"
+            className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 border text-[var(--text-primary)] px-5 text-[13px] font-bold tracking-[0.04em] transition-all whitespace-nowrap"
             style={{
               borderColor: "var(--ink-20)",
               borderRadius: "6px",
@@ -96,7 +96,7 @@ export default function StickyBar() {
           <Link
             href="/lunch-learn"
             tabIndex={visible ? undefined : -1}
-            className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 text-white px-5 text-[12px] font-bold tracking-[0.04em] transition-colors whitespace-nowrap"
+            className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 text-white px-5 text-[13px] font-bold tracking-[0.04em] transition-colors whitespace-nowrap"
             style={{
               background: "#F97316",
               borderRadius: "6px",

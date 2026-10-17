@@ -40,7 +40,7 @@ export default function RequestIdeaBookPage() {
 
           <aside className="lg:pt-14">
             {cover && (
-              <div className="overflow-hidden rounded-2xl" style={{ border: "1px solid var(--border-color)", background: "var(--bg-card-neutral)" }}>
+              <div className="overflow-hidden rounded-xl" style={{ border: "1px solid var(--border-color)", background: "var(--bg-card-neutral)" }}>
                 {/* A plain img: the book's rasters are already the exact sizes
                     they are shown at and must not route through /_next/image. */}
                 <img
@@ -65,7 +65,7 @@ export default function RequestIdeaBookPage() {
                   <Link href={ideaBook.href} data-tap="44" className="inline-flex items-center min-h-11 sm:min-h-0 font-semibold underline" style={{ color: "var(--accent-text)" }}>
                     Read it online now
                   </Link>{" "}
-                  while you wait for the post.
+                  while you wait for the mail.
                 </p>
               )}
               {catalogue.download && (

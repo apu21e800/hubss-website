@@ -51,7 +51,7 @@ export const PRODUCT_NAMES = [
 export const PROPER_NAMES: readonly string[] = [
   ...PRODUCT_NAMES,
   // HUB, its sections and families
-  "HUB Surface Systems", "HUB", "Product Portfolio Book", "Insights", "Lunch & Learn", "Resources",
+  "HUB Surface Systems", "HUB", "Product Portfolio Book", "Projects", "Insights", "Lunch & Learn", "Resources",
   "Preformed Thermoplastics", "Stamped Asphalt", "Asphalt & Concrete Repair", "Coatings",
   "Bus & Bike Lanes", "Parks & Paths", "Ennis-Flint", "Integrated Paving Concepts",
   // programs, standards, days
@@ -350,7 +350,7 @@ const CHECKS: Check[] = [
   {
     rule: "insights",
     re: /\bfield[\s-]notes?\b/giu,
-    hit: `The blog is called Insights now: say “Insights” (or “article”), not “Field Notes”.`,
+    hit: `The blog is called Projects now: say “Projects” (or “article”), not “Field Notes”.`,
   },
 
   // ── glossary (docs/GLOSSARY.md, 17 Oct 2026) ──────────────────────────────

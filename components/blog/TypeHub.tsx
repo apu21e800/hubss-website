@@ -7,7 +7,7 @@ import BlogCard, { StoryLead, pickLead } from "@/components/blog/BlogCard";
 import LunchLearnTile from "@/components/blog/LunchLearnTile";
 import RuleLabel from "@/components/blog/RuleLabel";
 import { getAllPosts } from "@/lib/blog";
-import { INSIGHTS_SECTIONS, sectionFor, type InsightsSection } from "@/lib/field-notes-taxonomy";
+import { BLOG_NAME, INSIGHTS_SECTIONS, sectionFor, type InsightsSection } from "@/lib/field-notes-taxonomy";
 
 /**
  * An Insights section page: /blog/projects, /blog/guides, /blog/articles.
@@ -47,11 +47,11 @@ export default async function TypeHub({ section }: { section: InsightsSection })
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     "@id": `${hubUrl}#collection`,
-    name: `${section.plural} · HUB Surface Systems Insights`,
+    name: `${section.plural} · HUB Surface Systems ${BLOG_NAME}`,
     description: section.blurb,
     url: hubUrl,
     inLanguage: "en-CA",
-    isPartOf: { "@type": "Blog", "@id": "https://hubss.com/blog#blog", name: "HUB Surface Systems Insights" },
+    isPartOf: { "@type": "Blog", "@id": "https://hubss.com/blog#blog", name: `HUB Surface Systems ${BLOG_NAME}` },
     about: lanes.map((l) => ({ "@type": "Thing", name: l })),
     publisher: { "@id": "https://hubss.com/#organization" },
     mainEntity: {
@@ -66,14 +66,17 @@ export default async function TypeHub({ section }: { section: InsightsSection })
     },
   };
 
+  // The blog and its first section are both Projects (17 Oct 2026): that
+  // section's trail, and its eyebrow below, name it once.
+  const sameAsBlog = section.plural === BLOG_NAME;
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: "https://hubss.com" },
-      { "@type": "ListItem", position: 2, name: "Insights", item: "https://hubss.com/blog" },
-      { "@type": "ListItem", position: 3, name: section.plural, item: hubUrl },
-    ],
+      { name: "Home", item: "https://hubss.com" },
+      { name: BLOG_NAME, item: "https://hubss.com/blog" },
+      ...(sameAsBlog ? [] : [{ name: section.plural, item: hubUrl }]),
+    ].map((c, i) => ({ "@type": "ListItem", position: i + 1, ...c })),
   };
 
   const lead = pickLead(posts);
@@ -95,25 +98,21 @@ export default async function TypeHub({ section }: { section: InsightsSection })
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-28 pb-10">
         <nav aria-label="Breadcrumb" className="mb-1 flex items-center gap-2 text-xs font-semibold tracking-[0.2em] uppercase">
           <Link href="/blog" className="inline-flex items-center transition-colors hover:text-[var(--accent-text)]" style={{ color: "var(--accent-text-lg)", minHeight: 44 }}>
-            Insights
+            {sameAsBlog ? `All ${BLOG_NAME.toLowerCase()}` : BLOG_NAME}
           </Link>
-          <span aria-hidden="true" style={{ color: "var(--ink-30)" }}>/</span>
-          <span style={{ color: "var(--text-secondary)" }}>{section.plural}</span>
+          {!sameAsBlog && (
+            <>
+              <span aria-hidden="true" style={{ color: "var(--ink-30)" }}>/</span>
+              <span style={{ color: "var(--text-secondary)" }}>{section.plural}</span>
+            </>
+          )}
         </nav>
 
         {/* The standard landing H1 (48px at 1440) on the standard container
             (lg:px-8), as /blog and the other landing pages (QA D11, 30 Sep
             2026, re-applied 2 Oct 2026 on the editorial layout). */}
         <header className="mb-8 grid gap-y-3 lg:grid-cols-12 lg:items-end lg:gap-x-12">
-          <h1
-            className="font-display font-black lg:col-span-7"
-            style={{
-              color: "var(--text-primary)",
-              fontSize: "clamp(2rem, 3.4vw, 3rem)",
-              lineHeight: 1.02,
-              letterSpacing: "-0.035em",
-            }}
-          >
+          <h1 className="h1-page lg:col-span-7" style={{ color: "var(--text-primary)" }}>
             {section.plural}
           </h1>
           <p className="text-base leading-relaxed lg:col-span-5 lg:pb-1.5" style={{ color: "var(--text-secondary)", maxWidth: "44ch" }}>
@@ -124,7 +123,7 @@ export default async function TypeHub({ section }: { section: InsightsSection })
         {/* The same sections /blog filters by, as links on one hairline:
             every section is one click from every other, for readers and for
             crawlers. The brand gradient sits under the one you are in. */}
-        <nav aria-label="Insights sections" className="flex items-end gap-6 overflow-x-auto scrollbar-hide" style={{ borderBottom: "1px solid var(--ink-10)" }}>
+        <nav aria-label="Sections" className="flex items-end gap-6 overflow-x-auto scrollbar-hide" style={{ borderBottom: "1px solid var(--ink-10)" }}>
           {tabs.map((t) => {
             const active = t.key === section.key;
             return (
@@ -137,7 +136,7 @@ export default async function TypeHub({ section }: { section: InsightsSection })
               >
                 {t.label}
                 {/* From sm up, as on /blog: on a phone the four fit without them. */}
-                <span className="hidden text-[11px] font-semibold tabular-nums sm:inline" style={{ color: "var(--text-muted)" }}>
+                <span className="hidden text-[12px] font-semibold tabular-nums sm:inline" style={{ color: "var(--text-muted)" }}>
                   {t.count}
                 </span>
                 {active && (
@@ -182,7 +181,7 @@ export default async function TypeHub({ section }: { section: InsightsSection })
       {others.length > 0 && (
         <div style={{ background: "var(--bg-section-asphalt)", borderTop: "1px solid var(--border-color)" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
-            <RuleLabel className="mb-2">Also in Insights</RuleLabel>
+            <RuleLabel className="mb-2">More to read</RuleLabel>
             <div className="grid grid-cols-1 sm:grid-cols-2 sm:gap-x-8 lg:gap-x-12">
               {others.map((s) => (
                 <Link
@@ -198,7 +197,7 @@ export default async function TypeHub({ section }: { section: InsightsSection })
                     >
                       {s.plural}
                     </span>
-                    <span className="mt-1 block text-[14px] leading-snug" style={{ color: "var(--text-secondary)" }}>
+                    <span className="mt-1 block text-[15px] leading-snug" style={{ color: "var(--text-secondary)" }}>
                       {s.blurb}
                     </span>
                   </span>

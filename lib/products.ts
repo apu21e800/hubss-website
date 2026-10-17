@@ -87,7 +87,7 @@ export const products: Product[] = [
   {
     name: "TrafficPatternsXD",
     slug: "traffic-patterns-xd",
-    seoTitle: "TrafficPatternsXD heavy-duty preformed thermoplastic",
+    seoTitle: "TrafficPatternsXD heavy-duty thermoplastic",
     seoDescription: "Aggregate-reinforced preformed thermoplastic, 150 mil, stamped into the asphalt for the toughest crosswalks, entrances and transit corridors. 10+ years.",
     shortDesc: "Aggregate-reinforced preformed thermoplastic. Traffic tough, proven coast to coast.",
     imageUrl: "/images/products/traffic-patterns-xd/traffic-patterns-xd-03.jpg",
@@ -111,7 +111,7 @@ export const products: Product[] = [
   {
     name: "TrafficPatterns",
     slug: "traffic-patterns",
-    seoTitle: "TrafficPatterns preformed thermoplastic crosswalks",
+    seoTitle: "TrafficPatterns thermoplastic crosswalks",
     seoDescription: "Preformed thermoplastic crosswalks and entrance features made to your design at 125 mil, with anti-skid aggregate through the material. 8+ years.",
     shortDesc: "Preformed thermoplastic. You design it, we build it, our certified installers make it last.",
     imageUrl: "/images/products/traffic-patterns/traffic-patterns-01.jpg",
@@ -240,17 +240,15 @@ export const products: Product[] = [
     name: "MMAX",
     slug: "mmax",
     seoTitle: "MMAX MMA bike lane and bus lane markings",
-    seoDescription: "MMAX methyl methacrylate (MMA) area markings for bus lanes, bike lanes and transit priority lanes: traffic-ready in 45 to 60 minutes, 23 colours.",
+    seoDescription: "MMAX methyl methacrylate (MMA) area markings for bus lanes, bike lanes and transit priority lanes: traffic-ready in about an hour, 23 colours.",
     shortDesc: "MMA area markings. Fast installation. Built for tough environments.",
     imageUrl: "/images/products/mmax/mmax-01.jpg",
     gallery: gallery("mmax", "mmax", 33),
-    description: "MMAX is a methyl methacrylate (MMA) area marking: a two-part resin with hard aggregate and colourfast pigment, for red bus lanes, green bike lanes, transit priority lanes and traffic calming. It cures traffic-ready in 45–60 minutes, so an active corridor is installed with minimal community disruption. The aggregate gives it a skid-resistant surface, and it applies at +3°C and rising, which matters in a Canadian season. Available in 8 standard and 15 premium colours, for dedicated lanes, lane delineation and traffic-calming treatments.",
+    description: "MMAX is a methyl methacrylate (MMA) area marking: a two-part resin with hard aggregate and colourfast pigment, for red bus lanes, green bike lanes, transit priority lanes and traffic calming. It is traffic-ready in about an hour, so an active corridor is marked in one overnight closure. The aggregate gives it grip, and it goes down from 3°C and rising, which matters in a Canadian season. Eight standard and fifteen premium colours.",
     specs: [
       { label: "Material", value: "Methyl methacrylate (MMA) resin" },
       { label: "Cure", value: "45–60 min · traffic-ready" },
       { label: "Traction", value: "Embedded aggregate, skid-resistant" },
-      { label: "Min. temp", value: "+3°C and rising" },
-      { label: "Colours", value: "8 standard + 15 premium" },
     ],
     // Expanded per Vernon: bike lanes, bus lanes, BRT corridors (→bus-lanes also), crosswalks, traffic-calming.
     // 28 Sep 2026 (pa#31): crosswalks out. The Crosswalks spread does not specify MMAX, its page never
@@ -260,7 +258,7 @@ export const products: Product[] = [
   {
     name: "StreetBondSR",
     slug: "streetbondsr",
-    seoTitle: "StreetBondSR solar reflective pavement coating",
+    seoTitle: "StreetBondSR solar reflective coating",
     seoDescription: "StreetBondSR is StreetBond formulated to reflect: twelve colours with a solar reflectance of 0.33 or higher, for the LEED v5 heat island credit.",
     shortDesc: "Solar reflective coating. Mitigating the urban heat island effect.",
     imageUrl: "/images/products/streetbondsr/streetbondsr-02.jpg",
@@ -331,7 +329,6 @@ export const products: Product[] = [
       { label: "Surfaces", value: "Asphalt" },
       { label: "Chemical resistance", value: "Fuel, oil, de-icing agents" },
       { label: "Solar reflectance", value: "Optional (SR Gray 0.35 on the 2026 colour card)" },
-      { label: "Purpose", value: "Preserves and protects asphalt" },
     ],
     // Expanded per Vernon: pedestrian areas, residential roadways, heat-island mitigation surfaces.
     // 28 Sep 2026 (pa#31): pedestrian-safety out (not in that spread's SPECIFY); Townhomes, whose spread
@@ -341,7 +338,7 @@ export const products: Product[] = [
   {
     name: "AirMark",
     slug: "airmark",
-    seoTitle: "AirMark preformed thermoplastic airfield marking",
+    seoTitle: "AirMark airfield marking thermoplastic",
     seoDescription: "AirMark is preformed thermoplastic for airfield markings on taxiways, aprons and other non-runway surfaces. Retroreflective, applied by certified crews.",
     // 28 Sep 2026 (QA pa#12, pa#36): "Used in Canada's busiest airports" is in no HUB document (the
     // AirMark brochure in /public/docs names no airport or country), so it is gone from the line and the
@@ -354,15 +351,15 @@ export const products: Product[] = [
     // taxiways, hold positions, aprons, ramps, parking and tie-down, vehicle roadways; fuels, lubricants
     // and de-icers), so they are gone; the colours are the sheet's five.
     description: "AirMark is preformed thermoplastic for airfield markings on taxiways, aprons, hold positions and other non-runway surfaces. Glass beads are embedded through the full cross-section of the material, so retroreflectivity holds as the surface wears. Certified crews heat-apply it, and it resists aviation fuels, lubricants and de-icers. It is specified for taxiway markings, hold positions, apron and ramp markings, aircraft parking and tie-down positions, and airside vehicle roadways.",
+    // Only what the paragraph does not say (copy review, 17 Oct 2026): the
+    // uses, the beads and the crews are in the text twenty pixels above.
     specs: [
-      { label: "Application", value: "Taxiways, aprons, hold positions, non-runway airfield surfaces" },
       { label: "Material", value: "Preformed thermoplastic" },
-      { label: "Retroreflectivity", value: "Glass beads through the full cross-section" },
       { label: "Colours", value: "Five standard: white, yellow, red, black, pink" },
       { label: "Resists", value: "Aviation fuels, lubricants, de-icers" },
       // No HUB or PPG document gives AirMark a service life in years, so the sheet shows none
       // (until 17 Oct 2026 it said "Multi-year, no annual repainting").
-      { label: "Installation", value: "Heat application by certified crews" },
+      { label: "Installation", value: "Heat-applied, bonds to the surface" },
     ],
     // Vernon: taxiways, aprons, helipads, holding-position signs — airfield surfaces.
     relatedApplications: ["airports", "regulatory-markings"],
@@ -370,7 +367,7 @@ export const products: Product[] = [
   {
     name: "PreMark",
     slug: "premark",
-    seoTitle: "PreMark preformed thermoplastic road symbols",
+    seoTitle: "PreMark thermoplastic road symbols",
     seoDescription: "PreMark is preformed thermoplastic for arrows, stop bars, legends and bike symbols, pre-cut to specification and heat-applied without stencils.",
     shortDesc: "Road marking symbols. Arrows. Stop bars. Legends. Bike symbols. Custom.",
     imageUrl: "/images/products/premark/premark-01.jpg",
@@ -411,8 +408,12 @@ export const products: Product[] = [
     // pothole hero (the problem ChipFill solves), zero branding in frame.
     // Gallery rebuilt to clean-only shots. Bank still thin — proper
     // finished-repair photography would be the right long-term fix.
-    imageUrl: "/images/products/chipfill/chipfill-road-repair.webp",
-    heroPosition: "center 60%",
+    // 17 Oct 2026: chipfill-application.jpg (1200px, the chips poured into
+    // the hole, the bag at the edge) replaces the 640px pothole render that
+    // could not fill a banner; the product page shows it over Studio's
+    // small hero (CODE_HERO_WIDTHS in app/products/[slug]/page.tsx).
+    imageUrl: "/images/products/chipfill/chipfill-application.jpg",
+    heroPosition: "center 62%",
     brandLogo: {
       src: "/images/products/chipfill/chipfill-logo.svg",
       alt: "ChipFill by HUB Surface Systems",
@@ -428,11 +429,11 @@ export const products: Product[] = [
     description: "ChipFill is thermoplastic in small chips: poured into the prepared hole, levelled and heated with a propane torch, so it needs no specialized equipment and no hot-mix plant. Once heated, it conforms to the shape of the damage and bonds to the surrounding asphalt or concrete, sealing out the water that drives freeze-thaw damage. It can be installed year-round in any weather, and the lane reopens to traffic within minutes. It is used for patrol patching, emergency repairs, utility cuts and edge joints on roads, parking lots, sidewalks and pathways.",
     specs: [
       { label: "Type", value: "Thermoplastic repair chips, heated in place" },
-      { label: "Application", value: "Heat torch, no specialized equipment required" },
-      { label: "Substrate", value: "Asphalt and concrete" },
-      { label: "Weather", value: "Year-round, all-conditions deployment" },
-      { label: "Cure", value: "Rapid set: minutes to reopen to traffic" },
-      { label: "Use case", value: "Smaller potholes, cracks, joints, surface defects" },
+      { label: "Equipment", value: "A propane torch" },
+      { label: "Surfaces", value: "Asphalt and concrete" },
+      { label: "Weather", value: "Any, year-round" },
+      { label: "Back in service", value: "Minutes" },
+      { label: "Best for", value: "Smaller potholes, cracks, joints" },
     ],
     // ChipFill/AggreFill/Fast Patch DPR — pothole + crack repair across all paved surfaces.
     // One-way on purpose (pa#31, 28 Sep 2026): no Product Book spread specifies a repair product, so the
@@ -473,12 +474,12 @@ export const products: Product[] = [
     // Cut to four sentences, 28 Sep 2026 (QA pa#36).
     description: "AggreFill is a pre-coated aggregate filler used with ChipFill to permanently repair larger potholes: deep road failures, parking lot craters, industrial-site damage and utility cuts. Where the damage is too deep or wide for ChipFill alone, AggreFill fills the void and ChipFill bonds the aggregate and seals the repair flush. The system goes in cold and is finished with a heat torch, bonding to the surrounding asphalt or concrete. Like ChipFill on its own, it can be installed year-round in any weather, and the lane reopens to traffic within minutes.",
     specs: [
-      { label: "Type", value: "Pre-coated aggregate filler, paired with ChipFill" },
-      { label: "Application", value: "Cold-applied aggregate + heat-torch ChipFill matrix" },
-      { label: "Substrate", value: "Asphalt and concrete" },
-      { label: "Repair size", value: "Potholes too deep or wide for ChipFill alone" },
-      { label: "Cure", value: "Rapid set: minutes to reopen to traffic" },
-      { label: "Weather", value: "Year-round, all-conditions deployment" },
+      { label: "Type", value: "Pre-coated aggregate, used with ChipFill" },
+      { label: "How it goes in", value: "Poured cold, finished with a torch and ChipFill" },
+      { label: "Surfaces", value: "Asphalt and concrete" },
+      { label: "Best for", value: "Potholes too deep or wide for ChipFill alone" },
+      { label: "Back in service", value: "Minutes" },
+      { label: "Weather", value: "Any, year-round" },
     ],
     relatedApplications: ["parking-lots", "residential-driveways", "parks-paths", "commercial-spaces", "townhomes"],
   },
@@ -513,13 +514,11 @@ export const products: Product[] = [
     // all three repair products stating both.
     description: "Fast Patch DPR is a distressed pavement repair material for asphalt and concrete: a pourable polymer blend of recycled and renewable materials for high-strength repairs to potholes, spalls, joints, wheel paths and utility cuts. With minimal site preparation, a repair is back in service in about an hour at 21°C, and the optional Fast Patch Kicker accelerator shortens the cure in cooler conditions so the work can go on year-round. The repair is permanent, bonding to the surrounding pavement, and freeze-thaw resistant for colder climates. Because it is odourless and 100% solids, it can be used indoors, on warehouse floors, as well as on roads, parking lots, sidewalks and utility cuts.",
     specs: [
-      { label: "Type", value: "Polymer-blend distressed pavement repair" },
-      { label: "Composition", value: "Recycled and renewable polymer matrix" },
+      { label: "Type", value: "Pourable polymer-blend pavement repair" },
+      { label: "Made from", value: "Recycled and renewable polymers" },
       { label: "Return to service", value: "About 1 hour at 21°C" },
-      { label: "Cold weather", value: "Compatible with Fast Patch Kicker accelerator" },
-      { label: "Substrate", value: "Asphalt and concrete: roads, parking lots, sidewalks, warehouses" },
-      { label: "Odour", value: "Odourless, suitable for indoor applications" },
-      { label: "Resilience", value: "Freeze-thaw resistant, for colder climates" },
+      { label: "Cold weather", value: "Fast Patch Kicker accelerator shortens the cure" },
+      { label: "Surfaces", value: "Asphalt and concrete, indoors too" },
     ],
     relatedApplications: ["parking-lots", "residential-driveways", "parks-paths", "commercial-spaces", "townhomes"],
   },

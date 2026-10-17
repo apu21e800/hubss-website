@@ -13,13 +13,11 @@ export const TRUSTED_BY = [
   "City of Vancouver",
   "University of British Columbia",
   "City of Ottawa",
-  "City of Calgary",
   "City of Brampton",
   "City of Mississauga",
   "TransLink",
   "City of Surrey",
   "City of Edmonton",
-  "City of Winnipeg",
   "City of Burnaby",
   "City of Richmond Hill",
 ];
@@ -44,7 +42,7 @@ export default function TrustedByMarquee() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <p
-          className="text-[10px] font-bold tracking-[0.22em] uppercase text-center"
+          className="text-[11px] font-bold tracking-[0.22em] uppercase text-center"
           style={{ color: "var(--ink-50)" }}
         >
           Trusted by

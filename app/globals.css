@@ -485,6 +485,19 @@
 @theme inline {
   --font-sans:    var(--font-inter);   /* body → Inter */
   --font-display: var(--font-geist);   /* headings → Geist */
+
+  /* The type scale, one step up (17 Oct 2026; Vern: "a lot of the text is
+     looking too small now ... improve readability, site wide"). Tailwind's
+     text-xs/sm/base are 12/14/16px by default; here they are 13/15/17px with
+     a little more leading, so every label, card line and paragraph set with
+     a utility grows together. The arbitrary px sizes in the components were
+     raised the same step by hand. */
+  --text-xs: 0.8125rem;
+  --text-xs--line-height: 1.5;
+  --text-sm: 0.9375rem;
+  --text-sm--line-height: 1.55;
+  --text-base: 1.0625rem;
+  --text-base--line-height: 1.65;
 }
 
 /* clip, not hidden: `overflow-x: hidden` on html and body made body a scroll
@@ -495,6 +508,49 @@
 html {
   overflow-x: hidden;
   overflow-x: clip;
+  /* In-page links glide instead of jumping (17 Oct 2026, Vern: the hero's
+     "See the work" felt janky: it teleported 6,000px to the map). The
+     reduced-motion block below sets this back to auto. scroll-padding keeps
+     an anchor's top clear of the fixed bar. */
+  scroll-behavior: smooth;
+  scroll-padding-top: 84px;
+}
+
+/* ─── Motion tokens (17 Oct 2026) ─────────────────────────────────────────
+   One ease and three durations for the whole site, so a hover, a panel and
+   a card all move the same way. --ease-out is the "settle" curve (fast
+   start, soft landing); --ease-in-out for things that move away and back. */
+:root {
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-1: 160ms;
+  --dur-2: 260ms;
+  --dur-3: 420ms;
+  /* The one orange fill, for every button that is orange. */
+  --accent-gradient: linear-gradient(135deg, #F97316 0%, #EA8C16 100%);
+}
+
+/* Tailwind 4's preflight no longer gives <button> the hand cursor, and
+   nothing here put it back: every button on the site showed the arrow
+   while every link showed the hand (interaction review, 17 Oct 2026). */
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  summary {
+    cursor: pointer;
+  }
+}
+
+/* iOS Safari zooms the page when a focused field's text is under 16px, and
+   stays zoomed after the keyboard closes. Every form but the contact form
+   was 13 to 15px (phone review, 17 Oct 2026). On a touch screen a field is
+   never smaller than 16px; laptops keep the designed size. */
+@media (pointer: coarse) and (max-width: 1023px) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  select,
+  textarea {
+    font-size: max(1em, 16px);
+  }
 }
 
 body {
@@ -528,6 +584,281 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: 0.01em;
   color: var(--text-secondary);
   line-height: 1.5;
+}
+
+/* ─── The type system (17 Oct 2026) ──────────────────────────────────────
+   The uniformity pass measured six H1 sizes, eleven H2 sizes and eleven
+   eyebrow styles across 22 pages. These classes are the whole scale; a
+   page sets nothing else on a heading. Unlayered and after the heading
+   base above, so they win over it and over Tailwind's utilities.
+
+   .h1-page   hubs, landing pages, forms, legal: 48px at 1440
+   .h1-hero   the name on a photo hero (product, application, post, About): 60px
+   .h2-section  a section's heading: 40px
+   .h2-sub    a sub-section inside a page: 28px
+   .eyebrow   the small uppercase label above a heading, flat accent;
+              .eyebrow-photo on a photograph (cream), .eyebrow-muted for a date
+   .link-arrow  a text link with an arrow: the arrow slides on hover */
+.h1-page {
+  font-size: clamp(2rem, 3.4vw, 3rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  font-weight: 800;
+}
+.h1-hero {
+  font-size: clamp(2.25rem, 5vw, 3.75rem);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  font-weight: 800;
+}
+.h2-section {
+  font-size: clamp(1.75rem, 2.8vw, 2.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  font-weight: 800;
+}
+.h2-sub {
+  font-size: clamp(1.375rem, 2vw, 1.75rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  font-weight: 800;
+}
+.eyebrow {
+  font-family: var(--font-inter), "Inter", system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  color: var(--accent-text);
+}
+.eyebrow-photo {
+  color: rgba(255, 250, 245, 0.92);
+}
+.eyebrow-muted {
+  color: var(--text-muted);
+}
+/* "Skip to content" (components/SkipLink.tsx): off screen until it has
+   keyboard focus, then a pill under the bar's left edge. */
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 10001;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: var(--accent-gradient);
+  color: var(--on-accent);
+  font-size: 15px;
+  font-weight: 700;
+  transform: translateY(-200%);
+  opacity: 0;
+  transition: transform var(--dur-1) var(--ease-out), opacity var(--dur-1) var(--ease-out);
+}
+.skip-link:focus-visible {
+  transform: none;
+  opacity: 1;
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+/* The line under the bar while the next page loads (components/NavigationProgress.tsx).
+   It creeps to 80% over two seconds, then finishes and fades on arrival. */
+.nav-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 0;
+  background: var(--accent-gradient);
+  z-index: 10000;
+  opacity: 0;
+  pointer-events: none;
+  transition: none;
+}
+.nav-progress[data-state="loading"] {
+  opacity: 1;
+  width: 82%;
+  transition: width 2200ms cubic-bezier(0.1, 0.6, 0.2, 1);
+}
+.nav-progress[data-state="done"] {
+  opacity: 0;
+  width: 100%;
+  transition: width var(--dur-1) var(--ease-out), opacity var(--dur-2) var(--ease-out) var(--dur-1);
+}
+
+/* The bar's items: resting colour from --nav-c (set inline), hover orange.
+   An inline `color` would beat the hover class (17 Oct 2026). */
+.nav-item {
+  color: var(--nav-c, var(--ink-85));
+}
+.nav-item:hover {
+  color: var(--accent-text);
+}
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-height: 44px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--accent-text);
+  transition: color var(--dur-1) var(--ease-out);
+}
+.link-arrow svg {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  transition: transform var(--dur-1) var(--ease-out);
+}
+.link-arrow:hover {
+  color: var(--text-primary);
+}
+.link-arrow:hover svg {
+  transform: translateX(2px);
+}
+.link-arrow-sm {
+  min-height: 0;
+  font-size: 13px;
+}
+.group:hover .link-arrow svg {
+  transform: translateX(2px);
+}
+
+/* ─── The chip (17 Oct 2026) ────────────────────────────────────────────
+   A filter pill: the one rounded-full control on the site. Selected is the
+   orange fill; the count inside it reads at full contrast either way. */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-height: 44px;
+  padding: 0 1rem;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--text-body);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  transition: background-color var(--dur-1) var(--ease-out), border-color var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out);
+}
+.chip:hover {
+  border-color: var(--ink-30);
+  color: var(--text-primary);
+}
+.chip[aria-pressed="true"],
+.chip[aria-current="true"] {
+  background: var(--accent-gradient);
+  border-color: transparent;
+  color: var(--on-accent);
+}
+.chip .chip-count {
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  padding: 1px 7px;
+  border-radius: 9999px;
+  background: var(--ink-08);
+  color: var(--text-secondary);
+}
+.chip[aria-pressed="true"] .chip-count {
+  background: rgba(0, 0, 0, 0.22);
+  color: var(--on-accent);
+}
+
+/* The segmented control (In-person / Virtual / Either): grey at rest, a
+   hover, the orange wash when chosen. The hover was missing and the colours
+   were inline (uniformity pass, 17 Oct 2026). */
+.segment {
+  min-height: 44px;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  background: var(--ink-05);
+  border: 1px solid var(--ink-10);
+  color: var(--ink-65);
+  transition: background-color var(--dur-1) var(--ease-out), border-color var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out), transform 60ms;
+}
+.segment:hover {
+  background: var(--ink-08);
+  border-color: var(--ink-20);
+  color: var(--text-primary);
+}
+.segment:active {
+  transform: scale(0.97);
+}
+.segment[aria-pressed="true"] {
+  background: rgba(249, 115, 22, 0.16);
+  border-color: rgba(249, 115, 22, 0.5);
+  color: var(--accent-text);
+}
+
+/* A field the visitor has filled wrongly shows it as soon as they leave it
+   (:user-invalid, after interaction only), in the site's own red; before
+   this the first word came from the browser's bubble on submit (interaction
+   review, 17 Oct 2026). A ring, not a border: the fields set their borders
+   inline. */
+input:user-invalid,
+textarea:user-invalid,
+select:user-invalid {
+  box-shadow: 0 0 0 1.5px rgba(239, 68, 68, 0.7);
+}
+
+/* FAQ disclosures (components/products/ProductFaq.tsx, LunchLearnFunnel.tsx):
+   the answer eases open instead of snapping, in browsers that animate
+   details (Chrome 131+); elsewhere it opens as before. */
+.faq::details-content {
+  height: 0;
+  overflow: clip;
+  transition: height var(--dur-2) var(--ease-out), content-visibility var(--dur-2) allow-discrete;
+}
+.faq[open]::details-content {
+  height: auto;
+}
+@supports (interpolate-size: allow-keywords) {
+  .faq { interpolate-size: allow-keywords; }
+}
+
+/* The document row's download square (components/sections/DocumentDownloads.tsx,
+   as /resources draws it): orange tint, darker under the pointer. */
+.doc-download {
+  color: var(--accent-text-lg);
+  background: rgba(249, 115, 22, 0.08);
+  border: 1px solid rgba(249, 115, 22, 0.18);
+  transition: background-color var(--dur-1) var(--ease-out), border-color var(--dur-1) var(--ease-out);
+}
+.doc-download:hover {
+  background: rgba(249, 115, 22, 0.16);
+  border-color: rgba(249, 115, 22, 0.4);
+}
+
+/* ─── The card (17 Oct 2026) ────────────────────────────────────────────
+   One card for products, applications, posts and templates: radius 12, a
+   hairline, no resting shadow (the home systems cards wore a dark halo on
+   the cream page), and one hover: a 2px lift, the orange hairline, the
+   photo at 1.03. The uniformity pass found two radii, five lifts and four
+   photo scales. */
+.card {
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  transition:
+    transform var(--dur-2) var(--ease-out),
+    border-color var(--dur-2) var(--ease-out),
+    box-shadow var(--dur-2) var(--ease-out);
+}
+.card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(249, 115, 22, 0.45);
+}
+.card .card-photo {
+  transition: transform var(--dur-3) var(--ease-out);
+}
+.card:hover .card-photo {
+  transform: scale(1.03);
+}
+@media (prefers-reduced-motion: reduce) {
+  .card:hover { transform: none; }
+  .card:hover .card-photo { transform: none; }
 }
 
 /* Card subheadings */
@@ -670,18 +1001,56 @@ p {
 .btn-accent,
 .btn-ghost {
   transition:
-    background-color 150ms ease,
-    border-color 150ms ease,
-    box-shadow 150ms ease,
-    filter 150ms ease,
-    color 150ms ease;
+    background-color var(--dur-1) var(--ease-out),
+    border-color var(--dur-1) var(--ease-out),
+    box-shadow var(--dur-2) var(--ease-out),
+    filter var(--dur-1) var(--ease-out),
+    color var(--dur-1) var(--ease-out),
+    transform var(--dur-2) var(--ease-out);
+  /* One size (17 Oct 2026; the uniformity pass found the orange button in
+     eight shapes, 42 to 60px tall, radius 8, 12 or a pill, weight 600 or
+     700). 44px, the touch floor, radius 8, 15px bold. .btn-lg is the hero's,
+     .btn-sm the bar's; nothing else resizes a button. Unlayered, so an
+     element's own py-3 or rounded-xl loses to this on purpose. */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
 }
 .btn-accent {
+  background: var(--accent-gradient);
+  color: var(--on-accent);
   box-shadow: var(--btn-shadow, 0 0 #0000);
+}
+.btn-lg {
+  min-height: 52px;
+  padding: 0 1.75rem;
+}
+.btn-sm {
+  min-height: 40px;
+  padding: 0 1rem;
+}
+.btn-block {
+  display: flex;
+  width: 100%;
 }
 .btn-accent:hover {
   filter: brightness(1.08);
-  box-shadow: var(--btn-shadow, 0 0 #0000), 0 8px 28px rgba(249, 115, 22, 0.38);
+  transform: translateY(-1px);
+  box-shadow: var(--btn-shadow, 0 0 #0000), 0 10px 30px rgba(249, 115, 22, 0.36);
+}
+.btn-accent:active,
+.btn-ghost:active {
+  transform: translateY(0) scale(0.985);
+  transition-duration: 60ms;
 }
 .btn-ghost {
   border: 1px solid var(--ink-20);
@@ -732,14 +1101,14 @@ p {
   --tw-prose-th-borders: var(--border-color);
   --tw-prose-td-borders: var(--border-subtle);
   color: var(--text-body);
-  font-size: 1rem;
-  line-height: 1.85;
+  font-size: 1.0625rem;
+  line-height: 1.8;
   font-variant-ligatures: common-ligatures;
 }
 
 /* Opening paragraph — slightly elevated */
 .blog-prose > p:first-of-type {
-  font-size: 1.075rem;
+  font-size: 1.15rem;
   color: var(--text-body);
   line-height: 1.8;
 }
@@ -890,6 +1259,23 @@ p {
   border-bottom: 1px solid var(--border-color);
   color: var(--text-body);
   vertical-align: top;
+}
+
+/* On a phone a three-column table has to fit 358px: headings wrap and the
+   cells tighten. With nowrap headings the "PreMark thermoplastic" column of
+   the line-painting guide sat off screen with no cue (phone review, 17 Oct
+   2026). */
+@media (max-width: 639px) {
+  .blog-prose th {
+    white-space: normal;
+  }
+  .blog-prose th,
+  .blog-prose td {
+    padding: 0.6rem 0.65rem;
+  }
+  .blog-prose table {
+    font-size: 0.9rem;
+  }
 }
 
 .blog-prose tr:nth-child(even) td {
@@ -1237,7 +1623,7 @@ html {
 .hero-book:hover, .hero-book:focus-visible { border-color: rgba(249, 115, 22, 0.9); background: rgba(8, 10, 14, 0.74); transform: translateY(-1px); }
 .hero-book:focus-visible { outline: 2px solid #F97316; outline-offset: 2px; }
 .hero-book img { width: 44px; height: 44px; flex: none; border-radius: 5px; object-fit: cover; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45); }
-.hero-book-kicker { display: block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-soft-text); line-height: 1.3; }
+.hero-book-kicker { display: block; font-size: 11.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-soft-text); line-height: 1.3; }
 .hero-book-line { display: flex; align-items: center; gap: 6px; margin-top: 3px; font-size: 15px; font-weight: 700; line-height: 1.2; color: #fff; }
 .hero-book:hover .hero-book-line svg { transform: translateX(2px); }
 .hero-book-line svg { transition: transform 0.2s ease; }

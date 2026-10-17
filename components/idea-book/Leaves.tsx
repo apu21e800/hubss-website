@@ -483,7 +483,7 @@ export function LeafView({ leaf, index, settings, priority }: { leaf: Leaf; inde
             <p className="ib-stats">{leaf.stats}</p>
             <p className="ib-body">{leaf.line}</p>
             <div className="ib-cover-actions">
-              <Link href="/contact" className="ib-btn">Send a project enquiry</Link>
+              <Link href="/contact" className="ib-btn">Send us the project</Link>
               <Link href={ideaBook.requestHref} className="ib-btn ib-btn-ghost">Request the printed copy</Link>
             </div>
           </div>

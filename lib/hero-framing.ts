@@ -21,9 +21,9 @@ import { hotspotPosition, type Hotspot } from "@/lib/photos";
 export const HERO_POSITION: Record<string, string> = {
   // ── Products ────────────────────────────────────────────────────────────────
   "/images/products/traffic-patterns/traffic-patterns-87.jpg": "60% 0%", // veterans' heads and the maple leaf
-  "/images/applications/crosswalks/crosswalks-114.png": "50% 45%", // TrafficPatternsXD: brick walkway, shelter above
+  "/images/applications/crosswalks/crosswalks-114.png": "50% 28%", // TrafficPatternsXD: brick walkway, shelter above; 28% keeps the walker at the top edge whole (17 Oct 2026)
   "/images/products/streetprint/streetprint-86.jpg": "50% 55%", // the gate stays centred on a phone
-  "/images/products/streetbond/streetbond-19.jpg": "55% 40%", // red walkway, railing and cranes
+  "/images/products/streetbond/streetbond-19.jpg": "60% 72%", // red walkway, railing and cranes; 72% gives the frame to the coating, not the sky (17 Oct 2026)
   "/images/products/mmax/mmax-04.jpg": "55% 75%", // BUS ONLY legend; the tower shows on a phone
   "/images/applications/parks-paths/parks-paths-70.jpg": "50% 74%", // DecoMark: portrait photo, the medallion
   "/images/applications/traffic-calming/traffic-calming-03.jpg": "50% 70%", // DuraTherm: the yellow pattern
@@ -31,7 +31,7 @@ export const HERO_POSITION: Record<string, string> = {
   "/images/products/airmark/airmark-04.jpg": "12% 28%", // control tower, hangar and holding lines
   "/images/products/durashield/durashield-11.jpg": "75% 92%", // the driveway; keeps the car's plate and the house number out
   "/images/products/streetbondsr/streetbondsr-02.jpg": "45% 70%", // the path junction; shelters show on a phone
-  "/images/products/chipfill/chipfill-road-repair.webp": "50% 60%",
+  "/images/products/chipfill/chipfill-application.jpg": "50% 62%",
   "/images/products/aggrefill/aggrefill-02.jpg": "50% 50%",
   "/images/products/fast-patch/fastpatch-repaired.jpg": "50% 50%",
 

@@ -284,7 +284,7 @@ function renderLinkRow(b: PostTextBlock, links: NonNullable<ReturnType<typeof li
             key={l.key}
             href={hrefFor(l.def, ctx)}
             {...blank}
-            className="group inline-flex items-center justify-between gap-3 rounded-lg border border-[var(--border-color)] px-4 text-[14px] font-semibold transition-colors hover:border-orange-500/60 sm:justify-start"
+            className="group inline-flex items-center justify-between gap-3 rounded-lg border border-[var(--border-color)] px-4 text-[15px] font-semibold transition-colors hover:border-orange-500/60 sm:justify-start"
             style={{ minHeight: 44, color: "var(--text-primary)", textDecoration: "none", background: "var(--bg-card)" }}
           >
             {l.text}

@@ -53,7 +53,7 @@ function photoFor(post: PostMeta) {
 export function StoryKicker({ post, className = "" }: { post: PostMeta; className?: string }) {
   const section = sectionFor(post.category);
   return (
-    <span className={`flex flex-wrap items-center gap-x-2 gap-y-1 text-[10.5px] font-bold uppercase tracking-[0.18em] ${className}`}>
+    <span className={`flex flex-wrap items-center gap-x-2 gap-y-1 text-[12.5px] font-bold uppercase tracking-[0.18em] ${className}`}>
       <span style={{ color: section.text }}>{section.singular}</span>
       <span aria-hidden="true" className="h-[3px] w-[3px] rounded-full" style={{ background: "var(--ink-30)" }} />
       <span className="tabular-nums tracking-[0.1em]" style={{ color: "var(--text-muted)" }}>
@@ -126,7 +126,7 @@ export function StoryLead({ post, headingLevel = "h2" }: { post: PostMeta; headi
   return (
     <Link href={`/blog/${post.slug}`} className="group grid items-center gap-6 lg:grid-cols-12 lg:gap-12">
       <span
-        className="relative block aspect-[3/2] overflow-hidden rounded-2xl lg:col-span-7"
+        className="relative block aspect-[3/2] overflow-hidden rounded-xl lg:col-span-7"
         style={{ containerType: "size", background: "var(--ink-05)" }}
       >
         <PhotoImage

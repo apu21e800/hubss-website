@@ -9,7 +9,7 @@ export default function CatalogueEmpty() {
   return (
     <main className="grid min-h-dvh place-items-center px-6 text-center" data-surface="dark">
       <div>
-        <p className="text-[11px] font-bold uppercase tracking-[0.24em]" style={{ color: "#fb923c" }}>
+        <p className="text-[12px] font-bold uppercase tracking-[0.24em]" style={{ color: "#fb923c" }}>
           Product Portfolio Book
         </p>
         <p className="mt-3 text-lg" style={{ color: "rgba(255,255,255,0.9)" }}>

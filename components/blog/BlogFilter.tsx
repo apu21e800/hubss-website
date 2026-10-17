@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useCallback, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Search, X, ChevronDown, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
@@ -69,7 +69,6 @@ function sectionFromParams(params: URLSearchParams): InsightsSectionKey | "all" 
  * seventy-odd cards down a 12,000px page.
  */
 export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Props) {
-  const router = useRouter();
   const searchParams = useSearchParams();
 
   const [search, setSearch]     = useState(() => searchParams.get("search") ?? "");
@@ -86,9 +85,14 @@ export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Prop
       if (state.section !== "all")   params.set("section",  state.section);
       if (state.sort !== "newest")   params.set("sort",     state.sort);
       const qs = params.toString();
-      router.replace(qs ? `/blog?${qs}` : "/blog", { scroll: false });
+      // Native history, not router.replace: the router's first transition
+      // into a search-param URL scrolled the page to the top, so the first
+      // tab or keystroke threw the reader off the filters (interaction
+      // review, 17 Oct 2026). Next keeps useSearchParams in step with
+      // replaceState, and nothing is fetched: the filter is client-side.
+      window.history.replaceState(window.history.state, "", qs ? `/blog?${qs}` : "/blog");
     },
-    [search, product, section, sort, router]
+    [search, product, section, sort]
   );
 
   useEffect(() => {
@@ -100,7 +104,7 @@ export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Prop
 
   function clearFilters() {
     setSearch(""); setProduct("all"); setSection("all"); setSort("newest");
-    router.replace("/blog", { scroll: false });
+    window.history.replaceState(window.history.state, "", "/blog");
   }
 
   const inSection = (p: PostMeta, key: InsightsSectionKey) => sectionFor(p.category).key === key;
@@ -166,7 +170,7 @@ export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Prop
     >
       {label}
       {count !== undefined && (
-        <span className="hidden text-[11px] font-semibold tabular-nums sm:inline" style={{ color: "var(--text-muted)" }}>
+        <span className="hidden text-[12px] font-semibold tabular-nums sm:inline" style={{ color: "var(--text-muted)" }}>
           {count}
         </span>
       )}
@@ -194,10 +198,10 @@ export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Prop
             family, weight and tracking over Tailwind's utilities. */}
         <h2
           id="library-heading"
-          className="mb-1 text-[10.5px] uppercase"
+          className="mb-1 text-[12.5px] uppercase"
           style={{ color: "var(--accent-text)", fontFamily: "inherit", fontWeight: 700, letterSpacing: "0.2em", lineHeight: 1.5 }}
         >
-          Browse Insights
+          Browse projects, guides and articles
         </h2>
 
         {/* ── Sections, then search · system · sort, on one hairline  */}
@@ -229,8 +233,8 @@ export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Prop
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: "var(--text-hint)" }} />
               <input
                 type="text"
-                placeholder="Search Insights…"
-                aria-label="Search Insights"
+                placeholder="Search…"
+                aria-label="Search projects, guides and articles"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full pl-9 pr-11 rounded-lg text-sm"
@@ -270,7 +274,7 @@ export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Prop
               <select
                 value={sort}
                 onChange={(e) => { setSort(e.target.value as typeof sort); pushParams({ sort: e.target.value }); }}
-                aria-label="Sort Insights"
+                aria-label="Sort"
                 className="appearance-none pl-3 pr-8 rounded-lg text-sm cursor-pointer w-full"
                 style={selectStyle}
               >
@@ -346,7 +350,7 @@ export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Prop
               <button
                 type="button"
                 onClick={() => setVisible((v) => v + PAGE)}
-                className="group inline-flex min-h-[48px] items-center gap-2 rounded-full px-6 text-[14px] font-bold transition-colors hover:border-orange-500/50 hover:text-[var(--accent-text)]"
+                className="group inline-flex min-h-[48px] items-center gap-2 rounded-full px-6 text-[15px] font-bold transition-colors hover:border-orange-500/50 hover:text-[var(--accent-text)]"
                 style={{ color: "var(--text-primary)", border: "1px solid var(--ink-15)", background: "var(--bg-card)" }}
               >
                 Show more

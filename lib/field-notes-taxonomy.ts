@@ -63,6 +63,16 @@ export type FieldNoteType =
  * /blog/projects, /blog/white-papers to /blog/guides, /blog/posts to
  * /blog/articles.
  */
+/**
+ * The blog's name on the site. "Insights" from 25 Sep 2026; **Projects**
+ * since 17 Oct 2026 (Vern: "instead of insights call them Projects... !!!
+ * see top nav"). Labels only, as before: the /blog URLs, the section slugs,
+ * the Sanity types and the cron routes keep their spelling. Read it wherever
+ * the site names the blog (the bar, the drawer, the footer, search, the
+ * masthead, the breadcrumbs, llms.txt), never type it.
+ */
+export const BLOG_NAME = "Projects";
+
 export type InsightsSectionKey = "projects" | "guides" | "articles";
 
 export interface InsightsSection {
@@ -109,7 +119,7 @@ export const INSIGHTS_SECTIONS: InsightsSection[] = [
     types: ["Guide", "White Paper"],
     blurb: "How to choose, specify and defend a surface decision.",
     promise:
-      "Decision support for engineers, landscape architects and procurement teams: comparisons, lifecycle math, spec language and the failure modes to design around in a freeze-thaw climate. The long technical papers for public works teams are here too.",
+      "Decision support for engineers, landscape architects and procurement teams: comparisons, service life by system, spec language and the failure modes to design around in a freeze-thaw climate. The long technical papers for public works teams are here too.",
     tint: "rgba(249,115,22,0.1)",
     border: "rgba(249,115,22,0.28)",
     text: "var(--accent-soft-text)",
@@ -212,7 +222,7 @@ export const FIELD_NOTE_TYPES: FieldNoteTypeMeta[] = [
     slug: "guides",
     blurb: "How to choose, specify, and defend a surface decision.",
     promise:
-      "Decision support for engineers, landscape architects, and procurement teams: comparisons, lifecycle math, spec language, and the failure modes to design around in a freeze-thaw climate.",
+      "Decision support for engineers, landscape architects, and procurement teams: comparisons, service life by system, spec language, and the failure modes to design around in a freeze-thaw climate.",
     schemaType: "TechArticle",
     tint: "rgba(249,115,22,0.1)",
     border: "rgba(249,115,22,0.28)",

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import PhotoImage from "@/components/ui/PhotoImage";
+import HeroPhoto from "@/components/ui/HeroPhoto";
 import Link from "next/link";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
@@ -198,8 +199,8 @@ export default async function ApplicationPage({ params }: Props) {
   // near the surface (lib/hero-framing.ts, HERO_PHONE_ZOOM); the CSS variables
   // feed the max-sm: classes on the image, and 1 means no change.
   const zoom = heroPhoneZoom(hero);
-  const heroStyle = {
-    objectPosition: heroPosition,
+  // On the banner, so the image inherits them.
+  const heroVars = {
     "--hero-zoom": zoom?.scale ?? 1,
     "--hero-origin": zoom?.origin ?? "50% 50%",
   } as React.CSSProperties;
@@ -216,7 +217,10 @@ export default async function ApplicationPage({ params }: Props) {
   const nameInSentence = inSentence(application.name);
   // The ask and the session topic, hand-written where the template reads
   // wrong: "Planning airports?", "Planning LEED & urban heat island?" (QA C6).
-  const ask = ASKS[application.slug] ?? { prompt: `Planning ${nameInSentence}?`, topic: nameInSentence };
+  // A statement, as the product pages ask ("Specify StreetPrint."): a
+  // question as a heading is the one shape the style guide rules out
+  // (uniformity pass, 17 Oct 2026).
+  const ask = ASKS[application.slug] ?? { prompt: `Specify ${nameInSentence}.`, topic: nameInSentence };
 
   return (
     <main style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
@@ -227,15 +231,14 @@ export default async function ApplicationPage({ params }: Props) {
 
       {/* Hero banner: darkened only where the type sits, with a light colour
           lift (Vern, 27 Sep 2026: "hero images... quite dark and muted"). */}
-      <div data-hero data-sanity={heroEdit} className="relative overflow-hidden" style={{ height: "clamp(360px, 52vh, 560px)" }}>
-        <PhotoImage
-          src={hero.src}
-          alt={hero.alt}
-          fill
-          className={`object-cover ${heroColourClass(hero)} max-sm:scale-(--hero-zoom) max-sm:origin-(--hero-origin)`}
-          style={heroStyle}
-          priority
-          sizes="100vw"
+      <div data-hero data-sanity={heroEdit} className="relative overflow-hidden" style={{ height: "clamp(360px, 52vh, 560px)", ...heroVars }}>
+        {/* The phone zoom (max-sm:scale) only on a /public photo: a Sanity
+            photo gets its portrait cut from the CDN (HeroPhoto) around the
+            same focal point, so there is nothing to zoom. */}
+        <HeroPhoto
+          photo={hero}
+          position={heroPosition}
+          className={`${heroColourClass(hero)} ${isSanityImage(hero.src) ? "" : "max-sm:scale-(--hero-zoom) max-sm:origin-(--hero-origin)"}`}
         />
         <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(8,13,22,0.12) 0%, rgba(8,13,22,0.04) 38%, rgba(8,13,22,0.36) 64%, rgba(8,13,22,0.84) 100%)" }} />
         <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgba(8,13,22,0.46) 0%, rgba(8,13,22,0.16) 40%, transparent 62%)" }} />
@@ -250,16 +253,12 @@ export default async function ApplicationPage({ params }: Props) {
           <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-14">
             {/* Cream, not orange: the orange label measured 2 to 3:1 over the
                 photos (QA pa#13). */}
-            <p
-              className="text-[11px] sm:text-xs font-bold tracking-[0.2em] uppercase mb-3"
-              style={{ color: "rgba(245,240,235,0.92)", textShadow: "0 1px 10px rgba(0,0,0,0.6)" }}
-            >
-              HUB application
+            <p className="eyebrow eyebrow-photo mb-3" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.6)" }}>
+              Application
             </p>
             <h1
-              className="font-black leading-[1.05] mb-3"
+              className="h1-hero mb-3"
               style={{
-                fontSize: "clamp(2rem, 5vw, 3.75rem)",
                 color: "var(--text-primary)",
                 textShadow: "0 2px 24px rgba(0,0,0,0.5)",
                 letterSpacing: "-0.025em",
@@ -291,13 +290,13 @@ export default async function ApplicationPage({ params }: Props) {
               {spread && <ApplicationSpread entry={spread} applicationName={application.name} />}
 
               {/* "How it works", matching the product pages. */}
-              <h2 className="text-2xl sm:text-3xl font-bold mb-5" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
+              <h2 className="h2-sub mb-5" style={{ color: "var(--text-primary)" }}>
                 How it works
               </h2>
               {body.blocks ? (
                 <RichText value={body.blocks} />
               ) : (
-                <p className="mb-12 leading-[1.85]" style={{ color: "var(--text-body)", fontSize: "clamp(1rem, 1.8vw, 1.075rem)", maxWidth: "65ch" }}>
+                <p className="mb-12 leading-[1.85]" style={{ color: "var(--text-body)", fontSize: "clamp(1.0625rem, 1.9vw, 1.125rem)", maxWidth: "65ch" }}>
                   {body.text}
                 </p>
               )}
@@ -321,15 +320,13 @@ export default async function ApplicationPage({ params }: Props) {
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-3 relative flex-shrink-0">
-                  <Link href={lunchLearnHref(ask.topic, "application")}
-                    className="px-5 rounded-lg text-sm font-bold transition-[filter] hover:brightness-110 inline-flex items-center"
-                    style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "var(--on-accent)", boxShadow: "0 4px 16px rgba(249,115,22,0.28)", minHeight: "44px" }}>
+                  <Link href={lunchLearnHref(ask.topic, "application")} className="btn-accent">
                     Book a Lunch &amp; Learn
                   </Link>
-                  <Link href="/contact"
-                    className="px-5 rounded-lg text-sm font-semibold transition-colors inline-flex items-center hover:bg-[var(--ink-04)]"
-                    style={{ background: "transparent", color: "var(--text-primary)", border: "1px solid var(--ink-15)", minHeight: "44px" }}>
-                    Talk to a specifier
+                  {/* "Talk to a specifier" told the specifier (the buyer, in
+                      this trade) to talk to himself (copy review, 17 Oct 2026). */}
+                  <Link href={`/contact?project=${encodeURIComponent(application.name)}&from=application`} className="btn-ghost">
+                    Talk to the office
                   </Link>
                 </div>
               </div>
@@ -380,22 +377,22 @@ export default async function ApplicationPage({ params }: Props) {
                 <h2 className="font-bold text-base mb-1.5" style={{ color: "var(--text-primary)" }}>
                   Pricing and installers
                 </h2>
-                <p className="text-[13.5px] leading-relaxed mb-4" style={{ color: "var(--text-secondary)" }}>
+                <p className="text-[15px] leading-relaxed mb-4 max-w-prose" style={{ color: "var(--text-secondary)" }}>
                   Your regional office prices the project, matches the system to the site and puts you in touch with a certified installer.
                 </p>
                 <div className="grid grid-cols-2 gap-2 mb-3">
                   <a href={telHref(offices.east.phone)} className="rounded-lg px-3 py-2 transition-colors hover:bg-[var(--ink-04)]" style={{ border: "1px solid var(--border-color)", minHeight: 44 }}>
-                    <span className="block text-[10.5px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>East</span>
-                    <span className="block text-[13.5px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{offices.east.phone}</span>
+                    <span className="block text-[12px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>East</span>
+                    <span className="block text-[15px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{offices.east.phone}</span>
                   </a>
                   <a href={telHref(offices.west.phone)} className="rounded-lg px-3 py-2 transition-colors hover:bg-[var(--ink-04)]" style={{ border: "1px solid var(--border-color)", minHeight: 44 }}>
-                    <span className="block text-[10.5px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>West</span>
-                    <span className="block text-[13.5px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{offices.west.phone}</span>
+                    <span className="block text-[12px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>West</span>
+                    <span className="block text-[15px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{offices.west.phone}</span>
                   </a>
                 </div>
-                <Link href="/contact" className="inline-flex items-center gap-1.5 text-[13.5px] font-semibold hover:underline underline-offset-2" style={{ color: "var(--accent-text)", minHeight: 44 }}>
-                  Send a project enquiry
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+                <Link href={`/contact?project=${encodeURIComponent(application.name)}&from=application`} className="link-arrow">
+                  Send us the project
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
                 </Link>
               </div>
               </div>
@@ -408,8 +405,8 @@ export default async function ApplicationPage({ params }: Props) {
           pages. The line under it was "{Name} photographed on site across
           Canada" (QA pa#32). */}
       <section style={{ background: "var(--bg-section-asphalt)", borderTop: "1px solid var(--border-color)" }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-1.5" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 section-padding">
+          <h2 className="h2-section mb-1.5" style={{ color: "var(--text-primary)" }}>
             The work
           </h2>
           <p className="mb-6 text-sm" style={{ color: "var(--text-secondary)" }}>
@@ -441,11 +438,11 @@ export default async function ApplicationPage({ params }: Props) {
  * The other fifteen pages keep the template.
  */
 const ASKS: Record<string, { prompt: string; topic: string }> = {
-  airports: { prompt: "Planning an airfield re-marking?", topic: "airfield re-marking" },
-  "pedestrian-safety": { prompt: "Planning a pedestrian safety upgrade?", topic: "pedestrian safety upgrades" },
-  "leed-urban-heat-island": { prompt: "Working toward LEED v5 credits?", topic: "LEED v5 credits" },
-  townhomes: { prompt: "Planning a townhome development?", topic: "townhome developments" },
-  "commercial-spaces": { prompt: "Planning a commercial entry or plaza?", topic: "commercial entries and plazas" },
+  airports: { prompt: "Specify an airfield re-marking.", topic: "airfield re-marking" },
+  "pedestrian-safety": { prompt: "Specify a pedestrian safety upgrade.", topic: "pedestrian safety upgrades" },
+  "leed-urban-heat-island": { prompt: "Specify for LEED v5 credits.", topic: "LEED v5 credits" },
+  townhomes: { prompt: "Specify a townhome development.", topic: "townhome developments" },
+  "commercial-spaces": { prompt: "Specify a commercial entry or plaza.", topic: "commercial entries and plazas" },
 };
 
 /**

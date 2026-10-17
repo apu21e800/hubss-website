@@ -20,6 +20,7 @@
  */
 
 import { stegaClean } from "@sanity/client/stega";
+import { current } from "@/lib/copy-superseded";
 
 export interface SectionCopy {
   eyebrow: string;
@@ -48,7 +49,7 @@ export const HOMEPAGE_COPY: HomepageCopy = {
   audiences: [
     {
       label: "Municipalities",
-      desc: "Crosswalks, transit corridors and plazas: built for Vision Zero programs, accessible, installed by certified crews coast to coast.",
+      desc: "Accessible crosswalks, transit corridors and plazas for Vision Zero programs, installed by certified crews across Canada.",
     },
     {
       label: "Designers & specifiers",
@@ -71,30 +72,33 @@ export const HOMEPAGE_COPY: HomepageCopy = {
     heading: "Ten systems,",
     headingAccent: "endless applications.",
     intro:
-      "Stamped asphalt, preformed thermoplastic and coatings, chosen by what the surface has to take.",
+      "Stamped asphalt, preformed thermoplastic and coatings. Which one depends on what the surface has to take.",
   },
+  // The 17 Oct 2026 copy review rewrote the lines below (lib/copy-superseded.ts
+  // carries the old ones, so Studio's copies print as these until the
+  // clean-up script has run on Vern's PC).
   applications: {
     eyebrow: "Applications",
-    heading: "Every surface,",
-    headingAccent: "a statement.",
+    heading: "The job decides",
+    headingAccent: "the system.",
     intro:
-      "Crosswalks, bike lanes, civic art, driveways: wherever people move, gather, or stop, the surface underneath is doing work.",
+      "Crosswalks, bike lanes, civic art, driveways. Each asks something different of the surface, and each has a system for it.",
   },
   ideaBook: {
     heading: "Every system and every application, in one book.",
     intro: "Read it here, save it to your phone, or have the printed copy mailed.",
   },
   insights: {
-    eyebrow: "Insights",
+    eyebrow: "Projects",
     heading: "How it goes in",
     headingAccent: "and how it holds up.",
-    intro: "Installation guides, project write-ups, and the specification detail behind them.",
+    intro: "Jobs by town, how each went in, and the spec behind it.",
   },
   onTheGround: {
     eyebrow: "On the ground",
-    heading: "Follow the work.",
+    heading: "Follow the crews.",
     headingAccent: "",
-    intro: "Projects across Canada, documented as they happen.",
+    intro: "New jobs across Canada, posted as they go in.",
   },
 };
 
@@ -112,15 +116,19 @@ export interface SanityHomepageSections {
 
 const has = (s: string | null | undefined): s is string => typeof s === "string" && stegaClean(s).trim() !== "";
 
-/** Studio's text when it has any, else the code's. */
-const txt = (s: string | null | undefined, code: string): string => (has(s) ? s.trim() : code);
+/**
+ * Studio's text when it has any, else the code's. A Studio line the copy
+ * review of 17 Oct 2026 superseded prints as its replacement until
+ * scripts/studio-cleanup-2026-10-17.ts has run (lib/copy-superseded.ts).
+ */
+const txt = (s: string | null | undefined, code: string): string => (has(s) ? String(current(s)).trim() : code);
 
 function section(sanity: Loose<SectionCopy> | null | undefined, code: SectionCopy): SectionCopy {
   const studioHeading = has(sanity?.heading);
   return {
     eyebrow: txt(sanity?.eyebrow, code.eyebrow),
     heading: txt(sanity?.heading, code.heading),
-    headingAccent: studioHeading ? (sanity?.headingAccent ?? "").trim() : code.headingAccent,
+    headingAccent: studioHeading ? String(current(sanity?.headingAccent ?? "")).trim() : code.headingAccent,
     intro: txt(sanity?.intro, code.intro),
   };
 }

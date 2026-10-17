@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import PhotoImage from "@/components/ui/PhotoImage";
 import { isSanityImage, sanitySized } from "@/lib/photos";
 import PhotoLightbox from "@/components/ui/PhotoLightbox";
@@ -26,9 +26,18 @@ const TAIL = 3;
 const settle = (count: number, total: number) =>
   total - count <= TAIL ? total : Math.min(count, total);
 
-export default function GalleryGrid({ images }: { images: GalleryImage[] }) {
+export default function GalleryGrid({ images: given }: { images: GalleryImage[] }) {
   const [lightboxIndex, setLightboxIndex] = useState(-1);
   const [visible, setVisible] = useState(INITIAL);
+  // Photos that share one alt ("Coloured bike lane" five times on a page)
+  // are told apart for a screen reader and for Google Images: the alt gets
+  // "photo 3 of 36"; the visible caption does not (technical review, 17 Oct
+  // 2026, 290 duplicate alts across the galleries).
+  const images = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const img of given) counts.set(img.alt, (counts.get(img.alt) ?? 0) + 1);
+    return given.map((img, i) => ((counts.get(img.alt) ?? 0) > 1 ? { ...img, alt: `${img.alt}, photo ${i + 1} of ${given.length}` } : img));
+  }, [given]);
 
   const shown = settle(visible, images.length);
   const displayed = images.slice(0, shown);
@@ -139,19 +148,15 @@ export default function GalleryGrid({ images }: { images: GalleryImage[] }) {
                 press is the rest anyway: "Show all 108" beside it was two
                 choices for one job, and 108 photos at once is a lot on a
                 phone (QA sweep, 16 Oct 2026). */}
-            <button
-              onClick={() => setVisible(images.length)}
-              className={`${nextIsAll ? "" : "max-sm:hidden "}px-4 py-2.5 min-h-11 rounded-lg text-sm font-semibold transition-colors hover:bg-[var(--ink-10)] active:scale-[0.97]`}
-              style={{ background: "var(--bg-card-neutral)", color: "var(--text-body)", border: "1px solid var(--ink-10)" }}
-            >
-              Show all {images.length}
-            </button>
+            {/* The wrapper carries the phone hiding: .btn-ghost sets its
+                display unlayered, so a utility on the button would lose. */}
+            <span className={nextIsAll ? "" : "max-sm:hidden"}>
+              <button onClick={() => setVisible(images.length)} className="btn-ghost">
+                Show all {images.length}
+              </button>
+            </span>
             {!nextIsAll && (
-              <button
-                onClick={() => setVisible(nextShown)}
-                className="px-5 py-2.5 min-h-11 rounded-lg text-sm font-semibold transition-all hover:brightness-110 active:scale-[0.97]"
-                style={{ background: "#f97316", color: "var(--on-accent)" }}
-              >
+              <button onClick={() => setVisible(nextShown)} className="btn-accent">
                 Load {nextCount} more
               </button>
             )}
@@ -224,7 +229,9 @@ function GalleryTile({
             ? "(max-width: 1280px) 100vw, 1280px"
             : "(max-width: 1024px) 50vw, 33vw"
         }
-        quality={aspect === "aspect-[16/9]" ? 75 : 70}
+        // 80 and 78 (were 75 and 70): the work is what the page sells, and 70
+        // showed as soft edges on the tiles (17 Oct 2026).
+        quality={aspect === "aspect-[16/9]" ? 80 : 78}
       />
 
       {/* Hover overlay — subtle bottom gradient */}
@@ -259,7 +266,7 @@ function GalleryTile({
           className="absolute bottom-0 inset-x-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out px-4 py-3 pointer-events-none"
           style={{ background: "rgba(8,8,8,0.88)", backdropFilter: "blur(8px)" }}
         >
-          <p className="text-[11px] leading-snug truncate" style={{ color: "var(--text-muted)" }}>
+          <p className="text-[12px] leading-snug truncate" style={{ color: "var(--text-muted)" }}>
             {img.caption}
           </p>
         </div>

@@ -10,7 +10,7 @@ import { buildMetadata } from "@/lib/seo";
 const SECTION = SECTION_BY_KEY.articles;
 
 export const metadata: Metadata = buildMetadata({
-  title: "Articles · Decorative Pavement Industry Insight",
+  title: "Articles · Notes from the road",
   description:
     "Shorter reads on where decorative pavement is heading in Canada: material context, industry shifts and the thinking behind HUB's systems.",
   slug: "blog/articles",

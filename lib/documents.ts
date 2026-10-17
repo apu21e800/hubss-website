@@ -30,7 +30,7 @@ export const docTypeLabel: Record<DocType, string> = {
   colour:       "Colour Guide",
   installation: "Installation Guide",
   brochure:     "Brochure",
-  catalogue:    "Catalogue",
+  catalogue:    "Template guide",
   faq:          "FAQ",
   design:       "Design Manual",
   application:  "Application Guide",
@@ -147,7 +147,7 @@ const ALL_DOCS: Record<string, ProductDocument[]> = {
     { label: "FAQ",                                  type: "faq",          href: "/docs/streetprint/streetprint-faq.pdf" },
     { label: "Colour Guide",                         type: "colour",       href: "/docs/streetprint/streetprint-colour-guide.pdf" },
     { label: "Asphalt Texturing Specification",      type: "spec",         href: "/docs/streetprint/StreetPrint-Asphalt-Texturing-Specification.pdf" },
-    { label: "Template Catalogue",                   type: "catalogue",    href: "/docs/streetprint/streetprint-template-catalog.pdf" },
+    { label: "Template guide",                       type: "catalogue",    href: "/docs/streetprint/streetprint-template-catalog.pdf" },
   ],
 };
 

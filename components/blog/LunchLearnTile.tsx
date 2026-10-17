@@ -75,7 +75,7 @@ export default function LunchLearnTile({
       {/* Wide, the picture's top lines up with the photographs beside it and
           the words sit in the middle of the picture's height. */}
       <span className={`block ${wide ? "mt-4 lg:mt-0 lg:self-center" : "mt-4"}`}>
-        <span className="block text-[10.5px] font-bold uppercase tracking-[0.18em]" style={{ color: "var(--accent-text)" }}>
+        <span className="block text-[12.5px] font-bold uppercase tracking-[0.18em]" style={{ color: "var(--accent-text)" }}>
           Lunch &amp; Learn
         </span>
         <span
@@ -86,10 +86,10 @@ export default function LunchLearnTile({
         </span>
         {/* Worded apart from the Lunch & Learn band that closes the page,
             which on /blog comes straight after this card. */}
-        <span className="mt-2 block text-[14px] leading-relaxed" style={{ color: "var(--text-secondary)", maxWidth: "40ch" }}>
+        <span className="mt-2 block text-[15px] leading-relaxed" style={{ color: "var(--text-secondary)", maxWidth: "40ch" }}>
           Samples, data sheets and your region&rsquo;s certified installers, in your office or online. Lunch is on us.
         </span>
-        <span className="mt-3 inline-flex items-center gap-1.5 text-[13px] font-bold" style={{ color: "var(--accent-text-lg)" }}>
+        <span className="mt-3 inline-flex items-center gap-1.5 text-[14.5px] font-bold" style={{ color: "var(--accent-text-lg)" }}>
           Book a session
           <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" className="transition-transform group-hover:translate-x-0.5" aria-hidden="true">
             <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" />

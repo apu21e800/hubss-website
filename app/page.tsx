@@ -141,7 +141,7 @@ const DEFAULT_HERO_ORIGIN = "/images/hero/hero-1.jpg";
  */
 function heroBook() {
   if (!showCatalogue() || !catalogueReady || !catalogue.coverThumb) return undefined;
-  return { href: ideaBook.href, cover: catalogue.coverThumb, kicker: keepDots(ideaBook.title), line: "Read it online" };
+  return { href: ideaBook.href, cover: catalogue.coverThumb, kicker: keepDots(ideaBook.title), short: ideaBook.short, line: "Read it online" };
 }
 
 export default async function Home() {
@@ -224,9 +224,12 @@ export default async function Home() {
           the visitor here. Since 28 Sep 2026 every pin has a published write-up
           and its own photos (lib/map-projects.ts). Wrapped here
           rather than set on the section inside CanadaMap so the anchor survives
-          whatever that component does to its own markup. */}
+          whatever that component does to its own markup. No scroll margin of
+          its own: html's scroll-padding-top (84px) is the one offset under
+          the bar; both together landed "See the work" with a 93px stripe of
+          the section above under the bar (17 Oct 2026). */}
       {SITE_FLAGS.showMap && (
-        <div id="map" style={{ scrollMarginTop: 80 }}>
+        <div id="map">
           <CanadaMapWrapper />
         </div>
       )}

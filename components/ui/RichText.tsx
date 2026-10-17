@@ -25,7 +25,7 @@ type MarkDef = NonNullable<SanityBlock["markDefs"]>[number];
 
 const body = {
   color: "var(--text-body)",
-  fontSize: "clamp(1rem, 1.8vw, 1.075rem)",
+  fontSize: "clamp(1.0625rem, 1.9vw, 1.125rem)",
 } as const;
 const heading = { color: "var(--text-primary)", letterSpacing: "-0.02em" } as const;
 const link = { color: "var(--accent-text)", textDecoration: "underline", textUnderlineOffset: "3px" } as const;

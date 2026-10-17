@@ -55,7 +55,7 @@ export default function ShareButtons({ url, title }: ShareButtonsProps) {
 
   return (
     <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-      <span className="text-[11px] font-bold uppercase tracking-[0.18em]" style={{ color: "var(--text-muted)" }}>
+      <span className="text-[12px] font-bold uppercase tracking-[0.18em]" style={{ color: "var(--text-muted)" }}>
         Share this post
       </span>
       <div className="flex items-center gap-0.5">

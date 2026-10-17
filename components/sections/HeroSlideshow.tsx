@@ -46,7 +46,7 @@ interface HeroSlideshowProps {
    * second button (app/page.tsx, heroBook): the cover, the book's name and a
    * line. Absent with the book switched off, and the second button returns.
    */
-  book?: { href: string; cover: string; kicker: string; line: string };
+  book?: { href: string; cover: string; kicker: string; short: string; line: string };
   /** Sanity-supplied hero image URL. Falls back to local /public/images/hero/hero-1.jpg. */
   heroImageSrc?: string;
   /** Alt text from Studio for that image. */
@@ -216,7 +216,7 @@ export default function HeroSlideshow({
             {/* One line on a phone too: at 0.22em tracking the eyebrow wrapped
                 and pushed the headline up into the sign. */}
             <p
-              className="text-[11px] tracking-[0.16em] sm:text-sm sm:tracking-[0.22em] font-bold uppercase mb-3"
+              className="text-[12px] tracking-[0.16em] sm:text-sm sm:tracking-[0.22em] font-bold uppercase mb-3"
               style={{
                 color: "var(--accent-soft-text)",
                 // A tight shadow for the letter edges and two soft ones for
@@ -278,19 +278,18 @@ export default function HeroSlideshow({
                 orange one's resting shadow is --btn-shadow, which the hover
                 builds on; as an inline box-shadow it beat the hover. */}
             <div className="flex flex-col sm:flex-row gap-3">
+              {/* prefetch={false}: a hash on this page needs no payload, and
+                  the default prefetch pulled the /products RSC and three
+                  card images every home load (technical review, 17 Oct 2026). */}
               <Link
                 href={cta1Href}
-                className="btn-accent inline-flex items-center justify-center gap-2 px-7 rounded-lg font-semibold text-sm"
-                style={{
-                  background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
-                  color: "var(--on-accent)",
-                  ["--btn-shadow" as string]: "0 6px 28px rgba(249,115,22,0.42)",
-                  minHeight: "44px",
-                }}
+                prefetch={false}
+                className="btn-accent btn-lg"
+                style={{ ["--btn-shadow" as string]: "0 6px 28px rgba(249,115,22,0.42)" }}
               >
                 {cta1Label}
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </Link>
               {/* The Product Book beside the orange button, in place of the
@@ -300,11 +299,17 @@ export default function HeroSlideshow({
                   The outlined button is back only with the book switched off.
                   .hero-book in app/globals.css. */}
               {book ? (
-                <Link href={book.href} className="hero-book">
+                <Link href={book.href} prefetch={false} className="hero-book">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={book.cover} alt="" width={44} height={44} decoding="async" />
                   <span className="min-w-0">
-                    <span className="hero-book-kicker">{book.kicker}</span>
+                    {/* The short name under 400px: "PRODUCT PORTFOLIO BOOK ·"
+                        wrapped onto its own line with the dot hanging (phone
+                        review, 17 Oct 2026). */}
+                    <span className="hero-book-kicker">
+                      <span className="max-[399px]:hidden">{book.kicker}</span>
+                      <span className="min-[400px]:hidden">{book.short}</span>
+                    </span>
                     <span className="hero-book-line">
                       {book.line}
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -314,11 +319,7 @@ export default function HeroSlideshow({
                   </span>
                 </Link>
               ) : (
-                <Link
-                  href={cta2Href}
-                  className="btn-ghost inline-flex items-center justify-center gap-2 px-7 rounded-lg font-semibold text-sm"
-                  style={{ minHeight: "44px" }}
-                >
+                <Link href={cta2Href} prefetch={false} className="btn-ghost btn-lg">
                   {cta2Label}
                 </Link>
               )}

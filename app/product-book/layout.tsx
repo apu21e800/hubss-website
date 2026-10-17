@@ -17,8 +17,6 @@ export function generateMetadata(): Metadata {
   if (!showCatalogue() || !catalogueReady) {
     return { robots: { index: false, follow: false } };
   }
-  const big = catalogue.widths[catalogue.widths.length - 1];
-  const cover = cataloguePageUrl(1, big);
   const edition = catalogue.edition ?? "";
   // No page count here, by Doug's ask (25 Sep 2026): the book is named, not
   // measured. (The old copy said "116 pages" for a 144-page book anyway.)
@@ -33,7 +31,9 @@ export function generateMetadata(): Metadata {
       title: ideaBook.title,
       description,
       url: `https://hubss.com${ideaBook.href}`,
-      images: [{ url: `https://hubss.com${cover}`, width: big, height: Math.round(big / catalogue.aspect) }],
+      // The 1200 x 630 JPEG scripts/gen-catalogue-pages.mjs makes from the
+      // cover (ensureShareImage), not the square page file.
+      images: [{ url: `https://hubss.com${catalogue.dir}/og.jpg`, width: 1200, height: 630 }],
     },
   };
 }

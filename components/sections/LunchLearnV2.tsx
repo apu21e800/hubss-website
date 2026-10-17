@@ -49,7 +49,7 @@ interface SubmitState {
 const EMPTY: FormState = { name: "", email: "", company: "", city: "", phone: "", website: "" };
 
 const BENEFITS = [
-  "45-minute session about your projects, in your office or virtual",
+  "In your office or online, built around your projects",
   "Spec language you can drop straight into your next RFP",
   "Physical samples, technical data sheets, and the certified installer map",
   "Lunch on HUB, and a $25 voucher when the session's virtual",
@@ -138,7 +138,7 @@ function useLunchLearnForm(withFormat: boolean) {
       if (!response.ok) throw new Error(`API error: ${response.statusText}`);
       setSubmitState({
         status: "success",
-        message: "You're booked in. We'll be in touch within one business day to confirm your date and details.",
+        message: "We'll be in touch within one business day to confirm the date and the details.",
       });
       setFormData(EMPTY);
       // The conversion, as app/contact/ContactForm.tsx counts its own. The
@@ -167,8 +167,8 @@ function useLunchLearnForm(withFormat: boolean) {
 function TopicChip({ topic, onClear }: { topic: string; onClear: () => void }) {
   return (
     <div className="flex items-center gap-2 rounded-lg px-3 py-2" style={{ background: "rgba(249,115,22,0.10)", border: "1px solid rgba(249,115,22,0.35)" }}>
-      <span className="text-[11px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--accent-text)" }}>Topic</span>
-      <span className="min-w-0 flex-1 truncate text-[13.5px] font-semibold" style={{ color: "var(--text-primary)" }}>{topic}</span>
+      <span className="text-[12px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--accent-text)" }}>Topic</span>
+      <span className="min-w-0 flex-1 truncate text-[15px] font-semibold" style={{ color: "var(--text-primary)" }}>{topic}</span>
       <button
         type="button"
         onClick={onClear}
@@ -194,8 +194,8 @@ const inputStyle: React.CSSProperties = {
 // typed, and the site's three forms ran three label systems (QA A19, F19,
 // D10; the Product Book form was named as the model). autoComplete lets a
 // browser fill the five fields in one go.
-const labelClass = "block text-[11px] font-semibold uppercase tracking-[0.16em] mb-1.5";
-const labelStyle: React.CSSProperties = { color: "var(--text-muted)" };
+const labelClass = "block text-[12px] font-semibold uppercase tracking-[0.16em] mb-1.5";
+const labelStyle: React.CSSProperties = { color: "var(--text-secondary)" };
 
 function Field({ name, label, type = "text", required = false, autoComplete, value, onChange }: {
   name: string; label: string; type?: string; required?: boolean; autoComplete?: string;
@@ -207,7 +207,7 @@ function Field({ name, label, type = "text", required = false, autoComplete, val
     <div>
       <label htmlFor={id} className={labelClass} style={labelStyle}>
         {label}
-        {!required && <span style={{ opacity: 0.6 }}> (optional)</span>}
+        {!required && <span style={{ color: "var(--text-secondary)", textTransform: "none", letterSpacing: 0 }}> (optional)</span>}
       </label>
       <input
         id={id}
@@ -247,7 +247,7 @@ function SuccessPanel({ message }: { message?: string }) {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
         </svg>
       </div>
-      <h3 className="font-bold text-lg mb-2" style={{ color: "var(--text-primary)" }}>You&apos;re on the list.</h3>
+      <h3 className="font-bold text-lg mb-2" style={{ color: "var(--text-primary)" }}>Request received.</h3>
       <p className="text-sm leading-relaxed max-w-sm mx-auto" style={{ color: "var(--ok-text)" }}>{message}</p>
     </motion.div>
   );
@@ -266,9 +266,9 @@ function MoreLink() {
   const pathname = usePathname();
   if (pathname === "/lunch-learn") return null;
   return (
-    <Link href="/lunch-learn" className="inline-flex items-center gap-1.5 text-[13px] font-semibold transition-colors hover:text-[var(--accent-soft-text)]" style={{ color: "var(--accent-text)", minHeight: 40 }}>
+    <Link href="/lunch-learn" className="link-arrow">
       Everything about the session
-      <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" /></svg>
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
     </Link>
   );
 }
@@ -346,10 +346,10 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
                     />
                   </span>
                   <div>
-                    <p className="text-[11px] font-bold tracking-[0.2em] uppercase" style={{ color: "var(--accent-text)" }}>
+                    <p className="eyebrow">
                       Lunch &amp; Learn
                     </p>
-                    <p className="text-[14px] font-semibold mt-0.5" style={{ color: "var(--text-primary)" }}>
+                    <p className="text-[15px] font-semibold mt-0.5" style={{ color: "var(--text-primary)" }}>
                       Hosted by the HUB team (and Moose, site dog)
                     </p>
                   </div>
@@ -359,15 +359,15 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
                     2026: the page had none); a section heading everywhere
                     else. h1 and h2 share one rule in app/globals.css, so it
                     looks the same either way. */}
-                <Title className="font-black mb-4" style={{ fontSize: "clamp(2rem, 4vw, 3.1rem)", lineHeight: 1.0, letterSpacing: "-0.03em", color: "var(--text-primary)" }}>
+                <Title className="h1-page mb-4" style={{ color: "var(--text-primary)" }}>
                   Specify with confidence.{" "}
                   <span style={{ background: "linear-gradient(92deg, #F97316 0%, #EAB308 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
                     Lunch is on us.
                   </span>
                 </Title>
                 <p className="text-[15px] leading-relaxed mb-8 max-w-xl" style={{ color: "var(--ink-70)" }}>
-                  A working session for engineers, architects, and municipal teams: real Canadian
-                  case studies, spec language, and samples on the table.
+                  Forty-five minutes with your engineering or design team. Canadian case
+                  studies, spec language you can use, and samples you can hold.
                 </p>
 
                 <div className="space-y-3.5 mb-9">
@@ -376,7 +376,7 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
                       <span className="flex-shrink-0 w-5 h-5 rounded-md flex items-center justify-center mt-0.5" style={{ background: "rgba(249,115,22,0.14)" }}>
                         <svg className="w-3 h-3" fill="none" stroke="var(--accent-text)" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
                       </span>
-                      <span className="text-[14px] leading-snug" style={{ color: "var(--text-primary)" }}>{b}</span>
+                      <span className="text-[15px] leading-snug" style={{ color: "var(--text-primary)" }}>{b}</span>
                     </div>
                   ))}
                 </div>
@@ -392,7 +392,7 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
                   {/* Below sm the two numbers stack under each other, East
                       over West, and the dot goes: the line wrapped after the
                       dot on a 390 phone, which put the orphan back. */}
-                  <p className="text-[13px] font-semibold flex items-start gap-x-1.5" style={{ color: "var(--ink-45)" }}>
+                  <p className="text-[14.5px] font-semibold flex items-start gap-x-1.5" style={{ color: "var(--text-secondary)" }}>
                     <span data-tap="44" className="inline-flex items-center flex-shrink-0">Or call:</span>
                     <span className="flex flex-col sm:flex-row sm:items-center sm:gap-x-1.5">
                       <a href={telHref(offices.east.phone)} data-tap="44" className="inline-flex items-center whitespace-nowrap hover:text-[var(--accent-text)] transition-colors">East {offices.east.phone}</a>
@@ -405,11 +405,11 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
 
               {/* Form side — inset panel */}
               <div className="lg:col-span-5 p-5 sm:p-7 lg:p-8 lg:pl-2 flex">
-                <div className="relative w-full rounded-2xl p-6 sm:p-7 self-center" style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--border-color)" }}>
+                <div className="relative w-full rounded-xl p-6 sm:p-7 self-center" style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--border-color)" }}>
                   {hideForm ? (
                     <div>
                       <FormTitle className="font-bold text-lg mb-1" style={{ color: "var(--text-primary)" }}>Book your session</FormTitle>
-                      <p className="text-[13px] mb-6" style={{ color: "var(--ink-55)" }}>
+                      <p className="text-[14.5px] mb-6" style={{ color: "var(--ink-55)" }}>
                         Pick a date and a format on the Lunch &amp; Learn page. Confirmed within one business day.
                       </p>
                       <Link
@@ -422,7 +422,7 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
                           <path d="M5 12h14" /><path d="M13 6l6 6-6 6" />
                         </svg>
                       </Link>
-                      <p className="text-[12px] mt-4" style={{ color: "var(--ink-45)" }}>
+                      <p className="text-[13px] mt-4" style={{ color: "var(--ink-45)" }}>
                         45 minutes · in-person or virtual · lunch on us
                       </p>
                     </div>
@@ -432,7 +432,7 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
                     <form onSubmit={f.handleSubmit} className="space-y-3.5">
                       <div className="mb-5">
                         <FormTitle className="font-bold text-lg mb-1" style={{ color: "var(--text-primary)" }}>Book your session</FormTitle>
-                        <p className="text-[13px]" style={{ color: "var(--ink-55)" }}>Confirmed within one business day.</p>
+                        <p className="text-[14.5px]" style={{ color: "var(--ink-55)" }}>Confirmed within one business day.</p>
                       </div>
                       {f.topic && <TopicChip topic={f.topic} onClear={f.clearTopic} />}
                       <Honeypot value={f.formData.website} onChange={f.handleChange} />
@@ -444,12 +444,9 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
                             type="button"
                             aria-pressed={f.format === opt}
                             onClick={() => f.setFormat(opt)}
-                            className="rounded-lg text-[12.5px] font-semibold transition-all active:scale-[0.97]"
-                            style={
-                              f.format === opt
-                                ? { background: "rgba(249,115,22,0.16)", border: "1px solid rgba(249,115,22,0.5)", color: "var(--accent-text)", minHeight: 44 }
-                                : { background: "var(--ink-05)", border: "1px solid var(--ink-10)", color: "var(--ink-65)", minHeight: 44 }
-                            }
+                            // .segment (app/globals.css): rests grey, hovers,
+                            // and the chosen one wears the orange wash.
+                            className="segment text-[13.5px]"
                           >
                             {opt}
                           </button>
@@ -467,12 +464,11 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
                       <button
                         type="submit"
                         disabled={f.submitState.status === "loading"}
-                        className="w-full py-4 rounded-xl font-bold text-[15px] transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50"
-                        style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "var(--on-accent)", boxShadow: "0 6px 24px rgba(249,115,22,0.35)" }}
+                        className="btn-accent btn-lg btn-block disabled:opacity-50"
                       >
                         {f.submitState.status === "loading" ? "Sending…" : "Book a Lunch & Learn"}
                       </button>
-                      <p className="text-center text-[11px]" style={{ color: "var(--ink-35)" }}>
+                      <p className="text-center text-[13px]" style={{ color: "var(--text-secondary)" }}>
                         No obligation, no invoice, lunch included.
                       </p>
                       {f.submitState.status === "error" && <ErrorNote message={f.submitState.message} />}
@@ -504,7 +500,7 @@ function Ticket() {
     <section className="relative py-16 sm:py-20 lg:py-24" style={{ background: "var(--bg-primary)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10">
-          <p className="text-[11px] font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "var(--accent-text)" }}>Lunch &amp; Learn</p>
+          <p className="text-[12px] font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "var(--accent-text)" }}>Lunch &amp; Learn</p>
           <h2 className="font-black" style={{ fontSize: "clamp(2rem, 4vw, 3.1rem)", lineHeight: 1.0, letterSpacing: "-0.03em", color: "var(--text-primary)" }}>
             Reserve a session for your team.
           </h2>
@@ -517,12 +513,12 @@ function Ticket() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.45 }}
-            className="lg:col-span-5 rounded-2xl overflow-hidden flex flex-col"
+            className="lg:col-span-5 rounded-xl overflow-hidden flex flex-col"
             style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--border-color)" }}
           >
             <div className="px-6 py-4 flex items-center justify-between" style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)" }}>
-              <span className="text-[11px] font-black tracking-[0.2em] uppercase text-[var(--text-primary)]">HUB · Lunch &amp; Learn</span>
-              <span className="text-[11px] font-bold text-[var(--ink-85)]">Admits your whole team</span>
+              <span className="text-[12px] font-black tracking-[0.2em] uppercase text-[var(--text-primary)]">HUB · Lunch &amp; Learn</span>
+              <span className="text-[12px] font-bold text-[var(--ink-85)]">Admits your whole team</span>
             </div>
 
             <div className="p-6 sm:p-7 flex-1 flex flex-col">
@@ -531,17 +527,17 @@ function Ticket() {
                   <Image src={MOOSE.src} alt={MOOSE.alt} fill className="object-cover object-top" sizes="48px" />
                 </span>
                 <div>
-                  <p className="text-[14px] font-bold leading-tight" style={{ color: "var(--text-primary)" }}>Hosted by the HUB technical team</p>
-                  <p className="text-[12px] mt-0.5" style={{ color: "var(--ink-55)" }}>Moose, site dog. Attendance subject to snack availability.</p>
+                  <p className="text-[15px] font-bold leading-tight" style={{ color: "var(--text-primary)" }}>Hosted by the HUB technical team</p>
+                  <p className="text-[13px] mt-0.5" style={{ color: "var(--ink-55)" }}>Moose, site dog. Attendance subject to snack availability.</p>
                 </div>
               </div>
 
               <div className="space-y-3 mb-6">
                 {TICKET_META.map((m) => (
                   <div key={m.k} className="flex items-baseline justify-between gap-4">
-                    <span className="text-[11px] font-bold tracking-[0.14em] uppercase flex-shrink-0" style={{ color: "var(--ink-45)" }}>{m.k}</span>
+                    <span className="text-[12px] font-bold tracking-[0.14em] uppercase flex-shrink-0" style={{ color: "var(--ink-45)" }}>{m.k}</span>
                     <span className="flex-1" style={{ borderBottom: "1px dotted var(--ink-12)", transform: "translateY(-4px)" }} />
-                    <span className="text-[13px] font-semibold text-right" style={{ color: "var(--text-primary)" }}>{m.v}</span>
+                    <span className="text-[14.5px] font-semibold text-right" style={{ color: "var(--text-primary)" }}>{m.v}</span>
                   </div>
                 ))}
               </div>
@@ -550,13 +546,13 @@ function Ticket() {
                 {["Spec language for your next RFP", "Samples + technical data sheets", "Certified installer map for your region"].map((b) => (
                   <div key={b} className="flex items-center gap-2.5">
                     <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="var(--accent-text)" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
-                    <span className="text-[13px]" style={{ color: "var(--ink-75)" }}>{b}</span>
+                    <span className="text-[14.5px]" style={{ color: "var(--ink-75)" }}>{b}</span>
                   </div>
                 ))}
               </div>
 
               <div className="mt-auto pt-4 flex items-center justify-between gap-3" style={{ borderTop: "1px dashed var(--ink-15)" }}>
-                <span className="text-[12px] font-semibold" style={{ color: "var(--ink-55)" }}>Lunch included · $25 voucher on virtual</span>
+                <span className="text-[13px] font-semibold" style={{ color: "var(--ink-55)" }}>Lunch included · $25 voucher on virtual</span>
                 <MoreLink />
               </div>
             </div>
@@ -568,7 +564,7 @@ function Ticket() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.45, delay: 0.08 }}
-            className="lg:col-span-7 rounded-2xl p-6 sm:p-8"
+            className="lg:col-span-7 rounded-xl p-6 sm:p-8"
             style={{ background: "var(--bg-card)", border: "1px solid rgba(249,115,22,0.18)", boxShadow: "0 0 0 1px rgba(249,115,22,0.05) inset, 0 16px 50px rgba(0,0,0,0.3)" }}
           >
             {f.submitState.status === "success" ? (
@@ -577,7 +573,7 @@ function Ticket() {
               <form onSubmit={f.handleSubmit} className="space-y-4">
                 <div className="flex items-center justify-between gap-3 flex-wrap mb-1">
                   <h3 className="font-bold text-lg" style={{ color: "var(--text-primary)" }}>Book it</h3>
-                  <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold" style={{ color: "var(--ink-55)" }}>
+                  <span className="inline-flex items-center gap-1.5 text-[13px] font-semibold" style={{ color: "var(--ink-55)" }}>
                     <span className="relative flex w-2 h-2">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60" style={{ background: "#4ade80" }} />
                       <span className="relative inline-flex rounded-full w-2 h-2" style={{ background: "#4ade80" }} />
@@ -588,7 +584,7 @@ function Ticket() {
 
                 {/* Format picker — feeds the email */}
                 <div>
-                  <p className="text-[11px] font-bold tracking-[0.14em] uppercase mb-2" style={{ color: "var(--ink-45)" }}>Session format</p>
+                  <p className={labelClass} style={labelStyle}>Session format</p>
                   <div className="grid grid-cols-3 gap-2" role="group" aria-label="Session format">
                     {["In-person", "Virtual", "Either"].map((opt) => (
                       <button
@@ -596,12 +592,7 @@ function Ticket() {
                         type="button"
                         aria-pressed={f.format === opt}
                         onClick={() => f.setFormat(opt)}
-                        className="rounded-lg text-[13px] font-semibold transition-all active:scale-[0.97]"
-                        style={
-                          f.format === opt
-                            ? { background: "rgba(249,115,22,0.16)", border: "1px solid rgba(249,115,22,0.5)", color: "var(--accent-text)", minHeight: 44 }
-                            : { background: "var(--ink-05)", border: "1px solid var(--ink-10)", color: "var(--ink-65)", minHeight: 44 }
-                        }
+                        className="segment text-[14.5px]"
                       >
                         {opt}
                       </button>
@@ -621,12 +612,11 @@ function Ticket() {
                 <button
                   type="submit"
                   disabled={f.submitState.status === "loading"}
-                  className="w-full py-4 rounded-xl font-bold text-[15px] transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50"
-                  style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "var(--on-accent)", boxShadow: "0 6px 24px rgba(249,115,22,0.35)" }}
+                  className="btn-accent btn-lg btn-block disabled:opacity-50"
                 >
                   {f.submitState.status === "loading" ? "Sending…" : `Reserve · ${f.format.toLowerCase()}`}
                 </button>
-                <p className="text-center text-[11px]" style={{ color: "var(--ink-35)" }}>No obligation, no invoice. We reach out within one business day.</p>
+                <p className="text-center text-[13px]" style={{ color: "var(--text-secondary)" }}>No obligation, no invoice. We reach out within one business day.</p>
                 {f.submitState.status === "error" && <ErrorNote message={f.submitState.message} />}
               </form>
             )}
@@ -648,7 +638,7 @@ function Proof() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center mb-10 lg:mb-12">
           {/* Copy */}
           <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
-            <p className="text-[11px] font-bold tracking-[0.22em] uppercase mb-4" style={{ color: "var(--accent-text)" }}>Lunch &amp; Learn</p>
+            <p className="text-[12px] font-bold tracking-[0.22em] uppercase mb-4" style={{ color: "var(--accent-text)" }}>Lunch &amp; Learn</p>
             <h2 className="font-black mb-5" style={{ fontSize: "clamp(2.1rem, 4.5vw, 3.4rem)", lineHeight: 0.98, letterSpacing: "-0.03em", color: "var(--text-primary)" }}>
               The teams that specify Canada&apos;s streets{" "}
               <span style={{ background: "linear-gradient(92deg, #F97316 0%, #EAB308 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
@@ -661,11 +651,11 @@ function Proof() {
             </p>
 
             <div className="mb-7">
-              <p className="text-[10px] font-bold tracking-[0.2em] uppercase mb-2.5" style={{ color: "var(--ink-45)" }}>Previous sessions include</p>
+              <p className="text-[11px] font-bold tracking-[0.2em] uppercase mb-2.5" style={{ color: "var(--ink-45)" }}>Previous sessions include</p>
               <div className="flex flex-wrap gap-x-3 gap-y-1.5 max-w-lg">
                 {CITY_WALL.map((c, i) => (
                   <span key={c} className="inline-flex items-center gap-3">
-                    <span className="text-[13px] font-medium" style={{ color: "var(--ink-60)" }}>{c}</span>
+                    <span className="text-[14.5px] font-medium" style={{ color: "var(--ink-60)" }}>{c}</span>
                     {i < CITY_WALL.length - 1 && <span className="w-1 h-1 rounded-full" style={{ background: "rgba(249,115,22,0.5)" }} />}
                   </span>
                 ))}
@@ -675,7 +665,7 @@ function Proof() {
             <div className="flex items-center gap-4 flex-wrap">
               <MoreLink />
               <span className="hidden sm:block" style={{ color: "var(--ink-15)" }}>|</span>
-              <span className="text-[13px] font-semibold" style={{ color: "var(--ink-45)" }}>Samples and spec sheets included</span>
+              <span className="text-[14.5px] font-semibold" style={{ color: "var(--ink-45)" }}>Samples and spec sheets included</span>
             </div>
           </motion.div>
 
@@ -687,15 +677,15 @@ function Proof() {
             transition={{ duration: 0.55, delay: 0.08 }}
             className="relative"
           >
-            <div className="relative rounded-2xl overflow-hidden" style={{ aspectRatio: "5/4", border: "1px solid var(--border-color)", boxShadow: "0 20px 60px rgba(0,0,0,0.4)" }}>
+            <div className="relative rounded-xl overflow-hidden" style={{ aspectRatio: "5/4", border: "1px solid var(--border-color)", boxShadow: "0 20px 60px rgba(0,0,0,0.4)" }}>
               <Image src={IMG.src} alt={IMG.alt} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 50vw" />
-              <span className="absolute top-3 left-3 px-2.5 py-1 rounded-md text-[10px] font-black tracking-[0.14em] uppercase" style={{ background: "rgba(7,11,18,0.75)", color: "var(--accent-text)", border: "1px solid rgba(249,115,22,0.3)", backdropFilter: "blur(6px)" }}>
+              <span className="absolute top-3 left-3 px-2.5 py-1 rounded-md text-[11px] font-black tracking-[0.14em] uppercase" style={{ background: "rgba(7,11,18,0.75)", color: "var(--accent-text)", border: "1px solid rgba(249,115,22,0.3)", backdropFilter: "blur(6px)" }}>
                 StreetBond
               </span>
               {/* Caption keeps clear of Moose (right padding tracks his width) */}
               <div className="absolute bottom-0 inset-x-0 pl-5 pr-[38%] sm:pr-[34%] py-3.5" style={{ background: "linear-gradient(to top, rgba(7,11,18,0.92) 0%, rgba(7,11,18,0.55) 70%, transparent 100%)" }}>
-                <p className="text-[13px] font-semibold leading-snug" style={{ color: "var(--text-primary)" }}>The systems your team gets hands-on</p>
-                <p className="text-[11px] mt-0.5" style={{ color: "var(--ink-60)" }}>Coatings · thermoplastics · stamped asphalt</p>
+                <p className="text-[14.5px] font-semibold leading-snug" style={{ color: "var(--text-primary)" }}>The systems your team gets hands-on</p>
+                <p className="text-[12px] mt-0.5" style={{ color: "var(--ink-60)" }}>Coatings · thermoplastics · stamped asphalt</p>
               </div>
             </div>
             {/* Moose keeps his spot */}
@@ -711,7 +701,7 @@ function Proof() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.45 }}
-          className="rounded-2xl p-6 sm:p-7"
+          className="rounded-xl p-6 sm:p-7"
           style={{ background: "var(--bg-card)", border: "1px solid rgba(249,115,22,0.18)", boxShadow: "0 0 0 1px rgba(249,115,22,0.05) inset, 0 16px 50px rgba(0,0,0,0.3)" }}
         >
           {f.submitState.status === "success" ? (
@@ -720,7 +710,7 @@ function Proof() {
             <form onSubmit={f.handleSubmit}>
               <div className="flex items-center justify-between gap-3 flex-wrap mb-4">
                 <h3 className="font-bold text-base" style={{ color: "var(--text-primary)" }}>Book your Lunch &amp; Learn</h3>
-                <span className="text-[12px] font-semibold" style={{ color: "var(--ink-50)" }}>Confirmed within one business day · no obligation</span>
+                <span className="text-[13px] font-semibold" style={{ color: "var(--ink-50)" }}>Confirmed within one business day · no obligation</span>
               </div>
               <Honeypot value={f.formData.website} onChange={f.handleChange} />
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 mb-3.5">
@@ -732,8 +722,7 @@ function Proof() {
                 <button
                   type="submit"
                   disabled={f.submitState.status === "loading"}
-                  className="w-full py-3.5 rounded-xl font-bold text-[14px] transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50 self-end"
-                  style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "var(--on-accent)", boxShadow: "0 6px 24px rgba(249,115,22,0.35)" }}
+                  className="btn-accent btn-lg btn-block disabled:opacity-50 self-end"
                 >
                   {f.submitState.status === "loading" ? "Sending…" : "Book a Lunch & Learn"}
                 </button>
@@ -781,23 +770,19 @@ function Band({ topic, from }: { topic?: string; from?: string }) {
             />
           </span>
           <div className="min-w-0 flex-1">
-            <p className="text-[11px] font-bold tracking-[0.2em] uppercase mb-1.5" style={{ color: "var(--accent-text)" }}>
+            <p className="eyebrow mb-1.5">
               Lunch &amp; Learn
             </p>
             <h2 id="ll-band-heading" className="text-lg sm:text-xl font-bold leading-snug" style={{ color: "var(--text-primary)" }}>
               {topic
-                ? `A free working session on ${topic} for your team: case studies, spec language and samples on the table.`
-                : "A free working session for engineers, architects and municipal teams: case studies, spec language and samples on the table."}
+                ? `Book a Lunch & Learn on ${topic} for your team. Forty-five minutes, samples and spec language, lunch included.`
+                : "Book a Lunch & Learn for your team. Forty-five minutes, samples and spec language, lunch included."}
             </h2>
           </div>
-          <Link
-            href={lunchLearnHref(topic, from)}
-            className="inline-flex flex-shrink-0 items-center gap-2 rounded-lg px-5 py-3 text-sm font-bold whitespace-nowrap"
-            style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "var(--on-accent)", boxShadow: "0 4px 24px rgba(249,115,22,0.30)" }}
-          >
+          <Link href={lunchLearnHref(topic, from)} className="btn-accent flex-shrink-0">
             Book a Lunch &amp; Learn
             <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </Link>
         </div>

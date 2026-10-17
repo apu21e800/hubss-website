@@ -587,9 +587,11 @@ const curatedProjects: MapProject[] = [
     lng: -122.8057,
     product: "TrafficPatternsXD",
     application: "Crosswalks",
-    images: [
-      cdn("ed2f3c3d1553b0fbe1eabd7598ebc5bd392d169c-206x134.jpg"), // blog/white-rock-pier-crosswalk/featured.png
-    ],
+    // No photo until a real one arrives: the post's cover is a 206x134px
+    // file, shown five times its size on the map sheet, the softest image
+    // on the site (technical review, 17 Oct 2026). Square One installed the
+    // job and should have the original.
+    images: [],
     post: "white-rock-pier-crosswalk",
     excerpt:
       "A TrafficPatternsXD decorative crosswalk at the White Rock Pier, installed by Square One among the upgrades for the pier's reopening after its storm repairs.",

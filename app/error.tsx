@@ -61,35 +61,10 @@ export default function GlobalError({ error, reset }: ErrorProps) {
           )}
 
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-            <button
-              onClick={reset}
-              style={{
-                padding: "12px 22px",
-                borderRadius: 10,
-                background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
-                color: "var(--on-accent)",
-                fontWeight: 700,
-                fontSize: 14,
-                border: "none",
-                cursor: "pointer",
-                boxShadow: "0 4px 16px rgba(249,115,22,0.35)",
-              }}
-            >
+            <button onClick={reset} className="btn-accent">
               Reload page
             </button>
-            <Link
-              href="/"
-              style={{
-                padding: "12px 22px",
-                borderRadius: 10,
-                background: "transparent",
-                color: "var(--text-primary)",
-                fontWeight: 600,
-                fontSize: 14,
-                textDecoration: "none",
-                border: "1px solid var(--ink-18)",
-              }}
-            >
+            <Link href="/" className="btn-ghost">
               Back to home
             </Link>
           </div>

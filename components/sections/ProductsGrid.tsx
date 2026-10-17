@@ -73,28 +73,19 @@ export default function ProductsGrid({ products: source, copy = HOMEPAGE_COPY.sy
       /* six system cards — the densest reading block on the page */
       data-surface="paper"
       id="systems"
-      className="py-28 lg:py-32"
+      className="section-padding"
       style={{ backgroundColor: "var(--bg-section-asphalt)" }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Section header */}
         <div className="mb-14 md:mb-16">
-          <p className="gradient-text text-xs tracking-[0.15em] font-semibold uppercase mb-3">
+          <p className="eyebrow mb-3">
             {copy.eyebrow}
           </p>
           <div className="flex items-end justify-between gap-6 flex-wrap">
             <div>
-              <h2
-                className="font-black mb-3"
-                style={{
-                  color: "var(--text-primary)",
-                  fontSize: "clamp(2.2rem, 4vw, 3.5rem)",
-                  lineHeight: 1.08,
-                  letterSpacing: "-0.03em",
-                  textWrap: "balance",
-                }}
-              >
+              <h2 className="h2-section mb-3" style={{ color: "var(--text-primary)" }}>
                 {/* One sentence in place of two fragments ("Six systems. Six
                     different jobs."), in the wording already proposed to Doug
                     (docs/COPY-FOR-DOUG.md §2). Each phrase is an inline-block,
@@ -122,13 +113,9 @@ export default function ProductsGrid({ products: source, copy = HOMEPAGE_COPY.sy
                 (app/globals.css) gives it its border, hover and focus ring.
                 prefetch={false} (QA F5): the six cards already prefetch their
                 pages; the index and the "Also available" names need not. */}
-            <Link
-              href="/products"
-              prefetch={false}
-              className="btn-ghost flex-shrink-0 inline-flex items-center gap-2 rounded-lg px-7 py-3.5 text-sm font-semibold"
-            >
+            <Link href="/products" prefetch={false} className="btn-ghost flex-shrink-0">
               All systems
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
             </Link>
@@ -179,26 +166,11 @@ export default function ProductsGrid({ products: source, copy = HOMEPAGE_COPY.sy
                   // focus-ring-inset (app/globals.css): the card clips
                   // itself, so the keyboard ring is drawn inside it
                   // (QA F7, 30 Sep 2026).
-                  className="focus-ring-inset group relative flex flex-col w-full h-full rounded-2xl overflow-hidden transition-all duration-250"
-                  style={{
-                    background: "var(--bg-card)",
-                    border: "1px solid var(--ink-10)",
-                    boxShadow: "0 2px 12px rgba(0,0,0,0.3)",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = "rgba(249,115,22,0.45)";
-                    e.currentTarget.style.boxShadow =
-                      "0 16px 48px rgba(0,0,0,0.35), 0 0 0 1px rgba(249,115,22,0.2) inset";
-                    e.currentTarget.style.transform = "translateY(-3px)";
-                  }}
-                  onMouseLeave={(e) => {
-                    // Back to the resting values set in `style` above. These
-                    // used to differ, so a card the pointer had crossed kept a
-                    // lighter shadow and border than its neighbours.
-                    e.currentTarget.style.borderColor = "var(--ink-10)";
-                    e.currentTarget.style.boxShadow = "0 2px 12px rgba(0,0,0,0.3)";
-                    e.currentTarget.style.transform = "translateY(0)";
-                  }}
+                  // .card (app/globals.css): the site's one card, its hover
+                  // in CSS. The JS hover and the resting shadow went on
+                  // 17 Oct 2026.
+                  className="card focus-ring-inset group relative flex flex-col w-full h-full"
+                  style={{ background: "var(--bg-card)" }}
                 >
                   {/* Image — aspect 3:2, top of card */}
                   <div className="relative w-full overflow-hidden" style={{ aspectRatio: "3/2" }}>
@@ -207,7 +179,7 @@ export default function ProductsGrid({ products: source, copy = HOMEPAGE_COPY.sy
                       alt={imgAlt}
                       fill
                       loading="lazy"
-                      className="object-cover transition-transform duration-700 group-hover:scale-[1.05]"
+                      className="card-photo object-cover"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       style={{ objectPosition: PRODUCT_POSITION[product.slug] ?? "center" }}
                     />
@@ -227,7 +199,7 @@ export default function ProductsGrid({ products: source, copy = HOMEPAGE_COPY.sy
                     {/* Product name */}
                     <div className="flex items-start justify-between gap-3 mb-3">
                       <h3
-                        className="font-bold text-[16px] leading-snug transition-colors duration-200 group-hover:text-[var(--accent-text)]"
+                        className="font-bold text-[18px] leading-snug transition-colors duration-200 group-hover:text-[var(--accent-text)]"
                         style={{ color: "var(--text-primary)" }}
                       >
                         {product.name}
@@ -237,7 +209,7 @@ export default function ProductsGrid({ products: source, copy = HOMEPAGE_COPY.sy
 
                     {/* Description */}
                     <p
-                      className="text-[13px] leading-relaxed flex-1 mb-4"
+                      className="text-[14.5px] leading-relaxed flex-1 mb-4"
                       style={{ color: "var(--text-secondary)" }}
                     >
                       {what}
@@ -249,7 +221,7 @@ export default function ProductsGrid({ products: source, copy = HOMEPAGE_COPY.sy
                         {apps.slice(0, 3).map((app) => (
                           <span
                             key={app}
-                            className="text-[10px] font-semibold px-2 py-0.5 rounded-full tracking-wide"
+                            className="text-[12px] font-semibold px-2 py-0.5 rounded-full tracking-wide"
                             style={{
                               background: "var(--fill-subtle)",
                               color: "var(--ink-55)",
@@ -259,11 +231,9 @@ export default function ProductsGrid({ products: source, copy = HOMEPAGE_COPY.sy
                           </span>
                         ))}
                       </div>
-                      <span
-                        className="flex-shrink-0 text-[11px] font-semibold transition-all duration-200 group-hover:translate-x-1"
-                        style={{ color: "rgba(249,115,22,0.92)" }}
-                      >
-                        Specs →
+                      <span className="link-arrow link-arrow-sm flex-shrink-0">
+                        Specs
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
                       </span>
                     </div>
 
@@ -292,13 +262,14 @@ export default function ProductsGrid({ products: source, copy = HOMEPAGE_COPY.sy
               (globals.css), so the desktop line stays compact. On a phone the
               label takes its own row and the four names fit on the next. */}
           <p
-            className="flex flex-wrap items-center justify-center sm:justify-start gap-x-1 text-[13px]"
+            className="flex flex-wrap items-center justify-center sm:justify-start gap-x-1 text-[14.5px]"
             style={{ color: "var(--ink-50)" }}
           >
             <span className="basis-full sm:basis-auto text-center">Also available:</span>
             {alsoAvailable.map((p, i) => (
+              // The dot follows its name (lib/separators.ts: a dot never
+              // opens a line), so a wrapped row starts with a name, not "·".
               <span key={p.slug} className="inline-flex items-center gap-x-1">
-                {i > 0 && <span aria-hidden="true">·</span>}
                 <Link
                   href={`/products/${p.slug}`}
                   prefetch={false}
@@ -307,6 +278,7 @@ export default function ProductsGrid({ products: source, copy = HOMEPAGE_COPY.sy
                 >
                   {p.name}
                 </Link>
+                {i < alsoAvailable.length - 1 && <span aria-hidden="true">·</span>}
               </span>
             ))}
           </p>

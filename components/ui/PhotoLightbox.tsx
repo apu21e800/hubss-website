@@ -327,7 +327,7 @@ function Frame({
         <p className="text-[9px] font-bold tracking-[0.2em] uppercase mb-0.5" style={{ color: "#FB923C" }}>
           HUB Surface Systems
         </p>
-        <p className="text-[13px] sm:text-sm font-semibold leading-snug" style={{ color: WHITE }}>
+        <p className="text-[14.5px] sm:text-sm font-semibold leading-snug" style={{ color: WHITE }}>
           {photo.caption ?? photo.alt}
         </p>
       </div>

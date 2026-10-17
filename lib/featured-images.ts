@@ -47,7 +47,7 @@ export const productImages: Record<string, ImageConfig> = {
   // photos are a supplier kit and a pack shot. fastpatch-repaired.jpg carries a third-party
   // copyright in its EXIF (lib/product-card-images.mjs refuses it) and needs replacing or a
   // photo-free hero. Listed here so each hero has an alt that describes the picture.
-  'chipfill':            { featured: '/images/products/chipfill/chipfill-road-repair.webp',            fallback: '/images/products/chipfill/chipfill-road-repair.webp',            alt: 'A pothole in an asphalt street, parked cars blurred behind: the damage ChipFill repairs' },
+  'chipfill':            { featured: '/images/products/chipfill/chipfill-application.jpg',            fallback: '/images/products/chipfill/chipfill-application.jpg',            alt: 'ChipFill thermoplastic chips poured by hand into a pothole, the bag beside it' },
   'aggrefill':           { featured: '/images/products/aggrefill/aggrefill-02.jpg',                     fallback: '/images/products/aggrefill/aggrefill-02.jpg',                     alt: 'AggreFill aggregate and white ChipFill granules in a pothole, a repair in progress' },
   'fast-patch':          { featured: '/images/products/fast-patch/fastpatch-repaired.jpg',              fallback: '/images/products/fast-patch/fastpatch-repaired.jpg',              alt: 'A finished Fast Patch DPR repair, a patch of fine grey aggregate set flush in the surrounding pavement' },
 };

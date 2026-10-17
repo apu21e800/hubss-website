@@ -67,16 +67,10 @@ export default async function ResourcesPage() {
           landing H1, 48px at 1440 (QA D11, 30 Sep 2026): the page sat at
           x=104 while About, Gallery and Contact sat at x=112. */}
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16">
-        <p
-          className="text-xs font-semibold tracking-[0.2em] uppercase mb-3"
-          style={{ color: "var(--accent-text-lg)" }}
-        >
+        <p className="eyebrow mb-3">
           Resources
         </p>
-        <h1
-          className="font-bold mb-4 leading-tight"
-          style={{ color: "var(--text-primary)", fontSize: "clamp(2rem, 3.4vw, 3rem)" }}
-        >
+        <h1 className="h1-page mb-4" style={{ color: "var(--text-primary)" }}>
           Specification library
         </h1>
         <p className="text-base max-w-2xl" style={{ color: "var(--text-secondary)" }}>
@@ -110,7 +104,7 @@ export default async function ResourcesPage() {
                 style={{ border: "1px solid var(--ink-12)" }}
               />
               <div className="min-w-0">
-                <p className="whitespace-nowrap text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--text-muted)" }}>
+                <p className="whitespace-nowrap text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--text-muted)" }}>
                   {catalogueLabel} edition
                 </p>
                 <p className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>
@@ -171,10 +165,7 @@ export default async function ResourcesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 pb-28 relative">
           {/* Section label */}
           <div className="flex items-center gap-4 mb-10">
-            <h2
-              className="text-sm font-bold tracking-widest uppercase"
-              style={{ color: "var(--accent-text-lg)" }}
-            >
+            <h2 className="eyebrow">
               All documents
             </h2>
             <div

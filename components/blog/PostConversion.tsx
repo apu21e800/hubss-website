@@ -34,7 +34,7 @@ import { lunchLearnHref } from "@/lib/lunch-learn";
 const ASK: Record<string, { heading: string; body: string }> = {
   "Guide": {
     heading: "Bring the rest of this decision to your team.",
-    body: "A 45-minute Lunch & Learn covers the comparisons this piece opened: lifecycle math for your climate, spec language you can paste into a tender, and material samples on the table for the people who have to sign off.",
+    body: "A 45-minute Lunch & Learn covers the comparisons this piece opened: the service-life maths for your climate, spec language you can paste into a tender, and material samples on the table for the people who have to sign off.",
   },
   "Case Study": {
     heading: "See the system that did it, in person.",
@@ -82,7 +82,7 @@ export default function PostConversion({ post }: { post: PostMeta }) {
   return (
     <div>
       <div
-        className="relative overflow-hidden rounded-2xl p-7 sm:p-10"
+        className="relative overflow-hidden rounded-xl p-7 sm:p-10"
         style={{
           background: "var(--bg-card)",
           border: "1px solid rgba(249,115,22,0.28)",
@@ -90,7 +90,7 @@ export default function PostConversion({ post }: { post: PostMeta }) {
         }}
       >
         <div className="absolute inset-x-0 top-0 h-[3px]" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} aria-hidden="true" />
-        <p className="text-[11px] font-bold tracking-[0.18em] uppercase mb-3" style={{ color: section.text }}>
+        <p className="text-[12px] font-bold tracking-[0.18em] uppercase mb-3" style={{ color: section.text }}>
           Lunch &amp; Learn
         </p>
         <h2
@@ -132,7 +132,7 @@ export default function PostConversion({ post }: { post: PostMeta }) {
 
         {/* Both offices, as targets a thumb can hit, written the house way
             ("West · 604-309-8212", docs/STYLE.md). */}
-        <div className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-0 text-[13px]" style={{ color: "var(--text-muted)" }}>
+        <div className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-0 text-[14.5px]" style={{ color: "var(--text-muted)" }}>
           <span>Or call</span>
           {PHONES.map((p) => (
             <a

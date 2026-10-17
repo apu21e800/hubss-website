@@ -29,7 +29,6 @@ export async function generateMetadata({ params }: { params: Promise<{ page: str
   const n = normalisePage(page);
   if (!showCatalogue() || n === null) return { robots: { index: false, follow: false } };
   const alt = cataloguePages[n - 1]?.alt ?? "";
-  const big = catalogue.widths[catalogue.widths.length - 1];
   return {
     title: { absolute: `${ideaBook.title}, page ${n} | HUB Surface Systems` },
     description: alt,
@@ -38,7 +37,7 @@ export async function generateMetadata({ params }: { params: Promise<{ page: str
       title: `${ideaBook.title}, page ${n}`,
       description: alt,
       url: `https://hubss.com${ideaBook.href}/${n}`,
-      images: [{ url: `https://hubss.com${cataloguePageUrl(n, big)}`, width: big, height: Math.round(big / catalogue.aspect) }],
+      images: [{ url: `https://hubss.com${catalogue.dir}/og.jpg`, width: 1200, height: 630 }],
     },
   };
 }

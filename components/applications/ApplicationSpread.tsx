@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ApplicationCatalogueEntry } from "@/lib/application-catalogue";
 import { products } from "@/lib/products";
+import { plainNote } from "@/lib/plain-specs";
 
 /**
  * The catalogue's application spread, rendered for the web.
@@ -31,16 +32,7 @@ export default function ApplicationSpread({
   return (
     <section aria-labelledby="application-positioning" className="mb-14">
       {/* Claim */}
-      <h2
-        id="application-positioning"
-        className="font-black mb-2.5"
-        style={{
-          color: "var(--text-primary)",
-          fontSize: "clamp(1.75rem, 3.4vw, 2.6rem)",
-          letterSpacing: "-0.03em",
-          lineHeight: 1.05,
-        }}
-      >
+      <h2 id="application-positioning" className="h2-section mb-2.5" style={{ color: "var(--text-primary)" }}>
         {entry.title}
       </h2>
 
@@ -62,7 +54,7 @@ export default function ApplicationSpread({
         className="mb-9 leading-[1.8]"
         style={{
           color: "var(--text-body)",
-          fontSize: "clamp(1rem, 1.7vw, 1.0625rem)",
+          fontSize: "clamp(1.0625rem, 1.8vw, 1.125rem)",
           maxWidth: "62ch",
         }}
       >
@@ -72,7 +64,7 @@ export default function ApplicationSpread({
       {/* Specify — the catalogue's own product selection for this work. */}
       <div style={{ borderTop: "1px solid var(--border-color)" }}>
         <h3
-          className="text-[11px] font-bold uppercase pt-7 pb-4"
+          className="text-[12px] font-bold uppercase pt-7 pb-4"
           style={{ color: "var(--accent-text-lg)", letterSpacing: "0.18em" }}
         >
           Specify
@@ -83,20 +75,28 @@ export default function ApplicationSpread({
             <li key={s.slug} style={{ borderTop: "1px solid var(--ink-06)" }}>
               <Link
                 href={`/products/${s.slug}`}
-                className="group flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-6 py-4 transition-colors hover:bg-[var(--ink-03)] -mx-3 px-3 rounded-lg"
+                className="group flex items-center gap-3 py-4 transition-colors hover:bg-[var(--ink-03)] -mx-3 px-3 rounded-lg"
               >
-                <span
-                  className="font-bold flex-shrink-0 transition-colors group-hover:text-[var(--accent-text)]"
-                  style={{ color: "var(--text-primary)", fontSize: "1.0625rem", minWidth: "11rem" }}
-                >
-                  {nameOf(s.slug)}
+                <span className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-6 min-w-0 flex-1">
+                  <span
+                    className="font-bold flex-shrink-0 transition-colors group-hover:text-[var(--accent-text)]"
+                    style={{ color: "var(--text-primary)", fontSize: "1.0625rem", minWidth: "11rem" }}
+                  >
+                    {nameOf(s.slug)}
+                  </span>
+                  <span
+                    className="leading-snug"
+                    style={{ color: "var(--text-secondary)", fontSize: "1rem" }}
+                  >
+                    {plainNote(s.note)}
+                  </span>
                 </span>
-                <span
-                  className="leading-snug"
-                  style={{ color: "var(--text-secondary)", fontSize: "0.95rem" }}
-                >
-                  {s.note}
-                </span>
+                {/* The chevron says the row is a link; on a phone the hover
+                    colour never showed and the list read as plain specs
+                    (phone review, 17 Oct 2026). */}
+                <svg className="w-4 h-4 flex-shrink-0 transition-transform group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ color: "var(--ink-35)" }}>
+                  <path d="M9 18l6-6-6-6" />
+                </svg>
               </Link>
             </li>
           ))}

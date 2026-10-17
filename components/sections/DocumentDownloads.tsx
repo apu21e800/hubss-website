@@ -54,7 +54,7 @@ function DocRow({
       {/* Type badge — desktop only */}
       {showBadge && (
         <span
-          className="flex-shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded border hidden sm:inline"
+          className="flex-shrink-0 text-[11px] font-semibold px-2 py-0.5 rounded border hidden sm:inline"
           style={{ background: "rgba(249,115,22,0.08)", color: "var(--accent-text-lg)", borderColor: "rgba(249,115,22,0.18)" }}
         >
           {typeLabel}
@@ -62,15 +62,13 @@ function DocRow({
       )}
 
       {/* Preview button */}
+      {/* The same row as /resources draws (uniformity pass, 17 Oct 2026):
+          Preview a grey ghost button, the download square orange, both with
+          a hover. Here Preview was orange and the download grey, and
+          neither changed under the pointer. */}
       <button
         onClick={() => onPreview({ href: doc.href, label: labelText, typeLabel })}
-        className="flex-shrink-0 flex items-center gap-1.5 text-xs font-semibold px-3 rounded-lg transition-colors"
-        style={{
-          minHeight: "44px",
-          background: "rgba(249,115,22,0.08)",
-          color: "var(--accent-text-lg)",
-          border: "1px solid rgba(249,115,22,0.18)",
-        }}
+        className="btn-ghost btn-sm flex-shrink-0 text-xs"
         aria-label={`Preview ${labelText}`}
       >
         <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -86,14 +84,8 @@ function DocRow({
         download
         target="_blank"
         rel="noopener noreferrer"
-        className="flex-shrink-0 flex items-center justify-center rounded-lg transition-colors"
-        style={{
-          minWidth: "44px",
-          minHeight: "44px",
-          color: "var(--ink-40)",
-          background: "var(--ink-05)",
-          border: "1px solid var(--ink-10)",
-        }}
+        className="doc-download flex-shrink-0 flex items-center justify-center rounded-lg"
+        style={{ minWidth: "44px", minHeight: "44px" }}
         title={`Download ${labelText}`}
         aria-label={`Download ${labelText}`}
       >
@@ -122,9 +114,9 @@ export default function DocumentDownloads({ slug }: { slug: string }) {
         />
       )}
 
-      <div id="spec-sheets" className="mt-14 scroll-mt-24">
+      <div id="spec-sheets" className="mt-14">
         <div
-          className="rounded-2xl overflow-hidden"
+          className="rounded-xl overflow-hidden"
           style={{
             background: "var(--bg-primary)",
             border: "1px solid var(--ink-10)",
@@ -135,17 +127,14 @@ export default function DocumentDownloads({ slug }: { slug: string }) {
             {/* Header */}
             <div className="flex items-center gap-4 mb-6">
               <div>
-                <p
-                  className="text-xs font-bold tracking-[0.2em] uppercase mb-1"
-                  style={{ color: "var(--accent-text-lg)" }}
-                >
+                <p className="eyebrow mb-1">
                   Documents
                 </p>
-                {/* "Downloads" describes the mechanism. A municipal engineer is
-                    not looking for a download, they are looking for the sheet
-                    they have to attach to a submittal. */}
-                <h2 className="text-xl font-bold" style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
-                  Spec &amp; submittal
+                {/* "Spec sheets": the name buyers use, and the one the button
+                    above and the menu use (copy review, 17 Oct 2026: six
+                    names for the same PDFs). */}
+                <h2 className="h2-sub" style={{ color: "var(--text-primary)" }}>
+                  Spec sheets
                 </h2>
               </div>
               <div className="flex-1 h-px ml-4" style={{ background: "var(--fill-subtle)" }} />

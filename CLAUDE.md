@@ -161,13 +161,24 @@ Vercel — connected to GitHub, auto-deploys on push to main
   (`ideaBook`, lib/idea-book-*.ts, components/idea-book, IdeaBookBand,
   showCatalogue, /public/catalogue, `test:idea-book`, /product-book) keep
   the old words on purpose: labels change, URLs stay.
-- The blog is **Insights** (was Field Notes). Labels only: /blog URLs, the
+- The blog is **Projects** since 17 Oct 2026 (Vern: "instead of insights
+  call them Projects... !!! see top nav"); it was Insights from 25 Sep and
+  Field Notes before that. One source for the name: `BLOG_NAME` in
+  lib/field-notes-taxonomy.ts (the bar, the drawer, the footer, search, the
+  /blog masthead, breadcrumbs and llms.txt read it). Labels only: /blog URLs,
+  the section slugs (/blog/projects, /blog/guides, /blog/articles), the
   Sanity types (blogPost, storyIdea), the cron routes and env names are
-  unchanged. The "Blog" post type prints as "Article" (lib/field-notes-taxonomy.ts,
-  `badge`); its stored value stays "Blog".
+  unchanged, and so are the code names (InsightsMegaMenu, nav-insights.json,
+  the `insights` panel). The blog and its first section are both called
+  Projects: a project post's breadcrumb names it once, and /blog/projects
+  shows "All projects" above its H1 instead of a duplicate crumb. The "Blog"
+  post type prints as "Article" (lib/field-notes-taxonomy.ts, `badge`); its
+  stored value stays "Blog". Studio's homepage eyebrow for the section is
+  rewritten at render until scripts/studio-cleanup-2026-10-17.ts (change 3)
+  runs on Vern's PC.
 - Studio says it in plain words (15 Oct 2026; Vern: "what does not live mean?
   ... maybe better to just call it blog"): **Blog posts** (blogPost; the site
-  still calls the blog Insights), **Blog ideas** (storyIdea, was "Insights
+  calls the blog Projects), **Blog ideas** (storyIdea, was "Insights
   plan"), **Job photos for social** (fieldPost, was "From the field"; the
   stream keeps that name in logs), **Sent to Buffer** (socialLog, read only).
   The old "Projects (Map Pins)" list is off the sidebar and the Create menu
@@ -345,6 +356,56 @@ screen, and a leaf's photo and heading arrive once 120px of it shows.
   the systems contents and the two colour pages scroll, by design, at
   1920x950, 1536x730, 1440x790 and 1440x900. Measure any layout change at
   those sizes (each leaf's height against `.ib-scroll`'s), not only 1440x900.
+
+## The system (17 Oct 2026, evening)
+Vern: "send a QA crew site wide to make sure everything is DDB agency
+grade ... create uniformity site wide, bring everything into alignment ...
+make sure every heading and body copy reads well, as if it is not written
+by AI." Five reviewers (uniformity, phone and tablet, copy voice, technical,
+interaction) swept a local production build; their reports are in the
+Claude project (claude/HUBSS-qa-crew-2026-10-17.md). The answer is a set
+of classes in app/globals.css that every page reads; set nothing else on
+these elements, and never draw a button, label or card by hand again:
+- Buttons: `.btn-accent` (orange) and `.btn-ghost` (outlined), one size
+  (44px, radius 8, 15px bold); `.btn-lg` only on the hero and form submits,
+  `.btn-sm` only in the bar and the reader's toolbar; `.btn-block` full
+  width. They set `display` unlayered, so to hide one at a breakpoint wrap
+  it (a `hidden md:block` div), never put `hidden` on the button.
+- Type: `.h1-page` (48px: hubs, landing, legal, forms) and `.h1-hero`
+  (60px: on a photo); `.h2-section` (40px) and `.h2-sub` (28px). Body is
+  the text-base token (17px). A label heading takes no full stop; a
+  sentence with a verb keeps its own.
+- `.eyebrow` (13px, 0.2em, flat accent; `.eyebrow-photo` cream on a photo),
+  `.link-arrow` (a text link with an svg arrow that slides; never the "→"
+  glyph; `.link-arrow-sm` inside cards), `.card` with `.card-photo` (radius
+  12, hairline, no resting shadow, 2px lift), `.chip` with `.chip-count`
+  (the one rounded-full control; `aria-pressed` is the selected state),
+  `.segment` (the In-person / Virtual / Either control), `.section-padding`
+  (96px, 64 on phones), `.nav-item` (the bar's resting colour in `--nav-c`
+  so hover can win). The motion tokens (`--dur-1/2/3`, `--ease-out`) are
+  the only durations.
+- Buttons have the hand cursor again (Tailwind 4 dropped it); on a touch
+  screen no field is under 16px (iOS zooms otherwise); `:user-invalid`
+  rings a field the visitor got wrong; `<details class="faq" name=...>`
+  opens one at a time and eases.
+- No root loading.tsx: it was a black "LOADING" screen between pages. It is
+  parked in app/_parked (delete when confirmed); components/NavigationProgress.tsx
+  draws a 2px line under the bar instead. html's `scroll-padding-top` is the
+  one anchor offset: no `scroll-mt` on targets.
+- Studio holds page text the 17 Oct copy review rewrote. lib/copy-superseded.ts
+  lists each old line and its replacement; `current()` prints the new line
+  wherever Studio still holds the old one (homepage sections, About, Contact,
+  the Lunch & Learn answers), and scripts/studio-cleanup-2026-10-17.ts change
+  4 writes the new lines into Studio on Vern's PC. Add to that list, never a
+  one-off shim, when a Studio-held line changes in code.
+- Sanity heroes render through components/ui/HeroPhoto.tsx (a plain <img>
+  with a 2560px candidate and a portrait CDN cut for phones around the
+  hotspot); /public heroes keep PhotoImage. next.config.ts deviceSizes stay
+  capped at 1920 on purpose (Vercel bills /public variants).
+- The home page leads with the newest post that has a photo; nothing is
+  pinned. The client ticker (TrustedByMarquee) lists only names the Product
+  Portfolio Book lists. The White Rock Pier pin has no photo until a real one
+  arrives (the post's cover is 206px).
 
 ## The glossary (17 Oct 2026)
 Doug, 17 Oct: "some of the copy is, in his words, gobbledygook ... get the

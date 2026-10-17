@@ -286,11 +286,38 @@ function writeEmpty() {
   );
 }
 
+/**
+ * The share image for the reader's three routes: the cover on the brand's
+ * charcoal at 1200 x 630 JPEG. Until 17 Oct 2026 the share image was the
+ * 2000px square WebP page itself, which LinkedIn letterboxed and which the
+ * site's own rule (lib/photos.ts) says to avoid for social crawlers. Made on
+ * every build from the first page's largest raster, when missing or older.
+ */
+async function ensureShareImage(m) {
+  if (!m || !m.edition || !Array.isArray(m.widths) || !m.widths.length) return;
+  const dir = path.join(PUB, String(m.edition));
+  const cover = path.join(dir, pageFile(1, m.widths[m.widths.length - 1]));
+  const out = path.join(dir, "og.jpg");
+  if (!fs.existsSync(cover)) return;
+  try {
+    if (fs.existsSync(out) && fs.statSync(out).mtimeMs >= fs.statSync(cover).mtimeMs) return;
+  } catch { /* make it */ }
+  const H = 630, W = 1200, pad = 24;
+  const page = await sharp(cover).resize({ height: H - pad * 2, withoutEnlargement: true }).toBuffer();
+  const meta = await sharp(page).metadata();
+  await sharp({ create: { width: W, height: H, channels: 3, background: "#0b0b0b" } })
+    .composite([{ input: page, left: Math.round((W - (meta.width ?? 0)) / 2), top: pad }])
+    .jpeg({ quality: 86, mozjpeg: true })
+    .toFile(out);
+  log(`share    og.jpg (${Math.round(fs.statSync(out).size / 1024)} KB)`);
+}
+
 async function main() {
   const existing = readManifest();
 
   if (!FORCE && !REMANIFEST && manifestIsSatisfied(existing)) {
     log(`up to date: ${existing.pages.length} pages, edition ${existing.edition}`);
+    await ensureShareImage(existing);
     return;
   }
 

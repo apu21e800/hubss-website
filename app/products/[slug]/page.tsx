@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import PhotoImage from "@/components/ui/PhotoImage";
+import HeroPhoto from "@/components/ui/HeroPhoto";
 import Link from "next/link";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
@@ -24,6 +25,7 @@ import { buildMetadata } from "@/lib/seo";
 import { getProductFamily } from "@/lib/product-taxonomy";
 import { catalogueFor } from "@/lib/product-catalogue";
 import ProductSpecCard, { fixPrint } from "@/components/products/ProductSpecCard";
+import { plainSpec } from "@/lib/plain-specs";
 import ProductFaq from "@/components/products/ProductFaq";
 import { faqsFor } from "@/lib/product-faqs";
 import { getMergedProduct } from "@/lib/products.server";
@@ -52,6 +54,15 @@ export async function generateStaticParams() {
 }
 
 type Props = { params: Promise<{ slug: string }> };
+
+/**
+ * Widths of the code's own hero photos that may stand in for a Studio hero
+ * that is too small to fill the banner (see `hero` below). Measured on
+ * 17 Oct 2026; add a line when a bigger photo lands in /public.
+ */
+const CODE_HERO_WIDTHS: Record<string, number> = {
+  "/images/products/chipfill/chipfill-application.jpg": 1200,
+};
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
@@ -146,10 +157,20 @@ export default async function ProductPage({ params }: Props) {
   // the old templates' invented settings into Studio ("at a civic plaza",
   // "150 mil ..."), so the Sanity alt and caption are replaced at render by
   // what the photo's folder proves; a line a person wrote in Studio stays.
-  const hero: Photo = honestPhoto(product.heroPhoto ?? {
-    src: featuredImg?.src ?? product.imageUrl,
-    alt: featuredImg?.alt ?? product.name,
-  });
+  // A Studio hero under 1000px wide is passed over for the code's photo when
+  // the code has one at least that wide (17 Oct 2026, Vern: "make sure
+  // images are clear and well positioned including all hero images"):
+  // ChipFill's Studio hero is a 640px file, and chipfill-application.jpg
+  // (1200px, the chips poured into the hole) is the photograph of what the
+  // product is. With no large photo anywhere (AggreFill) the hatched panel
+  // below stays, which is honest until one is taken.
+  const codeHero = { src: featuredImg?.src ?? product.imageUrl, alt: featuredImg?.alt ?? product.name };
+  const studioHero = product.heroPhoto;
+  const studioTooSmall = typeof studioHero?.width === "number" && studioHero.width < 1000;
+  const codeHeroWidth = CODE_HERO_WIDTHS[codeHero.src];
+  const hero: Photo = honestPhoto(
+    studioHero && !(studioTooSmall && codeHeroWidth && codeHeroWidth >= 1000) ? studioHero : codeHero,
+  );
   const galleryPhotos: Photo[] = product.galleryPhotos?.map(honestPhoto) ?? (() => {
     const bannerSrc = featuredImg?.src ?? product.imageUrl;
     const fromFolder = galleryFor(bannerSrc, product.gallery, `images/products/${product.slug}`);
@@ -314,15 +335,7 @@ export default async function ProductPage({ params }: Props) {
           />
         ) : (
           <>
-            <PhotoImage
-              src={hero.src}
-              alt={hero.alt}
-              fill
-              className={`object-cover ${heroColourClass(hero)}`}
-              style={{ objectPosition: heroPosition }}
-              priority
-              sizes="100vw"
-            />
+            <HeroPhoto photo={hero} position={heroPosition} className={heroColourClass(hero)} />
             <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(8,13,22,0.12) 0%, rgba(8,13,22,0.04) 38%, rgba(8,13,22,0.34) 64%, rgba(8,13,22,0.82) 100%)" }} />
             <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgba(8,13,22,0.46) 0%, rgba(8,13,22,0.16) 40%, transparent 62%)" }} />
           </>
@@ -332,16 +345,12 @@ export default async function ProductPage({ params }: Props) {
             {/* The label was orange on the photo and measured 2 to 3:1 on red,
                 orange and grey heroes (QA pa#13). Cream on the scrim reads on
                 all of them; the orange stays in the dash under the name. */}
-            <p
-              className="text-[11px] sm:text-xs font-bold tracking-[0.2em] uppercase mb-3"
-              style={{ color: "rgba(245,240,235,0.92)", textShadow: "0 1px 10px rgba(0,0,0,0.6)" }}
-            >
+            <p className="eyebrow eyebrow-photo mb-3" style={{ textShadow: "0 1px 10px rgba(0,0,0,0.6)" }}>
               {product.eyebrow ?? getProductFamily(product.slug)}
             </p>
             <h1
-              className="font-black leading-[1.05] mb-3"
+              className="h1-hero mb-3"
               style={{
-                fontSize: "clamp(2rem, 5vw, 3.75rem)",
                 color: "var(--text-primary)",
                 textShadow: "0 2px 24px rgba(0,0,0,0.5)",
                 letterSpacing: "-0.025em",
@@ -407,13 +416,13 @@ export default async function ProductPage({ params }: Props) {
                     pages. "What AirMark is" and a sidebar "Specification" made
                     the four products without a spread read as a second
                     template (QA B2, C3, 30 Sep 2026). */}
-                <h2 className="text-xl sm:text-2xl font-bold mb-4" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
+                <h2 className="h2-sub mb-4" style={{ color: "var(--text-primary)" }}>
                   How it works
                 </h2>
                 {product.descriptionBlocks ? (
                   <RichText value={product.descriptionBlocks} />
                 ) : (
-                  <p className="mb-12 leading-[1.85]" style={{ color: "var(--text-body)", fontSize: "clamp(1rem, 1.8vw, 1.075rem)", maxWidth: "65ch" }}>
+                  <p className="mb-12 leading-[1.85]" style={{ color: "var(--text-body)", fontSize: "clamp(1.0625rem, 1.9vw, 1.125rem)", maxWidth: "65ch" }}>
                     {product.description}
                   </p>
                 )}
@@ -447,15 +456,11 @@ export default async function ProductPage({ params }: Props) {
             </p>
           </div>
           <div className="flex flex-wrap gap-3 relative flex-shrink-0">
-            <Link href={lunchLearnHref(product.name, "product")}
-              className="px-5 rounded-lg text-sm font-bold transition-[filter] hover:brightness-110 inline-flex items-center"
-              style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "var(--on-accent)", boxShadow: "0 4px 16px rgba(249,115,22,0.28)", minHeight: "44px" }}>
+            <Link href={lunchLearnHref(product.name, "product")} className="btn-accent">
               Book a Lunch &amp; Learn
             </Link>
             {hasDocs && (
-              <a href="#spec-sheets"
-                className="px-5 rounded-lg text-sm font-semibold transition-colors inline-flex items-center hover:bg-[var(--ink-04)]"
-                style={{ background: "transparent", color: "var(--text-primary)", border: "1px solid var(--ink-15)", minHeight: "44px" }}>
+              <a href="#spec-sheets" className="btn-ghost">
                 Spec sheets
               </a>
             )}
@@ -485,48 +490,55 @@ export default async function ProductPage({ params }: Props) {
               and the way to a price. Sticky again from 28 Sep 2026, when the
               page stopped clipping with overflow hidden (app/globals.css). */}
           <aside className="min-w-0">
-            <div className="rounded-xl p-6 sm:p-7 lg:sticky lg:top-24 relative overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)", boxShadow: "0 1px 2px rgba(0,0,0,0.04)" }}>
+            <div className="rounded-xl p-6 sm:p-7 lg:sticky lg:top-24 relative overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}>
               <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
+              <h2 className="font-bold text-lg mb-1.5" style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
+                Price a project
+              </h2>
+              <p className="text-[15px] leading-relaxed mb-4 max-w-prose" style={{ color: "var(--text-secondary)" }}>
+                Your regional office prices it and puts you in touch with a certified {product.name} installer.
+              </p>
+              <div className="grid grid-cols-2 gap-2 mb-3">
+                <a href={telHref(offices.east.phone)} className="rounded-lg px-3 py-2 transition-colors hover:bg-[var(--ink-04)]" style={{ border: "1px solid var(--border-color)", minHeight: 44 }}>
+                  <span className="block text-[12px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>East</span>
+                  <span className="block text-[15px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{offices.east.phone}</span>
+                </a>
+                <a href={telHref(offices.west.phone)} className="rounded-lg px-3 py-2 transition-colors hover:bg-[var(--ink-04)]" style={{ border: "1px solid var(--border-color)", minHeight: 44 }}>
+                  <span className="block text-[12px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>West</span>
+                  <span className="block text-[15px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{offices.west.phone}</span>
+                </a>
+              </div>
+              {/* Carries the system to the contact form, as the Lunch & Learn
+                  link beside it carries its topic (interaction review, 17 Oct
+                  2026: the two buttons on one card behaved differently). */}
+              <Link href={`/contact?project=${encodeURIComponent(product.name)}&from=product`} className="link-arrow">
+                Send us the project
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+              </Link>
               {sideSpecs.length > 0 && (
                 <>
                   {/* Its own section, not an <h3> under Downloads. */}
-                  <h2 className="font-bold text-lg mb-5" style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
-                    Specification details
+                  {/* After the way to a price (17 Oct 2026, Vern: "imagine you are a
+                      city specifier or architect ... make it clean, don't overwhelm
+                      the buyer"): the sidebar leads with the people and the ask, and
+                      the leftover rows follow as "More details". */}
+                  <h2 className="font-bold text-base mt-8 mb-4" style={{ color: "var(--text-primary)", letterSpacing: "-0.01em" }}>
+                    More details
                   </h2>
-                  <dl className="space-y-3.5 mb-7">
+                  <dl className="space-y-3.5">
                     {sideSpecs.map((spec) => (
                       <div key={spec.label} className="flex justify-between gap-4 text-sm" style={{ borderBottom: "1px solid var(--ink-06)", paddingBottom: "12px" }}>
                         <dt style={{ color: "var(--text-muted)" }}>{spec.label}</dt>
                         <dd className="font-semibold text-right max-w-[62%]" style={{ color: "var(--text-primary)" }}>
                           {/* fixPrint: Studio holds StreetPrint's "Yes: flush surface" row; the
                               punctuation is corrected at render until the sync runs (QA B23). */}
-                          {fixPrint(spec.value)}
+                          {plainSpec(fixPrint(spec.value))}
                         </dd>
                       </div>
                     ))}
                   </dl>
                 </>
               )}
-              <h2 className="font-bold text-base mb-1.5" style={{ color: "var(--text-primary)" }}>
-                Pricing and installers
-              </h2>
-              <p className="text-[13.5px] leading-relaxed mb-4" style={{ color: "var(--text-secondary)" }}>
-                Your regional office prices the project and puts you in touch with a certified {product.name} installer.
-              </p>
-              <div className="grid grid-cols-2 gap-2 mb-3">
-                <a href={telHref(offices.east.phone)} className="rounded-lg px-3 py-2 transition-colors hover:bg-[var(--ink-04)]" style={{ border: "1px solid var(--border-color)", minHeight: 44 }}>
-                  <span className="block text-[10.5px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>East</span>
-                  <span className="block text-[13.5px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{offices.east.phone}</span>
-                </a>
-                <a href={telHref(offices.west.phone)} className="rounded-lg px-3 py-2 transition-colors hover:bg-[var(--ink-04)]" style={{ border: "1px solid var(--border-color)", minHeight: 44 }}>
-                  <span className="block text-[10.5px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>West</span>
-                  <span className="block text-[13.5px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{offices.west.phone}</span>
-                </a>
-              </div>
-              <Link href="/contact" className="inline-flex items-center gap-1.5 text-[13.5px] font-semibold hover:underline underline-offset-2" style={{ color: "var(--accent-text)", minHeight: 44 }}>
-                Send a project enquiry
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
-              </Link>
             </div>
           </aside>
         </div>
@@ -537,8 +549,8 @@ export default async function ProductPage({ params }: Props) {
             chapter. "Gallery" is what a CMS calls a folder; the catalogue
             calls its photography "The Work". */}
         <section style={{ background: "var(--bg-section-asphalt)", borderTop: "1px solid var(--border-color)" }}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-1.5" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 section-padding">
+            <h2 className="h2-section mb-1.5" style={{ color: "var(--text-primary)" }}>
               The work
             </h2>
             {/* Was "{Name} installations photographed on site across Canada",
@@ -558,7 +570,7 @@ export default async function ProductPage({ params }: Props) {
             then the documents: a visitor who scrolled this far is evaluating,
             and evaluation is made of questions and data sheets. */}
         {(faqs || hasDocs || slug === "streetbondsr") && (
-        <section id="documents" className="scroll-mt-24" style={{ background: "var(--bg-primary)", borderTop: "1px solid var(--border-color)" }}>
+        <section id="documents" style={{ background: "var(--bg-primary)", borderTop: "1px solid var(--border-color)" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-2 pb-14 sm:pb-20">
             {faqs && <ProductFaq productName={product.name} faqs={faqs} />}
             <div className={faqs ? "" : "pt-12"}>
@@ -570,11 +582,11 @@ export default async function ProductPage({ params }: Props) {
                 drawing styled as the USGBC's mark (QA pa#8). */}
             {slug === "streetbondsr" && (
               <div
-                className="mt-14 rounded-2xl p-7 sm:p-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:gap-10"
+                className="mt-14 rounded-xl p-7 sm:p-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:gap-10"
                 style={{ border: "1px solid var(--border-color)", background: "var(--bg-card)" }}
               >
                 <div className="flex-1 min-w-0">
-                  <p className="text-[11px] font-bold uppercase tracking-[0.18em] mb-2" style={{ color: "var(--accent-text)" }}>
+                  <p className="text-[12px] font-bold uppercase tracking-[0.18em] mb-2" style={{ color: "var(--accent-text)" }}>
                     LEED v5
                   </p>
                   <h3 className="text-2xl font-bold" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
@@ -585,13 +597,9 @@ export default async function ProductPage({ params }: Props) {
                     Sustainable Sites credit for urban heat island (non-roof).
                   </p>
                 </div>
-                <Link
-                  href="/contact"
-                  className="inline-flex flex-shrink-0 items-center justify-center gap-2 px-6 rounded-lg text-sm font-bold transition-[filter] hover:brightness-110"
-                  style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "var(--on-accent)", minHeight: 44 }}
-                >
+                <Link href={`/contact?project=${encodeURIComponent(product.name)}&from=product`} className="btn-accent flex-shrink-0">
                   Request LEED documentation
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
                 </Link>
               </div>
             )}
@@ -602,20 +610,16 @@ export default async function ProductPage({ params }: Props) {
         {/* Applications this product is used for */}
         {relatedAppData.length > 0 && (
           <section style={{ background: "var(--bg-section-asphalt)", borderTop: "1px solid var(--border-color)" }}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 section-padding">
             <div className="flex items-end justify-between mb-8">
               {/* One heading, no eyebrow: "Specified for" above "Where X
                   goes" said the same thing twice (Doug's round, 25 Sep 2026). */}
-              <h2 className="text-2xl sm:text-3xl font-bold" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
+              <h2 className="h2-section" style={{ color: "var(--text-primary)" }}>
                 Where {product.name} goes
               </h2>
-              <Link
-                href="/applications"
-                className="hidden sm:inline-flex items-center gap-1.5 text-sm font-semibold transition-colors duration-150 hover:text-[var(--text-primary)]"
-                style={{ color: "var(--text-secondary)", minHeight: 44 }}
-              >
+              <Link href="/applications" className="link-arrow hidden sm:inline-flex">
                 All applications
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
               </Link>
@@ -667,13 +671,9 @@ export default async function ProductPage({ params }: Props) {
                 );
               })}
             </div>
-            <Link
-              href="/applications"
-              className="sm:hidden mt-6 inline-flex items-center gap-1.5 text-sm font-semibold"
-              style={{ color: "var(--accent-text)", minHeight: 44 }}
-            >
+            <Link href="/applications" className="link-arrow sm:hidden mt-6">
               All applications
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
             </Link>
           </div>
           </section>

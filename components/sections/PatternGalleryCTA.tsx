@@ -68,14 +68,14 @@ export default function PatternGalleryCTA() {
       </div>
 
       <div className="min-w-0 flex-1">
-        <p className="text-[10px] font-bold tracking-[0.2em] uppercase mb-0.5" style={{ color: "var(--accent-text-lg)" }}>
+        <p className="text-[11px] font-bold tracking-[0.2em] uppercase mb-0.5" style={{ color: "var(--accent-text-lg)" }}>
           StreetPrint templates
         </p>
         {/* Eyebrow and title mirror the page it opens (/patterns). */}
         <p className="text-[15px] font-bold leading-tight" style={{ color: "var(--text-primary)" }}>
           The pattern library
         </p>
-        <p className="text-[12px] mt-0.5 hidden sm:block" style={{ color: "var(--text-secondary)" }}>
+        <p className="text-[13px] mt-0.5 hidden sm:block" style={{ color: "var(--text-secondary)" }}>
           Stamped into the asphalt, then coloured and sealed with StreetBond: herringbone, brick, cobble, ashlar and tile.
         </p>
       </div>

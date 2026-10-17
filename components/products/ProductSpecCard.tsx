@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { CatalogueEntry } from "@/lib/product-catalogue";
 import { products } from "@/lib/products";
 import { dotted } from "@/lib/separators";
+import { plainSpec } from "@/lib/plain-specs";
 
 /** The product page a cross-sell name points to, when the name is a product. */
 const productHref = (name: string): string | null => {
@@ -65,16 +66,7 @@ export default function ProductSpecCard({
   return (
     <section aria-labelledby="product-positioning" className="mb-14">
       {/* Claim */}
-      <h2
-        id="product-positioning"
-        className="font-black mb-2.5"
-        style={{
-          color: "var(--text-primary)",
-          fontSize: "clamp(1.75rem, 3.4vw, 2.6rem)",
-          letterSpacing: "-0.03em",
-          lineHeight: 1.05,
-        }}
-      >
+      <h2 id="product-positioning" className="h2-section mb-2.5" style={{ color: "var(--text-primary)" }}>
         {entry.title}
       </h2>
 
@@ -96,7 +88,7 @@ export default function ProductSpecCard({
         className="mb-9 leading-[1.8]"
         style={{
           color: "var(--text-body)",
-          fontSize: "clamp(1rem, 1.7vw, 1.0625rem)",
+          fontSize: "clamp(1.0625rem, 1.8vw, 1.125rem)",
           maxWidth: "62ch",
         }}
       >
@@ -106,7 +98,7 @@ export default function ProductSpecCard({
       {/* The four that matter. Two columns on anything wider than a phone —
           the catalogue runs them 2×2 and the pairing is part of how they read. */}
       <dl
-        className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-6 py-8"
+        className="grid grid-cols-2 gap-x-6 sm:gap-x-10 gap-y-6 py-8"
         style={{
           borderTop: "1px solid var(--border-color)",
           borderBottom: "1px solid var(--border-color)",
@@ -115,16 +107,16 @@ export default function ProductSpecCard({
         {entry.specs.map((s) => (
           <div key={s.label}>
             <dt
-              className="text-[11px] font-bold uppercase mb-1.5"
+              className="text-[12px] font-bold uppercase mb-1.5"
               style={{ color: "var(--text-faint)", letterSpacing: "0.14em" }}
             >
               {s.label}
             </dt>
             <dd
               className="font-semibold"
-              style={{ color: "var(--text-primary)", fontSize: "0.975rem", lineHeight: 1.4 }}
+              style={{ color: "var(--text-primary)", fontSize: "1.0625rem", lineHeight: 1.4 }}
             >
-              {fixPrint(s.value)}
+              {plainSpec(fixPrint(s.value))}
             </dd>
           </div>
         ))}
@@ -132,7 +124,7 @@ export default function ProductSpecCard({
 
       {/* Where it goes — the catalogue's footer strip, middot-separated. */}
       <p
-        className="mt-6 text-[11px] font-bold uppercase"
+        className="mt-6 text-[12px] font-bold uppercase"
         style={{ color: "var(--text-faint)", letterSpacing: "0.16em" }}
       >
         <span className="sr-only">{productName} is specified for: </span>
@@ -146,7 +138,7 @@ export default function ProductSpecCard({
           style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--border-color)" }}
         >
           <p
-            className="text-[10px] font-bold uppercase mb-1.5"
+            className="text-[11px] font-bold uppercase mb-1.5"
             style={{ color: "var(--accent-text-lg)", letterSpacing: "0.16em" }}
           >
             You may also need · {entry.alsoNeed.heading}

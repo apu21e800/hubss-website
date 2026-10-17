@@ -34,7 +34,7 @@ import { lunchLearnHref } from "@/lib/lunch-learn";
 const ASK: Record<string, { heading: string; body: string }> = {
   "Guide": {
     heading: "Bring the rest of this decision to your team.",
-    body: "A 45-minute Lunch & Learn covers the comparisons this piece opened: lifecycle math for your climate, spec language you can paste into a tender, and material samples on the table for the people who have to sign off.",
+    body: "A 45-minute Lunch & Learn covers the comparisons this piece opened: the service-life maths for your climate, spec language you can paste into a tender, and material samples on the table for the people who have to sign off.",
   },
   "Case Study": {
     heading: "See the system that did it, in person.",

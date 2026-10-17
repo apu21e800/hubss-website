@@ -108,7 +108,7 @@ export default async function BlogPage() {
           </h1>
           <p className="text-base leading-relaxed lg:col-span-4 lg:pb-1.5" style={{ color: "var(--text-secondary)", maxWidth: "44ch" }}>
             Decorative pavement in Canada, documented: the projects, the specifications
-            and the lifecycle math behind them.
+            and the service life behind them.
           </p>
         </header>
 

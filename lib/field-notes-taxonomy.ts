@@ -109,7 +109,7 @@ export const INSIGHTS_SECTIONS: InsightsSection[] = [
     types: ["Guide", "White Paper"],
     blurb: "How to choose, specify and defend a surface decision.",
     promise:
-      "Decision support for engineers, landscape architects and procurement teams: comparisons, lifecycle math, spec language and the failure modes to design around in a freeze-thaw climate. The long technical papers for public works teams are here too.",
+      "Decision support for engineers, landscape architects and procurement teams: comparisons, service life by system, spec language and the failure modes to design around in a freeze-thaw climate. The long technical papers for public works teams are here too.",
     tint: "rgba(249,115,22,0.1)",
     border: "rgba(249,115,22,0.28)",
     text: "var(--accent-soft-text)",
@@ -212,7 +212,7 @@ export const FIELD_NOTE_TYPES: FieldNoteTypeMeta[] = [
     slug: "guides",
     blurb: "How to choose, specify, and defend a surface decision.",
     promise:
-      "Decision support for engineers, landscape architects, and procurement teams: comparisons, lifecycle math, spec language, and the failure modes to design around in a freeze-thaw climate.",
+      "Decision support for engineers, landscape architects, and procurement teams: comparisons, service life by system, spec language, and the failure modes to design around in a freeze-thaw climate.",
     schemaType: "TechArticle",
     tint: "rgba(249,115,22,0.1)",
     border: "rgba(249,115,22,0.28)",

@@ -1160,8 +1160,8 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                   {i > 0 && <span aria-hidden="true" className="mx-1" style={{ width: 1, height: 14, background: "var(--ink-12)" }} />}
                   <a
                     href={office.href}
-                    className="inline-flex min-h-[44px] items-center gap-1.5 px-3 text-[13.5px] font-semibold active:opacity-60 transition-opacity"
-                    style={{ color: "var(--ink-60)" }}
+                    className="inline-flex min-h-[44px] items-center gap-1.5 px-3 text-[15px] font-semibold whitespace-nowrap active:opacity-60 transition-opacity"
+                    style={{ color: "var(--ink-70)" }}
                   >
                     <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: "var(--accent-text-lg)" }} aria-hidden="true">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />

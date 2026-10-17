@@ -12,7 +12,7 @@ const SECTION = SECTION_BY_KEY.guides;
 export const metadata: Metadata = buildMetadata({
   title: "Specification Guides · Choosing & Defending a Surface System",
   description:
-    "Decision support for engineers, landscape architects and procurement: comparisons, lifecycle costs, spec language and freeze-thaw failure modes.",
+    "Decision support for engineers, landscape architects and procurement: comparisons, cost over the service life, spec language and freeze-thaw failure modes.",
   slug: "blog/guides",
 });
 

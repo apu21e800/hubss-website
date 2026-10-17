@@ -224,7 +224,9 @@ function GalleryTile({
             ? "(max-width: 1280px) 100vw, 1280px"
             : "(max-width: 1024px) 50vw, 33vw"
         }
-        quality={aspect === "aspect-[16/9]" ? 75 : 70}
+        // 80 and 78 (were 75 and 70): the work is what the page sells, and 70
+        // showed as soft edges on the tiles (17 Oct 2026).
+        quality={aspect === "aspect-[16/9]" ? 80 : 78}
       />
 
       {/* Hover overlay — subtle bottom gradient */}

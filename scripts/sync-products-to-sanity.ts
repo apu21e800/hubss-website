@@ -4,23 +4,17 @@
  * Phase 2, Increment 2 — Products text content sync.
  *
  * Idempotently overwrites the TEXT fields of every Sanity product doc with
- * the current values from lib/products.ts (and PRODUCT_WHAT from
- * components/sections/ProductsGrid.tsx for the homepage blurb).
+ * the current values from lib/products.ts.
  *
  * Sync targets, per product:
  *   - name, eyebrow, shortDesc
  *   - description (portable text — single block matching the lib paragraph)
  *   - specs (label/value pairs with deterministic keys)
  *   - seo.title, seo.description
- *   - homepageBlurb (from PRODUCT_WHAT — homepage Systems card copy)
+ *   - homepageBlurb (the shortDesc again: the homepage Systems card line)
  *
  * Image fields, gallery, related-applications references, and product
  * documents are untouched.
- *
- * PRODUCT_TYPE and PRODUCT_STAT in ProductsGrid.tsx are presently dead
- * code (type chip removed per Vernon's note; stat never referenced in
- * JSX), so they are intentionally NOT synced. Lib retains them as the
- * fallback if the UI ever re-uses them.
  *
  * Usage:
  *   npx tsx scripts/sync-products-to-sanity.ts            # apply
@@ -133,25 +127,13 @@ async function main() {
   const libProducts: LibProduct[] = productsMod.products;
   console.log(`  Loaded ${libProducts.length} products from lib/products.ts`);
 
-  // PRODUCT_WHAT lives inside the ProductsGrid component file — re-declare here
-  // rather than parsing the component module (which carries JSX deps). The
-  // values below are a verbatim copy from components/sections/ProductsGrid.tsx
-  // and must be kept in sync if that file changes.
-  const PRODUCT_WHAT: Record<string, string> = {
-    "streetprint":
-      "In-place stamped asphalt: cobblestone, brick, herringbone and a wide variety of other patterns. No demolition, no raised edges, snowplow-safe. Looks like stone, performs like asphalt.",
-    "streetbond":
-      "Water based, epoxy modified acrylic coatings that transform asphalt and concrete.",
-    "traffic-patterns-xd":
-      "Aggregate-reinforced, preformed thermoplastic that is purpose engineered for the toughest environments. High performance crosswalks, entrance features and endless other applications.",
-    "traffic-patterns":
-      "Crisp preformed thermoplastic markings, factory-manufactured to 125mil and specified by municipalities coast to coast.",
-    "mmax":
-      "MMA resin with performance aggregates for use in area markings like bus lanes, bike lanes, and other visual needs in high traffic environments. Fast installation. Full range of colours. Extended season formula for shoulder season applications.",
-    "decomark":
-      "Preformed thermoplastic that is custom fabricated to put your design into a functional surface for use in endless environments. Used all across North America for unique messaging, branding, community expression, schools, etc.",
-  };
-
+  const HOMEPAGE_CARDS = new Set(["streetprint", "streetbond", "traffic-patterns-xd", "traffic-patterns", "mmax", "decomark"]);
+  // The homepage card line is the product's own line, the Product Portfolio
+  // Book's positioning line and subhead (shortDesc), since 17 Oct 2026. The
+  // cards fall back to the same field when Studio's blurb is empty
+  // (components/sections/ProductsGrid.tsx). Until then the sync carried a
+  // verbatim copy of the component's PRODUCT_WHAT table, a third wording of
+  // each system kept nowhere else.
   const remoteList: (RemoteProduct & { slug: string })[] = await client.fetch(
     `*[_type == "product"]{ _id, _rev, name, eyebrow, shortDesc, description, homepageBlurb, specs, seo, "slug": slug.current }`
   );
@@ -180,7 +162,8 @@ async function main() {
       title: p.seoTitle ?? null,
       description: p.seoDescription ?? null,
     };
-    const desiredHomepageBlurb = PRODUCT_WHAT[p.slug] ?? null;
+    // Only the six systems the homepage shows carry a blurb; the others keep none.
+    const desiredHomepageBlurb = HOMEPAGE_CARDS.has(p.slug) ? p.shortDesc : null;
     const desiredEyebrow = p.eyebrow ?? null;
 
     const diffs: string[] = [];

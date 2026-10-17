@@ -154,8 +154,8 @@ export default async function Home() {
   // merged records carried every gallery photo, the Portable Text and the
   // SEO fields of 17 products and 20 applications into the client
   // components' props, and so into the HTML: 1.05 MB for the homepage.
-  const productCards: ProductCard[] = mergedProducts.map(({ slug, name, imageUrl, homepageBlurb }) => ({
-    slug, name, imageUrl, homepageBlurb,
+  const productCards: ProductCard[] = mergedProducts.map(({ slug, name, imageUrl, shortDesc, homepageBlurb }) => ({
+    slug, name, imageUrl, shortDesc, homepageBlurb,
   }));
   const applicationCards: ApplicationCard[] = mergedApplications.map(({ slug, name, shortDesc, imageUrl }) => ({
     slug, name, shortDesc, imageUrl,

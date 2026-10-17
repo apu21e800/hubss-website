@@ -16,6 +16,16 @@
  *             system goes in, colours, times, terms (Doug's ticks)
  *   chrome    the homepage cards, About and the footer line (Vern's yes)
  *
+ * SUPERSEDED IN PART, the same day. The `claims` and `products` groups patched
+ * product and application documents; since the 17 Oct batch that followed
+ * (copy/book-words), every one of those fixes is in lib/products.ts and
+ * lib/applications.ts, the code-first source, and reaches Studio whole with
+ * `npm run sync:products` and `npm run sync:applications` (docs/SANITY-COPY-SYNC.md).
+ * Run the syncs, not these two groups: after a sync every change in them is
+ * skipped as already gone. `chrome` still stands: the homepage cards, About
+ * and the footer line are Studio-only page documents the syncs do not write.
+ *   npx tsx scripts/studio-copy-2026-10-17.ts --apply --only=chrome
+ *
  * Every change names the exact text it replaces and is skipped (and listed)
  * when Studio no longer holds it, so an edit made since is never overwritten.
  * A document with an unpublished draft gets the same change in the draft.

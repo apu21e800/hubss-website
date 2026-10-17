@@ -48,7 +48,7 @@ export const HOMEPAGE_COPY: HomepageCopy = {
   audiences: [
     {
       label: "Municipalities",
-      desc: "Crosswalks, transit corridors and plazas: Vision Zero aligned, accessible, installed by certified crews coast to coast.",
+      desc: "Crosswalks, transit corridors and plazas: built for Vision Zero programs, accessible, installed by certified crews coast to coast.",
     },
     {
       label: "Designers & specifiers",
@@ -56,7 +56,7 @@ export const HOMEPAGE_COPY: HomepageCopy = {
     },
     {
       label: "Contractors",
-      desc: "HUB certifies, trains and supports its installer network across Canada.",
+      desc: "HUB trains and certifies its installers across Canada.",
     },
   ],
   systems: {
@@ -64,12 +64,14 @@ export const HOMEPAGE_COPY: HomepageCopy = {
     // Ten, as the Product Portfolio Book counts them (Vern, 16 Oct 2026:
     // "yes 10 systems"): the six cards and the four named under them. The
     // second phrase is Doug's (17 Oct 2026: "change to 'Ten systems endless
-    // job types' or something to that effect"); Studio holds the live line
-    // (scripts/studio-cleanup-2026-10-17.ts), this is the fallback.
+    // job types' or something to that effect"), in the site's own word for
+    // the same thing (Vern, the same day: "endless applications I think");
+    // Studio holds the live line (scripts/studio-cleanup-2026-10-17.ts),
+    // this is the fallback.
     heading: "Ten systems,",
-    headingAccent: "endless job types.",
+    headingAccent: "endless applications.",
     intro:
-      "Stamped asphalt, preformed thermoplastic and coatings, chosen by what the surface has to take. Turning asphalt and concrete into your signature surface.",
+      "Stamped asphalt, preformed thermoplastic and coatings, chosen by what the surface has to take.",
   },
   applications: {
     eyebrow: "Applications",

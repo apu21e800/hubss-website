@@ -6,76 +6,33 @@ import Image from "next/image";
 import type { Product } from "@/lib/products";
 import { HOMEPAGE_COPY, type SectionCopy } from "@/lib/homepage-copy";
 import { productImages, resolveImage } from "@/lib/featured-images";
+import { catalogueFor } from "@/lib/product-catalogue";
 
 // What a card renders, and all the page sends (QA F3, 30 Sep 2026): the
 // homepage used to pass the whole merged product records, galleries of
 // hundreds of photos, Portable Text and SEO included, into this client
 // component, and every byte of it was serialised into the HTML (1.05 MB).
 // app/page.tsx maps the records to these fields.
-export type ProductCard = Pick<Product, "slug" | "name" | "imageUrl"> & {
-  /** The Sanity homepage blurb, when set; PRODUCT_WHAT is the fallback. */
+export type ProductCard = Pick<Product, "slug" | "name" | "imageUrl" | "shortDesc"> & {
+  /** The Sanity homepage blurb, when set; the product's shortDesc (the book's line) is the fallback. */
   homepageBlurb?: string;
 };
 
-// Plain-English: what it does and who uses it
-// Used as the fallback when Sanity has not set `homepageBlurb` on a product.
-const PRODUCT_WHAT: Record<string, string> = {
-  "streetprint":
-    "In-place stamped asphalt: cobblestone, brick, herringbone and a wide variety of other patterns. No demolition, no raised edges, snowplow-safe. Looks like stone, performs like asphalt.",
-  "streetbond":
-    "Water based, epoxy modified acrylic coatings that transform asphalt and concrete.",
-  "traffic-patterns-xd":
-    "Aggregate-reinforced, preformed thermoplastic that is purpose engineered for the toughest environments. High performance crosswalks, entrance features and endless other applications.",
-  "traffic-patterns":
-    "Crisp preformed thermoplastic markings, factory-manufactured to 125mil and specified by municipalities coast to coast.",
-  "mmax":
-    "MMA resin with performance aggregates for use in area markings like bus lanes, bike lanes, and other visual needs in high traffic environments. Fast installation. Full range of colours. Extended season formula for shoulder season applications.",
-  "decomark":
-    "Preformed thermoplastic that is custom fabricated to put your design into a functional surface for use in endless environments. Used all across North America for unique messaging, branding, community expression, schools, etc.",
-};
-
-const PRODUCT_TYPE: Record<string, string> = {
-  "streetprint":         "Stamped Asphalt",
-  "streetbond":          "Coloured Coating",
-  "traffic-patterns-xd": "Thermoplastic XD",
-  "traffic-patterns":    "Thermoplastic",
-  "mmax":                "MMA Resin",
-  "decomark":            "Custom Graphics",
-};
-
-const PRODUCT_STAT: Record<string, string> = {
-  // Doug: focus on positives, no paint comparisons.
-  "streetprint":         "Decades of proven service",
-  "streetbond":          "UV-stable · won't peel",
-  "traffic-patterns-xd": "Aggregate-reinforced surface",
-  "traffic-patterns":    "Durable, retroreflective markings",
-  "mmax":                "Traffic-ready in under an hour",
-  "decomark":            "Custom Pantone graphics",
-};
-
-// Hand-kept, and it drifted: TrafficPatterns and TrafficPatternsXD both
-// carried a "Bike Lanes" chip here long after Doug had said twice, in May,
-// that neither goes in a bike lane — "this is PreMark… TP's isn't used in
-// bike lanes" and "Bike lanes don't use TPXD". The September catalogue pass
-// corrected relatedApplications in lib/products.ts, which is what the
-// product PAGES read; this map is the homepage's own copy and nothing
-// pointed the fix at it. The catalogue's bike-lane spread (p50) specifies
-// MMAX and PreMark, and only those two.
+// What a card says under the name: the Product Portfolio Book's own line for
+// the system, its positioning line and subhead ("Stamped asphalt. The
+// original. Since 1992. A Canadian invention, eh?"), which is the product's
+// shortDesc, Studio over the code (lib/products.ts). Studio's homepageBlurb
+// wins when it is set; `npm run sync:products` writes it as the same line, so
+// the two agree until Doug edits one. Until 17 Oct 2026 the cards carried a third wording of each
+// system, written in May and kept nowhere else ("MMA resin with performance
+// aggregates…", "for use in endless environments"), which Doug's copy round
+// called gobbledygook.
 //
-// Keep this list matching the SPECIFY lists in lib/application-catalogue.ts.
-// If it needs a third source of truth, derive it from relatedApplications
-// instead of retyping it.
-const PRODUCT_APPS: Record<string, string[]> = {
-  "streetprint":         ["Crosswalks", "Driveways", "Plazas", "Intersections"],
-  "streetbond":          ["Bike Lanes", "Bus Lanes", "Driveways", "Paths"],
-  "traffic-patterns-xd": ["Crosswalks", "BRT Corridors", "Parking Lots"],
-  "traffic-patterns":    ["Crosswalks", "Parks & Paths", "Parking Lots"],
-  // Not "Crosswalks": the book specifies MMAX for bus and bike lanes, calming
-  // and pedestrian priority zones, and the MMAX page lists no crosswalks since
-  // the 28 Sep 2026 relations pass (lib/products.ts).
-  "mmax":                ["Bus Lanes", "Bike Lanes", "Traffic Calming"],
-  "decomark":            ["Public Art", "Crosswalks", "Community Branding"],
-};
+// The chips are the book's uses strip for the system (lib/product-catalogue.ts,
+// the printed page's foot: "CROSSWALKS · DRIVEWAYS · PARKS · STREETSCAPES"),
+// the first three. Until 17 Oct 2026 they were a hand-kept list that drifted:
+// TrafficPatterns and TrafficPatternsXD both carried a "Bike Lanes" chip here
+// long after Doug had said twice, in May, that neither goes in a bike lane.
 
 // Per-card object-position overrides for images that need non-center focal points
 const PRODUCT_POSITION: Record<string, string> = {
@@ -205,10 +162,8 @@ export default function ProductsGrid({ products: source, copy = HOMEPAGE_COPY.sy
             const imgAlt = productImages[product.slug]
               ? resolveImage(productImages[product.slug]).alt
               : product.name;
-            const apps = PRODUCT_APPS[product.slug] ?? [];
-            const type = PRODUCT_TYPE[product.slug];
-            const stat = PRODUCT_STAT[product.slug];
-            const what = product.homepageBlurb ?? PRODUCT_WHAT[product.slug];
+            const apps = catalogueFor(product.slug)?.uses ?? [];
+            const what = product.homepageBlurb || product.shortDesc;
 
             return (
               <motion.div
@@ -269,7 +224,7 @@ export default function ProductsGrid({ products: source, copy = HOMEPAGE_COPY.sy
                   {/* Card body */}
                   <div className="flex flex-col flex-1 p-5">
 
-                    {/* Product name + stat */}
+                    {/* Product name */}
                     <div className="flex items-start justify-between gap-3 mb-3">
                       <h3
                         className="font-bold text-[16px] leading-snug transition-colors duration-200 group-hover:text-[var(--accent-text)]"

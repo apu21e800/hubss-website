@@ -12,7 +12,8 @@
  * (hidden in Studio), never read.
  *
  * Facts are the book's and CLAUDE.md's: since 1999, StreetPrint installed in
- * Canada since 1992, service life per system, certified applicators.
+ * Canada since 1992, service life per system, certified installers (HUB's word,
+ * docs/GLOSSARY.md; "applicator" is the makers').
  *
  * Pure data: safe in server and client components, and importable by the sync
  * script under tsx.
@@ -28,7 +29,7 @@ export const ABOUT_HERO = {
 
 export const ABOUT_STORY: string[] = [
   "HUB began with a simple belief: streets don’t have to be grey. We built the company around StreetPrint, the stamped asphalt system invented in Canada and installed here since 1992.",
-  "Since 1999 we have added a system for nearly every surface a Canadian city looks after, each one installed to spec by certified applicators that HUB trains and authorizes.",
+  "Since 1999 we have added a system for nearly every surface a Canadian city looks after, each one installed to spec by certified installers that HUB trains and authorizes.",
 ];
 
 export const ABOUT_WHY_HUB: AboutCard[] = [
@@ -47,7 +48,7 @@ export const ABOUT_WHY_HUB: AboutCard[] = [
 ];
 
 export const ABOUT_PARTNERS_INTRO =
-  "HUB is an authorized distributor and applicator partner for the manufacturers behind its systems.";
+  "HUB is an authorized distributor and installer for the manufacturers behind its systems.";
 
 /**
  * What Sanity's page-about held until 30 Sep 2026, word for word. A field

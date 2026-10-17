@@ -7,6 +7,7 @@
 
 import Anthropic from "@anthropic-ai/sdk";
 import { PRODUCT_NAMES } from "@/lib/style-lint";
+import { GLOSSARY_FOR_WRITERS } from "@/lib/glossary";
 import { styleRewrite, type StylePass } from "@/lib/field-note-drafter";
 
 const MODEL = process.env.SOCIAL_DRAFT_MODEL || process.env.BLOG_DRAFT_MODEL || "claude-opus-4-5";
@@ -27,6 +28,8 @@ VOICE: relaxed, professional, leaders in the field. Confident and plain, never s
 FACTS: say only what the ARTICLE says. No new numbers, claims, places, clients or promises.
 
 HOUSE STYLE (docs/STYLE.md): sentence case for headings ("Where the colour goes", not "Where The Colour Goes"). Product names exactly: ${PRODUCT_NAMES.join(", ")}. The company is HUB Surface Systems, then HUB; never "Hub". The printed book is the Product Portfolio Book, never "the catalogue" and never by its old name, "the Idea Book" (a brief may still use it). Places as city and province spelled out (Milton, Ontario). No em dashes, none at all: an aside goes between commas or in parentheses, a pivot gets a full stop or a colon, a list gets commas. En dash only inside a span (10–20 years, 2026–27). No counts as a selling point.
+
+${GLOSSARY_FOR_WRITERS}
 
 MACHINE TELLS (docs/STYLE.md, "Machine tells"): readers recognise machine-written copy on sight and it costs trust, so none of these appears in any post:
 - Em dashes, anywhere, even one.

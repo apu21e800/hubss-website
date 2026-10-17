@@ -103,6 +103,7 @@ export type StyleRule =
   | "emoji"
   | "product-book"
   | "insights"
+  | "glossary"
   | "title-case";
 
 export interface StyleIssue {
@@ -350,6 +351,56 @@ const CHECKS: Check[] = [
     rule: "insights",
     re: /\bfield[\s-]notes?\b/giu,
     hit: `The blog is called Insights now: say “Insights” (or “article”), not “Field Notes”.`,
+  },
+
+  // ── glossary (docs/GLOSSARY.md, 17 Oct 2026) ──────────────────────────────
+  // The words the makers and the printed book use, and the ones that are
+  // wrong about how a system goes in or what it is. Warnings, like the rest.
+  {
+    rule: "glossary",
+    re: /\bpre-formed\b|\bthermo-plastics?\b|\bpreformed\s+thermo\s+plastics?\b/giu,
+    hit: `Spell it “preformed thermoplastic”: one word each, no hyphen.`,
+  },
+  {
+    // Surface-applied material bonds to the pavement; nothing fuses into the road.
+    rule: "glossary",
+    re: /\b(?:heat-)?fus(?:e|es|ed|ing)\s+(?:permanently\s+)?into\b|\bfus(?:e|es|ed|ing)\s+permanently\b|\bbecomes?\s+part\s+of\s+the\s+road(?:way)?\b|\bfus(?:e|es|ed|ing)\s+(?:permanently\s+)?to\s+the\s+(?:road|roadway|pavement)\s+surface\b/giu,
+    hit: `Say how it goes in: “heat-applied, it bonds to the surface” (TrafficPatterns, DecoMark, PreMark), “stamped into the asphalt” (TrafficPatternsXD) or “inlaid” (DuraTherm). Nothing fuses into the road.`,
+  },
+  {
+    rule: "glossary",
+    re: /\blife[\s-]?cycle\b|\blifespans?\b/giu,
+    hit: `One term for how long it lasts: “service life”.`,
+  },
+  {
+    rule: "glossary",
+    re: /\bapplicators?\b/giu,
+    hit: `HUB’s word is “installer” (certified installer); “applicator” is the makers’ word.`,
+  },
+  {
+    rule: "glossary",
+    re: /\bVision\s+Zero[\s-]+(?:aligned|compliant|certified|standards?)\b/giu,
+    hit: `Vision Zero is a program, not a standard: say “supports Vision Zero”, or say what the project did.`,
+  },
+  {
+    rule: "glossary",
+    re: /\bASTM[\s-](?:rated|certified|approved)\b/giu,
+    hit: `“ASTM-rated” names no standard: give the test and the number (60 BPN, ASTM E303), or say what the surface does.`,
+  },
+  {
+    rule: "glossary",
+    re: /\bspeed\s+bumps?\b/giu,
+    hit: `On a road it is a speed table or a speed hump; a speed bump is a parking-lot device.`,
+  },
+  {
+    rule: "glossary",
+    re: /\bpedestrian\s+crossings?\b(?!\s+(?:protection|control|device|guard|manual|policy|signal|treatment))/giu,
+    hit: `The Canadian word for the marking is “crosswalk”; keep “pedestrian crossing” for a manual’s or a policy’s own name.`,
+  },
+  {
+    rule: "glossary",
+    re: /\b(?:ADA|wheelchair)[\s-]+(?:compliant|friendly)\b/giu,
+    hit: `ADA is the American law: say “accessible” and name the Canadian standard the project met (CSA B651, AODA in Ontario).`,
   },
 ];
 

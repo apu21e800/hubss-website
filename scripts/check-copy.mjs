@@ -168,6 +168,13 @@ async function selfTest() {
     "A snowplow-safe, heat-activated repair that stays flush.",
     "Book a Lunch & Learn",
     "Open the Product Portfolio Book",
+    "Preformed thermoplastic is heat-applied and bonds to the surface; TrafficPatternsXD is stamped into the asphalt.",
+    "DuraTherm is inlaid into the stamped asphalt, so a plow blade passes over it.",
+    "A service life of 8+ years, and easily refreshed.",
+    "Toronto's Pedestrian Crossing Protection Device Justification Policy sets out when a crossing is marked.",
+    "The crosswalk supports the city's Vision Zero plan.",
+    "Skid resistance: 60 BPN, ASTM E303.",
+    "Speed tables and raised crosswalks slow drivers at the school.",
   ];
   for (const g of GOOD) expect(`good copy flagged: ${g}`, lintCopy(g).length === 0, rulesOf(lintCopy(g)));
 
@@ -224,6 +231,16 @@ async function selfTest() {
     ["product-book", "Every system is in the HUB Idea Book."],
     ["product-book", "Every system is in the HUB Product Book."],
     ["insights", "Read more Field Notes on hubss.com."],
+    ["glossary", "Pre-formed thermo-plastic sheets are laid on the road."],
+    ["glossary", "TrafficPatterns is heat-fused into asphalt or concrete so it becomes part of the road."],
+    ["glossary", "The thermoplastic fuses permanently to the road surface."],
+    ["glossary", "A life cycle of 8+ years, easily refreshed."],
+    ["glossary", "Installed by certified applicators that HUB trains."],
+    ["glossary", "Crosswalks, transit corridors and plazas: Vision Zero aligned and accessible."],
+    ["glossary", "It maintains ASTM-rated retroreflectivity through plow cycles."],
+    ["glossary", "Specified for crosswalks, speed bumps and traffic calming."],
+    ["glossary", "A decorative pedestrian crossing in Vaughan."],
+    ["glossary", "An ADA-compliant pedestrian and wheelchair friendly surface."],
   ];
   for (const [rule, text] of BAD) {
     const got = rulesOf(lintCopy(text));

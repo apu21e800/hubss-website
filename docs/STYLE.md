@@ -97,6 +97,16 @@ The test: read it aloud. If a person on the phone would not say it, cut it.
 - Dates as the site prints them: Sep 25, 2026.
 - One space after a full stop. Straight quotes in code, curly on the page.
 
+## The systems, in the right words
+
+`docs/GLOSSARY.md` (17 Oct 2026) says how each system goes in and what it is
+called: preformed thermoplastic (one word each), heat-applied and bonds to the
+surface (TrafficPatterns, DecoMark, PreMark), stamped into the asphalt
+(TrafficPatternsXD), inlaid (DuraTherm), stamped asphalt (StreetPrint), pavement
+coating (StreetBond, DuraShield), service life (never life cycle), certified
+installer (never applicator), crosswalk (never pedestrian crossing). Studio warns
+on the words to avoid; the AI writers carry the same list (`lib/glossary.ts`).
+
 ## Words we don't use
 
 revolutionary, game-changing, cutting-edge, unparalleled, world-class,
@@ -158,6 +168,7 @@ What the lint flags, and what it deliberately leaves alone:
 | Buttons | a label of four words or fewer that starts "Learn more", "Explore" or "Discover" | the same words inside a longer sentence |
 | Punctuation | exclamation marks, emoji (social posts on Facebook and Instagram may keep one) | |
 | Names | "the catalogue" (and "our", "HUB's", "the 2027" catalogue), "Idea Book" and "Product Book" for the book; "Field Notes" | "a catalogue of four patterns", "Template Catalog", "Product Portfolio Book" |
+| Glossary | "pre-formed", "thermo-plastic"; "heat-fused into", "fuses permanently", "becomes part of the road"; "life cycle", "lifespan"; "applicator"; "Vision Zero aligned"; "ASTM-rated"; "speed bumps"; "pedestrian crossing" as the marking; "ADA-compliant", "wheelchair friendly" | "heat-fused to the substrate" (the book's spec line), "Pedestrian Crossing Protection Device Justification Policy" (a policy's name), "speed tables" |
 | Title Case (headings, titles, eyebrows, buttons) | three or more capitalised words that aren't names | product names, HUB's names, places, acronyms, street names; a single run of capitals after a lowercase word, read as a name ("at Toronto Premium Outlets") |
 
 Changing a rule: edit `lib/style-lint.ts`, add a good and a bad sample to

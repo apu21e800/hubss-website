@@ -345,6 +345,19 @@ screen, and a leaf's photo and heading arrive once 120px of it shows.
   1920x950, 1536x730, 1440x790 and 1440x900. Measure any layout change at
   those sizes (each leaf's height against `.ib-scroll`'s), not only 1440x900.
 
+## The glossary (17 Oct 2026)
+Doug, 17 Oct: "some of the copy is, in his words, gobbledygook ... get the
+phraseology right, about the systems technology that's accurate but not over
+technical ... don't alter the product line, just learn to talk about it
+right." docs/GLOSSARY.md is the answer: the word for each thing, how each
+system goes in (heat-applied and bonds, stamped into the asphalt, inlaid,
+stamped asphalt), the road's words (crosswalk, bike lane, bus lane, speed
+table) and the claims that need a source. The AI writers read the same rules
+(lib/glossary.ts), Studio warns on the words to avoid (lib/style-lint.ts,
+rule `glossary`), `npm run test:copy` checks the lint. The review that
+produced it, line by line for Doug, is in the Claude project
+(claude/HUBSS-copy-review-2026-10-17.md).
+
 ## Copy source of truth
 The 2027 print catalogue — the Product Book, Volume 5 — (Figma file
 GGxfcnIv3MozUSa8R7KtT9, page "Catalogue 2027") is the approved copy. Doug has signed off on the printed

@@ -33,6 +33,7 @@
  * vetIdeas is pure: `npm run test:planner`.
  */
 
+import { GLOSSARY_FOR_TITLES } from "@/lib/glossary";
 import Anthropic from "@anthropic-ai/sdk";
 import type { SanityClient } from "@sanity/client";
 import { PRODUCT_CATALOGUE } from "@/lib/product-catalogue";
@@ -356,6 +357,8 @@ Angles that earn a busy reader's attention (research, 15 Oct 2026), within those
 - An article timed for one of the MOMENTS (below).
 
 MOMENTS: for each moment listed, propose exactly one article timed for it (set moment to its id), a guide or a roundup, built on the systems and applications it names and its angle. Its title may name the day (Remembrance Day) but no date or figure. The plan puts it first.
+
+${GLOSSARY_FOR_TITLES}
 
 Rules:
 - Nothing that EXISTING already covers: the same question or search intent counts as covered, whatever the words.

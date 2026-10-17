@@ -9,11 +9,12 @@
  * What it changes, each only while Studio still holds the value it replaces
  * (anything edited since is skipped and listed, never overwritten):
  *  1. The homepage's systems heading: "Ten systems, ten different jobs." to
- *     "Ten systems, endless job types." (Doug, 17 Oct: "change to 'Ten
- *     systems endless job types' or something to that effect"). The code
- *     fallback (lib/homepage-copy.ts) says the same since this commit. To
- *     use another second phrase, change ACCENT below before running, or edit
- *     the line in Studio afterwards (Edit on the page, click the heading).
+ *     "Ten systems, endless applications." (Doug, 17 Oct: "change to 'Ten
+ *     systems endless job types' or something to that effect"; Vern, the
+ *     same day: "endless applications I think"). The code fallback
+ *     (lib/homepage-copy.ts) says the same since this commit. To use another
+ *     second phrase, change ACCENT below before running, or edit the line in
+ *     Studio afterwards (Edit on the page, click the heading).
  *  2. The hero's second-button label, where Studio still holds the 14 Oct
  *     wording "Open the Product Book": it prints only while the book is
  *     switched off, but the old name should not sit in Studio either.
@@ -49,8 +50,8 @@ const client: SanityClient = createClient({
 });
 
 // ── 1. The homepage's systems heading
-/** The second phrase, Doug's words. "endless applications." is the site's own word for the same thing, if he prefers it. */
-const ACCENT = "endless job types.";
+/** The second phrase: Doug's "endless job types" in the site's own word (Vern, 17 Oct 2026: "endless applications I think"). */
+const ACCENT = "endless applications.";
 const HEADING = {
   id: "page-homepage",
   from: { heading: "Ten systems,", headingAccent: "ten different jobs." },

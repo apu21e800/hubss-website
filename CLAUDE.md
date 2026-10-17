@@ -208,8 +208,9 @@ Then, on Vern's answers:
   DuraShield, DuraTherm and StreetBondSR named under them (AirMark, not one
   of the book's ten, left that line). Studio holds the heading: the clean-up
   script below writes it; lib/homepage-copy.ts is the fallback. Since 17 Oct
-  2026 the second phrase is Doug's "endless job types."
-  (scripts/studio-cleanup-2026-10-17.ts, same pattern, dry run by default).
+  2026 the second phrase is "endless applications." (Doug: "endless job
+  types or something to that effect"; Vern: "endless applications I think";
+  scripts/studio-cleanup-2026-10-17.ts, same pattern, dry run by default).
 - The homepage map's project cards lead to projects, never the Product Book
   (Vern: "map should go to projects, not the booklet"): the write-up, or
   "More projects" (/blog/projects) for the 40 jobs without one
@@ -356,17 +357,54 @@ table) and the claims that need a source. The AI writers read the same rules
 (lib/glossary.ts), Studio warns on the words to avoid (lib/style-lint.ts,
 rule `glossary`), `npm run test:copy` checks the lint. The review that
 produced it, line by line for Doug, is in the Claude project
-(claude/HUBSS-copy-review-2026-10-17.md). The Studio fixes it asks for are
-scripts/studio-copy-2026-10-17.ts (Vern's PC; dry run by default, `--apply`
-writes, `--only=claims|products|chrome` ships one group; every change names
-the exact text it replaces and is skipped when Studio no longer holds it).
+(claude/HUBSS-copy-review-2026-10-17.md). The product and application fixes
+it asks for are in the code (below) and reach Studio with the syncs; the
+homepage-card, About and footer lines are scripts/studio-copy-2026-10-17.ts
+`--only=chrome` (Vern's PC; dry run by default, `--apply` writes; every change
+names the exact text it replaces and is skipped when Studio no longer holds
+it). The script's `claims` and `products` groups are superseded by the syncs.
+
+## The book's words on the site (17 Oct 2026)
+Doug's rule, the printed page wins, is now code: lib/product-catalogue.ts
+and lib/application-catalogue.ts are BUILT FROM lib/idea-book-print.ts (the
+printed system and application pages, read from the PDF's text layer), not
+transcribed on their own. Each file's `WEB_EDITS` lists every departure from
+the printed text with the reason (a maker's sheet or docs/GLOSSARY.md:
+"Life cycle" to "Service life", "Speed bumps" to "Speed tables", PreMark's
+"Provincially approved across Canada" cut, "ASTM-rated" cut, "FUN" to "fun")
+and the build fails if the printed text an edit replaces is no longer there.
+Typesetting slips (hyphens, "LEED v5", the double colon) stay render-time in
+components/products/ProductSpecCard.tsx PRINT_FIXES. The book's own lines the
+lint would flag ("Best in class performance", "Laughter for years to come!",
+the fragment headlines, "solutions" twice) stay as printed: Doug's call for
+the next print run, listed in the review record. The `page` numbers are the
+printed page the words are on (odd pages), which the Figma transcription had
+one page off; StreetBondSR is on 29, not 26.
+- lib/products.ts and lib/applications.ts were read line by line against
+  the makers' sheets the same day: how each system goes in (TrafficPatterns,
+  DecoMark and PreMark are heat-applied and bond to the surface;
+  TrafficPatternsXD is heated and stamped into the asphalt, asphalt only;
+  DuraTherm is inlaid), claims with no source cut (PreMark "provincially
+  approved", AirMark helipads, jet blast, rubber removal, "white and yellow";
+  Fast Patch "under 45 minutes", WVCO says an hour at 21°C; ChipFill
+  "preformed", it is chips), "service life" the one term, the ten hero lines
+  the book's own, the SEO titles the 3 Oct list (product name first, sentence
+  case). The nineteen application "How it works" paragraphs are one shape: the
+  job, the systems and how each goes in, the choice, a documented job where
+  one helps. Sanity overrides all of it: `npm run sync:products` and
+  `npm run sync:applications` on Vern's PC carry it to Studio.
+- The homepage systems cards say the book's line (the product's shortDesc;
+  Studio's homepageBlurb when set, which the sync writes as the same line)
+  and wear the book's uses strip as chips (components/sections/ProductsGrid.tsx).
+  The May card blurbs and the hand-kept chip lists are gone.
 
 ## Copy source of truth
-The 2027 print catalogue — the Product Book, Volume 5 — (Figma file
-GGxfcnIv3MozUSa8R7KtT9, page "Catalogue 2027") is the approved copy. Doug has signed off on the printed
-page; where the site and the book disagree, the book wins. It is transcribed
-into lib/product-catalogue.ts (product spreads) and lib/application-catalogue.ts
-(the 17 application spreads and their SPECIFY lists), and lib/products.ts /
+The printed Product Portfolio Book, Volume 5 (public/catalogue/HUBSS-Catalogue-2026-27.pdf;
+the Figma master GGxfcnIv3MozUSa8R7KtT9, page "Catalogue 2027", is where it was
+designed) is the approved copy. Doug has signed off on the printed page; where
+the site and the book disagree, the book wins. Its system and application
+pages are lib/idea-book-print.ts, which lib/product-catalogue.ts and
+lib/application-catalogue.ts are built from (above), and lib/products.ts /
 lib/applications.ts are written from it.
 
 BEFORE changing product, application or page copy, read docs/SANITY-COPY-SYNC.md.

@@ -11,8 +11,8 @@
  * value falls back to the code.
  *
  * Fields that can come from Sanity: name, eyebrow, shortDesc, description,
- * specs, seoTitle, seoDescription, homepageBlurb (with PRODUCT_WHAT in
- * components/sections/ProductsGrid.tsx as the fallback), and the hero photo and
+ * specs, seoTitle, seoDescription, homepageBlurb (with the shortDesc as the
+ * fallback, components/sections/ProductsGrid.tsx), and the hero photo and
  * gallery (with lib/featured-images.ts and the /public folders as the fallback).
  * Related applications, brand logo and the rest of the UI metadata come from
  * lib/products.ts only.

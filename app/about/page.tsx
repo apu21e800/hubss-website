@@ -303,8 +303,9 @@ export default async function AboutPage() {
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {[
-                { name: "GAF",         sub: "",              logo: "/images/partners/gaf-logo.png", products: ["StreetBond", "StreetBondSR", "DuraShield", "MMAX"],                                         accent: "#E05C1A" },
-                { name: "Ennis-Flint", sub: "A PPG company", logo: "/images/partners/ppg-logo.svg", products: ["TrafficPatterns", "TrafficPatternsXD", "PreMark", "AirMark", "DuraTherm", "DecoMark"], accent: "#0057A8" },
+                // MMAX is Ennis-Flint by PPG (its own sheets), not GAF: moved 17 Oct 2026.
+                { name: "GAF",         sub: "",              logo: "/images/partners/gaf-logo.png", products: ["StreetBond", "StreetBondSR", "DuraShield"],                                                 accent: "#E05C1A" },
+                { name: "Ennis-Flint", sub: "A PPG company", logo: "/images/partners/ppg-logo.svg", products: ["TrafficPatterns", "TrafficPatternsXD", "PreMark", "AirMark", "DuraTherm", "DecoMark", "MMAX"], accent: "#0057A8" },
               ].map((partner) => (
                 <div key={partner.name} className="rounded-xl relative overflow-hidden flex flex-col sm:flex-row sm:items-center gap-5 px-5 sm:px-7 py-6" style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}>
                   <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: partner.accent }} />

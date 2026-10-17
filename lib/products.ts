@@ -54,6 +54,16 @@ function gallery(slug: string, dir: string, count: number, ext: string = "jpg", 
   });
 }
 
+// 17 Oct 2026 (Doug's copy round: "get the phraseology right, about the systems technology that's
+// accurate but not over technical"): every line below was read against the maker's sheet (PPG
+// Ennis-Flint TS001 to TS005 and TS007, the MMAX brochure, GAF/StreetBond, Geveko's ChipFill listing,
+// WVCO's Fast Patch DPR sheet) and docs/GLOSSARY.md. How each system goes in is now the maker's
+// description (surface-applied and bonds; stamped into the asphalt; inlaid), claims with no source are
+// gone (PreMark "provincially approved", AirMark helipads and jet blast, Fast Patch "under 45 minutes"),
+// "service life" is the one term, the hero lines are the Product Portfolio Book's own, and the SEO
+// titles are the 3 Oct 2026 list (product name first, then the plain words). Sanity overrides these
+// fields: `npm run sync:products:dry`, then `npm run sync:products` on Vern's PC.
+//
 // Product copy re-based on the HUBSS 2026 catalogue (Figma, read 7 Sep 2026) — Doug-approved text,
 // so shortDesc / description / specs for the ten catalogue systems say what the printed page says and
 // nothing the printed page does not (dropped: glass-bead claims on TrafficPatterns/XD, a "milled groove"
@@ -77,19 +87,20 @@ export const products: Product[] = [
   {
     name: "TrafficPatternsXD",
     slug: "traffic-patterns-xd",
-    seoTitle: "TrafficPatternsXD · Heavy-Duty Decorative Pavement Markings",
-    seoDescription: "Get extra durability and a bold look with TrafficPatternsXD, a heavy-duty, decorative pavement marking system for high-traffic areas, BRT corridors, and intersections.",
+    seoTitle: "TrafficPatternsXD heavy-duty preformed thermoplastic",
+    seoDescription: "Aggregate-reinforced preformed thermoplastic, 150 mil, stamped into the asphalt for the toughest crosswalks, entrances and transit corridors. 10+ years.",
     shortDesc: "Aggregate-reinforced preformed thermoplastic. Traffic tough, proven coast to coast.",
     imageUrl: "/images/products/traffic-patterns-xd/traffic-patterns-xd-03.jpg",
     gallery: [1,2,4,7,10,13,16,19,22,25,28,31,34,37,40,43,46,49,52,55,58,61,64,67,70,73,76,79,82,85,88,91,94,97,100,103,106,109,112,115,118,121,124,127,129,130,133,136,139,143].map(n =>
       `/images/products/traffic-patterns-xd/traffic-patterns-xd-${String(n).padStart(2, "0")}.jpg`),
-    description: "TrafficPatternsXD is the toughest material in the range, built for performance in Canada. Aggregate-reinforced preformed thermoplastic, 150 mil thick, with anti-skid aggregate rated 8–9 on the Mohs scale running through the full cross-section, so the grip lasts as long as the colour. It is heat-fused into asphalt or concrete, not laid on it, which is what makes it hold under plow blades, road salt and the freeze-thaw that follows. Proven in high traffic and under concentrated wheel loads, with high colour contrast for increased safety, and specified by Canadian transit authorities, municipalities and stakeholders across Canada for crosswalks, entrances, transit corridors and streetscapes.",
+    description: "TrafficPatternsXD is the toughest material in the product range, built for performance in Canada. Aggregate-reinforced preformed thermoplastic, 150 mil thick, with anti-skid aggregate rated 8–9 on the Mohs scale running through the full cross-section, so the grip lasts as long as the colour. It is heated on prepared asphalt and stamped through into the top of the asphalt, which is what makes it hold under plow blades, road salt and the freeze-thaw that follows. Proven in high traffic and under concentrated wheel loads, with high colour contrast for increased safety, and specified by Canadian transit authorities, municipalities and commercial stakeholders across Canada for crosswalks, entrances, transit corridors and streetscapes.",
     specs: [
       { label: "Material", value: "Aggregate-reinforced preformed thermoplastic" },
       { label: "Thickness", value: "150 mil" },
       { label: "Aggregate", value: "8–9 Mohs, through the full cross-section" },
       { label: "Skid resistance", value: "60 BPN · ASTM E303" },
-      { label: "Bond", value: "Heat-fused to asphalt or concrete" },
+      { label: "Installation", value: "Heated and stamped into the asphalt" },
+      { label: "Surfaces", value: "Asphalt" },
       { label: "Service life", value: "10+ years" },
     ],
     // Expanded per Vernon's final audit: BRT corridors, high-volume crosswalks, bus priority, intersections, civic plazas.
@@ -100,15 +111,18 @@ export const products: Product[] = [
   {
     name: "TrafficPatterns",
     slug: "traffic-patterns",
-    shortDesc: "Preformed thermoplastic. You design it, we build it, we make it part of the road.",
+    seoTitle: "TrafficPatterns preformed thermoplastic crosswalks",
+    seoDescription: "Preformed thermoplastic crosswalks and entrance features made to your design at 125 mil, with anti-skid aggregate through the material. 8+ years.",
+    shortDesc: "Preformed thermoplastic. You design it, we build it, our certified installers make it last.",
     imageUrl: "/images/products/traffic-patterns/traffic-patterns-01.jpg",
     gallery: gallery("traffic-patterns", "traffic-patterns", 86, "jpg", [65, 69]),
-    description: "TrafficPatterns is preformed thermoplastic, factory-made to your design at 125 mil and heat-fused into asphalt or concrete so it becomes part of the road. Anti-skid aggregate is intermixed through the full cross-section, not broadcast across the top, so the grip lasts as long as the colour. Open to traffic within hours of installation, and engineered for snowplow blades, de-icing salts and Canadian freeze-thaw cycling. Customisable to community artwork: the same material carries a standard crossing, an entrance feature and an Indigenous-designed crosswalk. Specified by Canadian municipalities coast to coast for crosswalks, entrance features, parks and retail.",
+    description: "TrafficPatterns is preformed thermoplastic, factory-made to your design at 125 mil and heat-applied to asphalt or concrete, where it bonds to the surface. Anti-skid aggregate is intermixed through the full cross-section, so the grip lasts as long as the colour. Open to traffic within hours of installation, and engineered for snowplow blades, de-icing salts and Canadian freeze-thaw cycling. Custom designs to fit with the community: the same material carries a standard crossing, an entrance feature and an Indigenous-designed crosswalk. Specified by Canadian municipalities coast to coast for crosswalks, entrance features, parks and parking lots.",
     specs: [
       { label: "Material", value: "Preformed thermoplastic" },
       { label: "Thickness", value: "125 mil" },
       { label: "Aggregate", value: "Anti-skid, intermixed through the full cross-section" },
       { label: "Skid resistance", value: "60 BPN · ASTM E303" },
+      { label: "Installation", value: "Heat-applied, bonds to the surface" },
       { label: "Open to traffic", value: "Hours" },
       { label: "Service life", value: "8+ years" },
     ],
@@ -120,9 +134,9 @@ export const products: Product[] = [
   {
     name: "StreetBond",
     slug: "streetbond",
-    seoTitle: "StreetBond · Durable Asphalt Coatings for Safer Streets",
-    seoDescription: "StreetBond is a high-quality pavement coating system that transforms ordinary asphalt and concrete surfaces into vibrant, durable, and functional surfaces for streets, commercial spaces, and public facilities.",
-    shortDesc: "The colour system. Engineered to perform in Canada.",
+    seoTitle: "StreetBond pavement coating",
+    seoDescription: "StreetBond: a water-based, epoxy-modified acrylic pavement coating for asphalt and concrete. 63 standard colours, custom matching, moves with the pavement.",
+    shortDesc: "The colour. Engineered for life in Canada.",
     imageUrl: "/images/products/streetbond/streetbond-01.png",
     brandLogo: {
       src: "/images/products/streetbond/streetbond-logo-color.svg",
@@ -144,13 +158,13 @@ export const products: Product[] = [
       ...[80,81,82,83,84,85,86,87,88,89,90,91,92,93,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112].map(n =>
         `/images/products/streetbond/streetbond-${n}.jpg`),
     ],
-    description: "StreetBond is the colour system: a water-based, epoxy-modified acrylic coating for asphalt and concrete, designed to move with the pavement and so avoid the three failures of rigid coatings: cracking, premature wear and slipperiness. Sixty-three standard colours plus full custom colour matching, UV-stable and skid-resistant, engineered for plows and de-icing seasons. It is the coating that locks in every StreetPrint pattern, and on its own it turns parks, playgrounds, courts and plazas into surface colour. A life cycle of 8+ years, and easily refreshed: a worn surface is recoated, not rebuilt.",
+    description: "StreetBond is the colour: a water-based, epoxy-modified acrylic pavement coating for asphalt and concrete, designed to move with the pavement and so avoid the three failures of rigid coatings: cracking, premature wear and being slippery in wet conditions. Sixty-three standard colours plus full custom colour matching, UV-stable and skid-resistant, engineered for plows and de-icing seasons. It is the coating that colours every StreetPrint pattern, and on its own it turns parks, playgrounds, courts and area markings into surface colour. A service life of 8+ years, and easily refreshed: a worn surface is recoated, not rebuilt.",
     specs: [
       { label: "Type", value: "Water-based, epoxy-modified acrylic" },
       { label: "Surfaces", value: "Asphalt and concrete" },
       { label: "Colours", value: "63 standard + custom matching" },
       { label: "Flexibility", value: "Moves with the pavement: no cracking, no peeling" },
-      { label: "Life cycle", value: "8+ years / easily refreshed" },
+      { label: "Service life", value: "8+ years / easily refreshed" },
     ],
     colourCollections: [
       { name: "Traffic Red", hex: "#C0392B" },
@@ -170,17 +184,17 @@ export const products: Product[] = [
   {
     name: "StreetPrint",
     slug: "streetprint",
-    seoTitle: "StreetPrint · Stamped Asphalt Solutions for Urban Design",
-    seoDescription: "StreetPrint is stamped asphalt, a Canadian invention installed since 1992, combining the durability of asphalt with the look of brick, stone, or custom designs.",
+    seoTitle: "StreetPrint stamped asphalt",
+    seoDescription: "StreetPrint is stamped asphalt: a Canadian invention installed since 1992, with the durability of asphalt and the look of brick, stone or a custom pattern.",
     shortDesc: "Stamped asphalt. The original. Since 1992, a Canadian invention.",
     imageUrl: "/images/products/streetprint/streetprint-01.jpg",
     gallery: [1,3,5,7,9,10,11,13,15,17,19,21,23,25,27,29,31,32,33,35,37,39,41,43,45,47,49,51,53,55,56,57,59,61,63,65,67,69,71,73,75,77,79,80,81,83,85,87,89,91].map(n => {
       const ext = [57, 63].includes(n) ? "png" : "jpg";
       return `/images/products/streetprint/streetprint-${String(n).padStart(2, "0")}.${ext}`;
     }),
-    description: "StreetPrint is the original stamped asphalt, a Canadian invention, installed since 1992. Patterns are stamped into new or existing asphalt, then coloured and sealed with StreetBond coatings. The surface stays flush: nothing for a plow blade to catch, no joints to weed, no pavers to settle, and the asphalt stays flexible. Brick, cobble, herringbone or a custom pattern goes in with the pavement already there (reheat, stamp, coat), with no removal, no repaving and no haul-away. In Canadian service that is a 10–20 year surface, specified for crosswalks, driveways, plazas and heritage streetscapes.",
+    description: "StreetPrint is the original stamped asphalt, a Canadian invention, installed since 1992. Patterns are stamped into new or existing asphalt, then coloured with StreetBond coatings. The surface stays flush: nothing for a plow blade to catch, no joints to weed, no pavers to settle, and the asphalt stays flexible. Brick, cobble, herringbone or a custom pattern goes in with the pavement already there (reheat, stamp, coat), with no removal, no repaving and no haul-away. In Canadian service that is a 10–20 year surface, specified for crosswalks, driveways, plazas and heritage streetscapes.",
     specs: [
-      { label: "System", value: "In-place stamping + StreetBond coating" },
+      { label: "System", value: "Stamping + StreetBond coating" },
       { label: "Process", value: "Reheat · Stamp · Coat" },
       { label: "Patterns", value: "Standard and custom options" },
       { label: "Base", value: "New or existing asphalt" },
@@ -205,17 +219,17 @@ export const products: Product[] = [
     // The catalogue hero is a portrait photograph with the medallion in its
     // lower half; a centred crop shows concrete. Aim the banner at the artwork.
     heroPosition: "center 74%",
-    seoTitle: "DecoMark · Custom Horizontal Graphics and Wayfinding",
-    seoDescription: "Custom horizontal graphics, civic art, and pavement wayfinding in preformed thermoplastic.",
+    seoTitle: "DecoMark preformed thermoplastic graphics",
+    seoDescription: "DecoMark is preformed thermoplastic cut to your artwork: wayfinding, community branding and public art, heat-applied to asphalt or concrete.",
     shortDesc: "Custom graphics. Community identity. Public art.",
     imageUrl: "/images/products/decomark/decomark-01.jpg",
     gallery: gallery("decomark", "decomark", 78),
-    description: "DecoMark is preformed thermoplastic custom graphics: factory-fabricated to your vector artwork in the TrafficPatterns colour palette (standard and premium options), then heat-fused to asphalt or concrete. Community identity, commemorative art, wayfinding and civic landmarks at street scale: crests, BIA marks, recognition markers and rail-safety reminders that hold their contrast through freeze-thaw and plow seasons. It sits flush to grade, slip-resistant, and stays bright in every season.",
+    description: "DecoMark is preformed thermoplastic custom graphics: factory-fabricated to your vector artwork in standard and premium colours, then heat-applied to asphalt or concrete, where it bonds to the surface. Community identity, commemorative art, wayfinding and civic landmarks at street scale: crests, BIA marks, recognition markers and rail-safety reminders that hold their contrast through freeze-thaw and plow seasons. Anti-skid aggregate runs through the material, so the grip lasts as the surface wears, and it does not alter the pavement underneath.",
     specs: [
       { label: "System", value: "Preformed thermoplastic" },
       { label: "Design", value: "Vector artwork" },
       { label: "Colour", value: "Standard and premium options" },
-      { label: "Installation", value: "Heat-fused to the substrate" },
+      { label: "Installation", value: "Heat-applied, bonds to the surface" },
       { label: "Surfaces", value: "Asphalt and concrete" },
     ],
     // Expanded per Vernon: public art, community branding, wayfinding (public-spaces),
@@ -225,14 +239,16 @@ export const products: Product[] = [
   {
     name: "MMAX",
     slug: "mmax",
-    shortDesc: "MMA area markings. Methyl methacrylate. Fast installation. Built for Canada.",
+    seoTitle: "MMAX MMA bike lane and bus lane markings",
+    seoDescription: "MMAX methyl methacrylate (MMA) area markings for bus lanes, bike lanes and transit priority lanes: traffic-ready in 45 to 60 minutes, 23 colours.",
+    shortDesc: "MMA area markings. Fast installation. Built for tough environments.",
     imageUrl: "/images/products/mmax/mmax-01.jpg",
     gallery: gallery("mmax", "mmax", 33),
-    description: "MMAX is a methyl methacrylate (MMA) resin system for lane and area markings: red bus lanes, green bike lanes, transit-priority corridors and traffic-calming zones. It cures traffic-ready in 45–60 minutes, so an active corridor goes in fast without community disruption, and it holds colour where painted treatments are gone within a season. Embedded aggregate gives a non-slip surface, and it applies at +3°C and rising, which matters in a Canadian season. Available in 8 standard and 15 premium colours, and it holds up where the loads concentrate: stop pads, turning movements and queue jumps.",
+    description: "MMAX is a methyl methacrylate (MMA) area marking: a two-part resin with hard aggregate and colourfast pigment, for red bus lanes, green bike lanes, transit priority lanes and traffic calming. It cures traffic-ready in 45–60 minutes, so an active corridor is installed with minimal community disruption. The aggregate gives it a skid-resistant surface, and it applies at +3°C and rising, which matters in a Canadian season. Available in 8 standard and 15 premium colours, for dedicated lanes, lane delineation and traffic-calming treatments.",
     specs: [
       { label: "Material", value: "Methyl methacrylate (MMA) resin" },
       { label: "Cure", value: "45–60 min · traffic-ready" },
-      { label: "Traction", value: "Embedded aggregate / non-slip" },
+      { label: "Traction", value: "Embedded aggregate, skid-resistant" },
       { label: "Min. temp", value: "+3°C and rising" },
       { label: "Colours", value: "8 standard + 15 premium" },
     ],
@@ -244,8 +260,8 @@ export const products: Product[] = [
   {
     name: "StreetBondSR",
     slug: "streetbondsr",
-    seoTitle: "StreetBondSR · Solar Reflective Asphalt Coatings",
-    seoDescription: "Solar reflective, LEED-aligned coatings for asphalt and concrete that reduce urban heat island effect and support sustainable hardscape design across Canada.",
+    seoTitle: "StreetBondSR solar reflective pavement coating",
+    seoDescription: "StreetBondSR is StreetBond formulated to reflect: twelve colours with a solar reflectance of 0.33 or higher, for the LEED v5 heat island credit.",
     shortDesc: "Solar reflective coating. Mitigating the urban heat island effect.",
     imageUrl: "/images/products/streetbondsr/streetbondsr-02.jpg",
     gallery: [
@@ -255,13 +271,13 @@ export const products: Product[] = [
       "/images/products/streetbondsr/streetbondsr-07.jpg",
       "/images/products/streetbondsr/streetbondsr-08.jpg",
     ],
-    description: "StreetBondSR is StreetBond formulated to reflect rather than absorb: the same flexible chemistry, engineered for cooler surfaces. Twelve colours carry an initial solar reflectance of 0.33 or higher and can contribute to the LEED v5 Sustainable Sites credit for urban heat island reduction (non-roof). Applied to asphalt for parking, plazas, schools and LEED projects, it lowers surface temperature relative to dark pavement while carrying the durability and slip resistance of the StreetBond system, with a life cycle of 8+ years.",
+    description: "StreetBondSR is StreetBond formulated to reflect rather than absorb: the same flexible chemistry, engineered for cooler surfaces. Twelve colours carry an initial solar reflectance of 0.33 or higher and can contribute to the LEED v5 Sustainable Sites credit for urban heat island reduction (non-roof). Applied to asphalt for parking, plazas, schools and LEED projects, it lowers surface temperature relative to dark pavement while carrying the durability and slip resistance of the StreetBond system, with a service life of 8+ years.",
     specs: [
       { label: "Type", value: "Solar reflective epoxy-modified acrylic" },
       { label: "Solar reflectance", value: "≥ 0.33 initial · 12 colours" },
       { label: "LEED", value: "v5 SS credit: urban heat island (non-roof)" },
       { label: "Surfaces", value: "Asphalt" },
-      { label: "Life cycle", value: "8+ years" },
+      { label: "Service life", value: "8+ years" },
     ],
     colourCollections: [
       { name: "Cool White", hex: "#F5F5F5" },
@@ -284,12 +300,12 @@ export const products: Product[] = [
   {
     name: "DuraTherm",
     slug: "duratherm",
-    seoTitle: "DuraTherm · Inlaid Pavement Markings for Snowplow-Safe Crosswalks",
-    seoDescription: "Maximize safety and visibility with DuraTherm: inlaid, preformed thermoplastic markings that survive winter maintenance with no raised edge for plow blades.",
+    seoTitle: "DuraTherm inlaid thermoplastic crosswalks",
+    seoDescription: "DuraTherm is preformed thermoplastic inlaid in stamped asphalt: a decorative crosswalk that sits flush with the road, nothing for a plow blade to catch.",
     shortDesc: "Inlaid thermoplastic. Zero profile above grade.",
     imageUrl: "/images/products/duratherm/duratherm-01.jpg",
     gallery: gallery("duratherm", "duratherm", 36),
-    description: "DuraTherm is thermoplastic heat-fused into a stamped surface. The marking is inlaid into a stamped impression so the finished surface sits flush with the road: nothing for a plow blade to catch, nothing to trip on, no shear damage through winter maintenance. The look of a decorative crosswalk with zero profile above grade, bonded to the asphalt substrate. Specified for crosswalks, speed bumps, traffic calming and identity work where winter maintenance would strip anything that sits on top.",
+    description: "DuraTherm is thermoplastic inlaid in a stamped surface. The asphalt is heated and stamped first; precut 90 mil thermoplastic is set into the impressions and bonded with an infrared heater, so the finished surface sits flush with the road: nothing for a plow blade to catch, nothing to trip on, no shear damage through winter maintenance. The look of a decorative crosswalk with zero profile above grade. Specified for crosswalks, speed tables, traffic calming and identity work where winter maintenance would strip anything that sits on top.",
     specs: [
       { label: "Install", value: "Inlaid into a stamped surface" },
       { label: "Profile", value: "Zero: flush with the road" },
@@ -304,10 +320,12 @@ export const products: Product[] = [
   {
     name: "DuraShield",
     slug: "durashield",
+    seoTitle: "DuraShield asphalt maintenance coating",
+    seoDescription: "DuraShield is a two-component, epoxy-modified acrylic maintenance coating for asphalt. It resists fuel, oil and de-icing agents and protects the pavement.",
     shortDesc: "Pavement maintenance coating. Maintain a surface instead of replacing it.",
     imageUrl: "/images/products/durashield/durashield-01.jpg",
     gallery: gallery("durashield", "durashield", 10),
-    description: "DuraShield is a two-component, epoxy-modified acrylic maintenance coating for asphalt. It resists fuel, oil and de-icing agents, cools the surface with solar-reflective options, and protects the substrate underneath, extending the life cycle of the pavement instead of replacing it. Specified for parking lots, driveways, pathways and LEED sites where the asphalt is sound and the surface needs protecting.",
+    description: "DuraShield is a two-component, epoxy-modified acrylic maintenance coating for asphalt. It resists fuel, oil and de-icing agents, cools the surface with solar-reflective options, and protects the substrate underneath, extending the service life of the pavement instead of replacing it. Specified for parking lots, driveways, pathways and LEED sites where the asphalt is sound and the surface needs protecting.",
     specs: [
       { label: "Type", value: "Two-component epoxy-modified acrylic" },
       { label: "Surfaces", value: "Asphalt" },
@@ -323,8 +341,8 @@ export const products: Product[] = [
   {
     name: "AirMark",
     slug: "airmark",
-    seoTitle: "AirMark · Advanced Airport Pavement Markings",
-    seoDescription: "AirMark is an advanced, high-quality airport pavement markings system specifically designed for taxiways, aprons, and other non-runway aviation applications.",
+    seoTitle: "AirMark preformed thermoplastic airfield marking",
+    seoDescription: "AirMark is preformed thermoplastic for airfield markings on taxiways, aprons and other non-runway surfaces. Retroreflective, applied by certified crews.",
     // 28 Sep 2026 (QA pa#12, pa#36): "Used in Canada's busiest airports" is in no HUB document (the
     // AirMark brochure in /public/docs names no airport or country), so it is gone from the line and the
     // body. The body is cut to four sentences of facts it already stated. Sanity overrides shortDesc,
@@ -332,15 +350,18 @@ export const products: Product[] = [
     shortDesc: "Preformed thermoplastic for non-runway airfield markings.",
     imageUrl: "/images/products/airmark/airmark-01.jpg",
     gallery: gallery("airmark", "airmark", 22),
-    description: "AirMark is preformed thermoplastic for airfield markings on taxiways, aprons, helipads and other non-runway surfaces. Glass beads are embedded through the full cross-section of the material, so retroreflectivity holds as the surface wears. Certified crews heat-apply it, and it stands up to jet blast, snow clearing and rubber removal treatments. It is specified for taxiway centrelines, apron designations, holding position signs and ground-vehicle markings.",
+    // 17 Oct 2026: "helipads", "jet blast" and "rubber removal" are on no AirMark sheet (TS007 names
+    // taxiways, hold positions, aprons, ramps, parking and tie-down, vehicle roadways; fuels, lubricants
+    // and de-icers), so they are gone; the colours are the sheet's five.
+    description: "AirMark is preformed thermoplastic for airfield markings on taxiways, aprons, hold positions and other non-runway surfaces. Glass beads are embedded through the full cross-section of the material, so retroreflectivity holds as the surface wears. Certified crews heat-apply it, and it resists aviation fuels, lubricants and de-icers. It is specified for taxiway markings, hold positions, apron and ramp markings, aircraft parking and tie-down positions, and airside vehicle roadways.",
     specs: [
-      { label: "Application", value: "Taxiways, aprons, helipads, non-runway airfield surfaces" },
+      { label: "Application", value: "Taxiways, aprons, hold positions, non-runway airfield surfaces" },
       { label: "Material", value: "Preformed thermoplastic" },
-      { label: "Retroreflectivity", value: "Full-depth glass bead construction" },
-      { label: "Colour", value: "White and yellow" },
-      // Was "Multi-year service life", the label said twice. No HUB document gives AirMark a figure;
-      // this is the softened wording in CLAIMS-VERIFICATION.csv.
-      { label: "Service life", value: "Multi-year, no annual repainting" },
+      { label: "Retroreflectivity", value: "Glass beads through the full cross-section" },
+      { label: "Colours", value: "Five standard: white, yellow, red, black, pink" },
+      { label: "Resists", value: "Aviation fuels, lubricants, de-icers" },
+      // No HUB or PPG document gives AirMark a service life in years, so the sheet shows none
+      // (until 17 Oct 2026 it said "Multi-year, no annual repainting").
       { label: "Installation", value: "Heat application by certified crews" },
     ],
     // Vernon: taxiways, aprons, helipads, holding-position signs — airfield surfaces.
@@ -349,19 +370,20 @@ export const products: Product[] = [
   {
     name: "PreMark",
     slug: "premark",
-    seoTitle: "PreMark · Long-Lasting, High-Visibility Pavement Markings",
-    seoDescription: "Long-lasting, high-visibility preformed thermoplastic pavement markings for enhanced safety: arrows, stop bars, school zones, bike lanes, and regulatory symbols.",
+    seoTitle: "PreMark preformed thermoplastic road symbols",
+    seoDescription: "PreMark is preformed thermoplastic for arrows, stop bars, legends and bike symbols, pre-cut to specification and heat-applied without stencils.",
     shortDesc: "Road marking symbols. Arrows. Stop bars. Legends. Bike symbols. Custom.",
     imageUrl: "/images/products/premark/premark-01.jpg",
     gallery: gallery("premark", "premark", 11),
-    description: "PreMark is preformed thermoplastic for regulatory road markings: arrows, stop bars, yield triangles, school legends, bike symbols and ladder lines, pre-cut to specification. Heat-applied by torch: no stencils, no curing window, drive on immediately. Integrated glass beads for retroreflectivity, 125 mil standard with a 90 mil ViziGrip option, and a service life of 6–8 years. Provincially approved across Canada.",
+    description: "PreMark is preformed thermoplastic for regulatory road markings: arrows, stop bars, yield triangles, school legends, bike symbols and ladder lines, pre-cut to specification. Heat-applied by torch: no stencils, no curing window, drive on immediately. Integrated glass beads for retroreflectivity, 125 mil standard with a 90 mil ViziGrip option, and a service life of 6–8 years.",
     specs: [
       { label: "Material", value: "Preformed thermoplastic" },
       { label: "Thickness", value: "125 mil standard / 90 mil ViziGrip" },
       { label: "Installation", value: "Heat-applied: drive on immediately" },
       { label: "Retroreflectivity", value: "Integrated glass beads" },
       { label: "Service life", value: "6–8 years" },
-      { label: "Approval", value: "Provincially approved across Canada" },
+      // "Provincially approved across Canada" (a row here and a sentence above until 17 Oct 2026) names
+      // no province's approved-products list; it returns when one is cited.
     ],
     // Expanded per Vernon: bike lanes, regulatory markings, symbols/arrows, school zones (playgrounds), crosswalks.
     // 28 Sep 2026 (pa#31): playgrounds and traffic-calming out. Neither spread specifies PreMark, neither
@@ -378,7 +400,11 @@ export const products: Product[] = [
     name: "ChipFill",
     slug: "chipfill",
     eyebrow: "Asphalt & Concrete Repair",
-    shortDesc: "Heat-activated preformed material for permanent pothole repair. Year-round, all-weather.",
+    seoTitle: "ChipFill pothole repair",
+    seoDescription: "ChipFill is thermoplastic pothole repair in a bag: poured into the hole and heated with a torch, it bonds to asphalt or concrete and reopens in minutes.",
+    // 17 Oct 2026: not "preformed" (that is a factory-cut sheet); ChipFill is thermoplastic in small
+    // chips, poured and heated in place (Geveko's listing with Alberta Transportation).
+    shortDesc: "Thermoplastic chips for permanent pothole repair, heated in place. Year-round, all-weather.",
     // De-brand swap (companion to fix/aggrefill-hero): the prior hero
     // (`chipfill-aggrefill-bags.jpg`) showed two GEVEKO-branded supplier
     // bags. Swapped to `chipfill-road-repair.webp` — cinematic clean
@@ -399,9 +425,9 @@ export const products: Product[] = [
       "/images/products/chipfill/chipfill-03.jpg",
     ],
     // Cut to four sentences, 28 Sep 2026 (QA pa#36): the same facts, without the 180-word paragraph.
-    description: "ChipFill is laid into the prepared excavation and activated with a propane torch, so it needs no specialized equipment and no hot-mix plant. Once heated, it conforms to the shape of the damage and bonds to the surrounding asphalt or concrete, sealing out the water that drives freeze-thaw damage. It can be installed year-round in any weather, and the lane reopens to traffic within minutes. It is used for patrol patching, emergency repairs, utility cuts and edge joints on roads, parking lots, sidewalks and pathways.",
+    description: "ChipFill is thermoplastic in small chips: poured into the prepared hole, levelled and heated with a propane torch, so it needs no specialized equipment and no hot-mix plant. Once heated, it conforms to the shape of the damage and bonds to the surrounding asphalt or concrete, sealing out the water that drives freeze-thaw damage. It can be installed year-round in any weather, and the lane reopens to traffic within minutes. It is used for patrol patching, emergency repairs, utility cuts and edge joints on roads, parking lots, sidewalks and pathways.",
     specs: [
-      { label: "Type", value: "Heat-activated preformed pothole repair material" },
+      { label: "Type", value: "Thermoplastic repair chips, heated in place" },
       { label: "Application", value: "Heat torch, no specialized equipment required" },
       { label: "Substrate", value: "Asphalt and concrete" },
       { label: "Weather", value: "Year-round, all-conditions deployment" },
@@ -419,6 +445,8 @@ export const products: Product[] = [
     eyebrow: "Asphalt & Concrete Repair",
     // "Up to 1 m²" dropped from the line, body and spec, 28 Sep 2026 (QA pa#12): no document in
     // /public/docs states it, and "1 m² in diameter" mixed an area with a length.
+    seoTitle: "AggreFill pothole repair aggregate",
+    seoDescription: "AggreFill is pre-coated aggregate for larger potholes, used with ChipFill: the aggregate fills the hole, the heated ChipFill binds it and seals the repair.",
     shortDesc: "Pre-coated aggregate filler for larger potholes. Combined with ChipFill for permanent repair.",
     // De-brand swap: the prior hero (`aggrefill-application.webp` /
     // `aggrefill-01.jpg`) showed a GEVEKO-branded supplier bag, violating
@@ -461,7 +489,12 @@ export const products: Product[] = [
     // Not "cold-mix" (28 Sep 2026, QA pa#36): the hero called it cold-mix while the body sold it against
     // cold-mix products. Its own flyer (/resources/flyers/HUBSS-Flyer-fast-patch-v01.pdf) calls it a
     // polymer-blend pourable repair material, and the spec below already says polymer-blend.
-    shortDesc: "Polymer-blend repair for potholes, spalls, and utility cuts. Back in service in under an hour.",
+    seoTitle: "Fast Patch DPR asphalt and concrete repair",
+    seoDescription: "Fast Patch DPR is a pourable polymer repair for potholes, spalls and utility cuts in asphalt and concrete. Mix, pour, finish: in service in about an hour.",
+    // 17 Oct 2026: WVCO's sheet gives return to service as 1 hour at 21°C (1.5 for the other pack), not
+    // "under 45 minutes"; its uses are roadways, parking lots, micro-trenches, warehouses and
+    // sidewalks ("bridges", "curbs" and "impact absorption" were on no sheet).
+    shortDesc: "Polymer-blend repair for potholes, spalls, and utility cuts. Back in service in about an hour.",
     imageUrl: "/images/products/fast-patch/fastpatch-repaired.jpg",
     heroPosition: "center 50%",
     brandLogo: {
@@ -478,15 +511,15 @@ export const products: Product[] = [
     // Cut to four sentences (pa#36). "Compact" went with "cold-mix": the flyer's method is mix, pour,
     // finish. "Permanent" and "year-round" stay: the family intro in lib/product-categories.ts relies on
     // all three repair products stating both.
-    description: "Fast Patch DPR is a distressed pavement repair material for asphalt and concrete: a pourable polymer blend of recycled and renewable materials for high-strength repairs to potholes, spalls, joints, wheel paths and utility cuts. With minimal site preparation, a repair is back in service in less than 45 minutes, and the optional Fast Patch Kicker accelerator shortens the cure in cooler conditions so the work can go on year-round. The repair is permanent, bonding to the surrounding pavement with excellent freeze-thaw resistance and impact absorption. Because it is odourless, it can be used indoors on warehouse floors, loading docks and underground parkades, as well as on roads, bridges, parking lots, sidewalks and curbs.",
+    description: "Fast Patch DPR is a distressed pavement repair material for asphalt and concrete: a pourable polymer blend of recycled and renewable materials for high-strength repairs to potholes, spalls, joints, wheel paths and utility cuts. With minimal site preparation, a repair is back in service in about an hour at 21°C, and the optional Fast Patch Kicker accelerator shortens the cure in cooler conditions so the work can go on year-round. The repair is permanent, bonding to the surrounding pavement, and freeze-thaw resistant for colder climates. Because it is odourless and 100% solids, it can be used indoors, on warehouse floors, as well as on roads, parking lots, sidewalks and utility cuts.",
     specs: [
       { label: "Type", value: "Polymer-blend distressed pavement repair" },
       { label: "Composition", value: "Recycled and renewable polymer matrix" },
-      { label: "Cure time", value: "Return to service in <45 minutes" },
+      { label: "Return to service", value: "About 1 hour at 21°C" },
       { label: "Cold weather", value: "Compatible with Fast Patch Kicker accelerator" },
-      { label: "Substrate", value: "Asphalt and concrete: roads, bridges, lots, warehouses" },
+      { label: "Substrate", value: "Asphalt and concrete: roads, parking lots, sidewalks, warehouses" },
       { label: "Odour", value: "Odourless, suitable for indoor applications" },
-      { label: "Resilience", value: "Excellent freeze-thaw resistance + impact absorption" },
+      { label: "Resilience", value: "Freeze-thaw resistant, for colder climates" },
     ],
     relatedApplications: ["parking-lots", "residential-driveways", "parks-paths", "commercial-spaces", "townhomes"],
   },

@@ -60,7 +60,7 @@ const BOOK_FACTS: Record<string, string[]> = {
   premark: ["Service life"],
   duratherm: ["Profile"],
   decomark: ["Design"],
-  streetbond: ["Life cycle"],
+  streetbond: ["Service life"], // the book prints "Life cycle"; the web says one term (WEB_EDITS, lib/product-catalogue.ts)
   streetbondsr: ["Solar reflectance"],
   mmax: ["Cure"],
   durashield: ["Chemical resistance"],
@@ -99,9 +99,9 @@ const withFullStop = (line: string) => (/[.!?]$/.test(line.trim()) ? line.trim()
  */
 const SITE_ONLY: Record<string, { line: string; facts: string[] }> = {
   airmark: { line: "Preformed thermoplastic for non-runway airfield markings.", facts: ["Application"] },
-  chipfill: { line: "Heat-activated preformed material for permanent pothole repair.", facts: ["Weather"] },
+  chipfill: { line: "Thermoplastic chips for permanent pothole repair, heated in place.", facts: ["Weather"] },
   aggrefill: { line: "Pre-coated aggregate filler for larger potholes, combined with ChipFill for permanent repair.", facts: ["Substrate"] },
-  "fast-patch": { line: "Polymer-blend repair for potholes, spalls, and utility cuts.", facts: ["Cure time"] },
+  "fast-patch": { line: "Polymer-blend repair for potholes, spalls, and utility cuts.", facts: ["Return to service"] },
 };
 
 type Fact = { label: string; value: string };

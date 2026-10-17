@@ -46,7 +46,9 @@ export default function PersonaEntryPoints({ cards = HOMEPAGE_COPY.audiences }: 
                 >
                   {p.label}
                 </p>
-                <p className="text-xs leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                {/* 15px: at 13px this was the smallest running copy on the
+                    site and the first paragraph after the hero (17 Oct 2026). */}
+                <p className="text-[15px] leading-relaxed" style={{ color: "var(--text-secondary)" }}>
                   {p.desc}
                 </p>
               </div>

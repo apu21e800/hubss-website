@@ -12,7 +12,7 @@ import { BLOG_NAME, INSIGHTS_SECTIONS } from "@/lib/field-notes-taxonomy";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
-  title: `${BLOG_NAME} · Decorative Pavement Across Canada, Documented`,
+  title: `${BLOG_NAME} · Decorative pavement jobs across Canada`,
   description:
     "Decorative pavement projects across Canada, written up with the system on each, plus specification guides and articles on crosswalks, transit lanes and stamped asphalt.",
   slug: "blog",
@@ -96,20 +96,14 @@ export default async function BlogPage() {
             page is Projects (BLOG_NAME): the work first, the reading beside it. */}
         <header className="mb-10 grid gap-y-4 sm:mb-12 lg:grid-cols-12 lg:items-end lg:gap-x-12">
           <h1
-            className="font-display font-black text-balance lg:col-span-8"
-            style={{
-              color: "var(--text-primary)",
-              fontSize: "clamp(2rem, 3.4vw, 3rem)",
-              lineHeight: 1.02,
-              letterSpacing: "-0.035em",
-              maxWidth: "24ch",
-            }}
+            className="h1-page text-balance lg:col-span-8"
+            style={{ color: "var(--text-primary)", maxWidth: "24ch" }}
           >
-            Projects across Canada, documented
+            Projects
           </h1>
           <p className="text-base leading-relaxed lg:col-span-4 lg:pb-1.5" style={{ color: "var(--text-secondary)", maxWidth: "44ch" }}>
-            Where each job is, which system went down and how it holds up. With the
-            guides and articles for the people who specify the next one.
+            Jobs across Canada: the town, the system, and how it has held up. Guides
+            and articles for whoever writes the next spec.
           </p>
         </header>
 

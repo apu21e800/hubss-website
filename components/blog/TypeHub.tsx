@@ -112,15 +112,7 @@ export default async function TypeHub({ section }: { section: InsightsSection })
             (lg:px-8), as /blog and the other landing pages (QA D11, 30 Sep
             2026, re-applied 2 Oct 2026 on the editorial layout). */}
         <header className="mb-8 grid gap-y-3 lg:grid-cols-12 lg:items-end lg:gap-x-12">
-          <h1
-            className="font-display font-black lg:col-span-7"
-            style={{
-              color: "var(--text-primary)",
-              fontSize: "clamp(2rem, 3.4vw, 3rem)",
-              lineHeight: 1.02,
-              letterSpacing: "-0.035em",
-            }}
-          >
+          <h1 className="h1-page lg:col-span-7" style={{ color: "var(--text-primary)" }}>
             {section.plural}
           </h1>
           <p className="text-base leading-relaxed lg:col-span-5 lg:pb-1.5" style={{ color: "var(--text-secondary)", maxWidth: "44ch" }}>

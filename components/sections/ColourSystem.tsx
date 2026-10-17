@@ -36,12 +36,12 @@ export default function ColourSystem({
 }) {
   if (!families.length) return null;
   return (
-    <section id="colours" className="mt-14 scroll-mt-24">
-      <h2 className="text-2xl font-bold mb-2" style={{ color: "var(--text-primary)" }}>
+    <section id="colours" className="mt-14">
+      <h2 className="h2-sub mb-2" style={{ color: "var(--text-primary)" }}>
         {heading}
       </h2>
       {intro && (
-        <p className="text-sm leading-relaxed mb-6 max-w-2xl" style={{ color: "var(--text-secondary)" }}>
+        <p className="text-[15px] leading-relaxed mb-6 max-w-prose" style={{ color: "var(--text-secondary)" }}>
           {intro}
         </p>
       )}
@@ -134,7 +134,7 @@ export default function ColourSystem({
         ))}
       </div>
 
-      <p className="mt-6 text-[13px] leading-relaxed max-w-2xl" style={{ color: "var(--text-faint)" }}>
+      <p className="mt-6 text-[13px] leading-relaxed max-w-prose" style={{ color: "var(--text-secondary)" }}>
         Screen-reference values: colours vary by monitor and substrate. Specify from physical
         samples.{" "}
         {downloadHref && (

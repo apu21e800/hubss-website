@@ -20,9 +20,12 @@
  *     switched off, but the old name should not sit in Studio either.
  *  3. The homepage blog section's eyebrow, "Insights" to "Projects" (Vern,
  *     17 Oct, evening: "instead of insights call them Projects... !!! see
- *     top nav"). The site already prints "Projects" over that section
- *     while Studio holds "Insights" (components/sections/FeaturedBlogPost.tsx);
- *     this makes Studio say what the page says.
+ *     top nav"). Folded into change 4 the same night.
+ *  4. The lines the 17 Oct copy review rewrote (lib/copy-superseded.ts, one
+ *     list for this script and for the pages): the homepage section lines,
+ *     the About hero and story, the Contact lead, three Lunch & Learn
+ *     answers. The site already prints the new lines where Studio still
+ *     holds the old ones; this makes Studio say what the pages say.
  *
  * A document with an unpublished draft gets the same change in the draft,
  * so publishing the draft later does not undo it. Every write checks the
@@ -34,6 +37,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { config as loadDotenv } from "dotenv";
 import { flagSentences, describeIssue } from "../lib/style-lint";
+import { SUPERSEDED } from "../lib/copy-superseded";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 loadDotenv({ path: path.join(ROOT, ".env.local") });
@@ -70,13 +74,6 @@ const CTA = {
   to: "Open the Product Portfolio Book",
 };
 
-// ── 3. The homepage blog section's eyebrow: the blog's name
-const EYEBROW = {
-  id: "page-homepage",
-  from: "Insights",
-  to: "Projects",
-};
-
 type Change = { id: string; rev: string; label: string; set: Record<string, string> };
 const changes: Change[] = [];
 const skipped: string[] = [];
@@ -93,6 +90,16 @@ function style(label: string, text: string) {
 
 async function withDraft<T extends { _id: string; _rev: string }>(id: string, projection: string): Promise<T[]> {
   return client.fetch<T[]>(`*[_id in [$id, $draft]]${projection}`, { id, draft: `drafts.${id}` });
+}
+
+/** A dotted path with array indexes ("homepageSections.audiences[0].desc", "aboutStory[1]") read from a document. */
+function readPath(doc: unknown, path: string): unknown {
+  return path.split(".").reduce<unknown>((o, part) => {
+    const m = /^([^[]+)(?:\[(\d+)\])?$/.exec(part);
+    if (!m || !o || typeof o !== "object") return undefined;
+    const v = (o as Record<string, unknown>)[m[1]];
+    return m[2] === undefined ? v : Array.isArray(v) ? v[Number(m[2])] : undefined;
+  }, doc);
 }
 
 async function main() {
@@ -122,15 +129,22 @@ async function main() {
     }
   }
 
-  // 3. Blog section eyebrow
+  // 3 and 4. The superseded lines, by document: one patch per document
+  // (and per draft), each field only while it still holds the old line.
   {
-    const docs = await withDraft<{ _id: string; _rev: string; eyebrow?: string }>(EYEBROW.id, "{_id, _rev, \"eyebrow\": homepageSections.insights.eyebrow}");
-    for (const d of docs) {
-      const now = d.eyebrow ?? "";
-      if (now === EYEBROW.from) {
-        changes.push({ id: d._id, rev: d._rev, label: "homepage blog section eyebrow", set: { "homepageSections.insights.eyebrow": EYEBROW.to } });
-      } else if (now !== EYEBROW.to) {
-        skipped.push(`${d._id}: blog section eyebrow is "${now}", left as it is`);
+    const byDoc = new Map<string, typeof SUPERSEDED>();
+    for (const s of SUPERSEDED) byDoc.set(s.doc, [...(byDoc.get(s.doc) ?? []), s]);
+    for (const [id, lines] of byDoc) {
+      const docs = await withDraft<{ _id: string; _rev: string } & Record<string, unknown>>(id, "");
+      if (!docs.length) { skipped.push(`${id}: not found`); continue; }
+      for (const d of docs) {
+        const set: Record<string, string> = {};
+        for (const s of lines) {
+          const now = readPath(d, s.path);
+          if (now === s.from) { set[s.path] = s.to; style(`${d._id} ${s.path}`, s.to); }
+          else if (now !== s.to) skipped.push(`${d._id}: ${s.path} is ${JSON.stringify(now)}, left as it is`);
+        }
+        if (Object.keys(set).length) changes.push({ id: d._id, rev: d._rev, label: `${id}: ${Object.keys(set).length} superseded line(s)`, set });
       }
     }
   }

@@ -66,16 +66,7 @@ export default function ProductSpecCard({
   return (
     <section aria-labelledby="product-positioning" className="mb-14">
       {/* Claim */}
-      <h2
-        id="product-positioning"
-        className="font-black mb-2.5"
-        style={{
-          color: "var(--text-primary)",
-          fontSize: "clamp(1.75rem, 3.4vw, 2.6rem)",
-          letterSpacing: "-0.03em",
-          lineHeight: 1.05,
-        }}
-      >
+      <h2 id="product-positioning" className="h2-section mb-2.5" style={{ color: "var(--text-primary)" }}>
         {entry.title}
       </h2>
 

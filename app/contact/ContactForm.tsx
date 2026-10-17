@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Nav from "@/components/sections/Nav";
 import LunchLearn from "@/components/sections/LunchLearn";
 import { SocialLinks } from "@/components/ui/SocialLinks";
@@ -12,13 +12,14 @@ import { postForm } from "@/lib/post-form";
 // Note: metadata must be in a server component — defined in layout or a parallel route.
 // Page-level metadata for client components requires moving meta to a parent layout.
 
+// Sentence case, as the Lunch & Learn topics are (copy review, 17 Oct 2026).
 const projectTypes = [
-  "Crosswalk / Pedestrian Safety",
-  "Bus & Bike Lane Markings",
-  "Decorative Pavement / StreetPrint",
-  "Regulatory / Road Markings",
-  "Community / Public Art",
-  "Parking Lot",
+  "Crosswalk or pedestrian safety",
+  "Bus or bike lane markings",
+  "Decorative pavement or StreetPrint",
+  "Regulatory or road markings",
+  "Community or public art",
+  "Parking lot",
   "Other",
 ];
 
@@ -41,6 +42,17 @@ export default function ContactForm({ eyebrow, heading, subheading, footer }: Co
   const [form, setForm] = useState({
     name: "", company: "", email: "", phone: "", projectType: "", message: "", website: ""
   });
+  // The system or application the visitor came from ("Send us the project"
+  // on a product or application page carries ?project=StreetPrint, as the
+  // Lunch & Learn link carries its topic). Shown as a line above the form
+  // and sent as the project type when none is chosen, so the office knows
+  // which page the enquiry is about without the visitor typing it again
+  // (interaction review, 17 Oct 2026).
+  const [project, setProject] = useState("");
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search).get("project")?.trim().slice(0, 80) ?? "";
+    if (p) setProject(p);
+  }, []);
 
   // Native validation scrolls the first invalid field into view, and the
   // sticky header (72px) then covers it on a phone (QA D10, 30 Sep 2026).
@@ -51,7 +63,7 @@ export default function ContactForm({ eyebrow, heading, subheading, footer }: Co
     background: "var(--bg-primary)",
     border: "1px solid var(--border-subtle)",
     color: "var(--text-primary)",
-    scrollMarginTop: 112,
+    scrollMarginTop: 28, // on top of html's 84px scroll-padding
   } as const;
   const AUTOCOMPLETE: Record<string, string> = {
     name: "name", company: "organization", email: "email", phone: "tel",
@@ -92,14 +104,14 @@ export default function ContactForm({ eyebrow, heading, subheading, footer }: Co
             >
               {heading}
             </h1>
-            <p className="text-[16px] leading-relaxed mb-12" style={{ color: "var(--text-body)" }}>
+            <p className="text-[16px] leading-relaxed mb-12 max-w-prose" style={{ color: "var(--text-body)" }}>
               {subheading}
             </p>
             <div className="space-y-8">
               {/* The offices from Studio's Site Settings (lib/site-settings.ts). */}
               {[
-                { region: "West Office", ...offices.west },
-                { region: "East Office", ...offices.east },
+                { region: "West office", ...offices.west },
+                { region: "East office", ...offices.east },
               ].map((office) => (
                 <div key={office.region}>
                   <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "var(--accent-text-lg)" }}>{office.region}</p>
@@ -143,7 +155,7 @@ export default function ContactForm({ eyebrow, heading, subheading, footer }: Co
                     // line falls back instead of ending on "@ ".
                     // postForm: the spam check, with a way round it for
                     // browsers that block it (lib/post-form.ts).
-                    const res = await postForm({ ...form, company: form.company.trim() || undefined, formType: "contact", website: form.website });
+                    const res = await postForm({ ...form, projectType: form.projectType || (project ? `${project} (from the ${project} page)` : ""), company: form.company.trim() || undefined, formType: "contact", website: form.website });
                     const data = await res.json();
                     if (!res.ok || data.error) {
                       setError(data.error ?? "Something went wrong. Please try again.");
@@ -170,9 +182,12 @@ export default function ContactForm({ eyebrow, heading, subheading, footer }: Co
                     { label: "Company", key: "company", type: "text", placeholder: "City of Toronto", optional: true },
                   ].map((f) => (
                     <div key={f.key}>
-                      <label htmlFor={`contact-${f.key}`} className="block text-sm mb-2" style={{ color: "var(--text-body)" }}>
+                      {/* The label the Lunch & Learn and Product Portfolio Book
+                          forms use (uniformity pass, 17 Oct 2026: three label
+                          styles across three forms). */}
+                      <label htmlFor={`contact-${f.key}`} className="block text-[12px] font-semibold uppercase tracking-[0.16em] mb-1.5" style={{ color: "var(--text-secondary)" }}>
                         {f.label}
-                        {f.optional && <span style={{ opacity: 0.6 }}> (optional)</span>}
+                        {f.optional && <span style={{ textTransform: "none", letterSpacing: 0 }}> (optional)</span>}
                       </label>
                       <input
                         id={`contact-${f.key}`}
@@ -190,11 +205,14 @@ export default function ContactForm({ eyebrow, heading, subheading, footer }: Co
                   ))}
                 </div>
                 {[
-                  { label: "Email", key: "email", type: "email", placeholder: "jane@city.ca" },
-                  { label: "Phone", key: "phone", type: "tel", placeholder: "416-555-0100" },
+                  { label: "Email", key: "email", type: "email", placeholder: "jane@city.ca", optional: false },
+                  { label: "Phone", key: "phone", type: "tel", placeholder: "416-555-0100", optional: true },
                 ].map((f) => (
                   <div key={f.key}>
-                    <label htmlFor={`contact-${f.key}`} className="block text-sm mb-2" style={{ color: "var(--text-body)" }}>{f.label}</label>
+                    <label htmlFor={`contact-${f.key}`} className="block text-[12px] font-semibold uppercase tracking-[0.16em] mb-1.5" style={{ color: "var(--text-secondary)" }}>
+                      {f.label}
+                      {f.optional && <span style={{ textTransform: "none", letterSpacing: 0 }}> (optional)</span>}
+                    </label>
                     <input
                       id={`contact-${f.key}`}
                       name={f.key}
@@ -210,7 +228,7 @@ export default function ContactForm({ eyebrow, heading, subheading, footer }: Co
                   </div>
                 ))}
                 <div>
-                  <label htmlFor="contact-projectType" className="block text-sm mb-2" style={{ color: "var(--text-body)" }}>Project type</label>
+                  <label htmlFor="contact-projectType" className="block text-[12px] font-semibold uppercase tracking-[0.16em] mb-1.5" style={{ color: "var(--text-secondary)" }}>Project type</label>
                   <select
                     id="contact-projectType"
                     name="projectType"
@@ -223,12 +241,12 @@ export default function ContactForm({ eyebrow, heading, subheading, footer }: Co
                     // in white like a chosen value (QA, 28 Sep 2026).
                     style={{ ...fieldStyle, color: form.projectType ? "var(--text-primary)" : "color-mix(in srgb, var(--text-primary) 50%, transparent)" }}
                   >
-                    <option value="">Select project type...</option>
+                    <option value="">{project ? `About ${project}` : "Choose one"}</option>
                     {projectTypes.map((t) => <option key={t} value={t} style={{ color: "var(--text-primary)" }}>{t}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label htmlFor="contact-message" className="block text-sm mb-2" style={{ color: "var(--text-body)" }}>Message</label>
+                  <label htmlFor="contact-message" className="block text-[12px] font-semibold uppercase tracking-[0.16em] mb-1.5" style={{ color: "var(--text-secondary)" }}>Message</label>
                   <textarea
                     id="contact-message"
                     name="message"
@@ -236,7 +254,7 @@ export default function ContactForm({ eyebrow, heading, subheading, footer }: Co
                     rows={4}
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
-                    placeholder="Tell us about your project..."
+                    placeholder={project ? `The ${project} job: where it is, roughly when, and the size.` : "Where the job is, roughly when, and the size."}
                     className="w-full px-4 py-3 rounded-lg text-base outline-none resize-none focus:ring-1 focus:ring-orange-500"
                     style={fieldStyle}
                   />
@@ -261,8 +279,7 @@ export default function ContactForm({ eyebrow, heading, subheading, footer }: Co
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full font-semibold py-4 rounded-lg text-base transition-all disabled:opacity-60 min-h-[48px]"
-                  style={{ background: "#f97316", color: "var(--on-accent)" }}
+                  className="btn-accent btn-lg btn-block disabled:opacity-60"
                 >
                   {loading ? "Sending..." : "Send us your project"}
                 </button>

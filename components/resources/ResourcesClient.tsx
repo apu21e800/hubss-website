@@ -18,7 +18,7 @@ const TYPE_PRIORITY = [
   "Spec Sheet",
   "Data Sheet",
   "Brochure",
-  "Catalogue",
+  "Template guide",
   "Safety Data Sheet",
   "Colour Guide",
   "Design Manual",
@@ -41,7 +41,7 @@ const TYPE_BUCKETS: { label: string; types: string[] }[] = [
   { label: "Spec sheets", types: ["Spec Sheet"] },
   { label: "Data sheets", types: ["Data Sheet", "Safety Data Sheet"] },
   { label: "Guides & manuals", types: ["Colour Guide", "Design Manual", "Installation Guide", "Guide", "FAQ"] },
-  { label: "Brochures & flyers", types: ["Brochure", "Flyer", "Product Portfolio Book", "Catalogue"] },
+  { label: "Brochures & flyers", types: ["Brochure", "Flyer", "Product Portfolio Book", "Template guide"] },
   { label: "Other", types: ["Certificate", "Other"] },
 ];
 const BUCKET_BY_TYPE: Record<string, string> = {};
@@ -164,7 +164,7 @@ function DocCard({
       )}
 
       <div className="flex-1 min-w-0">
-        <p className="text-[11px] font-bold tracking-[0.16em] uppercase mb-0.5" style={{ color: "var(--accent-text)" }}>
+        <p className="text-[12px] font-bold tracking-[0.16em] uppercase mb-0.5" style={{ color: "var(--accent-text)" }}>
           {doc.type}
         </p>
         <h3 className="text-[15.5px] font-semibold leading-snug truncate transition-colors group-hover:text-[var(--accent-text)]" style={{ color: "var(--text-primary)" }}>
@@ -477,27 +477,17 @@ export default function ResourcesClient({
       )}
 
       {/* ── Tab Navigation  */}
-      <div id="documents" className="scroll-mt-24 mb-8">
+      <div id="documents" className="mb-8">
         <div className="flex gap-2">
           {TABS.map((tab) => (
+            // The same chip as the filters under it (uniformity pass, 17 Oct
+            // 2026: a rounded-lg pair sat over a row of rounded-full pills).
             <button
               key={tab}
+              type="button"
               onClick={() => handleTabChange(tab)}
-              className="px-4 rounded-lg text-sm font-medium transition-colors duration-200"
-              style={{
-                minHeight: 44,
-                // Same softening as the Field Notes filter chips: a solid
-                // orange fill reads as an accent on charcoal and as an alarm
-                // on paper. The wash is an alpha so it tints whatever surface
-                // it lands on, and it is still the only coloured tab in the
-                // row, which is what makes it the selected one.
-                background: activeTab === tab ? "rgba(249,115,22,0.14)" : "var(--ink-05)",
-                color: activeTab === tab ? "var(--accent-text)" : "var(--text-muted)",
-                border:
-                  activeTab === tab
-                    ? "1px solid rgba(249,115,22,0.38)"
-                    : "1px solid var(--border-color)",
-              }}
+              aria-pressed={activeTab === tab}
+              className="chip"
             >
               {tab}
             </button>
@@ -584,18 +574,8 @@ export default function ResourcesClient({
             setVisibleCount(PAGE_SIZE);
           }}
           aria-pressed={newOnly}
-          className="inline-flex items-center gap-1.5 px-4 min-h-[44px] rounded-full text-sm font-medium transition-all duration-150 ease-out hover:scale-[1.02] active:scale-[0.98]"
-          style={
-            newOnly
-              ? { background: "#F97316", color: "var(--on-accent)", border: "1px solid transparent" }
-              : /* Same neutral chip as "Featured" beside it. The orange tint
-                   it had when off read as already selected (QA, 27 Sep 2026). */
-                {
-                  background: "var(--ink-05)",
-                  color: "var(--text-muted)",
-                  border: "1px solid var(--border-color)",
-                }
-          }
+          // .chip (app/globals.css): the site's filter pill (17 Oct 2026).
+          className="chip"
         >
           <Sparkles
             className="w-3.5 h-3.5"
@@ -610,16 +590,7 @@ export default function ResourcesClient({
             setVisibleCount(PAGE_SIZE);
           }}
           aria-pressed={featuredOnly}
-          className="inline-flex items-center gap-1.5 px-4 min-h-[44px] rounded-full text-sm font-medium transition-all duration-150 ease-out hover:scale-[1.02] active:scale-[0.98]"
-          style={
-            featuredOnly
-              ? { background: "#F97316", color: "var(--on-accent)", border: "1px solid transparent" }
-              : {
-                  background: "var(--ink-05)",
-                  color: "var(--text-muted)",
-                  border: "1px solid var(--border-color)",
-                }
-          }
+          className="chip"
         >
           <Star
             className="w-3.5 h-3.5"
@@ -637,27 +608,10 @@ export default function ResourcesClient({
               key={opt.value}
               onClick={() => toggleType(opt.value)}
               aria-pressed={active}
-              className="inline-flex items-center gap-1.5 px-4 min-h-[44px] rounded-full text-sm font-medium transition-all duration-150 ease-out hover:scale-[1.02] active:scale-[0.98]"
-              style={
-                active
-                  ? { background: "#F97316", color: "var(--on-accent)", border: "1px solid transparent" }
-                  : {
-                      background: "var(--ink-05)",
-                      color: "var(--text-body)",
-                      border: "1px solid var(--border-color)",
-                    }
-              }
+              className="chip"
             >
               <span>{opt.value}</span>
-              <span
-                className="inline-flex items-center justify-center text-[11px] font-bold rounded-full min-w-[20px] px-1.5 py-0.5"
-                style={{
-                  background: active ? "var(--ink-20)" : "var(--ink-05)",
-                  color: active ? "var(--text-primary)" : "var(--text-muted)",
-                }}
-              >
-                {opt.count}
-              </span>
+              <span className="chip-count">{opt.count}</span>
             </button>
           );
         })}
@@ -727,10 +681,7 @@ export default function ResourcesClient({
                   {Object.entries(grouped).map(([productName, docs]) => (
                     <div key={productName}>
                       <div className="flex items-center gap-4 mb-6">
-                        <h3
-                          className="text-sm font-bold tracking-widest uppercase"
-                          style={{ color: "var(--accent-text-lg)" }}
-                        >
+                        <h3 className="eyebrow">
                           {productName}
                         </h3>
                         <div

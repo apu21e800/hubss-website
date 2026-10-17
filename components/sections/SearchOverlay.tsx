@@ -295,7 +295,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
   }, []);
 
   const hits = useMemo(() => search(query, entries), [query, entries]);
-  const groups = useMemo(() => groupHits(hits), [hits]);
+  const groups = useMemo(() => groupHits(hits, query), [hits, query]);
   /** Flat order matches what the eye sees, so ↑↓ walks the rendered list. */
   const flat = useMemo(() => groups.flatMap((g) => g.hits), [groups]);
 
@@ -375,6 +375,10 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
       className="fixed inset-0 z-[9999] flex items-start justify-center pt-[8vh] px-4"
       style={{ background: "rgba(0,0,0,0.82)", backdropFilter: "blur(14px)" }}
       onClick={onClose}
+      // The palette is one control: pinned to the dark surface, as the bar
+      // is, so it does not open cream on a paper page and charcoal on a dark
+      // one (interaction review, 17 Oct 2026).
+      data-surface="dark"
     >
       <motion.div
         ref={dialogRef}
@@ -426,7 +430,9 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
             // The row ↑↓ has reached, for a screen reader: without it the
             // choice was only visual (QA sweep, 16 Oct 2026).
             aria-activedescendant={hasList && active >= 0 && active < options.length ? `search-opt-${active}` : undefined}
-            placeholder="Search systems, specs, insights"
+            // Short enough for a 262px field on a phone (phone review,
+            // 17 Oct 2026: the old line was cut at "insight").
+            placeholder="Search the site"
             className="flex-1 bg-transparent outline-none"
             style={{
               color: "var(--text-primary)",
@@ -531,7 +537,7 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
           {showResults && flat.length > 0 && (
             <div id="search-results" ref={listRef} role="listbox" aria-label="Search results" className="max-h-[62vh] overflow-y-auto">
               {groups.map((group) => (
-                <div key={group.type}>
+                <div key={group.label ?? group.type}>
                   <p
                     className="text-[11px] font-bold uppercase tracking-[0.18em] px-5 pt-4 pb-2 sticky top-0"
                     // zIndex: each row's content-visibility makes it a stacking
@@ -546,8 +552,8 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                       className="inline-block align-middle"
                       style={{ width: 4, height: 4, borderRadius: "50%", background: "currentColor", marginRight: 9, marginBottom: 2, opacity: 0.7 }}
                     />
-                    {group.type}
-                    <span style={{ color: "var(--text-faint)", marginLeft: 9, letterSpacing: 0, opacity: 0.75 }}>{group.hits.length}</span>
+                    {group.label ?? group.type}
+                    {!group.label && <span style={{ color: "var(--text-faint)", marginLeft: 9, letterSpacing: 0, opacity: 0.75 }}>{group.hits.length}</span>}
                   </p>
                   {/* Inset by the panel's own gutter so an active row is a
                       rounded block floating on the surface, not a stripe
@@ -634,7 +640,10 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
                           // shape at every size on every machine, and pairing
                           // it with the word removes the last of the guessing.
                           <span
-                            className="flex-shrink-0 inline-flex items-center gap-1.5 pl-2 pr-2.5 rounded-md"
+                            // An Enter hint has no place on a touch screen
+                            // (phone review, 17 Oct 2026): hidden where there
+                            // is no pointer that hovers.
+                            className="flex-shrink-0 items-center gap-1.5 pl-2 pr-2.5 rounded-md hidden [@media(hover:hover)]:inline-flex"
                             style={{
                               height: 24,
                               color: "var(--accent-text-lg)",

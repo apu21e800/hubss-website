@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Inter } from "next/font/google";
 import "./globals.css";
 // Crisp Chat — sign up at crisp.chat (free), grab Website ID from Settings → Setup
@@ -13,6 +13,8 @@ import { Suspense } from "react";
 import { draftMode } from "next/headers";
 import PreviewTools from "@/components/PreviewTools";
 import { SiteSettingsProvider } from "@/components/SiteSettingsProvider";
+import NavigationProgress from "@/components/NavigationProgress";
+import SkipLink from "@/components/SkipLink";
 import { getSiteSettings } from "@/lib/sanity.queries";
 
 // Runs before first paint. Order: ?theme= in the URL (persisted, so a link
@@ -40,6 +42,9 @@ const SITE_DESCRIPTION =
 // was declared as 1200 x 630. lib/seo.ts still names the hero file for the
 // other pages (DEFAULT_OG_IMAGE); point it here too.
 const OG_IMAGE = { url: "/images/og/default.jpg", width: 1200, height: 630, alt: "The UBC Musqueam crosswalk in Vancouver: Coast Salish artwork in coloured pavement by HUB Surface Systems" };
+
+/** The browser chrome's colour on a phone: the bar's charcoal. */
+export const viewport: Viewport = { themeColor: "#0b0b0b" };
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://hubss.com"),
@@ -112,6 +117,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         />
       </head>
       <body className={`${geist.variable} ${inter.variable} antialiased`}>
+        <SkipLink />
         {/* Resource hints — React 19 hoists these into <head>. The landing
             page's map pulls style + tiles + glyphs from CARTO; warming the
             connection here shaves the first paint of the section. */}
@@ -121,6 +127,11 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             photos on nearly every page (lib/photos.ts); warming it too saves
             the TLS handshake before the first card photo (QA F13, 30 Sep 2026). */}
         <link rel="preconnect" href="https://cdn.sanity.io" crossOrigin="anonymous" />
+        {/* The line under the bar while the next page loads; useSearchParams
+            needs the boundary. */}
+        <Suspense fallback={null}>
+          <NavigationProgress />
+        </Suspense>
         <SiteSettingsProvider settings={settings}>{children}</SiteSettingsProvider>
         {/* The scroll-up sticky bar (components/StickyBar.tsx) is off since
             25 Sep 2026: with the header's Lunch & Learn button and the band at

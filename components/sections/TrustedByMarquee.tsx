@@ -13,13 +13,11 @@ export const TRUSTED_BY = [
   "City of Vancouver",
   "University of British Columbia",
   "City of Ottawa",
-  "City of Calgary",
   "City of Brampton",
   "City of Mississauga",
   "TransLink",
   "City of Surrey",
   "City of Edmonton",
-  "City of Winnipeg",
   "City of Burnaby",
   "City of Richmond Hill",
 ];

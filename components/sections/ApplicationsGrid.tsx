@@ -81,38 +81,46 @@ export default function ApplicationsGrid({ applications: source, copy = HOMEPAGE
   return (
     <section
       /* photo-led grid; the big contrast block in the middle of the page */
-      data-surface="dark" className="py-28" style={{ background: "var(--bg-dark)" }}>
+      data-surface="dark" className="section-padding" style={{ background: "var(--bg-dark)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-16">
-          <p className="grad-text text-xs font-semibold tracking-[0.2em] uppercase mb-3">
+        {/* The same header as the systems section above it: eyebrow, heading,
+            one line, and the index button top right (uniformity pass, 17 Oct
+            2026: the three "All x" buttons sat in three places). */}
+        <div className="mb-14 md:mb-16">
+          <p className="eyebrow mb-3">
             {copy.eyebrow}
           </p>
-          <h2
-            className="font-black mb-4"
-            style={{
-              color: "var(--text-primary)",
-              fontSize: "clamp(2.2rem, 4vw, 3.5rem)",
-              lineHeight: 1.05,
-              letterSpacing: "-0.03em",
-              textWrap: "balance",
-            }}
-          >
-            {copy.heading}
-            {copy.headingAccent && (
-              <>
-                {" "}
-                <span style={{
-                  background: "linear-gradient(90deg, #F97316 0%, #EAB308 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}>{copy.headingAccent}</span>
-              </>
-            )}
-          </h2>
-          <p className="text-base sm:text-lg max-w-2xl leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-            {copy.intro}
-          </p>
+          <div className="flex items-end justify-between gap-6 flex-wrap">
+            <div>
+              <h2 className="h2-section mb-3" style={{ color: "var(--text-primary)" }}>
+                {copy.heading}
+                {copy.headingAccent && (
+                  <>
+                    {" "}
+                    <span style={{
+                      background: "linear-gradient(90deg, #F97316 0%, #EAB308 100%)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      backgroundClip: "text",
+                    }}>{copy.headingAccent}</span>
+                  </>
+                )}
+              </h2>
+              <p className="text-base font-light max-w-lg leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                {copy.intro}
+              </p>
+            </div>
+            {/* A wrapper hides it on phones: .btn-ghost sets display
+                unlayered, so a `hidden` utility on the link itself would lose. */}
+            <div className="hidden md:block flex-shrink-0">
+              <Link href="/applications" prefetch={false} className="btn-ghost">
+                All applications
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+            </div>
+          </div>
         </div>
 
         {/* MOBILE DIET — same treatment as ProductsGrid: swipe row on phones
@@ -153,7 +161,7 @@ export default function ApplicationsGrid({ applications: source, copy = HOMEPAGE
                   // as an empty dark box for about a second after each swipe
                   // (QA, 28 Sep 2026). Low priority keeps the nine from
                   // competing with the hero; same sizes, same image variants.
-                  loading="eager"
+                  loading={i < 3 ? "eager" : "lazy"}
                   fetchPriority="low"
                   // Subject-foreground bias: pavement surface usually sits in the lower 2/3 of source frames.
                   className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
@@ -189,7 +197,9 @@ export default function ApplicationsGrid({ applications: source, copy = HOMEPAGE
                   {/* Three lines on a phone, two from sm (QA A10, 30 Sep
                       2026): at 304px wide, seven of the nine lines of copy
                       were cut mid-sentence with an ellipsis at two lines. */}
-                  <p className="text-sm text-[var(--ink-60)] mt-0.5 line-clamp-3 sm:line-clamp-2">
+                  {/* Three lines at every width: two cut "colo…", "seaso…",
+                      "chan…" on five of nine cards at 1440 (17 Oct 2026). */}
+                  <p className="text-sm text-[var(--ink-60)] mt-0.5 line-clamp-3">
                     {app.shortDesc}
                   </p>
                 </div>
@@ -199,19 +209,12 @@ export default function ApplicationsGrid({ applications: source, copy = HOMEPAGE
           })}
         </div>
 
-        {/* The section's one link to the index. "All applications", the
-            same classes as "All systems" in ProductsGrid.tsx (QA A11, 30 Sep
-            2026); .btn-ghost (app/globals.css) gives it its border, hover and
-            focus ring. prefetch={false} (QA F5): the nine cards prefetch
-            their own pages already. */}
-        <div className="flex justify-center mt-4">
-          <Link
-            href="/applications"
-            prefetch={false}
-            className="btn-ghost inline-flex items-center gap-2 rounded-lg px-7 py-3.5 text-sm font-semibold"
-          >
+        {/* On a phone the index button is below the swipe row, where the
+            thumb is; from md it is in the header above, beside the heading. */}
+        <div className="flex justify-center mt-2 md:hidden">
+          <Link href="/applications" prefetch={false} className="btn-ghost">
             All applications
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </Link>

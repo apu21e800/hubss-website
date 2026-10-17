@@ -47,16 +47,17 @@ const CanadaMap = dynamic(() => import("@/components/sections/CanadaMap"), {
  */
 export default function CanadaMapWrapper() {
   const [wanted, setWanted] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(false);
   const [near, setNear] = useState(false);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
+  // "See the work" and a search result send the visitor to #map. On a phone
+  // that used to land on the "Open the map" card, a second tap short of the
+  // map itself (phone review, 17 Oct 2026): arriving at #map opens it.
   useEffect(() => {
-    const mq = window.matchMedia("(min-width: 1024px)");
-    const update = () => setIsDesktop(mq.matches);
-    update();
-    mq.addEventListener("change", update);
-    return () => mq.removeEventListener("change", update);
+    const onHash = () => { if (window.location.hash === "#map") setWanted(true); };
+    onHash();
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
   }, []);
 
   useEffect(() => {
@@ -82,22 +83,25 @@ export default function CanadaMapWrapper() {
     return () => io.disconnect();
   }, [near]);
 
-  if ((isDesktop && near) || wanted) return <CanadaMap />;
+  if (near || wanted) return <CanadaMap />;
 
-  // Desktop, not yet near: reserve the space so nothing below it jumps when
-  // the map arrives.
-  if (isDesktop) {
-    return <div ref={sentinelRef} style={{ height: MAP_SECTION_HEIGHT, background: "var(--bg-dark)" }} aria-hidden="true" />;
-  }
-
+  // Both placeholders come from the server and CSS picks one: a laptop gets
+  // the reserved space (so nothing below jumps when the map arrives), a
+  // phone the card. Until 17 Oct 2026 a matchMedia state chose after
+  // hydration, so every desktop load painted the phone card first and the
+  // page grew 668px a second later. The sentinel is the desktop block; on a
+  // phone it is display:none and never intersects, so the map waits for the
+  // card's tap or #map.
   return (
-    <div ref={sentinelRef} className="mx-4 my-10">
+    <>
+      <div ref={sentinelRef} className="hidden lg:block" style={{ height: MAP_SECTION_HEIGHT, background: "var(--bg-dark)" }} aria-hidden="true" />
+      <div className="mx-4 my-10 lg:hidden">
       <button
         onClick={() => setWanted(true)}
-        className="group w-full rounded-2xl px-6 py-10 text-left transition-colors hover:bg-[var(--ink-05)]"
+        className="group w-full rounded-xl px-6 py-10 text-left transition-colors hover:bg-[var(--ink-05)]"
         style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--border-color)" }}
       >
-        <p className="text-[11px] font-bold tracking-[0.22em] uppercase mb-2" style={{ color: "var(--accent-text)" }}>
+        <p className="eyebrow mb-2">
           Installations across Canada
         </p>
         {/* The map's own header, word for word, so the card and the map
@@ -105,10 +109,10 @@ export default function CanadaMapWrapper() {
             header said 59). No count: docs/STYLE.md, no counts as a selling
             point. lib/map-count.json is still written every build. */}
         <p className="font-black leading-tight mb-2" style={{ color: "var(--text-primary)", fontSize: "1.5rem", letterSpacing: "-0.02em" }}>
-          Real projects. Real places.
+          Find a job near you.
         </p>
         <p className="text-sm mb-5" style={{ color: "var(--ink-65)" }}>
-          Every pin is a documented installation, shown in its own photos.
+          Every pin is a HUB installation, with its own photos.
         </p>
         <span className="inline-flex items-center gap-2 text-sm font-bold" style={{ color: "var(--accent-text)" }}>
           Open the map
@@ -117,6 +121,7 @@ export default function CanadaMapWrapper() {
           </svg>
         </span>
       </button>
-    </div>
+      </div>
+    </>
   );
 }

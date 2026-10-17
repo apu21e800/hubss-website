@@ -1,4 +1,5 @@
 import { getSanityPageContent, getSiteSettings } from "@/lib/sanity.queries";
+import { current } from "@/lib/copy-superseded";
 import { city, provinceCode, schemaPhone, type SiteSettings } from "@/lib/site-settings";
 import JsonLd from "@/components/ui/JsonLd";
 import ContactForm from "./ContactForm";
@@ -102,10 +103,13 @@ const contactSchema = ({ offices }: SiteSettings) => ({
 
 export default async function ContactPage() {
   const [sanityPage, settings] = await Promise.all([getSanityPageContent("contact"), getSiteSettings()]);
+  // current(): the 17 Oct 2026 copy review rewrote the heading and the line
+  // under it; Studio's copies print as the new lines until the clean-up
+  // script has run (lib/copy-superseded.ts).
   const hero = {
-    eyebrow:    sanityPage?.contactHero?.eyebrow    ?? "Get in touch",
-    heading:    sanityPage?.contactHero?.heading    ?? "Start a project",
-    subheading: sanityPage?.contactHero?.subheading ?? "Tell us about your community, your timeline, and your vision. We'll tell you which surface system brings it to life.",
+    eyebrow:    sanityPage?.contactHero?.eyebrow ?? "Get in touch",
+    heading:    current(sanityPage?.contactHero?.heading) ?? "Tell us about the job.",
+    subheading: current(sanityPage?.contactHero?.subheading) ?? "The site, the timing, what you want it to look like. We’ll say which system fits and put you in touch with the installer nearest you.",
   };
 
   return (

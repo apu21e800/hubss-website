@@ -66,7 +66,10 @@ export default function GalleryArchive({ images, footer }: { images: GalleryImag
           setVisible((v) => Math.min(v + PAGE, filtered.length));
         }
       },
-      { rootMargin: "600px 0px" }
+      // Two screens of warning: at 600px a reader at a trackpad's pace
+      // saw the footer, then the next chunk landed above it and the footer
+      // dropped away, a 0.25 layout shift (technical review, 17 Oct 2026).
+      { rootMargin: "1600px 0px" }
     );
     obs.observe(el);
     return () => obs.disconnect();
@@ -89,21 +92,13 @@ export default function GalleryArchive({ images, footer }: { images: GalleryImag
 
         {/* Header */}
         <div className="mb-12">
-          <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-3" style={{ color: "var(--accent-text-lg)" }}>
-            Photo archive
+          <p className="eyebrow mb-3">
+            Gallery
           </p>
           {/* The standard landing H1, 48px at 1440, as Insights, Resources
               and the rest (QA D11, 30 Sep 2026); this one was 56px. */}
-          <h1
-            className="font-black mb-4"
-            style={{
-              color: "var(--text-primary)",
-              fontSize: "clamp(2rem, 3.4vw, 3rem)",
-              lineHeight: 1.0,
-              letterSpacing: "-0.03em",
-            }}
-          >
-            Field documentation
+          <h1 className="h1-page mb-4" style={{ color: "var(--text-primary)" }}>
+            The work, in photographs
           </h1>
           {/* Was "{IMAGES.length}+ installations": the "+" overstated a counted
               list, and some installations have two photos (Sep 2026). */}
@@ -118,30 +113,17 @@ export default function GalleryArchive({ images, footer }: { images: GalleryImag
             const count = cat.count(images);
             const isActive = active === cat.value;
             return (
+              // .chip (app/globals.css): the site's filter pill, with its
+              // selected state announced (aria-pressed), as /blog's are.
               <button
                 key={cat.value}
+                type="button"
+                aria-pressed={isActive}
                 onClick={() => { setActive(cat.value); setLightbox(null); setVisible(PAGE); }}
-                className="flex items-center gap-1.5 text-xs font-semibold px-4 rounded-full transition-all whitespace-nowrap"
-                style={{
-                  background: isActive ? "#F97316" : "var(--ink-05)",
-                  color: isActive ? "var(--on-accent)" : "var(--text-muted)",
-                  border: "1px solid",
-                  borderColor: isActive ? "#F97316" : "var(--ink-10)",
-                  // 44px floor: these were 35px tall, and category filters are
-                  // the first thing a phone user reaches for on this page.
-                  minHeight: 44,
-                }}
+                className="chip"
               >
                 {cat.label}
-                <span
-                  className="text-[11px] font-mono px-1.5 py-0.5 rounded-full"
-                  style={{
-                    background: isActive ? "var(--ink-20)" : "var(--border-color)",
-                    color: isActive ? "var(--text-primary)" : "var(--ink-40)",
-                  }}
-                >
-                  {count}
-                </span>
+                <span className="chip-count">{count}</span>
               </button>
             );
           })}
@@ -177,8 +159,8 @@ export default function GalleryArchive({ images, footer }: { images: GalleryImag
               <button
                 key={img.src + i}
                 type="button"
-                aria-label={`${img.alt}, ${img.location}`}
-                className="archive-tile group relative block w-full overflow-hidden rounded-xl cursor-pointer text-left active:scale-[0.985] transition-transform duration-100 focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-orange-500"
+                aria-label={img.location ? `${img.alt}, ${img.location}` : img.alt}
+                className="archive-tile group relative block w-full overflow-hidden rounded-xl cursor-zoom-in text-left active:scale-[0.985] transition-transform duration-100 focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-orange-500"
                 style={{
                   border: "1px solid var(--border-color)",
                   animation: "archive-tile-in 0.4s ease both",
@@ -198,7 +180,7 @@ export default function GalleryArchive({ images, footer }: { images: GalleryImag
                 >
                   <PhotoImage
                     src={img.src}
-                    alt={`${img.alt}, ${img.location}, decorative pavement by HUB Surface Systems`}
+                    alt={`${img.alt}${img.location ? `, ${img.location}` : ""}, decorative pavement by HUB Surface Systems`}
                     fill
                     loading={i < EAGER ? "eager" : "lazy"}
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -217,7 +199,10 @@ export default function GalleryArchive({ images, footer }: { images: GalleryImag
                   >
                     <p className="text-xs font-bold" style={{ color: "var(--accent-text-lg)" }}>{img.category.toUpperCase().replace("-", " ")}</p>
                     <p className="text-sm font-semibold leading-tight" style={{ color: "var(--text-primary)" }}>{img.alt}</p>
-                    <p className="text-xs mt-0.5" style={{ color: "var(--ink-55)" }}>{img.location}</p>
+                    {/* No place line where none is recorded (41 tiles said
+                        "Canada" for a company that knows every job by its
+                        town: copy review, 17 Oct 2026). */}
+                    {img.location && <p className="text-xs mt-0.5" style={{ color: "var(--ink-55)" }}>{img.location}</p>}
                   </div>
                 </div>
               </button>
@@ -261,8 +246,8 @@ export default function GalleryArchive({ images, footer }: { images: GalleryImag
           // label ("High-Visibility Crosswalk"), so the fullscreen view, the
           // one a reader actually studies, was the least described surface
           // on the page.
-          alt: `${img.alt}, ${img.location}, decorative pavement by HUB Surface Systems`,
-          caption: `${img.alt} · ${img.location}`,
+          alt: `${img.alt}${img.location ? `, ${img.location}` : ""}, decorative pavement by HUB Surface Systems`,
+          caption: img.location ? `${img.alt} · ${img.location}` : img.alt,
         }))}
         index={lightbox ?? -1}
         onClose={closeLightbox}

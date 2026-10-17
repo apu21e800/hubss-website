@@ -17,6 +17,7 @@ import RelatedPosts from "@/components/blog/RelatedPosts";
 import ShareButtons from "@/components/blog/ShareButtons";
 import PostBody from "@/components/blog/PostBody";
 import PhotoImage from "@/components/ui/PhotoImage";
+import HeroPhoto from "@/components/ui/HeroPhoto";
 import { isSanityImage, sanityOgImage, sanitySized } from "@/lib/photos";
 import { focalObjectPosition, formatPostDate } from "@/lib/blog-taxonomy";
 
@@ -96,31 +97,21 @@ function heroAlt(post: Post): string {
 function HeroTitle({ post, section }: { post: Post; section: InsightsSection }) {
   return (
     <>
+      {/* The hero recipe every photo hero shares (17 Oct 2026): the eyebrow
+          in cream, the name at the hero size, weight 800. The bordered chip
+          and the 900 weight were this page's own. */}
       <Link
         href={`/blog/${section.slug}`}
-        className="group -my-2 mb-2 inline-flex items-center"
+        className="group mb-3 inline-flex items-center"
         style={{ minHeight: 44, textDecoration: "none" }}
       >
-        <span
-          className="transition-colors group-hover:border-orange-400"
-          style={{
-            fontSize: 10.5, fontWeight: 700, letterSpacing: "0.18em", lineHeight: 1,
-            textTransform: "uppercase", color: "#FB923C",
-            background: "rgba(10,10,10,0.72)",
-            border: "1px solid rgba(249,115,22,0.45)",
-            padding: "7px 12px 6px", borderRadius: 4,
-            backdropFilter: "blur(6px)", WebkitBackdropFilter: "blur(6px)",
-          }}
-        >
+        <span className="eyebrow eyebrow-photo transition-colors group-hover:text-[var(--accent-text)]">
           {section.singular}
         </span>
       </Link>
       <h1
+        className="h1-hero"
         style={{
-          fontSize: "clamp(1.75rem, 3.2vw, 2.75rem)",
-          fontWeight: 900,
-          lineHeight: 1.08,
-          letterSpacing: "-0.025em",
           color: "var(--text-primary)",
           marginBottom: "1.25rem",
           maxWidth: "22em",
@@ -309,7 +300,7 @@ export default async function BlogPostPage({ params }: Props) {
           {/* Photo first on a phone, then the title; side by side from lg,
               the title held to the foot of the hero as on a full-bleed one. */}
           <div
-            className="relative max-w-7xl mx-auto px-6 pt-8 pb-12 sm:pt-12 sm:pb-14 flex flex-col justify-between gap-7 lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-x-14"
+            className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12 sm:pt-12 sm:pb-14 flex flex-col justify-between gap-7 lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-x-14"
             style={{ minHeight: "inherit" }}
           >
             <figure
@@ -345,14 +336,11 @@ export default async function BlogPostPage({ params }: Props) {
             // containerType: the focal point (Studio's hotspot) is placed
             // against this box's own size; see focalObjectPosition (QA rest#29).
             <div className="absolute inset-0" style={{ containerType: "size" }}>
-              <PhotoImage
-                src={hero}
-                alt={heroAlt(post)}
-                fill
-                className="object-cover hero-pop"
-                style={focus ? { objectPosition: focus } : undefined}
-                priority
-                sizes="100vw"
+              <HeroPhoto
+                photo={{ src: hero, alt: heroAlt(post), hotspot: post.featuredImageHotspot }}
+                position={focus}
+                className="hero-pop"
+                phoneRatio={390 / 574}
               />
             </div>
           ) : (
@@ -372,7 +360,7 @@ export default async function BlogPostPage({ params }: Props) {
 
           {/* Label, title and meta, anchored to the bottom */}
           <div className="absolute inset-x-0 bottom-0">
-            <div className="max-w-7xl mx-auto px-6 pb-12 sm:pb-14">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-14">
               <HeroTitle post={post} section={section} />
             </div>
           </div>
@@ -385,7 +373,7 @@ export default async function BlogPostPage({ params }: Props) {
       {/* ── Article + sidebar ───────────────────── */}
       {/* The sidebar column takes some of the room the shorter measure gives
           back: 360 px, from 320 (QA D24, 30 Sep 2026). */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-10 lg:grid lg:gap-16" style={{ gridTemplateColumns: "minmax(0, 1fr) 360px" }}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14 pb-10 lg:grid lg:gap-16" style={{ gridTemplateColumns: "minmax(0, 1fr) 360px" }}>
         {/* A container, so a wide table (PostBody) can take the column's full
             width (100cqw) past the text's measure before it has to scroll. */}
         <div className="min-w-0" style={{ containerType: "inline-size" }}>
@@ -467,7 +455,7 @@ export default async function BlogPostPage({ params }: Props) {
           block that followed it went on 30 Sep 2026: with the Lunch & Learn
           card beside the article and the band before the footer, it was the
           third ask for the same session on one page. */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-12 sm:pb-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16">
         <div style={MEASURE}>
           <SystemsInPost products={post.products} primary={system} />
         </div>
@@ -475,7 +463,7 @@ export default async function BlogPostPage({ params }: Props) {
 
       {/* ── Related posts ──────────────────────── */}
       <div style={{ borderTop: "1px solid var(--border-color)", background: "var(--bg-section-asphalt)" }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
           <RelatedPosts posts={related} currentSlug={post.slug} />
         </div>
       </div>

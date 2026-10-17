@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useCallback, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Search, X, ChevronDown, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
@@ -69,7 +69,6 @@ function sectionFromParams(params: URLSearchParams): InsightsSectionKey | "all" 
  * seventy-odd cards down a 12,000px page.
  */
 export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Props) {
-  const router = useRouter();
   const searchParams = useSearchParams();
 
   const [search, setSearch]     = useState(() => searchParams.get("search") ?? "");
@@ -86,9 +85,14 @@ export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Prop
       if (state.section !== "all")   params.set("section",  state.section);
       if (state.sort !== "newest")   params.set("sort",     state.sort);
       const qs = params.toString();
-      router.replace(qs ? `/blog?${qs}` : "/blog", { scroll: false });
+      // Native history, not router.replace: the router's first transition
+      // into a search-param URL scrolled the page to the top, so the first
+      // tab or keystroke threw the reader off the filters (interaction
+      // review, 17 Oct 2026). Next keeps useSearchParams in step with
+      // replaceState, and nothing is fetched: the filter is client-side.
+      window.history.replaceState(window.history.state, "", qs ? `/blog?${qs}` : "/blog");
     },
-    [search, product, section, sort, router]
+    [search, product, section, sort]
   );
 
   useEffect(() => {
@@ -100,7 +104,7 @@ export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Prop
 
   function clearFilters() {
     setSearch(""); setProduct("all"); setSection("all"); setSort("newest");
-    router.replace("/blog", { scroll: false });
+    window.history.replaceState(window.history.state, "", "/blog");
   }
 
   const inSection = (p: PostMeta, key: InsightsSectionKey) => sectionFor(p.category).key === key;
@@ -194,7 +198,7 @@ export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Prop
             family, weight and tracking over Tailwind's utilities. */}
         <h2
           id="library-heading"
-          className="mb-1 text-[11.5px] uppercase"
+          className="mb-1 text-[12.5px] uppercase"
           style={{ color: "var(--accent-text)", fontFamily: "inherit", fontWeight: 700, letterSpacing: "0.2em", lineHeight: 1.5 }}
         >
           Browse projects, guides and articles

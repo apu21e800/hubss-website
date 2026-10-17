@@ -26,11 +26,11 @@ export interface LunchLearnFaq { q: string; a: string }
 export const LUNCH_LEARN_FAQS: LunchLearnFaq[] = [
   {
     q: "How long is the session?",
-    a: "30–45 minutes of presentation, followed by open Q&A. We're respectful of your team's calendar and stick to the time we agree on.",
+    a: "Forty-five minutes, then questions for as long as you want. We stick to the time we agree on.",
   },
   {
     q: "What does it cost?",
-    a: "Nothing. Sessions are how we introduce our systems to the people who specify them: no invoice, no minimum order, and no follow-up pressure.",
+    a: "Nothing. No invoice, no minimum order, no follow-up pressure. It is how we introduce the systems to the people who write the specs.",
   },
   {
     q: "Who should be in the room?",
@@ -38,7 +38,7 @@ export const LUNCH_LEARN_FAQS: LunchLearnFaq[] = [
   },
   {
     q: "In-person or virtual?",
-    a: "Both. In-person sessions are available coast to coast through our certified applicator network. Virtual sessions use Zoom or Teams. We mail sample kits before we connect.",
+    a: "Both. In-person sessions are available across Canada through our certified installers. Virtual sessions use Zoom or Teams, and we mail the sample kit ahead.",
   },
 ];
 

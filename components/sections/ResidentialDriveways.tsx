@@ -87,18 +87,15 @@ export default function ResidentialDriveways() {
             {/* The button used to link to this same page, so pressing it
                 reloaded it (QA pa#2). A homeowner here wants a price. */}
             <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
-              <Link
-                href="/contact"
-                className="inline-flex items-center gap-2 font-bold px-6 rounded-lg text-sm transition-[filter] duration-150 hover:brightness-110"
-                style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "var(--on-accent)", minHeight: 44 }}
-              >
+              <Link href="/contact?project=StreetPrint%20driveway&from=application" className="btn-accent">
                 Ask for a quote
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" aria-hidden>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
               </Link>
-              <Link href="/products/streetprint" className="inline-flex items-center text-sm font-semibold hover:underline underline-offset-2" style={{ color: "var(--text-primary)", minHeight: 44 }}>
+              <Link href="/products/streetprint" className="link-arrow">
                 About StreetPrint
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
               </Link>
             </div>
           </div>

@@ -1,4 +1,5 @@
 import { stegaClean } from "@sanity/client/stega";
+import { current } from "@/lib/copy-superseded";
 import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import LunchLearnFunnel from "@/components/sections/LunchLearnFunnel";
@@ -73,7 +74,9 @@ export default async function LunchLearnPage() {
     if (!h?.faqHeading) return undefined;
     return stegaClean(h.faqHeading) === "Everything You Need to Know" ? undefined : { faqHeading: h.faqHeading };
   }
-  const faqs = freshArray(sanityPage?.lunchLearnFaqs, "q", STALE_FAQ_QS) ?? LUNCH_LEARN_FAQS;
+  // current(): three answers the 17 Oct 2026 copy review rewrote print as
+  // the new lines until the clean-up script has run (lib/copy-superseded.ts).
+  const faqs = (freshArray(sanityPage?.lunchLearnFaqs, "q", STALE_FAQ_QS) ?? LUNCH_LEARN_FAQS).map((f) => ({ ...f, a: String(current(f.a)) }));
 
   // FAQPage schema, built from the list the page shows so the two cannot
   // drift (they had: the schema asked "Is the session in-person or virtual?"

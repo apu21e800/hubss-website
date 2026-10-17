@@ -22,15 +22,12 @@ export default function PavingPatterns() {
   return (
     <section className="mt-14">
       <div className="flex items-end justify-between gap-4 mb-2">
-        <h2 className="text-2xl font-bold" style={{ color: "var(--text-primary)" }}>
-          Standard templates.
+        <h2 className="h2-sub" style={{ color: "var(--text-primary)" }}>
+          Standard templates
         </h2>
-        <Link
-          href="/patterns"
-          className="text-sm font-bold flex-shrink-0 inline-flex items-center hover:translate-x-0.5 transition-transform"
-          style={{ color: "var(--accent-text)", minHeight: 44 }}
-        >
-          All 16 templates →
+        <Link href="/patterns" className="link-arrow flex-shrink-0">
+          All 16 templates
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
         </Link>
       </div>
       <p className="text-sm leading-relaxed mb-8 max-w-2xl" style={{ color: "var(--text-secondary)" }}>

@@ -28,12 +28,8 @@ export default function ProductFaq({
        heading sat against "Showing 7 of 77" and the gallery buttons (QA,
        27 Sep 2026). */
     <section aria-labelledby="product-faq" className="mt-16 mb-14">
-      <h2
-        id="product-faq"
-        className="text-xl sm:text-2xl font-bold mb-2"
-        style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}
-      >
-        {productName} · common questions
+      <h2 id="product-faq" className="h2-sub mb-2" style={{ color: "var(--text-primary)" }}>
+        {productName}: common questions
       </h2>
       <p className="mb-7 text-sm" style={{ color: "var(--text-secondary)" }}>
         Answers from HUB&apos;s field and technical documentation.
@@ -47,7 +43,10 @@ export default function ProductFaq({
           <details
             key={f.q}
             open={i === 0}
-            className="group"
+            // name: one answer open at a time; the opening eases
+            // (app/globals.css, details::details-content).
+            name="product-faq"
+            className="group faq"
             style={{ borderTop: i === 0 ? "none" : "1px solid var(--border-color)" }}
           >
             <summary

@@ -96,8 +96,8 @@ export const resourceDocuments: ResourceDocument[] = [
   },
   {
     id: 'sp-other-001',
-    title: 'StreetPrint Template Catalogue',
-    type: 'Catalogue',
+    title: 'StreetPrint template guide',
+    type: 'Template guide',
     product: 'streetprint',
     productName: 'StreetPrint',
     applications: productApplications['streetprint'],
@@ -1146,7 +1146,7 @@ const DOC_OVERRIDES: Record<string, Partial<ResourceDocument>> = {
   // ("Catalog", "Colorant", "Color"), "Two Component" unhyphenated, and a
   // TrafficPatternsXD generic specification named as if it were the only one.
   // The names match the product pages' document lists (lib/documents.ts).
-  'sp-other-001': { title: 'StreetPrint Template Catalogue', type: 'Catalogue' },
+  'sp-other-001': { title: 'StreetPrint template guide', type: 'Template guide' },
   'sp-other-002': { type: 'FAQ' },
   'sb-data-008': { title: 'StreetBond Colourant Technical Data Sheet' },
   'tp-spec-003': { title: 'TrafficPatterns Two-Component Sealer Specification' },

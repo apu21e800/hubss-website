@@ -98,9 +98,9 @@ const withFullStop = (line: string) => (/[.!?]$/.test(line.trim()) ? line.trim()
  * document backs, were cut here first and on 28 Sep from lib/products.ts too.
  */
 const SITE_ONLY: Record<string, { line: string; facts: string[] }> = {
-  airmark: { line: "Preformed thermoplastic for non-runway airfield markings.", facts: ["Application"] },
+  airmark: { line: "Preformed thermoplastic for non-runway airfield markings.", facts: ["Resists"] },
   chipfill: { line: "Thermoplastic chips for permanent pothole repair, heated in place.", facts: ["Weather"] },
-  aggrefill: { line: "Pre-coated aggregate filler for larger potholes, combined with ChipFill for permanent repair.", facts: ["Substrate"] },
+  aggrefill: { line: "Pre-coated aggregate filler for larger potholes, combined with ChipFill for permanent repair.", facts: ["Surfaces"] },
   "fast-patch": { line: "Polymer-blend repair for potholes, spalls, and utility cuts.", facts: ["Return to service"] },
 };
 
@@ -183,7 +183,7 @@ function Photo({ image, sizes, eager = false, className = "" }: { image: CardIma
       alt={image.alt}
       loading={eager ? "eager" : "lazy"}
       decoding="async"
-      className={`h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03] ${className}`}
+      className={`card-photo h-full w-full object-cover ${className}`}
     />
   );
 }
@@ -210,16 +210,15 @@ function Facts({ facts }: { facts: Fact[] }) {
 // can override them — an inline style beats any class. The keyboard focus ring
 // comes from the paper rule in globals.css (--accent-text, the card's own
 // corners), not from here: that rule is unlayered and would win anyway.
-const cardClass =
-  "group flex h-full flex-col overflow-hidden rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] transition-all duration-200 hover:-translate-y-1 hover:border-[rgba(184,62,11,0.45)] hover:shadow-[0_12px_32px_rgba(27,26,24,0.10)]";
+// .card (app/globals.css) is the site's one card: radius, hairline, lift,
+// photo scale (17 Oct 2026).
+const cardClass = "card group flex h-full flex-col bg-[var(--bg-card)]";
 
 function ViewLink({ label = "View system" }: { label?: string }) {
   return (
-    <span className="mt-auto flex items-center gap-1.5 pt-5 text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--accent-text-lg)" }}>
+    <span className="link-arrow link-arrow-sm mt-auto pt-5">
       {label}
-      <span aria-hidden="true" className="inline-block transition-transform duration-200 group-hover:translate-x-1">
-        &rarr;
-      </span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
     </span>
   );
 }
@@ -338,17 +337,14 @@ export default function ProductsPage() {
       {/* ── Header ─────────────────────────────────────────────────────── */}
       <header className="mx-auto max-w-7xl px-4 pb-14 pt-24 sm:px-6 sm:pb-20 sm:pt-32 lg:px-8">
         <div className="max-w-3xl">
-          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: "var(--accent-text-lg)" }}>
+          <p className="eyebrow mb-3">
             Products
           </p>
-          <h1
-            className="mb-5"
-            style={{ color: "var(--text-primary)", fontSize: "clamp(2rem, 4vw, 3.5rem)", lineHeight: 1.0, letterSpacing: "-0.03em" }}
-          >
-            Surface systems for the built environment.
+          <h1 className="h1-page mb-4" style={{ color: "var(--text-primary)" }}>
+            The HUB systems.
           </h1>
           <p className="max-w-2xl text-lg" style={{ color: "var(--text-secondary)" }}>
-            Four families: {familyList}. Built for freeze-thaw climates. Specified coast to coast.
+            Four families: {familyList}. Each one is made for freeze-thaw and specified across Canada.
           </p>
         </div>
 
@@ -356,10 +352,7 @@ export default function ProductsPage() {
           <ul className="flex flex-wrap gap-2">
             {FAMILIES.map(({ category, id, cards }) => (
               <li key={id}>
-                <a
-                  href={`#${id}`}
-                  className="inline-flex items-center gap-2 rounded-full border border-[var(--border-color)] bg-[var(--bg-card)] px-4 py-2 text-sm font-semibold text-[var(--text-secondary)] transition-colors hover:border-[rgba(184,62,11,0.45)] hover:text-[var(--accent-text)]"
-                >
+                <a href={`#${id}`} className="chip">
                   {category.label}
                 </a>
               </li>
@@ -370,14 +363,14 @@ export default function ProductsPage() {
         {/* On phones the two links stack, each a 44 px tap target (QA, 28 Sep
             2026: they were 20 px tall); from sm up they sit side by side as before. */}
         <div className="mt-3 flex flex-wrap gap-x-8 gap-y-0 text-sm font-semibold sm:mt-6 sm:gap-y-3">
-          <Link href="/resources" className="group inline-flex min-h-[44px] items-center gap-1.5 sm:min-h-0" style={{ color: "var(--accent-text)" }}>
+          <Link href="/resources" className="link-arrow">
             Spec sheets for every system
-            <span aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-1">&rarr;</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
           </Link>
           {catalogueOn && (
-            <Link href={ideaBook.href} className="group inline-flex min-h-[44px] items-center gap-1.5 sm:min-h-0" style={{ color: "var(--accent-text)" }}>
+            <Link href={ideaBook.href} className="link-arrow">
               Open the {ideaBook.short}
-              <span aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-1">&rarr;</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
             </Link>
           )}
         </div>
@@ -398,18 +391,17 @@ export default function ProductsPage() {
             key={id}
             id={id}
             aria-labelledby={`${id}-heading`}
-            className="scroll-mt-20"
             style={{
               background: i % 2 === 0 ? "var(--bg-section-asphalt)" : "var(--bg-primary)",
               borderTop: "1px solid var(--ink-05)",
             }}
           >
-            <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 section-padding">
               <div className="mb-10 max-w-3xl">
-                <h2 id={`${id}-heading`} className="text-3xl sm:text-4xl" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
+                <h2 id={`${id}-heading`} className="h2-section" style={{ color: "var(--text-primary)" }}>
                   {category.label}
                 </h2>
-                <p className="mt-4 text-base sm:text-lg" style={{ color: "var(--text-secondary)" }}>
+                <p className="mt-4 text-base sm:text-lg max-w-prose" style={{ color: "var(--text-secondary)" }}>
                   {category.intro}
                 </p>
               </div>

@@ -91,49 +91,13 @@ export default async function NotFound() {
           </p>
 
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginBottom: 32 }}>
-            <Link
-              href="/"
-              style={{
-                padding: "12px 22px",
-                borderRadius: 10,
-                background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
-                color: "var(--on-accent)",
-                fontWeight: 700,
-                fontSize: 14,
-                textDecoration: "none",
-                boxShadow: "0 4px 16px rgba(249,115,22,0.35)",
-              }}
-            >
-              Back to home →
+            <Link href="/" className="btn-accent">
+              Back to home
             </Link>
-            <Link
-              href="/products"
-              style={{
-                padding: "12px 22px",
-                borderRadius: 10,
-                background: "transparent",
-                color: "var(--text-primary)",
-                fontWeight: 600,
-                fontSize: 14,
-                textDecoration: "none",
-                border: "1px solid var(--ink-18)",
-              }}
-            >
+            <Link href="/products" className="btn-ghost">
               Browse products
             </Link>
-            <Link
-              href="/contact"
-              style={{
-                padding: "12px 22px",
-                borderRadius: 10,
-                background: "transparent",
-                color: "var(--text-primary)",
-                fontWeight: 600,
-                fontSize: 14,
-                textDecoration: "none",
-                border: "1px solid var(--ink-18)",
-              }}
-            >
+            <Link href="/contact" className="btn-ghost">
               Contact us
             </Link>
           </div>
@@ -142,9 +106,9 @@ export default async function NotFound() {
               below it. Wrapped, the West line kept a trailing dot (QA, 28 Sep
               2026). */}
           <div className="flex flex-col items-center gap-1.5 md:flex-row md:justify-center md:gap-6" style={{ fontSize: 13, color: "var(--text-secondary)" }}>
-            <span>West Office · {offices.west.name} · {offices.west.phone}</span>
+            <span>West office · {offices.west.name} · {offices.west.phone}</span>
             <span className="hidden md:inline" aria-hidden="true" style={{ color: "var(--ink-15)" }}>·</span>
-            <span>East Office · {offices.east.name} · {offices.east.phone}</span>
+            <span>East office · {offices.east.name} · {offices.east.phone}</span>
           </div>
         </div>
       </section>

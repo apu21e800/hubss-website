@@ -48,12 +48,8 @@ export interface LunchLearnFunnelProps {
   sectionHeadings?: { faqHeading?: string };
 }
 
-const h2Style: React.CSSProperties = {
-  fontSize: "clamp(1.6rem, 2.6vw, 2.1rem)",
-  lineHeight: 1.1,
-  letterSpacing: "-0.025em",
-  color: "var(--text-primary)",
-};
+// The section heading (app/globals.css .h2-section) carries the size.
+const h2Style: React.CSSProperties = { color: "var(--text-primary)" };
 
 export default function LunchLearnFunnel({ faqs, sectionHeadings }: LunchLearnFunnelProps = {}) {
   const faqItems = faqs?.length ? faqs : LUNCH_LEARN_FAQS;
@@ -62,14 +58,14 @@ export default function LunchLearnFunnel({ faqs, sectionHeadings }: LunchLearnFu
   return (
     <div data-surface="paper" style={{ background: "var(--bg-primary)" }}>
       {/* ── Session topics: pick the work, and the form takes the topic ── */}
-      <section aria-labelledby="ll-topics" className="py-20 lg:py-24">
+      <section aria-labelledby="ll-topics" className="section-padding">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-12 gap-y-4 items-end mb-10 lg:mb-12">
             <div className="lg:col-span-7">
-              <p className="text-xs font-bold tracking-[0.22em] uppercase mb-3" style={{ color: "var(--accent-text)" }}>
+              <p className="eyebrow mb-3">
                 Session topics
               </p>
-              <h2 id="ll-topics" className="font-bold" style={h2Style}>
+              <h2 id="ll-topics" className="h2-section" style={h2Style}>
                 Pick the work you&apos;re planning.
               </h2>
             </div>
@@ -82,14 +78,14 @@ export default function LunchLearnFunnel({ faqs, sectionHeadings }: LunchLearnFu
       </section>
 
       {/* ── Common questions: the product pages' <details> list ─────── */}
-      <section aria-labelledby="ll-faq" className="py-20 lg:py-24" style={{ background: "var(--bg-section-asphalt)" }}>
+      <section aria-labelledby="ll-faq" className="section-padding" style={{ background: "var(--bg-section-asphalt)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 id="ll-faq" className="font-bold mb-7" style={h2Style}>
+          <h2 id="ll-faq" className="h2-section mb-7" style={h2Style}>
             {faqHeading}
           </h2>
           <div className="rounded-xl overflow-hidden" style={{ border: "1px solid var(--border-color)", background: "var(--bg-card-neutral)" }}>
             {faqItems.map((f, i) => (
-              <details key={f.q} open={i === 0} className="group" style={{ borderTop: i === 0 ? "none" : "1px solid var(--border-color)" }}>
+              <details key={f.q} open={i === 0} name="ll-faq" className="group faq" style={{ borderTop: i === 0 ? "none" : "1px solid var(--border-color)" }}>
                 <summary className="flex items-baseline justify-between gap-4 cursor-pointer list-none px-5 py-4 sm:px-6" style={{ color: "var(--text-primary)" }}>
                   <span className="font-semibold" style={{ fontSize: "0.98rem", lineHeight: 1.45 }}>{f.q}</span>
                   <svg aria-hidden width="14" height="14" viewBox="0 0 14 14" className="flex-shrink-0 translate-y-[2px] transition-transform duration-200 group-open:rotate-45" style={{ color: "var(--accent-text-lg)" }}>

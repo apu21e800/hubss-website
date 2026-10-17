@@ -49,7 +49,7 @@ interface SubmitState {
 const EMPTY: FormState = { name: "", email: "", company: "", city: "", phone: "", website: "" };
 
 const BENEFITS = [
-  "45-minute session about your projects, in your office or virtual",
+  "In your office or online, built around your projects",
   "Spec language you can drop straight into your next RFP",
   "Physical samples, technical data sheets, and the certified installer map",
   "Lunch on HUB, and a $25 voucher when the session's virtual",
@@ -138,7 +138,7 @@ function useLunchLearnForm(withFormat: boolean) {
       if (!response.ok) throw new Error(`API error: ${response.statusText}`);
       setSubmitState({
         status: "success",
-        message: "You're booked in. We'll be in touch within one business day to confirm your date and details.",
+        message: "We'll be in touch within one business day to confirm the date and the details.",
       });
       setFormData(EMPTY);
       // The conversion, as app/contact/ContactForm.tsx counts its own. The
@@ -195,7 +195,7 @@ const inputStyle: React.CSSProperties = {
 // D10; the Product Book form was named as the model). autoComplete lets a
 // browser fill the five fields in one go.
 const labelClass = "block text-[12px] font-semibold uppercase tracking-[0.16em] mb-1.5";
-const labelStyle: React.CSSProperties = { color: "var(--text-muted)" };
+const labelStyle: React.CSSProperties = { color: "var(--text-secondary)" };
 
 function Field({ name, label, type = "text", required = false, autoComplete, value, onChange }: {
   name: string; label: string; type?: string; required?: boolean; autoComplete?: string;
@@ -207,7 +207,7 @@ function Field({ name, label, type = "text", required = false, autoComplete, val
     <div>
       <label htmlFor={id} className={labelClass} style={labelStyle}>
         {label}
-        {!required && <span style={{ opacity: 0.6 }}> (optional)</span>}
+        {!required && <span style={{ color: "var(--text-secondary)", textTransform: "none", letterSpacing: 0 }}> (optional)</span>}
       </label>
       <input
         id={id}
@@ -247,7 +247,7 @@ function SuccessPanel({ message }: { message?: string }) {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
         </svg>
       </div>
-      <h3 className="font-bold text-lg mb-2" style={{ color: "var(--text-primary)" }}>You&apos;re on the list.</h3>
+      <h3 className="font-bold text-lg mb-2" style={{ color: "var(--text-primary)" }}>Request received.</h3>
       <p className="text-sm leading-relaxed max-w-sm mx-auto" style={{ color: "var(--ok-text)" }}>{message}</p>
     </motion.div>
   );
@@ -266,9 +266,9 @@ function MoreLink() {
   const pathname = usePathname();
   if (pathname === "/lunch-learn") return null;
   return (
-    <Link href="/lunch-learn" className="inline-flex items-center gap-1.5 text-[14.5px] font-semibold transition-colors hover:text-[var(--accent-soft-text)]" style={{ color: "var(--accent-text)", minHeight: 40 }}>
+    <Link href="/lunch-learn" className="link-arrow">
       Everything about the session
-      <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" /></svg>
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>
     </Link>
   );
 }
@@ -346,7 +346,7 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
                     />
                   </span>
                   <div>
-                    <p className="text-[12px] font-bold tracking-[0.2em] uppercase" style={{ color: "var(--accent-text)" }}>
+                    <p className="eyebrow">
                       Lunch &amp; Learn
                     </p>
                     <p className="text-[15px] font-semibold mt-0.5" style={{ color: "var(--text-primary)" }}>
@@ -359,15 +359,15 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
                     2026: the page had none); a section heading everywhere
                     else. h1 and h2 share one rule in app/globals.css, so it
                     looks the same either way. */}
-                <Title className="font-black mb-4" style={{ fontSize: "clamp(2rem, 4vw, 3.1rem)", lineHeight: 1.0, letterSpacing: "-0.03em", color: "var(--text-primary)" }}>
+                <Title className="h1-page mb-4" style={{ color: "var(--text-primary)" }}>
                   Specify with confidence.{" "}
                   <span style={{ background: "linear-gradient(92deg, #F97316 0%, #EAB308 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
                     Lunch is on us.
                   </span>
                 </Title>
                 <p className="text-[15px] leading-relaxed mb-8 max-w-xl" style={{ color: "var(--ink-70)" }}>
-                  A working session for engineers, architects, and municipal teams: real Canadian
-                  case studies, spec language, and samples on the table.
+                  Forty-five minutes with your engineering or design team. Canadian case
+                  studies, spec language you can use, and samples you can hold.
                 </p>
 
                 <div className="space-y-3.5 mb-9">
@@ -392,7 +392,7 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
                   {/* Below sm the two numbers stack under each other, East
                       over West, and the dot goes: the line wrapped after the
                       dot on a 390 phone, which put the orphan back. */}
-                  <p className="text-[14.5px] font-semibold flex items-start gap-x-1.5" style={{ color: "var(--ink-45)" }}>
+                  <p className="text-[14.5px] font-semibold flex items-start gap-x-1.5" style={{ color: "var(--text-secondary)" }}>
                     <span data-tap="44" className="inline-flex items-center flex-shrink-0">Or call:</span>
                     <span className="flex flex-col sm:flex-row sm:items-center sm:gap-x-1.5">
                       <a href={telHref(offices.east.phone)} data-tap="44" className="inline-flex items-center whitespace-nowrap hover:text-[var(--accent-text)] transition-colors">East {offices.east.phone}</a>
@@ -405,7 +405,7 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
 
               {/* Form side — inset panel */}
               <div className="lg:col-span-5 p-5 sm:p-7 lg:p-8 lg:pl-2 flex">
-                <div className="relative w-full rounded-2xl p-6 sm:p-7 self-center" style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--border-color)" }}>
+                <div className="relative w-full rounded-xl p-6 sm:p-7 self-center" style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--border-color)" }}>
                   {hideForm ? (
                     <div>
                       <FormTitle className="font-bold text-lg mb-1" style={{ color: "var(--text-primary)" }}>Book your session</FormTitle>
@@ -444,12 +444,9 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
                             type="button"
                             aria-pressed={f.format === opt}
                             onClick={() => f.setFormat(opt)}
-                            className="rounded-lg text-[13.5px] font-semibold transition-all active:scale-[0.97]"
-                            style={
-                              f.format === opt
-                                ? { background: "rgba(249,115,22,0.16)", border: "1px solid rgba(249,115,22,0.5)", color: "var(--accent-text)", minHeight: 44 }
-                                : { background: "var(--ink-05)", border: "1px solid var(--ink-10)", color: "var(--ink-65)", minHeight: 44 }
-                            }
+                            // .segment (app/globals.css): rests grey, hovers,
+                            // and the chosen one wears the orange wash.
+                            className="segment text-[13.5px]"
                           >
                             {opt}
                           </button>
@@ -467,12 +464,11 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
                       <button
                         type="submit"
                         disabled={f.submitState.status === "loading"}
-                        className="w-full py-4 rounded-xl font-bold text-[15px] transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50"
-                        style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "var(--on-accent)", boxShadow: "0 6px 24px rgba(249,115,22,0.35)" }}
+                        className="btn-accent btn-lg btn-block disabled:opacity-50"
                       >
                         {f.submitState.status === "loading" ? "Sending…" : "Book a Lunch & Learn"}
                       </button>
-                      <p className="text-center text-[12px]" style={{ color: "var(--ink-35)" }}>
+                      <p className="text-center text-[13px]" style={{ color: "var(--text-secondary)" }}>
                         No obligation, no invoice, lunch included.
                       </p>
                       {f.submitState.status === "error" && <ErrorNote message={f.submitState.message} />}
@@ -517,7 +513,7 @@ function Ticket() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.45 }}
-            className="lg:col-span-5 rounded-2xl overflow-hidden flex flex-col"
+            className="lg:col-span-5 rounded-xl overflow-hidden flex flex-col"
             style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--border-color)" }}
           >
             <div className="px-6 py-4 flex items-center justify-between" style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)" }}>
@@ -568,7 +564,7 @@ function Ticket() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.45, delay: 0.08 }}
-            className="lg:col-span-7 rounded-2xl p-6 sm:p-8"
+            className="lg:col-span-7 rounded-xl p-6 sm:p-8"
             style={{ background: "var(--bg-card)", border: "1px solid rgba(249,115,22,0.18)", boxShadow: "0 0 0 1px rgba(249,115,22,0.05) inset, 0 16px 50px rgba(0,0,0,0.3)" }}
           >
             {f.submitState.status === "success" ? (
@@ -588,7 +584,7 @@ function Ticket() {
 
                 {/* Format picker — feeds the email */}
                 <div>
-                  <p className="text-[12px] font-bold tracking-[0.14em] uppercase mb-2" style={{ color: "var(--ink-45)" }}>Session format</p>
+                  <p className={labelClass} style={labelStyle}>Session format</p>
                   <div className="grid grid-cols-3 gap-2" role="group" aria-label="Session format">
                     {["In-person", "Virtual", "Either"].map((opt) => (
                       <button
@@ -596,12 +592,7 @@ function Ticket() {
                         type="button"
                         aria-pressed={f.format === opt}
                         onClick={() => f.setFormat(opt)}
-                        className="rounded-lg text-[14.5px] font-semibold transition-all active:scale-[0.97]"
-                        style={
-                          f.format === opt
-                            ? { background: "rgba(249,115,22,0.16)", border: "1px solid rgba(249,115,22,0.5)", color: "var(--accent-text)", minHeight: 44 }
-                            : { background: "var(--ink-05)", border: "1px solid var(--ink-10)", color: "var(--ink-65)", minHeight: 44 }
-                        }
+                        className="segment text-[14.5px]"
                       >
                         {opt}
                       </button>
@@ -621,12 +612,11 @@ function Ticket() {
                 <button
                   type="submit"
                   disabled={f.submitState.status === "loading"}
-                  className="w-full py-4 rounded-xl font-bold text-[15px] transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50"
-                  style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "var(--on-accent)", boxShadow: "0 6px 24px rgba(249,115,22,0.35)" }}
+                  className="btn-accent btn-lg btn-block disabled:opacity-50"
                 >
                   {f.submitState.status === "loading" ? "Sending…" : `Reserve · ${f.format.toLowerCase()}`}
                 </button>
-                <p className="text-center text-[12px]" style={{ color: "var(--ink-35)" }}>No obligation, no invoice. We reach out within one business day.</p>
+                <p className="text-center text-[13px]" style={{ color: "var(--text-secondary)" }}>No obligation, no invoice. We reach out within one business day.</p>
                 {f.submitState.status === "error" && <ErrorNote message={f.submitState.message} />}
               </form>
             )}
@@ -687,7 +677,7 @@ function Proof() {
             transition={{ duration: 0.55, delay: 0.08 }}
             className="relative"
           >
-            <div className="relative rounded-2xl overflow-hidden" style={{ aspectRatio: "5/4", border: "1px solid var(--border-color)", boxShadow: "0 20px 60px rgba(0,0,0,0.4)" }}>
+            <div className="relative rounded-xl overflow-hidden" style={{ aspectRatio: "5/4", border: "1px solid var(--border-color)", boxShadow: "0 20px 60px rgba(0,0,0,0.4)" }}>
               <Image src={IMG.src} alt={IMG.alt} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 50vw" />
               <span className="absolute top-3 left-3 px-2.5 py-1 rounded-md text-[11px] font-black tracking-[0.14em] uppercase" style={{ background: "rgba(7,11,18,0.75)", color: "var(--accent-text)", border: "1px solid rgba(249,115,22,0.3)", backdropFilter: "blur(6px)" }}>
                 StreetBond
@@ -711,7 +701,7 @@ function Proof() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.45 }}
-          className="rounded-2xl p-6 sm:p-7"
+          className="rounded-xl p-6 sm:p-7"
           style={{ background: "var(--bg-card)", border: "1px solid rgba(249,115,22,0.18)", boxShadow: "0 0 0 1px rgba(249,115,22,0.05) inset, 0 16px 50px rgba(0,0,0,0.3)" }}
         >
           {f.submitState.status === "success" ? (
@@ -732,8 +722,7 @@ function Proof() {
                 <button
                   type="submit"
                   disabled={f.submitState.status === "loading"}
-                  className="w-full py-3.5 rounded-xl font-bold text-[15px] transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50 self-end"
-                  style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "var(--on-accent)", boxShadow: "0 6px 24px rgba(249,115,22,0.35)" }}
+                  className="btn-accent btn-lg btn-block disabled:opacity-50 self-end"
                 >
                   {f.submitState.status === "loading" ? "Sending…" : "Book a Lunch & Learn"}
                 </button>
@@ -781,23 +770,19 @@ function Band({ topic, from }: { topic?: string; from?: string }) {
             />
           </span>
           <div className="min-w-0 flex-1">
-            <p className="text-[12px] font-bold tracking-[0.2em] uppercase mb-1.5" style={{ color: "var(--accent-text)" }}>
+            <p className="eyebrow mb-1.5">
               Lunch &amp; Learn
             </p>
             <h2 id="ll-band-heading" className="text-lg sm:text-xl font-bold leading-snug" style={{ color: "var(--text-primary)" }}>
               {topic
-                ? `A free working session on ${topic} for your team: case studies, spec language and samples on the table.`
-                : "A free working session for engineers, architects and municipal teams: case studies, spec language and samples on the table."}
+                ? `Book a Lunch & Learn on ${topic} for your team. Forty-five minutes, samples and spec language, lunch included.`
+                : "Book a Lunch & Learn for your team. Forty-five minutes, samples and spec language, lunch included."}
             </h2>
           </div>
-          <Link
-            href={lunchLearnHref(topic, from)}
-            className="inline-flex flex-shrink-0 items-center gap-2 rounded-lg px-5 py-3 text-sm font-bold whitespace-nowrap"
-            style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "var(--on-accent)", boxShadow: "0 4px 24px rgba(249,115,22,0.30)" }}
-          >
+          <Link href={lunchLearnHref(topic, from)} className="btn-accent flex-shrink-0">
             Book a Lunch &amp; Learn
             <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </Link>
         </div>

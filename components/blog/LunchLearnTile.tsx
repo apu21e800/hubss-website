@@ -75,7 +75,7 @@ export default function LunchLearnTile({
       {/* Wide, the picture's top lines up with the photographs beside it and
           the words sit in the middle of the picture's height. */}
       <span className={`block ${wide ? "mt-4 lg:mt-0 lg:self-center" : "mt-4"}`}>
-        <span className="block text-[11.5px] font-bold uppercase tracking-[0.18em]" style={{ color: "var(--accent-text)" }}>
+        <span className="block text-[12.5px] font-bold uppercase tracking-[0.18em]" style={{ color: "var(--accent-text)" }}>
           Lunch &amp; Learn
         </span>
         <span

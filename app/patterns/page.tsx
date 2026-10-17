@@ -7,7 +7,7 @@ import { buildMetadata } from "@/lib/seo";
 import { fieldTemplates, borderTemplates, patternSrc, type PatternTemplate } from "@/lib/pattern-templates";
 
 export const metadata: Metadata = buildMetadata({
-  title: "StreetPrint Pattern Library · Stamping Templates",
+  title: "StreetPrint patterns · Stamping templates",
   // Under 155 characters since 30 Sep 2026 (QA E1 flagged 176).
   description:
     "Sixteen dimensioned StreetPrint stamping templates: herringbone, offset brick, ashlar slate, cobble, tiles and border courses, as pressed into asphalt.",
@@ -54,16 +54,7 @@ function SectionHead({
         )}
       </div>
 
-      <h2
-        className="font-black"
-        style={{
-          color: "var(--text-primary)",
-          fontSize: "clamp(1.9rem, 3.2vw, 2.75rem)",
-          lineHeight: 1.05,
-          letterSpacing: "-0.03em",
-          textWrap: "balance",
-        }}
-      >
+      <h2 className="h2-section" style={{ color: "var(--text-primary)" }}>
         {title}
       </h2>
 
@@ -82,7 +73,7 @@ function TemplateCard({ t, wide = false }: { t: PatternTemplate; wide?: boolean 
   return (
     <div
       id={t.slug}
-      className="rounded-xl overflow-hidden scroll-mt-24"
+      className="rounded-xl overflow-hidden"
       style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--ink-08)" }}
     >
       <div className="p-4 sm:p-5">

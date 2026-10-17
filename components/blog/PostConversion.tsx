@@ -82,7 +82,7 @@ export default function PostConversion({ post }: { post: PostMeta }) {
   return (
     <div>
       <div
-        className="relative overflow-hidden rounded-2xl p-7 sm:p-10"
+        className="relative overflow-hidden rounded-xl p-7 sm:p-10"
         style={{
           background: "var(--bg-card)",
           border: "1px solid rgba(249,115,22,0.28)",

@@ -43,7 +43,7 @@ export default async function LunchLearnCard({
   return (
     <aside
       aria-label="Lunch & Learn"
-      className={`relative overflow-hidden rounded-2xl ${row ? "p-5 sm:p-6" : "p-5"}`}
+      className={`relative overflow-hidden rounded-xl ${row ? "p-5 sm:p-6" : "p-5"}`}
       style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)", boxShadow: "var(--card-shadow, 0 1px 2px rgba(0,0,0,0.06))" }}
     >
       <div className="absolute inset-x-0 top-0 h-[3px]" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} aria-hidden="true" />
@@ -82,14 +82,10 @@ export default async function LunchLearnCard({
               {line}
             </p>
           )}
-          <Link
-            href={lunchLearnHref(topic, from)}
-            className="inline-flex items-center justify-center gap-2 rounded-lg px-4 text-[15px] font-bold transition-[filter] hover:brightness-110"
-            style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "var(--on-accent)", minHeight: 44 }}
-          >
+          <Link href={lunchLearnHref(topic, from)} className="btn-accent">
             Book a Lunch &amp; Learn
             <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M5 12h14M12 5l7 7-7 7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </Link>
           {row ? (

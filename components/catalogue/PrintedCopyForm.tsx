@@ -72,7 +72,7 @@ export default function PrintedCopyForm({ compact = false }: { compact?: boolean
 
   if (status === "sent") {
     return (
-      <div className="rounded-2xl p-7 text-center" style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--border-color)" }}>
+      <div className="rounded-xl p-7 text-center" style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--border-color)" }}>
         <p className="text-lg font-bold" style={{ color: "var(--text-primary)" }}>
           Request received.
         </p>
@@ -92,7 +92,7 @@ export default function PrintedCopyForm({ compact = false }: { compact?: boolean
     border: "1px solid var(--border-color)",
   } as const;
   const label = "block text-[12px] font-semibold uppercase tracking-[0.16em] mb-1.5";
-  const labelStyle = { color: "var(--text-muted)" } as const;
+  const labelStyle = { color: "var(--text-secondary)" } as const;
 
   return (
     <form onSubmit={onSubmit} className={compact ? "space-y-3.5" : "space-y-4"}>
@@ -105,7 +105,7 @@ export default function PrintedCopyForm({ compact = false }: { compact?: boolean
           <input id="pc-name" name="name" required autoComplete="name" className={field} style={fieldStyle} />
         </div>
         <div>
-          <label className={label} style={labelStyle} htmlFor="pc-company">Company or municipality</label>
+          <label className={label} style={labelStyle} htmlFor="pc-company">Company or organization</label>
           <input id="pc-company" name="company" required autoComplete="organization" className={field} style={fieldStyle} />
         </div>
       </div>
@@ -117,7 +117,7 @@ export default function PrintedCopyForm({ compact = false }: { compact?: boolean
         </div>
         <div>
           <label className={label} style={labelStyle} htmlFor="pc-phone">
-            Phone <span style={{ opacity: 0.6 }}>(optional)</span>
+            Phone <span style={{ textTransform: "none", letterSpacing: 0 }}>(optional)</span>
           </label>
           <input id="pc-phone" name="phone" type="tel" autoComplete="tel" className={field} style={fieldStyle} />
         </div>
@@ -192,8 +192,7 @@ export default function PrintedCopyForm({ compact = false }: { compact?: boolean
       <button
         type="submit"
         disabled={status === "sending"}
-        className="w-full rounded-full px-6 py-3.5 text-[15px] font-semibold text-white transition-colors disabled:opacity-60 sm:w-auto"
-        style={{ background: "#F97316", boxShadow: "0 4px 16px rgba(249,115,22,0.28)" }}
+        className="btn-accent btn-lg btn-block sm:w-auto sm:inline-flex disabled:opacity-60"
       >
         {status === "sending" ? "Sending..." : "Request a printed copy"}
       </button>

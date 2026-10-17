@@ -202,7 +202,10 @@ export default async function Footer() {
 
           {/* Company and offices: one column at lg, two columns from xl and
               below lg (display: contents lets them join the outer grid). */}
-          <div className="col-span-2 grid grid-cols-2 gap-x-6 sm:gap-x-10 lg:col-span-1 lg:flex lg:flex-col lg:gap-y-10 xl:contents">
+          {/* One column on a phone: in two, "cleve.stordy@hubss.com" broke
+              as "hubss.co" / "m" on every page's foot (phone review, 17 Oct
+              2026). */}
+          <div className="col-span-2 grid grid-cols-1 gap-y-10 sm:grid-cols-2 sm:gap-x-10 sm:gap-y-0 lg:col-span-1 lg:flex lg:flex-col lg:gap-y-10 xl:contents">
 
             {/* Company */}
             <div>

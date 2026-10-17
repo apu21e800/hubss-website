@@ -12,6 +12,7 @@ import { stegaClean } from "next-sanity";
 import PhotoImage from "@/components/ui/PhotoImage";
 import { getProjectTiles, TileLink, type Pick } from "@/components/sections/InstagramStrip";
 import { ABOUT_HERO, ABOUT_STORY, ABOUT_WHY_HUB, ABOUT_PARTNERS_INTRO, ABOUT_SEED } from "@/lib/about-content";
+import { current } from "@/lib/copy-superseded";
 import { keepDots } from "@/lib/separators";
 
 // Sanity is the CMS for this page's copy, so the page has to be allowed to go
@@ -66,10 +67,12 @@ function fresh(sanity: string | undefined, seed: string): string | undefined {
 
 export default async function AboutPage() {
   const [sanityPage, { offices }] = await Promise.all([getSanityPageContent("about"), getSiteSettings()]);
+  // current(): a line Studio holds from the 30 Sep sync that the 17 Oct 2026
+  // copy review rewrote prints as the new line (lib/copy-superseded.ts).
   const hero = {
-    eyebrow:    keepDots(sanityPage?.aboutHero?.eyebrow ?? ABOUT_HERO.eyebrow),
-    heading:    sanityPage?.aboutHero?.heading ?? ABOUT_HERO.heading,
-    subheading: fresh(sanityPage?.aboutHero?.subheading, ABOUT_SEED.subheading) ?? ABOUT_HERO.subheading,
+    eyebrow:    keepDots(current(sanityPage?.aboutHero?.eyebrow) ?? ABOUT_HERO.eyebrow),
+    heading:    current(sanityPage?.aboutHero?.heading) ?? ABOUT_HERO.heading,
+    subheading: current(fresh(sanityPage?.aboutHero?.subheading, ABOUT_SEED.subheading)) ?? ABOUT_HERO.subheading,
   };
   // The hero photo from Studio; /images/hero/hero-3.jpg when it's empty.
   const aboutHeroPhoto = toPhoto(sanityPage?.aboutHeroImage, "HUB Surface Systems, decorative pavement across Canada") ?? {
@@ -82,7 +85,7 @@ export default async function AboutPage() {
 
   const sanityStory = sanityPage?.aboutStory;
   const storyIsSeed = sanityStory?.length === ABOUT_SEED.story.length && sanityStory.every((p, i) => stegaClean(p) === ABOUT_SEED.story[i]);
-  const storyParagraphs = sanityStory?.length && !storyIsSeed ? sanityStory : ABOUT_STORY;
+  const storyParagraphs = (sanityStory?.length && !storyIsSeed ? sanityStory : ABOUT_STORY).map((p) => String(current(p)));
 
   const sanityWhy = sanityPage?.aboutWhyHub;
   const whyIsSeed = sanityWhy?.length === ABOUT_SEED.whyHubTitles.length && sanityWhy.every((d, i) => stegaClean(d.title) === ABOUT_SEED.whyHubTitles[i]);
@@ -153,22 +156,13 @@ export default async function AboutPage() {
               <path fill="#f00" d="m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z" />
               <path fill="var(--text-primary)" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z" />
             </svg>
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--accent-text-lg)" }}>
+            <p className="eyebrow eyebrow-photo">
               {hero.eyebrow}
             </p>
           </div>
-          {/* The standard landing H1, 48px at 1440, as Insights, Resources
-              and the rest (QA D11, 30 Sep 2026, re-applied 2 Oct 2026 on the
-              trimmed page); this one was 56px. */}
-          <h1
-            className="font-black mb-6 max-w-4xl"
-            style={{
-              color: "var(--text-primary)",
-              fontSize: "clamp(2rem, 3.4vw, 3rem)",
-              lineHeight: 1.0,
-              letterSpacing: "-0.03em",
-            }}
-          >
+          {/* The hero H1 (app/globals.css .h1-hero): the size every photo
+              hero shares since 17 Oct 2026 (products, applications, posts). */}
+          <h1 className="h1-hero mb-6 max-w-4xl" style={{ color: "var(--text-primary)" }}>
             {hero.heading}
           </h1>
           {/* --ink-85 with the product hero's shadow; --text-faint (#8B8B8B)
@@ -208,24 +202,20 @@ export default async function AboutPage() {
           30 Sep 2026: two short paragraphs beside four documented jobs. The
           mission quote, the aside and the three values cards that followed
           (about 300 words between them) went; the photographs say it. */}
-      <div className="py-20 md:py-24" style={{ background: "var(--bg-primary)" }}>
+      <div className="section-padding" style={{ background: "var(--bg-primary)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
             <div className="lg:col-span-5">
-              <h2 className="text-3xl font-bold mb-6" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>How we got here</h2>
-              <div className="space-y-4 text-lg leading-relaxed" style={{ color: "var(--text-body)" }}>
+              <h2 className="h2-section mb-6" style={{ color: "var(--text-primary)" }}>How we got here</h2>
+              <div className="space-y-4 text-lg leading-relaxed max-w-prose" style={{ color: "var(--text-body)" }}>
                 {storyParagraphs.map((para, i) => (
                   <p key={i}>{para}</p>
                 ))}
               </div>
-              <Link
-                href="/#map"
-                className="mt-7 inline-flex items-center gap-2 text-sm font-semibold transition-colors hover:text-[var(--text-primary)]"
-                style={{ color: "var(--accent-text-lg)", minHeight: 40 }}
-              >
+              <Link href="/#map" className="link-arrow mt-5">
                 See the projects on the map
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M5 12h14M13 6l6 6-6 6" />
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
               </Link>
             </div>
@@ -244,9 +234,9 @@ export default async function AboutPage() {
 
       {/* ── Why HUB ─────────────────────────────────
           Three cards, one line each (was five). */}
-      <div className="py-20 md:py-24" style={{ background: "var(--bg-dark)" }}>
+      <div className="section-padding" style={{ background: "var(--bg-dark)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold mb-10" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>Why HUB</h2>
+          <h2 className="h2-section mb-10" style={{ color: "var(--text-primary)" }}>Why HUB</h2>
           {/* Flex, not grid: a short last row widens to fill it if Studio holds
               more or fewer than three. */}
           <div className="flex flex-wrap gap-6">
@@ -264,7 +254,7 @@ export default async function AboutPage() {
       {/* ── Offices ─────────────────────────────── */}
       <div className="py-20" style={{ background: "var(--bg-primary)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold mb-10" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>Talk to the office nearest you.</h2>
+          <h2 className="h2-section mb-10" style={{ color: "var(--text-primary)" }}>Talk to the office nearest you</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Towns, names, emails and phones from Studio's Site Settings
                 (lib/site-settings.ts); the regions and provinces stay here. */}
@@ -297,7 +287,7 @@ export default async function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="pt-16" style={{ borderTop: "1px solid var(--border-color)" }}>
             <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "var(--accent-text-lg)" }}>Manufacturer partners</p>
-            <h2 className="text-3xl font-bold mb-4" style={{ color: "var(--text-primary)", letterSpacing: "-0.02em" }}>Who stands behind the systems</h2>
+            <h2 className="h2-section mb-4" style={{ color: "var(--text-primary)" }}>Who stands behind the systems</h2>
             <p className="text-base leading-relaxed max-w-2xl mb-8" style={{ color: "var(--text-faint)" }}>
               {partnersIntro}
             </p>

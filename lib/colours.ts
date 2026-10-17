@@ -107,7 +107,9 @@ const EMA_2026: ColourFamily = {
 const SR_SERIES: ColourFamily = {
   key: "sr-series",
   name: "SR Series",
-  blurb: "The solar-reflective colourants from the 2026 card, engineered to reject heat and qualify surfaces for LEED Heat Island Reduction credits.",
+  // "can contribute": the careful wording the StreetBondSR hero and the LEED
+  // page use; "qualify" promised what HUB cannot (copy review, 17 Oct 2026).
+  blurb: "The solar-reflective colours from the 2026 card: each reflects a third of the sun or more, and can contribute to the LEED v5 heat island credit.",
   colours: [
       { name: "SR Paprika", hex: "#a04438", sr: 0.36 },
       { name: "SR Mustard", hex: "#c87f3a", sr: 0.41 },
@@ -260,38 +262,40 @@ const SECTION_META: Record<string, ColourSectionMeta> = {
     // at the top of the StreetBond page, so the phrase was appearing twice as
     // an <h2> on one document. This section is the chips themselves; naming it
     // for the count is both distinct and the more useful fact.
-    heading: "Sixty-three colours.",
-    intro: "Sixty-three EMA colours from the 2026 colour card, each with published solar reflectance. Full Pantone custom matching for branded environments.",
+    // The count is in the book line and the spec cell above; this block adds
+    // what they do not say (copy review, 17 Oct 2026: sixty-three, five times).
+    heading: "The colours",
+    intro: "Each colour's solar reflectance is on the 2026 card. Custom matches to a PMS reference for a client's own colours.",
     downloadHref: "/docs/StreetBond/StreetBond/StreetBond-Colour-Card-2026.pdf",
     downloadLabel: "Download the 2026 colour card (PDF)",
   },
   streetbondsr: {
-    heading: "Solar-reflective colours.",
-    intro: "The SR series from the 2026 colour card: high-reflectance colourants for cooler surfaces and LEED Heat Island Reduction credits.",
+    heading: "The SR colours",
+    intro: "Twelve colours from the 2026 card that reflect a third of the sun or more; each one's value is on the card.",
     downloadHref: "/docs/StreetBond/StreetBond/StreetBond-Colour-Card-2026.pdf",
     downloadLabel: "Download the 2026 colour card (PDF)",
   },
   durashield: {
-    heading: "DuraShield colours.",
-    intro: "Two engineered greys for protective overcoat work, from the 2026 colour card.",
+    heading: "DuraShield colours",
+    intro: "Two greys from the 2026 colour card.",
     downloadHref: "/docs/StreetBond/StreetBond/StreetBond-Colour-Card-2026.pdf",
     downloadLabel: "Download the 2026 colour card (PDF)",
   },
   "traffic-patterns-xd": {
-    heading: "The colour palette.",
-    intro: "Twenty standard and seventeen premium preformed-thermoplastic colours, PMS-matched. Physical samples available on request.",
+    heading: "The colours",
+    intro: "Twenty standard and seventeen premium colours, matched to a PMS reference. Samples on request.",
     downloadHref: "/docs/TrafficPatternsXD/TrafficPatternsXD-Colour-Guide.pdf",
     downloadLabel: "Download the colour guide (PDF)",
   },
   "traffic-patterns": {
-    heading: "The colour palette.",
-    intro: "Twenty standard and seventeen premium preformed-thermoplastic colours, PMS-matched. Physical samples available on request.",
+    heading: "The colours",
+    intro: "Twenty standard and seventeen premium colours, matched to a PMS reference. Samples on request.",
     downloadHref: "/docs/TrafficPatternsXD/TrafficPatternsXD-Colour-Guide.pdf",
     downloadLabel: "Download the colour guide (PDF)",
   },
   mmax: {
-    heading: "Twenty-three colours.",
-    intro: "Eight standard and fifteen premium MMA colours from the manufacturer's MMAX colour palette, PMS-matched. Physical samples available on request for specification.",
+    heading: "The colours",
+    intro: "From the MMAX colour palette, matched to a PMS reference. Samples on request.",
     downloadHref: "/docs/MMAX/MMAX-Colour-Palette.pdf",
     downloadLabel: "Download the MMAX colour palette (PDF)",
   },

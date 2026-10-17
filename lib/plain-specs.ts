@@ -41,8 +41,8 @@ const PLAIN: Record<string, string> = {
   // Solar reflectance and LEED
   "≥ 0.33 initial": "A third of sunlight reflected (0.33 or more)",
   "≥ 0.33 initial · 12 colours": "A third of sunlight reflected, in 12 colours",
-  "V5 SS Credit: Urban Heat Island": "Counts toward the LEED v5 heat island credit",
-  "v5 SS credit: urban heat island (non-roof)": "Counts toward the LEED v5 heat island credit",
+  "V5 SS Credit: Urban Heat Island": "Can contribute to the LEED v5 heat island credit",
+  "v5 SS credit: urban heat island (non-roof)": "Can contribute to the LEED v5 heat island credit",
   Optional: "Optional, in the lighter colours",
   // How it goes in
   "Stamping + StreetBond coating": "Stamped, then coloured with StreetBond",
@@ -74,7 +74,7 @@ export function plainSpec(value: string): string {
  */
 const PLAIN_NOTES: Record<string, string> = {
   "MMA resin: 45–60 minute cure": "MMA resin, traffic-ready in about an hour",
-  "LEED compliant SR ≥ 0.33, coatings keep surfaces cooler": "Solar reflective: counts toward the LEED heat island credit, cooler underfoot",
+  "LEED compliant SR ≥ 0.33, coatings keep surfaces cooler": "Solar reflective: can contribute to the LEED heat island credit, cooler underfoot",
   "Methyl methacrylate with corundum or sand": "MMA resin with hard aggregate for grip",
 };
 

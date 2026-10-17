@@ -16,10 +16,13 @@ const FALLBACK_IMAGES = [
 export default async function FeaturedBlogPost({ copy = HOMEPAGE_COPY.insights }: { copy?: SectionCopy } = {}) {
   const posts = await getAllPosts();
 
-  // Pin the residential driveways post as hero; fall back to most recent
-  const hero =
-    posts.find((p) => p.slug === "residential-driveways-stamped-asphalt-upgrade") ??
-    posts[0];
+  // The newest post with a photo leads (17 Oct 2026). Until then the
+  // residential driveways post (Mar 2026) was pinned here: the copy review
+  // read it as the most machine-written page on the site ("That's not a
+  // driveway. That's a maintenance project.") and it claimed a 20-year
+  // StreetBond life the product page does not. The newest project leads
+  // instead, as on /blog.
+  const hero = posts.find((p) => p.featuredImage) ?? posts[0];
 
   // Next three posts for the secondary row
   const secondary = posts
@@ -39,29 +42,18 @@ export default async function FeaturedBlogPost({ copy = HOMEPAGE_COPY.insights }
     <section
       /* Insights — reading. The id stays "field-notes": the homepage hero's
          first button points at it, and that href lives in Sanity (page-homepage). */
-      data-surface="paper" id="field-notes" className="py-28 lg:py-32" style={{ background: "var(--bg-section-asphalt)" }}>
+      data-surface="paper" id="field-notes" className="section-padding" style={{ background: "var(--bg-section-asphalt)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* ── Section header ────────────────────────────────── */}
-        <div className="flex items-end justify-between mb-14">
+        <div className="flex items-end justify-between gap-6 flex-wrap mb-14 md:mb-16">
           <div>
-            <p className="gradient-text text-xs font-semibold tracking-[0.2em] uppercase mb-3">
-              {/* Studio still holds the eyebrow the section had until 17 Oct
-                  2026 ("Insights"); it prints as the blog's name now (Vern:
-                  "instead of insights call them Projects"). Any other word
-                  Doug types wins. */}
-              {copy.eyebrow.trim() === "Insights" ? BLOG_NAME : copy.eyebrow}
+            <p className="eyebrow mb-3">
+              {/* "Insights" in Studio prints as the blog's name
+                  (lib/copy-superseded.ts, through mergeHomepageCopy). */}
+              {copy.eyebrow}
             </p>
-            <h2
-              className="font-black"
-              style={{
-                color: "var(--text-primary)",
-                fontSize: "clamp(2rem, 3.5vw, 3.2rem)",
-                lineHeight: 1.08,
-                letterSpacing: "-0.03em",
-                textWrap: "balance",
-              }}
-            >
+            <h2 className="h2-section mb-3" style={{ color: "var(--text-primary)" }}>
               {/* One heading in place of two fragments ("How it goes in. And
                   how it holds up."). Each phrase is an inline-block, so a
                   phone breaks the line between them and never mid-phrase
@@ -76,7 +68,7 @@ export default async function FeaturedBlogPost({ copy = HOMEPAGE_COPY.insights }
               )}
             </h2>
             <p
-              className="text-base mt-2 max-w-xl"
+              className="text-base font-light max-w-lg leading-relaxed"
               style={{ color: "var(--text-secondary)" }}
             >
               {copy.intro}
@@ -85,26 +77,20 @@ export default async function FeaturedBlogPost({ copy = HOMEPAGE_COPY.insights }
           {/* "All projects", as the phone button below says: it opens the whole
               library (projects, guides and articles). data-tap lifts it from
               42px to the 44px touch floor on tablets. */}
-          <Link
-            href="/blog"
-            data-tap="44"
-            className="hidden md:inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-lg transition-all border hover:border-orange-500/40 hover:text-[var(--text-primary)]"
-            style={{
-              border: "1px solid var(--border-color)",
-              color: "var(--text-secondary)",
-            }}
-          >
-            All {BLOG_NAME.toLowerCase()}
-            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </Link>
+          <div className="hidden md:block flex-shrink-0">
+            <Link href="/blog" className="btn-ghost">
+              All {BLOG_NAME.toLowerCase()}
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
+          </div>
         </div>
 
         {/* ── Hero featured article ──────────────────────────────────────── */}
         <Link href={`/blog/${hero.slug}`} className="block group mb-4">
           <div
-            className="grid grid-cols-1 md:grid-cols-5 gap-0 overflow-hidden rounded-2xl border transition-all duration-300 group-hover:shadow-[0_8px_32px_rgba(249,115,22,0.12)] group-hover:border-orange-500/25"
+            className="grid grid-cols-1 md:grid-cols-5 gap-0 overflow-hidden rounded-xl border transition-all duration-300 group-hover:shadow-[0_8px_32px_rgba(249,115,22,0.12)] group-hover:border-orange-500/25"
             style={{
               background: "var(--bg-card-neutral)",
               borderColor: "var(--border-color)",
@@ -223,7 +209,7 @@ export default async function FeaturedBlogPost({ copy = HOMEPAGE_COPY.insights }
                       alt={post.title}
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-                      sizes="(max-width: 768px) 100vw, 50vw"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     />
                   </div>
                   {/* Content */}
@@ -253,12 +239,11 @@ export default async function FeaturedBlogPost({ copy = HOMEPAGE_COPY.insights }
 
         {/* Mobile — all articles link */}
         <div className="mt-8 text-center md:hidden">
-          <Link
-            href="/blog"
-            className="text-sm font-semibold px-6 py-3 rounded-lg inline-block border transition-all hover:border-orange-500/40 hover:text-[var(--text-primary)]"
-            style={{ borderColor: "var(--border-color)", color: "var(--text-secondary)" }}
-          >
+          <Link href="/blog" className="btn-ghost">
             All {BLOG_NAME.toLowerCase()}
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
           </Link>
         </div>
 

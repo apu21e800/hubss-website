@@ -29,22 +29,16 @@ export default async function ApplicationsPage() {
       {/* The ten application cards are a choosing surface; they read better on paper. */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-16 sm:pb-24">
         <div className="mb-16 max-w-2xl">
-          <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-3" style={{ color: "var(--accent-text-lg)" }}>
-            In the field
+          <p className="eyebrow mb-3">
+            Applications
           </p>
-          <h1
-            className="font-black mb-5"
-            style={{
-              color: "var(--text-primary)",
-              fontSize: "clamp(2rem, 4vw, 3.5rem)",
-              lineHeight: 1.0,
-              letterSpacing: "-0.03em",
-            }}
-          >
-            Where our systems live.
+          <h1 className="h1-page mb-4" style={{ color: "var(--text-primary)" }}>
+            Pick the job.
           </h1>
           <p className="text-lg" style={{ color: "var(--text-secondary)" }}>
-            Each application has its own performance demands: retroreflectivity, snowplow tolerance, slip resistance, urban heat reduction, decorative finish. Product specs are matched to the demand. Installation is by certified HUB applicators.
+            A crosswalk, a bus lane and a splash pad each ask something different of the surface.
+            Each page names the systems that hold up there, how each goes in, and the certified
+            HUB installer who puts it down.
           </p>
         </div>
 

@@ -94,14 +94,18 @@ const buildSections = (offices: SiteSettings["offices"]): { heading: string; blo
 export default async function TermsPage() {
   const { offices } = await getSiteSettings();
   const sections = buildSections(offices);
+  // Paper, on the site's grid, with the text in a 768px measure: the legal
+  // pages were the one dark reading surface left, centred on their own
+  // column (uniformity pass, 17 Oct 2026).
   return (
-    <main style={{ background: "var(--bg-section-asphalt)", minHeight: "100vh" }}>
+    <main data-surface="paper" style={{ background: "var(--bg-primary)", minHeight: "100vh" }}>
       <Nav />
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24">
-        <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "var(--accent-text-lg)" }}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-32 pb-24">
+        <div className="max-w-3xl">
+        <p className="eyebrow mb-3">
           Legal
         </p>
-        <h1 className="text-5xl font-bold mb-3 leading-tight" style={{ color: "var(--text-primary)" }}>
+        <h1 className="h1-page mb-3" style={{ color: "var(--text-primary)" }}>
           Terms of use
         </h1>
         <p className="text-sm mb-12" style={{ color: "var(--text-muted)" }}>
@@ -134,6 +138,7 @@ export default async function TermsPage() {
               </div>
             </div>
           ))}
+        </div>
         </div>
       </div>
       <Footer />

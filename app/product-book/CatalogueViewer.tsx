@@ -68,10 +68,13 @@ const PRELOAD = 1;
  * used to be the only source, and in landscape on a phone the footer came out
  * 21px taller than its constant and sat on the bottom of the page.
  */
-const CHROME_TOP = 56;
-const CHROME_BOTTOM = 112;
-const CHROME_TOP_SM = 56;
-const CHROME_BOTTOM_SM = 170;
+// Measured on the built page, 17 Oct 2026 (the bars as they render at
+// 1280 to 1920 wide, and on a 390px phone): the CSS sizing before measure()
+// runs uses these, so a wrong guess paints the wrong stage for a second.
+const CHROME_TOP = 65;
+const CHROME_BOTTOM = 154;
+const CHROME_TOP_SM = 78;
+const CHROME_BOTTOM_SM = 159;
 /**
  * Below this the stage shows one page. At 900px a spread gives each page ~450px
  * of width, which is where this book's smallest captions stop being readable.
@@ -365,7 +368,13 @@ export default function CatalogueViewer({
   const pageCss = stageW === null ? null : stageW / (spreadMode ? 2 : 1);
   // Before the stage is measured, a media-query guess at the same answer, so
   // the first paint doesn't fetch one width and the measurement another.
-  const baseSizes = pageCss === null ? "(max-width: 899px) and (orientation: portrait) 100vw, (max-width: 899px) calc(100vh - 110px), 50vw" : `${Math.round(pageCss)}px`;
+  // On a wide screen the guess is measure()'s own arithmetic (a spread,
+  // between the two bars): "50vw" asked for the 2000px raster first and the
+  // measured 1362px stage then wanted the 1400px one, so three files were
+  // fetched and aborted on every open (technical review, 17 Oct 2026).
+  const baseSizes = pageCss === null
+    ? `(max-width: 899px) and (orientation: portrait) 100vw, (max-width: 899px) calc(100vh - 110px), min(50vw, calc((100vh - ${CHROME_TOP + CHROME_BOTTOM}px) * ${aspect.toFixed(4)}))`
+    : `${Math.round(pageCss)}px`;
   const sizesFor = (active: boolean) => (active && zoomed ? `${maxWidth}px` : baseSizes);
 
   useEffect(() => setCanShare(typeof navigator !== "undefined" && "share" in navigator), []);
@@ -671,10 +680,12 @@ export default function CatalogueViewer({
     }
   };
 
+  // A number past the last page goes to the last page, under 1 to the first
+  // (interaction review, 17 Oct 2026: 999 stayed in the box and nothing moved).
   const submitJump = (e: React.FormEvent) => {
     e.preventDefault();
-    const n = Number(jump);
-    if (Number.isInteger(n) && n >= 1 && n <= total) goToPage(n, true);
+    const n = Math.round(Number(jump));
+    if (Number.isFinite(n) && jump.trim() !== "") goToPage(Math.min(total, Math.max(1, n)), true);
     setJump("");
   };
 
@@ -697,12 +708,22 @@ export default function CatalogueViewer({
         className="absolute inset-x-0 grid place-items-center"
         style={{ top: chromeTop, bottom: chromeBottom }}
       >
+        {/* Before measure() has run, CSS does its arithmetic: the stage is
+            as wide as the room between the bars allows at the book's shape,
+            a spread from 900x600 up. Until 17 Oct 2026 it painted
+            full-bleed ("min(100vw, 100%)") and snapped to 1362x681 a second
+            later, a 0.5 layout shift on every open (technical review). */}
+        <style>{`
+          .pb-stage { --pb-ratio: ${aspect.toFixed(4)}; --pb-top: ${CHROME_TOP_SM}px; --pb-bottom: ${CHROME_BOTTOM_SM}px; }
+          @media (min-width: 640px) { .pb-stage { --pb-top: ${CHROME_TOP}px; --pb-bottom: ${CHROME_BOTTOM}px; } }
+          @media (min-width: ${SPREAD_MIN_WIDTH}px) and (min-height: ${SPREAD_MIN_HEIGHT}px) { .pb-stage { --pb-ratio: ${(aspect * 2).toFixed(4)}; } }
+        `}</style>
         <div
           ref={stageRef}
-          className="relative overflow-hidden"
+          className="pb-stage relative overflow-hidden"
           style={{
-            width: stageW === null ? "min(100vw, 100%)" : stageW,
-            aspectRatio: String(stageRatio),
+            width: stageW === null ? "min(100vw, calc((100dvh - var(--pb-top) - var(--pb-bottom)) * var(--pb-ratio)))" : stageW,
+            aspectRatio: stageW === null ? "var(--pb-ratio)" : String(stageRatio),
             touchAction: "none",
             cursor: zoomed ? "grab" : "zoom-in",
           }}
@@ -869,7 +890,10 @@ export default function CatalogueViewer({
                 the utility classes on font, weight, tracking and leading. */}
             <h1
               className="truncate text-[11px] font-bold uppercase tracking-[0.22em]"
-              style={{ color: "#fb923c", fontFamily: "inherit", fontWeight: 700, letterSpacing: "0.22em", lineHeight: "inherit", textWrap: "pretty" }}
+              // No textWrap: "pretty" here: it reset the wrap mode and `truncate`
+              // never happened, so on a phone the title wrapped with its dot
+              // hanging and the bar grew (phone review, 17 Oct 2026).
+              style={{ color: "#fb923c", fontFamily: "inherit", fontWeight: 700, letterSpacing: "0.22em", lineHeight: "inherit" }}
             >
               {ideaBook.short} · {ideaBook.volume}
             </h1>
@@ -995,7 +1019,9 @@ export default function CatalogueViewer({
             />
           </div>
 
-          <div className={`mt-2.5 items-center justify-between gap-3 border-t pt-2.5 ${short ? "hidden" : "flex"}`} style={{ borderColor: "rgba(255,255,255,0.08)" }}>
+          {/* Not on a phone: the page is 46% of a 390px screen between the
+              bars, and this row is 50px of it (phone review, 17 Oct 2026). */}
+          <div className={`mt-2.5 items-center justify-between gap-3 border-t pt-2.5 ${short ? "hidden" : "hidden sm:flex"}`} style={{ borderColor: "rgba(255,255,255,0.08)" }}>
             {/* Secondary to "Request a copy" above, on purpose: two solid
                 orange buttons on one screen means neither is the primary. */}
             <Link
@@ -1003,7 +1029,7 @@ export default function CatalogueViewer({
               className="inline-flex flex-1 items-center justify-center rounded-xl px-4 py-2.5 text-[14.5px] font-semibold transition-colors sm:flex-none"
               style={{ color: "#fdba74", border: "1px solid rgba(249,115,22,0.42)", background: "rgba(249,115,22,0.10)" }}
             >
-              Book a free Lunch &amp; Learn
+              Book a Lunch &amp; Learn
             </Link>
             <p className="hidden text-[12px] sm:block" style={{ color: "rgba(255,255,255,0.38)" }}>
               Drag a page or use <kbd style={kbd}>&larr;</kbd> <kbd style={kbd}>&rarr;</kbd> to turn &nbsp;·&nbsp; scroll or double-tap to zoom
@@ -1228,9 +1254,9 @@ function Actions({
 }
 
 /** The one action this page is actually for. */
-const btnPrimary =
-  "inline-flex items-center gap-1.5 rounded-xl px-3 py-2.5 text-[13px] font-semibold transition-colors " +
-  "bg-[#F97316] text-white hover:bg-[#ea6d12] shadow-[0_2px_10px_rgba(249,115,22,0.35)]";
+// The site's orange button (app/globals.css .btn-accent), at the reader's
+// smaller size: the reader's chrome is a toolbar, not a page.
+const btnPrimary = "btn-accent btn-sm";
 /** Everything else. */
 const btnGhost =
   "inline-flex items-center gap-1.5 rounded-xl px-3 py-2.5 text-[13px] font-semibold transition-colors " +

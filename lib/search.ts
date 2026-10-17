@@ -609,12 +609,27 @@ const CAP: Record<SearchType, number> = {
   Colour: 4,
 };
 
-/** Group ranked hits by type, preserving global rank inside each group. */
-export function groupHits(hits: SearchHit[]): { type: SearchType; hits: SearchHit[] }[] {
+/** A title and a query compared as words: "crosswalk" is "Crosswalks". */
+const sameName = (a: string, b: string) => {
+  const w = (s: string) => s.toLowerCase().replace(/[^a-z0-9 ]+/g, " ").trim().replace(/s\b/g, "");
+  return w(a) === w(b);
+};
+
+/**
+ * Group ranked hits by type, preserving global rank inside each group.
+ * A hit whose title IS the query ("crosswalk" for the page called Crosswalks)
+ * leads on its own as "Best match", whatever its type: the type order below
+ * put five systems above it and Enter opened TrafficPatterns (interaction
+ * review, 17 Oct 2026).
+ */
+export function groupHits(hits: SearchHit[], query = ""): { type: SearchType; label?: string; hits: SearchHit[] }[] {
+  const best = query.trim() ? hits.find((h) => sameName(h.title, query)) : undefined;
   const map = new Map<SearchType, SearchHit[]>();
   for (const h of hits) {
+    if (h === best) continue;
     if (!map.has(h.type)) map.set(h.type, []);
     map.get(h.type)!.push(h);
   }
-  return ORDER.filter((t) => map.has(t)).map((t) => ({ type: t, hits: map.get(t)!.slice(0, CAP[t]) }));
+  const groups = ORDER.filter((t) => map.has(t)).map((t) => ({ type: t, hits: map.get(t)!.slice(0, CAP[t]) }));
+  return best ? [{ type: best.type, label: "Best match", hits: [best] }, ...groups] : groups;
 }

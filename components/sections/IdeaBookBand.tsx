@@ -37,10 +37,12 @@ export default function IdeaBookBand({ copy = HOMEPAGE_COPY.ideaBook }: { copy?:
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6">
         <Link href={href} className="group flex items-center gap-4 sm:gap-6">
           <img
-            src={cataloguePageUrl(1, coverWidth)}
+            // The 240px cover thumbnail where it exists (the 800px page file
+            // was 70 KB for a 64px box: technical review, 17 Oct 2026).
+            src={catalogue.coverThumb ?? cataloguePageUrl(1, coverWidth)}
             alt={`${ideaBook.title} cover`}
-            width={coverWidth}
-            height={Math.round(coverWidth / catalogue.aspect)}
+            width={catalogue.coverThumb ? 240 : coverWidth}
+            height={catalogue.coverThumb ? Math.round(240 / catalogue.aspect) : Math.round(coverWidth / catalogue.aspect)}
             loading="lazy"
             decoding="async"
             className="h-16 w-16 flex-shrink-0 rounded-lg object-cover transition-transform duration-300 group-hover:-translate-y-0.5 sm:h-[72px] sm:w-[72px]"

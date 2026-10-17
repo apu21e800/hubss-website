@@ -21,15 +21,20 @@
 
 export interface AboutCard { title: string; desc: string }
 
+// Rewritten 17 Oct 2026 (the copy review: "The people who made your city
+// look like your city" and "carry a community's identity as well as its
+// traffic" read as written by a machine; HUB's own founding line does not).
+// lib/copy-superseded.ts carries the old lines, so Studio's copies print as
+// these until the clean-up script has run.
 export const ABOUT_HERO = {
-  eyebrow: "Canadian-operated since 1999 · All 10 provinces",
-  heading: "The people who made your city look like your city.",
-  subheading: "HUB Surface Systems builds streets that carry a community’s identity as well as its traffic.",
+  eyebrow: "Canadian-owned since 1999",
+  heading: "Streets don’t have to be grey.",
+  subheading: "HUB installs stamped asphalt, preformed thermoplastic and pavement coatings across Canada, through installers it trains and certifies.",
 };
 
 export const ABOUT_STORY: string[] = [
-  "HUB began with a simple belief: streets don’t have to be grey. We built the company around StreetPrint, the stamped asphalt system invented in Canada and installed here since 1992.",
-  "Since 1999 we have added a system for nearly every surface a Canadian city looks after, each one installed to spec by certified installers that HUB trains and authorizes.",
+  "HUB started in 1999 around one system: StreetPrint, the stamped asphalt invented in Canada and installed here since 1992.",
+  "Since then we have added a system for nearly every surface a Canadian city looks after, each one installed to spec by certified installers HUB trains and authorizes.",
 ];
 
 export const ABOUT_WHY_HUB: AboutCard[] = [

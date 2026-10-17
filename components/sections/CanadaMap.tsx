@@ -247,6 +247,40 @@ function Sheet({ project, onClose, onPrev, onNext, position }: {
 }) {
   const closeRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
+  // The way out mirrors the way in (17 Oct 2026): until then the sheet rose
+  // over 300ms and vanished in one frame. `closing` plays the slide down,
+  // then onClose unmounts. A drag on the sheet from its top follows the
+  // finger and lets go past a third of its height.
+  const [closing, setClosing] = useState(false);
+  const drag = useRef<{ y0: number; t0: number; dy: number } | null>(null);
+  const reduced = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const dismiss = useCallback(() => {
+    if (closing) return;
+    if (reduced) { onClose(); return; }
+    setClosing(true);
+    setTimeout(onClose, 220);
+  }, [closing, onClose, reduced]);
+  const onTouchStart = (e: React.TouchEvent) => {
+    const el = dialogRef.current;
+    if (!el || el.scrollTop > 0) return;
+    drag.current = { y0: e.touches[0].clientY, t0: Date.now(), dy: 0 };
+  };
+  const onTouchMove = (e: React.TouchEvent) => {
+    const d = drag.current; const el = dialogRef.current;
+    if (!d || !el) return;
+    d.dy = Math.max(0, e.touches[0].clientY - d.y0);
+    el.style.transform = `translateY(${d.dy}px)`;
+    el.style.transition = "none";
+  };
+  const onTouchEnd = () => {
+    const d = drag.current; const el = dialogRef.current;
+    drag.current = null;
+    if (!d || !el) return;
+    const fast = d.dy > 40 && Date.now() - d.t0 < 260;
+    el.style.transition = "";
+    if (fast || d.dy > el.offsetHeight / 3) { el.style.transform = `translateY(${d.dy}px)`; dismiss(); }
+    else el.style.transform = "";
+  };
 
   useEffect(() => {
     const returnTo = document.activeElement as HTMLElement | null;
@@ -258,7 +292,7 @@ function Sheet({ project, onClose, onPrev, onNext, position }: {
     body.style.top = `-${scrollY}px`;
     body.style.width = "100%";
     function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") { e.stopPropagation(); onClose(); return; }
+      if (e.key === "Escape") { e.stopPropagation(); dismiss(); return; }
       if (e.key !== "Tab") return;
       const root = dialogRef.current;
       if (!root) return;
@@ -278,19 +312,24 @@ function Sheet({ project, onClose, onPrev, onNext, position }: {
       window.scrollTo(0, scrollY);
       returnTo?.focus?.();
     };
-  }, [onClose]);
+  }, [dismiss]);
 
   return (
-    <div className="cm-sheet-backdrop" onClick={onClose}>
+    <div className={`cm-sheet-backdrop${closing ? " is-closing" : ""}`} onClick={dismiss}>
       <div
         ref={dialogRef}
-        className="cm-sheet"
+        className={`cm-sheet${closing ? " is-closing" : ""}`}
         role="dialog"
         aria-modal="true"
         aria-labelledby="cm-sheet-title"
         onClick={(e) => e.stopPropagation()}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+        onTouchCancel={onTouchEnd}
       >
         <div className="cm-sheet-bar">
+          <span className="cm-sheet-handle" aria-hidden="true" />
           <span className="cm-sheet-pos">{position}</span>
           <span className="cm-sheet-nav">
             {onPrev && (
@@ -303,7 +342,7 @@ function Sheet({ project, onClose, onPrev, onNext, position }: {
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6" /></svg>
               </button>
             )}
-            <button ref={closeRef} type="button" className="cm-icon-btn" aria-label="Close" onClick={onClose}>
+            <button ref={closeRef} type="button" className="cm-icon-btn" aria-label="Close" onClick={dismiss}>
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" strokeWidth={2} strokeLinecap="round" /></svg>
             </button>
           </span>
@@ -526,8 +565,10 @@ export default function CanadaMap() {
       if (isDesktop) {
         select(p);
       } else {
-        // On a phone a pin brings its card to the middle of the strip.
+        // On a phone a pin opens its sheet (one tap, not two: phone review,
+        // 17 Oct 2026) and brings its card to the middle of the strip.
         setSelectedId(p.id);
+        setSheetId(p.id);
         flyTo(p, "follow");
         const card = stripRef.current?.querySelector<HTMLElement>(`[data-id="${p.id}"]`);
         if (card) {
@@ -808,15 +849,15 @@ export default function CanadaMap() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <header className="cm-head">
             <div>
-              <p className="cm-eyebrow">Installations across Canada</p>
-              <h2 id="cm-heading" className="cm-h2">
-                Real projects. <span className="cm-grad">Real places.</span>
+              <p className="eyebrow cm-eyebrow">Installations across Canada</p>
+              <h2 id="cm-heading" className="h2-section cm-h2">
+                Find a job near you.
               </h2>
               {/* No count (docs/STYLE.md: no counts as a selling point; the
                   company's number is the book's 1,000+). "3 of 78" in the
                   panel is a count inside a control, which the guide allows. */}
               <p className="cm-sub">
-                Every pin is a documented installation, shown in its own photos.
+                Every pin is a HUB installation, with its own photos.
               </p>
             </div>
             <button type="button" className="cm-btn cm-btn-primary cm-tour-start" onClick={tour ? backToList : startTour}>
@@ -1040,17 +1081,18 @@ export default function CanadaMap() {
 
 // ── Styles. One block, every class prefixed cm- so nothing leaks.
 const CSS = `
-.cm-section { background: var(--bg-dark); padding: 5rem 0; }
+.cm-section { background: var(--bg-dark); padding: 96px 0; }
+@media (max-width: 768px) { .cm-section { padding: 64px 0; } }
 @media (min-width: 1024px) { .cm-section { min-height: calc(clamp(560px, 76vh, 860px) + 294px); } }
 .cm-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 1.5rem; }
-.cm-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent-text-lg); margin: 0 0 10px; }
-.cm-h2 { font-size: clamp(1.75rem, 3.5vw, 2.75rem); font-weight: 900; color: var(--text-primary); margin: 0 0 10px; line-height: 1.08; letter-spacing: -0.03em; }
+.cm-eyebrow { margin: 0 0 12px; }
+.cm-h2 { color: var(--text-primary); margin: 0 0 12px; }
 .cm-grad { background: linear-gradient(90deg, #F97316, #EAB308); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.cm-sub { font-size: 15px; color: var(--text-muted); margin: 0; line-height: 1.6; max-width: 520px; }
+.cm-sub { font-size: 16px; color: var(--text-secondary); margin: 0; line-height: 1.6; max-width: 520px; font-weight: 300; }
 
-.cm-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 18px; border-radius: 10px; font-size: 13.5px; font-weight: 700; text-decoration: none; cursor: pointer; white-space: nowrap; transition: background .15s ease, border-color .15s ease, color .15s ease, transform .15s ease; }
-.cm-btn-primary { background: linear-gradient(135deg, #F97316 0%, #EA8C16 100%); color: var(--on-accent); border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 6px 22px rgba(249,115,22,0.32); }
-.cm-btn-primary:hover { transform: translateY(-1px); }
+.cm-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 20px; border-radius: 8px; font-size: 15px; font-weight: 700; text-decoration: none; cursor: pointer; white-space: nowrap; transition: background .15s ease, border-color .15s ease, color .15s ease, transform .15s ease, filter .15s ease; }
+.cm-btn-primary { background: var(--accent-gradient); color: var(--on-accent); border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 6px 22px rgba(249,115,22,0.32); }
+.cm-btn-primary:hover { filter: brightness(1.08); transform: translateY(-1px); }
 .cm-btn-ghost { background: rgba(255,255,255,0.04); color: var(--text-primary); border: 1px solid rgba(255,255,255,0.14); }
 .cm-btn-ghost:hover { border-color: rgba(249,115,22,0.55); }
 .cm-link-btn { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 4px; background: none; border: 0; color: var(--accent-soft-text); font-size: 13px; font-weight: 700; cursor: pointer; }
@@ -1078,6 +1120,7 @@ const CSS = `
 .cm-search input { width: 100%; min-height: 44px; padding: 0 14px 0 38px; border-radius: 11px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-size: 13.5px; outline: none; }
 .cm-search input::placeholder { color: var(--text-secondary); }
 .cm-search input:focus { border-color: rgba(249,115,22,0.6); }
+.cm-search input:focus-visible, .cm-selects select:focus-visible { outline: 2px solid #F97316; outline-offset: 2px; }
 .cm-selects { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .cm-selects select { min-height: 44px; padding: 0 10px; border-radius: 11px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #C4C9D2; font-size: 13px; outline: none; cursor: pointer; min-width: 0; }
 .cm-selects select.is-on { border-color: rgba(249,115,22,0.55); color: #FDBA74; background: rgba(249,115,22,0.1); }
@@ -1171,7 +1214,11 @@ const CSS = `
 
 .cm-sheet-backdrop { position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.78); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); display: flex; align-items: flex-end; justify-content: center; animation: cm-fade .2s ease both; }
 .cm-sheet { width: 100%; max-width: 640px; max-height: 92vh; overflow-y: auto; background: #121212; border-radius: 22px 22px 0 0; border-top: 1px solid rgba(249,115,22,0.3); padding-bottom: max(16px, env(safe-area-inset-bottom)); animation: cm-up .3s cubic-bezier(.2,.8,.2,1) both; }
-.cm-sheet-bar { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: rgba(18,18,18,0.94); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.cm-sheet-bar { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; justify-content: space-between; padding: 14px 12px 10px; background: rgba(18,18,18,0.94); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.cm-sheet-handle { position: absolute; left: 50%; top: 6px; width: 40px; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.28); transform: translateX(-50%); }
+.cm-sheet-backdrop.is-closing { animation: cm-fade .2s ease reverse both; }
+.cm-sheet.is-closing { animation: cm-down .22s cubic-bezier(.4,0,1,1) both; }
+@keyframes cm-down { to { transform: translateY(100%); opacity: 0.6; } }
 .cm-sheet-pos { font-size: 12px; color: var(--text-muted); padding-left: 6px; font-variant-numeric: tabular-nums; }
 .cm-sheet-nav { display: inline-flex; gap: 6px; }
 .cm-sheet .cm-icon-btn { width: 44px; height: 44px; }

@@ -18,7 +18,7 @@ export default function RuleLabel({
   return (
     <Tag
       id={id}
-      className={`relative pb-3 text-[11.5px] uppercase ${className}`}
+      className={`relative pb-3 text-[12.5px] uppercase ${className}`}
       // Type inline: app/globals.css gives every h1-h6 its family, weight,
       // tracking and leading as unlayered CSS, which beats Tailwind's
       // utilities, so an h2 set with classes alone came out squeezed

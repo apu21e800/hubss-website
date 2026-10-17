@@ -251,7 +251,7 @@ const ACCENT = "var(--accent-text)";  // small-text accent (WCAG-safe on dark su
 function MenuLabel({ children, rule = true, className = "" }: { children: React.ReactNode; rule?: boolean; className?: string }) {
   return (
     <div
-      className={`text-[11.5px] font-bold tracking-[0.2em] uppercase ${rule ? "pb-3 mb-2" : ""} ${className}`}
+      className={`text-[12.5px] font-bold tracking-[0.2em] uppercase ${rule ? "pb-3 mb-2" : ""} ${className}`}
       style={{ color: ACCENT, borderBottom: rule ? "1px solid rgba(249,115,22,0.18)" : undefined }}
     >
       {children}
@@ -626,7 +626,7 @@ function LatestRow({ post, first }: { post: NavPost; first: boolean }) {
         />
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block text-[11.5px] font-bold uppercase tracking-[0.2em]" style={{ color: ACCENT }}>
+        <span className="block text-[12.5px] font-bold uppercase tracking-[0.2em]" style={{ color: ACCENT }}>
           {kindOf(post.type)}
         </span>
         <span
@@ -700,7 +700,7 @@ function InsightsMegaMenu() {
               />
             </span>
             {/* The section it lives in, and the title: nothing else. */}
-            <span className="mt-4 block text-[11.5px] font-bold uppercase tracking-[0.2em]" style={{ color: ACCENT }}>
+            <span className="mt-4 block text-[12.5px] font-bold uppercase tracking-[0.2em]" style={{ color: ACCENT }}>
               {kindOf(cover.type)}
             </span>
             <span
@@ -749,7 +749,7 @@ function MobileSectionHead({ label, href, active, pathname, onClose }: { label: 
   return (
     <div className="flex items-center justify-between pt-5 pb-1">
       <div
-        className="px-1 text-[11px] font-bold tracking-[0.22em] uppercase select-none"
+        className="px-1 text-[12px] font-bold tracking-[0.22em] uppercase select-none"
         style={{ color: active ? "var(--text-primary)" : "var(--accent-text-lg)" }}
       >
         <NavLabel active={active}>{label}</NavLabel>
@@ -1114,6 +1114,9 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
               {/* ── Everything else, as a plain list ──────────────── */}
               <motion.div variants={menuSectionVariants} className="mt-8 pt-2" style={{ borderTop: "1px solid var(--border-color)" }}>
                 {[
+                  // The book was reachable from the desktop panels only; a
+                  // phone had no row for it (phone review, 17 Oct 2026).
+                  ...(showIdeaBook() ? [{ label: ideaBook.title, href: ideaBook.href }] : []),
                   { label: "Gallery", href: "/gallery" },
                   { label: "About", href: "/about" },
                   { label: "Contact", href: "/contact" },
@@ -1151,14 +1154,17 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
             }}
           >
             {/* Regional phones: 44px tall targets (QA pa#38: they were 20). */}
-            <div className="flex items-center justify-center max-w-2xl mx-auto">
+            {/* flex-wrap: on a 360px phone the pair ran 402px wide and the
+                East number lost its last digit (phone review, 17 Oct 2026);
+                now the second office drops under the first. */}
+            <div className="flex flex-wrap items-center justify-center max-w-2xl mx-auto">
               {/* The phones from Studio's Site Settings (lib/site-settings.ts). */}
               {[
                 { label: `West · ${offices.west.phone}`, href: telHref(offices.west.phone) },
                 { label: `East · ${offices.east.phone}`, href: telHref(offices.east.phone) },
               ].map((office, i) => (
                 <span key={office.href} className="flex items-center">
-                  {i > 0 && <span aria-hidden="true" className="mx-1" style={{ width: 1, height: 14, background: "var(--ink-12)" }} />}
+                  {i > 0 && <span aria-hidden="true" className="mx-1 max-[400px]:hidden" style={{ width: 1, height: 14, background: "var(--ink-12)" }} />}
                   <a
                     href={office.href}
                     className="inline-flex min-h-[44px] items-center gap-1.5 px-3 text-[15px] font-semibold whitespace-nowrap active:opacity-60 transition-opacity"
@@ -1189,16 +1195,11 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
                 href={lunchLearnHref(llTopic, "menu")}
                 onClick={onClose}
                 aria-label="Book a Lunch & Learn"
-                className="inline-flex min-h-[44px] flex-shrink-0 items-center gap-1.5 rounded-xl px-4 text-[15px] font-bold active:scale-[0.97] active:opacity-90 transition-[transform,opacity] duration-100"
-                style={{
-                  background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
-                  color: "var(--on-accent)",
-                  boxShadow: "0 4px 18px rgba(249,115,22,0.32)",
-                }}
+                className="btn-accent flex-shrink-0"
               >
                 Book
                 <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 12h14M12 5l7 7-7 7" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
               </Link>
             </div>
@@ -1509,8 +1510,11 @@ export default function Nav() {
                 // did not exist in the document (QA F17, 30 Sep 2026).
                 aria-controls={openPanel === panel ? PANEL_IDS[panel] : undefined}
                 aria-current={currentPage(pathname, NAV_ROOT[panel])}
-                className="flex items-center gap-1 px-3 py-2 rounded-lg text-[15.5px] font-medium whitespace-nowrap transition-colors hover:text-[var(--accent-text)] hover:bg-[var(--ink-05)]"
-                style={{ color: openPanel === panel ? "var(--accent-text-lg)" : section === panel ? "var(--text-primary)" : "var(--ink-85)" }}
+                // The resting colour rides in a variable: an inline `color`
+                // beat the hover class, so a bar item never turned orange
+                // under the pointer (interaction review, 17 Oct 2026).
+                className="nav-item flex items-center gap-1 px-3 py-2 rounded-lg text-[15.5px] font-medium whitespace-nowrap transition-colors hover:bg-[var(--ink-05)]"
+                style={{ "--nav-c": openPanel === panel ? "var(--accent-text-lg)" : section === panel ? "var(--text-primary)" : "var(--ink-85)" } as React.CSSProperties}
               >
                 <NavLabel active={section === panel}>{label}</NavLabel>
                 <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"
@@ -1529,8 +1533,8 @@ export default function Nav() {
                 // lines and pushed the whole nav row out of alignment. A nav
                 // label is a single object; it should shrink the row, never
                 // wrap inside it.
-                className="px-3 py-2 rounded-lg text-[15.5px] font-medium whitespace-nowrap transition-colors hover:text-[var(--accent-text)] hover:bg-[var(--ink-05)]"
-                style={{ color: section && NAV_ROOT[section] === link.href ? "var(--text-primary)" : "var(--ink-85)" }}
+                className="nav-item px-3 py-2 rounded-lg text-[15.5px] font-medium whitespace-nowrap transition-colors hover:bg-[var(--ink-05)]"
+                style={{ "--nav-c": section && NAV_ROOT[section] === link.href ? "var(--text-primary)" : "var(--ink-85)" } as React.CSSProperties}
                 aria-current={currentPage(pathname, link.href)}
               >
                 <NavLabel active={!!section && NAV_ROOT[section] === link.href}>{link.label}</NavLabel>
@@ -1592,8 +1596,7 @@ export default function Nav() {
                 On /lunch-learn it is marked like the rest of the bar, with
                 the rule in its own text colour (QA A4, 30 Sep 2026). */}
             <a href="/lunch-learn"
-              className="btn-accent px-4 py-2 rounded-lg text-[15px] font-bold whitespace-nowrap"
-              style={{ background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)", color: "var(--on-accent)" }}
+              className="btn-accent btn-sm"
               aria-current={currentPage(pathname, "/lunch-learn")}
             >
               <NavLabel active={section === "lunch-learn"} rule="var(--on-accent)">Lunch &amp; Learn</NavLabel>
@@ -1658,10 +1661,10 @@ export default function Nav() {
       {/* Dims the page under an open panel so the panel reads as a layer.
           pointer-events: none, so moving onto the page still leaves the nav
           and closes the panel, and nothing under it stops being clickable.
-          Under Insights it is darker and softened (28 Sep 2026): that panel
-          ends two thirds of the way down, and the page's own headline under
-          its edge read as part of the menu. Products and Applications keep
-          the lighter one. */}
+          Darker and softened under every panel (17 Oct 2026; until then
+          only under Projects, and the hero's headline under the Products and
+          Applications panels' edge read as menu copy, while the blur snapped
+          on and off between panels). */}
       <AnimatePresence>
         {openPanel && (
           <motion.div
@@ -1673,10 +1676,9 @@ export default function Nav() {
             transition={{ duration: 0.2 }}
             className="fixed inset-0 z-40 hidden lg:block pointer-events-none"
             style={{
-              background: openPanel === "insights" ? "rgba(5,8,14,0.74)" : "rgba(5,8,14,0.45)",
-              backdropFilter: openPanel === "insights" ? "blur(6px)" : "none",
-              WebkitBackdropFilter: openPanel === "insights" ? "blur(6px)" : "none",
-              transition: "background-color 0.2s ease",
+              background: "rgba(5,8,14,0.66)",
+              backdropFilter: "blur(6px)",
+              WebkitBackdropFilter: "blur(6px)",
             }}
           />
         )}

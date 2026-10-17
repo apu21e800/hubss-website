@@ -167,7 +167,7 @@ function fieldItem(doc: FieldDoc): SocialItem | null {
         `System: ${system.name}.`,
         doc.application ? `Application: ${doc.application}.` : "",
         `What the crew says: ${doc.note}`,
-        about ? `About ${system.name}, from the HUB Product Book: ${about}` : "",
+        about ? `About ${system.name}, from the HUB Product Portfolio Book: ${about}` : "",
       ].filter(Boolean).join("\n"),
       linkTo: `the ${system.name} page on hubss.com`,
     },
@@ -481,7 +481,7 @@ async function emailEditors(subject: string, text: string): Promise<void> {
 /** How an email names what the drafts are for. */
 export function describe(r: Pick<SocialResult, "stream" | "title">): string {
   if (r.stream === "From the field") return `the job photos post "${r.title}"`;
-  if (r.stream === "From the library") return `"${r.title}" from HUB's library (a documented job or a Product Book spread)`;
+  if (r.stream === "From the library") return `"${r.title}" from HUB's library (a documented job or a Product Portfolio Book spread)`;
   return `the new Insights article "${r.title}"`;
 }
 

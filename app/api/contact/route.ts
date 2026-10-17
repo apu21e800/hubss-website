@@ -118,7 +118,7 @@ function buildEmailHtml(data: ContactPayload, hold?: Hold): string {
             : data.formType === "newsletter"
             ? "Newsletter signup"
             : data.formType === "catalogue-print"
-            ? "Printed Product Book request"
+            ? "Printed Product Portfolio Book request"
             : "New contact form submission"
         }
       </h2>
@@ -147,7 +147,7 @@ function buildSubjectLine(data: ContactPayload): string {
     return `Newsletter Signup: ${data.email}`;
   }
   if (data.formType === "catalogue-print") {
-    return `Printed Product Book Request: ${who}`;
+    return `Printed Product Portfolio Book request: ${who}`;
   }
   return `Contact Form: ${who}`;
 }

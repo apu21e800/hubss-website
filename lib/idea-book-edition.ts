@@ -136,7 +136,7 @@ const CONTENTS = [
 ].map((c) => ({ ...c, name: productName(c.slug) }));
 
 export const LEAVES: Leaf[] = [
-  { kind: "cover", id: "cover", section: "front", pages: [1], photo: { page: 1, alt: "The HUB Product Book cover: a Musqueam crosswalk in front of the HUB sign at UBC", focus: "50% 45%" } },
+  { kind: "cover", id: "cover", section: "front", pages: [1], photo: { page: 1, alt: "The HUB Product Portfolio Book cover: a Musqueam crosswalk in front of the HUB sign at UBC", focus: "50% 45%" } },
   {
     kind: "welcome", id: "welcome", section: "front", pages: [2, 3, 4, 5, 6, 7],
     heading: "Asphalt and concrete are the canvas.",
@@ -499,7 +499,7 @@ export const LEAVES: Leaf[] = [
     points: ["Tailored to your team's interests", "Continuing-education content", "In person across Canada, or virtual."],
     contactsEyebrow: "Two offices. One network. One country.", contactsTitle: "Speak with HUB.", contactsLine: "Every project starts with a conversation",
   },
-  { kind: "back", id: "back-cover", section: "back", pages: [144], photo: { page: 144, bottom: 1, focus: "50% 40%", alt: "A family on a blue TrafficPatternsXD crosswalk, the back cover of the Product Book" } },
+  { kind: "back", id: "back-cover", section: "back", pages: [144], photo: { page: 144, bottom: 1, focus: "50% 40%", alt: "A family on a blue TrafficPatternsXD crosswalk, the back cover of the Product Portfolio Book" } },
 ];
 
 /** The printed spread's words, for a leaf written out by hand (a photograph the table cannot describe). */

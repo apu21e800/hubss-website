@@ -38,7 +38,7 @@ export interface HomepageCopy {
   audiences: AudienceCard[];
   systems: SectionCopy;
   applications: SectionCopy;
-  /** The one-row Product Book callout: the line and the line under it (the book's name stays lib/catalogue.ts). */
+  /** The one-row Product Portfolio Book callout: the line and the line under it (the book's name stays lib/catalogue.ts). */
   ideaBook: Pick<SectionCopy, "heading" | "intro">;
   insights: SectionCopy;
   onTheGround: SectionCopy;
@@ -61,10 +61,13 @@ export const HOMEPAGE_COPY: HomepageCopy = {
   ],
   systems: {
     eyebrow: "The systems",
-    // Ten, as the Product Book counts them (Vern, 16 Oct 2026: "yes 10
-    // systems"): the six cards and the four named under them.
+    // Ten, as the Product Portfolio Book counts them (Vern, 16 Oct 2026:
+    // "yes 10 systems"): the six cards and the four named under them. The
+    // second phrase is Doug's (17 Oct 2026: "change to 'Ten systems endless
+    // job types' or something to that effect"); Studio holds the live line
+    // (scripts/studio-cleanup-2026-10-17.ts), this is the fallback.
     heading: "Ten systems,",
-    headingAccent: "ten different jobs.",
+    headingAccent: "endless job types.",
     intro:
       "Stamped asphalt, preformed thermoplastic and coatings, chosen by what the surface has to take. Turning asphalt and concrete into your signature surface.",
   },

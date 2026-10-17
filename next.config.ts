@@ -150,27 +150,32 @@ const nextConfig: NextConfig = {
       // no Canadian contacts. Replaced by the 2026 edition; this keeps every link
       // already sitting in someone's inbox or spec package working.
       { source: "/docs/StreetBondSR/Colour-Guide-1.pdf", destination: "/docs/StreetBondSR/StreetBondSR-Colour-Guide-2026.pdf", permanent: true },
-      // ── The Product Book ─────────────────────────────────────────────────
-      // The printed book has had three names on this site: "Catalogue"
+      // ── The Product Portfolio Book ───────────────────────────────────────
+      // The printed book has had four names on this site: "Catalogue"
       // (/catalogue, /request-catalogue), the "Idea Book" from 25 Sep 2026
-      // (/idea-book, /request-idea-book) and the "Product Book" from 14 Oct
-      // 2026 (Doug: "change the name of the Idea Book to Product Book").
-      // Every old address answers 308 straight to the current one, never
-      // through the name in between, so shared links, printed QR codes and
-      // Google's index carry over in one hop.
+      // (/idea-book, /request-idea-book), the "Product Book" from 14 Oct 2026
+      // and the "Product Portfolio Book" from 17 Oct 2026 (Doug's words; the
+      // addresses stayed at /product-book: labels change, URLs stay). Every
+      // old address answers 308 straight to the current one, never through
+      // the name in between, so shared links, printed QR codes and Google's
+      // index carry over in one hop.
       //
-      // /product-book is the digital edition (14 Oct 2026); the printed
-      // reader is /product-book/pages for page one and /product-book/<n> for
-      // the rest. It builds no /1 route (see app/product-book/[page]/page.tsx)
-      // and writes /product-book/pages into the address bar when you turn
-      // back to the cover; but "page 1" is the URL people type and share, so
-      // every page-one address lands on the printed book, open at the cover.
+      // /product-book is the printed book, page by page, open at the cover,
+      // and /product-book/<n> any other page. It builds no /1 route (see
+      // app/product-book/[page]/page.tsx) and writes /product-book into the
+      // address bar when you turn back to the cover; but "page 1" is the URL
+      // people type and share, so every page-one address lands there.
       { source: "/catalogue", destination: "/product-book", permanent: true },
       { source: "/idea-book", destination: "/product-book", permanent: true },
-      { source: "/idea-book/pages", destination: "/product-book/pages", permanent: true },
-      { source: "/catalogue/1", destination: "/product-book/pages", permanent: true },
-      { source: "/idea-book/1", destination: "/product-book/pages", permanent: true },
-      { source: "/product-book/1", destination: "/product-book/pages", permanent: true },
+      // The printed reader lived at /product-book/pages from 14 to 17 Oct 2026,
+      // while the long-scroll edition held /product-book. Doug (17 Oct) chose
+      // the printed version, so the reader is the book's home again and page
+      // one has no /1 or /pages address of its own.
+      { source: "/idea-book/pages", destination: "/product-book", permanent: true },
+      { source: "/product-book/pages", destination: "/product-book", permanent: true },
+      { source: "/catalogue/1", destination: "/product-book", permanent: true },
+      { source: "/idea-book/1", destination: "/product-book", permanent: true },
+      { source: "/product-book/1", destination: "/product-book", permanent: true },
       // Only page numbers. The rendered pages and the PDF still live under
       // /catalogue/2026-27/… and /catalogue/HUBSS-Catalogue-2026-27.pdf (moving
       // 433 rasters buys nothing a visitor sees), and redirects run before the

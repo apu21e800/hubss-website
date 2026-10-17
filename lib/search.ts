@@ -209,7 +209,7 @@ const PAGES: Omit<SearchEntry, "boost">[] = [
   { id: "p-products", type: "Page", title: "All systems", subtitle: "Every HUB product, grouped by family", href: "/products", keywords: "products range catalogue systems materials", body: "" },
   // The book, by the name Doug gave it. "catalogue" stays in the keywords so
   // anyone who knew it by the old name still lands on it.
-  { id: "p-idea-book", type: "Page", title: ideaBook.title, subtitle: "Every system and application, read in your browser", href: ideaBook.href, keywords: "product book idea book catalogue brochure lookbook volume 5 book read flipbook printed copy", body: "" },
+  { id: "p-idea-book", type: "Page", title: ideaBook.title, subtitle: "Every system and application, read in your browser", href: ideaBook.href, keywords: "product portfolio book product book idea book catalogue brochure lookbook volume 5 book read flipbook flip book printed copy", body: "" },
   { id: "p-apps", type: "Page", title: "All applications", subtitle: "Where HUB systems are specified", href: "/applications", keywords: "applications uses where sectors", body: "" },
   { id: "p-gallery", type: "Page", title: "Photo archive", subtitle: "Documented installations across Canada", href: "/gallery", keywords: "gallery photos images archive installations portfolio work", body: "" },
   // Insights and its three sections (28 Sep 2026: five types became Projects,

@@ -158,7 +158,7 @@ function plain(text: string): string {
 const FORM_NAMES: Record<string, string> = {
   contact: "contact form",
   "lunch-learn": "Lunch & Learn booking",
-  "catalogue-print": "printed Product Book request",
+  "catalogue-print": "printed Product Portfolio Book request",
   newsletter: "newsletter signup",
 };
 
@@ -171,7 +171,7 @@ export function describeSubmission(input: ScreenInput): string {
     field("Name", input.name),
     field("Company", input.company),
     domain && `Email domain: ${plain(domain)}`,
-    // A Product Book request's city is part of its mailing address, which stays here.
+    // A Product Portfolio Book request's city is part of its mailing address, which stays here.
     input.formType !== "catalogue-print" ? field("City", input.city) : null,
     field("Project type", input.projectType),
     field("Session format", input.format),
@@ -187,11 +187,11 @@ export function describeSubmission(input: ScreenInput): string {
 
 export const SCREEN_SYSTEM = `You screen messages sent through the website forms of HUB Surface Systems, a Canadian company that supplies decorative and functional pavement systems: stamped asphalt (StreetPrint), preformed thermoplastic crosswalks and road, bike lane and airfield markings (TrafficPatterns, TrafficPatternsXD, DecoMark, PreMark, AirMark, DuraTherm), pavement coatings (StreetBond, StreetBondSR, DuraShield, MMAX) and asphalt and concrete repair (ChipFill, AggreFill, Fast Patch). Its customers are municipalities, transit agencies, engineers, landscape architects, contractors and installers, developers, schools, property managers and homeowners, in Canada and sometimes the United States.
 
-The forms are a contact form, a Lunch & Learn booking form (a lunch presentation for a design or engineering office) and a request for HUB's printed Product Book.
+The forms are a contact form, a Lunch & Learn booking form (a lunch presentation for a design or engineering office) and a request for HUB's printed Product Portfolio Book.
 
 Decide whether each submission is genuine or spam.
 
-Genuine: anyone who might buy, specify, install or learn about these systems, or who has real business with HUB. Quotes, prices, samples, specifications, colours, patterns, installers, warranties, a project at any size (a single driveway counts), a Lunch & Learn booking, a Product Book request, an existing customer, a contractor or distributor who wants to work with HUB's products, a student or job seeker, a journalist. A short, misspelled or vague enquiry is still genuine. So is one from a free email address, one written in French, and one with no message at all. A link to a tender or a city or project page is normal in a real enquiry.
+Genuine: anyone who might buy, specify, install or learn about these systems, or who has real business with HUB. Quotes, prices, samples, specifications, colours, patterns, installers, warranties, a project at any size (a single driveway counts), a Lunch & Learn booking, a Product Portfolio Book request, an existing customer, a contractor or distributor who wants to work with HUB's products, a student or job seeker, a journalist. A short, misspelled or vague enquiry is still genuine. So is one from a free email address, one written in French, and one with no message at all. A link to a tender or a city or project page is normal in a real enquiry.
 
 Spam: someone selling HUB a service or product it did not ask for (SEO, search ranking, web design, marketing, leads, software, apps, AI tools, data or reporting platforms, staffing, outsourcing, financing, equipment), phishing (asking HUB to open, view or download files, invoices, documents or a "project page" at an outside link, often under a real company's name), scams, adult or gambling content, gibberish and bot tests. Comments about HUB's own website, its search ranking or "noticing your site" are sales pitches. The test is which way the money flows: someone offering to sell HUB their own products or services, road-marking equipment and materials included, is a pitch; someone who wants to buy, specify, install or resell HUB's systems is genuine.
 

@@ -17,14 +17,24 @@
  * in the layout, it is the only legible option, and the reader already handles
  * a single page well.
  *
- * NO PAPER. No curl, no shadow down a fake gutter, no page-flip. A turn is a
- * 160ms cross-fade of the whole spread with a 10px drift in the direction of
- * travel - enough to say which way you went, not enough to be a effect. Both
- * pages of a spread move as one object, because they are one object.
+ * A PAGE TURN, SINCE 17 OCT 2026. Doug chose the printed version over the
+ * long-scroll edition and asked for "a better page flip animation that's
+ * smooth". A turn is one leaf, the page you are leaving, lifting from its
+ * free edge and laying down on the other side with the next page printed on
+ * its back: a 3D rotation about the spine (rotateY, perspective on the
+ * stage), 620 ms on a key or a button, and under a finger it follows the
+ * drag and finishes on release. On a phone, where one page shows at a time,
+ * the leaf lifts away to 90 degrees and the next page is underneath. The
+ * pages beneath the leaf are the real spreads, clipped to their halves, so
+ * nothing is drawn twice and the two pages of a spread still move as one
+ * object. A jump (the scrubber) and prefers-reduced-motion keep the old
+ * 160 ms cross-fade. In spread mode a lone page sits on its own side (the
+ * cover on the right, the back cover on the left), as in the bound book, so
+ * a leaf always turns from the edge it would turn from.
  *
  * NEVER A SPINNER. The neighbouring spreads stay mounted and loading, so a turn
  * has nothing to wait for, and the outgoing spread stays mounted through the
- * fade so there is no white flash between them.
+ * turn so there is no white flash between them.
  *
  * NOT A TRAP. Visible close, Escape unwinds one layer at a time, and turns use
  * replaceState rather than pushState: the URL is always shareable but the back
@@ -45,6 +55,11 @@ const PrintedCopyForm = dynamic(() => import("@/components/catalogue/PrintedCopy
 const MAX_SCALE = 3.2;
 const TAP_ZOOM = 2.2;
 const FADE_MS = 160;
+/** A page turn on a key, a button or a release: long enough to read as paper, short enough to keep up with the arrow keys. */
+const TURN_MS = 620;
+const TURN_EASE = "cubic-bezier(0.3, 0.05, 0.25, 1)";
+/** How far a finger has to carry the leaf (as a fraction of its width) before a release finishes the turn. */
+const TURN_COMMIT = 0.42;
 /** Spreads kept mounted either side of the current one. */
 const PRELOAD = 1;
 /**
@@ -91,6 +106,25 @@ type Props = {
 
 type View = { s: number; x: number; y: number };
 
+/**
+ * A leaf in the air. `from` and `to` index `views`; `dir` 1 turns forward
+ * (the right-hand leaf lifts), -1 back (the left-hand one). `angle` is the
+ * leaf's rotation about the spine, in degrees; `animating` means the angle is
+ * reached by transition rather than set by a finger; `outcome` says where a
+ * released leaf is heading. `start` and `end` are the angles the turn runs
+ * between (0 to -180 for a forward turn of a spread, 0 to -90 for a single page).
+ */
+type Turn = {
+  from: number;
+  to: number;
+  dir: 1 | -1;
+  start: number;
+  end: number;
+  angle: number;
+  animating: boolean;
+  outcome: "complete" | "cancel";
+};
+
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 
 /**
@@ -131,6 +165,8 @@ export default function CatalogueViewer({
   const [chromeBottom, setChromeBottom] = useState(CHROME_BOTTOM);
   const [compact, setCompact] = useState(false);
   const [short, setShort] = useState(false);
+  const [turn, setTurn] = useState<Turn | null>(null);
+  const [reducedMotion, setReducedMotion] = useState(false);
 
   const stageRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLElement>(null);
@@ -172,32 +208,118 @@ export default function CatalogueViewer({
     setVi(viewOf(pageRef.current));
   }, [viewOf]);
 
-  const goTo = useCallback(
-    (nextVi: number, direction = 1) => {
-      const n = clamp(nextVi, 0, views.length - 1);
-      setDir(direction);
+  /** Land on a view: the state, the page in hand, the zoom and the address bar. */
+  const settle = useCallback(
+    (n: number) => {
       setVi(n);
       const group = views[n] ?? [1];
       if (!group.includes(pageRef.current)) pageRef.current = group[0];
       setView({ s: 1, x: 0, y: 0 });
       const first = views[n]?.[0] ?? 1;
       if (typeof window !== "undefined") {
-        const url = first === 1 ? ideaBook.pagesHref : `${ideaBook.href}/${first}`;
+        const url = first === 1 ? ideaBook.href : `${ideaBook.href}/${first}`;
         window.history.replaceState(null, "", url + window.location.search);
       }
     },
     [views],
   );
+
+  // The turn in flight, readable from handlers without a stale closure.
+  const turnRef = useRef<Turn | null>(null);
+  turnRef.current = turn;
+  const turnTimer = useRef<number | null>(null);
+  /** A leaf under a finger: the width it is measured against, which way it turns, and whether it was picked up at all. */
+  const dragTurn = useRef<{ width: number; dir: 1 | -1; held: boolean } | null>(null);
+
+  /** The angles a turn runs between: a spread's leaf lays over, a single page lifts away (or lands). */
+  const turnAngles = useCallback(
+    (direction: 1 | -1): { start: number; end: number } => {
+      if (spreadMode) return direction > 0 ? { start: 0, end: -180 } : { start: 0, end: 180 };
+      return direction > 0 ? { start: 0, end: -90 } : { start: -90, end: 0 };
+    },
+    [spreadMode],
+  );
+
+  /** Where a turn ends up: the view it was heading for, or the one it left. */
+  const finishTurn = useCallback(() => {
+    const t = turnRef.current;
+    if (turnTimer.current) window.clearTimeout(turnTimer.current);
+    turnTimer.current = null;
+    if (!t) return;
+    if (t.outcome === "complete") settle(t.to);
+    setTurn(null);
+  }, [settle]);
+
+  /** Send a leaf the rest of the way (or back) by transition; finishTurn lands it. */
+  const releaseTurn = useCallback((outcome: Turn["outcome"]) => {
+    const t = turnRef.current;
+    if (!t) return;
+    const target = outcome === "complete" ? t.end : t.start;
+    setTurn({ ...t, outcome, animating: true, angle: target });
+    if (turnTimer.current) window.clearTimeout(turnTimer.current);
+    // transitionend is the usual landing; this is the floor under it (a tab
+    // in the background, or a leaf released at its target angle, fires none).
+    turnTimer.current = window.setTimeout(finishTurn, TURN_MS + 80);
+  }, [finishTurn]);
+
+  const goTo = useCallback(
+    (nextVi: number, direction = 1, animate = false) => {
+      const n = clamp(nextVi, 0, views.length - 1);
+      setDir(direction);
+      // A leaf in the air lands first, so a second press is never lost and
+      // never turns the leaf it is standing on.
+      if (turnRef.current) finishTurn();
+      const here = turnRef.current?.outcome === "complete" ? turnRef.current.to : vi;
+      if (!animate || reducedMotion || n === here || zoomed) {
+        settle(n);
+        return;
+      }
+      const d: 1 | -1 = n > here ? 1 : -1;
+      const { start, end } = turnAngles(d);
+      // Two renders: the leaf at its start angle with no transition, then
+      // (in the effect below) the end angle with one, so the browser has a
+      // frame to start from.
+      setView({ s: 1, x: 0, y: 0 });
+      setTurn({ from: here, to: n, dir: d, start, end, angle: start, animating: false, outcome: "complete" });
+    },
+    [views.length, vi, reducedMotion, zoomed, settle, finishTurn, turnAngles],
+  );
+  // The second render of an automatic turn: the leaf is on screen at its start
+  // angle, so now the transition to the end angle can begin.
+  useEffect(() => {
+    if (!turn || turn.animating || dragTurn.current) return;
+    const id = window.requestAnimationFrame(() => releaseTurn("complete"));
+    return () => window.cancelAnimationFrame(id);
+  }, [turn, releaseTurn]);
+  // A leaf never outlives the layout it was drawn for.
+  useEffect(() => {
+    if (turnRef.current) finishTurn();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [spreadMode]);
+  useEffect(() => () => { if (turnTimer.current) window.clearTimeout(turnTimer.current); }, []);
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => setReducedMotion(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
   const goToPage = useCallback(
-    (page: number) => {
+    (page: number, animate = false) => {
       const direction = page >= (pageRef.current ?? 1) ? 1 : -1;
       pageRef.current = page;
-      goTo(viewOf(page), direction);
+      goTo(viewOf(page), direction, animate);
     },
     [goTo, viewOf],
   );
-  const prev = useCallback(() => goTo(vi - 1, -1), [goTo, vi]);
-  const next = useCallback(() => goTo(vi + 1, 1), [goTo, vi]);
+  /** Where the reader is, counting a leaf about to land: a second press turns the next leaf, not the same one. */
+  const position = useCallback(() => {
+    const t = turnRef.current;
+    return t && t.outcome === "complete" ? t.to : vi;
+  }, [vi]);
+  const prev = useCallback(() => goTo(position() - 1, -1, true), [goTo, position]);
+  const next = useCallback(() => goTo(position() + 1, 1, true), [goTo, position]);
 
   // --- layout ------------------------------------------------------------
   useEffect(() => {
@@ -357,7 +479,32 @@ export default function CatalogueViewer({
     const dx = e.clientX - d.x;
     const dy = e.clientY - d.y;
     d.moved = Math.max(d.moved, Math.hypot(dx, dy));
-    if (d.view.s > 1.01) panBy(dx, dy, d.view);
+    if (d.view.s > 1.01) {
+      panBy(dx, dy, d.view);
+      return;
+    }
+    // Unzoomed, a sideways drag picks up a leaf and carries it. The leaf is
+    // chosen once, from the first clear sideways movement, and then follows
+    // the finger: its angle is the distance travelled over the leaf's width.
+    if (!dragTurn.current) {
+      if (reducedMotion || Math.abs(dx) < 12 || Math.abs(dx) < Math.abs(dy) * 1.2) return;
+      const direction: 1 | -1 = dx < 0 ? 1 : -1;
+      const here = position();
+      const target = here + direction;
+      dragTurn.current = { width: Math.max(1, pageCss ?? stageRef.current?.clientWidth ?? 1), dir: direction, held: false };
+      if (target < 0 || target >= views.length) return;
+      if (turnRef.current) finishTurn();
+      const { start, end } = turnAngles(direction);
+      dragTurn.current.held = true;
+      setView({ s: 1, x: 0, y: 0 });
+      setTurn({ from: here, to: target, dir: direction, start, end, angle: start, animating: false, outcome: "cancel" });
+      return;
+    }
+    const t = turnRef.current;
+    const h = dragTurn.current;
+    if (!t || !h.held) return;
+    const travel = clamp((-dx * h.dir) / h.width, 0, 1);
+    setTurn({ ...t, animating: false, angle: t.start + (t.end - t.start) * travel });
   };
 
   const onPointerUp = (e: React.PointerEvent) => {
@@ -372,6 +519,18 @@ export default function CatalogueViewer({
     const dx = e.clientX - d.x;
     const dy = e.clientY - d.y;
     const dt = Date.now() - d.t;
+
+    // A leaf under the finger lands where the release says: carried past the
+    // commit line or flicked, it finishes; otherwise it lies back down.
+    const h = dragTurn.current;
+    dragTurn.current = null;
+    if (h) {
+      if (!h.held) return;
+      const travel = clamp((-dx * h.dir) / h.width, 0, 1);
+      const flick = dt < 350 && Math.abs(dx) > 40;
+      releaseTurn(travel > TURN_COMMIT || flick ? "complete" : "cancel");
+      return;
+    }
 
     if (d.view.s <= 1.01) {
       if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.4 && dt < 800) {
@@ -432,11 +591,11 @@ export default function CatalogueViewer({
           break;
         case "Home":
           e.preventDefault();
-          goTo(0, -1);
+          goTo(0, -1, true);
           break;
         case "End":
           e.preventDefault();
-          goTo(views.length - 1, 1);
+          goTo(views.length - 1, 1, true);
           break;
         case "+":
         case "=":
@@ -492,15 +651,19 @@ export default function CatalogueViewer({
       const i = vi + d;
       if (i >= 0 && i < views.length) s.add(i);
     }
+    if (turn) {
+      s.add(turn.from);
+      s.add(turn.to);
+    }
     return s;
-  }, [vi, views.length]);
+  }, [vi, views.length, turn]);
 
   const onShare = async () => {
     const url = typeof window !== "undefined" ? window.location.href : `https://hubss.com${ideaBook.href}`;
     try {
       await navigator.share({
         title: ideaBook.title,
-        text: "Decorative Pavement Solutions, the HUB Surface Systems Product Book.",
+        text: `Decorative pavement solutions: the HUB Surface Systems ${ideaBook.short}.`,
         url,
       });
     } catch {
@@ -511,7 +674,7 @@ export default function CatalogueViewer({
   const submitJump = (e: React.FormEvent) => {
     e.preventDefault();
     const n = Number(jump);
-    if (Number.isInteger(n) && n >= 1 && n <= total) goToPage(n);
+    if (Number.isInteger(n) && n >= 1 && n <= total) goToPage(n, true);
     setJump("");
   };
 
@@ -554,45 +717,104 @@ export default function CatalogueViewer({
               transform: `translate3d(${view.x}px, ${view.y}px, 0) scale(${view.s})`,
               transition: drag.current || pinch.current ? "none" : "transform 220ms cubic-bezier(0.22,1,0.36,1)",
               willChange: "transform",
+              // The leaf turns in this space: a long lens, so the page keeps
+              // its shape and only its edge comes forward.
+              perspective: spreadMode ? "2600px" : "1600px",
+              perspectiveOrigin: "50% 50%",
             }}
           >
             {views.map((group, i) => {
               if (!mounted.has(i)) return null;
               const active = i === vi;
+              // In a turn the two spreads lie flat under the leaf, each
+              // showing the half the leaf is not covering (or covering).
+              const under = turn && (i === turn.from || i === turn.to) ? underClip(turn, i, spreadMode) : null;
+              const shown = under !== null || active;
               return (
                 <div
                   key={`v${i}-${group.join("-")}`}
-                  className="absolute inset-0 flex items-stretch justify-center"
+                  className="absolute inset-0 flex items-stretch"
                   style={{
-                    opacity: active ? 1 : 0,
+                    justifyContent: lonePageSide(group, spreadMode),
+                    opacity: shown ? 1 : 0,
                     // The whole spread moves as one object, because it is one.
-                    transform: active ? "translateX(0)" : `translateX(${dir > 0 ? 10 : -10}px)`,
-                    transition: `opacity ${FADE_MS}ms linear, transform ${FADE_MS}ms cubic-bezier(0.22,1,0.36,1)`,
+                    transform: shown ? "translateX(0)" : `translateX(${dir > 0 ? 10 : -10}px)`,
+                    transition: turn ? "none" : `opacity ${FADE_MS}ms linear, transform ${FADE_MS}ms cubic-bezier(0.22,1,0.36,1)`,
+                    clipPath: under ?? undefined,
+                    // The page in hand sits on top, so when a turn lands the
+                    // spread it left fades out underneath, never over it.
+                    zIndex: active ? 1 : 0,
                     pointerEvents: "none",
                   }}
                   aria-hidden={!active}
                 >
                   {group.map((n) => (
-                    // display: contents, so the <img> lays out exactly as it
-                    // did before it had a <picture> around it.
-                    <picture key={n} style={{ display: "contents" }}>
-                      <source media={PHONE_MQ} srcSet={cataloguePageUrl(n, active && zoomed ? maxWidth : widths[0])} />
-                      <img
-                        src={cataloguePageUrl(n, widths[0])}
-                        srcSet={cataloguePageSrcSet(n)}
-                        sizes={sizesFor(active)}
-                        alt={pages[n - 1]?.alt ?? `${ideaBook.short}, page ${n}`}
-                        width={maxWidth}
-                        height={Math.round(maxWidth / aspect)}
-                        draggable={false}
-                        fetchPriority={active ? "high" : "low"}
-                        className="h-full w-auto max-w-none object-contain"
-                      />
-                    </picture>
+                    <PageImage key={n} n={n} active={active} zoomed={zoomed} widths={widths} maxWidth={maxWidth} aspect={aspect} sizes={sizesFor(active)} alt={pages[n - 1]?.alt ?? `${ideaBook.short}, page ${n}`} className="h-full w-auto max-w-none object-contain" />
                   ))}
                 </div>
               );
             })}
+
+            {/* The leaf: the page being turned, on a hinge at the spine. In a
+                spread its back is the page that lands; a single page has no
+                back, it lifts away to the edge and the next page is beneath. */}
+            {turn && (() => {
+              const fromGroup = views[turn.from] ?? [];
+              const toGroup = views[turn.to] ?? [];
+              const forward = turn.dir > 0;
+              // Which page is on the leaf's front and back.
+              const front = spreadMode
+                ? forward ? fromGroup[fromGroup.length - 1] : fromGroup[0]
+                : forward ? fromGroup[0] : toGroup[0];
+              const back = spreadMode ? (forward ? toGroup[0] : toGroup[toGroup.length - 1]) : undefined;
+              if (!front) return null;
+              const onSpread = spreadMode;
+              // Shade: the face that is lifting darkens toward the spine as
+              // it stands up, the face that is landing lightens. Under a
+              // finger the shade follows the angle; in a transition the
+              // overlays run their own linear fade over the same time (the
+              // angle is already at its target then), which reads the same.
+              const progress = turn.start === turn.end ? 0 : Math.abs((turn.angle - turn.start) / (turn.end - turn.start));
+              const lift = Math.sin(Math.PI * progress);
+              const frontShade = turn.animating ? 0.6 * progress : 0.6 * lift;
+              const backShade = turn.animating ? 0.6 * (1 - progress) : 0.6 * lift;
+              const shadeTransition = turn.animating ? `opacity ${TURN_MS}ms linear` : "none";
+              // A finger carries the leaf; a key sends it. No filter here:
+              // a filter flattens the 3D context and the back face would
+              // draw mirrored over the front.
+              const face: React.CSSProperties = { backfaceVisibility: "hidden", background: "#000", boxShadow: "0 0 28px rgba(0,0,0,0.45)" };
+              return (
+                <div
+                  className="absolute inset-y-0"
+                  style={{
+                    left: onSpread && forward ? "50%" : 0,
+                    width: onSpread ? "50%" : "100%",
+                    transformOrigin: onSpread ? (forward ? "left center" : "right center") : "left center",
+                    transformStyle: "preserve-3d",
+                    transform: `rotateY(${turn.angle}deg)`,
+                    transition: turn.animating ? `transform ${TURN_MS}ms ${TURN_EASE}` : "none",
+                    willChange: "transform",
+                    pointerEvents: "none",
+                    zIndex: 2,
+                  }}
+                  onTransitionEnd={(e) => {
+                    if (e.target === e.currentTarget && e.propertyName === "transform") finishTurn();
+                  }}
+                  aria-hidden
+                >
+                  <div className="absolute inset-0 flex items-stretch" style={{ ...face, justifyContent: onSpread ? (forward ? "flex-start" : "flex-end") : "center" }}>
+                    <PageImage n={front} active={false} zoomed={false} widths={widths} maxWidth={maxWidth} aspect={aspect} sizes={sizesFor(false)} alt="" className="h-full w-auto max-w-none object-contain" />
+                    <div className="absolute inset-0" style={{ opacity: frontShade, transition: shadeTransition, background: `linear-gradient(to ${forward ? "left" : "right"}, rgba(0,0,0,0) 35%, rgba(0,0,0,1) 100%)` }} />
+                  </div>
+                  {back && (
+                    <div className="absolute inset-0 flex items-stretch" style={{ ...face, transform: "rotateY(180deg)", justifyContent: forward ? "flex-end" : "flex-start" }}>
+                      <PageImage n={back} active={false} zoomed={false} widths={widths} maxWidth={maxWidth} aspect={aspect} sizes={sizesFor(false)} alt="" className="h-full w-auto max-w-none object-contain" />
+                      <div className="absolute inset-0" style={{ opacity: backShade, transition: shadeTransition, background: `linear-gradient(to ${forward ? "right" : "left"}, rgba(0,0,0,0) 35%, rgba(0,0,0,1) 100%)` }} />
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
           </div>
         </div>
       </div>
@@ -634,7 +856,7 @@ export default function CatalogueViewer({
             // the bar and the icon stay where they were.
             className="-my-[7px] inline-flex min-h-[44px] min-w-[44px] flex-shrink-0 items-center justify-center gap-2 rounded-full px-2.5 py-2 text-[11px] font-semibold uppercase tracking-[0.16em] transition-colors hover:bg-white/10 max-sm:-mx-[5px]"
             style={{ color: "rgba(255,255,255,0.78)" }}
-            aria-label="Close the Product Book"
+            aria-label={`Close the ${ideaBook.short}`}
           >
             <CloseIcon />
             <span className="hidden sm:inline">Close</span>
@@ -784,7 +1006,7 @@ export default function CatalogueViewer({
               Book a free Lunch &amp; Learn
             </Link>
             <p className="hidden text-[11px] sm:block" style={{ color: "rgba(255,255,255,0.38)" }}>
-              Swipe or use <kbd style={kbd}>&larr;</kbd> <kbd style={kbd}>&rarr;</kbd> to turn &nbsp;·&nbsp; scroll or double-tap to zoom
+              Drag a page or use <kbd style={kbd}>&larr;</kbd> <kbd style={kbd}>&rarr;</kbd> to turn &nbsp;·&nbsp; scroll or double-tap to zoom
             </p>
           </div>
 
@@ -793,7 +1015,7 @@ export default function CatalogueViewer({
               the cover with no sign of how to turn it. */}
           {!short && (
             <p className="mt-2 text-center text-[11px] sm:hidden" style={{ color: "rgba(255,255,255,0.45)" }}>
-              Swipe to turn &nbsp;·&nbsp; double-tap to zoom
+              Drag a page to turn &nbsp;·&nbsp; double-tap to zoom
             </p>
           )}
         </div>
@@ -810,7 +1032,7 @@ export default function CatalogueViewer({
           <div
             role="dialog"
             aria-modal="true"
-            aria-label="Request a printed copy of the Product Book"
+            aria-label={`Request a printed copy of the ${ideaBook.short}`}
             className="mx-auto my-8 w-[min(680px,calc(100vw-2rem))] rounded-2xl p-6 sm:p-8"
             style={{ background: "var(--bg-primary)", border: "1px solid var(--border-color)" }}
           >
@@ -879,6 +1101,82 @@ export default function CatalogueViewer({
         .catalogue-scrub:focus-visible::-webkit-slider-thumb { outline: 2px solid #fff; outline-offset: 2px; }
       `}</style>
     </main>
+  );
+}
+
+/**
+ * Where a lone page sits in spread mode: a right-hand page (odd, the cover)
+ * on the right, a left-hand page (even, the back cover) on the left, as in the
+ * bound book; a pair fills the stage; a single-page stage centres.
+ */
+function lonePageSide(group: number[], spreadMode: boolean): "center" | "flex-start" | "flex-end" {
+  if (!spreadMode || group.length !== 1) return "center";
+  return group[0] % 2 === 1 ? "flex-end" : "flex-start";
+}
+
+/**
+ * During a turn, the half of a spread that lies flat under the leaf. Forward:
+ * the spread being left keeps its left page, the one arriving shows its right
+ * page under the lifting leaf. Back: the mirror. A single page in a forward
+ * turn is the arriving page, whole; in a back turn the page being left, whole
+ * (the previous page comes down over it).
+ */
+function underClip(turn: Turn, i: number, spreadMode: boolean): string | null {
+  const forward = turn.dir > 0;
+  const whole = "none";
+  const hidden = "inset(0 0 100% 0)";
+  if (!spreadMode) {
+    if (i === turn.to) return forward ? whole : hidden;
+    if (i === turn.from) return forward ? hidden : whole;
+    return null;
+  }
+  const left = "inset(0 50% 0 0)";
+  const right = "inset(0 0 0 50%)";
+  if (i === turn.from) return forward ? left : right;
+  if (i === turn.to) return forward ? right : left;
+  return null;
+}
+
+/**
+ * One printed page. display: contents on the <picture>, so the <img> lays
+ * out exactly as it did before it had a <picture> around it.
+ */
+function PageImage({
+  n,
+  active,
+  zoomed,
+  widths,
+  maxWidth,
+  aspect,
+  sizes,
+  alt,
+  className,
+}: {
+  n: number;
+  active: boolean;
+  zoomed: boolean;
+  widths: number[];
+  maxWidth: number;
+  aspect: number;
+  sizes: string;
+  alt: string;
+  className: string;
+}) {
+  return (
+    <picture style={{ display: "contents" }}>
+      <source media={PHONE_MQ} srcSet={cataloguePageUrl(n, active && zoomed ? maxWidth : widths[0])} />
+      <img
+        src={cataloguePageUrl(n, widths[0])}
+        srcSet={cataloguePageSrcSet(n)}
+        sizes={sizes}
+        alt={alt}
+        width={maxWidth}
+        height={Math.round(maxWidth / aspect)}
+        draggable={false}
+        fetchPriority={active ? "high" : "low"}
+        className={className}
+      />
+    </picture>
   );
 }
 

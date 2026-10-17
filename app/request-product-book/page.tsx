@@ -6,8 +6,8 @@ import { buildMetadata } from "@/lib/seo";
 import { catalogue, catalogueReady, cataloguePageUrl, ideaBook } from "@/lib/catalogue";
 
 export const metadata = buildMetadata({
-  title: `Request a Printed ${ideaBook.short}`,
-  description: `Have ${ideaBook.title} mailed to your office: every HUB Surface Systems system, application and specification in one book.`,
+  title: `Request a printed ${ideaBook.short}`,
+  description: `Have the ${ideaBook.short} (${ideaBook.volume}) mailed to your office: every HUB Surface Systems system, application and specification in one book.`,
   slug: "request-product-book",
 });
 

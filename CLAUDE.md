@@ -147,19 +147,20 @@ npm run start   # run production locally
 ## Deploy
 Vercel — connected to GitHub, auto-deploys on push to main
 
-## Names (Doug's rounds, 25 Sep and 14 Oct 2026)
-- The printed book is the **Product Book** on the site ("The HUB Product Book ·
-  Volume 5"): "catalogue" until 25 Sep 2026, the "Idea Book" until 14 Oct
-  (Doug: "change the name of the Idea Book to Product Book"). Never
-  "catalogue" or "Idea Book" now (Studio warns on both, lib/style-lint.ts),
-  and no page count is printed anywhere. The book's home is /product-book
-  (the digital edition, below), the printed reader /product-book/pages and
-  /product-book/<n>, the form /request-product-book; every /catalogue and
-  /idea-book address 308s straight to its new one (next.config.ts). One
-  source for the name: `ideaBook` in lib/catalogue.ts. Code identifiers
+## Names (Doug's rounds, 25 Sep, 14 Oct and 17 Oct 2026)
+- The printed book is the **Product Portfolio Book** on the site ("Product
+  Portfolio Book · Volume 5", Doug's words, 17 Oct 2026): "catalogue" until
+  25 Sep 2026, the "Idea Book" until 14 Oct, the "Product Book" until 17 Oct.
+  Never "catalogue", "Idea Book" or "Product Book" now (Studio warns on all
+  three, lib/style-lint.ts), and no page count is printed anywhere. The
+  book's home is /product-book: the printed book page by page with a page
+  turn (the reader, below), /product-book/<n> for any other page, the form
+  /request-product-book; every /catalogue, /idea-book and /product-book/pages
+  address 308s straight to its current one (next.config.ts). One source for
+  the name: `ideaBook` in lib/catalogue.ts. Code identifiers and routes
   (`ideaBook`, lib/idea-book-*.ts, components/idea-book, IdeaBookBand,
-  showCatalogue, /public/catalogue, `test:idea-book`) keep the old words on
-  purpose.
+  showCatalogue, /public/catalogue, `test:idea-book`, /product-book) keep
+  the old words on purpose: labels change, URLs stay.
 - The blog is **Insights** (was Field Notes). Labels only: /blog URLs, the
   Sanity types (blogPost, storyIdea), the cron routes and env names are
   unchanged. The "Blog" post type prints as "Article" (lib/field-notes-taxonomy.ts,
@@ -206,7 +207,9 @@ Then, on Vern's answers:
   counts them (Vern: "yes 10 systems"): the six cards plus PreMark,
   DuraShield, DuraTherm and StreetBondSR named under them (AirMark, not one
   of the book's ten, left that line). Studio holds the heading: the clean-up
-  script below writes it; lib/homepage-copy.ts is the fallback.
+  script below writes it; lib/homepage-copy.ts is the fallback. Since 17 Oct
+  2026 the second phrase is Doug's "endless job types."
+  (scripts/studio-cleanup-2026-10-17.ts, same pattern, dry run by default).
 - The homepage map's project cards lead to projects, never the Product Book
   (Vern: "map should go to projects, not the booklet"): the write-up, or
   "More projects" (/blog/projects) for the 40 jobs without one
@@ -258,10 +261,34 @@ about 40% below the WordPress site's.
   it On would challenge non-browser clients, including the Sanity webhook
   (/api/revalidate): it needs a bypass for /api first; Log mode first.
 
-## The Product Book edition (14 Oct 2026)
+## The Product Portfolio Book reader (17 Oct 2026)
+Doug, 17 Oct 2026: "not happy with the virtual long scroll version of the
+Product Booklet, he likes the virtual print version better, so let's revert
+to that ... if we can add a better page flip animation that's smooth we can
+do that too." So /product-book is the printed book again, page by page
+(app/product-book/CatalogueViewer.tsx), with a page turn: one leaf, the page
+being left, lifts from its free edge about the spine (rotateY, perspective
+on the stage) and lays down with the next page on its back, 620 ms on a key
+or a button; under a finger it follows the drag and finishes on release
+(past 42% of the leaf's width, or a flick). On a phone (one page at a time)
+the leaf lifts away to 90 degrees and the next page is beneath. In spread
+mode a lone page sits on its own side (the cover right, the back cover
+left), as in the bound book. The scrubber and prefers-reduced-motion keep
+the 160 ms cross-fade. No filter on the leaf: a filter flattens the 3D
+context and the back face would draw mirrored over the front.
+- The long-scroll edition is parked, unlisted, at /product-book/edition
+  (noindex, no sitemap entry, nothing links to it; app/product-book/edition/page.tsx)
+  so it can come back on a word; delete the folder when it is not wanted.
+  Its data and components are below. `npm run test:idea-book` still covers
+  them. The launch article drafted for it (content/drafts/product-book-online.md)
+  was rewritten for the reader the same day; any Studio draft made from the
+  old wording must not be published.
+
+## The Product Book edition (14 Oct 2026, parked 17 Oct)
 Vern: "a mobile / virtual desktop version of the idea book that's not just a
 square PDF ... same content in booklet, better display for mobile and desktop
-experience. Doug's dream." /product-book is that edition: one leaf per printed
+experience. Doug's dream." /product-book/edition is that edition (it held
+/product-book from 14 to 17 Oct): one leaf per printed
 spread, 75 leaves for the 144 pages, laid out for the screen (a phone stacks,
 a laptop puts the photograph beside the page). Reading is plain scrolling
 (no snapping since 16 Oct 2026: Vern found it jumpy), ← and → turn leaves, C

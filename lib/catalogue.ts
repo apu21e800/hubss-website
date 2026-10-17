@@ -54,13 +54,16 @@ export const catalogueTotal = typeof raw.total === "number" ? raw.total : 0;
 /**
  * What the book is called on the site, in one place.
  *
- * Doug's word: "Idea Book" from 25 Sep 2026, "Product Book" since 14 Oct 2026
- * ("change the name of the Idea Book to Product Book"). Never "catalogue":
- * the book's cover reads "HUB Surface Systems · Decorative Pavement Solutions
- * · Volume 5". Every user-facing surface - the reader, the
- * request page, the Resources row, the homepage band, search, metadata - takes
- * its name from here so the word cannot drift again. Code identifiers keep the
- * old name on purpose; renaming files and flags buys nothing a visitor sees.
+ * Doug's word: "Idea Book" from 25 Sep 2026, "Product Book" from 14 Oct 2026
+ * ("change the name of the Idea Book to Product Book"), and "Product
+ * Portfolio Book · Volume 5" since 17 Oct 2026 ("Call the virtual print
+ * booklet 'Product Portfolio Book · Volume 5'"). Never "catalogue": the
+ * book's cover reads "HUB Surface Systems · Decorative Pavement Solutions ·
+ * Volume 5". Every user-facing surface - the reader, the request page, the
+ * Resources row, the homepage band and hero callout, search, metadata, the AI
+ * writers' prompts - takes its name from here so the word cannot drift again.
+ * Code identifiers and routes keep the old names on purpose; renaming files,
+ * flags and addresses buys nothing a visitor sees (labels change, URLs stay).
  *
  * The volume number is printed on the cover (page 2's text layer reads
  * "Volume 5") and is not derivable from the PDF's filename, so it is typed here
@@ -68,16 +71,25 @@ export const catalogueTotal = typeof raw.total === "number" ? raw.total : 0;
  * for none anywhere.
  */
 export const ideaBook = {
-  /** Short form, for buttons and links: "Product Book". */
-  short: "Product Book",
-  /** Full title, for headings and metadata: "The HUB Product Book · Volume 5". */
-  title: "The HUB Product Book · Volume 5",
+  /** Short form, for buttons, links and running text: "Product Portfolio Book". */
+  short: "Product Portfolio Book",
+  /** Full title, for headings and metadata: "Product Portfolio Book · Volume 5", Doug's words exactly. */
+  title: "Product Portfolio Book · Volume 5",
   /** The printed volume, as the cover says it. */
   volume: "Volume 5",
-  /** The book's route: the digital edition (app/product-book/page.tsx, since 14 Oct 2026). */
+  /**
+   * The book's home: the printed book, page by page, open at page one, with
+   * a page turn (app/product-book/page.tsx, CatalogueViewer). Doug, 17 Oct
+   * 2026: "he likes the virtual print version better, so let's revert to
+   * that". /product-book/<n> opens any other page.
+   */
   href: "/product-book",
-  /** The page-by-page reader of the printed book, open at page one; /product-book/<n> for any other page. */
-  pagesHref: "/product-book/pages",
+  /**
+   * The long-scroll digital edition of 14 Oct 2026, parked unlisted: not
+   * linked, not in the sitemap, noindex (app/product-book/edition/page.tsx).
+   * Kept so it can come back on a word; nothing was deleted.
+   */
+  editionHref: "/product-book/edition",
   /** The printed-copy form's route. */
   requestHref: "/request-product-book",
   /**
@@ -85,7 +97,7 @@ export const ideaBook = {
    * 15 MB through the bundle pipeline buys nothing), so the download link
    * renames it on the way out.
    */
-  fileName: `HUB-Product-Book-${raw.edition ?? "edition"}.pdf`,
+  fileName: `HUB-Product-Portfolio-Book-${raw.edition ?? "edition"}.pdf`,
 } as const;
 
 /** Has anything been rendered? Gates the reader's empty state. */

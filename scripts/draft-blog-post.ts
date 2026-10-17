@@ -72,7 +72,7 @@ const doc = {
   keywords: Array.isArray(data.keywords) ? data.keywords.slice(0, 6) : [],
   editorNotes: [
     `Written by Claude on ${new Date().toISOString().slice(0, 10)} from ${file}. Not on the site until someone presses Publish.`,
-    "Every statement is from the Product Book edition or the site's own pages; the links are the site's.",
+    "Every statement is from the Product Portfolio Book or the site's own pages; the links are the site's.",
     "Publishing dates it that day, and the next morning's social run drafts its posts in Buffer for approval.",
   ].join("\n"),
 };

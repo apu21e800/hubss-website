@@ -27,7 +27,7 @@ export default defineType({
       name: "source",
       title: "Stream",
       type: "string",
-      description: "Article (a new blog post), From the field (a Job photos post) or From the library (a documented job or a Product Book spread).",
+      description: "Article (a new blog post), From the field (a Job photos post) or From the library (a documented job or a Product Portfolio Book spread).",
     }),
     defineField({
       name: "styleCheck",

@@ -161,7 +161,7 @@ async function notify(
     "",
     check.unsupported.length
       ? `Fact check: ${check.unsupported.length} statement(s) to check before publishing. They're listed in the draft's "Notes for the editor".`
-      : "Fact check: every statement about HUB matches the Product Book.",
+      : "Fact check: every statement about HUB matches the Product Portfolio Book.",
     style.left.length
       ? `Style check: ${style.left.length} sentence(s) still have an em dash or another machine tell. They're listed in the notes and marked in yellow in Studio.`
       : "Style check: no em dashes or machine tells.",
@@ -206,8 +206,8 @@ export function buildDraftDocument(idea: Idea, draft: Draft, check: FactCheck, s
     `Drafted by Claude on ${today} from the plan item "${idea.title}". Not on the site until someone presses Publish.`,
     "",
     check.unsupported.length
-      ? `FACT CHECK: ${check.unsupported.length} statement(s) the HUB Product Book doesn't back up. Fix or remove them before publishing:`
-      : "FACT CHECK: every statement about HUB matches the Product Book and the brief.",
+      ? `FACT CHECK: ${check.unsupported.length} statement(s) the HUB Product Portfolio Book doesn't back up. Fix or remove them before publishing:`
+      : "FACT CHECK: every statement about HUB matches the Product Portfolio Book and the brief.",
     ...check.unsupported.map((u) => `- "${u.quote}": ${u.reason}`),
     "",
     ...(style ? [...styleReport(style, "before publishing (Studio marks them in yellow too)"), ""] : []),

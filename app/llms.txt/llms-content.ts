@@ -95,7 +95,7 @@ function tail(d: Data): string[] {
     ...(catalogueReady
       ? [`- [${ideaBook.title}](${url(ideaBook.href)}): Every HUB system, application and specification in one book, to read online.`]
       : []),
-    `- [Request a printed ${ideaBook.short}](${url(ideaBook.requestHref)}): Have ${ideaBook.title} mailed to your office.`,
+    `- [Request a printed ${ideaBook.short}](${url(ideaBook.requestHref)}): Have the ${ideaBook.short} mailed to your office.`,
     `- [Lunch & Learn](${url("/lunch-learn")}): Book a free Lunch & Learn: HUB brings lunch and material samples to your office, in person or virtual.`,
     ...PRODUCT_CATEGORIES.flatMap((f) =>
       f.secondary ? [`- [${f.secondary.label}](${url(f.secondary.href)}): ${f.secondary.menuLine ?? f.secondary.label}.`] : []

@@ -13,7 +13,9 @@ it in Buffer.
 **queue** instead of its drafts, and Buffer posts them at the next free slots
 unless someone deletes them there first. The emails then say "queued" and
 link to the queue. Anything else, or the variable unset, means drafts for
-approval, as before. Only Vern turns it (`lib/buffer.ts`, `socialAutoQueue`).
+approval, as before. A post whose copy the style pass couldn't fully fix (an
+em dash left, a machine tell) waits as a draft even with the switch on, and
+its email says so. Only Vern turns it (`lib/buffer.ts`, `socialAutoQueue`).
 
 **Job photos with a story (19 Oct 2026):** a Job photos post whose **The
 story** field is filled in is not drafted by the field stream below. It becomes

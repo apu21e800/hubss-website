@@ -627,13 +627,17 @@ own and emailing BLOG_DRAFT_NOTIFY through lib/editor-mail.ts):
   it goes live and how to hold it (switch "Goes live by itself" off). A
   draft either check fails (an unsupported statement, an em dash left) is
   saved held instead (`scheduled: false`, the time kept; readyToGo): nothing
-  unchecked goes live by itself.
+  unchecked goes live by itself. Every draft is created held and switched on
+  only after the editors' email went (a draft nobody knows about never goes
+  live by itself); a `projectClaim-<fieldPostId>` document (10-minute
+  staleness) stops two runs writing two articles.
   One article per run, only with 150 s of the route left (it runs last).
 - publishDueDrafts (first in the run): every `drafts.*` blogPost with
   `scheduled == true` and `scheduledFor` within ten minutes of now
-  becomes the live document in one transaction (toPublished: dated that
-  moment, scheduled false, scheduledFor gone, a note line), the webhook
-  rebuilds the site, the editors get the address. A draft with no title or
+  becomes the live document in one transaction (toPublished: a first publish
+  dated that moment, a scheduled edit keeping the live post's date, scheduled
+  false, scheduledFor gone, a note line), the webhook rebuilds the site, the
+  editors get the address. A draft with no title or
   slug, or a slug a live post has, is left and reported.
 - A field post with a story makes no social post of its own
   (lib/social-pipeline.ts, `hasStory`): the article's posts carry the job the
@@ -642,7 +646,9 @@ own and emailing BLOG_DRAFT_NOTIFY through lib/editor-mail.ts):
   published by the run.
 - lib/buffer.ts `socialAutoQueue()`: `SOCIAL_AUTO_QUEUE=on` queues posts in
   Buffer (posted at the next slot unless deleted) instead of drafts for
-  approval; unset means drafts. Only Vern sets it; the emails say which.
+  approval; unset means drafts. Copy the style pass couldn't fix always
+  waits as a draft, switch or no switch (`queued` on the result). Only Vern
+  sets it; the emails say which.
 - blogPost gained `scheduled` ("Goes live by itself", boolean), `scheduledFor`
   (hidden unless scheduled) and `fieldPost`; fieldPost gained `writeUp` and
   `article`. `npm run test:project-posts` (CI) covers scheduleSlot,

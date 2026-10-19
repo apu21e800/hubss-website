@@ -128,6 +128,12 @@ export interface SocialResult {
   skipped: ChannelSkip[];
   /** The style pass on the copy: "clean", or the sentences to fix in Buffer. */
   styleCheck: string;
+  /**
+   * The posts went into Buffer's queue (SOCIAL_AUTO_QUEUE=on and the copy
+   * clean) rather than its drafts. Copy the style pass couldn't fix always
+   * waits as a draft, whatever the switch says.
+   */
+  queued: boolean;
   /** See lib/social-outcome.ts. Only "retry" leaves the item to the next run. */
   outcome: Outcome;
   /** Studio's record of the item couldn't be written: what that means, for the email. */
@@ -152,9 +158,12 @@ interface FieldDoc {
   photo?: string | null;
   alt?: string | null;
   hotspot?: { x: number; y: number } | null;
-  /** The story is filled in: the post becomes an article (lib/project-posts.ts), not a post of its own. */
-  hasStory?: boolean | null;
+  /** The story, when filled in: the post becomes an article (lib/project-posts.ts), not a post of its own. */
+  writeUp?: string | null;
 }
+
+/** The same test as lib/project-posts.ts: a story of spaces is no story. */
+const hasStory = (d: FieldDoc) => !!d.writeUp?.trim();
 
 function fieldItem(doc: FieldDoc): SocialItem | null {
   const system = doc.system;
@@ -235,7 +244,7 @@ export async function draftSocialForNewPosts(now = new Date(), opts: { deadline?
         "photo": photos[0].asset->url,
         "alt": photos[0].alt,
         "hotspot": photos[0].hotspot{ x, y },
-        "hasStory": defined(writeUp) && writeUp != ""
+        writeUp
       }`
     ),
     // The newest job post (library or field): one a week (libraryDue). A log
@@ -261,7 +270,7 @@ export async function draftSocialForNewPosts(now = new Date(), opts: { deadline?
   // day's field slot for ever. One with its story filled in is not this
   // stream's: its article carries the job (lib/project-posts.ts).
   const fields = failedLast(
-    fieldDocs.filter((d) => !logged.has(`field:${d._id}`) && !d.hasStory).flatMap((d) => {
+    fieldDocs.filter((d) => !logged.has(`field:${d._id}`) && !hasStory(d)).flatMap((d) => {
       const item = fieldItem(d);
       if (!item) console.warn(`[social] field:${d._id}: no note, photo or system; skipped until it has them`);
       return item ? [item] : [];
@@ -347,6 +356,9 @@ async function draftItem(
   };
   const written = await writeSocialCopy(item.source, links);
   const { copy, style } = await polishSocialCopy(written);
+  // Queued only when the switch is on AND nothing is left for a person to
+  // fix: an em dash the rewrite couldn't take out never posts by itself.
+  const queued = socialAutoQueue() && style.left.length === 0;
 
   const result: SocialResult = {
     slug: item.key,
@@ -355,6 +367,7 @@ async function draftItem(
     drafted: [],
     skipped: [],
     styleCheck: styleReport(style, "in Buffer before approving").join("\n"),
+    queued,
     outcome: "retry",
   };
 
@@ -403,7 +416,7 @@ async function draftItem(
       if (rule.copy === "short") text = text.replace(links.short, utmLink(item, rule.utm));
       const imageUrl = imageFor(item.image, rule.image, item.imageHotspot);
       if (rule.needsImage && !imageUrl) { result.skipped.push({ service, channel: label, why: "Instagram needs a photo and this has none", kind: "lasting" }); continue; }
-      const id = await createBufferDraft({ channelId: ch.id, text, imageUrl, imageAlt: item.imageAlt ?? item.title, metadata: rule.metadata });
+      const id = await createBufferDraft({ channelId: ch.id, text, imageUrl, imageAlt: item.imageAlt ?? item.title, metadata: rule.metadata, draft: !queued });
       drafts.push({ _key: ch.id, _type: "bufferDraft", service, channel: label, bufferPostId: id });
       result.drafted.push({ service, channel: label });
     } catch (err) {
@@ -496,15 +509,19 @@ async function notify(r: SocialResult) {
   const what = describe(r);
 
   if (r.outcome === "drafted") {
-    // Queued (SOCIAL_AUTO_QUEUE=on): Buffer posts them at the next free slots
-    // unless someone deletes them there first. Otherwise they wait as drafts.
-    const queued = socialAutoQueue();
+    // Queued (SOCIAL_AUTO_QUEUE=on, copy clean): Buffer posts them at the next
+    // free slots unless someone deletes them there first. Otherwise they wait
+    // as drafts, and the email says why when the switch is on.
+    const queued = r.queued;
+    const heldForStyle = !queued && socialAutoQueue();
     await emailEditors(
       queued ? `Social posts queued in Buffer: ${r.title}${tag}` : `Social drafts ready in Buffer: ${r.title}${tag}`,
       [
         queued
-          ? `Social posts for ${what} are in Buffer's queue and go out at the next free slots (Tuesday, Wednesday and Thursday at 11:00 Toronto time), one slot each, unless you delete them in Buffer first.`
-          : `Social drafts for ${what} are waiting in Buffer. Nothing posts until you approve and schedule them.`,
+          ? `Social posts for ${what} are in Buffer's queue and go out at the next free slots in each channel's schedule (Tuesday, Wednesday and Thursday at 11:00 Toronto time, as set), one slot each, unless you delete them in Buffer first.`
+          : heldForStyle
+            ? `Social drafts for ${what} are waiting in Buffer, not queued: the style check below found something to fix first. Nothing posts until you fix and approve them.`
+            : `Social drafts for ${what} are waiting in Buffer. Nothing posts until you approve and schedule them.`,
         "",
         `${queued ? "Queued" : "Drafted"}: ${channelList(r.drafted)}`,
         ...(r.skipped.length ? ["", "Skipped:", ...skippedLines] : []),

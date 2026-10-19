@@ -110,7 +110,7 @@ check("is an unpublished draft, scheduled, filed under Projects", () => {
   assert.equal(doc._id, "drafts.blogpost-osoyoos-lakeside-park-path");
   assert.equal(doc.scheduled, true);
   assert.equal(doc.scheduledFor, slot);
-  assert.equal(doc.publishedAt, slot);
+  assert.equal(doc.publishedAt, "2026-10-19T14:01:00.000Z", "dated the day it was written, not the slot (a hand publish before the day must not print a future date)");
   assert.equal(doc.category, PROJECT_TYPE);
   assert.equal(doc.category, "Project Profile");
 });
@@ -197,6 +197,12 @@ check("keeps the words, the photos and the link to the post", () => {
   assert.deepEqual(live.fieldPost, doc.fieldPost);
 });
 check("says in the notes that the run published it", () => assert.match(live.editorNotes, /^Published by the daily run on Wednesday 21 October at 10:00 Toronto time\./));
+check("a scheduled edit to a live post keeps the post's date", () => {
+  const edit = toPublished({ ...doc, _rev: "r2" }, now, "2024-06-03T13:00:00.000Z");
+  assert.equal(edit.publishedAt, "2024-06-03T13:00:00.000Z");
+  assert.equal(edit.scheduled, false);
+  assert.match(edit.editorNotes, /^Edit published by the daily run/);
+});
 
 console.log(failures ? `\n${failures} failing` : "\nall passing");
 process.exit(failures ? 1 : 0);

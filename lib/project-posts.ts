@@ -36,6 +36,7 @@ import { writeDraft, checkDraft, polishDraft, styleReport, type Draft, type Fact
 import { markdownToPortableText } from "@/lib/markdown-to-portable-text";
 import { emailEditors } from "@/lib/editor-mail";
 import { SITE } from "@/lib/social-library";
+import { isConflict } from "@/lib/social-outcome";
 
 export const TORONTO = "America/Toronto";
 /** The daily run's hour (vercel.json, social-drafts): the time a scheduled article goes live. */
@@ -239,7 +240,10 @@ export function buildProjectDocument(doc: ProjectSource, draft: Draft, check: Fa
     title,
     slug: { _type: "slug", current: slug },
     category: PROJECT_TYPE,
-    publishedAt: slot,
+    // Today, not the slot: a draft published by hand before its day would
+    // otherwise print a date in the future (datedPublish leaves one alone).
+    // The run re-dates it the moment it goes.
+    publishedAt: today.toISOString(),
     scheduled: ready,
     scheduledFor: slot,
     excerpt: draft.excerpt.trim(),
@@ -284,16 +288,19 @@ export interface LiveDocument {
 }
 
 /**
- * The live document a scheduled draft becomes: the same words, dated this
- * moment (as Studio's Publish dates a first publish, sanity.config.ts), no
- * longer set to go by itself, and a line in the notes saying so.
+ * The live document a scheduled draft becomes: the same words, no longer
+ * set to go by itself, and a line in the notes saying so. A first publish
+ * is dated this moment (as Studio's Publish dates one, sanity.config.ts); a
+ * scheduled edit to a live post keeps the post's date (`liveDate`), so a
+ * correction to an old profile doesn't make it the newest post and doesn't
+ * send it round social again.
  */
-export function toPublished(draft: ScheduledDraft, now: Date): LiveDocument {
+export function toPublished(draft: ScheduledDraft, now: Date, liveDate?: string | null): LiveDocument {
   const { _rev: _r, _createdAt: _c, _updatedAt: _u, scheduledFor: _s, scheduled: _st, publishedAt: _p, editorNotes, ...rest } = draft;
   void _r; void _c; void _u; void _s; void _st; void _p;
   const when = torontoWhen(now.toISOString());
-  const notes = [`Published by the daily run on ${when}.`, editorNotes?.trim() ?? ""].filter(Boolean).join("\n\n");
-  return { ...rest, _id: draft._id.replace(/^drafts\./, ""), scheduled: false, publishedAt: now.toISOString(), editorNotes: notes };
+  const notes = [`${liveDate ? "Edit published" : "Published"} by the daily run on ${when}.`, editorNotes?.trim() ?? ""].filter(Boolean).join("\n\n");
+  return { ...rest, _id: draft._id.replace(/^drafts\./, ""), scheduled: false, publishedAt: liveDate || now.toISOString(), editorNotes: notes };
 }
 
 // ── step 1: publish what is due ─────────────────────────────────────────────
@@ -319,17 +326,32 @@ export async function publishDueDrafts(client: SanityClient, now = new Date()): 
     const liveId = draft._id.replace(/^drafts\./, "");
     try {
       if (!title || !slug) throw new Error("it has no title or no URL slug");
-      const clash = await client.fetch<number>(`count(*[_type == "blogPost" && slug.current == $slug && !(_id in path("drafts.**")) && _id != $id])`, { slug, id: liveId });
+      const [clash, live] = await Promise.all([
+        client.fetch<number>(`count(*[_type == "blogPost" && slug.current == $slug && !(_id in path("drafts.**")) && _id != $id])`, { slug, id: liveId }),
+        client.fetch<{ publishedAt?: string | null } | null>(`*[_id == $id][0]{ publishedAt }`, { id: liveId }),
+      ]);
       if (clash) throw new Error(`another live post already uses /blog/${slug}`);
-      const doc = toPublished(draft, now);
-      await client.transaction().createOrReplace(doc).delete(draft._id).commit();
-      console.log(`[projects] published ${liveId} (/blog/${slug}) on schedule`);
+      const doc = toPublished(draft, now, live?.publishedAt);
+      try {
+        await client.transaction().createOrReplace(doc).delete(draft._id).commit();
+      } catch (err) {
+        // A timeout can follow a commit that went through: if the live
+        // document is there and the draft is gone, it was published.
+        const after = await client.fetch<{ live: boolean; draft: boolean }>(`{ "live": defined(*[_id == $live][0]._id), "draft": defined(*[_id == $draft][0]._id) }`, { live: liveId, draft: draft._id });
+        if (!(after.live && !after.draft)) throw err;
+        console.warn(`[projects] ${draft._id}: the commit answered with an error but went through (${errorText(err)})`);
+      }
+      console.log(`[projects] published ${liveId} (/blog/${slug}) on schedule${live ? " (an edit to a live post)" : ""}`);
       const notified = await emailEditors(
-        `On hubss.com in a few minutes: ${title}`,
+        live ? `Updated on hubss.com: ${title}` : `On hubss.com in a few minutes: ${title}`,
         [
-          `"${title}" went live at ${torontoWhen(now.toISOString())}, as scheduled. The site rebuilds for about five minutes, then the page is at ${SITE}/blog/${slug}.`,
+          live
+            ? `The scheduled edit to "${title}" went live at ${torontoWhen(now.toISOString())}. It shows at ${SITE}/blog/${slug} within seconds, with the post's original date.`
+            : `"${title}" went live at ${torontoWhen(now.toISOString())}, as scheduled. The site rebuilds for about five minutes, then the page is at ${SITE}/blog/${slug}.`,
           "",
-          "Its social posts go to Buffer with tomorrow morning's run. To change the article, edit it in Studio → Blog posts and press Publish; an edit shows within seconds.",
+          live
+            ? "To change it again, edit it in Studio → Blog posts and press Publish."
+            : "Its social posts go to Buffer with tomorrow morning's run. To change the article, edit it in Studio → Blog posts and press Publish; an edit shows within seconds.",
         ].join("\n"),
         "projects"
       );
@@ -424,7 +446,45 @@ export async function draftProjectArticles(client: SanityClient, now = new Date(
   return out;
 }
 
+/** A run's claim on a job post while it writes, so two runs at once can't write two articles (a dashboard Run on top of the cron). */
+const claimIdFor = (fieldPostId: string) => `projectClaim-${fieldPostId.replace(/[^a-zA-Z0-9._-]/g, "-")}`;
+/** A claim older than this is a run Vercel stopped before it could clear it. */
+const STALE_CLAIM_MS = 10 * 60_000;
+
+/** Takes the claim; false when another run holds a live one. */
+async function claim(client: SanityClient, doc: ProjectSource, now: Date): Promise<boolean> {
+  const _id = claimIdFor(doc._id);
+  const take = () => client.create({ _id, _type: "projectClaim", fieldPost: doc._id, createdAt: now.toISOString() });
+  try {
+    await take();
+    return true;
+  } catch (err) {
+    if (!isConflict(err)) throw err;
+    const held = await client.fetch<{ createdAt?: string } | null>(`*[_id == $id][0]{ createdAt }`, { id: _id });
+    const age = held?.createdAt ? now.getTime() - Date.parse(held.createdAt) : Infinity;
+    if (age < STALE_CLAIM_MS) {
+      console.log(`[projects] ${doc._id}: another run is writing its article; skipped`);
+      return false;
+    }
+    console.warn(`[projects] ${doc._id}: a stale claim from a stopped run; taking over`);
+    await client.delete(_id);
+    await take();
+    return true;
+  }
+}
+
 async function draftOne(client: SanityClient, doc: ProjectSource, now: Date): Promise<Drafted | null> {
+  if (!(await claim(client, doc, now))) return null;
+  try {
+    return await writeArticle(client, doc, now);
+  } finally {
+    // The article itself (its fieldPost reference) is what stops a second
+    // one from now on; a claim left behind would block a retry after a failure.
+    await client.delete(claimIdFor(doc._id)).catch((err) => console.error(`[projects] ${doc._id}: couldn't clear the claim: ${errorText(err)}`));
+  }
+}
+
+async function writeArticle(client: SanityClient, doc: ProjectSource, now: Date): Promise<Drafted | null> {
   // draftProjectArticles has checked these.
   const system = { name: doc.system?.name ?? "", slug: doc.system?.slug ?? "" };
   const name = jobName(doc);
@@ -453,7 +513,10 @@ async function draftOne(client: SanityClient, doc: ProjectSource, now: Date): Pr
   for (let n = 2; await client.fetch<number>(`count(*[_type == "blogPost" && slug.current == $slug])`, { slug }); n++) slug = `${base}-${n}`;
 
   const document = buildProjectDocument(doc, draft, check, slug, slot, style, now);
-  await client.create(document);
+  // Saved held, whatever the checks said: it is switched on only once the
+  // editors have been told (below). A draft nobody knows about must never
+  // go live by itself.
+  await client.create({ ...document, scheduled: false });
   const liveId = document._id.replace(/^drafts\./, "");
   try {
     await client.patch(doc._id).set({ article: { _type: "reference", _ref: liveId, _weak: true } }).commit();
@@ -465,7 +528,7 @@ async function draftOne(client: SanityClient, doc: ProjectSource, now: Date): Pr
   console.log(`[projects] wrote "${document.title}" as ${document._id} from ${doc._id}; goes live ${slot}; fact check: ${check.verdict} (${check.unsupported.length}); style: ${style.left.length} of ${style.flagged} left${style.error ? ` (rewrite failed: ${style.error})` : ""}`);
 
   const when = torontoWhen(slot);
-  const ready = document.scheduled;
+  let ready = document.scheduled;
   const notified = await emailEditors(
     ready ? `Goes live ${when.replace(/ at .*$/, "")} unless you hold it: ${document.title}` : `Needs a read before it goes: ${document.title}`,
     [
@@ -494,6 +557,25 @@ async function draftOne(client: SanityClient, doc: ProjectSource, now: Date): Pr
     ].join("\n"),
     "projects"
   );
+  if (ready) {
+    if (notified.length) {
+      try {
+        await client.patch(document._id).set({ scheduled: true }).commit();
+      } catch (err) {
+        ready = false;
+        console.error(`[projects] ${document._id}: couldn't switch it on after the email: ${errorText(err)}; it stays held`);
+        await emailEditors(`Correction, held after all: ${document.title}`, `The draft "${document.title}" could not be switched to go live by itself (${errorText(err)}). It waits in Studio → Blog posts: read it and switch "Goes live by itself" on, or press Publish.\n\nOpen it: ${studioLink(liveId)}`, "projects");
+      }
+    } else {
+      ready = false;
+      console.error(`[projects] ${document._id}: the email didn't go, so the draft is held, not scheduled`);
+      await client
+        .patch(document._id)
+        .set({ editorNotes: `HELD: the email to the editors could not be sent when this was written, so it was not scheduled. Read it and switch "Goes live by itself" on, or press Publish.\n\n${document.editorNotes}` })
+        .commit()
+        .catch((err) => console.error(`[projects] ${document._id}: couldn't note the hold: ${errorText(err)}`));
+    }
+  }
   return {
     fieldPost: doc._id,
     job: name,

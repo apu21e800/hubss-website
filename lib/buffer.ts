@@ -99,6 +99,8 @@ export interface DraftPostInput {
   imageUrl?: string;
   imageAlt?: string;
   metadata?: Record<string, unknown>;
+  /** A draft for approval (true) or straight into the queue (false). Unset: the switch decides. */
+  draft?: boolean;
 }
 
 /**
@@ -122,7 +124,7 @@ export async function createBufferDraft(input: DraftPostInput): Promise<string> 
       text: input.text,
       schedulingType: "automatic",
       mode: "addToQueue",
-      saveToDraft: !socialAutoQueue(),
+      saveToDraft: input.draft ?? !socialAutoQueue(),
       aiAssisted: true,
       source: "hubss.com",
       assets: input.imageUrl

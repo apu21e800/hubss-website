@@ -142,8 +142,8 @@ check("the system and the application are the post's", () => {
 });
 check("search phrases, once each", () => assert.deepEqual(doc.keywords, ["cool pavement coating", "StreetBondSR"]));
 check("the notes say when it goes live and how to hold it", () => {
-  assert.match(doc.editorNotes, /GOES LIVE BY ITSELF on Wednesday 21 October at 10:00 Toronto time/);
-  assert.match(doc.editorNotes, /"Goes live by itself" above is turned off/);
+  assert.match(doc.editorNotes, /SCHEDULED for Wednesday 21 October at 10:00 Toronto time/);
+  assert.doesNotMatch(doc.editorNotes, /Claude|by itself|turn.*off/, "the notes Doug can read name no machinery");
   assert.match(doc.editorNotes, /FACT CHECK: every statement matches/);
   assert.match(doc.editorNotes, /the other 2 close the article/);
 });
@@ -159,8 +159,8 @@ check("unsupported statements are listed for the editor, and the draft is held",
   assert.match(flagged.editorNotes, /"480 square metres a day": the note says two days/);
   assert.equal(flagged.scheduled, false, "an unchecked claim must not go live by itself");
   assert.equal(flagged.scheduledFor, slot, "the time is kept for when it is switched on");
-  assert.match(flagged.editorNotes, /HELD FOR A READ/);
-  assert.doesNotMatch(flagged.editorNotes, /GOES LIVE BY ITSELF/);
+  assert.match(flagged.editorNotes, /^[\s\S]*HELD: a check below found something/);
+  assert.doesNotMatch(flagged.editorNotes, /SCHEDULED for/);
 });
 check("an em dash the style pass couldn't fix holds the draft too", () => {
   const style = { text: {}, flagged: 2, left: [{ label: "Body", sentence: "The path — now cooler.", problems: ["Em dash."] }] };
@@ -196,12 +196,12 @@ check("keeps the words, the photos and the link to the post", () => {
   assert.deepEqual(live.featuredImage, doc.featuredImage);
   assert.deepEqual(live.fieldPost, doc.fieldPost);
 });
-check("says in the notes that the run published it", () => assert.match(live.editorNotes, /^Published by the daily run on Wednesday 21 October at 10:00 Toronto time\./));
+check("says in the notes that it went on schedule", () => assert.match(live.editorNotes, /^Published on schedule, Wednesday 21 October at 10:00 Toronto time \(21e8\)\./));
 check("a scheduled edit to a live post keeps the post's date", () => {
   const edit = toPublished({ ...doc, _rev: "r2" }, now, "2024-06-03T13:00:00.000Z");
   assert.equal(edit.publishedAt, "2024-06-03T13:00:00.000Z");
   assert.equal(edit.scheduled, false);
-  assert.match(edit.editorNotes, /^Edit published by the daily run/);
+  assert.match(edit.editorNotes, /^Edit published on schedule/);
 });
 
 console.log(failures ? `\n${failures} failing` : "\nall passing");

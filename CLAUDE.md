@@ -578,8 +578,10 @@ that nothing on the site used.
 ## Social: three streams into Buffer (9 and 14 Oct 2026)
 Vern, 14 Oct: "automate as much as the social media as possible ... I don't
 want to write the blogs and do the social media". The daily cron
-(app/api/cron/social-drafts, 14:00 UTC) drafts posts into Buffer from three
-streams; a person approves every one in Buffer (docs/buffer-setup.md):
+(app/api/cron/social-drafts, 14:00 UTC) writes posts into Buffer from three
+streams; since 19 Oct 2026 they are queued and post by themselves unless
+deleted in Buffer (SOCIAL_AUTO_QUEUE=off brings approval back;
+docs/buffer-setup.md):
 - Articles: each newly published Insights post (lib/social-pipeline.ts).
 - From the field: a published Studio field post (sanity/schemas/fieldPost.ts,
   Studio → Job photos for social): job photos, place, system, one line of facts.
@@ -644,11 +646,12 @@ own and emailing BLOG_DRAFT_NOTIFY through lib/editor-mail.ts):
   day after it is live. Studio's Publish on a scheduled draft switches it off
   (sanity.config.ts datedPublish), so a later edit can't be
   published by the run.
-- lib/buffer.ts `socialAutoQueue()`: `SOCIAL_AUTO_QUEUE=on` queues posts in
-  Buffer (posted at the next slot unless deleted) instead of drafts for
-  approval; unset means drafts. Copy the style pass couldn't fix always
-  waits as a draft, switch or no switch (`queued` on the result). Only Vern
-  sets it; the emails say which.
+- lib/buffer.ts `socialAutoQueue()`: posts are queued in Buffer (posted at
+  the next slot unless deleted) by default since 19 Oct 2026 (Vern:
+  "auto-queue on"); `SOCIAL_AUTO_QUEUE=off` in Vercel puts them back to
+  drafts for approval. Copy the style pass couldn't fix always waits as a
+  draft, switch or no switch (`queued` on the result). Only Vern turns it;
+  the emails say which.
 - blogPost gained `scheduled` ("Goes live by itself", boolean), `scheduledFor`
   (hidden unless scheduled) and `fieldPost`; fieldPost gained `writeUp` and
   `article`. `npm run test:project-posts` (CI) covers scheduleSlot,

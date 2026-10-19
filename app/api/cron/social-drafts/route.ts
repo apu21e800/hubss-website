@@ -10,8 +10,8 @@
  *  1. publishDueDrafts (lib/project-posts.ts): every blog draft set to go
  *     live by itself whose time has come is published, and the site rebuilds.
  *  2. draftSocialForNewPosts (lib/social-pipeline.ts): Buffer posts for new
- *     articles, job photos and the library. Drafts for approval, or queued
- *     when SOCIAL_AUTO_QUEUE=on (lib/buffer.ts). The copy gets the house
+ *     articles, job photos and the library, queued for Buffer's next slots
+ *     (drafts for approval with SOCIAL_AUTO_QUEUE=off, lib/buffer.ts). The copy gets the house
  *     style pass (lib/style-lint.ts); what it can't fix is in the email and in
  *     Studio under Sent to Buffer.
  *  3. draftProjectArticles (lib/project-posts.ts): one job photos post with
@@ -21,8 +21,8 @@
  *
  * Needs, in Vercel (Production): CRON_SECRET, ANTHROPIC_API_KEY,
  * SANITY_API_WRITE_TOKEN, BUFFER_API_KEY; BLOG_DRAFT_NOTIFY and
- * RESEND_API_KEY for the emails; SOCIAL_AUTO_QUEUE=on to post without
- * approval. Until BUFFER_API_KEY is first set the social step does nothing.
+ * RESEND_API_KEY for the emails; SOCIAL_AUTO_QUEUE=off to go back to
+ * approving in Buffer. Until BUFFER_API_KEY is first set the social step does nothing.
  * After that, a social run that fails (an expired key, a missing setting, the
  * key itself gone) emails the editors what to do (notifyRunFailure), every
  * day until it's fixed.

@@ -2,12 +2,12 @@
  * The few Buffer API calls the social pipeline needs (developers.buffer.com,
  * GraphQL at https://api.buffer.com, `Authorization: Bearer <BUFFER_API_KEY>`).
  *
- * Drafts by default: every post is created with saveToDraft, so it waits in
- * Buffer until Vern or Doug approves and schedules it, and nothing here posts.
- * With SOCIAL_AUTO_QUEUE=on (19 Oct 2026; Vern: "automated blog and social
- * media creation"), a post goes into the channel's queue instead and Buffer
- * posts it at the next free slot (Tue, Wed, Thu 11:00 Toronto,
- * docs/buffer-setup.md) unless someone deletes it there first. The emails
+ * Queued by default since 19 Oct 2026 (Vern: "auto-queue on"): a post goes
+ * into the channel's queue and Buffer posts it at the next free slot (Tue,
+ * Wed, Thu 11:00 Toronto, docs/buffer-setup.md) unless someone deletes it
+ * there first. SOCIAL_AUTO_QUEUE=off in Vercel puts it back to drafts that
+ * wait for approval (how it ran from 9 to 19 Oct). Copy the style pass
+ * couldn't fix is drafted either way (lib/social-pipeline.ts). The emails
  * say which.
  *
  * The key, from Buffer's docs (checked 9 Oct 2026): every plan has the API,
@@ -99,18 +99,19 @@ export interface DraftPostInput {
   imageUrl?: string;
   imageAlt?: string;
   metadata?: Record<string, unknown>;
-  /** A draft for approval (true) or straight into the queue (false). Unset: the switch decides. */
+  /** A draft for approval (true) or straight into the queue (false). Unset: socialAutoQueue() decides. */
   draft?: boolean;
 }
 
 /**
- * True when posts go straight into Buffer's queue (SOCIAL_AUTO_QUEUE=on in
- * Vercel) rather than waiting as drafts for approval. Off unless set: the
- * flag is the one switch between "approve in Buffer first" and "posts by
- * itself", and only Vern turns it.
+ * True when posts go straight into Buffer's queue rather than waiting as
+ * drafts for approval: the default, as Vern decided on 19 Oct 2026.
+ * SOCIAL_AUTO_QUEUE=off (or no, false, 0) in Vercel is the one switch back
+ * to "approve in Buffer first", and only Vern turns it.
  */
 export function socialAutoQueue(): boolean {
-  return (process.env.SOCIAL_AUTO_QUEUE ?? "").trim().toLowerCase() === "on";
+  const v = (process.env.SOCIAL_AUTO_QUEUE ?? "").trim().toLowerCase();
+  return !["off", "no", "false", "0"].includes(v);
 }
 
 /**

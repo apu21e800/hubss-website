@@ -1,10 +1,11 @@
 /**
- * Social posts, three streams into one Buffer queue. By default nothing is
- * posted from here: each post waits as a draft until Vern or Doug approves it
- * in Buffer, and Buffer posts it on its schedule. With SOCIAL_AUTO_QUEUE=on
- * (lib/buffer.ts, 19 Oct 2026) a post goes into the queue instead and Buffer
- * posts it at the next slot unless someone deletes it there first; the emails
- * say which. Run daily by app/api/cron/social-drafts.
+ * Social posts, three streams into one Buffer queue. Since 19 Oct 2026
+ * (Vern: "auto-queue on") a post goes into the channel's queue and Buffer
+ * posts it at the next slot unless someone deletes it there first; with
+ * SOCIAL_AUTO_QUEUE=off (lib/buffer.ts) it waits as a draft until Vern or
+ * Doug approves it, as it did from 9 to 19 Oct. Copy the style pass couldn't
+ * fix waits as a draft either way. The emails say which. Run daily by
+ * app/api/cron/social-drafts.
  *
  *  1. Articles: an Insights post qualifies once it is live (in this
  *     deployment's built list, lib/blog.ts), is dated on or after
@@ -356,8 +357,9 @@ async function draftItem(
   };
   const written = await writeSocialCopy(item.source, links);
   const { copy, style } = await polishSocialCopy(written);
-  // Queued only when the switch is on AND nothing is left for a person to
-  // fix: an em dash the rewrite couldn't take out never posts by itself.
+  // Queued only when the switch is on (the default) AND nothing is left for
+  // a person to fix: an em dash the rewrite couldn't take out never posts by
+  // itself.
   const queued = socialAutoQueue() && style.left.length === 0;
 
   const result: SocialResult = {

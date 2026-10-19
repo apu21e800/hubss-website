@@ -122,7 +122,9 @@ Two more kinds of draft arrive the same way (docs/buffer-setup.md):
   first, alt text on each), where it is ("Brantford, Ontario"), the system, and
   one or two sentences of facts. Publish. The next morning the posts are in
   Buffer, written from those facts and nothing else, linked to the system's
-  page.
+  page. Fill in **The story** as well and the job becomes a Projects article
+  on the site, scheduled two weekdays out, with an email and time to hold it:
+  docs/DOUG-PROJECT-POSTS.md.
 - **From the library.** Every Monday morning, posts about one thing HUB has
   already published: a job from the homepage map, or a system or application
   from the Product Portfolio Book. Approve them like the others. A week with a new field

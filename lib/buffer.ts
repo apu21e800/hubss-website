@@ -2,8 +2,13 @@
  * The few Buffer API calls the social pipeline needs (developers.buffer.com,
  * GraphQL at https://api.buffer.com, `Authorization: Bearer <BUFFER_API_KEY>`).
  *
- * Drafts only: every post is created with saveToDraft, so it waits in Buffer
- * until Vern or Doug approves and schedules it. Nothing here posts.
+ * Queued by default since 19 Oct 2026 (Vern: "auto-queue on"): a post goes
+ * into the channel's queue and Buffer posts it at the next free slot (Tue,
+ * Wed, Thu 11:00 Toronto, docs/buffer-setup.md) unless someone deletes it
+ * there first. SOCIAL_AUTO_QUEUE=off in Vercel puts it back to drafts that
+ * wait for approval (how it ran from 9 to 19 Oct). Copy the style pass
+ * couldn't fix is drafted either way (lib/social-pipeline.ts). The emails
+ * say which.
  *
  * The key, from Buffer's docs (checked 9 Oct 2026): every plan has the API,
  * Free included; only the organization's owner can make a key; a key lasts a
@@ -94,9 +99,25 @@ export interface DraftPostInput {
   imageUrl?: string;
   imageAlt?: string;
   metadata?: Record<string, unknown>;
+  /** A draft for approval (true) or straight into the queue (false). Unset: socialAutoQueue() decides. */
+  draft?: boolean;
 }
 
-/** One draft in one channel's Buffer queue. Returns Buffer's post id. */
+/**
+ * True when posts go straight into Buffer's queue rather than waiting as
+ * drafts for approval: the default, as Vern decided on 19 Oct 2026.
+ * SOCIAL_AUTO_QUEUE=off (or no, false, 0) in Vercel is the one switch back
+ * to "approve in Buffer first", and only Vern turns it.
+ */
+export function socialAutoQueue(): boolean {
+  const v = (process.env.SOCIAL_AUTO_QUEUE ?? "").trim().toLowerCase();
+  return !["off", "no", "false", "0"].includes(v);
+}
+
+/**
+ * One post in one channel's Buffer queue: a draft for approval, or queued for
+ * the next slot when socialAutoQueue(). Returns Buffer's post id.
+ */
 export async function createBufferDraft(input: DraftPostInput): Promise<string> {
   const variables = {
     input: {
@@ -104,7 +125,7 @@ export async function createBufferDraft(input: DraftPostInput): Promise<string> 
       text: input.text,
       schedulingType: "automatic",
       mode: "addToQueue",
-      saveToDraft: true,
+      saveToDraft: input.draft ?? !socialAutoQueue(),
       aiAssisted: true,
       source: "hubss.com",
       assets: input.imageUrl

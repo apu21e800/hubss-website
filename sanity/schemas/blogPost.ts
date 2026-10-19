@@ -77,6 +77,45 @@ export default defineType({
       options: { timeStep: 60 },
       validation: (r) => r.required().error("Publish date is required"),
     }),
+    // Scheduling (19 Oct 2026, lib/project-posts.ts): an article the daily
+    // run wrote from a job photos post is saved as a draft that goes live by
+    // itself at `scheduledFor` unless someone turns `scheduled` off first.
+    // Any draft can be scheduled the same way. A boolean, not a status list:
+    // the 77 posts from before show it plainly off.
+    defineField({
+      name: "scheduled",
+      title: "Goes live by itself",
+      type: "boolean",
+      group: "content",
+      initialValue: false,
+      description: "On: the daily run publishes this draft at the time below, unless you turn it off first. Off: it goes live when you press Publish, as always. An article written from a job photos post arrives with this on, two days out, and you get an email.",
+    }),
+    defineField({
+      name: "scheduledFor",
+      title: "Goes live at",
+      type: "datetime",
+      group: "content",
+      options: { timeStep: 60 },
+      description: "The article goes on the site at the first daily run after this time (every morning at 10:00 Toronto time, 9:00 after the clocks go back). Change it to any later day to move it.",
+      hidden: ({ parent }) => !parent?.scheduled,
+      validation: (r) =>
+        r.custom((value, ctx) => {
+          const scheduled = (ctx.parent as { scheduled?: boolean } | undefined)?.scheduled;
+          if (scheduled && !value) return "Say when it should go live, or turn \"Goes live by itself\" off";
+          return true;
+        }),
+    }),
+    defineField({
+      name: "fieldPost",
+      title: "Written from the job photos post",
+      type: "reference",
+      to: [{ type: "fieldPost" }],
+      weak: true,
+      group: "content",
+      readOnly: true,
+      hidden: ({ value }) => !value,
+      description: "Set by the daily run: the Job photos post this article was written from.",
+    }),
     defineField({
       name: "excerpt",
       title: "Excerpt",
@@ -324,10 +363,15 @@ export default defineType({
   ],
 
   preview: {
-    select: { title: "title", publishedAt: "publishedAt", category: "category", media: "featuredImage" },
-    prepare: ({ title, publishedAt, category, media }) => ({
+    select: { title: "title", publishedAt: "publishedAt", category: "category", media: "featuredImage", scheduled: "scheduled", scheduledFor: "scheduledFor" },
+    prepare: ({ title, publishedAt, category, media, scheduled, scheduledFor }) => ({
       title,
-      subtitle: [category, publishedAt ? new Date(publishedAt).toLocaleDateString("en-CA") : "No date yet"].filter(Boolean).join(" · "),
+      subtitle: [
+        category,
+        scheduled && scheduledFor
+          ? `goes live ${new Date(scheduledFor).toLocaleString("en-CA", { timeZone: "America/Toronto", weekday: "short", day: "numeric", month: "short", hour: "numeric", minute: "2-digit" })}`
+          : publishedAt ? new Date(publishedAt).toLocaleDateString("en-CA") : "No date yet",
+      ].filter(Boolean).join(" · "),
       media,
     }),
   },

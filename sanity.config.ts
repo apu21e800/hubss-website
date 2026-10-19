@@ -111,6 +111,11 @@ const mainDocuments = defineDocuments([
  * Tuesday drafter dates its drafts the day it writes them, and a draft that
  * waited a week used to go live a week old unless someone remembered to
  * change the date. A date in the future, or any later Publish, is left alone.
+ *
+ * A scheduled draft (lib/project-posts.ts) that someone publishes by hand
+ * is no longer set to go by itself as it goes out: otherwise its next edit
+ * would sit in a draft still marked to go live by itself, at a time already
+ * past, and the daily run would publish the half-made edit.
  */
 function datedPublish(original: DocumentActionComponent): DocumentActionComponent {
   const Action: DocumentActionComponent = (props: DocumentActionProps) => {
@@ -120,10 +125,13 @@ function datedPublish(original: DocumentActionComponent): DocumentActionComponen
     return {
       ...result,
       onHandle: () => {
-        const current = (props.draft ?? props.published) as { publishedAt?: string } | null;
+        const current = (props.draft ?? props.published) as { publishedAt?: string; scheduled?: boolean } | null;
         const date = current?.publishedAt ? Date.parse(current.publishedAt) : NaN;
         if (!props.published && (Number.isNaN(date) || date <= Date.now())) {
           patch.execute([{ set: { publishedAt: new Date().toISOString() } }]);
+        }
+        if (current?.scheduled) {
+          patch.execute([{ set: { scheduled: false } }, { unset: ["scheduledFor"] }]);
         }
         result.onHandle?.();
       },

@@ -578,8 +578,10 @@ that nothing on the site used.
 ## Social: three streams into Buffer (9 and 14 Oct 2026)
 Vern, 14 Oct: "automate as much as the social media as possible ... I don't
 want to write the blogs and do the social media". The daily cron
-(app/api/cron/social-drafts, 14:00 UTC) drafts posts into Buffer from three
-streams; a person approves every one in Buffer (docs/buffer-setup.md):
+(app/api/cron/social-drafts, 14:00 UTC) writes posts into Buffer from three
+streams; since 19 Oct 2026 they are queued and post by themselves unless
+deleted in Buffer (SOCIAL_AUTO_QUEUE=off brings approval back;
+docs/buffer-setup.md):
 - Articles: each newly published Insights post (lib/social-pipeline.ts).
 - From the field: a published Studio field post (sanity/schemas/fieldPost.ts,
   Studio → Job photos for social): job photos, place, system, one line of facts.
@@ -606,6 +608,55 @@ streams; a person approves every one in Buffer (docs/buffer-setup.md):
 - Vercel crons stay at two (the drafter, this job): the library runs inside
   the daily job rather than as a third cron, and the planner inside the
   drafter.
+
+## Project posts: job photos become an article by themselves (19 Oct 2026)
+Vern, 17 Oct: "Doug adds photos and basic project information, it becomes
+a blog post, queues for the blog and posts to social"; 19 Oct: "automated
+blog and social media creation". lib/project-posts.ts, inside the daily
+14:00 UTC run (app/api/cron/social-drafts, three steps, each failing on its
+own and emailing BLOG_DRAFT_NOTIFY through lib/editor-mail.ts):
+- A Job photos post (fieldPost) with **The story** (`writeUp`) filled in and
+  no `article` yet becomes a Project Profile: the Insights drafter writes it
+  from the post's record (jobRecord: place, date, system, application, the
+  crew's note, the story, the captions) plus the system's approved facts,
+  with PROFILE_INSTRUCTIONS (450 to 750 words, never pad, never invent);
+  style pass and fact check as for every draft. Saved as
+  `drafts.blogpost-<slug>` with `scheduled: true`, `scheduledFor` from
+  scheduleSlot (the run's hour on the first weekday at least two days out,
+  skipping days another scheduled draft has), the first photo as the
+  featured photo, the rest under "The job in photographs", `fieldPost` a
+  weak reference back; the post gets `article` (weak). The email says when
+  it goes live and how to hold it (switch "Goes live by itself" off). A
+  draft either check fails (an unsupported statement, an em dash left) is
+  saved held instead (`scheduled: false`, the time kept; readyToGo): nothing
+  unchecked goes live by itself. Every draft is created held and switched on
+  only after the editors' email went (a draft nobody knows about never goes
+  live by itself); a `projectClaim-<fieldPostId>` document (10-minute
+  staleness) stops two runs writing two articles.
+  One article per run, only with 150 s of the route left (it runs last).
+- publishDueDrafts (first in the run): every `drafts.*` blogPost with
+  `scheduled == true` and `scheduledFor` within ten minutes of now
+  becomes the live document in one transaction (toPublished: a first publish
+  dated that moment, a scheduled edit keeping the live post's date, scheduled
+  false, scheduledFor gone, a note line), the webhook rebuilds the site, the
+  editors get the address. A draft with no title or
+  slug, or a slug a live post has, is left and reported.
+- A field post with a story makes no social post of its own
+  (lib/social-pipeline.ts, `hasStory`): the article's posts carry the job the
+  day after it is live. Studio's Publish on a scheduled draft switches it off
+  (sanity.config.ts datedPublish), so a later edit can't be
+  published by the run.
+- lib/buffer.ts `socialAutoQueue()`: posts are queued in Buffer (posted at
+  the next slot unless deleted) by default since 19 Oct 2026 (Vern:
+  "auto-queue on"); `SOCIAL_AUTO_QUEUE=off` in Vercel puts them back to
+  drafts for approval. Copy the style pass couldn't fix always waits as a
+  draft, switch or no switch (`queued` on the result). Only Vern turns it;
+  the emails say which.
+- blogPost gained `scheduled` ("Goes live by itself", boolean), `scheduledFor`
+  (hidden unless scheduled) and `fieldPost`; fieldPost gained `writeUp` and
+  `article`. `npm run test:project-posts` (CI) covers scheduleSlot,
+  torontoWhen, jobRecord, buildProjectDocument and toPublished. Doug's page:
+  docs/DOUG-PROJECT-POSTS.md.
 
 ## Articles that earn attention, on time (15 Oct 2026)
 Vern: "writing smart blog posts that will capture real attention ... pair

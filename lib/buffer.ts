@@ -2,8 +2,13 @@
  * The few Buffer API calls the social pipeline needs (developers.buffer.com,
  * GraphQL at https://api.buffer.com, `Authorization: Bearer <BUFFER_API_KEY>`).
  *
- * Drafts only: every post is created with saveToDraft, so it waits in Buffer
- * until Vern or Doug approves and schedules it. Nothing here posts.
+ * Drafts by default: every post is created with saveToDraft, so it waits in
+ * Buffer until Vern or Doug approves and schedules it, and nothing here posts.
+ * With SOCIAL_AUTO_QUEUE=on (19 Oct 2026; Vern: "automated blog and social
+ * media creation"), a post goes into the channel's queue instead and Buffer
+ * posts it at the next free slot (Tue, Wed, Thu 11:00 Toronto,
+ * docs/buffer-setup.md) unless someone deletes it there first. The emails
+ * say which.
  *
  * The key, from Buffer's docs (checked 9 Oct 2026): every plan has the API,
  * Free included; only the organization's owner can make a key; a key lasts a
@@ -96,7 +101,20 @@ export interface DraftPostInput {
   metadata?: Record<string, unknown>;
 }
 
-/** One draft in one channel's Buffer queue. Returns Buffer's post id. */
+/**
+ * True when posts go straight into Buffer's queue (SOCIAL_AUTO_QUEUE=on in
+ * Vercel) rather than waiting as drafts for approval. Off unless set: the
+ * flag is the one switch between "approve in Buffer first" and "posts by
+ * itself", and only Vern turns it.
+ */
+export function socialAutoQueue(): boolean {
+  return (process.env.SOCIAL_AUTO_QUEUE ?? "").trim().toLowerCase() === "on";
+}
+
+/**
+ * One post in one channel's Buffer queue: a draft for approval, or queued for
+ * the next slot when socialAutoQueue(). Returns Buffer's post id.
+ */
 export async function createBufferDraft(input: DraftPostInput): Promise<string> {
   const variables = {
     input: {
@@ -104,7 +122,7 @@ export async function createBufferDraft(input: DraftPostInput): Promise<string> 
       text: input.text,
       schedulingType: "automatic",
       mode: "addToQueue",
-      saveToDraft: true,
+      saveToDraft: !socialAutoQueue(),
       aiAssisted: true,
       source: "hubss.com",
       assets: input.imageUrl

@@ -103,7 +103,7 @@ export const structure: StructureResolver = (S) =>
         .icon(EditIcon)
         .child(
           S.documentTypeList("blogPost")
-            .title("Blog posts · on the site as Insights · drafts wait here for Publish")
+            .title("Blog posts · on the site as Projects · drafts wait here for Publish, or go live by themselves when scheduled")
             .defaultOrdering([{ field: "publishedAt", direction: "desc" }])
         ),
 
@@ -126,15 +126,17 @@ export const structure: StructureResolver = (S) =>
 
       // ── Job photos for social ────────────────────────────────────────────────
       // Photos of a finished job with a line of facts (sanity/schemas/fieldPost.ts).
-      // Publishing one has the next daily social run draft posts from it in Buffer.
-      // ("From the field" until 15 Oct 2026; the stream keeps that name in the logs.)
+      // Publishing one has the next daily run write posts from it for Buffer;
+      // with the story filled in it becomes a Projects article as well
+      // (lib/project-posts.ts, 19 Oct 2026). ("From the field" until 15 Oct
+      // 2026; the stream keeps that name in the logs.)
       S.listItem()
         .id("fromTheField")
         .title("Job photos for social")
         .icon(ImagesIcon)
         .child(
           S.documentTypeList("fieldPost")
-            .title("Job photos · publish one and it becomes social drafts in Buffer the next day")
+            .title("Job photos · publish one and it goes to Buffer the next morning; add the story and it becomes a Projects article too")
             .defaultOrdering([{ field: "date", direction: "desc" }])
         ),
 

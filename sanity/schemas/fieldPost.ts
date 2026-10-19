@@ -7,18 +7,25 @@ import { copyStyle, galleryImageItem } from "./_shared";
  * place, the system and a line of facts. Studio → Job photos for social
  * ("From the field" until 15 Oct 2026).
  *
- * Publishing one is all it takes: the next daily social run (14:00 UTC,
- * lib/social-pipeline.ts) writes a post per channel from it and leaves them as
- * drafts in Buffer, linked to the system's page. Nothing posts until someone
- * approves it in Buffer. The posts say only what this document says, so the
- * note is the only writing anyone does.
+ * Publishing one is all it takes: the next daily run (14:00 UTC,
+ * lib/social-pipeline.ts) writes a post per channel from it for Buffer,
+ * linked to the system's page. The posts say only what this document says, so
+ * the note is the only writing anyone does.
+ *
+ * With the story filled in (`writeUp`, since 19 Oct 2026; Vern, 17 Oct: "Doug
+ * adds photos and basic project information, it becomes a blog post, queues
+ * for the blog and posts to social"), the same daily run also writes a
+ * Projects article from it (lib/project-posts.ts), scheduled to go on the
+ * site two days later unless someone holds it, and the article's own social
+ * posts follow the day it is live. The photos alone then make no separate
+ * social post: the job goes out once, as the article.
  *
  * Not shown on the website (yet): the photos live here and in the posts.
  */
 export default defineType({
   name: "fieldPost",
   title: "Job photos",
-  description: "Photos of a finished job. Publish it and the next morning's social run writes posts from it as drafts in Buffer, for approval there. Not shown on the website.",
+  description: "Photos of a finished job. Publish it and the next morning's run writes social posts from it for Buffer. Add the story and it becomes a Projects article on the website as well, two days later. Not shown on the website by itself.",
   type: "document",
   icon: ImagesIcon,
 
@@ -66,6 +73,24 @@ export default defineType({
       title: "When it was done",
       type: "date",
       initialValue: () => new Date().toISOString().slice(0, 10),
+    }),
+    defineField({
+      name: "writeUp",
+      title: "The story, for a Projects article (optional)",
+      type: "text",
+      rows: 8,
+      description:
+        "Leave this empty and the photos become social posts only. Fill it in and the next morning's run also writes a Projects article from it for the website, scheduled two days out: you get an email with the draft, and it goes live by itself unless you turn \"Goes live by itself\" off in Blog posts first. A few sentences or a list, in your own words: who the client was (if they can be named), what they needed, what went in and when, who installed it, anything about the design or the colours, and how it has held up. The article says nothing that isn't here, in the line above or on the system's page, so no guesses and no figures you aren't sure of.",
+      validation: (r) => [r.max(4000).warning("That is a lot: a few sentences or a short list is enough"), copyStyle(r)],
+    }),
+    defineField({
+      name: "article",
+      title: "The article written from this",
+      type: "reference",
+      to: [{ type: "blogPost" }],
+      weak: true,
+      readOnly: true,
+      description: "Set by the daily run once it has written the article. Open it in Blog posts to read, edit, hold or publish it.",
     }),
   ],
 

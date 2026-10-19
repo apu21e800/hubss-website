@@ -41,6 +41,12 @@ export interface DraftBrief {
   title: string;
   searchPhrase?: string | null;
   type?: string | null;
+  /**
+   * Instructions for this piece that beat VOICE's SHAPE: a project profile
+   * written from one job's record (lib/project-posts.ts) is shorter than a
+   * guide and must not pad a short record out.
+   */
+  instructions?: string | null;
 }
 
 const VOICE = `You write Insights articles for HUB Surface Systems (hubss.com): articles for the people who specify, approve and pay for decorative and functional pavement in Canada: municipal engineers, planners, landscape architects, transit agencies, developers and property managers.
@@ -147,6 +153,7 @@ export async function writeDraft(brief: DraftBrief, facts: string, relatedPosts:
     `WORKING TITLE: ${brief.title}`,
     brief.type ? `TYPE: ${brief.type}` : "",
     brief.searchPhrase ? `TARGET SEARCH PHRASE: ${brief.searchPhrase}` : "",
+    brief.instructions ? `\nFOR THIS PIECE (these beat the SHAPE rules above):\n${brief.instructions}` : "",
     ``,
     `FACTS:`,
     facts,

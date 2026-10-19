@@ -48,11 +48,12 @@ jobs:
       - name: Form screen tests
         run: npm run test:forms
 
-      # The social pipeline's rules and the Insights planner's vetting
-      # (lib/social-outcome.ts, lib/social-library.ts, lib/insights-planner.ts).
+      # The social pipeline's rules, the Insights planner's vetting and the
+      # project-post workflow's scheduling and documents (lib/social-outcome.ts,
+      # lib/social-library.ts, lib/insights-planner.ts, lib/project-posts.ts).
       # No network.
-      - name: Social and planner tests
-        run: npm run test:social && npm run test:planner
+      - name: Social, planner and project-post tests
+        run: npm run test:social && npm run test:planner && npm run test:project-posts
 
       # The Product Book edition covers every printed page exactly once and every
       # leaf's links resolve (lib/idea-book-edition.ts).

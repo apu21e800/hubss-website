@@ -35,6 +35,20 @@
  * (590/mo) with the line-painting item above; "driveway coating" (70/mo,
  * KD 35) is the sealing item under another name.
  *
+ * Added 19 Oct 2026 from a third Semrush (Canada) pass, the day the
+ * project-post workflow shipped (Vern: "top notch SEO"): the two biggest
+ * searches in HUB's territory with no page aimed at them, both answered by
+ * the repair family (ChipFill: cracks, joints and small potholes; AggreFill;
+ * Fast Patch DPR), both marked Ready:
+ *
+ *   asphalt crack filler           880/mo  KD 19   CPC $1.20
+ *   asphalt patch                  480/mo  KD 28   CPC $1.41
+ *
+ * The same pass found HUB's own category terms tiny in Canada ("preformed
+ * thermoplastic" 20/mo, "decorative crosswalks" 20, "stamped asphalt
+ * driveway" 30, "coloured asphalt" 30), so the site's existing pages are the
+ * right answer there and no new idea is seeded for them.
+ *
  * The first two are marked Ready, so the Tuesday drafter has work; the rest
  * wait for Vern or Doug to mark them. Each item is created once, with a fixed
  * id, and never overwritten: a re-run leaves Studio edits alone.
@@ -196,6 +210,28 @@ const SEEDS: Seed[] = [
     systems: ["traffic-patterns-xd"],
     applications: ["crosswalks"],
     brief: "REAL PROJECT. Needs Doug before it is marked Ready: the years, how many crossings and where, what the City needed, why TrafficPatternsXD was specified (per the map pin), and a photo of the installation. The drafter writes only what this brief and the Product Book say. Audience: municipal engineers in mid-sized cities.",
+  },
+  {
+    key: "asphalt-crack-filler",
+    title: "Asphalt crack filler: what to use on a crack, a joint and a small pothole",
+    status: "ready",
+    priority: 1,
+    searchPhrase: "asphalt crack filler",
+    type: "Guide",
+    systems: ["chipfill", "aggrefill", "fast-patch"],
+    applications: ["parking-lots"],
+    brief: "People searching 'asphalt crack filler' are looking after a parking lot, a driveway or a municipal street and want to know what to put in a crack before winter opens it up. Explain in plain words why a crack matters (water, freeze-thaw, the crack becoming a pothole), the difference between a crack, a joint and a pothole, and which HUB repair product fits each, from the Product Portfolio Book and the product pages only: ChipFill for cracks, joints and smaller potholes, AggreFill and Fast Patch DPR for potholes. How each goes in and when it takes traffic, as the pages say. No prices, no coverage rates or cure times the pages don't give, no claims about other brands. Audience: property managers, public works staff, paving contractors.",
+  },
+  {
+    key: "asphalt-patch",
+    title: "Asphalt patch: cold patch, hot mix or a permanent repair product",
+    status: "ready",
+    priority: 1,
+    searchPhrase: "asphalt patch",
+    type: "Guide",
+    systems: ["fast-patch", "aggrefill", "chipfill"],
+    applications: ["parking-lots"],
+    brief: "A guide for the person with a pothole to fix this week. Be honest about the three usual routes (a bagged cold patch, a hot-mix repair by a paving crew, a permanent repair product) and what each is for, in general terms without numbers. Then what HUB's repair products are and where each fits, strictly from the Product Portfolio Book and the product pages: Fast Patch DPR and AggreFill for potholes, ChipFill for the small ones and for cracks and joints. How a repair goes in and when it takes traffic, as the pages say. No prices, no numbers the pages don't give, no claims about other products. Audience: property managers, facility teams, public works staff.",
   },
 ];
 

@@ -8,6 +8,21 @@ channel's Buffer queue with the post's photo and a tracked link. An email goes
 to `BLOG_DRAFT_NOTIFY`. Nothing is posted until someone approves and schedules
 it in Buffer.
 
+**The one switch (19 Oct 2026):** with `SOCIAL_AUTO_QUEUE=on` in Vercel
+(Production; a redeploy after setting it), the posts go into each channel's
+**queue** instead of its drafts, and Buffer posts them at the next free slots
+unless someone deletes them there first. The emails then say "queued" and
+link to the queue. Anything else, or the variable unset, means drafts for
+approval, as before. Only Vern turns it (`lib/buffer.ts`, `socialAutoQueue`).
+
+**Job photos with a story (19 Oct 2026):** a Job photos post whose **The
+story** field is filled in is not drafted by the field stream below. It becomes
+a scheduled Projects article instead (`lib/project-posts.ts`,
+docs/DOUG-PROJECT-POSTS.md), and the article's posts carry the job the day
+after it is live, so a job goes out once. The same daily run publishes the
+scheduled drafts first, then drafts social, then writes the next article with
+the time it has left.
+
 ## Three streams, one queue (since 14 Oct 2026)
 
 Vern, 14 Oct: "automate as much as the social media as possible ... I don't

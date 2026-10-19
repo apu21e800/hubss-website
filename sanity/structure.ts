@@ -103,7 +103,7 @@ export const structure: StructureResolver = (S) =>
         .icon(EditIcon)
         .child(
           S.documentTypeList("blogPost")
-            .title("Blog posts · on the site as Projects · drafts wait here for Publish, or go live by themselves when scheduled")
+            .title("Blog posts · on the site as Projects · drafts wait here for Publish, or go live at their scheduled time")
             .defaultOrdering([{ field: "publishedAt", direction: "desc" }])
         ),
 
@@ -136,7 +136,7 @@ export const structure: StructureResolver = (S) =>
         .icon(ImagesIcon)
         .child(
           S.documentTypeList("fieldPost")
-            .title("Job photos · publish one and it goes to Buffer the next morning; add the story and it becomes a Projects article too")
+            .title("Job photos · publish one and it goes to social the next morning; add the story and 21e8 writes it up as a Projects article")
             .defaultOrdering([{ field: "date", direction: "desc" }])
         ),
 

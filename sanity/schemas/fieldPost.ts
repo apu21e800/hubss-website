@@ -25,7 +25,7 @@ import { copyStyle, galleryImageItem } from "./_shared";
 export default defineType({
   name: "fieldPost",
   title: "Job photos",
-  description: "Photos of a finished job. Publish it and the next morning's run writes social posts from it for Buffer. Add the story and it becomes a Projects article on the website as well, two days later. Not shown on the website by itself.",
+  description: "Photos of a finished job. Publish it and it goes out on social the next morning. Add the story and 21e8 writes the job up as a Projects article for the website as well. Not shown on the website by itself.",
   type: "document",
   icon: ImagesIcon,
 
@@ -80,7 +80,7 @@ export default defineType({
       type: "text",
       rows: 8,
       description:
-        "Leave this empty and the photos become social posts only. Fill it in and the next morning's run also writes a Projects article from it for the website, scheduled two days out: you get an email with the draft, and it goes live by itself unless you turn \"Goes live by itself\" off in Blog posts first. A few sentences or a list, in your own words: who the client was (if they can be named), what they needed, what went in and when, who installed it, anything about the design or the colours, and how it has held up. The article says nothing that isn't here, in the line above or on the system's page, so no guesses and no figures you aren't sure of.",
+        "Leave this empty and the photos go to social only. Fill it in and 21e8 writes the job up as a Projects article for the website, checks it and schedules it: it is on hubss.com within a few working days, and its social posts follow. A few sentences or a list, in your own words: who the client was (if they can be named), what they needed, what went in and when, who installed it, anything about the design or the colours, and how it has held up. The article says nothing that isn't here, in the line above or on the system's page, so no guesses and no figures you aren't sure of.",
       validation: (r) => [r.max(4000).warning("That is a lot: a few sentences or a short list is enough"), copyStyle(r)],
     }),
     defineField({
@@ -90,7 +90,7 @@ export default defineType({
       to: [{ type: "blogPost" }],
       weak: true,
       readOnly: true,
-      description: "Set by the daily run once it has written the article. Open it in Blog posts to read, edit, hold or publish it.",
+      description: "The Projects article written from this post, once it exists. Open it in Blog posts.",
     }),
   ],
 

@@ -657,6 +657,14 @@ own and emailing BLOG_DRAFT_NOTIFY through lib/editor-mail.ts):
   `article`. `npm run test:project-posts` (CI) covers scheduleSlot,
   torontoWhen, jobRecord, buildProjectDocument and toPublished. Doug's page:
   docs/DOUG-PROJECT-POSTS.md.
+- The agency stays in the loop, and the machinery stays out of Doug's view
+  (Vern, 19 Oct: "let's not let Doug know it's that easy to publish. we
+  still need to get paid"): the hold, move and release instructions live in
+  the emails to BLOG_DRAFT_NOTIFY (Vern's address, never Doug's); what Doug
+  sees in Studio (the field descriptions, the list titles, the draft's
+  notes) says 21e8 writes the job up, checks it and schedules it, and never
+  "by itself", "Claude" or how to hold it. Doug's page is written the same
+  way. Keep it so.
 
 ## Articles that earn attention, on time (15 Oct 2026)
 Vern: "writing smart blog posts that will capture real attention ... pair

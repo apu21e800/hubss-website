@@ -88,7 +88,7 @@ export default defineType({
       type: "boolean",
       group: "content",
       initialValue: false,
-      description: "On: the daily run publishes this draft at the time below, unless you turn it off first. Off: it goes live when you press Publish, as always. An article written from a job photos post arrives with this on, two days out, and you get an email.",
+      description: "On: it goes live at the time below. Off: it goes live when you press Publish, as always.",
     }),
     defineField({
       name: "scheduledFor",
@@ -96,7 +96,7 @@ export default defineType({
       type: "datetime",
       group: "content",
       options: { timeStep: 60 },
-      description: "The article goes on the site at the first daily run after this time (every morning at 10:00 Toronto time, 9:00 after the clocks go back). Change it to any later day to move it.",
+      description: "It goes live at the first morning run on or after this time (10:00 Toronto time; 9:00 after the clocks go back). Change it to any later day to move it.",
       hidden: ({ parent }) => !parent?.scheduled,
       validation: (r) =>
         r.custom((value, ctx) => {
@@ -114,7 +114,7 @@ export default defineType({
       group: "content",
       readOnly: true,
       hidden: ({ value }) => !value,
-      description: "Set by the daily run: the Job photos post this article was written from.",
+      description: "The Job photos post this article was written from.",
     }),
     defineField({
       name: "excerpt",

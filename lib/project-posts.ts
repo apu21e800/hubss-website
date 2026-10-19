@@ -214,11 +214,11 @@ export function buildProjectDocument(doc: ProjectSource, draft: Draft, check: Fa
   const phrases = [...new Set(draft.searchPhrases.map((p) => p?.trim()).filter((p): p is string => !!p))];
 
   const notes = [
-    `Written by Claude on ${today.toISOString().slice(0, 10)} from the job photos post "${name}" (Studio → Job photos for social): its story, the crew's note, and the ${doc.system?.name ?? "system"} page's approved facts. Nothing else.`,
+    `Written up by 21e8 on ${today.toISOString().slice(0, 10)} from the job photos post "${name}" (Studio → Job photos for social): its story, the crew's note, and the ${doc.system?.name ?? "system"} page's approved facts. Nothing else.`,
     "",
     ready
-      ? `GOES LIVE BY ITSELF on ${torontoWhen(slot)}, unless "Goes live by itself" above is turned off before then. To move it, change "Goes live at". The day after it is live, its social posts go to Buffer.`
-      : `HELD FOR A READ: a check below found something. It does not go live until you fix it and switch "Goes live by itself" on (the time is set for ${torontoWhen(slot)}; a time already past goes at the next morning's run), or press Publish.`,
+      ? `SCHEDULED for ${torontoWhen(slot)}. To move it, change "Goes live at". The day after it is live, its social posts go out.`
+      : `HELD: a check below found something. It waits here until 21e8 has read it (set for ${torontoWhen(slot)} once released; a time already past goes at the next morning's run).`,
     "",
     check.unsupported.length
       ? `FACT CHECK: ${check.unsupported.length} statement(s) the job's record and the Product Portfolio Book don't back up. Fix or remove them before it goes live:`
@@ -299,7 +299,7 @@ export function toPublished(draft: ScheduledDraft, now: Date, liveDate?: string 
   const { _rev: _r, _createdAt: _c, _updatedAt: _u, scheduledFor: _s, scheduled: _st, publishedAt: _p, editorNotes, ...rest } = draft;
   void _r; void _c; void _u; void _s; void _st; void _p;
   const when = torontoWhen(now.toISOString());
-  const notes = [`${liveDate ? "Edit published" : "Published"} by the daily run on ${when}.`, editorNotes?.trim() ?? ""].filter(Boolean).join("\n\n");
+  const notes = [`${liveDate ? "Edit published" : "Published"} on schedule, ${when} (21e8).`, editorNotes?.trim() ?? ""].filter(Boolean).join("\n\n");
   return { ...rest, _id: draft._id.replace(/^drafts\./, ""), scheduled: false, publishedAt: liveDate || now.toISOString(), editorNotes: notes };
 }
 
@@ -571,7 +571,7 @@ async function writeArticle(client: SanityClient, doc: ProjectSource, now: Date)
       console.error(`[projects] ${document._id}: the email didn't go, so the draft is held, not scheduled`);
       await client
         .patch(document._id)
-        .set({ editorNotes: `HELD: the email to the editors could not be sent when this was written, so it was not scheduled. Read it and switch "Goes live by itself" on, or press Publish.\n\n${document.editorNotes}` })
+        .set({ editorNotes: `HELD: not scheduled, because the notice to 21e8 could not be sent. 21e8 releases it after a read.\n\n${document.editorNotes}` })
         .commit()
         .catch((err) => console.error(`[projects] ${document._id}: couldn't note the hold: ${errorText(err)}`));
     }

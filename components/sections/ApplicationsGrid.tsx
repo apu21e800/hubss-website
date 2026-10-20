@@ -106,7 +106,7 @@ export default function ApplicationsGrid({ applications: source, copy = HOMEPAGE
                   </>
                 )}
               </h2>
-              <p className="text-base font-light max-w-lg leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+              <p className="text-lg max-w-2xl leading-relaxed" style={{ color: "var(--text-secondary)" }}>
                 {copy.intro}
               </p>
             </div>

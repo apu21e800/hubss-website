@@ -371,10 +371,15 @@ these elements, and never draw a button, label or card by hand again:
   `.btn-sm` only in the bar and the reader's toolbar; `.btn-block` full
   width. They set `display` unlayered, so to hide one at a breakpoint wrap
   it (a `hidden md:block` div), never put `hidden` on the button.
-- Type: `.h1-page` (48px: hubs, landing, legal, forms) and `.h1-hero`
-  (60px: on a photo); `.h2-section` (40px) and `.h2-sub` (28px). Body is
-  the text-base token (17px). A label heading takes no full stop; a
-  sentence with a verb keeps its own.
+- Type (scale raised 20 Oct 2026; Vern, 19 Oct: "everything on the site
+  got a bit smaller ... not quite as impressive"): `.h1-page` (56px at
+  1440, 64 wide: hubs, landing, legal, forms) and `.h1-hero` (68px: on a
+  photo); `.h2-section` (56px at 1440, 36 on a phone, the homepage's
+  pre-17-Oct size, now everywhere) and `.h2-sub` (30px). `.section-padding`
+  is 112px at 1440 (128 wide, 72 on phones). Homepage intros are
+  `text-lg max-w-2xl`, never `font-light max-w-lg`. Body is the text-base
+  token (17px). A label heading takes no full stop; a sentence with a verb
+  keeps its own.
 - `.eyebrow` (13px, 0.2em, flat accent; `.eyebrow-photo` cream on a photo),
   `.link-arrow` (a text link with an svg arrow that slides; never the "→"
   glyph; `.link-arrow-sm` inside cards), `.card` with `.card-photo` (radius

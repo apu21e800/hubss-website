@@ -44,7 +44,7 @@ export const MOMENTS: readonly Moment[] = [
   },
   {
     id: "remembrance-day", name: "Remembrance Day", when: { month: 11, day: 11 },
-    angle: "Memorial and commemorative crosswalks: working with a Legion and the city, and a material that outlasts paint on a route people use every day.",
+    angle: "Memorial and commemorative crosswalks: working with a Legion and the city, and a material made to stay on a route people use every day.",
     systems: ["traffic-patterns"], applications: ["community-branding", "crosswalks"], libraryJob: "kitchener-veterans",
   },
   {
@@ -54,7 +54,7 @@ export const MOMENTS: readonly Moment[] = [
   },
   {
     id: "budget-season", name: "municipal budget season", when: { month: 1, day: 15 },
-    angle: "Repainting against a marking that lasts: what to weigh before the capital budget is set, from the Product Portfolio Book's service life for each system.",
+    angle: "Re-marking every season against a marking that lasts: what to weigh before the capital budget is set, from the Product Portfolio Book's service life for each system.",
     systems: ["premark", "mmax", "traffic-patterns"], applications: ["crosswalks", "bus-lanes"],
   },
   {

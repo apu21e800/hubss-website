@@ -68,7 +68,7 @@ export default async function FeaturedBlogPost({ copy = HOMEPAGE_COPY.insights }
               )}
             </h2>
             <p
-              className="text-base font-light max-w-lg leading-relaxed"
+              className="text-lg max-w-2xl leading-relaxed"
               style={{ color: "var(--text-secondary)" }}
             >
               {copy.intro}

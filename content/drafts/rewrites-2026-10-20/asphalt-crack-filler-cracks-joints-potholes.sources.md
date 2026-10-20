@@ -55,7 +55,7 @@ Each statement about HUB, a system, a number, a place, a client or a year, then 
 
 ## Photo
 
-image-e58314023b6dbcf9a565b90b8221063b41781da2-1480x912-jpg: Studio's Fast Patch DPR product hero, alt there "A finished Fast Patch DPR repair, a patch of fine grey aggregate set flush in the surrounding pavement". It shows a finished patch set flush in worn pavement: a repair, the subject. 1480 px wide, under the 1600 asked for: no repair photo in Studio or the repo reaches 1600 (the next largest are ChipFill's 1400 x 392 strip and 1200 x 900 pour). No hotspot existed; set at x 0.45, y 0.5, w 0.5, h 0.5, on the patch.
+image-576a3f8209c848d2b4803e1801228af6fb6027c2-1200x900-jpg (the editor's choice, 20 Oct): ChipFill gallery photo 00, chipfill-application.jpg, also the ChipFill page's hero (lib/products.ts:411–415: "the chips poured into the hole, the bag at the edge"). It shows ChipFill chips poured by hand into a shallow pothole, the ChipFill bag beside it: the lead product going into the piece's small pothole. 1200 px wide, under the 1600 asked for: no photo of the repair products in Studio or the repo reaches 1600 (the largest, Fast Patch DPR's finished patch, is 1480 x 912 and was the first choice). No hotspot or crop existed in the gallery; hotspot set at x 0.55, y 0.6, w 0.5, h 0.5, on the chips in the pothole (the pile's centre is about x 0.62, y 0.63; at x 0.55 the box holds the whole pile and the pour from the hand, so a phone-width crop does not cut the pile in half).
 
 ## What was left out
 

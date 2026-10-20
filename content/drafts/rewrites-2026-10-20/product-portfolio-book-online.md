@@ -26,7 +26,7 @@ The then-and-now pages show the same surface years apart: a TrafficPatternsXD cr
 
 The projects cover the country. Among them are the 14-year-old entrance feature at Toronto Premium Outlets in Halton Hills, Ontario; London, Ontario's transit corridor in TrafficPatternsXD and red MMAX; the white StreetBondSR surface at the Mont-Mégantic observatory in Québec; the cruise ship terminal walkway in Charlottetown, Prince Edward Island; and the crosswalks at the Kwanlin Dün Cultural Centre in Whitehorse, Yukon. Between them are the certified installers who lay the systems, province by province.
 
-The closing pages carry HUB's own numbers, 27 years and 1,000+ projects, coast to coast, and some of the communities HUB works with, the City of Toronto and the University of British Columbia among them. The last spread is the Lunch & Learn: an hour on the systems for your team, in person across Canada or virtual, with lunch on HUB.
+The closing pages carry HUB's own numbers, 27 years and 1,000+ projects, coast to coast, and some of the communities HUB works with, the City of Toronto and the University of British Columbia among them. The last spread is the Lunch & Learn: the systems for your team, in person across Canada or virtual, with lunch on HUB.
 
 ## Getting a copy
 

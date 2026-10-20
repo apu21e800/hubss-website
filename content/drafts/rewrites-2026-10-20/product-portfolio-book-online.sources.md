@@ -45,8 +45,9 @@ News about the book itself, not the web reader. Every statement, then the line i
   - lib/idea-book-edition.ts:484 (pages 140–141): stats "27 years · 1,000+ projects · coast to coast". (The company's numbers: docs/STYLE.md, Numbers.)
 - "some of the communities HUB works with, the City of Toronto and the University of British Columbia among them"
   - lib/idea-book-edition.ts:485–492: "Here are a few of the communities we work with." The list includes "City of Toronto" and "University of British Columbia".
-- "The last spread is the Lunch & Learn: an hour on the systems for your team, in person across Canada or virtual, with lunch on HUB."
-  - lib/idea-book-edition.ts:496–501 (pages 142–143): "Lunch is on us.", "Got an hour?", "An hour of technical, in-depth, product solutions ...", "In person across Canada, or virtual." The point "Continuing-education content" is left out: no CE claims (lib/lunch-learn-content.ts:17).
+- "The last spread is the Lunch & Learn: the systems for your team, in person across Canada or virtual, with lunch on HUB."
+  - lib/idea-book-edition.ts:496–501 (pages 142–143): "Lunch is on us.", "An hour of technical, in-depth, product solutions, covering the innovative options available for your upcoming projects.", "In person across Canada, or virtual."
+  - No session length: the book says an hour ("Got an hour?") and the Lunch & Learn page says forty-five minutes (lib/lunch-learn-content.ts:29), and Doug has not ruled. The point "Continuing-education content" is left out: no CE claims (lib/lunch-learn-content.ts:17).
 
 ## Getting a copy
 

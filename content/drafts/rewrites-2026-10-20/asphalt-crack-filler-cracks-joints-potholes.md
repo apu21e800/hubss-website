@@ -8,7 +8,7 @@ excerpt: In October a crack, an open joint and a small pothole are still small r
 keywords: ["asphalt crack filler", "pothole repair", "parking lot pothole repair", "ChipFill", "AggreFill", "Fast Patch DPR"]
 relatedProducts: [chipfill, aggrefill, fast-patch]
 relatedApplications: [parking-lots]
-cover: { ref: image-e58314023b6dbcf9a565b90b8221063b41781da2-1480x912-jpg, alt: "A finished Fast Patch DPR repair, a patch of fine grey aggregate set flush in the surrounding pavement", hotspot: { x: 0.45, y: 0.5, width: 0.5, height: 0.5 }, crop: null }
+cover: { ref: image-576a3f8209c848d2b4803e1801228af6fb6027c2-1200x900-jpg, alt: "ChipFill thermoplastic chips poured by hand into a pothole, the bag beside it", hotspot: { x: 0.55, y: 0.6, width: 0.5, height: 0.5 }, crop: null }
 ---
 
 Walk a lot or a street in October and the list is usually short: a crack across a drive aisle, a joint opening where the asphalt meets a curb, and a small pothole by the entrance. Each is still a small job, and an asphalt crack filler or a patch will do it before the first freeze.

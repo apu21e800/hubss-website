@@ -1,5 +1,5 @@
 ---
-title: The restripe is the time to put markings in preformed thermoplastic
+title: When the lot is restriped, put these markings in thermoplastic
 slug: parking-lot-line-painting-vs-thermoplastic
 target: live
 id: blogpost-parking-lot-line-painting-vs-thermoplastic

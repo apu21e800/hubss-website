@@ -104,6 +104,49 @@ async function checkRoutes() {
   return routes;
 }
 
+// ── 1b. every sitemap photo is on its page ───────────────────────────────────
+// EARNED BY: the image sitemap named each Sanity photo by a 1200px WebP copy
+// (fm=webp) that no page renders, and the homepage by four /public files it
+// no longer shows, so not one of its 1,482 photos was an image Google found on
+// the page it was listed for (the client's SEO brief, 20 Oct 2026). Each
+// cdn.sanity.io <image:loc> must now be the src, or a srcset candidate, of an
+// <img> or <source> on its own page, name and parameters included
+// (lib/page-photos.ts picks both). /public photos are listed as their baked
+// search copies by design (lib/search-images.ts) and are not checked here.
+async function checkSitemapPhotosOnPages() {
+  const xml = await (await fetch(BASE + "/sitemap.xml")).text();
+  const unescape = (s) => s.replace(/&quot;/g, '"').replace(/&#x27;|&#39;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
+  const bad = [];
+  let listed = 0, pages = 0;
+  for (const [, entry] of xml.matchAll(/<url>([\s\S]*?)<\/url>/g)) {
+    const loc = /<loc>([^<]+)<\/loc>/.exec(entry)?.[1];
+    const photos = [...entry.matchAll(/<image:loc>([^<]+)<\/image:loc>/g)]
+      .map((m) => unescape(m[1]))
+      .filter((u) => u.startsWith("https://cdn.sanity.io/"));
+    if (!loc || photos.length === 0) continue;
+    const route = loc.replace(/^https?:\/\/[^/]+/, "") || "/";
+    let html = "";
+    try { html = await (await fetch(BASE + route, { signal: AbortSignal.timeout(20000) })).text(); } catch {}
+    pages++;
+    // Every address an <img> or <source> offers. srcset candidates are split
+    // on a comma AND a space: a Sanity address can hold commas (rect=0,0,800,600).
+    const shown = new Set();
+    for (const [tag] of html.matchAll(/<(?:img|source)\b[^>]*>/gi)) {
+      for (const [, attr, value] of tag.matchAll(/\s(src|srcset)="([^"]*)"/gi)) {
+        const v = unescape(value);
+        if (attr.toLowerCase() === "src") shown.add(v);
+        else for (const part of v.split(/,\s+/)) { const u = part.trim().split(/\s+/)[0]; if (u) shown.add(u); }
+      }
+    }
+    for (const u of photos) {
+      listed++;
+      if (!shown.has(u)) bad.push(`${route}  ${u}`);
+    }
+  }
+  record("sitemap photos are on their pages", bad.length === 0,
+    `${listed} Sanity photos on ${pages} pages`, bad);
+}
+
 /** External mode: read links from the DEPLOYED html, not the local build. */
 async function checkLinksLive(routes) {
   const hrefs = new Set();
@@ -624,6 +667,7 @@ async function checkNoEmDashes(routes) {
   try {
     await ensureServer();
     const routes = await checkRoutes();
+    await checkSitemapPhotosOnPages();
     await checkLinks(routes);
     await checkBuiltPagesReachable();
     checkGalleryDistinctness();

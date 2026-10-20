@@ -7,16 +7,15 @@ import Nav from "@/components/sections/Nav";
 import Footer from "@/components/sections/Footer";
 import LunchLearn from "@/components/sections/LunchLearn";
 import GalleryGrid, { type GalleryImage } from "@/components/ui/GalleryGrid";
-import { galleryFor, altFor } from "@/lib/asset-scan";
 import ResidentialDriveways from "@/components/sections/ResidentialDriveways";
 import JsonLd from "@/components/ui/JsonLd";
-import { photoObject, seoCaption, honestPhoto, HUB_ORGANIZATION } from "@/lib/image-seo";
-import { isSanityImage, sanityOgImage, type Photo } from "@/lib/photos";
+import { photoObject, HUB_ORGANIZATION } from "@/lib/image-seo";
+import { isSanityImage, sanityOgImage } from "@/lib/photos";
+import { applicationPagePhotos } from "@/lib/page-photos";
 import { applications } from "@/lib/applications";
 import { getMergedApplication } from "@/lib/applications.server";
 import RichText from "@/components/ui/RichText";
 import { products } from "@/lib/products";
-import { applicationImages, resolveImage } from "@/lib/featured-images";
 import ApplicationSpread from "@/components/applications/ApplicationSpread";
 import { applicationCatalogueFor } from "@/lib/application-catalogue";
 import { buildMetadata } from "@/lib/seo";
@@ -60,8 +59,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const application = await getMergedApplication(slug);
   if (!application) return {};
-  const featured = applicationImages[slug] ? resolveImage(applicationImages[slug]) : null;
-  const heroSrc = application.heroPhoto?.src ?? featured?.src ?? application.imageUrl;
+  // The share card is the page's own hero (lib/page-photos.ts), named by its alt.
+  const { hero } = applicationPagePhotos(application);
   return buildMetadata({
     title: application.seoTitle ?? application.name,
     // The SEO description from Studio (or the code's) when it fits in whole
@@ -71,7 +70,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     // "…" (QA E1, on 22 pages).
     description: metaDescription(application.seoDescription, application.shortDesc),
     slug: `applications/${application.slug}`,
-    image: isSanityImage(heroSrc) ? sanityOgImage(heroSrc) : heroSrc,
+    image: isSanityImage(hero.src) ? sanityOgImage(hero.src, hero.alt) : hero.src,
   });
 }
 
@@ -113,33 +112,13 @@ export default async function ApplicationPage({ params }: Props) {
 
   const spread = applicationCatalogueFor(application.slug);
 
-  // The hero photo and the gallery come from Sanity, where Doug curates them
-  // (lib/photos.ts). An application whose Sanity document has none falls back
-  // to exactly what this page showed before: imageUrl, and the application's
-  // /public folder scanned at build time (lib/asset-scan.ts,
-  // docs/IMAGE-WORKFLOW.md).
-  //
-  // Since 28 Sep 2026 the code's hero for an application is its entry in
-  // applicationImages (lib/featured-images.ts), as a product's is in
-  // productImages; imageUrl is only the last fallback. One photo per
-  // application everywhere: this banner, the Sanity hero the photo sync
-  // writes (scripts/lib/photo-plan.ts), the homepage card and the sitemap.
-  const featured = applicationImages[application.slug] ? resolveImage(applicationImages[application.slug]) : null;
-  const bannerSrc = featured?.src ?? application.imageUrl;
-  //
-  // honestPhoto (lib/image-seo.ts, 30 Sep 2026, QA E10): the photo sync wrote
-  // the old templates' invented settings into Studio ("at a botanical garden
-  // path"), so the Sanity alt and caption are replaced at render by what the
-  // photo's folder proves; a line a person wrote in Studio stays.
-  const hero: Photo = honestPhoto(application.heroPhoto ?? { src: bannerSrc, alt: featured?.alt ?? application.name });
-  const galleryPhotos: Photo[] = application.galleryPhotos?.map(honestPhoto) ?? (() => {
-    const fromFolder = galleryFor(bannerSrc, application.gallery, `images/applications/${application.slug}`);
-    return (fromFolder.length > 0 ? fromFolder : [bannerSrc]).map((src) => ({
-      src,
-      alt: altFor(src, application.name),
-      caption: seoCaption(src) ?? altFor(src, application.name),
-    }));
-  })();
+  // The hero photo and the gallery come from Sanity, where Doug curates them,
+  // with the code's featured image (applicationImages) and /public folder as
+  // the fallback and the alts made honest (honestPhoto). The picks are
+  // lib/page-photos.ts, applicationPagePhotos, since 20 Oct 2026: the image
+  // sitemap reads the same picks, so it lists exactly the photos this page
+  // shows.
+  const { hero, gallery: galleryPhotos } = applicationPagePhotos(application);
   const gallery: GalleryImage[] = galleryPhotos.map((p) => ({ src: p.src, alt: p.alt, caption: p.caption ?? p.alt }));
 
   const relatedProductData = application.relatedProducts

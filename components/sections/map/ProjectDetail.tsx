@@ -10,7 +10,7 @@
  */
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { mapLoader } from "@/lib/map-photo";
+import { mapLoader, mapPhotoSrc } from "@/lib/map-photo";
 import type { MapProject } from "@/lib/map-projects";
 
 const PROVINCE_NAME: Record<string, string> = {
@@ -71,7 +71,7 @@ function Photos({ project, sizes, priority }: { project: MapProject; sizes: stri
           <div key={src} className="cm-photo-slide">
             <Image
               loader={mapLoader}
-              src={src}
+              src={mapPhotoSrc(project, src)}
               alt={i === 0 ? `${project.title}, ${project.city}` : `${project.title}, photo ${i + 1}`}
               fill
               sizes={sizes}

@@ -1,53 +1,147 @@
 /**
  * lib/sanity-image.ts
  *
- * Sanity image URL builder helpers with backward-compat string fallback.
+ * Sanity image URLs: the descriptive filename every photo carries (20 Oct
+ * 2026), and the @sanity/image-url builders with a string fallback.
+ *
+ * FILENAMES (the client's SEO brief, 20 Oct 2026, "Image search, my
+ * priority"). Sanity's CDN serves an asset under any name added after its
+ * own: .../<hash>-1920x1200.jpg/ubc-musqueam-crosswalk-vancouver.jpg?w=1600
+ * is the same file, byte for byte, as the address without the name (checked
+ * with curl on 20 Oct 2026: same status, type, length and hash, with and
+ * without `w`, `rect`, `fp-x` and `or`). Google Images reads the filename,
+ * and "eefd503782b8...-2400x1800.jpg" says nothing, so every builder on the
+ * site (lib/photos.ts, the menu's scripts/gen-nav-insights.ts, the ones
+ * below) names a photo with `withFilename`: its alt text, else the
+ * document's title or slug, else nothing at all (the bare address, which
+ * still works). The name is built from text the photo already carries;
+ * nothing is invented for it.
+ *
+ * Pure string functions at the top, no client and no side effects, so
+ * lib/photos.ts (client components import it) can use them without pulling
+ * the Sanity client into the browser.
  *
  * Usage:
- *   import { resolveImageUrl, imagePresets } from "@/lib/sanity-image";
- *
- *   // Sanity asset ref → CDN URL
- *   resolveImageUrl(doc.heroImage, { width: 1200, quality: 80 })
- *
- *   // Preset helpers — auto-sized, auto-formatted
- *   imagePresets.hero(doc.heroImage)   // 1920px, q85, crop
- *   imagePresets.card(doc.heroImage)   // 800px, q85, crop
- *   imagePresets.thumb(doc.heroImage)  // 240px, q80, crop
- *   imagePresets.og(doc.heroImage)     // 1200×630, q90 (social sharing)
- *
- *   // Legacy string path → passes straight through
- *   resolveImageUrl("/images/hero/hero-1.jpg")
+ *   withFilename(photo.src, photo.alt, doc.title)   // a cdn.sanity.io URL, named
+ *   imagePresets.hero(doc.heroImage, doc.heroImage?.alt)
+ *   resolveImageUrl(doc.heroImage, { width: 1200, name: doc.title })
+ *   resolveImageUrl("/images/hero/hero-1.jpg")      // a /public path passes through
  */
 
 import { createImageUrlBuilder } from "@sanity/image-url";
 import type { SanityImageSource } from "@sanity/image-url";
-import { client } from "./sanity.client";
 
-const builder = createImageUrlBuilder(client);
+/** The longest name a photo gets, before its extension. */
+export const FILENAME_MAX = 60;
 
 /**
- * Return the raw Sanity image URL builder for a given source.
- * Chain `.width()`, `.quality()`, `.url()` etc. on the result.
+ * "UBC Musqueam crosswalk, Vancouver" -> "ubc-musqueam-crosswalk-vancouver":
+ * lowercase ASCII words joined by hyphens, accents dropped ("Montréal" ->
+ * "montreal"), "&" as "and", an apostrophe closing up ("Children's" ->
+ * "childrens"), no hyphen at either end, at most FILENAME_MAX characters, cut
+ * at the end of a word. "" when the text has no letters or digits.
+ */
+export function slugForFilename(text: string | null | undefined): string {
+  if (!text) return "";
+  const s = text
+    .normalize("NFKD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/['‘’`]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  if (s.length <= FILENAME_MAX) return s;
+  // A cut that lands on a hyphen is already a word boundary; otherwise back up
+  // to the last one (one word longer than the limit is cut where it stands).
+  if (s[FILENAME_MAX] === "-") return s.slice(0, FILENAME_MAX);
+  const head = s.slice(0, FILENAME_MAX);
+  const end = head.lastIndexOf("-");
+  return (end > 0 ? head.slice(0, end) : head).replace(/-+$/, "");
+}
+
+/** The name for a photo: the first of the texts given that has words in it ("" when none has). */
+export function imageFilename(...texts: (string | null | undefined)[]): string {
+  for (const t of texts) {
+    const name = slugForFilename(t);
+    if (name) return name;
+  }
+  return "";
+}
+
+// https://cdn.sanity.io/images/<project>/<dataset>/<hash>-<w>x<h>.<ext>[/<name>][?query]
+const SANITY_IMAGE = /^(https:\/\/cdn\.sanity\.io\/images\/[^/?#]+\/[^/?#]+\/)([^/?#]+)(?:\/[^?#]*)?/;
+
+/**
+ * The asset's own file in a Sanity image URL ("<hash>-2400x1800.jpg"), named
+ * or not; "" for any other URL. Read this, never the last path segment: on a
+ * named address the last segment is the name.
+ */
+export function sanityAssetFile(url: string | null | undefined): string {
+  if (!url) return "";
+  return SANITY_IMAGE.exec(url)?.[2] ?? "";
+}
+
+/**
+ * A Sanity image URL with its descriptive filename: the first text with
+ * words in it (the photo's alt, then the document's title or slug), as
+ * slugForFilename spells it, with the asset's own extension. The query and
+ * everything else are left exactly as they were, so a srcset keeps its
+ * widths and parameters and only the path changes. A name already on the URL
+ * is replaced. With no usable text, or for any URL not on Sanity's image CDN
+ * (a /public path, another host), the URL comes back unchanged.
+ */
+export function withFilename(url: string, ...texts: (string | null | undefined)[]): string {
+  const m = SANITY_IMAGE.exec(url);
+  if (!m) return url;
+  const name = imageFilename(...texts);
+  if (!name) return url;
+  const ext = /\.([a-z0-9]+)$/i.exec(m[2])?.[1]?.toLowerCase();
+  return `${m[1]}${m[2]}/${name}${ext ? `.${ext}` : ""}${url.slice(m[0].length)}`;
+}
+
+// ── @sanity/image-url builders ────────────────────────────────────────────────
+// Nothing on the site calls these today (docs/SANITY-FINDINGS.md): the pages
+// get each photo's URL from GROQ (asset->url) and size it with lib/photos.ts.
+// They are kept for code that starts from an image object, and they name what
+// they build like everything else. The builder is made on first use, from the
+// project's id and dataset, so importing the functions above costs nothing.
+
+let imageBuilder: ReturnType<typeof createImageUrlBuilder> | null = null;
+function builder() {
+  imageBuilder ??= createImageUrlBuilder({
+    projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? "9dbro2m1",
+    dataset: process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production",
+  });
+  return imageBuilder;
+}
+
+/**
+ * The raw Sanity image URL builder for a given source. Chain `.width()`,
+ * `.quality()`, `.url()` etc. on the result, then name the URL:
+ * `withFilename(urlFor(img).width(800).url(), img.alt)`. (The builder's
+ * methods each return a new builder, so a name cannot ride along the chain.)
  */
 export function urlFor(source: SanityImageSource) {
-  return builder.image(source);
+  return builder().image(source);
 }
 
 /**
  * Resolve either a Sanity image object or a legacy string path to a URL.
  *
- * - Sanity asset ref  → builds a CDN URL with auto-format + optional resize
+ * - Sanity asset ref  → builds a CDN URL with auto-format + optional resize,
+ *                       named by `opts.name` (withFilename)
  * - String path       → returned as-is (Vercel CDN / public folder fallback)
  * - null / undefined  → returns null
  *
  * Defaults to auto("format") and quality(85) when no opts are provided.
  *
  * @example
- *   <img src={resolveImageUrl(product.heroImage, { width: 800 }) ?? "/images/placeholder.jpg"} />
+ *   <img src={resolveImageUrl(product.heroImage, { width: 800, name: product.name }) ?? "/images/placeholder.jpg"} />
  */
 export function resolveImageUrl(
   source: SanityImageSource | string | null | undefined,
-  opts?: { width?: number; height?: number; quality?: number }
+  opts?: { width?: number; height?: number; quality?: number; name?: string | null }
 ): string | null {
   if (!source) return null;
 
@@ -55,63 +149,47 @@ export function resolveImageUrl(
   if (typeof source === "string") return source;
 
   try {
-    let b = builder.image(source).auto("format").quality(opts?.quality ?? 85);
+    let b = builder().image(source).auto("format").quality(opts?.quality ?? 85);
     if (opts?.width)  b = b.width(opts.width);
     if (opts?.height) b = b.height(opts.height);
-    return b.url();
+    return withFilename(b.url(), opts?.name);
   } catch {
     return null;
   }
 }
 
+type Source = SanityImageSource | string | null | undefined;
+
+/** One preset: a builder chain for an image object, named; a string passes through. */
+function preset(make: (source: SanityImageSource) => string) {
+  return (source: Source, name?: string | null): string | null => {
+    if (!source || typeof source === "string") return source ?? null;
+    try {
+      return withFilename(make(source), name);
+    } catch {
+      return null;
+    }
+  };
+}
+
 /**
- * Pre-configured image presets for common use cases.
- *
- * Each preset produces an optimised, auto-formatted URL for its intended context.
- * Use these instead of raw `resolveImageUrl()` where the context is known.
+ * Pre-configured image presets for common use cases. The second argument is
+ * the photo's name text (its alt, else the document's title).
  *
  * @example
- *   // Hero image — full-width, high resolution
- *   <img src={imagePresets.hero(doc.heroImage) ?? fallback} />
- *
- *   // Card thumbnail — medium resolution
- *   <img src={imagePresets.card(doc.image) ?? fallback} />
- *
- *   // Open Graph / social sharing
- *   <meta property="og:image" content={imagePresets.og(doc.featuredImage) ?? ogDefault} />
+ *   <img src={imagePresets.hero(doc.heroImage, doc.heroImage?.alt) ?? fallback} />
+ *   <img src={imagePresets.card(doc.image, doc.title) ?? fallback} />
+ *   <meta property="og:image" content={imagePresets.og(doc.featuredImage, doc.title) ?? ogDefault} />
  */
 export const imagePresets = {
-  /** Full-width hero — 1920 px wide, q85, crop to fill */
-  hero: (source: SanityImageSource | string | null | undefined): string | null => {
-    if (!source || typeof source === "string") return source ?? null;
-    try {
-      return builder.image(source).width(1920).auto("format").quality(85).fit("crop").url();
-    } catch { return null; }
-  },
-
-  /** Product / application card — 800 px wide, q85, crop to fill */
-  card: (source: SanityImageSource | string | null | undefined): string | null => {
-    if (!source || typeof source === "string") return source ?? null;
-    try {
-      return builder.image(source).width(800).auto("format").quality(85).fit("crop").url();
-    } catch { return null; }
-  },
-
-  /** Thumbnail — 240 px wide, q80, crop to fill */
-  thumb: (source: SanityImageSource | string | null | undefined): string | null => {
-    if (!source || typeof source === "string") return source ?? null;
-    try {
-      return builder.image(source).width(240).auto("format").quality(80).fit("crop").url();
-    } catch { return null; }
-  },
-
-  /** Open Graph / social sharing — 1200×630, q90 */
-  og: (source: SanityImageSource | string | null | undefined): string | null => {
-    if (!source || typeof source === "string") return source ?? null;
-    try {
-      return builder.image(source).width(1200).height(630).auto("format").quality(90).fit("crop").url();
-    } catch { return null; }
-  },
+  /** Full-width hero: 1920 px wide, q85, crop to fill */
+  hero: preset((s) => urlFor(s).width(1920).auto("format").quality(85).fit("crop").url()),
+  /** Product / application card: 800 px wide, q85, crop to fill */
+  card: preset((s) => urlFor(s).width(800).auto("format").quality(85).fit("crop").url()),
+  /** Thumbnail: 240 px wide, q80, crop to fill */
+  thumb: preset((s) => urlFor(s).width(240).auto("format").quality(80).fit("crop").url()),
+  /** Open Graph / social sharing: 1200×630, q90 */
+  og: preset((s) => urlFor(s).width(1200).height(630).auto("format").quality(90).fit("crop").url()),
 };
 
 /**

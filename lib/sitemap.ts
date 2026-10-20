@@ -8,13 +8,13 @@ import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
 import type { PostMeta } from "@/lib/blog";
 import { INSIGHTS_SECTIONS, isArchivedPost } from "@/lib/field-notes-taxonomy";
-import { productImages, applicationImages, resolveImage } from "@/lib/featured-images";
-import { galleryFor } from "@/lib/asset-scan";
-import { sitemapImages } from "@/lib/image-seo";
+import { heroAlt, sitemapImages } from "@/lib/image-seo";
 import { withSearchImages } from "@/lib/search-images";
 import type { MergedProduct } from "@/lib/products.server";
 import type { MergedApplication } from "@/lib/applications.server";
-import { isSanityImage, sanitySearchImage, type Photo } from "@/lib/photos";
+import { galleryImageSrc, heroImageSrc, homeHeroSrc, isSanityImage, type Photo } from "@/lib/photos";
+import { sanityAssetFile } from "@/lib/sanity-image";
+import { applicationPagePhotos, postHeroSrc, productPagePhotos } from "@/lib/page-photos";
 
 const BASE_URL = "https://hubss.com";
 
@@ -23,10 +23,34 @@ const abs = (p: string) => (p.startsWith("http") ? p : `${BASE_URL}${p.startsWit
 type PhotoSources = {
   products: Map<string, Pick<MergedProduct, "heroPhoto" | "galleryPhotos">>;
   applications: Map<string, Pick<MergedApplication, "heroPhoto" | "galleryPhotos">>;
+  /** The homepage hero as Studio holds it (page-homepage, homepageHeroImage). */
+  homeHero?: Pick<Photo, "src" | "alt"> | null;
 };
 
-/** Sanity photos go to Google as 1200px WebP (lib/photos.ts); /public paths as they are. */
-const photoUrl = (src: string) => (isSanityImage(src) ? sanitySearchImage(src) : src);
+/**
+ * Each photo a page shows, at the address the page shows it (20 Oct 2026, the
+ * client's image-search brief): a Sanity photo by its descriptive filename and
+ * the exact transform in the page's <img> (lib/page-photos.ts, lib/photos.ts),
+ * so the entry Google reads is the image it finds on the page. Until then the
+ * sitemap offered a 1200px WebP copy (fm=webp) that no page renders. A
+ * /public photo is its path, which withSearchImages swaps for the copy the
+ * build baked (lib/search-images.ts). One entry per photo: a photo that is
+ * the hero and also in the gallery is listed once, at the hero's address.
+ */
+function onePerPhoto(urls: string[]): string[] {
+  const seen = new Set<string>();
+  return urls.filter((u) => {
+    const key = sanityAssetFile(u) || u.split("?")[0];
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+/** A gallery as the page serves it: every photo, the first ones as tiles and the rest in the crawlable fallback (GalleryGrid). */
+function galleryUrls(gallery: Photo[]): string[] {
+  return gallery.map((g, i) => (isSanityImage(g.src) ? galleryImageSrc(g.src, g.alt, i, gallery.length) : g.src));
+}
 
 /**
  * The sitemap, from whatever photo data it is given. Galleries and heroes come
@@ -41,13 +65,22 @@ export function buildSitemap(photos?: PhotoSources, posts: PostMeta[] = []): Met
   const productPhotos = photos?.products ?? new Map();
   const applicationPhotos = photos?.applications ?? new Map();
 
+  // The homepage shows one photograph in its hero (components/sections/HeroSlideshow.tsx):
+  // Studio's, or /images/hero/hero-1.jpg when Studio has none. Until 20 Oct 2026
+  // this entry named four /public files (hero-1, hero-bg, hero-2, hero-3) that
+  // the page no longer shows.
+  const homeHero = photos?.homeHero?.src ? photos.homeHero : null;
+  const homeImages = homeHero
+    ? [abs(homeHeroSrc(homeHero.src, homeHero.alt || heroAlt(homeHero.src)))]
+    : [abs("/images/hero/hero-1.jpg")];
+
   const staticRoutes: MetadataRoute.Sitemap = [
     {
       url: BASE_URL,
       lastModified: new Date(),
       changeFrequency: "daily",
       priority: 1.0,
-      images: [abs("/images/hero/hero-1.jpg"), abs("/images/hero/hero-bg.jpg"), abs("/images/hero/hero-2.jpg"), abs("/images/hero/hero-3.jpg")],
+      images: homeImages,
     },
     { url: `${BASE_URL}/products`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE_URL}/applications`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
@@ -89,9 +122,7 @@ export function buildSitemap(photos?: PhotoSources, posts: PostMeta[] = []): Met
   const productRoutes: MetadataRoute.Sitemap = products
     .filter((p) => !p.comingSoon)
     .map((p) => {
-      // Use the featured image from featured-images.ts (audited, correct) over the raw imageUrl
-      const featured = productImages[p.slug] ? resolveImage(productImages[p.slug]).src : p.imageUrl;
-      // Every photo in the product's folder, not the first three.
+      // Every photo in the product's gallery, not the first three.
       //
       // This is the only route by which most of the library reaches Google
       // Images. The galleries render seven tiles and load the rest behind a
@@ -99,12 +130,14 @@ export function buildSitemap(photos?: PhotoSources, posts: PostMeta[] = []): Met
       // /images/products/traffic-patterns-xd (138 photos) the sitemap was
       // offering four and hiding 134. Google accepts up to 1,000 image entries
       // per URL; the largest folder here is 141.
-      const merged = productPhotos.get(p.slug);
-      const heroSrc = photoUrl(merged?.heroPhoto?.src ?? featured);
-      const galleryImgs = sitemapImages(
-        merged?.galleryPhotos?.map((g: Photo) => photoUrl(g.src)) ?? galleryFor(featured, p.gallery, `images/products/${p.slug}`)
-      );
-      const images = [abs(heroSrc), ...galleryImgs].filter((v, i, a) => a.indexOf(v) === i);
+      //
+      // The hero and the gallery the page itself picks (lib/page-photos.ts),
+      // from the merged product the route passes (Studio over the code, as the
+      // page gets it), so a hero the page swaps (ChipFill) or draws as a panel
+      // (AggreFill) is not offered.
+      const { hero, heroShown, gallery } = productPagePhotos({ ...p, ...productPhotos.get(p.slug) });
+      const heroUrls = heroShown ? [isSanityImage(hero.src) ? heroImageSrc(hero) : hero.src] : [];
+      const images = onePerPhoto([...heroUrls.map(abs), ...sitemapImages(galleryUrls(gallery))]);
       return {
         url: `${BASE_URL}/products/${p.slug}`,
         lastModified: new Date(),
@@ -115,14 +148,10 @@ export function buildSitemap(photos?: PhotoSources, posts: PostMeta[] = []): Met
     });
 
   const applicationRoutes: MetadataRoute.Sitemap = applications.map((a) => {
-    const featured = applicationImages[a.slug] ? resolveImage(applicationImages[a.slug]).src : a.imageUrl;
-    // Full folder, same reasoning as productRoutes above.
-    const merged = applicationPhotos.get(a.slug);
-    const heroSrc = photoUrl(merged?.heroPhoto?.src ?? featured);
-    const galleryImgs = sitemapImages(
-      merged?.galleryPhotos?.map((g: Photo) => photoUrl(g.src)) ?? galleryFor(featured, a.gallery, `images/applications/${a.slug}`)
-    );
-    const images = [abs(heroSrc), ...galleryImgs].filter((v, i, arr) => arr.indexOf(v) === i);
+    // Full gallery, same reasoning as productRoutes above.
+    const { hero, gallery } = applicationPagePhotos({ ...a, ...applicationPhotos.get(a.slug) });
+    const heroUrl = isSanityImage(hero.src) ? heroImageSrc(hero) : hero.src;
+    const images = onePerPhoto([abs(heroUrl), ...sitemapImages(galleryUrls(gallery))]);
     return {
       url: `${BASE_URL}/applications/${a.slug}`,
       lastModified: new Date(),
@@ -137,16 +166,20 @@ export function buildSitemap(photos?: PhotoSources, posts: PostMeta[] = []): Met
   // a sitemap that lists redirects fails scripts/verify-site.mjs (check 1).
 
   // lib/blog.ts already leaves archived posts out; this holds if a caller
-  // passes a list from anywhere else.
-  const blogRoutes: MetadataRoute.Sitemap = posts.filter((p) => !isArchivedPost(p.slug)).map((p) => ({
-    url: `${BASE_URL}/blog/${p.slug}`,
-    lastModified: new Date(p.date),
-    changeFrequency: "monthly" as const,
-    priority: 0.7,
-    images: p.featuredImage ? [abs(photoUrl(p.featuredImage))] : undefined,
-  }));
+  // passes a list from anywhere else. Each post lists its featured photo at
+  // the address its hero shows it (inset or full-bleed, lib/page-photos.ts).
+  const blogRoutes: MetadataRoute.Sitemap = posts.filter((p) => !isArchivedPost(p.slug)).map((p) => {
+    const hero = postHeroSrc(p);
+    return {
+      url: `${BASE_URL}/blog/${p.slug}`,
+      lastModified: new Date(p.date),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+      images: hero ? [abs(hero)] : undefined,
+    };
+  });
 
-  // Every image above is named by its original, and the originals are the
+  // A /public photo above is named by its original, and the originals are the
   // heaviest files on the site (median 1 MB). withSearchImages points Google
   // at the 1200px WebP copies the build baked instead — see
   // lib/search-images.ts. scripts/gen-search-images.ts calls this function to

@@ -181,6 +181,7 @@ export default function GalleryArchive({ images, footer }: { images: GalleryImag
                   <PhotoImage
                     src={img.src}
                     alt={`${img.alt}${img.location ? `, ${img.location}` : ""}, decorative pavement by HUB Surface Systems`}
+                    filename={`${img.alt} ${img.location}`}
                     fill
                     loading={i < EAGER ? "eager" : "lazy"}
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -248,6 +249,8 @@ export default function GalleryArchive({ images, footer }: { images: GalleryImag
           // on the page.
           alt: `${img.alt}${img.location ? `, ${img.location}` : ""}, decorative pavement by HUB Surface Systems`,
           caption: img.location ? `${img.alt} · ${img.location}` : img.alt,
+          // The tile's filename, so the full view's address is the same photo's.
+          name: `${img.alt} ${img.location}`,
         }))}
         index={lightbox ?? -1}
         onClose={closeLightbox}

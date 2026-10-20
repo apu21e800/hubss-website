@@ -19,6 +19,7 @@ import ChromeImg from "@/components/ui/ChromeImg";
 import { CHROME_MARKS, CHROME_PANELS } from "@/lib/chrome-images.mjs";
 import navInsights from "@/lib/nav-insights.json";
 import { BLOG_NAME } from "@/lib/field-notes-taxonomy";
+import { altBesideTitle } from "@/lib/blog-taxonomy";
 // Nothing the menus draw goes through /_next/image. Family and group photos
 // and Moose are ChromeImg (baked at build time); Insights photos are Sanity
 // CDN addresses (or, for the fallback cover, baked chrome files) written at
@@ -181,6 +182,11 @@ interface NavPost {
   excerpt?: string; readTime?: string; thumb: NavImage;
   /** The panel's 3:2 row picture (since 2 Oct 2026; a copy without it falls back to `thumb`). */
   card?: NavImage;
+  /**
+   * The featured photo's alt in Studio (since 20 Oct 2026). The cover and the
+   * rows print it only when it is not the headline beside it (altBesideTitle).
+   */
+  alt?: string;
 }
 interface NavSection {
   key: string; label: string; href: string; blurb: string; count: number;
@@ -548,11 +554,13 @@ function ApplicationsMegaMenu() {
 }
 
 // A Sanity CDN photo from lib/nav-insights.json: plain <img srcset>, sized at
-// build time, never /_next/image. Lazy by default; the panel's cover asks
-// for eager.
-function InsightImg({ image, sizes, className, style, loading = "lazy", decoding = "async" }: { image: NavImage; sizes: string; className?: string; style?: React.CSSProperties; loading?: "lazy" | "eager"; decoding?: "async" | "sync" }) {
+// build time, never /_next/image (the addresses carry the photo's filename,
+// scripts/gen-nav-insights.ts). Lazy by default; the panel's cover asks for
+// eager. `alt` is empty unless the caller has the photo's own words: a
+// section's picture is decoration beside the section's name.
+function InsightImg({ image, sizes, className, style, loading = "lazy", decoding = "async", alt = "" }: { image: NavImage; sizes: string; className?: string; style?: React.CSSProperties; loading?: "lazy" | "eager"; decoding?: "async" | "sync"; alt?: string }) {
   // eslint-disable-next-line @next/next/no-img-element -- deliberate, see lib/chrome-images.mjs
-  return <img src={image.src} srcSet={image.srcSet} sizes={sizes} alt="" loading={loading} decoding={decoding} className={className} style={style} />;
+  return <img src={image.src} srcSet={image.srcSet} sizes={sizes} alt={alt} loading={loading} decoding={decoding} className={className} style={style} />;
 }
 
 // The panel's photographs, fetched before it opens (QA A7, 30 Sep 2026:
@@ -620,6 +628,7 @@ function LatestRow({ post, first }: { post: NavPost; first: boolean }) {
       >
         <InsightImg
           image={post.card ?? post.thumb}
+          alt={altBesideTitle(post.alt, post.title)}
           sizes={CARD_SIZES}
           loading="eager"
           className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
@@ -693,6 +702,7 @@ function InsightsMegaMenu() {
                   panel's first frame (warmInsightsCover). */}
               <InsightImg
                 image={cover.image}
+                alt={altBesideTitle(cover.alt, cover.title)}
                 sizes={COVER_SIZES}
                 loading="eager"
                 decoding="sync"

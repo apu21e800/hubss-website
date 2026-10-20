@@ -3,7 +3,7 @@ import PhotoImage from "@/components/ui/PhotoImage";
 import type { PostMeta } from "@/lib/blog";
 import { isSanityImage } from "@/lib/photos";
 import { sectionFor } from "@/lib/field-notes-taxonomy";
-import { clipExcerpt, focalObjectPosition, formatPostDate } from "@/lib/blog-taxonomy";
+import { altBesideTitle, clipExcerpt, focalObjectPosition, formatPostDate } from "@/lib/blog-taxonomy";
 
 /**
  * How Insights shows a post, everywhere a post is listed: the /blog front
@@ -32,7 +32,13 @@ function getFallback(slug: string) {
   return FALLBACKS[hash % FALLBACKS.length];
 }
 
-/** The photo, its focal point, and whether Sanity's CDN sizes it. */
+/**
+ * The photo, its focal point, whether Sanity's CDN sizes it, its alt and its
+ * filename. The alt is the photo's own description, or empty when it would
+ * only repeat the headline beside it (altBesideTitle); the filename is the
+ * photo's alt, else the title, else the slug (lib/sanity-image.ts), so a card
+ * asks for the same named address as the post's own page.
+ */
 function photoFor(post: PostMeta) {
   const src = post.featuredImage ?? getFallback(post.slug);
   return {
@@ -43,6 +49,8 @@ function photoFor(post: PostMeta) {
     focus: post.featuredImage
       ? focalObjectPosition(post.featuredImageHotspot, post.featuredImageWidth, post.featuredImageHeight)
       : undefined,
+    alt: post.featuredImage ? altBesideTitle(post.featuredImageAlt, post.title) : "",
+    filename: post.featuredImageAlt || post.title || post.slug,
   };
 }
 
@@ -89,7 +97,8 @@ export default function BlogCard({
       >
         <PhotoImage
           src={photo.src}
-          alt=""
+          alt={photo.alt}
+          filename={photo.filename}
           fill
           className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
           style={photo.focus ? { objectPosition: photo.focus } : undefined}
@@ -131,7 +140,8 @@ export function StoryLead({ post, headingLevel = "h2" }: { post: PostMeta; headi
       >
         <PhotoImage
           src={photo.src}
-          alt=""
+          alt={photo.alt}
+          filename={photo.filename}
           fill
           className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
           style={photo.focus ? { objectPosition: photo.focus } : undefined}

@@ -6,7 +6,7 @@ import Link from "next/link";
 // || instead of ?? guards against empty-string heroImageSrc from Sanity.
 import { heroAlt } from "@/lib/image-seo";
 import { HOME_HERO } from "@/lib/hero-framing";
-import { isSanityImage, sanitySized, sanitySrcSet } from "@/lib/photos";
+import { homeHeroSrc, isSanityImage, sanitySrcSet } from "@/lib/photos";
 import { keepDots } from "@/lib/separators";
 
 const FALLBACK_HERO = "/images/hero/hero-1.jpg";
@@ -89,8 +89,11 @@ export default function HeroSlideshow({
 }: HeroSlideshowProps = {}) {
   const src = heroImageSrc || FALLBACK_HERO;
   // A Sanity photo is sized by Sanity's CDN (lib/photos.ts): a phone gets an
-  // 828px WebP instead of the full-size original.
+  // 828px WebP instead of the full-size original. Every size carries the
+  // photo's filename, from the alt below; the <img src> is the address the
+  // image sitemap lists for the homepage (homeHeroSrc, lib/sitemap.ts).
   const fromSanity = isSanityImage(src);
+  const alt = heroImageAlt || heroAlt(src);
   const wideSource = heroSources.find((v) => v.kind === "wide" || v.file === HOME_HERO.wide.file);
 
   return (
@@ -123,10 +126,10 @@ export default function HeroSlideshow({
         ))}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={fromSanity ? sanitySized(src, 1920) : src}
-          srcSet={fromSanity ? sanitySrcSet(src) : undefined}
+          src={homeHeroSrc(src, alt)}
+          srcSet={fromSanity ? sanitySrcSet(src, undefined, undefined, alt) : undefined}
           sizes={fromSanity ? "100vw" : undefined}
-          alt={heroImageAlt || heroAlt(src)}
+          alt={alt}
           // @ts-ignore fetchPriority is valid HTML but TS types lag
           fetchPriority="high"
           // The file is graded when it is cut; this adds the site's lighter

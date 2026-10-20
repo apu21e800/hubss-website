@@ -12,15 +12,14 @@ import ColourSystem from "@/components/sections/ColourSystem";
 import PavingPatterns from "@/components/sections/PavingPatterns";
 import PatternGalleryCTA from "@/components/sections/PatternGalleryCTA";
 import { familiesFor, colourSectionFor } from "@/lib/colours";
-import { galleryFor, altFor } from "@/lib/asset-scan";
 import GalleryGrid, { type GalleryImage } from "@/components/ui/GalleryGrid";
 import JsonLd from "@/components/ui/JsonLd";
 import RichText from "@/components/ui/RichText";
-import { photoObject, seoCaption, honestPhoto, HUB_ORGANIZATION } from "@/lib/image-seo";
+import { photoObject, HUB_ORGANIZATION } from "@/lib/image-seo";
 import { isSanityImage, sanityOgImage, type Photo } from "@/lib/photos";
+import { heroTooSmall as heroIsTooSmall, productPagePhotos } from "@/lib/page-photos";
 import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
-import { productImages, resolveImage } from "@/lib/featured-images";
 import { buildMetadata } from "@/lib/seo";
 import { getProductFamily } from "@/lib/product-taxonomy";
 import { catalogueFor } from "@/lib/product-catalogue";
@@ -55,23 +54,14 @@ export async function generateStaticParams() {
 
 type Props = { params: Promise<{ slug: string }> };
 
-/**
- * Widths of the code's own hero photos that may stand in for a Studio hero
- * that is too small to fill the banner (see `hero` below). Measured on
- * 17 Oct 2026; add a line when a bigger photo lands in /public.
- */
-const CODE_HERO_WIDTHS: Record<string, number> = {
-  "/images/products/chipfill/chipfill-application.jpg": 1200,
-};
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   // The same merged product the page renders, so <title> and the meta
   // description follow the SEO fields in Studio like the rest of the page does.
   const product = await getMergedProduct(slug);
   if (!product) return {};
-  const featuredImg = productImages[slug] ? resolveImage(productImages[slug]) : null;
-  const heroSrc = product.heroPhoto?.src ?? featuredImg?.src ?? product.imageUrl;
+  // The share card is the page's own hero (lib/page-photos.ts), named by its alt.
+  const { hero } = productPagePhotos(product);
   return buildMetadata({
     title: product.seoTitle || product.name,
     // The SEO description from Studio (or the code's) when it fits in whole
@@ -81,7 +71,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     // "…" (QA E1, on 22 pages).
     description: metaDescription(product.seoDescription, product.shortDesc),
     slug: `products/${product.slug}`,
-    image: isSanityImage(heroSrc) ? sanityOgImage(heroSrc) : heroSrc,
+    image: isSanityImage(hero.src) ? sanityOgImage(hero.src, hero.alt) : hero.src,
   });
 }
 
@@ -139,47 +129,14 @@ export default async function ProductPage({ params }: Props) {
   // something to open.
   const hasDocs = getDocsForProduct(product.slug).length > 0;
 
-  // Featured image from lib/featured-images.ts (audited, correct per product)
-  const featuredImg = productImages[slug] ? resolveImage(productImages[slug]) : null;
-
-  // The hero photo and the gallery come from Sanity, where Doug curates them
-  // (lib/photos.ts). A product whose Sanity document has none falls back to
-  // exactly what this page showed before: the audited featured image, and the
-  // product's /public folder scanned at build time (docs/IMAGE-WORKFLOW.md).
-  //
-  // The folder fallback excludes the photo the hero banner ACTUALLY shows —
-  // featuredImg when one is configured, not product.imageUrl. Keying it on
-  // imageUrl meant every product with a distinct featured image (seven of
-  // eleven) repeated its banner photo inside "The work" while the imageUrl
-  // photo, shown nowhere, was silently dropped from the gallery.
-  //
-  // honestPhoto (lib/image-seo.ts, 30 Sep 2026, QA E10): the photo sync wrote
-  // the old templates' invented settings into Studio ("at a civic plaza",
-  // "150 mil ..."), so the Sanity alt and caption are replaced at render by
-  // what the photo's folder proves; a line a person wrote in Studio stays.
-  // A Studio hero under 1000px wide is passed over for the code's photo when
-  // the code has one at least that wide (17 Oct 2026, Vern: "make sure
-  // images are clear and well positioned including all hero images"):
-  // ChipFill's Studio hero is a 640px file, and chipfill-application.jpg
-  // (1200px, the chips poured into the hole) is the photograph of what the
-  // product is. With no large photo anywhere (AggreFill) the hatched panel
-  // below stays, which is honest until one is taken.
-  const codeHero = { src: featuredImg?.src ?? product.imageUrl, alt: featuredImg?.alt ?? product.name };
-  const studioHero = product.heroPhoto;
-  const studioTooSmall = typeof studioHero?.width === "number" && studioHero.width < 1000;
-  const codeHeroWidth = CODE_HERO_WIDTHS[codeHero.src];
-  const hero: Photo = honestPhoto(
-    studioHero && !(studioTooSmall && codeHeroWidth && codeHeroWidth >= 1000) ? studioHero : codeHero,
-  );
-  const galleryPhotos: Photo[] = product.galleryPhotos?.map(honestPhoto) ?? (() => {
-    const bannerSrc = featuredImg?.src ?? product.imageUrl;
-    const fromFolder = galleryFor(bannerSrc, product.gallery, `images/products/${product.slug}`);
-    return (fromFolder.length > 0 ? fromFolder : [bannerSrc]).map((src) => ({
-      src,
-      alt: altFor(src, product.name),
-      caption: seoCaption(src) ?? altFor(src, product.name),
-    }));
-  })();
+  // The hero photo and the gallery come from Sanity, where Doug curates them,
+  // with the code's featured image and /public folder as the fallback, the
+  // alts made honest (honestPhoto), and a Studio hero too small for the
+  // banner passed over for a code photo that fills it (ChipFill) or drawn as
+  // a panel (AggreFill). The picks are lib/page-photos.ts, productPagePhotos,
+  // since 20 Oct 2026: the image sitemap reads the same picks, so it lists
+  // exactly the photos this page shows.
+  const { hero, gallery: galleryPhotos } = productPagePhotos(product);
   const gallery: GalleryImage[] = galleryPhotos.map((p) => ({ src: p.src, alt: p.alt, caption: p.caption ?? p.alt }));
 
   // The related applications, merged with Sanity so each card can carry the
@@ -299,7 +256,7 @@ export default async function ProductPage({ params }: Props) {
   const heroPosition = heroObjectPosition(hero, product.heroPosition ?? "center 62%");
   // A photo under 1000 px wide cannot fill a 1440 px banner (QA B1); the band
   // becomes a dark panel below. Only a Studio photo carries its width.
-  const heroTooSmall = typeof hero.width === "number" && hero.width < 1000;
+  const heroTooSmall = heroIsTooSmall(hero);
 
   // The spread (ProductSpecCard) prints the book's four headline specs; the
   // sidebar used to print the same four again beside them in other words

@@ -407,6 +407,17 @@ these elements, and never draw a button, label or card by hand again:
   with a 2560px candidate and a portrait CDN cut for phones around the
   hotspot); /public heroes keep PhotoImage. next.config.ts deviceSizes stay
   capped at 1920 on purpose (Vercel bills /public variants).
+- Every Sanity photo URL carries a descriptive filename (20 Oct 2026, the
+  client's image-search brief): `withFilename` in lib/sanity-image.ts puts
+  the photo's alt (else the page's title or slug) after the asset,
+  `.../<hash>-2400x1800.jpg/red-streetbond-coating-on-a-harbourfront.jpg?w=1920...`,
+  the same file at Sanity's CDN. The lib/photos.ts builders take it as
+  their last argument, PhotoImage names from `filename` else `alt`, HeroPhoto
+  from the alt, the menu JSON at build. Read a photo's asset with
+  `sanityAssetFile`, never the last path segment. The image sitemap lists,
+  for each page, the photos that page shows at the address it shows them
+  (lib/page-photos.ts picks both); `npm run verify` fails a sitemap photo
+  that is not on its page, `npm run test:images` covers the names.
 - The home page leads with the newest post that has a photo; nothing is
   pinned. The client ticker (TrustedByMarquee) lists only names the Product
   Portfolio Book lists. The White Rock Pier pin has no photo until a real one

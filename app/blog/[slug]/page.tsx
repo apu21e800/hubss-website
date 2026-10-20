@@ -19,6 +19,7 @@ import PostBody from "@/components/blog/PostBody";
 import PhotoImage from "@/components/ui/PhotoImage";
 import HeroPhoto from "@/components/ui/HeroPhoto";
 import { isSanityImage, sanityOgImage, sanitySized } from "@/lib/photos";
+import { postHeroAlt, postHeroInset, postHeroSrc } from "@/lib/page-photos";
 import { focalObjectPosition, formatPostDate } from "@/lib/blog-taxonomy";
 
 /**
@@ -47,14 +48,6 @@ export async function generateStaticParams() {
 }
 
 /**
- * A featured photo narrower than this is not stretched across the hero (QA
- * rest#13): the White Rock Pier photo is 206 px wide and was blown up to
- * 1440, and seventeen more under 1200 px looked soft. Those get the inset
- * hero below.
- */
-const FULL_BLEED_MIN_WIDTH = 1200;
-
-/**
  * The reading column: 17 px type on a desktop (16 on a phone) and a measure
  * of about 70 characters. Everything that lines up with the article (the
  * share row, the Lunch & Learn card below lg, the systems rail and the
@@ -67,21 +60,6 @@ const FULL_BLEED_MIN_WIDTH = 1200;
  * characters a line. 56ch is 601 px, about 72 characters a line.
  */
 const MEASURE: CSSProperties = { maxWidth: "56ch", fontSize: "clamp(1rem, 0.96rem + 0.2vw, 1.0625rem)" };
-
-/**
- * The hero photograph's alt: Studio's alt for the featured image when it says
- * something the title does not, else the title (QA D21, 30 Sep 2026: "the
- * hero img alt is the post title"). Checked against Sanity on 30 Sep 2026: 73
- * of 74 posts carry the title itself as the image's alt (the import copied it
- * across), so on those the two are the same string either way. A real
- * description of the photo is typed into the featured image's alt in Studio;
- * nothing here invents one.
- */
-function heroAlt(post: Post): string {
-  const alt = post.featuredImageAlt?.trim();
-  const title = post.title.trim();
-  return alt && alt.toLowerCase() !== title.toLowerCase() ? alt : title;
-}
 
 /**
  * The section label, title and meta line, the same over either hero.
@@ -141,10 +119,11 @@ type Props = { params: Promise<{ slug: string }> };
 /**
  * The share card's 1200 x 630 crop, held on Studio's focal point when there
  * is one (Sanity's crop=focalpoint), so a link preview of the Toronto Premium
- * Outlets post shows the sign, as the hero does.
+ * Outlets post shows the sign, as the hero does. Named like the hero
+ * (lib/sanity-image.ts).
  */
-function ogImage(src: string, hotspot: Post["featuredImageHotspot"]): string {
-  const url = new URL(sanityOgImage(src));
+function ogImage(src: string, hotspot: Post["featuredImageHotspot"], name: string): string {
+  const url = new URL(sanityOgImage(src, name));
   if (hotspot) {
     url.searchParams.set("crop", "focalpoint");
     url.searchParams.set("fp-x", hotspot.x.toFixed(3));
@@ -163,7 +142,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     slug: `blog/${slug}`,
     type: "article",
     publishedTime: post.date,
-    image: post.featuredImage && isSanityImage(post.featuredImage) ? ogImage(post.featuredImage, post.featuredImageHotspot) : post.featuredImage,
+    image: post.featuredImage && isSanityImage(post.featuredImage) ? ogImage(post.featuredImage, post.featuredImageHotspot, postHeroAlt(post)) : post.featuredImage,
   });
 }
 
@@ -238,7 +217,7 @@ export default async function BlogPostPage({ params }: Props) {
     mainEntityOfPage: { "@type": "WebPage", "@id": postUrl },
     url: postUrl,
     image: post.featuredImage
-      ? (isSanityImage(post.featuredImage) ? sanitySized(post.featuredImage, 1200) : `https://hubss.com${post.featuredImage}`)
+      ? (isSanityImage(post.featuredImage) ? sanitySized(post.featuredImage, 1200, 80, postHeroAlt(post)) : `https://hubss.com${post.featuredImage}`)
       : "https://hubss.com/images/og-default.jpg",
   };
 
@@ -260,7 +239,11 @@ export default async function BlogPostPage({ params }: Props) {
   const hero = post.featuredImage;
   const heroW = post.featuredImageWidth;
   const heroH = post.featuredImageHeight;
-  const inset = !!hero && !!heroW && !!heroH && heroW < FULL_BLEED_MIN_WIDTH;
+  // Under 1200 px wide the photo is inset beside the title, not stretched
+  // (lib/page-photos.ts, FULL_BLEED_MIN_WIDTH). Its alt is also the words of
+  // its filename on every size (lib/sanity-image.ts).
+  const inset = postHeroInset(post);
+  const heroWords = postHeroAlt(post);
   const focus = focalObjectPosition(post.featuredImageHotspot, heroW, heroH);
   // The inset photo is shown at its own size or smaller, never enlarged:
   // at most 520 x 440 beside the title, the column's width on a phone.
@@ -288,7 +271,7 @@ export default async function BlogPostPage({ params }: Props) {
           <div className="absolute inset-0" aria-hidden="true">
             {/* eslint-disable-next-line @next/next/no-img-element -- a blurred wash, not a photo to optimise */}
             <img
-              src={post.featuredImageLqip ?? sanitySized(hero!, 64, 50)}
+              src={post.featuredImageLqip ?? sanitySized(hero!, 64, 50, heroWords)}
               alt=""
               className="absolute inset-0 h-full w-full object-cover"
               style={{ filter: "blur(36px) saturate(1.15)", transform: "scale(1.3)" }}
@@ -309,14 +292,14 @@ export default async function BlogPostPage({ params }: Props) {
             >
               {/* eslint-disable-next-line @next/next/no-img-element -- Sanity's CDN sizes it; see lib/photos.ts */}
               <img
-                src={sanitySized(hero!, Math.min(heroW!, 1040))}
+                src={postHeroSrc(post)}
                 srcSet={[insetW, insetW * 2]
                   .map((w) => Math.min(w, heroW!))
                   .filter((w, i, a) => a.indexOf(w) === i)
-                  .map((w) => `${sanitySized(hero!, w)} ${w}w`)
+                  .map((w) => `${sanitySized(hero!, w, 80, heroWords)} ${w}w`)
                   .join(", ")}
                 sizes={`(max-width: 1023px) min(calc(100vw - 48px), ${insetW}px), ${insetW}px`}
-                alt={heroAlt(post)}
+                alt={heroWords}
                 width={heroW}
                 height={heroH}
                 fetchPriority="high"
@@ -337,7 +320,7 @@ export default async function BlogPostPage({ params }: Props) {
             // against this box's own size; see focalObjectPosition (QA rest#29).
             <div className="absolute inset-0" style={{ containerType: "size" }}>
               <HeroPhoto
-                photo={{ src: hero, alt: heroAlt(post), hotspot: post.featuredImageHotspot }}
+                photo={{ src: hero, alt: heroWords, hotspot: post.featuredImageHotspot }}
                 position={focus}
                 className="hero-pop"
                 phoneRatio={390 / 574}
@@ -410,7 +393,7 @@ export default async function BlogPostPage({ params }: Props) {
                 title above is the page's only one (44 of the old posts restated
                 it as a `# ` heading; the import dropped those, and a Heading 1
                 typed in Studio comes out as an h2). */}
-            <PostBody body={post.body} lunchLearnTopic={topic} />
+            <PostBody body={post.body} lunchLearnTopic={topic} title={post.title} />
           </article>
 
           {/* Sharing, after the last paragraph and out of the way. */}

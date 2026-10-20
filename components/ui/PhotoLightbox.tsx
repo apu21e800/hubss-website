@@ -35,6 +35,8 @@ export interface LightboxPhoto {
   src: string;
   alt: string;
   caption?: string;
+  /** The words of the photo's filename (lib/sanity-image.ts), when they are not the alt. */
+  name?: string;
 }
 
 // Fixed colours: the backdrop is near-black in every theme, so nothing here
@@ -261,7 +263,7 @@ export default function PhotoLightbox({
             loaded from scratch (QA sweep, 16 Oct 2026). */}
         <div aria-hidden="true" style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", opacity: 0, pointerEvents: "none" }}>
           {preload.map((p) => (
-            <PhotoImage key={p.src} src={p.src} alt="" fill sizes="92vw" quality={85} loading="eager" />
+            <PhotoImage key={p.src} src={p.src} alt="" filename={p.name ?? p.alt} fill sizes="92vw" quality={85} loading="eager" />
           ))}
         </div>
       </motion.div>
@@ -304,6 +306,7 @@ function Frame({
         <PhotoImage
           src={photo.src}
           alt={photo.alt}
+          filename={photo.name ?? photo.alt}
           fill
           className="object-contain"
           style={{ filter: narrow ? undefined : "drop-shadow(0 24px 60px rgba(0,0,0,0.6))" }}

@@ -17,6 +17,7 @@ import CanadaMapWrapper from "@/components/sections/CanadaMapWrapper";
 import { SITE_FLAGS } from "@/lib/site-flags";
 import { getSanityPageContent, getSiteSettings } from "@/lib/sanity.queries";
 import { hotspotPosition, isSanityImage, sanityCrop, toPhoto } from "@/lib/photos";
+import { heroAlt } from "@/lib/image-seo";
 import { editAttr, isPreview } from "@/lib/sanity.preview";
 import { getMergedApplications } from "@/lib/applications.server";
 import { getMergedProducts } from "@/lib/products.server";
@@ -165,10 +166,13 @@ export default async function Home() {
   const copy = mergeHomepageCopy(sanityPage?.homepageSections);
   const heroPhoto = toPhoto(sanityPage?.homepageHeroImage, "");
   const studioHero = heroPhoto && heroPhoto.origin !== DEFAULT_HERO_ORIGIN && isSanityImage(heroPhoto.src) ? heroPhoto : null;
+  // The cuts carry the photo's filename, from the words its <img> is given
+  // (HeroSlideshow: the alt, else heroAlt).
+  const heroWords = studioHero ? studioHero.alt || heroAlt(studioHero.src) : undefined;
   const heroSources = studioHero
     ? [
-        { file: sanityCrop(studioHero.src, 2400, 1333, studioHero.hotspot), media: WIDE_MEDIA, kind: "wide" as const },
-        { file: sanityCrop(studioHero.src, 1200, 960, studioHero.hotspot), media: PHONE_MEDIA, kind: "phone" as const },
+        { file: sanityCrop(studioHero.src, 2400, 1333, studioHero.hotspot, 80, heroWords), media: WIDE_MEDIA, kind: "wide" as const },
+        { file: sanityCrop(studioHero.src, 1200, 960, studioHero.hotspot, 80, heroWords), media: PHONE_MEDIA, kind: "phone" as const },
       ]
     : HERO_SOURCES;
   const hero = {

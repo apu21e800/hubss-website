@@ -15,9 +15,13 @@
  * position), so the file is smaller and sharp.
  *
  * A /public photo keeps next/image (PhotoImage), as before.
+ *
+ * Every size carries the photo's filename (lib/sanity-image.ts): `name`, else
+ * the alt. The <img src> is heroImageSrc, the address the image sitemap lists
+ * for the page (lib/sitemap.ts).
  */
 import PhotoImage from "@/components/ui/PhotoImage";
-import { isSanityImage, sanityCrop, sanitySized, sanitySrcSet, sanityTurn, type Hotspot, type Photo } from "@/lib/photos";
+import { heroImageSrc, isSanityImage, sanityCrop, sanitySrcSet, sanityTurn, type Hotspot, type Photo } from "@/lib/photos";
 
 /** "50% 62%" as a focal point; the middle when it cannot be read. */
 function focalOf(position: string | undefined, hotspot?: Hotspot): Hotspot {
@@ -34,12 +38,15 @@ export default function HeroPhoto({
   priority = true,
   /** The phone box's shape, width:height, for the portrait cut (390 x 439 for a product hero). */
   phoneRatio = 390 / 439,
+  /** The words the photo's filename is made of, when they are not its alt. */
+  name,
 }: {
   photo: Pick<Photo, "src" | "alt" | "hotspot">;
   position?: string;
   className?: string;
   priority?: boolean;
   phoneRatio?: number;
+  name?: string;
 }) {
   const style = { objectPosition: position } as React.CSSProperties;
   if (!isSanityImage(photo.src)) {
@@ -47,22 +54,23 @@ export default function HeroPhoto({
       <PhotoImage src={photo.src} alt={photo.alt} fill className={`object-cover ${className}`} style={style} priority={priority} sizes="100vw" />
     );
   }
+  const words = name ?? photo.alt;
   const fp = focalOf(position, photo.hotspot);
   // A turned photo is served whole (lib/photos.ts); its phone cut is the
   // plain srcset too.
   const turned = sanityTurn(photo.src) !== 0;
   const phoneSet = turned
-    ? sanitySrcSet(photo.src, [828, 1200], 82)
+    ? sanitySrcSet(photo.src, [828, 1200], 82, words)
     : [780, 1170]
-        .map((w) => `${sanityCrop(photo.src, w, Math.round(w / phoneRatio), fp, 80)} ${w}w`)
+        .map((w) => `${sanityCrop(photo.src, w, Math.round(w / phoneRatio), fp, 80, words)} ${w}w`)
         .join(", ");
   return (
     <picture>
       <source media="(max-width: 639px)" srcSet={phoneSet} sizes="100vw" />
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src={sanitySized(photo.src, 1920, 82)}
-        srcSet={sanitySrcSet(photo.src, [828, 1200, 1920, 2560], 82)}
+        src={heroImageSrc(photo, words)}
+        srcSet={sanitySrcSet(photo.src, [828, 1200, 1920, 2560], 82, words)}
         sizes="100vw"
         alt={photo.alt}
         fetchPriority={priority ? "high" : undefined}

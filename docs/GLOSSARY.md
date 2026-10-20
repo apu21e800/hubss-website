@@ -71,7 +71,7 @@ CSA/ASC B651:23); then `docs/STYLE.md`.
 | Lunch & Learn | HUB's free session for a design or engineering team. | L&L, lunch and learn |
 | Resources | The specification library. | downloads |
 | the numbers | Since 1999; 27 years; 1,000+ projects; coast to coast; per-system service life. "10 provinces" is the book's number: it stays where the book says it and goes nowhere new. | 500+; 30+ years for the company (true of StreetPrint only); "Halifax to Vancouver" |
-| stamped asphalt, the link (20 Oct 2026) | The plain name for what StreetPrint is, and the site's best search phrase outside HUB's own names. The first mention in an article links to /products/streetprint with "stamped asphalt" in the link text: "StreetPrint stamped asphalt". | a link to /products/streetprint that says only "StreetPrint" or "see StreetPrint" |
+| stamped asphalt, the link (20 Oct 2026) | The plain name for what StreetPrint is, and the site's best search phrase outside HUB's own names. The first mention in an article that means StreetPrint links to /products/streetprint with "stamped asphalt" in the link text: "StreetPrint stamped asphalt". TrafficPatternsXD is stamped into asphalt but is not stamped asphalt: it links to its own page. | a link to /products/streetprint that says only "StreetPrint" or "see StreetPrint" |
 | paint (Vern, 20 Oct 2026) | Not a subject. An article is about what HUB's systems are and do. Where the reader's own question is about paint, one sentence says what the system is instead. | "beyond paint", "vs paint", "outlasts paint" in a title or heading; a section on how paint fails |
 
 ## Claims that need a source before they are written

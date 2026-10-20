@@ -268,7 +268,8 @@ check("SAVE_DRAFT says no \"vs\", and leadJob is offered but not required", () =
   assert.ok(!(SAVE_DRAFT.input_schema.required ?? []).includes("leadJob"));
 });
 check("the glossary links the first stamped asphalt to /products/streetprint, and keeps its old lines", () => {
-  assert.match(GLOSSARY_FOR_WRITERS, /the first mention of stamped asphalt links to \/products\/streetprint with "stamped asphalt" in the link text/);
+  assert.match(GLOSSARY_FOR_WRITERS, /the first mention of stamped asphalt that means StreetPrint links to \/products\/streetprint with "stamped asphalt" in the link text/);
+  assert.ok(GLOSSARY_FOR_WRITERS.includes("TrafficPatternsXD is stamped into asphalt but is not stamped asphalt"));
   assert.match(GLOSSARY_FOR_WRITERS, /"Stamped asphalt" is the plain name for what StreetPrint is/);
   assert.ok(GLOSSARY_FOR_WRITERS.includes("StreetPrint is stamped asphalt: a pattern pressed into heated asphalt"));
   assert.ok(GLOSSARY_FOR_WRITERS.includes("Paint is not the subject"));

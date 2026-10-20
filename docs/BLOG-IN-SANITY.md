@@ -59,13 +59,21 @@ item marked **Ready** with the highest priority, or, when none is Ready (since
 email says how many items are left and which one is next. It then:
 
 1. collects the facts it may use: the Product Portfolio Book pages of the item's systems and
-   applications, the company lines the site already prints, and the item's
-   brief (`lib/field-note-facts.ts`);
-2. has Claude write the post from those facts only, then has Claude check the
-   draft against the same facts (`lib/field-note-drafter.ts`);
-3. saves it in Insights as an **unpublished draft**, with a stand-in
-   photo (the first application's hero, else the first system's: a parking
-   lot post gets a parking lot) and the fact check in "Notes for the editor";
+   applications, the company lines the site already prints, up to eight
+   documented jobs from the homepage map that share those systems or
+   applications (since 20 Oct 2026), and the item's brief
+   (`lib/field-note-facts.ts`);
+2. has Claude write the post from those facts only, to the standard of
+   20 Oct 2026 (550 to 850 words for a guide, a real place first, proof before
+   explanation, no "vs"), naming the documented job it leads with, if any;
+   then has Claude check the draft against the same facts
+   (`lib/field-note-drafter.ts`);
+3. saves it in Insights as an **unpublished draft**. The featured photo is the
+   photo of the job the post leads with when that photo is in Sanity, with the
+   focal point set on its gallery copy in Studio, if one is; otherwise a
+   stand-in (the first application's hero, else the first system's: a parking
+   lot post gets a parking lot). "Notes for the editor" says which, and has
+   the fact check;
 4. marks the plan item Drafted and emails `BLOG_DRAFT_NOTIFY`.
 
 Two a week use the plan up, so after the email the run keeps it stocked
@@ -92,9 +100,10 @@ the future, so a draft that waited a week doesn't go out a week old.
 - **Run it now:** Vercel → hubss-website → Settings → Cron Jobs → Run.
 - **A particular item:** `/api/cron/draft-field-note?idea=<its id>`, with the
   `Authorization: Bearer $CRON_SECRET` header.
-- **Real projects:** the drafter only knows what the Product Portfolio Book and the brief
-  tell it. To write up an install, put the facts in the brief: where, when,
-  which system, what the client needed.
+- **Real projects:** the drafter only knows what the Product Portfolio Book, the
+  project map's documented jobs (`lib/map-projects.ts`) and the brief tell it.
+  To write up an install, put the facts in the brief: where, when, which
+  system, what the client needed.
 - **Settings (Vercel, Production):** `CRON_SECRET`, `ANTHROPIC_API_KEY`,
   `SANITY_API_WRITE_TOKEN` (an Editor token), `BLOG_DRAFT_NOTIFY` (emails,
   comma-separated), `RESEND_API_KEY`; optionally `BLOG_DRAFT_MODEL`.

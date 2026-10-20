@@ -97,9 +97,11 @@ Product Portfolio Book tell it.
 - **Does:** write from the Product Portfolio Book, the website and the brief; check its own
   draft against those facts and list anything it couldn't back up; email you.
 - **Doesn't:** publish; invent projects, clients, numbers or quotes (if it
-  needs a fact it doesn't have, it writes around it); choose photos (it puts
-  in the application's or the system's hero as a stand-in, so swap in the
-  real one when the article is about a particular job).
+  needs a fact it doesn't have, it writes around it); choose photos freely
+  (when the article leads with a job on the homepage map, the photo is that
+  job's; otherwise it puts in the application's or the system's hero as a
+  stand-in, so swap in the real one when the article is about a particular
+  job).
 
 ## 6. After you publish
 

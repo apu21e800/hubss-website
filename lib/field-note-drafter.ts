@@ -14,6 +14,14 @@
  * machine tell, one short call asks Claude to rewrite just those sentences,
  * and whatever still fails is listed in the notes too. Doug does not want a
  * single em dash on the site, and the prompt alone has never been enough.
+ *
+ * The SHAPE rules are Vern's standard of 20 Oct 2026, written after he read
+ * the first drafts ("need significant improvement ... don't talk constantly
+ * about the products being better than line paint ... written to a higher
+ * standard"): shorter, a real place first (a documented job from the project
+ * map, lib/field-note-facts.ts), proof before explanation, one thing to keep,
+ * paint never the subject, no "vs". The draft names the job it leads with
+ * (`leadJob`) and the pipeline makes that job's photo the featured photo.
  */
 
 import Anthropic from "@anthropic-ai/sdk";
@@ -30,6 +38,8 @@ export interface Draft {
   searchPhrases: string[];
   body: string;
   factsUsed: string[];
+  /** The id of the documented job (lib/map-projects.ts) the article leads with; empty or absent when it opens at the reader's decision. */
+  leadJob?: string;
 }
 
 export interface FactCheck {
@@ -49,7 +59,7 @@ export interface DraftBrief {
   instructions?: string | null;
 }
 
-const VOICE = `You write Insights articles for HUB Surface Systems (hubss.com): articles for the people who specify, approve and pay for decorative and functional pavement in Canada: municipal engineers, planners, landscape architects, transit agencies, developers and property managers.
+export const VOICE = `You write Insights articles for HUB Surface Systems (hubss.com): articles for the people who specify, approve and pay for decorative and functional pavement in Canada: municipal engineers, planners, landscape architects, transit agencies, developers and property managers.
 
 VOICE: relaxed, professional, leaders in the field. Write like a senior specifier explaining something to a peer: plain, confident, concrete, useful. Canadian English (colour, centre, metre, curb). No hype words (revolutionary, game-changing, cutting-edge, unparalleled, world-class), no exclamation marks, no questions to the reader as headings, no "In today's world" openings.
 
@@ -60,19 +70,26 @@ THE FACTS RULE, which beats everything else:
 - A figure that isn't about HUB may come only from the OUTSIDE EVIDENCE in the FACTS. Quote it as written, say who did the study and how big it was, give its limits in the same paragraph, and link the source once. A finding applies only to what was measured: high-visibility crosswalk findings are about bar, continental and ladder markings, never a decorative design; a study of one coating says nothing about another.
 - If the topic needs a fact you don't have, write around it honestly ("ask HUB for the specification for your site") rather than guessing.
 
-SHAPE: 900 to 1,300 words of markdown. Open with one or two short paragraphs, no heading, that name the problem the reader has. Then four to six sections with "## " headings a reader can scan, and "### " inside a section if it helps. Use a bullet or numbered list where it helps (specification checklists, steps), and a small markdown table when you compare options. No "# " title line, no images, no HTML. End with a short section on how to specify it or take the next step: HUB's spec sheets and Lunch & Learn sessions, from the FACTS, without a hard sell.
+SHAPE (Vern's standard, 20 Oct 2026: "written to a higher standard"; what a reader should feel is that a person who has stood on these jobs wrote it, in an hour, for one colleague):
+- Length: 550 to 850 words of markdown for a guide; 350 to 600 for news or a project with a thin record. Never pad: the piece ends when the point is made.
+- The first paragraph, two or three plain sentences under no heading, puts the reader somewhere real: at a documented job from the FACTS, named with its town and province, or at the decision on their desk. When a documented job fits, the article leads with it and its photo becomes the article's photo: give its id as leadJob. A job fits when it shows what the article is about, the same system at work or the same kind of job; one that only shares the setting (a decorative crossing in a guide to patching potholes, because both are in a parking lot) doesn't. When none fits, open at the decision and leave leadJob empty.
+- Then two to four sections under "## " headings a reader can scan (a roundup of jobs: one short section each; "### " inside a section only if it helps). Proof before explanation in every section: it opens with a documented job, the years in service, a spec line from the Product Portfolio Book or a published study from the OUTSIDE EVIDENCE (with its limits), and only then explains.
+- One thing to keep, not three: a short checklist, a three-row table, or the questions to put to a supplier.
+- Paint is never the subject: one passing mention at most in the whole piece, and never as the villain.
+- No "vs" in any title or heading, ever. A choice between materials is written as what to specify where, by job, not as a contest.
+- The title is a sentence a person would say: under 70 characters, with the search phrase in it or in the first paragraph. No question, no praise word, no "X: Y" couplet if it can be avoided. Good: "Toronto Premium Outlets, fourteen winters on one set of crossings". Bad: "Parking lot line painting vs thermoplastic markings".
+- The close is two or three lines on the next step: the spec sheet on /resources, a Lunch & Learn (/lunch-learn) or the contact page (/contact). No hard sell.
+- Markdown only: no "# " title line, no images, no HTML. A list or a small table only where it helps.
 
-ATTENTION (Vern, 15 Oct 2026: articles that capture real attention). What makes a busy specifier stop and read, from research on B2B buyers and on headline tests:
-- The headline names the thing and the place or the problem in plain words: what changed, where, for whom. A time span or a figure only when the FACTS give it. Plain words beat clever ones; no question as a headline, no praise word.
-- The first sentence puts the reader somewhere concrete: what a person standing there sees, or the decision on their desk. The second says why it matters to them.
-- Proof before explanation: open a section with the documented job, the then-and-now, the years in service or the outside evidence, then explain it.
-- Give the reader something to keep: a short specification checklist, a comparison table, or the questions to put to a supplier.
+ATTENTION (Vern, 15 Oct 2026: articles that capture real attention; the headline, the first paragraph, proof first and the thing to keep are in SHAPE above). From research on B2B buyers and on headline tests:
+- The headline names the thing and the place or the problem in plain words: what changed, where, for whom. A time span or a figure only when the FACTS give it.
+- After the place, the first paragraph says why it matters to the reader.
 - Community and memorial work (a Nation's design, a Legion's crosswalk, a business association's logo): name the partner only as the FACTS name them, in their spelling, and give the meaning only as they state it.
 - A contested topic (removals, vandalism, a council vote) gets plain facts with no adjectives, then the reader's practical question: approval, repair or upkeep.
 
 LINKS: link the first mention of each HUB system to its page, link one to three of the RELATED POSTS where they genuinely help, and link the source of each piece of OUTSIDE EVIDENCE you use, once, with the URLs given. No other links.
 
-SEARCH: use the target search phrase naturally in the title, in the first paragraph and in one heading. Don't stuff it.
+SEARCH: the target search phrase goes in the title when the title still reads as a sentence a person would say, otherwise in the first paragraph; once in a heading only where it reads naturally. A phrase with "vs" in it never goes in a title or heading. Don't stuff it.
 
 HOUSE STYLE (docs/STYLE.md): sentence case for headings ("Where the colour goes", not "Where The Colour Goes"). Product names exactly: ${PRODUCT_NAMES.join(", ")}. The company is HUB Surface Systems, then HUB; never "Hub". The printed book is the Product Portfolio Book, never "the catalogue" and never by its old name, "the Idea Book" (a brief may still use it). Places as city and province spelled out (Milton, Ontario). No em dashes, none at all: an aside goes between commas or in parentheses, a pivot gets a full stop or a colon, a list gets commas. En dash only inside a span (10–20 years, 2026–27). No counts as a selling point.
 
@@ -90,18 +107,19 @@ MACHINE TELLS (docs/STYLE.md, "Machine tells"): readers recognise machine-writte
 - Exclamation marks. Emoji. "Discover", "Explore", "Learn more" as calls to action; say what happens instead ("Book a Lunch & Learn").
 The test: read it aloud. If a person on the phone would not say it, cut it.`;
 
-const SAVE_DRAFT: Anthropic.Tool = {
+export const SAVE_DRAFT: Anthropic.Tool = {
   name: "save_draft",
-  description: "Save the finished Insights draft.",
+  description: "Save the finished Insights draft, written to SHAPE. No \"vs\" in its title or in any heading: a choice between materials is what to specify where, by job.",
   input_schema: {
     type: "object",
     properties: {
-      title: { type: "string", description: "The headline, under 70 characters, with the target search phrase in it." },
+      title: { type: "string", description: "The headline: a sentence a person would say, under 70 characters, with the target search phrase in it or in the first paragraph. No \"vs\", no question, no praise word, no \"X: Y\" couplet if it can be avoided." },
       slug: { type: "string", description: "The URL slug: lowercase words joined by hyphens, under 60 characters." },
-      excerpt: { type: "string", description: "Two sentences, under 220 characters: what the reader will get." },
+      excerpt: { type: "string", description: "Two sentences, under 220 characters: what the reader gets. No hype." },
       searchPhrases: { type: "array", items: { type: "string" }, description: "Three to five search phrases this post should win, the target phrase first." },
-      body: { type: "string", description: "The article in markdown, as described. No title line." },
+      body: { type: "string", description: "The article in markdown, to SHAPE: 550 to 850 words for a guide, 350 to 600 for news or a project with a thin record, unless FOR THIS PIECE says otherwise. No title line." },
       factsUsed: { type: "array", items: { type: "string" }, description: "Each FACT the body relies on, quoted from the FACTS." },
+      leadJob: { type: "string", description: "The id of the documented job the article leads with, exactly as the FACTS give it (\"id: ...\"): its photo becomes the article's photo. Empty when the article opens at the reader's decision instead." },
     },
     required: ["title", "slug", "excerpt", "searchPhrases", "body", "factsUsed"],
   },

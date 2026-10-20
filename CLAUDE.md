@@ -677,10 +677,9 @@ with an automated blog plan. we need to keep the blogs and social media
 pipeline full." Two research passes (B2B buyers, LinkedIn, local news,
 headline tests, AI search) became three things in code:
 - The writer's ATTENTION rules (lib/field-note-drafter.ts, VOICE): a plain,
-  concrete headline (no question, no praise); a first sentence that puts the
-  reader somewhere real; proof before explanation; something to keep (a
-  checklist, a table); partners named only as the facts name them; contested
-  topics told plainly.
+  concrete headline; partners named only as the facts name them; contested
+  topics told plainly. The first paragraph, proof before explanation and the
+  thing to keep are SHAPE's since 20 Oct 2026 (the standard, below).
 - Outside evidence (lib/insights-evidence.ts): five published studies, each
   read against its source, with who did it, its limits and a link (FHWA
   high-visibility crosswalks, SFMTA red lanes, the Bloomberg asphalt art
@@ -697,6 +696,16 @@ headline tests, AI search) became three things in code:
   before a moment with a `libraryJob`, that job takes the weekly library post
   (libraryPick in lib/social-library.ts: Kitchener's veterans crosswalk before
   Remembrance Day). `npm run test:planner`, `npm run test:social`.
+- The standard (20 Oct 2026, Vern: "written to a higher standard") is VOICE's
+  SHAPE: 550 to 850 words for a guide, 350 to 600 for news or a thin record;
+  a documented job (town and province) or the reader's decision first; proof
+  before explanation; one thing to keep; paint one passing mention at most; no
+  "vs" in a title, heading or planner idea. The jobs: documentedJobs
+  (lib/field-note-facts.ts) gives up to eight map jobs sharing the item's
+  systems or applications; the draft names its `leadJob`, whose first photo,
+  if on Sanity's CDN, is the featured photo, framed as its Studio gallery copy
+  (else the stand-in; the notes say which). Model: BLOG_DRAFT_MODEL in Vercel,
+  claude-opus-4-5 when unset. `npm run test:drafter`.
 - Not done, by choice: Semrush (Search Console and Bing are enough at this
   traffic; a one-month subscription only for a competitor audit), and more
   llms.txt or schema work aimed at AI answers (no evidence it helps).

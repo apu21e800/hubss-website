@@ -592,34 +592,40 @@ h1, h2, h3, h4, h5, h6 {
    page sets nothing else on a heading. Unlayered and after the heading
    base above, so they win over it and over Tailwind's utilities.
 
-   .h1-page   hubs, landing pages, forms, legal: 48px at 1440
-   .h1-hero   the name on a photo hero (product, application, post, About): 60px
-   .h2-section  a section's heading: 40px
-   .h2-sub    a sub-section inside a page: 28px
+   Scale (20 Oct 2026; Vern, 19 Oct: "everything on the site got a bit
+   smaller ... not quite as impressive"): the 17 Oct pass had cut the
+   homepage's section headings from 56px to 40 and the page titles to 48,
+   so the whole scale moved back up, on the one system, with the air
+   around it (.section-padding below).
+
+   .h1-page   hubs, landing pages, forms, legal: 56px at 1440, 64 on a wide screen
+   .h1-hero   the name on a photo hero (product, application, post, About): 68px
+   .h2-section  a section's heading: 56px at 1440, 36 on a phone
+   .h2-sub    a sub-section inside a page: 30px
    .eyebrow   the small uppercase label above a heading, flat accent;
               .eyebrow-photo on a photograph (cream), .eyebrow-muted for a date
    .link-arrow  a text link with an arrow: the arrow slides on hover */
 .h1-page {
-  font-size: clamp(2rem, 3.4vw, 3rem);
-  line-height: 1.05;
+  font-size: clamp(2.5rem, 4vw, 4rem);
+  line-height: 1.02;
   letter-spacing: -0.03em;
-  font-weight: 800;
+  font-weight: 900;
 }
 .h1-hero {
-  font-size: clamp(2.25rem, 5vw, 3.75rem);
-  line-height: 1.05;
-  letter-spacing: -0.025em;
-  font-weight: 800;
+  font-size: clamp(2.375rem, 5.5vw, 4.25rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  font-weight: 900;
 }
 .h2-section {
-  font-size: clamp(1.75rem, 2.8vw, 2.5rem);
-  line-height: 1.1;
-  letter-spacing: -0.025em;
-  font-weight: 800;
+  font-size: clamp(2.25rem, 4vw, 3.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  font-weight: 900;
 }
 .h2-sub {
-  font-size: clamp(1.375rem, 2vw, 1.75rem);
-  line-height: 1.15;
+  font-size: clamp(1.5rem, 2.2vw, 1.875rem);
+  line-height: 1.12;
   letter-spacing: -0.02em;
   font-weight: 800;
 }
@@ -881,14 +887,15 @@ p {
 
 /* ─── Section padding utility ───────────────────── */
 .section-padding {
-  padding-top: 96px;
-  padding-bottom: 96px;
+  /* 112px at 1440, 128 on a wide screen: the room the homepage had before 17 Oct. */
+  padding-top: clamp(6rem, 7.8vw, 8rem);
+  padding-bottom: clamp(6rem, 7.8vw, 8rem);
 }
 
 @media (max-width: 768px) {
   .section-padding {
-    padding-top: 64px;
-    padding-bottom: 64px;
+    padding-top: 72px;
+    padding-bottom: 72px;
   }
 }
 

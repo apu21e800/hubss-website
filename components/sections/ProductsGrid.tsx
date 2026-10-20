@@ -100,7 +100,7 @@ export default function ProductsGrid({ products: source, copy = HOMEPAGE_COPY.sy
                 )}
               </h2>
               <p
-                className="text-base font-light max-w-lg leading-relaxed"
+                className="text-lg max-w-2xl leading-relaxed"
                 style={{ color: "var(--text-secondary)" }}
               >
                 {copy.intro}

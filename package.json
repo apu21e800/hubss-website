@@ -29,6 +29,7 @@
     "test:analytics": "tsx scripts/test-automated-browser.ts",
     "test:redirects": "tsx scripts/test-legacy-docs.ts",
     "test:images": "tsx scripts/test-image-names.ts",
+    "test:ga4": "tsx scripts/test-ga4-lead.ts",
     "sync:products": "tsx scripts/sync-products-to-sanity.ts",
     "sync:products:dry": "tsx scripts/sync-products-to-sanity.ts --dry-run",
     "sync:applications": "tsx scripts/sync-applications-to-sanity.ts",

@@ -62,7 +62,10 @@ export default function PrintedCopyForm({ compact = false }: { compact?: boolean
       form.reset();
       // A request for the printed book is a lead, like the contact and Lunch &
       // Learn forms (until 15 Oct 2026 it was the one form GA never heard of).
-      window.gtag?.("event", "generate_lead", { event_category: "conversion", form_type: "product-book-print" });
+      // Since 20 Oct 2026 the route sends the lead (generate_lead) once the
+      // request is delivered (lib/ga4-lead.ts); form_sent is the "sent" screen,
+      // held or not.
+      window.gtag?.("event", "form_sent", { event_category: "conversion", form_type: "product-book-print" });
       track("product_book_request", { form_type: "product-book-print" });
     } catch (err) {
       setStatus("error");

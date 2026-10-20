@@ -50,6 +50,8 @@ Copy .env.local.example → .env.local and fill in:
 - FORM_SCREENED_EMAIL — where the forms send what they hold back from
   info@hubss.com (defaults to cleve.stordy@hubss.com). Nothing is dropped.
 - ANTHROPIC_API_KEY — the Insights drafter and the forms' spam screen
+- GA4_API_SECRET: the GA4 Measurement Protocol secret for the forms' leads
+  (Production only; see "Leads in GA4" under Forms and spam)
 
 ## Project Structure
 hubss-website/
@@ -253,8 +255,10 @@ about 40% below the WordPress site's.
   sees no automation signal (navigator.webdriver, headless or crawler user
   agents, no languages, a zero-size window). A person never trips one;
   `npm run test:analytics`. Our own headless QA is no longer counted either.
-- The printed Product Book request now sends generate_lead (form_type
-  product-book-print), like the contact and Lunch & Learn forms.
+- The printed Product Book request now counts as a lead (form_type
+  product-book-print), like the contact and Lunch & Learn forms. Since 20 Oct
+  2026 the route sends that generate_lead, for delivered requests only, and
+  the browser sends form_sent ("Leads in GA4" under Forms and spam).
 - lib/legacy-doc-redirects.ts: old WordPress spec-sheet PDFs go to the same
   PDF in /public/docs (by name for every current PDF, by hand for renamed
   ones), not to /resources; `npm run test:redirects`. Since 16 Oct an old
@@ -588,6 +592,16 @@ marked "[Screened]" with a banner saying why, and the visitor sees "sent".
   last line: when unsure, genuine.
 - One log line per request, `[contact] {"form","outcome","gate","by","reason"}`,
   no personal details.
+- Leads in GA4 (20 Oct 2026): GA4's two leads of 13 to 19 Oct were held spam;
+  the browser sent generate_lead on every "sent". Now the route sends it,
+  through GA4's Measurement Protocol, only for outcome "delivered", after the
+  response (after(), 2.5 s limit; lib/ga4-lead.ts), and the browser sends
+  form_sent. Needs GA4_API_SECRET in Vercel; unset, the route logs
+  `[contact] ga4 skipped: no secret` and sends nothing. lib/post-form.ts posts
+  the _ga cookies' ids so GA4 credits the visit's channel; with none, the lead
+  counts under a server id, lead_attribution "none" (GA4 refuses "ga_" names).
+  Params: form_type, project, session_id, lead_attribution; nothing personal.
+  `npm run test:ga4` (`-- --live` asks GA4's validation server).
 /api/ai-chat answers 404: it was an open Claude Opus endpoint on HUB's key
 that nothing on the site used.
 
@@ -776,7 +790,8 @@ changes on the fly to core text and images".
   fields in sanity/schemas/page.ts are hidden and read by nothing. No CE
   credit claims, ever. No stat chips or counts on the page.
 - The booking form (useLunchLearnForm in LunchLearnV2.tsx, shared with the
-  homepage card) sends generate_lead to GA and lunch_learn_submit to Vercel
+  homepage card) sends form_sent to GA (generate_lead until 20 Oct 2026; the
+  route sends the lead now, "Leads in GA4") and lunch_learn_submit to Vercel
   Analytics on success, as the contact form does. From 22 Sep to 2 Oct 2026
   nothing did: the page had moved to a form without them.
 

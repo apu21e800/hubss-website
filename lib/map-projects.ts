@@ -34,6 +34,13 @@ export interface MapProject {
    */
   images: string[];
   /**
+   * Alt text for the first photo, only where "<title>, <city>, <province>"
+   * would not describe it. The Insights drafter uses it when an article leads
+   * with this job and that photo becomes the featured photo
+   * (lib/field-note-pipeline.ts).
+   */
+  alt?: string;
+  /**
    * Kept so the "Representative" tag still works if a stand-in photo is ever
    * brought back with Doug's say-so. Unused since 28 Sep 2026.
    */

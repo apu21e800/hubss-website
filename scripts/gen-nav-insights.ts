@@ -59,6 +59,7 @@ import { config as loadDotenv } from "dotenv";
 import { FIELD_NOTE_TYPES, INSIGHTS_SECTIONS, isArchivedPost, sectionFor } from "../lib/field-notes-taxonomy";
 import { countWords, inferCategory, readTimeFor } from "../lib/blog-taxonomy";
 import { CHROME_COVER, chromeImage } from "../lib/chrome-images.mjs";
+import { imageFilename, withFilename } from "../lib/sanity-image";
 
 const ROOT = process.cwd();
 loadDotenv({ path: path.join(ROOT, ".env.local"), quiet: true });
@@ -117,6 +118,8 @@ interface Row {
   text?: string | null;
   tableText?: (string | null)[] | null;
   image?: { ref?: string | null; hotspot?: Hotspot | null; crop?: Crop | null } | null;
+  /** The featured photo's alt in Studio. */
+  alt?: string | null;
 }
 
 // The fields a post card needs beyond its photo: the excerpt, and what the
@@ -136,6 +139,13 @@ export interface NavPost {
   excerpt: string;
   /** As the post page prints it: "6 min read". */
   readTime: string;
+  /**
+   * The featured photo's alt as Studio holds it (since 20 Oct 2026; absent
+   * when Studio has none). Often the title itself: the menu prints it only
+   * when it says something the title does not (altBesideTitle,
+   * lib/blog-taxonomy.ts).
+   */
+  alt?: string;
   thumb: NavImage;
   /** The 3:2 picture of the panel's stacked rows (absent on a copy written before 2 Oct 2026). */
   card?: NavImage;
@@ -188,8 +198,10 @@ const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
  * The part of the photo Studio says to show: the crop rectangle in pixels
  * (whole image when none was set), and the hotspot as a focal point inside
  * that rectangle, which is how the CDN reads fp-x/fp-y once rect= is applied.
+ * `name`: the photo's filename on every size (lib/sanity-image.ts), from its
+ * alt, else the post's title, else its slug.
  */
-function framing(image: NonNullable<Row["image"]>) {
+function framing(image: NonNullable<Row["image"]>, name: string) {
   const asset = parseRef(image.ref ?? "");
   if (!asset) return null;
   const c = image.crop ?? {};
@@ -209,7 +221,7 @@ function framing(image: NonNullable<Row["image"]>) {
           y: clamp01((h.y - t) / Math.max(1e-6, 1 - t - b)),
         }
       : null;
-  return { asset, rect: cropped ? rect : null, width: rect.width, height: rect.height, focal };
+  return { asset, rect: cropped ? rect : null, width: rect.width, height: rect.height, focal, name };
 }
 
 type Framing = NonNullable<ReturnType<typeof framing>>;
@@ -221,7 +233,7 @@ function cdnUrl(f: Framing, w: number, h: number): string {
   if (f.focal) q.push("crop=focalpoint", `fp-x=${f.focal.x.toFixed(3)}`, `fp-y=${f.focal.y.toFixed(3)}`);
   q.push("auto=format");
   const { id, width, height, ext } = f.asset;
-  return `https://cdn.sanity.io/images/${projectId}/${dataset}/${id}-${width}x${height}.${ext}?${q.join("&")}`;
+  return withFilename(`https://cdn.sanity.io/images/${projectId}/${dataset}/${id}-${width}x${height}.${ext}?${q.join("&")}`, f.name);
 }
 
 /**
@@ -264,7 +276,8 @@ async function main() {
     `*[_type == "blogPost" && defined(slug.current) && defined(title) && defined(publishedAt) && defined(featuredImage.asset)]
       | order(publishedAt desc, slug.current asc)[0...40]{
         _id, "slug": slug.current, title, category, publishedAt, ${TEXT_FIELDS},
-        "image": featuredImage{ "ref": asset._ref, hotspot, crop }
+        "image": featuredImage{ "ref": asset._ref, hotspot, crop },
+        "alt": featuredImage.alt
       }`
   );
 
@@ -283,9 +296,10 @@ async function main() {
     const slug = r.slug.trim();
     if (!/^[a-z0-9-]+$/.test(slug)) continue;
     if (!live(slug)) continue;
-    const frame = r.image ? framing(r.image) : null;
-    if (!frame) continue;
     const title = r.title.trim();
+    const alt = r.alt?.trim() || undefined;
+    const frame = r.image ? framing(r.image, imageFilename(alt, title, slug)) : null;
+    if (!frame) continue;
     posts.push({
       frame,
       post: {
@@ -296,6 +310,7 @@ async function main() {
         date: printedDate(r.publishedAt),
         excerpt: (r.excerpt ?? "").trim(),
         readTime: readTimeOf(r),
+        ...(alt ? { alt } : {}),
         thumb: sized(frame, THUMB_WIDTHS, 1),
         card: sized(frame, CARD_WIDTHS, CARD_ASPECT),
       },

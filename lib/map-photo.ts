@@ -9,6 +9,16 @@
  * Anything else is returned as it is.
  */
 import { isSanityImage, sanityLoader } from "@/lib/photos";
+import { withFilename } from "@/lib/sanity-image";
+
+/**
+ * A map photo's src with its descriptive filename (lib/sanity-image.ts): the
+ * job's title and town, on every size the loader cuts. A /public photo is
+ * left as it is.
+ */
+export function mapPhotoSrc(project: { title: string; city: string }, src: string): string {
+  return withFilename(src, `${project.title} ${project.city}`);
+}
 
 export function mapLoader({ src, width, quality }: { src: string; width: number; quality?: number }): string {
   if (isSanityImage(src)) return sanityLoader({ src, width, quality });

@@ -8,6 +8,13 @@
  * told to state nothing about HUB, its systems, numbers, places or clients that
  * isn't in this block or in the editor's brief; the fact check then compares
  * the draft with the same block (lib/field-note-drafter.ts).
+ *
+ * Since 20 Oct 2026 the block also carries the documented jobs on the
+ * homepage map (lib/map-projects.ts) that share the plan item's systems or
+ * applications. Vern's standard for an article (the SHAPE rules in
+ * lib/field-note-drafter.ts): it starts at a real place, and the project map
+ * already holds them (Toronto Premium Outlets, Fairview Park, the Toronto lot
+ * crossing) where the first drafts had none.
  */
 
 import { products } from "@/lib/products";
@@ -17,6 +24,8 @@ import { APPLICATION_CATALOGUE } from "@/lib/application-catalogue";
 import type { PostMeta } from "@/lib/blog";
 import { evidenceFor, evidenceLines } from "@/lib/insights-evidence";
 import { TIMELY } from "@/lib/insights-calendar";
+import { mapProjects, TOUR_IDS, type MapProject } from "@/lib/map-projects";
+import { PROVINCES } from "@/lib/social-library";
 
 const SITE = "https://hubss.com";
 
@@ -81,6 +90,89 @@ export function relatedPostLines(posts: PostMeta[], systemNames: string[], limit
     .map(({ p }) => `- "${p.title}" ${SITE}/blog/${p.slug}: ${p.excerpt}`);
 }
 
+// ── documented jobs ─────────────────────────────────────────────────────────
+
+/** At most this many jobs go into one article's facts. */
+export const DOCUMENTED_JOBS_MAX = 8;
+
+/** The heading the jobs go under in the FACTS; the drafter's SHAPE rules refer to it. */
+export const DOCUMENTED_JOBS_HEADING =
+  "## Documented jobs (real places from the project map; say only what these lines say; when one fits, the article leads with it and its photo is the article's photo)";
+
+/** Lower case, no accents: so "Montréal" in a brief finds Montréal's jobs. */
+const fold = (s: string) => s.toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "");
+
+/** "Kitchener, Ontario": the place as the articles write it, province spelled out. */
+export const jobPlace = (j: Pick<MapProject, "city" | "province">) => `${j.city}, ${PROVINCES[j.province] ?? j.province}`;
+
+/**
+ * The project map's documented jobs for an article: the entries whose system
+ * (`product`, or one of its `systems`) is one of the products, or whose
+ * application is one of the applications. The map writes names
+ * ("TrafficPatternsXD", "Parking Lots"); lib/products.ts and
+ * lib/applications.ts turn the slugs into them.
+ *
+ * Order, best first: a job the brief itself names (a roundup's records, or an
+ * editor who asks for one job), then a job that matches on a system AND an
+ * application (a parking lot guide meets its parking lots before every other
+ * crosswalk of the same system: the cap would otherwise cut them), then jobs
+ * with a write-up (`post`), then the tour's (TOUR_IDS, the strongest
+ * photographs), then jobs with a year, then the rest; the map's own order
+ * (west to east) last. At most DOCUMENTED_JOBS_MAX.
+ */
+export function documentedJobs(
+  productSlugs: readonly string[],
+  applicationSlugs: readonly string[],
+  brief?: string | null,
+  projects: readonly MapProject[] = mapProjects
+): MapProject[] {
+  const systems = new Set(productSlugs.map((s) => products.find((p) => p.slug === s)?.name).filter((n): n is string => !!n));
+  const apps = new Set(applicationSlugs.map((s) => applications.find((a) => a.slug === s)?.name).filter((n): n is string => !!n));
+  const tour = new Set(TOUR_IDS);
+  const text = fold(brief ?? "");
+  const named = (j: MapProject) => !!text && text.includes(fold(j.title)) && text.includes(fold(j.city));
+  const bySystem = (j: MapProject) => [j.product, ...(j.systems ?? [])].some((n) => systems.has(n));
+  const byApp = (j: MapProject) => apps.has(j.application);
+  const tier = (j: MapProject) => (j.post || j.slug ? 0 : tour.has(j.id) ? 1 : j.year ? 2 : 3);
+  return projects
+    .map((j, i) => ({ j, i, named: named(j), fit: (bySystem(j) ? 1 : 0) + (byApp(j) ? 1 : 0) }))
+    .filter((x) => x.named || x.fit > 0)
+    .sort((a, b) =>
+      Number(b.named) - Number(a.named) ||
+      b.fit - a.fit ||
+      tier(a.j) - tier(b.j) ||
+      Number(tour.has(b.j.id)) - Number(tour.has(a.j.id)) ||
+      Number(!!b.j.year) - Number(!!a.j.year) ||
+      a.i - b.i
+    )
+    .slice(0, DOCUMENTED_JOBS_MAX)
+    .map((x) => x.j);
+}
+
+/** The map's words as written; only an em dash, which the house style never prints, becomes a comma. */
+const asWritten = (s: string) => s.replace(/\s*\u2014\s*/g, ", ").trim();
+
+/**
+ * One documented job as a fact paragraph. The write-up is linked only when
+ * its post is published (`slug`, set from lib/blog-index.json); otherwise the
+ * Product Portfolio Book page that shows the job, when there is one.
+ */
+export function jobFacts(j: MapProject): string {
+  const link = j.slug ? `Write-up: /blog/${j.slug}` : j.ideaBookPage ? `Shown in the Product Portfolio Book: /product-book/${j.ideaBookPage}` : "";
+  return [
+    `### ${j.title} (id: ${j.id})`,
+    `Where: ${jobPlace(j)}${j.approximate ? " (approximate: the town is known, not the site)" : ""}`,
+    j.year ? `Installed: ${j.year}` : "",
+    `System: ${j.product}${j.systems?.length ? `, with ${j.systems.join(" and ")}` : ""}`,
+    `Application: ${j.application}`,
+    `The job: ${asWritten(j.excerpt)}`,
+    j.problem ? `The problem: ${asWritten(j.problem)}` : "",
+    j.solution ? `What went in: ${asWritten(j.solution)}` : "",
+    link,
+    `Photo: ${j.images.length ? "yes" : "no"}`,
+  ].filter(Boolean).join("\n");
+}
+
 /**
  * The first line of a guide's brief written by the planner (lib/insights-planner.ts):
  * what follows are questions to answer, never facts, so factsBlock files them
@@ -89,8 +181,12 @@ export function relatedPostLines(posts: PostMeta[], systemNames: string[], limit
  */
 export const QUESTIONS_BRIEF = "Questions to answer (not facts):";
 
-/** The whole FACTS block for one plan item. */
-export function factsBlock(opts: { productSlugs: string[]; applicationSlugs: string[]; brief?: string | null }): string {
+/**
+ * The whole FACTS block for one plan item. `jobs: false` leaves out the
+ * project map's documented jobs: a project profile (lib/project-posts.ts) is
+ * about the one job its post records, and leads with that job and its photos.
+ */
+export function factsBlock(opts: { productSlugs: string[]; applicationSlugs: string[]; brief?: string | null; jobs?: boolean }): string {
   const sections = [
     "## About HUB Surface Systems",
     COMPANY_FACTS.map((f) => `- ${f}`).join("\n"),
@@ -99,6 +195,10 @@ export function factsBlock(opts: { productSlugs: string[]; applicationSlugs: str
   if (prods.length) sections.push("## Systems (from the approved 2026-27 Product Portfolio Book and the website)", prods.join("\n\n"));
   const apps = opts.applicationSlugs.map(applicationFacts).filter(Boolean) as string[];
   if (apps.length) sections.push("## Applications (from the approved Product Portfolio Book and the website)", apps.join("\n\n"));
+  // The same call as the pipeline's leadJobFor (lib/field-note-pipeline.ts),
+  // so the job a draft leads with is always one of these.
+  const jobs = opts.jobs === false ? [] : documentedJobs(opts.productSlugs, opts.applicationSlugs, opts.brief);
+  if (jobs.length) sections.push(DOCUMENTED_JOBS_HEADING, jobs.map(jobFacts).join("\n\n"));
   // Published studies on the same systems or applications (lib/insights-evidence.ts):
   // the only figures not about HUB that the article may use.
   const evidence = evidenceFor(opts.productSlugs, opts.applicationSlugs);

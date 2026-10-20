@@ -5,14 +5,15 @@
  * What they protect: a new plan item names only systems and applications HUB
  * has Product Book pages for, never repeats an article or plan item, carries no
  * claim the drafter could take as fact (a guide's brief is questions only; a
- * roundup's brief is the jobs' own records, word for word), and the plan is
- * topped up by no more than it asks for.
+ * roundup's brief is the jobs' own records, word for word), sets nothing
+ * "vs" anything (20 Oct 2026), and the plan is topped up by no more than it
+ * asks for.
  */
 import assert from "node:assert/strict";
 import { mapProjects } from "../lib/map-projects";
 import { PRODUCT_CATALOGUE } from "../lib/product-catalogue";
 import { applications } from "../lib/applications";
-import { goodQuestion, repeats, roundupJobs, vetIdeas, words, type Existing, type RawIdea } from "../lib/insights-planner";
+import { goodQuestion, LEAD_JOB_QUESTION, repeats, roundupJobs, vetIdeas, words, type Existing, type RawIdea } from "../lib/insights-planner";
 import { factsBlock, QUESTIONS_BRIEF } from "../lib/field-note-facts";
 import { dateIn, MOMENTS, momentKey, momentPlanned, momentsWithin, nextDate } from "../lib/insights-calendar";
 import { EVIDENCE, evidenceFor } from "../lib/insights-evidence";
@@ -78,7 +79,27 @@ check("its brief is the questions, and nothing the drafter could take as fact", 
   const { docs } = vet([guide({ questions: ["Paint lasts 1 year, so why use it?", "Thermoplastic is the best choice.", "What does a plow do to paint?", "How is an inlaid crosswalk specified?"] })]);
   const [first, ...lines] = docs[0].brief.split("\n");
   assert.equal(first, QUESTIONS_BRIEF);
-  assert.deepEqual(lines, ["- What does a plow do to paint?", "- How is an inlaid crosswalk specified?"]);
+  // The last line asks for a documented job to lead with: the map has TrafficPatternsXD jobs.
+  assert.deepEqual(lines, ["- What does a plow do to paint?", "- How is an inlaid crosswalk specified?", `- ${LEAD_JOB_QUESTION}`]);
+});
+check("a guide asks for a documented job to lead with only when the map has one of its systems", () => {
+  const withJobs = vet([guide()]).docs[0].brief;
+  assert.ok(withJobs.includes(LEAD_JOB_QUESTION), "TrafficPatternsXD is on the map");
+  const none = vet([guide({ title: "Recoating a worn asphalt parking lot", searchPhrase: "asphalt maintenance coating", systems: ["durashield"], applications: ["parking-lots"] })]).docs[0].brief;
+  assert.ok(!none.includes(LEAD_JOB_QUESTION), "no DuraShield job on the map: a parking lot job of another system doesn't count");
+  assert.ok(goodQuestion(LEAD_JOB_QUESTION), "the line passes the planner's own question rules");
+});
+check("no \"vs\" in a title or a question (Vern, 20 Oct 2026)", () => {
+  for (const title of ["Thermoplastic vs coatings for crosswalks", "Stamped asphalt versus pavers on a driveway", "Crosswalk surfaces vs. winter"]) {
+    const { docs, dropped } = vet([guide({ title, searchPhrase: "crosswalk surface choice" })]);
+    assert.equal(docs.length, 0, title);
+    assert.match(dropped[0].why, /"vs"/);
+  }
+  assert.equal(goodQuestion("How do thermoplastic vs coated crosswalks wear in winter?"), false);
+  assert.equal(goodQuestion("How does preformed thermoplastic compare versus a pavement coating?"), false);
+  assert.equal(goodQuestion("Where does a parking lot need preformed thermoplastic?"), true);
+  const roundup = vet([{ kind: "roundup", title: "Community crosswalks vs plain ones", searchPhrase: "community crosswalk art", jobIds: jobs.slice(0, 3).map((j) => j.id) }]);
+  assert.equal(roundup.docs.length, 0, "a roundup's title too");
 });
 check("a question that names a place or client, or assumes its answer, is dropped", () => {
   for (const q of [

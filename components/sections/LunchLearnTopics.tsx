@@ -107,9 +107,12 @@ export default function LunchLearnTopics({ topics = LL_TOPICS }: { topics?: Lunc
             className="group relative block w-full overflow-hidden rounded-xl text-left focus-visible:outline-offset-4"
             style={{ aspectRatio: "4 / 3", background: "var(--bg-card-surface)" }}
           >
+            {/* Decorative inside a button named by its topic; the file is
+                named by the topic too (lib/sanity-image.ts). */}
             <PhotoImage
               src={t.src}
               alt=""
+              filename={t.label}
               fill
               sizes="(min-width: 1280px) 400px, (min-width: 1024px) 31vw, 48vw"
               className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"

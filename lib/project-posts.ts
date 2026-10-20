@@ -492,6 +492,9 @@ async function writeArticle(client: SanityClient, doc: ProjectSource, now: Date)
     productSlugs: [system.slug],
     applicationSlugs: doc.application?.slug ? [doc.application.slug] : [],
     brief: jobRecord(doc),
+    // The article is this one job, with this post's photos: the project
+    // map's other jobs would only compete with it for the first paragraph.
+    jobs: false,
   });
   const related = relatedPostLines(await getAllPosts(), [system.name]);
   const written = await writeDraft({ title: name, type: PROJECT_TYPE, instructions: PROFILE_INSTRUCTIONS }, facts, related);

@@ -50,6 +50,8 @@ Copy .env.local.example → .env.local and fill in:
 - FORM_SCREENED_EMAIL — where the forms send what they hold back from
   info@hubss.com (defaults to cleve.stordy@hubss.com). Nothing is dropped.
 - ANTHROPIC_API_KEY — the Insights drafter and the forms' spam screen
+- GA4_API_SECRET: the GA4 Measurement Protocol secret for the forms' leads
+  (Production only; see "Leads in GA4" under Forms and spam)
 
 ## Project Structure
 hubss-website/
@@ -253,8 +255,10 @@ about 40% below the WordPress site's.
   sees no automation signal (navigator.webdriver, headless or crawler user
   agents, no languages, a zero-size window). A person never trips one;
   `npm run test:analytics`. Our own headless QA is no longer counted either.
-- The printed Product Book request now sends generate_lead (form_type
-  product-book-print), like the contact and Lunch & Learn forms.
+- The printed Product Book request now counts as a lead (form_type
+  product-book-print), like the contact and Lunch & Learn forms. Since 20 Oct
+  2026 the route sends that generate_lead, for delivered requests only, and
+  the browser sends form_sent ("Leads in GA4" under Forms and spam).
 - lib/legacy-doc-redirects.ts: old WordPress spec-sheet PDFs go to the same
   PDF in /public/docs (by name for every current PDF, by hand for renamed
   ones), not to /resources; `npm run test:redirects`. Since 16 Oct an old
@@ -417,6 +421,17 @@ these elements, and never draw a button, label or card by hand again:
   with a 2560px candidate and a portrait CDN cut for phones around the
   hotspot); /public heroes keep PhotoImage. next.config.ts deviceSizes stay
   capped at 1920 on purpose (Vercel bills /public variants).
+- Every Sanity photo URL carries a descriptive filename (20 Oct 2026, the
+  client's image-search brief): `withFilename` in lib/sanity-image.ts puts
+  the photo's alt (else the page's title or slug) after the asset,
+  `.../<hash>-2400x1800.jpg/red-streetbond-coating-on-a-harbourfront.jpg?w=1920...`,
+  the same file at Sanity's CDN. The lib/photos.ts builders take it as
+  their last argument, PhotoImage names from `filename` else `alt`, HeroPhoto
+  from the alt, the menu JSON at build. Read a photo's asset with
+  `sanityAssetFile`, never the last path segment. The image sitemap lists,
+  for each page, the photos that page shows at the address it shows them
+  (lib/page-photos.ts picks both); `npm run verify` fails a sitemap photo
+  that is not on its page, `npm run test:images` covers the names.
 - The home page leads with the newest post that has a photo; nothing is
   pinned. The client ticker (TrustedByMarquee) lists only names the Product
   Portfolio Book lists. The White Rock Pier pin has no photo until a real one
@@ -587,6 +602,16 @@ marked "[Screened]" with a banner saying why, and the visitor sees "sent".
   last line: when unsure, genuine.
 - One log line per request, `[contact] {"form","outcome","gate","by","reason"}`,
   no personal details.
+- Leads in GA4 (20 Oct 2026): GA4's two leads of 13 to 19 Oct were held spam;
+  the browser sent generate_lead on every "sent". Now the route sends it,
+  through GA4's Measurement Protocol, only for outcome "delivered", after the
+  response (after(), 2.5 s limit; lib/ga4-lead.ts), and the browser sends
+  form_sent. Needs GA4_API_SECRET in Vercel; unset, the route logs
+  `[contact] ga4 skipped: no secret` and sends nothing. lib/post-form.ts posts
+  the _ga cookies' ids so GA4 credits the visit's channel; with none, the lead
+  counts under a server id, lead_attribution "none" (GA4 refuses "ga_" names).
+  Params: form_type, project, session_id, lead_attribution; nothing personal.
+  `npm run test:ga4` (`-- --live` asks GA4's validation server).
 /api/ai-chat answers 404: it was an open Claude Opus endpoint on HUB's key
 that nothing on the site used.
 
@@ -687,10 +712,9 @@ with an automated blog plan. we need to keep the blogs and social media
 pipeline full." Two research passes (B2B buyers, LinkedIn, local news,
 headline tests, AI search) became three things in code:
 - The writer's ATTENTION rules (lib/field-note-drafter.ts, VOICE): a plain,
-  concrete headline (no question, no praise); a first sentence that puts the
-  reader somewhere real; proof before explanation; something to keep (a
-  checklist, a table); partners named only as the facts name them; contested
-  topics told plainly.
+  concrete headline; partners named only as the facts name them; contested
+  topics told plainly. The first paragraph, proof before explanation and the
+  thing to keep are SHAPE's since 20 Oct 2026 (the standard, below).
 - Outside evidence (lib/insights-evidence.ts): five published studies, each
   read against its source, with who did it, its limits and a link (FHWA
   high-visibility crosswalks, SFMTA red lanes, the Bloomberg asphalt art
@@ -707,6 +731,17 @@ headline tests, AI search) became three things in code:
   before a moment with a `libraryJob`, that job takes the weekly library post
   (libraryPick in lib/social-library.ts: Kitchener's veterans crosswalk before
   Remembrance Day). `npm run test:planner`, `npm run test:social`.
+- The standard (20 Oct 2026, Vern: "written to a higher standard") is VOICE's
+  SHAPE: 550 to 850 words for a guide, 350 to 600 for news or a thin record;
+  a documented job (town and province) or the reader's decision first; proof
+  before explanation; one thing to keep; paint one passing mention at most; no
+  "vs" in a title, heading or planner idea. The jobs: documentedJobs
+  (lib/field-note-facts.ts) gives up to eight map jobs sharing the item's
+  systems or applications; the draft names its `leadJob`, whose first photo,
+  if on Sanity's CDN, is the featured photo, framed as its Studio gallery copy
+  (else a stand-in: the first system's hero, the application's only for an
+  item that names no system; the notes say which). Model: BLOG_DRAFT_MODEL in
+  Vercel, claude-opus-4-5 when unset. `npm run test:drafter`.
 - Not done, by choice: Semrush (Search Console and Bing are enough at this
   traffic; a one-month subscription only for a competitor audit), and more
   llms.txt or schema work aimed at AI answers (no evidence it helps).
@@ -775,7 +810,8 @@ changes on the fly to core text and images".
   fields in sanity/schemas/page.ts are hidden and read by nothing. No CE
   credit claims, ever. No stat chips or counts on the page.
 - The booking form (useLunchLearnForm in LunchLearnV2.tsx, shared with the
-  homepage card) sends generate_lead to GA and lunch_learn_submit to Vercel
+  homepage card) sends form_sent to GA (generate_lead until 20 Oct 2026; the
+  route sends the lead now, "Leads in GA4") and lunch_learn_submit to Vercel
   Analytics on success, as the contact form does. From 22 Sep to 2 Oct 2026
   nothing did: the page had moved to a form without them.
 

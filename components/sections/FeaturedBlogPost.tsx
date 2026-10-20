@@ -3,6 +3,7 @@ import { BLOG_NAME } from "@/lib/field-notes-taxonomy";
 import PhotoImage from "@/components/ui/PhotoImage";
 import { getAllPosts } from "@/lib/blog";
 import { badgeFor } from "@/lib/field-notes-taxonomy";
+import { altBesideTitle } from "@/lib/blog-taxonomy";
 import { HOMEPAGE_COPY, type SectionCopy } from "@/lib/homepage-copy";
 
 // Fallback images from confirmed project paths in lib/projects.ts
@@ -98,9 +99,13 @@ export default async function FeaturedBlogPost({ copy = HOMEPAGE_COPY.insights }
           >
             {/* Image — 3/5 on desktop */}
             <div className="relative md:col-span-3 h-72 md:h-auto min-h-[380px] overflow-hidden">
+              {/* The photo's own description, or empty beside its headline
+                  (altBesideTitle, as on every listed post); named by its alt,
+                  else the title (lib/sanity-image.ts). */}
               <PhotoImage
                 src={heroImg}
-                alt={hero.title}
+                alt={hero.featuredImage ? altBesideTitle(hero.featuredImageAlt, hero.title) : ""}
+                filename={hero.featuredImageAlt || hero.title}
                 fill
                 className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                 sizes="(max-width: 768px) 100vw, 60vw"
@@ -206,7 +211,8 @@ export default async function FeaturedBlogPost({ copy = HOMEPAGE_COPY.insights }
                   <div className="relative w-full overflow-hidden" style={{ aspectRatio: "16/9" }}>
                     <PhotoImage
                       src={img}
-                      alt={post.title}
+                      alt={post.featuredImage ? altBesideTitle(post.featuredImageAlt, post.title) : ""}
+                      filename={post.featuredImageAlt || post.title}
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                       sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"

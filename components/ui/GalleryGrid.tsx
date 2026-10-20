@@ -2,13 +2,15 @@
 
 import { useMemo, useState } from "react";
 import PhotoImage from "@/components/ui/PhotoImage";
-import { isSanityImage, sanitySized } from "@/lib/photos";
+import { GALLERY, gallerySettle as settle, isSanityImage, sanitySized } from "@/lib/photos";
 import PhotoLightbox from "@/components/ui/PhotoLightbox";
 
 export interface GalleryImage {
   src: string;
   alt: string;
   caption?: string;
+  /** The words of the photo's filename (lib/sanity-image.ts); the alt as given when absent. */
+  name?: string;
 }
 
 // Vernon (Aug 2026): "show the hero gallery image then the first 6 images,
@@ -16,15 +18,14 @@ export interface GalleryImage {
 // appends CHUNK. Deliberately button-driven (no auto infinite scroll) —
 // product/application pages have specs, related systems, and the CTA below
 // the gallery, and an auto-loader would push them forever out of reach.
-const INITIAL = 7;
-const CHUNK = 12;
 // A gallery of eight or nine used to end on "Load 1 more" (QA, 27 Sep 2026):
 // a button for a stub reads as a mistake. When three or fewer photos would be
-// left behind the button, they are shown instead, at first paint and after
-// every "Load more".
-const TAIL = 3;
-const settle = (count: number, total: number) =>
-  total - count <= TAIL ? total : Math.min(count, total);
+// left behind the button (GALLERY.tail), they are shown instead, at first
+// paint and after every "Load more". The numbers live in lib/photos.ts
+// (GALLERY, gallerySettle), where the image sitemap reads them too: it lists
+// each photo at the address its tile or its <noscript> copy carries.
+const INITIAL: number = GALLERY.initial;
+const CHUNK: number = GALLERY.chunk;
 
 export default function GalleryGrid({ images: given }: { images: GalleryImage[] }) {
   const [lightboxIndex, setLightboxIndex] = useState(-1);
@@ -32,11 +33,16 @@ export default function GalleryGrid({ images: given }: { images: GalleryImage[] 
   // Photos that share one alt ("Coloured bike lane" five times on a page)
   // are told apart for a screen reader and for Google Images: the alt gets
   // "photo 3 of 36"; the visible caption does not (technical review, 17 Oct
-  // 2026, 290 duplicate alts across the galleries).
+  // 2026, 290 duplicate alts across the galleries). The filename keeps the
+  // alt as given (`name`), so a photo's address doesn't change when the
+  // gallery is reordered.
   const images = useMemo(() => {
     const counts = new Map<string, number>();
     for (const img of given) counts.set(img.alt, (counts.get(img.alt) ?? 0) + 1);
-    return given.map((img, i) => ((counts.get(img.alt) ?? 0) > 1 ? { ...img, alt: `${img.alt}, photo ${i + 1} of ${given.length}` } : img));
+    return given.map((img, i) => {
+      const named = { ...img, name: img.name ?? img.alt };
+      return (counts.get(img.alt) ?? 0) > 1 ? { ...named, alt: `${img.alt}, photo ${i + 1} of ${given.length}` } : named;
+    });
   }, [given]);
 
   const shown = settle(visible, images.length);
@@ -126,7 +132,7 @@ export default function GalleryGrid({ images: given }: { images: GalleryImage[] 
               /* eslint-disable-next-line @next/next/no-img-element */
               <img
                 key={img.src}
-                src={isSanityImage(img.src) ? sanitySized(img.src, 1200) : img.src}
+                src={isSanityImage(img.src) ? sanitySized(img.src, GALLERY.fallbackWidth, GALLERY.fallbackQuality, img.name) : img.src}
                 alt={img.alt}
                 loading="lazy"
                 decoding="async"
@@ -220,6 +226,7 @@ function GalleryTile({
       <PhotoImage
         src={img.src}
         alt={img.alt}
+        filename={img.name}
         fill
         priority={priority}
         loading={priority ? "eager" : "lazy"}
@@ -231,7 +238,7 @@ function GalleryTile({
         }
         // 80 and 78 (were 75 and 70): the work is what the page sells, and 70
         // showed as soft edges on the tiles (17 Oct 2026).
-        quality={aspect === "aspect-[16/9]" ? 80 : 78}
+        quality={aspect === "aspect-[16/9]" ? GALLERY.firstQuality : GALLERY.tileQuality}
       />
 
       {/* Hover overlay — subtle bottom gradient */}

@@ -30,6 +30,13 @@
  * studies the writer may cite (lib/insights-evidence.ts), so a guide can be
  * about what the research says.
  *
+ * Vern's standard for an article (20 Oct 2026, lib/field-note-drafter.ts
+ * SHAPE) reaches the plan too: no "A vs B" title or question, ever (a choice
+ * between materials is what to specify where, by job), and paint is never
+ * the subject. vetIdeas drops what breaks it. A guide whose systems have a
+ * documented job on the project map asks the writer to lead with one
+ * (LEAD_JOB_QUESTION).
+ *
  * vetIdeas is pure: `npm run test:planner`.
  */
 
@@ -42,7 +49,7 @@ import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
 import { mapProjects, type MapProject } from "@/lib/map-projects";
 import { PROVINCES } from "@/lib/social-library";
-import { QUESTIONS_BRIEF } from "@/lib/field-note-facts";
+import { documentedJobs, QUESTIONS_BRIEF } from "@/lib/field-note-facts";
 import { EVIDENCE } from "@/lib/insights-evidence";
 import { longDate, MOMENTS, momentLine, momentPlanned, momentsWithin, nextDate, type Moment } from "@/lib/insights-calendar";
 
@@ -196,6 +203,16 @@ const ref = (prefix: "product" | "application", slug: string): Ref => ({ _type: 
 /** Words that make a question assume its answer, or a title make a claim. */
 const LOADED = /\b(why (does|do|did|is|are|was|were|has|have|can)|only|best|worst|most|least|better|worse|cheaper|cheapest|longer|longest|faster|fastest|stronger|strongest|safer|safest|outlasts?|outlasting|superior|unique|guaranteed?|always|never|proven)\b/i;
 
+/** "A vs B": never in a title or a question (Vern, 20 Oct 2026). A choice is what to specify where. */
+export const VS = /\b(vs|versus)\b/i;
+
+/**
+ * The line a guide's questions end with when the project map holds a
+ * documented job of one of its systems: the writer leads with one
+ * (lib/field-note-drafter.ts SHAPE) and its photo is the article's.
+ */
+export const LEAD_JOB_QUESTION = "Which documented job in the facts shows this on a real site, so the article can lead with it?";
+
 /** Names a guide may use: HUB's systems and a few general terms that aren't about any client or place. */
 const NAMES = [
   ...products.map((p) => p.name), "HUB", "Product Portfolio Book", "Canada", "Canadian", "AODA", "LEED", "Vision Zero", "Complete Streets",
@@ -210,9 +227,9 @@ export function namesOnlyKnown(s: string): boolean {
   return !rest.trim().split(/\s+/).slice(1).some((w) => /^[A-Z]/.test(w) && w !== "I");
 }
 
-/** A question a guide's brief may carry: a real question that names nothing and assumes nothing. */
+/** A question a guide's brief may carry: a real question that names nothing, assumes nothing and sets nothing against anything. */
 export const goodQuestion = (q: string) =>
-  q.length >= 12 && q.length <= 200 && q.endsWith("?") && !/\d/.test(q) && !LOADED.test(q) && namesOnlyKnown(q);
+  q.length >= 12 && q.length <= 200 && q.endsWith("?") && !/\d/.test(q) && !LOADED.test(q) && !VS.test(q) && namesOnlyKnown(q);
 
 function jobLine(j: PlannerJob): string {
   return [
@@ -265,6 +282,7 @@ export function vetIdeas(
     const drop = (why: string) => dropped.push({ title: title || "(untitled)", why });
     if (!title || !searchPhrase) { drop("no title or search phrase"); continue; }
     if (/\d/.test(title) || /\d/.test(searchPhrase)) { drop("a figure in the title or search phrase"); continue; }
+    if (VS.test(title)) { drop("a \"vs\" title (a choice is what to specify where)"); continue; }
     if (LOADED.test(title)) { drop("the title makes a claim"); continue; }
     const same = repeats({ title, searchPhrase }, seen);
     if (same) { drop(`too close to "${same}"`); continue; }
@@ -302,11 +320,14 @@ export function vetIdeas(
       const questions = (r.questions ?? []).map(tidy).filter(goodQuestion).slice(0, 6);
       if (!systems.length) { drop("no HUB system from the Product Portfolio Book"); continue; }
       if (questions.length < 2) { drop("fewer than two questions that name and assume nothing"); continue; }
+      // A job of the guide's own systems, not one that only shares the
+      // application: a guide to repair products doesn't lead with a crosswalk.
+      const lead = documentedJobs(systems, []).length ? [LEAD_JOB_QUESTION] : [];
       doc = {
         _id, _type: "storyIdea", title, status: "idea", priority: moment ? 1 : 3, searchPhrase, type: "Guide",
         systems: systems.map((s) => ref("product", s)),
         applications: apps.map((s) => ref("application", s)),
-        brief: [QUESTIONS_BRIEF, ...questions.map((q) => `- ${q}`), ...(moment ? [momentLine(moment, now)] : [])].join("\n"),
+        brief: [QUESTIONS_BRIEF, ...[...questions, ...lead].map((q) => `- ${q}`), ...(moment ? [momentLine(moment, now)] : [])].join("\n"),
       };
     }
     if (moment) due.delete(moment.id);
@@ -329,11 +350,11 @@ const PROPOSE: Anthropic.Tool = {
           type: "object",
           properties: {
             kind: { type: "string", enum: ["guide", "roundup"] },
-            title: { type: "string", description: "Working title, sentence case, no em dash, no figures, no claim." },
+            title: { type: "string", description: "Working title, sentence case, no em dash, no figures, no claim, no \"vs\" (a choice is what to specify where, by job)." },
             searchPhrase: { type: "string", description: "What the reader types into Google, two to five words, lower case." },
             systems: { type: "array", items: { type: "string" }, description: "Guides: one to three SYSTEMS slugs." },
             applications: { type: "array", items: { type: "string" }, description: "Guides: zero to three APPLICATIONS slugs." },
-            questions: { type: "array", items: { type: "string" }, description: "Guides: three to six neutral questions the article answers." },
+            questions: { type: "array", items: { type: "string" }, description: "Guides: three to six neutral questions the article answers. None sets one material against another: no \"vs\", and paint is never the subject." },
             jobIds: { type: "array", items: { type: "string" }, description: "Roundups: three to six JOBS ids that share the theme." },
             moment: { type: "string", description: "The MOMENTS id this article is timed for; leave it out for an ordinary article." },
           },
@@ -348,7 +369,7 @@ const PROPOSE: Anthropic.Tool = {
 const SYSTEM = `You plan Insights articles for HUB Surface Systems (hubss.com), a Canadian company that supplies and installs decorative and functional pavement systems. The readers specify, approve and pay for pavement in Canada: municipal engineers, planners, landscape architects, transit agencies, developers and property managers. The articles are found through search and bring them to HUB's spec sheets and Lunch & Learn sessions.
 
 Propose articles of two kinds:
-- guide: a question these readers type into Google, answered from the Product Portfolio Book pages of one to three HUB systems (SYSTEMS). Comparisons, choosing between options, how to specify, how long it lasts and how to look after it. Give three to six neutral questions the article answers. A question names no place, client, agency or brand other than HUB's systems, holds no figures, and doesn't assume its answer: "How does an inlaid crosswalk hold up to plows?", never "Why does TrafficPatterns outlast paint?" or "What makes X the only...". Paint is never an article's subject: no "vs paint", "beyond paint" or "why paint fails" ideas (Vern, 20 Oct 2026).
+- guide: a question these readers type into Google, answered from the Product Portfolio Book pages of one to three HUB systems (SYSTEMS). What to specify where, how to specify it, how long it lasts and how to look after it. Give three to six neutral questions the article answers. A question names no place, client, agency or brand other than HUB's systems, holds no figures, and doesn't assume its answer: "How does an inlaid crosswalk hold up to plows?", never "Why does TrafficPatterns outlast paint?" or "What makes X the only...". Paint is never an article's subject: no "vs paint", "beyond paint" or "why paint fails" ideas (Vern, 20 Oct 2026). No "A vs B" in a title or a question, ever: a choice between materials is framed as what to specify where, by job ("Where a parking lot needs preformed thermoplastic, and where a pavement coating does the job"), never as a contest.
 - roundup: three to six documented jobs from JOBS that share one theme a reader would search for (one application, one system, one kind of place or one region). Use only JOBS ids, and each job in one roundup at most.
 
 Angles that earn a busy reader's attention (research, 15 Oct 2026), within those two kinds:
@@ -363,7 +384,7 @@ ${GLOSSARY_FOR_TITLES}
 Rules:
 - Nothing that EXISTING already covers: the same question or search intent counts as covered, whatever the words.
 - Search phrases are what a real person types: plain, two to five words, lower case, no brand names unless people search the brand.
-- Working titles in sentence case and Canadian English, no em dash, no figures, no exclamation mark, no hype, no claim (best, only, longest).
+- Working titles in sentence case and Canadian English, no em dash, no figures, no exclamation mark, no hype, no claim (best, only, longest), no "vs".
 - About half guides and half roundups, if JOBS allow.`;
 
 /** Asks Claude for ideas. Throws when Claude can't be reached; the caller logs it. */

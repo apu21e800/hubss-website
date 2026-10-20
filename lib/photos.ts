@@ -11,8 +11,13 @@
  * has no photos shows the folder, exactly as before; that's the site-wide rule
  * in lib/cms-merge.ts, applied to pictures.
  *
+ * Every Sanity URL built here carries the photo's descriptive filename when
+ * the caller passes its words (`name`; lib/sanity-image.ts, 20 Oct 2026).
+ *
  * Pure data and string functions: safe in server and client components.
  */
+
+import { sanityAssetFile, withFilename } from "./sanity-image";
 
 export interface Photo {
   /** https://cdn.sanity.io/images/... or a /images/... path in /public. */
@@ -80,9 +85,13 @@ export function hotspotPosition(photo: { hotspot?: Hotspot } | null | undefined)
  * A Sanity photo cut to an exact size around its focal point (the hotspot, or
  * the middle), as a JPEG-or-better URL. The homepage hero uses it to make its
  * wide-screen and phone cuts from whatever photo Studio holds.
+ *
+ * `name`, here and on every builder below: the photo's words (its alt, else
+ * the page's title), which become its filename in the URL (withFilename,
+ * lib/sanity-image.ts). Only the path changes; the parameters are the same.
  */
-export function sanityCrop(src: string, width: number, height: number, hotspot?: Hotspot, quality = 80): string {
-  if (sanityTurn(src)) return sanityLoader({ src, width, quality });
+export function sanityCrop(src: string, width: number, height: number, hotspot?: Hotspot, quality = 80, name?: string | null): string {
+  if (sanityTurn(src)) return withFilename(sanityLoader({ src, width, quality }), name);
   const url = new URL(src);
   url.searchParams.set("w", String(width));
   url.searchParams.set("h", String(height));
@@ -94,7 +103,7 @@ export function sanityCrop(src: string, width: number, height: number, hotspot?:
   }
   url.searchParams.set("q", String(quality));
   url.searchParams.set("auto", "format");
-  return url.toString();
+  return withFilename(url.toString(), name);
 }
 
 /** Where Sanity serves image assets from. */
@@ -133,11 +142,13 @@ const TURNED: Record<string, 90 | 270> = {
   "f615365455ea7ca976f9433a2f98f65ee0112feb-1280x720.jpg": 270, // Waterloo Park from the air (decomark-17, traffic-patterns-03, crosswalks-31)
 };
 
-/** How far a Sanity photo is turned at the CDN: 0 for almost every photo. */
+/**
+ * How far a Sanity photo is turned at the CDN: 0 for almost every photo. Read
+ * by the asset's own file, which on a named URL is not the last segment.
+ */
 export function sanityTurn(src: string | undefined | null): 0 | 90 | 270 {
   if (!isSanityImage(src)) return 0;
-  const name = (src as string).split("?")[0].split("/").pop() ?? "";
-  return TURNED[name] ?? 0;
+  return TURNED[sanityAssetFile(src)] ?? 0;
 }
 
 /**
@@ -159,7 +170,8 @@ function sized(url: URL, width: number): void {
 /**
  * next/image loader for Sanity's CDN. Pass it (through components/ui/PhotoImage)
  * for any src that isSanityImage: next/image then builds its srcset from these
- * URLs and never calls /_next/image.
+ * URLs and never calls /_next/image. A filename already on `src` (PhotoImage
+ * puts it there) stays on every size.
  */
 export function sanityLoader({ src, width, quality }: { src: string; width: number; quality?: number }): string {
   const url = new URL(src);
@@ -171,42 +183,84 @@ export function sanityLoader({ src, width, quality }: { src: string; width: numb
 }
 
 /** A sized Sanity URL, for the few places that use a plain <img>. */
-export function sanitySized(src: string, width: number, quality = 80): string {
-  return sanityLoader({ src, width, quality });
+export function sanitySized(src: string, width: number, quality = 80, name?: string | null): string {
+  return withFilename(sanityLoader({ src, width, quality }), name);
 }
 
 /**
  * A 1200×630 JPEG for Open Graph cards, cropped by Sanity. JPEG rather than
  * auto-format because some social crawlers still mishandle WebP.
  */
-export function sanityOgImage(src: string): string {
-  if (sanityTurn(src)) return sanityLoader({ src, width: 1200, quality: 80 }).replace("auto=format", "fm=jpg");
+export function sanityOgImage(src: string, name?: string | null): string {
+  if (sanityTurn(src)) return withFilename(sanityLoader({ src, width: 1200, quality: 80 }).replace("auto=format", "fm=jpg"), name);
   const url = new URL(src);
   url.searchParams.set("w", "1200");
   url.searchParams.set("h", "630");
   url.searchParams.set("fit", "crop");
   url.searchParams.set("fm", "jpg");
   url.searchParams.set("q", "80");
-  return url.toString();
-}
-
-/**
- * The copy of a Sanity photo the image sitemap offers Google Images: 1200px
- * WebP, the same size and format as the /public copies scripts/gen-search-images.ts
- * bakes (lib/search-images.ts). Sanity resizes on request, so nothing is baked.
- */
-export function sanitySearchImage(src: string): string {
-  const url = new URL(src);
-  sized(url, 1200);
-  url.searchParams.set("q", "80");
-  url.searchParams.set("fm", "webp");
-  url.searchParams.set("fit", "max");
-  return url.toString();
+  return withFilename(url.toString(), name);
 }
 
 /** srcSet for a plain <img> showing a Sanity photo full-bleed. */
-export function sanitySrcSet(src: string, widths = [828, 1200, 1920, 2400], quality = 80): string {
-  return widths.map((w) => `${sanitySized(src, w, quality)} ${w}w`).join(", ");
+export function sanitySrcSet(src: string, widths = [828, 1200, 1920, 2400], quality = 80, name?: string | null): string {
+  return widths.map((w) => `${sanitySized(src, w, quality, name)} ${w}w`).join(", ");
+}
+
+// ── The addresses a page shows, shared with the image sitemap ──────────────
+// The sitemap names each photo at the address the page's own <img> carries
+// (lib/page-photos.ts, lib/sitemap.ts), so these are the one place each is
+// spelled.
+
+/** A hero's <img src> (components/ui/HeroPhoto.tsx): 1920px at q82, named by its alt. */
+export function heroImageSrc(photo: Pick<Photo, "src" | "alt">, name?: string | null): string {
+  return sanitySized(photo.src, 1920, 82, name ?? photo.alt);
+}
+
+/** The homepage hero's <img src> (components/sections/HeroSlideshow.tsx): 1920px at q80. */
+export function homeHeroSrc(src: string, name?: string | null): string {
+  return isSanityImage(src) ? sanitySized(src, 1920, 80, name) : src;
+}
+
+/**
+ * The product and application galleries (components/ui/GalleryGrid.tsx): the
+ * first screen of tiles (`initial`, or every photo when `tail` or fewer would
+ * be left behind the button), more by `chunk`, and the rest as plain <img> in
+ * a <noscript> for crawlers. The first tile asks next/image for q80, the
+ * others q78; a tile's src is next/image's widest candidate (next.config.ts
+ * deviceSizes, 1920).
+ */
+export const GALLERY = {
+  initial: 7,
+  chunk: 12,
+  tail: 3,
+  firstQuality: 80,
+  tileQuality: 78,
+  srcWidth: 1920,
+  fallbackWidth: 1200,
+  fallbackQuality: 80,
+} as const;
+
+/** How many photos a gallery shows when asked for `count` of `total`. */
+export const gallerySettle = (count: number, total: number) =>
+  total - count <= GALLERY.tail ? total : Math.min(count, total);
+
+/**
+ * The address gallery photo `index` of `total` carries in the page as served:
+ * its tile's src, or its <noscript> copy past the first screen. Named by the
+ * photo's own alt (`name`), not the "photo 3 of 36" the tiles add for screen
+ * readers, so the address stays put when the gallery is reordered.
+ */
+export function galleryImageSrc(src: string, name: string | null | undefined, index: number, total: number): string {
+  if (!isSanityImage(src)) return src;
+  if (index < gallerySettle(GALLERY.initial, total)) {
+    return sanityLoader({
+      src: withFilename(src, name),
+      width: GALLERY.srcWidth,
+      quality: index === 0 ? GALLERY.firstQuality : GALLERY.tileQuality,
+    });
+  }
+  return sanitySized(src, GALLERY.fallbackWidth, GALLERY.fallbackQuality, name);
 }
 
 /** A projected Sanity image as a Photo, or null when the field is empty. */

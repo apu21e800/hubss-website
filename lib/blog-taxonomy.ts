@@ -172,6 +172,21 @@ export function primarySystem(title: string, slug: string, products: string[], d
   );
 }
 
+/**
+ * The alt of a post's photo printed beside the post's own headline (a card on
+ * /blog, the section pages, "Continue reading", the homepage's stories, the
+ * menu's cover story): the photo's own description from Studio, or "" when it
+ * has none or its words are the headline's. Most featured photos carry the
+ * post's title as their alt (the blog import copied it across), and beside the
+ * same words in the same link that photo is decorative: an alt would read the
+ * headline twice. A description typed into the photo's alt in Studio shows.
+ */
+export function altBesideTitle(alt: string | null | undefined, title: string): string {
+  const own = alt?.trim() ?? "";
+  const words = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+  return own && words(own) !== words(title) ? own : "";
+}
+
 /** Sanity's focal point: the centre (x, y) and extent of what matters, as fractions. */
 export interface Hotspot {
   x: number;

@@ -423,7 +423,7 @@ function renderTable(t: PostTableBlock): ReactNode {
 
 const IMAGE_WIDTHS = [640, 960, 1280, 1600];
 
-function renderImage(img: PostImageBlock): ReactNode {
+function renderImage(img: PostImageBlock, title?: string): ReactNode {
   const src = img.url || img.src;
   if (!src) return null;
   const alt = img.alt?.trim() ?? "";
@@ -432,11 +432,14 @@ function renderImage(img: PostImageBlock): ReactNode {
     // Never offer a width larger than the photo itself.
     const natural = img.width ?? IMAGE_WIDTHS[IMAGE_WIDTHS.length - 1];
     const widths = IMAGE_WIDTHS.filter((w) => w < natural).concat(Math.min(natural, 1600));
+    // The photo's filename (lib/sanity-image.ts): its alt, else its caption,
+    // else the post's title.
+    const name = alt || img.caption?.trim() || title;
     el = (
       // eslint-disable-next-line @next/next/no-img-element -- Sanity's CDN sizes it; see lib/photos.ts
       <img
-        src={sanitySized(src, Math.min(natural, 1280))}
-        srcSet={widths.map((w) => `${sanitySized(src, w)} ${w}w`).join(", ")}
+        src={sanitySized(src, Math.min(natural, 1280), 80, name)}
+        srcSet={widths.map((w) => `${sanitySized(src, w, 80, name)} ${w}w`).join(", ")}
         // The reading column's measure, or the photo's own width if it is
         // narrower: `sizes` is the width the browser draws it at, so a small
         // photo is never enlarged.
@@ -483,10 +486,13 @@ const hasText = (b: PostTextBlock) => blockText(b).trim().length > 0;
 export default function PostBody({
   body,
   lunchLearnTopic,
+  title,
 }: {
   body: PostBodyNode[] | null | undefined;
   /** The post's system or subject, carried by its /lunch-learn links into the booking form. */
   lunchLearnTopic?: string;
+  /** The post's title: the filename of a photo in the body that has no alt or caption. */
+  title?: string;
 }) {
   const nodes = (body ?? []).filter((n) => !isBlock(n) || hasText(n));
   const ids = new Map<string, number>();
@@ -518,7 +524,7 @@ export default function PostBody({
     }
 
     if (isBlock(n)) out.push(renderTextBlock(n, ids, ctx));
-    else if (n._type === "image") out.push(renderImage(n as PostImageBlock));
+    else if (n._type === "image") out.push(renderImage(n as PostImageBlock, title));
     else if (n._type === "table") out.push(renderTable(n as PostTableBlock));
     else if (n._type === "divider") out.push(<hr key={n._key} />);
     i++;

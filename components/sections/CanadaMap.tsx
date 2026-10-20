@@ -46,7 +46,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import Image from "next/image";
 import type { FeatureCollection, Point } from "geojson";
 import { mapProjects, TOUR_IDS, type MapProject } from "@/lib/map-projects";
-import { mapLoader } from "@/lib/map-photo";
+import { mapLoader, mapPhotoSrc } from "@/lib/map-photo";
 import ProjectDetail, { provinceName } from "@/components/sections/map/ProjectDetail";
 
 const MAP_STYLE = "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json";
@@ -211,7 +211,7 @@ function Thumb({ project, size }: { project: MapProject; size: { w: number; h: n
   return (
     <span className="cm-thumb" style={{ width: size.w, height: size.h }}>
       {src ? (
-        <Image loader={mapLoader} src={src} alt="" fill sizes={`${size.w * 2}px`} style={{ objectFit: "cover" }} />
+        <Image loader={mapLoader} src={mapPhotoSrc(project, src)} alt="" fill sizes={`${size.w * 2}px`} style={{ objectFit: "cover" }} />
       ) : (
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0Z" />
@@ -922,7 +922,7 @@ export default function CanadaMap() {
                   >
                     <span className="cm-bubble-photo">
                       {selected.images[0] ? (
-                        <Image loader={mapLoader} src={selected.images[0]} alt="" fill sizes="128px" style={{ objectFit: "cover" }} />
+                        <Image loader={mapLoader} src={mapPhotoSrc(selected, selected.images[0])} alt="" fill sizes="128px" style={{ objectFit: "cover" }} />
                       ) : null}
                     </span>
                     <span className="cm-bubble-tip" aria-hidden="true" />
@@ -1041,7 +1041,7 @@ export default function CanadaMap() {
                     >
                       <span className="cm-scard-photo">
                         {p.images[0] ? (
-                          <Image loader={mapLoader} src={p.images[0]} alt="" fill sizes="(max-width: 640px) 100vw, 640px" style={{ objectFit: "cover" }} />
+                          <Image loader={mapLoader} src={mapPhotoSrc(p, p.images[0])} alt="" fill sizes="(max-width: 640px) 100vw, 640px" style={{ objectFit: "cover" }} />
                         ) : null}
                         <span className="cm-scard-system">{p.product}</span>
                       </span>

@@ -69,6 +69,12 @@ jobs:
       - name: Spec-sheet redirects test
         run: npm run test:redirects
 
+      # The lead the server sends GA4 for a delivered message: its shape,
+      # nothing personal in it, and the visitor's ids read from GA's cookies
+      # (lib/ga4-lead.ts, lib/post-form.ts). No network.
+      - name: GA4 lead test
+        run: npm run test:ga4
+
       # The fast checks: routes, links, assets, gallery distinctness, and the
       # CMS field contract. No browser, so this is the one that gates merges.
       - name: Verify

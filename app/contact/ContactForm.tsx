@@ -159,7 +159,10 @@ export default function ContactForm({ eyebrow, heading, subheading, footer }: Co
                       setError(data.error ?? "Something went wrong. Please try again.");
                     } else {
                       setSubmitted(true);
-                      window.gtag?.("event", "generate_lead", { event_category: "conversion", form_type: "contact" });
+                      // form_sent: the visitor saw "sent", held or not. The
+                      // lead (generate_lead) is the route's to send, once the
+                      // message is delivered (lib/ga4-lead.ts).
+                      window.gtag?.("event", "form_sent", { event_category: "conversion", form_type: "contact" });
                       track("contact_submit", { form_type: "contact" });
                     }
                   } catch {

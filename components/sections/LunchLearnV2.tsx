@@ -144,8 +144,10 @@ function useLunchLearnForm(withFormat: boolean) {
       // The conversion, as app/contact/ContactForm.tsx counts its own. The
       // old funnel form sent these; when the page moved to this form
       // (22 Sep 2026) nothing did, so bookings stopped being counted
-      // (session B's finding, ported 2 Oct 2026).
-      window.gtag?.("event", "generate_lead", { event_category: "conversion", form_type: "lunch-learn" });
+      // (session B's finding, ported 2 Oct 2026). Since 20 Oct 2026 the
+      // route sends the lead (generate_lead) once the booking is delivered
+      // (lib/ga4-lead.ts); form_sent is the "sent" screen, held or not.
+      window.gtag?.("event", "form_sent", { event_category: "conversion", form_type: "lunch-learn" });
       track("lunch_learn_submit", {
         form_type: "lunch-learn",
         format: withFormat ? format : "n/a",

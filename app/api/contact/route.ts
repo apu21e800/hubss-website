@@ -1,7 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse, after } from "next/server";
 import { Resend } from "resend";
 import { checkBotId } from "botid/server";
 import { screenSubmission } from "@/lib/form-screen";
+import { leadEvent, readGaIds, sendLeadEvent, type GaIds } from "@/lib/ga4-lead";
 
 const TO_EMAIL = process.env.CONTACT_EMAIL ?? "info@hubss.com";
 // Printed-catalogue requests are fulfilment, not enquiries: Doug wants to see
@@ -188,6 +189,21 @@ function logOutcome(form: string, outcome: string, gate: string, by = "", reason
 }
 
 /**
+ * The lead, in GA4, for a message delivered to the office (lib/ga4-lead.ts):
+ * the form, the project or topic, the visit's GA ids, nothing personal. Sent
+ * by after(), once the visitor has the response. The mail has gone by now,
+ * so nothing here may turn the visitor's "sent" into an error.
+ */
+function countLead(body: ContactPayload, ga: GaIds | undefined) {
+  try {
+    const lead = leadEvent({ formType: body.formType, projectType: body.projectType, topic: body.topic, ga });
+    after(() => sendLeadEvent(lead));
+  } catch (err) {
+    console.error(`[contact] ga4 not scheduled: ${err instanceof Error ? err.message : "unknown error"}`);
+  }
+}
+
+/**
  * BotID's view of the request. "human": checked and fine. "bot": checked and
  * doubted. "unchecked": the check failed or took too long, or the browser
  * could not run it (a content blocker, a strict office network) and the form
@@ -237,12 +253,16 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: UNVERIFIED }, { status: 403 });
     }
 
-    const parsed = readPayload(await req.json().catch(() => null));
+    const raw: unknown = await req.json().catch(() => null);
+    const parsed = readPayload(raw);
     if ("error" in parsed) {
       logOutcome("unknown", "rejected", gate, "validation", parsed.code);
       return NextResponse.json({ error: parsed.error }, { status: 400 });
     }
     const body = parsed;
+    // The visitor's GA ids (lib/post-form.ts), for the lead below: digits and
+    // dots, or dropped. A form without them sends as before.
+    const ga = readGaIds(raw);
 
     // 2. Who should read it? Doug, unless something says otherwise; then the
     //    screened inbox, with the reason on top. Never nobody.
@@ -299,6 +319,8 @@ export async function POST(req: NextRequest) {
 
     // The visitor sees the same "sent" either way, so a spammer learns nothing.
     logOutcome(body.formType, hold ? "held" : "delivered", gate, logBy, logReason);
+    // GA4 hears of delivered messages only: held ones are not leads.
+    if (!hold) countLead(body, ga);
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("[contact API] Unexpected error:", err);

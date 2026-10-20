@@ -7,6 +7,8 @@ import AnalyticsEvents from "@/components/AnalyticsEvents";
 // VercelToolbar — only on staging/preview, never on production
 import { VercelToolbar } from "@vercel/toolbar/next";
 import HumanAnalytics from "@/components/HumanAnalytics";
+// One GA4 id for the tag, the cookie lib/post-form.ts reads and the server's leads.
+import { GA_MEASUREMENT_ID } from "@/lib/ga4-lead";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Suspense } from "react";
@@ -152,7 +154,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             <SpeedInsights />
             {/* Google Analytics for people: not for browsers driven by a
                 program (components/HumanAnalytics.tsx, 15 Oct 2026). */}
-            <HumanAnalytics gaId="G-7YSFCGRL5E" />
+            <HumanAnalytics gaId={GA_MEASUREMENT_ID} />
             <AnalyticsEvents />
           </>
         )}

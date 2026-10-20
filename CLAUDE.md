@@ -704,8 +704,9 @@ headline tests, AI search) became three things in code:
   (lib/field-note-facts.ts) gives up to eight map jobs sharing the item's
   systems or applications; the draft names its `leadJob`, whose first photo,
   if on Sanity's CDN, is the featured photo, framed as its Studio gallery copy
-  (else the stand-in; the notes say which). Model: BLOG_DRAFT_MODEL in Vercel,
-  claude-opus-4-5 when unset. `npm run test:drafter`.
+  (else a stand-in: the first system's hero, the application's only for an
+  item that names no system; the notes say which). Model: BLOG_DRAFT_MODEL in
+  Vercel, claude-opus-4-5 when unset. `npm run test:drafter`.
 - Not done, by choice: Semrush (Search Console and Bing are enough at this
   traffic; a one-month subscription only for a competitor audit), and more
   llms.txt or schema work aimed at AI answers (no evidence it helps).

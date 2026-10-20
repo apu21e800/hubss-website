@@ -8,9 +8,11 @@
  * jobs for the plan item's systems and applications, best first and at most
  * eight, each as the map records it; the job a draft leads with gives the
  * article its photo, from Sanity's CDN, framed as its gallery copy is framed
- * by hand in Studio, and anything else keeps the stand-in; the writer's rules
- * carry the standard (no em dash, no "vs", the new lengths); and the stamped
- * asphalt link script changes link text and nothing else.
+ * by hand in Studio, and anything else keeps the stand-in, the first system's
+ * hero (the application's only when the item names no system); the writer's
+ * rules carry the standard (no em dash, no "vs", the new lengths); and the
+ * stamped asphalt link script changes link text, adds no link, and leaves
+ * stamped-asphalt-parking-lot alone.
  */
 import assert from "node:assert/strict";
 import { mapProjects, TOUR_IDS, type MapProject } from "../lib/map-projects";
@@ -19,7 +21,7 @@ import { assetRefFromCdnUrl, buildDraftDocument, leadJobFor, pickFraming, type I
 import { SAVE_DRAFT, VOICE, type Draft, type FactCheck } from "../lib/field-note-drafter";
 import { GLOSSARY_FOR_WRITERS } from "../lib/glossary";
 import { lintCopy } from "../lib/style-lint";
-import { fixLinks, planPost, type Block, type MarkDef } from "./stamped-asphalt-links";
+import { fixLinks, planPost, SLUGS, type Block, type MarkDef } from "./stamped-asphalt-links";
 
 let failures = 0;
 function check(name: string, fn: () => void) {
@@ -177,28 +179,63 @@ check("pickFraming: the gallery copy framed by hand", () => {
   const hotspot = { x: 0.5, y: 0.5 };
   assert.deepEqual(pickFraming([{ hotspot: null, crop: null }, { hotspot, crop: null }]), { hotspot, crop: null });
 });
-check("no lead job: the stand-in, as before", () => {
+check("no lead job: the stand-in is the system's hero, not the application's", () => {
   const doc = buildDraftDocument(idea, draft, clean, "x");
-  assert.equal(featured(doc)?.asset._ref, "image-lotshero-2400x1600-jpg");
-  assert.match(doc.editorNotes, /PHOTO: a stand-in, the Parking Lots page's hero photo\. If the post describes a particular project, swap in a photo of it\./);
+  assert.equal(featured(doc)?.asset._ref, "image-xdhero-2400x1600-jpg");
+  assert.equal(featured(doc)?.alt, "A crosswalk");
+  assert.match(doc.editorNotes, /PHOTO: a stand-in, the TrafficPatternsXD page's hero photo\. If the post describes a particular project, swap in a photo of it\./);
+});
+const noHero: Linked = { _id: "product-durashield", name: "DuraShield", slug: "durashield", hero: { asset: null, alt: null } };
+check("the stand-in's order: the first system with a hero; the application's only when the item names no system", () => {
+  const ref = (i: Idea) => featured(buildDraftDocument(i, draft, clean, "x"))?.asset._ref;
+  assert.equal(ref({ ...idea, systems: [xdPage, { ...noHero, hero: { asset: "image-second-2400x1600-jpg" } }] }), "image-xdhero-2400x1600-jpg", "the first system's");
+  assert.equal(ref({ ...idea, systems: [noHero, xdPage] }), "image-xdhero-2400x1600-jpg", "a system with no hero is passed over");
+  assert.equal(ref({ ...idea, systems: [] }), "image-lotshero-2400x1600-jpg", "no system: the application's");
+  assert.equal(ref({ ...idea, systems: null }), "image-lotshero-2400x1600-jpg", "no system: the application's");
+  assert.equal(ref({ ...idea, systems: [], applications: [] }), undefined, "neither: none");
+});
+check("an item with systems never takes the application's hero: with no system photo, none, and the notes ask for one", () => {
+  const doc = buildDraftDocument({ ...idea, systems: [noHero] }, draft, clean, "x");
+  assert.equal(featured(doc), undefined);
+  assert.match(doc.editorNotes, /PHOTO: none\. Add a featured photo of HUB's own work before publishing\./);
+});
+check("the asphalt patch item, as the plan holds it on 20 Oct 2026: Fast Patch DPR's hero, never the Parking Lots walkway", () => {
+  const system = (slug: string, name: string, asset: string): Linked => ({ _id: `product-${slug}`, name, slug, hero: { asset, alt: null } });
+  const patch: Idea = {
+    _id: "storyIdea-asphalt-patch",
+    title: "Asphalt patch: cold patch, hot mix or a permanent repair product",
+    status: "ready",
+    type: "Guide",
+    brief: null,
+    systems: [
+      system("fast-patch", "Fast Patch DPR", "image-e58314023b6dbcf9a565b90b8221063b41781da2-1480x912-jpg"),
+      system("aggrefill", "AggreFill", "image-6969d130a52c712e5273a50680d12a01a42202b3-476x451-jpg"),
+      system("chipfill", "ChipFill", "image-bc9a68667e03c408935905752c35a129c5447917-640x358-jpg"),
+    ],
+    applications: [{ _id: "application-parking-lots", name: "Parking Lots", slug: "parking-lots", hero: { asset: "image-8678e35b0c180d24b6c3741cce73c61e7f1d22fb-2400x1800-jpg", alt: null } }],
+  };
+  const doc = buildDraftDocument(patch, draft, clean, "x");
+  assert.equal(featured(doc)?.asset._ref, "image-e58314023b6dbcf9a565b90b8221063b41781da2-1480x912-jpg");
+  assert.match(doc.editorNotes, /PHOTO: a stand-in, the Fast Patch DPR page's hero photo\./);
 });
 check("a lead job whose photo is a /images/map file: the stand-in, and the notes say where the job's photo is", () => {
   const commercial: Linked = { _id: "application-commercial-spaces", name: "Commercial Spaces", slug: "commercial-spaces", hero: { asset: "image-comhero-2400x1600-jpg", alt: "A storefront" } };
   const audiIdea: Idea = { ...idea, applications: [commercial] };
   assert.equal(leadJobFor(audiIdea, "vaughan-audi")?.ref, null, "listed, but its photo is not in Sanity");
   const doc = buildDraftDocument(audiIdea, { ...draft, leadJob: "vaughan-audi" }, clean, "x");
-  assert.equal(featured(doc)?.asset._ref, "image-comhero-2400x1600-jpg");
-  assert.match(doc.editorNotes, /PHOTO: a stand-in, the Commercial Spaces page's hero photo\. The article leads with the Audi Vaughan entrance job, whose photo is not in Studio yet \(https:\/\/hubss\.com\/images\/map\/vaughan-audi\.jpg\): upload it and use it instead\./);
+  assert.equal(featured(doc)?.asset._ref, "image-xdhero-2400x1600-jpg");
+  assert.match(doc.editorNotes, /PHOTO: a stand-in, the TrafficPatternsXD page's hero photo\. The article leads with the Audi Vaughan entrance job, whose photo is not in Studio yet \(https:\/\/hubss\.com\/images\/map\/vaughan-audi\.jpg\): upload it and use it instead\./);
 });
 check("a lead job its facts didn't list, or one made up: the stand-in", () => {
   for (const leadJob of ["made-up-job", "whitehorse-kwanlin-dun", " ", ""]) {
     const doc = buildDraftDocument(idea, { ...draft, leadJob }, clean, "x");
-    assert.equal(featured(doc)?.asset._ref, "image-lotshero-2400x1600-jpg", JSON.stringify(leadJob));
+    assert.equal(featured(doc)?.asset._ref, "image-xdhero-2400x1600-jpg", JSON.stringify(leadJob));
   }
 });
 check("the notes keep the house style", () => {
-  for (const leadJob of ["kitchener-cadillac-fairview", undefined]) {
-    assert.deepEqual(lintCopy(buildDraftDocument(idea, { ...draft, leadJob }, clean, "x").editorNotes).map((i) => i.message), []);
+  const cases: [Idea, string | undefined][] = [[idea, "kitchener-cadillac-fairview"], [idea, undefined], [{ ...idea, systems: [noHero] }, undefined]];
+  for (const [i, leadJob] of cases) {
+    assert.deepEqual(lintCopy(buildDraftDocument(i, { ...draft, leadJob }, clean, "x").editorNotes).map((x) => x.message), [], `${i.systems?.[0]?.name} ${leadJob}`);
   }
 });
 
@@ -264,22 +301,23 @@ check("a bare StreetPrint link the sentence follows with \"stamped asphalt\" tak
 check("a link to another page is not touched", () => {
   assert.equal(fixLinks(block("b4", [span("s1", "StreetPrint", ["l1"])], [linkTo("l1", "https://hubss.com/products/streetbond")])).block, null);
 });
-check("a post with no such link gets one on its first stamped asphalt, never in a heading, the words unchanged", () => {
-  const body = [
-    block("h", [span("s0", "Stamped asphalt parking lots")], [], "h2"),
-    block("p", [span("s1", "StreetPrint is the original. TrafficPatternsXD stamped asphalt lots take trucks.")]),
-  ];
-  const plan = planPost(body);
-  assert.equal(plan.blocks.length, 1);
-  const [p] = plan.blocks;
-  assert.equal(p._key, "p");
-  assert.deepEqual(texts(p), ["StreetPrint is the original. TrafficPatternsXD ", "stamped asphalt", " lots take trucks."]);
-  assert.deepEqual(p.markDefs, [{ _type: "link", _key: "sa1", href: "https://hubss.com/products/streetprint" }]);
-  assert.deepEqual((p.children?.[1] as { marks: string[] }).marks, ["sa1"]);
+check("a post's links are fixed and counted", () => {
+  const plan = planPost([block("p", [span("s1", "Or "), span("s2", "see StreetPrint", ["l1"])], [linkTo("l1")]), block("q", [span("s3", "No link here.")])]);
+  assert.equal(plan.links, 1);
+  assert.deepEqual(plan.blocks.map((b) => b._key), ["p"]);
+  assert.deepEqual(texts(plan.blocks[0]), ["Or ", "see StreetPrint stamped asphalt"]);
 });
-check("\"StreetPrint stamped asphalt\" in the text is linked whole", () => {
-  const plan = planPost([block("p", [span("s1", "We used StreetPrint stamped asphalt on the lane.")])]);
-  assert.deepEqual(texts(plan.blocks[0]), ["We used ", "StreetPrint stamped asphalt", " on the lane."]);
+check("a post with no link to /products/streetprint is left as it is: no link is added, even on a mention of stamped asphalt", () => {
+  for (const text of ["TrafficPatternsXD stamped asphalt parking lots are engineered for trucks.", "We used StreetPrint stamped asphalt on the lane.", "StreetPrint is the original."]) {
+    const plan = planPost([block("h", [span("s0", "Stamped asphalt parking lots")], [], "h2"), block("p", [span("s1", text)])]);
+    assert.deepEqual(plan.blocks, [], text);
+    assert.deepEqual(plan.changes, [], text);
+    assert.equal(plan.links, 0, text);
+  }
+});
+check("stamped-asphalt-parking-lot is left alone: its stamped asphalt is TrafficPatternsXD's, and it has no StreetPrint link", () => {
+  assert.ok(!(SLUGS as readonly string[]).includes("stamped-asphalt-parking-lot"));
+  assert.deepEqual([...SLUGS], ["how-stamped-asphalt-is-installed", "residential-driveways-stamped-asphalt", "residential-driveways-stamped-asphalt-upgrade", "stamped-asphalt-vs-concrete"]);
 });
 
 if (failures) {

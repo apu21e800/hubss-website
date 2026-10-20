@@ -9,14 +9,15 @@
  *   npx tsx scripts/stamped-asphalt-links.ts           # dry run (the default): reads the public API, shows every change, writes nothing, needs no token
  *   npx tsx scripts/stamped-asphalt-links.ts --apply   # writes them, with SANITY_API_WRITE_TOKEN from .env.local
  *
- * In the five posts in SLUGS, and nothing else:
- *  - every link to /products/streetprint gets "stamped asphalt" in its text:
- *    "see StreetPrint" becomes "see StreetPrint stamped asphalt", a bare
- *    "StreetPrint" becomes "StreetPrint stamped asphalt" (or takes in the
- *    words that follow it, when the sentence already goes on "stamped
- *    asphalt"), and a link that already says "stamped asphalt" is left alone;
- *  - a post with no such link gets one, on the first mention of "stamped
- *    asphalt" in a paragraph or a list item (failing that, of "StreetPrint").
+ * In the posts in SLUGS, and nothing else, every link to /products/streetprint
+ * gets "stamped asphalt" in its text: "see StreetPrint" becomes "see
+ * StreetPrint stamped asphalt", a bare "StreetPrint" becomes "StreetPrint
+ * stamped asphalt" (or takes in the words that follow it, when the sentence
+ * already goes on "stamped asphalt"), and a link that already says "stamped
+ * asphalt" is left alone. It adds no links. A post with no link to
+ * /products/streetprint has nothing to fix, and a mention of stamped asphalt
+ * can be another system's (TrafficPatternsXD is stamped into the asphalt
+ * too), where a link to StreetPrint would send the reader to the wrong system.
  * Only the body blocks that change are written, one patch per block
  * (body[_key=="..."]); a document's patches go in one transaction that checks
  * the revision the script read (ifRevisionID), so a post edited mid-run is
@@ -33,18 +34,20 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { config as loadDotenv } from "dotenv";
 
-// The five published posts whose slug contains "stamped-asphalt" (Vern's SEO
-// brief, Job 4, 20 Oct 2026).
+// Four of the five published posts whose slug contains "stamped-asphalt"
+// (Vern's SEO brief, Job 4, 20 Oct 2026). The fifth, stamped-asphalt-parking-lot,
+// is left alone: it has no link to /products/streetprint and never names
+// StreetPrint, so there is nothing to fix in it, and its one mention of
+// stamped asphalt is in a sentence about TrafficPatternsXD ("TrafficPatternsXD
+// stamped asphalt parking lots", block k6), where a link to StreetPrint would
+// send the reader to the wrong system.
 export const SLUGS = [
   "how-stamped-asphalt-is-installed",
   "residential-driveways-stamped-asphalt",
   "residential-driveways-stamped-asphalt-upgrade",
-  "stamped-asphalt-parking-lot",
   "stamped-asphalt-vs-concrete",
 ] as const;
 
-/** The link a post gets, as Studio's link field stores it (a full URL; PostBody prints it relative). */
-export const HREF = "https://hubss.com/products/streetprint";
 /** /products/streetprint, relative or on hubss.com, with or without a trailing slash, query or anchor. */
 const TO_STREETPRINT = /^(?:https?:\/\/(?:www\.)?hubss\.com)?\/products\/streetprint\/?(?:[?#].*)?$/i;
 const PHRASE = /stamped asphalt/i;
@@ -65,13 +68,14 @@ export interface PostPlan {
   kept: string[];
   /** What the script could not fix by itself, for a person in Studio. */
   left: string[];
+  /** Links to /products/streetprint in the post; with none, it is left as it is. */
+  links: number;
 }
 
 const isSpan = (c: unknown): c is Span => !!c && (c as Span)._type === "span" && typeof (c as Span).text === "string";
 const isStreetPrintLink = (d: MarkDef) => d._type === "link" && TO_STREETPRINT.test((d.href ?? "").trim());
 /** A span carrying no annotation (no link), only decorators such as bold. */
 const plainSpan = (b: Block, s: Span) => !(s.marks ?? []).some((m) => (b.markDefs ?? []).some((d) => d._key === m));
-const isProse = (b: Block) => b._type === "block" && (!b.style || b.style === "normal");
 
 /** From 60 characters before `start` to 50 after `end`, so a long paragraph prints as one line. */
 function around(text: string, start: number, end: number): string {
@@ -94,20 +98,6 @@ function shown(b: Block, key: string): string {
   }
   if (open) { text += "](/products/streetprint)"; end = text.length; }
   return start < 0 ? text : around(text, start, end);
-}
-
-/** The block's plain text, and where span `i` starts in it. */
-function plainText(b: Block, i: number): { text: string; offset: number } {
-  const kids = b.children ?? [];
-  const before = kids.slice(0, i).filter(isSpan).map((s) => s.text).join("");
-  return { text: kids.filter(isSpan).map((s) => s.text).join(""), offset: before.length };
-}
-
-function freshKey(b: Block): string {
-  const taken = new Set([...(b.children ?? []).map((c) => c._key), ...(b.markDefs ?? []).map((d) => d._key)]);
-  let n = 1;
-  while (taken.has(`sa${n}`)) n++;
-  return `sa${n}`;
 }
 
 /**
@@ -146,60 +136,17 @@ export function fixLinks(block: Block): { block: Block | null; changes: LinkChan
   return out;
 }
 
-/**
- * A link to /products/streetprint on the first mention of "stamped asphalt"
- * (with "StreetPrint " before it, when it has that), in a paragraph or list
- * item, outside any other link; with no such mention, on the first
- * "StreetPrint", which then reads "StreetPrint stamped asphalt". Pure.
- */
-export function addLink(body: Block[]): { block: Block; change: LinkChange } | null {
-  for (const [pattern, insert] of [[/(?:StreetPrint )?stamped asphalt/i, false], [/StreetPrint/i, true]] as const) {
-    for (const block of body.filter(isProse)) {
-      const kids = block.children ?? [];
-      for (let i = 0; i < kids.length; i++) {
-        const s = kids[i];
-        if (!isSpan(s) || !plainSpan(block, s)) continue;
-        const m = pattern.exec(s.text);
-        if (!m) continue;
-        const next: Block = structuredClone(block);
-        const key = freshKey(next);
-        const linked = insert ? `${m[0]} stamped asphalt` : m[0];
-        const pieces = ([
-          { ...s, text: s.text.slice(0, m.index) },
-          { _type: "span", _key: `${key}t`, text: linked, marks: [...(s.marks ?? []), key] },
-          { _type: "span", _key: `${key}r`, text: s.text.slice(m.index + m[0].length), marks: [...(s.marks ?? [])] },
-        ] satisfies Span[]).filter((p) => p.text !== "");
-        next.children = [...kids.slice(0, i), ...pieces, ...kids.slice(i + 1)];
-        next.markDefs = [...(next.markDefs ?? []), { _type: "link", _key: key, href: HREF }];
-        const { text, offset } = plainText(block, i);
-        return { block: next, change: { block: block._key, before: around(text, offset + m.index, offset + m.index + m[0].length), after: shown(next, key) } };
-      }
-    }
-  }
-  return null;
-}
-
-/** What one post needs: its links fixed, or a first link added. Pure. */
+/** What one post needs: the text of its links to /products/streetprint fixed. Adds no link. Pure. */
 export function planPost(body: Block[]): PostPlan {
-  const plan: PostPlan = { blocks: [], changes: [], kept: [], left: [] };
-  let links = 0;
+  const plan: PostPlan = { blocks: [], changes: [], kept: [], left: [], links: 0 };
   for (const block of body) {
     if (block._type !== "block") continue;
-    links += (block.markDefs ?? []).filter(isStreetPrintLink).length;
+    plan.links += (block.markDefs ?? []).filter(isStreetPrintLink).length;
     const r = fixLinks(block);
     plan.kept.push(...r.kept);
     plan.left.push(...r.left);
     plan.changes.push(...r.changes);
     if (r.block) plan.blocks.push(r.block);
-  }
-  if (!links) {
-    const added = addLink(body);
-    if (added) {
-      plan.blocks.push(added.block);
-      plan.changes.push(added.change);
-    } else {
-      plan.left.push("no link to /products/streetprint and no mention of stamped asphalt or StreetPrint to put one on");
-    }
   }
   return plan;
 }
@@ -242,6 +189,7 @@ async function main() {
     for (const c of plan.changes) console.log(`  block ${c.block}\n    old: ${c.before}\n    new: ${c.after}`);
     for (const k of plan.kept) console.log(`  left as it is (already says stamped asphalt): block ${k}`);
     for (const l of plan.left) console.log(`  NOT CHANGED, for Studio: ${l}`);
+    if (!plan.links) console.log("  left as it is: no link to /products/streetprint, so nothing to fix (the script adds none)");
     if (plan.blocks.length) todo.push({ doc, plan });
   }
 

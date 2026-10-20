@@ -99,9 +99,9 @@ Product Portfolio Book tell it.
 - **Doesn't:** publish; invent projects, clients, numbers or quotes (if it
   needs a fact it doesn't have, it writes around it); choose photos freely
   (when the article leads with a job on the homepage map, the photo is that
-  job's; otherwise it puts in the application's or the system's hero as a
-  stand-in, so swap in the real one when the article is about a particular
-  job).
+  job's; otherwise it puts in the hero of the first system the idea names, or
+  of its application when it names no system, as a stand-in, so swap in the
+  real one when the article is about a particular job).
 
 ## 6. After you publish
 

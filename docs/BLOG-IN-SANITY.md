@@ -71,9 +71,10 @@ email says how many items are left and which one is next. It then:
 3. saves it in Insights as an **unpublished draft**. The featured photo is the
    photo of the job the post leads with when that photo is in Sanity, with the
    focal point set on its gallery copy in Studio, if one is; otherwise a
-   stand-in (the first application's hero, else the first system's: a parking
-   lot post gets a parking lot). "Notes for the editor" says which, and has
-   the fact check;
+   stand-in: the first system's hero (a post about patching asphalt shows a
+   repair, not the Parking Lots page's StreetPrint walkway), and the first
+   application's only when the plan item names no system. "Notes for the
+   editor" says which, and has the fact check;
 4. marks the plan item Drafted and emails `BLOG_DRAFT_NOTIFY`.
 
 Two a week use the plan up, so after the email the run keeps it stocked

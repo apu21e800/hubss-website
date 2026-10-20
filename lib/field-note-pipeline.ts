@@ -25,8 +25,9 @@
  * When the draft leads with a documented job from the project map
  * (`leadJob`, one of the jobs its facts listed) and that job's first photo is
  * on Sanity's CDN, that photo is the featured photo, with the focal point and
- * crop of its gallery copy in Studio when one has them. Otherwise, as before,
- * a stand-in: the application's hero, else the system's. The notes say which.
+ * crop of its gallery copy in Studio when one has them. Otherwise a stand-in:
+ * the hero of the first of its systems, and the application's only when the
+ * plan item names no system (buildDraftDocument says why). The notes say which.
  */
 
 import { Resend } from "resend";
@@ -305,11 +306,15 @@ export function buildDraftDocument(idea: Idea, draft: Draft, check: FactCheck, s
         ...(framing?.crop ? { crop: framing.crop } : {}),
       }
     : null;
-  // Otherwise the stand-in photo: the application's hero first, then the
-  // system's. A post about parking lots gets a parking lot, not the product's
-  // best-known shot of something else (7 Oct 2026: the line-painting draft
-  // came with a bike path).
-  const photoFrom = jobPhoto ? undefined : [...apps, ...systems].find((x) => x.hero?.asset);
+  // Otherwise the stand-in photo: the hero of the first of the item's systems
+  // that has one, and the application's only when the item names no system.
+  // An application's hero can show another system altogether: the Parking
+  // Lots hero is a StreetPrint walkway, which the asphalt patch article due
+  // on 22 Oct 2026 would have worn. A system's hero at least shows the system
+  // the article is about. From 7 to 20 Oct 2026 the application's came first,
+  // after the line-painting draft, system first, came with a bike path: the
+  // right system in the wrong setting, which is the lesser fault.
+  const photoFrom = jobPhoto ? undefined : (systems.length ? systems : apps).find((x) => x.hero?.asset);
   const types = new Set<string>(FIELD_NOTE_TYPES.map((t) => t.label));
   const phrases = [...new Set([idea.searchPhrase, ...draft.searchPhrases].map((p) => p?.trim()).filter((p): p is string => !!p))];
   const today = new Date().toISOString().slice(0, 10);

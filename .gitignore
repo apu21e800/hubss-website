@@ -72,3 +72,9 @@ lib/blog-index.json
 /.sanity-work/
 # Local browser-tool scratch on Vern's machine.
 /.playwright-mcp/
+
+# Contact lists (Apollo exports, Constant Contact exports) live beside the repo on
+# Vern's PC and must never be committed (20 Oct 2026).
+apollo-Lists/
+*contacts*.csv
+*contacts*.xlsx

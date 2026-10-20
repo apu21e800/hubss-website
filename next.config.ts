@@ -369,6 +369,56 @@ const nextConfig: NextConfig = {
       { source: "/products/streetbond-coatings-asphalt-concrete/:path*", destination: "/products/streetbond", permanent: true },
       { source: "/applications/bike-bus-lanes", destination: "/applications/bike-lanes", permanent: true }, // matches /bike-bus-lanes
       { source: "/applications/streetscapes", destination: "/applications/traffic-calming", permanent: true }, // the old traffic-calming-streetscapes category
+      // The /blog/ addresses the old pages above were sent to until 22 Sep
+      // 2026: 34 posts planned in the migration and never written (f6fccaa
+      // repointed those rules). Google learned the addresses while they
+      // answered 200 and still crawls them into a 404: the client's SEO brief
+      // of 20 Oct 2026 (Search Console, Not found) lists 33 of them, and the
+      // 34th, Ralph's Farm Market, 404s the same way. Each goes straight to
+      // where its old page lands today (the comment names that page), one hop.
+      // The same BLOG_SLUGS guard as the category prefixes below, turned
+      // round: a redirect runs before the page, so a post published on one of
+      // these slugs must win, and the filter drops its rule when it exists.
+      ...[
+        { source: "/blog/surface-solutions-school-playgrounds", destination: "/applications/playgrounds", permanent: true }, // as /surface-system-solutions-for-school-playgrounds
+        { source: "/blog/decorative-asphalt-communities", destination: "/applications/community-branding", permanent: true }, // as /decorative-asphalt-for-communities
+        { source: "/blog/asphalt-coatings-parks-plazas", destination: "/applications/parks-paths", permanent: true }, // as /asphalt-coatings-for-parks-and-plazas
+        { source: "/blog/streetbondsr-cooler-asphalt", destination: "/applications/leed-urban-heat-island", permanent: true }, // as /streetbondsr-for-cooler-asphalt-surfaces
+        { source: "/blog/enhancing-transit-hubs-gta-vancouver", destination: "/applications/public-spaces", permanent: true }, // as /enhancing-transit-hubs-in-the-gta-and-metro-vancouver
+        { source: "/blog/rutland-centennial-park-kelowna", destination: "/applications/parks-paths", permanent: true }, // as /decorative-asphalt-for-rutland-centennial-park-kelowna
+        { source: "/blog/societe-transport-saguenay", destination: "/applications/crosswalks", permanent: true }, // as /societe-de-transport-du-saguenay
+        { source: "/blog/bikeway-intersection", destination: "/applications/bike-lanes", permanent: true }, // as /bikeway-intersection
+        { source: "/blog/decorative-asphalt-renewal", destination: "/applications/playgrounds", permanent: true }, // as /decorative-asphalt-renewal
+        { source: "/blog/asphalt-coatings-playgrounds", destination: "/blog/playgrounds-recreation", permanent: true }, // as /asphalt-coatings-for-playgrounds
+        { source: "/blog/west-vancouver-rainbow-crosswalk", destination: "/applications/crosswalks", permanent: true }, // as /west-vancouver-rainbow-crosswalk
+        { source: "/blog/ackerys-alley-orpheum-laneway", destination: "/applications/public-art", permanent: true }, // as /ackerys-alley-decorative-asphalt-orpheum-theatre-laneway
+        { source: "/blog/stamped-asphalt-2-years-wear", destination: "/applications/crosswalks", permanent: true }, // as /decorative-paving-stamped-asphalt-after-2-years-wear
+        { source: "/blog/ralphs-farm-market-parking-lot", destination: "/applications/parking-lots", permanent: true }, // as /ralphs-farm-market-decorative-asphalt-parking-lot
+        { source: "/blog/squamish-nation-rainbow-crosswalk", destination: "/applications/crosswalks", permanent: true }, // as /squamish-nation-rainbow-crosswalk
+        { source: "/blog/melfort-waterpark-splash-pad", destination: "/applications/splash-pads", permanent: true }, // as /melfort-saskatchewan-waterpark-splash-pad
+        { source: "/blog/victoria-harbour-walkway", destination: "/blog/pedestrian-channelization-public-spaces", permanent: true }, // as /victoria-harbor-decorative-asphalt-walkway
+        { source: "/blog/sports-court-asphalt-paving", destination: "/applications/sport-courts", permanent: true }, // as /sports-court-asphalt-paving
+        { source: "/blog/rainbow-crosswalk-sechelt", destination: "/applications/crosswalks", permanent: true }, // as /rainbow-crosswalk-sechelt
+        { source: "/blog/white-rock-stamped-pathway", destination: "/applications/parks-paths", permanent: true }, // as /white-rock-stamped-asphalt-pathway
+        { source: "/blog/checkerboard-crosswalk-coquitlam", destination: "/applications/crosswalks", permanent: true }, // as /checkerboard-decorative-asphalt-crosswalk
+        { source: "/blog/first-nations-crosswalk-granville", destination: "/applications/crosswalks", permanent: true }, // as /first-nations-decorative-crosswalk-design-granville-street
+        { source: "/blog/lickman-interchange-roundabout", destination: "/applications/traffic-calming", permanent: true }, // as /lickman-interchange-decorative-asphalt-roundabout
+        { source: "/blog/stamped-asphalt-viva-next", destination: "/blog/multimodal-connectivity-york-region", permanent: true }, // as /stamped-asphalt-streetscapes-viva-next
+        { source: "/blog/decorative-paving-townhomes", destination: "/blog/community-branding-case-study", permanent: true }, // as /decorative-paving-for-townhomes-canada (Windsor Gate, which this post covers)
+        { source: "/blog/decorative-paving-public-art-joyce", destination: "/applications/public-art", permanent: true }, // as /decorative-paving-public-art
+        { source: "/blog/residential-decorative-paving", destination: "/applications/townhomes", permanent: true }, // as /residential-decorative-paving
+        { source: "/blog/laneway-revitalization-vancouver", destination: "/blog/laneway-project", permanent: true }, // as /laneway-revitalization
+        { source: "/blog/residential-decorative-driveways", destination: "/applications/residential-driveways", permanent: true }, // as /residential-decorative-driveways
+        { source: "/blog/decorative-paving-playgrounds", destination: "/applications/playgrounds", permanent: true }, // as /decorative-paving-for-playgrounds
+        { source: "/blog/parking-lot-wayfinding", destination: "/applications/parking-lots", permanent: true }, // as /parking-lot-wayfinding
+        { source: "/blog/durable-coatings-asphalt", destination: "/applications/leed-urban-heat-island", permanent: true }, // as /durable-coatings-for-asphalt
+        { source: "/blog/stamped-asphalt-decorative-crosswalks", destination: "/applications/crosswalks", permanent: true }, // as /stamped-asphalt-decorative-crosswalks
+        { source: "/blog/enhanced-parking-lot-surfaces", destination: "/applications/parking-lots", permanent: true }, // as /enhanced-parking-lot-surfaces
+      ].filter((r) => !BLOG_SLUGS.includes(r.source.slice("/blog/".length))),
+      // Two WordPress tag pages from the same brief, 404ing: each system's page,
+      // where the bare /streetprint and /trafficpatternsxd already land.
+      { source: "/tag/streetprint", destination: "/products/streetprint", permanent: true },
+      { source: "/tag/trafficpatternsxd", destination: "/products/traffic-patterns-xd", permanent: true },
       // Footer/nav link variants
       { source: "/traffic-patterns", destination: "/products/traffic-patterns", permanent: true },
       // Other pages
@@ -647,6 +697,15 @@ const nextConfig: NextConfig = {
         destination: "/gallery",
         permanent: true,
       },
+      // Every other old WordPress feed: /comments/feed, /<post>/feed,
+      // /tag/<tag>/feed. The SEO brief of 20 Oct 2026 lists 17 of them 404ing.
+      // The site has no feed, so the blog is the nearest page. Last on purpose:
+      // a feed under a prefix that already has a fallback above (/projects/,
+      // /stamped-asphalt/, /featured-projects/ and the rest) keeps landing where
+      // it does, and this takes only what used to 404. It matches an address
+      // whose last segment is exactly "feed", and no page on this site ends in
+      // /feed (`npm run test:redirects` checks both).
+      { source: "/:path*/feed", destination: "/blog", permanent: true },
     ];
   },
   // turbopack config removed — Sanity Studio is incompatible with Turbopack

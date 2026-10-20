@@ -269,6 +269,16 @@ about 40% below the WordPress site's.
   did five under /featured-projects/ and /decorative-stamped-driveways/ that
   404'd once their trailing slash came off. `npm run verify` follows every
   address in the list to its end ("old addresses land on a page").
+- The 404s in the client's SEO brief (20 Oct 2026): the 34 /blog/ addresses
+  the old pages were sent to until 22 Sep 2026 (posts planned in the
+  migration and never written) 308 to where each old page lands today, in a
+  list next.config.ts filters by BLOG_SLUGS, so a post published on one of
+  those slugs wins. The two /tag/ pages go to their systems, every other old
+  feed to /blog (`/:path*/feed`, the last rule, so feeds under a prefix with
+  its own fallback keep landing there), and the 2014 TrafficPatternsXD
+  cross-section drawing to today's copy (KNOWN). `npm run test:redirects`
+  follows each through next.config.ts's own rules (LANDS). They are not in
+  lib/legacy-addresses.json, which stays the 16 Oct Search Console list.
 - Not done (Vern's dashboard): Vercel Firewall Bot Protection is Off. Turning
   it On would challenge non-browser clients, including the Sanity webhook
   (/api/revalidate): it needs a bypass for /api first; Log mode first.

@@ -67,6 +67,11 @@ export const KNOWN: Record<string, string> = {
   "/wp-content/uploads/2023/03/Duratherm-Custom-Design-Guidelines.pdf": "/docs/duratherm/duratherm-custom-design-guidelines.pdf",
   "/wp-content/uploads/2023/03/DecoMark-Application-Instructions.pdf": "/docs/decomark/decomark-application-instructions.pdf",
   "/wp-content/uploads/2023/03/DecoMark-Custom-Design-Guidelines.pdf": "/docs/decomark/decomark-custom-design-guidelines.pdf",
+  // TrafficPatternsXD: the cross-section drawing (drawn 2011) as uploaded in
+  // 2014. Today's file is the same drawing, which its 2023 upload already
+  // reaches by name; this one went to /resources until 20 Oct 2026, when the
+  // client's SEO brief listed it among the addresses Google still crawls.
+  "/wp-content/uploads/2014/04/TrafficPatternsXD_CrossSectionDetail.pdf": "/docs/TrafficPatternsXD/TrafficPatternsXD-CrossSection-Detail.pdf",
 };
 
 /**

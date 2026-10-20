@@ -86,42 +86,40 @@ export default function ContactForm({ eyebrow, heading, subheading, footer }: Co
         }}
       />
       <Nav />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-16 sm:pb-24">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+      {/* Above the fold (Vern, 20 Oct 2026: "make all the hero content fit
+          above the fold"): the heading, the two offices and the whole form
+          sit inside 768px on a laptop, 730 at 125% scaling. Measured on the
+          local build: the form's card ends at 720 on 1536x730 and 1366x768,
+          and at 736 on 1440x900 (before: 922). */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 lg:pt-14 pb-16 sm:pb-24">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
           {/* Left */}
-          <div className="pt-4">
-            <p className="text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: "var(--accent-text-lg)" }}>{eyebrow}</p>
-            {/* The standard landing H1, 48px at 1440, as Insights, Resources
-                and the rest (QA D11, 30 Sep 2026); this one was 56px. */}
-            <h1
-              className="font-black mb-8"
-              style={{
-                color: "var(--text-primary)",
-                fontSize: "clamp(2rem, 3.4vw, 3rem)",
-                lineHeight: 1.0,
-                letterSpacing: "-0.03em",
-              }}
-            >
+          <div className="lg:pt-2">
+            <p className="eyebrow mb-3" style={{ color: "var(--accent-text-lg)" }}>{eyebrow}</p>
+            <h1 className="h1-page mb-5" style={{ color: "var(--text-primary)" }}>
               {heading}
             </h1>
-            <p className="text-[16px] leading-relaxed mb-12 max-w-prose" style={{ color: "var(--text-body)" }}>
+            <p className="text-[16px] leading-relaxed mb-8 max-w-prose" style={{ color: "var(--text-body)" }}>
               {subheading}
             </p>
-            <div className="space-y-8">
-              {/* The offices from Studio's Site Settings (lib/site-settings.ts). */}
-              {[
-                { region: "West office", ...offices.west },
-                { region: "East office", ...offices.east },
-              ].map((office) => (
-                <div key={office.region}>
-                  <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "var(--accent-text-lg)" }}>{office.region}</p>
-                  <p className="text-sm font-medium mb-2" style={{ color: "var(--text-primary)" }}>{office.place}</p>
-                  <a href={mailtoHref(office.email)} className="text-sm flex items-center transition-colors hover:text-[var(--accent-text-lg)]" style={{ color: "var(--text-body)", minHeight: 44 }}>{office.email}</a>
-                  <a href={telHref(office.phone)} className="text-sm flex items-center transition-colors hover:text-[var(--accent-text-lg)]" style={{ color: "var(--text-body)", minHeight: 44 }}>{office.phone}</a>
-                </div>
-              ))}
+            <div>
+              {/* The offices from Studio's Site Settings (lib/site-settings.ts),
+                  side by side so both sit above the fold. */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {[
+                  { region: "West office", ...offices.west },
+                  { region: "East office", ...offices.east },
+                ].map((office) => (
+                  <div key={office.region}>
+                    <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "var(--accent-text-lg)" }}>{office.region}</p>
+                    <p className="text-sm font-medium mb-1" style={{ color: "var(--text-primary)" }}>{office.place}</p>
+                    <a href={mailtoHref(office.email)} className="text-sm flex items-center transition-colors hover:text-[var(--accent-text-lg)]" style={{ color: "var(--text-body)", minHeight: 44 }}>{office.email}</a>
+                    <a href={telHref(office.phone)} className="text-sm flex items-center transition-colors hover:text-[var(--accent-text-lg)]" style={{ color: "var(--text-body)", minHeight: 44 }}>{office.phone}</a>
+                  </div>
+                ))}
+              </div>
 
-              <div className="mt-6 pt-6" style={{ borderTop: "1px solid var(--border-subtle)" }}>
+              <div className="mt-5 pt-5" style={{ borderTop: "1px solid var(--border-subtle)" }}>
                 <div className="flex items-center gap-4 flex-wrap">
                   <p className="text-xs font-semibold uppercase tracking-widest flex-shrink-0" style={{ color: "var(--ink-50)" }}>Follow our work</p>
                   <SocialLinks size="sm" className="gap-4" />
@@ -132,7 +130,7 @@ export default function ContactForm({ eyebrow, heading, subheading, footer }: Co
           </div>
 
           {/* Right: form */}
-          <div className="rounded-xl p-6 sm:p-10" style={{ background: "var(--bg-card-surface)", border: "1px solid var(--border-subtle)" }}>
+          <div className="rounded-xl p-6 sm:p-8" style={{ background: "var(--bg-card-surface)", border: "1px solid var(--border-subtle)" }}>
             {submitted ? (
               <div className="flex flex-col items-center justify-center h-full py-16 text-center">
                 <div className="w-16 h-16 rounded-full flex items-center justify-center mb-5" style={{ background: "rgba(249,115,22,0.15)" }}>
@@ -170,7 +168,7 @@ export default function ContactForm({ eyebrow, heading, subheading, footer }: Co
                     setLoading(false);
                   }
                 }}
-                className="space-y-5"
+                className="space-y-4"
               >
                 {/* Company is optional (QA, 27 Sep 2026): this is the only
                     enquiry form, and a homeowner coming from the driveway
@@ -204,29 +202,31 @@ export default function ContactForm({ eyebrow, heading, subheading, footer }: Co
                     </div>
                   ))}
                 </div>
-                {[
-                  { label: "Email", key: "email", type: "email", placeholder: "jane@city.ca", optional: false },
-                  { label: "Phone", key: "phone", type: "tel", placeholder: "416-555-0100", optional: true },
-                ].map((f) => (
-                  <div key={f.key}>
-                    <label htmlFor={`contact-${f.key}`} className="block text-[12px] font-semibold uppercase tracking-[0.16em] mb-1.5" style={{ color: "var(--text-secondary)" }}>
-                      {f.label}
-                      {f.optional && <span style={{ textTransform: "none", letterSpacing: 0 }}> (optional)</span>}
-                    </label>
-                    <input
-                      id={`contact-${f.key}`}
-                      name={f.key}
-                      autoComplete={AUTOCOMPLETE[f.key]}
-                      type={f.type}
-                      required={f.key === "email"}
-                      value={form[f.key as keyof typeof form]}
-                      onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}
-                      placeholder={f.placeholder}
-                      className="w-full px-4 py-3 rounded-lg text-base outline-none focus:ring-1 focus:ring-orange-500 min-h-[48px]"
-                      style={fieldStyle}
-                    />
-                  </div>
-                ))}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {[
+                    { label: "Email", key: "email", type: "email", placeholder: "jane@city.ca", optional: false },
+                    { label: "Phone", key: "phone", type: "tel", placeholder: "416-555-0100", optional: true },
+                  ].map((f) => (
+                    <div key={f.key}>
+                      <label htmlFor={`contact-${f.key}`} className="block text-[12px] font-semibold uppercase tracking-[0.16em] mb-1.5" style={{ color: "var(--text-secondary)" }}>
+                        {f.label}
+                        {f.optional && <span style={{ textTransform: "none", letterSpacing: 0 }}> (optional)</span>}
+                      </label>
+                      <input
+                        id={`contact-${f.key}`}
+                        name={f.key}
+                        autoComplete={AUTOCOMPLETE[f.key]}
+                        type={f.type}
+                        required={f.key === "email"}
+                        value={form[f.key as keyof typeof form]}
+                        onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}
+                        placeholder={f.placeholder}
+                        className="w-full px-4 py-3 rounded-lg text-base outline-none focus:ring-1 focus:ring-orange-500 min-h-[48px]"
+                        style={fieldStyle}
+                      />
+                    </div>
+                  ))}
+                </div>
                 <div>
                   <label htmlFor="contact-projectType" className="block text-[12px] font-semibold uppercase tracking-[0.16em] mb-1.5" style={{ color: "var(--text-secondary)" }}>Project type</label>
                   <select
@@ -251,7 +251,7 @@ export default function ContactForm({ eyebrow, heading, subheading, footer }: Co
                     id="contact-message"
                     name="message"
                     autoComplete="off"
-                    rows={4}
+                    rows={3}
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
                     placeholder={project ? `The ${project} job: where it is, roughly when, and the size.` : "Where the job is, roughly when, and the size."}

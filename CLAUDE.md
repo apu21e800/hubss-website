@@ -90,7 +90,11 @@ hubss-website/
   `npx tsx scripts/draft-blog-post.ts content/drafts/<file>.md` on Vern's PC
   saves it as an unpublished draft with its cover (--dry-run first: it runs
   the house-style check and writes nothing). First one: the Product Book's
-  launch post (16 Oct 2026).
+  launch post (16 Oct 2026). Since 21 Oct 2026 (the cold patch guide) the
+  photo can be one already in Studio (`cover: { ref, alt, hotspot, crop }`),
+  relatedProducts and relatedApplications are set from their slugs, the alt
+  text and "vs" are checked too, and the note in Studio says 21e8 wrote it,
+  never how. Keep each piece's fact record beside it (<slug>.sources.md).
 - Article ideas: Studio → Blog ideas. The AI drafter (Tuesdays and
   Thursdays since 14 Oct 2026) takes the top Ready item, or the top Idea when
   none is Ready, and writes it up as an unpublished draft for review (never
@@ -754,6 +758,20 @@ changes on the fly to core text and images".
   Studio-fed text and hero photo outlined; click to open the field, the page
   updates as you type, Publish puts it live (the webhook, about 5 s). Each
   document also lists where it's used ("locations").
+- The way in from a document (21 Oct 2026; Vern: "when I try to click the
+  'Edit on the page' button on a blog article, it takes me to the homepage"):
+  the tool in the top bar always starts on the homepage, so every document
+  with a page (articles, drafts included, products, applications, the four
+  pages) has an **Edit on the page** button above its form that opens its own
+  page with the document beside it (sanity/components/EditOnThePage.tsx). The
+  page each opens, the "Used on N pages" list and the intent link (the one
+  Sanity's own list sends) are one source, sanity/studio-pages.ts;
+  `npm run test:studio` checks them against the installed Sanity.
+- An article that has never been published shows there too: in draft mode
+  only, getPost (lib/blog.ts) reads a slug this deployment didn't build, and
+  an undated one shows today's date (its first Publish dates it). Visitors
+  are unchanged: /blog/[slug] keeps dynamicParams = false, so without the
+  draft-mode cookie an unknown slug is a 404 before anything renders.
 - How: /api/draft-mode/enable checks Studio's one-time secret and turns on
   Next's draft mode for that browser. lib/sanity.queries.ts `sanityFetch`
   then reads drafts through lib/sanity.preview.ts, with stega markers on the

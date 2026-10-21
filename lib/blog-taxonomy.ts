@@ -116,6 +116,17 @@ export function formatPostDate(ymd: string): string {
   return `${MONTHS[Number(m[2]) - 1] ?? m[2]} ${Number(m[3])}, ${m[1]}`;
 }
 
+/**
+ * An article shown in Studio's "Edit on the page" before it has a Publish
+ * date (one made by hand in Studio) is dated `now`: its first Publish dates
+ * it that moment (sanity.config.ts, datedPublish), so the preview shows the
+ * date it will go out with. Anything that has a date keeps it (lib/blog.ts,
+ * getPost, draft mode only).
+ */
+export function datedForPreview<T extends { publishedAt?: string | null }>(raw: T, now: Date): T {
+  return raw.publishedAt ? raw : { ...raw, publishedAt: now.toISOString() };
+}
+
 // The system a post is ABOUT, read from its title and address. Longer names
 // first, so StreetBondSR is not read as StreetBond.
 const NAMED_SYSTEMS: [string, RegExp][] = [

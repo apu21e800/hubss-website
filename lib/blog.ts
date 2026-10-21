@@ -21,14 +21,21 @@
  * A failed read throws (lib/sanity.queries.ts, sanityFetch): the build fails
  * rather than publishing an empty blog, and an ISR refresh keeps the last good
  * page.
+ *
+ * The one exception is Studio's "Edit on the page" (draft mode, 21 Oct 2026):
+ * there getPost also reads an article that has never been published, so
+ * Doug and Vern can see a draft as it will look before they press Publish.
+ * Visitors never have draft mode (lib/sanity.preview.ts), so for them nothing
+ * changes: an unknown slug is still null, and still a 404.
  */
 
 import { unstable_cache } from "next/cache";
 import { stegaClean } from "@sanity/client/stega";
 import { sanityFetch, CACHE_VERSION } from "@/lib/sanity.queries";
+import { isPreview } from "@/lib/sanity.preview";
 import blogIndex from "@/lib/blog-index.json";
 import { FIELD_NOTE_TYPES, SECTION_BY_KEY, isArchivedPost, type FieldNoteType, type InsightsSectionKey } from "@/lib/field-notes-taxonomy";
-import { countWords, inferCategory, readTimeFor, scanProducts, type Hotspot } from "@/lib/blog-taxonomy";
+import { countWords, datedForPreview, inferCategory, readTimeFor, scanProducts, type Hotspot } from "@/lib/blog-taxonomy";
 import type { PostBodyNode } from "@/components/blog/PostBody";
 
 export type PostCategory = FieldNoteType;
@@ -236,23 +243,27 @@ const fetchAllPosts = unstable_cache(
   { tags: ["blog"], revalidate: 3600 }
 );
 
+/** One post with its body, read from Sanity (drafts too in draft mode, through sanityFetch). */
+async function readPost(slug: string, opts: { preview?: boolean } = {}): Promise<Post | null> {
+  const found = await sanityFetch<(RawPost & { body?: PostBodyNode[] | null; lqip?: string | null }) | null>(
+    `blog post ${slug}`,
+    // The preview only here: it is half a kilobyte, and the lists don't need it.
+    `*[_type == "blogPost" && slug.current == $slug][0]{${META_FIELDS}, "lqip": featuredImage.asset->metadata.lqip, ${BODY_FIELD}}`,
+    { slug }
+  );
+  const raw = found && opts.preview ? datedForPreview(found, new Date()) : found;
+  const meta = raw ? toMeta(raw) : null;
+  if (!raw || !meta) return null;
+  return {
+    ...meta,
+    body: raw.body ?? [],
+    text: [raw.text ?? "", tableWords(raw)].filter(Boolean).join("\n\n"),
+    featuredImageLqip: raw.lqip?.startsWith("data:image/") ? raw.lqip : undefined,
+  };
+}
+
 const fetchPost = unstable_cache(
-  async (slug: string): Promise<Post | null> => {
-    const raw = await sanityFetch<(RawPost & { body?: PostBodyNode[] | null; lqip?: string | null }) | null>(
-      `blog post ${slug}`,
-      // The preview only here: it is half a kilobyte, and the lists don't need it.
-      `*[_type == "blogPost" && slug.current == $slug][0]{${META_FIELDS}, "lqip": featuredImage.asset->metadata.lqip, ${BODY_FIELD}}`,
-      { slug }
-    );
-    const meta = raw ? toMeta(raw) : null;
-    if (!raw || !meta) return null;
-    return {
-      ...meta,
-      body: raw.body ?? [],
-      text: [raw.text ?? "", tableWords(raw)].filter(Boolean).join("\n\n"),
-      featuredImageLqip: raw.lqip?.startsWith("data:image/") ? raw.lqip : undefined,
-    };
-  },
+  async (slug: string): Promise<Post | null> => readPost(slug),
   [`blog-post:${QUERY_VERSION}`],
   { tags: ["blog"], revalidate: 3600 }
 );
@@ -268,10 +279,16 @@ export async function getPostsBySection(section: InsightsSectionKey): Promise<Po
   return (await getAllPosts()).filter((p) => types.has(p.category));
 }
 
-/** One live post with its body, or null. */
+/**
+ * One live post with its body, or null. In "Edit on the page" (draft mode
+ * only) also an article this deployment didn't build: a draft that has never
+ * been published, so it can be read on the page before its first Publish.
+ * Archived posts stay out either way (next.config.ts sends their addresses on).
+ */
 export async function getPost(slug: string): Promise<Post | null> {
-  if (!BUILT.has(slug)) return null;
-  return fetchPost(slug);
+  if (BUILT.has(slug)) return fetchPost(slug);
+  if (isArchivedPost(slug) || !(await isPreview())) return null;
+  return readPost(slug, { preview: true });
 }
 
 /** Every post of one type, newest first. */

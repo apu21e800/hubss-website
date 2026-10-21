@@ -38,6 +38,13 @@ import { focalObjectPosition, formatPostDate } from "@/lib/blog-taxonomy";
  * Nothing legitimate needs a slug the build didn't know about. A post that is
  * new in Studio starts a rebuild when it's published (app/api/revalidate), and
  * appears with that deployment. A Studio draft is never built.
+ *
+ * Studio's "Edit on the page" is the one reader who sees a draft (21 Oct 2026):
+ * Next lets a request carrying a valid draft-mode cookie past the closed list
+ * (its page handler skips the not-built 404 in draft mode, and the deployment's
+ * route for a closed list admits only that cookie), and getPost reads the
+ * unpublished draft there (lib/blog.ts). Without the cookie an unknown slug is
+ * still a 404 before anything renders.
  */
 export const dynamicParams = false;
 

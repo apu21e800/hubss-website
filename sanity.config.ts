@@ -11,6 +11,9 @@
  *     inside Studio. Click any text or photo that comes from Studio and its
  *     field opens beside the page; the page shows the change as you type,
  *     before it's published. How the preview works: lib/sanity.preview.ts.
+ *     Every document with a page has an "Edit on the page" button above its
+ *     form that opens its own page (21 Oct 2026, sanity/components/EditOnThePage.tsx);
+ *     the tool in the top bar starts on the homepage.
  *
  * Vercel environment variables:
  *   NEXT_PUBLIC_SANITY_PROJECT_ID = 9dbro2m1
@@ -26,65 +29,54 @@ import { presentationTool, defineDocuments, defineLocations, type DocumentLocati
 import { EyeOpenIcon } from "@sanity/icons";
 import { schemaTypes } from "./sanity/schemas";
 import { structure } from "./sanity/structure";
+import { EDIT_ON_THE_PAGE_TOOL, PAGE_ROUTES, documentPage } from "./sanity/studio-pages";
+import { EditOnThePageInput } from "./sanity/components/EditOnThePage";
+import { BLOG_NAME } from "./lib/field-notes-taxonomy";
 
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? "9dbro2m1";
 const dataset   = process.env.NEXT_PUBLIC_SANITY_DATASET   ?? "production";
-
-/** The four page documents and where each lives on the site. */
-const PAGE_ROUTES: Record<string, { href: string; title: string }> = {
-  homepage:      { href: "/",            title: "Homepage" },
-  about:         { href: "/about",       title: "About" },
-  contact:       { href: "/contact",     title: "Contact" },
-  "lunch-learn": { href: "/lunch-learn", title: "Lunch & Learn" },
-};
 
 const HOMEPAGE: DocumentLocation = { title: "Homepage", href: "/" };
 
 /**
  * Where each kind of document shows on the site. Studio prints these at the
  * top of the document ("Used on 3 pages") with a link that opens the page in
- * "Edit on the page".
+ * "Edit on the page". The first location of each is the document's own page,
+ * from sanity/studio-pages.ts, which the button above the form opens too.
  */
 const locations = {
   page: defineLocations({
     select: { slug: "slug.current" },
     resolve: (doc) => {
-      const route = doc?.slug ? PAGE_ROUTES[doc.slug] : undefined;
-      return route ? { locations: [route] } : null;
+      const own = documentPage("page", doc);
+      return own ? { locations: [own] } : null;
     },
   }),
   product: defineLocations({
     select: { name: "name", slug: "slug.current" },
-    resolve: (doc) =>
-      doc?.slug
-        ? { locations: [{ title: doc.name || "Product page", href: `/products/${doc.slug}` }, HOMEPAGE] }
-        : null,
+    resolve: (doc) => {
+      const own = documentPage("product", doc);
+      return own ? { locations: [own, HOMEPAGE] } : null;
+    },
   }),
   application: defineLocations({
     select: { name: "name", slug: "slug.current" },
-    resolve: (doc) =>
-      doc?.slug
-        ? {
-            locations: [
-              { title: doc.name || "Application page", href: `/applications/${doc.slug}` },
-              { title: "Applications", href: "/applications" },
-              HOMEPAGE,
-            ],
-          }
-        : null,
+    resolve: (doc) => {
+      const own = documentPage("application", doc);
+      return own ? { locations: [own, { title: "Applications", href: "/applications" }, HOMEPAGE] } : null;
+    },
   }),
   blogPost: defineLocations({
     select: { title: "title", slug: "slug.current" },
-    resolve: (doc) =>
-      doc?.slug
+    resolve: (doc) => {
+      const own = documentPage("blogPost", doc);
+      return own
         ? {
-            locations: [
-              { title: doc.title || "Article", href: `/blog/${doc.slug}` },
-              { title: "Insights", href: "/blog" },
-            ],
+            locations: [own, { title: BLOG_NAME, href: "/blog" }],
             message: "A new article appears on the site about five minutes after its first Publish.",
           }
-        : null,
+        : null;
+    },
   }),
   siteSettings: defineLocations({
     locations: [
@@ -161,7 +153,7 @@ export default defineConfig({
   plugins: [
     structureTool({ structure, title: "Content" }),
     presentationTool({
-      name: "edit-on-the-page",
+      name: EDIT_ON_THE_PAGE_TOOL,
       title: "Edit on the page",
       icon: EyeOpenIcon,
       previewUrl: {
@@ -177,6 +169,12 @@ export default defineConfig({
 
   schema: {
     types: schemaTypes,
+  },
+
+  // The "Edit on the page" button above the form of every document that has
+  // a page (sanity/components/EditOnThePage.tsx); other inputs are unchanged.
+  form: {
+    components: { input: EditOnThePageInput },
   },
 
   document: {

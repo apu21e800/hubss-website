@@ -90,7 +90,11 @@ hubss-website/
   `npx tsx scripts/draft-blog-post.ts content/drafts/<file>.md` on Vern's PC
   saves it as an unpublished draft with its cover (--dry-run first: it runs
   the house-style check and writes nothing). First one: the Product Book's
-  launch post (16 Oct 2026).
+  launch post (16 Oct 2026). Since 21 Oct 2026 (the cold patch guide) the
+  photo can be one already in Studio (`cover: { ref, alt, hotspot, crop }`),
+  relatedProducts and relatedApplications are set from their slugs, the alt
+  text and "vs" are checked too, and the note in Studio says 21e8 wrote it,
+  never how. Keep each piece's fact record beside it (<slug>.sources.md).
 - Article ideas: Studio → Blog ideas. The AI drafter (Tuesdays and
   Thursdays since 14 Oct 2026) takes the top Ready item, or the top Idea when
   none is Ready, and writes it up as an unpublished draft for review (never

@@ -809,6 +809,16 @@ changes on the fly to core text and images".
   photo isn't the default master (DEFAULT_HERO_ORIGIN in app/page.tsx).
 - Insights: the first Publish of an article dates it that moment
   (sanity.config.ts, datedPublish).
+- Only what HUB's Sanity plan includes (23 Oct 2026, as Square One's
+  Studio): the project is on the free plan (api.sanity.io
+  /projects/9dbro2m1/features: Edit on the page yes; Content Releases,
+  scheduled drafts and publishing, comments, Tasks no), so sanity.config.ts
+  turns those off and the "Upgrade to unlock" screens are gone. An article
+  still goes live at its time through its own fields ("Scheduled").
+  Turn one on only with a plan that includes it.
+- A post's reading time in Edit on the page is the public page's: toMeta
+  (lib/blog.ts) counts words after stegaClean. Count, compare or measure a
+  Studio string only after stegaClean.
 
 ## Lunch & Learn page (30 Sep and 2 Oct 2026)
 - /lunch-learn is app/lunch-learn/page.tsx: the boardroom card (LunchLearn ->

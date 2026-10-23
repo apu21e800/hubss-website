@@ -46,7 +46,7 @@
     "plan:seed": "tsx scripts/seed-field-notes-plan.ts",
     "indexnow": "node scripts/indexnow-submit.mjs",
     "test:project-posts": "tsx scripts/test-project-posts.ts",
-    "test:studio": "tsx scripts/test-edit-on-the-page.ts"
+    "test:studio": "tsx scripts/test-edit-on-the-page.ts && tsx scripts/test-studio-words.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",

@@ -118,7 +118,7 @@ export const structure: StructureResolver = (S) =>
         .icon(BulbOutlineIcon)
         .child(
           S.documentTypeList("storyIdea")
-            .title("Blog ideas · the AI writer drafts the top one Tuesday and Thursday")
+            .title("Blog ideas · 21e8 drafts the top one Tuesday and Thursday")
             .defaultOrdering([{ field: "priority", direction: "asc" }, { field: "_createdAt", direction: "asc" }])
         ),
 

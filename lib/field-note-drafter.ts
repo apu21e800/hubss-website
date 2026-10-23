@@ -305,12 +305,13 @@ export async function styleRewrite(pieces: CopyPiece[], opts: { model: string; s
 export function styleReport(style: StylePass, fix: string): string[] {
   if (!style.left.length) {
     return [style.flagged
-      ? `STYLE CHECK: clean. The drafter rewrote ${style.flagged} sentence(s) that had an em dash or another machine tell.`
-      : "STYLE CHECK: clean, no em dashes or machine tells."];
+      ? `STYLE CHECK: clean. 21e8 rewrote ${style.flagged} sentence(s) that had an em dash or another break from the house style.`
+      : "STYLE CHECK: clean, no em dashes or other breaks from the house style."];
   }
-  const why = style.error ? ` The automatic rewrite didn't run (${style.error}).` : "";
+  // The error itself goes to the run's log, never to what Doug reads (23 Oct 2026).
+  const why = style.error ? " The rewrite didn't run this time." : "";
   return [
-    `STYLE CHECK: ${style.left.length} sentence(s) still have an em dash or another machine tell.${why} Fix them ${fix}:`,
+    `STYLE CHECK: ${style.left.length} sentence(s) still have an em dash or another break from the house style.${why} Fix them ${fix}:`,
     ...style.left.map((l) => `- ${l.label}: "${l.sentence}" ${l.problems.join(" ")}`),
   ];
 }

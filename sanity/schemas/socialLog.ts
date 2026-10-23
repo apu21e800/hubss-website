@@ -34,7 +34,7 @@ export default defineType({
       title: "Style check",
       type: "text",
       rows: 6,
-      description: "Sentences in the Buffer drafts that still have an em dash or another machine tell after the drafter's own rewrite. Fix them in Buffer before you approve the posts.",
+      description: "Sentences in the Buffer drafts that still have an em dash or another break from the house style after 21e8's rewrite. Fix them in Buffer before you approve the posts.",
     }),
     defineField({ name: "slug", title: "Key", type: "string", description: "For an article, its address: hubss.com/blog/ followed by this. For a field post, field: and its id; for a library post, lib: and what it was." }),
     defineField({ name: "createdAt", title: "Drafted", type: "datetime" }),

@@ -281,7 +281,7 @@ async function plan(file: string): Promise<Plan | null> {
     else if (SEES_DRAFTS && !draft) p.skip = `${draftId} is no longer in Studio; nothing written.`;
     base = draft;
   }
-  if (draft?.scheduled === true) p.skip = `${draftId} is set to go live by itself. Switch "Goes live by itself" off in Studio, then run this again.`;
+  if (draft?.scheduled === true) p.skip = `${draftId} is set to go live by itself. Switch "Scheduled" off in Studio, then run this again.`;
   const taken = await client.fetch<string[]>(`*[_type == "blogPost" && slug.current == $slug && !(_id in [$liveId, $draftId])]._id`, { slug: front.slug, liveId, draftId });
   if (taken.length) p.skip = `/blog/${front.slug} is also used by ${taken.join(", ")}; nothing written.`;
 

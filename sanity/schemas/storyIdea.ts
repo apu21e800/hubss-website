@@ -28,7 +28,7 @@ export default defineType({
       name: "title",
       title: "Working title",
       type: "string",
-      description: "The angle in a line, e.g. 'Stamped asphalt vs interlocking pavers for a driveway'. The drafter writes the final headline.",
+      description: "The angle in a line, e.g. 'Stamped asphalt or interlocking pavers for a driveway'. 21e8 writes the final headline.",
       validation: (r) => r.required().error("Give the idea a working title"),
     }),
     defineField({
@@ -46,7 +46,7 @@ export default defineType({
         ],
         layout: "radio",
       },
-      description: "Set it to Ready and the drafter picks it up next (Tuesday and Thursday mornings). It sets Drafted itself. New Ideas are added at the bottom by themselves when the plan gets low; set one to Not doing to skip it.",
+      description: "Set it to Ready and 21e8 drafts it next (Tuesday and Thursday mornings), then sets it to Drafted. When the list runs low, 21e8 adds new Ideas at the bottom; set one to Not doing to skip it.",
       validation: (r) => r.required(),
     }),
     defineField({
@@ -83,7 +83,7 @@ export default defineType({
       name: "systems",
       title: "Systems",
       type: "array",
-      description: "The HUB systems the post is about. The drafter reads their Product Portfolio Book pages, and the first one's photo becomes the draft's stand-in photo.",
+      description: "The HUB systems the post is about. 21e8 writes from their Product Portfolio Book pages, and the first one's photo becomes the draft's stand-in photo.",
       of: [{ type: "reference", to: [{ type: "product" }] }],
     }),
     defineField({
@@ -97,7 +97,7 @@ export default defineType({
       title: "Brief",
       type: "text",
       rows: 6,
-      description: "What the post must cover, and any real facts to use: the project, the city, the year, what the client needed, what was installed. The drafter treats what you write here as true and invents nothing else, so a project it doesn't know about has to be described here.",
+      description: "What the post must cover, and any real facts to use: the project, the city, the year, what the client needed, what was installed. 21e8 takes what you write here as true and adds no facts of its own, so describe here any project that isn't on the project map.",
       // The drafter copies the brief's wording, dashes and all.
       validation: (r) => copyStyle(r),
     }),
@@ -106,7 +106,7 @@ export default defineType({
       title: "Draft",
       type: "string",
       readOnly: true,
-      description: "Set by the drafter: the slug of the draft it wrote.",
+      description: "Filled in when the draft is written: its slug.",
     }),
     defineField({
       name: "draftedAt",

@@ -320,7 +320,7 @@ export function buildDraftDocument(idea: Idea, draft: Draft, check: FactCheck, s
   const today = new Date().toISOString().slice(0, 10);
 
   const notes = [
-    `Drafted by Claude on ${today} from the plan item "${idea.title}". Not on the site until someone presses Publish.`,
+    `Written by 21e8 on ${today} from the Blog idea "${idea.title}". Not on the site until someone presses Publish.`,
     "",
     check.unsupported.length
       ? `FACT CHECK: ${check.unsupported.length} statement(s) the HUB Product Portfolio Book doesn't back up. Fix or remove them before publishing:`

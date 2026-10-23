@@ -31,6 +31,7 @@ import { schemaTypes } from "./sanity/schemas";
 import { structure } from "./sanity/structure";
 import { EDIT_ON_THE_PAGE_TOOL, PAGE_ROUTES, documentPage } from "./sanity/studio-pages";
 import { EditOnThePageInput } from "./sanity/components/EditOnThePage";
+import { withoutLockedActions } from "./sanity/document-locks";
 import { BLOG_NAME } from "./lib/field-notes-taxonomy";
 
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? "9dbro2m1";
@@ -184,9 +185,13 @@ export default defineConfig({
     // by the site.
     newDocumentOptions: (prev, { creationContext }) =>
       creationContext.type === "global" ? prev.filter((t) => !NOT_CREATED_BY_HAND.has(t.templateId)) : prev,
-    actions: (prev, context) =>
-      context.schemaType === "blogPost"
-        ? prev.map((action) => (action.action === "publish" ? datedPublish(action) : action))
-        : prev,
+    // No Delete, Unpublish or Duplicate on the pages, Site Settings or a
+    // "Sent to Buffer" record (sanity/document-locks.ts, 23 Oct 2026).
+    actions: (prev, context) => {
+      const kept = withoutLockedActions(prev, context.schemaType);
+      return context.schemaType === "blogPost"
+        ? kept.map((action) => (action.action === "publish" ? datedPublish(action) : action))
+        : kept;
+    },
   },
 });

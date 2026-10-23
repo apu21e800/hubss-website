@@ -670,7 +670,7 @@ own and emailing BLOG_DRAFT_NOTIFY through lib/editor-mail.ts):
   skipping days another scheduled draft has), the first photo as the
   featured photo, the rest under "The job in photographs", `fieldPost` a
   weak reference back; the post gets `article` (weak). The email says when
-  it goes live and how to hold it (switch "Goes live by itself" off). A
+  it goes live and how to hold it (switch "Scheduled" off). A
   draft either check fails (an unsupported statement, an em dash left) is
   saved held instead (`scheduled: false`, the time kept; readyToGo): nothing
   unchecked goes live by itself. Every draft is created held and switched on
@@ -696,7 +696,7 @@ own and emailing BLOG_DRAFT_NOTIFY through lib/editor-mail.ts):
   drafts for approval. Copy the style pass couldn't fix always waits as a
   draft, switch or no switch (`queued` on the result). Only Vern turns it;
   the emails say which.
-- blogPost gained `scheduled` ("Goes live by itself", boolean), `scheduledFor`
+- blogPost gained `scheduled` ("Scheduled"; "Goes live by itself" until 23 Oct 2026), `scheduledFor`
   (hidden unless scheduled) and `fieldPost`; fieldPost gained `writeUp` and
   `article`. `npm run test:project-posts` (CI) covers scheduleSlot,
   torontoWhen, jobRecord, buildProjectDocument and toPublished. Doug's page:

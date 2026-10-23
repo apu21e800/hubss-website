@@ -8,8 +8,9 @@
  * for Doug is Toronto's; the draft carries the post's photos, its link to the
  * post and the hold instruction; the live document it becomes is dated the
  * moment it goes and no longer scheduled; the facts the drafter gets are the
- * post's own words; and a scheduled draft counts as due at the run that
- * starts on its minute.
+ * post's own words; a scheduled draft counts as due at the run that starts
+ * on its minute; and only a fact check that clearly says "clean" lets an
+ * article go live by itself (readFactCheck, 23 Oct 2026).
  */
 import assert from "node:assert/strict";
 import {
@@ -24,7 +25,7 @@ import {
   torontoWhen,
   type ProjectSource,
 } from "../lib/project-posts";
-import type { Draft, FactCheck } from "../lib/field-note-drafter";
+import { readFactCheck, type Draft, type FactCheck } from "../lib/field-note-drafter";
 import { lintCopy } from "../lib/style-lint";
 
 let failures = 0;
@@ -174,6 +175,56 @@ check("readyToGo wants both checks clean", () => {
   assert.equal(readyToGo(clean), true);
   assert.equal(readyToGo(clean, { text: {}, flagged: 0, left: [] }), true);
   assert.equal(readyToGo({ verdict: "needs edits", unsupported: [{ quote: "x", reason: "y" }] }), false);
+  assert.equal(readyToGo({ verdict: "needs edits", unsupported: [] }), false, "a 'needs edits' that listed nothing is not clean");
+});
+
+console.log("The fact check's answer (readFactCheck)");
+// Only a clear "clean" lets an article go live by itself (23 Oct 2026; until
+// then a missing list counted as clean).
+const heldBy = (raw: unknown) => {
+  const c = readFactCheck(raw);
+  assert.equal(c.verdict, "needs edits");
+  assert.ok(c.unsupported.length >= 1, "a hold lists at least one line, so every count sees it");
+  assert.equal(readyToGo(c), false);
+  return c;
+};
+check("clean with nothing listed is clean", () => assert.deepEqual(readFactCheck({ verdict: "clean", unsupported: [] }), clean));
+check("clean with the list left out is clean", () => assert.deepEqual(readFactCheck({ verdict: "clean" }), clean));
+check("'needs edits' with nothing listed holds", () => assert.match(heldBy({ verdict: "needs edits", unsupported: [] }).unsupported[0].reason, /didn't say the draft was clean/));
+check("'needs edits' with the list left out holds", () => heldBy({ verdict: "needs edits" }));
+check("an empty answer holds", () => {
+  heldBy({});
+  heldBy(null);
+  heldBy(undefined);
+});
+check("a list is never clean, whatever the verdict says", () => {
+  const c = readFactCheck({ verdict: "clean", unsupported: [{ quote: "480 square metres a day", reason: "the note says two days" }] });
+  assert.equal(c.verdict, "needs edits");
+  assert.deepEqual(c.unsupported, [{ quote: "480 square metres a day", reason: "the note says two days" }]);
+});
+check("a list sent as JSON text is read as the list it is", () => {
+  const c = readFactCheck({ verdict: "needs edits", unsupported: JSON.stringify([{ quote: "in 2019", reason: "the record has no year" }]) });
+  assert.deepEqual(c.unsupported, [{ quote: "in 2019", reason: "the record has no year" }]);
+  assert.deepEqual(readFactCheck({ verdict: "clean", unsupported: "[]" }), clean);
+});
+check("text that isn't a list holds", () => assert.match(heldBy({ verdict: "clean", unsupported: "none found" }).unsupported[0].reason, /couldn't be read/));
+check("a single item sent on its own counts as a list of one", () =>
+  assert.deepEqual(readFactCheck({ verdict: "needs edits", unsupported: { quote: "Vancouver", reason: "not in the record" } }).unsupported, [{ quote: "Vancouver", reason: "not in the record" }]));
+check("a bare quote is kept, with no reason given", () =>
+  assert.deepEqual(readFactCheck({ verdict: "needs edits", unsupported: ["two days"] }).unsupported, [{ quote: "two days", reason: "The fact check gave no reason." }]));
+check("an item with nothing in it holds the whole draft", () => assert.match(heldBy({ verdict: "needs edits", unsupported: [{}] }).unsupported[0].reason, /didn't describe/));
+check("a number in the list holds", () => heldBy({ verdict: "needs edits", unsupported: [42] }));
+check("a held draft is saved with the time kept and the reason in the notes, in the house style", () => {
+  const held = buildProjectDocument(source, draft, readFactCheck({ verdict: "needs edits", unsupported: [] }), "x", slot);
+  assert.equal(held.scheduled, false, "an unread check must not go live by itself");
+  assert.equal(held.scheduledFor, slot);
+  assert.match(held.editorNotes, /FACT CHECK: 1 statement\(s\)/);
+  assert.match(held.editorNotes, /"\(the whole draft\)": The fact check didn't say the draft was clean/);
+  assert.doesNotMatch(held.editorNotes, /Claude|by itself|turn.*off/, "the notes Doug can read name no machinery");
+  assert.deepEqual(lintCopy(held.editorNotes).map((i) => i.message), []);
+  for (const raw of [{ verdict: "clean", unsupported: "none found" }, { verdict: "needs edits", unsupported: [{}] }]) {
+    assert.deepEqual(lintCopy(buildProjectDocument(source, draft, readFactCheck(raw), "x", slot).editorNotes).map((i) => i.message), []);
+  }
 });
 
 console.log("The live document (toPublished)");

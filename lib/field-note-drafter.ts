@@ -190,8 +190,49 @@ export async function checkDraft(draft: Draft, facts: string): Promise<FactCheck
   const client = new Anthropic();
   const system = `You fact-check Insights articles for HUB Surface Systems before a human editor publishes them. You are strict and literal. You compare the DRAFT with the FACTS and list every statement in the draft about HUB, its systems, specifications, numbers, standards, places, projects or clients that the FACTS do not support, including numbers that differ, capabilities the FACTS don't claim, and any named city, agency, project or client not in the FACTS. General context that isn't about HUB and has no numbers (what Vision Zero is, why contrast helps) is fine; don't list it. A figure from the FACTS' outside evidence is supported only when it is quoted as written, the same paragraph gives that study's limits, and it is applied only to what the study measured (a crosswalk-visibility finding used for a decorative design, or a study of one coating used for another, is unsupported): list any that fall short. Links are fine. If everything is supported, the verdict is "clean" and the list is empty.`;
   const user = `FACTS:\n${facts}\n\nDRAFT:\n# ${draft.title}\n\n${draft.excerpt}\n\n${draft.body}\n\nReport with the report tool.`;
-  const result = await toolCall<FactCheck>(client, system, user, REPORT, 3000);
-  return { verdict: result.unsupported?.length ? "needs edits" : "clean", unsupported: result.unsupported ?? [] };
+  const result = await toolCall<unknown>(client, system, user, REPORT, 3000);
+  return readFactCheck(result);
+}
+
+const UNREAD = "The fact check's answer couldn't be read, so nothing in this draft has been checked: read it against its facts before it is published.";
+
+/**
+ * The fact check's answer, read so that only a clear "clean" passes. A
+ * Projects article goes live by itself on a clean check (readyToGo in
+ * lib/project-posts.ts) and the editor's email calls it ready, so an answer
+ * that can't be read, or a "needs edits" with nothing listed, holds the draft
+ * for a person instead of passing it. A hold always lists at least one line,
+ * so every count of what to check sees it. A list sent as JSON text is read as
+ * the list it is. Until 23 Oct 2026 a missing list counted as clean. Ported
+ * from Square One's drafter, where it passed review on 20 Oct 2026.
+ */
+export function readFactCheck(result: unknown): FactCheck {
+  const r = (result ?? {}) as { verdict?: unknown; unsupported?: unknown };
+  const unread = (reason: string): FactCheck => ({ verdict: "needs edits", unsupported: [{ quote: "(the whole draft)", reason }] });
+  let list: unknown = r.unsupported;
+  if (typeof list === "string") {
+    try {
+      list = JSON.parse(list);
+    } catch {
+      return unread(UNREAD);
+    }
+  }
+  if (list && typeof list === "object" && !Array.isArray(list)) list = [list];
+  if (list === undefined || list === null) list = [];
+  if (!Array.isArray(list)) return unread(UNREAD);
+  const items: FactCheck["unsupported"] = [];
+  for (const item of list) {
+    if (typeof item === "string" && item.trim()) items.push({ quote: item.trim(), reason: "The fact check gave no reason." });
+    else if (item && typeof item === "object") {
+      const { quote, reason } = item as { quote?: unknown; reason?: unknown };
+      const q = typeof quote === "string" ? quote.trim() : "";
+      const why = typeof reason === "string" ? reason.trim() : "";
+      if (q || why) items.push({ quote: q || "(not quoted)", reason: why || "The fact check gave no reason." });
+      else return unread("The fact check listed a problem it didn't describe: read the draft against its facts before it is published.");
+    } else return unread(UNREAD);
+  }
+  if (!items.length && r.verdict !== "clean") return unread("The fact check didn't say the draft was clean, and listed nothing: read it against its facts before it is published.");
+  return { verdict: items.length ? "needs edits" : "clean", unsupported: items };
 }
 
 // ── the style pass ──────────────────────────────────────────────────────────

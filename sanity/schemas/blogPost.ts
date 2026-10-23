@@ -84,7 +84,7 @@ export default defineType({
     // the 77 posts from before show it plainly off.
     defineField({
       name: "scheduled",
-      title: "Goes live by itself",
+      title: "Scheduled",
       type: "boolean",
       group: "content",
       initialValue: false,
@@ -101,7 +101,7 @@ export default defineType({
       validation: (r) =>
         r.custom((value, ctx) => {
           const scheduled = (ctx.parent as { scheduled?: boolean } | undefined)?.scheduled;
-          if (scheduled && !value) return "Say when it should go live, or turn \"Goes live by itself\" off";
+          if (scheduled && !value) return "Say when it should go live, or turn \"Scheduled\" off";
           return true;
         }),
     }),
@@ -265,7 +265,7 @@ export default defineType({
       type: "text",
       rows: 6,
       group: "content",
-      description: "Never shown on the site. The AI drafter lists here what it based the draft on and any sentence its fact check couldn't match to the HUB Product Portfolio Book: check those before you publish.",
+      description: "Never shown on the site. 21e8 lists here what the draft is based on and any sentence to check against the HUB Product Portfolio Book before you publish.",
     }),
     defineField({
       name: "readTime",

@@ -74,14 +74,14 @@ Oakville, Ontario". It is what screen readers say and what Google reads.
 **Blog ideas** (Studio's name since 15 Oct 2026; "Insights plan" before) is
 the list of articles we want written. Each idea has a
 working title, a target search phrase and a brief. You don't have to do
-anything to it each week: the drafter takes the next idea by itself, and when
-the plan gets low it adds new ideas at the bottom by itself (guides answered
+anything to it each week: 21e8 takes the next idea, and when the plan gets
+low, adds new ideas at the bottom (guides answered
 from the Product Portfolio Book, and roundups of documented jobs). Set one to **Ready**
 only when you want that one next; set one to **Not doing** if you don't want
 it.
 
 Every Tuesday and Thursday morning (13:00 UTC, 9 a.m. in Toronto during summer
-time) the drafter takes the Ready idea with the highest priority, or, when
+time) 21e8 takes the Ready idea with the highest priority, or, when
 none is Ready, the next Idea, and writes a draft. You get an email; it says
 which idea is next. The draft is in **Blog posts**, unpublished, with a fact
 check and a style check in **Notes for the editor**. Read the notes, check
@@ -92,7 +92,7 @@ To have it write up a real project, put the facts in the brief: where, when,
 which system, what the client needed. It only knows what the brief and the
 Product Portfolio Book tell it.
 
-## 5. What the drafter does and doesn't do
+## 5. What 21e8 does and doesn't do
 
 - **Does:** write from the Product Portfolio Book, the website and the brief; check its own
   draft against those facts and list anything it couldn't back up; email you.
@@ -174,7 +174,7 @@ is simply wrong (a name it doesn't know, read as Title Case), publish anyway
 and tell Vern; he can teach it the name.
 
 The article drafts and the social drafts go through the same check before you
-see them: the drafter rewrites any sentence that breaks these rules and lists
+see them: 21e8 rewrites any sentence that breaks these rules and lists
 whatever it couldn't fix in its notes.
 
 ## If something looks wrong

@@ -21,7 +21,7 @@
  *     (scheduleSlot) with the post's photos, the first as the featured photo
  *     and the rest at the end of the article. The editors get an email that
  *     says when it goes live and how to hold it: open it in Studio → Blog
- *     posts and turn "Goes live by itself" off.
+ *     posts and turn "Scheduled" off.
  *  3. The job photos post makes no social post of its own once it has a
  *     story (lib/social-pipeline.ts): the article carries the job, once.
  *
@@ -188,7 +188,7 @@ export const studioLink = (docId: string) => `https://hubss.com/studio/intent/ed
  *
  * It goes live by itself only when both checks are clean (readyToGo). A
  * draft the fact check couldn't match to the job's record, or that still has
- * an em dash, is saved with "Goes live by itself" off and the time filled
+ * an em dash, is saved with "Scheduled" off and the time filled
  * in: nothing unchecked reaches the site on its own (Vern: never invent
  * facts; Doug: not a single em dash). The email says which.
  */
@@ -364,7 +364,7 @@ export async function publishDueDrafts(client: SanityClient, now = new Date()): 
         [
           `The daily run couldn't publish "${title || draft._id}" at its scheduled time because ${error}.`,
           "",
-          "Nothing is on the site. It stays in Studio → Blog posts as a scheduled draft: fix it there and it goes at the next run, or turn \"Goes live by itself\" off and publish it yourself.",
+          "Nothing is on the site. It stays in Studio → Blog posts as a scheduled draft: fix it there and it goes at the next run, or turn \"Scheduled\" off and publish it yourself.",
           "",
           `Open it: ${studioLink(liveId)}`,
         ].join("\n"),
@@ -537,7 +537,7 @@ async function writeArticle(client: SanityClient, doc: ProjectSource, now: Date)
     [
       ready
         ? `A Projects article was written from the job photos post "${name}" and is scheduled to go on hubss.com on ${when}. Nothing is on the site until then; its social posts go to Buffer the day after it is live.`
-        : `A Projects article was written from the job photos post "${name}", but a check found something (below), so it is waiting in Studio → Blog posts and does not go live by itself. Fix the line, then switch "Goes live by itself" on or press Publish.`,
+        : `A Projects article was written from the job photos post "${name}", but a check found something (below), so it is waiting in Studio → Blog posts and does not go live by itself. Fix the line, then switch "Scheduled" on or press Publish.`,
       "",
       document.title,
       document.excerpt,
@@ -546,7 +546,7 @@ async function writeArticle(client: SanityClient, doc: ProjectSource, now: Date)
       ...(ready
         ? [
             "- To change a line, edit it there. It still goes out on time.",
-            "- To hold it, turn \"Goes live by itself\" off. It then waits for you.",
+            "- To hold it, turn \"Scheduled\" off. It then waits for you.",
             "- To move it, change \"Goes live at\" to a later day.",
           ]
         : []),
@@ -567,7 +567,7 @@ async function writeArticle(client: SanityClient, doc: ProjectSource, now: Date)
       } catch (err) {
         ready = false;
         console.error(`[projects] ${document._id}: couldn't switch it on after the email: ${errorText(err)}; it stays held`);
-        await emailEditors(`Correction, held after all: ${document.title}`, `The draft "${document.title}" could not be switched to go live by itself (${errorText(err)}). It waits in Studio → Blog posts: read it and switch "Goes live by itself" on, or press Publish.\n\nOpen it: ${studioLink(liveId)}`, "projects");
+        await emailEditors(`Correction, held after all: ${document.title}`, `The draft "${document.title}" could not be switched to go live by itself (${errorText(err)}). It waits in Studio → Blog posts: read it and switch "Scheduled" on, or press Publish.\n\nOpen it: ${studioLink(liveId)}`, "projects");
       }
     } else {
       ready = false;

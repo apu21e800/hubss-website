@@ -24,6 +24,8 @@ import {
   publishedId,
 } from "../sanity/studio-pages";
 import { datedForPreview } from "../lib/blog-taxonomy";
+import { toMeta, type RawPost } from "../lib/blog";
+import { vercelStegaCombine } from "@vercel/stega";
 
 let failures = 0;
 function check(name: string, fn: () => void) {
@@ -124,6 +126,28 @@ check("an undated draft is dated now for the preview; a dated one keeps its date
   assert.equal(datedForPreview(undated, now).publishedAt, "2026-10-21T01:23:45.000Z");
   const dated = { publishedAt: "2026-10-07T04:49:22.814Z", title: "x" };
   assert.equal(datedForPreview(dated, now), dated);
+});
+
+check("a post's reading time in Edit on the page is the public page's: the preview's markers are not words", () => {
+  const mark = (s: string) => vercelStegaCombine(s, { origin: "sanity.io", href: "/studio/intent/edit/id=blogpost-x;type=blogPost;path=body" });
+  const body = Array.from({ length: 333 }, (_, i) => `word${i}`).join(" ");
+  const plain: RawPost = { _id: "blogpost-x", title: "Rail safety marking", slug: "x", publishedAt: "2026-10-01T12:00:00Z", text: body, tableText: ["Width", "Colour"] };
+  const marked: RawPost = { ...plain, text: body.split(". ").map(mark).join(". "), tableText: plain.tableText!.map((c) => mark(c!)) };
+  const a = toMeta(plain)!;
+  const b = toMeta(marked)!;
+  assert.equal(a.wordCount, 335);
+  assert.equal(b.wordCount, a.wordCount, `the preview counted ${b.wordCount} words against ${a.wordCount}`);
+  assert.equal(b.readTime, a.readTime);
+});
+
+console.log("\nOnly what HUB's plan includes");
+
+check("Releases, scheduled drafts and publishing, Tasks and comments are off: each led only to an upgrade screen", () => {
+  const config = read("sanity.config.ts");
+  for (const feature of ["releases", "scheduledDrafts", "scheduledPublishing", "tasks"]) {
+    assert.match(config, new RegExp(`\\n  ${feature}: \\{ enabled: false \\},`), `${feature} is on again`);
+  }
+  assert.match(config, /document: \{\s*\/\/ Not on HUB's plan \(above\)\.\s*comments: \{ enabled: false \},/, "comments are on again");
 });
 
 if (failures) {

@@ -195,7 +195,11 @@ export function toMeta(r: RawPost): PostMeta | null {
   const slug = r.slug?.trim();
   const title = r.title?.trim();
   if (!slug || !title || !r.publishedAt) return null;
-  const text = r.text ?? "";
+  // Cleaned before counting (23 Oct 2026): in Edit on the page the body's
+  // text carries the preview's invisible markers, which include U+FEFF, a
+  // space to JavaScript, so a 333-word post counted 527 and read "2 min read"
+  // there against "1 min read" on the site. Visitors' text has no markers.
+  const text = stegaClean(r.text ?? "");
   const tables = tableWords(r);
   const words = countWords(`${text} ${tables}`);
   const excerpt = r.excerpt?.trim() ?? "";

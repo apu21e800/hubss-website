@@ -151,6 +151,21 @@ export default defineConfig({
   projectId,
   dataset,
 
+  // Only what HUB's Sanity plan includes, so nothing in Doug's way leads to
+  // an "Upgrade to unlock" screen (23 Oct 2026, as Square One's Studio). The
+  // project is on Sanity's free plan: its features (api.sanity.io
+  // /projects/9dbro2m1/features) include Edit on the page
+  // (contentSourceMapping) but not Content Releases, scheduled drafts or
+  // publishing, comments or Tasks, all on by default in Sanity 5. Off: the
+  // Releases tool and its picker in the top bar, Sanity's own scheduling (an
+  // article goes live at its time through its own fields, "Scheduled" and
+  // "Goes live at", lib/project-posts.ts) and Tasks; comments are off in
+  // `document` below. Turn one on only with a plan that includes it.
+  releases: { enabled: false },
+  scheduledDrafts: { enabled: false },
+  scheduledPublishing: { enabled: false },
+  tasks: { enabled: false },
+
   plugins: [
     structureTool({ structure, title: "Content" }),
     presentationTool({
@@ -179,6 +194,8 @@ export default defineConfig({
   },
 
   document: {
+    // Not on HUB's plan (above).
+    comments: { enabled: false },
     // Studio's global Create menu offers only what an editor makes by hand
     // (15 Oct 2026). Pages and Site Settings are one of each, "Sent to
     // Buffer" is written by the social job, and the old map pins aren't read

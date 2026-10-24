@@ -60,7 +60,7 @@ import { bufferChannels, createBufferDraft, socialAutoQueue, type BufferChannel 
 import { emailEditors as sendToEditors } from "@/lib/editor-mail";
 import { writeSocialCopy, polishSocialCopy, type SocialCopy, type SocialSource } from "@/lib/social-drafter";
 import { contactLeft, styleReport, withLeft } from "@/lib/field-note-drafter";
-import { maskContact } from "@/lib/style-lint";
+import { contactIssues, maskContact } from "@/lib/style-lint";
 import { isSanityImage } from "@/lib/photos";
 import { PRODUCT_CATALOGUE } from "@/lib/product-catalogue";
 import { getMergedProduct } from "@/lib/products.server";
@@ -172,6 +172,9 @@ function fieldItem(doc: FieldDoc): SocialItem | null {
   if (!system?.name || !system.slug || !doc.place || !doc.note || !doc.photo) return null;
   const about = PRODUCT_CATALOGUE[system.slug]?.description;
   const title = `${system.name} in ${doc.place}`;
+  // A photo with no description of its own is described by the job, never by
+  // a Where that shows a customer's details: Buffer posts it with the photo.
+  const described = contactIssues(doc.place, { place: true }).length ? `${system.name} job` : title;
   return {
     key: `field:${doc._id}`,
     stream: "From the field",
@@ -193,7 +196,7 @@ function fieldItem(doc: FieldDoc): SocialItem | null {
     pageUrl: `${SITE}/products/${system.slug}`,
     campaign: "field",
     image: doc.photo,
-    imageAlt: doc.alt ?? title,
+    imageAlt: doc.alt ?? described,
     imageHotspot: doc.hotspot,
   };
 }

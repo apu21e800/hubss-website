@@ -24,19 +24,15 @@ const warnings = (issues: StyleIssue[], path?: Path): ValidationError[] =>
  * about (the contact rule, 24 Oct 2026): blog posts and Job photos, where
  * words arrive from a phone or a drafter and can go out without a second
  * read. Not the pages and products the office writes, where a public
- * place's address is fine. A Job photos post is read as typed (any case, any
- * house number), as the daily run reads it, and its Where field for a house
- * number at the start too, so the warning matches what holds the article.
+ * place's address is fine. Both are read as typed (any case, any house
+ * number), as the daily run reads a job post and a scheduled article on its
+ * day, and a Job photos post's Where for a house number at its start too, so
+ * the warning matches what holds the article.
  */
 const contactFor = (context: { document?: { _type?: string }; path?: Path }) => {
   const type = context.document?._type ?? "";
-  if (type === "fieldPost") {
-    const field = context.path?.[0];
-    return { contact: true, typed: true, place: field === "place" };
-  }
-  // A post's photo alt text and captions go on the page as typed too.
-  const last = context.path?.[context.path.length - 1];
-  return { contact: type === "blogPost", typed: type === "blogPost" && (last === "alt" || last === "caption") };
+  if (type === "fieldPost") return { contact: true, typed: true, place: context.path?.[0] === "place" };
+  return { contact: type === "blogPost", typed: type === "blogPost" };
 };
 
 const checkCopy: CustomValidator<string | undefined> = (value, context) => {
@@ -71,7 +67,7 @@ const checkBody: CustomValidator<unknown[] | undefined> = (value, context) => {
     } else if (block._type === "image") {
       for (const f of ["alt", "caption"]) {
         const text = block[f];
-        if (typeof text === "string") found.push(...warnings(lintCopy(text, { ...opts, typed: opts.contact }), [...at, f]));
+        if (typeof text === "string") found.push(...warnings(lintCopy(text, opts), [...at, f]));
       }
     } else if (block._type === "table" && Array.isArray(block.rows)) {
       for (const row of block.rows) {

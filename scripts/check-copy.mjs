@@ -354,9 +354,11 @@ async function selfTest() {
   expect("a slug with a phone number", hasContactAnyCase("call-604-555-0199"), null);
   for (const slug of ["kitchener-veterans-crosswalk-2024", "streetbond-osoyoos-british-columbia", "osoyoos-lakeside-park-path"])
     expect(`a clean slug read as an address: ${slug}`, !hasContactAnyCase(slug), null);
-  // A slug is read as typed: a year or a count before a street name counts there.
-  for (const slug of ["2024-commercial-drive-vancouver", "the-3-main-street-crossings"])
+  // A slug is read as typed: a year or a one-digit number before a street name counts there,
+  // but not a count after "the".
+  for (const slug of ["2024-commercial-drive-vancouver", "3-main-street-milton"])
     expect(`a slug's house number missed: ${slug}`, hasContactAnyCase(slug), null);
+  expect("a slug's count read as an address: the-3-main-street-crossings", !hasContactAnyCase("the-3-main-street-crossings"), null);
   expect("contact messages have no dash", contactIssues("604-555-0199, jane@shaw.ca, 1234 Main Street").every((i) => !i.message.includes(EM)), null);
   // HUB's lines are Site Settings' own (lib/site-settings.ts); a change there must reach the rule.
   const { DEFAULT_SITE_SETTINGS } = await import("../lib/site-settings.ts");
@@ -382,7 +384,8 @@ async function selfTest() {
   ];
   for (const [t, found] of TYPED_MISSES) expect(`typed rule missed: ${t}`, typedHits(t).length === 1 && typedHits(t)[0] === found, typedHits(t));
   expect("a Where starting with a house number", typedHits("1234 Lakeshore, Toronto", { place: true })[0] === "1234 Lakeshore", typedHits("1234 Lakeshore, Toronto", { place: true }));
-  expect("the same Where is no address in a story", typedHits("Done on 1234 Lakeshore, Toronto").length === 0, typedHits("Done on 1234 Lakeshore, Toronto"));
+  expect("a street named without its type, in a story", typedHits("Done on 1234 Lakeshore, Toronto")[0] === "1234 Lakeshore", typedHits("Done on 1234 Lakeshore, Toronto"));
+  expect("a two-digit Where is an address only in the Where field", typedHits("Done on 22 Elm, Milton").length === 0 && typedHits("22 Elm, Milton", { place: true })[0] === "22 Elm", typedHits("Done on 22 Elm, Milton"));
   const TYPED_CLEAN = [
     "We stamped the crosswalk at 152 Street and 72 Avenue in Surrey.",
     "The crossing on 200 Street near 64 Avenue.",
@@ -410,6 +413,16 @@ async function selfTest() {
     maskContact("Call the owner on 905-555-0123 or jane@shaw.ca at 1234 main st", { typed: true })
   );
   expect("a lowercase slug with an address", hasContactAnyCase("the-smiths-1234-main-st"), null);
+  // Job notes as they are typed (scripts/lib/contact-notes.ts): none of the
+  // plain ones held, every detail found (the re-review of 24 Oct 2026).
+  const { CLEAN_NOTES, CLEAN_WHERES, TYPED_DETAILS } = await import("./lib/contact-notes.ts");
+  for (const t of CLEAN_NOTES) expect(`a plain job note held: ${t}`, typedHits(t).length === 0, typedHits(t));
+  for (const t of CLEAN_WHERES) expect(`a public place's Where held: ${t}`, typedHits(t, { place: true }).length === 0, typedHits(t, { place: true }));
+  for (const [t, found, o] of TYPED_DETAILS) {
+    const got = typedHits(t, { typed: true, ...(o ?? {}) });
+    expect(`a typed detail missed: ${t}`, got.length === 1 && got[0] === found, got);
+  }
+  expect("no phone number no phone can have, and no toll-free line", contact("PO 4500123456, or call 1-800-555-0199.").length === 0, contact("PO 4500123456, or call 1-800-555-0199."));
   expect("a typed slug strips its address", stripContact("Driveway at 1234 main st in Milton") === "Driveway at in Milton", stripContact("Driveway at 1234 main st in Milton"));
 
   // A rewrite must keep the facts.

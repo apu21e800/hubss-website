@@ -93,10 +93,10 @@ export default async function LunchLearnCard({
             // Oct 2026), and the two wrap as a pair, so on a phone West lines
             // up under East, not under "Or call".
             <p className="flex gap-x-3 text-[13px]" style={{ color: "var(--text-muted)" }}>
-              <span className="flex-shrink-0 py-1.5">Or call</span>
+              <span className="flex-shrink-0 inline-flex min-h-[44px] items-center">Or call</span>
               <span className="flex flex-wrap gap-x-3">
-                <a href={telHref(offices.east.phone)} className="inline-block py-1.5 whitespace-nowrap font-semibold underline-offset-2 hover:underline" style={{ color: "var(--text-secondary)" }}>East {offices.east.phone}</a>
-                <a href={telHref(offices.west.phone)} className="inline-block py-1.5 whitespace-nowrap font-semibold underline-offset-2 hover:underline" style={{ color: "var(--text-secondary)" }}>West {offices.west.phone}</a>
+                <a href={telHref(offices.east.phone)} className="inline-flex min-h-[44px] items-center whitespace-nowrap font-semibold underline-offset-2 hover:underline" style={{ color: "var(--text-secondary)" }}>East {offices.east.phone}</a>
+                <a href={telHref(offices.west.phone)} className="inline-flex min-h-[44px] items-center whitespace-nowrap font-semibold underline-offset-2 hover:underline" style={{ color: "var(--text-secondary)" }}>West {offices.west.phone}</a>
               </span>
             </p>
           ) : (
@@ -106,8 +106,8 @@ export default async function LunchLearnCard({
             <p className="flex gap-x-3 text-[13px]" style={{ color: "var(--text-muted)" }}>
               <span className="flex-shrink-0 py-1">Or call</span>
               <span className="flex flex-col">
-                <a href={telHref(offices.east.phone)} className="inline-block py-1 whitespace-nowrap font-semibold underline-offset-2 hover:underline" style={{ color: "var(--text-secondary)" }}>East {offices.east.phone}</a>
-                <a href={telHref(offices.west.phone)} className="inline-block py-1 whitespace-nowrap font-semibold underline-offset-2 hover:underline" style={{ color: "var(--text-secondary)" }}>West {offices.west.phone}</a>
+                <a href={telHref(offices.east.phone)} className="inline-flex min-h-[44px] items-center whitespace-nowrap font-semibold underline-offset-2 hover:underline" style={{ color: "var(--text-secondary)" }}>East {offices.east.phone}</a>
+                <a href={telHref(offices.west.phone)} className="inline-flex min-h-[44px] items-center whitespace-nowrap font-semibold underline-offset-2 hover:underline" style={{ color: "var(--text-secondary)" }}>West {offices.west.phone}</a>
               </span>
             </p>
           )}

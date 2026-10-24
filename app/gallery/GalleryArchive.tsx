@@ -219,8 +219,8 @@ export default function GalleryArchive({ images, footer }: { images: GalleryImag
             </p>
             <button
               onClick={() => setVisible((v) => Math.min(v + PAGE, filtered.length))}
-              className="px-6 py-2.5 rounded-lg text-sm font-semibold transition-all hover:brightness-110 active:scale-[0.97]"
-              style={{ background: "#f97316", color: "var(--on-accent)" }}
+              // The site's secondary button, as on /blog and /resources (QA, 23 Oct 2026).
+              className="btn-ghost"
             >
               Load more
             </button>

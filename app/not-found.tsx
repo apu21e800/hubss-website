@@ -54,16 +54,7 @@ export default async function NotFound() {
           >
             404 · Off the road map
           </p>
-          <h1
-            style={{
-              fontSize: "clamp(2.5rem, 7vw, 4.5rem)",
-              fontWeight: 900,
-              color: "var(--text-primary)",
-              lineHeight: 1.05,
-              letterSpacing: "-0.03em",
-              margin: "0 0 18px",
-            }}
-          >
+          <h1 className="h1-page" style={{ color: "var(--text-primary)", margin: "0 0 18px" }}>
             This page took a{" "}
             <span
               style={{

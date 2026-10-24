@@ -119,10 +119,7 @@ export default function PatternsPage() {
               StreetPrint templates
             </p>
           </div>
-          <h1
-            className="font-black"
-            style={{ color: "var(--text-primary)", fontSize: "clamp(2.4rem, 5vw, 4rem)", lineHeight: 1.02, letterSpacing: "-0.035em" }}
-          >
+          <h1 className="h1-page" style={{ color: "var(--text-primary)" }}>
             The pattern library.
           </h1>
           <div
@@ -190,20 +187,13 @@ export default function PatternsPage() {
               </p>
             </div>
             {/* On phones the two buttons stack, full width: side by side each
-                label wrapped to two lines (QA, 28 Sep 2026). */}
+                label wrapped to two lines (QA, 28 Sep 2026). The site's two
+                buttons since 23 Oct 2026; they were drawn by hand (QA). */}
             <div className="flex flex-col gap-3 flex-shrink-0 sm:flex-row">
-              <Link
-                href="/products/streetprint"
-                className="px-5 py-2.5 rounded-lg text-sm font-bold transition-colors inline-flex items-center justify-center whitespace-nowrap min-h-[44px]"
-                style={{ background: "var(--bg-card-surface)", color: "var(--text-primary)", border: "1px solid var(--ink-10)" }}
-              >
+              <Link href="/products/streetprint" className="btn-ghost">
                 StreetPrint system
               </Link>
-              <Link
-                href="/contact"
-                className="px-5 py-2.5 rounded-lg text-sm font-bold inline-flex items-center justify-center whitespace-nowrap min-h-[44px]"
-                style={{ background: "linear-gradient(90deg, #F97316, #EAB308)", color: "#101010" }}
-              >
+              <Link href="/contact" className="btn-accent">
                 Start a project
               </Link>
             </div>

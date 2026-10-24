@@ -596,12 +596,17 @@ export default async function ProductPage({ params }: Props) {
               <h2 className="h2-section" style={{ color: "var(--text-primary)" }}>
                 Where {product.name} goes
               </h2>
-              <Link href="/applications" className="link-arrow hidden sm:inline-flex">
-                All applications
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </Link>
+              {/* .link-arrow sets display unlayered, so the breakpoint sits on
+                  a wrapper (phone QA, 23 Oct 2026: both copies showed, and
+                  this one ran off a 390px screen). */}
+              <div className="hidden sm:block">
+                <Link href="/applications" className="link-arrow">
+                  All applications
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
             </div>
 
             {/* One grid on every product page: four across from lg, two
@@ -650,10 +655,12 @@ export default async function ProductPage({ params }: Props) {
                 );
               })}
             </div>
-            <Link href="/applications" className="link-arrow sm:hidden mt-6">
-              All applications
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
-            </Link>
+            <div className="sm:hidden mt-6">
+              <Link href="/applications" className="link-arrow">
+                All applications
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+              </Link>
+            </div>
           </div>
           </section>
         )}

@@ -307,7 +307,15 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
   // Enter in an empty box opens nothing.
   const active = chosen.edit === typed.edit ? chosen.i : showResults ? 0 : -1;
   const setActive = useCallback((i: number) => setChosen({ edit: typed.edit, i }), [typed.edit]);
-  useEffect(() => { inputRef.current?.focus(); }, []);
+  // Focus goes back where it came from when the palette closes (desktop QA,
+  // 23 Oct 2026: Esc left it on the page body, so a keyboard user started
+  // again from the top). Not when that element has gone, as the phone
+  // menu's search button has once the menu has closed.
+  useEffect(() => {
+    const prev = document.activeElement as HTMLElement | null;
+    inputRef.current?.focus();
+    return () => { if (prev && prev !== document.body && document.contains(prev)) prev.focus(); };
+  }, []);
 
   const go = useCallback(
     (href: string, isFile?: boolean) => {
@@ -473,7 +481,8 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
               onClick={() => { setQuery(""); inputRef.current?.focus(); }}
               aria-label="Clear search"
               className="flex-shrink-0 flex items-center justify-center rounded-md hover:bg-[var(--ink-10)]"
-              style={{ width: 32, height: 32, color: "var(--text-faint)" }}
+              // 44px, the site's tap size (phone QA, 23 Oct 2026: it was 32).
+              style={{ width: 44, height: 44, color: "var(--text-faint)" }}
             >
               <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" strokeWidth={2} strokeLinecap="round" /></svg>
             </button>

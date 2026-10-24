@@ -719,12 +719,8 @@ export default function ResourcesClient({
             <div className="text-center mt-10">
               <button
                 onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
-                className="px-8 py-3 rounded-lg text-sm font-medium transition-all duration-200 hover:text-[var(--accent-text-lg)] hover:border-[#F97316]/30"
-                style={{
-                  background: "transparent",
-                  border: "1px solid var(--ink-12)",
-                  color: "var(--text-muted)",
-                }}
+                // The site's secondary button, as on /blog and /gallery (QA, 23 Oct 2026).
+                className="btn-ghost"
               >
                 Load more ({filtered.length - visibleCount} remaining)
               </button>

@@ -14,7 +14,12 @@ import dynamic from "next/dynamic";
  * clamp(760px, 96vh, 1060px), about 100px short: a visitor who clicked
  * "See the work" landed on the map and watched the page jump under them.
  */
-export const MAP_SECTION_HEIGHT = "calc(clamp(560px, 76vh, 860px) + 294px)";
+export const MAP_SECTION_HEIGHT = "calc(clamp(560px, 76vh, 860px) + clamp(326px, 326px + (100vw - 1024px) * 0.045, 343px))";
+// 23 Oct 2026 (desktop QA, CLS 0.72 on the homepage): the heading grew with
+// the 20 Oct type scale, so the 294px above was 32px short at 1024, 44 at
+// 1280 and 49 from 1440 (measured: section 910, 946, 1027 against 878, 902,
+// 978). The second clamp follows .h2-section's growth to its 56px cap. The
+// section's min-height in CanadaMap.tsx is the same expression.
 
 const CanadaMap = dynamic(() => import("@/components/sections/CanadaMap"), {
   ssr: false,

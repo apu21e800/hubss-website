@@ -68,7 +68,9 @@ function DocRow({
           neither changed under the pointer. */}
       <button
         onClick={() => onPreview({ href: doc.href, label: labelText, typeLabel })}
-        className="btn-ghost btn-sm flex-shrink-0 text-xs"
+        // btn-sm is only the bar's and the reader's; this one was 40px tall
+        // on a phone (QA, 23 Oct 2026).
+        className="btn-ghost flex-shrink-0"
         aria-label={`Preview ${labelText}`}
       >
         <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

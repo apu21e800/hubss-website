@@ -306,7 +306,10 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            // On /lunch-learn the card holds the page's h1: it paints with
+            // the page instead of waiting for the script to fade it in (QA,
+            // 23 Oct 2026: the heading was the largest paint, at 1 to 2 s).
+            initial={Title === "h1" ? false : { opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}

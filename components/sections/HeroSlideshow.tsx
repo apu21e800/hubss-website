@@ -8,8 +8,7 @@ import { heroAlt } from "@/lib/image-seo";
 import { HOME_HERO } from "@/lib/hero-framing";
 import { homeHeroSrc, isSanityImage, sanitySrcSet } from "@/lib/photos";
 import { keepDots } from "@/lib/separators";
-import SeeTheWork from "@/components/sections/WorkShowcase";
-import type { WorkSlide } from "@/lib/work-showcase";
+import SeeTheWork from "@/components/sections/SeeTheWork";
 
 const FALLBACK_HERO = "/images/hero/hero-1.jpg";
 
@@ -68,8 +67,6 @@ interface HeroSlideshowProps {
   widePosition?: string;
   /** While previewing in Studio: the attribute that makes the photo clickable (lib/sanity.preview.ts). */
   editAttribute?: string;
-  /** The highlights "See the work" opens on a phone (lib/work-showcase.ts). */
-  work?: WorkSlide[];
 }
 
 export default function HeroSlideshow({
@@ -90,7 +87,6 @@ export default function HeroSlideshow({
   position,
   widePosition,
   editAttribute,
-  work = [],
 }: HeroSlideshowProps = {}) {
   const src = heroImageSrc || FALLBACK_HERO;
   // A Sanity photo is sized by Sanity's CDN (lib/photos.ts): a phone gets an
@@ -290,10 +286,9 @@ export default function HeroSlideshow({
                   needs no payload, and the default prefetch pulled the
                   /products RSC and three card images every home load
                   (technical review, 17 Oct 2026). On a phone the button
-                  opens the highlights full screen (WorkShowcase.tsx). */}
+                  cuts to the map instead of gliding (SeeTheWork.tsx). */}
               <SeeTheWork
                 href={cta1Href}
-                slides={work}
                 className="btn-accent btn-lg"
                 style={{ ["--btn-shadow" as string]: "0 6px 28px rgba(249,115,22,0.42)" }}
               >

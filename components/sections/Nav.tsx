@@ -7,7 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import { usePathname, useRouter } from "next/navigation";
-import { motion, AnimatePresence, MotionConfig, useIsPresent, useReducedMotion, type Variants } from "framer-motion";
+import { animate, motion, AnimatePresence, MotionConfig, useReducedMotion, type Variants } from "framer-motion";
 import { products } from "@/lib/products";
 import { catalogue, catalogueReady, cataloguePageUrl, ideaBook } from "@/lib/catalogue";
 import { showCatalogue } from "@/lib/feature-flags";
@@ -958,17 +958,20 @@ function dropHash() {
 // numbers and a Lunch & Learn card, a fifth of a 390px screen and more than a
 // quarter of a 360px one.
 //
-// Now it has two levels, the way a phone's own settings do. The first screen
-// is the site in big type: Products, Applications and Projects, each opening
-// its directory; the Product Book, Gallery, About and Contact; and the two
-// offices to call. A section's directory slides in from the right (its
-// families or groups, each with its photograph and its names under it) and
-// "Menu" slides it back. The header is the bar itself, the same logo in the
-// same place, so opening reads as the bar dropping open, and the bar's three
-// lines turn into the cross that closes it. One thing is pinned: Lunch &
-// Learn. Every link and button is at least 44px tall (QA pa#38).
+// The first screen is the site in big type: Products, Applications and
+// Projects; the Product Book, Gallery, About and Contact; and the two offices
+// to call. A section opens in place, under its own name, like an accordion
+// (Vern, the same night, on the live site: "mobile menu should work more
+// like accordion, vs side animation"; it slid to a second screen for a few
+// hours): its "All" link, then its families or groups, each with its
+// photograph and its names two to a row. One section is open at a time, and
+// the name you tapped holds still while the others close round it. The
+// header is the bar itself, the same logo in the same place, so opening
+// reads as the bar dropping open, and the bar's three lines turn into the
+// cross that closes it. One thing is pinned: Lunch & Learn. Every link and
+// button is at least 44px tall (QA pa#38).
 
-type MenuLevel = "root" | "products" | "applications" | "insights";
+type MenuSection = "products" | "applications" | "insights";
 
 const EASE_OUT = [0.22, 1, 0.36, 1] as const;     // --ease-out
 const EASE_IN_OUT = [0.65, 0, 0.35, 1] as const;  // --ease-in-out
@@ -977,7 +980,7 @@ const EASE_IN_OUT = [0.65, 0, 0.35, 1] as const;  // --ease-in-out
 // (lib/product-categories.ts), the groups (APPLICATION_GROUPS above) and the
 // three sections of the blog (lib/field-notes-taxonomy.ts; Projects' own
 // "Canadian installations, written up").
-const ROOT_SECTIONS: { level: Exclude<MenuLevel, "root">; label: string; line: string; href: string; all: string }[] = [
+const ROOT_SECTIONS: { level: MenuSection; label: string; line: string; href: string; all: string }[] = [
   { level: "products", label: "Products", line: "Thermoplastics, coatings, stamped asphalt, repair", href: "/products", all: "All products" },
   { level: "applications", label: "Applications", line: "Streets, parks, commercial and residential", href: "/applications", all: "All applications" },
   { level: "insights", label: BLOG_NAME, line: "Installations, guides and articles", href: "/blog", all: `All ${BLOG_NAME.toLowerCase()}` },
@@ -1001,14 +1004,19 @@ const SHEET_FADE: Variants = {
   closed: { opacity: 0, transition: { duration: 0.15 } },
 };
 
-// One level replacing another: forward, the new one slides over from the
-// right while the old one drifts left and fades; back, the reverse.
-const LEVEL_SLIDE: Variants = {
-  enter: (dir: number) => (dir > 0 ? { x: "100%", opacity: 1, zIndex: 2 } : { x: "-24%", opacity: 0, zIndex: 1 }),
-  center: { x: "0%", opacity: 1, transition: { duration: 0.38, ease: EASE_OUT } },
-  leave: (dir: number) => (dir > 0
-    ? { x: "-24%", opacity: 0, zIndex: 1, transition: { duration: 0.34, ease: EASE_OUT } }
-    : { x: "100%", opacity: 1, zIndex: 2, transition: { duration: 0.34, ease: EASE_OUT } }),
+// A section opening and closing. The height eases out over 340ms as it
+// opens, the contents fading in a beat behind it so the rows never show
+// half-drawn; closing is a little quicker and eases both ways. The page
+// keeps the tapped name in place over the same 300ms (toggle, below).
+const OPEN_MS = 0.34;
+const CLOSE_MS = 0.3;
+const PANEL: Variants = {
+  shut: { height: 0, opacity: 0, transition: { height: { duration: CLOSE_MS, ease: EASE_IN_OUT }, opacity: { duration: 0.14 } } },
+  open: { height: "auto", opacity: 1, transition: { height: { duration: OPEN_MS, ease: EASE_OUT }, opacity: { duration: 0.22, delay: 0.06 } } },
+};
+const PANEL_STILL: Variants = {
+  shut: { height: 0, opacity: 0, transition: { duration: 0 } },
+  open: { height: "auto", opacity: 1, transition: { duration: 0 } },
 };
 
 function Chevron({ back = false, className = "w-4 h-4", style }: { back?: boolean; className?: string; style?: React.CSSProperties }) {
@@ -1041,8 +1049,7 @@ function BurgerCross() {
   );
 }
 
-// The first screen's rows rise in one after another as it opens; a level the
-// visitor comes back to is simply there.
+// The first screen's rows rise in one after another as it opens.
 function RiseIn({ index, on, className, children }: { index: number; on: boolean; className?: string; children: React.ReactNode }) {
   return (
     <motion.div
@@ -1056,49 +1063,15 @@ function RiseIn({ index, on, className, children }: { index: number; on: boolean
   );
 }
 
-// A level on its way out cannot be tapped or tabbed into.
-function LeavingInert({ children }: { children: React.ReactNode }) {
-  const present = useIsPresent();
-  return <div inert={!present}>{children}</div>;
-}
-
-// A level's head: "Menu" back to the first screen, the section's "All" link,
-// then its name.
-function LevelHead({ title, href, all, pathname, onBack, onClose, backRef }: {
-  title: string; href: string; all: string; pathname: string;
-  onBack: () => void; onClose: () => void; backRef: React.RefObject<HTMLButtonElement | null>;
-}) {
-  return (
-    <div className="pt-2">
-      <div className="flex items-center justify-between">
-        <button
-          ref={backRef}
-          type="button"
-          onClick={onBack}
-          className="-ml-2 inline-flex min-h-[44px] items-center gap-1 rounded-lg pl-1 pr-2.5 text-[15px] font-semibold transition-opacity active:opacity-60"
-          style={{ color: "var(--ink-70)" }}
-        >
-          <Chevron back className="w-[18px] h-[18px]" />
-          Menu
-        </button>
-        <MobileViewAll href={href} label={all} onClose={onClose} current={currentPage(pathname, href)} />
-      </div>
-      {/* Weight, size and leading inline: the heading base in app/globals.css
-          is unlayered and would win over utilities. */}
-      <h2 className="mt-1" style={{ color: "var(--text-primary)", fontSize: 34, fontWeight: 900, lineHeight: 1.04, letterSpacing: "-0.03em" }}>
-        {title}
-      </h2>
-    </div>
-  );
-}
-
-// One family or group in a directory: its photograph and its name in the
-// accent, the family's note, then its members, each a row.
+// One family or group in an open section: its photograph, its name in the
+// accent and the family's note, then its members two to a row (a name is
+// one or two words; a row each, with its line, made Products 1,100px long).
 function MenuGroup({ label, note, items, pathname, onClose }: { label: string; note?: string; items: MenuItem[]; pathname: string; onClose: () => void }) {
   const id = `menu-${label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
+  const names = items.filter((it) => !it.gallery);
   return (
-    <section aria-labelledby={id} className="mt-7 first:mt-5">
-      <div className="flex items-center gap-3.5 pb-2.5">
+    <section aria-labelledby={id} className="pt-5">
+      <div className="flex items-center gap-3.5 pb-2">
         <GroupPicture label={label} compact />
         <div className="min-w-0">
           <h3 id={id} className="uppercase" style={{ color: ACCENT, fontFamily: "var(--font-inter), Inter, system-ui, sans-serif", fontSize: 12, fontWeight: 700, letterSpacing: "0.16em", lineHeight: 1.3 }}>
@@ -1107,53 +1080,47 @@ function MenuGroup({ label, note, items, pathname, onClose }: { label: string; n
           {note && <p className="mt-1 text-[13px] leading-snug" style={{ color: "var(--ink-50)" }}>{note}</p>}
         </div>
       </div>
-      <ul>
-        {items.filter((it) => !it.gallery).map((it) => {
+      <ul className="grid grid-cols-2 gap-x-4">
+        {names.map((it) => {
           const here = pathname === it.href;
           return (
-            <li key={it.href}>
+            <li key={it.href} style={{ borderTop: "1px solid var(--ink-06)" }}>
               <Link prefetch={false}
                 href={it.href}
                 onClick={onClose}
                 aria-current={currentPage(pathname, it.href)}
-                className="flex min-h-[52px] items-center justify-between gap-4 py-2.5 transition-opacity active:opacity-60"
-                style={{ borderTop: "1px solid var(--ink-06)" }}
+                className="menu-name flex min-h-[48px] items-center py-2 text-[15.5px] font-semibold leading-tight"
+                style={{ color: here ? "var(--text-primary)" : "var(--ink-90)" }}
               >
-                <span className="min-w-0">
-                  <span className="block text-[16px] font-semibold leading-tight" style={{ color: here ? "var(--text-primary)" : "var(--ink-90)" }}>
-                    <NavLabel active={here}>{it.name}</NavLabel>
-                  </span>
-                  {it.line && <span className="mt-1 block text-[13.5px] leading-snug text-pretty" style={{ color: "var(--ink-50)" }}>{it.line}</span>}
-                </span>
-                <Chevron className="w-3.5 h-3.5" style={{ color: "var(--ink-25)" }} />
+                <NavLabel active={here}>{it.name}</NavLabel>
               </Link>
             </li>
           );
         })}
-        {items.filter((it) => it.gallery).map((it) => (
-          <li key={it.href} className="pt-2">
-            <GalleryCard item={it} compact current={currentPage(pathname, it.href)} onClick={onClose} />
-          </li>
-        ))}
       </ul>
+      {items.filter((it) => it.gallery).map((it) => (
+        <div key={it.href} className="pt-2">
+          <GalleryCard item={it} compact current={currentPage(pathname, it.href)} onClick={onClose} />
+        </div>
+      ))}
     </section>
   );
 }
 
-// Projects' directory opens with its cover story: the photo, its section and
-// its title, as the laptop panel does.
+// Projects opens with its cover story: the photo, its section and its
+// title, as the laptop panel does.
 function MenuCover({ pathname, onClose }: { pathname: string; onClose: () => void }) {
   const c = INSIGHTS.cover;
   if (!c) return null;
   const href = `/blog/${c.slug}`;
   return (
-    <Link prefetch={false} href={href} onClick={onClose} aria-current={currentPage(pathname, href)} className="mt-5 block transition-opacity active:opacity-70">
+    <Link prefetch={false} href={href} onClick={onClose} aria-current={currentPage(pathname, href)} className="mt-4 block transition-opacity active:opacity-70">
       <span className="relative block aspect-[16/9] w-full overflow-hidden rounded-xl" style={{ background: PHOTO_GROUND, border: "1px solid var(--ink-10)" }}>
         <InsightImg
           image={c.image}
           alt={altBesideTitle(c.alt, c.title)}
           sizes="(min-width: 704px) 640px, calc(100vw - 32px)"
-          loading="eager"
+          loading="lazy"
           className="absolute inset-0 h-full w-full object-cover"
         />
       </span>
@@ -1165,63 +1132,93 @@ function MenuCover({ pathname, onClose }: { pathname: string; onClose: () => voi
   );
 }
 
+// What an open section holds, under its "All" link.
+function SectionPanel({ section, pathname, onClose }: { section: (typeof ROOT_SECTIONS)[number]; pathname: string; onClose: () => void }) {
+  return (
+    <div className="pb-6">
+      <div className="-mt-1">
+        <MobileViewAll href={section.href} label={section.all} onClose={onClose} current={currentPage(pathname, section.href)} />
+      </div>
+      {section.level === "products" && (
+        <>
+          {PRODUCT_CATEGORIES.map((cat) => (
+            <MenuGroup key={cat.label} label={cat.label} note={cat.menuNote} items={productFamily(cat)} pathname={pathname} onClose={onClose} />
+          ))}
+          <div className="mt-5" style={{ borderTop: "1px solid var(--ink-06)" }}>
+            <MobileResourcesRow pathname={pathname} onClose={onClose} />
+          </div>
+        </>
+      )}
+      {section.level === "applications" &&
+        APPLICATION_GROUPS.map((group) => (
+          <MenuGroup key={group.label} label={group.label} items={applicationGroup(group)} pathname={pathname} onClose={onClose} />
+        ))}
+      {section.level === "insights" && (
+        <>
+          <MenuCover pathname={pathname} onClose={onClose} />
+          <div className="mt-5" style={{ borderTop: "1px solid var(--ink-06)" }}>
+            {NAV_SECTIONS.map((s) => (
+              <MobileSectionRow key={s.key} section={s} pathname={pathname} onClose={onClose} />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 function MobileOverlay({ isOpen, scrolled, onClose, onSearchOpen }: { isOpen: boolean; scrolled: boolean; onClose: () => void; onSearchOpen: () => void }) {
   const { offices } = useSiteSettings();
   const overlayRef = useRef<HTMLDivElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
-  const backRef = useRef<HTMLButtonElement>(null);
-  const rowRefs = useRef<Partial<Record<MenuLevel, HTMLButtonElement | null>>>({});
+  const panelRefs = useRef<Partial<Record<MenuSection, HTMLDivElement | null>>>({});
   const reduce = useReducedMotion();
   const pathname = usePathname() ?? "";
 
-  // The level on screen, and which way the last change went: 0 when the menu
-  // has just opened (the first screen rises in), 1 forward, -1 back.
-  const [level, setLevel] = useState<MenuLevel>("root");
-  const [dir, setDir] = useState<0 | 1 | -1>(0);
-  const cameFrom = useRef<MenuLevel>("root");
-  // For 550ms after a level is chosen, nothing in the menu takes a tap: a
-  // double tap landed its second tap on whatever slid under the finger, the
-  // cover story under "Projects" or "Menu" under "Products" (independent
-  // review, 24 Oct 2026). The slide takes 380ms; 550 also covers a slow
-  // double click (Windows' default is 500ms), and is shorter than anyone
-  // takes to read the new screen and choose.
-  const [settling, setSettling] = useState(false);
-  const settleTimer = useRef<number | null>(null);
-  const settle = (on: boolean) => {
-    if (settleTimer.current !== null) window.clearTimeout(settleTimer.current);
-    settleTimer.current = on ? window.setTimeout(() => setSettling(false), 550) : null;
-    setSettling(on);
-  };
+  // The open section, if any. Closed again every time the menu closes.
+  const [openSection, setOpenSection] = useState<MenuSection | null>(null);
+  const lastToggle = useRef(0);
+  const scrollAnim = useRef<{ stop: () => void } | null>(null);
   useEffect(() => {
-    if (!isOpen) { setLevel("root"); setDir(0); cameFrom.current = "root"; settle(false); }
-    // settle only touches a ref and a state setter.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (!isOpen) setOpenSection(null);
   }, [isOpen]);
-  useEffect(() => () => { if (settleTimer.current !== null) window.clearTimeout(settleTimer.current); }, []);
+  useEffect(() => () => scrollAnim.current?.stop(), []);
 
-  const go = (next: MenuLevel) => {
-    if (settling || next === level) return;
-    settle(true);
-    // Each level starts at its top; the one leaving slides from there too.
-    // scrollTop, not scrollTo with a behavior: neither box sets
-    // scroll-behavior, so this is instant in every browser.
-    if (bodyRef.current) bodyRef.current.scrollTop = 0;
-    if (overlayRef.current) overlayRef.current.scrollTop = 0;
-    cameFrom.current = level;
-    setDir(next === "root" ? -1 : 1);
-    setLevel(next);
+  // The list's scroller: the body, or the whole drawer on a phone on its
+  // side, where the drawer scrolls as one (app/globals.css, .drawer).
+  const scroller = () => {
+    const body = bodyRef.current;
+    if (body && body.scrollHeight > body.clientHeight + 1) return body;
+    const all = overlayRef.current;
+    return all && all.scrollHeight > all.clientHeight + 1 ? all : body;
   };
 
-  // Focus follows the move: into a directory, onto "Menu"; back, onto the
-  // row that opened it.
-  useEffect(() => {
-    if (!isOpen || dir === 0) return;
-    const t = setTimeout(() => {
-      if (level === "root") rowRefs.current[cameFrom.current]?.focus();
-      else backRef.current?.focus();
-    }, 30);
-    return () => clearTimeout(t);
-  }, [level, dir, isOpen]);
+  // Open one section, closing any other. A section closing ABOVE the one
+  // tapped takes its height out from over it, so the list scrolls back by
+  // that much over the same 300ms with the same easing: the name you
+  // tapped holds still and the new section opens under your finger. Two
+  // taps in 350ms count once (a double tap closed what the first opened).
+  const toggle = (next: MenuSection) => {
+    const now = performance.now();
+    if (now - lastToggle.current < 350) return;
+    lastToggle.current = now;
+    const opening = openSection === next ? null : next;
+    const closing = openSection;
+    const sc = scroller();
+    if (sc && opening && closing && closing !== opening) {
+      const order = ROOT_SECTIONS.map((r) => r.level);
+      const above = order.indexOf(closing) < order.indexOf(opening);
+      const h = panelRefs.current[closing]?.offsetHeight ?? 0;
+      if (above && h > 0 && sc.scrollTop > 0) {
+        scrollAnim.current?.stop();
+        const from = sc.scrollTop;
+        const to = Math.max(0, from - h);
+        if (reduce) sc.scrollTop = to;
+        else scrollAnim.current = animate(from, to, { duration: CLOSE_MS, ease: EASE_IN_OUT, onUpdate: (v) => { sc.scrollTop = v; } });
+      }
+    }
+    setOpenSection(opening);
+  };
 
   // Where closing the menu puts the page: back where it was, unless the logo
   // was tapped on the homepage, which closes it at the top.
@@ -1283,16 +1280,15 @@ function MobileOverlay({ isOpen, scrolled, onClose, onSearchOpen }: { isOpen: bo
   }, [isOpen]);
 
   // The session topic: the family or group the open page belongs to (on
-  // /products/streetprint, Stamped Asphalt), else the directory on screen.
+  // /products/streetprint, Stamped Asphalt), else the section open.
   const here =
     PRODUCT_CATEGORIES.find((cat) => productFamily(cat).some((it) => it.href === pathname))?.label ??
     APPLICATION_GROUPS.find((g) => applicationGroup(g).some((it) => it.href === pathname))?.label ??
     null;
-  const llTopic = here ?? (level === "applications" ? "your application" : "HUB systems");
+  const llTopic = here ?? (openSection === "applications" ? "your application" : "HUB systems");
   // The current section, marked as the bar marks it (QA A4, 30 Sep 2026).
   const section = navSection(pathname);
-  const rise = dir === 0 && !reduce;
-  const head = ROOT_SECTIONS.find((s) => s.level === level);
+  const rise = !reduce;
 
   const plainLinks = [
     // The book was reachable from the desktop panels only; a phone had no
@@ -1394,172 +1390,145 @@ function MobileOverlay({ isOpen, scrolled, onClose, onSearchOpen }: { isOpen: bo
             </div>
           </div>
 
-          {/* ── The sheet: the levels and the pinned Lunch & Learn ─────── */}
+          {/* ── The sheet: the sections and the pinned Lunch & Learn ───── */}
           <motion.div
             className="drawer-sheet flex min-h-0 flex-1 flex-col"
             style={{ background: "var(--bg-deepest)" }}
             variants={reduce ? SHEET_FADE : SHEET_WIPE}
           >
             <div ref={bodyRef} className="drawer-body flex-1 overflow-y-auto overscroll-contain" style={{ WebkitOverflowScrolling: "touch" } as React.CSSProperties}>
-              <div className="relative px-4 sm:px-6 pb-10 max-w-2xl mx-auto" style={settling ? { pointerEvents: "none" } : undefined}>
-                <AnimatePresence mode="popLayout" initial={false} custom={dir}>
-                  <motion.div
-                    key={level}
-                    custom={dir}
-                    variants={LEVEL_SLIDE}
-                    initial={dir === 0 ? false : "enter"}
-                    animate="center"
-                    exit="leave"
-                    // relative: z-index only orders positioned boxes, and the
-                    // level coming in stays in the flow.
-                    className="relative"
-                    style={{ background: "var(--bg-deepest)" }}
-                  >
-                    <LeavingInert>
-                      {level === "root" ? (
-                        <div className="pt-3">
-                          {/* ── The three sections, each a directory ──── */}
-                          {ROOT_SECTIONS.map((s, i) => {
-                            const active = section === s.level;
-                            return (
-                              <RiseIn key={s.level} index={i} on={rise}>
-                                <button
-                                  ref={(el) => { rowRefs.current[s.level] = el; }}
-                                  type="button"
-                                  onClick={() => go(s.level)}
-                                  className="flex w-full items-center justify-between gap-4 py-3.5 text-left transition-opacity active:opacity-60"
-                                  style={{ borderBottom: "1px solid var(--ink-06)" }}
-                                >
-                                  <span className="min-w-0">
-                                    <span
-                                      className="font-display block"
-                                      style={{ color: active ? "var(--text-primary)" : "var(--ink-90)", fontSize: 30, fontWeight: 800, lineHeight: 1.08, letterSpacing: "-0.03em" }}
-                                    >
-                                      <NavLabel active={active}>{s.label}</NavLabel>
-                                    </span>
-                                    <span className="mt-1.5 block text-[13.5px] leading-snug text-balance" style={{ color: "var(--ink-50)" }}>{s.line}</span>
-                                  </span>
-                                  <Chevron className="w-5 h-5" style={{ color: "var(--ink-30)" }} />
-                                </button>
-                              </RiseIn>
-                            );
-                          })}
+              <div className="px-4 sm:px-6 pb-10 pt-3 max-w-2xl mx-auto">
+                {/* ── The three sections, each opening in place ──────── */}
+                {ROOT_SECTIONS.map((s, i) => {
+                  const active = section === s.level;
+                  const isOpenRow = openSection === s.level;
+                  const panelId = `menu-panel-${s.level}`;
+                  return (
+                    <RiseIn key={s.level} index={i} on={rise}>
+                      <div style={{ borderBottom: "1px solid var(--ink-06)" }}>
+                        <button
+                          id={`menu-row-${s.level}`}
+                          type="button"
+                          onClick={() => toggle(s.level)}
+                          aria-expanded={isOpenRow}
+                          aria-controls={panelId}
+                          className="menu-row flex w-full items-center justify-between gap-4 py-3.5 text-left"
+                        >
+                          <span className="min-w-0">
+                            <span
+                              className="font-display block"
+                              style={{ color: active || isOpenRow ? "var(--text-primary)" : "var(--ink-90)", fontSize: 30, fontWeight: 800, lineHeight: 1.08, letterSpacing: "-0.03em" }}
+                            >
+                              <NavLabel active={active}>{s.label}</NavLabel>
+                            </span>
+                            <span className="mt-1.5 block text-[13.5px] leading-snug text-balance" style={{ color: "var(--ink-50)" }}>{s.line}</span>
+                          </span>
+                          {/* The chevron turns down as the section opens. */}
+                          <motion.span
+                            aria-hidden="true"
+                            className="grid h-9 w-9 flex-shrink-0 place-items-center rounded-full"
+                            style={{ color: isOpenRow ? "var(--accent-text-lg)" : "var(--ink-30)", background: isOpenRow ? "rgba(249,115,22,0.12)" : "transparent" }}
+                            animate={{ rotate: isOpenRow ? 90 : 0 }}
+                            transition={reduce ? { duration: 0 } : { duration: OPEN_MS, ease: EASE_OUT }}
+                          >
+                            <Chevron className="w-5 h-5" />
+                          </motion.span>
+                        </button>
+                        <AnimatePresence initial={false}>
+                          {isOpenRow && (
+                            <motion.div
+                              key={panelId}
+                              id={panelId}
+                              role="region"
+                              aria-labelledby={`menu-row-${s.level}`}
+                              ref={(el) => { panelRefs.current[s.level] = el; }}
+                              variants={reduce ? PANEL_STILL : PANEL}
+                              initial="shut"
+                              animate="open"
+                              exit="shut"
+                              style={{ overflow: "hidden" }}
+                            >
+                              <SectionPanel section={s} pathname={pathname} onClose={onClose} />
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    </RiseIn>
+                  );
+                })}
 
-                          {/* ── The book and the plain pages ─────────── */}
-                          <div className="mt-4">
-                            {plainLinks.map((link, i) => {
-                              const active = (!!section && NAV_ROOT[section] === link.href) || pathname === link.href;
-                              return (
-                                <RiseIn key={link.href} index={ROOT_SECTIONS.length + i} on={rise}>
-                                  <Link prefetch={false}
-                                    href={link.href}
-                                    onClick={onClose}
-                                    aria-current={currentPage(pathname, link.href)}
-                                    className="flex min-h-[52px] items-center justify-between gap-4 py-2 transition-opacity active:opacity-60"
-                                    style={{ borderBottom: "1px solid var(--ink-06)" }}
-                                  >
-                                    <span className="min-w-0">
-                                      <span className="block text-[18px] font-semibold leading-tight" style={{ color: active ? "var(--text-primary)" : "var(--ink-85)", letterSpacing: "-0.01em" }}>
-                                        <NavLabel active={active}>{link.label}</NavLabel>
-                                      </span>
-                                      {link.sub && <span className="mt-0.5 block text-[13px] leading-snug" style={{ color: "var(--ink-50)" }}>{link.sub}</span>}
-                                    </span>
-                                    <span className="flex items-center gap-3">
-                                      {link.book && ideaBookCover && (
-                                        // eslint-disable-next-line @next/next/no-img-element -- the book's own raster, lib/catalogue.ts
-                                        <img
-                                          src={ideaBookCover}
-                                          srcSet={ideaBookCoverSet}
-                                          sizes="32px"
-                                          alt=""
-                                          width={240}
-                                          height={240}
-                                          loading="lazy"
-                                          decoding="async"
-                                          className="h-8 w-8 rounded-[2px] object-cover"
-                                          style={{ border: "1px solid var(--ink-12)", boxShadow: "0 6px 12px -6px rgba(0,0,0,0.7)" }}
-                                        />
-                                      )}
-                                      <Chevron style={{ color: "var(--ink-25)" }} />
-                                    </span>
-                                  </Link>
-                                </RiseIn>
-                              );
-                            })}
-                          </div>
+                {/* ── The book and the plain pages ─────────── */}
+                <div className="mt-4">
+                  {plainLinks.map((link, i) => {
+                    const active = (!!section && NAV_ROOT[section] === link.href) || pathname === link.href;
+                    return (
+                      <RiseIn key={link.href} index={ROOT_SECTIONS.length + i} on={rise}>
+                        <Link prefetch={false}
+                          href={link.href}
+                          onClick={onClose}
+                          aria-current={currentPage(pathname, link.href)}
+                          className="flex min-h-[52px] items-center justify-between gap-4 py-2 transition-opacity active:opacity-60"
+                          style={{ borderBottom: "1px solid var(--ink-06)" }}
+                        >
+                          <span className="min-w-0">
+                            <span className="block text-[18px] font-semibold leading-tight" style={{ color: active ? "var(--text-primary)" : "var(--ink-85)", letterSpacing: "-0.01em" }}>
+                              <NavLabel active={active}>{link.label}</NavLabel>
+                            </span>
+                            {link.sub && <span className="mt-0.5 block text-[13px] leading-snug" style={{ color: "var(--ink-50)" }}>{link.sub}</span>}
+                          </span>
+                          <span className="flex items-center gap-3">
+                            {link.book && ideaBookCover && (
+                              // eslint-disable-next-line @next/next/no-img-element -- the book's own raster, lib/catalogue.ts
+                              <img
+                                src={ideaBookCover}
+                                srcSet={ideaBookCoverSet}
+                                sizes="32px"
+                                alt=""
+                                width={240}
+                                height={240}
+                                loading="lazy"
+                                decoding="async"
+                                className="h-8 w-8 rounded-[2px] object-cover"
+                                style={{ border: "1px solid var(--ink-12)", boxShadow: "0 6px 12px -6px rgba(0,0,0,0.7)" }}
+                              />
+                            )}
+                            <Chevron style={{ color: "var(--ink-25)" }} />
+                          </span>
+                        </Link>
+                      </RiseIn>
+                    );
+                  })}
+                </div>
 
-                          {/* ── The two offices ─────────────────────── */}
-                          {/* The phones from Studio's Site Settings (lib/site-settings.ts). */}
-                          <RiseIn index={ROOT_SECTIONS.length + plainLinks.length} on={rise} className="mt-9">
-                            <div className="pb-2 text-[12px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--accent-text-lg)" }}>
-                              Call an office
-                            </div>
-                            {([["West", offices.west], ["East", offices.east]] as const).map(([name, office]) => (
-                              <a
-                                key={name}
-                                href={telHref(office.phone)}
-                                className="flex min-h-[60px] items-center gap-3.5 py-2 transition-opacity active:opacity-60"
-                                style={{ borderTop: "1px solid var(--ink-06)" }}
-                              >
-                                <span
-                                  aria-hidden="true"
-                                  className="grid h-10 w-10 flex-shrink-0 place-items-center rounded-full"
-                                  style={{ background: "rgba(249,115,22,0.12)", color: "var(--accent-text-lg)" }}
-                                >
-                                  <PhoneGlyph />
-                                </span>
-                                <span className="min-w-0">
-                                  <span className="block text-[16px] font-semibold leading-tight" style={{ color: "var(--text-primary)" }}>
-                                    {name} · {office.phone}
-                                  </span>
-                                  <span className="mt-0.5 block text-[13px] leading-snug" style={{ color: "var(--ink-50)" }}>{office.place}</span>
-                                </span>
-                              </a>
-                            ))}
-                          </RiseIn>
-                        </div>
-                      ) : (
-                        head && (
-                          <div>
-                            <LevelHead
-                              title={head.label}
-                              href={head.href}
-                              all={head.all}
-                              pathname={pathname}
-                              onBack={() => go("root")}
-                              onClose={onClose}
-                              backRef={backRef}
-                            />
-                            {level === "products" && (
-                              <>
-                                {PRODUCT_CATEGORIES.map((cat) => (
-                                  <MenuGroup key={cat.label} label={cat.label} note={cat.menuNote} items={productFamily(cat)} pathname={pathname} onClose={onClose} />
-                                ))}
-                                <div className="mt-7" style={{ borderTop: "1px solid var(--ink-06)" }}>
-                                  <MobileResourcesRow pathname={pathname} onClose={onClose} />
-                                </div>
-                              </>
-                            )}
-                            {level === "applications" &&
-                              APPLICATION_GROUPS.map((group) => (
-                                <MenuGroup key={group.label} label={group.label} items={applicationGroup(group)} pathname={pathname} onClose={onClose} />
-                              ))}
-                            {level === "insights" && (
-                              <>
-                                <MenuCover pathname={pathname} onClose={onClose} />
-                                <div className="mt-6" style={{ borderTop: "1px solid var(--ink-06)" }}>
-                                  {NAV_SECTIONS.map((s) => (
-                                    <MobileSectionRow key={s.key} section={s} pathname={pathname} onClose={onClose} />
-                                  ))}
-                                </div>
-                              </>
-                            )}
-                          </div>
-                        )
-                      )}
-                    </LeavingInert>
-                  </motion.div>
-                </AnimatePresence>
+                {/* ── The two offices ─────────────────────── */}
+                {/* The phones from Studio's Site Settings (lib/site-settings.ts). */}
+                <RiseIn index={ROOT_SECTIONS.length + plainLinks.length} on={rise} className="mt-9">
+                  <div className="pb-2 text-[12px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--accent-text-lg)" }}>
+                    Call an office
+                  </div>
+                  {([["West", offices.west], ["East", offices.east]] as const).map(([name, office]) => (
+                    <a
+                      key={name}
+                      href={telHref(office.phone)}
+                      className="flex min-h-[60px] items-center gap-3.5 py-2 transition-opacity active:opacity-60"
+                      style={{ borderTop: "1px solid var(--ink-06)" }}
+                    >
+                      <span
+                        aria-hidden="true"
+                        className="grid h-10 w-10 flex-shrink-0 place-items-center rounded-full"
+                        style={{ background: "rgba(249,115,22,0.12)", color: "var(--accent-text-lg)" }}
+                      >
+                        <PhoneGlyph />
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block text-[16px] font-semibold leading-tight" style={{ color: "var(--text-primary)" }}>
+                          {name} · {office.phone}
+                        </span>
+                        <span className="mt-0.5 block text-[13px] leading-snug" style={{ color: "var(--ink-50)" }}>{office.place}</span>
+                      </span>
+                    </a>
+                  ))}
+                </RiseIn>
               </div>
             </div>
 

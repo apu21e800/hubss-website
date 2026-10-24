@@ -148,9 +148,88 @@ export const SUPERSEDED: Superseded[] = [
     from: "Both. In-person sessions are available coast to coast through our certified applicator network. Virtual sessions use Zoom or Teams. We mail sample kits before we connect.",
     to: "Both. In-person sessions are available across Canada through our certified installers. Virtual sessions use Zoom or Teams, and we mail the sample kit ahead.",
   },
+
+  // ── Posts (lib/blog.ts and the build's menu and search files read these
+  // through currentIn, currentBody and currentPlain: only in their own post)
+  // The parking lot guide, 24 Oct 2026. Vern, on the homepage card: "don't
+  // talk about re-striping. Choose totally different heading. No stripes".
+  // The title also said "thermoplastic" alone, which docs/GLOSSARY.md keeps
+  // for the hot-poured road paint. The address stays (labels change, URLs
+  // stay); the body paths are the positions the cleanup script checks.
+  {
+    doc: "blogpost-parking-lot-line-painting-vs-thermoplastic",
+    path: "title",
+    from: "When the lot is restriped, put these markings in thermoplastic",
+    to: "Which parking lot markings to put in preformed thermoplastic",
+  },
+  {
+    doc: "blogpost-parking-lot-line-painting-vs-thermoplastic",
+    path: "excerpt",
+    from: "Which parking lot markings to put in preformed thermoplastic while the lot is closed for restriping, and the lots that show them holding. PreMark for symbols and stop bars, TrafficPatternsXD for crosswalks.",
+    to: "PreMark for the symbols and stop bars, TrafficPatternsXD for the crosswalks, and the lots that show them holding.",
+  },
+  {
+    doc: "blogpost-parking-lot-line-painting-vs-thermoplastic",
+    path: "body[0].children[4].text",
+    from: ", and the Product Portfolio Book prints them as a 14-year-old entrance feature, still performing every day. If your parking lot line painting is booked, the lot will be closed in sections anyway, and that is the window to decide which markings go down in preformed thermoplastic.",
+    to: ", and the Product Portfolio Book prints them as a 14-year-old entrance feature, still performing every day. A lot's arrows, stop bars and accessible parking symbols can go down in preformed thermoplastic too.",
+  },
+  {
+    doc: "blogpost-parking-lot-line-painting-vs-thermoplastic",
+    path: "body[9].children[0].text",
+    from: "Writing it into the parking lot line painting contract",
+    to: "Writing it into the drawings and the tender",
+  },
+  {
+    doc: "blogpost-parking-lot-line-painting-vs-thermoplastic",
+    path: "body[10].children[0].text",
+    from: "Before the restripe is booked, mark up the layout drawing:",
+    to: "Before the work is booked, mark up the lot's layout drawing:",
+  },
 ];
 
-const byFrom = new Map(SUPERSEDED.map((s) => [s.from, s.to]));
+// The pages' lines are matched on their words alone; a post's only in that
+// post, so a line in one article can never rewrite another.
+const isPost = (s: Superseded) => s.doc.startsWith("blogpost-");
+const byFrom = new Map(SUPERSEDED.filter((s) => !isPost(s)).map((s) => [s.from, s.to]));
+const inDoc = new Map(SUPERSEDED.filter(isPost).map((s) => [`${s.doc}\n${s.from}`, s.to]));
+const docId = (id: string) => id.replace(/^drafts\./, "");
+
+/** current() for a post: its title, standfirst or a span of its body, matched only in that post. */
+export function currentIn<T extends string | null | undefined>(doc: string, value: T): T | string {
+  if (typeof value !== "string") return value;
+  const clean = stegaClean(value);
+  const id = docId(doc);
+  return inDoc.get(`${id}\n${clean}`) ?? inDoc.get(`${id}\n${clean.trim()}`) ?? value;
+}
+
+/** A post's body with each superseded span printed as its replacement (the marks and links stay). */
+export function currentBody<B>(doc: string, blocks: B[]): B[] {
+  return blocks.map((b) => {
+    const kids = (b as { children?: unknown }).children;
+    if (!Array.isArray(kids)) return b;
+    let changed = false;
+    const next = kids.map((k) => {
+      const text = (k as { text?: unknown } | null)?.text;
+      if (typeof text !== "string") return k;
+      const to = currentIn(doc, text);
+      if (to === text) return k;
+      changed = true;
+      return { ...(k as object), text: to };
+    });
+    return changed ? ({ ...(b as object), children: next } as B) : b;
+  });
+}
+
+/** A post's body as plain text (pt::text) with its superseded spans replaced: reading time, the product scan. */
+export function currentPlain(doc: string, text: string): string {
+  const id = docId(doc);
+  let out = text;
+  for (const s of SUPERSEDED) {
+    if (s.doc === id && s.path.startsWith("body") && out.includes(s.from)) out = out.split(s.from).join(s.to);
+  }
+  return out;
+}
 
 /**
  * The line as the site says it now: a Studio value that is still one of the

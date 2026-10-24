@@ -21,6 +21,7 @@ import { createClient } from "@sanity/client";
 import { config as loadDotenv } from "dotenv";
 import { FIELD_NOTE_TYPES } from "../lib/field-notes-taxonomy";
 import { inferCategory } from "../lib/blog-taxonomy";
+import { currentIn } from "../lib/copy-superseded";
 
 const ROOT = process.cwd();
 loadDotenv({ path: path.join(ROOT, ".env.local"), quiet: true });
@@ -55,8 +56,8 @@ async function main() {
     out.push({
       _id: r._id,
       slug,
-      title: r.title.trim(),
-      excerpt: (r.excerpt ?? "").trim().slice(0, 140),
+      title: String(currentIn(r._id, r.title)).trim(),
+      excerpt: String(currentIn(r._id, r.excerpt) ?? "").trim().slice(0, 140),
       type: r.category && types.has(r.category) ? r.category : inferCategory(slug, r.title),
       keywords: (r.keywords ?? []).filter((k): k is string => typeof k === "string" && k.trim() !== ""),
     });

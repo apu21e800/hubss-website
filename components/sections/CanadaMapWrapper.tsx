@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
-import { WORK_PHONE } from "@/components/sections/WorkShowcase";
 // Just the number, from its own generated file — importing it from
 // lib/map-projects.ts would drag the whole dataset into the phone bundle.
 
@@ -67,21 +66,24 @@ export default function CanadaMapWrapper() {
   // link to this page's #map counts as arriving.
   useEffect(() => {
     const onHash = () => { if (window.location.hash === "#map") setWanted(true); };
-    const onClick = (e: MouseEvent) => {
+    const toMap = (e: Event) => {
       const a = e.target instanceof Element ? e.target.closest("a[href]") : null;
-      if (!(a instanceof HTMLAnchorElement)) return;
-      // On a phone the hero's "See the work" opens the photographs, not the
-      // map (WorkShowcase.tsx); its "Open the map" is the tap that counts.
-      if (a.dataset.work === "showcase" && window.matchMedia(WORK_PHONE).matches) return;
+      if (!(a instanceof HTMLAnchorElement)) return false;
       const url = new URL(a.href, window.location.href);
-      if (url.hash === "#map" && url.pathname === window.location.pathname) setWanted(true);
+      return url.hash === "#map" && url.pathname === window.location.pathname;
     };
+    const onClick = (e: MouseEvent) => { if (toMap(e)) setWanted(true); };
+    // The finger lands a tenth of a second or so before the click: start
+    // fetching the map's code then (the same chunk next/dynamic loads).
+    const onDown = (e: PointerEvent) => { if (toMap(e)) void import("@/components/sections/CanadaMap"); };
     onHash();
     window.addEventListener("hashchange", onHash);
     document.addEventListener("click", onClick, true);
+    document.addEventListener("pointerdown", onDown, true);
     return () => {
       window.removeEventListener("hashchange", onHash);
       document.removeEventListener("click", onClick, true);
+      document.removeEventListener("pointerdown", onDown, true);
     };
   }, []);
 

@@ -33,7 +33,7 @@ import type { SanityClient } from "@sanity/client";
 import { getAllPosts } from "@/lib/blog";
 import { factsBlock, relatedPostLines } from "@/lib/field-note-facts";
 import { writeDraft, checkDraft, polishDraft, styleReport, contactLeft, withLeft, type Draft, type FactCheck, type StylePass } from "@/lib/field-note-drafter";
-import { hasContactAnyCase, stripContact } from "@/lib/style-lint";
+import { contactIssues, hasContactAnyCase, maskContact, stripContact } from "@/lib/style-lint";
 import { markdownToPortableText } from "@/lib/markdown-to-portable-text";
 import { emailEditors } from "@/lib/editor-mail";
 import { SITE } from "@/lib/social-library";
@@ -148,6 +148,7 @@ export const PROFILE_INSTRUCTIONS = [
   "If THE JOB is short, the article is short. Never pad it with general pavement writing, and never add a client, a date, a size, a colour, a cost or a reason THE JOB doesn't give.",
   "The headline names the place and the work in plain words, as a newspaper's local page would.",
   "Never print a phone number, an email or a street address from THE JOB: a customer's details stay off the site. Name the place by its town, and by its site only where THE JOB names one.",
+  "Never name a private homeowner or a family, even where THE JOB does: say \"a homeowner in Milton\". Name a business, school, city or agency only where THE JOB names it.",
 ].join("\n");
 
 /**
@@ -157,10 +158,10 @@ export const PROFILE_INSTRUCTIONS = [
  * of them holds the article for a person, whether or not the draft repeats
  * it (24 Oct 2026): it may say more about the customer than a rule can see.
  */
-export function jobPostText(doc: ProjectSource): { label: string; text: string }[] {
+export function jobPostText(doc: ProjectSource): { label: string; text: string; place?: boolean }[] {
   const photos = (doc.photos ?? []).filter((p) => p?.asset);
   return [
-    { label: "Job post, Where", text: doc.place?.trim() ?? "" },
+    { label: "Job post, Where", text: doc.place?.trim() ?? "", place: true },
     { label: "Job post, What was done", text: doc.note?.trim() ?? "" },
     { label: "Job post, The story", text: doc.writeUp?.trim() ?? "" },
     ...photos.flatMap((p, i) => [
@@ -248,8 +249,14 @@ export function buildProjectDocument(doc: ProjectSource, draft: Draft, check: Fa
   // reads them, so one with a contact detail in it is dropped.
   const phrases = [...new Set(draft.searchPhrases.map((p) => p?.trim()).filter((p): p is string => !!p && !hasContactAnyCase(p)))];
 
+  // The notes never quote a contact detail: they stay on the live post, in a
+  // dataset anyone can read (maskContact). The job's place is masked as a
+  // Where field is read, the rest as typed words.
+  const place = doc.place?.trim() ?? "";
+  const maskedPlace = place ? maskContact(place, { place: true }) : "";
+  const masked = (t: string) => maskContact(place && maskedPlace !== place ? t.split(place).join(maskedPlace) : t, { typed: true });
   const notes = [
-    `Written up by 21e8 on ${today.toISOString().slice(0, 10)} from the job photos post "${name}" (Studio → Job photos for social): its story, the crew's note, and the ${doc.system?.name ?? "system"} page's approved facts. Nothing else.`,
+    `Written up by 21e8 on ${today.toISOString().slice(0, 10)} from the job photos post "${masked(name)}" (Studio → Job photos for social): its story, the crew's note, and the ${doc.system?.name ?? "system"} page's approved facts. Nothing else.`,
     "",
     ready
       ? `SCHEDULED for ${torontoWhen(slot)}. To move it, change "Goes live at". The day after it is live, its social posts go out.`
@@ -258,7 +265,7 @@ export function buildProjectDocument(doc: ProjectSource, draft: Draft, check: Fa
     check.unsupported.length
       ? `FACT CHECK: ${check.unsupported.length} statement(s) the job's record and the Product Portfolio Book don't back up. Fix or remove them before it goes live:`
       : "FACT CHECK: every statement matches the job's record and the Product Portfolio Book.",
-    ...check.unsupported.map((u) => `- "${u.quote}": ${u.reason}`),
+    ...check.unsupported.map((u) => `- "${masked(u.quote)}": ${masked(u.reason)}`),
     "",
     ...(style ? [...styleReport(style, "before it goes live (Studio marks them in yellow too)"), ""] : []),
     first
@@ -266,7 +273,7 @@ export function buildProjectDocument(doc: ProjectSource, draft: Draft, check: Fa
       : "PHOTOS: the post had none with a file. Add a featured photo before it goes live.",
     "",
     "BASED ON:",
-    ...draft.factsUsed.map((f) => `- ${f}`),
+    ...draft.factsUsed.map((f) => `- ${masked(f)}`),
   ].join("\n");
 
   return {
@@ -341,7 +348,46 @@ export function toPublished(draft: ScheduledDraft, now: Date, liveDate?: string 
 // ── step 1: publish what is due ─────────────────────────────────────────────
 
 export interface Published { id: string; slug: string; title: string; notified: string[] }
-export interface PublishOutcome { published: Published[]; failed: { id: string; title: string; error: string }[] }
+export interface PublishOutcome {
+  published: Published[];
+  failed: { id: string; title: string; error: string }[];
+  /** Due, but showing a contact detail that isn't HUB's: switched off and the editors told (contactProblemsForLive). */
+  held: { id: string; title: string; where: string[]; notified: string[] }[];
+}
+
+type Block = { _type?: string; children?: { text?: string }[]; alt?: unknown; caption?: unknown; rows?: { cells?: unknown[] }[] };
+
+/**
+ * Where a scheduled draft shows a phone number, email or street address that
+ * isn't HUB's, read at the moment it would go live (the review of 24 Oct
+ * 2026: a person can add one after the checks, or release a held draft with
+ * a caption still to fix). The words are read as Claude's prose is; the
+ * photos' alt text and captions, the tags, the keywords and the URL as
+ * typed. Field names only, never the detail: they go into the notes and the
+ * email. Pure, for test:project-posts.
+ */
+export function contactProblemsForLive(draft: ScheduledDraft): string[] {
+  const where = new Set<string>();
+  const prose = (label: string, t: unknown) => { if (typeof t === "string" && contactIssues(t).length) where.add(label); };
+  const typed = (label: string, t: unknown) => { if (typeof t === "string" && hasContactAnyCase(t)) where.add(label); };
+  prose("the title", draft.title);
+  prose("the excerpt", draft.excerpt);
+  const seo = (draft.seo ?? {}) as { metaTitle?: unknown; metaDescription?: unknown };
+  prose("the search title", seo.metaTitle);
+  prose("the search description", seo.metaDescription);
+  const featured = (draft.featuredImage ?? {}) as { alt?: unknown; caption?: unknown };
+  typed("the featured photo's alt text", featured.alt);
+  typed("the featured photo's caption", featured.caption);
+  for (const b of (Array.isArray(draft.body) ? draft.body : []) as Block[]) {
+    if (b?._type === "block") prose("the body", (b.children ?? []).map((c) => c?.text ?? "").join(""));
+    else if (b?._type === "image") { typed("a photo's alt text", b.alt); typed("a photo's caption", b.caption); }
+    else if (b?._type === "table") for (const r of b.rows ?? []) for (const c of r?.cells ?? []) prose("a table", c);
+  }
+  for (const k of Array.isArray(draft.keywords) ? draft.keywords : []) typed("the keywords", k);
+  for (const t of Array.isArray(draft.tags) ? draft.tags : []) typed("the tags", t);
+  typed("the URL", draft.slug?.current);
+  return [...where];
+}
 
 /**
  * Publishes every scheduled draft whose time has come, one transaction each
@@ -350,7 +396,7 @@ export interface PublishOutcome { published: Published[]; failed: { id: string; 
  * the editors are told.
  */
 export async function publishDueDrafts(client: SanityClient, now = new Date()): Promise<PublishOutcome> {
-  const out: PublishOutcome = { published: [], failed: [] };
+  const out: PublishOutcome = { published: [], failed: [], held: [] };
   const due = await client.fetch<ScheduledDraft[]>(
     `*[_type == "blogPost" && _id in path("drafts.**") && scheduled == true && defined(scheduledFor) && dateTime(scheduledFor) <= dateTime($by)] | order(scheduledFor asc)`,
     { by: new Date(now.getTime() + DUE_GRACE_MS).toISOString() }
@@ -359,6 +405,11 @@ export async function publishDueDrafts(client: SanityClient, now = new Date()): 
     const title = draft.title?.trim() ?? "";
     const slug = draft.slug?.current?.trim() ?? "";
     const liveId = draft._id.replace(/^drafts\./, "");
+    const where = contactProblemsForLive(draft);
+    if (where.length) {
+      out.held.push(await holdForContact(client, draft, where, now));
+      continue;
+    }
     try {
       if (!title || !slug) throw new Error("it has no title or no URL slug");
       const [clash, live] = await Promise.all([
@@ -409,6 +460,42 @@ export async function publishDueDrafts(client: SanityClient, now = new Date()): 
     }
   }
   return out;
+}
+
+/**
+ * A due draft that shows a contact detail isn't published: "Scheduled" goes
+ * off (the time is kept), the notes say why in field names only, and the
+ * editors are told. If the switch can't be turned off, the draft still isn't
+ * published this run, and the next run checks it again.
+ */
+async function holdForContact(client: SanityClient, draft: ScheduledDraft, where: string[], now: Date): Promise<PublishOutcome["held"][number]> {
+  const title = draft.title?.trim() ?? "";
+  const liveId = draft._id.replace(/^drafts\./, "");
+  const fields = where.join(", ");
+  try {
+    await client
+      .patch(draft._id)
+      .set({
+        scheduled: false,
+        editorNotes: [`HELD on its day: it shows a phone number, email or street address that isn't HUB's (in ${fields}). It waits here until 21e8 has read it.`, draft.editorNotes?.trim() ?? ""].filter(Boolean).join("\n\n"),
+      })
+      .commit();
+  } catch (err) {
+    console.error(`[projects] ${draft._id}: couldn't switch it off after the contact check: ${errorText(err)}; not published this run`);
+  }
+  console.log(`[projects] held ${draft._id} at its time: a contact detail that isn't HUB's in ${fields}`);
+  const notified = await emailEditors(
+    `Held at its scheduled time: ${title || draft._id}`,
+    [
+      `"${title || draft._id}" was due on hubss.com at ${torontoWhen(String(draft.scheduledFor ?? now.toISOString()))}, but it now shows a phone number, email or street address that isn't HUB's, in ${fields}. Nothing is on the site: "Scheduled" is off and it waits in Studio → Blog posts.`,
+      "",
+      "Take the detail out and switch \"Scheduled\" on, and it goes at the next run. If it's meant to be there (a public place, or the owner agreed), press Publish in Studio.",
+      "",
+      `Open it: ${studioLink(liveId)}`,
+    ].join("\n"),
+    "projects"
+  );
+  return { id: draft._id, title, where, notified };
 }
 
 // ── step 2: write the next article ──────────────────────────────────────────

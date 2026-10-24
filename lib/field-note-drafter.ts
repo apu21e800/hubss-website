@@ -25,7 +25,7 @@
  */
 
 import Anthropic from "@anthropic-ai/sdk";
-import { contactIssues, flagSentences, keepsFacts, PRODUCT_NAMES, type FlagOptions, type StyleRule } from "@/lib/style-lint";
+import { contactIssues, flagSentences, keepsFacts, maskContact, PRODUCT_NAMES, type FlagOptions, type StyleRule } from "@/lib/style-lint";
 import { GLOSSARY_FOR_WRITERS } from "@/lib/glossary";
 
 /** Override with BLOG_DRAFT_MODEL; the default is the model the repo already used. */
@@ -216,9 +216,10 @@ export interface StylePass {
   flagged: number;
   /**
    * The sentences that still do, for a person to fix. `contact`: it shows a
-   * phone number, email or street address that isn't HUB's (lib/style-lint.ts).
+   * phone number, email or street address that isn't HUB's (lib/style-lint.ts);
+   * `place`: it is a job post's Where, read for a house number at its start.
    */
-  left: { label: string; sentence: string; problems: string[]; contact?: true }[];
+  left: { label: string; sentence: string; problems: string[]; contact?: true; place?: true }[];
   /** Why the rewrite didn't happen, when it didn't. */
   error?: string;
 }
@@ -314,16 +315,17 @@ export async function styleRewrite(pieces: CopyPiece[], opts: { model: string; s
  * them, never through the rewrite (a job post's place, story and captions; a
  * photo's alt text): each one that shows a phone number, email or street
  * address that isn't HUB's becomes a line for a person to read, as a
- * sentence the rewrite couldn't fix does. One line per text.
+ * sentence the rewrite couldn't fix does. Read as typed (any case, any house
+ * number; `place` for a job post's Where). One line per text.
  */
-export function contactLeft(pieces: { label: string; text?: string | null }[]): StylePass["left"] {
+export function contactLeft(pieces: { label: string; text?: string | null; place?: boolean }[]): StylePass["left"] {
   const seen = new Set<string>();
-  return pieces.flatMap(({ label, text }) => {
+  return pieces.flatMap(({ label, text, place }) => {
     const t = text?.trim() ?? "";
-    const issues = contactIssues(t);
+    const issues = contactIssues(t, { typed: true, place });
     if (!issues.length || seen.has(t)) return [];
     seen.add(t);
-    return [{ label, sentence: t, problems: [...new Set(issues.map((i) => i.message))], contact: true as const }];
+    return [{ label, sentence: t, problems: [...new Set(issues.map((i) => i.message))], contact: true as const, ...(place ? { place: true as const } : {}) }];
   });
 }
 
@@ -348,7 +350,9 @@ export function styleReport(style: StylePass, fix: string): string[] {
     style.left.some((l) => l.contact)
       ? `STYLE CHECK: ${style.left.length} line(s) still break the house style or show a phone number, email or street address that isn't HUB's.${why} Fix them ${fix}:`
       : `STYLE CHECK: ${style.left.length} sentence(s) still have an em dash or another break from the house style.${why} Fix them ${fix}:`,
-    ...style.left.map((l) => `- ${l.label}: "${l.sentence}" ${l.problems.join(" ")}`),
+    // The detail itself is never quoted: the notes and the Sent to Buffer
+    // records live in a dataset anyone can read (maskContact).
+    ...style.left.map((l) => `- ${l.label}: "${maskContact(l.sentence, { typed: l.contact === true, place: l.place === true })}" ${l.problems.join(" ")}`),
   ];
 }
 

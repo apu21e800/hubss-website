@@ -15,6 +15,7 @@ import assert from "node:assert/strict";
 import { contactLeft, withLeft } from "../lib/field-note-drafter";
 import {
   buildProjectDocument,
+  contactProblemsForLive,
   jobName,
   jobPostText,
   jobRecord,
@@ -228,8 +229,8 @@ check("held, however clean the draft and the fact check", () => {
 check("the notes say what to take out", () => {
   assert.match(held.editorNotes, /^HELD/m);
   assert.match(held.editorNotes, /phone number, email or street address that isn't HUB's/);
-  assert.match(held.editorNotes, /- Job post, Where: "1234 Main Street, Milton, Ontario" A street address or postal code/);
-  assert.match(held.editorNotes, /- Job post, photo 1 caption: "Call the owner on 905-555-0123 for a visit" A phone number/);
+  assert.match(held.editorNotes, /- Job post, Where: "\[address\], Milton, Ontario" A street address or postal code/);
+  assert.match(held.editorNotes, /- Job post, photo 1 caption: "Call the owner on \[phone number\] for a visit" A phone number/);
 });
 check("the slug never carries an address or a phone number", () => {
   assert.equal(slugSource({ title: "A stamped driveway at 1234 Main Street in Milton", slug: "stamped-driveway-at-1234-main-street-milton" }), "A stamped driveway at in Milton");
@@ -242,6 +243,40 @@ check("a search phrase with a contact detail is dropped", () => {
   assert.deepEqual(d.keywords, ["stamped driveway milton"]);
 });
 check("the drafter is told to leave them out", () => assert.match(PROFILE_INSTRUCTIONS, /Never print a phone number, an email or a street address from THE JOB/));
+
+console.log("Read as typed, masked, and checked again on its day (24 Oct 2026 review)");
+const lowercase: ProjectSource = { ...source, photos: [{ asset: "image-aaa-2400x1800-jpg", alt: "the smiths' driveway", caption: "at 1234 main st, the week it was done" }] };
+check("a lower-case address in a caption holds the article", () => {
+  const lines = contactLeft(jobPostText(lowercase));
+  assert.deepEqual(lines.map((l) => l.label), ["Job post, photo 1 caption"]);
+  assert.equal(readyToGo(clean, withLeft({ text: {}, flagged: 0, left: [] }, lines)), false);
+});
+check("a Where that starts with a house number holds it", () =>
+  assert.deepEqual(contactLeft(jobPostText({ ...source, place: "1234 Lakeshore, Toronto" })).map((l) => l.label), ["Job post, Where"]));
+check("the notes never quote the detail", () => {
+  for (const d of ["1234 Main Street", "905-555-0123"]) assert.equal(held.editorNotes.includes(d), false, d);
+  assert.match(held.editorNotes, /Job post, Where: "\[address\], Milton, Ontario"/);
+  assert.match(held.editorNotes, /Call the owner on \[phone number\] for a visit/);
+});
+check("the drafter is told not to name a homeowner", () => assert.match(PROFILE_INSTRUCTIONS, /Never name a private homeowner or a family/));
+check("a clean scheduled draft shows nothing on its day", () => assert.deepEqual(contactProblemsForLive(doc), []));
+check("a phone number added to the body is found on its day", () => {
+  const edited = { ...doc, body: [...doc.body, { _type: "block", _key: "x", style: "normal", markDefs: [], children: [{ _type: "span", _key: "xs", text: "Thanks to the owner, 905-555-0123.", marks: [] }] }] };
+  assert.deepEqual(contactProblemsForLive(edited), ["the body"]);
+});
+check("a caption left with an address is found, read as typed", () => {
+  const body = doc.body.map((b) => (b._type === "image" ? { ...b, caption: "the smiths at 1234 main st" } : b));
+  assert.deepEqual(contactProblemsForLive({ ...doc, body }), ["a photo's caption"]);
+});
+check("so are the featured photo, the keywords and the URL", () => {
+  const found = contactProblemsForLive({
+    ...doc,
+    featuredImage: { ...doc.featuredImage, alt: "Driveway at 1234 Main Street" },
+    keywords: ["905-555-0123"],
+    slug: { current: "driveway-1234-main-st" },
+  });
+  assert.deepEqual(found, ["the featured photo's alt text", "the keywords", "the URL"]);
+});
 
 console.log(failures ? `\n${failures} failing` : "\nall passing");
 process.exit(failures ? 1 : 0);

@@ -60,6 +60,7 @@ import { bufferChannels, createBufferDraft, socialAutoQueue, type BufferChannel 
 import { emailEditors as sendToEditors } from "@/lib/editor-mail";
 import { writeSocialCopy, polishSocialCopy, type SocialCopy, type SocialSource } from "@/lib/social-drafter";
 import { contactLeft, styleReport, withLeft } from "@/lib/field-note-drafter";
+import { maskContact } from "@/lib/style-lint";
 import { isSanityImage } from "@/lib/photos";
 import { PRODUCT_CATALOGUE } from "@/lib/product-catalogue";
 import { getMergedProduct } from "@/lib/products.server";
@@ -195,6 +196,23 @@ function fieldItem(doc: FieldDoc): SocialItem | null {
     imageAlt: doc.alt ?? title,
     imageHotspot: doc.hotspot,
   };
+}
+
+/**
+ * What a social post sends out as a person typed it: the photo's
+ * description (its alt text, else the title) on every stream, and a job
+ * photos post's own words, which may say more about the customer than a
+ * rule can see. contactLeft reads them as typed (24 Oct 2026). Pure, for
+ * test:social.
+ */
+export function typedSocialWords(item: Pick<SocialItem, "stream" | "title" | "imageAlt"> & { source: Pick<SocialSource, "text"> }): { label: string; text?: string | null; place?: boolean }[] {
+  const field = item.stream === "From the field";
+  return [
+    { label: "Photo description", text: item.imageAlt ?? item.title },
+    // A job post's title is "<system> in <Where>": its Where is read as one
+    // ("1234 Lakeshore, Toronto" has no street type to give it away).
+    ...(field ? [{ label: "Job post, Where", text: item.title.replace(/^.*? in /, ""), place: true }, { label: "Job post", text: item.source.text }] : []),
+  ];
 }
 
 /** A library item, with the Studio hero photo of its page when there is one (what the page shows). */
@@ -363,10 +381,7 @@ async function draftItem(
   // more about the customer than the rule can see. A phone number, email or
   // street address that isn't HUB's in any of them keeps the posts as drafts
   // (24 Oct 2026; contactLeft in lib/field-note-drafter.ts).
-  const style = withLeft(polished.style, contactLeft([
-    { label: "Photo description", text: item.imageAlt ?? item.title },
-    ...(item.stream === "From the field" ? [{ label: "Job post", text: item.source.text }] : []),
-  ]));
+  const style = withLeft(polished.style, contactLeft(typedSocialWords(item)));
   // Queued only when the switch is on (the default) AND nothing is left for
   // a person to fix: an em dash the rewrite couldn't take out never posts by
   // itself.
@@ -395,7 +410,11 @@ async function draftItem(
       _id: logId,
       _type: "socialLog",
       slug: item.key,
-      title: item.title,
+      // A job post's title carries its place ("StreetBond in <Where>"): never
+      // a customer's address in a record anyone can read.
+      title: item.stream === "From the field"
+        ? item.title.replace(/^(.*? in )(.*)$/, (_, head: string, where: string) => head + maskContact(where, { place: true }))
+        : maskContact(item.title, { typed: true }),
       source: item.stream,
       createdAt: now.toISOString(),
       drafts: [],

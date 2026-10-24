@@ -426,10 +426,18 @@ for (const [re, say] of FILLER) {
 // HUB's own lines only. A Job photos post's story, note or captions can carry
 // a customer's phone number or house address, and a Projects article and its
 // social posts go out by themselves: one of these holds them for a person to
-// read (24 Oct 2026, Square One's rule of 20 Oct). Read on the raw text, since
-// mask() blanks emails. A numbered street ("152 Street and 72 Avenue", a
-// Surrey crossing) is not an address; a house number with a street name is
-// ("1234 Main Street", "12345 72 Avenue"). Names are not caught.
+// read (24 Oct 2026, Square One's rule of 20 Oct). Two readings:
+//  - Claude's prose (the default): a house number with a capitalised street
+//    name ("1234 Main Street", "12345 72 Avenue"); a year or a one-digit
+//    count before a street name counts only after "at", "on", "lives".
+//  - Words a person typed (`typed`: a job post, a photo's alt text or
+//    caption, a slug): any case, any house number, rural routes, PO boxes,
+//    French addresses, "5678 Highway 7" and seven-digit local numbers,
+//    because those go on the page as typed and a miss costs more than a
+//    false hold (the review of 24 Oct 2026).
+// In both, a numbered crossing ("152 Street and 72 Avenue", a Surrey
+// intersection) and a highway's number ("Highway 401 and King Street") are
+// not addresses. Names are not caught.
 
 /**
  * HUB's published office lines, as lib/site-settings.ts has them
@@ -449,90 +457,169 @@ const PHONE_IN_COPY = new RegExp(
   `(^|[^\\d\\-\\u2010-\\u2015])((?:\\+?1${PHONE_SEP})?(?:\\(\\s*\\d{3}\\s*\\)|\\d{3})${PHONE_SEP}\\d{3}${PHONE_SEP}\\d{4})(?!\\d)`,
   "g"
 );
+// A local number with no area code ("555-0123"), typed words only: in prose
+// "300-1200 vehicles" would read as one. Never inside a longer number.
+const LOCAL_PHONE = new RegExp("(^|[^\\d\\-\\u2010-\\u2015.])(\\d{3}[\\s.\\-\\u2010-\\u2015]\\d{4})(?![\\d\\-\\u2010-\\u2015])", "g");
 const EMAIL_IN_COPY = /[^\s<>()"',;:[\]]+@[^\s<>()"',;:[\]]+\.[a-z]{2,}/gi;
 const POSTCODE_IN_COPY = /\b[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d\b/gi;
 const STREET_TYPES =
   "Street|St|Avenue|Ave|Road|Rd|Drive|Dr|Crescent|Cres|Court|Ct|Crt|Place|Pl|Boulevard|Blvd|Way|Lane|Ln|Highway|Hwy|Terrace|Trail|Parkway|Pkwy|Circle|Close|Gate|Row|Line|Sideroad";
-const STREET_IN_COPY = new RegExp(
-  `\\b(?:\\d{1,5}[-\\u2010-\\u2013])?\\d{1,6}[A-Z]?\\s+(?:[A-Z][\\w'\\u2019.-]*|\\d{1,3}(?:st|nd|rd|th)?)(?:\\s+[A-Z0-9][\\w'\\u2019.-]*){0,2}\\s+(?:${STREET_TYPES})\\b\\.?`,
-  "g"
+/** Street names people type that prose rarely puts after a number. */
+const TYPED_STREET_TYPES = `${STREET_TYPES}|Bay|Hill|Heights|Broadway|Square|Mews|Grove|Landing|Ridge`;
+const streetRule = (types: string, flags: string) =>
+  new RegExp(
+    `\\b(?:\\d{1,5}[-\\u2010-\\u2013])?\\d{1,6}[A-Z]?\\s+(?:[A-Z][\\w'\\u2019.-]*|\\d{1,3}(?:st|nd|rd|th)?)(?:\\s+[A-Z0-9][\\w'\\u2019.-]*){0,2}\\s+(?:${types})\\b\\.?`,
+    flags
+  );
+const STREET_IN_COPY = streetRule(STREET_TYPES, "g");
+const STREET_ANY_CASE = streetRule(TYPED_STREET_TYPES, "gi");
+/** Typed words only: "5678 Highway 7", "12345 Regional Road 25", "2345 Concession 6". */
+const ROUTE_ADDRESS = /\b\d{1,6}\s+(?:Highway|Hwy\.?|Regional\s+R(?:oa)?d\.?|County\s+R(?:oa)?d\.?|Line|Side\s?road|Concession|Conc\.)\s+\d{1,4}\b/gi;
+/** Typed words only: a rural route or a post office box. */
+const RURAL_OR_BOX = /\b(?:R\.?\s?R\.?\s*#?\s*\d{1,3}|Rural\s+Route\s*#?\s*\d{1,3}|(?:P\.?\s?O\.?\s*)?Box\s*#?\s*\d{1,6})\b/gi;
+/** Typed words only: a French address ("1234 rue Sainte-Catherine", "56, chemin du Lac"). */
+// "avenue" and "place" only with French words after them: "72 Avenue in
+// Surrey" is a numbered street, "3 place settings" a count.
+const FRENCH_ADDRESS = new RegExp(
+  "\\b\\d{1,6}\\s*,?\\s+(?:rue|chemin|boulevard|boul\\.?|route|rang|mont\\u00e9e|montee|all\\u00e9e|allee|promenade|impasse|(?:avenue|av\\.|place)\\s+(?:du|de|des|d'|d\\u2019|de\\s+la))(?:\\s+[A-Za-z\\u00c0-\\u00ff'\\u2019-]+){1,3}",
+  "gi"
 );
+/** The Where field only: a house number at its start ("1234 Lakeshore, Toronto"). */
+const LEADING_NUMBER = new RegExp("^\\s*(\\d{1,6}[A-Za-z]?\\s+[A-Za-z\\u00c0-\\u00ff][\\w'\\u2019.-]*)");
 
 const PHONE_SAY = `A phone number that isn't one of HUB's office lines (${HUB_PHONES.join(", ")}): take it out.`;
 const EMAIL_SAY = `An email address that isn't HUB's (@${HUB_EMAIL_DOMAIN}): take it out.`;
 const ADDRESS_SAY = "A street address or postal code: take it out, unless it's a public place or the owner has agreed to it being on the site.";
 
-/** Phone numbers, emails, street addresses and postal codes that aren't HUB's own, in reading order. */
-export function contactIssues(text: string): StyleIssue[] {
+export interface ContactOptions {
+  /** Words a person typed: any case, any house number, the extra forms above. */
+  typed?: boolean;
+  /** The Where field of a job post: a house number at its start counts too. */
+  place?: boolean;
+}
+
+/** Phone numbers, emails, street addresses and postal codes that aren't HUB's own, in reading order, one per detail. */
+export function contactIssues(text: string, opts: ContactOptions = {}): StyleIssue[] {
   if (!text || !text.trim()) return [];
-  const out: StyleIssue[] = [];
+  const typed = opts.typed === true || opts.place === true;
+  const found: StyleIssue[] = [];
   const add = (index: number, length: number, message: string) =>
-    out.push({ rule: "contact", message, excerpt: excerptAt(text, index, length), index, length });
-  // Web addresses blanked, same length, for the number rules: a photo's file
-  // name on Sanity's CDN ("...a3fe670359-1200x900.jpg") reads as a phone
-  // number otherwise. Emails are read on the raw text (mailto: links too).
+    found.push({ rule: "contact", message, excerpt: excerptAt(text, index, length), index, length });
+  // Web addresses blanked, same length: a photo's file name on Sanity's CDN
+  // ("...a3fe670359-1200x900.jpg") reads as a phone number otherwise, and a
+  // medium.com/@name link as an email. mailto: links stay readable.
   const plain = text.replace(/\b(?:https?:\/\/|www\.)[^\s<>"')\]]+/gi, (m) => " ".repeat(m.length));
+  const full: [number, number][] = [];
   for (const m of plain.matchAll(PHONE_IN_COPY)) {
-    if (!HUB_DIGITS.has(digitsOf(m[2]))) add((m.index ?? 0) + m[1].length, m[2].length, PHONE_SAY);
+    const at = (m.index ?? 0) + m[1].length;
+    full.push([at, at + m[2].length]);
+    if (!HUB_DIGITS.has(digitsOf(m[2]))) add(at, m[2].length, PHONE_SAY);
   }
-  for (const m of text.matchAll(EMAIL_IN_COPY)) {
+  if (typed) {
+    // Never the last seven digits of a full number, HUB's own included.
+    for (const m of plain.matchAll(LOCAL_PHONE)) {
+      const at = (m.index ?? 0) + m[1].length;
+      if (!full.some(([a, b]) => at < b && a < at + m[2].length)) add(at, m[2].length, PHONE_SAY);
+    }
+  }
+  for (const m of plain.matchAll(EMAIL_IN_COPY)) {
     const domain = (m[0].split("@").pop() ?? "").toLowerCase();
     if (domain !== HUB_EMAIL_DOMAIN && !domain.endsWith(`.${HUB_EMAIL_DOMAIN}`)) add(m.index ?? 0, m[0].length, EMAIL_SAY);
   }
   for (const m of plain.matchAll(POSTCODE_IN_COPY)) add(m.index ?? 0, m[0].length, ADDRESS_SAY);
-  for (const m of plain.matchAll(STREET_IN_COPY)) {
+  for (const m of plain.matchAll(typed ? STREET_ANY_CASE : STREET_IN_COPY)) {
     const at = m.index ?? 0;
-    if (isAddress(m[0], text.slice(Math.max(0, at - 16), at))) add(at, m[0].length, ADDRESS_SAY);
+    if (isAddress(m[0], text.slice(Math.max(0, at - 16), at), typed)) add(at, m[0].length, ADDRESS_SAY);
   }
-  return out.sort((a, b) => a.index - b.index);
+  if (typed) {
+    for (const re of [ROUTE_ADDRESS, RURAL_OR_BOX, FRENCH_ADDRESS]) for (const m of plain.matchAll(re)) add(m.index ?? 0, m[0].length, ADDRESS_SAY);
+  }
+  if (opts.place) {
+    const m = LEADING_NUMBER.exec(plain);
+    if (m) add(m[0].length - m[1].length, m[1].length, ADDRESS_SAY);
+  }
+  // One issue per detail: a postcode inside an address, or a local number
+  // inside a full one, is the same detail.
+  const out: StyleIssue[] = [];
+  for (const i of found.sort((a, b) => a.index - b.index || b.length - a.length)) {
+    if (out.some((o) => i.index < o.index + o.length && o.index < i.index + i.length)) continue;
+    out.push(i);
+  }
+  return out;
 }
 
-const CIVIC = new RegExp("^(?:\\d{1,5}[-\\u2010-\\u2013])?(\\d+)");
+const CIVIC = new RegExp("^(?:\\d{1,5}[-\\u2010-\\u2013])?(\\d+)[A-Za-z]?\\s+(\\S+)");
+/** The words a numbered street is named by ("152 Street", "72 Avenue", "No. 3 Road", "15 Sideroad"). */
+const NUMBERED_STREET = new Set(["street", "st", "avenue", "ave", "road", "rd", "line", "sideroad", "concession", "highway", "hwy"]);
+const NOT_A_NAME = new Set(["and", "or", "near", "at", "to", "from", "of", "by", "with", "between", "past", "off", "on", "the", "for", "in", "into", "over", "under", "a", "an", "per", "each", "every", "along", "across"]);
+/** A distance or a size, not a house number: "35 km Spirit Trail", "480 square metres". */
+const UNITS = new Set(["km", "m", "metres", "meters", "kilometres", "kilometers", "ft", "feet", "foot", "mm", "cm", "mi", "miles", "sq", "square", "years", "days", "hours", "minutes"]);
 
 /**
- * A street match that is an address. "2024 Boundary Road Pump Station", "In
- * 2023 Fraser Highway crews ...": a year, not a house number; "the 3 Main
- * Street crossings", a count. A year-like or one-digit number counts only
- * when the words before it say address ("at 2041 Main Street", "lives at 5
- * Oak Street").
+ * A street match that is an address. Never a numbered crossing ("152 Street
+ * and 72 Avenue": the word after the number names a numbered street), a
+ * highway's number ("Highway 401 and King Street"), a distance ("35 km
+ * Spirit Trail") or a phrase with a joining word in it. In prose, also never a year ("2024 Boundary Road Pump
+ * Station", "In 2023 Fraser Highway crews") or a one-digit count ("the 3 Main
+ * Street crossings"), unless the words before it say address ("at 2041 Main
+ * Street", "lives at 5 Oak Street"). Typed words drop that last exception:
+ * there any house number counts.
  */
-function isAddress(match: string, before: string): boolean {
-  const civic = CIVIC.exec(match)?.[1] ?? "";
+function isAddress(match: string, before: string, typed = false): boolean {
+  const m = CIVIC.exec(match);
+  const civic = m?.[1] ?? "";
+  const first = (m?.[2] ?? "").toLowerCase().replace(/[.,]+$/, "");
+  if (NUMBERED_STREET.has(first) || UNITS.has(first)) return false;
+  // The words between the number and the street type: a joining word among
+  // them ("30 intersections along the Highway") means it's a sentence, not
+  // an address.
+  const words = match.trim().split(/\s+/).slice(1, -1).map((w) => w.toLowerCase().replace(/[.,]+$/, ""));
+  if (words.some((w) => NOT_A_NAME.has(w))) return false;
+  if (/\b(?:highway|hwy\.?|route|road|rd\.?|line|concession|exit)\s*#?\s*$/i.test(before)) return false;
+  if (typed) return true;
   const addressWord = /\b(?:at|on|is|address|lives?|home|house|unit|suite)\s*[:#]?\s*$/i.test(before);
   return !((civic.length === 1 || /^(?:19|20)\d\d$/.test(civic)) && !addressWord);
 }
 
-const STREET_ANY_CASE = new RegExp(STREET_IN_COPY.source, "gi");
-
 /**
  * Whether words written without their capitals (a slug, a search phrase)
  * carry a phone number, email or street address that isn't HUB's: the
- * contact rule, with hyphens read as spaces and the street rule in any case.
+ * typed reading, with hyphens and underscores read as spaces.
  */
 export function hasContactAnyCase(text: string): boolean {
   const words = text.replace(/[-_/]+/g, " ");
-  if (contactIssues(text).length || contactIssues(words).length) return true;
-  for (const m of words.matchAll(STREET_ANY_CASE)) {
-    const at = m.index ?? 0;
-    if (isAddress(m[0], words.slice(Math.max(0, at - 16), at))) return true;
-  }
-  return false;
+  return contactIssues(text, { typed: true }).length > 0 || contactIssues(words, { typed: true }).length > 0;
 }
 
 /**
  * The text with every phone number, email and address that isn't HUB's
- * taken out: what a slug is made from, so a held article's address can't
- * reach its URL while a person fixes the title.
+ * taken out, read as typed: what a slug is made from, so a held article's
+ * address can't reach its URL while a person fixes the title.
  */
 export function stripContact(text: string): string {
   let out = "";
   let from = 0;
-  for (const i of contactIssues(text)) {
-    if (i.index < from) continue;
+  for (const i of contactIssues(text, { typed: true })) {
     out += text.slice(from, i.index);
     from = i.index + i.length;
   }
   return (out + text.slice(from)).replace(/\s{2,}/g, " ").trim();
+}
+
+/**
+ * The text with each contact detail replaced by what it is ("[phone
+ * number]", "[email]", "[address]"): what the editor's notes and the Sent to
+ * Buffer records quote, since Sanity's dataset can be read by anyone and the
+ * detail must not live on there. `typed` as contactIssues takes it.
+ */
+export function maskContact(text: string, opts: ContactOptions = {}): string {
+  let out = "";
+  let from = 0;
+  for (const i of contactIssues(text, opts)) {
+    out += text.slice(from, i.index) + (i.message === PHONE_SAY ? "[phone number]" : i.message === EMAIL_SAY ? "[email]" : "[address]");
+    from = i.index + i.length;
+  }
+  return out + text.slice(from);
 }
 
 /**
@@ -542,8 +629,9 @@ export function stripContact(text: string): string {
  * contact rule out: Studio runs it only where words arrive unreviewed (blog
  * posts and Job photos, sanity/schemas/_shared.ts), not on the pages and
  * products the office writes, where a public place's address is fine.
+ * `typed` and `place` read it as contactIssues does.
  */
-export function lintCopy(text: string, opts: { contact?: boolean } = {}): StyleIssue[] {
+export function lintCopy(text: string, opts: { contact?: boolean } & ContactOptions = {}): StyleIssue[] {
   if (!text || !text.trim()) return [];
   const prose = mask(text);
   const issues: StyleIssue[] = [];
@@ -565,7 +653,7 @@ export function lintCopy(text: string, opts: { contact?: boolean } = {}): StyleI
       issues.push({ rule: check.rule, message: hit.message, excerpt: excerptAt(text, index, length), index, length });
     }
   }
-  if (opts.contact !== false) issues.push(...contactIssues(text));
+  if (opts.contact !== false) issues.push(...contactIssues(text, { typed: opts.typed, place: opts.place }));
   // One warning per problem: "isn't just a task. It's ..." is one reversal, not two.
   const out: StyleIssue[] = [];
   for (const i of issues.sort((a, b) => a.index - b.index || b.length - a.length)) {
@@ -722,6 +810,8 @@ export interface FlagOptions {
   ignore?: StyleRule[];
   /** false leaves the contact rule out, as lintCopy's option does. */
   contact?: boolean;
+  /** Read the contact rule as for words a person typed (contactIssues). */
+  typed?: boolean;
 }
 
 const ABBREVIATION = /(?:\b(?:e\.g|i\.e|etc|vs|approx|St|Mr|Mrs|Ms|Dr|No|Inc|Ltd|Co|a\.m|p\.m)\.)["'’”)\]]*$/i;
@@ -758,7 +848,7 @@ export function flagSentences(text: string, options: FlagOptions = {}): FlaggedS
   const headings = options.headings ?? "none";
   const ignore = new Set(options.ignore ?? []);
   const keep = (i: StyleIssue) => !ignore.has(i.rule);
-  const issues = lintCopy(text, { contact: options.contact }).filter(keep);
+  const issues = lintCopy(text, { contact: options.contact, typed: options.typed }).filter(keep);
 
   // Segments: lines, or table cells, without their leading markdown marks.
   const segments: [number, number, boolean][] = [];

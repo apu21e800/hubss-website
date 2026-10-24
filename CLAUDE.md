@@ -712,35 +712,58 @@ own and emailing BLOG_DRAFT_NOTIFY through lib/editor-mail.ts):
 
 ## A customer's details hold the article (24 Oct 2026)
 Ported from Square One (its rule of 20 Oct 2026) before more job posts become
-articles that go live by themselves. lib/style-lint.ts `contactIssues` (rule
-`contact`): a phone number that isn't one of HUB's office lines (`HUB_PHONES`,
-kept equal to Site Settings by `npm run test:copy`), an email not at
-hubss.com, a Canadian postal code, or a house number with a street name
-("1234 Main Street"; a numbered crossing, a year or a count is not one). Web
-addresses are blanked first: a photo's file name on Sanity's CDN reads as a
-phone number otherwise.
+articles that go live by themselves, then tightened on the review of the same
+day. lib/style-lint.ts `contactIssues` (rule `contact`): a phone number that
+isn't one of HUB's office lines (`HUB_PHONES`, kept equal to Site Settings'
+code defaults by `npm run test:copy`; an office number changed only in Studio
+reads as someone else's, so the article waits), an email not at hubss.com, a
+Canadian postal code, a street address. Web addresses are blanked first (a
+CDN file name reads as a phone number, a medium.com/@ link as an email).
+Never an address: a numbered crossing ("152 Street and 72 Avenue"), a
+highway's number ("Highway 401 and King Street"), a distance ("35 km Spirit
+Trail"), a phrase with a joining word in it.
+- Two readings. Claude's prose (the default): a house number with a
+  capitalised street name, a year or one-digit count only after "at", "on",
+  "lives". Words a person typed (`typed`): any case, any house number, Bay or
+  Hill streets, "5678 Highway 7", RR and PO Box, French addresses, seven-digit
+  local numbers, and for a job post's Where (`place`) a house number at its
+  start. Typed text goes on the page as typed, so a miss costs more there
+  than a false hold.
 - Where it runs: every drafter's style pass (flagSentences: titles,
-  excerpts, bodies, social copy), and Studio's yellow warnings on blog posts
-  and Job photos only (sanity/schemas/_shared.ts `contactFor`); pages and
-  products keep a public place's address without a warning (`contact: false`).
+  excerpts, bodies, social copy) in the default reading; `contactLeft`
+  (lib/field-note-drafter.ts) reads a job post's words and a photo's
+  description as typed. Studio warns on blog posts (their photos' alt text and
+  captions as typed) and on Job photos (all as typed, Where with `place`), as
+  the run reads them; pages and products keep a public place's address
+  without a warning (sanity/schemas/_shared.ts `contactFor`).
 - A Projects article is held (`scheduled: false`) when one is left in the
-  draft OR is anywhere in its job post (the place, the crew's note, the story,
-  each photo's alt text and caption: `jobPostText` in lib/project-posts.ts),
-  since captions and alt text go on the page as typed. The notes and the
-  email say what to take out. The slug never carries one (`slugSource`), and
-  a keyword with one is dropped.
+  draft OR is anywhere in its job post (`jobPostText`). The slug never
+  carries one (`slugSource`), a keyword with one is dropped.
+- On its day, publishDueDrafts checks the draft again (`contactProblemsForLive`:
+  the words, every photo's alt text and caption, tags, keywords, the URL): a
+  detail added or left since is held there, "Scheduled" switched off, the
+  notes and Vern's email naming the fields. "Press Publish in Studio" if it is
+  meant to be there.
+- Never quoted: Sanity's dataset can be read by anyone, so the notes and the
+  Sent to Buffer records print [phone number], [email] or [address] in its
+  place (`maskContact` in styleReport, the notes, the log's title). Vern's
+  emails are private and say where.
 - Social posts wait as drafts in Buffer, whatever SOCIAL_AUTO_QUEUE says,
   when the copy, the photo's description or a job post's own words show one
-  (lib/social-pipeline.ts `draftItem`).
-- The writers are told to leave them out (VOICE, PROFILE_INSTRUCTIONS, the
-  social SYSTEM); the Job photos fields and docs/DOUG-PROJECT-POSTS.md tell
-  Doug the same.
-- Names are not caught: a client is named only where the job post names one.
+  (`typedSocialWords` in lib/social-pipeline.ts).
+- The writers are told to leave them out and never to name a private
+  homeowner, only the town (VOICE, PROFILE_INSTRUCTIONS, the social SYSTEM);
+  the Job photos fields and docs/DOUG-PROJECT-POSTS.md tell Doug the same.
+  Other names are not caught.
+- Not fixed here: a published Job photos post is itself readable through
+  Sanity's API, so what Doug types there is public data even before it is
+  an article. Photos' location data: the 40 newest originals carry none
+  (checked 24 Oct 2026); a phone upload has not been tested.
 - Measured against the live dataset (77 posts) and every lib text the
-  drafters read: five hits, all public places' street addresses (the
-  Brantford post's 407 Elgin Street, Tsain-Ko Centre's 5500 Sunshine Coast
-  Highway), none on HUB's own lines. `npm run test:copy` and
-  `npm run test:project-posts` cover it.
+  drafters read: five hits in each reading, all public places' street
+  addresses (the Brantford post's 407 Elgin Street, Tsain-Ko Centre's 5500
+  Sunshine Coast Highway), none on HUB's own lines. `npm run test:copy`,
+  `test:project-posts` and `test:social` cover it.
 
 ## Articles that earn attention, on time (15 Oct 2026)
 Vern: "writing smart blog posts that will capture real attention ... pair

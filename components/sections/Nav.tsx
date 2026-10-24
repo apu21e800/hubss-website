@@ -355,7 +355,18 @@ function GroupPicture({ label, compact = false }: { label: string; compact?: boo
   );
 }
 
-type MenuItem = { href: string; name: string; line?: string };
+type MenuItem = {
+  href: string;
+  name: string;
+  line?: string;
+  /** A picture for a destination beside the products (the pattern gallery): it draws as a card of its own, not one more product row. */
+  gallery?: string;
+};
+
+// The pattern gallery's picture in the menus: a herringbone template drawing,
+// square, as the search overlay already bakes it at every build
+// (scripts/gen-search-images.ts, 256px WebP, about 2 KB).
+const GALLERY_THUMB = "/images/search/thumbs/pattern/herringbone-256.webp";
 
 function productFamily(cat: (typeof PRODUCT_CATEGORIES)[number]): MenuItem[] {
   const items: MenuItem[] = cat.slugs.flatMap((sl) => {
@@ -364,7 +375,7 @@ function productFamily(cat: (typeof PRODUCT_CATEGORIES)[number]): MenuItem[] {
   });
   // The one structural extra a column may carry: a real secondary
   // destination (the pattern gallery under Stamped Asphalt).
-  if (cat.secondary) items.push({ href: cat.secondary.href, name: cat.secondary.label, line: cat.secondary.menuLine });
+  if (cat.secondary) items.push({ href: cat.secondary.href, name: cat.secondary.label, line: cat.secondary.menuLine, gallery: GALLERY_THUMB });
   return items;
 }
 
@@ -388,8 +399,9 @@ function MenuColumn({ label, items }: { label: string; items: MenuItem[] }) {
         <GroupPicture label={label} />
       </div>
       <MenuLabel className="flex items-end">{label}</MenuLabel>
+      <div>
       <ul>
-        {items.map((it) => (
+        {items.filter((it) => !it.gallery).map((it) => (
           <li key={it.href}>
             <Link prefetch={false}
               href={it.href}
@@ -416,7 +428,56 @@ function MenuColumn({ label, items }: { label: string; items: MenuItem[] }) {
           </li>
         ))}
       </ul>
+      {items.filter((it) => it.gallery).map((it) => <GalleryCard key={it.href} item={it} />)}
+      </div>
     </div>
+  );
+}
+
+// The pattern gallery under StreetPrint (23 Oct 2026; Vern: "make pattern
+// gallery button stand out from the streetprint button above it"). It is a
+// place to browse, not one more product, so it is a card of its own: a
+// template drawing beside the name, the name in the accent, the arrow
+// always showing. `compact` is the phone menu's size.
+function GalleryCard({ item, compact = false, current, onClick }: { item: MenuItem; compact?: boolean; current?: "page"; onClick?: () => void }) {
+  const size = compact ? 48 : 56;
+  return (
+    <Link prefetch={false}
+      href={item.href}
+      onClick={onClick}
+      aria-current={current}
+      data-tap="44"
+      className={`card group flex items-center gap-3 ${compact ? "mb-2 mt-1 p-2" : "mt-3 p-2.5"}`}
+      style={{ background: "var(--ink-025)" }}
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={item.gallery}
+        alt=""
+        width={size}
+        height={size}
+        loading="lazy"
+        decoding="async"
+        // pattern-sheet: the white line art turns charcoal on a light theme,
+        // as every other template drawing on the site does.
+        className="pattern-sheet flex-shrink-0 rounded-lg"
+        style={{ width: size, height: size, border: "1px solid var(--ink-08)" }}
+      />
+      <span className="min-w-0 flex-1">
+        <span className="flex items-center gap-1.5 text-[15.5px] font-semibold leading-snug" style={{ color: "var(--accent-text)" }}>
+          {item.name}
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.25} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
+            className="flex-shrink-0 transition-transform group-hover:translate-x-0.5" style={{ transitionDuration: "var(--dur-1)" }}>
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </span>
+        {item.line && (
+          <span className="mt-0.5 block text-[13px] leading-snug text-pretty" style={{ color: "var(--ink-58)" }}>
+            {item.line}
+          </span>
+        )}
+      </span>
+    </Link>
   );
 }
 
@@ -821,7 +882,7 @@ function MobileFamily({
             className="overflow-hidden"
           >
             <ul className="pb-2 pl-[110px]">
-              {items.map((it) => (
+              {items.filter((it) => !it.gallery).map((it) => (
                 <li key={it.href}>
                   <Link prefetch={false}
                     href={it.href}
@@ -839,6 +900,11 @@ function MobileFamily({
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 18l6-6-6-6" />
                     </svg>
                   </Link>
+                </li>
+              ))}
+              {items.filter((it) => it.gallery).map((it) => (
+                <li key={it.href}>
+                  <GalleryCard item={it} compact current={currentPage(pathname, it.href)} onClick={onClose} />
                 </li>
               ))}
             </ul>

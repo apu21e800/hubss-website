@@ -1,11 +1,15 @@
+import type { ReactNode } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { PATTERN_TEMPLATES, patternSrc } from "@/lib/pattern-templates";
 
 /**
- * PavingPatterns — StreetPrint product-page preview of the real stamping
- * templates (dimensioned CAD sheets, white-on-charcoal). Full set lives
- * at /patterns. Server component — no client JS.
+ * PavingPatterns: a product page's preview of the real stamping templates
+ * (dimensioned CAD sheets, white-on-charcoal). The full set lives at
+ * /patterns. StreetPrint's page, and since 23 Oct 2026 TrafficPatternsXD's
+ * (Vern: "templates apply to TPXD too"; its Design Manual stamps the same
+ * six patterns with its own wire-rope grids), each with its own intro and
+ * link label. Server component, no client JS.
  */
 
 const FEATURED = [
@@ -17,7 +21,7 @@ const FEATURED = [
   "tiles-8in",
 ];
 
-export default function PavingPatterns() {
+export default function PavingPatterns({ intro, moreLabel = "All 16 templates" }: { intro?: ReactNode; moreLabel?: string } = {}) {
   const featured = FEATURED.map((slug) => PATTERN_TEMPLATES.find((t) => t.slug === slug)!).filter(Boolean);
   return (
     <section className="mt-14">
@@ -26,13 +30,17 @@ export default function PavingPatterns() {
           Standard templates
         </h2>
         <Link href="/patterns" className="link-arrow flex-shrink-0">
-          All 16 templates
+          {moreLabel}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
         </Link>
       </div>
       <p className="text-sm leading-relaxed mb-8 max-w-2xl" style={{ color: "var(--text-secondary)" }}>
-        The stamping templates as installed, dimensioned to the inch. Field patterns combine
-        with border courses; fully custom designs cut to order.
+        {intro ?? (
+          <>
+            The stamping templates as installed, dimensioned to the inch. Field patterns combine
+            with border courses; fully custom designs cut to order.
+          </>
+        )}
       </p>
 
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">

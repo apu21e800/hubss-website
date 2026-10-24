@@ -133,7 +133,14 @@ export default function PatternsPage() {
           <p className="text-base sm:text-lg max-w-2xl leading-relaxed" style={{ color: "var(--text-secondary)" }}>
             Sixteen stamping templates, shown as installed, dimensioned to the inch. Flexible
             templates press the pattern into warm asphalt; StreetBond colour locks it in. Every
-            field pattern combines with every border course, plus fully custom designs.
+            field pattern combines with every border course, plus fully custom designs.{" "}
+            {/* 23 Oct 2026 (Vern: "templates apply to TPXD too"): its Design
+                Manual stamps herringbone, offset brick, slate, cobble and tile
+                with its own wire-rope grids. */}
+            <Link href="/products/traffic-patterns-xd" className="underline underline-offset-2" style={{ color: "var(--text-primary)" }}>
+              TrafficPatternsXD
+            </Link>{" "}
+            is stamped in many of the same patterns, with its own wire-rope grids.
           </p>
         </div>
       </section>

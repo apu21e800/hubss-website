@@ -60,11 +60,25 @@ export default function CanadaMapWrapper() {
   // "See the work" and a search result send the visitor to #map. On a phone
   // that used to land on the "Open the map" card, a second tap short of the
   // map itself (phone review, 17 Oct 2026): arriving at #map opens it.
+  // Next's <Link> goes to a hash on the same page with pushState, which fires
+  // no hashchange, so "See the work" (and a map result in search, opened on
+  // the homepage) still left a phone on the card (24 Oct 2026): a tap on any
+  // link to this page's #map counts as arriving.
   useEffect(() => {
     const onHash = () => { if (window.location.hash === "#map") setWanted(true); };
+    const onClick = (e: MouseEvent) => {
+      const a = e.target instanceof Element ? e.target.closest("a[href]") : null;
+      if (!(a instanceof HTMLAnchorElement)) return;
+      const url = new URL(a.href, window.location.href);
+      if (url.hash === "#map" && url.pathname === window.location.pathname) setWanted(true);
+    };
     onHash();
     window.addEventListener("hashchange", onHash);
-    return () => window.removeEventListener("hashchange", onHash);
+    document.addEventListener("click", onClick, true);
+    return () => {
+      window.removeEventListener("hashchange", onHash);
+      document.removeEventListener("click", onClick, true);
+    };
   }, []);
 
   useEffect(() => {

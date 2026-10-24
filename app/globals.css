@@ -1076,6 +1076,13 @@ p {
   min-height: 40px;
   padding: 0 1rem;
 }
+/* The touch floor holds for the small size too: on a phone the reader's
+   orange button was 40px (24 Oct 2026 tap audit). */
+@media (pointer: coarse) {
+  .btn-sm {
+    min-height: 44px;
+  }
+}
 .btn-block {
   display: flex;
   width: 100%;

@@ -161,11 +161,16 @@ export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Prop
   // under the one you are in, sitting on the row's hairline. The active tab
   // is told by weight and the rule, not by a coloured fill (Vern, 21 Sep: the
   // solid orange pill was "too loud").
+  // The space between tabs is their own padding, not a gap, so a tap
+  // anywhere along the row lands on a tab: "All" was 19px wide with 24px of
+  // nothing either side (24 Oct 2026 tap audit). The row's -mx-3 keeps the
+  // first name on the page's edge; the rule spans the name, inside the
+  // padding, and inside the tab, where the row's scrolling can't clip it.
   const Tab = ({ label, count, active, onClick }: { label: string; count?: number; active: boolean; onClick: () => void }) => (
     <button
       onClick={onClick}
       aria-pressed={active}
-      className="relative inline-flex min-h-[48px] flex-shrink-0 items-center gap-1.5 whitespace-nowrap text-[15px] transition-colors hover:text-[var(--text-primary)]"
+      className="relative inline-flex min-h-[48px] flex-shrink-0 items-center gap-1.5 whitespace-nowrap px-3 text-[15px] transition-colors hover:text-[var(--text-primary)]"
       style={{ color: active ? "var(--text-primary)" : "var(--text-muted)", fontWeight: active ? 700 : 600 }}
     >
       {label}
@@ -176,7 +181,7 @@ export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Prop
       )}
       <span
         aria-hidden="true"
-        className="absolute inset-x-0 -bottom-px h-[2px] rounded-full transition-opacity"
+        className="absolute inset-x-3 bottom-0 h-[2px] rounded-full transition-opacity"
         style={{ background: "var(--gradient-brand)", opacity: active ? 1 : 0 }}
       />
     </button>
@@ -209,7 +214,7 @@ export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Prop
           <div
             role="group"
             aria-label="Sections"
-            className="-mb-px flex items-end gap-6 overflow-x-auto scrollbar-none"
+            className="-mx-3 -mb-px flex items-end overflow-x-auto scrollbar-none"
             style={{ WebkitOverflowScrolling: "touch", msOverflowStyle: "none", scrollbarWidth: "none" }}
           >
             <Tab label="All" count={byProduct.length} active={section === "all"} onClick={() => { setSection("all"); pushParams({ section: "all" }); }} />
@@ -228,8 +233,11 @@ export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Prop
             })}
           </div>
 
+          {/* On a phone the search takes its own row and the two menus share
+              the next, half each (24 Oct 2026: they stacked one under the
+              other at two different widths). */}
           <div className="flex flex-wrap items-center gap-2.5 pb-3">
-            <div className="relative min-w-[190px] flex-1 lg:w-60 lg:flex-none">
+            <div className="relative basis-full sm:basis-auto min-w-[190px] flex-1 lg:w-60 lg:flex-none">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: "var(--text-hint)" }} />
               <input
                 type="text"
@@ -254,7 +262,7 @@ export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Prop
 
             {/* Product is its own axis, not another tab. Every system is here —
                 the old row showed the top four and dropped the rest. */}
-            <div className="relative">
+            <div className="relative flex-1 min-w-0 sm:flex-none">
               <select
                 value={product}
                 onChange={(e) => { setProduct(e.target.value); pushParams({ product: e.target.value }); }}
@@ -270,7 +278,7 @@ export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Prop
               <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none" style={{ color: "var(--text-hint)" }} />
             </div>
 
-            <div className="relative">
+            <div className="relative flex-1 min-w-0 sm:flex-none">
               <select
                 value={sort}
                 onChange={(e) => { setSort(e.target.value as typeof sort); pushParams({ sort: e.target.value }); }}

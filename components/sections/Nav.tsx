@@ -938,9 +938,16 @@ function useWarmHome() {
   }, [router]);
 }
 function toTopOfHome(reduce: boolean | null) {
-  if (window.location.hash) window.history.replaceState(window.history.state, "", "/");
+  dropHash();
   if (reduce) scrollWindowInstantly(0);
   else window.scrollTo({ top: 0, behavior: "smooth" });
+}
+// The address loses its #map, and Next is told: replaceState with null (Next
+// copies its own state in). Handed Next's own state object, the call looks
+// like Next's and the router is not told, so it still thought it was at
+// /#map and the next "See the work" went nowhere (review, 24 Oct 2026).
+function dropHash() {
+  if (window.location.hash) window.history.replaceState(null, "", window.location.pathname + window.location.search);
 }
 
 // ── Phone menu ───────────────────────────────────────────────────────
@@ -1343,7 +1350,7 @@ function MobileOverlay({ isOpen, scrolled, onClose, onSearchOpen }: { isOpen: bo
                 onClick={(e) => {
                   if (pathname === "/") {
                     e.preventDefault();
-                    if (window.location.hash) window.history.replaceState(window.history.state, "", "/");
+                    dropHash();
                     restoreTo.current = 0;
                   }
                   onClose();

@@ -17,6 +17,7 @@ import PreviewTools from "@/components/PreviewTools";
 import { SiteSettingsProvider } from "@/components/SiteSettingsProvider";
 import NavigationProgress from "@/components/NavigationProgress";
 import SkipLink from "@/components/SkipLink";
+import HistoryScroll from "@/components/HistoryScroll";
 import { getSiteSettings } from "@/lib/sanity.queries";
 
 // Runs before first paint. Order: ?theme= in the URL (persisted, so a link
@@ -128,6 +129,8 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       </head>
       <body className={`${geist.variable} ${inter.variable} antialiased`}>
         <SkipLink />
+        {/* Back and Forward land in one step, not a glide. */}
+        <HistoryScroll />
         {/* Resource hints — React 19 hoists these into <head>. The landing
             page's map pulls style + tiles + glyphs from CARTO; warming the
             connection here shaves the first paint of the section. */}

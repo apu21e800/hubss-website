@@ -322,7 +322,8 @@ function Sheet({ project, onClose, onPrev, onNext, position }: {
       // into a glide from the top of the page back down to the map after
       // every close, as it did for the phone menu (phone QA, 24 Oct 2026).
       scrollWindowInstantly(scrollY);
-      returnTo?.focus?.();
+      // preventScroll: the scroll is put back above; focus must not move it.
+      returnTo?.focus?.({ preventScroll: true });
     };
   }, [dismiss]);
 

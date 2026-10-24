@@ -1148,11 +1148,29 @@ function MobileOverlay({ isOpen, scrolled, onClose, onSearchOpen }: { isOpen: bo
   const [level, setLevel] = useState<MenuLevel>("root");
   const [dir, setDir] = useState<0 | 1 | -1>(0);
   const cameFrom = useRef<MenuLevel>("root");
+  // For 550ms after a level is chosen, nothing in the menu takes a tap: a
+  // double tap landed its second tap on whatever slid under the finger, the
+  // cover story under "Projects" or "Menu" under "Products" (independent
+  // review, 24 Oct 2026). The slide takes 380ms; 550 also covers a slow
+  // double click (Windows' default is 500ms), and is shorter than anyone
+  // takes to read the new screen and choose.
+  const [settling, setSettling] = useState(false);
+  const settleTimer = useRef<number | null>(null);
+  const settle = (on: boolean) => {
+    if (settleTimer.current !== null) window.clearTimeout(settleTimer.current);
+    settleTimer.current = on ? window.setTimeout(() => setSettling(false), 550) : null;
+    setSettling(on);
+  };
   useEffect(() => {
-    if (!isOpen) { setLevel("root"); setDir(0); cameFrom.current = "root"; }
+    if (!isOpen) { setLevel("root"); setDir(0); cameFrom.current = "root"; settle(false); }
+    // settle only touches a ref and a state setter.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
+  useEffect(() => () => { if (settleTimer.current !== null) window.clearTimeout(settleTimer.current); }, []);
 
   const go = (next: MenuLevel) => {
+    if (settling || next === level) return;
+    settle(true);
     // Each level starts at its top; the one leaving slides from there too.
     // scrollTop, not scrollTo with a behavior: neither box sets
     // scroll-behavior, so this is instant in every browser.
@@ -1216,10 +1234,14 @@ function MobileOverlay({ isOpen, scrolled, onClose, onSearchOpen }: { isOpen: bo
   useEffect(() => {
     if (!isOpen) return;
     const prev = document.activeElement as HTMLElement | null;
-    const t = setTimeout(() => overlayRef.current?.focus(), 60);
+    const t = setTimeout(() => overlayRef.current?.focus({ preventScroll: true }), 60);
     return () => {
       clearTimeout(t);
-      prev?.focus();
+      // preventScroll: the button sits in the sticky bar, inside html's
+      // 84px scroll-padding-top, so a plain focus() scrolled the page up to
+      // centre it, 428px on a 390x844 phone, every close (independent
+      // review, 24 Oct 2026).
+      prev?.focus({ preventScroll: true });
     };
   }, [isOpen]);
 
@@ -1328,7 +1350,7 @@ function MobileOverlay({ isOpen, scrolled, onClose, onSearchOpen }: { isOpen: bo
             variants={reduce ? SHEET_FADE : SHEET_WIPE}
           >
             <div ref={bodyRef} className="drawer-body flex-1 overflow-y-auto overscroll-contain" style={{ WebkitOverflowScrolling: "touch" } as React.CSSProperties}>
-              <div className="relative px-4 sm:px-6 pb-10 max-w-2xl mx-auto">
+              <div className="relative px-4 sm:px-6 pb-10 max-w-2xl mx-auto" style={settling ? { pointerEvents: "none" } : undefined}>
                 <AnimatePresence mode="popLayout" initial={false} custom={dir}>
                   <motion.div
                     key={level}
@@ -1615,7 +1637,9 @@ export default function Nav() {
     const handler = (e: KeyboardEvent) => {
       if (e.key !== "Escape") return;
       setOpenPanel(null);
-      trigger.current?.focus();
+      // preventScroll: the trigger is in the sticky bar (see the phone menu's
+      // focus restore).
+      trigger.current?.focus({ preventScroll: true });
     };
     document.addEventListener("keydown", handler);
     return () => document.removeEventListener("keydown", handler);

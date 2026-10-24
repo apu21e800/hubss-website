@@ -234,9 +234,11 @@ async function notify(
     check.unsupported.length
       ? `Fact check: ${check.unsupported.length} statement(s) to check before publishing. They're listed in the draft's "Notes for the editor".`
       : "Fact check: every statement about HUB matches the Product Portfolio Book.",
-    style.left.length
-      ? `Style check: ${style.left.length} sentence(s) still have an em dash or another machine tell. They're listed in the notes and marked in yellow in Studio.`
-      : "Style check: no em dashes or machine tells.",
+    style.left.some((l) => l.contact)
+      ? `Style check: ${style.left.length} line(s) to fix, including a phone number, email or street address that isn't HUB's. They're listed in the notes and marked in yellow in Studio.`
+      : style.left.length
+        ? `Style check: ${style.left.length} sentence(s) still have an em dash or another machine tell. They're listed in the notes and marked in yellow in Studio.`
+        : "Style check: no em dashes or machine tells.",
     "",
     `Open it: ${link}`,
   ].join("\n");

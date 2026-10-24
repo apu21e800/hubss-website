@@ -59,7 +59,7 @@ import { getAllPosts, getPost } from "@/lib/blog";
 import { bufferChannels, createBufferDraft, socialAutoQueue, type BufferChannel } from "@/lib/buffer";
 import { emailEditors as sendToEditors } from "@/lib/editor-mail";
 import { writeSocialCopy, polishSocialCopy, type SocialCopy, type SocialSource } from "@/lib/social-drafter";
-import { styleReport } from "@/lib/field-note-drafter";
+import { contactLeft, styleReport, withLeft } from "@/lib/field-note-drafter";
 import { isSanityImage } from "@/lib/photos";
 import { PRODUCT_CATALOGUE } from "@/lib/product-catalogue";
 import { getMergedProduct } from "@/lib/products.server";
@@ -356,7 +356,17 @@ async function draftItem(
     short: utmLink(item, "threads"),
   };
   const written = await writeSocialCopy(item.source, links);
-  const { copy, style } = await polishSocialCopy(written);
+  const polished = await polishSocialCopy(written);
+  const copy = polished.copy;
+  // What goes out as typed: the photo's description (its alt text, else the
+  // title) on every stream, and a job photos post's own words, which may say
+  // more about the customer than the rule can see. A phone number, email or
+  // street address that isn't HUB's in any of them keeps the posts as drafts
+  // (24 Oct 2026; contactLeft in lib/field-note-drafter.ts).
+  const style = withLeft(polished.style, contactLeft([
+    { label: "Photo description", text: item.imageAlt ?? item.title },
+    ...(item.stream === "From the field" ? [{ label: "Job post", text: item.source.text }] : []),
+  ]));
   // Queued only when the switch is on (the default) AND nothing is left for
   // a person to fix: an em dash the rewrite couldn't take out never posts by
   // itself.

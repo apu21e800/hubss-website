@@ -316,6 +316,52 @@ async function selfTest() {
   const fb = flagSentences(`Book your team a session ${String.fromCodePoint(0x1f6a7)}`, { ignore: ["emoji"] });
   expect("ignored rules are ignored", fb.length === 0, fb);
 
+  // Contact details (24 Oct 2026): HUB's own lines pass, anyone else's is held.
+  const { contactIssues, stripContact, hasContactAnyCase, HUB_PHONES } = lint;
+  const contact = (t, opts) => lintCopy(t, opts).filter((i) => i.rule === "contact").map((i) => t.slice(i.index, i.index + i.length));
+  const HUB_OWN = [
+    "Call 604-309-8212 or 416-540-9287, or email info@hubss.com or doug.bain@hubss.com.",
+    "(604) 309-8212, or [email us](mailto:cleve.stordy@hubss.com).",
+    "Call 1-416-540-9287 to book.",
+    "We stamped the crosswalk at 152 Street and 72 Avenue in Surrey.",
+    "In 2023 Fraser Highway crews added a crosswalk.",
+    "Between 300-1200 vehicles a day use it.",
+    "Public art \u00b7 2024 Commercial Drive, Vancouver.",
+    "We stamped the 3 Main Street crossings in a week.",
+    "Highway 401 and King Street West, Toronto.",
+    "XDG-10-100 is 8\u2019W x 14\u2019L; 1,000+ projects coast to coast since 1999.",
+    "The photo: https://cdn.sanity.io/images/9dbro2m1/production/02ae81c199eb25441a4f4786353255f2c47cb1d5-1184x864.jpg",
+  ];
+  for (const t of HUB_OWN) expect(`contact rule flagged: ${t}`, contact(t).length === 0, contact(t));
+  const NOT_HUBS = [
+    ["The owner, at 604-555-0199, asked for brick.", "604-555-0199"],
+    ["Call (416) 555 0199 for photos.", "(416) 555 0199"],
+    ["Write to jane.doe@example.com for photos.", "jane.doe@example.com"],
+    ["[Email her](mailto:jane@shaw.ca) for the photos.", "jane@shaw.ca"],
+    ["The driveway at 1234 Main Street in Milton.", "1234 Main Street"],
+    ["A home at 12345 72 Avenue in Surrey.", "12345 72 Avenue"],
+    ["A lane off 4421 W 10th Ave.", "4421 W 10th Ave."],
+    ["A farm at 8125 Fifth Line, Milton.", "8125 Fifth Line"],
+    ["The driveway at 2041 Main Street.", "2041 Main Street."],
+    ["The owner lives at 5 Oak Street.", "5 Oak Street."],
+    ["The postal code is L9T 2X5.", "L9T 2X5"],
+  ];
+  for (const [t, found] of NOT_HUBS) expect(`contact rule missed: ${t}`, contact(t).length === 1 && contact(t)[0] === found, contact(t));
+  expect("contact: false leaves the rule out", contact("The owner, at 604-555-0199.", { contact: false }).length === 0, null);
+  expect("flagSentences reads the contact rule", flagSentences("A good job. The owner, at 604-555-0199, asked for brick.").length === 1, null);
+  expect("stripContact takes the address out", stripContact("Stamped driveway at 1234 Main Street in Milton") === "Stamped driveway at in Milton", stripContact("Stamped driveway at 1234 Main Street in Milton"));
+  expect("a slug with an address", hasContactAnyCase("stamped-driveway-1234-main-street-milton"), null);
+  expect("a slug with a phone number", hasContactAnyCase("call-604-555-0199"), null);
+  for (const slug of ["kitchener-veterans-crosswalk-2024", "streetbond-osoyoos-british-columbia", "2024-commercial-drive-vancouver", "the-3-main-street-crossings"])
+    expect(`a clean slug read as an address: ${slug}`, !hasContactAnyCase(slug), null);
+  expect("contact messages have no dash", contactIssues("604-555-0199, jane@shaw.ca, 1234 Main Street").every((i) => !i.message.includes(EM)), null);
+  // HUB's lines are Site Settings' own (lib/site-settings.ts); a change there must reach the rule.
+  const { DEFAULT_SITE_SETTINGS } = await import("../lib/site-settings.ts");
+  const officePhones = [DEFAULT_SITE_SETTINGS.offices.west.phone, DEFAULT_SITE_SETTINGS.offices.east.phone].sort();
+  expect("HUB_PHONES are Site Settings' office lines", JSON.stringify([...HUB_PHONES].sort()) === JSON.stringify(officePhones), { HUB_PHONES, officePhones });
+  for (const o of Object.values(DEFAULT_SITE_SETTINGS.offices))
+    expect(`office email flagged: ${o.email}`, contact(`Email ${o.email} or call ${o.phone}.`).length === 0, contact(`Email ${o.email} or call ${o.phone}.`));
+
   // A rewrite must keep the facts.
   expect("keepsFacts: same facts", keepsFacts(`Lasts 10${EN}20 years ${EM} StreetPrint.`, `StreetPrint lasts 10 to 20 years.`), null);
   expect("keepsFacts: lost a number", !keepsFacts("Cures in 45 minutes.", "Cures fast."), null);

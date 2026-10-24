@@ -19,13 +19,23 @@ import { describeIssue, lintCopy, lintHeading, type StyleIssue } from "../../lib
 const warnings = (issues: StyleIssue[], path?: Path): ValidationError[] =>
   issues.map((i) => ({ message: describeIssue(i), ...(path ? { path } : {}) }));
 
-const checkCopy: CustomValidator<string | undefined> = (value) => {
-  const found = typeof value === "string" ? warnings(lintCopy(value)) : [];
+/**
+ * Where a phone number, email or street address that isn't HUB's is warned
+ * about (the contact rule, 24 Oct 2026): blog posts and Job photos, where
+ * words arrive from a phone or a drafter and can go out without a second
+ * read. Not the pages and products the office writes, where a public
+ * place's address is fine.
+ */
+const CONTACT_CHECKED = new Set(["blogPost", "fieldPost"]);
+const contactFor = (context: { document?: { _type?: string } }) => ({ contact: CONTACT_CHECKED.has(context.document?._type ?? "") });
+
+const checkCopy: CustomValidator<string | undefined> = (value, context) => {
+  const found = typeof value === "string" ? warnings(lintCopy(value, contactFor(context))) : [];
   return found.length ? found : true;
 };
 
-const checkHeading: CustomValidator<string | undefined> = (value) => {
-  const found = typeof value === "string" ? warnings([...lintCopy(value), ...lintHeading(value)]) : [];
+const checkHeading: CustomValidator<string | undefined> = (value, context) => {
+  const found = typeof value === "string" ? warnings([...lintCopy(value, contactFor(context)), ...lintHeading(value)]) : [];
   return found.length ? found : true;
 };
 
@@ -37,8 +47,9 @@ const isObj = (v: unknown): v is Obj => typeof v === "object" && v !== null;
  * photo alt text and captions, table cells. Each warning points at its block,
  * so Studio marks the paragraph that needs the fix.
  */
-const checkBody: CustomValidator<unknown[] | undefined> = (value) => {
+const checkBody: CustomValidator<unknown[] | undefined> = (value, context) => {
   if (!Array.isArray(value)) return true;
+  const opts = contactFor(context);
   const found: ValidationError[] = [];
   for (const block of value) {
     if (!isObj(block) || typeof block._key !== "string") continue;
@@ -46,18 +57,18 @@ const checkBody: CustomValidator<unknown[] | undefined> = (value) => {
     if (block._type === "block" && Array.isArray(block.children)) {
       const text = block.children.map((c) => (isObj(c) && typeof c.text === "string" ? c.text : "")).join("");
       const heading = typeof block.style === "string" && /^h[1-6]$/.test(block.style);
-      found.push(...warnings([...lintCopy(text), ...(heading ? lintHeading(text) : [])], at));
+      found.push(...warnings([...lintCopy(text, opts), ...(heading ? lintHeading(text) : [])], at));
     } else if (block._type === "image") {
       for (const f of ["alt", "caption"]) {
         const text = block[f];
-        if (typeof text === "string") found.push(...warnings(lintCopy(text), [...at, f]));
+        if (typeof text === "string") found.push(...warnings(lintCopy(text, opts), [...at, f]));
       }
     } else if (block._type === "table" && Array.isArray(block.rows)) {
       for (const row of block.rows) {
         if (!isObj(row) || typeof row._key !== "string" || !Array.isArray(row.cells)) continue;
         const rowKey = row._key;
         row.cells.forEach((cell, n) => {
-          if (typeof cell === "string") found.push(...warnings(lintCopy(cell), [...at, "rows", { _key: rowKey }, "cells", n]));
+          if (typeof cell === "string") found.push(...warnings(lintCopy(cell, opts), [...at, "rows", { _key: rowKey }, "cells", n]));
         });
       }
     }

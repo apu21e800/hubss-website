@@ -104,6 +104,7 @@ export type StyleRule =
   | "product-book"
   | "insights"
   | "glossary"
+  | "contact"
   | "title-case";
 
 export interface StyleIssue {
@@ -421,11 +422,128 @@ for (const [re, say] of FILLER) {
   });
 }
 
+// ── contact details ─────────────────────────────────────────────────────────
+// HUB's own lines only. A Job photos post's story, note or captions can carry
+// a customer's phone number or house address, and a Projects article and its
+// social posts go out by themselves: one of these holds them for a person to
+// read (24 Oct 2026, Square One's rule of 20 Oct). Read on the raw text, since
+// mask() blanks emails. A numbered street ("152 Street and 72 Avenue", a
+// Surrey crossing) is not an address; a house number with a street name is
+// ("1234 Main Street", "12345 72 Avenue"). Names are not caught.
+
+/**
+ * HUB's published office lines, as lib/site-settings.ts has them
+ * (DEFAULT_SITE_SETTINGS; `npm run test:copy` fails if the two disagree).
+ * Copied, not imported: this file stays dependency-free for Studio.
+ */
+export const HUB_PHONES: readonly string[] = ["604-309-8212", "416-540-9287"];
+/** HUB's own email domain: the offices' addresses and info@. */
+export const HUB_EMAIL_DOMAIN = "hubss.com";
+
+const digitsOf = (s: string) => s.replace(/\D/g, "").replace(/^1(?=\d{10}$)/, "");
+const HUB_DIGITS = new Set(HUB_PHONES.map(digitsOf));
+const PHONE_SEP = "\\s*[\\s.\\-\\u2010-\\u2015/]?\\s*";
+// No lookbehind (older Safari, see the header): the character before the
+// number is group 1 and is stepped over.
+const PHONE_IN_COPY = new RegExp(
+  `(^|[^\\d\\-\\u2010-\\u2015])((?:\\+?1${PHONE_SEP})?(?:\\(\\s*\\d{3}\\s*\\)|\\d{3})${PHONE_SEP}\\d{3}${PHONE_SEP}\\d{4})(?!\\d)`,
+  "g"
+);
+const EMAIL_IN_COPY = /[^\s<>()"',;:[\]]+@[^\s<>()"',;:[\]]+\.[a-z]{2,}/gi;
+const POSTCODE_IN_COPY = /\b[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d\b/gi;
+const STREET_TYPES =
+  "Street|St|Avenue|Ave|Road|Rd|Drive|Dr|Crescent|Cres|Court|Ct|Crt|Place|Pl|Boulevard|Blvd|Way|Lane|Ln|Highway|Hwy|Terrace|Trail|Parkway|Pkwy|Circle|Close|Gate|Row|Line|Sideroad";
+const STREET_IN_COPY = new RegExp(
+  `\\b(?:\\d{1,5}[-\\u2010-\\u2013])?\\d{1,6}[A-Z]?\\s+(?:[A-Z][\\w'\\u2019.-]*|\\d{1,3}(?:st|nd|rd|th)?)(?:\\s+[A-Z0-9][\\w'\\u2019.-]*){0,2}\\s+(?:${STREET_TYPES})\\b\\.?`,
+  "g"
+);
+
+const PHONE_SAY = `A phone number that isn't one of HUB's office lines (${HUB_PHONES.join(", ")}): take it out.`;
+const EMAIL_SAY = `An email address that isn't HUB's (@${HUB_EMAIL_DOMAIN}): take it out.`;
+const ADDRESS_SAY = "A street address or postal code: take it out, unless it's a public place or the owner has agreed to it being on the site.";
+
+/** Phone numbers, emails, street addresses and postal codes that aren't HUB's own, in reading order. */
+export function contactIssues(text: string): StyleIssue[] {
+  if (!text || !text.trim()) return [];
+  const out: StyleIssue[] = [];
+  const add = (index: number, length: number, message: string) =>
+    out.push({ rule: "contact", message, excerpt: excerptAt(text, index, length), index, length });
+  // Web addresses blanked, same length, for the number rules: a photo's file
+  // name on Sanity's CDN ("...a3fe670359-1200x900.jpg") reads as a phone
+  // number otherwise. Emails are read on the raw text (mailto: links too).
+  const plain = text.replace(/\b(?:https?:\/\/|www\.)[^\s<>"')\]]+/gi, (m) => " ".repeat(m.length));
+  for (const m of plain.matchAll(PHONE_IN_COPY)) {
+    if (!HUB_DIGITS.has(digitsOf(m[2]))) add((m.index ?? 0) + m[1].length, m[2].length, PHONE_SAY);
+  }
+  for (const m of text.matchAll(EMAIL_IN_COPY)) {
+    const domain = (m[0].split("@").pop() ?? "").toLowerCase();
+    if (domain !== HUB_EMAIL_DOMAIN && !domain.endsWith(`.${HUB_EMAIL_DOMAIN}`)) add(m.index ?? 0, m[0].length, EMAIL_SAY);
+  }
+  for (const m of plain.matchAll(POSTCODE_IN_COPY)) add(m.index ?? 0, m[0].length, ADDRESS_SAY);
+  for (const m of plain.matchAll(STREET_IN_COPY)) {
+    const at = m.index ?? 0;
+    if (isAddress(m[0], text.slice(Math.max(0, at - 16), at))) add(at, m[0].length, ADDRESS_SAY);
+  }
+  return out.sort((a, b) => a.index - b.index);
+}
+
+const CIVIC = new RegExp("^(?:\\d{1,5}[-\\u2010-\\u2013])?(\\d+)");
+
+/**
+ * A street match that is an address. "2024 Boundary Road Pump Station", "In
+ * 2023 Fraser Highway crews ...": a year, not a house number; "the 3 Main
+ * Street crossings", a count. A year-like or one-digit number counts only
+ * when the words before it say address ("at 2041 Main Street", "lives at 5
+ * Oak Street").
+ */
+function isAddress(match: string, before: string): boolean {
+  const civic = CIVIC.exec(match)?.[1] ?? "";
+  const addressWord = /\b(?:at|on|is|address|lives?|home|house|unit|suite)\s*[:#]?\s*$/i.test(before);
+  return !((civic.length === 1 || /^(?:19|20)\d\d$/.test(civic)) && !addressWord);
+}
+
+const STREET_ANY_CASE = new RegExp(STREET_IN_COPY.source, "gi");
+
+/**
+ * Whether words written without their capitals (a slug, a search phrase)
+ * carry a phone number, email or street address that isn't HUB's: the
+ * contact rule, with hyphens read as spaces and the street rule in any case.
+ */
+export function hasContactAnyCase(text: string): boolean {
+  const words = text.replace(/[-_/]+/g, " ");
+  if (contactIssues(text).length || contactIssues(words).length) return true;
+  for (const m of words.matchAll(STREET_ANY_CASE)) {
+    const at = m.index ?? 0;
+    if (isAddress(m[0], words.slice(Math.max(0, at - 16), at))) return true;
+  }
+  return false;
+}
+
+/**
+ * The text with every phone number, email and address that isn't HUB's
+ * taken out: what a slug is made from, so a held article's address can't
+ * reach its URL while a person fixes the title.
+ */
+export function stripContact(text: string): string {
+  let out = "";
+  let from = 0;
+  for (const i of contactIssues(text)) {
+    if (i.index < from) continue;
+    out += text.slice(from, i.index);
+    from = i.index + i.length;
+  }
+  return (out + text.slice(from)).replace(/\s{2,}/g, " ").trim();
+}
+
 /**
  * Everything in `text` that breaks the house style, in reading order.
- * Plain text or markdown; link addresses and emails are ignored.
+ * Plain text or markdown; link addresses and emails are left out of the
+ * style rules (the contact rule reads them). `contact: false` leaves the
+ * contact rule out: Studio runs it only where words arrive unreviewed (blog
+ * posts and Job photos, sanity/schemas/_shared.ts), not on the pages and
+ * products the office writes, where a public place's address is fine.
  */
-export function lintCopy(text: string): StyleIssue[] {
+export function lintCopy(text: string, opts: { contact?: boolean } = {}): StyleIssue[] {
   if (!text || !text.trim()) return [];
   const prose = mask(text);
   const issues: StyleIssue[] = [];
@@ -447,6 +565,7 @@ export function lintCopy(text: string): StyleIssue[] {
       issues.push({ rule: check.rule, message: hit.message, excerpt: excerptAt(text, index, length), index, length });
     }
   }
+  if (opts.contact !== false) issues.push(...contactIssues(text));
   // One warning per problem: "isn't just a task. It's ..." is one reversal, not two.
   const out: StyleIssue[] = [];
   for (const i of issues.sort((a, b) => a.index - b.index || b.length - a.length)) {
@@ -601,6 +720,8 @@ export interface FlagOptions {
   headings?: "whole" | "markdown" | "none";
   /** Rules this copy is allowed to break (a Facebook post may carry one emoji). */
   ignore?: StyleRule[];
+  /** false leaves the contact rule out, as lintCopy's option does. */
+  contact?: boolean;
 }
 
 const ABBREVIATION = /(?:\b(?:e\.g|i\.e|etc|vs|approx|St|Mr|Mrs|Ms|Dr|No|Inc|Ltd|Co|a\.m|p\.m)\.)["'’”)\]]*$/i;
@@ -637,7 +758,7 @@ export function flagSentences(text: string, options: FlagOptions = {}): FlaggedS
   const headings = options.headings ?? "none";
   const ignore = new Set(options.ignore ?? []);
   const keep = (i: StyleIssue) => !ignore.has(i.rule);
-  const issues = lintCopy(text).filter(keep);
+  const issues = lintCopy(text, { contact: options.contact }).filter(keep);
 
   // Segments: lines, or table cells, without their leading markdown marks.
   const segments: [number, number, boolean][] = [];

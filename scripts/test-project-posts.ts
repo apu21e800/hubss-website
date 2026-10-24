@@ -12,14 +12,17 @@
  * starts on its minute.
  */
 import assert from "node:assert/strict";
+import { contactLeft, withLeft } from "../lib/field-note-drafter";
 import {
   buildProjectDocument,
   jobName,
+  jobPostText,
   jobRecord,
   PROFILE_INSTRUCTIONS,
   PROJECT_TYPE,
   readyToGo,
   scheduleSlot,
+  slugSource,
   toPublished,
   torontoWhen,
   type ProjectSource,
@@ -203,6 +206,42 @@ check("a scheduled edit to a live post keeps the post's date", () => {
   assert.equal(edit.scheduled, false);
   assert.match(edit.editorNotes, /^Edit published on schedule/);
 });
+
+console.log("A customer's details hold the article (24 Oct 2026)");
+const withDetails: ProjectSource = {
+  ...source,
+  place: "1234 Main Street, Milton, Ontario",
+  photos: [{ asset: "image-aaa-2400x1800-jpg", alt: "", caption: "Call the owner on 905-555-0123 for a visit" }],
+};
+const detailLines = contactLeft(jobPostText(withDetails));
+check("the job post's place and captions are read", () => {
+  assert.deepEqual(detailLines.map((l) => l.label), ["Job post, Where", "Job post, photo 1 caption"]);
+  assert.ok(detailLines.every((l) => l.contact === true));
+});
+check("a job post with none adds nothing", () => assert.deepEqual(contactLeft(jobPostText(source)), []));
+const detailStyle = withLeft({ text: {}, flagged: 0, left: [] }, detailLines);
+const held = buildProjectDocument(withDetails, draft, clean, "milton-driveway", slot, detailStyle, new Date("2026-10-19T14:01:00Z"));
+check("held, however clean the draft and the fact check", () => {
+  assert.equal(readyToGo(clean, detailStyle), false);
+  assert.equal(held.scheduled, false);
+});
+check("the notes say what to take out", () => {
+  assert.match(held.editorNotes, /^HELD/m);
+  assert.match(held.editorNotes, /phone number, email or street address that isn't HUB's/);
+  assert.match(held.editorNotes, /- Job post, Where: "1234 Main Street, Milton, Ontario" A street address or postal code/);
+  assert.match(held.editorNotes, /- Job post, photo 1 caption: "Call the owner on 905-555-0123 for a visit" A phone number/);
+});
+check("the slug never carries an address or a phone number", () => {
+  assert.equal(slugSource({ title: "A stamped driveway at 1234 Main Street in Milton", slug: "stamped-driveway-at-1234-main-street-milton" }), "A stamped driveway at in Milton");
+  assert.equal(slugSource({ title: "A stamped driveway in Milton", slug: "stamped-driveway-1234-main-street-milton" }), "A stamped driveway in Milton");
+  assert.equal(slugSource({ title: "Call 905-555-0123 about the driveway", slug: "" }), "Call about the driveway");
+  assert.equal(slugSource(draft), "osoyoos-lakeside-park-path");
+});
+check("a search phrase with a contact detail is dropped", () => {
+  const d = buildProjectDocument(source, { ...draft, searchPhrases: ["stamped driveway milton", "1234 main street milton", "905-555-0123"] }, clean, "x", slot);
+  assert.deepEqual(d.keywords, ["stamped driveway milton"]);
+});
+check("the drafter is told to leave them out", () => assert.match(PROFILE_INSTRUCTIONS, /Never print a phone number, an email or a street address from THE JOB/));
 
 console.log(failures ? `\n${failures} failing` : "\nall passing");
 process.exit(failures ? 1 : 0);

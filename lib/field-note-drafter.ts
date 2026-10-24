@@ -25,7 +25,7 @@
  */
 
 import Anthropic from "@anthropic-ai/sdk";
-import { flagSentences, keepsFacts, PRODUCT_NAMES, type FlagOptions, type StyleRule } from "@/lib/style-lint";
+import { contactIssues, flagSentences, keepsFacts, PRODUCT_NAMES, type FlagOptions, type StyleRule } from "@/lib/style-lint";
 import { GLOSSARY_FOR_WRITERS } from "@/lib/glossary";
 
 /** Override with BLOG_DRAFT_MODEL; the default is the model the repo already used. */
@@ -69,6 +69,7 @@ THE FACTS RULE, which beats everything else:
 - General context that isn't about HUB (what Vision Zero or Complete Streets are, why contrast helps pedestrians, what freeze-thaw does to paint) is fine in plain words, without numbers.
 - A figure that isn't about HUB may come only from the OUTSIDE EVIDENCE in the FACTS. Quote it as written, say who did the study and how big it was, give its limits in the same paragraph, and link the source once. A finding applies only to what was measured: high-visibility crosswalk findings are about bar, continental and ladder markings, never a decorative design; a study of one coating says nothing about another.
 - If the topic needs a fact you don't have, write around it honestly ("ask HUB for the specification for your site") rather than guessing.
+- No phone numbers, emails or street addresses, even where the FACTS have one: name a place by its town and its site. A customer's details stay off the site, and HUB's own are on the contact page.
 
 SHAPE (Vern's standard, 20 Oct 2026: "written to a higher standard"; what a reader should feel is that a person who has stood on these jobs wrote it, in an hour, for one colleague):
 - Length: 550 to 850 words of markdown for a guide; 350 to 600 for news or a project with a thin record. Never pad: the piece ends when the point is made.
@@ -213,8 +214,11 @@ export interface StylePass {
   text: Record<string, string>;
   /** How many sentences broke the house style as Claude first wrote them. */
   flagged: number;
-  /** The sentences that still do, for a person to fix. */
-  left: { label: string; sentence: string; problems: string[] }[];
+  /**
+   * The sentences that still do, for a person to fix. `contact`: it shows a
+   * phone number, email or street address that isn't HUB's (lib/style-lint.ts).
+   */
+  left: { label: string; sentence: string; problems: string[]; contact?: true }[];
   /** Why the rewrite didn't happen, when it didn't. */
   error?: string;
 }
@@ -294,8 +298,38 @@ export async function styleRewrite(pieces: CopyPiece[], opts: { model: string; s
   } catch (err) {
     error = err instanceof Error ? err.message : String(err);
   }
-  const left = pieces.flatMap((p) => flag(p).map((f) => ({ label: p.label, sentence: f.text, problems: problems(f.issues) })));
+  const left = pieces.flatMap((p) =>
+    flag(p).map((f) => ({
+      label: p.label,
+      sentence: f.text,
+      problems: problems(f.issues),
+      ...(f.issues.some((i) => i.rule === "contact") ? { contact: true as const } : {}),
+    }))
+  );
   return { text, flagged: items.length, left, ...(error ? { error } : {}) };
+}
+
+/**
+ * Words a pipeline puts on the site or sends out exactly as a person typed
+ * them, never through the rewrite (a job post's place, story and captions; a
+ * photo's alt text): each one that shows a phone number, email or street
+ * address that isn't HUB's becomes a line for a person to read, as a
+ * sentence the rewrite couldn't fix does. One line per text.
+ */
+export function contactLeft(pieces: { label: string; text?: string | null }[]): StylePass["left"] {
+  const seen = new Set<string>();
+  return pieces.flatMap(({ label, text }) => {
+    const t = text?.trim() ?? "";
+    const issues = contactIssues(t);
+    if (!issues.length || seen.has(t)) return [];
+    seen.add(t);
+    return [{ label, sentence: t, problems: [...new Set(issues.map((i) => i.message))], contact: true as const }];
+  });
+}
+
+/** The style pass with more lines a person must read first. */
+export function withLeft(style: StylePass, more: StylePass["left"]): StylePass {
+  return more.length ? { ...style, left: [...style.left, ...more] } : style;
 }
 
 /**
@@ -311,7 +345,9 @@ export function styleReport(style: StylePass, fix: string): string[] {
   // The error itself goes to the run's log, never to what Doug reads (23 Oct 2026).
   const why = style.error ? " The rewrite didn't run this time." : "";
   return [
-    `STYLE CHECK: ${style.left.length} sentence(s) still have an em dash or another break from the house style.${why} Fix them ${fix}:`,
+    style.left.some((l) => l.contact)
+      ? `STYLE CHECK: ${style.left.length} line(s) still break the house style or show a phone number, email or street address that isn't HUB's.${why} Fix them ${fix}:`
+      : `STYLE CHECK: ${style.left.length} sentence(s) still have an em dash or another break from the house style.${why} Fix them ${fix}:`,
     ...style.left.map((l) => `- ${l.label}: "${l.sentence}" ${l.problems.join(" ")}`),
   ];
 }

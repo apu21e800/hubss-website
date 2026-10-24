@@ -32,7 +32,8 @@
 import type { SanityClient } from "@sanity/client";
 import { getAllPosts } from "@/lib/blog";
 import { factsBlock, relatedPostLines } from "@/lib/field-note-facts";
-import { writeDraft, checkDraft, polishDraft, styleReport, type Draft, type FactCheck, type StylePass } from "@/lib/field-note-drafter";
+import { writeDraft, checkDraft, polishDraft, styleReport, contactLeft, withLeft, type Draft, type FactCheck, type StylePass } from "@/lib/field-note-drafter";
+import { hasContactAnyCase, stripContact } from "@/lib/style-lint";
 import { markdownToPortableText } from "@/lib/markdown-to-portable-text";
 import { emailEditors } from "@/lib/editor-mail";
 import { SITE } from "@/lib/social-library";
@@ -146,7 +147,39 @@ export const PROFILE_INSTRUCTIONS = [
   "The job comes first: where it is, what was built and when, in the first paragraph. Then what went in and why that system (from THE JOB and the system's facts), then how it was done or how it has held up where THE JOB says so, then a short close on specifying it.",
   "If THE JOB is short, the article is short. Never pad it with general pavement writing, and never add a client, a date, a size, a colour, a cost or a reason THE JOB doesn't give.",
   "The headline names the place and the work in plain words, as a newspaper's local page would.",
+  "Never print a phone number, an email or a street address from THE JOB: a customer's details stay off the site. Name the place by its town, and by its site only where THE JOB names one.",
 ].join("\n");
+
+/**
+ * The job post's own words, as Doug typed them: the place, the crew's note,
+ * the story, and each photo's alt text and caption (the last two go on the
+ * page exactly as written). A phone number, email or street address in any
+ * of them holds the article for a person, whether or not the draft repeats
+ * it (24 Oct 2026): it may say more about the customer than a rule can see.
+ */
+export function jobPostText(doc: ProjectSource): { label: string; text: string }[] {
+  const photos = (doc.photos ?? []).filter((p) => p?.asset);
+  return [
+    { label: "Job post, Where", text: doc.place?.trim() ?? "" },
+    { label: "Job post, What was done", text: doc.note?.trim() ?? "" },
+    { label: "Job post, The story", text: doc.writeUp?.trim() ?? "" },
+    ...photos.flatMap((p, i) => [
+      { label: `Job post, photo ${i + 1} alt text`, text: p.alt?.trim() ?? "" },
+      { label: `Job post, photo ${i + 1} caption`, text: p.caption?.trim() ?? "" },
+    ]),
+  ].filter((x) => x.text);
+}
+
+/**
+ * What the slug is made from: the draft's own, unless it or the title shows
+ * a phone number, email or street address that isn't HUB's. Then it is the
+ * title with that taken out, so a held article's address can't reach its
+ * URL while a person fixes the words.
+ */
+export function slugSource(draft: Pick<Draft, "slug" | "title">): string {
+  if (hasContactAnyCase(draft.title) || hasContactAnyCase(draft.slug ?? "")) return stripContact(draft.title);
+  return draft.slug || draft.title;
+}
 
 // ── the documents ───────────────────────────────────────────────────────────
 
@@ -211,7 +244,9 @@ export function buildProjectDocument(doc: ProjectSource, draft: Draft, check: Fa
         ...rest.map((p, i) => imageOf(p, `photo-${i + 1}`, p.alt?.trim() || `${name}, photo ${i + 2} of ${photos.length}`)),
       ]
     : [];
-  const phrases = [...new Set(draft.searchPhrases.map((p) => p?.trim()).filter((p): p is string => !!p))];
+  // Keywords go into the live page's search data (its schema) and no check
+  // reads them, so one with a contact detail in it is dropped.
+  const phrases = [...new Set(draft.searchPhrases.map((p) => p?.trim()).filter((p): p is string => !!p && !hasContactAnyCase(p)))];
 
   const notes = [
     `Written up by 21e8 on ${today.toISOString().slice(0, 10)} from the job photos post "${name}" (Studio → Job photos for social): its story, the crew's note, and the ${doc.system?.name ?? "system"} page's approved facts. Nothing else.`,
@@ -498,7 +533,12 @@ async function writeArticle(client: SanityClient, doc: ProjectSource, now: Date)
   });
   const related = relatedPostLines(await getAllPosts(), [system.name]);
   const written = await writeDraft({ title: name, type: PROJECT_TYPE, instructions: PROFILE_INSTRUCTIONS }, facts, related);
-  const { draft, style } = await polishDraft(written);
+  const polished = await polishDraft(written);
+  const draft = polished.draft;
+  // A contact detail in the job post holds the article as one in the draft
+  // does: the captions and alt text go on the page as typed, and the rest may
+  // say more about the customer than the rule can see (jobPostText).
+  const style = withLeft(polished.style, contactLeft(jobPostText(doc)));
   const check = await checkDraft(draft, facts);
 
   // Right before writing, so two runs at once can't both get here with time
@@ -510,8 +550,8 @@ async function writeArticle(client: SanityClient, doc: ProjectSource, now: Date)
   const taken = await client.fetch<string[]>(`*[_type == "blogPost" && scheduled == true && defined(scheduledFor)].scheduledFor`);
   const slot = scheduleSlot(now, taken);
 
-  // A slug nobody uses, drafts included.
-  const base = cleanSlug(draft.slug || draft.title) || `project-${Date.now()}`;
+  // A slug nobody uses, drafts included, with no address in it (slugSource).
+  const base = cleanSlug(slugSource(draft)) || `project-${Date.now()}`;
   let slug = base;
   for (let n = 2; await client.fetch<number>(`count(*[_type == "blogPost" && slug.current == $slug])`, { slug }); n++) slug = `${base}-${n}`;
 
@@ -554,9 +594,11 @@ async function writeArticle(client: SanityClient, doc: ProjectSource, now: Date)
       check.unsupported.length
         ? `Fact check: ${check.unsupported.length} statement(s) to check before it goes live. They're listed in the draft's "Notes for the editor".`
         : "Fact check: every statement matches the job's record and the Product Portfolio Book.",
-      style.left.length
-        ? `Style check: ${style.left.length} sentence(s) still have an em dash or another machine tell. They're listed in the notes and marked in yellow in Studio.`
-        : "Style check: no em dashes or machine tells.",
+      style.left.some((l) => l.contact)
+        ? `Style check: ${style.left.length} line(s) to fix, including a phone number, email or street address that isn't HUB's (in the article or the job post). Take it out of the article unless the owner has agreed to it being there. They're listed in the notes and marked in yellow in Studio.`
+        : style.left.length
+          ? `Style check: ${style.left.length} sentence(s) still have an em dash or another machine tell. They're listed in the notes and marked in yellow in Studio.`
+          : "Style check: no em dashes or machine tells.",
     ].join("\n"),
     "projects"
   );

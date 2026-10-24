@@ -710,6 +710,38 @@ own and emailing BLOG_DRAFT_NOTIFY through lib/editor-mail.ts):
   "by itself", "Claude" or how to hold it. Doug's page is written the same
   way. Keep it so.
 
+## A customer's details hold the article (24 Oct 2026)
+Ported from Square One (its rule of 20 Oct 2026) before more job posts become
+articles that go live by themselves. lib/style-lint.ts `contactIssues` (rule
+`contact`): a phone number that isn't one of HUB's office lines (`HUB_PHONES`,
+kept equal to Site Settings by `npm run test:copy`), an email not at
+hubss.com, a Canadian postal code, or a house number with a street name
+("1234 Main Street"; a numbered crossing, a year or a count is not one). Web
+addresses are blanked first: a photo's file name on Sanity's CDN reads as a
+phone number otherwise.
+- Where it runs: every drafter's style pass (flagSentences: titles,
+  excerpts, bodies, social copy), and Studio's yellow warnings on blog posts
+  and Job photos only (sanity/schemas/_shared.ts `contactFor`); pages and
+  products keep a public place's address without a warning (`contact: false`).
+- A Projects article is held (`scheduled: false`) when one is left in the
+  draft OR is anywhere in its job post (the place, the crew's note, the story,
+  each photo's alt text and caption: `jobPostText` in lib/project-posts.ts),
+  since captions and alt text go on the page as typed. The notes and the
+  email say what to take out. The slug never carries one (`slugSource`), and
+  a keyword with one is dropped.
+- Social posts wait as drafts in Buffer, whatever SOCIAL_AUTO_QUEUE says,
+  when the copy, the photo's description or a job post's own words show one
+  (lib/social-pipeline.ts `draftItem`).
+- The writers are told to leave them out (VOICE, PROFILE_INSTRUCTIONS, the
+  social SYSTEM); the Job photos fields and docs/DOUG-PROJECT-POSTS.md tell
+  Doug the same.
+- Names are not caught: a client is named only where the job post names one.
+- Measured against the live dataset (77 posts) and every lib text the
+  drafters read: five hits, all public places' street addresses (the
+  Brantford post's 407 Elgin Street, Tsain-Ko Centre's 5500 Sunshine Coast
+  Highway), none on HUB's own lines. `npm run test:copy` and
+  `npm run test:project-posts` cover it.
+
 ## Articles that earn attention, on time (15 Oct 2026)
 Vern: "writing smart blog posts that will capture real attention ... pair
 with an automated blog plan. we need to keep the blogs and social media

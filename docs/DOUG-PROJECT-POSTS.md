@@ -18,6 +18,7 @@ article on hubss.com under **Projects**, and the social posts for it.
    when, who installed it, anything about the design or the colours, and how
    it has held up. Everything the article says about the job comes from here
    and from the line above, so no guesses and no figures you aren't sure of.
+   Leave out customers' phone numbers, emails and home addresses.
    Leave it empty and the photos go to social only, as before.
 7. **Publish**.
 

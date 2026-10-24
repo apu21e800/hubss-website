@@ -59,7 +59,7 @@ async function main() {
       title: String(currentIn(r._id, r.title)).trim(),
       excerpt: String(currentIn(r._id, r.excerpt) ?? "").trim().slice(0, 140),
       type: r.category && types.has(r.category) ? r.category : inferCategory(slug, r.title),
-      keywords: (r.keywords ?? []).filter((k): k is string => typeof k === "string" && k.trim() !== ""),
+      keywords: (r.keywords ?? []).filter((k): k is string => typeof k === "string" && k.trim() !== "").map((k) => String(currentIn(r._id, k))),
     });
   }
   if (out.length === 0) {

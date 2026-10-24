@@ -7,7 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import { usePathname, useRouter } from "next/navigation";
-import { animate, motion, AnimatePresence, MotionConfig, useReducedMotion, type Variants } from "framer-motion";
+import { motion, AnimatePresence, MotionConfig, useReducedMotion, type Variants } from "framer-motion";
 import { products } from "@/lib/products";
 import { PRODUCT_CATEGORIES } from "@/lib/product-categories";
 import { lunchLearnHref } from "@/lib/lunch-learn";
@@ -604,12 +604,10 @@ function MobileOverlay({ isOpen, scrolled, onClose, onSearchOpen }: { isOpen: bo
 
   // The open section, if any. Closed again every time the menu closes.
   const [openSection, setOpenSection] = useState<MenuSection | null>(null);
-  const lastToggle = useRef(0);
-  const scrollAnim = useRef<{ stop: () => void } | null>(null);
+  const lastToggle = useRef<{ at: number; level: MenuSection | null }>({ at: 0, level: null });
   useEffect(() => {
     if (!isOpen) setOpenSection(null);
   }, [isOpen]);
-  useEffect(() => () => scrollAnim.current?.stop(), []);
 
   // The list's scroller: the body, or the whole drawer on a phone on its
   // side, where the drawer scrolls as one (app/globals.css, .drawer).
@@ -622,29 +620,56 @@ function MobileOverlay({ isOpen, scrolled, onClose, onSearchOpen }: { isOpen: bo
 
   // Open one section, closing any other. A section closing ABOVE the one
   // tapped takes its height out from over it, so the list scrolls back by
-  // that much over the same 300ms with the same easing: the name you
-  // tapped holds still and the new section opens under your finger. Two
-  // taps in 350ms count once (a double tap closed what the first opened).
+  // exactly what the panel has given up, frame by frame, from the panel's
+  // own exit animation (`follow`, read by onFold below): one clock, so the
+  // name you tapped holds still while the one above folds, as far as there
+  // is scroll to give back (a list scrolled 500px can give back 500px of a
+  // 950px panel; the rest moves the name up, once, with the fold). Until
+  // 24 Oct 2026 a second tween ran beside the fold from the tap's handler,
+  // and under load the two parted by 50 to 180px (phone and code reviews).
+  // Two taps in 350ms count once (a double tap closed what the first opened;
+  // a tap on the next row straight after counts: the guard is per row, code
+  // review, 24 Oct 2026).
+  const follow = useRef<{ level: MenuSection; scroller: HTMLElement; from: number; height: number; started: boolean } | null>(null);
   const toggle = (next: MenuSection) => {
     const now = performance.now();
-    if (now - lastToggle.current < 350) return;
-    lastToggle.current = now;
+    if (next === lastToggle.current.level && now - lastToggle.current.at < 350) return;
+    lastToggle.current = { at: now, level: next };
     const opening = openSection === next ? null : next;
     const closing = openSection;
     const sc = scroller();
+    follow.current = null;
     if (sc && opening && closing && closing !== opening) {
       const order = ROOT_SECTIONS.map((r) => r.level);
       const above = order.indexOf(closing) < order.indexOf(opening);
       const h = panelRefs.current[closing]?.offsetHeight ?? 0;
       if (above && h > 0 && sc.scrollTop > 0) {
-        scrollAnim.current?.stop();
-        const from = sc.scrollTop;
-        const to = Math.max(0, from - h);
-        if (reduce) sc.scrollTop = to;
-        else scrollAnim.current = animate(from, to, { duration: CLOSE_MS, ease: EASE_IN_OUT, onUpdate: (v) => { sc.scrollTop = v; } });
+        if (reduce) sc.scrollTop = Math.max(0, sc.scrollTop - h);
+        else follow.current = { level: closing, scroller: sc, from: sc.scrollTop, height: h, started: false };
       }
     }
     setOpenSection(opening);
+  };
+  // The closing panel's height, each frame of its fold: the list gives back
+  // what the panel has lost so far. Its first frame is left alone, twice
+  // over: Framer's first value is not the height drawn (865 for a 949px
+  // panel, measured), and in that frame Framer measures both panels at
+  // their targets (this one at 0, the opening one at its full height) in one
+  // pass, and the list, 865px shorter for that instant, is clamped 85px up
+  // (998 to 913: the row sat 85px lower for one frame); the microtask runs
+  // after Framer's frame and before the paint, and puts the list back.
+  const onFold = (level: MenuSection, height: number) => {
+    const f = follow.current;
+    if (!f || f.level !== level) return;
+    if (!f.started) {
+      f.started = true;
+      const sc = f.scroller;
+      const from = f.from;
+      queueMicrotask(() => { sc.scrollTop = from; });
+      return;
+    }
+    if (height > f.height) return;
+    f.scroller.scrollTop = Math.max(0, f.from - (f.height - height));
   };
 
   // Where closing the menu puts the page: back where it was, unless the logo
@@ -652,16 +677,23 @@ function MobileOverlay({ isOpen, scrolled, onClose, onSearchOpen }: { isOpen: bo
   const restoreTo = useRef<number | null>(null);
   const warmHome = useWarmHome();
 
-  // iOS-safe scroll lock: fixes body at scroll position, restores on close
+  // The scroll lock: <html> stops scrolling (as the photo viewer's lock,
+  // components/ui/PhotoLightbox.tsx) and <body> is fixed at the page's
+  // place for iOS, which ignores overflow on the root for a finger. Never
+  // `overflow: hidden` on <body> itself: that made body a scroll container
+  // of its own and Chrome's lazy loading took every photo on the homepage
+  // for "in view", 555 KB of them on the tap of the burger (performance
+  // review, 24 Oct 2026; measured: body overflow hidden 14 to 21 image
+  // requests, html overflow hidden or body fixed alone 14 to 14).
   useEffect(() => {
     if (!isOpen) return;
     const scrollY = window.scrollY;
-    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
     document.body.style.position = "fixed";
     document.body.style.top = `-${scrollY}px`;
     document.body.style.width = "100%";
     return () => {
-      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
       document.body.style.position = "";
       document.body.style.top = "";
       document.body.style.width = "";
@@ -873,6 +905,7 @@ function MobileOverlay({ isOpen, scrolled, onClose, onSearchOpen }: { isOpen: bo
                               initial="shut"
                               animate="open"
                               exit="shut"
+                              onUpdate={(v) => { if (typeof v.height === "number") onFold(s.level, v.height); }}
                               style={{ overflow: "hidden" }}
                             >
                               <SectionPanel section={s} pathname={pathname} onClose={onClose} />
@@ -1288,6 +1321,11 @@ export default function Nav() {
                 ref={triggerRefs[panel]}
                 type="button"
                 onMouseEnter={() => hoverOpen(panel)}
+                // Leaving the trigger before the 90ms is up cancels the open
+                // (desktop review, 24 Oct 2026: a pointer that crossed a
+                // trigger and parked on the logo or in the bar's padding got
+                // that panel 90ms later).
+                onMouseLeave={cancelHover}
                 onClick={() => clickTrigger(panel)}
                 aria-expanded={openPanel === panel}
                 // No aria-haspopup: the panel is a disclosure, not a menu

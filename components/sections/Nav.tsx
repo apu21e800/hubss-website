@@ -6,7 +6,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence, MotionConfig, useIsPresent, useReducedMotion, type Variants } from "framer-motion";
 import { products } from "@/lib/products";
 import { catalogue, catalogueReady, cataloguePageUrl, ideaBook } from "@/lib/catalogue";
@@ -919,6 +919,30 @@ function MobileResourcesRow({ pathname, onClose }: { pathname: string; onClose: 
   );
 }
 
+// ── The logo ─────────────────────────────────────────────────────────
+// Vern, 23 Oct 2026: "sometimes the logo click does not work". On the
+// homepage it had nowhere to go: a link to the page you are on leaves Next
+// where it is, so a tap from far down did nothing. There the logo goes back
+// to the top (and drops a #map from the address, so a reload starts at the
+// top too). Elsewhere it navigates as before; its prefetch stays off (it
+// pulled the homepage's 1.2MB hero onto every page), and the homepage is
+// fetched the moment a finger or pointer reaches the logo instead, so the
+// tap does not wait on the network.
+let homeWarmed = false;
+function useWarmHome() {
+  const router = useRouter();
+  return useCallback(() => {
+    if (homeWarmed) return;
+    homeWarmed = true;
+    router.prefetch("/");
+  }, [router]);
+}
+function toTopOfHome(reduce: boolean | null) {
+  if (window.location.hash) window.history.replaceState(window.history.state, "", "/");
+  if (reduce) scrollWindowInstantly(0);
+  else window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
 // ── Phone menu ───────────────────────────────────────────────────────
 // Rebuilt 24 Oct 2026 (Vern: "the mobile menu experience ... was good at one
 // time but it has fallen into chaos. Zoop it up."). Until then it was one
@@ -1192,6 +1216,11 @@ function MobileOverlay({ isOpen, scrolled, onClose, onSearchOpen }: { isOpen: bo
     return () => clearTimeout(t);
   }, [level, dir, isOpen]);
 
+  // Where closing the menu puts the page: back where it was, unless the logo
+  // was tapped on the homepage, which closes it at the top.
+  const restoreTo = useRef<number | null>(null);
+  const warmHome = useWarmHome();
+
   // iOS-safe scroll lock: fixes body at scroll position, restores on close
   useEffect(() => {
     if (!isOpen) return;
@@ -1207,7 +1236,8 @@ function MobileOverlay({ isOpen, scrolled, onClose, onSearchOpen }: { isOpen: bo
       document.body.style.width = "";
       // At once: html's scroll-behavior: smooth (app/globals.css) made this
       // glide from the top back down after every close (phone QA, 23 Oct 2026).
-      scrollWindowInstantly(scrollY);
+      scrollWindowInstantly(restoreTo.current ?? scrollY);
+      restoreTo.current = null;
     };
   }, [isOpen]);
 
@@ -1305,7 +1335,21 @@ function MobileOverlay({ isOpen, scrolled, onClose, onSearchOpen }: { isOpen: bo
               {/* prefetch={false}: this Link is the site logo, always visible.
                   Its default viewport-prefetch of "/" was fetching the homepage
                   hero image (~1.2MB) on every other route on first paint. */}
-              <Link href="/" onClick={onClose} prefetch={false} className="flex-shrink-0 flex min-h-[44px] items-center gap-3">
+              <Link
+                href="/"
+                prefetch={false}
+                onTouchStart={warmHome}
+                onPointerEnter={warmHome}
+                onClick={(e) => {
+                  if (pathname === "/") {
+                    e.preventDefault();
+                    if (window.location.hash) window.history.replaceState(window.history.state, "", "/");
+                    restoreTo.current = 0;
+                  }
+                  onClose();
+                }}
+                className="flex-shrink-0 flex min-h-[44px] items-center gap-3"
+              >
                 <Image
                   src="/images/hub-official-logo.svg"
                   alt="HUB Surface Systems"
@@ -1729,6 +1773,8 @@ export default function Nav() {
   // The current section, for the bar and the drawer (navSection above).
   const pathname = usePathname() ?? "";
   const section = navSection(pathname);
+  const warmHome = useWarmHome();
+  const reduceMotion = useReducedMotion();
 
   return (
     // reducedMotion="user": with the system setting on, the panels, the
@@ -1765,7 +1811,20 @@ export default function Nav() {
               paint (React/Next eagerly resolve fetchPriority="high" <img> in
               prefetched RSC data). Nothing on this route shows that image,
               so it was pure waste. */}
-          <Link href="/" prefetch={false} className="flex-shrink-0 flex min-h-[44px] items-center gap-3 group">
+          <Link
+            href="/"
+            prefetch={false}
+            onTouchStart={warmHome}
+            onPointerEnter={warmHome}
+            onFocus={warmHome}
+            onClick={(e) => {
+              if (pathname !== "/") return;
+              e.preventDefault();
+              closePanels();
+              toTopOfHome(reduceMotion);
+            }}
+            className="flex-shrink-0 flex min-h-[44px] items-center gap-3 group"
+          >
             {/* Not the LCP hero — every route has its own dedicated priority
                 hero image further down; this is just the header logo. */}
             <Image

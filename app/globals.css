@@ -1699,6 +1699,18 @@ html {
   overflow-x: hidden;
   overflow-x: clip;
 }
+/* A Sanity hero photo (components/ui/HeroPhoto.tsx): its framing position,
+   except under 640px, where the photo is the CDN's own portrait cut around
+   the focal point and sits centred. */
+.hero-photo {
+  object-position: var(--hero-pos, 50% 50%);
+}
+@media (max-width: 639px) {
+  .hero-photo-cut {
+    object-position: 50% 50%;
+  }
+}
+
 /* The menu's pinned Lunch & Learn: the orange button, pressed like the
    others (.btn-accent), with the same focus ring. */
 .menu-cta {

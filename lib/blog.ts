@@ -231,7 +231,7 @@ export function toMeta(r: RawPost): PostMeta | null {
     declaredProducts: declared,
     applications: strings(r.applications),
     tags: tags.length ? tags : undefined,
-    keywords: strings(r.keywords),
+    keywords: strings(r.keywords).map((k) => String(currentIn(r._id, k))),
     wordCount: words,
     seoTitle: r.seo?.metaTitle?.trim() || undefined,
     seoDescription: r.seo?.metaDescription?.trim() || undefined,

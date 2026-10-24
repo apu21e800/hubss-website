@@ -957,6 +957,25 @@ don't replace it.
   nothing did: the page had moved to a form without them.
 
 ## Menus and Insights, editorial (30 Sep 2026)
+- The desktop panels were rebuilt on 24 Oct 2026 (Vern: "we need to do the
+  same for the desktop mega menu, it currently looks amateur. let's improve
+  it 1000x"), in the phone menu's language, in components/sections/MegaMenus.tsx
+  (the `.mm-*` classes in app/globals.css): the section's name in display
+  type with its line and "All" link; the lists under a short orange rule and
+  a sentence-case heading, hairlines between the names, a product's line
+  under its name; ONE tall 4:5 photograph at the right (from 1280 up) that
+  is the family or group under the pointer or the keyboard, cross-fading as
+  it moves (the CHROME_PANELS pictures, baked 4:5 as the `feature` family);
+  the foot row as text with a mark (Resources, the Product Portfolio Book,
+  Lunch & Learn), pinned to the panel's bottom edge so a short laptop screen
+  always shows it; one height for the three panels from 1280 up. Products is
+  three columns (Stamped Asphalt and Asphalt & Concrete Repair share the
+  third) so every product's line fits on one line. The bar's triggers have
+  no chip: hover and open turn the label cream and the open panel's trigger
+  wears the current section's 2px rule; leaving a trigger cancels its pending
+  open, leaving the bar closes after 120ms. Nav.tsx keeps the bar, the open
+  state and the phone menu, and imports the panels and the shared parts
+  (MooseAvatar, GalleryCard, the groups) from MegaMenus.tsx.
 - The Products and Applications panels keep their photographs: at the 2 Oct
   merge session A's Nav.tsx (photo menus, active state, prefetch, ARIA) was
   kept whole and session B's typographic panels were not taken.

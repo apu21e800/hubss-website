@@ -26,6 +26,31 @@ const CanadaMap = dynamic(() => import("@/components/sections/CanadaMap"), {
   loading: () => <div style={{ height: MAP_SECTION_HEIGHT, background: "var(--bg-dark)" }} />,
 });
 
+/** The basemap's two hosts: the style from one, its sprites, glyphs and tiles from the other. */
+const MAP_HOSTS = ["https://basemaps.cartocdn.com", "https://tiles.basemaps.cartocdn.com"];
+let mapWarmed = false;
+/**
+ * The map's cost, paid before the tap lands: the component's chunk (which
+ * carries maplibre since 24 Oct 2026) and the connections to the basemap's
+ * two hosts, each a DNS lookup and a TLS handshake that cost a second on a
+ * cellular link before the style could even be asked for (performance
+ * review, 24 Oct 2026). "See the work" calls this when a finger or pointer
+ * reaches it; the wrapper calls it when a finger lands on any link to #map.
+ * Once per page.
+ */
+export function warmMap() {
+  if (mapWarmed || typeof window === "undefined") return;
+  mapWarmed = true;
+  for (const href of MAP_HOSTS) {
+    const link = document.createElement("link");
+    link.rel = "preconnect";
+    link.href = href;
+    link.crossOrigin = "anonymous";
+    document.head.appendChild(link);
+  }
+  void import("@/components/sections/CanadaMap");
+}
+
 /**
  * Decides when the map is allowed to cost anything.
  *
@@ -73,9 +98,9 @@ export default function CanadaMapWrapper() {
       return url.hash === "#map" && url.pathname === window.location.pathname;
     };
     const onClick = (e: MouseEvent) => { if (toMap(e)) setWanted(true); };
-    // The finger lands a tenth of a second or so before the click: start
-    // fetching the map's code then (the same chunk next/dynamic loads).
-    const onDown = (e: PointerEvent) => { if (toMap(e)) void import("@/components/sections/CanadaMap"); };
+    // The finger lands a tenth of a second or so before the click: the
+    // map's code and its hosts' connections start then (warmMap).
+    const onDown = (e: PointerEvent) => { if (toMap(e)) warmMap(); };
     onHash();
     window.addEventListener("hashchange", onHash);
     document.addEventListener("click", onClick, true);
@@ -124,6 +149,7 @@ export default function CanadaMapWrapper() {
       <div ref={sentinelRef} className="hidden lg:block" style={{ height: MAP_SECTION_HEIGHT, background: "var(--bg-dark)" }} aria-hidden="true" />
       <div className="mx-4 my-10 lg:hidden">
       <button
+        onPointerDown={warmMap}
         onClick={() => { setTapped(true); setWanted(true); }}
         className="group w-full rounded-xl px-6 py-10 text-left transition-colors hover:bg-[var(--ink-05)]"
         style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--border-color)" }}

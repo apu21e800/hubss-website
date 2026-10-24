@@ -419,8 +419,8 @@
 .ib-closing-dark .ib-body { color: var(--ib-dark-muted); }
 .ib-closing-dark .ib-cover-actions { justify-content: center; }
 .ib-communities { padding: clamp(32px, 6vh, 64px) var(--ib-gutter); }
-.ib-community-list { list-style: none; margin: 22px 0 0; padding: 0; columns: 2; column-gap: 32px; font-size: 13.5px; line-height: 1.9; font-weight: 600; max-width: 1360px; }
-.ib-community-list li { break-inside: avoid; }
+.ib-community-list { list-style: none; margin: 22px 0 0; padding: 0; columns: 2; column-gap: 32px; font-size: 13.5px; line-height: 1.4; font-weight: 600; max-width: 1360px; }
+.ib-community-list li { break-inside: avoid; padding: 0.25em 0; } /* the same row pitch as the old 1.9, without a wrapped name reading loose */
 .ib-lunch-box { background: var(--ib-dark); color: var(--ib-dark-text); padding: clamp(40px, 8vh, 96px) var(--ib-gutter); display: grid; align-content: center; justify-items: start; text-align: left; }
 .ib-lunch-box .ib-body { color: var(--ib-dark-muted); max-width: 52ch; }
 .ib-lunch-box .ib-dotlist { margin: 20px 0 28px; }

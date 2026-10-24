@@ -6,8 +6,12 @@ import { instagramHandle, type SocialAccounts } from "@/lib/site-settings";
  * lib/social-links.ts; nothing is typed here. The glyphs are the ones
  * components/ui/SocialLinks.tsx draws in the footer.
  *
- * On a phone the five sit in one row, glyph above name, each a 64px-tall
- * target. From md up they are pills in a row, beside the label from lg up.
+ * On a phone the five sit in one row as glyphs, each a 52px-tall target
+ * named by its aria-label, the way the footer draws them. Until 24 Oct 2026
+ * each tile carried its name under the glyph too, but the shared button rule
+ * (.btn-ghost: 15px, 20px of padding a side) left a 390px phone "I...",
+ * "L...", "Y...", "F..." (phone QA). From md up they are pills in a row,
+ * glyph and name, beside the label from lg up.
  */
 const CHANNELS = [
   {
@@ -65,12 +69,12 @@ export default function FollowButtons({ social }: { social: SocialAccounts }) {
               rel="noopener noreferrer"
               aria-label={ch.key === "instagram" ? `${ch.label}${handle ? `, ${handle}` : ""} (opens in a new tab)` : ch.label}
               title={ch.key === "instagram" && handle ? handle : undefined}
-              className="btn-ghost flex h-16 w-full flex-col items-center justify-center gap-1.5 rounded-lg bg-[var(--bg-card)] px-1 text-[12px] font-semibold md:h-11 md:w-auto md:flex-row md:gap-2 md:px-4 md:text-sm"
+              className="btn-ghost btn-tile flex h-[52px] w-full items-center justify-center rounded-lg bg-[var(--bg-card)] md:h-11 md:w-auto"
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="flex-shrink-0">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="h-[22px] w-[22px] flex-shrink-0 md:h-[18px] md:w-[18px]">
                 <path d={ch.path} />
               </svg>
-              <span className="truncate max-w-full">{ch.name}</span>
+              <span className="hidden md:inline" aria-hidden="true">{ch.name}</span>
             </a>
           </li>
         ))}

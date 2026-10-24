@@ -113,16 +113,18 @@ export default async function ResourcesPage() {
               </div>
             </div>
             <div className="flex w-full items-center gap-2 sm:w-auto">
+              {/* 44px tall, the site's touch floor (37px until the 24 Oct
+                  2026 tap audit), level with the cover beside them. */}
               <a
                 href={ideaBook.href}
-                className="flex-1 whitespace-nowrap rounded-lg px-3 py-2 text-center text-xs font-semibold transition-colors sm:flex-none"
+                className="inline-flex min-h-[44px] flex-1 items-center justify-center whitespace-nowrap rounded-lg px-3 text-xs font-semibold transition-colors sm:flex-none"
                 style={{ color: "var(--accent-text)", border: "1px solid rgba(249,115,22,0.32)", background: "rgba(249,115,22,0.08)" }}
               >
                 Read it
               </a>
               <a
                 href={ideaBook.requestHref}
-                className="flex-1 whitespace-nowrap rounded-lg px-3 py-2 text-center text-xs font-semibold transition-colors sm:flex-none"
+                className="inline-flex min-h-[44px] flex-1 items-center justify-center whitespace-nowrap rounded-lg px-3 text-xs font-semibold transition-colors sm:flex-none"
                 style={{ color: "var(--text-secondary)", border: "1px solid var(--border-color)" }}
               >
                 Request a copy

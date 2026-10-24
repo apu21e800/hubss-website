@@ -379,7 +379,7 @@ export default async function ProductPage({ params }: Props) {
                 {product.descriptionBlocks ? (
                   <RichText value={product.descriptionBlocks} />
                 ) : (
-                  <p className="mb-12 leading-[1.85]" style={{ color: "var(--text-body)", fontSize: "clamp(1.0625rem, 1.9vw, 1.125rem)", maxWidth: "65ch" }}>
+                  <p className="mb-12 leading-(--lh-read)" style={{ color: "var(--text-body)", fontSize: "clamp(1.0625rem, 1.9vw, 1.125rem)", maxWidth: "65ch" }}>
                     {product.description}
                   </p>
                 )}

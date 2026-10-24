@@ -51,7 +51,7 @@ export default function ApplicationSpread({
 
       {/* Evidence */}
       <p
-        className="mb-9 leading-[1.8]"
+        className="mb-9 leading-(--lh-read)"
         style={{
           color: "var(--text-body)",
           fontSize: "clamp(1.0625rem, 1.8vw, 1.125rem)",

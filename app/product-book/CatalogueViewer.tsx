@@ -1125,6 +1125,14 @@ export default function CatalogueViewer({
           border: 2px solid rgba(0,0,0,0.5);
         }
         .catalogue-scrub:focus-visible::-webkit-slider-thumb { outline: 2px solid #fff; outline-offset: 2px; }
+        /* A finger needs more than a 22px strip and a 14px dot (24 Oct 2026
+           tap audit; Safari drags only from the dot). The strip takes 44px
+           and gives back the 22 it adds, so the bar keeps its height. */
+        @media (pointer: coarse) {
+          .catalogue-scrub { height: 44px; margin-block: -11px; }
+          .catalogue-scrub::-webkit-slider-thumb { width: 22px; height: 22px; margin-top: -9.5px; }
+          .catalogue-scrub::-moz-range-thumb { width: 22px; height: 22px; }
+        }
       `}</style>
     </main>
   );
@@ -1258,9 +1266,12 @@ function Actions({
 // smaller size: the reader's chrome is a toolbar, not a page.
 const btnPrimary = "btn-accent btn-sm";
 /** Everything else. */
+// The orange button's height and corners (.btn-sm: 40px, radius 8; 44px on a
+// touch screen), so the pair line up: the PDF and share buttons were 36px with
+// rounder corners beside it (24 Oct 2026 tap audit).
 const btnGhost =
-  "inline-flex items-center gap-1.5 rounded-xl px-3 py-2.5 text-[13px] font-semibold transition-colors " +
-  "bg-white/10 text-white hover:bg-white/20 border border-white/15";
+  "inline-flex min-h-[40px] min-w-[40px] items-center justify-center gap-1.5 rounded-lg px-3 text-[13px] font-semibold transition-colors " +
+  "pointer-coarse:min-h-[44px] pointer-coarse:min-w-[44px] bg-white/10 text-white hover:bg-white/20 border border-white/15";
 const kbd = {
   display: "inline-block",
   padding: "1px 5px",

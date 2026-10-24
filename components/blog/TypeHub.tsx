@@ -122,30 +122,36 @@ export default async function TypeHub({ section }: { section: InsightsSection })
 
         {/* The same sections /blog filters by, as links on one hairline:
             every section is one click from every other, for readers and for
-            crawlers. The brand gradient sits under the one you are in. */}
-        <nav aria-label="Sections" className="flex items-end gap-6 overflow-x-auto scrollbar-hide" style={{ borderBottom: "1px solid var(--ink-10)" }}>
-          {tabs.map((t) => {
-            const active = t.key === section.key;
-            return (
-              <Link
-                key={t.key}
-                href={t.href}
-                aria-current={active ? "page" : undefined}
-                className="relative -mb-px inline-flex min-h-[48px] flex-shrink-0 items-center gap-1.5 whitespace-nowrap text-[15px] transition-colors hover:text-[var(--text-primary)]"
-                style={{ color: active ? "var(--text-primary)" : "var(--text-muted)", fontWeight: active ? 700 : 600 }}
-              >
-                {t.label}
-                {/* From sm up, as on /blog: on a phone the four fit without them. */}
-                <span className="hidden text-[12px] font-semibold tabular-nums sm:inline" style={{ color: "var(--text-muted)" }}>
-                  {t.count}
-                </span>
-                {active && (
-                  <span aria-hidden="true" className="absolute inset-x-0 -bottom-px h-[2px] rounded-full" style={{ background: "var(--gradient-brand)" }} />
-                )}
-              </Link>
-            );
-          })}
-        </nav>
+            crawlers. The brand gradient sits under the one you are in.
+            The hairline is the wrapper's, under the scrolling row: drawn
+            by the row itself, the row clipped the gradient away (24 Oct
+            2026). Tabs are spaced by their own padding, so the whole row
+            is tappable, as on /blog (BlogFilter's Tab). */}
+        <div style={{ borderBottom: "1px solid var(--ink-10)" }}>
+          <nav aria-label="Sections" className="-mx-3 -mb-px flex items-end overflow-x-auto scrollbar-hide">
+            {tabs.map((t) => {
+              const active = t.key === section.key;
+              return (
+                <Link
+                  key={t.key}
+                  href={t.href}
+                  aria-current={active ? "page" : undefined}
+                  className="relative inline-flex min-h-[48px] flex-shrink-0 items-center gap-1.5 whitespace-nowrap px-3 text-[15px] transition-colors hover:text-[var(--text-primary)]"
+                  style={{ color: active ? "var(--text-primary)" : "var(--text-muted)", fontWeight: active ? 700 : 600 }}
+                >
+                  {t.label}
+                  {/* From sm up, as on /blog: on a phone the four fit without them. */}
+                  <span className="hidden text-[12px] font-semibold tabular-nums sm:inline" style={{ color: "var(--text-muted)" }}>
+                    {t.count}
+                  </span>
+                  {active && (
+                    <span aria-hidden="true" className="absolute inset-x-3 bottom-0 h-[2px] rounded-full" style={{ background: "var(--gradient-brand)" }} />
+                  )}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
       </div>
 
       {/* The lead story: the newest in the section with a photograph big

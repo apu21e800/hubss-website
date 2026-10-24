@@ -314,7 +314,10 @@ export default function SearchOverlay({ onClose }: { onClose: () => void }) {
   useEffect(() => {
     const prev = document.activeElement as HTMLElement | null;
     inputRef.current?.focus();
-    return () => { if (prev && prev !== document.body && document.contains(prev)) prev.focus(); };
+    // preventScroll: the search buttons are in the sticky bar, inside html's
+    // 84px scroll-padding-top, and a plain focus() scrolled the page up to
+    // centre the one it returned to (independent review, 24 Oct 2026).
+    return () => { if (prev && prev !== document.body && document.contains(prev)) prev.focus({ preventScroll: true }); };
   }, []);
 
   const go = useCallback(

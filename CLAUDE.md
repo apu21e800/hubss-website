@@ -31,7 +31,7 @@ Markings, Parks & Paths, Community Branding, Town Homes, Parking Lots, Airports.
   "20-year durability" claim — do not reintroduce one.
 
 ## Tech Stack
-- Next.js 16.4.0 (App Router, Turbopack); 16.1.6 until the 7 Oct 2026 security patch
+- Next.js 16.4.3 (App Router, Turbopack); 16.4.0 until the 23 Oct 2026 security patch, 16.1.6 until the 7 Oct one
 - Tailwind CSS 4
 - TypeScript (strict)
 - Blog posts in Sanity Studio, rendered by components/blog/PostBody.tsx
@@ -259,6 +259,11 @@ about 40% below the WordPress site's.
   sees no automation signal (navigator.webdriver, headless or crawler user
   agents, no languages, a zero-size window). A person never trips one;
   `npm run test:analytics`. Our own headless QA is no longer counted either.
+- Not on /studio (24 Oct 2026; components/NotInStudio.tsx in app/layout.tsx):
+  the chat, GA4, Vercel Analytics, Speed Insights and the toolbar stay off the
+  Studio and every page under it, so an editor's session isn't a visit and
+  the chat bubble doesn't sit over the Studio. Square One's Studio has done
+  the same since 14 Oct.
 - The printed Product Book request now counts as a lead (form_type
   product-book-print), like the contact and Lunch & Learn forms. Since 20 Oct
   2026 the route sends that generate_lead, for delivered requests only, and
@@ -710,6 +715,83 @@ own and emailing BLOG_DRAFT_NOTIFY through lib/editor-mail.ts):
   "by itself", "Claude" or how to hold it. Doug's page is written the same
   way. Keep it so.
 
+## A customer's details hold the article (24 Oct 2026)
+Ported from Square One (its rule of 20 Oct 2026) before more job posts become
+articles that go live by themselves, then tightened on two reviews the same
+day. lib/style-lint.ts `contactIssues` (rule `contact`): a phone number that
+isn't one of HUB's office lines (`HUB_PHONES`, kept equal to Site Settings'
+code defaults by `npm run test:copy`; an office number changed only in Studio
+reads as someone else's, so the article waits), an email not at hubss.com, a
+Canadian postal code, a street address. Web addresses are blanked first (a
+CDN file name reads as a phone number, a medium.com/@ link as an email). Never
+an address or a phone: a numbered crossing ("152 Street and 72 Avenue"), a
+highway's number ("Highway 401 and King Street"), a distance or a size ("35
+km Spirit Trail", "3 day road closure", "150 mil"), what a job puts on a road
+("3 bus lane segments", "a 2 way street"), a count (one or two digits before
+a street and one of the nouns a crew counts, COUNT_NOUNS: "the 3 Main Street
+crossings"; never after "at", "on" or a comma, and never just any word in
+s: "45 Maple Crescent looks sharp" is a house), a year after "in", "since"
+or a month (not "by" or "from": "drive by 2041 Main Street"), a range
+("800-1200 square feet"), a toll-free line, a number no phone can have (a
+purchase order).
+- Two readings. Claude's prose at draft time (the default): a house number
+  with a capitalised street name, a year or one-digit count only after "at",
+  "on", "lives". Words a person typed (`typed`): any case, any house number,
+  Bay or Hill streets, "5678 Highway 7", an RR before a comma, a town or a
+  site, a PO Box or a Box opening the words, French addresses, a street named
+  without its type after a comma, colon, "at" or "on" ("at 1234 Yonge,
+  Toronto", "at 12 lakeshore,"), seven-digit local numbers, and for a job
+  post's Where (`place`) a house number at its start.
+- The second review found the first typed reading held 15 of 18 plain job
+  notes; the third found the first narrowing let "45 Maple Crescent looks
+  sharp" through. scripts/lib/contact-notes.ts is what it is measured on
+  now: 182 plain notes, stories and captions and 10 public Wheres (none may
+  be held) and 73 typed details (each must be found), in `npm run
+  test:copy`. Add a line there before changing a rule. Known gaps: a note
+  typed with no capitals at all loses the forms that need one (a street with
+  no type outside "at", a bare "Box 14", "RR 2 moffat"); an address followed
+  by a noun a crew counts ("45 Maple Crescent entrances") reads as a count,
+  and one after "since" as a year; names are not caught.
+- Where it runs: every drafter's style pass (flagSentences) in the default
+  reading; `contactLeft` (lib/field-note-drafter.ts) reads a job post's words
+  and a photo's description as typed. Studio warns on blog posts and Job
+  photos, both as typed (Where with `place`), as the run reads them; pages
+  and products keep a public place's address without a warning
+  (sanity/schemas/_shared.ts `contactFor`).
+- A Projects article is held (`scheduled: false`) when one is left in the
+  draft, is anywhere in its job post (`jobPostText`), or shows when the draft
+  is read as it will be on its day (`contactProblemsForLive`, run in
+  buildProjectDocument too, so a draft held on its day is never scheduled).
+  The slug never carries one (`slugSource`), a keyword with one is dropped,
+  and a photo with no alt text is named after the system ("StreetBond job"),
+  not after a Where with an address (alt text goes into the photo's file
+  name). On its day, publishDueDrafts reads the draft again, all as typed:
+  a detail added or left since is held there, "Scheduled" switched off, the
+  notes and Vern's email naming the fields. "Press Publish in Studio" if it
+  is meant to be there.
+- Never quoted: Sanity's dataset can be read by anyone. A line with a detail
+  names its field and the kind ("- Job post, The story: A phone number..."),
+  never its words, masked or not: a mask covers only what the rule sees. When
+  the job shows one, the notes leave out the fact check's quotes, the facts
+  used and the place; Vern's email has the fact check, masked. The Sent to
+  Buffer record's title masks the Where, and a photo with no description is
+  posted as "StreetBond job".
+- Social posts wait as drafts in Buffer, whatever SOCIAL_AUTO_QUEUE says,
+  when the copy, the photo's description or a job post's own words show one
+  (`typedSocialWords` in lib/social-pipeline.ts).
+- The writers are told to leave them out and never to name a private
+  homeowner, only the town (VOICE, PROFILE_INSTRUCTIONS, the social SYSTEM);
+  the Job photos fields and docs/DOUG-PROJECT-POSTS.md tell Doug the same.
+- Not fixed here: a published Job photos post is itself readable through
+  Sanity's API, so what Doug types there is public data even before it is
+  an article. Photos' location data: the 40 newest originals carry none
+  (checked 24 Oct 2026); a phone upload has not been tested.
+- Measured against the live dataset (77 posts) and every lib text the
+  drafters read, 5,566 texts: five hits in each reading, all public places'
+  street addresses (the Brantford post's 407 Elgin Street, Tsain-Ko
+  Centre's 5500 Sunshine Coast Highway), none on HUB's own lines.
+  `npm run test:copy`, `test:project-posts` and `test:social` cover it.
+
 ## Articles that earn attention, on time (15 Oct 2026)
 Vern: "writing smart blog posts that will capture real attention ... pair
 with an automated blog plan. we need to keep the blogs and social media
@@ -819,6 +901,38 @@ changes on the fly to core text and images".
 - A post's reading time in Edit on the page is the public page's: toMeta
   (lib/blog.ts) counts words after stegaClean. Count, compare or measure a
   Studio string only after stegaClean.
+
+## "See the work" on a phone, Back, and taps (24 Oct 2026)
+Vern, 24 Oct: "currently it takes the user to the interactive map, but it's
+a bit janky on mobile experience. this is first impression stuff".
+- Under 1024px the hero's "See the work" (when its link is `#map`) opens
+  components/sections/WorkShowcase.tsx full screen: the map tour's stops
+  (TOUR_IDS) as photographs, one job to a screen, built on the server by
+  lib/work-showcase.ts (a photo wider than 2.5:1 is left out). "Open the
+  map", at every screen's foot and on the last screen, moves the page to
+  the map under it; a laptop keeps the glide to the map.
+- It pushes a `#work` entry (state `{ hubssWork: true }`): Back closes it,
+  Forward and Back from a write-up reopen it at the same photo
+  (sessionStorage `hubss-work-slide`), a fresh /#work opens it and closing
+  then rewrites the address. While open, html is overflow hidden and the
+  page behind is `inert` (Next's route announcer excepted); the "/" search
+  key is ignored under any `aria-modal` layer but search's own.
+- Never hand Next its own history state in replaceState or pushState
+  (`window.history.state`): Next takes the call for its own and is not told
+  of the new address (the logo's dropHash in Nav.tsx: the next "See the
+  work" went nowhere). Pass null or an object of your own.
+- A Next Link to a hash on the same page fires no hashchange, so
+  CanadaMapWrapper also listens for taps on links to this page's #map.
+- Back and Forward: Chrome restores the place after Next draws the page,
+  at html's smooth scroll, so it slid; components/HistoryScroll.tsx makes
+  scrolling instant for a second after a popstate. `data-scroll-behavior`
+  on <html> (app/layout.tsx) is what lets Next open new pages at the top.
+- Touch targets: nothing under 44px on a touch screen (`pointer-coarse:`
+  utilities, `[data-tap]`, `.btn-sm` at 44px under `pointer: coarse`). On
+  24 Oct 2026 a sweep of every sitemap page at 390px found none.
+- Locally, `next start` can leave the homepage's /applications prefetches
+  hanging, so `networkidle` never comes on a second visit to "/"; hubss.com
+  and the previews do not. QA scripts wait for `load` there.
 
 ## Lunch & Learn page (30 Sep and 2 Oct 2026)
 - /lunch-learn is app/lunch-learn/page.tsx: the boardroom card (LunchLearn ->

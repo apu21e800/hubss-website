@@ -316,6 +316,115 @@ async function selfTest() {
   const fb = flagSentences(`Book your team a session ${String.fromCodePoint(0x1f6a7)}`, { ignore: ["emoji"] });
   expect("ignored rules are ignored", fb.length === 0, fb);
 
+  // Contact details (24 Oct 2026): HUB's own lines pass, anyone else's is held.
+  const { contactIssues, stripContact, hasContactAnyCase, HUB_PHONES } = lint;
+  const contact = (t, opts) => lintCopy(t, opts).filter((i) => i.rule === "contact").map((i) => t.slice(i.index, i.index + i.length));
+  const HUB_OWN = [
+    "Call 604-309-8212 or 416-540-9287, or email info@hubss.com or doug.bain@hubss.com.",
+    "(604) 309-8212, or [email us](mailto:cleve.stordy@hubss.com).",
+    "Call 1-416-540-9287 to book.",
+    "We stamped the crosswalk at 152 Street and 72 Avenue in Surrey.",
+    "In 2023 Fraser Highway crews added a crosswalk.",
+    "Between 300-1200 vehicles a day use it.",
+    "Public art \u00b7 2024 Commercial Drive, Vancouver.",
+    "We stamped the 3 Main Street crossings in a week.",
+    "Highway 401 and King Street West, Toronto.",
+    "XDG-10-100 is 8\u2019W x 14\u2019L; 1,000+ projects coast to coast since 1999.",
+    "The photo: https://cdn.sanity.io/images/9dbro2m1/production/02ae81c199eb25441a4f4786353255f2c47cb1d5-1184x864.jpg",
+  ];
+  for (const t of HUB_OWN) expect(`contact rule flagged: ${t}`, contact(t).length === 0, contact(t));
+  const NOT_HUBS = [
+    ["The owner, at 604-555-0199, asked for brick.", "604-555-0199"],
+    ["Call (416) 555 0199 for photos.", "(416) 555 0199"],
+    ["Write to jane.doe@example.com for photos.", "jane.doe@example.com"],
+    ["[Email her](mailto:jane@shaw.ca) for the photos.", "jane@shaw.ca"],
+    ["The driveway at 1234 Main Street in Milton.", "1234 Main Street"],
+    ["A home at 12345 72 Avenue in Surrey.", "12345 72 Avenue"],
+    ["A lane off 4421 W 10th Ave.", "4421 W 10th Ave."],
+    ["A farm at 8125 Fifth Line, Milton.", "8125 Fifth Line"],
+    ["The driveway at 2041 Main Street.", "2041 Main Street."],
+    ["The owner lives at 5 Oak Street.", "5 Oak Street."],
+    ["The postal code is L9T 2X5.", "L9T 2X5"],
+  ];
+  for (const [t, found] of NOT_HUBS) expect(`contact rule missed: ${t}`, contact(t).length === 1 && contact(t)[0] === found, contact(t));
+  expect("contact: false leaves the rule out", contact("The owner, at 604-555-0199.", { contact: false }).length === 0, null);
+  expect("flagSentences reads the contact rule", flagSentences("A good job. The owner, at 604-555-0199, asked for brick.").length === 1, null);
+  expect("stripContact takes the address out", stripContact("Stamped driveway at 1234 Main Street in Milton") === "Stamped driveway at in Milton", stripContact("Stamped driveway at 1234 Main Street in Milton"));
+  expect("a slug with an address", hasContactAnyCase("stamped-driveway-1234-main-street-milton"), null);
+  expect("a slug with a phone number", hasContactAnyCase("call-604-555-0199"), null);
+  for (const slug of ["kitchener-veterans-crosswalk-2024", "streetbond-osoyoos-british-columbia", "osoyoos-lakeside-park-path"])
+    expect(`a clean slug read as an address: ${slug}`, !hasContactAnyCase(slug), null);
+  // A slug is read as typed: a year or a one-digit number before a street name counts there,
+  // but not a count after "the".
+  for (const slug of ["2024-commercial-drive-vancouver", "3-main-street-milton"])
+    expect(`a slug's house number missed: ${slug}`, hasContactAnyCase(slug), null);
+  expect("a slug's count read as an address: the-3-main-street-crossings", !hasContactAnyCase("the-3-main-street-crossings"), null);
+  expect("contact messages have no dash", contactIssues("604-555-0199, jane@shaw.ca, 1234 Main Street").every((i) => !i.message.includes(EM)), null);
+  // HUB's lines are Site Settings' own (lib/site-settings.ts); a change there must reach the rule.
+  const { DEFAULT_SITE_SETTINGS } = await import("../lib/site-settings.ts");
+  const officePhones = [DEFAULT_SITE_SETTINGS.offices.west.phone, DEFAULT_SITE_SETTINGS.offices.east.phone].sort();
+  expect("HUB_PHONES are Site Settings' office lines", JSON.stringify([...HUB_PHONES].sort()) === JSON.stringify(officePhones), { HUB_PHONES, officePhones });
+  for (const o of Object.values(DEFAULT_SITE_SETTINGS.offices))
+    expect(`office email flagged: ${o.email}`, contact(`Email ${o.email} or call ${o.phone}.`).length === 0, contact(`Email ${o.email} or call ${o.phone}.`));
+
+  // Words a person typed (24 Oct 2026 review): any case, any house number,
+  // the forms people type. Claude's prose keeps the stricter rule above.
+  const { maskContact } = lint;
+  const typedHits = (t, opts = { typed: true }) => contactIssues(t, opts).map((i) => t.slice(i.index, i.index + i.length));
+  const TYPED_MISSES = [
+    ["the smiths at 1234 main st", "1234 main st"],
+    ["2041 Main Street, Milton, Ontario", "2041 Main Street"],
+    ["Back to the Patels, 1987 Oak Street", "1987 Oak Street"],
+    ["5678 Highway 7, Markham", "5678 Highway 7"],
+    ["RR 2, Caledon", "RR 2"],
+    ["PO Box 123, Milton", "PO Box 123"],
+    ["1234 rue Sainte-Catherine, Montr\u00e9al", "1234 rue Sainte-Catherine"],
+    ["call 555-0123 for the gate code", "555-0123"],
+    ["100 Bay Street, Toronto", "100 Bay Street"],
+  ];
+  for (const [t, found] of TYPED_MISSES) expect(`typed rule missed: ${t}`, typedHits(t).length === 1 && typedHits(t)[0] === found, typedHits(t));
+  expect("a Where starting with a house number", typedHits("1234 Lakeshore, Toronto", { place: true })[0] === "1234 Lakeshore", typedHits("1234 Lakeshore, Toronto", { place: true }));
+  expect("a street named without its type, in a story", typedHits("Done on 1234 Lakeshore, Toronto")[0] === "1234 Lakeshore", typedHits("Done on 1234 Lakeshore, Toronto"));
+  expect("a two-digit Where is an address only in the Where field", typedHits("Done on 22 Elm, Milton").length === 0 && typedHits("22 Elm, Milton", { place: true })[0] === "22 Elm", typedHits("Done on 22 Elm, Milton"));
+  const TYPED_CLEAN = [
+    "We stamped the crosswalk at 152 Street and 72 Avenue in Surrey.",
+    "The crossing on 200 Street near 64 Avenue.",
+    "Highway 401 and King Street West, Toronto.",
+    "Call 604-309-8212 or 416-540-9287.",
+    "(604) 309-8212, 604 309 8212, 604.309.8212, 1-416-540-9287, +1 416 540 9287",
+    "Read it on https://medium.com/@hubss/the-post",
+    "XDG-10-100 is 8 ft wide; 1,000+ projects coast to coast since 1999.",
+    "Two coats over 480 square metres, done in two days.",
+    "Brantford, Ontario",
+    "Crews marked 30 intersections along the Highway in a week.",
+    "The 35 km Spirit Trail runs along the shore.",
+  ];
+  for (const t of TYPED_CLEAN) expect(`typed rule flagged: ${t}`, typedHits(t).length === 0, typedHits(t));
+  expect("a Where with no number is clean", typedHits("Children's Safety Village of Brant, Brantford, Ontario", { place: true }).length === 0, null);
+  const { products } = await import("../lib/products.ts");
+  for (const pr of products)
+    for (const t of [pr.shortDesc, pr.description])
+      if (t) expect(`typed rule flagged ${pr.name}'s copy`, typedHits(t).length === 0, typedHits(t));
+  for (const [t] of NOT_HUBS) expect(`default rule changed: ${t}`, contact(t).length === 1, contact(t));
+  expect("the default rule still skips a year", contact("In 2023 Fraser Highway crews added a crosswalk.").length === 0, null);
+  expect(
+    "the mask names the kind, never the detail",
+    maskContact("Call the owner on 905-555-0123 or jane@shaw.ca at 1234 main st", { typed: true }) === "Call the owner on [phone number] or [email] at [address]",
+    maskContact("Call the owner on 905-555-0123 or jane@shaw.ca at 1234 main st", { typed: true })
+  );
+  expect("a lowercase slug with an address", hasContactAnyCase("the-smiths-1234-main-st"), null);
+  // Job notes as they are typed (scripts/lib/contact-notes.ts): none of the
+  // plain ones held, every detail found (the re-review of 24 Oct 2026).
+  const { CLEAN_NOTES, CLEAN_WHERES, TYPED_DETAILS } = await import("./lib/contact-notes.ts");
+  for (const t of CLEAN_NOTES) expect(`a plain job note held: ${t}`, typedHits(t).length === 0, typedHits(t));
+  for (const t of CLEAN_WHERES) expect(`a public place's Where held: ${t}`, typedHits(t, { place: true }).length === 0, typedHits(t, { place: true }));
+  for (const [t, found, o] of TYPED_DETAILS) {
+    const got = typedHits(t, { typed: true, ...(o ?? {}) });
+    expect(`a typed detail missed: ${t}`, got.length === 1 && got[0] === found, got);
+  }
+  expect("no phone number no phone can have, and no toll-free line", contact("PO 4500123456, or call 1-800-555-0199.").length === 0, contact("PO 4500123456, or call 1-800-555-0199."));
+  expect("a typed slug strips its address", stripContact("Driveway at 1234 main st in Milton") === "Driveway at in Milton", stripContact("Driveway at 1234 main st in Milton"));
+
   // A rewrite must keep the facts.
   expect("keepsFacts: same facts", keepsFacts(`Lasts 10${EN}20 years ${EM} StreetPrint.`, `StreetPrint lasts 10 to 20 years.`), null);
   expect("keepsFacts: lost a number", !keepsFacts("Cures in 45 minutes.", "Cures fast."), null);

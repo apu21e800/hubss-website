@@ -17,6 +17,8 @@ import PreviewTools from "@/components/PreviewTools";
 import { SiteSettingsProvider } from "@/components/SiteSettingsProvider";
 import NavigationProgress from "@/components/NavigationProgress";
 import SkipLink from "@/components/SkipLink";
+import HistoryScroll from "@/components/HistoryScroll";
+import NotInStudio from "@/components/NotInStudio";
 import { getSiteSettings } from "@/lib/sanity.queries";
 
 // Runs before first paint. Order: ?theme= in the URL (persisted, so a link
@@ -104,7 +106,15 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     // suppressHydrationWarning: the theme bootstrap below sets data-theme on
     // <html> before React hydrates, and that attribute is not in the server
     // markup by design (it depends on the visitor's saved choice).
-    <html lang="en" data-theme="mixed" suppressHydrationWarning>
+    //
+    // data-scroll-behavior="smooth": tells Next.js that html scrolls smoothly
+    // (app/globals.css), so it switches that off while it moves a new page to
+    // the top. Since Next.js 16 it only does so when asked. Without it every
+    // link tapped from down a page opened the new page at the old depth, often
+    // its very bottom, and glided up for most of a second; a touch on the way
+    // stopped it there (Vern and Doug, 23 Oct 2026: "some clicks start users
+    // at the bottom of the page"). In-page anchors (#map) still glide.
+    <html lang="en" data-theme="mixed" data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
         {/* Theme bootstrap — runs before first paint so a saved "light" never
             flashes dark. Order: ?theme= in the URL (persisted, so a review link
@@ -120,6 +130,8 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       </head>
       <body className={`${geist.variable} ${inter.variable} antialiased`}>
         <SkipLink />
+        {/* Back and Forward land in one step, not a glide. */}
+        <HistoryScroll />
         {/* Resource hints — React 19 hoists these into <head>. The landing
             page's map pulls style + tiles + glyphs from CARTO; warming the
             connection here shaves the first paint of the section. */}
@@ -147,7 +159,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             </Suspense>
           </>
         ) : (
-          <>
+          // Not on /studio either: an editor's session isn't a visit, and the
+          // chat bubble sat over the Studio (components/NotInStudio.tsx).
+          <NotInStudio>
             <CrispChat />
             {process.env.VERCEL_ENV !== "production" && <VercelToolbar />}
             <Analytics />
@@ -156,7 +170,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
                 program (components/HumanAnalytics.tsx, 15 Oct 2026). */}
             <HumanAnalytics gaId={GA_MEASUREMENT_ID} />
             <AnalyticsEvents />
-          </>
+          </NotInStudio>
         )}
       </body>
     </html>

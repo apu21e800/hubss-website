@@ -25,7 +25,7 @@
  */
 
 import Anthropic from "@anthropic-ai/sdk";
-import { flagSentences, keepsFacts, PRODUCT_NAMES, type FlagOptions, type StyleRule } from "@/lib/style-lint";
+import { contactIssues, flagSentences, keepsFacts, PRODUCT_NAMES, type FlagOptions, type StyleRule } from "@/lib/style-lint";
 import { GLOSSARY_FOR_WRITERS } from "@/lib/glossary";
 
 /** Override with BLOG_DRAFT_MODEL; the default is the model the repo already used. */
@@ -69,6 +69,7 @@ THE FACTS RULE, which beats everything else:
 - General context that isn't about HUB (what Vision Zero or Complete Streets are, why contrast helps pedestrians, what freeze-thaw does to paint) is fine in plain words, without numbers.
 - A figure that isn't about HUB may come only from the OUTSIDE EVIDENCE in the FACTS. Quote it as written, say who did the study and how big it was, give its limits in the same paragraph, and link the source once. A finding applies only to what was measured: high-visibility crosswalk findings are about bar, continental and ladder markings, never a decorative design; a study of one coating says nothing about another.
 - If the topic needs a fact you don't have, write around it honestly ("ask HUB for the specification for your site") rather than guessing.
+- No phone numbers, emails or street addresses, even where the FACTS have one: name a place by its town and its site. A customer's details stay off the site, and HUB's own are on the contact page.
 
 SHAPE (Vern's standard, 20 Oct 2026: "written to a higher standard"; what a reader should feel is that a person who has stood on these jobs wrote it, in an hour, for one colleague):
 - Length: 550 to 850 words of markdown for a guide; 350 to 600 for news or a project with a thin record. Never pad: the piece ends when the point is made.
@@ -190,8 +191,49 @@ export async function checkDraft(draft: Draft, facts: string): Promise<FactCheck
   const client = new Anthropic();
   const system = `You fact-check Insights articles for HUB Surface Systems before a human editor publishes them. You are strict and literal. You compare the DRAFT with the FACTS and list every statement in the draft about HUB, its systems, specifications, numbers, standards, places, projects or clients that the FACTS do not support, including numbers that differ, capabilities the FACTS don't claim, and any named city, agency, project or client not in the FACTS. General context that isn't about HUB and has no numbers (what Vision Zero is, why contrast helps) is fine; don't list it. A figure from the FACTS' outside evidence is supported only when it is quoted as written, the same paragraph gives that study's limits, and it is applied only to what the study measured (a crosswalk-visibility finding used for a decorative design, or a study of one coating used for another, is unsupported): list any that fall short. Links are fine. If everything is supported, the verdict is "clean" and the list is empty.`;
   const user = `FACTS:\n${facts}\n\nDRAFT:\n# ${draft.title}\n\n${draft.excerpt}\n\n${draft.body}\n\nReport with the report tool.`;
-  const result = await toolCall<FactCheck>(client, system, user, REPORT, 3000);
-  return { verdict: result.unsupported?.length ? "needs edits" : "clean", unsupported: result.unsupported ?? [] };
+  const result = await toolCall<unknown>(client, system, user, REPORT, 3000);
+  return readFactCheck(result);
+}
+
+const UNREAD = "The fact check's answer couldn't be read, so nothing in this draft has been checked: read it against its facts before it is published.";
+
+/**
+ * The fact check's answer, read so that only a clear "clean" passes. A
+ * Projects article goes live by itself on a clean check (readyToGo in
+ * lib/project-posts.ts) and the editor's email calls it ready, so an answer
+ * that can't be read, or a "needs edits" with nothing listed, holds the draft
+ * for a person instead of passing it. A hold always lists at least one line,
+ * so every count of what to check sees it. A list sent as JSON text is read as
+ * the list it is. Until 23 Oct 2026 a missing list counted as clean. Ported
+ * from Square One's drafter, where it passed review on 20 Oct 2026.
+ */
+export function readFactCheck(result: unknown): FactCheck {
+  const r = (result ?? {}) as { verdict?: unknown; unsupported?: unknown };
+  const unread = (reason: string): FactCheck => ({ verdict: "needs edits", unsupported: [{ quote: "(the whole draft)", reason }] });
+  let list: unknown = r.unsupported;
+  if (typeof list === "string") {
+    try {
+      list = JSON.parse(list);
+    } catch {
+      return unread(UNREAD);
+    }
+  }
+  if (list && typeof list === "object" && !Array.isArray(list)) list = [list];
+  if (list === undefined || list === null) list = [];
+  if (!Array.isArray(list)) return unread(UNREAD);
+  const items: FactCheck["unsupported"] = [];
+  for (const item of list) {
+    if (typeof item === "string" && item.trim()) items.push({ quote: item.trim(), reason: "The fact check gave no reason." });
+    else if (item && typeof item === "object") {
+      const { quote, reason } = item as { quote?: unknown; reason?: unknown };
+      const q = typeof quote === "string" ? quote.trim() : "";
+      const why = typeof reason === "string" ? reason.trim() : "";
+      if (q || why) items.push({ quote: q || "(not quoted)", reason: why || "The fact check gave no reason." });
+      else return unread("The fact check listed a problem it didn't describe: read the draft against its facts before it is published.");
+    } else return unread(UNREAD);
+  }
+  if (!items.length && r.verdict !== "clean") return unread("The fact check didn't say the draft was clean, and listed nothing: read it against its facts before it is published.");
+  return { verdict: items.length ? "needs edits" : "clean", unsupported: items };
 }
 
 // ── the style pass ──────────────────────────────────────────────────────────
@@ -213,8 +255,12 @@ export interface StylePass {
   text: Record<string, string>;
   /** How many sentences broke the house style as Claude first wrote them. */
   flagged: number;
-  /** The sentences that still do, for a person to fix. */
-  left: { label: string; sentence: string; problems: string[] }[];
+  /**
+   * The sentences that still do, for a person to fix. `contact`: it shows a
+   * phone number, email or street address that isn't HUB's (lib/style-lint.ts),
+   * so styleReport names its field, never its words.
+   */
+  left: { label: string; sentence: string; problems: string[]; contact?: true }[];
   /** Why the rewrite didn't happen, when it didn't. */
   error?: string;
 }
@@ -294,8 +340,39 @@ export async function styleRewrite(pieces: CopyPiece[], opts: { model: string; s
   } catch (err) {
     error = err instanceof Error ? err.message : String(err);
   }
-  const left = pieces.flatMap((p) => flag(p).map((f) => ({ label: p.label, sentence: f.text, problems: problems(f.issues) })));
+  const left = pieces.flatMap((p) =>
+    flag(p).map((f) => ({
+      label: p.label,
+      sentence: f.text,
+      problems: problems(f.issues),
+      ...(f.issues.some((i) => i.rule === "contact") ? { contact: true as const } : {}),
+    }))
+  );
   return { text, flagged: items.length, left, ...(error ? { error } : {}) };
+}
+
+/**
+ * Words a pipeline puts on the site or sends out exactly as a person typed
+ * them, never through the rewrite (a job post's place, story and captions; a
+ * photo's alt text): each one that shows a phone number, email or street
+ * address that isn't HUB's becomes a line for a person to read, as a
+ * sentence the rewrite couldn't fix does. Read as typed (any case, any house
+ * number; `place` for a job post's Where). One line per text.
+ */
+export function contactLeft(pieces: { label: string; text?: string | null; place?: boolean }[]): StylePass["left"] {
+  const seen = new Set<string>();
+  return pieces.flatMap(({ label, text, place }) => {
+    const t = text?.trim() ?? "";
+    const issues = contactIssues(t, { typed: true, place });
+    if (!issues.length || seen.has(t)) return [];
+    seen.add(t);
+    return [{ label, sentence: t, problems: [...new Set(issues.map((i) => i.message))], contact: true as const }];
+  });
+}
+
+/** The style pass with more lines a person must read first. */
+export function withLeft(style: StylePass, more: StylePass["left"]): StylePass {
+  return more.length ? { ...style, left: [...style.left, ...more] } : style;
 }
 
 /**
@@ -311,8 +388,15 @@ export function styleReport(style: StylePass, fix: string): string[] {
   // The error itself goes to the run's log, never to what Doug reads (23 Oct 2026).
   const why = style.error ? " The rewrite didn't run this time." : "";
   return [
-    `STYLE CHECK: ${style.left.length} sentence(s) still have an em dash or another break from the house style.${why} Fix them ${fix}:`,
-    ...style.left.map((l) => `- ${l.label}: "${l.sentence}" ${l.problems.join(" ")}`),
+    style.left.some((l) => l.contact)
+      ? `STYLE CHECK: ${style.left.length} line(s) still break the house style or show a phone number, email or street address that isn't HUB's.${why} Fix them ${fix}:`
+      : `STYLE CHECK: ${style.left.length} sentence(s) still have an em dash or another break from the house style.${why} Fix them ${fix}:`,
+    // A line with a contact detail is never quoted, masked or not: the notes
+    // and the Sent to Buffer records live in a dataset anyone can read, and a
+    // mask covers only what the rule sees ("at 1234 Lakeshore for Jane",
+    // the re-review of 24 Oct 2026). The field and the kind say where;
+    // Studio marks an article's line in yellow.
+    ...style.left.map((l) => (l.contact ? `- ${l.label}: ${l.problems.join(" ")}` : `- ${l.label}: "${l.sentence}" ${l.problems.join(" ")}`)),
   ];
 }
 

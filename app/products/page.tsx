@@ -252,7 +252,7 @@ function SystemCard({ card, sizes, eager }: { card: Card; sizes: string; eager: 
       <h3 className={`px-5 text-xl sm:px-6 ${card.image ? "pt-5 sm:pt-6" : "pt-2 sm:pt-3"}`} style={{ color: "var(--text-primary)" }}>
         {card.name}
       </h3>
-      <p className="mt-2 px-5 text-[15px] sm:px-6" style={{ color: "var(--text-secondary)", lineHeight: 1.55 }}>
+      <p className="mt-2 px-5 text-[15px] sm:px-6" style={{ color: "var(--text-secondary)", lineHeight: 1.45 }}>
         {card.line}
       </p>
       <div className="px-5 sm:px-6">
@@ -283,7 +283,7 @@ function FeatureCard({ card }: { card: Card }) {
         <h3 className="text-2xl" style={{ color: "var(--text-primary)" }}>
           {card.name}
         </h3>
-        <p className="mt-3 text-[15px]" style={{ color: "var(--text-secondary)", lineHeight: 1.55 }}>
+        <p className="mt-3 text-[15px]" style={{ color: "var(--text-secondary)", lineHeight: 1.45 }}>
           {subhead ?? card.line}
         </p>
         <Facts facts={card.facts} />

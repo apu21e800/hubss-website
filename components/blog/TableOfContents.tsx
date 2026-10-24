@@ -56,8 +56,10 @@ export default function TableOfContents({ collapsible = false }: { collapsible?:
 
   if (headings.length < 2) return null;
 
+  // On a touch screen each heading is a 44px row (24 Oct 2026 tap audit: they
+  // were 30px tall with dead space between), so the gaps go.
   const list = (
-      <ul className="space-y-2 border-l border-[var(--ink-10)]">
+      <ul className="space-y-2 border-l border-[var(--ink-10)] pointer-coarse:space-y-0">
         {headings.map((h) => (
           <li key={h.id}>
             <a
@@ -68,7 +70,7 @@ export default function TableOfContents({ collapsible = false }: { collapsible?:
                   .getElementById(h.id)
                   ?.scrollIntoView({ behavior: "smooth" });
               }}
-              className={`block pl-4 py-1 transition-all duration-200 border-l-2 -ml-px ${
+              className={`block pl-4 py-1 pointer-coarse:py-3 transition-all duration-200 border-l-2 -ml-px ${
                 activeId === h.id
                   ? "border-orange-400 text-[var(--accent-text)] font-medium"
                   : "border-transparent text-[var(--text-body)] hover:text-[var(--text-primary)] hover:border-gray-500"

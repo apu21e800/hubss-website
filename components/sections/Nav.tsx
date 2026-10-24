@@ -1741,6 +1741,11 @@ export default function Nav() {
    */
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      // Not over another full-screen layer (the photo viewer, the work, a
+      // map sheet, the phone menu): the search would open under or over it
+      // and one Escape would close both (review, 24 Oct 2026).
+      const covered = [...document.querySelectorAll('[aria-modal="true"]')].some((d) => d.getAttribute("aria-label") !== "Site search");
+      if (covered) return;
       const el = document.activeElement as HTMLElement | null;
       const typing =
         !!el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.tagName === "SELECT" || el.isContentEditable);

@@ -57,9 +57,21 @@ export default function SeeTheWork({
   const showcase = slides.length > 0 && href === "#map";
 
   // Back from a write-up to /#work, or a link to it: open where it was.
+  // Forward onto an entry the showcase made opens it again too (it was
+  // left open there with nothing showing, and the next tap stacked a second
+  // #work, so the first X or Back did nothing: review, 24 Oct 2026).
   useEffect(() => {
-    if (!showcase || window.location.hash !== HASH || !window.matchMedia(WORK_PHONE).matches) return;
-    setOpen(Math.min(recall(), slides.length));
+    if (!showcase) return;
+    const reopen = () => {
+      if (window.location.hash !== HASH || !window.matchMedia(WORK_PHONE).matches) return;
+      setOpen((o) => (o === null ? Math.min(recall(), slides.length) : o));
+    };
+    reopen();
+    const onPop = () => {
+      if ((window.history.state as { hubssWork?: boolean } | null)?.hubssWork) reopen();
+    };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
   }, [showcase, slides.length]);
 
   // The first photograph is on the phone before the tap: fetched once the
@@ -86,9 +98,12 @@ export default function SeeTheWork({
     if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     e.preventDefault();
     remember(0);
-    // An entry of its own, so Back closes it. Not Next's state object:
-    // handed that, Next would not hear of the new address (Nav.tsx dropHash).
-    window.history.pushState({ hubssWork: true }, "", window.location.pathname + window.location.search + HASH);
+    // An entry of its own, so Back closes it, unless the address already
+    // is one. Not Next's state object: handed that, Next would not hear of
+    // the new address (Nav.tsx dropHash).
+    const url = window.location.pathname + window.location.search + HASH;
+    if (window.location.hash === HASH) window.history.replaceState({ hubssWork: true }, "", url);
+    else window.history.pushState({ hubssWork: true }, "", url);
     setOpen(0);
   };
 
@@ -114,11 +129,18 @@ function Showcase({ slides, start, onGone, returnTo }: { slides: WorkSlide[]; st
   const rootRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const leaving = useRef(false);
+  // Where focus goes when it has gone: the map after "Open the map", else
+  // back to "See the work".
+  const focusOnGone = useRef<HTMLElement | null>(null);
+  // Where a glide is headed: taps made during it step on from there, not
+  // from the slide still in view (five quick taps moved three slides).
+  const headed = useRef<number | null>(null);
 
-  const go = useCallback((i: number) => {
+  const step = useCallback((by: number) => {
     const t = trackRef.current;
     if (!t) return;
-    const to = Math.max(0, Math.min(total - 1, i));
+    const to = Math.max(0, Math.min(total - 1, (headed.current ?? indexRef.current) + by));
+    headed.current = to;
     t.scrollTo({ left: to * t.clientWidth, behavior: reduced() ? "auto" : "smooth" });
   }, [total]);
 
@@ -154,8 +176,9 @@ function Showcase({ slides, start, onGone, returnTo }: { slides: WorkSlide[]; st
       if (!map) return;
       const pad = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
       scrollWindowInstantly(map.getBoundingClientRect().top + window.scrollY - pad);
+      // Focus goes to the map once the page behind is live again (unmount).
       if (!map.hasAttribute("tabindex")) map.setAttribute("tabindex", "-1");
-      map.focus({ preventScroll: true });
+      focusOnGone.current = map;
     });
   }, [finish]);
 
@@ -173,6 +196,13 @@ function Showcase({ slides, start, onGone, returnTo }: { slides: WorkSlide[]; st
     const html = document.documentElement;
     const before = html.style.overflow;
     html.style.overflow = "hidden";
+    // The page behind is out of reach for a screen reader and the keyboard
+    // too, not only out of sight (TalkBack could swipe into the hidden page:
+    // review, 24 Oct 2026). Next's route announcer stays live.
+    const behind = [...document.body.children].filter(
+      (el) => el !== rootRef.current && !el.hasAttribute("inert") && !["SCRIPT", "STYLE", "LINK", "TEMPLATE", "NEXT-ROUTE-ANNOUNCER"].includes(el.tagName),
+    );
+    behind.forEach((el) => el.setAttribute("inert", ""));
     closeRef.current?.focus({ preventScroll: true });
     const raf = requestAnimationFrame(() => setShown(true));
     const warm = window.setTimeout(() => { void import("@/components/sections/CanadaMap"); }, 2500);
@@ -180,8 +210,9 @@ function Showcase({ slides, start, onGone, returnTo }: { slides: WorkSlide[]; st
       cancelAnimationFrame(raf);
       window.clearTimeout(warm);
       html.style.overflow = before;
+      behind.forEach((el) => el.removeAttribute("inert"));
       if (document.activeElement === document.body || rootRef.current?.contains(document.activeElement)) {
-        returnTo.current?.focus({ preventScroll: true });
+        (focusOnGone.current ?? returnTo.current)?.focus({ preventScroll: true });
       }
     };
   }, [returnTo]);
@@ -197,8 +228,8 @@ function Showcase({ slides, start, onGone, returnTo }: { slides: WorkSlide[]; st
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") { e.preventDefault(); close(); return; }
-      if (e.key === "ArrowRight") { e.preventDefault(); go(indexRef.current + 1); return; }
-      if (e.key === "ArrowLeft") { e.preventDefault(); go(indexRef.current - 1); return; }
+      if (e.key === "ArrowRight") { e.preventDefault(); step(1); return; }
+      if (e.key === "ArrowLeft") { e.preventDefault(); step(-1); return; }
       if (e.key !== "Tab" || !rootRef.current) return;
       const focusable = [...rootRef.current.querySelectorAll<HTMLElement>("a[href], button:not([disabled])")].filter(
         (el) => el.offsetParent !== null && !el.closest("[inert]"),
@@ -212,7 +243,7 @@ function Showcase({ slides, start, onGone, returnTo }: { slides: WorkSlide[]; st
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [close, go]);
+  }, [close, step]);
 
   // A turned phone keeps the same slide.
   useEffect(() => {
@@ -228,6 +259,8 @@ function Showcase({ slides, start, onGone, returnTo }: { slides: WorkSlide[]; st
     const t = trackRef.current;
     if (!t || !t.clientWidth) return;
     const i = Math.max(0, Math.min(total - 1, Math.round(t.scrollLeft / t.clientWidth)));
+    // Arrived where the arrows sent it: the next tap steps from here.
+    if (headed.current !== null && Math.abs(t.scrollLeft - headed.current * t.clientWidth) < 2) headed.current = null;
     if (i === indexRef.current) return;
     indexRef.current = i;
     setIndex(i);
@@ -256,7 +289,7 @@ function Showcase({ slides, start, onGone, returnTo }: { slides: WorkSlide[]; st
         </button>
       </div>
 
-      <div ref={trackRef} className="ws-track" onScroll={onScroll}>
+      <div ref={trackRef} className="ws-track" tabIndex={-1} onScroll={onScroll} onTouchStart={() => { headed.current = null; }}>
         {slides.map((s, i) => (
           <article key={s.id} className="ws-slide" aria-roledescription="slide" aria-label={`${i + 1} of ${slides.length}: ${s.title}`} inert={i !== index}>
             <div className="ws-photo">
@@ -292,7 +325,7 @@ function Showcase({ slides, start, onGone, returnTo }: { slides: WorkSlide[]; st
       </div>
 
       <div className="ws-foot">
-        <button type="button" className="ws-btn" aria-label="Previous" onClick={() => go(index - 1)} disabled={index === 0}>
+        <button type="button" className="ws-btn" aria-label="Previous" onClick={() => step(-1)} disabled={index === 0}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M15 18l-6-6 6-6" />
           </svg>
@@ -305,10 +338,10 @@ function Showcase({ slides, start, onGone, returnTo }: { slides: WorkSlide[]; st
               <path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z" />
               <circle cx="12" cy="9.5" r="2.5" />
             </svg>
-            Open the map
+            <span className="ws-pill-label">Open the map</span>
           </a>
         )}
-        <button type="button" className="ws-btn" aria-label="Next" onClick={() => go(index + 1)} disabled={atEnd}>
+        <button type="button" className="ws-btn" aria-label="Next" onClick={() => step(1)} disabled={atEnd}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M9 18l6-6-6-6" />
           </svg>

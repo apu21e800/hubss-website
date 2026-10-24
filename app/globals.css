@@ -1848,7 +1848,14 @@ html {
   opacity: 1;
 }
 .ws-text {
-  flex: none;
+  /* Gives way to the photograph's floor and scrolls when a small screen or
+     enlarged text needs more room than there is (review, 24 Oct 2026: at
+     223px wide "Read the write-up" was cut off). */
+  flex: 0 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-x pan-y;
   padding: 18px 20px 4px;
 }
 .ws-place {
@@ -1923,9 +1930,12 @@ html {
   padding: 10px 16px max(14px, env(safe-area-inset-bottom));
 }
 .ws-pill {
+  position: relative;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
+  min-width: 0;
   min-height: 44px;
   padding: 0 18px;
   border-radius: 9999px;
@@ -1937,11 +1947,14 @@ html {
   color: #fff;
 }
 .ws-end {
-  justify-content: center;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-x pan-y;
 }
 .ws-end-body {
   width: 100%;
   max-width: 30rem;
+  margin-block: auto;
   padding: 0 24px 24px;
 }
 .ws-end-title {
@@ -1972,6 +1985,22 @@ html {
 .ws-ghost:active {
   background: rgba(255, 255, 255, 0.08);
 }
+/* Under 340px (a folding phone's cover screen, or enlarged text) the pill
+   is its pin alone, so Next stays on the screen. */
+@media (max-width: 339px) {
+  .ws-pill {
+    width: 44px;
+    padding: 0;
+  }
+  .ws-pill-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
 /* A phone on its side: the photograph beside the words. */
 @media (orientation: landscape) and (max-height: 520px) {
   .ws-top {
@@ -1988,6 +2017,7 @@ html {
   .ws-text {
     flex: 1 1 auto;
     min-width: 0;
+    max-height: 100%;
     align-self: center;
     padding: 0 24px;
   }
@@ -1998,8 +2028,7 @@ html {
     -webkit-line-clamp: 3;
   }
   .ws-end {
-    justify-content: flex-start;
-    align-items: center;
+    align-items: flex-start;
   }
   .ws-end-body {
     padding-bottom: 0;

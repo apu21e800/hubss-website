@@ -47,10 +47,14 @@ export default function PdfPreviewModal({
       if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", handleKey);
-    document.body.style.overflow = "hidden";
+    // On <html>: body's overflow never reaches the window here (html has
+    // overflow-x: clip), so the page scrolled behind the preview.
+    const html = document.documentElement;
+    const prevOverflow = html.style.overflow;
+    html.style.overflow = "hidden";
     return () => {
       window.removeEventListener("keydown", handleKey);
-      document.body.style.overflow = "";
+      html.style.overflow = prevOverflow;
     };
   }, [onClose]);
 

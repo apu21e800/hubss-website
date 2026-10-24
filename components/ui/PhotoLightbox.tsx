@@ -141,12 +141,16 @@ export default function PhotoLightbox({
     };
   }, [open]);
 
-  // Body scroll lock while open
+  // The page holds still while open. On <html>, not <body>: html carries
+  // overflow-x: clip (app/globals.css), so body's overflow never reaches the
+  // window and a swipe over the photo scrolled the gallery behind it; closing
+  // left the visitor 700px from the photo they opened (24 Oct 2026).
   useEffect(() => {
     if (!open) return;
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = prevOverflow; };
+    const html = document.documentElement;
+    const prevOverflow = html.style.overflow;
+    html.style.overflow = "hidden";
+    return () => { html.style.overflow = prevOverflow; };
   }, [open]);
 
   // The frame is sized in JS from the viewport and the photo's ratio.

@@ -2051,3 +2051,22 @@ html {
     transition: none;
   }
 }
+
+/* The phone menu's sections and names (components/sections/Nav.tsx): a
+   press dims them, as every row in the menu does, with no grey flash from
+   the browser, and the keyboard's ring sits clear of the text. */
+.menu-row,
+.menu-name {
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity var(--dur-1) var(--ease-out);
+}
+.menu-row:active,
+.menu-name:active {
+  opacity: 0.6;
+}
+.menu-row:focus-visible,
+.menu-name:focus-visible {
+  outline: 2px solid var(--accent-text-lg);
+  outline-offset: 2px;
+  border-radius: 6px;
+}

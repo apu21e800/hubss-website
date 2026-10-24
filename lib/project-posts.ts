@@ -193,7 +193,9 @@ export const studioLink = (docId: string) => `https://hubss.com/studio/intent/ed
  * facts; Doug: not a single em dash). The email says which.
  */
 export function readyToGo(check: FactCheck, style?: StylePass): boolean {
-  return check.unsupported.length === 0 && (style?.left.length ?? 0) === 0;
+  // The verdict too, not just an empty list (23 Oct 2026): a "needs edits"
+  // that listed nothing is a check nobody can act on, so it holds.
+  return check.verdict === "clean" && check.unsupported.length === 0 && (style?.left.length ?? 0) === 0;
 }
 
 export function buildProjectDocument(doc: ProjectSource, draft: Draft, check: FactCheck, slug: string, slot: string, style?: StylePass, today = new Date()) {

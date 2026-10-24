@@ -49,6 +49,14 @@ export default function HeroPhoto({
   name?: string;
 }) {
   const style = { objectPosition: position } as React.CSSProperties;
+  // The Sanity photo's position rides in a variable (.hero-photo in
+  // app/globals.css) so a phone can drop it: there the <source> below is
+  // already the CDN's portrait cut around the focal point, at the box's shape,
+  // and moving it again slid it sideways. A post's hero, whose position is
+  // worked out for the whole photo (focalObjectPosition), showed the photo on
+  // the left half and nothing on the right (Vern's iPhone, 23 Oct 2026; all
+  // five posts with a focal point set).
+  const cutStyle = { "--hero-pos": position } as React.CSSProperties;
   if (!isSanityImage(photo.src)) {
     return (
       <PhotoImage src={photo.src} alt={photo.alt} fill className={`object-cover ${className}`} style={style} priority={priority} sizes="100vw" />
@@ -76,8 +84,8 @@ export default function HeroPhoto({
         fetchPriority={priority ? "high" : undefined}
         loading={priority ? "eager" : "lazy"}
         decoding="async"
-        className={`absolute inset-0 h-full w-full object-cover ${className}`}
-        style={style}
+        className={`absolute inset-0 h-full w-full object-cover hero-photo${turned ? "" : " hero-photo-cut"} ${className}`}
+        style={cutStyle}
       />
     </picture>
   );

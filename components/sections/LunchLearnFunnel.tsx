@@ -92,7 +92,7 @@ export default function LunchLearnFunnel({ faqs, sectionHeadings }: LunchLearnFu
                     <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                   </svg>
                 </summary>
-                <p className="px-5 pb-5 sm:px-6 leading-[1.75]" style={{ color: "var(--text-body)", fontSize: "0.95rem", maxWidth: "68ch" }}>
+                <p className="px-5 pb-5 sm:px-6 leading-(--lh-read)" style={{ color: "var(--text-body)", fontSize: "0.95rem", maxWidth: "68ch" }}>
                   {f.a}
                 </p>
               </details>

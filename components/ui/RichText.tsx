@@ -83,18 +83,18 @@ function renderBlock(b: SanityBlock, key: string): ReactNode {
     case "h6": return <h4 key={key} className="text-base font-bold pt-1" style={heading}>{content}</h4>;
     case "blockquote":
       return (
-        <blockquote key={key} className="border-l-2 pl-5 italic leading-[1.85]" style={{ ...body, borderColor: "var(--accent)" }}>
+        <blockquote key={key} className="border-l-2 pl-5 italic leading-(--lh-read)" style={{ ...body, borderColor: "var(--accent)" }}>
           {content}
         </blockquote>
       );
-    default: return <p key={key} className="leading-[1.85]" style={body}>{content}</p>;
+    default: return <p key={key} className="leading-(--lh-read)" style={body}>{content}</p>;
   }
 }
 
 function renderList(type: "bullet" | "number", items: SanityBlock[], key: string): ReactNode {
   const List = type === "number" ? "ol" : "ul";
   return (
-    <List key={key} className={`${type === "number" ? "list-decimal" : "list-disc"} pl-6 space-y-2 leading-[1.75]`} style={body}>
+    <List key={key} className={`${type === "number" ? "list-decimal" : "list-disc"} pl-6 space-y-2 leading-(--lh-read)`} style={body}>
       {items.map((item, i) => (
         <li key={item._key || `${key}-${i}`} style={{ marginLeft: `${Math.max(0, (item.level ?? 1) - 1) * 1.5}rem` }}>
           {spans(item)}

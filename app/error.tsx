@@ -50,7 +50,7 @@ export default function GlobalError({ error, reset }: ErrorProps) {
           >
             We hit a pothole on this page.
           </h1>
-          <p style={{ fontSize: 15, color: "var(--text-muted)", lineHeight: 1.6, margin: "0 0 28px" }}>
+          <p style={{ fontSize: 15, color: "var(--text-muted)", lineHeight: 1.5, margin: "0 0 28px" }}>
             An unexpected error broke this view. Reload to try again. If it keeps happening, our team has been notified.
           </p>
 

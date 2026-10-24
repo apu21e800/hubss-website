@@ -491,13 +491,40 @@
      text-xs/sm/base are 12/14/16px by default; here they are 13/15/17px with
      a little more leading, so every label, card line and paragraph set with
      a utility grows together. The arbitrary px sizes in the components were
-     raised the same step by hand. */
+     raised the same step by hand.
+
+     Line heights (24 Oct 2026; Vern: "line heights on headings and
+     paragraphs are too high. Not professionally done."). One rhythm for
+     the site, by role, the closer the larger the type:
+       display headings  1.02 to 1.05   (.h1-page, .h1-hero, .h2-section)
+       headings, titles  1.12 to 1.25   (h1 to h6, .h2-sub, leading-tight)
+       UI copy           1.45           (cards, intros, labels, lists)
+       body              1.5            (body, every p that sets nothing)
+       long reading      --lh-read      (articles, product and application
+                                         stories: 1.5 on a phone, 1.55 wider)
+     relaxed was 1.625 (Tailwind's) and read loose in every card; it is the
+     body value now. */
   --text-xs: 0.8125rem;
-  --text-xs--line-height: 1.5;
+  --text-xs--line-height: 1.45;
   --text-sm: 0.9375rem;
-  --text-sm--line-height: 1.55;
+  --text-sm--line-height: 1.45;
   --text-base: 1.0625rem;
-  --text-base--line-height: 1.65;
+  --text-base--line-height: 1.5;
+  --text-lg--line-height: 1.45;
+  --text-xl--line-height: 1.4;
+  --text-2xl--line-height: 1.25;
+  --leading-relaxed: 1.5;
+}
+
+/* Long-form reading: the measure is short on a phone, so the lines sit
+   closer; from a tablet up the line is longer and takes a little more. */
+:root {
+  --lh-read: 1.5;
+}
+@media (min-width: 768px) {
+  :root {
+    --lh-read: 1.55;
+  }
 }
 
 /* clip, not hidden: `overflow-x: hidden` on html and body made body a scroll
@@ -558,7 +585,7 @@ body {
   color: var(--text-body);
   font-size: 16px;
   font-family: var(--font-inter), "Inter", system-ui, -apple-system, sans-serif;
-  line-height: 1.7;
+  line-height: 1.5;
   overflow-x: hidden;
   overflow-x: clip;
   -webkit-font-smoothing: antialiased;
@@ -876,13 +903,17 @@ select:user-invalid {
   text-transform: uppercase;
 }
 
+/* A paragraph takes its line height from where it sits (the body's 1.5, or
+   its parent's or its own utility). This rule set 1.7 here until 24 Oct
+   2026, unlayered, and unlayered CSS beats every Tailwind utility: no
+   paragraph on the site could be set tighter, so the leading-tight and
+   leading-snug on card titles and blurbs never applied. */
 p {
-  line-height: 1.7;
   text-wrap: pretty; /* prevents orphaned words on last line of paragraphs */
 }
 
 .prose p {
-  line-height: 1.75;
+  line-height: var(--lh-read);
 }
 
 /* ─── Section padding utility ───────────────────── */
@@ -1045,9 +1076,24 @@ p {
   min-height: 40px;
   padding: 0 1rem;
 }
+/* The touch floor holds for the small size too: on a phone the reader's
+   orange button was 40px (24 Oct 2026 tap audit). */
+@media (pointer: coarse) {
+  .btn-sm {
+    min-height: 44px;
+  }
+}
 .btn-block {
   display: flex;
   width: 100%;
+}
+/* The homepage's follow tiles (components/sections/FollowButtons.tsx): a
+   glyph alone on a phone, so no side padding to squeeze it. From md up they
+   are ordinary .btn-ghost pills, glyph and name. */
+@media (max-width: 767px) {
+  .btn-tile {
+    padding: 0;
+  }
 }
 .btn-accent:hover {
   filter: brightness(1.08);
@@ -1109,7 +1155,7 @@ p {
   --tw-prose-td-borders: var(--border-subtle);
   color: var(--text-body);
   font-size: 1.0625rem;
-  line-height: 1.8;
+  line-height: var(--lh-read);
   font-variant-ligatures: common-ligatures;
 }
 
@@ -1117,7 +1163,7 @@ p {
 .blog-prose > p:first-of-type {
   font-size: 1.15rem;
   color: var(--text-body);
-  line-height: 1.8;
+  line-height: 1.5;
 }
 
 /* Paragraph spacing */
@@ -1172,7 +1218,7 @@ p {
   font-style: italic;
   font-size: 1.2rem;
   color: var(--text-body);
-  line-height: 1.7;
+  line-height: 1.45;
 }
 
 .blog-prose blockquote p {
@@ -1648,6 +1694,360 @@ html {
    Classes in components/sections/Nav.tsx (MobileOverlay). */
 @media (max-height: 500px) {
   .drawer { overflow-y: auto; }
-  .drawer-head { position: sticky; top: 0; z-index: 1; }
+  .drawer-head { position: sticky; top: 0; z-index: 3; }
+  .drawer-sheet { flex: none; }
   .drawer-body { flex: none; overflow: visible; }
+}
+/* The sheet under the menu's header (24 Oct 2026 rebuild): a level sliding
+   in or out runs past its sides, and nothing may scroll sideways. clip, not
+   hidden, so the sheet does not become a scroller of its own (hidden stays
+   first as the fallback for Safari before 16). */
+.drawer-sheet {
+  overflow-x: hidden;
+  overflow-x: clip;
+}
+/* A Sanity hero photo (components/ui/HeroPhoto.tsx): its framing position,
+   except under 640px, where the photo is the CDN's own portrait cut around
+   the focal point and sits centred. */
+.hero-photo {
+  object-position: var(--hero-pos, 50% 50%);
+}
+@media (max-width: 639px) {
+  .hero-photo-cut {
+    object-position: 50% 50%;
+  }
+}
+
+/* The menu's pinned Lunch & Learn: the orange button, pressed like the
+   others (.btn-accent), with the same focus ring. */
+.menu-cta {
+  box-shadow: 0 10px 28px -12px rgba(249, 115, 22, 0.6);
+  transition: transform var(--dur-1) var(--ease-out), filter var(--dur-1) var(--ease-out);
+}
+.menu-cta:active {
+  transform: scale(0.985);
+  filter: brightness(1.06);
+  transition-duration: 60ms;
+}
+.menu-cta:focus-visible {
+  outline: 2px solid var(--accent-text-lg);
+  outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .menu-cta, .menu-cta:active { transition: none; transform: none; }
+}
+
+/* ── The work, full screen on a phone ─────────────────────────────────
+   "See the work" under 1024px (components/sections/WorkShowcase.tsx,
+   24 Oct 2026): one job to a screen, the photograph first. Fixed colours,
+   as in the photo viewer: it is near-black in every theme. The slides are a
+   scroll-snap row, so a swipe is the phone's own, momentum and all. */
+.ws {
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  display: flex;
+  flex-direction: column;
+  background: #0c0c0c;
+  color: #fff;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 220ms var(--ease-out), transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  overscroll-behavior: contain;
+}
+.ws.is-shown {
+  opacity: 1;
+  transform: none;
+}
+.ws-top {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: max(8px, env(safe-area-inset-top)) 12px 8px 20px;
+}
+.ws-count {
+  font-family: var(--font-inter), "Inter", system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: rgba(255, 255, 255, 0.62);
+}
+.ws-btn {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  transition: background-color var(--dur-1) var(--ease-out), opacity var(--dur-1) var(--ease-out);
+}
+.ws-btn:active,
+.ws-pill:active {
+  background: rgba(255, 255, 255, 0.22);
+}
+.ws-btn:disabled {
+  opacity: 0.28;
+  cursor: default;
+}
+.ws-btn:focus-visible,
+.ws-pill:focus-visible,
+.ws-link:focus-visible,
+.ws-ghost:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+.ws-track {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  touch-action: pan-x;
+  scrollbar-width: none;
+}
+.ws-track::-webkit-scrollbar {
+  display: none;
+}
+.ws-slide {
+  flex: 0 0 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+.ws-photo {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 34%;
+  overflow: hidden;
+  background: #171717;
+}
+.ws-photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 260ms var(--ease-out);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.ws-photo img.is-loaded {
+  opacity: 1;
+}
+.ws-text {
+  /* Gives way to the photograph's floor and scrolls when a small screen or
+     enlarged text needs more room than there is (review, 24 Oct 2026: at
+     223px wide "Read the write-up" was cut off). */
+  flex: 0 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-x pan-y;
+  padding: 18px 20px 4px;
+}
+.ws-place {
+  font-family: var(--font-inter), "Inter", system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  color: #fb923c;
+}
+.ws-title {
+  margin-top: 6px;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+  color: #fff;
+  text-wrap: balance;
+}
+.ws-excerpt {
+  margin-top: 8px;
+  font-size: 15px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.74);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
+}
+/* Four lines hold every story without a write-up whole; a shorter screen
+   gives the photograph the room instead. */
+@media (max-height: 700px) {
+  .ws-excerpt {
+    -webkit-line-clamp: 3;
+  }
+}
+@media (max-height: 600px) {
+  .ws-excerpt {
+    -webkit-line-clamp: 2;
+  }
+  .ws-title {
+    font-size: 22px;
+  }
+}
+.ws-meta {
+  margin-top: 8px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.5);
+}
+.ws-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fb923c;
+}
+.ws-link svg {
+  width: 14px;
+  height: 14px;
+  flex: none;
+}
+.ws-foot {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px max(14px, env(safe-area-inset-bottom));
+}
+.ws-pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+  color: #fff;
+}
+.ws-end {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-x pan-y;
+}
+.ws-end-body {
+  width: 100%;
+  max-width: 30rem;
+  margin-block: auto;
+  padding: 0 24px 24px;
+}
+.ws-end-title {
+  margin-top: 10px;
+  font-size: clamp(2.25rem, 9vw, 3rem);
+  font-weight: 900;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  color: #fff;
+}
+.ws-end-actions {
+  margin-top: 28px;
+  display: grid;
+  gap: 12px;
+}
+.ws-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 1.25rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+}
+.ws-ghost:active {
+  background: rgba(255, 255, 255, 0.08);
+}
+/* Under 340px (a folding phone's cover screen, or enlarged text) the pill
+   is its pin alone, so Next stays on the screen. */
+@media (max-width: 339px) {
+  .ws-pill {
+    width: 44px;
+    padding: 0;
+  }
+  .ws-pill-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+/* A phone on its side: the photograph beside the words. */
+@media (orientation: landscape) and (max-height: 520px) {
+  .ws-top {
+    padding-top: max(4px, env(safe-area-inset-top));
+    padding-bottom: 4px;
+  }
+  .ws-slide {
+    flex-direction: row;
+  }
+  .ws-photo {
+    flex: 0 0 56%;
+    min-height: 0;
+  }
+  .ws-text {
+    flex: 1 1 auto;
+    min-width: 0;
+    max-height: 100%;
+    align-self: center;
+    padding: 0 24px;
+  }
+  .ws-title {
+    font-size: 22px;
+  }
+  .ws-excerpt {
+    -webkit-line-clamp: 3;
+  }
+  .ws-end {
+    align-items: flex-start;
+  }
+  .ws-end-body {
+    padding-bottom: 0;
+  }
+  .ws-end-title {
+    font-size: 2rem;
+  }
+  .ws-end-actions {
+    margin-top: 16px;
+    grid-template-columns: 1fr 1fr;
+  }
+  .ws-foot {
+    padding-top: 4px;
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ws,
+  .ws-photo img {
+    transition: none;
+  }
 }

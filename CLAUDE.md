@@ -902,6 +902,38 @@ changes on the fly to core text and images".
   (lib/blog.ts) counts words after stegaClean. Count, compare or measure a
   Studio string only after stegaClean.
 
+## "See the work" on a phone, Back, and taps (24 Oct 2026)
+Vern, 24 Oct: "currently it takes the user to the interactive map, but it's
+a bit janky on mobile experience. this is first impression stuff".
+- Under 1024px the hero's "See the work" (when its link is `#map`) opens
+  components/sections/WorkShowcase.tsx full screen: the map tour's stops
+  (TOUR_IDS) as photographs, one job to a screen, built on the server by
+  lib/work-showcase.ts (a photo wider than 2.5:1 is left out). "Open the
+  map", at every screen's foot and on the last screen, moves the page to
+  the map under it; a laptop keeps the glide to the map.
+- It pushes a `#work` entry (state `{ hubssWork: true }`): Back closes it,
+  Forward and Back from a write-up reopen it at the same photo
+  (sessionStorage `hubss-work-slide`), a fresh /#work opens it and closing
+  then rewrites the address. While open, html is overflow hidden and the
+  page behind is `inert` (Next's route announcer excepted); the "/" search
+  key is ignored under any `aria-modal` layer but search's own.
+- Never hand Next its own history state in replaceState or pushState
+  (`window.history.state`): Next takes the call for its own and is not told
+  of the new address (the logo's dropHash in Nav.tsx: the next "See the
+  work" went nowhere). Pass null or an object of your own.
+- A Next Link to a hash on the same page fires no hashchange, so
+  CanadaMapWrapper also listens for taps on links to this page's #map.
+- Back and Forward: Chrome restores the place after Next draws the page,
+  at html's smooth scroll, so it slid; components/HistoryScroll.tsx makes
+  scrolling instant for a second after a popstate. `data-scroll-behavior`
+  on <html> (app/layout.tsx) is what lets Next open new pages at the top.
+- Touch targets: nothing under 44px on a touch screen (`pointer-coarse:`
+  utilities, `[data-tap]`, `.btn-sm` at 44px under `pointer: coarse`). On
+  24 Oct 2026 a sweep of every sitemap page at 390px found none.
+- Locally, `next start` can leave the homepage's /applications prefetches
+  hanging, so `networkidle` never comes on a second visit to "/"; hubss.com
+  and the previews do not. QA scripts wait for `load` there.
+
 ## Lunch & Learn page (30 Sep and 2 Oct 2026)
 - /lunch-learn is app/lunch-learn/page.tsx: the boardroom card (LunchLearn ->
   LunchLearnV2, whose title is the page's h1; #book is the card), then

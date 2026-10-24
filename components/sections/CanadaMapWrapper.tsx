@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import { WORK_PHONE } from "@/components/sections/WorkShowcase";
 // Just the number, from its own generated file — importing it from
 // lib/map-projects.ts would drag the whole dataset into the phone bundle.
 
@@ -52,17 +53,36 @@ const CanadaMap = dynamic(() => import("@/components/sections/CanadaMap"), {
  */
 export default function CanadaMapWrapper() {
   const [wanted, setWanted] = useState(false);
+  // The card was tapped: the map opens on its frame (CanadaMap revealOnMount).
+  const [tapped, setTapped] = useState(false);
   const [near, setNear] = useState(false);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
   // "See the work" and a search result send the visitor to #map. On a phone
   // that used to land on the "Open the map" card, a second tap short of the
   // map itself (phone review, 17 Oct 2026): arriving at #map opens it.
+  // Next's <Link> goes to a hash on the same page with pushState, which fires
+  // no hashchange, so "See the work" (and a map result in search, opened on
+  // the homepage) still left a phone on the card (24 Oct 2026): a tap on any
+  // link to this page's #map counts as arriving.
   useEffect(() => {
     const onHash = () => { if (window.location.hash === "#map") setWanted(true); };
+    const onClick = (e: MouseEvent) => {
+      const a = e.target instanceof Element ? e.target.closest("a[href]") : null;
+      if (!(a instanceof HTMLAnchorElement)) return;
+      // On a phone the hero's "See the work" opens the photographs, not the
+      // map (WorkShowcase.tsx); its "Open the map" is the tap that counts.
+      if (a.dataset.work === "showcase" && window.matchMedia(WORK_PHONE).matches) return;
+      const url = new URL(a.href, window.location.href);
+      if (url.hash === "#map" && url.pathname === window.location.pathname) setWanted(true);
+    };
     onHash();
     window.addEventListener("hashchange", onHash);
-    return () => window.removeEventListener("hashchange", onHash);
+    document.addEventListener("click", onClick, true);
+    return () => {
+      window.removeEventListener("hashchange", onHash);
+      document.removeEventListener("click", onClick, true);
+    };
   }, []);
 
   useEffect(() => {
@@ -88,7 +108,7 @@ export default function CanadaMapWrapper() {
     return () => io.disconnect();
   }, [near]);
 
-  if (near || wanted) return <CanadaMap />;
+  if (near || wanted) return <CanadaMap revealOnMount={tapped} />;
 
   // Both placeholders come from the server and CSS picks one: a laptop gets
   // the reserved space (so nothing below jumps when the map arrives), a
@@ -102,7 +122,7 @@ export default function CanadaMapWrapper() {
       <div ref={sentinelRef} className="hidden lg:block" style={{ height: MAP_SECTION_HEIGHT, background: "var(--bg-dark)" }} aria-hidden="true" />
       <div className="mx-4 my-10 lg:hidden">
       <button
-        onClick={() => setWanted(true)}
+        onClick={() => { setTapped(true); setWanted(true); }}
         className="group w-full rounded-xl px-6 py-10 text-left transition-colors hover:bg-[var(--ink-05)]"
         style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--border-color)" }}
       >

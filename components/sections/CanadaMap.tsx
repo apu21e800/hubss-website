@@ -47,6 +47,7 @@ import Image from "next/image";
 import type { FeatureCollection, Point } from "geojson";
 import { mapProjects, TOUR_IDS, type MapProject } from "@/lib/map-projects";
 import { mapLoader, mapPhotoSrc } from "@/lib/map-photo";
+import { scrollWindowInstantly } from "@/lib/scroll";
 import ProjectDetail, { provinceName } from "@/components/sections/map/ProjectDetail";
 
 const MAP_STYLE = "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json";
@@ -320,7 +321,7 @@ function Sheet({ project, onClose, onPrev, onNext, position }: {
       // At once: html's scroll-behavior: smooth (app/globals.css) turned this
       // into a glide from the top of the page back down to the map after
       // every close, as it did for the phone menu (phone QA, 24 Oct 2026).
-      window.scrollTo({ top: scrollY, left: 0, behavior: "instant" });
+      scrollWindowInstantly(scrollY);
       returnTo?.focus?.();
     };
   }, [dismiss]);

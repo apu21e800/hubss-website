@@ -14,6 +14,7 @@ import { showCatalogue } from "@/lib/feature-flags";
 import { applications } from "@/lib/applications";
 import { PRODUCT_CATEGORIES, PRODUCT_MENU_LINES } from "@/lib/product-categories";
 import { lunchLearnHref } from "@/lib/lunch-learn";
+import { scrollWindowInstantly } from "@/lib/scroll";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 import ChromeImg from "@/components/ui/ChromeImg";
 import { CHROME_MARKS, CHROME_PANELS } from "@/lib/chrome-images.mjs";
@@ -1153,8 +1154,10 @@ function MobileOverlay({ isOpen, scrolled, onClose, onSearchOpen }: { isOpen: bo
 
   const go = (next: MenuLevel) => {
     // Each level starts at its top; the one leaving slides from there too.
-    bodyRef.current?.scrollTo({ top: 0, behavior: "instant" });
-    overlayRef.current?.scrollTo({ top: 0, behavior: "instant" });
+    // scrollTop, not scrollTo with a behavior: neither box sets
+    // scroll-behavior, so this is instant in every browser.
+    if (bodyRef.current) bodyRef.current.scrollTop = 0;
+    if (overlayRef.current) overlayRef.current.scrollTop = 0;
     cameFrom.current = level;
     setDir(next === "root" ? -1 : 1);
     setLevel(next);
@@ -1186,7 +1189,7 @@ function MobileOverlay({ isOpen, scrolled, onClose, onSearchOpen }: { isOpen: bo
       document.body.style.width = "";
       // At once: html's scroll-behavior: smooth (app/globals.css) made this
       // glide from the top back down after every close (phone QA, 23 Oct 2026).
-      window.scrollTo({ top: scrollY, left: 0, behavior: "instant" });
+      scrollWindowInstantly(scrollY);
     };
   }, [isOpen]);
 

@@ -400,6 +400,11 @@ export default async function BlogPostPage({ params }: Props) {
                 title above is the page's only one (44 of the old posts restated
                 it as a `# ` heading; the import dropped those, and a Heading 1
                 typed in Studio comes out as an h2). */}
+            {/* Below 1024px there is no sidebar, so the contents fold above the
+                body instead (phone QA, 23 Oct 2026). */}
+            <div className="mb-8 lg:hidden">
+              <TableOfContents collapsible />
+            </div>
             <PostBody body={post.body} lunchLearnTopic={topic} title={post.title} />
           </article>
 

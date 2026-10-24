@@ -355,7 +355,18 @@ function GroupPicture({ label, compact = false }: { label: string; compact?: boo
   );
 }
 
-type MenuItem = { href: string; name: string; line?: string };
+type MenuItem = {
+  href: string;
+  name: string;
+  line?: string;
+  /** A picture for a destination beside the products (the pattern gallery): it draws as a card of its own, not one more product row. */
+  gallery?: string;
+};
+
+// The pattern gallery's picture in the menus: a herringbone template drawing,
+// square, as the search overlay already bakes it at every build
+// (scripts/gen-search-images.ts, 256px WebP, about 2 KB).
+const GALLERY_THUMB = "/images/search/thumbs/pattern/herringbone-256.webp";
 
 function productFamily(cat: (typeof PRODUCT_CATEGORIES)[number]): MenuItem[] {
   const items: MenuItem[] = cat.slugs.flatMap((sl) => {
@@ -364,7 +375,7 @@ function productFamily(cat: (typeof PRODUCT_CATEGORIES)[number]): MenuItem[] {
   });
   // The one structural extra a column may carry: a real secondary
   // destination (the pattern gallery under Stamped Asphalt).
-  if (cat.secondary) items.push({ href: cat.secondary.href, name: cat.secondary.label, line: cat.secondary.menuLine });
+  if (cat.secondary) items.push({ href: cat.secondary.href, name: cat.secondary.label, line: cat.secondary.menuLine, gallery: GALLERY_THUMB });
   return items;
 }
 
@@ -388,8 +399,9 @@ function MenuColumn({ label, items }: { label: string; items: MenuItem[] }) {
         <GroupPicture label={label} />
       </div>
       <MenuLabel className="flex items-end">{label}</MenuLabel>
+      <div>
       <ul>
-        {items.map((it) => (
+        {items.filter((it) => !it.gallery).map((it) => (
           <li key={it.href}>
             <Link prefetch={false}
               href={it.href}
@@ -416,7 +428,56 @@ function MenuColumn({ label, items }: { label: string; items: MenuItem[] }) {
           </li>
         ))}
       </ul>
+      {items.filter((it) => it.gallery).map((it) => <GalleryCard key={it.href} item={it} />)}
+      </div>
     </div>
+  );
+}
+
+// The pattern gallery under StreetPrint (23 Oct 2026; Vern: "make pattern
+// gallery button stand out from the streetprint button above it"). It is a
+// place to browse, not one more product, so it is a card of its own: a
+// template drawing beside the name, the name in the accent, the arrow
+// always showing. `compact` is the phone menu's size.
+function GalleryCard({ item, compact = false, current, onClick }: { item: MenuItem; compact?: boolean; current?: "page"; onClick?: () => void }) {
+  const size = compact ? 48 : 56;
+  return (
+    <Link prefetch={false}
+      href={item.href}
+      onClick={onClick}
+      aria-current={current}
+      data-tap="44"
+      className={`card group flex items-center gap-3 ${compact ? "mb-2 mt-1 p-2" : "mt-3 p-2.5"}`}
+      style={{ background: "var(--ink-025)" }}
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={item.gallery}
+        alt=""
+        width={size}
+        height={size}
+        loading="lazy"
+        decoding="async"
+        // pattern-sheet: the white line art turns charcoal on a light theme,
+        // as every other template drawing on the site does.
+        className="pattern-sheet flex-shrink-0 rounded-lg"
+        style={{ width: size, height: size, border: "1px solid var(--ink-08)" }}
+      />
+      <span className="min-w-0 flex-1">
+        <span className="flex items-center gap-1.5 text-[15.5px] font-semibold leading-snug" style={{ color: "var(--accent-text)" }}>
+          {item.name}
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.25} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
+            className="flex-shrink-0 transition-transform group-hover:translate-x-0.5" style={{ transitionDuration: "var(--dur-1)" }}>
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </span>
+        {item.line && (
+          <span className="mt-0.5 block text-[13px] leading-snug text-pretty" style={{ color: "var(--ink-58)" }}>
+            {item.line}
+          </span>
+        )}
+      </span>
+    </Link>
   );
 }
 
@@ -821,7 +882,7 @@ function MobileFamily({
             className="overflow-hidden"
           >
             <ul className="pb-2 pl-[110px]">
-              {items.map((it) => (
+              {items.filter((it) => !it.gallery).map((it) => (
                 <li key={it.href}>
                   <Link prefetch={false}
                     href={it.href}
@@ -839,6 +900,11 @@ function MobileFamily({
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 18l6-6-6-6" />
                     </svg>
                   </Link>
+                </li>
+              ))}
+              {items.filter((it) => it.gallery).map((it) => (
+                <li key={it.href}>
+                  <GalleryCard item={it} compact current={currentPage(pathname, it.href)} onClick={onClose} />
                 </li>
               ))}
             </ul>
@@ -938,9 +1004,21 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
   const { offices } = useSiteSettings();
   const overlayRef = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
-  // Which family or group is dropped open; one at a time, none on open.
+  const pathname = usePathname() ?? "";
+  // Which family or group is dropped open; one at a time. On open it is the
+  // one that holds the current page, so the menu shows where you are (phone
+  // QA, 23 Oct 2026: on /products/streetprint nothing in it was marked).
   const [openFamily, setOpenFamily] = useState<string | null>(null);
-  useEffect(() => { if (!isOpen) setOpenFamily(null); }, [isOpen]);
+  useEffect(() => {
+    if (!isOpen) { setOpenFamily(null); return; }
+    const here =
+      PRODUCT_CATEGORIES.find((cat) => productFamily(cat).some((it) => it.href === pathname))?.label ??
+      APPLICATION_GROUPS.find((g) => applicationGroup(g).some((it) => it.href === pathname))?.label ??
+      null;
+    setOpenFamily(here);
+    // Only on open: a family the visitor opens or closes stays as they left it.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
 
   // iOS-safe scroll lock: fixes body at scroll position, restores on close
   useEffect(() => {
@@ -955,14 +1033,27 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
       document.body.style.position = "";
       document.body.style.top = "";
       document.body.style.width = "";
-      window.scrollTo(0, scrollY);
+      // At once: html's scroll-behavior: smooth (app/globals.css) made this
+      // glide from the top back down after every close (phone QA, 23 Oct 2026).
+      window.scrollTo({ top: scrollY, left: 0, behavior: "instant" });
     };
   }, [isOpen]);
 
-  // ESC to close
+  // ESC to close, and Tab stays inside the menu (phone QA, 23 Oct 2026: past
+  // its last link focus walked into the page behind it), as the search does.
   useEffect(() => {
     if (!isOpen) return;
-    const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") { onClose(); return; }
+      if (e.key !== "Tab" || !overlayRef.current) return;
+      const f = [...overlayRef.current.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), input, [tabindex]:not([tabindex="-1"])')]
+        .filter((el) => el.getClientRects().length > 0);
+      if (!f.length) return;
+      const first = f[0], last = f[f.length - 1];
+      const at = document.activeElement;
+      if (e.shiftKey && (at === first || at === overlayRef.current)) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && at === last) { e.preventDefault(); first.focus(); }
+    };
     document.addEventListener("keydown", handler);
     return () => document.removeEventListener("keydown", handler);
   }, [isOpen, onClose]);
@@ -981,7 +1072,6 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
   // The session topic follows the family or group the visitor has open.
   const llTopic = openFamily ?? "HUB systems";
   // The current section, marked as the bar marks it (QA A4, 30 Sep 2026).
-  const pathname = usePathname() ?? "";
   const section = navSection(pathname);
 
   return (
@@ -997,7 +1087,9 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
           animate={{ x: 0 }}
           exit={{ x: "100%" }}
           transition={reduce ? { duration: 0 } : { duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-          className="fixed inset-0 z-[60] lg:hidden flex flex-col outline-none"
+          // drawer: under 500px tall (a phone on its side) the whole drawer
+          // scrolls as one, the header staying put (app/globals.css).
+          className="drawer fixed inset-0 z-[60] lg:hidden flex flex-col outline-none"
           // Dark, like the <nav> it belongs to. The drawer renders outside
           // that <nav>, so on a paper page it inherited paper tokens: a cream
           // body under hardcoded dark header and footer strips, with the close
@@ -1011,7 +1103,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
         >
           {/* ── Header ────────────────────────────────────────────── */}
           <div
-            className="flex-shrink-0 flex items-center justify-between px-5"
+            className="drawer-head flex-shrink-0 flex items-center justify-between px-5"
             style={{
               height: 64,
               borderBottom: "1px solid var(--border-color)",
@@ -1071,7 +1163,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
           </div>
 
           {/* ── Scrollable body ───────────────────────────────────────── */}
-          <div className="flex-1 overflow-y-auto overscroll-contain" style={{ WebkitOverflowScrolling: "touch" } as React.CSSProperties}>
+          <div className="drawer-body flex-1 overflow-y-auto overscroll-contain" style={{ WebkitOverflowScrolling: "touch" } as React.CSSProperties}>
             <motion.div
               variants={menuContainerVariants}
               initial="hidden"
@@ -1454,7 +1546,9 @@ export default function Nav() {
               unoptimized
             />
             <span
-              className="hidden sm:inline-flex items-center gap-1.5 pl-3"
+              // Not from 1024 to 1279, where the full bar runs out of room
+              // (phone QA, 23 Oct 2026: Lunch & Learn ended 3px from the edge).
+              className="hidden sm:inline-flex lg:hidden xl:inline-flex items-center gap-1.5 pl-3"
               style={{
                 borderLeft: "1px solid var(--ink-12)",
                 height: 22,
@@ -1515,7 +1609,8 @@ export default function Nav() {
                 onMouseEnter={() => hoverOpen(panel)}
                 onClick={() => clickTrigger(panel)}
                 aria-expanded={openPanel === panel}
-                aria-haspopup="true"
+                // No aria-haspopup: the panel is a disclosure, not a menu
+                // (desktop QA, 23 Oct 2026).
                 // Only while the panel is mounted: closed, the id it named
                 // did not exist in the document (QA F17, 30 Sep 2026).
                 aria-controls={openPanel === panel ? PANEL_IDS[panel] : undefined}
@@ -1605,12 +1700,15 @@ export default function Nav() {
             {/* Lunch & Learn, the gradient button; .btn-accent for its hover and ring.
                 On /lunch-learn it is marked like the rest of the bar, with
                 the rule in its own text colour (QA A4, 30 Sep 2026). */}
-            <a href="/lunch-learn"
+            {/* A Link like the rest of the bar (desktop QA, 23 Oct 2026: the
+                plain <a> reloaded the whole page). */}
+            <Link href="/lunch-learn"
+              prefetch={false}
               className="btn-accent btn-sm"
               aria-current={currentPage(pathname, "/lunch-learn")}
             >
               <NavLabel active={section === "lunch-learn"} rule="var(--on-accent)">Lunch &amp; Learn</NavLabel>
-            </a>
+            </Link>
           </div>
 
           {/* Mobile — search + hamburger */}

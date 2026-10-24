@@ -70,7 +70,7 @@ export default function FollowButtons({ social }: { social: SocialAccounts }) {
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="flex-shrink-0">
                 <path d={ch.path} />
               </svg>
-              <span className="truncate">{ch.name}</span>
+              <span className="truncate max-w-full">{ch.name}</span>
             </a>
           </li>
         ))}

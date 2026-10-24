@@ -1465,7 +1465,9 @@ p {
 :focus-visible {
   outline: 2px solid rgba(249, 115, 22, 0.8);
   outline-offset: 2px;
-  border-radius: 2px;
+  /* No border-radius here (23 Oct 2026, desktop QA): on a dark surface it
+     snapped a rounded field or button to 2px corners while focused. The
+     outline follows the element's own corners, as paper surfaces had it. */
 }
 
 /* …drawn inside the element for a link that fills a clipped card. The
@@ -1637,4 +1639,15 @@ html {
 @media (prefers-reduced-motion: reduce) {
   .hero-book, .hero-book-line svg { transition: none; }
   .hero-book:hover, .hero-book:focus-visible { transform: none; }
+}
+
+/* The phone menu on a phone turned on its side (23 Oct 2026, phone QA):
+   under 500px tall the pinned offices and Lunch & Learn left the list 191
+   of 390px, about a row and a half. There the drawer scrolls as one, the
+   header staying put, and the offices and the card come after the list.
+   Classes in components/sections/Nav.tsx (MobileOverlay). */
+@media (max-height: 500px) {
+  .drawer { overflow-y: auto; }
+  .drawer-head { position: sticky; top: 0; z-index: 1; }
+  .drawer-body { flex: none; overflow: visible; }
 }

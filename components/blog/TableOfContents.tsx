@@ -7,7 +7,12 @@ interface TocItem {
   text: string;
 }
 
-export default function TableOfContents() {
+/**
+ * `collapsible`: the phone's copy (23 Oct 2026, phone QA: below 1024px an
+ * article had no contents at all, only the laptop sidebar did). It folds
+ * under "On this page" above the body, closed until tapped.
+ */
+export default function TableOfContents({ collapsible = false }: { collapsible?: boolean } = {}) {
   const [headings, setHeadings] = useState<TocItem[]>([]);
   const [activeId, setActiveId] = useState<string>("");
 
@@ -51,11 +56,7 @@ export default function TableOfContents() {
 
   if (headings.length < 2) return null;
 
-  return (
-    <nav aria-label="Table of contents" className="text-sm">
-      <p className="text-xs font-semibold uppercase tracking-widest text-[var(--text-body)] mb-4">
-        On this page
-      </p>
+  const list = (
       <ul className="space-y-2 border-l border-[var(--ink-10)]">
         {headings.map((h) => (
           <li key={h.id}>
@@ -78,6 +79,32 @@ export default function TableOfContents() {
           </li>
         ))}
       </ul>
+  );
+
+  if (collapsible) {
+    return (
+      <details className="faq group rounded-xl" style={{ border: "1px solid var(--border-color)" }}>
+        <summary
+          className="flex min-h-[48px] cursor-pointer list-none items-center justify-between gap-3 px-4 text-xs font-semibold uppercase tracking-widest text-[var(--text-body)] [&::-webkit-details-marker]:hidden"
+        >
+          On this page
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="transition-transform duration-200 group-open:rotate-180">
+            <path d="M6 9l6 6 6-6" />
+          </svg>
+        </summary>
+        <nav aria-label="Table of contents" className="px-4 pb-4 text-sm">
+          {list}
+        </nav>
+      </details>
+    );
+  }
+
+  return (
+    <nav aria-label="Table of contents" className="text-sm">
+      <p className="text-xs font-semibold uppercase tracking-widest text-[var(--text-body)] mb-4">
+        On this page
+      </p>
+      {list}
     </nav>
   );
 }

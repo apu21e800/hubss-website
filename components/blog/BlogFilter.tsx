@@ -350,8 +350,9 @@ export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Prop
               <button
                 type="button"
                 onClick={() => setVisible((v) => v + PAGE)}
-                className="group inline-flex min-h-[48px] items-center gap-2 rounded-full px-6 text-[15px] font-bold transition-colors hover:border-orange-500/50 hover:text-[var(--accent-text)]"
-                style={{ color: "var(--text-primary)", border: "1px solid var(--ink-15)", background: "var(--bg-card)" }}
+                // The site's secondary button, as on /gallery, /resources and the
+                // product galleries (desktop QA, 23 Oct 2026: four looks for one job).
+                className="btn-ghost group"
               >
                 Show more
                 <ChevronDown className="w-4 h-4 transition-transform group-hover:translate-y-0.5" />

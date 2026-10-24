@@ -21,8 +21,9 @@ import { PATTERN_TEMPLATES, patternSrc } from "@/lib/pattern-templates";
  * templates. The book says StreetPrint patterns are "coloured and sealed with
  * StreetBond coatings", so it belongs on StreetBond. TrafficPatternsXD is imprinted with
  * its own wire-rope grids (its Design Manual, in the page's documents), so
- * this band should not render there. No count (house style), and no "fan":
- * none of the templates on /patterns is a fan.
+ * this band does not render there; since 23 Oct 2026 its page shows the
+ * PavingPatterns preview with an intro that says so. No count (house
+ * style), and no "fan": none of the templates on /patterns is a fan.
  */
 
 const PREVIEW_SLUGS = ["herringbone", "british-cobble", "ashlar-slate"];

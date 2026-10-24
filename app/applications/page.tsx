@@ -92,9 +92,11 @@ export default async function ApplicationsPage() {
                     card stopped mid-sentence with "…" and the page looked
                     unfinished (QA sweep). 13.5 px, up from 12.5, which was
                     under the 13 px floor on phones (QA C22, 30 Sep 2026). */}
+                {/* Four from 1024px (desktop QA, 23 Oct 2026): at three, six of
+                    the nineteen still stopped mid-sentence at 1280 to 1920. */}
                 <p
-                  className="text-[15px] leading-snug line-clamp-3"
-                  style={{ color: "var(--text-body)", textShadow: "0 1px 2px rgba(0,0,0,0.5)", minHeight: "calc(3 * 1.375em)" }}
+                  className="text-[15px] leading-snug line-clamp-3 min-h-[calc(3*1.375em)] lg:line-clamp-4 lg:min-h-[calc(4*1.375em)]"
+                  style={{ color: "var(--text-body)", textShadow: "0 1px 2px rgba(0,0,0,0.5)" }}
                 >
                   {app.shortDesc}
                 </p>

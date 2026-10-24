@@ -435,10 +435,32 @@ export default async function ProductPage({ params }: Props) {
               />
             )}
             {product.slug === "streetprint" && <PavingPatterns />}
+            {/* TrafficPatternsXD is stamped in the same patterns with its own
+                wire-rope grids (its Design Manual lists them by part number),
+                so its page shows the templates too (Vern, 23 Oct 2026:
+                "templates apply to TPXD too"). The band left it on 27 Sep
+                (QA pa#37) because it called the gallery TPXD's own; this
+                intro says whose grids they are. The six shown are all in the
+                manual: standard and diagonal herringbone, offset brick, ashlar
+                slate, British cobble, 8 inch tile. */}
+            {product.slug === "traffic-patterns-xd" && (
+              <PavingPatterns
+                moreLabel="The pattern gallery"
+                intro={
+                  <>
+                    TrafficPatternsXD is stamped with wire-rope grids in many of the same patterns as
+                    StreetPrint: herringbone, offset brick, slate, cobble and tile, with border courses.
+                    Each grid&apos;s size and part number is in the{" "}
+                    <a href="/docs/TrafficPatternsXD/TrafficPatternsXD-Design-Manual.pdf" className="underline underline-offset-2" style={{ color: "var(--text-primary)" }}>
+                      Design Manual
+                    </a>
+                    .
+                  </>
+                }
+              />
+            )}
             {/* StreetBond colours the stamped pattern, so StreetPrint's templates
-                belong on its page. TrafficPatternsXD is stamped with its own
-                wire grids (its Design Manual), so the band no longer runs there
-                (QA pa#37). */}
+                belong on its page. */}
             {product.slug === "streetbond" && <PatternGalleryCTA />}
 
           </div>
@@ -574,12 +596,17 @@ export default async function ProductPage({ params }: Props) {
               <h2 className="h2-section" style={{ color: "var(--text-primary)" }}>
                 Where {product.name} goes
               </h2>
-              <Link href="/applications" className="link-arrow hidden sm:inline-flex">
-                All applications
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </Link>
+              {/* .link-arrow sets display unlayered, so the breakpoint sits on
+                  a wrapper (phone QA, 23 Oct 2026: both copies showed, and
+                  this one ran off a 390px screen). */}
+              <div className="hidden sm:block">
+                <Link href="/applications" className="link-arrow">
+                  All applications
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
             </div>
 
             {/* One grid on every product page: four across from lg, two
@@ -628,10 +655,12 @@ export default async function ProductPage({ params }: Props) {
                 );
               })}
             </div>
-            <Link href="/applications" className="link-arrow sm:hidden mt-6">
-              All applications
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
-            </Link>
+            <div className="sm:hidden mt-6">
+              <Link href="/applications" className="link-arrow">
+                All applications
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+              </Link>
+            </div>
           </div>
           </section>
         )}

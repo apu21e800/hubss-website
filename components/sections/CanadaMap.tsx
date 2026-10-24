@@ -109,7 +109,11 @@ function matches(p: MapProject, q: string): boolean {
 }
 
 function useMedia(query: string): boolean {
-  const [on, setOn] = useState(false);
+  // The first render already knows the answer: this component only renders in
+  // the browser (CanadaMapWrapper, ssr: false). Starting false drew the phone
+  // layout first on a laptop, 540px taller, then snapped back: the homepage
+  // jumped twice when the map arrived (desktop QA, 23 Oct 2026, CLS 0.72).
+  const [on, setOn] = useState(() => typeof window !== "undefined" && window.matchMedia(query).matches);
   useEffect(() => {
     const mq = window.matchMedia(query);
     const update = () => setOn(mq.matches);
@@ -1083,7 +1087,7 @@ export default function CanadaMap() {
 const CSS = `
 .cm-section { background: var(--bg-dark); padding: 96px 0; }
 @media (max-width: 768px) { .cm-section { padding: 64px 0; } }
-@media (min-width: 1024px) { .cm-section { min-height: calc(clamp(560px, 76vh, 860px) + 294px); } }
+@media (min-width: 1024px) { .cm-section { min-height: calc(clamp(560px, 76vh, 860px) + clamp(326px, 326px + (100vw - 1024px) * 0.045, 343px)); } }
 .cm-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 1.5rem; }
 .cm-eyebrow { margin: 0 0 12px; }
 .cm-h2 { color: var(--text-primary); margin: 0 0 12px; }
@@ -1170,7 +1174,7 @@ const CSS = `
 .cm-detail-text { font-size: 14px; line-height: 1.6; color: var(--text-body); margin: 0 0 16px; }
 .cm-detail-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
 .cm-detail-links { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 0; }
-.cm-detail-links a { display: inline-flex; align-items: center; min-height: 40px; font-size: 13px; font-weight: 700; color: var(--accent-soft-text); text-decoration: none; }
+.cm-detail-links a { display: inline-flex; align-items: center; min-height: 44px; font-size: 13px; font-weight: 700; color: var(--accent-soft-text); text-decoration: none; }
 .cm-detail-links a:hover { color: var(--text-primary); }
 .cm-brief { margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 6px; }
 .cm-brief summary { min-height: 40px; display: flex; align-items: center; gap: 8px; cursor: pointer; list-style: none; font-size: 13px; font-weight: 700; color: var(--text-muted); }

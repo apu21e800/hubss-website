@@ -138,7 +138,7 @@ export default function ColourSystem({
         Screen-reference values: colours vary by monitor and substrate. Specify from physical
         samples.{" "}
         {downloadHref && (
-          <a href={downloadHref} className="underline underline-offset-2 hover:text-[var(--accent-text)] transition-colors" target="_blank" rel="noopener noreferrer">
+          <a href={downloadHref} className="inline-flex min-h-[44px] items-center underline underline-offset-2 hover:text-[var(--accent-text)] transition-colors" target="_blank" rel="noopener noreferrer">
             {downloadLabel ?? "Download the colour reference (PDF)"}
           </a>
         )}

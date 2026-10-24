@@ -21,6 +21,8 @@ import {
   unusableReason,
   type SkipKind,
 } from "../lib/social-outcome";
+import { typedSocialWords } from "../lib/social-pipeline";
+import { contactLeft, styleReport, withLeft } from "../lib/field-note-drafter";
 
 let failures = 0;
 function check(name: string, fn: () => void) {
@@ -113,6 +115,37 @@ check("Sanity's 401 on the site's read: the read token", () => {
   const hint = failureHint(sanityRead401);
   assert.match(hint, /SANITY_API_READ_TOKEN/);
   assert.doesNotMatch(hint, /WRITE/);
+});
+
+console.log("A customer's details keep the posts as drafts (24 Oct 2026)");
+const fieldPost = (place: string, alt?: string) => ({
+  stream: "From the field" as const,
+  title: `StreetBond in ${place}`,
+  imageAlt: alt,
+  source: { text: `Where: ${place}.\nSystem: StreetBond.\nWhat the crew says: Two coats over the driveway.` },
+});
+check("a job post's place is read as typed", () => {
+  const lines = contactLeft(typedSocialWords(fieldPost("the smiths, 1234 main st, Milton")));
+  assert.deepEqual(lines.map((l) => l.label), ["Photo description", "Job post, Where", "Job post"]);
+});
+check("a Where with a house number and no street type holds them too", () =>
+  assert.deepEqual(contactLeft(typedSocialWords(fieldPost("1234 Lakeshore, Toronto", "A red driveway"))).map((l) => l.label), ["Job post, Where", "Job post"]));
+check("a two-digit Where with no street type: the Where line only", () =>
+  assert.deepEqual(contactLeft(typedSocialWords(fieldPost("22 Elm, Milton", "A red driveway"))).map((l) => l.label), ["Job post, Where"]));
+check("the Sent to Buffer record names the field and the kind, never the words", () => {
+  // A mask covers only what the rule sees: "owner Jane" would stay (the re-review of 24 Oct 2026).
+  const post = { ...fieldPost("1234 Lakeshore, Toronto", "A red driveway"), source: { text: "Where: 1234 Lakeshore, Toronto.\nSystem: StreetBond.\nWhat the crew says: owner Jane, 905-555-0123, wants it by Friday." } };
+  const report = styleReport(withLeft({ text: {}, flagged: 0, left: [] }, contactLeft(typedSocialWords(post))), "in Buffer before approving").join("\n");
+  for (const d of ["Lakeshore", "Jane", "905-555-0123", "Friday", "[address]", "[phone number]"]) assert.equal(report.includes(d), false, d);
+  assert.match(report, /- Job post, Where: A street address/);
+  assert.match(report, /- Job post: (?:A street address|A phone number)/);
+});
+check("a photo's alt text with a phone number holds the posts", () =>
+  assert.equal(contactLeft(typedSocialWords(fieldPost("Milton, Ontario", "Call 905-555-0123 for a quote"))).length, 1));
+check("a clean job post holds nothing", () => assert.deepEqual(contactLeft(typedSocialWords(fieldPost("Milton, Ontario", "A red StreetBond driveway"))), []));
+check("an article's own words aren't read again, only its photo's description", () => {
+  const words = typedSocialWords({ stream: "Article", title: "A cooler path in Osoyoos", imageAlt: "The path in Sandstone", source: { text: "At 407 Elgin Street in Brantford." } });
+  assert.deepEqual(words.map((w) => w.label), ["Photo description"]);
 });
 
 if (failures) {

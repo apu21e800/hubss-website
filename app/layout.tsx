@@ -18,6 +18,7 @@ import { SiteSettingsProvider } from "@/components/SiteSettingsProvider";
 import NavigationProgress from "@/components/NavigationProgress";
 import SkipLink from "@/components/SkipLink";
 import HistoryScroll from "@/components/HistoryScroll";
+import NotInStudio from "@/components/NotInStudio";
 import { getSiteSettings } from "@/lib/sanity.queries";
 
 // Runs before first paint. Order: ?theme= in the URL (persisted, so a link
@@ -158,7 +159,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             </Suspense>
           </>
         ) : (
-          <>
+          // Not on /studio either: an editor's session isn't a visit, and the
+          // chat bubble sat over the Studio (components/NotInStudio.tsx).
+          <NotInStudio>
             <CrispChat />
             {process.env.VERCEL_ENV !== "production" && <VercelToolbar />}
             <Analytics />
@@ -167,7 +170,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
                 program (components/HumanAnalytics.tsx, 15 Oct 2026). */}
             <HumanAnalytics gaId={GA_MEASUREMENT_ID} />
             <AnalyticsEvents />
-          </>
+          </NotInStudio>
         )}
       </body>
     </html>

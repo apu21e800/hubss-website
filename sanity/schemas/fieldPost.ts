@@ -42,7 +42,7 @@ export default defineType({
       name: "place",
       title: "Where",
       type: "string",
-      description: "Town and province, spelled out, e.g. 'Brantford, Ontario'. Add the site if the client is happy to be named, e.g. 'Children's Safety Village of Brant, Brantford, Ontario'.",
+      description: "Town and province, spelled out, e.g. 'Brantford, Ontario'. Add the site if the client is happy to be named, e.g. 'Children's Safety Village of Brant, Brantford, Ontario'. No street address, phone number or email.",
       validation: (r) => [r.required().error("Say where the job is"), copyStyle(r)],
     }),
     defineField({
@@ -80,7 +80,7 @@ export default defineType({
       type: "text",
       rows: 8,
       description:
-        "Leave this empty and the photos go to social only. Fill it in and 21e8 writes the job up as a Projects article for the website, checks it and schedules it: it is on hubss.com within a few working days, and its social posts follow. A few sentences or a list, in your own words: who the client was (if they can be named), what they needed, what went in and when, who installed it, anything about the design or the colours, and how it has held up. The article says nothing that isn't here, in the line above or on the system's page, so no guesses and no figures you aren't sure of.",
+        "Leave this empty and the photos go to social only. Fill it in and 21e8 writes the job up as a Projects article for the website, checks it and schedules it: it is on hubss.com within a few working days, and its social posts follow. A few sentences or a list, in your own words: who the client was (if they can be named), what they needed, what went in and when, who installed it, anything about the design or the colours, and how it has held up. The article says nothing that isn't here, in the line above or on the system's page, so no guesses and no figures you aren't sure of. Leave out customers' phone numbers, emails and home addresses. A homeowner isn't named in the article, only the town.",
       validation: (r) => [r.max(4000).warning("That is a lot: a few sentences or a short list is enough"), copyStyle(r)],
     }),
     defineField({

@@ -8,6 +8,8 @@ import { heroAlt } from "@/lib/image-seo";
 import { HOME_HERO } from "@/lib/hero-framing";
 import { homeHeroSrc, isSanityImage, sanitySrcSet } from "@/lib/photos";
 import { keepDots } from "@/lib/separators";
+import SeeTheWork from "@/components/sections/WorkShowcase";
+import type { WorkSlide } from "@/lib/work-showcase";
 
 const FALLBACK_HERO = "/images/hero/hero-1.jpg";
 
@@ -66,6 +68,8 @@ interface HeroSlideshowProps {
   widePosition?: string;
   /** While previewing in Studio: the attribute that makes the photo clickable (lib/sanity.preview.ts). */
   editAttribute?: string;
+  /** The highlights "See the work" opens on a phone (lib/work-showcase.ts). */
+  work?: WorkSlide[];
 }
 
 export default function HeroSlideshow({
@@ -86,6 +90,7 @@ export default function HeroSlideshow({
   position,
   widePosition,
   editAttribute,
+  work = [],
 }: HeroSlideshowProps = {}) {
   const src = heroImageSrc || FALLBACK_HERO;
   // A Sanity photo is sized by Sanity's CDN (lib/photos.ts): a phone gets an
@@ -281,12 +286,14 @@ export default function HeroSlideshow({
                 orange one's resting shadow is --btn-shadow, which the hover
                 builds on; as an inline box-shadow it beat the hover. */}
             <div className="flex flex-col sm:flex-row gap-3">
-              {/* prefetch={false}: a hash on this page needs no payload, and
-                  the default prefetch pulled the /products RSC and three
-                  card images every home load (technical review, 17 Oct 2026). */}
-              <Link
+              {/* prefetch={false} (inside SeeTheWork): a hash on this page
+                  needs no payload, and the default prefetch pulled the
+                  /products RSC and three card images every home load
+                  (technical review, 17 Oct 2026). On a phone the button
+                  opens the highlights full screen (WorkShowcase.tsx). */}
+              <SeeTheWork
                 href={cta1Href}
-                prefetch={false}
+                slides={work}
                 className="btn-accent btn-lg"
                 style={{ ["--btn-shadow" as string]: "0 6px 28px rgba(249,115,22,0.42)" }}
               >
@@ -294,7 +301,7 @@ export default function HeroSlideshow({
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
-              </Link>
+              </SeeTheWork>
               {/* The Product Book beside the orange button, in place of the
                   outlined "See the systems" (Vern, 16 Oct 2026). Doug: an
                   outlined "Open the Product Book" button "is not enough"; the

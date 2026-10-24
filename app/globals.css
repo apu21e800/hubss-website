@@ -1736,3 +1736,289 @@ html {
 @media (prefers-reduced-motion: reduce) {
   .menu-cta, .menu-cta:active { transition: none; transform: none; }
 }
+
+/* ── The work, full screen on a phone ─────────────────────────────────
+   "See the work" under 1024px (components/sections/WorkShowcase.tsx,
+   24 Oct 2026): one job to a screen, the photograph first. Fixed colours,
+   as in the photo viewer: it is near-black in every theme. The slides are a
+   scroll-snap row, so a swipe is the phone's own, momentum and all. */
+.ws {
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  display: flex;
+  flex-direction: column;
+  background: #0c0c0c;
+  color: #fff;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 220ms var(--ease-out), transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  overscroll-behavior: contain;
+}
+.ws.is-shown {
+  opacity: 1;
+  transform: none;
+}
+.ws-top {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: max(8px, env(safe-area-inset-top)) 12px 8px 20px;
+}
+.ws-count {
+  font-family: var(--font-inter), "Inter", system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: rgba(255, 255, 255, 0.62);
+}
+.ws-btn {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  transition: background-color var(--dur-1) var(--ease-out), opacity var(--dur-1) var(--ease-out);
+}
+.ws-btn:active,
+.ws-pill:active {
+  background: rgba(255, 255, 255, 0.22);
+}
+.ws-btn:disabled {
+  opacity: 0.28;
+  cursor: default;
+}
+.ws-btn:focus-visible,
+.ws-pill:focus-visible,
+.ws-link:focus-visible,
+.ws-ghost:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+.ws-track {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  touch-action: pan-x;
+  scrollbar-width: none;
+}
+.ws-track::-webkit-scrollbar {
+  display: none;
+}
+.ws-slide {
+  flex: 0 0 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+.ws-photo {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 34%;
+  overflow: hidden;
+  background: #171717;
+}
+.ws-photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 260ms var(--ease-out);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.ws-photo img.is-loaded {
+  opacity: 1;
+}
+.ws-text {
+  flex: none;
+  padding: 18px 20px 4px;
+}
+.ws-place {
+  font-family: var(--font-inter), "Inter", system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  color: #fb923c;
+}
+.ws-title {
+  margin-top: 6px;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+  color: #fff;
+  text-wrap: balance;
+}
+.ws-excerpt {
+  margin-top: 8px;
+  font-size: 15px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.74);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
+}
+/* Four lines hold every story without a write-up whole; a shorter screen
+   gives the photograph the room instead. */
+@media (max-height: 700px) {
+  .ws-excerpt {
+    -webkit-line-clamp: 3;
+  }
+}
+@media (max-height: 600px) {
+  .ws-excerpt {
+    -webkit-line-clamp: 2;
+  }
+  .ws-title {
+    font-size: 22px;
+  }
+}
+.ws-meta {
+  margin-top: 8px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.5);
+}
+.ws-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fb923c;
+}
+.ws-link svg {
+  width: 14px;
+  height: 14px;
+  flex: none;
+}
+.ws-foot {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px max(14px, env(safe-area-inset-bottom));
+}
+.ws-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+  color: #fff;
+}
+.ws-end {
+  justify-content: center;
+}
+.ws-end-body {
+  width: 100%;
+  max-width: 30rem;
+  padding: 0 24px 24px;
+}
+.ws-end-title {
+  margin-top: 10px;
+  font-size: clamp(2.25rem, 9vw, 3rem);
+  font-weight: 900;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  color: #fff;
+}
+.ws-end-actions {
+  margin-top: 28px;
+  display: grid;
+  gap: 12px;
+}
+.ws-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 1.25rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+}
+.ws-ghost:active {
+  background: rgba(255, 255, 255, 0.08);
+}
+/* A phone on its side: the photograph beside the words. */
+@media (orientation: landscape) and (max-height: 520px) {
+  .ws-top {
+    padding-top: max(4px, env(safe-area-inset-top));
+    padding-bottom: 4px;
+  }
+  .ws-slide {
+    flex-direction: row;
+  }
+  .ws-photo {
+    flex: 0 0 56%;
+    min-height: 0;
+  }
+  .ws-text {
+    flex: 1 1 auto;
+    min-width: 0;
+    align-self: center;
+    padding: 0 24px;
+  }
+  .ws-title {
+    font-size: 22px;
+  }
+  .ws-excerpt {
+    -webkit-line-clamp: 3;
+  }
+  .ws-end {
+    justify-content: flex-start;
+    align-items: center;
+  }
+  .ws-end-body {
+    padding-bottom: 0;
+  }
+  .ws-end-title {
+    font-size: 2rem;
+  }
+  .ws-end-actions {
+    margin-top: 16px;
+    grid-template-columns: 1fr 1fr;
+  }
+  .ws-foot {
+    padding-top: 4px;
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ws,
+  .ws-photo img {
+    transition: none;
+  }
+}

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import { WORK_PHONE } from "@/components/sections/WorkShowcase";
 // Just the number, from its own generated file — importing it from
 // lib/map-projects.ts would drag the whole dataset into the phone bundle.
 
@@ -69,6 +70,9 @@ export default function CanadaMapWrapper() {
     const onClick = (e: MouseEvent) => {
       const a = e.target instanceof Element ? e.target.closest("a[href]") : null;
       if (!(a instanceof HTMLAnchorElement)) return;
+      // On a phone the hero's "See the work" opens the photographs, not the
+      // map (WorkShowcase.tsx); its "Open the map" is the tap that counts.
+      if (a.dataset.work === "showcase" && window.matchMedia(WORK_PHONE).matches) return;
       const url = new URL(a.href, window.location.href);
       if (url.hash === "#map" && url.pathname === window.location.pathname) setWanted(true);
     };

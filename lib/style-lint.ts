@@ -480,8 +480,6 @@ const STREET_TYPES =
   "Street|St|Avenue|Ave|Road|Rd|Drive|Dr|Crescent|Cres|Court|Ct|Crt|Place|Pl|Boulevard|Blvd|Way|Lane|Ln|Highway|Hwy|Terrace|Trail|Parkway|Pkwy|Circle|Close|Gate|Row|Line|Sideroad";
 /** Street names people type that prose rarely puts after a number. */
 const TYPED_STREET_TYPES = `${STREET_TYPES}|Bay|Hill|Heights|Broadway|Square|Mews|Grove|Landing|Ridge`;
-/** The street types that are never ordinary words: what follows them ("1234 main st milton") is the town. */
-const ABBREVIATED_TYPES = new Set(["st", "ave", "rd", "dr", "cres", "ct", "crt", "pl", "blvd", "ln", "hwy", "pkwy"]);
 const streetRule = (types: string, flags: string) =>
   new RegExp(
     `\\b(?:\\d{1,5}[-\\u2010-\\u2013])?\\d{1,6}[A-Z]?\\s+(?:[A-Z][\\w'\\u2019.-]*|\\d{1,3}(?:st|nd|rd|th)?)(?:\\s+[A-Z0-9][\\w'\\u2019.-]*){0,2}\\s+(?:${types})\\b\\.?`,
@@ -491,40 +489,51 @@ const STREET_IN_COPY = streetRule(STREET_TYPES, "g");
 const STREET_ANY_CASE = streetRule(TYPED_STREET_TYPES, "gi");
 /** Typed words only: "5678 Highway 7", "12345 Regional Road 25", "2345 Concession 6", "1234 Fire Route 52" (three digits at least: "2 Highway 7 crossings" is a count). */
 const ROUTE_ADDRESS = /\b(\d{3,6})\s+(?:Highway|Hwy\.?|Regional\s+R(?:oa)?d\.?|County\s+R(?:oa)?d\.?|Line|Side\s?road|Concession|Conc\.|Fire\s+Route)\s+\d{1,4}\b/gi;
-/** Typed words only: a rural route, before a comma or the end ("RR 2, Caledon"; "RR 25 at Derry Road" is Halton's road). */
-const RURAL_ROUTE = /\b(?:R\.?\s?R\.?\s*#?\s*\d{1,3}|Rural\s+Route\s*#?\s*\d{1,3})\b(?=\s*(?:[,;\n]|\.?\s*$))/gi;
+/**
+ * Typed words only: a rural route before a comma, the end, a town or a site
+ * ("RR 2, Caledon", "RR 2 Moffat", "RR 3 Site 30 C12"); "on RR 25 at Derry
+ * Road" is Halton's road (ROAD_BEFORE, RURAL_AFTER).
+ */
+const RURAL_ROUTE = /\b(?:R\.?\s?R\.?\s*#?\s*\d{1,3}|Rural\s+Route\s*#?\s*\d{1,3})\b/gi;
+const RURAL_AFTER = /^(?:\s*(?:[,;\n]|\.?\s*$)|\s+(?:[Ss]ite\b|[A-Z][a-z]))/;
 /** Typed words only: a post office box ("PO Box 123"), or "Box 14" opening the words or a part of them ("junction box 2" is not one). */
 const PO_BOX = /\b(?:P\.?\s?O\.?\s*Box|Post\s+Office\s+Box)\s*#?\s*\d{1,6}\b/gi;
 const BARE_BOX = new RegExp("(^|[,;\\n]\\s*)(Box\\s*#?\\s*\\d{1,6})\\b", "g");
 /** Any case, for a word in a case-sensitive rule. */
 const anyCase = (w: string) => w.replace(/[a-z]/g, (c) => `[${c}${c.toUpperCase()}]`);
-const FR_NAME = "[A-Za-z\\u00c0-\\u00ff][\\w\\u00c0-\\u00ff'\\u2019-]*";
-const FR_CAPITAL = "[A-Z\\u00c0-\\u00de0-9][\\w\\u00c0-\\u00ff'\\u2019-]*";
+const FR_NAME = "[A-Za-z0-9\\u00c0-\\u00ff][\\w\\u00c0-\\u00ff'\\u2019-]*";
 const FR_LINK = `(?:${anyCase("du")}|${anyCase("des")}|${anyCase("de")}(?:\\s+${anyCase("la")})?|[dD]['\\u2019]|${anyCase("la")}|${anyCase("le")}|${anyCase("les")})`;
 const EACUTE = "(?:\\u00e9|\\u00c9|[eE])";
 /** Typed words only: a French address. */
 // "rue", "chemin", "rang" and "montee" are never English: any case after
 // them ("1234 rue sainte-catherine"). "boulevard", "route", "promenade",
 // "impasse" and "allee" are English words too ("3 boulevard sections", "2
-// route options"): a capital, a number or "du", "de", "des" after them.
+// route options"): after a one- or two-digit number, a capital, a number or
+// "du", "de", "des" must follow them ("1234 boulevard rene-levesque" is an
+// address).
 // "avenue" and "place" only with "du", "de", "des" after them: "72 Avenue in
 // Surrey" is a numbered street, "3 place settings" a count.
 const FRENCH_ADDRESS = new RegExp(
   `\\b(\\d{1,6})\\s*,?\\s+(?:(?:${anyCase("rue")}|${anyCase("chemin")}|${anyCase("rang")}|${anyCase("mont")}${EACUTE}${anyCase("e")})((?:\\s+${FR_NAME}){1,3})` +
-    `|(?:${anyCase("boul")}(?:${anyCase("evard")}|\\.)?|${anyCase("route")}|${anyCase("promenade")}|${anyCase("impasse")}|${anyCase("all")}${EACUTE}${anyCase("e")})(?:\\s+${FR_LINK})?\\s+${FR_CAPITAL}(?:\\s+${FR_NAME}){0,2}` +
+    `|(?:${anyCase("boul")}(?:${anyCase("evard")}|\\.)?|${anyCase("route")}|${anyCase("promenade")}|${anyCase("impasse")}|${anyCase("all")}${EACUTE}${anyCase("e")})(\\s+${FR_LINK})?\\s+(${FR_NAME})(?:\\s+${FR_NAME}){0,2}` +
     `|(?:${anyCase("avenue")}|${anyCase("av")}\\.|${anyCase("place")})\\s+${FR_LINK}\\s+${FR_NAME}(?:\\s+${FR_NAME}){0,2})`,
   "g"
 );
 /**
  * Typed words only: a street named without its type ("Herringbone, 1234
- * Lakeshore", "at 1234 Yonge, Toronto", "Where: 1234 Kingsway"): three
- * digits at least, one or two capitalised words, after a comma, a colon,
- * "at", "on", "to", "from", "of" or "near" (or nothing), and before a comma,
- * "in" or the end.
- * A year only after "at" or "on" ("Kitchener, 2021 Remembrance Day.").
+ * Lakeshore", "at 1234 Yonge, Toronto", "Where: 1234 Kingsway", "at 12
+ * Lakeshore,"): one or two capitalised words, after a comma, a colon, "at",
+ * "on", "to", "from", "of" or "near" (or nothing), and before a comma, "in"
+ * or the end. Three digits at least, but one or two after "at"; a year only
+ * after "at" or "on" ("Kitchener, 2021 Remembrance Day.").
  */
 const NAMED_ROAD = new RegExp(
-  "(^|[,;:\\n]\\s*|\\b(?:[Aa]t|[Oo]n|[Tt]o|[Ff]rom|[Oo]f|[Nn]ear)\\s+)(\\d{3,5})\\s+([A-Z][a-z\\u00e0-\\u00ff'\\u2019]+(?:[\\s-][A-Z][a-z\\u00e0-\\u00ff'\\u2019]+)?)(?=\\s*(?:[,;\\n]|\\.(?:\\s|$)|$|\\s+in\\s))",
+  "(^|[,;:\\n]\\s*|\\b(?:[Aa]t|[Oo]n|[Tt]o|[Ff]rom|[Oo]f|[Nn]ear)\\s+)(\\d{1,5})\\s+([A-Z][a-z\\u00e0-\\u00ff'\\u2019]+(?:[\\s-][A-Z][a-z\\u00e0-\\u00ff'\\u2019]+)?)(?=\\s*(?:[,;\\n]|\\.(?:\\s|$)|$|\\s+in\\s))",
+  "g"
+);
+/** The same, typed in lowercase, only after "at" ("at 1234 lakeshore, toronto"). */
+const LOWER_NAMED_ROAD = new RegExp(
+  "(\\b[Aa]t\\s+)(\\d{3,5})\\s+([a-z][a-z\\u00e0-\\u00ff'\\u2019]+)(?=\\s*(?:[,;\\n]|\\.(?:\\s|$)|$|\\s+in\\s))",
   "g"
 );
 /** The Where field only: a house number at its start ("1234 Lakeshore, Toronto"). */
@@ -558,9 +567,6 @@ export function contactIssues(text: string, opts: ContactOptions = {}): StyleIss
   // medium.com/@name link as an email. mailto: links stay readable.
   const plain = text.replace(/\b(?:https?:\/\/|www\.)[^\s<>"')\]]+/gi, (m) => " ".repeat(m.length));
   const before = (at: number) => plain.slice(Math.max(0, at - 24), at);
-  // Words with no capitals at all (a slug, a search phrase, a note typed in
-  // lowercase): the word after a street type may be the town there.
-  const caseless = !/[A-Z]/.test(plain);
   const full: [number, number][] = [];
   for (const m of plain.matchAll(PHONE_IN_COPY)) {
     const at = (m.index ?? 0) + m[1].length;
@@ -587,7 +593,7 @@ export function contactIssues(text: string, opts: ContactOptions = {}): StyleIss
   for (const m of plain.matchAll(typed ? STREET_ANY_CASE : STREET_IN_COPY)) {
     const at = m.index ?? 0;
     const end = at + m[0].length;
-    if (isAddress(m[0], before(at), plain.slice(end, end + 40), typed, caseless)) add(at, m[0].length, ADDRESS_SAY);
+    if (isAddress(m[0], before(at), plain.slice(end, end + 40), typed)) add(at, m[0].length, ADDRESS_SAY);
   }
   if (typed) {
     for (const m of plain.matchAll(ROUTE_ADDRESS)) {
@@ -596,18 +602,23 @@ export function contactIssues(text: string, opts: ContactOptions = {}): StyleIss
     }
     for (const m of plain.matchAll(RURAL_ROUTE)) {
       const at = m.index ?? 0;
-      if (!ROAD_BEFORE.test(before(at))) add(at, m[0].length, ADDRESS_SAY);
+      const end = at + m[0].length;
+      if (RURAL_AFTER.test(plain.slice(end, end + 12)) && !ROAD_BEFORE.test(before(at))) add(at, m[0].length, ADDRESS_SAY);
     }
     for (const m of plain.matchAll(PO_BOX)) add(m.index ?? 0, m[0].length, ADDRESS_SAY);
     for (const m of plain.matchAll(BARE_BOX)) add((m.index ?? 0) + m[1].length, m[2].length, ADDRESS_SAY);
     for (const m of plain.matchAll(FRENCH_ADDRESS)) {
       // "1 rue pietonne" is a pedestrian street; "12 rue de la Paix" an address.
       if (m[2] !== undefined && m[1].length === 1 && !CAPITAL.test(m[2].trim().charAt(0))) continue;
+      // "3 boulevard sections", "2 route options": counts.
+      if (m[4] !== undefined && m[3] === undefined && m[1].length < 3 && !/^[0-9]/.test(m[4]) && !CAPITAL.test(m[4].charAt(0))) continue;
       add(m.index ?? 0, m[0].length, ADDRESS_SAY);
     }
-    for (const m of plain.matchAll(NAMED_ROAD)) {
-      const at = (m.index ?? 0) + m[1].length;
-      if (namedRoad(m[2], m[3], m[1])) add(at, m[0].length - m[1].length, ADDRESS_SAY);
+    for (const re of [NAMED_ROAD, LOWER_NAMED_ROAD]) {
+      for (const m of plain.matchAll(re)) {
+        const at = (m.index ?? 0) + m[1].length;
+        if (namedRoad(m[2], m[3], m[1]) && !NOT_A_NAME.has(m[3].toLowerCase())) add(at, m[0].length - m[1].length, ADDRESS_SAY);
+      }
     }
   }
   if (opts.place) {
@@ -642,6 +653,8 @@ const UNITS = new Set([
   "km", "m", "metre", "metres", "meter", "meters", "kilometre", "kilometres", "kilometer", "kilometers", "ft", "feet", "foot", "inch", "inches", "mm", "cm", "mi", "mile", "miles", "sq", "square",
   "year", "years", "month", "months", "week", "weeks", "day", "days", "hr", "hrs", "hour", "hours", "min", "minute", "minutes", "storey", "storeys", "story",
   "colour", "colours", "color", "colors", "coat", "coats", "series", "x", "kg", "lb", "lbs",
+  "degree", "degrees", "celsius", "fahrenheit", "psi", "mph", "kph", "rpm", "mil", "mils", "micron", "microns", "percent", "kpa", "mpa", "ppm",
+  "ml", "oz", "litre", "litres", "liter", "liters", "tonne", "tonnes", "gallon", "gallons",
 ]);
 /** What a job puts on a road, never a street's name: "3 bus lane segments", "12 stop line markings", "a 2 way street". */
 const ROAD_WORDS = new Set([
@@ -649,28 +662,29 @@ const ROAD_WORDS = new Set([
   "traffic", "parking", "loading", "hov", "lane", "lanes", "line", "lines", "solid", "dashed", "dotted", "broken", "mural", "murals", "marking", "markings", "zone", "zones",
   "stall", "stalls", "pad", "pads", "rink", "way", "shared",
 ]);
-/** Road words that name streets too, capitalised ("12 Centre Street", "2 Park Lane"): a count only in lowercase ("2 dog park gate posts"). */
-const LOWER_ROAD_WORDS = new Set([
-  "centre", "center", "school", "field", "court", "side", "service", "access", "frontage", "fire", "dog", "gate", "garden", "park", "play", "road", "street", "block", "blocks",
-  "phase", "section", "sections", "path", "paths", "trail", "plaza", "entrance", "crossing", "crossings", "speed", "transit", "edge", "double", "hockey", "soccer", "sport", "sports",
-  "rail", "railway", "station", "bridge", "ramp", "curb", "island", "median", "roundabout", "circle", "driveway", "walkway", "sidewalk", "patio", "pool", "boulevard",
+/**
+ * What a crew counts on a street, after it: a one- or two-digit number before
+ * the street is then a count ("the 3 Main Street crossings", "2 King Street
+ * West crosswalks", "2 dog park gate posts"). A listed noun, never any word
+ * ending in s ("45 Maple Crescent looks sharp" is a house: the third review
+ * of 24 Oct 2026), and plural only where one of them can be a single home's
+ * job ("the 12 Oak Street job" is an address, "our 2 Bay Street jobs" a count).
+ */
+const COUNT_NOUNS = new Set([
+  "crosswalk", "crosswalks", "crossing", "crossings", "segment", "segments", "section", "sections", "marking", "markings", "mural", "murals",
+  "line", "lines", "lane", "lanes", "bar", "bars", "arrow", "arrows", "chevron", "chevrons", "symbol", "symbols", "logo", "logos",
+  "intersection", "intersections", "corner", "corners", "island", "islands", "median", "medians", "roundabout", "roundabouts", "ramp", "ramps",
+  "stall", "stalls", "leg", "legs", "approaches", "stops", "zones", "lots", "blocks", "sites", "locations", "jobs", "projects", "installs",
+  "installations", "gates", "posts", "pads", "rows", "strips", "panels", "templates", "entrances", "spaces", "bays",
 ]);
-/** Before a count, not a house number: "the 3 Main Street crossings", "both 2 Bay Street jobs". */
-const COUNT_BEFORE = /\b(?:the|these|those|both|all|our|its|their|his|her|my|your|first|last|next|another|some|few|several)\s*$/i;
-/** Before a year, not a house number: "In 2023 Fraser Highway", "Summer 2022 King Street". */
+/** Before a house number, never a count: "at 45 Maple Crescent", "the smiths, 45 park road". */
+const ADDRESS_BEFORE = /(?:\b(?:at|on|lives?|home|house|address)\s*[:#]?|[,;:])\s*$/i;
+/** Before a year, not a house number: "In 2023 Fraser Highway", "Summer 2022 King Street". Not "by" or "from": "drive by 2041 Main Street", "photos from 1987 Oak Street". */
 const YEAR_BEFORE =
-  /\b(?:in|since|by|from|until|till|before|after|during|through|circa|early|late|mid|summer|fall|autumn|winter|spring|jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|june?|july?|aug(?:ust)?|sept?(?:ember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\.?,?\s*$/i;
+  /\b(?:in|since|until|till|during|circa|early|late|mid|summer|fall|autumn|winter|spring|jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|june?|july?|aug(?:ust)?|sept?(?:ember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\.?,?\s*$/i;
 /** Before a road's number, not a house: "on RR 25", "along RR 2". */
 const ROAD_BEFORE = /\b(?:on|along|off|near|onto|via|to|from|at|crossing)\s*$/i;
-/** A word after the street type that ends an address or joins it to the next words: its direction, a unit, a town, a joining word. */
-const ADDRESS_GOES_ON = new Set([
-  "unit", "apt", "apartment", "suite", "ste", "in", "at", "near", "by", "for", "off", "and", "or", "on", "with", "since", "to", "from", "where", "which", "who", "that", "was", "is",
-  "has", "had", "have", "will", "until", "last", "this", "next", "every", "each", "but", "so", "because", "when", "while", "after", "before", "during", "a", "an", "the",
-  "bc", "ab", "sk", "mb", "qc", "ns", "nb", "nl", "pe", "yt", "nt", "nu", "ont", "ontario",
-]);
 const NEXT_WORD = new RegExp("^\\s+([a-z][a-z'\\u2019]*)\\b");
-/** A plural, as a count goes on to one ("crossings", "lots"), not "bus" or "grass". */
-const PLURAL = /[^su]s$/;
 const CAPITAL = new RegExp("[A-Z\\u00c0-\\u00de]");
 const DIRECTION = /^\s+(?:n|s|e|w|ne|nw|se|sw|north|south|east|west)\b\.?/i;
 const STREET_TYPE_WORD = new RegExp(`^(?:${TYPED_STREET_TYPES})$`, "i");
@@ -694,7 +708,7 @@ const NOT_A_ROAD = new Set([
  * words drop that last exception, but a year after "in", "since" or a month
  * is still a year ("In 2023 Fraser Highway").
  */
-function isAddress(match: string, before: string, after: string, typed = false, caseless = false): boolean {
+function isAddress(match: string, before: string, after: string, typed = false): boolean {
   const m = CIVIC.exec(match);
   const civic = m?.[1] ?? "";
   const first = (m?.[2] ?? "").toLowerCase().replace(/[.,]+$/, "");
@@ -702,19 +716,15 @@ function isAddress(match: string, before: string, after: string, typed = false, 
   // The words between the number and the street type. A count is one or
   // two digits: "1234 Town Line Road" is a farm, "12 stop line markings" a job.
   const parts = match.trim().split(/\s+/);
-  const name = parts.slice(1, -1).map((w) => w.replace(/[.,]+$/, ""));
+  const name = parts.slice(1, -1).map((w) => w.replace(/[.,]+$/, "").toLowerCase());
   const count = civic.length <= 2;
-  if (name.some((w) => NOT_A_NAME.has(w.toLowerCase()) || (count && (ROAD_WORDS.has(w.toLowerCase()) || LOWER_ROAD_WORDS.has(w))))) return false;
+  if (name.some((w) => NOT_A_NAME.has(w) || (count && ROAD_WORDS.has(w)))) return false;
   if (/\b(?:highway|hwy\.?|route|road|rd\.?|line|concession|exit)\s*#?\s*$/i.test(before)) return false;
-  // A count goes on to what it counts, in the plural: "the 3 Main Street
-  // crossings", "2 King Street West crosswalks". "Their 12 Oak Street
-  // driveway" is a house. Not read in words with no capitals, where
-  // "3-main-street-milton" ends in its town.
-  const type = (parts[parts.length - 1] ?? "").toLowerCase().replace(/\.$/, "");
+  // A count goes on to what it counts (COUNT_NOUNS), never after "at", "on"
+  // or a comma: "Their 12 Oak Street driveway" and "at 45 Maple Crescent"
+  // are houses.
   const next = NEXT_WORD.exec(after.replace(DIRECTION, ""))?.[1];
-  const counted = !!next && PLURAL.test(next) && !ADDRESS_GOES_ON.has(next);
-  if (count && counted && COUNT_BEFORE.test(before)) return false;
-  if (count && counted && !caseless && !ABBREVIATED_TYPES.has(type)) return false;
+  if (count && next && COUNT_NOUNS.has(next) && !ADDRESS_BEFORE.test(before)) return false;
   const year = YEAR.test(civic);
   if (typed) return !(year && YEAR_BEFORE.test(before));
   const addressWord = /\b(?:at|on|is|address|lives?|home|house|unit|suite)\s*[:#]?\s*$/i.test(before);
@@ -723,6 +733,7 @@ function isAddress(match: string, before: string, after: string, typed = false, 
 
 /** A NAMED_ROAD match that is an address: not a year away from "at" or "on", a unit, a street type, a product, a month. */
 function namedRoad(civic: string, words: string, lead: string): boolean {
+  if (civic.length < 3 && !/\b[Aa]t\s/.test(lead)) return false;
   if (YEAR.test(civic) && !/\b[Aa]t|\b[Oo]n/.test(lead)) return false;
   const first = words.split(/[\s-]/)[0].toLowerCase();
   if (UNITS.has(first) || NOT_A_ROAD.has(first) || NUMBERED_STREET.has(first)) return false;

@@ -721,26 +721,31 @@ Canadian postal code, a street address. Web addresses are blanked first (a
 CDN file name reads as a phone number, a medium.com/@ link as an email). Never
 an address or a phone: a numbered crossing ("152 Street and 72 Avenue"), a
 highway's number ("Highway 401 and King Street"), a distance or a size ("35
-km Spirit Trail", "3 day road closure"), what a job puts on a road ("3 bus
-lane segments", "a 2 way street"), a count ("the 3 Main Street crossings",
-"2 King Street West crosswalks"), a year after "in", "since" or a month, a
-range ("800-1200 square feet"), a toll-free line, a number no phone can have
-(a purchase order).
+km Spirit Trail", "3 day road closure", "150 mil"), what a job puts on a road
+("3 bus lane segments", "a 2 way street"), a count (one or two digits before
+a street and one of the nouns a crew counts, COUNT_NOUNS: "the 3 Main Street
+crossings"; never after "at", "on" or a comma, and never just any word in
+s: "45 Maple Crescent looks sharp" is a house), a year after "in", "since"
+or a month (not "by" or "from": "drive by 2041 Main Street"), a range
+("800-1200 square feet"), a toll-free line, a number no phone can have (a
+purchase order).
 - Two readings. Claude's prose at draft time (the default): a house number
   with a capitalised street name, a year or one-digit count only after "at",
   "on", "lives". Words a person typed (`typed`): any case, any house number,
-  Bay or Hill streets, "5678 Highway 7", an RR or a Box before a comma, a PO
-  Box, French addresses, a street named without its type after a comma,
-  colon, "at" or "on" ("at 1234 Yonge, Toronto"), seven-digit local numbers,
-  and for a job post's Where (`place`) a house number at its start.
-- The re-review found the first typed reading held 15 of 18 plain job notes.
-  scripts/lib/contact-notes.ts is what it is measured on now: 168 plain notes,
-  stories, captions and Wheres (none may be held) and 49 typed details (each
-  must be found), both in `npm run test:copy`. Add a note there before
-  changing a rule. Known gaps: a note typed with no capitals at all loses the
-  capital-only forms (a street with no type, a bare "Box 14"), "12 oak street
-  milton" (a short house number, lowercase, then the town) reads as a count,
-  and names are not caught.
+  Bay or Hill streets, "5678 Highway 7", an RR before a comma, a town or a
+  site, a PO Box or a Box opening the words, French addresses, a street named
+  without its type after a comma, colon, "at" or "on" ("at 1234 Yonge,
+  Toronto", "at 12 Lakeshore,"), seven-digit local numbers, and for a job
+  post's Where (`place`) a house number at its start.
+- The second review found the first typed reading held 15 of 18 plain job
+  notes; the third found the first narrowing let "45 Maple Crescent looks
+  sharp" through. scripts/lib/contact-notes.ts is what it is measured on
+  now: 177 plain notes, stories and captions and 10 public Wheres (none may
+  be held) and 72 typed details (each must be found), in `npm run
+  test:copy`. Add a line there before changing a rule. Known gaps: a note
+  typed with no capitals at all loses the forms that need one (a street with
+  no type outside "at", a bare "Box 14", "RR 2 moffat"), and names are not
+  caught.
 - Where it runs: every drafter's style pass (flagSentences) in the default
   reading; `contactLeft` (lib/field-note-drafter.ts) reads a job post's words
   and a photo's description as typed. Studio warns on blog posts and Job

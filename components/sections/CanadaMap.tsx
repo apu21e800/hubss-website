@@ -256,7 +256,7 @@ function Sheet({ project, onClose, onPrev, onNext, position }: {
   // then onClose unmounts. A drag on the sheet from its top follows the
   // finger and lets go past a third of its height.
   const [closing, setClosing] = useState(false);
-  const drag = useRef<{ y0: number; t0: number; dy: number } | null>(null);
+  const drag = useRef<{ x0: number; y0: number; t0: number; dy: number } | null>(null);
   const reduced = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const dismiss = useCallback(() => {
     if (closing) return;
@@ -267,11 +267,15 @@ function Sheet({ project, onClose, onPrev, onNext, position }: {
   const onTouchStart = (e: React.TouchEvent) => {
     const el = dialogRef.current;
     if (!el || el.scrollTop > 0) return;
-    drag.current = { y0: e.touches[0].clientY, t0: Date.now(), dy: 0 };
+    drag.current = { x0: e.touches[0].clientX, y0: e.touches[0].clientY, t0: Date.now(), dy: 0 };
   };
   const onTouchMove = (e: React.TouchEvent) => {
     const d = drag.current; const el = dialogRef.current;
     if (!d || !el) return;
+    // A sideways swipe is the photo rail's, not a pull on the sheet (phone
+    // QA, 24 Oct 2026: swiping photos nudged the whole sheet down).
+    const dx = Math.abs(e.touches[0].clientX - d.x0);
+    if (d.dy === 0 && dx > 8 && dx > e.touches[0].clientY - d.y0) { drag.current = null; return; }
     d.dy = Math.max(0, e.touches[0].clientY - d.y0);
     el.style.transform = `translateY(${d.dy}px)`;
     el.style.transition = "none";
@@ -313,7 +317,10 @@ function Sheet({ project, onClose, onPrev, onNext, position }: {
       body.style.position = prev.position;
       body.style.top = prev.top;
       body.style.width = prev.width;
-      window.scrollTo(0, scrollY);
+      // At once: html's scroll-behavior: smooth (app/globals.css) turned this
+      // into a glide from the top of the page back down to the map after
+      // every close, as it did for the phone menu (phone QA, 24 Oct 2026).
+      window.scrollTo({ top: scrollY, left: 0, behavior: "instant" });
       returnTo?.focus?.();
     };
   }, [dismiss]);
@@ -357,8 +364,19 @@ function Sheet({ project, onClose, onPrev, onNext, position }: {
   );
 }
 
+// Centre a card in the phone strip by scrolling the strip alone. The card's
+// own scrollIntoView also scrolled the page to keep the card in view, so a
+// tour or a tapped pin pushed the map's top under the bar (phone QA, 24 Oct
+// 2026: the frame's top sat 50px above the screen during the tour).
+function centreInStrip(strip: HTMLElement | null, card: HTMLElement, smooth: boolean) {
+  if (!strip) return;
+  const s = strip.getBoundingClientRect(), c = card.getBoundingClientRect();
+  const left = strip.scrollLeft + (c.left - s.left) - (strip.clientWidth - c.width) / 2;
+  strip.scrollTo({ left: Math.max(0, left), behavior: smooth ? "smooth" : "auto" });
+}
+
 // ── Main component
-export default function CanadaMap() {
+export default function CanadaMap({ revealOnMount = false }: { revealOnMount?: boolean } = {}) {
   const mapRef = useRef<MapRef>(null);
   const frameRef = useRef<HTMLDivElement>(null);
   const stripRef = useRef<HTMLDivElement>(null);
@@ -459,6 +477,20 @@ export default function CanadaMap() {
     freezeList.current = false;
     map.fitBounds(homeBounds, { duration: reducedMotion ? 0 : duration });
   }, [reducedMotion, homeBounds]);
+
+  // "Open the map", the phone card in CanadaMapWrapper, lands on the map
+  // itself, under the bar, with the strip of projects below it; the heading
+  // and the filters are a scroll up (phone QA, 24 Oct 2026: the frame began
+  // 745px down an 844px screen, so the tap opened a heading and three rows
+  // of filters and no map).
+  useEffect(() => {
+    if (!revealOnMount) return;
+    const id = requestAnimationFrame(() =>
+      frameRef.current?.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" }));
+    return () => cancelAnimationFrame(id);
+    // Once, on mount.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // ── Moving the camera to a project
   const flyTo = useCallback((p: MapProject, how: "tour" | "select" | "follow") => {
@@ -577,7 +609,7 @@ export default function CanadaMap() {
         const card = stripRef.current?.querySelector<HTMLElement>(`[data-id="${p.id}"]`);
         if (card) {
           stripByCode.current = true;
-          card.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", inline: "center", block: "nearest" });
+          centreInStrip(stripRef.current, card, !reducedMotion);
           setTimeout(() => { stripByCode.current = false; }, 700);
         }
       }
@@ -702,7 +734,7 @@ export default function CanadaMap() {
     const card = stripRef.current?.querySelector<HTMLElement>(`[data-id="${selectedId}"]`);
     if (!card) return;
     stripByCode.current = true;
-    card.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", inline: "center", block: "nearest" });
+    centreInStrip(stripRef.current, card, !reducedMotion);
     const t = setTimeout(() => { stripByCode.current = false; }, 800);
     return () => clearTimeout(t);
   }, [isDesktop, tour, selectedId, reducedMotion]);
@@ -1092,7 +1124,7 @@ const CSS = `
 .cm-eyebrow { margin: 0 0 12px; }
 .cm-h2 { color: var(--text-primary); margin: 0 0 12px; }
 .cm-grad { background: linear-gradient(90deg, #F97316, #EAB308); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.cm-sub { font-size: 16px; color: var(--text-secondary); margin: 0; line-height: 1.6; max-width: 520px; font-weight: 300; }
+.cm-sub { font-size: 16px; color: var(--text-secondary); margin: 0; line-height: 1.45; max-width: 520px; font-weight: 300; }
 
 .cm-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 20px; border-radius: 8px; font-size: 15px; font-weight: 700; text-decoration: none; cursor: pointer; white-space: nowrap; transition: background .15s ease, border-color .15s ease, color .15s ease, transform .15s ease, filter .15s ease; }
 .cm-btn-primary { background: var(--accent-gradient); color: var(--on-accent); border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 6px 22px rgba(249,115,22,0.32); }
@@ -1171,7 +1203,7 @@ const CSS = `
 .cm-detail-title { font-size: 21px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; color: var(--text-primary); margin: 0 0 6px; outline: none; }
 .cm-detail-place { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; font-size: 13px; color: var(--text-muted); margin: 0 0 12px; }
 .cm-approx { font-size: 11px; font-weight: 600; color: #B7BDC8; border: 1px dashed rgba(255,255,255,0.22); border-radius: 6px; padding: 1px 7px; }
-.cm-detail-text { font-size: 14px; line-height: 1.6; color: var(--text-body); margin: 0 0 16px; }
+.cm-detail-text { font-size: 14px; line-height: 1.5; color: var(--text-body); margin: 0 0 16px; }
 .cm-detail-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
 .cm-detail-links { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 0; }
 .cm-detail-links a { display: inline-flex; align-items: center; min-height: 44px; font-size: 13px; font-weight: 700; color: var(--accent-soft-text); text-decoration: none; }
@@ -1181,7 +1213,7 @@ const CSS = `
 .cm-brief summary::-webkit-details-marker { display: none; }
 .cm-brief summary::before { content: ""; width: 7px; height: 7px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(-45deg); transition: transform .2s ease; }
 .cm-brief[open] summary::before { transform: rotate(45deg); }
-.cm-brief p { font-size: 13px; line-height: 1.6; color: var(--text-body); margin: 0 0 10px; }
+.cm-brief p { font-size: 13px; line-height: 1.5; color: var(--text-body); margin: 0 0 10px; }
 .cm-brief .cm-brief-label { font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-text-lg); margin: 6px 0 4px; }
 
 .cm-tour { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 6px 10px; margin: 0 12px 10px; padding: 8px 8px 10px 12px; border-radius: 12px; background: rgba(249,115,22,0.08); border: 1px solid rgba(249,115,22,0.25); }
@@ -1217,7 +1249,7 @@ const CSS = `
 .cm-scard-place { font-size: 12.5px; color: var(--text-muted); padding: 0 4px; }
 
 .cm-sheet-backdrop { position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.78); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); display: flex; align-items: flex-end; justify-content: center; animation: cm-fade .2s ease both; }
-.cm-sheet { width: 100%; max-width: 640px; max-height: 92vh; overflow-y: auto; background: #121212; border-radius: 22px 22px 0 0; border-top: 1px solid rgba(249,115,22,0.3); padding-bottom: max(16px, env(safe-area-inset-bottom)); animation: cm-up .3s cubic-bezier(.2,.8,.2,1) both; }
+.cm-sheet { width: 100%; max-width: 640px; max-height: 92vh; max-height: 92dvh; overflow-y: auto; background: #121212; border-radius: 22px 22px 0 0; border-top: 1px solid rgba(249,115,22,0.3); padding-bottom: max(16px, env(safe-area-inset-bottom)); animation: cm-up .3s cubic-bezier(.2,.8,.2,1) both; }
 .cm-sheet-bar { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; justify-content: space-between; padding: 14px 12px 10px; background: rgba(18,18,18,0.94); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
 .cm-sheet-handle { position: absolute; left: 50%; top: 6px; width: 40px; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.28); transform: translateX(-50%); }
 .cm-sheet-backdrop.is-closing { animation: cm-fade .2s ease reverse both; }
@@ -1237,6 +1269,15 @@ const CSS = `
 .maplibregl-ctrl-group button + button { border-top: 1px solid rgba(255,255,255,0.1) !important; }
 .maplibregl-ctrl-group .maplibregl-ctrl-icon { filter: invert(1) brightness(1.4); }
 .maplibregl-ctrl-bottom-right { margin: 0 6px 6px 0; }
+
+/* On a touch screen every control in the map is a 44px target (phone QA,
+   24 Oct 2026: "Start over", the tour's buttons, "The brief" and the zoom
+   buttons were 40). */
+@media (pointer: coarse) {
+  .cm-link-btn, .cm-brief summary { min-height: 44px; }
+  .cm-icon-btn { width: 44px; height: 44px; }
+  .maplibregl-ctrl-group button { width: 44px !important; height: 44px !important; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   .cm-bubble, .cm-sheet, .cm-sheet-backdrop, .cm-hint { animation: none; }

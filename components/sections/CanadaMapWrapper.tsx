@@ -52,6 +52,8 @@ const CanadaMap = dynamic(() => import("@/components/sections/CanadaMap"), {
  */
 export default function CanadaMapWrapper() {
   const [wanted, setWanted] = useState(false);
+  // The card was tapped: the map opens on its frame (CanadaMap revealOnMount).
+  const [tapped, setTapped] = useState(false);
   const [near, setNear] = useState(false);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
@@ -88,7 +90,7 @@ export default function CanadaMapWrapper() {
     return () => io.disconnect();
   }, [near]);
 
-  if (near || wanted) return <CanadaMap />;
+  if (near || wanted) return <CanadaMap revealOnMount={tapped} />;
 
   // Both placeholders come from the server and CSS picks one: a laptop gets
   // the reserved space (so nothing below jumps when the map arrives), a
@@ -102,7 +104,7 @@ export default function CanadaMapWrapper() {
       <div ref={sentinelRef} className="hidden lg:block" style={{ height: MAP_SECTION_HEIGHT, background: "var(--bg-dark)" }} aria-hidden="true" />
       <div className="mx-4 my-10 lg:hidden">
       <button
-        onClick={() => setWanted(true)}
+        onClick={() => { setTapped(true); setWanted(true); }}
         className="group w-full rounded-xl px-6 py-10 text-left transition-colors hover:bg-[var(--ink-05)]"
         style={{ background: "var(--bg-card-neutral)", border: "1px solid var(--border-color)" }}
       >

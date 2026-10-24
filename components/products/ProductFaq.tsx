@@ -70,7 +70,7 @@ export default function ProductFaq({
               </svg>
             </summary>
             <p
-              className="px-5 pb-5 sm:px-6 leading-[1.75]"
+              className="px-5 pb-5 sm:px-6 leading-(--lh-read)"
               style={{ color: "var(--text-body)", fontSize: "0.95rem", maxWidth: "68ch" }}
             >
               {f.a}

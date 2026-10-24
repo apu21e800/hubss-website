@@ -7,7 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence, MotionConfig, useReducedMotion, type Variants } from "framer-motion";
+import { motion, AnimatePresence, MotionConfig, useIsPresent, useReducedMotion, type Variants } from "framer-motion";
 import { products } from "@/lib/products";
 import { catalogue, catalogueReady, cataloguePageUrl, ideaBook } from "@/lib/catalogue";
 import { showCatalogue } from "@/lib/feature-flags";
@@ -110,6 +110,38 @@ function NavLabel({ children, active, rule = "#F97316" }: { children: React.Reac
     <span className="relative inline-block">
       {children}
       {active && <span aria-hidden="true" className="absolute inset-x-0 -bottom-1 h-0.5 rounded-full" style={{ background: rule }} />}
+    </span>
+  );
+}
+
+// "Canadian" beside the logo, the flag and the word: in the bar, and in the
+// phone menu's header, which is the bar drawn again. Not from 1024 to 1279,
+// where the full bar runs out of room (phone QA, 23 Oct 2026: Lunch & Learn
+// ended 3px from the edge). role="img": an aria-label on a plain span is
+// ignored by assistive tech (QA F17, 30 Sep 2026); as an image the flag and
+// its word read as one thing, "Canadian".
+function CanadianMark() {
+  return (
+    <span
+      className="hidden sm:inline-flex lg:hidden xl:inline-flex items-center gap-1.5 pl-3"
+      style={{ borderLeft: "1px solid var(--ink-12)", height: 22 }}
+      role="img"
+      aria-label="Canadian"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 9600 4800"
+        width={16}
+        height={8}
+        aria-hidden="true"
+        style={{ display: "block", flexShrink: 0, borderRadius: 1 }}
+      >
+        <path fill="#f00" d="m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z" />
+        <path fill="var(--text-primary)" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z" />
+      </svg>
+      <span className="text-[11px] font-bold tracking-[0.18em] uppercase" style={{ color: "var(--ink-55)", lineHeight: 1 }}>
+        Canadian
+      </span>
     </span>
   );
 }
@@ -488,10 +520,17 @@ function GalleryCard({ item, compact = false, current, onClick }: { item: MenuIt
 // line, an outlined button (the bar above already carries the orange one).
 // The link carries a topic into the booking form (lib/lunch-learn.ts), so
 // Doug's request email says which menu the visitor booked from.
-function MooseAvatar({ size = 40 }: { size?: number }) {
+// `onAccent`: on the phone menu's orange button, where an orange ring would
+// vanish, the ring is light.
+function MooseAvatar({ size = 40, onAccent = false }: { size?: number; onAccent?: boolean }) {
   return (
     <span aria-hidden="true" className="relative flex-shrink-0" style={{ width: size, height: size }}>
-      <span className="absolute inset-0 rounded-full" style={{ background: "rgba(249,115,22,0.14)", border: "1.5px solid rgba(249,115,22,0.45)" }} />
+      <span
+        className="absolute inset-0 rounded-full"
+        style={onAccent
+          ? { background: "rgba(255,255,255,0.2)", border: "1.5px solid rgba(255,255,255,0.6)" }
+          : { background: "rgba(249,115,22,0.14)", border: "1.5px solid rgba(249,115,22,0.45)" }}
+      />
       {/* 122% of the ring, bottom-aligned: Moose looks out over the edge. */}
       <ChromeImg
         family="moose"
@@ -795,126 +834,6 @@ function InsightsMegaMenu() {
   );
 }
 
-// ── Mobile overlay ───────────────────────────────────────────────────
-// The phone's site map, the desktop panels adapted: each family or group is a
-// row with its photograph that drops its members open (products with their
-// one line), then Insights as its three sections, each a row with its
-// picture, then the rest. Lunch & Learn and the two offices stay pinned to
-// the bottom. Every link and button is at least 44px tall (QA pa#38: the
-// office numbers were 20).
-
-// Stagger variants — used on the content wrapper so child sections animate in sequence
-const menuContainerVariants: Variants = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.055, delayChildren: 0.08 } },
-};
-const menuSectionVariants: Variants = {
-  hidden: { opacity: 0, y: 8 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.32, ease: [0.22, 1, 0.36, 1] } },
-};
-
-// Section header: the orange label and its 44px "All" link on one line.
-// The current section's label is in --text-primary with the orange rule
-// under it, the bar's own mark (QA A4, B10, C8, D12, 30 Sep 2026).
-function MobileSectionHead({ label, href, active, pathname, onClose }: { label: string; href: string; active: boolean; pathname: string; onClose: () => void }) {
-  return (
-    <div className="flex items-center justify-between pt-5 pb-1">
-      <div
-        className="px-1 text-[12px] font-bold tracking-[0.22em] uppercase select-none"
-        style={{ color: active ? "var(--text-primary)" : "var(--accent-text-lg)" }}
-      >
-        <NavLabel active={active}>{label}</NavLabel>
-      </div>
-      <MobileViewAll href={href} label="All" onClose={onClose} current={currentPage(pathname, href)} />
-    </div>
-  );
-}
-
-// One family or group in the drawer: a row you can open. Picture, name, the
-// family's note, a chevron; its members drop down underneath. Closed by
-// default, so the drawer is eight rows of pictures instead of thirty-two
-// names (Vern, 26 Sep 2026: the plain list was "the other extreme").
-function MobileFamily({
-  label, note, items, open, pathname, onToggle, onClose,
-}: {
-  label: string;
-  note?: string;
-  items: MenuItem[];
-  open: boolean;
-  pathname: string;
-  onToggle: () => void;
-  onClose: () => void;
-}) {
-  const reduce = useReducedMotion();
-  const id = `drawer-${label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
-  return (
-    <div style={{ borderBottom: "1px solid var(--ink-05)" }}>
-      <button
-        type="button"
-        onClick={onToggle}
-        aria-expanded={open}
-        // The members list is mounted only while open (QA F17, 30 Sep 2026).
-        aria-controls={open ? id : undefined}
-        className="flex w-full items-center gap-3.5 px-1 py-3 text-left active:opacity-70 transition-opacity"
-      >
-        <GroupPicture label={label} compact />
-        <span className="min-w-0 flex-1">
-          <span className="block text-[15px] font-semibold leading-tight" style={{ color: "var(--text-primary)" }}>{label}</span>
-          {note && <span className="mt-0.5 block text-[13px] leading-snug" style={{ color: "var(--ink-50)" }}>{note}</span>}
-        </span>
-        <svg
-          className="w-4 h-4 flex-shrink-0 transition-transform duration-200"
-          style={{ color: "var(--ink-30)", transform: open ? "rotate(90deg)" : "none" }}
-          fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 18l6-6-6-6" />
-        </svg>
-      </button>
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div
-            id={id}
-            key="members"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={reduce ? { duration: 0 } : { duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-            className="overflow-hidden"
-          >
-            <ul className="pb-2 pl-[110px]">
-              {items.filter((it) => !it.gallery).map((it) => (
-                <li key={it.href}>
-                  <Link prefetch={false}
-                    href={it.href}
-                    onClick={onClose}
-                    aria-current={currentPage(pathname, it.href)}
-                    className="flex min-h-[48px] items-center justify-between gap-4 py-2 pr-1 active:opacity-60 transition-opacity"
-                  >
-                    <span className="min-w-0">
-                      <span className="block text-[15px] leading-tight" style={{ color: pathname === it.href ? "var(--text-primary)" : "var(--ink-85)" }}>
-                        <NavLabel active={pathname === it.href}>{it.name}</NavLabel>
-                      </span>
-                      {it.line && <span className="mt-1 block text-[13.5px] leading-snug text-pretty" style={{ color: "var(--ink-50)" }}>{it.line}</span>}
-                    </span>
-                    <svg className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "var(--ink-20)" }} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 18l6-6-6-6" />
-                    </svg>
-                  </Link>
-                </li>
-              ))}
-              {items.filter((it) => it.gallery).map((it) => (
-                <li key={it.href}>
-                  <GalleryCard item={it} compact current={currentPage(pathname, it.href)} onClick={onClose} />
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
-
 // "All →" beside a drawer section's label, 44px tall
 function MobileViewAll({ href, label, onClose, current }: { href: string; label: string; onClose: () => void; current?: "page" }) {
   return (
@@ -945,8 +864,8 @@ function MobileSectionRow({ section: s, pathname, onClose }: { section: NavSecti
       href={s.href}
       onClick={onClose}
       aria-current={currentPage(pathname, s.href)}
-      className="flex items-center gap-3.5 px-1 py-3 active:opacity-70 transition-opacity"
-      style={{ borderBottom: "1px solid var(--ink-05)" }}
+      className="flex items-center gap-3.5 py-3 active:opacity-70 transition-opacity"
+      style={{ borderBottom: "1px solid var(--ink-06)" }}
     >
       {s.photo ? (
         <InsightImg
@@ -958,7 +877,7 @@ function MobileSectionRow({ section: s, pathname, onClose }: { section: NavSecti
       ) : (
         <RuledTile compact />
       )}
-      <span className="min-w-0 flex-1 text-[15px] font-semibold leading-tight" style={{ color: current ? "var(--text-primary)" : "var(--ink-85)" }}>
+      <span className="min-w-0 flex-1 text-[16px] font-semibold leading-tight" style={{ color: current ? "var(--text-primary)" : "var(--ink-85)" }}>
         <NavLabel active={current}>{s.label}</NavLabel>
       </span>
       <svg className="w-4 h-4 flex-shrink-0" style={{ color: "var(--ink-30)" }} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -977,8 +896,8 @@ function MobileResourcesRow({ pathname, onClose }: { pathname: string; onClose: 
       href={RESOURCES.href}
       onClick={onClose}
       aria-current={currentPage(pathname, RESOURCES.href)}
-      className="flex items-center gap-3.5 px-1 py-3 active:opacity-70 transition-opacity"
-      style={{ borderBottom: "1px solid var(--ink-05)" }}
+      className="flex items-center gap-3.5 py-3 active:opacity-70 transition-opacity"
+      style={{ borderBottom: "1px solid var(--ink-06)" }}
     >
       <span className="grid h-12 w-24 flex-shrink-0 place-items-center rounded-lg" style={{ background: `${HATCH}, var(--bg-card)`, border: "1px solid var(--ink-10)", color: ACCENT }} aria-hidden="true">
         <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -987,7 +906,7 @@ function MobileResourcesRow({ pathname, onClose }: { pathname: string; onClose: 
         </svg>
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block text-[15px] font-semibold leading-tight" style={{ color: "var(--text-primary)" }}>
+        <span className="block text-[16px] font-semibold leading-tight" style={{ color: "var(--text-primary)" }}>
           <NavLabel active={current}>{RESOURCES.label}</NavLabel>
         </span>
         <span className="mt-0.5 block text-[13px] leading-snug" style={{ color: "var(--ink-50)" }}>{RESOURCES.line}</span>
@@ -999,26 +918,258 @@ function MobileResourcesRow({ pathname, onClose }: { pathname: string; onClose: 
   );
 }
 
-// ── Premium full-screen mobile menu ─────────────────────────────────────
-function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onClose: () => void; onSearchOpen: () => void }) {
+// ── Phone menu ───────────────────────────────────────────────────────
+// Rebuilt 24 Oct 2026 (Vern: "the mobile menu experience ... was good at one
+// time but it has fallen into chaos. Zoop it up."). Until then it was one
+// long scroll: every family and group as a photo row that dropped open,
+// Projects' three rows, four links, and, pinned under all of it, both office
+// numbers and a Lunch & Learn card, a fifth of a 390px screen and more than a
+// quarter of a 360px one.
+//
+// Now it has two levels, the way a phone's own settings do. The first screen
+// is the site in big type: Products, Applications and Projects, each opening
+// its directory; the Product Book, Gallery, About and Contact; and the two
+// offices to call. A section's directory slides in from the right (its
+// families or groups, each with its photograph and its names under it) and
+// "Menu" slides it back. The header is the bar itself, the same logo in the
+// same place, so opening reads as the bar dropping open, and the bar's three
+// lines turn into the cross that closes it. One thing is pinned: Lunch &
+// Learn. Every link and button is at least 44px tall (QA pa#38).
+
+type MenuLevel = "root" | "products" | "applications" | "insights";
+
+const EASE_OUT = [0.22, 1, 0.36, 1] as const;     // --ease-out
+const EASE_IN_OUT = [0.65, 0, 0.35, 1] as const;  // --ease-in-out
+
+// What each section holds, in its own names: the families
+// (lib/product-categories.ts), the groups (APPLICATION_GROUPS above) and the
+// three sections of the blog (lib/field-notes-taxonomy.ts; Projects' own
+// "Canadian installations, written up").
+const ROOT_SECTIONS: { level: Exclude<MenuLevel, "root">; label: string; line: string; href: string; all: string }[] = [
+  { level: "products", label: "Products", line: "Thermoplastics, coatings, stamped asphalt, repair", href: "/products", all: "All products" },
+  { level: "applications", label: "Applications", line: "Streets, parks, commercial and residential", href: "/applications", all: "All applications" },
+  { level: "insights", label: BLOG_NAME, line: "Installations, guides and articles", href: "/blog", all: `All ${BLOG_NAME.toLowerCase()}` },
+];
+
+// The sheet under the header wipes down out of the bar, and back up into it.
+// Three states: `hidden`, where it mounts (one value, so its first frame is
+// already clipped: a keyframe list there painted the whole menu for a frame
+// before the wipe); `open`, whose clip is dropped once it lands
+// (transitionEnd), so nothing clips the list while it scrolls; and `closed`,
+// on the way out, which starts from a full clip again since "none" cannot be
+// tweened. With reduced motion it fades instead.
+const SHEET_WIPE: Variants = {
+  hidden: { clipPath: "inset(0% 0% 100% 0%)" },
+  open: { clipPath: "inset(0% 0% 0% 0%)", transition: { duration: 0.46, ease: EASE_OUT }, transitionEnd: { clipPath: "none" } },
+  closed: { clipPath: ["inset(0% 0% 0% 0%)", "inset(0% 0% 100% 0%)"], transition: { duration: 0.3, ease: EASE_IN_OUT } },
+};
+const SHEET_FADE: Variants = {
+  hidden: { opacity: 0 },
+  open: { opacity: 1, transition: { duration: 0.15 } },
+  closed: { opacity: 0, transition: { duration: 0.15 } },
+};
+
+// One level replacing another: forward, the new one slides over from the
+// right while the old one drifts left and fades; back, the reverse.
+const LEVEL_SLIDE: Variants = {
+  enter: (dir: number) => (dir > 0 ? { x: "100%", opacity: 1, zIndex: 2 } : { x: "-24%", opacity: 0, zIndex: 1 }),
+  center: { x: "0%", opacity: 1, transition: { duration: 0.38, ease: EASE_OUT } },
+  leave: (dir: number) => (dir > 0
+    ? { x: "-24%", opacity: 0, zIndex: 1, transition: { duration: 0.34, ease: EASE_OUT } }
+    : { x: "100%", opacity: 1, zIndex: 2, transition: { duration: 0.34, ease: EASE_OUT } }),
+};
+
+function Chevron({ back = false, className = "w-4 h-4", style }: { back?: boolean; className?: string; style?: React.CSSProperties }) {
+  return (
+    <svg className={`flex-shrink-0 ${className}`} style={style} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d={back ? "M15 18l-6-6 6-6" : "M9 18l6-6-6-6"} />
+    </svg>
+  );
+}
+
+function PhoneGlyph({ className = "w-4 h-4" }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+    </svg>
+  );
+}
+
+// The bar's three lines (its 24px icon: 16px lines at 6, 12 and 18, 2px,
+// round ends) turning into the cross, and back on the way out.
+function BurgerCross() {
+  const t = { duration: 0.32, ease: EASE_OUT };
+  const line = "absolute left-[3px] h-[2px] w-[18px] rounded-full bg-current";
+  return (
+    <span aria-hidden="true" className="relative block h-6 w-6">
+      <motion.span className={`${line} top-[5px]`} variants={{ hidden: { y: 0, rotate: 0 }, closed: { y: 0, rotate: 0 }, open: { y: 6, rotate: 45 } }} transition={t} />
+      <motion.span className={`${line} top-[11px]`} variants={{ hidden: { opacity: 1, scaleX: 1 }, closed: { opacity: 1, scaleX: 1 }, open: { opacity: 0, scaleX: 0.3 } }} transition={t} />
+      <motion.span className={`${line} top-[17px]`} variants={{ hidden: { y: 0, rotate: 0 }, closed: { y: 0, rotate: 0 }, open: { y: -6, rotate: -45 } }} transition={t} />
+    </span>
+  );
+}
+
+// The first screen's rows rise in one after another as it opens; a level the
+// visitor comes back to is simply there.
+function RiseIn({ index, on, className, children }: { index: number; on: boolean; className?: string; children: React.ReactNode }) {
+  return (
+    <motion.div
+      className={className}
+      initial={on ? { opacity: 0, y: 14 } : false}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.1 + index * 0.03, duration: 0.34, ease: EASE_OUT }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+// A level on its way out cannot be tapped or tabbed into.
+function LeavingInert({ children }: { children: React.ReactNode }) {
+  const present = useIsPresent();
+  return <div inert={!present}>{children}</div>;
+}
+
+// A level's head: "Menu" back to the first screen, the section's "All" link,
+// then its name.
+function LevelHead({ title, href, all, pathname, onBack, onClose, backRef }: {
+  title: string; href: string; all: string; pathname: string;
+  onBack: () => void; onClose: () => void; backRef: React.RefObject<HTMLButtonElement | null>;
+}) {
+  return (
+    <div className="pt-2">
+      <div className="flex items-center justify-between">
+        <button
+          ref={backRef}
+          type="button"
+          onClick={onBack}
+          className="-ml-2 inline-flex min-h-[44px] items-center gap-1 rounded-lg pl-1 pr-2.5 text-[15px] font-semibold transition-opacity active:opacity-60"
+          style={{ color: "var(--ink-70)" }}
+        >
+          <Chevron back className="w-[18px] h-[18px]" />
+          Menu
+        </button>
+        <MobileViewAll href={href} label={all} onClose={onClose} current={currentPage(pathname, href)} />
+      </div>
+      {/* Weight, size and leading inline: the heading base in app/globals.css
+          is unlayered and would win over utilities. */}
+      <h2 className="mt-1" style={{ color: "var(--text-primary)", fontSize: 34, fontWeight: 900, lineHeight: 1.04, letterSpacing: "-0.03em" }}>
+        {title}
+      </h2>
+    </div>
+  );
+}
+
+// One family or group in a directory: its photograph and its name in the
+// accent, the family's note, then its members, each a row.
+function MenuGroup({ label, note, items, pathname, onClose }: { label: string; note?: string; items: MenuItem[]; pathname: string; onClose: () => void }) {
+  const id = `menu-${label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
+  return (
+    <section aria-labelledby={id} className="mt-7 first:mt-5">
+      <div className="flex items-center gap-3.5 pb-2.5">
+        <GroupPicture label={label} compact />
+        <div className="min-w-0">
+          <h3 id={id} className="uppercase" style={{ color: ACCENT, fontFamily: "var(--font-inter), Inter, system-ui, sans-serif", fontSize: 12, fontWeight: 700, letterSpacing: "0.16em", lineHeight: 1.3 }}>
+            {label}
+          </h3>
+          {note && <p className="mt-1 text-[13px] leading-snug" style={{ color: "var(--ink-50)" }}>{note}</p>}
+        </div>
+      </div>
+      <ul>
+        {items.filter((it) => !it.gallery).map((it) => {
+          const here = pathname === it.href;
+          return (
+            <li key={it.href}>
+              <Link prefetch={false}
+                href={it.href}
+                onClick={onClose}
+                aria-current={currentPage(pathname, it.href)}
+                className="flex min-h-[52px] items-center justify-between gap-4 py-2.5 transition-opacity active:opacity-60"
+                style={{ borderTop: "1px solid var(--ink-06)" }}
+              >
+                <span className="min-w-0">
+                  <span className="block text-[16px] font-semibold leading-tight" style={{ color: here ? "var(--text-primary)" : "var(--ink-90)" }}>
+                    <NavLabel active={here}>{it.name}</NavLabel>
+                  </span>
+                  {it.line && <span className="mt-1 block text-[13.5px] leading-snug text-pretty" style={{ color: "var(--ink-50)" }}>{it.line}</span>}
+                </span>
+                <Chevron className="w-3.5 h-3.5" style={{ color: "var(--ink-25)" }} />
+              </Link>
+            </li>
+          );
+        })}
+        {items.filter((it) => it.gallery).map((it) => (
+          <li key={it.href} className="pt-2">
+            <GalleryCard item={it} compact current={currentPage(pathname, it.href)} onClick={onClose} />
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+// Projects' directory opens with its cover story: the photo, its section and
+// its title, as the laptop panel does.
+function MenuCover({ pathname, onClose }: { pathname: string; onClose: () => void }) {
+  const c = INSIGHTS.cover;
+  if (!c) return null;
+  const href = `/blog/${c.slug}`;
+  return (
+    <Link prefetch={false} href={href} onClick={onClose} aria-current={currentPage(pathname, href)} className="mt-5 block transition-opacity active:opacity-70">
+      <span className="relative block aspect-[16/9] w-full overflow-hidden rounded-xl" style={{ background: PHOTO_GROUND, border: "1px solid var(--ink-10)" }}>
+        <InsightImg
+          image={c.image}
+          alt={altBesideTitle(c.alt, c.title)}
+          sizes="(min-width: 704px) 640px, calc(100vw - 32px)"
+          loading="eager"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+      </span>
+      <span className="mt-3 block text-[12px] font-bold uppercase tracking-[0.2em]" style={{ color: ACCENT }}>{kindOf(c.type)}</span>
+      <span className="font-display mt-1.5 block text-[21px] font-bold leading-[1.15] tracking-[-0.02em] text-balance" style={{ color: "var(--text-primary)" }}>
+        {c.title}
+      </span>
+    </Link>
+  );
+}
+
+function MobileOverlay({ isOpen, scrolled, onClose, onSearchOpen }: { isOpen: boolean; scrolled: boolean; onClose: () => void; onSearchOpen: () => void }) {
   const { offices } = useSiteSettings();
   const overlayRef = useRef<HTMLDivElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
+  const backRef = useRef<HTMLButtonElement>(null);
+  const rowRefs = useRef<Partial<Record<MenuLevel, HTMLButtonElement | null>>>({});
   const reduce = useReducedMotion();
   const pathname = usePathname() ?? "";
-  // Which family or group is dropped open; one at a time. On open it is the
-  // one that holds the current page, so the menu shows where you are (phone
-  // QA, 23 Oct 2026: on /products/streetprint nothing in it was marked).
-  const [openFamily, setOpenFamily] = useState<string | null>(null);
+
+  // The level on screen, and which way the last change went: 0 when the menu
+  // has just opened (the first screen rises in), 1 forward, -1 back.
+  const [level, setLevel] = useState<MenuLevel>("root");
+  const [dir, setDir] = useState<0 | 1 | -1>(0);
+  const cameFrom = useRef<MenuLevel>("root");
   useEffect(() => {
-    if (!isOpen) { setOpenFamily(null); return; }
-    const here =
-      PRODUCT_CATEGORIES.find((cat) => productFamily(cat).some((it) => it.href === pathname))?.label ??
-      APPLICATION_GROUPS.find((g) => applicationGroup(g).some((it) => it.href === pathname))?.label ??
-      null;
-    setOpenFamily(here);
-    // Only on open: a family the visitor opens or closes stays as they left it.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (!isOpen) { setLevel("root"); setDir(0); cameFrom.current = "root"; }
   }, [isOpen]);
+
+  const go = (next: MenuLevel) => {
+    // Each level starts at its top; the one leaving slides from there too.
+    bodyRef.current?.scrollTo({ top: 0, behavior: "instant" });
+    overlayRef.current?.scrollTo({ top: 0, behavior: "instant" });
+    cameFrom.current = level;
+    setDir(next === "root" ? -1 : 1);
+    setLevel(next);
+  };
+
+  // Focus follows the move: into a directory, onto "Menu"; back, onto the
+  // row that opened it.
+  useEffect(() => {
+    if (!isOpen || dir === 0) return;
+    const t = setTimeout(() => {
+      if (level === "root") rowRefs.current[cameFrom.current]?.focus();
+      else backRef.current?.focus();
+    }, 30);
+    return () => clearTimeout(t);
+  }, [level, dir, isOpen]);
 
   // iOS-safe scroll lock: fixes body at scroll position, restores on close
   useEffect(() => {
@@ -1047,7 +1198,7 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
       if (e.key === "Escape") { onClose(); return; }
       if (e.key !== "Tab" || !overlayRef.current) return;
       const f = [...overlayRef.current.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), input, [tabindex]:not([tabindex="-1"])')]
-        .filter((el) => el.getClientRects().length > 0);
+        .filter((el) => el.getClientRects().length > 0 && !el.closest("[inert]"));
       if (!f.length) return;
       const first = f[0], last = f[f.length - 1];
       const at = document.activeElement;
@@ -1069,10 +1220,28 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
     };
   }, [isOpen]);
 
-  // The session topic follows the family or group the visitor has open.
-  const llTopic = openFamily ?? "HUB systems";
+  // The session topic: the family or group the open page belongs to (on
+  // /products/streetprint, Stamped Asphalt), else the directory on screen.
+  const here =
+    PRODUCT_CATEGORIES.find((cat) => productFamily(cat).some((it) => it.href === pathname))?.label ??
+    APPLICATION_GROUPS.find((g) => applicationGroup(g).some((it) => it.href === pathname))?.label ??
+    null;
+  const llTopic = here ?? (level === "applications" ? "your application" : "HUB systems");
   // The current section, marked as the bar marks it (QA A4, 30 Sep 2026).
   const section = navSection(pathname);
+  const rise = dir === 0 && !reduce;
+  const head = ROOT_SECTIONS.find((s) => s.level === level);
+
+  const plainLinks = [
+    // The book was reachable from the desktop panels only; a phone had no
+    // row for it (phone review, 17 Oct 2026).
+    // Its name on the row and its volume under it: "Product Portfolio Book ·
+    // Volume 5" on one line left "5" alone on a 390px phone.
+    ...(showIdeaBook() ? [{ label: ideaBook.short, sub: ideaBook.volume, href: ideaBook.href, book: true }] : []),
+    { label: "Gallery", sub: undefined, href: "/gallery", book: false },
+    { label: "About", sub: undefined, href: "/about", book: false },
+    { label: "Contact", sub: undefined, href: "/contact", book: false },
+  ];
 
   return (
     <AnimatePresence>
@@ -1083,10 +1252,9 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
           aria-modal="true"
           aria-label="Site navigation"
           tabIndex={-1}
-          initial={{ x: "100%" }}
-          animate={{ x: 0 }}
-          exit={{ x: "100%" }}
-          transition={reduce ? { duration: 0 } : { duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+          initial="hidden"
+          animate="open"
+          exit="closed"
           // drawer: under 500px tall (a phone on its side) the whole drawer
           // scrolls as one, the header staying put (app/globals.css).
           className="drawer fixed inset-0 z-[60] lg:hidden flex flex-col outline-none"
@@ -1095,217 +1263,253 @@ function MobileOverlay({ isOpen, onClose, onSearchOpen }: { isOpen: boolean; onC
           // body under hardcoded dark header and footer strips, with the close
           // X in --text-primary at 1.02:1 and the phone links at 1.04:1.
           data-surface="dark"
-          style={{
-            background: "var(--bg-deepest)",
-            height: "100dvh",
-          }}
+          style={{ height: "100dvh" }}
           onClick={(e) => e.stopPropagation()}
         >
-          {/* ── Header ────────────────────────────────────────────── */}
+          {/* ── Header: the bar, as it is on the page ─────────────────── */}
           <div
-            className="drawer-head flex-shrink-0 flex items-center justify-between px-5"
+            className="drawer-head flex-shrink-0"
             style={{
-              height: 64,
-              borderBottom: "1px solid var(--border-color)",
-              background: "rgba(7,11,18,0.92)",
-              backdropFilter: "blur(16px)",
-            }}
-          >
-            {/* prefetch={false}: this Link is the site logo, always visible.
-                Its default viewport-prefetch of "/" was fetching the homepage
-                hero image (~1.2MB) on every other route on first paint — pure
-                waste, since that image never renders here. Trades a touch of
-                nav-to-home snappiness for a lot of unused bytes on every
-                other page. */}
-            <Link href="/" onClick={onClose} prefetch={false} className="flex min-h-[44px] items-center active:opacity-70 transition-opacity">
-              {/* Not the LCP hero — each route has its own priority hero
-                  image; this is a small header logo. */}
-              <Image
-                src="/images/hub-official-logo.svg"
-                alt="HUB Surface Systems"
-                width={150} height={36}
-                style={{ height: 30, width: "auto" }}
-                unoptimized
-              />
-            </Link>
-
-            <div className="flex items-center gap-1">
-              {/* Search shortcut */}
-              <button
-                onClick={() => { onClose(); onSearchOpen(); }}
-                aria-label="Open search"
-                className="flex items-center justify-center rounded-xl active:opacity-60 transition-opacity"
-                style={{ width: 48, height: 48, color: "var(--ink-45)" }}
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <circle cx="11" cy="11" r="8" strokeWidth={1.75} />
-                  <path d="M21 21l-4.35-4.35" strokeWidth={1.75} strokeLinecap="round" />
-                </svg>
-              </button>
-
-              {/* Close — 48×48 tap target, prominent X */}
-              <button
-                onClick={onClose}
-                aria-label="Close navigation menu"
-                className="flex items-center justify-center rounded-xl active:opacity-60 transition-opacity"
-                style={{
-                  width: 48, height: 48,
-                  color: "var(--text-primary)",
-                  background: "var(--fill-subtle)",
-                  border: "1px solid var(--ink-10)",
-                }}
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          {/* ── Scrollable body ───────────────────────────────────────── */}
-          <div className="drawer-body flex-1 overflow-y-auto overscroll-contain" style={{ WebkitOverflowScrolling: "touch" } as React.CSSProperties}>
-            <motion.div
-              variants={menuContainerVariants}
-              initial="hidden"
-              animate="show"
-              className="px-4 pb-8 max-w-2xl mx-auto"
-            >
-
-              {/* ── Products ──────────────────────────────────────── */}
-              <motion.div variants={menuSectionVariants}>
-                <MobileSectionHead label="Products" href="/products" active={section === "products"} pathname={pathname} onClose={onClose} />
-                {PRODUCT_CATEGORIES.map((cat) => (
-                  <MobileFamily
-                    key={cat.label}
-                    label={cat.label}
-                    note={cat.menuNote}
-                    items={productFamily(cat)}
-                    open={openFamily === cat.label}
-                    pathname={pathname}
-                    onToggle={() => setOpenFamily(openFamily === cat.label ? null : cat.label)}
-                    onClose={onClose}
-                  />
-                ))}
-                <MobileResourcesRow pathname={pathname} onClose={onClose} />
-              </motion.div>
-
-              {/* ── Applications ──────────────────────────────────── */}
-              <motion.div variants={menuSectionVariants} className="mt-2">
-                <MobileSectionHead label="Applications" href="/applications" active={section === "applications"} pathname={pathname} onClose={onClose} />
-                {APPLICATION_GROUPS.map((group) => (
-                  <MobileFamily
-                    key={group.label}
-                    label={group.label}
-                    items={applicationGroup(group)}
-                    open={openFamily === group.label}
-                    pathname={pathname}
-                    onToggle={() => setOpenFamily(openFamily === group.label ? null : group.label)}
-                    onClose={onClose}
-                  />
-                ))}
-              </motion.div>
-
-              {/* ── Insights: the three sections, and "All" ───────── */}
-              <motion.div variants={menuSectionVariants} className="mt-2">
-                <MobileSectionHead label={BLOG_NAME} href="/blog" active={section === "insights"} pathname={pathname} onClose={onClose} />
-                {NAV_SECTIONS.map((s) => (
-                  <MobileSectionRow key={s.key} section={s} pathname={pathname} onClose={onClose} />
-                ))}
-              </motion.div>
-
-              {/* ── Everything else, as a plain list ──────────────── */}
-              <motion.div variants={menuSectionVariants} className="mt-8 pt-2" style={{ borderTop: "1px solid var(--border-color)" }}>
-                {[
-                  // The book was reachable from the desktop panels only; a
-                  // phone had no row for it (phone review, 17 Oct 2026).
-                  ...(showIdeaBook() ? [{ label: ideaBook.title, href: ideaBook.href }] : []),
-                  { label: "Gallery", href: "/gallery" },
-                  { label: "About", href: "/about" },
-                  { label: "Contact", href: "/contact" },
-                ].map((link) => (
-                  <Link prefetch={false}
-                    key={link.href}
-                    href={link.href}
-                    onClick={onClose}
-                    aria-current={currentPage(pathname, link.href)}
-                    className="flex items-center justify-between py-4 px-1 text-[16px] font-[500] active:opacity-60 transition-opacity"
-                    style={{
-                      color: section && NAV_ROOT[section] === link.href ? "var(--text-primary)" : "var(--ink-70)",
-                      borderBottom: "1px solid var(--ink-05)",
-                    }}
-                  >
-                    <NavLabel active={!!section && NAV_ROOT[section] === link.href}>{link.label}</NavLabel>
-                    <svg className="w-4 h-4" style={{ color: "var(--ink-20)" }} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 18l6-6-6-6" />
-                    </svg>
-                  </Link>
-                ))}
-              </motion.div>
-
-            </motion.div>
-          </div>
-
-          {/* ── Pinned: the offices and Lunch & Learn ─────────────────── */}
-          <div
-            className="flex-shrink-0 px-4 pt-1.5"
-            style={{
-              borderTop: "1px solid var(--border-color)",
               background: "rgba(7,11,18,0.96)",
-              backdropFilter: "blur(20px)",
-              paddingBottom: "max(14px, env(safe-area-inset-bottom))",
+              backdropFilter: "blur(12px)",
+              WebkitBackdropFilter: "blur(12px)",
+              borderBottom: scrolled ? "1px solid rgba(249,115,22,0.18)" : "1px solid var(--border-color)",
             }}
           >
-            {/* Regional phones: 44px tall targets (QA pa#38: they were 20). */}
-            {/* flex-wrap: on a 360px phone the pair ran 402px wide and the
-                East number lost its last digit (phone review, 17 Oct 2026);
-                now the second office drops under the first. */}
-            <div className="flex flex-wrap items-center justify-center max-w-2xl mx-auto">
-              {/* The phones from Studio's Site Settings (lib/site-settings.ts). */}
-              {[
-                { label: `West · ${offices.west.phone}`, href: telHref(offices.west.phone) },
-                { label: `East · ${offices.east.phone}`, href: telHref(offices.east.phone) },
-              ].map((office, i) => (
-                <span key={office.href} className="flex items-center">
-                  {i > 0 && <span aria-hidden="true" className="mx-1 max-[400px]:hidden" style={{ width: 1, height: 14, background: "var(--ink-12)" }} />}
-                  <a
-                    href={office.href}
-                    className="inline-flex min-h-[44px] items-center gap-1.5 px-3 text-[15px] font-semibold whitespace-nowrap active:opacity-60 transition-opacity"
-                    style={{ color: "var(--ink-70)" }}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between gap-4">
+              {/* prefetch={false}: this Link is the site logo, always visible.
+                  Its default viewport-prefetch of "/" was fetching the homepage
+                  hero image (~1.2MB) on every other route on first paint. */}
+              <Link href="/" onClick={onClose} prefetch={false} className="flex-shrink-0 flex min-h-[44px] items-center gap-3">
+                <Image
+                  src="/images/hub-official-logo.svg"
+                  alt="HUB Surface Systems"
+                  width={160}
+                  height={38}
+                  style={{ height: 34, width: "auto" }}
+                  unoptimized
+                />
+                <CanadianMark />
+              </Link>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => { onClose(); onSearchOpen(); }}
+                  aria-label="Open search"
+                  className="flex items-center justify-center transition-opacity active:opacity-60"
+                  style={{ width: 44, height: 44, color: "var(--ink-60)" }}
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8" strokeWidth={2} /><path d="M21 21l-4.35-4.35" strokeWidth={2} strokeLinecap="round" />
+                  </svg>
+                </button>
+                <motion.button
+                  type="button"
+                  onClick={onClose}
+                  aria-label="Close navigation menu"
+                  className="flex items-center justify-center rounded-full"
+                  style={{ width: 44, height: 44 }}
+                  variants={{ hidden: { color: "rgba(255,255,255,0.6)" }, closed: { color: "rgba(255,255,255,0.6)" }, open: { color: "rgba(255,255,255,0.96)" } }}
+                  transition={{ duration: 0.32, ease: EASE_OUT }}
+                >
+                  <BurgerCross />
+                </motion.button>
+              </div>
+            </div>
+          </div>
+
+          {/* ── The sheet: the levels and the pinned Lunch & Learn ─────── */}
+          <motion.div
+            className="drawer-sheet flex min-h-0 flex-1 flex-col"
+            style={{ background: "var(--bg-deepest)" }}
+            variants={reduce ? SHEET_FADE : SHEET_WIPE}
+          >
+            <div ref={bodyRef} className="drawer-body flex-1 overflow-y-auto overscroll-contain" style={{ WebkitOverflowScrolling: "touch" } as React.CSSProperties}>
+              <div className="relative px-4 sm:px-6 pb-10 max-w-2xl mx-auto">
+                <AnimatePresence mode="popLayout" initial={false} custom={dir}>
+                  <motion.div
+                    key={level}
+                    custom={dir}
+                    variants={LEVEL_SLIDE}
+                    initial={dir === 0 ? false : "enter"}
+                    animate="center"
+                    exit="leave"
+                    // relative: z-index only orders positioned boxes, and the
+                    // level coming in stays in the flow.
+                    className="relative"
+                    style={{ background: "var(--bg-deepest)" }}
                   >
-                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: "var(--accent-text-lg)" }} aria-hidden="true">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                    </svg>
-                    {office.label}
-                  </a>
-                </span>
-              ))}
+                    <LeavingInert>
+                      {level === "root" ? (
+                        <div className="pt-3">
+                          {/* ── The three sections, each a directory ──── */}
+                          {ROOT_SECTIONS.map((s, i) => {
+                            const active = section === s.level;
+                            return (
+                              <RiseIn key={s.level} index={i} on={rise}>
+                                <button
+                                  ref={(el) => { rowRefs.current[s.level] = el; }}
+                                  type="button"
+                                  onClick={() => go(s.level)}
+                                  className="flex w-full items-center justify-between gap-4 py-3.5 text-left transition-opacity active:opacity-60"
+                                  style={{ borderBottom: "1px solid var(--ink-06)" }}
+                                >
+                                  <span className="min-w-0">
+                                    <span
+                                      className="font-display block"
+                                      style={{ color: active ? "var(--text-primary)" : "var(--ink-90)", fontSize: 30, fontWeight: 800, lineHeight: 1.08, letterSpacing: "-0.03em" }}
+                                    >
+                                      <NavLabel active={active}>{s.label}</NavLabel>
+                                    </span>
+                                    <span className="mt-1.5 block text-[13.5px] leading-snug text-balance" style={{ color: "var(--ink-50)" }}>{s.line}</span>
+                                  </span>
+                                  <Chevron className="w-5 h-5" style={{ color: "var(--ink-30)" }} />
+                                </button>
+                              </RiseIn>
+                            );
+                          })}
+
+                          {/* ── The book and the plain pages ─────────── */}
+                          <div className="mt-4">
+                            {plainLinks.map((link, i) => {
+                              const active = (!!section && NAV_ROOT[section] === link.href) || pathname === link.href;
+                              return (
+                                <RiseIn key={link.href} index={ROOT_SECTIONS.length + i} on={rise}>
+                                  <Link prefetch={false}
+                                    href={link.href}
+                                    onClick={onClose}
+                                    aria-current={currentPage(pathname, link.href)}
+                                    className="flex min-h-[52px] items-center justify-between gap-4 py-2 transition-opacity active:opacity-60"
+                                    style={{ borderBottom: "1px solid var(--ink-06)" }}
+                                  >
+                                    <span className="min-w-0">
+                                      <span className="block text-[18px] font-semibold leading-tight" style={{ color: active ? "var(--text-primary)" : "var(--ink-85)", letterSpacing: "-0.01em" }}>
+                                        <NavLabel active={active}>{link.label}</NavLabel>
+                                      </span>
+                                      {link.sub && <span className="mt-0.5 block text-[13px] leading-snug" style={{ color: "var(--ink-50)" }}>{link.sub}</span>}
+                                    </span>
+                                    <span className="flex items-center gap-3">
+                                      {link.book && ideaBookCover && (
+                                        // eslint-disable-next-line @next/next/no-img-element -- the book's own raster, lib/catalogue.ts
+                                        <img
+                                          src={ideaBookCover}
+                                          srcSet={ideaBookCoverSet}
+                                          sizes="32px"
+                                          alt=""
+                                          width={240}
+                                          height={240}
+                                          loading="lazy"
+                                          decoding="async"
+                                          className="h-8 w-8 rounded-[2px] object-cover"
+                                          style={{ border: "1px solid var(--ink-12)", boxShadow: "0 6px 12px -6px rgba(0,0,0,0.7)" }}
+                                        />
+                                      )}
+                                      <Chevron style={{ color: "var(--ink-25)" }} />
+                                    </span>
+                                  </Link>
+                                </RiseIn>
+                              );
+                            })}
+                          </div>
+
+                          {/* ── The two offices ─────────────────────── */}
+                          {/* The phones from Studio's Site Settings (lib/site-settings.ts). */}
+                          <RiseIn index={ROOT_SECTIONS.length + plainLinks.length} on={rise} className="mt-9">
+                            <div className="pb-2 text-[12px] font-bold uppercase tracking-[0.2em]" style={{ color: "var(--accent-text-lg)" }}>
+                              Call an office
+                            </div>
+                            {([["West", offices.west], ["East", offices.east]] as const).map(([name, office]) => (
+                              <a
+                                key={name}
+                                href={telHref(office.phone)}
+                                className="flex min-h-[60px] items-center gap-3.5 py-2 transition-opacity active:opacity-60"
+                                style={{ borderTop: "1px solid var(--ink-06)" }}
+                              >
+                                <span
+                                  aria-hidden="true"
+                                  className="grid h-10 w-10 flex-shrink-0 place-items-center rounded-full"
+                                  style={{ background: "rgba(249,115,22,0.12)", color: "var(--accent-text-lg)" }}
+                                >
+                                  <PhoneGlyph />
+                                </span>
+                                <span className="min-w-0">
+                                  <span className="block text-[16px] font-semibold leading-tight" style={{ color: "var(--text-primary)" }}>
+                                    {name} · {office.phone}
+                                  </span>
+                                  <span className="mt-0.5 block text-[13px] leading-snug" style={{ color: "var(--ink-50)" }}>{office.place}</span>
+                                </span>
+                              </a>
+                            ))}
+                          </RiseIn>
+                        </div>
+                      ) : (
+                        head && (
+                          <div>
+                            <LevelHead
+                              title={head.label}
+                              href={head.href}
+                              all={head.all}
+                              pathname={pathname}
+                              onBack={() => go("root")}
+                              onClose={onClose}
+                              backRef={backRef}
+                            />
+                            {level === "products" && (
+                              <>
+                                {PRODUCT_CATEGORIES.map((cat) => (
+                                  <MenuGroup key={cat.label} label={cat.label} note={cat.menuNote} items={productFamily(cat)} pathname={pathname} onClose={onClose} />
+                                ))}
+                                <div className="mt-7" style={{ borderTop: "1px solid var(--ink-06)" }}>
+                                  <MobileResourcesRow pathname={pathname} onClose={onClose} />
+                                </div>
+                              </>
+                            )}
+                            {level === "applications" &&
+                              APPLICATION_GROUPS.map((group) => (
+                                <MenuGroup key={group.label} label={group.label} items={applicationGroup(group)} pathname={pathname} onClose={onClose} />
+                              ))}
+                            {level === "insights" && (
+                              <>
+                                <MenuCover pathname={pathname} onClose={onClose} />
+                                <div className="mt-6" style={{ borderTop: "1px solid var(--ink-06)" }}>
+                                  {NAV_SECTIONS.map((s) => (
+                                    <MobileSectionRow key={s.key} section={s} pathname={pathname} onClose={onClose} />
+                                  ))}
+                                </div>
+                              </>
+                            )}
+                          </div>
+                        )
+                      )}
+                    </LeavingInert>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
             </div>
 
-            {/* Lunch & Learn: the card the desktop panels carry, with the
-                button in the brand orange here, where it is the drawer's one
-                call to action. */}
+            {/* ── Pinned: Lunch & Learn, the menu's one call to action ──── */}
             <div
-              className="mt-1 flex items-center gap-3 rounded-2xl py-2.5 pl-3 pr-2.5 max-w-2xl mx-auto"
-              style={{ background: "var(--ink-04)", border: "1px solid var(--ink-10)" }}
+              className="drawer-foot flex-shrink-0 px-4 sm:px-6 pt-3"
+              style={{
+                borderTop: "1px solid var(--ink-08)",
+                background: "var(--bg-deepest)",
+                paddingBottom: "max(12px, env(safe-area-inset-bottom))",
+              }}
             >
-              <MooseAvatar size={40} />
-              <div className="min-w-0 flex-1">
-                <div className="text-[15px] font-bold leading-tight" style={{ color: "var(--text-primary)" }}>Lunch &amp; Learn</div>
-                <div className="mt-0.5 text-[13px] leading-snug" style={{ color: "var(--ink-60)" }}>{LL_LINE}</div>
-              </div>
               <Link prefetch={false}
                 href={lunchLearnHref(llTopic, "menu")}
                 onClick={onClose}
-                aria-label="Book a Lunch & Learn"
-                className="btn-accent flex-shrink-0"
+                className="menu-cta mx-auto flex w-full max-w-2xl items-center gap-3 rounded-2xl py-1.5 pl-2 pr-4"
+                style={{ background: "var(--accent-gradient)", color: "var(--on-accent)", minHeight: 52 }}
               >
-                Book
-                <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M12 5l7 7-7 7" />
+                <MooseAvatar size={38} onAccent />
+                <span className="min-w-0 flex-1 text-[16px] font-bold leading-tight">Book a Lunch &amp; Learn</span>
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" className="flex-shrink-0">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.25} d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
               </Link>
             </div>
-          </div>
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
@@ -1534,7 +1738,7 @@ export default function Nav() {
               paint (React/Next eagerly resolve fetchPriority="high" <img> in
               prefetched RSC data). Nothing on this route shows that image,
               so it was pure waste. */}
-          <Link href="/" prefetch={false} className="flex-shrink-0 flex items-center gap-3 group">
+          <Link href="/" prefetch={false} className="flex-shrink-0 flex min-h-[44px] items-center gap-3 group">
             {/* Not the LCP hero — every route has its own dedicated priority
                 hero image further down; this is just the header logo. */}
             <Image
@@ -1545,38 +1749,7 @@ export default function Nav() {
               style={{ height: 34, width: "auto" }}
               unoptimized
             />
-            <span
-              // Not from 1024 to 1279, where the full bar runs out of room
-              // (phone QA, 23 Oct 2026: Lunch & Learn ended 3px from the edge).
-              className="hidden sm:inline-flex lg:hidden xl:inline-flex items-center gap-1.5 pl-3"
-              style={{
-                borderLeft: "1px solid var(--ink-12)",
-                height: 22,
-              }}
-              // role="img": an aria-label on a plain span is ignored by
-              // assistive tech (QA F17, 30 Sep 2026); as an image the flag
-              // and its word read as one thing, "Canadian".
-              role="img"
-              aria-label="Canadian"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 9600 4800"
-                width={16}
-                height={8}
-                aria-hidden="true"
-                style={{ display: "block", flexShrink: 0, borderRadius: 1 }}
-              >
-                <path fill="#f00" d="m0 0h2400l99 99h4602l99-99h2400v4800h-2400l-99-99h-4602l-99 99H0z" />
-                <path fill="var(--text-primary)" d="m2400 0h4800v4800h-4800zm2490 4430-45-863a95 95 0 0 1 111-98l859 151-116-320a65 65 0 0 1 20-73l941-762-212-99a65 65 0 0 1-34-79l186-572-542 115a65 65 0 0 1-73-38l-105-247-423 454a65 65 0 0 1-111-57l204-1052-327 189a65 65 0 0 1-91-27l-332-652-332 652a65 65 0 0 1-91 27l-327-189 204 1052a65 65 0 0 1-111 57l-423-454-105 247a65 65 0 0 1-73 38l-542-115 186 572a65 65 0 0 1-34 79l-212 99 941 762a65 65 0 0 1 20 73l-116 320 859-151a95 95 0 0 1 111 98l-45 863z" />
-              </svg>
-              <span
-                className="text-[11px] font-bold tracking-[0.18em] uppercase"
-                style={{ color: "var(--ink-55)", lineHeight: 1 }}
-              >
-                Canadian
-              </span>
-            </span>
+            <CanadianMark />
           </Link>
 
           {/* Desktop links, from lg (1024px). Below that the bar is the
@@ -1793,7 +1966,7 @@ export default function Nav() {
       </AnimatePresence>
 
       {/* Mobile overlay — rendered outside <nav> so its z-index is not capped by the nav stacking context */}
-      <MobileOverlay isOpen={mobileOpen} onClose={() => setMobileOpen(false)} onSearchOpen={openSearch} />
+      <MobileOverlay isOpen={mobileOpen} scrolled={scrolled} onClose={() => setMobileOpen(false)} onSearchOpen={openSearch} />
 
       {/* Search overlay */}
       <AnimatePresence>

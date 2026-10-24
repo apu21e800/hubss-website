@@ -384,7 +384,7 @@ export default async function BlogPostPage({ params }: Props) {
                 className="standfirst"
                 style={{
                   fontSize: "clamp(1.15rem, 1.05rem + 0.35vw, 1.3rem)",
-                  lineHeight: 1.55,
+                  lineHeight: 1.45,
                   color: "var(--text-primary)",
                   fontWeight: 500,
                   letterSpacing: "-0.005em",

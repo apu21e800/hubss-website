@@ -37,6 +37,7 @@ import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
 import { PRODUCT_CATEGORIES, PRODUCT_MENU_LINES } from "@/lib/product-categories";
 import { catalogue, catalogueReady, cataloguePageUrl, ideaBook } from "@/lib/catalogue";
+export { ideaBook };
 import { showCatalogue } from "@/lib/feature-flags";
 import { lunchLearnHref } from "@/lib/lunch-learn";
 import ChromeImg from "@/components/ui/ChromeImg";
@@ -151,8 +152,8 @@ export const NAV_SECTIONS: NavSection[] = INSIGHTS.sections?.length
   : INSIGHT_SECTIONS.map((s) => ({ key: s.href, label: s.label, href: s.href, blurb: "", count: 0 }));
 
 /** The Product Portfolio Book's cover (the 240px thumbnail, the 800px first page for 2x). */
-const ideaBookCover = catalogue.coverThumb ?? null;
-const ideaBookCoverSet = ideaBookCover
+export const ideaBookCover = catalogue.coverThumb ?? null;
+export const ideaBookCoverSet = ideaBookCover
   ? `${ideaBookCover} 240w, ${cataloguePageUrl(1, catalogue.widths[0])} ${catalogue.widths[0]}w`
   : undefined;
 export const showIdeaBook = () => showCatalogue() && catalogueReady && ideaBookCover !== null;
@@ -293,11 +294,17 @@ function PanelHead({ title, line, href, all }: { title: string; line: string; hr
   );
 }
 
-/** A column's eyebrow and its note. */
+/**
+ * A column's heading: a short rule in the brand orange, then the family's
+ * name in sentence case, quiet, and its note. Not the uppercase eyebrow: at
+ * 13px and 0.2em "Preformed Thermoplastics" and "Commercial & Sustainability"
+ * wrap in a 200px column (creative director, 24 Oct 2026).
+ */
 function ColumnHead({ label, note }: { label: string; note?: string }) {
   return (
     <div className="mm-col-head">
-      <div className="eyebrow">{label}</div>
+      <span className="mm-rule" aria-hidden="true" />
+      <div className="mm-col-label">{label}</div>
       {note && <div className="mm-note">{note}</div>}
     </div>
   );
@@ -370,7 +377,8 @@ function Feature({ pictures, active }: { pictures: { label: string; note?: strin
         ))}
       </div>
       <div className="mm-feature-caption" key={pictures[active]?.label}>
-        <div className="eyebrow">{pictures[active]?.label}</div>
+        <span className="mm-rule" aria-hidden="true" />
+        <div className="mm-col-label">{pictures[active]?.label}</div>
         {pictures[active]?.note && <div className="mm-note">{pictures[active].note}</div>}
       </div>
     </aside>
@@ -398,7 +406,7 @@ function LunchLearnRow({ topic }: { topic: string }) {
   return (
     <FootRow
       href={lunchLearnHref(topic, "menu")}
-      mark={<MooseAvatar size={36} />}
+      mark={<MooseAvatar size={34} />}
       label="Lunch & Learn"
       line={LL_LINE}
       action="Book a session"

@@ -259,6 +259,11 @@ about 40% below the WordPress site's.
   sees no automation signal (navigator.webdriver, headless or crawler user
   agents, no languages, a zero-size window). A person never trips one;
   `npm run test:analytics`. Our own headless QA is no longer counted either.
+- Not on /studio (24 Oct 2026; components/NotInStudio.tsx in app/layout.tsx):
+  the chat, GA4, Vercel Analytics, Speed Insights and the toolbar stay off the
+  Studio and every page under it, so an editor's session isn't a visit and
+  the chat bubble doesn't sit over the Studio. Square One's Studio has done
+  the same since 14 Oct.
 - The printed Product Book request now counts as a lead (form_type
   product-book-print), like the contact and Lunch & Learn forms. Since 20 Oct
   2026 the route sends that generate_lead, for delivered requests only, and

@@ -1706,6 +1706,14 @@ html {
   overflow-x: hidden;
   overflow-x: clip;
 }
+/* No scroll anchoring in the menu's scrollers (24 Oct 2026): as a section
+   folded above the one tapped, Chrome anchored the list to the folding
+   panel and jumped it 85px in the first frame, on top of the scroll the
+   menu gives back itself (Nav.tsx onFold). */
+.drawer,
+.drawer-body {
+  overflow-anchor: none;
+}
 /* A Sanity hero photo (components/ui/HeroPhoto.tsx): its framing position,
    except under 640px, where the photo is the CDN's own portrait cut around
    the focal point and sits centred. */

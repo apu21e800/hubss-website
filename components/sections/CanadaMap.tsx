@@ -41,7 +41,13 @@ import Map, {
   type MapLayerMouseEvent,
   type ViewStateChangeEvent,
 } from "react-map-gl/maplibre";
-import type { GeoJSONSource } from "maplibre-gl";
+// maplibre itself, handed to <Map mapLib>: react-map-gl would otherwise
+// `import("maplibre-gl")` from an effect after this component has rendered,
+// a hop later (performance review, 24 Oct 2026: the 275 KB chunk started
+// 120 to 340ms after the map's own chunk on a fast line, 650 to 820ms on a
+// slow one). Named here, it ships in this component's chunk group and the
+// two download together from the tap.
+import maplibregl, { type GeoJSONSource } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import Image from "next/image";
 import type { FeatureCollection, Point } from "geojson";
@@ -661,20 +667,28 @@ export default function CanadaMap({ revealOnMount = false }: { revealOnMount?: b
     // tile in view loaded, or "idle", whichever is first: on a phone the
     // tiles were drawn at about 1.8 seconds and "idle" came at 3.5 (the
     // labels fading in keep the map busy), so the dark sat over a finished
-    // map until its 2.5 second cap.
-    if (!window.__hubssMapReady) {
-      const m = map.getMap();
-      const ready = () => {
-        if (window.__hubssMapReady) return;
-        if (!m.areTilesLoaded()) return;
-        window.__hubssMapReady = true;
-        m.off("render", ready);
-        m.off("idle", ready);
-        window.dispatchEvent(new Event("hubss:map-ready"));
-      };
-      m.on("render", ready);
-      m.on("idle", ready);
-    }
+    // map until its cap. A fact about THIS map: the flag comes down with it
+    // (the cleanup), since the map unmounts on every page change and comes
+    // back empty; a flag that stayed up lifted the dark onto a black frame
+    // 120ms after the second "See the work" of a visit (code review, 24 Oct
+    // 2026: home, a product page, the logo, the button).
+    const m = map.getMap();
+    const ready = () => {
+      if (window.__hubssMapReady) return;
+      if (!m.areTilesLoaded()) return;
+      window.__hubssMapReady = true;
+      m.off("render", ready);
+      m.off("idle", ready);
+      window.dispatchEvent(new Event("hubss:map-ready"));
+    };
+    window.__hubssMapReady = false;
+    m.on("render", ready);
+    m.on("idle", ready);
+    return () => {
+      m.off("render", ready);
+      m.off("idle", ready);
+      window.__hubssMapReady = false;
+    };
   }, [loaded, isDesktop, padding, syncInView, homeBounds]);
 
   // A search frames what it found, once typing pauses.
@@ -936,6 +950,7 @@ export default function CanadaMap({ revealOnMount = false }: { revealOnMount?: b
           <div ref={frameRef} className="cm-frame">
             <Map
               ref={mapRef}
+              mapLib={maplibregl}
               mapStyle={MAP_STYLE}
               initialViewState={{ bounds: homeBounds, fitBoundsOptions: { padding: 40 } }}
               style={{ width: "100%", height: "100%" }}
@@ -1097,8 +1112,15 @@ export default function CanadaMap({ revealOnMount = false }: { revealOnMount?: b
                       onClick={() => { stopTour(); setSelectedId(p.id); setSheetId(p.id); }}
                     >
                       <span className="cm-scard-photo">
-                        {p.images[0] ? (
-                          <Image loader={mapLoader} src={mapPhotoSrc(p, p.images[0])} alt="" fill sizes="(max-width: 640px) 100vw, 640px" style={{ objectFit: "cover" }} />
+                        {/* After the style is in (`loaded`): on a phone the
+                            strip mounts with the map and its eight photos,
+                            500 KB at the old 100vw sizing, shared the line
+                            with maplibre and the style and held the map up
+                            by seconds on a cellular link (performance
+                            review, 24 Oct 2026). A card is min(78vw, 320px)
+                            wide, so a 390px phone gets the 640 cut, not 828. */}
+                        {loaded && p.images[0] ? (
+                          <Image loader={mapLoader} src={mapPhotoSrc(p, p.images[0])} alt="" fill sizes="(max-width: 640px) 78vw, 320px" style={{ objectFit: "cover" }} />
                         ) : null}
                         <span className="cm-scard-system">{p.product}</span>
                       </span>

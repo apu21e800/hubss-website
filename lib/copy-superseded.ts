@@ -186,6 +186,20 @@ export const SUPERSEDED: Superseded[] = [
     from: "Before the restripe is booked, mark up the layout drawing:",
     to: "Before the work is booked, mark up the lot's layout drawing:",
   },
+  // Its keywords (the page's JSON-LD and the hubs' lanes; code review, 24 Oct
+  // 2026: "restriping" still shipped there).
+  {
+    doc: "blogpost-parking-lot-line-painting-vs-thermoplastic",
+    path: "keywords[0]",
+    from: "parking lot line painting",
+    to: "parking lot pavement markings",
+  },
+  {
+    doc: "blogpost-parking-lot-line-painting-vs-thermoplastic",
+    path: "keywords[5]",
+    from: "parking lot restriping",
+    to: "parking lot layout",
+  },
 ];
 
 // The pages' lines are matched on their words alone; a post's only in that

@@ -10,12 +10,16 @@
  * list does not have it throws a TypeError instead of scrolling; thrown in a
  * close handler, that would leave the page fixed. Switching html's own
  * behavior to auto for the one call works everywhere (Next.js's router does
- * the same).
+ * the same), with one reflow between the two, so the style is in effect
+ * when the scroll is asked for: without it Chromium glided on a scroll UP
+ * the page (1500 to 0 went 1498, 1482, 1468...; code review, 24 Oct 2026),
+ * which no caller had done yet.
  */
 export function scrollWindowInstantly(y: number): void {
   const html = document.documentElement;
   const before = html.style.scrollBehavior;
   html.style.scrollBehavior = "auto";
+  html.getClientRects();
   window.scrollTo(0, y);
   html.style.scrollBehavior = before;
 }

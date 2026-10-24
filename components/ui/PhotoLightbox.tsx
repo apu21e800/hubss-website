@@ -282,7 +282,7 @@ export default function PhotoLightbox({
             loaded from scratch (QA sweep, 16 Oct 2026). */}
         <div aria-hidden="true" style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", opacity: 0, pointerEvents: "none" }}>
           {preload.map((p) => (
-            <PhotoImage key={p.src} src={p.src} alt="" filename={p.name ?? p.alt} fill sizes="92vw" quality={85} loading="eager" />
+            <PhotoImage key={p.src} src={p.src} alt="" filename={p.name ?? p.alt} fill sizes="92vw" loading="eager" />
           ))}
         </div>
       </motion.div>
@@ -330,7 +330,7 @@ function Frame({
           className="object-contain"
           style={{ filter: narrow ? undefined : "drop-shadow(0 24px 60px rgba(0,0,0,0.6))" }}
           sizes="92vw"
-          quality={85}
+         
           priority
           onLoad={(e) => {
             const img = e.currentTarget;

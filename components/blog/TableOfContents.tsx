@@ -83,12 +83,12 @@ export default function TableOfContents({ collapsible = false }: { collapsible?:
 
   if (collapsible) {
     return (
-      <details className="faq rounded-xl" style={{ border: "1px solid var(--border-color)" }}>
+      <details className="faq group rounded-xl" style={{ border: "1px solid var(--border-color)" }}>
         <summary
           className="flex min-h-[48px] cursor-pointer list-none items-center justify-between gap-3 px-4 text-xs font-semibold uppercase tracking-widest text-[var(--text-body)] [&::-webkit-details-marker]:hidden"
         >
           On this page
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="transition-transform duration-200 group-open:rotate-180">
             <path d="M6 9l6 6 6-6" />
           </svg>
         </summary>

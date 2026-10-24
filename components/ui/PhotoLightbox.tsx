@@ -25,6 +25,16 @@
  *     sits directly below the picture (it used to cover its bottom-left).
  *   • On a phone the photo runs edge to edge and the arrows sit below it on
  *     the backdrop; they used to overlap a 278px-wide photo.
+ *
+ * 24 Oct 2026 (Vern, on a phone: "The image buttons are in the middle on
+ * mobile experience, also too many orange buttons here. Basic UI stuff"):
+ *   • The buttons are dark glass, not orange: on this screen the photo is
+ *     the colour, and the site's orange is kept for the one thing to do on a
+ *     page. Three orange circles round one photo was two too many.
+ *   • On a phone the arrows left the middle of the screen for a bar at its
+ *     foot, where a thumb is: previous at the left edge, the count between,
+ *     next at the right edge. Close stays top right. From sm up the arrows
+ *     sit beside the photo and the count top left, as before.
  */
 
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -44,22 +54,14 @@ export interface LightboxPhoto {
 const WHITE = "rgba(255,255,255,0.9)";
 const WHITE_DIM = "rgba(255,255,255,0.55)";
 
-const BTN: React.CSSProperties = {
-  width: 48,
-  height: 48,
-  borderRadius: "50%",
-  background: "linear-gradient(135deg, #F97316 0%, #EA8C16 100%)",
-  color: "#FFFFFF",
-  boxShadow: "0 4px 20px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.08) inset",
-  alignItems: "center",
-  justifyContent: "center",
-  flexShrink: 0,
-};
+// Size only: the fill and the border are classes, so hover and press can
+// change them (an inline background would beat the hover class).
+const BTN: React.CSSProperties = { width: 48, height: 48, flexShrink: 0 };
 
-// display comes from the classes (the side arrows are `hidden sm:flex`), so
-// it must not be in the inline style, which would win over `hidden`.
+// display comes from each button's own classes (the side arrows are
+// `hidden sm:flex`), so it is not in here.
 const BTN_CLASS =
-  "items-center justify-center transition-all hover:brightness-110 active:scale-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white";
+  "items-center justify-center rounded-full border border-white/15 bg-white/10 text-white backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.35)] transition-colors hover:bg-white/20 active:bg-white/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white";
 
 /** Phones (under Tailwind's sm) lay the arrows below the photo. */
 const NARROW = 640;
@@ -188,15 +190,18 @@ export default function PhotoLightbox({
           if (Math.abs(dx) > 48) (dx > 0 ? prev() : next());
         }}
       >
-        {/* Counter: top-left pill, fixed white on the backdrop */}
-        <div
-          className="absolute top-4 left-4 sm:top-5 sm:left-5 z-10 px-3 py-1.5 rounded-full text-xs font-bold tracking-wide select-none tabular-nums"
-          style={{ background: "rgba(255,255,255,0.1)", color: WHITE, border: "1px solid rgba(255,255,255,0.14)", backdropFilter: "blur(8px)" }}
-        >
-          {index + 1} <span style={{ color: WHITE_DIM }}>/ {photos.length}</span>
-        </div>
+        {/* Counter: top-left pill from sm up, fixed white on the backdrop;
+            on a phone it is in the bar at the foot. */}
+        {photos.length > 1 && (
+          <div
+            className="absolute top-5 left-5 z-10 hidden sm:block px-3 py-1.5 rounded-full text-xs font-bold tracking-wide select-none tabular-nums"
+            style={{ background: "rgba(255,255,255,0.1)", color: WHITE, border: "1px solid rgba(255,255,255,0.14)", backdropFilter: "blur(8px)" }}
+          >
+            {index + 1} <span style={{ color: WHITE_DIM }}>/ {photos.length}</span>
+          </div>
+        )}
 
-        {/* Close: orange circle, top-right; takes focus on open */}
+        {/* Close: top-right; takes focus on open */}
         <button
           ref={closeRef}
           type="button"
@@ -206,7 +211,7 @@ export default function PhotoLightbox({
           style={BTN}
         >
           <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M18 6L6 18M6 6l12 12" strokeWidth={2.5} strokeLinecap="round" />
+            <path d="M18 6L6 18M6 6l12 12" strokeWidth={2.25} strokeLinecap="round" />
           </svg>
         </button>
 
@@ -225,23 +230,33 @@ export default function PhotoLightbox({
           </button>
         )}
 
-        {/* Frame: the photo, then its caption, then (phones) the arrows */}
-        <Frame key={photo.src} photo={photo} maxW={maxW} maxH={maxH} narrow={narrow}>
-          {photos.length > 1 && (
-            <div className="flex sm:hidden items-center justify-center gap-5 pt-4" onClick={(e) => e.stopPropagation()}>
-              <button type="button" onClick={prev} aria-label="Previous photo" className={`flex ${BTN_CLASS}`} style={BTN}>
-                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M15 18l-6-6 6-6" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
-              <button type="button" onClick={next} aria-label="Next photo" className={`flex ${BTN_CLASS}`} style={BTN}>
-                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M9 18l6-6-6-6" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
-            </div>
-          )}
-        </Frame>
+        {/* Frame: the photo, then its caption */}
+        <Frame key={photo.src} photo={photo} maxW={maxW} maxH={maxH} narrow={narrow} />
+
+        {/* Phones: previous, the count, next, in a bar at the foot of the
+            screen, clear of the home indicator. A tap on the bar between
+            the buttons does not close the viewer. */}
+        {photos.length > 1 && (
+          <div
+            className="absolute inset-x-0 bottom-0 z-10 flex sm:hidden items-center justify-between px-4 pt-3"
+            style={{ paddingBottom: "max(16px, env(safe-area-inset-bottom))" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button type="button" onClick={prev} aria-label="Previous photo" className={`flex ${BTN_CLASS}`} style={BTN}>
+              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M15 18l-6-6 6-6" strokeWidth={2.25} strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+            <span className="text-[13px] font-semibold tracking-wide tabular-nums select-none" style={{ color: WHITE }}>
+              {index + 1} <span style={{ color: WHITE_DIM }}>/ {photos.length}</span>
+            </span>
+            <button type="button" onClick={next} aria-label="Next photo" className={`flex ${BTN_CLASS}`} style={BTN}>
+              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M9 18l6-6-6-6" strokeWidth={2.25} strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          </div>
+        )}
 
         {photos.length > 1 && (
           <button

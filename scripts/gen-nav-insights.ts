@@ -56,6 +56,7 @@ import fs from "fs";
 import path from "path";
 import { createClient } from "@sanity/client";
 import { config as loadDotenv } from "dotenv";
+import { currentIn } from "../lib/copy-superseded";
 import { FIELD_NOTE_TYPES, INSIGHTS_SECTIONS, isArchivedPost, sectionFor } from "../lib/field-notes-taxonomy";
 import { countWords, inferCategory, readTimeFor } from "../lib/blog-taxonomy";
 import { CHROME_COVER, chromeImage } from "../lib/chrome-images.mjs";
@@ -296,7 +297,7 @@ async function main() {
     const slug = r.slug.trim();
     if (!/^[a-z0-9-]+$/.test(slug)) continue;
     if (!live(slug)) continue;
-    const title = r.title.trim();
+    const title = String(currentIn(r._id, r.title)).trim();
     const alt = r.alt?.trim() || undefined;
     const frame = r.image ? framing(r.image, imageFilename(alt, title, slug)) : null;
     if (!frame) continue;
@@ -308,7 +309,7 @@ async function main() {
         type: typeOf(r, slug, title),
         publishedAt: r.publishedAt,
         date: printedDate(r.publishedAt),
-        excerpt: (r.excerpt ?? "").trim(),
+        excerpt: String(currentIn(r._id, r.excerpt) ?? "").trim(),
         readTime: readTimeOf(r),
         ...(alt ? { alt } : {}),
         thumb: sized(frame, THUMB_WIDTHS, 1),
@@ -335,14 +336,14 @@ async function main() {
       { slug: CHROME_COVER.slug }
     );
     if (pick && live(pick.slug)) {
-      const title = pick.title.trim();
+      const title = String(currentIn(pick._id, pick.title)).trim();
       cover = {
         slug: pick.slug,
         title,
         type: typeOf(pick, pick.slug, title),
         publishedAt: pick.publishedAt,
         date: printedDate(pick.publishedAt),
-        excerpt: (pick.excerpt ?? "").trim(),
+        excerpt: String(currentIn(pick._id, pick.excerpt) ?? "").trim(),
         readTime: readTimeOf(pick),
         thumb: chromeImage("post", CHROME_COVER.src),
         image: chromeImage("cover", CHROME_COVER.src),

@@ -656,6 +656,25 @@ export default function CanadaMap({ revealOnMount = false }: { revealOnMount?: b
     const c = map.getCenter();
     homeRef.current = { lng: c.lng, lat: c.lat, zoom: map.getZoom() };
     syncInView();
+    // The first frame of tiles is in: "See the work" lifts its dark on
+    // this (components/sections/SeeTheWork.tsx). The first render with every
+    // tile in view loaded, or "idle", whichever is first: on a phone the
+    // tiles were drawn at about 1.8 seconds and "idle" came at 3.5 (the
+    // labels fading in keep the map busy), so the dark sat over a finished
+    // map until its 2.5 second cap.
+    if (!window.__hubssMapReady) {
+      const m = map.getMap();
+      const ready = () => {
+        if (window.__hubssMapReady) return;
+        if (!m.areTilesLoaded()) return;
+        window.__hubssMapReady = true;
+        m.off("render", ready);
+        m.off("idle", ready);
+        window.dispatchEvent(new Event("hubss:map-ready"));
+      };
+      m.on("render", ready);
+      m.on("idle", ready);
+    }
   }, [loaded, isDesktop, padding, syncInView, homeBounds]);
 
   // A search frames what it found, once typing pauses.

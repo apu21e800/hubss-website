@@ -904,19 +904,18 @@ changes on the fly to core text and images".
 
 ## "See the work" on a phone, Back, and taps (24 Oct 2026)
 Vern, 24 Oct: "currently it takes the user to the interactive map, but it's
-a bit janky on mobile experience. this is first impression stuff".
-- Under 1024px the hero's "See the work" (when its link is `#map`) opens
-  components/sections/WorkShowcase.tsx full screen: the map tour's stops
-  (TOUR_IDS) as photographs, one job to a screen, built on the server by
-  lib/work-showcase.ts (a photo wider than 2.5:1 is left out). "Open the
-  map", at every screen's foot and on the last screen, moves the page to
-  the map under it; a laptop keeps the glide to the map.
-- It pushes a `#work` entry (state `{ hubssWork: true }`): Back closes it,
-  Forward and Back from a write-up reopen it at the same photo
-  (sessionStorage `hubss-work-slide`), a fresh /#work opens it and closing
-  then rewrites the address. While open, html is overflow hidden and the
-  page behind is `inert` (Next's route announcer excepted); the "/" search
-  key is ignored under any `aria-modal` layer but search's own.
+a bit janky on mobile experience. this is first impression stuff", and
+later the same night, after a full-screen slideshow of the jobs had
+replaced it for a few hours: "at one point it took us to the interactive
+map which was cool. What happened to that." The map stays; make it better,
+don't replace it.
+- Under 1024px the hero's "See the work" (when its link is `#map`) cuts to
+  the map instead of gliding seven thousand pixels down the page
+  (components/sections/SeeTheWork.tsx): the screen fades to dark, the page
+  jumps to the map's frame under the bar, and the dark lifts when CanadaMap
+  says "hubss:map-ready" (its first `idle` after load, also
+  `window.__hubssMapReady`), or after 2.5 seconds at most. `#map` is pushed
+  as its own step, so Back returns to the top. A laptop keeps the glide.
 - Never hand Next its own history state in replaceState or pushState
   (`window.history.state`): Next takes the call for its own and is not told
   of the new address (the logo's dropHash in Nav.tsx: the next "See the

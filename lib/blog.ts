@@ -31,6 +31,7 @@
 
 import { unstable_cache } from "next/cache";
 import { stegaClean } from "@sanity/client/stega";
+import { currentBody, currentIn, currentPlain } from "@/lib/copy-superseded";
 import { sanityFetch, CACHE_VERSION } from "@/lib/sanity.queries";
 import { isPreview } from "@/lib/sanity.preview";
 import blogIndex from "@/lib/blog-index.json";
@@ -193,16 +194,18 @@ function tableWords(r: RawPost): string {
 /** A post as GROQ returns it (META_FIELDS) → what the pages use. */
 export function toMeta(r: RawPost): PostMeta | null {
   const slug = r.slug?.trim();
-  const title = r.title?.trim();
+  // currentIn: a line lib/copy-superseded.ts rewrote prints as the new one
+  // while Studio still holds the old (the parking lot guide, 24 Oct 2026).
+  const title = currentIn(r._id, r.title)?.trim();
   if (!slug || !title || !r.publishedAt) return null;
   // Cleaned before counting (23 Oct 2026): in Edit on the page the body's
   // text carries the preview's invisible markers, which include U+FEFF, a
   // space to JavaScript, so a 333-word post counted 527 and read "2 min read"
   // there against "1 min read" on the site. Visitors' text has no markers.
-  const text = stegaClean(r.text ?? "");
+  const text = currentPlain(r._id, stegaClean(r.text ?? ""));
   const tables = tableWords(r);
   const words = countWords(`${text} ${tables}`);
-  const excerpt = r.excerpt?.trim() ?? "";
+  const excerpt = currentIn(r._id, r.excerpt)?.trim() ?? "";
   const declared = strings(r.declaredProducts);
   const scanned = scanProducts(title, excerpt, text, tables, ...strings(r.hrefs), ...strings(r.alts));
   const tags = strings(r.tags);
@@ -260,8 +263,8 @@ async function readPost(slug: string, opts: { preview?: boolean } = {}): Promise
   if (!raw || !meta) return null;
   return {
     ...meta,
-    body: raw.body ?? [],
-    text: [raw.text ?? "", tableWords(raw)].filter(Boolean).join("\n\n"),
+    body: currentBody(raw._id, raw.body ?? []),
+    text: [currentPlain(raw._id, raw.text ?? ""), tableWords(raw)].filter(Boolean).join("\n\n"),
     featuredImageLqip: raw.lqip?.startsWith("data:image/") ? raw.lqip : undefined,
   };
 }

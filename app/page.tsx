@@ -26,7 +26,6 @@ import { mergeHomepageCopy } from "@/lib/homepage-copy";
 import { catalogue, catalogueReady, ideaBook } from "@/lib/catalogue";
 import { showCatalogue } from "@/lib/feature-flags";
 import { keepDots } from "@/lib/separators";
-import { workSlides } from "@/lib/work-showcase";
 
 // 30 Sep 2026 (QA A1, E2, E4): "Systems", not the banned "Solutions", in the
 // title; one factual description with no "leader" (the same line as the site
@@ -191,8 +190,6 @@ export default async function Home() {
     cta2Label:  sanityPage?.homepageHero?.cta2Label  ?? "See the systems",
     cta2Href:   sanityPage?.homepageHero?.cta2Href   ?? "#systems",
     book: heroBook(),
-    // On a phone "See the work" opens these (lib/work-showcase.ts).
-    work: workSlides(),
     // Hero slide 1 in Studio; /images/hero/hero-1.jpg when it's empty.
     heroImageSrc: heroPhoto?.src,
     heroImageAlt: heroPhoto?.alt,

@@ -1827,7 +1827,7 @@ html {
    text, not boxes. The panel is dark in every theme (the bar pins its tokens
    dark), so the hairlines and inks below are the dark set. */
 .mm {
-  padding: 28px 0 0;
+  padding: 24px 0 0;
 }
 .mm-body {
   display: grid;
@@ -1845,7 +1845,7 @@ html {
   }
 }
 .mm-head {
-  margin-bottom: 22px;
+  margin-bottom: 18px;
 }
 .mm-title {
   font-family: var(--font-display), var(--font-inter), "Inter", system-ui, sans-serif;
@@ -1877,8 +1877,16 @@ html {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   column-gap: 28px;
 }
+.mm-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.mm-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
 .mm-col-head {
-  padding-bottom: 8px;
+  padding-bottom: 6px;
   margin-bottom: 2px;
 }
 .mm-rule {
@@ -1920,7 +1928,7 @@ html {
   justify-content: space-between;
   gap: 10px;
   min-height: 44px;
-  padding: 6px 0;
+  padding: 4px 0;
   color: var(--text-primary);
 }
 .mm-section {

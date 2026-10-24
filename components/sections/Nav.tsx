@@ -1479,10 +1479,16 @@ export default function Nav() {
                 boxShadow: "0 28px 60px rgba(0,0,0,0.55)",
               }}
             >
-              <div id={PANEL_IDS[openPanel]}>
-                {openPanel === "products" && <ProductsPanel />}
-                {openPanel === "applications" && <ApplicationsPanel />}
-                {openPanel === "insights" && <ProjectsPanel />}
+              {/* The same container as the bar above it, so the panel's left
+                  edge lines up with the logo and its right edge with the
+                  Lunch & Learn button; a scroller, for a screen shorter than
+                  the panel (the foot row stays pinned, app/globals.css .mm-foot). */}
+              <div id={PANEL_IDS[openPanel]} className="max-h-[calc(100vh-72px)] overflow-y-auto overscroll-contain">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                  {openPanel === "products" && <ProductsPanel />}
+                  {openPanel === "applications" && <ApplicationsPanel />}
+                  {openPanel === "insights" && <ProjectsPanel />}
+                </div>
               </div>
             </motion.div>
           )}

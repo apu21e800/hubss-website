@@ -483,9 +483,19 @@ export function ProductsPanel() {
       <div className="mm-body">
         <div className="mm-main">
           <PanelHead title="Products" line="Thermoplastics, coatings, stamped asphalt, repair" href="/products" all="All products" />
-          <div className="mm-cols">
-            {PRODUCT_CATEGORIES.map((cat, i) => (
-              <Column key={cat.label} label={cat.label} note={cat.menuNote} items={productFamily(cat)} index={i} onPoint={onPoint} />
+          {/* Three columns, not four: the two short families (Stamped
+              Asphalt, one system and the pattern gallery; Asphalt & Concrete
+              Repair, three) share the third, so each column is wide enough
+              for a product's line on one line ("Preformed thermoplastic to
+              your design" wrapped in every column of four). */}
+          <div className="mm-cols mm-cols-3">
+            {[[0], [1], [2, 3]].map((group) => (
+              <div key={group.join("-")} className="mm-stack">
+                {group.map((i) => {
+                  const cat = PRODUCT_CATEGORIES[i];
+                  return cat ? <Column key={cat.label} label={cat.label} note={cat.menuNote} items={productFamily(cat)} index={i} onPoint={onPoint} /> : null;
+                })}
+              </div>
             ))}
           </div>
         </div>
@@ -541,9 +551,10 @@ function SectionRow({ section: s, index }: { section: NavSection; index: number 
         ) : (
           <span className="mm-section-photo" style={{ background: PHOTO_GROUND }} />
         )}
+        {/* The name alone, as the phone menu's rows: the sections' three-line
+            blurbs made the rows taller than the cover story beside them. */}
         <span className="min-w-0 flex-1">
           <span className="mm-name">{s.label}</span>
-          {s.blurb && <span className="mm-item-line">{s.blurb}</span>}
         </span>
         <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" className="mm-chev" aria-hidden="true">
           <path d="M9 18l6-6-6-6" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />

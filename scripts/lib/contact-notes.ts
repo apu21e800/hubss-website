@@ -189,6 +189,11 @@ export const CLEAN_NOTES: string[] = [
   "the thermoplastic goes down at 400 degrees, then cools",
   "laid at 1200 sq ft a night",
   "preformed thermoplastic at 150 mil, heated into the asphalt",
+  "crosswalks at 3 schools, all downtown",
+  "done at 10 am, open by noon",
+  "at 2 locations, both in Milton",
+  "at 12 noon, the road opened",
+  "it cures at 15 below, slowly",
 ];
 
 /** Where fields of public places and crossings: none may be held, read as a Where. */
@@ -280,4 +285,5 @@ export const TYPED_DETAILS: [string, string, { place?: boolean }?][] = [
   ["12 Kings Road, Milton", "12 Kings Road"],
   ["the 12 Oak Street job", "12 Oak Street"],
   ["at 1234 lakeshore, toronto", "1234 lakeshore"],
+  ["at 12 lakeshore, toronto", "12 lakeshore"],
 ];

@@ -735,17 +735,18 @@ purchase order).
   Bay or Hill streets, "5678 Highway 7", an RR before a comma, a town or a
   site, a PO Box or a Box opening the words, French addresses, a street named
   without its type after a comma, colon, "at" or "on" ("at 1234 Yonge,
-  Toronto", "at 12 Lakeshore,"), seven-digit local numbers, and for a job
+  Toronto", "at 12 lakeshore,"), seven-digit local numbers, and for a job
   post's Where (`place`) a house number at its start.
 - The second review found the first typed reading held 15 of 18 plain job
   notes; the third found the first narrowing let "45 Maple Crescent looks
   sharp" through. scripts/lib/contact-notes.ts is what it is measured on
-  now: 177 plain notes, stories and captions and 10 public Wheres (none may
-  be held) and 72 typed details (each must be found), in `npm run
+  now: 182 plain notes, stories and captions and 10 public Wheres (none may
+  be held) and 73 typed details (each must be found), in `npm run
   test:copy`. Add a line there before changing a rule. Known gaps: a note
   typed with no capitals at all loses the forms that need one (a street with
-  no type outside "at", a bare "Box 14", "RR 2 moffat"), and names are not
-  caught.
+  no type outside "at", a bare "Box 14", "RR 2 moffat"); an address followed
+  by a noun a crew counts ("45 Maple Crescent entrances") reads as a count,
+  and one after "since" as a year; names are not caught.
 - Where it runs: every drafter's style pass (flagSentences) in the default
   reading; `contactLeft` (lib/field-note-drafter.ts) reads a job post's words
   and a photo's description as typed. Studio warns on blog posts and Job

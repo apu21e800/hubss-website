@@ -531,9 +531,13 @@ const NAMED_ROAD = new RegExp(
   "(^|[,;:\\n]\\s*|\\b(?:[Aa]t|[Oo]n|[Tt]o|[Ff]rom|[Oo]f|[Nn]ear)\\s+)(\\d{1,5})\\s+([A-Z][a-z\\u00e0-\\u00ff'\\u2019]+(?:[\\s-][A-Z][a-z\\u00e0-\\u00ff'\\u2019]+)?)(?=\\s*(?:[,;\\n]|\\.(?:\\s|$)|$|\\s+in\\s))",
   "g"
 );
-/** The same, typed in lowercase, only after "at" ("at 1234 lakeshore, toronto"). */
+/**
+ * The same, typed in lowercase, only after "at" and only one word, never a
+ * plural ("at 1234 lakeshore, toronto", "at 12 lakeshore,"; "at 3 schools,"
+ * is a count, "at 10 am," a time).
+ */
 const LOWER_NAMED_ROAD = new RegExp(
-  "(\\b[Aa]t\\s+)(\\d{3,5})\\s+([a-z][a-z\\u00e0-\\u00ff'\\u2019]+)(?=\\s*(?:[,;\\n]|\\.(?:\\s|$)|$|\\s+in\\s))",
+  "(\\b[Aa]t\\s+)(\\d{1,5})\\s+([a-z][a-z\\u00e0-\\u00ff'\\u2019]+)(?=\\s*(?:[,;\\n]|\\.(?:\\s|$)|$|\\s+in\\s))",
   "g"
 );
 /** The Where field only: a house number at its start ("1234 Lakeshore, Toronto"). */
@@ -617,6 +621,7 @@ export function contactIssues(text: string, opts: ContactOptions = {}): StyleIss
     for (const re of [NAMED_ROAD, LOWER_NAMED_ROAD]) {
       for (const m of plain.matchAll(re)) {
         const at = (m.index ?? 0) + m[1].length;
+        if (re === LOWER_NAMED_ROAD && /s$/.test(m[3])) continue;
         if (namedRoad(m[2], m[3], m[1]) && !NOT_A_NAME.has(m[3].toLowerCase())) add(at, m[0].length - m[1].length, ADDRESS_SAY);
       }
     }
@@ -691,6 +696,7 @@ const STREET_TYPE_WORD = new RegExp(`^(?:${TYPED_STREET_TYPES})$`, "i");
 /** Not a road's name after a number: "100 Mile House", "Phase 2", "1200 Fast Patch", "152 Street". */
 const NOT_A_ROAD = new Set([
   "phase", "volume", "grade", "section", "lot", "ward", "exit", "series", "unit", "suite", "route", "model", "type", "class", "page", "part", "step", "canada",
+  "am", "pm", "noon", "midnight", "oclock", "sharp", "below", "above",
   "january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december",
   "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday",
 ]);

@@ -85,7 +85,10 @@ function collectJobs() {
   for (const rel of ["lib/products.ts", "lib/applications.ts"]) {
     for (const src of imageUrlsIn(rel)) jobs.push({ family: "row", src });
   }
-  for (const { src, position } of Object.values(CHROME_PANELS)) jobs.push({ family: "panel", src, position });
+  for (const { src, position } of Object.values(CHROME_PANELS)) {
+    jobs.push({ family: "panel", src, position });
+    jobs.push({ family: "feature", src, position });
+  }
   jobs.push({ family: "cover", src: CHROME_COVER.src, position: CHROME_COVER.position });
   jobs.push({ family: "post", src: CHROME_COVER.src, position: CHROME_COVER.position });
   for (const [family, src] of Object.entries(CHROME_MARKS)) jobs.push({ family, src });

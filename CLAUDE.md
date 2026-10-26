@@ -414,8 +414,10 @@ these elements, and never draw a button, label or card by hand again:
   the only durations.
 - Buttons have the hand cursor again (Tailwind 4 dropped it); on a touch
   screen no field is under 16px (iOS zooms otherwise); `:user-invalid`
-  rings a field the visitor got wrong; `<details class="faq" name=...>`
-  opens one at a time and eases.
+  rings a field the visitor got wrong and components/FieldValidity.tsx
+  (app/layout.tsx) mirrors that into `aria-invalid` for a screen reader
+  (26 Oct 2026); `<details class="faq" name=...>` opens one at a time and
+  eases.
 - No root loading.tsx: it was a black "LOADING" screen between pages. It is
   parked in app/_parked (delete when confirmed); components/NavigationProgress.tsx
   draws a 2px line under the bar instead. html's `scroll-padding-top` is the
@@ -1137,7 +1139,10 @@ don't replace it.
   together left a hairline of white round the wheel.
 - Homepage hero: the room under the buttons is `.hero-copy` in app/globals.css
   (about 11% of the screen's height; smaller under 820 px tall, where the lift
-  would put the headline into the HUB sign).
+  would put the headline into the HUB sign). On a phone under 600px tall
+  (320x568, the first iPhone SE) the picture is 4:3 and the tagline is
+  hidden, so the headline, the orange button and the book callout share the
+  first screen (26 Oct 2026; the button had been cut by the fold).
 - Studio shows yellow style warnings (lib/style-lint.ts): em dashes, "--",
   the "not X, it's Y" reversal, Title Case headings. `npm run verify` fails on
   an em dash in any built page.

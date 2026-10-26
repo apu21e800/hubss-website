@@ -80,6 +80,19 @@ function imageUrlsIn(rel) {
   return found;
 }
 
+/** Every `featured` hero in lib/featured-images.ts (products and applications), in file order. */
+function featuredHeroes() {
+  const text = fs.readFileSync(path.join(ROOT, "lib/featured-images.ts"), "utf8");
+  return [...new Set([...text.matchAll(/featured:\s*'(\/images\/[^']+)'/g)].map((m) => m[1]))];
+}
+
+/** The 4:5 crop position for a hero: lib/hero-framing.ts HERO_POSITION ("60% 0%") as fractions, else centred. */
+function heroPosition(src) {
+  const text = fs.readFileSync(path.join(ROOT, "lib/hero-framing.ts"), "utf8");
+  const m = new RegExp(`"${src.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}":\\s*"(\\d+)% (\\d+)%"`).exec(text);
+  return m ? [Number(m[1]) / 100, Number(m[2]) / 100] : [0.5, 0.5];
+}
+
 function collectJobs() {
   const jobs = [];
   for (const rel of ["lib/products.ts", "lib/applications.ts"]) {
@@ -88,6 +101,19 @@ function collectJobs() {
   for (const { src, position } of Object.values(CHROME_PANELS)) {
     jobs.push({ family: "panel", src, position });
     jobs.push({ family: "feature", src, position });
+  }
+  // The desktop panels' photograph for each product and application under
+  // the pointer (26 Oct 2026; Vern: "different image for each hover"): the
+  // page's own hero (lib/featured-images.ts `featured`), framed where
+  // lib/hero-framing.ts frames it. A hero that is also a CHROME_PANELS
+  // picture keeps the panel's framing (one URL, one crop).
+  const panelSrcs = new Set(Object.values(CHROME_PANELS).map((p) => p.src));
+  for (const src of featuredHeroes()) {
+    // The repair products keep their family's picture in the menu
+    // (MegaMenus.tsx NO_ITEM_PICTURE): a bag and a grey patch are not a
+    // picture to hover for, and Fast Patch's carries a third party's copyright.
+    if (/\/images\/products\/(chipfill|aggrefill|fast-patch)\//.test(src)) continue;
+    if (!panelSrcs.has(src)) jobs.push({ family: "feature", src, position: heroPosition(src) });
   }
   jobs.push({ family: "cover", src: CHROME_COVER.src, position: CHROME_COVER.position });
   jobs.push({ family: "post", src: CHROME_COVER.src, position: CHROME_COVER.position });

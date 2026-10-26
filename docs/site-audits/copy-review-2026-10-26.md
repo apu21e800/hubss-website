@@ -4,8 +4,9 @@ Vern, 26 Oct 2026: "a DDB AAAA creative agency QA pass, with extra attention to 
 
 Ten reviewers read the 76 published posts (the archived York transit post left out) against docs/STYLE.md and docs/GLOSSARY.md and filed local edits (a phrase, a sentence, never a paragraph; nothing added, no number, name, quote or link changed). Three independent editors then read every edited span (885 spans) and corrected 11 edits with a one-line fix each; 11 were dropped. What survived is scripts/copy-review-2026-10-26.json, applied by scripts/copy-review-2026-10-26.ts on Vern's PC (dry run by default; `--apply` writes; `--case` adds the sentence-case pass on titles and headings).
 
-- 962 word edits on 885 spans in 75 posts: tell 404, terminology 271, gobbledygook 115, spelling 113, claim 27, paint 26, seo 6.
-- 115 case edits (Title Case titles and headings to sentence case), applied only with `--case`: Doug's word first, since the older posts' titles are his.
+- 962 word edits on 885 spans in 75 posts: tell 404, terminology 271, gobbledygook 115, spelling 113, claim 27, paint 26, seo 6. Applied on Vern's PC on 26 Oct 2026; the dry run reads "962 already in Studio; 0 left alone".
+- 113 case edits (Title Case titles and headings to sentence case), applied only with `--case`: Doug's word first, since the older posts' titles are his. 115 until the evening of 26 Oct: two titles keep their capitals, "The Laneway Project" and "The Toronto Laneway Project" (The Laneway Project is a Toronto non-profit's name).
+- Running the script again is safe: an edit already in Studio is counted and never applied twice. Before that guard four edits whose new words contain their old ones ("thermoplastic" to "preformed thermoplastic", "StreetPrint" to "StreetPrint stamped asphalt") would have doubled on a second `--apply`, which the case pass needs.
 - 42 claims flagged, not changed (below): a figure or a statement with no source in the printed Product Portfolio Book or a maker's sheet. The post keeps it until Doug says.
 - Verdicts: improve 38, rewrite-candidate 35, fine 3. A rewrite candidate got its worst lines fixed and a note; the rewrite itself is a separate decision.
 

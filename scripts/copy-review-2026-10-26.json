@@ -10519,16 +10519,6 @@
    "group": "case"
   },
   {
-   "slug": "municipalities-case-study",
-   "doc": "blogpost-municipalities-case-study",
-   "sanity": "title",
-   "from": "The Toronto Laneway Project",
-   "to": "The Toronto laneway project",
-   "kind": "case",
-   "why": "sentence case (docs/STYLE.md)",
-   "group": "case"
-  },
-  {
    "slug": "playgrounds-recreation",
    "doc": "blogpost-playgrounds-recreation",
    "sanity": "body[_key==\"kh\"].children[_key==\"kg\"].text",
@@ -10604,16 +10594,6 @@
    "sanity": "title",
    "from": "Decorative Crosswalk and Median",
    "to": "Decorative crosswalk and median",
-   "kind": "case",
-   "why": "sentence case (docs/STYLE.md)",
-   "group": "case"
-  },
-  {
-   "slug": "laneway-project",
-   "doc": "blogpost-laneway-project",
-   "sanity": "title",
-   "from": "The Laneway Project",
-   "to": "The laneway project",
    "kind": "case",
    "why": "sentence case (docs/STYLE.md)",
    "group": "case"

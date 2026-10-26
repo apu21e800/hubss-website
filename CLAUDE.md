@@ -497,6 +497,10 @@ headings (Doug's word first), `--only=<slug>` one post. Every span is
 addressed by its block's and child's _key and written only while it still
 holds the exact text the edit replaces; a block emptied whole is removed;
 an unpublished draft gets the same edits; every write checks the revision.
+The word edits were applied on Vern's PC on 26 Oct 2026. A second run is
+safe: an edit already in Studio is counted ("already in Studio") and never
+applied again (`alreadyIn`); without that, four edits whose new words
+contain their old ones would have doubled on the run `--case` needs.
 The words the reviewers cut most that the lint did not know are in
 lib/style-lint.ts now (docs/STYLE.md, Words we don't use), so Studio warns
 on them and the drafters' style pass reads them.

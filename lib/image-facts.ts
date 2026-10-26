@@ -795,7 +795,7 @@ export const IMAGE_FACTS: Record<string, ImageFact> = {
   "/images/products/streetprint/streetprint-16.jpg": {"system":"StreetPrint","source":"CHECK (a record names StreetBond for this StreetPrint folder photo)"},
   "/images/products/streetprint/streetprint-17.jpg": {"system":"StreetPrint","source":"CHECK (a record names StreetBond for this StreetPrint folder photo)"},
   "/images/products/streetprint/streetprint-18.jpg": {"system":"StreetPrint","place":"Victoria, British Columbia","source":"twin: same photo as /images/applications/public-spaces/public-spaces-07.jpg (Decorative plaza paving); by eye: building reads 'Quadra School 1914': Quadra Elementary on Quadra Street, Victoria"},
-  "/images/products/streetprint/streetprint-19.jpg": {"system":"StreetPrint","source":"the captions sheet"},
+  "/images/products/streetprint/streetprint-19.jpg": {"system":"StreetPrint","place":"Coquitlam, British Columbia","source":"the captions sheet; by eye: Lamp-post banners read WINDSORGATE and the street blade sign reads KENSAL. Windsor Gate and Kensal Place are in Coquitlam (web lookup of property listings), so the town is certain even though the signs name the development, not the town."},
   "/images/products/streetprint/streetprint-20.jpg": {"system":"StreetPrint","source":"the captions sheet"},
   "/images/products/streetprint/streetprint-21.jpg": {"system":"StreetPrint","source":"the captions sheet"},
   "/images/products/streetprint/streetprint-22.jpg": {"system":"StreetPrint","source":"the captions sheet"},

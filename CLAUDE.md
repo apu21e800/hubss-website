@@ -470,6 +470,12 @@ these elements, and never draw a button, label or card by hand again:
   Parks & Paths), and "eye cue", the evidence. Doug's columns win over the
   records, the records over the eye. `npm run test:images` checks every line
   the facts make (one system, provinces spelled out, no stray marks).
+  DecoMark and PreMark are graphics and markings ON a surface, so their lines
+  say what sits on what ("DecoMark graphics on a park path"; SYSTEM_LINES in
+  lib/image-seo.ts), never "DecoMark park path surface" (live for an hour on
+  26 Oct 2026; the test fails a new pair that reads that way). The sheet's
+  "proposed line" is the site's own line: scripts/gen-image-facts.ts fills
+  it from seoAlt after writing the facts, and the test fails if they part.
 - The home page leads with the newest post that has a photo; nothing is
   pinned. The client ticker (TrustedByMarquee) lists only names the Product
   Portfolio Book lists. The White Rock Pier pin has no photo until a real one

@@ -216,8 +216,12 @@ export function systemFor(src: string): string {
  * claim something the record does not, or read wrong: the LEED line says
  * solar-reflective, which only StreetBondSR is; the driveway line says
  * stamped asphalt, which is StreetPrint (StreetBond is the coating on it);
- * PreMark and DecoMark are markings and graphics on a parking lot, not its
- * surface.
+ * DecoMark and PreMark are graphics and markings laid on a surface, never the
+ * surface itself ("DecoMark park path surface" said the path was DecoMark,
+ * live for an hour on 26 Oct 2026), so their lines say what sits on what;
+ * TrafficPatternsXD in the bus lane gallery is the paving at a rapidway or a
+ * bus terminal, not a lane marking. `npm run test:images` fails a new pair
+ * that reads the old way.
  */
 const SYSTEM_LINES: Record<string, string> = {
   "Solar-reflective pavement coating|StreetBond": "StreetBond coating",
@@ -226,6 +230,16 @@ const SYSTEM_LINES: Record<string, string> = {
   "Parking lot surface|DecoMark": "DecoMark parking lot graphics",
   "Decorative crosswalk|PreMark": "PreMark crosswalk markings",
   "Crosswalk marking|PreMark": "PreMark crosswalk markings",
+  "Park path surface|DecoMark": "DecoMark graphics on a park path",
+  "Park path surface|PreMark": "PreMark markings on a park path",
+  "Decorative plaza paving|DecoMark": "DecoMark graphics on a plaza",
+  "Commercial site paving|DecoMark": "DecoMark graphics on a commercial site",
+  "Coloured bike lane|DecoMark": "DecoMark graphics on a bike lane",
+  "Coloured bike lane|PreMark": "PreMark bike lane markings",
+  "Splash pad surface|DecoMark": "DecoMark graphics at a splash pad",
+  "Sport court surface|DecoMark": "DecoMark graphics on a sport court",
+  "Traffic calming surface treatment|DecoMark": "DecoMark traffic calming graphics",
+  "Bus lane marking|TrafficPatternsXD": "TrafficPatternsXD decorative paving on a bus route",
 };
 
 /**

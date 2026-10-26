@@ -31,7 +31,7 @@
  * RESOURCES, the groups).
  */
 import Link from "next/link";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { products } from "@/lib/products";
 import { applications } from "@/lib/applications";
@@ -42,6 +42,8 @@ import { showCatalogue } from "@/lib/feature-flags";
 import { lunchLearnHref } from "@/lib/lunch-learn";
 import ChromeImg from "@/components/ui/ChromeImg";
 import { CHROME_MARKS, CHROME_PANELS, chromeImage } from "@/lib/chrome-images.mjs";
+import { productImages, applicationImages } from "@/lib/featured-images";
+import { HERO_POSITION } from "@/lib/hero-framing";
 import navInsights from "@/lib/nav-insights.json";
 import { BLOG_NAME } from "@/lib/field-notes-taxonomy";
 import { altBesideTitle } from "@/lib/blog-taxonomy";
@@ -94,7 +96,58 @@ export type MenuItem = {
   line?: string;
   /** A picture for a destination beside the products (the pattern gallery): a card of its own. */
   gallery?: string;
+  /** The page's hero, shown at the right of the desktop panel while the pointer is on this name. */
+  picture?: Picture;
 };
+
+/** One photograph the desktop panel's tall frame can show: a family's or group's, or a page's hero. */
+export type Picture = { label: string; note?: string; src: string; position?: [number, number] };
+const NO_ITEM_PICTURE: ReadonlySet<string> = new Set(["chipfill", "aggrefill", "fast-patch"]);
+
+/**
+ * The panel's pictures in one list: the columns' (so a column's index is
+ * its picture's), then each name's, once per photograph (a name whose hero
+ * is also its column's picture points at the column's). `byHref` says which
+ * picture a name shows.
+ */
+function panelPictures(columns: { label: string; note?: string; items: MenuItem[] }[]): { pictures: Picture[]; byHref: Map<string, number> } {
+  const pictures: Picture[] = columns.map((c) => {
+    const p = panelPhoto(c.label);
+    return { label: c.label, note: c.note, src: p?.src ?? "", position: p?.position };
+  });
+  const byHref = new Map<string, number>();
+  for (const c of columns) {
+    for (const it of c.items) {
+      if (!it.picture) continue;
+      let i = pictures.findIndex((p) => p.src === it.picture!.src);
+      if (i === -1) { i = pictures.length; pictures.push(it.picture); }
+      byHref.set(it.href, i);
+    }
+  }
+  return { pictures, byHref };
+}
+
+/**
+ * A product's or application's photograph for the panel (26 Oct 2026; Vern:
+ * "choose stronger images for the mega menu ... different image for each
+ * hover"): the page's own hero (lib/featured-images.ts, the photo editor's
+ * picks), framed where lib/hero-framing.ts frames it, baked 4:5 by
+ * scripts/gen-chrome-images.mjs. So the panel previews the page the visitor
+ * is about to open; the family's or group's picture (CHROME_PANELS) shows
+ * while the pointer is on the heading or between the names.
+ */
+function heroPicture(kind: "product" | "application", slug: string, label: string, note?: string): Picture | undefined {
+  // The repair products' photographs are a bag and a patch of grey aggregate
+  // (lib/featured-images.ts: nothing on disk qualifies, and Fast Patch's
+  // carries a third party's copyright); the family's ChipFill pour stays up
+  // for those names.
+  if (kind === "product" && NO_ITEM_PICTURE.has(slug)) return undefined;
+  const cfg = (kind === "product" ? productImages : applicationImages)[slug];
+  if (!cfg) return undefined;
+  const src = cfg.featured ?? cfg.fallback;
+  const m = /^(\d+)% (\d+)%$/.exec(HERO_POSITION[src] ?? "");
+  return { label, note, src, position: m ? [Number(m[1]) / 100, Number(m[2]) / 100] : [0.5, 0.5] };
+}
 
 /** The pattern gallery's picture: a herringbone template drawing the search overlay bakes (256px WebP). */
 const GALLERY_THUMB = "/images/search/thumbs/pattern/herringbone-256.webp";
@@ -102,7 +155,7 @@ const GALLERY_THUMB = "/images/search/thumbs/pattern/herringbone-256.webp";
 export function productFamily(cat: (typeof PRODUCT_CATEGORIES)[number]): MenuItem[] {
   const items: MenuItem[] = cat.slugs.flatMap((sl) => {
     const p = products.find((x) => x.slug === sl);
-    return p ? [{ href: `/products/${p.slug}`, name: p.name, line: PRODUCT_MENU_LINES[p.slug] }] : [];
+    return p ? [{ href: `/products/${p.slug}`, name: p.name, line: PRODUCT_MENU_LINES[p.slug], picture: heroPicture("product", p.slug, p.name, PRODUCT_MENU_LINES[p.slug]) }] : [];
   });
   if (cat.secondary) items.push({ href: cat.secondary.href, name: cat.secondary.label, line: cat.secondary.menuLine, gallery: GALLERY_THUMB });
   return items;
@@ -111,7 +164,7 @@ export function productFamily(cat: (typeof PRODUCT_CATEGORIES)[number]): MenuIte
 export function applicationGroup(group: (typeof APPLICATION_GROUPS)[number]): MenuItem[] {
   return group.slugs.flatMap((sl) => {
     const a = applications.find((x) => x.slug === sl);
-    return a ? [{ href: `/applications/${a.slug}`, name: a.name }] : [];
+    return a ? [{ href: `/applications/${a.slug}`, name: a.name, picture: heroPicture("application", a.slug, a.name) }] : [];
   });
 }
 
@@ -321,13 +374,16 @@ function ColumnHead({ label, note }: { label: string; note?: string }) {
  * product's name. The pattern gallery (a `gallery` item) is not a product
  * and is not listed here: it is a row in the foot, with the other places.
  */
-function Column({ label, note, items, index, onPoint }: { label: string; note?: string; items: MenuItem[]; index: number; onPoint: (i: number) => void }) {
+function Column({ label, note, items, index, onPoint, onPointItem }: { label: string; note?: string; items: MenuItem[]; index: number; onPoint: (i: number) => void; onPointItem?: (href: string) => void }) {
   const names = items.filter((it) => !it.gallery);
   return (
     <motion.div
       className="mm-col"
       onMouseEnter={() => onPoint(index)}
-      onFocus={() => onPoint(index)}
+      // Focus bubbles in React: a name's own onFocus has already pointed at
+      // its picture, so the column points at the family's only when the
+      // focus landed somewhere else in it.
+      onFocus={(e) => { if (!(e.target as HTMLElement).closest(".mm-item")) onPoint(index); }}
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.06 + index * 0.04, duration: 0.36, ease: EASE_OUT }}
@@ -336,7 +392,14 @@ function Column({ label, note, items, index, onPoint }: { label: string; note?: 
       <ul className="mm-list">
         {names.map((it) => (
           <li key={it.href}>
-            <Link prefetch={false} href={it.href} data-tap="44" className="mm-item group">
+            <Link
+              prefetch={false}
+              href={it.href}
+              data-tap="44"
+              className="mm-item group"
+              onMouseEnter={onPointItem && it.picture ? () => onPointItem(it.href) : undefined}
+              onFocus={onPointItem && it.picture ? () => onPointItem(it.href) : undefined}
+            >
               <span className="min-w-0">
                 <span className="mm-name">{it.name}</span>
                 {it.line && <span className="mm-item-line">{it.line}</span>}
@@ -353,36 +416,51 @@ function Column({ label, note, items, index, onPoint }: { label: string; note?: 
 }
 
 /**
- * The tall photograph at the right: the column under the pointer. Every
- * picture is in the stack and the one in front fades up over the last, so a
- * move along the columns never shows a hole; `aria-hidden`, since the
- * columns beside it say everything it says.
+ * The tall photograph at the right: the name or the column under the
+ * pointer. A picture is mounted the first time it is pointed at (the panel
+ * holds up to 23 pictures since 26 Oct 2026, so loading them all on open
+ * would cost a megabyte), and the one showing stays until the new one has
+ * loaded, so a move along the names never shows a hole; `aria-hidden`,
+ * since the names beside it say everything it says.
  */
-function Feature({ pictures, active }: { pictures: { label: string; note?: string; src: string; position?: [number, number] }[]; active: number }) {
+function Feature({ pictures, active }: { pictures: Picture[]; active: number }) {
   const still = useReducedMotion();
+  const [mounted, setMounted] = useState<number[]>(() => [active]);
+  const [loaded, setLoaded] = useState<Record<string, true>>({});
+  const shownRef = useRef(active);
+  useEffect(() => {
+    setMounted((m) => (m.includes(active) ? m : [...m, active]));
+  }, [active]);
+  const activeSrc = pictures[active]?.src;
+  if (activeSrc && loaded[activeSrc]) shownRef.current = active;
+  const shown = activeSrc && loaded[activeSrc] ? active : shownRef.current;
   return (
     <aside className="mm-feature" aria-hidden="true">
       <div className="mm-feature-frame" style={{ background: PHOTO_GROUND }}>
-        {pictures.map((p, i) => (
-          <ChromeImg
-            key={p.src}
-            family="feature"
-            src={p.src}
-            alt=""
-            sizes={FEATURE_SIZES}
-            width={640}
-            height={800}
-            loading="eager"
-            decoding="async"
-            className="mm-feature-img"
-            style={{
-              opacity: i === active ? 1 : 0,
-              zIndex: i === active ? 2 : 1,
-              objectPosition: p.position ? `${p.position[0] * 100}% ${p.position[1] * 100}%` : "50% 50%",
-              transition: still ? "none" : undefined,
-            }}
-          />
-        ))}
+        {mounted.map((i) => {
+          const p = pictures[i];
+          return p?.src ? (
+            <ChromeImg
+              key={p.src}
+              family="feature"
+              src={p.src}
+              alt=""
+              sizes={FEATURE_SIZES}
+              width={640}
+              height={800}
+              loading="eager"
+              decoding="async"
+              className="mm-feature-img"
+              onLoad={() => setLoaded((l) => (l[p.src] ? l : { ...l, [p.src]: true }))}
+              style={{
+                opacity: i === shown ? 1 : 0,
+                zIndex: i === shown ? 2 : 1,
+                objectPosition: p.position ? `${p.position[0] * 100}% ${p.position[1] * 100}%` : "50% 50%",
+                transition: still ? "none" : undefined,
+              }}
+            />
+          ) : null;
+        })}
       </div>
       <div className="mm-feature-caption" key={pictures[active]?.label}>
         <span className="mm-rule" aria-hidden="true" />
@@ -488,11 +566,34 @@ function Foot({ children }: { children: React.ReactNode }) {
   return <div className="mm-foot">{children}</div>;
 }
 
-/** The active column: the pointer's, else the first; reset when the panel re-mounts. */
-function usePointed() {
+/**
+ * The picture under the pointer: a column's (its family or group) or a
+ * name's (that page's hero); the first column's until something is pointed
+ * at; reset when the panel re-mounts. Pointing at a column fetches its
+ * names' pictures, so the first move down the list finds them ready.
+ */
+function usePointed(groups: { index: number; items: MenuItem[] }[], byHref: Map<string, number>) {
   const [active, setActive] = useState(0);
-  const onPoint = useCallback((i: number) => setActive(i), []);
-  return { active, onPoint };
+  const warmed = useRef(new Set<string>());
+  const onPoint = useCallback((i: number) => {
+    setActive(i);
+    const g = groups.find((x) => x.index === i);
+    if (!g || typeof window === "undefined") return;
+    for (const it of g.items) {
+      if (!it.picture || warmed.current.has(it.picture.src)) continue;
+      warmed.current.add(it.picture.src);
+      const img = new window.Image();
+      img.sizes = FEATURE_SIZES;
+      const baked = chromeImage("feature", it.picture.src);
+      img.srcset = baked.srcSet;
+      img.src = baked.src;
+    }
+  }, [groups]);
+  const onPointItem = useCallback((href: string) => {
+    const i = byHref.get(href);
+    if (i !== undefined) setActive(i);
+  }, [byHref]);
+  return { active, onPoint, onPointItem };
 }
 
 // ── The three panels ───────────────────────────────────────────────────
@@ -503,11 +604,11 @@ const panelPhoto = (label: string) => {
 };
 
 export function ProductsPanel() {
-  const { active, onPoint } = usePointed();
-  const pictures = PRODUCT_CATEGORIES.flatMap((cat) => {
-    const p = panelPhoto(cat.label);
-    return p ? [{ label: cat.label, note: cat.menuNote, ...p }] : [];
-  });
+  // The families' pictures first, in column order (so a column's index is
+  // its picture's), then every product's.
+  const families = PRODUCT_CATEGORIES.map((cat) => ({ cat, items: productFamily(cat) }));
+  const { pictures, byHref } = panelPictures(families.map(({ cat, items }) => ({ label: cat.label, note: cat.menuNote, items })));
+  const { active, onPoint, onPointItem } = usePointed(families.map(({ items }, index) => ({ index, items })), byHref);
   return (
     <div className="mm">
       <div className="mm-body">
@@ -526,14 +627,14 @@ export function ProductsPanel() {
             {[[0], [1], [2, 3]].map((group) => (
               <div key={group.join("-")} className="mm-stack">
                 {group.map((i) => {
-                  const cat = PRODUCT_CATEGORIES[i];
-                  return cat ? <Column key={cat.label} label={cat.label} items={productFamily(cat)} index={i} onPoint={onPoint} /> : null;
+                  const f = families[i];
+                  return f ? <Column key={f.cat.label} label={f.cat.label} items={f.items} index={i} onPoint={onPoint} onPointItem={onPointItem} /> : null;
                 })}
               </div>
             ))}
           </div>
         </div>
-        {pictures.length > 0 && <Feature pictures={pictures} active={Math.min(active, pictures.length - 1)} />}
+        <Feature pictures={pictures} active={Math.min(active, pictures.length - 1)} />
       </div>
       <Foot>
         <ResourcesRow />
@@ -547,11 +648,9 @@ export function ProductsPanel() {
 }
 
 export function ApplicationsPanel() {
-  const { active, onPoint } = usePointed();
-  const pictures = APPLICATION_GROUPS.flatMap((g) => {
-    const p = panelPhoto(g.label);
-    return p ? [{ label: g.label, note: g.note, ...p }] : [];
-  });
+  const groups = APPLICATION_GROUPS.map((g) => ({ g, items: applicationGroup(g) }));
+  const { pictures, byHref } = panelPictures(groups.map(({ g, items }) => ({ label: g.label, note: g.note, items })));
+  const { active, onPoint, onPointItem } = usePointed(groups.map(({ items }, index) => ({ index, items })), byHref);
   return (
     <div className="mm">
       <div className="mm-body">
@@ -568,12 +667,12 @@ export function ApplicationsPanel() {
               caption. Stacking Residential under Commercial in three
               columns, as Products does, made the panel 689px. */}
           <div className="mm-cols mm-cols-aligned">
-            {APPLICATION_GROUPS.map((g, i) => (
-              <Column key={g.label} label={g.label} items={applicationGroup(g)} index={i} onPoint={onPoint} />
+            {groups.map(({ g, items }, i) => (
+              <Column key={g.label} label={g.label} items={items} index={i} onPoint={onPoint} onPointItem={onPointItem} />
             ))}
           </div>
         </div>
-        {pictures.length > 0 && <Feature pictures={pictures} active={Math.min(active, pictures.length - 1)} />}
+        <Feature pictures={pictures} active={Math.min(active, pictures.length - 1)} />
       </div>
       <Foot>
         <LunchLearnRow topic="your application" />

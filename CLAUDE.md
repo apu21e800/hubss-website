@@ -989,7 +989,16 @@ don't replace it.
   subgrid) so a wrapped name leaves the lists level. The pattern gallery is
   a foot row beside Resources, not a card under StreetPrint; below 1280 the
   foot rows drop their lines, since three with lines do not fit 960px. All
-  three panels are 545px at 1280 and up.
+  three panels are 545px at 1280 and up. The photograph follows the NAME
+  under the pointer or the keyboard (26 Oct 2026; Vern: "different image
+  for each hover"): each product's and application's own hero
+  (lib/featured-images.ts `featured`, framed as lib/hero-framing.ts frames
+  it, baked 4:5 by scripts/gen-chrome-images.mjs), the family's or group's
+  CHROME_PANELS picture while the pointer is on the heading or between the
+  names, and for the three repair products (a bag, a grey patch, a
+  third-party file) the family's ChipFill pour. A picture is mounted the
+  first time it is pointed at and the one showing stays until the new one
+  has loaded; pointing at a column fetches its names' pictures ahead.
 - The Products and Applications panels keep their photographs: at the 2 Oct
   merge session A's Nav.tsx (photo menus, active state, prefetch, ARIA) was
   kept whole and session B's typographic panels were not taken.

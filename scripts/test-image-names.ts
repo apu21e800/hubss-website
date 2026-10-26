@@ -7,6 +7,8 @@
 import assert from "node:assert/strict";
 import { FILENAME_MAX, imageFilename, sanityAssetFile, slugForFilename, withFilename } from "../lib/sanity-image";
 import { GALLERY, galleryImageSrc, heroImageSrc, sanityCrop, sanityLoader, sanitySized, sanitySrcSet, sanityTurn } from "../lib/photos";
+import { honestPhoto, seoAlt } from "../lib/image-seo";
+import { IMAGE_FACTS } from "../lib/image-facts";
 
 let passed = 0;
 function test(name: string, fn: () => void) {
@@ -89,6 +91,36 @@ test("a gallery photo's address is the one its tile or fallback <img> carries", 
   assert.equal(galleryImageSrc(ASSET, "Coloured bike lane", 7, 30), sanitySized(named, 1200, 80));
   // Ten photos: all ten are tiles (no button for three or fewer left over).
   assert.equal(galleryImageSrc(ASSET, "x", 9, 10), sanityLoader({ src: withFilename(ASSET, "x"), width: GALLERY.srcWidth, quality: 78 }));
+});
+
+
+// The gallery lines (lib/image-seo.ts honestLine, lib/image-facts.ts from the
+// captions sheet, 26 Oct 2026): every line the facts can make reads as a
+// caption, names a real system once, and spells the province out.
+const SYSTEMS = ["StreetPrint", "StreetBond", "StreetBondSR", "TrafficPatterns", "TrafficPatternsXD", "DecoMark", "DuraTherm", "PreMark", "MMAX", "DuraShield", "AirMark", "ChipFill", "AggreFill", "Fast Patch DPR"];
+test("every gallery line the facts make is a clean caption", () => {
+  const bad: string[] = [];
+  for (const [file, fact] of Object.entries(IMAGE_FACTS)) {
+    const line = seoAlt(file, "");
+    if (!line) continue;
+    if (fact.system && !SYSTEMS.includes(fact.system)) bad.push(`${file}: unknown system ${fact.system}`);
+    if (/\s{2}|undefined|null|,\s*,|,\s*$|\bQuébec\b|, (?:BC|ON|QC|AB|YT)$/.test(line)) bad.push(`${file}: ${line}`);
+    if (/[—!]|\bvs\b/.test(line)) bad.push(`${file}: ${line}`);
+    const names = SYSTEMS.filter((n) => new RegExp(`\\b${n}\\b`).test(line));
+    if (names.length > 1 && !(names.includes("StreetBond") && names.includes("StreetBondSR"))) bad.push(`${file}: two systems: ${line}`);
+    if (line[0] !== line[0].toUpperCase()) bad.push(`${file}: lowercase start: ${line}`);
+  }
+  assert.deepEqual(bad, []);
+});
+
+test("a documented photo's line carries its system and place; a person's Studio line stays", () => {
+  assert.equal(seoAlt("/images/applications/crosswalks/crosswalks-110.jpg", ""), "TrafficPatternsXD decorative crosswalk, Oakville, Ontario");
+  // A product folder's photo keeps its product, whatever else the records say.
+  assert.match(seoAlt("/images/products/streetprint/streetprint-25.jpg", ""), /^StreetPrint stamped asphalt/);
+  const typed = honestPhoto({ src: "https://cdn.sanity.io/x.jpg", alt: "Doug's own words", origin: "/images/applications/crosswalks/crosswalks-110.jpg" });
+  assert.equal(typed.alt, "Doug's own words");
+  const bare = honestPhoto({ src: "https://cdn.sanity.io/x.jpg", alt: "Decorative crosswalk", origin: "/images/applications/crosswalks/crosswalks-110.jpg" });
+  assert.equal(bare.alt, "TrafficPatternsXD decorative crosswalk, Oakville, Ontario");
 });
 
 console.log(`image names: ${passed} passed`);

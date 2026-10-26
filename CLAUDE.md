@@ -458,6 +458,18 @@ these elements, and never draw a button, label or card by hand again:
   place after; honestPhoto replaces Studio's generated lines and the bare
   folder line at render, so the 1,399 Studio captions follow without a
   sync. Provinces are spelled out, as the Product Book edition does.
+  Since the evening of 26 Oct 2026 (Vern: "take our best shot at getting
+  the photo captions right for now, it could be a while before we get
+  Doug's attention"), the sheet also carries 21e8's reading of each photo:
+  "system (by eye)" (printed only when the picture makes the system plain;
+  a "likely" call is a suggestion for Doug and prints nothing), "place (by
+  eye)" (a sign, lettering or a landmark in the frame; or the photo's own
+  location data within 5 km of a documented town, 9 for the big cities, and
+  an airfield named by its airport), "subject (by eye)" (the gallery's word
+  refined where the photo plainly shows another application: a splash pad in
+  Parks & Paths), and "eye cue", the evidence. Doug's columns win over the
+  records, the records over the eye. `npm run test:images` checks every line
+  the facts make (one system, provinces spelled out, no stray marks).
 - The home page leads with the newest post that has a photo; nothing is
   pinned. The client ticker (TrustedByMarquee) lists only names the Product
   Portfolio Book lists. The White Rock Pier pin has no photo until a real one

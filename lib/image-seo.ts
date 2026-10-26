@@ -19,9 +19,21 @@
  * pages can replace it at render (`honestPhoto`); a line a person wrote in
  * Studio is left alone.
  *
+ * Since 26 Oct 2026 (Vern: "add location and product used to all the
+ * images") a line also carries what the site's own records establish about
+ * the photograph itself: the system, for a photo in an application folder
+ * (the printed Product Portfolio Book's caption, a twin of the same photo in
+ * a product folder, the map's job record), and the place, for any photo
+ * (the same records). lib/image-facts.ts holds them, generated from the
+ * captions sheet docs/site-audits/gallery-captions-2026-10-26.csv, where
+ * Doug's own columns win over the evidence. A photo with no fact keeps its
+ * folder's line.
+ *
  * The function signatures are unchanged, so no caller changes. Safe to import
  * anywhere: pure data and string functions, no side effects.
  */
+
+import { IMAGE_FACTS } from "@/lib/image-facts";
 
 export interface ImageSubject {
   /** The line a photo in this folder may carry: the system or the application, nothing more. */
@@ -39,7 +51,9 @@ const APPLICATION_SUBJECTS: Record<string, ImageSubject> = {
   "bike-lanes": { label: "Coloured bike lane", plural: "coloured bike lanes" },
   "bus-lanes": { label: "Bus lane marking", plural: "bus lane markings" },
   "traffic-calming": { label: "Traffic calming surface treatment", plural: "traffic calming surface treatments" },
-  "pedestrian-safety": { label: "Pedestrian crossing marking", plural: "pedestrian crossing markings" },
+  // Glossary: crosswalk, never "pedestrian crossing". No /public folder of
+  // this name; the page's Studio gallery is photos from the other folders.
+  "pedestrian-safety": { label: "Pedestrian safety crosswalk marking", plural: "pedestrian safety crosswalk markings" },
   "parking-lots": { label: "Parking lot surface", plural: "parking lot surfaces" },
   "parks-paths": { label: "Park path surface", plural: "park path surfaces" },
   playgrounds: { label: "Playground surface graphics", plural: "playground surface graphics" },
@@ -169,17 +183,61 @@ export function subjectFor(src: string): ImageSubject | null {
   return null;
 }
 
-/** The documented place for a photo, or "" when there is none. */
+/**
+ * The documented place for a photo, or "" when there is none: the captions
+ * sheet's (lib/image-facts.ts, province spelled out) first, then the file
+ * and folder lists above.
+ */
 export function placeFor(src: string): string {
-  return FILE_PLACES[src.split("?")[0]] ?? PLACES[folderOf(src)] ?? "";
+  const clean = src.split("?")[0];
+  return IMAGE_FACTS[clean]?.place ?? FILE_PLACES[clean] ?? PLACES[folderOf(src)] ?? "";
 }
 
-/** "StreetPrint stamped asphalt" or "StreetPrint stamped asphalt, Kitchener, ON". */
+/**
+ * The system a photo in an APPLICATION folder is documented as showing, or
+ * "" (lib/image-facts.ts). A product folder's photo is its product by the
+ * folder rule; where a record names a sibling system for one (the book
+ * captions a StreetPrint photo "StreetBond", the coating on it) the folder's
+ * word stands and the sheet shows the record, so nothing here overrides it.
+ */
+export function systemFor(src: string): string {
+  const clean = src.split("?")[0];
+  return folderOf(clean).startsWith("images/applications/") ? (IMAGE_FACTS[clean]?.system ?? "") : "";
+}
+
+/**
+ * Pairs where putting the system in front of the folder's line would claim
+ * something the record does not: the LEED folder's line says solar-reflective,
+ * which only StreetBondSR is; the driveway folders' line says stamped asphalt,
+ * which is StreetPrint (StreetBond is the coating on it).
+ */
+const SYSTEM_LINES: Record<string, string> = {
+  "leed-urban-heat-island|StreetBond": "StreetBond coating",
+  "residential-driveways|StreetBond": "StreetBond coating on a stamped asphalt driveway",
+  "private-driveways|StreetBond": "StreetBond coating on a stamped asphalt driveway",
+};
+
+/** "TrafficPatternsXD decorative crosswalk": the system in front of the folder's line. */
+function subjectWithSystem(src: string, subject: ImageSubject): string {
+  const system = systemFor(src);
+  if (!system) return subject.label;
+  const special = SYSTEM_LINES[`${leafOf(folderOf(src))}|${system}`];
+  if (special) return special;
+  if (subject.label.toLowerCase().startsWith(system.toLowerCase())) return subject.label;
+  return `${system} ${subject.label[0].toLowerCase()}${subject.label.slice(1)}`;
+}
+
+/**
+ * "StreetPrint stamped asphalt", "TrafficPatternsXD decorative crosswalk,
+ * Oakville, Ontario": the folder's subject, the documented system in front of
+ * an application photo's, and the documented place after.
+ */
 function honestLine(src: string): string | undefined {
   const subject = subjectFor(src);
   if (!subject) return undefined;
+  const line = subjectWithSystem(src, subject);
   const place = placeFor(src);
-  return place ? `${subject.label}, ${place}` : subject.label;
+  return place ? `${line}, ${place}` : line;
 }
 
 /**
@@ -202,10 +260,12 @@ export function seoCaption(src: string): string | undefined {
   return honestLine(src);
 }
 
-/** The one phrase a folder's photos can honestly carry, for schema `keywords`. */
+/** The phrases a photo can honestly carry, for schema `keywords`: its folder's subject and, where documented, its system. */
 export function seoKeywords(src: string): string[] {
   const subject = subjectFor(src);
-  return subject ? [subject.label] : [];
+  if (!subject) return [];
+  const system = systemFor(src);
+  return system && !subject.label.toLowerCase().startsWith(system.toLowerCase()) ? [subject.label, system] : [subject.label];
 }
 
 // ── Recognising the old templates ─────────────────────────────────────────────
@@ -273,15 +333,29 @@ export function looksGenerated(text: string | undefined | null): boolean {
 }
 
 /**
+ * True when a Studio line is nothing a person wrote: the retired templates'
+ * output, or the photo's bare folder line (what the pages printed from 30 Sep
+ * to 26 Oct 2026, and what a sync may have copied into Studio), which the
+ * documented system and place now extend.
+ */
+function replaceable(text: string | undefined | null, key: string): boolean {
+  if (!text) return false;
+  if (looksGenerated(text)) return true;
+  const subject = subjectFor(key);
+  return !!subject && text.trim() === subject.label;
+}
+
+/**
  * A photo with honest alt and caption: a line the retired templates wrote
- * into Studio is replaced by what the photo's folder proves (through
- * `origin`, the /public path the photo came from); a line a person wrote
- * stays. Width, height, src and origin pass through untouched.
+ * into Studio, or the bare folder line, is replaced by what the photo's
+ * records prove (through `origin`, the /public path the photo came from); a
+ * line a person wrote stays. Width, height, src and origin pass through
+ * untouched.
  */
 export function honestPhoto<P extends { src: string; alt: string; caption?: string; origin?: string }>(p: P): P {
   const key = p.origin ?? p.src;
-  const alt = looksGenerated(p.alt) ? seoAlt(key, p.alt) : p.alt;
-  const caption = looksGenerated(p.caption) ? seoCaption(key) : p.caption;
+  const alt = replaceable(p.alt, key) ? seoAlt(key, p.alt) : p.alt;
+  const caption = replaceable(p.caption, key) ? seoCaption(key) : p.caption;
   return { ...p, alt, caption };
 }
 

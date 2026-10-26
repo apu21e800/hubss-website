@@ -55,11 +55,11 @@ export default async function FeaturedBlogPost({ copy = HOMEPAGE_COPY.insights }
               {copy.eyebrow}
             </p>
             <h2 className="h2-section mb-3" style={{ color: "var(--text-primary)" }}>
-              {/* One heading in place of two fragments ("How it goes in. And
-                  how it holds up."). Each phrase is an inline-block, so a
-                  phone breaks the line between them and never mid-phrase
-                  (the old one wrapped as "How it goes in. And / how it holds
-                  up."). From sm up it fits on one line. */}
+              {/* The heading and its accent phrase (when Studio sets one)
+                  are inline-blocks, so a phone breaks the line between the
+                  phrases and never mid-phrase. Since 26 Oct 2026 the line is
+                  one phrase, "Recent work across Canada." (Doug was not
+                  taken with "How it goes in and how it holds up."). */}
               <span className="inline-block">{copy.heading}</span>
               {copy.headingAccent && (
                 <>

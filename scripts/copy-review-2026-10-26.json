@@ -1,0 +1,2395 @@
+{
+ "generated": "2026-10-26T05:01:55.046196Z",
+ "edits": [
+  {
+   "slug": "geary-works-toronto-park-walkway",
+   "doc": "blogpost-geary-works-toronto-park-walkway",
+   "path": "title",
+   "from": "Geary Works: Placemaking Done With the Pavement Itself",
+   "to": "Geary Works: placemaking done with the pavement itself",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "how-stamped-asphalt-is-installed",
+   "doc": "blogpost-how-stamped-asphalt-is-installed",
+   "path": "title",
+   "from": "Reheat, Stamp, Coat: How Stamped Asphalt Is Actually Installed",
+   "to": "Reheat, stamp, coat: how stamped asphalt is actually installed",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "hub-certified-installer-network",
+   "doc": "blogpost-hub-certified-installer-network",
+   "path": "title",
+   "from": "Who Actually Installs It: The HUB Certified Installer Network",
+   "to": "Who actually installs it: the HUB certified installer network",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "london-east-link-brt",
+   "doc": "blogpost-london-east-link-brt",
+   "path": "title",
+   "from": "East London Link BRT: Two Products, One Corridor",
+   "to": "East London Link BRT: two products, one corridor",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "snowplow-safe-decorative-pavement",
+   "doc": "blogpost-snowplow-safe-decorative-pavement",
+   "path": "title",
+   "from": "The Plow Came Through. The Pattern Stayed.",
+   "to": "The plow came through. The pattern stayed.",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "thermoplastic-colour-selection",
+   "doc": "blogpost-thermoplastic-colour-selection",
+   "path": "title",
+   "from": "Choosing Colour: The Thermoplastic, Coating and MMA Palettes",
+   "to": "Choosing colour: the thermoplastic, coating and MMA palettes",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "residential-driveways-stamped-asphalt-upgrade",
+   "doc": "blogpost-residential-driveways-stamped-asphalt-upgrade",
+   "path": "title",
+   "from": "Why Canadian Homeowners Are Upgrading to Stamped Asphalt Driveways",
+   "to": "Why Canadian homeowners are upgrading to stamped asphalt driveways",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "residential-driveways-stamped-asphalt-upgrade",
+   "doc": "blogpost-residential-driveways-stamped-asphalt-upgrade",
+   "path": "body[10].children[0].text",
+   "from": "What Stamped Asphalt Actually Is",
+   "to": "What stamped asphalt actually is",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "residential-driveways-stamped-asphalt-upgrade",
+   "doc": "blogpost-residential-driveways-stamped-asphalt-upgrade",
+   "path": "body[23].children[0].text",
+   "from": "How It Compares to the Alternatives",
+   "to": "How it compares to the alternatives",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "residential-driveways-stamped-asphalt-upgrade",
+   "doc": "blogpost-residential-driveways-stamped-asphalt-upgrade",
+   "path": "body[33].children[0].text",
+   "from": "Who Is This Right For?",
+   "to": "Who is this right for?",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "residential-driveways-stamped-asphalt-upgrade",
+   "doc": "blogpost-residential-driveways-stamped-asphalt-upgrade",
+   "path": "body[39].children[0].text",
+   "from": "The Installation Process",
+   "to": "The installation process",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "residential-driveways-stamped-asphalt-upgrade",
+   "doc": "blogpost-residential-driveways-stamped-asphalt-upgrade",
+   "path": "body[5].children[0].text",
+   "from": "The Problem With What You Have Now",
+   "to": "The problem with what you have now",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "residential-driveways-stamped-asphalt",
+   "doc": "blogpost-residential-driveways-stamped-asphalt",
+   "path": "title",
+   "from": "Why Stamped Asphalt Driveways Outperform Interlocking Stone (And Look Better Too)",
+   "to": "Why stamped asphalt driveways outperform interlocking stone (and look better too)",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "residential-driveways-stamped-asphalt",
+   "doc": "blogpost-residential-driveways-stamped-asphalt",
+   "path": "body[27].children[0].text",
+   "from": "The Bottom Line",
+   "to": "The bottom line",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "residential-driveways-stamped-asphalt",
+   "doc": "blogpost-residential-driveways-stamped-asphalt",
+   "path": "body[3].children[0].text",
+   "from": "What Stamped Asphalt Actually Is",
+   "to": "What stamped asphalt actually is",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "residential-driveways-stamped-asphalt",
+   "doc": "blogpost-residential-driveways-stamped-asphalt",
+   "path": "body[7].children[0].text",
+   "from": "The Honest Comparison",
+   "to": "The honest comparison",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "corporate-logos-branded-pavement",
+   "doc": "blogpost-corporate-logos-branded-pavement",
+   "path": "title",
+   "from": "Your Logo, at Street Scale: Custom Pavement Graphics for Corporate Campuses and Branded Environments",
+   "to": "Your logo, at street scale: custom pavement graphics for corporate campuses and branded environments",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "corporate-logos-branded-pavement",
+   "doc": "blogpost-corporate-logos-branded-pavement",
+   "path": "body[2].children[0].text",
+   "from": "DecoMark: Print Quality at Pavement Scale",
+   "to": "DecoMark: print quality at pavement scale",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "corporate-logos-branded-pavement",
+   "doc": "blogpost-corporate-logos-branded-pavement",
+   "path": "body[6].children[0].text",
+   "from": "Corporate Campus Applications",
+   "to": "Corporate campus applications",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "the-street-is-your-canvas",
+   "doc": "blogpost-the-street-is-your-canvas",
+   "path": "title",
+   "from": "The Street Is Your Canvas",
+   "to": "The street is your canvas",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "surface-signage-wayfinding",
+   "doc": "blogpost-surface-signage-wayfinding",
+   "path": "title",
+   "from": "Looking Down: Why the Most Effective Signage Is Now on the Ground",
+   "to": "Looking down: why the most effective signage is now on the ground",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "surface-signage-wayfinding",
+   "doc": "blogpost-surface-signage-wayfinding",
+   "path": "body[20].children[0].text",
+   "from": "Urban Placemaking Without Vertical Clutter",
+   "to": "Urban placemaking without vertical clutter",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "surface-signage-wayfinding",
+   "doc": "blogpost-surface-signage-wayfinding",
+   "path": "body[24].children[0].text",
+   "from": "Getting the Specification Right",
+   "to": "Getting the specification right",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "surface-signage-wayfinding",
+   "doc": "blogpost-surface-signage-wayfinding",
+   "path": "body[2].children[0].text",
+   "from": "The Evidence for Horizontal Wayfinding",
+   "to": "The evidence for horizontal wayfinding",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "surface-signage-wayfinding",
+   "doc": "blogpost-surface-signage-wayfinding",
+   "path": "body[5].children[0].text",
+   "from": "DecoMark: Precision Wayfinding at Street Scale",
+   "to": "DecoMark: precision wayfinding at street scale",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "traffic-calming-surface-design",
+   "doc": "blogpost-traffic-calming-surface-design",
+   "path": "title",
+   "from": "Traffic Calming Through Surface Design: How Canadian Municipalities Are Slowing Traffic Without Speed Bumps",
+   "to": "Traffic calming through surface design: how Canadian municipalities are slowing traffic without speed bumps",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "traffic-calming-surface-design",
+   "doc": "blogpost-traffic-calming-surface-design",
+   "path": "body[15].children[0].text",
+   "from": "Specifying for Your Program",
+   "to": "Specifying for your program",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "traffic-calming-surface-design",
+   "doc": "blogpost-traffic-calming-surface-design",
+   "path": "body[2].children[0].text",
+   "from": "The Psychology of Place",
+   "to": "The psychology of place",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "traffic-calming-surface-design",
+   "doc": "blogpost-traffic-calming-surface-design",
+   "path": "body[5].children[0].text",
+   "from": "Coloured Intersection Treatments",
+   "to": "Coloured intersection treatments",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "traffic-calming-surface-design",
+   "doc": "blogpost-traffic-calming-surface-design",
+   "path": "body[8].children[0].text",
+   "from": "Pattern Complexity and Retroreflectivity",
+   "to": "Pattern complexity and retroreflectivity",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "streetbond-leed-urban-heat-island",
+   "doc": "blogpost-streetbond-leed-urban-heat-island",
+   "path": "title",
+   "from": "StreetBondSR and Urban Heat Island Mitigation: A Guide for Canadian Landscape Architects",
+   "to": "StreetBondSR and urban heat island mitigation: a guide for Canadian landscape architects",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "streetbond-leed-urban-heat-island",
+   "doc": "blogpost-streetbond-leed-urban-heat-island",
+   "path": "body[2].children[0].text",
+   "from": "How Solar-Reflective Coatings Work",
+   "to": "How solar-reflective coatings work",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "university-campus-surface-branding",
+   "doc": "blogpost-university-campus-surface-branding",
+   "path": "title",
+   "from": "Campus Identity at Street Level: How Universities Are Branding Their Grounds With Decorative Pavement",
+   "to": "Campus identity at street level: how universities are branding their grounds with decorative pavement",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "university-campus-surface-branding",
+   "doc": "blogpost-university-campus-surface-branding",
+   "path": "body[11].children[0].text",
+   "from": "Colour-Coded Wayfinding Systems",
+   "to": "Colour-coded wayfinding systems",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "university-campus-surface-branding",
+   "doc": "blogpost-university-campus-surface-branding",
+   "path": "body[19].children[0].text",
+   "from": "Snow Removal Compatibility",
+   "to": "Snow removal compatibility",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "university-campus-surface-branding",
+   "doc": "blogpost-university-campus-surface-branding",
+   "path": "body[22].children[0].text",
+   "from": "Cultural Sensitivity in Design",
+   "to": "Cultural sensitivity in design",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "pedestrian-walkways-surface-systems",
+   "doc": "blogpost-pedestrian-walkways-surface-systems",
+   "path": "title",
+   "from": "Pathways That Perform: Surface Systems for Pedestrian Walkways, Greenways, and Urban Trails",
+   "to": "Pathways that perform: surface systems for pedestrian walkways, greenways, and urban trails",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "pedestrian-walkways-surface-systems",
+   "doc": "blogpost-pedestrian-walkways-surface-systems",
+   "path": "body[13].children[0].text",
+   "from": "Accessibility: The Technical Requirements",
+   "to": "Accessibility: the technical requirements",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "pedestrian-walkways-surface-systems",
+   "doc": "blogpost-pedestrian-walkways-surface-systems",
+   "path": "body[2].children[0].text",
+   "from": "StreetBond on Pathways: Colour as Infrastructure",
+   "to": "StreetBond on pathways: colour as infrastructure",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "pedestrian-walkways-surface-systems",
+   "doc": "blogpost-pedestrian-walkways-surface-systems",
+   "path": "body[6].children[0].text",
+   "from": "Bowen Island: A Case Study in Environmental Sensitivity",
+   "to": "Bowen Island: a case study in environmental sensitivity",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "commercial-spaces-decorative-pavement",
+   "doc": "blogpost-commercial-spaces-decorative-pavement",
+   "path": "title",
+   "from": "First Impressions Start at the Pavement: Decorative Surface Systems for Commercial Properties",
+   "to": "First impressions start at the pavement: decorative surface systems for commercial properties",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "commercial-spaces-decorative-pavement",
+   "doc": "blogpost-commercial-spaces-decorative-pavement",
+   "path": "body[11].children[0].text",
+   "from": "BOPIS Flow and the New Parking Lot",
+   "to": "BOPIS flow and the new parking lot",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "commercial-spaces-decorative-pavement",
+   "doc": "blogpost-commercial-spaces-decorative-pavement",
+   "path": "body[15].children[0].text",
+   "from": "LEED Credits and Solar-Reflective Surfaces",
+   "to": "LEED credits and solar-reflective surfaces",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "commercial-spaces-decorative-pavement",
+   "doc": "blogpost-commercial-spaces-decorative-pavement",
+   "path": "body[22].children[0].text",
+   "from": "Decision Criteria for Commercial Properties",
+   "to": "Decision criteria for commercial properties",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "commercial-spaces-decorative-pavement",
+   "doc": "blogpost-commercial-spaces-decorative-pavement",
+   "path": "body[2].children[0].text",
+   "from": "The Entry Sequence as Brand Touchpoint",
+   "to": "The entry sequence as brand touchpoint",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "commercial-spaces-decorative-pavement",
+   "doc": "blogpost-commercial-spaces-decorative-pavement",
+   "path": "body[7].children[0].text",
+   "from": "TrafficPatternsXD: Pedestrian Safety as Design Element",
+   "to": "TrafficPatternsXD: pedestrian safety as design element",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "vision-zero-thermoplastic-crosswalks",
+   "doc": "blogpost-vision-zero-thermoplastic-crosswalks",
+   "path": "title",
+   "from": "Vision Zero Crosswalks: Why Canadian Municipalities Are Moving Beyond Traffic Paint",
+   "to": "Vision Zero crosswalks: why Canadian municipalities are moving beyond traffic paint",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "vision-zero-thermoplastic-crosswalks",
+   "doc": "blogpost-vision-zero-thermoplastic-crosswalks",
+   "path": "body[14].children[0].text",
+   "from": "The Lifecycle Cost Argument",
+   "to": "The lifecycle cost argument",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "vision-zero-thermoplastic-crosswalks",
+   "doc": "blogpost-vision-zero-thermoplastic-crosswalks",
+   "path": "body[18].children[0].text",
+   "from": "Specifying for Your Municipality",
+   "to": "Specifying for your municipality",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "vision-zero-thermoplastic-crosswalks",
+   "doc": "blogpost-vision-zero-thermoplastic-crosswalks",
+   "path": "body[2].children[0].text",
+   "from": "The Problem with Painted Crosswalks",
+   "to": "The problem with painted crosswalks",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "vision-zero-thermoplastic-crosswalks",
+   "doc": "blogpost-vision-zero-thermoplastic-crosswalks",
+   "path": "body[7].children[0].text",
+   "from": "Preformed Thermoplastic: The Municipal Standard",
+   "to": "Preformed thermoplastic: the municipal standard",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "asphalt-concrete-renewal",
+   "doc": "blogpost-asphalt-concrete-renewal",
+   "path": "title",
+   "from": "Renew Before You Replace: The Economics of Decorative Asphalt and Concrete Restoration",
+   "to": "Renew before you replace: the economics of decorative asphalt and concrete restoration",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "asphalt-concrete-renewal",
+   "doc": "blogpost-asphalt-concrete-renewal",
+   "path": "body[13].children[0].text",
+   "from": "StreetPrint: The Complete Transformation",
+   "to": "StreetPrint: the complete transformation",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "asphalt-concrete-renewal",
+   "doc": "blogpost-asphalt-concrete-renewal",
+   "path": "body[17].children[0].text",
+   "from": "The Property Manager Case",
+   "to": "The property manager case",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "asphalt-concrete-renewal",
+   "doc": "blogpost-asphalt-concrete-renewal",
+   "path": "body[2].children[0].text",
+   "from": "The Lifecycle Diagnosis",
+   "to": "The lifecycle diagnosis",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "asphalt-concrete-renewal",
+   "doc": "blogpost-asphalt-concrete-renewal",
+   "path": "body[9].children[0].text",
+   "from": "StreetBond on Concrete: From Grey to Branded",
+   "to": "StreetBond on concrete: from grey to branded",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "community-identity-surface-design",
+   "doc": "blogpost-community-identity-surface-design",
+   "path": "title",
+   "from": "The Street Is Your Canvas: How Surface Design Builds Community Identity",
+   "to": "The street is your canvas: how surface design builds community identity",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "community-identity-surface-design",
+   "doc": "blogpost-community-identity-surface-design",
+   "path": "body[14].children[0].text",
+   "from": "BIA Districts and Cultural Corridors",
+   "to": "BIA districts and cultural corridors",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "community-identity-surface-design",
+   "doc": "blogpost-community-identity-surface-design",
+   "path": "body[3].children[0].text",
+   "from": "Why Horizontal, Why Now",
+   "to": "Why horizontal, why now",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "community-identity-surface-design",
+   "doc": "blogpost-community-identity-surface-design",
+   "path": "body[6].children[0].text",
+   "from": "DecoMark: Precision at Pavement Scale",
+   "to": "DecoMark: precision at pavement scale",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "community-identity-surface-design",
+   "doc": "blogpost-community-identity-surface-design",
+   "path": "body[9].children[0].text",
+   "from": "Case Studies in Civic Storytelling",
+   "to": "Case studies in civic storytelling",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "commercial-parking-reit-specification",
+   "doc": "blogpost-commercial-parking-reit-specification",
+   "path": "title",
+   "from": "Why Canada's Top REITs Are Specifying Decorative Pavement",
+   "to": "Why Canada's top REITs are specifying decorative pavement",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "commercial-parking-reit-specification",
+   "doc": "blogpost-commercial-parking-reit-specification",
+   "path": "body[10].children[0].text",
+   "from": "Three Canadian Case Studies",
+   "to": "Three Canadian case studies",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "commercial-parking-reit-specification",
+   "doc": "blogpost-commercial-parking-reit-specification",
+   "path": "body[15].children[0].text",
+   "from": "Fortinos: Multiple GTA Locations",
+   "to": "Fortinos: multiple GTA locations",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "commercial-parking-reit-specification",
+   "doc": "blogpost-commercial-parking-reit-specification",
+   "path": "body[17].children[0].text",
+   "from": "The Budget Argument",
+   "to": "The budget argument",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "commercial-parking-reit-specification",
+   "doc": "blogpost-commercial-parking-reit-specification",
+   "path": "body[20].children[0].text",
+   "from": "Canadian Winters: The Real Performance Test",
+   "to": "Canadian winters: the real performance test",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "commercial-parking-reit-specification",
+   "doc": "blogpost-commercial-parking-reit-specification",
+   "path": "body[22].children[0].text",
+   "from": "Specifying for Your Next Project",
+   "to": "Specifying for your next project",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "commercial-parking-reit-specification",
+   "doc": "blogpost-commercial-parking-reit-specification",
+   "path": "body[5].children[0].text",
+   "from": "The Four Systems Commercial Properties Are Specifying",
+   "to": "The four systems commercial properties are specifying",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "stamped-asphalt-vs-concrete",
+   "doc": "blogpost-stamped-asphalt-vs-concrete",
+   "path": "title",
+   "from": "Stamped Asphalt vs. Decorative Concrete: Why Canadian Municipalities Are Making the Switch",
+   "to": "Stamped asphalt vs. decorative concrete: why Canadian municipalities are making the switch",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "stamped-asphalt-vs-concrete",
+   "doc": "blogpost-stamped-asphalt-vs-concrete",
+   "path": "body[10].children[0].text",
+   "from": "The Lifecycle Cost Comparison",
+   "to": "The lifecycle cost comparison",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "stamped-asphalt-vs-concrete",
+   "doc": "blogpost-stamped-asphalt-vs-concrete",
+   "path": "body[15].children[0].text",
+   "from": "Repairability: The Factor Designers Underestimate",
+   "to": "Repairability: the factor designers underestimate",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "stamped-asphalt-vs-concrete",
+   "doc": "blogpost-stamped-asphalt-vs-concrete",
+   "path": "body[3].children[0].text",
+   "from": "Why Concrete Fails in Canadian Climates",
+   "to": "Why concrete fails in Canadian climates",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "stamped-asphalt-vs-concrete",
+   "doc": "blogpost-stamped-asphalt-vs-concrete",
+   "path": "body[7].children[0].text",
+   "from": "Why Asphalt Thrives in the Same Conditions",
+   "to": "Why asphalt thrives in the same conditions",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "vision-zero-surface-markings",
+   "doc": "blogpost-vision-zero-surface-markings",
+   "path": "title",
+   "from": "Vision Zero and the Role of High-Visibility Surface Markings",
+   "to": "Vision Zero and the role of high-visibility surface markings",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "vision-zero-surface-markings",
+   "doc": "blogpost-vision-zero-surface-markings",
+   "path": "body[2].children[0].text",
+   "from": "The Evidence Base",
+   "to": "The evidence base",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "vision-zero-surface-markings",
+   "doc": "blogpost-vision-zero-surface-markings",
+   "path": "body[5].children[0].text",
+   "from": "Beyond Standard Markings",
+   "to": "Beyond standard markings",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "durable-transit-lanes-crossings",
+   "doc": "blogpost-durable-transit-lanes-crossings",
+   "path": "title",
+   "from": "Durable Transit Lanes & Safer Crossings: Why Canadian Cities Are Moving Past Paint",
+   "to": "Durable transit lanes & safer crossings: why Canadian cities are moving past paint",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "durable-transit-lanes-crossings",
+   "doc": "blogpost-durable-transit-lanes-crossings",
+   "path": "body[12].children[0].text",
+   "from": "The Specification Case",
+   "to": "The specification case",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "white-rock-langley-trafficpatterns",
+   "doc": "blogpost-white-rock-langley-trafficpatterns",
+   "path": "body[12].children[0].text",
+   "from": "How TrafficPatterns® Made It Possible",
+   "to": "How TrafficPatterns® made it possible",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "white-rock-langley-trafficpatterns",
+   "doc": "blogpost-white-rock-langley-trafficpatterns",
+   "path": "body[23].children[0].text",
+   "from": "A City Rooted in Rail",
+   "to": "A city rooted in rail",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "white-rock-langley-trafficpatterns",
+   "doc": "blogpost-white-rock-langley-trafficpatterns",
+   "path": "body[27].children[0].text",
+   "from": "Why TrafficPatterns® Was Key",
+   "to": "Why TrafficPatterns® was key",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "white-rock-langley-trafficpatterns",
+   "doc": "blogpost-white-rock-langley-trafficpatterns",
+   "path": "body[8].children[0].text",
+   "from": "From Vision to Reality",
+   "to": "From vision to reality",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "decorative-crosswalks-community-identity",
+   "doc": "blogpost-decorative-crosswalks-community-identity",
+   "path": "title",
+   "from": "How Decorative Crosswalks Build Community Identity",
+   "to": "How decorative crosswalks build community identity",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "decorative-crosswalks-community-identity",
+   "doc": "blogpost-decorative-crosswalks-community-identity",
+   "path": "body[12].children[0].text",
+   "from": "Indigenous Recognition: Where Infrastructure Meets Reconciliation",
+   "to": "Indigenous recognition: where infrastructure meets reconciliation",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "decorative-crosswalks-community-identity",
+   "doc": "blogpost-decorative-crosswalks-community-identity",
+   "path": "body[17].children[0].text",
+   "from": "Technical Reality: What \"Permanent\" Requires",
+   "to": "Technical reality: what \"permanent\" requires",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "decorative-crosswalks-community-identity",
+   "doc": "blogpost-decorative-crosswalks-community-identity",
+   "path": "body[7].children[0].text",
+   "from": "Vancouver's Model: What Measurable Impact Looks Like",
+   "to": "Vancouver's model: what measurable impact looks like",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "cycling-transit-integration-surface-solutions",
+   "doc": "blogpost-cycling-transit-integration-surface-solutions",
+   "path": "title",
+   "from": "Strengthening Cycling & Transit Integration with Long-Lasting Surface Solutions",
+   "to": "Strengthening cycling & transit integration with long-lasting surface solutions",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "cycling-transit-integration-surface-solutions",
+   "doc": "blogpost-cycling-transit-integration-surface-solutions",
+   "path": "body[10].children[0].text",
+   "from": "Red MMAX™: Bus Lanes",
+   "to": "Red MMAX™: bus lanes",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "cycling-transit-integration-surface-solutions",
+   "doc": "blogpost-cycling-transit-integration-surface-solutions",
+   "path": "body[15].children[0].text",
+   "from": "TrafficPatternsXD™: Crosswalks & Conflict Zones",
+   "to": "TrafficPatternsXD™: crosswalks & conflict zones",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "cycling-transit-integration-surface-solutions",
+   "doc": "blogpost-cycling-transit-integration-surface-solutions",
+   "path": "body[8].children[0].text",
+   "from": "The Solution: Red MMAX™ + TrafficPatternsXD™",
+   "to": "The solution: red MMAX™ + TrafficPatternsXD™",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "safety-durability-transit-stations",
+   "doc": "blogpost-safety-durability-transit-stations",
+   "path": "title",
+   "from": "Enhancing Safety & Durability for High-Traffic Transit Stations",
+   "to": "Enhancing safety & durability for high-traffic transit stations",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "safety-durability-transit-stations",
+   "doc": "blogpost-safety-durability-transit-stations",
+   "path": "body[0].children[0].text",
+   "from": "How Thermoplastic Surfacing Is Helping Canadian Complete Streets Perform Better",
+   "to": "How thermoplastic surfacing is helping Canadian Complete Streets perform better",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "safety-durability-transit-stations",
+   "doc": "blogpost-safety-durability-transit-stations",
+   "path": "body[11].children[0].text",
+   "from": "Strategic Applications Included:",
+   "to": "Strategic applications included:",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "safety-durability-transit-stations",
+   "doc": "blogpost-safety-durability-transit-stations",
+   "path": "body[15].children[0].text",
+   "from": "Key System Benefits:",
+   "to": "Key system benefits:",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "safety-durability-transit-stations",
+   "doc": "blogpost-safety-durability-transit-stations",
+   "path": "body[38].children[0].text",
+   "from": "Conclusion: Results & Long-Term Benefits for VIVA, Metrolinx, and GrandLinq",
+   "to": "Conclusion: results & long-term benefits for Viva, Metrolinx, and GrandLinq",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "white-paper-resilient-transit-infrastructure",
+   "doc": "blogpost-white-paper-resilient-transit-infrastructure",
+   "path": "title",
+   "from": "White Paper: Strategic Guide for Public Works Leaders",
+   "to": "White paper: strategic guide for public works leaders",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "white-paper-resilient-transit-infrastructure",
+   "doc": "blogpost-white-paper-resilient-transit-infrastructure",
+   "path": "body[0].children[0].text",
+   "from": "Surface Solutions for Resilient Transit Infrastructure",
+   "to": "Surface solutions for resilient transit infrastructure",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "white-paper-resilient-transit-infrastructure",
+   "doc": "blogpost-white-paper-resilient-transit-infrastructure",
+   "path": "body[3].children[0].text",
+   "from": "Engineering Challenges and Solutions",
+   "to": "Engineering challenges and solutions",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "white-paper-resilient-transit-infrastructure",
+   "doc": "blogpost-white-paper-resilient-transit-infrastructure",
+   "path": "body[5].children[0].text",
+   "from": "HUB Surface Systems: Built for Public Works",
+   "to": "HUB Surface Systems: built for public works",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "white-paper-resilient-transit-infrastructure",
+   "doc": "blogpost-white-paper-resilient-transit-infrastructure",
+   "path": "body[62].children[0].text",
+   "from": "Results for Public Works Departments",
+   "to": "Results for public works departments",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "white-paper-resilient-transit-infrastructure",
+   "doc": "blogpost-white-paper-resilient-transit-infrastructure",
+   "path": "body[8].children[0].text",
+   "from": "Real Results from Canadian Cities",
+   "to": "Real results from Canadian cities",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "white-paper-transportation-urban-design",
+   "doc": "blogpost-white-paper-transportation-urban-design",
+   "path": "title",
+   "from": "White Paper: Technical Guide for Transportation Engineers & Urban Designers",
+   "to": "White paper: technical guide for transportation engineers & urban designers",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "white-paper-transportation-urban-design",
+   "doc": "blogpost-white-paper-transportation-urban-design",
+   "path": "body[0].children[0].text",
+   "from": "Building Resilient, Low-Maintenance Transit Corridors",
+   "to": "Building resilient, low-maintenance transit corridors",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "white-paper-transportation-urban-design",
+   "doc": "blogpost-white-paper-transportation-urban-design",
+   "path": "body[11].children[0].text",
+   "from": "Material Systems & Applications",
+   "to": "Material systems & applications",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "white-paper-transportation-urban-design",
+   "doc": "blogpost-white-paper-transportation-urban-design",
+   "path": "body[15].children[0].text",
+   "from": "York Region: VIVA Bus Rapid Transit Network",
+   "to": "York Region: Viva bus rapid transit network",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "white-paper-transportation-urban-design",
+   "doc": "blogpost-white-paper-transportation-urban-design",
+   "path": "body[20].children[0].text",
+   "from": "East London Link, Bus Rapid Transit: London, ON",
+   "to": "East London Link, bus rapid transit: London, ON",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "white-paper-transportation-urban-design",
+   "doc": "blogpost-white-paper-transportation-urban-design",
+   "path": "body[35].children[0].text",
+   "from": "Why Engineers Choose HUB",
+   "to": "Why engineers choose HUB",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "white-paper-transportation-urban-design",
+   "doc": "blogpost-white-paper-transportation-urban-design",
+   "path": "body[41].children[0].text",
+   "from": "Product Line at a Glance",
+   "to": "Product line at a glance",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "white-paper-transportation-urban-design",
+   "doc": "blogpost-white-paper-transportation-urban-design",
+   "path": "body[42].children[0].text",
+   "from": "Engineered Surface Solutions for Modern Urban Infrastructure",
+   "to": "Engineered surface solutions for modern urban infrastructure",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "white-paper-transportation-urban-design",
+   "doc": "blogpost-white-paper-transportation-urban-design",
+   "path": "body[4].children[0].text",
+   "from": "What This Guide Covers",
+   "to": "What this guide covers",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "white-paper-transportation-urban-design",
+   "doc": "blogpost-white-paper-transportation-urban-design",
+   "path": "body[9].children[0].text",
+   "from": "Engineering Challenges at a Glance",
+   "to": "Engineering challenges at a glance",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "extending-transit-lane-lifespan",
+   "doc": "blogpost-extending-transit-lane-lifespan",
+   "path": "title",
+   "from": "Extending Transit Lane Lifespan & Reducing Costs",
+   "to": "Extending transit lane lifespan & reducing costs",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "extending-transit-lane-lifespan",
+   "doc": "blogpost-extending-transit-lane-lifespan",
+   "path": "body[15].children[0].text",
+   "from": "TTC Bus Priority Corridors: Toronto, ON",
+   "to": "TTC bus priority corridors: Toronto, ON",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "extending-transit-lane-lifespan",
+   "doc": "blogpost-extending-transit-lane-lifespan",
+   "path": "body[42].children[0].text",
+   "from": "TrafficPatternsXD™: Crosswalks & Conflict Zones",
+   "to": "TrafficPatternsXD™: crosswalks & conflict zones",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "extending-transit-lane-lifespan",
+   "doc": "blogpost-extending-transit-lane-lifespan",
+   "path": "body[46].children[0].text",
+   "from": "StreetBond150™: Active Transportation Zones",
+   "to": "StreetBond150™: active transportation zones",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "transportation-infrastructure-guide",
+   "doc": "blogpost-transportation-infrastructure-guide",
+   "path": "title",
+   "from": "Transportation Infrastructure: Technical Resources for Public Works and Engineering Teams",
+   "to": "Transportation infrastructure: technical resources for public works and engineering teams",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "transportation-infrastructure-guide",
+   "doc": "blogpost-transportation-infrastructure-guide",
+   "path": "body[10].children[0].text",
+   "from": "White Paper: Guide for Transportation Engineers & Urban Designers",
+   "to": "White paper: guide for transportation engineers & urban designers",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "transportation-infrastructure-guide",
+   "doc": "blogpost-transportation-infrastructure-guide",
+   "path": "body[14].children[0].text",
+   "from": "TTC Bus Priority Corridors, Toronto",
+   "to": "TTC bus priority corridors, Toronto",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "transportation-infrastructure-guide",
+   "doc": "blogpost-transportation-infrastructure-guide",
+   "path": "body[20].children[0].text",
+   "from": "Branded Crosswalks & Pedestrian Safety, Vancouver and Richmond",
+   "to": "Branded crosswalks & pedestrian safety, Vancouver and Richmond",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "transportation-infrastructure-guide",
+   "doc": "blogpost-transportation-infrastructure-guide",
+   "path": "body[23].children[0].text",
+   "from": "Why Infrastructure Leaders Specify HUB Surface Systems",
+   "to": "Why infrastructure leaders specify HUB Surface Systems",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "transportation-infrastructure-guide",
+   "doc": "blogpost-transportation-infrastructure-guide",
+   "path": "body[3].children[0].text",
+   "from": "White Paper: Strategic Guide for Public Works Leaders",
+   "to": "White paper: strategic guide for public works leaders",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "decorative-hardscape-grey-is-new-black",
+   "doc": "blogpost-decorative-hardscape-grey-is-new-black",
+   "path": "title",
+   "from": "Grey is the New Black: Decorative Hardscape Solutions for High-Visibility & Durable Urban Designs",
+   "to": "Grey is the new black: decorative hardscape solutions for high-visibility & durable urban designs",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "decorative-hardscape-grey-is-new-black",
+   "doc": "blogpost-decorative-hardscape-grey-is-new-black",
+   "path": "body[14].children[0].text",
+   "from": "Extreme Durability with TrafficPatternsXD for Complete Streets & Parking Areas",
+   "to": "Extreme durability with TrafficPatternsXD for Complete Streets & parking areas",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "decorative-hardscape-grey-is-new-black",
+   "doc": "blogpost-decorative-hardscape-grey-is-new-black",
+   "path": "body[22].children[0].text",
+   "from": "StreetBond: The Best Coating Solution for Multi-Use Hardscapes",
+   "to": "StreetBond: the best coating solution for multi-use hardscapes",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "decorative-hardscape-grey-is-new-black",
+   "doc": "blogpost-decorative-hardscape-grey-is-new-black",
+   "path": "body[2].children[0].text",
+   "from": "Why Decorative Hardscape Solutions Matter for Urban Planning & Complete Streets",
+   "to": "Why decorative hardscape solutions matter for urban planning & Complete Streets",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "decorative-hardscape-grey-is-new-black",
+   "doc": "blogpost-decorative-hardscape-grey-is-new-black",
+   "path": "body[30].children[0].text",
+   "from": "Case Studies: Transforming Hardscapes Across Canada",
+   "to": "Case studies: transforming hardscapes across Canada",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "decorative-hardscape-grey-is-new-black",
+   "doc": "blogpost-decorative-hardscape-grey-is-new-black",
+   "path": "body[31].children[0].text",
+   "from": "1. Modernizing Public Spaces with Grey and White Hardscapes",
+   "to": "1. Modernizing public spaces with grey and white hardscapes",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "decorative-hardscape-grey-is-new-black",
+   "doc": "blogpost-decorative-hardscape-grey-is-new-black",
+   "path": "body[33].children[0].text",
+   "from": "2. Upgrading Parking Lots & Driveways",
+   "to": "2. Upgrading parking lots & driveways",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "decorative-hardscape-grey-is-new-black",
+   "doc": "blogpost-decorative-hardscape-grey-is-new-black",
+   "path": "body[35].children[0].text",
+   "from": "3. Enhancing Community Plazas & Recreational Spaces",
+   "to": "3. Enhancing community plazas & recreational spaces",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "decorative-hardscape-grey-is-new-black",
+   "doc": "blogpost-decorative-hardscape-grey-is-new-black",
+   "path": "body[37].children[0].text",
+   "from": "4. High-Impact Branding for Business Parks",
+   "to": "4. High-impact branding for business parks",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "decorative-hardscape-grey-is-new-black",
+   "doc": "blogpost-decorative-hardscape-grey-is-new-black",
+   "path": "body[40].children[0].text",
+   "from": "FAQs on Hardscape Solutions for Urban Planners & Property Managers",
+   "to": "FAQs on hardscape solutions for urban planners & property managers",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "decorative-hardscape-grey-is-new-black",
+   "doc": "blogpost-decorative-hardscape-grey-is-new-black",
+   "path": "body[4].children[0].text",
+   "from": "The Future of Modern Hardscape Design",
+   "to": "The future of modern hardscape design",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "decorative-hardscape-grey-is-new-black",
+   "doc": "blogpost-decorative-hardscape-grey-is-new-black",
+   "path": "body[50].children[0].text",
+   "from": "Conclusion: Elevating Public Spaces with TrafficPatterns & StreetBond",
+   "to": "Conclusion: elevating public spaces with TrafficPatterns & StreetBond",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "decorative-hardscape-grey-is-new-black",
+   "doc": "blogpost-decorative-hardscape-grey-is-new-black",
+   "path": "body[7].children[0].text",
+   "from": "TrafficPatterns: Subtle Yet Effective for Urban Hardscapes",
+   "to": "TrafficPatterns: subtle yet effective for urban hardscapes",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "decorative-paving-solutions",
+   "doc": "blogpost-decorative-paving-solutions",
+   "path": "title",
+   "from": "Decorative Paving Solutions for Streets & Public Spaces",
+   "to": "Decorative paving solutions for streets & public spaces",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "decorative-paving-solutions",
+   "doc": "blogpost-decorative-paving-solutions",
+   "path": "body[0].children[0].text",
+   "from": "Why Engaging Public Spaces Matter",
+   "to": "Why engaging public spaces matter",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "decorative-paving-solutions",
+   "doc": "blogpost-decorative-paving-solutions",
+   "path": "body[15].children[0].text",
+   "from": "DecoMark®: Urban Graphics with Staying Power",
+   "to": "DecoMark®: urban graphics with staying power",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "decorative-paving-solutions",
+   "doc": "blogpost-decorative-paving-solutions",
+   "path": "body[24].children[0].text",
+   "from": "Design Benefits that Build Better Cities",
+   "to": "Design benefits that build better cities",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "decorative-paving-solutions",
+   "doc": "blogpost-decorative-paving-solutions",
+   "path": "body[34].children[0].text",
+   "from": "Addressing Common Questions",
+   "to": "Addressing common questions",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "decorative-paving-solutions",
+   "doc": "blogpost-decorative-paving-solutions",
+   "path": "body[48].children[0].text",
+   "from": "The Decorative Paving Process",
+   "to": "The decorative paving process",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "decorative-paving-solutions",
+   "doc": "blogpost-decorative-paving-solutions",
+   "path": "body[56].children[0].text",
+   "from": "Transform Your Public Space",
+   "to": "Transform your public space",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "decorative-paving-solutions",
+   "doc": "blogpost-decorative-paving-solutions",
+   "path": "body[7].children[0].text",
+   "from": "StreetBond®: Durable Coatings with Visual Impact",
+   "to": "StreetBond®: durable coatings with visual impact",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "vancouver-decorative-crosswalk-design",
+   "doc": "blogpost-vancouver-decorative-crosswalk-design",
+   "path": "title",
+   "from": "Vancouver Crosswalk Design & District Identity",
+   "to": "Vancouver crosswalk design & district identity",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "vancouver-decorative-crosswalk-design",
+   "doc": "blogpost-vancouver-decorative-crosswalk-design",
+   "path": "body[1].children[0].text",
+   "from": "The Surface Branding Arsenal",
+   "to": "The surface branding arsenal",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "vancouver-decorative-crosswalk-design",
+   "doc": "blogpost-vancouver-decorative-crosswalk-design",
+   "path": "body[27].children[0].text",
+   "from": "UBC Crosswalk Intersection: Signature Campus Gateways",
+   "to": "UBC crosswalk intersection: signature campus gateways",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "vancouver-decorative-crosswalk-design",
+   "doc": "blogpost-vancouver-decorative-crosswalk-design",
+   "path": "body[39].children[0].text",
+   "from": "Granville & 68th: Indigenous-Inspired Crosswalk Concept",
+   "to": "Granville & 68th: Indigenous-inspired crosswalk concept",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "vancouver-decorative-crosswalk-design",
+   "doc": "blogpost-vancouver-decorative-crosswalk-design",
+   "path": "body[9].children[0].text",
+   "from": "Commercial Drive: Little Italy Crosswalk Intersections",
+   "to": "Commercial Drive: Little Italy crosswalk intersections",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "veterans-crosswalk-kitchener",
+   "doc": "blogpost-veterans-crosswalk-kitchener",
+   "path": "title",
+   "from": "Veterans Crosswalk: Community Branding with TrafficPatterns® in Kitchener",
+   "to": "Veterans crosswalk: community branding with TrafficPatterns® in Kitchener",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "veterans-crosswalk-kitchener",
+   "doc": "blogpost-veterans-crosswalk-kitchener",
+   "path": "body[2].children[0].text",
+   "from": "Why Brand the Ground?",
+   "to": "Why brand the ground?",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "branded-crosswalks-vancouver-richmond",
+   "doc": "blogpost-branded-crosswalks-vancouver-richmond",
+   "path": "title",
+   "from": "Case Study: Branded Crosswalks and Pedestrian Safety in Vancouver & Richmond",
+   "to": "Case study: branded crosswalks and pedestrian safety in Vancouver & Richmond",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "branded-crosswalks-vancouver-richmond",
+   "doc": "blogpost-branded-crosswalks-vancouver-richmond",
+   "path": "body[28].children[0].text",
+   "from": "Results Across Both Cities",
+   "to": "Results across both cities",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "multimodal-connectivity-york-region",
+   "doc": "blogpost-multimodal-connectivity-york-region",
+   "path": "body[0].children[0].text",
+   "from": "How Surface Design Supports Complete Streets & Vision Zero Implementation",
+   "to": "How surface design supports Complete Streets & Vision Zero implementation",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "multimodal-connectivity-york-region",
+   "doc": "blogpost-multimodal-connectivity-york-region",
+   "path": "body[24].children[0].text",
+   "from": "East London Link, Bus Rapid Transit: London, ON",
+   "to": "East London Link, bus rapid transit: London, ON",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "multimodal-connectivity-york-region",
+   "doc": "blogpost-multimodal-connectivity-york-region",
+   "path": "body[29].children[0].text",
+   "from": "Results Across Both Projects",
+   "to": "Results across both projects",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "trafficpatternsxd-urban-design",
+   "doc": "blogpost-trafficpatternsxd-urban-design",
+   "path": "title",
+   "from": "Heritage Crosswalks in Woodbridge: How TrafficPatternsXD Delivered the Look Without the Liability",
+   "to": "Heritage crosswalks in Woodbridge: how TrafficPatternsXD delivered the look without the liability",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "trafficpatternsxd-urban-design",
+   "doc": "blogpost-trafficpatternsxd-urban-design",
+   "path": "body[2].children[0].text",
+   "from": "The Problem with Actual Brick",
+   "to": "The problem with actual brick",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "trafficpatternsxd-urban-design",
+   "doc": "blogpost-trafficpatternsxd-urban-design",
+   "path": "body[9].children[0].text",
+   "from": "What Makes TrafficPatternsXD Different",
+   "to": "What makes TrafficPatternsXD different",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "pedestrian-safety-solutions",
+   "doc": "blogpost-pedestrian-safety-solutions",
+   "path": "title",
+   "from": "Pedestrian Safety Solutions: How High-Visibility Crosswalks Save Lives",
+   "to": "Pedestrian safety solutions: how high-visibility crosswalks save lives",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "pedestrian-safety-solutions",
+   "doc": "blogpost-pedestrian-safety-solutions",
+   "path": "body[0].children[0].text",
+   "from": "Canadian Municipalities Are Proving That Surface Treatments Reduce Crashes Without Full Reconstruction",
+   "to": "Canadian municipalities are proving that surface treatments reduce crashes without full reconstruction",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "pedestrian-safety-solutions",
+   "doc": "blogpost-pedestrian-safety-solutions",
+   "path": "body[24].children[0].text",
+   "from": "High-Performance Crosswalk Solutions",
+   "to": "High-performance crosswalk solutions",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "pedestrian-safety-solutions",
+   "doc": "blogpost-pedestrian-safety-solutions",
+   "path": "body[25].children[0].text",
+   "from": "TrafficPatternsXD®: Extreme Durability Thermoplastic",
+   "to": "TrafficPatternsXD®: extreme durability thermoplastic",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "pedestrian-safety-solutions",
+   "doc": "blogpost-pedestrian-safety-solutions",
+   "path": "body[42].children[0].text",
+   "from": "TrafficPatterns®: Standard High-Performance Thermoplastic",
+   "to": "TrafficPatterns®: standard high-performance thermoplastic",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "pedestrian-safety-solutions",
+   "doc": "blogpost-pedestrian-safety-solutions",
+   "path": "body[7].children[0].text",
+   "from": "The Science Behind High-Visibility Crosswalks",
+   "to": "The science behind high-visibility crosswalks",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "pedestrian-safety-solutions",
+   "doc": "blogpost-pedestrian-safety-solutions",
+   "path": "body[8].children[0].text",
+   "from": "How Visual Contrast Changes Driver Behaviour",
+   "to": "How visual contrast changes driver behaviour",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "keeping-pedestrians-safe",
+   "doc": "blogpost-keeping-pedestrians-safe",
+   "path": "title",
+   "from": "Keeping Pedestrians Safe and Operation Budgets Low",
+   "to": "Keeping pedestrians safe and operation budgets low",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "keeping-pedestrians-safe",
+   "doc": "blogpost-keeping-pedestrians-safe",
+   "path": "body[0].children[0].text",
+   "from": "Canadian Municipalities Are Proving That Surface Treatments Reduce Crashes Without Full Reconstruction",
+   "to": "Canadian municipalities are proving that surface treatments reduce crashes without full reconstruction",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "keeping-pedestrians-safe",
+   "doc": "blogpost-keeping-pedestrians-safe",
+   "path": "body[3].children[0].text",
+   "from": "Three Key Advantages",
+   "to": "Three key advantages",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "simcoe-rainbow-crosswalk",
+   "doc": "blogpost-simcoe-rainbow-crosswalk",
+   "path": "title",
+   "from": "TrafficPatternsXD: Powering Simcoe's Pride-Inspired Rainbow Crosswalk",
+   "to": "TrafficPatternsXD: powering Simcoe's Pride-inspired rainbow crosswalk",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "simcoe-rainbow-crosswalk",
+   "doc": "blogpost-simcoe-rainbow-crosswalk",
+   "path": "body[0].children[0].text",
+   "from": "Celebrating Inclusivity with a Splash of Color",
+   "to": "Celebrating inclusivity with a splash of color",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "simcoe-rainbow-crosswalk",
+   "doc": "blogpost-simcoe-rainbow-crosswalk",
+   "path": "body[10].children[0].text",
+   "from": "Transforming Urban Spaces with Durable Crosswalk Solutions",
+   "to": "Transforming urban spaces with durable crosswalk solutions",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "simcoe-rainbow-crosswalk",
+   "doc": "blogpost-simcoe-rainbow-crosswalk",
+   "path": "body[13].children[0].text",
+   "from": "Looking Forward: More Inclusive, Vibrant Urban Spaces with TrafficPatternsXD",
+   "to": "Looking forward: more inclusive, vibrant urban spaces with TrafficPatternsXD",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "simcoe-rainbow-crosswalk",
+   "doc": "blogpost-simcoe-rainbow-crosswalk",
+   "path": "body[4].children[0].text",
+   "from": "TrafficPatternsXD: Durable, Versatile, and Visually Appealing",
+   "to": "TrafficPatternsXD: durable, versatile, and visually appealing",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "simcoe-rainbow-crosswalk",
+   "doc": "blogpost-simcoe-rainbow-crosswalk",
+   "path": "body[6].children[0].text",
+   "from": "Ryder's Rainbow: A Story of Determination and Community Support",
+   "to": "Ryder's rainbow: a story of determination and community support",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "simcoe-rainbow-crosswalk",
+   "doc": "blogpost-simcoe-rainbow-crosswalk",
+   "path": "body[8].children[0].text",
+   "from": "The Symbolism and Impact of the Pride-inspired Rainbow Crosswalk in Urban Spaces",
+   "to": "The symbolism and impact of the Pride-inspired rainbow crosswalk in urban spaces",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "streetbondsr-solar-reflective-coatings",
+   "doc": "blogpost-streetbondsr-solar-reflective-coatings",
+   "path": "title",
+   "from": "StreetBondSR in Osoyoos: Solar Reflective Pavement That Earns LEED Credits",
+   "to": "StreetBondSR in Osoyoos: solar reflective pavement that earns LEED credits",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "streetbondsr-solar-reflective-coatings",
+   "doc": "blogpost-streetbondsr-solar-reflective-coatings",
+   "path": "body[2].children[0].text",
+   "from": "The Science Behind High-SRI Pavement",
+   "to": "The science behind high-SRI pavement",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "streetbondsr-solar-reflective-coatings",
+   "doc": "blogpost-streetbondsr-solar-reflective-coatings",
+   "path": "body[5].children[0].text",
+   "from": "What Osoyoos Achieved",
+   "to": "What Osoyoos achieved",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "streetbondsr-solar-reflective-coatings",
+   "doc": "blogpost-streetbondsr-solar-reflective-coatings",
+   "path": "body[9].children[0].text",
+   "from": "The Broader Specification Case",
+   "to": "The broader specification case",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "commercial-applications",
+   "doc": "blogpost-commercial-applications",
+   "path": "title",
+   "from": "Commercial Applications Case Study: Fairview Park, Kitchener",
+   "to": "Commercial applications case study: Fairview Park, Kitchener",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "community-branding-case-study",
+   "doc": "blogpost-community-branding-case-study",
+   "path": "title",
+   "from": "Community Branding Case Study: Windsor Gate, Coquitlam",
+   "to": "Community branding case study: Windsor Gate, Coquitlam",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "community-spaces",
+   "doc": "blogpost-community-spaces",
+   "path": "title",
+   "from": "Community Spaces Case Study: Celebrating Little Italy on Commercial Drive",
+   "to": "Community spaces case study: celebrating Little Italy on Commercial Drive",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "community-spaces",
+   "doc": "blogpost-community-spaces",
+   "path": "body[19].children[0].text",
+   "from": "The Result: A Revitalized and Recognizable Destination",
+   "to": "The result: a revitalized and recognizable destination",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "community-spaces",
+   "doc": "blogpost-community-spaces",
+   "path": "body[2].children[0].text",
+   "from": "The Challenge: Reinforcing Heritage in a Changing Urban Landscape",
+   "to": "The challenge: reinforcing heritage in a changing urban landscape",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "educational-facilities",
+   "doc": "blogpost-educational-facilities",
+   "path": "title",
+   "from": "Educational Facilities Case Study: UBC Musqueam Crosswalk",
+   "to": "Educational facilities case study: UBC Musqueam crosswalk",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "educational-facilities",
+   "doc": "blogpost-educational-facilities",
+   "path": "body[11].children[0].text",
+   "from": "The Solution: TrafficPatterns® Decorative Crosswalks",
+   "to": "The solution: TrafficPatterns® decorative crosswalks",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "educational-facilities",
+   "doc": "blogpost-educational-facilities",
+   "path": "body[1].children[0].text",
+   "from": "The Challenge: Creating a Meaningful and Durable Landmark",
+   "to": "The challenge: creating a meaningful and durable landmark",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "municipalities-case-study",
+   "doc": "blogpost-municipalities-case-study",
+   "path": "title",
+   "from": "Municipalities Case Study: Toronto Laneway Project",
+   "to": "Municipalities case study: Toronto laneway project",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "playgrounds-recreation",
+   "doc": "blogpost-playgrounds-recreation",
+   "path": "title",
+   "from": "Playgrounds & Recreation: Cost-Effective Surfacing with StreetBond150",
+   "to": "Playgrounds & recreation: cost-effective surfacing with StreetBond150",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "playgrounds-recreation",
+   "doc": "blogpost-playgrounds-recreation",
+   "path": "body[12].children[0].text",
+   "from": "The Challenge: Upgrading School Playgrounds on a Budget",
+   "to": "The challenge: upgrading school playgrounds on a budget",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "playgrounds-recreation",
+   "doc": "blogpost-playgrounds-recreation",
+   "path": "body[17].children[0].text",
+   "from": "The Solution: StreetBond150 for Vibrant, Budget-Friendly Playgrounds",
+   "to": "The solution: StreetBond150 for vibrant, budget-friendly playgrounds",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "playgrounds-recreation",
+   "doc": "blogpost-playgrounds-recreation",
+   "path": "body[5].children[0].text",
+   "from": "Why StreetBond150 Works for School Playgrounds",
+   "to": "Why StreetBond150 works for school playgrounds",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "pictograph-crosswalk-sechelt",
+   "doc": "blogpost-pictograph-crosswalk-sechelt",
+   "path": "body[0].children[0].text",
+   "from": "Tell Your Community's Story with Pictographs",
+   "to": "Tell your community's story with pictographs",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "pictograph-crosswalk-sechelt",
+   "doc": "blogpost-pictograph-crosswalk-sechelt",
+   "path": "body[24].children[0].text",
+   "from": "TrafficPatterns® & DecoMark® Interconnected Surface Systems",
+   "to": "TrafficPatterns® & DecoMark® interconnected surface systems",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "pictograph-crosswalk-sechelt",
+   "doc": "blogpost-pictograph-crosswalk-sechelt",
+   "path": "body[8].children[0].text",
+   "from": "Other Areas for Application Include",
+   "to": "Other areas for application include",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "tsain-ko-crosswalk-sechelt",
+   "doc": "blogpost-tsain-ko-crosswalk-sechelt",
+   "path": "body[0].children[0].text",
+   "from": "TrafficPatterns Decorative Crosswalk Application",
+   "to": "TrafficPatterns decorative crosswalk application",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "decorative-asphalt-crosswalks",
+   "doc": "blogpost-decorative-asphalt-crosswalks",
+   "path": "title",
+   "from": "Decorative Asphalt Crosswalks",
+   "to": "Decorative asphalt crosswalks",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "decorative-asphalt-crosswalks",
+   "doc": "blogpost-decorative-asphalt-crosswalks",
+   "path": "body[0].children[0].text",
+   "from": "Hardscape Solutions for Decorative Asphalt Crosswalks & More",
+   "to": "Hardscape solutions for decorative asphalt crosswalks & more",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "decorative-asphalt-crosswalks",
+   "doc": "blogpost-decorative-asphalt-crosswalks",
+   "path": "body[13].children[0].text",
+   "from": "DuraTherm: Enhanced Inset Thermoplastic in Stamped Asphalt",
+   "to": "DuraTherm: enhanced inset thermoplastic in stamped asphalt",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "decorative-asphalt-crosswalks",
+   "doc": "blogpost-decorative-asphalt-crosswalks",
+   "path": "body[9].children[0].text",
+   "from": "TrafficPatterns: Enhanced Asphalt Surface System",
+   "to": "TrafficPatterns: enhanced asphalt surface system",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "roadway-accents-natures-walk",
+   "doc": "blogpost-roadway-accents-natures-walk",
+   "path": "title",
+   "from": "Roadway Accents Nature's Walk",
+   "to": "Roadway accents Nature's Walk",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "roadway-accents-natures-walk",
+   "doc": "blogpost-roadway-accents-natures-walk",
+   "path": "body[1].children[0].text",
+   "from": "How Does StreetPrint Work?",
+   "to": "How does StreetPrint work?",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "roadway-accents-natures-walk",
+   "doc": "blogpost-roadway-accents-natures-walk",
+   "path": "body[3].children[0].text",
+   "from": "How Does StreetBond Work?",
+   "to": "How does StreetBond work?",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "every-child-matters-crosswalk",
+   "doc": "blogpost-every-child-matters-crosswalk",
+   "path": "title",
+   "from": "Every Child Matters Decorative Asphalt Crosswalk",
+   "to": "Every Child Matters decorative asphalt crosswalk",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "stamped-asphalt-parking-lot",
+   "doc": "blogpost-stamped-asphalt-parking-lot",
+   "path": "body[1].children[0].text",
+   "from": "Durable Crosswalks & Traffic Calming Devices That Exceed Performance Expectations",
+   "to": "Durable crosswalks & traffic calming devices that exceed performance expectations",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "terry-fox-plaza-coquitlam",
+   "doc": "blogpost-terry-fox-plaza-coquitlam",
+   "path": "title",
+   "from": "Terry Fox Decorative Asphalt Plaza",
+   "to": "Terry Fox decorative asphalt plaza",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "terry-fox-plaza-coquitlam",
+   "doc": "blogpost-terry-fox-plaza-coquitlam",
+   "path": "body[1].children[0].text",
+   "from": "StreetBond150 Advanced Coatings for Asphalt & Concrete",
+   "to": "StreetBond150 advanced coatings for asphalt & concrete",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "terry-fox-plaza-coquitlam",
+   "doc": "blogpost-terry-fox-plaza-coquitlam",
+   "path": "body[3].children[0].text",
+   "from": "DecoMark: Custom Wayfinding and Horizontal Surface Markings",
+   "to": "DecoMark: custom wayfinding and horizontal surface markings",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "decorative-crosswalk-meridian",
+   "doc": "blogpost-decorative-crosswalk-meridian",
+   "path": "title",
+   "from": "Decorative Crosswalk and Median",
+   "to": "Decorative crosswalk and median",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "decorative-crosswalk-meridian",
+   "doc": "blogpost-decorative-crosswalk-meridian",
+   "path": "body[1].children[0].text",
+   "from": "Why StreetBond 150 & TrafficPatternsXD for Decorative Crosswalks and Medians?",
+   "to": "Why StreetBond 150 & TrafficPatternsXD for decorative crosswalks and medians?",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "laneway-project",
+   "doc": "blogpost-laneway-project",
+   "path": "title",
+   "from": "The Laneway Project",
+   "to": "The laneway project",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "laneway-project",
+   "doc": "blogpost-laneway-project",
+   "path": "body[10].children[0].text",
+   "from": "Improvements to Laneways Can Create:",
+   "to": "Improvements to laneways can create:",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "laneway-project",
+   "doc": "blogpost-laneway-project",
+   "path": "body[1].children[0].text",
+   "from": "Unlocking the Potential of Toronto's Laneways",
+   "to": "Unlocking the potential of Toronto's laneways",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "parc-riviera-streetbond-walkway",
+   "doc": "blogpost-parc-riviera-streetbond-walkway",
+   "path": "title",
+   "from": "Parc Riviera Mews StreetBond Asphalt Walkway",
+   "to": "Parc Riviera Mews StreetBond asphalt walkway",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "decorative-asphalt-high-traffic",
+   "doc": "blogpost-decorative-asphalt-high-traffic",
+   "path": "title",
+   "from": "Decorative Asphalt for High-Traffic Areas: The Emery Village Story",
+   "to": "Decorative asphalt for high-traffic areas: the Emery Village story",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "decorative-asphalt-high-traffic",
+   "doc": "blogpost-decorative-asphalt-high-traffic",
+   "path": "body[1].children[0].text",
+   "from": "The Challenge: Unit Pavers Under Heavy Load",
+   "to": "The challenge: unit pavers under heavy load",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "murrayville-schoolhouse-sidewalk",
+   "doc": "blogpost-murrayville-schoolhouse-sidewalk",
+   "path": "title",
+   "from": "Decorative Asphalt Sidewalks for Townhomes",
+   "to": "Decorative asphalt sidewalks for townhomes",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "murrayville-schoolhouse-sidewalk",
+   "doc": "blogpost-murrayville-schoolhouse-sidewalk",
+   "path": "body[0].children[0].text",
+   "from": "Decorative Asphalt Sidewalks",
+   "to": "Decorative asphalt sidewalks",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "bowen-island-asphalt-path",
+   "doc": "blogpost-bowen-island-asphalt-path",
+   "path": "title",
+   "from": "Decorative Asphalt Path at Snug Cove, Bowen Island",
+   "to": "Decorative asphalt path at Snug Cove, Bowen Island",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "bowen-island-asphalt-path",
+   "doc": "blogpost-bowen-island-asphalt-path",
+   "path": "body[0].children[0].text",
+   "from": "For Asphalt & Concrete Paving",
+   "to": "For asphalt & concrete paving",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "richmond-brighouse-crosswalk",
+   "doc": "blogpost-richmond-brighouse-crosswalk",
+   "path": "title",
+   "from": "Decorative Crosswalk at Richmond Brighouse",
+   "to": "Decorative crosswalk at Richmond Brighouse",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "richmond-brighouse-crosswalk",
+   "doc": "blogpost-richmond-brighouse-crosswalk",
+   "path": "body[4].children[0].text",
+   "from": "Durable Decorative Crosswalks That Exceed Performance Expectations",
+   "to": "Durable decorative crosswalks that exceed performance expectations",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "white-rock-pier-crosswalk",
+   "doc": "blogpost-white-rock-pier-crosswalk",
+   "path": "title",
+   "from": "New White Rock Pier Decorative Crosswalk",
+   "to": "New White Rock Pier decorative crosswalk",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "white-rock-pier-crosswalk",
+   "doc": "blogpost-white-rock-pier-crosswalk",
+   "path": "body[0].children[0].text",
+   "from": "In Time for the Re-Opening of the White Rock Pier",
+   "to": "In time for the re-opening of the White Rock Pier",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "white-rock-pier-crosswalk",
+   "doc": "blogpost-white-rock-pier-crosswalk",
+   "path": "body[5].children[0].text",
+   "from": "Durable Crosswalks & Traffic Calming Devices That Exceed Performance Expectations",
+   "to": "Durable crosswalks & traffic calming devices that exceed performance expectations",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "pedestrian-channelization-public-spaces",
+   "doc": "blogpost-pedestrian-channelization-public-spaces",
+   "path": "title",
+   "from": "Pedestrian Channelization for Public Spaces",
+   "to": "Pedestrian channelization for public spaces",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "pedestrian-channelization-public-spaces",
+   "doc": "blogpost-pedestrian-channelization-public-spaces",
+   "path": "body[13].children[0].text",
+   "from": "Practical Appealing Architectural Parks, Plazas, Pathways and Hardscapes",
+   "to": "Practical appealing architectural parks, plazas, pathways and hardscapes",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "bc-childrens-hospital-labyrinth",
+   "doc": "blogpost-bc-childrens-hospital-labyrinth",
+   "path": "title",
+   "from": "Decorative Paving & Labyrinth for BC Children's Hospital",
+   "to": "Decorative paving & labyrinth for BC Children's Hospital",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "bc-childrens-hospital-labyrinth",
+   "doc": "blogpost-bc-childrens-hospital-labyrinth",
+   "path": "body[0].children[0].text",
+   "from": "Horizontal Surface Markings",
+   "to": "Horizontal surface markings",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "best-crosswalks-canada",
+   "doc": "blogpost-best-crosswalks-canada",
+   "path": "body[0].children[0].text",
+   "from": "High Durability Crosswalks",
+   "to": "High durability crosswalks",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "best-crosswalks-canada",
+   "doc": "blogpost-best-crosswalks-canada",
+   "path": "body[14].children[0].text",
+   "from": "Durable Crosswalks & Traffic Calming Devices That Exceed Performance Expectations",
+   "to": "Durable crosswalks & traffic calming devices that exceed performance expectations",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "best-crosswalks-canada",
+   "doc": "blogpost-best-crosswalks-canada",
+   "path": "body[1].children[0].text",
+   "from": "The Smart Crosswalk Solution for Canadian Municipalities and Commercial Parking Lots",
+   "to": "The smart crosswalk solution for Canadian municipalities and commercial parking lots",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "durable-coatings-waterparks",
+   "doc": "blogpost-durable-coatings-waterparks",
+   "path": "title",
+   "from": "Durable Pavement Coatings Ideal for Waterparks",
+   "to": "Durable pavement coatings ideal for waterparks",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "complete-streets-new-westminster",
+   "doc": "blogpost-complete-streets-new-westminster",
+   "path": "body[0].children[0].text",
+   "from": "For Landscape Architecture",
+   "to": "For landscape architecture",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "spirit-trail-wayfinding-vancouver",
+   "doc": "blogpost-spirit-trail-wayfinding-vancouver",
+   "path": "title",
+   "from": "Horizontal Branding & Wayfinding for the Spirit Trail",
+   "to": "Horizontal branding & wayfinding for the Spirit Trail",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "spirit-trail-wayfinding-vancouver",
+   "doc": "blogpost-spirit-trail-wayfinding-vancouver",
+   "path": "body[0].children[0].text",
+   "from": "Preformed Thermoplastic Paving",
+   "to": "Preformed thermoplastic paving",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "spirit-trail-wayfinding-vancouver",
+   "doc": "blogpost-spirit-trail-wayfinding-vancouver",
+   "path": "body[1].children[0].text",
+   "from": "Effective Community Horizontal Branding & Wayfinding Solutions",
+   "to": "Effective community horizontal branding & wayfinding solutions",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "performance-crosswalks-asphalt-concrete",
+   "doc": "blogpost-performance-crosswalks-asphalt-concrete",
+   "path": "title",
+   "from": "Performance Crosswalks for Asphalt & Concrete",
+   "to": "Performance crosswalks for asphalt & concrete",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "performance-crosswalks-asphalt-concrete",
+   "doc": "blogpost-performance-crosswalks-asphalt-concrete",
+   "path": "body[0].children[0].text",
+   "from": "High Performance Crosswalks",
+   "to": "High performance crosswalks",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  },
+  {
+   "slug": "performance-crosswalks-asphalt-concrete",
+   "doc": "blogpost-performance-crosswalks-asphalt-concrete",
+   "path": "body[1].children[0].text",
+   "from": "TrafficPatternsXD Performance Crosswalks for Asphalt & Concrete",
+   "to": "TrafficPatternsXD performance crosswalks for asphalt & concrete",
+   "kind": "case",
+   "why": "sentence case (docs/STYLE.md)",
+   "group": "case"
+  }
+ ]
+}

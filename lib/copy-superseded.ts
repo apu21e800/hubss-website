@@ -70,6 +70,21 @@ export const SUPERSEDED: Superseded[] = [
     from: "Installation guides, project write-ups, and the specification detail behind them.",
     to: "Jobs by town, how each went in, and the spec behind it.",
   },
+  // 26 Oct 2026 (Vern: Doug "did not seem impressed" with the heading): one
+  // plain phrase in place of the two. The accent empties, so the page prints
+  // the heading alone (FeaturedBlogPost renders the accent only when set).
+  {
+    doc: "page-homepage",
+    path: "homepageSections.insights.heading",
+    from: "How it goes in",
+    to: "Recent work across Canada.",
+  },
+  {
+    doc: "page-homepage",
+    path: "homepageSections.insights.headingAccent",
+    from: "and how it holds up.",
+    to: "",
+  },
   {
     doc: "page-homepage",
     path: "homepageSections.onTheGround.heading",

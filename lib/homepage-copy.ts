@@ -90,8 +90,12 @@ export const HOMEPAGE_COPY: HomepageCopy = {
   },
   insights: {
     eyebrow: "Projects",
-    heading: "How it goes in",
-    headingAccent: "and how it holds up.",
+    // 26 Oct 2026 (Vern: Doug "did not seem impressed" with "How it goes in
+    // and how it holds up."): the plain line. One phrase, so headingAccent
+    // is empty; Studio's old two phrases print as this one
+    // (lib/copy-superseded.ts) until the cleanup script writes it there.
+    heading: "Recent work across Canada.",
+    headingAccent: "",
     intro: "Jobs by town, how each went in, and the spec behind it.",
   },
   onTheGround: {

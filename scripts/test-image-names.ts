@@ -5,6 +5,9 @@
  *   npm run test:images
  */
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+import { parseCsv } from "./lib/csv";
 import { FILENAME_MAX, imageFilename, sanityAssetFile, slugForFilename, withFilename } from "../lib/sanity-image";
 import { GALLERY, galleryImageSrc, heroImageSrc, sanityCrop, sanityLoader, sanitySized, sanitySrcSet, sanityTurn } from "../lib/photos";
 import { honestPhoto, seoAlt } from "../lib/image-seo";
@@ -121,6 +124,34 @@ test("a documented photo's line carries its system and place; a person's Studio 
   assert.equal(typed.alt, "Doug's own words");
   const bare = honestPhoto({ src: "https://cdn.sanity.io/x.jpg", alt: "Decorative crosswalk", origin: "/images/applications/crosswalks/crosswalks-110.jpg" });
   assert.equal(bare.alt, "TrafficPatternsXD decorative crosswalk, Oakville, Ontario");
+});
+
+// DecoMark and PreMark are graphics and markings ON a surface: a line never
+// puts them in front of a surface word as if they were the path, the plaza or
+// the lane, and only MMA, a road marking or no system names a bus lane
+// marking (26 Oct 2026: "DecoMark park path surface" was live for an hour).
+test("a graphic or a marking is never the surface it sits on", () => {
+  const bad: string[] = [];
+  for (const file of Object.keys(IMAGE_FACTS)) {
+    const line = seoAlt(file, "").split(",")[0];
+    if (/^(DecoMark|PreMark|AirMark) .*\b(surface|paving|surface treatment|coloured bike lane)$/.test(line)) bad.push(`${file}: ${line}`);
+    if (/bus lane marking$/.test(line) && !/^(MMAX|PreMark) |^Bus lane marking$/.test(line)) bad.push(`${file}: ${line}`);
+  }
+  assert.deepEqual(bad, []);
+  assert.equal(seoAlt("/images/applications/parks-paths/parks-paths-101.png", ""), "DecoMark graphics on a park path, North Vancouver, British Columbia");
+  assert.equal(seoAlt("/images/applications/bike-lanes/bike-lanes-25.jpg", ""), "PreMark bike lane markings");
+  assert.equal(seoAlt("/images/applications/sport-courts/sport-courts-16.jpg", ""), "DecoMark graphics on a sport court, Anjou, Montréal, Quebec");
+  // A surfacing system is still the surface: its line is unchanged.
+  assert.equal(seoAlt("/images/applications/parks-paths/parks-paths-51.jpg", ""), "StreetPrint park path surface");
+});
+
+// The captions sheet is what Doug reviews: its "proposed line" must be the
+// line the site prints (scripts/gen-image-facts.ts fills it).
+test("the captions sheet proposes the line the site prints", () => {
+  const sheet = parseCsv(readFileSync(path.join(process.cwd(), "docs/site-audits/gallery-captions-2026-10-26.csv"), "utf8"));
+  assert.ok(sheet.length > 1000, `the sheet has ${sheet.length} rows`);
+  const off = sheet.filter((r) => r["proposed line"] !== seoAlt(r.file, "")).map((r) => `${r.file}: sheet "${r["proposed line"]}", site "${seoAlt(r.file, "")}"`);
+  assert.deepEqual(off.slice(0, 5), [], `${off.length} rows differ; run npx tsx scripts/gen-image-facts.ts`);
 });
 
 console.log(`image names: ${passed} passed`);

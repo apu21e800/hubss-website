@@ -10,39 +10,30 @@
  * the evidence over 21e8's eye ("system (by eye)", "place (by eye)": a call
  * made from the photograph itself, with its cue beside it).
  *
- *   npx tsx scripts/gen-image-facts.ts        # rewrites lib/image-facts.ts
+ *   npx tsx scripts/gen-image-facts.ts        # rewrites lib/image-facts.ts,
+ *                                             # then the sheet's "proposed line"
  *
  * A row with no place and no system writes nothing: the photo keeps its
  * folder's line. Nothing here is guessed; a "GPS says near" hint is not a
  * fact until Doug confirms it in his column.
+ *
+ * The sheet's "proposed line" is then filled from the site's own code
+ * (lib/image-seo.ts seoAlt, reading the facts just written), so the line Doug
+ * reviews is the line the site prints: on 26 Oct 2026 the sheet's own
+ * composition disagreed with the site on 38 rows. `npm run test:images` fails
+ * if they part again.
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { parseCsv, parseRows, toCsv } from "./lib/csv";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SHEET = path.join(ROOT, "docs/site-audits/gallery-captions-2026-10-26.csv");
 const OUT = path.join(ROOT, "lib/image-facts.ts");
 
-function parseCsv(text: string): Record<string, string>[] {
-  const rows: string[][] = [];
-  let row: string[] = [], cell = "", quoted = false;
-  for (let i = 0; i < text.length; i++) {
-    const ch = text[i];
-    if (quoted) {
-      if (ch === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else quoted = false; }
-      else cell += ch;
-    } else if (ch === '"') quoted = true;
-    else if (ch === ",") { row.push(cell); cell = ""; }
-    else if (ch === "\n" || ch === "\r") { if (ch === "\r" && text[i + 1] === "\n") i++; row.push(cell); rows.push(row); row = []; cell = ""; }
-    else cell += ch;
-  }
-  if (cell || row.length) { row.push(cell); rows.push(row); }
-  const head = rows[0].map((h) => h.replace(/^﻿/, "").trim());
-  return rows.slice(1).filter((r) => r.length > 1).map((r) => Object.fromEntries(head.map((h, i) => [h, (r[i] ?? "").trim()])));
-}
-
-const rows = parseCsv(readFileSync(SHEET, "utf8"));
+const text = readFileSync(SHEET, "utf8");
+const rows = parseCsv(text);
 const facts: Record<string, { system?: string; place?: string; source: string }> = {};
 for (const r of rows) {
   // Doug's word, then the records, then 21e8's eye on the photograph itself
@@ -89,3 +80,19 @@ const lines = [
 ];
 writeFileSync(OUT, lines.join("\n"));
 console.log(`lib/image-facts.ts: ${Object.keys(facts).length} photographs with a system or a place (${rows.length} in the sheet)`);
+
+// Loaded only now, so it reads the facts written above.
+import("../lib/image-seo").then(({ seoAlt }) => {
+  const raw = parseRows(text);
+  const col = (name: string) => raw[0].findIndex((h) => h.replace(/^﻿/, "").trim() === name);
+  const fileCol = col("file"), lineCol = col("proposed line");
+  if (fileCol < 0 || lineCol < 0) throw new Error("the sheet has no file or proposed line column");
+  let changed = 0;
+  for (const row of raw.slice(1)) {
+    if (row.length <= Math.max(fileCol, lineCol)) continue;
+    const line = seoAlt(row[fileCol].trim(), "");
+    if (row[lineCol] !== line) { row[lineCol] = line; changed++; }
+  }
+  if (changed) writeFileSync(SHEET, toCsv(raw));
+  console.log(`${path.relative(ROOT, SHEET)}: ${changed} proposed lines set to the site's own`);
+});

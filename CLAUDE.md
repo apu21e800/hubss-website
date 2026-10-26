@@ -977,13 +977,19 @@ don't replace it.
   state and the phone menu, and imports the panels and the shared parts
   (MooseAvatar, GalleryCard, the groups) from MegaMenus.tsx. 26 Oct 2026
   (Vern: "the headings for each mega menu topic could stand out more as
-  headings"; the pattern gallery card "looks out of place"): a family's or
-  group's name is 20px Geist under a 24x3 rule; Applications' four columns
-  share one head row (`.mm-cols-aligned`, subgrid) so two wrapped names
-  leave the lists level, and carry no note (the photo's caption has it); the
-  pattern gallery is a foot row beside Resources, not a card under
-  StreetPrint; below 1280 the foot rows drop their lines, since three with
-  lines do not fit 960px. All three panels are 571px at 1280 and up.
+  headings"; the pattern gallery card "looks out of place"; later the same
+  day: "too much to scan, headings seem to run in with the product text ...
+  possibly the text is too big"): four sizes with a job each. The section's
+  name 30px Geist 800; a family's or group's name 17px Geist 700 under a
+  22x2 orange rule, with no note under it in any column (the photo's
+  caption carries the note); the product and place names Inter 15px 600 in
+  ink-90, a face and a weight below the headings, with a 12.5px ink-50 line
+  under a product's name; hairlines between names, 36px between columns.
+  Applications' four columns share one head row (`.mm-cols-aligned`,
+  subgrid) so a wrapped name leaves the lists level. The pattern gallery is
+  a foot row beside Resources, not a card under StreetPrint; below 1280 the
+  foot rows drop their lines, since three with lines do not fit 960px. All
+  three panels are 545px at 1280 and up.
 - The Products and Applications panels keep their photographs: at the 2 Oct
   merge session A's Nav.tsx (photo menus, active state, prefetch, ARIA) was
   kept whole and session B's typographic panels were not taken.

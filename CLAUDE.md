@@ -446,6 +446,26 @@ these elements, and never draw a button, label or card by hand again:
   Portfolio Book lists. The White Rock Pier pin has no photo until a real one
   arrives (the post's cover is 206px).
 
+## The blog's copy review (26 Oct 2026)
+Vern, 26 Oct: "a DDB AAAA creative agency QA pass ... make sure the
+editorial stuff does not read like AI slop ... Don't re-write everything
+only improve, it's a lot of posts." Ten reviewers read the 76 published
+posts against docs/STYLE.md and docs/GLOSSARY.md and filed local edits
+(nothing added; no number, name, quote or link changed); three independent
+editors read every edited span before the list was final. The record, with
+the 42 claims flagged for Doug and the rewrite candidates, is
+docs/site-audits/copy-review-2026-10-26.md. The edits are
+scripts/copy-review-2026-10-26.json, applied by
+scripts/copy-review-2026-10-26.ts on Vern's PC: dry run by default,
+`--apply` writes, `--case` adds the sentence-case pass on titles and
+headings (Doug's word first), `--only=<slug>` one post. Every span is
+addressed by its block's and child's _key and written only while it still
+holds the exact text the edit replaces; a block emptied whole is removed;
+an unpublished draft gets the same edits; every write checks the revision.
+The words the reviewers cut most that the lint did not know are in
+lib/style-lint.ts now (docs/STYLE.md, Words we don't use), so Studio warns
+on them and the drafters' style pass reads them.
+
 ## The glossary (17 Oct 2026)
 Doug, 17 Oct: "some of the copy is, in his words, gobbledygook ... get the
 phraseology right, about the systems technology that's accurate but not over

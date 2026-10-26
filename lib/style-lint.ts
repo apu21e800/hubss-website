@@ -204,6 +204,20 @@ const FILLER: [RegExp, (word: string) => string][] = [
     () => `“Premium” as praise is filler: say what makes it better.`,
   ],
   [/\bsolutions\b/giu, () => `“Solutions” is filler: name the thing (the coating, the markings, the system).`],
+  // The 26 Oct 2026 blog review: the words ten reviewers cut most across 76
+  // posts (scripts/copy-review-2026-10-26.json). The singular "solution" as a
+  // product ("a wayfinding solution"); "a solution of" (chemistry) is not it.
+  [/\b(?:a|an|the|this|our|your|one|ideal|perfect|complete|proven|durable|total)\s+(?:[\p{L}-]+\s+){0,2}?solution\b(?!\s+of\b)/giu, () => `“Solution” is filler: name the thing (the coating, the markings, the system).`],
+  [/\bhigh[\s-]performance\b/giu, () => `“High-performance” is filler: say the figure (the BPN, the service life) or cut it.`],
+  [/\bground[\s-]plane\b/giu, () => `“Ground plane” is jargon: say the pavement, the road or the surface.`],
+  [/\baesthetics?\b(?!\s+(?:guideline|standard|review|committee|polic))/giu, (w) => `“${cap(w)}” is filler: say the look, the colour or the pattern, whichever you mean.`],
+  [/\btransform(?:s|ed|ing|ation|ations)?\b/giu, (w) => `“${cap(w)}” is filler: say what changed.`],
+  [/\benduring\b|\blong[\s-]lasting\b/giu, (w) => `“${cap(w)}” is a claim with no figure: give the service life, or cut it.`],
+  [/\bvibrant(?:ly)?\b/giu, (w) => `“${cap(w)}” is filler: name the colours.`],
+  [/\benhanc(?:e|es|ed|ing|ement|ements)\b/giu, (w) => `“${cap(w)}” is filler: say improve, or say what is better.`],
+  [/\bengineered\s+(?:for|to)\b/giu, () => `“Engineered for” is filler: say what it does.`],
+  [/\bideal\s+for\b/giu, () => `“Ideal for” is filler: say for, or say why it suits.`],
+  [/\bdeliver(?:s|ed|ing)?\s+(?:a\s+|an\s+|the\s+)?(?:premium|superior|outstanding|exceptional|lasting|enduring|durable|high|strong|real|measurable|proven)?\s*(?:performance|results?|value|impact|quality|durability)\b/giu, () => `“Delivers performance” is filler: say what it does, with the figure.`],
   [/\bjourneys?\b/giu, (w) => `“${cap(w)}” is filler: say what actually happens.`],
   // As a figure of speech only: "landscape architects" are the readers.
   [

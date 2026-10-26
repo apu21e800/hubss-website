@@ -6,7 +6,9 @@
  * establish (the map's jobs, the printed Product Portfolio Book's captions,
  * the catalogue assets' manifest, the client's own captions in
  * lib/image-seo.ts, a twin of the photo in a product folder) and two columns
- * for Doug: "Place (Doug)" and "System (Doug)" win over the evidence.
+ * for Doug: "Place (Doug)" and "System (Doug)" win over the evidence, and
+ * the evidence over 21e8's eye ("system (by eye)", "place (by eye)": a call
+ * made from the photograph itself, with its cue beside it).
  *
  *   npx tsx scripts/gen-image-facts.ts        # rewrites lib/image-facts.ts
  *
@@ -43,11 +45,26 @@ function parseCsv(text: string): Record<string, string>[] {
 const rows = parseCsv(readFileSync(SHEET, "utf8"));
 const facts: Record<string, { system?: string; place?: string; source: string }> = {};
 for (const r of rows) {
-  const place = r["Place (Doug)"] || r["place (evidence)"];
-  const system = r["System (Doug)"] || r["system (evidence)"];
-  if (!place && !system) continue;
-  const source = r["Place (Doug)"] || r["System (Doug)"] ? "Doug, from the captions sheet" : (r["source"].split(";")[0] || "the captions sheet").trim();
-  facts[r.file] = { ...(system ? { system } : {}), ...(place ? { place } : {}), source };
+  // Doug's word, then the records, then 21e8's eye on the photograph itself
+  // (Vern, 26 Oct 2026: "take our best shot at getting the photo captions
+  // right for now"): a system named only when the picture made it clear, a
+  // place only when something in the picture names it, or the photograph's
+  // own location data puts the camera in a documented town.
+  const eyeCue = r["eye cue"] ?? "";
+  const eyeNote = r["eye note"] ?? "";
+  const eyeSystem = r["system (by eye)"] && !/suggestion only/.test(eyeNote) ? r["system (by eye)"] : "";
+  const eyePlace = r["place (by eye)"] ?? "";
+  const place = r["Place (Doug)"] || r["place (evidence)"] || eyePlace || "";
+  const system = r["System (Doug)"] || r["system (evidence)"] || eyeSystem || "";
+  const label = r["subject (by eye)"] || "";
+  if (!place && !system && !label) continue;
+  const parts: string[] = [];
+  if (r["Place (Doug)"] || r["System (Doug)"]) parts.push("Doug, from the captions sheet");
+  if ((!r["System (Doug)"] && r["system (evidence)"]) || (!r["Place (Doug)"] && r["place (evidence)"])) parts.push((r["source"].split(";")[0] || "the captions sheet").replace(/^CHECK \([^)]*\);\s*/, "").trim());
+  if (!r["System (Doug)"] && !r["system (evidence)"] && eyeSystem) parts.push(`by eye: ${eyeCue.split(" | place:")[0].replace(/^clear:\s*/, "")}`);
+  if (!r["Place (Doug)"] && !r["place (evidence)"] && eyePlace) parts.push(/own location data/.test(eyeCue) ? "the photograph's own location data" : `by eye: ${eyeCue.split(" | place:")[1]?.trim() ?? "a sign or landmark in the picture"}`);
+  const source = parts.join("; ") || "the captions sheet";
+  facts[r.file] = { ...(system ? { system } : {}), ...(place ? { place } : {}), ...(label ? { label } : {}), source };
 }
 const lines = [
   "/**",
@@ -57,7 +74,13 @@ const lines = [
   " * edit the sheet (Doug's two columns win), then run the script. Read by",
   " * lib/image-seo.ts (honestLine). The `source` is the record each fact rests on.",
   " */",
-  "export interface ImageFact { system?: string; place?: string; source: string }",
+  "export interface ImageFact {",
+  "  system?: string;",
+  "  place?: string;",
+  "  /** The gallery's word for this photo, refined by eye: a splash pad in the Parks & Paths gallery says so. */",
+  "  label?: string;",
+  "  source: string;",
+  "}",
   "",
   "export const IMAGE_FACTS: Record<string, ImageFact> = {",
   ...Object.entries(facts).sort().map(([file, f]) => `  ${JSON.stringify(file)}: ${JSON.stringify(f)},`),

@@ -190,7 +190,13 @@ export function subjectFor(src: string): ImageSubject | null {
  */
 export function placeFor(src: string): string {
   const clean = src.split("?")[0];
-  return IMAGE_FACTS[clean]?.place ?? FILE_PLACES[clean] ?? PLACES[folderOf(src)] ?? "";
+  return spellProvince(IMAGE_FACTS[clean]?.place ?? FILE_PLACES[clean] ?? PLACES[folderOf(src)] ?? "");
+}
+
+const PROVINCES: Record<string, string> = { BC: "British Columbia", ON: "Ontario", QC: "Quebec", AB: "Alberta", MB: "Manitoba", SK: "Saskatchewan", NS: "Nova Scotia", NB: "New Brunswick", YT: "Yukon" };
+/** "Kitchener, ON" -> "Kitchener, Ontario": the site spells provinces out, as the Product Book edition does. */
+function spellProvince(place: string): string {
+  return place.replace(/,\s*([A-Z]{2})$/, (m, code: string) => (PROVINCES[code] ? `, ${PROVINCES[code]}` : m));
 }
 
 /**
@@ -206,25 +212,42 @@ export function systemFor(src: string): string {
 }
 
 /**
- * Pairs where putting the system in front of the folder's line would claim
- * something the record does not: the LEED folder's line says solar-reflective,
- * which only StreetBondSR is; the driveway folders' line says stamped asphalt,
- * which is StreetPrint (StreetBond is the coating on it).
+ * Line and system pairs where putting the system in front of the line would
+ * claim something the record does not, or read wrong: the LEED line says
+ * solar-reflective, which only StreetBondSR is; the driveway line says
+ * stamped asphalt, which is StreetPrint (StreetBond is the coating on it);
+ * PreMark and DecoMark are markings and graphics on a parking lot, not its
+ * surface.
  */
 const SYSTEM_LINES: Record<string, string> = {
-  "leed-urban-heat-island|StreetBond": "StreetBond coating",
-  "residential-driveways|StreetBond": "StreetBond coating on a stamped asphalt driveway",
-  "private-driveways|StreetBond": "StreetBond coating on a stamped asphalt driveway",
+  "Solar-reflective pavement coating|StreetBond": "StreetBond coating",
+  "Stamped asphalt driveway|StreetBond": "StreetBond coating on a stamped asphalt driveway",
+  "Parking lot surface|PreMark": "PreMark parking lot markings",
+  "Parking lot surface|DecoMark": "DecoMark parking lot graphics",
+  "Decorative crosswalk|PreMark": "PreMark crosswalk markings",
+  "Crosswalk marking|PreMark": "PreMark crosswalk markings",
 };
+
+/**
+ * The gallery's word for an application photo, refined where the records
+ * say what the picture shows ("Splash pad surface" for a splash pad in the
+ * Parks & Paths gallery); a product folder's photo keeps the product's line.
+ */
+function labelFor(src: string, subject: ImageSubject): string {
+  const clean = src.split("?")[0];
+  if (!folderOf(clean).startsWith("images/applications/")) return subject.label;
+  return IMAGE_FACTS[clean]?.label ?? subject.label;
+}
 
 /** "TrafficPatternsXD decorative crosswalk": the system in front of the folder's line. */
 function subjectWithSystem(src: string, subject: ImageSubject): string {
+  const label = labelFor(src, subject);
   const system = systemFor(src);
-  if (!system) return subject.label;
-  const special = SYSTEM_LINES[`${leafOf(folderOf(src))}|${system}`];
+  if (!system) return label;
+  const special = SYSTEM_LINES[`${label}|${system}`];
   if (special) return special;
-  if (subject.label.toLowerCase().startsWith(system.toLowerCase())) return subject.label;
-  return `${system} ${subject.label[0].toLowerCase()}${subject.label.slice(1)}`;
+  if (label.toLowerCase().startsWith(system.toLowerCase())) return label;
+  return `${system} ${label[0].toLowerCase()}${label.slice(1)}`;
 }
 
 /**

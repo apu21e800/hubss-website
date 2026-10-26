@@ -64,8 +64,8 @@ The test: read it aloud. If a person on the phone would not say it, cut it.
 - Families, the same in the menu, on /products, on the product page and in
   the book: Preformed Thermoplastics, Coatings, Stamped Asphalt, Asphalt &
   Concrete Repair.
-- Sections: Insights (the library, filed under Projects, Guides and Articles;
-  each piece is a project, a guide or an article), the Product Portfolio Book
+- Sections: Projects (the library, filed under Projects and Guides; each
+  piece is a project or a guide), the Product Portfolio Book
   ("Product Portfolio Book · Volume 5" in full; Doug's name, 17 Oct 2026),
   Resources (the specification library), Lunch & Learn.
 - Places: city and province, province spelled out in prose: Milton,

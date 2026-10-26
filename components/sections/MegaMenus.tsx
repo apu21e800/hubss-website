@@ -133,19 +133,20 @@ interface NavInsights {
 }
 export const INSIGHTS = navInsights as NavInsights;
 
+// A post's kicker in the menus: its section's label (lib/field-notes-taxonomy.ts
+// badgeFor; the "Blog" posts are guides since 26 Oct 2026).
 const INSIGHT_KIND: Record<string, string> = {
   "Case Study": "Project",
   "Project Profile": "Project",
   Guide: "Guide",
   "White Paper": "Guide",
-  Blog: "Article",
+  Blog: "Guide",
 };
-export const kindOf = (type: string) => INSIGHT_KIND[type] ?? "Article";
+export const kindOf = (type: string) => INSIGHT_KIND[type] ?? "Guide";
 
 const INSIGHT_SECTIONS = [
   { label: "Projects", href: "/blog/projects" },
   { label: "Guides", href: "/blog/guides" },
-  { label: "Articles", href: "/blog/articles" },
 ];
 export const NAV_SECTIONS: NavSection[] = INSIGHTS.sections?.length
   ? INSIGHTS.sections
@@ -577,7 +578,7 @@ export function ApplicationsPanel() {
   );
 }
 
-/** One of the three sections of the blog, with its picture, at the left of Projects. */
+/** One of the two sections of the blog, with its picture, at the left of Projects. */
 function SectionRow({ section: s, index }: { section: NavSection; index: number }) {
   return (
     <motion.li
@@ -639,7 +640,7 @@ export function ProjectsPanel() {
     <div className="mm">
       <div className="mm-body mm-body-projects">
         <div className="mm-main">
-          <PanelHead title={BLOG_NAME} line="Installations, guides and articles" href="/blog" all={`All ${BLOG_NAME.toLowerCase()}`} />
+          <PanelHead title={BLOG_NAME} line="Installations and guides" href="/blog" all={`All ${BLOG_NAME.toLowerCase()}`} />
           <ul className="mm-sections">
             {NAV_SECTIONS.map((s, i) => <SectionRow key={s.key} section={s} index={i} />)}
           </ul>

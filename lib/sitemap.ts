@@ -90,8 +90,8 @@ export function buildSitemap(photos?: PhotoSources, posts: PostMeta[] = []): Met
     { url: `${BASE_URL}/gallery`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
     { url: `${BASE_URL}/patterns`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE_URL}/blog`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
-    // The Insights sections (Projects, Guides, Articles since 28 Sep 2026;
-    // the five type hubs before). Each is an indexable collection page
+    // The Insights sections (Projects and Guides; three, with Articles, from
+    // 28 Sep to 26 Oct 2026; the five type hubs before). Each is an indexable collection page
     // carrying its own CollectionPage/ItemList schema, so they belong in the
     // sitemap alongside /blog rather than being discovered only by crawl.
     // The old hub addresses redirect, so they are not listed.

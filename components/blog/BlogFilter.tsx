@@ -27,10 +27,11 @@ const PAGE = 12;
 /**
  * The section in the address. ?section=projects since 28 Sep 2026; links from
  * before then carry a stored type (?category=Case Study), which still lands
- * on the section that lists it.
+ * on the section that lists it, and ?section=articles (28 Sep to 26 Oct
+ * 2026) lands on the guides, where those posts are listed now.
  */
 function sectionFromParams(params: URLSearchParams): InsightsSectionKey | "all" {
-  const s = params.get("section");
+  const s = params.get("section") === "articles" ? "guides" : params.get("section");
   if (s && s in SECTION_BY_KEY) return s as InsightsSectionKey;
   const legacy = params.get("category");
   if (legacy && TYPE_BY_LABEL[legacy as FieldNoteType]) return sectionFor(legacy).key;
@@ -59,8 +60,9 @@ function sectionFromParams(params: URLSearchParams): InsightsSectionKey | "all" 
  *      posts than it says." The ramp is now capped at six cards.
  *
  * 28 Sep 2026: the five type pills became the three sections (Projects,
- * Guides, Articles; lib/field-notes-taxonomy.ts), and the count line says
- * "posts", so it can't be read as the Articles section's count (QA rest#39).
+ * Guides, Articles; lib/field-notes-taxonomy.ts; two since 26 Oct 2026, the
+ * articles with the guides), and the count line says "posts", so it can't be
+ * read as a section's count (QA rest#39).
  *
  * 30 Sep 2026 (Vern: "editorial, blogs should follow suit"): the pills are a
  * magazine's section tabs, type on a hairline with the brand gradient under
@@ -206,7 +208,7 @@ export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Prop
           className="mb-1 text-[12.5px] uppercase"
           style={{ color: "var(--accent-text)", fontFamily: "inherit", fontWeight: 700, letterSpacing: "0.2em", lineHeight: 1.5 }}
         >
-          Browse projects, guides and articles
+          Browse projects and guides
         </h2>
 
         {/* ── Sections, then search · system · sort, on one hairline  */}
@@ -242,7 +244,7 @@ export default function BlogFilter({ posts, allProducts, frontSlugs = [] }: Prop
               <input
                 type="text"
                 placeholder="Search…"
-                aria-label="Search projects, guides and articles"
+                aria-label="Search projects and guides"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full pl-9 pr-11 rounded-lg text-sm"

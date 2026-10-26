@@ -26,14 +26,15 @@ appear together; no card ever links to a page that doesn't exist yet.
 
 ## What each field does
 
-- **Type**: which of Insights' three sections lists the post, and the label
+- **Type**: which of the site's two sections lists the post, and the label
   on its card and header. Case Study and Project Profile are **Projects**
-  (/blog/projects, label "Project"); Guide and White Paper are **Guides**
-  (/blog/guides, "Guide"); Blog is **Articles** (/blog/articles, "Article").
-  The five types stay in Studio as they are; since 28 Sep 2026 the site shows
-  three sections, and the old hub addresses (/blog/case-studies,
-  /blog/project-profiles, /blog/white-papers, /blog/posts) redirect to them.
-  Blank means the site guesses from the title.
+  (/blog/projects, label "Project"); Guide, White Paper and Blog are
+  **Guides** (/blog/guides, "Guide"). The five types stay in Studio as they
+  are; since 28 Sep 2026 the site shows sections, not types (three until 26
+  Oct 2026, when the Articles section joined the Guides), and the old
+  addresses (/blog/case-studies, /blog/project-profiles, /blog/white-papers,
+  /blog/posts, /blog/articles) redirect to them. Blank means the site
+  guesses from the title.
 - **Excerpt**: the card text, the italic lede, and Google's description unless
   **Search result overrides** says otherwise.
 - **Body**: Heading 2 for each section (they become "On this page" in the

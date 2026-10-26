@@ -76,7 +76,7 @@ export default async function FeaturedBlogPost({ copy = HOMEPAGE_COPY.insights }
             </p>
           </div>
           {/* "All projects", as the phone button below says: it opens the whole
-              library (projects, guides and articles). data-tap lifts it from
+              library (projects and guides). data-tap lifts it from
               42px to the 44px touch floor on tablets. */}
           <div className="hidden md:block flex-shrink-0">
             <Link href="/blog" className="btn-ghost">

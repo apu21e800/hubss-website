@@ -14,8 +14,9 @@
  * (scripts/import-blog-to-sanity.ts) got them from; the site no longer reads
  * it, so change a post's type in Studio, not here. The types themselves
  * (FIELD_NOTE_TYPES: values, schema types, Studio's Type list) are still read
- * everywhere. Since 28 Sep 2026 the site lists them in three sections
- * (INSIGHTS_SECTIONS, below): Projects, Guides and Articles.
+ * everywhere. Since 28 Sep 2026 the site lists them in sections
+ * (INSIGHTS_SECTIONS, below): three until 26 Oct 2026, two since, Projects
+ * and Guides.
  *
  * Vernon: "update all Field notes — Case Studies, Project Profiles, Guides,
  * White Papers, Blog posts! This is high priority, also SEO optimize, this is
@@ -48,20 +49,27 @@ export type FieldNoteType =
   | "Blog";
 
 /**
- * THE THREE SECTIONS (Vern, 28 Sep 2026): "Case Studies 14, Project Profiles
- * 25, Guides 24, White Papers 3, Articles: these categories feel like they
- * have not been refined enough. Insights = blog." Five hubs split one library
- * along lines a reader could not see (a case study and a project profile are
- * both a write-up of a job; a white paper is a long guide), and two of them
- * held three posts and eight. The site now shows three sections, and a card
- * or a post carries one label: Project, Guide or Article.
+ * THE SECTIONS. Three from 28 Sep 2026 (Vern: "Case Studies 14, Project
+ * Profiles 25, Guides 24, White Papers 3, Articles: these categories feel
+ * like they have not been refined enough. Insights = blog." Five hubs split
+ * one library along lines a reader could not see: a case study and a project
+ * profile are both a write-up of a job; a white paper is a long guide).
+ *
+ * Two since 26 Oct 2026 (Vern: "Projects, guides, articles is a bit
+ * confusing, maybe we only need guides and articles ... is it a blog, a
+ * guide, an article, a project... makes me dizzy"). A reader comes for two
+ * things, the work and the reading, so the sections are Projects (the jobs:
+ * case studies and project profiles) and Guides (the reading: guides, white
+ * papers and the eight "Blog" posts, every one of them an explainer of a
+ * system or where it fits). A card or a post carries one label, Project or
+ * Guide, and the word "article" is gone from the site's navigation.
  *
  * Labels and routes only. The five stored values below are unchanged, so
  * Studio, the drafter and every published post keep working; each type just
- * names the section it is listed in. The old hub addresses redirect
+ * names the section it is listed in. The old addresses redirect
  * (next.config.ts): /blog/case-studies and /blog/project-profiles to
- * /blog/projects, /blog/white-papers to /blog/guides, /blog/posts to
- * /blog/articles.
+ * /blog/projects; /blog/white-papers, /blog/posts and /blog/articles to
+ * /blog/guides.
  */
 /**
  * The blog's name on the site. "Insights" from 25 Sep 2026; **Projects**
@@ -73,7 +81,7 @@ export type FieldNoteType =
  */
 export const BLOG_NAME = "Projects";
 
-export type InsightsSectionKey = "projects" | "guides" | "articles";
+export type InsightsSectionKey = "projects" | "guides";
 
 export interface InsightsSection {
   key: InsightsSectionKey;
@@ -116,26 +124,13 @@ export const INSIGHTS_SECTIONS: InsightsSection[] = [
     singular: "Guide",
     plural: "Guides",
     slug: "guides",
-    types: ["Guide", "White Paper"],
+    types: ["Guide", "White Paper", "Blog"],
     blurb: "How to choose, specify and defend a surface decision.",
     promise:
-      "Decision support for engineers, landscape architects and procurement teams: comparisons, service life by system, spec language and the failure modes to design around in a freeze-thaw climate. The long technical papers for public works teams are here too.",
+      "Decision support for engineers, landscape architects and procurement teams: comparisons, service life by system, spec language and the failure modes to design around in a freeze-thaw climate. The long technical papers for public works teams are here too, and the shorter reads on where decorative pavement is heading in Canada.",
     tint: "rgba(249,115,22,0.1)",
     border: "rgba(249,115,22,0.28)",
     text: "var(--accent-soft-text)",
-  },
-  {
-    key: "articles",
-    singular: "Article",
-    plural: "Articles",
-    slug: "articles",
-    types: ["Blog"],
-    blurb: "Industry notes, product context and what we are seeing on the road.",
-    promise:
-      "Shorter reads on where decorative pavement is heading in Canada: material context, industry shifts and the thinking behind the systems.",
-    tint: "var(--ink-05)",
-    border: "var(--ink-12)",
-    text: "var(--text-muted)",
   },
 ];
 
@@ -155,7 +150,7 @@ export interface FieldNoteTypeMeta {
    * Since 28 Sep 2026 the site prints the section's label instead: badgeFor().
    */
   badge: string;
-  /** Which of the three sections lists it. */
+  /** Which of the two sections lists it. */
   section: InsightsSectionKey;
   /**
    * The type's plural, hub segment, blurb and promise, from when each type
@@ -245,10 +240,12 @@ export const FIELD_NOTE_TYPES: FieldNoteTypeMeta[] = [
   {
     label: "Blog",
     badge: "Article",
-    section: "articles",
+    // Listed with the Guides since 26 Oct 2026 (the Articles section, 28 Sep
+    // to 26 Oct 2026, held these eight alone). Its hub was /blog/posts until
+    // 28 Sep 2026, then /blog/articles; both addresses redirect to
+    // /blog/guides.
+    section: "guides",
     plural: "Articles",
-    // Its hub was /blog/posts until 28 Sep 2026; that address now redirects
-    // to /blog/articles, the Articles section.
     slug: "posts",
     blurb: "Industry notes, product context, and what we are seeing on the road.",
     promise:
@@ -271,15 +268,15 @@ export const TYPE_BY_SLUG: Record<string, FieldNoteTypeMeta> =
 
 /**
  * The section a post's stored type is listed in. A value the taxonomy doesn't
- * know (an old import, a typo in Studio) is listed with the articles, as an
- * untyped post always was.
+ * know (an old import, a typo in Studio) is listed with the guides, where an
+ * untyped post (a "Blog") goes.
  */
 export function sectionFor(category: string | undefined | null): InsightsSection {
   const type = category ? TYPE_BY_LABEL[category as FieldNoteType] : undefined;
-  return SECTION_BY_KEY[type?.section ?? "articles"];
+  return SECTION_BY_KEY[type?.section ?? "guides"];
 }
 
-/** What a card or a post hero prints for a post's stored type: Project, Guide or Article. */
+/** What a card or a post hero prints for a post's stored type: Project or Guide. */
 export function badgeFor(category: string | undefined | null): string {
   return sectionFor(category).singular;
 }

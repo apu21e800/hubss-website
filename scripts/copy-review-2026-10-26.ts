@@ -118,7 +118,22 @@ function blockOf(p: string): string | null {
 // ── The plan for one document ────────────────────────────────────────────────
 
 interface Change { path: string; before: string; after: string; edits: Edit[] }
-interface Plan { id: string; rev: string; slug: string; set: Record<string, string>; unset: string[]; changes: Change[]; left: string[] }
+interface Plan { id: string; rev: string; slug: string; set: Record<string, string>; unset: string[]; changes: Change[]; left: string[]; done: number }
+
+/**
+ * An edit already in the text: never applied again. One whose new words
+ * contain its old ones ("thermoplastic" to "preformed thermoplastic") still
+ * finds its old words exactly once after the first run, so without this a
+ * second run (the case pass needs `--apply` again) would have doubled four of
+ * them on the live posts: "preformed preformed thermoplastic" (26 Oct 2026).
+ */
+function alreadyIn(text: string, e: Edit): boolean {
+  if (e.group === "case") return text === e.to && e.to !== e.from;
+  // a cut is done once its words are gone
+  if (!e.to) return count(text, e.from) === 0;
+  if (!text.includes(e.to)) return false;
+  return e.to.includes(e.from) || count(text, e.from) === 0;
+}
 
 function plan(doc: Record<string, unknown>, edits: Edit[]): Plan {
   const id = doc._id as string;
@@ -131,10 +146,12 @@ function plan(doc: Record<string, unknown>, edits: Edit[]): Plan {
     lst.push(e);
     bySpan.set(e.sanity, lst);
   }
-  const p: Plan = { id, rev, slug, set: {}, unset: [], changes: [], left: [] };
+  const p: Plan = { id, rev, slug, set: {}, unset: [], changes: [], left: [], done: 0 };
   for (const [spanPath, lst] of bySpan) {
     const current = readAt(doc, spanPath);
     if (typeof current !== "string") {
+      // a paragraph an earlier run removed: those edits are done
+      if (lst.every((e) => e.unset && readAt(doc, e.unset) === undefined)) { p.done += lst.length; continue; }
       p.left.push(`${spanPath}: not a text in this document (${lst.length} edit${lst.length === 1 ? "" : "s"})`);
       continue;
     }
@@ -144,6 +161,7 @@ function plan(doc: Record<string, unknown>, edits: Edit[]): Plan {
     // words first, in the order filed; the case edit last, on the result
     const ordered = [...lst.filter((e) => e.group === "words"), ...lst.filter((e) => e.group === "case")];
     for (const e of ordered) {
+      if (alreadyIn(text, e)) { p.done++; continue; }
       if (e.group === "case") {
         if (text !== e.from) { p.left.push(`${spanPath}: the heading no longer reads «${short(e.from)}» (case pass skipped)`); continue; }
         text = e.to; applied.push(e); continue;
@@ -211,6 +229,7 @@ async function main() {
   }
 
   let spans = 0, applied = 0, left = 0, styleNotes = 0;
+  const done = plans.reduce((n, p) => n + p.done, 0);
   for (const p of plans) {
     const n = p.changes.length;
     if (!n && !p.left.length) continue;
@@ -233,7 +252,7 @@ async function main() {
   if (missing.length) console.log(`\nNot in Studio any more (${missing.length}): ${missing.join(", ")}`);
 
   const docsToWrite = plans.filter((p) => p.changes.length);
-  console.log(`\n${applied} edits on ${spans} spans in ${docsToWrite.length} documents${CASE ? " (case pass included)" : " (word edits only; --case adds the sentence-case pass)"}; ${left} left alone${styleNotes ? `; ${styleNotes} house-style notes (warnings only)` : ""}.`);
+  console.log(`\n${applied} edits on ${spans} spans in ${docsToWrite.length} documents${CASE ? " (case pass included)" : " (word edits only; --case adds the sentence-case pass)"}; ${done} already in Studio; ${left} left alone${styleNotes ? `; ${styleNotes} house-style notes (warnings only)` : ""}.`);
   if (!APPLY) {
     console.log("Dry run: nothing written. Run again with --apply to write.");
     return;

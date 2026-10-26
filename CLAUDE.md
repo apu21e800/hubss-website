@@ -975,7 +975,15 @@ don't replace it.
   wears the current section's 2px rule; leaving a trigger cancels its pending
   open, leaving the bar closes after 120ms. Nav.tsx keeps the bar, the open
   state and the phone menu, and imports the panels and the shared parts
-  (MooseAvatar, GalleryCard, the groups) from MegaMenus.tsx.
+  (MooseAvatar, GalleryCard, the groups) from MegaMenus.tsx. 26 Oct 2026
+  (Vern: "the headings for each mega menu topic could stand out more as
+  headings"; the pattern gallery card "looks out of place"): a family's or
+  group's name is 20px Geist under a 24x3 rule; Applications' four columns
+  share one head row (`.mm-cols-aligned`, subgrid) so two wrapped names
+  leave the lists level, and carry no note (the photo's caption has it); the
+  pattern gallery is a foot row beside Resources, not a card under
+  StreetPrint; below 1280 the foot rows drop their lines, since three with
+  lines do not fit 960px. All three panels are 571px at 1280 and up.
 - The Products and Applications panels keep their photographs: at the 2 Oct
   merge session A's Nav.tsx (photo menus, active state, prefetch, ARIA) was
   kept whole and session B's typographic panels were not taken.

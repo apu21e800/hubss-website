@@ -1009,6 +1009,13 @@ don't replace it.
   the page reads (lunchLearnFaqs, the FAQ heading); the other Lunch & Learn
   fields in sanity/schemas/page.ts are hidden and read by nothing. No CE
   credit claims, ever. No stat chips or counts on the page.
+- The session is 60 minutes (Doug, 26 Oct 2026, on the e-blasts: "60 mins,
+  across the board"; the printed book's Lunch & Learn page: "Got an hour?").
+  It said 45 until then, in the card, the menu line, the post cards, the
+  social drafter's brief and the first answer. Studio still holds "Forty-five
+  minutes, then questions ..." for that answer: lib/copy-superseded.ts prints
+  it as "Sixty minutes, ..." until scripts/studio-cleanup-2026-10-17.ts writes
+  it on Vern's PC.
 - The booking form (useLunchLearnForm in LunchLearnV2.tsx, shared with the
   homepage card) sends form_sent to GA (generate_lead until 20 Oct 2026; the
   route sends the lead now, "Leads in GA4") and lunch_learn_submit to Vercel

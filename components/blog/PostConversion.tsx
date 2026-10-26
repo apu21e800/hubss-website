@@ -34,7 +34,7 @@ import { lunchLearnHref } from "@/lib/lunch-learn";
 const ASK: Record<string, { heading: string; body: string }> = {
   "Guide": {
     heading: "Bring the rest of this decision to your team.",
-    body: "A 45-minute Lunch & Learn covers the comparisons this piece opened: the service-life maths for your climate, spec language you can paste into a tender, and material samples on the table for the people who have to sign off.",
+    body: "A 60-minute Lunch & Learn covers the comparisons this piece opened: the service-life maths for your climate, spec language you can paste into a tender, and material samples on the table for the people who have to sign off.",
   },
   "Case Study": {
     heading: "See the system that did it, in person.",
@@ -42,7 +42,7 @@ const ASK: Record<string, { heading: string; body: string }> = {
   },
   "Project Profile": {
     heading: "Let's talk about what your surface could do.",
-    body: "Book a 45-minute session and we will walk your team through the systems behind installations like this one: what they cost, how they hold up through Canadian winters, and who installs them near you.",
+    body: "Book a 60-minute session and we will walk your team through the systems behind installations like this one: what they cost, how they hold up through Canadian winters, and who installs them near you.",
   },
   "White Paper": {
     heading: "Turn the document into a working session.",
@@ -50,7 +50,7 @@ const ASK: Record<string, { heading: string; body: string }> = {
   },
   "Blog": {
     heading: "Get the technical version, over lunch.",
-    body: "A 45-minute Lunch & Learn puts the specifications, samples, and Canadian case data in front of your whole team. In your office or virtual, lunch is on us either way.",
+    body: "A 60-minute Lunch & Learn puts the specifications, samples, and Canadian case data in front of your whole team. In your office or virtual, lunch is on us either way.",
   },
 };
 

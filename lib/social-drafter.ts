@@ -43,7 +43,7 @@ MACHINE TELLS (docs/STYLE.md, "Machine tells"): readers recognise machine-writte
 - Exclamation marks. "Discover", "Explore", "Learn more" as the ask; say what happens instead ("Read the article", "Book a Lunch & Learn").
 The test: read it aloud. If a person on the phone would not say it, cut it.
 
-EACH POST: one idea from the article that a specifier, planner or property manager would stop for, then the link, then ONE ask. The ask is always the same: the article ends with an offer of a 45-minute Lunch & Learn for their team (samples, specs, lunch included), so invite them to read it and book one. One link only: the exact URL given for that channel.
+EACH POST: one idea from the article that a specifier, planner or property manager would stop for, then the link, then ONE ask. The ask is always the same: the article ends with an offer of a 60-minute Lunch & Learn for their team (samples, specs, lunch included), so invite them to read it and book one. One link only: the exact URL given for that channel.
 
 CHANNELS:
 - linkedin: 500 to 1,100 characters. Short paragraphs. Lead with the practical point for people who specify pavement. Up to 3 hashtags at the very end.

@@ -38,7 +38,7 @@ export default async function LunchLearnCard({
   const title = heading ?? (topic ? `Bring ${topic} to your team` : "Bring HUB to your team");
   const line =
     body ??
-    "A free 45-minute working session in your office or online: case studies, spec language and samples on the table. Lunch is on us.";
+    "A free 60-minute working session in your office or online: case studies, spec language and samples on the table. Lunch is on us.";
   const row = layout === "row";
   return (
     <aside

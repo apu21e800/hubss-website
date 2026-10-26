@@ -27,7 +27,7 @@ const serviceSchema = {
   name: "HUB Lunch & Learn · Decorative Pavement Spec Session",
   serviceType: "Technical Lunch & Learn Presentation",
   description:
-    "Free 30–45 minute presentation for engineering, architecture, and municipal-procurement teams covering decorative pavement systems, thermoplastic markings, and coloured coatings. Includes material samples, spec sheets, and regional installer contacts.",
+    "Free 60-minute presentation for engineering, architecture, and municipal-procurement teams covering decorative pavement systems, thermoplastic markings, and coloured coatings. Includes material samples, spec sheets, and regional installer contacts.",
   provider: { "@id": "https://hubss.com/#organization" },
   areaServed: { "@type": "Country", name: "Canada" },
   audience: {

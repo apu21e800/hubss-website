@@ -60,7 +60,7 @@ const EASE_OUT = [0.22, 1, 0.36, 1] as const;
 export const RESOURCES = { href: "/resources", label: "Resources", line: "Spec sheets, data sheets and guides" } as const;
 
 /** Lunch & Learn, in the words the site already uses (LunchLearnCard). */
-export const LL_LINE = "A free 45-minute session. Lunch is on us.";
+export const LL_LINE = "A free 60-minute session. Lunch is on us.";
 
 /**
  * Four groups a specifier would recognise, each named for the place, not the

@@ -10,8 +10,11 @@ import { getSanityPageContent } from "@/lib/sanity.queries";
 import { LUNCH_LEARN_FAQS } from "@/lib/lunch-learn-content";
 
 export const metadata = buildMetadata({
-  title: "Lunch & Learn · Free Spec Session for Engineers & Planners",
-  description: "Book a free Lunch & Learn with HUB Surface Systems: lunch, material samples and 27 years of decorative pavement expertise, in person or virtual.",
+  // The audience named in full since 26 Oct 2026: the MediaEdge display ads
+  // of November 2026 run to landscape architects (OALA), and the page they
+  // land on said "Engineers & Planners".
+  title: "Lunch & Learn for engineers, landscape architects and planners",
+  description: "A free Lunch & Learn for engineering, landscape architecture and planning teams: Canadian case studies, spec language and samples. Your office or online.",
   slug: "lunch-learn",
 });
 

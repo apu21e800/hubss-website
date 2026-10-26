@@ -371,8 +371,8 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
                   </span>
                 </Title>
                 <p className="text-[15px] leading-relaxed mb-8 max-w-xl" style={{ color: "var(--ink-70)" }}>
-                  Forty-five minutes with your engineering or design team. Canadian case
-                  studies, spec language you can use, and samples you can hold.
+                  Forty-five minutes with your engineering, landscape architecture or planning
+                  team. Canadian case studies, spec language you can use, and samples you can hold.
                 </p>
 
                 <div className="space-y-3.5 mb-9">

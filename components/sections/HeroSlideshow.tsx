@@ -113,7 +113,7 @@ export default function HeroSlideshow({
            (Vern, 26 Sep 2026: "too zoomed in, too cropped"). From sm up it is
            the full-bleed background it always was, type over the street. The
            gradients live inside this box so they cover exactly the picture. */}
-      <div className="hero-photo relative aspect-[5/4] w-full sm:absolute sm:inset-0 sm:aspect-auto">
+      <div className="hero-photo home-hero-photo relative aspect-[5/4] w-full sm:absolute sm:inset-0 sm:aspect-auto">
       {/* ── Background image — plain <img>, not next/image and not CSS background-image.
            Both prior approaches failed on Vercel. Plain img src is picked up by
            the browser HTML preload scanner immediately, before CSS/JS parsing. */}
@@ -263,7 +263,7 @@ export default function HeroSlideshow({
 
             {/* H2 — supporting tagline — readable subhead under bold H1 */}
             <h2
-              className="font-semibold mb-8"
+              className="hero-tagline font-semibold mb-8"
               style={{
                 fontSize: "clamp(1.25rem, 2vw, 1.625rem)",
                 lineHeight: 1.25,

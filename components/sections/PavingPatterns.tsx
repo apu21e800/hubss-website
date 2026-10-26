@@ -61,7 +61,10 @@ export default function PavingPatterns({ intro, moreLabel = "All 16 templates" }
                 // inverts it to charcoal on paper (app/globals.css). Without
                 // it the drawings vanished when the page went light (28 Sep 2026).
                 className="w-full h-auto pattern-sheet"
-                sizes="(max-width: 768px) 50vw, 33vw"
+                // Three across inside the product page's main column: about
+                // 220px each at 1440 (the 24 Oct 2026 review found a 475px
+                // file in a 218px slot with the old 33vw).
+                sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 260px"
               />
             </div>
             <div className="px-4 pb-3.5 pt-2.5" style={{ borderTop: "1px solid var(--border-color)" }}>

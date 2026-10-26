@@ -18,6 +18,7 @@ import { SiteSettingsProvider } from "@/components/SiteSettingsProvider";
 import NavigationProgress from "@/components/NavigationProgress";
 import SkipLink from "@/components/SkipLink";
 import HistoryScroll from "@/components/HistoryScroll";
+import FieldValidity from "@/components/FieldValidity";
 import NotInStudio from "@/components/NotInStudio";
 import { getSiteSettings } from "@/lib/sanity.queries";
 
@@ -132,6 +133,8 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <SkipLink />
         {/* Back and Forward land in one step, not a glide. */}
         <HistoryScroll />
+        {/* A wrongly filled field says so to a screen reader (aria-invalid). */}
+        <FieldValidity />
         {/* Resource hints — React 19 hoists these into <head>. The landing
             page's map pulls style + tiles + glyphs from CARTO; warming the
             connection here shaves the first paint of the section. */}

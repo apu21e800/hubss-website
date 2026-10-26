@@ -115,6 +115,13 @@ premium (as praise), solutions (as filler), "beautiful that", "specialists"
 as a boast, and any credential HUB doesn't hold (no CE, AIBC, RAIC, PEO or
 CPD credit claims).
 
+Added after the 26 Oct 2026 review of the 76 posts (the words the ten
+reviewers cut most): "a wayfinding solution" (name the thing),
+high-performance, ground plane, aesthetics (say the look, the colour, the
+pattern), transform, enduring and long-lasting (give the service life),
+vibrant (name the colours), enhance, "engineered for", "ideal for",
+"delivers performance". Studio warns on each (lib/style-lint.ts).
+
 ## Structure
 
 - One primary call to action per surface, and the verb says what happens:

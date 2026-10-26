@@ -10,7 +10,8 @@ import { getAllPosts } from "@/lib/blog";
 import { BLOG_NAME, INSIGHTS_SECTIONS, sectionFor, type InsightsSection } from "@/lib/field-notes-taxonomy";
 
 /**
- * An Insights section page: /blog/projects, /blog/guides, /blog/articles.
+ * An Insights section page: /blog/projects, /blog/guides (and, 28 Sep to
+ * 26 Oct 2026, /blog/articles, which redirects to the guides now).
  *
  * WHY THESE PAGES EXIST: a library behind one /blog index gives search
  * engines exactly one page to rank for every content shape at once. A

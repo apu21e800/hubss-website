@@ -280,7 +280,7 @@ export async function getAllPosts(): Promise<PostMeta[]> {
   return (await fetchAllPosts()).filter((p) => BUILT.has(p.slug));
 }
 
-/** Every post listed in one section (Projects, Guides, Articles), newest first. */
+/** Every post listed in one section (Projects, Guides), newest first. */
 export async function getPostsBySection(section: InsightsSectionKey): Promise<PostMeta[]> {
   const types = new Set<string>(SECTION_BY_KEY[section].types);
   return (await getAllPosts()).filter((p) => types.has(p.category));

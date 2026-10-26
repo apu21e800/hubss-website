@@ -133,19 +133,20 @@ interface NavInsights {
 }
 export const INSIGHTS = navInsights as NavInsights;
 
+// A post's kicker in the menus: its section's label (lib/field-notes-taxonomy.ts
+// badgeFor; the "Blog" posts are guides since 26 Oct 2026).
 const INSIGHT_KIND: Record<string, string> = {
   "Case Study": "Project",
   "Project Profile": "Project",
   Guide: "Guide",
   "White Paper": "Guide",
-  Blog: "Article",
+  Blog: "Guide",
 };
-export const kindOf = (type: string) => INSIGHT_KIND[type] ?? "Article";
+export const kindOf = (type: string) => INSIGHT_KIND[type] ?? "Guide";
 
 const INSIGHT_SECTIONS = [
   { label: "Projects", href: "/blog/projects" },
   { label: "Guides", href: "/blog/guides" },
-  { label: "Articles", href: "/blog/articles" },
 ];
 export const NAV_SECTIONS: NavSection[] = INSIGHTS.sections?.length
   ? INSIGHTS.sections
@@ -296,9 +297,14 @@ function PanelHead({ title, line, href, all }: { title: string; line: string; hr
 
 /**
  * A column's heading: a short rule in the brand orange, then the family's
- * name in sentence case, quiet, and its note. Not the uppercase eyebrow: at
- * 13px and 0.2em "Preformed Thermoplastics" and "Commercial & Sustainability"
- * wrap in a 200px column (creative director, 24 Oct 2026).
+ * name in display type, and its note. Not the uppercase eyebrow: at 13px and
+ * 0.2em "Preformed Thermoplastics" and "Commercial & Sustainability" wrap in
+ * a 200px column (creative director, 24 Oct 2026). At 13.5px Inter the name
+ * sat under the 16px product names and read as a note (Vern, 26 Oct 2026:
+ * "the headings for each mega menu topic could stand out more as
+ * headings"), so it is 20px Geist now: one line in Products' 277px columns,
+ * two in Applications' 201px ("Commercial & Sustainability" is 264px wide),
+ * where .mm-cols-aligned keeps the four lists level.
  */
 function ColumnHead({ label, note }: { label: string; note?: string }) {
   return (
@@ -310,10 +316,13 @@ function ColumnHead({ label, note }: { label: string; note?: string }) {
   );
 }
 
-/** One family or group: its names, with a hairline between, a line under a product's name. */
+/**
+ * One family or group: its names, with a hairline between, a line under a
+ * product's name. The pattern gallery (a `gallery` item) is not a product
+ * and is not listed here: it is a row in the foot, with the other places.
+ */
 function Column({ label, note, items, index, onPoint }: { label: string; note?: string; items: MenuItem[]; index: number; onPoint: (i: number) => void }) {
   const names = items.filter((it) => !it.gallery);
-  const cards = items.filter((it) => it.gallery);
   return (
     <motion.div
       className="mm-col"
@@ -339,7 +348,6 @@ function Column({ label, note, items, index, onPoint }: { label: string; note?: 
           </li>
         ))}
       </ul>
-      {cards.map((it) => <GalleryCard key={it.href} item={it} />)}
     </motion.div>
   );
 }
@@ -425,6 +433,28 @@ function ResourcesRow() {
   );
 }
 
+/**
+ * The pattern gallery, beside Resources (26 Oct 2026; Vern, on the card
+ * under StreetPrint: "it looks out of place as it is"). The foot is the row
+ * of places that are not products, and a gallery of stamping templates is
+ * one of them; its mark is the herringbone drawing the phone's card uses.
+ */
+function GalleryRow() {
+  const link = PRODUCT_CATEGORIES.find((cat) => cat.secondary)?.secondary;
+  if (!link) return null;
+  return (
+    <FootRow
+      href={link.href}
+      mark={
+        // eslint-disable-next-line @next/next/no-img-element -- a 2 KB baked drawing, lib/chrome-images.mjs
+        <img src={GALLERY_THUMB} alt="" width={36} height={36} loading="lazy" decoding="async" className="mm-mark mm-mark-pattern pattern-sheet" />
+      }
+      label={link.label}
+      line={link.menuLine ?? ""}
+    />
+  );
+}
+
 function IdeaBookRow() {
   if (!ideaBookCover) return null;
   return (
@@ -484,10 +514,10 @@ export function ProductsPanel() {
         <div className="mm-main">
           <PanelHead title="Products" line="Thermoplastics, coatings, stamped asphalt, repair" href="/products" all="All products" />
           {/* Three columns, not four: the two short families (Stamped
-              Asphalt, one system and the pattern gallery; Asphalt & Concrete
-              Repair, three) share the third, so each column is wide enough
-              for a product's line on one line ("Preformed thermoplastic to
-              your design" wrapped in every column of four). */}
+              Asphalt, one system; Asphalt & Concrete Repair, three) share
+              the third, so each column is wide enough for a product's line
+              on one line ("Preformed thermoplastic to your design" wrapped
+              in every column of four). */}
           <div className="mm-cols mm-cols-3">
             {[[0], [1], [2, 3]].map((group) => (
               <div key={group.join("-")} className="mm-stack">
@@ -503,6 +533,7 @@ export function ProductsPanel() {
       </div>
       <Foot>
         <ResourcesRow />
+        <GalleryRow />
         {/* The topic is the whole range: which family a visitor last hovered
             says little about what they want. */}
         <LunchLearnRow topic="HUB systems" />
@@ -522,9 +553,19 @@ export function ApplicationsPanel() {
       <div className="mm-body">
         <div className="mm-main">
           <PanelHead title="Applications" line="Streets, parks, commercial and residential" href="/applications" all="All applications" />
-          <div className="mm-cols">
+          {/* Four columns of 201px, in which "Commercial & Sustainability"
+              and "Parks & Public Spaces" take two lines at the heading size:
+              the heads share one grid row (.mm-cols-aligned), so the four
+              lists still start on one line. No note under a group's name:
+              its places say the same words ("Crossings, lanes and calming"
+              over Crosswalks, Bike Lanes and Traffic Calming), the phone
+              menu's groups carry none, and with them the panel ran to 597px,
+              past a 1366x768 laptop's 585. The note stays in the photo's
+              caption. Stacking Residential under Commercial in three
+              columns, as Products does, made the panel 689px. */}
+          <div className="mm-cols mm-cols-aligned">
             {APPLICATION_GROUPS.map((g, i) => (
-              <Column key={g.label} label={g.label} note={g.note} items={applicationGroup(g)} index={i} onPoint={onPoint} />
+              <Column key={g.label} label={g.label} items={applicationGroup(g)} index={i} onPoint={onPoint} />
             ))}
           </div>
         </div>
@@ -537,7 +578,7 @@ export function ApplicationsPanel() {
   );
 }
 
-/** One of the three sections of the blog, with its picture, at the left of Projects. */
+/** One of the two sections of the blog, with its picture, at the left of Projects. */
 function SectionRow({ section: s, index }: { section: NavSection; index: number }) {
   return (
     <motion.li
@@ -599,7 +640,7 @@ export function ProjectsPanel() {
     <div className="mm">
       <div className="mm-body mm-body-projects">
         <div className="mm-main">
-          <PanelHead title={BLOG_NAME} line="Installations, guides and articles" href="/blog" all={`All ${BLOG_NAME.toLowerCase()}`} />
+          <PanelHead title={BLOG_NAME} line="Installations and guides" href="/blog" all={`All ${BLOG_NAME.toLowerCase()}`} />
           <ul className="mm-sections">
             {NAV_SECTIONS.map((s, i) => <SectionRow key={s.key} section={s} index={i} />)}
           </ul>

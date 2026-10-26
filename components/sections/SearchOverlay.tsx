@@ -69,7 +69,7 @@ const QUICK: { label: string; href: string; hint: string }[] = [
   { label: "All applications", href: "/applications", hint: "Uses" },
   { label: "Photo archive", href: "/gallery", hint: "Installations" },
   { label: "Specification library", href: "/resources", hint: "Spec sheets" },
-  { label: BLOG_NAME, href: "/blog", hint: "Projects, guides and articles" },
+  { label: BLOG_NAME, href: "/blog", hint: "Projects and guides" },
   { label: "Lunch & Learn", href: "/lunch-learn", hint: "Book a session" },
 ];
 

@@ -1,21 +1,19 @@
-import type { Metadata } from "next";
-import TypeHub from "@/components/blog/TypeHub";
-import { SECTION_BY_KEY } from "@/lib/field-notes-taxonomy";
-import { buildMetadata } from "@/lib/seo";
+import { permanentRedirect } from "next/navigation";
 
-// Static route: takes precedence over /blog/[slug], which only ever generates
-// real post slugs (see its generateStaticParams). Lists the stored "Blog"
-// type; /blog/posts, its address until 28 Sep 2026, redirects here
-// (next.config.ts).
-const SECTION = SECTION_BY_KEY.articles;
+// Rendered on request, never at build: nothing should reach this page while
+// the next.config.ts rule stands, and a prerendered redirect would count as a
+// built page that answers 308 in scripts/verify-site.mjs (check 2).
+export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Articles · Notes from the road",
-  description:
-    "Shorter reads on where decorative pavement is heading in Canada: material context, industry shifts and the thinking behind HUB's systems.",
-  slug: "blog/articles",
-});
-
+/**
+ * /blog/articles was the Articles section from 28 Sep 2026, when the five
+ * Insights types became three sections, to 26 Oct 2026, when the three
+ * became two (lib/field-notes-taxonomy.ts): the eight "Blog" posts it listed
+ * are with the Guides now. next.config.ts answers this address with a 308 at
+ * the edge; this page is the fallback if that rule is ever removed, as
+ * app/blog/posts/page.tsx is for the address before it. Keep the
+ * destinations the same.
+ */
 export default function Page() {
-  return <TypeHub section={SECTION} />;
+  permanentRedirect("/blog/guides");
 }

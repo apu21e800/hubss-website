@@ -224,16 +224,19 @@ const nextConfig: NextConfig = {
       // { source: "/applications/public-art", destination: "/applications/community-branding", permanent: true },
       // Public Spaces now has its own page in applications.ts — redirect removed
       { source: "/decorative-streetscape-solutions", destination: "/applications/crosswalks", permanent: true },
-      // ── Insights sections (28 Sep 2026) ───────────────────────────────────
+      // ── Insights sections (28 Sep 2026; two sections since 26 Oct 2026) ──
       // The five type hubs became three sections (lib/field-notes-taxonomy.ts):
       // case studies and project profiles are Projects, white papers are with
       // the Guides, and the "Blog" type's hub moved from /blog/posts to
-      // /blog/articles. Each old page (app/blog/<old>/page.tsx) redirects too,
-      // as a fallback; keep the destinations the same.
+      // /blog/articles. On 26 Oct 2026 the Articles section folded into the
+      // Guides, so /blog/articles redirects too. Each old page
+      // (app/blog/<old>/page.tsx) redirects as a fallback; keep the
+      // destinations the same.
       { source: "/blog/case-studies", destination: "/blog/projects", permanent: true },
       { source: "/blog/project-profiles", destination: "/blog/projects", permanent: true },
       { source: "/blog/white-papers", destination: "/blog/guides", permanent: true },
-      { source: "/blog/posts", destination: "/blog/articles", permanent: true },
+      { source: "/blog/posts", destination: "/blog/guides", permanent: true },
+      { source: "/blog/articles", destination: "/blog/guides", permanent: true },
       // Archived posts: still published in Studio, kept off the site, each
       // sent to the post that replaced it (ARCHIVED_POSTS, same file).
       ...Object.entries(ARCHIVED_POSTS).map(([from, to]) => ({ source: `/blog/${from}`, destination: `/blog/${to}`, permanent: true })),

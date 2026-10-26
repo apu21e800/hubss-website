@@ -14,7 +14,7 @@ import { buildMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: `${BLOG_NAME} · Decorative pavement jobs across Canada`,
   description:
-    "Decorative pavement projects across Canada, written up with the system on each, plus specification guides and articles on crosswalks, transit lanes and stamped asphalt.",
+    "Decorative pavement projects across Canada, written up with the system on each, plus specification guides on crosswalks, transit lanes and stamped asphalt.",
   slug: "blog",
 });
 
@@ -52,7 +52,7 @@ export default async function BlogPage() {
     "@id": "https://hubss.com/blog#blog",
     name: `HUB Surface Systems ${BLOG_NAME}`,
     description:
-      "Projects, specification guides and articles on decorative pavement, thermoplastic markings and coloured coatings in Canada.",
+      "Projects and specification guides on decorative pavement, thermoplastic markings and coloured coatings in Canada.",
     url: "https://hubss.com/blog",
     inLanguage: "en-CA",
     publisher: { "@id": "https://hubss.com/#organization" },
@@ -103,7 +103,7 @@ export default async function BlogPage() {
           </h1>
           <p className="text-base leading-relaxed lg:col-span-4 lg:pb-1.5" style={{ color: "var(--text-secondary)", maxWidth: "44ch" }}>
             Jobs across Canada: the town, the system, and how it has held up. Guides
-            and articles for whoever writes the next spec.
+            for whoever writes the next spec.
           </p>
         </header>
 

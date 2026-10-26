@@ -1840,8 +1840,9 @@ html {
     grid-template-columns: minmax(0, 1fr) 280px;
     /* One height for the three panels (the tallest, Products, sets it), so
        moving along the bar swaps the contents in place and the panel's
-       edge never jumps (it moved 124px between panels before). */
-    min-height: 432px;
+       edge never jumps (it moved 124px between panels before). 444 since
+       26 Oct 2026: the family names grew to 20px. */
+    min-height: 444px;
   }
 }
 .mm-head {
@@ -1880,36 +1881,54 @@ html {
 .mm-cols-3 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
+/* Four columns whose heads share one row: a name that wraps (Commercial &
+   Sustainability, at 20px in 201px) or a two-line note pushes every list
+   down together, so the four lists start on one line. */
+.mm-cols-aligned {
+  grid-template-rows: auto auto;
+}
+.mm-cols-aligned > .mm-col {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 2;
+  align-content: start;
+}
 .mm-stack {
   display: flex;
   flex-direction: column;
   gap: 18px;
 }
 .mm-col-head {
-  padding-bottom: 6px;
+  padding-bottom: 10px;
   margin-bottom: 2px;
 }
 .mm-rule {
   display: block;
-  width: 20px;
-  height: 2px;
+  width: 24px;
+  height: 3px;
   margin-bottom: 10px;
-  border-radius: 1px;
+  border-radius: 1.5px;
   background: #f97316;
 }
+/* The family's name: the panel's second size (34, 20, 16, 13), in the
+   display face the panel title and the product names share, so it reads as
+   the heading of its list and not as a note on it (26 Oct 2026). */
 .mm-col-label {
-  font-family: var(--font-inter), "Inter", system-ui, sans-serif;
-  font-size: 13.5px;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  line-height: 1.35;
+  font-family: var(--font-display), var(--font-inter), "Inter", system-ui, sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
   color: var(--text-primary);
+  /* "Parks & Public Spaces" wraps in a 201px column: as "Parks & / Public
+     Spaces", not "Parks & Public / Spaces". */
+  text-wrap: balance;
 }
 .mm-note {
-  margin-top: 3px;
-  font-size: 13px;
+  margin-top: 5px;
+  font-size: 13.5px;
   line-height: 1.4;
-  color: var(--ink-50);
+  color: var(--ink-55);
   text-wrap: pretty;
 }
 .mm-list {
@@ -2075,6 +2094,21 @@ html {
   background: var(--ink-05);
   border: 1px solid var(--ink-10);
   color: var(--accent-text);
+}
+/* The pattern gallery's mark: the herringbone drawing, a sheet inverted for
+   the dark panel (.pattern-sheet), with no ground of its own. */
+.mm-mark-pattern {
+  display: block;
+  object-fit: cover;
+  background: none;
+  border-color: var(--ink-16);
+}
+/* Below 1280 the Products foot holds three rows in 960px, which their lines
+   do not fit (1,125px with them): the rows keep their mark, name and action. */
+@media (max-width: 1279px) {
+  .mm-foot-line {
+    display: none;
+  }
 }
 .mm-book {
   flex: none;

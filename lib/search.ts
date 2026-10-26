@@ -212,13 +212,13 @@ const PAGES: Omit<SearchEntry, "boost">[] = [
   { id: "p-idea-book", type: "Page", title: ideaBook.title, subtitle: "Every system and application, read in your browser", href: ideaBook.href, keywords: "product portfolio book product book idea book catalogue brochure lookbook volume 5 book read flipbook flip book printed copy", body: "" },
   { id: "p-apps", type: "Page", title: "All applications", subtitle: "Where HUB systems are specified", href: "/applications", keywords: "applications uses where sectors", body: "" },
   { id: "p-gallery", type: "Page", title: "Photo archive", subtitle: "Documented installations across Canada", href: "/gallery", keywords: "gallery photos images archive installations portfolio work", body: "" },
-  // Insights and its three sections (28 Sep 2026: five types became Projects,
-  // Guides and Articles, lib/field-notes-taxonomy.ts). The old type names stay
-  // in the keywords, so "case study" or "white paper" still lands somewhere.
-  { id: "p-blog", type: "Page", title: BLOG_NAME, subtitle: "Projects, guides and articles on Canadian pavement", href: "/blog", keywords: "blog articles posts library research writing notes field notes insights projects", body: "" },
+  // Insights and its two sections (28 Sep 2026: five types became Projects,
+  // Guides and Articles; 26 Oct 2026: the articles joined the guides,
+  // lib/field-notes-taxonomy.ts). The old names stay in the keywords, so
+  // "case study", "white paper" or "articles" still lands somewhere.
+  { id: "p-blog", type: "Page", title: BLOG_NAME, subtitle: "Projects and guides on Canadian pavement", href: "/blog", keywords: "blog articles posts library research writing notes field notes insights projects", body: "" },
   { id: "p-projects", type: "Page", title: "Projects", subtitle: SECTION_BY_KEY.projects.blurb, href: `/blog/${SECTION_BY_KEY.projects.slug}`, keywords: "projects case studies case study project profiles installations portfolio outcomes evidence", body: "" },
-  { id: "p-guides", type: "Page", title: "Guides", subtitle: SECTION_BY_KEY.guides.blurb, href: `/blog/${SECTION_BY_KEY.guides.slug}`, keywords: "guides how to specify comparison decision white papers white paper technical research engineering", body: "" },
-  { id: "p-articles", type: "Page", title: "Articles", subtitle: SECTION_BY_KEY.articles.blurb, href: `/blog/${SECTION_BY_KEY.articles.slug}`, keywords: "articles industry notes news blog", body: "" },
+  { id: "p-guides", type: "Page", title: "Guides", subtitle: SECTION_BY_KEY.guides.blurb, href: `/blog/${SECTION_BY_KEY.guides.slug}`, keywords: "guides how to specify comparison decision white papers white paper technical research engineering articles industry notes news blog", body: "" },
   { id: "p-resources", type: "Page", title: "Specification library", subtitle: "Spec sheets, data sheets, colour cards and submittals", href: "/resources", keywords: "resources downloads documents spec sheets pdf submittal data sheet", body: "" },
   { id: "p-ll", type: "Page", title: "Lunch & Learn", subtitle: "Free spec session for engineers, planners and architects", href: "/lunch-learn", keywords: "lunch learn session training presentation cpd book booking teach", body: "" },
   { id: "p-patterns", type: "Page", title: "Pattern library", subtitle: "Stamped asphalt patterns and border templates", href: "/patterns", keywords: "patterns templates stamps brick cobblestone herringbone", body: "" },

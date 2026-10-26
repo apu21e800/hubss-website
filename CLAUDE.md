@@ -172,7 +172,7 @@ Vercel — connected to GitHub, auto-deploys on push to main
   Field Notes before that. One source for the name: `BLOG_NAME` in
   lib/field-notes-taxonomy.ts (the bar, the drawer, the footer, search, the
   /blog masthead, breadcrumbs and llms.txt read it). Labels only: /blog URLs,
-  the section slugs (/blog/projects, /blog/guides, /blog/articles), the
+  the section slugs (/blog/projects, /blog/guides), the
   Sanity types (blogPost, storyIdea), the cron routes and env names are
   unchanged, and so are the code names (InsightsMegaMenu, nav-insights.json,
   the `insights` panel). The blog and its first section are both called
@@ -975,7 +975,15 @@ don't replace it.
   wears the current section's 2px rule; leaving a trigger cancels its pending
   open, leaving the bar closes after 120ms. Nav.tsx keeps the bar, the open
   state and the phone menu, and imports the panels and the shared parts
-  (MooseAvatar, GalleryCard, the groups) from MegaMenus.tsx.
+  (MooseAvatar, GalleryCard, the groups) from MegaMenus.tsx. 26 Oct 2026
+  (Vern: "the headings for each mega menu topic could stand out more as
+  headings"; the pattern gallery card "looks out of place"): a family's or
+  group's name is 20px Geist under a 24x3 rule; Applications' four columns
+  share one head row (`.mm-cols-aligned`, subgrid) so two wrapped names
+  leave the lists level, and carry no note (the photo's caption has it); the
+  pattern gallery is a foot row beside Resources, not a card under
+  StreetPrint; below 1280 the foot rows drop their lines, since three with
+  lines do not fit 960px. All three panels are 571px at 1280 and up.
 - The Products and Applications panels keep their photographs: at the 2 Oct
   merge session A's Nav.tsx (photo menus, active state, prefetch, ARIA) was
   kept whole and session B's typographic panels were not taken.
@@ -1013,15 +1021,19 @@ don't replace it.
 - Hero photos: products from productImages, applications from applicationImages
   (lib/featured-images.ts; imageUrl is only the last fallback), framed by
   HERO_POSITION in lib/hero-framing.ts, keyed by the photo's /public path.
-- Insights has three sections: Projects (/blog/projects), Guides (/blog/guides),
-  Articles (/blog/articles). Stored Sanity types are unchanged; the old hub
-  URLs and /projects/<slug> redirect (lib/field-notes-taxonomy.ts).
+- The blog has two sections (26 Oct 2026; Vern: "Projects, guides, articles
+  is a bit confusing ... makes me dizzy"): Projects (/blog/projects: case
+  studies and project profiles) and Guides (/blog/guides: guides, white
+  papers and the "Blog" posts, which the Articles section listed alone from
+  28 Sep to 26 Oct 2026). A card or a post says Project or Guide. Stored
+  Sanity types are unchanged; the old hub URLs, /blog/articles and
+  /projects/<slug> redirect (lib/field-notes-taxonomy.ts, next.config.ts).
 - The Insights mega menu reads lib/nav-insights.json, written at build from
   Sanity by scripts/gen-nav-insights.ts. Since 2 Oct 2026 (Vern: "insights
   mega menu dropdown still feels busy, too much text maybe") the panel is
-  pictures first: the cover story (photo, section label, title), three section
-  tiles (Projects, Guides, Articles, each wearing the photo of its newest tall
-  enough post, `sections[].photo` in the JSON), "All Insights" and the foot row
+  pictures first: the cover story (photo, section label, title), the section
+  rows (Projects and Guides, each wearing the photo of its newest tall
+  enough post, `sections[].photo` in the JSON), "All projects" and the foot row
   (Product Book, Lunch & Learn). No excerpts, dates, counts or "Latest" list. The
   file still carries `latest` and the excerpts for other readers.
 

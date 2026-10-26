@@ -14,7 +14,7 @@
  * minute, lib/blog.ts), and Sanity CDN addresses at the sizes the menu shows
  * them.
  *
- * SECTIONS (28 Sep 2026): Projects, Guides and Articles, each with the line
+ * SECTIONS (28 Sep 2026; two since 26 Oct 2026): Projects and Guides, each with the line
  * the site already prints for it (INSIGHTS_SECTIONS in
  * lib/field-notes-taxonomy.ts, `blurb`) and the number of posts its page
  * lists: every live post, grouped by the section its type belongs to, as

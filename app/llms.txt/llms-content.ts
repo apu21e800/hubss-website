@@ -105,7 +105,7 @@ function tail(d: Data): string[] {
   return [
     "## Projects",
     "",
-    `- [Projects](${url("/blog")}): Projects, guides and articles on Canadian decorative pavement.`,
+    `- [Projects](${url("/blog")}): Projects and guides on Canadian decorative pavement.`,
     ...INSIGHTS_SECTIONS.map((s) => `- [${s.plural}](${url(`/blog/${s.slug}`)}): ${line(s.blurb)}`),
     "",
     "## Resources",

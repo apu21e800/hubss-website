@@ -410,7 +410,7 @@ const EASE_IN_OUT = [0.65, 0, 0.35, 1] as const;  // --ease-in-out
 const ROOT_SECTIONS: { level: MenuSection; label: string; line: string; href: string; all: string }[] = [
   { level: "products", label: "Products", line: "Thermoplastics, coatings, stamped asphalt, repair", href: "/products", all: "All products" },
   { level: "applications", label: "Applications", line: "Streets, parks, commercial and residential", href: "/applications", all: "All applications" },
-  { level: "insights", label: BLOG_NAME, line: "Installations, guides and articles", href: "/blog", all: `All ${BLOG_NAME.toLowerCase()}` },
+  { level: "insights", label: BLOG_NAME, line: "Installations and guides", href: "/blog", all: `All ${BLOG_NAME.toLowerCase()}` },
 ];
 
 // The sheet under the header wipes down out of the bar, and back up into it.

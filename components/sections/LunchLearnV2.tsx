@@ -61,7 +61,9 @@ const BENEFITS = [
 // phones, "10 provinces" invited a question on a site whose map documents
 // projects in three, and "$0" and "FOCUSED" read as gimmicks). The one fact
 // they added, "45 minutes", is the first tick; "27 years" stays on the
-// homepage and About, where it is sourced from the book.
+// homepage and About, where it is sourced from the book. The session is 60
+// minutes since 26 Oct 2026 (Doug: "60 mins, across the board"; the printed
+// book: "Got an hour?").
 
 const CITY_WALL = ["City of Toronto", "York Region", "City of Vancouver", "UBC", "TransLink", "City of Ottawa", "Halifax RM", "City of Calgary"];
 
@@ -371,7 +373,7 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
                   </span>
                 </Title>
                 <p className="text-[15px] leading-relaxed mb-8 max-w-xl" style={{ color: "var(--ink-70)" }}>
-                  Forty-five minutes with your engineering, landscape architecture or planning
+                  Sixty minutes with your engineering, landscape architecture or planning
                   team. Canadian case studies, spec language you can use, and samples you can hold.
                 </p>
 
@@ -428,7 +430,7 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
                         </svg>
                       </Link>
                       <p className="text-[13px] mt-4" style={{ color: "var(--ink-45)" }}>
-                        45 minutes · in-person or virtual · lunch on us
+                        60 minutes · in-person or virtual · lunch on us
                       </p>
                     </div>
                   ) : f.submitState.status === "success" ? (
@@ -493,7 +495,7 @@ function Boardroom({ hideForm = false, titleAs: Title = "h2" }: { hideForm?: boo
 // Variant B — "Ticket": session ticket + booking panel with a format picker
 // ══════════════════════════════════════════════════════════════════
 const TICKET_META = [
-  { k: "Duration", v: "45 minutes + Q&A" },
+  { k: "Duration", v: "60 minutes + Q&A" },
   { k: "Cost", v: "$0 · hosted by HUB" },
   { k: "Format", v: "In-person or virtual" },
   { k: "Materials", v: "Samples + spec sheets" },
@@ -651,7 +653,7 @@ function Proof() {
               </span>
             </h2>
             <p className="text-[15px] leading-relaxed mb-7 max-w-lg" style={{ color: "var(--ink-70)" }}>
-              45 minutes with the HUB technical team: spec language for your next RFP and samples
+              60 minutes with the HUB technical team: spec language for your next RFP and samples
               on the table. In your office or virtual, lunch on us.
             </p>
 
@@ -780,8 +782,8 @@ function Band({ topic, from }: { topic?: string; from?: string }) {
             </p>
             <h2 id="ll-band-heading" className="text-lg sm:text-xl font-bold leading-snug" style={{ color: "var(--text-primary)" }}>
               {topic
-                ? `Book a Lunch & Learn on ${topic} for your team. Forty-five minutes, samples and spec language, lunch included.`
-                : "Book a Lunch & Learn for your team. Forty-five minutes, samples and spec language, lunch included."}
+                ? `Book a Lunch & Learn on ${topic} for your team. Sixty minutes, samples and spec language, lunch included.`
+                : "Book a Lunch & Learn for your team. Sixty minutes, samples and spec language, lunch included."}
             </h2>
           </div>
           <Link href={lunchLearnHref(topic, from)} className="btn-accent flex-shrink-0">

@@ -145,11 +145,16 @@ export const SUPERSEDED: Superseded[] = [
   },
 
   // ── Lunch & Learn questions (lib/lunch-learn-content.ts) ───────────────
+  // The session is 60 minutes (Doug, 26 Oct 2026, on the e-blasts: "60 mins,
+  // across the board"; the printed book: "Got an hour?"). Studio holds the
+  // 17 Oct answer, which said forty-five (the 17 Oct review's own "from",
+  // "30–45 minutes of presentation, followed by open Q&A ...", is no longer
+  // in Studio).
   {
     doc: "page-lunch-learn",
     path: "lunchLearnFaqs[0].a",
-    from: "30–45 minutes of presentation, followed by open Q&A. We're respectful of your team's calendar and stick to the time we agree on.",
-    to: "Forty-five minutes, then questions for as long as you want. We stick to the time we agree on.",
+    from: "Forty-five minutes, then questions for as long as you want. We stick to the time we agree on.",
+    to: "Sixty minutes, then questions for as long as you want. We stick to the time we agree on.",
   },
   {
     doc: "page-lunch-learn",

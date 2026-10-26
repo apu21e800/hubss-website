@@ -13,8 +13,9 @@
  * page reads. The persona cards, the "What you walk away with" items and
  * the topic tiles' data are not here: the first two are not rendered, the
  * tiles are code (components/sections/LunchLearnTopics.tsx). The copy is
- * A's (30 Sep 2026); the facts are the site's own: a 45-minute session, in
- * person or virtual, lunch on HUB. No CE credit claims, ever: HUB does not
+ * A's (30 Sep 2026); the facts are the site's own: a 60-minute session (Doug,
+ * 26 Oct 2026: "60 mins, across the board"; the printed book: "Got an
+ * hour?"; it was 45 until then), in person or virtual, lunch on HUB. No CE credit claims, ever: HUB does not
  * offer them (the launch-era Sanity copy claimed they did).
  *
  * Pure data: safe in server and client components, and importable by the
@@ -26,7 +27,7 @@ export interface LunchLearnFaq { q: string; a: string }
 export const LUNCH_LEARN_FAQS: LunchLearnFaq[] = [
   {
     q: "How long is the session?",
-    a: "Forty-five minutes, then questions for as long as you want. We stick to the time we agree on.",
+    a: "Sixty minutes, then questions for as long as you want. We stick to the time we agree on.",
   },
   {
     q: "What does it cost?",

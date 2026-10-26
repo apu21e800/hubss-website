@@ -517,13 +517,17 @@ export function ProductsPanel() {
               Asphalt, one system; Asphalt & Concrete Repair, three) share
               the third, so each column is wide enough for a product's line
               on one line ("Preformed thermoplastic to your design" wrapped
-              in every column of four). */}
+              in every column of four). No note under a family's name
+              (26 Oct 2026, Vern: "headings seem to run in with the product
+              text"): a grey line under the heading and a grey line under
+              every name made one grey texture. The photo's caption keeps
+              the family's note. */}
           <div className="mm-cols mm-cols-3">
             {[[0], [1], [2, 3]].map((group) => (
               <div key={group.join("-")} className="mm-stack">
                 {group.map((i) => {
                   const cat = PRODUCT_CATEGORIES[i];
-                  return cat ? <Column key={cat.label} label={cat.label} note={cat.menuNote} items={productFamily(cat)} index={i} onPoint={onPoint} /> : null;
+                  return cat ? <Column key={cat.label} label={cat.label} items={productFamily(cat)} index={i} onPoint={onPoint} /> : null;
                 })}
               </div>
             ))}

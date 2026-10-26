@@ -1827,7 +1827,7 @@ html {
    text, not boxes. The panel is dark in every theme (the bar pins its tokens
    dark), so the hairlines and inks below are the dark set. */
 .mm {
-  padding: 24px 0 0;
+  padding: 22px 0 0;
 }
 .mm-body {
   display: grid;
@@ -1842,15 +1842,23 @@ html {
        moving along the bar swaps the contents in place and the panel's
        edge never jumps (it moved 124px between panels before). 444 since
        26 Oct 2026: the family names grew to 20px. */
-    min-height: 444px;
+    min-height: 420px;
   }
 }
 .mm-head {
-  margin-bottom: 18px;
+  margin-bottom: 22px;
 }
+/* The panel's type, 26 Oct 2026 (Vern, on the 20px names and 16px bold
+   product names of the day before: "too much to scan, headings seem to
+   run in with the product text ... possibly the text is too big"). Four
+   sizes with a job each: the section's name at 30px in the display face;
+   a family's name at 17px in the display face; the product names in Inter
+   at 15px semibold, a weight and a face below the headings, so a heading
+   is the only bold display type in its column; the lines at 12.5px in a
+   quiet ink. Hairlines between names, air between columns. */
 .mm-title {
   font-family: var(--font-display), var(--font-inter), "Inter", system-ui, sans-serif;
-  font-size: 34px;
+  font-size: 30px;
   font-weight: 800;
   letter-spacing: -0.025em;
   line-height: 1.05;
@@ -1861,22 +1869,22 @@ html {
   flex-wrap: wrap;
   align-items: center;
   gap: 2px 18px;
-  margin-top: 8px;
+  margin-top: 6px;
 }
 .mm-line {
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.45;
-  color: var(--ink-60);
+  color: var(--ink-55);
 }
 .mm-all {
   min-height: 28px;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
 }
 .mm-cols {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  column-gap: 28px;
+  column-gap: 36px;
 }
 .mm-cols-3 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1899,36 +1907,34 @@ html {
   gap: 18px;
 }
 .mm-col-head {
-  padding-bottom: 10px;
-  margin-bottom: 2px;
+  padding-bottom: 12px;
 }
 .mm-rule {
   display: block;
-  width: 24px;
-  height: 3px;
-  margin-bottom: 10px;
-  border-radius: 1.5px;
+  width: 22px;
+  height: 2px;
+  margin-bottom: 9px;
+  border-radius: 1px;
   background: #f97316;
 }
-/* The family's name: the panel's second size (34, 20, 16, 13), in the
-   display face the panel title and the product names share, so it reads as
-   the heading of its list and not as a note on it (26 Oct 2026). */
+/* The family's or group's name: the only bold display type in its column
+   (the names under it are Inter), so it reads as the heading of its list. */
 .mm-col-label {
   font-family: var(--font-display), var(--font-inter), "Inter", system-ui, sans-serif;
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
   color: var(--text-primary);
   /* "Parks & Public Spaces" wraps in a 201px column: as "Parks & / Public
      Spaces", not "Parks & Public / Spaces". */
   text-wrap: balance;
 }
 .mm-note {
-  margin-top: 5px;
-  font-size: 13.5px;
+  margin-top: 4px;
+  font-size: 13px;
   line-height: 1.4;
-  color: var(--ink-55);
+  color: var(--ink-50);
   text-wrap: pretty;
 }
 .mm-list {
@@ -1947,7 +1953,7 @@ html {
   justify-content: space-between;
   gap: 10px;
   min-height: 44px;
-  padding: 4px 0;
+  padding: 5px 0;
   color: var(--text-primary);
 }
 .mm-section {
@@ -1957,11 +1963,12 @@ html {
 }
 .mm-name {
   display: block;
-  font-family: var(--font-display), var(--font-inter), "Inter", system-ui, sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  line-height: 1.25;
+  font-family: var(--font-inter), "Inter", system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  line-height: 1.3;
+  color: var(--ink-90);
   transition: color var(--dur-1) var(--ease-out);
 }
 .mm-item:hover .mm-name,
@@ -1972,10 +1979,10 @@ html {
 }
 .mm-item-line {
   display: block;
-  margin-top: 2px;
+  margin-top: 1px;
   font-size: 12.5px;
   line-height: 1.3;
-  color: var(--ink-58);
+  color: var(--ink-50);
   text-wrap: pretty;
 }
 .mm-chev {
@@ -2049,7 +2056,7 @@ html {
 .mm-foot-label {
   display: block;
   font-family: var(--font-display), var(--font-inter), "Inter", system-ui, sans-serif;
-  font-size: 15px;
+  font-size: 14.5px;
   font-weight: 700;
   line-height: 1.2;
   white-space: nowrap;
@@ -2062,9 +2069,9 @@ html {
 .mm-foot-line {
   display: block;
   margin-top: 2px;
-  font-size: 13px;
+  font-size: 12.5px;
   line-height: 1.35;
-  color: var(--ink-60);
+  color: var(--ink-55);
   white-space: nowrap;
 }
 .mm-foot-action {
@@ -2072,7 +2079,7 @@ html {
   align-items: center;
   gap: 6px;
   margin-left: 12px;
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 700;
   color: var(--accent-text);
   white-space: nowrap;
@@ -2178,13 +2185,13 @@ html {
 }
 .mm-kicker {
   display: block;
-  margin-top: 16px;
-  font-size: 12px;
+  margin-top: 14px;
+  font-size: 11.5px;
 }
 .mm-cover-title {
   display: block;
   margin-top: 8px;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 700;
   line-height: 1.15;
   letter-spacing: -0.025em;
@@ -2214,7 +2221,7 @@ html {
   -webkit-box-orient: vertical;
   overflow: hidden;
   margin-top: 5px;
-  font-size: 16px;
+  font-size: 15.5px;
   font-weight: 700;
   line-height: 1.25;
   letter-spacing: -0.02em;

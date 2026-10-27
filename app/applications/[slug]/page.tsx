@@ -24,6 +24,7 @@ import { editAttr, isPreview } from "@/lib/sanity.preview";
 import { getSiteSettings } from "@/lib/sanity.queries";
 import { telHref } from "@/lib/site-settings";
 import { lunchLearnHref } from "@/lib/lunch-learn";
+import PricingStrip from "@/components/sections/PricingStrip";
 import type { SanityBlock } from "@/types/sanity";
 
 // Sanity is the CMS for this page's copy, so the page has to be allowed to go
@@ -263,6 +264,13 @@ export default async function ApplicationPage({ params }: Props) {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 pb-16 sm:pb-20">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16">
             <div className="lg:col-span-2 min-w-0">
+              {/* Phones and tablets only: the sidebar's way to a price, on the
+                  first screen (components/sections/PricingStrip.tsx). */}
+              <PricingStrip
+                heading="Pricing and installers"
+                offices={offices}
+                contactHref={`/contact?project=${encodeURIComponent(application.name)}&from=application`}
+              />
               {/* The catalogue's spread first, where the printed book has one:
                   headline, pull line, and the SPECIFY list naming which systems
                   go in this work and why, each a link to its product. */}
@@ -324,6 +332,34 @@ export default async function ApplicationPage({ params }: Props) {
                   (QA C25, 30 Sep 2026). The pricing card is now the same
                   card everywhere; the systems get their own. */}
               <div className="lg:sticky lg:top-24 space-y-4">
+              {/* The way to a price first, then the systems (27 Oct 2026): on the
+                  four pages without a spread the systems card came first and
+                  pushed the phones under a laptop's first screen (regulatory
+                  markings at 1440x900), and the product sidebars lead with
+                  the people and the ask (Vern, 17 Oct 2026). */}
+              <div className="rounded-xl p-6 sm:p-7 relative overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)", boxShadow: "0 1px 2px rgba(0,0,0,0.04)" }}>
+                <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
+                <h2 className="font-bold text-base mb-1.5" style={{ color: "var(--text-primary)" }}>
+                  Pricing and installers
+                </h2>
+                <p className="text-[15px] leading-relaxed mb-4 max-w-prose" style={{ color: "var(--text-secondary)" }}>
+                  Your regional office prices the project, matches the system to the site and puts you in touch with a certified installer.
+                </p>
+                <div className="grid grid-cols-2 gap-2 mb-3">
+                  <a href={telHref(offices.east.phone)} className="rounded-lg px-3 py-2 transition-colors hover:bg-[var(--ink-04)]" style={{ border: "1px solid var(--border-color)", minHeight: 44 }}>
+                    <span className="block text-[12px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>East</span>
+                    <span className="block text-[15px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{offices.east.phone}</span>
+                  </a>
+                  <a href={telHref(offices.west.phone)} className="rounded-lg px-3 py-2 transition-colors hover:bg-[var(--ink-04)]" style={{ border: "1px solid var(--border-color)", minHeight: 44 }}>
+                    <span className="block text-[12px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>West</span>
+                    <span className="block text-[15px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{offices.west.phone}</span>
+                  </a>
+                </div>
+                <Link href={`/contact?project=${encodeURIComponent(application.name)}&from=application`} className="link-arrow">
+                  Send us the project
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+                </Link>
+              </div>
               {!spread && relatedProductData.length > 0 && (
                 <div className="rounded-xl p-6 sm:p-7 relative overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)", boxShadow: "0 1px 2px rgba(0,0,0,0.04)" }}>
                   <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
@@ -351,29 +387,6 @@ export default async function ApplicationPage({ params }: Props) {
                   </ul>
                 </div>
               )}
-              <div className="rounded-xl p-6 sm:p-7 relative overflow-hidden" style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)", boxShadow: "0 1px 2px rgba(0,0,0,0.04)" }}>
-                <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: "linear-gradient(90deg, #F97316, #EAB308)" }} />
-                <h2 className="font-bold text-base mb-1.5" style={{ color: "var(--text-primary)" }}>
-                  Pricing and installers
-                </h2>
-                <p className="text-[15px] leading-relaxed mb-4 max-w-prose" style={{ color: "var(--text-secondary)" }}>
-                  Your regional office prices the project, matches the system to the site and puts you in touch with a certified installer.
-                </p>
-                <div className="grid grid-cols-2 gap-2 mb-3">
-                  <a href={telHref(offices.east.phone)} className="rounded-lg px-3 py-2 transition-colors hover:bg-[var(--ink-04)]" style={{ border: "1px solid var(--border-color)", minHeight: 44 }}>
-                    <span className="block text-[12px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>East</span>
-                    <span className="block text-[15px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{offices.east.phone}</span>
-                  </a>
-                  <a href={telHref(offices.west.phone)} className="rounded-lg px-3 py-2 transition-colors hover:bg-[var(--ink-04)]" style={{ border: "1px solid var(--border-color)", minHeight: 44 }}>
-                    <span className="block text-[12px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--text-muted)" }}>West</span>
-                    <span className="block text-[15px] font-semibold whitespace-nowrap" style={{ color: "var(--text-primary)" }}>{offices.west.phone}</span>
-                  </a>
-                </div>
-                <Link href={`/contact?project=${encodeURIComponent(application.name)}&from=application`} className="link-arrow">
-                  Send us the project
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
-                </Link>
-              </div>
               </div>
             </aside>
           </div>

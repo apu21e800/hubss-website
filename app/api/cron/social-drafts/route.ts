@@ -9,26 +9,30 @@
  * `[leads]` log line with the last two weeks' delivered, held and failed
  * messages by form, which the Monday report reads. A failure there is a log
  * line only (no email, the run's status untouched): the counts themselves
- * are safe in Sanity and tomorrow's line has them.
+ * are safe in Sanity and tomorrow's line has them. Then the review page's
+ * two links, emailed to the editors once per key (lib/review-link.ts).
  *
  * Then three steps, each on its own (a failure in one is emailed and the next
  * still runs; the response carries all three):
  *  1. publishDueDrafts (lib/project-posts.ts): every blog draft set to go
  *     live by itself whose time has come is published, and the site rebuilds.
  *  2. draftSocialForNewPosts (lib/social-pipeline.ts): Buffer posts for new
- *     articles, job photos and the library, queued for Buffer's next slots
- *     (drafts for approval with SOCIAL_AUTO_QUEUE=off, lib/buffer.ts). The copy gets the house
+ *     articles, job photos and the library: drafts for Doug's review while
+ *     he reviews first (REVIEW_FIRST, on by default since 27 Oct 2026,
+ *     lib/review-first.ts), else queued for Buffer's next slots (drafts with
+ *     SOCIAL_AUTO_QUEUE=off, lib/buffer.ts). The copy gets the house
  *     style pass (lib/style-lint.ts); what it can't fix is in the email and in
  *     Studio under Sent to Buffer.
  *  3. draftProjectArticles (lib/project-posts.ts): one job photos post with
- *     its story becomes a scheduled Projects article, with whatever time the
+ *     its story becomes a Projects article (held for Doug's review while he
+ *     reviews first, else scheduled), with whatever time the
  *     route has left (it needs about two and a half minutes; otherwise the
  *     next run does it).
  *
  * Needs, in Vercel (Production): CRON_SECRET, ANTHROPIC_API_KEY,
  * SANITY_API_WRITE_TOKEN, BUFFER_API_KEY; BLOG_DRAFT_NOTIFY and
- * RESEND_API_KEY for the emails; SOCIAL_AUTO_QUEUE=off to go back to
- * approving in Buffer. Until BUFFER_API_KEY is first set the social step does nothing.
+ * RESEND_API_KEY for the emails; REVIEW_FIRST=off once Doug leaves it to
+ * 21e8. Until BUFFER_API_KEY is first set the social step does nothing.
  * After that, a social run that fails (an expired key, a missing setting, the
  * key itself gone) emails the editors what to do (notifyRunFailure), every
  * day until it's fixed.
@@ -40,6 +44,7 @@ import { draftProjectArticles, publishDueDrafts } from "@/lib/project-posts";
 import { sanityWriteClient } from "@/lib/sanity.write";
 import { emailEditors } from "@/lib/editor-mail";
 import { logLeadSummary } from "@/lib/lead-counts";
+import { sendReviewLinkOnce } from "@/lib/review-link";
 
 export const maxDuration = 300;
 export const dynamic = "force-dynamic";
@@ -77,6 +82,15 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   } catch (err) {
     out.leads = { error: errorText(err) };
     console.error(`[leads] summary failed: ${errorText(err)}`);
+  }
+
+  // The review page's links go to the editors once per key
+  // (lib/review-link.ts). Never stops the run.
+  try {
+    out.reviewLink = await sendReviewLinkOnce(client.withConfig({ timeout: 10_000, maxRetries: 0 }), now);
+  } catch (err) {
+    out.reviewLink = { error: errorText(err) };
+    console.error(`[review] link email failed: ${errorText(err)}`);
   }
 
   // 1. The blog: scheduled drafts whose time has come.

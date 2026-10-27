@@ -57,6 +57,13 @@ jobs:
       - name: Social, planner, project-post and drafter tests
         run: npm run test:social && npm run test:planner && npm run test:project-posts && npm run test:drafter
 
+      # Doug reviews first: nothing queues in Buffer while REVIEW_FIRST is on,
+      # the two review links' keys are the server's alone, Doug's page shows
+      # only what 21e8 put there and names no machinery (lib/review-first.ts,
+      # lib/review-page.ts, components/review/ReviewView.tsx). No network.
+      - name: Review page test
+        run: npm run test:review
+
       # The Product Book edition covers every printed page exactly once and every
       # leaf's links resolve (lib/idea-book-edition.ts).
       - name: Product Book edition test

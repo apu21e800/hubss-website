@@ -105,6 +105,18 @@ export default defineType({
           return true;
         }),
     }),
+    // Doug reads first (27 Oct 2026, lib/review-first.ts): 21e8 ticks this
+    // once it has read the draft, and the draft then shows, words and photo,
+    // on Doug's review page (app/review) until it is published. Ticking it
+    // publishes nothing.
+    defineField({
+      name: "forReview",
+      title: "Ready for Doug's review",
+      type: "boolean",
+      group: "content",
+      initialValue: false,
+      description: "21e8 ticks this once the draft has been read and checked. It then shows on Doug's review page until it is published. It publishes nothing.",
+    }),
     defineField({
       name: "fieldPost",
       title: "Written from the job photos post",

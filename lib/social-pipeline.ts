@@ -1,11 +1,14 @@
 /**
- * Social posts, three streams into one Buffer queue. Since 19 Oct 2026
- * (Vern: "auto-queue on") a post goes into the channel's queue and Buffer
- * posts it at the next slot unless someone deletes it there first; with
- * SOCIAL_AUTO_QUEUE=off (lib/buffer.ts) it waits as a draft until Vern or
- * Doug approves it, as it did from 9 to 19 Oct. Copy the style pass couldn't
- * fix waits as a draft either way. The emails say which. Run daily by
- * app/api/cron/social-drafts.
+ * Social posts, three streams into one Buffer queue. Since 27 Oct 2026 Doug
+ * reviews first (lib/review-first.ts): every post waits in Buffer as a draft,
+ * which Vern reads on his review page and puts on Doug's (app/review), until
+ * someone presses Add to Queue.
+ * With REVIEW_FIRST=off, as from 19 to 27 Oct (Vern: "auto-queue on"), a
+ * post goes into the channel's queue and Buffer posts it at the next slot
+ * unless someone deletes it there first, or waits as a draft with
+ * SOCIAL_AUTO_QUEUE=off (lib/buffer.ts), as from 9 to 19 Oct. Copy the style
+ * pass couldn't fix waits as a draft either way. The emails say which. Run
+ * daily by app/api/cron/social-drafts.
  *
  *  1. Articles: an Insights post qualifies once it is live (in this
  *     deployment's built list, lib/blog.ts), is dated on or after
@@ -57,6 +60,7 @@
 import { sanityWriteClient } from "@/lib/sanity.write";
 import { getAllPosts, getPost } from "@/lib/blog";
 import { bufferChannels, createBufferDraft, socialAutoQueue, type BufferChannel } from "@/lib/buffer";
+import { agencyLink, reviewFirst } from "@/lib/review-first";
 import { emailEditors as sendToEditors } from "@/lib/editor-mail";
 import { writeSocialCopy, polishSocialCopy, type SocialCopy, type SocialSource } from "@/lib/social-drafter";
 import { contactLeft, styleReport, withLeft } from "@/lib/field-note-drafter";
@@ -130,10 +134,12 @@ export interface SocialResult {
   skipped: ChannelSkip[];
   /** The style pass on the copy: "clean", or the sentences to fix in Buffer. */
   styleCheck: string;
+  /** Nothing was left for a person to fix in the copy (the style pass's `left` was empty). */
+  styleClean: boolean;
   /**
-   * The posts went into Buffer's queue (SOCIAL_AUTO_QUEUE=on and the copy
-   * clean) rather than its drafts. Copy the style pass couldn't fix always
-   * waits as a draft, whatever the switch says.
+   * The posts went into Buffer's queue (review first off, SOCIAL_AUTO_QUEUE
+   * on and the copy clean) rather than its drafts. Copy the style pass
+   * couldn't fix always waits as a draft, whatever the switches say.
    */
   queued: boolean;
   /** See lib/social-outcome.ts. Only "retry" leaves the item to the next run. */
@@ -385,9 +391,9 @@ async function draftItem(
   // street address that isn't HUB's in any of them keeps the posts as drafts
   // (24 Oct 2026; contactLeft in lib/field-note-drafter.ts).
   const style = withLeft(polished.style, contactLeft(typedSocialWords(item)));
-  // Queued only when the switch is on (the default) AND nothing is left for
-  // a person to fix: an em dash the rewrite couldn't take out never posts by
-  // itself.
+  // Queued only when the switches allow it (never while Doug reviews first,
+  // lib/buffer.ts socialAutoQueue) AND nothing is left for a person to fix:
+  // an em dash the rewrite couldn't take out never posts by itself.
   const queued = socialAutoQueue() && style.left.length === 0;
 
   const result: SocialResult = {
@@ -397,6 +403,7 @@ async function draftItem(
     drafted: [],
     skipped: [],
     styleCheck: styleReport(style, "in Buffer before approving").join("\n"),
+    styleClean: style.left.length === 0,
     queued,
     outcome: "retry",
   };
@@ -543,11 +550,13 @@ async function notify(r: SocialResult) {
   const what = describe(r);
 
   if (r.outcome === "drafted") {
-    // Queued (SOCIAL_AUTO_QUEUE=on, copy clean): Buffer posts them at the next
-    // free slots unless someone deletes them there first. Otherwise they wait
-    // as drafts, and the email says why when the switch is on.
+    // Queued (review first off, SOCIAL_AUTO_QUEUE on, copy clean): Buffer
+    // posts them at the next free slots unless someone deletes them there
+    // first. Otherwise they wait as drafts, and the email says why.
     const queued = r.queued;
-    const heldForStyle = !queued && socialAutoQueue();
+    // Held for the copy, whichever switch is on: the style check left a line
+    // (the review of #104: under review first the switch alone can't tell).
+    const heldForStyle = !queued && !r.styleClean;
     await emailEditors(
       queued ? `Social posts queued in Buffer: ${r.title}${tag}` : `Social drafts ready in Buffer: ${r.title}${tag}`,
       [
@@ -556,6 +565,15 @@ async function notify(r: SocialResult) {
           : heldForStyle
             ? `Social drafts for ${what} are waiting in Buffer, not queued: the style check below found something to fix first. Nothing posts until you fix and approve them.`
             : `Social drafts for ${what} are waiting in Buffer. Nothing posts until you approve and schedule them.`,
+        // Doug reviews first (lib/review-first.ts): where he reads them, and the step after his OK.
+        ...(!queued && reviewFirst()
+          ? [
+              "",
+              heldForStyle
+                ? `Doug reviews first. Fix the line in Buffer, then put them on his page from your review page${agencyLink() ? ` (${agencyLink()})` : ""}. After his OK: Buffer → Drafts → Add to Queue on each.`
+                : `Doug reviews first. Read them on your review page${agencyLink() ? ` (${agencyLink()})` : ""} and press "Put on Doug's page". After his OK: Buffer → Drafts → Add to Queue on each.`,
+            ]
+          : []),
         "",
         `${queued ? "Queued" : "Drafted"}: ${channelList(r.drafted)}`,
         ...(r.skipped.length ? ["", "Skipped:", ...skippedLines] : []),

@@ -120,6 +120,29 @@ check("broken or blocked storage never throws", () => {
   assert.equal(storedVisitSource(junk), undefined);
 });
 
+check("a browser that blocks storage (reading window.sessionStorage throws) never throws either", () => {
+  // The Vercel Agent's review of #103: as default arguments, window.sessionStorage
+  // was read before the try, so the SecurityError escaped and stopped
+  // instrumentation-client.ts. Called the way instrumentation-client.ts calls it.
+  const g = globalThis as Record<string, unknown>;
+  const saved = { window: g.window, document: g.document };
+  const blocked = {
+    location: { href: AD, host: HOST },
+    get sessionStorage(): never {
+      throw new Error("SecurityError: Failed to read the 'sessionStorage' property from 'Window': Access is denied for this document.");
+    },
+  };
+  g.window = blocked;
+  g.document = { referrer: "https://www.google.com/" };
+  try {
+    assert.doesNotThrow(() => recordVisitSource());
+    assert.equal(storedVisitSource(), undefined);
+  } finally {
+    g.window = saved.window;
+    g.document = saved.document;
+  }
+});
+
 check("the email's lines", () => {
   const ad = describeVisitSource(sourceFromUrl(AD, "", HOST));
   assert.equal(ad.cameFrom, 'google / cpc · west-search-crosswalks · rsa-1 · "decorative crosswalks" · Google Ads click');

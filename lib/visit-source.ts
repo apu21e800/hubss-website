@@ -112,25 +112,27 @@ interface StorageLike {
 /**
  * Called on every full page load (instrumentation-client.ts). The first page
  * of a visit is always kept; a later one only when it names a source of its
- * own. Never throws: storage can be off or full.
+ * own. Never throws: storage can be off or full, and where a browser blocks
+ * it, merely reading window.sessionStorage throws (a SecurityError), so the
+ * defaults are read inside the try, not as default arguments (the Vercel
+ * Agent's review of #103: a default argument threw before the catch and would
+ * have stopped instrumentation-client.ts before BotID started).
  */
-export function recordVisitSource(
-  loc: { href: string; host: string } = window.location,
-  referrer: string = document.referrer,
-  storage: StorageLike = window.sessionStorage
-): void {
+export function recordVisitSource(loc?: { href: string; host: string }, referrer?: string, storage?: StorageLike): void {
   try {
-    const next = sourceFromUrl(loc.href, referrer, loc.host);
-    if (storage.getItem(STORAGE_KEY) === null || namesASource(next)) {
-      storage.setItem(STORAGE_KEY, JSON.stringify(next));
+    const where = loc ?? window.location;
+    const store = storage ?? window.sessionStorage;
+    const next = sourceFromUrl(where.href, referrer ?? document.referrer, where.host);
+    if (store.getItem(STORAGE_KEY) === null || namesASource(next)) {
+      store.setItem(STORAGE_KEY, JSON.stringify(next));
     }
   } catch {}
 }
 
-/** The visit's source for a form, checked again on the way out. Never throws. */
-export function storedVisitSource(storage: StorageLike = window.sessionStorage): VisitSource | undefined {
+/** The visit's source for a form, checked again on the way out. Never throws, as above. */
+export function storedVisitSource(storage?: StorageLike): VisitSource | undefined {
   try {
-    const raw = storage.getItem(STORAGE_KEY);
+    const raw = (storage ?? window.sessionStorage).getItem(STORAGE_KEY);
     return raw ? cleanVisitSource(JSON.parse(raw)) : undefined;
   } catch {
     return undefined;

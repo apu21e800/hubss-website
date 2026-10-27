@@ -83,6 +83,13 @@ jobs:
       - name: Lead counts test
         run: npm run test:leads
 
+      # Where a visit came from, as the forms send it to the office's email:
+      # the utm_ tags, a Google Ads click (never its id), the landing page and
+      # the referring site, and the route's own check of them
+      # (lib/visit-source.ts). No network.
+      - name: Visit source test
+        run: npm run test:source
+
       # Studio's "Edit on the page" button opens the document's own page with
       # the intent Sanity's own links use, and an unpublished article is read
       # only in draft mode (sanity/studio-pages.ts, lib/blog.ts). No network.
